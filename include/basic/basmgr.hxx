@@ -81,7 +81,7 @@ struct LibraryContainerInfo
     OldBasicPassword* mpOldBasicPassword;
 
     LibraryContainerInfo()
-        :mpOldBasicPassword( NULL )
+        :mpOldBasicPassword( nullptr )
     {
     }
 
@@ -135,8 +135,8 @@ protected:
 
 public:
                     TYPEINFO_OVERRIDE();
-                    BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = NULL, OUString* pLibPath = NULL, bool bDocMgr = false );
-                    BasicManager( StarBASIC* pStdLib, OUString* pLibPath = NULL, bool bDocMgr = false );
+                    BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = nullptr, OUString* pLibPath = nullptr, bool bDocMgr = false );
+                    BasicManager( StarBASIC* pStdLib, OUString* pLibPath = nullptr, bool bDocMgr = false );
 
     /** deletes the given BasicManager instance
 

@@ -25,7 +25,7 @@
 #include "codegen.hxx"
 #include <basic/basmgr.hxx>
 
-SbiGlobals* SbiGlobals::pGlobals = 0;
+SbiGlobals* SbiGlobals::pGlobals = nullptr;
 
 SbiGlobals* GetSbData()
 {
@@ -36,15 +36,15 @@ SbiGlobals* GetSbData()
 
 SbiGlobals::SbiGlobals()
 {
-    pInst = NULL;
-    pSbFac= NULL;
-    pUnoFac = NULL;
-    pTypeFac = NULL;
-    pClassFac = NULL;
-    pOLEFac = NULL;
-    pFormFac = NULL;
-    pMod  = NULL;
-    pCompMod = NULL; // JSM
+    pInst = nullptr;
+    pSbFac= nullptr;
+    pUnoFac = nullptr;
+    pTypeFac = nullptr;
+    pClassFac = nullptr;
+    pOLEFac = nullptr;
+    pFormFac = nullptr;
+    pMod  = nullptr;
+    pCompMod = nullptr; // JSM
     nInst = 0;
     nCode = 0;
     nLine = 0;
@@ -52,10 +52,10 @@ SbiGlobals::SbiGlobals()
     bCompiler = false;
     bGlobalInitErr = false;
     bRunInit = false;
-    pTransliterationWrapper = NULL;
+    pTransliterationWrapper = nullptr;
     bBlockCompilerError = false;
-    pAppBasMgr = NULL;
-    pMSOMacroRuntimLib = NULL;
+    pAppBasMgr = nullptr;
+    pMSOMacroRuntimLib = nullptr;
 }
 
 SbiGlobals::~SbiGlobals()

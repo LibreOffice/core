@@ -90,7 +90,7 @@ short SbiStringPool::Add( double n, SbxDataType t )
 SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s, SbiParser* pP ) : rStrings( r ), pParser( pP )
 {
     eScope   = s;
-    pParent  = NULL;
+    pParent  = nullptr;
     nCur     =
     nProcId  = 0;
 }
@@ -108,7 +108,7 @@ SbiSymDef* SbiSymPool::First()
 SbiSymDef* SbiSymPool::Next()
 {
     if (m_Data.size() <= ++nCur)
-        return NULL;
+        return nullptr;
     else
         return m_Data[ nCur ].get();
 }
@@ -195,7 +195,7 @@ SbiSymDef* SbiSymPool::Find( const OUString& rName )
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -206,7 +206,7 @@ SbiSymDef* SbiSymPool::Get( sal_uInt16 n )
 {
     if (m_Data.size() <= n)
     {
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -283,7 +283,7 @@ SbiSymDef::SbiSymDef( const OUString& rName ) : aName( rName )
     bChained =
     bGlobal  = false;
     pIn      =
-    pPool    = NULL;
+    pPool    = nullptr;
     nDefaultId = 0;
     nFixedStringLength = -1;
 }
@@ -295,12 +295,12 @@ SbiSymDef::~SbiSymDef()
 
 SbiProcDef* SbiSymDef::GetProcDef()
 {
-    return NULL;
+    return nullptr;
 }
 
 SbiConstDef* SbiSymDef::GetConstDef()
 {
-    return NULL;
+    return nullptr;
 }
 
 
@@ -431,7 +431,7 @@ void SbiProcDef::SetType( SbxDataType t )
 
 void SbiProcDef::Match( SbiProcDef* pOld )
 {
-    SbiSymDef *pn=NULL;
+    SbiSymDef *pn=nullptr;
     // parameter 0 is the function name
     sal_uInt16 i;
     for( i = 1; i < aParams.GetSize(); i++ )

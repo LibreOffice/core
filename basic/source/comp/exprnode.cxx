@@ -29,7 +29,7 @@
 SbiExprNode::SbiExprNode( SbiExprNode* l, SbiToken t, SbiExprNode* r ) :
     pLeft(l),
     pRight(r),
-    pWithParent(NULL),
+    pWithParent(nullptr),
     eNodeType(SbxNODE),
     eType(SbxVARIANT), // Nodes are always Variant
     eTok(t),
@@ -39,7 +39,7 @@ SbiExprNode::SbiExprNode( SbiExprNode* l, SbiToken t, SbiExprNode* r ) :
 
 SbiExprNode::SbiExprNode( double n, SbxDataType t ):
     nVal(n),
-    pWithParent(NULL),
+    pWithParent(nullptr),
     eNodeType(SbxNUMVAL),
     eType(t),
     eTok(NIL),
@@ -49,7 +49,7 @@ SbiExprNode::SbiExprNode( double n, SbxDataType t ):
 
 SbiExprNode::SbiExprNode( const OUString& rVal ):
     aStrVal(rVal),
-    pWithParent(NULL),
+    pWithParent(nullptr),
     eNodeType(SbxSTRVAL),
     eType(SbxSTRING),
     eTok(NIL),
@@ -58,7 +58,7 @@ SbiExprNode::SbiExprNode( const OUString& rVal ):
 }
 
 SbiExprNode::SbiExprNode( const SbiSymDef& r, SbxDataType t, SbiExprList* l ) :
-    pWithParent(NULL),
+    pWithParent(nullptr),
     eNodeType(SbxVARVAL),
     eTok(NIL),
     bError(false)
@@ -66,15 +66,15 @@ SbiExprNode::SbiExprNode( const SbiSymDef& r, SbxDataType t, SbiExprList* l ) :
     eType     = ( t == SbxVARIANT ) ? r.GetType() : t;
     aVar.pDef = const_cast<SbiSymDef*>(&r);
     aVar.pPar = l;
-    aVar.pvMorePar = NULL;
-    aVar.pNext= NULL;
+    aVar.pvMorePar = nullptr;
+    aVar.pNext= nullptr;
 }
 
 // #120061 TypeOf
 SbiExprNode::SbiExprNode( SbiExprNode* l, sal_uInt16 nId ) :
     nTypeStrId(nId),
     pLeft(l),
-    pWithParent(NULL),
+    pWithParent(nullptr),
     eNodeType(SbxTYPEOF),
     eType(SbxBOOL),
     eTok(NIL),
@@ -85,7 +85,7 @@ SbiExprNode::SbiExprNode( SbiExprNode* l, sal_uInt16 nId ) :
 // new <type>
 SbiExprNode::SbiExprNode( sal_uInt16 nId ) :
     nTypeStrId(nId),
-    pWithParent(NULL),
+    pWithParent(nullptr),
     eNodeType(SbxNEW),
     eType(SbxOBJECT),
     eTok(NIL),
@@ -94,7 +94,7 @@ SbiExprNode::SbiExprNode( sal_uInt16 nId ) :
 }
 
 SbiExprNode::SbiExprNode() :
-    pWithParent(NULL),
+    pWithParent(nullptr),
     eNodeType(SbxDUMMY),
     eType(SbxVARIANT),
     eTok(NIL),
@@ -124,7 +124,7 @@ SbiSymDef* SbiExprNode::GetVar()
     if( eNodeType == SbxVARVAL )
         return aVar.pDef;
     else
-        return NULL;
+        return nullptr;
 }
 
 SbiSymDef* SbiExprNode::GetRealVar()
@@ -133,7 +133,7 @@ SbiSymDef* SbiExprNode::GetRealVar()
     if( p )
         return p->GetVar();
     else
-        return NULL;
+        return nullptr;
 }
 
 // From 1995-12-18
@@ -147,7 +147,7 @@ SbiExprNode* SbiExprNode::GetRealNode()
         return p;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 // This method transform the type, if it fits into the Integer range

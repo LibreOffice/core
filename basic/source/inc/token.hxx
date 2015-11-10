@@ -122,7 +122,7 @@ class TokenLabelInfo
 public:
     TokenLabelInfo();
     TokenLabelInfo( const TokenLabelInfo& rInfo )
-        : m_pTokenCanBeLabelTab( NULL )
+        : m_pTokenCanBeLabelTab( nullptr )
             { (void)rInfo; }
     ~TokenLabelInfo();
 
@@ -143,7 +143,7 @@ protected:
     bool bAs;                       // last keyword was AS
     bool bErrorIsSymbol;            // Handle Error token as Symbol, not keyword
 public:
-    SbiTokenizer( const OUString&, StarBASIC* = NULL );
+    SbiTokenizer( const OUString&, StarBASIC* = nullptr );
    ~SbiTokenizer();
 
     inline bool IsEof()             { return bEof; }

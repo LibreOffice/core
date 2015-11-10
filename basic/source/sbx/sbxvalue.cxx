@@ -185,7 +185,7 @@ void SbxValue::Clear()
         case SbxVOID:
             break;
         case SbxSTRING:
-            delete aData.pOUString; aData.pOUString = NULL;
+            delete aData.pOUString; aData.pOUString = nullptr;
             break;
         case SbxOBJECT:
             if( aData.pObj )
@@ -199,7 +199,7 @@ void SbxValue::Clear()
                     if ( !bParentProp )
                         aData.pObj->ReleaseRef();
                 }
-                aData.pObj = NULL;
+                aData.pObj = nullptr;
             }
             break;
         case SbxDECIMAL:
@@ -207,7 +207,7 @@ void SbxValue::Clear()
                 releaseDecimalPtr( aData.pDecimal );
             break;
         case SbxDATAOBJECT:
-            aData.pData = NULL; break;
+            aData.pData = nullptr; break;
         default:
         {
             SbxValues aEmpty;
@@ -268,7 +268,7 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
                     if( !bSuccess )
                     {
                         SetError( ERRCODE_SBX_BAD_PROP_VALUE );
-                        p = NULL;
+                        p = nullptr;
                     }
                 }
                 else if( pDflt )
@@ -280,7 +280,7 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
             if( pArray )
             {
                 // When indicated get the parameter
-                SbxArray* pPar = NULL;
+                SbxArray* pPar = nullptr;
                 SbxVariable* pVar = dynamic_cast<SbxVariable*>( p );
                 if( pVar )
                     pPar = pVar->GetParameters();
@@ -317,7 +317,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
     if( !CanRead() )
     {
         SetError( ERRCODE_SBX_PROP_WRITEONLY );
-        rRes.pObj = NULL;
+        rRes.pObj = nullptr;
     }
     else
     {
@@ -376,7 +376,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
                     else
                     {
                         SetError( ERRCODE_SBX_NO_OBJECT );
-                        rRes.pObj = NULL;
+                        rRes.pObj = nullptr;
                     }
                     break;
                 default:
@@ -385,7 +385,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
                     else
                     {
                         SetError( ERRCODE_SBX_CONVERSION );
-                        rRes.pObj = NULL;
+                        rRes.pObj = nullptr;
                     }
             }
         }
@@ -664,7 +664,7 @@ bool SbxValue::fillAutomationDecimal
     ( css::bridge::oleautomation::Decimal& rAutomationDec ) const
 {
     SbxDecimal* pDecimal = GetDecimal();
-    if( pDecimal != NULL )
+    if( pDecimal != nullptr )
     {
         pDecimal->fillAutomationDecimal( rAutomationDec );
         return true;
@@ -733,7 +733,7 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
         return false;
     }
     // Test downcast!!!
-    if( 0 != dynamic_cast<const SbxVariable*>( this) )
+    if( nullptr != dynamic_cast<const SbxVariable*>( this) )
         const_cast<SbxVariable*>(static_cast<const SbxVariable*>(this))->Broadcast( SBX_HINT_DATAWANTED );
     SbxDataType t = GetType();
     if( t == SbxSTRING )
@@ -918,12 +918,12 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 Get( aL );
 
                 // #30576: To begin with test, if the conversion worked
-                if( aL.pOUString != NULL && aR.pOUString != NULL )
+                if( aL.pOUString != nullptr && aR.pOUString != nullptr )
                 {
                     *aL.pOUString += *aR.pOUString;
                 }
                 // Not even Left OK?
-                else if( aL.pOUString == NULL )
+                else if( aL.pOUString == nullptr )
                 {
                     aL.pOUString = new OUString();
                 }
@@ -1425,7 +1425,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 RTL_TEXTENCODING_ASCII_US);
             double d;
             SbxDataType t;
-            if( ImpScan( aVal, d, t, NULL ) != ERRCODE_SBX_OK || t == SbxDOUBLE )
+            if( ImpScan( aVal, d, t, nullptr ) != ERRCODE_SBX_OK || t == SbxDOUBLE )
             {
                 aData.nSingle = 0.0F;
                 return false;
@@ -1440,7 +1440,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             OUString aVal = read_uInt16_lenPrefixed_uInt8s_ToOUString(r,
                 RTL_TEXTENCODING_ASCII_US);
             SbxDataType t;
-            if( ImpScan( aVal, aData.nDouble, t, NULL ) != ERRCODE_SBX_OK )
+            if( ImpScan( aVal, aData.nDouble, t, nullptr ) != ERRCODE_SBX_OK )
             {
                 aData.nDouble = 0.0;
                 return false;
@@ -1469,7 +1469,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             if( !aVal.isEmpty() )
                     aData.pOUString = new OUString( aVal );
                 else
-                    aData.pOUString = NULL; // JSM 1995-09-22
+                    aData.pOUString = nullptr; // JSM 1995-09-22
                 break;
             }
             case SbxERROR:
@@ -1482,11 +1482,11 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 switch( nMode )
                 {
                     case 0:
-                        aData.pObj = NULL;
+                        aData.pObj = nullptr;
                         break;
                     case 1:
                         aData.pObj = SbxBase::Load( r );
-                        return ( aData.pObj != NULL );
+                        return ( aData.pObj != nullptr );
                     case 2:
                         aData.pObj = this;
                         break;

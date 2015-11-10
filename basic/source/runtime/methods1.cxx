@@ -122,10 +122,10 @@ RTLFUNC(CallByName)
 
     // 1. parameter is object
     SbxBase* pObjVar = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
-    SbxObject* pObj = NULL;
+    SbxObject* pObj = nullptr;
     if( pObjVar )
         pObj = dynamic_cast<SbxObject*>( pObjVar );
-    if( !pObj && pObjVar && 0 != dynamic_cast<const SbxVariable*>( pObjVar) )
+    if( !pObj && pObjVar && nullptr != dynamic_cast<const SbxVariable*>( pObjVar) )
     {
         SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
         pObj = dynamic_cast<SbxObject*>( pObjVarObj );
@@ -144,7 +144,7 @@ RTLFUNC(CallByName)
 
     //SbxObject* pFindObj = NULL;
     SbxVariable* pFindVar = pObj->Find( aNameStr, SbxCLASS_DONTCARE );
-    if( pFindVar == NULL )
+    if( pFindVar == nullptr )
     {
         StarBASIC::Error( ERRCODE_BASIC_PROC_UNDEFINED );
         return;
@@ -182,8 +182,8 @@ RTLFUNC(CallByName)
             {
                 SbxVariableRef rFindVar = pFindVar;
                 SbiInstance* pInst = GetSbData()->pInst;
-                SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
-                if( pRT != NULL )
+                SbiRuntime* pRT = pInst ? pInst->pRun : nullptr;
+                if( pRT != nullptr )
                 {
                     pRT->StepSET_Impl( pValVar, rFindVar );
                 }
@@ -193,7 +193,7 @@ RTLFUNC(CallByName)
     case vbMethod:
         {
             SbMethod* pMeth = dynamic_cast<SbMethod*>( pFindVar );
-            if( pMeth == NULL )
+            if( pMeth == nullptr )
             {
                 StarBASIC::Error( ERRCODE_BASIC_PROC_UNDEFINED );
                 return;
@@ -217,7 +217,7 @@ RTLFUNC(CallByName)
             if( xArray.Is() )
                 pMeth->SetParameters( xArray );
             pMeth->Call( refVar );
-            pMeth->SetParameters( NULL );
+            pMeth->SetParameters( nullptr );
         }
         break;
     default:
@@ -850,7 +850,7 @@ RTLFUNC(Array)
     refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
-    refVar->SetParameters( NULL );
+    refVar->SetParameters( nullptr );
 }
 
 
@@ -890,7 +890,7 @@ RTLFUNC(DimArray)
     refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
-    refVar->SetParameters( NULL );
+    refVar->SetParameters( nullptr );
 }
 
 /*
@@ -931,7 +931,7 @@ RTLFUNC(FindObject)
     OUString aNameStr = rPar.Get(1)->GetOUString();
 
     SbxBase* pFind =  StarBASIC::FindSBXInCurrentScope( aNameStr );
-    SbxObject* pFindObj = NULL;
+    SbxObject* pFindObj = nullptr;
     if( pFind )
     {
         pFindObj = dynamic_cast<SbxObject*>( pFind );
@@ -955,12 +955,12 @@ RTLFUNC(FindPropertyObject)
     }
 
     SbxBase* pObjVar = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
-    SbxObject* pObj = NULL;
+    SbxObject* pObj = nullptr;
     if( pObjVar )
     {
         pObj = dynamic_cast<SbxObject*>( pObjVar );
     }
-    if( !pObj && pObjVar && 0 != dynamic_cast<const SbxVariable*>( pObjVar) )
+    if( !pObj && pObjVar && nullptr != dynamic_cast<const SbxVariable*>( pObjVar) )
     {
         SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
         pObj = dynamic_cast<SbxObject*>( pObjVarObj );
@@ -968,7 +968,7 @@ RTLFUNC(FindPropertyObject)
 
     OUString aNameStr = rPar.Get(2)->GetOUString();
 
-    SbxObject* pFindObj = NULL;
+    SbxObject* pFindObj = nullptr;
     if( pObj )
     {
         SbxVariable* pFindVar = pObj->Find( aNameStr, SbxCLASS_OBJECT );
@@ -1269,7 +1269,7 @@ void PutGet( SbxArray& rPar, bool bPut )
         pStrm->Seek( nFilePos );
     }
 
-    SbxDimArray* pArr = 0;
+    SbxDimArray* pArr = nullptr;
     SbxVariable* pVar = rPar.Get(3);
     if( pVar->GetType() & SbxARRAY )
     {
@@ -1841,7 +1841,7 @@ RTLFUNC(Split)
     refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
-    refVar->SetParameters( NULL );
+    refVar->SetParameters( nullptr );
 }
 
 // MonthName(month[, abbreviate])
@@ -2017,7 +2017,7 @@ IntervalInfo const * getIntervalInfo( const OUString& rStringCode )
             return &aIntervalTable[i];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 inline void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, sal_Int16& rnDay, double dDate )
@@ -2295,7 +2295,7 @@ RTLFUNC(DateDiff)
 }
 
 double implGetDateOfFirstDayInFirstWeek
-    ( sal_Int16 nYear, sal_Int16& nFirstDay, sal_Int16& nFirstWeek, bool* pbError = NULL )
+    ( sal_Int16 nYear, sal_Int16& nFirstDay, sal_Int16& nFirstWeek, bool* pbError = nullptr )
 {
     SbError nError = 0;
     if( nFirstDay < 0 || nFirstDay > 7 )
@@ -2534,7 +2534,7 @@ RTLFUNC(FormatDateTime)
         // Dienstag, 21. December 2004
     case 1:
         {
-            SvNumberFormatter* pFormatter = NULL;
+            SvNumberFormatter* pFormatter = nullptr;
             if( GetSbData()->pInst )
             {
                 pFormatter = GetSbData()->pInst->GetNumberFormatter();
@@ -3290,7 +3290,7 @@ RTLFUNC(Me)
     SbModule* pActiveModule = GetSbData()->pInst->GetActiveModule();
     SbClassModuleObject* pClassModuleObject = dynamic_cast<SbClassModuleObject*>( pActiveModule );
     SbxVariableRef refVar = rPar.Get(0);
-    if( pClassModuleObject == NULL )
+    if( pClassModuleObject == nullptr )
     {
         SbObjModule* pMod = dynamic_cast<SbObjModule*>( pActiveModule );
         if ( pMod )

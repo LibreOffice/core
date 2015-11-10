@@ -83,7 +83,7 @@ void releaseDecimalPtr( SbxDecimal*& rpDecimal )
         if( rpDecimal->mnRefCount == 0 )
         {
             delete rpDecimal;
-            rpDecimal = NULL;
+            rpDecimal = nullptr;
         }
     }
 }
@@ -393,10 +393,10 @@ bool SbxDecimal::getString( OUString& rString )
 SbxDecimal* ImpCreateDecimal( SbxValues* p )
 {
     if( !p )
-        return NULL;
+        return nullptr;
 
     SbxDecimal*& rpDecimal = p->pDecimal;
-    if( rpDecimal == NULL )
+    if( rpDecimal == nullptr )
     {
         rpDecimal = new SbxDecimal();
         rpDecimal->addRef();

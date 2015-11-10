@@ -161,7 +161,7 @@ void ImpPutString( SbxValues* p, const OUString* n )
 {
     SbxValues aTmp;
     aTmp.eType = SbxSTRING;
-    OUString* pTmp = NULL;
+    OUString* pTmp = nullptr;
     // as a precaution, if a NULL-Ptr appears
     if( !n )
         n = pTmp = new OUString;
@@ -210,7 +210,7 @@ void ImpPutString( SbxValues* p, const OUString* n )
                     *p->pOUString = *n;
             }
             else
-                delete p->pOUString, p->pOUString = NULL;
+                delete p->pOUString, p->pOUString = nullptr;
             break;
         case SbxOBJECT:
         {

@@ -68,7 +68,7 @@ struct SbxValues
     };
     SbxDataType  eType;
 
-    SbxValues(): pData( NULL ), eType(SbxEMPTY) {}
+    SbxValues(): pData( nullptr ), eType(SbxEMPTY) {}
     SbxValues( SbxDataType e ): eType(e) {}
     SbxValues( char _nChar ): nChar( _nChar ), eType(SbxCHAR) {}
     SbxValues( sal_uInt8 _nByte ): nByte( _nByte ), eType(SbxBYTE) {}
@@ -105,7 +105,7 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VALUE,1);
     TYPEINFO_OVERRIDE();
     SbxValue();
-    SbxValue( SbxDataType, void* = NULL );
+    SbxValue( SbxDataType, void* = nullptr );
     SbxValue( const SbxValue& );
     SbxValue& operator=( const SbxValue& );
     virtual void Clear() override;
@@ -187,8 +187,8 @@ public:
     bool Convert( SbxDataType );
     bool Compute( SbxOperator, const SbxValue& );
     bool Compare( SbxOperator, const SbxValue& ) const;
-    bool Scan( const OUString&, sal_uInt16* = NULL );
-    void Format( OUString&, const OUString* = NULL ) const;
+    bool Scan( const OUString&, sal_uInt16* = nullptr );
+    void Format( OUString&, const OUString* = nullptr ) const;
 
     // The following operators are definied for easier handling.
     // TODO: Ensure error conditions (overflow, conversions)
@@ -294,7 +294,7 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VARIABLE,2);
     TYPEINFO_OVERRIDE();
     SbxVariable();
-    SbxVariable( SbxDataType, void* = NULL );
+    SbxVariable( SbxDataType, void* = nullptr );
     SbxVariable( const SbxVariable& );
     SbxVariable& operator=( const SbxVariable& );
 
@@ -321,7 +321,7 @@ public:
     // Sfx-Broadcasting-Support:
     // Due to data reduction and better DLL-hierarchy currently via casting
     SfxBroadcaster& GetBroadcaster();
-    bool IsBroadcaster() const { return pCst != NULL; }
+    bool IsBroadcaster() const { return pCst != nullptr; }
     virtual void Broadcast( sal_uInt32 nHintId ) override;
 
     inline const SbxObject* GetParent() const { return pParent; }

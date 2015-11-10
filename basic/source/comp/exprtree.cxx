@@ -36,7 +36,7 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     nParenLevel = 0;
     eCurExpr = t;
     m_eMode = eMode;
-    pNext = NULL;
+    pNext = nullptr;
     pExpr = (t != SbSTDEXPR ) ? Term( pKeywordSymbolInfo ) : Boolean();
     if( t != SbSYMBOL )
     {
@@ -59,7 +59,7 @@ SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
     nParenLevel = 0;
     eCurExpr = SbOPERAND;
     m_eMode = EXPRMODE_STANDARD;
-    pNext = NULL;
+    pNext = nullptr;
     pExpr = new SbiExprNode( n, t );
     pExpr->Optimize(pParser);
 }
@@ -71,7 +71,7 @@ SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPa
     nParenLevel = 0;
     eCurExpr = SbOPERAND;
     m_eMode = EXPRMODE_STANDARD;
-    pNext = NULL;
+    pNext = nullptr;
     pExpr = new SbiExprNode( r, SbxVARIANT, pPar );
 }
 
@@ -175,8 +175,8 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     {
         SbiExprNode* pWithVar = pParser->GetWithVar();
         // #26608: get to the node-chain's end to pass the correct object
-        SbiSymDef* pDef = pWithVar ? pWithVar->GetRealVar() : NULL;
-        SbiExprNode* pNd = NULL;
+        SbiSymDef* pDef = pWithVar ? pWithVar->GetRealVar() : nullptr;
+        SbiExprNode* pNd = nullptr;
         if( !pDef )
         {
             pParser->Next();
@@ -197,13 +197,13 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         return pNd;
     }
 
-    SbiToken eTok = (pKeywordSymbolInfo == NULL) ? pParser->Next() : pKeywordSymbolInfo->m_eTok;
+    SbiToken eTok = (pKeywordSymbolInfo == nullptr) ? pParser->Next() : pKeywordSymbolInfo->m_eTok;
     // memorize the parsing's begin
     pParser->LockColumn();
-    OUString aSym( (pKeywordSymbolInfo == NULL) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
-    SbxDataType eType = (pKeywordSymbolInfo == NULL) ? pParser->GetType() : pKeywordSymbolInfo->m_eSbxDataType;
-    SbiParameters* pPar = NULL;
-    SbiExprListVector* pvMoreParLcl = NULL;
+    OUString aSym( (pKeywordSymbolInfo == nullptr) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
+    SbxDataType eType = (pKeywordSymbolInfo == nullptr) ? pParser->GetType() : pKeywordSymbolInfo->m_eSbxDataType;
+    SbiParameters* pPar = nullptr;
+    SbiExprListVector* pvMoreParLcl = nullptr;
     // are there parameters following?
     SbiToken eNextTok = pParser->Peek();
     // is it a known parameter?
@@ -234,7 +234,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         // i75443 check for additional sets of parameters
         while( eTok == LPAREN )
         {
-            if( pvMoreParLcl == NULL )
+            if( pvMoreParLcl == nullptr )
             {
                 pvMoreParLcl = new SbiExprListVector();
             }
@@ -277,7 +277,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         SbxArray* pModMethods = rMod.GetMethods();
         if( pModMethods->Find( aSym, SbxCLASS_DONTCARE ) )
         {
-            pDef = NULL;
+            pDef = nullptr;
         }
     }
     if( !pDef )
@@ -414,12 +414,12 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
 
     if( bError )
     {
-        return NULL;
+        return nullptr;
     }
     OUString aSym( pParser->GetSym() );
     SbxDataType eType = pParser->GetType();
-    SbiParameters* pPar = NULL;
-    SbiExprListVector* pvMoreParLcl = NULL;
+    SbiParameters* pPar = nullptr;
+    SbiExprListVector* pvMoreParLcl = nullptr;
     eTok = pParser->Peek();
 
     if( DoParametersFollow( pParser, eCurExpr, eTok ) )
@@ -432,7 +432,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
         // i109624 check for additional sets of parameters
         while( eTok == LPAREN )
         {
-            if( pvMoreParLcl == NULL )
+            if( pvMoreParLcl == nullptr )
             {
                 pvMoreParLcl = new SbiExprListVector();
             }
@@ -590,7 +590,7 @@ SbiExprNode* SbiExpression::Unary()
         case MINUS:
             eTok = NEG;
             pParser->Next();
-            pNd = new SbiExprNode( Unary(), eTok, NULL );
+            pNd = new SbiExprNode( Unary(), eTok, nullptr );
             break;
         case NOT:
             if( pParser->IsVBASupportOn() )
@@ -600,7 +600,7 @@ SbiExprNode* SbiExpression::Unary()
             else
             {
                 pParser->Next();
-                pNd = new SbiExprNode( Unary(), eTok, NULL );
+                pNd = new SbiExprNode( Unary(), eTok, nullptr );
             }
             break;
         case PLUS:
@@ -762,13 +762,13 @@ SbiExprNode* SbiExpression::Comp()
 
 SbiExprNode* SbiExpression::VBA_Not()
 {
-    SbiExprNode* pNd = NULL;
+    SbiExprNode* pNd = nullptr;
 
     SbiToken eTok = pParser->Peek();
     if( eTok == NOT )
     {
         pParser->Next();
-        pNd = new SbiExprNode( VBA_Not(), eTok, NULL );
+        pNd = new SbiExprNode( VBA_Not(), eTok, nullptr );
     }
     else
     {
@@ -923,7 +923,7 @@ short SbiConstExpression::GetShortValue()
 SbiExprList::SbiExprList( SbiParser* p )
 {
     pParser = p;
-    pFirst = NULL;
+    pFirst = nullptr;
     nExpr  =
     nDim   = 0;
     bError = false;
@@ -1020,7 +1020,7 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
         return;
     }
     // read in parameter table and lay down in correct order!
-    SbiExpression* pLast = NULL;
+    SbiExpression* pLast = nullptr;
     OUString aName;
     while( !bError )
     {
@@ -1089,7 +1089,7 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
                 pExpr->GetName() = aName;
             }
         }
-        pExpr->pNext = NULL;
+        pExpr->pNext = nullptr;
         if( !pLast )
         {
             pFirst = pLast = pExpr;
@@ -1162,7 +1162,7 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
 
     if( pParser->Peek() != RPAREN )
     {
-        SbiExpression *pExpr1, *pExpr2, *pLast = NULL;
+        SbiExpression *pExpr1, *pExpr2, *pLast = nullptr;
         SbiToken eTok;
         for( ;; )
         {
@@ -1189,7 +1189,7 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
             else
             {
                 pExpr1->SetBased();
-                pExpr1->pNext = NULL;
+                pExpr1->pNext = nullptr;
                 bConst = bConst && pExpr1->IsIntConstant();
                 bError = bError || !pExpr1->IsValid();
                 if( !pLast )

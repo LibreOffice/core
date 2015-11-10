@@ -163,7 +163,7 @@ void BasicScriptListener_Impl::firing( const ScriptEvent& aScriptEvent ) throw (
 {
     SolarMutexGuard g;
 
-    firing_impl( aScriptEvent, NULL );
+    firing_impl( aScriptEvent, nullptr );
 }
 
 Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
@@ -210,7 +210,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 
         SbxObject* p = maBasicRef;
         SbxObject* pParent = p->GetParent();
-        SbxObject* pParentParent = pParent ? pParent->GetParent() : NULL;
+        SbxObject* pParentParent = pParent ? pParent->GetParent() : nullptr;
 
         StarBASICRef xAppStandardBasic;
         StarBASICRef xDocStandardBasic;
@@ -249,7 +249,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         {
             bSearchLib = false;
         }
-        SbxVariable* pMethVar = NULL;
+        SbxVariable* pMethVar = nullptr;
         // Be still tolerant and make default search if no search basic exists
         if( bSearchLib && xLibSearchBasic.Is() )
         {
@@ -284,7 +284,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         }
 
         // Default: Be tolerant and search everywhere
-        if( (!pMethVar || 0 == dynamic_cast<const SbMethod*>( pMethVar)) && maBasicRef.Is() )
+        if( (!pMethVar || nullptr == dynamic_cast<const SbMethod*>( pMethVar)) && maBasicRef.Is() )
         {
             pMethVar = maBasicRef->FindQualified( aMacro, SbxCLASS_DONTCARE );
         }
@@ -309,7 +309,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         }
 
         // Call method
-        SbxVariableRef xValue = pRet ? new SbxVariable : 0;
+        SbxVariableRef xValue = pRet ? new SbxVariable : nullptr;
         if( xArray.Is() )
         {
             pMeth->SetParameters( xArray );
@@ -319,7 +319,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         {
             *pRet = sbxToUnoValue( xValue );
         }
-        pMeth->SetParameters( NULL );
+        pMeth->SetParameters( nullptr );
     }
     else // scripting framework script
     {
@@ -333,7 +333,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
     css::uno::Reference< css::container::XNameContainer > aRetDlgLib;
 
     SbxVariable* pDlgLibContVar = pBasic->Find("DialogLibraries", SbxCLASS_OBJECT);
-    if( pDlgLibContVar && 0 != dynamic_cast<const SbUnoObject*>( pDlgLibContVar) )
+    if( pDlgLibContVar && nullptr != dynamic_cast<const SbUnoObject*>( pDlgLibContVar) )
     {
         SbUnoObject* pDlgLibContUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pDlgLibContVar));
         Any aDlgLibContAny = pDlgLibContUnoObj->getUnoAny();
@@ -384,11 +384,11 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
     css::uno::Reference< css::container::XNameContainer > aDlgLib;
     // Find dialog library for dialog, direct access is not possible here
     StarBASIC* pStartedBasic = static_cast<StarBASIC*>(pBasic);
-    SbxObject* pParentBasic = pStartedBasic ? pStartedBasic->GetParent() : NULL;
-    SbxObject* pParentParentBasic = pParentBasic ? pParentBasic->GetParent() : NULL;
+    SbxObject* pParentBasic = pStartedBasic ? pStartedBasic->GetParent() : nullptr;
+    SbxObject* pParentParentBasic = pParentBasic ? pParentBasic->GetParent() : nullptr;
 
-    SbxObject* pSearchBasic1 = NULL;
-    SbxObject* pSearchBasic2 = NULL;
+    SbxObject* pSearchBasic1 = nullptr;
+    SbxObject* pSearchBasic2 = nullptr;
     if( pParentParentBasic )
     {
         pSearchBasic1 = pParentBasic;
@@ -432,7 +432,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
     // Get dialog
     SbxBaseRef pObj = rPar.Get( 1 )->GetObject();
-    if( !(pObj && 0 != dynamic_cast<const SbUnoObject*>( &pObj )) )
+    if( !(pObj && nullptr != dynamic_cast<const SbUnoObject*>( &pObj )) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
@@ -486,7 +486,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
     css::uno::Reference< css::container::XNameContainer > aDlgLib;
     bool bDocDialog = false;
-    StarBASIC* pFoundBasic = NULL;
+    StarBASIC* pFoundBasic = nullptr;
     SAL_INFO("basic", "About to try get a hold of ThisComponent");
     Reference< frame::XModel > xModel = StarBASIC::GetModelFromBasic( GetSbData()->pInst->GetBasic() ) ;
     aDlgLib = implFindDialogLibForDialogBasic( aAnyISP, GetSbData()->pInst->GetBasic(), pFoundBasic );

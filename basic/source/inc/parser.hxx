@@ -50,7 +50,7 @@ class SbiParser : public SbiTokenizer
     void DefProc( bool bStatic, bool bPrivate ); // read in procedure
     void DefVar( SbiOpcode eOp, bool bStatic ); // read in DIM/REDIM
     void TypeDecl( SbiSymDef&, bool bAsNewAlreadyParsed=false );    // AS-declaration
-    void OpenBlock( SbiToken, SbiExprNode* = NULL );
+    void OpenBlock( SbiToken, SbiExprNode* = nullptr );
     void CloseBlock();
     bool Channel( bool bAlways=false );     // parse channel number
     void StmntBlock( SbiToken );
@@ -96,7 +96,7 @@ public:
     bool TestComma();
     void TestEoln();
 
-    void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );  // let or call
+    void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr );  // let or call
     void ErrorStmnt();              // ERROR n
     void BadBlock();                // LOOP/WEND/NEXT
     void NoIf();                    // ELSE/ELSE IF without IF

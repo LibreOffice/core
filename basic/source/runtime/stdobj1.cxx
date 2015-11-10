@@ -52,7 +52,7 @@ SbxObject* SbStdFactory::CreateObject( const OUString& rClassName )
     else if( rClassName.equalsIgnoreAsciiCase("Font") )
         return new SbStdFont;
     else
-        return NULL;
+        return nullptr;
 }
 
 

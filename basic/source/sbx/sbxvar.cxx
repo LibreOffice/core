@@ -48,7 +48,7 @@ class SbxVariableImpl
     StarBASIC*                  m_pComListenerParentBasic;
 
     SbxVariableImpl()
-        : m_pComListenerParentBasic( NULL )
+        : m_pComListenerParentBasic( nullptr )
     {}
     SbxVariableImpl( const SbxVariableImpl& r )
         : m_aDeclareClassName( r.m_aDeclareClassName )
@@ -63,9 +63,9 @@ class SbxVariableImpl
 
 SbxVariable::SbxVariable() : SbxValue()
 {
-    mpSbxVariableImpl = NULL;
-    pCst = NULL;
-    pParent = NULL;
+    mpSbxVariableImpl = nullptr;
+    pCst = nullptr;
+    pParent = nullptr;
     nUserData = 0;
     nHash = 0;
 }
@@ -76,8 +76,8 @@ SbxVariable::SbxVariable( const SbxVariable& r )
       mpPar( r.mpPar ),
       pInfo( r.pInfo )
 {
-    mpSbxVariableImpl = NULL;
-    if( r.mpSbxVariableImpl != NULL )
+    mpSbxVariableImpl = nullptr;
+    if( r.mpSbxVariableImpl != nullptr )
     {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
 #if HAVE_FEATURE_SCRIPTING
@@ -87,7 +87,7 @@ SbxVariable::SbxVariable( const SbxVariable& r )
         }
 #endif
     }
-    pCst = NULL;
+    pCst = nullptr;
     if( r.CanRead() )
     {
         pParent = r.pParent;
@@ -97,7 +97,7 @@ SbxVariable::SbxVariable( const SbxVariable& r )
     }
     else
     {
-        pParent = NULL;
+        pParent = nullptr;
         nUserData = 0;
         nHash = 0;
     }
@@ -105,9 +105,9 @@ SbxVariable::SbxVariable( const SbxVariable& r )
 
 SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 {
-    mpSbxVariableImpl = NULL;
-    pCst = NULL;
-    pParent = NULL;
+    mpSbxVariableImpl = nullptr;
+    pCst = nullptr;
+    pParent = nullptr;
     nUserData = 0;
     nHash = 0;
 }
@@ -171,7 +171,7 @@ void SbxVariable::Broadcast( sal_uInt32 nHintId )
 
         // Avoid further broadcasting
         SfxBroadcaster* pSave = pCst;
-        pCst = NULL;
+        pCst = nullptr;
         SbxFlagBits nSaveFlags = GetFlags();
         SetFlag( SbxFlagBits::ReadWrite );
         if( mpPar.Is() )
@@ -351,7 +351,7 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
 {
     SbxValue::operator=( r );
     delete mpSbxVariableImpl;
-    if( r.mpSbxVariableImpl != NULL )
+    if( r.mpSbxVariableImpl != nullptr )
     {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
 #if HAVE_FEATURE_SCRIPTING
@@ -363,7 +363,7 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     }
     else
     {
-        mpSbxVariableImpl = NULL;
+        mpSbxVariableImpl = nullptr;
     }
     return *this;
 }
@@ -432,7 +432,7 @@ void SbxVariable::SetParent( SbxObject* p )
 
 SbxVariableImpl* SbxVariable::getImpl()
 {
-    if( mpSbxVariableImpl == NULL )
+    if( mpSbxVariableImpl == nullptr )
     {
         mpSbxVariableImpl = new SbxVariableImpl();
     }
@@ -522,7 +522,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
                     rStrm, RTL_TEXTENCODING_ASCII_US);
             double d;
             SbxDataType t;
-            if( ImpScan( aTmpString, d, t, NULL ) != ERRCODE_SBX_OK || t == SbxDOUBLE )
+            if( ImpScan( aTmpString, d, t, nullptr ) != ERRCODE_SBX_OK || t == SbxDOUBLE )
             {
                 aTmp.nSingle = 0;
                 return false;
@@ -537,7 +537,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             aTmpString = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
                                                                         RTL_TEXTENCODING_ASCII_US);
             SbxDataType t;
-            if( ImpScan( aTmpString, aTmp.nDouble, t, NULL ) != ERRCODE_SBX_OK )
+            if( ImpScan( aTmpString, aTmp.nDouble, t, nullptr ) != ERRCODE_SBX_OK )
             {
                 aTmp.nDouble = 0;
                 return false;

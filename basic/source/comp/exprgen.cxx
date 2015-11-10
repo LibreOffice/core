@@ -82,7 +82,7 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
     }
     else if( IsOperand() )
     {
-        SbiExprNode* pWithParent_ = NULL;
+        SbiExprNode* pWithParent_ = nullptr;
         SbiOpcode eOp;
         if( aVar.pDef->GetScope() == SbPARAM )
         {
@@ -108,7 +108,7 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
             }
         }
         // special treatment for WITH
-        else if( (pWithParent_ = GetWithParent()) != NULL )
+        else if( (pWithParent_ = GetWithParent()) != nullptr )
         {
             eOp = _ELEM;            // .-Term in WITH
         }
@@ -133,7 +133,7 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
         }
         for( SbiExprNode* p = this; p; p = p->aVar.pNext )
         {
-            if( p == this && pWithParent_ != NULL )
+            if( p == this && pWithParent_ != nullptr )
             {
                 pWithParent_->Gen(rGen);
             }

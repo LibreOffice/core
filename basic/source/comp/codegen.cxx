@@ -219,7 +219,7 @@ void SbiCodeGen::Save()
                     }
                 }
             }
-            SbMethod* pMeth = NULL;
+            SbMethod* pMeth = nullptr;
             for( sal_uInt16 nPass = 0 ; nPass < nPassCount ; nPass++ )
             {
                 if( nPass == 1 )
@@ -336,7 +336,7 @@ void SbiCodeGen::Save()
                         {
                             nUserData |= PARAM_INFO_WITHBRACKETS;
                         }
-                        SbxParamInfo* pParam = NULL;
+                        SbxParamInfo* pParam = nullptr;
                         if( nUserData )
                         {
                             pParam = const_cast<SbxParamInfo*>(pInfo->GetParam( i ));
@@ -491,7 +491,7 @@ class BufferTransformer : public PCodeVisitor< T >
     sal_uInt8* m_pStart;
     SbiBuffer m_ConvertedBuf;
 public:
-    BufferTransformer():m_pStart(NULL), m_ConvertedBuf( NULL, 1024 ) {}
+    BufferTransformer():m_pStart(nullptr), m_ConvertedBuf( nullptr, 1024 ) {}
     virtual void start( sal_uInt8* pStart ) override { m_pStart = pStart; }
     virtual void processOpCode0( SbiOpcode eOp ) override
     {

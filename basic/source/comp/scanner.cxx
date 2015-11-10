@@ -26,7 +26,7 @@
 SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
 {
     pBasic   = p;
-    pLine    = NULL;
+    pLine    = nullptr;
     nVal     = 0;
     eScanType = SbxVARIANT;
     nErrors  = 0;
@@ -48,7 +48,7 @@ SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
     bInStatement =
     bPrevLineExtentsComment = false;
     bHash    = true;
-    pSaveLine = NULL;
+    pSaveLine = nullptr;
 }
 
 SbiScanner::~SbiScanner()
@@ -537,7 +537,7 @@ PrevLineCommentLbl:
         if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
             bPrevLineExtentsComment = true;
         nCol2 = nCol2 + nLen;
-        pLine = NULL;
+        pLine = nullptr;
     }
     return true;
 
@@ -545,7 +545,7 @@ PrevLineCommentLbl:
 eoln:
     if( nCol && *--pLine == '_' )
     {
-        pLine = NULL;
+        pLine = nullptr;
         bool bRes = NextSym();
         if( bVBASupportOn && aSym[0] == '.' )
         {
@@ -559,7 +559,7 @@ eoln:
     }
     else
     {
-        pLine = NULL;
+        pLine = nullptr;
         nLine = nOldLine;
         nCol1 = nOldCol1;
         nCol2 = nOldCol2;

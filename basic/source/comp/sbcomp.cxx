@@ -959,7 +959,7 @@ bool SbModule::Compile()
     bool bRet = IsCompiled();
     if( bRet )
     {
-        if( 0 == dynamic_cast<const SbObjModule*>( this) )
+        if( nullptr == dynamic_cast<const SbObjModule*>( this) )
             pBasic->ClearAllModuleVars();
         RemoveVars(); // remove 'this' Modules variables
         // clear all method statics
@@ -971,7 +971,7 @@ bool SbModule::Compile()
         }
 
         // #i31510 Init other libs only if Basic isn't running
-        if( GetSbData()->pInst == NULL )
+        if( GetSbData()->pInst == nullptr )
         {
             SbxObject* pParent_ = pBasic->GetParent();
             if( pParent_ )

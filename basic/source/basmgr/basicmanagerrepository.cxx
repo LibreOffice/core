@@ -225,7 +225,7 @@ namespace basic
             without creating another instance.
          */
         BasicManager*& pBasicManager = impl_getLocationForModel( _rxDocumentModel );
-        if ( pBasicManager == NULL )
+        if ( pBasicManager == nullptr )
             impl_createManagerForModel( pBasicManager, _rxDocumentModel );
 
         return pBasicManager;
@@ -237,7 +237,7 @@ namespace basic
         SolarMutexGuard g;
 
         BasicManager* pAppManager = GetSbData()->pAppBasMgr;
-        if ( ( pAppManager == NULL ) && _bCreate )
+        if ( ( pAppManager == nullptr ) && _bCreate )
             pAppManager = impl_createApplicationBasicManager();
 
         return pAppManager;
@@ -259,7 +259,7 @@ namespace basic
     {
         SolarMutexGuard g;
 
-        OSL_PRECOND( getApplicationBasicManager( false ) == NULL, "ImplRepository::impl_createApplicationBasicManager: there already is one!" );
+        OSL_PRECOND( getApplicationBasicManager( false ) == nullptr, "ImplRepository::impl_createApplicationBasicManager: there already is one!" );
 
         // Determine Directory
         SvtPathOptions aPathCFG;
@@ -308,7 +308,7 @@ namespace basic
         // (BasicLibraries and DialogLibraries have automatically been added in SetLibraryContainerInfo)
 
         // notify
-        impl_notifyCreationListeners( NULL, *pBasicManager );
+        impl_notifyCreationListeners( nullptr, *pBasicManager );
 
         // outta here
         return pBasicManager;
@@ -352,8 +352,8 @@ namespace basic
     {
         BasicManager* pAppManager = getApplicationBasicManager( true );
 
-        StarBASIC* pAppBasic = pAppManager ? pAppManager->GetLib(0) : NULL;
-        DBG_ASSERT( pAppBasic != NULL, "impl_getApplicationBasic: unable to determine the default application's Basic library!" );
+        StarBASIC* pAppBasic = pAppManager ? pAppManager->GetLib(0) : nullptr;
+        DBG_ASSERT( pAppBasic != nullptr, "impl_getApplicationBasic: unable to determine the default application's Basic library!" );
         return pAppBasic;
     }
 
@@ -398,7 +398,7 @@ namespace basic
     {
         StarBASIC* pAppBasic = impl_getDefaultAppBasicLibrary();
 
-        _out_rpBasicManager = 0;
+        _out_rpBasicManager = nullptr;
         Reference< XStorage > xStorage;
         if ( !impl_getDocumentStorage_nothrow( _rxDocumentModel, xStorage ) )
         {
@@ -434,7 +434,7 @@ namespace basic
                     {
                         // user wants to break loading of BASIC-manager
                         delete _out_rpBasicManager;
-                        _out_rpBasicManager = NULL;
+                        _out_rpBasicManager = nullptr;
                         xStorage.clear();
                         break;
                     }
@@ -448,7 +448,7 @@ namespace basic
             // create new BASIC-manager
             StarBASIC* pBasic = new StarBASIC( pAppBasic );
             pBasic->SetFlag( SbxFlagBits::ExtSearch );
-            _out_rpBasicManager = new BasicManager( pBasic, NULL, true );
+            _out_rpBasicManager = new BasicManager( pBasic, nullptr, true );
         }
 
         // knit the containers with the BasicManager
@@ -599,7 +599,7 @@ namespace basic
 
     void BasicManagerRepository::resetApplicationBasicManager()
     {
-        return ImplRepository::Instance().setApplicationBasicManager( NULL );
+        return ImplRepository::Instance().setApplicationBasicManager( nullptr );
     }
 
 

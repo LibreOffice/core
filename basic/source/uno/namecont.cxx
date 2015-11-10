@@ -386,7 +386,7 @@ SfxLibraryContainer::SfxLibraryContainer()
     , maNameContainer( new NameContainer(cppu::UnoType<XNameAccess>::get()) )
     , mbOldInfoFormat( false )
     , mbOasis2OOoFormat( false )
-    , mpBasMgr( NULL )
+    , mpBasMgr( nullptr )
     , mbOwnBasMgr( false )
     , meInitMode(DEFAULT)
 {
@@ -667,7 +667,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             meInitMode = LIBRARY_INIT_FILE;
             uno::Reference< embed::XStorage > xDummyStor;
             ::xmlscript::LibDescriptor aLibDesc;
-            implLoadLibraryIndexFile( NULL, aLibDesc, xDummyStor, aInitFileName );
+            implLoadLibraryIndexFile( nullptr, aLibDesc, xDummyStor, aInitFileName );
             return;
         }
         else
@@ -2729,7 +2729,7 @@ void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArgument
 
 void SAL_CALL SfxLibraryContainer::initializeFromDocumentURL( const OUString& _rInitialDocumentURL )
 {
-    init( _rInitialDocumentURL, NULL );
+    init( _rInitialDocumentURL, nullptr );
 }
 
 void SAL_CALL SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBasedDocument >& _rxDocument )
@@ -3224,7 +3224,7 @@ void SfxLibrary::removeByName( const OUString& Name )
 Sequence< Type > SfxLibrary::getTypes()
     throw( RuntimeException, std::exception )
 {
-    static OTypeCollection * s_pTypes_NameContainer = 0;
+    static OTypeCollection * s_pTypes_NameContainer = nullptr;
     if( !s_pTypes_NameContainer )
     {
         MutexGuard aGuard( Mutex::getGlobalMutex() );
@@ -3291,7 +3291,7 @@ ScriptExtensionIterator::ScriptExtensionIterator()
     , m_iUserPackage( 0 )
     , m_iSharedPackage( 0 )
        , m_iBundledPackage( 0 )
-    , m_pScriptSubPackageIterator( NULL )
+    , m_pScriptSubPackageIterator( nullptr )
 {}
 
 OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDialogLib )
@@ -3470,7 +3470,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
     }
     else
     {
-        if( m_pScriptSubPackageIterator == NULL )
+        if( m_pScriptSubPackageIterator == nullptr )
         {
             const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage ];
@@ -3481,13 +3481,13 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
-        if( m_pScriptSubPackageIterator != NULL )
+        if( m_pScriptSubPackageIterator != nullptr )
         {
             xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
             if( !xScriptPackage.is() )
             {
                 delete m_pScriptSubPackageIterator;
-                m_pScriptSubPackageIterator = NULL;
+                m_pScriptSubPackageIterator = nullptr;
                 m_iUserPackage++;
             }
         }
@@ -3524,7 +3524,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
     }
     else
     {
-        if( m_pScriptSubPackageIterator == NULL )
+        if( m_pScriptSubPackageIterator == nullptr )
         {
             const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage ];
@@ -3535,13 +3535,13 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
-        if( m_pScriptSubPackageIterator != NULL )
+        if( m_pScriptSubPackageIterator != nullptr )
         {
             xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
             if( !xScriptPackage.is() )
             {
                 delete m_pScriptSubPackageIterator;
-                m_pScriptSubPackageIterator = NULL;
+                m_pScriptSubPackageIterator = nullptr;
                 m_iSharedPackage++;
             }
         }
@@ -3578,7 +3578,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
     }
     else
     {
-        if( m_pScriptSubPackageIterator == NULL )
+        if( m_pScriptSubPackageIterator == nullptr )
         {
             const Reference< deployment::XPackage >* pBundledPackages = m_aBundledPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage ];
@@ -3589,13 +3589,13 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
-        if( m_pScriptSubPackageIterator != NULL )
+        if( m_pScriptSubPackageIterator != nullptr )
         {
             xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
             if( !xScriptPackage.is() )
             {
                 delete m_pScriptSubPackageIterator;
-                m_pScriptSubPackageIterator = NULL;
+                m_pScriptSubPackageIterator = nullptr;
                 m_iBundledPackage++;
             }
         }

@@ -340,7 +340,7 @@ void SAL_CALL SfxScriptLibraryContainer::importFromOldStorage( const OUString& a
         BasicManager* pBasicManager = new BasicManager( *static_cast<SotStorage*>(xStorage), aFile );
 
         // Set info
-        LibraryContainerInfo aInfo( this, NULL, static_cast< OldBasicPassword* >( this ) );
+        LibraryContainerInfo aInfo( this, nullptr, static_cast< OldBasicPassword* >( this ) );
         pBasicManager->SetLibraryContainerInfo( aInfo );
 
         // Now the libraries should be copied to this SfxScriptLibraryContainer
@@ -867,7 +867,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         }
     }
 
-    StarBASIC* pBasicLib = NULL;
+    StarBASIC* pBasicLib = nullptr;
     bool bLoadBinary = false;
     if( !pScriptLib->mbLoadedBinary && !bVerifyPasswordOnly && !pLib->mbPasswordVerified )
     {
@@ -875,7 +875,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         OSL_ENSURE( pBasicMgr, "SfxScriptLibraryContainer::implLoadPasswordLibrary: cannot do this without a BasicManager!" );
         bool bLoaded = pScriptLib->mbLoaded;
         pScriptLib->mbLoaded = true;        // Necessary to get lib
-        pBasicLib = pBasicMgr ? pBasicMgr->GetLib( Name ) : NULL;
+        pBasicLib = pBasicMgr ? pBasicMgr->GetLib( Name ) : nullptr;
         pScriptLib->mbLoaded = bLoaded;    // Restore flag
         if( !pBasicLib )
         {

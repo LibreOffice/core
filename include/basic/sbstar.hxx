@@ -88,7 +88,7 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASIC,1);
     TYPEINFO_OVERRIDE();
 
-    StarBASIC( StarBASIC* pParent = NULL, bool bIsDocBasic = false );
+    StarBASIC( StarBASIC* pParent = nullptr, bool bIsDocBasic = false );
 
     // #51727 SetModified overridden so that the Modfied-State is
         // not delivered to Parent.
@@ -119,13 +119,13 @@ public:
     static sal_Int32 GetErl();
 
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
-    virtual bool Call( const OUString&, SbxArray* = NULL ) override;
+    virtual bool Call( const OUString&, SbxArray* = nullptr ) override;
 
     SbxArray*       GetModules() { return pModules; }
     SbxObject*      GetRtl()     { return pRtl;     }
     SbModule*       FindModule( const OUString& );
     // Run init code of all modules (including the inserted Doc-Basics)
-    void            InitAllModules( StarBASIC* pBasicNotToInit = NULL );
+    void            InitAllModules( StarBASIC* pBasicNotToInit = nullptr );
     void            DeInitAllModules();
     void            ClearAllModuleVars();
 

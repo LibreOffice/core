@@ -227,7 +227,7 @@ Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
 Reference< XIntrospectionAccess > SAL_CALL
 DocObjectWrapper::getIntrospection(  ) throw (RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 Any SAL_CALL
@@ -319,7 +319,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
     // get return value
     aReturn = sbxToUnoValue( xReturn );
 
-    pMethod->SetParameters( NULL );
+    pMethod->SetParameters( nullptr );
 
     return aReturn;
 }
@@ -385,7 +385,7 @@ Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
 
 SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeException, std::exception)
 {
-    SbMethodRef pMethod = NULL;
+    SbMethodRef pMethod = nullptr;
     if ( m_pMod )
     {
         SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
@@ -400,7 +400,7 @@ SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeE
 
 SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (RuntimeException, std::exception)
 {
-    SbPropertyRef pProperty = NULL;
+    SbPropertyRef pProperty = nullptr;
     if ( m_pMod )
     {
         SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
@@ -483,7 +483,7 @@ IMPL_STATIC_LINK_NOARG_TYPED( AsyncQuitHandler, OnAsyncQuit, void*, void )
 
 SbModule::SbModule( const OUString& rName, bool bVBACompat )
          : SbxObject( "StarBASICModule" ),
-           pImage( NULL ), pBreaks( NULL ), pClassData( NULL ), mbVBACompat( bVBACompat ),  pDocObject( NULL ), bIsProxyModule( false )
+           pImage( nullptr ), pBreaks( nullptr ), pClassData( nullptr ), mbVBACompat( bVBACompat ),  pDocObject( nullptr ), bIsProxyModule( false )
 {
     SetName( rName );
     SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
@@ -491,7 +491,7 @@ SbModule::SbModule( const OUString& rName, bool bVBACompat )
 
     // #i92642: Set name property to intitial name
     SbxVariable* pNameProp = pProps->Find( "Name", SbxCLASS_PROPERTY );
-    if( pNameProp != NULL )
+    if( pNameProp != nullptr )
     {
         pNameProp->PutString( GetName() );
     }
@@ -503,7 +503,7 @@ SbModule::~SbModule()
     delete pImage;
     delete pBreaks;
     delete pClassData;
-    mxWrapper = NULL;
+    mxWrapper = nullptr;
 }
 
 uno::Reference< script::XInvocation >
@@ -518,12 +518,12 @@ SbModule::GetUnoModule()
 
 bool SbModule::IsCompiled() const
 {
-    return pImage != 0;
+    return pImage != nullptr;
 }
 
 const SbxObject* SbModule::FindType( const OUString& aTypeName ) const
 {
-    return pImage ? pImage->FindType( aTypeName ) : NULL;
+    return pImage ? pImage->FindType( aTypeName ) : nullptr;
 }
 
 
@@ -531,7 +531,7 @@ const SbxObject* SbModule::FindType( const OUString& aTypeName ) const
 
 void SbModule::StartDefinitions()
 {
-    delete pImage; pImage = NULL;
+    delete pImage; pImage = nullptr;
     if( pClassData )
         pClassData->clear();
 
@@ -559,7 +559,7 @@ void SbModule::StartDefinitions()
 SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
 {
     SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
-    SbMethod* pMeth = p ? dynamic_cast<SbMethod*>( p ) : NULL;
+    SbMethod* pMeth = p ? dynamic_cast<SbMethod*>( p ) : nullptr;
     if( p && !pMeth )
     {
         pMethods->Remove( p );
@@ -591,7 +591,7 @@ SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
 SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
 {
     SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
-    SbProperty* pProp = p ? dynamic_cast<SbProperty*>( p ) : NULL;
+    SbProperty* pProp = p ? dynamic_cast<SbProperty*>( p ) : nullptr;
     if( p && !pProp )
     {
         pProps->Remove( p );
@@ -610,7 +610,7 @@ SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
 SbProcedureProperty* SbModule::GetProcedureProperty( const OUString& rName, SbxDataType t )
 {
     SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
-    SbProcedureProperty* pProp = p ? dynamic_cast<SbProcedureProperty*>( p ) : NULL;
+    SbProcedureProperty* pProp = p ? dynamic_cast<SbProcedureProperty*>( p ) : nullptr;
     if( p && !pProp )
     {
         pProps->Remove( p );
@@ -629,7 +629,7 @@ SbProcedureProperty* SbModule::GetProcedureProperty( const OUString& rName, SbxD
 SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth )
 {
     SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
-    SbIfaceMapperMethod* pMapperMethod = p ? dynamic_cast<SbIfaceMapperMethod*>( p ) : NULL;
+    SbIfaceMapperMethod* pMapperMethod = p ? dynamic_cast<SbIfaceMapperMethod*>( p ) : nullptr;
     if( p && !pMapperMethod )
     {
         pMethods->Remove( p );
@@ -679,7 +679,7 @@ void SbModule::EndDefinitions( bool bNewState )
 
 void SbModule::Clear()
 {
-    delete pImage; pImage = NULL;
+    delete pImage; pImage = nullptr;
     if( pClassData )
         pClassData->clear();
     SbxObject::Clear();
@@ -692,7 +692,7 @@ SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if ( bIsProxyModule && !GetSbData()->bRunInit )
     {
-        return NULL;
+        return nullptr;
     }
     if( !pRes && pImage )
     {
@@ -764,7 +764,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     aVals.eType = SbxVARIANT;
 
                     SbxArray* pArg = pVar->GetParameters();
-                    sal_uInt16 nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
+                    sal_uInt16 nVarParCount = (pArg != nullptr) ? pArg->Count() : 0;
                     if( nVarParCount > 1 )
                     {
                         SbxArrayRef xMethParameters = new SbxArray;
@@ -777,7 +777,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                         pMethVar->SetParameters( xMethParameters );
                         pMethVar->Get( aVals );
-                        pMethVar->SetParameters( NULL );
+                        pMethVar->SetParameters( nullptr );
                     }
                     else
                     {
@@ -789,7 +789,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             else if( pHint->GetId() == SBX_HINT_DATACHANGED )
             {
-                SbxVariable* pMethVar = NULL;
+                SbxVariable* pMethVar = nullptr;
 
                 bool bSet = pProcProperty->isSet();
                 if( bSet )
@@ -817,7 +817,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     SbxValues aVals;
                     pMethVar->Get( aVals );
-                    pMethVar->SetParameters( NULL );
+                    pMethVar->SetParameters( nullptr );
                 }
             }
         }
@@ -919,7 +919,7 @@ void SbModule::SetSource32( const OUString& r )
             eLastTok = eCurTok;
         }
         // Definition of the method
-        SbMethod* pMeth = NULL;
+        SbMethod* pMeth = nullptr;
         if( eEndTok != NIL )
         {
             sal_uInt16 nLine1 = aTok.GetLine();
@@ -1069,7 +1069,7 @@ void SbModule::Run( SbMethod* pMeth )
 
     static sal_uInt16 nMaxCallLevel = 0;
 
-    bool bDelInst = ( GetSbData()->pInst == NULL );
+    bool bDelInst = ( GetSbData()->pInst == nullptr );
     bool bQuit = false;
     StarBASICRef xBasic;
     uno::Reference< frame::XModel > xModel;
@@ -1214,7 +1214,7 @@ void SbModule::Run( SbMethod* pMeth )
                 clearNativeObjectWrapperVector();
 
                 SAL_WARN_IF(GetSbData()->pInst->nCallLvl != 0,"basic","BASIC-Call-Level > 0");
-                delete GetSbData()->pInst, GetSbData()->pInst = NULL, bDelInst = false;
+                delete GetSbData()->pInst, GetSbData()->pInst = nullptr, bDelInst = false;
 
                 // #i30690
                 SolarMutexGuard aSolarGuard;
@@ -1259,7 +1259,7 @@ void SbModule::Run( SbMethod* pMeth )
         ClearUnoObjectsInRTL_Impl( xBasic );
 
         delete GetSbData()->pInst;
-        GetSbData()->pInst = NULL;
+        GetSbData()->pInst = nullptr;
     }
     if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !GetSbData()->pInst )
             bQuit = true;
@@ -1284,7 +1284,7 @@ void SbModule::RunInit()
         SbModule* pOldMod = GetSbData()->pMod;
         GetSbData()->pMod = this;
         // The init code starts always here
-        SbiRuntime* pRt = new SbiRuntime( this, NULL, 0 );
+        SbiRuntime* pRt = new SbiRuntime( this, nullptr, 0 );
 
         pRt->pNext = GetSbData()->pInst->pRun;
         GetSbData()->pInst->pRun = pRt;
@@ -1359,22 +1359,22 @@ void SbModule::ClearPrivateVars()
 
 void SbModule::implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic )
 {
-    if( pVar->SbxValue::GetType() != SbxOBJECT || 0 != dynamic_cast<const SbProcedureProperty*>( pVar) )
+    if( pVar->SbxValue::GetType() != SbxOBJECT || nullptr != dynamic_cast<const SbProcedureProperty*>( pVar) )
         return;
 
     SbxObject* pObj = dynamic_cast<SbxObject*>( pVar->GetObject() );
-    if( pObj != NULL )
+    if( pObj != nullptr )
     {
         SbxObject* p = pObj;
 
         SbModule* pMod = dynamic_cast<SbModule*>( p  );
-        if( pMod != NULL )
+        if( pMod != nullptr )
             pMod->ClearVarsDependingOnDeletedBasic( pDeletedBasic );
 
-        while( (p = p->GetParent()) != NULL )
+        while( (p = p->GetParent()) != nullptr )
         {
             StarBASIC* pBasic = dynamic_cast<StarBASIC*>( p  );
-            if( pBasic != NULL && pBasic == pDeletedBasic )
+            if( pBasic != nullptr && pBasic == pDeletedBasic )
             {
                 pVar->SbxValue::Clear();
                 break;
@@ -1419,7 +1419,7 @@ void StarBASIC::ClearAllModuleVars()
     {
         SbModule* pModule = static_cast<SbModule*>(pModules->Get( nMod ));
         // Initialise only, if the startcode was already executed
-        if( pModule->pImage && pModule->pImage->bInit && !pModule->isProxyModule() && 0 == dynamic_cast<const SbObjModule*>( pModule) )
+        if( pModule->pImage && pModule->pImage->bInit && !pModule->isProxyModule() && nullptr == dynamic_cast<const SbObjModule*>( pModule) )
             pModule->ClearPrivateVars();
     }
 
@@ -1524,7 +1524,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
             break;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 // Test, if a line contains STMNT-Opcodes
@@ -1535,7 +1535,7 @@ bool SbModule::IsBreakable( sal_uInt16 nLine ) const
         return false;
     const sal_uInt8* p = reinterpret_cast<const sal_uInt8*>(pImage->GetCode());
     sal_uInt16 nl, nc;
-    while( ( p = FindNextStmnt( p, nl, nc ) ) != NULL )
+    while( ( p = FindNextStmnt( p, nl, nc ) ) != nullptr )
         if( nl == nLine )
             return true;
     return false;
@@ -1599,7 +1599,7 @@ bool SbModule::ClearBP( sal_uInt16 nLine )
                 break;
         }
         if( pBreaks->empty() )
-            delete pBreaks, pBreaks = NULL;
+            delete pBreaks, pBreaks = nullptr;
     }
     return bRes;
 }
@@ -1607,7 +1607,7 @@ bool SbModule::ClearBP( sal_uInt16 nLine )
 void SbModule::ClearAllBP()
 {
     delete pBreaks;
-    pBreaks = NULL;
+    pBreaks = nullptr;
 }
 
 void
@@ -1893,7 +1893,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                     aVals.eType = SbxVARIANT;
 
                     SbxArray* pArg = pVar->GetParameters();
-                    sal_uInt16 nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
+                    sal_uInt16 nVarParCount = (pArg != nullptr) ? pArg->Count() : 0;
                     if( nVarParCount > 1 )
                     {
                         SbxArrayRef xMethParameters = new SbxArray;
@@ -1906,7 +1906,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 
                         pMeth->SetParameters( xMethParameters );
                         pMeth->Get( aVals );
-                        pMeth->SetParameters( NULL );
+                        pMeth->SetParameters( nullptr );
                     }
                     else
                     {
@@ -1918,7 +1918,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
             }
             else if( pHint->GetId() == SBX_HINT_DATACHANGED )
             {
-                SbxVariable* pMeth = NULL;
+                SbxVariable* pMeth = nullptr;
 
                 bool bSet = pProcProperty->isSet();
                 if( bSet )
@@ -1946,7 +1946,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 
                     SbxValues aVals;
                     pMeth->Get( aVals );
-                    pMeth->SetParameters( NULL );
+                    pMeth->SetParameters( nullptr );
                 }
             }
         }
@@ -1999,7 +1999,7 @@ SbMethod::SbMethod( const OUString& r, SbxDataType t, SbModule* p )
     nLine1       =
     nLine2       = 0;
     refStatics = new SbxArray;
-    mCaller          = 0;
+    mCaller          = nullptr;
     // HACK due to 'Referenz could not be saved'
     SetFlag( SbxFlagBits::NoModify );
 }
@@ -2137,7 +2137,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
     // Release objects
     pMod_->ReleaseRef();
     pBasic->ReleaseRef();
-    mCaller = 0;
+    mCaller = nullptr;
     return nErr;
 }
 
@@ -2161,7 +2161,7 @@ void SbMethod::Broadcast( sal_uInt32 nHintId )
 
         // Block broadcasts while creating new method
         SfxBroadcaster* pSave = pCst;
-        pCst = NULL;
+        pCst = nullptr;
         SbMethod* pThisCopy = new SbMethod( *this );
         SbMethodRef xHolder = pThisCopy;
         if( mpPar.Is() )
@@ -2170,7 +2170,7 @@ void SbMethod::Broadcast( sal_uInt32 nHintId )
             if( GetType() != SbxVOID ) {
                 mpPar->PutDirect( pThisCopy, 0 );
             }
-            SetParameters( NULL );
+            SetParameters( nullptr );
         }
 
         pCst = pSave;
@@ -2178,7 +2178,7 @@ void SbMethod::Broadcast( sal_uInt32 nHintId )
 
         SbxFlagBits nSaveFlags = GetFlags();
         SetFlag( SbxFlagBits::ReadWrite );
-        pCst = NULL;
+        pCst = nullptr;
         Put( pThisCopy->GetValues_Impl() );
         pCst = pSave;
         SetFlags( nSaveFlags );
@@ -2242,7 +2242,7 @@ SbObjModule::GetObject()
 SbxVariable*
 SbObjModule::Find( const OUString& rName, SbxClassType t )
 {
-    SbxVariable* pVar = NULL;
+    SbxVariable* pVar = nullptr;
     if ( pDocObject)
         pVar = pDocObject->Find( rName, t );
     if ( !pVar )
@@ -2482,8 +2482,8 @@ void SbUserFormModule::ResetApiObj(  bool bTriggerTerminateEvent )
     {
         triggerTerminateEvent();
     }
-    pDocObject = NULL;
-    m_xDialog = NULL;
+    pDocObject = nullptr;
+    m_xDialog = nullptr;
 }
 
 void SbUserFormModule::triggerMethod( const OUString& aMethodToRun )
@@ -2523,7 +2523,7 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
             {
                 aArguments[i] = sbxToUnoValue( xArray->Get( static_cast< sal_uInt16 >(i) + 1) );
             }
-            pMeth->SetParameters( NULL );
+            pMeth->SetParameters( nullptr );
         }
         else
         {
@@ -2699,7 +2699,7 @@ void SbUserFormModule::InitObject()
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );
 
             // the dialog must be disposed at the end!
-            StarBASIC* pParentBasic = NULL;
+            StarBASIC* pParentBasic = nullptr;
             SbxObject* pCurObject = this;
             do
             {
@@ -2707,9 +2707,9 @@ void SbUserFormModule::InitObject()
                 pParentBasic = dynamic_cast<StarBASIC*>( pObjParent  );
                 pCurObject = pObjParent;
             }
-            while( pParentBasic == NULL && pCurObject != NULL );
+            while( pParentBasic == nullptr && pCurObject != nullptr );
 
-            SAL_WARN_IF( pParentBasic == NULL, "basic", "pParentBasic == NULL" );
+            SAL_WARN_IF( pParentBasic == nullptr, "basic", "pParentBasic == NULL" );
             registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
 
             // if old listener object exists, remove it from dialog and document model

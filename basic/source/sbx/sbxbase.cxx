@@ -34,7 +34,7 @@ TYPEINIT0(SbxBase)
 
 SbxAppData::SbxAppData()
     : eSbxError(ERRCODE_SBX_OK)
-    , pBasicFormater(0)
+    , pBasicFormater(nullptr)
     , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
 {
 }
@@ -174,7 +174,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     }
     // Unknown type: go over the factories!
     SbxAppData& r = GetSbxData_Impl();
-    SbxBase* pNew = NULL;
+    SbxBase* pNew = nullptr;
     for (auto const& rpFac : r.m_Factories)
     {
         pNew = rpFac->Create( nSbxId, nCreator );
@@ -188,7 +188,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
 SbxObject* SbxBase::CreateObject( const OUString& rClass )
 {
     SbxAppData& r = GetSbxData_Impl();
-    SbxObject* pNew = NULL;
+    SbxObject* pNew = nullptr;
     for (auto const& rpFac : r.m_Factories)
     {
         pNew = rpFac->CreateObject( rClass );
@@ -227,7 +227,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
             {
                 // Deleting of the object
                 SbxBaseRef aRef( p );
-                p = NULL;
+                p = nullptr;
             }
         }
         else
@@ -235,7 +235,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
             rStrm.SetError( SVSTREAM_FILEFORMAT_ERROR );
             // Deleting of the object
             SbxBaseRef aRef( p );
-            p = NULL;
+            p = nullptr;
         }
     }
     else
@@ -314,12 +314,12 @@ SbxFactory::~SbxFactory()
 
 SbxBase* SbxFactory::Create( sal_uInt16, sal_uInt32 )
 {
-    return NULL;
+    return nullptr;
 }
 
 SbxObject* SbxFactory::CreateObject( const OUString& )
 {
-    return NULL;
+    return nullptr;
 }
 
 ///////////////////////////////// SbxInfo
@@ -335,7 +335,7 @@ void SbxInfo::AddParam(const OUString& rName, SbxDataType eType, SbxFlagBits nFl
 const SbxParamInfo* SbxInfo::GetParam( sal_uInt16 n ) const
 {
     if (n < 1 || n > m_Params.size())
-        return NULL;
+        return nullptr;
     else
         return m_Params[n - 1].get();
 }

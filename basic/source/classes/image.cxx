@@ -29,10 +29,10 @@
 
 SbiImage::SbiImage()
 {
-    pStringOff = NULL;
-    pStrings   = NULL;
-    pCode      = NULL;
-    pLegacyPCode = NULL;
+    pStringOff = nullptr;
+    pStrings   = nullptr;
+    pCode      = nullptr;
+    pLegacyPCode = nullptr;
     nFlags     = SbiImageFlags::NONE;
     nStrings   = 0;
     nStringSize= 0;
@@ -58,9 +58,9 @@ void SbiImage::Clear()
     delete[] pStrings;
     delete[] pCode;
     ReleaseLegacyBuffer();
-    pStringOff = NULL;
-    pStrings   = NULL;
-    pCode      = NULL;
+    pStringOff = nullptr;
+    pStrings   = nullptr;
+    pCode      = nullptr;
     nFlags     = SbiImageFlags::NONE;
     nStrings   = 0;
     nStringSize= 0;
@@ -673,7 +673,7 @@ OUString SbiImage::GetString( short nId ) const
 
 const SbxObject* SbiImage::FindType (const OUString& aTypeName) const
 {
-    return rTypes.Is() ? static_cast<SbxObject*>(rTypes->Find(aTypeName,SbxCLASS_OBJECT)) : NULL;
+    return rTypes.Is() ? static_cast<SbxObject*>(rTypes->Find(aTypeName,SbxCLASS_OBJECT)) : nullptr;
 }
 
 sal_uInt16 SbiImage::CalcLegacyOffset( sal_Int32 nOffset )
@@ -689,7 +689,7 @@ sal_uInt32 SbiImage::CalcNewOffset( sal_Int16 nOffset )
 void  SbiImage::ReleaseLegacyBuffer()
 {
     delete[] pLegacyPCode;
-    pLegacyPCode = NULL;
+    pLegacyPCode = nullptr;
     nLegacyCodeSize = 0;
 }
 

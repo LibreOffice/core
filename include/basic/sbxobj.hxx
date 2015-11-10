@@ -62,7 +62,7 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType );
     SbxVariable* FindQualified( const OUString&, SbxClassType );
     // Quick-Call-Interface for Methods
-    virtual bool Call( const OUString&, SbxArray* = NULL );
+    virtual bool Call( const OUString&, SbxArray* = nullptr );
     // Execution of DDE-Commands
     SbxVariable* Execute( const OUString& );
     // Manage elements

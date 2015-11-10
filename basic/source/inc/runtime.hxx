@@ -71,12 +71,12 @@ struct SbiForStack {                // for/next stack:
     css::uno::Reference< css::container::XEnumeration > xEnumeration;
 
     SbiForStack()
-        : pNext(NULL)
+        : pNext(nullptr)
         , eForType(FOR_TO)
         , nCurCollectionIndex(0)
-        , pArrayCurIndices(NULL)
-        , pArrayLowerBounds(NULL)
-        , pArrayUpperBounds(NULL)
+        , pArrayCurIndices(nullptr)
+        , pArrayLowerBounds(nullptr)
+        , pArrayUpperBounds(nullptr)
     {}
     ~SbiForStack()
     {
@@ -199,7 +199,7 @@ public:
     // offer NumberFormatter also static
     static SvNumberFormatter* PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
         sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
-        LanguageType* peFormatterLangType=NULL, DateFormat* peFormatterDateFormat=NULL );
+        LanguageType* peFormatterLangType=nullptr, DateFormat* peFormatterDateFormat=nullptr );
 };
 
 // chainable items to keep references temporary
@@ -208,7 +208,7 @@ struct RefSaveItem
     SbxVariableRef xRef;
     RefSaveItem* pNext;
 
-    RefSaveItem() { pNext = NULL; }
+    RefSaveItem() { pNext = nullptr; }
 };
 
 
@@ -285,7 +285,7 @@ class SbiRuntime
         {
             RefSaveItem* pToClearItem = pRefSaveList;
             pRefSaveList = pToClearItem->pNext;
-            pToClearItem->xRef = NULL;
+            pToClearItem->xRef = nullptr;
             pToClearItem->pNext = pItemStoreList;
             pItemStoreList = pToClearItem;
         }

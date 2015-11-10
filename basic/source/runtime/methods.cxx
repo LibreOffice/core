@@ -443,7 +443,7 @@ RTLFUNC(CurDir)
             StarBASIC::Error( ERRCODE_BASIC_NO_MEMORY );
             return;
           }
-        if( getcwd( pMem.get(), nSize-1 ) != NULL )
+        if( getcwd( pMem.get(), nSize-1 ) != nullptr )
           {
             rPar.Get(0)->PutString( OUString::createFromAscii(pMem.get()) );
             return;
@@ -2124,7 +2124,7 @@ RTLFUNC(DateValue)
     else
     {
         // #39629 check GetSbData()->pInst, can be called from the URL line
-        SvNumberFormatter* pFormatter = NULL;
+        SvNumberFormatter* pFormatter = nullptr;
         if( GetSbData()->pInst )
         {
             pFormatter = GetSbData()->pInst->GetNumberFormatter();
@@ -2194,7 +2194,7 @@ RTLFUNC(TimeValue)
     }
     else
     {
-        SvNumberFormatter* pFormatter = NULL;
+        SvNumberFormatter* pFormatter = nullptr;
         if( GetSbData()->pInst )
             pFormatter = GetSbData()->pInst->GetNumberFormatter();
         else
@@ -2405,7 +2405,7 @@ RTLFUNC(Time)
             double nDays = (double)nSeconds * ( 1.0 / (24.0*3600.0) );
             Color* pCol;
 
-            SvNumberFormatter* pFormatter = NULL;
+            SvNumberFormatter* pFormatter = nullptr;
             sal_uInt32 nIndex;
             if( GetSbData()->pInst )
             {
@@ -2462,7 +2462,7 @@ RTLFUNC(Date)
             OUString aRes;
             Color* pCol;
 
-            SvNumberFormatter* pFormatter = NULL;
+            SvNumberFormatter* pFormatter = nullptr;
             sal_uInt32 nIndex;
             if( GetSbData()->pInst )
             {
@@ -2528,7 +2528,7 @@ RTLFUNC(IsObject)
 
         SbUnoClass* pUnoClass;
         bool bObject;
-        if( pObj &&  NULL != ( pUnoClass=dynamic_cast<SbUnoClass*>( pObj) )  )
+        if( pObj &&  nullptr != ( pUnoClass=dynamic_cast<SbUnoClass*>( pObj) )  )
         {
             bObject = pUnoClass->getUnoClass().is();
         }
@@ -2588,7 +2588,7 @@ RTLFUNC(IsEmpty)
     }
     else
     {
-        SbxVariable* pVar = NULL;
+        SbxVariable* pVar = nullptr;
         if( SbiRuntime::isVBAEnabled() )
         {
             pVar = getDefaultProp( rPar.Get(1) );
@@ -2710,7 +2710,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
     static sal_Char cWild2 = '?';
 
     delete pRTLData->pWildCard;
-    pRTLData->pWildCard = NULL;
+    pRTLData->pWildCard = nullptr;
     pRTLData->sFullNameToBeChecked.clear();
 
     OUString aFileParam = rFileParam;
@@ -3006,7 +3006,7 @@ RTLFUNC(Dir)
                 if( nRet != FileBase::E_None )
                 {
                     delete pRTLData->pDir;
-                    pRTLData->pDir = NULL;
+                    pRTLData->pDir = nullptr;
                     rPar.Get(0)->PutString( OUString() );
                     return;
                 }
@@ -3053,7 +3053,7 @@ RTLFUNC(Dir)
                         if( nRet != FileBase::E_None )
                         {
                             delete pRTLData->pDir;
-                            pRTLData->pDir = NULL;
+                            pRTLData->pDir = nullptr;
                             aPath.clear();
                             break;
                         }
@@ -3255,7 +3255,7 @@ RTLFUNC(FileDateTime)
 
         Color* pCol;
 
-        SvNumberFormatter* pFormatter = NULL;
+        SvNumberFormatter* pFormatter = nullptr;
         sal_uInt32 nIndex;
         if( GetSbData()->pInst )
         {
@@ -3718,7 +3718,7 @@ RTLFUNC(Shell)
         ++iter;
 
         sal_uInt16 nParamCount = sal::static_int_cast< sal_uInt16 >(aTokenList.size() - 1 );
-        rtl_uString** pParamList = NULL;
+        rtl_uString** pParamList = nullptr;
         if( nParamCount )
         {
             pParamList = new rtl_uString*[nParamCount];
@@ -3726,7 +3726,7 @@ RTLFUNC(Shell)
             {
                 const OUString& rParamStr = (*iter);
                 const OUString aTempStr( rParamStr.getStr(), rParamStr.getLength());
-                pParamList[iList] = NULL;
+                pParamList[iList] = nullptr;
                 rtl_uString_assign(&(pParamList[iList]), aTempStr.pData);
             }
         }
@@ -3737,9 +3737,9 @@ RTLFUNC(Shell)
                     pParamList,
                     nParamCount,
                     nOptions,
-                    NULL,
-                    NULL,
-                    NULL, 0,
+                    nullptr,
+                    nullptr,
+                    nullptr, 0,
                     &pApp ) == osl_Process_E_None;
 
         // 53521 only free process handle on success
@@ -4414,7 +4414,7 @@ RTLFUNC(StrConv)
         refVar->ResetFlag( SbxFlagBits::Fixed );
         refVar->PutObject( pArray );
         refVar->SetFlags( nFlags );
-        refVar->SetParameters( NULL );
+        refVar->SetParameters( nullptr );
         return;
     }
     rPar.Get(0)->PutString(aNewStr);

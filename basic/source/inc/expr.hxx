@@ -120,7 +120,7 @@ public:
     SbiExprNode();
     SbiExprNode( double, SbxDataType );
     SbiExprNode( const OUString& );
-    SbiExprNode( const SbiSymDef&, SbxDataType, SbiExprList* = NULL );
+    SbiExprNode( const SbiSymDef&, SbxDataType, SbiExprList* = nullptr );
     SbiExprNode( SbiExprNode*, SbiToken, SbiExprNode* );
     SbiExprNode( SbiExprNode*, sal_uInt16 );    // #120061 TypeOf
     SbiExprNode( sal_uInt16 );                  // new <type>
@@ -167,7 +167,7 @@ protected:
     bool          bByVal;           // true: ByVal-Parameter
     bool          bBracket;         // true: Parameter list with brackets
     sal_uInt16        nParenLevel;
-    SbiExprNode* Term( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );
+    SbiExprNode* Term( const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr );
     SbiExprNode* ObjTerm( SbiSymDef& );
     SbiExprNode* Operand( bool bUsedForTypeOf = false );
     SbiExprNode* Unary();
@@ -183,9 +183,9 @@ protected:
     SbiExprNode* Boolean();
 public:
     SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR,
-        SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = NULL ); // parsing Ctor
+        SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr ); // parsing Ctor
     SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
-    SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = NULL );
+    SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = nullptr );
    ~SbiExpression();
     OUString& GetName()             { return aArgName;            }
     void SetBased()                 { bBased = true;              }

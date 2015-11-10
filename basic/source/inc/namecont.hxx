@@ -86,7 +86,7 @@ public:
     NameContainer( const css::uno::Type& rType )
         : mnElementCount( 0 )
         , mType( rType )
-        , mpxEventSource( NULL )
+        , mpxEventSource( nullptr )
         , maContainerListeners( m_aMutex )
         , maChangesListeners( m_aMutex )
     {}

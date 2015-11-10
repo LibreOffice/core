@@ -86,7 +86,7 @@ protected:
     void            GlobalRunDeInit();
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
-                                    bool bFollowJumps, const SbiImage* pImg=NULL ) const;
+                                    bool bFollowJumps, const SbiImage* pImg=nullptr ) const;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
     virtual bool LoadCompleted() override;
@@ -120,7 +120,7 @@ public:
     bool     StoreBinaryData( SvStream&, sal_uInt16 nVer );
     bool     LoadBinaryData( SvStream& );
     bool     ExceedsLegacyModuleSize();
-    void     fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
+    void     fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = nullptr ) const;
     bool     HasExeCode();
     bool     IsVBACompat() const { return mbVBACompat;}
     void     SetVBACompat( bool bCompat );

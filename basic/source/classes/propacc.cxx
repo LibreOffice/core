@@ -231,7 +231,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
     }
 
     // Object could not be created
-    refVar->PutObject( NULL );
+    refVar->PutObject( nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

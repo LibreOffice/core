@@ -66,7 +66,7 @@ protected:
     bool   bInStatement;
     void   GenError( SbError );
 public:
-    SbiScanner( const OUString&, StarBASIC* = NULL );
+    SbiScanner( const OUString&, StarBASIC* = nullptr );
    ~SbiScanner();
 
     void  EnableErrors()            { bError = false; }

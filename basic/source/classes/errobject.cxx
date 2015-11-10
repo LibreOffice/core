@@ -173,7 +173,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
 // SbxErrObject
 SbxErrObject::SbxErrObject( const OUString& rName, const uno::Any& rUnoObj )
     : SbUnoObject( rName, rUnoObj )
-    , m_pErrObject( NULL )
+    , m_pErrObject( nullptr )
 {
     OSL_TRACE("SbxErrObject::SbxErrObject ctor");
     rUnoObj >>= m_xErr;
@@ -207,7 +207,7 @@ SbxErrObject::getErrObject()
 void SbxErrObject::setNumberAndDescription( ::sal_Int32 _number, const OUString& _description )
     throw (uno::RuntimeException)
 {
-    if( m_pErrObject != NULL )
+    if( m_pErrObject != nullptr )
     {
         m_pErrObject->setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
     }

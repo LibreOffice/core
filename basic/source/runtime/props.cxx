@@ -80,7 +80,7 @@ RTLFUNC(Nothing)
     (void)bWrite;
 
     // return an empty object
-    rPar.Get( 0 )->PutObject( NULL );
+    rPar.Get( 0 )->PutObject( nullptr );
 }
 
 RTLFUNC(Null)

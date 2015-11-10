@@ -31,7 +31,7 @@ class MacroSnippet
 
     void InitSnippet()
     {
-        CPPUNIT_ASSERT_MESSAGE( "No resource manager", maDll.GetBasResMgr() != NULL );
+        CPPUNIT_ASSERT_MESSAGE( "No resource manager", maDll.GetBasResMgr() != nullptr );
         mpBasic = new StarBASIC();
         StarBASIC::SetGlobalErrorHdl( LINK( this, MacroSnippet, BasicErrorHdl ) );
     }
@@ -90,10 +90,10 @@ class MacroSnippet
 
     SbxVariableRef Run( const css::uno::Sequence< css::uno::Any >& rArgs )
     {
-        SbxVariableRef pReturn = NULL;
+        SbxVariableRef pReturn = nullptr;
         if ( !Compile() )
             return pReturn;
-        SbMethod* pMeth = mpMod ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxCLASS_METHOD )) : NULL;
+        SbMethod* pMeth = mpMod ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxCLASS_METHOD )) : nullptr;
         if ( pMeth )
         {
             if ( rArgs.getLength() )
@@ -120,7 +120,7 @@ class MacroSnippet
 
     bool Compile()
     {
-        CPPUNIT_ASSERT_MESSAGE("module is NULL", mpMod != NULL );
+        CPPUNIT_ASSERT_MESSAGE("module is NULL", mpMod != nullptr );
         mpMod->Compile();
         return !mbError;
     }

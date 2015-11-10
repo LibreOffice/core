@@ -47,10 +47,10 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, bool bStatic, bool bConst )
         Next();
         bWithEvents = true;
     }
-    if( !TestSymbol() ) return NULL;
+    if( !TestSymbol() ) return nullptr;
     SbxDataType t = eScanType;
     SbiSymDef* pDef = bConst ? new SbiConstDef( aSym ) : new SbiSymDef( aSym );
-    SbiDimList* pDim = NULL;
+    SbiDimList* pDim = nullptr;
     // Brackets?
     if( Peek() == LPAREN )
     {
@@ -167,7 +167,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                     // Take over in the string pool
                     rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
 
-                    if( rDef.IsNew() && pProc == NULL )
+                    if( rDef.IsNew() && pProc == nullptr )
                         aRequiredTypes.push_back( aCompleteName );
                 }
                 eType = SbxOBJECT;
@@ -305,7 +305,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     }
 
     bool bDefined = false;
-    while( ( pDef = VarDecl( &pDim, bStatic, bConst ) ) != NULL )
+    while( ( pDef = VarDecl( &pDim, bStatic, bConst ) ) != nullptr )
     {
         /*fprintf(stderr, "Actual sub: \n");
         fprintf(stderr, "Symbol name: %s\n",OUStringToOString(pDef->GetName(),RTL_TEXTENCODING_UTF8).getStr());*/
@@ -325,7 +325,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         if( pOld && !(eOp == _REDIM || eOp == _REDIMP) )
         {
             if( pDef->GetScope() == SbLOCAL && pOld->GetScope() != SbLOCAL )
-                pOld = NULL;
+                pOld = nullptr;
         }
         if( pOld )
         {
@@ -390,7 +390,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             if( nFixedStringLength >= 0 )
                 nOpnd2 |= (SBX_FIXED_LEN_STRING_FLAG + (sal_uInt32(nFixedStringLength) << 17));     // len = all bits above 0x10000
 
-            if( pDim != NULL && pDim->GetDims() > 0 )
+            if( pDim != nullptr && pDim->GetDims() > 0 )
                 nOpnd2 |= SBX_TYPE_VAR_TO_DIM_FLAG;
 
             aGen.Gen( eOp2, pDef->GetId(), nOpnd2 );
@@ -404,7 +404,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             if( !bCompatible && !pDef->IsNew() )
             {
                 OUString aTypeName( aGblStrings.Find( pDef->GetTypeId() ) );
-                if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == NULL )
+                if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == nullptr )
                 {
                     if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
                     {
@@ -425,7 +425,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             {
                 if( eOp == _REDIMP )
                 {
-                    SbiExpression aExpr( this, *pDef, NULL );
+                    SbiExpression aExpr( this, *pDef, nullptr );
                     aExpr.Gen();
                     aGen.Gen( _REDIMP_ERASE );
 
@@ -490,7 +490,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 // Delete the var at REDIM beforehand
                 if( eOp == _REDIM )
                 {
-                    SbiExpression aExpr( this, *pDef, NULL );
+                    SbiExpression aExpr( this, *pDef, nullptr );
                     aExpr.Gen();
                     if ( bVBASupportOn )
                         // delete the array but
@@ -503,7 +503,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 }
                 else if( eOp == _REDIMP )
                 {
-                    SbiExpression aExpr( this, *pDef, NULL );
+                    SbiExpression aExpr( this, *pDef, nullptr );
                     aExpr.Gen();
                     aGen.Gen( _REDIMP_ERASE );
                 }
@@ -589,7 +589,7 @@ void SbiParser::DefType( bool bPrivate )
     SbxObject *pType = new SbxObject(aSym);
 
     std::unique_ptr<SbiSymDef> pElem;
-    SbiDimList* pDim = NULL;
+    SbiDimList* pDim = nullptr;
     bool bDone = false;
 
     while( !bDone && !IsEof() )
@@ -666,7 +666,7 @@ void SbiParser::DefType( bool bPrivate )
                     {
                         OUString aTypeName( aGblStrings.Find( nElemTypeId ) );
                         SbxObject* pTypeObj = static_cast< SbxObject* >( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) );
-                        if( pTypeObj != NULL )
+                        if( pTypeObj != nullptr )
                         {
                             SbxObject* pCloneObj = cloneTypeObjectImpl( *pTypeObj );
                             pTypeElem->PutObject( pCloneObj );
@@ -675,7 +675,7 @@ void SbiParser::DefType( bool bPrivate )
                 }
                 pTypeMembers->Insert( pTypeElem, pTypeMembers->Count() );
             }
-            delete pDim, pDim = NULL;
+            delete pDim, pDim = nullptr;
             pElem.reset();
         }
     }
@@ -723,21 +723,21 @@ void SbiParser::DefEnum( bool bPrivate )
         switch( Peek() )
         {
             case ENDENUM :
-                pElem = NULL;
+                pElem = nullptr;
                 bDone = true;
                 Next();
             break;
 
             case EOLN :
             case REM :
-                pElem = NULL;
+                pElem = nullptr;
                 Next();
             break;
 
             default:
             {
                 // TODO: Check existing!
-                pDim = NULL;
+                pDim = nullptr;
                 pElem = VarDecl( &pDim, false, true );
                 if( !pElem )
                 {
@@ -830,7 +830,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
 {
     bool bFunc = ( eCurTok == FUNCTION );
     bool bProp = ( eCurTok == GET || eCurTok == SET || eCurTok == LET );
-    if( !TestSymbol() ) return NULL;
+    if( !TestSymbol() ) return nullptr;
     OUString aName( aSym );
     SbxDataType eType = eScanType;
     SbiProcDef* pDef = new SbiProcDef( this, aName, true );
@@ -936,7 +936,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                     Next();
                     bParamArray = true;
                 }
-                SbiSymDef* pPar = VarDecl( NULL, false, false );
+                SbiSymDef* pPar = VarDecl( nullptr, false, false );
                 if( !pPar )
                 {
                     break;
@@ -1041,7 +1041,7 @@ void SbiParser::DefDeclare( bool bPrivate )
                     // Declared as a variable
                     Error( ERRCODE_BASIC_BAD_DECLARATION, pDef->GetName() );
                     delete pDef;
-                    pDef = NULL;
+                    pDef = nullptr;
                 }
                 else
                 {
@@ -1214,7 +1214,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
             // Declared as a variable
             Error( ERRCODE_BASIC_BAD_DECLARATION, pDef->GetName() );
             delete pDef;
-            pProc = NULL;
+            pProc = nullptr;
             bError_ = true;
         }
         // #100027: Multiple declaration -> Error
@@ -1226,7 +1226,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
             {
                 Error( ERRCODE_BASIC_PROC_DEFINED, pDef->GetName() );
                 delete pDef;
-                pProc = NULL;
+                pProc = nullptr;
                 bError_ = true;
             }
         }
@@ -1282,7 +1282,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     pProc->GetLabels().CheckRefs();
     CloseBlock();
     aGen.Gen( _LEAVE );
-    pProc = NULL;
+    pProc = nullptr;
 }
 
 // STATIC variable|procedure

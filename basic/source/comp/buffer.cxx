@@ -32,8 +32,8 @@ SbiBuffer::SbiBuffer( SbiParser* p, short n )
     pParser = p;
     n = ( (n + 15 ) / 16 ) * 16;
     if( !n ) n = 16;
-    pBuf  = NULL;
-    pCur  = NULL;
+    pBuf  = nullptr;
+    pCur  = nullptr;
     nInc  = n;
     nSize =
     nOff  = 0;
@@ -50,8 +50,8 @@ SbiBuffer::~SbiBuffer()
 char* SbiBuffer::GetBuffer()
 {
     char* p = pBuf;
-    pBuf = NULL;
-    pCur = NULL;
+    pBuf = nullptr;
+    pCur = nullptr;
     return p;
 }
 
@@ -79,7 +79,7 @@ bool SbiBuffer::Check( sal_Int32 n )
         char* p;
         if( ( nSize + nn ) > UP_LIMIT )
         {
-            p = NULL;
+            p = nullptr;
         }
         else
         {
@@ -89,7 +89,7 @@ bool SbiBuffer::Check( sal_Int32 n )
         {
             pParser->Error( ERRCODE_BASIC_PROG_TOO_LARGE );
             nInc = 0;
-            delete[] pBuf; pBuf = NULL;
+            delete[] pBuf; pBuf = nullptr;
             return false;
         }
         else

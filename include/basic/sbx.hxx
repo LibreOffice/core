@@ -54,7 +54,7 @@ struct SbxParamInfo
     SbxDataType    eType;          // Data type
     SbxFlagBits    nFlags;         // Flag-Bits
     sal_uInt32     nUserData;      // IDs etc.
-    SbxParamInfo( const OUString& s, SbxDataType t, SbxFlagBits n, SbxBase* b = NULL )
+    SbxParamInfo( const OUString& s, SbxDataType t, SbxFlagBits n, SbxBase* b = nullptr )
         : aName( s ), aTypeRef( b ), eType( t ), nFlags( n ), nUserData( 0 ) {}
     ~SbxParamInfo() {}
 };

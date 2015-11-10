@@ -62,7 +62,7 @@ public:
     void       GetLineRange( sal_uInt16&, sal_uInt16& );
 
     // Interface to execute a method from the applications
-    ErrCode         Call( SbxValue* pRet = NULL,  SbxVariable* pCaller = NULL );
+    ErrCode         Call( SbxValue* pRet = nullptr,  SbxVariable* pCaller = nullptr );
     virtual void    Broadcast( sal_uInt32 nHintId ) override;
 };
 
@@ -77,7 +77,7 @@ class BASIC_DLLPUBLIC SbIfaceMapperMethod : public SbMethod
 public:
     TYPEINFO_OVERRIDE();
     SbIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth )
-        : SbMethod( rName, pImplMeth->GetType(), NULL )
+        : SbMethod( rName, pImplMeth->GetType(), nullptr )
         , mxImplMeth( pImplMeth )
     {}
     virtual ~SbIfaceMapperMethod();

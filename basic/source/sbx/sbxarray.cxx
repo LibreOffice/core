@@ -167,7 +167,7 @@ SbxVariable* SbxArray::Get32( sal_uInt32 nIdx )
     if( !CanRead() )
     {
         SetError( ERRCODE_SBX_PROP_WRITEONLY );
-        return NULL;
+        return nullptr;
     }
     SbxVariableRef& rRef = GetRef32( nIdx );
 
@@ -182,7 +182,7 @@ SbxVariable* SbxArray::Get( sal_uInt16 nIdx )
     if( !CanRead() )
     {
         SetError( ERRCODE_SBX_PROP_WRITEONLY );
-        return NULL;
+        return nullptr;
     }
     SbxVariableRef& rRef = GetRef( nIdx );
 
@@ -388,7 +388,7 @@ void SbxArray::Merge( SbxArray* p )
 
 SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
 {
-    SbxVariable* p = NULL;
+    SbxVariable* p = nullptr;
     for (size_t i = 0; i < mpVarEntries->size(); ++i)
     {
         SbxVarEntry* pEntry = (*mpVarEntries)[i];
@@ -439,10 +439,10 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
 
 SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
 {
-    SbxVariable* p = NULL;
+    SbxVariable* p = nullptr;
     sal_uInt32 nCount = mpVarEntries->size();
     if( !nCount )
-        return NULL;
+        return nullptr;
     bool bExtSearch = IsSet( SbxFlagBits::ExtSearch );
     sal_uInt16 nHash = SbxVariable::MakeHashCode( rName );
     for( sal_uInt32 i = 0; i < nCount; i++ )

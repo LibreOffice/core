@@ -93,7 +93,7 @@ SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )
     if( GetParameters() )
     {
         SbxObject* pObj = static_cast<SbxObject*>(GetObject());
-        return pObj ? pObj->FindUserData( nData ) : NULL;
+        return pObj ? pObj->FindUserData( nData ) : nullptr;
     }
     else
     {
@@ -106,7 +106,7 @@ SbxVariable* SbxCollection::Find( const OUString& rName, SbxClassType t )
     if( GetParameters() )
     {
         SbxObject* pObj = static_cast<SbxObject*>(GetObject());
-        return pObj ? pObj->Find( rName, t ) : NULL;
+        return pObj ? pObj->Find( rName, t ) : nullptr;
     }
     else
     {
@@ -172,7 +172,7 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
     else
     {
         SbxBase* pObj = pPar_->Get( 1 )->GetObject();
-        if( !pObj || !( 0 != dynamic_cast<const SbxObject*>( pObj) ) )
+        if( !pObj || !( nullptr != dynamic_cast<const SbxObject*>( pObj) ) )
         {
             SetError( ERRCODE_SBX_NOTIMP );
         }
@@ -193,7 +193,7 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
     }
     else
     {
-        SbxVariable* pRes = NULL;
+        SbxVariable* pRes = nullptr;
         SbxVariable* p = pPar_->Get( 1 );
         if( p->GetType() == SbxSTRING )
         {

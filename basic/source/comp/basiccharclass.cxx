@@ -33,8 +33,8 @@ bool BasicCharClass::isLetter( sal_Unicode c )
 
 bool BasicCharClass::isLetterUnicode( sal_Unicode c )
 {
-  static CharClass* pCharClass = NULL;
-  if( pCharClass == NULL )
+  static CharClass* pCharClass = nullptr;
+  if( pCharClass == nullptr )
     pCharClass = new CharClass( Application::GetSettings().GetLanguageTag() );
   // can we get pCharClass to accept a sal_Unicode instead of this waste?
   return pCharClass->isLetter( OUString(c), 0 );

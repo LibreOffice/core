@@ -106,7 +106,7 @@ static const SbiStatement StmntTable [] = {
 { WITH,     &SbiParser::With,       N, Y, }, // WITH
 { WRITE,    &SbiParser::Write,      N, Y, }, // WRITE
 
-{ NIL, NULL, N, N }
+{ NIL, nullptr, N, N }
 };
 
 
@@ -119,9 +119,9 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
 {
     eCurExpr = SbSYMBOL;
     eEndTok  = NIL;
-    pProc    = NULL;
-    pStack   = NULL;
-    pWithVar = NULL;
+    pProc    = nullptr;
+    pStack   = nullptr;
+    pWithVar = nullptr;
     nBase    = 0;
     bText    =
     bGblDefs =
@@ -479,7 +479,7 @@ SbiExprNode* SbiParser::GetWithVar()
             return p->pWithVar;
         p = p->pNext;
     }
-    return NULL;
+    return nullptr;
 }
 
 

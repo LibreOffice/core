@@ -80,7 +80,7 @@ double ImpGetDouble( const SbxValues* p )
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, NULL ) != ERRCODE_SBX_OK )
+                if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_SBX_OK )
                 {
                     nRes = 0;
 #if HAVE_FEATURE_SCRIPTING

@@ -125,7 +125,7 @@ IMPL_LINK_NOARG_TYPED( SbiInputDialog, Cancel, Button *, void )
 }
 
 SbiStream::SbiStream()
-    : pStrm(0)
+    : pStrm(nullptr)
     , nExpandOnWriteTo(0)
     , nLine(0)
     , nLen(0)
@@ -622,7 +622,7 @@ SbError SbiStream::Open
     MapError();
     if( nError )
     {
-        delete pStrm, pStrm = NULL;
+        delete pStrm, pStrm = nullptr;
     }
     return nError;
 }
@@ -633,7 +633,7 @@ SbError SbiStream::Close()
     {
         MapError();
         delete pStrm;
-        pStrm = NULL;
+        pStrm = nullptr;
     }
     nChan = 0;
     return nError;
@@ -762,7 +762,7 @@ SbiIoSystem::SbiIoSystem()
 {
     for( short i = 0; i < CHANNELS; i++ )
     {
-        pChan[ i ] = NULL;
+        pChan[ i ] = nullptr;
     }
     nChan  = 0;
     nError = 0;
@@ -796,7 +796,7 @@ void SbiIoSystem::Open(short nCh, const OString& rName, StreamMode nMode, SbiStr
         nError = pChan[ nCh ]->Open( nCh, rName, nMode, nFlags, nLen );
        if( nError )
        {
-            delete pChan[ nCh ], pChan[ nCh ] = NULL;
+            delete pChan[ nCh ], pChan[ nCh ] = nullptr;
        }
     }
     nChan = 0;
@@ -817,7 +817,7 @@ void SbiIoSystem::Close()
     {
         nError = pChan[ nChan ]->Close();
         delete pChan[ nChan ];
-        pChan[ nChan ] = NULL;
+        pChan[ nChan ] = nullptr;
     }
     nChan = 0;
 }
@@ -831,7 +831,7 @@ void SbiIoSystem::Shutdown()
         {
             SbError n = pChan[ i ]->Close();
             delete pChan[ i ];
-            pChan[ i ] = NULL;
+            pChan[ i ] = nullptr;
             if( n && !nError )
             {
                 nError = n;
@@ -913,7 +913,7 @@ void SbiIoSystem::Write(const OUString& rBuf, short n)
 
 SbiStream* SbiIoSystem::GetStream( short nChannel ) const
 {
-    SbiStream* pRet = 0;
+    SbiStream* pRet = nullptr;
     if( nChannel >= 0 && nChannel < CHANNELS )
     {
         pRet = pChan[ nChannel ];
@@ -929,7 +929,7 @@ void SbiIoSystem::CloseAll()
         {
             SbError n = pChan[ i ]->Close();
             delete pChan[ i ];
-            pChan[ i ] = NULL;
+            pChan[ i ] = nullptr;
             if( n && !nError )
             {
                 nError = n;

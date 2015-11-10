@@ -184,7 +184,7 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
             nFractDigit--;
         }
         // Consume trailing content
-        if ( p != NULL )
+        if ( p != nullptr )
         {
             // Round up if necessary
             if( *p >= '5' && *p <= '9' )

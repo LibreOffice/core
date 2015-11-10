@@ -115,8 +115,8 @@ struct BasicManagerImpl
     OUString         aBasicLibPath;
 
     BasicManagerImpl()
-        : mpManagerStream( NULL )
-        , mppLibStreams( NULL )
+        : mpManagerStream( nullptr )
+        , mppLibStreams( nullptr )
         , mnLibStreamCount( 0 )
     {}
     ~BasicManagerImpl();
@@ -343,7 +343,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::Cont
     else
     {
         StarBASIC* pLib = mpMgr->GetLib( maLibName );
-        SbModule* pMod = pLib ? pLib->FindModule( aName ) : NULL;
+        SbModule* pMod = pLib ? pLib->FindModule( aName ) : nullptr;
         if( pMod )
         {
             pLib->Remove( pMod );
@@ -434,7 +434,7 @@ BasicLibInfo::BasicLibInfo()
     bReference          = false;
     bPasswordVerified   = false;
     bDoLoad             = false;
-    mxScriptCont        = NULL;
+    mxScriptCont        = nullptr;
     aStorageName        = szImbedded;
     aRelStorageName     = szImbedded;
 }
@@ -505,7 +505,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         if ( !pStdLib )
         {
             // Should never happen, but if it happens we wont crash...
-            pStdLib = new StarBASIC( NULL, mbDocMgr );
+            pStdLib = new StarBASIC( nullptr, mbDocMgr );
 
             if (mpImpl->aLibs.empty())
                 CreateLibInfo();
@@ -649,7 +649,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
                 StarBASIC* pLib = rpBasLibInfo->GetLib();
                 if( !pLib )
                 {
-                    bool bLoaded = ImpLoadLibrary( rpBasLibInfo.get(), NULL );
+                    bool bLoaded = ImpLoadLibrary( rpBasLibInfo.get(), nullptr );
                     if( bLoaded )
                         pLib = rpBasLibInfo->GetLib();
                 }
@@ -705,7 +705,7 @@ void BasicManager::ImpMgrNotLoaded( const OUString& rStorageName )
 
     // Create a stdlib otherwise we crash!
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
-    pStdLibInfo->SetLib( new StarBASIC( NULL, mbDocMgr ) );
+    pStdLibInfo->SetLib( new StarBASIC( nullptr, mbDocMgr ) );
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
     xStdLib->SetName( szStdLibName );
     pStdLibInfo->SetLibName( szStdLibName );
@@ -909,7 +909,7 @@ BasicManager::~BasicManager()
 void BasicManager::LegacyDeleteBasicManager( BasicManager*& _rpManager )
 {
     delete _rpManager;
-    _rpManager = NULL;
+    _rpManager = nullptr;
 }
 
 
@@ -1078,7 +1078,7 @@ bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
     bool bLoaded = false;
     if( xNew.Is() )
     {
-        if( 0 != dynamic_cast<const StarBASIC*>( &xNew ) )
+        if( nullptr != dynamic_cast<const StarBASIC*>( &xNew ) )
         {
             StarBASIC* pNew = static_cast<StarBASIC*>(static_cast<SbxBase*>(xNew));
             // Use the Parent of the old BASICs
@@ -1178,10 +1178,10 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
     else
     {
         RemoveLib( nLibId, false );
-        pLibInfo = 0;
+        pLibInfo = nullptr;
     }
 
-    return pLibInfo ? &*pLibInfo->GetLib() : 0;
+    return pLibInfo ? &*pLibInfo->GetLib() : nullptr;
 
 }
 
@@ -1298,7 +1298,7 @@ StarBASIC* BasicManager::GetLib( sal_uInt16 nLib ) const
     {
         return mpImpl->aLibs[nLib]->GetLib();
     }
-    return 0;
+    return nullptr;
 }
 
 StarBASIC* BasicManager::GetStdLib() const
@@ -1316,7 +1316,7 @@ StarBASIC* BasicManager::GetLib( const OUString& rName ) const
             return rpLib->GetLib();
         }
     }
-    return 0;
+    return nullptr;
 }
 
 sal_uInt16 BasicManager::GetLibId( const OUString& rName ) const
@@ -1369,7 +1369,7 @@ bool BasicManager::LoadLib( sal_uInt16 nLib )
         }
         else
         {
-            bDone = ImpLoadLibrary( &rLibInfo, NULL );
+            bDone = ImpLoadLibrary( &rLibInfo, nullptr );
             StarBASIC* pLib = GetLib( nLib );
             if ( pLib )
             {
@@ -1390,7 +1390,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName )
 {
     if ( GetLib( rLibName ) )
     {
-        return 0;
+        return nullptr;
     }
     BasicLibInfo* pLibInfo = CreateLibInfo();
     StarBASIC* pNew = new StarBASIC( GetStdLib(), mbDocMgr );
@@ -1445,7 +1445,7 @@ StarBASIC* BasicManager::CreateLibForLibContainer( const OUString& rLibName,
 {
     if ( GetLib( rLibName ) )
     {
-        return 0;
+        return nullptr;
     }
     BasicLibInfo* pLibInfo = CreateLibInfo();
     StarBASIC* pNew = new StarBASIC( GetStdLib(), mbDocMgr );
@@ -1468,7 +1468,7 @@ BasicLibInfo* BasicManager::FindLibInfo( StarBASIC* pBasic )
             return rpLib.get();
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1618,13 +1618,13 @@ namespace
                 }
             }
         }
-        return 0;
+        return nullptr;
     }
 }
 
 bool BasicManager::HasMacro( OUString const& i_fullyQualifiedName ) const
 {
-    return ( NULL != lcl_queryMacro( const_cast< BasicManager* >( this ), i_fullyQualifiedName ) );
+    return ( nullptr != lcl_queryMacro( const_cast< BasicManager* >( this ), i_fullyQualifiedName ) );
 }
 
 ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, SbxArray* i_arguments, SbxValue* i_retValue )
@@ -1828,7 +1828,7 @@ uno::Type ModuleContainer_Impl::getElementType()
 sal_Bool ModuleContainer_Impl::hasElements()
     throw(uno::RuntimeException, std::exception)
 {
-    SbxArray* pMods = mpLib ? mpLib->GetModules() : NULL;
+    SbxArray* pMods = mpLib ? mpLib->GetModules() : nullptr;
     return pMods && pMods->Count() > 0;
 }
 
@@ -1836,7 +1836,7 @@ sal_Bool ModuleContainer_Impl::hasElements()
 uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : NULL;
+    SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : nullptr;
     if( !pMod )
         throw container::NoSuchElementException();
     uno::Reference< script::XStarBasicModuleInfo > xMod = static_cast<XStarBasicModuleInfo*>(new ModuleInfo_Impl
@@ -1849,7 +1849,7 @@ uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
 uno::Sequence< OUString > ModuleContainer_Impl::getElementNames()
     throw(uno::RuntimeException, std::exception)
 {
-    SbxArray* pMods = mpLib ? mpLib->GetModules() : NULL;
+    SbxArray* pMods = mpLib ? mpLib->GetModules() : nullptr;
     sal_uInt16 nMods = pMods ? pMods->Count() : 0;
     uno::Sequence< OUString > aRetSeq( nMods );
     OUString* pRetSeq = aRetSeq.getArray();
@@ -1864,8 +1864,8 @@ uno::Sequence< OUString > ModuleContainer_Impl::getElementNames()
 sal_Bool ModuleContainer_Impl::hasByName( const OUString& aName )
     throw(uno::RuntimeException, std::exception)
 {
-    SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : NULL;
-    bool bRet = (pMod != NULL);
+    SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : nullptr;
+    bool bRet = (pMod != nullptr);
     return bRet;
 }
 
@@ -1897,7 +1897,7 @@ void ModuleContainer_Impl::insertByName( const OUString& aName, const uno::Any& 
 void ModuleContainer_Impl::removeByName( const OUString& Name )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    SbModule* pMod = mpLib ? mpLib->FindModule( Name ) : NULL;
+    SbModule* pMod = mpLib ? mpLib->FindModule( Name ) : nullptr;
     if( !pMod )
     {
         throw container::NoSuchElementException();
@@ -1983,7 +1983,7 @@ sal_Bool DialogContainer_Impl::hasElements()
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( 0 != dynamic_cast<const SbxObject*>( pVar) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
+        if ( nullptr != dynamic_cast<const SbxObject*>( pVar) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
         {
             bRet = true;
             break;
@@ -1997,7 +1997,7 @@ uno::Any DialogContainer_Impl::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
-    if( !( pVar && 0 != dynamic_cast<const SbxObject*>( pVar) &&
+    if( !( pVar && nullptr != dynamic_cast<const SbxObject*>( pVar) &&
            ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) ) )
     {
         throw container::NoSuchElementException();
@@ -2023,7 +2023,7 @@ uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( 0 != dynamic_cast<const SbxObject*>( pVar) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
+        if ( nullptr != dynamic_cast<const SbxObject*>( pVar) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
         {
             pRetSeq[ nDialogCounter ] = OUString( pVar->GetName() );
             nDialogCounter++;
@@ -2038,7 +2038,7 @@ sal_Bool DialogContainer_Impl::hasByName( const OUString& aName )
 {
     bool bRet = false;
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
-    if( pVar && 0 != dynamic_cast<const SbxObject*>( pVar) &&
+    if( pVar && nullptr != dynamic_cast<const SbxObject*>( pVar) &&
            ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
     {
         bRet = true;
@@ -2078,7 +2078,7 @@ void DialogContainer_Impl::removeByName( const OUString& Name )
 {
     (void)Name;
     SbxVariable* pVar = mpLib->GetObjects()->Find( Name, SbxCLASS_DONTCARE );
-    if( !( pVar && 0 != dynamic_cast<const SbxObject*>( pVar) &&
+    if( !( pVar && nullptr != dynamic_cast<const SbxObject*>( pVar) &&
            ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) ) )
     {
         throw container::NoSuchElementException();

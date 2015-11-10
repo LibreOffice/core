@@ -146,7 +146,7 @@ static SbxVariable* Operand
             // This is perhaps an error
             if( !*p )
             {
-                return NULL;
+                return nullptr;
             }
             // Double quotes are OK
             if( *p == '"' )
@@ -261,7 +261,7 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
                     SbxVariable* pVar = refVar;
                     SbxVariable* pVar2 = refVar2;
                     *pVar = *pVar2;
-                    pVar->SetParameters( NULL );
+                    pVar->SetParameters( nullptr );
                 }
             }
         }
@@ -297,7 +297,7 @@ static SbxVariable* Element
         pObj->SetFlags( nOld );
         if( refVar.Is() )
         {
-            refVar->SetParameters( NULL );
+            refVar->SetParameters( nullptr );
             // Follow still parameter?
             p = SkipWhitespace( p );
             if( *p == '(' )
@@ -347,7 +347,7 @@ static SbxVariable* Element
 
 SbxVariable* SbxObject::Execute( const OUString& rTxt )
 {
-    SbxVariable* pVar = NULL;
+    SbxVariable* pVar = nullptr;
     const sal_Unicode* p = rTxt.getStr();
     for( ;; )
     {
@@ -376,12 +376,12 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
 
 SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
 {
-    SbxVariable* pVar = NULL;
+    SbxVariable* pVar = nullptr;
     const sal_Unicode* p = rName.getStr();
     p = SkipWhitespace( p );
     if( !*p )
     {
-        return NULL;;
+        return nullptr;;
     }
     pVar = QualifiedName( this, this, &p, t );
     p = SkipWhitespace( p );
