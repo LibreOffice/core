@@ -144,12 +144,6 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 }
 
 #define IMAGE(id) pImgMgr->SeekImage(id)
-static inline bool lcl_isExperimentalMode()
-{
-    // make inputbar feature on by default, leave the switch for the
-    // moment in case we need to back it out easily
-    return true;
-}
 
 //  class ScInputWindow
 
@@ -164,8 +158,6 @@ static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBin
             pViewSh = dynamic_cast<ScTabViewShell*>( pViewFrm->GetViewShell()  );
     }
 
-    if ( !lcl_isExperimentalMode() )
-        return VclPtr<ScTextWnd>::Create( pParent, pViewSh );
     return VclPtr<ScInputBarGroup>::Create( pParent, pViewSh );
 }
 
@@ -182,8 +174,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         aTextEqual      ( ScResId( SCSTR_QHELP_BTNEQUAL ) ),
         mnMaxY          (0),
         bIsOkCancelMode ( false ),
-        bInResize       ( false ),
-        mbIsMultiLine   ( lcl_isExperimentalMode() )
+        bInResize       ( false )
 {
     ScModule*        pScMod  = SC_MOD();
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager(*pScMod);
@@ -571,37 +562,24 @@ void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
 void ScInputWindow::Resize()
 {
     ToolBox::Resize();
-    if ( mbIsMultiLine )
-    {
-        aTextWindow.Resize();
-        Size aSize = GetSizePixel();
-        aSize.Height() = CalcWindowSizePixel().Height() + ADDITIONAL_BORDER;
-        ScInputBarGroup* pGroupBar = dynamic_cast< ScInputBarGroup* > ( pRuntimeWindow.get() );
-        if ( pGroupBar )
-        {
-            // To ensure smooth display and prevent the items in the toolbar being
-            // repositioned ( vertically ) we lock the vertical positioning of the toolbox
-            // items when we are displaying > 1 line.
-            // So, we need to adjust the height of the toolbox accordingly. If we don't
-            // then the largest item ( e.g. the GroupBar window ) will actually be
-            // positioned such that the toolbar will cut off the bottom of that item
-            if ( pGroupBar->GetNumLines() > 1 )
-                aSize.Height() += pGroupBar->GetVertOffset() + ADDITIONAL_SPACE;
-        }
-        SetSizePixel(aSize);
-        Invalidate();
-    }
-    else
-    {
-        long nWidth = GetSizePixel().Width();
-        long nLeft  = aTextWindow.GetPosPixel().X();
-        Size aSize  = aTextWindow.GetSizePixel();
 
-        aSize.Width() = std::max( ((long)(nWidth - nLeft - 5)), (long)0 );
-
-        aTextWindow.SetSizePixel( aSize );
-        aTextWindow.Invalidate();
+    aTextWindow.Resize();
+    Size aSize = GetSizePixel();
+    aSize.Height() = CalcWindowSizePixel().Height() + ADDITIONAL_BORDER;
+    ScInputBarGroup* pGroupBar = dynamic_cast<ScInputBarGroup*>(pRuntimeWindow.get());
+    if (pGroupBar)
+    {
+        // To ensure smooth display and prevent the items in the toolbar being
+        // repositioned ( vertically ) we lock the vertical positioning of the toolbox
+        // items when we are displaying > 1 line.
+        // So, we need to adjust the height of the toolbox accordingly. If we don't
+        // then the largest item ( e.g. the GroupBar window ) will actually be
+        // positioned such that the toolbar will cut off the bottom of that item
+        if (pGroupBar->GetNumLines() > 1)
+            aSize.Height() += pGroupBar->GetVertOffset() + ADDITIONAL_SPACE;
     }
+    SetSizePixel(aSize);
+    Invalidate();
 }
 
 void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
@@ -821,86 +799,80 @@ bool ScInputWindow::IsPointerAtResizePos()
 
 void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( mbIsMultiLine )
+    Point aPosPixel = GetPointerPosPixel();
+
+    ScInputBarGroup* pGroupBar = dynamic_cast<ScInputBarGroup*>(pRuntimeWindow.get());
+
+    if (bInResize || IsPointerAtResizePos())
+        SetPointer(Pointer(PointerStyle::WindowSSize));
+    else
+        SetPointer(Pointer(PointerStyle::Arrow));
+
+    if (bInResize)
     {
-        Point aPosPixel = GetPointerPosPixel();
+        // detect direction
+        long nResizeThreshold = ((long)TBX_WINDOW_HEIGHT * 0.7);
+        bool bResetPointerPos = false;
 
-        ScInputBarGroup* pGroupBar = dynamic_cast< ScInputBarGroup* > ( pRuntimeWindow.get() );
-
-        if ( bInResize || IsPointerAtResizePos() )
-            SetPointer( Pointer( PointerStyle::WindowSSize ) );
-        else
-            SetPointer( Pointer( PointerStyle::Arrow ) );
-
-        if ( bInResize )
+        // Detect attempt to expand toolbar too much
+        if (aPosPixel.Y() >= mnMaxY)
         {
-            // detect direction
-            long nResizeThreshold = ( (long)TBX_WINDOW_HEIGHT * 0.7 );
-            bool bResetPointerPos = false;
+            bResetPointerPos = true;
+            aPosPixel.Y() = mnMaxY;
+        } // or expanding down
+        else if (GetOutputSizePixel().Height() - aPosPixel.Y() < -nResizeThreshold)
+        {
+            pGroupBar->IncrementVerticalSize();
+            bResetPointerPos = true;
+        } // or shrinking up
+        else if ((GetOutputSizePixel().Height() - aPosPixel.Y()) > nResizeThreshold)
+        {
+            bResetPointerPos = true;
+            pGroupBar->DecrementVerticalSize();
+        }
 
-            // Detect attempt to expand toolbar too much
-            if ( aPosPixel.Y() >= mnMaxY )
-            {
-                bResetPointerPos = true;
-                aPosPixel.Y() = mnMaxY;
-            } // or expanding down
-            else if ( GetOutputSizePixel().Height() - aPosPixel.Y() < -nResizeThreshold  )
-            {
-                pGroupBar->IncrementVerticalSize();
-                bResetPointerPos = true;
-            } // or shrinking up
-            else if ( ( GetOutputSizePixel().Height() - aPosPixel.Y()  ) > nResizeThreshold )
-            {
-                bResetPointerPos = true;
-                pGroupBar->DecrementVerticalSize();
-            }
-
-            if ( bResetPointerPos )
-            {
-                aPosPixel.Y() =  GetOutputSizePixel().Height();
-                SetPointerPosPixel( aPosPixel );
-            }
+        if (bResetPointerPos)
+        {
+            aPosPixel.Y() =  GetOutputSizePixel().Height();
+            SetPointerPosPixel(aPosPixel);
         }
     }
-    ToolBox::MouseMove( rMEvt );
+
+    ToolBox::MouseMove(rMEvt);
 }
 
 void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( mbIsMultiLine )
+    if (rMEvt.IsLeft())
     {
-        if ( rMEvt.IsLeft() )
+        if (IsPointerAtResizePos())
         {
-            if ( IsPointerAtResizePos() )
-            {
-                // Don't leave the mouse pointer leave *this* window
-                CaptureMouse();
-                bInResize = true;
+            // Don't leave the mouse pointer leave *this* window
+            CaptureMouse();
+            bInResize = true;
 
-                // find the height of the gridwin, we don't wan't to be
-                // able to expand the toolbar too far so we need to
-                // calculate an upper limit
-                // I'd prefer to leave at least a single column header and a
-                // row but I don't know how to get that value in pixels.
-                // Use TBX_WINDOW_HEIGHT for the moment
-                ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-                mnMaxY =  GetOutputSizePixel().Height() + ( pViewSh->GetGridHeight(SC_SPLIT_TOP) + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM) ) - TBX_WINDOW_HEIGHT;
-            }
+            // find the height of the gridwin, we don't wan't to be
+            // able to expand the toolbar too far so we need to
+            // calculate an upper limit
+            // I'd prefer to leave at least a single column header and a
+            // row but I don't know how to get that value in pixels.
+            // Use TBX_WINDOW_HEIGHT for the moment
+            ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+            mnMaxY = GetOutputSizePixel().Height() + (pViewSh->GetGridHeight(SC_SPLIT_TOP) + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM)) - TBX_WINDOW_HEIGHT;
         }
     }
+
     ToolBox::MouseButtonDown( rMEvt );
 }
 void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if ( mbIsMultiLine )
+    ReleaseMouse();
+    if ( rMEvt.IsLeft() )
     {
-        ReleaseMouse();
-        if ( rMEvt.IsLeft() )
-        {
-            bInResize = false;
-            mnMaxY = 0;
-        }
+        bInResize = false;
+        mnMaxY = 0;
     }
+
     ToolBox::MouseButtonUp( rMEvt );
 }
 
@@ -911,21 +883,21 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
         aScrollBar           ( VclPtr<ScrollBar>::Create(this, WB_TABSTOP | WB_VERT | WB_DRAG) ),
         nVertOffset          ( 0 )
 {
-      aMultiTextWnd->Show();
-      aMultiTextWnd->SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
-      aMultiTextWnd->SetHelpId( HID_INSWIN_INPUT );
+    aMultiTextWnd->Show();
+    aMultiTextWnd->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
+    aMultiTextWnd->SetHelpId(HID_INSWIN_INPUT);
 
-      Size aSize( GetSettings().GetStyleSettings().GetScrollBarSize(), aMultiTextWnd->GetPixelHeightForLines(1) );
+    Size aSize(GetSettings().GetStyleSettings().GetScrollBarSize(), aMultiTextWnd->GetPixelHeightForLines(1));
 
-      aButton->SetClickHdl( LINK( this, ScInputBarGroup, ClickHdl ) );
-      aButton->SetSizePixel( aSize );
-      aButton->Enable();
-      aButton->SetSymbol( SymbolType::SPIN_DOWN  );
-      aButton->SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
-      aButton->Show();
+    aButton->SetClickHdl(LINK(this, ScInputBarGroup, ClickHdl));
+    aButton->SetSizePixel(aSize);
+    aButton->Enable();
+    aButton->SetSymbol(SymbolType::SPIN_DOWN);
+    aButton->SetQuickHelpText(ScResId(SCSTR_QHELP_EXPAND_FORMULA));
+    aButton->Show();
 
-      aScrollBar->SetSizePixel( aSize );
-      aScrollBar->SetScrollHdl( LINK( this, ScInputBarGroup, Impl_ScrollHdl ) );
+    aScrollBar->SetSizePixel(aSize);
+    aScrollBar->SetScrollHdl(LINK(this, ScInputBarGroup, Impl_ScrollHdl));
 }
 
 ScInputBarGroup::~ScInputBarGroup()
@@ -941,20 +913,17 @@ void ScInputBarGroup::dispose()
     ScTextWndBase::dispose();
 }
 
-void
-ScInputBarGroup::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
+void ScInputBarGroup::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
     aMultiTextWnd->InsertAccessibleTextData( rTextData );
 }
 
-void
-ScInputBarGroup::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
+void ScInputBarGroup::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
     aMultiTextWnd->RemoveAccessibleTextData( rTextData );
 }
 
-const OUString&
-ScInputBarGroup::GetTextString() const
+const OUString& ScInputBarGroup::GetTextString() const
 {
     return aMultiTextWnd->GetTextString();
 }

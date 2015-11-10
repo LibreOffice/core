@@ -275,13 +275,14 @@ public:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    bool            IsMultiLineInput() { return mbIsMultiLine; }
+
 protected:
     virtual void    SetText( const OUString& rString ) override;
     virtual OUString  GetText() const override;
 
     static bool UseSubTotal( ScRangeList* pRangeList );
     bool IsPointerAtResizePos();
+
 private:
     VclPtr<ScPosWnd>  aWndPos;
     VclPtr<ScTextWndBase> pRuntimeWindow;
@@ -294,7 +295,6 @@ private:
     long            mnMaxY;
     bool            bIsOkCancelMode;
     bool            bInResize;
-    bool            mbIsMultiLine;
 };
 
 class ScInputWindowWrapper : public SfxChildWindow

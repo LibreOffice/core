@@ -2071,11 +2071,7 @@ IMPL_LINK_NOARG_TYPED(ScInputHandler, ModifyHdl, LinkParamNone*, void)
     {
         // Update input line from ModifyHdl for changes that are not
         // wrapped by DataChanging/DataChanged calls (like Drag&Drop)
-        OUString aText;
-        if ( pInputWin->IsMultiLineInput() )
-            aText = ScEditUtil::GetMultilineString(*pEngine);
-        else
-            aText = GetEditText(pEngine);
+        OUString aText(ScEditUtil::GetMultilineString(*pEngine));
         lcl_RemoveTabs(aText);
         pInputWin->SetTextString(aText);
     }
@@ -2127,7 +2123,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
     if (eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE)
     {
         OUString aText;
-        if ( pInputWin && pInputWin->IsMultiLineInput() )
+        if (pInputWin)
             aText = ScEditUtil::GetMultilineString(*pEngine);
         else
             aText = GetEditText(pEngine);
@@ -3041,7 +3037,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
     switch ( nCode )
     {
         case KEY_RETURN:
-            if (bControl && !bShift && ( !bInputLine || ( pInputWin && pInputWin->IsMultiLineInput() ) ) )
+            if (bControl && !bShift && (!bInputLine || pInputWin))
                 bDoEnter = true;
             else if (nModi == 0 && nTipVisible && pFormulaData && miAutoPosFormula != pFormulaData->end())
             {
@@ -3454,7 +3450,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         if (pData)
                         {
                             pEngine->SetText( *pData );
-                            if ( pInputWin && pInputWin->IsMultiLineInput() )
+                            if (pInputWin)
                                 aString = ScEditUtil::GetMultilineString(*pEngine);
                             else
                                 aString = GetEditText(pEngine);
