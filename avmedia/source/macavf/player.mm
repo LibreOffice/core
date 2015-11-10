@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace macavf {
 
-MacAVObserverObject* MacAVObserverHandler::mpMacAVObserverObject = NULL;
+MacAVObserverObject* MacAVObserverHandler::mpMacAVObserverObject = nullptr;
 
 MacAVObserverObject* MacAVObserverHandler::getObserver()
 {
@@ -79,7 +79,7 @@ MacAVObserverObject* MacAVObserverHandler::getObserver()
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
 :   mxMgr( rxMgr )
-,   mpPlayer( NULL )
+,   mpPlayer( nullptr )
 ,   mfUnmutedVolume( 0 )
 ,   mfStopTime( DBL_MAX )
 ,   mbMuted( false )
@@ -380,7 +380,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
     // check the window parameters
     uno::Reference< ::media::XPlayerWindow > xRet;
-    if( (aSize.Width <= 0) || (aSize.Height <= 0) || (pParentView == NULL) )
+    if( (aSize.Width <= 0) || (aSize.Height <= 0) || (pParentView == nullptr) )
          return xRet;
 
     // create the window

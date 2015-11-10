@@ -31,13 +31,13 @@ namespace avmedia { namespace quicktime {
 
 static ::osl::Mutex& ImplGetOwnStaticMutex()
 {
-    static ::osl::Mutex* pMutex = NULL;
+    static ::osl::Mutex* pMutex = nullptr;
 
-    if( pMutex == NULL )
+    if( pMutex == nullptr )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-        if( pMutex == NULL )
+        if( pMutex == nullptr )
         {
             static ::osl::Mutex aMutex;
             pMutex = &aMutex;

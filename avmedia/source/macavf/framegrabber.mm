@@ -34,7 +34,7 @@ namespace avmedia { namespace macavf {
 // ----------------
 
 FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& /*rxMgr*/ )
-:   mpImageGen( NULL )
+:   mpImageGen( nullptr )
 {}
 
 // ------------------------------------------------------------------------------
@@ -90,12 +90,12 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     OSL_TRACE( "AVPlayer::grabFrame( %.3fsec)", fMediaTime );
 
     // get the requested image from the movie
-    CGImage* pCGImage = [mpImageGen copyCGImageAtTime:CMTimeMakeWithSeconds(fMediaTime,1000) actualTime:NULL error:NULL];
+    CGImage* pCGImage = [mpImageGen copyCGImageAtTime:CMTimeMakeWithSeconds(fMediaTime,1000) actualTime:nullptr error:nullptr];
 
     // convert the image to a TIFF-formatted byte-array
     CFMutableDataRef pCFData = CFDataCreateMutable( kCFAllocatorDefault, 0 );
-    CGImageDestination* pCGImgDest = CGImageDestinationCreateWithData( pCFData, kUTTypeTIFF, 1, 0 );
-    CGImageDestinationAddImage( pCGImgDest, pCGImage, NULL );
+    CGImageDestination* pCGImgDest = CGImageDestinationCreateWithData( pCFData, kUTTypeTIFF, 1, nullptr );
+    CGImageDestinationAddImage( pCGImgDest, pCGImage, nullptr );
     CGImageDestinationFinalize( pCGImgDest );
     CFRelease( pCGImgDest );
     const long nBitmapLen = CFDataGetLength( pCFData );

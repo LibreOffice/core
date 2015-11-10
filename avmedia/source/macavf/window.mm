@@ -39,7 +39,7 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Pla
 ,   mrPlayer( i_rPlayer )
 ,   mnPointerType( awt::SystemPointer::ARROW )
 ,   mpView( i_pParentView )
-,   mpPlayerLayer( NULL )
+,   mpPlayerLayer( nullptr )
 {
     OSL_TRACE ("Constructing an avmedia::macavf::Window");
     if( !mpView ) // sanity check
