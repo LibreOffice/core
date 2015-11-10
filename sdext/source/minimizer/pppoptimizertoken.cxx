@@ -25,7 +25,7 @@
 #include <unordered_map>
 
 typedef std::unordered_map< const char*, PPPOptimizerTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
-static TypeNameHashMap* pHashMap = NULL;
+static TypeNameHashMap* pHashMap = nullptr;
 static ::osl::Mutex& getHashMapMutex()
 {
     static osl::Mutex s_aHashMapProtection;

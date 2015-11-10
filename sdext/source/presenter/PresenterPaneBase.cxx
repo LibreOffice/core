@@ -59,7 +59,7 @@ PresenterPaneBase::PresenterPaneBase (
       mbHasCallout(false),
       maCalloutAnchor()
 {
-    if (mpPresenterController.get() != NULL)
+    if (mpPresenterController.get() != nullptr)
         mxPresenterHelper = mpPresenterController->GetPresenterHelper();
 }
 
@@ -77,41 +77,41 @@ void PresenterPaneBase::disposing()
 
     {
         Reference<XComponent> xComponent (mxContentCanvas, UNO_QUERY);
-        mxContentCanvas = NULL;
+        mxContentCanvas = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
 
     {
         Reference<XComponent> xComponent (mxContentWindow, UNO_QUERY);
-        mxContentWindow = NULL;
+        mxContentWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
 
     {
         Reference<XComponent> xComponent (mxBorderCanvas, UNO_QUERY);
-        mxBorderCanvas = NULL;
+        mxBorderCanvas = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
 
     {
         Reference<XComponent> xComponent (mxBorderWindow, UNO_QUERY);
-        mxBorderWindow = NULL;
+        mxBorderWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
 
-    mxComponentContext = NULL;
+    mxComponentContext = nullptr;
 }
 
 void PresenterPaneBase::SetTitle (const OUString& rsTitle)
 {
     msTitle = rsTitle;
 
-    OSL_ASSERT(mpPresenterController.get()!=NULL);
-    OSL_ASSERT(mpPresenterController->GetPaintManager().get()!=NULL);
+    OSL_ASSERT(mpPresenterController.get()!=nullptr);
+    OSL_ASSERT(mpPresenterController->GetPaintManager().get()!=nullptr);
 
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
@@ -245,8 +245,8 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
         }
         catch (Exception&)
         {
-            mxContentWindow = NULL;
-            mxComponentContext = NULL;
+            mxContentWindow = nullptr;
+            mxComponentContext = nullptr;
             throw;
         }
     }
@@ -310,7 +310,7 @@ void SAL_CALL PresenterPaneBase::disposing (const lang::EventObject& rEvent)
 {
     if (rEvent.Source == mxBorderWindow)
     {
-        mxBorderWindow = NULL;
+        mxBorderWindow = nullptr;
     }
 }
 

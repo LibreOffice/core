@@ -154,7 +154,7 @@ void SAL_CALL PresenterScrollBar::disposing()
         mxWindow->removeMouseMotionListener(this);
 
         Reference<lang::XComponent> xComponent (mxWindow, UNO_QUERY);
-        mxWindow = NULL;
+        mxWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -245,7 +245,7 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
         mxCanvas = rxCanvas;
         if (mxCanvas.is())
         {
-            if (mpBitmaps.get()==NULL)
+            if (mpBitmaps.get()==nullptr)
             {
                 if (mpSharedBitmaps.expired())
                 {
@@ -458,7 +458,7 @@ void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEven
     throw (css::uno::RuntimeException, std::exception)
 {
     if (rEvent.Source == mxWindow)
-        mxWindow = NULL;
+        mxWindow = nullptr;
 }
 
 
@@ -474,7 +474,7 @@ void PresenterScrollBar::Repaint (
     const geometry::RealRectangle2D& rBox,
     const bool bAsynchronousUpdate)
 {
-    if (mpPaintManager.get() != NULL)
+    if (mpPaintManager.get() != nullptr)
         mpPaintManager->Invalidate(
             mxWindow,
             PresenterGeometryHelper::ConvertRectangle(rBox),
@@ -484,7 +484,7 @@ void PresenterScrollBar::Repaint (
 void PresenterScrollBar::PaintBackground(
     const css::awt::Rectangle& rUpdateBox)
 {
-    if (mpBackgroundBitmap.get() == NULL)
+    if (mpBackgroundBitmap.get() == nullptr)
         return;
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
@@ -528,7 +528,7 @@ void PresenterScrollBar::PaintBitmap(
             geometry::AffineMatrix2D(
                 1,0,aBox.X1 + (aBox.X2-aBox.X1 - aBitmapSize.Width)/2,
                 0,1,aBox.Y1 + (aBox.Y2-aBox.Y1 - aBitmapSize.Height)/2),
-            NULL,
+            nullptr,
             Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
@@ -582,7 +582,7 @@ void PresenterScrollBar::UpdateWidthOrHeight (
     sal_Int32& rSize,
     const SharedBitmapDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get() != NULL)
+    if (rpDescriptor.get() != nullptr)
     {
         Reference<rendering::XBitmap> xBitmap (rpDescriptor->GetNormalBitmap());
         if (xBitmap.is())
@@ -599,8 +599,8 @@ css::uno::Reference<css::rendering::XBitmap> PresenterScrollBar::GetBitmap (
     const Area eArea,
     const SharedBitmapDescriptor& rpBitmaps) const
 {
-    if (rpBitmaps.get() == NULL)
-        return NULL;
+    if (rpBitmaps.get() == nullptr)
+        return nullptr;
     else
         return rpBitmaps->GetBitmap(GetBitmapMode(eArea));
 }
@@ -684,7 +684,7 @@ void PresenterVerticalScrollBar::UpdateBorders()
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     double nBottom = aWindowBox.Height;
 
-    if (mpNextButtonDescriptor.get() != NULL)
+    if (mpNextButtonDescriptor.get() != nullptr)
     {
         Reference<rendering::XBitmap> xBitmap (mpNextButtonDescriptor->GetNormalBitmap());
         if (xBitmap.is())
@@ -695,7 +695,7 @@ void PresenterVerticalScrollBar::UpdateBorders()
             nBottom -= aSize.Height + gnScrollBarGap;
         }
     }
-    if (mpPrevButtonDescriptor.get() != NULL)
+    if (mpPrevButtonDescriptor.get() != nullptr)
     {
         Reference<rendering::XBitmap> xBitmap (mpPrevButtonDescriptor->GetNormalBitmap());
         if (xBitmap.is())
@@ -747,7 +747,7 @@ void PresenterVerticalScrollBar::UpdateBorders()
 
 void PresenterVerticalScrollBar::UpdateBitmaps()
 {
-    if (mpBitmaps.get() != NULL)
+    if (mpBitmaps.get() != nullptr)
     {
         mpPrevButtonDescriptor = mpBitmaps->GetBitmap("Up");
         mpNextButtonDescriptor = mpBitmaps->GetBitmap("Down");
@@ -812,7 +812,7 @@ PresenterScrollBar::MousePressRepeater::MousePressRepeater (
 void PresenterScrollBar::MousePressRepeater::Dispose()
 {
     Stop();
-    mpScrollBar = NULL;
+    mpScrollBar = nullptr;
 }
 
 void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Area& reArea)
@@ -861,7 +861,7 @@ void PresenterScrollBar::MousePressRepeater::Callback (const TimeValue& rCurrent
 {
     (void)rCurrentTime;
 
-    if (mpScrollBar.get() == NULL)
+    if (mpScrollBar.get() == nullptr)
     {
         Stop();
         return;

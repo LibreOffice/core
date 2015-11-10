@@ -49,7 +49,7 @@ PresenterSprite::~PresenterSprite()
         Reference<lang::XComponent> xComponent (mxSprite, UNO_QUERY);
         if (xComponent.is())
             xComponent->dispose();
-        mxSprite = NULL;
+        mxSprite = nullptr;
     }
 }
 
@@ -71,7 +71,7 @@ css::uno::Reference<css::rendering::XCanvas> PresenterSprite::GetCanvas()
     if (mxSprite.is())
         return mxSprite->getContentCanvas();
     else
-        return NULL;
+        return nullptr;
 }
 
 void PresenterSprite::Show()
@@ -107,10 +107,10 @@ void PresenterSprite::MoveTo (const css::geometry::RealPoint2D& rLocation)
             maLocation,
             rendering::ViewState(
                 geometry::AffineMatrix2D(1,0,0, 0,1,0),
-                NULL),
+                nullptr),
             rendering::RenderState(
                 geometry::AffineMatrix2D(1,0,0, 0,1,0),
-                NULL,
+                nullptr,
                 uno::Sequence<double>(4),
                 rendering::CompositeOperation::SOURCE)
             );
@@ -135,10 +135,10 @@ void PresenterSprite::ProvideSprite()
             mxSprite->move(maLocation,
                 rendering::ViewState(
                 geometry::AffineMatrix2D(1,0,0, 0,1,0),
-                NULL),
+                nullptr),
             rendering::RenderState(
                 geometry::AffineMatrix2D(1,0,0, 0,1,0),
-                NULL,
+                nullptr,
                 uno::Sequence<double>(4),
                 rendering::CompositeOperation::SOURCE)
                 );
@@ -158,7 +158,7 @@ void PresenterSprite::DisposeSprite()
         Reference<lang::XComponent> xComponent (mxSprite, UNO_QUERY);
         if (xComponent.is())
             xComponent->dispose();
-        mxSprite = NULL;
+        mxSprite = nullptr;
     }
 }
 

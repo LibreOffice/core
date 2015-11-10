@@ -207,7 +207,7 @@ void OptimizerDialog::UpdateConfiguration()
 
 OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, Reference< XDispatch > rxStatusDispatcher ) :
     UnoDialog( rxContext, rxFrame ),
-    ConfigurationAccess( rxContext, NULL ),
+    ConfigurationAccess( rxContext, nullptr ),
     mnCurrentStep( 0 ),
     mnTabIndex( 0 ),
     mxFrame( rxFrame ),

@@ -114,7 +114,7 @@ bool PresenterConfigurationAccess::GoToChild (const OUString& rsPathToNode)
             return true;
     }
 
-    mxRoot = NULL;
+    mxRoot = nullptr;
     return false;
 }
 
@@ -127,7 +127,7 @@ bool PresenterConfigurationAccess::GoToChild (const Predicate& rPredicate)
     if (Reference<XInterface>(maNode, UNO_QUERY).is())
         return true;
 
-    mxRoot = NULL;
+    mxRoot = nullptr;
     return false;
 }
 

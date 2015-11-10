@@ -66,7 +66,7 @@ void PresenterPaintManager::Invalidate (
 
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         mpPaneContainer->FindContentWindow(rxWindow));
-    if (pDescriptor.get()==NULL || ! pDescriptor->mbIsOpaque)
+    if (pDescriptor.get()==nullptr || ! pDescriptor->mbIsOpaque)
         nInvalidateMode |= awt::InvalidateStyle::TRANSPARENT;
     else
         nInvalidateMode |= awt::InvalidateStyle::NOTRANSPARENT;
@@ -108,7 +108,7 @@ void PresenterPaintManager::Invalidate (
 
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         mpPaneContainer->FindContentWindow(rxWindow));
-    if (pDescriptor.get()==NULL || ! pDescriptor->mbIsOpaque)
+    if (pDescriptor.get()==nullptr || ! pDescriptor->mbIsOpaque)
         nInvalidateMode |= awt::InvalidateStyle::TRANSPARENT;
     else
         nInvalidateMode |= awt::InvalidateStyle::NOTRANSPARENT;

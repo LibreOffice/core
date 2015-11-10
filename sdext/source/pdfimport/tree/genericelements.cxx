@@ -198,11 +198,11 @@ void ParagraphElement::visitedBy( ElementTreeVisitor&                          r
 bool ParagraphElement::isSingleLined( PDFIProcessor& rProc ) const
 {
     std::list< Element* >::const_iterator it = Children.begin();
-    TextElement* pText = NULL, *pLastText = NULL;
+    TextElement* pText = nullptr, *pLastText = nullptr;
     while( it != Children.end() )
     {
         // a paragraph containing subparagraphs cannot be single lined
-        if( dynamic_cast< ParagraphElement* >(*it) != NULL )
+        if( dynamic_cast< ParagraphElement* >(*it) != nullptr )
             return false;
 
         pText = dynamic_cast< TextElement* >(*it);
@@ -224,7 +224,7 @@ bool ParagraphElement::isSingleLined( PDFIProcessor& rProc ) const
     }
 
     // a paragraph without a single text is not considered single lined
-    return pLastText != NULL;
+    return pLastText != nullptr;
 }
 
 double ParagraphElement::getLineHeight( PDFIProcessor& rProc ) const
@@ -233,14 +233,14 @@ double ParagraphElement::getLineHeight( PDFIProcessor& rProc ) const
     for( std::list< Element* >::const_iterator it = Children.begin(); it != Children.end(); ++it )
     {
         ParagraphElement* pPara = dynamic_cast< ParagraphElement* >(*it);
-        TextElement* pText = NULL;
+        TextElement* pText = nullptr;
         if( pPara )
         {
             double lh = pPara->getLineHeight( rProc );
             if( lh > line_h )
                 line_h = lh;
         }
-        else if( (pText = dynamic_cast< TextElement* >( *it )) != NULL )
+        else if( (pText = dynamic_cast< TextElement* >( *it )) != nullptr )
         {
             const FontAttributes& rFont = rProc.getFont( pText->FontId );
             double lh = pText->h;
@@ -255,7 +255,7 @@ double ParagraphElement::getLineHeight( PDFIProcessor& rProc ) const
 
 TextElement* ParagraphElement::getFirstTextChild() const
 {
-    TextElement* pText = NULL;
+    TextElement* pText = nullptr;
     for( std::list< Element* >::const_iterator it = Children.begin();
          it != Children.end() && ! pText; ++it )
     {
@@ -290,7 +290,7 @@ void PageElement::updateParagraphGeometry( Element* pEle )
         for( std::list< Element* >::iterator it = pEle->Children.begin();
              it != pEle->Children.end(); ++it )
         {
-            Element* pChild = NULL;
+            Element* pChild = nullptr;
             TextElement* pText = dynamic_cast<TextElement*>(*it);
             if( pText )
                 pChild = pText;
@@ -448,7 +448,7 @@ void PageElement::resolveUnderlines( PDFIProcessor& rProc )
                 }
                 // second: hyperlinks may be larger than their underline
                 // since they are just arbitrary rectangles in the action definition
-                else if( dynamic_cast< HyperlinkElement* >(pEle) != NULL &&
+                else if( dynamic_cast< HyperlinkElement* >(pEle) != nullptr &&
                          l_x >= pEle->x && r_x <= pEle->x+pEle->w )
                 {
                     bRemovePoly = true;

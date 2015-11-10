@@ -35,7 +35,7 @@ extern "C"
         SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
     {
         OUString    aImplName( OUString::createFromAscii( pImplName ) );
-        void*       pRet = 0;
+        void*       pRet = nullptr;
 
         if( pServiceManager )
         {

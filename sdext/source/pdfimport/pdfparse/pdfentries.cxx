@@ -95,7 +95,7 @@ using namespace pdfparse;
 EmitContext::EmitContext( const PDFContainer* pTop ) :
     m_bDeflate( false ),
     m_bDecrypt( false ),
-    m_pImplData( NULL )
+    m_pImplData( nullptr )
 {
     if( pTop )
         m_pImplData = new EmitImplData( pTop );
@@ -490,7 +490,7 @@ PDFObject* PDFContainer::findObject( unsigned int nNumber, unsigned int nGenerat
             return pObject;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 PDFArray::~PDFArray()
@@ -559,7 +559,7 @@ void PDFDict::eraseValue( const OString& rName )
         {
             for( unsigned int j = i+1; j < nEle; j++ )
             {
-                if( dynamic_cast<PDFComment*>(m_aSubElements[j]) == NULL )
+                if( dynamic_cast<PDFComment*>(m_aSubElements[j]) == nullptr )
                 {
                     // free name and value
                     delete m_aSubElements[j];
@@ -581,17 +581,17 @@ PDFEntry* PDFDict::buildMap()
     m_aMap.clear();
     // build map
     unsigned int nEle = m_aSubElements.size();
-    PDFName* pName = NULL;
+    PDFName* pName = nullptr;
     for( unsigned int i = 0; i < nEle; i++ )
     {
-        if( dynamic_cast<PDFComment*>(m_aSubElements[i]) == NULL )
+        if( dynamic_cast<PDFComment*>(m_aSubElements[i]) == nullptr )
         {
             if( pName )
             {
                 m_aMap[ pName->m_aName ] = m_aSubElements[i];
-                pName = NULL;
+                pName = nullptr;
             }
-            else if( (pName = dynamic_cast<PDFName*>(m_aSubElements[i])) == NULL )
+            else if( (pName = dynamic_cast<PDFName*>(m_aSubElements[i])) == nullptr )
                 return m_aSubElements[i];
         }
     }
@@ -617,7 +617,7 @@ bool PDFStream::emit( EmitContext& rWriteContext ) const
 
 PDFEntry* PDFStream::clone() const
 {
-    return new PDFStream( m_nBeginOffset, m_nEndOffset, NULL );
+    return new PDFStream( m_nBeginOffset, m_nEndOffset, nullptr );
 }
 
 unsigned int PDFStream::getDictLength( const PDFContainer* pContainer ) const
@@ -670,7 +670,7 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
         if( nRead != nOuterStreamLen )
         {
             rtl_freeMemory( *ppStream );
-            *ppStream = NULL;
+            *ppStream = nullptr;
             *pBytes = 0;
             return false;
         }
@@ -718,7 +718,7 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
         }
     }
     else
-        *ppStream = NULL, *pBytes = 0;
+        *ppStream = nullptr, *pBytes = 0;
     return bIsDeflated;
 }
 
@@ -764,7 +764,7 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
     if( err < Z_OK )
     {
         rtl_freeMemory( *pOutBuf );
-        *pOutBuf = NULL;
+        *pOutBuf = nullptr;
         *pOutLen = 0;
     }
 }
@@ -774,11 +774,11 @@ bool PDFObject::writeStream( EmitContext& rWriteContext, const PDFFile* pParsedF
     bool bSuccess = false;
     if( m_pStream )
     {
-        char* pStream = NULL;
+        char* pStream = nullptr;
         unsigned int nBytes = 0;
         if( getDeflatedStream( &pStream, &nBytes, pParsedFile, rWriteContext ) && nBytes && rWriteContext.m_bDeflate )
         {
-            sal_uInt8* pOutBytes = NULL;
+            sal_uInt8* pOutBytes = nullptr;
             sal_uInt32 nOutBytes = 0;
             unzipToBuffer( pStream, nBytes, &pOutBytes, &nOutBytes );
             rWriteContext.write( pOutBytes, nOutBytes );
@@ -812,13 +812,13 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
         pEData->setDecryptObject( m_nNumber, m_nGeneration );
     if( (rWriteContext.m_bDeflate || rWriteContext.m_bDecrypt) && pEData )
     {
-        char* pStream = NULL;
+        char* pStream = nullptr;
         unsigned int nBytes = 0;
         bool bDeflate = getDeflatedStream( &pStream, &nBytes, pEData->m_pObjectContainer, rWriteContext );
         if( pStream && nBytes )
         {
             // unzip the stream
-            sal_uInt8* pOutBytes = NULL;
+            sal_uInt8* pOutBytes = nullptr;
             sal_uInt32 nOutBytes = 0;
             if( bDeflate && rWriteContext.m_bDeflate )
                 unzipToBuffer( pStream, nBytes, &pOutBytes, &nOutBytes );
@@ -1034,8 +1034,8 @@ struct PDFFileImplData
         m_nStandardRevision( 0 ),
         m_nKeyLength( 0 ),
         m_nPEntry( 0 ),
-        m_aCipher( NULL ),
-        m_aDigest( NULL )
+        m_aCipher( nullptr ),
+        m_aDigest( nullptr )
     {
         memset( m_aOEntry, 0, sizeof( m_aOEntry ) );
         memset( m_aUEntry, 0, sizeof( m_aUEntry ) );
@@ -1089,7 +1089,7 @@ bool PDFFile::decrypt( const sal_uInt8* pInBuffer, sal_uInt32 nLen, sal_uInt8* p
     rtlCipherError aErr = rtl_cipher_initARCFOUR( m_pData->m_aCipher,
                                                   rtl_Cipher_DirectionDecode,
                                                   aSum, i,
-                                                  NULL, 0 );
+                                                  nullptr, 0 );
     if( aErr == rtl_Cipher_E_None )
         aErr = rtl_cipher_decodeARCFOUR( m_pData->m_aCipher,
                                          pInBuffer, nLen,
@@ -1167,7 +1167,7 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
         // encrypt pad string
         rtl_cipher_initARCFOUR( pData->m_aCipher, rtl_Cipher_DirectionEncode,
                                 aKey, nKeyLen,
-                                NULL, 0 );
+                                nullptr, 0 );
         rtl_cipher_encodeARCFOUR( pData->m_aCipher, nPadString, sizeof( nPadString ),
                                   nEncryptedEntry, sizeof( nEncryptedEntry ) );
         bValid = (memcmp( nEncryptedEntry, pData->m_aUEntry, 32 ) == 0);
@@ -1179,7 +1179,7 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
         rtl_digest_updateMD5( pData->m_aDigest, pData->m_aDocID.getStr(), pData->m_aDocID.getLength() );
         rtl_digest_getMD5( pData->m_aDigest, nEncryptedEntry, sizeof(nEncryptedEntry) );
         rtl_cipher_initARCFOUR( pData->m_aCipher, rtl_Cipher_DirectionEncode,
-                                aKey, sizeof(aKey), NULL, 0 );
+                                aKey, sizeof(aKey), nullptr, 0 );
         rtl_cipher_encodeARCFOUR( pData->m_aCipher,
                                   nEncryptedEntry, 16,
                                   nEncryptedEntry, 16 ); // encrypt in place
@@ -1190,7 +1190,7 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
                 aTempKey[j] = static_cast<sal_uInt8>( aKey[j] ^ i );
 
             rtl_cipher_initARCFOUR( pData->m_aCipher, rtl_Cipher_DirectionEncode,
-                                    aTempKey, sizeof(aTempKey), NULL, 0 );
+                                    aTempKey, sizeof(aTempKey), nullptr, 0 );
             rtl_cipher_encodeARCFOUR( pData->m_aCipher,
                                       nEncryptedEntry, 16,
                                       nEncryptedEntry, 16 ); // encrypt in place
@@ -1237,7 +1237,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
         if( m_pData->m_nStandardRevision == 2 )
         {
             rtl_cipher_initARCFOUR( m_pData->m_aCipher, rtl_Cipher_DirectionDecode,
-                                    aKey, nKeyLen, NULL, 0 );
+                                    aKey, nKeyLen, nullptr, 0 );
             rtl_cipher_decodeARCFOUR( m_pData->m_aCipher,
                                       m_pData->m_aOEntry, 32,
                                       nPwd, 32 );
@@ -1251,7 +1251,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
                 for( unsigned int j = 0; j < sizeof(nTempKey); j++ )
                     nTempKey[j] = sal_uInt8(aKey[j] ^ i);
                 rtl_cipher_initARCFOUR( m_pData->m_aCipher, rtl_Cipher_DirectionDecode,
-                                        nTempKey, nKeyLen, NULL, 0 );
+                                        nTempKey, nKeyLen, nullptr, 0 );
                 rtl_cipher_decodeARCFOUR( m_pData->m_aCipher,
                                           nPwd, 32,
                                           nPwd, 32 ); // decrypt inplace

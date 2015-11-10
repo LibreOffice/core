@@ -55,7 +55,7 @@ void SAL_CALL PresenterCurrentSlideObserver::disposing()
     if(mxSlideShowController.is())
     {
         mxSlideShowController->removeSlideShowListener(static_cast<XSlideShowListener*>(this));
-        mxSlideShowController = NULL;
+        mxSlideShowController = nullptr;
     }
 }
 
@@ -136,7 +136,7 @@ void SAL_CALL PresenterCurrentSlideObserver::disposing (
     if (rEvent.Source == Reference<XInterface>(static_cast<XWeak*>(mpPresenterController.get())))
         dispose();
     else if (rEvent.Source == mxSlideShowController)
-        mxSlideShowController = NULL;
+        mxSlideShowController = nullptr;
 }
 
 } } // end of namespace ::sdext::presenter

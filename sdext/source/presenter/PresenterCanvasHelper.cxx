@@ -33,10 +33,10 @@ namespace sdext { namespace presenter {
 PresenterCanvasHelper::PresenterCanvasHelper()
     : maDefaultViewState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL),
+        nullptr),
       maDefaultRenderState(
           geometry::AffineMatrix2D(1,0,0, 0,1,0),
-          NULL,
+          nullptr,
           Sequence<double>(4),
           rendering::CompositeOperation::SOURCE)
 {
@@ -66,7 +66,7 @@ void PresenterCanvasHelper::PaintRectangle (
     const css::rendering::ViewState& rDefaultViewState,
     const css::rendering::RenderState& rDefaultRenderState)
 {
-    if (rpBitmap.get() == NULL)
+    if (rpBitmap.get() == nullptr)
         return;
 
     if ( ! rxCanvas.is() || ! rxCanvas->getDevice().is())

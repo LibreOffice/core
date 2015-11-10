@@ -216,7 +216,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorder (
     }
     ProvideTheme(rxCanvas);
 
-    if (mpRenderer.get() != NULL)
+    if (mpRenderer.get() != nullptr)
     {
         mpRenderer->SetCanvas(rxCanvas);
         mpRenderer->SetupClipping(
@@ -252,7 +252,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
     }
     ProvideTheme(rxCanvas);
 
-    if (mpRenderer.get() != NULL)
+    if (mpRenderer.get() != nullptr)
     {
         mpRenderer->SetCanvas(rxCanvas);
         mpRenderer->SetupClipping(
@@ -274,12 +274,12 @@ awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
 {
     ThrowIfDisposed();
     ProvideTheme();
-    if (mpRenderer.get() != NULL)
+    if (mpRenderer.get() != nullptr)
     {
         const std::shared_ptr<RendererPaneStyle> pRendererPaneStyle(
             mpRenderer->GetRendererPaneStyle(rsPaneBorderStyleName));
-        if (pRendererPaneStyle.get() != NULL
-            && pRendererPaneStyle->mpBottomCallout.get() != NULL)
+        if (pRendererPaneStyle.get() != nullptr
+            && pRendererPaneStyle->mpBottomCallout.get() != nullptr)
         {
             return awt::Point (
                 0,
@@ -300,7 +300,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
     if ( ! mxContext.is())
         return false;
 
-    if (mpTheme.get() != NULL)
+    if (mpTheme.get() != nullptr)
     {
         // Check if the theme already has a canvas.
         if ( ! mpTheme->HasCanvas())
@@ -315,9 +315,9 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
         bModified = true;
     }
 
-    if (mpTheme.get() != NULL && bModified)
+    if (mpTheme.get() != nullptr && bModified)
     {
-        if (mpRenderer.get() == NULL)
+        if (mpRenderer.get() == nullptr)
             mpRenderer.reset(new Renderer(mxContext, mpTheme));
         else
             mpRenderer->SetCanvas(rxCanvas);
@@ -328,10 +328,10 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
 
 bool PresenterPaneBorderPainter::ProvideTheme()
 {
-    if (mpTheme.get() == NULL)
+    if (mpTheme.get() == nullptr)
     {
         // Create a theme without bitmaps (no canvas => no bitmaps).
-        return ProvideTheme(NULL);
+        return ProvideTheme(nullptr);
     }
     else
     {
@@ -344,7 +344,7 @@ bool PresenterPaneBorderPainter::ProvideTheme()
 void PresenterPaneBorderPainter::SetTheme (const std::shared_ptr<PresenterTheme>& rpTheme)
 {
     mpTheme = rpTheme;
-    if (mpRenderer.get() == NULL)
+    if (mpRenderer.get() == nullptr)
         mpRenderer.reset(new Renderer(mxContext, mpTheme));
 }
 
@@ -353,10 +353,10 @@ awt::Rectangle PresenterPaneBorderPainter::AddBorder (
     const awt::Rectangle& rInnerBox,
     const css::drawing::framework::BorderType eBorderType) const
 {
-    if (mpRenderer.get() != NULL)
+    if (mpRenderer.get() != nullptr)
     {
         const std::shared_ptr<RendererPaneStyle> pRendererPaneStyle(mpRenderer->GetRendererPaneStyle(rsPaneURL));
-        if (pRendererPaneStyle.get() != NULL)
+        if (pRendererPaneStyle.get() != nullptr)
             return pRendererPaneStyle->AddBorder(rInnerBox, eBorderType);
     }
     return rInnerBox;
@@ -367,10 +367,10 @@ awt::Rectangle PresenterPaneBorderPainter::RemoveBorder (
     const css::awt::Rectangle& rOuterBox,
     const css::drawing::framework::BorderType eBorderType) const
 {
-    if (mpRenderer.get() != NULL)
+    if (mpRenderer.get() != nullptr)
     {
         const std::shared_ptr<RendererPaneStyle> pRendererPaneStyle(mpRenderer->GetRendererPaneStyle(rsPaneURL));
-        if (pRendererPaneStyle.get() != NULL)
+        if (pRendererPaneStyle.get() != nullptr)
             return pRendererPaneStyle->RemoveBorder(rOuterBox, eBorderType);
     }
     return rOuterBox;
@@ -397,7 +397,7 @@ PresenterPaneBorderPainter::Renderer::Renderer (
       maRendererPaneStyles(),
       mxCanvas(),
       mxPresenterHelper(),
-      maViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL),
+      maViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr),
       mxViewStateClip(),
       mbHasCallout(false),
       maCalloutAnchor()
@@ -438,7 +438,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
 
     // Create the outer and inner border of the, ahm, border.
     std::shared_ptr<RendererPaneStyle> pStyle (GetRendererPaneStyle(rsPaneURL));
-    if (pStyle.get() == NULL)
+    if (pStyle.get() == nullptr)
         return;
 
     awt::Rectangle aOuterBox (rBBox);
@@ -567,7 +567,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
 
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
-        NULL,
+        nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
@@ -605,7 +605,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
 std::shared_ptr<RendererPaneStyle>
     PresenterPaneBorderPainter::Renderer::GetRendererPaneStyle (const OUString& rsResourceURL)
 {
-    OSL_ASSERT(mpTheme.get()!=NULL);
+    OSL_ASSERT(mpTheme.get()!=nullptr);
 
     RendererPaneStyleContainer::const_iterator iStyle (maRendererPaneStyles.find(rsResourceURL));
     if (iStyle == maRendererPaneStyles.end())
@@ -734,7 +734,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBitmap(
         geometry::AffineMatrix2D(
             double(nW)/rpBitmap->mnWidth, 0, nX,
             0, double(nH)/rpBitmap->mnHeight, nY),
-        NULL,
+        nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::OVER);
 
@@ -750,14 +750,14 @@ void PresenterPaneBorderPainter::Renderer::SetupClipping (
     const awt::Rectangle& rOuterBox,
     const OUString& rsPaneStyleName)
 {
-    mxViewStateClip = NULL;
-    maViewState.Clip = NULL;
+    mxViewStateClip = nullptr;
+    maViewState.Clip = nullptr;
 
     if ( ! mxCanvas.is())
         return;
 
     std::shared_ptr<RendererPaneStyle> pStyle (GetRendererPaneStyle(rsPaneStyleName));
-    if (pStyle.get() == NULL)
+    if (pStyle.get() == nullptr)
     {
         mxViewStateClip = PresenterGeometryHelper::CreatePolygon(
             rUpdateBox,
@@ -815,7 +815,7 @@ RendererPaneStyle::RendererPaneStyle (
       maOuterBorderSize(),
       maTotalBorderSize()
 {
-    if (rpTheme.get() != NULL)
+    if (rpTheme.get() != nullptr)
     {
         mpTopLeft = GetBitmap(rpTheme, rsStyleName, "TopLeft");
         mpTop = GetBitmap(rpTheme, rsStyleName, "Top");
@@ -832,7 +832,7 @@ RendererPaneStyle::RendererPaneStyle (
         mpFont = rpTheme->GetFont(rsStyleName);
 
         OUString sAnchor ("Left");
-        if (mpFont.get() != NULL)
+        if (mpFont.get() != nullptr)
         {
             sAnchor = mpFont->msAnchor;
             mnFontXOffset = mpFont->mnXOffset;
@@ -876,7 +876,7 @@ awt::Rectangle RendererPaneStyle::AddBorder (
     const awt::Rectangle& rBox,
     const drawing::framework::BorderType eBorderType) const
 {
-    const BorderSize* pBorderSize = NULL;
+    const BorderSize* pBorderSize = nullptr;
     switch (eBorderType)
     {
         case drawing::framework::BorderType_INNER_BORDER:
@@ -902,7 +902,7 @@ awt::Rectangle RendererPaneStyle::RemoveBorder (
     const awt::Rectangle& rBox,
     const css::drawing::framework::BorderType eBorderType) const
 {
-    const BorderSize* pBorderSize = NULL;
+    const BorderSize* pBorderSize = nullptr;
     switch (eBorderType)
     {
         case drawing::framework::BorderType_INNER_BORDER:
@@ -927,7 +927,7 @@ awt::Rectangle RendererPaneStyle::RemoveBorder (
 const Reference<rendering::XCanvasFont> RendererPaneStyle::GetFont (
     const Reference<rendering::XCanvas>& rxCanvas) const
 {
-    if (mpFont.get() != NULL)
+    if (mpFont.get() != nullptr)
         mpFont->PrepareFont(rxCanvas);
     return mpFont->mxFont;
 }
@@ -946,7 +946,7 @@ SharedBitmapDescriptor RendererPaneStyle::GetBitmap(
     const OUString& rsBitmapName)
 {
     SharedBitmapDescriptor pDescriptor (rpTheme->GetBitmap(rsStyleName, rsBitmapName));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         return pDescriptor;
     else
         return mpEmpty;

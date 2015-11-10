@@ -67,13 +67,13 @@ void PresenterPaneContainer::PreparePane (
         return;
 
     SharedPaneDescriptor pPane (FindPaneURL(rxPaneId->getResourceURL()));
-    if (pPane.get() == NULL)
+    if (pPane.get() == nullptr)
     {
         // No entry found for the given pane id.  Create a new one.
         SharedPaneDescriptor pDescriptor (new PaneDescriptor());
         pDescriptor->mxPaneId = rxPaneId;
         pDescriptor->msViewURL = rsViewURL;
-        pDescriptor->mxPane = NULL;
+        pDescriptor->mxPane = nullptr;
         if (rsTitle.indexOf('%') < 0)
         {
             pDescriptor->msTitle = rsTitle;
@@ -123,11 +123,11 @@ PresenterPaneContainer::SharedPaneDescriptor
             sPaneURL = xPaneId->getResourceURL();
 
         pDescriptor = FindPaneURL(sPaneURL);
-        if (pDescriptor.get() == NULL)
+        if (pDescriptor.get() == nullptr)
             PreparePane(xPaneId, OUString(), OUString(), OUString(),
                 false, ViewInitializationFunction(), 0,0,0,0);
         pDescriptor = FindPaneURL(sPaneURL);
-        if (pDescriptor.get() != NULL)
+        if (pDescriptor.get() != nullptr)
         {
             Reference<awt::XWindow> xWindow (rxPane->getWindow());
             pDescriptor->mxContentWindow = xWindow;
@@ -160,7 +160,7 @@ PresenterPaneContainer::SharedPaneDescriptor
         sPaneURL = rxPaneId->getResourceURL();
 
     SharedPaneDescriptor pDescriptor (FindPaneURL(sPaneURL));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         pDescriptor->mxBorderWindow = rxBorderWindow;
         return pDescriptor;
@@ -188,7 +188,7 @@ PresenterPaneContainer::SharedPaneDescriptor
         }
 
         pDescriptor = FindPaneURL(sPaneURL);
-        if (pDescriptor.get() != NULL)
+        if (pDescriptor.get() != nullptr)
         {
             pDescriptor->mxView = rxView;
             pDescriptor->mpViewBackground = rpViewBackground;
@@ -217,14 +217,14 @@ PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::RemovePane (const Reference<XResourceId>& rxPaneId)
 {
     SharedPaneDescriptor pDescriptor (FindPaneId(rxPaneId));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         if (pDescriptor->mxContentWindow.is())
             pDescriptor->mxContentWindow->removeEventListener(this);
-        pDescriptor->mxContentWindow = NULL;
-        pDescriptor->mxBorderWindow = NULL;
-        pDescriptor->mxPane = NULL;
-        pDescriptor->mxView = NULL;
+        pDescriptor->mxContentWindow = nullptr;
+        pDescriptor->mxBorderWindow = nullptr;
+        pDescriptor->mxPane = nullptr;
+        pDescriptor->mxView = nullptr;
         pDescriptor->mbIsActive = false;
     }
     return pDescriptor;
@@ -247,9 +247,9 @@ PresenterPaneContainer::SharedPaneDescriptor
         }
 
         pDescriptor = FindPaneURL(sPaneURL);
-        if (pDescriptor.get() != NULL)
+        if (pDescriptor.get() != nullptr)
         {
-            pDescriptor->mxView = NULL;
+            pDescriptor->mxView = nullptr;
             pDescriptor->mpViewBackground = SharedBitmapDescriptor();
         }
     }
@@ -329,7 +329,7 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindViewURL
 OUString PresenterPaneContainer::GetPaneURLForViewURL (const OUString& rsViewURL)
 {
     SharedPaneDescriptor pDescriptor (FindViewURL(rsViewURL));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         if (pDescriptor->mxPaneId.is())
             return pDescriptor->mxPaneId->getResourceURL();
     return OUString();
@@ -337,7 +337,7 @@ OUString PresenterPaneContainer::GetPaneURLForViewURL (const OUString& rsViewURL
 
 void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get() != NULL)
+    if (rpDescriptor.get() != nullptr)
     {
         // Find iterator for pDescriptor.
         PaneList::iterator iPane;
@@ -365,7 +365,7 @@ void SAL_CALL PresenterPaneContainer::disposing (
 {
     SharedPaneDescriptor pDescriptor (
         FindContentWindow(Reference<awt::XWindow>(rEvent.Source, UNO_QUERY)));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         RemovePane(pDescriptor->mxPaneId);
     }

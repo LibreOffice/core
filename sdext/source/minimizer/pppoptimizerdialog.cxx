@@ -33,7 +33,7 @@ using namespace ::com::sun::star::beans;
 
 PPPOptimizerDialog::PPPOptimizerDialog( const Reference< XComponentContext > &xContext ) :
     mxContext( xContext ),
-    mpOptimizerDialog( NULL )
+    mpOptimizerDialog( nullptr )
 {
 }
 
@@ -126,7 +126,7 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
                     OUString sResult( sBuf.makeStringAndClear() );
                     SAL_INFO("sdext.minimizer", sResult );
                 }
-                delete mpOptimizerDialog, mpOptimizerDialog = NULL;
+                delete mpOptimizerDialog, mpOptimizerDialog = nullptr;
             }
             catch( ... )
             {

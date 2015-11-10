@@ -81,7 +81,7 @@ class ConfigurationAccess
     public:
 
         ConfigurationAccess( const css::uno::Reference< css::uno::XComponentContext >& rXFactory,
-                                OptimizerSettings* pDefaultSettings = NULL );
+                                OptimizerSettings* pDefaultSettings = nullptr );
         ~ConfigurationAccess();
         void SaveConfiguration();
 

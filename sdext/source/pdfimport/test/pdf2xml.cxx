@@ -74,7 +74,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         uno::Reference<pdfi::PDFIRawAdaptor> xAdaptor( new pdfi::PDFIRawAdaptor(OUString(), aEnv.getComponentContext()) );
         xAdaptor->setTreeVisitorFactory(pTreeFactory);
-        xAdaptor->odfConvert( aSrcURL, new OutputWrap(aDstURL), NULL );
+        xAdaptor->odfConvert( aSrcURL, new OutputWrap(aDstURL), nullptr );
     }
     catch (const uno::Exception& e)
     {

@@ -53,9 +53,9 @@ PresenterSpritePane::~PresenterSpritePane()
 
 void PresenterSpritePane::disposing()
 {
-    mpSprite->SetFactory(NULL);
-    mxParentWindow = NULL;
-    mxParentCanvas = NULL;
+    mpSprite->SetFactory(nullptr);
+    mxParentWindow = nullptr;
+    mxParentCanvas = nullptr;
     PresenterPaneBase::disposing();
 }
 

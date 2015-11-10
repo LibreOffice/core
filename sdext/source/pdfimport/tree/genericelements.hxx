@@ -110,7 +110,7 @@ namespace pdfi
 
     struct ListElement : public Element
     {
-        ListElement() : Element( NULL ) {}
+        ListElement() : Element( nullptr ) {}
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
     };
 
@@ -245,7 +245,7 @@ namespace pdfi
         PageElement( Element* pParent, sal_Int32 nPageNr )
         : Element( pParent ), PageNumber( nPageNr ), Hyperlinks(),
         TopMargin( 0.0 ), BottomMargin( 0.0 ), LeftMargin( 0.0 ), RightMargin( 0.0 ),
-        HeaderElement( NULL ), FooterElement( NULL )
+        HeaderElement( nullptr ), FooterElement( nullptr )
         {}
     private:
         // helper method for resolveHyperlinks
@@ -274,7 +274,7 @@ namespace pdfi
     {
         friend class ElementFactory;
     protected:
-        DocumentElement() : Element( NULL ) {}
+        DocumentElement() : Element( nullptr ) {}
     public:
         virtual ~DocumentElement();
 

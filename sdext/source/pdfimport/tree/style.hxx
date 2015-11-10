@@ -43,11 +43,11 @@ namespace pdfi
             Element*                 ContainedElement;
             std::vector< Style* >    SubStyles;
 
-            Style() : ContainedElement( NULL )  {}
+            Style() : ContainedElement( nullptr )  {}
             Style( const OString& rName, const PropertyMap& rProps ) :
                 Name( rName ),
                 Properties( rProps ),
-                ContainedElement( NULL )
+                ContainedElement( nullptr )
             {}
         };
 
@@ -63,7 +63,7 @@ namespace pdfi
             bool                    IsSubStyle;
             sal_Int32               RefCount;
 
-            HashedStyle() : ContainedElement( NULL ), IsSubStyle( true ), RefCount( 0 ) {}
+            HashedStyle() : ContainedElement( nullptr ), IsSubStyle( true ), RefCount( 0 ) {}
 
             HashedStyle( const HashedStyle& rRight ) :
                 Name( rRight.Name ),

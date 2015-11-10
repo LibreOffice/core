@@ -144,25 +144,25 @@ void SAL_CALL PresenterNotesView::disposing()
         mxParentWindow->removeWindowListener(this);
         mxParentWindow->removePaintListener(this);
         mxParentWindow->removeKeyListener(this);
-        mxParentWindow = NULL;
+        mxParentWindow = nullptr;
     }
 
     // Dispose tool bar.
     {
         Reference<XComponent> xComponent (static_cast<XWeak*>(mpToolBar.get()), UNO_QUERY);
-        mpToolBar = NULL;
+        mpToolBar = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
     {
         Reference<XComponent> xComponent (mxToolBarCanvas, UNO_QUERY);
-        mxToolBarCanvas = NULL;
+        mxToolBarCanvas = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
     {
         Reference<XComponent> xComponent (mxToolBarWindow, UNO_QUERY);
-        mxToolBarWindow = NULL;
+        mxToolBarWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -170,23 +170,23 @@ void SAL_CALL PresenterNotesView::disposing()
     // Dispose close button
     {
         Reference<XComponent> xComponent (static_cast<XWeak*>(mpCloseButton.get()), UNO_QUERY);
-        mpCloseButton = NULL;
+        mpCloseButton = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
 
     // Create the tool bar.
 
-    mpScrollBar = NULL;
+    mpScrollBar = nullptr;
 
-    mxViewId = NULL;
+    mxViewId = nullptr;
 }
 
 void PresenterNotesView::CreateToolBar (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
 {
-    if (rpPresenterController.get() == NULL)
+    if (rpPresenterController.get() == nullptr)
         return;
 
     Reference<drawing::XPresenterHelper> xPresenterHelper (
@@ -270,7 +270,7 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
 
         Layout();
 
-        if (mpScrollBar.get() != NULL)
+        if (mpScrollBar.get() != nullptr)
         {
             mpScrollBar->SetThumbPosition(0, false);
             UpdateScrollBar();
@@ -286,7 +286,7 @@ void SAL_CALL PresenterNotesView::disposing (const lang::EventObject& rEventObje
     throw (RuntimeException, std::exception)
 {
     if (rEventObject.Source == mxParentWindow)
-        mxParentWindow = NULL;
+        mxParentWindow = nullptr;
 }
 
 //----- XWindowListener -------------------------------------------------------
@@ -350,7 +350,7 @@ void SAL_CALL PresenterNotesView::setCurrentPage (const Reference<drawing::XDraw
     throw (RuntimeException, std::exception)
 {
     // Get the associated notes page.
-    mxCurrentNotesPage = NULL;
+    mxCurrentNotesPage = nullptr;
     try
     {
         Reference<presentation::XPresentationPage> xPresentationPage(rxSlide, UNO_QUERY);
@@ -367,7 +367,7 @@ void SAL_CALL PresenterNotesView::setCurrentPage (const Reference<drawing::XDraw
 Reference<drawing::XDrawPage> SAL_CALL PresenterNotesView::getCurrentPage()
     throw (RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 //----- XKeyListener ----------------------------------------------------------
@@ -440,13 +440,13 @@ void PresenterNotesView::Layout()
             mnSeparatorYLocation = aWindowBox.Height - nToolBarHeight - gnSpaceBelowSeparator;
             aNewTextBoundingBox.Y2 = mnSeparatorYLocation - gnSpaceAboveSeparator;
             // Place the close button.
-            if (mpCloseButton.get() != NULL)
+            if (mpCloseButton.get() != nullptr)
                 mpCloseButton->SetCenter(geometry::RealPoint2D(
                                                                (aWindowBox.Width +  aToolBarSize.Width) / 2,
                                                                aWindowBox.Height - aToolBarSize.Height/2));
         }
     // Check whether the vertical scroll bar is necessary.
-    if (mpScrollBar.get() != NULL)
+    if (mpScrollBar.get() != nullptr)
         {
             bool bShowVerticalScrollbar (false);
             try
@@ -519,7 +519,7 @@ void PresenterNotesView::Paint (const awt::Rectangle& rUpdateBox)
     if ( ! mxCanvas.is())
         return;
 
-    if (mpBackground.get() == NULL)
+    if (mpBackground.get() == nullptr)
         mpBackground = mpPresenterController->GetViewBackground(mxViewId->getResourceURL());
 
     if (rUpdateBox.Y < maTextBoundingBox.Y2
@@ -542,14 +542,14 @@ void PresenterNotesView::PaintToolBar (const awt::Rectangle& rUpdateBox)
 
     rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL);
+        nullptr);
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
+        nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
-    if (mpBackground.get() != NULL)
+    if (mpBackground.get() != nullptr)
     {
         // Paint the background.
         mpPresenterController->GetCanvasHelper()->Paint(
@@ -584,11 +584,11 @@ void PresenterNotesView::PaintText (const awt::Rectangle& rUpdateBox)
         PresenterGeometryHelper::CreatePolygon(aBox, mxCanvas->getDevice()));
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
+        nullptr,
         Sequence<double>(3),
         rendering::CompositeOperation::SOURCE);
 
-    if (mpBackground.get() != NULL)
+    if (mpBackground.get() != nullptr)
     {
         // Paint the background.
         mpPresenterController->GetCanvasHelper()->Paint(
@@ -645,7 +645,7 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
     if (nNewSize > 5)
     {
         mpFont->mnSize = nNewSize;
-        mpFont->mxFont = NULL;
+        mpFont->mxFont = nullptr;
         mpTextView->SetFont(mpFont);
 
         Layout();
@@ -660,7 +660,7 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
             std::shared_ptr<PresenterConfigurationAccess> pConfiguration (
                 mpPresenterController->GetTheme()->GetNodeForViewStyle(
                     sStyleName));
-            if (pConfiguration.get()==NULL || ! pConfiguration->IsValid())
+            if (pConfiguration.get()==nullptr || ! pConfiguration->IsValid())
                 return;
 
             pConfiguration->GoToChild(OUString("Font"));
@@ -681,7 +681,7 @@ std::shared_ptr<PresenterTextView> PresenterNotesView::GetTextView() const
 
 void PresenterNotesView::UpdateScrollBar()
 {
-    if (mpScrollBar.get() != NULL)
+    if (mpScrollBar.get() != nullptr)
     {
         try
         {

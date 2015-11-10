@@ -36,15 +36,15 @@ static const struct ImplementationEntry gServiceEntries[] =
         PresenterProtocolHandler::Create,
         PresenterProtocolHandler::getImplementationName_static,
         PresenterProtocolHandler::getSupportedServiceNames_static,
-        createSingleComponentFactory, 0, 0
+        createSingleComponentFactory, nullptr, 0
     },
     {
         PresenterScreenJob::Create,
         PresenterScreenJob::getImplementationName_static,
         PresenterScreenJob::getSupportedServiceNames_static,
-        createSingleComponentFactory, 0, 0
+        createSingleComponentFactory, nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL presenter_component_getFactory(

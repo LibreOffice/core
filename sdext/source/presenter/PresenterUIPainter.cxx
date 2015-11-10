@@ -58,11 +58,11 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
     // Prepare painting.
     rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL);
+        nullptr);
 
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
+        nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
@@ -160,11 +160,11 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
     // Prepare painting.
     rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL);
+        nullptr);
 
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
+        nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 

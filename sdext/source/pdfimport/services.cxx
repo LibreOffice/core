@@ -83,9 +83,9 @@ namespace
         ComponentFactory    pFactory;
 
         ComponentDescription()
-            :pAsciiServiceName( NULL )
-            ,pAsciiImplementationName( NULL )
-            ,pFactory( NULL )
+            :pAsciiServiceName( nullptr )
+            ,pAsciiImplementationName( nullptr )
+            ,pFactory( nullptr )
         {
         }
         ComponentDescription( const sal_Char* _pAsciiServiceName, const sal_Char* _pAsciiImplementationName, ComponentFactory _pFactory )
@@ -120,7 +120,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL pdfimport_component_getFactory(
     Reference< XSingleComponentFactory > xFactory;
 
     const ComponentDescription* pComponents = lcl_getComponents();
-    while ( pComponents->pAsciiServiceName != NULL )
+    while ( pComponents->pAsciiServiceName != nullptr )
     {
         if ( sImplementationName.equalsAscii( pComponents->pAsciiImplementationName ) )
         {

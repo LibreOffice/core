@@ -97,12 +97,12 @@ void SAL_CALL PresenterWindowManager::disposing()
 {
     NotifyDisposing();
 
-    SetParentPane(NULL);
+    SetParentPane(nullptr);
 
     Reference<lang::XComponent> xComponent (mxPaneBorderManager, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
-    mxPaneBorderManager = NULL;
+    mxPaneBorderManager = nullptr;
 
     PresenterPaneContainer::PaneList::const_iterator iPane;
     PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
@@ -129,8 +129,8 @@ void PresenterWindowManager::SetParentPane (
         mxParentWindow->removeMouseListener(this);
         mxParentWindow->removeFocusListener(this);
     }
-    mxParentWindow = NULL;
-    mxParentCanvas = NULL;
+    mxParentWindow = nullptr;
+    mxParentCanvas = nullptr;
 
     if (rxPane.is())
     {
@@ -139,7 +139,7 @@ void PresenterWindowManager::SetParentPane (
     }
     else
     {
-        mxParentWindow = NULL;
+        mxParentWindow = nullptr;
     }
 
     if (mxParentWindow.is())
@@ -162,7 +162,7 @@ void PresenterWindowManager::SetTheme (const std::shared_ptr<PresenterTheme>& rp
 
     // Get background bitmap or background color from the theme.
 
-    if (mpTheme.get() != NULL)
+    if (mpTheme.get() != nullptr)
     {
         mpBackgroundBitmap = mpTheme->GetBitmap(OUString(), "Background");
     }
@@ -172,8 +172,8 @@ void PresenterWindowManager::NotifyViewCreation (const Reference<XView>& rxView)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindPaneId(rxView->getResourceId()->getAnchor()));
-    OSL_ASSERT(pDescriptor.get() != NULL);
-    if (pDescriptor.get() != NULL)
+    OSL_ASSERT(pDescriptor.get() != nullptr);
+    if (pDescriptor.get() != nullptr)
     {
         Layout();
 
@@ -193,7 +193,7 @@ void PresenterWindowManager::SetPanePosSizeAbsolute (
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindPaneURL(rsPaneURL));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         awt::Rectangle aParentBox = mxParentWindow->getPosSize();
         if (aParentBox.Width > 0 && aParentBox.Height > 0)
@@ -280,7 +280,7 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
     if ( ! mxParentCanvas.is())
         return;
 
-    if (mpTheme.get()!=NULL)
+    if (mpTheme.get()!=nullptr)
     {
         try
         {
@@ -362,7 +362,7 @@ void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent
     throw (RuntimeException, std::exception)
 {
     if (rEvent.Source == mxParentWindow)
-        mxParentWindow = NULL;
+        mxParentWindow = nullptr;
     else
     {
         Reference<awt::XWindow> xWindow (rEvent.Source, UNO_QUERY);
@@ -429,7 +429,7 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 
 void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
 {
-    OSL_ASSERT(mpPresenterController.get() != NULL);
+    OSL_ASSERT(mpPresenterController.get() != nullptr);
 
     if (meLayoutMode != eMode
         || mbIsSlideSorterActive
@@ -613,8 +613,8 @@ void PresenterWindowManager::Layout()
     {
         mbIsLayoutPending = false;
         mbIsLayouting = true;
-        mxScaledBackgroundBitmap = NULL;
-        mxClipPolygon = NULL;
+        mxScaledBackgroundBitmap = nullptr;
+        mxClipPolygon = nullptr;
 
         try
         {
@@ -660,7 +660,7 @@ void PresenterWindowManager::LayoutStandardMode()
     // go over the inner pane size.
     PresenterPaneContainer::SharedPaneDescriptor pPane (
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
-    if (pPane.get() != NULL)
+    if (pPane.get() != nullptr)
     {
         const awt::Size aCurrentSlideOuterBox(CalculatePaneSize(
             nHorizontalSlideDivide - 1.5*nGap,
@@ -682,7 +682,7 @@ void PresenterWindowManager::LayoutStandardMode()
     // width.  This takes into acount the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
-    if (pPane.get() != NULL)
+    if (pPane.get() != nullptr)
     {
         const awt::Size aNextSlideOuterBox (CalculatePaneSize(
             aBox.Width - nHorizontalSlideDivide - 1.5*nGap,
@@ -721,7 +721,7 @@ void PresenterWindowManager::LayoutNotesMode()
     // The notes view has no fixed aspect ratio.
     PresenterPaneContainer::SharedPaneDescriptor pPane (
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNotesPaneURL));
-    if (pPane.get() != NULL)
+    if (pPane.get() != nullptr)
     {
         const geometry::RealSize2D aNotesViewOuterSize(
             nPrimaryWidth - 1.5*nGap + 0.5,
@@ -745,7 +745,7 @@ void PresenterWindowManager::LayoutNotesMode()
     // width.  This takes into acount the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL);
-    if (pPane.get() != NULL)
+    if (pPane.get() != nullptr)
     {
         const awt::Size aCurrentSlideOuterBox(CalculatePaneSize(
             nSecondaryWidth - 1.5*nGap,
@@ -766,7 +766,7 @@ void PresenterWindowManager::LayoutNotesMode()
     // width.  This takes into acount the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
-    if (pPane.get() != NULL)
+    if (pPane.get() != nullptr)
     {
         const awt::Size aNextSlideOuterBox (CalculatePaneSize(
             nTertiaryWidth,
@@ -825,11 +825,11 @@ geometry::RealRectangle2D PresenterWindowManager::LayoutToolBar()
     // Get access to the tool bar.
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msToolBarPaneURL));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         PresenterToolBarView* pToolBarView
             = dynamic_cast<PresenterToolBarView*>(pDescriptor->mxView.get());
-        if (pToolBarView != NULL && pToolBarView->GetPresenterToolBar().is())
+        if (pToolBarView != nullptr && pToolBarView->GetPresenterToolBar().is())
         {
             geometry::RealSize2D aSize (pToolBarView->GetPresenterToolBar()->GetMinimalSize());
 
@@ -955,9 +955,9 @@ void PresenterWindowManager::UpdateWindowSize (const Reference<awt::XWindow>& rx
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindBorderWindow(rxBorderWindow));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
-        mxClipPolygon = NULL;
+        mxClipPolygon = nullptr;
 
         awt::Rectangle aParentBox = mxParentWindow->getPosSize();
         awt::Rectangle aBorderBox (pDescriptor->mxBorderWindow->getPosSize());
@@ -1011,7 +1011,7 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
         rendering::CompositeOperation::SOURCE);
 
     // Paint the background.
-    if (mpBackgroundBitmap.get() != NULL)
+    if (mpBackgroundBitmap.get() != nullptr)
     {
         ProvideBackgroundBitmap();
 
@@ -1026,8 +1026,8 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
                 1,
                 0,
                 mxScaledBackgroundBitmap,
-                NULL,
-                NULL,
+                nullptr,
+                nullptr,
                 rendering::StrokeAttributes(),
                 rendering::TexturingMode::REPEAT,
                 rendering::TexturingMode::REPEAT);
@@ -1180,7 +1180,7 @@ void PresenterWindowManager::Invalidate()
 }
 void PresenterWindowManager::Update()
 {
-    mxClipPolygon = NULL;
+    mxClipPolygon = nullptr;
     mbIsLayoutPending = true;
 
     UpdateWindowList();

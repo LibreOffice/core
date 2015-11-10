@@ -204,14 +204,14 @@ void PresenterController::disposing()
         mxMainWindow->removeFocusListener(this);
         mxMainWindow->removeMouseListener(this);
         mxMainWindow->removeMouseMotionListener(this);
-        mxMainWindow = NULL;
+        mxMainWindow = nullptr;
     }
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);
 
     Reference<XComponent> xWindowManagerComponent (
         static_cast<XWeak*>(mpWindowManager.get()), UNO_QUERY);
-    mpWindowManager = NULL;
+    mpWindowManager = nullptr;
     if (xWindowManagerComponent.is())
         xWindowManagerComponent->dispose();
 
@@ -220,29 +220,29 @@ void PresenterController::disposing()
         Reference<frame::XFrame> xFrame (mxController->getFrame());
         if (xFrame.is())
             xFrame->removeFrameActionListener(this);
-        mxController = NULL;
+        mxController = nullptr;
     }
 
-    mxComponentContext = NULL;
-    mxConfigurationController = NULL;
-    mxSlideShowController = NULL;
-    mxMainPaneId = NULL;
-    mpPaneContainer = NULL;
+    mxComponentContext = nullptr;
+    mxConfigurationController = nullptr;
+    mxSlideShowController = nullptr;
+    mxMainPaneId = nullptr;
+    mpPaneContainer = nullptr;
     mnCurrentSlideIndex = -1;
-    mxCurrentSlide = NULL;
-    mxNextSlide = NULL;
+    mxCurrentSlide = nullptr;
+    mxNextSlide = nullptr;
     mpTheme.reset();
     {
         Reference<lang::XComponent> xComponent (
             static_cast<XWeak*>(mpPaneBorderPainter.get()), UNO_QUERY);
-        mpPaneBorderPainter = NULL;
+        mpPaneBorderPainter = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
     mpCanvasHelper.reset();
     {
         Reference<lang::XComponent> xComponent (mxPresenterHelper, UNO_QUERY);
-        mxPresenterHelper = NULL;
+        mxPresenterHelper = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -250,7 +250,7 @@ void PresenterController::disposing()
     mnPendingSlideNumber = -1;
     {
         Reference<lang::XComponent> xComponent (mxUrlTransformer, UNO_QUERY);
-        mxUrlTransformer = NULL;
+        mxUrlTransformer = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -280,7 +280,7 @@ void PresenterController::GetSlides (const sal_Int32 nOffset)
         return;
 
     // Get the current slide from the slide show controller.
-    mxCurrentSlide = NULL;
+    mxCurrentSlide = nullptr;
     Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
     sal_Int32 nSlideIndex = -1;
     try
@@ -303,7 +303,7 @@ void PresenterController::GetSlides (const sal_Int32 nOffset)
     }
 
     // Get the next slide.
-    mxNextSlide = NULL;
+    mxNextSlide = nullptr;
     try
     {
         const sal_Int32 nNextSlideIndex (mxSlideShowController->getNextSlideIndex()+nOffset);
@@ -368,7 +368,7 @@ void PresenterController::UpdatePaneTitles()
     PresenterPaneContainer::PaneList::const_iterator iPane;
     for (iPane=mpPaneContainer->maPanes.begin(); iPane!=mpPaneContainer->maPanes.end(); ++iPane)
     {
-        OSL_ASSERT((*iPane).get() != NULL);
+        OSL_ASSERT((*iPane).get() != nullptr);
 
         OUString sTemplate (IsAccessibilityActive()
             ? (*iPane)->msAccessibleTitleTemplate
@@ -431,7 +431,7 @@ void PresenterController::UpdateViews()
 SharedBitmapDescriptor
     PresenterController::GetViewBackground (const OUString& rsViewURL) const
 {
-    if (mpTheme.get() != NULL)
+    if (mpTheme.get() != nullptr)
     {
         const OUString sStyleName (mpTheme->GetStyleName(rsViewURL));
         return mpTheme->GetBitmap(sStyleName, "Background");
@@ -442,7 +442,7 @@ SharedBitmapDescriptor
 PresenterTheme::SharedFontDescriptor
     PresenterController::GetViewFont (const OUString& rsViewURL) const
 {
-    if (mpTheme.get() != NULL)
+    if (mpTheme.get() != nullptr)
     {
         const OUString sStyleName (mpTheme->GetStyleName(rsViewURL));
         return mpTheme->GetFont(sStyleName);
@@ -495,7 +495,7 @@ void PresenterController::ShowView (const OUString& rsViewURL)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindViewURL(rsViewURL));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         pDescriptor->mbIsActive = true;
         mxConfigurationController->requestResourceActivation(
@@ -514,7 +514,7 @@ void PresenterController::HideView (const OUString& rsViewURL)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindViewURL(rsViewURL));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         mxConfigurationController->requestResourceDeactivation(
             ResourceId::createWithAnchor(
@@ -543,11 +543,11 @@ void PresenterController::DispatchUnoCommand (const OUString& rsCommand) const
 Reference<css::frame::XDispatch> PresenterController::GetDispatch (const util::URL& rURL) const
 {
     if ( ! mxController.is())
-        return NULL;
+        return nullptr;
 
     Reference<frame::XDispatchProvider> xDispatchProvider (mxController->getFrame(), UNO_QUERY);
     if ( ! xDispatchProvider.is())
-        return NULL;
+        return nullptr;
 
     return xDispatchProvider->queryDispatch(
         rURL,
@@ -783,7 +783,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
                     mpWindowManager->Update();
                     // Request the repainting of the area previously
                     // occupied by the view.
-                    if (pDescriptor.get() != NULL)
+                    if (pDescriptor.get() != nullptr)
                         GetPaintManager()->Invalidate(pDescriptor->mxBorderWindow);
                 }
             }
@@ -806,13 +806,13 @@ void SAL_CALL PresenterController::disposing (
     throw (RuntimeException, std::exception)
 {
     if (rEvent.Source == mxController)
-        mxController = NULL;
+        mxController = nullptr;
     else if (rEvent.Source == mxConfigurationController)
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
     else if (rEvent.Source == mxSlideShowController)
-        mxSlideShowController = NULL;
+        mxSlideShowController = nullptr;
     else if (rEvent.Source == mxMainWindow)
-        mxMainWindow = NULL;
+        mxMainWindow = nullptr;
 }
 
 //----- XFrameActionListener --------------------------------------------------
@@ -976,7 +976,7 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
 
         case awt::Key::F1:
             // Toggle the help view.
-            if (mpWindowManager.get() != NULL)
+            if (mpWindowManager.get() != nullptr)
             {
                 if (mpWindowManager->GetViewMode() != PresenterWindowManager::VM_Help)
                     mpWindowManager->SetViewMode(PresenterWindowManager::VM_Help);
@@ -1018,7 +1018,7 @@ void PresenterController::HandleNumericKeyPress (
             // Ctrl-1, Ctrl-2, and Ctrl-3 are used to switch between views
             // (slide view, notes view, normal). Ctrl-4 switches monitors
             mnPendingSlideNumber = -1;
-            if (mpWindowManager.get() == NULL)
+            if (mpWindowManager.get() == nullptr)
                 return;
             switch(nKey)
             {
@@ -1120,7 +1120,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     mpWindowManager->SetParentPane(rxPane);
     mpWindowManager->SetTheme(mpTheme);
 
-    if (mpPaneBorderPainter.get() != NULL)
+    if (mpPaneBorderPainter.get() != nullptr)
         mpPaneBorderPainter->SetTheme(mpTheme);
 
     // Add key listener
@@ -1190,7 +1190,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
 {
     mnPendingSlideNumber = nPendingSlideNumber;
 
-    if (mpTheme.get() == NULL)
+    if (mpTheme.get() == nullptr)
         return;
 
     if ( ! mxMainWindow.is())
@@ -1198,7 +1198,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
 
     PresenterTheme::SharedFontDescriptor pFont (
         mpTheme->GetFont("PendingSlideNumberFont"));
-    if (pFont.get() == NULL)
+    if (pFont.get() == nullptr)
         return;
 
     pFont->PrepareFont(Reference<rendering::XCanvas>(mxCanvas, UNO_QUERY));

@@ -334,7 +334,7 @@ void PresenterTextView::Paint (
 
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
-        NULL,
+        nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);

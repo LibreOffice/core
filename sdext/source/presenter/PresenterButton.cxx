@@ -58,11 +58,11 @@ const static double gnVerticalBorder (5);
         PresenterConfigurationAccess::GetProperty(xProperties, "Action") >>= sAction;
 
         PresenterTheme::SharedFontDescriptor pFont;
-        if (rpTheme.get() != NULL)
+        if (rpTheme.get() != nullptr)
             pFont = rpTheme->GetFont("ButtonFont");
 
         PresenterTheme::SharedFontDescriptor pMouseOverFont;
-        if (rpTheme.get() != NULL)
+        if (rpTheme.get() != nullptr)
             pMouseOverFont = rpTheme->GetFont("ButtonMouseOverFont");
 
         rtl::Reference<PresenterButton> pButton (
@@ -79,7 +79,7 @@ const static double gnVerticalBorder (5);
         return pButton;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 PresenterButton::PresenterButton (
@@ -153,7 +153,7 @@ void SAL_CALL PresenterButton::disposing()
     if (mxCanvas.is())
     {
         Reference<lang::XComponent> xComponent (mxCanvas, UNO_QUERY);
-        mxCanvas = NULL;
+        mxCanvas = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -165,7 +165,7 @@ void SAL_CALL PresenterButton::disposing()
         mxWindow->removeMouseListener(this);
         mxWindow->removeMouseMotionListener(this);
         Reference<lang::XComponent> xComponent (mxWindow, UNO_QUERY);
-        mxWindow = NULL;
+        mxWindow = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -201,7 +201,7 @@ void PresenterButton::SetCanvas (
     if (mxCanvas.is())
     {
         Reference<lang::XComponent> xComponent (mxCanvas, UNO_QUERY);
-        mxCanvas = NULL;
+        mxCanvas = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -277,7 +277,7 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
 
         rendering::ViewState aViewState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            NULL);
+            nullptr);
         rendering::RenderState aRenderState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
             PresenterGeometryHelper::CreatePolygon(rEvent.UpdateRect, mxCanvas->getDevice()),
@@ -310,7 +310,7 @@ void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent& rEvent
 
     if (meState == PresenterBitmapDescriptor::ButtonDown)
     {
-        OSL_ASSERT(mpPresenterController.get()!=NULL);
+        OSL_ASSERT(mpPresenterController.get()!=nullptr);
         mpPresenterController->DispatchUnoCommand(msAction);
 
         meState = PresenterBitmapDescriptor::Normal;
@@ -358,16 +358,16 @@ void SAL_CALL PresenterButton::disposing (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException, std::exception)
 {
     if (rEvent.Source == mxWindow)
-        mxWindow = NULL;
+        mxWindow = nullptr;
 }
 
 
 
 css::geometry::IntegerSize2D PresenterButton::CalculateButtonSize()
 {
-    if (mpFont.get()!=NULL && !mpFont->mxFont.is() && mxCanvas.is())
+    if (mpFont.get()!=nullptr && !mpFont->mxFont.is() && mxCanvas.is())
         mpFont->PrepareFont(mxCanvas);
-    if (mpFont.get()==NULL || !mpFont->mxFont.is())
+    if (mpFont.get()==nullptr || !mpFont->mxFont.is())
         return geometry::IntegerSize2D(-1,-1);
 
     geometry::RealSize2D aTextSize (PresenterCanvasHelper::GetTextSize(mpFont->mxFont,msText));
@@ -399,7 +399,7 @@ void PresenterButton::RenderButton (
         GetBitmap(rpCenter, eMode),
         GetBitmap(rpRight, eMode));
 
-    if (rpFont.get()==NULL || ! rpFont->mxFont.is())
+    if (rpFont.get()==nullptr || ! rpFont->mxFont.is())
         return;
 
     const rendering::StringContext aContext (msText, 0, msText.getLength());
@@ -407,7 +407,7 @@ void PresenterButton::RenderButton (
         rpFont->mxFont->createTextLayout(aContext,rendering::TextDirection::WEAK_LEFT_TO_RIGHT,0));
     const geometry::RealRectangle2D aTextBBox (xLayout->queryTextBounds());
 
-    rendering::RenderState aRenderState (geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL,
+    rendering::RenderState aRenderState (geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr,
         Sequence<double>(4), rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, rpFont->mnColor);
 
@@ -417,7 +417,7 @@ void PresenterButton::RenderButton (
     /// this is responsible of the close button
     rxCanvas->drawTextLayout(
         xLayout,
-        rendering::ViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL),
+        rendering::ViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr),
         aRenderState);
 }
 
@@ -430,12 +430,12 @@ Reference<rendering::XBitmap> PresenterButton::GetBitmap (
     const SharedBitmapDescriptor& mpIcon,
     const PresenterBitmapDescriptor::Mode eMode)
 {
-    if (mpIcon.get() != NULL)
+    if (mpIcon.get() != nullptr)
         return mpIcon->GetBitmap(eMode);
     else
     {
-        OSL_ASSERT(mpIcon.get()!=NULL);
-        return NULL;
+        OSL_ASSERT(mpIcon.get()!=nullptr);
+        return nullptr;
     }
 }
 
@@ -470,7 +470,7 @@ void PresenterButton::SetupButtonBitmaps()
 
     mxMouseOverBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(maButtonSize);
     xCanvas.set(mxMouseOverBitmap, UNO_QUERY);
-    if (mpMouseOverFont.get()!=NULL && !mpMouseOverFont->mxFont.is() && mxCanvas.is())
+    if (mpMouseOverFont.get()!=nullptr && !mpMouseOverFont->mxFont.is() && mxCanvas.is())
         mpMouseOverFont->PrepareFont(mxCanvas);
     if (xCanvas.is())
         RenderButton(

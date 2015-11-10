@@ -247,7 +247,7 @@ void DrawXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::con
     if( elem.Children.empty() )
         return;
 
-    bool bTextBox = (dynamic_cast<ParagraphElement*>(elem.Children.front()) != NULL);
+    bool bTextBox = (dynamic_cast<ParagraphElement*>(elem.Children.front()) != nullptr);
     PropertyMap aFrameProps;
     fillFrameProps( elem, aFrameProps, m_rEmitContext );
     m_rEmitContext.rEmitter.beginTag( "draw:frame", aFrameProps );
@@ -485,7 +485,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::co
     m_rProcessor.sortElements( &elem );
 
     // find paragraphs in text
-    ParagraphElement* pCurPara = NULL;
+    ParagraphElement* pCurPara = nullptr;
     std::list< Element* >::iterator page_element, next_page_element;
     next_page_element = elem.Children.begin();
     double fCurLineHeight = 0.0; // average height of text items in current para
@@ -561,7 +561,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::co
                     line_left = pDraw->x;
                     line_right = pDraw->x + pDraw->w;
                     // begin a new paragraph
-                    pCurPara = NULL;
+                    pCurPara = nullptr;
                     // mark draw element as character
                     pDraw->isCharacter = true;
                 }
@@ -569,7 +569,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::co
 
             if( ! bInsertToParagraph )
             {
-                pCurPara = NULL;
+                pCurPara = nullptr;
                 continue;
             }
         }
@@ -589,16 +589,16 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::co
                     // if the new text is significantly distant from the paragraph
                     // begin a new paragraph
                     if( pGeo->y > pCurPara->y + pCurPara->h + fCurLineHeight*0.5  )
-                        pCurPara = NULL; // insert new paragraph
+                        pCurPara = nullptr; // insert new paragraph
                     else if( pGeo->y > (pCurPara->y+pCurPara->h - fCurLineHeight*0.05) )
                     {
                         // new paragraph if either the last line of the paragraph
                         // was significantly shorter than the paragraph as a whole
                         if( (line_right - line_left) < pCurPara->w*0.75 )
-                            pCurPara = NULL;
+                            pCurPara = nullptr;
                         // or the last line was significantly smaller than the column width
                         else if( (line_right - line_left) < column_width*0.75 )
-                            pCurPara = NULL;
+                            pCurPara = nullptr;
                     }
                 }
 
@@ -629,7 +629,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::co
         // move element to current paragraph
        if (! pCurPara )  // new paragraph, insert one
        {
-            pCurPara = ElementFactory::createParagraphElement( NULL );
+            pCurPara = ElementFactory::createParagraphElement( nullptr );
             // set parent
             pCurPara->Parent = &elem;
             //insert new paragraph before current element

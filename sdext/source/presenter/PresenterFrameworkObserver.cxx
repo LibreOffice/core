@@ -92,10 +92,10 @@ void PresenterFrameworkObserver::Shutdown()
     maAction = Action();
     maPredicate = Predicate();
 
-    if (mxConfigurationController != NULL)
+    if (mxConfigurationController != nullptr)
     {
         mxConfigurationController->removeConfigurationChangeListener(this);
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
     }
 }
 
@@ -107,7 +107,7 @@ void SAL_CALL PresenterFrameworkObserver::disposing (const lang::EventObject& rE
 
     if (rEvent.Source == mxConfigurationController)
     {
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
         if (maAction)
             maAction(false);
     }

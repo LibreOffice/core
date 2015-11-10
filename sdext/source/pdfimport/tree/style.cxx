@@ -87,7 +87,7 @@ const PropertyMap* StyleContainer::getProperties( sal_Int32 nStyleId ) const
 {
     std::unordered_map< sal_Int32, HashedStyle >::const_iterator it =
         m_aIdToStyle.find( nStyleId );
-    return it != m_aIdToStyle.end() ? &(it->second.Properties) : NULL;
+    return it != m_aIdToStyle.end() ? &(it->second.Properties) : nullptr;
 }
 
 sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& rNewProps )

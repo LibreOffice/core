@@ -72,8 +72,8 @@ class FileEmitContext : public EmitContext
 
 FileEmitContext::FileEmitContext( const char* pFileName, const char* pOrigName, const PDFContainer* pTop )
     : EmitContext( pTop ),
-      m_aHandle( NULL ),
-      m_aReadHandle( NULL ),
+      m_aHandle( nullptr ),
+      m_aReadHandle( nullptr ),
       m_nReadLen( 0 )
 {
     OUString aSysFile( OStringToOUString( OString( pFileName ), osl_getThreadTextEncoding() ) );
@@ -90,7 +90,7 @@ FileEmitContext::FileEmitContext( const char* pFileName, const char* pOrigName, 
         {
             fprintf( stderr, "could not truncate %s\n", pFileName );
             osl_closeFile( m_aHandle );
-            m_aHandle = NULL;
+            m_aHandle = nullptr;
         }
     }
     else if( osl_openFile( aURL.pData, &m_aHandle,
@@ -344,8 +344,8 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
             continue;
         OString aFontName( pName->m_aName );
 
-        PDFObjectRef* pStreamRef = 0;
-        const char* pFileType = NULL;
+        PDFObjectRef* pStreamRef = nullptr;
+        const char* pFileType = nullptr;
         // we have a font descriptor, try for a type 1 font
         map_it = pDict->m_aMap.find( "FontFile" );
         if( map_it != pDict->m_aMap.end() )
@@ -424,9 +424,9 @@ int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPD
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
-    const char* pInFile = NULL;
-    const char* pOutFile = NULL;
-    const char* pPassword = NULL;
+    const char* pInFile = nullptr;
+    const char* pOutFile = nullptr;
+    const char* pPassword = nullptr;
     OStringBuffer aOutFile( 256 );
     PDFFileHdl aHdl = write_unzipFile;
 
@@ -491,9 +491,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                 return 1;
             }
         }
-        else if( pInFile == NULL )
+        else if( pInFile == nullptr )
             pInFile = argv[nArg];
-        else if( pOutFile == NULL )
+        else if( pOutFile == nullptr )
             pOutFile = argv[nArg];
     }
     if( ! pInFile )

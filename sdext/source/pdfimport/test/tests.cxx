@@ -472,12 +472,12 @@ namespace
             xAdaptor->setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
             OUString tempFileURL;
-            CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
+            CPPUNIT_ASSERT( osl::File::createTempFile( nullptr, nullptr, &tempFileURL ) == osl::File::E_None );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
                                    xAdaptor->odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(tempFileURL),
-                                                        NULL ));
+                                                        nullptr ));
             osl::File::remove( tempFileURL );
         }
 
@@ -487,12 +487,12 @@ namespace
             xAdaptor->setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
             OUString tempFileURL;
-            CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
+            CPPUNIT_ASSERT( osl::File::createTempFile( nullptr, nullptr, &tempFileURL ) == osl::File::E_None );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
                                    xAdaptor->odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(tempFileURL),
-                                                        NULL ));
+                                                        nullptr ));
             osl::File::remove( tempFileURL );
         }
 

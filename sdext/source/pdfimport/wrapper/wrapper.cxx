@@ -208,7 +208,7 @@ namespace
         const sal_Char* pRead(pOrig);
         sal_Char* pWrite(pBuffer);
         const sal_Char* pCur(pOrig);
-        while ((pCur = strchr(pCur, '\\')) != 0)
+        while ((pCur = strchr(pCur, '\\')) != nullptr)
         {
             const sal_Char cNext(pCur[1]);
             if (cNext == 'n' || cNext == 'r' || cNext == '\\')
@@ -1070,9 +1070,9 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
     sal_Int32 nArgs = rFilterOptions.isEmpty() ? 2 : 4;
 
     oslProcess    aProcess;
-    oslFileHandle pIn  = NULL;
-    oslFileHandle pOut = NULL;
-    oslFileHandle pErr = NULL;
+    oslFileHandle pIn  = nullptr;
+    oslFileHandle pOut = nullptr;
+    oslFileHandle pErr = nullptr;
     oslSecurity pSecurity = osl_getCurrentSecurity ();
     oslProcessError eErr =
         osl_executeProcess_WithRedirectedIO(converterURL.pData,
@@ -1080,7 +1080,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
                                             nArgs,
                                             osl_Process_SEARCHPATH|osl_Process_HIDDEN,
                                             pSecurity,
-                                            0, 0, 0,
+                                            nullptr, nullptr, 0,
                                             &aProcess, &pIn, &pOut, &pErr);
     osl_freeSecurityHandle(pSecurity);
 
@@ -1206,9 +1206,9 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
     OSL_ASSERT(rSink);
 
     // convert XInputStream to local temp file
-    oslFileHandle aFile = NULL;
+    oslFileHandle aFile = nullptr;
     OUString aURL;
-    if( osl_createTempFile( NULL, &aFile, &aURL.pData ) != osl_File_E_None )
+    if( osl_createTempFile( nullptr, &aFile, &aURL.pData ) != osl_File_E_None )
         return false;
 
     // copy content, buffered...

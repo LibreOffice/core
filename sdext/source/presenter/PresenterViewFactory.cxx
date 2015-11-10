@@ -169,7 +169,7 @@ void PresenterViewFactory::Register (const Reference<frame::XController>& rxCont
         OSL_ASSERT(false);
         if (mxConfigurationController.is())
             mxConfigurationController->removeResourceFactoryForReference(this);
-        mxConfigurationController = NULL;
+        mxConfigurationController = nullptr;
 
         throw;
     }
@@ -184,9 +184,9 @@ void SAL_CALL PresenterViewFactory::disposing()
 {
     if (mxConfigurationController.is())
         mxConfigurationController->removeResourceFactoryForReference(this);
-    mxConfigurationController = NULL;
+    mxConfigurationController = nullptr;
 
-    if (mpResourceCache.get() != NULL)
+    if (mpResourceCache.get() != nullptr)
     {
         // Dispose all views in the cache.
         ResourceContainer::const_iterator iView (mpResourceCache->begin());
@@ -223,13 +223,13 @@ Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
             mxConfigurationController->getResource(rxViewId->getAnchor()),
             UNO_QUERY_THROW);
         xView = GetViewFromCache(rxViewId, xAnchorPane);
-        if (xView == NULL)
+        if (xView == nullptr)
             xView = CreateView(rxViewId, xAnchorPane);
 
         // Activate the view.
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
             mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
-        if (pDescriptor.get() != NULL)
+        if (pDescriptor.get() != nullptr)
             pDescriptor->SetActivationState(true);
     }
 
@@ -248,16 +248,16 @@ void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>&
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPresenterController->GetPaneContainer()->FindPaneId(
             rxView->getResourceId()->getAnchor()));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         pDescriptor->SetActivationState(false);
 
     // Dispose only views that we can not put into the cache.
     CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(rxView.get());
-    if (pView == NULL || mpResourceCache.get()==NULL)
+    if (pView == nullptr || mpResourceCache.get()==nullptr)
     {
         try
         {
-            if (pView != NULL)
+            if (pView != nullptr)
                 pView->ReleaseView();
             Reference<lang::XComponent> xComponent (rxView, UNO_QUERY);
             if (xComponent.is())
@@ -292,8 +292,8 @@ Reference<XResource> PresenterViewFactory::GetViewFromCache(
     const Reference<XResourceId>& rxViewId,
     const Reference<XPane>& rxAnchorPane) const
 {
-    if (mpResourceCache.get() == NULL)
-        return NULL;
+    if (mpResourceCache.get() == nullptr)
+        return nullptr;
 
     try
     {
@@ -310,7 +310,7 @@ Reference<XResource> PresenterViewFactory::GetViewFromCache(
             {
                 CachablePresenterView* pView
                     = dynamic_cast<CachablePresenterView*>(iView->second.first.get());
-                if (pView != NULL)
+                if (pView != nullptr)
                     pView->ActivatePresenterView();
                 return Reference<XResource>(iView->second.first, UNO_QUERY);
             }
@@ -321,7 +321,7 @@ Reference<XResource> PresenterViewFactory::GetViewFromCache(
     catch (RuntimeException&)
     {
     }
-    return NULL;
+    return nullptr;
 }
 
 Reference<XResource> PresenterViewFactory::CreateView(
@@ -361,12 +361,12 @@ Reference<XResource> PresenterViewFactory::CreateView(
 
         // Activate it.
         CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(xView.get());
-        if (pView != NULL)
+        if (pView != nullptr)
             pView->ActivatePresenterView();
     }
     catch (RuntimeException&)
     {
-        xView = NULL;
+        xView = nullptr;
     }
 
     return xView;
@@ -395,7 +395,7 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
     }
     catch (RuntimeException&)
     {
-        xView = NULL;
+        xView = nullptr;
     }
 
     return xView;
@@ -424,7 +424,7 @@ Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
     }
     catch (RuntimeException&)
     {
-        xView = NULL;
+        xView = nullptr;
     }
 
     return xView;
@@ -464,7 +464,7 @@ Reference<XView> PresenterViewFactory::CreateNotesView(
     }
     catch (RuntimeException&)
     {
-        xView = NULL;
+        xView = nullptr;
     }
 
     return xView;
@@ -490,14 +490,14 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
                 mpPresenterController));
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
             mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
-        if (pDescriptor.get() != NULL)
+        if (pDescriptor.get() != nullptr)
             pDescriptor->maActivator = ::boost::bind(
                 &PresenterSlideSorter::SetActiveState, _1);
         xView = pView.get();
     }
     catch (RuntimeException&)
     {
-        xView = NULL;
+        xView = nullptr;
     }
 
     return xView;

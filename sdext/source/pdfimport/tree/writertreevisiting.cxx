@@ -199,7 +199,7 @@ void WriterXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::c
     if( elem.Children.empty() )
         return;
 
-    bool bTextBox = (dynamic_cast<ParagraphElement*>(elem.Children.front()) != NULL);
+    bool bTextBox = (dynamic_cast<ParagraphElement*>(elem.Children.front()) != nullptr);
     PropertyMap aFrameProps;
     fillFrameProps( elem, aFrameProps, m_rEmitContext );
     m_rEmitContext.rEmitter.beginTag( "draw:frame", aFrameProps );
@@ -321,7 +321,7 @@ void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >
             // currently these are only DrawElement types
             for( std::list< Element* >::iterator child_it = pPage->Children.begin(); child_it != pPage->Children.end(); ++child_it )
             {
-                if( dynamic_cast<DrawElement*>(*child_it) != NULL )
+                if( dynamic_cast<DrawElement*>(*child_it) != nullptr )
                     (*child_it)->visitedBy( *this, child_it );
             }
         }
@@ -332,7 +332,7 @@ void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >
     // only DrawElement types
     for( std::list< Element* >::iterator it = elem.Children.begin(); it != elem.Children.end(); ++it )
     {
-        if( dynamic_cast<DrawElement*>(*it) == NULL )
+        if( dynamic_cast<DrawElement*>(*it) == nullptr )
             (*it)->visitedBy( *this, it );
     }
 
@@ -425,7 +425,7 @@ void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< Element
     {
         // find if there is a previous paragraph that might be a heading for this one
         std::list<Element*>::const_iterator prev = rParentIt;
-        ParagraphElement* pPrevPara = NULL;
+        ParagraphElement* pPrevPara = nullptr;
         while( prev != elem.Parent->Children.begin() )
         {
             --prev;
@@ -487,7 +487,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
     m_rProcessor.sortElements( &elem );
 
     // find paragraphs in text
-    ParagraphElement* pCurPara = NULL;
+    ParagraphElement* pCurPara = nullptr;
     std::list< Element* >::iterator page_element, next_page_element;
     next_page_element = elem.Children.begin();
     double fCurLineHeight = 0.0; // average height of text items in current para
@@ -563,7 +563,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
                     line_left = pDraw->x;
                     line_right = pDraw->x + pDraw->w;
                     // begin a new paragraph
-                    pCurPara = NULL;
+                    pCurPara = nullptr;
                     // mark draw element as character
                     pDraw->isCharacter = true;
                 }
@@ -571,7 +571,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
 
             if( ! bInsertToParagraph )
             {
-                pCurPara = NULL;
+                pCurPara = nullptr;
                 continue;
             }
         }
@@ -591,16 +591,16 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
                     // if the new text is significantly distant from the paragraph
                     // begin a new paragraph
                     if( pGeo->y > pCurPara->y+pCurPara->h + fCurLineHeight*0.5 )
-                        pCurPara = NULL; // insert new paragraph
+                        pCurPara = nullptr; // insert new paragraph
                     else if( pGeo->y > (pCurPara->y+pCurPara->h - fCurLineHeight*0.05) )
                     {
                         // new paragraph if either the last line of the paragraph
                         // was significantly shorter than the paragraph as a whole
                         if( (line_right - line_left) < pCurPara->w*0.75 )
-                            pCurPara = NULL;
+                            pCurPara = nullptr;
                         // or the last line was significantly smaller than the column width
                         else if( (line_right - line_left) < column_width*0.75 )
-                            pCurPara = NULL;
+                            pCurPara = nullptr;
                     }
                 }
             }
@@ -626,7 +626,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
         // move element to current paragraph
         if( ! pCurPara ) // new paragraph, insert one
         {
-            pCurPara = ElementFactory::createParagraphElement( NULL );
+            pCurPara = ElementFactory::createParagraphElement( nullptr );
             // set parent
             pCurPara->Parent = &elem;
             //insert new paragraph before current element
@@ -674,15 +674,15 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
             if( pPara->y+pPara->h < rElem.h*0.15 && pPara->isSingleLined( m_rProcessor ) )
             {
                 std::list< Element* >::iterator next_it = it;
-                ParagraphElement* pNextPara = NULL;
-                while( ++next_it != rElem.Children.end() && pNextPara == NULL )
+                ParagraphElement* pNextPara = nullptr;
+                while( ++next_it != rElem.Children.end() && pNextPara == nullptr )
                 {
                     pNextPara = dynamic_cast<ParagraphElement*>(*next_it);
                 }
                 if( pNextPara && pNextPara->y > pPara->y+pPara->h*2 )
                 {
                     rElem.HeaderElement = pPara;
-                    pPara->Parent = NULL;
+                    pPara->Parent = nullptr;
                     rElem.Children.remove( pPara );
                 }
             }
@@ -701,15 +701,15 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
             if( pPara->y > rElem.h*0.85 && pPara->isSingleLined( m_rProcessor ) )
             {
                 std::list< Element* >::reverse_iterator next_it = rit;
-                ParagraphElement* pNextPara = NULL;
-                while( ++next_it != rElem.Children.rend() && pNextPara == NULL )
+                ParagraphElement* pNextPara = nullptr;
+                while( ++next_it != rElem.Children.rend() && pNextPara == nullptr )
                 {
                     pNextPara = dynamic_cast<ParagraphElement*>(*next_it);
                 }
                 if( pNextPara && pNextPara->y < pPara->y-pPara->h*2 )
                 {
                     rElem.FooterElement = pPara;
-                    pPara->Parent = NULL;
+                    pPara->Parent = nullptr;
                     rElem.Children.remove( pPara );
                 }
             }
@@ -996,7 +996,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
         // check whether to leave some space to next paragraph
         // find whether there is a next paragraph
         std::list< Element* >::const_iterator it = rParentIt;
-        const ParagraphElement* pNextPara = NULL;
+        const ParagraphElement* pNextPara = nullptr;
         while( ++it != elem.Parent->Children.end() && ! pNextPara )
             pNextPara = dynamic_cast< const ParagraphElement* >(*it);
         if( pNextPara )
@@ -1091,7 +1091,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     // calculate page margins out of the relevant children (paragraphs)
     elem.TopMargin = elem.h, elem.BottomMargin = 0, elem.LeftMargin = elem.w, elem.RightMargin = 0;
     // first element should be a paragraphy
-    ParagraphElement* pFirstPara = NULL;
+    ParagraphElement* pFirstPara = nullptr;
     for( std::list< Element* >::const_iterator it = elem.Children.begin(); it != elem.Children.end(); ++it )
     {
         if( dynamic_cast<ParagraphElement*>( *it ) )
@@ -1211,7 +1211,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     // no paragraph or other elements before the first paragraph
     if( ! pFirstPara )
     {
-        pFirstPara = ElementFactory::createParagraphElement( NULL );
+        pFirstPara = ElementFactory::createParagraphElement( nullptr );
         pFirstPara->Parent = &elem;
         elem.Children.push_front( pFirstPara );
     }

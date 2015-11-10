@@ -71,7 +71,7 @@ FileEmitContext::FileEmitContext( const OUString&                            rOr
                                   const uno::Reference< uno::XComponentContext >& xContext,
                                   const pdfparse::PDFContainer*                   pTop ) :
     pdfparse::EmitContext( pTop ),
-    m_aReadHandle(NULL),
+    m_aReadHandle(nullptr),
     m_nReadLen(0),
     m_xContextStream(),
     m_xSeek(),
@@ -100,7 +100,7 @@ FileEmitContext::FileEmitContext( const OUString&                            rOr
         if( aErr != osl_File_E_None )
         {
             osl_closeFile( m_aReadHandle );
-            m_aReadHandle = NULL;
+            m_aReadHandle = nullptr;
         }
     }
     m_bDeflate = true;
@@ -228,7 +228,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
     }
     if( xInput.is() )
     {
-        oslFileHandle aFile = NULL;
+        oslFileHandle aFile = nullptr;
         try {
             uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
             if( xSeek.is() )
@@ -261,7 +261,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             )
             {
                 sal_uInt64 nWritten = 0;
-                if( osl_createTempFile( NULL, &aFile, &aURL.pData ) != osl_File_E_None )
+                if( osl_createTempFile( nullptr, &aFile, &aURL.pData ) != osl_File_E_None )
                 {
                     bSuccess = false;
                 }
@@ -448,7 +448,7 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
     sal_uInt8 nActualChecksum[ RTL_DIGEST_LENGTH_MD5 ];
     memset( nActualChecksum, 0, sizeof(nActualChecksum) );
     rtlDigest aActualDigest = rtl_digest_createMD5();
-    oslFileHandle aRead = NULL;
+    oslFileHandle aRead = nullptr;
     oslFileError aErr = osl_File_E_None;
     if( (aErr = osl_openFile(rInPDFFileURL.pData,
                              &aRead,
@@ -527,7 +527,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                         continue;
                     }
                     pdfparse::PDFName* pChkSumName = dynamic_cast<pdfparse::PDFName*>(chk->second);
-                    if( pChkSumName == NULL )
+                    if( pChkSumName == nullptr )
                     {
                         OSL_TRACE( "no name for DocChecksum entry" );
                         continue;

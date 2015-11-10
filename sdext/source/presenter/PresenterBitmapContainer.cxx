@@ -107,7 +107,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::GetBitmap (
     BitmapContainer::const_iterator iSet (maIconContainer.find(rsName));
     if (iSet != maIconContainer.end())
         return iSet->second;
-    else if (mpParentContainer.get() != NULL)
+    else if (mpParentContainer.get() != nullptr)
         return mpParentContainer->GetBitmap(rsName);
     else
         return SharedBitmapDescriptor();
@@ -315,7 +315,7 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (
       mxDisabledBitmap(),
       mxMaskBitmap()
 {
-    if (rpDefault.get() != NULL)
+    if (rpDefault.get() != nullptr)
     {
         mnWidth = rpDefault->mnWidth;
         mnHeight = rpDefault->mnHeight;

@@ -373,10 +373,10 @@ Reference<frame::XDispatch> PresenterProtocolHandler::Dispatch::Create (
     const ::rtl::Reference<PresenterController>& rpPresenterController)
 {
     ::rtl::Reference<Dispatch> pDispatch (new Dispatch (rsURLPath, rpPresenterController));
-    if (pDispatch->mpCommand.get() != NULL)
+    if (pDispatch->mpCommand.get() != nullptr)
         return Reference<frame::XDispatch>(pDispatch.get());
     else
-        return NULL;
+        return nullptr;
 }
 
 PresenterProtocolHandler::Dispatch::Dispatch (
@@ -389,7 +389,7 @@ PresenterProtocolHandler::Dispatch::Dispatch (
       maStatusListenerContainer(),
       mbIsListeningToWindowManager(false)
 {
-    if (mpCommand.get() != NULL)
+    if (mpCommand.get() != nullptr)
     {
         mpPresenterController->GetWindowManager()->AddLayoutListener(this);
         mbIsListeningToWindowManager = true;
@@ -401,7 +401,7 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
     const ::rtl::Reference<PresenterController>& rpPresenterController)
 {
     if (rsURLPath.getLength() <= 5)
-        return NULL;
+        return nullptr;
 
     if (rsURLPath == "CloseNotes")
         return new SetNotesViewCommand(false, rpPresenterController);
@@ -430,7 +430,7 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
     if (rsURLPath == "ShrinkNotesFont")
         return new NotesFontSizeCommand(rpPresenterController, -1);
 
-    return NULL;
+    return nullptr;
 }
 
 PresenterProtocolHandler::Dispatch::~Dispatch()
@@ -441,7 +441,7 @@ void PresenterProtocolHandler::Dispatch::disposing()
 {
     if (mbIsListeningToWindowManager)
     {
-        if (mpPresenterController.get() != NULL)
+        if (mpPresenterController.get() != nullptr)
             mpPresenterController->GetWindowManager()->RemoveLayoutListener(this);
         mbIsListeningToWindowManager = false;
     }
@@ -463,7 +463,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     if (rURL.Protocol == "vnd.org.libreoffice.presenterscreen:"
         && rURL.Path == msURLPath)
     {
-        if (mpCommand.get() != NULL)
+        if (mpCommand.get() != nullptr)
             mpCommand->Execute();
     }
     else
@@ -769,14 +769,14 @@ NotesFontSizeCommand::NotesFontSizeCommand(
 
 ::rtl::Reference<PresenterNotesView> NotesFontSizeCommand::GetNotesView() const
 {
-    if (mpPresenterController.get() == NULL)
-        return NULL;
+    if (mpPresenterController.get() == nullptr)
+        return nullptr;
 
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPresenterController->GetPaneContainer()->FindViewURL(
             PresenterViewFactory::msNotesViewURL));
-    if (pDescriptor.get() == NULL)
-        return NULL;
+    if (pDescriptor.get() == nullptr)
+        return nullptr;
 
     return dynamic_cast<PresenterNotesView*>(pDescriptor->mxView.get());
 }

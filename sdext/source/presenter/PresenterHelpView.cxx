@@ -156,7 +156,7 @@ PresenterHelpView::PresenterHelpView (
         if (mpPresenterController.is())
         {
             mpFont = mpPresenterController->GetViewFont(mxViewId->getResourceURL());
-            if (mpFont.get() != NULL)
+            if (mpFont.get() != nullptr)
             {
                 mpFont->PrepareFont(mxCanvas);
             }
@@ -176,8 +176,8 @@ PresenterHelpView::PresenterHelpView (
     }
     catch (RuntimeException&)
     {
-        mxViewId = NULL;
-        mxWindow = NULL;
+        mxViewId = nullptr;
+        mxWindow = nullptr;
         throw;
     }
 }
@@ -188,13 +188,13 @@ PresenterHelpView::~PresenterHelpView()
 
 void SAL_CALL PresenterHelpView::disposing()
 {
-    mxViewId = NULL;
+    mxViewId = nullptr;
 
     if (mpCloseButton.is())
     {
         Reference<lang::XComponent> xComponent (
             static_cast<XWeak*>(mpCloseButton.get()), UNO_QUERY);
-        mpCloseButton = NULL;
+        mpCloseButton = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -213,11 +213,11 @@ void SAL_CALL PresenterHelpView::disposing (const lang::EventObject& rEventObjec
 {
     if (rEventObject.Source == mxCanvas)
     {
-        mxCanvas = NULL;
+        mxCanvas = nullptr;
     }
     else if (rEventObject.Source == mxWindow)
     {
-        mxWindow = NULL;
+        mxWindow = nullptr;
         dispose();
     }
 }
@@ -285,7 +285,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
 
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
+        nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
@@ -385,7 +385,7 @@ void PresenterHelpView::ProcessString (
 
 void PresenterHelpView::CheckFontSize()
 {
-    if (mpFont.get() == NULL)
+    if (mpFont.get() == nullptr)
         return;
 
     sal_Int32 nBestSize (6);
@@ -421,7 +421,7 @@ void PresenterHelpView::CheckFontSize()
         if (nHeightDifference<=0 && mpFont->mnSize>nBestSize)
             nBestSize = mpFont->mnSize;
         mpFont->mnSize = nFontSizeGuess;
-        mpFont->mxFont = NULL;
+        mpFont->mxFont = nullptr;
         mpFont->PrepareFont(mxCanvas);
 
         // Reformat blocks.
@@ -432,7 +432,7 @@ void PresenterHelpView::CheckFontSize()
     if (nBestSize != mpFont->mnSize)
     {
         mpFont->mnSize = nBestSize;
-        mpFont->mxFont = NULL;
+        mpFont->mxFont = nullptr;
         mpFont->PrepareFont(mxCanvas);
 
         // Reformat blocks.
@@ -482,7 +482,7 @@ void PresenterHelpView::ProvideCanvas()
 
 void PresenterHelpView::Resize()
 {
-    if (mpCloseButton.get() != NULL && mxWindow.is())
+    if (mpCloseButton.get() != nullptr && mxWindow.is())
     {
         const awt::Rectangle aWindowBox (mxWindow->getPosSize());
         mnMaximalWidth = (mxWindow->getPosSize().Width - 4*gnHorizontalGap) / 2;

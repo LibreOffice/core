@@ -874,7 +874,7 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
 {
     assert(state);
 
-    if( u == NULL )
+    if( u == nullptr )
         return;
 
     double csdx = 0.0;

@@ -49,7 +49,7 @@ void OptimizationStats::SetStatusValue( const PPPOptimizerTokenEnum eStat, const
 const uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenEnum eStat ) const
 {
     std::map< PPPOptimizerTokenEnum, uno::Any, Compare >::const_iterator aIter( maStats.find( eStat ) );
-    return aIter != maStats.end() ? &((*aIter).second) : NULL;
+    return aIter != maStats.end() ? &((*aIter).second) : nullptr;
 }
 
 

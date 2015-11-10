@@ -640,7 +640,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
         if (mpAccessiblePreview.is())
         {
             mpAccessibleConsole->RemoveChild(mpAccessiblePreview);
-            mpAccessiblePreview = NULL;
+            mpAccessiblePreview = nullptr;
         }
 
         mxPreviewContentWindow = rxPreviewContentWindow;
@@ -663,7 +663,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
         if (mpAccessibleNotes.is())
         {
             mpAccessibleConsole->RemoveChild(mpAccessibleNotes);
-            mpAccessibleNotes = NULL;
+            mpAccessibleNotes = nullptr;
         }
 
         mxNotesContentWindow = rxNotesContentWindow;
@@ -706,11 +706,11 @@ void PresenterAccessible::NotifyCurrentSlideChange (
 void SAL_CALL PresenterAccessible::disposing()
 {
     UpdateAccessibilityHierarchy(
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         OUString(),
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         std::shared_ptr<PresenterTextView>());
 
     if (mxMainWindow.is())
@@ -718,12 +718,12 @@ void SAL_CALL PresenterAccessible::disposing()
         mxMainWindow->removeFocusListener(this);
 
         if (mxMainPane.is())
-            mxMainPane->setAccessible(NULL);
+            mxMainPane->setAccessible(nullptr);
     }
 
-    mpAccessiblePreview = NULL;
-    mpAccessibleNotes = NULL;
-    mpAccessibleConsole = NULL;
+    mpAccessiblePreview = nullptr;
+    mpAccessibleNotes = nullptr;
+    mpAccessibleConsole = nullptr;
 }
 
 //----- XAccessible -----------------------------------------------------------
@@ -741,7 +741,7 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
         }
         mpAccessibleConsole = AccessibleConsole::Create(
             mxComponentContext, css::lang::Locale());
-        mpAccessibleConsole->SetWindow(mxMainWindow, NULL);
+        mpAccessibleConsole->SetWindow(mxMainWindow, nullptr);
         mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
         UpdateAccessibilityHierarchy();
         if (mpPresenterController.is())
@@ -766,7 +766,7 @@ void SAL_CALL PresenterAccessible::focusLost (const css::awt::FocusEvent& rEvent
 {
     (void)rEvent;
     SAL_INFO("sdext.presenter", OSL_THIS_FUNC << ": PresenterAccessible::focusLost at " << this);
-    AccessibleFocusManager::Instance()->FocusObject(NULL);
+    AccessibleFocusManager::Instance()->FocusObject(nullptr);
 }
 
 //----- XEventListener ----------------------------------------------------
@@ -775,7 +775,7 @@ void SAL_CALL PresenterAccessible::disposing (const css::lang::EventObject& rEve
     throw (css::uno::RuntimeException, std::exception)
 {
     if (rEvent.Source == mxMainWindow)
-        mxMainWindow = NULL;
+        mxMainWindow = nullptr;
 }
 
 //----- XInitialize -----------------------------------------------------------
@@ -854,7 +854,7 @@ void PresenterAccessible::AccessibleObject::SetAccessibleParent (
 void SAL_CALL PresenterAccessible::AccessibleObject::disposing()
 {
     AccessibleFocusManager::Instance()->RemoveFocusableObject(this);
-    SetWindow(NULL, NULL);
+    SetWindow(nullptr, nullptr);
 }
 
 //----- XAccessible -------------------------------------------------------
@@ -956,7 +956,7 @@ Reference<XAccessibleRelationSet> SAL_CALL
 {
     ThrowIfDisposed();
 
-    return NULL;
+    return nullptr;
 }
 
 Reference<XAccessibleStateSet> SAL_CALL
@@ -1164,12 +1164,12 @@ void SAL_CALL PresenterAccessible::AccessibleObject::disposing (const css::lang:
 {
     if (rEvent.Source == mxContentWindow)
     {
-        mxContentWindow = NULL;
-        mxBorderWindow = NULL;
+        mxContentWindow = nullptr;
+        mxBorderWindow = nullptr;
     }
     else
     {
-        SetWindow(NULL, NULL);
+        SetWindow(nullptr, nullptr);
     }
 }
 
@@ -1813,7 +1813,7 @@ bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int16 n
     switch (nType)
     {
         case AccessibleStateType::EDITABLE:
-            return mpParagraph.get()!=NULL;
+            return mpParagraph.get()!=nullptr;
 
         case AccessibleStateType::ACTIVE:
             return true;

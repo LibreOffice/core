@@ -99,10 +99,10 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                 uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
                 if( xSeek.is() )
                     xSeek->seek( 0 );
-                oslFileHandle aFile = NULL;
+                oslFileHandle aFile = nullptr;
                 sal_uInt64 nWritten = 0;
                 OUString aURL;
-                if( osl_createTempFile( NULL, &aFile, &aURL.pData ) == osl_File_E_None )
+                if( osl_createTempFile( nullptr, &aFile, &aURL.pData ) == osl_File_E_None )
                 {
                     SAL_INFO("sdext.pdfimport", "created temp file " << aURL);
                     const sal_Int32 nBufSize = 4096;

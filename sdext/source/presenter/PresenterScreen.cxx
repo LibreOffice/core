@@ -122,7 +122,7 @@ PresenterScreenJob::~PresenterScreenJob()
 
 void SAL_CALL PresenterScreenJob::disposing()
 {
-    mxComponentContext = NULL;
+    mxComponentContext = nullptr;
 }
 
 //----- XJob -----------------------------------------------------------
@@ -208,7 +208,7 @@ void SAL_CALL PresenterScreenListener::disposing()
     if (mpPresenterScreen.is())
     {
         mpPresenterScreen->RequestShutdownPresenterScreen();
-        mpPresenterScreen = NULL;
+        mpPresenterScreen = nullptr;
     }
 }
 
@@ -229,7 +229,7 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
         if (mpPresenterScreen.is())
         {
             mpPresenterScreen->RequestShutdownPresenterScreen();
-            mpPresenterScreen = NULL;
+            mpPresenterScreen = nullptr;
         }
     }
 }
@@ -244,7 +244,7 @@ void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject& 
     if (mpPresenterScreen.is())
     {
         mpPresenterScreen->RequestShutdownPresenterScreen();
-        mpPresenterScreen = NULL;
+        mpPresenterScreen = nullptr;
     }
 }
 
@@ -306,7 +306,7 @@ void SAL_CALL PresenterScreen::disposing()
     {
         xCC->restoreConfiguration(mxSavedConfiguration);
     }
-    mxConfigurationControllerWeak = Reference<XConfigurationController>(NULL);
+    mxConfigurationControllerWeak = Reference<XConfigurationController>(nullptr);
 
     Reference<lang::XComponent> xViewFactoryComponent (mxViewFactory, UNO_QUERY);
     if (xViewFactoryComponent.is())
@@ -315,7 +315,7 @@ void SAL_CALL PresenterScreen::disposing()
     if (xPaneFactoryComponent.is())
         xPaneFactoryComponent->dispose();
 
-    mxModel = NULL;
+    mxModel = nullptr;
 }
 
 //----- XEventListener --------------------------------------------------------
@@ -560,7 +560,7 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
     // displays.  That leaves no room for the presenter.
     const sal_Int32 nScreen(GetPresenterScreenNumber(rxPresentation));
     if (nScreen < 0)
-        return NULL;
+        return nullptr;
 
     return ResourceId::create(
         Reference<XComponentContext>(mxContextWeak),
@@ -578,7 +578,7 @@ void PresenterScreen::RequestShutdownPresenterScreen()
     if (xCC.is() && mxSavedConfiguration.is())
     {
         xCC->restoreConfiguration(mxSavedConfiguration);
-        mxSavedConfiguration = NULL;
+        mxSavedConfiguration = nullptr;
     }
 
     if (xCC.is())
@@ -600,14 +600,14 @@ void PresenterScreen::ShutdownPresenterScreen()
     Reference<lang::XComponent> xViewFactoryComponent (mxViewFactory, UNO_QUERY);
     if (xViewFactoryComponent.is())
         xViewFactoryComponent->dispose();
-    mxViewFactory = NULL;
+    mxViewFactory = nullptr;
 
     Reference<lang::XComponent> xPaneFactoryComponent (mxPaneFactory, UNO_QUERY);
     if (xPaneFactoryComponent.is())
         xPaneFactoryComponent->dispose();
-    mxPaneFactory = NULL;
+    mxPaneFactory = nullptr;
 
-    if (mpPresenterController.get() != NULL)
+    if (mpPresenterController.get() != nullptr)
     {
         mpPresenterController->dispose();
         mpPresenterController.clear();
@@ -844,7 +844,7 @@ void PresenterScreen::SetupView(
             aViewDescriptor = iDescriptor->second;
 
         // Prepare the pane.
-        OSL_ASSERT(mpPaneContainer.get() != NULL);
+        OSL_ASSERT(mpPaneContainer.get() != nullptr);
         mpPaneContainer->PreparePane(
             xPaneId,
             rsViewURL,

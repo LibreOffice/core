@@ -92,13 +92,13 @@ public:
         const std::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper = NULL);
+        const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper = nullptr);
     PresenterBitmapContainer (
         const css::uno::Reference<css::container::XNameAccess>& rsRootNode,
         const std::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper = NULL);
+        const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper = nullptr);
     ~PresenterBitmapContainer();
 
     void Initialize (

@@ -181,7 +181,7 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     const Reference<rendering::XGraphicDevice>& rxDevice)
 {
     if ( ! rxDevice.is())
-        return NULL;
+        return nullptr;
 
     Sequence<Sequence<geometry::RealPoint2D> > aPoints(1);
     aPoints[0] = Sequence<geometry::RealPoint2D>(4);
@@ -203,7 +203,7 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     const Reference<rendering::XGraphicDevice>& rxDevice)
 {
     if ( ! rxDevice.is())
-        return NULL;
+        return nullptr;
 
     Sequence<Sequence<geometry::RealPoint2D> > aPoints(1);
     aPoints[0] = Sequence<geometry::RealPoint2D>(4);
@@ -225,7 +225,7 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     const Reference<rendering::XGraphicDevice>& rxDevice)
 {
     if ( ! rxDevice.is())
-        return NULL;
+        return nullptr;
 
     const sal_Int32 nCount (rBoxes.size());
     Sequence<Sequence<geometry::RealPoint2D> > aPoints(nCount);

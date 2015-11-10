@@ -40,7 +40,7 @@ public:
     virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) = 0;
     virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) = 0;
 
-    explicit EmitContext( const PDFContainer* pTop = NULL );
+    explicit EmitContext( const PDFContainer* pTop = nullptr );
     virtual ~EmitContext();
 
     // set this to deflate contained streams
@@ -210,14 +210,14 @@ struct PDFStream : public PDFEntry
     virtual bool emit( EmitContext& rWriteContext ) const override;
     virtual PDFEntry* clone() const override;
 
-    unsigned int getDictLength( const PDFContainer* pObjectContainer = NULL ) const; // get contents of the "Length" entry of the dict
+    unsigned int getDictLength( const PDFContainer* pObjectContainer = nullptr ) const; // get contents of the "Length" entry of the dict
 };
 
 struct PDFTrailer : public PDFContainer
 {
     PDFDict*        m_pDict;
 
-    PDFTrailer() : PDFContainer(), m_pDict( NULL ) {}
+    PDFTrailer() : PDFContainer(), m_pDict( nullptr ) {}
     virtual ~PDFTrailer();
     virtual bool emit( EmitContext& rWriteContext ) const override;
     virtual PDFEntry* clone() const override;
@@ -235,7 +235,7 @@ public:
 
     PDFFile()
     : PDFContainer(),
-      m_pData( NULL ),
+      m_pData( nullptr ),
       m_nMajor( 0 ), m_nMinor( 0 )
     {}
     virtual ~PDFFile();
@@ -267,7 +267,7 @@ struct PDFObject : public PDFContainer
     unsigned int    m_nGeneration;
 
     PDFObject( unsigned int nNr, unsigned int nGen )
-    : m_pObject( NULL ), m_pStream( NULL ), m_nNumber( nNr ), m_nGeneration( nGen ) {}
+    : m_pObject( nullptr ), m_pStream( nullptr ), m_nNumber( nNr ), m_nGeneration( nGen ) {}
     virtual ~PDFObject();
     virtual bool emit( EmitContext& rWriteContext ) const override;
     virtual PDFEntry* clone() const override;

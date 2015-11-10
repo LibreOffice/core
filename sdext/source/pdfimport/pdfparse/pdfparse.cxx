@@ -307,30 +307,30 @@ public:
         if( m_aObjectStack.empty() )
             m_aObjectStack.push_back( new PDFPart() );
         PDFContainer* pContainer = dynamic_cast<PDFContainer*>(m_aObjectStack.back());
-        if( pContainer == NULL )
+        if( pContainer == nullptr )
             parseError( "comment without container", first );
         pContainer->m_aSubElements.push_back( pComment );
     }
 
     void insertNewValue( PDFEntry* pNewValue, iteratorT pPos )
     {
-        PDFContainer* pContainer = NULL;
-        const char* pMsg = NULL;
+        PDFContainer* pContainer = nullptr;
+        const char* pMsg = nullptr;
         if( ! m_aObjectStack.empty() &&
-            (pContainer = dynamic_cast<PDFContainer*>(m_aObjectStack.back())) != NULL )
+            (pContainer = dynamic_cast<PDFContainer*>(m_aObjectStack.back())) != nullptr )
         {
-            if( dynamic_cast<PDFDict*>(pContainer) == NULL      &&
-                dynamic_cast<PDFArray*>(pContainer) == NULL )
+            if( dynamic_cast<PDFDict*>(pContainer) == nullptr      &&
+                dynamic_cast<PDFArray*>(pContainer) == nullptr )
             {
                 PDFObject* pObj = dynamic_cast<PDFObject*>(pContainer);
                 if( pObj )
                 {
-                    if( pObj->m_pObject == NULL )
+                    if( pObj->m_pObject == nullptr )
                         pObj->m_pObject = pNewValue;
                     else
                     {
                         pMsg = "second value for object";
-                        pContainer = NULL;
+                        pContainer = nullptr;
                     }
                 }
                 else if( dynamic_cast<PDFDict*>(pNewValue) )
@@ -338,16 +338,16 @@ public:
                     PDFTrailer* pTrailer = dynamic_cast<PDFTrailer*>(pContainer);
                     if( pTrailer )
                     {
-                        if( pTrailer->m_pDict == NULL )
+                        if( pTrailer->m_pDict == nullptr )
                             pTrailer->m_pDict = dynamic_cast<PDFDict*>(pNewValue);
                         else
-                            pContainer = NULL;
+                            pContainer = nullptr;
                     }
                     else
-                        pContainer = NULL;
+                        pContainer = nullptr;
                 }
                 else
-                    pContainer = NULL;
+                    pContainer = nullptr;
             }
         }
         if( pContainer )
@@ -421,7 +421,7 @@ public:
     {
         if( m_aObjectStack.empty() )
             parseError( "endobj without obj", first );
-        else if( dynamic_cast<PDFObject*>(m_aObjectStack.back()) == NULL )
+        else if( dynamic_cast<PDFObject*>(m_aObjectStack.back()) == nullptr )
             parseError( "spurious endobj", first );
         else
             m_aObjectStack.pop_back();
@@ -447,10 +447,10 @@ public:
     }
     void endDict( iteratorT first, SAL_UNUSED_PARAMETER iteratorT )
     {
-        PDFDict* pDict = NULL;
+        PDFDict* pDict = nullptr;
         if( m_aObjectStack.empty() )
             parseError( "dictionary end without begin", first );
-        else if( (pDict = dynamic_cast<PDFDict*>(m_aObjectStack.back())) == NULL )
+        else if( (pDict = dynamic_cast<PDFDict*>(m_aObjectStack.back())) == nullptr )
             parseError( "spurious dictionary end", first );
         else
             m_aObjectStack.pop_back();
@@ -480,7 +480,7 @@ public:
     {
         if( m_aObjectStack.empty() )
             parseError( "array end without begin", first );
-        else if( dynamic_cast<PDFArray*>(m_aObjectStack.back()) == NULL )
+        else if( dynamic_cast<PDFArray*>(m_aObjectStack.back()) == nullptr )
             parseError( "spurious array end", first );
         else
             m_aObjectStack.pop_back();
@@ -533,7 +533,7 @@ public:
     {
         if( m_aObjectStack.empty() )
             parseError( "%%EOF without trailer", first );
-        else if( dynamic_cast<PDFTrailer*>(m_aObjectStack.back()) == NULL )
+        else if( dynamic_cast<PDFTrailer*>(m_aObjectStack.back()) == nullptr )
             parseError( "spurious %%EOF", first );
         else
             m_aObjectStack.pop_back();
@@ -617,7 +617,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
 #else
     file_iterator<> file_start( pFileName );
     if( ! file_start )
-        return NULL;
+        return nullptr;
     file_iterator<> file_end = file_start.make_end();
     PDFGrammar< file_iterator<> > aGrammar( file_start );
 
@@ -651,7 +651,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
 #endif
     }
 
-    PDFEntry* pRet = NULL;
+    PDFEntry* pRet = nullptr;
     unsigned int nEntries = aGrammar.m_aObjectStack.size();
     if( nEntries == 1 )
     {

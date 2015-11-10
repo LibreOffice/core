@@ -124,7 +124,7 @@ void SAL_CALL PresenterPaneFactory::disposing()
     mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
 
     // Dispose the panes in the cache.
-    if (mpResourceCache.get() != NULL)
+    if (mpResourceCache.get() != nullptr)
     {
         ResourceContainer::const_iterator iPane (mpResourceCache->begin());
         ResourceContainer::const_iterator iEnd (mpResourceCache->end());
@@ -147,13 +147,13 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     ThrowIfDisposed();
 
     if ( ! rxPaneId.is())
-        return NULL;
+        return nullptr;
 
     const OUString sPaneURL (rxPaneId->getResourceURL());
     if (sPaneURL.isEmpty())
-        return NULL;
+        return nullptr;
 
-    if (mpResourceCache.get() != NULL)
+    if (mpResourceCache.get() != nullptr)
     {
         // Has the requested resource already been created?
         ResourceContainer::const_iterator iResource (mpResourceCache->find(sPaneURL));
@@ -164,7 +164,7 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
                 mpPresenterController->GetPaneContainer());
             PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
                 pPaneContainer->FindPaneURL(sPaneURL));
-            if (pDescriptor.get() != NULL)
+            if (pDescriptor.get() != nullptr)
             {
                 pDescriptor->SetActivationState(true);
                 if (pDescriptor->mxBorderWindow.is())
@@ -195,13 +195,13 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
     const OUString sPaneURL (rxResource->getResourceId()->getResourceURL());
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         pPaneContainer->FindPaneURL(sPaneURL));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         pDescriptor->SetActivationState(false);
         if (pDescriptor->mxBorderWindow.is())
             pDescriptor->mxBorderWindow->setVisible(sal_False);
 
-        if (mpResourceCache.get() != NULL)
+        if (mpResourceCache.get() != nullptr)
         {
             // Store the pane in the cache.
             (*mpResourceCache)[sPaneURL] = rxResource;
@@ -223,19 +223,19 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     const OUString& rsTitle)
 {
     if ( ! rxPaneId.is())
-        return NULL;
+        return nullptr;
 
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
     if ( ! xCC.is())
-        return NULL;
+        return nullptr;
 
     Reference<XComponentContext> xContext (mxComponentContextWeak);
     if ( ! xContext.is())
-        return NULL;
+        return nullptr;
 
     Reference<XPane> xParentPane (xCC->getResource(rxPaneId->getAnchor()), UNO_QUERY);
     if ( ! xParentPane.is())
-        return NULL;
+        return nullptr;
 
     try
     {
@@ -250,7 +250,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
         OSL_ASSERT(false);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 Reference<XResource> PresenterPaneFactory::CreatePane (
@@ -295,7 +295,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         pContainer->StoreBorderWindow(rxPaneId, xPane->GetBorderWindow()));
     pContainer->StorePane(xPane);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         if (bIsSpritePane)
         {
