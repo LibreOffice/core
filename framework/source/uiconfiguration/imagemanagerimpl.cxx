@@ -446,7 +446,7 @@ bool ImageManagerImpl::implts_loadUserImages(
                 aUserImagesVector.reserve(nCount);
                 for ( sal_Int32 i=0; i < nCount; i++ )
                 {
-                    const ImageItemDescriptor* pItem = &(*pList->pImageItemList)[i];
+                    const ImageItemDescriptor* pItem = (*pList->pImageItemList)[i].get();
                     aUserImagesVector.push_back( pItem->aCommandURL );
                 }
 
@@ -517,11 +517,10 @@ bool ImageManagerImpl::implts_storeUserImages(
             pList->pImageItemList = new ImageItemListDescriptor;
             for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
             {
-                ImageItemDescriptor* pItem = new ::framework::ImageItemDescriptor;
-
+                ImageItemDescriptor* pItem = new ImageItemDescriptor;
                 pItem->nIndex = i;
                 pItem->aCommandURL = pImageList->GetImageName( i );
-                pList->pImageItemList->push_back( pItem );
+                pList->pImageItemList->push_back( std::unique_ptr<ImageItemDescriptor>(pItem) );
             }
 
             pList->aURL = "Bitmaps/" + OUString::createFromAscii(BITMAP_FILE_NAMES[nImageType]);

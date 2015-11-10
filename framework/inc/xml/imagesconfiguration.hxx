@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
+#include <memory>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 namespace framework
@@ -54,7 +55,7 @@ struct ExternalImageItemDescriptor
     OUString  aURL;                       // a URL to an external bitmap
 };
 
-typedef boost::ptr_vector<ImageItemDescriptor> ImageItemListDescriptor;
+typedef std::vector<std::unique_ptr<ImageItemDescriptor> > ImageItemListDescriptor;
 
 typedef boost::ptr_vector<ExternalImageItemDescriptor> ExternalImageItemListDescriptor;
 

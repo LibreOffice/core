@@ -309,7 +309,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 m_bImageStartFound = true;
 
                 // Create new image item descriptor
-                ImageItemDescriptor* pItem = new ImageItemDescriptor;
+                std::unique_ptr<ImageItemDescriptor> pItem(new ImageItemDescriptor);
                 pItem->nIndex = -1;
 
                 // Read attributes for this image definition
@@ -341,7 +341,6 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 // Check required attribute "bitmap-index"
                 if ( pItem->nIndex < 0 )
                 {
-                    delete pItem;
                     delete m_pImages;
                     m_pImages = nullptr;
 
@@ -353,7 +352,6 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 // Check required attribute "command"
                 if ( pItem->aCommandURL.isEmpty() )
                 {
-                    delete pItem;
                     delete m_pImages;
                     m_pImages = nullptr;
 
@@ -362,7 +360,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                m_pImages->pImageItemList->push_back( pItem );
+                m_pImages->pImageItemList->push_back( std::move(pItem) );
             }
             break;
 
@@ -729,7 +727,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     if ( pImageItemList )
     {
         for ( size_t i = 0; i < pImageItemList->size(); i++ )
-            WriteImage( &(*pImageItemList)[i] );
+            WriteImage( (*pImageItemList)[i].get() );
     }
 
     m_xWriteDocumentHandler->endElement( ELEMENT_NS_IMAGES );
