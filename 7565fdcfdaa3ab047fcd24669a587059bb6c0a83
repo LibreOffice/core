@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_876214d7",
+        "filename": "sw/qa/python/check_flies.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-10T16:31:50Z",
+      "side": 1,
+      "message": "UnoRuntime class is specific to Java, just remove it",
+      "revId": "7565fdcfdaa3ab047fcd24669a587059bb6c0a83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
