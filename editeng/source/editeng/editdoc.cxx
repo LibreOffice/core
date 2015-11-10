@@ -440,22 +440,22 @@ sal_Int32 TextPortionList::Count() const
 
 const TextPortion& TextPortionList::operator[](sal_Int32 nPos) const
 {
-    return maPortions[nPos];
+    return *maPortions[nPos].get();
 }
 
 TextPortion& TextPortionList::operator[](sal_Int32 nPos)
 {
-    return maPortions[nPos];
+    return *maPortions[nPos].get();
 }
 
 void TextPortionList::Append(TextPortion* p)
 {
-    maPortions.push_back(p);
+    maPortions.push_back(std::unique_ptr<TextPortion>(p));
 }
 
 void TextPortionList::Insert(sal_Int32 nPos, TextPortion* p)
 {
-    maPortions.insert(maPortions.begin()+nPos, p);
+    maPortions.insert(maPortions.begin()+nPos, std::unique_ptr<TextPortion>(p));
 }
 
 void TextPortionList::Remove(sal_Int32 nPos)
@@ -465,14 +465,14 @@ void TextPortionList::Remove(sal_Int32 nPos)
 
 namespace {
 
-class FindTextPortionByAddress : std::unary_function<TextPortion, bool>
+class FindTextPortionByAddress : std::unary_function<std::unique_ptr<TextPortion>, bool>
 {
     const TextPortion* mp;
 public:
     explicit FindTextPortionByAddress(const TextPortion* p) : mp(p) {}
-    bool operator() (const TextPortion& v) const
+    bool operator() (const std::unique_ptr<TextPortion>& v) const
     {
-        return &v == mp;
+        return v.get() == mp;
     }
 };
 
@@ -497,7 +497,7 @@ sal_Int32 TextPortionList::FindPortion(
     sal_Int32 n = maPortions.size();
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        const TextPortion& rPortion = maPortions[i];
+        const TextPortion& rPortion = *maPortions[i].get();
         nTmpPos = nTmpPos + rPortion.GetLen();
         if ( nTmpPos >= nCharPos )
         {
@@ -518,7 +518,7 @@ sal_Int32 TextPortionList::GetStartPos(sal_Int32 nPortion)
     sal_Int32 nPos = 0;
     for (sal_Int32 i = 0; i < nPortion; ++i)
     {
-        const TextPortion& rPortion = maPortions[i];
+        const TextPortion& rPortion = *maPortions[i].get();
         nPos = nPos + rPortion.GetLen();
     }
     return nPos;

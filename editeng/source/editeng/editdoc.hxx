@@ -445,7 +445,7 @@ public:
 
 class TextPortionList
 {
-    typedef boost::ptr_vector<TextPortion> PortionsType;
+    typedef std::vector<std::unique_ptr<TextPortion> > PortionsType;
     PortionsType maPortions;
 
 public:
