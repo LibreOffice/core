@@ -215,7 +215,8 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
         m_pImpl->m_pBtn = VclPtr<ImplBtn>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( m_pImpl->m_pBtn );
-        m_pImpl->m_pBtn->buttonDownSignal.connect( boost::bind( &ComboBox::Impl::ImplClickButtonHandler, m_pImpl.get(), _1 ));
+        m_pImpl->m_pBtn->buttonDownSignal.connect( [this]( ImplBtn* pImplBtn )
+                                                   { this->m_pImpl->ImplClickButtonHandler( pImplBtn ); } );
         m_pImpl->m_pBtn->Show();
 
         nEditStyle |= WB_NOBORDER;
@@ -247,7 +248,8 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     m_pImpl->m_pImplLB->SetSelectHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplSelectHdl) );
     m_pImpl->m_pImplLB->SetCancelHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplCancelHdl) );
     m_pImpl->m_pImplLB->SetDoubleClickHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplDoubleClickHdl) );
-    m_pImpl->m_pImplLB->userDrawSignal.connect( boost::bind( &ComboBox::Impl::ImplUserDrawHandler, m_pImpl.get(), _1 ) );
+    m_pImpl->m_pImplLB->userDrawSignal.connect( [this]( UserDrawEvent* pUserDrawEvent )
+                                                { this->m_pImpl->ImplUserDrawHandler( pUserDrawEvent ); } );
     m_pImpl->m_pImplLB->SetSelectionChangedHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplSelectionChangedHdl) );
     m_pImpl->m_pImplLB->SetListItemSelectHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplListItemSelectHdl) );
     m_pImpl->m_pImplLB->Show();
