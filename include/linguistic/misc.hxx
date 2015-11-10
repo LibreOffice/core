@@ -111,7 +111,7 @@ css::uno::Sequence< sal_Int16 >
 
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not
-bool    IsReadOnly( const OUString &rURL, bool *pbExist = 0 );
+bool    IsReadOnly( const OUString &rURL, bool *pbExist = nullptr );
 
 // checks if a file with the given URL exists
 bool    FileExists( const OUString &rURL );

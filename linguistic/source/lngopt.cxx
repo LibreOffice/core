@@ -51,7 +51,7 @@ using namespace com::sun::star::registry;
 
 
 // static member intialization
-SvtLinguOptions *   LinguOptions::pData = NULL;
+SvtLinguOptions *   LinguOptions::pData = nullptr;
 oslInterlockedCount LinguOptions::nRefCount;
 
 
@@ -81,7 +81,7 @@ LinguOptions::~LinguOptions()
 
     if ( osl_atomic_decrement( &nRefCount ) == 0 )
     {
-        delete pData;   pData  = NULL;
+        delete pData;   pData  = nullptr;
     }
 }
 
@@ -95,7 +95,7 @@ struct WID_Name
 //! since the WID is used as index in this table!
 WID_Name aWID_Name[] =
 {
-    { 0,                                  0 },
+    { 0,                                  nullptr },
     { UPH_IS_USE_DICTIONARY_LIST,         UPN_IS_USE_DICTIONARY_LIST },
     { UPH_IS_IGNORE_CONTROL_CHARACTERS,   UPN_IS_IGNORE_CONTROL_CHARACTERS },
     { UPH_IS_SPELL_UPPER_CASE,            UPN_IS_SPELL_UPPER_CASE },
@@ -106,16 +106,16 @@ WID_Name aWID_Name[] =
     { UPH_HYPH_MIN_WORD_LENGTH,           UPN_HYPH_MIN_WORD_LENGTH },
     { UPH_DEFAULT_LOCALE,                 UPN_DEFAULT_LOCALE },
     { UPH_IS_SPELL_AUTO,                  UPN_IS_SPELL_AUTO },
-    { 0,                                  0 },
-    { 0,                                  0 },
+    { 0,                                  nullptr },
+    { 0,                                  nullptr },
     { UPH_IS_SPELL_SPECIAL,               UPN_IS_SPELL_SPECIAL },
     { UPH_IS_HYPH_AUTO,                   UPN_IS_HYPH_AUTO },
     { UPH_IS_HYPH_SPECIAL,                UPN_IS_HYPH_SPECIAL },
     { UPH_IS_WRAP_REVERSE,                UPN_IS_WRAP_REVERSE },
-    { 0,                                  0 },
-    { 0,                                  0 },
-    { 0,                                  0 },
-    { 0,                                  0 },
+    { 0,                                  nullptr },
+    { 0,                                  nullptr },
+    { 0,                                  nullptr },
+    { 0,                                  nullptr },
     { UPH_DEFAULT_LANGUAGE,               UPN_DEFAULT_LANGUAGE },
     { UPH_DEFAULT_LOCALE_CJK,             UPN_DEFAULT_LOCALE_CJK },
     { UPH_DEFAULT_LOCALE_CTL,             UPN_DEFAULT_LOCALE_CTL }
@@ -481,7 +481,7 @@ Locale LinguProps::getPropertyLocale(const OUString& aPropertyName) throw (css::
 void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory *pServiceManager, void * )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if ( LinguProps::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =

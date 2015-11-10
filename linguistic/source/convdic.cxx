@@ -141,7 +141,7 @@ bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType
     // first argument being 0 should stop the file from being parsed
     // up to the end (reading all entries) when the required
     // data (language, conversion type) is found.
-    ConvDicXMLImport *pImport = new ConvDicXMLImport( 0 );
+    ConvDicXMLImport *pImport = new ConvDicXMLImport( nullptr );
 
     //!! keep a first reference to ensure the lifetime of the object !!
     uno::Reference< XInterface > xRef( static_cast<document::XFilter *>(pImport), UNO_QUERY );

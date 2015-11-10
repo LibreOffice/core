@@ -370,7 +370,7 @@ void ConvDicList::MyAppExitListener::AtExit()
 ConvDicList::ConvDicList() :
     aEvtListeners( GetLinguMutex() )
 {
-    pNameContainer = 0;
+    pNameContainer = nullptr;
     bDisposing = false;
 
     pExitListener = new MyAppExitListener( *this );
@@ -626,7 +626,7 @@ void * SAL_CALL ConvDicList_getFactory(
         const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager, void *  )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if ( ConvDicList::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         uno::Reference< XSingleServiceFactory > xFactory =

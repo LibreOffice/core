@@ -139,12 +139,12 @@ void SAL_CALL FlushListener::disposing( const EventObject& rSource )
     if (xDicList.is()  &&  rSource.Source == xDicList)
     {
         xDicList->removeDictionaryListEventListener( this );
-        xDicList = NULL;    //! release reference
+        xDicList = nullptr;    //! release reference
     }
     if (xPropSet.is()  &&  rSource.Source == xPropSet)
     {
         lcl_RemoveAsPropertyChangeListener( this, xPropSet );
-        xPropSet = NULL;    //! release reference
+        xPropSet = nullptr;    //! release reference
     }
 }
 

@@ -255,7 +255,7 @@ void SAL_CALL LngSvcMgrListenerHelper::disposing( const lang::EventObject& rSour
         aLngSvcMgrListeners   .removeInterface( xRef );
         aLngSvcEvtBroadcasters.removeInterface( xRef );
         if (xDicList == xRef)
-            xDicList = 0;
+            xDicList = nullptr;
     }
 }
 
@@ -410,7 +410,7 @@ void LngSvcMgrListenerHelper::DisposeAndClear( const lang::EventObject &rEvtObj 
     {
         xDicList->removeDictionaryListEventListener(
             static_cast<linguistic2::XDictionaryListEventListener *>(this) );
-        xDicList = 0;
+        xDicList = nullptr;
     }
 }
 
@@ -451,16 +451,16 @@ LngSvcMgr::LngSvcMgr()
 {
     bDisposing = false;
 
-    pSpellDsp   = 0;
-    pGrammarDsp = 0;
-    pHyphDsp    = 0;
-    pThesDsp    = 0;
+    pSpellDsp   = nullptr;
+    pGrammarDsp = nullptr;
+    pHyphDsp    = nullptr;
+    pThesDsp    = nullptr;
 
-    pAvailSpellSvcs     = 0;
-    pAvailGrammarSvcs   = 0;
-    pAvailHyphSvcs      = 0;
-    pAvailThesSvcs      = 0;
-    pListenerHelper     = 0;
+    pAvailSpellSvcs     = nullptr;
+    pAvailGrammarSvcs   = nullptr;
+    pAvailHyphSvcs      = nullptr;
+    pAvailThesSvcs      = nullptr;
+    pListenerHelper     = nullptr;
 
     // request notify events when properties (i.e. something in the subtree) changes
     uno::Sequence< OUString > aNames(4);
@@ -561,7 +561,7 @@ void LngSvcMgr::disposing(const lang::EventObject&)
 void LngSvcMgr::clearSvcInfoArray(SvcInfoArray* &rpInfo)
 {
     delete rpInfo;
-    rpInfo = NULL;
+    rpInfo = nullptr;
 }
 
 LngSvcMgr::~LngSvcMgr()
@@ -1004,7 +1004,7 @@ void LngSvcMgr::GetGrammarCheckerDsp_Impl( bool bSetSvcList  )
         {
             pGrammarDsp    = dynamic_cast< GrammarCheckingIterator * >(xGCI.get());
             xGrammarDsp    = xGCI;
-            SAL_WARN_IF( pGrammarDsp == NULL, "linguistic", "failed to get implementation" );
+            SAL_WARN_IF( pGrammarDsp == nullptr, "linguistic", "failed to get implementation" );
             if (bSetSvcList && pGrammarDsp)
                 SetCfgServiceLists( *pGrammarDsp );
         }
@@ -1550,7 +1550,7 @@ uno::Sequence< OUString > SAL_CALL
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     uno::Sequence< OUString > aRes;
-    const SvcInfoArray *pInfoArray = 0;
+    const SvcInfoArray *pInfoArray = nullptr;
 
     if (rServiceName == SN_SPELLCHECKER)
     {
@@ -1610,7 +1610,7 @@ uno::Sequence< lang::Locale > SAL_CALL
 
     uno::Sequence< lang::Locale > aRes;
 
-    uno::Sequence< lang::Locale >  *pAvailLocales     = NULL;
+    uno::Sequence< lang::Locale >  *pAvailLocales     = nullptr;
     if (rServiceName == SN_SPELLCHECKER)
         pAvailLocales       = &aAvailSpellLocales;
     else if (rServiceName == SN_GRAMMARCHECKER)
@@ -1742,7 +1742,7 @@ bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
 
     bool bRes = false;
 
-    LinguDispatcher *pDsp = 0;
+    LinguDispatcher *pDsp = nullptr;
     uno::Sequence< lang::Locale > aLocales;
 
     if (rServiceName == SN_SPELLCHECKER)
@@ -1784,7 +1784,7 @@ bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
         beans::PropertyValue *pValue  = pValues;
 
         // get node name to be used
-        const char *pNodeName = NULL;
+        const char *pNodeName = nullptr;
         if (pDsp == pSpellDsp)
             pNodeName = "ServiceManager/SpellCheckerList";
         else if (pDsp == pGrammarDsp)
@@ -2072,7 +2072,7 @@ void * SAL_CALL LngSvcMgr_getFactory(
             void * /*pRegistryKey*/ )
 {
 
-    void * pRet = 0;
+    void * pRet = nullptr;
     if ( LngSvcMgr::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory =

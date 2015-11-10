@@ -110,8 +110,8 @@ void PropertyChgHelper::GetCurrentValues()
         const OUString *pPropName = GetPropNames().getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            bool *pbVal     = NULL,
-                 *pbResVal  = NULL;
+            bool *pbVal     = nullptr,
+                 *pbResVal  = nullptr;
 
             if ( pPropName[i] == UPN_IS_IGNORE_CONTROL_CHARACTERS )
             {
@@ -147,7 +147,7 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
         const PropertyValue *pVal = rPropVals.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            bool  *pbResVal = NULL;
+            bool  *pbResVal = nullptr;
             switch (pVal[i].Handle)
             {
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS :
@@ -175,7 +175,7 @@ bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
         bool bSCWA = false, // SPELL_CORRECT_WORDS_AGAIN ?
              bSWWA = false; // SPELL_WRONG_WORDS_AGAIN ?
 
-        bool  *pbVal = NULL;
+        bool  *pbVal = nullptr;
         switch (rEvt.PropertyHandle)
         {
             case UPH_IS_IGNORE_CONTROL_CHARACTERS :
@@ -194,7 +194,7 @@ bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
 
-        bRes = 0 != pbVal;  // sth changed?
+        bRes = nullptr != pbVal;  // sth changed?
         if (bRes)
         {
             bool bSpellEvts = (nEvtFlags & AE_SPELLCHECKER);
@@ -271,7 +271,7 @@ void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
     if (rSource.Source == xPropSet)
     {
         RemoveAsPropListener();
-        xPropSet = NULL;
+        xPropSet = nullptr;
         aPropNames.realloc( 0 );
     }
 }
@@ -385,8 +385,8 @@ void PropertyHelper_Spell::GetCurrentValues()
         const OUString *pPropName = GetPropNames().getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            bool *pbVal     = NULL,
-                 *pbResVal  = NULL;
+            bool *pbVal     = nullptr,
+                 *pbResVal  = nullptr;
 
             if ( pPropName[i] == UPN_IS_SPELL_UPPER_CASE )
             {
@@ -423,7 +423,7 @@ bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt 
         bool bSCWA = false, // SPELL_CORRECT_WORDS_AGAIN ?
              bSWWA = false; // SPELL_WRONG_WORDS_AGAIN ?
 
-        bool *pbVal = NULL;
+        bool *pbVal = nullptr;
         switch (rEvt.PropertyHandle)
         {
             case UPH_IS_SPELL_UPPER_CASE          :
@@ -453,7 +453,7 @@ bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt 
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
 
-        bRes = (pbVal != 0);
+        bRes = (pbVal != nullptr);
         if (bRes)
         {
             sal_Int16 nLngSvcFlags = 0;
@@ -505,7 +505,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
             }
             else
             {
-                bool *pbResVal = NULL;
+                bool *pbResVal = nullptr;
                 switch (pVal[i].Handle)
                 {
                     case UPH_IS_SPELL_UPPER_CASE     : pbResVal = &bResIsSpellUpperCase; break;
@@ -565,8 +565,8 @@ void PropertyHelper_Hyphen::GetCurrentValues()
         const OUString *pPropName = GetPropNames().getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            sal_Int16  *pnVal    = NULL,
-                   *pnResVal = NULL;
+            sal_Int16  *pnVal    = nullptr,
+                   *pnResVal = nullptr;
 
             if ( pPropName[i] == UPN_HYPH_MIN_LEADING )
             {
@@ -602,7 +602,7 @@ bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt
     {
         sal_Int16 nLngSvcFlags = LinguServiceEventFlags::HYPHENATE_AGAIN;
 
-        sal_Int16   *pnVal = NULL;
+        sal_Int16   *pnVal = nullptr;
         switch (rEvt.PropertyHandle)
         {
             case UPH_HYPH_MIN_LEADING     : pnVal = &nHyphMinLeading; break;
@@ -614,7 +614,7 @@ bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt
         if (pnVal)
             rEvt.NewValue >>= *pnVal;
 
-        bRes = (pnVal != 0);
+        bRes = (pnVal != nullptr);
         if (bRes)
         {
             if (nLngSvcFlags)
@@ -655,7 +655,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
         const PropertyValue *pVal = rPropVals.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            sal_Int16 *pnResVal = NULL;
+            sal_Int16 *pnResVal = nullptr;
 
             if ( pVal[i].Name == UPN_HYPH_MIN_LEADING )
                 pnResVal = &nResHyphMinLeading;

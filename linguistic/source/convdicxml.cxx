@@ -190,7 +190,7 @@ SvXMLImportContext * ConvDicXMLImportContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if ( nPrefix == XML_NAMESPACE_TCD && rLocalName == "text-conversion-dictionary" )
         pContext = new ConvDicXMLDictionaryContext_Impl( GetConvDicImport(), nPrefix, rLocalName );
     else
@@ -225,7 +225,7 @@ SvXMLImportContext * ConvDicXMLDictionaryContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if ( nPrefix == XML_NAMESPACE_TCD && rLocalName == "entry" )
         pContext = new ConvDicXMLEntryTextContext_Impl( GetConvDicImport(), nPrefix, rLocalName );
     else
@@ -238,7 +238,7 @@ SvXMLImportContext * ConvDicXMLEntryTextContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if ( nPrefix == XML_NAMESPACE_TCD && rLocalName == "right-text" )
         pContext = new ConvDicXMLRightTextContext_Impl( GetConvDicImport(), nPrefix, rLocalName, *this );
     else
@@ -391,7 +391,7 @@ SvXMLImportContext * ConvDicXMLImport::CreateContext(
         const OUString &rLocalName,
         const uno::Reference < xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     if ( nPrefix == XML_NAMESPACE_TCD && rLocalName == "text-conversion-dictionary" )
         pContext = new ConvDicXMLDictionaryContext_Impl( *this, nPrefix, rLocalName );
     else

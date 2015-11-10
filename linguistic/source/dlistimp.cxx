@@ -758,7 +758,7 @@ uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
 void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager, void *  )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if ( DicList::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         uno::Reference< XSingleServiceFactory > xFactory =

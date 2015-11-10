@@ -312,7 +312,7 @@ uno::Reference< XDictionaryEntry > SearchDicList(
                     if (bSearchSpellEntry || lcl_HasHyphInfo( xEntry ))
                         break;
                 }
-                xEntry = 0;
+                xEntry = nullptr;
             }
         }
     }
@@ -790,7 +790,7 @@ void SAL_CALL
 
     if (xDesktop.is()  &&  rEvtSource.Source == xDesktop)
     {
-        xDesktop = NULL;    //! release reference to desktop
+        xDesktop = nullptr;    //! release reference to desktop
     }
 }
 

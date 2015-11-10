@@ -287,12 +287,12 @@ Reference< XHyphenatedWord > SAL_CALL
 
     // search for entry with that language
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
-    LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
+    LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : nullptr;
 
     bool bWordModified = false;
     if (!pEntry || (nMaxLeading < 0 || nMaxLeading > nWordLen))
     {
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -423,12 +423,12 @@ Reference< XHyphenatedWord > SAL_CALL
 
     // search for entry with that language
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
-    LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
+    LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : nullptr;
 
     bool bWordModified = false;
     if (!pEntry || !(0 <= nIndex && nIndex <= nWordLen - 2))
     {
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -554,7 +554,7 @@ Reference< XPossibleHyphens > SAL_CALL
 
     // search for entry with that language
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
-    LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
+    LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : nullptr;
 
     if (pEntry)
     {
@@ -699,7 +699,7 @@ Sequence< OUString >
     // search for entry with that language and use data from that
     sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
     const HyphSvcByLangMap_t::const_iterator  aIt( aSvcMap.find( nLanguage ) );
-    const LangSvcEntries_Hyph       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
+    const LangSvcEntries_Hyph       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : nullptr;
     if (pEntry)
     {
         aRes = pEntry->aSvcImplNames;

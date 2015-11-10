@@ -751,7 +751,7 @@ void SAL_CALL DictionaryNeo::setName( const OUString& aName )
     if (aDicName != aName)
     {
         aDicName = aName;
-        launchEvent(DictionaryEventFlags::CHG_NAME, NULL);
+        launchEvent(DictionaryEventFlags::CHG_NAME, nullptr);
     }
 }
 
@@ -792,7 +792,7 @@ void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
                     "lng : dictionary is still modified" );
         }
 
-        launchEvent(nEvent, NULL);
+        launchEvent(nEvent, nullptr);
     }
 }
 
@@ -830,7 +830,7 @@ void SAL_CALL DictionaryNeo::setLocale( const Locale& aLocale )
         nLanguage = nLanguageP;
         bIsModified = true; // new language needs to be saved with dictionary
 
-        launchEvent( DictionaryEventFlags::CHG_LANGUAGE, NULL );
+        launchEvent( DictionaryEventFlags::CHG_LANGUAGE, nullptr );
     }
 }
 
@@ -987,7 +987,7 @@ void SAL_CALL DictionaryNeo::clear(  )
         bNeedEntries = false;
         bIsModified = true;
 
-        launchEvent( DictionaryEventFlags::ENTRIES_CLEARED , NULL );
+        launchEvent( DictionaryEventFlags::ENTRIES_CLEARED , nullptr );
     }
 }
 
