@@ -137,15 +137,18 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         mpFloatWin->GetDropTarget()->addDropTargetListener(xDrop);
 
         mpImplWin = VclPtr<ImplWin>::Create( this, (nStyle & (WB_LEFT|WB_RIGHT|WB_CENTER))|WB_NOBORDER );
-        mpImplWin->buttonDownSignal.connect( boost::bind( &ListBox::ImplClickButtonHandler, this, _1 ));
-        mpImplWin->userDrawSignal.connect( boost::bind( &ListBox::ImplUserDrawHandler, this, _1 ) );
+        mpImplWin->buttonDownSignal.connect( [this]( Control* pControl )
+                                             { this->ImplClickButtonHandler( pControl ); } );
+        mpImplWin->userDrawSignal.connect( [this]( UserDrawEvent* pUserDrawEvent )
+                                           { this->ImplUserDrawHandler( pUserDrawEvent ); } );
         mpImplWin->Show();
         mpImplWin->GetDropTarget()->addDropTargetListener(xDrop);
         mpImplWin->SetEdgeBlending(GetEdgeBlending());
 
         mpBtn = VclPtr<ImplBtn>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
-        mpBtn->buttonDownSignal.connect( boost::bind( &ListBox::ImplClickButtonHandler, this, _1 ));
+        mpBtn->buttonDownSignal.connect( [this]( Control* pControl )
+                                         { this->ImplClickButtonHandler( pControl ); } );
         mpBtn->Show();
         mpBtn->GetDropTarget()->addDropTargetListener(xDrop);
     }
@@ -158,7 +161,8 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mpImplLB->SetScrollHdl( LINK( this, ListBox, ImplScrollHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ListBox, ImplCancelHdl ) );
     mpImplLB->SetDoubleClickHdl( LINK( this, ListBox, ImplDoubleClickHdl ) );
-    mpImplLB->userDrawSignal.connect( boost::bind( &ListBox::ImplUserDrawHandler, this, _1 ) );
+    mpImplLB->userDrawSignal.connect( [this]( UserDrawEvent* pUserDrawEvent )
+                                      { this->ImplUserDrawHandler( pUserDrawEvent ); } );
     mpImplLB->SetFocusHdl( LINK( this, ListBox, ImplFocusHdl ) );
     mpImplLB->SetListItemSelectHdl( LINK( this, ListBox, ImplListItemSelectHdl ) );
     mpImplLB->SetPosPixel( Point() );
