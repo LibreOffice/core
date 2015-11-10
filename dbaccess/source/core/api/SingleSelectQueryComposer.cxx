@@ -169,7 +169,7 @@ namespace
     void resetIterator( OSQLParseTreeIterator& _rIterator, bool _bDispose )
     {
         const OSQLParseNode* pSqlParseNode = _rIterator.getParseTree();
-        _rIterator.setParseTree(NULL);
+        _rIterator.setParseTree(nullptr);
         delete pSqlParseNode;
         if ( _bDispose )
             _rIterator.dispose();
@@ -222,14 +222,14 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     :OSubComponent(m_aMutex,_xConnection)
     ,OPropertyContainer(m_aBHelper)
     ,m_aSqlParser( _rContext, &m_aParseContext )
-    ,m_aSqlIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
-    ,m_aAdditiveIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
+    ,m_aSqlIterator( _xConnection, _rxTables, m_aSqlParser, nullptr )
+    ,m_aAdditiveIterator( _xConnection, _rxTables, m_aSqlParser, nullptr )
     ,m_aElementaryParts( (size_t)SQLPartCount )
     ,m_xConnection(_xConnection)
     ,m_xMetaData(_xConnection->getMetaData())
     ,m_xConnectionTables( _rxTables )
     ,m_aContext( _rContext )
-    ,m_pTables(NULL)
+    ,m_pTables(nullptr)
     ,m_nBoolCompareMode( BooleanComparisonMode::EQUAL_INTEGER )
     ,m_nCommandType(CommandType::COMMAND)
 {
@@ -286,8 +286,8 @@ void SAL_CALL OSingleSelectQueryComposer::disposing()
     resetIterator( m_aSqlIterator, true );
     resetIterator( m_aAdditiveIterator, true );
 
-    m_xConnectionTables = NULL;
-    m_xConnection       = NULL;
+    m_xConnectionTables = nullptr;
+    m_xConnection       = nullptr;
 
     clearCurrentCollections();
 }
@@ -792,7 +792,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         const std::unique_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL ) );
         OSL_ENSURE( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
         if ( pStatementTree.get() )
-            if ( !pStatementTree->parseNodeToExecutableStatement( sSQL, m_xConnection, m_aSqlParser, NULL ) )
+            if ( !pStatementTree->parseNodeToExecutableStatement( sSQL, m_xConnection, m_aSqlParser, nullptr ) )
                 break;
 
         Reference< XResultSetMetaData > xResultSetMeta;
@@ -1363,11 +1363,11 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
 void OSingleSelectQueryComposer::clearColumns( const EColumnType _eType )
 {
     OPrivateColumns* pColumns = m_aCurrentColumns[ _eType ];
-    if ( pColumns != NULL )
+    if ( pColumns != nullptr )
     {
         pColumns->disposing();
         m_aColumnsCollection.push_back( pColumns );
-        m_aCurrentColumns[ _eType ] = NULL;
+        m_aCurrentColumns[ _eType ] = nullptr;
     }
 }
 
@@ -1381,7 +1381,7 @@ void OSingleSelectQueryComposer::clearCurrentCollections()
         {
             (*aIter)->disposing();
             m_aColumnsCollection.push_back(*aIter);
-            *aIter = NULL;
+            *aIter = nullptr;
         }
     }
 
@@ -1389,7 +1389,7 @@ void OSingleSelectQueryComposer::clearCurrentCollections()
     {
         m_pTables->disposing();
         m_aTablesCollection.push_back(m_pTables);
-        m_pTables = NULL;
+        m_pTables = nullptr;
     }
 }
 

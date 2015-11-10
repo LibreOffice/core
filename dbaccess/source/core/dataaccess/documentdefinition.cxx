@@ -191,8 +191,8 @@ namespace dbaccess
     {
         if ( m_xBroadCaster.is() )
             m_xBroadCaster->removeStateChangeListener(this);
-        m_xBroadCaster = NULL;
-        m_pDefinition = NULL;
+        m_xBroadCaster = nullptr;
+        m_pDefinition = nullptr;
     }
 
     void SAL_CALL OEmbedObjectHolder::changingState( const lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ ) throw (embed::WrongStateException, uno::RuntimeException, std::exception)
@@ -216,7 +216,7 @@ namespace dbaccess
 
     void SAL_CALL OEmbedObjectHolder::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException, std::exception)
     {
-        m_xBroadCaster = NULL;
+        m_xBroadCaster = nullptr;
     }
 
     // OEmbeddedClientHelper
@@ -407,12 +407,12 @@ ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxCont
                                           const TContentPtr& _pImpl, bool _bForm )
     :OContentHelper(_xORB,_rxContainer,_pImpl)
     ,OPropertyStateContainer(OContentHelper::rBHelper)
-    ,m_pInterceptor(NULL)
+    ,m_pInterceptor(nullptr)
     ,m_bForm(_bForm)
     ,m_bOpenInDesign(false)
     ,m_bInExecute(false)
     ,m_bRemoveListener(false)
-    ,m_pClientHelper(NULL)
+    ,m_pClientHelper(nullptr)
 {
     registerProperties();
 }
@@ -439,7 +439,7 @@ ODocumentDefinition::~ODocumentDefinition()
     {
         m_pInterceptor->dispose();
         m_pInterceptor->release();
-        m_pInterceptor = NULL;
+        m_pInterceptor = nullptr;
     }
 }
 
@@ -457,12 +457,12 @@ void ODocumentDefinition::closeObject()
         catch(const Exception&)
         {
         }
-        m_xEmbeddedObject = NULL;
+        m_xEmbeddedObject = nullptr;
         if ( m_pClientHelper )
         {
-            m_pClientHelper->resetClient(NULL);
+            m_pClientHelper->resetClient(nullptr);
             m_pClientHelper->release();
-            m_pClientHelper = NULL;
+            m_pClientHelper = nullptr;
         }
     }
 }
@@ -937,7 +937,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         xReportEngine->setActiveConnection(m_xLastKnownConnection);
         if ( bOpenHidden )
             return makeAny( xReportEngine->createDocumentModel() );
-        return makeAny( xReportEngine->createDocumentAlive( NULL ) );
+        return makeAny( xReportEngine->createDocumentAlive( nullptr ) );
     }
 
     if ( _bActivate && !bOpenHidden )
@@ -1207,7 +1207,7 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
             catch(const Exception&)
             {
             }
-            m_xEmbeddedObject = NULL;
+            m_xEmbeddedObject = nullptr;
         }
     }
 
@@ -1243,7 +1243,7 @@ bool ODocumentDefinition::save(bool _bApprove)
             Reference< XInteractionRequest > xRequest(pRequest);
             // some knittings
             // two continuations allowed: OK and Cancel
-            ODocumentSaveContinuation* pDocuSave = NULL;
+            ODocumentSaveContinuation* pDocuSave = nullptr;
 
             if ( m_pImpl->m_aProps.aTitle.isEmpty() )
             {
@@ -1263,7 +1263,7 @@ bool ODocumentDefinition::save(bool _bApprove)
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, 0) );
+            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
@@ -1337,7 +1337,7 @@ bool ODocumentDefinition::saveAs()
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, 0) );
+            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
@@ -1497,7 +1497,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     {
         m_pInterceptor->dispose();
         m_pInterceptor->release();
-        m_pInterceptor = NULL;
+        m_pInterceptor = nullptr;
     }
 
     m_pInterceptor = new OInterceptor( this );
@@ -1832,7 +1832,7 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
         {
             // no XDatabaseDocumentUI -> just execute the respective command
             m_bOpenInDesign = _bForEditing;
-            xComponent = Reference<XComponent>(onCommandOpenSomething(Any(), true, NULL), UNO_QUERY);
+            xComponent = Reference<XComponent>(onCommandOpenSomething(Any(), true, nullptr), UNO_QUERY);
             OSL_ENSURE( xComponent.is(), "ODocumentDefinition::impl_openUI_nolck_throw: opening the thingie failed." );
             return xComponent;
         }

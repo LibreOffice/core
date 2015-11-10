@@ -200,7 +200,7 @@ void DocumentStorageAccess::dispose()
 
     m_aExposedStorages.clear();
 
-    m_pModelImplementation = NULL;
+    m_pModelImplementation = nullptr;
 }
 
 Reference< XStorage > DocumentStorageAccess::impl_openSubStorage_nothrow( const OUString& _rStorageName, sal_Int32 _nDesiredMode )
@@ -395,7 +395,7 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
 ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _rxContext, ODatabaseContext& _rDBContext )
             :m_xModel()
             ,m_xDataSource()
-            ,m_pStorageAccess( NULL )
+            ,m_pStorageAccess( nullptr )
             ,m_aMutex()
             ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
@@ -413,7 +413,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
             ,m_bSuppressVersionColumns(true)
             ,m_bModified(false)
             ,m_bDocumentReadOnly(false)
-            ,m_pSharedConnectionManager(NULL)
+            ,m_pSharedConnectionManager(nullptr)
             ,m_nControllerLockCount(0)
 {
     // some kind of default
@@ -430,7 +430,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
                     )
             :m_xModel()
             ,m_xDataSource()
-            ,m_pStorageAccess( NULL )
+            ,m_pStorageAccess( nullptr )
             ,m_aMutex()
             ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
@@ -449,7 +449,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_bSuppressVersionColumns(true)
             ,m_bModified(false)
             ,m_bDocumentReadOnly(false)
-            ,m_pSharedConnectionManager(NULL)
+            ,m_pSharedConnectionManager(nullptr)
             ,m_nControllerLockCount(0)
 {
     impl_construct_nothrow();
@@ -513,7 +513,7 @@ namespace
 {
     OUString lcl_getContainerStorageName_throw( ODatabaseModelImpl::ObjectType _eType )
     {
-        const sal_Char* pAsciiName( NULL );
+        const sal_Char* pAsciiName( nullptr );
         switch ( _eType )
         {
         case ODatabaseModelImpl::E_FORM:   pAsciiName = "forms"; break;
@@ -619,7 +619,7 @@ void ODatabaseModelImpl::reset()
     {
         m_pStorageAccess->dispose();
         m_pStorageAccess->release();
-        m_pStorageAccess = NULL;
+        m_pStorageAccess = nullptr;
     }
 }
 
@@ -672,8 +672,8 @@ void ODatabaseModelImpl::clearConnections()
         }
     }
 
-    m_pSharedConnectionManager = NULL;
-    m_xSharedConnectionManager = NULL;
+    m_pSharedConnectionManager = nullptr;
+    m_xSharedConnectionManager = nullptr;
 }
 
 void ODatabaseModelImpl::dispose()
@@ -699,13 +699,13 @@ void ODatabaseModelImpl::dispose()
     for (;aIter != aEnd ; ++aIter)
     {
         if ( aIter->get() )
-            (*aIter)->m_pDataSource = NULL;
+            (*aIter)->m_pDataSource = nullptr;
     }
     m_aContainer.clear();
 
     clearConnections();
 
-    m_xNumberFormatsSupplier = NULL;
+    m_xNumberFormatsSupplier = nullptr;
 
     try
     {
@@ -716,7 +716,7 @@ void ODatabaseModelImpl::dispose()
         if ( bCouldStore )
             commitRootStorage();
 
-        impl_switchToStorage_throw( NULL );
+        impl_switchToStorage_throw( nullptr );
     }
     catch( const Exception& )
     {
@@ -727,7 +727,7 @@ void ODatabaseModelImpl::dispose()
     {
         m_pStorageAccess->dispose();
         m_pStorageAccess->release();
-        m_pStorageAccess = NULL;
+        m_pStorageAccess = nullptr;
     }
 }
 
@@ -1109,7 +1109,7 @@ void ODatabaseModelImpl::revokeDataSource() const
 
 bool ODatabaseModelImpl::adjustMacroMode_AutoReject()
 {
-    return m_aMacroMode.adjustMacroMode( NULL );
+    return m_aMacroMode.adjustMacroMode( nullptr );
 }
 
 bool ODatabaseModelImpl::checkMacrosOnLoading()
@@ -1193,7 +1193,7 @@ namespace
         if ( _inout_rListener.is() )
         {
             _inout_rListener->dispose();
-            _inout_rListener = NULL;
+            _inout_rListener = nullptr;
         }
 
         if ( xModify.is() && _bListen )

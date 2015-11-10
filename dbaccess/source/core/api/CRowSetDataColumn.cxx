@@ -222,7 +222,7 @@ sdbcx::ObjectType ORowSetDataColumns::createObject(const OUString& _rName)
 void SAL_CALL ORowSetDataColumns::disposing()
 {
     ORowSetDataColumns_BASE::disposing();
-    m_aColumns = NULL;
+    m_aColumns = nullptr;
 }
 
 void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< OUString> &_rVector)

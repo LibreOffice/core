@@ -61,7 +61,7 @@ OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xRes
            ,m_nResultSetConcurrency(0)
            ,m_bIsBookmarkable(false)
 {
-    m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< OUString>(), NULL,NULL);
+    m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< OUString>(), nullptr,nullptr);
 
     try
     {
@@ -150,9 +150,9 @@ void OResultSet::disposing()
     // close the pending result set
     Reference< XCloseable > (m_xDelegatorResultSet, UNO_QUERY)->close();
 
-    m_xDelegatorResultSet = NULL;
-    m_xDelegatorRow = NULL;
-    m_xDelegatorRowUpdate = NULL;
+    m_xDelegatorResultSet = nullptr;
+    m_xDelegatorRow = nullptr;
+    m_xDelegatorRowUpdate = nullptr;
 
     m_aStatement.clear();
 }

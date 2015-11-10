@@ -56,9 +56,9 @@ using namespace ::com::sun::star::view;
 // class DBTreeListBox
 DBTreeListBox::DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle ,bool _bHandleEnterKey)
     :SvTreeListBox(pParent,nWinStyle)
-    ,m_pDragedEntry(NULL)
-    ,m_pActionListener(NULL)
-    ,m_pContextMenuProvider( NULL )
+    ,m_pDragedEntry(nullptr)
+    ,m_pActionListener(nullptr)
+    ,m_pContextMenuProvider( nullptr )
     ,m_bHandleEnterKey(_bHandleEnterKey)
 {
     init();
@@ -99,7 +99,7 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
     std::pair<SvTreeListEntries::iterator,SvTreeListEntries::iterator> aIters =
         myModel->GetChildIterators(pStart);
 
-    SvTreeListEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = nullptr;
     SvTreeListEntries::iterator it = aIters.first, itEnd = aIters.second;
     for (; it != itEnd; ++it)
     {
@@ -113,7 +113,7 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
                 // found
                 break;
         }
-        pEntry = NULL;
+        pEntry = nullptr;
     }
 
     return pEntry;
@@ -171,7 +171,7 @@ void DBTreeListBox::SelectHdl()
 
 void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    bool bHitEmptySpace = (NULL == GetEntry(rMEvt.GetPosPixel(), true));
+    bool bHitEmptySpace = (nullptr == GetEntry(rMEvt.GetPosPixel(), true));
     if (bHitEmptySpace && (rMEvt.GetClicks() == 2) && rMEvt.IsMod1())
         Control::MouseButtonDown(rMEvt);
     else
@@ -222,7 +222,7 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     {
         SvTreeListEntry* pDroppedEntry = GetEntry(_rEvt.maPosPixel);
         // check if drag is on child entry, which is not allowed
-        SvTreeListEntry* pParent = NULL;
+        SvTreeListEntry* pParent = nullptr;
         if ( _rEvt.mnAction & DND_ACTION_MOVE )
         {
             if ( !m_pDragedEntry ) // no entry to move
@@ -233,7 +233,7 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                 return nDropOption;
             }
 
-            pParent = pDroppedEntry ? GetParent(pDroppedEntry) : NULL;
+            pParent = pDroppedEntry ? GetParent(pDroppedEntry) : nullptr;
             while ( pParent && pParent != m_pDragedEntry )
                 pParent = GetParent(pParent);
         }
@@ -321,17 +321,17 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
             case KeyFuncType::COPY:
                 bHandled = ( m_aCopyHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
-                    m_aCopyHandler.Call( NULL );
+                    m_aCopyHandler.Call( nullptr );
                 break;
             case KeyFuncType::PASTE:
                 bHandled = ( m_aPasteHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
-                    m_aPasteHandler.Call( NULL );
+                    m_aPasteHandler.Call( nullptr );
                 break;
             case KeyFuncType::DELETE:
                 bHandled = ( m_aDeleteHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
-                    m_aDeleteHandler.Call( NULL );
+                    m_aDeleteHandler.Call( nullptr );
                 break;
             default:
                 break;
@@ -575,7 +575,7 @@ std::unique_ptr<PopupMenu> DBTreeListBox::CreateContextMenu()
     aEvent.ExecutePosition.X = -1;
     aEvent.ExecutePosition.Y = -1;
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-        pContextMenu.get(), 0 );
+        pContextMenu.get(), nullptr );
     aEvent.Selection = new SelectionSupplier( m_pContextMenuProvider->getCurrentSelection( *this ) );
 
     ::cppu::OInterfaceIteratorHelper aIter( *pInterceptors );
@@ -593,7 +593,7 @@ std::unique_ptr<PopupMenu> DBTreeListBox::CreateContextMenu()
             switch ( eAction )
             {
                 case ContextMenuInterceptorAction_CANCELLED:
-                    return NULL;
+                    return nullptr;
 
                 case ContextMenuInterceptorAction_EXECUTE_MODIFIED:
                     bModifiedMenu = true;
@@ -646,7 +646,7 @@ IMPL_LINK_NOARG_TYPED(DBTreeListBox, OnTimeOut, Timer*, void)
 {
     implStopSelectionTimer();
 
-    m_aSelChangeHdl.Call( NULL );
+    m_aSelChangeHdl.Call( nullptr );
 }
 
 void DBTreeListBox::StateChanged( StateChangedType nStateChange )

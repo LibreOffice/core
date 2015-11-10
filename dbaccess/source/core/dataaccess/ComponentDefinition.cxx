@@ -71,7 +71,7 @@ public:
     virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception) override
     {
     }
-    void clear() { m_pComponent = NULL; }
+    void clear() { m_pComponent = nullptr; }
 };
 
 OComponentDefinition_Impl::OComponentDefinition_Impl()
@@ -185,7 +185,7 @@ Sequence< OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames(  )
 
 Reference< XInterface > OComponentDefinition::Create( const Reference< XComponentContext >& _rxContext )
 {
-    return *(new OComponentDefinition( _rxContext, NULL, TContentPtr( new OComponentDefinition_Impl ) ) );
+    return *(new OComponentDefinition( _rxContext, nullptr, TContentPtr( new OComponentDefinition_Impl ) ) );
 }
 
 void SAL_CALL OComponentDefinition::disposing()
@@ -240,7 +240,7 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
         for ( ; aIter != aEnd; ++aIter )
             aNames.push_back( aIter->first );
 
-        m_xColumns = new OColumns( *this, m_aMutex, true, aNames, this, NULL, true, false, false );
+        m_xColumns = new OColumns( *this, m_aMutex, true, aNames, this, nullptr, true, false, false );
         m_xColumns->setParent( *this );
     }
     return m_xColumns.get();

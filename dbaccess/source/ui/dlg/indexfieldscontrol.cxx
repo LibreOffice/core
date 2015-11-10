@@ -70,8 +70,8 @@ namespace dbaui
     IndexFieldsControl::IndexFieldsControl( vcl::Window* _pParent, WinBits nWinStyle)
         : EditBrowseBox(_pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::ACTIVATE_ON_BUTTONDOWN, nWinStyle, BROWSER_STANDARD_FLAGS)
         , m_aSeekRow(m_aFields.end())
-        , m_pSortingCell(NULL)
-        , m_pFieldNameCell(NULL)
+        , m_pSortingCell(nullptr)
+        , m_pFieldNameCell(nullptr)
         , m_nMaxColumnsInIndex(0)
         , m_bAddIndexAppendix(false)
     {
@@ -251,12 +251,12 @@ namespace dbaui
     CellController* IndexFieldsControl::GetController(long _nRow, sal_uInt16 _nColumnId)
     {
         if (!IsEnabled())
-            return NULL;
+            return nullptr;
 
         IndexFields::const_iterator aRow;
         bool bNewField = !implGetFieldDesc(_nRow, aRow);
 
-        DbaMouseDownListBoxController* pReturn = NULL;
+        DbaMouseDownListBoxController* pReturn = nullptr;
         switch (_nColumnId)
         {
             case COLUMN_ID_ORDER:

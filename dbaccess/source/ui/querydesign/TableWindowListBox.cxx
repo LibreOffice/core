@@ -44,8 +44,8 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS | WB_BORDER)
     ,m_aMousePos( Point(0,0) )
     ,m_pTabWin( pParent )
-    ,m_nDropEvent(0)
-    ,m_nUiEvent(0)
+    ,m_nDropEvent(nullptr)
+    ,m_nUiEvent(nullptr)
     ,m_bReallyScrolled( false )
 {
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
@@ -63,7 +63,7 @@ void OTableWindowListBox::dragFinished( )
     // second look for ui activities which should happen after d&d
     if (m_nUiEvent)
         Application::RemoveUserEvent(m_nUiEvent);
-    m_nUiEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl), NULL, true);
+    m_nUiEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl), nullptr, true);
 }
 
 OTableWindowListBox::~OTableWindowListBox()
@@ -114,7 +114,7 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryTe
     {
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void OTableWindowListBox::NotifyScrolled()
@@ -277,14 +277,14 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 
 IMPL_LINK_NOARG_TYPED( OTableWindowListBox, LookForUiHdl, void*, void )
 {
-    m_nUiEvent = 0;
+    m_nUiEvent = nullptr;
     m_pTabWin->getTableView()->lookForUiActivities();
 }
 
 IMPL_LINK_NOARG_TYPED( OTableWindowListBox, DropHdl, void*, void )
 {
     // create the connection
-    m_nDropEvent = 0;
+    m_nDropEvent = nullptr;
     OSL_ENSURE(m_pTabWin,"No TableWindow!");
     try
     {
@@ -309,7 +309,7 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
         if (m_nDropEvent)
             Application::RemoveUserEvent(m_nDropEvent);
-        m_nDropEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, DropHdl), NULL, true);
+        m_nDropEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, DropHdl), nullptr, true);
 
         return DND_ACTION_LINK;
     }
@@ -328,7 +328,7 @@ void OTableWindowListBox::GetFocus()
     if(m_pTabWin)
         m_pTabWin->setActive();
 
-    if (GetCurEntry() != NULL)
+    if (GetCurEntry() != nullptr)
     {
         if ( GetSelectionCount() == 0 || GetCurEntry() != FirstSelected() )
         {
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG_TYPED( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, bool
 {
     // tell my parent
     vcl::Window* pParent = Window::GetParent();
-    OSL_ENSURE(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
+    OSL_ENSURE(pParent != nullptr, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
 
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());
 

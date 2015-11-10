@@ -126,7 +126,7 @@ namespace dbaui
         if ( _rData.m_pListener.get() )
         {
             _rData.m_pListener->dispose();
-            _rData.m_pListener = NULL;
+            _rData.m_pListener = nullptr;
         }
 
         // remember new frame
@@ -245,7 +245,7 @@ namespace dbaui
     void FrameWindowActivationListener::dispose()
     {
         impl_registerOnFrameContainerWindow_nothrow( false );
-        m_pData = NULL;
+        m_pData = nullptr;
     }
 
     void FrameWindowActivationListener::impl_registerOnFrameContainerWindow_nothrow( bool _bRegister )

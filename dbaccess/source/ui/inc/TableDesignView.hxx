@@ -83,8 +83,8 @@ namespace dbaui
         virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
         virtual void            GetFocus() override;
 
-        OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : NULL; }
-        OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : NULL; }
+        OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : nullptr; }
+        OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : nullptr; }
         OTableController&       getController() const { return m_rController; }
 
         css::lang::Locale      getLocale() const { return m_aLocale;}

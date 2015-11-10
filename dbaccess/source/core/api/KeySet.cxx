@@ -133,7 +133,7 @@ OKeySet::~OKeySet()
         tryDispose(i->second);
     }
 
-    m_xComposer = NULL;
+    m_xComposer = nullptr;
 
 }
 
@@ -410,7 +410,7 @@ void OKeySet::executeStatement(OUStringBuffer& io_aFilter, Reference<XSingleSele
 
 void OKeySet::invalidateRow()
 {
-    m_xRow = NULL;
+    m_xRow = nullptr;
     ::comphelper::disposeComponent(m_xSet);
 }
 

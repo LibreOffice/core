@@ -85,7 +85,7 @@ namespace dbaui
 
             DropDescriptor()
                 : nType(E_TABLE)
-                , pDroppedAt(NULL)
+                , pDroppedAt(nullptr)
                 , nAction(DND_ACTION_NONE)
                 , bHtml(false)
                 , bError(false)

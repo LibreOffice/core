@@ -42,7 +42,7 @@ ORowSetColumn::ORowSetColumn( const Reference < XResultSetMetaData >& _xMetaData
                               const OUString& _rDescription,
                               const OUString& i_sLabel,
                               const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> &_getValue )
-    :ORowSetDataColumn( _xMetaData, _xRow, NULL, _nPos, _rxDBMeta, _rDescription, i_sLabel, _getValue )
+    :ORowSetDataColumn( _xMetaData, _xRow, nullptr, _nPos, _rxDBMeta, _rDescription, i_sLabel, _getValue )
 {
 }
 

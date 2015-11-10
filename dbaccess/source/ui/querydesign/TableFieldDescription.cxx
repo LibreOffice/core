@@ -34,7 +34,7 @@ using namespace comphelper;
 using namespace dbaui;
 
 OTableFieldDesc::OTableFieldDesc()
-    :m_pTabWindow(0)
+    :m_pTabWindow(nullptr)
     ,m_eDataType(1000)
     ,m_eFunctionType( FKT_NONE )
     ,m_eFieldType(TAB_NORMAL_FIELD)
@@ -49,13 +49,13 @@ OTableFieldDesc::OTableFieldDesc()
 
 OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
     : ::salhelper::SimpleReferenceObject()
-    , m_pTabWindow(NULL)
+    , m_pTabWindow(nullptr)
 {
     *this = rRS;
 }
 
 OTableFieldDesc::OTableFieldDesc(const OUString& rT, const OUString& rF )
-    :m_pTabWindow(0)
+    :m_pTabWindow(nullptr)
     ,m_eDataType(1000)
     ,m_eFunctionType( FKT_NONE )
     ,m_eFieldType(TAB_NORMAL_FIELD)

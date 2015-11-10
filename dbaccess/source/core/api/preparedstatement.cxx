@@ -52,7 +52,7 @@ OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
     m_xAggregateAsParameters.set( m_xAggregateAsSet, UNO_QUERY_THROW );
 
     Reference<XDatabaseMetaData> xMeta = _xConn->getMetaData();
-    m_pColumns = new OColumns(*this, m_aMutex, xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),::std::vector< OUString>(), NULL,NULL);
+    m_pColumns = new OColumns(*this, m_aMutex, xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),::std::vector< OUString>(), nullptr,nullptr);
 }
 
 OPreparedStatement::~OPreparedStatement()
@@ -133,7 +133,7 @@ void OPreparedStatement::disposing()
     {
         MutexGuard aGuard(m_aMutex);
         m_pColumns->disposing();
-        m_xAggregateAsParameters = NULL;
+        m_xAggregateAsParameters = nullptr;
     }
     OStatementBase::disposing();
 }

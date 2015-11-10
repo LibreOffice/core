@@ -516,9 +516,9 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,bool _b
     aStr = comphelper::string::stripStart(aStr, ' ');
 
     // to make sure that we only set first three
-    ListBox* pColumnListControl =  NULL;
-    ListBox* pPredicateListControl = NULL;
-    Edit* pPredicateValueControl = NULL;
+    ListBox* pColumnListControl =  nullptr;
+    ListBox* pPredicateListControl = nullptr;
+    Edit* pPredicateValueControl = nullptr;
     switch( nIdx )
     {
         case 0:
@@ -770,7 +770,7 @@ void DlgFilterCrit::BuildWherePart()
         Sequence<Sequence<PropertyValue> >& _rValues = aFilter;
         if ( getCondition(*m_pLB_WHEREFIELD2,*m_pLB_WHERECOMP2,*m_pET_WHEREVALUE2,aValue) )
             _rValues = aHaving;
-        PropertyValue* pPos = NULL;
+        PropertyValue* pPos = nullptr;
         if ( m_pLB_WHERECOND2->GetSelectEntryPos() )
         {
             sal_Int32 nPos = _rValues.getLength();
@@ -794,7 +794,7 @@ void DlgFilterCrit::BuildWherePart()
         Sequence<Sequence<PropertyValue> >& _rValues = aFilter;
         if ( getCondition(*m_pLB_WHEREFIELD3,*m_pLB_WHERECOMP3,*m_pET_WHEREVALUE3,aValue) )
             _rValues = aHaving;
-        PropertyValue* pPos = NULL;
+        PropertyValue* pPos = nullptr;
         if ( m_pLB_WHERECOND3->GetSelectEntryPos() )
         {
             sal_Int32 nPos = _rValues.getLength();

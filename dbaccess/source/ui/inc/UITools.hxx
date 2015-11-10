@@ -395,7 +395,7 @@ namespace dbaui
                 const OUString& _sParentFolder,
                 bool _bForm,
                 bool _bCollection = true,
-                const css::uno::Reference< css::ucb::XContent>& _xContent = NULL,
+                const css::uno::Reference< css::ucb::XContent>& _xContent = nullptr,
                 bool _bMove = false
             );
 

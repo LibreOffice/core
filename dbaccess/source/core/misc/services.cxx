@@ -37,17 +37,17 @@ namespace dba{
             &::dbaccess::DatabaseDataProvider::Create,
             &::dbaccess::DatabaseDataProvider::getImplementationName_Static,
             &::dbaccess::DatabaseDataProvider::getSupportedServiceNames_Static,
-            &cppu::createSingleComponentFactory, 0, 0
+            &cppu::createSingleComponentFactory, nullptr, 0
         },
 
         {
             &dbaccess::ODatabaseContext::Create,
             &dbaccess::ODatabaseContext::getImplementationName_static,
             &dbaccess::ODatabaseContext::getSupportedServiceNames_static,
-            &cppu::createOneInstanceComponentFactory, 0, 0
+            &cppu::createOneInstanceComponentFactory, nullptr, 0
         },
 
-        { 0, 0, 0, 0, 0, 0 }
+        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };
 }
 

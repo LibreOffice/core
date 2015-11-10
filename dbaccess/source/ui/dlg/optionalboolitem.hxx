@@ -38,7 +38,7 @@ namespace dbaui
         OptionalBoolItem( const OptionalBoolItem& _rSource );
 
         virtual bool             operator==( const SfxPoolItem& _rItem ) const override;
-        virtual SfxPoolItem*     Clone( SfxItemPool* _pPool = NULL ) const override;
+        virtual SfxPoolItem*     Clone( SfxItemPool* _pPool = nullptr ) const override;
 
         bool    HasValue() const                { return !!m_aValue; }
         void    ClearValue()                    { m_aValue.reset(); }

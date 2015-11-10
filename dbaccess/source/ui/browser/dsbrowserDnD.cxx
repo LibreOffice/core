@@ -68,12 +68,12 @@ namespace dbaui
             OUString aName = GetEntryText( _pApplyTo );
             OUString aDSName = getDataSourceAcessor( m_pTreeView->getListBox().GetRootLevelParent( _pApplyTo ) );
 
-            ODataClipboard* pData = NULL;
+            ODataClipboard* pData = nullptr;
             SharedConnection xConnection;
             if ( CommandType::QUERY != _nCommandType )
             {
                 if ( _bAllowConnection && !ensureConnection( _pApplyTo, xConnection) )
-                    return NULL;
+                    return nullptr;
                 pData = new ODataClipboard(aDSName, _nCommandType, aName, xConnection, getNumberFormatter(), getORB());
             }
             else
@@ -90,7 +90,7 @@ namespace dbaui
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return NULL;
+        return nullptr;
     }
     sal_Int8 SbaTableQueryBrowser::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
     {
@@ -133,13 +133,13 @@ namespace dbaui
         if ( m_nAsyncDrop )
             Application::RemoveUserEvent(m_nAsyncDrop);
 
-        m_nAsyncDrop = 0;
+        m_nAsyncDrop = nullptr;
         m_aAsyncDrop.aDroppedData.clear();
         m_aAsyncDrop.nType          = E_TABLE;
         m_aAsyncDrop.nAction        = _rEvt.mnAction;
         m_aAsyncDrop.bError         = false;
         m_aAsyncDrop.bHtml          = false;
-        m_aAsyncDrop.pDroppedAt     = NULL;
+        m_aAsyncDrop.pDroppedAt     = nullptr;
         m_aAsyncDrop.aUrl.clear();
 
         // loop through the available formats and see what we can do ...
@@ -192,7 +192,7 @@ namespace dbaui
         if (pTransfer)
             pTransfer->StartDrag( &m_pTreeView->getListBox(), DND_ACTION_COPY );
 
-        return NULL != pTransfer;
+        return nullptr != pTransfer;
     }
     IMPL_LINK_NOARG_TYPED(SbaTableQueryBrowser, OnCopyEntry, LinkParamNone*, void)
     {
@@ -207,7 +207,7 @@ namespace dbaui
     }
     void SbaTableQueryBrowser::copyEntry(SvTreeListEntry* _pEntry)
     {
-        TransferableHelper* pTransfer = NULL;
+        TransferableHelper* pTransfer = nullptr;
         Reference< XTransferable> aEnsureDelete;
         EntryType eType = getEntryType(_pEntry);
         pTransfer       = implCopyObject( _pEntry, eType == etQuery ? CommandType::QUERY : CommandType::TABLE);
@@ -217,7 +217,7 @@ namespace dbaui
     }
     IMPL_LINK_NOARG_TYPED( SbaTableQueryBrowser, OnAsyncDrop, void*, void )
     {
-        m_nAsyncDrop = 0;
+        m_nAsyncDrop = nullptr;
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
 
@@ -244,7 +244,7 @@ namespace dbaui
                 DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pEntryLoop->GetUserData());
                 if(pData)
                 {
-                    pEntryLoop->SetUserData(NULL);
+                    pEntryLoop->SetUserData(nullptr);
                     Reference< XContainer > xContainer(pData->xContainer, UNO_QUERY);
                     if (xContainer.is())
                         xContainer->removeContainerListener(this);
@@ -261,7 +261,7 @@ namespace dbaui
                 pEntryLoop = m_pTreeModel->Next(pEntryLoop);
             }
         }
-        m_pCurrentlyDisplayed = NULL;
+        m_pCurrentlyDisplayed = nullptr;
     }
 }   // namespace dbaui
 

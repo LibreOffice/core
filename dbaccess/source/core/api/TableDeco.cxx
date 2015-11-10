@@ -68,7 +68,7 @@ ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnect
     ,m_xMetaData( _rxConnection.is() ? _rxConnection->getMetaData() : Reference< XDatabaseMetaData >() )
     ,m_xNumberFormats( _rxNumberFormats )
     ,m_nPrivileges(-1)
-    ,m_pColumns(NULL)
+    ,m_pColumns(nullptr)
 {
     ODataSettings::registerPropertiesFor(this);
 }
@@ -90,13 +90,13 @@ void SAL_CALL ODBTableDecorator::disposing()
     OTableDescriptor_BASE::disposing();
 
     MutexGuard aGuard(m_aMutex);
-    m_xTable        = NULL;
-    m_xMetaData     = NULL;
-    m_xColumnDefinitions = NULL;
-    m_xNumberFormats = NULL;
+    m_xTable        = nullptr;
+    m_xMetaData     = nullptr;
+    m_xColumnDefinitions = nullptr;
+    m_xNumberFormats = nullptr;
     if ( m_pColumns )
         m_pColumns->disposing();
-    m_xColumnMediator = NULL;
+    m_xColumnMediator = nullptr;
 }
 
 sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
@@ -479,7 +479,7 @@ sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& 
 
 Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -537,7 +537,7 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
         m_xConnection,
         xColsSupp,
         m_xNumberFormats,
-        NULL
+        nullptr
     );
 }
 
@@ -585,7 +585,7 @@ void ODBTableDecorator::refreshColumns()
 
 OColumn* ODBTableDecorator::createColumn(const OUString& _rName) const
 {
-    OColumn* pReturn = NULL;
+    OColumn* pReturn = nullptr;
 
     Reference<XNameAccess> xNames;
     if ( m_xTable.is() )

@@ -49,7 +49,7 @@ void OFieldDescGenWin::dispose()
 
 void OFieldDescGenWin::Init()
 {
-    OSL_ENSURE(GetEditorCtrl() != NULL, "OFieldDescGenWin::Init : have no editor control !");
+    OSL_ENSURE(GetEditorCtrl() != nullptr, "OFieldDescGenWin::Init : have no editor control !");
 
     m_pFieldControl->Init();
 }

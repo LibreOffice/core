@@ -284,7 +284,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController(
 Reference< runtime::XFormControllerContext > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContext() throw (RuntimeException, std::exception)
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::getContext: no support!!" );
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& /*_context*/ ) throw (RuntimeException, std::exception)
@@ -295,7 +295,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const R
 Reference< XInteractionHandler > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getInteractionHandler() throw (RuntimeException, std::exception)
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::getInteractionHandler: no support!!" );
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& /*_interactionHandler*/ ) throw (RuntimeException, std::exception)
@@ -306,7 +306,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandl
 Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getParent(  ) throw (RuntimeException, std::exception)
 {
     // don't have any parent form controllers
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& /*Parent*/ ) throw (NoSupportException, RuntimeException, std::exception)
@@ -534,13 +534,13 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController_Base(_rM)
     ,m_nRowSetPrivileges(0)
-    ,m_pClipbordNotifier( NULL )
+    ,m_pClipbordNotifier( nullptr )
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_aAsyncDisplayError( LINK( this, SbaXDataBrowserController, OnAsyncDisplayError ) )
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
     ,m_sModuleIdentifier( OUString( "com.sun.star.sdb.DataSourceBrowser" ) )
-    ,m_pFormControllerImpl(NULL)
+    ,m_pFormControllerImpl(nullptr)
     ,m_nFormActionNestingLevel(0)
     ,m_bLoadCanceled( false )
     ,m_bCannotSelectUnfiltered( true )
@@ -695,7 +695,7 @@ void SbaXDataBrowserController::initFormatter()
         m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
     else // clear the formatter
-        m_xFormatter = NULL;
+        m_xFormatter = nullptr;
 }
 
 void SbaXDataBrowserController::describeSupportedFeatures()
@@ -1200,7 +1200,7 @@ void SbaXDataBrowserController::disposing()
         m_pClipbordNotifier->ClearCallbackLink();
         m_pClipbordNotifier->AddRemoveListener( getView(), false );
         m_pClipbordNotifier->release();
-        m_pClipbordNotifier = NULL;
+        m_pClipbordNotifier = nullptr;
     }
 
     if (getBrowserView())
@@ -1218,9 +1218,9 @@ void SbaXDataBrowserController::disposing()
     {
         ::comphelper::disposeComponent(m_xRowSet);
 
-        m_xRowSet           = NULL;
-        m_xColumnsSupplier  = NULL;
-        m_xLoadable         = NULL;
+        m_xRowSet           = nullptr;
+        m_xColumnsSupplier  = nullptr;
+        m_xLoadable         = nullptr;
     }
     catch(Exception&)
     {
@@ -1247,7 +1247,7 @@ void SbaXDataBrowserController::frameAction(const css::frame::FrameActionEvent& 
                 if (getBrowserView() && getBrowserView()->getVclControl() && !m_aInvalidateClipboard.IsActive())
                 {
                     m_aInvalidateClipboard.Start();
-                    OnInvalidateClipboard( NULL );
+                    OnInvalidateClipboard( nullptr );
                 }
                 break;
             case FrameAction_FRAME_DEACTIVATING:
@@ -1256,7 +1256,7 @@ void SbaXDataBrowserController::frameAction(const css::frame::FrameActionEvent& 
                 if (getBrowserView() && getBrowserView()->getVclControl() && m_aInvalidateClipboard.IsActive())
                 {
                     m_aInvalidateClipboard.Stop();
-                    OnInvalidateClipboard( NULL );
+                    OnInvalidateClipboard( nullptr );
                 }
                 // remove the "get cell focus"-event
                 m_aAsyncGetCellFocus.CancelCall();
@@ -1324,7 +1324,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
         pParamRequest->addContinuation(pAbort);
 
         // create the handler, let it handle the request
-        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), 0) );
+        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), nullptr) );
         xHandler->handle(xParamRequest);
 
         if (!pParamValues->wasSelected())
@@ -1476,7 +1476,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_CUT:
             {
                 CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
-                if (xCurrentController.Is() && 0 != dynamic_cast< const EditCellController* >(xCurrentController.get()))
+                if (xCurrentController.Is() && nullptr != dynamic_cast< const EditCellController* >(xCurrentController.get()))
                 {
                     Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
                     bool bHasLen = (rEdit.GetSelection().Len() != 0);
@@ -1842,7 +1842,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     Reference< css::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    AbstractFmSearchDialog* pDialog = NULL;
+    AbstractFmSearchDialog* pDialog = nullptr;
     if ( pFact )
     {
         ::std::vector< OUString > aContextNames;
@@ -2267,19 +2267,19 @@ void SbaXDataBrowserController::SelectionChanged()
 void SbaXDataBrowserController::CellActivated()
 {
     m_aInvalidateClipboard.Start();
-    OnInvalidateClipboard( NULL );
+    OnInvalidateClipboard( nullptr );
 }
 
 void SbaXDataBrowserController::CellDeactivated()
 {
     m_aInvalidateClipboard.Stop();
-    OnInvalidateClipboard( NULL );
+    OnInvalidateClipboard( nullptr );
 }
 
 IMPL_LINK_NOARG_TYPED(SbaXDataBrowserController, OnClipboardChanged, TransferableDataHelper*, void)
 {
     SolarMutexGuard aGuard;
-    OnInvalidateClipboard( NULL );
+    OnInvalidateClipboard( nullptr );
 }
 
 IMPL_LINK_TYPED(SbaXDataBrowserController, OnInvalidateClipboard, Timer*, _pTimer, void)
@@ -2435,7 +2435,7 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInfo
 
 IMPL_LINK_NOARG_TYPED(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, void)
 {
-    SbaGridControl* pVclGrid = getBrowserView() ? getBrowserView()->getVclControl() : NULL;
+    SbaGridControl* pVclGrid = getBrowserView() ? getBrowserView()->getVclControl() : nullptr;
     // if we have a controller, but the window for the controller doesn't have the focus, we correct this
     if (pVclGrid && pVclGrid->IsEditing() && pVclGrid->HasChildPathFocus())
         pVclGrid->Controller()->GetWindow().GrabFocus();
@@ -2492,7 +2492,7 @@ void SbaXDataBrowserController::initializeParser() const
         catch(Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
-            m_xParser = NULL;
+            m_xParser = nullptr;
             // no further handling, we ignore the error
         }
     }

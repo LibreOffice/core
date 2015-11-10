@@ -185,7 +185,7 @@ public:
 #define IMPLEMENT_IMPLEMENTATION_ID( classname )    \
 css::uno::Sequence< sal_Int8 > classname::getUnoTunnelImplementationId() \
 {   \
-    static ::cppu::OImplementationId* pId = 0;  \
+    static ::cppu::OImplementationId* pId = nullptr;  \
     if ( !pId ) \
     {   \
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ); \

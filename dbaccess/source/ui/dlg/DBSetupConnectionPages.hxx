@@ -86,7 +86,7 @@ namespace dbaui
         OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OLDAPConnectionPageSetup();
         virtual void dispose() override;
-        virtual void callModifiedHdl(void* pControl = 0) override;
+        virtual void callModifiedHdl(void* pControl = nullptr) override;
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -126,7 +126,7 @@ namespace dbaui
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
-        virtual void callModifiedHdl(void* pControl = 0) override;
+        virtual void callModifiedHdl(void* pControl = nullptr) override;
     };
 
     // OGeneralSpecialJDBCConnectionPageSetup
@@ -150,7 +150,7 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void callModifiedHdl(void* pControl = 0) override;
+        virtual void callModifiedHdl(void* pControl = nullptr) override;
 
         DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
         VclPtr<FixedText>          m_pHeaderText;

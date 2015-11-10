@@ -66,7 +66,7 @@ namespace dbaui
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
 
-        inline void resetLastActive() { m_pLastActiveEntry = NULL;}
+        inline void resetLastActive() { m_pLastActiveEntry = nullptr;}
 
         void    updateHelpText();
 

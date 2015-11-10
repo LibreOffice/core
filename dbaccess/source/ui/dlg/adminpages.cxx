@@ -59,8 +59,8 @@ namespace dbaui
     OGenericAdministrationPage::OGenericAdministrationPage(vcl::Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rUIXMLDescription, &_rAttrSet)
         ,m_abEnableRoadmap(false)
-        ,m_pAdminDialog(NULL)
-        ,m_pItemSetHelper(NULL)
+        ,m_pAdminDialog(nullptr)
+        ,m_pItemSetHelper(nullptr)
     {
 
         SetExchangeSupport();

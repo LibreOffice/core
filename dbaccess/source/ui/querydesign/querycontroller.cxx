@@ -331,7 +331,7 @@ OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
     ,OQueryController_PBase( getBroadcastHelper() )
     ,m_pParseContext( new svxform::OSystemParseContext )
     ,m_aSqlParser( _rM, m_pParseContext )
-    ,m_pSqlIterator(NULL)
+    ,m_pSqlIterator(nullptr)
     ,m_nLimit(-1)
     ,m_nVisibleRows(0x400)
     ,m_nSplitPos(-1)
@@ -445,7 +445,7 @@ void OQueryController::deleteIterator()
         delete m_pSqlIterator->getParseTree();
         m_pSqlIterator->dispose();
         delete m_pSqlIterator;
-        m_pSqlIterator = NULL;
+        m_pSqlIterator = nullptr;
     }
 }
 
@@ -489,7 +489,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
 
         case ID_BROWSER_ESCAPEPROCESSING:
             aReturn.bChecked = !m_bEscapeProcessing;
-            aReturn.bEnabled = ( m_pSqlIterator != NULL ) && !m_bGraphicalDesign;
+            aReturn.bEnabled = ( m_pSqlIterator != nullptr ) && !m_bGraphicalDesign;
             break;
         case SID_RELATION_ADD_RELATION:
             aReturn.bEnabled = isEditable() && m_bGraphicalDesign && m_vTableData.size() > 1;
@@ -610,7 +610,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 {
                     // change the view of the data
                     delete m_pSqlIterator->getParseTree();
-                    m_pSqlIterator->setParseTree(NULL);
+                    m_pSqlIterator->setParseTree(nullptr);
                     m_bGraphicalDesign = !m_bGraphicalDesign;
                     impl_setViewMode( &aError );
                 }
@@ -634,7 +634,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                             {
                                 aError = SQLException(
                                     OUString( ModuleRes( STR_QRY_NOSELECT ) ),
-                                    NULL,
+                                    nullptr,
                                     "S1000",
                                     1000,
                                     Any()
@@ -657,7 +657,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     {
                         aError = SQLException(
                             OUString( ModuleRes( STR_QRY_SYNTAX ) ),
-                            NULL,
+                            nullptr,
                             "S1000",
                             1000,
                             Any()
@@ -831,7 +831,7 @@ bool OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInf
     {
         m_bGraphicalDesign = !m_bGraphicalDesign;
         // restore old state
-        getContainer()->switchView( NULL );
+        getContainer()->switchView( nullptr );
             // don't pass &aError here, this would overwrite the error which the first switchView call
             // returned in this location.
         if ( _pErrorInfo )
@@ -1099,12 +1099,12 @@ void OQueryController::setQueryComposer()
             }
             catch(const Exception&)
             {
-                m_xComposer = NULL;
+                m_xComposer = nullptr;
             }
             OSL_ENSURE(m_xComposer.is(),"No querycomposer available!");
             Reference<XTablesSupplier> xTablesSup(getConnection(), UNO_QUERY);
             deleteIterator();
-            m_pSqlIterator = new ::connectivity::OSQLParseTreeIterator( getConnection(), xTablesSup->getTables(), m_aSqlParser, NULL );
+            m_pSqlIterator = new ::connectivity::OSQLParseTreeIterator( getConnection(), xTablesSup->getTables(), m_aSqlParser, nullptr );
         }
     }
 }
@@ -1191,7 +1191,7 @@ void OQueryController::reconnect(bool _bUI)
         {
             m_bGraphicalDesign = false;
             // don't call Execute(SQL) because this changes the sql statement
-            impl_setViewMode( NULL );
+            impl_setViewMode( nullptr );
         }
         InvalidateAll();
     }
@@ -1242,7 +1242,7 @@ void OQueryController::execute_QueryPropDlg()
         m_bDistinct = aQueryPropDlg->getDistinct();
         m_nLimit = aQueryPropDlg->getLimit();
         InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
-        InvalidateFeature( SID_QUERY_LIMIT, 0, true );
+        InvalidateFeature( SID_QUERY_LIMIT, nullptr, true );
     }
 }
 
@@ -1760,7 +1760,7 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
         ModuleRes aModuleRes(STR_QRY_NOSELECT);
         OUString sTmpStr(aModuleRes);
         OUString sError(sTmpStr);
-        showError(SQLException(sError,NULL,"S1000",1000,Any()));
+        showError(SQLException(sError,nullptr,"S1000",1000,Any()));
     }
     else
         sTranslatedStmt = m_sStatement;
@@ -1922,7 +1922,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
 void OQueryController::reset()
 {
     impl_reset();
-    getContainer()->reset( NULL );
+    getContainer()->reset( nullptr );
     ClearUndoManager();
 }
 

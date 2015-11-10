@@ -281,7 +281,7 @@ void SAL_CALL SbaXGridControl::dispose() throw( RuntimeException, std::exception
         {
             (*aIter).second->disposeAndClear(aEvt);
             (*aIter).second->release();
-            (*aIter).second = NULL;
+            (*aIter).second = nullptr;
         }
     }
     StatusMultiplexerArray().swap(m_aStatusMultiplexer);
@@ -453,7 +453,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     {
         // notify any status listeners that the dialog is now active (well, about to be active)
         MapDispatchToBool::iterator aThisURLState = m_aDispatchStates.insert( MapDispatchToBool::value_type( eURLType, sal_True ) ).first;
-        NotifyStatusChanged( aURL, NULL );
+        NotifyStatusChanged( aURL, nullptr );
 
         // execute the dialog
         switch ( eURLType )
@@ -490,7 +490,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
         // notify any status listeners that the dialog vanished
         m_aDispatchStates.erase( aThisURLState );
-        NotifyStatusChanged( aURL, NULL );
+        NotifyStatusChanged( aURL, nullptr );
     }
 }
 
@@ -546,7 +546,7 @@ SbaXGridPeer* SbaXGridPeer::getImplementation(const Reference< XInterface >& _rx
         _rxIFace, UNO_QUERY);
     if (xTunnel.is())
         return reinterpret_cast<SbaXGridPeer*>(xTunnel->getSomething(getUnoTunnelId()));
-    return NULL;
+    return nullptr;
 }
 
 VclPtr<FmGridControl> SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinBits nStyle)
@@ -708,8 +708,8 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
 SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
                                vcl::Window* pParent, FmXGridPeer* _pPeer, WinBits nBits)
     :FmGridControl(_rM,pParent, _pPeer, nBits)
-    ,m_pMasterListener(NULL)
-    ,m_nAsyncDropEvent(0)
+    ,m_pMasterListener(nullptr)
+    ,m_nAsyncDropEvent(nullptr)
     ,m_nCurrentActionColId((sal_uInt16)-1)
     ,m_bActivatingForDrop(false)
 {
@@ -735,7 +735,7 @@ VclPtr<BrowserHeader> SbaGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 CellController* SbaGridControl::GetController(long nRow, sal_uInt16 nCol)
 {
     if ( m_bActivatingForDrop )
-        return NULL;
+        return nullptr;
 
     return FmGridControl::GetController(nRow, nCol);
 }
@@ -772,7 +772,7 @@ SvNumberFormatter* SbaGridControl::GetDatasourceFormatter()
 
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     if ( !pSupplierImpl )
-        return NULL;
+        return nullptr;
 
     SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
     return pFormatter;
@@ -1395,7 +1395,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
             ActivateCell();
 
         CellControllerRef xCurrentController = Controller();
-        if (!xCurrentController.Is() || 0 == dynamic_cast< const EditCellController* >(xCurrentController.get()))
+        if (!xCurrentController.Is() || nullptr == dynamic_cast< const EditCellController* >(xCurrentController.get()))
             return DND_ACTION_NONE;
         Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
 
@@ -1422,7 +1422,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
             m_aDataDescriptor = ODataAccessObjectTransferable::extractObjectDescriptor(aDropped);
             if (m_nAsyncDropEvent)
                 Application::RemoveUserEvent(m_nAsyncDropEvent);
-            m_nAsyncDropEvent = Application::PostUserEvent(LINK(this, SbaGridControl, AsynchDropEvent), NULL, true);
+            m_nAsyncDropEvent = Application::PostUserEvent(LINK(this, SbaGridControl, AsynchDropEvent), nullptr, true);
             return DND_ACTION_COPY;
         }
     }
@@ -1444,7 +1444,7 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
 
 IMPL_LINK_NOARG_TYPED(SbaGridControl, AsynchDropEvent, void*, void)
 {
-    m_nAsyncDropEvent = 0;
+    m_nAsyncDropEvent = nullptr;
 
     Reference< XPropertySet >  xDataSource = getDataSource();
     if ( xDataSource.is() )
@@ -1452,7 +1452,7 @@ IMPL_LINK_NOARG_TYPED(SbaGridControl, AsynchDropEvent, void*, void)
         bool bCountFinal = false;
         xDataSource->getPropertyValue(PROPERTY_ISROWCOUNTFINAL) >>= bCountFinal;
         if ( !bCountFinal )
-            setDataSource(NULL); // dettach from grid control
+            setDataSource(nullptr); // dettach from grid control
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
         ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor, getContext());
         Reference<XEventListener> xHolder = pImExport;
@@ -1464,7 +1464,7 @@ IMPL_LINK_NOARG_TYPED(SbaGridControl, AsynchDropEvent, void*, void)
             if(!pImExport->Read())
             {
                 OUString sError = OUString(ModuleRes(STR_NO_COLUMNNAME_MATCHING));
-                throwGenericSQLException(sError,NULL);
+                throwGenericSQLException(sError,nullptr);
             }
             AfterDrop();
             Show();

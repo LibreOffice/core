@@ -43,10 +43,10 @@ namespace dbaui
 
 ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialogBase(_rxORB)
-    ,m_pDatasourceItems(NULL)
-    ,m_pItemPool(NULL)
-    ,m_pItemPoolDefaults(NULL)
-    ,m_pCollection(NULL)
+    ,m_pDatasourceItems(nullptr)
+    ,m_pItemPool(nullptr)
+    ,m_pItemPoolDefaults(nullptr)
+    ,m_pCollection(nullptr)
 {
 
     m_pCollection = new ::dbaccess::ODsnTypeCollection(_rxORB);
@@ -65,7 +65,7 @@ ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
     }
 
     delete m_pCollection;
-    m_pCollection = NULL;
+    m_pCollection = nullptr;
 
 }
 

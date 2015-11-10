@@ -39,7 +39,7 @@ namespace dbaccess
         {}
         virtual ~WrappedResultSet()
         {
-            m_xRowLocate = NULL;
+            m_xRowLocate = nullptr;
         }
 
         virtual void construct(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) override;

@@ -51,7 +51,7 @@ namespace dbaui
         virtual OUString            getAutoIncrementValue() const override;
 
     public:
-        OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=NULL);
+        OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=nullptr);
         virtual ~OWizTypeSelectControl();
         virtual void dispose() override;
 
@@ -75,7 +75,7 @@ namespace dbaui
         OWizTypeSelectList( vcl::Window* pParent, WinBits nStyle = WB_BORDER )
             : MultiListBox(pParent,nStyle)
             , m_bPKey(false)
-            , m_pParentTabPage(NULL)
+            , m_pParentTabPage(nullptr)
             {}
         virtual ~OWizTypeSelectList();
         virtual void dispose() override;
@@ -119,7 +119,7 @@ namespace dbaui
         virtual bool            LeavePage() override;
         virtual OUString        GetTitle() const override;
 
-        OWizTypeSelect(vcl::Window* pParent, SvStream* _pStream = NULL );
+        OWizTypeSelect(vcl::Window* pParent, SvStream* _pStream = nullptr );
         virtual ~OWizTypeSelect();
         virtual void dispose() override;
 

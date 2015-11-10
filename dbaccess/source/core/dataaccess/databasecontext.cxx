@@ -194,7 +194,7 @@ ODatabaseContext::~ODatabaseContext()
     if ( m_pDatabaseDocumentLoader )
         m_pDatabaseDocumentLoader->release();
 
-    m_xDBRegistrationAggregate->setDelegator( NULL );
+    m_xDBRegistrationAggregate->setDelegator( nullptr );
     m_xDBRegistrationAggregate.clear();
     m_xDatabaseRegistrations.clear();
 }
@@ -319,7 +319,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
     {
         if (!bEmbeddedDataSource)
         {
-            ::ucbhelper::Content aContent( _sURL, NULL, comphelper::getProcessComponentContext() );
+            ::ucbhelper::Content aContent( _sURL, nullptr, comphelper::getProcessComponentContext() );
             if ( !aContent.isDocument() )
                 throw InteractiveIOException(
                     _sURL, *this, InteractionClassification_ERROR, IOErrorCode_NO_FILE
@@ -362,7 +362,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-        aArgs.put( "InteractionHandler", task::InteractionHandler::createWithParent(m_aContext, 0) );
+        aArgs.put( "InteractionHandler", task::InteractionHandler::createWithParent(m_aContext, nullptr) );
         if (bEmbeddedDataSource)
         {
             // In this case the host contains the real path, and the path is the embedded stream name.
@@ -734,7 +734,7 @@ sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& r
 
 Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

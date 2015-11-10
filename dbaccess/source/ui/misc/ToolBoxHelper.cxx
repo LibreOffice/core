@@ -30,7 +30,7 @@ namespace dbaui
 {
     OToolBoxHelper::OToolBoxHelper()
         : m_nSymbolsSize(-1)
-        , m_pToolBox(NULL)
+        , m_pToolBox(nullptr)
     {
 
         OSL_ENSURE(m_nSymbolsSize != SvtMiscOptions().GetCurrentSymbolsSize(),"SymbolsSize should not be identical");
@@ -92,7 +92,7 @@ namespace dbaui
         m_pToolBox = _pTB;
         if ( m_pToolBox )
         {
-            ConfigOptionsChanged(NULL);
+            ConfigOptionsChanged(nullptr);
             if ( bFirstTime )
                 adjustToolBoxSize(m_pToolBox);
         }

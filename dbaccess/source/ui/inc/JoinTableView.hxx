@@ -201,7 +201,7 @@ namespace dbaui
         */
         sal_Int32 getConnectionCount(const OTableWindow* _pFromWin) const;
 
-        OTableConnection* GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin = false,const OTableConnection* _rpFirstAfter = NULL) const;
+        OTableConnection* GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin = false,const OTableConnection* _rpFirstAfter = nullptr) const;
 
         /** clear the window map and connection vector without destroying it
 
@@ -320,7 +320,7 @@ namespace dbaui
             modified
             @param _pAction a possible undo action to add at the controller
         */
-        void invalidateAndModify(SfxUndoAction *_pAction=NULL);
+        void invalidateAndModify(SfxUndoAction *_pAction=nullptr);
 
     private:
         using Window::Scroll;

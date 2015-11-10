@@ -215,7 +215,7 @@ namespace dbaui
         // import data
         ORowSetImportExport(const SharedConnection& _rxConnection,
                             const css::uno::Reference< css::uno::XComponentContext >& _rM)
-                        : ODatabaseImportExport(_rxConnection,NULL,_rM)
+                        : ODatabaseImportExport(_rxConnection,nullptr,_rM)
         {}
 
         virtual bool Write() override;

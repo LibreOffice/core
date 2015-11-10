@@ -138,7 +138,7 @@ namespace dbaccess
             const SubComponentType i_eType, const OUString& i_rName )
         {
             Reference< XController > xController( i_rAppUI, UNO_QUERY_THROW );
-            ENSURE_OR_RETURN( ( i_eType == FORM ) || ( i_eType == REPORT ), "lcl_getSubComponentDef_nothrow: illegal controller", NULL );
+            ENSURE_OR_RETURN( ( i_eType == FORM ) || ( i_eType == REPORT ), "lcl_getSubComponentDef_nothrow: illegal controller", nullptr );
 
             Reference< XCommandProcessor > xCommandProcessor;
             try

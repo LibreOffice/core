@@ -58,7 +58,7 @@ ODbAdminDialog::ODbAdminDialog(vcl::Window* _pParent
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,this,this));
 
     // add the initial tab page
-    m_nMainPageID = AddTabPage("advanced", OConnectionTabPage::Create, NULL);
+    m_nMainPageID = AddTabPage("advanced", OConnectionTabPage::Create, nullptr);
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
@@ -71,7 +71,7 @@ ODbAdminDialog::~ODbAdminDialog()
 
 void ODbAdminDialog::dispose()
 {
-    SetInputSet(NULL);
+    SetInputSet(nullptr);
     DELETEZ(pExampleSet);
     SfxTabDialog::dispose();
 }
@@ -99,7 +99,7 @@ void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
 
 void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, sal_uInt16 _nTextId, CreateTabPage _pCreateFunc)
 {
-    AddTabPage(_nPageId, OUString(ModuleRes(_nTextId)), _pCreateFunc, NULL);
+    AddTabPage(_nPageId, OUString(ModuleRes(_nTextId)), _pCreateFunc, nullptr);
     m_aCurrentDetailPages.push(_nPageId);
 }
 
@@ -159,7 +159,7 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
         case  ::dbaccess::DST_USERDEFINE10:
             {
                 OUString aTitle(ModuleRes(STR_PAGETITLE_ADVANCED));
-                AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, 0, false, 1);
+                AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, nullptr, false, 1);
                 m_aCurrentDetailPages.push(PAGE_USERDRIVER);
             }
             break;
@@ -204,7 +204,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     ::dbaccess::ODsnTypeCollection* pCollection = rCollectionItem.getCollection();
     if ( pCollection->determineType(getDatasourceType( *pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
-        AddTabPage( PAGE_MYSQL_NATIVE, OUString( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, NULL );
+        AddTabPage( PAGE_MYSQL_NATIVE, OUString( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, nullptr );
         RemoveTabPage("advanced");
         m_nMainPageID = PAGE_MYSQL_NATIVE;
     }
@@ -298,9 +298,9 @@ void ODbAdminDialog::clearPassword()
 SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
 {
     // just to be sure ....
-    _rpSet = NULL;
-    _rpPool = NULL;
-    _rppDefaults = NULL;
+    _rpSet = nullptr;
+    _rpPool = nullptr;
+    _rppDefaults = nullptr;
 
     const OUString sFilterAll( "%", 1, RTL_TEXTENCODING_ASCII_US );
     // create and initialize the defaults
@@ -451,7 +451,7 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
     if (_rpSet)
     {
         delete _rpSet;
-        _rpSet = NULL;
+        _rpSet = nullptr;
     }
 
     // delete the pool
@@ -460,11 +460,11 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
         _rpPool->ReleaseDefaults(true);
             // the "true" means delete the items, too
         SfxItemPool::Free(_rpPool);
-        _rpPool = NULL;
+        _rpPool = nullptr;
     }
 
     // reset the defaults ptr
-    _rppDefaults = NULL;
+    _rppDefaults = nullptr;
         // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
 }
 

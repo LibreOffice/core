@@ -235,7 +235,7 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
 bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, bool _bCheck, const SharedConnection& _xConnection)
 {
     Reference<XEventListener> xEvt;
-    ODatabaseImportExport* pImport = NULL;
+    ODatabaseImportExport* pImport = nullptr;
     if ( _rDesc.bHtml )
         pImport = new OHTMLImportExport(_xConnection,getNumberFormatter(_xConnection, m_pController->getORB()),m_pController->getORB());
     else
@@ -293,7 +293,7 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
             _rAsyncDrop.aHtmlRtfStorage = aNew;
         }
         else
-            _rAsyncDrop.aHtmlRtfStorage = NULL;
+            _rAsyncDrop.aHtmlRtfStorage = nullptr;
     }
     return bRet;
 }
@@ -305,7 +305,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
     if ( _rDesc.aHtmlRtfStorage.Is() )
     {
         copyTagTable(_rDesc,false,_xConnection);
-        _rDesc.aHtmlRtfStorage = NULL;
+        _rDesc.aHtmlRtfStorage = nullptr;
         // we now have to delete the temp file created in executeDrop
         INetURLObject aURL;
         aURL.SetURL(_rDesc.aUrl);

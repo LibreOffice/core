@@ -143,7 +143,7 @@ void OQueryViewSwitch::paste()
 
 OQueryContainerWindow* OQueryViewSwitch::getContainer() const
 {
-    vcl::Window* pDesignParent = getDesignView() ? getDesignView()->GetParent() : NULL;
+    vcl::Window* pDesignParent = getDesignView() ? getDesignView()->GetParent() : nullptr;
     return static_cast< OQueryContainerWindow* >( pDesignParent );
 }
 
@@ -247,7 +247,7 @@ bool OQueryViewSwitch::impl_postViewSwitch( const bool i_bGraphicalDesign, const
 OAddTableDlg* OQueryViewSwitch::getAddTableDialog()
 {
     if ( !m_pDesignView )
-        return NULL;
+        return nullptr;
     return m_pDesignView->getController().getAddTableDialog();
 }
 

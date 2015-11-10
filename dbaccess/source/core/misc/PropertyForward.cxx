@@ -120,10 +120,10 @@ namespace dbaccess
             throw DisposedException( OUString(), *this );
 
         m_xSource->removePropertyChangeListener( OUString(), this );
-        m_xSource = NULL;
-        m_xDestContainer = NULL;
-        m_xDestInfo = NULL;
-        m_xDest = NULL;
+        m_xSource = nullptr;
+        m_xDestContainer = nullptr;
+        m_xDestInfo = nullptr;
+        m_xDest = nullptr;
     }
 
     void OPropertyForward::setDefinition( const css::uno::Reference< css::beans::XPropertySet>& _xDest )

@@ -222,7 +222,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
 {
     OSL_PRECOND( _rxConnection.is(), "OQueryColumn::impl_determineOriginalTableColumn: illegal connection!" );
     if ( !_rxConnection.is() )
-        return NULL;
+        return nullptr;
 
     Reference< XPropertySet > xOriginalTableColumn;
     try
@@ -234,7 +234,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
         OSL_VERIFY( getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema );
         OSL_VERIFY( getPropertyValue( PROPERTY_TABLENAME ) >>= sTable );
         if ( sCatalog.isEmpty() && sSchema.isEmpty() && sTable.isEmpty() )
-            return NULL;
+            return nullptr;
 
         OUString sComposedTableName = ::dbtools::composeTableName(
             _rxConnection->getMetaData(), sCatalog, sSchema, sTable, false, ::dbtools::eComplete );
@@ -243,7 +243,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
         Reference< XTablesSupplier > xSuppTables( _rxConnection, UNO_QUERY_THROW );
         Reference< XNameAccess > xTables( xSuppTables->getTables(), UNO_QUERY_THROW );
         if ( !xTables->hasByName( sComposedTableName ) )
-            return NULL;
+            return nullptr;
 
         Reference< XColumnsSupplier > xSuppCols( xTables->getByName( sComposedTableName ), UNO_QUERY_THROW );
         Reference< XNameAccess > xColumns( xSuppCols->getColumns(), UNO_QUERY_THROW );
@@ -251,7 +251,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
         OUString sColumn;
         OSL_VERIFY( getPropertyValue( PROPERTY_REALNAME ) >>= sColumn );
         if ( !xColumns->hasByName( sColumn ) )
-            return NULL;
+            return nullptr;
 
         xOriginalTableColumn.set( xColumns->getByName( sColumn ), UNO_QUERY );
     }

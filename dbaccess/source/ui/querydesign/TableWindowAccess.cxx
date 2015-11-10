@@ -40,13 +40,13 @@ namespace dbaui
     using namespace ::com::sun::star;
 
     OTableWindowAccess::OTableWindowAccess(OTableWindow* _pTable)
-        :VCLXAccessibleComponent(_pTable->GetComponentInterface().is() ? _pTable->GetWindowPeer() : NULL)
+        :VCLXAccessibleComponent(_pTable->GetComponentInterface().is() ? _pTable->GetWindowPeer() : nullptr)
         ,m_pTable(_pTable)
     {
     }
     void SAL_CALL OTableWindowAccess::disposing()
     {
-        m_pTable = NULL;
+        m_pTable = nullptr;
         VCLXAccessibleComponent::disposing();
     }
     void OTableWindowAccess::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -54,7 +54,7 @@ namespace dbaui
         if ( rVclWindowEvent.GetId() == VCLEVENT_OBJECT_DYING )
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            m_pTable = NULL;
+            m_pTable = nullptr;
         }
 
         VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );

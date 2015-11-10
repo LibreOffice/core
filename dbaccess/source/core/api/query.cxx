@@ -70,13 +70,13 @@ namespace dbaccess
 OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XConnection >& _rxConn
                ,const Reference< XComponentContext >& _xORB)
-    :OContentHelper(_xORB,NULL,TContentPtr(new OContentHelper_Impl))
+    :OContentHelper(_xORB,nullptr,TContentPtr(new OContentHelper_Impl))
     ,OQueryDescriptor_Base(m_aMutex,*this)
     ,ODataSettings(OContentHelper::rBHelper,true)
     ,m_xCommandDefinition(_rxCommandDefinition)
     ,m_xConnection(_rxConn)
-    ,m_pColumnMediator( NULL )
-    ,m_pWarnings( NULL )
+    ,m_pColumnMediator( nullptr )
+    ,m_pWarnings( nullptr )
     ,m_bCaseSensitiv(true)
     ,m_eDoingCurrently(NONE)
 {
@@ -124,7 +124,7 @@ void OQuery::rebuildColumns()
 
     try
     {
-        m_pColumnMediator = NULL;
+        m_pColumnMediator = nullptr;
 
         Reference<XColumnsSupplier> xColSup(m_xCommandDefinition,UNO_QUERY);
         Reference< XNameAccess > xColumnDefinitions;
@@ -260,7 +260,7 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeExc
         "OQuery::disposing : where did this call come from ?");
 
     m_xCommandDefinition->removePropertyChangeListener(OUString(), this);
-    m_xCommandDefinition = NULL;
+    m_xCommandDefinition = nullptr;
 }
 
 // XDataDescriptorFactory
@@ -276,11 +276,11 @@ void SAL_CALL OQuery::disposing()
     if (m_xCommandDefinition.is())
     {
         m_xCommandDefinition->removePropertyChangeListener(OUString(), this);
-        m_xCommandDefinition = NULL;
+        m_xCommandDefinition = nullptr;
     }
     disposeColumns();
 
-    m_pWarnings = NULL;
+    m_pWarnings = nullptr;
 }
 
 void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception, std::exception)
@@ -323,7 +323,7 @@ Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(Runt
 
 OColumn* OQuery::createColumn(const OUString& /*_rName*/) const
 {
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL OQuery::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)

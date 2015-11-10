@@ -44,7 +44,7 @@ namespace dbaui
         virtual void GetFocus() override;
 
         void setSplitter(Splitter* _pSplitter);
-        void set(vcl::Window* _pRight,Window* _pLeft = NULL);
+        void set(vcl::Window* _pRight,Window* _pLeft = nullptr);
         virtual void Resize() override;
     };
 }

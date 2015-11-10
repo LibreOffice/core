@@ -202,7 +202,7 @@ namespace sdbtools
             if ( !found )
                 throw IllegalArgumentException(
                     OUString( SdbtRes( STR_INVALID_COMPOSITION_TYPE ) ),
-                    NULL,
+                    nullptr,
                     0
                 );
 

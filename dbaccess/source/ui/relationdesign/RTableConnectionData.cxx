@@ -379,7 +379,7 @@ xKey.clear();
     {
         DropRelation();
         OUString sError(ModuleRes(STR_QUERY_REL_COULD_NOT_CREATE));
-        ::dbtools::throwGenericSQLException(sError,NULL);
+        ::dbtools::throwGenericSQLException(sError,nullptr);
     }
 
     // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated

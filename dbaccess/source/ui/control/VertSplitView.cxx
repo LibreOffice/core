@@ -29,9 +29,9 @@ using namespace ::dbaui;
 
 // class OSplitterView
 OSplitterView::OSplitterView(vcl::Window* _pParent,bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
-    ,m_pSplitter( NULL )
-    ,m_pLeft(NULL)
-    ,m_pRight(NULL)
+    ,m_pSplitter( nullptr )
+    ,m_pLeft(nullptr)
+    ,m_pRight(nullptr)
     ,m_bVertical(_bVertical)
 {
     ImplInitSettings( true, true, true );

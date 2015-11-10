@@ -31,7 +31,7 @@ namespace dbaui
         sal_Int32           m_nAliasNum;
         OUString     m_strInitialAlias;
     public:
-        OQueryTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias = NULL );
+        OQueryTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias = nullptr );
 
         OUString GetAliasName() const
         {

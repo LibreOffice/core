@@ -61,15 +61,15 @@ namespace dbaui
         sal_uInt32 nControlFlags)
 
         :OGenericAdministrationPage(pParent, rId, rUIXMLDescription, _rCoreAttrs)
-        ,m_pOptionsLabel(NULL)
-        ,m_pOptions(NULL)
-        ,m_pCharsetLabel(NULL)
-        ,m_pCharset(NULL)
-        ,m_pAutoRetrievingEnabled(NULL)
-        ,m_pAutoIncrementLabel(NULL)
-        ,m_pAutoIncrement(NULL)
-        ,m_pAutoRetrievingLabel(NULL)
-        ,m_pAutoRetrieving(NULL)
+        ,m_pOptionsLabel(nullptr)
+        ,m_pOptions(nullptr)
+        ,m_pCharsetLabel(nullptr)
+        ,m_pCharset(nullptr)
+        ,m_pAutoRetrievingEnabled(nullptr)
+        ,m_pAutoIncrementLabel(nullptr)
+        ,m_pAutoIncrement(nullptr)
+        ,m_pAutoRetrievingLabel(nullptr)
+        ,m_pAutoRetrieving(nullptr)
         ,m_nControlFlags(nControlFlags)
     {
 
@@ -224,7 +224,7 @@ namespace dbaui
         // get the DSN string (needed for the index dialog)
         const SfxStringItem* pUrlItem = _rSet.GetItem<SfxStringItem>(DSID_CONNECTURL);
         const DbuTypeCollectionItem* pTypesItem = _rSet.GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
-        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : nullptr;
         if (pTypeCollection && pUrlItem && pUrlItem->GetValue().getLength())
             m_sDsn = pTypeCollection->cutPrefix(pUrlItem->GetValue());
 
@@ -426,7 +426,7 @@ namespace dbaui
 
         const SfxStringItem* pUrlItem = _rCoreAttrs.GetItem<SfxStringItem>(DSID_CONNECTURL);
         const DbuTypeCollectionItem* pTypesItem = _rCoreAttrs.GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
-        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : nullptr;
         if (pTypeCollection && pUrlItem && pUrlItem->GetValue().getLength() )
         {
             m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());

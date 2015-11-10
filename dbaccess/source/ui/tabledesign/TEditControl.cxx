@@ -134,16 +134,16 @@ void OTableEditorCtrl::Init()
 
 OTableEditorCtrl::OTableEditorCtrl(vcl::Window* pWindow)
     :OTableRowView(pWindow)
-    ,pNameCell(NULL)
-    ,pTypeCell(NULL)
-    ,pHelpTextCell(NULL)
-    ,pDescrCell(NULL)
-    ,pDescrWin(NULL)
-    ,nCutEvent(0)
-    ,nPasteEvent(0)
-    ,nDeleteEvent(0)
-    ,nInsNewRowsEvent(0)
-    ,nInvalidateTypeEvent(0)
+    ,pNameCell(nullptr)
+    ,pTypeCell(nullptr)
+    ,pHelpTextCell(nullptr)
+    ,pDescrCell(nullptr)
+    ,pDescrWin(nullptr)
+    ,nCutEvent(nullptr)
+    ,nPasteEvent(nullptr)
+    ,nDeleteEvent(nullptr)
+    ,nInsNewRowsEvent(nullptr)
+    ,nInvalidateTypeEvent(nullptr)
     ,m_eChildFocus(NONE)
     ,nOldDataPos(-1)
     ,bSaveOnMove(true)
@@ -296,7 +296,7 @@ bool OTableEditorCtrl::SetDataPtr( long nRow )
     if(nRow >= (long)m_pRowList->size())
         return false;
     pActRow = (*m_pRowList)[nRow];
-    return pActRow != 0;
+    return pActRow != nullptr;
 }
 
 bool OTableEditorCtrl::SeekRow(long _nRow)
@@ -326,12 +326,12 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
     if (IsReadOnly() || (   xTable.is() &&
                             xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE) &&
                             ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == "VIEW"))
-        return NULL;
+        return nullptr;
 
     // If the row is ReadOnly, editing is forbidden
     SetDataPtr( nRow );
     if( pActRow->IsReadOnly() )
-        return NULL;
+        return nullptr;
 
     OFieldDescription* pActFieldDescr = pActRow->GetActFieldDescr();
     switch (nColumnId)
@@ -341,19 +341,19 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
         case FIELD_TYPE:
             if (pActFieldDescr && !pActFieldDescr->GetName().isEmpty())
                 return new ListBoxCellController( pTypeCell );
-            else return NULL;
+            else return nullptr;
         case HELP_TEXT:
             if (pActFieldDescr && !pActFieldDescr->GetName().isEmpty())
                 return new EditCellController( pHelpTextCell );
             else
-                return NULL;
+                return nullptr;
         case COLUMN_DESCRIPTION:
             if (pActFieldDescr && !pActFieldDescr->GetName().isEmpty())
                 return new EditCellController( pDescrCell );
             else
-                return NULL;
+                return nullptr;
         default:
-            return NULL;
+            return nullptr;
     }
 }
 
@@ -427,7 +427,7 @@ EditBrowseBox::RowStatus OTableEditorCtrl::GetRowStatus(long nRow) const
 
 bool OTableEditorCtrl::SaveCurRow()
 {
-    if (GetFieldDescr(GetCurRow()) == NULL)
+    if (GetFieldDescr(GetCurRow()) == nullptr)
         // there is no data in the current row
         return true;
     if (!SaveModified())
@@ -632,7 +632,7 @@ bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 
 IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, InvalidateFieldType, void*, void )
 {
-    nInvalidateTypeEvent = 0;
+    nInvalidateTypeEvent = nullptr;
     Invalidate( GetFieldRectPixel(nOldDataPos, FIELD_TYPE) );
 }
 
@@ -669,7 +669,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         else
             pActRow->SetFieldType( GetView()->getController().getTypeInfoFallBack() );
 
-        nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType), NULL, true );
+        nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType), nullptr, true );
         pActFieldDescr = pActRow->GetActFieldDescr();
         pDescrWin->DisplayData( pActFieldDescr );
         GetUndoManager().AddUndoAction( new OTableEditorTypeSelUndoAct(this, nRow, nColId+1, TOTypeInfoSP()) );
@@ -1087,11 +1087,11 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
     if( (nRow<0) || (sal::static_int_cast< unsigned long >(nRow)>=nListCount) )
     {
         OSL_FAIL("(nRow<0) || (nRow>=nListCount)");
-        return NULL;
+        return nullptr;
     }
      std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[ nRow ];
     if( !pRow )
-        return NULL;
+        return nullptr;
     return pRow->GetActFieldDescr();
 }
 
@@ -1207,7 +1207,7 @@ void OTableEditorCtrl::cut()
     {
         if (nCutEvent)
             Application::RemoveUserEvent(nCutEvent);
-        nCutEvent = Application::PostUserEvent(LINK(this, OTableEditorCtrl, DelayedCut), NULL, true);
+        nCutEvent = Application::PostUserEvent(LINK(this, OTableEditorCtrl, DelayedCut), nullptr, true);
     }
 }
 
@@ -1230,7 +1230,7 @@ void OTableEditorCtrl::paste()
     {
         if( nPasteEvent )
             Application::RemoveUserEvent( nPasteEvent );
-        nPasteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedPaste), NULL, true );
+        nPasteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedPaste), nullptr, true );
     }
     else if(m_eChildFocus == NAME)
     {
@@ -1418,12 +1418,12 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                         case SID_DELETE:
                             if( nDeleteEvent )
                                 Application::RemoveUserEvent( nDeleteEvent );
-                            nDeleteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedDelete), NULL, true );
+                            nDeleteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedDelete), nullptr, true );
                             break;
                         case SID_TABLEDESIGN_INSERTROWS:
                             if( nInsNewRowsEvent )
                                 Application::RemoveUserEvent( nInsNewRowsEvent );
-                            nInsNewRowsEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedInsNewRows), NULL, true );
+                            nInsNewRowsEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedInsNewRows), nullptr, true );
                             break;
                         case SID_TABLEDESIGN_TABED_PRIMARYKEY:
                             SetPrimaryKey( !IsPrimaryKey() );
@@ -1443,13 +1443,13 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
 
 IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedCut, void*, void )
 {
-    nCutEvent = 0;
+    nCutEvent = nullptr;
     OTableRowView::cut();
 }
 
 IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedPaste, void*, void )
 {
-    nPasteEvent = 0;
+    nPasteEvent = nullptr;
 
     sal_Int32 nPastePosition = GetView()->getController().getFirstEmptyRowPosition();
     if ( !GetView()->getController().getTable().is() )
@@ -1475,13 +1475,13 @@ IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedPaste, void*, void )
 
 IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedDelete, void*, void )
 {
-    nDeleteEvent = 0;
+    nDeleteEvent = nullptr;
     DeleteRows();
 }
 
 IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedInsNewRows, void*, void )
 {
-    nInsNewRowsEvent = 0;
+    nInsNewRowsEvent = nullptr;
     sal_Int32 nPastePosition = GetView()->getController().getFirstEmptyRowPosition();
     if ( !GetView()->getController().getTable().is() )
         nPastePosition = GetSelectRowCount() ? FirstSelectedRow() : m_nDataPos;
@@ -1618,7 +1618,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
     }
 
     pActFieldDescr = pRow->GetActFieldDescr();
-    if (pActFieldDescr != NULL && !pActFieldDescr->GetFormatKey())
+    if (pActFieldDescr != nullptr && !pActFieldDescr->GetFormatKey())
     {
         sal_Int32 nFormatKey = ::dbtools::getDefaultNumberFormat( pActFieldDescr->GetType(),
             pActFieldDescr->GetScale(),

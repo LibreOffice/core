@@ -81,7 +81,7 @@ void SAL_CALL LocalNameApproval::approveElement( const OUString& _rName, const R
     if ( _rName.indexOf( '/' ) != -1 )
         throw IllegalArgumentException(
             m_aErrors.getErrorMessage( ErrorCondition::DB_OBJECT_NAME_WITH_SLASHES ),
-            NULL,
+            nullptr,
             0
         );
 }
@@ -653,7 +653,7 @@ OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i
 
 ::rtl::Reference<OContentHelper> ODocumentContainer::getContent(const OUString& _sName) const
 {
-    ::rtl::Reference<OContentHelper> pContent = NULL;
+    ::rtl::Reference<OContentHelper> pContent = nullptr;
     try
     {
         Reference<XUnoTunnel> xUnoTunnel(const_cast<ODocumentContainer*>(this)->implGetByName( _sName, true ), UNO_QUERY );
@@ -733,7 +733,7 @@ void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName ) throw(N
     // do the removal
     implRemove(_rName);
 
-    notifyByName( aGuard, _rName, NULL, NULL, E_REMOVED, ContainerListemers );
+    notifyByName( aGuard, _rName, nullptr, nullptr, E_REMOVED, ContainerListemers );
 }
 
 void SAL_CALL ODocumentContainer::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)

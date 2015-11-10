@@ -245,13 +245,13 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             if ( !xHandler.is() )
             {
                 // instantiate the default SDB interaction handler
-                xHandler.set( task::InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
+                xHandler.set( task::InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY );
             }
 
             OUString sName = pName ? pName->GetValue() : OUString();
             OUString sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
             OUString sTemp = sName;
-            sName = ::dbaui::getStrippedDatabaseName(NULL,sTemp);
+            sName = ::dbaui::getStrippedDatabaseName(nullptr,sTemp);
             if ( !sName.isEmpty() )
                 sLoginRequest = sLoginRequest.replaceAll("$name$", sName);
             else
@@ -267,7 +267,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             aRequest.Diagnostic = sLoginRequest;
             aRequest.HasRealm   = aRequest.HasAccount = sal_False;
             // aRequest.Realm
-            aRequest.HasUserName = pUser != 0;
+            aRequest.HasUserName = pUser != nullptr;
             aRequest.UserName    = pUser ? OUString(pUser->GetValue()) : OUString();
             aRequest.HasPassword = sal_True;
             //aRequest.Password
@@ -535,7 +535,7 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
         case  ::dbaccess::DST_LDAP:
             {
                 const SfxInt32Item* pPortNumber = m_pItemSetHelper->getOutputSet()->GetItem<SfxInt32Item>(DSID_CONN_LDAP_PORTNUMBER);
-                sNewUrl = pCollection->cutPrefix(pUrlItem->GetValue()) + lcl_createHostWithPort(NULL,pPortNumber);
+                sNewUrl = pCollection->cutPrefix(pUrlItem->GetValue()) + lcl_createHostWithPort(nullptr,pPortNumber);
             }
             break;
         case  ::dbaccess::DST_JDBC:

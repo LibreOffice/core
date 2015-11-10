@@ -381,7 +381,7 @@ OFieldDescription* NamedTableCopySource::createFieldDescription( const OUString&
         if ( col->GetName() == _rColumnName )
             return new OFieldDescription( *col );
 
-    return NULL;
+    return nullptr;
 }
 
 OUString NamedTableCopySource::getSelectStatement() const
@@ -463,7 +463,7 @@ Sequence< OUString > DummyCopySource::getPrimaryKeyColumnNames() const
 OFieldDescription* DummyCopySource::createFieldDescription( const OUString& /*_rColumnName*/ ) const
 {
     SAL_WARN("dbaccess.ui",  "DummyCopySource::createFieldDescription: not to be called!" );
-    return NULL;
+    return nullptr;
 }
 
 OUString DummyCopySource::getSelectStatement() const
@@ -621,7 +621,7 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefa
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aDestTypeInfo, m_aDestTypeInfoIndex );
 
-    m_xInteractionHandler.set( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
+    m_xInteractionHandler.set( InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY );
 
     VclPtrInstance<OCopyTable> pPage1( this );
     pPage1->disallowViews();
@@ -1047,7 +1047,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     _rColVector.clear();
     _rColumns.clear();
 
-    OFieldDescription* pActFieldDescr = NULL;
+    OFieldDescription* pActFieldDescr = nullptr;
     OUString sCreateParam("x");
     // ReadOnly-Flag
     // On drop no line must be editable.
@@ -1136,7 +1136,7 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
                 xColumn->setPropertyValue(PROPERTY_NAME,makeAny(pField->GetName()));
 
             xAppend->appendByDescriptor(xColumn);
-            xColumn = NULL;
+            xColumn = nullptr;
             // now only the settings are missing
             if(xColumns->hasByName(pField->GetName()))
             {
@@ -1203,12 +1203,12 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         Reference<XDataDescriptorFactory> xFact(xTables,UNO_QUERY);
         OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
         if(!xFact.is())
-            return NULL;
+            return nullptr;
 
         xTable = xFact->createDataDescriptor();
         OSL_ENSURE(xTable.is(),"Could not create a new object!");
         if(!xTable.is())
-            return NULL;
+            return nullptr;
 
         OUString sCatalog,sSchema,sTable;
         Reference< XDatabaseMetaData> xMetaData = m_xDestConnection->getMetaData();
@@ -1259,7 +1259,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                 m_sName = sComposedName;
             }
             else
-                xTable = NULL;
+                xTable = nullptr;
         }
         if(xTable.is())
         {

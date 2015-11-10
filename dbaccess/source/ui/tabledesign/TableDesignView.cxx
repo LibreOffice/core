@@ -239,7 +239,7 @@ bool OTableDesignView::PreNotify( NotifyEvent& rNEvt )
 
 IClipboardTest* OTableDesignView::getActiveChild() const
 {
-    IClipboardTest* pTest = NULL;
+    IClipboardTest* pTest = nullptr;
     switch(m_eChildFocus)
     {
         case DESCRIPTION:
@@ -304,7 +304,7 @@ void OTableDesignView::reSync()
 {
     GetEditorCtrl()->DeactivateCell();
      std::shared_ptr<OTableRow>  pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
-    OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : NULL;
+    OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : nullptr;
     if ( pFieldDescr )
         GetDescWin()->DisplayData(pFieldDescr);
 }

@@ -92,7 +92,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_aDestColumns(true)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)
-    ,m_pFormatter(NULL)
+    ,m_pFormatter(nullptr)
     ,m_rInputStream( _rInputStream )
     ,m_pTypeInfo()
     ,m_pColumnList(pList)
@@ -146,11 +146,11 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)
-    ,m_pFormatter(NULL)
+    ,m_pFormatter(nullptr)
     ,m_rInputStream( _rInputStream )
     ,m_pTypeInfo()
-    ,m_pColumnList(NULL)
-    ,m_pInfoMap(NULL)
+    ,m_pColumnList(nullptr)
+    ,m_pInfoMap(nullptr)
     ,m_nColumnPos(0)
     ,m_nRows(1)
     ,m_nRowCount(0)
@@ -284,7 +284,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
 
 ODatabaseExport::~ODatabaseExport()
 {
-    m_pFormatter = NULL;
+    m_pFormatter = nullptr;
     ODatabaseExport::TColumns::iterator aIter = m_aDestColumns.begin();
     ODatabaseExport::TColumns::iterator aEnd  = m_aDestColumns.end();
 
@@ -678,7 +678,7 @@ bool ODatabaseExport::createRowSet()
 {
     m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
 
-    return m_pUpdateHelper.get() != NULL;
+    return m_pUpdateHelper.get() != nullptr;
 }
 
 bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTextColor, const FontDescriptor& _rFont)
@@ -797,7 +797,7 @@ void ODatabaseExport::ensureFormatter()
         Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
         Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
         SvNumberFormatsSupplierObj* pSupplierImpl = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-        m_pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
+        m_pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : nullptr;
         Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
         xNumberFormatSettings->getPropertyValue("NullDate") >>= m_aNullDate;
     }

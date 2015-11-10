@@ -81,7 +81,7 @@ namespace dbaccess
                     aCommandOpen.Name = "show";
 
                     const sal_Int32 nCommandIdentifier = i_rData.xDocDefCommands->createCommandIdentifier();
-                    i_rData.xDocDefCommands->execute( aCommandOpen, nCommandIdentifier, NULL );
+                    i_rData.xDocDefCommands->execute( aCommandOpen, nCommandIdentifier, nullptr );
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace dbaccess
 
     SubComponentLoader::~SubComponentLoader()
     {
-        delete m_pData, m_pData = NULL;
+        delete m_pData, m_pData = nullptr;
     }
 
     void SAL_CALL SubComponentLoader::windowResized( const WindowEvent& i_rEvent ) throw (RuntimeException, std::exception)

@@ -27,10 +27,10 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-uno::Sequence< OUString >*                   OModuleRegistration::s_pImplementationNames = NULL;
-uno::Sequence< uno::Sequence< OUString > >*  OModuleRegistration::s_pSupportedServices = NULL;
-uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pCreationFunctionPointers = NULL;
-uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pFactoryFunctionPointers = NULL;
+uno::Sequence< OUString >*                   OModuleRegistration::s_pImplementationNames = nullptr;
+uno::Sequence< uno::Sequence< OUString > >*  OModuleRegistration::s_pSupportedServices = nullptr;
+uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pCreationFunctionPointers = nullptr;
+uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pFactoryFunctionPointers = nullptr;
 
 void OModuleRegistration::registerComponent(
     const OUString& _rImplementationName,
@@ -97,10 +97,10 @@ void OModuleRegistration::revokeComponent(const OUString& _rImplementationName)
 
     if (s_pImplementationNames->getLength() == 0)
     {
-        delete s_pImplementationNames; s_pImplementationNames = NULL;
-        delete s_pSupportedServices; s_pSupportedServices = NULL;
-        delete s_pCreationFunctionPointers; s_pCreationFunctionPointers = NULL;
-        delete s_pFactoryFunctionPointers; s_pFactoryFunctionPointers = NULL;
+        delete s_pImplementationNames; s_pImplementationNames = nullptr;
+        delete s_pSupportedServices; s_pSupportedServices = nullptr;
+        delete s_pCreationFunctionPointers; s_pCreationFunctionPointers = nullptr;
+        delete s_pFactoryFunctionPointers; s_pFactoryFunctionPointers = nullptr;
     }
 }
 
@@ -114,7 +114,7 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
     if (!s_pImplementationNames)
     {
         OSL_FAIL("OModuleRegistration::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
-        return NULL;
+        return nullptr;
     }
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
         "OModuleRegistration::getComponentFactory : inconsistent state (the pointers) !");
@@ -138,7 +138,7 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
             const FactoryInstantiation FactoryInstantiationFunction = reinterpret_cast<const FactoryInstantiation>(*pFactoryFunction);
             const ComponentInstantiation ComponentInstantiationFunction = reinterpret_cast<const ComponentInstantiation>(*pComponentFunction);
 
-            xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices, NULL);
+            xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices, nullptr);
             if (xReturn.is())
             {
                 return xReturn.get();
@@ -146,7 +146,7 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

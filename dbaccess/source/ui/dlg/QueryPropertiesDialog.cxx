@@ -15,9 +15,9 @@ namespace dbaui
 QueryPropertiesDialog::QueryPropertiesDialog(
     vcl::Window* pParent, const bool bDistinct, const sal_Int64 nLimit )
     : ModalDialog(pParent, "QueryPropertiesDialog", "dbaccess/ui/querypropertiesdialog.ui")
-    , m_pRB_Distinct( 0 )
-    , m_pRB_NonDistinct( 0 )
-    , m_pLB_Limit( 0 )
+    , m_pRB_Distinct( nullptr )
+    , m_pRB_NonDistinct( nullptr )
+    , m_pLB_Limit( nullptr )
 {
     get( m_pRB_Distinct, "distinct" );
     get( m_pRB_NonDistinct, "nondistinct" );

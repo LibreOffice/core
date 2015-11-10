@@ -105,7 +105,7 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  ,oslInterlockedCount& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
     ,m_xTableDefinitions(_xTableDefinitions)
-    ,m_pTableMediator( NULL )
+    ,m_pTableMediator( nullptr )
     ,m_bInDrop(false)
 {
 }
@@ -245,7 +245,7 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
     if ( xDataFactory.is() && m_xMetaData.is() )
     {
         xMasterColumnsSup.set( xDataFactory->createDataDescriptor(), UNO_QUERY );
-        ODBTableDecorator* pTable = new ODBTableDecorator( m_xConnection, xMasterColumnsSup, ::dbtools::getNumberFormats( m_xConnection ) ,NULL);
+        ODBTableDecorator* pTable = new ODBTableDecorator( m_xConnection, xMasterColumnsSup, ::dbtools::getNumberFormats( m_xConnection ) ,nullptr);
         xRet = pTable;
         pTable->construct();
     }
@@ -446,8 +446,8 @@ void SAL_CALL OTableContainer::disposing()
 {
     OFilteredContainer::disposing();
     // say goodbye to our listeners
-    m_xTableDefinitions = NULL;
-    m_pTableMediator = NULL;
+    m_xTableDefinitions = nullptr;
+    m_pTableMediator = nullptr;
 }
 
 void SAL_CALL OTableContainer::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)

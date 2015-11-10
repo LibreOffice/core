@@ -126,7 +126,7 @@ void OResultColumn::disposing()
     OColumn::disposing();
 
     MutexGuard aGuard(m_aMutex);
-    m_xMetaData = NULL;
+    m_xMetaData = nullptr;
 }
 
 // comphelper::OPropertyArrayUsageHelper

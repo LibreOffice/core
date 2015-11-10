@@ -40,7 +40,7 @@ OSubComponent::OSubComponent(Mutex& _rMutex, const Reference< XInterface > & xPa
 
 OSubComponent::~OSubComponent()
 {
-    m_xParent = NULL;
+    m_xParent = nullptr;
 
 }
 
@@ -79,7 +79,7 @@ void OSubComponent::release() throw ( )
                 {
                     MutexGuard aGuard( rBHelper.rMutex );
                     xParent = m_xParent;
-                    m_xParent = NULL;
+                    m_xParent = nullptr;
                 }
 
                 OSL_ENSURE( m_refCount == 1, "OSubComponent::release: invalid ref count (before dispose)!" );

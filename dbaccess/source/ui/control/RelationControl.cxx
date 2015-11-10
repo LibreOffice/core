@@ -132,10 +132,10 @@ namespace dbaui
             EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT,
             WB_TABSTOP | WB_BORDER,
             BrowserMode::AUTOSIZE_LASTCOL)
-        , m_pBoxControl(NULL)
+        , m_pBoxControl(nullptr)
         , m_nDataPos(0)
-        , m_xSourceDef(NULL)
-        , m_xDestDef(NULL)
+        , m_xSourceDef(nullptr)
+        , m_xDestDef(nullptr)
     {
     }
 
@@ -192,9 +192,9 @@ namespace dbaui
     bool ORelationControl::PreNotify(NotifyEvent& rNEvt)
     {
         if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
-            PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate), NULL, true);
+            PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate), nullptr, true);
         else if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
-            PostUserEvent(LINK(this, ORelationControl, AsynchActivate), NULL, true);
+            PostUserEvent(LINK(this, ORelationControl, AsynchActivate), nullptr, true);
 
         return EditBrowseBox::PreNotify(rNEvt);
     }
@@ -466,8 +466,8 @@ namespace dbaui
     void OTableListBoxControl::fillListBoxes()
     {
         OSL_ENSURE( !m_pTableMap->empty(), "OTableListBoxControl::fillListBoxes: no table window!");
-        OTableWindow* pInitialLeft = NULL;
-        OTableWindow* pInitialRight = NULL;
+        OTableWindow* pInitialLeft = nullptr;
+        OTableWindow* pInitialRight = nullptr;
 
         // Collect the names of all TabWins
         OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
@@ -517,8 +517,8 @@ namespace dbaui
     IMPL_LINK_TYPED( OTableListBoxControl, OnTableChanged, ListBox&, rListBox, void )
     {
         OUString strSelected(rListBox.GetSelectEntry());
-        OTableWindow* pLeft     = NULL;
-        OTableWindow* pRight    = NULL;
+        OTableWindow* pLeft     = nullptr;
+        OTableWindow* pRight    = nullptr;
 
         // Special treatment: If there are only two tables, we need to switch the other one too when changing in a LB
         if ( m_pTableMap->size() == 2 )
@@ -550,10 +550,10 @@ namespace dbaui
         {
             // First we need the TableDef to the Table and with it the TabWin
             OJoinTableView::OTableWindowMap::const_iterator aFind = m_pTableMap->find(strSelected);
-            OTableWindow* pLoop = NULL;
+            OTableWindow* pLoop = nullptr;
             if( aFind != m_pTableMap->end() )
                 pLoop = aFind->second;
-            OSL_ENSURE(pLoop != NULL, "ORelationDialog::OnTableChanged: invalid ListBox entry!");
+            OSL_ENSURE(pLoop != nullptr, "ORelationDialog::OnTableChanged: invalid ListBox entry!");
                 // We need to find strSelect, because we filled the ListBoxes with the table names with which we compare now
             if (&rListBox == m_pLeftTable)
             {

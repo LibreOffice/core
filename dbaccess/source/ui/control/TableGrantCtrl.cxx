@@ -48,10 +48,10 @@ const sal_uInt16 COL_DROP       = 8;
 // OTableGrantControl
 OTableGrantControl::OTableGrantControl( vcl::Window* pParent, WinBits nBits)
     :EditBrowseBox( pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT, nBits )
-    ,m_pCheckCell( NULL )
-    ,m_pEdit( NULL )
+    ,m_pCheckCell( nullptr )
+    ,m_pEdit( nullptr )
     ,m_nDataPos( 0 )
-    ,m_nDeactivateEvent(0)
+    ,m_nDeactivateEvent(nullptr)
 {
     // Spalten einfuegen
     sal_uInt16 i=1;
@@ -79,13 +79,13 @@ void OTableGrantControl::dispose()
     if (m_nDeactivateEvent)
     {
         Application::RemoveUserEvent(m_nDeactivateEvent);
-        m_nDeactivateEvent = 0;
+        m_nDeactivateEvent = nullptr;
     }
 
     m_pCheckCell.disposeAndClear();
     m_pEdit.disposeAndClear();
 
-    m_xTables       = NULL;
+    m_xTables       = nullptr;
     ::svt::EditBrowseBox::dispose();
 }
 
@@ -156,26 +156,26 @@ bool OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
         {
             if (m_nDeactivateEvent)
                 Application::RemoveUserEvent(m_nDeactivateEvent);
-            m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchDeactivate), NULL, true);
+            m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchDeactivate), nullptr, true);
         }
     if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
         if (m_nDeactivateEvent)
             Application::RemoveUserEvent(m_nDeactivateEvent);
-        m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchActivate), NULL, true);
+        m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchActivate), nullptr, true);
     }
     return EditBrowseBox::PreNotify(rNEvt);
 }
 
 IMPL_LINK_NOARG_TYPED(OTableGrantControl, AsynchActivate, void*, void)
 {
-    m_nDeactivateEvent = 0;
+    m_nDeactivateEvent = nullptr;
     ActivateCell();
 }
 
 IMPL_LINK_NOARG_TYPED(OTableGrantControl, AsynchDeactivate, void*, void)
 {
-    m_nDeactivateEvent = 0;
+    m_nDeactivateEvent = nullptr;
     DeactivateCell();
 }
 
@@ -360,7 +360,7 @@ void OTableGrantControl::setGrantUser(const Reference< XAuthorizable>& _xGrantUs
 CellController* OTableGrantControl::GetController( long nRow, sal_uInt16 nColumnId )
 {
 
-    CellController* pController = NULL;
+    CellController* pController = nullptr;
     switch( nColumnId )
     {
         case COL_TABLE_NAME:

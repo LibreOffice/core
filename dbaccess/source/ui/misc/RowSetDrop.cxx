@@ -44,7 +44,7 @@ ORowSetImportExport::ORowSetImportExport(   vcl::Window* _pParent,
                                             const Reference< XComponentContext >& _rM,
                                             const OUString& rExchange
                                             )
-                                            : ODatabaseImportExport(_aDataDescriptor,_rM,NULL,rExchange)
+                                            : ODatabaseImportExport(_aDataDescriptor,_rM,nullptr,rExchange)
                                             ,m_xTargetResultSetUpdate(_xResultSetUpdate)
                                             ,m_xTargetRowUpdate(_xResultSetUpdate,UNO_QUERY)
                                             ,m_pParent(_pParent)

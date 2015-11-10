@@ -295,7 +295,7 @@ private:
     void    loadEmbeddedObjectForPreview()
     {
         loadEmbeddedObject(
-            NULL,
+            nullptr,
             css::uno::Sequence< sal_Int8 >(),
             css::uno::Sequence< css::beans::PropertyValue >(),
             true,

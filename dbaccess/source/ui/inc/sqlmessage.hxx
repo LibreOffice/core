@@ -87,7 +87,7 @@ public:
                 const OUString& rMessage,
                 WinBits nStyle = WB_OK | WB_DEF_OK,
                 MessageType _eType = Info,
-                const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
+                const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
 
     virtual ~OSQLMessageBox();
     virtual void dispose() override;
@@ -111,7 +111,7 @@ public:
     OSQLWarningBox( vcl::Window* _pParent,
                     const OUString& _rMessage,
                     WinBits _nStyle = WB_OK | WB_DEF_OK,
-                    const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
+                    const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
 };
 
 // OSQLErrorBox
@@ -121,7 +121,7 @@ public:
     OSQLErrorBox( vcl::Window* _pParent,
                   const OUString& _rMessage,
                   WinBits _nStyle = WB_OK | WB_DEF_OK,
-                  const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
+                  const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
 };
 
 }   // namespace dbaui

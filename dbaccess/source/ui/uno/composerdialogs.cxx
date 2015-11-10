@@ -119,7 +119,7 @@ namespace dbaui
 
         if ( !xConnection.is() || !xColumns.is() || !m_xComposer.is() )
             // can't create the dialog if I have improper settings
-            return NULL;
+            return nullptr;
 
         return createComposerDialog( _pParent, xConnection, xColumns );
     }

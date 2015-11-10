@@ -166,7 +166,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_aCloseListener( getMutex() )
             ,m_aStorageListeners( getMutex() )
             ,m_pEventContainer( new DocumentEvents( *this, getMutex(), _pImpl->getDocumentEvents() ) )
-            ,m_pEventExecutor( NULL )   // initialized below, ref-count-protected
+            ,m_pEventExecutor( nullptr )   // initialized below, ref-count-protected
             ,m_aEventNotifier( *this, getMutex() )
             ,m_aViewMonitor( m_aEventNotifier )
             ,m_eInitState( NotInitialized )
@@ -217,7 +217,7 @@ ODatabaseDocument::~ODatabaseDocument()
         dispose();
     }
 
-    delete m_pEventContainer, m_pEventContainer = NULL;
+    delete m_pEventContainer, m_pEventContainer = nullptr;
 }
 
 Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
@@ -887,7 +887,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
         }
 
         if ( m_xCurrentController == _xController )
-            m_xCurrentController = NULL;
+            m_xCurrentController = nullptr;
 
         bLastControllerGone = m_aControllers.empty();
         bIsClosing = m_bClosing;
@@ -1063,7 +1063,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     if ( !bIsInitializationProcess )
     {
         _rGuard.clear();
-        m_aEventNotifier.notifyDocumentEvent( _eType == SAVE ? "OnSave" : "OnSaveAs", NULL, makeAny( _rURL ) );
+        m_aEventNotifier.notifyDocumentEvent( _eType == SAVE ? "OnSave" : "OnSaveAs", nullptr, makeAny( _rURL ) );
         _rGuard.reset();
     }
 
@@ -1130,13 +1130,13 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     catch( const IOException& )
     {
         if ( !bIsInitializationProcess )
-            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", NULL, makeAny( _rURL ) );
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, makeAny( _rURL ) );
         throw;
     }
     catch( const RuntimeException& )
     {
         if ( !bIsInitializationProcess )
-            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", NULL, makeAny( _rURL ) );
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, makeAny( _rURL ) );
         throw;
     }
     catch( const Exception& )
@@ -1145,14 +1145,14 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
 
         // notify the failure
         if ( !bIsInitializationProcess )
-            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", NULL, makeAny( _rURL ) );
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, makeAny( _rURL ) );
 
         impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
     // notify the document event
     if ( !bIsInitializationProcess )
-        m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveDone" : "OnSaveAsDone", NULL, makeAny( _rURL ) );
+        m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveDone" : "OnSaveAsDone", nullptr, makeAny( _rURL ) );
 
     // reset our "modified" flag, and clear the guard
     impl_setModified_nothrow( false, _rGuard );
@@ -1276,7 +1276,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
 
     {
         aGuard.clear();
-        m_aEventNotifier.notifyDocumentEvent( "OnSaveTo", NULL, makeAny( _rURL ) );
+        m_aEventNotifier.notifyDocumentEvent( "OnSaveTo", nullptr, makeAny( _rURL ) );
         aGuard.reset();
     }
 
@@ -1294,7 +1294,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
     catch( const Exception& )
     {
         Any aError = ::cppu::getCaughtException();
-        m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToFailed", NULL, aError );
+        m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToFailed", nullptr, aError );
 
         if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
             ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
@@ -1307,7 +1307,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
         impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
-    m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", NULL, makeAny( _rURL ) );
+    m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", nullptr, makeAny( _rURL ) );
 }
 
 // XModifyBroadcaster
@@ -1431,7 +1431,7 @@ void ODatabaseDocument::clearObjectContainer( WeakReference< XNameAccess >& _rxC
 
     Reference< XChild > xChild( _rxContainer.get(),UNO_QUERY );
     if ( xChild.is() )
-        xChild->setParent( NULL );
+        xChild->setParent( nullptr );
     _rxContainer.clear();
 }
 
@@ -1618,7 +1618,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
 {
     OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
     OSL_ENSURE( xComponent.is(), "Need component!" );
-    OSL_ENSURE( NULL != pServiceName, "Need component name!" );
+    OSL_ENSURE( nullptr != pServiceName, "Need component name!" );
 
     // get component
     Reference< XWriter > xSaxWriter = xml::sax::Writer::create( m_pImpl->m_aContext );
@@ -1842,7 +1842,7 @@ void ODatabaseDocument::disposing()
         uno::Reference<uno::XInterface> xUIInterface( m_xUIConfigurationManager );
         aKeepAlive.push_back( xUIInterface );
     }
-    m_xUIConfigurationManager = NULL;
+    m_xUIConfigurationManager = nullptr;
 
     clearObjectContainer( m_xForms );
     clearObjectContainer( m_xReports );

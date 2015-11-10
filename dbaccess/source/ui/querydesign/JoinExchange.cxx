@@ -34,7 +34,7 @@ namespace dbaui
     OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,bool _bFirstEntry)
         :m_bFirstEntry(_bFirstEntry)
         ,m_jxdSourceDescription(jxdSource)
-        ,m_pDragListener(NULL)
+        ,m_pDragListener(nullptr)
     {
         // add available types to list
     }
@@ -53,7 +53,7 @@ namespace dbaui
     {
         if (m_pDragListener)
             m_pDragListener->dragFinished();
-        m_pDragListener = NULL;
+        m_pDragListener = nullptr;
     }
 
     bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotClipboardFormatId _nSlotID)
@@ -85,7 +85,7 @@ namespace dbaui
 
     Sequence< sal_Int8 > OJoinExchObj::getUnoTunnelImplementationId()
     {
-        static ::cppu::OImplementationId * pId = 0;
+        static ::cppu::OImplementationId * pId = nullptr;
         if (! pId)
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

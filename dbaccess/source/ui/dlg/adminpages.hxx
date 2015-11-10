@@ -136,7 +136,7 @@ namespace dbaui
         virtual void    ActivatePage() override;
 
     protected:
-        virtual void callModifiedHdl(void* /*pControl*/ = 0) { m_aModifiedHandler.Call(this); }
+        virtual void callModifiedHdl(void* /*pControl*/ = nullptr) { m_aModifiedHandler.Call(this); }
 
         /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns sal_True
         virtual bool prepareLeave() { return true; }

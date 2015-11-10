@@ -91,9 +91,9 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     :m_xSet(_xRs)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
     ,m_aContext( _rContext )
-    ,m_pCacheSet(NULL)
-    ,m_pMatrix(NULL)
-    ,m_pInsertMatrix(NULL)
+    ,m_pCacheSet(nullptr)
+    ,m_pMatrix(nullptr)
+    ,m_pInsertMatrix(nullptr)
     ,m_nLastColumnIndex(0)
     ,m_nFetchSize(0)
     ,m_nRowCount(0)
@@ -191,7 +191,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 {
                     SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
                 }
-                m_pCacheSet = NULL;
+                m_pCacheSet = nullptr;
                 m_xCacheSet.clear();
             }
             else
@@ -344,8 +344,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
                 // we couldn't create a keyset here so we have to create a static cache
                 if ( m_pCacheSet )
-                    m_pCacheSet = NULL;
-                m_xCacheSet = NULL;
+                    m_pCacheSet = nullptr;
+                m_xCacheSet = nullptr;
                 m_pCacheSet = new OStaticSet(i_nMaxRows);
                 m_xCacheSet = m_pCacheSet;
                 m_pCacheSet->construct(_xRs,i_sRowSetFilter);
@@ -362,8 +362,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 
 ORowSetCache::~ORowSetCache()
 {
-    m_pCacheSet = NULL;
-    m_xCacheSet = NULL;
+    m_pCacheSet = nullptr;
+    m_xCacheSet = nullptr;
     if(m_pMatrix)
     {
         m_pMatrix->clear();
@@ -376,8 +376,8 @@ ORowSetCache::~ORowSetCache()
         delete m_pInsertMatrix;
     }
     m_xSet          = WeakReference< XResultSet>();
-    m_xMetaData     = NULL;
-    m_aUpdateTable  = NULL;
+    m_xMetaData     = nullptr;
+    m_aUpdateTable  = nullptr;
 
 }
 
@@ -1157,7 +1157,7 @@ sal_Int32 ORowSetCache::getRow(  )
 bool ORowSetCache::absolute( sal_Int32 row )
 {
     if(!row )
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_ABS_ZERO),NULL,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_ABS_ZERO),nullptr,SQLSTATE_GENERAL,1000,Any() );
 
     if(row < 0)
     {
@@ -1220,7 +1220,7 @@ bool ORowSetCache::relative( sal_Int32 rows )
             nNewPosition = m_nRowCount + 1 + rows;
         else
             if ( m_bBeforeFirst || ( m_bRowCountFinal && m_bAfterLast ) )
-                throw SQLException( DBACORE_RESSTRING( RID_STR_NO_RELATIVE ), NULL, SQLSTATE_GENERAL, 1000, Any() );
+                throw SQLException( DBACORE_RESSTRING( RID_STR_NO_RELATIVE ), nullptr, SQLSTATE_GENERAL, 1000, Any() );
         if ( nNewPosition )
         {
             bErg = absolute( nNewPosition );
@@ -1269,7 +1269,7 @@ bool ORowSetCache::previous(  )
 void ORowSetCache::refreshRow(  )
 {
     if(isAfterLast())
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_REFESH_AFTERLAST),NULL,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_REFESH_AFTERLAST),nullptr,SQLSTATE_GENERAL,1000,Any() );
     OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"refreshRow() called for invalid row!");
     m_pCacheSet->refreshRow();
     m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
@@ -1293,7 +1293,7 @@ bool ORowSetCache::rowInserted(  )
 bool ORowSetCache::insertRow(::std::vector< Any >& o_aBookmarks)
 {
     if ( !m_bNew || !m_aInsertRow->is() )
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_MOVETOINSERTROW_CALLED),NULL,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_MOVETOINSERTROW_CALLED),nullptr,SQLSTATE_GENERAL,1000,Any() );
 
     m_pCacheSet->insertRow(*m_aInsertRow,m_aUpdateTable);
 
@@ -1349,7 +1349,7 @@ void ORowSetCache::cancelRowModification()
 void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector< Any >& o_aBookmarks )
 {
     if(isAfterLast() || isBeforeFirst())
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATEROW),NULL,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATEROW),nullptr,SQLSTATE_GENERAL,1000,Any() );
 
     Any aBookmark = ((*_rUpdateRow)->get())[0].makeAny();
     OSL_ENSURE(aBookmark.hasValue(),"Bookmark must have a value!");
@@ -1358,7 +1358,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector
     moveToBookmark(aBookmark);
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
     // refetch the whole row
-    (*m_aMatrixIter) = NULL;
+    (*m_aMatrixIter) = nullptr;
 
     if ( moveToBookmark(aBookmark) )
     {
@@ -1380,7 +1380,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector
 bool ORowSetCache::deleteRow(  )
 {
     if(isAfterLast() || isBeforeFirst())
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_DELETEROW),NULL,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_DELETEROW),nullptr,SQLSTATE_GENERAL,1000,Any() );
 
     m_pCacheSet->deleteRow(*m_aMatrixIter,m_aUpdateTable);
     if ( !m_pCacheSet->rowDeleted() )
@@ -1389,13 +1389,13 @@ bool ORowSetCache::deleteRow(  )
     --m_nRowCount;
     OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
     ORowSetMatrix::iterator aPos = calcPosition();
-    (*aPos)   = NULL;
+    (*aPos)   = nullptr;
 
     ORowSetMatrix::iterator aEnd = m_pMatrix->end();
     for(++aPos;aPos != aEnd && aPos->is();++aPos)
     {
         *(aPos-1) = *aPos;
-        (*aPos)   = NULL;
+        (*aPos)   = nullptr;
     }
     m_aMatrixIter = m_pMatrix->end();
 
@@ -1409,7 +1409,7 @@ void ORowSetCache::cancelRowUpdates(  )
     if(!m_nPosition)
     {
         OSL_FAIL("cancelRowUpdates:Invalid positions pos == 0");
-        ::dbtools::throwFunctionSequenceException(NULL);
+        ::dbtools::throwFunctionSequenceException(nullptr);
     }
 
     if(m_pCacheSet->absolute(m_nPosition))
@@ -1417,7 +1417,7 @@ void ORowSetCache::cancelRowUpdates(  )
     else
     {
         OSL_FAIL("cancelRowUpdates couldn't position right with absolute");
-        ::dbtools::throwFunctionSequenceException(NULL);
+        ::dbtools::throwFunctionSequenceException(nullptr);
     }
 }
 
@@ -1586,7 +1586,7 @@ bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
             if(pJoin)
             { // we are only interested in qualified joins like RIGHT or LEFT
                 OSQLParseNode* pJoinType    = pJoin->getChild(1);
-                OSQLParseNode* pOuterType   = NULL;
+                OSQLParseNode* pOuterType   = nullptr;
                 if(SQL_ISRULE(pJoinType,join_type) && pJoinType->count() == 2)
                     pOuterType = pJoinType->getChild(0);
                 else if(SQL_ISRULE(pJoinType,outer_join_type))
@@ -1611,7 +1611,7 @@ bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
 
                     OUString sTableRange = OSQLParseNode::getTableRange(pTableRef);
                     if(sTableRange.isEmpty())
-                        pTableRef->getChild(0)->parseNodeToStr( sTableRange, _xConnection, NULL, false, false );
+                        pTableRef->getChild(0)->parseNodeToStr( sTableRange, _xConnection, nullptr, false, false );
                     bOk =  sTableRange == _sUpdateTableName;
                 }
             }

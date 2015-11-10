@@ -54,12 +54,12 @@ namespace dbaui
     OGeneralPage::OGeneralPage( vcl::Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems )
         :OGenericAdministrationPage( pParent, "PageGeneral", _rUIXMLDescription, _rItems )
         ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN )
-        ,m_pSpecialMessage              ( NULL )
+        ,m_pSpecialMessage              ( nullptr )
         ,m_eLastMessage                 ( smNone )
         ,m_bDisplayingInvalid           ( false )
         ,m_bInitTypeList                ( true )
-        ,m_pDatasourceType              ( NULL )
-        ,m_pCollection                  ( NULL )
+        ,m_pDatasourceType              ( nullptr )
+        ,m_pCollection                  ( nullptr )
     {
         get( m_pDatasourceType, "datasourceType" );
         get( m_pSpecialMessage, "specialMessage" );
@@ -489,14 +489,14 @@ namespace dbaui
     // OGeneralPageWizard
     OGeneralPageWizard::OGeneralPageWizard( vcl::Window* pParent, const SfxItemSet& _rItems )
         :OGeneralPage( pParent, "dbaccess/ui/generalpagewizard.ui", _rItems )
-        ,m_pRB_CreateDatabase           ( NULL )
-        ,m_pRB_OpenExistingDatabase     ( NULL )
-        ,m_pRB_ConnectDatabase          ( NULL )
-        ,m_pFT_EmbeddedDBLabel          ( NULL )
-        ,m_pEmbeddedDBType              ( NULL )
-        ,m_pFT_DocListLabel             ( NULL )
-        ,m_pLB_DocumentList             ( NULL )
-        ,m_pPB_OpenDatabase             ( NULL )
+        ,m_pRB_CreateDatabase           ( nullptr )
+        ,m_pRB_OpenExistingDatabase     ( nullptr )
+        ,m_pRB_ConnectDatabase          ( nullptr )
+        ,m_pFT_EmbeddedDBLabel          ( nullptr )
+        ,m_pEmbeddedDBType              ( nullptr )
+        ,m_pFT_DocListLabel             ( nullptr )
+        ,m_pLB_DocumentList             ( nullptr )
+        ,m_pPB_OpenDatabase             ( nullptr )
         ,m_eOriginalCreationMode        ( eCreateNew )
         ,m_bInitEmbeddedDBList          ( true )
     {

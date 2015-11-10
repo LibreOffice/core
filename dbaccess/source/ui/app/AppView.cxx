@@ -60,8 +60,8 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 // class OAppBorderWindow
 OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
-    ,m_pPanel(NULL)
-    ,m_pDetailView(NULL)
+    ,m_pPanel(nullptr)
+    ,m_pDetailView(nullptr)
     ,m_pView(_pParent)
 {
 
@@ -293,7 +293,7 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
 
 IClipboardTest* OApplicationView::getActiveChild() const
 {
-    IClipboardTest* pTest = NULL;
+    IClipboardTest* pTest = nullptr;
     if ( DETAIL == m_eChildFocus )
         pTest = getDetailView();
     return pTest;
@@ -490,7 +490,7 @@ void OApplicationView::showPreview(const Reference< XContent >& _xContent)
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     stopComponentListening(m_xObject);
-    m_xObject = NULL;
+    m_xObject = nullptr;
     getDetailView()->showPreview(_xContent);
 }
 
@@ -503,7 +503,7 @@ void OApplicationView::showPreview( const OUString& _sDataSourceName,
     if ( isPreviewEnabled() )
     {
         stopComponentListening(m_xObject);
-        m_xObject = NULL;
+        m_xObject = nullptr;
         try
         {
             Reference<XNameAccess> xNameAccess;
@@ -543,7 +543,7 @@ void OApplicationView::GetFocus()
 void OApplicationView::_disposing( const css::lang::EventObject& /*_rSource*/ )
 {
     if ( m_pWin && getDetailView() )
-        showPreview(NULL);
+        showPreview(nullptr);
 }
 
 void OApplicationView::ImplInitSettings()

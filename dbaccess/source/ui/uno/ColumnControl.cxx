@@ -65,7 +65,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
     {
         mbCreatingPeer = true;
 
-        vcl::Window* pParentWin = NULL;
+        vcl::Window* pParentWin = nullptr;
         if (rParentPeer.is())
         {
             VCLXWindow* pParent = VCLXWindow::GetImplementation(rParentPeer);
@@ -74,7 +74,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
         }
 
         OColumnPeer* pPeer = new OColumnPeer( pParentWin, m_xContext );
-        OSL_ENSURE(pPeer != NULL, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
+        OSL_ENSURE(pPeer != nullptr, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
         setPeer( pPeer );
 
         UnoControlComponentInfos aComponentInfos(maComponentInfos);

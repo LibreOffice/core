@@ -65,7 +65,7 @@ OQueryContainer::OQueryContainer(
                 , const Reference< XConnection >& _rxConn
                 , const Reference< XComponentContext >& _rxORB,
                 ::dbtools::WarningsContainer* _pWarnings)
-    :ODefinitionContainer(_rxORB,NULL,TContentPtr(new ODefinitionContainer_Impl))
+    :ODefinitionContainer(_rxORB,nullptr,TContentPtr(new ODefinitionContainer_Impl))
     ,m_pWarnings( _pWarnings )
     ,m_xCommandDefinitions(_rxCommandDefinitions)
     ,m_xConnection(_rxConn)
@@ -131,8 +131,8 @@ void OQueryContainer::disposing()
     Reference< XContainerApproveBroadcaster > xContainerApprove( m_xCommandDefinitions, UNO_QUERY );
     xContainerApprove->removeContainerApproveListener( this );
 
-    m_xCommandDefinitions   = NULL;
-    m_xConnection           = NULL;
+    m_xCommandDefinitions   = nullptr;
+    m_xConnection           = nullptr;
 }
 
 // XServiceInfo
@@ -165,7 +165,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 
     try
     {
-        notifyByName( aGuard, sNewObjectName, xNewObject, NULL, E_INSERTED, ApproveListeners );
+        notifyByName( aGuard, sNewObjectName, xNewObject, nullptr, E_INSERTED, ApproveListeners );
     }
     catch (const WrappedTargetException& e)
     {
@@ -190,7 +190,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
     implAppend( sNewObjectName, xNewObject );
     try
     {
-        notifyByName( aGuard, sNewObjectName, xNewObject, NULL, E_INSERTED, ContainerListemers );
+        notifyByName( aGuard, sNewObjectName, xNewObject, nullptr, E_INSERTED, ContainerListemers );
     }
     catch (const WrappedTargetException& e)
     {
@@ -305,12 +305,12 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const Contain
 
 Reference< XVeto > SAL_CALL OQueryContainer::approveReplaceElement( const ContainerEvent& /*Event*/ ) throw (WrappedTargetException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 Reference< XVeto > SAL_CALL OQueryContainer::approveRemoveElement( const ContainerEvent& /*Event*/ ) throw (WrappedTargetException, RuntimeException, std::exception)
 {
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL OQueryContainer::disposing( const css::lang::EventObject& _rSource ) throw(css::uno::RuntimeException, std::exception)
@@ -391,7 +391,7 @@ bool OQueryContainer::checkExistence(const OUString& _rName)
         }
         else if ( bRet && aFind == m_aDocumentMap.end() )
         {
-            implAppend(_rName,NULL);
+            implAppend(_rName,nullptr);
         }
     }
     return bRet;

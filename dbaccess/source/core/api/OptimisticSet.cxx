@@ -89,9 +89,9 @@ OptimisticSet::OptimisticSet(const Reference<XComponentContext>& _rContext,
                              const ORowSetValueVector& _aParameterValueForCache,
                              sal_Int32 i_nMaxRows,
                              sal_Int32& o_nRowCount)
-            :OKeySet(NULL,NULL,OUString(),_xComposer,_aParameterValueForCache,i_nMaxRows,o_nRowCount)
+            :OKeySet(nullptr,nullptr,OUString(),_xComposer,_aParameterValueForCache,i_nMaxRows,o_nRowCount)
             ,m_aSqlParser( _rContext )
-            ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, NULL )
+            ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, nullptr )
             ,m_bResultSetChanged(false)
 {
 }

@@ -32,11 +32,11 @@ using namespace ::com::sun::star::lang;
 // class DBTreeView
 DBTreeView::DBTreeView( vcl::Window* pParent, WinBits nBits)
                     :   Window( pParent, nBits )
-                    , m_pTreeListBox(NULL)
+                    , m_pTreeListBox(nullptr)
 {
 
     m_pTreeListBox = VclPtr<DBTreeListBox>::Create(this, WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
-    m_pTreeListBox->EnableCheckButton(NULL);
+    m_pTreeListBox->EnableCheckButton(nullptr);
     m_pTreeListBox->SetDragDropMode( DragDropMode::NONE );
     m_pTreeListBox->EnableInplaceEditing( true );
     m_pTreeListBox->SetHelpId(HID_TLB_TREELISTBOX);

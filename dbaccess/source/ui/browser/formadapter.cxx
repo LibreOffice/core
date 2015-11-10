@@ -685,7 +685,7 @@ Reference< XInterface > SAL_CALL SbaXFormAdapter::getStatement() throw( css::sdb
 {
     if (m_xMainForm.is())
         return m_xMainForm->getStatement();
-    return NULL;
+    return nullptr;
 }
 
 // css::sdbc::XResultSetUpdate

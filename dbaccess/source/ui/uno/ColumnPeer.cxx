@@ -32,7 +32,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
 OColumnPeer::OColumnPeer(vcl::Window* _pParent,const Reference<XComponentContext>& _rxContext)
-    :m_pActFieldDescr(NULL)
+    :m_pActFieldDescr(nullptr)
 {
     osl_atomic_increment( &m_refCount );
     {
@@ -61,7 +61,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
         if ( m_pActFieldDescr )
         {
             delete m_pActFieldDescr;
-            m_pActFieldDescr = NULL;
+            m_pActFieldDescr = nullptr;
         }
         if ( _xColumn.is() )
         {

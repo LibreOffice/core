@@ -245,7 +245,7 @@ void OQueryDescriptor_Base::columnDropped(const OUString& /*_sName*/)
 Reference< XPropertySet > OQueryDescriptor_Base::createColumnDescriptor()
 {
     OSL_FAIL( "OQueryDescriptor_Base::createColumnDescriptor: called why?" );
-    return NULL;
+    return nullptr;
 }
 
 void OQueryDescriptor_Base::rebuildColumns( )
@@ -264,7 +264,7 @@ void OQueryDescriptor_Base::refreshColumns()
 OColumn* OQueryDescriptor_Base::createColumn( const OUString& /*_rName*/ ) const
 {
     // creating a column/descriptor for a query/descriptor does not make sense at all
-    return NULL;
+    return nullptr;
 }
 
 }

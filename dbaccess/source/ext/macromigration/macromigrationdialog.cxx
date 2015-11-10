@@ -214,7 +214,7 @@ namespace dbmm
             enableButtons( WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT, false );
 
             // start the migration asynchronously
-            PostUserEvent( LINK( this, MacroMigrationDialog, OnStartMigration ), NULL, true );
+            PostUserEvent( LINK( this, MacroMigrationDialog, OnStartMigration ), nullptr, true );
         }
         break;
 
@@ -489,7 +489,7 @@ namespace dbmm
                 }
 
                 aViews.push_back( ViewDescriptor( xFrame, sViewName ) );
-                xFrame->setComponent( NULL, NULL );
+                xFrame->setComponent( nullptr, nullptr );
                 xController->dispose();
             }
 

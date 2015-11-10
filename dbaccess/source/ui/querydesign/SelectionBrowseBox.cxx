@@ -427,15 +427,15 @@ void OSelectionBrowseBox::SetReadOnly(bool bRO)
 CellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
 {
     if ( nColId > getFields().size() )
-        return NULL;
+        return nullptr;
     OTableFieldDescRef pEntry = getFields()[nColId-1];
     OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::GetController : keine FieldDescription !");
 
     if (!pEntry.is())
-        return NULL;
+        return nullptr;
 
     if (static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
-        return NULL;
+        return nullptr;
 
     long nCellIndex = GetRealRow(nRow);
     switch (nCellIndex)
@@ -662,16 +662,16 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
     ::connectivity::OSQLParser& rParser( rController.getParser() );
     {
         // automatically add parentheses around subqueries
-        OSQLParseNode *pParseNode = NULL;
+        OSQLParseNode *pParseNode = nullptr;
         OUString devnull;
         pParseNode = rParser.parseTree( devnull, _sFieldName, true );
-        if (pParseNode == NULL)
+        if (pParseNode == nullptr)
             pParseNode = rParser.parseTree( devnull, _sFieldName );
-        if (pParseNode != NULL && SQL_ISRULE(pParseNode, select_statement))
+        if (pParseNode != nullptr && SQL_ISRULE(pParseNode, select_statement))
             _sFieldName = "(" + _sFieldName + ")";
     }
 
-    OSQLParseNode* pParseNode = NULL;
+    OSQLParseNode* pParseNode = nullptr;
     {
         // 4 passes in trying to interprete the field name
         // - don't quote the field name, parse internationally
@@ -710,10 +710,10 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
 
             pParseNode = rParser.parseTree( sErrorMsg, sSql, bInternational );
         }
-        while ( ( pParseNode == NULL ) && ( --nPass > 0 ) );
+        while ( ( pParseNode == nullptr ) && ( --nPass > 0 ) );
     }
 
-    if ( pParseNode == NULL )
+    if ( pParseNode == nullptr )
     {
         // something different which we have to check
         OUString sErrorMessage( ModuleRes( STR_QRY_COLUMN_NOT_FOUND ) );
@@ -887,7 +887,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
 bool OSelectionBrowseBox::SaveModified()
 {
     OQueryController& rController = static_cast<OQueryController&>(getDesignView()->getController());
-    OTableFieldDescRef pEntry = NULL;
+    OTableFieldDescRef pEntry = nullptr;
     sal_uInt16 nCurrentColumnPos = GetColumnPos(GetCurColumnId());
     if(getFields().size() > static_cast<sal_uInt16>(nCurrentColumnPos - 1))
         pEntry = getEntry(nCurrentColumnPos - 1);
@@ -1003,7 +1003,7 @@ bool OSelectionBrowseBox::SaveModified()
                 {
                     pEntry->SetAlias(OUString());
                     pEntry->SetTable(OUString());
-                    pEntry->SetTabWindow(NULL);
+                    pEntry->SetTabWindow(nullptr);
                 }
                 sNewValue = pEntry->GetAlias();
 
@@ -1199,7 +1199,7 @@ bool OSelectionBrowseBox::SaveModified()
     if ( bListAction && !m_bInUndoMode )
         static_cast<OQueryController&>(getDesignView()->getController()).GetUndoManager().LeaveListAction();
 
-    return pEntry != NULL && !bError;
+    return pEntry != nullptr && !bError;
 }
 
 bool OSelectionBrowseBox::SeekRow(long nRow)
@@ -1212,7 +1212,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, 
 {
     rDev.SetClipRegion(vcl::Region(rRect));
 
-    OTableFieldDescRef pEntry = NULL;
+    OTableFieldDescRef pEntry = nullptr;
     sal_uInt16 nPos = GetColumnPos(nColumnId);
     if(getFields().size() > sal_uInt16(nPos - 1))
         pEntry = getFields()[nPos - 1];
@@ -1426,7 +1426,7 @@ void OSelectionBrowseBox::DeleteFields(const OUString& rAliasName)
             DeactivateCell();
 
         OTableFields::reverse_iterator aIter = getFields().rbegin();
-        OTableFieldDescRef pEntry = NULL;
+        OTableFieldDescRef pEntry = nullptr;
         for(sal_uInt16 nPos=sal::static_int_cast< sal_uInt16 >(getFields().size());aIter != getFields().rend();++aIter,--nPos)
         {
             pEntry = *aIter;
@@ -1488,7 +1488,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
     // put at the end of the list if to small or to big,
     if ((_nColumnPosition == BROWSER_INVALIDID) || (_nColumnPosition >= getFields().size()))   // append the field
     {
-        if (FindFirstFreeCol(_nColumnPosition) == NULL)  // no more free columns
+        if (FindFirstFreeCol(_nColumnPosition) == nullptr)  // no more free columns
         {
             AppendNewCol();
             _nColumnPosition = sal::static_int_cast< sal_uInt16 >(
@@ -1538,7 +1538,7 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxd
 {
     OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(jxdSource.pListBox->GetTabWin());
     if (!pSourceWin)
-        return NULL;
+        return nullptr;
 
     // name and position of the selected field
     OUString aFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
@@ -1562,7 +1562,7 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _r
 {
 
     if(m_nMaxColumns && m_nMaxColumns <= FieldsCount())
-        return NULL;
+        return nullptr;
     if (bActivate)
         SaveModified();
 
@@ -1616,12 +1616,12 @@ OTableFieldDescRef OSelectionBrowseBox::FindFirstFreeCol(sal_uInt16& _rColumnPos
         ++aIter;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void OSelectionBrowseBox::CheckFreeColumns(sal_uInt16& _rColumnPosition)
 {
-    if (FindFirstFreeCol(_rColumnPosition) == NULL)
+    if (FindFirstFreeCol(_rColumnPosition) == nullptr)
     {
         // it is full, append a Packen column
         AppendNewCol(DEFAULT_QUERY_COLS);
@@ -2111,7 +2111,7 @@ OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
     sal_uInt16 nPos = GetColumnPos(nColId);
 
     OTableFieldDescRef pEntry = getFields()[nPos-1];
-    OSL_ENSURE(pEntry != NULL, "OSelectionBrowseBox::GetCellText : invalid column id, prepare for GPF ... ");
+    OSL_ENSURE(pEntry != nullptr, "OSelectionBrowseBox::GetCellText : invalid column id, prepare for GPF ... ");
     if ( pEntry->IsEmpty() )
         return OUString();
 
@@ -2232,7 +2232,7 @@ OUString OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 n
 
     sal_uInt16 nPos = GetColumnPos(nColId);
     OTableFieldDescRef pEntry = getFields()[nPos - 1];
-    OSL_ENSURE(pEntry != NULL, "OSelectionBrowseBox::GetCellContents : invalid column id, prepare for GPF ... ");
+    OSL_ENSURE(pEntry != nullptr, "OSelectionBrowseBox::GetCellContents : invalid column id, prepare for GPF ... ");
 
     switch (nCellIndex)
     {
@@ -2258,7 +2258,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
 
     sal_uInt16 nPos = GetColumnPos(nColId);
     OTableFieldDescRef pEntry = getEntry(nPos - 1);
-    OSL_ENSURE(pEntry != NULL, "OSelectionBrowseBox::SetCellContents : invalid column id, prepare for GPF ... ");
+    OSL_ENSURE(pEntry != nullptr, "OSelectionBrowseBox::SetCellContents : invalid column id, prepare for GPF ... ");
 
     switch (nRow)
     {
@@ -2662,7 +2662,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
 
 Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
-    OTableFieldDescRef pEntry = NULL;
+    OTableFieldDescRef pEntry = nullptr;
     if(getFields().size() > sal_uInt16(_nColumnPos - 1))
         pEntry = getFields()[_nColumnPos - 1];
 

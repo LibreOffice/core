@@ -98,7 +98,7 @@ IMPLEMENT_FORWARD_REFCOUNT(ODBTable,OTable_Base)
 
 OColumn* ODBTable::createColumn(const OUString& _rName) const
 {
-    OColumn* pReturn = NULL;
+    OColumn* pReturn = nullptr;
 
     Reference<XPropertySet> xProp;
     if ( m_xDriverColumns.is() && m_xDriverColumns->hasByName(_rName) )
@@ -143,9 +143,9 @@ void SAL_CALL ODBTable::disposing()
 {
     OPropertySetHelper::disposing();
     OTable_Base::disposing();
-    m_xColumnDefinitions = NULL;
-    m_xDriverColumns = NULL;
-    m_pColumnMediator = NULL;
+    m_xColumnDefinitions = nullptr;
+    m_xDriverColumns = nullptr;
+    m_pColumnMediator = nullptr;
 }
 
 void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
@@ -321,7 +321,7 @@ sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) thr
 
 Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -342,7 +342,7 @@ Reference< XPropertySet > ODBTable::createColumnDescriptor()
 sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
 {
     Reference<XDatabaseMetaData> xMeta = getMetaData();
-    OColumns* pCol = new OColumns(*this, m_aMutex, NULL, isCaseSensitive(), _rNames, this,this,
+    OColumns* pCol = new OColumns(*this, m_aMutex, nullptr, isCaseSensitive(), _rNames, this,this,
                                     getAlterService().is() || (xMeta.is() && xMeta->supportsAlterTableWithAddColumn()),
                                     getAlterService().is() || (xMeta.is() && xMeta->supportsAlterTableWithDropColumn()));
     static_cast<OColumnsHelper*>(pCol)->setParent(this);
@@ -359,7 +359,7 @@ sdbcx::OCollection* ODBTable::createKeys(const TStringVector& _rNames)
 
 sdbcx::OCollection* ODBTable::createIndexes(const TStringVector& _rNames)
 {
-    return new OIndexes(this,m_aMutex,_rNames,NULL);
+    return new OIndexes(this,m_aMutex,_rNames,nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

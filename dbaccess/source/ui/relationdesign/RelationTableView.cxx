@@ -64,7 +64,7 @@ using namespace ::com::sun::star::accessibility;
 ORelationTableView::ORelationTableView( vcl::Window* pParent, ORelationDesignView* pView )
     :OJoinTableView( pParent, pView )
     , ::comphelper::OContainerListener(m_aMutex)
-    ,m_pExistingConnection(NULL)
+    ,m_pExistingConnection(nullptr)
     ,m_bInRemove(false)
 
 {
@@ -288,7 +288,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
 
     if(aIter != GetTabWinMap().end())
     {
-        aIter->second->SetZOrder(NULL, ZOrderFlags::First);
+        aIter->second->SetZOrder(nullptr, ZOrderFlags::First);
         aIter->second->GrabFocus();
         EnsureVisible(aIter->second);
         // no new one
@@ -360,7 +360,7 @@ void ORelationTableView::lookForUiActivities()
             ConnDoubleClicked(m_pExistingConnection);
             m_pCurrentlyTabConnData.reset();
         }
-        m_pExistingConnection = NULL;
+        m_pExistingConnection = nullptr;
     }
     if(m_pCurrentlyTabConnData)
     {

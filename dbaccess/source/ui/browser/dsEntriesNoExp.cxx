@@ -106,7 +106,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( const SvTree
 
 void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, bool _bSelect)
 {
-    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
+    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : nullptr;
     if (pTextItem)
     {
         static_cast<OBoldListboxString*>(pTextItem)->emphasize(_bSelect);
@@ -128,7 +128,7 @@ void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, bool _bSelect)
 
 bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry)
 {
-    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
+    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : nullptr;
     if (pTextItem)
         return static_cast<OBoldListboxString*>(pTextItem)->isEmphasized();
     else {

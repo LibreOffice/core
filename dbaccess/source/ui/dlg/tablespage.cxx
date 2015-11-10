@@ -364,7 +364,7 @@ namespace dbaui
             m_pTablesList->Expand(pExpand);
             pExpand = m_pTablesList->FirstChild(pExpand);
             if (pExpand && SvTreeList::NextSibling(pExpand))
-                pExpand = NULL;
+                pExpand = nullptr;
         }
 
         // update the toolbox according the current selection and check state
@@ -453,8 +453,8 @@ namespace dbaui
         {
             bool bCatalogWildcard = false;
             bool bSchemaWildcard =  false;
-            SvTreeListEntry* pSchema = NULL;
-            SvTreeListEntry* pCatalog = NULL;
+            SvTreeListEntry* pSchema = nullptr;
+            SvTreeListEntry* pCatalog = nullptr;
 
             if (m_pTablesList->GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED && !m_pTablesList->GetModel()->HasChildren(pEntry))
             {   // checked and a leaf, which means it's no catalog, no schema, but a real table
@@ -464,7 +464,7 @@ namespace dbaui
                     pSchema = m_pTablesList->GetModel()->GetParent(pEntry);
                     if (pAllObjectsEntry == pSchema)
                         // do not want to have the root entry
-                        pSchema = NULL;
+                        pSchema = nullptr;
 
                     if (pSchema)
                     {   // it's a real schema entry, not the "all objects" root
@@ -473,7 +473,7 @@ namespace dbaui
                             pCatalog = m_pTablesList->GetModel()->GetParent(pSchema);
                             if (pAllObjectsEntry == pCatalog)
                                 // do not want to have the root entry
-                                pCatalog = NULL;
+                                pCatalog = nullptr;
 
                             if (pCatalog)
                             {   // it's a real catalog entry, not the "all objects" root
@@ -533,7 +533,7 @@ namespace dbaui
 
     SvTreeListEntry* OTableSubscriptionPage::implNextSibling(SvTreeListEntry* _pEntry) const
     {
-        SvTreeListEntry* pReturn = NULL;
+        SvTreeListEntry* pReturn = nullptr;
         if (_pEntry)
         {
             pReturn = SvTreeList::NextSibling(_pEntry);

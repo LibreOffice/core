@@ -198,7 +198,7 @@ void OSqlEdit::SetText(const OUString& rNewText)
     if (m_timerUndoActionCreation.IsActive())
     {   // create the trailing undo-actions
         m_timerUndoActionCreation.Stop();
-        LINK(this, OSqlEdit, OnUndoActionTimer).Call(NULL);
+        LINK(this, OSqlEdit, OnUndoActionTimer).Call(nullptr);
     }
 
     MultiLineEditSyntaxHighlight::SetText(rNewText);

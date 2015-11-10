@@ -284,7 +284,7 @@ void OStaticSet::reset(const Reference< XResultSet> &_xDriverSet)
     }
     m_aSetIter = m_aSet.end();
     m_bEnd = false;
-    m_aSet.push_back(NULL); // this is the beforefirst record
+    m_aSet.push_back(nullptr); // this is the beforefirst record
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,7 +39,7 @@ OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
 
 OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, sal_uInt16 nCommentID)
     :OQueryDesignUndoAction(pOwner, nCommentID)
-    ,m_pConnection(NULL)
+    ,m_pConnection(nullptr)
     ,m_bOwnerOfConn(false)
 {
 }

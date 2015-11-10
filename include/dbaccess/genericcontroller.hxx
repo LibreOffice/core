@@ -419,7 +419,7 @@ namespace dbaui
         // to all listeners to the given css::util::URL
         // if there is a toolbar slot with the given id it is updated (the new state is determined via GetState)
         // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
-        void InvalidateFeature(sal_uInt16 nId, const css::uno::Reference< css::frame::XStatusListener > & xListener = NULL, bool _bForceBroadcast = false);
+        void InvalidateFeature(sal_uInt16 nId, const css::uno::Reference< css::frame::XStatusListener > & xListener = nullptr, bool _bForceBroadcast = false);
 
         /** InvalidateAll invalidates all features currently known
         */

@@ -36,12 +36,12 @@ OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwB
 
 OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct()
 {
-    pOwner = NULL;
+    pOwner = nullptr;
 }
 
 OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID)
     : OQueryDesignUndoAction(pOwner, nCommentID)
-    , m_pTabWin(NULL)
+    , m_pTabWin(nullptr)
     , m_bOwnerOfObjects(false)
 {
 }

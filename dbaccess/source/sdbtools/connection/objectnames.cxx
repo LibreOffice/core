@@ -293,7 +293,7 @@ namespace sdbtools
             )
             throw IllegalArgumentException(
                 OUString( SdbtRes( STR_INVALID_COMMAND_TYPE ) ),
-                NULL,
+                nullptr,
                 0
             );
     }
@@ -316,7 +316,7 @@ namespace sdbtools
         {
             throw IllegalArgumentException(
                 OUString( SdbtRes( STR_CONN_WITHOUT_QUERIES_OR_TABLES ) ),
-                NULL,
+                nullptr,
                 0
             );
         }
@@ -347,7 +347,7 @@ namespace sdbtools
         {
             throw IllegalArgumentException(
                 "The connection could not provide its database's meta data.",
-                NULL,
+                nullptr,
                 0
             );
         }

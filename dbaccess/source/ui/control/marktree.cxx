@@ -182,7 +182,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
         }
     }
 
-    SvTreeListEntry* pEntry = IsSelected(_pEntry) ? FirstSelected() : NULL;
+    SvTreeListEntry* pEntry = IsSelected(_pEntry) ? FirstSelected() : nullptr;
     while(pEntry)
     {
         SetCheckButtonState(pEntry,eState);

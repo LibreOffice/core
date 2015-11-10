@@ -277,7 +277,7 @@ namespace dbaui
 
                 Command aCommand;
                 aCommand.Name = "close";
-                _rxCommandProcessor->execute( aCommand, nCommandIdentifier, NULL );
+                _rxCommandProcessor->execute( aCommand, nCommandIdentifier, nullptr );
                 bSuccess = true;
             }
             catch( const Exception& )

@@ -53,7 +53,7 @@ OQueryTableWindow::OQueryTableWindow( vcl::Window* pParent, const TTableWindowDa
     :OTableWindow( pParent, pTabWinData )
     ,m_nAliasNum(0)
 {
-    if (pszInitialAlias != NULL)
+    if (pszInitialAlias != nullptr)
         m_strInitialAlias = OUString(pszInitialAlias);
     else
         m_strInitialAlias = GetAliasName();
@@ -116,19 +116,19 @@ void* OQueryTableWindow::createUserData(const Reference< XPropertySet>& _xColumn
 void OQueryTableWindow::deleteUserData(void*& _pUserData)
 {
     delete static_cast<OTableFieldInfo*>(_pUserData);
-    _pUserData = NULL;
+    _pUserData = nullptr;
 }
 
 void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
 {
-    OSL_ENSURE(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry must not be NULL !");
+    OSL_ENSURE(pEntry != nullptr, "OQueryTableWindow::OnEntryDoubleClicked : pEntry must not be NULL !");
         // you could also scan that and then return, but like this it could possibly hint to faults at the caller
 
     if (getTableView()->getDesignView()->getController().isReadOnly())
         return;
 
     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : field doesn't have FieldInfo !");
+    OSL_ENSURE(pInf != nullptr, "OQueryTableWindow::OnEntryDoubleClicked : field doesn't have FieldInfo !");
 
     // build up DragInfo
     OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(), m_xListBox->GetEntryText(pEntry));

@@ -238,7 +238,7 @@ namespace dbaui
         if ( -1 != nApprovePos )
         {
             // ask whether it should be saved
-            nRet = ExecuteQuerySaveDocument(NULL,_rDocuRequest.Name);
+            nRet = ExecuteQuerySaveDocument(nullptr,_rDocuRequest.Name);
         }
 
         if ( RET_CANCEL == nRet )
@@ -292,7 +292,7 @@ namespace dbaui
         if ( m_xContext.is() )
         {
             Reference< XInteractionHandler2 > xFallbackHandler(
-                InteractionHandler::createWithParent(m_xContext, 0) );
+                InteractionHandler::createWithParent(m_xContext, nullptr) );
             xFallbackHandler->handle( _rxRequest );
             return true;
         }

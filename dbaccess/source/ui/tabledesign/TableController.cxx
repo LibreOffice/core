@@ -433,7 +433,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
         {
             m_sName.clear();
             stopTableListening();
-            m_xTable = NULL;
+            m_xTable = nullptr;
         }
     }
     return ! (aInfo.isValid() || bError);
@@ -631,7 +631,7 @@ void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(R
     if ( _rSource.Source == m_xTable )
     {   // some deleted our table so we have a new one
         stopTableListening();
-        m_xTable    = NULL;
+        m_xTable    = nullptr;
         m_bNew      = true;
         setModified(sal_True);
     }
@@ -652,7 +652,7 @@ void OTableController::losingConnection( )
         xComponent->removeEventListener(xEvtL);
     }
     stopTableListening();
-    m_xTable    = NULL;
+    m_xTable    = nullptr;
     assignTable();
     if(!m_xTable.is())
     {
@@ -702,7 +702,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup, boo
                     xColumn->setPropertyValue(PROPERTY_NAME,makeAny(pField->GetName()));
 
                 xAppend->appendByDescriptor(xColumn);
-                xColumn = NULL;
+                xColumn = nullptr;
                 // now only the settings are missing
                 if(xColumns->hasByName(pField->GetName()))
                 {
@@ -1093,7 +1093,7 @@ void OTableController::alterColumns()
                     }
                 }
                 // exceptions are caught outside
-                xNewColumn = NULL;
+                xNewColumn = nullptr;
                 if(xColumns->hasByName(pField->GetName()))
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                 bReload = true;
@@ -1197,7 +1197,7 @@ void OTableController::alterColumns()
                     ScopedVclPtrInstance< OSQLMessageBox > aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
                     if(aMsg->Execute() == RET_YES)
                     {
-                        xKeyColumns = NULL;
+                        xKeyColumns = nullptr;
                         dropPrimaryKey();
                     }
                     else

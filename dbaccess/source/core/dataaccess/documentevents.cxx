@@ -99,7 +99,7 @@ namespace dbaccess
                 { "OnTitleChanged",         false },
                 { "OnSubComponentOpened",   false },
                 { "OnSubComponentClosed",   false },
-                { NULL, false }
+                { nullptr, false }
             };
             return s_aData;
         }

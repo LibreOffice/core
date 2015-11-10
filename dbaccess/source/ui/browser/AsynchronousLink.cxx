@@ -27,7 +27,7 @@ OAsynchronousLink::OAsynchronousLink( const Link<void*,void>& _rHandler )
     :m_aHandler(_rHandler)
     ,m_aEventSafety()
     ,m_aDestructionSafety()
-    ,m_nEventId(0)
+    ,m_nEventId(nullptr)
 {
 }
 
@@ -37,7 +37,7 @@ OAsynchronousLink::~OAsynchronousLink()
         ::osl::MutexGuard aEventGuard( m_aEventSafety );
         if ( m_nEventId )
             Application::RemoveUserEvent(m_nEventId);
-        m_nEventId = 0;
+        m_nEventId = nullptr;
     }
 
     {
@@ -62,7 +62,7 @@ void OAsynchronousLink::CancelCall()
     ::osl::MutexGuard aEventGuard( m_aEventSafety );
     if ( m_nEventId )
         Application::RemoveUserEvent( m_nEventId );
-    m_nEventId = 0;
+    m_nEventId = nullptr;
 }
 
 IMPL_LINK_TYPED(OAsynchronousLink, OnAsyncCall, void*, _pArg, void)
@@ -75,7 +75,7 @@ IMPL_LINK_TYPED(OAsynchronousLink, OnAsyncCall, void*, _pArg, void)
                 // our destructor deleted the event just while we are waiting for m_aEventSafety
                 // -> get outta here
                 return;
-            m_nEventId = 0;
+            m_nEventId = nullptr;
         }
     }
     m_aHandler.Call(_pArg);

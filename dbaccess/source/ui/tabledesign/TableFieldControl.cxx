@@ -108,7 +108,7 @@ css::uno::Reference< css::sdbc::XDatabaseMetaData> OTableFieldControl::getMetaDa
 {
     Reference<XConnection> xCon = GetCtrl()->GetView()->getController().getConnection();
     if(!xCon.is())
-        return NULL;
+        return nullptr;
     return xCon->getMetaData();
 }
 

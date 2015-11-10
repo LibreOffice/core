@@ -91,7 +91,7 @@ LimitBoxController::LimitBoxController(
     svt::ToolboxController( rxContext,
                             uno::Reference< frame::XFrame >(),
                             OUString( ".uno:DBLimit" ) ),
-    m_pLimitBox( NULL )
+    m_pLimitBox( nullptr )
 {
 }
 

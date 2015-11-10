@@ -147,7 +147,7 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference< XDocumentHandler >& _xFilter)
 {
     OSL_ENSURE( xStorage.is(), "Need storage!");
-    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");
 
     if ( xStorage.is() )
     {
@@ -164,7 +164,7 @@ sal_Int32 ReadThroughComponent(
                 // if no stream can be opened, return immediately with OK signal
 
                 // do we even have an alternative name?
-                if ( NULL == pCompatibilityStreamName )
+                if ( nullptr == pCompatibilityStreamName )
                     return 0;
 
                 // if so, does the stream exist?
@@ -295,7 +295,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     {
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
-        tools::SvRef<SfxMedium> pMedium(0);
+        tools::SvRef<SfxMedium> pMedium(nullptr);
         if (!xStorage.is())
         {
             OUString sStreamRelPath;
@@ -382,7 +382,7 @@ SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
                                       const uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetDocElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
@@ -701,7 +701,7 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
 SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const OUString& rLocalName,
                                      const uno::Reference< XAttributeList>& xAttrList, bool bIsAutoStyle )
 {
-    SvXMLImportContext *pContext = NULL;
+    SvXMLImportContext *pContext = nullptr;
     if (!pContext)
     {
         pContext = new OTableStylesContext(*this, _nPrefix, rLocalName, xAttrList, bIsAutoStyle);

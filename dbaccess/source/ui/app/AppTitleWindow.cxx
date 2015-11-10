@@ -31,7 +31,7 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
 , m_aSpace1(VclPtr<FixedText>::Create(this))
 , m_aSpace2(VclPtr<FixedText>::Create(this))
 , m_aTitle(VclPtr<FixedText>::Create(this))
-, m_pChild(NULL)
+, m_pChild(nullptr)
 , m_bShift(_bShift)
 {
 

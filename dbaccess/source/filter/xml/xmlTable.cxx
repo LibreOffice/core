@@ -112,7 +112,7 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
         const OUString& rLocalName,
         const uno::Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetQueryElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )

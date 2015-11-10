@@ -71,7 +71,7 @@ namespace dbaccess
         */
         void    notifyDocumentEvent(
                     const OUString& _EventName,
-                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = NULL,
+                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = nullptr,
                     const css::uno::Any& _Supplement = css::uno::Any()
                 );
 
@@ -84,7 +84,7 @@ namespace dbaccess
         */
         void    notifyDocumentEventAsync(
                     const OUString& _EventName,
-                    const css::uno::Reference< css::frame::XController2 >& _ViewController = NULL,
+                    const css::uno::Reference< css::frame::XController2 >& _ViewController = nullptr,
                     const css::uno::Any& _Supplement = css::uno::Any()
                 );
 
@@ -97,7 +97,7 @@ namespace dbaccess
         */
         void    notifyDocumentEvent(
                     const sal_Char* _pAsciiEventName,
-                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = NULL,
+                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = nullptr,
                     const css::uno::Any& _rSupplement = css::uno::Any()
                 )
         {
@@ -113,7 +113,7 @@ namespace dbaccess
         */
         void    notifyDocumentEventAsync(
                     const sal_Char* _pAsciiEventName,
-                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = NULL,
+                    const css::uno::Reference< css::frame::XController2 >& _rxViewController = nullptr,
                     const css::uno::Any& _rSupplement = css::uno::Any()
                 )
         {

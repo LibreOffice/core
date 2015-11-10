@@ -44,8 +44,8 @@ namespace dbaui
     // OQueryContainerWindow
     OQueryContainerWindow::OQueryContainerWindow(vcl::Window* pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
         :ODataView( pParent, _rController, _rxContext )
-        ,m_pViewSwitch(NULL)
-        ,m_pBeamer(NULL)
+        ,m_pViewSwitch(nullptr)
+        ,m_pBeamer(nullptr)
     {
         m_pViewSwitch = new OQueryViewSwitch( this, _rController, _rxContext );
 
@@ -62,7 +62,7 @@ namespace dbaui
     {
         {
             std::unique_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
-            m_pViewSwitch = NULL;
+            m_pViewSwitch = nullptr;
         }
         if ( m_pBeamer )
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
@@ -70,7 +70,7 @@ namespace dbaui
         if ( m_xBeamer.is() )
         {
             Reference< css::util::XCloseable > xCloseable(m_xBeamer,UNO_QUERY);
-            m_xBeamer = NULL;
+            m_xBeamer = nullptr;
             if(xCloseable.is())
                 xCloseable->close(sal_False); // false - holds the ownership of this frame
         }
@@ -150,8 +150,8 @@ namespace dbaui
         {
             // here I know that we will be destroyed from the frame
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-            m_pBeamer = NULL;
-            m_xBeamer = NULL;
+            m_pBeamer = nullptr;
+            m_xBeamer = nullptr;
             m_pSplitter->Hide();
             Resize();
         }

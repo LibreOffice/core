@@ -65,7 +65,7 @@ namespace dbaui
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-        AddTabPage("settings", OUserAdmin::Create, 0);
+        AddTabPage("settings", OUserAdmin::Create, nullptr);
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
         RemoveResetButton();
@@ -89,7 +89,7 @@ namespace dbaui
             }
         }
 
-        SetInputSet(NULL);
+        SetInputSet(nullptr);
         DELETEZ(pExampleSet);
         SfxTabDialog::dispose();
     }
@@ -102,7 +102,7 @@ namespace dbaui
             if ( !aMetaData.supportsUserAdministration( getORB() ) )
             {
                 OUString sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
-                throw SQLException(sError,NULL,OUString("S1000") ,0,Any());
+                throw SQLException(sError,nullptr,OUString("S1000") ,0,Any());
             }
         }
         catch(const SQLException&)

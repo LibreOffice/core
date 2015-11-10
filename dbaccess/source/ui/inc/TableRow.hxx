@@ -43,7 +43,7 @@ namespace dbaui
         ~OTableRow();
 
         inline OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
-        inline bool isValid() const { return GetActFieldDescr() != NULL; }
+        inline bool isValid() const { return GetActFieldDescr() != nullptr; }
 
         void SetFieldType( const TOTypeInfoSP& _pType, bool _bForce = false );
 

@@ -93,35 +93,35 @@ namespace
 OFieldDescControl::OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar )
     :TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
     ,pHelp( pHelpBar )
-    ,pLastFocusWindow(NULL)
-    ,m_pActFocusWindow(NULL)
-    ,pDefaultText(NULL)
-    ,pRequiredText(NULL)
-    ,pAutoIncrementText(NULL)
-    ,pTextLenText(NULL)
-    ,pNumTypeText(NULL)
-    ,pLengthText(NULL)
-    ,pScaleText(NULL)
-    ,pFormatText(NULL)
-    ,pBoolDefaultText(NULL)
-    ,m_pColumnNameText(NULL)
-    ,m_pTypeText(NULL)
-    ,m_pAutoIncrementValueText(NULL)
-    ,pRequired(NULL)
-    ,pNumType(NULL)
-    ,pAutoIncrement(NULL)
-    ,pDefault(NULL)
-    ,pTextLen(NULL)
-    ,pLength(NULL)
-    ,pScale(NULL)
-    ,pFormatSample(NULL)
-    ,pBoolDefault(NULL)
-    ,m_pColumnName(NULL)
-    ,m_pType(NULL)
-    ,m_pAutoIncrementValue(NULL)
-    ,pFormat(NULL)
-    ,m_pVertScroll( NULL )
-    ,m_pHorzScroll( NULL )
+    ,pLastFocusWindow(nullptr)
+    ,m_pActFocusWindow(nullptr)
+    ,pDefaultText(nullptr)
+    ,pRequiredText(nullptr)
+    ,pAutoIncrementText(nullptr)
+    ,pTextLenText(nullptr)
+    ,pNumTypeText(nullptr)
+    ,pLengthText(nullptr)
+    ,pScaleText(nullptr)
+    ,pFormatText(nullptr)
+    ,pBoolDefaultText(nullptr)
+    ,m_pColumnNameText(nullptr)
+    ,m_pTypeText(nullptr)
+    ,m_pAutoIncrementValueText(nullptr)
+    ,pRequired(nullptr)
+    ,pNumType(nullptr)
+    ,pAutoIncrement(nullptr)
+    ,pDefault(nullptr)
+    ,pTextLen(nullptr)
+    ,pLength(nullptr)
+    ,pScale(nullptr)
+    ,pFormatSample(nullptr)
+    ,pBoolDefault(nullptr)
+    ,m_pColumnName(nullptr)
+    ,m_pType(nullptr)
+    ,m_pAutoIncrementValue(nullptr)
+    ,pFormat(nullptr)
+    ,m_pVertScroll( nullptr )
+    ,m_pHorzScroll( nullptr )
     ,m_pPreviousType()
     ,m_nPos(-1)
     ,aYes(ModuleRes(STR_VALUE_YES))
@@ -131,7 +131,7 @@ OFieldDescControl::OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar*
     ,m_nWidth(50)
     ,m_bAdded(false)
     ,m_bRightAligned(false)
-    ,pActFieldDescr(NULL)
+    ,pActFieldDescr(nullptr)
 {
     Contruct();
 }
@@ -389,7 +389,7 @@ void OFieldDescControl::ScrollAllAggregates()
         OSL_ENSURE(sizeof(ppAggregates)/sizeof(ppAggregates[0]) == sizeof(ppAggregatesText)/sizeof(ppAggregatesText[0]),"Lists are not identical!");
 
         for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
-            ScrollAggregate(ppAggregatesText[i],ppAggregates[i],NULL,nDeltaX, nDeltaY);
+            ScrollAggregate(ppAggregatesText[i],ppAggregates[i],nullptr,nDeltaX, nDeltaY);
 
         ScrollAggregate(pFormatText,pFormatSample,pFormat,nDeltaX, nDeltaY);
     }
@@ -674,7 +674,7 @@ void OFieldDescControl::ArrangeAggregates()
 
     // And go ...
     int nCurrentControlPos = 0;
-    Control* pZOrderPredecessor = NULL;
+    Control* pZOrderPredecessor = nullptr;
     for (size_t i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
     {
         if (adAggregates[i].pctrlInputControl)
@@ -706,8 +706,8 @@ void OFieldDescControl::ArrangeAggregates()
     }
 
     // Finally, put the ScrollBars at the top of the z-order
-    m_pVertScroll->SetZOrder(NULL, ZOrderFlags::First);
-    m_pHorzScroll->SetZOrder(NULL, ZOrderFlags::First);
+    m_pVertScroll->SetZOrder(nullptr, ZOrderFlags::First);
+    m_pHorzScroll->SetZOrder(nullptr, ZOrderFlags::First);
 }
 
 void OFieldDescControl::ActivateAggregate( EControlType eType )
@@ -928,7 +928,7 @@ VclPtr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(sal_uInt16 
 
 void OFieldDescControl::DeactivateAggregate( EControlType eType )
 {
-    pLastFocusWindow = NULL;
+    pLastFocusWindow = nullptr;
     // Destroy Controls
     switch( eType )
     {
@@ -1071,7 +1071,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         DeactivateAggregate( tpAutoIncrementValue );
         m_pPreviousType = TOTypeInfoSP();
         // Reset the saved focus' pointer
-        pLastFocusWindow = NULL;
+        pLastFocusWindow = nullptr;
         if ( m_bAdded )
         {
             ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
@@ -1098,7 +1098,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     if( m_pPreviousType != pFieldType )
     {
         // Reset the saved focus' pointer
-        pLastFocusWindow = NULL;
+        pLastFocusWindow = nullptr;
 
         // Controls, which must NOT be displayed again
         DeactivateAggregate( tpNumType );
@@ -1509,7 +1509,7 @@ void OFieldDescControl::GetFocus()
     if( pLastFocusWindow )
     {
         pLastFocusWindow->GrabFocus();
-        pLastFocusWindow = NULL;
+        pLastFocusWindow = nullptr;
     }
 }
 
@@ -1528,7 +1528,7 @@ void OFieldDescControl::implFocusLost(vcl::Window* _pWhich)
 
 void OFieldDescControl::LoseFocus()
 {
-    implFocusLost(NULL);
+    implFocusLost(nullptr);
 
     TabPage::LoseFocus();
 }

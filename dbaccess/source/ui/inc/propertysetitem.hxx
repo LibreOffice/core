@@ -41,7 +41,7 @@ namespace dbaui
         OPropertySetItem(const OPropertySetItem& _rSource);
 
         virtual bool             operator==(const SfxPoolItem& _rItem) const override;
-        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const override;
+        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = nullptr) const override;
     };
 
 }   // namespace dbaui

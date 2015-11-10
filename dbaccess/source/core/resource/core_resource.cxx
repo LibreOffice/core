@@ -38,7 +38,7 @@ namespace dbaccess
     }
 
     sal_Int32       ResourceManager::s_nClients = 0;
-    ResMgr*         ResourceManager::m_pImpl = NULL;
+    ResMgr*         ResourceManager::m_pImpl = nullptr;
 
     void ResourceManager::ensureImplExists()
     {
@@ -86,7 +86,7 @@ namespace dbaccess
         if (!--s_nClients && m_pImpl)
         {
             delete m_pImpl;
-            m_pImpl = NULL;
+            m_pImpl = nullptr;
         }
     }
 }

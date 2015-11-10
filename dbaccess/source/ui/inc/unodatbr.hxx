@@ -395,7 +395,7 @@ namespace dbaui
                 If <TRUE/>, all ancestor on the way to the entry will be expanded
         */
         SvTreeListEntry* getObjectEntry(const svx::ODataAccessDescriptor& _rDescriptor,
-            SvTreeListEntry** _ppDataSourceEntry = NULL, SvTreeListEntry** _ppContainerEntry = NULL,
+            SvTreeListEntry** _ppDataSourceEntry = nullptr, SvTreeListEntry** _ppContainerEntry = nullptr,
             bool _bExpandAncestors = true
         );
         /** retrieves the tree entry for the object described by data source name, command and command type
@@ -416,7 +416,7 @@ namespace dbaui
         */
         SvTreeListEntry* getObjectEntry(
             const OUString& _rDataSource, const OUString& _rCommand, sal_Int32 _nCommandType,
-            SvTreeListEntry** _ppDataSourceEntry = NULL, SvTreeListEntry** _ppContainerEntry = NULL,
+            SvTreeListEntry** _ppDataSourceEntry = nullptr, SvTreeListEntry** _ppContainerEntry = nullptr,
             bool _bExpandAncestors = true,
             const SharedConnection& _rxConnection = SharedConnection()
         );

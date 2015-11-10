@@ -130,7 +130,7 @@ namespace dbaui
                 if ( !xHandler.is() )
                 {
                     // instantiate the default SDB interaction handler
-                    xHandler.set( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
+                    xHandler.set( InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY );
                 }
 
                 xConnection = xConnectionCompletion->connectWithCompletion(xHandler);

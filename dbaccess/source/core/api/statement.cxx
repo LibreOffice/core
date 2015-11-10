@@ -124,7 +124,7 @@ void OStatementBase::disposeResultSet()
     Reference< XComponent > xComp(m_aResultSet.get(), UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
-    m_aResultSet = NULL;
+    m_aResultSet = nullptr;
 }
 
 // OComponentHelper
@@ -140,7 +140,7 @@ void OStatementBase::disposing()
     // free the original statement
     {
         MutexGuard aCancelGuard(m_aCancelMutex);
-        m_xAggregateAsCancellable = NULL;
+        m_xAggregateAsCancellable = nullptr;
     }
 
     if ( m_xAggregateAsSet.is() )
@@ -153,7 +153,7 @@ void OStatementBase::disposing()
         {// don't care for anymore
         }
     }
-    m_xAggregateAsSet = NULL;
+    m_xAggregateAsSet = nullptr;
 
     // free the parent at last
     OSubComponent::disposing();
@@ -216,7 +216,7 @@ sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & 
             {
                 // get the property name
                 OUString sPropName;
-                getInfoHelper().fillPropertyMembersByHandle( &sPropName, NULL, nHandle );
+                getInfoHelper().fillPropertyMembersByHandle( &sPropName, nullptr, nHandle );
 
                 // now set the value
                 Any aCurrentValue = m_xAggregateAsSet->getPropertyValue( sPropName );
@@ -254,7 +254,7 @@ void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
             if ( m_xAggregateAsSet.is() )
             {
                 OUString sPropName;
-                getInfoHelper().fillPropertyMembersByHandle( &sPropName, NULL, nHandle );
+                getInfoHelper().fillPropertyMembersByHandle( &sPropName, nullptr, nHandle );
                 m_xAggregateAsSet->setPropertyValue( sPropName, rValue );
             }
             break;
@@ -279,7 +279,7 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
             if ( m_xAggregateAsSet.is() )
             {
                 OUString sPropName;
-                const_cast< OStatementBase* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, NULL, nHandle );
+                const_cast< OStatementBase* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, nullptr, nHandle );
                 rValue = m_xAggregateAsSet->getPropertyValue( sPropName );
             }
             break;

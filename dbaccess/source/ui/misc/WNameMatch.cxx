@@ -62,7 +62,7 @@ OWizNameMatching::OWizNameMatching( vcl::Window* pParent)
 
     m_pCTRL_LEFT->SetSelectHdl(LINK(this,OWizNameMatching,TableListClickHdl));
     m_pCTRL_RIGHT->SetSelectHdl(LINK(this,OWizNameMatching,TableListRightSelectHdl));
-    m_pCTRL_RIGHT->EnableCheckButton( NULL );
+    m_pCTRL_RIGHT->EnableCheckButton( nullptr );
 
     m_pCTRL_LEFT->SetStyle( m_pCTRL_LEFT->GetStyle() | WB_FORCE_MAKEVISIBLE );
     m_pCTRL_RIGHT->SetStyle( m_pCTRL_RIGHT->GetStyle() | WB_FORCE_MAKEVISIBLE );
@@ -215,8 +215,8 @@ IMPL_LINK_TYPED( OWizNameMatching, ButtonClickHdl, Button *, pButton, void )
         else if(pButton == m_pColumn_down)
             nPos += 2;
 
-        m_pCTRL_LEFT->ModelIsMoving(pEntry,NULL,nPos);
-        m_pCTRL_LEFT->GetModel()->Move(pEntry,NULL,nPos);
+        m_pCTRL_LEFT->ModelIsMoving(pEntry,nullptr,nPos);
+        m_pCTRL_LEFT->GetModel()->Move(pEntry,nullptr,nPos);
         m_pCTRL_LEFT->ModelHasMoved(pEntry);
 
         long nThumbPos      = m_pCTRL_LEFT->GetVScroll()->GetThumbPos();
@@ -242,8 +242,8 @@ IMPL_LINK_TYPED( OWizNameMatching, RightButtonClickHdl, Button *, pButton, void 
         else if(pButton == m_pColumn_down_right)
             nPos += 2;
 
-        m_pCTRL_RIGHT->ModelIsMoving(pEntry,NULL,nPos);
-        m_pCTRL_RIGHT->GetModel()->Move(pEntry,NULL,nPos);
+        m_pCTRL_RIGHT->ModelIsMoving(pEntry,nullptr,nPos);
+        m_pCTRL_RIGHT->GetModel()->Move(pEntry,nullptr,nPos);
         m_pCTRL_RIGHT->ModelHasMoved(pEntry);
         long nThumbPos      = m_pCTRL_RIGHT->GetVScroll()->GetThumbPos();
         long nVisibleSize   = m_pCTRL_RIGHT->GetVScroll()->GetVisibleSize();
@@ -397,7 +397,7 @@ void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
     ODatabaseExport::TColumnVector::const_iterator aEnd = _rList.end();
     for(;aIter != aEnd;++aIter)
     {
-        SvTreeListEntry* pEntry = InsertEntry((*aIter)->first, 0, false, TREELIST_APPEND, (*aIter)->second);
+        SvTreeListEntry* pEntry = InsertEntry((*aIter)->first, nullptr, false, TREELIST_APPEND, (*aIter)->second);
         SvButtonState eState = !(m_bReadOnly && (*aIter)->second->IsAutoIncrement()) ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
         SetCheckButtonState( pEntry, eState );
     }

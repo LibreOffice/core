@@ -188,7 +188,7 @@ namespace dbmm
     {
         static void lcl_appendErrorDescription( OUStringBuffer& _inout_rBuffer, const MigrationError& _rError )
         {
-            const sal_Char* pAsciiErrorDescription( NULL );
+            const sal_Char* pAsciiErrorDescription( nullptr );
             ::std::vector< OUString > aParameterNames;
             switch ( _rError.eType )
             {

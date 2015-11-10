@@ -68,10 +68,10 @@ UnoDataBrowserView::UnoDataBrowserView( vcl::Window* pParent,
                                         IController& _rController,
                                         const Reference< css::uno::XComponentContext >& _rxContext)
     :ODataView(pParent,_rController,_rxContext)
-    ,m_pTreeView(NULL)
-    ,m_pSplitter(NULL)
-    ,m_pVclControl(NULL)
-    ,m_pStatus(NULL)
+    ,m_pTreeView(nullptr)
+    ,m_pSplitter(nullptr)
+    ,m_pVclControl(nullptr)
+    ,m_pStatus(nullptr)
 {
 
 }
@@ -102,7 +102,7 @@ void UnoDataBrowserView::Construct(const Reference< css::awt::XControlModel >& x
         getContainer()->addControl(::comphelper::getString(xModelSet->getPropertyValue(PROPERTY_NAME)), m_xGrid);
 
         // get the VCL-control
-        m_pVclControl = NULL;
+        m_pVclControl = nullptr;
         getVclControl();
 
         OSL_ENSURE(m_pVclControl != nullptr, "UnoDataBrowserView::Construct : no real grid control !");
@@ -122,7 +122,7 @@ UnoDataBrowserView::~UnoDataBrowserView()
 void UnoDataBrowserView::dispose()
 {
     m_pSplitter.disposeAndClear();
-    setTreeView(NULL);
+    setTreeView(nullptr);
 
     m_pStatus.disposeAndClear();
 
@@ -292,7 +292,7 @@ void UnoDataBrowserView::GetFocus()
 void UnoDataBrowserView::_disposing( const css::lang::EventObject& /*_rSource*/ )
 {
     stopComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
-    m_pVclControl = NULL;
+    m_pVclControl = nullptr;
 }
 
 bool UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )

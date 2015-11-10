@@ -47,7 +47,7 @@ OPropertyHandlerFactory::~OPropertyHandlerFactory()
 
 const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
 {
-    const XMLPropertyHandler* pHandler = NULL;
+    const XMLPropertyHandler* pHandler = nullptr;
 
     switch (_nType)
     {
@@ -70,7 +70,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
     return pHandler;
 }
 
-#define MAP_END() { NULL, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFVER_010, false}
+#define MAP_END() { nullptr, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFVER_010, false}
 rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMapper( bool bForExport )
 {
     static const XMLPropertyMapEntry s_aTableStylesProperties[] =

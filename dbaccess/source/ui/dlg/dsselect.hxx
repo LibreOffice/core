@@ -52,7 +52,7 @@ protected:
 #endif
 
 public:
-    ODatasourceSelectDialog( vcl::Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet = NULL );
+    ODatasourceSelectDialog( vcl::Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet = nullptr );
     virtual ~ODatasourceSelectDialog();
     virtual void dispose() override;
     OUString GetSelected() const { return m_pDatasource->GetSelectEntry();}

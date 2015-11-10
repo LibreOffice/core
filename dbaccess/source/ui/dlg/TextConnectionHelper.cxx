@@ -109,7 +109,7 @@ namespace dbaui
             { TC_SEPARATORS,    m_pFormatHeader },
             { TC_HEADER,        m_pRowHeader },
             { TC_CHARSET,       m_pCharSetHeader },
-            { 0, NULL }
+            { 0, nullptr }
         };
 
         for ( size_t section=0; section < sizeof( aSections ) / sizeof( aSections[0] ) - 1; ++section )
@@ -245,7 +245,7 @@ namespace dbaui
     {
         OUString sExtension = GetExtension();
         OUString aErrorText;
-        Control* pErrorWin = NULL;
+        Control* pErrorWin = nullptr;
         OUString aDelText(m_pFieldSeparator->GetText());
         if(aDelText.isEmpty())
         {   // No FieldSeparator

@@ -300,7 +300,7 @@ namespace dbaui
         OSL_ENSURE(!m_pImpl->m_bSuspended, "Cannot reconnect while suspended!");
 
         stopConnectionListening( m_pImpl->m_xConnection );
-        m_pImpl->m_aSdbMetaData.reset( NULL );
+        m_pImpl->m_aSdbMetaData.reset( nullptr );
         m_pImpl->m_xConnection.clear();
 
         // reconnect
@@ -314,7 +314,7 @@ namespace dbaui
         // now really reconnect ...
         if ( bReConnect )
         {
-            m_pImpl->m_xConnection.reset( connect( m_pImpl->m_aDataSource.getDataSource(), NULL ), SharedConnection::TakeOwnership );
+            m_pImpl->m_xConnection.reset( connect( m_pImpl->m_aDataSource.getDataSource(), nullptr ), SharedConnection::TakeOwnership );
             m_pImpl->m_aSdbMetaData.reset( m_pImpl->m_xConnection );
         }
 
@@ -325,7 +325,7 @@ namespace dbaui
     void DBSubComponentController::disconnect()
     {
         stopConnectionListening(m_pImpl->m_xConnection);
-        m_pImpl->m_aSdbMetaData.reset( NULL );
+        m_pImpl->m_aSdbMetaData.reset( nullptr );
         m_pImpl->m_xConnection.clear();
 
         InvalidateAll();
@@ -450,7 +450,7 @@ namespace dbaui
     {
         OUString aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
         Reference< XWindow > xWindow = getTopMostContainerWindow();
-        vcl::Window* pWin = NULL;
+        vcl::Window* pWin = nullptr;
         if ( xWindow.is() )
             pWin = VCLUnoHelper::GetWindow(xWindow);
         if ( !pWin )
@@ -555,7 +555,7 @@ namespace dbaui
     {
         ::osl::MutexGuard aGuard( getMutex() );
         if ( !m_pImpl->documentHasScriptSupport() )
-            return NULL;
+            return nullptr;
 
         return Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY_THROW );
     }

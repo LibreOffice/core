@@ -426,7 +426,7 @@ namespace dbaui
 
     protected:
         // container handling
-        void implInsert(const css::uno::Any& aElement, sal_Int32 nIndex, const OUString* pNewElName = NULL) throw(css::lang::IllegalArgumentException);
+        void implInsert(const css::uno::Any& aElement, sal_Int32 nIndex, const OUString* pNewElName = nullptr) throw(css::lang::IllegalArgumentException);
         sal_Int32 implGetPos(const OUString& rName);
 
         void StopListening();

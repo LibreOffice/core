@@ -95,7 +95,7 @@ OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_
           ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
           ,m_aTypeImage( VclPtr<FixedImage>::Create(this) )
           ,m_xTitle( VclPtr<OTableWindowTitle>::Create(this) )
-          ,m_pAccessible(NULL)
+          ,m_pAccessible(nullptr)
           ,m_pData( pTabWinData )
           ,m_nMoveCount(0)
           ,m_nMoveIncrement(1)
@@ -135,7 +135,7 @@ void OTableWindow::dispose()
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 
-    m_pAccessible = NULL;
+    m_pAccessible = nullptr;
     m_aTypeImage.disposeAndClear();
     m_xTitle.disposeAndClear();
     vcl::Window::dispose();
@@ -206,7 +206,7 @@ bool OTableWindow::FillListBox()
     if (GetData()->IsShowAll())
     {
         SvTreeListEntry* pEntry = m_xListBox->InsertEntry( OUString("*") );
-        pEntry->SetUserData( createUserData(NULL,false) );
+        pEntry->SetUserData( createUserData(nullptr,false) );
     }
 
     Reference<XNameAccess> xPKeyColumns;
@@ -227,7 +227,7 @@ bool OTableWindow::FillListBox()
             const OUString* pIter = aColumns.getConstArray();
             const OUString* pEnd = pIter + aColumns.getLength();
 
-            SvTreeListEntry* pEntry = NULL;
+            SvTreeListEntry* pEntry = nullptr;
             for (; pIter != pEnd; ++pIter)
             {
                 bool bPrimaryKeyColumn = xPKeyColumns.is() && xPKeyColumns->hasByName( *pIter );
@@ -253,13 +253,13 @@ bool OTableWindow::FillListBox()
 
 void* OTableWindow::createUserData(const Reference< XPropertySet>& /*_xColumn*/,bool /*_bPrimaryKey*/)
 {
-    return NULL;
+    return nullptr;
 }
 
 void OTableWindow::deleteUserData(void*& _pUserData)
 {
     OSL_ENSURE(!_pUserData,"INVALID call. Need to delete the userclass!");
-    _pUserData = NULL;
+    _pUserData = nullptr;
 }
 
 void OTableWindow::clearListBox()

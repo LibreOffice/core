@@ -434,7 +434,7 @@ void OSQLMessageBox::impl_positionControls()
 
     if ( m_pImpl->aDisplayInfo.empty() )
         return;
-    const ExceptionDisplayInfo* pSecondInfo = NULL;
+    const ExceptionDisplayInfo* pSecondInfo = nullptr;
 
     const ExceptionDisplayInfo& rFirstInfo = *m_pImpl->aDisplayInfo.begin();
     if ( m_pImpl->aDisplayInfo.size() > 1 )

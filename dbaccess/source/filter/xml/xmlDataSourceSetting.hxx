@@ -41,7 +41,7 @@ namespace dbaxml
         OXMLDataSourceSetting( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName,
                     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
-                    ,OXMLDataSourceSetting* _pContainer = NULL);
+                    ,OXMLDataSourceSetting* _pContainer = nullptr);
         virtual ~OXMLDataSourceSetting();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,

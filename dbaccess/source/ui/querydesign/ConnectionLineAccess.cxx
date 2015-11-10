@@ -38,13 +38,13 @@ namespace dbaui
     using namespace ::com::sun::star;
 
     OConnectionLineAccess::OConnectionLineAccess(OTableConnection* _pLine)
-        : VCLXAccessibleComponent(_pLine->GetComponentInterface().is() ? _pLine->GetWindowPeer() : NULL)
+        : VCLXAccessibleComponent(_pLine->GetComponentInterface().is() ? _pLine->GetWindowPeer() : nullptr)
         ,m_pLine(_pLine)
     {
     }
     void SAL_CALL OConnectionLineAccess::disposing()
     {
-        m_pLine = NULL;
+        m_pLine = nullptr;
         VCLXAccessibleComponent::disposing();
     }
     Any SAL_CALL OConnectionLineAccess::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)

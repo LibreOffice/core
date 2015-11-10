@@ -271,8 +271,8 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_aTableTypeFilter(_rDB.m_pImpl->m_aTableTypeFilter)
             ,m_aContext( _rxORB )
             ,m_xMasterConnection(_rxMaster)
-            ,m_pTables(NULL)
-            ,m_pViews(NULL)
+            ,m_pTables(nullptr)
+            ,m_pViews(nullptr)
             ,m_aWarnings( Reference< XWarningsSupplier >( _rxMaster, UNO_QUERY ) )
             ,m_nInAppend(0)
             ,m_bSupportsViews(false)
@@ -468,7 +468,7 @@ void OConnection::disposing()
         ::comphelper::disposeComponent(xComp);
     }
     m_aStatements.clear();
-    m_xMasterTables = NULL;
+    m_xMasterTables = nullptr;
 
     if(m_pTables)
         m_pTables->dispose();
@@ -494,7 +494,7 @@ void OConnection::disposing()
     catch(const Exception&)
     {
     }
-    m_xMasterConnection = NULL;
+    m_xMasterConnection = nullptr;
 }
 
 // XChild

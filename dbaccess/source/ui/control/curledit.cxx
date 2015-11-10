@@ -28,8 +28,8 @@ namespace dbaui
 
 OConnectionURLEdit::OConnectionURLEdit(vcl::Window* _pParent, WinBits _nBits,bool _bShowPrefix)
     :Edit(_pParent, _nBits)
-    ,m_pTypeCollection(NULL)
-    ,m_pForcedPrefix(NULL)
+    ,m_pTypeCollection(nullptr)
+    ,m_pForcedPrefix(nullptr)
     ,m_bShowPrefix(_bShowPrefix)
 {
 }

@@ -52,7 +52,7 @@ namespace dbaccess
         {
         }
     public:
-        ORowSetCacheIterator() :m_aIter(),m_pCache(NULL),m_pRowSet(NULL){}
+        ORowSetCacheIterator() :m_aIter(),m_pCache(nullptr),m_pRowSet(nullptr){}
         ORowSetCacheIterator(const ORowSetCacheIterator& _rRH);
         ORowSetCacheIterator& operator =(const ORowSetCacheIterator&);
 

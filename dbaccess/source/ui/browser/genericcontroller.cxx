@@ -158,7 +158,7 @@ struct OGenericUnoController_Data
 // OGenericUnoController
 OGenericUnoController::OGenericUnoController(const Reference< XComponentContext >& _rM)
     :OGenericUnoController_Base( getMutex() )
-    ,m_pView(NULL)
+    ,m_pView(nullptr)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
@@ -313,7 +313,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     catch(Exception&)
     {
         // no one clears my view if I won't
-        m_pView = NULL;
+        m_pView = nullptr;
         throw;
     }
 }
@@ -370,7 +370,7 @@ Reference< XWindow > SAL_CALL OGenericUnoController::getComponentWindow() throw 
 
 Reference<XSidebarProvider> SAL_CALL OGenericUnoController::getSidebar() throw (RuntimeException, std::exception)
 {
-        return NULL;
+        return nullptr;
 }
 
 OUString SAL_CALL OGenericUnoController::getViewControllerName() throw (css::uno::RuntimeException, std::exception)
@@ -606,7 +606,7 @@ void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< 
 
 void OGenericUnoController::InvalidateAll()
 {
-    ImplInvalidateFeature( ALL_FEATURES, NULL, true );
+    ImplInvalidateFeature( ALL_FEATURES, nullptr, true );
 }
 
 void OGenericUnoController::InvalidateAll_Impl()
@@ -617,7 +617,7 @@ void OGenericUnoController::InvalidateAll_Impl()
             aIter != m_aSupportedFeatures.end();
             ++aIter
         )
-        ImplBroadcastFeatureState( aIter->first, NULL, true );
+        ImplBroadcastFeatureState( aIter->first, nullptr, true );
 
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
@@ -794,7 +794,7 @@ void OGenericUnoController::disposing()
         m_arrStatusListener.clear();
     }
 
-    m_xDatabaseContext = NULL;
+    m_xDatabaseContext = nullptr;
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
         m_aAsyncInvalidateAll.CancelCall();
@@ -806,10 +806,10 @@ void OGenericUnoController::disposing()
     // check out from all the objects we are listening
     // the frame
     stopFrameListening( m_aCurrentFrame.getFrame() );
-    m_aCurrentFrame.attachFrame( NULL );
+    m_aCurrentFrame.attachFrame( nullptr );
 
-    m_xMasterDispatcher = NULL;
-    m_xSlaveDispatcher = NULL;
+    m_xMasterDispatcher = nullptr;
+    m_xSlaveDispatcher = nullptr;
     m_xTitleHelper.clear();
     m_xUrlTransformer.clear();
     m_aInitParameters.clear();
@@ -979,7 +979,7 @@ void OGenericUnoController::setView( const VclPtr<ODataView> &i_rView )
 
 void OGenericUnoController::clearView()
 {
-    m_pView = NULL;
+    m_pView = nullptr;
 }
 
 void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
@@ -1106,7 +1106,7 @@ namespace
 {
     OUString lcl_getModuleHelpModuleName( const Reference< XFrame >& _rxFrame )
     {
-        const sal_Char* pReturn = NULL;
+        const sal_Char* pReturn = nullptr;
 
         try
         {

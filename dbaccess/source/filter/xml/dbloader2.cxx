@@ -263,7 +263,7 @@ private:
 
 DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactory)
     :m_aContext( _rxFactory )
-    ,m_nStartWizard(0)
+    ,m_nStartWizard(nullptr)
 {
 
 }
@@ -403,7 +403,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     // not touch it.
     if ( !aMediaDesc.has( "InteractionHandler" ) )
     {
-        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, 0) );
+        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
        aMediaDesc.put( "InteractionHandler", xHandler );
     }
 
@@ -564,7 +564,7 @@ void DBContentLoader::cancel() throw(std::exception)
 
 IMPL_LINK_NOARG_TYPED( DBContentLoader, OnStartTableWizard, void*, void )
 {
-    m_nStartWizard = 0;
+    m_nStartWizard = nullptr;
     try
     {
         Sequence< Any > aWizArgs(1);
@@ -582,7 +582,7 @@ IMPL_LINK_NOARG_TYPED( DBContentLoader, OnStartTableWizard, void*, void )
     {
         OSL_FAIL("caught an exception while starting the table wizard!");
     }
-    m_xMySelf = NULL;
+    m_xMySelf = nullptr;
 }
 
 }

@@ -37,7 +37,7 @@ using namespace ::com::sun::star::lang;
 // OColumnControlWindow
 OColumnControlWindow::OColumnControlWindow(vcl::Window* pParent
                                            ,const Reference<XComponentContext>& _rxContext)
-            : OFieldDescControl(pParent,NULL)
+            : OFieldDescControl(pParent,nullptr)
             , m_xContext(_rxContext)
             , m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(true)
@@ -128,7 +128,7 @@ Reference< XConnection> OColumnControlWindow::getConnection()
 void OColumnControlWindow::setConnection(const Reference< XConnection>& _xCon)
 {
     m_xConnection = _xCon;
-    m_xFormatter = NULL;
+    m_xFormatter = nullptr;
     m_aDestTypeInfoIndex.clear();
     m_aDestTypeInfo.clear();
 

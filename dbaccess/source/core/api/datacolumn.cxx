@@ -101,8 +101,8 @@ void ODataColumn::disposing()
 {
     OResultColumn::disposing();
 
-    m_xRow = NULL;
-    m_xRowUpdate = NULL;
+    m_xRow = nullptr;
+    m_xRowUpdate = nullptr;
 }
 
 // css::sdb::XColumn

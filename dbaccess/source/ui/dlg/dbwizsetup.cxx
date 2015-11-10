@@ -108,7 +108,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
                                )
     :svt::RoadmapWizard( _pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
 
-    , m_pOutSet(NULL)
+    , m_pOutSet(nullptr)
     , m_bIsConnectable( false)
     , m_sRM_IntroText( ModuleRes( STR_PAGETITLE_INTROPAGE ) )
     , m_sRM_dBaseText( ModuleRes( STR_PAGETITLE_DBASE ) )
@@ -125,10 +125,10 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
     , m_sRM_AuthentificationText( ModuleRes( STR_PAGETITLE_AUTHENTIFICATION ) )
     , m_sRM_FinalText( ModuleRes( STR_PAGETITLE_FINAL ) )
     , m_sWorkPath( SvtPathOptions().GetWorkPath() )
-    , m_pGeneralPage( NULL )
-    , m_pMySQLIntroPage( NULL )
-    , m_pFinalPage( NULL )
-    , m_pCollection( NULL )
+    , m_pGeneralPage( nullptr )
+    , m_pMySQLIntroPage( nullptr )
+    , m_pFinalPage( nullptr )
+    , m_pCollection( nullptr )
 {
     // no local resources needed anymore
     // extract the datasource type collection from the item set
@@ -268,7 +268,7 @@ ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
 void ODbTypeWizDialogSetup::dispose()
 {
     delete m_pOutSet;
-    m_pOutSet = NULL;
+    m_pOutSet = nullptr;
     m_pGeneralPage.clear();
     m_pMySQLIntroPage.clear();
     m_pFinalPage.clear();
@@ -681,7 +681,7 @@ namespace
 
 bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
-    Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), 0) );
+    Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), nullptr) );
     try
     {
         if (callSaveAsDialog())
@@ -907,7 +907,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             {
                 m_xDesktop.set( Desktop::create(_rxORB) );
                 m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
-                m_xInteractionHandler = InteractionHandler::createWithParent(_rxORB, 0);
+                m_xInteractionHandler = InteractionHandler::createWithParent(_rxORB, nullptr);
             }
             catch( const Exception& )
             {

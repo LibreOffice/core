@@ -183,7 +183,7 @@ using namespace ::com::sun::star;
         if ( m_pETHostServer->IsValueChangedFromSaved() )
         {
             const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _rSet->GetItem(DSID_TYPECOLLECTION) );
-            ::dbaccess::ODsnTypeCollection* pCollection = NULL;
+            ::dbaccess::ODsnTypeCollection* pCollection = nullptr;
             if (pCollectionItem)
                 pCollection = pCollectionItem->getCollection();
             OSL_ENSURE(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
@@ -279,7 +279,7 @@ using namespace ::com::sun::star;
     {
         // show the "Connect directly" option only if the driver is installed
         const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _rSet.GetItem(DSID_TYPECOLLECTION) );
-        bool bHasMySQLNative = ( pCollectionItem != NULL ) && pCollectionItem->getCollection()->hasDriver( "sdbc:mysqlc:" );
+        bool bHasMySQLNative = ( pCollectionItem != nullptr ) && pCollectionItem->getCollection()->hasDriver( "sdbc:mysqlc:" );
         if ( bHasMySQLNative )
             m_pNATIVEDatabase->Show();
 
@@ -414,7 +414,7 @@ using namespace ::com::sun::star;
 
         const SfxStringItem* pUrlItem = _rCoreAttrs.GetItem<SfxStringItem>(DSID_CONNECTURL);
         const DbuTypeCollectionItem* pTypesItem = _rCoreAttrs.GetItem<DbuTypeCollectionItem>(DSID_TYPECOLLECTION);
-        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : nullptr;
         if (pTypeCollection && pUrlItem && pUrlItem->GetValue().getLength() )
         {
             m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());

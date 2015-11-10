@@ -31,7 +31,7 @@ using namespace ::com::sun::star::beans;
 
 // class OTableRow
 OTableRow::OTableRow()
-    :m_pActFieldDescr( NULL )
+    :m_pActFieldDescr( nullptr )
     ,m_nPos( -1 )
     ,m_bReadOnly( false )
     ,m_bOwnsDescriptions(false)
@@ -39,7 +39,7 @@ OTableRow::OTableRow()
 }
 
 OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
-    :m_pActFieldDescr( NULL )
+    :m_pActFieldDescr( nullptr )
     ,m_nPos( -1 )
     ,m_bReadOnly( false )
     ,m_bOwnsDescriptions(true)
@@ -48,7 +48,7 @@ OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
 }
 
 OTableRow::OTableRow( const OTableRow& rRow, long nPosition )
-    :m_pActFieldDescr(NULL)
+    :m_pActFieldDescr(nullptr)
     ,m_nPos( nPosition )
     ,m_bReadOnly(rRow.IsReadOnly())
     ,m_bOwnsDescriptions(false)
@@ -93,7 +93,7 @@ void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, bool _bForce )
     else
     {
         delete m_pActFieldDescr;
-        m_pActFieldDescr = NULL;
+        m_pActFieldDescr = nullptr;
     }
 }
 

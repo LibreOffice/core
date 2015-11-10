@@ -26,7 +26,7 @@ using namespace ::com::sun::star::uno;
 
 // class OQueryTableWindowData
 OQueryTableWindowData::OQueryTableWindowData(const OUString& _rComposedName, const OUString& rTableName, const OUString& rTableAlias )
-    :OTableWindowData(NULL,_rComposedName, rTableName, rTableAlias)
+    :OTableWindowData(nullptr,_rComposedName, rTableName, rTableAlias)
 {
 }
 

@@ -66,7 +66,7 @@ OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParen
     ,m_aHScrollBar( VclPtr<ScrollBar>::Create(this, WB_HSCROLL|WB_REPEAT|WB_DRAG) )
     ,m_aVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL|WB_REPEAT|WB_DRAG) )
     ,m_pCornerWindow(VclPtr<ScrollBarBox>::Create(this, WB_3DLOOK))
-    ,m_pTableView(NULL)
+    ,m_pTableView(nullptr)
 {
 
     // ScrollBars
@@ -162,13 +162,13 @@ OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
     ,DropTargetHelper(this)
     ,m_aDragOffset( Point(0,0) )
     ,m_aScrollOffset( Point(0,0) )
-    ,m_pDragWin( NULL )
-    ,m_pSizingWin( NULL )
-    ,m_pSelectedConn( NULL )
+    ,m_pDragWin( nullptr )
+    ,m_pSizingWin( nullptr )
+    ,m_pSelectedConn( nullptr )
     ,m_bTrackingInitiallyMoved(false)
-    ,m_pLastFocusTabWin(NULL)
+    ,m_pLastFocusTabWin(nullptr)
     ,m_pView( pView )
-    ,m_pAccessible(NULL)
+    ,m_pAccessible(nullptr)
 {
     SetSizePixel( Size(1000, 1000) );
 
@@ -187,7 +187,7 @@ void OJoinTableView::dispose()
     if( m_pAccessible )
     {
         m_pAccessible->clearTableView();
-        m_pAccessible = NULL;
+        m_pAccessible = nullptr;
     }
     // delete lists
     clearLayoutInformation();
@@ -314,7 +314,7 @@ OTableWindowData* OJoinTableView::CreateImpl(const OUString& _rComposedName
                                              ,const OUString& _sTableName
                                              ,const OUString& _rWinName)
 {
-    return new OTableWindowData( NULL,_rComposedName,_sTableName, _rWinName );
+    return new OTableWindowData( nullptr,_rComposedName,_sTableName, _rWinName );
 }
 
 void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool /*bNewTable*/)
@@ -393,7 +393,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
             m_aTableMap.erase( pTabWin->GetComposedName() );
 
         if (pTabWin == m_pLastFocusTabWin)
-            m_pLastFocusTabWin = NULL;
+            m_pLastFocusTabWin = nullptr;
 
         pTabWin->clearListBox();
         pTabWin->disposeOnce();
@@ -622,7 +622,7 @@ void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMouseP
     SetPointer(Pointer(PointerStyle::Move));
     Point aMousePos = ScreenToOutputPixel( rMousePos );
     m_aDragOffset = aMousePos - pTabWin->GetPosPixel();
-    m_pDragWin->SetZOrder(NULL, ZOrderFlags::First);
+    m_pDragWin->SetZOrder(nullptr, ZOrderFlags::First);
     m_bTrackingInitiallyMoved = false;
     StartTracking();
 }
@@ -752,7 +752,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
 
             // position window
             EndTracking();
-            m_pDragWin->SetZOrder(NULL, ZOrderFlags::First);
+            m_pDragWin->SetZOrder(nullptr, ZOrderFlags::First);
             // check, if I really moved
             // (this prevents setting the modified-Flag, when there actually was no change0
             TTableWindowData::value_type pData = m_pDragWin->GetData();
@@ -766,7 +766,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
 
                 m_pDragWin->GrabFocus();
             }
-            m_pDragWin = NULL;
+            m_pDragWin = nullptr;
             SetPointer(Pointer(PointerStyle::Arrow));
         }
         // else we handle the resizing
@@ -784,7 +784,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
             TabWinSized(m_pSizingWin, ptOld, szOld);
 
             m_pSizingWin->Invalidate( m_aSizingRect );
-            m_pSizingWin = NULL;
+            m_pSizingWin = nullptr;
         }
     }
     else if (rTEvt.IsTrackingCanceled())
@@ -878,7 +878,7 @@ void OJoinTableView::DeselectConn(OTableConnection* pConn)
         pWin->GetListBox()->SelectAll(false);
 
     pConn->Deselect();
-    m_pSelectedConn = NULL;
+    m_pSelectedConn = nullptr;
 }
 
 void OJoinTableView::SelectConn(OTableConnection* pConn)
@@ -992,8 +992,8 @@ void OJoinTableView::ClearAll()
     }
     m_vTableConnection.clear();
 
-    m_pLastFocusTabWin  = NULL;
-    m_pSelectedConn     = NULL;
+    m_pLastFocusTabWin  = nullptr;
+    m_pSelectedConn     = nullptr;
 
     // scroll to the upper left
     ScrollPane(-GetScrollOffset().X(), true, true);
@@ -1198,7 +1198,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
 
 OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin,const OTableConnection* _rpFirstAfter) const
 {
-    OTableConnection* pConn = NULL;
+    OTableConnection* pConn = nullptr;
     OSL_ENSURE(pRhs || pLhs, "OJoinTableView::GetTabConn : invalid args !");
         // only one NULL-arg allowed
 
@@ -1214,12 +1214,12 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
 
             if  (   (   (pData->GetSourceWin() == pLhs)
                     &&  (   (pData->GetDestWin() == pRhs)
-                        ||  (NULL == pRhs)
+                        ||  (nullptr == pRhs)
                         )
                     )
                 ||  (   (pData->GetSourceWin() == pRhs)
                     &&  (   (pData->GetDestWin() == pLhs)
-                        ||  (NULL == pLhs)
+                        ||  (nullptr == pLhs)
                         )
                     )
                 )
@@ -1294,8 +1294,8 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                             if (aIter->second && aIter->second->HasChildPathFocus())
                                 break;
 
-                        OTableWindow* pNextWin = NULL;
-                        OTableConnection* pNextConn = NULL;
+                        OTableWindow* pNextWin = nullptr;
+                        OTableConnection* pNextConn = nullptr;
 
                         if (aIter != m_aTableMap.end())
                         {   // there is a currently active tab win
@@ -1411,7 +1411,7 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
             vcl::Window* pSource = rNEvt.GetWindow();
             if (pSource)
             {
-                vcl::Window* pSearchFor = NULL;
+                vcl::Window* pSearchFor = nullptr;
                 if (pSource->GetParent() == this)
                     // it may be one of the tab wins
                     pSearchFor = pSource;
@@ -1524,8 +1524,8 @@ void OJoinTableView::dragFinished( )
 
 void OJoinTableView::clearLayoutInformation()
 {
-    m_pLastFocusTabWin  = NULL;
-    m_pSelectedConn     = NULL;
+    m_pLastFocusTabWin  = nullptr;
+    m_pSelectedConn     = nullptr;
     // delete lists
     OTableWindowMap::iterator aIter = m_aTableMap.begin();
     OTableWindowMap::iterator aEnd  = m_aTableMap.end();

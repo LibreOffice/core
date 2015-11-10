@@ -60,7 +60,7 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const Re
     long nTop = GetBoundingRect().Bottom();
     long nTemp;
 
-    const OConnectionLine* pTopLine = NULL;
+    const OConnectionLine* pTopLine = nullptr;
     const ::std::vector<OConnectionLine*>& rConnLineList = GetConnLineList();
     std::vector<OConnectionLine*>::const_iterator aIter = rConnLineList.begin();
     std::vector<OConnectionLine*>::const_iterator aEnd = rConnLineList.end();

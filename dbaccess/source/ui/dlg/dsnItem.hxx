@@ -37,11 +37,11 @@ namespace dbaui
 
     public:
         TYPEINFO_OVERRIDE();
-        DbuTypeCollectionItem(sal_Int16 nWhich = 0, ::dbaccess::ODsnTypeCollection* _pCollection = NULL);
+        DbuTypeCollectionItem(sal_Int16 nWhich = 0, ::dbaccess::ODsnTypeCollection* _pCollection = nullptr);
         DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSource);
 
         virtual bool             operator==(const SfxPoolItem& _rItem) const override;
-        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const override;
+        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = nullptr) const override;
 
         ::dbaccess::ODsnTypeCollection* getCollection() const { return m_pCollection; }
     };

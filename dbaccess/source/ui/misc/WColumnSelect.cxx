@@ -185,8 +185,8 @@ bool OWizColumnSelect::LeavePage()
 
 IMPL_LINK_TYPED( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
 {
-    ListBox *pLeft = NULL;
-    ListBox *pRight = NULL;
+    ListBox *pLeft = nullptr;
+    ListBox *pRight = nullptr;
     bool bAll = false;
 
     if (pButton == m_pColumn_RH)

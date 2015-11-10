@@ -53,7 +53,7 @@ namespace dbaui
 // OJoinDesignView
 OJoinDesignView::OJoinDesignView(vcl::Window* _pParent, OJoinController& _rController,const Reference< XComponentContext >& _rxContext)
     :ODataView( _pParent, _rController, _rxContext )
-    ,m_pTableView(NULL)
+    ,m_pTableView(nullptr)
     ,m_rController( _rController )
 {
     m_pScrollWindow = VclPtr<OScrollWindowHelper>::Create(this);

@@ -92,8 +92,8 @@ ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _
     ,m_xContext(_rM)
     ,m_nCommandType(CommandType::TABLE)
     ,m_bNeedToReInitialize(false)
-    ,m_pReader(NULL)
-    ,m_pRowMarker(NULL)
+    ,m_pReader(nullptr)
+    ,m_pRowMarker(nullptr)
     ,m_bInInitialize(false)
     ,m_bCheckOnly(false)
 {
@@ -116,14 +116,14 @@ ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XComponentContext >& _rM )
     :m_bBookmarkSelection( false )
-    ,m_pStream(NULL)
+    ,m_pStream(nullptr)
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rM)
     ,m_nCommandType(css::sdb::CommandType::TABLE)
     ,m_bNeedToReInitialize(false)
-    ,m_pReader(NULL)
-    ,m_pRowMarker(NULL)
+    ,m_pReader(nullptr)
+    ,m_pRowMarker(nullptr)
     ,m_bInInitialize(false)
     ,m_bCheckOnly(false)
 {
@@ -313,8 +313,8 @@ void ODatabaseImportExport::initialize()
         }
         catch(Exception& )
         {
-            m_xRow = NULL;
-            m_xResultSetMetaData = NULL;
+            m_xRow = nullptr;
+            m_xResultSetMetaData = nullptr;
             ::comphelper::disposeComponent(m_xResultSet);
             throw;
         }
@@ -613,7 +613,7 @@ bool ORTFImportExport::Read()
             m_pReader->enableCheckOnly();
         eState = static_cast<ORTFReader*>(m_pReader)->CallParser();
         m_pReader->release();
-        m_pReader = NULL;
+        m_pReader = nullptr;
     }
 
     return eState != SVPAR_ERROR;
@@ -685,7 +685,7 @@ bool OHTMLImportExport::Read()
         m_pReader->SetTableName(m_sDefaultTableName);
         eState = static_cast<OHTMLReader*>(m_pReader)->CallParser();
         m_pReader->release();
-        m_pReader = NULL;
+        m_pReader = nullptr;
     }
 
     return eState != SVPAR_ERROR;
@@ -937,7 +937,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
 
     Reference< css::util::XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
-    SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
+    SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : nullptr;
     if(pFormatter)
     {
         double fVal = 0.0;

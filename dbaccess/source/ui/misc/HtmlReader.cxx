@@ -163,7 +163,7 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_TABLE_OFF:
                 if(!--m_nTableCount)
                 {
-                    m_xTable = NULL;
+                    m_xTable = nullptr;
                 }
                 break;
             case HTML_TABLEROW_ON:
@@ -517,7 +517,7 @@ bool OHTMLReader::CreateTable(int nToken)
 void OHTMLReader::setTextEncoding()
 {
     m_bMetaOptions = true;
-    ParseMetaOptions(NULL, NULL);
+    ParseMetaOptions(nullptr, nullptr);
 }
 
 void OHTMLReader::release()

@@ -38,7 +38,7 @@ namespace dbaccess
             , m_aSetIter(m_aSet.end())
             , m_bEnd(false)
         {
-            m_aSet.push_back(NULL); // this is the beforefirst record
+            m_aSet.push_back(nullptr); // this is the beforefirst record
         }
 
         virtual void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) override;

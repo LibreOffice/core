@@ -90,7 +90,7 @@ namespace dbaui
     OConnectionHelper::OConnectionHelper( vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs)
         : OGenericAdministrationPage(pParent, _rId, _rUIXMLDescription, _rCoreAttrs)
         , m_bUserGrabFocus(false)
-        , m_pCollection(NULL)
+        , m_pCollection(nullptr)
     {
         get(m_pFT_Connection, "browseurllabel");
         get(m_pConnectionURL, "browseurl");
@@ -536,7 +536,7 @@ namespace dbaui
         ::ucbhelper::Content aCheckExistence;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
         Reference< css::task::XInteractionHandler > xInteractionHandler(
-            task::InteractionHandler::createWithParent(m_xORB, 0), UNO_QUERY );
+            task::InteractionHandler::createWithParent(m_xORB, nullptr), UNO_QUERY );
         OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
         xInteractionHandler = pHandler;
 

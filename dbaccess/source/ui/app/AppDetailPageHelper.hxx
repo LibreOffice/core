@@ -193,7 +193,7 @@ namespace dbaui
         inline DBTreeListBox* getCurrentView() const
         {
             ElementType eType = getElementType();
-            return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)].get() : NULL;
+            return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)].get() : nullptr;
         }
 
         /// select all entries in the visible control

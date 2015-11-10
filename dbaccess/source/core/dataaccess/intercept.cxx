@@ -71,7 +71,7 @@ void SAL_CALL OInterceptor::dispose()
     m_xSlaveDispatchProvider.clear();
     m_xMasterDispatchProvider.clear();
 
-    m_pContentHolder = NULL;
+    m_pContentHolder = nullptr;
 }
 
 
@@ -79,8 +79,8 @@ void SAL_CALL OInterceptor::dispose()
 OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
     :m_pContentHolder( _pContentHolder )
     ,m_aInterceptedURL(7)
-    ,m_pDisposeEventListeners(0)
-    ,m_pStatCL(0)
+    ,m_pDisposeEventListeners(nullptr)
+    ,m_pStatCL(nullptr)
 {
 
     OSL_ENSURE(DISPATCH_RELOAD < m_aInterceptedURL.getLength(),"Illegal size.");
@@ -240,7 +240,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVE];
         aStateEvent.FeatureDescriptor = "Update";
-        aStateEvent.IsEnabled = m_pContentHolder != NULL && m_pContentHolder->isModified();
+        aStateEvent.IsEnabled = m_pContentHolder != nullptr && m_pContentHolder->isModified();
         aStateEvent.Requery = sal_False;
 
         Control->statusChanged(aStateEvent);

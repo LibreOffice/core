@@ -34,7 +34,7 @@ namespace dbaui
         SvTreeListEntry*            pEntry;         // the entry, which was dragged or to which was dropped on
 
         OJoinExchangeData(OTableWindowListBox* pBox);
-        OJoinExchangeData() : pListBox(NULL), pEntry(NULL) { }
+        OJoinExchangeData() : pListBox(nullptr), pEntry(nullptr) { }
     };
     struct OJoinDropData
     {

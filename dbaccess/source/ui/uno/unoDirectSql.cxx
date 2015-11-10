@@ -88,7 +88,7 @@ namespace dbaui
             {
                 // the connection the row set is working with
                 ODatasourceConnector aDSConnector(m_aContext, _pParent);
-                xConnection = aDSConnector.connect( m_sInitialSelection, NULL );
+                xConnection = aDSConnector.connect( m_sInitialSelection, nullptr );
             }
             catch( const Exception& )
             {
@@ -97,7 +97,7 @@ namespace dbaui
         }
         if ( !xConnection.is() )
             // can't create the dialog if I have improper settings
-            return NULL;
+            return nullptr;
 
         return VclPtr<DirectSQLDialog>::Create( _pParent, xConnection );
     }

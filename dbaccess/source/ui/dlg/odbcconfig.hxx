@@ -62,7 +62,7 @@ public:
     ~OOdbcEnumeration();
 
 #ifdef HAVE_ODBC_SUPPORT
-    bool        isLoaded() const { return NULL != m_pOdbcLib; }
+    bool        isLoaded() const { return nullptr != m_pOdbcLib; }
 #else
     bool        isLoaded() const { return false; }
 #endif

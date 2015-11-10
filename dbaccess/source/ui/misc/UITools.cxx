@@ -185,7 +185,7 @@ SQLExceptionInfo createConnection(  const Reference< css::beans::XPropertySet>& 
             }
             else
             {   // instantiate the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(_rxContext, 0), UNO_QUERY);
+                Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(_rxContext, nullptr), UNO_QUERY);
                 _rOUTConnection = xConnectionCompletion->connectWithCompletion(xHandler);
             }
         }
@@ -959,7 +959,7 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
 void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& _rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
-    SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : NULL;
+    SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : nullptr;
     if ( pSystemWindow )
     {
         _rMemFunc( pSystemWindow->GetTaskPaneList(), _pToRegister );
@@ -1325,11 +1325,11 @@ Reference< XPropertySet > createView( const OUString& _rName, const Reference< X
     Reference<XDataDescriptorFactory> xFact(xViews,UNO_QUERY);
     OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
     if(!xFact.is())
-        return NULL;
+        return nullptr;
 
     Reference<XPropertySet> xView = xFact->createDataDescriptor();
     if ( !xView.is() )
-        return NULL;
+        return nullptr;
 
     OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(_rxConnection->getMetaData(),
@@ -1349,7 +1349,7 @@ Reference< XPropertySet > createView( const OUString& _rName, const Reference< X
     if(xAppend.is())
         xAppend->appendByDescriptor(xView);
 
-    xView = NULL;
+    xView = nullptr;
     // we need to reget the view because after appending it, it is no longer valid
     // but this time it isn't a view object it is a table object with type "VIEW"
     Reference<XTablesSupplier> xTabSup(_rxConnection,UNO_QUERY);
@@ -1449,7 +1449,7 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
     {
         OUString sError(ModuleRes(STR_NAME_ALREADY_EXISTS));
         sError = sError.replaceFirst("#",sNewName);
-        throw SQLException(sError,NULL,OUString("S1000") ,0,Any());
+        throw SQLException(sError,nullptr,OUString("S1000") ,0,Any());
     }
 
     try

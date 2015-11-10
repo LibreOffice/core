@@ -672,7 +672,7 @@ void OApplicationController::onLoadedMenu(const Reference< css::frame::XLayoutMa
             MnemonicGenerator aMnemonicGenerator;
             // - the menu already has mnemonics
             SystemWindow* pSystemWindow = getContainer()->GetSystemWindow();
-            MenuBar* pMenu = pSystemWindow ? pSystemWindow->GetMenuBar() : NULL;
+            MenuBar* pMenu = pSystemWindow ? pSystemWindow->GetMenuBar() : nullptr;
             if ( pMenu )
             {
                 sal_uInt16 nMenuItems = pMenu->GetItemCount();

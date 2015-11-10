@@ -268,7 +268,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 sRootEntryText  = ModuleRes(STR_ALL_VIEWS);
             else
                 sRootEntryText  = ModuleRes(STR_ALL_TABLES_AND_VIEWS);
-            InsertEntry( sRootEntryText, NULL, false, TREELIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
+            InsertEntry( sRootEntryText, nullptr, false, TREELIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
         }
 
         if ( _rTables.empty() )
@@ -344,7 +344,7 @@ void OTableTreeListBox::checkWildcard(SvTreeListEntry* _pEntry)
 
 SvTreeListEntry* OTableTreeListBox::getAllObjectsEntry() const
 {
-    return haveVirtualRoot() ? First() : NULL;
+    return haveVirtualRoot() ? First() : nullptr;
 }
 
 void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
@@ -420,7 +420,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
 {
     OSL_PRECOND( _rxMeta.is(), "OTableTreeListBox::implAddEntry: invalid meta data!" );
     if ( !_rxMeta.is() )
-        return NULL;
+        return nullptr;
 
     // split the complete name into it's components
     OUString sCatalog, sSchema, sName;
@@ -458,7 +458,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
         pParentEntry = pFolder;
     }
 
-    SvTreeListEntry* pRet = NULL;
+    SvTreeListEntry* pRet = nullptr;
     if ( !_bCheckName || !GetEntryPosByName( sName, pParentEntry ) )
     {
         pRet = InsertEntry( sName, pParentEntry );
@@ -530,7 +530,7 @@ SvTreeListEntry* OTableTreeListBox::addedTable( const OUString& _rName )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return NULL;
+    return nullptr;
 }
 
 bool OTableTreeListBox::impl_getAndAssertMetaData( Reference< XDatabaseMetaData >& _out_rMetaData ) const
@@ -565,10 +565,10 @@ OUString OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) co
                     )   // here we support catalog but no schema
                 )
             {
-                if ( pCatalog == NULL )
+                if ( pCatalog == nullptr )
                 {
                     pCatalog = pSchema;
-                    pSchema = NULL;
+                    pSchema = nullptr;
                 }
                 sCatalog = GetEntryText( pCatalog );
             }
@@ -592,15 +592,15 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rN
     {
         Reference< XDatabaseMetaData > xMeta;
         if ( !impl_getAndAssertMetaData( xMeta ) )
-            return NULL;
+            return nullptr;
 
         // split the complete name into it's components
         OUString sCatalog, sSchema, sName;
         qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
 
         SvTreeListEntry* pParent = getAllObjectsEntry();
-        SvTreeListEntry* pCat = NULL;
-        SvTreeListEntry* pSchema = NULL;
+        SvTreeListEntry* pCat = nullptr;
+        SvTreeListEntry* pSchema = nullptr;
         if ( !sCatalog.isEmpty() )
         {
             pCat = GetEntryPosByName(sCatalog, pParent);
@@ -621,7 +621,7 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rN
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return NULL;
+    return nullptr;
 }
 
 void OTableTreeListBox::removedTable( const OUString& _rName )

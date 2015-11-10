@@ -240,7 +240,7 @@ namespace dbaui
         {
             try { AsyncDialogExecutor::executeModalDialogAsync( xDialog ); }
             catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
-            return NULL;
+            return nullptr;
         }
 
         Reference< XComponent > xDesignerComponent( xDesigner, UNO_QUERY );

@@ -208,7 +208,7 @@ SvXMLImportContext* OXMLDataSource::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDataSourceElemTokenMap();
     const sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
 

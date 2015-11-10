@@ -50,7 +50,7 @@ namespace dbaccess
         virtual void impl_refresh() throw(RuntimeException) override {}
         virtual Reference< XPropertySet > createDescriptor() override
         {
-            return NULL;
+            return nullptr;
         }
     public:
         OPrivateColumns(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
@@ -83,7 +83,7 @@ namespace dbaccess
         virtual void impl_refresh() throw(RuntimeException) override {}
         virtual Reference< XPropertySet > createDescriptor() override
         {
-            return NULL;
+            return nullptr;
         }
     public:
         OPrivateTables( const OSQLTables& _rTables,

@@ -468,7 +468,7 @@ namespace dbaui
 
             DO NOT CALL with getMutex() held!!
         */
-        const SharedConnection& ensureConnection( ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL );
+        const SharedConnection& ensureConnection( ::dbtools::SQLExceptionInfo* _pErrorInfo = nullptr );
 
         /** retrieves the current connection
         */

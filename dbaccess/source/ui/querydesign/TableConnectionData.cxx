@@ -98,7 +98,7 @@ bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSour
         return AppendConnLine(rSourceFieldName, rDestFieldName);
 
     OConnectionLineDataRef pConnLineData = m_vConnLineData[nIndex];
-    OSL_ENSURE(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
+    OSL_ENSURE(pConnLineData != nullptr, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
 
     pConnLineData->SetSourceFieldName( rSourceFieldName );
     pConnLineData->SetDestFieldName( rDestFieldName );

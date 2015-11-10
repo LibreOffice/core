@@ -79,7 +79,7 @@ namespace dbaui
             { DSID_PRIMARY_KEY_SUPPORT,     "PrimaryKeySupport" },
             { DSID_RESPECTRESULTSETTYPE,    "RespectDriverResultSetType" },
             { DSID_MAX_ROW_SCAN,            "MaxRowScan" },
-            { 0, NULL }
+            { 0, nullptr }
         };
         return s_aMappings;
     }

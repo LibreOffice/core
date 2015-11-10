@@ -33,7 +33,7 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
     : SvtIconChoiceCtrl(_pParent,WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
                                 WB_TABSTOP | WB_CLIPCHILDREN | WB_NOVSCROLL | WB_SMART_ARRANGE | WB_NOHSCROLL | WB_CENTER)
     ,DropTargetHelper(this)
-    ,m_pActionListener(NULL)
+    ,m_pActionListener(nullptr)
 {
 
     struct CategoryDescriptor
@@ -74,7 +74,7 @@ void OApplicationIconControl::dispose()
         if ( pEntry )
         {
             std::unique_ptr<ElementType> aType(static_cast<ElementType*>(pEntry->GetUserData()));
-            pEntry->SetUserData(NULL);
+            pEntry->SetUserData(nullptr);
         }
     }
     SvtIconChoiceCtrl::dispose();

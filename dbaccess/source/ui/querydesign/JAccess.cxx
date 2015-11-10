@@ -33,7 +33,7 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
 
     OJoinDesignViewAccess::OJoinDesignViewAccess(OJoinTableView* _pTableView)
-        :VCLXAccessibleComponent(_pTableView->GetComponentInterface().is() ? _pTableView->GetWindowPeer() : NULL)
+        :VCLXAccessibleComponent(_pTableView->GetComponentInterface().is() ? _pTableView->GetWindowPeer() : nullptr)
         ,m_pTableView(_pTableView)
     {
     }
@@ -48,7 +48,7 @@ namespace dbaui
     void OJoinDesignViewAccess::clearTableView()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        m_pTableView = NULL;
+        m_pTableView = nullptr;
     }
     // XAccessibleContext
     sal_Int32 SAL_CALL OJoinDesignViewAccess::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)

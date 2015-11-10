@@ -110,7 +110,7 @@ namespace dbaui
             aError->Execute();
         }
 
-        PostUserEvent(LINK(this, DirectSQLDialog, OnClose), NULL, true);
+        PostUserEvent(LINK(this, DirectSQLDialog, OnClose), nullptr, true);
     }
 
     sal_Int32 DirectSQLDialog::getHistorySize() const
@@ -170,7 +170,7 @@ namespace dbaui
         if (!m_xConnection.is())
             return "have no connection!";
 
-        return NULL;
+        return nullptr;
     }
 #endif
 

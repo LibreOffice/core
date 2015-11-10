@@ -125,7 +125,7 @@ Sequence< OUString > SAL_CALL OCommandDefinition::getSupportedServiceNames(  ) t
 
 Reference< XInterface > OCommandDefinition::Create(const Reference< XComponentContext >& _rxContext)
 {
-    return *(new OCommandDefinition( _rxContext, NULL, TContentPtr( new OCommandDefinition_Impl ) ) );
+    return *(new OCommandDefinition( _rxContext, nullptr, TContentPtr( new OCommandDefinition_Impl ) ) );
 }
 
 void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)

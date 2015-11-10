@@ -62,26 +62,26 @@ namespace dbaui
     SpecialSettingsPage::SpecialSettingsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta )
         : OGenericAdministrationPage(pParent, "SpecialSettingsPage",
             "dbaccess/ui/specialsettingspage.ui", _rCoreAttrs)
-        , m_pIsSQL92Check( NULL )
-        , m_pAppendTableAlias( NULL )
-        , m_pAsBeforeCorrelationName( NULL )
-        , m_pEnableOuterJoin( NULL )
-        , m_pIgnoreDriverPrivileges( NULL )
-        , m_pParameterSubstitution( NULL )
-        , m_pSuppressVersionColumn( NULL )
-        , m_pCatalog( NULL )
-        , m_pSchema( NULL )
-        , m_pIndexAppendix( NULL )
-        , m_pDosLineEnds( NULL )
-        , m_pCheckRequiredFields( NULL )
-        , m_pIgnoreCurrency(NULL)
-        , m_pEscapeDateTime(NULL)
-        , m_pPrimaryKeySupport(NULL)
-        , m_pRespectDriverResultSetType(NULL)
-        , m_pBooleanComparisonModeLabel( NULL )
-        , m_pBooleanComparisonMode( NULL )
-        , m_pMaxRowScanLabel( NULL )
-        , m_pMaxRowScan( NULL )
+        , m_pIsSQL92Check( nullptr )
+        , m_pAppendTableAlias( nullptr )
+        , m_pAsBeforeCorrelationName( nullptr )
+        , m_pEnableOuterJoin( nullptr )
+        , m_pIgnoreDriverPrivileges( nullptr )
+        , m_pParameterSubstitution( nullptr )
+        , m_pSuppressVersionColumn( nullptr )
+        , m_pCatalog( nullptr )
+        , m_pSchema( nullptr )
+        , m_pIndexAppendix( nullptr )
+        , m_pDosLineEnds( nullptr )
+        , m_pCheckRequiredFields( nullptr )
+        , m_pIgnoreCurrency(nullptr)
+        , m_pEscapeDateTime(nullptr)
+        , m_pPrimaryKeySupport(nullptr)
+        , m_pRespectDriverResultSetType(nullptr)
+        , m_pBooleanComparisonModeLabel( nullptr )
+        , m_pBooleanComparisonMode( nullptr )
+        , m_pMaxRowScanLabel( nullptr )
+        , m_pMaxRowScan( nullptr )
         , m_aControlDependencies()
         , m_aBooleanSettings()
         , m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
@@ -105,7 +105,7 @@ namespace dbaui
 
                 // check whether this must be a tristate check box
                 const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
-                if ( 0 != dynamic_cast< const OptionalBoolItem* >(&rItem) )
+                if ( nullptr != dynamic_cast< const OptionalBoolItem* >(&rItem) )
                     (*setting->ppControl)->EnableTriState();
             }
         }
@@ -436,13 +436,13 @@ namespace dbaui
 
         // auto-generated values?
         if (rFeatures.supportsGeneratedValues())
-            AddTabPage("generated", ODriversSettings::CreateGeneratedValuesPage, NULL);
+            AddTabPage("generated", ODriversSettings::CreateGeneratedValuesPage, nullptr);
         else
             RemoveTabPage("generated");
 
         // any "special settings"?
         if (rFeatures.supportsAnySpecialSetting())
-            AddTabPage("special", ODriversSettings::CreateSpecialSettingsPage, NULL);
+            AddTabPage("special", ODriversSettings::CreateSpecialSettingsPage, nullptr);
         else
             RemoveTabPage("special");
 
@@ -457,7 +457,7 @@ namespace dbaui
 
     void AdvancedSettingsDialog::dispose()
     {
-        SetInputSet(NULL);
+        SetInputSet(nullptr);
         DELETEZ(pExampleSet);
         SfxTabDialog::dispose();
     }

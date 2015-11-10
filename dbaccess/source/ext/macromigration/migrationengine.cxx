@@ -238,7 +238,7 @@ namespace dbmm
             Command aCommand;
             aCommand.Name = OUString::createFromAscii( _pAsciiCommand );
             return _rxCommandProc->execute(
-                aCommand, _rxCommandProc->createCommandIdentifier(), NULL );
+                aCommand, _rxCommandProc->createCommandIdentifier(), nullptr );
         }
 
         OUString lcl_getMimeType_nothrow( const Reference< XCommandProcessor >& _rxContent )
@@ -280,7 +280,7 @@ namespace dbmm
                 aCommand.Argument <<= aLoadArgs.getPropertyValues();
                 Reference< XComponent > xDocComponent(
                     xCommandProcessor->execute(
-                        aCommand, xCommandProcessor->createCommandIdentifier(), NULL
+                        aCommand, xCommandProcessor->createCommandIdentifier(), nullptr
                     ),
                     UNO_QUERY
                 );
@@ -1337,7 +1337,7 @@ namespace dbmm
 
             // now that the concrete scripts storage does not have any elements anymore,
             // remove it
-            xScriptsRoot.reset( NULL ); // need to reset the storage to be allowed to remove it
+            xScriptsRoot.reset( nullptr ); // need to reset the storage to be allowed to remove it
             aDocStorage.removeScriptTypeStorage( _eScriptType );
 
             // done so far

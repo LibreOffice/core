@@ -140,14 +140,14 @@ OJoinTableView* AddTableDialogContext::getTableView() const
 {
     if ( m_rController.getJoinView() )
         return m_rController.getJoinView()->getTableView();
-    return NULL;
+    return nullptr;
 }
 
 // OJoinController
 
 OJoinController::OJoinController(const Reference< XComponentContext >& _rM)
     :OJoinController_BASE(_rM)
-    ,m_pAddTableDialog(NULL)
+    ,m_pAddTableDialog(nullptr)
 {
 }
 
@@ -194,7 +194,7 @@ void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, lo
 {
     // the data for the window
     TTableWindowData::value_type pData = pTabWin->GetData();
-    OSL_ENSURE(pData != 0, "SaveTabWinPosSize : TabWin hat keine Daten !");
+    OSL_ENSURE(pData != nullptr, "SaveTabWinPosSize : TabWin hat keine Daten !");
 
     // set Position & Size of data anew (with current window parameters)
     Point aPos = pTabWin->GetPosPixel();
@@ -217,7 +217,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
             aReturn.bChecked = isEditable();
             break;
         case ID_BROWSER_ADDTABLE:
-            aReturn.bEnabled = ( getView() != NULL )
+            aReturn.bEnabled = ( getView() != nullptr )
                             && const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed();
             aReturn.bChecked = aReturn.bEnabled && m_pAddTableDialog != nullptr && m_pAddTableDialog->IsVisible() ;
             if ( aReturn.bEnabled )

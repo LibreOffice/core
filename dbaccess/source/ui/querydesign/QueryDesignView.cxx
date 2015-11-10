@@ -120,7 +120,7 @@ namespace
         {
             sTableRange = ::connectivity::OSQLParseNode::getTableRange(_pTableRef);
             if ( sTableRange.isEmpty() )
-                _pTableRef->parseNodeToStr(sTableRange,xConnection,NULL,false,false);
+                _pTableRef->parseNodeToStr(sTableRange,xConnection,nullptr,false,false);
         }
         return sTableRange;
     }
@@ -215,7 +215,7 @@ namespace
         for (sal_uInt32 i=0; !bError && i < nCount; ++i)
         {
             const ::connectivity::OSQLParseNode* pParseNode = pTableRefList->getChild(i);
-            const ::connectivity::OSQLParseNode* pJoinNode = NULL;
+            const ::connectivity::OSQLParseNode* pJoinNode = nullptr;
 
             if ( SQL_ISRULE( pParseNode, qualified_join ) || SQL_ISRULE( pParseNode, joined_table ) || SQL_ISRULE( pParseNode, cross_union ) )
                 pJoinNode = pParseNode;
@@ -601,7 +601,7 @@ namespace
     bool GetInnerJoinCriteria(  const OQueryDesignView* _pView,
                                     const ::connectivity::OSQLParseNode *pCondition)
     {
-        return InsertJoinConnection(_pView,pCondition, INNER_JOIN,NULL,NULL) != eOk;
+        return InsertJoinConnection(_pView,pCondition, INNER_JOIN,nullptr,nullptr) != eOk;
     }
     OUString GenerateSelectList( const OQueryDesignView* _pView,
                                         OTableFields&   _rFieldList,
@@ -1341,7 +1341,7 @@ namespace
         {
             // check if we have to put the or criteria on one line.
             const  ::connectivity::OSQLParseNode* pSearchCondition = pCondition->getChild(1);
-            bool bMustAddOrOnOneLine = CheckOrCriteria(pSearchCondition,NULL);
+            bool bMustAddOrOnOneLine = CheckOrCriteria(pSearchCondition,nullptr);
             if ( SQL_ISRULE( pSearchCondition, search_condition) ) // we have a or
             {
                 _pSelectionBrw->DuplicateConditionLevel( nLevel);
@@ -1752,7 +1752,7 @@ namespace
                 if ( pTabWin && pTabWin->ExistsField( _rColumName, _rInfo ) )
                     return pTabWin;
             }
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -1774,7 +1774,7 @@ namespace
         if (aTableRange.isEmpty())
         {
             // SELECT column, ...
-            bFound = NULL != lcl_findColumnInTables( aColumnName, *pTabList, _raInfo );
+            bFound = nullptr != lcl_findColumnInTables( aColumnName, *pTabList, _raInfo );
             if ( bFound && ( aColumnName.toChar() != '*' ) )
                 _raInfo->SetFieldAlias(aColumnAlias);
         }
@@ -1802,7 +1802,7 @@ namespace
     bool checkJoinConditions(   const OQueryDesignView* _pView,
                                     const ::connectivity::OSQLParseNode* _pNode )
     {
-        const ::connectivity::OSQLParseNode* pJoinNode = NULL;
+        const ::connectivity::OSQLParseNode* pJoinNode = nullptr;
         bool bRet = true;
         if (SQL_ISRULE(_pNode,qualified_join))
             pJoinNode = _pNode;
@@ -1910,7 +1910,7 @@ namespace
         OTableFields::iterator aEnd = rUnUsedFields.end();
         for(OTableFields::iterator aIter = rUnUsedFields.begin();aIter != aEnd;++aIter)
             if(_pSelectionBrw->InsertField(*aIter,BROWSER_INVALIDID,false,false).is())
-                (*aIter) = NULL;
+                (*aIter) = nullptr;
         OTableFields().swap( rUnUsedFields );
     }
 
@@ -2117,7 +2117,7 @@ namespace
                                 const ::connectivity::OSQLParseNode* pNode,
                                 OJoinTableView::OTableWindowMap* pTabList )
     {
-        if( pNode==0 || !SQL_ISRULE(pNode,select_statement))
+        if( pNode==nullptr || !SQL_ISRULE(pNode,select_statement))
             return eNoSelectStatement;
 
         ::connectivity::OSQLParseNode* pParseTree = pNode->getChild(2); // selection
@@ -2181,7 +2181,7 @@ namespace
                                                             &rController.getParser().getContext());
 
                         sal_Int32 nFunctionType = FKT_NONE;
-                        ::connectivity::OSQLParseNode* pParamRef = NULL;
+                        ::connectivity::OSQLParseNode* pParamRef = nullptr;
                         sal_Int32 nColumnRefPos = pColumnRef->count() - 2;
                         if ( nColumnRefPos >= 0 && static_cast<sal_uInt32>(nColumnRefPos) < pColumnRef->count() )
                             pParamRef = pColumnRef->getChild(nColumnRefPos);
@@ -2226,7 +2226,7 @@ namespace
                                 aInfo->SetFieldType(TAB_NORMAL_FIELD);
                                 aInfo->SetField(sFieldName);
                             }
-                            aInfo->SetTabWindow(NULL);
+                            aInfo->SetTabWindow(nullptr);
                             aInfo->SetFieldAlias(aColumnAlias);
                         }
                         else
@@ -2255,7 +2255,7 @@ namespace
                                                     &rController.getParser().getContext(),
                                                     true); // quote is to true because we need quoted elements inside the function
 
-                        aInfo->SetTabWindow( NULL );
+                        aInfo->SetTabWindow( nullptr );
 
                         // since we support queries in queries, the thingie might belong to an existing "table"
                         OQueryTableWindow* pExistingTable = lcl_findColumnInTables( aColumns, *pTabList, aInfo );
@@ -2297,7 +2297,7 @@ namespace
         if (!pParseRoot->getChild(3)->getChild(ORDER_BY_CHILD_POS)->isLeaf())
         {
             ::connectivity::OSQLParseNode* pNode = pParseRoot->getChild(3)->getChild(ORDER_BY_CHILD_POS)->getChild(2);
-            ::connectivity::OSQLParseNode* pParamRef = NULL;
+            ::connectivity::OSQLParseNode* pParamRef = nullptr;
 
             OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
             EOrderDir eOrderDir;
@@ -2388,7 +2388,7 @@ namespace
             for( sal_uInt32 i=0 ; i < pGroupBy->count() && eOk == eErrorCode; ++i )
             {
                 OTableFieldDescRef aDragInfo = new OTableFieldDesc();
-                ::connectivity::OSQLParseNode* pParamRef = NULL;
+                ::connectivity::OSQLParseNode* pParamRef = nullptr;
                 ::connectivity::OSQLParseNode* pArgument = pGroupBy->getChild( i );
                 if(SQL_ISRULE(pArgument,column_ref))
                 {
@@ -2733,7 +2733,7 @@ sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
 
 void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFieldList)
 {
-    OSL_ENSURE(pFieldList != NULL, "OQueryDesignView::FillValidFields : What the hell do you think I can do with a NULL-ptr ? This will crash !");
+    OSL_ENSURE(pFieldList != nullptr, "OQueryDesignView::FillValidFields : What the hell do you think I can do with a NULL-ptr ? This will crash !");
     pFieldList->Clear();
 
     bool bAllTables = sAliasName.isEmpty();
@@ -3004,10 +3004,10 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
 {
     OSL_ENSURE(pEntry.is(),"Entry is null!");
     if(!pEntry.is())
-        return NULL;
+        return nullptr;
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getController()).getConnection();
     if(!xConnection.is())
-        return NULL;
+        return nullptr;
 
     ::connectivity::OSQLParser& rParser( static_cast<OQueryController&>(getController()).getParser() );
     OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntry->GetTabWindow());
@@ -3552,7 +3552,7 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
     aInfo->SetDataType(nDataType);
     aInfo->SetFieldType(TAB_NORMAL_FIELD);
     aInfo->SetField(sFunctionTerm);
-    aInfo->SetTabWindow(NULL);
+    aInfo->SetTabWindow(nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

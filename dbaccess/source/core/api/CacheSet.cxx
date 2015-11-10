@@ -117,10 +117,10 @@ OCacheSet::~OCacheSet()
 {
     try
     {
-        m_xDriverSet = NULL;
-        m_xDriverRow = NULL;
-        m_xSetMetaData = NULL;
-        m_xConnection = NULL;
+        m_xDriverSet = nullptr;
+        m_xDriverRow = nullptr;
+        m_xSetMetaData = nullptr;
+        m_xConnection = nullptr;
     }
     catch(Exception&)
     {

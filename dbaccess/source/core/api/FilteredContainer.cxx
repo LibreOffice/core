@@ -362,7 +362,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             }
 
             reFill( lcl_filter( aUnfilteredTables,
-                _rTableFilter, aTableTypeFilter, m_xMetaData, NULL ) );
+                _rTableFilter, aTableTypeFilter, m_xMetaData, nullptr ) );
 
             disposeComponent( xTables );
         }
@@ -383,10 +383,10 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         if ( m_xMasterContainer.is() )
             removeMasterContainerListener();
 
-        m_xMasterContainer  = NULL;
-        m_xMetaData         = NULL;
-        m_pWarningsContainer = NULL;
-        m_pRefreshListener  = NULL;
+        m_xMasterContainer  = nullptr;
+        m_xMetaData         = nullptr;
+        m_pWarningsContainer = nullptr;
+        m_pRefreshListener  = nullptr;
         m_bConstructed      = false;
     }
 

@@ -175,9 +175,9 @@ void SAL_CALL ODefinitionContainer::insertByName( const OUString& _rName, const 
     Reference< XContent > xNewElement(aElement,UNO_QUERY);
     approveNewObject( _rName, xNewElement );  // will throw if necessary
 
-    notifyByName( aGuard, _rName, xNewElement, NULL, E_INSERTED, ApproveListeners );
+    notifyByName( aGuard, _rName, xNewElement, nullptr, E_INSERTED, ApproveListeners );
     implAppend( _rName, xNewElement );
-    notifyByName( aGuard, _rName, xNewElement, NULL, E_INSERTED, ContainerListemers );
+    notifyByName( aGuard, _rName, xNewElement, nullptr, E_INSERTED, ContainerListemers );
 }
 
 void SAL_CALL ODefinitionContainer::removeByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
@@ -195,9 +195,9 @@ void SAL_CALL ODefinitionContainer::removeByName( const OUString& _rName ) throw
     Reference< XContent > xOldElement = implGetByName( _rName, impl_haveAnyListeners_nothrow() );
 
     // do the removal
-    notifyByName( aGuard, _rName, NULL, xOldElement, E_REMOVED, ApproveListeners );
+    notifyByName( aGuard, _rName, nullptr, xOldElement, E_REMOVED, ApproveListeners );
     implRemove( _rName );
-    notifyByName( aGuard, _rName, NULL, xOldElement, E_REMOVED, ContainerListemers );
+    notifyByName( aGuard, _rName, nullptr, xOldElement, E_REMOVED, ContainerListemers );
 
     removeObjectListener( xOldElement );
     disposeComponent(xOldElement);

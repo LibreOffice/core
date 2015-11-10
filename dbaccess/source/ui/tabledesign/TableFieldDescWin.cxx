@@ -83,7 +83,7 @@ void OTableFieldDescWin::dispose()
 
 void OTableFieldDescWin::Init()
 {
-    OSL_ENSURE(getGenPage() != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
+    OSL_ENSURE(getGenPage() != nullptr, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
     getGenPage()->Init();
 }
 
@@ -202,7 +202,7 @@ void OTableFieldDescWin::Resize()
 
 IClipboardTest* OTableFieldDescWin::getActiveChild() const
 {
-    IClipboardTest* pTest = NULL;
+    IClipboardTest* pTest = nullptr;
     switch(m_eChildFocus)
     {
         case DESCRIPTION:

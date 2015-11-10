@@ -39,13 +39,13 @@ namespace dbaui
 
         // if pointer in bottom area begin scroll
         if( aScrollArea.IsInside(_rPoint) )
-            m_aUpScroll.Call(NULL);
+            m_aUpScroll.Call(nullptr);
         else
         {
             aScrollArea.SetPos(Point(0,0));
             // if pointer in top area begin scroll
             if( aScrollArea.IsInside(_rPoint) )
-                m_aDownScroll.Call(NULL);
+                m_aDownScroll.Call(nullptr);
         }
     }
 }

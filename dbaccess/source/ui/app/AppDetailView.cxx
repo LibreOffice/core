@@ -74,8 +74,8 @@ TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sa
 OCreationList::OCreationList( OTasksWindow& _rParent )
     :SvTreeListBox( &_rParent, WB_TABSTOP | WB_HASBUTTONSATROOT | WB_HASBUTTONS )
     ,m_rTaskWindow( _rParent )
-    ,m_pMouseDownEntry( NULL )
-    ,m_pLastActiveEntry( NULL )
+    ,m_pMouseDownEntry( nullptr )
+    ,m_pLastActiveEntry( nullptr )
 {
     sal_uInt16 nSize = SPACEBETWEENENTRIES;
     SetSpaceBetweenEntries(nSize);
@@ -156,8 +156,8 @@ Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nLine )
 
     // try to let the focus rect start before the bitmap item - this looks better
     SvLBoxItem* pBitmapItem = _pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP );
-    SvLBoxTab* pTab = pBitmapItem ? GetTab( _pEntry, pBitmapItem ) : NULL;
-    SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : NULL;
+    SvLBoxTab* pTab = pBitmapItem ? GetTab( _pEntry, pBitmapItem ) : nullptr;
+    SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : nullptr;
     OSL_ENSURE( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
     if ( pTab && pItemData )
         aRect.Left() = pTab->GetPos() - pItemData->maSize.Width() / 2;
@@ -180,8 +180,8 @@ void OCreationList::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*
 void OCreationList::ModelHasCleared()
 {
     SvTreeListBox::ModelHasCleared();
-    m_pLastActiveEntry = NULL;
-    m_pMouseDownEntry = NULL;
+    m_pLastActiveEntry = nullptr;
+    m_pMouseDownEntry = nullptr;
 }
 
 void OCreationList::GetFocus()
@@ -195,7 +195,7 @@ void OCreationList::LoseFocus()
 {
     SvTreeListBox::LoseFocus();
     m_pLastActiveEntry = GetCurEntry();
-    setCurrentEntryInvalidate( NULL );
+    setCurrentEntryInvalidate( nullptr );
 }
 
 void OCreationList::MouseButtonDown( const MouseEvent& rMEvt )
@@ -215,7 +215,7 @@ void OCreationList::MouseMove( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeaveWindow() )
     {
-        setCurrentEntryInvalidate( NULL );
+        setCurrentEntryInvalidate( nullptr );
     }
     else if ( !rMEvt.IsSynthetic() )
     {
@@ -233,7 +233,7 @@ void OCreationList::MouseMove( const MouseEvent& rMEvt )
             {
                 OSL_ENSURE( ( GetCurEntry() == m_pMouseDownEntry ) || !GetCurEntry(),
                     "OCreationList::MouseMove: inconsistence (2)!" );
-                setCurrentEntryInvalidate( NULL );
+                setCurrentEntryInvalidate( nullptr );
             }
         }
         else
@@ -268,7 +268,7 @@ void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
         ReleaseMouse();
 
         InvalidateEntry( m_pMouseDownEntry );
-        m_pMouseDownEntry = NULL;
+        m_pMouseDownEntry = nullptr;
     }
 
     SvTreeListBox::MouseButtonUp( rMEvt );
@@ -572,8 +572,8 @@ OApplicationDetailView::~OApplicationDetailView()
 
 void OApplicationDetailView::dispose()
 {
-    set(NULL);
-    setSplitter(NULL);
+    set(nullptr);
+    setSplitter(nullptr);
     m_aHorzSplitter.disposeAndClear();
     m_aTasks.disposeAndClear();
     m_aContainer.disposeAndClear();
@@ -644,12 +644,12 @@ bool OApplicationDetailView::interceptKeyInput( const KeyEvent& _rEvent )
 
 void OApplicationDetailView::createTablesPage(const Reference< XConnection >& _xConnection )
 {
-    impl_createPage( E_TABLE, _xConnection, NULL );
+    impl_createPage( E_TABLE, _xConnection, nullptr );
 }
 
 void OApplicationDetailView::createPage( ElementType _eType,const Reference< XNameAccess >& _xContainer )
 {
-    impl_createPage( _eType, NULL, _xContainer );
+    impl_createPage( _eType, nullptr, _xContainer );
 }
 
 void OApplicationDetailView::impl_createPage( ElementType _eType, const Reference< XConnection >& _rxConnection,

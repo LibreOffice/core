@@ -51,7 +51,7 @@ SvXMLImportContext* OXMLTableFilterList::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & /*xAttrList*/ )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     if ( XML_NAMESPACE_DB == nPrefix )
     {

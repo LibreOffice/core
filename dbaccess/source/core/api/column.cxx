@@ -153,8 +153,8 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    bool _bDropColumn,
                    bool _bUseHardRef)
                    : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
-    ,m_pMediator(NULL)
-    ,m_xDrvColumns(NULL)
+    ,m_pMediator(nullptr)
+    ,m_xDrvColumns(nullptr)
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
     ,m_bInitialized(false)
@@ -172,7 +172,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         bool _bDropColumn,
         bool _bUseHardRef)
        : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
-    ,m_pMediator(NULL)
+    ,m_pMediator(nullptr)
     ,m_xDrvColumns(_rxDrvColumns)
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
@@ -226,9 +226,9 @@ void OColumns::clearColumns()
 void SAL_CALL OColumns::disposing()
 {
     MutexGuard aGuard(m_rMutex);
-    m_xDrvColumns = NULL;
-    m_pMediator = NULL;
-    m_pColFactoryImpl = NULL;
+    m_xDrvColumns = nullptr;
+    m_pMediator = nullptr;
+    m_pColFactoryImpl = nullptr;
     OColumns_BASE::disposing();
 }
 

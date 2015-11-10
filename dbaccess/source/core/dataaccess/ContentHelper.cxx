@@ -51,7 +51,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 
 OContentHelper_Impl::OContentHelper_Impl()
-    : m_pDataSource(0)
+    : m_pDataSource(nullptr)
 {
 }
 
@@ -81,7 +81,7 @@ void SAL_CALL OContentHelper::disposing()
     EventObject aEvt(*this);
     m_aContentListeners.disposeAndClear(aEvt);
 
-    m_xParentContainer = NULL;
+    m_xParentContainer = nullptr;
 }
 
 IMPLEMENT_SERVICE_INFO1(OContentHelper,"com.sun.star.comp.sdb.Content","com.sun.star.ucb.Content");
@@ -514,7 +514,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
                 OInterfaceIteratorHelper aIter( *pPropsContainer );
                 while ( aIter.hasMoreElements() )
                 {
-                    PropertyEventSequence* propertyEvents = NULL;
+                    PropertyEventSequence* propertyEvents = nullptr;
 
                     XPropertiesChangeListener* pListener = static_cast< XPropertiesChangeListener * >( aIter.next() );
                     PropertiesEventListenerMap::iterator it = aListeners.find( pListener );
@@ -563,7 +563,7 @@ sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw
 
 OContentHelper* OContentHelper::getImplementation( const Reference< XInterface >& _rxComponent )
 {
-    OContentHelper* pContent( NULL );
+    OContentHelper* pContent( nullptr );
 
     Reference< XUnoTunnel > xUnoTunnel( _rxComponent, UNO_QUERY );
     if ( xUnoTunnel.is() )

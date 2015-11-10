@@ -520,7 +520,7 @@ TransferableHelper* OApplicationController::copyObject()
         ::osl::MutexGuard aGuard( getMutex() );
 
         ElementType eType = getContainer()->getElementType();
-        TransferableHelper* pData = NULL;
+        TransferableHelper* pData = nullptr;
         switch( eType )
         {
             case E_TABLE:
@@ -531,7 +531,7 @@ TransferableHelper* OApplicationController::copyObject()
                 if ( xConnection.is() )
                     xMetaData = xConnection->getMetaData();
 
-                OUString sName = getContainer()->getQualifiedName( NULL );
+                OUString sName = getContainer()->getQualifiedName( nullptr );
                 if ( !sName.isEmpty() )
                 {
                     OUString sDataSource = getDatabaseName();
@@ -575,7 +575,7 @@ TransferableHelper* OApplicationController::copyObject()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return NULL;
+    return nullptr;
 }
 
 bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDescriptor& _rPasteData, const OUString& _sParentFolder, bool _bMove)
@@ -642,7 +642,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                     {
                         // the concrete query
                         Reference< XQueryDefinitionsSupplier > xSourceQuerySup(
-                            getDataSourceByName( sDataSourceName, getView(), getORB(), NULL ),
+                            getDataSourceByName( sDataSourceName, getView(), getORB(), nullptr ),
                             UNO_QUERY_THROW );
                         Reference< XNameAccess > xQueries( xSourceQuerySup->getQueryDefinitions(), UNO_SET_THROW );
                         if ( xQueries->hasByName( sCommand ) )
@@ -798,7 +798,7 @@ bool OApplicationController::isTableFormat()  const
 
 IMPL_LINK_NOARG_TYPED( OApplicationController, OnAsyncDrop, void*, void )
 {
-    m_nAsyncDrop = 0;
+    m_nAsyncDrop = nullptr;
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 

@@ -326,7 +326,7 @@ VclPtr<OTableWindow> OQueryTableView::createWindow(const TTableWindowData::value
 void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn, bool _bCreateUndoAction)
 {
     // let's first check if I have the connection already
-    OQueryTableConnection* pTabConn = NULL;
+    OQueryTableConnection* pTabConn = nullptr;
     const auto& rConnections = getTableConnections();
     auto aEnd = rConnections.end();
     auto aIter = ::std::find(   rConnections.begin(),
@@ -349,7 +349,7 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
         pTabConn = static_cast<OQueryTableConnection*>((*aIter).get());
 
     // no -> insert
-    if (pTabConn == NULL)
+    if (pTabConn == nullptr)
     {
         // the new data ...
         OQueryTableConnectionData* pNewData = static_cast< OQueryTableConnectionData*>(rNewConn.GetData()->NewInstance());
@@ -467,7 +467,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     if(!bSuccess)
     {
         // reset table window
-        pUndoAction->SetTabWin(NULL);
+        pUndoAction->SetTabWin(nullptr);
         pUndoAction->SetOwnership(false);
 
         delete pUndoAction;
@@ -699,7 +699,7 @@ OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
     OTableWindowMap::const_iterator aIter = GetTabWinMap().find(rAliasName);
     if(aIter != GetTabWinMap().end())
         return static_cast<OQueryTableWindow*>(aIter->second.get());
-    return NULL;
+    return nullptr;
 }
 
 bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
@@ -736,7 +736,7 @@ bool OQueryTableView::ContainsTabWin(const OTableWindow& rTabWin)
 
 void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 {
-    OSL_ENSURE(pTabWin != NULL, "OQueryTableView::RemoveTabWin : Window should not be NULL !");
+    OSL_ENSURE(pTabWin != nullptr, "OQueryTableView::RemoveTabWin : Window should not be NULL !");
 
     if(pTabWin && ContainsTabWin(*pTabWin)) // #i122589# check if registered before deleting
     {
@@ -818,7 +818,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
         // and its data, gets destroyed and destroys both the window and its data
 
     if (m_pLastFocusTabWin == pTabWin)
-        m_pLastFocusTabWin = NULL;
+        m_pLastFocusTabWin = nullptr;
 
     // collect connections belonging to the window and pass to UndoAction
     sal_Int16 nCnt = 0;
@@ -867,7 +867,7 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
         if (pTabWin->Init())
         {
             TTableWindowData::value_type pData = pTabWin->GetData();
-            OSL_ENSURE(pData != 0, "OQueryTableView::ShowTabWin : TabWin has no data !");
+            OSL_ENSURE(pData != nullptr, "OQueryTableView::ShowTabWin : TabWin has no data !");
             // If there is a position and size defined, we use them
             if (pData->HasPosition() && pData->HasSize())
             {
@@ -929,7 +929,7 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
 void OQueryTableView::InsertField(const OTableFieldDescRef& rInfo)
 {
-    OSL_ENSURE(getDesignView() != NULL, "OQueryTableView::InsertField : has no Parent !");
+    OSL_ENSURE(getDesignView() != nullptr, "OQueryTableView::InsertField : has no Parent !");
     static_cast<OQueryDesignView*>(getDesignView())->InsertField(rInfo);
 }
 
@@ -949,7 +949,7 @@ bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const
 void OQueryTableView::onNoColumns_throw()
 {
     OUString sError( ModuleRes( STR_STATEMENT_WITHOUT_RESULT_SET ) );
-    ::dbtools::throwSQLException( sError, ::dbtools::SQL_GENERAL_ERROR, NULL );
+    ::dbtools::throwSQLException( sError, ::dbtools::SQL_GENERAL_ERROR, nullptr );
 }
 
 bool OQueryTableView::supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const

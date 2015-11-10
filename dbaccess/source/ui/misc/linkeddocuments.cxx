@@ -300,7 +300,7 @@ namespace dbaui
                 aCommand.Name = "openDesign";
                 aCommand.Argument <<= aCommandArgs.getPropertyValues();
                 WaitObject aWaitCursor( m_pDialogParent );
-                xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), NULL ), UNO_QUERY );
+                xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), nullptr ), UNO_QUERY );
             }
         }
         catch(const Exception&)

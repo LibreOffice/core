@@ -153,7 +153,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
         return true;
     }
 
-    PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ), NULL, true );
+    PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ), nullptr, true );
     return false;
 }
 
@@ -176,13 +176,13 @@ IMPL_LINK_NOARG_TYPED(OApplicationSwapWindow, ChangeToLastSelected, void*, void)
 void OApplicationSwapWindow::selectContainer(ElementType _eType)
 {
     sal_uLong nCount = m_aIconControl->GetEntryCount();
-    SvxIconChoiceCtrlEntry* pEntry = NULL;
+    SvxIconChoiceCtrlEntry* pEntry = nullptr;
     for (sal_uLong i=0; i < nCount; ++i)
     {
         pEntry = m_aIconControl->GetEntry(i);
         if ( pEntry && *static_cast<ElementType*>(pEntry->GetUserData()) == _eType )
             break;
-        pEntry = NULL;
+        pEntry = nullptr;
     }
 
     if ( pEntry )

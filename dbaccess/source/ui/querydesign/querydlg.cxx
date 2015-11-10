@@ -47,7 +47,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
                        const Reference< XConnection >& _xConnection,
                        bool _bAllowTableSelect)
     : ModalDialog( pParent, "JoinDialog", "dbaccess/ui/joindialog.ui" )
-    , m_pTableControl( NULL )
+    , m_pTableControl( nullptr )
     , m_pTableMap(_pTableMap)
     , m_pTableView(pParent)
     , eJoinType(static_cast<OQueryTableConnectionData*>(_pData.get())->GetJoinType())

@@ -68,7 +68,7 @@ namespace dbaccess
 
     void SAL_CALL OPrivateColumns::disposing()
     {
-        m_aColumns = NULL;
+        m_aColumns = nullptr;
         clear_NoDispose();
             // we're not owner of the objects we're holding, instead the object we got in our ctor is
             // So we're not allowed to dispose our elements.
@@ -88,7 +88,7 @@ namespace dbaccess
 
             OSL_FAIL("Column not found in collection!");
         }
-        return NULL;
+        return nullptr;
     }
 
     connectivity::sdbcx::ObjectType OPrivateTables::createObject(const OUString& _rName)
@@ -101,7 +101,7 @@ namespace dbaccess
             (void)aIter;
             return connectivity::sdbcx::ObjectType(m_aTables.find(_rName)->second,UNO_QUERY);
         }
-        return NULL;
+        return nullptr;
     }
 }
 

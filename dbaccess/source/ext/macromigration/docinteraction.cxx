@@ -54,7 +54,7 @@ namespace dbmm
         Reference< XInteractionHandler >    xHandler;
 
         explicit InteractionHandler_Data( const Reference<XComponentContext>& _rContext )
-            :xHandler( css::task::InteractionHandler::createWithParent(_rContext, 0), UNO_QUERY )
+            :xHandler( css::task::InteractionHandler::createWithParent(_rContext, nullptr), UNO_QUERY )
         {
         }
     };
@@ -76,7 +76,7 @@ namespace dbmm
     {
         // create request
         DocumentPasswordRequest aRequest(
-            OUString(), NULL,
+            OUString(), nullptr,
             InteractionClassification_QUERY,
             _io_rPassword.isEmpty() ? PasswordRequestMode_PASSWORD_ENTER : PasswordRequestMode_PASSWORD_REENTER,
             _rDocumentName

@@ -52,9 +52,9 @@ namespace dbaui
         OAsynchronousLink( const Link<void*,void>& _rHandler );
         virtual ~OAsynchronousLink();
 
-        bool    IsRunning() const { return m_nEventId != 0; }
+        bool    IsRunning() const { return m_nEventId != nullptr; }
 
-        void Call( void* _pArgument = NULL );
+        void Call( void* _pArgument = nullptr );
         void CancelCall();
 
     protected:

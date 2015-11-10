@@ -77,11 +77,11 @@ connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const OUString& /
 ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu::OBroadcastHelper& _rBHelper, ::osl::Mutex* _pMutex )
     :OPropertyStateContainer(_rBHelper)
     ,m_pMutex(_pMutex)
-    ,m_pMySelf(NULL)
-    ,m_pCache(NULL)
-    ,m_pColumns(NULL)
+    ,m_pMySelf(nullptr)
+    ,m_pCache(nullptr)
+    ,m_pColumns(nullptr)
     ,m_rBHelper(_rBHelper)
-    ,m_pEmptyCollection( NULL )
+    ,m_pEmptyCollection( nullptr )
     ,m_aContext( _rContext )
     ,m_aErrors( _rContext )
     ,m_nLastColumnIndex(-1)
@@ -110,7 +110,7 @@ ORowSetBase::~ORowSetBase()
         m_pColumns->acquire();
         m_pColumns->disposing();
         delete m_pColumns;
-        m_pColumns = NULL;
+        m_pColumns = nullptr;
     }
 
     delete m_pEmptyCollection;
@@ -166,7 +166,7 @@ void SAL_CALL ORowSetBase::disposing()
         m_pCache->deregisterOldRow(m_aOldRow);
         m_pCache->deleteIterator(this);
     }
-    m_pCache = NULL;
+    m_pCache = nullptr;
 }
 
 // comphelper::OPropertyArrayUsageHelper
@@ -338,7 +338,7 @@ Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_In
 
     if ( impl_rowDeleted() )
     {
-        return NULL;
+        return nullptr;
     }
 
     bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
@@ -375,7 +375,7 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
 Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *m_pMySelf );
-    return NULL;
+    return nullptr;
 }
 
 Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
@@ -391,7 +391,7 @@ Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex ) throw(
 Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *m_pMySelf );
-    return NULL;
+    return nullptr;
 }
 
 // css::sdbcx::XRowLocate
@@ -1085,7 +1085,7 @@ void ORowSetBase::checkPositioningAllowed() throw( SQLException, RuntimeExceptio
 
 Reference< XInterface >  ORowSetBase::getStatement() throw( SQLException, RuntimeException, std::exception )
 {
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)

@@ -343,7 +343,7 @@ OAddTableDlg::OAddTableDlg( vcl::Window* pParent, IAddTableDialogContext& _rCont
 
     m_pTableList->EnableInplaceEditing( false );
     m_pTableList->SetStyle(m_pTableList->GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
-    m_pTableList->EnableCheckButton( NULL ); // do not show any buttons
+    m_pTableList->EnableCheckButton( nullptr ); // do not show any buttons
     m_pTableList->SetSelectionMode( SINGLE_SELECTION );
     m_pTableList->notifyHiContrastChanged();
     m_pTableList->suppressEmptyFolders();
@@ -419,7 +419,7 @@ void OAddTableDlg::impl_addTable()
 
 IMPL_LINK_NOARG_TYPED( OAddTableDlg, AddClickHdl, Button*, void )
 {
-    TableListDoubleClickHdl(NULL);
+    TableListDoubleClickHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED( OAddTableDlg, TableListDoubleClickHdl, SvTreeListBox*, bool )

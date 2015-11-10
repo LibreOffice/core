@@ -92,7 +92,7 @@ struct AsciiPropertyValue
 
     AsciiPropertyValue()
         :DefaultValue( )
-        ,AsciiName( NULL )
+        ,AsciiName( nullptr )
         ,ValueType( ::cppu::UnoType<void>::get() )
     {
     }
@@ -330,7 +330,7 @@ public:
 
             css::uno::Reference< css::embed::XStorage > getOrCreateRootStorage();
     inline  css::uno::Reference< css::embed::XStorage > getRootStorage() const { return m_xDocumentStorage.getTyped(); }
-    inline  void resetRootStorage() { impl_switchToStorage_throw( NULL ); }
+    inline  void resetRootStorage() { impl_switchToStorage_throw( nullptr ); }
 
     /** returns the data source. If it doesn't exist it will be created
     */
