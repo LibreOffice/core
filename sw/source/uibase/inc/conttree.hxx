@@ -54,52 +54,52 @@ class SwContentTree
     : public SvTreeListBox
     , public SfxListener
 {
-    ImageList           aEntryImages;
-    OUString            sSpace;
-    AutoTimer           aUpdTimer;
+    ImageList           m_aEntryImages;
+    OUString            m_sSpace;
+    AutoTimer           m_aUpdTimer;
 
-    o3tl::enumarray<ContentTypeId,SwContentType*>  aActiveContentArr;
-    o3tl::enumarray<ContentTypeId,SwContentType*>  aHiddenContentArr;
-    OUString            aContextStrings[CONTEXT_COUNT + 1];
-    OUString            sRemoveIdx;
-    OUString            sUpdateIdx;
-    OUString            sUnprotTable;
-    OUString            sRename;
-    OUString            sReadonlyIdx;
-    OUString            sInvisible;
-    OUString            sPostItShow;
-    OUString            sPostItHide;
-    OUString            sPostItDelete;
+    o3tl::enumarray<ContentTypeId,SwContentType*>  m_aActiveContentArr;
+    o3tl::enumarray<ContentTypeId,SwContentType*>  m_aHiddenContentArr;
+    OUString            m_aContextStrings[CONTEXT_COUNT + 1];
+    OUString            m_sRemoveIdx;
+    OUString            m_sUpdateIdx;
+    OUString            m_sUnprotTable;
+    OUString            m_sRename;
+    OUString            m_sReadonlyIdx;
+    OUString            m_sInvisible;
+    OUString            m_sPostItShow;
+    OUString            m_sPostItHide;
+    OUString            m_sPostItDelete;
 
-    SwWrtShell*         pHiddenShell;   // dropped Doc
-    SwWrtShell*         pActiveShell;   // the active or a const. open view
-    SwNavigationConfig* pConfig;
+    SwWrtShell*         m_pHiddenShell;   // dropped Doc
+    SwWrtShell*         m_pActiveShell;   // the active or a const. open view
+    SwNavigationConfig* m_pConfig;
 
     std::map< void*, bool > mOutLineNodeMap;
 
-    sal_Int32           nActiveBlock;
-    sal_Int32           nHiddenBlock;
-    ContentTypeId       nRootType;
-    ContentTypeId       nLastSelType;
-    sal_uInt8           nOutlineLevel;
+    sal_Int32           m_nActiveBlock;
+    sal_Int32           m_nHiddenBlock;
+    ContentTypeId       m_nRootType;
+    ContentTypeId       m_nLastSelType;
+    sal_uInt8           m_nOutlineLevel;
 
-    bool                bIsActive           :1;
-    bool                bIsConstant         :1;
-    bool                bIsHidden           :1;
-    bool                bDocChgdInDragging  :1;
-    bool                bIsInternalDrag     :1;
-    bool                bIsRoot             :1;
-    bool                bIsIdleClear        :1;
-    bool                bIsLastReadOnly     :1;
-    bool                bIsOutlineMoveable  :1;
-    bool                bViewHasChanged     :1;
-    bool                bIsImageListInitialized : 1;
+    bool                m_bIsActive           :1;
+    bool                m_bIsConstant         :1;
+    bool                m_bIsHidden           :1;
+    bool                m_bDocChgdInDragging  :1;
+    bool                m_bIsInternalDrag     :1;
+    bool                m_bIsRoot             :1;
+    bool                m_bIsIdleClear        :1;
+    bool                m_bIsLastReadOnly     :1;
+    bool                m_bIsOutlineMoveable  :1;
+    bool                m_bViewHasChanged     :1;
+    bool                m_bIsImageListInitialized : 1;
     bool                m_bActiveDocModified :1;
 
     static bool         bIsInDrag;
 
-    bool                bIsKeySpace;
-    Rectangle           oldRectangle;
+    bool                m_bIsKeySpace;
+    Rectangle           m_aOldRectangle;
 
     void                FindActiveTypeAndRemoveUserData();
 
@@ -166,13 +166,13 @@ public:
     void            SetConstantShell(SwWrtShell* pSh);
 
     SwWrtShell*     GetWrtShell()
-                        {return bIsActive||bIsConstant ?
-                                    pActiveShell :
-                                        pHiddenShell;}
+                        {return m_bIsActive||m_bIsConstant ?
+                                    m_pActiveShell :
+                                        m_pHiddenShell;}
 
     static bool     IsInDrag() {return bIsInDrag;}
 
-    sal_uInt8       GetOutlineLevel()const {return nOutlineLevel;}
+    sal_uInt8       GetOutlineLevel()const {return m_nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
 
     virtual bool    Expand( SvTreeListEntry* pParent ) override;
@@ -184,12 +184,12 @@ public:
     void            ShowTree();
     void            HideTree();
 
-    bool            IsConstantView() {return bIsConstant;}
-    bool            IsActiveView()   {return bIsActive;}
-    bool            IsHiddenView()   {return bIsHidden;}
+    bool            IsConstantView() {return m_bIsConstant;}
+    bool            IsActiveView()   {return m_bIsActive;}
+    bool            IsHiddenView()   {return m_bIsHidden;}
 
-    const SwWrtShell*   GetActiveWrtShell() {return pActiveShell;}
-    SwWrtShell*         GetHiddenWrtShell() {return pHiddenShell;}
+    const SwWrtShell*   GetActiveWrtShell() {return m_pActiveShell;}
+    SwWrtShell*         GetHiddenWrtShell() {return m_pHiddenShell;}
 
     DECL_LINK_TYPED( ContentDoubleClickHdl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( TimerUpdate, Timer *, void );
