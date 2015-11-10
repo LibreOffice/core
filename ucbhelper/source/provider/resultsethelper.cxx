@@ -52,7 +52,7 @@ namespace ucbhelper {
 ResultSetImplHelper::ResultSetImplHelper(
     const uno::Reference< uno::XComponentContext >& rxContext,
     const com::sun::star::ucb::OpenCommandArgument2& rCommand )
-: m_pDisposeEventListeners( 0 ),
+: m_pDisposeEventListeners( nullptr ),
   m_bStatic( false ),
   m_bInitDone( false ),
   m_aCommand( rCommand ),
@@ -272,7 +272,7 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
         if ( xStubFactory.is() )
         {
             xStubFactory->connectToCache(
-                                  this, xCache, m_aCommand.SortingInfo, 0 );
+                                  this, xCache, m_aCommand.SortingInfo, nullptr );
             return;
         }
     }

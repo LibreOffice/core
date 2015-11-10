@@ -653,7 +653,7 @@ public:
                      const OUString & rMimeType = OUString( ),
                      bool bMajorVersion = false,
                      const OUString & rCommentVersion = OUString( ),
-                     OUString* pResultURL = NULL,
+                     OUString* pResultURL = nullptr,
                      const OUString & rDocumentId = OUString( ) )
         throw( css::ucb::CommandAbortedException,
                css::uno::RuntimeException,

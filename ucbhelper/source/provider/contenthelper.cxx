@@ -98,11 +98,11 @@ struct ContentImplHelper_Impl
     PropertyChangeListeners*                      m_pPropertyChangeListeners;
 
     ContentImplHelper_Impl()
-    : m_pDisposeEventListeners( 0 ),
-        m_pContentEventListeners( 0 ),
-      m_pPropSetChangeListeners( 0 ),
-        m_pCommandChangeListeners( 0 ),
-      m_pPropertyChangeListeners( 0 ) {}
+    : m_pDisposeEventListeners( nullptr ),
+        m_pContentEventListeners( nullptr ),
+      m_pPropSetChangeListeners( nullptr ),
+        m_pCommandChangeListeners( nullptr ),
+      m_pPropertyChangeListeners( nullptr ) {}
 
     ~ContentImplHelper_Impl()
     {
@@ -554,7 +554,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
                 throw;
             }
 
-            xContainer = 0;
+            xContainer = nullptr;
 
             // Success!
 
@@ -566,7 +566,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
                 if ( xReg.is() )
                 {
                     OUString aKey( xSet->getKey() );
-                    xSet = 0;
+                    xSet = nullptr;
                     xReg->removePropertySet( aKey );
                 }
             }
@@ -722,7 +722,7 @@ void ContentImplHelper::notifyPropertiesChange(
                 cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
                 while ( aIter.hasMoreElements() )
                 {
-                    PropertyEventSequence* p = NULL;
+                    PropertyEventSequence* p = nullptr;
 
                     beans::XPropertiesChangeListener* pListener =
                         static_cast< beans::XPropertiesChangeListener * >(

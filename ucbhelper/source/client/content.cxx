@@ -1042,7 +1042,7 @@ bool Content::transferContent( const Content& rSourceContent,
     }
 
     Any aRet = pBroker->execute( aCommand, 0, m_xImpl->getEnvironment() );
-    if ( pResultURL != NULL )
+    if ( pResultURL != nullptr )
         aRet >>= *pResultURL;
     return true;
 }
@@ -1151,7 +1151,7 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    m_xCommandProcessor = 0;
+    m_xCommandProcessor = nullptr;
 
     // #92581# - Don't reset m_aURL!!!
 
@@ -1183,7 +1183,7 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
         // content object again if demanded ( --> Content_Impl::getContent() )
         getURL();
 
-        m_xContent = 0;
+        m_xContent = nullptr;
     }
 }
 
@@ -1216,8 +1216,8 @@ void Content_Impl::disposing( const EventObject& Source )
         xContent = m_xContent;
 
         m_aURL.clear();
-        m_xCommandProcessor = 0;
-        m_xContent = 0;
+        m_xCommandProcessor = nullptr;
+        m_xContent = nullptr;
     }
 
     if ( xContent.is() )

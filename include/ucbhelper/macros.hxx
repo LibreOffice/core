@@ -52,7 +52,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL         \
 Class::getTypes()                                                           \
     throw( css::uno::RuntimeException, std::exception )          \
 {                                                                           \
-    static cppu::OTypeCollection* pCollection = NULL;                       \
+    static cppu::OTypeCollection* pCollection = nullptr;                       \
       if ( !pCollection )                                                     \
       {                                                                       \
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );    \

@@ -428,7 +428,7 @@ class ResultSetDataSupplier : public salhelper::SimpleReferenceObject
     ResultSet* m_pResultSet;
 
 public:
-    ResultSetDataSupplier() : m_pResultSet( 0 ) {}
+    ResultSetDataSupplier() : m_pResultSet( nullptr ) {}
 
     /**
      * This method returns the resultset this supplier belongs to.

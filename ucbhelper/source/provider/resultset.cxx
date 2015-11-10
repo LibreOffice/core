@@ -66,10 +66,10 @@ static const PropertyInfo aPropertyTable[] =
       beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY,
       &sal_Int32_getCppuType
     },
-    { 0,
+    { nullptr,
       0,
       0,
-      0
+      nullptr
     }
 };
 
@@ -178,8 +178,8 @@ inline ResultSet_Impl::ResultSet_Impl(
   m_xEnv( rxEnv ),
   m_aProperties( rProperties ),
   m_xDataSupplier( rDataSupplier ),
-  m_pDisposeEventListeners( 0 ),
-  m_pPropertyChangeListeners( 0 ),
+  m_pDisposeEventListeners( nullptr ),
+  m_pPropertyChangeListeners( nullptr ),
   m_nPos( 0 ), // Position is one-based. Zero means: before first element.
   m_bWasNull( false ),
   m_bAfterLast( false )

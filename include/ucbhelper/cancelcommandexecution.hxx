@@ -90,7 +90,7 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::ucb::IOErrorCode eEr
                              const css::uno::Sequence< css::uno::Any > & rArgs,
                              const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
                              const OUString & rMessage = OUString(),
-                             const css::uno::Reference< css::ucb::XCommandProcessor > & xContext = 0 )
+                             const css::uno::Reference< css::ucb::XCommandProcessor > & xContext = nullptr )
     throw( css::uno::Exception );
 }
 

@@ -35,7 +35,7 @@ namespace ucbhelper
         , m_nLength( 0 )
     {
         if ( !m_tmpfl )
-            osl_createTempFile( NULL, &m_tmpfl, NULL );
+            osl_createTempFile( nullptr, &m_tmpfl, nullptr );
         OSL_ENSURE( m_tmpfl, "input stream without tempfile!" );
 
         if ( osl_setFilePos( m_tmpfl, osl_Pos_End, 0 ) == osl_File_E_None )
@@ -50,7 +50,7 @@ namespace ucbhelper
 
     FdInputStream::~FdInputStream()
     {
-        if ( 0 != m_tmpfl)
+        if ( nullptr != m_tmpfl)
             osl_closeFile(m_tmpfl);
     }
 
@@ -127,7 +127,7 @@ namespace ucbhelper
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(m_tmpfl)
-            osl_closeFile(m_tmpfl),m_tmpfl = 0;
+            osl_closeFile(m_tmpfl),m_tmpfl = nullptr;
     }
 
 

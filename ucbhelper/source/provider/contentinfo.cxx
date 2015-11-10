@@ -46,7 +46,7 @@ PropertySetInfo::PropertySetInfo(
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv,
     ContentImplHelper* pContent )
 : m_xEnv( rxEnv ),
-  m_pProps( 0 ),
+  m_pProps( nullptr ),
   m_pContent( pContent )
 {
 }
@@ -191,7 +191,7 @@ void PropertySetInfo::reset()
 {
     osl::MutexGuard aGuard( m_aMutex );
     delete m_pProps;
-    m_pProps = 0;
+    m_pProps = nullptr;
 }
 
 
@@ -229,7 +229,7 @@ CommandProcessorInfo::CommandProcessorInfo(
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv,
     ContentImplHelper* pContent )
 : m_xEnv( rxEnv ),
-  m_pCommands( 0 ),
+  m_pCommands( nullptr ),
   m_pContent( pContent )
 {
 }
@@ -377,7 +377,7 @@ void CommandProcessorInfo::reset()
 {
     osl::MutexGuard aGuard( m_aMutex );
     delete m_pCommands;
-    m_pCommands = 0;
+    m_pCommands = nullptr;
 }
 
 

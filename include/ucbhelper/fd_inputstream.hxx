@@ -49,7 +49,7 @@ namespace ucbhelper
          *  on which the inputstream acts.
          */
 
-        FdInputStream(oslFileHandle tmpfl = 0);
+        FdInputStream(oslFileHandle tmpfl = nullptr);
 
         virtual ~FdInputStream();
 

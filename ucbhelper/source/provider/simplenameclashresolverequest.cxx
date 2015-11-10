@@ -113,7 +113,7 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionSupplyName::getImplementationId()
 uno::Sequence< uno::Type > SAL_CALL InteractionSupplyName::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OTypeCollection* pCollection = 0;
+    static cppu::OTypeCollection* pCollection = nullptr;
       if ( !pCollection )
       {
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
