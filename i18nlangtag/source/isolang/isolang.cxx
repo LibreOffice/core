@@ -904,7 +904,7 @@ static IsoLangOtherEntry const aImplOtherEntries[] =
     { LANGUAGE_KOREAN,                      "korean"         },
     { LANGUAGE_ENGLISH_US,                  "posix"          },
     { LANGUAGE_CHINESE_TRADITIONAL,         "tchinese"       },
-    { LANGUAGE_DONTKNOW,                    NULL             }  // marks end of table
+    { LANGUAGE_DONTKNOW,                    nullptr             }  // marks end of table
 };
 
 
@@ -915,7 +915,7 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
     { LANGUAGE_USER_PRIV_DEFAULT,           "x-default"      },
     { LANGUAGE_USER_PRIV_COMMENT,           "x-comment"      },
     { LANGUAGE_USER_PRIV_JOKER,             "*"              }, //! not BCP47 but transferable in configmgr
-    { LANGUAGE_DONTKNOW,                    NULL             }  // marks end of table
+    { LANGUAGE_DONTKNOW,                    nullptr             }  // marks end of table
 };
 
 
@@ -924,8 +924,8 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
 void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         css::lang::Locale & rLocale, bool bIgnoreOverride )
 {
-    const IsoLanguageScriptCountryEntry* pScriptEntryOverride = NULL;
-    const IsoLanguageCountryEntry* pEntryOverride = NULL;
+    const IsoLanguageScriptCountryEntry* pScriptEntryOverride = nullptr;
+    const IsoLanguageCountryEntry* pEntryOverride = nullptr;
 
 Label_Override_Lang_Locale:
 
@@ -1053,7 +1053,7 @@ css::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
         }
 
         // Search in ISO lll-Ssss-CC
-        const IsoLanguageScriptCountryEntry* pFirstScript = NULL;
+        const IsoLanguageScriptCountryEntry* pFirstScript = nullptr;
         for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
                 pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
         {
@@ -1097,7 +1097,7 @@ css::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
     }
 
     // Search for locale and remember first lang-only.
-    const IsoLanguageCountryEntry* pFirstLang = NULL;
+    const IsoLanguageCountryEntry* pFirstLang = nullptr;
     const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
     for ( ; pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
@@ -1271,7 +1271,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     OUString aUpperCountry = rCountry.toAsciiUpperCase();
 
     //  first look for exact match
-    const IsoLanguageCountryEntry* pFirstLang = NULL;
+    const IsoLanguageCountryEntry* pFirstLang = nullptr;
     for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
             pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {

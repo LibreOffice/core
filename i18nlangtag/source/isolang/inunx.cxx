@@ -45,7 +45,7 @@ static LanguageType nImplSystemUILanguage = LANGUAGE_DONTKNOW;
 static const sal_Char* getLangFromEnvironment()
 {
     static const sal_Char* pFallback = "C";
-    const sal_Char *pLang = NULL;
+    const sal_Char *pLang = nullptr;
 
     pLang = getenv ( "LC_ALL" );
     if (! pLang || pLang[0] == 0)
@@ -64,7 +64,7 @@ static const sal_Char* getLangFromEnvironment()
 static const sal_Char* getUILangFromEnvironment()
 {
     static const sal_Char* pFallback = "C";
-    const sal_Char *pLang = NULL;
+    const sal_Char *pLang = nullptr;
 
     pLang = getenv ( "LANGUAGE" );      // respect the GNU extension
     if (! pLang || pLang[0] == 0)

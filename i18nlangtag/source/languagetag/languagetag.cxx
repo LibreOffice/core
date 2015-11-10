@@ -45,7 +45,7 @@ using namespace com::sun::star;
 struct myLtError
 {
     lt_error_t* p;
-    myLtError() : p(NULL) {}
+    myLtError() : p(nullptr) {}
     ~myLtError() { if (p) lt_error_unref( p); }
 };
 
@@ -369,7 +369,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTag & rLanguageTag )
     :
         maLocale( rLanguageTag.maLocale),
         maBcp47( rLanguageTag.maBcp47),
-        mpImplLangtag( NULL),
+        mpImplLangtag( nullptr),
         mnLangID( rLanguageTag.mnLangID),
         meIsValid( DECISION_DONTKNOW),
         meIsIsoLocale( DECISION_DONTKNOW),
@@ -396,7 +396,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
         maCachedCountry( rLanguageTagImpl.maCachedCountry),
         maCachedVariants( rLanguageTagImpl.maCachedVariants),
         mpImplLangtag( rLanguageTagImpl.mpImplLangtag ?
-                lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : NULL),
+                lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : nullptr),
         mnLangID( rLanguageTagImpl.mnLangID),
         meIsValid( rLanguageTagImpl.meIsValid),
         meIsIsoLocale( rLanguageTagImpl.meIsIsoLocale),
@@ -429,7 +429,7 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     maCachedVariants    = rLanguageTagImpl.maCachedVariants;
     lt_tag_t * oldTag = mpImplLangtag;
     mpImplLangtag       = rLanguageTagImpl.mpImplLangtag ?
-                            lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : NULL;
+                            lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : nullptr;
     lt_tag_unref(oldTag);
     mnLangID            = rLanguageTagImpl.mnLangID;
     meIsValid           = rLanguageTagImpl.meIsValid;
