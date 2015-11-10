@@ -60,17 +60,17 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    rtl_uString* pPath = NULL;
+    rtl_uString* pPath = nullptr;
     rtl_string2UString( &pPath, argv[1], strlen(argv[1]),
                         osl_getThreadTextEncoding(),OSTRING_TO_OUSTRING_CVTFLAGS );
 
-    rtl_uString* pUrl = NULL;
+    rtl_uString* pUrl = nullptr;
     if (osl_getFileURLFromSystemPath(pPath, &pUrl) != osl_File_E_None)
         return -1;
 //escape the special characters
 
     sal_Unicode cEscapeChar = 0x5c;
-    rtl_uString* pBuffer = NULL;
+    rtl_uString* pBuffer = nullptr;
     sal_Int32 nCapacity = 255;
     rtl_uString_new_WithLength( &pBuffer, nCapacity );
 
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         pCur ++;
     }
 //convert back to byte string so that we can print it.
-    rtl_String* pBootVar = NULL;
+    rtl_String* pBootVar = nullptr;
     rtl_uString2String( &pBootVar, pBuffer->buffer, pBuffer->length,
                         osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
 
