@@ -2272,7 +2272,7 @@ void Desktop::OpenClients()
                 SAL_WARN( "desktop.app", "Error during recovery" << e.Message);
             }
         }
-        else if (bExistsRecoveryData && bDisableRecovery)
+        else if (bExistsRecoveryData && bDisableRecovery && !rArgs.HasModuleParam())
             // prevent new Writer doc
             bRecovery = true;
 
