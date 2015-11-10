@@ -2453,7 +2453,7 @@ void DomainMapper_Impl::ChainTextFrames()
         sal_Int32 nSeq;
         OUString s_mso_next_textbox;
         bool bShapeNameSet;
-        TextFramesForChaining(): xShape(0), nId(0), nSeq(0), bShapeNameSet(false) {}
+        TextFramesForChaining(): xShape(nullptr), nId(0), nSeq(0), bShapeNameSet(false) {}
     } ;
     typedef std::map <OUString, TextFramesForChaining> ChainMap;
 

@@ -2354,7 +2354,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
             // Stop buffering, there will be no custom mark for this footnote or endnote.
-            m_aStates.top().pCurrentBuffer = 0;
+            m_aStates.top().pCurrentBuffer = nullptr;
         break;
     }
     case RTF_PAGE:
