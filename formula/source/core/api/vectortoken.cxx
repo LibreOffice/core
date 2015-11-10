@@ -12,22 +12,22 @@
 namespace formula {
 
 VectorRefArray::VectorRefArray() :
-    mpNumericArray(NULL),
-    mpStringArray(NULL),
+    mpNumericArray(nullptr),
+    mpStringArray(nullptr),
     mbValid(true) {}
 
 VectorRefArray::VectorRefArray( InitInvalid ) :
-    mpNumericArray(NULL),
-    mpStringArray(NULL),
+    mpNumericArray(nullptr),
+    mpStringArray(nullptr),
     mbValid(false) {}
 
 VectorRefArray::VectorRefArray( const double* pArray ) :
     mpNumericArray(pArray),
-    mpStringArray(NULL),
+    mpStringArray(nullptr),
     mbValid(true) {}
 
 VectorRefArray::VectorRefArray( rtl_uString** pArray ) :
-    mpNumericArray(NULL),
+    mpNumericArray(nullptr),
     mpStringArray(pArray),
     mbValid(true) {}
 

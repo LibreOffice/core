@@ -84,7 +84,7 @@ StructPage::StructPage(vcl::Window* pParent):
     TabPage(pParent, "StructPage", "formula/ui/structpage.ui"),
     maImgEnd        ( ModuleRes( BMP_STR_END ) ),
     maImgError      ( ModuleRes( BMP_STR_ERROR ) ),
-    pSelectedToken  ( NULL )
+    pSelectedToken  ( nullptr )
 {
     get(m_pTlbStruct, "struct");
     Size aSize(LogicToPixel(Size(86, 162), MAP_APPFONT));
@@ -123,7 +123,7 @@ SvTreeListEntry* StructPage::InsertEntry( const OUString& rText, SvTreeListEntry
 {
     m_pTlbStruct->SetActiveFlag( false );
 
-    SvTreeListEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = nullptr;
     switch( nFlag )
     {
         case STRUCT_FOLDER:
@@ -145,17 +145,17 @@ SvTreeListEntry* StructPage::InsertEntry( const OUString& rText, SvTreeListEntry
 OUString StructPage::GetEntryText(SvTreeListEntry* pEntry) const
 {
     OUString aString;
-    if(pEntry!=NULL)
+    if(pEntry!=nullptr)
         aString = m_pTlbStruct->GetEntryText(pEntry);
     return  aString;
 }
 
 IFormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
 {
-    if(pEntry!=NULL)
+    if(pEntry!=nullptr)
     {
         IFormulaToken * pToken=static_cast<IFormulaToken *>(pEntry->GetUserData());
-        if(pToken!=NULL)
+        if(pToken!=nullptr)
         {
             if ( !(pToken->isFunction() || pToken->getArgumentCount() > 1 ) )
             {
@@ -167,7 +167,7 @@ IFormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 IMPL_LINK_TYPED( StructPage, SelectHdl, SvTreeListBox*, pTlb, void )
@@ -177,10 +177,10 @@ IMPL_LINK_TYPED( StructPage, SelectHdl, SvTreeListBox*, pTlb, void )
         if(pTlb==m_pTlbStruct)
         {
             SvTreeListEntry*    pCurEntry=m_pTlbStruct->GetCurEntry();
-            if(pCurEntry!=NULL)
+            if(pCurEntry!=nullptr)
             {
                 pSelectedToken=static_cast<IFormulaToken *>(pCurEntry->GetUserData());
-                if(pSelectedToken!=NULL)
+                if(pSelectedToken!=nullptr)
                 {
                     if ( !(pSelectedToken->isFunction() || pSelectedToken->getArgumentCount() > 1) )
                     {

@@ -162,7 +162,7 @@ OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr x
     , meSepType( eSepType)
 {
     SvtSysLocale aSysLocale;
-    const CharClass* pCharClass = (xMap->isEnglish() ? NULL : aSysLocale.GetCharClassPtr());
+    const CharClass* pCharClass = (xMap->isEnglish() ? nullptr : aSysLocale.GetCharClassPtr());
     if (meSepType == FormulaCompiler::RESOURCE_BASE)
     {
         for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
@@ -249,14 +249,14 @@ void OpCodeList::putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, s
 const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr, sal_Unicode c )
 {
     if ( !pStr )
-        return NULL;
+        return nullptr;
     while ( *pStr )
     {
         if ( *pStr == c )
             return pStr;
         pStr++;
     }
-    return NULL;
+    return nullptr;
 }
 
 struct OpCodeMapData
@@ -533,8 +533,8 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
 FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         :
         pArr( &rArr ),
-        pCode( NULL ),
-        pStack( NULL ),
+        pCode( nullptr ),
+        pStack( nullptr ),
         eLastOp( ocPush ),
         nRecursion( 0 ),
         nNumFmt( css::util::NumberFormat::UNDEFINED ),
@@ -550,9 +550,9 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
 
 FormulaCompiler::FormulaCompiler()
         :
-        pArr( NULL ),
-        pCode( NULL ),
-        pStack( NULL ),
+        pArr( nullptr ),
+        pCode( nullptr ),
+        pStack( nullptr ),
         eLastOp( ocPush ),
         nRecursion(0),
         nNumFmt( css::util::NumberFormat::UNDEFINED ),
@@ -628,7 +628,7 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
                 FormulaGrammar::mergeToGrammar( FormulaGrammar::setEnglishBit(
                         FormulaGrammar::GRAM_EXTERNAL, bEnglish), FormulaGrammar::CONV_UNSPECIFIED)));
     SvtSysLocale aSysLocale;
-    const CharClass* pCharClass = (xMap->isEnglish() ? NULL : aSysLocale.GetCharClassPtr());
+    const CharClass* pCharClass = (xMap->isEnglish() ? nullptr : aSysLocale.GetCharClassPtr());
     FormulaOpCodeMapEntry const * pArr2 = rMapping.getConstArray();
     FormulaOpCodeMapEntry const * const pStop = pArr2 + rMapping.getLength();
     for ( ; pArr2 < pStop; ++pArr2)
@@ -728,9 +728,9 @@ void FormulaCompiler::InitSymbolsEnglishXL() const
     // TODO: For now, just replace the separators to the Excel English
     // variants. Later, if we want to properly map Excel functions with Calc
     // functions, we'll need to do a little more work here.
-    mxSymbolsEnglishXL->putOpCode( OUString(','), ocSep, NULL);
-    mxSymbolsEnglishXL->putOpCode( OUString(','), ocArrayColSep, NULL);
-    mxSymbolsEnglishXL->putOpCode( OUString(';'), ocArrayRowSep, NULL);
+    mxSymbolsEnglishXL->putOpCode( OUString(','), ocSep, nullptr);
+    mxSymbolsEnglishXL->putOpCode( OUString(','), ocArrayColSep, nullptr);
+    mxSymbolsEnglishXL->putOpCode( OUString(';'), ocArrayRowSep, nullptr);
 }
 
 void FormulaCompiler::InitSymbolsOOXML() const
@@ -1671,7 +1671,7 @@ bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, Formul
     FormulaToken *p1, *p2;
     if (pc < 2 || !pCode1 || !pCode2 ||
             (pCode2 - pCode1 != 1) || (pCode - pCode2 != 1) ||
-            ((p1 = *pCode1) == 0) || ((p2 = *pCode2) == 0) )
+            ((p1 = *pCode1) == nullptr) || ((p2 = *pCode2) == nullptr) )
         return false;
 
     FormulaTokenRef p = ExtendRangeReference( *p1, *p2, true);
@@ -1699,7 +1699,7 @@ bool FormulaCompiler::CompileTokenArray()
             aCorrectedSymbol.clear();
         }
         pArr->DelRPN();
-        pStack = NULL;
+        pStack = nullptr;
         FormulaToken* pData[ FORMULA_MAXTOKENS ];
         pCode = pData;
         bool bWasForced = pArr->IsRecalcModeForced();
@@ -2025,7 +2025,7 @@ void FormulaCompiler::AppendBoolean( OUStringBuffer& rBuffer, bool bVal ) const
 void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rStr )
 {
     rBuffer.append( '"');
-    if ( lcl_UnicodeStrChr( rStr.getStr(), '"' ) == NULL )
+    if ( lcl_UnicodeStrChr( rStr.getStr(), '"' ) == nullptr )
         rBuffer.append( rStr );
     else
     {
@@ -2049,9 +2049,9 @@ void FormulaCompiler::UpdateSeparatorsNative(
 {
     NonConstOpCodeMapPtr xSymbolsNative;
     lcl_fillNativeSymbols( xSymbolsNative);
-    xSymbolsNative->putOpCode( rSep, ocSep, NULL);
-    xSymbolsNative->putOpCode( rArrayColSep, ocArrayColSep, NULL);
-    xSymbolsNative->putOpCode( rArrayRowSep, ocArrayRowSep, NULL);
+    xSymbolsNative->putOpCode( rSep, ocSep, nullptr);
+    xSymbolsNative->putOpCode( rArrayColSep, ocArrayColSep, nullptr);
+    xSymbolsNative->putOpCode( rArrayRowSep, ocArrayRowSep, nullptr);
 }
 
 void FormulaCompiler::ResetNativeSymbols()

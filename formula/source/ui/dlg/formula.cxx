@@ -227,16 +227,16 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
                                         ,const IFunctionManager* _pFunctionMgr
                                         ,IControlReferenceHandler* _pDlg)
     :
-    m_pSpecialOpCodesEnd(NULL),
-    m_pFunctionOpCodesEnd(NULL),
-    m_pUnaryOpCodesEnd(NULL),
-    m_pBinaryOpCodesEnd(NULL),
+    m_pSpecialOpCodesEnd(nullptr),
+    m_pFunctionOpCodesEnd(nullptr),
+    m_pUnaryOpCodesEnd(nullptr),
+    m_pBinaryOpCodesEnd(nullptr),
     m_pHelper       (_pHelper),
     m_pParent       (pParent),
     m_pDlg          (_pDlg),
-    pTheRefEdit     (NULL),
-    pTheRefButton   (NULL),
-    pMEdit          (NULL),
+    pTheRefEdit     (nullptr),
+    pTheRefButton   (nullptr),
+    pMEdit          (nullptr),
     bUserMatrixFlag (false),
     aTitle1         ( ModuleRes( STR_TITLE1 ) ),
     aTitle2         ( ModuleRes( STR_TITLE2 ) ),
@@ -245,7 +245,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     bIsShutDown     (false),
     bMakingTree     (false),
     nEdFocus        (0),
-    pFuncDesc       (NULL),
+    pFuncDesc       (nullptr),
     nArgs           (0)
 {
     pParent->get(m_pParaWinBox, "BOX");
@@ -394,13 +394,13 @@ void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
     if(nSwitch==MouseNotifyEvent::GETFOCUS && !bIsShutDown)
     {
         vcl::Window* pWin=rNEvt.GetWindow();
-        if(pWin!=NULL)
+        if(pWin!=nullptr)
         {
             aActivWinId = pWin->GetUniqueId();
             if(aActivWinId.isEmpty())
             {
                 vcl::Window* pParent=pWin->GetParent();
-                while(pParent!=NULL)
+                while(pParent!=nullptr)
                 {
                     aActivWinId=pParent->GetUniqueId();
 
@@ -646,7 +646,7 @@ bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp)
 
 void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count)
 {
-    if( _pToken != NULL && Count > 0 )
+    if( _pToken != nullptr && Count > 0 )
     {
         long nParas = _pToken->GetParamCount();
         OpCode eOp = _pToken->GetOpCode();
@@ -762,9 +762,9 @@ void FormulaDlg_Impl::fillTree(StructPage* _pTree)
     GetFormulaOpCodeMapper();
     FormulaToken* pToken = m_pTokenArray->LastRPN();
 
-    if( pToken != NULL)
+    if( pToken != nullptr)
     {
-        MakeTree(_pTree,NULL,pToken,1);
+        MakeTree(_pTree,nullptr,pToken,1);
         bMakingTree = false;
     }
 }
@@ -958,7 +958,7 @@ void FormulaDlg_Impl::FillControls(bool &rbNext, bool &rbPrev)
 void FormulaDlg_Impl::ClearAllParas()
 {
     DeleteArgs();
-    pFuncDesc = NULL;
+    pFuncDesc = nullptr;
     pParaWin->ClearAll();
     m_pWndResult->SetText(OUString());
     m_pFtFuncName->SetText(OUString());
@@ -1452,10 +1452,10 @@ void FormulaDlg_Impl::UpdateSelection()
         m_pEdRef->SetUniqueId( pTheRefEdit->GetUniqueId() );
     }
 
-    m_pRefBtn->Show( pButton != NULL );
+    m_pRefBtn->Show( pButton != nullptr );
 
     ::std::pair<RefButton*,RefEdit*> aPair;
-    aPair.first = pButton ? m_pRefBtn.get() : NULL;
+    aPair.first = pButton ? m_pRefBtn.get() : nullptr;
     aPair.second = m_pEdRef;
     return aPair;
 }
@@ -1495,7 +1495,7 @@ void FormulaDlg_Impl::RefInputDoneAfter( bool bForced )
             sal_uInt16 nPrivActiv = pParaWin->GetActiveLine();
             pParaWin->SetArgument( nPrivActiv, m_pEdRef->GetText() );
             ModifyHdl( *pParaWin );
-            pTheRefEdit = NULL;
+            pTheRefEdit = nullptr;
         }
         m_pParent->SetText( aTitle1 );
     }
@@ -1622,7 +1622,7 @@ void FormulaDlg_Impl::UpdateParaWin(const Selection& _rSelection, const OUString
     pParaWin->UpdateParas();
 
     Edit* pEd = GetCurrRefEdit();
-    if( pEd != NULL )
+    if( pEd != nullptr )
         pEd->SetSelection( theSel );
 
     pParaWin->SetRefMode(false);
@@ -1633,7 +1633,7 @@ bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
 
     OUString      aStrEd;
     Edit* pEd = GetCurrRefEdit();
-    if(pEd!=NULL && pTheRefEdit==nullptr)
+    if(pEd!=nullptr && pTheRefEdit==nullptr)
     {
         _rSelection=pEd->GetSelection();
         _rSelection.Justify();
@@ -1921,7 +1921,7 @@ void FormEditData::SaveValues()
 
 void FormEditData::Reset()
 {
-    pParent = NULL;
+    pParent = nullptr;
     nMode = 0;
     nFStart = 0;
     nCatSel = 1;        //! oder 0 (zuletzt benutzte)

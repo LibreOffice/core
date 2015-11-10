@@ -36,7 +36,7 @@ namespace formula
             virtual ~OEmptyFunctionDescription(){}
 
             virtual OUString getFunctionName() const override { return OUString(); }
-            virtual const IFunctionCategory* getCategory() const override { return NULL; }
+            virtual const IFunctionCategory* getCategory() const override { return nullptr; }
             virtual OUString getDescription() const override { return OUString(); }
             virtual sal_Int32 getSuppressedArgumentCount() const override { return 0; }
             virtual OUString getFormula(const ::std::vector< OUString >& ) const override { return OUString(); }
@@ -78,7 +78,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
     sal_Int32  nOldStart = rFStart;
     OUString   aFname;
 
-    rFStart = GetFunctionStart( rFormula, rFStart, bBack, ppFDesc ? &aFname : NULL );
+    rFStart = GetFunctionStart( rFormula, rFStart, bBack, ppFDesc ? &aFname : nullptr );
     bool bFound  = ( rFStart != FUNC_NOTFOUND );
 
     if ( bFound )
@@ -88,7 +88,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
 
         if ( ppFDesc )
         {
-            *ppFDesc = NULL;
+            *ppFDesc = nullptr;
             const OUString sTemp( aFname );
             const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
             for(sal_uInt32 j= 0; j < nCategoryCount && !*ppFDesc; ++j)

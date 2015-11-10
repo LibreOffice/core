@@ -124,7 +124,7 @@ void FuncPage::UpdateFunctionList()
 
     if ( nSelPos > 0 )
     {
-        if ( pCategory == NULL )
+        if ( pCategory == nullptr )
         {
             const sal_uInt32 nCount = m_pFunctionManager->getCount();
             for(sal_uInt32 i = 0 ; i < nCount; ++i)

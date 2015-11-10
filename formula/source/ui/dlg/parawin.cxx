@@ -37,7 +37,7 @@ namespace formula
 
 ParaWin::ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg):
     TabPage         (pParent, "ParameterPage", "formula/ui/parameter.ui"),
-    pFuncDesc       ( NULL ),
+    pFuncDesc       ( nullptr ),
     pMyParent       (_pDlg),
     m_sOptional     ( ModuleRes( STR_OPTIONAL ) ),
     m_sRequired     ( ModuleRes( STR_REQUIRED ) ),
@@ -287,7 +287,7 @@ RefEdit* ParaWin::GetActiveEdit()
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -340,7 +340,7 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
     SetArgumentText( OUString() );
     SetEditDesc( OUString() );
     nArgs = 0;
-    if ( pFuncDesc!=NULL)
+    if ( pFuncDesc!=nullptr)
     {
         if ( !pFuncDesc->getDescription().isEmpty() )
         {
@@ -444,7 +444,7 @@ void ParaWin::InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, PushButton& rBtn
 
 void ParaWin::ClearAll()
 {
-    SetFunctionDesc(NULL);
+    SetFunctionDesc(nullptr);
     SetArgumentOffset(0);
 }
 

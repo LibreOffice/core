@@ -229,7 +229,7 @@ void FormulaToken::SetGlobal( bool )
 short* FormulaToken::GetJump() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetJump: virtual dummy called" );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -243,7 +243,7 @@ const OUString& FormulaToken::GetExternal() const
 FormulaToken* FormulaToken::GetFAPOrigToken() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetFAPOrigToken: virtual dummy called" );
-    return NULL;
+    return nullptr;
 }
 
 sal_uInt16 FormulaToken::GetError() const
@@ -296,30 +296,30 @@ ScSingleRefData* FormulaToken::GetSingleRef2()
 const ScMatrix* FormulaToken::GetMatrix() const
 {
     OSL_FAIL( "FormulaToken::GetMatrix: virtual dummy called" );
-    return NULL;
+    return nullptr;
 }
 
 ScMatrix* FormulaToken::GetMatrix()
 {
     OSL_FAIL( "FormulaToken::GetMatrix: virtual dummy called" );
-    return NULL;
+    return nullptr;
 }
 
 ScJumpMatrix* FormulaToken::GetJumpMatrix() const
 {
     OSL_FAIL( "FormulaToken::GetJumpMatrix: virtual dummy called" );
-    return NULL;
+    return nullptr;
 }
 const std::vector<ScComplexRefData>* FormulaToken::GetRefList() const
 {
     OSL_FAIL( "FormulaToken::GetRefList: virtual dummy called" );
-    return NULL;
+    return nullptr;
 }
 
 std::vector<ScComplexRefData>* FormulaToken::GetRefList()
 {
     OSL_FAIL( "FormulaToken::GetRefList: virtual dummy called" );
-    return NULL;
+    return nullptr;
 }
 
 bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
@@ -454,7 +454,7 @@ FormulaToken* FormulaTokenArray::GetNextReference()
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::GetNextColRowName()
@@ -465,7 +465,7 @@ FormulaToken* FormulaTokenArray::GetNextColRowName()
         if ( t->GetOpCode() == ocColRowName )
             return t;
     }
-    return NULL;
+    return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::GetNextReferenceRPN()
@@ -486,7 +486,7 @@ FormulaToken* FormulaTokenArray::GetNextReferenceRPN()
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::GetNextReferenceOrName()
@@ -512,7 +512,7 @@ FormulaToken* FormulaTokenArray::GetNextReferenceOrName()
              }
          }
      }
-    return NULL;
+    return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::GetNextName()
@@ -526,7 +526,7 @@ FormulaToken* FormulaTokenArray::GetNextName()
                 return t;
         }
     } // if( pCode )
-    return NULL;
+    return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::Next()
@@ -534,7 +534,7 @@ FormulaToken* FormulaTokenArray::Next()
     if( pCode && nIndex < nLen )
         return pCode[ nIndex++ ];
     else
-        return NULL;
+        return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::NextNoSpaces()
@@ -546,7 +546,7 @@ FormulaToken* FormulaTokenArray::NextNoSpaces()
         if( nIndex < nLen )
             return pCode[ nIndex++ ];
     }
-    return NULL;
+    return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::NextRPN()
@@ -554,7 +554,7 @@ FormulaToken* FormulaTokenArray::NextRPN()
     if( pRPN && nIndex < nRPN )
         return pRPN[ nIndex++ ];
     else
-        return NULL;
+        return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::PrevRPN()
@@ -562,7 +562,7 @@ FormulaToken* FormulaTokenArray::PrevRPN()
     if( pRPN && nIndex )
         return pRPN[ --nIndex ];
     else
-        return NULL;
+        return nullptr;
 }
 
 void FormulaTokenArray::DelRPN()
@@ -576,7 +576,7 @@ void FormulaTokenArray::DelRPN()
         }
         delete [] pRPN;
     }
-    pRPN = NULL;
+    pRPN = nullptr;
     nRPN = nIndex = 0;
 }
 
@@ -584,7 +584,7 @@ FormulaToken* FormulaTokenArray::PeekPrev( sal_uInt16 & nIdx )
 {
     if (0 < nIdx && nIdx <= nLen)
         return pCode[--nIdx];
-    return NULL;
+    return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::PeekNext()
@@ -592,7 +592,7 @@ FormulaToken* FormulaTokenArray::PeekNext()
     if( pCode && nIndex < nLen )
         return pCode[ nIndex ];
     else
-        return NULL;
+        return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::PeekNextNoSpaces()
@@ -605,10 +605,10 @@ FormulaToken* FormulaTokenArray::PeekNextNoSpaces()
         if ( j < nLen )
             return pCode[ j ];
         else
-            return NULL;
+            return nullptr;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
@@ -621,10 +621,10 @@ FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
         if ( j > 0 || pCode[j]->GetOpCode() != ocSpaces )
             return pCode[ j ];
         else
-            return NULL;
+            return nullptr;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 bool FormulaTokenArray::HasReferences() const
@@ -699,8 +699,8 @@ bool FormulaTokenArray::HasOpCodes(const unordered_opcode_set& rOpCodes) const
 }
 
 FormulaTokenArray::FormulaTokenArray() :
-    pCode(NULL),
-    pRPN(NULL),
+    pCode(nullptr),
+    pRPN(nullptr),
     nLen(0),
     nRPN(0),
     nIndex(0),
@@ -730,8 +730,8 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     nMode  = r.nMode;
     bHyperLink = r.bHyperLink;
     mbFromRangeName = r.mbFromRangeName;
-    pCode  = NULL;
-    pRPN   = NULL;
+    pCode  = nullptr;
+    pRPN   = nullptr;
     FormulaToken** pp;
     if( nLen )
     {
@@ -753,7 +753,7 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
 void FormulaTokenArray::Assign( sal_uInt16 nCode, FormulaToken **pTokens )
 {
     assert( nLen == 0 );
-    assert( pCode == NULL );
+    assert( pCode == nullptr );
 
     nLen = nCode;
     pCode = new FormulaToken*[ nLen ];
@@ -837,7 +837,7 @@ void FormulaTokenArray::Clear()
         }
         delete [] pCode;
     }
-    pCode = NULL; pRPN = NULL;
+    pCode = nullptr; pRPN = nullptr;
     nError = nLen = nIndex = nRPN = 0;
     bHyperLink = false;
     mbFromRangeName = false;
@@ -856,7 +856,7 @@ FormulaToken* FormulaTokenArray::AddToken( const FormulaToken& r )
 
 FormulaToken* FormulaTokenArray::MergeArray( )
 {
-    return NULL;
+    return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken* t,
@@ -891,7 +891,7 @@ FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken*
     else
     {
         t->Delete();
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -917,7 +917,7 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
             pCode[ nLen++ ] = t;
             t->IncRef();
         }
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -1102,7 +1102,7 @@ class FormulaMissingContext
             const FormulaToken* mpFunc;
             int                 mnCurArg;
 
-                    void    Clear() { mpFunc = NULL; mnCurArg = 0; }
+                    void    Clear() { mpFunc = nullptr; mnCurArg = 0; }
             inline  bool    AddDefaultArg( FormulaTokenArray* pNewArr, int nArg, double f ) const;
                     bool    AddMissingExternal( FormulaTokenArray* pNewArr ) const;
                     bool    AddMissing( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
@@ -1489,7 +1489,7 @@ bool FormulaTokenArray::MayReferenceFollow()
 }
 FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
 {
-    FormulaToken* pRet = NULL;
+    FormulaToken* pRet = nullptr;
     switch ( eOp )
     {
         case ocOpen:
@@ -1573,12 +1573,12 @@ const FormulaToken* FormulaTokenIterator::Next()
 
 const FormulaToken* FormulaTokenIterator::PeekNextOperator()
 {
-    const FormulaToken* t = NULL;
+    const FormulaToken* t = nullptr;
     short nIdx = maStack.back().nPC;
-    while (!t && ((t = GetNonEndOfPathToken( ++nIdx)) != NULL))
+    while (!t && ((t = GetNonEndOfPathToken( ++nIdx)) != nullptr))
     {
         if (t->GetOpCode() == ocPush)
-            t = NULL;   // ignore operands
+            t = nullptr;   // ignore operands
     }
     if (!t && maStack.size() > 1)
     {
@@ -1611,14 +1611,14 @@ const FormulaToken* FormulaTokenIterator::GetNonEndOfPathToken( short nIdx ) con
     {
         const FormulaToken* t = cur.pArr->pRPN[ nIdx ];
         // such an OpCode ends an IF() or CHOOSE() path
-        return (t->GetOpCode() == ocSep || t->GetOpCode() == ocClose) ? NULL : t;
+        return (t->GetOpCode() == ocSep || t->GetOpCode() == ocClose) ? nullptr : t;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool FormulaTokenIterator::IsEndOfPath() const
 {
-    return GetNonEndOfPathToken( maStack.back().nPC + 1) == NULL;
+    return GetNonEndOfPathToken( maStack.back().nPC + 1) == nullptr;
 }
 
 

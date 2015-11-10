@@ -36,8 +36,8 @@ namespace
 
 cppu::ImplementationEntry entries[] = {
     { &FormulaOpCodeMapperObj::create, &FormulaOpCodeMapperObj::getImplementationName_Static, &FormulaOpCodeMapperObj::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
+        &cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 }
 

@@ -55,7 +55,7 @@ public:
 };
 
 OModuleImpl::OModuleImpl()
-    :m_pResources(NULL)
+    :m_pResources(nullptr)
 {
 }
 
@@ -87,7 +87,7 @@ namespace
     struct theOModuleMutex : public rtl::Static< osl::Mutex, theOModuleMutex > {};
 }
 sal_Int32       OModule::s_nClients = 0;
-OModuleImpl*    OModule::s_pImpl = NULL;
+OModuleImpl*    OModule::s_pImpl = nullptr;
 
 ResMgr* OModule::getResManager()
 {
@@ -109,7 +109,7 @@ void OModule::revokeClient()
     if (!--s_nClients && s_pImpl)
     {
         delete s_pImpl;
-        s_pImpl = NULL;
+        s_pImpl = nullptr;
     }
 }
 

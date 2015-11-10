@@ -55,7 +55,7 @@ public:
                                             , bool _bSupportResult
                                             , bool _bSupportMatrix
                                             ,IFunctionManager* _pFunctionMgr
-                                            ,IControlReferenceHandler* _pDlg = NULL );
+                                            ,IControlReferenceHandler* _pDlg = nullptr );
     virtual ~FormulaModalDialog();
     virtual void dispose() override;
 
@@ -65,8 +65,8 @@ private:
 protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
-    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
+    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
+    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputDoneAfter( bool bForced = false );
     void            SetFocusWin(vcl::Window *pWin,const OString& nUniqueId);
 
@@ -95,7 +95,7 @@ public:
                                     , bool _bSupportResult
                                     , bool _bSupportMatrix
                                     , IFunctionManager* _pFunctionMgr
-                                    , IControlReferenceHandler* _pDlg = NULL );
+                                    , IControlReferenceHandler* _pDlg = nullptr );
     virtual ~FormulaDlg();
     virtual void dispose() override;
 private:
@@ -108,8 +108,8 @@ protected:
 protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
-    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
+    ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
+    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputDoneAfter( bool bForced = false );
     void            SetFocusWin(vcl::Window *pWin,const OString& nUniqueId);
 

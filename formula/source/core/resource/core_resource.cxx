@@ -40,7 +40,7 @@ namespace formula
         struct theResourceManagerMutex : public rtl::Static< osl::Mutex, theResourceManagerMutex > {};
     }
     sal_Int32       ResourceManager::s_nClients = 0;
-    ResMgr*         ResourceManager::m_pImpl = NULL;
+    ResMgr*         ResourceManager::m_pImpl = nullptr;
 
 
     void ResourceManager::ensureImplExists()
@@ -65,7 +65,7 @@ namespace formula
         if (!--s_nClients && m_pImpl)
         {
             delete m_pImpl;
-            m_pImpl = NULL;
+            m_pImpl = nullptr;
         }
     }
     ResMgr* ResourceManager::getResManager()

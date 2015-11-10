@@ -49,12 +49,12 @@ namespace formula
         bool                GetNextFunc( const OUString&     rFormula,
                                                bool          bBack,
                                                sal_Int32&    rFStart, // Ein- und Ausgabe
-                                               sal_Int32*    pFEnd = NULL,
-                                         const IFunctionDescription** ppFDesc = NULL,
-                                               ::std::vector< OUString>*      pArgs = NULL ) const;
+                                               sal_Int32*    pFEnd = nullptr,
+                                         const IFunctionDescription** ppFDesc = nullptr,
+                                               ::std::vector< OUString>*      pArgs = nullptr ) const;
 
         sal_Int32           GetFunctionStart( const OUString& rFormula, sal_Int32 nStart,
-                                                        bool bBack, OUString* pFuncName = NULL ) const;
+                                                        bool bBack, OUString* pFuncName = nullptr ) const;
 
         sal_Int32           GetFunctionEnd  ( const OUString& rFormula, sal_Int32 nStart ) const;
 
