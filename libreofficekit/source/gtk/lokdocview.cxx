@@ -282,6 +282,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_CELL_CURSOR";
     case LOK_CALLBACK_HYPERLINK_CLICKED:
         return "LOK_CALLBACK_HYPERLINK_CLICKED";
+    case LOK_CALLBACK_MOUSE_POINTER:
+        return "LOK_CALLBACK_MOUSE_POINTER";
     case LOK_CALLBACK_STATE_CHANGED:
         return "LOK_CALLBACK_STATE_CHANGED";
     case LOK_CALLBACK_STATUS_INDICATOR_START:
@@ -734,6 +736,15 @@ callback (gpointer pData)
     case LOK_CALLBACK_CURSOR_VISIBLE:
     {
         priv->m_bCursorVisible = pCallback->m_aPayload == "true";
+    }
+    break;
+    case LOK_CALLBACK_MOUSE_POINTER:
+    {
+        // The gtk docs claim that most css cursors should be supported, however
+        // on my system at least this is not true and many cursors are unsupported.
+        // In this case pCursor = null, which results in the default cursor being set.
+        GdkCursor* pCursor = gdk_cursor_new_from_name(gtk_widget_get_display(GTK_WIDGET(pDocView)), pCallback->m_aPayload.c_str());
+        gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(pDocView)), pCursor);
     }
     break;
     case LOK_CALLBACK_GRAPHIC_SELECTION:
