@@ -298,16 +298,22 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     };
 
     if (!bUseDoubleBufferedRendering)
+    {
+        // Use asserts to make sure the iAttributes array is not changed without changing these ugly
+        // hardcode indexes into it.
+        assert(iAttributes[0] == WGL_DOUBLE_BUFFER_ARB);
         iAttributes[1] = GL_FALSE;
+    }
 
     if (bRequestVirtualDevice)
     {
+        assert(iAttributes[2] == WGL_DRAW_TO_WINDOW_ARB);
         iAttributes[2] = WGL_DRAW_TO_BITMAP_ARB;
     }
 
     bool bArbMultisampleSupported = true;
 
-    // First we check to see if we can get a pixel format for 4 samples
+    // First we check to see if we can get a pixel format for 8 samples
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     // If we returned true, and our format count is greater than 1
     if (valid && numFormats >= 1)
@@ -320,7 +326,8 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         DestroyWindow(hWnd);
         return bArbMultisampleSupported;
     }
-    // Our pixel format with 4 samples failed, test for 2 samples
+    // Our pixel format with 8 samples failed, test for 2 samples
+    assert(iAttributes[18] == WGL_SAMPLES_ARB);
     iAttributes[19] = 2;
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     if (valid && numFormats >= 1)
