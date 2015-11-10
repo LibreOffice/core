@@ -1302,7 +1302,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
     const sal_Int32 nXPos = aPaM.GetIndex();
     for (size_t nAttr = rAttrs.size(); nAttr; )
     {
-        const EditCharAttrib& rAttr = rAttrs[--nAttr];
+        const EditCharAttrib& rAttr = *rAttrs[--nAttr].get();
         if (rAttr.GetStart() == nXPos)
         {
             if (rAttr.Which() == EE_FEATURE_FIELD)

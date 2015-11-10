@@ -540,7 +540,7 @@ void EditUndoSetAttribs::Undo()
         ContentNode* pNode = pEE->GetEditDoc().GetObject( nPara );
         for (size_t nAttr = 0; nAttr < rInf.GetPrevCharAttribs().size(); ++nAttr)
         {
-            const EditCharAttrib& rX = rInf.GetPrevCharAttribs()[nAttr];
+            const EditCharAttrib& rX = *rInf.GetPrevCharAttribs()[nAttr].get();
             // is automatically "poolsized"
             pEE->GetEditDoc().InsertAttrib(pNode, rX.GetStart(), rX.GetEnd(), *rX.GetItem());
             if (rX.Which() == EE_FEATURE_FIELD)

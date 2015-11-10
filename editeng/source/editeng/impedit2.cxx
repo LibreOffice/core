@@ -2048,7 +2048,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars, EditU
         const CharAttribList::AttribsType& rAttribs = rPaM.GetNode()->GetCharAttribs().GetAttribs();
         for (size_t i = 0, n = rAttribs.size(); i < n; ++i)
         {
-            const EditCharAttrib& rAttr = rAttribs[i];
+            const EditCharAttrib& rAttr = *rAttribs[i].get();
             if (rAttr.GetEnd() >= nStart && rAttr.GetStart() < nEnd)
             {
                 EditSelection aSel( rPaM );
@@ -2928,7 +2928,7 @@ bool ImpEditEngine::UpdateFields()
         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
         for (size_t nAttr = 0; nAttr < rAttribs.size(); ++nAttr)
         {
-            EditCharAttrib& rAttr = rAttribs[nAttr];
+            EditCharAttrib& rAttr = *rAttribs[nAttr].get();
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 EditCharAttribField& rField = static_cast<EditCharAttribField&>(rAttr);

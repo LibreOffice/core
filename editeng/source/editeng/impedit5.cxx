@@ -211,7 +211,7 @@ EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const S
 
         for ( sal_Int32 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )
         {
-            const EditCharAttrib& rAttr = pNode->GetCharAttribs().GetAttribs()[nAttr];
+            const EditCharAttrib& rAttr = *pNode->GetCharAttribs().GetAttribs()[nAttr].get();
             if (rAttr.GetLen())
             {
                 EditCharAttrib* pNew = MakeCharAttrib(*pPool, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
@@ -430,7 +430,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
             const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
             for (size_t nAttr = 0; nAttr < rAttrs.size(); ++nAttr)
             {
-                const EditCharAttrib& rAttr = rAttrs[nAttr];
+                const EditCharAttrib& rAttr = *rAttrs[nAttr].get();
 
                 if ( nStart == nEnd )
                 {
@@ -544,7 +544,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
                         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
                         for (size_t i = 0, n = rAttribs.size(); i < n; ++i)
                         {
-                            EditCharAttrib& rAttr = rAttribs[i];
+                            EditCharAttrib& rAttr = *rAttribs[i].get();
                             if (rAttr.GetStart() > nEndPos)
                                 break;
 
@@ -732,7 +732,7 @@ void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& 
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for (size_t i = 0; i < rAttrs.size(); ++i)
         {
-            const EditCharAttrib& rAttr = rAttrs[i];
+            const EditCharAttrib& rAttr = *rAttrs[i].get();
             EECharAttrib aEEAttr;
             aEEAttr.pAttr = rAttr.GetItem();
             aEEAttr.nPara = nPara;

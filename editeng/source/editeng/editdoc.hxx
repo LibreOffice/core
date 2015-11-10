@@ -113,7 +113,7 @@ typedef std::deque< WritingDirectionInfo > WritingDirectionInfos;
 class ContentAttribsInfo
 {
 private:
-    typedef boost::ptr_vector<EditCharAttrib> CharAttribsType;
+    typedef std::vector<std::unique_ptr<EditCharAttrib> > CharAttribsType;
 
     SfxItemSet          aPrevParaAttribs;
     CharAttribsType     aPrevCharAttribs;
@@ -184,7 +184,7 @@ public:
 class CharAttribList
 {
 public:
-    typedef boost::ptr_vector<EditCharAttrib> AttribsType;
+    typedef std::vector<std::unique_ptr<EditCharAttrib> > AttribsType;
 
 private:
     AttribsType     aAttribs;
@@ -828,7 +828,7 @@ public:
 
 inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int32 nAttr)
 {
-    return (nAttr < (sal_Int32)rAttribs.size()) ? &rAttribs[nAttr] : nullptr;
+    return (nAttr < (sal_Int32)rAttribs.size()) ? rAttribs[nAttr].get() : nullptr;
 }
 
 void CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);

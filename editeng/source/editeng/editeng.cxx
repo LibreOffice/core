@@ -2234,7 +2234,7 @@ sal_uInt16 EditEngine::GetFieldCount( sal_Int32 nPara ) const
         CharAttribList::AttribsType::const_iterator it = rAttrs.begin(), itEnd = rAttrs.end();
         for (; it != itEnd; ++it)
         {
-            if (it->Which() == EE_FEATURE_FIELD)
+            if ((*it)->Which() == EE_FEATURE_FIELD)
                 ++nFields;
         }
     }
@@ -2252,7 +2252,7 @@ EFieldInfo EditEngine::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
         CharAttribList::AttribsType::const_iterator it = rAttrs.begin(), itEnd = rAttrs.end();
         for (; it != itEnd; ++it)
         {
-            const EditCharAttrib& rAttr = *it;
+            const EditCharAttrib& rAttr = *it->get();
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 if ( nCurrentField == nField )
@@ -2297,7 +2297,7 @@ void EditEngine::RemoveFields( bool bKeepFieldText, std::function<bool ( const S
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for (size_t nAttr = rAttrs.size(); nAttr; )
         {
-            const EditCharAttrib& rAttr = rAttrs[--nAttr];
+            const EditCharAttrib& rAttr = *rAttrs[--nAttr].get();
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 const SvxFieldData* pFldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
