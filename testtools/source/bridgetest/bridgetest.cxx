@@ -214,7 +214,7 @@ namespace {
 template < typename T >
 bool testAny(
     T const & value, Reference< XBridgeTest > const & xLBT,
-    char const * typeName = 0)
+    char const * typeName = nullptr)
 {
     Any any;
     any <<=  value;
@@ -231,7 +231,7 @@ bool testAny(
                 RTL_TEXTENCODING_ASCII_US).getStr());
         success = false;
     }
-    if (typeName != 0
+    if (typeName != nullptr
         && !any2.getValueType().getTypeName().equalsAscii(typeName))
     {
         fprintf(
@@ -1046,7 +1046,7 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
     sal_Int8* buf = new sal_Int8[pTdElem->nSize * val->nElements];
     sal_Int8* pBufCur = buf;
 
-    uno_Sequence* retSeq = NULL;
+    uno_Sequence* retSeq = nullptr;
     switch (pTdElem->eTypeClass)
     {
     case TypeClass_SEQUENCE:
@@ -1100,14 +1100,14 @@ inline bool makeSurrogate(
     // official:
     uno_getEnvironment(
         reinterpret_cast< uno_Environment ** >( &aCppEnv_official ),
-        aCppEnvTypeName.pData, 0 );
+        aCppEnvTypeName.pData, nullptr );
     // anonymous:
     uno_createEnvironment(
         reinterpret_cast< uno_Environment ** >( &aCppEnv_ano ),
-        aCppEnvTypeName.pData, 0 );
+        aCppEnvTypeName.pData, nullptr );
     uno_createEnvironment(
         reinterpret_cast< uno_Environment ** >( &aUnoEnv_ano ),
-        aUnoEnvTypeName.pData, 0 );
+        aUnoEnvTypeName.pData, nullptr );
 
     UnoInterfaceReference unoI;
     Mapping cpp2uno( aCppEnv_official.get(), aUnoEnv_ano.get() );
@@ -1261,7 +1261,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager,
     SAL_UNUSED_PARAMETER void * )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
     {

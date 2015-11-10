@@ -340,9 +340,9 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           && (arguments[28] >>= arg28) && arg28.member.getLength() == 1
           && arg28.member[0] == 0.456
           && (arguments[29] >>= arg29) && arg29.member.getLength() == 1
-          && arg29.member[0] != NULL
+          && arg29.member[0] != nullptr
           && (arguments[30] >>= arg30) && arg30.member.getLength() == 1
-          && arg30.member[0] != NULL
+          && arg30.member[0] != nullptr
           && (arguments[31] >>= arg31) && arg31.member.getLength() == 1
           && arg31.member[0] == ttb::TestEnum_TWO
           && (arguments[32] >>= arg32) && arg32.member.getLength() == 1
@@ -471,10 +471,10 @@ css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames2() {
 
 ::cppu::ImplementationEntry entries[] = {
     { &create, &getImplementationName, &getSupportedServiceNames,
-      &::cppu::createSingleComponentFactory, 0, 0 },
+      &::cppu::createSingleComponentFactory, nullptr, 0 },
     { &create2, &getImplementationName2, &getSupportedServiceNames2,
-      &::cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 } };
+      &::cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(

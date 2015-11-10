@@ -990,7 +990,7 @@ void Test_Impl::testConstructorsService(
         TestStruct(10),
         TestPolyStruct< sal_Bool >(true),
         TestPolyStruct< Any >(makeAny(true)),
-        Reference< XInterface >(0));
+        Reference< XInterface >(nullptr));
     Sequence< Any > args(40);
     args[0] <<= true;
     args[1] <<= SAL_MIN_INT8;
@@ -1032,7 +1032,7 @@ void Test_Impl::testConstructorsService(
     args[36] <<= TestStruct(10);
     args[37] <<= TestPolyStruct< sal_Bool >(true);
     args[38] <<= TestPolyStruct< Any >(makeAny(true));
-    args[39] <<= Reference< XInterface >(0);
+    args[39] <<= Reference< XInterface >(nullptr);
     Constructors::create2(context, args);
 
     Sequence<Type> argSeq1(1); argSeq1[0] = cppu::UnoType<sal_Int32>::get();
@@ -1183,7 +1183,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, SAL_UNUSED_PARAMETER void * pServiceManager,
     SAL_UNUSED_PARAMETER void * )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
     {
