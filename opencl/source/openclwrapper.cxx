@@ -114,19 +114,19 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
 
     char deviceName[DEVICE_NAME_LENGTH] = {0};
     clGetDeviceInfo(deviceId, CL_DEVICE_NAME,
-            sizeof(deviceName), deviceName, NULL);
+            sizeof(deviceName), deviceName, nullptr);
 
     char driverVersion[DRIVER_VERSION_LENGTH] = {0};
     clGetDeviceInfo(deviceId, CL_DRIVER_VERSION,
-            sizeof(driverVersion), driverVersion, NULL);
+            sizeof(driverVersion), driverVersion, nullptr);
 
     cl_platform_id platformId;
     clGetDeviceInfo(deviceId, CL_DEVICE_PLATFORM,
-            sizeof(platformId), &platformId, NULL);
+            sizeof(platformId), &platformId, nullptr);
 
     char platformVersion[PLATFORM_VERSION_LENGTH] = {0};
     clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, sizeof(platformVersion),
-            platformVersion, NULL);
+            platformVersion, nullptr);
 
     // create hash for deviceName + driver version + platform version
     OString aString = OString(deviceName) + driverVersion + platformVersion;
@@ -142,7 +142,7 @@ std::vector<std::shared_ptr<osl::File> > binaryGenerated( const char * clFileNam
 
     std::vector<std::shared_ptr<osl::File> > aGeneratedFiles;
     cl_int clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,
-            0, NULL, &numDevices );
+            0, nullptr, &numDevices );
     numDevices /= sizeof(numDevices);
 
     if(clStatus != CL_SUCCESS)
@@ -153,7 +153,7 @@ std::vector<std::shared_ptr<osl::File> > binaryGenerated( const char * clFileNam
     // grab the handle to the device in the context.
     cl_device_id pDevID;
     clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,
-            sizeof( cl_device_id ), &pDevID, NULL );
+            sizeof( cl_device_id ), &pDevID, nullptr );
 
     if(clStatus != CL_SUCCESS)
         return aGeneratedFiles;
@@ -200,7 +200,7 @@ bool generatBinFromKernelSource( cl_program program, const char * clFileName )
     cl_uint numDevices;
 
     cl_int clStatus = clGetProgramInfo( program, CL_PROGRAM_NUM_DEVICES,
-                   sizeof(numDevices), &numDevices, NULL );
+                   sizeof(numDevices), &numDevices, nullptr );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
     assert(numDevices == 1);
@@ -208,14 +208,14 @@ bool generatBinFromKernelSource( cl_program program, const char * clFileName )
     cl_device_id pDevID;
     /* grab the handle to the device in the program. */
     clStatus = clGetProgramInfo( program, CL_PROGRAM_DEVICES,
-                   sizeof(cl_device_id), &pDevID, NULL );
+                   sizeof(cl_device_id), &pDevID, nullptr );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
     /* figure out the size of the binary. */
     size_t binarySize;
 
     clStatus = clGetProgramInfo( program, CL_PROGRAM_BINARY_SIZES,
-                   sizeof(size_t), &binarySize, NULL );
+                   sizeof(size_t), &binarySize, nullptr );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
     /* copy over the generated binary. */
@@ -223,7 +223,7 @@ bool generatBinFromKernelSource( cl_program program, const char * clFileName )
     {
         char *binary = new char[binarySize];
         clStatus = clGetProgramInfo( program, CL_PROGRAM_BINARIES,
-                                     sizeof(char *), &binary, NULL );
+                                     sizeof(char *), &binary, nullptr );
         CHECK_OPENCL(clStatus,"clGetProgramInfo");
 
         OString fileName = createFileName(pDevID, clFileName);
@@ -278,7 +278,7 @@ void releaseOpenCLEnv( GPUEnv *gpuInfo )
         if (gpuEnv.mpCmdQueue[i])
         {
             clReleaseCommandQueue(gpuEnv.mpCmdQueue[i]);
-            gpuEnv.mpCmdQueue[i] = NULL;
+            gpuEnv.mpCmdQueue[i] = nullptr;
         }
     }
     gpuEnv.mnCmdQueuePos = 0;
@@ -286,7 +286,7 @@ void releaseOpenCLEnv( GPUEnv *gpuInfo )
     if ( gpuEnv.mpContext )
     {
         clReleaseContext( gpuEnv.mpContext );
-        gpuEnv.mpContext = NULL;
+        gpuEnv.mpContext = nullptr;
     }
     bIsInited = false;
     gpuInfo->mnIsUserCreated = 0;
@@ -300,13 +300,13 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
     //char options[512];
     // create a cl program executable for all the devices specified
     clStatus = clBuildProgram(gpuInfo->mpArryPrograms[idx], 1, &gpuInfo->mpDevID,
-                              buildOption, NULL, NULL);
+                              buildOption, nullptr, nullptr);
 
     if ( clStatus != CL_SUCCESS )
     {
         size_t length;
         clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
-                                          CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
+                                          CL_PROGRAM_BUILD_LOG, 0, nullptr, &length);
         if ( clStatus != CL_SUCCESS )
         {
             return false;
@@ -343,7 +343,7 @@ bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char
 {
     size_t numDevices;
     cl_int clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
-            0, NULL, &numDevices );
+            0, nullptr, &numDevices );
     numDevices /= sizeof(numDevices);
     CHECK_OPENCL( clStatus, "clGetContextInfo" );
 
@@ -372,7 +372,7 @@ bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char
         // grab the handles to all of the devices in the context.
         std::unique_ptr<cl_device_id[]> pArryDevsID(new cl_device_id[numDevices]);
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
-                       sizeof( cl_device_id ) * numDevices, pArryDevsID.get(), NULL );
+                       sizeof( cl_device_id ) * numDevices, pArryDevsID.get(), nullptr );
 
         if(clStatus != CL_SUCCESS)
         {
@@ -417,14 +417,14 @@ void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bA
     // Check device extensions for double type
     size_t aDevExtInfoSize = 0;
 
-    cl_uint clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS, 0, NULL, &aDevExtInfoSize );
+    cl_uint clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS, 0, nullptr, &aDevExtInfoSize );
     if( clStatus != CL_SUCCESS )
         return;
 
     std::unique_ptr<char[]> pExtInfo(new char[aDevExtInfoSize]);
 
     clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS,
-                   sizeof(char) * aDevExtInfoSize, pExtInfo.get(), NULL);
+                   sizeof(char) * aDevExtInfoSize, pExtInfo.get(), nullptr);
 
     if( clStatus != CL_SUCCESS )
         return;
@@ -454,7 +454,7 @@ bool initOpenCLRunEnv( GPUEnv *gpuInfo )
     gpuInfo->mnPreferredVectorWidthFloat = 0;
 
     clGetDeviceInfo(gpuInfo->mpDevID, CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, sizeof(cl_uint),
-                    &gpuInfo->mnPreferredVectorWidthFloat, NULL);
+                    &gpuInfo->mnPreferredVectorWidthFloat, nullptr);
 
     return false;
 }
@@ -505,40 +505,40 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenCLPlatformInfo& rPlatformInfo)
     aDeviceInfo.device = aDeviceId;
 
     char pName[DEVICE_NAME_LENGTH];
-    cl_int nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_NAME, DEVICE_NAME_LENGTH, pName, NULL);
+    cl_int nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_NAME, DEVICE_NAME_LENGTH, pName, nullptr);
     if(nState != CL_SUCCESS)
         return;
 
     aDeviceInfo.maName = OUString::createFromAscii(pName);
 
     char pVendor[DEVICE_NAME_LENGTH];
-    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_VENDOR, DEVICE_NAME_LENGTH, pVendor, NULL);
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_VENDOR, DEVICE_NAME_LENGTH, pVendor, nullptr);
     if(nState != CL_SUCCESS)
         return;
 
     aDeviceInfo.maVendor = OUString::createFromAscii(pVendor);
 
     cl_ulong nMemSize;
-    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(nMemSize), &nMemSize, NULL);
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(nMemSize), &nMemSize, nullptr);
     if(nState != CL_SUCCESS)
         return;
 
     aDeviceInfo.mnMemory = nMemSize;
 
     cl_uint nClockFrequency;
-    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_MAX_CLOCK_FREQUENCY, sizeof(nClockFrequency), &nClockFrequency, NULL);
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_MAX_CLOCK_FREQUENCY, sizeof(nClockFrequency), &nClockFrequency, nullptr);
     if(nState != CL_SUCCESS)
         return;
 
     aDeviceInfo.mnFrequency = nClockFrequency;
 
     cl_uint nComputeUnits;
-    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(nComputeUnits), &nComputeUnits, NULL);
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(nComputeUnits), &nComputeUnits, nullptr);
     if(nState != CL_SUCCESS)
         return;
 
     char pDriver[DEVICE_NAME_LENGTH];
-    nState = clGetDeviceInfo(aDeviceId, CL_DRIVER_VERSION, DEVICE_NAME_LENGTH, pDriver, NULL);
+    nState = clGetDeviceInfo(aDeviceId, CL_DRIVER_VERSION, DEVICE_NAME_LENGTH, pDriver, nullptr);
 
     if(nState != CL_SUCCESS)
         return;
@@ -564,28 +564,28 @@ bool createPlatformInfo(cl_platform_id nPlatformId, OpenCLPlatformInfo& rPlatfor
     rPlatformInfo.platform = nPlatformId;
     char pName[64];
     cl_int nState = clGetPlatformInfo(nPlatformId, CL_PLATFORM_NAME, 64,
-             pName, NULL);
+             pName, nullptr);
     if(nState != CL_SUCCESS)
         return false;
     rPlatformInfo.maName = OUString::createFromAscii(pName);
 
     char pVendor[64];
     nState = clGetPlatformInfo(nPlatformId, CL_PLATFORM_VENDOR, 64,
-             pVendor, NULL);
+             pVendor, nullptr);
     if(nState != CL_SUCCESS)
         return false;
 
     rPlatformInfo.maVendor = OUString::createFromAscii(pVendor);
 
     cl_uint nDevices;
-    nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, 0, NULL, &nDevices);
+    nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, 0, nullptr, &nDevices);
     if(nState != CL_SUCCESS)
         return false;
 
     // memory leak that does not matter
     // memory is stored in static variable that lives through the whole program
     cl_device_id* pDevices = new cl_device_id[nDevices];
-    nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, nDevices, pDevices, NULL);
+    nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, nDevices, pDevices, nullptr);
     if(nState != CL_SUCCESS)
         return false;
 
@@ -610,7 +610,7 @@ const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo()
         return aPlatforms;
 
     cl_uint nPlatforms;
-    cl_int nState = clGetPlatformIDs(0, NULL, &nPlatforms);
+    cl_int nState = clGetPlatformIDs(0, nullptr, &nPlatforms);
 
     if(nState != CL_SUCCESS)
         return aPlatforms;
@@ -618,7 +618,7 @@ const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo()
     // memory leak that does not matter,
     // memory is stored in static instance aPlatforms
     cl_platform_id* pPlatforms = new cl_platform_id[nPlatforms];
-    nState = clGetPlatformIDs(nPlatforms, pPlatforms, NULL);
+    nState = clGetPlatformIDs(nPlatforms, pPlatforms, nullptr);
 
     if(nState != CL_SUCCESS)
         return aPlatforms;
@@ -651,14 +651,14 @@ cl_device_id findDeviceIdByDeviceString(const OUString& rString, const std::vect
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_t& rPlatformId)
 {
     cl_platform_id platformId;
     cl_int nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_PLATFORM,
-            sizeof(platformId), &platformId, NULL);
+            sizeof(platformId), &platformId, nullptr);
 
     if(nState != CL_SUCCESS)
         return;
@@ -690,7 +690,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     if(fillOpenCLInfo().empty())
         return false;
 
-    cl_device_id pDeviceId = NULL;
+    cl_device_id pDeviceId = nullptr;
     if(pDevice)
         pDeviceId = findDeviceIdByDeviceString(*pDevice, fillOpenCLInfo());
 
@@ -714,24 +714,24 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     {
         // we don't need to change anything
         // still the same device
-        return pDeviceId != NULL;
+        return pDeviceId != nullptr;
     }
 
     cl_platform_id platformId;
     cl_int nState = clGetDeviceInfo(pDeviceId, CL_DEVICE_PLATFORM,
-            sizeof(platformId), &platformId, NULL);
+            sizeof(platformId), &platformId, nullptr);
 
     cl_context_properties cps[3];
     cps[0] = CL_CONTEXT_PLATFORM;
     cps[1] = reinterpret_cast<cl_context_properties>(platformId);
     cps[2] = 0;
-    cl_context context = clCreateContext( cps, 1, &pDeviceId, NULL, NULL, &nState );
+    cl_context context = clCreateContext( cps, 1, &pDeviceId, nullptr, nullptr, &nState );
     if (nState != CL_SUCCESS)
         SAL_WARN("opencl", "clCreateContext failed: " << errorString(nState));
 
-    if(nState != CL_SUCCESS || context == NULL)
+    if(nState != CL_SUCCESS || context == nullptr)
     {
-        if(context != NULL)
+        if(context != nullptr)
             clReleaseContext(context);
 
         SAL_WARN("opencl", "failed to set/switch opencl device");
@@ -747,7 +747,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         if (nState != CL_SUCCESS)
             SAL_WARN("opencl", "clCreateCommandQueue failed: " << errorString(nState));
 
-        if (command_queue[i] == NULL || nState != CL_SUCCESS)
+        if (command_queue[i] == nullptr || nState != CL_SUCCESS)
         {
             // Release all command queues created so far.
             for (int j = 0; j <= i; ++j)
@@ -755,7 +755,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
                 if (command_queue[j])
                 {
                     clReleaseCommandQueue(command_queue[j]);
-                    command_queue[j] = NULL;
+                    command_queue[j] = nullptr;
                 }
             }
 

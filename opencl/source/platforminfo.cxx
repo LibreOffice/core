@@ -12,7 +12,7 @@
 #include <opencl/platforminfo.hxx>
 
 OpenCLDeviceInfo::OpenCLDeviceInfo()
-    : device(0)
+    : device(nullptr)
     , mnMemory(0)
     , mnComputeUnits(0)
     , mnFrequency(0)
@@ -20,7 +20,7 @@ OpenCLDeviceInfo::OpenCLDeviceInfo()
 }
 
 OpenCLPlatformInfo::OpenCLPlatformInfo()
-    : platform(NULL)
+    : platform(nullptr)
 {
 }
 
