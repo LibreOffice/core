@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_a7863863",
+        "filename": "external/neon/UnpackedTarball_neon.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-10T16:33:24Z",
+      "side": 1,
+      "message": "Will change this.",
+      "parentUuid": "faac7902_6c039710",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_2c098f32",
         "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-10T14:40:30Z",
       "side": 1,
       "message": "the original code apparently used\n\n  if (to \u003d\u003d LONG_MIN || to \u003d\u003d LONG_MAX)\n      return NE_TIMEOUT_INVALID;\n\nto check for strtol returning an indicator that \"the correct value is outside the range of representable values,\" so when using strtoul instead you should instead check for\n\n  if (to \u003d\u003d ULONG_MAX)\n      return NE_TIMEOUT_INVALID;",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_27ac08ed",
+        "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-10T16:33:24Z",
+      "side": 1,
+      "message": "ULONG_MAX (4294967295), it\u0027s a legal value for WebDAV, see\n\u003chttp://tools.ietf.org/html/rfc4918#section-10.7\u003e:\n\"The timeout value for TimeType \"Second\" MUST NOT be greater than 2^32-1\"\n\nIn issue 90249 case, it\u0027s the value the WebDAV server sends.\n\nValues higher than ULONG_MAX would be illegal.",
+      "parentUuid": "faac7902_2c098f32",
       "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_67b6103f",
+        "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-10T16:33:24Z",
+      "side": 1,
+      "message": "for practical use, probably for this should be better:\n\nif (to1 \u003e (unsinged long) LONG_MAX)\n      return NE_TIMEOUT_INFINITE;\n\nLONG_MAX would be a lock timeout of around 68 years, practically an infinite time, I think.\nThe if clause presented in the comment above would no longer be necessary.",
+      "parentUuid": "faac7902_8c06bb1e",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_0c12cb62",
         "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2015-11-10T14:40:30Z",
       "side": 1,
       "message": "this and the following lines did not change from the original, apart from the trivial tab vs. spaces; I\u0027d suggest to use tabs in your change, too, and turn these effectively unchanged lines back into context\n\nand this check should no longer be necessary at all, see the other comments above",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_87b97431",
+        "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-10T16:33:24Z",
+      "side": 1,
+      "message": "I agree, no longer necessary",
+      "parentUuid": "faac7902_0c12cb62",
       "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
