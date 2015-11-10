@@ -1155,7 +1155,7 @@ void restartOnMac(bool passArguments) {
     {
         argPtrs.push_back(i->getStr());
     }
-    argPtrs.push_back(0);
+    argPtrs.push_back(nullptr);
     execv(execPath8.getStr(), const_cast< char ** >(&argPtrs[0]));
     if (errno == ENOTSUP) { // happens when multithreaded on OS X < 10.6
         pid_t pid = fork();
