@@ -4,6 +4,11 @@
   <requires lib="gtk+" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/galaxy/cmd/ -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_paste.png</property>
+  </object>
   <object class="GtkGrid" id="NotebookBar">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -14,7 +19,7 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <child>
-          <object class="GtkBox" id="box3">
+          <object class="GtkBox" id="home">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
@@ -324,6 +329,99 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="sfxlo-SidebarToolBox" id="fonteffects">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="show_arrow">False</property>
+                    <child>
+                      <object class="GtkToolButton" id="bold">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="is_important">True</property>
+                        <property name="action_name">.uno:Bold</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="italic">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="is_important">True</property>
+                        <property name="action_name">.uno:Italic</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuToolButton" id="underline">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="is_important">True</property>
+                        <property name="action_name">.uno:Underline</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="strikeout">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="is_important">True</property>
+                        <property name="action_name">.uno:Strikeout</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="shadowed">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="is_important">True</property>
+                        <property name="action_name">.uno:Shadowed</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="sfxlo-SidebarToolBox" id="Sidebar ToolBox1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -353,6 +451,46 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
+                      <object class="sfxlo-SidebarToolBox" id="numberbullet">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_text" translatable="yes">Bullets and Numbering</property>
+                        <property name="show_arrow">False</property>
+                        <child>
+                          <object class="GtkMenuToolButton" id="bullet">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="is_important">True</property>
+                            <property name="action_name">.uno:DefaultBullet</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkMenuToolButton" id="number">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="is_important">True</property>
+                            <property name="action_name">.uno:DefaultNumbering</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkButton" id="button-increment-indent">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -362,7 +500,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -375,11 +513,8 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                     <child>
                       <placeholder/>
@@ -454,10 +589,43 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkSeparator" id="separator1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="sfxlo-SidebarToolBox" id="linespacing">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <object class="GtkMenuToolButton" id="setlinespacing">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="tooltip_text" translatable="yes">Line Spacing</property>
+                            <property name="action_name">.uno:LineSpacing</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
+                      </packing>
                     </child>
                     <child>
                       <placeholder/>
@@ -496,13 +664,115 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel" id="label3">
+          <object class="GtkBox" id="insert">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">View</property>
+            <child>
+              <object class="GtkBox" id="box2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkButton" id="button-insert-table">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:InsertTable</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button-insert-image">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:InsertGraphic</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkButton" id="button-insert-textbox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:DrawText</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button-pagebreak">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="action_name">.uno:InsertPagebreak</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button-insertfield">
+                <property name="label" translatable="yes">button</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="action_name">.uno:InsertFieldCtrl</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Insert</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -514,10 +784,10 @@
           <placeholder/>
         </child>
         <child type="tab">
-          <object class="GtkLabel" id="label4">
+          <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Insert</property>
+            <property name="label" translatable="yes">View</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -613,9 +883,5 @@
       </packing>
     </child>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_paste.png</property>
-  </object>
+  <object class="GtkSizeGroup" id="sizegroup1"/>
 </interface>
