@@ -593,6 +593,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
             (!sName.isEmpty() && sOrigName != sName) )
         {
             OUString sOldName( sName );
+
             sal_Int32 i = 0;
             while( xTextImportHelper->HasFrameByName( sName ) )
             {
@@ -601,8 +602,15 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
             }
             xNamed->setName( sName );
             if( sName != sOldName )
-                xTextImportHelper->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_FRAME,
+            {
+                bool bSuccess = xTextImportHelper->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_FRAME,
                                              sOldName, sName );
+                if (!bSuccess && GetImport().getGeneratorVersion() == SvXMLImport::LO_44x)
+                {
+                    bCreateFailed = true;
+                    return;
+                }
+            }
         }
     }
 
