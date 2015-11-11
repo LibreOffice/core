@@ -391,7 +391,7 @@ String STR_CUSTOMANIMATION_USERPATH
 
 String STR_SLIDETRANSITION_NONE
 {
-    Text [ en-US ] = "No transition";
+    Text [ en-US ] = "None";
 };
 
 Image IMG_CUSTOMANIMATION_ON_CLICK
