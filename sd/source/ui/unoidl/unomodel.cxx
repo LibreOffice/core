@@ -2558,6 +2558,20 @@ bool SdXImpressDocument::isMimeTypeSupported()
     return EditEngine::HasValidData(aDataHelper.GetTransferable());
 }
 
+Pointer SdXImpressDocument::getPointer()
+{
+    SolarMutexGuard aGuard;
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return Pointer();
+
+    Window* pWindow = pViewShell->GetActiveWindow();
+    if (!pWindow)
+        return Pointer();
+
+    return pWindow->GetPointer();
+}
+
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
     uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);

@@ -202,7 +202,14 @@ typedef enum
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_CELL_CURSOR
+    LOK_CALLBACK_CELL_CURSOR,
+
+    /**
+     * The current mouse pointer style.
+     *
+     * Payload is a css mouse pointer style.
+     */
+    LOK_CALLBACK_MOUSE_POINTER
 }
 LibreOfficeKitCallbackType;
 
