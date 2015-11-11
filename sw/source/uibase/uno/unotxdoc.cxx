@@ -3165,6 +3165,17 @@ bool SwXTextDocument::isMimeTypeSupported()
     return aDataHelper.GetXTransferable().is() && SwTransferable::IsPaste(*pWrtShell, aDataHelper);
 }
 
+Pointer SwXTextDocument::getPointer()
+{
+    SolarMutexGuard aGuard;
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    if (!pWrtShell)
+        return Pointer();
+
+    return pWrtShell->GetView().GetEditWin().GetPointer();
+}
+
 int SwXTextDocument::getPart()
 {
     SolarMutexGuard aGuard;
