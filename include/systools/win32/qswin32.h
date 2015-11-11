@@ -32,10 +32,16 @@
 #   define QUICKSTART_CLASSNAME             QUICKSTART_CLASSNAMEW
 #   define QUICKSTART_WINDOWNAME            QUICKSTART_WINDOWNAMEW
 #   define SHUTDOWN_QUICKSTART_MESSAGE      SHUTDOWN_QUICKSTART_MESSAGEW
+#   ifndef FindWindow
+#       define FindWindow   FindWindowW
+#   endif
 #else
 #   define QUICKSTART_CLASSNAME             QUICKSTART_CLASSNAMEA
 #   define QUICKSTART_WINDOWNAME            QUICKSTART_WINDOWNAMEA
 #   define SHUTDOWN_QUICKSTART_MESSAGE      SHUTDOWN_QUICKSTART_MESSAGEA
+#   ifndef FindWindow
+#       define FindWindow   FindWindowA
+#   endif
 #endif
 
 #endif // INCLUDED_SYSTOOLS_WIN32_QSWIN32_H

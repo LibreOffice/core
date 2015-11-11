@@ -93,6 +93,7 @@ namespace vcl
         FW_EXTRABOLD = 800,                 /**< Extra-bold (Ultra-bold)            */
         FW_BLACK = 900                      /**< Black (Heavy)                      */
     };
+#endif /* FW_THIN */
 
 /** Value of the width member of the TTGlobalFontInfo struct */
     enum WidthClass {
@@ -106,7 +107,6 @@ namespace vcl
         FWIDTH_EXTRA_EXPANDED = 8,          /**< 150% of normal                     */
         FWIDTH_ULTRA_EXPANDED = 9           /**< 200% of normal                     */
     };
-#endif /* FW_THIN */
 
 /** Type of the 'kern' table, stored in _TrueTypeFont::kerntype */
     enum KernType {

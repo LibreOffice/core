@@ -22,6 +22,13 @@
 #undef Rectangle
 #undef DELETE
 #undef OPTIONAL
+#undef PASSTHROUGH
+#undef STRICT
+#undef ABSOLUTE
+#undef RELATIVE
+#undef IGNORE
+#undef IN
+#undef OUT
 
 #undef Folder
 #undef GradientStyle_RECT
@@ -64,6 +71,10 @@
 
 #undef Yield
 
+#undef GetTimeFormat
+
+#undef CompareString
+
 /* new StretchBlt() Modes (simpler names) */
 #ifndef STRETCH_ANDSCANS
 #define STRETCH_ANDSCANS        1
@@ -75,9 +86,11 @@
 #define STRETCH_DELETESCANS     3
 #endif
 
+#ifdef __cplusplus
 extern "C"
 {
 BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 );
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

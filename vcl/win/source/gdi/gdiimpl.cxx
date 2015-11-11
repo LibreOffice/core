@@ -48,9 +48,7 @@
 #endif
 #endif
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
+#include "prewin.h"
 
 #ifdef __MINGW32__
 #ifdef GetObject
@@ -62,9 +60,7 @@
 #include <gdiplusenums.h>
 #include <gdipluscolor.h>
 
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
+#include "postwin.h"
 
 #define SAL_POLYPOLYCOUNT_STACKBUF          8
 #define SAL_POLYPOLYPOINTS_STACKBUF         64
