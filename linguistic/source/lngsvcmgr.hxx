@@ -32,7 +32,8 @@
 #include <unotools/configitem.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 #include "linguistic/misc.hxx"
 #include "defs.hxx"
@@ -101,7 +102,7 @@ class LngSvcMgr :
 
     LngSvcMgrListenerHelper *                           pListenerHelper;
 
-    typedef boost::ptr_vector< SvcInfo >    SvcInfoArray;
+    typedef std::vector< std::unique_ptr<SvcInfo> >    SvcInfoArray;
     SvcInfoArray *                                      pAvailSpellSvcs;
     SvcInfoArray *                                      pAvailGrammarSvcs;
     SvcInfoArray *                                      pAvailHyphSvcs;

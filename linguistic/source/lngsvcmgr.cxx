@@ -37,6 +37,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <boost/checked_delete.hpp>
 #include <boost/noncopyable.hpp>
+#include <o3tl/make_unique.hxx>
 
 #include "lngsvcmgr.hxx"
 #include "lngopt.hxx"
@@ -1090,7 +1091,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                         aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
                     }
 
-                    pAvailSpellSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
+                    pAvailSpellSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1153,7 +1154,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                         aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
                     }
 
-                    pAvailGrammarSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
+                    pAvailGrammarSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1213,7 +1214,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
                         aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
                     }
-                    pAvailHyphSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
+                    pAvailHyphSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1275,7 +1276,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                         aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
                     }
 
-                    pAvailThesSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
+                    pAvailThesSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1584,7 +1585,7 @@ uno::Sequence< OUString > SAL_CALL
         LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
         for (size_t i = 0;  i < nMaxCnt; ++i)
         {
-            const SvcInfo &rInfo = (*pInfoArray)[i];
+            const SvcInfo &rInfo = *(*pInfoArray)[i].get();
             if (LinguIsUnspecified( nLanguage )
                 || rInfo.HasLanguage( nLanguage ))
             {
