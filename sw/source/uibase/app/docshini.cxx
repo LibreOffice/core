@@ -49,6 +49,8 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <vcl/svapp.hxx>
@@ -688,6 +690,13 @@ void SwDocShell::SubInitNew()
     {
         bool bSquaredPageMode = SW_MOD()->GetUsrPref(false)->IsSquaredPageMode();
         m_pDoc->SetDefaultPageMode( bSquaredPageMode );
+
+        // only set Widow/Orphan defaults on a new, non-web document - not an opened one
+        if( GetMedium() && GetMedium()->GetOrigURL().isEmpty() )
+        {
+            m_pDoc->SetDefault( SvxWidowsItem(  (sal_uInt8) 2, RES_PARATR_WIDOWS)  );
+            m_pDoc->SetDefault( SvxOrphansItem( (sal_uInt8) 2, RES_PARATR_ORPHANS) );
+        }
     }
 
     m_pDoc->getIDocumentState().ResetModified();

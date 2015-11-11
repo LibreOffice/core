@@ -149,6 +149,7 @@ public:
     void testTdf90808();
     void testTdf75137();
     void testTdf83798();
+    void testTdf89714();
     void testPropertyDefaults();
     void testTableBackgroundColor();
     void testTdf88899();
@@ -225,6 +226,7 @@ public:
     CPPUNIT_TEST(testTdf90808);
     CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTdf83798);
+    CPPUNIT_TEST(testTdf89714);
     CPPUNIT_TEST(testPropertyDefaults);
     CPPUNIT_TEST(testTableBackgroundColor);
     CPPUNIT_TEST(testTdf88899);
@@ -2263,6 +2265,17 @@ void SwUiWriterTest::testTdf83798()
     pCrsr->Move(fnMoveForward, fnGoContent);
     CPPUNIT_ASSERT_EQUAL(OUString("2.A"), pCrsr->GetText());
     pCrsr->DeleteMark();
+}
+
+void SwUiWriterTest::testTdf89714()
+{
+    createDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
+    uno::Reference<uno::XInterface> xInterface(xFact->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertyState> xPropState(xInterface, uno::UNO_QUERY);
+    //enabled Paragraph Orphan and Widows by default starting in LO5.1
+    CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault(OUString("ParaOrphans")) );
+    CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault(OUString("ParaWidows"))  );
 }
 
 void SwUiWriterTest::testPropertyDefaults()
