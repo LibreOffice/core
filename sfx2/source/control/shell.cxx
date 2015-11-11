@@ -46,7 +46,8 @@
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 // Maps the Which() field to a pointer to a SfxPoolItem
 typedef boost::ptr_map<sal_uInt16, SfxPoolItem> SfxItemPtrMap;
@@ -67,7 +68,7 @@ struct SfxShell_Impl: public SfxBroadcaster
     sal_uIntPtr                 nHelpId;
     svtools::AsynchronLink*     pExecuter;
     svtools::AsynchronLink*     pUpdater;
-    boost::ptr_vector<SfxSlot>  aSlotArr;
+    std::vector<std::unique_ptr<SfxSlot> >  aSlotArr;
 
     css::uno::Sequence < css::embed::VerbDescriptor > aVerbList;
     ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
@@ -572,14 +573,14 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
 
         if (!pImp->aSlotArr.empty())
         {
-            SfxSlot& rSlot = pImp->aSlotArr[0];
+            SfxSlot& rSlot = *pImp->aSlotArr[0].get();
             pNewSlot->pNextSlot = rSlot.pNextSlot;
             rSlot.pNextSlot = pNewSlot;
         }
         else
             pNewSlot->pNextSlot = pNewSlot;
 
-        pImp->aSlotArr.insert(pImp->aSlotArr.begin() + (sal_uInt16) n, pNewSlot);
+        pImp->aSlotArr.insert(pImp->aSlotArr.begin() + (sal_uInt16) n, std::unique_ptr<SfxSlot>(pNewSlot));
     }
 
     pImp->aVerbList = aVerbs;
@@ -640,7 +641,7 @@ const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
     DBG_ASSERT(nIndex < rList.getLength(),"Wrong VerbId!");
 
     if (nIndex < rList.getLength())
-        return &pImp->aSlotArr[nIndex];
+        return pImp->aSlotArr[nIndex].get();
     else
         return nullptr;
 }
