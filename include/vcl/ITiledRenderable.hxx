@@ -14,6 +14,7 @@
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <tools/gen.hxx>
+#include <vcl/pointr.hxx>
 #include <vcl/virdev.hxx>
 
 namespace vcl
@@ -170,6 +171,8 @@ public:
     {
         return OString();
     }
+
+    virtual Pointer getPointer() = 0;
 
     /// Sets the clipboard of the component.
     virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) = 0;

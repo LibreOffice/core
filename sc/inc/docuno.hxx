@@ -430,6 +430,9 @@ public:
                                    int nOutputHeight,
                                    long nTileWidth,
                                    long nTileHeight ) SAL_OVERRIDE;
+
+    /// @see vcl::ITiledRenderable::getPointer().
+    virtual Pointer getPointer() SAL_OVERRIDE;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper2<
