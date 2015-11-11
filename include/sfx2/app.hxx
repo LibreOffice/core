@@ -115,8 +115,6 @@ class SfxObjectShellLock;
 
 class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 {
-    SAL_DLLPRIVATE static SfxApplication* pApp;
-
     SfxAppData_Impl*            pAppData_Impl;
 
     DECL_DLLPRIVATE_LINK_TYPED( GlobalBasicErrorHdl_Impl, StarBASIC*, bool );
@@ -135,7 +133,7 @@ public:
                                 SfxApplication();
                                 virtual ~SfxApplication();
     static SfxApplication*      GetOrCreate();
-    static SfxApplication*      Get() { return pApp;}
+    static SfxApplication*      Get();
 
     // Resource Manager
     static ResMgr*              GetSfxResManager();

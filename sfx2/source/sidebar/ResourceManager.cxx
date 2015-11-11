@@ -58,8 +58,8 @@ bool getBool(utl::OConfigurationNode const & aNode, const char* pNodeName)
 
 ResourceManager& ResourceManager::Instance()
 {
-    static ResourceManager maInstance;
-    return maInstance;
+    static ResourceManager s_SidebarResourceManagerInstance;
+    return s_SidebarResourceManagerInstance;
 }
 
 ResourceManager::ResourceManager()

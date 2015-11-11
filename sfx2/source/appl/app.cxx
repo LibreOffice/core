@@ -121,8 +121,8 @@
 
 using namespace ::com::sun::star;
 
-// Static member
-SfxApplication* SfxApplication::pApp = nullptr;
+static SfxApplication* g_pSfxApplication = nullptr;
+
 #if HAVE_FEATURE_SCRIPTING
 static BasicDLL*       pBasic   = nullptr;
 #endif
@@ -142,20 +142,25 @@ namespace
 #include <sfx2/imagemgr.hxx>
 #include "fwkhelper.hxx"
 
+SfxApplication* SfxApplication::Get()
+{
+    return g_pSfxApplication;
+}
+
 SfxApplication* SfxApplication::GetOrCreate()
 {
     // SFX on demand
     ::osl::MutexGuard aGuard(theApplicationMutex::get());
-    if (!pApp)
+    if (!g_pSfxApplication)
     {
         SAL_INFO( "sfx.appl", "SfxApplication::SetApp" );
 
-        pApp = new SfxApplication;
+        g_pSfxApplication = new SfxApplication;
 
         // at the moment a bug may occur when Initialize_Impl returns FALSE,
         // but this is only temporary because all code that may cause such
         // a fault will be moved outside the SFX
-        pApp->Initialize_Impl();
+        g_pSfxApplication->Initialize_Impl();
 
         ::framework::SetImageProducer( GetImage );
         ::framework::SetRefreshToolbars( RefreshToolbars );
@@ -176,7 +181,7 @@ SfxApplication* SfxApplication::GetOrCreate()
             Help::DisableBalloonHelp();
 #endif
     }
-    return pApp;
+    return g_pSfxApplication;
 }
 
 SfxApplication::SfxApplication()
@@ -243,7 +248,7 @@ SfxApplication::~SfxApplication()
 #endif
 
     delete pAppData_Impl;
-    pApp = nullptr;
+    g_pSfxApplication = nullptr;
 }
 
 
