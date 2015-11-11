@@ -478,10 +478,11 @@ Reference< XShape > Shape::createAndInsert(
         aTransformation.translate( aCenter.getX(), aCenter.getY() );
     }
 
+    bool bInGroup = !aParentTransformation.isIdentity();
     if( maPosition.X != 0 || maPosition.Y != 0)
     {
         // if global position is used, add it to transformation
-        if (mbWps && aParentTransformation.isIdentity())
+        if (mbWps && !bInGroup)
             aTransformation.translate( maPosition.X * EMU_PER_HMM, maPosition.Y * EMU_PER_HMM);
         else
             aTransformation.translate( maPosition.X, maPosition.Y );
@@ -503,10 +504,18 @@ Reference< XShape > Shape::createAndInsert(
         sal_Int32 i, nNumPoints = aPoly.count();
         uno::Sequence< awt::Point > aPointSequence( nNumPoints );
         awt::Point* pPoints = aPointSequence.getArray();
+        uno::Reference<lang::XServiceInfo> xModelInfo(rFilterBase.getModel(), uno::UNO_QUERY);
+        bool bIsWriter = xModelInfo->supportsService("com.sun.star.text.TextDocument");
         for( i = 0; i < nNumPoints; ++i )
         {
             const ::basegfx::B2DPoint aPoint( aPoly.getB2DPoint( i ) );
-            pPoints[ i ] = awt::Point( static_cast< sal_Int32 >( aPoint.getX() ), static_cast< sal_Int32 >( aPoint.getY() ) );
+            if (bIsWriter && bInGroup)
+                // Writer's draw page is in twips, and these points get passed
+                // to core without any unit conversion when Writer
+                // postprocesses only the group shape itself.
+                pPoints[i] = awt::Point(static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getX())), static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getY())));
+            else
+                pPoints[i] = awt::Point(static_cast<sal_Int32>(aPoint.getX()), static_cast<sal_Int32>(aPoint.getY()));
         }
         uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( 1 );
         aPolyPolySequence.getArray()[ 0 ] = aPointSequence;

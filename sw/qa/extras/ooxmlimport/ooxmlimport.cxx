@@ -2657,6 +2657,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf92454, "tdf92454.docx")
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf85232, "tdf85232.docx")
+{
+    uno::Reference<drawing::XShapes> xShapes(getShapeByName("Group 219"), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xShapes->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShape, uno::UNO_QUERY);
+    // Make sure we're not testing the ellipse child.
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.LineShape"), xShapeDescriptor->getShapeType());
+    // This was 2900: horizontal position of the line was incorrect, the 3 children were not connected visually.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2267), xShape->getPosition().X);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
