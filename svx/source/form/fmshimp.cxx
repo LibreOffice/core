@@ -265,7 +265,6 @@ using namespace ::com::sun::star::form::runtime;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::script;
 using namespace ::svxform;
 using namespace ::svx;
@@ -675,14 +674,14 @@ FmXFormShell::~FmXFormShell()
 }
 
 
-Reference< XModel > FmXFormShell::getContextDocument() const
+Reference< css::frame::XModel > FmXFormShell::getContextDocument() const
 {
-    Reference< XModel > xModel;
+    Reference< css::frame::XModel > xModel;
 
     // determine the type of document we live in
     try
     {
-        Reference< XController > xController;
+        Reference< css::frame::XController > xController;
         if ( m_xAttachedFrame.is() )
             xController = m_xAttachedFrame->getController();
         if ( xController.is() )
@@ -719,7 +718,7 @@ bool FmXFormShell::impl_checkDisposed() const
         return m_eDocumentType;
 
     // determine the type of document we live in
-    Reference< XModel > xModel = getContextDocument();
+    Reference< css::frame::XModel > xModel = getContextDocument();
     if ( xModel.is() )
         m_eDocumentType = DocumentClassification::classifyDocument( xModel );
     else

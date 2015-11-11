@@ -130,7 +130,7 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                         else
                         {
                             double fValue = rChars.toDouble();
-                            Color* pColor = nullptr;
+                            ::Color* pColor = nullptr;
                             OUString aFormattedValue;
                             pNumFrmt->GetOutputString( fValue, nKey, aFormattedValue, &pColor );
                             mrModel.maData[ mnPtIndex ] <<= aFormattedValue;

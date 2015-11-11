@@ -49,8 +49,10 @@ const double nPi180=0.000174532925199432957692222; // If we have too few digits,
 
 class XPolygon;
 class XPolyPolygon;
-
-inline long Round(double a) { return a>0.0 ? (long)(a+0.5) : -(long)((-a)+0.5); }
+namespace svx
+{
+    inline long Round(double a) { return a>0.0 ? (long)(a+0.5) : -(long)((-a)+0.5); }
+}
 
 inline void MoveRect(Rectangle& rRect, const Size& S)    { rRect.Move(S.Width(),S.Height()); }
 inline void MovePoint(Point& rPnt, const Size& S)        { rPnt.X()+=S.Width(); rPnt.Y()+=S.Height(); }
@@ -119,27 +121,27 @@ inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction
         SAL_WARN( "svx.svdraw", "invalid fraction yFact, using Fraction(1,1)" );
         yFact = Fraction(1,1);
     }
-    rPnt.X() = rRef.X() + Round( (rPnt.X() - rRef.X()) * double(xFact) );
-    rPnt.Y() = rRef.Y() + Round( (rPnt.Y() - rRef.Y()) * double(yFact) );
+    rPnt.X() = rRef.X() + svx::Round( (rPnt.X() - rRef.X()) * double(xFact) );
+    rPnt.Y() = rRef.Y() + svx::Round( (rPnt.Y() - rRef.Y()) * double(yFact) );
 }
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
 {
     long dx=rPnt.X()-rRef.X();
     long dy=rPnt.Y()-rRef.Y();
-    rPnt.X()=Round(rRef.X()+dx*cs+dy*sn);
-    rPnt.Y()=Round(rRef.Y()+dy*cs-dx*sn);
+    rPnt.X()=svx::Round(rRef.X()+dx*cs+dy*sn);
+    rPnt.Y()=svx::Round(rRef.Y()+dy*cs-dx*sn);
 }
 
 inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear)
 {
     if (!bVShear) { // Horizontal
         if (rPnt.Y()!=rRef.Y()) { // else not needed
-            rPnt.X()-=Round((rPnt.Y()-rRef.Y())*tn);
+            rPnt.X()-=svx::Round((rPnt.Y()-rRef.Y())*tn);
         }
     } else { // or else vertical
         if (rPnt.X()!=rRef.X()) { // else not needed
-            rPnt.Y()-=Round((rPnt.X()-rRef.X())*tn);
+            rPnt.Y()-=svx::Round((rPnt.X()-rRef.X())*tn);
         }
     }
 }

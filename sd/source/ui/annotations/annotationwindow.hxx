@@ -82,7 +82,7 @@ class AnnotationWindow : public FloatingWindow
         SdDrawDocument*         mpDoc;
 
         OutlinerView*           mpOutlinerView;
-        Outliner*               mpOutliner;
+        ::Outliner*             mpOutliner;
         VclPtr<ScrollBar>       mpVScrollbar;
         css::uno::Reference< css::office::XAnnotation > mxAnnotation;
         bool                    mbReadonly;
@@ -113,7 +113,7 @@ class AnnotationWindow : public FloatingWindow
 
         DrawDocShell*           DocShell()      { return mpDocShell; }
         OutlinerView*           getView()       { return mpOutlinerView; }
-        Outliner*               Engine()        { return mpOutliner; }
+        ::Outliner*             Engine()        { return mpOutliner; }
         SdDrawDocument*         Doc()           { return mpDoc; }
 
         long            GetPostItTextHeight();

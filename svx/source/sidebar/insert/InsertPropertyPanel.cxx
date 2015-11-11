@@ -131,7 +131,7 @@ IMPL_LINK_TYPED(InsertPropertyPanel, WindowEventListener, VclWindowEvent&, rEven
             return;
     }
 
-    Reference<frame::XSubToolbarController> xController (pSidebarToolBox->GetControllerForItemId(nItemId), UNO_QUERY);
+    Reference<css::frame::XSubToolbarController> xController (pSidebarToolBox->GetControllerForItemId(nItemId), UNO_QUERY);
     if ( ! xController.is() )
         return;
 
