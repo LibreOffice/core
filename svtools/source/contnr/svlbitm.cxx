@@ -223,14 +223,14 @@ void SvLBoxString::InitViewData(
     long nTextWidth;
     if (pView->GetEntryCount() > 100)
     {
-        static SvTreeListBox *pPreviousView = nullptr;
-        static float fApproximateCharWidth = 0.0;
-        if (pPreviousView != pView)
+        static SvTreeListBox *s_pPreviousView = nullptr;
+        static float s_fApproximateCharWidth = 0.0;
+        if (s_pPreviousView != pView)
         {
-            pPreviousView = pView;
-            fApproximateCharWidth = pView->approximate_char_width();
+            s_pPreviousView = pView;
+            s_fApproximateCharWidth = pView->approximate_char_width();
         }
-        nTextWidth = maText.getLength() * fApproximateCharWidth;
+        nTextWidth = maText.getLength() * s_fApproximateCharWidth;
     }
     else
         nTextWidth = pView->GetTextWidth(maText);

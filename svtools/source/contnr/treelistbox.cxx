@@ -48,8 +48,8 @@
 using namespace css::accessibility;
 
 // Drag&Drop
-static VclPtr<SvTreeListBox> pDDSource;
-static VclPtr<SvTreeListBox> pDDTarget;
+static VclPtr<SvTreeListBox> g_pDDSource;
+static VclPtr<SvTreeListBox> g_pDDTarget;
 
 #define SVLBOX_ACC_RETURN 1
 #define SVLBOX_ACC_ESCAPE 2
@@ -758,7 +758,7 @@ void SvTreeListBox::RemoveSelection()
 
 SvTreeListBox* SvTreeListBox::GetSourceView()
 {
-    return pDDSource;
+    return g_pDDSource;
 }
 
 void SvTreeListBox::RecalcViewData()
@@ -1158,7 +1158,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    if( rEvt.mbLeaving || !CheckDragAndDropMode( pDDSource, rEvt.mnAction ) )
+    if (rEvt.mbLeaving || !CheckDragAndDropMode(g_pDDSource, rEvt.mnAction))
     {
         ImplShowTargetEmphasis( pTargetEntry, false );
     }
@@ -1175,10 +1175,10 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
         }
         else
         {
-            DBG_ASSERT( pDDSource, "SvTreeListBox::QueryDrop(): SourceBox == 0" );
-            if( !( pEntry && pDDSource->GetModel() == this->GetModel()
+            DBG_ASSERT(g_pDDSource, "SvTreeListBox::QueryDrop(): SourceBox == 0");
+            if (!( pEntry && g_pDDSource->GetModel() == this->GetModel()
                     && DND_ACTION_MOVE == rEvt.mnAction
-                    && ( pEntry->nEntryFlags & SvTLEntryFlags::DISABLE_DROP ) ))
+                    && (pEntry->nEntryFlags & SvTLEntryFlags::DISABLE_DROP)))
             {
                 if( NotifyAcceptDrop( pEntry ))
                     nRet = rEvt.mnAction;
@@ -1204,7 +1204,7 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
     pSourceView->EnableSelectionAsDropTarget();
 
     ImplShowTargetEmphasis( pTargetEntry, false );
-    pDDTarget = this;
+    g_pDDTarget = this;
 
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
 
@@ -1222,17 +1222,17 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
 
         if( DND_ACTION_COPY == rEvt.mnAction )
         {
-            if ( CopySelection( pDDSource, pTarget ) )
+            if (CopySelection(g_pDDSource, pTarget))
                 nRet = rEvt.mnAction;
         }
         else if( DND_ACTION_MOVE == rEvt.mnAction )
         {
-            if ( MoveSelection( pDDSource, pTarget ) )
+            if (MoveSelection(g_pDDSource, pTarget))
                 nRet = rEvt.mnAction;
         }
         else if( DND_ACTION_COPYMOVE == rEvt.mnAction )
         {
-            if ( MoveSelectionCopyFallbackPossible( pDDSource, pTarget, true ) )
+            if (MoveSelectionCopyFallbackPossible(g_pDDSource, pTarget, true))
                 nRet = rEvt.mnAction;
         }
     }
@@ -1250,8 +1250,8 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
  */
 void SvTreeListBox::SetupDragOrigin()
 {
-    pDDSource = this;
-    pDDTarget = nullptr;
+    g_pDDSource = this;
+    g_pDDTarget = nullptr;
 }
 
 void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
@@ -1314,17 +1314,17 @@ nAction
     EnableSelectionAsDropTarget();
 
 #ifndef UNX
-    if( (nAction == DND_ACTION_MOVE) && ( (pDDTarget &&
-        ((sal_uLong)(pDDTarget->GetModel())!=(sal_uLong)(this->GetModel()))) ||
-        !pDDTarget ))
+    if ((nAction == DND_ACTION_MOVE) && ( (g_pDDTarget &&
+        ((sal_uLong)(g_pDDTarget->GetModel())!=(sal_uLong)(this->GetModel()))) ||
+        !g_pDDTarget))
     {
         RemoveSelection();
     }
 #endif
 
     ImplShowTargetEmphasis( pTargetEntry, false );
-    pDDSource = nullptr;
-    pDDTarget = nullptr;
+    g_pDDSource = nullptr;
+    g_pDDTarget = nullptr;
     pTargetEntry = nullptr;
     nDragDropMode = nOldDragMode;
 }
@@ -1526,10 +1526,10 @@ void SvTreeListBox::dispose()
 
         SvTreeListBox::RemoveBoxFromDDList_Impl( *this );
 
-        if( this == pDDSource )
-            pDDSource = nullptr;
-        if( this == pDDTarget )
-            pDDTarget = nullptr;
+        if (this == g_pDDSource)
+            g_pDDSource = nullptr;
+        if (this == g_pDDTarget)
+            g_pDDTarget = nullptr;
         delete mpImpl;
         mpImpl = nullptr;
     }
