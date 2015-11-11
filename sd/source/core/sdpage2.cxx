@@ -18,7 +18,6 @@
  */
 
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <libxml/xmlwriter.h>
 
 #include <sfx2/docfile.hxx>
@@ -141,7 +140,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     // - replace-data for OutlinerParaObject
     std::vector<SfxStyleSheetBase*> aOutlineStyles;
     std::vector<SfxStyleSheetBase*> aOldOutlineStyles;
-    boost::ptr_vector<StyleReplaceData> aReplList;
+    std::vector<StyleReplaceData> aReplList;
     bool bListsFilled = false;
 
     const size_t nObjCount = GetObjCount();
@@ -177,12 +176,12 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                     if (bReplaceStyleSheets && pSheet)
                     {
                         // Replace instead Set
-                        StyleReplaceData* pReplData = new StyleReplaceData;
-                        pReplData->nNewFamily = pSheet->GetFamily();
-                        pReplData->nFamily    = pSheet->GetFamily();
-                        pReplData->aNewName   = aFullName;
-                        pReplData->aName      = aOldFullName;
-                        aReplList.push_back(pReplData);
+                        StyleReplaceData aReplData;
+                        aReplData.nNewFamily = pSheet->GetFamily();
+                        aReplData.nFamily    = pSheet->GetFamily();
+                        aReplData.aNewName   = aFullName;
+                        aReplData.aName      = aOldFullName;
+                        aReplList.push_back(aReplData);
                     }
                     else
                     {
@@ -221,7 +220,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
             OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
             if ( bReplaceStyleSheets && pOPO )
             {
-                boost::ptr_vector<StyleReplaceData>::const_iterator it = aReplList.begin();
+                std::vector<StyleReplaceData>::const_iterator it = aReplList.begin();
                 while (it != aReplList.end())
                 {
                     pOPO->ChangeStyleSheets( it->aName, it->nFamily, it->aNewName, it->nNewFamily );
