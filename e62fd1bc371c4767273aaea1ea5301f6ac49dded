@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_075aa483",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-11T08:55:18Z",
+      "side": 1,
+      "message": "But we already keep a reference inside ButtonStatusListener. No need for 2 references.",
+      "revId": "e62fd1bc371c4767273aaea1ea5301f6ac49dded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_4754ac53",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-11T08:55:18Z",
+      "side": 1,
+      "message": "Clearing the reference here isn\u0027t enough, as the dispatcher still keeps a reference of the listener (which was passed by addStatusListener), so it won\u0027t be destructed. You have to call here removeStatusListener first.",
+      "revId": "e62fd1bc371c4767273aaea1ea5301f6ac49dded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_2751a863",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-11T08:55:18Z",
+      "side": 1,
+      "message": "Just a suggestion: It could be much nicer if you fold the whole dispatching handling to inside the listener class.",
+      "revId": "e62fd1bc371c4767273aaea1ea5301f6ac49dded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_e75e8075",
+        "filename": "vcl/source/control/buttonstatuslistener.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-11T08:55:18Z",
+      "side": 1,
+      "message": "You don\u0027t need to call removeStatusListener here.",
+      "revId": "e62fd1bc371c4767273aaea1ea5301f6ac49dded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
