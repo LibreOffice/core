@@ -21,6 +21,8 @@
 #define INCLUDED_SD_SOURCE_FILTER_PPT_PROPREAD_HXX
 
 #include <map>
+#include <vector>
+#include <memory>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <sal/types.h>
@@ -108,7 +110,7 @@ public:
     void            Clear();
 
     void            SetTextEncoding( sal_uInt16 nTextEnc ){ mnTextEnc = nTextEnc; };
-    bool        Read( OUString& rString, sal_uInt32 nType = VT_EMPTY, bool bDwordAlign = true );
+    bool            Read( OUString& rString, sal_uInt32 nType = VT_EMPTY, bool bDwordAlign = true );
     PropItem&       operator=( PropItem& rPropItem );
 
     using SvStream::Read;
@@ -117,7 +119,7 @@ public:
 class Section
 {
         sal_uInt16              mnTextEnc;
-        boost::ptr_vector<PropEntry> maEntries;
+        std::vector<std::unique_ptr<PropEntry> > maEntries;
 
     protected:
 
