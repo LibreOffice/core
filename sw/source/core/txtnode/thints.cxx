@@ -96,30 +96,20 @@ SwpHints::SwpHints()
 {
 }
 
-struct TextAttrDeleter
+static void TextAttrDelete( SwDoc & rDoc, SwTextAttr * const pAttr )
 {
-    SwAttrPool & m_rPool;
-    explicit TextAttrDeleter( SwDoc & rDoc ) : m_rPool( rDoc.GetAttrPool() ) { }
-    void operator() (SwTextAttr * const pAttr)
+    if (RES_TXTATR_META == pAttr->Which() ||
+        RES_TXTATR_METAFIELD == pAttr->Which())
     {
-        if (RES_TXTATR_META == pAttr->Which() ||
-            RES_TXTATR_METAFIELD == pAttr->Which())
-        {
-            static_txtattr_cast<SwTextMeta *>(pAttr)->ChgTextNode(nullptr); // prevents ASSERT
-        }
-        SwTextAttr::Destroy( pAttr, m_rPool );
+        static_txtattr_cast<SwTextMeta *>(pAttr)->ChgTextNode(nullptr); // prevents ASSERT
     }
-};
+    SwTextAttr::Destroy( pAttr, rDoc.GetAttrPool() );
+}
 
-struct TextAttrContains
+static bool TextAttrContains(const sal_Int32 nPos, SwTextAttrEnd * const pAttr)
 {
-    sal_Int32 m_nPos;
-    explicit TextAttrContains( const sal_Int32 nPos ) : m_nPos( nPos ) { }
-    bool operator() (SwTextAttrEnd * const pAttr)
-    {
-        return (pAttr->GetStart() < m_nPos) && (m_nPos < *pAttr->End());
-    }
-};
+    return (pAttr->GetStart() < nPos) && (nPos < *pAttr->End());
+}
 
 // a:       |-----|
 // b:
@@ -264,7 +254,9 @@ lcl_DoSplitNew(NestList_t & rSplits, SwTextNode & rNode,
     // first find the portion that is split (not necessarily the last one!)
     NestList_t::iterator const iter(
         ::std::find_if( rSplits.begin(), rSplits.end(),
-            TextAttrContains(nSplitPos) ) );
+            [nSplitPos](SwTextAttrEnd * const pAttr) {
+                return TextAttrContains(nSplitPos, pAttr);
+            } ) );
     if (iter != rSplits.end()) // already split here?
     {
         const sal_Int32 nStartPos( // skip other's dummy character!
@@ -390,8 +382,8 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                 {
                     case FAIL:
                         SAL_INFO("sw.core", "cannot insert hint: overlap");
-                        ::std::for_each(SplitNew.begin(), SplitNew.end(),
-                            TextAttrDeleter(*rNode.GetDoc()));
+                        for (const auto& aSplit : SplitNew)
+                            TextAttrDelete(*rNode.GetDoc(), aSplit);
                         return false;
                     case SPLIT_NEW:
                         lcl_DoSplitNew(SplitNew, rNode, nNewStart,

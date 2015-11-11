@@ -131,7 +131,7 @@ public:
 
 class SwHistorySetTextField : public SwHistoryHint
 {
-    //!! beware of the order for the declation of the auto_ptrs.
+    //!! beware of the order for the declation of the unique_ptrs.
     //!! If they get destroyed in the wrong order sw may crash (namely mail-merge as well)
     ::std::unique_ptr<SwFieldType> m_pFieldType;
     const ::std::unique_ptr<SwFormatField> m_pField;

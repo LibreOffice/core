@@ -1144,14 +1144,18 @@ void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
     OSL_ENSURE( getIDocumentLayoutAccess().GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
     if( bInvalid )
     {
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::AllInvalidateSmartTagsOrSpelling),bSmartTags));
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::SetNeedGrammarCheck), true) );
+        for ( auto aLayout : aAllLayouts )
+        {
+            aLayout->AllInvalidateSmartTagsOrSpelling(bSmartTags);
+            aLayout->SetNeedGrammarCheck(true);
+        }
         if ( bSmartTags )
             GetNodes().ForEach( lcl_CheckSmartTagsAgain, &bOnlyWrong );
         GetNodes().ForEach( lcl_SpellAndGrammarAgain, &bOnlyWrong );
     }
 
-    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));
+    for ( auto aLayout : aAllLayouts )
+        aLayout->SetIdleFlags();
 }
 
 void SwDoc::InvalidateAutoCompleteFlag()
@@ -1160,14 +1164,16 @@ void SwDoc::InvalidateAutoCompleteFlag()
     if( pTmpRoot )
     {
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllInvalidateAutoCompleteWords));
+        for( auto aLayout : aAllLayouts )
+            aLayout->AllInvalidateAutoCompleteWords();
         for( sal_uLong nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
         {
             SwTextNode* pTextNode = GetNodes()[ nNd ]->GetTextNode();
             if ( pTextNode ) pTextNode->SetAutoCompleteWordDirty( true );
         }
 
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));
+        for( auto aLayout : aAllLayouts )
+            aLayout->SetIdleFlags();
     }
 }
 

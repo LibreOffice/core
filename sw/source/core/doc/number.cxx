@@ -883,8 +883,8 @@ void SwNumRule::SetInvalidRule(bool bFlag)
                 aLists.insert( pList );
             }
         }
-        std::for_each( aLists.begin(), aLists.end(),
-                       std::mem_fun( &SwList::InvalidateListTree ) );
+        for ( auto aList : aLists )
+            aList->InvalidateListTree();
     }
 
     mbInvalidRuleFlag = bFlag;
@@ -992,8 +992,8 @@ void SwNumRule::Validate()
         const SwTextNode* pTextNode = *aIter;
         aLists.insert( pTextNode->GetDoc()->getIDocumentListsAccess().getListByName( pTextNode->GetListId() ) );
     }
-    std::for_each( aLists.begin(), aLists.end(),
-                   std::mem_fun( &SwList::ValidateListTree ) );
+    for ( auto aList : aLists )
+        aList->ValidateListTree();
 
     SetInvalidRule(false);
 }

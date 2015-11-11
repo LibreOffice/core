@@ -1441,9 +1441,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 // sub-document, to get the correct PageDesc.
                 if(!bFreezedLayouts && bCreateSingleFile)
                 {
-                    std::set<SwRootFrm*> aAllLayouts = pTargetShell->GetDoc()->GetAllLayouts();
-                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),
-                        [](SwRootFrm* pLayout) { pLayout->FreezeLayout(true); });
+                    for ( auto aLayout : pTargetShell->GetDoc()->GetAllLayouts() )
+                        aLayout->FreezeLayout(true);
                     bFreezedLayouts = true;
                 }
             } while( !bCancel &&
@@ -1483,12 +1482,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             if(bCreateSingleFile)
             {
                 pTargetShell->CalcLayout();
-                std::set<SwRootFrm*> aAllLayouts = pTargetShell->GetDoc()->GetAllLayouts();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(), [](SwRootFrm* pLayout)
+                for ( auto aLayout : pTargetShell->GetDoc()->GetAllLayouts() )
                 {
-                    pLayout->FreezeLayout(false);
-                    pLayout->AllCheckPageDescs();
-                });
+                    aLayout->FreezeLayout(false);
+                    aLayout->AllCheckPageDescs();
+                }
             }
 
             pProgressDlg.disposeAndClear();

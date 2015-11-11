@@ -35,13 +35,13 @@ void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
          (rNew.IsCountBlankLines() != mpLineNumberInfo->IsCountBlankLines() ||
           rNew.IsRestartEachPage() != mpLineNumberInfo->IsRestartEachPage()) )
     {
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
         pTmpRoot->StartAllAction();
         // FME 2007-08-14 #i80120# Invalidate size, because ChgThisLines()
         // is only (and may only be) called by the formatting routines
         //pTmpRoot->InvalidateAllContent( INV_LINENUM | INV_SIZE );
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllContent), INV_LINENUM | INV_SIZE));
-         pTmpRoot->EndAllAction();
+        for( auto aLayout : GetAllLayouts() )
+            aLayout->InvalidateAllContent( INV_LINENUM | INV_SIZE );
+        pTmpRoot->EndAllAction();
     }
     *mpLineNumberInfo = rNew;
     getIDocumentState().SetModified();
@@ -140,9 +140,8 @@ void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
     if( pRoot )
     {
         pRoot->StartAllAction();
-        std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllAddPaintRect));
-        //pRoot->GetCurrShell()->AddPaintRect( pRoot->Frm() );
+        for( auto aLayout : pDoc->GetAllLayouts() )
+            aLayout->AllAddPaintRect();
         pRoot->EndAllAction();
     }
 }

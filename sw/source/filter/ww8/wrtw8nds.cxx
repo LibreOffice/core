@@ -210,8 +210,8 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     */
     if (rWr.m_bInWriteEscher)
     {
-        std::for_each(maFlyFrms.begin(), maFlyFrms.end(),
-            std::mem_fun_ref(&ww8::Frame::ForceTreatAsInline));
+        for ( auto& aFlyFrm : maFlyFrms )
+            aFlyFrm.ForceTreatAsInline();
     }
 
     maFlyIter = maFlyFrms.begin();
