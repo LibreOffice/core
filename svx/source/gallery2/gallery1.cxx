@@ -182,18 +182,18 @@ Gallery::~Gallery()
 
 Gallery* Gallery::GetGalleryInstance()
 {
-    static Gallery* pGallery = nullptr;
+    static Gallery* s_pGallery = nullptr;
 
-    if( !pGallery )
+    if (!s_pGallery)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pGallery )
+        if (!s_pGallery)
         {
-            pGallery = new Gallery( SvtPathOptions().GetGalleryPath() );
+            s_pGallery = new Gallery( SvtPathOptions().GetGalleryPath() );
         }
     }
 
-    return pGallery;
+    return s_pGallery;
 }
 
 void Gallery::ImplLoad( const OUString& rMultiPath )
