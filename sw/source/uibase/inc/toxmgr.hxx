@@ -31,32 +31,32 @@ class SwForm;
 //one single method will be sufficient to insert AND upate indexes
 class SW_DLLPUBLIC SwTOXDescription
 {
-    TOXTypes            eTOXType;
-    OUString            aStyleNames[MAXLEVEL];
-    OUString            sSequenceName;
-    OUString            sMainEntryCharStyle;
-    OUString            sAutoMarkURL;
-    OUString*           pTitle;
-    OUString*           pTOUName;
-    SwForm*             pForm;
-    sal_uInt16          nContent;
-    sal_uInt16          nIndexOptions;
-    sal_uInt16          nOLEOptions;
-    LanguageType        eLanguage;
-    OUString            sSortAlgorithm;
+    TOXTypes            m_eTOXType;
+    OUString            m_aStyleNames[MAXLEVEL];
+    OUString            m_sSequenceName;
+    OUString            m_sMainEntryCharStyle;
+    OUString            m_sAutoMarkURL;
+    OUString*           m_pTitle;
+    OUString*           m_pTOUName;
+    SwForm*             m_pForm;
+    sal_uInt16          m_nContent;
+    sal_uInt16          m_nIndexOptions;
+    sal_uInt16          m_nOLEOptions;
+    LanguageType        m_eLanguage;
+    OUString            m_sSortAlgorithm;
 
-    OUString            sAuthBrackets;
-    SwCaptionDisplay    eCaptionDisplay;
-    SwTOXSortKey        eSortKey1;
-    SwTOXSortKey        eSortKey2;
-    SwTOXSortKey        eSortKey3;
-    sal_uInt8           nLevel;
-    bool                bFromObjectNames : 1;
-    bool                bFromChapter : 1;
-    bool                bReadonly: 1;
-    bool                bLevelFromChapter : 1;
-    bool                bIsAuthSequence :1;
-    bool                bSortByDocument :1;
+    OUString            m_sAuthBrackets;
+    SwCaptionDisplay    m_eCaptionDisplay;
+    SwTOXSortKey        m_eSortKey1;
+    SwTOXSortKey        m_eSortKey2;
+    SwTOXSortKey        m_eSortKey3;
+    sal_uInt8           m_nLevel;
+    bool                m_bFromObjectNames : 1;
+    bool                m_bFromChapter : 1;
+    bool                m_bReadonly: 1;
+    bool                m_bLevelFromChapter : 1;
+    bool                m_bIsAuthSequence :1;
+    bool                m_bSortByDocument :1;
 
     //TODO: TemplateNames
     //const String* pTemplateName = 0, ???
@@ -67,104 +67,104 @@ class SW_DLLPUBLIC SwTOXDescription
 public:
     // single argument ctors shall be explicit.
     explicit SwTOXDescription(TOXTypes eType) :
-        eTOXType(eType),
-        pTitle(nullptr),
-        pTOUName(nullptr),
-        pForm(nullptr),
-        nContent(nsSwTOXElement::TOX_MARK | nsSwTOXElement::TOX_OUTLINELEVEL),
-        nIndexOptions(nsSwTOIOptions::TOI_SAME_ENTRY|nsSwTOIOptions::TOI_FF|nsSwTOIOptions::TOI_CASE_SENSITIVE),
-        nOLEOptions(0),
-        eLanguage((LanguageType)::GetAppLanguage()),
-        eCaptionDisplay(CAPTION_COMPLETE),
-        nLevel(MAXLEVEL),
-        bFromObjectNames(false),
-        bFromChapter(false),
-        bReadonly(true),
-        bLevelFromChapter(false),
-        bIsAuthSequence(false),
-        bSortByDocument(true)
+        m_eTOXType(eType),
+        m_pTitle(nullptr),
+        m_pTOUName(nullptr),
+        m_pForm(nullptr),
+        m_nContent(nsSwTOXElement::TOX_MARK | nsSwTOXElement::TOX_OUTLINELEVEL),
+        m_nIndexOptions(nsSwTOIOptions::TOI_SAME_ENTRY|nsSwTOIOptions::TOI_FF|nsSwTOIOptions::TOI_CASE_SENSITIVE),
+        m_nOLEOptions(0),
+        m_eLanguage((LanguageType)::GetAppLanguage()),
+        m_eCaptionDisplay(CAPTION_COMPLETE),
+        m_nLevel(MAXLEVEL),
+        m_bFromObjectNames(false),
+        m_bFromChapter(false),
+        m_bReadonly(true),
+        m_bLevelFromChapter(false),
+        m_bIsAuthSequence(false),
+        m_bSortByDocument(true)
         {}
     ~SwTOXDescription()
         {
-            delete pTitle;
-            delete pForm;
-            delete pTOUName;
+            delete m_pTitle;
+            delete m_pForm;
+            delete m_pTOUName;
         }
 
-    TOXTypes        GetTOXType() const { return eTOXType;}
+    TOXTypes        GetTOXType() const { return m_eTOXType;}
 
     const OUString& GetStyleNames(sal_uInt16 nLvl) const
-                                {return aStyleNames[nLvl];}
+                                {return m_aStyleNames[nLvl];}
     void            SetStyleNames(const OUString& rSet, sal_uInt16 nLvl)
-                                {aStyleNames[nLvl] = rSet; }
+                                {m_aStyleNames[nLvl] = rSet; }
 
-    const OUString& GetAutoMarkURL() const { return sAutoMarkURL;}
-    void            SetAutoMarkURL(const OUString& rSet) {sAutoMarkURL = rSet;}
+    const OUString& GetAutoMarkURL() const { return m_sAutoMarkURL;}
+    void            SetAutoMarkURL(const OUString& rSet) {m_sAutoMarkURL = rSet;}
 
-    void            SetTitle(const OUString& pSet) {delete pTitle; pTitle = new OUString(pSet);}
-    const OUString* GetTitle() const {return pTitle; }
+    void            SetTitle(const OUString& pSet) {delete m_pTitle; m_pTitle = new OUString(pSet);}
+    const OUString* GetTitle() const {return m_pTitle; }
 
-    void            SetTOUName(const OUString& pSet) {delete pTOUName; pTOUName = new OUString(pSet);}
-    const OUString* GetTOUName() const {return pTOUName; }
+    void            SetTOUName(const OUString& pSet) {delete m_pTOUName; m_pTOUName = new OUString(pSet);}
+    const OUString* GetTOUName() const {return m_pTOUName; }
 
-    void            SetForm(const SwForm& rSet) {delete pForm; pForm = new SwForm(rSet);}
-    const SwForm*   GetForm() const {return pForm;}
+    void            SetForm(const SwForm& rSet) {delete m_pForm; m_pForm = new SwForm(rSet);}
+    const SwForm*   GetForm() const {return m_pForm;}
 
-    void            SetContentOptions(sal_uInt16 nSet) { nContent = nSet;}
-    sal_uInt16          GetContentOptions() const { return nContent;}
+    void            SetContentOptions(sal_uInt16 nSet) { m_nContent = nSet;}
+    sal_uInt16          GetContentOptions() const { return m_nContent;}
 
-    void            SetIndexOptions(sal_uInt16 nSet) { nIndexOptions = nSet;}
-    sal_uInt16          GetIndexOptions() const { return nIndexOptions;}
+    void            SetIndexOptions(sal_uInt16 nSet) { m_nIndexOptions = nSet;}
+    sal_uInt16          GetIndexOptions() const { return m_nIndexOptions;}
 
-    const OUString& GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
-    void            SetMainEntryCharStyle(const OUString& rSet)  {sMainEntryCharStyle = rSet;}
+    const OUString& GetMainEntryCharStyle() const {return m_sMainEntryCharStyle;}
+    void            SetMainEntryCharStyle(const OUString& rSet)  {m_sMainEntryCharStyle = rSet;}
 
-    void            SetLevel(sal_uInt8 nSet) {nLevel = nSet;}
-    sal_uInt8           GetLevel()const  {return nLevel; }
+    void            SetLevel(sal_uInt8 nSet) {m_nLevel = nSet;}
+    sal_uInt8           GetLevel()const  {return m_nLevel; }
 
-    void            SetCreateFromObjectNames(bool bSet) { bFromObjectNames = bSet;}
-    bool            IsCreateFromObjectNames() const {return bFromObjectNames;}
+    void            SetCreateFromObjectNames(bool bSet) { m_bFromObjectNames = bSet;}
+    bool            IsCreateFromObjectNames() const {return m_bFromObjectNames;}
 
-    const OUString& GetSequenceName() const {return sSequenceName;}
-    void            SetSequenceName(const OUString& rSet) {sSequenceName = rSet;}
+    const OUString& GetSequenceName() const {return m_sSequenceName;}
+    void            SetSequenceName(const OUString& rSet) {m_sSequenceName = rSet;}
 
-    SwCaptionDisplay    GetCaptionDisplay() const { return eCaptionDisplay;}
-    void                SetCaptionDisplay(SwCaptionDisplay eSet) {eCaptionDisplay = eSet;}
+    SwCaptionDisplay    GetCaptionDisplay() const { return m_eCaptionDisplay;}
+    void                SetCaptionDisplay(SwCaptionDisplay eSet) {m_eCaptionDisplay = eSet;}
 
-    void            SetFromChapter(bool bSet) { bFromChapter = bSet;}
-    bool            IsFromChapter() const {return bFromChapter;}
+    void            SetFromChapter(bool bSet) { m_bFromChapter = bSet;}
+    bool            IsFromChapter() const {return m_bFromChapter;}
 
-    void            SetReadonly(bool bSet){bReadonly = bSet;}
-    bool            IsReadonly() const {return bReadonly;}
+    void            SetReadonly(bool bSet){m_bReadonly = bSet;}
+    bool            IsReadonly() const {return m_bReadonly;}
 
-    sal_uInt16          GetOLEOptions() const {return nOLEOptions;}
-    void            SetOLEOptions(sal_uInt16 nOpt) {nOLEOptions = nOpt;}
+    sal_uInt16          GetOLEOptions() const {return m_nOLEOptions;}
+    void            SetOLEOptions(sal_uInt16 nOpt) {m_nOLEOptions = nOpt;}
 
-    bool            IsLevelFromChapter() const {return bLevelFromChapter;}
-    void            SetLevelFromChapter(bool bSet) {bLevelFromChapter = bSet;}
+    bool            IsLevelFromChapter() const {return m_bLevelFromChapter;}
+    void            SetLevelFromChapter(bool bSet) {m_bLevelFromChapter = bSet;}
 
-    OUString        GetAuthBrackets() const {return sAuthBrackets;}
-    void            SetAuthBrackets(const OUString& rSet) {sAuthBrackets = rSet;}
+    OUString        GetAuthBrackets() const {return m_sAuthBrackets;}
+    void            SetAuthBrackets(const OUString& rSet) {m_sAuthBrackets = rSet;}
 
-    bool            IsAuthSequence() const {return bIsAuthSequence;}
-    void            SetAuthSequence(bool bSet){bIsAuthSequence = bSet;}
+    bool            IsAuthSequence() const {return m_bIsAuthSequence;}
+    void            SetAuthSequence(bool bSet){m_bIsAuthSequence = bSet;}
 
-    bool            IsSortByDocument()const {return bSortByDocument ;}
-    void            SetSortByDocument(bool bSet) {bSortByDocument = bSet;}
+    bool            IsSortByDocument()const {return m_bSortByDocument ;}
+    void            SetSortByDocument(bool bSet) {m_bSortByDocument = bSet;}
 
     void SetSortKeys(SwTOXSortKey eKey1,
                         SwTOXSortKey eKey2,
                             SwTOXSortKey eKey3);
 
-    SwTOXSortKey GetSortKey1() const {return eSortKey1;}
-    SwTOXSortKey GetSortKey2() const {return eSortKey2;}
-    SwTOXSortKey GetSortKey3() const {return eSortKey3;}
+    SwTOXSortKey GetSortKey1() const {return m_eSortKey1;}
+    SwTOXSortKey GetSortKey2() const {return m_eSortKey2;}
+    SwTOXSortKey GetSortKey3() const {return m_eSortKey3;}
 
-    LanguageType    GetLanguage() const {return eLanguage;}
-    void            SetLanguage(LanguageType nLang)  {eLanguage = nLang;}
+    LanguageType    GetLanguage() const {return m_eLanguage;}
+    void            SetLanguage(LanguageType nLang)  {m_eLanguage = nLang;}
 
-    const OUString& GetSortAlgorithm()const {return sSortAlgorithm;}
-    void            SetSortAlgorithm(const OUString& rSet) {sSortAlgorithm = rSet;}
+    const OUString& GetSortAlgorithm()const {return m_sSortAlgorithm;}
+    void            SetSortAlgorithm(const OUString& rSet) {m_sSortAlgorithm = rSet;}
 
     void            ApplyTo(SwTOXBase& rTOXBase);
 

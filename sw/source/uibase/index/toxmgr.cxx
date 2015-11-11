@@ -471,9 +471,9 @@ void SwTOXDescription::SetSortKeys(SwTOXSortKey eKey1,
     if(AUTH_FIELD_END > eKey3.eField)
         aArr[nPos++] = eKey3;
 
-    eSortKey1 = aArr[0];
-    eSortKey2 = aArr[1];
-    eSortKey3 = aArr[2];
+    m_eSortKey1 = aArr[0];
+    m_eSortKey2 = aArr[1];
+    m_eSortKey3 = aArr[2];
 }
 
 void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
@@ -494,8 +494,8 @@ void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
     rTOXBase.SetProtected(IsReadonly());
     rTOXBase.SetOLEOptions(GetOLEOptions());
     rTOXBase.SetLevelFromChapter(IsLevelFromChapter());
-    rTOXBase.SetLanguage(eLanguage);
-    rTOXBase.SetSortAlgorithm(sSortAlgorithm);
+    rTOXBase.SetLanguage(m_eLanguage);
+    rTOXBase.SetSortAlgorithm(m_sSortAlgorithm);
 
 }
 
