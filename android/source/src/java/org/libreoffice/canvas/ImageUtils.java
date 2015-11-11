@@ -1,24 +1,31 @@
 package org.libreoffice.canvas;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 public class ImageUtils {
-    /**
-     * Convert transparent pixels to gray ones.
-     */
-    public static Bitmap bitmapToPressed(Bitmap input) {
-        Bitmap op = Bitmap.createBitmap(input.getWidth(), input.getHeight(), input.getConfig());
-        for(int i=0; i<op.getWidth(); i++){
-            for(int j=0; j<op.getHeight(); j++){
-                int p = input.getPixel(i, j);
-                // assign gray color if the pixel in input is transparent.
-                int newColor = Color.alpha(p) == 0 ? Color.argb(255, 200, 200, 200) : p;
-                op.setPixel(i, j, newColor);
-            }
-        }
+    public static Bitmap getBitmapForDrawable(Drawable drawable) {
+        drawable = drawable.mutate();
 
-        return op;
+        int width = !drawable.getBounds().isEmpty() ?
+                drawable.getBounds().width() : drawable.getIntrinsicWidth();
+
+        width = width <= 0 ? 1 : width;
+
+        int height = !drawable.getBounds().isEmpty() ?
+                drawable.getBounds().height() : drawable.getIntrinsicHeight();
+
+        height = height <= 0 ? 1 : height;
+
+        final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

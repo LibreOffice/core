@@ -95,7 +95,8 @@
     <color name="toolbar_forgeround">#3e3e3e</color>
     <color name="toolbar_background">#ffffff</color>
 
-    <color name="handle_color">#40A040</color>
+    <color name="handle_color">#26a69a</color>
 
+    <color name="button_selected_background">#33000000</color>
 </resources>
 

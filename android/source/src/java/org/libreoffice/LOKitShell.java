@@ -59,6 +59,14 @@ public class LOKitShell {
         return LibreOfficeMainActivity.mAppContext.getToolbarController();
     }
 
+    public static FormattingController getFormattingController() {
+        return LibreOfficeMainActivity.mAppContext.getFormattingController();
+    }
+
+    public static FontController getFontController() {
+        return LibreOfficeMainActivity.mAppContext.getFontController();
+    }
+
     public static int getMemoryClass(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         return activityManager.getMemoryClass() * 1024 * 1024;

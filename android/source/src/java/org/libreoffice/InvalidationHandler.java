@@ -88,15 +88,29 @@ public class InvalidationHandler implements Document.MessageCallback {
             Log.e(LOGTAG, "LOK_CALLBACK_STATE_CHANGED unexpected payload: " + payload);
             return;
         }
-        boolean pressed = Boolean.parseBoolean(parts[1]);
+        final String value = parts[1];
+        boolean pressed = Boolean.parseBoolean(value);
+
         if (parts[0].equals(".uno:Bold")) {
-            LOKitShell.getToolbarController().onToggleStateChanged(Document.BOLD, pressed);
+            LOKitShell.getFormattingController().onToggleStateChanged(Document.BOLD, pressed);
         } else if (parts[0].equals(".uno:Italic")) {
-            LOKitShell.getToolbarController().onToggleStateChanged(Document.ITALIC, pressed);
+            LOKitShell.getFormattingController().onToggleStateChanged(Document.ITALIC, pressed);
         } else if (parts[0].equals(".uno:Underline")) {
-            LOKitShell.getToolbarController().onToggleStateChanged(Document.UNDERLINE, pressed);
+            LOKitShell.getFormattingController().onToggleStateChanged(Document.UNDERLINE, pressed);
         } else if (parts[0].equals(".uno:Strikeout")) {
-            LOKitShell.getToolbarController().onToggleStateChanged(Document.STRIKEOUT, pressed);
+            LOKitShell.getFormattingController().onToggleStateChanged(Document.STRIKEOUT, pressed);
+        } else if (parts[0].equals(".uno:CharFontName")) {
+            LOKitShell.getFontController().selectFont(value);
+        } else if (parts[0].equals(".uno:FontHeight")) {
+            LOKitShell.getFontController().selectFontSize(value);
+        } else if (parts[0].equals(".uno:LeftPara")) {
+            LOKitShell.getFormattingController().onToggleStateChanged(Document.ALIGN_LEFT, pressed);
+        } else if (parts[0].equals(".uno:CenterPara")) {
+            LOKitShell.getFormattingController().onToggleStateChanged(Document.ALIGN_CENTER, pressed);
+        } else if (parts[0].equals(".uno:RightPara")) {
+            LOKitShell.getFormattingController().onToggleStateChanged(Document.ALIGN_RIGHT, pressed);
+        } else if (parts[0].equals(".uno:JustifyPara")) {
+            LOKitShell.getFormattingController().onToggleStateChanged(Document.ALIGN_JUSTIFY, pressed);
         } else {
             Log.d(LOGTAG, "LOK_CALLBACK_STATE_CHANGED type uncatched: " + payload);
         }
@@ -383,7 +397,7 @@ public class InvalidationHandler implements Document.MessageCallback {
      * Handle a transition to OverlayState.CURSOR state.
      */
     private void handleCursorState(OverlayState previous) {
-        LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
+        LibreOfficeMainActivity.mAppContext.showSoftKeyboardOrFormattingToolbar();
         if (previous == OverlayState.TRANSITION) {
             mDocumentOverlay.showHandle(SelectionHandle.HandleType.MIDDLE);
             mDocumentOverlay.showCursor();
