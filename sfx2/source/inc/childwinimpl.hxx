@@ -22,7 +22,6 @@
 
 #include <sfx2/childwin.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 #include <memory>
 
@@ -42,7 +41,7 @@ public:
 
 class SfxChildWinFactArr_Impl
 {
-    typedef boost::ptr_vector<SfxChildWinFactory> DataType;
+    typedef std::vector<std::unique_ptr<SfxChildWinFactory> > DataType;
     DataType maData;
 
 public:
