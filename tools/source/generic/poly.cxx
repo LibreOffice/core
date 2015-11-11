@@ -1586,8 +1586,6 @@ SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
 
 SvStream& WritePolygon( SvStream& rOStream, const tools::Polygon& rPoly )
 {
-    SAL_WARN_IF( !rOStream.GetVersion(), "tools", "Polygon::<< - Solar-Version not set on rOStream" );
-
     sal_uInt16          i;
     sal_uInt16          nPoints = rPoly.GetSize();
 

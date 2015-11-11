@@ -645,8 +645,6 @@ void PolyPolygon::Write( SvStream& rOStream ) const
 {
     VersionCompat aCompat( rOStream, StreamMode::WRITE, 1 );
 
-    SAL_WARN_IF( !rOStream.GetVersion(), "tools", "PolyPolygon::<< - Solar-Version not set on rOStream" );
-
     // Write number of polygons
     sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
     rOStream.WriteUInt16( nPolyCount );
