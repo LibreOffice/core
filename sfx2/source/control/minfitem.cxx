@@ -21,7 +21,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-SfxPoolItem* SfxMacroInfoItem::CreateDefault() { DBG_ASSERT(false, "No SfxMacroInfItem factory available"); return 0; }
+SfxPoolItem* SfxMacroInfoItem::CreateDefault() { DBG_ASSERT(false, "No SfxMacroInfItem factory available"); return nullptr; }
 
 
 
