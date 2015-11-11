@@ -3093,8 +3093,8 @@ void SwAccessibleMap::FireEvents()
         {
             mpEvents->SetFiring();
             mpEvents->MoveInvalidXAccToEnd();
-            ::std::for_each(mpEvents->begin(), mpEvents->end(),
-                [this] (SwAccessibleEvent_Impl const& rEvent) { this->FireEvent(rEvent); } );
+            for( auto const& aEvent : *mpEvents )
+                 FireEvent(aEvent);
 
             delete mpEventMap;
             mpEventMap = nullptr;

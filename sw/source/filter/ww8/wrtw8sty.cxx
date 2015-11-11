@@ -910,8 +910,8 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
     /*
      * Write them all to pTableStream
      */
-    ::std::for_each(aFontList.begin(), aFontList.end(),
-        ::std::bind2nd(::std::mem_fun(&wwFont::Write),pTableStream));
+    for ( auto aFont : aFontList )
+        aFont->Write(pTableStream);
 
     /*
      * Write the position and len in the FIB
@@ -924,16 +924,16 @@ void wwFontHelper::WriteFontTable( DocxAttributeOutput& rAttrOutput )
 {
     ::std::vector<const wwFont *> aFontList( AsVector() );
 
-    ::std::for_each( aFontList.begin(), aFontList.end(),
-        ::std::bind2nd( ::std::mem_fun( &wwFont::WriteDocx ), &rAttrOutput ) );
+    for ( auto aFont : aFontList )
+        aFont->WriteDocx(&rAttrOutput);
 }
 
 void wwFontHelper::WriteFontTable( const RtfAttributeOutput& rAttrOutput )
 {
     ::std::vector<const wwFont *> aFontList( AsVector() );
 
-    ::std::for_each( aFontList.begin(), aFontList.end(),
-        ::std::bind2nd( ::std::mem_fun( &wwFont::WriteRtf ), &rAttrOutput ) );
+    for ( auto aFont : aFontList )
+        aFont->WriteRtf(&rAttrOutput);
 }
 
 WW8_WrPlc0::WW8_WrPlc0( sal_uLong nOffset )

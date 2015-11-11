@@ -434,8 +434,8 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLan
     if( pTmpRoot && !m_rDoc.IsInReading() )
     {
         pTmpRoot->StartAllAction();
-        std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllContent), INV_SIZE));
+        for(SwRootFrm* aLayout : m_rDoc.GetAllLayouts())
+            aLayout->InvalidateAllContent(INV_SIZE);
         pTmpRoot->EndAllAction();
     }
     m_rDoc.getIDocumentState().SetModified();
@@ -504,8 +504,8 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
         if( pTmpRoot && !m_rDoc.IsInReading() )
         {
             pTmpRoot->StartAllAction();
-            std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllContent), INV_SIZE));
+            for( auto aLayout : m_rDoc.GetAllLayouts() )
+                aLayout->InvalidateAllContent(INV_SIZE);
             pTmpRoot->EndAllAction();
         }
         m_rDoc.getIDocumentState().SetModified();

@@ -339,8 +339,8 @@ void DocumentDeviceManager::PrtDataChanged()
 
             pFntCache->Flush();
 
-            std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllContent), INV_SIZE));
+            for(SwRootFrm* aLayout : m_rDoc.GetAllLayouts())
+                aLayout->InvalidateAllContent(INV_SIZE);
 
             for(SwViewShell& rShell : pSh->GetRingContainer())
                 rShell.InitPrt(getPrinter(false));

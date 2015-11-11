@@ -240,7 +240,8 @@ void SwFootnoteIdxs::UpdateAllFootnote()
     }
 
     if( pTmpRoot && FTNNUM_PAGE == rFootnoteInfo.eNum )
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFootnoteNums));
+        for( auto aLayout : aAllLayouts )
+            aLayout->UpdateFootnoteNums();
 }
 
 SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFndPos ) const

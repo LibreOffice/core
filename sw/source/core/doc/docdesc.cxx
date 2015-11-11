@@ -499,8 +499,8 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     if ( (bUseOn || bFollow) && pTmpRoot)
         // Inform layout!
     {
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
+        for( auto aLayout : GetAllLayouts() )
+            aLayout->AllCheckPageDescs();
     }
 
     // Take over the page attributes.
@@ -564,8 +564,8 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         mpFootnoteInfo->ChgPageDesc(m_PageDescs[0].get());
         if ( bHasLayout )
         {
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFootnotePageDescs), false));
+            for( auto aLayout : GetAllLayouts() )
+                aLayout->CheckFootnotePageDescs(false);
         }
     }
     else if ( mpEndNoteInfo->DependsOn( pDel ) )
@@ -573,8 +573,8 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         mpEndNoteInfo->ChgPageDesc(m_PageDescs[0].get());
         if ( bHasLayout )
         {
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFootnotePageDescs), true));
+            for( auto aLayout : GetAllLayouts() )
+                aLayout->CheckFootnotePageDescs(true);
         }
     }
 
@@ -585,8 +585,8 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
             m_PageDescs[j]->SetFollow(nullptr);
             if( bHasLayout )
             {
-                std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
+                for( auto aLayout : GetAllLayouts() )
+                    aLayout->AllCheckPageDescs();
             }
         }
     }

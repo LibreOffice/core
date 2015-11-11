@@ -1502,8 +1502,8 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
     if( bNotifyLayout && pTmpRoot )
     {
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
+        for( auto aLayout : GetAllLayouts() )
+            aLayout->AllCheckPageDescs();
     }
 
     // If foot notes change the pages have to be triggered

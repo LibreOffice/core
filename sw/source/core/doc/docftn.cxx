@@ -279,12 +279,15 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
         {
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
             if ( bFootnotePos )
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllRemoveFootnotes));
+                for( auto aLayout : aAllLayouts )
+                    aLayout->AllRemoveFootnotes();
             else
             {
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFootnoteNums));
+                for( auto aLayout : aAllLayouts )
+                    aLayout->UpdateFootnoteNums();
                 if ( bFootnoteDesc )
-                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFootnotePageDescs), false));
+                    for( auto aLayout : aAllLayouts )
+                        aLayout->CheckFootnotePageDescs(false);
                 if ( bExtra )
                 {
                     // For messages regarding ErgoSum etc. we save the extra code and use the
@@ -351,8 +354,8 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         {
             if ( bFootnoteDesc )
             {
-                std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFootnotePageDescs), true));
+                for( auto aLayout : GetAllLayouts() )
+                    aLayout->CheckFootnotePageDescs(true);
             }
             if ( bExtra )
             {
@@ -487,8 +490,8 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
         }
         else if( pTmpRoot )
         {
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFootnoteNums));
+            for( auto aLayout : GetAllLayouts() )
+                aLayout->UpdateFootnoteNums();
         }
         getIDocumentState().SetModified();
     }
