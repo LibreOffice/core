@@ -1620,17 +1620,16 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
     TextNode* pNode = mpDoc->GetNodes()[ nPara ];
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
 
-    TextLine* pTmpLine = new TextLine;
-    pTmpLine->SetStart( pNode->GetText().getLength() );
-    pTmpLine->SetEnd( pTmpLine->GetStart() );
-    pTEParaPortion->GetLines().push_back( pTmpLine );
+    TextLine aTmpLine;
+    aTmpLine.SetStart( pNode->GetText().getLength() );
+    aTmpLine.SetEnd( aTmpLine.GetStart() );
 
     if ( ImpGetAlign() == TXTALIGN_CENTER )
-        pTmpLine->SetStartX( (short)(mnMaxTextWidth / 2) );
+        aTmpLine.SetStartX( (short)(mnMaxTextWidth / 2) );
     else if ( ImpGetAlign() == TXTALIGN_RIGHT )
-        pTmpLine->SetStartX( (short)mnMaxTextWidth );
+        aTmpLine.SetStartX( (short)mnMaxTextWidth );
     else
-        pTmpLine->SetStartX( mpDoc->GetLeftMargin() );
+        aTmpLine.SetStartX( mpDoc->GetLeftMargin() );
 
     bool bLineBreak = !pNode->GetText().isEmpty();
 
@@ -1642,9 +1641,10 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
     {
         // -2: The new one is already inserted.
         sal_uInt16 nPos = (sal_uInt16) pTEParaPortion->GetTextPortions().size() - 1 ;
-        pTmpLine->SetStartPortion( nPos );
-        pTmpLine->SetEndPortion( nPos );
+        aTmpLine.SetStartPortion( nPos );
+        aTmpLine.SetEndPortion( nPos );
     }
+    pTEParaPortion->GetLines().push_back( aTmpLine );
 }
 
 void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*, sal_Int32 nPortionStart, long nRemainingWidth )
@@ -2142,8 +2142,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
     // initialization
     if ( pTEParaPortion->GetLines().empty() )
     {
-        TextLine* pL = new TextLine;
-        pTEParaPortion->GetLines().push_back( pL );
+        pTEParaPortion->GetLines().push_back( TextLine() );
     }
 
     const sal_Int32 nInvalidDiff = pTEParaPortion->GetInvalidDiff();
@@ -2394,8 +2393,9 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         {
             if ( nIndex < pNode->GetText().getLength() )
             {
-                pLine = new TextLine;
-                pTEParaPortion->GetLines().insert( pTEParaPortion->GetLines().begin() + ++nLine, pLine );
+                ++nLine;
+                pTEParaPortion->GetLines().insert( pTEParaPortion->GetLines().begin() + nLine, TextLine() );
+                pLine = &pTEParaPortion->GetLines()[nLine];
             }
             else
             {
