@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_59413439",
+        "filename": "external/neon/UnpackedTarball_neon.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-11T14:49:31Z",
+      "side": 1,
+      "message": "\"it is even clear that in \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d90249#c15\u003e (claiming success on Mac) an appropriate WebDAV server was used?\"\n\nI wrote the instruction to carry out the test in this mail:\n\u003chttp://nabble.documentfoundation.org/Libreoffice-qa-Need-help-to-verify-issue-tdf-90449-on-Mac-platform-tt4165655.html\u003e\n\n\"but to LO versions where \u0027long\u0027 is 32-bit\"\n\nYou are right, I tested on Linux 32bit, where the issue is confirmed.\n\nIn the end the fix needs to be on all platforms.",
+      "parentUuid": "faac7902_a74e3894",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_2c098f32",
         "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
         "patchSetId": 2
