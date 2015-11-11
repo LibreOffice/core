@@ -570,6 +570,9 @@ public:
 
 class SVX_DLLPUBLIC ControlConversionMenuController : public SfxMenuControl
 {
+    ControlConversionMenuController( const ControlConversionMenuController&) = delete;
+    ControlConversionMenuController& operator =( const ControlConversionMenuController&) = delete;
+
 protected:
     std::vector<std::unique_ptr<SfxStatusForwarder> > m_aStatusForwarders;
     Menu*                   m_pMainMenu;
