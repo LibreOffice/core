@@ -90,7 +90,7 @@ public:
     virtual css::uno::Sequence< Currency2 > SAL_CALL getAllCurrencies2( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< FormatElement > SAL_CALL getAllFormats( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< Implementation > SAL_CALL getCollatorImplementations( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException, std::exception);
     virtual css::uno::Sequence< OUString > SAL_CALL getTransliterations( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual ForbiddenCharacters SAL_CALL getForbiddenCharacters( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getReservedWord( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override ;

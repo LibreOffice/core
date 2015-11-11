@@ -931,7 +931,7 @@ LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale ) throw(Runtime
 #define COLLATOR_ELEMENTS       3
 
 OUString SAL_CALL
-LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
+LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException, std::exception)
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
     if ( func ) {
