@@ -94,7 +94,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getTransliterations( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual ForbiddenCharacters SAL_CALL getForbiddenCharacters( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getReservedWord( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override ;
-    virtual css::uno::Sequence< OUString > SAL_CALL getBreakIteratorRules( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException) ;
+    virtual css::uno::Sequence< OUString > SAL_CALL getBreakIteratorRules( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) ;
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getAllInstalledLocaleNames() throw(css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSearchOptions( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;

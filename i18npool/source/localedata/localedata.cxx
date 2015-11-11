@@ -1221,7 +1221,7 @@ LocaleDataImpl::getHangingCharacters( const Locale& rLocale ) throw(RuntimeExcep
 }
 
 Sequence< OUString > SAL_CALL
-LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  ) throw(RuntimeException)
+LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  ) throw(RuntimeException, std::exception)
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getBreakIteratorRules" ));
 
