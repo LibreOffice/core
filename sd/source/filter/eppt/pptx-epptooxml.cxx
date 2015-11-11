@@ -548,6 +548,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
                     pThruBlk = "true";
                     bOOXmlSpecificTransition = true;
                 }
+                break;
             }
             case animations::TransitionType::MISCSHAPEWIPE:
             {
@@ -588,8 +589,8 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
                         bOOXmlSpecificTransition = true;
                         break;
                 }
+                break;
             }
-            break;
         }
     }
 
