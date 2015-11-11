@@ -120,11 +120,12 @@ bool MergeClasses::VisitCXXConstructExpr( const CXXConstructExpr* pCXXConstructE
     if (ignoreLocation(pCXXConstructExpr)) {
         return true;
     }
-    const CXXConstructorDecl* pCXXConstructorDecl = pCXXConstructExpr->getConstructor();
-    const CXXRecordDecl* pParentCXXRecordDecl = pCXXConstructorDecl->getParent();
-    if (ignoreLocation(pParentCXXRecordDecl)) {
+    // ignore calls when a sub-class is constructing it's superclass
+    if (pCXXConstructExpr->getConstructionKind() != CXXConstructExpr::ConstructionKind::CK_Complete) {
         return true;
     }
+    const CXXConstructorDecl* pCXXConstructorDecl = pCXXConstructExpr->getConstructor();
+    const CXXRecordDecl* pParentCXXRecordDecl = pCXXConstructorDecl->getParent();
     std::string s = pParentCXXRecordDecl->getQualifiedNameAsString();
     addToInstantiatedSet(s);
     return true;
