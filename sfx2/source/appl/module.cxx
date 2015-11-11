@@ -242,7 +242,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
     for ( size_t n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
     {
         SfxTbxCtrlFactory *pF = &(*pImpl->pTbxCtrlFac)[n];
-        if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
+        if ( pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
             SAL_INFO("sfx2.appl", "TbxController-Registering is not clearly defined!");
@@ -264,7 +264,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
     for ( size_t n=0; n<pImpl->pStbCtrlFac->size(); n++ )
     {
         SfxStbCtrlFactory *pF = &(*pImpl->pStbCtrlFac)[n];
-        if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
+        if ( pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
             SAL_INFO("sfx2.appl", "TbxController-Registering is not clearly defined!");
@@ -286,7 +286,7 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
     for ( size_t n=0; n<pImpl->pMenuCtrlFac->size(); n++ )
     {
         SfxMenuCtrlFactory *pF = &(*pImpl->pMenuCtrlFac)[n];
-        if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
+        if ( pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
             SAL_INFO("sfx2.appl", "MenuController-Registering is not clearly defined!");

@@ -1830,7 +1830,7 @@ bool SfxDispatcher::_FillState(const SfxSlotServer& rSvr, SfxItemSet& rState,
                 {
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
                     SAL_INFO_IF(
-                        !pItem->IsA(pIF->GetSlot(nSlotId)->GetType()->Type()),
+                        typeid(pItem) != *pIF->GetSlot(nSlotId)->GetType()->Type(),
                         "sfx.control",
                         "item-type unequal to IDL (=> no BASIC) with SID: "
                             << nSlotId << " in " << pIF->GetClassName());
