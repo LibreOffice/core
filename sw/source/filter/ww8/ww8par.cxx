@@ -3540,7 +3540,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 //
                 //So the 0x7 should be right at the end of the previous
                 //range to be a real cell-end.
-                if (pPap->nOrigStartPos == nCpOfs+nPosCp+1 ||
+                if (pPap->nOrigStartPos == nPosCp+1 ||
                     pPap->nOrigStartPos == WW8_CP_MAX)
                 {
                     TabCellEnd();       // Table cell/row end
