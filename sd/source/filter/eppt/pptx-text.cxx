@@ -49,6 +49,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <o3tl/make_unique.hxx>
 
 css::uno::Reference< css::i18n::XBreakIterator > xPPTBreakIter;
 
@@ -725,7 +726,7 @@ ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > & rXTe
                     {
                         PortionObj* pPortionObj = new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection );
                         if ( pPortionObj->Count() )
-                            mvPortions.push_back( pPortionObj );
+                            mvPortions.push_back( std::unique_ptr<PortionObj>(pPortionObj) );
                         else
                             delete pPortionObj;
                     }
@@ -751,8 +752,8 @@ ParagraphObj::~ParagraphObj()
 
 void ParagraphObj::Write( SvStream* pStrm )
 {
-    for ( boost::ptr_vector<PortionObj>::iterator it = mvPortions.begin(); it != mvPortions.end(); ++it )
-        it->Write( pStrm, mbLastParagraph );
+    for ( std::vector<std::unique_ptr<PortionObj> >::iterator it = mvPortions.begin(); it != mvPortions.end(); ++it )
+        (*it)->Write( pStrm, mbLastParagraph );
 }
 
 void ParagraphObj::ImplClear()
@@ -916,7 +917,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                     }
                 }
 
-                CalculateGraphicBulletSize( ( mvPortions.empty() ) ? 24 : mvPortions.front().mnCharHeight );
+                CalculateGraphicBulletSize( ( mvPortions.empty() ) ? 24 : mvPortions.front()->mnCharHeight );
 
                 switch( nNumberingType )
                 {
@@ -1228,8 +1229,8 @@ void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
     mbForbiddenRules = rParagraphObj.mbForbiddenRules;
     mnBiDi = rParagraphObj.mnBiDi;
 
-    for ( boost::ptr_vector<PortionObj>::const_iterator it = rParagraphObj.begin(); it != rParagraphObj.end(); ++it )
-        mvPortions.push_back( new PortionObj( *it ) );
+    for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = rParagraphObj.begin(); it != rParagraphObj.end(); ++it )
+        mvPortions.push_back( o3tl::make_unique<PortionObj>( **it ) );
 
     maTabStop = rParagraphObj.maTabStop;
     bExtendedParameters = rParagraphObj.bExtendedParameters;
@@ -1257,8 +1258,8 @@ void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
 sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition )
 {
     mnTextSize = 0;
-    for ( boost::ptr_vector<PortionObj>::iterator it = mvPortions.begin(); it != mvPortions.end(); ++it )
-        mnTextSize += it->ImplCalculateTextPositions( nCurrentTextPosition + mnTextSize );
+    for ( std::vector<std::unique_ptr<PortionObj> >::iterator it = mvPortions.begin(); it != mvPortions.end(); ++it )
+        mnTextSize += (*it)->ImplCalculateTextPositions( nCurrentTextPosition + mnTextSize );
     return mnTextSize;
 }
 

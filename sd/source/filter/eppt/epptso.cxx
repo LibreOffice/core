@@ -796,9 +796,9 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
     for ( sal_uInt32 i = 0; i < rTextObj.ParagraphCount(); ++i )
     {
         ParagraphObj* pPara = rTextObj.GetParagraph(i);
-        for ( boost::ptr_vector<PortionObj>::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
+        for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
         {
-            const PortionObj& rPortion = *it;
+            const PortionObj& rPortion = *(*it).get();
             nPropertyFlags = 0;
             sal_uInt32 nCharAttr = rPortion.mnCharAttr;
             sal_uInt32 nCharColor = rPortion.mnCharColor;
@@ -1094,9 +1094,9 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
         {
             pPara = aTextObj.GetParagraph(i);
-            for ( boost::ptr_vector<PortionObj>::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
+            for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
             {
-                const PortionObj& rPortion = *it;
+                const PortionObj& rPortion = *(*it).get();
                 if ( rPortion.mpFieldEntry )
                 {
                     const FieldEntry* pFieldEntry = rPortion.mpFieldEntry;
@@ -3864,9 +3864,9 @@ void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
         for ( sal_uInt32 i = 0; nCharactersLeft && i < ParagraphCount(); ++i )
         {
             ParagraphObj* pPtr = GetParagraph(i);
-            for ( boost::ptr_vector<PortionObj>::const_iterator it = pPtr->begin(); nCharactersLeft && it != pPtr->end(); ++it )
+            for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPtr->begin(); nCharactersLeft && it != pPtr->end(); ++it )
             {
-                const PortionObj& rPortion = *it;
+                const PortionObj& rPortion = *(*it).get();
                 sal_Int32 nPortionSize = rPortion.mnTextSize >= nCharactersLeft ? nCharactersLeft : rPortion.mnTextSize;
                 sal_Int32 nFlags = 7;
                 nCharactersLeft -= nPortionSize;

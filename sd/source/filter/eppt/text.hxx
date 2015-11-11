@@ -27,7 +27,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <editeng/svxenum.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 #include <memory>
 
 namespace com { namespace sun { namespace star {
@@ -177,7 +177,7 @@ class ParagraphObj : public PropStateValue, public SOParagraph
     friend class TextObj;
     friend struct PPTExParaSheet;
 
-    boost::ptr_vector<PortionObj> mvPortions;
+    std::vector<std::unique_ptr<PortionObj> > mvPortions;
         MapMode         maMapModeSrc;
         MapMode         maMapModeDest;
 
@@ -226,10 +226,10 @@ class ParagraphObj : public PropStateValue, public SOParagraph
 
     bool empty() const { return mvPortions.empty(); }
 
-    const PortionObj& front() const { return mvPortions.front(); }
+    const PortionObj& front() const { return *mvPortions.front().get(); }
 
-    boost::ptr_vector<PortionObj>::const_iterator begin() const { return mvPortions.begin(); }
-    boost::ptr_vector<PortionObj>::const_iterator end() const { return mvPortions.end(); }
+    std::vector<std::unique_ptr<PortionObj> >::const_iterator begin() const { return mvPortions.begin(); }
+    std::vector<std::unique_ptr<PortionObj> >::const_iterator end() const { return mvPortions.end(); }
 
         void            CalculateGraphicBulletSize( sal_uInt16 nFontHeight );
                         ~ParagraphObj();
