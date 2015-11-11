@@ -619,6 +619,11 @@ bool Button::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
+void Button::SetStateUno(const css::frame::FeatureStateEvent& rEvent)
+{
+    Enable(rEvent.IsEnabled);
+}
+
 IMPL_STATIC_LINK_TYPED( Button, dispatchCommandHandler, Button*, pButton, void )
 {
     if (pButton == nullptr)
@@ -1601,6 +1606,13 @@ void PushButton::SetState( TriState eState )
         CompatStateChanged( StateChangedType::State );
         Toggle();
     }
+}
+
+void PushButton::SetStateUno(const css::frame::FeatureStateEvent& rEvent)
+{
+    Button::SetStateUno(rEvent);
+    if (rEvent.State.has<bool>())
+        SetPressed(rEvent.State.get<bool>());
 }
 
 void PushButton::SetPressed( bool bPressed )
