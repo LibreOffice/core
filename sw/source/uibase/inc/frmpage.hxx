@@ -273,36 +273,36 @@ public:
 
 class SwFrmAddPage : public SfxTabPage
 {
-    VclPtr<VclContainer> pNameFrame;
-    VclPtr<FixedText>    pNameFT;
-    VclPtr<Edit>         pNameED;
-    VclPtr<FixedText>    pAltNameFT;
-    VclPtr<Edit>         pAltNameED;
-    VclPtr<FixedText>    pPrevFT;
-    VclPtr<ListBox>      pPrevLB;
-    VclPtr<FixedText>    pNextFT;
-    VclPtr<ListBox>      pNextLB;
+    VclPtr<VclContainer> m_pNameFrame;
+    VclPtr<FixedText>    m_pNameFT;
+    VclPtr<Edit>         m_pNameED;
+    VclPtr<FixedText>    m_pAltNameFT;
+    VclPtr<Edit>         m_pAltNameED;
+    VclPtr<FixedText>    m_pPrevFT;
+    VclPtr<ListBox>      m_pPrevLB;
+    VclPtr<FixedText>    m_pNextFT;
+    VclPtr<ListBox>      m_pNextLB;
 
-    VclPtr<VclContainer> pProtectFrame;
-    VclPtr<CheckBox>     pProtectContentCB;
-    VclPtr<CheckBox>     pProtectFrameCB;
-    VclPtr<CheckBox>     pProtectSizeCB;
+    VclPtr<VclContainer> m_pProtectFrame;
+    VclPtr<CheckBox>     m_pProtectContentCB;
+    VclPtr<CheckBox>     m_pProtectFrameCB;
+    VclPtr<CheckBox>     m_pProtectSizeCB;
 
     VclPtr<VclContainer> m_pContentAlignFrame;
     VclPtr<ListBox>      m_pVertAlignLB;
 
-    VclPtr<VclContainer> pPropertiesFrame;
-    VclPtr<CheckBox>     pEditInReadonlyCB;
-    VclPtr<CheckBox>     pPrintFrameCB;
-    VclPtr<FixedText>    pTextFlowFT;
-    VclPtr<ListBox>      pTextFlowLB;
+    VclPtr<VclContainer> m_pPropertiesFrame;
+    VclPtr<CheckBox>     m_pEditInReadonlyCB;
+    VclPtr<CheckBox>     m_pPrintFrameCB;
+    VclPtr<FixedText>    m_pTextFlowFT;
+    VclPtr<ListBox>      m_pTextFlowLB;
 
-    SwWrtShell*   pWrtSh;
+    SwWrtShell*   m_pWrtSh;
 
-    OUString      sDlgType;
-    bool      bHtmlMode;
-    bool      bFormat;
-    bool      bNew;
+    OUString      m_sDlgType;
+    bool      m_bHtmlMode;
+    bool      m_bFormat;
+    bool      m_bNew;
 
     DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
     DECL_LINK_TYPED(ChainModifyHdl, ListBox&, void);
@@ -321,9 +321,9 @@ public:
     virtual void Reset(const SfxItemSet *rSet) override;
 
     void            SetFormatUsed(bool bFormat);
-    void            SetFrmType(const OUString &rType) { sDlgType = rType; }
-    void            SetNewFrame(bool bNewFrame) { bNew  = bNewFrame; }
-    void            SetShell(SwWrtShell* pSh) { pWrtSh  = pSh; }
+    void            SetFrmType(const OUString &rType) { m_sDlgType = rType; }
+    void            SetNewFrame(bool bNewFrame) { m_bNew  = bNewFrame; }
+    void            SetShell(SwWrtShell* pSh) { m_pWrtSh  = pSh; }
 
 };
 
