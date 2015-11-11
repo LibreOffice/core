@@ -968,7 +968,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                     aEntry.eState=eState;
                     aEntry.nWhichId=nWhich;
                     if (!IsInvalidItem(&rItem)) {
-                        aEntry.pType=&typeid(&typeid(rItem));
+                        aEntry.pType=&typeid(rItem);
                         aEntry.nMax=0x7FFFFFFF;
                         aEntry.nMin=-aEntry.nMax;
                         aEntry.nVal=-4711;
