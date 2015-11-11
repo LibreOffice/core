@@ -67,6 +67,23 @@
       "revId": "e62fd1bc371c4767273aaea1ea5301f6ac49dded",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_e7d5e0b9",
+        "filename": "vcl/source/control/buttonstatuslistener.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-11T09:13:57Z",
+      "side": 1,
+      "message": "In addition, there is no need to clear the button reference here. Don\u0027t confuse \"disposing\" method with \"dispose\" method. \"disposing\" is a callback that fires when the *dispatcher* is destructed. \"dispose\" is a method where you clean anything when *your class* is due to be destructed. (And since you simply do clear() on it in Button::dispose, there is no need to manually clear the button reference inside it.)",
+      "revId": "e62fd1bc371c4767273aaea1ea5301f6ac49dded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
