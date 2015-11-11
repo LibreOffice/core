@@ -32,7 +32,7 @@ public:
     SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn) {}
     SdrMeasureTextIsFixedAngleItem(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,rIn) {}
     virtual ~SdrMeasureTextIsFixedAngleItem();
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 //Angle of the text in 1/100deg. 0=horizontal; read from left to right. (n.i.)
@@ -41,7 +41,7 @@ public:
     SdrMeasureTextFixedAngleItem(long nVal=0): SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
     SdrMeasureTextFixedAngleItem(SvStream& rIn): SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,rIn) {}
     virtual ~SdrMeasureTextFixedAngleItem();
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 // The decimal places used for the measure value
@@ -50,7 +50,7 @@ public:
     SdrMeasureDecimalPlacesItem(sal_Int16 nVal=2): SfxInt16Item(SDRATTR_MEASUREDECIMALPLACES,nVal)  {}
     SdrMeasureDecimalPlacesItem(SvStream& rIn): SfxInt16Item(SDRATTR_MEASUREDECIMALPLACES,rIn) {}
     virtual ~SdrMeasureDecimalPlacesItem();
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 #endif

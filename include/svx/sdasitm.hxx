@@ -89,7 +89,7 @@ class SVX_DLLPUBLIC SdrCustomShapeReplacementURLItem : public SfxStringItem
     public:
             SdrCustomShapeReplacementURLItem();
             virtual ~SdrCustomShapeReplacementURLItem();
-            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const override;
+            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
 inline SdrOnOffItem makeSdrTextWordWrapItem( bool bAuto ) {
