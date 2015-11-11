@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_a74e3894",
+        "filename": "external/neon/UnpackedTarball_neon.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-11T11:05:53Z",
+      "side": 1,
+      "message": "\"Judging from the issue report on Mac and my own test on Linux it seems Windows it\u0027s the only one showing the problem.\"\n\nFor one, AFAIU occurrence of the problem depends on the specific WebDAV server to use.  Is it even clear that in \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d90249#c15\u003e (claiming success on Mac) an appropriate WebDAV server was used?\n\nFor another, I assume any tests on Mac and Linux have been done with 64-bit versions of LO (where \u0027long\u0027 is 64-bit), and that the problem is not specific to Windows (but where it hits always, as there even for a 64-bit LO \u0027long\u0027 is only 32-bit), but to LO versions where \u0027long\u0027 is 32-bit.",
+      "parentUuid": "faac7902_87aa1418",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_2c098f32",
         "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
         "patchSetId": 2
