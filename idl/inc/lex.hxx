@@ -20,11 +20,11 @@
 #ifndef INCLUDED_IDL_INC_LEX_HXX
 #define INCLUDED_IDL_INC_LEX_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <sal/types.h>
 #include <hash.hxx>
 #include <tools/stream.hxx>
+#include <vector>
+#include <memory>
 
 enum SVTOKEN_ENUM { SVTOKEN_EMPTY,      SVTOKEN_COMMENT,
                     SVTOKEN_INTEGER,    SVTOKEN_STRING,
@@ -132,8 +132,8 @@ class SvTokenStream
     SvFileStream *  pInStream;
     SvStream &      rInStream;
     OUString        aFileName;
-    boost::ptr_vector<SvToken> aTokList;
-    boost::ptr_vector<SvToken>::iterator pCurToken;
+    std::vector<std::unique_ptr<SvToken> > aTokList;
+    std::vector<std::unique_ptr<SvToken> >::iterator pCurToken;
 
     OString aBufStr;
 
@@ -178,25 +178,25 @@ public:
 
     SvToken* GetToken_PrevAll()
     {
-        boost::ptr_vector<SvToken>::iterator pRetToken = pCurToken;
+        std::vector<std::unique_ptr<SvToken> >::iterator pRetToken = pCurToken;
 
         // current iterator always valid
         if(pCurToken != aTokList.begin())
             --pCurToken;
 
-        return &(*pRetToken);
+        return (*pRetToken).get();
     }
 
     SvToken* GetToken_NextAll()
     {
-        boost::ptr_vector<SvToken>::iterator pRetToken = pCurToken++;
+        std::vector<std::unique_ptr<SvToken> >::iterator pRetToken = pCurToken++;
 
         if (pCurToken == aTokList.end())
             pCurToken = pRetToken;
 
         SetMax();
 
-        return &(*pRetToken);
+        return (*pRetToken).get();
     }
 
     SvToken* GetToken_Next()
@@ -205,12 +205,12 @@ public:
         return GetToken_NextAll();
     }
 
-    SvToken& GetToken() const { return *pCurToken; }
+    SvToken& GetToken() const { return *(*pCurToken).get(); }
 
     bool     Read( char cChar )
                     {
-                        if( pCurToken->IsChar()
-                          && cChar == pCurToken->GetChar() )
+                        if( (*pCurToken)->IsChar()
+                          && cChar == (*pCurToken)->GetChar() )
                         {
                             GetToken_Next();
                             return true;
@@ -221,9 +221,9 @@ public:
 
     void     ReadDelemiter()
                     {
-                        if( pCurToken->IsChar()
-                          && (';' == pCurToken->GetChar()
-                                || ',' == pCurToken->GetChar()) )
+                        if( (*pCurToken)->IsChar()
+                          && (';' == (*pCurToken)->GetChar()
+                                || ',' == (*pCurToken)->GetChar()) )
                         {
                             GetToken_Next();
                         }

@@ -119,7 +119,7 @@ SvTokenStream::~SvTokenStream()
 void SvTokenStream::FillTokenList()
 {
     SvToken * pToken = new SvToken();
-    aTokList.push_back(pToken);
+    aTokList.push_back(std::unique_ptr<SvToken>(pToken));
     do
     {
         if( !MakeToken( *pToken ) )
@@ -127,10 +127,10 @@ void SvTokenStream::FillTokenList()
             if (!aTokList.empty())
             {
                 *pToken = SvToken();
-                boost::ptr_vector<SvToken>::const_iterator it = aTokList.begin();
+                std::vector<std::unique_ptr<SvToken> >::const_iterator it = aTokList.begin();
 
-                pToken->SetLine(it->GetLine());
-                pToken->SetColumn(it->GetColumn());
+                pToken->SetLine((*it)->GetLine());
+                pToken->SetColumn((*it)->GetColumn());
             }
             break;
         }
@@ -141,7 +141,7 @@ void SvTokenStream::FillTokenList()
         else
         {
             pToken = new SvToken();
-            aTokList.push_back(pToken);
+            aTokList.push_back(std::unique_ptr<SvToken>(pToken));
         }
     }
     while( !pToken->IsEof() );
