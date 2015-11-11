@@ -23,7 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 class TextCharAttribList
 {
@@ -31,7 +32,7 @@ private:
     TextCharAttribList(const TextCharAttribList&) = delete;
     TextCharAttribList& operator=(const TextCharAttribList&) = delete;
 
-    typedef boost::ptr_vector<TextCharAttrib> TextCharAttribs;
+    typedef std::vector<std::unique_ptr<TextCharAttrib> > TextCharAttribs;
     TextCharAttribs maAttribs;
     bool            mbHasEmptyAttribs;
 
@@ -42,9 +43,9 @@ public:
     void            Clear();
     sal_uInt16          Count() const               { return maAttribs.size(); }
 
-    const TextCharAttrib& GetAttrib( sal_uInt16 n ) const { return maAttribs[n]; }
-    TextCharAttrib& GetAttrib( sal_uInt16 n )       { return maAttribs[n]; }
-    void            RemoveAttrib( sal_uInt16 n )    { maAttribs.release( maAttribs.begin() + n ).release(); }
+    const TextCharAttrib& GetAttrib( sal_uInt16 n ) const { return *maAttribs[n].get(); }
+    TextCharAttrib& GetAttrib( sal_uInt16 n )       { return *maAttribs[n].get(); }
+    void            RemoveAttrib( sal_uInt16 n )    { maAttribs[n].release(); maAttribs.erase( maAttribs.begin() + n ); }
 
     void            InsertAttrib( TextCharAttrib* pAttrib );
 

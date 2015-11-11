@@ -18,7 +18,6 @@
  */
 
 #include <string.h>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
