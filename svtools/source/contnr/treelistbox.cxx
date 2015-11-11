@@ -1314,9 +1314,9 @@ nAction
     EnableSelectionAsDropTarget();
 
 #ifndef UNX
-    if ((nAction == DND_ACTION_MOVE) && ((g_pDDTarget &&
-        ((g_pDDTarget->GetModel()) != (this->GetModel()))) ||
-        !g_pDDTarget))
+    if (   (nAction == DND_ACTION_MOVE)
+        && (   (g_pDDTarget && (g_pDDTarget->GetModel() != this->GetModel()))
+            || !g_pDDTarget))
     {
         RemoveSelection();
     }
