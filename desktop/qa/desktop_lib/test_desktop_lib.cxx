@@ -185,14 +185,18 @@ void DesktopLOKTest::testGetStyles()
     CPPUNIT_ASSERT( aValues.size() > 0 );
     for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aValues)
     {
-        CPPUNIT_ASSERT( rPair.second.size() > 0);
+        if( rPair.first != "ClearStyle")
+        {
+            CPPUNIT_ASSERT( rPair.second.size() > 0);
+        }
         if (rPair.first != "CharacterStyles" &&
             rPair.first != "ParagraphStyles" &&
             rPair.first != "FrameStyles" &&
             rPair.first != "PageStyles" &&
             rPair.first != "NumberingStyles" &&
             rPair.first != "CellStyles" &&
-            rPair.first != "ShapeStyles")
+            rPair.first != "ShapeStyles" &&
+            rPair.first != "ClearStyle")
         {
             CPPUNIT_FAIL("Unknown style family: " + rPair.first);
         }
