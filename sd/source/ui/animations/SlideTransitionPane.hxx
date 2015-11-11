@@ -71,7 +71,6 @@ private:
     void updateControls();
     void updateControlState();
     void updateVariants(size_t nPresetOffset);
-    size_t getPresetOffset(const impl::TransitionEffect &rEffect);
 
     void updateSoundList();
     void openSoundFileDialog();

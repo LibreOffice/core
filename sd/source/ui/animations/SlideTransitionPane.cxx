@@ -356,6 +356,23 @@ void lcl_FillSoundListBox(
                      lcl_AppendSoundToListBox( rOutListBox ));
 }
 
+/// Returns an offset into the list of transition presets
+size_t getPresetOffset( const sd::impl::TransitionEffect &rEffect )
+{
+    const sd::TransitionPresetList& rPresetList =
+        sd::TransitionPreset::getTransitionPresetList();
+    sd::TransitionPresetPtr pFound;
+
+    size_t nIdx = 0;
+    for( auto aIt: rPresetList )
+    {
+        if( rEffect.operator==( *aIt ))
+            break;
+        nIdx++;
+    }
+    return nIdx;
+}
+
 } // anonymous namespace
 
 namespace sd
@@ -995,23 +1012,6 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, TransitionSelected, ValueSet *, void)
 {
     updateVariants( mpVS_TRANSITION_ICONS->GetSelectItemId() - 1 );
     applyToSelectedPages();
-}
-
-/// Returns an offset into the list of transition presets
-size_t SlideTransitionPane::getPresetOffset( const impl::TransitionEffect &rEffect )
-{
-    const sd::TransitionPresetList& rPresetList =
-        sd::TransitionPreset::getTransitionPresetList();
-    sd::TransitionPresetPtr pFound;
-
-    size_t nIdx = 0;
-    for( auto aIt: rPresetList )
-    {
-        if( rEffect.operator==( *aIt ))
-            break;
-        nIdx++;
-    }
-    return nIdx;
 }
 
 /// we use an integer offset into the list of transition presets
