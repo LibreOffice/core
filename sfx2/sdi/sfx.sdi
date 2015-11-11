@@ -7802,7 +7802,7 @@ SfxInt16Item ThesaurusFromContext SID_THES
 
     /* config: */
     AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_TEXT;

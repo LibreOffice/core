@@ -185,6 +185,17 @@
           <value>com.sun.star.comp.framework.SaveAsMenuController</value>
         </prop>
       </node>
+      <node oor:name="c17" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ThesaurusFromContext</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ThesaurusMenuController</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="ZoomToolBox" oor:op="replace">

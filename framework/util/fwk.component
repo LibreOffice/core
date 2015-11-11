@@ -204,4 +204,8 @@
       constructor="com_sun_star_comp_framework_SubToolBarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.framework.ThesaurusMenuController"
+      constructor="com_sun_star_comp_framework_ThesaurusMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
 </component>
