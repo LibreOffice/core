@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_87aa1418",
+        "filename": "external/neon/UnpackedTarball_neon.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-11T10:19:57Z",
+      "side": 1,
+      "message": "Judging from the issue report on Mac and my own test on Linux it seems Windows it\u0027s the only one showing the problem.\n\nThough from the POV of neon correctnes this should be on all LO platform on Linux (and Mac ? Don\u0027t know that platform) it will affect porter using system neon library.\nI will propose the patch upstream neon, anyway.",
+      "parentUuid": "faac7902_674bb0b1",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_2c098f32",
         "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
         "patchSetId": 2
