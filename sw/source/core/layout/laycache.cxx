@@ -223,7 +223,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 assert(pTab && "Table follow without master");
                             }
                         }
-                        do
+                        while (1)
                         {
                             sal_uLong nNdIdx =
                                     pTab->GetTable()->GetTableNode()->GetIndex();
@@ -268,7 +268,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             }
                             else
                                 break;
-                        } while( pTab );
+                        }
                     }
                 }
             }
