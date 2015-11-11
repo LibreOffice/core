@@ -875,7 +875,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_filterColumn );
 }
 
-ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
+ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const ScDBData* pDefinedData ) :
     XclExpRoot( rRoot ),
     pFilterMode( nullptr ),
     pFilterInfo( nullptr )
@@ -885,7 +885,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
 
     bool        bFound  = false;
     bool        bAdvanced = false;
-    ScDBData*   pData   = rRoot.GetDoc().GetAnonymousDBData(nTab);
+    const ScDBData* pData = (pDefinedData ? pDefinedData : rRoot.GetDoc().GetAnonymousDBData(nTab));
     ScRange     aAdvRange;
     if (pData)
     {
@@ -904,13 +904,14 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
         maRef = aRange;
 
         // #i2394# built-in defined names must be sorted by containing sheet name
-        rNameMgr.InsertBuiltInName( EXC_BUILTIN_FILTERDATABASE, aRange );
+        if (!pDefinedData)
+            rNameMgr.InsertBuiltInName( EXC_BUILTIN_FILTERDATABASE, aRange );
 
         // advanced filter
         if( bAdvanced )
         {
             // filter criteria, excel allows only same table
-            if( aAdvRange.aStart.Tab() == nTab )
+            if( !pDefinedData && aAdvRange.aStart.Tab() == nTab )
                 rNameMgr.InsertBuiltInName( EXC_BUILTIN_CRITERIA, aAdvRange );
 
             // filter destination range, excel allows only same table
@@ -918,7 +919,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
             {
                 ScRange aDestRange( aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
                 aDestRange.aEnd.IncCol( nColCnt - 1 );
-                if( aDestRange.aStart.Tab() == nTab )
+                if( !pDefinedData && aDestRange.aStart.Tab() == nTab )
                     rNameMgr.InsertBuiltInName( EXC_BUILTIN_EXTRACT, aDestRange );
             }
 
@@ -1052,7 +1053,7 @@ XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :
 
 void XclExpFilterManager::InitTabFilter( SCTAB nScTab )
 {
-    maFilterMap[ nScTab ].reset( new ExcAutoFilterRecs( GetRoot(), nScTab ) );
+    maFilterMap[ nScTab ].reset( new ExcAutoFilterRecs( GetRoot(), nScTab, nullptr ) );
 }
 
 XclExpRecordRef XclExpFilterManager::CreateRecord( SCTAB nScTab )

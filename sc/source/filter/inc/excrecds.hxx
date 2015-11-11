@@ -41,6 +41,7 @@
 
 //------------------------------------------------------------------ Forwards -
 
+class ScDBData;
 struct ScQueryEntry;
 
 //----------------------------------------------------------- class ExcRecord -
@@ -401,7 +402,11 @@ public:
 class ExcAutoFilterRecs : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    explicit            ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab );
+    /** @param  pDefinedData
+                If nullptr, obtain anonymous ScDBData from sheet nTab.
+                Else, use defined database range; used with XclExpTables.
+     */
+    explicit            ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const ScDBData* pDefinedData );
     virtual             ~ExcAutoFilterRecs();
 
     void                AddObjRecs();
