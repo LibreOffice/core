@@ -1346,7 +1346,7 @@
           <value>subtle</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Venetian Blinds</value>
+          <value xml:lang="en-US">Venetian</value>
         </prop>
       </node>
       <node oor:name="venetian-blinds-3d" oor:op="replace">
@@ -1354,7 +1354,7 @@
           <value>exciting</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">3D Venetian Blinds</value>
+          <value xml:lang="en-US">3D Venetian</value>
         </prop>
       </node>
       <node oor:name="box" oor:op="replace">
@@ -1370,7 +1370,7 @@
           <value>subtle</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Checkerboard</value>
+          <value xml:lang="en-US">Checkers</value>
         </prop>
       </node>
       <node oor:name="comb" oor:op="replace">
@@ -1474,7 +1474,7 @@
           <value>subtle</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Diagonal Squares</value>
+          <value xml:lang="en-US">Diagonal</value>
         </prop>
       </node>
       <node oor:name="random" oor:op="replace">
@@ -1514,7 +1514,7 @@
           <value>exciting</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Flipping Tiles</value>
+          <value xml:lang="en-US">Tiles</value>
         </prop>
       </node>
       <node oor:name="cube-turning" oor:op="replace">
@@ -1522,7 +1522,7 @@
           <value>exciting</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Cube Turning</value>
+          <value xml:lang="en-US">Cube</value>
         </prop>
       </node>
       <node oor:name="revolving-circles" oor:op="replace">
@@ -1530,7 +1530,7 @@
           <value>exciting</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Revolving Circles</value>
+          <value xml:lang="en-US">Circles</value>
         </prop>
       </node>
       <node oor:name="turning-helix" oor:op="replace">
@@ -1538,7 +1538,7 @@
           <value>exciting</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Turning Helix</value>
+          <value xml:lang="en-US">Helix</value>
         </prop>
       </node>
       <node oor:name="fall" oor:op="replace">
