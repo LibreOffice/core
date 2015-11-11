@@ -41,7 +41,7 @@ namespace comphelper {
 
 // this helper class is designed to allow to parse ContentType- and Relationship-related information from OfficeOpenXML format
 class OFOPXMLHelper_Impl
-    : public cppu::WeakImplHelper< com::sun::star::xml::sax::XDocumentHandler >
+    : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
     sal_uInt16 m_nFormat; // which format to parse
 
@@ -61,25 +61,25 @@ class OFOPXMLHelper_Impl
     OUString m_aPartNameAttr;
     OUString m_aContentTypeAttr;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aResultSeq;
-    ::com::sun::star::uno::Sequence< OUString > m_aElementsSeq; // stack of elements being parsed
+    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > m_aResultSeq;
+    css::uno::Sequence< OUString > m_aElementsSeq; // stack of elements being parsed
 
 
 public:
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > GetParsingResult();
+    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > GetParsingResult();
 
     explicit OFOPXMLHelper_Impl( sal_uInt16 nFormat ); // must not be created directly
     virtual ~OFOPXMLHelper_Impl();
 
     // XDocumentHandler
-    virtual void SAL_CALL startDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL startElement( const OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endElement( const OUString& aName ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endElement( const OUString& aName ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -122,7 +122,7 @@ void WriteRelationsInfoSequence(
     if ( !xOutStream.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(rContext);
+    uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(rContext);
 
     xWriter->setOutputStream( xOutStream );
 
@@ -137,7 +137,7 @@ void WriteRelationsInfoSequence(
 
     // write the namespace
     AttributeList* pRootAttrList = new AttributeList;
-    uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
+    uno::Reference< css::xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
         OUString( "xmlns" ),
         aCDATAString,
@@ -149,7 +149,7 @@ void WriteRelationsInfoSequence(
     for ( sal_Int32 nInd = 0; nInd < aSequence.getLength(); nInd++ )
     {
         AttributeList *pAttrList = new AttributeList;
-        uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
+        uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
         for( sal_Int32 nSecInd = 0; nSecInd < aSequence[nInd].getLength(); nSecInd++ )
         {
             if ( aSequence[nInd][nSecInd].First.equals( aIDAttr )
@@ -187,7 +187,7 @@ void WriteContentSequence(
     if ( !xOutStream.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(rContext);
+    uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(rContext);
 
     xWriter->setOutputStream( xOutStream );
 
@@ -202,7 +202,7 @@ void WriteContentSequence(
 
     // write the namespace
     AttributeList* pRootAttrList = new AttributeList;
-    uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
+    uno::Reference< css::xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
         OUString( "xmlns" ),
         aCDATAString,
@@ -214,7 +214,7 @@ void WriteContentSequence(
     for ( sal_Int32 nInd = 0; nInd < aDefaultsSequence.getLength(); nInd++ )
     {
         AttributeList *pAttrList = new AttributeList;
-        uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
+        uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
         pAttrList->AddAttribute( aExtensionAttr, aCDATAString, aDefaultsSequence[nInd].First );
         pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, aDefaultsSequence[nInd].Second );
 
@@ -226,7 +226,7 @@ void WriteContentSequence(
     for ( sal_Int32 nInd = 0; nInd < aOverridesSequence.getLength(); nInd++ )
     {
         AttributeList *pAttrList = new AttributeList;
-        uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
+        uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
         pAttrList->AddAttribute( aPartNameAttr, aCDATAString, aOverridesSequence[nInd].First );
         pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, aOverridesSequence[nInd].Second );
 
@@ -250,16 +250,16 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadSequence_Impl(
     if ( !rContext.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
         throw uno::RuntimeException();
 
-    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( rContext );
+    uno::Reference< css::xml::sax::XParser > xParser = css::xml::sax::Parser::create( rContext );
 
     OFOPXMLHelper_Impl *const pHelper = new OFOPXMLHelper_Impl( nFormat );
-    uno::Reference< xml::sax::XDocumentHandler > xHelper( static_cast< xml::sax::XDocumentHandler* >( pHelper ) );
-    xml::sax::InputSource aParserInput;
+    uno::Reference< css::xml::sax::XDocumentHandler > xHelper( static_cast< css::xml::sax::XDocumentHandler* >( pHelper ) );
+    css::xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xInStream;
     aParserInput.sSystemId = aStringID;
     xParser->setDocumentHandler( xHelper );
     xParser->parseStream( aParserInput );
-    xParser->setDocumentHandler( uno::Reference < xml::sax::XDocumentHandler > () );
+    xParser->setDocumentHandler( uno::Reference < css::xml::sax::XDocumentHandler > () );
 
     return pHelper->GetParsingResult();
 }
@@ -299,19 +299,19 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OFOPXMLHelper_Impl::GetParsi
 
 
 void SAL_CALL OFOPXMLHelper_Impl::startDocument()
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+        throw(css::xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL OFOPXMLHelper_Impl::endDocument()
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+        throw(css::xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
-        throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
+void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
+        throw( css::xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT )
     {
@@ -320,7 +320,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
 
             if ( nNewLength != 1 )
-                throw xml::sax::SAXException(); // TODO: this element must be the first level element
+                throw css::xml::sax::SAXException(); // TODO: this element must be the first level element
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
@@ -331,7 +331,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
         {
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
             if ( nNewLength != 2 )
-                throw xml::sax::SAXException(); // TODO: this element must be the second level element
+                throw css::xml::sax::SAXException(); // TODO: this element must be the second level element
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
@@ -343,7 +343,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             OUString aIDValue = xAttribs->getValueByName( m_aIDAttr );
             if ( aIDValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the ID value must present
+                throw css::xml::sax::SAXException(); // TODO: the ID value must present
 
             OUString aTypeValue = xAttribs->getValueByName( m_aTypeAttr );
             OUString aTargetValue = xAttribs->getValueByName( m_aTargetAttr );
@@ -373,7 +373,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             m_aResultSeq[nNewEntryNum-1].realloc( nAttrNum );
         }
         else
-            throw xml::sax::SAXException(); // TODO: no other elements expected!
+            throw css::xml::sax::SAXException(); // TODO: no other elements expected!
     }
     else if ( m_nFormat == CONTENTTYPE_FORMAT )
     {
@@ -382,7 +382,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
 
             if ( nNewLength != 1 )
-                throw xml::sax::SAXException(); // TODO: this element must be the first level element
+                throw css::xml::sax::SAXException(); // TODO: this element must be the first level element
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
@@ -396,7 +396,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
         {
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
             if ( nNewLength != 2 )
-                throw xml::sax::SAXException(); // TODO: this element must be the second level element
+                throw css::xml::sax::SAXException(); // TODO: this element must be the second level element
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
@@ -409,11 +409,11 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             OUString aExtensionValue = xAttribs->getValueByName( m_aExtensionAttr );
             if ( aExtensionValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the Extension value must present
+                throw css::xml::sax::SAXException(); // TODO: the Extension value must present
 
             OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
             if ( aContentTypeValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the ContentType value must present
+                throw css::xml::sax::SAXException(); // TODO: the ContentType value must present
 
             sal_Int32 nNewResultLen = m_aResultSeq[0].getLength() + 1;
             m_aResultSeq[0].realloc( nNewResultLen );
@@ -425,7 +425,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
         {
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
             if ( nNewLength != 2 )
-                throw xml::sax::SAXException(); // TODO: this element must be the second level element
+                throw css::xml::sax::SAXException(); // TODO: this element must be the second level element
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
@@ -438,11 +438,11 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 
             OUString aPartNameValue = xAttribs->getValueByName( m_aPartNameAttr );
             if ( aPartNameValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the PartName value must present
+                throw css::xml::sax::SAXException(); // TODO: the PartName value must present
 
             OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
             if ( aContentTypeValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the ContentType value must present
+                throw css::xml::sax::SAXException(); // TODO: the ContentType value must present
 
             sal_Int32 nNewResultLen = m_aResultSeq[1].getLength() + 1;
             m_aResultSeq[1].realloc( nNewResultLen );
@@ -451,24 +451,24 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             m_aResultSeq[1][nNewResultLen-1].Second = aContentTypeValue;
         }
         else
-            throw xml::sax::SAXException(); // TODO: no other elements expected!
+            throw css::xml::sax::SAXException(); // TODO: no other elements expected!
     }
     else
-        throw xml::sax::SAXException(); // TODO: no other elements expected!
+        throw css::xml::sax::SAXException(); // TODO: no other elements expected!
 }
 
 
 void SAL_CALL OFOPXMLHelper_Impl::endElement( const OUString& aName )
-    throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
+    throw( css::xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT || m_nFormat == CONTENTTYPE_FORMAT )
     {
         sal_Int32 nLength = m_aElementsSeq.getLength();
         if ( nLength <= 0 )
-            throw xml::sax::SAXException(); // TODO: no other end elements expected!
+            throw css::xml::sax::SAXException(); // TODO: no other end elements expected!
 
         if ( !m_aElementsSeq[nLength-1].equals( aName ) )
-            throw xml::sax::SAXException(); // TODO: unexpected element ended
+            throw css::xml::sax::SAXException(); // TODO: unexpected element ended
 
         m_aElementsSeq.realloc( nLength - 1 );
     }
@@ -476,25 +476,25 @@ void SAL_CALL OFOPXMLHelper_Impl::endElement( const OUString& aName )
 
 
 void SAL_CALL OFOPXMLHelper_Impl::characters( const OUString& /*aChars*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+        throw(css::xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL OFOPXMLHelper_Impl::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+        throw(css::xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL OFOPXMLHelper_Impl::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+        throw(css::xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL OFOPXMLHelper_Impl::setDocumentLocator( const uno::Reference< css::xml::sax::XLocator >& /*xLocator*/ )
+        throw(css::xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 

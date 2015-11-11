@@ -2187,7 +2187,7 @@ namespace cppcanvas
 
                         // crop bitmap to given source rectangle (no
                         // need to copy and convert the whole bitmap)
-                        Bitmap aBmp( pAct->GetBitmap() );
+                        ::Bitmap aBmp( pAct->GetBitmap() );
                         const Rectangle aCropRect( pAct->GetSrcPoint(),
                                                     pAct->GetSrcSize() );
                         aBmp.Crop( aCropRect );

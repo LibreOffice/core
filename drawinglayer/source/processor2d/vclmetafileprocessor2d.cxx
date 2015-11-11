@@ -216,7 +216,7 @@ namespace
 
         @return converted tools PolyPolygon, w/o one-point fills
      */
-    tools::PolyPolygon getFillPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly )
+    ::tools::PolyPolygon getFillPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly )
     {
         // filter input rPoly
         basegfx::B2DPolyPolygon aPoly;
@@ -227,7 +227,7 @@ namespace
             if( !aCandidate.isClosed() || aCandidate.count() > 1 )
                 aPoly.append(aCandidate);
         }
-        return tools::PolyPolygon(aPoly);
+        return ::tools::PolyPolygon(aPoly);
     }
 
 } // end of anonymous namespace
@@ -519,9 +519,9 @@ namespace drawinglayer
                 aEndArrow.transform(maCurrentTransformation);
 
                 pRetval = new SvtGraphicStroke(
-                        tools::Polygon(aLocalPolygon),
-                        tools::PolyPolygon(aStartArrow),
-                        tools::PolyPolygon(aEndArrow),
+                        ::tools::Polygon(aLocalPolygon),
+                        ::tools::PolyPolygon(aStartArrow),
+                        ::tools::PolyPolygon(aEndArrow),
                         mfCurrentUnifiedTransparence,
                         fLineWidth,
                         eCap,
@@ -1266,7 +1266,7 @@ namespace drawinglayer
 
                                 if(aCandidate.count() > 1)
                                 {
-                                    const tools::Polygon aToolsPolygon(aCandidate);
+                                    const ::tools::Polygon aToolsPolygon(aCandidate);
 
                                     mpMetaFile->AddAction(new MetaPolyLineAction(aToolsPolygon, aLineInfo));
                                 }
@@ -1540,7 +1540,7 @@ namespace drawinglayer
 
                     // #i111954# do NOT use decomposition, but use direct VCL-command
                     // process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    const tools::PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
+                    const ::tools::PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
                     const HatchStyle aHatchStyle(
                         attribute::HATCHSTYLE_SINGLE == rFillHatchAttribute.getStyle() ? HATCH_SINGLE :
                         attribute::HATCHSTYLE_DOUBLE == rFillHatchAttribute.getStyle() ? HATCH_DOUBLE :
@@ -1615,7 +1615,7 @@ namespace drawinglayer
                         // necessary to again remove this subdivision since it decreases possible
                         // printing quality (not even resolution-dependent for now). THB will tell
                         // me when that task is fixed in the master
-                        const tools::PolyPolygon aToolsPolyPolygon(
+                        const ::tools::PolyPolygon aToolsPolyPolygon(
                             getFillPolyPolygon(
                                 basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon)));
 
@@ -1899,7 +1899,7 @@ namespace drawinglayer
                                 }
 
                                 mpOutputDevice->DrawTransparent(
-                                    tools::PolyPolygon(aLocalPolyPolygon),
+                                    ::tools::PolyPolygon(aLocalPolyPolygon),
                                     nTransPercentVcl);
 
                                 if(bSupportSvtGraphicFill)

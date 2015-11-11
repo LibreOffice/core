@@ -1146,7 +1146,7 @@ namespace drawinglayer
                         ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
 
                         // draw hatch using VCL
-                        mpOutputDevice->DrawHatch(tools::PolyPolygon(tools::Polygon(aHatchPolygon)), aVCLHatch);
+                        mpOutputDevice->DrawHatch(::tools::PolyPolygon(::tools::Polygon(aHatchPolygon)), aVCLHatch);
                     }
                     break;
                 }

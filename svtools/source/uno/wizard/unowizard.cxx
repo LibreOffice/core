@@ -97,40 +97,40 @@ namespace {
                     , public Wizard_PBase
     {
     public:
-        explicit Wizard( const uno::Reference< uno::XComponentContext >& i_rContext );
+        explicit Wizard( const css::uno::Reference< css::uno::XComponentContext >& i_rContext );
 
         // lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception) override;
-        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
         // beans::XPropertySet
-        virtual uno::Reference< beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // ui::dialogs::XWizard
-        virtual OUString SAL_CALL getHelpURL() throw (uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setHelpURL( const OUString& _helpurl ) throw (uno::RuntimeException, std::exception) override;
-        virtual uno::Reference< awt::XWindow > SAL_CALL getDialogWindow() throw (uno::RuntimeException, std::exception) override;
-        virtual uno::Reference< ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, sal_Bool Enable ) throw (uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setDefaultButton( ::sal_Int16 WizardButton ) throw (uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL travelNext(  ) throw (uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL travelPrevious(  ) throw (uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, sal_Bool Enable ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL updateTravelUI(  ) throw (uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, sal_Bool Final ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getHelpURL() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setHelpURL( const OUString& _helpurl ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< awt::XWindow > SAL_CALL getDialogWindow() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, sal_Bool Enable ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setDefaultButton( ::sal_Int16 WizardButton ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL travelNext(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL travelPrevious(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, sal_Bool Enable ) throw (container::NoSuchElementException, util::InvalidStateException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL updateTravelUI(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, sal_Bool Final ) throw (container::NoSuchElementException, util::InvalidStateException, css::uno::RuntimeException, std::exception) override;
 
         // ui::dialogs::XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int16 SAL_CALL execute(  ) throw (uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int16 SAL_CALL execute(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // lang::XInitialization
-        virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
    protected:
         virtual ~Wizard();
@@ -140,8 +140,8 @@ namespace {
         virtual void destroyDialog() override;
 
     private:
-        uno::Sequence< uno::Sequence< sal_Int16 > >         m_aWizardSteps;
-        uno::Reference< ui::dialogs::XWizardController >    m_xController;
+        css::uno::Sequence< css::uno::Sequence< sal_Int16 > >         m_aWizardSteps;
+        css::uno::Reference< ui::dialogs::XWizardController >    m_xController;
         OUString                                            m_sHelpURL;
     };
 

@@ -604,7 +604,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XCompone
     // update window list
     ::std::vector< OUString > aNewWindowListVector;
 
-    Reference< XDesktop2 > xDesktop = Desktop::create( xContext );
+    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
 
     sal_uInt16  nActiveItemId = 0;
     sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
@@ -831,7 +831,7 @@ IMPL_LINK_TYPED( MenuManager, Select, Menu *, pMenu, bool )
             {
                 // window list menu item selected
 
-                Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
+                Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
 
                 sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
                 Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );

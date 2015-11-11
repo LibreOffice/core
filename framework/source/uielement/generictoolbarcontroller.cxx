@@ -91,13 +91,6 @@ static OUString getMasterCommand( const OUString& rCommand )
     return aMasterCommand;
 }
 
-struct ExecuteInfo
-{
-    css::uno::Reference< css::frame::XDispatch >     xDispatch;
-    css::util::URL                                   aTargetURL;
-    css::uno::Sequence< css::beans::PropertyValue >  aArgs;
-};
-
 GenericToolbarController::GenericToolbarController( const Reference< XComponentContext >&    rxContext,
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbar,

@@ -60,7 +60,8 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
                 ::ucbhelper::Content aCnt(
                     rFileName, Reference < XCommandEnvironment >(),
                     comphelper::getProcessComponentContext() );
-                aCnt.executeCommand( OUString("delete"), makeAny( true ) );
+                aCnt.executeCommand( OUString("delete"),
+                    css::uno::makeAny( true ) );
             }
 
             catch ( const CommandAbortedException& )

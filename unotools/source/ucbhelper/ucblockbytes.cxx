@@ -500,8 +500,8 @@ Moderator::Moderator(
     const Command& rArg
 )
     throw(
-        ::com::sun::star::ucb::ContentCreationException,
-        ::com::sun::star::uno::RuntimeException
+        css::ucb::ContentCreationException,
+        css::uno::RuntimeException
     )
     : m_aMutex(),
 
@@ -1133,7 +1133,8 @@ bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputSt
             if( !m_xSeekable.is() && rxInputStream.is() )
             {
                 Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                Reference< XOutputStream > rxTempOut = Reference < XOutputStream > ( TempFile::create(xContext), UNO_QUERY_THROW );
+                Reference< XOutputStream > rxTempOut = Reference < XOutputStream > (
+                           css::io::TempFile::create(xContext), UNO_QUERY_THROW );
 
                 ::comphelper::OStorageHelper::CopyInputToOutput( rxInputStream, rxTempOut );
                 m_xInputStream = Reference< XInputStream >( rxTempOut, UNO_QUERY );

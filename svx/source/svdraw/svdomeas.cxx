@@ -488,14 +488,14 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     long nOverhang=rRec.nHelplineOverhang;
     long nHelplineDist=rRec.nHelplineDist;
 
-    long dx= Round(nLineDist*nHlpCos);
-    long dy=-Round(nLineDist*nHlpSin);
-    long dxh1a= Round((nHelplineDist-rRec.nHelpline1Len)*nHlpCos);
-    long dyh1a=-Round((nHelplineDist-rRec.nHelpline1Len)*nHlpSin);
-    long dxh1b= Round((nHelplineDist-rRec.nHelpline2Len)*nHlpCos);
-    long dyh1b=-Round((nHelplineDist-rRec.nHelpline2Len)*nHlpSin);
-    long dxh2= Round((nLineDist+nOverhang)*nHlpCos);
-    long dyh2=-Round((nLineDist+nOverhang)*nHlpSin);
+    long dx= svx::Round(nLineDist*nHlpCos);
+    long dy=-svx::Round(nLineDist*nHlpSin);
+    long dxh1a= svx::Round((nHelplineDist-rRec.nHelpline1Len)*nHlpCos);
+    long dyh1a=-svx::Round((nHelplineDist-rRec.nHelpline1Len)*nHlpSin);
+    long dxh1b= svx::Round((nHelplineDist-rRec.nHelpline2Len)*nHlpCos);
+    long dyh1b=-svx::Round((nHelplineDist-rRec.nHelpline2Len)*nHlpSin);
+    long dxh2= svx::Round((nLineDist+nOverhang)*nHlpCos);
+    long dyh2=-svx::Round((nLineDist+nOverhang)*nHlpSin);
 
     // extension line 1
     rPol.aHelpline1.aP1=Point(aP1.X()+dxh1a,aP1.Y()+dyh1a);

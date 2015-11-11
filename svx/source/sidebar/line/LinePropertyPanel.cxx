@@ -59,7 +59,7 @@ namespace svx { namespace sidebar {
 
 LinePropertyPanel::LinePropertyPanel(
     vcl::Window* pParent,
-    const uno::Reference<frame::XFrame>& rxFrame,
+    const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   LinePropertyPanelBase(pParent, rxFrame),
     maStyleControl(SID_ATTR_LINE_STYLE, *pBindings, *this),
@@ -105,7 +105,7 @@ void LinePropertyPanel::Initialize()
 
 VclPtr<vcl::Window> LinePropertyPanel::Create (
     vcl::Window* pParent,
-    const uno::Reference<frame::XFrame>& rxFrame,
+    const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)

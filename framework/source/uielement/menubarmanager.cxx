@@ -990,7 +990,7 @@ IMPL_LINK_TYPED( MenuBarManager, Select, Menu *, pMenu, bool )
             {
                 // window list menu item selected
 
-                Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
+                Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
 
                 sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
                 Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );

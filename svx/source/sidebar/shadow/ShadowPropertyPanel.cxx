@@ -70,7 +70,7 @@ namespace svx { namespace sidebar {
 
 ShadowPropertyPanel::ShadowPropertyPanel(
     vcl::Window* pParent,
-    const uno::Reference<frame::XFrame>& rxFrame,
+    const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "ShadowPropertyPanel", "svx/ui/sidebarshadow.ui", rxFrame),
     maShadowController(SID_ATTR_FILL_SHADOW, *pBindings, *this),
@@ -358,7 +358,7 @@ void ShadowPropertyPanel::NotifyItemUpdate(
 
 VclPtr<vcl::Window> ShadowPropertyPanel::Create (
     vcl::Window* pParent,
-    const uno::Reference<frame::XFrame>& rxFrame,
+    const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if(pParent == NULL)

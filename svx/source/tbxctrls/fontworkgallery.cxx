@@ -57,11 +57,9 @@
 
 using ::svtools::ToolbarMenu;
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::frame;
 
 namespace svx
 {
@@ -251,9 +249,9 @@ IMPL_LINK_NOARG_TYPED(FontWorkGalleryDialog, DoubleClickFavoriteHdl, ValueSet*, 
 class FontworkAlignmentWindow : public ToolbarMenu
 {
 public:
-    FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
+    FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
 
-    virtual void statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( RuntimeException ) override;
 
 private:
     svt::ToolboxController& mrController;
@@ -272,7 +270,7 @@ private:
 };
 
 FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController,
-    const Reference< XFrame >& rFrame, vcl::Window* pParentWindow)
+    const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow)
     : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
     , mrController(rController)
     , maImgAlgin1(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_LEFT))
@@ -305,7 +303,7 @@ void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
     }
 }
 
-void FontworkAlignmentWindow::statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException )
+void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     if( Event.FeatureURL.Main.equals( msFontworkAlignment ) )
     {
@@ -362,7 +360,7 @@ public:
 
 
 FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentContext >& rxContext )
-: svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), OUString( ".uno:FontworkAlignment" ) )
+: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), OUString( ".uno:FontworkAlignment" ) )
 {
 }
 
@@ -426,7 +424,7 @@ Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames
 class FontworkCharacterSpacingWindow : public ToolbarMenu
 {
 public:
-    FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
+    FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException ) override;
 private:
@@ -443,7 +441,7 @@ private:
 };
 
 FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::ToolboxController& rController,
-    const Reference< XFrame >& rFrame, vcl::Window* pParentWindow)
+    const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow)
     : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
     , mrController(rController)
     , msFontworkCharacterSpacing(".uno:FontworkCharacterSpacing")
@@ -598,7 +596,7 @@ public:
 
 
 FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Reference< XComponentContext >& rxContext )
-: svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), OUString( ".uno:FontworkCharacterSpacingFloater" ) )
+: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), OUString( ".uno:FontworkCharacterSpacingFloater" ) )
 {
 }
 
