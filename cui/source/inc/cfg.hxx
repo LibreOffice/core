@@ -204,6 +204,8 @@ class ContextMenuSaveInData : public SaveInData
 {
 private:
     std::unique_ptr< SvxConfigEntry > m_pRootEntry;
+    css::uno::Reference< css::container::XNameAccess > m_xPersistentWindowState;
+    OUString GetUIName( const OUString& rResourceURL );
 
 public:
     ContextMenuSaveInData(

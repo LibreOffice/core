@@ -1351,10 +1351,38 @@ ContextMenuSaveInData::ContextMenuSaveInData(
     const OUString& aModuleId, bool bIsDocConfig )
     : SaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bIsDocConfig )
 {
+    css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    css::uno::Reference< css::container::XNameAccess > xConfig( css::ui::theWindowStateConfiguration::get( xContext ) );
+    xConfig->getByName( aModuleId ) >>= m_xPersistentWindowState;
 }
 
 ContextMenuSaveInData::~ContextMenuSaveInData()
 {
+}
+
+OUString ContextMenuSaveInData::GetUIName( const OUString& rResourceURL )
+{
+    if ( m_xPersistentWindowState.is() )
+    {
+        css::uno::Sequence< css::beans::PropertyValue > aProps;
+        try
+        {
+            m_xPersistentWindowState->getByName( rResourceURL ) >>= aProps;
+        }
+        catch ( const css::uno::Exception& )
+        {}
+
+        for ( const auto& aProp : aProps )
+        {
+            if ( aProp.Name == ITEM_DESCRIPTOR_UINAME )
+            {
+                OUString aResult;
+                aProp.Value >>= aResult;
+                return aResult;
+            }
+        }
+    }
+    return OUString();
 }
 
 SvxEntries* ContextMenuSaveInData::GetEntries()
@@ -1393,14 +1421,17 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
             if ( xPopupMenu.is() )
             {
                 OUString aMenuName = aUrl.copy( aUrl.lastIndexOf( '/' ) + 1 );
+                OUString aUIMenuName = GetUIName( aUrl );
+                if ( aUIMenuName.isEmpty() )
+                    aUIMenuName = aMenuName;
 
                 // insert into std::unordered_map to filter duplicates from the parent
                 aMenuInfo.insert( MenuInfo::value_type( aMenuName, true ) );
 
-                SvxConfigEntry* pEntry = new SvxConfigEntry( aMenuName, aUrl, true );
+                SvxConfigEntry* pEntry = new SvxConfigEntry( aUIMenuName, aUrl, true );
                 pEntry->SetMain();
                 m_pRootEntry->GetEntries()->push_back( pEntry );
-                LoadSubMenus( xPopupMenu, aMenuName, pEntry );
+                LoadSubMenus( xPopupMenu, aUIMenuName, pEntry );
             }
         }
 
@@ -1438,10 +1469,14 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
 
             if ( xPopupMenu.is() )
             {
-                SvxConfigEntry* pEntry = new SvxConfigEntry( aMenuName, aUrl, true, true );
+                OUString aUIMenuName = GetUIName( aUrl );
+                if ( aUIMenuName.isEmpty() )
+                    aUIMenuName = aMenuName;
+
+                SvxConfigEntry* pEntry = new SvxConfigEntry( aUIMenuName, aUrl, true, true );
                 pEntry->SetMain();
                 m_pRootEntry->GetEntries()->push_back( pEntry );
-                LoadSubMenus( xPopupMenu, aMenuName, pEntry );
+                LoadSubMenus( xPopupMenu, aUIMenuName, pEntry );
             }
         }
         std::sort( m_pRootEntry->GetEntries()->begin(), m_pRootEntry->GetEntries()->end(), EntrySort );
