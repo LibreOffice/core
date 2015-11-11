@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_674bb0b1",
+        "filename": "external/neon/UnpackedTarball_neon.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2015-11-11T09:19:09Z",
+      "side": 1,
+      "message": "You could also use $(if $(filter WNT,$(OS)), \u003cpatch-file\u003e ) inside gb_UnpackedTarball_add_patches if you prefer (/me does :)).\nSee external/nss/UnpackedTarball_nss.mk for an example, where both styles are mixed.\nBut - is that patch really specific to Windows?",
+      "parentUuid": "faac7902_a7863863",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_2c098f32",
         "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
         "patchSetId": 2
