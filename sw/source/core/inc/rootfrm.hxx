@@ -254,7 +254,7 @@ public:
     static void AssertPageFlys( SwPageFrm * );
 
     /// Invalidate all Content, Size or PrtArea
-    void InvalidateAllContent( sal_uInt8 nInvalidate = INV_SIZE );
+    void InvalidateAllContent( sal_uInt8 nInvalidate );
 
     /**
      * Invalidate/re-calculate the position of all floating
