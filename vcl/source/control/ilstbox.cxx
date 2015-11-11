@@ -87,12 +87,12 @@ void ImplEntryList::SelectEntry( sal_Int32 nPos, bool bSelect )
 {
     if (0 <= nPos && static_cast<size_t>(nPos) < maEntries.size())
     {
-        boost::ptr_vector<ImplEntryType>::iterator iter = maEntries.begin()+nPos;
+        std::vector<std::unique_ptr<ImplEntryType> >::iterator iter = maEntries.begin()+nPos;
 
-        if ( ( iter->mbIsSelected != bSelect ) &&
-           ( (iter->mnFlags & ListBoxEntryFlags::DisableSelection) == ListBoxEntryFlags::NONE  ) )
+        if ( ( (*iter)->mbIsSelected != bSelect ) &&
+           ( ( (*iter)->mnFlags & ListBoxEntryFlags::DisableSelection) == ListBoxEntryFlags::NONE  ) )
         {
-            iter->mbIsSelected = bSelect;
+            (*iter)->mbIsSelected = bSelect;
             if ( mbCallSelectionChangedHdl )
                 maSelectionChangedHdl.Call( nPos );
         }
@@ -135,12 +135,12 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
         if (0 <= nPos && nPos < nEntriesSize)
         {
             insPos = nPos;
-            maEntries.insert( maEntries.begin() + nPos, pNewEntry );
+            maEntries.insert( maEntries.begin() + nPos, std::unique_ptr<ImplEntryType>(pNewEntry) );
         }
         else
         {
             insPos = nEntriesSize;
-            maEntries.push_back(pNewEntry);
+            maEntries.push_back(std::unique_ptr<ImplEntryType>(pNewEntry));
         }
     }
     else
@@ -159,7 +159,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
             if ( nComp >= 0 )
             {
                 insPos = nEntriesSize;
-                maEntries.push_back(pNewEntry);
+                maEntries.push_back(std::unique_ptr<ImplEntryType>(pNewEntry));
             }
             else
             {
@@ -169,7 +169,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
                 if ( nComp <= 0 )
                 {
                     insPos = 0;
-                    maEntries.insert(maEntries.begin(),pNewEntry);
+                    maEntries.insert(maEntries.begin(), std::unique_ptr<ImplEntryType>(pNewEntry));
                 }
                 else
                 {
@@ -201,7 +201,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
                         nMid++;
 
                     insPos = nMid;
-                    maEntries.insert(maEntries.begin()+nMid,pNewEntry);
+                    maEntries.insert(maEntries.begin()+nMid, std::unique_ptr<ImplEntryType>(pNewEntry));
                 }
             }
         }
@@ -212,7 +212,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
             // Collator implementation is garbage then give the user a chance to see
             // his stuff
             insPos = 0;
-            maEntries.insert(maEntries.begin(),pNewEntry);
+            maEntries.insert(maEntries.begin(), std::unique_ptr<ImplEntryType>(pNewEntry));
         }
 
     }
@@ -224,9 +224,9 @@ void ImplEntryList::RemoveEntry( sal_Int32 nPos )
 {
     if (0 <= nPos && static_cast<size_t>(nPos) < maEntries.size())
     {
-        boost::ptr_vector<ImplEntryType>::iterator iter = maEntries.begin()+ nPos;
+        std::vector<std::unique_ptr<ImplEntryType> >::iterator iter = maEntries.begin()+ nPos;
 
-        if ( !!iter->maImage )
+        if ( !!(*iter)->maImage )
             mnImages--;
 
         maEntries.erase(iter);
@@ -238,7 +238,7 @@ sal_Int32 ImplEntryList::FindEntry( const OUString& rString, bool bSearchMRUArea
     const sal_Int32 nEntries = static_cast<sal_Int32>(maEntries.size());
     for ( sal_Int32 n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
     {
-        OUString aComp( vcl::I18nHelper::filterFormattingChars( maEntries[n].maStr ) );
+        OUString aComp( vcl::I18nHelper::filterFormattingChars( maEntries[n]->maStr ) );
         if ( aComp == rString )
             return n;
     }

@@ -20,7 +20,8 @@
 #ifndef INCLUDED_VCL_INC_ILSTBOX_HXX
 #define INCLUDED_VCL_INC_ILSTBOX_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 #include <boost/signals2/signal.hpp>
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
@@ -51,7 +52,7 @@ struct ImplEntryType
     OUString    maStr;
     Image       maImage;
     void*       mpUserData;
-    bool    mbIsSelected;
+    bool        mbIsSelected;
     ListBoxEntryFlags mnFlags;
     long        mnHeight;
 
@@ -97,13 +98,13 @@ private:
 
     Link<sal_Int32,void> maSelectionChangedHdl;
     bool            mbCallSelectionChangedHdl;
-    boost::ptr_vector<ImplEntryType> maEntries;
+    std::vector<std::unique_ptr<ImplEntryType> > maEntries;
 
     ImplEntryType*  GetEntry( sal_Int32  nPos ) const
     {
         if (nPos < 0 || static_cast<size_t>(nPos) >= maEntries.size())
             return nullptr;
-        return const_cast<ImplEntryType*>(&maEntries[nPos]);
+        return const_cast<ImplEntryType*>(maEntries[nPos].get());
     }
 
 public:
