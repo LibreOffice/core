@@ -774,6 +774,9 @@ SwXCell::SwXCell(SwFrameFormat* pTableFormat, const SwStartNode& rStartNode) :
 
 SwXCell::~SwXCell()
 {
+    SolarMutexGuard aGuard;
+    if(GetRegisteredIn())
+        GetRegisteredIn()->Remove(this);
 }
 
 namespace
