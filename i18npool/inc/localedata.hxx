@@ -99,7 +99,7 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSearchOptions( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getCollationOptions( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::uno::Sequence< beans::PropertyValue > > SAL_CALL getContinuousNumberingLevels( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::uno::Sequence< beans::PropertyValue > > SAL_CALL getContinuousNumberingLevels( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
     virtual css::uno::Sequence< css::uno::Reference< container::XIndexAccess > > SAL_CALL getOutlineNumberingLevels( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
 
     // XLocaleData4

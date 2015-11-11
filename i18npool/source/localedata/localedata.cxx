@@ -1265,7 +1265,7 @@ LocaleDataImpl::getReservedWord( const Locale& rLocale  ) throw(RuntimeException
 
 
 Sequence< Sequence<beans::PropertyValue> > SAL_CALL
-LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException)
+LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException, std::exception)
 {
     // load symbol
     MyFunc_Type2 func = reinterpret_cast<MyFunc_Type2>(getFunctionSymbol( rLocale, "getContinuousNumberingLevels" ));
