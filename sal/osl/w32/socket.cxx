@@ -714,6 +714,7 @@ struct oslHostAddrImpl {
     oslSocketAddr   pSockAddr;
 } ;
 
+#if _WIN32_WINNT < _WIN32_WINNT_VISTA
 static oslHostAddr __osl_hostentToHostAddr (const struct hostent *he)
 {
     oslHostAddr pAddr= NULL;
@@ -773,6 +774,7 @@ static oslHostAddr __osl_hostentToHostAddr (const struct hostent *he)
 
     return pAddr;
 }
+#endif
 
 /*****************************************************************************/
 /* osl_createHostAddr */
