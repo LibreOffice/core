@@ -53,16 +53,7 @@ public class AccessibilityTools {
         XWindow xWindow = null;
 
         try {
-            if (xModel == null) {
-                System.out.println("invalid model (==null)");
-            }
-
             XController xController = xModel.getCurrentController();
-
-            if (xController == null) {
-                System.out.println("can't get controller from model");
-            }
-
             XFrame xFrame = xController.getFrame();
 
             if (xFrame == null) {
