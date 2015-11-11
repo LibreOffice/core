@@ -30,7 +30,6 @@
 
 #include <vector>
 #include <memory>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace framework
 {
@@ -75,7 +74,7 @@ struct ImageListItemDescriptor
     OUString                    aHighContrastMaskURL;   // an URL to an optional high contrast bitmap as a mask
 };
 
-typedef boost::ptr_vector<ImageListItemDescriptor> ImageListDescriptor;
+typedef std::vector<std::unique_ptr<ImageListItemDescriptor> > ImageListDescriptor;
 
 struct ImageListsDescriptor
 {

@@ -510,7 +510,7 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
                 if ( m_pImages )
                 {
                     if ( m_aImageList.pImageList )
-                        m_aImageList.pImageList->push_back( m_pImages );
+                        m_aImageList.pImageList->push_back( std::unique_ptr<ImageListItemDescriptor>(m_pImages) );
                     m_pImages = nullptr;
                 }
                 m_bImagesStartFound = false;
@@ -642,7 +642,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
 
         for ( size_t i = 0; i < m_aImageListsItems.pImageList->size(); i++ )
         {
-            const ImageListItemDescriptor* pImageItems = &(*pImageList)[i];
+            const ImageListItemDescriptor* pImageItems = (*pImageList)[i].get();
             WriteImageList( pImageItems );
         }
     }

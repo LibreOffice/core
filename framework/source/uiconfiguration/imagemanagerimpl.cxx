@@ -440,7 +440,7 @@ bool ImageManagerImpl::implts_loadUserImages(
             if (( aUserImageListInfo.pImageList != nullptr ) &&
                 ( !aUserImageListInfo.pImageList->empty() ))
             {
-                ImageListItemDescriptor* pList = &aUserImageListInfo.pImageList->front();
+                ImageListItemDescriptor* pList = aUserImageListInfo.pImageList->front().get();
                 sal_Int32 nCount = pList->pImageItemList->size();
                 std::vector< OUString > aUserImagesVector;
                 aUserImagesVector.reserve(nCount);
@@ -512,7 +512,7 @@ bool ImageManagerImpl::implts_storeUserImages(
             aUserImageListInfo.pImageList = new ImageListDescriptor;
 
             ImageListItemDescriptor* pList = new ImageListItemDescriptor;
-            aUserImageListInfo.pImageList->push_back( pList );
+            aUserImageListInfo.pImageList->push_back( std::unique_ptr<ImageListItemDescriptor>(pList) );
 
             pList->pImageItemList = new ImageItemListDescriptor;
             for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
