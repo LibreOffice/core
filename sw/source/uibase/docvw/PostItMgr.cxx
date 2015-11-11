@@ -593,6 +593,10 @@ void SwPostItMgr::PreparePageContainer()
 
 void SwPostItMgr::LayoutPostIts()
 {
+    bool bEnableMapMode = comphelper::LibreOfficeKit::isActive() && !mpEditWin->IsMapModeEnabled();
+    if (bEnableMapMode)
+        mpEditWin->EnableMapMode();
+
     if ( !mvPostItFields.empty() && !mbWaitingForCalcRects )
     {
         mbLayouting = true;
@@ -809,6 +813,9 @@ void SwPostItMgr::LayoutPostIts()
 
         mbLayouting = false;
     }
+
+    if (bEnableMapMode)
+        mpEditWin->EnableMapMode(false);
 }
 
 bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
@@ -856,6 +863,8 @@ void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const Rectangle& /*rRe
         if (!pPostIt)
             continue;
 
+        bool bEnableMapMode = !mpEditWin->IsMapModeEnabled();
+        mpEditWin->EnableMapMode();
         rRenderContext.Push(PushFlags::MAPMODE);
         Point aOffset(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
         MapMode aMapMode(rRenderContext.GetMapMode());
@@ -867,6 +876,8 @@ void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const Rectangle& /*rRe
         pPostIt->PaintTile(rRenderContext, aRectangle);
 
         rRenderContext.Pop();
+        if (bEnableMapMode)
+            mpEditWin->EnableMapMode(false);
     }
 }
 
