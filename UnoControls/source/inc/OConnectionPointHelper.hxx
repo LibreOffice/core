@@ -34,45 +34,15 @@ namespace unocontrols{
 
 //  class declaration OConnectionPointHelper
 
-class OConnectionPointHelper    :   public  ::com::sun::star::lang::XConnectionPoint
+class OConnectionPointHelper    :   public  css::lang::XConnectionPoint
                                 ,   public  ::cppu::OWeakObject
 {
 
-//  public methods
-
 public:
-
-    //  construct/destruct
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     OConnectionPointHelper( ::osl::Mutex&                       aMutex                      ,
                             OConnectionPointContainerHelper*    pContainerImplementation    ,
-                            ::com::sun::star::uno::Type                       aType                       );
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
+                            css::uno::Type                       aType                       );
 
     virtual ~OConnectionPointHelper();
 
@@ -91,8 +61,8 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -114,135 +84,40 @@ public:
 
     //  XConnectionPoint
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
+    virtual css::uno::Type SAL_CALL getConnectionType()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual ::com::sun::star::uno::Type SAL_CALL getConnectionType()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XConnectionPointContainer > SAL_CALL getConnectionPointContainer()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
+    virtual css::uno::Reference< css::lang::XConnectionPointContainer > SAL_CALL getConnectionPointContainer()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL advise(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xListener
+        const css::uno::Reference< css::uno::XInterface >& xListener
     ) throw (
-        ::com::sun::star::lang::ListenerExistException,
-        ::com::sun::star::lang::InvalidListenerException ,
-        ::com::sun::star::uno::RuntimeException, std::exception
+        css::lang::ListenerExistException,
+        css::lang::InvalidListenerException ,
+        css::uno::RuntimeException, std::exception
     ) override;
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
+    virtual void SAL_CALL unadvise( const css::uno::Reference< css::uno::XInterface >& xListener )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual void SAL_CALL unadvise( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xListener )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getConnections()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-//  private methods
+    virtual css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > SAL_CALL getConnections()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     bool impl_LockContainer();
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     void impl_UnlockContainer();
-
-//  private variables
 
 private:
 
-    ::osl::Mutex&                                                   m_aSharedMutex;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XConnectionPointContainer >   m_oContainerWeakReference;   // Reference to container-class!. Don't use Reference<...>
+    ::osl::Mutex&                                                     m_aSharedMutex;
+    css::uno::WeakReference< css::lang::XConnectionPointContainer >   m_oContainerWeakReference;   // Reference to container-class!. Don't use Reference<...>
                                                                                             // It is a ring-reference => and must be a wekreference!
-    OConnectionPointContainerHelper*                                m_pContainerImplementation;
-    ::com::sun::star::uno::Type                                                   m_aInterfaceType;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                       m_xLock;
+    OConnectionPointContainerHelper*                                  m_pContainerImplementation;
+    css::uno::Type                                                    m_aInterfaceType;
+    css::uno::Reference< css::uno::XInterface >                       m_xLock;
 
 };  // class OConnectionPointHelper
 

@@ -52,44 +52,14 @@ class ProgressBar;
 
 //  class declaration
 
-class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
-                        , public ::com::sun::star::task::XStatusIndicator
+class StatusIndicator   : public css::awt::XLayoutConstrains
+                        , public css::task::XStatusIndicator
                         , public BaseContainerControl
 {
 
-    //  public methods
-
     public:
 
-        //  construct/destruct
-
-        /**_______________________________________________________________________________________________________
-            @short
-            @descr
-
-            @seealso
-
-            @param
-
-            @return
-
-            @onerror
-        */
-
-        StatusIndicator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-
-        /**_______________________________________________________________________________________________________
-            @short
-            @descr
-
-            @seealso
-
-            @param
-
-            @return
-
-            @onerror
-        */
+        StatusIndicator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         virtual ~StatusIndicator();
 
@@ -108,8 +78,8 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    A RuntimeException is thrown.
         */
 
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         /**_______________________________________________________________________________________________________
             @short      increment refcount
@@ -139,155 +109,87 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror    A RuntimeException is thrown.
         */
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         //  XAggregation
 
-        /**_______________________________________________________________________________________________________
-        */
-
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         //  XStatusIndicator
-
-        /*-****************************************************************************************************
-        *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL start(
             const OUString&  sText   ,
             sal_Int32 nRange
-        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        ) throw( css::uno::RuntimeException, std::exception ) override;
 
-        /*-****************************************************************************************************
-        *//*-*****************************************************************************************************/
+        virtual void SAL_CALL end() throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual void SAL_CALL end() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL reset() throw( css::uno::RuntimeException, std::exception ) override;
 
-        /*-****************************************************************************************************
-        *//*-*****************************************************************************************************/
+        virtual void SAL_CALL setText( const OUString& sText ) throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual void SAL_CALL reset() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-        /*-****************************************************************************************************
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL setText( const OUString& sText ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-        /*-****************************************************************************************************
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( css::uno::RuntimeException, std::exception ) override;
 
         //  XLayoutConstrains
 
-        /**_______________________________________________________________________________________________________
-        */
+        virtual css::awt::Size SAL_CALL getMinimumSize() throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::awt::Size SAL_CALL getPreferredSize() throw( css::uno::RuntimeException, std::exception ) override;
 
-        /**_______________________________________________________________________________________________________
-        */
-
-        virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-        /**_______________________________________________________________________________________________________
-        */
-
-        virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         //  XControl
 
-        /**_______________________________________________________________________________________________________
-        */
-
         virtual void SAL_CALL createPeer(
-            const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&    xToolkit    ,
-            const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent
-        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const   css::uno::Reference< css::awt::XToolkit >&    xToolkit    ,
+            const   css::uno::Reference< css::awt::XWindowPeer >& xParent
+        ) throw( css::uno::RuntimeException, std::exception ) override;
 
-        /**_______________________________________________________________________________________________________
-        */
+        virtual sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& xModel )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-        /**_______________________________________________________________________________________________________
-        */
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel()
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         //  XComponent
 
-        /**_______________________________________________________________________________________________________
-        */
-
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
         //  XWindow
-
-        /**_______________________________________________________________________________________________________
-        */
 
         virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
                                             sal_Int32   nY      ,
                                             sal_Int32   nWidth  ,
                                             sal_Int32   nHeight ,
-                                            sal_Int16   nFlags  ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                                            sal_Int16   nFlags  ) throw( css::uno::RuntimeException, std::exception ) override;
 
         //  BaseControl
 
-        /**_______________________________________________________________________________________________________
-        */
-
-        static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
-
-        /**_______________________________________________________________________________________________________
-        */
+        static const css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
         static const OUString impl_getStaticImplementationName();
 
-//  protected methods
-
 protected:
 
-        /**_______________________________________________________________________________________________________
-        */
-
-        virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentPeer
+        virtual css::awt::WindowDescriptor* impl_getWindowDescriptor(
+            const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
         ) override;
-
-        /**_______________________________________________________________________________________________________
-        */
 
         virtual void impl_paint (
             sal_Int32 nX,
             sal_Int32 nY,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > & rGraphics
+            const css::uno::Reference< css::awt::XGraphics > & rGraphics
         ) override;
 
-        /**_______________________________________________________________________________________________________
-        */
-
-        virtual void impl_recalcLayout( const ::com::sun::star::awt::WindowEvent& aEvent ) override;
-
-// debug methods
+        virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent ) override;
 
 private:
 
-    /**_______________________________________________________________________________________________________
-    */
-
-// private variables
-
-private:
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >       m_xText;
-    rtl::Reference<ProgressBar> m_xProgressBar;
+    css::uno::Reference< css::awt::XFixedText >   m_xText;
+    rtl::Reference<ProgressBar>                   m_xProgressBar;
 
 };  // class StatusIndicator
 

@@ -373,7 +373,7 @@ const OUString StatusIndicator::impl_getStaticImplementationName()
 
 WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const css::uno::Reference< XWindowPeer >& xParentPeer )
 {
-    // - used from "createPeer()" to set the values of an ::com::sun::star::awt::WindowDescriptor !!!
+    // - used from "createPeer()" to set the values of an css::awt::WindowDescriptor !!!
     // - if you will change the descriptor-values, you must override this virtuell function
     // - the caller must release the memory for this dynamical descriptor !!!
 

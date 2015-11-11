@@ -53,21 +53,17 @@ namespace unocontrols{
 
 //  class
 
-class OMRCListenerMultiplexerHelper : public ::com::sun::star::awt::XFocusListener
-                                    , public ::com::sun::star::awt::XWindowListener
-                                    , public ::com::sun::star::awt::XKeyListener
-                                    , public ::com::sun::star::awt::XMouseListener
-                                    , public ::com::sun::star::awt::XMouseMotionListener
-                                    , public ::com::sun::star::awt::XPaintListener
-                                    , public ::com::sun::star::awt::XTopWindowListener
+class OMRCListenerMultiplexerHelper : public css::awt::XFocusListener
+                                    , public css::awt::XWindowListener
+                                    , public css::awt::XKeyListener
+                                    , public css::awt::XMouseListener
+                                    , public css::awt::XMouseMotionListener
+                                    , public css::awt::XPaintListener
+                                    , public css::awt::XTopWindowListener
                                     , public ::cppu::OWeakObject
 {
 
-//  public methods
-
 public:
-
-    //  construct/destruct
 
     /**_______________________________________________________________________________________________________
         @short      constructor
@@ -76,8 +72,8 @@ public:
         @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
     */
 
-    OMRCListenerMultiplexerHelper(  const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xControl    ,
-                                    const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xPeer       );
+    OMRCListenerMultiplexerHelper(  const   css::uno::Reference< css::awt::XWindow >& xControl    ,
+                                    const   css::uno::Reference< css::awt::XWindow >& xPeer       );
 
     /**_______________________________________________________________________________________________________
         @short      copy-constructor
@@ -86,10 +82,6 @@ public:
     */
 
     OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& aCopyInstance );
-
-    /**_______________________________________________________________________________________________________
-        @short      destructor
-    */
 
     virtual ~OMRCListenerMultiplexerHelper();
 
@@ -108,8 +100,8 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -129,15 +121,7 @@ public:
 
     virtual void SAL_CALL release() throw() override;
 
-    //  operator
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() const { return (static_cast<OWeakObject*>(const_cast<OMRCListenerMultiplexerHelper *>(this)));}
-
-    /**_______________________________________________________________________________________________________
-    */
+    operator css::uno::Reference< css::uno::XInterface >() const { return (static_cast<OWeakObject*>(const_cast<OMRCListenerMultiplexerHelper *>(this)));}
 
     OMRCListenerMultiplexerHelper& operator= ( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
@@ -148,7 +132,7 @@ public:
         @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
     */
 
-    void setPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xPeer );
+    void setPeer( const css::uno::Reference< css::awt::XWindow >& xPeer );
 
     /**_______________________________________________________________________________________________________
         @short      Remove all listeners and send a disposing message.
@@ -160,169 +144,100 @@ public:
         @short      Add the specified listener to the source.
     */
 
-    void advise(    const   ::com::sun::star::uno::Type&                              aType       ,
-                    const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  xListener   );
+    void advise(    const   css::uno::Type&                              aType       ,
+                    const   css::uno::Reference< css::uno::XInterface >&  xListener   );
 
     /**_______________________________________________________________________________________________________
         @short      Remove the specified listener from the source.
     */
 
-    void unadvise(  const   ::com::sun::star::uno::Type&                              aType       ,
-                    const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  xListener   );
+    void unadvise(  const   css::uno::Type&                              aType       ,
+                    const   css::uno::Reference< css::uno::XInterface >&  xListener   );
 
     //  XEventListener
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& aSource)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aSource)
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XFocusListener
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL focusGained(const css::awt::FocusEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL focusLost(const css::awt::FocusEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XWindowListener
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL windowResized(const css::awt::WindowEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL windowResized(const ::com::sun::star::awt::WindowEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL windowShown(const css::lang::EventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL windowMoved(const ::com::sun::star::awt::WindowEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL windowShown(const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL windowHidden(const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowHidden(const css::lang::EventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XKeyListener
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL keyPressed( const ::com::sun::star::awt::KeyEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL keyReleased( const ::com::sun::star::awt::KeyEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XMouseListener
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL mousePressed(const css::awt::MouseEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL mousePressed(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL mouseReleased(const css::awt::MouseEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL mouseEntered(const css::awt::MouseEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL mouseReleased(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL mouseEntered(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL mouseExited(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL mouseExited(const css::awt::MouseEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XMouseMotionListener
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL mouseDragged(const css::awt::MouseEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL mouseDragged(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL mouseMoved(const ::com::sun::star::awt::MouseEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL mouseMoved(const css::awt::MouseEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XPaintListener
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL windowPaint(const ::com::sun::star::awt::PaintEvent& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowPaint(const css::awt::PaintEvent& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XTopWindowListener
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL windowOpened( const css::lang::EventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowClosing( const css::lang::EventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL windowClosed( const css::lang::EventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowMinimized( const css::lang::EventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_______________________________________________________________________________________________________
-    */
+    virtual void SAL_CALL windowNormalized( const css::lang::EventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowActivated( const css::lang::EventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL windowMinimized( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL windowNormalized( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 //  protected methods
 
@@ -334,8 +249,8 @@ protected:
         @param      rType   The listener type, which specify the type of the listener.
     */
 
-    void impl_adviseToPeer( const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xPeer   ,
-                            const   ::com::sun::star::uno::Type&                          aType   );
+    void impl_adviseToPeer( const   css::uno::Reference< css::awt::XWindow >& xPeer   ,
+                            const   css::uno::Type&                          aType   );
 
     /**_______________________________________________________________________________________________________
         @short      Add the listener to the peer.
@@ -343,16 +258,16 @@ protected:
         @param      rType   The listener type, which specify the type of the listener.
     */
 
-    void impl_unadviseFromPeer( const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xPeer   ,
-                                const   ::com::sun::star::uno::Type&                          aType   );
+    void impl_unadviseFromPeer( const   css::uno::Reference< css::awt::XWindow >& xPeer   ,
+                                const   css::uno::Type&                          aType   );
 
 //  private variables
 
 private:
 
     ::osl::Mutex                                m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::awt::XWindow >  m_xControl;
+    css::uno::Reference< css::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
+    css::uno::WeakReference< css::awt::XWindow >  m_xControl;
     ::cppu::OMultiTypeInterfaceContainerHelper  m_aListenerHolder;
 
 };  // class OMRCListenerMultiplexerHelper

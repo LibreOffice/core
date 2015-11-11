@@ -312,7 +312,7 @@ sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedVa
 
 void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHandle ,
                                                         const   Any&        rValue  )
-                                                        throw ( ::com::sun::star::uno::Exception, std::exception )
+                                                        throw ( css::uno::Exception, std::exception )
 {
     // this method only set the value
     MutexGuard  aGuard (m_aMutex);

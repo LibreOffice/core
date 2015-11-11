@@ -42,28 +42,18 @@ namespace unocontrols{
 
 struct IMPL_ControlInfo
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl;
-    OUString                                sName;
+    css::uno::Reference< css::awt::XControl > xControl;
+    OUString                                  sName;
 };
 
-class BaseContainerControl  : public ::com::sun::star::awt::XControlModel
-                            , public ::com::sun::star::awt::XControlContainer
+class BaseContainerControl  : public css::awt::XControlModel
+                            , public css::awt::XControlContainer
                             , public BaseControl
 {
 
-//  public methods
-
 public:
 
-    //  construct/destruct
-
-    /**_______________________________________________________________________________________________________
-    */
-
-       BaseContainerControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-
-    /**_______________________________________________________________________________________________________
-    */
+       BaseContainerControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~BaseContainerControl();
 
@@ -82,9 +72,9 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        const css::uno::Type& aType
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XTypeProvider
 
@@ -96,181 +86,88 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XAggregation
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
-        const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryAggregation(
+        const css::uno::Type& aType
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XControl
 
-    /**_______________________________________________________________________________________________________
-    */
-
     virtual void SAL_CALL createPeer(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&      xToolkit ,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&   xParent
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
+        const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
+        const css::uno::Reference< css::awt::XWindowPeer >&   xParent
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL setModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        const css::uno::Reference< css::awt::XControlModel >& xModel
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XComponent
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XEventListener
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XControlContainer
 
-    /**_______________________________________________________________________________________________________
-    */
-
     virtual void SAL_CALL addControl(
-        const OUString&                                   sName    ,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >&    xControl
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception  ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
+        const OUString&                                     sName    ,
+        const css::uno::Reference< css::awt::XControl >&    xControl
+    ) throw( css::uno::RuntimeException, std::exception  ) override;
 
     virtual void SAL_CALL removeControl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_______________________________________________________________________________________________________
-    */
+        const css::uno::Reference< css::awt::XControl >& xControl
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL setStatusText(
         const OUString& sStatusText
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl(
+    virtual css::uno::Reference< css::awt::XControl > SAL_CALL getControl(
         const OUString& sName
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XWindow
 
-    /**_______________________________________________________________________________________________________
-    */
-
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-//  protected methods
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
     using OComponentHelper::disposing;
-    /**_______________________________________________________________________________________________________
-        @short
-        @descr
 
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentPeer
+    virtual css::awt::WindowDescriptor* impl_getWindowDescriptor(
+        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
 
-    /**_______________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual void impl_paint(
         sal_Int32                                           nX ,
         sal_Int32                                           nY ,
-        const   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >&   xGraphics
+        const   css::uno::Reference< css::awt::XGraphics >&   xGraphics
     ) override;
 
-//  private methods
-
 private:
-
-    /**_______________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     void impl_activateTabControllers();
 
-    /**_______________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     void impl_cleanMemory();
 
-//  private variables
-
-private:
     // list of pointer of "struct IMPL_ControlInfo" to hold child-controls
     ::std::vector< IMPL_ControlInfo* > maControlInfoList;
 
     // list of references of XTabController to hold tab-order in this container
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >  m_xTabControllerList;
+    css::uno::Sequence< css::uno::Reference< css::awt::XTabController > >  m_xTabControllerList;
 
     ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListeners;
 
