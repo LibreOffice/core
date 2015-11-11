@@ -111,7 +111,7 @@ public:
     virtual OUString SAL_CALL getIndexKeysByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
     virtual OUString SAL_CALL getIndexModuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
     virtual css::uno::Sequence< UnicodeScript > SAL_CALL getUnicodeScripts( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
-    virtual css::uno::Sequence< OUString > SAL_CALL getFollowPageWords( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getFollowPageWords( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
     virtual bool SAL_CALL hasPhonetic( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
     virtual bool SAL_CALL isPhonetic( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
     virtual OUString SAL_CALL getHangingCharacters( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);

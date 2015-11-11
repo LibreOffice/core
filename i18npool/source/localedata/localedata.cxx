@@ -1122,7 +1122,7 @@ LocaleDataImpl::getUnicodeScripts( const Locale& rLocale ) throw(RuntimeExceptio
 }
 
 Sequence< OUString > SAL_CALL
-LocaleDataImpl::getFollowPageWords( const Locale& rLocale ) throw(RuntimeException)
+LocaleDataImpl::getFollowPageWords( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getFollowPageWords" ));
 
