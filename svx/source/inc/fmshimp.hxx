@@ -61,7 +61,7 @@
 #include <queue>
 #include <set>
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 
 typedef std::vector< css::uno::Reference< css::form::XForm > > FmFormArray;
 
@@ -571,7 +571,7 @@ public:
 class SVX_DLLPUBLIC ControlConversionMenuController : public SfxMenuControl
 {
 protected:
-    boost::ptr_vector<SfxStatusForwarder> m_aStatusForwarders;
+    std::vector<std::unique_ptr<SfxStatusForwarder> > m_aStatusForwarders;
     Menu*                   m_pMainMenu;
     PopupMenu*              m_pConversionMenu;
 

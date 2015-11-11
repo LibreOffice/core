@@ -95,6 +95,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -4036,8 +4037,7 @@ ControlConversionMenuController::ControlConversionMenuController( sal_uInt16 _nI
         for (sal_Int16 i=0; i<m_pConversionMenu->GetItemCount(); ++i)
         {
             _rBindings.Invalidate(m_pConversionMenu->GetItemId(i));
-            SfxStatusForwarder* pForwarder = new SfxStatusForwarder(m_pConversionMenu->GetItemId(i), *this);
-            m_aStatusForwarders.push_back(pForwarder);
+            m_aStatusForwarders.push_back(o3tl::make_unique<SfxStatusForwarder>(m_pConversionMenu->GetItemId(i), *this));
         }
     }
 }
