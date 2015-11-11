@@ -127,7 +127,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	icuuc \
 	lcms2 \
 	mdds_headers \
-	mesa_headers \
+	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
