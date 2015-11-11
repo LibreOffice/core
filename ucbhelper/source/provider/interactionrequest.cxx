@@ -47,10 +47,10 @@ namespace ucbhelper
 struct InteractionRequest_Impl
 {
     rtl::Reference< InteractionContinuation > m_xSelection;
-    com::sun::star::uno::Any m_aRequest;
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > m_aContinuations;
+    css::uno::Any m_aRequest;
+    css::uno::Sequence<
+        css::uno::Reference<
+            css::task::XInteractionContinuation > > m_aContinuations;
 
     InteractionRequest_Impl() {}
     explicit InteractionRequest_Impl( const uno::Any & rRequest )

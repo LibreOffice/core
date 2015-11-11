@@ -51,7 +51,7 @@ namespace ucbhelper {
 
 ResultSetImplHelper::ResultSetImplHelper(
     const uno::Reference< uno::XComponentContext >& rxContext,
-    const com::sun::star::ucb::OpenCommandArgument2& rCommand )
+    const css::ucb::OpenCommandArgument2& rCommand )
 : m_pDisposeEventListeners( nullptr ),
   m_bStatic( false ),
   m_bInitDone( false ),
@@ -100,8 +100,8 @@ css::uno::Any SAL_CALL ResultSetImplHelper::queryInterface( const css::uno::Type
 
 XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
                       lang::XTypeProvider,
-                         lang::XServiceInfo,
-                      com::sun::star::ucb::XDynamicResultSet );
+                      lang::XServiceInfo,
+                      css::ucb::XDynamicResultSet );
 
 
 
@@ -170,13 +170,13 @@ void SAL_CALL ResultSetImplHelper::removeEventListener(
 // virtual
 uno::Reference< sdbc::XResultSet > SAL_CALL
 ResultSetImplHelper::getStaticResultSet()
-    throw( com::sun::star::ucb::ListenerAlreadySetException,
+    throw( css::ucb::ListenerAlreadySetException,
            uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw com::sun::star::ucb::ListenerAlreadySetException();
+        throw css::ucb::ListenerAlreadySetException();
 
     init( true );
     return m_xResultSet1;
@@ -185,15 +185,14 @@ ResultSetImplHelper::getStaticResultSet()
 
 // virtual
 void SAL_CALL ResultSetImplHelper::setListener(
-        const uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >&
-            Listener )
-    throw( com::sun::star::ucb::ListenerAlreadySetException,
+        const uno::Reference< css::ucb::XDynamicResultSetListener >& Listener )
+    throw( css::ucb::ListenerAlreadySetException,
            uno::RuntimeException, std::exception )
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
     if ( m_bStatic || m_xListener.is() )
-        throw com::sun::star::ucb::ListenerAlreadySetException();
+        throw css::ucb::ListenerAlreadySetException();
 
     m_xListener = Listener;
 
@@ -209,21 +208,20 @@ void SAL_CALL ResultSetImplHelper::setListener(
     init( false );
 
     uno::Any aInfo;
-    aInfo <<= com::sun::star::ucb::WelcomeDynamicResultSetStruct(
+    aInfo <<= css::ucb::WelcomeDynamicResultSetStruct(
         m_xResultSet1 /* "old" */,
         m_xResultSet2 /* "new" */ );
 
-    uno::Sequence< com::sun::star::ucb::ListAction > aActions( 1 );
-    aActions.getArray()[ 0 ]
-        = com::sun::star::ucb::ListAction(
+    uno::Sequence< css::ucb::ListAction > aActions {
+         css::ucb::ListAction(
             0, // Position; not used
             0, // Count; not used
-            com::sun::star::ucb::ListActionType::WELCOME,
-            aInfo );
+            css::ucb::ListActionType::WELCOME,
+            aInfo ) };
     aGuard.clear();
 
     Listener->notify(
-        com::sun::star::ucb::ListEvent(
+        css::ucb::ListEvent(
             static_cast< cppu::OWeakObject * >( this ), aActions ) );
 }
 
@@ -232,37 +230,33 @@ void SAL_CALL ResultSetImplHelper::setListener(
 sal_Int16 SAL_CALL ResultSetImplHelper::getCapabilities()
     throw( uno::RuntimeException, std::exception )
 {
-    // ! com::sun::star::ucb::ContentResultSetCapability::SORTED
+    // ! css::ucb::ContentResultSetCapability::SORTED
     return 0;
 }
 
 
 // virtual
 void SAL_CALL ResultSetImplHelper::connectToCache(
-        const uno::Reference< com::sun::star::ucb::XDynamicResultSet > &
-            xCache )
-    throw( com::sun::star::ucb::ListenerAlreadySetException,
-           com::sun::star::ucb::AlreadyInitializedException,
-           com::sun::star::ucb::ServiceNotFoundException,
+        const uno::Reference< css::ucb::XDynamicResultSet > & xCache )
+    throw( css::ucb::ListenerAlreadySetException,
+           css::ucb::AlreadyInitializedException,
+           css::ucb::ServiceNotFoundException,
            uno::RuntimeException, std::exception )
 {
     if ( m_xListener.is() )
-        throw com::sun::star::ucb::ListenerAlreadySetException();
+        throw css::ucb::ListenerAlreadySetException();
 
     if ( m_bStatic )
-        throw com::sun::star::ucb::ListenerAlreadySetException();
+        throw css::ucb::ListenerAlreadySetException();
 
-    uno::Reference< com::sun::star::ucb::XSourceInitialization >
-        xTarget( xCache, uno::UNO_QUERY );
+    uno::Reference< css::ucb::XSourceInitialization > xTarget( xCache, uno::UNO_QUERY );
     if ( xTarget.is() )
     {
-        uno::Reference<
-            com::sun::star::ucb::XCachedDynamicResultSetStubFactory >
-                xStubFactory;
+        uno::Reference< css::ucb::XCachedDynamicResultSetStubFactory >  xStubFactory;
         try
         {
             xStubFactory
-                = com::sun::star::ucb::CachedDynamicResultSetStubFactory::create(
+                = css::ucb::CachedDynamicResultSetStubFactory::create(
                       m_xContext );
         }
         catch ( uno::Exception const & )
@@ -276,7 +270,7 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
             return;
         }
     }
-    throw com::sun::star::ucb::ServiceNotFoundException();
+    throw css::ucb::ServiceNotFoundException();
 }
 
 

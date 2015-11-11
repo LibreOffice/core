@@ -39,7 +39,7 @@ void InterceptedInteraction::setInterceptions(const ::std::vector< InterceptedRe
 
 InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
     const InterceptedRequest&,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >&)
+    const css::uno::Reference< css::task::XInteractionRequest >&)
 {
     // default behaviour! see impl_interceptRequest() for further information ...
     return E_NOT_INTERCEPTED;
@@ -69,7 +69,7 @@ void SAL_CALL InterceptedInteraction::handle(const css::uno::Reference< css::tas
     impl_handleDefault(xRequest);
 }
 
-void InterceptedInteraction::impl_handleDefault(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)
+void InterceptedInteraction::impl_handleDefault(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     EInterceptionState eState = impl_interceptRequest(xRequest);
 
@@ -98,7 +98,7 @@ void InterceptedInteraction::impl_handleDefault(const ::com::sun::star::uno::Ref
     }
 }
 
-InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_interceptRequest(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)
+InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_interceptRequest(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     css::uno::Any                                                                    aRequest       = xRequest->getRequest();
     css::uno::Type                                                                   aRequestType   = aRequest.getValueType();
