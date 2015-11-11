@@ -665,7 +665,47 @@ bool OpenGLContext::init(Display* dpy, Window win, int screen)
     return ImplInit();
 }
 
+// Copy of gluCheckExtension(), from the Apache-licensed
+// https://code.google.com/p/glues/source/browse/trunk/glues/source/glues_registry.c
+static GLboolean checkExtension(const GLubyte* extName, const GLubyte* extString)
+{
+  GLboolean flag=GL_FALSE;
+  char* word;
+  char* lookHere;
+  char* deleteThis;
 
+  if (extString==nullptr)
+  {
+     return GL_FALSE;
+  }
+
+  deleteThis=lookHere=static_cast<char*>(malloc(strlen(reinterpret_cast<const char*>(extString))+1));
+  if (lookHere==nullptr)
+  {
+     return GL_FALSE;
+  }
+
+  /* strtok() will modify string, so copy it somewhere */
+  strcpy(lookHere, reinterpret_cast<const char*>(extString));
+
+  while ((word=strtok(lookHere, " "))!=nullptr)
+  {
+     if (strcmp(word, reinterpret_cast<const char*>(extName))==0)
+     {
+        flag=GL_TRUE;
+        break;
+     }
+     lookHere=nullptr; /* get next token */
+  }
+  free(static_cast<void*>(deleteThis));
+
+  return flag;
+}
+
+bool GLWindow::HasGLXExtension( const char* name ) const
+{
+    return checkExtension( reinterpret_cast<const GLubyte*>(name), reinterpret_cast<const GLubyte*>(GLXExtensions) );
+}
 
 bool OpenGLContext::ImplInit()
 {
