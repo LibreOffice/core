@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_27d888ef",
+        "filename": "filter/source/svg/svgreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2015-11-11T09:16:51Z",
+      "side": 1,
+      "message": "Yes, 0 will give false",
+      "parentUuid": "faac7902_07f3c40b",
+      "revId": "48f410960b01226a2eddd36a90c32458333e8943",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_671a9070",
         "filename": "filter/source/svg/svgreader.cxx",
         "patchSetId": 2
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "I think it also fails if 1 is in the end and \u0027\u003d\u0027 is used instead of \u0027\u003d\u003d\u0027",
       "parentUuid": "faac7902_671a9070",
+      "range": {
+        "startLine": 490,
+        "startChar": 16,
+        "endLine": 490,
+        "endChar": 57
+      },
+      "revId": "48f410960b01226a2eddd36a90c32458333e8943",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_87e5f4a9",
+        "filename": "filter/source/svg/svgreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2015-11-11T09:16:51Z",
+      "side": 1,
+      "message": "You are absolutely correct in this case ;-)",
+      "parentUuid": "faac7902_87905497",
       "range": {
         "startLine": 490,
         "startChar": 16,
