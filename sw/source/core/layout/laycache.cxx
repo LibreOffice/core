@@ -220,7 +220,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                     pSub = pSub->GetNext();
                                 }
                                 pTab = pTab->GetFollow();
-                                OSL_ENSURE( pTab, "Table follow without master" );
+                                assert(pTab && "Table follow without master");
                             }
                         }
                         do
