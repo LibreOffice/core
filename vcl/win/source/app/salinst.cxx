@@ -63,6 +63,8 @@
 #define GetObject GetObjectA
 #endif
 
+#include "prewin.h"
+
 #include <gdiplus.h>
 #include <gdiplusenums.h>
 #include <gdipluscolor.h>
@@ -71,6 +73,7 @@
 #ifdef _WIN32_WINNT_WINBLUE
 #include <VersionHelpers.h>
 #endif
+#include "postwin.h"
 
 #ifdef __MINGW32__
 #ifdef GetObject

@@ -58,14 +58,14 @@ extern "C" {
 
 DWORD IsValidFilePath (
     rtl_uString *  path,
-    LPCTSTR *      lppError,
+    LPCWSTR *      lppError,
     DWORD          dwFlags,
     rtl_uString ** corrected
 );
 
 DWORD GetCaseCorrectPathName (
-    LPCTSTR lpszShortPath,  // file name
-    LPTSTR  lpszLongPath,   // path buffer
+    LPCWSTR lpszShortPath,  // file name
+    LPWSTR  lpszLongPath,   // path buffer
     DWORD   cchBuffer,      // size of path buffer
     BOOL bCheckExistence
 );

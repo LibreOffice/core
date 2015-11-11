@@ -41,6 +41,9 @@
 
 typedef sal_Int32 FXPT2DOT30;
 
+// Avoid conflict with wingdi.h
+namespace
+{
 struct CIEXYZ
 {
     FXPT2DOT30      aXyzX;
@@ -141,7 +144,7 @@ struct DIBV5Header : public DIBInfoHeader
     ~DIBV5Header()
     {}
 };
-
+}
 namespace
 {
     inline sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
