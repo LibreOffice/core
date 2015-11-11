@@ -1431,7 +1431,7 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
                 rEntry.Scaling = fScaling;
         }
 
-        maFonts.push_back(new FontCollectionEntry(rEntry));
+        maFonts.push_back(rEntry);
         return nFonts;
     }
     return 0;

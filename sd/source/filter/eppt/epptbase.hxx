@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTBASE_HXX
 
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <vcl/mapmod.hxx>
 #include <tools/stream.hxx>
@@ -144,7 +143,7 @@ struct FontCollectionEntry
         sal_Int16               CharSet;
 
         OUString                Original;
-        bool                bIsConverted;
+        bool                    bIsConverted;
 
         FontCollectionEntry( const OUString& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
                             Scaling ( 1.0 ),
@@ -195,7 +194,7 @@ public:
 private:
 
     VclPtr<VirtualDevice> pVDev;
-    boost::ptr_vector<FontCollectionEntry> maFonts;
+    std::vector<FontCollectionEntry> maFonts;
 };
 
 #define PPTEX_STYLESHEETENTRYS  9
