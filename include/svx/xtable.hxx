@@ -171,7 +171,6 @@ class SVX_DLLPUBLIC XPropertyList : public cppu::OWeakObject
     SAL_DLLPRIVATE void operator delete(void *);
 protected:
     typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
-    typedef ::std::vector< Bitmap* > BitmapList_impl;
 
     XPropertyListType   meType;
     OUString            maName; // not persistent
