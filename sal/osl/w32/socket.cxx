@@ -1092,7 +1092,7 @@ sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(oslSocketAddr pAddr)
     {
         struct sockaddr_in* pSystemInetAddr= (struct sockaddr_in*)&(pAddr->m_sockaddr);
 
-        if ( (pSystemInetAddr->sin_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet)))
+        if (pSystemInetAddr->sin_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
             return ntohs(pSystemInetAddr->sin_port);
     }
     return OSL_INVALID_PORT;
