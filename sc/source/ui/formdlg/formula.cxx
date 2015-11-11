@@ -58,9 +58,6 @@
 using namespace formula;
 using namespace com::sun::star;
 
-ScDocument* ScFormulaDlg::s_pDoc = nullptr;
-ScAddress ScFormulaDlg::aCursorPos;
-
 //      init/ shared functions for dialog
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
@@ -91,13 +88,13 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         }
     }
 
-    if (s_pDoc == nullptr)
-        s_pDoc = pViewData->GetDocument();
-    m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS, static_cast<ScDocShell*>(s_pDoc->GetDocumentShell())),uno::UNO_QUERY);
+    if (m_pDoc == nullptr)
+        m_pDoc = pViewData->GetDocument();
+    m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS, static_cast<ScDocShell*>(m_pDoc->GetDocumentShell())),uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
     xSet->setPropertyValue(SC_UNO_COMPILEFAP, uno::makeAny(sal_True));
 
-    m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(SC_SERVICE_OPCODEMAPPER, static_cast<ScDocShell*>(s_pDoc->GetDocumentShell())),uno::UNO_QUERY);
+    m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(SC_SERVICE_OPCODEMAPPER, static_cast<ScDocShell*>(m_pDoc->GetDocumentShell())),uno::UNO_QUERY);
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
 
@@ -119,11 +116,11 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     {
         pScMod->SetRefInputHdl(pScMod->GetInputHdl());
 
-        s_pDoc = pViewData->GetDocument();
+        m_pDoc = pViewData->GetDocument();
         SCCOL nCol = pViewData->GetCurX();
         SCROW nRow = pViewData->GetCurY();
         SCTAB nTab = pViewData->GetTabNo();
-        aCursorPos = ScAddress( nCol, nRow, nTab );
+        m_CursorPos = ScAddress( nCol, nRow, nTab );
 
         pScMod->InitFormEditData();                             // create new
         pData = pScMod->GetFormEditData();
@@ -137,7 +134,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         // edit if formula exists
 
         OUString aFormula;
-        s_pDoc->GetFormula( nCol, nRow, nTab, aFormula );
+        m_pDoc->GetFormula( nCol, nRow, nTab, aFormula );
         bool bEdit   = ( aFormula.getLength() > 1 );
         bool bMatrix = false;
         if ( bEdit )
@@ -201,7 +198,7 @@ void ScFormulaDlg::fill()
     if (pData)
     {
         //  data exists -> restore state (after switch)
-        //  don't reinitialise pDoc and aCursorPos
+        //  don't reinitialise m_pDoc and m_CursorPos
         //pDoc = pViewData->GetDocument();
         if(IsInputHdl(pData->GetInputHandler()))
         {
@@ -307,7 +304,7 @@ bool ScFormulaDlg::Close()
 
 bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult )
 {
-    std::unique_ptr<ScSimpleFormulaCalculator> pFCell(new ScSimpleFormulaCalculator(s_pDoc, aCursorPos, rStrExp));
+    std::unique_ptr<ScSimpleFormulaCalculator> pFCell(new ScSimpleFormulaCalculator(m_pDoc, m_CursorPos, rStrExp));
     pFCell->SetLimitString(true);
 
     // HACK! to avoid neither #REF! from ColRowNames
@@ -324,7 +321,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
             aBraced.append('(');
             aBraced.append(rStrExp);
             aBraced.append(')');
-            pFCell.reset(new ScSimpleFormulaCalculator(s_pDoc, aCursorPos, aBraced.makeStringAndClear()));
+            pFCell.reset(new ScSimpleFormulaCalculator(m_pDoc, m_CursorPos, aBraced.makeStringAndClear()));
             pFCell->SetLimitString(true);
         }
         else
@@ -334,7 +331,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
     sal_uInt16 nErrCode = pFCell->GetErrCode();
     if ( nErrCode == 0 || pFCell->IsMatrix() )
     {
-        SvNumberFormatter& aFormatter = *(s_pDoc->GetFormatTable());
+        SvNumberFormatter& aFormatter = *(m_pDoc->GetFormatTable());
         Color* pColor;
         if ( pFCell->IsValue() )
         {
@@ -392,7 +389,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         }
 
         OUString      aRefStr;
-        bool bOtherDoc = (pRefDoc != s_pDoc && pRefDoc->GetDocumentShell()->HasName());
+        bool bOtherDoc = (pRefDoc != m_pDoc && pRefDoc->GetDocumentShell()->HasName());
         if ( bOtherDoc )
         {
             //  reference to other document - wie inputhdl.cxx
@@ -419,16 +416,16 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             // position.
             ScTokenArray aArray;
             ScComplexRefData aRefData;
-            aRefData.InitRangeRel(rRef, aCursorPos);
+            aRefData.InitRangeRel(rRef, m_CursorPos);
             bool bSingle = aRefData.Ref1 == aRefData.Ref2;
-            if (aCursorPos.Tab() != rRef.aStart.Tab())
+            if (m_CursorPos.Tab() != rRef.aStart.Tab())
                 aRefData.Ref1.SetFlag3D(true);
             if (bSingle)
                 aArray.AddSingleReference(aRefData.Ref1);
             else
                 aArray.AddDoubleReference(aRefData);
-            ScCompiler aComp(s_pDoc, aCursorPos, aArray);
-            aComp.SetGrammar(s_pDoc->GetGrammar());
+            ScCompiler aComp(m_pDoc, m_CursorPos, aArray);
+            aComp.SetGrammar(m_pDoc->GetGrammar());
             OUStringBuffer aBuf;
             aComp.CreateStringFromTokenArray(aBuf);
             aRefStr = aBuf.makeStringAndClear();
@@ -441,7 +438,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 bool ScFormulaDlg::IsRefInputMode() const
 {
     const IFunctionDescription* pDesc = getCurrentFunctionDescription();
-    bool bRef = (pDesc && (pDesc->getSuppressedArgumentCount() > 0)) && (s_pDoc != nullptr);
+    bool bRef = (pDesc && (pDesc->getSuppressedArgumentCount() > 0)) && (m_pDoc != nullptr);
     return bRef;
 }
 
@@ -449,7 +446,7 @@ bool ScFormulaDlg::IsDocAllowed(SfxObjectShell* pDocSh) const
 {
     //  not allowed: different from this doc, and no name
     //  pDocSh is always a ScDocShell
-    if ( pDocSh && &static_cast<ScDocShell*>(pDocSh)->GetDocument() != s_pDoc && !pDocSh->HasName() )
+    if (pDocSh && &static_cast<ScDocShell*>(pDocSh)->GetDocument() != m_pDoc && !pDocSh->HasName())
         return false;
 
     return true;        // everything else is allowed
@@ -552,7 +549,7 @@ void ScFormulaDlg::deleteFormData()
 }
 void ScFormulaDlg::clear()
 {
-    s_pDoc = nullptr;
+    m_pDoc = nullptr;
 
     //restore reference inputhandler
     ScModule* pScMod = SC_MOD();
@@ -580,12 +577,12 @@ void ScFormulaDlg::switchBack()
     if ( pScViewShell )
     {
         ScViewData& rVD=pScViewShell->GetViewData();
-        SCTAB nExecTab = aCursorPos.Tab();
+        SCTAB nExecTab = m_CursorPos.Tab();
         if ( nExecTab != rVD.GetTabNo() )
             pScViewShell->SetTabNo( nExecTab );
 
-        SCROW nRow=aCursorPos.Row();
-        SCCOL nCol=aCursorPos.Col();
+        SCROW nRow = m_CursorPos.Row();
+        SCCOL nCol = m_CursorPos.Col();
 
         if(rVD.GetCurX()!=nCol || rVD.GetCurY()!=nRow)
             pScViewShell->SetCursor(nCol,nRow);
@@ -648,13 +645,13 @@ uno::Reference< sheet::XFormulaOpCodeMapper> ScFormulaDlg::getFormulaOpCodeMappe
 
 table::CellAddress ScFormulaDlg::getReferencePosition() const
 {
-    return table::CellAddress(aCursorPos.Tab(),aCursorPos.Col(),aCursorPos.Row());
+    return table::CellAddress(m_CursorPos.Tab(), m_CursorPos.Col(), m_CursorPos.Row());
 }
 
 ::std::unique_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::unique_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());
-    pArray->Fill(_aTokenList, s_pDoc->GetSharedStringPool(), s_pDoc->GetExternalRefManager());
+    pArray->Fill(_aTokenList, m_pDoc->GetSharedStringPool(), m_pDoc->GetExternalRefManager());
     return pArray;
 }
 

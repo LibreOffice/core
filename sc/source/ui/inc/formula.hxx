@@ -47,8 +47,9 @@ class ScFormulaDlg : public formula::FormulaDlg,
     css::uno::Reference< css::sheet::XFormulaParser>          m_xParser;
     css::uno::Reference< css::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
 
-    static ScDocument*  s_pDoc;
-    static ScAddress    aCursorPos;
+    ScDocument*  m_pDoc;
+    ScAddress    m_CursorPos;
+
 public:
                     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                         vcl::Window* pParent, ScViewData* pViewData ,formula::IFunctionManager* _pFunctionMgr);
