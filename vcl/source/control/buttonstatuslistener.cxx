@@ -20,7 +20,7 @@ ButtonStatusListener::~ButtonStatusListener() {}
 void ButtonStatusListener::statusChanged(const css::frame::FeatureStateEvent& rEvent)
             throw(css::uno::RuntimeException, std::exception)
 {
-    mButton->Enable(rEvent.IsEnabled);
+    mButton->SetStateUno(rEvent);
 }
 
 void ButtonStatusListener::disposing(const css::lang::EventObject& /*Source*/)
