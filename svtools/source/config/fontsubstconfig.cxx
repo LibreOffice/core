@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 using namespace utl;
 using namespace com::sun::star;
@@ -40,7 +40,7 @@ const sal_Char cSubstituteFont[]= "SubstituteFont";
 const sal_Char cOnScreenOnly[]  = "OnScreenOnly";
 const sal_Char cAlways[]        = "Always";
 
-typedef boost::ptr_vector<SubstitutionStruct> SubstitutionStructArr;
+typedef std::vector<SubstitutionStruct> SubstitutionStructArr;
 
 struct SvtFontSubstConfig_Impl
 {
@@ -80,12 +80,12 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     nName = 0;
     for(nNode = 0; nNode < aNodeNames.getLength(); nNode++)
     {
-        SubstitutionStruct* pInsert = new SubstitutionStruct;
-        pNodeValues[nName++] >>= pInsert->sFont;
-        pNodeValues[nName++] >>= pInsert->sReplaceBy;
-        pInsert->bReplaceAlways = *static_cast<sal_Bool const *>(pNodeValues[nName++].getValue());
-        pInsert->bReplaceOnScreenOnly = *static_cast<sal_Bool const *>(pNodeValues[nName++].getValue());
-        pImpl->aSubstArr.push_back(pInsert);
+        SubstitutionStruct aInsert;
+        pNodeValues[nName++] >>= aInsert.sFont;
+        pNodeValues[nName++] >>= aInsert.sReplaceBy;
+        aInsert.bReplaceAlways = *static_cast<sal_Bool const *>(pNodeValues[nName++].getValue());
+        aInsert.bReplaceOnScreenOnly = *static_cast<sal_Bool const *>(pNodeValues[nName++].getValue());
+        pImpl->aSubstArr.push_back(aInsert);
     }
 }
 
@@ -160,7 +160,7 @@ const SubstitutionStruct* SvtFontSubstConfig::GetSubstitution(sal_Int32 nPos)
 
 void SvtFontSubstConfig::AddSubstitution(const SubstitutionStruct& rToAdd)
 {
-    pImpl->aSubstArr.push_back(new SubstitutionStruct(rToAdd));
+    pImpl->aSubstArr.push_back(rToAdd);
 }
 
 void SvtFontSubstConfig::Apply()

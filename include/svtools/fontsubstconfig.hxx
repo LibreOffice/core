@@ -27,8 +27,8 @@ struct SvtFontSubstConfig_Impl;
 
 struct SubstitutionStruct
 {
-    OUString   sFont;
-    OUString   sReplaceBy;
+    OUString    sFont;
+    OUString    sReplaceBy;
     bool        bReplaceAlways;
     bool        bReplaceOnScreenOnly;
 };
