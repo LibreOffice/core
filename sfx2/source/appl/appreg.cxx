@@ -116,11 +116,11 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
 
 
 
-void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFactory *pFact )
+void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, const SfxMenuCtrlFactory& rFact )
 {
     if ( pMod )
     {
-        pMod->RegisterMenuControl( pFact );
+        pMod->RegisterMenuControl( rFact );
         return;
     }
 
@@ -128,15 +128,15 @@ void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFacto
     for ( size_t n=0; n<pAppData_Impl->pMenuCtrlFac->size(); n++ )
     {
         SfxMenuCtrlFactory *pF = &(*pAppData_Impl->pMenuCtrlFac)[n];
-        if ( pF->nTypeId == pFact->nTypeId &&
-            (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
+        if ( pF->nTypeId == rFact.nTypeId &&
+            (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
             SAL_INFO("sfx", "MenuController register is not clearly defined!");
         }
     }
 #endif
 
-    pAppData_Impl->pMenuCtrlFac->push_back( pFact );
+    pAppData_Impl->pMenuCtrlFac->push_back( rFact );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

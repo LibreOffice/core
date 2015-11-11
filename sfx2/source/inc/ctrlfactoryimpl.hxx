@@ -25,17 +25,18 @@
 #include <sfx2/tbxctrl.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 class SfxMenuCtrlFactArr_Impl
 {
-    typedef boost::ptr_vector<SfxMenuCtrlFactory> DataType;
+    typedef std::vector<SfxMenuCtrlFactory> DataType;
     DataType maData;
 
 public:
     const SfxMenuCtrlFactory& operator []( size_t i ) const;
     SfxMenuCtrlFactory& operator []( size_t i );
 
-    void push_back( SfxMenuCtrlFactory* p );
+    void push_back( const SfxMenuCtrlFactory& );
 
     size_t size() const;
 };

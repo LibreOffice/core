@@ -80,7 +80,7 @@ public:
     void                        RegisterToolBoxControl(SfxTbxCtrlFactory*);
     void                        RegisterChildWindow(SfxChildWinFactory*);
     void                        RegisterStatusBarControl(SfxStbCtrlFactory*);
-    void                        RegisterMenuControl(SfxMenuCtrlFactory*);
+    void                        RegisterMenuControl(const SfxMenuCtrlFactory&);
 
     virtual VclPtr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,
                                                vcl::Window* pParent,

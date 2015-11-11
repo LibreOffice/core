@@ -277,7 +277,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
 
 
 
-void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
+void SfxModule::RegisterMenuControl( const SfxMenuCtrlFactory& rFact )
 {
     if (!pImpl->pMenuCtrlFac)
         pImpl->pMenuCtrlFac = new SfxMenuCtrlFactArr_Impl;
@@ -286,15 +286,15 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
     for ( size_t n=0; n<pImpl->pMenuCtrlFac->size(); n++ )
     {
         SfxMenuCtrlFactory *pF = &(*pImpl->pMenuCtrlFac)[n];
-        if ( pF->nTypeId == pFact->nTypeId &&
-            (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
+        if ( pF->nTypeId == rFact.nTypeId &&
+            (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
             SAL_INFO("sfx2.appl", "MenuController-Registering is not clearly defined!");
         }
     }
 #endif
 
-    pImpl->pMenuCtrlFac->push_back( pFact );
+    pImpl->pMenuCtrlFac->push_back( rFact );
 }
 
 

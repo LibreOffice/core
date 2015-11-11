@@ -246,14 +246,14 @@ SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/,
 
 void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
 {
-    RegisterMenuControl( pMod, new SfxMenuCtrlFactory(
+    RegisterMenuControl( pMod, SfxMenuCtrlFactory(
                 SfxMenuControl::CreateImpl, typeid(SfxStringItem), nSlotId ) );
 }
 
 
-void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pFact)
+void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, const SfxMenuCtrlFactory& rFact)
 {
-    SfxGetpApp()->RegisterMenuControl_Impl( pMod, pFact );
+    SfxGetpApp()->RegisterMenuControl_Impl( pMod, rFact );
 }
 
 SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings )
