@@ -493,24 +493,24 @@ IMPL_LINK_TYPED( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn, void )
  *  I18NStatus
  */
 
-I18NStatus* I18NStatus::pInstance = nullptr;
+static I18NStatus* g_pI18NStatusInstance = nullptr;
 
 I18NStatus& I18NStatus::get()
 {
-    if( ! pInstance )
-        pInstance = new I18NStatus();
-    return *pInstance;
+    if (!g_pI18NStatusInstance)
+        g_pI18NStatusInstance = new I18NStatus();
+    return *g_pI18NStatusInstance;
 }
 
 bool I18NStatus::exists()
 {
-    return pInstance != nullptr;
+    return g_pI18NStatusInstance != nullptr;
 }
 
 void I18NStatus::free()
 {
-    if( pInstance )
-        delete pInstance, pInstance = nullptr;
+    if (g_pI18NStatusInstance)
+        delete g_pI18NStatusInstance, g_pI18NStatusInstance = nullptr;
 }
 
 I18NStatus::I18NStatus() :
@@ -522,8 +522,8 @@ I18NStatus::I18NStatus() :
 I18NStatus::~I18NStatus()
 {
     m_pStatusWindow.disposeAndClear();
-    if( pInstance == this )
-        pInstance = nullptr;
+    if( g_pI18NStatusInstance == this )
+        g_pI18NStatusInstance = nullptr;
 }
 
 void I18NStatus::setParent( SalFrame* pParent )

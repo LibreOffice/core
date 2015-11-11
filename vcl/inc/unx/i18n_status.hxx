@@ -65,8 +65,6 @@ private:
     I18NStatus();
     ~I18NStatus();
 
-    static I18NStatus* pInstance;
-
     static bool getStatusWindowMode();
 
 public:
