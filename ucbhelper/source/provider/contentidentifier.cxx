@@ -142,7 +142,7 @@ ContentIdentifier::getImplementationId()
 
 
 // virtual
-Sequence< com::sun::star::uno::Type > SAL_CALL
+Sequence< css::uno::Type > SAL_CALL
 ContentIdentifier::getTypes()
     throw( RuntimeException, std::exception )
 {

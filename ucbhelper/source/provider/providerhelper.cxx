@@ -49,10 +49,8 @@ Contents;
 
 struct ContentProviderImplHelper_Impl
 {
-    uno::Reference< com::sun::star::ucb::XPropertySetRegistry >
-        m_xPropertySetRegistry;
-    Contents
-        m_aContents;
+    uno::Reference< css::ucb::XPropertySetRegistry >  m_xPropertySetRegistry;
+    Contents                                          m_aContents;
 };
 
 } // namespace ucbhelper_impl
@@ -99,7 +97,7 @@ css::uno::Any SAL_CALL ContentProviderImplHelper::queryInterface( const css::uno
 XTYPEPROVIDER_IMPL_3( ContentProviderImplHelper,
                          lang::XTypeProvider,
                          lang::XServiceInfo,
-                         com::sun::star::ucb::XContentProvider );
+                         css::ucb::XContentProvider );
 
 // virtual
 sal_Bool SAL_CALL ContentProviderImplHelper::supportsService(
@@ -111,8 +109,8 @@ sal_Bool SAL_CALL ContentProviderImplHelper::supportsService(
 
 // virtual
 sal_Int32 SAL_CALL ContentProviderImplHelper::compareContentIds(
-        const uno::Reference< com::sun::star::ucb::XContentIdentifier >& Id1,
-        const uno::Reference< com::sun::star::ucb::XContentIdentifier >& Id2 )
+        const uno::Reference< css::ucb::XContentIdentifier >& Id1,
+        const uno::Reference< css::ucb::XContentIdentifier >& Id2 )
     throw( uno::RuntimeException, std::exception )
 {
     // Simply do a string compare.
@@ -162,8 +160,7 @@ void ContentProviderImplHelper::removeContent( ContentImplHelper* pContent )
 
 rtl::Reference< ContentImplHelper >
 ContentProviderImplHelper::queryExistingContent(
-    const uno::Reference< com::sun::star::ucb::XContentIdentifier >&
-        Identifier )
+    const uno::Reference< css::ucb::XContentIdentifier >& Identifier )
 {
     return queryExistingContent( Identifier->getContentIdentifier() );
 }
@@ -234,7 +231,7 @@ void ContentProviderImplHelper::registerNewContent(
     }
 }
 
-uno::Reference< com::sun::star::ucb::XPropertySetRegistry >
+uno::Reference< css::ucb::XPropertySetRegistry >
 ContentProviderImplHelper::getAdditionalPropertySetRegistry()
 {
     // Get propertyset registry.
@@ -243,8 +240,8 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
 
     if ( !m_pImpl->m_xPropertySetRegistry.is() )
     {
-        uno::Reference< com::sun::star::ucb::XPropertySetRegistryFactory >
-            xRegFac = com::sun::star::ucb::Store::create( m_xContext );
+        uno::Reference< css::ucb::XPropertySetRegistryFactory >
+            xRegFac = css::ucb::Store::create( m_xContext );
 
         // Open/create a registry.
         m_pImpl->m_xPropertySetRegistry
@@ -258,7 +255,7 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
     return m_pImpl->m_xPropertySetRegistry;
 }
 
-uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
+uno::Reference< css::ucb::XPersistentPropertySet >
 ContentProviderImplHelper::getAdditionalPropertySet(
     const OUString& rKey, bool bCreate )
 {
@@ -268,12 +265,12 @@ ContentProviderImplHelper::getAdditionalPropertySet(
     if ( m_pImpl->m_xPropertySetRegistry.is() )
     {
         // Open/create persistent property set.
-        return uno::Reference< com::sun::star::ucb::XPersistentPropertySet >(
+        return uno::Reference< css::ucb::XPersistentPropertySet >(
             m_pImpl->m_xPropertySetRegistry->openPropertySet(
                 rKey, bCreate ) );
     }
 
-    return uno::Reference< com::sun::star::ucb::XPersistentPropertySet >();
+    return uno::Reference< css::ucb::XPersistentPropertySet >();
 }
 
 bool ContentProviderImplHelper::renameAdditionalPropertySet(
@@ -341,7 +338,7 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
     else
     {
         // Get old property set, if exists.
-        uno::Reference< com::sun::star::ucb::XPersistentPropertySet > xOldSet
+        uno::Reference< css::ucb::XPersistentPropertySet > xOldSet
             = getAdditionalPropertySet( rOldKey, false );
         if ( xOldSet.is() )
         {
@@ -425,7 +422,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
     else
     {
         // Get old property set, if exists.
-        uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
+        uno::Reference< css::ucb::XPersistentPropertySet >
             xOldPropSet = getAdditionalPropertySet( rSourceKey, false );
         if ( !xOldPropSet.is() )
             return false;
@@ -451,7 +448,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
         if ( nCount )
         {
             // Fail, if property set with new key already exists.
-            uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
+            uno::Reference< css::ucb::XPersistentPropertySet >
                 xNewPropSet
                     = getAdditionalPropertySet( rTargetKey, false );
             if ( xNewPropSet.is() )

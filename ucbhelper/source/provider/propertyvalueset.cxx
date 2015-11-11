@@ -697,16 +697,16 @@ void PropertyValueSet::appendPropertySet(
             {
                 // Efficient: Get all prop values with one ( remote) call.
 
-                Sequence< ::com::sun::star::beans::PropertyValue > aPropValues
+                Sequence< css::beans::PropertyValue > aPropValues
                     = xPropertyAccess->getPropertyValues();
 
-                const ::com::sun::star::beans::PropertyValue* pPropValues
+                const css::beans::PropertyValue* pPropValues
                       = aPropValues.getConstArray();
 
                 sal_Int32 nValuesCount = aPropValues.getLength();
                 for ( sal_Int32 n = 0; n < nValuesCount; ++n )
                 {
-                    const ::com::sun::star::beans::PropertyValue& rPropValue
+                    const css::beans::PropertyValue& rPropValue
                         = pPropValues[ n ];
 
                     // Find info for current property value.

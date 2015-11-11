@@ -43,7 +43,7 @@ using namespace com::sun::star;
 namespace ucbhelper {
 
 PropertySetInfo::PropertySetInfo(
-    const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv,
+    const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
     ContentImplHelper* pContent )
 : m_xEnv( rxEnv ),
   m_pProps( nullptr ),
@@ -126,7 +126,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
             // Get info for additional properties.
 
 
-            uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
+            uno::Reference< css::ucb::XPersistentPropertySet >
                 xSet ( m_pContent->getAdditionalPropertySet( false ) );
 
             if ( xSet.is() )
@@ -226,7 +226,7 @@ bool PropertySetInfo::queryProperty(
 
 
 CommandProcessorInfo::CommandProcessorInfo(
-    const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv,
+    const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
     ContentImplHelper* pContent )
 : m_xEnv( rxEnv ),
   m_pCommands( nullptr ),
@@ -274,7 +274,7 @@ css::uno::Any SAL_CALL CommandProcessorInfo::queryInterface( const css::uno::Typ
 
 XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
                          lang::XTypeProvider,
-                         com::sun::star::ucb::XCommandInfo );
+                         css::ucb::XCommandInfo );
 
 
 
@@ -283,7 +283,7 @@ XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
 
 
 // virtual
-uno::Sequence< com::sun::star::ucb::CommandInfo > SAL_CALL
+uno::Sequence< css::ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
     throw( uno::RuntimeException, std::exception )
 {
@@ -298,11 +298,9 @@ CommandProcessorInfo::getCommands()
 
             try
             {
-                uno::Sequence< com::sun::star::ucb::CommandInfo > aCmds
+                uno::Sequence< css::ucb::CommandInfo > aCmds
                     = m_pContent->getCommands( m_xEnv );
-                m_pCommands
-                    = new uno::Sequence< com::sun::star::ucb::CommandInfo >(
-                        aCmds );
+                m_pCommands = new uno::Sequence< css::ucb::CommandInfo >( aCmds );
             }
             catch ( uno::RuntimeException const & )
             {
@@ -310,9 +308,7 @@ CommandProcessorInfo::getCommands()
             }
             catch ( uno::Exception const & )
             {
-                m_pCommands
-                    = new uno::Sequence< com::sun::star::ucb::CommandInfo >(
-                        0 );
+                m_pCommands = new uno::Sequence< css::ucb::CommandInfo >( 0 );
             }
         }
     }
@@ -321,31 +317,31 @@ CommandProcessorInfo::getCommands()
 
 
 // virtual
-com::sun::star::ucb::CommandInfo SAL_CALL
+css::ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName(
         const OUString& Name )
-    throw( com::sun::star::ucb::UnsupportedCommandException,
+    throw( css::ucb::UnsupportedCommandException,
            uno::RuntimeException, std::exception )
 {
-    com::sun::star::ucb::CommandInfo aInfo;
+    css::ucb::CommandInfo aInfo;
     if ( queryCommand( Name, aInfo ) )
         return aInfo;
 
-    throw com::sun::star::ucb::UnsupportedCommandException();
+    throw css::ucb::UnsupportedCommandException();
 }
 
 
 // virtual
-com::sun::star::ucb::CommandInfo SAL_CALL
+css::ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
-    throw( com::sun::star::ucb::UnsupportedCommandException,
+    throw( css::ucb::UnsupportedCommandException,
            uno::RuntimeException, std::exception )
 {
-    com::sun::star::ucb::CommandInfo aInfo;
+    css::ucb::CommandInfo aInfo;
     if ( queryCommand( Handle, aInfo ) )
         return aInfo;
 
-    throw com::sun::star::ucb::UnsupportedCommandException();
+    throw css::ucb::UnsupportedCommandException();
 }
 
 
@@ -354,7 +350,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
        const OUString& Name )
     throw( uno::RuntimeException, std::exception )
 {
-    com::sun::star::ucb::CommandInfo aInfo;
+    css::ucb::CommandInfo aInfo;
     return queryCommand( Name, aInfo );
 }
 
@@ -363,7 +359,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
     throw( uno::RuntimeException, std::exception )
 {
-    com::sun::star::ucb::CommandInfo aInfo;
+    css::ucb::CommandInfo aInfo;
     return queryCommand( Handle, aInfo );
 }
 
@@ -384,18 +380,18 @@ void CommandProcessorInfo::reset()
 
 bool CommandProcessorInfo::queryCommand(
     const OUString& rName,
-    com::sun::star::ucb::CommandInfo& rCommand )
+    css::ucb::CommandInfo& rCommand )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
     getCommands();
 
-    const com::sun::star::ucb::CommandInfo* pCommands
+    const css::ucb::CommandInfo* pCommands
         = m_pCommands->getConstArray();
     sal_Int32 nCount = m_pCommands->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
-        const com::sun::star::ucb::CommandInfo& rCurrCommand = pCommands[ n ];
+        const css::ucb::CommandInfo& rCurrCommand = pCommands[ n ];
         if ( rCurrCommand.Name == rName )
         {
             rCommand = rCurrCommand;
@@ -409,18 +405,17 @@ bool CommandProcessorInfo::queryCommand(
 
 bool CommandProcessorInfo::queryCommand(
     sal_Int32 nHandle,
-    com::sun::star::ucb::CommandInfo& rCommand )
+    css::ucb::CommandInfo& rCommand )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
     getCommands();
 
-    const com::sun::star::ucb::CommandInfo* pCommands
-        = m_pCommands->getConstArray();
+    const css::ucb::CommandInfo* pCommands = m_pCommands->getConstArray();
     sal_Int32 nCount = m_pCommands->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
-        const com::sun::star::ucb::CommandInfo& rCurrCommand = pCommands[ n ];
+        const css::ucb::CommandInfo& rCurrCommand = pCommands[ n ];
         if ( rCurrCommand.Handle == nHandle )
         {
             rCommand = rCurrCommand;
