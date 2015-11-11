@@ -99,8 +99,10 @@
 #include "fltlst.hxx"
 #include <sfx2/request.hxx>
 #include "arrdecl.hxx"
+#include <o3tl/make_unique.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 #include <functional>
 
 #if defined(DBG_UTIL)
@@ -280,22 +282,9 @@ public:
 
 namespace
 {
-    typedef boost::ptr_vector<SfxFilterMatcher_Impl> SfxFilterMatcherArr_Impl;
+    typedef std::vector<std::unique_ptr<SfxFilterMatcher_Impl> > SfxFilterMatcherArr_Impl;
     static SfxFilterMatcherArr_Impl aImplArr;
     static int nSfxFilterMatcherCount;
-
-    class hasName :
-        public std::unary_function<SfxFilterMatcher_Impl, bool>
-    {
-    private:
-        const OUString& mrName;
-    public:
-        explicit hasName(const OUString &rName) : mrName(rName) {}
-        bool operator() (const SfxFilterMatcher_Impl& rImpl) const
-        {
-            return rImpl.aName == mrName;
-        }
-    };
 
     SfxFilterMatcher_Impl & getSfxFilterMatcher_Impl(const OUString &rName)
     {
@@ -306,16 +295,13 @@ namespace
 
         // find the impl-Data of any comparable FilterMatcher that was created
         // previously
-        SfxFilterMatcherArr_Impl::iterator aEnd = aImplArr.end();
-        SfxFilterMatcherArr_Impl::iterator aIter =
-            std::find_if(aImplArr.begin(), aEnd, hasName(aName));
-        if (aIter != aEnd)
-            return *aIter;
+        for (std::unique_ptr<SfxFilterMatcher_Impl>& aImpl : aImplArr)
+            if (aImpl->aName == aName)
+                return *aImpl.get();
 
         // first Matcher created for this factory
-        SfxFilterMatcher_Impl *pImpl = new SfxFilterMatcher_Impl(aName);
-        aImplArr.push_back(pImpl);
-        return *pImpl;
+        aImplArr.push_back(o3tl::make_unique<SfxFilterMatcher_Impl>(aName));
+        return *aImplArr.back().get();
     }
 }
 
@@ -1198,7 +1184,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
         // global filter arry was modified, factory specific ones might need an
         // update too
         for (auto& aImpl : aImplArr)
-            aImpl.Update();
+            aImpl->Update();
     }
 }
 
