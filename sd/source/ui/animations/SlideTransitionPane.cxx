@@ -377,7 +377,7 @@ public:
     }
     virtual ~TransitionPane() { disposeOnce(); }
 
-    virtual Size GetOptimalSize() const
+    virtual Size GetOptimalSize() const override
     {
         return LogicToPixel(Size(70, 88), MAP_APPFONT);
     }
