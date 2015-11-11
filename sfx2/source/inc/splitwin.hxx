@@ -22,7 +22,8 @@
 #include <vcl/splitwin.hxx>
 #include <sfx2/childwin.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 class SfxWorkWindow;
 class SfxDockingWindow;
@@ -37,7 +38,7 @@ struct SfxDock_Impl
     long              nSize;
 };
 
-typedef boost::ptr_vector<SfxDock_Impl> SfxDockArr_Impl;
+typedef std::vector<std::unique_ptr<SfxDock_Impl> > SfxDockArr_Impl;
 
 class SfxSplitWindow : public SplitWindow
 {

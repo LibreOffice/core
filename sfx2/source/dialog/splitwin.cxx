@@ -285,7 +285,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
                         pDock->bNewLine = true;
                 }
 
-                pDockArr->insert(pDockArr->begin() + n, pDock);
+                pDockArr->insert(pDockArr->begin() + n, std::unique_ptr<SfxDock_Impl>(pDock));
             }
         }
     }
@@ -339,7 +339,7 @@ void SfxSplitWindow::SaveConfig_Impl()
     sal_uInt16 n;
     for ( n=0; n<pDockArr->size(); n++ )
     {
-        const SfxDock_Impl& rDock = (*pDockArr)[n];
+        const SfxDock_Impl& rDock = *(*pDockArr)[n].get();
         if ( rDock.bHide || rDock.pWin )
             nCount++;
     }
@@ -348,7 +348,7 @@ void SfxSplitWindow::SaveConfig_Impl()
 
     for ( n=0; n<pDockArr->size(); n++ )
     {
-        const SfxDock_Impl& rDock = (*pDockArr)[n];
+        const SfxDock_Impl& rDock = *(*pDockArr)[n].get();
         if ( !rDock.bHide && !rDock.pWin )
             continue;
         if ( rDock.bNewLine )
@@ -419,7 +419,7 @@ void SfxSplitWindow::Split()
     sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        const SfxDock_Impl& rD = (*pDockArr)[n];
+        const SfxDock_Impl& rD = *(*pDockArr)[n].get();
         if ( rD.pWin )
         {
             const sal_uInt16 nId = rD.nType;
@@ -476,7 +476,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        SfxDock_Impl& rDock = (*pDockArr)[n];
+        SfxDock_Impl& rDock = *(*pDockArr)[n].get();
         if ( rDock.bNewLine )
         {
             // The window opens a new line
@@ -533,7 +533,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
         // Not found, insert at end
         pFoundDock = new SfxDock_Impl;
         pFoundDock->bHide = true;
-        pDockArr->push_back( pFoundDock );
+        pDockArr->push_back( std::unique_ptr<SfxDock_Impl>(pFoundDock) );
         pFoundDock->nType = pDockWin->GetType();
         nLine++;
         nPos = 0;
@@ -557,11 +557,11 @@ void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow *pDockWin, bool bSave)
     sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        const SfxDock_Impl& rDock = (*pDockArr)[n];
+        const SfxDock_Impl& rDock = *(*pDockArr)[n].get();
         if ( rDock.nType == pDockWin->GetType() )
         {
             if ( rDock.bNewLine && n<nCount-1 )
-                (*pDockArr)[n+1].bNewLine = true;
+                (*pDockArr)[n+1]->bNewLine = true;
 
             // Window has a position, this we forget
             pDockArr->erase(pDockArr->begin() + n);
@@ -628,7 +628,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     sal_uInt16 nInsertPos = 0;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        SfxDock_Impl& rD = (*pDockArr)[n];
+        SfxDock_Impl& rD = *(*pDockArr)[n].get();
 
         if (rD.pWin)
         {
@@ -662,7 +662,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
         nInsertPos = nLastWindowIdx + 1;    // ignore all non-windows after the last window
     }
 
-    pDockArr->insert(pDockArr->begin() + nInsertPos, pDock);
+    pDockArr->insert(pDockArr->begin() + nInsertPos, std::unique_ptr<SfxDock_Impl>(pDock));
     InsertWindow_Impl( pDock, rSize, nLine, nPos, bNewLine );
     SaveConfig_Impl();
 }
@@ -782,7 +782,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
         sal_uInt16 nCount = pDockArr->size();
         for ( sal_uInt16 n=0; n<nCount; ++n )
         {
-            const SfxDock_Impl& rD = (*pDockArr)[n];
+            const SfxDock_Impl& rD = *(*pDockArr)[n].get();
             if ( rD.pWin )
             {
                 const sal_uInt16 nId = rD.nType;
@@ -839,7 +839,7 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, bool bHide )
     sal_uInt16 nCount = pDockArr->size();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        SfxDock_Impl& rDock = (*pDockArr)[n];
+        SfxDock_Impl& rDock = *(*pDockArr)[n].get();
         if ( rDock.nType == pDockWin->GetType() )
         {
             rDock.pWin = nullptr;
