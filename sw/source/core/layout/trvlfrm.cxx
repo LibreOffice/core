@@ -136,7 +136,7 @@ public:
         }
 };
 
-static SwCrsrOszControl aOszCtrl = { nullptr, nullptr, nullptr };
+static SwCrsrOszControl g_OszCtrl = { nullptr, nullptr, nullptr };
 
 /** Searches the ContentFrm owning the PrtArea containing the point. */
 bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -534,7 +534,7 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                             SwCrsrMoveState* pCMS, bool ) const
 {
     vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
-    aOszCtrl.Entry( this );
+    g_OszCtrl.Entry( this );
 
     //If the Points lies inside the Fly, we try hard to set the Crsr inside it.
     //However if the Point sits inside a Fly which is completely located inside
@@ -561,7 +561,7 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             if ( pFly && pFly->Frm().IsInside( rPoint ) &&
                  Frm().IsInside( pFly->Frm() ) )
             {
-                if ( aOszCtrl.ChkOsz( pFly ) )
+                if (g_OszCtrl.ChkOsz(pFly))
                     break;
                 bRet = pFly->GetCrsrOfst( pPos, rPoint, pCMS );
                 if ( bRet )
@@ -602,7 +602,7 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             bRet = true;
         }
     }
-    aOszCtrl.Exit( this );
+    g_OszCtrl.Exit( this );
     return bRet;
 }
 
