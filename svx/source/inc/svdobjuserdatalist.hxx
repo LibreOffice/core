@@ -12,13 +12,14 @@
 
 #include <svx/svdobj.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 class SdrObjUserData;
 
 class SdrObjUserDataList
 {
-    typedef boost::ptr_vector<SdrObjUserData> ListType;
+    typedef std::vector<std::unique_ptr<SdrObjUserData> > ListType;
     ListType maList;
 
 public:
