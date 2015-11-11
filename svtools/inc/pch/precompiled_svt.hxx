@@ -22,7 +22,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <cassert>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

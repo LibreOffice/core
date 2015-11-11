@@ -23,7 +23,7 @@
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 // structure to store the actuel data
 struct SvParser_Impl
@@ -650,7 +650,7 @@ IMPL_LINK_NOARG_TYPED( SvParser, NewDataRead, LinkParamNone*, void )
  *
  *======================================================================*/
 
-typedef boost::ptr_vector<SvKeyValue> SvKeyValueList_Impl;
+typedef std::vector<SvKeyValue> SvKeyValueList_Impl;
 
 struct SvKeyValueIterator::Impl
 {
@@ -689,7 +689,7 @@ bool SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
 
 void SvKeyValueIterator::Append (const SvKeyValue &rKeyVal)
 {
-    mpImpl->maList.push_back(new SvKeyValue(rKeyVal));
+    mpImpl->maList.push_back(rKeyVal);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
