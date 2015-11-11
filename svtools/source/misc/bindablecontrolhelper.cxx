@@ -38,7 +38,7 @@ namespace svt
 
 using namespace ::com::sun::star;
 
-bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< frame::XModel >& xModel, table::CellRangeAddress& aAddress )
+bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< frame::XModel >& xModel, css::table::CellRangeAddress& aAddress )
 {
     bool bRes = false;
     uno::Reference< sheet::XCellRangeReferrer > xReferrer;
@@ -81,7 +81,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          // pretend we converted the imported string address into the
          // appropriate address structure
          uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellAddressConversion"), uno::UNO_QUERY );
-         table::CellAddress aAddress;
+         css::table::CellAddress aAddress;
          if ( xConvertor.is() )
          {
              // we need this service to properly convert XL notation also
@@ -112,7 +112,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          // pretend we converted the imported string address into the
          // appropriate address structure
          uno::Reference< beans::XPropertySet > xConvertor( xFac->createInstance( "com.sun.star.table.CellRangeAddressConversion"), uno::UNO_QUERY );
-         table::CellRangeAddress aAddress;
+         css::table::CellRangeAddress aAddress;
          if ( xConvertor.is() )
          {
              if ( !lcl_isNamedRange( rsRowSource, xModel, aAddress ) )

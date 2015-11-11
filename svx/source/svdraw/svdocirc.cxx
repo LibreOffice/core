@@ -60,7 +60,7 @@ Point GetAnglePnt(const Rectangle& rR, long nAngle)
     long nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
     double a;
     a=nAngle*nPi180;
-    Point aRetval(Round(cos(a)*nMaxRad),-Round(sin(a)*nMaxRad));
+    Point aRetval(svx::Round(cos(a)*nMaxRad),-svx::Round(sin(a)*nMaxRad));
     if (nWdt==0) aRetval.X()=0;
     if (nHgt==0) aRetval.Y()=0;
     if (nWdt!=nHgt) {
@@ -883,13 +883,13 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         double a;
         // starting point
         a=nStartAngle*nPi180;
-        aTmpPt1=Point(Round(cos(a)*nMaxRad),-Round(sin(a)*nMaxRad));
+        aTmpPt1=Point(svx::Round(cos(a)*nMaxRad),-svx::Round(sin(a)*nMaxRad));
         if (nWdt==0) aTmpPt1.X()=0;
         if (nHgt==0) aTmpPt1.Y()=0;
         aTmpPt1+=aCenter;
         // finishing point
         a=nEndAngle*nPi180;
-        aTmpPt2=Point(Round(cos(a)*nMaxRad),-Round(sin(a)*nMaxRad));
+        aTmpPt2=Point(svx::Round(cos(a)*nMaxRad),-svx::Round(sin(a)*nMaxRad));
         if (nWdt==0) aTmpPt2.X()=0;
         if (nHgt==0) aTmpPt2.Y()=0;
         aTmpPt2+=aCenter;
@@ -1001,7 +1001,7 @@ void SdrCircObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
         }
     }
     if (aGeo.nShearAngle!=0) {
-        long nDst=Round((rRect.Bottom()-rRect.Top())*aGeo.nTan);
+        long nDst=svx::Round((rRect.Bottom()-rRect.Top())*aGeo.nTan);
         if (aGeo.nShearAngle>0) {
             Point aRef(rRect.TopLeft());
             rRect.Left()-=nDst;

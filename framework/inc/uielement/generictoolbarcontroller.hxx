@@ -31,7 +31,6 @@ class ToolBox;
 namespace framework
 {
 
-struct ExecuteInfo;
 class GenericToolbarController : public svt::ToolboxController
 {
     public:
@@ -52,6 +51,13 @@ class GenericToolbarController : public svt::ToolboxController
         virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         DECL_STATIC_LINK_TYPED( GenericToolbarController, ExecuteHdl_Impl, void*, void );
+
+        struct ExecuteInfo
+        {
+            css::uno::Reference< css::frame::XDispatch >     xDispatch;
+            css::util::URL                                   aTargetURL;
+            css::uno::Sequence< css::beans::PropertyValue >  aArgs;
+        };
 
     protected:
         VclPtr<ToolBox>     m_pToolbar;

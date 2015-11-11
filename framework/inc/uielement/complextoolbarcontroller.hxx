@@ -36,21 +36,6 @@ namespace vcl { class Window; }
 namespace framework
 {
 
-struct ExecuteInfo
-{
-    css::uno::Reference< css::frame::XDispatch >     xDispatch;
-    css::util::URL                                   aTargetURL;
-    css::uno::Sequence< css::beans::PropertyValue >  aArgs;
-};
-
-struct NotifyInfo
-{
-    OUString                                                        aEventName;
-    css::uno::Reference< css::frame::XControlNotificationListener > xNotifyListener;
-    css::util::URL                                                  aSourceURL;
-    css::uno::Sequence< css::beans::NamedValue >                    aInfoSeq;
-};
-
 class ComplexToolbarController : public svt::ToolboxController
 
 {
@@ -73,6 +58,21 @@ class ComplexToolbarController : public svt::ToolboxController
 
         DECL_STATIC_LINK_TYPED( ComplexToolbarController, ExecuteHdl_Impl, void*, void );
         DECL_STATIC_LINK_TYPED( ComplexToolbarController, Notify_Impl, void*, void);
+
+        struct ExecuteInfo
+        {
+            css::uno::Reference< css::frame::XDispatch >     xDispatch;
+            css::util::URL                                   aTargetURL;
+            css::uno::Sequence< css::beans::PropertyValue >  aArgs;
+        };
+
+        struct NotifyInfo
+        {
+            OUString                                                        aEventName;
+            css::uno::Reference< css::frame::XControlNotificationListener > xNotifyListener;
+            css::util::URL                                                  aSourceURL;
+            css::uno::Sequence< css::beans::NamedValue >                    aInfoSeq;
+        };
 
     protected:
         static sal_Int32 getFontSizePixel( const vcl::Window* pWindow );

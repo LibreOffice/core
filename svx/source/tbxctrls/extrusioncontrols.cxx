@@ -44,11 +44,6 @@
 #include "colorwindow.hxx"
 #include "extrusiondepthdialog.hxx"
 
-
-
-//using ::svtools::ToolbarMenu;
-
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -242,7 +237,7 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
     const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController(
         rxContext,
-        Reference< frame::XFrame >(),
+        Reference< css::frame::XFrame >(),
         OUString( ".uno:ExtrusionDirectionFloater" )
     )
 {
@@ -486,7 +481,7 @@ ExtrusionDepthController::ExtrusionDepthController(
     const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController(
         rxContext,
-        Reference< frame::XFrame >(),
+        Reference< css::frame::XFrame >(),
         OUString( ".uno:ExtrusionDepthFloater" )
     )
 {
@@ -759,7 +754,7 @@ void ExtrusionLightingWindow::SelectHdl(void* pControl)
 ExtrusionLightingControl::ExtrusionLightingControl(
     const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController( rxContext,
-                Reference< frame::XFrame >(),
+                Reference< css::frame::XFrame >(),
                 OUString( ".uno:ExtrusionDirectionFloater" )
     )
 {
@@ -903,7 +898,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 )
 :   svt::PopupWindowController(
         rxContext,
-        Reference< frame::XFrame >(),
+        Reference< css::frame::XFrame >(),
         OUString( ".uno:ExtrusionSurfaceFloater" )
     )
 {

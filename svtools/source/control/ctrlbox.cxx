@@ -57,7 +57,6 @@
 
 #define FONTNAMEBOXMRUENTRIESFILE "/user/config/fontnameboxmruentries"
 
-using namespace ::com::sun::star;
 
 class ImplColorListData
 {
@@ -495,7 +494,7 @@ Color ImpLineListData::GetColorDist( const Color& rMain, const Color& rDefault )
 
 sal_uInt16 LineListBox::GetSelectEntryStyle( sal_Int32 nSelIndex ) const
 {
-    sal_uInt16 nStyle = table::BorderLineStyle::SOLID;
+    sal_uInt16 nStyle = css::table::BorderLineStyle::SOLID;
     sal_Int32 nPos = GetSelectEntryPos( nSelIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -554,25 +553,25 @@ std::vector<double> GetDashing( sal_uInt16 nDashing )
     std::vector<double> aPattern;
     switch (nDashing)
     {
-        case table::BorderLineStyle::DOTTED:
+        case css::table::BorderLineStyle::DOTTED:
             aPattern.push_back( 1.0 ); // line
             aPattern.push_back( 2.0 ); // blank
         break;
-        case table::BorderLineStyle::DASHED:
+        case css::table::BorderLineStyle::DASHED:
             aPattern.push_back( 16.0 ); // line
             aPattern.push_back( 5.0 );  // blank
         break;
-        case table::BorderLineStyle::FINE_DASHED:
+        case css::table::BorderLineStyle::FINE_DASHED:
             aPattern.push_back( 6.0 ); // line
             aPattern.push_back( 2.0 ); // blank
         break;
-        case table::BorderLineStyle::DASH_DOT:
+        case css::table::BorderLineStyle::DASH_DOT:
             aPattern.push_back( 16.0 ); // line
             aPattern.push_back( 5.0 );  // blank
             aPattern.push_back( 5.0 );  // line
             aPattern.push_back( 5.0 );  // blank
         break;
-        case table::BorderLineStyle::DASH_DOT_DOT:
+        case css::table::BorderLineStyle::DASH_DOT_DOT:
             aPattern.push_back( 16.0 ); // line
             aPattern.push_back( 5.0 );  // blank
             aPattern.push_back( 5.0 );  // line
@@ -702,7 +701,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         {
             double y2 =  n1 + nDist + double( n2 ) / 2;
             aVirDev->SetFillColor( aColor2 );
-            svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, table::BorderLineStyle::SOLID );
+            svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, css::table::BorderLineStyle::SOLID );
         }
         rBmp = aVirDev->GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
     }
@@ -823,7 +822,7 @@ sal_Int32 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 sal_uInt16 LineListBox::GetEntryStyle( sal_Int32 nPos ) const
 {
     ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < pLineList->size()) ? (*pLineList)[ nPos ] : nullptr;
-    return ( pData ) ? pData->GetStyle() : table::BorderLineStyle::NONE;
+    return ( pData ) ? pData->GetStyle() : css::table::BorderLineStyle::NONE;
 }
 
 bool LineListBox::UpdatePaintLineColor()
