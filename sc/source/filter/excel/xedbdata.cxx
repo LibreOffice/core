@@ -8,6 +8,7 @@
  */
 
 #include "xedbdata.hxx"
+#include "excrecds.hxx"
 #include "xltools.hxx"
 #include "dbdata.hxx"
 #include "document.hxx"
@@ -219,9 +220,8 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
          * When not applied but buttons hidden, Excel writes, for example,
          * <filterColumn colId="0" hiddenButton="1"/> */
 
-        pTableStrm->singleElement( XML_autoFilter,
-                XML_ref, XclXmlUtils::ToOString(aRange),
-                FSEND);
+        ExcAutoFilterRecs aAutoFilter( rStrm.GetRoot(), aRange.aStart.Tab(), &rData);
+        aAutoFilter.SaveXml( rStrm);
     }
 
     const std::vector< OUString >& rColNames = rData.GetTableColumnNames();
