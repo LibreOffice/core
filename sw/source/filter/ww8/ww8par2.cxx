@@ -477,7 +477,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     // Frame in Style Definition (word appears to ignore them if inside an
     // text autoshape)
     if (!m_bTxbxFlySection && m_nAktColl < m_vColl.size())
-        aRet.mpStyleApo = StyleExists(m_nAktColl) ? m_vColl[m_nAktColl].pWWFly : nullptr;
+        aRet.mpStyleApo = StyleExists(m_nAktColl) ? m_vColl[m_nAktColl].m_pWWFly : nullptr;
 
     /*
     #i1140#
@@ -783,7 +783,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
         // only for SwTextFormatColl, not CharFormat
         // WW: 0 = no Numbering
         SwWW8StyInf * pColl = GetStyle(m_nAktColl);
-        if (pColl != nullptr && pColl->bColl && *pData)
+        if (pColl != nullptr && pColl->m_bColl && *pData)
         {
             // Range WW:1..9 -> SW:0..8 no bullets / numbering
 
@@ -818,7 +818,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
 {
     SwWW8StyInf * pStyInf = GetStyle(m_nAktColl);
     if( !m_pAktColl || nLen <= 0                       // only for Styledef
-        || (pStyInf && !pStyInf->bColl)              // ignore  CharFormat ->
+        || (pStyInf && !pStyInf->m_bColl)              // ignore  CharFormat ->
         || ( m_nIniFlags & WW8FL_NO_OUTLINE ) )
     {
         m_nSwNumLevel = 0xff;
@@ -848,7 +848,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
 
         pStyInf = GetStyle(m_nAktColl);
         if (pStyInf != nullptr)
-            pStyInf->bHasStyNumRule = true;
+            pStyInf->m_bHasStyNumRule = true;
     }
 }
 
@@ -956,9 +956,9 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     }
 
     SwWW8StyInf * pStyInf = GetStyle(m_nAktColl);
-    if (sNumRule.isEmpty() && pStyInf != nullptr &&  pStyInf->bHasStyNumRule)
+    if (sNumRule.isEmpty() && pStyInf != nullptr &&  pStyInf->m_bHasStyNumRule)
     {
-        sNumRule = pStyInf->pFormat->GetNumRule().GetValue();
+        sNumRule = pStyInf->m_pFormat->GetNumRule().GetValue();
         pNumRule = m_rDoc.FindNumRulePtr(sNumRule);
         if (!pNumRule)
             sNumRule.clear();
@@ -3527,8 +3527,8 @@ sal_uInt16 SwWW8ImplReader::StyleUsingLFO( sal_uInt16 nLFOIndex ) const
     if( !m_vColl.empty() )
     {
         for(sal_uInt16 nI = 0; nI < m_pStyles->GetCount(); nI++ )
-            if(    m_vColl[ nI ].bValid
-                && (nLFOIndex == m_vColl[ nI ].nLFOIndex) )
+            if(    m_vColl[ nI ].m_bValid
+                && (nLFOIndex == m_vColl[ nI ].m_nLFOIndex) )
                 nRes = nI;
     }
     return nRes;
@@ -3540,10 +3540,10 @@ const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
     if( !m_vColl.empty() )
     {
         for(sal_uInt16 nI = 0; nI < m_pStyles->GetCount(); nI++ )
-            if(    m_vColl[ nI ].bValid
+            if(    m_vColl[ nI ].m_bValid
                 && (rName.equals( m_vColl[ nI ].GetOrgWWName())) )
             {
-                pRet = m_vColl[ nI ].pFormat;
+                pRet = m_vColl[ nI ].m_pFormat;
                 break;
             }
     }
@@ -3743,7 +3743,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     SwFormat* pColl;
     bool bStyExist;
 
-    if (rSI.bColl)
+    if (rSI.m_bColl)
     {
         // Para-Style
         sw::util::ParaStyleMapper::StyleResult aResult =
@@ -3767,7 +3767,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
         bImport = false;
 
     bool bOldNoImp = pIo->m_bNoAttrImport;
-    rSI.bImportSkipped = !bImport;
+    rSI.m_bImportSkipped = !bImport;
 
     if( !bImport )
         pIo->m_bNoAttrImport = true;
@@ -3780,37 +3780,37 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
         pColl->SetAuto(false);          // suggested by JP
     }                                   // but changes the UI
     pIo->m_pAktColl = pColl;
-    rSI.pFormat = pColl;                  // remember translation WW->SW
-    rSI.bImportSkipped = !bImport;
+    rSI.m_pFormat = pColl;                  // remember translation WW->SW
+    rSI.m_bImportSkipped = !bImport;
 
     // Set Based on style
-    sal_uInt16 j = rSI.nBase;
+    sal_uInt16 j = rSI.m_nBase;
     if (j != nThisStyle && j < cstd )
     {
         SwWW8StyInf* pj = &pIo->m_vColl[j];
-        if (rSI.pFormat && pj->pFormat && rSI.bColl == pj->bColl)
+        if (rSI.m_pFormat && pj->m_pFormat && rSI.m_bColl == pj->m_bColl)
         {
-            rSI.pFormat->SetDerivedFrom( pj->pFormat );  // ok, set Based on
-            rSI.eLTRFontSrcCharSet = pj->eLTRFontSrcCharSet;
-            rSI.eRTLFontSrcCharSet = pj->eRTLFontSrcCharSet;
-            rSI.eCJKFontSrcCharSet = pj->eCJKFontSrcCharSet;
-            rSI.n81Flags = pj->n81Flags;
-            rSI.n81BiDiFlags = pj->n81BiDiFlags;
+            rSI.m_pFormat->SetDerivedFrom( pj->m_pFormat );  // ok, set Based on
+            rSI.m_eLTRFontSrcCharSet = pj->m_eLTRFontSrcCharSet;
+            rSI.m_eRTLFontSrcCharSet = pj->m_eRTLFontSrcCharSet;
+            rSI.m_eCJKFontSrcCharSet = pj->m_eCJKFontSrcCharSet;
+            rSI.m_n81Flags = pj->m_n81Flags;
+            rSI.m_n81BiDiFlags = pj->m_n81BiDiFlags;
             if (!rSI.IsWW8BuiltInHeadingStyle())
             {
                 rSI.mnWW8OutlineLevel = pj->mnWW8OutlineLevel;
             }
-            rSI.bParaAutoBefore = pj->bParaAutoBefore;
-            rSI.bParaAutoAfter = pj->bParaAutoAfter;
+            rSI.m_bParaAutoBefore = pj->m_bParaAutoBefore;
+            rSI.m_bParaAutoAfter = pj->m_bParaAutoAfter;
 
-            if (pj->pWWFly)
-                rSI.pWWFly = new WW8FlyPara(pIo->m_bVer67, pj->pWWFly);
+            if (pj->m_pWWFly)
+                rSI.m_pWWFly = new WW8FlyPara(pIo->m_bVer67, pj->m_pWWFly);
         }
     }
     else if( pIo->m_bNewDoc && bStyExist )
-        rSI.pFormat->SetDerivedFrom();
+        rSI.m_pFormat->SetDerivedFrom();
 
-    rSI.nFollow = nNextStyle;       // remember Follow
+    rSI.m_nFollow = nNextStyle;       // remember Follow
 
     pStyRule = nullptr;                   // recreate if necessary
     bTextColChanged = bFontChanged = bCJKFontChanged = bCTLFontChanged =
@@ -3828,7 +3828,7 @@ void WW8RStyle::PostStyle(SwWW8StyInf &rSI, bool bOldNoImp)
     pIo->m_nCharFormat = -1;
 
     // If Style basiert auf Nichts oder Basis ignoriert
-    if ((rSI.nBase >= cstd || pIo->m_vColl[rSI.nBase].bImportSkipped) && rSI.bColl)
+    if ((rSI.m_nBase >= cstd || pIo->m_vColl[rSI.m_nBase].m_bImportSkipped) && rSI.m_bColl)
     {
         // If Char-Styles does not work
         // -> set hard WW-Defaults
@@ -3851,17 +3851,17 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
 
     SwWW8StyInf &rSI = pIo->m_vColl[nNr];
 
-    if( rSI.bImported || !rSI.bValid )
+    if( rSI.m_bImported || !rSI.m_bValid )
         return;
 
-    rSI.bImported = true;                      // set flag now to avoid endless loops
+    rSI.m_bImported = true;                      // set flag now to avoid endless loops
 
     // valid and not NUL and not yet imported
 
-    if( rSI.nBase < cstd && !pIo->m_vColl[rSI.nBase].bImported )
-        Import1Style( rSI.nBase );
+    if( rSI.m_nBase < cstd && !pIo->m_vColl[rSI.m_nBase].m_bImported )
+        Import1Style( rSI.m_nBase );
 
-    pStStrm->Seek( rSI.nFilePos );
+    pStStrm->Seek( rSI.m_nFilePos );
 
     short nSkip, cbStd;
     OUString sName;
@@ -3891,7 +3891,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     //offset
 
     //Import of the Style Contents
-    ImportGrupx(nSkip, xStd->sgc == 1, rSI.nFilePos & 1);
+    ImportGrupx(nSkip, xStd->sgc == 1, rSI.m_nFilePos & 1);
 
     PostStyle(rSI, bOldNoImp);
 
@@ -3904,13 +3904,13 @@ void WW8RStyle::RecursiveReg(sal_uInt16 nNr)
         return;
 
     SwWW8StyInf &rSI = pIo->m_vColl[nNr];
-    if( rSI.bImported || !rSI.bValid )
+    if( rSI.m_bImported || !rSI.m_bValid )
         return;
 
-    rSI.bImported = true;
+    rSI.m_bImported = true;
 
-    if( rSI.nBase < cstd && !pIo->m_vColl[rSI.nBase].bImported )
-        RecursiveReg(rSI.nBase);
+    if( rSI.m_nBase < cstd && !pIo->m_vColl[rSI.m_nBase].m_bImported )
+        RecursiveReg(rSI.m_nBase);
 
     pIo->RegisterNumFormatOnStyle(nNr);
 
@@ -3929,7 +3929,7 @@ void WW8RStyle::PostProcessStyles()
      formats and use it to mark handled ones
     */
     for (i=0; i < cstd; ++i)
-        pIo->m_vColl[i].bImported = false;
+        pIo->m_vColl[i].m_bImported = false;
 
     /*
      Register the num formats and tabstop changes on the styles recursively.
@@ -3944,7 +3944,7 @@ void WW8RStyle::PostProcessStyles()
     */
     for (i=0; i < cstd; ++i)
     {
-        if (pIo->m_vColl[i].bValid)
+        if (pIo->m_vColl[i].m_bValid)
         {
             RecursiveReg(i);
         }
@@ -3958,13 +3958,13 @@ void WW8RStyle::ScanStyles()        // investigate style dependencies
         short nSkip;
         SwWW8StyInf &rSI = pIo->m_vColl[i];
 
-        rSI.nFilePos = pStStrm->Tell();        // remember FilePos
+        rSI.m_nFilePos = pStStrm->Tell();        // remember FilePos
         WW8_STD* pStd = Read1Style( nSkip, nullptr, nullptr );  // read STD
-        rSI.bValid = (nullptr != pStd);
-        if (rSI.bValid)
+        rSI.m_bValid = (nullptr != pStd);
+        if (rSI.m_bValid)
         {
-            rSI.nBase = pStd->istdBase;        // remember Basis
-            rSI.bColl = ( pStd->sgc == 1 );    // Para-Style
+            rSI.m_nBase = pStd->istdBase;        // remember Basis
+            rSI.m_bColl = ( pStd->sgc == 1 );    // Para-Style
         }
         else
             rSI = SwWW8StyInf();
@@ -4213,9 +4213,9 @@ void WW8RStyle::ImportOldFormatStyles()
 {
     for (sal_uInt16 i=0; i < cstd; ++i)
     {
-        pIo->m_vColl[i].bColl = true;
+        pIo->m_vColl[i].m_bColl = true;
         //every chain must end eventually at the null style (style code 222)
-        pIo->m_vColl[i].nBase = 222;
+        pIo->m_vColl[i].m_nBase = 222;
     }
 
     rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(
@@ -4256,7 +4256,7 @@ void WW8RStyle::ImportOldFormatStyles()
                 nByteCount += aTmp.getLength();
                 sName = OStringToOUString(aTmp, eStructChrSet);
             }
-            rSI.bImported = true;
+            rSI.m_bImported = true;
         }
 
         if (sName.isEmpty())
@@ -4389,7 +4389,7 @@ void WW8RStyle::ImportOldFormatStyles()
             stcBase = 222;
 
         SwWW8StyInf &rSI = pIo->m_vColl[stc];
-        rSI.nBase = stcBase;
+        rSI.m_nBase = stcBase;
 
         ww::sti eSti = ww::GetCanonicalStiFromStc(stc);
 
@@ -4399,10 +4399,10 @@ void WW8RStyle::ImportOldFormatStyles()
         if (stcp >= aPAPXOffsets.size())
             continue;
 
-        rSI.bValid = true;
+        rSI.m_bValid = true;
 
         if (ww::StandardStiIsCharStyle(eSti) && !aPAPXOffsets[stcp].mnSize)
-            pIo->m_vColl[stc].bColl = false;
+            pIo->m_vColl[stc].m_bColl = false;
 
         bool bOldNoImp = PrepareStyle(rSI, eSti, stc, stcNext);
 
@@ -4423,7 +4423,7 @@ void WW8RStyle::ImportNewFormatStyles()
     ScanStyles();                       // Scan Based On
 
     for (sal_uInt16 i = 0; i < cstd; ++i) // import Styles
-        if (pIo->m_vColl[i].bValid)
+        if (pIo->m_vColl[i].m_bValid)
             Import1Style( i );
 }
 
@@ -4450,17 +4450,17 @@ void WW8RStyle::Import()
     {
         // Follow chain
         SwWW8StyInf* pi = &pIo->m_vColl[i];
-        sal_uInt16 j = pi->nFollow;
+        sal_uInt16 j = pi->m_nFollow;
         if( j < cstd )
         {
             SwWW8StyInf* pj = &pIo->m_vColl[j];
             if ( j != i                             // rational Index ?
-                 && pi->pFormat                        // Format ok ?
-                 && pj->pFormat                        // Derived-Format ok ?
-                 && pi->bColl                       // only possible for paragraph templates (WW)
-                 && pj->bColl ){                    // identical Typ ?
-                    static_cast<SwTextFormatColl*>(pi->pFormat)->SetNextTextFormatColl(
-                     *static_cast<SwTextFormatColl*>(pj->pFormat) );    // ok, register
+                 && pi->m_pFormat                        // Format ok ?
+                 && pj->m_pFormat                        // Derived-Format ok ?
+                 && pi->m_bColl                       // only possible for paragraph templates (WW)
+                 && pj->m_bColl ){                    // identical Typ ?
+                    static_cast<SwTextFormatColl*>(pi->m_pFormat)->SetNextTextFormatColl(
+                     *static_cast<SwTextFormatColl*>(pj->m_pFormat) );    // ok, register
             }
         }
     }
@@ -4475,8 +4475,8 @@ void WW8RStyle::Import()
     // for e.g. tables an always valid Std-Style is necessary
 
     if( pIo->StyleExists(0) && !pIo->m_vColl.empty() &&
-        pIo->m_vColl[0].pFormat && pIo->m_vColl[0].bColl && pIo->m_vColl[0].bValid )
-        pIo->m_pDfltTextFormatColl = static_cast<SwTextFormatColl*>(pIo->m_vColl[0].pFormat);
+        pIo->m_vColl[0].m_pFormat && pIo->m_vColl[0].m_bColl && pIo->m_vColl[0].m_bValid )
+        pIo->m_pDfltTextFormatColl = static_cast<SwTextFormatColl*>(pIo->m_vColl[0].m_pFormat);
     else
         pIo->m_pDfltTextFormatColl = pIo->m_rDoc.GetDfltTextFormatColl();
 
@@ -4514,16 +4514,16 @@ void WW8RStyle::Import()
 
 rtl_TextEncoding SwWW8StyInf::GetCharSet() const
 {
-    if ((pFormat) && (pFormat->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
-        return eRTLFontSrcCharSet;
-    return eLTRFontSrcCharSet;
+    if ((m_pFormat) && (m_pFormat->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+        return m_eRTLFontSrcCharSet;
+    return m_eLTRFontSrcCharSet;
 }
 
 rtl_TextEncoding SwWW8StyInf::GetCJKCharSet() const
 {
-    if ((pFormat) && (pFormat->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
-        return eRTLFontSrcCharSet;
-    return eCJKFontSrcCharSet;
+    if ((m_pFormat) && (m_pFormat->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+        return m_eRTLFontSrcCharSet;
+    return m_eCJKFontSrcCharSet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1675,9 +1675,9 @@ bool SwWW8ImplReader::SetTextFormatCollAndListLevel(const SwPaM& rRg,
     SwWW8StyInf& rStyleInfo)
 {
     bool bRes = true;
-    if( rStyleInfo.pFormat && rStyleInfo.bColl )
+    if( rStyleInfo.m_pFormat && rStyleInfo.m_bColl )
     {
-        bRes = m_rDoc.SetTextFormatColl(rRg, static_cast<SwTextFormatColl*>(rStyleInfo.pFormat));
+        bRes = m_rDoc.SetTextFormatColl(rRg, static_cast<SwTextFormatColl*>(rStyleInfo.m_pFormat));
         SwTextNode* pTextNode = m_pPaM->GetNode().GetTextNode();
         OSL_ENSURE( pTextNode, "No Text-Node at PaM-Position" );
         if ( !pTextNode )
@@ -1694,11 +1694,11 @@ bool SwWW8ImplReader::SetTextFormatCollAndListLevel(const SwPaM& rRg,
             pTextNode->ResetAttr( RES_PARATR_NUMRULE );
         }
 
-        if (USHRT_MAX > rStyleInfo.nLFOIndex && WW8ListManager::nMaxLevel
-                                                > rStyleInfo.nListLevel)
+        if (USHRT_MAX > rStyleInfo.m_nLFOIndex && WW8ListManager::nMaxLevel
+                                                > rStyleInfo.m_nListLevel)
         {
             const bool bApplyListStyle = false;
-            RegisterNumFormatOnTextNode(rStyleInfo.nLFOIndex, rStyleInfo.nListLevel,
+            RegisterNumFormatOnTextNode(rStyleInfo.m_nLFOIndex, rStyleInfo.m_nListLevel,
                                     bApplyListStyle);
         }
     }
@@ -1712,11 +1712,11 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
     {
         const long nAbsLSpace = rFormat.GetAbsLSpace();
         const long nListFirstLineIndent = GetListFirstLineIndent(rFormat);
-        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFormat, RES_LR_SPACE));
+        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
         aLR.SetTextLeft(nAbsLSpace);
         aLR.SetTextFirstLineOfst(writer_cast<short>(nListFirstLineIndent));
-        rStyle.pFormat->SetFormatAttr(aLR);
-        rStyle.bListReleventIndentSet = true;
+        rStyle.m_pFormat->SetFormatAttr(aLR);
+        rStyle.m_bListReleventIndentSet = true;
     }
 }
 
@@ -1724,8 +1724,8 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
 {
     if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION ) // #i86652#
     {
-        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFormat, RES_LR_SPACE));
-        if (rStyle.bListReleventIndentSet)
+        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
+        if (rStyle.m_bListReleventIndentSet)
         {
 
             SyncIndentWithList( aLR, rFormat, false, false ); // #i103711#, #i105414#
@@ -1735,7 +1735,7 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
             aLR.SetTextLeft(0);
             aLR.SetTextFirstLineOfst(0);
         }
-        rStyle.pFormat->SetFormatAttr(aLR);
+        rStyle.m_pFormat->SetFormatAttr(aLR);
     }
 }
 
@@ -1746,7 +1746,7 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
         return;
 
     SwWW8StyInf &rStyleInf = m_vColl[nStyle];
-    if (rStyleInf.bValid)
+    if (rStyleInf.m_bValid)
     {
         OSL_ENSURE(m_pAktColl, "Cannot be called outside of style import");
         // Phase 1: Nummerierungsattribute beim Einlesen einer StyleDef
@@ -1759,8 +1759,8 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
                  (WW8ListManager::nMaxLevel > nActLevel)
                )
             {
-                rStyleInf.nLFOIndex  = nActLFO;
-                rStyleInf.nListLevel = nActLevel;
+                rStyleInf.m_nLFOIndex  = nActLFO;
+                rStyleInf.m_nListLevel = nActLevel;
 
                 if (
                     (USHRT_MAX > nActLFO) &&
@@ -1786,16 +1786,16 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
         return;
 
     SwWW8StyInf &rStyleInf = m_vColl[nStyle];
-    if (rStyleInf.bValid && rStyleInf.pFormat)
+    if (rStyleInf.m_bValid && rStyleInf.m_pFormat)
     {
         //Save old pre-list modified indent, which are the word indent values
         rStyleInf.maWordLR =
-            ItemGet<SvxLRSpaceItem>(*rStyleInf.pFormat, RES_LR_SPACE);
+            ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE);
 
         // Phase 2: aktualisieren der StyleDef nach einlesen aller Listen
         SwNumRule* pNmRule = nullptr;
-        const sal_uInt16 nLFO = rStyleInf.nLFOIndex;
-        const sal_uInt8  nLevel = rStyleInf.nListLevel;
+        const sal_uInt16 nLFO = rStyleInf.m_nLFOIndex;
+        const sal_uInt8  nLevel = rStyleInf.m_nListLevel;
         if (
              (USHRT_MAX > nLFO) &&
              (WW8ListManager::nMaxLevel > nLevel)
@@ -1810,13 +1810,13 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
                 if (rStyleInf.IsWW8BuiltInHeadingStyle()
                     && rStyleInf.HasWW8OutlineLevel())
                 {
-                    rStyleInf.pOutlineNumrule = pNmRule;
+                    rStyleInf.m_pOutlineNumrule = pNmRule;
                 }
                 else
                 {
-                    rStyleInf.pFormat->SetFormatAttr(
+                    rStyleInf.m_pFormat->SetFormatAttr(
                         SwNumRuleItem(pNmRule->GetName()));
-                    rStyleInf.bHasStyNumRule = true;
+                    rStyleInf.m_bHasStyNumRule = true;
                 }
             }
         }
@@ -2056,7 +2056,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             braindeadness
             */
             if (m_pAktColl && (m_nLFOPosition == 2047-1) && m_nAktColl < m_vColl.size())
-                m_vColl[m_nAktColl].bHasBrokenWW6List = true;
+                m_vColl[m_nAktColl].m_bHasBrokenWW6List = true;
 
             // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
             if (USHRT_MAX > m_nLFOPosition)

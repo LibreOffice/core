@@ -478,14 +478,14 @@ ESelection GetESelection(EditEngine &rDrawEditEngine, long nCpStart, long nCpEnd
 void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
 {
     SwWW8StyInf * pStyInf = GetStyle(nColl);
-    if( pStyInf != nullptr && pStyInf->pFormat && pStyInf->bColl )
+    if( pStyInf != nullptr && pStyInf->m_pFormat && pStyInf->m_bColl )
     {
         const SfxPoolItem* pItem;
         for( sal_uInt16 i = POOLATTR_BEGIN; i < POOLATTR_END; i++ )
         {
             // If we are set in the source and not set in the destination
             // then add it in.
-            if ( SfxItemState::SET == pStyInf->pFormat->GetItemState(
+            if ( SfxItemState::SET == pStyInf->m_pFormat->GetItemState(
                 i, true, &pItem ) )
             {
                 SfxItemPool *pEditPool = rS.GetPool();

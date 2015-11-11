@@ -1721,15 +1721,15 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     sal_uInt16 nTabBase;
     if (m_pAktColl && m_nAktColl < m_vColl.size()) // StyleDef
     {
-        nTabBase = m_vColl[m_nAktColl].nBase;
+        nTabBase = m_vColl[m_nAktColl].m_nBase;
         if (nTabBase < m_vColl.size())  // Based On
-            pSty = static_cast<const SwTextFormatColl*>(m_vColl[nTabBase].pFormat);
+            pSty = static_cast<const SwTextFormatColl*>(m_vColl[nTabBase].m_pFormat);
     }
     else
     { // Text
         nTabBase = m_nAktColl;
         if (m_nAktColl < m_vColl.size())
-            pSty = static_cast<const SwTextFormatColl*>(m_vColl[m_nAktColl].pFormat);
+            pSty = static_cast<const SwTextFormatColl*>(m_vColl[m_nAktColl].m_pFormat);
         //TODO: figure out else here
     }
 
@@ -1747,7 +1747,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
             sal_uInt16 nOldTabBase = nTabBase;
             // If based on another
             if (nTabBase < m_vColl.size())
-                nTabBase = m_vColl[nTabBase].nBase;
+                nTabBase = m_vColl[nTabBase].m_nBase;
 
             if (
                     nTabBase < m_vColl.size() &&
@@ -1759,7 +1759,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
                 // current one (prevent loop)
                 aLoopWatch.insert(reinterpret_cast<size_t>(pSty));
                 if (nTabBase < m_vColl.size())
-                    pSty = static_cast<const SwTextFormatColl*>(m_vColl[nTabBase].pFormat);
+                    pSty = static_cast<const SwTextFormatColl*>(m_vColl[nTabBase].m_pFormat);
                 //TODO figure out the else branch
 
                 if (aLoopWatch.find(reinterpret_cast<size_t>(pSty)) !=
@@ -3708,7 +3708,7 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     m_nAktColl = m_pPlcxMan->GetColl();
 
     // Invalid Style-Id
-    if (m_nAktColl >= m_vColl.size() || !m_vColl[m_nAktColl].pFormat || !m_vColl[m_nAktColl].bColl)
+    if (m_nAktColl >= m_vColl.size() || !m_vColl[m_nAktColl].m_pFormat || !m_vColl[m_nAktColl].m_bColl)
     {
         m_nAktColl = 0;
         m_bParaAutoBefore = false;
@@ -3716,8 +3716,8 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     }
     else
     {
-        m_bParaAutoBefore = m_vColl[m_nAktColl].bParaAutoBefore;
-        m_bParaAutoAfter = m_vColl[m_nAktColl].bParaAutoAfter;
+        m_bParaAutoBefore = m_vColl[m_nAktColl].m_bParaAutoBefore;
+        m_bParaAutoAfter = m_vColl[m_nAktColl].m_bParaAutoAfter;
     }
 
     if (nOldColl >= m_vColl.size())
@@ -3736,9 +3736,9 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     if (!bTabRowEnd && StyleExists(m_nAktColl))
     {
         SetTextFormatCollAndListLevel( *m_pPaM, m_vColl[ m_nAktColl ]);
-        ChkToggleAttr(m_vColl[ nOldColl ].n81Flags, m_vColl[ m_nAktColl ].n81Flags);
-        ChkToggleBiDiAttr(m_vColl[nOldColl].n81BiDiFlags,
-            m_vColl[m_nAktColl].n81BiDiFlags);
+        ChkToggleAttr(m_vColl[ nOldColl ].m_n81Flags, m_vColl[ m_nAktColl ].m_n81Flags);
+        ChkToggleBiDiAttr(m_vColl[nOldColl].m_n81BiDiFlags,
+            m_vColl[m_nAktColl].m_n81BiDiFlags);
     }
 }
 
@@ -5882,7 +5882,7 @@ void SwWW8ImplReader::SetOutlineStyles()
     {
         SwWW8StyInf* pStyleInf = (*aStyleIter);
 
-        if (!pStyleInf->bColl) //Character Style
+        if (!pStyleInf->m_bColl) //Character Style
             continue;
 
         const sal_uInt16 nOutlineStyleListLevelOfWW8BuiltInHeadingStyle
@@ -5894,7 +5894,7 @@ void SwWW8ImplReader::SetOutlineStyles()
         }
 
         if (pChosenWW8ListStyle != nullptr && pStyleInf->mnWW8OutlineLevel
-                                           == pStyleInf->nListLevel)
+                                           == pStyleInf->m_nListLevel)
         {
             const SwNumFormat& rRule
                 = pChosenWW8ListStyle->Get(pStyleInf->mnWW8OutlineLevel);
@@ -5906,10 +5906,10 @@ void SwWW8ImplReader::SetOutlineStyles()
         nOutlineStyleListLevelWithAssignment
             |= nOutlineStyleListLevelOfWW8BuiltInHeadingStyle;
 
-        SwTextFormatColl* pTextFormatColl = static_cast<SwTextFormatColl*>(pStyleInf->pFormat);
+        SwTextFormatColl* pTextFormatColl = static_cast<SwTextFormatColl*>(pStyleInf->m_pFormat);
         if (pStyleInf->GetOutlineNumrule() != pChosenWW8ListStyle
-            || (pStyleInf->nListLevel < WW8ListManager::nMaxLevel
-                && pStyleInf->mnWW8OutlineLevel != pStyleInf->nListLevel))
+            || (pStyleInf->m_nListLevel < WW8ListManager::nMaxLevel
+                && pStyleInf->mnWW8OutlineLevel != pStyleInf->m_nListLevel))
         {
             // WW8 Built-In Heading Style does not apply the chosen one.
             // --> delete assignment to OutlineStyle, but keep its current

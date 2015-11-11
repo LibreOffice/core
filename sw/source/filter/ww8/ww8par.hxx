@@ -215,20 +215,20 @@ struct WW8FlyPara
 
 class SwWW8StyInf
 {
-    OUString        sWWStyleName;
-    sal_uInt16      nWWStyleId;
+    OUString        m_sWWStyleName;
+    sal_uInt16      m_nWWStyleId;
 public:
-    rtl_TextEncoding eLTRFontSrcCharSet;    // rtl_TextEncoding for the font
-    rtl_TextEncoding eRTLFontSrcCharSet;    // rtl_TextEncoding for the font
-    rtl_TextEncoding eCJKFontSrcCharSet;    // rtl_TextEncoding for the font
-    SwFormat*      pFormat;
-    WW8FlyPara* pWWFly;
-    SwNumRule*  pOutlineNumrule;
-    long        nFilePos;
-    sal_uInt16      nBase;
-    sal_uInt16      nFollow;
-    sal_uInt16      nLFOIndex;
-    sal_uInt8        nListLevel;
+    rtl_TextEncoding m_eLTRFontSrcCharSet;    // rtl_TextEncoding for the font
+    rtl_TextEncoding m_eRTLFontSrcCharSet;    // rtl_TextEncoding for the font
+    rtl_TextEncoding m_eCJKFontSrcCharSet;    // rtl_TextEncoding for the font
+    SwFormat*      m_pFormat;
+    WW8FlyPara* m_pWWFly;
+    SwNumRule*  m_pOutlineNumrule;
+    long        m_nFilePos;
+    sal_uInt16      m_nBase;
+    sal_uInt16      m_nFollow;
+    sal_uInt16      m_nLFOIndex;
+    sal_uInt8        m_nListLevel;
 
     // WW8 outline level is zero-based:
     // 0: outline level 1
@@ -238,95 +238,95 @@ public:
     // 9: body text
     sal_uInt8 mnWW8OutlineLevel;
 
-    sal_uInt16  n81Flags;           // for bold, italic, ...
-    sal_uInt16  n81BiDiFlags;       // for bold, italic, ...
+    sal_uInt16  m_n81Flags;           // for bold, italic, ...
+    sal_uInt16  m_n81BiDiFlags;       // for bold, italic, ...
     SvxLRSpaceItem maWordLR;
-    bool bValid;            // empty of valid
-    bool bImported;         // for recursive imports
-    bool bColl;             // true-> pFormat is SwTextFormatColl
-    bool bImportSkipped;    // only true if !bNewDoc && existing style
-    bool bHasStyNumRule;    // true-> named NumRule in style
-    bool bHasBrokenWW6List; // true-> WW8+ style has a WW7- list
-    bool bListReleventIndentSet; //true if this style's indent has
+    bool m_bValid;            // empty of valid
+    bool m_bImported;         // for recursive imports
+    bool m_bColl;             // true-> pFormat is SwTextFormatColl
+    bool m_bImportSkipped;    // only true if !bNewDoc && existing style
+    bool m_bHasStyNumRule;    // true-> named NumRule in style
+    bool m_bHasBrokenWW6List; // true-> WW8+ style has a WW7- list
+    bool m_bListReleventIndentSet; //true if this style's indent has
                                  //been explicitly set, it's set to the value
                                  //of pFormat->GetItemState(RES_LR_SPACE, false)
                                  //if it was possible to get the ItemState
                                  //for L of the LR space independently
-    bool bParaAutoBefore;   // For Auto spacing before a paragraph
-    bool bParaAutoAfter;    // For Auto Spacing after a paragraph
+    bool m_bParaAutoBefore;   // For Auto spacing before a paragraph
+    bool m_bParaAutoAfter;    // For Auto Spacing after a paragraph
 
     SwWW8StyInf() :
-        sWWStyleName( OUString() ),
-        nWWStyleId( 0 ),
-        eLTRFontSrcCharSet(0),
-        eRTLFontSrcCharSet(0),
-        eCJKFontSrcCharSet(0),
-        pFormat( nullptr ),
-        pWWFly( nullptr ),
-        pOutlineNumrule( nullptr ),
-        nFilePos( 0 ),
-        nBase( 0 ),
-        nFollow( 0 ),
-        nLFOIndex( USHRT_MAX ),
-        nListLevel(WW8ListManager::nMaxLevel),
+        m_sWWStyleName( OUString() ),
+        m_nWWStyleId( 0 ),
+        m_eLTRFontSrcCharSet(0),
+        m_eRTLFontSrcCharSet(0),
+        m_eCJKFontSrcCharSet(0),
+        m_pFormat( nullptr ),
+        m_pWWFly( nullptr ),
+        m_pOutlineNumrule( nullptr ),
+        m_nFilePos( 0 ),
+        m_nBase( 0 ),
+        m_nFollow( 0 ),
+        m_nLFOIndex( USHRT_MAX ),
+        m_nListLevel(WW8ListManager::nMaxLevel),
         mnWW8OutlineLevel( MAXLEVEL ),
-        n81Flags( 0 ),
-        n81BiDiFlags(0),
+        m_n81Flags( 0 ),
+        m_n81BiDiFlags(0),
         maWordLR( RES_LR_SPACE ),
-        bValid(false),
-        bImported(false),
-        bColl(false),
-        bImportSkipped(false),
-        bHasStyNumRule(false),
-        bHasBrokenWW6List(false),
-        bListReleventIndentSet(false),
-        bParaAutoBefore(false),
-        bParaAutoAfter(false)
+        m_bValid(false),
+        m_bImported(false),
+        m_bColl(false),
+        m_bImportSkipped(false),
+        m_bHasStyNumRule(false),
+        m_bHasBrokenWW6List(false),
+        m_bListReleventIndentSet(false),
+        m_bParaAutoBefore(false),
+        m_bParaAutoAfter(false)
 
     {}
 
     ~SwWW8StyInf()
     {
-        delete pWWFly;
+        delete m_pWWFly;
     }
 
     void SetOrgWWIdent( const OUString& rName, const sal_uInt16 nId )
     {
-        sWWStyleName = rName;
-        nWWStyleId = nId;
+        m_sWWStyleName = rName;
+        m_nWWStyleId = nId;
 
         // apply default WW8 outline level to WW8 Built-in Heading styles
         if (IsWW8BuiltInHeadingStyle())
         {
-            mnWW8OutlineLevel = nWWStyleId - 1;
+            mnWW8OutlineLevel = m_nWWStyleId - 1;
         }
     }
 
     const OUString& GetOrgWWName() const
     {
-        return sWWStyleName;
+        return m_sWWStyleName;
     }
 
     bool HasWW8OutlineLevel() const
     {
-        return (pFormat != nullptr && (MAXLEVEL > mnWW8OutlineLevel));
+        return (m_pFormat != nullptr && (MAXLEVEL > mnWW8OutlineLevel));
     }
 
     bool IsOutlineNumbered() const
     {
-        return pOutlineNumrule && HasWW8OutlineLevel();
+        return m_pOutlineNumrule && HasWW8OutlineLevel();
     }
 
     const SwNumRule* GetOutlineNumrule() const
     {
-        return pOutlineNumrule;
+        return m_pOutlineNumrule;
     }
     rtl_TextEncoding GetCharSet() const;
     rtl_TextEncoding GetCJKCharSet() const;
 
     sal_uInt16 GetWWStyleId() const
     {
-        return nWWStyleId;
+        return m_nWWStyleId;
     }
 
     bool IsWW8BuiltInHeadingStyle() const
