@@ -1377,7 +1377,7 @@ public:
 };
 
 Sequence< Reference<container::XIndexAccess> > SAL_CALL
-LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException)
+LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException, std::exception)
 {
     // load symbol
     MyFunc_Type3 func = reinterpret_cast<MyFunc_Type3>(getFunctionSymbol( rLocale, "getOutlineNumberingLevels" ));
