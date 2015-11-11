@@ -59,6 +59,8 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/svpforlokit.hxx>
@@ -1265,6 +1267,12 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         }
         aValues.add_child(sStyleFam.toUtf8().getStr(), aChildren);
     }
+
+    boost::property_tree::ptree aChildClearFormat;
+    OUString sClearFormat = SVX_RESSTR( RID_SVXSTR_CLEARFORM );
+    aChildClearFormat.put("", sClearFormat.toUtf8());
+    aValues.add_child("ClearStyle", aChildClearFormat);
+
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
