@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 
 /**
  * Bitmap handle canvas element is used to show a handle on the screen.
@@ -26,8 +27,9 @@ public abstract class BitmapHandle extends CommonCanvasElement {
      * Return a bitmap for a drawable id.
      */
     protected static Bitmap getBitmapForDrawable(Context context, int drawableId) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        return BitmapFactory.decodeResource(context.getResources(), drawableId, options);
+        Drawable drawable = context.getResources().getDrawable(drawableId);
+
+        return ImageUtils.getBitmapForDrawable(drawable);
     }
 
     /**

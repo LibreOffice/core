@@ -64,6 +64,7 @@
     <string name="action_strikeout">Strike Out</string>
     <string name="action_keyboard">Show keyboard</string>
     <string name="action_save">Save</string>
+    <string name="action_fromat">Enable Format</string>
 
     <!-- Feedback messages -->
     <string name="message_saved">Save complete</string>

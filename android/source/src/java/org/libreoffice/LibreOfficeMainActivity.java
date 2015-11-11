@@ -17,8 +17,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -61,20 +59,24 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
     private static boolean mEnableEditing;
 
-    int providerId;
-    URI documentUri;
+    private int providerId;
+    private URI documentUri;
 
     public Handler mMainHandler;
 
     private DrawerLayout mDrawerLayout;
+    private LOAbout mAbout;
+
     private ListView mDrawerList;
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private File mInputFile;
     private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
-    private LOAbout mAbout;
+
+    private FormattingController mFormattingController;
     private ToolbarController mToolbarController;
+    private FontController mFontController;
 
     public LibreOfficeMainActivity() {
         mAbout = new LOAbout(this, false);
@@ -88,63 +90,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         return mEnableEditing;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        mToolbarController.setOptionMenu(menu);
-
-        if (mTempFile != null) {
-            mToolbarController.disableMenuItem(R.id.action_save, true);
-            Toast.makeText(this, getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_bold:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Bold"));
-                return true;
-            case R.id.action_italic:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Italic"));
-                return true;
-            case R.id.action_underline:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Underline"));
-                return true;
-            case R.id.action_strikeout:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Strikeout"));
-                return true;
-            case R.id.action_keyboard:
-                showSoftKeyboard();
-                break;
-            case R.id.action_about:
-                mAbout.showAbout();
-                return true;
-            case R.id.action_save:
-                saveDocument();
-                return true;
-            case R.id.action_parts:
-                mDrawerLayout.openDrawer(mDrawerList);
-                return true;
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        boolean isDrawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        // Do the same in case the drawer is locked.
-        boolean isDrawerLocked = mDrawerLayout.getDrawerLockMode(mDrawerList) != DrawerLayout.LOCK_MODE_UNLOCKED;
-        menu.findItem(R.id.action_parts).setVisible(!isDrawerOpen && !isDrawerLocked);
-        menu.setGroupVisible(R.id.group_edit_actions, mEnableEditing);
-        return super.onPrepareOptionsMenu(menu);
+    public boolean usesTemporaryFile() {
+        return mTempFile != null;
     }
 
     @Override
@@ -152,7 +99,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         Log.w(LOGTAG, "onCreate..");
         mAppContext = this;
         super.onCreate(savedInstanceState);
-
 
         SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mEnableEditing = sPrefs.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
@@ -166,9 +112,21 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mToolbarController = new ToolbarController(this, getSupportActionBar(), toolbar);
+        Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+
+        hideBottomToolbar();
+
+        mToolbarController = new ToolbarController(this, getSupportActionBar(), toolbarTop);
+        mFormattingController = new FormattingController(this, toolbarBottom);
+        toolbarTop.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LOKitShell.sendNavigationClickEvent();
+            }
+        });
+
+        mFontController = new FontController(this);
 
         if (getIntent().getData() != null) {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
@@ -192,13 +150,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         } else {
             mInputFile = new File(DEFAULT_DOC_PATH);
         }
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LOKitShell.sendNavigationClickEvent();
-            }
-        });
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -226,6 +177,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
         // create TextCursorLayer
         mDocumentOverlay = new DocumentOverlay(mAppContext, layerView);
+
+        mToolbarController.setupToolbars();
     }
 
     private boolean copyFileToTemp() {
@@ -272,7 +225,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
      * Save the document and invoke save on document provider to upload the file
      * to the cloud if necessary.
      */
-    private void saveDocument() {
+    public void saveDocument() {
         final long lastModified = mInputFile.lastModified();
         final Activity activity = LibreOfficeMainActivity.this;
         Toast.makeText(this, R.string.message_saving, Toast.LENGTH_SHORT).show();
@@ -328,9 +281,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                     else {
                         // 20 seconds later, the local file has not changed,
                         // maybe there were no changes at all
-                        Toast.makeText(activity,
-                                R.string.message_save_incomplete,
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, R.string.message_save_incomplete, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -346,7 +297,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         boolean bEnableExperimental = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
         if (bEnableExperimental != mEnableEditing) {
             mEnableEditing = bEnableExperimental;
-            invalidateOptionsMenu();
         }
     }
 
@@ -415,11 +365,29 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                LayerView layerView = (LayerView) findViewById(R.id.layer_view);
+                showSoftKeyboardDirect();
+            }
+        });
+    }
 
-                if (layerView.requestFocus()) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.showSoftInput(layerView, InputMethodManager.SHOW_FORCED);
+    private void showSoftKeyboardDirect() {
+        LayerView layerView = (LayerView) findViewById(R.id.layer_view);
+
+        if (layerView.requestFocus()) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(layerView, InputMethodManager.SHOW_FORCED);
+        }
+
+        hideBottomToolbar();
+    }
+
+    public void showSoftKeyboardOrFormattingToolbar() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                Toolbar toolbarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+                if (toolbarBottom.getVisibility() != View.VISIBLE) {
+                    showSoftKeyboardDirect();
                 }
             }
         });
@@ -447,6 +415,46 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         }
     }
 
+    public void showBottomToolbar() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.toolbar_bottom).setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    public void hideBottomToolbar() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.toolbar_bottom).setVisibility(View.GONE);
+                findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public void showFormattingToolbar() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                showBottomToolbar();
+                findViewById(R.id.formatting_toolbar).setVisibility(View.VISIBLE);
+                hideSoftKeyboardDirect();
+            }
+        });
+    }
+
+    public void hideFormattingToolbar() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                hideBottomToolbar();
+                findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
+            }
+        });
+    }
+
     public void showProgressSpinner() {
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
     }
@@ -455,12 +463,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         findViewById(R.id.loadingPanel).setVisibility(View.GONE);
     }
 
-    public void showAlertDialog(String s) {
+    public void showAlertDialog(String message) {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LibreOfficeMainActivity.this);
 
         alertDialogBuilder.setTitle("Error");
-        alertDialogBuilder.setMessage(s);
+        alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
@@ -477,6 +485,32 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
     public ToolbarController getToolbarController() {
         return mToolbarController;
+    }
+
+    public FontController getFontController() {
+        return mFontController;
+    }
+
+    public FormattingController getFormattingController() {
+        return mFormattingController;
+    }
+
+    public void openDrawer() {
+        mDrawerLayout.openDrawer(mDrawerList);
+    }
+
+    public void showAbout() {
+        mAbout.showAbout();
+    }
+
+    public void showSettings() {
+        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+    }
+
+    public boolean isDrawerEnabled() {
+        boolean isDrawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        boolean isDrawerLocked = mDrawerLayout.getDrawerLockMode(mDrawerList) != DrawerLayout.LOCK_MODE_UNLOCKED;
+        return !isDrawerOpen && !isDrawerLocked;
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {

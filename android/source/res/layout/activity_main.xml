@@ -12,9 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include layout="@layout/toolbar"/>
+
+        <include layout="@layout/toolbar_bottom"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/toolbar_bottom"
             android:orientation="vertical">
 
             <include layout="@layout/toolbar"/>
@@ -30,7 +35,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
-                <include layout="@layout/text_selection_handles"/>
+                <org.libreoffice.overlay.DocumentOverlayView
+                    android:id="@+id/text_cursor_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"/>
 
             </RelativeLayout>
         </LinearLayout>
@@ -43,9 +51,11 @@
             android:gravity="center">
 
             <ProgressBar
+                android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"/>
+
         </RelativeLayout>
 
         <View

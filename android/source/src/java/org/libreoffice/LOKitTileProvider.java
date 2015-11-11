@@ -124,12 +124,23 @@ public class LOKitTileProvider implements TileProvider {
 
         mDocument.setPart(0);
 
+        setupDocumentFonts();
+
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
                 LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdapter().notifyDataSetChanged();
             }
         });
+    }
+
+    private void setupDocumentFonts() {
+        String values = mDocument.getCommandValues(".uno:CharFontName");
+        if (values == null || values.isEmpty())
+            return;
+
+        LOKitShell.getFontController().parseJson(values);
+        LOKitShell.getFontController().setupFontViews();
     }
 
     private String getGenericPartName(int i) {
