@@ -69,8 +69,6 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     osl::Module lib(aLibName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (lib.is())
     {
-        lib.release();
-
         // ========================= LATEST VERSION =========================
         oslGenericFunction pSym = lib.getFunctionSymbol(COMPONENT_GETENV);
         if (pSym)
@@ -124,6 +122,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                 }
             }
         }
+        lib.release();
     }
 #endif
     return bRet ? JNI_TRUE : JNI_FALSE;
@@ -159,8 +158,6 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     osl::Module lib(aLibName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (lib.is())
     {
-        lib.release();
-
         // ========================= LATEST VERSION =========================
         oslGenericFunction pSym = lib.getFunctionSymbol(COMPONENT_GETENV);
         if (pSym)
@@ -228,6 +225,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                 }
             }
         }
+        lib.release();
     }
 #endif
     return joSLL_cpp;
