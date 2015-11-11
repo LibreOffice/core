@@ -343,7 +343,6 @@ DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent, WinBits nStyle
           ,m_aNextBtn(VclPtr<ImageButton>::Create(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS))
           ,m_aLastBtn(VclPtr<ImageButton>::Create(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS))
           ,m_aNewBtn(VclPtr<ImageButton>::Create(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS))
-          ,m_nDefaultWidth(0)
           ,m_nCurrentPos(-1)
           ,m_bPositioning(false)
 {
@@ -371,8 +370,6 @@ DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent, WinBits nStyle
     m_aRecordText->SetText(SVX_RESSTR(RID_STR_REC_TEXT));
     m_aRecordOf->SetText(SVX_RESSTR(RID_STR_REC_FROM_TEXT));
     m_aRecordCount->SetText(OUString('?'));
-
-    m_nDefaultWidth = ArrangeControls();
 
     m_aFirstBtn->Disable();
     m_aPrevBtn->Disable();
@@ -437,8 +434,9 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     // positioning of the controls
     // calculate base size
     Rectangle   aRect(static_cast<DbGridControl*>(GetParent())->GetControlArea());
-    const long  nH      = aRect.GetSize().Height();
-    Size        aBorder = LogicToPixel(Size(2, 2),MAP_APPFONT);
+    long nH = aRect.GetSize().Height();
+    long nW = GetParent()->GetOutputSizePixel().Width();
+    Size aBorder = LogicToPixel(Size(2, 2),MAP_APPFONT);
     aBorder = Size(CalcZoom(aBorder.Width()), CalcZoom(aBorder.Height()));
     sal_uInt16      nX = 1;
     sal_uInt16      nY = 0;
@@ -470,7 +468,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     OUString textPattern(hairSpace);
     textPattern += sevenDigits;
     textPattern += hairSpace;
-    nTextWidth = m_aAbsolute->GetTextWidth( textPattern );
+    nTextWidth = m_aAbsolute->GetTextWidth(textPattern);
     m_aAbsolute->SetPosPixel(Point(nX,nY));
     m_aAbsolute->SetSizePixel(Size(nTextWidth, nH));
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
@@ -482,7 +480,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
     textPattern = sevenDigits + " * (" + sevenDigits + ")";
-    nTextWidth = m_aRecordCount->GetTextWidth( textPattern );
+    nTextWidth = m_aRecordCount->GetTextWidth(textPattern);
     m_aRecordCount->SetPosPixel(Point(nX,nY));
     m_aRecordCount->SetSizePixel(Size(nTextWidth,nH));
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
@@ -496,6 +494,68 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     SetPosAndSize(*m_aNewBtn.get(), aButtonPos, aButtonSize);
 
     nX = sal::static_int_cast< sal_uInt16 >(aButtonPos.X() + 1);
+
+    nW -= GetSettings().GetStyleSettings().GetScrollBarSize();
+
+    if (nX > nW)
+    {
+        aButtonPos.X() = nW-nH;
+        m_aNewBtn->SetPosPixel(aButtonPos);
+        aButtonPos.X() -= nH;
+        m_aLastBtn->SetPosPixel(aButtonPos);
+        aButtonPos.X() -= nH;
+        m_aNextBtn->SetPosPixel(aButtonPos);
+        aButtonPos.X() -= nH;
+        m_aPrevBtn->SetPosPixel(aButtonPos);
+        aButtonPos.X() -= nH;
+        m_aFirstBtn->SetPosPixel(aButtonPos);
+
+        auto nDiff = nX - nW;
+
+        Size aSize = m_aAbsolute->GetSizePixel();
+        aSize.Width() -= nDiff/3.0;
+        m_aAbsolute->SetSizePixel(aSize);
+
+        aSize = m_aRecordCount->GetSizePixel();
+        aSize.Width() -= nDiff/3.0*2;
+        m_aRecordCount->SetSizePixel(aSize);
+
+        Point aPos = m_aRecordOf->GetPosPixel();
+        aPos.X() -= nDiff/3.0;
+        m_aRecordOf->SetPosPixel(aPos);
+
+        aPos = m_aRecordCount->GetPosPixel();
+        aPos.X() -= nDiff/3.0;
+        m_aRecordCount->SetPosPixel(aPos);
+
+        vcl::Window* pWindows[] =
+        {
+            m_aRecordText.get(),
+            m_aAbsolute.get(),
+            m_aRecordOf.get(),
+            m_aRecordCount.get(),
+            m_aFirstBtn.get(),
+            m_aPrevBtn.get(),
+            m_aNextBtn.get(),
+            m_aLastBtn.get(),
+            m_aNewBtn.get()
+        };
+
+        for (size_t i=0; i < (sizeof (pWindows) / sizeof(pWindows[0])); ++i)
+        {
+            if (pWindows[i]->GetPosPixel().X() < 0)
+                pWindows[i]->SetSizePixel(Size(0, nH));
+            aSize = pWindows[i]->GetSizePixel();
+            auto nExcess = (pWindows[i]->GetPosPixel().X() + aSize.Width()) - nW;
+            if (nExcess > 0)
+            {
+                aSize.Width() -= nExcess;
+                pWindows[i]->SetSizePixel(aSize);
+            }
+        }
+
+        nX = nW;
+    }
 
     return nX;
 }
@@ -775,7 +835,7 @@ void DbGridControl::NavigationBar::StateChanged(StateChangedType nType)
             SetZoomedPointFont(*this, aFont);
 
             // rearrange the controls
-            m_nDefaultWidth = ArrangeControls();
+            ArrangeControls();
         }
         break;
         default:;
@@ -1150,9 +1210,9 @@ void DbGridControl::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
     // positioning of the controls
     if (m_bNavigationBar)
     {
-        nX = m_aBar->GetDefaultWidth();
-        Rectangle   aRect(GetControlArea());
-        m_aBar->SetPosSizePixel(Point(0,nY + 1), Size(nX, aRect.GetSize().Height() - 1));
+        Rectangle aRect(GetControlArea());
+        m_aBar->SetPosSizePixel(Point(0, nY + 1), Size(aRect.GetSize().Width(), aRect.GetSize().Height() - 1));
+        nX = m_aBar->ArrangeControls();
     }
 }
 

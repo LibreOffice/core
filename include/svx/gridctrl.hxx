@@ -161,7 +161,6 @@ public:
         VclPtr<ImageButton>  m_aNextBtn;         // ImageButton for 'go to the next record'
         VclPtr<ImageButton>  m_aLastBtn;         // ImageButton for 'go to the last record'
         VclPtr<ImageButton>  m_aNewBtn;          // ImageButton for 'go to a new record'
-        sal_uInt16           m_nDefaultWidth;
         sal_Int32            m_nCurrentPos;
 
         bool                 m_bPositioning;     // protect PositionDataSource against recursion
@@ -191,7 +190,7 @@ public:
         void InvalidateState(sal_uInt16 nWhich) {SetState(nWhich);}
         void SetState(sal_uInt16 nWhich);
         bool GetState(sal_uInt16 nWhich) const;
-        sal_uInt16 GetDefaultWidth() const {return m_nDefaultWidth;}
+        sal_uInt16 ArrangeControls();
 
     protected:
         virtual void Resize() override;
@@ -200,7 +199,6 @@ public:
 
     private:
         DECL_LINK_TYPED(OnClick, Button*, void);
-        sal_uInt16 ArrangeControls();
 
         void PositionDataSource(sal_Int32 nRecord);
     };
