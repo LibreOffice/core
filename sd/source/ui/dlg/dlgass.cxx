@@ -69,7 +69,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -167,7 +166,7 @@ public:
     uno::Sequence < beans::NamedValue > GetPassword( const OUString& rPath );
     void DeletePasswords();
 
-    boost::ptr_vector< PasswordEntry > maPasswordList;
+    std::vector< PasswordEntry > maPasswordList;
 
     OUString maDocFile;
     OUString maLayoutFile;
@@ -1585,9 +1584,9 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const OUString& rP
 
             if(pEntry == nullptr)
             {
-                pEntry = new PasswordEntry();
+                maPasswordList.push_back( PasswordEntry() );
+                pEntry = &maPasswordList.back();
                 pEntry->maPath = rPath;
-                maPasswordList.push_back( pEntry );
             }
 
             pEntry->aEncryptionData = aEncryptionData;
