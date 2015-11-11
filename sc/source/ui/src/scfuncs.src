@@ -1193,7 +1193,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Calculates the ISO 8601 calender week for the given date." ;
+            Text [ en-US ] = "Calculates the ISO 8601 calendar week for the given date." ;
         };
         ExtraData =
         {
