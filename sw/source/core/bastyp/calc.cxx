@@ -713,7 +713,7 @@ SwCalcOper SwCalc::GetToken()
             }
             aVarName = aName;
             eCurrOper = CALC_NAME;
-            bSetError = false;
+            bSetError = true;
         }
         else if ( aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
         {
