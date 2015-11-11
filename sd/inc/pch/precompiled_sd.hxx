@@ -71,7 +71,6 @@
 #include <boost/limits.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <canvas/canvastools.hxx>
 #include <canvas/elapsedtime.hxx>

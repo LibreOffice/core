@@ -32,7 +32,7 @@
 #include "assclass.hxx"
 
 #include <memory>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 class FixedText;
 class RadioButton;
@@ -166,7 +166,7 @@ private:
     void    ChangePage();
     void    UpdatePage();
 
-    boost::ptr_vector<SdPublishingDesign>   m_aDesignList;
+    std::vector<SdPublishingDesign>   m_aDesignList;
     bool    m_bDesignListDirty;
     SdPublishingDesign* m_pDesign;
     bool    Load();
