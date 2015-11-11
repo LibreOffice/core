@@ -59,6 +59,7 @@ class SvxConfigDialog : public SfxTabDialog
 private:
     css::uno::Reference< css::frame::XFrame > m_xFrame;
     sal_uInt16 m_nMenusPageId;
+    sal_uInt16 m_nContextMenusPageId;
     sal_uInt16 m_nKeyboardPageId;
     sal_uInt16 m_nToolbarsPageId;
     sal_uInt16 m_nEventsPageId;
@@ -439,7 +440,7 @@ public:
 class SvxMenuConfigPage : public SvxConfigPage
 {
 private:
-
+    bool m_bIsMenuBar;
     DECL_LINK_TYPED( SelectMenu, ListBox&, void );
     DECL_LINK_TYPED( SelectMenuEntry, SvTreeListBox *, void );
     DECL_LINK_TYPED( NewMenuHdl, Button *, void );
@@ -455,7 +456,7 @@ private:
     void            DeleteSelectedTopLevel() override;
 
 public:
-    SvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
+    SvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet, bool bIsMenuBar = true );
     virtual ~SvxMenuConfigPage();
     virtual void dispose() override;
 

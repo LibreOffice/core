@@ -192,6 +192,11 @@ String RID_SVXSTR_PRODUCTNAME_TOOLBARS
     Text [ en-US ] = "%PRODUCTNAME %MODULENAME Toolbars" ;
 };
 
+String RID_SVXSTR_PRODUCTNAME_CONTEXTMENUS
+{
+    Text [ en-US ] = "%PRODUCTNAME %MODULENAME Context Menus" ;
+};
+
 String RID_SVXSTR_TOOLBAR
 {
     Text [ en-US ] = "Toolbar" ;

@@ -739,6 +739,11 @@ VclPtr<SfxTabPage> CreateSvxMenuConfigPage( vcl::Window *pParent, const SfxItemS
     return VclPtr<SvxMenuConfigPage>::Create( pParent, *rSet );
 }
 
+VclPtr<SfxTabPage> CreateSvxContextMenuConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
+{
+    return VclPtr<SvxMenuConfigPage>::Create( pParent, *rSet, false );
+}
+
 VclPtr<SfxTabPage> CreateKeyboardConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
        return VclPtr<SfxAcceleratorConfigPage>::Create( pParent, *rSet );
@@ -783,6 +788,7 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
     : SfxTabDialog(pParent, "CustomizeDialog",
         "cui/ui/customizedialog.ui", pInSet)
     , m_nMenusPageId(0)
+    , m_nContextMenusPageId(0)
     , m_nKeyboardPageId(0)
     , m_nToolbarsPageId(0)
     , m_nEventsPageId(0)
@@ -790,6 +796,10 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
     InitImageType();
 
     m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage, nullptr);
+    if ( getenv("LO_USE_NEWCONTEXTMENU") )
+        m_nContextMenusPageId = AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
+    else
+        RemoveTabPage("contextmenus");
     m_nKeyboardPageId = AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
     m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
     m_nEventsPageId = AddTabPage("events", CreateSvxEventConfigPage, nullptr);
@@ -819,7 +829,7 @@ void SvxConfigDialog::SetFrame(const css::uno::Reference< css::frame::XFrame >& 
 void SvxConfigDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 {
     if (nId == m_nMenusPageId || nId == m_nKeyboardPageId ||
-        nId == m_nToolbarsPageId)
+        nId == m_nToolbarsPageId || nId == m_nContextMenusPageId)
     {
         rPage.SetFrame(m_xFrame);
     }
@@ -2193,8 +2203,9 @@ bool SvxConfigPage::MoveEntryData(
     return false;
 }
 
-SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
+SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSet, bool bIsMenuBar)
     : SvxConfigPage(pParent, rSet)
+    , m_bIsMenuBar( bIsMenuBar )
 {
     m_pContentsListBox = VclPtr<SvxMenuEntriesListBox>::Create(m_pEntries, this);
     m_pContentsListBox->set_grid_left_attach(0);
@@ -2231,6 +2242,14 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
     m_pModifyCommandButton->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, EntrySelectHdl ) );
+
+    if ( !bIsMenuBar )
+    {
+        m_pTopLevel->set_label( CUI_RES( RID_SVXSTR_PRODUCTNAME_CONTEXTMENUS ) );
+        m_pNewTopLevelButton->Hide();
+        pMenu->HideItem( pMenu->GetItemId( "move" ) );
+        pMenu->HideItem( pMenu->GetItemId( "menuitem3" ) );
+    }
 }
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
