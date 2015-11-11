@@ -49,8 +49,8 @@ namespace unocontrols{
 
 //  class
 
-class FrameControl  : public ::com::sun::star::awt::XControlModel
-                    , public ::com::sun::star::lang::XConnectionPointContainer
+class FrameControl  : public css::awt::XControlModel
+                    , public css::lang::XConnectionPointContainer
                     , public BaseControl                                // This order is necessary for right initialization of m_aMutex!
                     , public ::cppu::OBroadcastHelper
                     , public ::cppu::OPropertySetHelper
@@ -62,15 +62,15 @@ public:
 
     //  construct/destruct
 
-    FrameControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    FrameControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~FrameControl();
 
     //  XInterface
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        const css::uno::Type& aType
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -92,14 +92,14 @@ public:
 
     //  XTypeProvider
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XAggregation
 
-    ::com::sun::star::uno::Any SAL_CALL queryAggregation(
-        const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    css::uno::Any SAL_CALL queryAggregation(
+        const css::uno::Type& aType
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -110,52 +110,52 @@ public:
     //  XControl
 
     virtual void SAL_CALL createPeer(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >&      xToolkit ,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&   xParent
-    ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
+        const css::uno::Reference< css::awt::XWindowPeer >&   xParent
+    ) throw ( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL setModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        const css::uno::Reference< css::awt::XControlModel >& xModel
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XComponent
 
-    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XView
 
     virtual sal_Bool SAL_CALL setGraphics(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xDevice
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        const css::uno::Reference< css::awt::XGraphics >& xDevice
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XConnectionPointContainer
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getConnectionPointTypes()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getConnectionPointTypes()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
-        const ::com::sun::star::uno::Type& aType
-    ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
+        const css::uno::Type& aType
+    ) throw ( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL advise(
-        const ::com::sun::star::uno::Type&                                aType       ,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&    xListener
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        const css::uno::Type&                                aType       ,
+        const css::uno::Reference< css::uno::XInterface >&    xListener
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL unadvise(
-        const ::com::sun::star::uno::Type&                                aType ,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&    xListener
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        const css::uno::Type&                                aType ,
+        const css::uno::Reference< css::uno::XInterface >&    xListener
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
     //  impl but public methods to register service!
 
-    static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
+    static const css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
     static const OUString impl_getStaticImplementationName();
 
@@ -167,54 +167,54 @@ protected:
     //  OPropertySetHelper
 
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        ::com::sun::star::uno::Any&       rConvertedValue   ,
-        ::com::sun::star::uno::Any&       rOldValue         ,
+        css::uno::Any&       rConvertedValue   ,
+        css::uno::Any&       rOldValue         ,
         sal_Int32           nHandle           ,
-        const ::com::sun::star::uno::Any& rValue
-    ) throw( ::com::sun::star::lang::IllegalArgumentException ) override;
+        const css::uno::Any& rValue
+    ) throw( css::lang::IllegalArgumentException ) override;
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle ,
-        const ::com::sun::star::uno::Any& rValue
-    ) throw ( ::com::sun::star::uno::Exception, std::exception ) override;
+        const css::uno::Any& rValue
+    ) throw ( css::uno::Exception, std::exception ) override;
 
-    virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any&   rValue  ,
+    virtual void SAL_CALL getFastPropertyValue( css::uno::Any&   rValue  ,
                                                 sal_Int32       nHandle ) const override;
 
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     //  XPropertySet
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  BaseControl
 
-    virtual ::com::sun::star::awt::WindowDescriptor* impl_getWindowDescriptor(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentPeer
+    virtual css::awt::WindowDescriptor* impl_getWindowDescriptor(
+        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
 
 //  private methods
 
 private:
 
-    void impl_createFrame(  const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >&       xPeer           ,
+    void impl_createFrame(  const css::uno::Reference< css::awt::XWindowPeer >&       xPeer           ,
                             const OUString&                                         sURL            ,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    seqArguments    );
+                            const css::uno::Sequence< css::beans::PropertyValue >&    seqArguments    );
 
     void impl_deleteFrame();
 
-    static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
+    static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
 //  private variables
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >        m_xFrame;
-    OUString                                                                    m_sComponentURL;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_seqLoaderArguments;
-    ::cppu::OMultiTypeInterfaceContainerHelper                                  m_aInterfaceContainer;
-    css::uno::Reference<OConnectionPointContainerHelper>                        m_aConnectionPointContainer;
+    css::uno::Reference< css::frame::XFrame2 >              m_xFrame;
+    OUString                                                m_sComponentURL;
+    css::uno::Sequence< css::beans::PropertyValue >         m_seqLoaderArguments;
+    ::cppu::OMultiTypeInterfaceContainerHelper              m_aInterfaceContainer;
+    css::uno::Reference<OConnectionPointContainerHelper>    m_aConnectionPointContainer;
 
 };  // class FrameControl
 

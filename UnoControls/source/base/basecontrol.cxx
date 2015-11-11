@@ -718,7 +718,7 @@ const OUString BaseControl::impl_getStaticImplementationName()
 
 WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
-    // - used from "createPeer()" to set the values of an ::com::sun::star::awt::WindowDescriptor !!!
+    // - used from "createPeer()" to set the values of an css::awt::WindowDescriptor !!!
     // - if you will change the descriptor-values, you must override this virtuell function
     // - the caller must release the memory for this dynamical descriptor !!!
 

@@ -43,64 +43,21 @@ namespace unocontrols{
 #define PROGRESSBAR_LINECOLOR_BRIGHT        TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )    // white
 #define PROGRESSBAR_LINECOLOR_SHADOW        TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )    // black
 
-class ProgressBar   : public ::com::sun::star::awt::XControlModel
-                    , public ::com::sun::star::awt::XProgressBar
+class ProgressBar   : public css::awt::XControlModel
+                    , public css::awt::XProgressBar
                     , public BaseControl
 {
 
-//  public methods
-
 public:
 
-    //  construct/destruct
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    ProgressBar( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
+    ProgressBar( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~ProgressBar();
 
     //  XInterface
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -122,136 +79,32 @@ public:
 
     //  XTypeProvider
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XAggregation
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XProgressBar
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual void SAL_CALL setForegroundColor( sal_Int32 nColor )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL setBackgroundColor( sal_Int32 nColor )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
+    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL setRange(
         sal_Int32   nMin    ,
         sal_Int32   nMax
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual sal_Int32 SAL_CALL getValue() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual sal_Int32 SAL_CALL getValue() throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XWindow
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual void SAL_CALL setPosSize(
         sal_Int32   nX      ,
@@ -259,119 +112,37 @@ public:
         sal_Int32   nWidth  ,
         sal_Int32   nHeight ,
         sal_Int16   nFlags
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
     //  XControl
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
     virtual sal_Bool SAL_CALL setModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        const css::uno::Reference< css::awt::XControlModel >& xModel
+    ) throw( css::uno::RuntimeException, std::exception ) override;
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //  BaseControl
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
+    static const css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
     static const OUString impl_getStaticImplementationName();
 
-//  protected methods
-
 protected:
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     virtual void impl_paint(
         sal_Int32 nX ,
         sal_Int32 nY ,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics
+        const css::uno::Reference< css::awt::XGraphics >& xGraphics
     ) override;
-
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
-
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
 
     void impl_recalcRange();
 
-//  private variables
-
 private:
 
-    bool        m_bHorizontal;   // orientation for steps            [true=horizontal/false=vertikal]
-    ::com::sun::star::awt::Size   m_aBlockSize;   // width and height of a block      [>=0,0]
+    bool            m_bHorizontal;   // orientation for steps            [true=horizontal/false=vertikal]
+    css::awt::Size  m_aBlockSize;   // width and height of a block      [>=0,0]
     sal_Int32       m_nForegroundColor;   //                                  (alpha,r,g,b)
     sal_Int32       m_nBackgroundColor;   //                                  (alpha,r,g,b)
     sal_Int32       m_nMinRange;   // lowest value  =   0%             [long, <_nMaxRange]
