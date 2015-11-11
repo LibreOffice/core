@@ -23,12 +23,14 @@
 #include <sfx2/childwin.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 class SfxFrame;
 
 class SfxChildWinContextArr_Impl
 {
-    typedef boost::ptr_vector<SfxChildWinContextFactory> DataType;
+    typedef std::vector<std::unique_ptr<SfxChildWinContextFactory> > DataType;
     DataType maData;
 
 public:
