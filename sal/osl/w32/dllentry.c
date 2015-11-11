@@ -70,7 +70,7 @@ _pRawDllMain()
 */
 
 static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved );
-extern BOOL (WINAPI *_pRawDllMain)(HANDLE, DWORD, LPVOID) = _RawDllMain;
+extern BOOL (WINAPI *_pRawDllMain)(HINSTANCE, DWORD, LPVOID) = _RawDllMain;
 
 #endif
 
