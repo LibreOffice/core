@@ -503,14 +503,6 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::c
         ViewRedirector aViewRedirector;
         FmFormView::CompleteRedraw(pOutDev, rReg, pRedirector ? pRedirector : &aViewRedirector);
     }
-    // or save?
-    else
-    {
-        SdViewRedrawRec* pRec = new SdViewRedrawRec;
-        pRec->mpOut = pOutDev;
-        pRec->aRect = rReg.GetBoundRect();
-        maLockedRedraws.push_back(pRec);
-    }
 }
 
 void View::MarkListHasChanged()

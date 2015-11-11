@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_VIEW_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_VIEW_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include "pres.hxx"
 #include <tools/gen.hxx>
 #include <svtools/transfer.hxx>
@@ -55,13 +53,6 @@ struct SdNavigatorDropEvent;
 class ViewShell;
 class Window;
 class ViewClipboard;
-
-// SdViewRedrawRec
-struct SdViewRedrawRec
-{
-    VclPtr<OutputDevice> mpOut;
-    Rectangle            aRect;
-};
 
 //For master view we want to force that master
 //textboxes have readonly text, because the
@@ -262,14 +253,13 @@ protected:
     SdrMarkList*            mpDragSrcMarkList;
     SdrObject*              mpDropMarkerObj;
     SdrDropMarkerOverlay*   mpDropMarker;
-    sal_uInt16                  mnDragSrcPgNum;
+    sal_uInt16              mnDragSrcPgNum;
     Point                   maDropPos;
     ::std::vector<OUString> maDropFileVector;
     sal_Int8                mnAction;
     Idle                    maDropErrorIdle;
     Idle                    maDropInsertFileIdle;
-    sal_uInt16                  mnLockRedrawSmph;
-    boost::ptr_vector<SdViewRedrawRec> maLockedRedraws;
+    sal_uInt16              mnLockRedrawSmph;
     bool                    mbIsDropAllowed;
 
                             DECL_LINK_TYPED( DropErrorHdl, Idle*, void );
