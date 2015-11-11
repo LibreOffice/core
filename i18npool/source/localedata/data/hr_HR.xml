@@ -234,38 +234,38 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>Ned</DefaultAbbrvName>
-          <DefaultFullName>Nedjelja</DefaultFullName>
+          <DefaultAbbrvName>ned</DefaultAbbrvName>
+          <DefaultFullName>nedjelja</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>Pon</DefaultAbbrvName>
-          <DefaultFullName>Ponedjeljak</DefaultFullName>
+          <DefaultAbbrvName>pon</DefaultAbbrvName>
+          <DefaultFullName>ponedjeljak</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>Uto</DefaultAbbrvName>
-          <DefaultFullName>Utorak</DefaultFullName>
+          <DefaultAbbrvName>uto</DefaultAbbrvName>
+          <DefaultFullName>utorak</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>Sri</DefaultAbbrvName>
-          <DefaultFullName>Srijeda</DefaultFullName>
+          <DefaultAbbrvName>sri</DefaultAbbrvName>
+          <DefaultFullName>srijeda</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>Čet</DefaultAbbrvName>
-          <DefaultFullName>Četvrtak</DefaultFullName>
+          <DefaultAbbrvName>čet</DefaultAbbrvName>
+          <DefaultFullName>četvrtak</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>Pet</DefaultAbbrvName>
-          <DefaultFullName>Petak</DefaultFullName>
+          <DefaultAbbrvName>pet</DefaultAbbrvName>
+          <DefaultFullName>petak</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>Sub</DefaultAbbrvName>
-          <DefaultFullName>Subota</DefaultFullName>
+          <DefaultAbbrvName>sub</DefaultAbbrvName>
+          <DefaultFullName>subota</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
