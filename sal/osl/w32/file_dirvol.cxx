@@ -131,9 +131,6 @@ namespace /* private */
     inline bool is_UNC_path(const sal_Unicode* path)
     { return (0 == wcsncmp(UNC_PREFIX, path, SAL_N_ELEMENTS(UNC_PREFIX) - 1)); }
 
-    inline bool is_UNC_path(const rtl::OUString& path)
-    { return is_UNC_path(path.getStr()); }
-
     void parse_UNC_path(const sal_Unicode* path, UNCComponents* puncc)
     {
         OSL_PRECOND(is_UNC_path(path), "Precondition violated: No UNC path");
@@ -170,9 +167,6 @@ namespace /* private */
             "sal.osl",
             "Postcondition violated: Invalid UNC path detected");
     }
-
-    void parse_UNC_path(const rtl::OUString& path, UNCComponents* puncc)
-    { parse_UNC_path(path.getStr(), puncc); }
 
     bool has_path_parent(const sal_Unicode* path)
     {
