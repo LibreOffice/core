@@ -23,7 +23,6 @@
 #include <map>
 #include <vector>
 #include <memory>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <sal/types.h>
 #include <sot/storage.hxx>
@@ -148,7 +147,7 @@ class PropRead
         sal_uInt16              mnVersionLo;
         sal_uInt16              mnVersionHi;
         sal_uInt8               mApplicationCLSID[ 16 ];
-        boost::ptr_vector<Section> maSections;
+        std::vector<std::unique_ptr<Section> > maSections;
 
         void                    AddSection( Section& rSection );
 

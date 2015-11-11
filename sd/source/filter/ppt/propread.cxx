@@ -566,16 +566,16 @@ PropRead::PropRead( SotStorage& rStorage, const OUString& rName ) :
 
 void PropRead::AddSection( Section& rSection )
 {
-    maSections.push_back( new Section( rSection ) );
+    maSections.push_back( o3tl::make_unique<Section>( rSection ) );
 }
 
 const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
-    boost::ptr_vector<Section>::iterator it;
+    std::vector<std::unique_ptr<Section> >::iterator it;
     for ( it = maSections.begin(); it != maSections.end(); ++it)
     {
-        if ( memcmp( it->GetFMTID(), pFMTID, 16 ) == 0 )
-            return &(*it);
+        if ( memcmp( (*it)->GetFMTID(), pFMTID, 16 ) == 0 )
+            return it->get();
     }
     return nullptr;
 }
@@ -628,7 +628,8 @@ PropRead& PropRead::operator=( const PropRead& rPropRead )
         mnVersionHi = rPropRead.mnVersionHi;
         memcpy( mApplicationCLSID, rPropRead.mApplicationCLSID, 16 );
 
-        maSections = rPropRead.maSections.clone();
+        for(const std::unique_ptr<Section>& rSection : rPropRead.maSections)
+            maSections.push_back(o3tl::make_unique<Section>(*rSection.get()));
     }
     return *this;
 }
