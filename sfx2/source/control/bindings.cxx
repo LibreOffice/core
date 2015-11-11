@@ -64,8 +64,8 @@
 
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <memory>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <unordered_map>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -100,14 +100,14 @@ struct SfxFoundCache_Impl
 
 class SfxFoundCacheArr_Impl
 {
-    typedef boost::ptr_vector<SfxFoundCache_Impl> DataType;
+    typedef std::vector<std::unique_ptr<SfxFoundCache_Impl> > DataType;
     DataType maData;
 
 public:
 
     SfxFoundCache_Impl& operator[] ( size_t i )
     {
-        return maData[i];
+        return *maData[i].get();
     }
 
     size_t size() const
@@ -117,7 +117,7 @@ public:
 
     void push_back( SfxFoundCache_Impl* p )
     {
-        maData.push_back(p);
+        maData.push_back(std::unique_ptr<SfxFoundCache_Impl>(p));
     }
 };
 
