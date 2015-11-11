@@ -24,6 +24,12 @@
 #define Rectangle    BLA_Rectangle
 #define Folder       WIN_Folder
 #define GradientStyle_RECT  WIN_GradientStyle_RECT
+#ifndef IN
+#define IN
+#endif
+#ifndef OUT
+#define OUT
+#endif
 
 #if !defined STRICT
 #define STRICT

@@ -76,7 +76,8 @@ extern "C"
 
 #else
 
-    #include <windows.h>
+    #include "prewin.h"
+    #include "postwin.h"
     #define TARGET_LIB        "sofficeapp" ".dll"
     #define TARGET_MERGED_LIB "mergedlo" ".dll"
     #define SEPARATOR         '\\'

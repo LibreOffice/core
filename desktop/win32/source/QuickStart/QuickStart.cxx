@@ -72,11 +72,11 @@ int APIENTRY WinMain(HINSTANCE /*hInstance*/,
     {
         if ( 0 == strcmp( __argv[i], "--killtray" ) )
         {
-            HWND    hwndTray = FindWindow( QUICKSTART_CLASSNAME, NULL );
+            HWND hwndTray = FindWindow( QUICKSTART_CLASSNAME, NULL );
 
             if ( hwndTray )
             {
-                UINT    uMsgKillTray = RegisterWindowMessage( SHUTDOWN_QUICKSTART_MESSAGE );
+                UINT uMsgKillTray = RegisterWindowMessage( SHUTDOWN_QUICKSTART_MESSAGE );
                 SendMessage( hwndTray, uMsgKillTray, 0, 0 );
             }
 

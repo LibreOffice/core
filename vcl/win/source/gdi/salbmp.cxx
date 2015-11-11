@@ -39,15 +39,9 @@
 #endif
 #endif
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-
+#include "prewin.h"
 #include <gdiplus.h>
-
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
+#include "postwin.h"
 
 // - Inlines -
 
