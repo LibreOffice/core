@@ -1102,7 +1102,7 @@ LocaleDataImpl::getIndexModuleByAlgorithm( const Locale& rLocale, const OUString
 }
 
 Sequence< UnicodeScript > SAL_CALL
-LocaleDataImpl::getUnicodeScripts( const Locale& rLocale ) throw(RuntimeException)
+LocaleDataImpl::getUnicodeScripts( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getUnicodeScripts" ));
 
