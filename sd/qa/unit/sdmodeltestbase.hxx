@@ -247,6 +247,80 @@ protected:
         }
         xDocShRef->DoClose();
     }
+
+    uno::Reference< drawing::XDrawPagesSupplier > getDoc( sd::DrawDocShellRef xDocShRef )
+    {
+        uno::Reference< drawing::XDrawPagesSupplier > xDoc (
+            xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+        CPPUNIT_ASSERT_MESSAGE( "no document", xDoc.is() );
+        return xDoc;
+    }
+
+    uno::Reference< drawing::XDrawPage > getPage( int nPage,  sd::DrawDocShellRef xDocShRef )
+    {
+        uno::Reference< drawing::XDrawPagesSupplier > xDoc( getDoc( xDocShRef ) );
+        uno::Reference< drawing::XDrawPage > xPage( xDoc->getDrawPages()->getByIndex( nPage ), uno::UNO_QUERY_THROW );
+        CPPUNIT_ASSERT_MESSAGE( "no page", xPage.is() );
+        return xPage;
+    }
+
+    // very confusing ... UNO index-based access to pages is 0-based. This one is 1-based
+    const SdrPage* GetPage( int nPage, sd::DrawDocShellRef xDocShRef )
+    {
+        SdDrawDocument* pDoc =  xDocShRef->GetDoc() ;
+        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+        const SdrPage* pPage = pDoc->GetPage( nPage );
+        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+        return pPage;
+    }
+
+    uno::Reference< beans::XPropertySet > getShape( int nShape, uno::Reference< drawing::XDrawPage > xPage )
+    {
+        uno::Reference< beans::XPropertySet > xShape( xPage->getByIndex( nShape ), uno::UNO_QUERY );
+        CPPUNIT_ASSERT_MESSAGE( "Failed to load shape", xShape.is() );
+        return xShape;
+    }
+
+    // Nth shape on Mth page
+    uno::Reference< beans::XPropertySet > getShapeFromPage( int nShape, int nPage, sd::DrawDocShellRef xDocShRef )
+    {
+        uno::Reference< drawing::XDrawPage > xPage ( getPage( nPage, xDocShRef ) );
+        uno::Reference< beans::XPropertySet > xShape( getShape( nShape, xPage ) );
+        CPPUNIT_ASSERT_MESSAGE( "Failed to load shape", xShape.is() );
+
+        return xShape;
+    }
+
+    // Nth paragraph of text in given text shape
+    uno::Reference< text::XTextRange > getParagraphFromShape( int nPara, uno::Reference< beans::XPropertySet > xShape )
+    {
+        uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>( xShape, uno::UNO_QUERY )->getText();
+        CPPUNIT_ASSERT_MESSAGE( "Not a text shape", xText.is() );
+
+        uno::Reference< container::XEnumerationAccess > paraEnumAccess( xText, uno::UNO_QUERY );
+        uno::Reference< container::XEnumeration > paraEnum( paraEnumAccess->createEnumeration() );
+
+        for ( int i = 0; i < nPara; ++i )
+            paraEnum->nextElement();
+
+        uno::Reference< text::XTextRange > xParagraph( paraEnum->nextElement(), uno::UNO_QUERY_THROW );
+
+        return xParagraph;
+    }
+
+    uno::Reference< text::XTextRange > getRunFromParagraph( int nRun, uno::Reference< text::XTextRange > xParagraph )
+    {
+        uno::Reference< container::XEnumerationAccess > runEnumAccess(xParagraph, uno::UNO_QUERY);
+        uno::Reference< container::XEnumeration > runEnum = runEnumAccess->createEnumeration();
+
+        for ( int i = 0; i < nRun; ++i )
+            runEnum->nextElement();
+
+        uno::Reference< text::XTextRange > xRun( runEnum->nextElement(), uno::UNO_QUERY);
+
+        return xRun;
+    }
 };
 
 #endif
