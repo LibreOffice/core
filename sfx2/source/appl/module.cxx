@@ -233,7 +233,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 
 
 
-void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
+void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 {
     if (!pImpl->pTbxCtrlFac)
         pImpl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
@@ -242,20 +242,20 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
     for ( size_t n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
     {
         SfxTbxCtrlFactory *pF = &(*pImpl->pTbxCtrlFac)[n];
-        if ( pF->nTypeId == pFact->nTypeId &&
-            (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
+        if ( pF->nTypeId == rFact.nTypeId &&
+            (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
             SAL_INFO("sfx2.appl", "TbxController-Registering is not clearly defined!");
         }
     }
 #endif
 
-    pImpl->pTbxCtrlFac->push_back( pFact );
+    pImpl->pTbxCtrlFac->push_back( rFact );
 }
 
 
 
-void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
+void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 {
     if (!pImpl->pStbCtrlFac)
         pImpl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
@@ -264,15 +264,15 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
     for ( size_t n=0; n<pImpl->pStbCtrlFac->size(); n++ )
     {
         SfxStbCtrlFactory *pF = &(*pImpl->pStbCtrlFac)[n];
-        if ( pF->nTypeId == pFact->nTypeId &&
-            (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
+        if ( pF->nTypeId == rFact.nTypeId &&
+            (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
             SAL_INFO("sfx2.appl", "TbxController-Registering is not clearly defined!");
         }
     }
 #endif
 
-    pImpl->pStbCtrlFac->push_back( pFact );
+    pImpl->pStbCtrlFac->push_back( rFact );
 }
 
 

@@ -272,9 +272,9 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (css::uno::RuntimeException, st
 }
 
 
-void SfxToolBoxControl::RegisterToolBoxControl( SfxModule* pMod, SfxTbxCtrlFactory* pFact)
+void SfxToolBoxControl::RegisterToolBoxControl( SfxModule* pMod, const SfxTbxCtrlFactory& rFact)
 {
-    SfxGetpApp()->RegisterToolBoxControl_Impl( pMod, pFact );
+    SfxGetpApp()->RegisterToolBoxControl_Impl( pMod, rFact );
 }
 
 SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule* pMod  )

@@ -224,21 +224,21 @@ public:
 
     static SfxItemState        GetItemState( const SfxPoolItem* pState );
     static SfxToolBoxControl*  CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule *pMod );
-    static void                RegisterToolBoxControl( SfxModule*, SfxTbxCtrlFactory*);
+    static void                RegisterToolBoxControl( SfxModule*, const SfxTbxCtrlFactory&);
 };
 
 #define SFX_IMPL_TOOLBOX_CONTROL(Class, nItemClass) \
         SfxToolBoxControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx ); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
-               { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
+               { SfxToolBoxControl::RegisterToolBoxControl( pMod, SfxTbxCtrlFactory( \
                     Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
 
 #define SFX_IMPL_TOOLBOX_CONTROL_ARG(Class, nItemClass, Arg) \
         SfxToolBoxControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx, Arg); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
-               { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
+               { SfxToolBoxControl::RegisterToolBoxControl( pMod, SfxTbxCtrlFactory( \
                     Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
 
 

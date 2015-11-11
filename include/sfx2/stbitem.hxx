@@ -115,7 +115,7 @@ public:
     StatusBar&      GetStatusBar() const { return *pBar; }
 
     static SfxStatusBarControl* CreateControl( sal_uInt16 nSlotID, sal_uInt16 nId, StatusBar *pBar, SfxModule* );
-    static void RegisterStatusBarControl(SfxModule*, SfxStbCtrlFactory*);
+    static void RegisterStatusBarControl(SfxModule*, const SfxStbCtrlFactory&);
 
 };
 
@@ -129,7 +129,7 @@ public:
         SfxStatusBarControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ) \
                { return new Class( nSlotId, nId, rStb ); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
-               { SfxStatusBarControl::RegisterStatusBarControl( pMod, new SfxStbCtrlFactory( \
+               { SfxStatusBarControl::RegisterStatusBarControl( pMod, SfxStbCtrlFactory( \
                     Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
 
 

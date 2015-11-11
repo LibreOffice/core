@@ -77,9 +77,9 @@ public:
     ResMgr*                     GetResMgr();
     SfxSlotPool*                GetSlotPool() const;
 
-    void                        RegisterToolBoxControl(SfxTbxCtrlFactory*);
+    void                        RegisterToolBoxControl(const SfxTbxCtrlFactory&);
     void                        RegisterChildWindow(SfxChildWinFactory*);
-    void                        RegisterStatusBarControl(SfxStbCtrlFactory*);
+    void                        RegisterStatusBarControl(const SfxStbCtrlFactory&);
     void                        RegisterMenuControl(const SfxMenuCtrlFactory&);
 
     virtual VclPtr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,

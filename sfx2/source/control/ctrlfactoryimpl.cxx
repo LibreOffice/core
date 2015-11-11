@@ -49,7 +49,7 @@ SfxStbCtrlFactory& SfxStbCtrlFactArr_Impl::operator []( size_t i )
     return maData[i];
 }
 
-void SfxStbCtrlFactArr_Impl::push_back( SfxStbCtrlFactory* p )
+void SfxStbCtrlFactArr_Impl::push_back( const SfxStbCtrlFactory& p )
 {
     maData.push_back(p);
 }
@@ -69,7 +69,7 @@ SfxTbxCtrlFactory& SfxTbxCtrlFactArr_Impl::operator []( size_t i )
     return maData[i];
 }
 
-void SfxTbxCtrlFactArr_Impl::push_back( SfxTbxCtrlFactory* p )
+void SfxTbxCtrlFactArr_Impl::push_back( const SfxTbxCtrlFactory& p )
 {
     maData.push_back(p);
 }

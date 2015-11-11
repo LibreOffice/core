@@ -24,7 +24,6 @@
 #include <sfx2/stbitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 
 class SfxMenuCtrlFactArr_Impl
@@ -43,28 +42,28 @@ public:
 
 class SfxStbCtrlFactArr_Impl
 {
-    typedef boost::ptr_vector<SfxStbCtrlFactory> DataType;
+    typedef std::vector<SfxStbCtrlFactory> DataType;
     DataType maData;
 
 public:
     const SfxStbCtrlFactory& operator []( size_t i ) const;
     SfxStbCtrlFactory& operator []( size_t i );
 
-    void push_back( SfxStbCtrlFactory* p );
+    void push_back( const SfxStbCtrlFactory& );
 
     size_t size() const;
 };
 
 class SfxTbxCtrlFactArr_Impl
 {
-    typedef boost::ptr_vector<SfxTbxCtrlFactory> DataType;
+    typedef std::vector<SfxTbxCtrlFactory> DataType;
     DataType maData;
 
 public:
     const SfxTbxCtrlFactory& operator []( size_t i ) const;
     SfxTbxCtrlFactory& operator []( size_t i );
 
-    void push_back( SfxTbxCtrlFactory* p );
+    void push_back( const SfxTbxCtrlFactory& );
 
     size_t size() const;
 };

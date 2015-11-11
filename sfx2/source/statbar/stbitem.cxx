@@ -633,9 +633,9 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
 }
 
 
-void SfxStatusBarControl::RegisterStatusBarControl(SfxModule* pMod, SfxStbCtrlFactory* pFact)
+void SfxStatusBarControl::RegisterStatusBarControl(SfxModule* pMod, const SfxStbCtrlFactory& rFact)
 {
-    SfxGetpApp()->RegisterStatusBarControl_Impl( pMod, pFact );
+    SfxGetpApp()->RegisterStatusBarControl_Impl( pMod, rFact );
 }
 
 

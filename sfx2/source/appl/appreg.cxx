@@ -66,11 +66,11 @@ void SfxApplication::Registrations_Impl()
 
 
 
-void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFactory *pFact )
+void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, const SfxTbxCtrlFactory& rFact )
 {
     if ( pMod )
     {
-        pMod->RegisterToolBoxControl( pFact );
+        pMod->RegisterToolBoxControl( rFact );
         return;
     }
 
@@ -78,24 +78,24 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
     for ( size_t n=0; n<pAppData_Impl->pTbxCtrlFac->size(); n++ )
     {
         SfxTbxCtrlFactory *pF = &(*pAppData_Impl->pTbxCtrlFac)[n];
-        if ( pF->nTypeId == pFact->nTypeId &&
-            (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
+        if ( pF->nTypeId == rFact.nTypeId &&
+            (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
             SAL_INFO("sfx", "TbxController registration is not clearly defined!");
         }
     }
 #endif
 
-    pAppData_Impl->pTbxCtrlFac->push_back( pFact );
+    pAppData_Impl->pTbxCtrlFac->push_back( rFact );
 }
 
 
 
-void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlFactory *pFact )
+void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, const SfxStbCtrlFactory& rFact )
 {
     if ( pMod )
     {
-        pMod->RegisterStatusBarControl( pFact );
+        pMod->RegisterStatusBarControl( rFact );
         return;
     }
 
@@ -103,15 +103,15 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
     for ( size_t n=0; n<pAppData_Impl->pStbCtrlFac->size(); n++ )
     {
         SfxStbCtrlFactory *pF = &(*pAppData_Impl->pStbCtrlFac)[n];
-        if ( pF->nTypeId == pFact->nTypeId &&
-            (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
+        if ( pF->nTypeId == rFact.nTypeId &&
+            (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
             SAL_INFO("sfx", "StbController registration is not clearly defined!");
         }
     }
 #endif
 
-    pAppData_Impl->pStbCtrlFac->push_back( pFact );
+    pAppData_Impl->pStbCtrlFac->push_back( rFact );
 }
 
 
