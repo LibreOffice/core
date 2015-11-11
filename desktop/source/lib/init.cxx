@@ -1252,12 +1252,45 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
     uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
 
+    static const sal_Char* aWriterStyles[] =
+    {
+        "Text body",
+        "Quotations",
+        "Title",
+        "Subtitle",
+        "Heading 1",
+        "Heading 2",
+        "Heading 3"
+    };
+
     boost::property_tree::ptree aValues;
     for (sal_Int32 nStyleFam = 0; nStyleFam < aStyleFamilies.getLength(); ++nStyleFam)
     {
         boost::property_tree::ptree aChildren;
         OUString sStyleFam = aStyleFamilies[nStyleFam];
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(sStyleFam), uno::UNO_QUERY);
+
+        // Writer provides a huge number of styles, we have a list of 7 "default" styles which
+        // should be shown in the normal dropdown, which we should add to the start of the list
+        // to simplify their selection.
+        if (sStyleFam == "ParagraphStyles"
+            && doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT)
+        {
+            for( sal_uInt32 nStyle = 0; nStyle < sizeof( aWriterStyles ) / sizeof( sal_Char*); ++nStyle )
+            {
+                uno::Reference< beans::XPropertySet > xStyle;
+                xStyleFamily->getByName( OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
+                OUString sName;
+                xStyle->getPropertyValue("DisplayName") >>= sName;
+                if( !sName.isEmpty() )
+                {
+                    boost::property_tree::ptree aChild;
+                    aChild.put("", sName.toUtf8());
+                    aChildren.push_back(std::make_pair("", aChild));
+                }
+            }
+        }
+
         uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
         for (sal_Int32 nInd = 0; nInd < aStyles.getLength(); ++nInd)
         {
