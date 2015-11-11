@@ -247,6 +247,8 @@ endif
 	$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
 ifeq ($(OS),IOS)
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
+else ifeq ($(OS),LINUX)
+	$(PERL) -w $(SRCDIR)/solenv/bin/linux-instdir-check-elf.pl
 endif
 
 build-non-l10n-only build-l10n-only build-nocheck check debugrun translations packageinfo $(gb_Top_MODULE_CHECK_TARGETS): build
