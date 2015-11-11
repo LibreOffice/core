@@ -1207,7 +1207,7 @@ LocaleDataImpl::getForbiddenCharacters( const Locale& rLocale ) throw(RuntimeExc
 }
 
 OUString SAL_CALL
-LocaleDataImpl::getHangingCharacters( const Locale& rLocale ) throw(RuntimeException)
+LocaleDataImpl::getHangingCharacters( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getForbiddenCharacters" ));
 
