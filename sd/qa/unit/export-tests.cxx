@@ -194,8 +194,7 @@ void SdExportTest::testN821567()
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "not exactly one page", xDoc->getDrawPages()->getCount() == 1 );
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage( getPage( 0, xDocShRef ) );
 
     uno::Reference< beans::XPropertySet > xPropSet( xPage, uno::UNO_QUERY );
     uno::Any aAny = xPropSet->getPropertyValue( "Background" );
@@ -572,13 +571,8 @@ void SdExportTest::testFdo90607()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo90607.pptx"), PPTX);
     xDocShRef = saveAndReload(xDocShRef, PPTX);
 
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-     SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
 
     const SdrPage *pPage = pDoc->GetPage(1);
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
@@ -895,11 +889,6 @@ void SdExportTest::testBulletStartNumber()
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n90255.pptx"), PPTX );
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
@@ -935,28 +924,13 @@ void SdExportTest::testLineStyle()
 
 void SdExportTest::testRightToLeftParaghraph()
 {
-        ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/rightToLeftParagraph.pptx"), PPTX);
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/rightToLeftParagraph.pptx"), PPTX);
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
-
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-    xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-    xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-
-    uno::Reference< beans::XPropertySet > xShape(
-    xPage->getByIndex(0), uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE( "no shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
-    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
-    paraEnumAccess.set(xText, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
     uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
 
     sal_Int16 nWritingMode = 0;
@@ -971,31 +945,13 @@ void SdExportTest::testTextboxWithHyperlink()
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/hyperlinktest.pptx"), PPTX);
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
-
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-    xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-    xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-
-    uno::Reference< beans::XPropertySet > xShape(
-        xPage->getByIndex(0), uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE( "no shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
-    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
-    paraEnumAccess.set(xText, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
 
     // first chunk of text
-    // FIXME: those should really be some convenience function (getShape, getParagraph, getRun etc.)
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
     uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
 
     uno::Reference<text::XTextField> xField;
@@ -1016,11 +972,7 @@ void SdExportTest::testBulletColor()
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage( getPage( 0, xDocShRef ) );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
@@ -1039,11 +991,12 @@ void SdExportTest::testBulletColor()
 void SdExportTest::testTdf62176()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/Tdf62176.odp"), ODP);
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage( getPage( 0, xDocShRef ) );
+
     //there should be only *one* shape
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage->getCount());
-    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xShape( getShape( 0, xPage ) );
     //checking Paragraph's Left Margin with expected value
     sal_Int32 nParaLeftMargin = 0;
     xShape->getPropertyValue("ParaLeftMargin") >>= nParaLeftMargin;
@@ -1052,19 +1005,18 @@ void SdExportTest::testTdf62176()
     sal_Int32 nParaFirstLineIndent = 0;
     xShape->getPropertyValue("ParaFirstLineIndent") >>= nParaFirstLineIndent;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1300), nParaFirstLineIndent);
+
     //Checking the *Text* in TextBox
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess(xText, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
-    uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph->getString());
+
     //Saving and Reloading the file
     xDocShRef = saveAndReload(xDocShRef, ODP);
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc2(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
-    uno::Reference<drawing::XDrawPage> xPage2(xDoc2->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage2( getPage(0, xDocShRef ) );
     //there should be only *one* shape
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage2->getCount());
-    uno::Reference<beans::XPropertySet> xShape2(xPage2->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xShape2( getShape( 0, xPage2 ) );
     //checking Paragraph's Left Margin with expected value
     sal_Int32 nParaLeftMargin2 = 0;
     xShape2->getPropertyValue("ParaLeftMargin") >>= nParaLeftMargin2;
@@ -1073,26 +1025,21 @@ void SdExportTest::testTdf62176()
     sal_Int32 nParaFirstLineIndent2 = 0;
     xShape2->getPropertyValue("ParaFirstLineIndent") >>= nParaFirstLineIndent2;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1300), nParaFirstLineIndent2);
+
     //Checking the *Text* in TextBox
-    uno::Reference<text::XText> xText2 = uno::Reference<text::XTextRange>(xShape2, uno::UNO_QUERY)->getText();
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess2(xText2, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum2(paraEnumAccess2->createEnumeration());
-    uno::Reference<text::XTextRange> xParagraph2(paraEnum2->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> xParagraph2( getParagraphFromShape( 0, xShape2 ) );
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph2->getString());
 }
+
 void SdExportTest::testBulletCharAndFont()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/bulletCharAndFont.odp"), ODP);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc( xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XDrawPage > xPage( xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
-    paraEnumAccess.set(xText, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
     uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
+
     uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
@@ -1174,13 +1121,8 @@ void SdExportTest::testBnc822341()
 void SdExportTest::testBulletMarginAndIndentation()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bulletMarginAndIndent.pptx"), PPTX );
-
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-    xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XDrawPage > xPage(
-    xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
@@ -1203,25 +1145,10 @@ void SdExportTest::testParaMarginAndindentation()
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/paraMarginAndIndentation.pptx"), PPTX);
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
-
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-    xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-    xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-
-    uno::Reference< beans::XPropertySet > xShape(
-    xPage->getByIndex(0), uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE( "no shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
-    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
-    paraEnumAccess.set(xText, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
     uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
 
     sal_Int32 nParaLeftMargin = 0;
@@ -1241,10 +1168,6 @@ void SdExportTest::testCellLeftAndRightMargin()
     xDocShRef = saveAndReload( xDocShRef, PPTX );
     sal_Int32 nLeftMargin, nRightMargin;
 
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
@@ -1279,9 +1202,6 @@ void SdExportTest::testTableCellBorder()
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/n90190.pptx"), PPTX);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
@@ -1335,15 +1255,11 @@ void SdExportTest::testTdf80224()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/tdf80224.odp"), ODP);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc( xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XDrawPage > xPage( xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
-    paraEnumAccess.set(xText, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
     uno::Reference< beans::XPropertySet > xPropSet( xParagraph->getStart(), uno::UNO_QUERY_THROW );
+
     sal_Int32 nCharColor;
     xPropSet->getPropertyValue("CharColor") >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6644396), nCharColor);

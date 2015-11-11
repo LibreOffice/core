@@ -640,14 +640,10 @@ void SdImportTest::testFdo71075()
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
 
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-    aAny = xPropSet->getPropertyValue( "Model" );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", aAny.hasValue() );
+    uno::Reference< beans::XPropertySet > xPropSet( getShapeFromPage( 0, 0, xDocShRef ) );
+    aAny = xPropSet->getPropertyValue( OUString("Model") );
+    CPPUNIT_ASSERT_MESSAGE( "The shape doesn't have the property", aAny.hasValue() );
 
     uno::Reference< chart::XChartDocument > xChartDoc;
     aAny >>= xChartDoc;
@@ -682,10 +678,7 @@ void SdImportTest::testStrictOOXML()
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     xDocShRef->DoClose();
 }
@@ -900,8 +893,8 @@ void SdImportTest::testBnc591147()
         xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), xPage->getCount() );
 
-    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
+    //uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( getShape( 0, xPage ) );
     OUString sVideoURL("emptyURL");
     bool bSucess = xPropSet->getPropertyValue("MediaURL") >>= sVideoURL;
     CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSucess );
@@ -911,8 +904,7 @@ void SdImportTest::testBnc591147()
     xPage.set( xDoc->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), xPage->getCount() );
 
-    xShape.set( xPage->getByIndex(0), uno::UNO_QUERY_THROW );
-    xPropSet.set( xShape, uno::UNO_QUERY_THROW );
+    xPropSet.set( getShape( 0, xPage ) );
     OUString sAudioURL("emptyURL");
     bSucess = xPropSet->getPropertyValue("MediaURL") >>= sAudioURL;
     CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSucess );
@@ -928,30 +920,13 @@ void SdImportTest::testBnc584721_4()
     // Black text was imported as white because of wrong caching mechanism
 
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_4.pptx"), PPTX);
-
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW );
-
-    uno::Reference< beans::XPropertySet > xShape(
-        xPage->getByIndex(1), uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE( "no text shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 1, 1, xDocShRef ) );
 
     // Get first paragraph of the text
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
-    CPPUNIT_ASSERT_MESSAGE( "no text shape", xText.is() );
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
-    paraEnumAccess.set(xText, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
 
     // Get first run of the paragraph
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph (0, xParagraph ) );
     uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
     sal_Int32 nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
@@ -1087,30 +1062,13 @@ void SdImportTest::testBnc862510_6()
 {
     // Black text was imported instead of gray
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_6.pptx"), PPTX);
-
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-
-    uno::Reference< beans::XPropertySet > xShape(
-        xPage->getByIndex(0), uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE( "no shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph of the text
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
-    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
-    paraEnumAccess.set(xText, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
 
     // Get first run of the paragraph
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
     uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
     sal_Int32 nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
@@ -1125,25 +1083,10 @@ void SdImportTest::testBnc862510_7()
 {
     // Title shape's text was aligned to left instead of center.
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_7.pptx"), PPTX);
-
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-
-    uno::Reference< beans::XPropertySet > xShape(
-        xPage->getByIndex(0), uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE( "no shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
-    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
-    paraEnumAccess.set(xText, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
-                uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
     uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
 
     sal_Int16 nParaAdjust = 0;
@@ -1164,8 +1107,7 @@ void SdImportTest::testPDFImport()
     uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "no exactly two shapes", xPage->getCount() == 2 );
 
-    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShape( getShape( 0, xPage ) );
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
     CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
 
@@ -1197,12 +1139,6 @@ void SdImportTest::testPDFImportSkipImages()
 void SdImportTest::testBulletSuffix()
 {
     sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n83889.pptx"), PPTX );
-
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
@@ -1265,12 +1201,7 @@ void SdImportTest::testTdf93830()
 {
     // Text shape offset was ignored
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf93830.pptx"), PPTX);
-
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
-        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< drawing::XDrawPage > xPage(
-        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage( getPage( 0, xDocShRef ) );
 
     // Get the first text box from group shape
     uno::Reference< container::XIndexAccess > xShape( xPage->getByIndex(0), uno::UNO_QUERY );
