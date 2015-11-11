@@ -33,6 +33,10 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/attributelist.hxx>
 
+#ifdef ATTRIBUTE_HELPID
+#undef ATTRIBUTE_HELPID
+#endif
+
 #define XMLNS_MENU                  "http://openoffice.org/2001/menu"
 
 #define ELEMENT_MENUBAR             "http://openoffice.org/2001/menu^menubar"

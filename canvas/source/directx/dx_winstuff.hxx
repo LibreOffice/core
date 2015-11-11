@@ -25,15 +25,9 @@
 
 #include <basegfx/numeric/ftools.hxx>
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
 
-#ifndef _WINDOWS_
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-#endif
+#include "prewin.h"
 
 // Enabling Direct3D Debug Information Further more, with registry key
 // \\HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Direct3D\D3D9Debugging\\EnableCreationStack
@@ -43,17 +37,10 @@
 # define D3D_DEBUG_INFO
 #endif
 
-
-#define GradientStyle_RECT win32GradientStyle_RECT
-#undef WB_LEFT
-#undef WB_RIGHT
-
 #include <d3d9.h>
 
 typedef IDirect3DSurface9 surface_type;
 
-
-#undef DrawText
 
 #ifndef max
 #define max(a,b) (((a) > (b)) ? (a) : (b))
@@ -166,12 +153,8 @@ namespace dxcanvas
     }
 }
 
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
-#undef DELETE
-#undef GradientStyle_RECT
+#include "postwin.h"
 
 #endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_WINSTUFF_HXX
 

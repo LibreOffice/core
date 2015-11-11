@@ -27,15 +27,8 @@
 #   define _SHELL32_
 #endif
 
-#ifndef _WINDOWS_
-#ifdef _MSC_VER
-#   pragma warning(push,1) /* disable warnings within system headers */
-#endif
-#   include <windows.h>
-#ifdef _MSC_VER
-#   pragma warning(pop)
-#endif
-#endif
+#include "prewin.h"
+#include "postwin.h"
 
 #ifdef __MINGW32__
 #include <basetyps.h>

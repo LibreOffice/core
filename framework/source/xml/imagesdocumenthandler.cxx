@@ -32,6 +32,10 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
+#ifdef XMLNS_XLINK
+#undef XMLNS_XLINK
+#endif
+
 #define ELEMENT_IMAGECONTAINER      "imagescontainer"
 #define ELEMENT_IMAGES              "images"
 #define ELEMENT_ENTRY               "entry"
