@@ -24,6 +24,7 @@
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
+#include <algorithm>
 #include <vector>
 
 #include "linguistic/spelldta.hxx"
