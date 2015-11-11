@@ -247,6 +247,62 @@ protected:
         }
         xDocShRef->DoClose();
     }
+
+    uno::Reference< drawing::XDrawPagesSupplier > getDoc( sd::DrawDocShellRef xDocShRef )
+    {
+        uno::Reference< drawing::XDrawPagesSupplier > xDoc (
+            xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+        return xDoc;
+    }
+
+    uno::Reference< drawing::XDrawPage > getPage( int nPage,  sd::DrawDocShellRef xDocShRef )
+    {
+        uno::Reference< drawing::XDrawPagesSupplier > xDoc( getDoc( xDocShRef ) );
+        uno::Reference< drawing::XDrawPage > xPage( xDoc->getDrawPages()->getByIndex( nPage ), uno::UNO_QUERY_THROW );
+        return xPage;
+    }
+
+    uno::Reference< beans::XPropertySet > getShape( int nShape, uno::Reference< drawing::XDrawPage > xPage )
+    {
+        uno::Reference< beans::XPropertySet > xShape( xPage->getByIndex( nShape ), uno::UNO_QUERY );
+        //FIXME: CPPUNIT_ASSERT xShape.is()
+        return xShape;
+    }
+
+    uno::Reference< beans::XPropertySet > getShapeFromPage( int nShape, int nPage, sd::DrawDocShellRef xDocShRef )
+    {
+        uno::Reference< drawing::XDrawPage > xPage ( getPage( nPage, xDocShRef ) );
+        uno::Reference< beans::XPropertySet > xShape( getShape( nShape, xPage ) );
+        return xShape;
+    }
+
+    uno::Reference< text::XTextRange > getParagraphFromShape( int nPara, uno::Reference< beans::XPropertySet > xShape )
+    {
+        uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>( xShape, uno::UNO_QUERY )->getText();
+        uno::Reference< container::XEnumerationAccess > paraEnumAccess( xText, uno::UNO_QUERY );
+        uno::Reference< container::XEnumeration > paraEnum( paraEnumAccess->createEnumeration() );
+
+        for ( int i = 0; i < nPara; ++i )
+            paraEnum->nextElement();
+
+        uno::Reference< text::XTextRange > xParagraph( paraEnum->nextElement(), uno::UNO_QUERY_THROW );
+
+        return xParagraph;
+    }
+
+    uno::Reference< beans::XPropertySet > getRunFromParagraph( int nRun, uno::Reference< text::XTextRange > xParagraph )
+    {
+        uno::Reference< container::XEnumerationAccess > runEnumAccess(xParagraph, uno::UNO_QUERY);
+        uno::Reference< container::XEnumeration > runEnum = runEnumAccess->createEnumeration();
+
+        for ( int i = 0; i < nRun; ++i )
+            runEnum->nextElement();
+
+        uno::Reference< text::XTextRange > xRun( runEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+        return xPropSet;
+    }
 };
 
 #endif
