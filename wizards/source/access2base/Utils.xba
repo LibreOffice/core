@@ -13,6 +13,18 @@ REM ----------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
+Public Function _AddArray(ByVal pvArray As Variant, pvItem As Variant) As Variant
+&apos;Add the item at the end of the array
+
+Dim vArray() As Variant
+	If IsArray(pvArray) Then vArray = pvArray Else vArray = Array()
+	ReDim Preserve vArray(LBound(vArray) To UBound(vArray) + 1)
+	vArray(UBound(vArray)) = pvItem
+	_AddArray() = vArray()
+
+End Function
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _AddNumeric(ByVal Optional pvTypes As Variant) As Variant
 &apos;Return on top of argument the list of all numeric types
 &apos;Facilitates the entry of the list of allowed types in _CheckArgument calls
@@ -596,11 +608,11 @@ Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
 	Select Case lChar
 		Case 48 To 57, 65 To 90, 97 To 122		&apos;	0-9, A-Z, a-z
 			_PercentEncode = psChar
-		Case &quot;-&quot;, &quot;.&quot;, &quot;_&quot;, &quot;~&quot;
+		Case Asc(&quot;-&quot;), Asc(&quot;.&quot;), Asc(&quot;_&quot;), Asc(&quot;~&quot;)
 			_PercentEncode = psChar
-		Case &quot;!&quot;, &quot;$&quot;, &quot;&amp;&quot;, &quot;&apos;&quot;, &quot;(&quot;, &quot;)&quot;, &quot;*&quot;, &quot;+&quot;, &quot;,&quot;, &quot;;&quot;, &quot;=&quot;		&apos;	Reserved characters used as delimitors in query strings
+		Case Asc(&quot;!&quot;), Asc(&quot;$&quot;), Asc(&quot;&amp;&quot;), Asc(&quot;&apos;&quot;), Asc(&quot;(&quot;), Asc(&quot;)&quot;), Asc(&quot;*&quot;), Asc(&quot;+&quot;), Asc(&quot;,&quot;), Asc(&quot;;&quot;), Asc(&quot;=&quot;)	&apos;	Reserved characters used as delimitors in query strings
 			_PercentEncode = psChar
-		Case &quot; &quot;, &quot;%&quot;
+		Case Asc(&quot; &quot;), Asc(&quot;%&quot;)
 			_PercentEncode = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex(lChar), 2)
 		Case 0 To 127
 			_PercentEncode = psChar
@@ -620,6 +632,46 @@ Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
 	Exit Function
 
 End Function	&apos;	_PercentEncode V1.4.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _ReadFileIntoArray(ByVal psFileName) As Variant
+&apos;	Loads all lines of a text file into a variant array
+&apos;	Any error reduces output to an empty array
+&apos;	Input file name presumed in URL form
+
+Dim vLines() As Variant, iFile As Integer, sLine As String, iCount1 As Integer, iCount2 As Integer
+Const cstMaxLines = 16000		&apos;	+/- the limit of array sizes in Basic
+	On Local Error GoTo Error_Function
+	vLines = Array()
+	_ReadFileIntoArray = Array()
+	If psFileName = &quot;&quot; Then Exit Function
+
+	iFile = FreeFile()
+	Open psFileName For Input Access Read Shared As #iFile
+	iCount1 = 0
+	Do While Not Eof(iFile) And iCount1 &lt; cstMaxLines
+		Line Input #iFile, sLine
+		iCount1 = iCount1 + 1
+	Loop
+	Close #iFile
+
+	ReDim vLines(0 To iCount1 - 1)		&apos;	Reading file twice preferred to ReDim Preserve for performance reasons
+	iFile = FreeFile()
+	Open psFileName For Input Access Read Shared As #iFile
+	iCount2 = 0
+	Do While Not Eof(iFile) And iCount2 &lt; iCount1
+		Line Input #iFile, vLines(iCount2)
+		iCount2 = iCount2 + 1
+	Loop
+	Close #iFile
+
+Exit_Function:	
+	_ReadFileIntoArray() = vLines()
+	Exit Function
+Error_Function:
+	vLines = Array()
+	Resume Exit_Function
+End Function	&apos;	_ReadFileIntoArray	V1.4.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub _ResetCalledSub(ByVal psSub As String)

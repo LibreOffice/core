@@ -1210,14 +1210,18 @@ Public Function OutputTo(ByVal pvObjectType As Variant _
 							, ByVal Optional pvAutoStart As Variant _
 							, ByVal Optional pvTemplateFile As Variant _
 							, ByVal Optional pvEncoding As Variant _
+							, ByVal Optional pvQuality As Variant _
 							) As Boolean
 &apos;Supported:	acFormatPDF, acFormatODT, acFormatDOC, acFormatHTML for forms
+&apos;			acFormatHTML for tables and queries
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
-	Utils._SetCalledSub(&quot;OutputTo&quot;)
+Const cstThisSub = &quot;OutputTo&quot;
+	Utils._SetCalledSub(cstThisSub)
+
 	OutputTo = False
 	
-	If Not Utils._CheckArgument(pvObjectType, 1, Utils._AddNumeric(), acSendForm) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvObjectType, 1, Utils._AddNumeric(), Array(acOutputTable, acOutputQuery, acOutputForm)) Then Goto Exit_Function
 	If IsMissing(pvObjectName) Then pvObjectName = &quot;&quot;
 	If Not Utils._CheckArgument(pvObjectName, 2, vbString) Then Goto Exit_Function
 	If IsMissing(pvOutputFormat) Then pvOutputFormat = &quot;&quot;
@@ -1233,15 +1237,31 @@ Public Function OutputTo(ByVal pvObjectType As Variant _
 	If IsMissing(pvAutoStart) Then pvAutoStart = False
 	If Not Utils._CheckArgument(pvAutoStart, 5, vbBoolean) Then Goto Exit_Function
 	If IsMissing(pvTemplateFile) Then pvTemplateFile = &quot;&quot;
-	If Not Utils._CheckArgument(pvTemplateFile, 6, vbString, &quot;&quot;) Then Goto Exit_Function
-	If IsMissing(pvEncoding) Then pvEncoding = &quot;&quot;
-	If Not Utils._CheckArgument(pvEncoding, 7, vbString, &quot;&quot;) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvTemplateFile, 6, vbString) Then Goto Exit_Function
+	If IsMissing(pvEncoding) Then pvEncoding = 0
+	If Not Utils._CheckArgument(pvEncoding, 7, _AddNumeric(), Array(0, acUTF8Encoding)) Then Goto Exit_Function
+	If IsMissing(pvQuality) Then pvQuality = acExportQualityPrint
+	If Not Utils._CheckArgument(pvQuality, 7, _AddNumeric(), Array(acExportQualityPrint, acExportQualityScreen)) Then Goto Exit_Function
+
+	If pvObjectType = acOutputTable Or pvObjectType = acOutputQuery Then
+		OutputTo = Application._CurrentDb().OutputTo( _
+					pvObjectType _
+					, pvObjectName _
+					, pvOutputFormat _
+					, pvOutputFile _
+					, pvAutoStart _
+					, pvTemplateFile _
+					, pvEncoding _
+					, pvQuality _
+					)
+		GoTo Exit_Function
+	End If
 	
 Dim vWindow As Variant, sOutputFile As String, ofForm As Object, i As Integer, bFound As Boolean
 	&apos;Find applicable form
 	If pvObjectName = &quot;&quot; Then
 		vWindow = _SelectWindow()
-		If vWindow.WindowType &lt;&gt; acSendForm Then Goto Error_Action
+		If vWindow.WindowType &lt;&gt; acOutoutForm Then Goto Error_Action
 		Set ofForm = Application.Forms(vWindow._Name)
 	Else
 		bFound = False
@@ -1309,7 +1329,7 @@ Dim sOutputFormat As String, sFilter As String, oFilterData As Object, oExport A
 	OutputTo = True
 	
 Exit_Function:
-	Utils._ResetCalledSub(&quot;OutputTo&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_NotFound:
 	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;OBJECT&quot;), pvObjectName))
@@ -1318,7 +1338,7 @@ Error_Action:
 	TraceError(TRACEFATAL, ERRACTION, Utils._CalledSub(), 0)
 	Goto Exit_Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;OutputTo&quot;, Erl)
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
 Error_File:
 	TraceError(TRACEFATAL, ERRFILENOTCREATED, Utils._CalledSub(), 0, , sOutputFile)
@@ -2436,7 +2456,7 @@ Const cstComma = &quot;,&quot;
 				&amp; Iif(psSubject = &quot;&quot;, &quot;&quot;, &quot;subject=&quot; &amp; psSubject &amp; &quot;&amp;&quot;) _
 				&amp; Iif(psBody = &quot;&quot;, &quot;&quot;, &quot;body=&quot; &amp; psBody &amp; &quot;&amp;&quot;)
 	If Right(sMailTo, 1) = &quot;&amp;&quot; Or Right(sMailTo, 1) = &quot;?&quot; Then sMailTo = Left(sMailTo, Len(sMailTo) - 1)
-	sMailTo = Utils._URLEncode(sMailTo)
+	sMailTo = ConvertToUrl(sMailTo)
 	
 	oDispatch = createUnoService( &quot;com.sun.star.frame.DispatchHelper&quot;)
 	oDispatch.executeDispatch(StarDesktop, sMailTo, &quot;&quot;, 0, Array())

@@ -273,7 +273,13 @@ Global Const acSendTable = 0
 
 REM AcOutputObjectType
 REM -----------------------------------------------------------------
+Global Const acOutputTable = 0
+Global Const acOutputQuery = 1
 Global Const acOutputForm = 2
+
+REM AcEncoding
+REM -----------------------------------------------------------------
+Global Const acUTF8Encoding = 65001
 
 REM AcFormat
 REM -----------------------------------------------------------------
@@ -281,6 +287,11 @@ Global Const acFormatPDF = &quot;writer_pdf_Export&quot;
 Global Const acFormatODT = &quot;writer8&quot;
 Global Const acFormatDOC = &quot;MS Word 97&quot;
 Global Const acFormatHTML = &quot;HTML&quot;
+
+REM AcExportQuality
+REM -----------------------------------------------------------------
+Global Const acExportQualityPrint = 0
+Global Const acExportQualityScreen = 1
 
 REM AcSysCmdAction
 REM -----------------------------------------------------------------

@@ -559,17 +559,17 @@ Dim vMatrix() As Variant, lSize As Long, iNumFields As Integer, i As Integer
 	iNumFields = RowSet.getColumns().Count - 1
 	If iNumFields &lt; 0 Then Goto Exit_Function
 
-	ReDim vMatrix(0 To pvNumRows - 1, 0 To iNumFields)			&apos;	Conscious opposite of MSAccess !!
+	ReDim vMatrix(0 To iNumFields, 0 To pvNumRows - 1)
 	
 	Do While Not _EOF And lSize &lt; pvNumRows - 1
 		lSize = lSize + 1
 		For i = 0 To iNumFields
-			vMatrix(lSize, i) = _getResultSetColumnValue(RowSet, i + 1)
+			vMatrix(i, lSize) = _getResultSetColumnValue(RowSet, i + 1)
 		Next i
 		_Move(&quot;NEXT&quot;)
 	Loop
 	If lSize &lt; pvNumRows - 1 Then				&apos;	Resize to number of fetched records
-		ReDim Preserve vMatrix(0 To lSize, 0 To iNumFields)
+		ReDim Preserve vMatrix(0 To iNumFields, 0 To lSize)
 	End If
 
 Exit_Function:
