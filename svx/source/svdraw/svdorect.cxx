@@ -206,7 +206,7 @@ void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     rRect = maRect;
     if (aGeo.nShearAngle!=0)
     {
-        long nDst=Round((maRect.Bottom()-maRect.Top())*aGeo.nTan);
+        long nDst=svx::Round((maRect.Bottom()-maRect.Top())*aGeo.nTan);
         if (aGeo.nShearAngle>0)
         {
             Point aRef(rRect.TopLeft());

@@ -34,7 +34,7 @@ namespace svx { namespace sidebar {
 
 SelectionChangeHandler::SelectionChangeHandler (
     const std::function<rtl::OUString()>& rSelectionChangeCallback,
-    const Reference<frame::XController>& rxController,
+    const Reference<css::frame::XController>& rxController,
     const EnumContext::Context eDefaultContext)
     : SelectionChangeHandlerInterfaceBase(m_aMutex),
       maSelectionChangeCallback(rSelectionChangeCallback),
