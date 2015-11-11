@@ -154,7 +154,7 @@ sal_uInt32 ExSoundCollection::GetId(const OUString& rString)
     if (!rString.isEmpty())
     {
         const sal_uInt32 nSoundCount = maEntries.size();
-        boost::ptr_vector<ExSoundEntry>::const_iterator iter;
+        std::vector<ExSoundEntry>::const_iterator iter;
 
         for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++nSoundId)
         {
@@ -164,13 +164,12 @@ sal_uInt32 ExSoundCollection::GetId(const OUString& rString)
 
         if ( nSoundId++ == nSoundCount )
         {
-            ExSoundEntry* pEntry = new ExSoundEntry( rString );
-            if ( pEntry->GetFileSize() )
-                maEntries.push_back(pEntry);
+            ExSoundEntry aEntry( rString );
+            if ( aEntry.GetFileSize() )
+                maEntries.push_back(aEntry);
             else
             {
                 nSoundId = 0;   // only insert sounds that are accessible
-                delete pEntry;
             }
         }
     }
@@ -183,7 +182,7 @@ sal_uInt32 ExSoundCollection::GetSize() const
     if (!maEntries.empty())
     {
         nSize += 8 + 12;    // size of SoundCollectionContainerHeader + SoundCollAtom
-        boost::ptr_vector<ExSoundEntry>::const_iterator iter;
+        std::vector<ExSoundEntry>::const_iterator iter;
         sal_uInt32 i = 1;
         for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++i)
             nSize += iter->GetSize(i);
@@ -204,7 +203,7 @@ void ExSoundCollection::Write( SvStream& rSt ) const
         // create SoundCollAtom ( reference to the next free SoundId );
         rSt.WriteUInt32( EPP_SoundCollAtom << 16 ).WriteUInt32( 4 ).WriteUInt32( nSoundCount );
 
-        boost::ptr_vector<ExSoundEntry>::const_iterator iter;
+        std::vector<ExSoundEntry>::const_iterator iter;
         for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++i)
             iter->Write(rSt,i);
     }
