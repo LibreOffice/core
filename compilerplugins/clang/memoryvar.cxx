@@ -232,7 +232,7 @@ bool MemoryVar::VisitReturnStmt(const ReturnStmt *returnStmt)
     return true;
 }
 
-loplugin::Plugin::Registration< MemoryVar > X("memoryvar");
+loplugin::Plugin::Registration< MemoryVar > X("memoryvar", false);
 
 }
 
