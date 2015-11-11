@@ -63,38 +63,38 @@ typedef std::vector<std::unique_ptr<SwRedlineDataChild>> SwRedlineDataChildArr;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
-    VclPtr<vcl::Window>     pParentDlg;
+    VclPtr<vcl::Window>     m_pParentDlg;
     std::vector<std::unique_ptr<SwRedlineDataParent>> m_RedlineParents;
     SwRedlineDataChildArr   m_RedlineChildren;
-    SwRedlineDataParentSortArr aUsedSeqNo;
-    VclPtr<SvxAcceptChgCtr>    aTabPagesCTRL;
-    PopupMenu               aPopup;
-    Timer                   aDeselectTimer;
-    Timer                   aSelectTimer;
-    OUString                sInserted;
-    OUString                sDeleted;
-    OUString                sFormated;
-    OUString                sTableChgd;
-    OUString                sFormatCollSet;
-    OUString                sFilterAction;
-    OUString                sAutoFormat;
-    VclPtr<SvxTPView>       pTPView;
-    VclPtr<SvxRedlinTable>  pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
-    Link<SvTreeListBox*,void> aOldSelectHdl;
-    Link<SvTreeListBox*,void> aOldDeselectHdl;
-    bool                    bOnlyFormatedRedlines;
-    bool                    bHasReadonlySel;
-    bool                    bRedlnAutoFormat;
+    SwRedlineDataParentSortArr m_aUsedSeqNo;
+    VclPtr<SvxAcceptChgCtr>    m_aTabPagesCTRL;
+    PopupMenu               m_aPopup;
+    Timer                   m_aDeselectTimer;
+    Timer                   m_aSelectTimer;
+    OUString                m_sInserted;
+    OUString                m_sDeleted;
+    OUString                m_sFormated;
+    OUString                m_sTableChgd;
+    OUString                m_sFormatCollSet;
+    OUString                m_sFilterAction;
+    OUString                m_sAutoFormat;
+    VclPtr<SvxTPView>       m_pTPView;
+    VclPtr<SvxRedlinTable>  m_pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    Link<SvTreeListBox*,void> m_aOldSelectHdl;
+    Link<SvTreeListBox*,void> m_aOldDeselectHdl;
+    bool                    m_bOnlyFormatedRedlines;
+    bool                    m_bHasReadonlySel;
+    bool                    m_bRedlnAutoFormat;
 
     // prevent update dialog data during longer operations (cf #102657#)
-    bool                    bInhibitActivate;
+    bool                    m_bInhibitActivate;
 
-    Image                   aInserted;
-    Image                   aDeleted;
-    Image                   aFormated;
-    Image                   aTableChgd;
-    Image                   aFormatCollSet;
-    Image                   aAutoFormat;
+    Image                   m_aInserted;
+    Image                   m_aDeleted;
+    Image                   m_aFormated;
+    Image                   m_aTableChgd;
+    Image                   m_aFormatCollSet;
+    Image                   m_aAutoFormat;
 
     DECL_DLLPRIVATE_LINK_TYPED( AcceptHdl,     SvxTPView*, void );
     DECL_DLLPRIVATE_LINK_TYPED( AcceptAllHdl,  SvxTPView*, void );
@@ -127,8 +127,8 @@ public:
 
     DECL_LINK_TYPED( FilterChangedHdl, SvxTPFilter*, void );
 
-    inline SvxAcceptChgCtr& GetChgCtrl()        { return *aTabPagesCTRL.get(); }
-    inline bool     HasRedlineAutoFormat() const   { return bRedlnAutoFormat; }
+    inline SvxAcceptChgCtr& GetChgCtrl()        { return *m_aTabPagesCTRL.get(); }
+    inline bool     HasRedlineAutoFormat() const   { return m_bRedlnAutoFormat; }
 
     void            Init(sal_uInt16 nStart = 0);
     void            CallAcceptReject( bool bSelect, bool bAccept );
