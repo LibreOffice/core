@@ -71,7 +71,6 @@ ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,gengal,\
 	$(DLOPEN_LIBS) \
 	-lpthread \
-    -lGL \
     -lX11 \
 ))
 

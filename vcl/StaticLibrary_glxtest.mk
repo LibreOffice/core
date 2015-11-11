@@ -33,7 +33,6 @@ $(eval $(call gb_StaticLibrary_add_libs,glxtest,\
 	-lm \
 	-ldl \
 	-lpthread \
-    -lGL \
     -lX11 \
 ))
 

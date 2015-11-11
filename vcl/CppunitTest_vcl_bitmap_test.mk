@@ -18,7 +18,7 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
 	boost_headers \
 	glew \
 	glm_headers \
-    mesa_headers \
+	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,vcl_bitmap_test,\

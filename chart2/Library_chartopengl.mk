@@ -22,7 +22,7 @@ $(eval $(call gb_Library_set_precompiled_header,chartopengl,$(SRCDIR)/chart2/inc
 $(eval $(call gb_Library_use_externals,chartopengl,\
 	boost_headers \
 	glm_headers \
-	mesa_headers \
+	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 	glew \
 ))
 

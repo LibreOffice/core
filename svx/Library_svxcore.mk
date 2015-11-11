@@ -84,7 +84,7 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	boost_headers \
 	icuuc \
 	icu_headers \
-	mesa_headers \
+	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 	glew \
 	libxml2 \
 ))

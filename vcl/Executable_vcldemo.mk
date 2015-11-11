@@ -19,7 +19,7 @@ $(eval $(call gb_Executable_use_externals,vcldemo,\
 	boost_headers \
 	glew \
 	glm_headers \
-    mesa_headers \
+	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 ))
 
 $(eval $(call gb_Executable_set_include,vcldemo,\
@@ -50,7 +50,6 @@ ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,vcldemo,\
 	-lm $(DLOPEN_LIBS) \
 	-lpthread \
-    -lGL \
     -lX11 \
 ))
 

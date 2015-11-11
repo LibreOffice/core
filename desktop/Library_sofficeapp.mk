@@ -112,7 +112,6 @@ $(eval $(call gb_Library_use_static_libraries,sofficeapp,\
 $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-lm $(DLOPEN_LIBS) \
 	-lpthread \
-    -lGL \
     -lX11 \
 ))
 endif

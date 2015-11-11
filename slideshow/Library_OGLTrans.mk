@@ -31,7 +31,7 @@ $(eval $(call gb_Library_use_libraries,OGLTrans,\
 $(eval $(call gb_Library_use_externals,OGLTrans,\
 	boost_headers \
 	glew \
-	mesa_headers \
+	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 	glm_headers \
 ))
 

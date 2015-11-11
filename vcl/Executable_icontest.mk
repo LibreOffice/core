@@ -13,7 +13,7 @@ $(eval $(call gb_Executable_use_externals,icontest,\
     boost_headers \
     glew \
 	glm_headers \
-	mesa_headers \
+	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 ))
 
 $(eval $(call gb_Executable_use_api,icontest,\
@@ -29,7 +29,6 @@ ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,icontest,\
 	-lm $(DLOPEN_LIBS) \
 	-lpthread \
-    -lGL \
     -lX11 \
 ))
 

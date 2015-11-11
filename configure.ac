@@ -10410,23 +10410,25 @@ else
     fi
     ENABLE_OPENGL_CANVAS=TRUE
 
-    dnl ===================================================================
-    dnl Check for system Mesa
-    dnl ===================================================================
-    AC_MSG_CHECKING([which Mesa headers to use])
-    if test "$with_system_mesa_headers" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_MESA_HEADERS=TRUE
-        AC_LANG_PUSH(C)
-        AC_CHECK_HEADER(GL/glxext.h, [],
-           [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
-        AC_MSG_CHECKING([whether GL/glxext.h defines PFNGLXBINDTEXIMAGEEXTPROC])
-        AC_EGREP_HEADER(PFNGLXBINDTEXIMAGEEXTPROC, GL/glxext.h, [AC_MSG_RESULT([yes])], AC_MSG_ERROR(no))
-        AC_LANG_POP(C)
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_MESA_HEADERS=
-        BUILD_TYPE="$BUILD_TYPE MESA"
+    if test "$USING_X11" != TRUE; then
+        dnl ===================================================================
+        dnl Check for system Mesa
+        dnl ===================================================================
+        AC_MSG_CHECKING([which Mesa headers to use])
+        if test "$with_system_mesa_headers" = "yes"; then
+            AC_MSG_RESULT([external])
+            SYSTEM_MESA_HEADERS=TRUE
+            AC_LANG_PUSH(C)
+            AC_CHECK_HEADER(GL/glxext.h, [],
+               [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
+            AC_MSG_CHECKING([whether GL/glxext.h defines PFNGLXBINDTEXIMAGEEXTPROC])
+            AC_EGREP_HEADER(PFNGLXBINDTEXIMAGEEXTPROC, GL/glxext.h, [AC_MSG_RESULT([yes])], AC_MSG_ERROR(no))
+            AC_LANG_POP(C)
+        else
+            AC_MSG_RESULT([internal])
+            SYSTEM_MESA_HEADERS=
+            BUILD_TYPE="$BUILD_TYPE MESA"
+        fi
     fi
 fi
 

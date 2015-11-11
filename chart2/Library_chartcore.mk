@@ -29,7 +29,7 @@ $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
 	glm_headers \
 	glew \
-	mesa_headers \
+	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,chartcore,\
