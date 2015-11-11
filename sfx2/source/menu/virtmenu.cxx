@@ -366,7 +366,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 pPopup = nullptr;
 
                 SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
-                rCtrlArr.push_back(pMnuCtrl);
+                rCtrlArr.push_back(std::unique_ptr<SfxMenuControl>(pMnuCtrl));
                 (pItems+nPos)->Bind( nullptr, nSlotId, sItemText, *pBindings);
                 pMnuCtrl->Bind( this, nSlotId, sItemText, *pBindings);
 
@@ -409,7 +409,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
-                            rCtrlArr.push_back(pMnuCtrl);
+                            rCtrlArr.push_back(std::unique_ptr<SfxMenuControl>(pMnuCtrl));
                             (pItems+nPos)->Bind( nullptr, nSlotId, sItemText, *pBindings);
                         }
                     }
@@ -421,7 +421,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
-                            rCtrlArr.push_back(pMnuCtrl);
+                            rCtrlArr.push_back(std::unique_ptr<SfxMenuControl>(pMnuCtrl));
                             (pItems+nPos)->Bind( nullptr, nSlotId, sItemText, *pBindings);
                         }
                         else
@@ -691,10 +691,10 @@ void SfxVirtualMenu::BindControllers()
     for (SfxMenuCtrlArr_Impl::iterator i = rCtrlArr.begin();
             i != rCtrlArr.end(); ++i)
     {
-        sal_uInt16 nSlotId = i->GetId();
+        sal_uInt16 nSlotId = (*i)->GetId();
         if (pSVMenu->GetItemCommand(nSlotId).isEmpty())
         {
-            i->ReBind();
+            (*i)->ReBind();
         }
     }
 
@@ -718,10 +718,10 @@ void SfxVirtualMenu::UnbindControllers()
     for (SfxMenuCtrlArr_Impl::iterator i = rCtrlArr.begin();
             i != rCtrlArr.end(); ++i)
     {
-        if (i->IsBound())
+        if ((*i)->IsBound())
         {
             // UnoController is not bound!
-            i->UnBind();
+            (*i)->UnBind();
         }
     }
 

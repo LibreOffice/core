@@ -44,7 +44,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <boost/tuple/tuple.hpp>
 #include <cassert>

@@ -19,14 +19,15 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_VIRTMENU_HXX
 #define INCLUDED_SFX2_SOURCE_INC_VIRTMENU_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 #include <sfx2/mnuitem.hxx>
 
 class SfxBindings;
 class SfxMenuImageControl_Impl;
 
-typedef ::boost::ptr_vector<SfxMenuControl> SfxMenuCtrlArr_Impl;
+typedef std::vector<std::unique_ptr<SfxMenuControl> > SfxMenuCtrlArr_Impl;
 
 class SAL_DLLPUBLIC_EXPORT SfxVirtualMenu
 {
