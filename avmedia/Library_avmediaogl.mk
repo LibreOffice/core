@@ -18,7 +18,6 @@ $(eval $(call gb_Library_use_externals,avmediaogl, \
     libgltf \
     glew \
     glm_headers \
-    $(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 ))
 
 $(eval $(call gb_Library_use_libraries,avmediaogl,\

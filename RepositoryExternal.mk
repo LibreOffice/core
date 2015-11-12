@@ -37,22 +37,6 @@ endif
 
 # External headers
 
-ifneq ($(SYSTEM_MESA_HEADERS),)
-
-gb_LinkTarget__use_mesa_headers :=
-
-else # !SYSTEM_MESA_HEADERS
-
-define gb_LinkTarget__use_mesa_headers
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/external/Mesa/inc \
-	$$(INCLUDE) \
-)
-
-endef
-
-endif # SYSTEM_MESA_HEADERS
-
 ifneq ($(SYSTEM_NPAPI_HEADERS),)
 
 # yes this uses internal headers too...

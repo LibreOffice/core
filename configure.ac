@@ -1893,11 +1893,6 @@ AC_ARG_WITH(system-bluez,
         [Use bluetooth.h already on system.]),,
     [with_system_bluez="$with_system_headers"])
 
-AC_ARG_WITH(system-mesa-headers,
-    AS_HELP_STRING([--with-system-mesa-headers],
-        [Use Mesa headers already on system.]),,
-    [with_system_mesa_headers="$with_system_headers"])
-
 AC_ARG_WITH(system-curl,
     AS_HELP_STRING([--with-system-curl],
         [Use curl already on system.]),,
@@ -10396,43 +10391,16 @@ elif test "$_os" = "Darwin"; then
     # We use frameworks on Mac OS X, no need for detail checks
     ENABLE_OPENGL=TRUE
     ENABLE_OPENGL_CANVAS=TRUE
-    SYSTEM_MESA_HEADERS=TRUE
 elif test $_os = WINNT; then
-    # Experimental: try to use OpenGL on Windows
     ENABLE_OPENGL=TRUE
     ENABLE_OPENGL_CANVAS=TRUE
-    # We need the internal "Mesa" headers.
-    SYSTEM_MESA_HEADERS=
-    BUILD_TYPE="$BUILD_TYPE MESA"
 else
     if test "$USING_X11" = TRUE; then
         ENABLE_OPENGL=TRUE
     fi
     ENABLE_OPENGL_CANVAS=TRUE
-
-    if test "$USING_X11" != TRUE; then
-        dnl ===================================================================
-        dnl Check for system Mesa
-        dnl ===================================================================
-        AC_MSG_CHECKING([which Mesa headers to use])
-        if test "$with_system_mesa_headers" = "yes"; then
-            AC_MSG_RESULT([external])
-            SYSTEM_MESA_HEADERS=TRUE
-            AC_LANG_PUSH(C)
-            AC_CHECK_HEADER(GL/glxext.h, [],
-               [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
-            AC_MSG_CHECKING([whether GL/glxext.h defines PFNGLXBINDTEXIMAGEEXTPROC])
-            AC_EGREP_HEADER(PFNGLXBINDTEXIMAGEEXTPROC, GL/glxext.h, [AC_MSG_RESULT([yes])], AC_MSG_ERROR(no))
-            AC_LANG_POP(C)
-        else
-            AC_MSG_RESULT([internal])
-            SYSTEM_MESA_HEADERS=
-            BUILD_TYPE="$BUILD_TYPE MESA"
-        fi
-    fi
 fi
 
-AC_SUBST(SYSTEM_MESA_HEADERS)
 AC_SUBST(ENABLE_OPENGL)
 AC_SUBST(ENABLE_OPENGL_CANVAS)
 

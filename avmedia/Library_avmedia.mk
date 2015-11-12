@@ -26,7 +26,6 @@ $(eval $(call gb_Library_add_defs,avmedia,\
 $(eval $(call gb_Library_use_externals,avmedia,\
 	boost_headers \
 	glew \
-	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 ))
 
 $(eval $(call gb_Library_use_libraries,avmedia,\

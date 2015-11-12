@@ -19,7 +19,6 @@ $(eval $(call gb_Executable_use_externals,vcldemo,\
 	boost_headers \
 	glew \
 	glm_headers \
-	$(if $(filter WNT MACOSX,$(OS)),mesa_headers) \
 ))
 
 $(eval $(call gb_Executable_set_include,vcldemo,\

@@ -31,9 +31,7 @@
 #endif
 
 #if defined( _WIN32 )
-#include <GL/glext.h>
 #include <GL/wglew.h>
-#include <GL/wglext.h>
 #elif defined( MACOSX )
 #include <OpenGL/OpenGL.h>
 #ifdef __OBJC__
