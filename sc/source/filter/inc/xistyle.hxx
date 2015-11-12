@@ -22,6 +22,7 @@
 
 #include <list>
 #include <memory>
+#include <vector>
 #include <tools/mempool.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -194,7 +195,7 @@ private:
     void                UpdateAppFont( const XclFontData& rFontData, bool bHasCharSet );
 
 private:
-    boost::ptr_vector< XclImpFont > maFontList; /// List of all FONT records in the Excel file.
+    std::vector< XclImpFont > maFontList; /// List of all FONT records in the Excel file.
     XclFontData         maAppFont;              /// Application font (for column width).
     XclImpFont          maFont4;                /// Built-in font with index 4.
     XclImpFont          maCtrlFont;             /// BIFF5 default form controls font (Helv,8pt,bold).

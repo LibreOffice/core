@@ -561,15 +561,15 @@ const XclImpFont* XclImpFontBuffer::GetFont( sal_uInt16 nFontIndex ) const
 
 void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
 {
-    XclImpFont* pFont = new XclImpFont( GetRoot() );
-    pFont->ReadFont( rStrm );
-    maFontList.push_back( pFont );
+    maFontList.push_back( XclImpFont( GetRoot() ) );
+    XclImpFont& rFont = maFontList.back();
+    rFont.ReadFont( rStrm );
 
     if( maFontList.size() == 1 )
     {
-        UpdateAppFont( pFont->GetFontData(), pFont->HasCharSet() );
+        UpdateAppFont( rFont.GetFontData(), rFont.HasCharSet() );
         // #i71033# set text encoding from application font, if CODEPAGE is missing
-        SetAppFontEncoding( pFont->GetFontEncoding() );
+        SetAppFontEncoding( rFont.GetFontEncoding() );
     }
 }
 
