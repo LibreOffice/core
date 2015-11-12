@@ -467,7 +467,8 @@ public:
 
 public:
 
-    SAL_DLLPRIVATE static SdDrawDocument* pDocLockedInsertingLinks;  // static to prevent recursions while resolving links
+    /// static to prevent recursions while resolving links
+    SAL_DLLPRIVATE static SdDrawDocument* s_pDocLockedInsertingLinks;
 
     /** Create and insert a set of two new pages: a standard (draw) page and
         the associated notes page.  The new pages are inserted directly

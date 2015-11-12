@@ -112,7 +112,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::beans::PropertyValue;
 
 
-SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = nullptr;
+SdDrawDocument* SdDrawDocument::s_pDocLockedInsertingLinks = nullptr;
 
 PresentationSettings::PresentationSettings()
 :   mbAll( true ),
@@ -692,14 +692,14 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 /** updates all links, only links in this document should by resolved */
 void SdDrawDocument::UpdateAllLinks()
 {
-    if ( !pDocLockedInsertingLinks && pLinkManager && !pLinkManager->GetLinks().empty() )
+    if (!s_pDocLockedInsertingLinks && pLinkManager && !pLinkManager->GetLinks().empty())
     {
-        pDocLockedInsertingLinks = this; // lock inserting links. only links in this document should by resolved
+        s_pDocLockedInsertingLinks = this; // lock inserting links. only links in this document should by resolved
 
         pLinkManager->UpdateAllLinks();  // query box: update all links?
 
-        if( pDocLockedInsertingLinks == this )
-            pDocLockedInsertingLinks = nullptr;  // unlock inserting links
+        if (s_pDocLockedInsertingLinks == this)
+            s_pDocLockedInsertingLinks = nullptr;  // unlock inserting links
     }
 }
 
