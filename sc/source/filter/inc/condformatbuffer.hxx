@@ -26,8 +26,7 @@
 #include "rangelst.hxx"
 
 #include <memory>
-
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 class ScColorScaleFormat;
 class ScDataBarFormat;
@@ -293,7 +292,7 @@ public:
     /** Imports settings from the CONDFORMATTING record. */
     CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
     ExtCfDataBarRuleRef createExtCfDataBarRule(ScDataBarFormatData* pTarget);
-    boost::ptr_vector<ExtCfCondFormat>& importExtCondFormat();
+    std::vector< std::unique_ptr<ExtCfCondFormat> >& importExtCondFormat();
 
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
@@ -307,7 +306,7 @@ private:
     typedef RefVector< ExtCfDataBarRule > ExtCfDataBarRuleVec;
     CondFormatVec       maCondFormats;      /// All conditional formatting in a sheet.
     ExtCfDataBarRuleVec        maCfRules;          /// All external conditional formatting rules in a sheet.
-    boost::ptr_vector<ExtCfCondFormat> maExtCondFormats;
+    std::vector< std::unique_ptr<ExtCfCondFormat> > maExtCondFormats;
 };
 
 } // namespace xls

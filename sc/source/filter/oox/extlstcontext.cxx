@@ -163,8 +163,8 @@ void ExtConditionalFormattingContext::onEndElement()
                 aRange[i]->aEnd.SetTab(nTab);
             }
 
-            boost::ptr_vector<ExtCfCondFormat>& rExtFormats =  getCondFormats().importExtCondFormat();
-            rExtFormats.push_back(new ExtCfCondFormat(aRange, maEntries));
+            std::vector< std::unique_ptr<ExtCfCondFormat> >& rExtFormats =  getCondFormats().importExtCondFormat();
+            rExtFormats.push_back(o3tl::make_unique<ExtCfCondFormat>(aRange, maEntries));
         }
         break;
         case XLS14_TOKEN(cfRule):

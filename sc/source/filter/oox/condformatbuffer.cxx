@@ -1147,7 +1147,7 @@ void CondFormatBuffer::finalizeImport()
     {
         ScDocument* pDoc = &getScDocument();
 
-        const ScRangeList& rRange = itr->getRange();
+        const ScRangeList& rRange = (*itr)->getRange();
         SCTAB nTab = rRange.front()->aStart.Tab();
         ScConditionalFormat* pFormat = findFormatByRange(rRange, pDoc, nTab);
         if (!pFormat)
@@ -1159,7 +1159,7 @@ void CondFormatBuffer::finalizeImport()
             pDoc->AddCondFormatData(rRange, nTab, nKey);
         }
 
-        const std::vector< std::unique_ptr<ScFormatEntry> >& rEntries = itr->getEntries();
+        const std::vector< std::unique_ptr<ScFormatEntry> >& rEntries = (*itr)->getEntries();
         for (auto i = rEntries.begin(); i != rEntries.end(); ++i)
         {
             pFormat->AddEntry((*i)->Clone(pDoc));
@@ -1181,7 +1181,7 @@ ExtCfDataBarRuleRef CondFormatBuffer::createExtCfDataBarRule(ScDataBarFormatData
     return extRule;
 }
 
-boost::ptr_vector<ExtCfCondFormat>& CondFormatBuffer::importExtCondFormat()
+std::vector< std::unique_ptr<ExtCfCondFormat> >& CondFormatBuffer::importExtCondFormat()
 {
     return maExtCondFormats;
 }
