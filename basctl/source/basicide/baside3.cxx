@@ -97,6 +97,12 @@ DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rD
         SetReadOnly(true);
 }
 
+void DialogWindow::dispose()
+{
+    pEditor.reset();
+    BaseWindow::dispose();
+}
+
 void DialogWindow::LoseFocus()
 {
     if ( IsModified() )

@@ -57,13 +57,14 @@ class DialogWindow: public BaseWindow
 {
 private:
     DialogWindowLayout& rLayout;
-    std::unique_ptr<DlgEditor> pEditor; // never nullptr
+    std::unique_ptr<DlgEditor> pEditor;
     std::unique_ptr<SfxUndoManager> pUndoMgr; // never nullptr
     OUString            aCurPath;
 
 protected:
     virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     virtual void        Resize() override;
+    virtual void        dispose() override;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
