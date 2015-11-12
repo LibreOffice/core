@@ -1290,10 +1290,10 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         if (sStyleFam == "ParagraphStyles"
             && doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT)
         {
-            for( OUString aStyle: aWriterStyles )
+            for (const OUString& rStyle: aWriterStyles)
             {
                 uno::Reference< beans::XPropertySet > xStyle;
-                xStyleFamily->getByName( aStyle ) >>= xStyle;
+                xStyleFamily->getByName(rStyle) >>= xStyle;
                 OUString sName;
                 xStyle->getPropertyValue("DisplayName") >>= sName;
                 if( !sName.isEmpty() )
@@ -1308,14 +1308,14 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         }
 
         uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
-        for ( OUString aStyle: aStyles )
+        for (const OUString& rStyle: aStyles )
         {
             // Filter out the default styles - they are already at the top
             // of the list
-            if (aDefaultStyleNames.find(aStyle) == aDefaultStyleNames.end())
+            if (aDefaultStyleNames.find(rStyle) == aDefaultStyleNames.end())
             {
                 boost::property_tree::ptree aChild;
-                aChild.put("", aStyle);
+                aChild.put("", rStyle);
                 aChildren.push_back(std::make_pair("", aChild));
             }
         }
