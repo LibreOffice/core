@@ -82,6 +82,8 @@ private:
     VclPtr<FixedText>       m_pFtCreatedBy;
     VclPtr<FixedText>       m_pFtCustomized;
 
+    ScEditWindow * m_pEditFocus; ///one of m_pWndLeft, m_pWndCenter, m_pWndRight
+
     sal_uInt16       nWhich;
     OUString         aCmdArr[6];
 
@@ -99,7 +101,7 @@ private:
     static bool IsExtFileNameEntry(EditTextObject* pTextObj);
     DECL_LINK_TYPED( ListHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED( ClickHdl, Button*, void );
-    DECL_STATIC_LINK_TYPED( ScHFEditPage, MenuHdl, ScExtIButton&, void );
+    DECL_LINK_TYPED( MenuHdl, ScExtIButton&, void );
 };
 
 class ScRightHeaderEditPage : public ScHFEditPage
