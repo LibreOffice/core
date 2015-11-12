@@ -91,7 +91,7 @@ public:
                             bool bAppendStr = false );
 
 // IMPORT: Formulas
-    static void         ParseFormula(
+    static void         ConvertCellRangeAddress(
                             OUString& sFormula,
                             const bool bIsFormula = true);
 // EXPORT: Core Date Time

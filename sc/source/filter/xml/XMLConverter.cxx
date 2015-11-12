@@ -279,7 +279,7 @@ void ScXMLConverter::GetStringFromDetOpType(
     ScRangeStringConverter::AssignString( rString, sTypeStr, bAppendStr );
 }
 
-void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
+void ScXMLConverter::ConvertCellRangeAddress(OUString& sFormula, const bool bIsFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
     bool bInQuotationMarks(false);

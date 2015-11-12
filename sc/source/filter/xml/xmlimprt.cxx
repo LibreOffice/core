@@ -3126,7 +3126,7 @@ public:
             {
                 OUString aContent = p->sContent;
                 if (!p->bIsExpression)
-                    ScXMLConverter::ParseFormula(aContent, false);
+                    ScXMLConverter::ConvertCellRangeAddress(aContent, false);
 
                 ScRangeData* pData = new ScRangeData(
                     mpDoc, p->sName, aContent, aPos, nNewType, p->eGrammar);
