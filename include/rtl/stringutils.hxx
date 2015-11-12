@@ -77,7 +77,8 @@ template<char C> struct SAL_WARN_UNUSED OUStringLiteral1_ {
         "non-ASCII character in OUStringLiteral1");
     char const c = C;
 };
-#if defined _MSC_VER && _MSC_VER <= 1900 // Visual Studio 2015
+#if defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__
+    // Visual Studio 2015
 template<char C> using OUStringLiteral1 = OUStringLiteral1_<C>;
 #pragma warning(disable: 4239)
 #else
