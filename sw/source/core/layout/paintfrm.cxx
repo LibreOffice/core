@@ -6106,7 +6106,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
 
     static vcl::DeleteOnDeinit< drawinglayer::primitive2d::DiscreteShadow > shadowMaskObj
         ( new drawinglayer::primitive2d::DiscreteShadow( SW_RES( BMP_PAGE_SHADOW_MASK ) ));
-    static drawinglayer::primitive2d::DiscreteShadow& shadowMask = *shadowMaskObj.get();
+    drawinglayer::primitive2d::DiscreteShadow& shadowMask = *shadowMaskObj.get();
     static vcl::DeleteOnDeinit< BitmapEx > aPageTopRightShadowObj( new BitmapEx );
     static vcl::DeleteOnDeinit< BitmapEx > aPageBottomRightShadowObj( new BitmapEx );
     static vcl::DeleteOnDeinit< BitmapEx > aPageBottomLeftShadowObj( new BitmapEx );
@@ -6115,14 +6115,14 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     static vcl::DeleteOnDeinit< BitmapEx > aPageTopShadowBaseObj( new BitmapEx );
     static vcl::DeleteOnDeinit< BitmapEx > aPageTopLeftShadowObj( new BitmapEx );
     static vcl::DeleteOnDeinit< BitmapEx > aPageLeftShadowBaseObj( new BitmapEx );
-    static BitmapEx& aPageTopRightShadow = *aPageTopRightShadowObj.get();
-    static BitmapEx& aPageBottomRightShadow = *aPageBottomRightShadowObj.get();
-    static BitmapEx& aPageBottomLeftShadow = *aPageBottomLeftShadowObj.get();
-    static BitmapEx& aPageBottomShadow = *aPageBottomShadowBaseObj.get();
-    static BitmapEx& aPageRightShadow = *aPageRightShadowBaseObj.get();
-    static BitmapEx& aPageTopShadow = *aPageTopShadowBaseObj.get();
-    static BitmapEx& aPageTopLeftShadow = *aPageTopLeftShadowObj.get();
-    static BitmapEx& aPageLeftShadow = *aPageLeftShadowBaseObj.get();
+    BitmapEx& aPageTopRightShadow = *aPageTopRightShadowObj.get();
+    BitmapEx& aPageBottomRightShadow = *aPageBottomRightShadowObj.get();
+    BitmapEx& aPageBottomLeftShadow = *aPageBottomLeftShadowObj.get();
+    BitmapEx& aPageBottomShadow = *aPageBottomShadowBaseObj.get();
+    BitmapEx& aPageRightShadow = *aPageRightShadowBaseObj.get();
+    BitmapEx& aPageTopShadow = *aPageTopShadowBaseObj.get();
+    BitmapEx& aPageTopLeftShadow = *aPageTopLeftShadowObj.get();
+    BitmapEx& aPageLeftShadow = *aPageLeftShadowBaseObj.get();
     static Color aShadowColor( COL_AUTO );
 
     SwRect aAlignedPageRect( _rPageRect );
