@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XINAME_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XINAME_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "xlname.hxx"
 #include "xiroot.hxx"
 #include "xistream.hxx"
@@ -29,6 +28,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <memory>
+#include <vector>
 
 class ScRangeData;
 class ScTokenArray;
@@ -102,7 +102,7 @@ public:
     void ConvertAllTokens();
 
 private:
-    typedef boost::ptr_vector< XclImpName > XclImpNameList;
+    typedef std::vector< std::unique_ptr<XclImpName> > XclImpNameList;
     XclImpNameList      maNameList;
 };
 

@@ -24,6 +24,7 @@
 #include "excimp8.hxx"
 #include "scextopt.hxx"
 #include "document.hxx"
+#include <o3tl/make_unique.hxx>
 
 // *** Implementation ***
 
@@ -276,7 +277,7 @@ void XclImpNameManager::ReadName( XclImpStream& rStrm )
 {
     sal_uLong nCount = maNameList.size();
     if( nCount < 0xFFFF )
-        maNameList.push_back( new XclImpName( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
+        maNameList.push_back( o3tl::make_unique<XclImpName>( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
 }
 
 const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB nScTab ) const
@@ -285,12 +286,12 @@ const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB n
     const XclImpName* pLocalName = nullptr;    // a found local name
     for( XclImpNameList::const_iterator itName = maNameList.begin(); itName != maNameList.end() && !pLocalName; ++itName )
     {
-        if( itName->GetXclName() == rXclName )
+        if( (*itName)->GetXclName() == rXclName )
         {
-            if( itName->GetScTab() == nScTab )
-                pLocalName = &(*itName);
-            else if( itName->IsGlobal() )
-                pGlobalName = &(*itName);
+            if( (*itName)->GetScTab() == nScTab )
+                pLocalName = itName->get();
+            else if( (*itName)->IsGlobal() )
+                pGlobalName = itName->get();
         }
     }
     return pLocalName ? pLocalName : pGlobalName;
@@ -299,14 +300,14 @@ const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB n
 const XclImpName* XclImpNameManager::GetName( sal_uInt16 nXclNameIdx ) const
 {
     OSL_ENSURE( nXclNameIdx > 0, "XclImpNameManager::GetName - index must be >0" );
-    return ( nXclNameIdx <= 0 ||  nXclNameIdx > maNameList.size() ) ? nullptr : &(maNameList.at( nXclNameIdx - 1 ));
+    return ( nXclNameIdx <= 0 ||  nXclNameIdx > maNameList.size() ) ? nullptr : maNameList.at( nXclNameIdx - 1 ).get();
 }
 
 void XclImpNameManager::ConvertAllTokens()
 {
     XclImpNameList::iterator it = maNameList.begin(), itEnd = maNameList.end();
     for (; it != itEnd; ++it)
-        it->ConvertTokens();
+        (*it)->ConvertTokens();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
