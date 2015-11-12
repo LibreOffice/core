@@ -178,6 +178,7 @@ class SwSidebarWin : public vcl::Window
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
         virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, sal_uLong) SAL_OVERRIDE;
+        virtual void KeyInput(const KeyEvent& rKeyEvt) SAL_OVERRIDE;
         void PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
         /// Get the matching sub-widget inside this sidebar widget for rPointLogic, if any.
         vcl::Window* IsHitWindow(const Point& rPointLogic);

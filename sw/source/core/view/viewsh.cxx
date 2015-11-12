@@ -120,6 +120,8 @@ void SwViewShell::ToggleHeaderFooterEdit()
 void SwViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
 {
     getIDocumentDrawModelAccess()->GetDrawModel()->registerLibreOfficeKitCallback(pCallback, pData);
+    if (SwPostItMgr* pPostItMgr = GetPostItMgr())
+        pPostItMgr->registerLibreOfficeKitCallback(pCallback, pData);
 }
 
 void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const

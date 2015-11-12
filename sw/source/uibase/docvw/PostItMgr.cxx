@@ -881,6 +881,19 @@ void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const Rectangle& /*rRe
     }
 }
 
+void SwPostItMgr::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    for (SwSidebarItem* pItem : mvPostItFields)
+    {
+        SwSidebarWin* pPostIt = pItem->pPostIt;
+        if (!pPostIt)
+            continue;
+
+        pPostIt->GetOutlinerView()->setTiledRendering(mpWrtShell->isTiledRendering());
+        pPostIt->GetOutlinerView()->registerLibreOfficeKitCallback(pCallback, pData);
+    }
+}
+
 void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
 {
     OSL_ENSURE((lScroll % GetScrollSize() )==0,"SwPostItMgr::Scroll: scrolling by wrong value");

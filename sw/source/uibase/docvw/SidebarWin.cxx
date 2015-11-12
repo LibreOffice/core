@@ -355,6 +355,12 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
     }
 }
 
+void SwSidebarWin::KeyInput(const KeyEvent& rKeyEvent)
+{
+    if (mpSidebarTextControl)
+        mpSidebarTextControl->KeyInput(rKeyEvent);
+}
+
 void SwSidebarWin::SetPosSizePixelRect(long nX, long nY, long nWidth, long nHeight,
                                        const SwRect& aAnchorRect, const long aPageBorder)
 {
