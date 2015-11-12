@@ -104,7 +104,7 @@ private:
     {
         if (nPos < 0 || static_cast<size_t>(nPos) >= maEntries.size())
             return nullptr;
-        return const_cast<ImplEntryType*>(maEntries[nPos].get());
+        return maEntries[nPos].get();
     }
 
 public:
