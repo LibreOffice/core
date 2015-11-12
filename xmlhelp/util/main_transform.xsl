@@ -256,9 +256,6 @@
 <xsl:template match="item"><span class="{@type}"><xsl:apply-templates /></span></xsl:template>
 <xsl:template match="item" mode="embedded"><span class="{@type}"><xsl:apply-templates /></span></xsl:template>
 
-<!-- LASTEDITED -->
-<xsl:template match="lastedited" />
-
 <!-- LINK -->
 <xsl:template match="link">
 	<xsl:choose> <!-- don't insert the heading link to itself -->
