@@ -1709,7 +1709,7 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
 
 vcl::Window* SwPostItMgr::IsHitSidebarWindow(const Point& rPointLogic)
 {
-    vcl::Window* pRet = 0;
+    vcl::Window* pRet = nullptr;
 
     if (HasNotes() && ShowNotes())
     {

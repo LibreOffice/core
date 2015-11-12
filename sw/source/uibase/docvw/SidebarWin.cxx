@@ -284,7 +284,7 @@ vcl::Window* SwSidebarWin::IsHitWindow(const Point& rPointLogic)
     Rectangle aRectangleLogic(EditWin().PixelToLogic(GetPosPixel()), EditWin().PixelToLogic(GetSizePixel()));
     if (aRectangleLogic.IsInside(rPointLogic))
         return mpSidebarTextControl;
-    return 0;
+    return nullptr;
 }
 
 void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags nInFlags)
