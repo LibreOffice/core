@@ -48,11 +48,11 @@
 #include <memory>
 
 // STATIC DATA -----------------------------------------------------------
-static VclPtr<ScEditWindow> pActiveEdWnd = nullptr;
+static VclPtr<ScEditWindow> g_pActiveEdWnd = nullptr;
 
 ScEditWindow* GetScEditWindow ()
 {
-    return pActiveEdWnd;
+    return g_pActiveEdWnd;
 }
 
 static void lcl_GetFieldData( ScHeaderFieldData& rData )
@@ -283,7 +283,7 @@ void ScEditWindow::Command( const CommandEvent& rCEvt )
 void ScEditWindow::GetFocus()
 {
     pEdView->ShowCursor();
-    pActiveEdWnd = this;
+    g_pActiveEdWnd = this;
 
     css::uno::Reference< css::accessibility::XAccessible > xTemp = xAcc;
     if (xTemp.is() && pAcc)

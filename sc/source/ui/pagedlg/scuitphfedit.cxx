@@ -51,8 +51,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static VclPtr<ScEditWindow> pActiveEdWnd = nullptr;
-
 // class ScHFEditPage
 
 ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
@@ -793,7 +791,7 @@ IMPL_LINK_TYPED( ScHFEditPage, ListHdl_Impl, ListBox&, rList, void )
 
 IMPL_LINK_TYPED( ScHFEditPage, ClickHdl, Button*, pBtn, void )
 {
-    pActiveEdWnd = ::GetScEditWindow();
+    VclPtr<ScEditWindow> pActiveEdWnd = ::GetScEditWindow();
     if ( !pActiveEdWnd )
         return;
 
@@ -824,7 +822,7 @@ IMPL_LINK_TYPED( ScHFEditPage, ClickHdl, Button*, pBtn, void )
 
 IMPL_STATIC_LINK_TYPED( ScHFEditPage, MenuHdl, ScExtIButton&, rBtn, void )
 {
-    pActiveEdWnd = ::GetScEditWindow();
+    VclPtr<ScEditWindow> pActiveEdWnd = ::GetScEditWindow();
     if ( !pActiveEdWnd )
         return;
 
