@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESEXPORTHELPER_HXX
 
 #include <vector>
+#include <memory>
 #include <list>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -29,7 +30,6 @@
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
 class ScDocument;
@@ -251,7 +251,7 @@ public:
 class ScRowStyles : public ScColumnRowStylesBase
 {
     typedef ::mdds::flat_segment_tree<sal_Int32, sal_Int32> StylesType;
-    ::boost::ptr_vector<StylesType> aTables;
+    std::vector<std::unique_ptr<StylesType> > aTables;
     struct Cache
     {
         sal_Int32 mnTable;
