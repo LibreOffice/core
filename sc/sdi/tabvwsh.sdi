@@ -198,6 +198,7 @@ interface TableEditView
     FID_SEARCH          [ ExecMethod = ExecSearch; ]
     FID_REPLACE         [ ExecMethod = ExecSearch; ]
     FID_SEARCH_ALL      [ ExecMethod = ExecSearch; ]
+    FID_SEARCH_ON       [ ExecMethod = ExecSearch; Export = FALSE; ]
     FID_REPLACE_ALL     [ ExecMethod = ExecSearch; ]
     FID_REPEAT_SEARCH   [ ExecMethod = ExecSearch; ]
 

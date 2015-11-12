@@ -246,6 +246,10 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
     switch ( nSlot )
     {
+        case FID_SEARCH_ON:
+            bSearchJustOpened = sal_True;
+            break;
+
         case FID_SEARCH_NOW:
             {
                 if ( pReqArgs &&

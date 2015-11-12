@@ -225,7 +225,18 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_SEARCH_ITEM:
-                rSet.Put( ScGlobal::GetSearchItem() );
+                {
+                    SvxSearchItem searchItem = ScGlobal::GetSearchItem();
+                    // i35093:
+                    if (bSearchJustOpened)
+                    {
+                        ScMarkData& rMarkData = pViewData->GetMarkData();
+                        if (rMarkData.IsMarked())
+                            searchItem.SetSelection( sal_True );
+                    }
+                    bSearchJustOpened = sal_False;
+                    rSet.Put(searchItem);
+                }
                 break;
 
             case SID_SEARCH_OPTIONS:

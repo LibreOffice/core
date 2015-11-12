@@ -178,6 +178,7 @@ private:
     String                  aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
     sal_Bool    bForceFocusOnCurCell; // i123629
+    sal_Bool    bSearchJustOpened; // i35093
 
 private:
     void    Construct( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
