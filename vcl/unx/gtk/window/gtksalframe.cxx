@@ -945,10 +945,12 @@ void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
 {
     gint nOrigwidth, nOrigheight;
     gtk_window_get_size(GTK_WINDOW(m_pWindow), &nOrigwidth, &nOrigheight);
+#if !GTK_CHECK_VERSION(3,0,0)
     if (nWidth > nOrigwidth || nHeight > nOrigheight)
     {
         m_bPaintsBlocked = true;
     }
+#endif
     gtk_widget_set_size_request(m_pWindow, nWidth, nHeight );
 }
 
@@ -956,10 +958,12 @@ void GtkSalFrame::window_resize(long nWidth, long nHeight)
 {
     gint nOrigwidth, nOrigheight;
     gtk_window_get_size(GTK_WINDOW(m_pWindow), &nOrigwidth, &nOrigheight);
+#if !GTK_CHECK_VERSION(3,0,0)
     if (nWidth > nOrigwidth || nHeight > nOrigheight)
     {
         m_bPaintsBlocked = true;
     }
+#endif
     gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 }
 
@@ -3382,7 +3386,6 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->m_bPaintsBlocked = false;
 
     cairo_save(cr);
 
