@@ -2278,8 +2278,8 @@ void SwUiWriterTest::testTdf89714()
     uno::Reference<uno::XInterface> xInterface(xFact->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertyState> xPropState(xInterface, uno::UNO_QUERY);
     //enabled Paragraph Orphan and Widows by default starting in LO5.1
-    CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault(OUString("ParaOrphans")) );
-    CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault(OUString("ParaWidows"))  );
+    CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault("ParaOrphans") );
+    CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault("ParaWidows")  );
 }
 
 void SwUiWriterTest::testPropertyDefaults()
