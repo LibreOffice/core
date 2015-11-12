@@ -283,13 +283,6 @@ void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
             "ScDocument::SetStorageGrammar: wrong storage grammar");
 
     eStorageGrammar = eGram;
-
-    // FIXME: the XML import shouldn't strip brackets, the compiler should
-    // digest them instead, which could also speedup reference recognition
-    // during import.
-
-    eXmlImportGrammar = formula::FormulaGrammar::mergeToGrammar( eGram,
-            formula::FormulaGrammar::CONV_OOO);
 }
 
 void ScDocument::SetDocVisible( bool bSet )

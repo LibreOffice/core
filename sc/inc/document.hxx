@@ -387,11 +387,6 @@ private:
         documents, GRAM_ODFF for ODF 1.2 documents. */
     formula::FormulaGrammar::Grammar  eStorageGrammar;
 
-    /** The compiler grammar used in ODF import after brackets had been
-        stripped (which they shouldn't, but until that's fixed) by the XML
-        importer. */
-    formula::FormulaGrammar::Grammar  eXmlImportGrammar;
-
     sal_uLong               nFormulaCodeInTree;             // FormelRPN im Formelbaum
     sal_uLong               nXMLImportedFormulaCount;        // progress count during XML import
     sal_uInt16              nInterpretLevel;                // >0 if in interpreter
