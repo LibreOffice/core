@@ -144,7 +144,7 @@ class ToolBarManager : public ToolbarManager_Base
         virtual bool MenuItemAllowed( sal_uInt16 ) const;
 
         void RemoveControllers();
-        OUString RetrieveLabelFromCommand( const OUString& aCmdURL );
+        OUString RetrieveFromCommand( const OUString aName, const OUString& aCmdURL );
         sal_Int32 RetrievePropertiesFromCommand( const OUString& aCmdURL );
         css::uno::Sequence< css::beans::PropertyValue > GetPropsForCommand( const OUString& rCmdURL );
         void CreateControllers();

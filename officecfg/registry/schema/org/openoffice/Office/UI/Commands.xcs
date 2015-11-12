@@ -28,17 +28,22 @@
       </info>
       <prop oor:name="Label" oor:type="xs:string" oor:localized="true">
         <info>
-          <desc>A localized text that describes the command or identifier. Can be used as a label inside a menu or as short tool tip help.</desc>
+          <desc>A localized text that describes the command. Will be used instead of ContextLabel, PopupLabel and TooltipLabel if those are not specified.</desc>
         </info>
       </prop>
       <prop oor:name="ContextLabel" oor:type="xs:string" oor:localized="true">
         <info>
-          <desc>A localized text that describes the identifier of a command in a structured menu.  </desc>
+          <desc>Used in Menus and also in popup menus if PopupLabel is not specified.</desc>
         </info>
       </prop>
       <prop oor:name="PopupLabel" oor:type="xs:string" oor:localized="true">
         <info>
-          <desc>A localized text that describes the identifier of a command in a popup menu.</desc>
+          <desc>Used in popup menus to give commands a different label than in the main menu.</desc>
+        </info>
+      </prop>
+      <prop oor:name="TooltipLabel" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>Used for Tooltips (Toolbar and Glade Widgets that have their 'action_name' specified.)</desc>
         </info>
       </prop>
       <prop oor:name="Properties" oor:type="xs:int" oor:nillable="false">

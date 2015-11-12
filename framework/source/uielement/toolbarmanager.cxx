@@ -809,7 +809,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     return aPropSeq;
 }
 
-OUString ToolBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
+OUString ToolBarManager::RetrieveFromCommand( const OUString aName, const OUString& aCmdURL )
 {
     OUString aLabel;
     Sequence< PropertyValue > aPropSeq;
@@ -818,7 +818,7 @@ OUString ToolBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
     aPropSeq = GetPropsForCommand( aCmdURL );
     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
     {
-        if ( aPropSeq[i].Name == "Name" )
+        if ( aPropSeq[i].Name == aName )
         {
             aPropSeq[i].Value >>= aLabel;
             break;
@@ -1272,7 +1272,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString( RetrieveLabelFromCommand( aCommandURL ));
+                    OUString aString( RetrieveFromCommand( "Label", aCommandURL ));
+                    OUString aTooltipFromCommand( RetrieveFromCommand( "TooltipLabel", aCommandURL ));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     if ( aMenuDesc.is() )
@@ -1284,8 +1285,10 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
                     OUString sQuickHelp( aString );
                     // Use custom tooltip if available
-                    if ( !aTooltip.isEmpty() )
+                    if ( !aTooltip.isEmpty() ) // Tooltip from menu xml file (toolbar:tooltip)
                         sQuickHelp = aTooltip;
+                    else if ( !aTooltipFromCommand.isEmpty() ) // Tooltip from uno command (TooltipLabel)
+                        sQuickHelp = aTooltipFromCommand;
                     OUString sShortCut;
                     if( RetrieveShortcut( aCommandURL, sShortCut ) )
                     {
