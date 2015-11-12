@@ -43,7 +43,7 @@ void ScPivotLayoutTreeListLabel::FillLabelFields(ScDPLabelDataVector& rLabelVect
         const ScDPLabelData& rLabelData = *it;
 
         ScItemValue* pValue = new ScItemValue(rLabelData.maName, rLabelData.mnCol, rLabelData.mnFuncMask);
-        maItemValues.push_back(pValue);
+        maItemValues.push_back(std::unique_ptr<ScItemValue>(pValue));
         if (rLabelData.mbDataLayout)
         {
             maDataItem = maItemValues.size() - 1;
@@ -71,8 +71,8 @@ bool ScPivotLayoutTreeListLabel::IsDataElement(SCCOL nColumn)
 ScItemValue* ScPivotLayoutTreeListLabel::GetItem(SCCOL nColumn)
 {
     if (nColumn == PIVOT_DATA_FIELD)
-        return &maItemValues[maDataItem];
-    return &maItemValues[nColumn];
+        return maItemValues[maDataItem].get();
+    return maItemValues[nColumn].get();
 }
 
 void ScPivotLayoutTreeListLabel::KeyInput(const KeyEvent& rKeyEvent)

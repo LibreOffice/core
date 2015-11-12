@@ -12,12 +12,13 @@
 #define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTLABEL_HXX
 
 #include "PivotLayoutTreeListBase.hxx"
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 class ScPivotLayoutTreeListLabel : public ScPivotLayoutTreeListBase
 {
 private:
-    boost::ptr_vector<ScItemValue> maItemValues;
+    std::vector<std::unique_ptr<ScItemValue> > maItemValues;
     SCCOL maDataItem;
 
 public:
