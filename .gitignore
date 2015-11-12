@@ -116,10 +116,8 @@ DerivedData
 # MSVS specific
 */Debug
 *.sdf
-*.sln
 *.v11*
 *.v12*
-*.vcxproj*
 *.opensdf
 
 # QtCreator specific
