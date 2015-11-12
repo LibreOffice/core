@@ -103,29 +103,29 @@ namespace svtools{ class ColorConfig;}
 
 class SW_DLLPUBLIC SwViewOption
 {
-    static Color    aDocColor;  // color of document boundaries
-    static Color    aDocBoundColor;  // color of document boundaries
-    static Color    aObjectBoundColor; // color of object boundaries
-    static Color    aAppBackgroundColor; // application background
-    static Color    aTableBoundColor; // color of table boundaries
-    static Color    aFontColor;
-    static Color    aIndexShadingsColor; // background color of indexes
-    static Color    aLinksColor;
-    static Color    aVisitedLinksColor;
-    static Color    aDirectCursorColor;
-    static Color    aTextGridColor;
-    static Color    aSpellColor;     // mark color of online spell checking
-    static Color    aSmarttagColor;
-    static Color    aFieldShadingsColor;
-    static Color    aSectionBoundColor;
-    static Color    aPageBreakColor;
-    static Color    aScriptIndicatorColor;
-    static Color    aShadowColor;
-    static Color    aHeaderFooterMarkColor;
+    static Color    m_aDocColor;  // color of document boundaries
+    static Color    m_aDocBoundColor;  // color of document boundaries
+    static Color    m_aObjectBoundColor; // color of object boundaries
+    static Color    m_aAppBackgroundColor; // application background
+    static Color    m_aTableBoundColor; // color of table boundaries
+    static Color    m_aFontColor;
+    static Color    m_aIndexShadingsColor; // background color of indexes
+    static Color    m_aLinksColor;
+    static Color    m_aVisitedLinksColor;
+    static Color    m_aDirectCursorColor;
+    static Color    m_aTextGridColor;
+    static Color    m_aSpellColor;     // mark color of online spell checking
+    static Color    m_aSmarttagColor;
+    static Color    m_aFieldShadingsColor;
+    static Color    m_aSectionBoundColor;
+    static Color    m_aPageBreakColor;
+    static Color    m_aScriptIndicatorColor;
+    static Color    m_aShadowColor;
+    static Color    m_aHeaderFooterMarkColor;
 
-    static sal_Int32 nAppearanceFlags;
+    static sal_Int32 m_nAppearanceFlags;
 protected:
-    static sal_uInt16   nPixelTwips;// 1 Pixel == ? Twips
+    static sal_uInt16   m_nPixelTwips;// 1 Pixel == ? Twips
 
     OUString        m_sSymbolFont;        // Symbolfont.
     sal_uInt32      m_nCoreOptions;       // Bits for SwViewShell.
@@ -167,7 +167,7 @@ protected:
     bool  m_bTest6        :1;     // Test-flag  "No screen adj"
     bool  m_bTest7        :1;     // Test-flag  "win format"
     bool  m_bTest8        :1;     // Test-flag  ""
-    static bool  s_bTest9;    // Test-Flag  "DrawingLayerNotLoading"
+    static bool  m_bTest9;    // Test-Flag  "DrawingLayerNotLoading"
     bool  m_bTest10       :1;     // Test-Flag  "Format by Input"
 #endif
 
@@ -178,7 +178,7 @@ public:
 
     static void Init( vcl::Window *pWin );        // Initializing of static data.
 
-    static sal_uInt16 GetPixelTwips() { return nPixelTwips; }
+    static sal_uInt16 GetPixelTwips() { return m_nPixelTwips; }
 
     inline sal_uInt32   GetCoreOptions() const {return m_nCoreOptions;}
     inline void     SetUIOptions( const SwViewOption& );
