@@ -36,7 +36,7 @@ XColorListRef XColorList::CreateStdColorList()
 
 XColorListRef XColorList::GetStdColorList()
 {
-    static XColorListRef aTable( CreateStdColorList() );
+    XColorListRef aTable( CreateStdColorList() );
     return aTable;
 }
 
