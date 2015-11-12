@@ -284,16 +284,19 @@ void ScXMLConverter::ConvertCellRangeAddress(OUString& sFormula)
     OUStringBuffer sBuffer(sFormula.getLength());
     bool bInQuotationMarks(false);
     sal_Unicode chPrevious('=');
-    for (sal_Int32 i = 0; i < sFormula.getLength(); ++i)
+    const sal_Unicode* p = sFormula.getStr();
+    const sal_Unicode* const pStop = p + sFormula.getLength();
+    for ( ; p < pStop; ++p)
     {
-        if (sFormula[i] == '\'')
+        const sal_Unicode c = *p;
+        if (c == '\'')
             bInQuotationMarks = !bInQuotationMarks;
         if (bInQuotationMarks)
-            sBuffer.append(sFormula[i]);
-        else if ((sFormula[i] != '.') ||
+            sBuffer.append(c);
+        else if ((c != '.') ||
                 !((chPrevious == ':') || (chPrevious == ' ') || (chPrevious == '=')))
-                sBuffer.append(sFormula[i]);
-        chPrevious = sFormula[i];
+            sBuffer.append(c);
+        chPrevious = c;
     }
 
     sFormula = sBuffer.makeStringAndClear();
