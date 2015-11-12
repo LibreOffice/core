@@ -3663,6 +3663,9 @@
       </node>
       <node oor:name=".uno:FormatPaintbrush" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Clone Formatting</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Clone Formatting (double click for multi-selection)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
