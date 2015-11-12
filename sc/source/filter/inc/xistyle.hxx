@@ -25,7 +25,6 @@
 #include <vector>
 #include <tools/mempool.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "rangelst.hxx"
 #include "patattr.hxx"
 #include "xladdress.hxx"
@@ -520,8 +519,6 @@ private:
 /** Contains an (encoded) XF index for a range of rows in a single column. */
 class XclImpXFRange
 {
-    DECL_FIXEDMEMPOOL_NEWDEL( XclImpXFRange )
-
 public:
     SCROW               mnScRow1;       /// The first row of an equal-formatted range.
     SCROW               mnScRow2;       /// The last row of an equal-formatted range.
@@ -562,7 +559,7 @@ inline bool XclImpXFRange::Contains( SCROW nScRow ) const
 class XclImpXFRangeColumn : private boost::noncopyable
 {
 public:
-    typedef ::boost::ptr_vector<XclImpXFRange> IndexList;
+    typedef std::vector<XclImpXFRange> IndexList;
 
     inline explicit     XclImpXFRangeColumn() {}
 
@@ -590,7 +587,7 @@ private:
     void                TryConcatPrev( sal_uLong nIndex );
 
     /** Insert a range into the list at the specified index. */
-    void                Insert(XclImpXFRange* pXFRange, sal_uLong nIndex);
+    void                Insert(const XclImpXFRange& rXFRange, sal_uLong nIndex);
 
 private:
     IndexList maIndexList;    /// The list of XF index range.
