@@ -21,6 +21,7 @@
 #include "global.hxx"
 #include "progress.hxx"
 #include <osl/diagnose.h>
+#include <o3tl/make_unique.hxx>
 
 ScfProgressBar::ScfProgressSegment::ScfProgressSegment( sal_Size nSize ) :
     mnSize( nSize ),
@@ -69,7 +70,7 @@ ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegme
 {
     if( nSegment < 0 )
         return nullptr;
-    return &(maSegments.at( nSegment ));
+    return maSegments.at( nSegment ).get();
 }
 
 void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
@@ -139,7 +140,7 @@ sal_Int32 ScfProgressBar::AddSegment( sal_Size nSize )
     if( nSize == 0 )
         return SCF_INV_SEGMENT;
 
-    maSegments.push_back( new ScfProgressSegment( nSize ) );
+    maSegments.push_back( o3tl::make_unique<ScfProgressSegment>( nSize ) );
     mnTotalSize += nSize;
     return static_cast< sal_Int32 >( maSegments.size() - 1 );
 }

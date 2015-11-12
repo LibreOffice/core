@@ -21,7 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_FPROGRESSBAR_HXX
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 #include "globstr.hrc"
 #include "ftools.hxx"
 #include "scdllapi.h"
@@ -161,7 +162,7 @@ private:
     };
 
     typedef ::std::unique_ptr< ScProgress >         ScProgressPtr;
-    typedef boost::ptr_vector< ScfProgressSegment > ScfSegmentList;
+    typedef std::vector< std::unique_ptr<ScfProgressSegment> > ScfSegmentList;
 
     ScfSegmentList      maSegments;         /// List of progress segments.
     OUString            maText;             /// UI string for system progress.
