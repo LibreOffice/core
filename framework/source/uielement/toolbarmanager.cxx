@@ -809,7 +809,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     return aPropSeq;
 }
 
-OUString ToolBarManager::RetrieveFromCommand( const OUString aName, const OUString& aCmdURL )
+OUString ToolBarManager::RetrieveFromCommand( const OUString & aName, const OUString& aCmdURL )
 {
     OUString aLabel;
     Sequence< PropertyValue > aPropSeq;
