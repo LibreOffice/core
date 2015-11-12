@@ -178,6 +178,8 @@ class SwSidebarWin : public vcl::Window
 
         virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) override;
         void PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+        /// Get the matching sub-widget inside this sidebar widget for rPointLogic, if any.
+        vcl::Window* IsHitWindow(const Point& rPointLogic);
 
     protected:
         virtual void    DataChanged( const DataChangedEvent& aEvent) override;

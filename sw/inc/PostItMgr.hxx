@@ -234,6 +234,8 @@ class SwPostItMgr: public SfxListener
         Rectangle GetTopScrollRect(const unsigned long aPage) const;
 
         bool IsHit(const Point &aPointPixel);
+        /// Get the matching window that is responsible for handling mouse events of rPointLogic, if any.
+        vcl::Window* IsHitSidebarWindow(const Point& rPointLogic);
         Color GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) const;
 
         sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pField) const;

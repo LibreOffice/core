@@ -1706,6 +1706,37 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
     }
     return false;
 }
+
+vcl::Window* SwPostItMgr::IsHitSidebarWindow(const Point& rPointLogic)
+{
+    vcl::Window* pRet = 0;
+
+    if (HasNotes() && ShowNotes())
+    {
+        bool bEnableMapMode = !mpEditWin->IsMapModeEnabled();
+        if (bEnableMapMode)
+            mpEditWin->EnableMapMode();
+
+        for (SwSidebarItem* pItem : mvPostItFields)
+        {
+            SwSidebarWin* pPostIt = pItem->pPostIt;
+            if (!pPostIt)
+                continue;
+
+            if (vcl::Window* pWindow = pPostIt->IsHitWindow(rPointLogic))
+            {
+                pRet = pWindow;
+                break;
+            }
+        }
+
+        if (bEnableMapMode)
+            mpEditWin->EnableMapMode(false);
+    }
+
+    return pRet;
+}
+
 Rectangle SwPostItMgr::GetBottomScrollRect(const unsigned long aPage) const
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
