@@ -1272,7 +1272,10 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         "Heading 3"
     };
 
-    // static const std::vector<OUString> aList = { "aaaa", "bbb" };
+    // We need to keep a list of the default style names
+    // in order to filter these out later when processing
+    // the full list of styles.
+    std::set<OUString> aDefaultStyleNames;
 
     boost::property_tree::ptree aValues;
     for (sal_Int32 nStyleFam = 0; nStyleFam < aStyleFamilies.getLength(); ++nStyleFam)
@@ -1295,6 +1298,8 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
                 xStyle->getPropertyValue("DisplayName") >>= sName;
                 if( !sName.isEmpty() )
                 {
+                    aDefaultStyleNames.insert( sName );
+
                     boost::property_tree::ptree aChild;
                     aChild.put("", sName.toUtf8());
                     aChildren.push_back(std::make_pair("", aChild));
@@ -1305,9 +1310,14 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
         for ( OUString aStyle: aStyles )
         {
-            boost::property_tree::ptree aChild;
-            aChild.put("", aStyles[nInd]);
-            aChildren.push_back(std::make_pair("", aChild));
+            // Filter out the default styles - they are already at the top
+            // of the list
+            if (aDefaultStyleNames.find(aStyle) == aDefaultStyleNames.end())
+            {
+                boost::property_tree::ptree aChild;
+                aChild.put("", aStyle);
+                aChildren.push_back(std::make_pair("", aChild));
+            }
         }
         aValues.add_child(sStyleFam.toUtf8().getStr(), aChildren);
     }
