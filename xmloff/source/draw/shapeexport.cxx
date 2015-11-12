@@ -661,7 +661,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         if ( ( GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITER &&
                GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITERWEB &&
                GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITERGLOBAL ) ||
-             !( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) ||
+             ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) ||
              aShapeInfo.meShapeType == XmlShapeTypeDrawGroupShape ||
              ( aShapeInfo.meShapeType == XmlShapeTypeDrawCustomShape &&
                aShapeInfo.xCustomShapeReplacement.is() ) )
