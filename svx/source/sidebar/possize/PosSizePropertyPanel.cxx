@@ -269,19 +269,19 @@ void PosSizePropertyPanel::HandleContextChange(
 
     maContext = rContext;
 
-    sal_Int32 nLayoutMode (0);
+    bool bShowPosition = false;
+    bool bShowAngle = false;
+    bool bShowFlip = false;
+
     switch (maContext.GetCombinedContext_DI())
     {
         case CombinedEnumContext(Application_WriterVariants, Context_Draw):
-            nLayoutMode = 0;
+            bShowAngle = true;
+            bShowFlip = true;
             break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_Graphic):
-        case CombinedEnumContext(Application_WriterVariants, Context_Media):
-        case CombinedEnumContext(Application_WriterVariants, Context_Frame):
-        case CombinedEnumContext(Application_WriterVariants, Context_OLE):
-        case CombinedEnumContext(Application_WriterVariants, Context_Form):
-            nLayoutMode = 1;
+            bShowFlip = true;
             break;
 
         case CombinedEnumContext(Application_Calc, Context_Draw):
@@ -289,7 +289,9 @@ void PosSizePropertyPanel::HandleContextChange(
         case CombinedEnumContext(Application_DrawImpress, Context_Draw):
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-            nLayoutMode = 2;
+            bShowPosition = true;
+            bShowAngle = true;
+            bShowFlip = true;
             break;
 
         case CombinedEnumContext(Application_Calc, Context_Chart):
@@ -302,108 +304,28 @@ void PosSizePropertyPanel::HandleContextChange(
         case CombinedEnumContext(Application_DrawImpress, Context_OLE):
         case CombinedEnumContext(Application_DrawImpress, Context_3DObject):
         case CombinedEnumContext(Application_DrawImpress, Context_MultiObject):
-            nLayoutMode = 3;
+            bShowPosition = true;
             break;
     }
 
-    switch (nLayoutMode)
-    {
-        case 0:
-        {
-            mpMtrWidth->SetMin( 2 );
-            mpMtrHeight->SetMin( 2 );
-            mpFtPosX->Hide();
-            mpMtrPosX->Hide();
-            mpFtPosY->Hide();
-            mpMtrPosY->Hide();
+    // Position
+    mpFtPosX->Show(bShowPosition);
+    mpMtrPosX->Show(bShowPosition);
+    mpFtPosY->Show(bShowPosition);
+    mpMtrPosY->Show(bShowPosition);
 
-            //rotation
-            mpFtAngle->Show();
-            mpMtrAngle->Show();
-            mpDial->Show();
+    // Rotation
+    mpFtAngle->Show(bShowAngle);
+    mpMtrAngle->Show(bShowAngle);
+    mpDial->Show(bShowAngle);
 
-            //flip
-            mpFtFlip->Show();
-            mpFlipTbx->Show();
-            mbIsFlip = true;
+    // Flip
+    mpFtFlip->Show(bShowFlip);
+    mpFlipTbx->Show(bShowFlip);
+    mbIsFlip = bShowFlip;
 
-            if (mxSidebar.is())
-                mxSidebar->requestLayout();
-        }
-        break;
-
-        case 1:
-        {
-            mpMtrWidth->SetMin( 2 );
-            mpMtrHeight->SetMin( 2 );
-            mpFtPosX->Hide();
-            mpMtrPosX->Hide();
-            mpFtPosY->Hide();
-            mpMtrPosY->Hide();
-
-            //rotation
-            mpFtAngle->Hide();
-            mpMtrAngle->Hide();
-            mpDial->Hide();
-
-            //flip
-            mpFlipTbx->Hide();
-            mpFtFlip->Hide();
-            mbIsFlip = false;
-
-            if (mxSidebar.is())
-                mxSidebar->requestLayout();
-        }
-        break;
-
-        case 2:
-        {
-            mpMtrWidth->SetMin( 1 );
-            mpMtrHeight->SetMin( 1 );
-            mpFtPosX->Show();
-            mpMtrPosX->Show();
-            mpFtPosY->Show();
-            mpMtrPosY->Show();
-
-            //rotation
-            mpFtAngle->Show();
-            mpMtrAngle->Show();
-            mpDial->Show();
-
-            //flip
-            mpFlipTbx->Show();
-            mpFtFlip->Show();
-            mbIsFlip = true;
-
-            if (mxSidebar.is())
-                mxSidebar->requestLayout();
-        }
-        break;
-
-        case 3:
-        {
-            mpMtrWidth->SetMin( 1 );
-            mpMtrHeight->SetMin( 1 );
-            mpFtPosX->Show();
-            mpMtrPosX->Show();
-            mpFtPosY->Show();
-            mpMtrPosY->Show();
-
-            //rotation
-            mpFtAngle->Hide();
-            mpMtrAngle->Hide();
-            mpDial->Hide();
-
-            //flip
-            mpFlipTbx->Hide();
-            mpFtFlip->Hide();
-            mbIsFlip = false;
-
-            if (mxSidebar.is())
-                mxSidebar->requestLayout();
-        }
-        break;
-    }
+    if (mxSidebar.is())
+        mxSidebar->requestLayout();
 }
 
 
