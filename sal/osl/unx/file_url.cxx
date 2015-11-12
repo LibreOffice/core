@@ -22,6 +22,7 @@
 #include "system.hxx"
 
 #include <cassert>
+#include <stdexcept>
 #include <limits.h>
 #include <errno.h>
 #include <strings.h>
@@ -204,8 +205,13 @@ oslFileError getSystemPathFromFileUrl(
 oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath )
 {
     OUString path;
-    auto e = getSystemPathFromFileUrl(
-        OUString::unacquired(&ustrFileURL), &path, true);
+    oslFileError e;
+    try {
+        e = getSystemPathFromFileUrl(
+            OUString::unacquired(&ustrFileURL), &path, true);
+    } catch (std::length_error) {
+        e = osl_File_E_RANGE;
+    }
     if (e == osl_File_E_None) {
         rtl_uString_assign(pustrSystemPath, path.pData);
     }
