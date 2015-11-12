@@ -145,6 +145,7 @@
 #include <xmloff/odffields.hxx>
 
 #include <PostItMgr.hxx>
+#include <SidebarWin.hxx>
 #include <FrameControlsManager.hxx>
 
 #include <algorithm>
@@ -1331,6 +1332,15 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
+
+    if (comphelper::LibreOfficeKit::isActive() && m_rView.GetPostItMgr())
+    {
+        if (vcl::Window* pWindow = m_rView.GetPostItMgr()->GetActiveSidebarWin())
+        {
+            pWindow->KeyInput(rKEvt);
+            return;
+        }
+    }
 
     if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
         m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard )

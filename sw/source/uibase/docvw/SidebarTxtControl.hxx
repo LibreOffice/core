@@ -40,7 +40,6 @@ class SidebarTextControl : public Control
 
     protected:
         virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
-        virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
         virtual void    MouseMove( const MouseEvent& rMEvt ) override;
         virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
         virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
@@ -61,6 +60,7 @@ class SidebarTextControl : public Control
         virtual void dispose() override;
 
         virtual void GetFocus() override;
+        virtual void KeyInput( const KeyEvent& rKeyEvt ) override;
 
         OutlinerView* GetTextView() const;
 
