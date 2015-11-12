@@ -283,16 +283,12 @@ void ScXMLConverter::ConvertCellRangeAddress(OUString& sFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
     bool bInQuotationMarks(false);
-    bool bInDoubleQuotationMarks(false);
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); ++i)
     {
-        if (sFormula[i] == '\'' && !bInDoubleQuotationMarks &&
-            chPrevious != '\\')
+        if (sFormula[i] == '\'' && chPrevious != '\\')
             bInQuotationMarks = !bInQuotationMarks;
-        else if (sFormula[i] == '"' && !bInQuotationMarks)
-            bInDoubleQuotationMarks = !bInDoubleQuotationMarks;
-        if (bInQuotationMarks || bInDoubleQuotationMarks)
+        if (bInQuotationMarks)
             sBuffer.append(sFormula[i]);
         else if ((sFormula[i] != '.') ||
                 !((chPrevious == ':') || (chPrevious == ' ') || (chPrevious == '=')))
