@@ -4150,7 +4150,7 @@ ScCellRangesBase* ScCellRangesBase::getImplementation(const uno::Reference<uno::
     return pRet;
 }
 
-typedef boost::ptr_vector<ScNamedEntry> ScNamedEntryArr_Impl;
+typedef std::vector<ScNamedEntry> ScNamedEntryArr_Impl;
 
 struct ScCellRangesObj::Impl
 {
@@ -4459,9 +4459,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
                 //  if a name is given, also insert into list of named entries
                 //  (only possible for a single range)
                 //  name is not in m_pImpl->m_aNamedEntries (tested above)
-
-                ScNamedEntry* pEntry = new ScNamedEntry( aNamStr, *rAddRanges[ 0 ] );
-                m_pImpl->m_aNamedEntries.push_back(pEntry);
+                m_pImpl->m_aNamedEntries.push_back(ScNamedEntry( aNamStr, *rAddRanges[ 0 ] ));
             }
         }
     }
