@@ -188,7 +188,7 @@
           <value>true</value>
         </prop>
         <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="ContextSensitive" oor:type="xs:boolean">
           <value>true</value>
