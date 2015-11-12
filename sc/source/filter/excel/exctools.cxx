@@ -188,60 +188,54 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
     rIn.Ignore( 1 );       // statt nUser!
 
     if( nName )
-        pName = new OUString( rIn.ReadUniString( nName ) );
+        aName = rIn.ReadUniString( nName );
     else
     {
-        pName = new OUString( "Scenery" );
+        aName = "Scenery";
         rIn.Ignore( 1 );
     }
 
-    pUserName = new OUString( rIn.ReadUniString() );
+    aUserName = rIn.ReadUniString();
 
     if( nComment )
-        pComment = new OUString( rIn.ReadUniString() );
+        aComment = rIn.ReadUniString();
     else
-        pComment = new OUString;
+        aComment;
 
     sal_uInt16          n = nCref;
     sal_uInt16          nC, nR;
+    aEntries.reserve(n);
     while( n )
     {
         nR = rIn.ReaduInt16();
         nC = rIn.ReaduInt16();
 
-        aEntries.push_back(new ExcScenarioCell( nC, nR ));
+        aEntries.push_back(ExcScenarioCell( nC, nR ));
 
         n--;
     }
 
     n = nCref;
 
-    boost::ptr_vector<ExcScenarioCell>::iterator iter;
+    std::vector<ExcScenarioCell>::iterator iter;
     for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
         iter->SetValue(rIn.ReadUniString());
-}
-
-ExcScenario::~ExcScenario()
-{
-    delete pName;
-    delete pComment;
-    delete pUserName;
 }
 
 void ExcScenario::Apply( const XclImpRoot& rRoot, const bool bLast )
 {
     ScDocument&         r = rRoot.GetDoc();
-    OUString            aSzenName( *pName );
-    sal_uInt16              nNewTab = nTab + 1;
+    OUString            aSzenName( aName );
+    sal_uInt16          nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
         return;
 
     r.SetScenario( nNewTab, true );
     // do not show scenario frames
-    r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
+    r.SetScenarioData( nNewTab, aComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
 
-    boost::ptr_vector<ExcScenarioCell>::const_iterator iter;
+    std::vector<ExcScenarioCell>::const_iterator iter;
     for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
     {
         sal_uInt16 nCol = iter->nCol;
@@ -268,11 +262,11 @@ void ExcScenarioList::Apply( const XclImpRoot& rRoot )
 {
     sal_uInt16 n = static_cast<sal_uInt16>(aEntries.size());
 
-    boost::ptr_vector<ExcScenario>::reverse_iterator iter;
+    std::vector< std::unique_ptr<ExcScenario> >::reverse_iterator iter;
     for (iter = aEntries.rbegin(); iter != aEntries.rend(); ++iter)
     {
         n--;
-        iter->Apply(rRoot, n == nLastScenario);
+        (*iter)->Apply(rRoot, n == nLastScenario);
     }
 }
 

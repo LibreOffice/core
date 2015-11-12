@@ -104,6 +104,7 @@
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <unotools/streamwrap.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 using namespace ::comphelper;
@@ -279,7 +280,7 @@ void ImportExcel8::Scenman()
 
 void ImportExcel8::Scenario()
 {
-    maScenList.aEntries.push_back( new ExcScenario( aIn, *pExcRoot ) );
+    maScenList.aEntries.push_back( o3tl::make_unique<ExcScenario>( aIn, *pExcRoot ) );
 }
 
 void ImportExcel8::Labelsst()

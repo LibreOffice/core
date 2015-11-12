@@ -20,7 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCSCEN_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXCSCEN_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 #include <rtl/ustring.hxx>
 
 struct RootData;
@@ -48,18 +49,16 @@ public:
 
     ExcScenario( XclImpStream& rIn, const RootData& rRoot );
 
-    ~ExcScenario();
-
     void Apply( const XclImpRoot& rRoot, const bool bLast = false );
 
 protected:
 
-    OUString* pName;
-    OUString* pComment;
-    OUString* pUserName;
-    sal_uInt8 nProtected;
+    OUString         aName;
+    OUString         aComment;
+    OUString         aUserName;
+    sal_uInt8        nProtected;
     const sal_uInt16 nTab;
-    boost::ptr_vector<ExcScenarioCell> aEntries;
+    std::vector<ExcScenarioCell> aEntries;
 };
 
 struct ExcScenarioList
@@ -69,7 +68,7 @@ struct ExcScenarioList
     void Apply( const XclImpRoot& rRoot );
 
     sal_uInt16 nLastScenario;
-    boost::ptr_vector<ExcScenario> aEntries;
+    std::vector< std::unique_ptr<ExcScenario> > aEntries;
 };
 
 #endif
