@@ -16,6 +16,7 @@
 #include "document.hxx"
 
 #include "rangeutl.hxx"
+#include <o3tl/make_unique.hxx>
 
 using ::oox::core::ContextHandlerRef;
 
@@ -79,7 +80,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
 {
     if (mpCurrentRule)
     {
-        ScFormatEntry& rFormat = *maEntries.rbegin();
+        ScFormatEntry& rFormat = *maEntries.rbegin()->get();
         assert(rFormat.GetType() == condformat::ICONSET);
         ScIconSetFormat& rIconSet = static_cast<ScIconSetFormat&>(rFormat);
         ScDocument* pDoc = &getScDocument();
@@ -111,8 +112,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         {
             ScDocument* pDoc = &getScDocument();
             mpCurrentRule = new IconSetRule(*this);
-            ScIconSetFormat* pIconSet = new ScIconSetFormat(pDoc);
-            maEntries.push_back(pIconSet);
+            maEntries.push_back(o3tl::make_unique<ScIconSetFormat>(pDoc));
             return new IconSetContext(*this, mpCurrentRule);
         }
         else

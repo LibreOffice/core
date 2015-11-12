@@ -14,7 +14,8 @@
 #include "worksheetfragment.hxx"
 #include "workbookfragment.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 struct ScDataBarFormatData;
 class ScFormatEntry;
@@ -50,7 +51,7 @@ public:
 
 private:
     OUString aChars;
-    boost::ptr_vector<ScFormatEntry> maEntries;
+    std::vector<std::unique_ptr<ScFormatEntry> > maEntries;
     IconSetRule* mpCurrentRule;
 };
 

@@ -269,14 +269,14 @@ public:
 class ExtCfCondFormat
 {
 public:
-    ExtCfCondFormat(const ScRangeList& aRange, boost::ptr_vector<ScFormatEntry>& rEntries);
+    ExtCfCondFormat(const ScRangeList& aRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries);
     ~ExtCfCondFormat();
 
     const ScRangeList& getRange();
-    const boost::ptr_vector<ScFormatEntry>& getEntries();
+    const std::vector< std::unique_ptr<ScFormatEntry> >& getEntries();
 
 private:
-    boost::ptr_vector<ScFormatEntry> maEntries;
+    std::vector< std::unique_ptr<ScFormatEntry> > maEntries;
     ScRangeList maRange;
 };
 

@@ -1159,10 +1159,10 @@ void CondFormatBuffer::finalizeImport()
             pDoc->AddCondFormatData(rRange, nTab, nKey);
         }
 
-        const boost::ptr_vector<ScFormatEntry>& rEntries = itr->getEntries();
+        const std::vector< std::unique_ptr<ScFormatEntry> >& rEntries = itr->getEntries();
         for (auto i = rEntries.begin(); i != rEntries.end(); ++i)
         {
-            pFormat->AddEntry(i->Clone(pDoc));
+            pFormat->AddEntry((*i)->Clone(pDoc));
         }
     }
 }
@@ -1328,10 +1328,10 @@ void ExtCfDataBarRule::importCfvo( const AttributeList& rAttribs )
     maModel.maColorScaleType = rAttribs.getString( XML_type, OUString() );
 }
 
-ExtCfCondFormat::ExtCfCondFormat(const ScRangeList& rRange, boost::ptr_vector<ScFormatEntry>& rEntries):
+ExtCfCondFormat::ExtCfCondFormat(const ScRangeList& rRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries):
     maRange(rRange)
 {
-    maEntries.transfer(maEntries.begin(), rEntries.begin(), rEntries.end(), rEntries);
+    maEntries.swap(rEntries);
 }
 
 ExtCfCondFormat::~ExtCfCondFormat()
@@ -1343,7 +1343,7 @@ const ScRangeList& ExtCfCondFormat::getRange()
     return maRange;
 }
 
-const boost::ptr_vector<ScFormatEntry>& ExtCfCondFormat::getEntries()
+const std::vector< std::unique_ptr<ScFormatEntry> >& ExtCfCondFormat::getEntries()
 {
     return maEntries;
 }
