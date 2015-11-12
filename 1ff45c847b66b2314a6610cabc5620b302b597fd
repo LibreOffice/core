@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_79c1982e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T12:08:47Z",
+      "side": 1,
+      "message": "So what\u0027s the point of renaming the SIDs then?",
+      "revId": "1ff45c847b66b2314a6610cabc5620b302b597fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_d9b524d1",
+        "filename": "sd/source/ui/controller/displaymodecontroller.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T12:08:47Z",
+      "side": 1,
+      "message": "Does it really incorporate Apache code?",
+      "revId": "1ff45c847b66b2314a6610cabc5620b302b597fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_19b04cdd",
+        "filename": "sd/source/ui/controller/displaymodecontroller.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T12:08:47Z",
+      "side": 1,
+      "message": "No reason to keep those as a separate functions",
+      "revId": "1ff45c847b66b2314a6610cabc5620b302b597fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_b9bae0be",
+        "filename": "sd/source/ui/controller/displaymodecontroller.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T12:08:47Z",
+      "side": 1,
+      "message": "???",
+      "revId": "1ff45c847b66b2314a6610cabc5620b302b597fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_f9b468d2",
+        "filename": "sd/source/ui/controller/displaymodecontroller.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T12:08:47Z",
+      "side": 1,
+      "message": "Should check the return value of this, before de-referencing the ToolBox.",
+      "revId": "1ff45c847b66b2314a6610cabc5620b302b597fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_59cad450",
+        "filename": "sd/source/ui/controller/displaymodecontroller.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T12:08:47Z",
+      "side": 1,
+      "message": "This is the wrong approach. The command URL should be taken from the css::uno::Sequence that passed to this constructor, or using the XInitialization-based late initialization (svt::ToolboxController::initialize already takes care to init the command URL).",
+      "revId": "1ff45c847b66b2314a6610cabc5620b302b597fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_99c43c41",
+        "filename": "sd/source/ui/view/drviewse.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T12:08:47Z",
+      "side": 1,
+      "message": "Is this include used somewhere?",
+      "revId": "1ff45c847b66b2314a6610cabc5620b302b597fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_39c71047",
+        "filename": "sd/uiconfig/simpress/toolbar/standardbar.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T12:08:47Z",
+      "side": 1,
+      "message": "This toolbar:style won\u0027t survive customization. You should set the bits in the controller, the same way we do already in other controllers.",
+      "revId": "1ff45c847b66b2314a6610cabc5620b302b597fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
