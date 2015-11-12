@@ -3399,8 +3399,10 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         nModCode |= KEY_SHIFT;
     if ( GetKeyState( VK_CONTROL ) & 0x8000 )
         nModCode |= KEY_MOD1;
-    if ( GetKeyState( VK_MENU ) & 0x8000 )
+    if ( GetKeyState( VK_LMENU ) & 0x8000 )
         nModCode |= KEY_MOD2;
+    if ( GetKeyState( VK_RMENU ) & 0x8000 )  // this is the ALTGR-Key in this case
+        nModCode &= ~KEY_MOD1;               // remove the Control flag
 
     if ( (nMsg == WM_CHAR) || (nMsg == WM_SYSCHAR) )
     {
@@ -3606,13 +3608,6 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 aKeyEvt.mnTime      = GetMessageTime();
                 aKeyEvt.mnCode     |= nModCode;
                 aKeyEvt.mnRepeat    = nRepeat;
-
-                if( (nModCode & (KEY_MOD1|KEY_MOD2)) == (KEY_MOD1|KEY_MOD2) &&
-                    aKeyEvt.mnCharCode )
-                {
-                     // this is actually AltGr and should not be handled as Alt
-                     aKeyEvt.mnCode &= ~(KEY_MOD1|KEY_MOD2);
-                }
 
                 bIgnoreCharMsg = bCharPeek ? TRUE : FALSE;
                 long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
