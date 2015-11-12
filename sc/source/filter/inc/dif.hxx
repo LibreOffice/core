@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_DIF_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_DIF_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 #include <rtl/ustring.hxx>
 
@@ -153,8 +153,8 @@ class DifColumn
         SCROW nEnd;
     };
 
-    ENTRY *pAkt;
-    boost::ptr_vector<ENTRY> aEntries;
+    ENTRY *mpAkt;
+    std::vector<ENTRY> maEntries;
 
     DifColumn();
 
