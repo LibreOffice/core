@@ -52,6 +52,7 @@
 
 #include <oox/token/tokens.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -3090,7 +3091,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                             pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
                         }
 
-                        maDxf.push_back(new XclExpDxf( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pColor ));
+                        maDxf.push_back(o3tl::make_unique<XclExpDxf>( rRoot, pAlign, pBorder, pFont, pNumFormat, pCellProt, pColor ));
                         ++nIndex;
                     }
 
@@ -3120,7 +3121,7 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
 
     for ( DxfContainer::iterator itr = maDxf.begin(); itr != maDxf.end(); ++itr )
     {
-        itr->SaveXml( rStrm );
+        (*itr)->SaveXml( rStrm );
     }
 
     rStyleSheet->endElement( XML_dxfs );

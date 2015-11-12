@@ -31,7 +31,7 @@
 #include "conditio.hxx"
 #include "fonthelper.hxx"
 #include <memory>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
@@ -735,7 +735,7 @@ public:
 
     virtual void SaveXml( XclExpXmlStream& rStrm) override;
 private:
-    typedef boost::ptr_vector<XclExpDxf> DxfContainer;
+    typedef std::vector< std::unique_ptr<XclExpDxf> > DxfContainer;
     std::map<OUString, sal_Int32> maStyleNameToDxfId;
     DxfContainer maDxf;
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
