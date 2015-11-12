@@ -284,7 +284,6 @@ void ScXMLConverter::ConvertCellRangeAddress(OUString& sFormula)
     OUStringBuffer sBuffer(sFormula.getLength());
     bool bInQuotationMarks(false);
     bool bInDoubleQuotationMarks(false);
-    sal_Int16 nCountBraces(0);
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); ++i)
     {
@@ -295,17 +294,12 @@ void ScXMLConverter::ConvertCellRangeAddress(OUString& sFormula)
             bInDoubleQuotationMarks = !bInDoubleQuotationMarks;
         if (bInQuotationMarks || bInDoubleQuotationMarks)
             sBuffer.append(sFormula[i]);
-        else if (sFormula[i] == '[')
-            ++nCountBraces;
-        else if (sFormula[i] == ']')
-            nCountBraces--;
         else if ((sFormula[i] != '.') ||
-                !((chPrevious == '[') || (chPrevious == ':') || (chPrevious == ' ') || (chPrevious == '=')))
+                !((chPrevious == ':') || (chPrevious == ' ') || (chPrevious == '=')))
                 sBuffer.append(sFormula[i]);
         chPrevious = sFormula[i];
     }
 
-    OSL_ENSURE(nCountBraces == 0, "there are some braces still open");
     sFormula = sBuffer.makeStringAndClear();
 }
 
