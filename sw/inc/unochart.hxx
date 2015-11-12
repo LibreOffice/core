@@ -278,7 +278,7 @@ protected:
 
 public:
     SwChartDataSequence( SwChartDataProvider &rProvider,
-                         SwFrameFormat   &rTblFmt,
+                         SwFrameFormat   &rTableFormat,
                          std::shared_ptr<SwUnoCrsr> pTableCursor );
     virtual ~SwChartDataSequence();
 

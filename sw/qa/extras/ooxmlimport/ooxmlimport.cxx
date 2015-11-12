@@ -2887,12 +2887,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf91417, "tdf91417.docx")
 DECLARE_OOXMLIMPORT_TEST(testTdf90810, "tdf90810short.docx")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XFootnotesSupplier> xFtnSupp(xTextDocument, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFtnIdxAcc(xFtnSupp->getFootnotes(), uno::UNO_QUERY);
-    uno::Reference<text::XFootnote> xFtn(xFtnIdxAcc->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XText> xFtnText(xFtn, uno::UNO_QUERY);
-    rtl::OUString sFtnText = xFtnText->getString();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(90), static_cast<sal_Int32>(sFtnText.getLength()));
+    uno::Reference<text::XFootnotesSupplier> xFootnoteSupp(xTextDocument, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnoteIdxAcc(xFootnoteSupp->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XFootnote> xFootnote(xFootnoteIdxAcc->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xFootnoteText(xFootnote, uno::UNO_QUERY);
+    rtl::OUString sFootnoteText = xFootnoteText->getString();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(90), static_cast<sal_Int32>(sFootnoteText.getLength()));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf89165, "tdf89165.docx")

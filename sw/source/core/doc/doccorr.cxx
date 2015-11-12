@@ -121,7 +121,7 @@ void PaMCorrAbs( const SwPaM& rRange,
         }
     }
 
-    for(const auto& pWeakUnoCrsr : pDoc->mvUnoCrsrTbl)
+    for(const auto& pWeakUnoCrsr : pDoc->mvUnoCrsrTable)
     {
         auto pUnoCursor(pWeakUnoCrsr.lock());
         if(!pUnoCursor)
@@ -142,11 +142,11 @@ void PaMCorrAbs( const SwPaM& rRange,
             bChange |= lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
         }
 
-        SwUnoTableCrsr *const pUnoTblCrsr =
+        SwUnoTableCrsr *const pUnoTableCrsr =
             dynamic_cast<SwUnoTableCrsr *>(pUnoCursor.get());
-        if( pUnoTblCrsr )
+        if( pUnoTableCrsr )
         {
-            for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
+            for(SwPaM& rPaM : (&pUnoTableCrsr->GetSelRing())->GetRingContainer())
             {
                 bChange |=
                     lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
@@ -274,7 +274,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
        }
     }
 
-    for(const auto& pWeakUnoCrsr : pDoc->mvUnoCrsrTbl)
+    for(const auto& pWeakUnoCrsr : pDoc->mvUnoCrsrTable)
     {
         auto pUnoCrsr(pWeakUnoCrsr.lock());
         if(!pUnoCrsr)
@@ -284,11 +284,11 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
             lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
         }
 
-        SwUnoTableCrsr* pUnoTblCrsr =
+        SwUnoTableCrsr* pUnoTableCrsr =
             dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
-        if( pUnoTblCrsr )
+        if( pUnoTableCrsr )
         {
-            for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
+            for(SwPaM& rPaM : (&pUnoTableCrsr->GetSelRing())->GetRingContainer())
             {
                 lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
             }

@@ -334,7 +334,7 @@ public:
      * If the void* casts wrongly, it's its own fault!
      * The void* must be checked for 0 in any case!
      *
-     * return true if the Portion associated with this SwTxtFrm was
+     * return true if the Portion associated with this SwTextFrm was
      * potentially destroyed and replaced by Prepare
      */
     virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,

@@ -1641,17 +1641,17 @@ public:
     void dumpAsXml(struct _xmlTextWriter* = nullptr) const;
 
     std::set<Color> GetDocColors();
-    std::vector< std::weak_ptr<SwUnoCrsr> > mvUnoCrsrTbl;
+    std::vector< std::weak_ptr<SwUnoCrsr> > mvUnoCrsrTable;
 
     // Remove expired UnoCrsr weak pointers the document keeps to notify about document death.
-    void cleanupUnoCrsrTbl()
+    void cleanupUnoCrsrTable()
     {
         // In most cases we'll remove most of the elements.
-        std::vector< std::weak_ptr<SwUnoCrsr> > unoCrsrTbl;
-        std::copy_if(mvUnoCrsrTbl.begin(), mvUnoCrsrTbl.end(),
-                     std::back_inserter(unoCrsrTbl),
+        std::vector< std::weak_ptr<SwUnoCrsr> > unoCrsrTable;
+        std::copy_if(mvUnoCrsrTable.begin(), mvUnoCrsrTable.end(),
+                     std::back_inserter(unoCrsrTable),
                      [](const std::weak_ptr<SwUnoCrsr>& pWeakPtr) { return !pWeakPtr.expired(); });
-        std::swap(mvUnoCrsrTbl, unoCrsrTbl);
+        std::swap(mvUnoCrsrTable, unoCrsrTable);
     }
 
 private:

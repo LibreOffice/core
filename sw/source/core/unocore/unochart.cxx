@@ -366,7 +366,7 @@ static void GetTableByName( const SwDoc &rDoc, const OUString &rTableName,
 static void GetFormatAndCreateCursorFromRangeRep(
         const SwDoc    *pDoc,
         const OUString &rRangeRepresentation,   // must be a single range (i.e. so called sub-range)
-        SwFrameFormat    **ppTblFmt,     // will be set to the table format of the table used in the range representation
+        SwFrameFormat    **ppTableFormat,     // will be set to the table format of the table used in the range representation
         std::shared_ptr<SwUnoCrsr>&   rpUnoCrsr )   // will be set to cursor spanning the cell range (cursor will be created!)
 {
     OUString aTableName;    // table name
@@ -377,8 +377,8 @@ static void GetFormatAndCreateCursorFromRangeRep(
 
     if (!bNamesFound)
     {
-        if (ppTblFmt)
-            *ppTblFmt   = nullptr;
+        if (ppTableFormat)
+            *ppTableFormat   = nullptr;
         rpUnoCrsr.reset();
     }
     else
@@ -386,12 +386,12 @@ static void GetFormatAndCreateCursorFromRangeRep(
         SwFrameFormat *pTableFormat = nullptr;
 
         // is the correct table format already provided?
-        if (*ppTblFmt != nullptr  &&  (*ppTblFmt)->GetName() == aTableName)
-            pTableFormat = *ppTblFmt;
+        if (*ppTableFormat != nullptr  &&  (*ppTableFormat)->GetName() == aTableName)
+            pTableFormat = *ppTableFormat;
         else
             GetTableByName( *pDoc, aTableName, &pTableFormat, nullptr );
 
-        *ppTblFmt = pTableFormat;
+        *ppTableFormat = pTableFormat;
 
         rpUnoCrsr.reset();  // default result in case of failure
 

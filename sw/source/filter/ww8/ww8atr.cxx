@@ -3272,7 +3272,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
     }
 }
 
-void WW8AttributeOutput::ParaNumRule_Impl(const SwTextNode* /*pTxtNd*/,
+void WW8AttributeOutput::ParaNumRule_Impl(const SwTextNode* /*pTextNd*/,
         sal_Int32 const nLvl, sal_Int32 const nNumId)
 {
     // write sprmPIlvl and sprmPIlfo

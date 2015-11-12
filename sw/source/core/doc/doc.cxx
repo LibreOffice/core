@@ -1680,15 +1680,15 @@ bool SwDoc::ContainsHiddenChars() const
     return false;
 }
 
-std::shared_ptr<SwUnoCrsr> SwDoc::CreateUnoCrsr( const SwPosition& rPos, bool bTblCrsr )
+std::shared_ptr<SwUnoCrsr> SwDoc::CreateUnoCrsr( const SwPosition& rPos, bool bTableCrsr )
 {
     std::shared_ptr<SwUnoCrsr> pNew;
-    if( bTblCrsr )
+    if( bTableCrsr )
         pNew = std::make_shared<SwUnoTableCrsr>(rPos);
     else
         pNew = std::make_shared<SwUnoCrsr>(rPos);
 
-    mvUnoCrsrTbl.push_back( pNew );
+    mvUnoCrsrTable.push_back( pNew );
     return pNew;
 }
 

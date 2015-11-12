@@ -426,7 +426,7 @@ SwDoc::~SwDoc()
     getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAndDestroyAll();
 
     const sw::DocDisposingHint aHint;
-    for(const auto& pWeakCursor : mvUnoCrsrTbl)
+    for(const auto& pWeakCursor : mvUnoCrsrTable)
     {
         auto pCursor(pWeakCursor.lock());
         if(pCursor)
