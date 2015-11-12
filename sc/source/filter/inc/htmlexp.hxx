@@ -24,7 +24,7 @@
 #include <rtl/textenc.h>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 #include <memory>
 
 #include "expbase.hxx"
@@ -102,7 +102,7 @@ class ScHTMLExport : public ScExportBase
     static const sal_Char sIndentSource[];
 
     typedef std::unique_ptr<std::map<OUString, OUString> > FileNameMapPtr;
-    typedef boost::ptr_vector<ScHTMLGraphEntry> GraphEntryList;
+    typedef std::vector<ScHTMLGraphEntry> GraphEntryList;
 
     GraphEntryList   aGraphList;
     ScHTMLStyle      aHTMLStyle;
