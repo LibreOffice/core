@@ -1310,10 +1310,27 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         aValues.add_child(sStyleFam.toUtf8().getStr(), aChildren);
     }
 
-    boost::property_tree::ptree aChildClearFormat;
-    OUString sClearFormat = SVX_RESSTR( RID_SVXSTR_CLEARFORM );
-    aChildClearFormat.put("", sClearFormat.toUtf8());
-    aValues.add_child("ClearStyle", aChildClearFormat);
+    {
+        boost::property_tree::ptree aCommandList;
+
+        {
+            boost::property_tree::ptree aChild;
+
+            OUString sClearFormat = SVX_RESSTR( RID_SVXSTR_CLEARFORM );
+
+            boost::property_tree::ptree aName;
+            aName.put("", sClearFormat.toUtf8());
+            aChild.push_back(std::make_pair("text", aName));
+
+            boost::property_tree::ptree aCommand;
+            aCommand.put("", ".uno:ResetAttributes");
+            aChild.push_back(std::make_pair("id", aCommand));
+
+            aCommandList.push_back(std::make_pair("", aChild));
+        }
+
+        aValues.add_child("Commands", aCommandList);
+    }
 
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
