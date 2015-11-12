@@ -25,7 +25,7 @@
 #define __ORCUS_STATIC_LIB
 #include <orcus/spreadsheet/import_interface.hpp>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 #include <map>
 #include <unordered_map>
 #include <vector>
@@ -455,7 +455,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
     StringCellCaches maStringCells;
     ScOrcusGlobalSettings maGlobalSettings;
     ScOrcusSharedStrings maSharedStrings;
-    boost::ptr_vector<ScOrcusSheet> maSheets;
+    std::vector< std::unique_ptr<ScOrcusSheet> > maSheets;
     ScOrcusStyles maStyles;
 
     int mnProgress;
