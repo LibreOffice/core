@@ -78,7 +78,7 @@
     { \
         if ( IsReschedule() )  \
         { \
-            ::RescheduleProgress( pImp->GetShell()->GetDoc()->GetDocShell() ); \
+            ::RescheduleProgress( m_pImp->GetShell()->GetDoc()->GetDocShell() ); \
         } \
     }
 
@@ -88,7 +88,7 @@ void SwLayAction::CheckWaitCrsr()
     if ( !IsWait() && IsWaitAllowed() && IsPaint() &&
          ((std::clock() - GetStartTicks()) * 1000 / CLOCKS_PER_SEC >= CLOCKS_PER_SEC/2) )
     {
-        pWait = new SwWait( *pRoot->GetFormat()->GetDoc()->GetDocShell(), true );
+        m_pWait = new SwWait( *m_pRoot->GetFormat()->GetDoc()->GetDocShell(), true );
     }
 }
 
@@ -96,18 +96,18 @@ void SwLayAction::CheckWaitCrsr()
 inline void SwLayAction::CheckIdleEnd()
 {
     if ( !IsInput() )
-        bInput = bool(GetInputType()) && Application::AnyInput( GetInputType() );
+        m_bInput = bool(GetInputType()) && Application::AnyInput( GetInputType() );
 }
 
 void SwLayAction::SetStatBar( bool bNew )
 {
     if ( bNew )
     {
-        nEndPage = pRoot->GetPageNum();
-        nEndPage += nEndPage * 10 / 100;
+        m_nEndPage = m_pRoot->GetPageNum();
+        m_nEndPage += m_nEndPage * 10 / 100;
     }
     else
-        nEndPage = USHRT_MAX;
+        m_nEndPage = USHRT_MAX;
 }
 
 bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrm *pCnt,
@@ -186,7 +186,7 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrm *pCn
 
     bool bRetPaint = false;
     for ( SwRects::const_iterator it = aTmp.begin(); it != aTmp.end(); ++it )
-        bRetPaint |= pImp->GetShell()->AddPaintRect( *it );
+        bRetPaint |= m_pImp->GetShell()->AddPaintRect( *it );
     return bRetPaint;
 }
 
@@ -199,7 +199,7 @@ inline bool SwLayAction::_PaintContent( const SwContentFrm *pContent,
         if ( pPage->GetSortedObjs() )
             return PaintWithoutFlys( rRect, pContent, pPage );
         else
-            return pImp->GetShell()->AddPaintRect( rRect );
+            return m_pImp->GetShell()->AddPaintRect( rRect );
     }
     return false;
 }
@@ -259,42 +259,42 @@ void SwLayAction::PaintContent( const SwContentFrm *pCnt,
 }
 
 SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewShellImp *pI ) :
-    pRoot( pRt ),
-    pImp( pI ),
-    pOptTab( nullptr ),
-    pWait( nullptr ),
-    nPreInvaPage( USHRT_MAX ),
-    nStartTicks( std::clock() ),
-    nInputType( VclInputFlags::NONE ),
-    nEndPage( USHRT_MAX ),
-    nCheckPageNum( USHRT_MAX )
+    m_pRoot( pRt ),
+    m_pImp( pI ),
+    m_pOptTab( nullptr ),
+    m_pWait( nullptr ),
+    m_nPreInvaPage( USHRT_MAX ),
+    m_nStartTicks( std::clock() ),
+    m_nInputType( VclInputFlags::NONE ),
+    m_nEndPage( USHRT_MAX ),
+    m_nCheckPageNum( USHRT_MAX )
 {
-    bPaintExtraData = ::IsExtraData( pImp->GetShell()->GetDoc() );
-    bPaint = bComplete = bWaitAllowed = bCheckPages = true;
-    bInput = bAgain = bNextCycle = bCalcLayout = bIdle = bReschedule =
-    bUpdateExpFields = bBrowseActionStop = bActionInProgress = false;
+    m_bPaintExtraData = ::IsExtraData( m_pImp->GetShell()->GetDoc() );
+    m_bPaint = m_bComplete = m_bWaitAllowed = m_bCheckPages = true;
+    m_bInput = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
+    m_bUpdateExpFields = m_bBrowseActionStop = m_bActionInProgress = false;
     // OD 14.04.2003 #106346# - init new flag <mbFormatContentOnInterrupt>.
     mbFormatContentOnInterrupt = false;
 
-    assert(!pImp->m_pLayAction); // there can be only one SwLayAction
-    pImp->m_pLayAction = this;   // register there
+    assert(!m_pImp->m_pLayAction); // there can be only one SwLayAction
+    m_pImp->m_pLayAction = this;   // register there
 }
 
 SwLayAction::~SwLayAction()
 {
-    OSL_ENSURE( !pWait, "Wait object not destroyed" );
-    pImp->m_pLayAction = nullptr;      // unregister
+    OSL_ENSURE( !m_pWait, "Wait object not destroyed" );
+    m_pImp->m_pLayAction = nullptr;      // unregister
 }
 
 void SwLayAction::Reset()
 {
-    pOptTab = nullptr;
-    nStartTicks = std::clock();
-    nInputType = VclInputFlags::NONE;
-    nEndPage = nPreInvaPage = nCheckPageNum = USHRT_MAX;
-    bPaint = bComplete = bWaitAllowed = bCheckPages = true;
-    bInput = bAgain = bNextCycle = bCalcLayout = bIdle = bReschedule =
-    bUpdateExpFields = bBrowseActionStop = false;
+    m_pOptTab = nullptr;
+    m_nStartTicks = std::clock();
+    m_nInputType = VclInputFlags::NONE;
+    m_nEndPage = m_nPreInvaPage = m_nCheckPageNum = USHRT_MAX;
+    m_bPaint = m_bComplete = m_bWaitAllowed = m_bCheckPages = true;
+    m_bInput = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
+    m_bUpdateExpFields = m_bBrowseActionStop = false;
 }
 
 bool SwLayAction::RemoveEmptyBrowserPages()
@@ -302,10 +302,10 @@ bool SwLayAction::RemoveEmptyBrowserPages()
     // switching from the normal to the browser mode, empty pages may be
     // retained for an annoyingly long time, so delete them here
     bool bRet = false;
-    const SwViewShell *pSh = pRoot->GetCurrShell();
+    const SwViewShell *pSh = m_pRoot->GetCurrShell();
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
     {
-        SwPageFrm *pPage = static_cast<SwPageFrm*>(pRoot->Lower());
+        SwPageFrm *pPage = static_cast<SwPageFrm*>(m_pRoot->Lower());
         do
         {
             if ( (pPage->GetSortedObjs() && pPage->GetSortedObjs()->size()) ||
@@ -326,48 +326,48 @@ bool SwLayAction::RemoveEmptyBrowserPages()
 
 void SwLayAction::Action(OutputDevice* pRenderContext)
 {
-    bActionInProgress = true;
+    m_bActionInProgress = true;
 
     //TurboMode? Hands-off during idle-format
     if ( IsPaint() && !IsIdle() && TurboAction() )
     {
-        delete pWait, pWait = nullptr;
-        pRoot->ResetTurboFlag();
-        bActionInProgress = false;
-        pRoot->DeleteEmptySct();
+        delete m_pWait, m_pWait = nullptr;
+        m_pRoot->ResetTurboFlag();
+        m_bActionInProgress = false;
+        m_pRoot->DeleteEmptySct();
         return;
     }
-    else if ( pRoot->GetTurbo() )
+    else if ( m_pRoot->GetTurbo() )
     {
-        pRoot->DisallowTurbo();
-        const SwFrm *pFrm = pRoot->GetTurbo();
-        pRoot->ResetTurbo();
+        m_pRoot->DisallowTurbo();
+        const SwFrm *pFrm = m_pRoot->GetTurbo();
+        m_pRoot->ResetTurbo();
         pFrm->InvalidatePage();
     }
-    pRoot->DisallowTurbo();
+    m_pRoot->DisallowTurbo();
 
     if ( IsCalcLayout() )
         SetCheckPages( false );
 
     InternalAction(pRenderContext);
-    bAgain |= RemoveEmptyBrowserPages();
+    m_bAgain |= RemoveEmptyBrowserPages();
     while ( IsAgain() )
     {
-        bAgain = bNextCycle = false;
+        m_bAgain = m_bNextCycle = false;
         InternalAction(pRenderContext);
-        bAgain |= RemoveEmptyBrowserPages();
+        m_bAgain |= RemoveEmptyBrowserPages();
     }
-    pRoot->DeleteEmptySct();
+    m_pRoot->DeleteEmptySct();
 
-    delete pWait, pWait = nullptr;
+    delete m_pWait, m_pWait = nullptr;
 
     //Turbo-Action permitted again for all cases.
-    pRoot->ResetTurboFlag();
-    pRoot->ResetTurbo();
+    m_pRoot->ResetTurboFlag();
+    m_pRoot->ResetTurbo();
 
     SetCheckPages( true );
 
-    bActionInProgress = false;
+    m_bActionInProgress = false;
 }
 
 SwPageFrm* SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
@@ -427,19 +427,19 @@ static void unlockPositionOfObjects( SwPageFrm *pPageFrm )
 
 void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 {
-    OSL_ENSURE( pRoot->Lower()->IsPageFrm(), ":-( No page below the root.");
+    OSL_ENSURE( m_pRoot->Lower()->IsPageFrm(), ":-( No page below the root.");
 
-    pRoot->Calc(pRenderContext);
+    m_pRoot->Calc(pRenderContext);
 
     // Figure out the first invalid page or the first one to be formatted,
     // respectively. A complete-action means the first invalid page.
     // However, the first page to be formatted might be the one having the
     // number 1.  If we're doing a fake formatting, the number of the first
     // page is the number of the first visible page.
-    SwPageFrm *pPage = IsComplete() ? static_cast<SwPageFrm*>(pRoot->Lower()) :
-                pImp->GetFirstVisPage(pRenderContext);
+    SwPageFrm *pPage = IsComplete() ? static_cast<SwPageFrm*>(m_pRoot->Lower()) :
+                m_pImp->GetFirstVisPage(pRenderContext);
     if ( !pPage )
-        pPage = static_cast<SwPageFrm*>(pRoot->Lower());
+        pPage = static_cast<SwPageFrm*>(m_pRoot->Lower());
 
     // If there's a first-flow-Content in the first visible page that's also a Follow,
     // we switch the page back to the original master of that Content.
@@ -450,17 +450,17 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
     while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
         pPage = static_cast<SwPageFrm*>(pPage->GetNext());
 
-    IDocumentLayoutAccess& rLayoutAccess = pRoot->GetFormat()->getIDocumentLayoutAccess();
-    bool bNoLoop = pPage && SwLayouter::StartLoopControl( pRoot->GetFormat()->GetDoc(), pPage );
+    IDocumentLayoutAccess& rLayoutAccess = m_pRoot->GetFormat()->getIDocumentLayoutAccess();
+    bool bNoLoop = pPage && SwLayouter::StartLoopControl( m_pRoot->GetFormat()->GetDoc(), pPage );
     sal_uInt16 nPercentPageNum = 0;
-    while ( (pPage && !IsInterrupt()) || nCheckPageNum != USHRT_MAX )
+    while ( (pPage && !IsInterrupt()) || m_nCheckPageNum != USHRT_MAX )
     {
-        if (!pPage || (nCheckPageNum != USHRT_MAX && pPage->GetPhyPageNum() >= nCheckPageNum))
+        if (!pPage || (m_nCheckPageNum != USHRT_MAX && pPage->GetPhyPageNum() >= m_nCheckPageNum))
         {
-            if ( !pPage || pPage->GetPhyPageNum() > nCheckPageNum )
+            if ( !pPage || pPage->GetPhyPageNum() > m_nCheckPageNum )
             {
-                SwPageFrm *pPg = static_cast<SwPageFrm*>(pRoot->Lower());
-                while ( pPg && pPg->GetPhyPageNum() < nCheckPageNum )
+                SwPageFrm *pPg = static_cast<SwPageFrm*>(m_pRoot->Lower());
+                while ( pPg && pPg->GetPhyPageNum() < m_nCheckPageNum )
                     pPg = static_cast<SwPageFrm*>(pPg->GetNext());
                 if ( pPg )
                     pPage = pPg;
@@ -472,33 +472,33 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             SetCheckPages( true );
             SwFrm::CheckPageDescs( pPage, true, &pTmp );
             SetCheckPages( false );
-            nCheckPageNum = USHRT_MAX;
+            m_nCheckPageNum = USHRT_MAX;
             pPage = pTmp;
             continue;
         }
 
-        if ( nEndPage != USHRT_MAX && pPage->GetPhyPageNum() > nPercentPageNum )
+        if ( m_nEndPage != USHRT_MAX && pPage->GetPhyPageNum() > nPercentPageNum )
         {
             nPercentPageNum = pPage->GetPhyPageNum();
-            ::SetProgressState( nPercentPageNum, pImp->GetShell()->GetDoc()->GetDocShell());
+            ::SetProgressState( nPercentPageNum, m_pImp->GetShell()->GetDoc()->GetDocShell());
         }
-        pOptTab = nullptr;
+        m_pOptTab = nullptr;
 
         // No Shortcut for Idle or CalcLayout
         if ( !IsIdle() && !IsComplete() && IsShortCut( pPage ) )
         {
-            pRoot->DeleteEmptySct();
+            m_pRoot->DeleteEmptySct();
             XCHECKPAGE;
             if ( !IsInterrupt() &&
-                 (pRoot->IsSuperfluous() || pRoot->IsAssertFlyPages()) )
+                 (m_pRoot->IsSuperfluous() || m_pRoot->IsAssertFlyPages()) )
             {
-                if ( pRoot->IsAssertFlyPages() )
-                    pRoot->AssertFlyPages();
-                if ( pRoot->IsSuperfluous() )
+                if ( m_pRoot->IsAssertFlyPages() )
+                    m_pRoot->AssertFlyPages();
+                if ( m_pRoot->IsSuperfluous() )
                 {
                     bool bOld = IsAgain();
-                    pRoot->RemoveSuperfluous();
-                    bAgain = bOld;
+                    m_pRoot->RemoveSuperfluous();
+                    m_bAgain = bOld;
                 }
                 if ( IsAgain() )
                 {
@@ -506,7 +506,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         rLayoutAccess.GetLayouter()->EndLoopControl();
                     return;
                 }
-                pPage = static_cast<SwPageFrm*>(pRoot->Lower());
+                pPage = static_cast<SwPageFrm*>(m_pRoot->Lower());
                 while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
                     pPage = static_cast<SwPageFrm*>(pPage->GetNext());
                 while ( pPage && pPage->GetNext() &&
@@ -518,7 +518,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         }
         else
         {
-            pRoot->DeleteEmptySct();
+            m_pRoot->DeleteEmptySct();
             XCHECKPAGE;
 
             while ( !IsInterrupt() && !IsNextCycle() &&
@@ -578,7 +578,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                             pPage->InvalidateFlyLayout();
                             pPage->InvalidateFlyContent();
                             if ( IsBrowseActionStop() )
-                                bInput = true;
+                                m_bInput = true;
                         }
                     }
                     if( bNoLoop )
@@ -600,22 +600,22 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             {
                 SetNextCycle( false );
 
-                if ( nPreInvaPage != USHRT_MAX )
+                if ( m_nPreInvaPage != USHRT_MAX )
                 {
-                    if( !IsComplete() && nPreInvaPage + 2 < nFirstPageNum )
+                    if( !IsComplete() && m_nPreInvaPage + 2 < nFirstPageNum )
                     {
-                        pImp->SetFirstVisPageInvalid();
-                        SwPageFrm *pTmpPage = pImp->GetFirstVisPage(pRenderContext);
+                        m_pImp->SetFirstVisPageInvalid();
+                        SwPageFrm *pTmpPage = m_pImp->GetFirstVisPage(pRenderContext);
                         nFirstPageNum = pTmpPage->GetPhyPageNum();
-                        if( nPreInvaPage < nFirstPageNum )
+                        if( m_nPreInvaPage < nFirstPageNum )
                         {
-                            nPreInvaPage = nFirstPageNum;
+                            m_nPreInvaPage = nFirstPageNum;
                             pPage = pTmpPage;
                         }
                     }
-                    while ( pPage->GetPrev() && pPage->GetPhyPageNum() > nPreInvaPage )
+                    while ( pPage->GetPrev() && pPage->GetPhyPageNum() > m_nPreInvaPage )
                         pPage = static_cast<SwPageFrm*>(pPage->GetPrev());
-                    nPreInvaPage = USHRT_MAX;
+                    m_nPreInvaPage = USHRT_MAX;
                 }
 
                 while ( pPage->GetPrev() &&
@@ -640,15 +640,15 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             CheckIdleEnd();
         }
         if ( !pPage && !IsInterrupt() &&
-             (pRoot->IsSuperfluous() || pRoot->IsAssertFlyPages()) )
+             (m_pRoot->IsSuperfluous() || m_pRoot->IsAssertFlyPages()) )
         {
-            if ( pRoot->IsAssertFlyPages() )
-                pRoot->AssertFlyPages();
-            if ( pRoot->IsSuperfluous() )
+            if ( m_pRoot->IsAssertFlyPages() )
+                m_pRoot->AssertFlyPages();
+            if ( m_pRoot->IsSuperfluous() )
             {
                 bool bOld = IsAgain();
-                pRoot->RemoveSuperfluous();
-                bAgain = bOld;
+                m_pRoot->RemoveSuperfluous();
+                m_bAgain = bOld;
             }
             if ( IsAgain() )
             {
@@ -656,7 +656,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                     rLayoutAccess.GetLayouter()->EndLoopControl();
                 return;
             }
-            pPage = static_cast<SwPageFrm*>(pRoot->Lower());
+            pPage = static_cast<SwPageFrm*>(m_pRoot->Lower());
             while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
                 pPage = static_cast<SwPageFrm*>(pPage->GetNext());
             while ( pPage && pPage->GetNext() &&
@@ -684,7 +684,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         // already - the border of the page will never be painted.
         SwPageFrm *pPg = pPage;
         XCHECKPAGE;
-        const SwRect &rVis = pImp->GetShell()->VisArea();
+        const SwRect &rVis = m_pImp->GetShell()->VisArea();
 
         while( pPg && pPg->Frm().Bottom() < rVis.Top() )
             pPg = static_cast<SwPageFrm*>(pPg->GetNext());
@@ -783,7 +783,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         // reset flag for special interrupt content formatting.
         mbFormatContentOnInterrupt = false;
     }
-    pOptTab = nullptr;
+    m_pOptTab = nullptr;
     if( bNoLoop )
         rLayoutAccess.GetLayouter()->EndLoopControl();
 }
@@ -796,7 +796,7 @@ bool SwLayAction::_TurboAction( const SwContentFrm *pCnt )
     {
         const SwRect aOldRect( pCnt->UnionFrm( true ) );
         const long   nOldBottom = pCnt->Frm().Top() + pCnt->Prt().Bottom();
-        pCnt->Calc(pImp->GetShell()->GetOut());
+        pCnt->Calc(m_pImp->GetShell()->GetOut());
         if ( pCnt->Frm().Bottom() < aOldRect.Bottom() )
             pCnt->SetRetouche();
 
@@ -810,7 +810,7 @@ bool SwLayAction::_TurboAction( const SwContentFrm *pCnt )
             if ( nAllLines != static_cast<const SwTextFrm*>(pCnt)->GetAllLines() )
             {
                 if ( IsPaintExtraData() )
-                    pImp->GetShell()->AddPaintRect( pCnt->Frm() );
+                    m_pImp->GetShell()->AddPaintRect( pCnt->Frm() );
                 // This is to calculate the remaining LineNums on the page,
                 // and we don't stop processing here. To perform this inside RecalcAllLines
                 // would be expensive, because we would have to notify the page even
@@ -848,14 +848,14 @@ bool SwLayAction::TurboAction()
 {
     bool bRet = true;
 
-    if ( pRoot->GetTurbo() )
+    if ( m_pRoot->GetTurbo() )
     {
-        if ( !_TurboAction( pRoot->GetTurbo() ) )
+        if ( !_TurboAction( m_pRoot->GetTurbo() ) )
         {
             CheckIdleEnd();
             bRet = false;
         }
-        pRoot->ResetTurbo();
+        m_pRoot->ResetTurbo();
     }
     else
         bRet = false;
@@ -986,9 +986,9 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
  */
 bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
-    vcl::RenderContext* pRenderContext = pImp->GetShell()->GetOut();
+    vcl::RenderContext* pRenderContext = m_pImp->GetShell()->GetOut();
     bool bRet = false;
-    const SwViewShell *pSh = pRoot->GetCurrShell();
+    const SwViewShell *pSh = m_pRoot->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     // If the page is not valid, we quickly format it, otherwise
@@ -1016,7 +1016,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
             return false;
     }
 
-    const SwRect &rVis = pImp->GetShell()->VisArea();
+    const SwRect &rVis = m_pImp->GetShell()->VisArea();
     if ( (prPage->Frm().Top() >= rVis.Bottom()) ||
          (prPage->Frm().Left()>= rVis.Right()) )
     {
@@ -1268,7 +1268,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
                 // Is the change even visible?
                 if ( pLay->IsCompletePaint() )
                 {
-                    pImp->GetShell()->AddPaintRect( aPaint );
+                    m_pImp->GetShell()->AddPaintRect( aPaint );
                     bAddRect = false;
                 }
                 else
@@ -1276,18 +1276,18 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
                     SwRegionRects aRegion( aOldRect );
                     aRegion -= aPaint;
                     for ( size_t i = 0; i < aRegion.size(); ++i )
-                        pImp->GetShell()->AddPaintRect( aRegion[i] );
+                        m_pImp->GetShell()->AddPaintRect( aRegion[i] );
                     aRegion.ChangeOrigin( aPaint );
                     aRegion.clear();
                     aRegion.push_back( aPaint );
                     aRegion -= aOldRect;
                     for ( size_t i = 0; i < aRegion.size(); ++i )
-                        pImp->GetShell()->AddPaintRect( aRegion[i] );
+                        m_pImp->GetShell()->AddPaintRect( aRegion[i] );
                 }
             }
             else
             {
-                pImp->GetShell()->AddPaintRect( aPaint );
+                m_pImp->GetShell()->AddPaintRect( aPaint );
                 bAlreadyPainted = true;
                 // OD 11.11.2002 #104414# - remember frame at complete paint
                 aFrmAtCompletePaint = pLay->Frm();
@@ -1300,7 +1300,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
                 const SwViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
                 const SwTwips nHalfDocBorder = pSh ? pSh->GetViewOptions()->GetGapBetweenPages()
                                                    : SwViewOption::GetDefGapBetweenPages();
-                const bool bLeftToRightViewLayout = pRoot->IsLeftToRightViewLayout();
+                const bool bLeftToRightViewLayout = m_pRoot->IsLeftToRightViewLayout();
                 const bool bPrev = bLeftToRightViewLayout ? pLay->GetPrev() : pLay->GetNext();
                 const bool bNext = bLeftToRightViewLayout ? pLay->GetNext() : pLay->GetPrev();
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
@@ -1321,14 +1321,14 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
                     aSpaceToPrevPage.Top( aSpaceToPrevPage.Top() - nHalfDocBorder );
                     aSpaceToPrevPage.Bottom( pLay->Frm().Top() );
                     if(aSpaceToPrevPage.Height() > 0 && aSpaceToPrevPage.Width() > 0)
-                        pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
+                        m_pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
 
                     // left
                     aSpaceToPrevPage = aPageRect;
                     aSpaceToPrevPage.Left( aSpaceToPrevPage.Left() - nHalfDocBorder );
                     aSpaceToPrevPage.Right( pLay->Frm().Left() );
                     if(aSpaceToPrevPage.Height() > 0 && aSpaceToPrevPage.Width() > 0)
-                        pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
+                        m_pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
                 }
                 if ( bNext )
                 {
@@ -1337,14 +1337,14 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
                     aSpaceToNextPage.Bottom( aSpaceToNextPage.Bottom() + nHalfDocBorder );
                     aSpaceToNextPage.Top( pLay->Frm().Bottom() );
                     if(aSpaceToNextPage.Height() > 0 && aSpaceToNextPage.Width() > 0)
-                        pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
+                        m_pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
 
                     // right
                     aSpaceToNextPage = aPageRect;
                     aSpaceToNextPage.Right( aSpaceToNextPage.Right() + nHalfDocBorder );
                     aSpaceToNextPage.Left( pLay->Frm().Right() );
                     if(aSpaceToNextPage.Height() > 0 && aSpaceToNextPage.Width() > 0)
-                        pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
+                        m_pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
                 }
             }
         }
@@ -1358,7 +1358,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
         SWRECTFN( pLay );
         SwRect aRect( pLay->GetUpper()->PaintArea() );
         (aRect.*fnRect->fnSetTop)( (pLay->*fnRect->fnGetPrtBottom)() );
-        if ( !pImp->GetShell()->AddPaintRect( aRect ) )
+        if ( !m_pImp->GetShell()->AddPaintRect( aRect ) )
             pLay->ResetRetouche();
     }
 
@@ -1387,7 +1387,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
             else if( !pLow->IsSctFrm() || static_cast<SwSectionFrm*>(pLow)->GetSection() )
                 bChanged |= FormatLayout( pRenderContext, static_cast<SwLayoutFrm*>(pLow), bAddRect );
         }
-        else if ( pImp->GetShell()->IsPaintLocked() )
+        else if ( m_pImp->GetShell()->IsPaintLocked() )
             // Shortcut to minimize the cycles. With Lock, the
             // paint is coming either way (primarily for browse)
             pLow->OptCalc();
@@ -1406,14 +1406,14 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
            aBoundRect.Height() > aFrmAtCompletePaint.Height() )
        )
     {
-        pImp->GetShell()->AddPaintRect( aBoundRect );
+        m_pImp->GetShell()->AddPaintRect( aBoundRect );
     }
     return bChanged || bTabChanged;
 }
 
 bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
 {
-    vcl::RenderContext* pRenderContext = pImp->GetShell()->GetOut();
+    vcl::RenderContext* pRenderContext = m_pImp->GetShell()->GetOut();
     OSL_ENSURE( !IsAgain(), "Attention to the invalid page." );
     if ( IsAgain() )
         return false;
@@ -1430,7 +1430,7 @@ bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
 
         if ( IsPaint() && (pFly->IsCompletePaint() || bChanged) &&
                     pFly->Frm().Top() > 0 && pFly->Frm().Left() > 0 )
-            pImp->GetShell()->AddPaintRect( pFly->Frm() );
+            m_pImp->GetShell()->AddPaintRect( pFly->Frm() );
 
         if ( bChanged )
             pFly->Invalidate();
@@ -1454,7 +1454,7 @@ bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
             if ( pLow->IsTabFrm() )
                 bTabChanged |= FormatLayoutTab( static_cast<SwTabFrm*>(pLow), bAddRect );
             else
-                bChanged |= FormatLayout( pImp->GetShell()->GetOut(), static_cast<SwLayoutFrm*>(pLow), bAddRect );
+                bChanged |= FormatLayout( m_pImp->GetShell()->GetOut(), static_cast<SwLayoutFrm*>(pLow), bAddRect );
         }
         pLow = pLow->GetNext();
     }
@@ -1469,8 +1469,8 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
     if ( IsAgain() || !pTab->Lower() )
         return false;
 
-    vcl::RenderContext* pRenderContext = pImp->GetShell()->GetOut();
-    IDocumentTimerAccess& rTimerAccess = pRoot->GetFormat()->getIDocumentTimerAccess();
+    vcl::RenderContext* pRenderContext = m_pImp->GetShell()->GetOut();
+    IDocumentTimerAccess& rTimerAccess = m_pRoot->GetFormat()->getIDocumentTimerAccess();
     rTimerAccess.BlockIdling();
 
     bool bChanged = false;
@@ -1518,14 +1518,14 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
                 {
                     aMarginRect = pTab->Frm();
                     (aMarginRect.*fnRect->fnSetWidth)( nLeftMargin );
-                    pImp->GetShell()->AddPaintRect( aMarginRect );
+                    m_pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
 
                 if ( (pTab->*fnRect->fnGetRightMargin)() > 0)
                 {
                     aMarginRect = pTab->Frm();
                     (aMarginRect.*fnRect->fnSetLeft)( (pTab->*fnRect->fnGetPrtRight)() );
-                    pImp->GetShell()->AddPaintRect( aMarginRect );
+                    m_pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
 
                 SwTwips nTopMargin = (pTab->*fnRect->fnGetTopMargin)();
@@ -1533,19 +1533,19 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
                 {
                     aMarginRect = pTab->Frm();
                     (aMarginRect.*fnRect->fnSetHeight)( nTopMargin );
-                    pImp->GetShell()->AddPaintRect( aMarginRect );
+                    m_pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
 
                 if ( (pTab->*fnRect->fnGetBottomMargin)() > 0)
                 {
                     aMarginRect = pTab->Frm();
                     (aMarginRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
-                    pImp->GetShell()->AddPaintRect( aMarginRect );
+                    m_pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
             }
             else if ( pTab->IsCompletePaint() )
             {
-                pImp->GetShell()->AddPaintRect( aPaintFrm );
+                m_pImp->GetShell()->AddPaintRect( aPaintFrm );
                 bAddRect = false;
                 bPainted = true;
             }
@@ -1555,15 +1555,15 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
                 SwRect aRect( pTab->GetUpper()->PaintArea() );
                 // OD 04.11.2002 #104100# - vertical layout support
                 (aRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
-                if ( !pImp->GetShell()->AddPaintRect( aRect ) )
+                if ( !m_pImp->GetShell()->AddPaintRect( aRect ) )
                     pTab->ResetRetouche();
             }
         }
         else
             bAddRect = false;
 
-        if ( pTab->IsCompletePaint() && !pOptTab )
-            pOptTab = pTab;
+        if ( pTab->IsCompletePaint() && !m_pOptTab )
+            m_pOptTab = pTab;
         pTab->ResetCompletePaint();
     }
     if ( IsPaint() && bAddRect && pTab->IsRetouche() && !pTab->GetNext() )
@@ -1574,7 +1574,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
         SwRect aRect( pTab->GetUpper()->PaintArea() );
         // OD 04.11.2002 #104100# - vertical layout support
         (aRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
-        if ( !pImp->GetShell()->AddPaintRect( aRect ) )
+        if ( !m_pImp->GetShell()->AddPaintRect( aRect ) )
             pTab->ResetRetouche();
     }
 
@@ -1584,7 +1584,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
 
     // Ugly shortcut!
     if ( pTab->IsLowersFormatted() &&
-         (bPainted || !pImp->GetShell()->VisArea().IsOver( pTab->Frm())) )
+         (bPainted || !m_pImp->GetShell()->VisArea().IsOver( pTab->Frm())) )
         return false;
 
     // Now, deal with the lowers
@@ -1602,7 +1602,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
         SwLayoutFrm *pLow = static_cast<SwLayoutFrm*>(pTab->Lower());
         while ( pLow )
         {
-            bChanged |= FormatLayout( pImp->GetShell()->GetOut(), pLow, bAddRect );
+            bChanged |= FormatLayout( m_pImp->GetShell()->GetOut(), pLow, bAddRect );
             if ( IsAgain() )
                 return false;
             pLow = static_cast<SwLayoutFrm*>(pLow->GetNext());
@@ -1615,7 +1615,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
 bool SwLayAction::FormatContent( const SwPageFrm *pPage )
 {
     const SwContentFrm *pContent = pPage->ContainsContent();
-    const SwViewShell *pSh = pRoot->GetCurrShell();
+    const SwViewShell *pSh = m_pRoot->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     while ( pContent && pPage->IsAnLower( pContent ) )
@@ -1634,10 +1634,10 @@ bool SwLayAction::FormatContent( const SwPageFrm *pPage )
             const SwTabFrm *pTab = pContent->FindTabFrm();
             const bool bInValid = !pContent->IsValid() || pContent->IsCompletePaint();
             const bool bOldPaint = IsPaint();
-            bPaint = bOldPaint && !(pTab && pTab == pOptTab);
+            m_bPaint = bOldPaint && !(pTab && pTab == m_pOptTab);
             _FormatContent( pContent, pPage );
             // #i26945# - reset <bPaint> before format objects
-            bPaint = bOldPaint;
+            m_bPaint = bOldPaint;
 
             // OD 2004-05-10 #i28701# - format floating screen object at content frame.
             // No format, if action flag <bAgain> is set or action is interrupted.
@@ -1660,7 +1660,7 @@ bool SwLayAction::FormatContent( const SwPageFrm *pPage )
                 const_cast<SwTextFrm*>(static_cast<const SwTextFrm*>(pContent))->RecalcAllLines();
                 if ( IsPaintExtraData() && IsPaint() &&
                      nAllLines != static_cast<const SwTextFrm*>(pContent)->GetAllLines() )
-                    pImp->GetShell()->AddPaintRect( pContent->Frm() );
+                    m_pImp->GetShell()->AddPaintRect( pContent->Frm() );
             }
 
             if ( IsAgain() )
@@ -1686,7 +1686,7 @@ bool SwLayAction::FormatContent( const SwPageFrm *pPage )
             {
                 const sal_uInt16 nCurNum = pContent->FindPageFrm()->GetPhyPageNum();
                 if (  nCurNum < pPage->GetPhyPageNum() )
-                    nPreInvaPage = nCurNum;
+                    m_nPreInvaPage = nCurNum;
 
                 // If the Frm flowed backwards more than one page, we need to
                 // start over again from the beginning, so nothing gets left out.
@@ -1719,9 +1719,9 @@ bool SwLayAction::FormatContent( const SwPageFrm *pPage )
             if ( bSetContent )
             {
                 if ( bBrowse && !IsIdle() && !IsCalcLayout() && !IsComplete() &&
-                     pContent->Frm().Top() > pImp->GetShell()->VisArea().Bottom())
+                     pContent->Frm().Top() > m_pImp->GetShell()->VisArea().Bottom())
                 {
-                    const long nBottom = pImp->GetShell()->VisArea().Bottom();
+                    const long nBottom = m_pImp->GetShell()->VisArea().Bottom();
                     const SwFrm *pTmp = lcl_FindFirstInvaContent( pPage,
                                                             nBottom, pContent );
                     if ( !pTmp )
@@ -1751,7 +1751,7 @@ bool SwLayAction::FormatContent( const SwPageFrm *pPage )
                 const_cast<SwTextFrm*>(static_cast<const SwTextFrm*>(pContent))->RecalcAllLines();
                 if ( IsPaintExtraData() && IsPaint() &&
                      nAllLines != static_cast<const SwTextFrm*>(pContent)->GetAllLines() )
-                    pImp->GetShell()->AddPaintRect( pContent->Frm() );
+                    m_pImp->GetShell()->AddPaintRect( pContent->Frm() );
             }
 
             // Do this if the Frm has been formatted before.
@@ -1766,9 +1766,9 @@ bool SwLayAction::FormatContent( const SwPageFrm *pPage )
                     return false;
             }
             if ( bBrowse && !IsIdle() && !IsCalcLayout() && !IsComplete() &&
-                 pContent->Frm().Top() > pImp->GetShell()->VisArea().Bottom())
+                 pContent->Frm().Top() > m_pImp->GetShell()->VisArea().Bottom())
             {
-                const long nBottom = pImp->GetShell()->VisArea().Bottom();
+                const long nBottom = m_pImp->GetShell()->VisArea().Bottom();
                 const SwFrm *pTmp = lcl_FindFirstInvaContent( pPage,
                                                     nBottom, pContent );
                 if ( !pTmp )
@@ -1854,7 +1854,7 @@ bool SwLayAction::_FormatFlyContent( const SwFlyFrm *pFly )
             const_cast<SwTextFrm*>(static_cast<const SwTextFrm*>(pContent))->RecalcAllLines();
             if ( IsPaintExtraData() && IsPaint() &&
                  nAllLines != static_cast<const SwTextFrm*>(pContent)->GetAllLines() )
-                pImp->GetShell()->AddPaintRect( pContent->Frm() );
+                m_pImp->GetShell()->AddPaintRect( pContent->Frm() );
         }
 
         if ( IsAgain() )
