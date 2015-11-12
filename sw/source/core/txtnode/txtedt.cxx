@@ -1618,12 +1618,12 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         return false;
     }
 
-    if( pLinguNode != this )
-    {
-        pLinguNode = this;
-        pLinguFrm = static_cast<SwTextFrm*>(getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), rHyphInf.GetCrsrPos() ));
-    }
-    SwTextFrm *pFrm = pLinguFrm;
+    SwTextFrm *pFrm = ::sw::SwHyphIterCacheLastTxtFrm(this,
+        [&rHyphInf, this]() {
+            return static_cast<SwTextFrm*>(this->getLayoutFrm(
+                this->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                rHyphInf.GetCrsrPos()));
+        });
     if( pFrm )
         pFrm = &(pFrm->GetFrmAtOfst( rHyphInf.nStart ));
     else

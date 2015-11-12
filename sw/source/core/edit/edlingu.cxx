@@ -155,11 +155,16 @@ public:
 
 class SwHyphIter : public SwLinguIter
 {
+    // With that we save a GetFrm() in Hyphenate //TODO: does it actually matter?
+    const SwTextNode *m_pLastNode;
+    SwTextFrm  *m_pLastFrm;
+    friend SwTextFrm * sw::SwHyphIterCacheLastTxtFrm(SwTextNode *, std::function<SwTextFrm * ()>);
+
     bool bOldIdle;
     static void DelSoftHyph( SwPaM &rPam );
 
 public:
-    SwHyphIter() : bOldIdle(false) {}
+    SwHyphIter() : m_pLastNode(nullptr), m_pLastFrm(nullptr), bOldIdle(false) {}
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
     void End();
@@ -176,11 +181,6 @@ public:
 static SwSpellIter* g_pSpellIter = nullptr;
 static SwConvIter*  g_pConvIter = nullptr;
 static SwHyphIter*  g_pHyphIter = nullptr;
-
-// With that we save a GetFrm() in Hyphenate.
-// Caution: There are external declaration to these pointers in txtedt.cxx!
-const SwTextNode *pLinguNode;
-      SwTextFrm  *pLinguFrm;
 
 SwLinguIter::SwLinguIter()
     : pSh(nullptr)
@@ -249,9 +249,6 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
     }
 
     pCrsr->SetMark();
-
-    pLinguFrm = nullptr;
-    pLinguNode = nullptr;
 }
 
 void SwLinguIter::_End(bool bRestoreSelection)
@@ -570,6 +567,23 @@ void SwHyphIter::InsertSoftHyph( const sal_Int32 nHyphPos )
     pCrsr->DeleteMark();
     pMySh->EndAction();
     pCrsr->SetMark();
+}
+
+namespace sw {
+
+SwTextFrm *
+SwHyphIterCacheLastTxtFrm(SwTextNode *const pNode,
+        std::function<SwTextFrm * ()> const create)
+{
+    assert(g_pHyphIter);
+    if (pNode != g_pHyphIter->m_pLastNode || !g_pHyphIter->m_pLastFrm)
+    {
+        g_pHyphIter->m_pLastNode = pNode;
+        g_pHyphIter->m_pLastFrm = create();
+    }
+    return g_pHyphIter->m_pLastFrm;
+}
+
 }
 
 bool SwEditShell::HasLastSentenceGotGrammarChecked()

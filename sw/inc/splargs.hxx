@@ -22,12 +22,15 @@
 #include <i18nlangtag/lang.h>
 #include <tools/solar.h>
 #include <tools/gen.hxx>
-#include <limits.h>
 
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
+#include <functional>
+#include <limits.h>
+
+class SwTextFrm;
 class SwTextNode;
 class SwIndex;
 namespace vcl { class Font; }
@@ -151,6 +154,14 @@ public:
         return xHyphWord;
     }
 };
+
+
+namespace sw {
+
+SwTextFrm *
+SwHyphIterCacheLastTxtFrm(SwTextNode *, std::function<SwTextFrm * ()>);
+
+}
 
 #endif
 
