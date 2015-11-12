@@ -299,7 +299,9 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     const CXXRecordDecl *pParentRecordDecl = isa<RecordDecl>(fieldDecl->getDeclContext()) ? dyn_cast<CXXRecordDecl>(fieldDecl->getParent()) : nullptr;
     if (containsWindowSubclass(fieldDecl->getType())) {
         // have to ignore this for now, nasty reverse dependency from tools->vcl
-        if (!(pParentRecordDecl != nullptr && pParentRecordDecl->getQualifiedNameAsString() == "ErrorContextImpl")) {
+        if (!(pParentRecordDecl != nullptr &&
+                (pParentRecordDecl->getQualifiedNameAsString() == "ErrorContextImpl" ||
+                 pParentRecordDecl->getQualifiedNameAsString() == "ScHFEditPage"))) {
             report(
                 DiagnosticsEngine::Warning,
                 "OutputDevice subclass %0 declared as a pointer member, should be wrapped in VclPtr",

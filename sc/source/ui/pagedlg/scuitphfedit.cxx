@@ -58,6 +58,7 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
                             sal_uInt16          nWhichId,
                             bool                bHeader  )
     : SfxTabPage( pParent, "HeaderFooterContent", "modules/scalc/ui/headerfootercontent.ui", &rCoreAttrs )
+    , m_pEditFocus(nullptr)
     , nWhich( nWhichId )
 {
     get(m_pWndLeft,"textviewWND_LEFT");
@@ -139,9 +140,14 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
     m_pWndLeft->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
     m_pWndCenter->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
     m_pWndRight->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
+    auto setEditFocus = [this](ScEditWindow & rEdit) { this->m_pEditFocus = &rEdit; };
+    m_pWndLeft->SetGetFocusHdl(setEditFocus);
+    m_pWndCenter->SetGetFocusHdl(setEditFocus);
+    m_pWndRight->SetGetFocusHdl(setEditFocus);
     FillCmdArr();
 
     m_pWndLeft->GrabFocus();
+    m_pEditFocus = m_pWndLeft; // there's no event from GrabFocus()
 
     InitPreDefinedList();
 
@@ -791,39 +797,37 @@ IMPL_LINK_TYPED( ScHFEditPage, ListHdl_Impl, ListBox&, rList, void )
 
 IMPL_LINK_TYPED( ScHFEditPage, ClickHdl, Button*, pBtn, void )
 {
-    VclPtr<ScEditWindow> pActiveEdWnd = ::GetScEditWindow();
-    if ( !pActiveEdWnd )
+    if (!m_pEditFocus)
         return;
 
     if ( pBtn == m_pBtnText )
     {
-        pActiveEdWnd->SetCharAttributes();
+        m_pEditFocus->SetCharAttributes();
     }
     else
     {
         if ( pBtn == m_pBtnPage )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
+            m_pEditFocus->InsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD));
         else if ( pBtn == m_pBtnLastPage )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD) );
+            m_pEditFocus->InsertField(SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD));
         else if ( pBtn == m_pBtnDate )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
+            m_pEditFocus->InsertField(SvxFieldItem(SvxDateField(Date(Date::SYSTEM),SVXDATETYPE_VAR), EE_FEATURE_FIELD));
         else if ( pBtn == m_pBtnTime )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD) );
+            m_pEditFocus->InsertField(SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD));
         else if ( pBtn == m_pBtnFile )
         {
-            pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ) );
+            m_pEditFocus->InsertField(SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD));
         }
         else if ( pBtn == m_pBtnTable )
-            pActiveEdWnd->InsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD) );
+            m_pEditFocus->InsertField(SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD));
     }
     InsertToDefinedList();
-    pActiveEdWnd->GrabFocus();
+    m_pEditFocus->GrabFocus();
 }
 
-IMPL_STATIC_LINK_TYPED( ScHFEditPage, MenuHdl, ScExtIButton&, rBtn, void )
+IMPL_LINK_TYPED( ScHFEditPage, MenuHdl, ScExtIButton&, rBtn, void )
 {
-    VclPtr<ScEditWindow> pActiveEdWnd = ::GetScEditWindow();
-    if ( !pActiveEdWnd )
+    if (!m_pEditFocus)
         return;
 
     SAL_WARN_IF(rBtn.GetSelected() == 0, "sc.ui", "nothing selected");
@@ -831,16 +835,16 @@ IMPL_STATIC_LINK_TYPED( ScHFEditPage, MenuHdl, ScExtIButton&, rBtn, void )
 
     if (sSelectedId == "title")
     {
-        pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ) );
+        m_pEditFocus->InsertField(SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD));
     }
     else if (sSelectedId == "filename")
     {
-        pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
+        m_pEditFocus->InsertField( SvxFieldItem( SvxExtFileField(
             OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
     }
     else if (sSelectedId == "pathname")
     {
-        pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
+        m_pEditFocus->InsertField( SvxFieldItem( SvxExtFileField(
             OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ), EE_FEATURE_FIELD ) );
     }
 }

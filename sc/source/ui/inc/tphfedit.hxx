@@ -33,6 +33,8 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weakref.hxx>
 
+#include <functional>
+
 class ScHeaderEditEngine;
 class ScPatternAttr;
 class EditView;
@@ -72,6 +74,7 @@ public:
 
     ScHeaderEditEngine*  GetEditEngine() const { return pEdEngine; }
     void SetObjectSelectHdl( const Link<ScEditWindow&,void>& aLink) { aObjectSelectLink = aLink; }
+    void SetGetFocusHdl(const std::function<void (ScEditWindow&)>& rLink) { m_GetFocusLink = rLink; }
 
     void SetLocation(ScEditWindowLocation eLoc) { eLocation = eLoc; }
 protected:
@@ -95,6 +98,7 @@ private:
     ScAccessibleEditObject* pAcc;
 
     Link<ScEditWindow&,void> aObjectSelectLink;
+    std::function<void (ScEditWindow&)> m_GetFocusLink;
 };
 
 class SC_DLLPUBLIC ScExtIButton : public ImageButton

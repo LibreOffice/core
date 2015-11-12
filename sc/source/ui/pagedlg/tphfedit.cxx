@@ -47,13 +47,6 @@
 #include "scabstdlg.hxx"
 #include <memory>
 
-// STATIC DATA -----------------------------------------------------------
-static VclPtr<ScEditWindow> g_pActiveEdWnd = nullptr;
-
-ScEditWindow* GetScEditWindow ()
-{
-    return g_pActiveEdWnd;
-}
 
 static void lcl_GetFieldData( ScHeaderFieldData& rData )
 {
@@ -283,7 +276,9 @@ void ScEditWindow::Command( const CommandEvent& rCEvt )
 void ScEditWindow::GetFocus()
 {
     pEdView->ShowCursor();
-    g_pActiveEdWnd = this;
+
+    assert(m_GetFocusLink);
+    m_GetFocusLink(*this);
 
     css::uno::Reference< css::accessibility::XAccessible > xTemp = xAcc;
     if (xTemp.is() && pAcc)
