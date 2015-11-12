@@ -29,6 +29,8 @@
 #include "tabprotection.hxx"
 
 #include <map>
+#include <vector>
+#include <memory>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -157,7 +159,7 @@ public:
     void                Apply();
 
 private:
-    typedef boost::ptr_vector< XclImpCondFormat > XclImpCondFmtList;
+    typedef std::vector< std::unique_ptr<XclImpCondFormat> > XclImpCondFmtList;
     XclImpCondFmtList   maCondFmtList;      /// List with all conditional formatting.
 };
 

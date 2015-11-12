@@ -707,20 +707,20 @@ void XclImpCondFormatManager::ReadCondfmt( XclImpStream& rStrm )
 {
     XclImpCondFormat* pFmt = new XclImpCondFormat( GetRoot(), maCondFmtList.size() );
     pFmt->ReadCondfmt( rStrm );
-    maCondFmtList.push_back( pFmt );
+    maCondFmtList.push_back( std::unique_ptr<XclImpCondFormat>(pFmt) );
 }
 
 void XclImpCondFormatManager::ReadCF( XclImpStream& rStrm )
 {
     OSL_ENSURE( !maCondFmtList.empty(), "XclImpCondFormatManager::ReadCF - CF without leading CONDFMT" );
     if( !maCondFmtList.empty() )
-        maCondFmtList.back().ReadCF( rStrm );
+        maCondFmtList.back()->ReadCF( rStrm );
 }
 
 void XclImpCondFormatManager::Apply()
 {
     for( XclImpCondFmtList::iterator itFmt = maCondFmtList.begin(); itFmt != maCondFmtList.end(); ++itFmt )
-        itFmt->Apply();
+        (*itFmt)->Apply();
     maCondFmtList.clear();
 }
 
