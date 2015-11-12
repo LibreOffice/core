@@ -185,7 +185,7 @@ private:
 
         explicit DVItem ( const ScRangeList& rRanges, const ScValidationData& rValidData );
     };
-    typedef ::boost::ptr_vector<DVItem> DVItemList;
+    typedef std::vector< std::unique_ptr<DVItem> > DVItemList;
 
     DVItemList maDVItems;
 };

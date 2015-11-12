@@ -61,6 +61,7 @@
 
 #include <memory>
 #include <utility>
+#include <o3tl/make_unique.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::std::unique_ptr;
@@ -866,8 +867,8 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
         XclTokenArrayHelper::ConvertStringToList(*xTokArr1, rDoc.GetSharedStringPool(), '\n', true);
 
     maDVItems.push_back(
-        new DVItem(aScRanges, ScValidationData(eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, rScRange.aStart)));
-    DVItem& rItem = maDVItems.back();
+        o3tl::make_unique<DVItem>(aScRanges, ScValidationData(eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, rScRange.aStart)));
+    DVItem& rItem = *maDVItems.back().get();
 
     rItem.maValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );
     rItem.maValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, css::sheet::TableValidationVisibility::INVISIBLE, css::sheet::TableValidationVisibility::UNSORTED ) );
@@ -900,7 +901,7 @@ void XclImpValidationManager::Apply()
     DVItemList::iterator itr = maDVItems.begin(), itrEnd = maDVItems.end();
     for (; itr != itrEnd; ++itr)
     {
-        DVItem& rItem = *itr;
+        DVItem& rItem = *itr->get();
         // set the handle ID
         sal_uLong nHandle = rDoc.AddValidationEntry( rItem.maValidData );
         ScPatternAttr aPattern( rDoc.GetPool() );
