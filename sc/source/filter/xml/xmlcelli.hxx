@@ -28,7 +28,6 @@
 #include <editeng/flditem.hxx>
 
 #include <boost/optional.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
@@ -58,7 +57,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     };
 
     typedef std::vector<std::unique_ptr<ParaFormat> > ParaFormatsType;
-    typedef boost::ptr_vector<Field> FieldsType;
+    typedef std::vector<std::unique_ptr<Field> > FieldsType;
     typedef std::pair<OUString, OUString> FormulaWithNamespace;
 
     boost::optional<FormulaWithNamespace> maFormula; /// table:formula attribute

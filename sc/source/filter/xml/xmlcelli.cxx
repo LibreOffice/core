@@ -361,8 +361,8 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
 void ScXMLTableRowCellContext::PushParagraphField(SvxFieldData* pData, const OUString& rStyleName)
 {
     mbHasFormatRuns = true;
-    maFields.push_back(new Field(pData));
-    Field& rField = maFields.back();
+    maFields.push_back(o3tl::make_unique<Field>(pData));
+    Field& rField = *maFields.back().get();
 
     sal_Int32 nPos = maParagraph.getLength();
     maParagraph.append('\1'); // Placeholder text for inserted field item.
@@ -1114,7 +1114,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 {
                     FieldsType::const_iterator it = maFields.begin(), itEnd = maFields.end();
                     for (; it != itEnd; ++it)
-                        mpEditEngine->QuickInsertField(SvxFieldItem(*it->mpData, EE_FEATURE_FIELD), it->maSelection);
+                        mpEditEngine->QuickInsertField(SvxFieldItem(*(*it)->mpData, EE_FEATURE_FIELD), (*it)->maSelection);
                 }
 
                 // This edit engine uses the SfxItemPool instance returned
