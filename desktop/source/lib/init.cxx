@@ -1261,7 +1261,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
     uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
 
-    static const sal_Char* aWriterStyles[] =
+    static const std::vector<OUString> aWriterStyles =
     {
         "Text body",
         "Quotations",
@@ -1271,6 +1271,8 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         "Heading 2",
         "Heading 3"
     };
+
+    // static const std::vector<OUString> aList = { "aaaa", "bbb" };
 
     boost::property_tree::ptree aValues;
     for (sal_Int32 nStyleFam = 0; nStyleFam < aStyleFamilies.getLength(); ++nStyleFam)
@@ -1285,10 +1287,10 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         if (sStyleFam == "ParagraphStyles"
             && doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT)
         {
-            for( sal_uInt32 nStyle = 0; nStyle < sizeof( aWriterStyles ) / sizeof( sal_Char*); ++nStyle )
+            for( OUString aStyle: aWriterStyles )
             {
                 uno::Reference< beans::XPropertySet > xStyle;
-                xStyleFamily->getByName( OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
+                xStyleFamily->getByName( aStyle ) >>= xStyle;
                 OUString sName;
                 xStyle->getPropertyValue("DisplayName") >>= sName;
                 if( !sName.isEmpty() )
