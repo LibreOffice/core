@@ -107,9 +107,9 @@ Button::~Button()
 
 void Button::dispose()
 {
-    Control::dispose();
     if (mpButtonData->mpStatusListener.is())
         mpButtonData->mpStatusListener->dispose();
+    Control::dispose();
 }
 
 void Button::SetCommandHandler(const OUString& aCommand)
