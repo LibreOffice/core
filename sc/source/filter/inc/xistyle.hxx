@@ -506,7 +506,7 @@ public:
     ScStyleSheet*       CreateStyleSheet( sal_uInt16 nXFIndex );
 
 private:
-    typedef boost::ptr_vector< XclImpStyle >        XclImpStyleList;
+    typedef std::vector< std::unique_ptr<XclImpStyle> >        XclImpStyleList;
     typedef ::std::map< sal_uInt16, XclImpStyle* >  XclImpStyleMap;
 
     boost::ptr_vector< XclImpXF > maXFList; /// List of contents of all XF record.

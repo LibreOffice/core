@@ -1576,7 +1576,7 @@ void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
 {
     XclImpStyle* pStyle = new XclImpStyle( GetRoot() );
     pStyle->ReadStyle( rStrm );
-    (pStyle->IsBuiltin() ? maBuiltinStyles : maUserStyles).push_back( pStyle );
+    (pStyle->IsBuiltin() ? maBuiltinStyles : maUserStyles).push_back( std::unique_ptr<XclImpStyle>(pStyle) );
     OSL_ENSURE( maStylesByXf.count( pStyle->GetXfId() ) == 0, "XclImpXFBuffer::ReadStyle - multiple styles with equal XF identifier" );
     maStylesByXf[ pStyle->GetXfId() ] = pStyle;
 }
@@ -1632,13 +1632,13 @@ void XclImpXFBuffer::CreateUserStyles()
         in the aConflictNameStyles list. */
     for( XclImpStyleList::iterator itStyle = maBuiltinStyles.begin(); itStyle != maBuiltinStyles.end(); ++itStyle )
     {
-        OUString aStyleName = XclTools::GetBuiltInStyleName( itStyle->GetBuiltinId(), itStyle->GetName(), itStyle->GetLevel() );
+        OUString aStyleName = XclTools::GetBuiltInStyleName( (*itStyle)->GetBuiltinId(), (*itStyle)->GetName(), (*itStyle)->GetLevel() );
         OSL_ENSURE( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
             "XclImpXFBuffer::CreateUserStyles - multiple styles with equal built-in identifier" );
         if( aCellStyles.count( aStyleName ) > 0 )
-            aConflictNameStyles.push_back( &(*itStyle) );
+            aConflictNameStyles.push_back( itStyle->get() );
         else
-            aCellStyles[ aStyleName ] = &(*itStyle);
+            aCellStyles[ aStyleName ] = itStyle->get();
     }
 
     /*  Calculate names of user defined styles. Store styles with reserved
@@ -1646,12 +1646,12 @@ void XclImpXFBuffer::CreateUserStyles()
     for( XclImpStyleList::iterator itStyle = maUserStyles.begin(); itStyle != maUserStyles.end(); ++itStyle )
     {
         // #i1624# #i1768# ignore unnamed user styles
-        if( !itStyle->GetName().isEmpty() )
+        if( !(*itStyle)->GetName().isEmpty() )
         {
-            if( aCellStyles.count( itStyle->GetName() ) > 0 )
-                aConflictNameStyles.push_back( &(*itStyle) );
+            if( aCellStyles.count( (*itStyle)->GetName() ) > 0 )
+                aConflictNameStyles.push_back( itStyle->get() );
             else
-                aCellStyles[ itStyle->GetName() ] = &(*itStyle);
+                aCellStyles[ (*itStyle)->GetName() ] = itStyle->get();
         }
     }
 
