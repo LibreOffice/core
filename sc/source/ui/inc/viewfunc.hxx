@@ -26,7 +26,6 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScPatternAttr;
 class ScAutoFormatData;
