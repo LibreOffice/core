@@ -13,7 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libpagemaker,$(PAGEMAKER_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libpagemaker,0))
 
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libpagemaker, \
     external/libpagemaker/ubsan-visibility.patch \

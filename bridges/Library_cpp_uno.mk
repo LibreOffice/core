@@ -217,7 +217,7 @@ endif
 endif
 
 ifeq ($(COM),GCC)
-ifneq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(COM_IS_CLANG),TRUE)
 bridges_NON_CALL_EXCEPTIONS_FLAGS := -fnon-call-exceptions
 endif
 endif

@@ -93,7 +93,7 @@ gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE
 # If CC or CXX already include -fvisibility=hidden, don't duplicate it
 ifeq (,$(filter -fvisibility=hidden,$(CC)))
 gb__visibility_hidden := -fvisibility=hidden
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 gb__visibility_hidden := -fvisibility-ms-compat
 endif
@@ -115,7 +115,7 @@ endif
 gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror)
 
 # This is the default in non-C++11 mode
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXX03FLAGS := -std=gnu++98 -Werror=c++11-extensions -Wno-c++11-long-long \
     -Wno-deprecated-declarations
 else
@@ -128,7 +128,7 @@ endif
 gb_CFLAGS_COMMON += -std=gnu89
 
 ifeq ($(ENABLE_LTO),TRUE)
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 gb_LTOFLAGS := -flto
 else
 gb_LTOFLAGS := -flto=$(PARALLELISM) -fuse-linker-plugin -O2
@@ -179,7 +179,7 @@ gb_LinkTarget_INCLUDE :=\
     $(subst -I. , ,$(SOLARINC)) \
     -I$(BUILDDIR)/config_$(gb_Side) \
 
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 ifeq ($(COMPILER_PLUGIN_TOOL),)
 gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/obj/plugin.so -Xclang -add-plugin -Xclang loplugin
 ifneq ($(COMPILER_PLUGIN_WARNINGS_ONLY),)

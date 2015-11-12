@@ -13,7 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,librevenge,$(REVENGE_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,librevenge,0))
 
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,librevenge, \
     external/librevenge/ubsan-visibility.patch \

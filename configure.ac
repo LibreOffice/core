@@ -3267,35 +3267,29 @@ else
 fi
 AC_SUBST(CROSS_COMPILING)
 
-dnl ===================================================================
-dnl  Is GCC actually Clang?
-dnl ===================================================================
+COM_IS_CLANG=
+AC_MSG_CHECKING([whether the compiler is actually Clang])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+    #ifndef __clang__
+    you lose
+    #endif
+    int foo=42;
+    ]])],
+    [AC_MSG_RESULT([yes])
+     COM_IS_CLANG=TRUE],
+    [AC_MSG_RESULT([no])])
 
-COM_GCC_IS_CLANG=
-if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([whether GCC is actually Clang])
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-        #ifndef __clang__
-        you lose
-        #endif
-        int foo=42;
-        ]])],
-        [AC_MSG_RESULT([yes])
-         COM_GCC_IS_CLANG=TRUE],
-        [AC_MSG_RESULT([no])])
-
-    if test "$COM_GCC_IS_CLANG" = TRUE; then
-        AC_MSG_CHECKING([the Clang version])
-        clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC -E -P /dev/stdin`
-        CLANG_FULL_VERSION=`echo __clang_version__ | $CC -E -P /dev/stdin`
-        CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-        AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
-        AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
-    fi
+if test "$COM_IS_CLANG" = TRUE; then
+    AC_MSG_CHECKING([the Clang version])
+    clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC -E -P /dev/stdin`
+    CLANG_FULL_VERSION=`echo __clang_version__ | $CC -E -P /dev/stdin`
+    CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+    AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
+    AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
 fi
-AC_SUBST(COM_GCC_IS_CLANG)
+AC_SUBST(COM_IS_CLANG)
 
-if test "$CCACHE" != "" -a "$COM_GCC_IS_CLANG" = TRUE; then
+if test "$CCACHE" != "" -a "$COM_IS_CLANG" = TRUE; then
     if test -z "$CCACHE_CPP2"; then
         AC_MSG_WARN([Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings.])
         add_warning "Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings."
@@ -3305,7 +3299,7 @@ fi
 dnl ===================================================================
 dnl  Test the gcc version
 dnl ===================================================================
-if test "$GCC" = "yes" -a -z "$COM_GCC_IS_CLANG"; then
+if test "$GCC" = "yes" -a -z "$COM_IS_CLANG"; then
     AC_MSG_CHECKING([the GCC version])
     _gcc_version=`$CC -dumpversion`
     GCC_VERSION=`echo $_gcc_version | $AWK -F. '{ print \$1*100+\$2 }'`
@@ -5931,7 +5925,7 @@ if test "$GCC" = "yes"; then
             HAVE_THREADSAFE_STATICS=TRUE
         fi
     elif test "$_os" != Android; then
-        if test "$COM_GCC_IS_CLANG" = TRUE; then
+        if test "$COM_IS_CLANG" = TRUE; then
             AC_LANG_PUSH([C++])
             AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <list>
@@ -6469,7 +6463,7 @@ _ACEOF
             dnl known to not work with -z defs (unsetting which makes the test
             dnl moot, though):
             my_linkflagsnoundefs=$LINKFLAGSNOUNDEFS
-            if test "$COM_GCC_IS_CLANG" = TRUE; then
+            if test "$COM_IS_CLANG" = TRUE; then
                 for i in $CXX; do
                     case $i in
                     -fsanitize=*)
@@ -6595,7 +6589,7 @@ dnl ===================================================================
 
 COMPILER_PLUGINS=
 # currently only Clang
-if test "$COM_GCC_IS_CLANG" = "TRUE"; then
+if test "$COM_IS_CLANG" = "TRUE"; then
     if test -n "$enable_compiler_plugins"; then
         compiler_plugins="$enable_compiler_plugins"
     elif test -n "$ENABLE_DBGUTIL"; then
@@ -8231,7 +8225,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         fi
         AC_MSG_CHECKING([for MariaDB Client library])
         MARIADB_CFLAGS=`$MARIADBCONFIG --cflags`
-        if test "$COM_GCC_IS_CLANG" = TRUE; then
+        if test "$COM_IS_CLANG" = TRUE; then
             MARIADB_CFLAGS=$(printf '%s' "$MARIADB_CFLAGS" | sed -e s/-fstack-protector-strong//)
         fi
         MARIADB_LIBS=`$MARIADBCONFIG --libs_r`
