@@ -154,7 +154,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     friend class SwClipboardChangeListener;
 
     // search & replace
-    static VclPtr<SvxSearchDialog>  m_pSrchDlg;
     static SvxSearchItem           *m_pSrchItem;
 
     static sal_uInt16       m_nMoveType; // for buttons below the scrollbar (viewmdi)

@@ -132,7 +132,6 @@ bool            SwView::m_bExtra      = false;
 bool            SwView::m_bFound      = false;
 bool            SwView::m_bJustOpened = false;
 
-VclPtr<SvxSearchDialog> SwView::m_pSrchDlg    = nullptr;
 SearchAttrItemList*     SwView::m_pSrchList   = nullptr;
 SearchAttrItemList*     SwView::m_pReplList   = nullptr;
 

@@ -187,16 +187,16 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
             DELETEZ( m_pSrchList );
             DELETEZ( m_pReplList );
 
-            m_pSrchDlg = GetSearchDialog();
-            if (m_pSrchDlg)
+            SvxSearchDialog *const pSrchDlg(GetSearchDialog());
+            if (pSrchDlg)
             {
                 // We will remember the search-/replace items.
-                const SearchAttrItemList* pList = m_pSrchDlg->GetSearchItemList();
+                const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
                 if( pList && pList->Count() )
                     m_pSrchList = new SearchAttrItemList( *pList );
 
-                if( nullptr != (pList = m_pSrchDlg->GetReplaceItemList() ) &&
-                    pList->Count() )
+                pList = pSrchDlg->GetReplaceItemList();
+                if (nullptr != pList && pList->Count())
                     m_pReplList = new SearchAttrItemList( *pList );
             }
         }
@@ -210,18 +210,18 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     SwView::SetMoveType(NID_SRCH_REP);
             }
 
-            m_pSrchDlg = GetSearchDialog();
-            if (m_pSrchDlg)
+            SvxSearchDialog * pSrchDlg(GetSearchDialog());
+            if (pSrchDlg)
             {
                 DELETEZ( m_pSrchList );
                 DELETEZ( m_pReplList );
 
-                const SearchAttrItemList* pList = m_pSrchDlg->GetSearchItemList();
+                const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
                 if( pList && pList->Count() )
                     m_pSrchList = new SearchAttrItemList( *pList );
 
-                if( nullptr != (pList = m_pSrchDlg->GetReplaceItemList() ) &&
-                    pList->Count() )
+                pList = pSrchDlg->GetReplaceItemList();
+                if (nullptr != pList && pList->Count())
                     m_pReplList = new SearchAttrItemList( *pList );
             }
 
@@ -255,13 +255,11 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
 #if HAVE_FEATURE_DESKTOP
                 {
-                    const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
-                    SvxSearchDialogWrapper *pDlgWrp = static_cast<SvxSearchDialogWrapper*>( GetViewFrame()->GetChildWindow(nChildId) );
-                    if ( pDlgWrp )
+                    pSrchDlg = GetSearchDialog();
+                    if (pSrchDlg)
                     {
-                        m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
-                        m_pSrchDlg->SetDocWin(m_pEditWin);
-                        m_pSrchDlg->SetSrchFlag(false);
+                        pSrchDlg->SetDocWin(m_pEditWin);
+                        pSrchDlg->SetSrchFlag(false);
                     }
                 }
 #endif
@@ -287,14 +285,11 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
 #if HAVE_FEATURE_DESKTOP
                 {
-                    const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
-                    SvxSearchDialogWrapper *pDlgWrp = static_cast<SvxSearchDialogWrapper*>(GetViewFrame()->GetChildWindow(nChildId));
-
-                    if ( pDlgWrp )
+                    pSrchDlg = GetSearchDialog();
+                    if (pSrchDlg)
                     {
-                        m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
-                        m_pSrchDlg->SetDocWin(m_pEditWin);
-                        m_pSrchDlg->SetSrchFlag(false);
+                        pSrchDlg->SetDocWin(m_pEditWin);
+                        pSrchDlg->SetSrchFlag(false);
                     }
                 }
 #endif
@@ -348,14 +343,11 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 }
 #if HAVE_FEATURE_DESKTOP
                 {
-                    const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
-                    SvxSearchDialogWrapper *pDlgWrp = static_cast<SvxSearchDialogWrapper*>(GetViewFrame()->GetChildWindow(nChildId));
-
-                    if ( pDlgWrp )
+                    pSrchDlg = GetSearchDialog();
+                    if (pSrchDlg)
                     {
-                        m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
-                        m_pSrchDlg->SetDocWin(m_pEditWin);
-                        m_pSrchDlg->SetSrchFlag(false);
+                        pSrchDlg->SetDocWin(m_pEditWin);
+                        pSrchDlg->SetSrchFlag(false);
                     }
                 }
 #endif
@@ -416,19 +408,17 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     {
                         OUString aText( SW_RES( STR_NB_REPLACED ) );
                         aText = aText.replaceFirst("XX", OUString::number( nFound ));
-                        vcl::Window* pParentWindow = GetParentWindow( m_pSrchDlg );
+                        pSrchDlg = GetSearchDialog();
+                        vcl::Window* pParentWindow = GetParentWindow(pSrchDlg);
                         ScopedVclPtr<InfoBox>::Create( pParentWindow, aText )->Execute();
                     }
                 }
 #if HAVE_FEATURE_DESKTOP
-                const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
-                SvxSearchDialogWrapper *pDlgWrp = static_cast<SvxSearchDialogWrapper*>(GetViewFrame()->GetChildWindow(nChildId));
-
-                if ( pDlgWrp )
+                pSrchDlg = GetSearchDialog();
+                if (pSrchDlg)
                 {
-                    m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
-                    m_pSrchDlg->SetDocWin(m_pEditWin);
-                    m_pSrchDlg->SetSrchFlag(false);
+                    pSrchDlg->SetDocWin(m_pEditWin);
+                    pSrchDlg->SetSrchFlag(false);
                 }
 #endif
                 break;
@@ -883,10 +873,10 @@ SvxSearchDialog* SwView::GetSearchDialog()
 #if HAVE_FEATURE_DESKTOP
     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
     SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->GetChildWindow(nId) );
-    m_pSrchDlg = pWrp ? pWrp->getDialog () : nullptr;
-    return m_pSrchDlg;
+    auto pSrchDlg = (pWrp) ? pWrp->getDialog() : nullptr;
+    return pSrchDlg;
 #else
-    return NULL;
+    return nullptr;
 #endif
 }
 
