@@ -845,6 +845,7 @@ bool Dialog::ImplStartExecuteModal()
     ImplAdjustNWFSizes();
 
     Show();
+    ToTop();
 
     pSVData->maAppData.mnModalMode++;
     return true;
