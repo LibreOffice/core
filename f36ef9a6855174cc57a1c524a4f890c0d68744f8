@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_7969988b",
+        "filename": "include/vcl/buttonstatuslistener.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T09:32:43Z",
+      "side": 1,
+      "message": "Will be good to have those private, as you don\u0027t use them from outside",
+      "revId": "f36ef9a6855174cc57a1c524a4f890c0d68744f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_d90404c8",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T09:32:43Z",
+      "side": 1,
+      "message": "It\u0027s OK, but you don\u0027t _really_ need this after you introduced the dispose method. You can just let it die in Button dtor.",
+      "revId": "f36ef9a6855174cc57a1c524a4f890c0d68744f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_f913c80b",
+        "filename": "vcl/source/control/buttonstatuslistener.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-12T09:32:43Z",
+      "side": 1,
+      "message": "The dispatcher could be already cleared when you get here. So condition any mxDispatch dereference with if(mxDispatcher.is()) (mButton.clear however should _not_ depend on it, of course.)",
+      "revId": "f36ef9a6855174cc57a1c524a4f890c0d68744f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
