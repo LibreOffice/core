@@ -23,6 +23,7 @@
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 
@@ -1831,7 +1832,7 @@ bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
 
     //TODO: Test for same entries in reverse order?
     for (size_t i=0; i<size(); i++)
-        if ( ! (maEntries == r.maEntries ) )
+        if ( ! ::comphelper::ContainerUniquePtrEquals(maEntries, r.maEntries) )
             return false;
 
     // right now don't check for same range
