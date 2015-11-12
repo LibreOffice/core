@@ -2186,7 +2186,9 @@ namespace basegfx
             const B2DVector aVectorToA(rEnd - rCandidateA);
             const double fCrossA(aLineVector.cross(aVectorToA));
 
-            if(fTools::equalZero(fCrossA))
+            // tdf#88352 increase numerical correctness and use rtl::math::approxEqual
+            // instead of fTools::equalZero which compares with a fixed small value
+            if(rtl::math::approxEqual(fCrossA, 0.0))
             {
                 // one point on the line
                 return bWithLine;
@@ -2195,7 +2197,8 @@ namespace basegfx
             const B2DVector aVectorToB(rEnd - rCandidateB);
             const double fCrossB(aLineVector.cross(aVectorToB));
 
-            if(fTools::equalZero(fCrossB))
+            // increase numerical correctness
+            if(rtl::math::approxEqual(fCrossB, 0.0))
             {
                 // one point on the line
                 return bWithLine;
