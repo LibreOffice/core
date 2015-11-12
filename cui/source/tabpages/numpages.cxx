@@ -2803,16 +2803,19 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
     m_pLabelFollowedByLB->SetSelectHdl( LINK(this, SvxNumPositionTabPage, LabelFollowedByHdl_Impl) );
 
     aLk3 = LINK(this, SvxNumPositionTabPage, ListtabPosHdl_Impl);
+    aLk2 = LINK(this, SvxNumPositionTabPage, ListtabPosFocusHdl_Impl);
     m_pListtabMF->SetUpHdl(aLk3);
     m_pListtabMF->SetDownHdl(aLk3);
     m_pListtabMF->SetLoseFocusHdl(aLk2);
 
     aLk3 = LINK(this, SvxNumPositionTabPage, AlignAtHdl_Impl);
+    aLk2 = LINK(this, SvxNumPositionTabPage, AlignAtFocusHdl_Impl);
     m_pAlignedAtMF->SetUpHdl(aLk3);
     m_pAlignedAtMF->SetDownHdl(aLk3);
     m_pAlignedAtMF->SetLoseFocusHdl(aLk2);
 
     aLk3 = LINK(this, SvxNumPositionTabPage, IndentAtHdl_Impl);
+    aLk2 = LINK(this, SvxNumPositionTabPage, IndentAtFocusHdl_Impl);
     m_pIndentAtMF->SetUpHdl(aLk3);
     m_pIndentAtMF->SetDownHdl(aLk3);
     m_pIndentAtMF->SetLoseFocusHdl(aLk2);
@@ -3542,6 +3545,10 @@ IMPL_LINK_NOARG_TYPED(SvxNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, 
     SetModified();
 }
 
+IMPL_LINK_TYPED( SvxNumPositionTabPage, ListtabPosFocusHdl_Impl, Control&, rControl, void )
+{
+    ListtabPosHdl_Impl(static_cast<SpinField&>(rControl));
+}
 IMPL_LINK_TYPED( SvxNumPositionTabPage, ListtabPosHdl_Impl, SpinField&, rFld, void )
 {
     // determine value to be set at the chosen list levels
@@ -3563,6 +3570,10 @@ IMPL_LINK_TYPED( SvxNumPositionTabPage, ListtabPosHdl_Impl, SpinField&, rFld, vo
     SetModified();
 }
 
+IMPL_LINK_TYPED( SvxNumPositionTabPage, AlignAtFocusHdl_Impl, Control&, rControl, void )
+{
+    AlignAtHdl_Impl(static_cast<SpinField&>(rControl));
+}
 IMPL_LINK_TYPED( SvxNumPositionTabPage, AlignAtHdl_Impl, SpinField&, rFld, void )
 {
     // determine value to be set at the chosen list levels
@@ -3585,6 +3596,10 @@ IMPL_LINK_TYPED( SvxNumPositionTabPage, AlignAtHdl_Impl, SpinField&, rFld, void 
     SetModified();
 }
 
+IMPL_LINK_TYPED( SvxNumPositionTabPage, IndentAtFocusHdl_Impl, Control&, rControl, void )
+{
+    IndentAtHdl_Impl(static_cast<SpinField&>(rControl));
+}
 IMPL_LINK_TYPED( SvxNumPositionTabPage, IndentAtHdl_Impl, SpinField&, rFld, void )
 {
     // determine value to be set at the chosen list levels
