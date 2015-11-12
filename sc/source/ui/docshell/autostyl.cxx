@@ -35,16 +35,6 @@ struct ScAutoStyleInitData
         aRange(rR), aStyle1(rSt1), nTimeout(nT), aStyle2(rSt2) {}
 };
 
-struct ScAutoStyleData
-{
-    sal_uLong nTimeout;
-    ScRange   aRange;
-    OUString  aStyle;
-
-    ScAutoStyleData( sal_uLong nT, const ScRange& rR, const OUString& rT ) :
-        nTimeout(nT), aRange(rR), aStyle(rT) {}
-};
-
 inline sal_uLong TimeNow()          // Sekunden
 {
     return (sal_uLong) time(nullptr);
@@ -122,7 +112,7 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
     sal_uLong nNow = TimeNow();
 
     // Remove the first item with the same range.
-    ::boost::ptr_vector<ScAutoStyleData>::iterator itr =
+    std::vector<ScAutoStyleData>::iterator itr =
         ::std::find_if(aEntries.begin(), aEntries.end(), FindByRange(rRange));
 
     if (itr != aEntries.end())
@@ -137,10 +127,10 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
     }
 
     //  Einfuege-Position suchen
-    boost::ptr_vector<ScAutoStyleData>::iterator iter =
+    std::vector<ScAutoStyleData>::iterator iter =
         ::std::find_if(aEntries.begin(), aEntries.end(), FindByTimeout(nTimeout));
 
-    aEntries.insert(iter,new ScAutoStyleData(nTimeout,rRange,rStyle));
+    aEntries.insert(iter, ScAutoStyleData(nTimeout,rRange,rStyle));
 
     //  abgelaufene ausfuehren, Timer neu starten
 
@@ -150,7 +140,7 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
 
 void ScAutoStyleList::AdjustEntries( sal_uLong nDiff )  // Millisekunden
 {
-    boost::ptr_vector<ScAutoStyleData>::iterator iter;
+    std::vector<ScAutoStyleData>::iterator iter;
     for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
     {
         if (iter->nTimeout <= nDiff)
@@ -164,7 +154,7 @@ void ScAutoStyleList::ExecuteEntries()
 {
     // Execute and remove all items with timeout == 0 from the begin position
     // until the first item with non-zero timeout value.
-    ::boost::ptr_vector<ScAutoStyleData>::iterator itr = aEntries.begin(), itrEnd = aEntries.end();
+    std::vector<ScAutoStyleData>::iterator itr = aEntries.begin(), itrEnd = aEntries.end();
     for (; itr != itrEnd; ++itr)
     {
         if (itr->nTimeout)
@@ -181,7 +171,7 @@ void ScAutoStyleList::ExecuteAllNow()
 {
     aTimer.Stop();
 
-    boost::ptr_vector<ScAutoStyleData>::iterator iter;
+    std::vector<ScAutoStyleData>::iterator iter;
     for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
         pDocSh->DoAutoStyle(iter->aRange,iter->aStyle);
 
@@ -191,7 +181,7 @@ void ScAutoStyleList::ExecuteAllNow()
 void ScAutoStyleList::StartTimer( sal_uLong nNow )      // Sekunden
 {
     // ersten Eintrag mit Timeout != 0 suchen
-    boost::ptr_vector<ScAutoStyleData>::iterator iter =
+    std::vector<ScAutoStyleData>::iterator iter =
         ::std::find_if(aEntries.begin(),aEntries.end(), FindNonZeroTimeout());
 
     if (iter != aEntries.end())
