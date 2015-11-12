@@ -20,7 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_LOTATTR_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_LOTATTR_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 #include "address.hxx"
 #include "scitems.hxx"
@@ -100,7 +101,7 @@ private:
     SvxColorItem*       pBlack;
     SvxColorItem*       pWhite;
     Color*              pColTab;
-    boost::ptr_vector<ENTRY> aEntries;
+    std::vector< std::unique_ptr<ENTRY> > aEntries;
 
     LOTUS_ROOT* mpLotusRoot;
 };
@@ -120,7 +121,7 @@ private:
         SCROW nLastRow;
     };
 
-    boost::ptr_vector<ENTRY> aEntries;
+    std::vector< std::unique_ptr<ENTRY> > aEntries;
 };
 
 class LotAttrTable

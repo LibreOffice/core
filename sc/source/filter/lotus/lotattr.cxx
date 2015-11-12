@@ -89,11 +89,11 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     sal_uInt32  nRefHash;
     MakeHash( rAttr, nRefHash );
 
-    boost::ptr_vector<ENTRY>::const_iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
-                                                                 boost::bind(&ENTRY::nHash0,_1) == nRefHash);
+    std::vector< std::unique_ptr<ENTRY> >::const_iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
+                                                                 [nRefHash] (const auto& rEntry) { return rEntry->nHash0 == nRefHash; });
 
     if (iter != aEntries.end())
-        return *(iter->pPattAttr);
+        return *((*iter)->pPattAttr);
 
     // generate new Pattern Attribute
     ScPatternAttr*  pNewPatt = new ScPatternAttr(pDocPool);
@@ -147,7 +147,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
         rItemSet.Put( aHorJustify );
     }
 
-    aEntries.push_back(pAkt);
+    aEntries.push_back(std::unique_ptr<ENTRY>(pAkt));
 
     return *pNewPatt;
 }
@@ -192,12 +192,12 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
     // being read as sal_uInt16 there's no chance that nRow would be invalid..
     OSL_ENSURE( ValidRow(nRow), "*LotAttrCol::SetAttr(): ... und rums?!" );
 
-    boost::ptr_vector<ENTRY>::reverse_iterator iterLast = aEntries.rbegin();
+    std::vector<std::unique_ptr<ENTRY> >::reverse_iterator iterLast = aEntries.rbegin();
 
     if(iterLast != aEntries.rend())
     {
-        if( ( iterLast->nLastRow == nRow - 1 ) && ( &rAttr == iterLast->pPattAttr ) )
-            iterLast->nLastRow = nRow;
+        if( ( (*iterLast)->nLastRow == nRow - 1 ) && ( &rAttr == (*iterLast)->pPattAttr ) )
+            (*iterLast)->nLastRow = nRow;
         else
         {
             ENTRY *pAkt = new ENTRY;
@@ -205,7 +205,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
             pAkt->pPattAttr = &rAttr;
             pAkt->nFirstRow = pAkt->nLastRow = nRow;
 
-            aEntries.push_back(pAkt);
+            aEntries.push_back(std::unique_ptr<ENTRY>(pAkt));
         }
     }
     else
@@ -214,7 +214,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
         pAkt->pPattAttr = &rAttr;
         pAkt->nFirstRow = pAkt->nLastRow = nRow;
 
-        aEntries.push_back(pAkt);
+        aEntries.push_back(std::unique_ptr<ENTRY>(pAkt));
     }
 }
 
@@ -222,11 +222,11 @@ void LotAttrCol::Apply(LOTUS_ROOT* pLotusRoot, const SCCOL nColNum, const SCTAB 
 {
     ScDocument*     pDoc = pLotusRoot->pDoc;
 
-    boost::ptr_vector<ENTRY>::iterator iter;
+    std::vector<std::unique_ptr<ENTRY> >::iterator iter;
     for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
     {
-        pDoc->ApplyPatternAreaTab(nColNum,iter->nFirstRow,nColNum,iter->nLastRow,
-                                  nTabNum, *(iter->pPattAttr));
+        pDoc->ApplyPatternAreaTab(nColNum, (*iter)->nFirstRow, nColNum, (*iter)->nLastRow,
+                                  nTabNum, *((*iter)->pPattAttr));
     }
 }
 
