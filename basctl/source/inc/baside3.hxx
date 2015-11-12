@@ -56,13 +56,14 @@ class DialogWindow: public BaseWindow
 {
 private:
     DialogWindowLayout& rLayout;
-    boost::scoped_ptr<DlgEditor> pEditor; // never nullptr
+    boost::scoped_ptr<DlgEditor> pEditor;
     boost::scoped_ptr<SfxUndoManager> pUndoMgr; // never nullptr
     OUString            aCurPath;
 
 protected:
     virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
