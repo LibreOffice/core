@@ -1,0 +1,42 @@
+--- boost/config/compiler/clang.hpp
++++ boost/config/compiler/clang.hpp
+@@ -260,9 +260,7 @@
+ 
+ 
+ // Unused attribute:
+-#if defined(__GNUC__) && (__GNUC__ >= 4)
+ #  define BOOST_ATTRIBUTE_UNUSED __attribute__((unused))
+-#endif
+ 
+ #ifndef BOOST_COMPILER
+ #  define BOOST_COMPILER "Clang version " __clang_version__
+
+# workdir/UnpackedTarball/boost\boost/smart_ptr/detail/sp_counted_base_clang.hpp(29,1) :  error: cannot mangle this C11 atomic type yet
+# inline void atomic_increment( atomic_int_least32_t * pw )
+# ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--- boost/smart_ptr/detail/sp_counted_base.hpp
++++ boost/smart_ptr/detail/sp_counted_base.hpp
+@@ -21,7 +21,7 @@
+ #include <boost/smart_ptr/detail/sp_has_sync.hpp>
+ 
+ #if defined( __clang__ ) && defined( __has_extension )
+-# if __has_extension( __c_atomic__ )
++# if __has_extension( __c_atomic__ ) && !defined _MSC_VER
+ #   define BOOST_SP_HAS_CLANG_C11_ATOMICS
+ # endif
+ #endif
+
+# C:/lo64/core/workdir/UnpackedTarball/boost/libs/thread/src/win32/thread.cpp(1006,36) :  error: dllimport cannot be applied to non-inline function definition
+#     BOOST_THREAD_DECL void __cdecl on_process_enter()
+#                                    ^
+--- boost/thread/detail/config.hpp
++++ boost/thread/detail/config.hpp
+@@ -396,7 +396,7 @@
+ #else //Use default
+ #   if defined(BOOST_THREAD_PLATFORM_WIN32)
+ #       if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) \
+-      || defined(__MINGW32__) || defined(MINGW32) || defined(BOOST_MINGW32)
++      || defined(__MINGW32__) || defined(MINGW32) || defined(BOOST_MINGW32) || defined __clang__
+       //For compilers supporting auto-tss cleanup
+             //with Boost.Threads lib, use Boost.Threads lib
+ #           define BOOST_THREAD_USE_LIB

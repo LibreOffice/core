@@ -18,6 +18,26 @@ $(eval $(call gb_StaticLibrary_add_defs,boostthread,\
 	-DBOOST_ALL_NO_LIB \
 ))
 
+# Lots of the declarations in boost duplicated from windows.h when
+# BOOST_USE_WINDOWS_H is not defined (which appears to be the normal case) cause
+# warnings or even errors with Clang when windows.h is included too (e.g.,
+# "conflicting types for 'FileTimeToLocalFileTime'" between
+# C:/PROGRA~2/WI3CF2~1/8.1/include/um/fileapi.h and
+# workdir/UnpackedTarball/boost/boost/date_time/filetime_functions.hpp), for
+# which it appears easies to just define BOOST_USE_WINDOWS_H; also
+# -Winvalid-constexpr (e.g., reported from the constexpr definition of lowest()
+# in workdir/UnpackedTarball/boost/boost/chrono/duration.hpp, which uses
+# std::numeric_limits<>::max() from MSVC's standard library, where nothing is
+# marked constexpr) is apparently reported as an error by default:
+ifeq ($(OS),WNT)
+ifeq ($(COM_IS_CLANG),TRUE)
+$(eval $(call gb_StaticLibrary_add_defs,boostthread, \
+    -DBOOST_USE_WINDOWS_H \
+    -Wno-error=invalid-constexpr \
+))
+endif
+endif
+
 $(eval $(call gb_StaticLibrary_use_external,boostthread,boost_headers))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boostthread,cpp))

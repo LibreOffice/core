@@ -85,6 +85,8 @@ boost_patches += boost_1_59_0.multi_array.wshadow.patch
 # https://svn.boost.org/trac/boost/ticket/11501
 boost_patches += boost_1_59_0.property_tree.wreturn-type.patch
 
+boost_patches += clang-cl.patch.0
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
