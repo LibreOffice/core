@@ -44,6 +44,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/settings.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include "output.hxx"
 #include "document.hxx"
@@ -66,8 +67,8 @@
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/string.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
+#include <vector>
 
 #include <math.h>
 
@@ -1471,7 +1472,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
 
     // alternative pattern instances in case we need to modify the pattern
     // before processing the cell value.
-    ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
+    std::vector<std::unique_ptr<ScPatternAttr> > aAltPatterns;
 
     std::vector<long> aDX;
     long nPosY = nScrY;
@@ -1615,8 +1616,8 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                     }
                     if ( mpDoc->GetPreviewFont() || mpDoc->GetPreviewCellStyle() )
                     {
-                        aAltPatterns.push_back(new ScPatternAttr(*pPattern));
-                        ScPatternAttr* pAltPattern = &aAltPatterns.back();
+                        aAltPatterns.push_back(o3tl::make_unique<ScPatternAttr>(*pPattern));
+                        ScPatternAttr* pAltPattern = aAltPatterns.back().get();
                         if (  ScStyleSheet* pPreviewStyle = mpDoc->GetPreviewCellStyle( nCellX, nCellY, nTab ) )
                         {
                             pAltPattern->SetStyleSheet(pPreviewStyle);
@@ -1639,8 +1640,8 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                             pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue())
                     {
                         // Disable line break when the cell content is numeric.
-                        aAltPatterns.push_back(new ScPatternAttr(*pPattern));
-                        ScPatternAttr* pAltPattern = &aAltPatterns.back();
+                        aAltPatterns.push_back(o3tl::make_unique<ScPatternAttr>(*pPattern));
+                        ScPatternAttr* pAltPattern = aAltPatterns.back().get();
                         SfxBoolItem aLineBreak(ATTR_LINEBREAK, false);
                         pAltPattern->GetItemSet().Put(aLineBreak);
                         pPattern = pAltPattern;
