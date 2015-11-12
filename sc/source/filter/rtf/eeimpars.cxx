@@ -478,7 +478,7 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseE
     sal_Char nDir = nHorizontal;
     for ( size_t i = 0; i < pE->maImageList.size() ; ++i )
     {
-        ScHTMLImage* pI = &pE->maImageList[ i ];
+        ScHTMLImage* pI = pE->maImageList[ i ].get();
         if ( pI->pGraphic )
             bHasGraphics = true;
         Size aSizePix = pI->aSize;
@@ -554,7 +554,7 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     sal_Char nDir = nHorizontal;
     for ( size_t i = 0; i < pE->maImageList.size(); ++i )
     {
-        ScHTMLImage* pI = &pE->maImageList[ i ];
+        ScHTMLImage* pI = pE->maImageList[ i ].get();
         if ( nDir & nHorizontal )
         {   // Horizontal
             aInsertPos.X() += aLogicSize.Width();

@@ -66,6 +66,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <utility>
+#include <o3tl/make_unique.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -1331,8 +1332,8 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
 
 void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 {
-    ScHTMLImage* pImage = new ScHTMLImage;
-    pActEntry->maImageList.push_back( pImage );
+    pActEntry->maImageList.push_back( o3tl::make_unique<ScHTMLImage>() );
+    ScHTMLImage* pImage = pActEntry->maImageList.back().get();
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
     for (size_t i = 0, n = rOptions.size(); i < n; ++i)
     {
@@ -1410,7 +1411,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         long nWidth = 0;
         for ( size_t i=0; i < pActEntry->maImageList.size(); ++i )
         {
-            ScHTMLImage* pI = &pActEntry->maImageList[ i ];
+            ScHTMLImage* pI = pActEntry->maImageList[ i ].get();
             if ( pI->nDir & nHorizontal )
                 nWidth += pI->aSize.Width() + 2 * pI->aSpace.X();
             else
@@ -1419,7 +1420,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         if ( pActEntry->nWidth
           && (nWidth + pImage->aSize.Width() + 2 * pImage->aSpace.X()
                 >= pActEntry->nWidth) )
-            pActEntry->maImageList.back().nDir = nVertical;
+            pActEntry->maImageList.back()->nDir = nVertical;
     }
 }
 
@@ -1628,7 +1629,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         case HTML_PARABREAK_OFF:
         {   // We continue vertically after an image
             if ( pActEntry->maImageList.size() > 0 )
-                pActEntry->maImageList.back().nDir = nVertical;
+                pActEntry->maImageList.back()->nDir = nVertical;
         }
         break;
         case HTML_ANCHOR_ON:
