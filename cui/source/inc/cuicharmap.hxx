@@ -76,10 +76,12 @@ private:
     VclPtr<ListBox>        m_pSubsetLB;
     VclPtr<FixedText>      m_pSymbolText;
     VclPtr<SvxShowText>    m_pShowChar;
-    VclPtr<FixedText>      m_pCharCodeText;
+    VclPtr<Edit>           m_pHexCodeText;
+    VclPtr<Edit>           m_pDecimalCodeText;
     vcl::Font       aFont;
     bool            bOne;
     const SubsetMap* pSubsetMap;
+    enum class Radix : sal_Int16 {decimal = 10, hexadecimal=16};
 
     DECL_LINK_TYPED(OKHdl, Button*, void);
     DECL_LINK_TYPED(FontSelectHdl, ListBox&, void);
@@ -88,8 +90,11 @@ private:
     DECL_LINK_TYPED(CharSelectHdl, SvxShowCharSet*, void);
     DECL_LINK_TYPED(CharHighlightHdl, SvxShowCharSet*, void);
     DECL_LINK_TYPED(CharPreSelectHdl, SvxShowCharSet*, void);
+    DECL_LINK_TYPED(DecimalCodeChangeHdl, SvxShowCharSet*, void *);
+    DECL_LINK_TYPED(HexCodeChangeHdl, SvxShowCharSet*, void *);
 
     static void fillAllSubsets(ListBox &rListBox);
+    int selectCharByCode(Radix radix);
 
 public:
                     SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=0 );
