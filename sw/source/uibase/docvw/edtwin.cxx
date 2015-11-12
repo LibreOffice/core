@@ -2756,6 +2756,21 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     if (m_rView.GetPostItMgr()->IsHit(rMEvt.GetPosPixel()))
         return;
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (vcl::Window* pWindow = m_rView.GetPostItMgr()->IsHitSidebarWindow(rMEvt.GetPosPixel()))
+        {
+            bool bDisableMapMode = pWindow->IsMapModeEnabled();
+            if (bDisableMapMode)
+                pWindow->EnableMapMode(false);
+
+            pWindow->MouseButtonDown(rMEvt);
+
+            if (bDisableMapMode)
+                pWindow->EnableMapMode();
+            return;
+        }
+    }
     m_rView.GetPostItMgr()->SetActiveSidebarWin(0);
 
     GrabFocus();

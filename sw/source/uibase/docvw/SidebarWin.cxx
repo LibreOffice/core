@@ -279,6 +279,14 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
     rRenderContext.Push(PushFlags::NONE);
 }
 
+vcl::Window* SwSidebarWin::IsHitWindow(const Point& rPointLogic)
+{
+    Rectangle aRectangleLogic(EditWin()->PixelToLogic(GetPosPixel()), EditWin()->PixelToLogic(GetSizePixel()));
+    if (aRectangleLogic.IsInside(rPointLogic))
+        return mpSidebarTextControl;
+    return 0;
+}
+
 void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, sal_uLong nInFlags)
 {
     if (mpMetadataAuthor->IsVisible() )
