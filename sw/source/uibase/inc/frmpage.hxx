@@ -90,38 +90,38 @@ class SwFrmPage: public SfxTabPage
     VclPtr<SvxSwFrameExample>  m_pExampleWN;
 
     //'string provider'
-    SvxSwFramePosString aFramePosString;
+    SvxSwFramePosString m_aFramePosString;
 
-    bool            bAtHorzPosModified;
-    bool            bAtVertPosModified;
+    bool            m_bAtHorzPosModified;
+    bool            m_bAtVertPosModified;
 
-    bool            bFormat;
-    bool            bNew;
-    bool            bNoModifyHdl;
-    bool            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
+    bool            m_bFormat;
+    bool            m_bNew;
+    bool            m_bNoModifyHdl;
+    bool            m_bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
     // --> OD 2009-08-31 #mongolianlayou#
-    bool            bIsVerticalL2R;
-    bool            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
-    bool            bHtmlMode;
-    sal_uInt16          nHtmlMode;
-    OUString        sDlgType;
-    Size            aGrfSize;
-    SwTwips         nUpperBorder;
-    SwTwips         nLowerBorder;
-    double          fWidthHeightRatio; //width-to-height ratio to support the KeepRatio button
+    bool            m_bIsVerticalL2R;
+    bool            m_bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
+    bool            m_bHtmlMode;
+    sal_uInt16          m_nHtmlMode;
+    OUString        m_sDlgType;
+    Size            m_aGrfSize;
+    SwTwips         m_nUpperBorder;
+    SwTwips         m_nLowerBorder;
+    double          m_fWidthHeightRatio; //width-to-height ratio to support the KeepRatio button
 
     // OD 12.11.2003 #i22341# - keep content position of character for
     // to character anchored objects.
     const SwPosition* mpToCharContentPos;
 
     // old alignment
-    sal_Int16 nOldH;
-    sal_Int16 nOldHRel;
-    sal_Int16 nOldV;
-    sal_Int16 nOldVRel;
+    sal_Int16 m_nOldH;
+    sal_Int16 m_nOldHRel;
+    sal_Int16 m_nOldV;
+    sal_Int16 m_nOldVRel;
 
-    FrmMap* pVMap;
-    FrmMap* pHMap;
+    FrmMap* m_pVMap;
+    FrmMap* m_pHMap;
 
     bool    m_bAllowVertPositioning;
     bool    m_bIsMathOLE;
@@ -194,10 +194,10 @@ public:
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
 
-    void            SetNewFrame(bool bNewFrame) { bNew      = bNewFrame; }
+    void            SetNewFrame(bool bNewFrame) { m_bNew      = bNewFrame; }
     void            SetFormatUsed(bool bFormat);
-    void            SetFrmType(const OUString &rType) { sDlgType  = rType; }
-    inline bool     IsInGraficMode() { return sDlgType == "PictureDialog" || sDlgType == "ObjectDialog"; }
+    void            SetFrmType(const OUString &rType) { m_sDlgType  = rType; }
+    inline bool     IsInGraficMode() { return m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog"; }
     void            EnableVerticalPositioning( bool bEnable );
 };
 
