@@ -116,6 +116,7 @@
 #include <tools/date.hxx>
 #include <i18nlangtag/lang.h>
 #include <comphelper/extract.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -403,8 +404,8 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     const ScXMLEditAttributeMap& rEditAttrMap = GetScImport().GetEditAttributeMap();
 
     mbHasFormatRuns = true;
-    maFormats.push_back(new ParaFormat(*mpEditEngine));
-    ParaFormat& rFmt = maFormats.back();
+    maFormats.push_back(o3tl::make_unique<ParaFormat>(*mpEditEngine));
+    ParaFormat& rFmt = *maFormats.back().get();
     rFmt.maSelection.nStartPara = rFmt.maSelection.nEndPara = mnCurParagraph;
     rFmt.maSelection.nStartPos = nBegin;
     rFmt.maSelection.nEndPos = nEnd;
@@ -1107,7 +1108,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 {
                     ParaFormatsType::const_iterator it = maFormats.begin(), itEnd = maFormats.end();
                     for (; it != itEnd; ++it)
-                        mpEditEngine->QuickSetAttribs(it->maItemSet, it->maSelection);
+                        mpEditEngine->QuickSetAttribs((*it)->maItemSet, (*it)->maSelection);
                 }
 
                 {

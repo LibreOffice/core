@@ -31,6 +31,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
+#include <vector>
 
 class ScXMLImport;
 class ScFormulaCell;
@@ -56,7 +57,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
         ~Field();
     };
 
-    typedef boost::ptr_vector<ParaFormat> ParaFormatsType;
+    typedef std::vector<std::unique_ptr<ParaFormat> > ParaFormatsType;
     typedef boost::ptr_vector<Field> FieldsType;
     typedef std::pair<OUString, OUString> FormulaWithNamespace;
 
