@@ -70,7 +70,7 @@ void ScUserListData::InitTokens()
             {
                 OUString aSub(p0, nLen);
                 OUString aUpStr = ScGlobal::pCharClass->uppercase(aSub);
-                maSubStrings.push_back(new SubStr(aSub, aUpStr));
+                maSubStrings.push_back(SubStr(aSub, aUpStr));
             }
             bFirst = true;
         }
@@ -80,7 +80,7 @@ void ScUserListData::InitTokens()
     {
         OUString aSub(p0, nLen);
         OUString aUpStr = ScGlobal::pCharClass->uppercase(aSub);
-        maSubStrings.push_back(new SubStr(aSub, aUpStr));
+        maSubStrings.push_back(SubStr(aSub, aUpStr));
     }
 }
 

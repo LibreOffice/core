@@ -23,6 +23,7 @@
 #include "scdllapi.h"
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 /**
  * Stores individual user-defined sort list.
@@ -37,7 +38,7 @@ public:
         SubStr(const OUString& rReal, const OUString& rUpper);
     };
 private:
-    typedef ::boost::ptr_vector<SubStr> SubStringsType;
+    typedef std::vector<SubStr> SubStringsType;
     SubStringsType maSubStrings;
     OUString aStr;
 
