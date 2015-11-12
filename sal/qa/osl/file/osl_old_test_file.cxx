@@ -52,6 +52,7 @@ public:
     CPPUNIT_TEST_SUITE_END( );
 };
 
+#ifndef WIN32
 const char * const aSource1[] =
 {
     "a"    , "file:///" TEST_VOLUME "bla/a",
@@ -78,6 +79,7 @@ const char * const aSource2[ ] =
     "../../../a/b/c/d", "file:///" TEST_VOLUME "a/b/c/d",
     nullptr,nullptr
 };
+#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
