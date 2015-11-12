@@ -88,8 +88,6 @@
 bool SwViewShell::mbLstAct = false;
 ShellResource *SwViewShell::mpShellRes = nullptr;
 VclPtr<vcl::Window> SwViewShell::mpCareWindow = nullptr;
-BitmapEx* SwViewShell::mpErrorBmp = nullptr;
-BitmapEx* SwViewShell::mpReplaceBmp = nullptr;
 
 bool bInSizeNotify = false;
 
@@ -2486,12 +2484,12 @@ const BitmapEx& SwViewShell::GetReplacementBitmap( bool bIsErrorState )
     sal_uInt16 nResId = 0;
     if( bIsErrorState )
     {
-        ppRet = &mpErrorBmp;
+        ppRet = &m_pErrorBmp;
         nResId = RID_GRAPHIC_ERRORBMP;
     }
     else
     {
-        ppRet = &mpReplaceBmp;
+        ppRet = &m_pReplaceBmp;
         nResId = RID_GRAPHIC_REPLACEBMP;
     }
 
@@ -2504,8 +2502,8 @@ const BitmapEx& SwViewShell::GetReplacementBitmap( bool bIsErrorState )
 
 void SwViewShell::DeleteReplacementBitmaps()
 {
-    DELETEZ( mpErrorBmp );
-    DELETEZ( mpReplaceBmp );
+    DELETEZ( m_pErrorBmp );
+    DELETEZ( m_pReplaceBmp );
 }
 
 SwPostItMgr* SwViewShell::GetPostItMgr()

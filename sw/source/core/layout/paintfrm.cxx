@@ -2306,7 +2306,7 @@ void DrawGraphic(
 
     if( bReplaceGrfNum )
     {
-        const BitmapEx& rBmp = SwViewShell::GetReplacementBitmap( false );
+        const BitmapEx& rBmp = rSh.GetReplacementBitmap(false);
         vcl::Font aTmp( pOutDev->GetFont() );
         Graphic::DrawEx( pOutDev, aEmptyOUStr, aTmp, rBmp, rOrg.Pos(), rOrg.SSize() );
     }

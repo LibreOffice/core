@@ -144,7 +144,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         {
             pSh->LockPaint();
             bUnlockPaint = true;
-            SwViewShell::DeleteReplacementBitmaps();
+            pSh->DeleteReplacementBitmaps();
             GetView().InvalidateBorder();               //Scrollbar work
         }
         break;

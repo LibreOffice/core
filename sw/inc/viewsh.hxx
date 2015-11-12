@@ -107,8 +107,8 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     // Set SwVisArea in order to enable clean formatting before printing.
     friend void SetSwVisArea( SwViewShell *pSh, const SwRect & );
 
-    static BitmapEx*    mpReplaceBmp;    ///< replaced display of still loaded images
-    static BitmapEx*    mpErrorBmp;      ///< error display of missed images
+    BitmapEx* m_pReplaceBmp; ///< replaced display of still loaded images
+    BitmapEx* m_pErrorBmp;   ///< error display of missed images
 
     static bool mbLstAct;        // true if EndAction of last Shell
                                     // i.e. if the EndActions of the other
@@ -555,8 +555,8 @@ public:
 
     inline bool IsInConstructor() const { return mbInConstructor; }
 
-    static const BitmapEx& GetReplacementBitmap( bool bIsErrorState );
-    static void DeleteReplacementBitmaps();
+    const BitmapEx& GetReplacementBitmap(bool bIsErrorState);
+    void DeleteReplacementBitmaps();
 
     const SwPostItMgr* GetPostItMgr() const { return (const_cast<SwViewShell*>(this))->GetPostItMgr(); }
     SwPostItMgr* GetPostItMgr();
