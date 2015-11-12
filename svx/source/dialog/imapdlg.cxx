@@ -184,7 +184,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     m_pEdtText->SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
     m_pCbbTarget->SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
 
-       SvtMiscOptions aMiscOptions;
+    SvtMiscOptions aMiscOptions;
     aMiscOptions.AddListenerLink( LINK( this, SvxIMapDlg, MiscHdl ) );
 
     m_pTbxIMapDlg1->SetSelectHdl( LINK( this, SvxIMapDlg, TbxClickHdl ) );
@@ -220,6 +220,9 @@ SvxIMapDlg::~SvxIMapDlg()
 
 void SvxIMapDlg::dispose()
 {
+    SvtMiscOptions aMiscOptions;
+    aMiscOptions.RemoveListenerLink( LINK( this, SvxIMapDlg, MiscHdl ) );
+
     // Delete URL-List
     pIMapWnd.disposeAndClear();
     DELETEZ( pOwnData );
@@ -776,9 +779,11 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
 
 IMPL_LINK_NOARG(SvxIMapDlg, MiscHdl)
 {
-       SvtMiscOptions aMiscOptions;
-    m_pTbxIMapDlg1->SetOutStyle( aMiscOptions.GetToolboxStyle() );
-
+    if (m_pTbxIMapDlg1)
+    {
+        SvtMiscOptions aMiscOptions;
+        m_pTbxIMapDlg1->SetOutStyle( aMiscOptions.GetToolboxStyle() );
+    }
     return 0L;
 }
 
