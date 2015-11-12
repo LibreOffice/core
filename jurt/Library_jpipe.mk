@@ -23,7 +23,7 @@ $(eval $(call gb_Library_add_cobjects,jpipe,\
 
 else
 
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(gb_CC)),)
 Library_jpipe__staticsalhack = TRUE
 endif

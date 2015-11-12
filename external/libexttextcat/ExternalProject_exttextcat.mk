@@ -18,7 +18,7 @@ $(call gb_ExternalProject_get_state_target,exttextcat,build):
 		./configure --disable-shared --with-pic \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_DEBUG_CFLAGS) $(gb_COMPILEROPTFLAGS) \
-			$(if $(COM_GCC_IS_CLANG),-Qunused-arguments) \
+			$(if $(COM_IS_CLANG),-Qunused-arguments) \
 			$(if $(filter AIX,$(OS)),-D_LINUX_SOURCE_COMPAT)" \
 		&& $(MAKE) \
 	)

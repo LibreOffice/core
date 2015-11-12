@@ -13,7 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libmwaw,$(MWAW_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libmwaw,0))
 
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
     external/libmwaw/ubsan-visibility.patch \

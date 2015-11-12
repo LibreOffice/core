@@ -25,7 +25,7 @@ gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 include $(GBUILDDIR)/platform/windows.mk
 
-ifeq ($(COM_GCC_IS_CLANG),)
+ifeq ($(COM_IS_CLANG),)
 # This has to do something with calling conventions, which are different
 # for x86 and x64. Don't put it in the common part since it is breaking
 # and conde that uses boost::bind

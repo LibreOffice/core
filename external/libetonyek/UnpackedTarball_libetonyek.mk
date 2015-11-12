@@ -30,7 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 endif
 endif
 
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libetonyek, \
     external/libetonyek/ubsan-visibility.patch \
