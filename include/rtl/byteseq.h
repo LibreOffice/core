@@ -150,7 +150,11 @@ enum __ByteSequence_NoAcquire
     /** This enum value can be used to create a bytesequence from a C-Handle without
         acquiring the handle.
     */
-    BYTESEQ_NOACQUIRE = 0xcafebabe
+    BYTESEQ_NOACQUIRE =
+#if defined _MSC_VER
+        (int)
+#endif
+        0xcafebabe
 };
 
 /** C++ class representing a SAL byte sequence.
