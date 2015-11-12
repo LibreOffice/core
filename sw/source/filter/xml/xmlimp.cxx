@@ -349,10 +349,10 @@ void SwXMLDocStylesContext_Impl::EndElement()
 
 const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()
 {
-    if( !pDocElemTokenMap )
-        pDocElemTokenMap = new SvXMLTokenMap( aDocTokenMap );
+    if( !m_pDocElemTokenMap )
+        m_pDocElemTokenMap = new SvXMLTokenMap( aDocTokenMap );
 
-    return *pDocElemTokenMap;
+    return *m_pDocElemTokenMap;
 }
 
 SvXMLImportContext *SwXMLImport::CreateContext(
@@ -398,22 +398,22 @@ SwXMLImport::SwXMLImport(
     const uno::Reference< uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags)
 :   SvXMLImport( rContext, implementationName, nImportFlags ),
-    pSttNdIdx( nullptr ),
-    pTableItemMapper( nullptr ),
-    pDocElemTokenMap( nullptr ),
-    pTableElemTokenMap( nullptr ),
-    pTableCellAttrTokenMap( nullptr ),
-    pGraphicResolver( nullptr ),
-    pEmbeddedResolver( nullptr ),
-    nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
-    bLoadDoc( true ),
-    bInsert( false ),
-    bBlock( false ),
-    bShowProgress( true ),
-    bOrganizerMode( false ),
-    bInititedXForms( false ),
-    bPreserveRedlineMode( true ),
-    doc( nullptr )
+    m_pSttNdIdx( nullptr ),
+    m_pTableItemMapper( nullptr ),
+    m_pDocElemTokenMap( nullptr ),
+    m_pTableElemTokenMap( nullptr ),
+    m_pTableCellAttrTokenMap( nullptr ),
+    m_pGraphicResolver( nullptr ),
+    m_pEmbeddedResolver( nullptr ),
+    m_nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
+    m_bLoadDoc( true ),
+    m_bInsert( false ),
+    m_bBlock( false ),
+    m_bShowProgress( true ),
+    m_bOrganizerMode( false ),
+    m_bInititedXForms( false ),
+    m_bPreserveRedlineMode( true ),
+    m_pDoc( nullptr )
 {
     _InitItemImport();
 
@@ -421,16 +421,16 @@ SwXMLImport::SwXMLImport(
 
 SwXMLImport::~SwXMLImport() throw ()
 {
-    delete pDocElemTokenMap;
-    delete pTableElemTokenMap;
-    delete pTableCellAttrTokenMap;
+    delete m_pDocElemTokenMap;
+    delete m_pTableElemTokenMap;
+    delete m_pTableCellAttrTokenMap;
     _FinitItemImport();
 }
 
 void SwXMLImport::setTextInsertMode(
          const Reference< XTextRange > & rInsertPos )
 {
-    bInsert = true;
+    m_bInsert = true;
 
     Reference < XText > xText = rInsertPos->getText();
     Reference < XTextCursor > xTextCursor =
@@ -441,19 +441,19 @@ void SwXMLImport::setTextInsertMode(
 void SwXMLImport::setStyleInsertMode( sal_uInt16 nFamilies,
                                       bool bOverwrite )
 {
-    bInsert = !bOverwrite;
-    nStyleFamilyMask = nFamilies;
-    bLoadDoc = false;
+    m_bInsert = !bOverwrite;
+    m_nStyleFamilyMask = nFamilies;
+    m_bLoadDoc = false;
 }
 
 void SwXMLImport::setBlockMode( )
 {
-    bBlock = true;
+    m_bBlock = true;
 }
 
 void SwXMLImport::setOrganizerMode( )
 {
-    bOrganizerMode = true;
+    m_bOrganizerMode = true;
 }
 
 namespace
@@ -653,7 +653,7 @@ void SwXMLImport::startDocument()
 
     if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
     {
-        pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
+        m_pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
         if( IsInsertMode() )
         {
             SwPaM *pPaM = pTextCrsr->GetPaM();
@@ -661,7 +661,7 @@ void SwXMLImport::startDocument()
 
             // Split once and remember the node that has been splitted.
             pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
-            *pSttNdIdx = pPos->nNode.GetIndex()-1;
+            *m_pSttNdIdx = pPos->nNode.GetIndex()-1;
 
             // Split again.
             pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
@@ -683,8 +683,8 @@ void SwXMLImport::startDocument()
 
     if( !GetGraphicResolver().is() )
     {
-        pGraphicResolver = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
-        Reference< document::XGraphicObjectResolver > xGraphicResolver( pGraphicResolver );
+        m_pGraphicResolver = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
+        Reference< document::XGraphicObjectResolver > xGraphicResolver( m_pGraphicResolver );
         SetGraphicResolver( xGraphicResolver );
     }
 
@@ -693,10 +693,10 @@ void SwXMLImport::startDocument()
         SfxObjectShell *pPersist = pDoc->GetPersist();
         if( pPersist )
         {
-            pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
+            m_pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
                                             *pPersist,
                                             EMBEDDEDOBJECTHELPER_MODE_READ );
-            Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver( pEmbeddedResolver );
+            Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver( m_pEmbeddedResolver );
             SetEmbeddedResolver( xEmbeddedResolver );
         }
     }
@@ -712,10 +712,10 @@ void SwXMLImport::endDocument()
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    if( pGraphicResolver )
-        SvXMLGraphicHelper::Destroy( pGraphicResolver );
-    if( pEmbeddedResolver )
-        SvXMLEmbeddedObjectHelper::Destroy( pEmbeddedResolver );
+    if( m_pGraphicResolver )
+        SvXMLGraphicHelper::Destroy( m_pGraphicResolver );
+    if( m_pEmbeddedResolver )
+        SvXMLEmbeddedObjectHelper::Destroy( m_pEmbeddedResolver );
     // Clear the shape import to sort the shapes  (and not in the
     // destructor that might be called after the import has finished
     // for Java filters.
@@ -732,35 +732,35 @@ void SwXMLImport::endDocument()
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
         assert(pTextCrsr && "SwXTextCursor missing");
         SwPaM *pPaM = pTextCrsr->GetPaM();
-        if( IsInsertMode() && pSttNdIdx->GetIndex() )
+        if( IsInsertMode() && m_pSttNdIdx->GetIndex() )
         {
             // If we are in insert mode, join the splitted node that is in front
             // of the new content with the first new node. Or in other words:
             // Revert the first split node.
-            SwTextNode* pTextNode = pSttNdIdx->GetNode().GetTextNode();
-            SwNodeIndex aNxtIdx( *pSttNdIdx );
+            SwTextNode* pTextNode = m_pSttNdIdx->GetNode().GetTextNode();
+            SwNodeIndex aNxtIdx( *m_pSttNdIdx );
             if( pTextNode && pTextNode->CanJoinNext( &aNxtIdx ) &&
-                pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
+                m_pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
             {
                 // If the PaM points to the first new node, move the PaM to the
                 // end of the previous node.
                 if( pPaM->GetPoint()->nNode == aNxtIdx )
                 {
-                    pPaM->GetPoint()->nNode = *pSttNdIdx;
+                    pPaM->GetPoint()->nNode = *m_pSttNdIdx;
                     pPaM->GetPoint()->nContent.Assign( pTextNode,
                                             pTextNode->GetText().getLength());
                 }
 
 #if OSL_DEBUG_LEVEL > 0
                 // !!! This should be impossible !!!!
-                OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
+                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound().nNode.GetIndex(),
                         "PaM.Bound1 point to new node " );
-                OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
+                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( false ).nNode.GetIndex(),
                         "PaM.Bound2 points to new node" );
 
-                if( pSttNdIdx->GetIndex()+1 ==
+                if( m_pSttNdIdx->GetIndex()+1 ==
                                         pPaM->GetBound().nNode.GetIndex() )
                 {
                     const sal_Int32 nCntPos =
@@ -768,7 +768,7 @@ void SwXMLImport::endDocument()
                     pPaM->GetBound().nContent.Assign( pTextNode,
                             pTextNode->GetText().getLength() + nCntPos );
                 }
-                if( pSttNdIdx->GetIndex()+1 ==
+                if( m_pSttNdIdx->GetIndex()+1 ==
                                 pPaM->GetBound( false ).nNode.GetIndex() )
                 {
                     const sal_Int32 nCntPos =
@@ -831,7 +831,7 @@ void SwXMLImport::endDocument()
                     // Remove line break that has been inserted by the import,
                     // but only if one has been inserted!
                     if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) &&
-                         *pSttNdIdx != pPos->nNode )
+                         *m_pSttNdIdx != pPos->nNode )
                     {
                         pNextNd->JoinPrev();
                     }
@@ -861,8 +861,8 @@ void SwXMLImport::endDocument()
 
     GetTextImport()->ResetCursor();
 
-    delete pSttNdIdx;
-    pSttNdIdx = nullptr;
+    delete m_pSttNdIdx;
+    m_pSttNdIdx = nullptr;
 
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )
@@ -888,7 +888,7 @@ void SwXMLImport::endDocument()
     }
 
     // #i90243#
-    if ( bInititedXForms )
+    if ( m_bInititedXForms )
     {
         Reference< xforms::XFormsSupplier > xFormsSupp( GetModel(), UNO_QUERY );
         Reference< XNameAccess > xXForms;
@@ -902,9 +902,9 @@ void SwXMLImport::endDocument()
                 Sequence< beans::PropertyValue > aXFormsSettings;
 
                 const OUString sXFormsSettingsName( GetXMLToken( XML_XFORM_MODEL_SETTINGS ) );
-                if ( xLateInitSettings.is() && xLateInitSettings->hasByName( sXFormsSettingsName ) )
+                if ( m_xLateInitSettings.is() && m_xLateInitSettings->hasByName( sXFormsSettingsName ) )
                 {
-                    OSL_VERIFY( xLateInitSettings->getByName( sXFormsSettingsName ) >>= aXFormsSettings );
+                    OSL_VERIFY( m_xLateInitSettings->getByName( sXFormsSettingsName ) >>= aXFormsSettings );
                     applyXFormsSettings( xXForms, aXFormsSettings );
                 }
             }
@@ -973,9 +973,9 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
     return new SwXMLTextImportHelper( GetModel(), *this, getImportInfo(),
                                       IsInsertMode(),
-                                      IsStylesOnlyMode(), bShowProgress,
+                                      IsStylesOnlyMode(), m_bShowProgress,
                                       IsBlockMode(), IsOrganizerMode(),
-                                      bPreserveRedlineMode );
+                                      m_bPreserveRedlineMode );
 }
 
 XMLShapeImportHelper* SwXMLImport::CreateShapeImport()
@@ -1451,19 +1451,19 @@ void SwXMLImport::SetDocumentSpecificSettings(
 
     // preserve the settings for a later iteration - we are currently reading the settings.xml,
     // the content.xml will be read later, by another instance of SwXMLImport
-    OSL_ENSURE( xLateInitSettings.is(), "SwXMLImport::SetDocumentSpecificSettings: no storage for those settings!" );
-    if ( !xLateInitSettings.is() )
+    OSL_ENSURE( m_xLateInitSettings.is(), "SwXMLImport::SetDocumentSpecificSettings: no storage for those settings!" );
+    if ( !m_xLateInitSettings.is() )
         return;
 
     try
     {
-        if ( xLateInitSettings->hasByName( _rSettingsGroupName ) )
+        if ( m_xLateInitSettings->hasByName( _rSettingsGroupName ) )
         {
-            xLateInitSettings->replaceByName( _rSettingsGroupName, makeAny( _rSettings ) );
+            m_xLateInitSettings->replaceByName( _rSettingsGroupName, makeAny( _rSettings ) );
             OSL_FAIL( "SwXMLImport::SetDocumentSpecificSettings: already have settings for this model!" );
         }
         else
-            xLateInitSettings->insertByName( _rSettingsGroupName, makeAny( _rSettings ) );
+            m_xLateInitSettings->insertByName( _rSettingsGroupName, makeAny( _rSettings ) );
     }
     catch( const Exception& )
     {
@@ -1486,7 +1486,7 @@ void SwXMLImport::initialize(
         {
             if (aValue.Name == "PreserveRedlineMode")
             {
-                OSL_VERIFY( aValue.Value >>= bPreserveRedlineMode );
+                OSL_VERIFY( aValue.Value >>= m_bPreserveRedlineMode );
             }
             continue;
         }
@@ -1496,7 +1496,7 @@ void SwXMLImport::initialize(
         {
             if (aNamedValue.Name == "LateInitSettings")
             {
-                OSL_VERIFY( aNamedValue.Value >>= xLateInitSettings );
+                OSL_VERIFY( aNamedValue.Value >>= m_xLateInitSettings );
             }
         }
     }
@@ -1532,13 +1532,13 @@ void SwXMLImport::initXForms()
     if( ! pDoc->isXForms() )
         pDoc->initXForms( false );
 
-    bInititedXForms = true;
+    m_bInititedXForms = true;
 }
 
 SwDoc* SwXMLImport::getDoc()
 {
-    if( doc != nullptr )
-        return doc;
+    if( m_pDoc != nullptr )
+        return m_pDoc;
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
@@ -1546,9 +1546,9 @@ SwDoc* SwXMLImport::getDoc()
     SwXText *pText = reinterpret_cast< SwXText *>(
             sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
     assert( pText != nullptr );
-    doc = pText->GetDoc();
-    assert( doc != nullptr );
-    return doc;
+    m_pDoc = pText->GetDoc();
+    assert( m_pDoc != nullptr );
+    return m_pDoc;
 }
 
 const SwDoc* SwXMLImport::getDoc() const

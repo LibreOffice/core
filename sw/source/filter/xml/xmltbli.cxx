@@ -149,18 +149,18 @@ static SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
 
 const SvXMLTokenMap& SwXMLImport::GetTableElemTokenMap()
 {
-    if( !pTableElemTokenMap )
-        pTableElemTokenMap = new SvXMLTokenMap( aTableElemTokenMap );
+    if( !m_pTableElemTokenMap )
+        m_pTableElemTokenMap = new SvXMLTokenMap( aTableElemTokenMap );
 
-    return *pTableElemTokenMap;
+    return *m_pTableElemTokenMap;
 }
 
 const SvXMLTokenMap& SwXMLImport::GetTableCellAttrTokenMap()
 {
-    if( !pTableCellAttrTokenMap )
-        pTableCellAttrTokenMap = new SvXMLTokenMap( aTableCellAttrTokenMap );
+    if( !m_pTableCellAttrTokenMap )
+        m_pTableCellAttrTokenMap = new SvXMLTokenMap( aTableCellAttrTokenMap );
 
-    return *pTableCellAttrTokenMap;
+    return *m_pTableCellAttrTokenMap;
 }
 
 class SwXMLTableCell_Impl

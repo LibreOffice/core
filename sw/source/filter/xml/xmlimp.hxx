@@ -49,37 +49,37 @@ namespace SwImport {
 
 class SwXMLImport: public SvXMLImport
 {
-    SwNodeIndex             *pSttNdIdx;
+    SwNodeIndex             *m_pSttNdIdx;
 
-    SvXMLUnitConverter      *pTwipUnitConv;
-    SvXMLImportItemMapper   *pTableItemMapper;// paragraph item import
-    SvXMLTokenMap           *pDocElemTokenMap;
-    SvXMLTokenMap           *pTableElemTokenMap;
-    SvXMLTokenMap           *pTableCellAttrTokenMap;
-    SvXMLGraphicHelper      *pGraphicResolver;
-    SvXMLEmbeddedObjectHelper   *pEmbeddedResolver;
+    SvXMLUnitConverter      *m_pTwipUnitConv;
+    SvXMLImportItemMapper   *m_pTableItemMapper;// paragraph item import
+    SvXMLTokenMap           *m_pDocElemTokenMap;
+    SvXMLTokenMap           *m_pTableElemTokenMap;
+    SvXMLTokenMap           *m_pTableCellAttrTokenMap;
+    SvXMLGraphicHelper      *m_pGraphicResolver;
+    SvXMLEmbeddedObjectHelper   *m_pEmbeddedResolver;
 
-    SvXMLItemMapEntriesRef  xTableItemMap;
-    SvXMLItemMapEntriesRef  xTableColItemMap;
-    SvXMLItemMapEntriesRef  xTableRowItemMap;
-    SvXMLItemMapEntriesRef  xTableCellItemMap;
-    tools::SvRef<SotStorage>            xPackage;
+    SvXMLItemMapEntriesRef  m_xTableItemMap;
+    SvXMLItemMapEntriesRef  m_xTableColItemMap;
+    SvXMLItemMapEntriesRef  m_xTableRowItemMap;
+    SvXMLItemMapEntriesRef  m_xTableCellItemMap;
+    tools::SvRef<SotStorage>            m_xPackage;
     css::uno::Reference< css::container::XNameContainer >
-                            xLateInitSettings;
+                            m_xLateInitSettings;
 
-    sal_uInt16              nStyleFamilyMask;// Mask of styles to load
-    bool                bLoadDoc : 1;   // Load doc or styles only
-    bool                bInsert : 1;    // Insert mode. If styles are
+    sal_uInt16              m_nStyleFamilyMask;// Mask of styles to load
+    bool                m_bLoadDoc : 1;   // Load doc or styles only
+    bool                m_bInsert : 1;    // Insert mode. If styles are
                                             // loaded only false means that
                                             // existing styles will be
                                             // overwritten.
-    bool                bBlock : 1;     // Load text block
-    bool                bShowProgress : 1;
-    bool                bOrganizerMode : 1;
-    bool                bInititedXForms : 1;
-    bool                bPreserveRedlineMode;
+    bool                m_bBlock : 1;     // Load text block
+    bool                m_bShowProgress : 1;
+    bool                m_bOrganizerMode : 1;
+    bool                m_bInititedXForms : 1;
+    bool                m_bPreserveRedlineMode;
 
-    SwDoc*      doc; // cached for getDoc()
+    SwDoc*      m_pDoc; // cached for getDoc()
 
     void                    _InitItemImport();
     void                    _FinitItemImport();
@@ -146,11 +146,11 @@ public:
             const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext *CreateBodyContentContext( const OUString& rLocalName );
-    sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
-    bool IsInsertMode() const { return bInsert; }
-    bool IsStylesOnlyMode() const { return !bLoadDoc; }
-    bool IsBlockMode() const { return bBlock; }
-    bool IsOrganizerMode() const { return bOrganizerMode; }
+    sal_uInt16 GetStyleFamilyMask() const { return m_nStyleFamilyMask; }
+    bool IsInsertMode() const { return m_bInsert; }
+    bool IsStylesOnlyMode() const { return !m_bLoadDoc; }
+    bool IsBlockMode() const { return m_bBlock; }
+    bool IsOrganizerMode() const { return m_bOrganizerMode; }
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;
@@ -191,17 +191,17 @@ public:
 
 inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const
 {
-    return *pTwipUnitConv;
+    return *m_pTwipUnitConv;
 }
 
 inline const SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper() const
 {
-    return *pTableItemMapper;
+    return *m_pTableItemMapper;
 }
 
 inline       SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper()
 {
-    return *pTableItemMapper;
+    return *m_pTableItemMapper;
 }
 
 #endif  //  _XMLIMP_HXX

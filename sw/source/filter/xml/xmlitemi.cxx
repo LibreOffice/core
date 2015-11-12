@@ -329,21 +329,21 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
 
 void SwXMLImport::_InitItemImport()
 {
-    pTwipUnitConv = new SvXMLUnitConverter( GetComponentContext(),
+    m_pTwipUnitConv = new SvXMLUnitConverter( GetComponentContext(),
             util::MeasureUnit::TWIP, util::MeasureUnit::TWIP );
 
-    xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
-    xTableColItemMap = new SvXMLItemMapEntries( aXMLTableColItemMap );
-    xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );
-    xTableCellItemMap = new SvXMLItemMapEntries( aXMLTableCellItemMap );
+    m_xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
+    m_xTableColItemMap = new SvXMLItemMapEntries( aXMLTableColItemMap );
+    m_xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );
+    m_xTableCellItemMap = new SvXMLItemMapEntries( aXMLTableCellItemMap );
 
-    pTableItemMapper = new SwXMLImportTableItemMapper_Impl( xTableItemMap );
+    m_pTableItemMapper = new SwXMLImportTableItemMapper_Impl( m_xTableItemMap );
 }
 
 void SwXMLImport::_FinitItemImport()
 {
-    delete pTableItemMapper;
-    delete pTwipUnitConv;
+    delete m_pTableItemMapper;
+    delete m_pTwipUnitConv;
 }
 
 SvXMLImportContext *SwXMLImport::CreateTableItemImportContext(
@@ -358,20 +358,20 @@ SvXMLImportContext *SwXMLImport::CreateTableItemImportContext(
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TABLE_TABLE:
-        xItemMap = xTableItemMap;
+        xItemMap = m_xTableItemMap;
         break;
     case XML_STYLE_FAMILY_TABLE_COLUMN:
-        xItemMap = xTableColItemMap;
+        xItemMap = m_xTableColItemMap;
         break;
     case XML_STYLE_FAMILY_TABLE_ROW:
-        xItemMap = xTableRowItemMap;
+        xItemMap = m_xTableRowItemMap;
         break;
     case XML_STYLE_FAMILY_TABLE_CELL:
-        xItemMap = xTableCellItemMap;
+        xItemMap = m_xTableCellItemMap;
         break;
     }
 
-    pTableItemMapper->setMapEntries( xItemMap );
+    m_pTableItemMapper->setMapEntries( xItemMap );
 
     return new SwXMLItemSetContext_Impl( *this, nPrefix, rLocalName,
                                             xAttrList, rItemSet,
