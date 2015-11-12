@@ -1076,6 +1076,7 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
 #if GTK_CHECK_VERSION(3,0,0)
     g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
+    g_signal_connect( G_OBJECT(m_pWindow), "size-allocate", G_CALLBACK(sizeAllocated), this );
 #if GTK_CHECK_VERSION(3,14,0)
     GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
     g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
@@ -3398,7 +3399,87 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 
     cairo_surface_flush(cairo_get_target(cr));
 
-    return FALSE;
+    return false;
+}
+
+void GtkSalFrame::sizeAllocated(GtkWidget*, GdkRectangle *pAllocation, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+
+    bool bSized = false;
+
+    if( pThis->m_bFullscreen || (pThis->m_nStyle & (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::PLUG)) == SalFrameStyleFlags::SIZEABLE )
+    {
+        if( pAllocation->width != (int)pThis->maGeometry.nWidth || pAllocation->height != (int)pThis->maGeometry.nHeight )
+        {
+            bSized = true;
+            pThis->maGeometry.nWidth = pAllocation->width;
+            pThis->maGeometry.nHeight = pAllocation->height;
+        }
+    }
+
+    if( bSized )
+    {
+        pThis->AllocateFrame();
+        pThis->CallCallback( SALEVENT_RESIZE, nullptr );
+        pThis->TriggerPaintEvent();
+    }
+}
+
+gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpointer frame)
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->m_bPaintsBlocked = false;
+
+    bool bMoved = false;
+    int x = pEvent->x, y = pEvent->y;
+
+    /*  HACK: during sizing/moving a toolbar pThis->maGeometry is actually
+     *  already exact; even worse: due to the asynchronicity of configure
+     *  events the borderwindow which would evaluate this event
+     *  would size/move based on wrong data if we would actually evaluate
+     *  this event. So let's swallow it.
+     */
+    if( (pThis->m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) &&
+        GtkSalFrame::getDisplay()->GetCaptureFrame() == pThis )
+        return false;
+
+    /* #i31785# claims we cannot trust the x,y members of the event;
+     * they are e.g. not set correctly on maximize/demaximize;
+     * yet the gdkdisplay-x11.c code handling configure_events has
+     * done this XTranslateCoordinates work since the day ~zero.
+     */
+    if( x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
+    {
+        bMoved = true;
+        pThis->maGeometry.nX = x;
+        pThis->maGeometry.nY = y;
+    }
+
+    // update decoration hints
+    if( ! (pThis->m_nStyle & SalFrameStyleFlags::PLUG) )
+    {
+        GdkRectangle aRect;
+        gdk_window_get_frame_extents( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &aRect );
+        pThis->maGeometry.nTopDecoration    = y - aRect.y;
+        pThis->maGeometry.nBottomDecoration = aRect.y + aRect.height - y - pEvent->height;
+        pThis->maGeometry.nLeftDecoration   = x - aRect.x;
+        pThis->maGeometry.nRightDecoration  = aRect.x + aRect.width - x - pEvent->width;
+    }
+    else
+    {
+        pThis->maGeometry.nTopDecoration =
+            pThis->maGeometry.nBottomDecoration =
+            pThis->maGeometry.nLeftDecoration =
+            pThis->maGeometry.nRightDecoration = 0;
+    }
+
+    pThis->updateScreenNumber();
+
+    if (bMoved)
+        pThis->CallCallback(SALEVENT_MOVE, nullptr);
+
+    return false;
 }
 #else
 gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer frame )
@@ -3410,6 +3491,87 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
 
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
 
+    return false;
+}
+
+gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gpointer frame )
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->m_bPaintsBlocked = false;
+
+    bool bMoved = false, bSized = false;
+    int x = pEvent->x, y = pEvent->y;
+
+    /*  HACK: during sizing/moving a toolbar pThis->maGeometry is actually
+     *  already exact; even worse: due to the asynchronicity of configure
+     *  events the borderwindow which would evaluate this event
+     *  would size/move based on wrong data if we would actually evaluate
+     *  this event. So let's swallow it.
+     */
+    if( (pThis->m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) &&
+        GtkSalFrame::getDisplay()->GetCaptureFrame() == pThis )
+        return false;
+
+    /* #i31785# claims we cannot trust the x,y members of the event;
+     * they are e.g. not set correctly on maximize/demaximize;
+     * yet the gdkdisplay-x11.c code handling configure_events has
+     * done this XTranslateCoordinates work since the day ~zero.
+     */
+    if( x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
+    {
+        bMoved = true;
+        pThis->maGeometry.nX        = x;
+        pThis->maGeometry.nY        = y;
+    }
+    /* #i86302#
+     * for non sizeable windows we set the min and max hint for the window manager to
+     * achieve correct sizing. However this is asynchronous and e.g. on Compiz
+     * it sometimes happens that the window gets resized to another size (some default)
+     * if we update the size here, subsequent setMinMaxSize will use this wrong size
+     * - which is not good since the window manager will now size the window back to this
+     * wrong size at some point.
+     */
+    if( pThis->m_bFullscreen || (pThis->m_nStyle & (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::PLUG)) == SalFrameStyleFlags::SIZEABLE )
+    {
+        if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )
+        {
+            bSized = true;
+            pThis->maGeometry.nWidth    = pEvent->width;
+            pThis->maGeometry.nHeight   = pEvent->height;
+        }
+    }
+
+    // update decoration hints
+    if( ! (pThis->m_nStyle & SalFrameStyleFlags::PLUG) )
+    {
+        GdkRectangle aRect;
+        gdk_window_get_frame_extents( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &aRect );
+        pThis->maGeometry.nTopDecoration    = y - aRect.y;
+        pThis->maGeometry.nBottomDecoration = aRect.y + aRect.height - y - pEvent->height;
+        pThis->maGeometry.nLeftDecoration   = x - aRect.x;
+        pThis->maGeometry.nRightDecoration  = aRect.x + aRect.width - x - pEvent->width;
+    }
+    else
+    {
+        pThis->maGeometry.nTopDecoration =
+            pThis->maGeometry.nBottomDecoration =
+            pThis->maGeometry.nLeftDecoration =
+            pThis->maGeometry.nRightDecoration = 0;
+    }
+
+    pThis->updateScreenNumber();
+    if( bSized )
+        pThis->AllocateFrame();
+
+    if( bMoved && bSized )
+        pThis->CallCallback( SALEVENT_MOVERESIZE, nullptr );
+    else if( bMoved )
+        pThis->CallCallback( SALEVENT_MOVE, nullptr );
+    else if( bSized )
+        pThis->CallCallback( SALEVENT_RESIZE, nullptr );
+
+    if (bSized)
+        pThis->TriggerPaintEvent();
     return false;
 }
 
@@ -3551,93 +3713,6 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 
     pThis->CallCallback( SALEVENT_RESIZE, nullptr );
 
-    return false;
-}
-
-gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gpointer frame )
-{
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->m_bPaintsBlocked = false;
-
-    bool bMoved = false, bSized = false;
-    int x = pEvent->x, y = pEvent->y;
-
-    /*  HACK: during sizing/moving a toolbar pThis->maGeometry is actually
-     *  already exact; even worse: due to the asynchronicity of configure
-     *  events the borderwindow which would evaluate this event
-     *  would size/move based on wrong data if we would actually evaluate
-     *  this event. So let's swallow it.
-     */
-    if( (pThis->m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) &&
-        GtkSalFrame::getDisplay()->GetCaptureFrame() == pThis )
-        return false;
-
-    /* #i31785# claims we cannot trust the x,y members of the event;
-     * they are e.g. not set correctly on maximize/demaximize;
-     * yet the gdkdisplay-x11.c code handling configure_events has
-     * done this XTranslateCoordinates work since the day ~zero.
-     */
-    if( x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
-    {
-        bMoved = true;
-        pThis->maGeometry.nX        = x;
-        pThis->maGeometry.nY        = y;
-    }
-    /* #i86302#
-     * for non sizeable windows we set the min and max hint for the window manager to
-     * achieve correct sizing. However this is asynchronous and e.g. on Compiz
-     * it sometimes happens that the window gets resized to another size (some default)
-     * if we update the size here, subsequent setMinMaxSize will use this wrong size
-     * - which is not good since the window manager will now size the window back to this
-     * wrong size at some point.
-     */
-    /*    fprintf (stderr, "configure %d %d %d (%d) %d, %d diff? %d\n",
-             (int)pThis->m_bFullscreen, (pThis->m_nStyle & (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::PLUG)), SalFrameStyleFlags::SIZEABLE,
-             !!( pThis->m_bFullscreen || (pThis->m_nStyle & (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::PLUG)) == SalFrameStyleFlags::SIZEABLE ),
-             pEvent->width, pEvent->height,
-             !!(pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight)
-             ); */
-    if( pThis->m_bFullscreen || (pThis->m_nStyle & (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::PLUG)) == SalFrameStyleFlags::SIZEABLE )
-    {
-        if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )
-        {
-            bSized = true;
-            pThis->maGeometry.nWidth    = pEvent->width;
-            pThis->maGeometry.nHeight   = pEvent->height;
-        }
-    }
-
-    // update decoration hints
-    if( ! (pThis->m_nStyle & SalFrameStyleFlags::PLUG) )
-    {
-        GdkRectangle aRect;
-        gdk_window_get_frame_extents( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &aRect );
-        pThis->maGeometry.nTopDecoration    = y - aRect.y;
-        pThis->maGeometry.nBottomDecoration = aRect.y + aRect.height - y - pEvent->height;
-        pThis->maGeometry.nLeftDecoration   = x - aRect.x;
-        pThis->maGeometry.nRightDecoration  = aRect.x + aRect.width - x - pEvent->width;
-    }
-    else
-    {
-        pThis->maGeometry.nTopDecoration =
-            pThis->maGeometry.nBottomDecoration =
-            pThis->maGeometry.nLeftDecoration =
-            pThis->maGeometry.nRightDecoration = 0;
-    }
-
-    pThis->updateScreenNumber();
-    if( bSized )
-        pThis->AllocateFrame();
-
-    if( bMoved && bSized )
-        pThis->CallCallback( SALEVENT_MOVERESIZE, nullptr );
-    else if( bMoved )
-        pThis->CallCallback( SALEVENT_MOVE, nullptr );
-    else if( bSized )
-        pThis->CallCallback( SALEVENT_RESIZE, nullptr );
-
-    if (bSized)
-        pThis->TriggerPaintEvent();
     return false;
 }
 
