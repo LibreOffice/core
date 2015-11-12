@@ -358,12 +358,12 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
 
             pUserList->clear();                 // alle Eintraege raus
             sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
+            pUserList->reserve(nCount);
             const OUString* pAry = aSeq.getConstArray();
             for (sal_uInt16 i=0; i<nCount; i++)
             {
                 OUString aEntry = pAry[i];
-                ScUserListData* pData = new ScUserListData(aEntry);
-                pUserList->push_back(pData);
+                pUserList->push_back( ScUserListData(aEntry) );
             }
             bSaveApp = true;    // Liste wird mit den App-Optionen gespeichert
         }

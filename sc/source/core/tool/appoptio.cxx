@@ -180,11 +180,11 @@ static void lcl_SetSortList( const Any& rValue )
         if (!bDefault)
         {
             aList.clear();
+            aList.reserve(nCount);
 
             for (long i=0; i<nCount; i++)
             {
-                ScUserListData* pNew = new ScUserListData( pArray[i] );
-                aList.push_back(pNew);
+                aList.push_back( ScUserListData( pArray[i] ) );
             }
         }
 

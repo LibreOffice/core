@@ -22,7 +22,6 @@
 
 #include "scdllapi.h"
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 
 /**
@@ -47,7 +46,6 @@ private:
 public:
     ScUserListData(const OUString& rStr);
     ScUserListData(const ScUserListData& rData);
-    ~ScUserListData();
 
     const OUString& GetString() const { return aStr; }
     void SetString(const OUString& rStr);
@@ -63,7 +61,7 @@ public:
  */
 class SC_DLLPUBLIC ScUserList
 {
-    typedef ::boost::ptr_vector<ScUserListData> DataType;
+    typedef std::vector<ScUserListData> DataType;
     DataType maData;
 public:
     typedef DataType::iterator iterator;
@@ -85,8 +83,9 @@ public:
     iterator begin();
     const_iterator begin() const;
     void clear();
+    void reserve(size_t size) { maData.reserve(size); }
     size_t size() const;
-    void push_back(ScUserListData* p);
+    void push_back(const ScUserListData& r) { maData.push_back(r); }
     void erase(iterator itr);
 };
 

@@ -96,10 +96,6 @@ ScUserListData::ScUserListData(const ScUserListData& rData) :
     InitTokens();
 }
 
-ScUserListData::~ScUserListData()
-{
-}
-
 void ScUserListData::SetString( const OUString& rStr )
 {
     aStr = rStr;
@@ -237,9 +233,9 @@ ScUserList::ScUserList()
             OUString aDayLong = aDayLongBuf.makeStringAndClear();
 
             if ( !HasEntry( aDayShort ) )
-                maData.push_back( new ScUserListData( aDayShort ));
+                maData.push_back( ScUserListData( aDayShort ));
             if ( !HasEntry( aDayLong ) )
-                maData.push_back( new ScUserListData( aDayLong ));
+                maData.push_back( ScUserListData( aDayLong ));
         }
 
         xCal = xCalendars[j].Months;
@@ -262,9 +258,9 @@ ScUserList::ScUserList()
             OUString aMonthLong = aMonthLongBuf.makeStringAndClear();
 
             if ( !HasEntry( aMonthShort ) )
-                maData.push_back( new ScUserListData( aMonthShort ));
+                maData.push_back( ScUserListData( aMonthShort ));
             if ( !HasEntry( aMonthLong ) )
-                maData.push_back( new ScUserListData( aMonthLong ));
+                maData.push_back( ScUserListData( aMonthLong ));
         }
     }
 }
@@ -348,11 +344,6 @@ void ScUserList::clear()
 size_t ScUserList::size() const
 {
     return maData.size();
-}
-
-void ScUserList::push_back(ScUserListData* p)
-{
-    maData.push_back(p);
 }
 
 void ScUserList::erase(iterator itr)
