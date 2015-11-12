@@ -114,10 +114,9 @@ dnl ===================================================================
 AC_CANONICAL_HOST
 
 AC_MSG_CHECKING([for product name])
+PRODUCTNAME="AC_PACKAGE_NAME"
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
-    PRODUCTNAME=AC_PACKAGE_NAME"Dev"
-else
-    PRODUCTNAME="AC_PACKAGE_NAME"
+    PRODUCTNAME="${PRODUCTNAME}Dev"
 fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
