@@ -489,10 +489,10 @@ public:
 
     /** Returns the object that stores all contents of an XF record. */
     inline XclImpXF*    GetXF( sal_uInt16 nXFIndex )
-                            { return (nXFIndex >= maXFList.size()) ? nullptr : &maXFList.at(nXFIndex); }
+                            { return (nXFIndex >= maXFList.size()) ? nullptr : maXFList.at(nXFIndex).get(); }
 
     inline const XclImpXF*    GetXF( sal_uInt16 nXFIndex ) const
-                            { return (nXFIndex >= maXFList.size()) ? nullptr : &maXFList.at(nXFIndex); }
+                            { return (nXFIndex >= maXFList.size()) ? nullptr : maXFList.at(nXFIndex).get(); }
 
     /** Returns the index to the Excel font used in the specified XF record. */
     sal_uInt16          GetFontIndex( sal_uInt16 nXFIndex ) const;
@@ -509,7 +509,7 @@ private:
     typedef std::vector< std::unique_ptr<XclImpStyle> >        XclImpStyleList;
     typedef ::std::map< sal_uInt16, XclImpStyle* >  XclImpStyleMap;
 
-    boost::ptr_vector< XclImpXF > maXFList; /// List of contents of all XF record.
+    std::vector< std::unique_ptr<XclImpXF> > maXFList; /// List of contents of all XF record.
     XclImpStyleList     maBuiltinStyles;    /// List of built-in cell styles.
     XclImpStyleList     maUserStyles;       /// List of user defined cell styles.
     XclImpStyleMap      maStylesByXf;       /// Maps XF records to cell styles.
