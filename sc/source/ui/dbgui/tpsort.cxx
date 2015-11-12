@@ -140,7 +140,7 @@ void ScTabPageSortFields::Init()
     for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
     {
         maSortKeyCtrl.AddSortKey(i+1);
-        maSortKeyItems[i].m_pLbSort->SetSelectHdl( LINK( this, ScTabPageSortFields, SelectHdl ) );
+        maSortKeyItems[i]->m_pLbSort->SetSelectHdl( LINK( this, ScTabPageSortFields, SelectHdl ) );
     }
 }
 
@@ -155,7 +155,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
     bSortByRows = aSortData.bByRow;
     bHasHeader  = aSortData.bHasHeader;
 
-    if ( maSortKeyItems[0].m_pLbSort->GetEntryCount() == 0 )
+    if ( maSortKeyItems[0]->m_pLbSort->GetEntryCount() == 0 )
         FillFieldLists(0);
 
     // ListBox selection:
@@ -165,7 +165,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
         for ( sal_uInt16 i=nSortKeyCount; i<aSortData.GetSortKeyCount(); i++ )
         {
             maSortKeyCtrl.AddSortKey(i+1);
-            maSortKeyItems[i].m_pLbSort->SetSelectHdl( LINK( this,
+            maSortKeyItems[i]->m_pLbSort->SetSelectHdl( LINK( this,
                                  ScTabPageSortFields, SelectHdl ) );
         }
         nSortKeyCount = aSortData.GetSortKeyCount();
@@ -175,26 +175,26 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
         {
             if (aSortData.maKeyState[i].bDoSort )
             {
-                maSortKeyItems[i].m_pLbSort->SelectEntryPos( GetFieldSelPos(
+                maSortKeyItems[i]->m_pLbSort->SelectEntryPos( GetFieldSelPos(
                                     aSortData.maKeyState[i].nField ) );
                 (aSortData.maKeyState[i].bAscending)
-                    ? maSortKeyItems[i].m_pBtnUp->Check()
-                    : maSortKeyItems[i].m_pBtnDown->Check();
+                    ? maSortKeyItems[i]->m_pBtnUp->Check()
+                    : maSortKeyItems[i]->m_pBtnDown->Check();
             }
             else
             {
-                maSortKeyItems[i].m_pLbSort->SelectEntryPos( 0 ); // Select none
-                maSortKeyItems[i].m_pBtnUp->Check();
+                maSortKeyItems[i]->m_pLbSort->SelectEntryPos( 0 ); // Select none
+                maSortKeyItems[i]->m_pBtnUp->Check();
             }
         }
 
         // Enable or disable field depending on preceding Listbox selection
-        maSortKeyItems[0].EnableField();
+        maSortKeyItems[0]->EnableField();
         for ( sal_uInt16 i=1; i<nSortKeyCount; i++ )
-            if ( maSortKeyItems[i - 1].m_pLbSort->GetSelectEntryPos() == 0 )
-                maSortKeyItems[i].DisableField();
+            if ( maSortKeyItems[i - 1]->m_pLbSort->GetSelectEntryPos() == 0 )
+                maSortKeyItems[i]->DisableField();
             else
-                maSortKeyItems[i].EnableField();
+                maSortKeyItems[i]->EnableField();
     }
     else
     {
@@ -207,17 +207,17 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
 
         sal_uInt16  nSort1Pos = nCol - aSortData.nCol1+1;
 
-        maSortKeyItems[0].m_pLbSort->SelectEntryPos( nSort1Pos );
+        maSortKeyItems[0]->m_pLbSort->SelectEntryPos( nSort1Pos );
         for ( sal_uInt16 i=1; i<nSortKeyCount; i++ )
-            maSortKeyItems[i].m_pLbSort->SelectEntryPos( 0 );
+            maSortKeyItems[i]->m_pLbSort->SelectEntryPos( 0 );
 
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-            maSortKeyItems[i].m_pBtnUp->Check();
+            maSortKeyItems[i]->m_pBtnUp->Check();
 
-        maSortKeyItems[0].EnableField();
-        maSortKeyItems[1].EnableField();
+        maSortKeyItems[0]->EnableField();
+        maSortKeyItems[1]->EnableField();
         for ( sal_uInt16 i=2; i<nSortKeyCount; i++ )
-            maSortKeyItems[i].DisableField();
+            maSortKeyItems[i]->DisableField();
     }
 
     if ( pDlg )
@@ -227,7 +227,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
     }
 
     // Make sure that there is always a last undefined sort key
-    if ( maSortKeyItems[nSortKeyCount - 1].m_pLbSort->GetSelectEntryPos() > 0 )
+    if ( maSortKeyItems[nSortKeyCount - 1]->m_pLbSort->GetSelectEntryPos() > 0 )
         SetLastSortKey( nSortKeyCount );
 }
 
@@ -250,7 +250,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
 
     for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
     {
-        nSortPos.push_back( maSortKeyItems[i].m_pLbSort->GetSelectEntryPos() );
+        nSortPos.push_back( maSortKeyItems[i]->m_pLbSort->GetSelectEntryPos() );
 
         if ( nSortPos[i] == LISTBOX_ENTRY_NOTFOUND ) nSortPos[i] = 0;
     }
@@ -280,7 +280,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
         }
 
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-            aNewSortData.maKeyState[i].bAscending = maSortKeyItems[i].m_pBtnUp->IsChecked();
+            aNewSortData.maKeyState[i].bAscending = maSortKeyItems[i]->m_pBtnUp->IsChecked();
 
         // bHasHeader is in ScTabPageSortOptions::FillItemSet, where it belongs
     }
@@ -307,14 +307,14 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
         {
             std::vector<sal_uInt16> nCurSel;
             for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-                nCurSel.push_back( maSortKeyItems[i].m_pLbSort->GetSelectEntryPos() );
+                nCurSel.push_back( maSortKeyItems[i]->m_pLbSort->GetSelectEntryPos() );
 
             bHasHeader  = pDlg->GetHeaders();
             bSortByRows = pDlg->GetByRows();
             FillFieldLists(0);
 
             for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-                maSortKeyItems[i].m_pLbSort->SelectEntryPos( nCurSel[i] );
+                maSortKeyItems[i]->m_pLbSort->SelectEntryPos( nCurSel[i] );
         }
     }
 }
@@ -346,8 +346,8 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
         {
             for ( sal_uInt16 i=nStartField; i<nSortKeyCount; i++ )
             {
-                maSortKeyItems[i].m_pLbSort->Clear();
-                maSortKeyItems[i].m_pLbSort->InsertEntry( aStrUndefined, 0 );
+                maSortKeyItems[i]->m_pLbSort->Clear();
+                maSortKeyItems[i]->m_pLbSort->InsertEntry( aStrUndefined, 0 );
             }
 
             SCCOL   nFirstSortCol   = aSortData.nCol1;
@@ -373,7 +373,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
                     nFieldArr.push_back( col );
 
                     for ( sal_uInt16 j=nStartField; j<nSortKeyCount; j++ )
-                        maSortKeyItems[j].m_pLbSort->InsertEntry( aFieldName, i );
+                        maSortKeyItems[j]->m_pLbSort->InsertEntry( aFieldName, i );
 
                     i++;
                 }
@@ -394,7 +394,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
                     nFieldArr.push_back( row );
 
                     for ( sal_uInt16 j=nStartField; j<nSortKeyCount; j++ )
-                        maSortKeyItems[j].m_pLbSort->InsertEntry( aFieldName, i );
+                        maSortKeyItems[j]->m_pLbSort->InsertEntry( aFieldName, i );
 
                     i++;
                 }
@@ -430,14 +430,14 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
     // Add Sort Key Item
     ++nSortKeyCount;
     maSortKeyCtrl.AddSortKey( nSortKeyCount );
-    maSortKeyItems[nItem].m_pLbSort->SetSelectHdl(
+    maSortKeyItems[nItem]->m_pLbSort->SetSelectHdl(
                      LINK( this, ScTabPageSortFields, SelectHdl ) );
 
     FillFieldLists( nItem );
 
     // Set Status
-    maSortKeyItems[nItem].m_pBtnUp->Check();
-    maSortKeyItems[nItem].m_pLbSort->SelectEntryPos( 0 );
+    maSortKeyItems[nItem]->m_pBtnUp->Check();
+    maSortKeyItems[nItem]->m_pLbSort->SelectEntryPos( 0 );
 }
 
 // Handler:
@@ -448,7 +448,7 @@ IMPL_LINK_TYPED( ScTabPageSortFields, SelectHdl, ListBox&, rLb, void )
     ScSortKeyItems::iterator pIter;
 
     // If last listbox is enabled add one item
-    if ( maSortKeyItems.back().m_pLbSort == &rLb )
+    if ( maSortKeyItems.back()->m_pLbSort == &rLb )
         if ( aSelEntry != aStrUndefined )
         {
             SetLastSortKey( nSortKeyCount );
@@ -458,7 +458,7 @@ IMPL_LINK_TYPED( ScTabPageSortFields, SelectHdl, ListBox&, rLb, void )
     // Find selected listbox
     for ( pIter = maSortKeyItems.begin(); pIter != maSortKeyItems.end(); ++pIter )
     {
-        if ( pIter->m_pLbSort == &rLb ) break;
+        if ( (*pIter)->m_pLbSort == &rLb ) break;
     }
 
     // If not selecting the last Listbox, modify the succeeding ones
@@ -469,16 +469,16 @@ IMPL_LINK_TYPED( ScTabPageSortFields, SelectHdl, ListBox&, rLb, void )
         {
             for ( ; pIter != maSortKeyItems.end(); ++pIter )
             {
-                pIter->m_pLbSort->SelectEntryPos( 0 );
+                (*pIter)->m_pLbSort->SelectEntryPos( 0 );
 
-                if ( pIter->m_pFlSort->IsEnabled() )
-                    pIter->DisableField();
+                if ( (*pIter)->m_pFlSort->IsEnabled() )
+                    (*pIter)->DisableField();
             }
         }
         else
         {
-            if ( !pIter->m_pFlSort->IsEnabled() )
-                    pIter->EnableField();
+            if ( !(*pIter)->m_pFlSort->IsEnabled() )
+                    (*pIter)->EnableField();
         }
      }
 }

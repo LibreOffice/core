@@ -42,7 +42,7 @@ ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyIt
 {
     pParent->get(m_pBox, "SortKeyWindow");
     if (!mrSortKeyItems.empty())
-        nItemHeight = mrSortKeyItems.front().getItemHeight();
+        nItemHeight = mrSortKeyItems.front()->getItemHeight();
     else
     {
         ScSortKeyItem aTemp(m_pBox);
@@ -70,7 +70,7 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
                      OUString::number( nItemNumber );
     pSortKeyItem->m_pFlSort->SetText( aLine );
 
-    mrSortKeyItems.push_back(pSortKeyItem);
+    mrSortKeyItems.push_back(std::unique_ptr<ScSortKeyItem>(pSortKeyItem));
 }
 
 void ScSortKeyWindow::DoScroll(sal_Int32 nNewPos)

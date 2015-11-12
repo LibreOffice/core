@@ -10,7 +10,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SORTKEYDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SORTKEYDLG_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 #include "anyrefdg.hxx"
 
@@ -39,7 +40,7 @@ struct ScSortKeyItem : public VclBuilderContainer
     long getItemHeight() const;
 };
 
-typedef boost::ptr_vector<ScSortKeyItem> ScSortKeyItems;
+typedef std::vector<std::unique_ptr<ScSortKeyItem> > ScSortKeyItems;
 
 class ScSortKeyWindow
 {
