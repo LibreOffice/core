@@ -22,7 +22,7 @@
 
 #include "address.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 class ScDocument;
 class ScAreaLink;
@@ -40,18 +40,17 @@ private:
 public:
     ScAreaLinkSaver( const ScAreaLink& rSource );
     ScAreaLinkSaver( const ScAreaLinkSaver& rCopy );
-    ~ScAreaLinkSaver();
 
     bool        IsEqual( const ScAreaLink& rCompare ) const;
     bool        IsEqualSource( const ScAreaLink& rCompare ) const;
 
     void        WriteToLink( ScAreaLink& rLink ) const;
-    void InsertNewLink( ScDocument* pDoc );
+    void        InsertNewLink( ScDocument* pDoc );
 };
 
 class ScAreaLinkSaveCollection
 {
-    typedef ::boost::ptr_vector<ScAreaLinkSaver> DataType;
+    typedef ::std::vector<ScAreaLinkSaver> DataType;
     DataType maData;
 public:
     ScAreaLinkSaveCollection();
@@ -67,7 +66,7 @@ public:
     ScAreaLinkSaver& operator[](size_t nIndex);
     const ScAreaLinkSaver& operator[](size_t nIndex) const;
     size_t size() const;
-    void push_back(ScAreaLinkSaver* p);
+    void push_back(const ScAreaLinkSaver&);
 };
 
 #endif

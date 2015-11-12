@@ -44,8 +44,6 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
 {
 }
 
-ScAreaLinkSaver::~ScAreaLinkSaver() {}
-
 bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
 {
     return ( aFileName.equals(rCompare.GetFile()) &&
@@ -173,13 +171,12 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
         for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = rLinks[i].get();
-            if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
+            if (dynamic_cast<const ScAreaLink*>( pBase) != nullptr)
             {
                 if (!pColl)
                     pColl = new ScAreaLinkSaveCollection;
 
-                ScAreaLinkSaver* pSaver = new ScAreaLinkSaver( *static_cast<ScAreaLink*>(pBase ));
-                pColl->push_back(pSaver);
+                pColl->push_back( ScAreaLinkSaver( *static_cast<ScAreaLink*>(pBase ) ) );
             }
         }
     }
@@ -202,7 +199,7 @@ size_t ScAreaLinkSaveCollection::size() const
     return maData.size();
 }
 
-void ScAreaLinkSaveCollection::push_back(ScAreaLinkSaver* p)
+void ScAreaLinkSaveCollection::push_back(const ScAreaLinkSaver& p)
 {
     maData.push_back(p);
 }
