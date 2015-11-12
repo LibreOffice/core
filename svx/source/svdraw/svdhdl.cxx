@@ -2250,10 +2250,7 @@ SdrCropHdl::SdrCropHdl(
 
 BitmapEx SdrCropHdl::GetHandlesBitmap()
 {
-    static BitmapEx* pModernBitmap = nullptr;
-    if( pModernBitmap == nullptr )
-        pModernBitmap = new BitmapEx(ResId(SIP_SA_CROP_MARKERS, *ImpGetResMgr()));
-    return *pModernBitmap;
+    return BitmapEx(ResId(SIP_SA_CROP_MARKERS, *ImpGetResMgr()));
 }
 
 
