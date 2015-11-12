@@ -92,8 +92,7 @@ public:
 
 // IMPORT: Formulas
     static void         ConvertCellRangeAddress(
-                            OUString& sFormula,
-                            const bool bIsFormula = true);
+                            OUString& sFormula);
 // EXPORT: Core Date Time
     static void         ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate);
 
