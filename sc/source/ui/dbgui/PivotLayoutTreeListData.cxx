@@ -137,7 +137,7 @@ void ScPivotLayoutTreeListData::FillDataField(ScPivotFieldVector& rDataFields)
                                                        pItemValue->maName,
                                                        pItemValue->maFunctionData.mnDupCount);
 
-        maDataItemValues.push_back(pItemValue);
+        maDataItemValues.push_back(std::unique_ptr<ScItemValue>(pItemValue));
         InsertEntry(sDataItemName, nullptr, false, TREELIST_APPEND, pItemValue);
     }
 }
@@ -193,7 +193,7 @@ void ScPivotLayoutTreeListData::InsertEntryForItem(ScItemValue* pItemValue, sal_
 {
     ScItemValue* pDataItemValue = new ScItemValue(pItemValue);
     pDataItemValue->mpOriginalItemValue = pItemValue;
-    maDataItemValues.push_back(pDataItemValue);
+    maDataItemValues.push_back(std::unique_ptr<ScItemValue>(pDataItemValue));
 
     ScPivotFuncData& rFunctionData = pDataItemValue->maFunctionData;
 
