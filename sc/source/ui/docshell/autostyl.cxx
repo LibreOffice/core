@@ -24,18 +24,7 @@
 #include "docsh.hxx"
 #include "sc.hrc"
 
-struct ScAutoStyleInitData
-{
-    ScRange     aRange;
-    OUString    aStyle1;
-    sal_uLong   nTimeout;
-    OUString    aStyle2;
-
-    ScAutoStyleInitData( const ScRange& rR, const OUString& rSt1, sal_uLong nT, const OUString& rSt2 ) :
-        aRange(rR), aStyle1(rSt1), nTimeout(nT), aStyle2(rSt2) {}
-};
-
-inline sal_uLong TimeNow()          // Sekunden
+static inline sal_uLong TimeNow()          // Sekunden
 {
     return (sal_uLong) time(nullptr);
 }
@@ -86,13 +75,13 @@ ScAutoStyleList::~ScAutoStyleList()
 void ScAutoStyleList::AddInitial( const ScRange& rRange, const OUString& rStyle1,
                                     sal_uLong nTimeout, const OUString& rStyle2 )
 {
-    aInitials.push_back(new ScAutoStyleInitData( rRange, rStyle1, nTimeout, rStyle2 ));
+    aInitials.push_back( ScAutoStyleInitData( rRange, rStyle1, nTimeout, rStyle2 ) );
     aInitIdle.Start();
 }
 
 IMPL_LINK_NOARG_TYPED(ScAutoStyleList, InitHdl, Idle *, void)
 {
-    boost::ptr_vector<ScAutoStyleInitData>::iterator iter;
+    std::vector<ScAutoStyleInitData>::iterator iter;
     for (iter = aInitials.begin(); iter != aInitials.end(); ++iter)
     {
         //  apply first style immediately
