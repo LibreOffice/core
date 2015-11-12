@@ -1294,7 +1294,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         }
 
         uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
-        for (sal_Int32 nInd = 0; nInd < aStyles.getLength(); ++nInd)
+        for ( OUString aStyle: aStyles )
         {
             boost::property_tree::ptree aChild;
             aChild.put("", aStyles[nInd]);
