@@ -32,7 +32,7 @@
 #include "excdefs.hxx"
 #include <rtl/ref.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 #include <memory>
 #include <unordered_map>
 
@@ -107,7 +107,7 @@ protected:
     XclImpOutlineBuffer*    pRowOutlineBuff;
     XclImpColRowSettings*   pColRowBuff;        // Col/Row settings 1 table
 
-    typedef boost::ptr_vector< XclImpOutlineDataBuffer > XclImpOutlineListBuffer;
+    typedef std::vector< std::unique_ptr<XclImpOutlineDataBuffer> > XclImpOutlineListBuffer;
     XclImpOutlineListBuffer* pOutlineListBuffer;
 
     LastFormulaMapType maLastFormulaCells; // Keep track of last formula cells in each column.

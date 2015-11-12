@@ -1228,7 +1228,7 @@ void ImportExcel::NewTable()
     InitializeTable( nTab );
 
     XclImpOutlineDataBuffer* pNewItem = new XclImpOutlineDataBuffer( GetRoot(), nTab );
-    pOutlineListBuffer->push_back( pNewItem );
+    pOutlineListBuffer->push_back( std::unique_ptr<XclImpOutlineDataBuffer>(pNewItem) );
     pExcRoot->pColRowBuff = pColRowBuff = pNewItem->GetColRowBuff();
     pColOutlineBuff = pNewItem->GetColOutline();
     pRowOutlineBuff = pNewItem->GetRowOutline();
@@ -1259,7 +1259,7 @@ void ImportExcel::PostDocLoad()
 
     // outlines for all sheets, sets hidden rows and columns (#i11776# after filtered ranges)
     for (XclImpOutlineListBuffer::iterator itBuffer = pOutlineListBuffer->begin(); itBuffer != pOutlineListBuffer->end(); ++itBuffer)
-        itBuffer->Convert();
+        (*itBuffer)->Convert();
 
     // document view settings (before visible OLE area)
     GetDocViewSettings().Finalize();
