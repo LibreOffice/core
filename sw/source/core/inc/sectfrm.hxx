@@ -129,7 +129,7 @@ public:
      * We need this in the FormatWidthCols to "deflate" columns there.
      */
     SwTwips Undersize(bool bOverSize = false);
-    SwTwips Undersize() const;
+    SwTwips CalcUndersize() const;
 
     /// Adapt size to surroundings
     void _CheckClipping( bool bGrow, bool bMaximize );

@@ -2492,7 +2492,7 @@ void SwSectionFrm::InvalidateFootnotePos()
     }
 }
 
-SwTwips SwSectionFrm::Undersize() const
+SwTwips SwSectionFrm::CalcUndersize() const
 {
     SWRECTFN(this);
     return InnerHeight() - (Prt().*fnRect->fnGetHeight)();
@@ -2500,8 +2500,7 @@ SwTwips SwSectionFrm::Undersize() const
 
 SwTwips SwSectionFrm::Undersize(bool bOverSize)
 {
-    SWRECTFN(this);
-    const auto nRet = InnerHeight() - (Prt().*fnRect->fnGetHeight)();
+    const auto nRet = CalcUndersize();
     m_bUndersized = (nRet > 0);
     return (nRet <= 0 && !bOverSize) ? 0 : nRet;
 }

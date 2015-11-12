@@ -664,7 +664,7 @@ size_t SwPageFrm::GetContentHeight(const long nTop, const long nBottom) const
             else if (pCnt->IsSctFrm())
             {
                 // Grow if undersized, but don't shrink if oversized.
-                const auto delta = static_cast<const SwSectionFrm*>(pCnt)->Undersize();
+                const auto delta = static_cast<const SwSectionFrm*>(pCnt)->CalcUndersize();
                 if (delta > 0)
                     nTmp += delta;
             }
