@@ -22,7 +22,8 @@
 
 #include "eeparser.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 #include <o3tl/sorted_vector.hxx>
 
 struct ScRTFCellDefault
@@ -48,7 +49,7 @@ class EditEngine;
 class ScRTFParser : public ScEEParser
 {
 private:
-    typedef boost::ptr_vector<ScRTFCellDefault> DefaultList;
+    typedef std::vector< std::unique_ptr<ScRTFCellDefault> > DefaultList;
 
     DefaultList maDefaultList;
     size_t mnCurPos;

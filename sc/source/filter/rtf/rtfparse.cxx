@@ -207,7 +207,7 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
         // Not flush on the right? => new table
         if ( nLastWidth && !maDefaultList.empty() )
         {
-            const ScRTFCellDefault& rD = maDefaultList.back();
+            const ScRTFCellDefault& rD = *maDefaultList.back().get();
             if (rD.nTwips != nLastWidth)
             {
                 SCCOL n1, n2;
@@ -224,14 +224,14 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
         // Build up TwipCols only after nLastWidth comparison!
         for ( size_t i = 0, n = maDefaultList.size(); i < n; ++i )
         {
-            const ScRTFCellDefault& rD = maDefaultList[i];
+            const ScRTFCellDefault& rD = *maDefaultList[i].get();
             SCCOL nCol;
             if ( !SeekTwips(rD.nTwips, &nCol) )
                 pColTwips->insert( rD.nTwips );
         }
     }
     pDefMerge = nullptr;
-    pActDefault = maDefaultList.empty() ? nullptr : &maDefaultList[0];
+    pActDefault = maDefaultList.empty() ? nullptr : maDefaultList[0].get();
     mnCurPos = 0;
     OSL_ENSURE( pActDefault, "NewCellRow: pActDefault==0" );
 }
@@ -270,7 +270,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
         {
             if (!maDefaultList.empty())
-                nLastWidth = maDefaultList.back().nTwips;
+                nLastWidth = maDefaultList.back()->nTwips;
 
             nColCnt = 0;
             maDefaultList.clear();
@@ -289,7 +289,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         {
             if (!pDefMerge && !maDefaultList.empty())
             {
-                pDefMerge = &maDefaultList.back();
+                pDefMerge = maDefaultList.back().get();
                 mnCurPos = maDefaultList.size() - 1;
             }
             OSL_ENSURE( pDefMerge, "RTF_CLMRG: pDefMerge==0" );
@@ -304,7 +304,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             bNewDef = true;
             pInsDefault->nCol = nColCnt;
             pInsDefault->nTwips = pInfo->nTokenValue; // Right cell border
-            maDefaultList.push_back( pInsDefault );
+            maDefaultList.push_back( std::unique_ptr<ScRTFCellDefault>(pInsDefault) );
             // New free-flying pInsDefault
             pInsDefault = new ScRTFCellDefault( pPool );
             if ( ++nColCnt > nColMax )
@@ -359,7 +359,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
 
             pActDefault = nullptr;
             if (!maDefaultList.empty() && (mnCurPos+1) < maDefaultList.size())
-                pActDefault = &maDefaultList[++mnCurPos];
+                pActDefault = maDefaultList[++mnCurPos].get();
 
             nLastToken = pInfo->nToken;
         }
