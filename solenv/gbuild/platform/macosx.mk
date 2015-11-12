@@ -308,10 +308,8 @@ gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(WORKDIR)/UnpackedTarba
 # Module class
 
 define gb_Module_DEBUGRUNCOMMAND
-OFFICESCRIPT=$$($(gb_MKTEMP)) && \
-printf '%s\n' "set args --norestore --nologo '--accept=pipe,name=$(USER);urp;'" > $${OFFICESCRIPT} && \
-gdb -x $${OFFICESCRIPT} $(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice && \
-rm $${OFFICESCRIPT}
+lldb -f $(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice -- --norestore --nologo \
+    '"--accept=pipe,name=$(USER)\;urp"'
 endef
 
 # InstallModuleTarget class
