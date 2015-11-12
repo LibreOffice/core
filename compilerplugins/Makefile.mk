@@ -19,7 +19,7 @@ compilerplugins.clean:
 
 else
 
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 
 compilerplugins:
 	$(MAKE) $(PARALLELISM_OPTION) -f $(SRCDIR)/compilerplugins/Makefile-clang.mk compilerplugins

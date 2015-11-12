@@ -18,7 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libebook, \
     external/libebook/0001-lrf-compute-color-interpolation-coeff.-correctly.patch.1 \
 ))
 
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libebook, \
     external/libebook/ubsan-visibility.patch \
