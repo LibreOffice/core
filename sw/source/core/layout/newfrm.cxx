@@ -39,9 +39,9 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <DocumentLayoutManager.hxx>
 
-SwLayVout     *SwRootFrm::mpVout = nullptr;
-bool           SwRootFrm::mbInPaint = false;
-bool           SwRootFrm::mbNoVirDev = false;
+SwLayVout     *SwRootFrm::s_pVout = nullptr;
+bool           SwRootFrm::s_isInPaint = false;
+bool           SwRootFrm::s_isNoVirDev = false;
 
 SwCache *SwFrm::mpCache = nullptr;
 
@@ -343,7 +343,7 @@ sal_uInt32 SwFrm::mnLastFrmId=0;
 
 void _FrmInit()
 {
-    SwRootFrm::mpVout = new SwLayVout();
+    SwRootFrm::s_pVout = new SwLayVout();
     SwCache *pNew = new SwCache( 100
 #ifdef DBG_UTIL
     , "static SwBorderAttrs::pCache"
@@ -363,7 +363,7 @@ void _FrmFinit()
             OSL_ENSURE( !pObj, "Who didn't deregister?");
         }
 #endif
-    delete SwRootFrm::mpVout;
+    delete SwRootFrm::s_pVout;
     delete SwFrm::GetCachePtr();
 }
 

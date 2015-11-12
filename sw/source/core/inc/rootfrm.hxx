@@ -60,8 +60,8 @@ class SwRootFrm: public SwLayoutFrm
     friend inline void SetLastPage( SwPageFrm* );
 
     // For creating and destroying of the virtual output device manager
-    friend void _FrmInit(); // Creates mpVout
-    friend void _FrmFinit(); // Destroys mpVout
+    friend void _FrmInit(); // Creates s_pVout
+    friend void _FrmFinit(); // Destroys s_pVout
 
     std::vector<SwRect> maPageRects;// returns the current rectangle for each page frame
                                     // the rectangle is extended to the top/bottom/left/right
@@ -74,9 +74,9 @@ class SwRootFrm: public SwLayoutFrm
 
     bool    mbNeedGrammarCheck;     // true when sth needs to be checked (not necessarily started yet!)
 
-    static SwLayVout     *mpVout;
-    static bool           mbInPaint; // Protection against double Paints
-    static bool           mbNoVirDev;// No virt. Device for SystemPaints
+    static SwLayVout     *s_pVout;
+    static bool           s_isInPaint; // Protection against double Paints
+    static bool           s_isNoVirDev;// No virt. Device for SystemPaints
 
     bool    mbCheckSuperfluous   :1; // Search for empty Pages?
     bool    mbIdleFormat         :1; // Trigger Idle Formatter?
@@ -328,9 +328,9 @@ public:
     const SwPageFrm *GetLastPage() const { return mpLastPage; }
           SwPageFrm *GetLastPage()       { return mpLastPage; }
 
-    static bool IsInPaint() { return mbInPaint; }
+    static bool IsInPaint() { return s_isInPaint; }
 
-    static void SetNoVirDev( const bool bNew ) { mbNoVirDev = bNew; }
+    static void SetNoVirDev(const bool bNew) { s_isNoVirDev = bNew; }
 
     inline long GetBrowseWidth() const;
     inline void InvalidateBrowseWidth();

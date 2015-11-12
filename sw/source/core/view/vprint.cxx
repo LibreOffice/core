@@ -91,7 +91,7 @@ public:
     {}
 };
 
-SwQueuedPaint *SwPaintQueue::pQueue = nullptr;
+SwQueuedPaint *SwPaintQueue::s_pPaintQueue = nullptr;
 
 // saves some settings from the draw view
 class SwDrawViewSave
@@ -106,7 +106,7 @@ public:
 void SwPaintQueue::Add( SwViewShell *pNew, const SwRect &rNew )
 {
     SwQueuedPaint *pPt;
-    if ( nullptr != (pPt = pQueue) )
+    if (nullptr != (pPt = s_pPaintQueue))
     {
         while ( pPt->pSh != pNew && pPt->pNext )
             pPt = pPt->pNext;
@@ -120,14 +120,14 @@ void SwPaintQueue::Add( SwViewShell *pNew, const SwRect &rNew )
     if ( pPt )
         pPt->pNext = pNQ;
     else
-        pQueue = pNQ;
+        s_pPaintQueue = pNQ;
 }
 
 void SwPaintQueue::Repaint()
 {
-    if ( !SwRootFrm::IsInPaint() && pQueue )
+    if (!SwRootFrm::IsInPaint() && s_pPaintQueue)
     {
-        SwQueuedPaint *pPt = pQueue;
+        SwQueuedPaint *pPt = s_pPaintQueue;
         do
         {   SwViewShell *pSh = pPt->pSh;
             SET_CURR_SHELL( pSh );
@@ -146,17 +146,18 @@ void SwPaintQueue::Repaint()
         } while ( pPt );
 
         do
-        {   pPt = pQueue;
-            pQueue = pQueue->pNext;
+        {
+            pPt = s_pPaintQueue;
+            s_pPaintQueue = s_pPaintQueue->pNext;
             delete pPt;
-        } while ( pQueue );
+        } while (s_pPaintQueue);
     }
 }
 
 void SwPaintQueue::Remove( SwViewShell *pSh )
 {
     SwQueuedPaint *pPt;
-    if ( nullptr != (pPt = pQueue) )
+    if (nullptr != (pPt = s_pPaintQueue))
     {
         SwQueuedPaint *pPrev = nullptr;
         while ( pPt && pPt->pSh != pSh )
@@ -168,8 +169,8 @@ void SwPaintQueue::Remove( SwViewShell *pSh )
         {
             if ( pPrev )
                 pPrev->pNext = pPt->pNext;
-            else if ( pPt == pQueue )
-                pQueue = nullptr;
+            else if (pPt == s_pPaintQueue)
+                s_pPaintQueue = nullptr;
             delete pPt;
         }
     }

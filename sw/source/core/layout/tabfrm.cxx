@@ -122,12 +122,12 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab )
     rTab.SetFollow( this );
 }
 
-extern const SwTable   *pColumnCacheLastTable;
-extern const SwTabFrm  *pColumnCacheLastTabFrm;
-extern const SwFrm     *pColumnCacheLastCellFrm;
-extern const SwTable   *pRowCacheLastTable;
-extern const SwTabFrm  *pRowCacheLastTabFrm;
-extern const SwFrm     *pRowCacheLastCellFrm;
+extern const SwTable   *g_pColumnCacheLastTable;
+extern const SwTabFrm  *g_pColumnCacheLastTabFrm;
+extern const SwFrm     *g_pColumnCacheLastCellFrm;
+extern const SwTable   *g_pRowCacheLastTable;
+extern const SwTabFrm  *g_pRowCacheLastTabFrm;
+extern const SwFrm     *g_pRowCacheLastCellFrm;
 
 //return the SwTabFrm (if any) that this SwTabFrm is a follow flow line for
 SwTabFrm* SwTabFrm::GetFollowFlowLineFor()
@@ -155,14 +155,14 @@ void SwTabFrm::DestroyImpl()
     // makes use of these global pointers. Obviously
     // this code did not consider that a TabFrm can be
     // deleted.
-    if ( this == pColumnCacheLastTabFrm )
+    if (this == g_pColumnCacheLastTabFrm)
     {
-        pColumnCacheLastTable  = nullptr;
-        pColumnCacheLastTabFrm = nullptr;
-        pColumnCacheLastCellFrm= nullptr;
-        pRowCacheLastTable  = nullptr;
-        pRowCacheLastTabFrm = nullptr;
-        pRowCacheLastCellFrm= nullptr;
+        g_pColumnCacheLastTable  = nullptr;
+        g_pColumnCacheLastTabFrm = nullptr;
+        g_pColumnCacheLastCellFrm = nullptr;
+        g_pRowCacheLastTable  = nullptr;
+        g_pRowCacheLastTabFrm = nullptr;
+        g_pRowCacheLastCellFrm = nullptr;
     }
 
     SwLayoutFrm::DestroyImpl();

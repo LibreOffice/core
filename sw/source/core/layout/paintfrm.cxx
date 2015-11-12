@@ -3187,14 +3187,14 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
         {
             return;
         }
-        if ( SwRootFrm::mbInPaint )
+        if (SwRootFrm::s_isInPaint)
         {
             SwPaintQueue::Add( pSh, rRect );
             return;
         }
     }
     else
-        SwRootFrm::mbInPaint = bResetRootPaint = true;
+        SwRootFrm::s_isInPaint = bResetRootPaint = true;
 
     SwSavePaintStatics *pStatics = nullptr;
     if ( gProp.pSGlobalShell )
@@ -3344,7 +3344,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
                     // 2nd parameter is no longer <const> and will be set to the
                     // rectangle the virtual output device is calculated from <aPaintRect>,
                     // if the virtual output is used.
-                    mpVout->Enter( pSh, aPaintRect, !mbNoVirDev );
+                    s_pVout->Enter(pSh, aPaintRect, !s_isNoVirDev);
 
                     // OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
                     // Thus, all objects overlapping on pixel level with the unadjusted
@@ -3353,7 +3353,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
                 }
 
                 // maybe this can be put in the above scope. Since we are not sure, just leave it ATM
-                mpVout->SetOrgRect( aPaintRect );
+                s_pVout->SetOrgRect( aPaintRect );
 
                 // OD 29.08.2002 #102450#
                 // determine background color of page for <PaintLayer> method
@@ -3425,7 +3425,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
                     pPage->RefreshExtraData( aPaintRect );
 
                 DELETEZ(gProp.pBLines);
-                mpVout->Leave();
+                s_pVout->Leave();
 
                 // #i68597#
                 // needed to move grid painting inside Begin/EndDrawLayer bounds and to change
@@ -3514,7 +3514,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
     DELETEZ( gProp.pSLines );
 
     if ( bResetRootPaint )
-        SwRootFrm::mbInPaint = false;
+        SwRootFrm::s_isInPaint = false;
     if ( pStatics )
         delete pStatics;
     else

@@ -72,15 +72,15 @@ inline bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
 // table column cache
 SwTabCols *pLastCols   = nullptr;
-const SwTable   *pColumnCacheLastTable  = nullptr;
-const SwTabFrm  *pColumnCacheLastTabFrm = nullptr;
-const SwFrm     *pColumnCacheLastCellFrm = nullptr;
+const SwTable   *g_pColumnCacheLastTable  = nullptr;
+const SwTabFrm  *g_pColumnCacheLastTabFrm = nullptr;
+const SwFrm     *g_pColumnCacheLastCellFrm = nullptr;
 
 // table row cache
 SwTabCols *pLastRows   = nullptr;
-const SwTable   *pRowCacheLastTable  = nullptr;
-const SwTabFrm  *pRowCacheLastTabFrm = nullptr;
-const SwFrm     *pRowCacheLastCellFrm = nullptr;
+const SwTable   *g_pRowCacheLastTable  = nullptr;
+const SwTabFrm  *g_pRowCacheLastTabFrm = nullptr;
+const SwFrm     *g_pRowCacheLastCellFrm = nullptr;
 
 class TableWait
 {
@@ -523,7 +523,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
     if ( pLastCols )
     {
         bool bDel = true;
-        if ( pColumnCacheLastTable == pTab->GetTable() )
+        if (g_pColumnCacheLastTable == pTab->GetTable())
         {
             bDel = false;
             SWRECTFN( pTab )
@@ -534,17 +534,17 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
             const sal_uLong nRightMax = (pTab->Frm().*fnRect->fnGetRight)() -
                                     (pPage->Frm().*fnRect->fnGetLeft)();
 
-            if ( pColumnCacheLastTabFrm != pTab )
+            if (g_pColumnCacheLastTabFrm != pTab)
             {
                 // if TabFrm was changed, we only shift a little bit
                 // as the width is the same
-                SWRECTFNX( pColumnCacheLastTabFrm )
-                if( (pColumnCacheLastTabFrm->Frm().*fnRectX->fnGetWidth)() ==
+                SWRECTFNX( g_pColumnCacheLastTabFrm )
+                if ((g_pColumnCacheLastTabFrm->Frm().*fnRectX->fnGetWidth)() ==
                     (pTab->Frm().*fnRect->fnGetWidth)() )
                 {
                     pLastCols->SetLeftMin( nLeftMin );
 
-                    pColumnCacheLastTabFrm = pTab;
+                    g_pColumnCacheLastTabFrm = pTab;
                 }
                 else
                     bDel = true;
@@ -556,11 +556,11 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                  pLastCols->GetRight   () == (sal_uInt16)(pTab->Prt().*fnRect->fnGetRight)()&&
                  pLastCols->GetRightMax() == (sal_uInt16)nRightMax - pLastCols->GetLeftMin() )
             {
-                if ( pColumnCacheLastCellFrm != pBox )
+                if (g_pColumnCacheLastCellFrm != pBox)
                 {
                     pTab->GetTable()->GetTabCols( *pLastCols,
                                         static_cast<const SwCellFrm*>(pBox)->GetTabBox(), true);
-                    pColumnCacheLastCellFrm = pBox;
+                    g_pColumnCacheLastCellFrm = pBox;
                 }
                 rToFill = *pLastCols;
             }
@@ -575,9 +575,9 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
         SwDoc::GetTabCols( rToFill, nullptr, static_cast<const SwCellFrm*>(pBox) );
 
         pLastCols   = new SwTabCols( rToFill );
-        pColumnCacheLastTable  = pTab->GetTable();
-        pColumnCacheLastTabFrm = pTab;
-        pColumnCacheLastCellFrm= pBox;
+        g_pColumnCacheLastTable  = pTab->GetTable();
+        g_pColumnCacheLastTabFrm = pTab;
+        g_pColumnCacheLastCellFrm= pBox;
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -596,7 +596,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
     if ( pLastRows )
     {
         bool bDel = true;
-        if ( pRowCacheLastTable == pTab->GetTable() )
+        if (g_pRowCacheLastTable == pTab->GetTable())
         {
             bDel = false;
             SWRECTFN( pTab )
@@ -608,8 +608,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
             const long nRight    = (pTab->Prt().*fnRect->fnGetHeight)();
             const long nRightMax = bVert ? nRight : LONG_MAX;
 
-            if ( pRowCacheLastTabFrm != pTab ||
-                 pRowCacheLastCellFrm != pBox )
+            if (g_pRowCacheLastTabFrm != pTab || g_pRowCacheLastCellFrm != pBox)
                 bDel = true;
 
             if ( !bDel &&
@@ -631,9 +630,9 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
         SwDoc::GetTabRows( rToFill, nullptr, static_cast<const SwCellFrm*>(pBox) );
 
         pLastRows   = new SwTabCols( rToFill );
-        pRowCacheLastTable  = pTab->GetTable();
-        pRowCacheLastTabFrm = pTab;
-        pRowCacheLastCellFrm= pBox;
+        g_pRowCacheLastTable = pTab->GetTable();
+        g_pRowCacheLastTabFrm = pTab;
+        g_pRowCacheLastCellFrm = pBox;
     }
 }
 
