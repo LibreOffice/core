@@ -36,6 +36,7 @@
 #include "stringutil.hxx"
 #include "scmatrix.hxx"
 #include "documentimport.hxx"
+#include <o3tl/make_unique.hxx>
 
 // Excel->Calc cell address/range conversion ==================================
 
@@ -850,7 +851,7 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
 
     for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
-            maValueList.push_back( new XclImpCachedValue( rStrm ) );
+            maValueList.push_back( o3tl::make_unique<XclImpCachedValue>( rStrm ) );
 }
 
 XclImpCachedMatrix::~XclImpCachedMatrix()
@@ -869,23 +870,23 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix( svl::SharedStringPool& rPool ) c
         {
             for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
             {
-                switch( itValue->GetType() )
+                switch( (*itValue)->GetType() )
                 {
                     case EXC_CACHEDVAL_EMPTY:
                         // Excel shows 0.0 here, not an empty cell
                         xScMatrix->PutEmpty( nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_DOUBLE:
-                        xScMatrix->PutDouble( itValue->GetValue(), nScCol, nScRow );
+                        xScMatrix->PutDouble( (*itValue)->GetValue(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_STRING:
-                        xScMatrix->PutString(rPool.intern(itValue->GetString()), nScCol, nScRow);
+                        xScMatrix->PutString(rPool.intern((*itValue)->GetString()), nScCol, nScRow);
                     break;
                     case EXC_CACHEDVAL_BOOL:
-                        xScMatrix->PutBoolean( itValue->GetBool(), nScCol, nScRow );
+                        xScMatrix->PutBoolean( (*itValue)->GetBool(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_ERROR:
-                        xScMatrix->PutError( itValue->GetScError(), nScCol, nScRow );
+                        xScMatrix->PutError( (*itValue)->GetScError(), nScCol, nScRow );
                     break;
                     default:
                         OSL_FAIL( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );

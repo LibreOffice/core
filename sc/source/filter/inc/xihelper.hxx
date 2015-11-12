@@ -22,12 +22,12 @@
 
 #include <editeng/editdata.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "types.hxx"
 #include "xladdress.hxx"
 #include "xiroot.hxx"
 #include "xistring.hxx"
 #include <memory>
+#include <vector>
 
 class ScRangeList;
 
@@ -333,7 +333,7 @@ public:
     ScMatrixRef CreateScMatrix( svl::SharedStringPool& rPool ) const;
 
 private:
-    typedef boost::ptr_vector< XclImpCachedValue > XclImpValueList;
+    typedef std::vector< std::unique_ptr<XclImpCachedValue> > XclImpValueList;
 
     XclImpValueList     maValueList;    /// List of cached cell values.
     SCSIZE              mnScCols;       /// Number of cached columns.
