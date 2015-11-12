@@ -1024,7 +1024,7 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
             {
                 ScRange aRange;
                 if( pRangeData->IsReference( aRange ) )
-                    maWQList.push_back( new XclImpWebQuery( aRange ) );
+                    maWQList.push_back( XclImpWebQuery( aRange ) );
             }
         }
     }

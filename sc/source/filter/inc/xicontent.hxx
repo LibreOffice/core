@@ -31,7 +31,6 @@
 #include <map>
 #include <vector>
 #include <memory>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
 /* ============================================================================
@@ -193,7 +192,7 @@ private:
 // Web queries ================================================================
 
 /** Stores the data of one web query. */
-class XclImpWebQuery : private boost::noncopyable
+class XclImpWebQuery
 {
 public:
     explicit            XclImpWebQuery( const ScRange& rDestRange );
@@ -247,7 +246,7 @@ public:
     void                Apply();
 
 private:
-    typedef boost::ptr_vector< XclImpWebQuery > XclImpWebQueryList;
+    typedef std::vector< XclImpWebQuery > XclImpWebQueryList;
     XclImpWebQueryList  maWQList;       /// List of the web query objects.
 };
 
