@@ -286,7 +286,7 @@ void ScXMLConverter::ConvertCellRangeAddress(OUString& sFormula)
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); ++i)
     {
-        if (sFormula[i] == '\'' && chPrevious != '\\')
+        if (sFormula[i] == '\'')
             bInQuotationMarks = !bInQuotationMarks;
         if (bInQuotationMarks)
             sBuffer.append(sFormula[i]);
