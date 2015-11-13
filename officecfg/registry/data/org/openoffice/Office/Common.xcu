@@ -139,13 +139,6 @@
       <value>${DICT_REPO_URL}</value>
     </prop>
   </node>
-  <node oor:name="VCL">
-    <prop oor:name="UseOpenGL" oor:type="xs:boolean">
-      <value install:module="macosx">false</value>
-      <value install:module="unx">false</value>
-      <value install:module="wnt">true</value>
-    </prop>
-  </node>
   <node oor:name="I18N">
     <node oor:name="CTL">
       <prop oor:name="CTLFont" install:module="ctl">
