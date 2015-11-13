@@ -675,7 +675,7 @@ const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
 
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
-        return &maGroupFields[nDim];
+        return maGroupFields[nDim].get();
 
     return nullptr;
 }
@@ -823,7 +823,7 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
     if (nDimPos >= maGroupFields.size())
         return nullptr;
 
-    const ScDPItemDataVec& rGI = maGroupFields[nDimPos].maItems;
+    const ScDPItemDataVec& rGI = maGroupFields[nDimPos]->maItems;
     if (nItemId >= rGI.size())
         return nullptr;
 
@@ -968,7 +968,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
     nDim -= mnColumnCount;
     if (static_cast<size_t>(nDim) < maGroupFields.size())
     {
-        const ScDPItemDataVec& rGI = maGroupFields[nDim].maItems;
+        const ScDPItemDataVec& rGI = maGroupFields[nDim]->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
         {
             if (rGI[i] == rItem)
@@ -1029,7 +1029,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) con
 
 long ScDPCache::AppendGroupField()
 {
-    maGroupFields.push_back(new GroupItems);
+    maGroupFields.push_back(o3tl::make_unique<GroupItems>());
     return static_cast<long>(maFields.size() + maGroupFields.size() - 1);
 }
 
@@ -1048,7 +1048,7 @@ void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
     {
-        GroupItems& rGI = maGroupFields[nDim];
+        GroupItems& rGI = *maGroupFields[nDim].get();
         rGI.maItems.clear();
         rGI.maInfo = rNumInfo;
         rGI.mnGroupType = nGroupType;
@@ -1072,7 +1072,7 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
     {
-        ScDPItemDataVec& rItems = maGroupFields.at(nDim).maItems;
+        ScDPItemDataVec& rItems = maGroupFields.at(nDim)->maItems;
         rItems.push_back(rData);
         return rItems.size()-1;
     }
@@ -1102,7 +1102,7 @@ void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
     {
-        const ScDPItemDataVec& rGI = maGroupFields.at(nDim).maItems;
+        const ScDPItemDataVec& rGI = maGroupFields.at(nDim)->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
             rIds.push_back(static_cast<SCROW>(i));
     }
@@ -1142,7 +1142,7 @@ const ScDPNumGroupInfo* ScDPCache::GetNumGroupInfo(long nDim) const
 
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
-        return &maGroupFields.at(nDim).maInfo;
+        return &maGroupFields.at(nDim)->maInfo;
 
     return nullptr;
 }
@@ -1163,7 +1163,7 @@ sal_Int32 ScDPCache::GetGroupType(long nDim) const
 
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
-        return maGroupFields.at(nDim).mnGroupType;
+        return maGroupFields.at(nDim)->mnGroupType;
 
     return 0;
 }

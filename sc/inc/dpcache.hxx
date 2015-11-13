@@ -25,7 +25,6 @@
 #include <tools/date.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
 #include <memory>
@@ -111,7 +110,7 @@ private:
     mutable ScDPObjectSet maRefObjects;
 
     typedef std::vector< std::unique_ptr<Field> > FieldsType;
-    typedef boost::ptr_vector<GroupItems> GroupFieldsType;
+    typedef std::vector< std::unique_ptr<GroupItems> > GroupFieldsType;
 
     FieldsType maFields;
     GroupFieldsType maGroupFields;

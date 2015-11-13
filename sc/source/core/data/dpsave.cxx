@@ -51,6 +51,7 @@
 
 #include <unordered_map>
 #include <unordered_set>
+#include <algorithm>
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
