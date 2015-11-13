@@ -45,7 +45,6 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
     , mpProgram(nullptr)
     , mbUseScissor(false)
     , mbUseStencil(false)
-    , mbOffscreen(false)
     , mnLineColor(SALCOLOR_NONE)
     , mnFillColor(SALCOLOR_NONE)
 #ifdef DBG_UTIL
@@ -79,10 +78,9 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
 
     // We always prefer to bind our VirtualDevice / offscreen graphics
     // to the current OpenGLContext - to avoid switching contexts.
-    if (mpContext.is() && mbOffscreen)
+    if (mpContext.is() && OpenGLContext::hasCurrent() && !mpContext->isCurrent())
     {
-        if (OpenGLContext::hasCurrent() && !mpContext->isCurrent())
-            mpContext.clear();
+        mpContext.clear();
     }
 
     if( mpContext.is() )
@@ -116,8 +114,6 @@ bool OpenGLSalGraphicsImpl::ReleaseContext()
 
 void OpenGLSalGraphicsImpl::Init()
 {
-    mbOffscreen = IsOffscreen();
-
     // check if we can simply re-use the same context
     if( mpContext.is() )
     {
@@ -165,10 +161,7 @@ void OpenGLSalGraphicsImpl::PreDraw()
     mpContext->makeCurrent();
     CHECK_GL_ERROR();
 
-    if( !mbOffscreen )
-        mpContext->AcquireDefaultFramebuffer();
-    else
-        CheckOffscreenTexture();
+    CheckOffscreenTexture();
     CHECK_GL_ERROR();
 
     glViewport( 0, 0, GetWidth(), GetHeight() );
@@ -180,8 +173,12 @@ void OpenGLSalGraphicsImpl::PreDraw()
 
 void OpenGLSalGraphicsImpl::PostDraw()
 {
-    if( !mbOffscreen && mpContext->mnPainting == 0 )
+    if( mpContext->mnPainting == 0 )
+    {
+        if (!IsOffscreen()) ...
+#warning "Trigger re-rendering of the window if we have one"
         glFlush();
+    }
     if( mbUseScissor )
     {
         glDisable( GL_SCISSOR_TEST );
@@ -211,7 +208,7 @@ void OpenGLSalGraphicsImpl::ApplyProgramMatrices(float fPixelOffset)
 void OpenGLSalGraphicsImpl::freeResources()
 {
     // TODO Delete shaders, programs and textures if not shared
-    if( mbOffscreen && mpContext.is() && mpContext->isInitialized() )
+    if( mpContext.is() && mpContext->isInitialized() )
     {
         mpContext->makeCurrent();
         mpContext->ReleaseFramebuffer( maOffscreenTex );
@@ -1536,17 +1533,9 @@ void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGrap
         return;
     }
 
-    if( rImpl.mbOffscreen )
-    {
-        PreDraw();
-        DrawTexture( rImpl.maOffscreenTex, rPosAry );
-        PostDraw();
-        return;
-    }
-
-    SAL_WARN( "vcl.opengl", "*** NOT IMPLEMENTED *** copyBits" );
-    // TODO: Copy from one FBO to the other (glBlitFramebuffer)
-    //       ie. copying from one visible window to another visible window
+    PreDraw();
+    DrawTexture( rImpl.maOffscreenTex, rPosAry );
+    PostDraw();
 }
 
 void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
@@ -1875,10 +1864,8 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 
 OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
 {
-    if( mbOffscreen || !AcquireContext() )
-        return nullptr;
-    else
-        return mpContext.get();
+    AcquireContext();
+    return mpContext.get();
 }
 
 bool OpenGLSalGraphicsImpl::IsForeignContext(const rtl::Reference<OpenGLContext> &xContext)

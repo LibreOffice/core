@@ -57,7 +57,13 @@ class VCL_DLLPUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
     friend class OpenGLTests;
 protected:
 
+    /// This context is solely for blitting @maOffscreenTex
+    rtl::Reference<OpenGLContext> mpWindowContext;
+
+    /// This context is whatever is most convenient to render
+    /// to @maOffscreenTex with.
     rtl::Reference<OpenGLContext> mpContext;
+
     SalGraphics& mrParent;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mpProvider;
@@ -72,7 +78,11 @@ protected:
     bool mbUseScissor;
     bool mbUseStencil;
 
-    bool mbOffscreen;
+    /**
+     * All rendering happens to this off-screen texture. For
+     * non-virtual devices, ie. windows - we will blit it and
+     * swapBuffers later.
+     */
     OpenGLTexture maOffscreenTex;
 
     SalColor mnLineColor;
@@ -131,8 +141,10 @@ public:
     // get the height of the device
     GLfloat GetHeight() const { return mpProvider ? mpProvider->GetHeight() : 1; }
 
-    // check whether this instance is used for offscreen (Virtual Device)
-    // rendering ie. does it need its own context.
+    /**
+     * check whether this instance is used for offscreen (Virtual Device)
+     * rendering ie. does it need its own context.
+     */
     bool IsOffscreen() const { return mpProvider == nullptr || mpProvider->IsOffScreen(); }
 
     // operations to do before painting
@@ -145,10 +157,10 @@ protected:
     bool AcquireContext();
     bool ReleaseContext();
 
-    // retrieve the default context for offscreen rendering
+    /// retrieve the default context for offscreen rendering
     static rtl::Reference<OpenGLContext> GetDefaultContext();
 
-    /// create a new context for window rendering
+    /// create a new context for rendering to the underlying window
     virtual rtl::Reference<OpenGLContext> CreateWinContext() = 0;
 
     /// check whether the given context can be used for off-screen rendering
