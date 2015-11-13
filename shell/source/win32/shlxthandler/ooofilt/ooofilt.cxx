@@ -418,8 +418,9 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
         }
         // Copy UNICODE characters in chunk buffer to output UNICODE buffer
         ULONG ulToCopy = min( *pcwcBuffer, m_ulUnicodeBufferLen - m_ulUnicodeCharsRead );
-        ZeroMemory(awcBuffer, sizeof(awcBuffer));
         wmemcpy( awcBuffer, m_pwsBuffer.c_str() + m_ulUnicodeCharsRead, ulToCopy );
+        ZeroMemory(
+             awcBuffer + ulToCopy, (*pcwcBuffer - ulToCopy) * sizeof (WCHAR));
         m_ulUnicodeCharsRead += ulToCopy;
         *pcwcBuffer = ulToCopy;
         if ( m_ulUnicodeBufferLen == m_ulUnicodeCharsRead )
