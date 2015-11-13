@@ -782,7 +782,7 @@ static void cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
 static void formulaChanged(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pData*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
-    gtk_entry_set_text((GtkEntry*)rWindow.m_pFormulabarEntry, pPayload);
+    gtk_entry_set_text(GTK_ENTRY(rWindow.m_pFormulabarEntry), pPayload);
 }
 
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
