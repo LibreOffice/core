@@ -51,7 +51,6 @@
 #include "conditio.hxx"
 
 #include <oox/token/tokens.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
@@ -300,7 +299,7 @@ private:
                             const Color& rColor ) const;
 
 private:
-    typedef boost::ptr_vector< XclListColor >     XclListColorList;
+    typedef std::vector< std::unique_ptr<XclListColor> >     XclListColorList;
     typedef std::shared_ptr< XclListColorList > XclListColorListRef;
     typedef ::std::vector< XclColorIdData >       XclColorIdDataVec;
     typedef ::std::vector< XclPaletteColor >      XclPaletteColorVec;
@@ -356,7 +355,7 @@ void XclExpPaletteImpl::Finalize()
     maColorIdDataVec.resize( nCount );
     for( sal_uInt32 nIdx = 0; nIdx < nCount; ++nIdx )
     {
-        const XclListColor& listColor = mxColorList->at( nIdx );
+        const XclListColor& listColor = *mxColorList->at( nIdx ).get();
         maColorIdDataVec[ listColor.GetColorId() ].Set( listColor.GetColor(), nIdx );
     }
 
@@ -384,7 +383,7 @@ void XclExpPaletteImpl::Finalize()
         // find nearest unused default color for each unprocessed list color
         for( nIndex = 0; nIndex < nCount; ++nIndex )
             aNearestVec[ nIndex ].mnDist = aRemapVec[ nIndex ].mbProcessed ? SAL_MAX_INT32 :
-                GetNearestPaletteColor( aNearestVec[ nIndex ].mnPalIndex, mxColorList->at( nIndex ).GetColor(), true );
+                GetNearestPaletteColor( aNearestVec[ nIndex ].mnPalIndex, mxColorList->at( nIndex )->GetColor(), true );
         // find the list color which is nearest to a default color
         sal_uInt32 nFound = 0;
         for( nIndex = 1; nIndex < nCount; ++nIndex )
@@ -393,7 +392,7 @@ void XclExpPaletteImpl::Finalize()
         // replace default color with list color
         sal_uInt32 nNearest = aNearestVec[ nFound ].mnPalIndex;
         OSL_ENSURE( nNearest < maPalette.size(), "XclExpPaletteImpl::Finalize - algorithm error" );
-        maPalette[ nNearest ].SetColor( mxColorList->at( nFound ).GetColor() );
+        maPalette[ nNearest ].SetColor( mxColorList->at( nFound )->GetColor() );
         aRemapVec[ nFound ].SetIndex( nNearest );
     }
 
@@ -521,7 +520,7 @@ XclListColor* XclExpPaletteImpl::SearchListEntry( const Color& rColor, sal_uInt3
     // search optimization for equal-colored objects occurring repeatedly
     if (mnLastIdx < mxColorList->size())
     {
-        pEntry = &(*mxColorList)[mnLastIdx];
+        pEntry = (*mxColorList)[mnLastIdx].get();
         if( pEntry->GetColor() == rColor )
         {
             rnIndex = mnLastIdx;
@@ -536,7 +535,7 @@ XclListColor* XclExpPaletteImpl::SearchListEntry( const Color& rColor, sal_uInt3
     while( !bFound && (nBegIdx < nEndIdx) )
     {
         rnIndex = (nBegIdx + nEndIdx) / 2;
-        pEntry = &(*mxColorList)[rnIndex];
+        pEntry = (*mxColorList)[rnIndex].get();
         bFound = pEntry->GetColor() == rColor;
         if( !bFound )
         {
@@ -558,9 +557,7 @@ XclListColor* XclExpPaletteImpl::SearchListEntry( const Color& rColor, sal_uInt3
 XclListColor* XclExpPaletteImpl::CreateListEntry( const Color& rColor, sal_uInt32 nIndex )
 {
     XclListColor* pEntry = new XclListColor( rColor, mxColorList->size() );
-    XclListColorList::iterator itr = mxColorList->begin();
-    ::std::advance(itr, nIndex);
-    mxColorList->insert(itr, pEntry);
+    mxColorList->insert(mxColorList->begin() + nIndex, std::unique_ptr<XclListColor>(pEntry));
     return pEntry;
 }
 
@@ -599,7 +596,7 @@ void XclExpPaletteImpl::RawReducePalette( sal_uInt32 nPass )
     for( sal_uInt32 nIdx = 0, nCount = xOldList->size(); nIdx < nCount; ++nIdx )
     {
         // get the old list entry
-        const XclListColor* pOldEntry = &(xOldList->at( nIdx ));
+        const XclListColor* pOldEntry = xOldList->at( nIdx ).get();
         nR = pOldEntry->GetColor().GetRed();
         nG = pOldEntry->GetColor().GetGreen();
         nB = pOldEntry->GetColor().GetBlue();
@@ -637,8 +634,8 @@ void XclExpPaletteImpl::ReduceLeastUsedColor()
     sal_uInt32 nKeep = GetNearestListColor( nRemove );
 
     // merge both colors to one color, remove one color from list
-    XclListColor* pKeepEntry = &mxColorList->at(nKeep);
-    XclListColor* pRemoveEntry = &mxColorList->at(nRemove);
+    XclListColor* pKeepEntry = mxColorList->at(nKeep).get();
+    XclListColor* pRemoveEntry = mxColorList->at(nRemove).get();
     if( pKeepEntry && pRemoveEntry )
     {
         // merge both colors (if pKeepEntry is a base color, it will not change)
@@ -667,7 +664,7 @@ sal_uInt32 XclExpPaletteImpl::GetLeastUsedListColor() const
 
     for( sal_uInt32 nIdx = 0, nCount = mxColorList->size(); nIdx < nCount; ++nIdx )
     {
-        XclListColor& pEntry = mxColorList->at( nIdx );
+        XclListColor& pEntry = *mxColorList->at( nIdx ).get();
         // ignore the base colors
         if( !pEntry.IsBaseColor() && (pEntry.GetWeighting() < nMinW) )
         {
@@ -687,7 +684,7 @@ sal_uInt32 XclExpPaletteImpl::GetNearestListColor( const Color& rColor, sal_uInt
     {
         if( nIdx != nIgnore )
         {
-            if( XclListColor* pEntry = &mxColorList->at(nIdx) )
+            if( XclListColor* pEntry = mxColorList->at(nIdx).get() )
             {
                 sal_Int32 nDist = lclGetColorDistance( rColor, pEntry->GetColor() );
                 if( nDist < nMinD )
@@ -705,7 +702,7 @@ sal_uInt32 XclExpPaletteImpl::GetNearestListColor( sal_uInt32 nIndex ) const
 {
     if (nIndex >= mxColorList->size())
         return 0;
-    XclListColor* pEntry = &mxColorList->at(nIndex);
+    XclListColor* pEntry = mxColorList->at(nIndex).get();
     return GetNearestListColor( pEntry->GetColor(), nIndex );
 }
 
