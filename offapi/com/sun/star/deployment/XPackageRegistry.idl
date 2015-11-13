@@ -75,10 +75,8 @@ interface XPackageRegistry
         @param mediaType
                media type of package, empty string if to be detected
         @param removed
-
         @param identifier
                the identifier of the extension
-
         @param xCmdEnv
                command environment for error and progress handling
         @return

@@ -64,7 +64,7 @@ published struct TableSortField
         com::sun::star::table::TableSortFieldType::NUMERIC
         </p>
 
-        @ see   com::sun::star::i18n::XCollator
+        @see   com::sun::star::i18n::XCollator
      */
     com::sun::star::lang::Locale CollatorLocale;
 
@@ -74,7 +74,7 @@ published struct TableSortField
         com::sun::star::table::TableSortFieldType::NUMERIC
         </p>
 
-        @ see   com::sun::star::i18n::XCollator
+        @see   com::sun::star::i18n::XCollator
      */
     string CollatorAlgorithm;
 
