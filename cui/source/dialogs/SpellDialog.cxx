@@ -1558,14 +1558,20 @@ IMPL_LINK_NOARG_TYPED(SentenceEditWindow_Impl, ToolbarHdl, ToolBox *, void)
 {
     const sal_uInt16 nCurItemId = m_xToolbar->GetCurItemId();
     if (nCurItemId == m_xToolbar->GetItemId("paste"))
+    {
         Paste();
+        CallModifyLink();
+    }
     else if (nCurItemId == m_xToolbar->GetItemId("insert"))
     {
         if (Edit::GetGetSpecialCharsFunction())
         {
             OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
             if (!aChars.isEmpty())
+            {
                 ReplaceSelected(aChars);
+                CallModifyLink();
+            }
         }
     }
 }
