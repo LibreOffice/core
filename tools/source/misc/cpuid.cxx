@@ -16,8 +16,7 @@ namespace tools
 namespace cpuid
 {
 
-// First minimize to MSVC / GCC compat. compiler and x86 / x64 architecture
-#if (defined(_MSC_VER) && (defined(_M_X64) || defined(_M_IX86))) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
+#if defined(__LO_SSE2_AVAILABLE__)
 
 namespace
 {

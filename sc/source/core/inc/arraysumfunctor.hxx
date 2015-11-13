@@ -11,8 +11,11 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_ARRAYSUMFUNCTOR_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_ARRAYSUMFUNCTOR_HXX
 
-#include <emmintrin.h>
 #include <tools/cpuid.hxx>
+
+#if defined(__LO_SSE2_AVAILABLE__)
+#include <emmintrin.h>
+#endif
 
 namespace sc
 {
@@ -67,6 +70,7 @@ public:
 private:
     inline double executeSSE2(size_t& i, const double* pCurrent) const
     {
+#if defined(__LO_SSE2_AVAILABLE__)
         double fSum = 0.0;
         size_t nRealSize = mnSize - i;
         size_t nUnrolledSize = nRealSize - (nRealSize % 8);
@@ -107,6 +111,11 @@ private:
             fSum += temp;
         }
         return fSum;
+#else
+        (void) i;
+        (void) pCurrent;
+        return 0.0;
+#endif
     }
 
     inline double executeUnrolled(size_t& i, const double* pCurrent) const
