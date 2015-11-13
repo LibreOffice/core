@@ -469,7 +469,7 @@ void GenerateConstructorTrampoline(
 
     // mov r11, copyConstruct
     *p++ = 0x49; *p++ = 0xBB;
-    *((void **)p) = &copyConstruct; p += 8;
+    *((void **)p) = reinterpret_cast<void *>(&copyConstruct); p += 8;
 
     // jmp r11
     *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
@@ -489,7 +489,7 @@ void GenerateDestructorTrampoline(
 
     // mov r11, destruct
     *p++ = 0x49; *p++ = 0xBB;
-    *((void **)p) = &destruct; p += 8;
+    *((void **)p) = reinterpret_cast<void *>(&destruct); p += 8;
 
     // jmp r11
     *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
