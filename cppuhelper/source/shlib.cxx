@@ -40,17 +40,19 @@
 css::uno::Environment cppuhelper::detail::getEnvironment(
     rtl::OUString const & name, rtl::OUString const & implementation)
 {
-    assert(!implementation.isEmpty());
     rtl::OUString n(name);
-    static char const * log = std::getenv("UNO_ENV_LOG");
-    if (log != nullptr && *log != 0) {
-        rtl::OString imps(log);
-        for (sal_Int32 i = 0; i != -1;) {
-            rtl::OString imp(imps.getToken(0, ';', i));
-            //TODO: this assumes UNO_ENV_LOG only contains ASCII characters:
-            if (implementation.equalsAsciiL(imp.getStr(), imp.getLength())) {
-                n += ":log";
-                break;
+    if (!implementation.isEmpty()) {
+        static char const * log = std::getenv("UNO_ENV_LOG");
+        if (log != nullptr && *log != 0) {
+            rtl::OString imps(log);
+            for (sal_Int32 i = 0; i != -1;) {
+                rtl::OString imp(imps.getToken(0, ';', i));
+                //TODO: this assumes UNO_ENV_LOG only contains ASCII characters:
+                if (implementation.equalsAsciiL(imp.getStr(), imp.getLength()))
+                {
+                    n += ":log";
+                    break;
+                }
             }
         }
     }
