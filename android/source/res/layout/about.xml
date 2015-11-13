@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
         android:text="@string/app_version"
-        android:textColor="@android:color/secondary_text_light"
         android:textSize="18sp"/>
 
     <TextView
@@ -23,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/app_description"
-        android:textColor="@android:color/secondary_text_light"
         android:textSize="18sp"/>
 
     <TextView
@@ -34,7 +32,6 @@
         android:paddingBottom="20dip"
         android:paddingTop="20dip"
         android:text="@string/app_credits"
-        android:textColor="@android:color/secondary_text_light"
         android:textSize="18sp"/>
 
     <TextView
@@ -43,7 +40,6 @@
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
         android:text="@string/app_vendor"
-        android:textColor="@android:color/secondary_text_light"
         android:textSize="18sp"/>
 </LinearLayout>
 </ScrollView>
