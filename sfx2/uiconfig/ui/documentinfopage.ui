@@ -218,7 +218,7 @@
     <child>
       <object class="GtkCheckButton" id="thumbnailsavecb">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Save preview picture with this document</property>
+        <property name="label" translatable="yes">Save preview image with this document</property>
         <property name="use_action_appearance">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
