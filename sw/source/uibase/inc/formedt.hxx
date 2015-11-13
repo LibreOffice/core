@@ -39,28 +39,28 @@ class SwIdxFormDlg : public SvxStandardDialog
 {
     void            Apply() override;
 
-    VclPtr<ListBox>         aEntryLB;
-    VclPtr<OKButton>        aOKBtn;
-    VclPtr<CancelButton>    aCancelBT;
-    VclPtr<FixedText>       aLevelFT;
-    VclPtr<Edit>            aEntryED;
-    VclPtr<PushButton>      aEntryBT;
-    VclPtr<PushButton>      aTabBT;
-    VclPtr<PushButton>      aPageBT;
-    VclPtr<PushButton>      aJumpBT;
-    VclPtr<FixedLine>       aEntryFL;
-    VclPtr<FixedText>       aLevelFT2;
-    VclPtr<ListBox>         aLevelLB;
-    VclPtr<FixedText>       aTemplateFT;
-    VclPtr<ListBox>         aParaLayLB;
-    VclPtr<PushButton>      aStdBT;
-    VclPtr<PushButton>      aAssignBT;
-    VclPtr<FixedLine>       aFormatFL;
+    VclPtr<ListBox>         m_aEntryLB;
+    VclPtr<OKButton>        m_aOKBtn;
+    VclPtr<CancelButton>    m_aCancelBT;
+    VclPtr<FixedText>       m_aLevelFT;
+    VclPtr<Edit>            m_aEntryED;
+    VclPtr<PushButton>      m_aEntryBT;
+    VclPtr<PushButton>      m_aTabBT;
+    VclPtr<PushButton>      m_aPageBT;
+    VclPtr<PushButton>      m_aJumpBT;
+    VclPtr<FixedLine>       m_aEntryFL;
+    VclPtr<FixedText>       m_aLevelFT2;
+    VclPtr<ListBox>         m_aLevelLB;
+    VclPtr<FixedText>       m_aTemplateFT;
+    VclPtr<ListBox>         m_aParaLayLB;
+    VclPtr<PushButton>      m_aStdBT;
+    VclPtr<PushButton>      m_aAssignBT;
+    VclPtr<FixedLine>       m_aFormatFL;
 
-    SwWrtShell     &rSh;
-    SwForm         *pForm;
-    sal_uInt16          nAktLevel;
-    bool            bLastLinkIsEnd;
+    SwWrtShell     &m_rSh;
+    SwForm         *m_pForm;
+    sal_uInt16          m_nAktLevel;
+    bool            m_bLastLinkIsEnd;
 
 public:
     SwIdxFormDlg( vcl::Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
