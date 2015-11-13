@@ -23,7 +23,7 @@
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <sfx2/sidebar/CommandInfoProvider.hxx>
+#include <svtools/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/help.hxx>
@@ -179,13 +179,6 @@ void ControllerItem::ResetFrame()
     mxFrame = nullptr;
 }
 
-::rtl::OUString ControllerItem::GetLabel() const
-{
-    return CommandInfoProvider::Instance().GetLabelForCommand(
-        ".uno:" + msCommandName,
-        mxFrame);
-}
-
 ::rtl::OUString ControllerItem::GetHelpText() const
 {
     Help* pHelp = Application::GetHelp();
@@ -211,7 +204,7 @@ ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()
 
 void ControllerItem::SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nIndex)
 {
-    rToolBox.SetQuickHelpText(nIndex, GetLabel());
+    rToolBox.SetQuickHelpText(nIndex,svt::CommandInfoProvider::Instance().GetTooltipForCommand(".uno:" + msCommandName, mxFrame));
     rToolBox.SetHelpText(nIndex, GetHelpText());
     rToolBox.SetItemImage(nIndex, GetIcon());
 }

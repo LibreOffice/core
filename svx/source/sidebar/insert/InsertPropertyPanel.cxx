@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "InsertPropertyPanel.hxx"
-#include "sfx2/sidebar/CommandInfoProvider.hxx"
 
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Tools.hxx>

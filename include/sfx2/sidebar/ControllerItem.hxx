@@ -94,11 +94,6 @@ public:
     */
     void RequestUpdate();
 
-    /** Return the label for the command.  It contains the keyboard
-        accelerator when one exists.
-    */
-    ::rtl::OUString GetLabel() const;
-
     /** Return the extended help text for the command.
         Returns an empty string when the UNO command name is not available.
     */
