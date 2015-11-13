@@ -6023,7 +6023,9 @@ void ScGridWindow::UpdateCursorOverlay()
 
     const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
 
-    if (!maVisibleRange.isInside(nX, nY))
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+
+    if (!pDrawLayer->isTiledRendering() && !maVisibleRange.isInside(nX, nY))
     {
         if (maVisibleRange.mnCol2 < nX || maVisibleRange.mnRow2 < nY)
             return;     // no further check needed, nothing visible
@@ -6042,13 +6044,11 @@ void ScGridWindow::UpdateCursorOverlay()
     }
 
     //  don't show the cursor in overlapped cells
-
     const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>( pPattern->GetItem(ATTR_MERGE_FLAG) );
     bool bOverlapped = rMergeFlag.IsOverlapped();
 
     //  left or above of the screen?
-
-    bool bVis = ( nX>=pViewData->GetPosX(eHWhich) && nY>=pViewData->GetPosY(eVWhich) );
+    bool bVis = pDrawLayer->isTiledRendering() || ( nX>=pViewData->GetPosX(eHWhich) && nY>=pViewData->GetPosY(eVWhich) );
     if (!bVis)
     {
         SCCOL nEndX = nX;
@@ -6078,7 +6078,7 @@ void ScGridWindow::UpdateCursorOverlay()
         }
 
         // in the tiled rendering case, don't limit to the screen size
-        if (bMaybeVisible)
+        if (bMaybeVisible || pDrawLayer->isTiledRendering())
         {
             long nSizeXPix;
             long nSizeYPix;
@@ -6120,8 +6120,6 @@ void ScGridWindow::UpdateCursorOverlay()
             aPixelRects.push_back(aBottom);
         }
     }
-
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
 
     if ( !aPixelRects.empty() )
     {
