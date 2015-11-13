@@ -1889,6 +1889,8 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
 {
     AcquireContext();
+    if( mpContext.is() )
+        mpContext->mnPainting++;
     return mpContext.get();
 }
 
@@ -1954,15 +1956,18 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     pProgram->ApplyMatrix(GetWidth(), GetHeight(), 0.0);
     pProgram->SetVertices( &aVertices[0] );
-    glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+    if (!getenv("NO_COPY"))
+        glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
 
     pProgram->Clean();
 
     if (!getenv("NO_SWAP"))
     {
+        glFlush();
         mpWindowContext->swapBuffers();
         glFlush();
-        usleep(500000);
+        if (!getenv("NO_SLEEP"))
+            usleep(500000);
     }
 
     VCL_GL_INFO( "vcl.opengl", "flushAndSwap - end." );
@@ -1973,9 +1978,12 @@ void OpenGLSalGraphicsImpl::endPaint()
     assert( !IsOffscreen() );
 
     AcquireContext();
-    if( mpContext.is() &&
-        mpContext->mnPainting == 0 )
-        flushAndSwap();
+    if( mpContext.is() )
+    {
+        mpContext->mnPainting--;
+        if( mpContext->mnPainting == 0 )
+            flushAndSwap();
+    }
 }
 
 bool OpenGLSalGraphicsImpl::IsForeignContext(const rtl::Reference<OpenGLContext> &xContext)

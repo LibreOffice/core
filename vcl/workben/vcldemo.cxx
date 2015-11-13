@@ -1105,10 +1105,17 @@ public:
             {
                 mnStartTime = getTimeNow();
                 for (int i = 0; i < r->getTestRepeatCount(); i++)
+                {
+                    OutputDevice::PaintScope aScope(&rDev);
                     r->RenderRegion(rDev, aWholeWin, aCtx);
+                }
                 addTime(mnSelectedRenderer, getTimeNow() - mnStartTime);
-            } else
+            }
+            else
+            {
+                OutputDevice::PaintScope aScope(&rDev);
                 r->RenderRegion(rDev, aWholeWin, aCtx);
+            }
         }
         else
         {
@@ -1128,11 +1135,20 @@ public:
                     {
                         mnStartTime = getTimeNow();
                         for (int j = 0; j < r->getTestRepeatCount() * THUMB_REPEAT_FACTOR; j++)
+                        {
+                            OutputDevice::PaintScope aScope(&rDev);
                             r->RenderRegion(rDev, aRegions[i], aCtx);
+                        }
                         addTime(i, (getTimeNow() - mnStartTime) / THUMB_REPEAT_FACTOR);
-                    } else
+                    }
+                    else
+                    {
                         for (int j = 0; j < r->getTestRepeatCount(); j++)
+                        {
+                            OutputDevice::PaintScope aScope(&rDev);
                             r->RenderRegion(rDev, aRegions[i], aCtx);
+                        }
+                    }
                 }
                 else
                 {
