@@ -2269,7 +2269,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
-                     NULL, NULL,
+                     nullptr, nullptr,
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
@@ -2346,7 +2346,7 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    GError* error = NULL;
+    GError* error = nullptr;
 
     priv->m_fZoom = fZoom;
     long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, fZoom);
@@ -2361,7 +2361,7 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
                                 nDocumentHeightPixels);
 
     // Update the client's view size
-    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_CLIENT_ZOOM);
     pLOEvent->m_nTilePixelWidth = nTileSizePixels;
     pLOEvent->m_nTilePixelHeight = nTileSizePixels;
@@ -2370,7 +2370,7 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-    if (error != NULL)
+    if (error != nullptr)
     {
         g_warning("Unable to call LOK_SET_CLIENT_ZOOM: %s", error->message);
         g_clear_error(&error);
