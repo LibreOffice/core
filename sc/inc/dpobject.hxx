@@ -34,7 +34,6 @@
 #include <set>
 #include <vector>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
 namespace com { namespace sun { namespace star {
@@ -421,7 +420,7 @@ private:
         std::set<ScDPObject*>& rRefs) const;
 
 private:
-    typedef ::boost::ptr_vector<ScDPObject> TablesType;
+    typedef std::vector< std::unique_ptr<ScDPObject> > TablesType;
 
     ScDocument* mpDoc;
     TablesType maTables;

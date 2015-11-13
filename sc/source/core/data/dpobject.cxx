@@ -585,19 +585,19 @@ public:
     }
 };
 
-class FindIntersectingTable : std::unary_function<ScDPObject, bool>
+class FindIntersectingTable : std::unary_function<std::unique_ptr<ScDPObject>, bool>
 {
     ScRange maRange;
 public:
     explicit FindIntersectingTable(const ScRange& rRange) : maRange(rRange) {}
 
-    bool operator() (const ScDPObject& rObj) const
+    bool operator() (const std::unique_ptr<ScDPObject>& rObj) const
     {
-        return maRange.Intersects(rObj.GetOutRange());
+        return maRange.Intersects(rObj->GetOutRange());
     }
 };
 
-class FindIntersetingTableByColumns : std::unary_function<ScDPObject, bool>
+class FindIntersetingTableByColumns : std::unary_function<std::unique_ptr<ScDPObject>, bool>
 {
     SCCOL mnCol1;
     SCCOL mnCol2;
@@ -607,9 +607,9 @@ public:
     FindIntersetingTableByColumns(SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab) :
         mnCol1(nCol1), mnCol2(nCol2), mnRow(nRow), mnTab(nTab) {}
 
-    bool operator() (const ScDPObject& rObj) const
+    bool operator() (const std::unique_ptr<ScDPObject>& rObj) const
     {
-        const ScRange& rRange = rObj.GetOutRange();
+        const ScRange& rRange = rObj->GetOutRange();
         if (mnTab != rRange.aStart.Tab())
             // Not on this sheet.
             return false;
@@ -631,7 +631,7 @@ public:
     }
 };
 
-class FindIntersectingTableByRows : std::unary_function<ScDPObject, bool>
+class FindIntersectingTableByRows : std::unary_function<std::unique_ptr<ScDPObject>, bool>
 {
     SCCOL mnCol;
     SCROW mnRow1;
@@ -641,9 +641,9 @@ public:
     FindIntersectingTableByRows(SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab) :
         mnCol(nCol), mnRow1(nRow1), mnRow2(nRow2), mnTab(nTab) {}
 
-    bool operator() (const ScDPObject& rObj) const
+    bool operator() (const std::unique_ptr<ScDPObject>& rObj) const
     {
-        const ScRange& rRange = rObj.GetOutRange();
+        const ScRange& rRange = rObj->GetOutRange();
         if (mnTab != rRange.aStart.Tab())
             // Not on this sheet.
             return false;
@@ -665,7 +665,7 @@ public:
     }
 };
 
-class AccumulateOutputRanges : std::unary_function<ScDPObject, void>
+class AccumulateOutputRanges : std::unary_function<std::unique_ptr<ScDPObject>, void>
 {
     ScRangeList maRanges;
     SCTAB mnTab;
@@ -673,9 +673,9 @@ public:
     explicit AccumulateOutputRanges(SCTAB nTab) : mnTab(nTab) {}
     AccumulateOutputRanges(const AccumulateOutputRanges& r) : maRanges(r.maRanges), mnTab(r.mnTab) {}
 
-    void operator() (const ScDPObject& rObj)
+    void operator() (const std::unique_ptr<ScDPObject>& rObj)
     {
-        const ScRange& rRange = rObj.GetOutRange();
+        const ScRange& rRange = rObj->GetOutRange();
         if (mnTab != rRange.aStart.Tab())
             // Not on this sheet.
             return;
@@ -3293,15 +3293,15 @@ namespace {
 /**
  * Unary predicate to match DP objects by the table ID.
  */
-class MatchByTable : public unary_function<ScDPObject, bool>
+class MatchByTable : public unary_function<std::unique_ptr<ScDPObject>, bool>
 {
     SCTAB mnTab;
 public:
     explicit MatchByTable(SCTAB nTab) : mnTab(nTab) {}
 
-    bool operator() (const ScDPObject& rObj) const
+    bool operator() (const std::unique_ptr<ScDPObject>& rObj) const
     {
-        return rObj.GetOutRange().aStart.Tab() == mnTab;
+        return rObj->GetOutRange().aStart.Tab() == mnTab;
     }
 };
 
@@ -3461,7 +3461,7 @@ bool ScDPCollection::ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject
 
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
-    maTables.erase_if(MatchByTable(nTab));
+    maTables.erase( std::remove_if(maTables.begin(), maTables.end(), MatchByTable(nTab)), maTables.end());
 }
 
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -3469,7 +3469,7 @@ void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
 {
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)
-        itr->UpdateReference(eUpdateRefMode, r, nDx, nDy, nDz);
+        (*itr)->UpdateReference(eUpdateRefMode, r, nDx, nDy, nDz);
 
     // Update the source ranges of the caches.
     maSheetCaches.updateReference(eUpdateRefMode, r, nDx, nDy, nDz);
@@ -3481,7 +3481,7 @@ void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
     TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
     for (; it != itEnd; ++it)
     {
-        const ScDPObject& rObj = *it;
+        const ScDPObject& rObj = *it->get();
         ScRange aOutRange = rObj.GetOutRange();
         if (aOutRange.aStart.Tab() != nOld)
             continue;
@@ -3490,13 +3490,13 @@ void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
         ScAddress& e = aOutRange.aEnd;
         s.SetTab(nNew);
         e.SetTab(nNew);
-        std::unique_ptr<ScDPObject> pNew(new ScDPObject(rObj));
+        ScDPObject* pNew = new ScDPObject(rObj);
         pNew->SetOutRange(aOutRange);
         mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
-        o3tl::ptr_container::push_back(aAdded, std::move(pNew));
+        aAdded.push_back(std::unique_ptr<ScDPObject>(pNew));
     }
 
-    maTables.transfer(maTables.end(), aAdded.begin(), aAdded.end(), aAdded);
+    std::move(aAdded.begin(), aAdded.end(), std::back_inserter(maTables));
 }
 
 bool ScDPCollection::RefsEqual( const ScDPCollection& r ) const
@@ -3506,7 +3506,7 @@ bool ScDPCollection::RefsEqual( const ScDPCollection& r ) const
 
     TablesType::const_iterator itr = maTables.begin(), itr2 = r.maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr, ++itr2)
-        if (!itr->RefsEqual(*itr2))
+        if (!(*itr)->RefsEqual(*itr2->get()))
             return false;
 
     return true;
@@ -3520,7 +3520,7 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
         TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
         TablesType::iterator itr2 = r.maTables.begin();
         for (; itr != itrEnd; ++itr, ++itr2)
-            itr->WriteRefsTo(*itr2);
+            (*itr)->WriteRefsTo(*itr2->get());
     }
     else
     {
@@ -3532,12 +3532,12 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
         OSL_ENSURE( nSrcSize >= nDestSize, "WriteRefsTo: missing entries in document" );
         for (size_t nSrcPos = 0; nSrcPos < nSrcSize; ++nSrcPos)
         {
-            const ScDPObject& rSrcObj = maTables[nSrcPos];
+            const ScDPObject& rSrcObj = *maTables[nSrcPos].get();
             const OUString& aName = rSrcObj.GetName();
             bool bFound = false;
             for (size_t nDestPos = 0; nDestPos < nDestSize && !bFound; ++nDestPos)
             {
-                ScDPObject& rDestObj = r.maTables[nDestPos];
+                ScDPObject& rDestObj = *r.maTables[nDestPos].get();
                 if (rDestObj.GetName() == aName)
                 {
                     rSrcObj.WriteRefsTo(rDestObj);     // found object, copy refs
@@ -3564,20 +3564,20 @@ size_t ScDPCollection::GetCount() const
 
 ScDPObject& ScDPCollection::operator [](size_t nIndex)
 {
-    return maTables[nIndex];
+    return *maTables[nIndex].get();
 }
 
 const ScDPObject& ScDPCollection::operator [](size_t nIndex) const
 {
-    return maTables[nIndex];
+    return *maTables[nIndex].get();
 }
 
 const ScDPObject* ScDPCollection::GetByName(const OUString& rName) const
 {
     TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)
-        if (itr->GetName() == rName)
-            return &(*itr);
+        if ((*itr)->GetName() == rName)
+            return itr->get();
 
     return nullptr;
 }
@@ -3597,7 +3597,7 @@ OUString ScDPCollection::CreateNewName( sal_uInt16 nMin ) const
         TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
         for (; itr != itrEnd; ++itr)
         {
-            if (itr->GetName() == aNewName)
+            if ((*itr)->GetName() == aNewName)
             {
                 bFound = true;
                 break;
@@ -3618,7 +3618,7 @@ void ScDPCollection::FreeTable(ScDPObject* pDPObj)
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)
     {
-        ScDPObject* p = &(*itr);
+        ScDPObject* p = itr->get();
         if (p == pDPObj)
         {
             maTables.erase(itr);
@@ -3634,7 +3634,7 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
     const ScAddress& e = rOutRange.aEnd;
     mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
 
-    maTables.push_back(pDPObj);
+    maTables.push_back(std::unique_ptr<ScDPObject>(pDPObj));
     return true;
 }
 
@@ -3737,7 +3737,7 @@ void ScDPCollection::GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*
     TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
     for (; it != itEnd; ++it)
     {
-        const ScDPObject& rObj = *it;
+        const ScDPObject& rObj = *it->get();
         if (!rObj.IsSheetData())
             // Source is not a sheet range.
             continue;
@@ -3766,7 +3766,7 @@ void ScDPCollection::GetAllTables(const OUString& rSrcName, std::set<ScDPObject*
     TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
     for (; it != itEnd; ++it)
     {
-        const ScDPObject& rObj = *it;
+        const ScDPObject& rObj = *it->get();
         if (!rObj.IsSheetData())
             // Source is not a sheet range.
             continue;
@@ -3797,7 +3797,7 @@ void ScDPCollection::GetAllTables(
     TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
     for (; it != itEnd; ++it)
     {
-        const ScDPObject& rObj = *it;
+        const ScDPObject& rObj = *it->get();
         if (!rObj.IsImportData())
             // Source data is not a database.
             continue;
