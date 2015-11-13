@@ -275,7 +275,6 @@ private:
     void setActiveXToolbarsVisible( bool bVisible );
 
     DECL_LINK_TYPED( updateHdl, Timer *, void );
-    DECL_LINK_TYPED( PostYieldListener, LinkParamNone*, void );
     DECL_LINK_TYPED( ReadyForNextInputHdl, Timer *, void );
     DECL_LINK_TYPED( endPresentationHdl, void*, void );
     DECL_LINK_TYPED( ContextMenuSelectHdl, Menu *, bool );
@@ -311,7 +310,7 @@ private:
     static void setAutoSaveState( bool bOn );
     void gotoPreviousSlide (const bool bSkipAllMainSequenceEffects);
 
-    /** Called by PostYieldListener and updateHdl handlers this method is
+    /** Called by our maUpdateTimer's updateHdl handler this method is
         responsible to call the slideshow update() method and, depending on
         its return value, wait for a certain amount of time before another
         call to update() is scheduled.
