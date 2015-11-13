@@ -1683,6 +1683,8 @@ ScStyleSheet* XclImpXFBuffer::CreateStyleSheet( sal_uInt16 nXFIndex )
 
 // Buffer for XF indexes in cells =============================================
 
+IMPL_FIXEDMEMPOOL_NEWDEL( XclImpXFRange )
+
 bool XclImpXFRange::Expand( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 {
     if( maXFIndex != rXFIndex )
@@ -1720,7 +1722,7 @@ void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
     OSL_ENSURE( maIndexList.empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
 
     // insert a complete row range with one insert.
-    maIndexList.push_back( XclImpXFRange( 0, MAXROW, rXFIndex ) );
+    maIndexList.push_back( new XclImpXFRange( 0, MAXROW, rXFIndex ) );
 }
 
 void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
@@ -1757,20 +1759,20 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
                 ++(pThisRange->mnScRow1);
                 // try to concatenate with previous of this
                 if( !pPrevRange || !pPrevRange->Expand( nScRow, rXFIndex ) )
-                    Insert( XclImpXFRange( nScRow, rXFIndex ), nIndex );
+                    Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
             }
             else if( nLastScRow == nScRow )         // replace last XF
             {
                 --(pThisRange->mnScRow2);
                 if( !pNextRange || !pNextRange->Expand( nScRow, rXFIndex ) )
-                    Insert( XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
+                    Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
             }
             else                                    // insert in the middle of the range
             {
                 pThisRange->mnScRow1 = nScRow + 1;
                 // List::Insert() moves entries towards end of list, so insert twice at nIndex
-                Insert( XclImpXFRange( nScRow, rXFIndex ), nIndex );
-                Insert( XclImpXFRange( nFirstScRow, nScRow - 1, pThisRange->maXFIndex ), nIndex );
+                Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
+                Insert( new XclImpXFRange( nFirstScRow, nScRow - 1, pThisRange->maXFIndex ), nIndex );
             }
             return;
         }
@@ -1786,12 +1788,12 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
         return;
 
     // create new range
-    Insert( XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
+    Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
 }
 
-void XclImpXFRangeColumn::Insert(const XclImpXFRange& rXFRange, sal_uLong nIndex)
+void XclImpXFRangeColumn::Insert(XclImpXFRange* pXFRange, sal_uLong nIndex)
 {
-    maIndexList.insert( maIndexList.begin() + nIndex, rXFRange );
+    maIndexList.insert( maIndexList.begin() + nIndex, pXFRange );
 }
 
 void XclImpXFRangeColumn::Find(

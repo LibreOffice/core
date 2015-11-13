@@ -199,8 +199,6 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
 
     if( nComment )
         aComment = rIn.ReadUniString();
-    else
-        aComment;
 
     sal_uInt16          n = nCref;
     sal_uInt16          nC, nR;
