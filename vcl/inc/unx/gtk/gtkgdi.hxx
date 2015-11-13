@@ -59,8 +59,6 @@ public:
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 
-    cairo_t* getCairoContext() const;
-
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 private:
     GtkWidget       *mpWindow;
