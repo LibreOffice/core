@@ -179,7 +179,7 @@ extern "C" INPROC_DLLPUBLIC BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwRe
 }
 
 
-extern "C" STDAPI INPROC_DLLPUBLIC DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID* ppv )
+STDAPI INPROC_DLLPUBLIC DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID* ppv )
 {
     for( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
          if ( *guidList[nInd] == rclsid )
@@ -196,7 +196,7 @@ extern "C" STDAPI INPROC_DLLPUBLIC DllGetClassObject( REFCLSID rclsid, REFIID ri
 }
 
 
-extern "C" STDAPI INPROC_DLLPUBLIC DllCanUnloadNow()
+STDAPI INPROC_DLLPUBLIC DllCanUnloadNow()
 {
     if ( !g_nObj && !g_nLock )
         return S_OK;
