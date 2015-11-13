@@ -72,7 +72,7 @@ published interface XSSOManager : ::com::sun::star::uno::XInterface
         the name of the target/acceptor side principal to which the source
         principal intends to authenticate.
 
-        @paran TargetHost
+        @param TargetHost
         the host name associated with the target principal.
 
         @returns

@@ -82,7 +82,7 @@ published interface XInsertObjectDialog: com::sun::star::uno::XInterface
         @returns
             the structure containing the object and container related options
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
         @throws com::sun::star::io::IOException

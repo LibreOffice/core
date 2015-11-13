@@ -93,8 +93,8 @@ published service UpdateRootElement
  is invoked.
  </p>
 
- @ see AccessRootElement
- @ see com::sun::star::util::XChangesNotifier
+ @see AccessRootElement
+ @see com::sun::star::util::XChangesNotifier
 */
     interface com::sun::star::util::XChangesBatch;
 };

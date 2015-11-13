@@ -140,8 +140,8 @@ published service AccessRootElement
  with a single event.
  </p>
 
- @ see UpdateRootElement
- @ see com::sun::star::util::XChangesBatch
+ @see UpdateRootElement
+ @see com::sun::star::util::XChangesBatch
 */
     interface com::sun::star::util::XChangesNotifier;
 

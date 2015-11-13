@@ -52,7 +52,7 @@ published interface XModifiable2: com::sun::star::util::XModifiable
     //-------------------------------------------------------------------------
     /** disable possibility to change modified state of the document
 
-        @retuns the value that says whether the modified state change was
+        @returns the value that says whether the modified state change was
                 enabled before the call
             <TRUE/> the changing of the modified state was already disabled
             <FALSE/> the changing of the modified state was enabled
@@ -63,7 +63,7 @@ published interface XModifiable2: com::sun::star::util::XModifiable
     //-------------------------------------------------------------------------
     /** enable possibility to change modified state of the document
 
-        @retuns the value that says whether the modified state change was
+        @returns the value that says whether the modified state change was
                 enabled before the call
             <TRUE/> the changing of the modified state was disabled
             <FALSE/> the changing of the modified state was already enabled

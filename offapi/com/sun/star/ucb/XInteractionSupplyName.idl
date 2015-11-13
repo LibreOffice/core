@@ -46,7 +46,7 @@ published interface XInteractionSupplyName : com::sun::star::task::XInteractionC
     //-------------------------------------------------------------------------
     /** sets the name to supply.
 
-        @parem Name
+        @param Name
         contains the name to supply.
     */
     void setName( [in] string Name );

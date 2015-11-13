@@ -124,7 +124,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
         implemented as <type>ContentResultSet</type>. Its content will never
         change.
 
-        @trows ListenerAlreadySetException
+        @throws ListenerAlreadySetException
         if someone already has registered as listener via
         <member>XDynamicResultSet::setListener</member> or if someone has
         established a connection to a <type>CachedDynamicResultSet</type>

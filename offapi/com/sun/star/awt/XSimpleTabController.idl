@@ -55,7 +55,7 @@ published interface XSimpleTabController : com::sun::star::uno::XInterface
         which can be used further to address this tab by using other methods
         of this interface.
 
-        @return [long
+        @return
                 an unique ID for this new tab.
      */
     long insertTab();
@@ -139,7 +139,7 @@ published interface XSimpleTabController : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** return the unique ID of the current active tab.
 
-        @eturn  [long]
+        @return  ID
                 the ID of the active tab.
      */
     long getActiveTabID();

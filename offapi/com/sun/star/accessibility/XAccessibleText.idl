@@ -312,7 +312,7 @@ published interface XAccessibleText : ::com::sun::star::uno::XInterface
             The first character of the new selection.
             The valid range is 0..length.
 
-        @parm nEndIndex
+        @param nEndIndex
             The position after the last character of the new selection.
             The valid range is 0..length.
 

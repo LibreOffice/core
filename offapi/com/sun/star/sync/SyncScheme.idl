@@ -30,7 +30,7 @@
 
 /** contains the scheme name of this SyncScheme
 
-    @derepcated
+    @deprecated
  */
 published struct SyncScheme
 {

@@ -65,7 +65,7 @@ published interface XStorable2: XStorable
             optional parameters for saving, can take values from subset of
             <type scope="com::sun::star::document">MediaDescriptor</type>
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             the optional parameters contain unacceptable for save entry
 
         @throws com::sun::star::io::IOException

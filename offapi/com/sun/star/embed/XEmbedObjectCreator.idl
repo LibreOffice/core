@@ -130,10 +130,10 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
             an object of type <type>EmbeddedObjectDescriptor</type>
             contains object related properties
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
-        @thrown ::com::sun::star::container::NoSuchElementException
+        @throws ::com::sun::star::container::NoSuchElementException
             the specified entry does not exist
 
         @throws com::sun::star::io::IOException
@@ -175,7 +175,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
             an object of type <type>EmbeddedObjectDescriptor</type>
             contains object related properties
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
         @throws com::sun::star::io::IOException

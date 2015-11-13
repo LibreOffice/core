@@ -45,7 +45,7 @@ published interface XColumnsSupplier: com::sun::star::uno::XInterface
 {
 
     /** returns the container of columns.
-        @rerurns
+        @returns
             the columns
      */
     com::sun::star::container::XNameAccess getColumns();

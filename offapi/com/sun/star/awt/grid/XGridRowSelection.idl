@@ -47,7 +47,7 @@ published interface XGridRowSelection
         @param RowIndex
             denotes the index of the row to select
 
-        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <code>RowIndex</code> does not denote a valid row index
     */
     void selectRow( [in] long RowIndex )

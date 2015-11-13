@@ -103,7 +103,7 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
             optional parameters for object reloading, see also
             <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
         @throws com::sun::star::embed::WrongStateException

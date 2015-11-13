@@ -107,7 +107,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
             see also
             <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
         @throws com::sun::star::embed::WrongStateException
@@ -148,7 +148,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
             optional parameters for the object saving, see also
             <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
         @throws com::sun::star::embed::WrongStateException
@@ -198,7 +198,7 @@ published interface XEmbedPersist: XCommonEmbedPersist
             optional parameters for the object saving, see also
             <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
         @throws com::sun::star::embed::WrongStateException
