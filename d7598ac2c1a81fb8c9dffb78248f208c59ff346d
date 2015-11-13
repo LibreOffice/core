@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_dc5d12ee",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-13T13:51:49Z",
+      "side": 1,
+      "message": "the simple case isn\u0027t simple enough :)\n\ni was thinking of \"new SwDoc\" so there is no doc shell etc.",
+      "revId": "d7598ac2c1a81fb8c9dffb78248f208c59ff346d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
