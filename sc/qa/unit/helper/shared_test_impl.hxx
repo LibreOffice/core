@@ -17,7 +17,7 @@
 
 struct FindCondFormatByEnclosingRange
 {
-    FindCondFormatByEnclosingRange(const ScRange& rRange):
+    explicit FindCondFormatByEnclosingRange(const ScRange& rRange):
         mrRange(rRange) {}
 
     bool operator()(const std::unique_ptr<ScConditionalFormat>& pFormat)

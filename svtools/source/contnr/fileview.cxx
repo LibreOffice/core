@@ -121,7 +121,7 @@ namespace
         SvtFileView_Impl* m_pTimeoutHandler;
 
     public:
-        CallbackTimer( SvtFileView_Impl* _pHandler ) : m_pTimeoutHandler( _pHandler ) { }
+        explicit CallbackTimer( SvtFileView_Impl* _pHandler ) : m_pTimeoutHandler( _pHandler ) { }
 
     protected:
         virtual void SAL_CALL onShot() override;
@@ -221,7 +221,7 @@ private:
     void                        Init();         // reads the translation file and fills the (internal) list
 
 public:
-                                NameTranslationList( const INetURLObject& rBaseURL );
+                                explicit NameTranslationList( const INetURLObject& rBaseURL );
                                             // rBaseURL: path to folder for which the translation of the entries
                                             //  should be done
 
@@ -293,7 +293,7 @@ class NameTranslator_Impl : public ::svt::IContentTitleTranslation
 private:
     NameTranslationList*    mpActFolder;
 public:
-                            NameTranslator_Impl( const INetURLObject& rActualFolder );
+                            explicit NameTranslator_Impl( const INetURLObject& rActualFolder );
                             virtual ~NameTranslator_Impl();
 
      // IContentTitleTranslation

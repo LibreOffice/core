@@ -1738,7 +1738,7 @@ class FindDimByName : std::unary_function<const ScDPSaveDimension*, bool>
 {
     OUString maName;
 public:
-    FindDimByName(const OUString& rName) : maName(rName) {}
+    explicit FindDimByName(const OUString& rName) : maName(rName) {}
 
     bool operator() (const ScDPSaveDimension* p) const
     {

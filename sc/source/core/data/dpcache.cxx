@@ -93,7 +93,7 @@ namespace {
 class MacroInterpretIncrementer
 {
 public:
-    MacroInterpretIncrementer(ScDocument* pDoc) :
+    explicit MacroInterpretIncrementer(ScDocument* pDoc) :
         mpDoc(pDoc)
     {
         mpDoc->IncMacroInterpretLevel();
@@ -211,7 +211,7 @@ class PushBackValue : std::unary_function<Bucket, void>
 {
     ScDPCache::ScDPItemDataVec& mrItems;
 public:
-    PushBackValue(ScDPCache::ScDPItemDataVec& _items) : mrItems(_items) {}
+    explicit PushBackValue(ScDPCache::ScDPItemDataVec& _items) : mrItems(_items) {}
     void operator() (const Bucket& v)
     {
         mrItems.push_back(v.maValue);
@@ -222,7 +222,7 @@ class PushBackOrderIndex : std::unary_function<Bucket, void>
 {
     ScDPCache::IndexArrayType& mrData;
 public:
-    PushBackOrderIndex(ScDPCache::IndexArrayType& _items) : mrData(_items) {}
+    explicit PushBackOrderIndex(ScDPCache::IndexArrayType& _items) : mrData(_items) {}
     void operator() (const Bucket& v)
     {
         mrData.push_back(v.mnOrderIndex);
@@ -701,7 +701,7 @@ class InsertLabel : public std::unary_function<OUString, void>
 {
     LabelSet& mrNames;
 public:
-    InsertLabel(LabelSet& rNames) : mrNames(rNames) {}
+    explicit InsertLabel(LabelSet& rNames) : mrNames(rNames) {}
     void operator() (const OUString& r)
     {
         mrNames.insert(r);

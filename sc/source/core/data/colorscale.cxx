@@ -31,7 +31,7 @@ private:
     void startListening(ScTokenArray* pTokens, const ScAddress& rPos);
 
 public:
-    ScFormulaListener(ScFormulaCell* pCell);
+    explicit ScFormulaListener(ScFormulaCell* pCell);
     virtual ~ScFormulaListener();
 
     void Notify( const SfxHint& rHint ) override;

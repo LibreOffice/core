@@ -275,7 +275,7 @@ struct TableValues::Impl
     ScRange maRange;
     TablesType m_Tables;
 
-    Impl( const ScRange& rRange ) : maRange(rRange)
+    explicit Impl( const ScRange& rRange ) : maRange(rRange)
     {
         size_t nTabs = rRange.aEnd.Tab() - rRange.aStart.Tab() + 1;
         size_t nCols = rRange.aEnd.Col() - rRange.aStart.Col() + 1;

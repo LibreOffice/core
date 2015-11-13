@@ -99,7 +99,7 @@ class exclude : public std::unary_function<OString, bool>
 {
 public:
 
-    exclude(const string_container_t& exclude_list)
+    explicit exclude(const string_container_t& exclude_list)
     {
         string_container_t::const_iterator iter     = exclude_list.begin();
         string_container_t::const_iterator iter_end = exclude_list.end();

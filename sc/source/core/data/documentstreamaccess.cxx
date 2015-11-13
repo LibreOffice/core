@@ -22,7 +22,7 @@ struct DocumentStreamAccessImpl
     ScDocument& mrDoc;
     ColumnBlockPositionSet maBlockPosSet;
 
-    DocumentStreamAccessImpl( ScDocument& rDoc ) :
+    explicit DocumentStreamAccessImpl( ScDocument& rDoc ) :
         mrDoc(rDoc),
         maBlockPosSet(rDoc)
     {}

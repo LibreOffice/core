@@ -175,7 +175,7 @@ class RefMovedNotifier : std::unary_function<SvtListener*, void>
 {
     const sc::RefMovedHint& mrHint;
 public:
-    RefMovedNotifier( const sc::RefMovedHint& rHint ) : mrHint(rHint) {}
+    explicit RefMovedNotifier( const sc::RefMovedHint& rHint ) : mrHint(rHint) {}
 
     void operator() ( SvtListener* p )
     {

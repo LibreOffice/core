@@ -306,8 +306,8 @@ EventInfoHash& getEventTransInfo()
 class ScriptEventHelper
 {
 public:
-    ScriptEventHelper( const Reference< XInterface >& xControl );
-    ScriptEventHelper( const OUString& sCntrlServiceName );
+    explicit ScriptEventHelper( const Reference< XInterface >& xControl );
+    explicit ScriptEventHelper( const OUString& sCntrlServiceName );
     ~ScriptEventHelper();
     Sequence< ScriptEventDescriptor > createEvents( const OUString& sCodeName );
     Sequence< OUString > getEventListeners();
@@ -570,7 +570,7 @@ class EventListener : public EventListener_BASE
 {
 
 public:
-    EventListener( const Reference< XComponentContext >& rxContext );
+    explicit EventListener( const Reference< XComponentContext >& rxContext );
     // XEventListener
     virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( RuntimeException, std::exception ) override;
     using cppu::OPropertySetHelper::disposing;

@@ -158,7 +158,7 @@ class ScriptTypeAggregator : public sc::ColumnSpanSet::Action
     SvtScriptType mnScriptType;
 
 public:
-    ScriptTypeAggregator(ScDocument& rDoc) : mrDoc(rDoc), mnScriptType(SvtScriptType::NONE) {}
+    explicit ScriptTypeAggregator(ScDocument& rDoc) : mrDoc(rDoc), mnScriptType(SvtScriptType::NONE) {}
 
     virtual void startColumn(SCTAB nTab, SCCOL nCol) override
     {

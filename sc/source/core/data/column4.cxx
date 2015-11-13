@@ -403,7 +403,7 @@ class StartListeningHandler
     sc::StartListeningContext& mrCxt;
 
 public:
-    StartListeningHandler( sc::StartListeningContext& rCxt ) :
+    explicit StartListeningHandler( sc::StartListeningContext& rCxt ) :
         mrCxt(rCxt) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
@@ -417,7 +417,7 @@ class EndListeningHandler
     sc::EndListeningContext& mrCxt;
 
 public:
-    EndListeningHandler( sc::EndListeningContext& rCxt ) :
+    explicit EndListeningHandler( sc::EndListeningContext& rCxt ) :
         mrCxt(rCxt) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
@@ -931,7 +931,7 @@ private:
     }
 
 public:
-    ScriptTypeUpdater( ScColumn& rCol ) :
+    explicit ScriptTypeUpdater( ScColumn& rCol ) :
         mrCol(rCol),
         mrTextAttrs(rCol.GetCellAttrStore()),
         miPosAttr(mrTextAttrs.begin()),
@@ -1053,7 +1053,7 @@ class RelativeRefBoundChecker
     ScRange maBoundRange;
 
 public:
-    RelativeRefBoundChecker( const ScRange& rBoundRange ) :
+    explicit RelativeRefBoundChecker( const ScRange& rBoundRange ) :
         maBoundRange(rBoundRange) {}
 
     void operator() ( size_t /*nRow*/, ScFormulaCell* pCell )
@@ -1100,7 +1100,7 @@ class ListenerCollector
 {
     std::vector<SvtListener*>& mrListeners;
 public:
-    ListenerCollector( std::vector<SvtListener*>& rListener ) :
+    explicit ListenerCollector( std::vector<SvtListener*>& rListener ) :
         mrListeners(rListener) {}
 
     void operator() ( size_t /*nRow*/, SvtBroadcaster* p )
@@ -1114,7 +1114,7 @@ class FormulaCellCollector
 {
     std::vector<ScFormulaCell*>& mrCells;
 public:
-    FormulaCellCollector( std::vector<ScFormulaCell*>& rCells ) : mrCells(rCells) {}
+    explicit FormulaCellCollector( std::vector<ScFormulaCell*>& rCells ) : mrCells(rCells) {}
 
     void operator() ( size_t /*nRow*/, ScFormulaCell* p )
     {
@@ -1273,7 +1273,7 @@ class EndListeningFormulaCellsHandler
     SCROW mnEndRow;
 
 public:
-    EndListeningFormulaCellsHandler( sc::EndListeningContext& rEndCxt ) :
+    explicit EndListeningFormulaCellsHandler( sc::EndListeningContext& rEndCxt ) :
         mrEndCxt(rEndCxt), mnStartRow(-1), mnEndRow(-1) {}
 
     void operator() ( const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize )

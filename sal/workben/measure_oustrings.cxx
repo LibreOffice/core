@@ -54,7 +54,7 @@ private:
     const char *m_pMessage;
     sal_uInt32 m_nStartTime, m_nEndTime;
 public:
-    TimerMeasure(const char *pMessage)
+    explicit TimerMeasure(const char *pMessage)
     : m_pMessage(pMessage)
     {
         m_nStartTime = osl_getGlobalTimer();

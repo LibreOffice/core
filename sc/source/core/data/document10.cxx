@@ -395,7 +395,7 @@ class StartNeededListenersHandler : std::unary_function<ScTable*, void>
 {
     std::shared_ptr<sc::StartListeningContext> mpCxt;
 public:
-    StartNeededListenersHandler( ScDocument& rDoc ) : mpCxt(new sc::StartListeningContext(rDoc)) {}
+    explicit StartNeededListenersHandler( ScDocument& rDoc ) : mpCxt(new sc::StartListeningContext(rDoc)) {}
 
     void operator() (ScTable* p)
     {

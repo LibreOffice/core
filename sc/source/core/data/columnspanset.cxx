@@ -276,7 +276,7 @@ class Scanner
 {
     SingleColumnSpanSet::ColumnSpansType& mrRanges;
 public:
-    Scanner(SingleColumnSpanSet::ColumnSpansType& rRanges) : mrRanges(rRanges) {}
+    explicit Scanner(SingleColumnSpanSet::ColumnSpansType& rRanges) : mrRanges(rRanges) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {

@@ -89,7 +89,7 @@ private:
     FixedText*  pFixedText;
 
 public:
-    expliciti               ScTestListener(FixedText* pF);
+    explicit                ScTestListener(FixedText* pF);
     virtual                 ~ScTestListener();
 
                             SMART_UNO_DECLARATION( ScTestListener, UsrObject );

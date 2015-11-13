@@ -116,7 +116,7 @@ class MeasureTimeSwitch
     double& mrDiff;
     TimeValue maTimeBefore;
 public:
-    MeasureTimeSwitch(double& rDiff) : mrDiff(rDiff)
+    explicit MeasureTimeSwitch(double& rDiff) : mrDiff(rDiff)
     {
         mrDiff = 9999.0;
         osl_getSystemTime(&maTimeBefore);
@@ -3489,7 +3489,7 @@ void Test::testCopyPasteSkipEmpty()
     {
         ScDocument* mpDoc;
 
-        TestRange( ScDocument* pDoc ) : mpDoc(pDoc) {}
+        explicit TestRange( ScDocument* pDoc ) : mpDoc(pDoc) {}
 
         bool checkRange( const ScAddress& rPos, const Check* p, const Check* pEnd )
         {

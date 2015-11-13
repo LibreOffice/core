@@ -143,7 +143,7 @@ struct ScDefaultAttr
     const ScPatternAttr*    pAttr;
     SCROW                   nFirst;
     SCSIZE                  nCount;
-    ScDefaultAttr(const ScPatternAttr* pPatAttr) : pAttr(pPatAttr), nFirst(0), nCount(0) {}
+    explicit ScDefaultAttr(const ScPatternAttr* pPatAttr) : pAttr(pPatAttr), nFirst(0), nCount(0) {}
 };
 
 struct ScLessDefaultAttr
@@ -2649,7 +2649,7 @@ class BroadcastAction : public sc::ColumnSpanSet::ColumnAction
     ScColumn* mpCol;
 
 public:
-    BroadcastAction( ScDocument& rDoc ) : mrDoc(rDoc), mpCol(nullptr) {}
+    explicit BroadcastAction( ScDocument& rDoc ) : mrDoc(rDoc), mpCol(nullptr) {}
 
     virtual void startColumn( ScColumn* pCol ) override
     {

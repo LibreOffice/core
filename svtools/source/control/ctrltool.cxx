@@ -108,7 +108,7 @@ private:
     ImplFontListFontInfo*   mpFirst;
     FontListFontNameType    mnType;
 
-    ImplFontListNameInfo(const OUString& rSearchName)
+    explicit ImplFontListNameInfo(const OUString& rSearchName)
         : maSearchName(rSearchName)
         , mpFirst(nullptr)
         , mnType(FontListFontNameType::NONE)

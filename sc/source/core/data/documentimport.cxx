@@ -52,7 +52,7 @@ struct ScDocumentImportImpl
     SvtScriptType mnDefaultScriptNumeric;
     std::vector<TabAttr> maTabAttrs;
 
-    ScDocumentImportImpl(ScDocument& rDoc) :
+    explicit ScDocumentImportImpl(ScDocument& rDoc) :
         mrDoc(rDoc),
         maListenCxt(rDoc),
         maBlockPosSet(rDoc),

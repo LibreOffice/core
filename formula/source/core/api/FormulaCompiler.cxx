@@ -45,12 +45,12 @@ namespace {
 
 class FormulaCompilerRecursionGuard
 {
-private:
-            short&              rRecursion;
-public:
-                                FormulaCompilerRecursionGuard( short& rRec )
-                                    : rRecursion( rRec ) { ++rRecursion; }
-                                ~FormulaCompilerRecursionGuard() { --rRecursion; }
+    private:
+        short& rRecursion;
+    public:
+        explicit FormulaCompilerRecursionGuard( short& rRec )
+            : rRecursion( rRec ) { ++rRecursion; }
+        ~FormulaCompilerRecursionGuard() { --rRecursion; }
 };
 
 short lcl_GetRetFormat( OpCode eOpCode )

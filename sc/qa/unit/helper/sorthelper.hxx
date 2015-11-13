@@ -20,7 +20,7 @@
 class SortTypeSetter {
     bool mbSortRefUpdate;
 public:
-    SortTypeSetter(bool bSortRefUpdate)
+    explicit SortTypeSetter(bool bSortRefUpdate)
     {
         mbSortRefUpdate = changeTo(bSortRefUpdate);
     }
