@@ -357,14 +357,25 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, D
     }
 }
 
-/// We want to work in absolute twips: so set delta between rChild and rParent as origin on rChild, then disable map mode on rChild.
-static void lcl_setAbsoluteTwips(vcl::Window& rParent, vcl::Window& rChild)
+/// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
+static void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild, MouseEvent* pMouseEvent)
 {
+    // Set map mode, so that callback payloads will contain absolute coordinates instead of relative ones.
     Point aOffset(rChild.GetOutOffXPixel() - rParent.GetOutOffXPixel(), rChild.GetOutOffYPixel() - rParent.GetOutOffYPixel());
+    aOffset = rChild.PixelToLogic(aOffset);
     MapMode aMapMode(rChild.GetMapMode());
-    aMapMode.SetOrigin(rChild.PixelToLogic(aOffset));
+    aMapMode.SetOrigin(aOffset);
     rChild.SetMapMode(aMapMode);
     rChild.EnableMapMode(false);
+
+    if (pMouseEvent)
+    {
+        // Set event coordinates, so they contain relative coordinates instead of absolute ones.
+        Point aPos = pMouseEvent->GetPosPixel();
+        aPos.Move(-aOffset.getX(), -aOffset.getY());
+        MouseEvent aMouseEvent(aPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(), pMouseEvent->GetButtons(), pMouseEvent->GetModifier());
+        *pMouseEvent = aMouseEvent;
+    }
 }
 
 void SwSidebarWin::KeyInput(const KeyEvent& rKeyEvent)
@@ -372,7 +383,7 @@ void SwSidebarWin::KeyInput(const KeyEvent& rKeyEvent)
     if (mpSidebarTextControl)
     {
         mpSidebarTextControl->Push(PushFlags::MAPMODE);
-        lcl_setAbsoluteTwips(EditWin(), *mpSidebarTextControl);
+        lcl_translateTwips(EditWin(), *mpSidebarTextControl, nullptr);
 
         mpSidebarTextControl->KeyInput(rKeyEvent);
 
@@ -385,9 +396,10 @@ void SwSidebarWin::MouseButtonDown(const MouseEvent& rMouseEvent)
     if (mpSidebarTextControl)
     {
         mpSidebarTextControl->Push(PushFlags::MAPMODE);
-        lcl_setAbsoluteTwips(EditWin(), *mpSidebarTextControl);
+        MouseEvent aMouseEvent(rMouseEvent);
+        lcl_translateTwips(EditWin(), *mpSidebarTextControl, &aMouseEvent);
 
-        mpSidebarTextControl->MouseButtonDown(rMouseEvent);
+        mpSidebarTextControl->MouseButtonDown(aMouseEvent);
 
         mpSidebarTextControl->Pop();
     }
