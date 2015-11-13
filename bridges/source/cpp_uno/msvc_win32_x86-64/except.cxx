@@ -340,6 +340,7 @@ private:
 
 __type_info::~__type_info() throw ()
 {
+    (void)_m_data;
 }
 
 class __type_info_descriptor
