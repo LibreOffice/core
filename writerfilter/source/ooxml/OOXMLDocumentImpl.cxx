@@ -281,6 +281,8 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rT
     OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages);
     pDocument->setXNoteId(nId);
     pDocument->setXNoteType(rType);
+    pDocument->setModel(getModel());
+    pDocument->setDrawPage(getDrawPage());
 
     return writerfilter::Reference<Stream>::Pointer_t(pDocument);
 }
