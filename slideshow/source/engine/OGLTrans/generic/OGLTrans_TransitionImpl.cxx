@@ -1866,7 +1866,8 @@ std::shared_ptr<OGLTransitionImpl> makeRipple()
 
 std::shared_ptr<OGLTransitionImpl> makeGlitter()
 {
-    const int NX = 30, NY = 30;
+    const int NX = 80;
+    const int NY = NX * 4 / 3;
 
     Primitives_t aLeavingSlide;
     Primitives_t aEnteringSlide;
@@ -1875,37 +1876,42 @@ std::shared_ptr<OGLTransitionImpl> makeGlitter()
     {
         for (int x = 0; x < NX+2; x+=2)
         {
-            Primitive Slide;
+            Primitive aHexagon;
 
             if (y % 4 == 0)
             {
-                Slide.pushTriangle(vec(x-1, y-1, NX, NY), vec(x,   y-2, NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x,   y-2, NX, NY), vec(x+1, y-1, NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x+1, y-1, NX, NY), vec(x+1, y,   NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x+1, y,   NX, NY), vec(x,   y+1, NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x,   y+1, NX, NY), vec(x-1, y,   NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x-1, y,   NX, NY), vec(x-1, y-1, NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x-1, y-1, NX, NY), vec(x,   y-2, NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x,   y-2, NX, NY), vec(x+1, y-1, NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x+1, y-1, NX, NY), vec(x+1, y,   NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x+1, y,   NX, NY), vec(x,   y+1, NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x,   y+1, NX, NY), vec(x-1, y,   NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x-1, y,   NX, NY), vec(x-1, y-1, NX, NY), vec(x, y+0.5, NX, NY));
             }
             else
             {
-                Slide.pushTriangle(vec(x-2, y-1, NX, NY), vec(x-1, y-2, NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x-1, y-2, NX, NY), vec(x,   y-1, NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x,   y-1, NX, NY), vec(x,   y,   NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x,   y,   NX, NY), vec(x-1, y+1, NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x-1, y+1, NX, NY), vec(x-2, y,   NX, NY), vec(x, y+0.5, NX, NY));
-                Slide.pushTriangle(vec(x-2, y,   NX, NY), vec(x-2, y-1, NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x-2, y-1, NX, NY), vec(x-1, y-2, NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x-1, y-2, NX, NY), vec(x,   y-1, NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x,   y-1, NX, NY), vec(x,   y,   NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x,   y,   NX, NY), vec(x-1, y+1, NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x-1, y+1, NX, NY), vec(x-2, y,   NX, NY), vec(x, y+0.5, NX, NY));
+                aHexagon.pushTriangle(vec(x-2, y,   NX, NY), vec(x-2, y-1, NX, NY), vec(x, y+0.5, NX, NY));
             }
 
-            glm::vec3 center = Slide.getVertices()[2];
+            glm::vec3 aCenter = aHexagon.getVertices()[2];
 
-            float random = comphelper::rng::uniform_real_distribution(-0.2, std::nextafter(0.2, DBL_MAX));
+            float fRandom = comphelper::rng::uniform_real_distribution(-0.25, std::nextafter(0.2, DBL_MAX));
 
-            Slide.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), center, 180 , true, fdiv(x, NX) + random , 1.0));
+            double fDelta = 0.6 + fRandom;
+            double fHorizontal = fdiv(x, NX + 2) * fDelta;
 
-            aLeavingSlide.push_back (Slide);
+            double fStart = fHorizontal;
+            double fEnd   = fHorizontal + (1.0 - fDelta);
 
-            Slide.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), center, 180 , false, fdiv(x, NX) + random, 1.0));
-            aEnteringSlide.push_back (Slide);
+            aHexagon.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), aCenter, 180 , true, fStart, fEnd));
+            aLeavingSlide.push_back(aHexagon);
+
+            aHexagon.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), aCenter, 180 , false, fStart, fEnd));
+            aEnteringSlide.push_back(aHexagon);
         }
     }
 
