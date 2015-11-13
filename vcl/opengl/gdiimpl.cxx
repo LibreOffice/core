@@ -37,6 +37,8 @@
 
 #include <vector>
 
+#include <stdlib.h>
+
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider *pProvider)
     : mpContext(nullptr)
     , mrParent(rParent)
@@ -100,7 +102,12 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
         pContext = pContext->mpPrevContext;
     }
 
-    mpContext = pContext ? pContext : GetDefaultContext();
+    if( mpContext.is() )
+        mpContext = pContext;
+    else if( mpWindowContext.is() )
+        mpContext = mpWindowContext;
+    else
+        mpContext = GetDefaultContext();
 
     return mpContext.is();
 }
@@ -199,10 +206,7 @@ void OpenGLSalGraphicsImpl::PostDraw()
     if( mpContext->mnPainting == 0 )
     {
         if (!IsOffscreen())
-        {
-            SAL_DEBUG("PostDraw flush ?");
             flushAndSwap();
-        }
     }
 
     OpenGLZone::leave();
@@ -382,8 +386,13 @@ void OpenGLSalGraphicsImpl::SetROPFillColor( SalROPColor /*nROPColor*/ )
 
 bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
 {
+    bool bClearTexture = false;
+
     if( !maOffscreenTex )
+    {
         maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
+        bClearTexture = true;
+    }
 
     if( !maOffscreenTex.IsUnique() )
     {
@@ -400,6 +409,13 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
     else
     {
         mpFramebuffer = mpContext->AcquireFramebuffer( maOffscreenTex );
+        if( bClearTexture )
+        {
+            glDrawBuffer( GL_COLOR_ATTACHMENT0 );
+            GLuint clearColor[4] = { 0, 0, 0, 0 };
+            glClearBufferuiv( GL_COLOR, 0, clearColor );
+            // FIXME: use glClearTexImage if we have it ?
+        }
     }
 
     CHECK_GL_ERROR();
@@ -1872,7 +1888,6 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 
 OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
 {
-    SAL_DEBUG( "want to rid ourselves of this method" );
     AcquireContext();
     return mpContext.get();
 }
@@ -1886,22 +1901,33 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     VCL_GL_INFO( "vcl.opengl", "flushAndSwap" );
 
-//    glFlush(); - not needed
+    glBindTexture( GL_TEXTURE_2D, 0 );
+
+    glFlush();
     mpWindowContext->makeCurrent();
     CHECK_GL_ERROR();
 
     mpWindowContext->AcquireDefaultFramebuffer();
     CHECK_GL_ERROR();
 
-    glViewport( 0, 0, GetWidth(), GetHeight() );
-    ImplInitClipRegion();
+    glDisable( GL_SCISSOR_TEST );
+    CHECK_GL_ERROR();
+    glDisable( GL_STENCIL_TEST );
     CHECK_GL_ERROR();
 
-    SalTwoRect aPosAry(0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight(),
-                       0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight());
+    glViewport( 0, 0, GetWidth(), GetHeight() );
+    CHECK_GL_ERROR();
+
+    glClearColor((float)rand()/RAND_MAX, (float)rand()/RAND_MAX,
+                 (float)rand()/RAND_MAX, 1.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
+    CHECK_GL_ERROR();
+
+    SalTwoRect aPosAry( 0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight(),
+                        0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight() );
 
     OpenGLProgram *pProgram =
-        mpContext->UseProgram( "textureVertexShader", "textureFragmentShader", "" );
+        mpWindowContext->UseProgram( "textureVertexShader", "textureFragmentShader", "" );
 
     pProgram->SetTexture( "sampler", maOffscreenTex );
 
@@ -1932,7 +1958,14 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     pProgram->Clean();
 
-    mpContext->swapBuffers();
+    if (!getenv("NO_SWAP"))
+    {
+        mpWindowContext->swapBuffers();
+        glFlush();
+        usleep(500000);
+    }
+
+    VCL_GL_INFO( "vcl.opengl", "flushAndSwap - end." );
 }
 
 void OpenGLSalGraphicsImpl::endPaint()
