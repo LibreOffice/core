@@ -18,6 +18,8 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
 
+#include <osl/thread.hxx>
+
 #if defined(MACOSX)
 #include <premac.h>
 #include <AppKit/NSOpenGLView.h>
@@ -1487,6 +1489,14 @@ void OpenGLContext::swapBuffers()
 #elif defined( UNX )
     glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
 #endif
+
+    static bool bSleep = getenv("SAL_GL_SLEEP_ON_SWAP");
+    if (bSleep)
+    {
+        // half a second.
+        TimeValue aSleep( 0, 500*1000*1000 );
+        osl::Thread::wait( aSleep );
+    }
 }
 
 void OpenGLContext::sync()
