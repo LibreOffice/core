@@ -42,20 +42,21 @@
 #include "calcmacros.hxx"
 
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 
-#define PIVOT_DATA_FIELD        (MAXCOLCOUNT)
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
+#define PIVOT_DATA_FIELD        (MAXCOLCOUNT)
+
 struct SC_DLLPUBLIC ScDPName
 {
     OUString     maName;         ///< Original name of the dimension.
     OUString     maLayoutName;   ///< Layout name (display name)
-    sal_uInt8 mnDupCount;
+    sal_uInt8    mnDupCount;
 
     ScDPName();
     explicit ScDPName(const OUString& rName, const OUString& rLayoutName, sal_uInt8 nDupCount);
@@ -108,7 +109,7 @@ struct ScDPLabelData
     OUString SC_DLLPUBLIC getDisplayName() const;
 };
 
-typedef boost::ptr_vector<ScDPLabelData> ScDPLabelDataVector;
+typedef std::vector< std::unique_ptr<ScDPLabelData> > ScDPLabelDataVector;
 
 struct ScPivotField
 {

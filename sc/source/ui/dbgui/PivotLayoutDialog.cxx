@@ -560,7 +560,7 @@ void ScPivotLayoutDialog::ApplyLabelData(ScDPSaveData& rSaveData)
 
     for (it = rLabelDataVector.begin(); it != rLabelDataVector.end(); ++it)
     {
-        const ScDPLabelData& pLabelData = *it;
+        const ScDPLabelData& pLabelData = *it->get();
 
         OUString aUnoName = ScDPUtil::createDuplicateDimensionName(pLabelData.maName, pLabelData.mnDupCount);
         ScDPSaveDimension* pSaveDimensions = rSaveData.GetExistingDimensionByName(aUnoName);
@@ -629,7 +629,7 @@ bool ScPivotLayoutDialog::IsDataElement(SCCOL nColumn)
 
 ScDPLabelData& ScPivotLayoutDialog::GetLabelData(SCCOL nColumn)
 {
-    return maPivotParameters.maLabelArray[nColumn];
+    return *maPivotParameters.maLabelArray[nColumn].get();
 }
 
 void ScPivotLayoutDialog::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames)

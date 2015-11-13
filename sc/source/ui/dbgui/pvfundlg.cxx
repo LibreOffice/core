@@ -282,11 +282,11 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
     OUString aSelectedEntry;
     for( ScDPLabelDataVector::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
     {
-        mpLbBaseField->InsertEntry(aIt->getDisplayName());
+        mpLbBaseField->InsertEntry((*aIt)->getDisplayName());
         maBaseFieldNameMap.insert(
-            NameMapType::value_type(aIt->getDisplayName(), aIt->maName));
-        if (aIt->maName == rFuncData.maFieldRef.ReferenceField)
-            aSelectedEntry = aIt->getDisplayName();
+            NameMapType::value_type((*aIt)->getDisplayName(), (*aIt)->maName));
+        if ((*aIt)->maName == rFuncData.maFieldRef.ReferenceField)
+            aSelectedEntry = (*aIt)->getDisplayName();
     }
 
     // base item list box
@@ -402,7 +402,7 @@ IMPL_LINK_TYPED( ScDPFunctionDlg, SelectHdl, ListBox&, rLBox, void )
         size_t nBasePos = mpLbBaseField->GetSelectEntryPos();
         if( nBasePos < mrLabelVec.size() )
         {
-            const vector<ScDPLabelData::Member>& rMembers = mrLabelVec[nBasePos].maMembers;
+            const vector<ScDPLabelData::Member>& rMembers = mrLabelVec[nBasePos]->maMembers;
             mbEmptyItem = lclFillListBox(*mpLbBaseItem, rMembers, SC_BASEITEM_USER_POS);
             // build cache for base names.
             NameMapType aMap;

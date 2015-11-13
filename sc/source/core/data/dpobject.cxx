@@ -2385,9 +2385,9 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
 
     for (sal_Int32 nDim = 0; nDim < nDimCount; ++nDim)
     {
-        std::unique_ptr<ScDPLabelData> pNewLabel(new ScDPLabelData);
+        ScDPLabelData* pNewLabel = new ScDPLabelData;
         FillLabelDataForDimension(xDims, nDim, *pNewLabel);
-        o3tl::ptr_container::push_back(rParam.maLabelArray, std::move(pNewLabel));
+        rParam.maLabelArray.push_back(std::unique_ptr<ScDPLabelData>(pNewLabel));
     }
 
     return true;
@@ -2625,7 +2625,7 @@ void ScDPObject::ConvertOrientation(
         pDim->RemoveSubtotalName();
         if (nDimIndex < rLabels.size())
         {
-            const ScDPLabelData& rLabel = rLabels[nDimIndex];
+            const ScDPLabelData& rLabel = *rLabels[nDimIndex].get();
             if (!rLabel.maLayoutName.isEmpty())
                 pDim->SetLayoutName(rLabel.maLayoutName);
             if (!rLabel.maSubtotalName.isEmpty())

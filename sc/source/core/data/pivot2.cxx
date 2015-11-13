@@ -37,6 +37,7 @@
 #include "refupdat.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
+#include <o3tl/make_unique.hxx>
 
 #if DEBUG_PIVOT_TABLE
 using std::cout;
@@ -166,7 +167,7 @@ void ScPivotParam::SetLabelData(const ScDPLabelDataVector& rVector)
     ScDPLabelDataVector::const_iterator it;
     for (it = rVector.begin(); it != rVector.end(); ++it)
     {
-        aNewArray.push_back(new ScDPLabelData(*it));
+        aNewArray.push_back(o3tl::make_unique<ScDPLabelData>(*it->get()));
     }
     maLabelArray.swap(aNewArray);
 }

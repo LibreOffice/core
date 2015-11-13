@@ -40,7 +40,7 @@ void ScPivotLayoutTreeListLabel::FillLabelFields(ScDPLabelDataVector& rLabelVect
     ScDPLabelDataVector::iterator it;
     for (it = rLabelVector.begin(); it != rLabelVector.end(); ++it)
     {
-        const ScDPLabelData& rLabelData = *it;
+        const ScDPLabelData& rLabelData = *it->get();
 
         ScItemValue* pValue = new ScItemValue(rLabelData.maName, rLabelData.mnCol, rLabelData.mnFuncMask);
         maItemValues.push_back(std::unique_ptr<ScItemValue>(pValue));
