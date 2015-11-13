@@ -1955,16 +1955,16 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
 }
 
 SwParaPortion::SwParaPortion()
-    : bFlag00(false)
-    , bFlag11(false)
-    , bFlag12(false)
-    , bFlag13(false)
-    , bFlag14(false)
-    , bFlag15(false)
-    , bFlag16(false)
+    : m_bFlag00(false)
+    , m_bFlag11(false)
+    , m_bFlag12(false)
+    , m_bFlag13(false)
+    , m_bFlag14(false)
+    , m_bFlag15(false)
+    , m_bFlag16(false)
 {
     FormatReset();
-    bFlys = bFootnoteNum = bMargin = false;
+    m_bFlys = m_bFootnoteNum = m_bMargin = false;
     SetWhichPor( POR_PARA );
 }
 

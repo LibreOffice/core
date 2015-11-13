@@ -230,33 +230,33 @@ public:
 class SwParaPortion : public SwLineLayout
 {
     // Area that needs repainting
-    SwRepaint aRepaint;
+    SwRepaint m_aRepaint;
     // Area that needs reformatting
-    SwCharRange aReformat;
-    SwScriptInfo aScriptInfo;
+    SwCharRange m_aReformat;
+    SwScriptInfo m_aScriptInfo;
     // Fraction aZoom;
-    long nDelta;
+    long m_nDelta;
 
     // If a SwTextFrm is locked, no changes occur to the formatting data (under
     // pLine) (compare with Orphans)
-    bool bFlys          : 1; // Overlapping Flys?
-    bool bPrep          : 1; // PREP_*
-    bool bPrepWidows    : 1; // PREP_WIDOWS
-    bool bPrepAdjust    : 1; // PREP_ADJUST_FRM
-    bool bPrepMustFit   : 1; // PREP_MUST_FIT
-    bool bFollowField   : 1; // We have a bit of field left for the Follow
+    bool m_bFlys          : 1; // Overlapping Flys?
+    bool m_bPrep          : 1; // PREP_*
+    bool m_bPrepWidows    : 1; // PREP_WIDOWS
+    bool m_bPrepAdjust    : 1; // PREP_ADJUST_FRM
+    bool m_bPrepMustFit   : 1; // PREP_MUST_FIT
+    bool m_bFollowField   : 1; // We have a bit of field left for the Follow
 
-    bool bFixLineHeight : 1; // Fixed line height
-    bool bFootnoteNum    : 1; // contains a footnotenumberportion
-    bool bMargin    : 1; // contains a hanging punctuation in the margin
+    bool m_bFixLineHeight : 1; // Fixed line height
+    bool m_bFootnoteNum    : 1; // contains a footnotenumberportion
+    bool m_bMargin    : 1; // contains a hanging punctuation in the margin
 
-    bool bFlag00    : 1;
-    bool bFlag11    : 1;
-    bool bFlag12    : 1;
-    bool bFlag13    : 1;
-    bool bFlag14    : 1;
-    bool bFlag15    : 1;
-    bool bFlag16    : 1;
+    bool m_bFlag00    : 1;
+    bool m_bFlag11    : 1;
+    bool m_bFlag12    : 1;
+    bool m_bFlag13    : 1;
+    bool m_bFlag14    : 1;
+    bool m_bFlag15    : 1;
+    bool m_bFlag16    : 1;
 
 public:
     SwParaPortion();
@@ -269,14 +269,14 @@ public:
     inline void ResetPreps();
 
     // Get/Set methods
-    inline SwRepaint& GetRepaint() { return aRepaint; }
-    inline const SwRepaint& GetRepaint() const { return aRepaint; }
-    inline SwCharRange& GetReformat() { return aReformat; }
-    inline const SwCharRange& GetReformat() const { return aReformat; }
-    inline long& GetDelta() { return nDelta; }
-    inline const long& GetDelta() const { return nDelta; }
-    inline SwScriptInfo& GetScriptInfo() { return aScriptInfo; }
-    inline const SwScriptInfo& GetScriptInfo() const { return aScriptInfo; }
+    inline SwRepaint& GetRepaint() { return m_aRepaint; }
+    inline const SwRepaint& GetRepaint() const { return m_aRepaint; }
+    inline SwCharRange& GetReformat() { return m_aReformat; }
+    inline const SwCharRange& GetReformat() const { return m_aReformat; }
+    inline long& GetDelta() { return m_nDelta; }
+    inline const long& GetDelta() const { return m_nDelta; }
+    inline SwScriptInfo& GetScriptInfo() { return m_aScriptInfo; }
+    inline const SwScriptInfo& GetScriptInfo() const { return m_aScriptInfo; }
 
     // For SwTextFrm::Format: returns the paragraph's current length
     sal_Int32 GetParLen() const;
@@ -285,27 +285,27 @@ public:
     bool UpdateQuoVadis( const OUString &rQuo );
 
     // Flags
-    inline void SetFly( const bool bNew = true ) { bFlys = bNew; }
-    inline bool HasFly() const { return bFlys; }
+    inline void SetFly( const bool bNew = true ) { m_bFlys = bNew; }
+    inline bool HasFly() const { return m_bFlys; }
 
     // Preps
-    inline void SetPrep( const bool bNew = true ) { bPrep = bNew; }
-    inline bool IsPrep() const { return bPrep; }
-    inline void SetPrepWidows( const bool bNew = true ) { bPrepWidows = bNew; }
-    inline bool IsPrepWidows() const { return bPrepWidows; }
-    inline void SetPrepMustFit( const bool bNew = true ) { bPrepMustFit = bNew; }
-    inline bool IsPrepMustFit() const { return bPrepMustFit; }
-    inline void SetPrepAdjust( const bool bNew = true ) { bPrepAdjust = bNew; }
-    inline bool IsPrepAdjust() const { return bPrepAdjust; }
-    inline void SetFollowField( const bool bNew = true ) { bFollowField = bNew; }
-    inline bool IsFollowField() const { return bFollowField; }
-    inline void SetFixLineHeight( const bool bNew = true ) { bFixLineHeight = bNew; }
-    inline bool IsFixLineHeight() const { return bFixLineHeight; }
+    inline void SetPrep( const bool bNew = true ) { m_bPrep = bNew; }
+    inline bool IsPrep() const { return m_bPrep; }
+    inline void SetPrepWidows( const bool bNew = true ) { m_bPrepWidows = bNew; }
+    inline bool IsPrepWidows() const { return m_bPrepWidows; }
+    inline void SetPrepMustFit( const bool bNew = true ) { m_bPrepMustFit = bNew; }
+    inline bool IsPrepMustFit() const { return m_bPrepMustFit; }
+    inline void SetPrepAdjust( const bool bNew = true ) { m_bPrepAdjust = bNew; }
+    inline bool IsPrepAdjust() const { return m_bPrepAdjust; }
+    inline void SetFollowField( const bool bNew = true ) { m_bFollowField = bNew; }
+    inline bool IsFollowField() const { return m_bFollowField; }
+    inline void SetFixLineHeight( const bool bNew = true ) { m_bFixLineHeight = bNew; }
+    inline bool IsFixLineHeight() const { return m_bFixLineHeight; }
 
-    inline void SetFootnoteNum( const bool bNew = true ) { bFootnoteNum = bNew; }
-    inline bool IsFootnoteNum() const { return bFootnoteNum; }
-    inline void SetMargin( const bool bNew = true ) { bMargin = bNew; }
-    inline bool IsMargin() const { return bMargin; }
+    inline void SetFootnoteNum( const bool bNew = true ) { m_bFootnoteNum = bNew; }
+    inline bool IsFootnoteNum() const { return m_bFootnoteNum; }
+    inline void SetMargin( const bool bNew = true ) { m_bMargin = bNew; }
+    inline bool IsMargin() const { return m_bMargin; }
 
     // Set nErgo in the QuoVadisPortion
     void SetErgoSumNum( const OUString &rErgo );
@@ -333,19 +333,19 @@ inline SwLineLayout::SwLineLayout()
 
 inline void SwParaPortion::ResetPreps()
 {
-    bPrep = bPrepWidows = bPrepAdjust = bPrepMustFit = false;
+    m_bPrep = m_bPrepWidows = m_bPrepAdjust = m_bPrepMustFit = false;
 }
 
 inline void SwParaPortion::FormatReset()
 {
-    nDelta = 0;
-    aReformat = SwCharRange(0, COMPLETE_STRING);
+    m_nDelta = 0;
+    m_aReformat = SwCharRange(0, COMPLETE_STRING);
     // bFlys needs to be retained in SwTextFrm::_Format() so that empty
     // paragraphs that needed to avoid Frames with no flow, reformat
     // when the Frame disappears from the Area
     // bFlys = false;
     ResetPreps();
-    bFollowField = bFixLineHeight = bMargin = false;
+    m_bFollowField = m_bFixLineHeight = m_bMargin = false;
 }
 
 inline SwLinePortion *SwLineLayout::GetFirstPortion() const
