@@ -1199,6 +1199,11 @@ SentenceEditWindow_Impl::SentenceEditWindow_Impl(vcl::Window * pParent, WinBits 
     DisableSelectionOnFocus();
 }
 
+SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
+{
+    disposeOnce();
+}
+
 VCL_BUILDER_DECL_FACTORY(SentenceEditWindow)
 {
     (void)rMap;
