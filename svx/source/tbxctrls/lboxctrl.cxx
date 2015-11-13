@@ -224,7 +224,7 @@ SvxUndoRedoControl::SvxUndoRedoControl( sal_uInt16 nSlotId, sal_uInt16 nId, Tool
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
-    aDefaultText = MnemonicGenerator::EraseAllMnemonicChars( rTbx.GetItemText( nId ) );
+    aDefaultTooltip = rTbx.GetQuickHelpText( nId );
 }
 
 SvxUndoRedoControl::~SvxUndoRedoControl()
@@ -239,13 +239,13 @@ void SvxUndoRedoControl::StateChanged(
         if ( eState == SfxItemState::DISABLED )
         {
             ToolBox& rBox = GetToolBox();
-            rBox.SetQuickHelpText( GetId(), aDefaultText );
+            rBox.SetQuickHelpText( GetId(), aDefaultTooltip );
         }
         else if ( pState && dynamic_cast<const SfxStringItem*>( pState) !=  nullptr )
         {
             const SfxStringItem& rItem = *static_cast<const SfxStringItem *>(pState);
             ToolBox& rBox = GetToolBox();
-            OUString aQuickHelpText = MnemonicGenerator::EraseAllMnemonicChars( rItem.GetValue() );
+            OUString aQuickHelpText = rItem.GetValue();
             rBox.SetQuickHelpText( GetId(), aQuickHelpText );
         }
         SvxListBoxControl::StateChanged( nSID, eState, pState );
