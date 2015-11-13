@@ -384,8 +384,7 @@ makeSimpleTransition(
 {
     return std::make_shared<SimpleTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, rSceneObjects),
-            rSettings)
-        ;
+            rSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl>
@@ -852,35 +851,28 @@ glm::vec2 vec(float x, float y, float nx, float ny)
 
 std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( sal_uInt16 n, sal_uInt16 m )
 {
-    double invN(1.0/static_cast<double>(n));
-    double invM(1.0/static_cast<double>(m));
-    double iDn = 0.0;
-    double iPDn = invN;
     Primitives_t aLeavingSlide;
     Primitives_t aEnteringSlide;
-    for(unsigned int i(0); i < n; ++i)
+
+    for (int x = 0; x < n; x++)
     {
-        double jDm = 0.0;
-        double jPDm = invM;
-        for(unsigned int j(0); j < m; ++j)
+        for (int y = 0; y < n; y++)
         {
-            Primitive Tile;
+            Primitive aTile;
+            glm::vec2 x11 = vec(x,   y,   n, m);
+            glm::vec2 x12 = vec(x,   y+1, n, m);
+            glm::vec2 x21 = vec(x+1, y,   n, m);
+            glm::vec2 x22 = vec(x+1, y+1, n, m);
 
-            Tile.pushTriangle(glm::vec2( iPDn , jDm ) , glm::vec2( iDn , jDm ) , glm::vec2( iDn , jPDm ));
+            aTile.pushTriangle(x21, x11, x12);
+            aTile.pushTriangle(x22, x21, x12);
 
-            Tile.pushTriangle(glm::vec2( iPDn , jPDm ) , glm::vec2( iPDn , jDm ) , glm::vec2( iDn , jPDm ));//bottom left corner of tile
+            aTile.Operations.push_back(makeSRotate( glm::vec3(0 , 1, 0), (aTile.getVertices()[1] + aTile.getVertices()[3]) / 2.0f, 180 , true, x11.x * x11.y / 2.0f , ((x22.x * x22.y) + 1.0f) / 2.0f));
+            aLeavingSlide.push_back(aTile);
 
-            Tile.Operations.push_back( makeSRotate( glm::vec3( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0f , 180 , true, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
-            aLeavingSlide.push_back(Tile);
-            Tile.Operations.push_back( makeSRotate( glm::vec3( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0f , -180, false, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
-
-            aEnteringSlide.push_back(Tile);
-
-            jDm += invM;
-            jPDm += invM;
+            aTile.Operations.push_back(makeSRotate( glm::vec3(0 , 1, 0), (aTile.getVertices()[1] + aTile.getVertices()[3]) / 2.0f, -180, false, x11.x * x11.y / 2.0f , ((x22.x * x22.y) + 1.0f) / 2.0f));
+            aEnteringSlide.push_back(aTile);
         }
-        iDn += invN;
-        iPDn += invN;
     }
 
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
