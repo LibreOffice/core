@@ -131,52 +131,6 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
     return bRet;
 }
 
-static LONG DeleteSubKeyTree( HKEY RootKey, LPCSTR lpKey )
-{
-    HKEY hKey;
-    LONG rc = RegOpenKeyExA( RootKey, lpKey, 0, KEY_READ | DELETE, &hKey );
-
-    if (ERROR_SUCCESS == rc)
-    {
-        LPCSTR    lpSubKey;
-        DWORD     nMaxSubKeyLen;
-
-        rc = RegQueryInfoKeyA( hKey, 0, 0, 0, 0, &nMaxSubKeyLen, 0, 0, 0, 0, 0, 0 );
-        nMaxSubKeyLen++; // space for trailing '\0'
-        lpSubKey = reinterpret_cast<CHAR*>( _alloca( nMaxSubKeyLen*sizeof(CHAR) ) );
-
-        while (ERROR_SUCCESS == rc)
-        {
-            DWORD nLen = nMaxSubKeyLen;
-            rc = RegEnumKeyExA( hKey, 0, (LPSTR)lpSubKey, &nLen, 0, 0, 0, 0);    // always index zero
-
-            if ( ERROR_NO_MORE_ITEMS == rc )
-            {
-                rc = RegDeleteKeyA( RootKey, lpKey );
-                if ( rc == ERROR_SUCCESS )
-                    OutputDebugStringFormat( "deleted key [%s] from registry.\n", lpKey );
-                else
-                    OutputDebugStringFormat( "RegDeleteKeyA %s returned %ld.\n", lpKey, rc );
-                break;
-            }
-            else if ( rc == ERROR_SUCCESS )
-            {
-                rc = DeleteSubKeyTree( hKey, lpSubKey );
-                if ( ERROR_SUCCESS != rc )
-                    OutputDebugStringFormat( "RegDeleteKeyA %s returned %ld.\n", lpSubKey, rc );
-            }
-
-        }
-        RegCloseKey(hKey);
-    }
-    else
-    {
-        OutputDebugStringFormat( "RegOpenKeyExA %s returned %ld.\n", lpKey, rc );
-    }
-
-    return rc;
-}
-
 bool GetMsiProp( MSIHANDLE handle, LPCSTR name, /*out*/std::string& value )
 {
     DWORD sz = 0;
