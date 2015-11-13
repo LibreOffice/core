@@ -41,7 +41,7 @@
 typedef int ( __stdcall * DllNativeRegProc ) ( int, BOOL, BOOL, const char* );
 typedef int ( __stdcall * DllNativeUnregProc ) ( int, BOOL, BOOL );
 
-BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
+BOOL UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
 {
     if ( pStr1 == NULL && pStr2 == NULL )
         return TRUE;
