@@ -148,6 +148,15 @@ DocumentOverlay (org.libreoffice.overlay.DocumentOverlay) and DocumentOverlayVie
 (org.libreoffice.overlay.DocumentOverlayView) are the classes that provide the overlay over
 the document, where selections and the cursor is drawn.
 
+
+Icons
+*****
+
+App uses material design icons available at [1].
+
+
+[1] - https://www.google.com/design/icons/
+
 Emulator and debugging notes
 ****************************
 
