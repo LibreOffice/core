@@ -26,6 +26,8 @@
 #include "mtvcellfunc.hxx"
 #include "scmatrix.hxx"
 
+#include "arraysumfunctor.hxx"
+
 #include <formula/token.hxx>
 
 using namespace formula;
@@ -235,18 +237,9 @@ public:
                 if (nDataSize == 0)
                     return;
 
-                size_t nUnrolled = (nDataSize & 0x3) >> 2;
+                sc::ArraySumFunctor functor(p, nDataSize);
 
-                // Try to encourage the compiler/CPU to do something sensible for the next.
-                for (i = 0; i < nUnrolled; i+=4)
-                {
-                    mfRest += p[i];
-                    mfRest += p[i+1];
-                    mfRest += p[i+2];
-                    mfRest += p[i+3];
-                }
-                for (; i < nDataSize; ++i)
-                    mfRest += p[i];
+                mfRest += functor();
                 break;
             }
 
