@@ -69,9 +69,9 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 
+#include <svtools/commandinfoprovider.hxx>
 #include <svtools/menuoptions.hxx>
 #include <boost/bind.hpp>
-#include <svtools/acceleratorexecute.hxx>
 
 //  namespaces
 
@@ -1272,8 +1272,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString( RetrieveFromCommand( "Name", aCommandURL ));
-                    OUString aTooltipFromCommand( RetrieveFromCommand( "TooltipLabel", aCommandURL ));
+                    OUString aString(svt::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
+                    OUString aTooltipFromCommand(svt::CommandInfoProvider::Instance().GetTooltipForCommand(aCommandURL, m_xFrame, false));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     if ( aMenuDesc.is() )
@@ -1289,8 +1289,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         sQuickHelp = aTooltip;
                     else if ( !aTooltipFromCommand.isEmpty() ) // Tooltip from uno command (TooltipLabel)
                         sQuickHelp = aTooltipFromCommand;
-                    OUString sShortCut;
-                    if( RetrieveShortcut( aCommandURL, sShortCut ) )
+                    OUString sShortCut = svt::CommandInfoProvider::Instance().GetCommandShortcut(aCommandURL, m_xFrame);
+                    if( !sShortCut.isEmpty() )
                     {
                         sQuickHelp += " (";
                         sQuickHelp += sShortCut;
@@ -2167,121 +2167,6 @@ Image ToolBarManager::QueryAddonsImage( const OUString& aCommandURL, bool bBigIm
     Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages );
     return aImage;
 }
-
-bool ToolBarManager::impl_RetrieveShortcutsFromConfiguration(
-    const Reference< XAcceleratorConfiguration >& rAccelCfg,
-    const OUString& rCommand,
-    OUString& rShortCut )
-{
-    if ( rAccelCfg.is() )
-    {
-        try
-        {
-            css::awt::KeyEvent aKeyEvent;
-            Sequence< OUString > aCommands { rCommand };
-
-            Sequence< Any > aSeqKeyCode( rAccelCfg->getPreferredKeyEventsForCommandList( aCommands ) );
-            if( aSeqKeyCode.getLength() == 1 )
-            {
-                if ( aSeqKeyCode[0] >>= aKeyEvent )
-                {
-                    rShortCut = svt::AcceleratorExecute::st_AWTKey2VCLKey( aKeyEvent ).GetName();
-                    return true;
-                }
-            }
-        }
-        catch (const IllegalArgumentException&)
-        {
-        }
-    }
-
-    return false;
-}
-
-bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rShortCut )
-{
-    if ( m_bModuleIdentified )
-    {
-        Reference< XAcceleratorConfiguration > xDocAccelCfg( m_xDocAcceleratorManager );
-        Reference< XAcceleratorConfiguration > xModuleAccelCfg( m_xModuleAcceleratorManager );
-        Reference< XAcceleratorConfiguration > xGlobalAccelCfg( m_xGlobalAcceleratorManager );
-
-        if ( !m_bAcceleratorCfg )
-        {
-            // Retrieve references on demand
-            m_bAcceleratorCfg = true;
-            if ( !xDocAccelCfg.is() )
-            {
-                Reference< XController > xController = m_xFrame->getController();
-                Reference< XModel > xModel;
-                if ( xController.is() )
-                {
-                    xModel = xController->getModel();
-                    if ( xModel.is() )
-                    {
-                        Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
-                        if ( xSupplier.is() )
-                        {
-                            Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
-                            if ( xDocUICfgMgr.is() )
-                            {
-                                xDocAccelCfg = xDocUICfgMgr->getShortCutManager();
-                                m_xDocAcceleratorManager = xDocAccelCfg;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if ( !xModuleAccelCfg.is() )
-            {
-                Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
-                    theModuleUIConfigurationManagerSupplier::get( m_xContext );
-                try
-                {
-                    Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
-                    if ( xUICfgMgr.is() )
-                    {
-                        xModuleAccelCfg = xUICfgMgr->getShortCutManager();
-                        m_xModuleAcceleratorManager = xModuleAccelCfg;
-                    }
-                }
-                catch (const RuntimeException&)
-                {
-                    throw;
-                }
-                catch (const Exception&)
-                {
-                }
-            }
-
-            if ( !xGlobalAccelCfg.is() ) try
-            {
-                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( m_xContext );
-                m_xGlobalAcceleratorManager = xGlobalAccelCfg;
-            }
-            catch ( const css::uno::DeploymentException& )
-            {
-                SAL_WARN("fwk.uielement", "GlobalAcceleratorConfiguration"
-                        " not available. This should happen only on mobile platforms.");
-            }
-        }
-
-        bool bFound = false;
-
-        if ( m_xGlobalAcceleratorManager.is() )
-            bFound  = impl_RetrieveShortcutsFromConfiguration( xGlobalAccelCfg, rCommandURL, rShortCut );
-        if ( !bFound && m_xModuleAcceleratorManager.is() )
-            bFound = impl_RetrieveShortcutsFromConfiguration( xModuleAccelCfg, rCommandURL, rShortCut );
-        if ( !bFound && m_xDocAcceleratorManager.is() )
-            impl_RetrieveShortcutsFromConfiguration( xGlobalAccelCfg, rCommandURL, rShortCut );
-
-        if( bFound )
-            return true;
-    }
-    return false;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

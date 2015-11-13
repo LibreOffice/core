@@ -16,22 +16,22 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SIDEBAR_COMMANDINFOPROVIDER_HXX
-#define INCLUDED_SFX2_SIDEBAR_COMMANDINFOPROVIDER_HXX
+#ifndef INCLUDED_COMPHELPER_COMMANDINFOPROVIDER_HXX
+#define INCLUDED_COMPHELPER_COMMANDINFOPROVIDER_HXX
 
-#include <sfx2/dllapi.h>
+#include <svtools/svtdllapi.h>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 
-namespace sfx2 { namespace sidebar {
+namespace svt {
 
 /** Provide information about UNO commands like tooltip text with
     keyboard accelerator.
 */
-class SFX2_DLLPUBLIC CommandInfoProvider
+class SVT_DLLPUBLIC CommandInfoProvider
 {
 public:
     /** Return the singleton instance.
@@ -51,12 +51,31 @@ public:
         @param rxFrame
             The frame is used to identify the module and document.
         @return
-            The returned label contains the keyboard accelerator, if
-            one is defined.
+            The command labe.
     */
     ::rtl::OUString GetLabelForCommand (
         const ::rtl::OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    /** Return a tooltip for the given command. Falls back to label if command has no tooltip.
+        @param rsCommandName
+            The command name is expected to start with .uno:
+        @param rxFrame
+            The frame is used to identify the module and document.
+        @param bIncludeShortcut
+            Whether the shortcut should be appended in brackets
+        @return
+            The returned label contains the keyboard accelerator, if
+            one is defined and bIncludeShortcut is true.
+    */
+    ::rtl::OUString GetTooltipForCommand (
+        const ::rtl::OUString& rsCommandName,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        bool bIncludeShortcut = true);
+
+    /** Returns the shortcut for a command in human-readable form */
+    ::rtl::OUString GetCommandShortcut (const ::rtl::OUString& rCommandName,
+                                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Do not call.  Should be part of a local and hidden interface.
     */
@@ -78,17 +97,16 @@ public:
     css::uno::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration();
     css::uno::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration();
     ::rtl::OUString GetModuleIdentifier();
-    ::rtl::OUString GetCommandShortcut (const ::rtl::OUString& rCommandName);
     css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
         const ::rtl::OUString& rsCommandName);
-    ::rtl::OUString GetCommandLabel (const ::rtl::OUString& rsCommandName);
+    ::rtl::OUString GetCommandProperty(const OUString& rsProperty, const ::rtl::OUString& rsCommandName);
     static rtl::OUString RetrieveShortcutsFromConfiguration(
         const css::uno::Reference<css::ui::XAcceleratorConfiguration>& rxConfiguration,
         const rtl::OUString& rsCommandName);
 };
 
-} } // end of namespace sfx2/framework
+} // end of namespace svt
 
-#endif
+#endif // INCLUDED_COMPHELPER_COMMANDINFOPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

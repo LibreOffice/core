@@ -23,7 +23,7 @@
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <sfx2/sidebar/CommandInfoProvider.hxx>
+#include <svtools/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/help.hxx>
@@ -181,7 +181,7 @@ void ControllerItem::ResetFrame()
 
 ::rtl::OUString ControllerItem::GetLabel() const
 {
-    return CommandInfoProvider::Instance().GetLabelForCommand(
+    return svt::CommandInfoProvider::Instance().GetLabelForCommand(
         ".uno:" + msCommandName,
         mxFrame);
 }
