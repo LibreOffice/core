@@ -89,8 +89,9 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     sal_uInt32  nRefHash;
     MakeHash( rAttr, nRefHash );
 
-    std::vector< std::unique_ptr<ENTRY> >::const_iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
-                                                                 [nRefHash] (const auto& rEntry) { return rEntry->nHash0 == nRefHash; });
+    std::vector< std::unique_ptr<ENTRY> >::const_iterator iter
+        = std::find_if(aEntries.begin(),aEntries.end(),
+                       [nRefHash] (const std::unique_ptr<ENTRY>& rEntry) { return rEntry->nHash0 == nRefHash; } );
 
     if (iter != aEntries.end())
         return *((*iter)->pPattAttr);
