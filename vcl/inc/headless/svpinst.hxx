@@ -30,7 +30,6 @@
 #include <basebmp/scanlineformats.hxx>
 
 #include <list>
-#include <map>
 
 #include <time.h>
 
@@ -87,9 +86,6 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
     bool                    isFrameAlive( const SalFrame* pFrame ) const;
 
     void                    DoReleaseYield( int nTimeoutMS );
-
-    typedef std::map< sal_uInt16, ::basebmp::Format > BitCountFormatMap;
-    BitCountFormatMap m_aBitCountFormatMap;
 
 public:
     static SvpSalInstance*  s_pDefaultInstance;
@@ -170,12 +166,6 @@ public:
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
     virtual GenPspGraphics *CreatePrintGraphics() override;
-
-    // We want to be able to select colourspace, i.e. ARGB vs RGBA vs BGRA etc.
-    // -- as the rest of vcl always uses bit depths, it is perhaps simplest
-    // to let us simply change the mapping of bitcount to format (which was
-    // previously unchangeable).
-    void setBitCountFormatMapping( sal_uInt16 nBitCount, ::basebmp::Format aFormat );
 
     ::basebmp::Format getFormatForBitCount( sal_uInt16 );
 };

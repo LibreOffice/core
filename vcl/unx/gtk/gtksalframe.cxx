@@ -1969,7 +1969,7 @@ void GtkSalFrame::AllocateFrame()
             aFrameSize.setY( 1 );
         int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, aFrameSize.getX());
         m_aFrame = basebmp::createBitmapDevice(aFrameSize, true,
-                                               basebmp::Format::ThirtyTwoBitTcMaskBGRX, cairo_stride);
+                                               SVP_CAIRO_FORMAT, cairo_stride);
         m_aFrame->setDamageTracker(
             basebmp::IBitmapDeviceDamageTrackerSharedPtr(new DamageTracker(*this)) );
         SAL_INFO("vcl.gtk3", "allocated m_aFrame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
