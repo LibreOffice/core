@@ -45,24 +45,6 @@
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
-
-#ifdef DEBUG
-inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
-{
-    CHAR    buffer[1024];
-    va_list args;
-
-    va_start( args, pFormat );
-    StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
-    OutputDebugStringA( buffer );
-    va_end(args);
-}
-#else
-static inline void OutputDebugStringFormat( LPCSTR, ... )
-{
-}
-#endif
-
 static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
     std::_tstring result;
