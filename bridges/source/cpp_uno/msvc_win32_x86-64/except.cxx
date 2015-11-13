@@ -523,7 +523,7 @@ struct ExceptionType
             // As _n0 is always initialized to zero, that means the
             // hasvirtbase flag (see the ONTL catchabletype struct) is
             // off, and thus the copyctor is of the ctor_ptr kind.
-            memcpy(&type_info, mscx_getRTTI(pTD->pTypeName), mscx_getRTTI_len(pTD->pTypeName));
+            memcpy(static_cast<void *>(&type_info), static_cast<void *>(mscx_getRTTI(pTD->pTypeName)), mscx_getRTTI_len(pTD->pTypeName));
             _pTypeInfo = static_cast<sal_uInt32>(
             reinterpret_cast<sal_uInt64>(&type_info) - pCodeBase);
             GenerateConstructorTrampoline( pCode, pTD );
