@@ -15,7 +15,6 @@
 #include <vcl/image.hxx>
 
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class SvTreeListEntry;
 
@@ -38,7 +37,7 @@ struct ScOrcusXMLTreeParam
         SC_DLLPUBLIC EntryData(EntryType eType);
     };
 
-    typedef boost::ptr_vector<EntryData> UserDataStoreType;
+    typedef std::vector<EntryData> EntryDataVec;
 
     Image maImgElementDefault;
     Image maImgElementRepeat;
@@ -48,7 +47,7 @@ struct ScOrcusXMLTreeParam
      * Store all custom data instances since the tree control doesn't manage
      * the life cycle of user datas.
      */
-    UserDataStoreType maUserDataStore;
+    EntryDataVec maUserDataStore;
 
     static SC_DLLPUBLIC EntryData* getUserData(SvTreeListEntry& rEntry);
     static SC_DLLPUBLIC const EntryData* getUserData(const SvTreeListEntry& rEntry);
