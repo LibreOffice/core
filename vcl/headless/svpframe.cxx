@@ -70,7 +70,6 @@ void SvpSalFrame::enableDamageTracker( bool bOn )
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
                           SalFrameStyleFlags nSalFrameStyle,
-                          bool      bTopDown,
                           basebmp::Format nScanlineFormat,
                           SystemParentData* ) :
     m_pInstance( pInstance ),
@@ -78,7 +77,6 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nStyle( nSalFrameStyle ),
     m_bVisible( false ),
 #ifndef IOS
-    m_bTopDown( bTopDown ),
     m_bDamageTracking( false ),
     m_nScanlineFormat( nScanlineFormat ),
 #endif
@@ -92,7 +90,6 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     memset( static_cast<void *>(&m_aSystemChildData), 0, sizeof( SystemEnvData ) );
     m_aSystemChildData.nSize        = sizeof( SystemEnvData );
 #ifdef IOS
-    (void) bTopDown;
     (void) nScanlineFormat;
 #elif defined ANDROID
     // Nothing
@@ -295,7 +292,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
         sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(m_nScanlineFormat, aFrameSize.getX());
-        m_aFrame = createBitmapDevice( aFrameSize, m_bTopDown, m_nScanlineFormat, nStride );
+        m_aFrame = createBitmapDevice( aFrameSize, true, m_nScanlineFormat, nStride );
         if (m_bDamageTracking)
             m_aFrame->setDamageTracker(
                 basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );

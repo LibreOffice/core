@@ -47,9 +47,7 @@ public:
 
     // Set new size using a buffer at the given address
     virtual bool            SetSizeUsingBuffer( long nNewDX, long nNewDY,
-                                                const basebmp::RawMemorySharedArray & /* pBuffer */,
-                                                const bool /* bTopDown */
-                                              )
+                                                const basebmp::RawMemorySharedArray & /* pBuffer */ )
         {
             // Only the headless virtual device has an implementation that uses
             // pBuffer (and bTopDown).

@@ -44,7 +44,6 @@ class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
     SalFrameStyleFlags                  m_nStyle;
     bool                                m_bVisible;
 #ifndef IOS
-    bool                                m_bTopDown;
     basebmp::BitmapDeviceSharedPtr      m_aFrame;
     bool                                m_bDamageTracking;
     basebmp::Format                     m_nScanlineFormat;
@@ -63,7 +62,6 @@ public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
                  SalFrameStyleFlags nSalFrameStyle,
-                 bool      bTopDown,
                  basebmp::Format nScanlineFormat,
                  SystemParentData* pSystemParent = nullptr );
     virtual ~SvpSalFrame();
