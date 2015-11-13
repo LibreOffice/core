@@ -814,12 +814,17 @@ void OOXMLFastContextHandler::resolveData(const OUString & rId)
     if (!objDocument)
         return;
 
-    uno::Reference<io::XInputStream> xInputStream
-        (objDocument->getInputStreamForId(rId));
-
-    OOXMLValue::Pointer_t aValue(new OOXMLInputStreamValue(xInputStream));
-
-    newProperty(NS_ooxml::LN_inputstream, aValue);
+    try
+    {
+        uno::Reference<io::XInputStream> xInputStream
+            (objDocument->getInputStreamForId(rId));
+        OOXMLValue::Pointer_t aValue(new OOXMLInputStreamValue(xInputStream));
+        newProperty(NS_ooxml::LN_inputstream, aValue);
+    }
+    catch (const lang::IllegalArgumentException& rEx)
+    {
+        SAL_WARN("writerfilter", "OOXMLFastContextHandler::prepareMceContext: unhandled element:" << rEx.Message);
+    }
 }
 
 OUString OOXMLFastContextHandler::getTargetForId
