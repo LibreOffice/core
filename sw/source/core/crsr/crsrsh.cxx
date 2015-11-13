@@ -65,6 +65,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
+#include <PostItMgr.hxx>
 
 using namespace com::sun::star;
 using namespace util;
@@ -1290,6 +1291,15 @@ void SwCrsrShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRe
             pAktCrsr->Invalidate( aRect );
 
     }
+
+    if (SwPostItMgr* pPostItMgr = GetPostItMgr())
+    {
+        // No point in showing the cursor for Writer text when there is an
+        // active annotation edit.
+        if (bVis)
+            bVis = !pPostItMgr->HasActiveSidebarWin();
+    }
+
     if( m_bSVCrsrVis && bVis ) // also show SV cursor again
         m_pVisCrsr->Show();
 }
