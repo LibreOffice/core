@@ -100,17 +100,17 @@ void DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point
 
 SwLabPreview::SwLabPreview(vcl::Window* pParent)
     : Window(pParent, 0)
-    , aGrayColor(COL_LIGHTGRAY)
-    , aHDistStr(SW_RESSTR(STR_HDIST))
-    , aVDistStr(SW_RESSTR(STR_VDIST))
-    , aWidthStr(SW_RESSTR(STR_WIDTH))
-    , aHeightStr(SW_RESSTR(STR_HEIGHT))
-    , aLeftStr(SW_RESSTR(STR_LEFT))
-    , aUpperStr(SW_RESSTR(STR_UPPER))
-    , aColsStr(SW_RESSTR(STR_COLS))
-    , aRowsStr(SW_RESSTR(STR_ROWS))
-    , aPWidthStr(SW_RESSTR(STR_PWIDTH))
-    , aPHeightStr(SW_RESSTR(STR_PHEIGHT))
+    , m_aGrayColor(COL_LIGHTGRAY)
+    , m_aHDistStr(SW_RESSTR(STR_HDIST))
+    , m_aVDistStr(SW_RESSTR(STR_VDIST))
+    , m_aWidthStr(SW_RESSTR(STR_WIDTH))
+    , m_aHeightStr(SW_RESSTR(STR_HEIGHT))
+    , m_aLeftStr(SW_RESSTR(STR_LEFT))
+    , m_aUpperStr(SW_RESSTR(STR_UPPER))
+    , m_aColsStr(SW_RESSTR(STR_COLS))
+    , m_aRowsStr(SW_RESSTR(STR_ROWS))
+    , m_aPWidthStr(SW_RESSTR(STR_PWIDTH))
+    , m_aPHeightStr(SW_RESSTR(STR_PHEIGHT))
 {
     SetMapMode(MAP_PIXEL);
 
@@ -125,16 +125,16 @@ SwLabPreview::SwLabPreview(vcl::Window* pParent)
     aFont.SetWeight(WEIGHT_NORMAL);
     SetFont(aFont);
 
-    lHDistWidth  = GetTextWidth(aHDistStr );
-    lVDistWidth  = GetTextWidth(aVDistStr );
-    lHeightWidth = GetTextWidth(aHeightStr);
-    lLeftWidth   = GetTextWidth(aLeftStr  );
-    lUpperWidth  = GetTextWidth(aUpperStr );
-    lColsWidth   = GetTextWidth(aColsStr  );
-    lPWidthWidth  = GetTextWidth(aPWidthStr);
-    lPHeightWidth = GetTextWidth(aPHeightStr);
-    lXHeight = GetTextHeight();
-    lXWidth  = GetTextWidth(OUString('X'));
+    m_lHDistWidth  = GetTextWidth(m_aHDistStr );
+    m_lVDistWidth  = GetTextWidth(m_aVDistStr );
+    m_lHeightWidth = GetTextWidth(m_aHeightStr);
+    m_lLeftWidth   = GetTextWidth(m_aLeftStr  );
+    m_lUpperWidth  = GetTextWidth(m_aUpperStr );
+    m_lColsWidth   = GetTextWidth(m_aColsStr  );
+    m_lPWidthWidth  = GetTextWidth(m_aPWidthStr);
+    m_lPHeightWidth = GetTextWidth(m_aPHeightStr);
+    m_lXHeight = GetTextHeight();
+    m_lXWidth  = GetTextWidth(OUString('X'));
 }
 
 Size SwLabPreview::GetOptimalSize() const
@@ -152,7 +152,7 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     const long lOutHPix = aSz.Height();
 
     // Scale factor
-    const double fxpix = double(lOutWPix - (2 * (lLeftWidth + 15))) / double(lOutWPix);
+    const double fxpix = double(lOutWPix - (2 * (m_lLeftWidth + 15))) / double(lOutWPix);
 
     const long lOutWPix23 = long(double(lOutWPix) * fxpix);
     const long lOutHPix23 = long(double(lOutHPix) * fxpix);
@@ -169,19 +169,19 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     rRenderContext.SetBackground(Wallpaper(rWinColor));
 
     rRenderContext.SetLineColor(rWinColor);
-    rRenderContext.SetFillColor(aGrayColor);
+    rRenderContext.SetFillColor(m_aGrayColor);
     vcl::Font aPaintFont(rRenderContext.GetFont());
     aPaintFont.SetTransparent(false);
     rRenderContext.SetFont(aPaintFont);
 
     // size of region to be displayed
-    const long lDispW = aItem.m_lLeft + aItem.m_lHDist + ((aItem.m_nCols == 1)
-                            ? aItem.m_lLeft
-                            : ROUND(aItem.m_lHDist / 10.0));
+    const long lDispW = m_aItem.m_lLeft + m_aItem.m_lHDist + ((m_aItem.m_nCols == 1)
+                            ? m_aItem.m_lLeft
+                            : ROUND(m_aItem.m_lHDist / 10.0));
 
-    const long lDispH = aItem.m_lUpper + aItem.m_lVDist + ((aItem.m_nRows == 1)
-                            ? aItem.m_lUpper
-                            : ROUND(aItem.m_lVDist / 10.0));
+    const long lDispH = m_aItem.m_lUpper + m_aItem.m_lVDist + ((m_aItem.m_nRows == 1)
+                            ? m_aItem.m_lUpper
+                            : ROUND(m_aItem.m_lVDist / 10.0));
 
     // Scale factor
     const float fx = float(lOutWPix23) / std::max(1L, lDispW);
@@ -194,12 +194,12 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
     const long lX0 = (lOutWPix - lOutlineW) / 2;
     const long lY0 = (lOutHPix - lOutlineH) / 2;
-    const long lX1 = lX0 + ROUND(f *  aItem.m_lLeft );
-    const long lY1 = lY0 + ROUND(f *  aItem.m_lUpper);
-    const long lX2 = lX0 + ROUND(f * (aItem.m_lLeft  + aItem.m_lWidth ));
-    const long lY2 = lY0 + ROUND(f * (aItem.m_lUpper + aItem.m_lHeight));
-    const long lX3 = lX0 + ROUND(f * (aItem.m_lLeft  + aItem.m_lHDist ));
-    const long lY3 = lY0 + ROUND(f * (aItem.m_lUpper + aItem.m_lVDist ));
+    const long lX1 = lX0 + ROUND(f *  m_aItem.m_lLeft );
+    const long lY1 = lY0 + ROUND(f *  m_aItem.m_lUpper);
+    const long lX2 = lX0 + ROUND(f * (m_aItem.m_lLeft  + m_aItem.m_lWidth ));
+    const long lY2 = lY0 + ROUND(f * (m_aItem.m_lUpper + m_aItem.m_lHeight));
+    const long lX3 = lX0 + ROUND(f * (m_aItem.m_lLeft  + m_aItem.m_lHDist ));
+    const long lY3 = lY0 + ROUND(f * (m_aItem.m_lUpper + m_aItem.m_lVDist ));
 
     // draw outline (area)
     rRenderContext.DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
@@ -208,86 +208,86 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     rRenderContext.SetLineColor(rFieldTextColor);
     rRenderContext.DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Up
     rRenderContext.DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Left
-    if (aItem.m_nCols == 1)
+    if (m_aItem.m_nCols == 1)
         rRenderContext.DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Right
-    if (aItem.m_nRows == 1)
+    if (m_aItem.m_nRows == 1)
         rRenderContext.DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
 
     // Labels
     rRenderContext.SetClipRegion(vcl::Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
     rRenderContext.SetFillColor(COL_LIGHTGRAYBLUE);
-    const sal_Int32 nRows = std::min<sal_Int32>(2, aItem.m_nRows);
-    const sal_Int32 nCols = std::min<sal_Int32>(2, aItem.m_nCols);
+    const sal_Int32 nRows = std::min<sal_Int32>(2, m_aItem.m_nRows);
+    const sal_Int32 nCols = std::min<sal_Int32>(2, m_aItem.m_nCols);
     for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
         for (sal_Int32 nCol = 0; nCol < nCols; ++nCol)
-            rRenderContext.DrawRect(Rectangle(Point(lX0 + ROUND(f * (aItem.m_lLeft  + nCol * aItem.m_lHDist)),
-                                                    lY0 + ROUND(f * (aItem.m_lUpper + nRow * aItem.m_lVDist))),
-                                              Size(ROUND(f * aItem.m_lWidth),
-                                                   ROUND(f * aItem.m_lHeight))));
+            rRenderContext.DrawRect(Rectangle(Point(lX0 + ROUND(f * (m_aItem.m_lLeft  + nCol * m_aItem.m_lHDist)),
+                                                    lY0 + ROUND(f * (m_aItem.m_lUpper + nRow * m_aItem.m_lVDist))),
+                                              Size(ROUND(f * m_aItem.m_lWidth),
+                                                   ROUND(f * m_aItem.m_lHeight))));
     rRenderContext.SetClipRegion();
 
     // annotation: left border
-    if (aItem.m_lLeft)
+    if (m_aItem.m_lLeft)
     {
         long lX = (lX0 + lX1) / 2;
         DrawArrow(rRenderContext, Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), false);
         DrawArrow(rRenderContext, Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
-        rRenderContext.DrawText(Point(lX1 - lLeftWidth, lY0 - 10 - lXHeight), aLeftStr);
+        rRenderContext.DrawText(Point(lX1 - m_lLeftWidth, lY0 - 10 - m_lXHeight), m_aLeftStr);
     }
 
     // annotation: upper border
-    if (aItem.m_lUpper)
+    if (m_aItem.m_lUpper)
     {
         DrawArrow(rRenderContext, Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), false);
-        rRenderContext.DrawText(Point(lX0 - 10 - lUpperWidth, lY0 + ROUND(f*aItem.m_lUpper/2.0 - lXHeight/2.0)), aUpperStr);
+        rRenderContext.DrawText(Point(lX0 - 10 - m_lUpperWidth, lY0 + ROUND(f*m_aItem.m_lUpper/2.0 - m_lXHeight/2.0)), m_aUpperStr);
     }
 
     // annotation: width and height
     {
-        long lX = lX2 - lXWidth / 2 - lHeightWidth / 2;
-        long lY = lY1 + lXHeight;
+        long lX = lX2 - m_lXWidth / 2 - m_lHeightWidth / 2;
+        long lY = lY1 + m_lXHeight;
 
         rRenderContext.DrawLine(Point(lX1, lY), Point(lX2 - 1, lY));
         rRenderContext.DrawLine(Point(lX, lY1), Point(lX, lY2 - 1));
 
-        rRenderContext.DrawText(Point(lX1 + lXWidth / 2, lY - lXHeight / 2), aWidthStr);
-        rRenderContext.DrawText(Point(lX - lHeightWidth / 2, lY2 - lXHeight - lXHeight / 2), aHeightStr);
+        rRenderContext.DrawText(Point(lX1 + m_lXWidth / 2, lY - m_lXHeight / 2), m_aWidthStr);
+        rRenderContext.DrawText(Point(lX - m_lHeightWidth / 2, lY2 - m_lXHeight - m_lXHeight / 2), m_aHeightStr);
     }
 
     // annotation: horizontal gap
-    if (aItem.m_nCols > 1)
+    if (m_aItem.m_nCols > 1)
     {
         long lX = (lX1 + lX3) / 2;
         DrawArrow(rRenderContext, Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), false);
         DrawArrow(rRenderContext, Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
-        rRenderContext.DrawText(Point(lX - lHDistWidth / 2, lY0 - 10 - lXHeight), aHDistStr);
+        rRenderContext.DrawText(Point(lX - m_lHDistWidth / 2, lY0 - 10 - m_lXHeight), m_aHDistStr);
     }
 
     // annotation: vertical gap
-    if (aItem.m_nRows > 1)
+    if (m_aItem.m_nRows > 1)
     {
         DrawArrow(rRenderContext, Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), false);
-        rRenderContext.DrawText(Point(lX0 - 10 - lVDistWidth, lY1 + ROUND(f*aItem.m_lVDist/2.0 - lXHeight/2.0)), aVDistStr);
+        rRenderContext.DrawText(Point(lX0 - 10 - m_lVDistWidth, lY1 + ROUND(f*m_aItem.m_lVDist/2.0 - m_lXHeight/2.0)), m_aVDistStr);
     }
 
     // annotation: columns
     {
         long lY = lY0 + lOutlineH + 4;
         DrawArrow(rRenderContext, Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), true);
-        rRenderContext.DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - lColsWidth / 2, lY + 5), aColsStr);
+        rRenderContext.DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - m_lColsWidth / 2, lY + 5), m_aColsStr);
     }
 
     // annotation: lines
     {
         long lX = lX0 + lOutlineW + 4;
         DrawArrow(rRenderContext, Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), true);
-        rRenderContext.DrawText(Point(lX + 5, (lY0 + lY0 + lOutlineH - 1 - lXHeight / 2) / 2), aRowsStr);
+        rRenderContext.DrawText(Point(lX + 5, (lY0 + lY0 + lOutlineH - 1 - m_lXHeight / 2) / 2), m_aRowsStr);
     }
 }
 
 void SwLabPreview::UpdateItem(const SwLabItem& rItem)
 {
-    aItem = rItem;
+    m_aItem = rItem;
     Invalidate();
 }
 
