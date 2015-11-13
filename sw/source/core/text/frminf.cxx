@@ -24,9 +24,9 @@
 sal_Int32 SwTextMargin::GetTextStart() const
 {
     const OUString &rText = GetInfo().GetText();
-    const sal_Int32 nEnd = nStart + pCurr->GetLen();
+    const sal_Int32 nEnd = m_nStart + m_pCurr->GetLen();
 
-    for( sal_Int32 i = nStart; i < nEnd; ++i )
+    for( sal_Int32 i = m_nStart; i < nEnd; ++i )
     {
         const sal_Unicode aChar = rText[i];
         if( CH_TAB != aChar && ' ' != aChar )
@@ -38,14 +38,14 @@ sal_Int32 SwTextMargin::GetTextStart() const
 sal_Int32 SwTextMargin::GetTextEnd() const
 {
     const OUString &rText = GetInfo().GetText();
-    const sal_Int32 nEnd = nStart + pCurr->GetLen();
-    for( sal_Int32 i = nEnd - 1; i >= nStart; --i )
+    const sal_Int32 nEnd = m_nStart + m_pCurr->GetLen();
+    for( sal_Int32 i = nEnd - 1; i >= m_nStart; --i )
     {
         const sal_Unicode aChar = rText[i];
         if( CH_TAB != aChar && CH_BREAK != aChar && ' ' != aChar )
             return i + 1;
     }
-    return nStart;
+    return m_nStart;
 }
 
 // Does the paragraph fit into one line?

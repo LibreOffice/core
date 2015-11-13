@@ -72,7 +72,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                                                 const SwTextAttr *pHint ) const
 {
     SwExpandPortion *pRet = nullptr;
-    SwFrm *pFrame = pFrm;
+    SwFrm *pFrame = m_pFrm;
     SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
     const bool bName = rInf.GetOpt().IsFieldName();
 
@@ -279,7 +279,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         if( !bName )
         {
             pTmpFnt = new SwFont( *pFnt );
-            pTmpFnt->SetDiffFnt( &pChFormat->GetAttrSet(), pFrm->GetTextNode()->getIDocumentSettingAccess() );
+            pTmpFnt->SetDiffFnt( &pChFormat->GetAttrSet(), m_pFrm->GetTextNode()->getIDocumentSettingAccess() );
         }
         {
             OUString const aStr( (bName)
@@ -449,7 +449,7 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFor
 
 SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) const
 {
-    if( rInf.IsNumDone() || rInf.GetTextStart() != nStart
+    if( rInf.IsNumDone() || rInf.GetTextStart() != m_nStart
                 || rInf.GetTextStart() != rInf.GetIdx() )
         return nullptr;
 
@@ -545,7 +545,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
                 // we do not allow a vertical font
                 pNumFnt->SetVertical( pNumFnt->GetOrientation(),
-                                      pFrm->IsVertical() );
+                                      m_pFrm->IsVertical() );
 
                 // --> OD 2008-01-23 #newlistelevelattrs#
                 pRet = new SwBulletPortion( rNumFormat.GetBulletChar(),
@@ -590,7 +590,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     checkApplyParagraphMarkFormatToNumbering( pNumFnt, rInf, pIDSA );
 
                     // we do not allow a vertical font
-                    pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
+                    pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrm->IsVertical() );
 
                     pRet = new SwNumberPortion( aText, pNumFnt,
                                                 bLeft, bCenter, nMinDist,

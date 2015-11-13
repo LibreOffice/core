@@ -72,7 +72,7 @@ bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
 void SwTextPainter::CtorInitTextPainter( SwTextFrm *pNewFrm, SwTextPaintInfo *pNewInf )
 {
     CtorInitTextCursor( pNewFrm, pNewInf );
-    pInf = pNewInf;
+    m_pInf = pNewInf;
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
 #if OSL_DEBUG_LEVEL > 1
@@ -88,7 +88,7 @@ void SwTextPainter::CtorInitTextPainter( SwTextFrm *pNewFrm, SwTextPaintInfo *pN
 
 SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
 {
-    SwLinePortion *pPor = pCurr->GetFirstPortion();
+    SwLinePortion *pPor = m_pCurr->GetFirstPortion();
     GetInfo().SetPaintOfst( 0 );
     SwTwips nPaintOfst = rPaint.Left();
 
@@ -96,7 +96,7 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
     // nPaintOfst ist dokumentglobal, deswegen nLeftMar aufaddieren
     // const sal_uInt16 nLeftMar = sal_uInt16(GetLeftMargin());
     // 8310: painten von LineBreaks in leeren Zeilen.
-    if( nPaintOfst && pCurr->Width() )
+    if( nPaintOfst && m_pCurr->Width() )
     {
         SwLinePortion *pLast = nullptr;
         // 7529 und 4757: nicht <= nPaintOfst
@@ -145,9 +145,9 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     // Adjustierung ggf. nachholen
     GetAdjusted();
-    GetInfo().SetpSpaceAdd( pCurr->GetpLLSpaceAdd() );
+    GetInfo().SetpSpaceAdd( m_pCurr->GetpLLSpaceAdd() );
     GetInfo().ResetSpaceIdx();
-    GetInfo().SetKanaComp( pCurr->GetpKanaComp() );
+    GetInfo().SetKanaComp( m_pCurr->GetpKanaComp() );
     GetInfo().ResetKanaIdx();
     // The size of the frame
     GetInfo().SetIdx( GetStart() );
@@ -158,7 +158,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // 6882: Leerzeilen duerfen nicht wegoptimiert werden bei Paragraphzeichen.
     const bool bEndPor = GetInfo().GetOpt().IsParagraph() && GetInfo().GetText().isEmpty();
 
-    SwLinePortion *pPor = bEndPor ? pCurr->GetFirstPortion() : CalcPaintOfst( rPaint );
+    SwLinePortion *pPor = bEndPor ? m_pCurr->GetFirstPortion() : CalcPaintOfst( rPaint );
 
     // Optimization!
     const SwTwips nMaxRight = std::min( rPaint.Right(), Right() );
@@ -173,7 +173,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         // 8084: Optimization, less painting
         // AMA: By 8084 7538 has been revived
         // bDrawInWindow entfernt, damit DropCaps auch gedruckt werden
-        bPaintDrop = pPor == pCurr->GetFirstPortion()
+        bPaintDrop = pPor == m_pCurr->GetFirstPortion()
                      && GetDropLines() >= GetLineNr();
     }
 
@@ -195,7 +195,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetPos().Y() + nTmpHeight > rPaint.Top() + rPaint.Height() )
         {
             bClip = false;
-            rClip.ChgClip( rPaint, pFrm, pCurr->HasUnderscore() );
+            rClip.ChgClip( rPaint, m_pFrm, m_pCurr->HasUnderscore() );
         }
 #if OSL_DEBUG_LEVEL > 1
         static bool bClipAlways = false;
@@ -222,9 +222,9 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     const SwRect aLineRect( aPnt1, aPnt2 );
 
-    if( pCurr->IsClipping() )
+    if( m_pCurr->IsClipping() )
     {
-        rClip.ChgClip( aLineRect, pFrm );
+        rClip.ChgClip( aLineRect, m_pFrm );
         bClip = false;
     }
 
@@ -251,7 +251,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         {
             const SwTwips nOldY = GetInfo().Y();
 
-            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, nullptr,
+            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *m_pCurr, nullptr,
                 GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), *pOut ),
                 GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), *pOut )
             ) );
@@ -267,12 +267,12 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if( bEndPor )
         SeekStartAndChg( GetInfo() );
 
-    const bool bRest = pCurr->IsRest();
+    const bool bRest = m_pCurr->IsRest();
     bool bFirst = true;
 
     SwArrowPortion *pArrow = nullptr;
     // Reference portion for the paragraph end portion
-    SwLinePortion* pEndTempl = pCurr->GetFirstPortion();
+    SwLinePortion* pEndTempl = m_pCurr->GetFirstPortion();
 
     while( pPor )
     {
@@ -283,7 +283,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         if ( bAdjustBaseLine )
         {
-            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, pPor ) );
+            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *m_pCurr, pPor ) );
 
             // we store the last portion, because a possible paragraph
             // end character has the same font as this portion
@@ -303,7 +303,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         {
             sal_Int32 nOffset = GetInfo().GetIdx();
             SeekStartAndChg( GetInfo(), true );
-            if( GetRedln() && pCurr->HasRedline() )
+            if( GetRedln() && m_pCurr->HasRedline() )
                 GetRedln()->Seek( *pFnt, nOffset, 0 );
         }
         else if( pPor->InTextGrp() || pPor->InFieldGrp() || pPor->InTabGrp() )
@@ -329,7 +329,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 ) > nMaxRight )
         {
             bClip = false;
-            rClip.ChgClip( rPaint, pFrm, pCurr->HasUnderscore() );
+            rClip.ChgClip( rPaint, m_pFrm, m_pCurr->HasUnderscore() );
         }
 
         // Portions, which lay "below" the text like post-its
@@ -422,7 +422,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
             if ( bAdjustBaseLine )
                 GetInfo().Y( GetInfo().GetPos().Y()
-                           + AdjustBaseLine( *pCurr, &aEnd ) );
+                           + AdjustBaseLine( *m_pCurr, &aEnd ) );
             GetInfo().X( GetInfo().X() + GetCurr()->GetHangingMargin() );
             aEnd.Paint( GetInfo() );
             GetInfo().Y( nOldY );
@@ -438,7 +438,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             if( bUnderSz || bNextUndersized )
             {
                 if ( bAdjustBaseLine )
-                    GetInfo().Y( GetInfo().GetPos().Y() + pCurr->GetAscent() );
+                    GetInfo().Y( GetInfo().GetPos().Y() + m_pCurr->GetAscent() );
 
                 if( pArrow )
                     GetInfo().DrawRedArrow( *pArrow );
@@ -460,8 +460,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
     }
 
-    if( pCurr->IsClipping() )
-        rClip.ChgClip( rPaint, pFrm );
+    if( m_pCurr->IsClipping() )
+        rClip.ChgClip( rPaint, m_pFrm );
 }
 
 void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
@@ -577,7 +577,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                 // and the font of the lowest portion.
                 if ( nAdjustBaseLine )
                 {
-                    const sal_uInt16 nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
+                    const sal_uInt16 nTmpBaseLineOfst = AdjustBaseLine( *m_pCurr, pPor );
                     if ( nMaxBaseLineOfst < nTmpBaseLineOfst )
                     {
                         nMaxBaseLineOfst = nTmpBaseLineOfst;

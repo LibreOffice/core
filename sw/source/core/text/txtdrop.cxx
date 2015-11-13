@@ -435,7 +435,7 @@ void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
     sal_uInt16 nHeight = 0;
     sal_uInt16 nDropLns = 0;
     const bool bRegisterOld = IsRegisterOn();
-    bRegisterOn = false;
+    m_bRegisterOn = false;
 
     Top();
 
@@ -456,7 +456,7 @@ void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
             {
                 CalcAscentAndHeight( nAscent, nHeight );
                 nDropHght = nDropHght + nHeight;
-                bRegisterOn = bRegisterOld;
+                m_bRegisterOn = bRegisterOld;
             }
             if ( !Next() )
             {
@@ -470,7 +470,7 @@ void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
         nDropHght = nDropHght + nAscent;
         Top();
     }
-    bRegisterOn = bRegisterOld;
+    m_bRegisterOn = bRegisterOld;
     SetDropDescent( nHeight - nAscent );
     SetDropHeight( nDropHght );
     SetDropLines( nDropLns );
@@ -510,7 +510,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         return nullptr;
 
     sal_Int32 nPorLen = pDropFormat->GetWholeWord() ? 0 : pDropFormat->GetChars();
-    nPorLen = pFrm->GetTextNode()->GetDropLen( nPorLen );
+    nPorLen = m_pFrm->GetTextNode()->GetDropLen( nPorLen );
     if( !nPorLen )
     {
         static_cast<SwTextFormatter*>(this)->ClearDropFormat();
@@ -563,7 +563,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         if ( pFormat )
         {
             const SwAttrSet& rSet = pFormat->GetAttrSet();
-            pTmpFnt->SetDiffFnt( &rSet, pFrm->GetTextNode()->getIDocumentSettingAccess() );
+            pTmpFnt->SetDiffFnt( &rSet, m_pFrm->GetTextNode()->getIDocumentSettingAccess() );
         }
 
         // we do not allow a vertical font for the drop portion
@@ -604,17 +604,17 @@ void SwTextPainter::PaintDropPortion()
 
     Top();
 
-    GetInfo().SetpSpaceAdd( pCurr->GetpLLSpaceAdd() );
+    GetInfo().SetpSpaceAdd( m_pCurr->GetpLLSpaceAdd() );
     GetInfo().ResetSpaceIdx();
-    GetInfo().SetKanaComp( pCurr->GetpKanaComp() );
+    GetInfo().SetKanaComp( m_pCurr->GetpKanaComp() );
     GetInfo().ResetKanaIdx();
 
     // 8047: Drops and Dummies
-    while( !pCurr->GetLen() && Next() )
+    while( !m_pCurr->GetLen() && Next() )
         ;
 
     // MarginPortion und Adjustment!
-    const SwLinePortion *pPor = pCurr->GetFirstPortion();
+    const SwLinePortion *pPor = m_pCurr->GetFirstPortion();
     long nX = 0;
     while( pPor && !pPor->IsDropPortion() )
     {

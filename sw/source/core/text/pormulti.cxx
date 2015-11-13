@@ -1252,7 +1252,7 @@ SwSpaceManipulator::~SwSpaceManipulator()
 void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti, const SwMultiPortion* pEnvPor )
 {
-    SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
+    SwTextGridItem const*const pGrid(GetGridItem(m_pFrm->FindPageFrm()));
     const bool bHasGrid = pGrid && GetInfo().SnapToGrid();
     sal_uInt16 nRubyHeight = 0;
     bool bRubyTop = false;
@@ -1272,7 +1272,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     if ( bRubyInGrid )
     {
         GetInfo().SetSnapToGrid( ! bRubyTop );
-        rMulti.Height( pCurr->Height() );
+        rMulti.Height( m_pCurr->Height() );
     }
 
     SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
@@ -1412,7 +1412,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
                 {
                     if ( bRubyTop != ( pLay == &rMulti.GetRoot() ) )
                         // adjust base text
-                        nAdjustment = ( pCurr->Height() - nRubyHeight - pPor->Height() ) / 2;
+                        nAdjustment = ( m_pCurr->Height() - nRubyHeight - pPor->Height() ) / 2;
                     else if ( bRubyTop )
                         // adjust upper ruby text
                         nAdjustment = nRubyHeight - pPor->Height();
@@ -1531,7 +1531,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
                 }
                 else
                 {
-                    nOfst += pCurr->Height() - nRubyHeight;
+                    nOfst += m_pCurr->Height() - nRubyHeight;
                     GetInfo().SetSnapToGrid( false );
                 }
             } else
@@ -1669,13 +1669,13 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
         // We set nTmpX (which is used for portion calculating) to the
         // current Y value
-        const SwPageFrm* pPage = pFrm->FindPageFrm();
+        const SwPageFrm* pPage = m_pFrm->FindPageFrm();
         OSL_ENSURE( pPage, "No page in frame!");
         const SwLayoutFrm* pUpperFrm = pPage;
 
-        if ( pFrm->IsInTab() )
+        if ( m_pFrm->IsInTab() )
         {
-            pUpperFrm = pFrm->GetUpper();
+            pUpperFrm = m_pFrm->GetUpper();
             while ( pUpperFrm && !pUpperFrm->IsCellFrm() )
                 pUpperFrm = pUpperFrm->GetUpper();
             assert(pUpperFrm); //pFrm is in table but does not have an upper cell frame
@@ -1686,7 +1686,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             if ( ATT_VAR_SIZE == rFrameFormatSize.GetHeightSizeType() )
                 pUpperFrm = pPage;
         }
-        if ( pUpperFrm == pPage && !pFrm->IsInFootnote() )
+        if ( pUpperFrm == pPage && !m_pFrm->IsInFootnote() )
             pUpperFrm = pPage->FindBodyCont();
 
         nMaxWidth = pUpperFrm ?
@@ -1701,7 +1701,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     SwMultiPortion* pOldMulti = pMulti;
 
     pMulti = &rMulti;
-    SwLineLayout *pOldCurr = pCurr;
+    SwLineLayout *pOldCurr = m_pCurr;
     sal_Int32 nOldStart = GetStart();
     SwTwips nMinWidth = nTmpX + 1;
     SwTwips nActWidth = nMaxWidth;
@@ -1750,7 +1750,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     SwLinePortion *pNextSecond = nullptr;
     bool bRet = false;
 
-    SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
+    SwTextGridItem const*const pGrid(GetGridItem(m_pFrm->FindPageFrm()));
     const bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
 
     bool bRubyTop = false;
@@ -1760,8 +1760,8 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
     do
     {
-        pCurr = &rMulti.GetRoot();
-        nStart = nStartIdx;
+        m_pCurr = &rMulti.GetRoot();
+        m_nStart = nStartIdx;
         bRet = false;
         FormatReset( aInf );
         aInf.X( nTmpX );
@@ -1794,7 +1794,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         aInf.SetSnapToGrid( bOldGridModeAllowed );
 
         rMulti.CalcSize( *this, aInf );
-        pCurr->SetRealHeight( pCurr->Height() );
+        m_pCurr->SetRealHeight( m_pCurr->Height() );
 
         if( rMulti.IsBidi() )
         {
@@ -1805,15 +1805,15 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         if( rMulti.HasRotation() && !rMulti.IsDouble() )
             break;
         // second line has to be formatted
-        else if( pCurr->GetLen()<nMultiLen || rMulti.IsRuby() || aInf.GetRest())
+        else if( m_pCurr->GetLen()<nMultiLen || rMulti.IsRuby() || aInf.GetRest())
         {
-            sal_Int32 nFirstLen = pCurr->GetLen();
-            delete pCurr->GetNext();
-            pCurr->SetNext( new SwLineLayout() );
-            pCurr = pCurr->GetNext();
-            nStart = aInf.GetIdx();
+            sal_Int32 nFirstLen = m_pCurr->GetLen();
+            delete m_pCurr->GetNext();
+            m_pCurr->SetNext( new SwLineLayout() );
+            m_pCurr = m_pCurr->GetNext();
+            m_nStart = aInf.GetIdx();
             aInf.X( nTmpX );
-            SwTextFormatInfo aTmp( aInf, *pCurr, nActWidth );
+            SwTextFormatInfo aTmp( aInf, *m_pCurr, nActWidth );
             if( rMulti.IsRuby() )
             {
                 aTmp.SetRuby( !rMulti.OnTop() );
@@ -1843,7 +1843,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
             rMulti.CalcSize( *this, aInf );
             rMulti.GetRoot().SetRealHeight( rMulti.GetRoot().Height() );
-            pCurr->SetRealHeight( pCurr->Height() );
+            m_pCurr->SetRealHeight( m_pCurr->Height() );
             if( rMulti.IsRuby() )
             {
                 pNextSecond = aTmp.GetRest();
@@ -1852,7 +1852,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             }
             else
                 pNextFirst = aTmp.GetRest();
-            if( ( !aTmp.IsRuby() && nFirstLen + pCurr->GetLen() < nMultiLen )
+            if( ( !aTmp.IsRuby() && nFirstLen + m_pCurr->GetLen() < nMultiLen )
                 || aTmp.GetRest() )
                 // our guess for width of multiportion was too small,
                 // text did not fit into multiportion
@@ -1894,8 +1894,8 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
     pMulti = pOldMulti;
 
-    pCurr = pOldCurr;
-    nStart = nOldStart;
+    m_pCurr = pOldCurr;
+    m_nStart = nOldStart;
       SetPropFont( 0 );
 
     rMulti.SetLen( rMulti.GetRoot().GetLen() + ( rMulti.GetRoot().GetNext() ?
@@ -2196,7 +2196,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
             if ( GetInfo().SnapToGrid() )
             {
                 SwTextGridItem const*const pGrid(
-                        GetGridItem(pFrm->FindPageFrm()));
+                        GetGridItem(m_pFrm->FindPageFrm()));
                 if ( pGrid )
                 {
                     bRubyTop = ! pGrid->GetRubyTextBelow();
@@ -2205,7 +2205,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
             }
 
             pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),
-                                      *pFrm->GetTextNode()->getIDocumentSettingAccess(),
+                                      *m_pFrm->GetTextNode()->getIDocumentSettingAccess(),
                                        nMultiPos, static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset(),
                                        pRubyPos );
         }
@@ -2245,19 +2245,19 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pTextCursor,
                                   long nSpaceAdd )
 {
     pTextCrsr = pTextCursor;
-    nStart = pTextCursor->nStart;
-    pTextCursor->nStart = nCurrStart;
-    pCurr = pTextCursor->pCurr;
-    pTextCursor->pCurr = &pMulti->GetRoot();
+    nStart = pTextCursor->m_nStart;
+    pTextCursor->m_nStart = nCurrStart;
+    pCurr = pTextCursor->m_pCurr;
+    pTextCursor->m_pCurr = &pMulti->GetRoot();
     while( pTextCursor->Y() + pTextCursor->GetLineHeight() < nY &&
         pTextCursor->Next() )
         ; // nothing
-    nWidth = pTextCursor->pCurr->Width();
+    nWidth = pTextCursor->m_pCurr->Width();
     nOldProp = pTextCursor->GetPropFont();
 
     if ( pMulti->IsDouble() || pMulti->IsBidi() )
     {
-        bSpaceChg = pMulti->ChgSpaceAdd( pTextCursor->pCurr, nSpaceAdd );
+        bSpaceChg = pMulti->ChgSpaceAdd( pTextCursor->m_pCurr, nSpaceAdd );
 
         sal_Int32 nSpaceCnt;
         if ( pMulti->IsDouble() )
@@ -2274,12 +2274,12 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pTextCursor,
         }
 
         if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
-            pTextCursor->pCurr->Width( static_cast<sal_uInt16>(nWidth + nSpaceAdd * nSpaceCnt / SPACING_PRECISION_FACTOR ) );
+            pTextCursor->m_pCurr->Width( static_cast<sal_uInt16>(nWidth + nSpaceAdd * nSpaceCnt / SPACING_PRECISION_FACTOR ) );
 
         // For a BidiPortion we have to calculate the offset from the
         // end of the portion
         if ( nX && pMulti->IsBidi() )
-            nX = pTextCursor->pCurr->Width() - nX;
+            nX = pTextCursor->m_pCurr->Width() - nX;
     }
     else
         bSpaceChg = false;
@@ -2288,10 +2288,10 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pTextCursor,
 SwTextCursorSave::~SwTextCursorSave()
 {
     if( bSpaceChg )
-        SwDoubleLinePortion::ResetSpaceAdd( pTextCrsr->pCurr );
-    pTextCrsr->pCurr->Width( nWidth );
-    pTextCrsr->pCurr = pCurr;
-    pTextCrsr->nStart = nStart;
+        SwDoubleLinePortion::ResetSpaceAdd( pTextCrsr->m_pCurr );
+    pTextCrsr->m_pCurr->Width( nWidth );
+    pTextCrsr->m_pCurr = pCurr;
+    pTextCrsr->m_nStart = nStart;
     pTextCrsr->SetPropFont( nOldProp );
 }
 

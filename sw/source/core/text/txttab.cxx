@@ -70,17 +70,17 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
     sal_uInt16 nNewTabPos;
     bool bAutoTabStop = true;
     {
-        const bool bRTL = pFrm->IsRightToLeft();
+        const bool bRTL = m_pFrm->IsRightToLeft();
         // #i24363# tab stops relative to indent
         // nTabLeft: The absolute value, the tab stops are relative to: Tabs origin.
 
         // #i91133#
         const bool bTabsRelativeToIndent =
-            pFrm->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT);
+            m_pFrm->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT);
         const SwTwips nTabLeft = bRTL
-                                 ? pFrm->Frm().Right() -
+                                 ? m_pFrm->Frm().Right() -
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 )
-                                 : pFrm->Frm().Left() +
+                                 : m_pFrm->Frm().Left() +
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 );
 
         // The absolute position, where we started the line formatting
@@ -88,7 +88,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         if ( bRTL )
         {
             Point aPoint( nLinePos, 0 );
-            pFrm->SwitchLTRtoRTL( aPoint );
+            m_pFrm->SwitchLTRtoRTL( aPoint );
             nLinePos = aPoint.X();
         }
 
@@ -105,15 +105,15 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                                        nLinePos + nTabPos;
 
         SwTwips nMyRight;
-        if ( pFrm->IsVertLR() )
+        if ( m_pFrm->IsVertLR() )
            nMyRight = Left();
         else
            nMyRight = Right();
 
-        if ( pFrm->IsVertical() )
+        if ( m_pFrm->IsVertical() )
         {
-            Point aRightTop( nMyRight, pFrm->Frm().Top() );
-            pFrm->SwitchHorizontalToVertical( aRightTop );
+            Point aRightTop( nMyRight, m_pFrm->Frm().Top() );
+            m_pFrm->SwitchHorizontalToVertical( aRightTop );
             nMyRight = aRightTop.Y();
         }
 
@@ -129,7 +129,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         // any hard set tab stops:
         // Note: If there are no user defined tab stops, there is always a
         // default tab stop.
-        const SvxTabStop* pTabStop = aLineInf.GetTabStop( nSearchPos, nMyRight );
+        const SvxTabStop* pTabStop = m_aLineInf.GetTabStop( nSearchPos, nMyRight );
         if ( pTabStop )
         {
             cFill = ' ' != pTabStop->GetFill() ? pTabStop->GetFill() : 0;
@@ -145,17 +145,17 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         }
         else
         {
-            sal_uInt16 nDefTabDist = aLineInf.GetDefTabStop();
+            sal_uInt16 nDefTabDist = m_aLineInf.GetDefTabStop();
             if( USHRT_MAX == nDefTabDist )
             {
                 const SvxTabStopItem& rTab =
-                    static_cast<const SvxTabStopItem &>(pFrm->GetAttrSet()->
+                    static_cast<const SvxTabStopItem &>(m_pFrm->GetAttrSet()->
                       GetPool()->GetDefaultItem( RES_PARATR_TABSTOP ));
                 if( rTab.Count() )
                     nDefTabDist = (sal_uInt16)rTab[0].GetTabPos();
                 else
                     nDefTabDist = SVX_TAB_DEFDIST;
-                aLineInf.SetDefTabStop( nDefTabDist );
+                m_aLineInf.SetDefTabStop( nDefTabDist );
             }
             SwTwips nCount = nSearchPos;
 
@@ -169,7 +169,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                        : ( ( nCount + 1 ) * nDefTabDist );
 
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
-            const SwTwips nMinimumTabWidth = pFrm->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) ? 0 : 50;
+            const SwTwips nMinimumTabWidth = m_pFrm->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) ? 0 : 50;
             if( (  bRTL && nTabLeft - nNextPos >= nCurrentAbsPos - nMinimumTabWidth ) ||
                  ( !bRTL && nNextPos + nTabLeft <= nCurrentAbsPos + nMinimumTabWidth  ) )
             {
@@ -194,17 +194,17 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                     if ( bRTL )
                     {
                         Point aPoint( Left(), 0 );
-                        pFrm->SwitchLTRtoRTL( aPoint );
-                        nLeftMarginTabPos = pFrm->Frm().Right() - aPoint.X();
+                        m_pFrm->SwitchLTRtoRTL( aPoint );
+                        nLeftMarginTabPos = m_pFrm->Frm().Right() - aPoint.X();
                     }
                     else
                     {
-                        nLeftMarginTabPos = Left() - pFrm->Frm().Left();
+                        nLeftMarginTabPos = Left() - m_pFrm->Frm().Left();
                     }
                 }
-                if( pCurr->HasForcedLeftMargin() )
+                if( m_pCurr->HasForcedLeftMargin() )
                 {
-                    SwLinePortion* pPor = pCurr->GetPortion();
+                    SwLinePortion* pPor = m_pCurr->GetPortion();
                     while( pPor && !pPor->IsFlyPortion() )
                     {
                         pPor = pPor->GetPortion();
@@ -226,11 +226,11 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                 // a tab stop at the left margin can be applied. If this condition is
                 // not hold, it is overruled by compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST.
                 const bool bTabAtLeftMarginAllowed =
-                    ( !aLineInf.IsListTabStopIncluded() ||
+                    ( !m_aLineInf.IsListTabStopIncluded() ||
                       !pTabStop ||
-                      nNextPos != aLineInf.GetListTabStopPosition() ) ||
+                      nNextPos != m_aLineInf.GetListTabStopPosition() ) ||
                     // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
-                    pFrm->GetTextNode()->getIDocumentSettingAccess()->
+                    m_pFrm->GetTextNode()->getIDocumentSettingAccess()->
                         get(DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
                 if ( bTabAtLeftMarginAllowed )
                 {
@@ -254,7 +254,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
     if ( bAuto )
     {
         if ( SVX_TAB_ADJUST_DECIMAL == eAdj &&
-             1 == aLineInf.NumberOfTabStops() )
+             1 == m_aLineInf.NumberOfTabStops() )
             pTabPor = new SwAutoTabDecimalPortion( nNewTabPos, cDec, cFill );
     }
     else

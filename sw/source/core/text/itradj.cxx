@@ -45,16 +45,16 @@ void SwTextAdjuster::FormatBlock( )
     const SwLinePortion *pFly = nullptr;
 
     bool bSkip = !IsLastBlock() &&
-        nStart + pCurr->GetLen() >= GetInfo().GetText().getLength();
+        m_nStart + m_pCurr->GetLen() >= GetInfo().GetText().getLength();
 
     // Multi-line fields are tricky, because we need to check whether there are
     // any other text portions in the paragraph.
     if( bSkip )
     {
-        const SwLineLayout *pLay = pCurr->GetNext();
+        const SwLineLayout *pLay = m_pCurr->GetNext();
         while( pLay && !pLay->GetLen() )
         {
-            const SwLinePortion *pPor = pCurr->GetFirstPortion();
+            const SwLinePortion *pPor = m_pCurr->GetFirstPortion();
             while( pPor && bSkip )
             {
                 if( pPor->InTextGrp() )
@@ -70,8 +70,8 @@ void SwTextAdjuster::FormatBlock( )
         if( !GetInfo().GetParaPortion()->HasFly() )
         {
             if( IsLastCenter() )
-                CalcFlyAdjust( pCurr );
-            pCurr->FinishSpaceAdd();
+                CalcFlyAdjust( m_pCurr );
+            m_pCurr->FinishSpaceAdd();
             return;
         }
         else
@@ -79,7 +79,7 @@ void SwTextAdjuster::FormatBlock( )
             const SwLinePortion *pTmpFly = nullptr;
 
             // End at the last Fly
-            const SwLinePortion *pPos = pCurr->GetFirstPortion();
+            const SwLinePortion *pPos = m_pCurr->GetFirstPortion();
             while( pPos )
             {
                 // Look for the last Fly which has text coming after it:
@@ -96,16 +96,16 @@ void SwTextAdjuster::FormatBlock( )
             if( !pFly )
             {
                 if( IsLastCenter() )
-                    CalcFlyAdjust( pCurr );
-                pCurr->FinishSpaceAdd();
+                    CalcFlyAdjust( m_pCurr );
+                m_pCurr->FinishSpaceAdd();
                 return;
             }
         }
     }
 
     const sal_Int32 nOldIdx = GetInfo().GetIdx();
-    GetInfo().SetIdx( nStart );
-    CalcNewBlock( pCurr, pFly );
+    GetInfo().SetIdx( m_nStart );
+    CalcNewBlock( m_pCurr, pFly );
     GetInfo().SetIdx( nOldIdx );
     GetInfo().GetParaPortion()->GetRepaint().SetOfst(0);
 }
@@ -340,7 +340,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                         // all kashida positions are invalid
                         // do regular blank justification
                         pCurrent->FinishSpaceAdd();
-                        GetInfo().SetIdx( nStart );
+                        GetInfo().SetIdx( m_nStart );
                         CalcNewBlock( pCurrent, pStopAt, nReal, true );
                         return;
                     }
@@ -358,7 +358,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                             // no kashidas left
                             // do regular blank justification
                             pCurrent->FinishSpaceAdd();
-                            GetInfo().SetIdx( nStart );
+                            GetInfo().SetIdx( m_nStart );
                             CalcNewBlock( pCurrent, pStopAt, nReal, true );
                             return;
                         }
@@ -589,7 +589,7 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
     sal_Int32 nLen = 0;
 
     // If we only have one line, the text portion is consecutive and we center, then ...
-    bool bComplete = 0 == nStart;
+    bool bComplete = 0 == m_nStart;
     const bool bTabCompat = GetTextFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
     bool bMultiTab = false;
 
@@ -685,7 +685,7 @@ SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const long nRealWidth,
 {
     SwTextFly aTextFly( GetTextFrm() );
 
-    const sal_uInt16 nCurrWidth = pCurr->PrtWidth();
+    const sal_uInt16 nCurrWidth = m_pCurr->PrtWidth();
     SwFlyPortion *pFlyPortion = nullptr;
 
     SwRect aLineVert( rCurrRect );
@@ -735,12 +735,12 @@ void SwTextAdjuster::CalcDropAdjust()
     // 1) Skip dummies
     Top();
 
-    if( !pCurr->IsDummy() || NextLine() )
+    if( !m_pCurr->IsDummy() || NextLine() )
     {
         // Adjust first
         GetAdjusted();
 
-        SwLinePortion *pPor = pCurr->GetFirstPortion();
+        SwLinePortion *pPor = m_pCurr->GetFirstPortion();
 
         // 2) Make sure we include the ropPortion
         // 3) pLeft is the GluePor preceding the DropPor
@@ -770,7 +770,7 @@ void SwTextAdjuster::CalcDropAdjust()
                         // Adjust first
                         GetAdjusted();
 
-                        pPor = pCurr->GetFirstPortion();
+                        pPor = m_pCurr->GetFirstPortion();
                         const SwMarginPortion *pMar = pPor->IsMarginPortion() ?
                                                       static_cast<SwMarginPortion*>(pPor) : nullptr;
                         if( !pMar )

@@ -90,7 +90,7 @@ inline void ClearFly( SwTextFormatInfo &rInf )
 void SwTextFormatter::CtorInitTextFormatter( SwTextFrm *pNewFrm, SwTextFormatInfo *pNewInf )
 {
     CtorInitTextPainter( pNewFrm, pNewInf );
-    pInf = pNewInf;
+    m_pInf = pNewInf;
     pDropFormat = GetInfo().GetDropFormat();
     pMulti = nullptr;
 
@@ -105,10 +105,10 @@ void SwTextFormatter::CtorInitTextFormatter( SwTextFrm *pNewFrm, SwTextFormatInf
     m_nHintEndIndex = 0;
     m_pFirstOfBorderMerge = nullptr;
 
-    if( nStart > GetInfo().GetText().getLength() )
+    if( m_nStart > GetInfo().GetText().getLength() )
     {
         OSL_ENSURE( false, "+SwTextFormatter::CTOR: bad offset" );
-        nStart = GetInfo().GetText().getLength();
+        m_nStart = GetInfo().GetText().getLength();
     }
 
 }
@@ -127,13 +127,13 @@ SwTextFormatter::~SwTextFormatter()
 void SwTextFormatter::Insert( SwLineLayout *pLay )
 {
     // Insert BEHIND the current element
-    if ( pCurr )
+    if ( m_pCurr )
     {
-        pLay->SetNext( pCurr->GetNext() );
-        pCurr->SetNext( pLay );
+        pLay->SetNext( m_pCurr->GetNext() );
+        m_pCurr->SetNext( pLay );
     }
     else
-        pCurr = pLay;
+        m_pCurr = pLay;
 }
 
 sal_uInt16 SwTextFormatter::GetFrmRstHeight() const
@@ -143,12 +143,12 @@ sal_uInt16 SwTextFormatter::GetFrmRstHeight() const
 
     // GetFrmRstHeight() is being called with Footnote.
     // Wrong: const SwFrm *pUpper = pFrm->GetUpper();
-    const SwFrm *pPage = static_cast<const SwFrm*>(pFrm->FindPageFrm());
+    const SwFrm *pPage = static_cast<const SwFrm*>(m_pFrm->FindPageFrm());
     const SwTwips nHeight = pPage->Frm().Top()
                           + pPage->Prt().Top()
                           + pPage->Prt().Height() - Y();
     if( 0 > nHeight )
-        return pCurr->Height();
+        return m_pCurr->Height();
     else
         return sal_uInt16( nHeight );
 }
@@ -173,7 +173,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     rInf.SetFly( nullptr );
 
     FeedInf( rInf );
-    rInf.SetLast( pCurr );
+    rInf.SetLast( m_pCurr );
     // pUnderflow does not need to be deleted, because it will drown in the following
     // Truncate()
     rInf.SetUnderflow(nullptr);
@@ -182,7 +182,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     rInf.SetPaintOfst( GetLeftMargin() );
 
     // We look for the portion with the under-flow position
-    SwLinePortion *pPor = pCurr->GetFirstPortion();
+    SwLinePortion *pPor = m_pCurr->GetFirstPortion();
     if( pPor != pUnderflow )
     {
         // pPrev will be the last portion before pUnderflow,
@@ -274,17 +274,17 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     // The SwLineLayout is an exception to this, which splits at the first
     // portion change.
     // Here only the other way around:
-    if( rInf.GetLast() == pCurr )
+    if( rInf.GetLast() == m_pCurr )
     {
         if( pPor->InTextGrp() && !pPor->InExpGrp() )
         {
-            const sal_uInt16 nOldWhich = pCurr->GetWhichPor();
-            *static_cast<SwLinePortion*>(pCurr) = *pPor;
-            pCurr->SetPortion( pPor->GetPortion() );
-            pCurr->SetWhichPor( nOldWhich );
+            const sal_uInt16 nOldWhich = m_pCurr->GetWhichPor();
+            *static_cast<SwLinePortion*>(m_pCurr) = *pPor;
+            m_pCurr->SetPortion( pPor->GetPortion() );
+            m_pCurr->SetWhichPor( nOldWhich );
             pPor->SetPortion( nullptr );
             delete pPor;
-            pPor = pCurr;
+            pPor = m_pCurr;
         }
     }
     pPor->Truncate();
@@ -305,11 +305,11 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
 {
     // The new portion is inserted, but everything's different for
     // LineLayout...
-    if( pPor == pCurr )
+    if( pPor == m_pCurr )
     {
-        if ( pCurr->GetPortion() )
+        if ( m_pCurr->GetPortion() )
         {
-            pPor = pCurr->GetPortion();
+            pPor = m_pCurr->GetPortion();
         }
 
         // #i112181#
@@ -329,10 +329,10 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
         rInf.SetOtherThanFootnoteInside( rInf.IsOtherThanFootnoteInside() || !pPor->IsFootnotePortion() );
 
         // Adjust maxima
-        if( pCurr->Height() < pPor->Height() )
-            pCurr->Height( pPor->Height() );
-        if( pCurr->GetAscent() < pPor->GetAscent() )
-            pCurr->SetAscent( pPor->GetAscent() );
+        if( m_pCurr->Height() < pPor->Height() )
+            m_pCurr->Height( pPor->Height() );
+        if( m_pCurr->GetAscent() < pPor->GetAscent() )
+            m_pCurr->SetAscent( pPor->GetAscent() );
     }
 
     // Sometimes chains are constructed (e.g. by hyphenate)
@@ -355,13 +355,13 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     // First NewTextPortion() decides whether pCurr ends up in pPor.
     // We need to make sure that the font is being set in any case.
     // This is done automatically in CalcAscent.
-    rInf.SetLast( pCurr );
+    rInf.SetLast( m_pCurr );
     rInf.ForcedLeftMargin( 0 );
 
-    OSL_ENSURE( pCurr->FindLastPortion() == pCurr, "pLast supposed to equal pCurr" );
+    OSL_ENSURE( m_pCurr->FindLastPortion() == m_pCurr, "pLast supposed to equal pCurr" );
 
-    if( !pCurr->GetAscent() && !pCurr->Height() )
-        CalcAscent( rInf, pCurr );
+    if( !m_pCurr->GetAscent() && !m_pCurr->Height() )
+        CalcAscent( rInf, m_pCurr );
 
     SeekAndChg( rInf );
 
@@ -380,7 +380,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     SwLinePortion *pPor = NewPortion( rInf );
 
     // Asian grid stuff
-    SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
+    SwTextGridItem const*const pGrid(GetGridItem(m_pFrm->FindPageFrm()));
     const bool bHasGrid = pGrid && rInf.SnapToGrid() &&
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
@@ -487,11 +487,11 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             if ( ! pGridKernPortion )
                 pGridKernPortion = pPor->IsKernPortion() ?
                                    static_cast<SwKernPortion*>(pPor) :
-                                   new SwKernPortion( *pCurr );
+                                   new SwKernPortion( *m_pCurr );
 
             // if we have a new GridKernPortion, we initially calculate
             // its size so that its ends on the grid
-            const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
+            const SwPageFrm* pPageFrm = m_pFrm->FindPageFrm();
             const SwLayoutFrm* pBody = pPageFrm->FindBodyCont();
             SWRECTFN( pPageFrm )
 
@@ -503,7 +503,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             if ( bVert )
             {
                 Point aPoint( nStartX, 0 );
-                pFrm->SwitchHorizontalToVertical( aPoint );
+                m_pFrm->SwitchHorizontalToVertical( aPoint );
                 nStartX = aPoint.Y();
             }
 
@@ -542,7 +542,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             nUnderLineStart = GetLeftMargin() + rInf.X();
 
         if ( pPor->IsFlyPortion() )
-            pCurr->SetFly( true );
+            m_pCurr->SetFly( true );
         // some special cases, where we have to take care for the repaint
         // offset:
         // 1. Underlined portions due to special underline feature
@@ -701,8 +701,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         else if( rInf.GetLast() && rInf.LastKernPortion() )
             rInf.GetLast()->FormatEOL( rInf );
     }
-    if( pCurr->GetPortion() && pCurr->GetPortion()->InNumberGrp()
-        && static_cast<SwNumberPortion*>(pCurr->GetPortion())->IsHide() )
+    if( m_pCurr->GetPortion() && m_pCurr->GetPortion()->InNumberGrp()
+        && static_cast<SwNumberPortion*>(m_pCurr->GetPortion())->IsHide() )
         rInf.SetNumDone( false );
 
     // Delete fly in any case
@@ -767,8 +767,8 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
                 if( !rInf.GetText().isEmpty() )
                 {
                     if ( pPor->GetLen() || !rInf.GetIdx()
-                         || ( pCurr != pLast && !pLast->IsFlyPortion() )
-                         || !pCurr->IsRest() ) // instead of !rInf.GetRest()
+                         || ( m_pCurr != pLast && !pLast->IsFlyPortion() )
+                         || !m_pCurr->IsRest() ) // instead of !rInf.GetRest()
                         bChg = SeekAndChg( rInf );
                     else
                         bChg = SeekAndChgBefore( rInf );
@@ -909,8 +909,8 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             }
             if( !pPor )
             {
-                if( !rInf.X() && !pCurr->GetPortion() && !pCurr->GetLen() && !GetFnt()->IsURL() )
-                    pPor = pCurr;
+                if( !rInf.X() && !m_pCurr->GetPortion() && !m_pCurr->GetLen() && !GetFnt()->IsURL() )
+                    pPor = m_pCurr;
                 else
                 {
                     pPor = new SwTextPortion;
@@ -1017,7 +1017,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
                     rInf.SetNumDone(true);
 
         rInf.SetRest(nullptr);
-        pCurr->SetRest( true );
+        m_pCurr->SetRest( true );
         return pPor;
     }
 
@@ -1030,7 +1030,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         // 1. The ErgoSumTexts
         if( !rInf.IsErgoDone() )
         {
-            if( pFrm->IsInFootnote() && !pFrm->GetIndPrev() )
+            if( m_pFrm->IsInFootnote() && !m_pFrm->GetIndPrev() )
                 pPor = static_cast<SwLinePortion*>(NewErgoSumPortion( rInf ));
             rInf.SetErgoDone( true );
         }
@@ -1038,19 +1038,19 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         // 2. Arrow portions
         if( !pPor && !rInf.IsArrowDone() )
         {
-            if( pFrm->GetOfst() && !pFrm->IsFollow() &&
-                rInf.GetIdx() == pFrm->GetOfst() )
-                pPor = new SwArrowPortion( *pCurr );
+            if( m_pFrm->GetOfst() && !m_pFrm->IsFollow() &&
+                rInf.GetIdx() == m_pFrm->GetOfst() )
+                pPor = new SwArrowPortion( *m_pCurr );
             rInf.SetArrowDone( true );
         }
 
         // 3. Kerning portions at beginning of line in grid mode
-        if ( ! pPor && ! pCurr->GetPortion() )
+        if ( ! pPor && ! m_pCurr->GetPortion() )
         {
             SwTextGridItem const*const pGrid(
                     GetGridItem(GetTextFrm()->FindPageFrm()));
             if ( pGrid )
-                pPor = new SwKernPortion( *pCurr );
+                pPor = new SwKernPortion( *m_pCurr );
         }
 
         // 4. The line rests (multiline fields)
@@ -1060,7 +1060,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
             // Only for pPor of course
             if( pPor )
             {
-                pCurr->SetRest( true );
+                m_pCurr->SetRest( true );
                 rInf.SetRest(nullptr);
             }
         }
@@ -1073,7 +1073,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
             OSL_ENSURE( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
                      "Rotated number portion trouble" );
 
-            const bool bFootnoteNum = pFrm->IsFootnoteNumFrm();
+            const bool bFootnoteNum = m_pFrm->IsFootnoteNumFrm();
             rInf.GetParaPortion()->SetFootnoteNum( bFootnoteNum );
             if( bFootnoteNum )
                 pPor = static_cast<SwLinePortion*>(NewFootnoteNumPortion( rInf ));
@@ -1084,7 +1084,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         // it's crucial whether the SwFootnoteFrm is aFollow
         if( !rInf.IsErgoDone() && !pPor && ! rInf.IsMulti() )
         {
-            if( pFrm->IsInFootnote() && !pFrm->GetIndPrev() )
+            if( m_pFrm->IsInFootnote() && !m_pFrm->GetIndPrev() )
                 pPor = static_cast<SwLinePortion*>(NewErgoSumPortion( rInf ));
             rInf.SetErgoDone( true );
         }
@@ -1105,17 +1105,17 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
             pPor = static_cast<SwLinePortion*>(NewDropPortion( rInf ));
 
         // 9. Kerning portions at beginning of line in grid mode
-        if ( !pPor && !pCurr->GetPortion() )
+        if ( !pPor && !m_pCurr->GetPortion() )
         {
             SwTextGridItem const*const pGrid(
                     GetGridItem(GetTextFrm()->FindPageFrm()));
             if ( pGrid )
-                pPor = new SwKernPortion( *pCurr );
+                pPor = new SwKernPortion( *m_pCurr );
         }
     }
 
         // 10. Decimal tab portion at the beginning of each line in table cells
-        if ( !pPor && !pCurr->GetPortion() &&
+        if ( !pPor && !m_pCurr->GetPortion() &&
              GetTextFrm()->IsInTab() &&
              GetTextFrm()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) )
         {
@@ -1174,7 +1174,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
     {
         // LineBreaks and Flys (bug05.sdw)
         // IsDummy()
-        if( rInf.IsNewLine() && (!rInf.GetFly() || !pCurr->IsDummy()) )
+        if( rInf.IsNewLine() && (!rInf.GetFly() || !m_pCurr->IsDummy()) )
             return nullptr;
 
         // Wenn der Text an den Fly gestossen ist, oder wenn
@@ -1458,11 +1458,11 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
 
     // Man darf nicht vergessen, dass pCurr als GetLast() vernuenftige
     // Werte bereithalten muss:
-    if( !pCurr->Height() )
+    if( !m_pCurr->Height() )
     {
-        OSL_ENSURE( pCurr->Height(), "SwTextFormatter::NewPortion: limbo dance" );
-        pCurr->Height( pPor->Height() );
-        pCurr->SetAscent( pPor->GetAscent() );
+        OSL_ENSURE( m_pCurr->Height(), "SwTextFormatter::NewPortion: limbo dance" );
+        m_pCurr->Height( pPor->Height() );
+        m_pCurr->SetAscent( pPor->GetAscent() );
     }
 
     OSL_ENSURE( !pPor || pPor->Height(),
@@ -1477,7 +1477,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
 
 sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
 {
-    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+    OSL_ENSURE( ! m_pFrm->IsVertical() || m_pFrm->IsSwapped(),
             "SwTextFormatter::FormatLine( nStartPos ) with unswapped frame" );
 
     // For the formatting routines, we set pOut to the reference device.
@@ -1492,11 +1492,11 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
 
     // Recycling muss bei geaenderter Zeilenhoehe unterdrueckt werden
     // und auch bei geaendertem Ascent (Absenken der Grundlinie).
-    const sal_uInt16 nOldHeight = pCurr->Height();
-    const sal_uInt16 nOldAscent = pCurr->GetAscent();
+    const sal_uInt16 nOldHeight = m_pCurr->Height();
+    const sal_uInt16 nOldAscent = m_pCurr->GetAscent();
 
-    pCurr->SetEndHyph( false );
-    pCurr->SetMidHyph( false );
+    m_pCurr->SetEndHyph( false );
+    m_pCurr->SetMidHyph( false );
 
     // fly positioning can make it necessary format a line several times
     // for this, we have to keep a copy of our rest portion
@@ -1509,13 +1509,13 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
     // for an optimal repaint rectangle, we want to compare fly portions
     // before and after the BuildPortions call
     const bool bOptimizeRepaint = AllowRepaintOpt();
-    const sal_Int32 nOldLineEnd = nStartPos + pCurr->GetLen();
+    const sal_Int32 nOldLineEnd = nStartPos + m_pCurr->GetLen();
     std::vector<long> flyStarts;
 
     // these are the conditions for a fly position comparison
-    if ( bOptimizeRepaint && pCurr->IsFly() )
+    if ( bOptimizeRepaint && m_pCurr->IsFly() )
     {
-        SwLinePortion* pPor = pCurr->GetFirstPortion();
+        SwLinePortion* pPor = m_pCurr->GetFirstPortion();
         long nPOfst = 0;
         while ( pPor )
         {
@@ -1551,11 +1551,11 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
 
         if( GetInfo().IsStop() )
         {
-            pCurr->SetLen( 0 );
-            pCurr->Height( GetFrmRstHeight() + 1 );
-            pCurr->SetRealHeight( GetFrmRstHeight() + 1 );
-            pCurr->Width(0);
-            pCurr->Truncate();
+            m_pCurr->SetLen( 0 );
+            m_pCurr->Height( GetFrmRstHeight() + 1 );
+            m_pCurr->SetRealHeight( GetFrmRstHeight() + 1 );
+            m_pCurr->Width(0);
+            m_pCurr->Truncate();
             return nStartPos;
         }
         else if( GetInfo().IsDropInit() )
@@ -1564,32 +1564,32 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
             GetInfo().SetDropInit( false );
         }
 
-        pCurr->CalcLine( *this, GetInfo() );
+        m_pCurr->CalcLine( *this, GetInfo() );
         CalcRealHeight( GetInfo().IsNewLine() );
 
         //#i120864# For Special case that at the first calculation couldn't get
         //correct height. And need to recalculate for the right height.
-        SwLinePortion* pPorTmp = pCurr->GetPortion();
+        SwLinePortion* pPorTmp = m_pCurr->GetPortion();
         if ( IsFlyInCntBase() && (!IsQuick() || (pPorTmp && pPorTmp->IsFlyCntPortion() && !pPorTmp->GetPortion() &&
-            pCurr->Height() > pPorTmp->Height())))
+            m_pCurr->Height() > pPorTmp->Height())))
         {
             sal_uInt16 nTmpAscent, nTmpHeight;
             CalcAscentAndHeight( nTmpAscent, nTmpHeight );
             AlignFlyInCntBase( Y() + long( nTmpAscent ) );
-            pCurr->CalcLine( *this, GetInfo() );
+            m_pCurr->CalcLine( *this, GetInfo() );
             CalcRealHeight();
         }
 
         // bBuild entscheidet, ob noch eine Ehrenrunde gedreht wird
-        if ( pCurr->GetRealHeight() <= GetInfo().GetLineHeight() )
+        if ( m_pCurr->GetRealHeight() <= GetInfo().GetLineHeight() )
         {
-            pCurr->SetRealHeight( GetInfo().GetLineHeight() );
+            m_pCurr->SetRealHeight( GetInfo().GetLineHeight() );
             bBuild = false;
         }
         else
         {
             bBuild = ( GetInfo().GetTextFly().IsOn() && ChkFlyUnderflow(GetInfo()) )
-                     || GetInfo().CheckFootnotePortion(pCurr);
+                     || GetInfo().CheckFootnotePortion(m_pCurr);
             if( bBuild )
             {
                 GetInfo().SetNumDone( bOldNumDone );
@@ -1606,9 +1606,9 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
                 if ( xSaveField )
                     GetInfo().SetRest( new SwFieldPortion( *xSaveField ) );
 
-                pCurr->SetLen( 0 );
-                pCurr->Width(0);
-                pCurr->Truncate();
+                m_pCurr->SetLen( 0 );
+                m_pCurr->Width(0);
+                m_pCurr->Truncate();
             }
         }
     }
@@ -1619,7 +1619,7 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
     if (GetInfo().GetTextFrm()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN))
     {
         sal_uInt16 nSum = 0;
-        SwLinePortion* pPor = pCurr->GetFirstPortion();
+        SwLinePortion* pPor = m_pCurr->GetFirstPortion();
 
         while (pPor)
         {
@@ -1627,14 +1627,14 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
             pPor = pPor->GetPortion();
         }
 
-        if (nSum > pCurr->Width())
-            pCurr->Width(nSum);
+        if (nSum > m_pCurr->Width())
+            m_pCurr->Width(nSum);
     }
 
     // calculate optimal repaint rectangle
     if ( bOptimizeRepaint )
     {
-        GetInfo().SetPaintOfst( ::lcl_CalcOptRepaint( *this, *pCurr, nOldLineEnd, flyStarts ) );
+        GetInfo().SetPaintOfst( ::lcl_CalcOptRepaint( *this, *m_pCurr, nOldLineEnd, flyStarts ) );
         flyStarts.clear();
     }
     else
@@ -1651,21 +1651,21 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
     // delete master copy of rest portion
     xSaveField.reset();
 
-    sal_Int32 nNewStart = nStartPos + pCurr->GetLen();
+    sal_Int32 nNewStart = nStartPos + m_pCurr->GetLen();
 
     // adjust text if kana compression is enabled
     if ( GetInfo().CompressLine() )
     {
-        SwTwips nRepaintOfst = CalcKanaAdj( pCurr );
+        SwTwips nRepaintOfst = CalcKanaAdj( m_pCurr );
 
         // adjust repaint offset
         if ( nRepaintOfst < GetInfo().GetPaintOfst() )
             GetInfo().SetPaintOfst( nRepaintOfst );
     }
 
-    CalcAdjustLine( pCurr );
+    CalcAdjustLine( m_pCurr );
 
-    if( nOldHeight != pCurr->Height() || nOldAscent != pCurr->GetAscent() )
+    if( nOldHeight != m_pCurr->Height() || nOldAscent != m_pCurr->GetAscent() )
     {
         SetFlyInCntBase();
         GetInfo().SetPaintOfst( 0 ); //geaenderte Zeilenhoehe => kein Recycling
@@ -1675,7 +1675,7 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
     }
 
     if ( IsFlyInCntBase() && !IsQuick() )
-        UpdatePos( pCurr, GetTopLeft(), GetStart() );
+        UpdatePos( m_pCurr, GetTopLeft(), GetStart() );
 
     return nNewStart;
 }
@@ -1690,10 +1690,10 @@ void SwTextFormatter::RecalcRealHeight()
 
 void SwTextFormatter::CalcRealHeight( bool bNewLine )
 {
-    sal_uInt16 nLineHeight = pCurr->Height();
-    pCurr->SetClipping( false );
+    sal_uInt16 nLineHeight = m_pCurr->Height();
+    m_pCurr->SetClipping( false );
 
-    SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
+    SwTextGridItem const*const pGrid(GetGridItem(m_pFrm->FindPageFrm()));
     if ( pGrid && GetInfo().SnapToGrid() )
     {
         const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
@@ -1701,20 +1701,20 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         const bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         nLineHeight = nGridWidth + nRubyHeight;
-        const sal_uInt16 nAmpRatio = (pCurr->Height() + nLineHeight - 1)/nLineHeight;
+        const sal_uInt16 nAmpRatio = (m_pCurr->Height() + nLineHeight - 1)/nLineHeight;
         nLineHeight *= nAmpRatio;
 
-        const sal_uInt16 nAsc = pCurr->GetAscent() +
+        const sal_uInt16 nAsc = m_pCurr->GetAscent() +
                       ( bRubyTop ?
-                       ( nLineHeight - pCurr->Height() + nRubyHeight ) / 2 :
-                       ( nLineHeight - pCurr->Height() - nRubyHeight ) / 2 );
+                       ( nLineHeight - m_pCurr->Height() + nRubyHeight ) / 2 :
+                       ( nLineHeight - m_pCurr->Height() - nRubyHeight ) / 2 );
 
-        pCurr->Height( nLineHeight );
-        pCurr->SetAscent( nAsc );
-        pInf->GetParaPortion()->SetFixLineHeight();
+        m_pCurr->Height( nLineHeight );
+        m_pCurr->SetAscent( nAsc );
+        m_pInf->GetParaPortion()->SetFixLineHeight();
 
         // we ignore any line spacing options except from ...
-        const SvxLineSpacingItem* pSpace = aLineInf.GetLineSpacing();
+        const SvxLineSpacingItem* pSpace = m_aLineInf.GetLineSpacing();
         if ( ! IsParaLine() && pSpace &&
              SVX_INTER_LINE_SPACE_PROP == pSpace->GetInterLineSpaceRule() )
         {
@@ -1727,7 +1727,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
             nLineHeight = (sal_uInt16)(nTmp / 100);
         }
 
-        pCurr->SetRealHeight( nLineHeight );
+        m_pCurr->SetRealHeight( nLineHeight );
         return;
     }
 
@@ -1735,10 +1735,10 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
     // sollten kein Register etc. beachten. Dummerweise hat kann es eine leere
     // Zeile am Absatzende geben (bei leeren Abs?tzen oder nach einem
     // Shift-Return), die das Register durchaus beachten soll.
-    if( !pCurr->IsDummy() || ( !pCurr->GetNext() &&
+    if( !m_pCurr->IsDummy() || ( !m_pCurr->GetNext() &&
         GetStart() >= GetTextFrm()->GetText().getLength() && !bNewLine ) )
     {
-        const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
+        const SvxLineSpacingItem *pSpace = m_aLineInf.GetLineSpacing();
         if( pSpace )
         {
             switch( pSpace->GetLineSpaceRule() )
@@ -1768,9 +1768,9 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                                 pCurr->GetAscent() )
                                 pCurr->SetClipping( true );
 #endif
-                            pCurr->SetAscent( nAsc );
-                            pCurr->Height( nLineHeight );
-                            pInf->GetParaPortion()->SetFixLineHeight();
+                            m_pCurr->SetAscent( nAsc );
+                            m_pCurr->Height( nLineHeight );
+                            m_pInf->GetParaPortion()->SetFixLineHeight();
                         }
                     }
                 break;
@@ -1784,12 +1784,12 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 {
                     nLineHeight = pSpace->GetLineHeight();
                     const sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%
-                    if( nAsc < pCurr->GetAscent() ||
-                        nLineHeight - nAsc < pCurr->Height() - pCurr->GetAscent() )
-                        pCurr->SetClipping( true );
-                    pCurr->Height( nLineHeight );
-                    pCurr->SetAscent( nAsc );
-                    pInf->GetParaPortion()->SetFixLineHeight();
+                    if( nAsc < m_pCurr->GetAscent() ||
+                        nLineHeight - nAsc < m_pCurr->Height() - m_pCurr->GetAscent() )
+                        m_pCurr->SetClipping( true );
+                    m_pCurr->Height( nLineHeight );
+                    m_pCurr->SetAscent( nAsc );
+                    m_pInf->GetParaPortion()->SetFixLineHeight();
                 }
                 break;
                 default: OSL_FAIL( ": unknown LineSpaceRule" );
@@ -1831,17 +1831,17 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
 
         if( IsRegisterOn() )
         {
-            SwTwips nTmpY = Y() + pCurr->GetAscent() + nLineHeight - pCurr->Height();
-            SWRECTFN( pFrm )
+            SwTwips nTmpY = Y() + m_pCurr->GetAscent() + nLineHeight - m_pCurr->Height();
+            SWRECTFN( m_pFrm )
             if ( bVert )
-                nTmpY = pFrm->SwitchHorizontalToVertical( nTmpY );
+                nTmpY = m_pFrm->SwitchHorizontalToVertical( nTmpY );
             nTmpY = (*fnRect->fnYDiff)( nTmpY, RegStart() );
             const sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
             if( nDiff )
                 nLineHeight += RegDiff() - nDiff;
         }
     }
-    pCurr->SetRealHeight( nLineHeight );
+    m_pCurr->SetRealHeight( nLineHeight );
 }
 
 void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
@@ -1851,9 +1851,9 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
     rInf.Init();
 
     rInf.ChkNoHyph( CntEndHyph(), CntMidHyph() );
-    rInf.SetRoot( pCurr );
-    rInf.SetLineStart( nStart );
-    rInf.SetIdx( nStart );
+    rInf.SetRoot( m_pCurr );
+    rInf.SetLineStart( m_nStart );
+    rInf.SetIdx( m_nStart );
 
     // Handle overflows:
     // #i34348# Changed type from sal_uInt16 to SwTwips
@@ -1886,15 +1886,15 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
 
 void SwTextFormatter::FormatReset( SwTextFormatInfo &rInf )
 {
-    pCurr->Truncate();
-    pCurr->Init();
-    if( pBlink && pCurr->IsBlinking() )
-        pBlink->Delete( pCurr );
+    m_pCurr->Truncate();
+    m_pCurr->Init();
+    if( pBlink && m_pCurr->IsBlinking() )
+        pBlink->Delete( m_pCurr );
 
     // delete pSpaceAdd und pKanaComp
-    pCurr->FinishSpaceAdd();
-    pCurr->FinishKanaComp();
-    pCurr->ResetFlags();
+    m_pCurr->FinishSpaceAdd();
+    m_pCurr->FinishKanaComp();
+    m_pCurr->ResetFlags();
     FeedInf( rInf );
 }
 
@@ -1917,8 +1917,8 @@ SwTwips SwTextFormatter::CalcBottomLine() const
     SwTwips nMin = GetInfo().GetTextFly().GetMinBottom();
     if( nMin && ++nMin > nRet )
     {
-        SwTwips nDist = pFrm->Frm().Height() - pFrm->Prt().Height()
-                        - pFrm->Prt().Top();
+        SwTwips nDist = m_pFrm->Frm().Height() - m_pFrm->Prt().Height()
+                        - m_pFrm->Prt().Top();
         if( nRet + nDist < nMin )
         {
             const bool bRepaint = HasTruncLines() &&
@@ -1940,8 +1940,8 @@ SwTwips SwTextFormatter::_CalcFitToContent()
 {
     FormatReset( GetInfo() );
     BuildPortions( GetInfo() );
-    pCurr->CalcLine( *this, GetInfo() );
-    return pCurr->Width();
+    m_pCurr->CalcLine( *this, GetInfo() );
+    return m_pCurr->Width();
 }
 
 // determines if the calculation of a repaint offset is allowed
@@ -1951,8 +1951,8 @@ bool SwTextFormatter::AllowRepaintOpt() const
 {
     // reformat position in front of current line? Only in this case
     // we want to set the repaint offset
-    bool bOptimizeRepaint = nStart < GetInfo().GetReformatStart() &&
-                                pCurr->GetLen();
+    bool bOptimizeRepaint = m_nStart < GetInfo().GetReformatStart() &&
+                                m_pCurr->GetLen();
 
     // a special case is the last line of a block adjusted paragraph:
     if ( bOptimizeRepaint )
@@ -1966,10 +1966,10 @@ bool SwTextFormatter::AllowRepaintOpt() const
             else
             {
                 // ????: Blank in der letzten Masterzeile (blocksat.sdw)
-                bOptimizeRepaint = nullptr == pCurr->GetNext() && !pFrm->GetFollow();
+                bOptimizeRepaint = nullptr == m_pCurr->GetNext() && !m_pFrm->GetFollow();
                 if ( bOptimizeRepaint )
                 {
-                    SwLinePortion *pPos = pCurr->GetFirstPortion();
+                    SwLinePortion *pPos = m_pCurr->GetFirstPortion();
                     while ( pPos && !pPos->IsFlyPortion() )
                         pPos = pPos->GetPortion();
                     bOptimizeRepaint = !pPos;
@@ -1999,11 +1999,11 @@ bool SwTextFormatter::AllowRepaintOpt() const
 
 void SwTextFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 {
-    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+    OSL_ENSURE( ! m_pFrm->IsVertical() || m_pFrm->IsSwapped(),
             "SwTextFormatter::CalcUnclipped with unswapped frame" );
 
     long nFlyAsc, nFlyDesc;
-    pCurr->MaxAscentDescent( rTop, rBottom, nFlyAsc, nFlyDesc );
+    m_pCurr->MaxAscentDescent( rTop, rBottom, nFlyAsc, nFlyDesc );
     rTop = Y() + GetCurr()->GetAscent();
     rBottom = rTop + nFlyDesc;
     rTop -= nFlyAsc;
@@ -2012,7 +2012,7 @@ void SwTextFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     sal_Int32 nStartIdx, bool bAlways ) const
 {
-    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+    OSL_ENSURE( ! m_pFrm->IsVertical() || m_pFrm->IsSwapped(),
             "SwTextFormatter::UpdatePos with unswapped frame" );
 
     if( GetInfo().IsTest() )
@@ -2133,12 +2133,12 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
 
 void SwTextFormatter::AlignFlyInCntBase( long nBaseLine ) const
 {
-    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+    OSL_ENSURE( ! m_pFrm->IsVertical() || m_pFrm->IsSwapped(),
             "SwTextFormatter::AlignFlyInCntBase with unswapped frame" );
 
     if( GetInfo().IsTest() )
         return;
-    SwLinePortion *pFirst = pCurr->GetFirstPortion();
+    SwLinePortion *pFirst = m_pCurr->GetFirstPortion();
     SwLinePortion *pPos = pFirst;
     objectpositioning::AsCharFlags nFlags = AS_CHAR_NOFLAG;
     if( GetMulti() && GetMulti()->HasRotation() )
@@ -2154,7 +2154,7 @@ void SwTextFormatter::AlignFlyInCntBase( long nBaseLine ) const
     {
         if( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
         {
-            pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
+            m_pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
 
             if( pPos->IsGrfNumPortion() )
                 static_cast<SwGrfNumPortion*>(pPos)->SetBase( nTmpAscent, nTmpDescent,
@@ -2189,11 +2189,11 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
         SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
 
         SwRect aLineVert( aLine );
-        if ( pFrm->IsVertical() )
-            pFrm->SwitchHorizontalToVertical( aLineVert );
+        if ( m_pFrm->IsVertical() )
+            m_pFrm->SwitchHorizontalToVertical( aLineVert );
         SwRect aInter( rInf.GetTextFly().GetFrm( aLineVert ) );
-        if ( pFrm->IsVertical() )
-            pFrm->SwitchVerticalToHorizontal( aInter );
+        if ( m_pFrm->IsVertical() )
+            m_pFrm->SwitchVerticalToHorizontal( aInter );
 
         if( !aInter.HasArea() )
             return false;
@@ -2209,11 +2209,11 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
             aLine.Width( pPos->Width() );
 
             aLineVert = aLine;
-            if ( pFrm->IsVertical() )
-                pFrm->SwitchHorizontalToVertical( aLineVert );
+            if ( m_pFrm->IsVertical() )
+                m_pFrm->SwitchHorizontalToVertical( aLineVert );
             aInter = rInf.GetTextFly().GetFrm( aLineVert );
-            if ( pFrm->IsVertical() )
-                pFrm->SwitchVerticalToHorizontal( aInter );
+            if ( m_pFrm->IsVertical() )
+                m_pFrm->SwitchVerticalToHorizontal( aInter );
 
             // New flys from below?
             if( !pPos->IsFlyPortion() )
@@ -2227,7 +2227,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
                         // RealHeight including spacing
                         rInf.SetLineHeight( nHeight );
                         // Height without extra spacing
-                        rInf.SetLineNetHeight( pCurr->Height() );
+                        rInf.SetLineNetHeight( m_pCurr->Height() );
                         return true;
                     }
                 }
@@ -2238,7 +2238,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
                 if ( ! aInter.IsOver( aLine ) )
                 {
                     rInf.SetLineHeight( nHeight );
-                    rInf.SetLineNetHeight( pCurr->Height() );
+                    rInf.SetLineNetHeight( m_pCurr->Height() );
                     return true;
                 }
                 else
@@ -2253,7 +2253,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
                         static_cast<const SwFlyPortion*>(pPos)->GetFixWidth() != aInter.Width() )
                     {
                         rInf.SetLineHeight( nHeight );
-                        rInf.SetLineNetHeight( pCurr->Height() );
+                        rInf.SetLineNetHeight( m_pCurr->Height() );
                         return true;
                     }
                 }
@@ -2285,7 +2285,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     {
         // Real line height has already been calculated, we only have to
         // search for intersections in the lower part of the strip
-        nAscent = pCurr->GetAscent();
+        nAscent = m_pCurr->GetAscent();
         nHeight = rInf.GetLineNetHeight();
         nTop += rInf.GetLineHeight() - nHeight;
     }
@@ -2295,14 +2295,14 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         nHeight = pLast->Height();
 
         // We make a first guess for the lines real height
-        if ( ! pCurr->GetRealHeight() )
+        if ( ! m_pCurr->GetRealHeight() )
             CalcRealHeight();
 
-        if ( pCurr->GetRealHeight() > nHeight )
-            nTop += pCurr->GetRealHeight() - nHeight;
+        if ( m_pCurr->GetRealHeight() > nHeight )
+            nTop += m_pCurr->GetRealHeight() - nHeight;
         else
             // Important for fixed space between lines
-            nHeight = pCurr->GetRealHeight();
+            nHeight = m_pCurr->GetRealHeight();
     }
 
     const long nLeftMar = GetLeftMargin();
@@ -2312,18 +2312,18 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
                   + nLeftMar - nLeftMin , nHeight );
 
     SwRect aLineVert( aLine );
-    if ( pFrm->IsRightToLeft() )
-        pFrm->SwitchLTRtoRTL( aLineVert );
+    if ( m_pFrm->IsRightToLeft() )
+        m_pFrm->SwitchLTRtoRTL( aLineVert );
 
-    if ( pFrm->IsVertical() )
-        pFrm->SwitchHorizontalToVertical( aLineVert );
+    if ( m_pFrm->IsVertical() )
+        m_pFrm->SwitchHorizontalToVertical( aLineVert );
     SwRect aInter( rTextFly.GetFrm( aLineVert ) );
 
-    if ( pFrm->IsRightToLeft() )
-        pFrm->SwitchRTLtoLTR( aInter );
+    if ( m_pFrm->IsRightToLeft() )
+        m_pFrm->SwitchRTLtoLTR( aInter );
 
-    if ( pFrm->IsVertical() )
-        pFrm->SwitchVerticalToHorizontal( aInter );
+    if ( m_pFrm->IsVertical() )
+        m_pFrm->SwitchVerticalToHorizontal( aInter );
 
     if( aInter.IsOver( aLine ) )
     {
@@ -2338,9 +2338,9 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
                 aInter.Left( nFrmLeft );
 
             long nAddMar = 0;
-            if ( pFrm->IsRightToLeft() )
+            if ( m_pFrm->IsRightToLeft() )
             {
-                nAddMar = pFrm->Frm().Right() - Right();
+                nAddMar = m_pFrm->Frm().Right() - Right();
                 if ( nAddMar < 0 )
                     nAddMar = 0;
             }
@@ -2367,7 +2367,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         {
             rInf.SetNewLine( true );
             // 8221: We know that for dummies, it holds ascent == height
-            pCurr->SetDummy(true);
+            m_pCurr->SetDummy(true);
         }
 
         // aInter becomes frame-local
@@ -2375,7 +2375,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         SwFlyPortion *pFly = new SwFlyPortion( aInter );
         if( bForced )
         {
-            pCurr->SetForcedLeftMargin();
+            m_pCurr->SetForcedLeftMargin();
             rInf.ForcedLeftMargin( (sal_uInt16)aInter.Width() );
         }
 
@@ -2399,8 +2399,8 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
             // That means we can comfortably grow up to this value; that's how
             // we save a few empty lines.
             long nNextTop = rTextFly.GetNextTop();
-            if ( pFrm->IsVertical() )
-                nNextTop = pFrm->SwitchVerticalToHorizontal( nNextTop );
+            if ( m_pFrm->IsVertical() )
+                nNextTop = m_pFrm->SwitchVerticalToHorizontal( nNextTop );
             if( nNextTop > aInter.Bottom() )
             {
                 SwTwips nH = nNextTop - aInter.Top();
@@ -2435,10 +2435,10 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         if( pFly->Fix() < rInf.Width() )
             rInf.Width( pFly->Fix() );
 
-        SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(m_pFrm->FindPageFrm()));
         if ( pGrid )
         {
-            const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
+            const SwPageFrm* pPageFrm = m_pFrm->FindPageFrm();
             const SwLayoutFrm* pBody = pPageFrm->FindBodyCont();
 
             SWRECTFN( pPageFrm )
@@ -2454,7 +2454,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
             if ( bVert )
             {
                 Point aPoint( nStartX, 0 );
-                pFrm->SwitchHorizontalToVertical( aPoint );
+                m_pFrm->SwitchHorizontalToVertical( aPoint );
                 nStartX = aPoint.Y();
             }
 
@@ -2476,7 +2476,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
                                                    SwTextAttr *pHint ) const
 {
     SwFlyCntPortion *pRet = nullptr;
-    const SwFrm *pFrame = static_cast<SwFrm*>(pFrm);
+    const SwFrm *pFrame = static_cast<SwFrm*>(m_pFrm);
 
     SwFlyInCntFrm *pFly;
     SwFrameFormat* pFrameFormat = static_cast<SwTextFlyCnt*>(pHint)->GetFlyCnt().GetFrameFormat();
@@ -2492,7 +2492,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
     //SwLinePortion *pPos = pCurr->GetFirstPortion();
     //lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
-    pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+    m_pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
     // If the ascent of the frame is larger than the ascent of the current position,
     // we use this one when calculating the base, or the frame would be positioned

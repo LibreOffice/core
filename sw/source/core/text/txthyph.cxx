@@ -131,16 +131,16 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     // We never need to hyphenate anything in the last row
     // Except for, if it contains a FlyPortion or if it's the
     // last row of the Master
-    if( !GetNext() && !rInf.GetTextFly().IsOn() && !pFrm->GetFollow() )
+    if( !GetNext() && !rInf.GetTextFly().IsOn() && !m_pFrm->GetFollow() )
         return false;
 
-    sal_Int32 nWrdStart = nStart;
+    sal_Int32 nWrdStart = m_nStart;
 
     // We need to retain the old row
     // E.g.: The attribute for hyphenation was not set, but
     // it's always set in SwTextFrm::Hyphenate, because we want
     // to set breakpoints.
-    SwLineLayout *pOldCurr = pCurr;
+    SwLineLayout *pOldCurr = m_pCurr;
 
     InitCntHyph();
 
@@ -151,26 +151,26 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     {
         SwParaPortion *pPara = new SwParaPortion();
         SetParaPortion( &rInf, pPara );
-        pCurr = pPara;
+        m_pCurr = pPara;
         OSL_ENSURE( IsParaLine(), "SwTextFormatter::Hyphenate: not the first" );
     }
     else
-        pCurr = new SwLineLayout();
+        m_pCurr = new SwLineLayout();
 
     nWrdStart = FormatLine( nWrdStart );
 
     // Man muss immer im Hinterkopf behalten, dass es z.B.
     // Felder gibt, die aufgetrennt werden koennen ...
-    if( pCurr->PrtWidth() && pCurr->GetLen() )
+    if( m_pCurr->PrtWidth() && m_pCurr->GetLen() )
     {
         // Wir muessen uns darauf einstellen, dass in der Zeile
         // FlyFrms haengen, an denen auch umgebrochen werden darf.
         // Wir suchen also die erste HyphPortion in dem angegebenen
         // Bereich.
 
-        SwLinePortion *pPos = pCurr->GetPortion();
+        SwLinePortion *pPos = m_pCurr->GetPortion();
         const sal_Int32 nPamStart = rHyphInf.nStart;
-        nWrdStart = nStart;
+        nWrdStart = m_nStart;
         const sal_Int32 nEnd = rHyphInf.GetEnd();
         while( pPos )
         {
@@ -199,8 +199,8 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     }
 
     // Das alte LineLayout wird wieder eingestellt ...
-    delete pCurr;
-    pCurr = pOldCurr;
+    delete m_pCurr;
+    m_pCurr = pOldCurr;
 
     if( pOldCurr->IsParaPortion() )
     {
