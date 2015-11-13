@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/CommandInfoProvider.hxx>
-
-#include <comphelper/processfactory.hxx>
+#include <svtools/commandinfoprovider.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
@@ -32,7 +31,6 @@
 
 using namespace css;
 using namespace css::uno;
-using ::rtl::OUString;
 
 
 namespace
@@ -45,7 +43,7 @@ namespace
           public FrameListenerInterfaceBase
     {
     public:
-        FrameListener (sfx2::sidebar::CommandInfoProvider& rInfoProvider, const Reference<frame::XFrame>& rxFrame)
+        FrameListener (svt::CommandInfoProvider& rInfoProvider, const Reference<frame::XFrame>& rxFrame)
             : FrameListenerInterfaceBase(m_aMutex),
               mrInfoProvider(rInfoProvider),
               mxFrame(rxFrame)
@@ -70,12 +68,12 @@ namespace
         }
 
     private:
-        sfx2::sidebar::CommandInfoProvider& mrInfoProvider;
+        svt::CommandInfoProvider& mrInfoProvider;
         Reference<frame::XFrame> mxFrame;
     };
 }
 
-namespace sfx2 { namespace sidebar {
+namespace svt {
 
 CommandInfoProvider& CommandInfoProvider::Instance()
 {
@@ -110,12 +108,48 @@ OUString CommandInfoProvider::GetLabelForCommand (
 {
     SetFrame(rxFrame);
 
-    const OUString sLabel (GetCommandLabel(rsCommandName));
-    const OUString sShortCut (GetCommandShortcut(rsCommandName));
-    if (sShortCut.getLength() > 0)
-        return sLabel + " (" + sShortCut + ")";
-    else
-        return sLabel;
+    return GetCommandProperty("Name", rsCommandName);
+}
+
+OUString CommandInfoProvider::GetTooltipForCommand (
+    const OUString& rsCommandName,
+    const Reference<frame::XFrame>& rxFrame,
+    bool bIncludeShortcut)
+{
+    SetFrame(rxFrame);
+
+    OUString sLabel (GetCommandProperty("TooltipLabel", rsCommandName));
+    if (sLabel.isEmpty())
+        sLabel = GetLabelForCommand(rsCommandName, rxFrame);
+
+    if (bIncludeShortcut) {
+        const OUString sShortCut(GetCommandShortcut(rsCommandName, rxFrame));
+        if (!sShortCut.isEmpty())
+            return sLabel + " (" + sShortCut + ")";
+    }
+    return sLabel;
+}
+
+OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName,
+                                                  const Reference<frame::XFrame>& rxFrame)
+{
+    SetFrame(rxFrame);
+
+    OUString sShortcut;
+
+    sShortcut = RetrieveShortcutsFromConfiguration(GetDocumentAcceleratorConfiguration(), rsCommandName);
+    if (sShortcut.getLength() > 0)
+        return sShortcut;
+
+    sShortcut = RetrieveShortcutsFromConfiguration(GetModuleAcceleratorConfiguration(), rsCommandName);
+    if (sShortcut.getLength() > 0)
+        return sShortcut;
+
+    sShortcut = RetrieveShortcutsFromConfiguration(GetGlobalAcceleratorConfiguration(), rsCommandName);
+    if (sShortcut.getLength() > 0)
+        return sShortcut;
+
+    return OUString();
 }
 
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
@@ -214,25 +248,6 @@ OUString CommandInfoProvider::GetModuleIdentifier()
     return msCachedModuleIdentifier;
 }
 
-OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName)
-{
-    OUString sShortcut;
-
-    sShortcut = RetrieveShortcutsFromConfiguration(GetDocumentAcceleratorConfiguration(), rsCommandName);
-    if (sShortcut.getLength() > 0)
-        return sShortcut;
-
-    sShortcut = RetrieveShortcutsFromConfiguration(GetModuleAcceleratorConfiguration(), rsCommandName);
-    if (sShortcut.getLength() > 0)
-        return sShortcut;
-
-    sShortcut = RetrieveShortcutsFromConfiguration(GetGlobalAcceleratorConfiguration(), rsCommandName);
-    if (sShortcut.getLength() > 0)
-        return sShortcut;
-
-    return OUString();
-}
-
 OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
     const Reference<ui::XAcceleratorConfiguration>& rxConfiguration,
     const OUString& rsCommandName)
@@ -260,7 +275,7 @@ OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
     return OUString();
 }
 
-Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties (const OUString& rsCommandName)
+Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties(const OUString& rsCommandName)
 {
     Sequence<beans::PropertyValue> aProperties;
 
@@ -282,12 +297,12 @@ Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties (const 
     return aProperties;
 }
 
-OUString CommandInfoProvider::GetCommandLabel (const OUString& rsCommandName)
+OUString CommandInfoProvider::GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName)
 {
     const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
     {
-        if (aProperties[nIndex].Name == "Name")
+        if (aProperties[nIndex].Name == rsProperty)
         {
             OUString sLabel;
             aProperties[nIndex].Value >>= sLabel;
@@ -297,6 +312,6 @@ OUString CommandInfoProvider::GetCommandLabel (const OUString& rsCommandName)
     return OUString();
 }
 
-} } // end of namespace sfx2/framework
+} // end of namespace svt
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sidebar/ControllerFactory.hxx>
-#include <sfx2/sidebar/CommandInfoProvider.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 
 #include <com/sun/star/frame/XToolbarController.hpp>
@@ -28,6 +27,7 @@
 
 #include <framework/sfxhelperfunctions.hxx>
 #include <svtools/generictoolboxcontroller.hxx>
+#include <svtools/commandinfoprovider.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -120,13 +120,13 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         if (xUpdatable.is())
             xUpdatable->update();
 
-        // Add label.
+        // Add tooltip.
         if (xController.is())
         {
-            const OUString sLabel (sfx2::sidebar::CommandInfoProvider::Instance().GetLabelForCommand(
+            const OUString sTooltip (svt::CommandInfoProvider::Instance().GetTooltipForCommand(
                     rsCommandName,
                     rxFrame));
-            pToolBox->SetQuickHelpText(nItemId, sLabel);
+            pToolBox->SetQuickHelpText(nItemId, sTooltip);
             pToolBox->EnableItem(nItemId);
         }
     }
