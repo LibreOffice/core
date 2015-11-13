@@ -61,7 +61,8 @@ class Tile
     Tile() : valid(false), m_pBuffer(nullptr) {}
     ~Tile()
     {
-        g_clear_object(&m_pBuffer);
+        if (m_pBuffer)
+            cairo_surface_destroy(m_pBuffer);
     }
 
     /**
@@ -70,14 +71,14 @@ class Tile
     */
     bool valid;
 
-    /// Function to get the pointer to enclosing GdkPixbuf
-    GdkPixbuf* getBuffer();
+    /// Function to get the pointer to enclosing cairo_surface_t
+    cairo_surface_t* getBuffer();
     /// Used to set the pixel buffer of this object
-    void setPixbuf(GdkPixbuf*);
+    void setSurface(cairo_surface_t*);
 
 private:
     /// Pixel buffer data for this tile
-    GdkPixbuf *m_pBuffer;
+    cairo_surface_t *m_pBuffer;
 };
 
 /**
@@ -95,9 +96,9 @@ class TileBuffer
      : m_pLOKDocument(document)
      , m_nWidth(columns)
     {
-        GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileSizePixels, nTileSizePixels);
-        m_DummyTile.setPixbuf(pPixBuf);
-        g_object_unref(pPixBuf);
+        cairo_surface_t *pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nTileSizePixels, nTileSizePixels);
+        m_DummyTile.setSurface(pSurface);
+        cairo_surface_destroy(pSurface);
     }
 
     ~TileBuffer() {}

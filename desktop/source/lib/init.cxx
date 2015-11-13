@@ -887,9 +887,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #elif defined(ANDROID)
-    InitSvpForLibreOfficeKit();
-
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)32) ;
+    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)0) ;
 
     boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
 
@@ -902,9 +900,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
-    InitSvpForLibreOfficeKit();
-
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)32) ;
+    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)0) ;
 
     // Set background to transparent by default.
     memset(pBuffer, 0, nCanvasWidth * nCanvasHeight * 4);
@@ -915,7 +911,9 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     // Allocate a separate buffer for the alpha device.
     std::vector<sal_uInt8> aAlpha(nCanvasWidth * nCanvasHeight);
     memset(aAlpha.data(), 0, nCanvasWidth * nCanvasHeight);
-    boost::shared_array<sal_uInt8> aAlphaBuffer(aAlpha.data(), NoDelete<sal_uInt8>());
+// TO_DO: enable alpha
+//    boost::shared_array<sal_uInt8> aAlphaBuffer(aAlpha.data(), NoDelete<sal_uInt8>());
+    boost::shared_array<sal_uInt8> aAlphaBuffer;
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),

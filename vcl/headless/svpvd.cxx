@@ -94,13 +94,6 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     return true;
 }
 
-void InitSvpForLibreOfficeKit()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
-    pSalInstance->setBitCountFormatMapping( 32, ::basebmp::Format::ThirtyTwoBitTcMaskRGBA );
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,7 @@
 #include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
 #ifndef IOS
-#include "headless/svptextrender.hxx"
+#include "svpcairotextrender.hxx"
 #endif
 #include "saldatabasic.hxx"
 
@@ -101,17 +101,31 @@ namespace
         if (!rBuffer)
             return false;
 
-        if (rBuffer->getScanlineFormat() != basebmp::Format::ThirtyTwoBitTcMaskBGRX)
+        if (rBuffer->getScanlineFormat() != SVP_CAIRO_FORMAT
+         && rBuffer->getScanlineFormat() != basebmp::Format::OneBitLsbGrey)
             return false;
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
         basegfx::B2IVector size = rBuffer->getSize();
         sal_Int32 nStride = rBuffer->getScanlineStride();
-        return (cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX()) == nStride);
+        cairo_format_t nFormat;
+        if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
+            nFormat = CAIRO_FORMAT_RGB24;
+        else
+            nFormat = CAIRO_FORMAT_A1;
+        return (cairo_format_stride_for_width(nFormat, size.getX()) == nStride);
 #else
         return false;
 #endif
     }
+}
+
+#endif
+
+basebmp::BitmapDeviceSharedPtr SvpSalGraphics::createSimpleMask() const
+{
+    return basebmp::createBitmapDevice(m_aOrigDevice->getSize(), true, basebmp::Format::OneBitLsbGrey,
+                cairo_format_stride_for_width(CAIRO_FORMAT_A1, m_aOrigDevice->getSize().getX()));
 }
 
 void SvpSalGraphics::clipRegion(cairo_t* cr)
@@ -222,7 +236,7 @@ SvpSalGraphics::SvpSalGraphics() :
     m_aDrawMode( basebmp::DrawMode::Paint ),
     m_bClipSetup( false )
 {
-    m_xTextRenderImpl.reset(new SvpTextRender(*this));
+    m_xTextRenderImpl.reset(new SvpCairoTextRender(*this));
 }
 
 SvpSalGraphics::~SvpSalGraphics()
@@ -235,8 +249,6 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
     ResetClipRegion();
     m_xTextRenderImpl->setDevice(rDevice);
 }
-
-#endif
 
 void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
@@ -949,9 +961,14 @@ cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr
     sal_Int32 nStride = rBuffer->getScanlineStride();
 
     basebmp::RawMemorySharedArray data = rBuffer->getBuffer();
+    cairo_format_t nFormat;
+    if (rBuffer->getScanlineFormat() == SVP_CAIRO_FORMAT)
+        nFormat = CAIRO_FORMAT_RGB24;
+    else
+        nFormat = CAIRO_FORMAT_A1;
     cairo_surface_t *target =
         cairo_image_surface_create_for_data(data.get(),
-                                        CAIRO_FORMAT_RGB24,
+                                        nFormat,
                                         size.getX(), size.getY(),
                                         nStride);
     cairo_t* cr = cairo_create(target);

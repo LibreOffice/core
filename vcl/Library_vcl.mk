@@ -556,7 +556,6 @@ vcl_generic_code= \
     vcl/generic/fontmanager/fontsubst \
     vcl/generic/glyphs/gcach_ftyp \
     vcl/generic/glyphs/gcach_layout \
-    vcl/generic/glyphs/gcach_rbmp \
     vcl/generic/glyphs/glyphcache \
     vcl/generic/glyphs/scrptrun \
     vcl/generic/fontmanager/fontcache \
@@ -577,7 +576,9 @@ vcl_headless_code= \
 vcl_headless_freetype_code=\
     vcl/headless/svpprn \
     vcl/headless/svptext \
-    vcl/headless/svptextrender \
+    vcl/headless/svpglyphcache \
+    vcl/unx/generic/gdi/cairotextrender \
+    vcl/headless/svpcairotextrender \
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
@@ -585,7 +586,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/plugadapt/salplug \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
-    vcl/unx/generic/gdi/cairotextrender \
     vcl/unx/generic/gdi/x11windowprovider \
     vcl/unx/generic/window/screensaverinhibitor \
     $(if $(filter TRUE,$(ENABLE_CUPS)),\

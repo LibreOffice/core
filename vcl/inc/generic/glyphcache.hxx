@@ -44,7 +44,6 @@ class GlyphData;
 class GraphiteFaceWrapper;
 class FontConfigFontOptions;
 class PhysicalFontCollection;
-class RawBitmap;
 class ServerFont;
 class ServerFontLayout;
 class ServerFontLayoutEngine;
@@ -153,12 +152,8 @@ public:
     void                    SetLruValue( int n ) const  { mnLruValue = n; }
     long                    GetLruValue() const         { return mnLruValue;}
 
-    ExtGlyphData&           ExtDataRef()                { return maExtData; }
-    const ExtGlyphData&     ExtDataRef() const          { return maExtData; }
-
 private:
     GlyphMetric             maMetric;
-    ExtGlyphData            maExtData;
 
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnLruValue;
@@ -201,8 +196,6 @@ public:
     sal_GlyphId             FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 ) const;
     bool                    GetGlyphOutline( sal_GlyphId aGlyphId, ::basegfx::B2DPolyPolygon& ) const;
     bool                    GetAntialiasAdvice() const;
-    bool                    GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& ) const;
-    bool                    GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& ) const;
 
 private:
     friend class GlyphCache;
@@ -328,28 +321,6 @@ protected:
 public:
     virtual void            RemovingFont( ServerFont& ) {}
     virtual void            RemovingGlyph( GlyphData& ) {}
-};
-
-class VCL_DLLPUBLIC RawBitmap
-{
-public:
-                            RawBitmap();
-                            ~RawBitmap();
-
-    bool                    Rotate( int nAngle );
-
-public:
-    basebmp::RawMemorySharedArray mpBits;
-    sal_uLong               mnAllocated;
-
-    sal_uLong               mnWidth;
-    sal_uLong               mnHeight;
-
-    sal_uLong               mnScanlineSize;
-    sal_uLong               mnBitCount;
-
-    int                     mnXOffset;
-    int                     mnYOffset;
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX

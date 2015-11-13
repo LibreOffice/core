@@ -34,6 +34,16 @@
 #define SvpSalGraphics AquaSalGraphics
 #else
 
+//Using formats that match cairo's formats. For android we patch cairo,
+//which is internal in that case, to swap the rgb components so that
+//cairo then matches the OpenGL GL_RGBA format so we can use it there
+//where we don't have GL_BGRA support.
+#ifdef ANDROID
+#   define SVP_CAIRO_FORMAT basebmp::Format::ThirtyTwoBitTcMaskRGBA
+#else
+#   define SVP_CAIRO_FORMAT basebmp::Format::ThirtyTwoBitTcMaskBGRX
+#endif
+
 class GlyphCache;
 class ServerFont;
 typedef struct _cairo cairo_t;
@@ -56,6 +66,7 @@ public:
     static GlyphCache& getPlatformGlyphCache();
     void BlendTextColor(const basebmp::Color &rTextColor, const basebmp::BitmapDeviceSharedPtr &rAlphaMask,
                         const basegfx::B2IPoint &rDstPoint);
+    basebmp::BitmapDeviceSharedPtr createSimpleMask() const;
     void setDevice(basebmp::BitmapDeviceSharedPtr& rDevice);
 
 private:

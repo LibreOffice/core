@@ -31,12 +31,12 @@
 #include "headless/svpdummies.hxx"
 #include "headless/svpvd.hxx"
 #ifdef IOS
-#include "headless/svpgdi.hxx"
 #include "quartz/salbmp.h"
 #include "quartz/salgdi.h"
 #include "quartz/salvd.h"
 #endif
 #include "headless/svpbmp.hxx"
+#include "headless/svpgdi.hxx"
 
 #include <salframe.hxx>
 #include <svdata.hxx>
@@ -200,12 +200,12 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 
 SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
-    return new SvpSalFrame( this, nullptr, nStyle, SVP_DEFAULT_BITMAP_FORMAT, pParent );
+    return new SvpSalFrame( this, nullptr, nStyle, SVP_CAIRO_FORMAT, pParent );
 }
 
 SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
-    return new SvpSalFrame( this, pParent, nStyle, SVP_DEFAULT_BITMAP_FORMAT );
+    return new SvpSalFrame( this, pParent, nStyle, SVP_CAIRO_FORMAT );
 }
 
 void SvpSalInstance::DestroyFrame( SalFrame* pFrame )
@@ -416,20 +416,8 @@ void SvpSalTimer::Start( sal_uLong nMS )
     m_pInstance->StartTimer( nMS );
 }
 
-void SvpSalInstance::setBitCountFormatMapping( sal_uInt16 nBitCount,
-                                            Format aFormat )
-{
-    m_aBitCountFormatMap[nBitCount] = aFormat;
-}
-
 Format SvpSalInstance::getFormatForBitCount( sal_uInt16 nBitCount )
 {
-    BitCountFormatMap::iterator aIt;
-    if ( (aIt = m_aBitCountFormatMap.find( nBitCount )) != m_aBitCountFormatMap.end() )
-    {
-        return aIt->second;
-    }
-
     switch( nBitCount )
     {
         case 1:
@@ -444,18 +432,10 @@ Format SvpSalInstance::getFormatForBitCount( sal_uInt16 nBitCount )
 #else
             return Format::SixteenBitLsbTcMask;
 #endif
-        case 24:
-            return Format::ThirtyTwoBitTcMaskBGRX;
         case 32:
             return Format::ThirtyTwoBitTcMaskBGRA;
-        case 0:
-#ifdef ANDROID
-            return Format::ThirtyTwoBitTcMaskRGBA;
-#else
-            return Format::ThirtyTwoBitTcMaskBGRX;
-#endif
         default:
-            return SVP_DEFAULT_BITMAP_FORMAT;
+            return SVP_CAIRO_FORMAT;
      }
 
 }
