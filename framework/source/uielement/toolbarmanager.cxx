@@ -1272,7 +1272,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString( RetrieveFromCommand( "Label", aCommandURL ));
+                    OUString aString( RetrieveFromCommand( "Name", aCommandURL ));
                     OUString aTooltipFromCommand( RetrieveFromCommand( "TooltipLabel", aCommandURL ));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
