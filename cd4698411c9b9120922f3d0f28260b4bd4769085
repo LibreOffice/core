@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_9c038ab8",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2380,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-13T15:03:43Z",
+      "side": 1,
+      "message": "so it turns out that Yield is not enough, since it only dispatches the first highest priority idle task, and not all of them.\n\nso plan B is to add a own Idle task for the test with a low priority, and then loop around Yield until that Idle is invoked.\n\nthat means using the Idle class from \u003cvcl/idle.hxx\u003e, use the SetPriority() to set it to e.g. LOWEST, LOWER or LOW and SetIdleHdl to give it a callback function and then Start() to activate it.\n\nthe callback function should be defined with DECL_LINK_TYPED and IMPL_LINK_TYPED, take an Idle* parameter,  and you need to add a little class with a boolean flag member that is then flipped by the callback.\n\nthen after starting the Idle, break out of the loop around Yield if the flag in the Idle is set.",
+      "revId": "cd4698411c9b9120922f3d0f28260b4bd4769085",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
