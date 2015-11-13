@@ -746,9 +746,6 @@ void SAL_CALL SlideshowImpl::disposing()
 
     setActiveXToolbarsVisible( true );
 
-    Application::DisableNoYieldMode();
-    Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
-
     mbDisposed = true;
 }
 
@@ -1788,22 +1785,6 @@ IMPL_LINK_NOARG_TYPED(SlideshowImpl, updateHdl, Timer *, void)
     updateSlideShow();
 }
 
-IMPL_LINK_NOARG_TYPED(SlideshowImpl, PostYieldListener, LinkParamNone*, void)
-{
-    // prevent me from deletion when recursing (App::Reschedule does)
-    const rtl::Reference<SlideshowImpl> this_(this);
-
-    Application::DisableNoYieldMode();
-    Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
-    Application::Reschedule(true); // fix for fdo#32861 - process
-                                   // *all* outstanding events after
-                                   // yield is done.
-    if (mbDisposed)
-        return;
-    Application::Reschedule(true);
-    updateSlideShow();
-}
-
 sal_Int32 SlideshowImpl::updateSlideShow()
 {
     // prevent me from deletion when recursing (App::EnableYieldMode does)
@@ -1815,26 +1796,13 @@ sal_Int32 SlideshowImpl::updateSlideShow()
 
     try
     {
-        // TODO(Q3): Evaluate under various systems and setups,
-        // whether this is really necessary. Under WinXP and Matrox
-        // G550, the frame rates were much more steadier with this
-        // tweak, although.
-
-        // currently no solution, because this kills sound (at least on Windows)
-
         double fUpdate = 0.0;
         if( !xShow->update(fUpdate) )
             fUpdate = -1.0;
 
         if (mxShow.is() && (fUpdate >= 0.0))
         {
-            if (::basegfx::fTools::equalZero(fUpdate))
-            {
-                // Use post yield listener for short update intervalls.
-                Application::EnableNoYieldMode();
-                Application::AddPostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
-            }
-            else
+            if (!::basegfx::fTools::equalZero(fUpdate))
             {
                 // Avoid busy loop when the previous call to update()
                 // returns a small positive number but not 0 (which is
@@ -1851,14 +1819,11 @@ sal_Int32 SlideshowImpl::updateSlideShow()
                 // too high (only then conversion to milliseconds and long
                 // integer may lead to zero value.)
                 OSL_ASSERT(static_cast<sal_uLong>(fUpdate * 1000.0) > 0);
-
-                Application::DisableNoYieldMode();
-                Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
-
-                // Use a timer for the asynchronous callback.
-                maUpdateTimer.SetTimeout(static_cast<sal_uLong>(fUpdate * 1000.0));
-                maUpdateTimer.Start();
             }
+
+            // Use our high resolution timers for the asynchronous callback.
+            maUpdateTimer.SetTimeout(static_cast<sal_uLong>(fUpdate * 1000.0));
+            maUpdateTimer.Start();
         }
     }
     catch( Exception& )

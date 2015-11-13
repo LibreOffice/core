@@ -508,11 +508,6 @@ void DeInitVCL()
         delete pSVData->maAppData.mpKeyListeners;
         pSVData->maAppData.mpKeyListeners = nullptr;
     }
-    if ( pSVData->maAppData.mpPostYieldListeners )
-    {
-        delete pSVData->maAppData.mpPostYieldListeners;
-        pSVData->maAppData.mpPostYieldListeners = nullptr;
-    }
 
     if ( pSVData->maAppData.mpFirstHotKey )
         ImplFreeHotKeyData();
