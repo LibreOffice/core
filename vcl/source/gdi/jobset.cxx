@@ -217,7 +217,6 @@ bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 
 SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 {
-    SAL_WARN_IF( !rIStream.GetVersion(), "vcl", "JobSetup::>> - Solar-Version not set on rOStream" );
 
     {
         sal_uInt16 nLen = 0;
@@ -311,11 +310,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 
 SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
 {
-    SAL_WARN_IF( !rOStream.GetVersion(), "vcl", "JobSetup::<< - Solar-Version not set on rOStream" );
 
-    // We do not have a new FileFormat at this point in time
-    // #define JOBSET_FILEFORMAT2      3780
-    // if ( rOStream.GetVersion() < JOBSET_FILEFORMAT2 )
     {
         sal_uInt16 nLen = 0;
         if ( !rJobSetup.mpData )
