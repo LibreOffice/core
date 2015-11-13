@@ -492,7 +492,7 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     // do not wait for events either if the app decided that it is too busy for timers
     // (feature added for the slideshow)
     pSVData->mpDefInst->DoYield(
-        i_bWait && !pSVData->maAppData.mbAppQuit && !pSVData->maAppData.mbNoYield,
+        i_bWait && !pSVData->maAppData.mbAppQuit,
         i_bAllEvents, nReleased);
     pSVData->maAppData.mnDispatchLevel--;
 
@@ -501,31 +501,6 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     // flush lazy deleted objects
     if( pSVData->maAppData.mnDispatchLevel == 0 )
         vcl::LazyDelete::flush();
-
-    // the system timer events will not necessarily come in non waiting mode
-    // e.g. on OS X; need to trigger timer checks manually
-    if( pSVData->maAppData.mbNoYield )
-    {
-        //Process all timers
-        Scheduler::ProcessTaskScheduling(true);
-    }
-
-    // call post yield listeners
-    if( pSVData->maAppData.mpPostYieldListeners )
-    {
-        vcl::DeletionListener aDel( pSVData->maAppData.mpPostYieldListeners );
-
-        auto& rYieldListeners = pSVData->maAppData.mpPostYieldListeners->m_aListeners;
-        // Copy the list, because this can be destroyed when calling a Link...
-        std::vector<Link<LinkParamNone*,void>> aCopy( rYieldListeners );
-        for( Link<LinkParamNone*,void>& rLink : aCopy )
-        {
-            if (aDel.isDeleted()) break;
-            // check this hasn't been removed in some re-enterancy scenario fdo#47368
-            if( std::find(rYieldListeners.begin(), rYieldListeners.end(), rLink) != rYieldListeners.end() )
-                rLink.Call( nullptr );
-        }
-    }
 }
 
 void Application::Reschedule( bool i_bAllEvents )
@@ -1094,39 +1069,6 @@ void Application::RemoveIdleHdl( const Link<Application*,void>& rLink )
 
     if ( pSVData->maAppData.mpIdleMgr )
         pSVData->maAppData.mpIdleMgr->RemoveIdleHdl( rLink );
-}
-
-void Application::EnableNoYieldMode()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mbNoYield = true;
-}
-
-void Application::DisableNoYieldMode()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mbNoYield = false;
-}
-
-void Application::AddPostYieldListener( const Link<LinkParamNone*,void>& i_rListener )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->maAppData.mpPostYieldListeners )
-        pSVData->maAppData.mpPostYieldListeners = new SVAppPostYieldListeners();
-    // ensure uniqueness
-    auto& rYieldListeners = pSVData->maAppData.mpPostYieldListeners->m_aListeners;
-    if (std::find(rYieldListeners.begin(), rYieldListeners.end(), i_rListener) == rYieldListeners.end())
-       rYieldListeners.push_back( i_rListener );
-}
-
-void Application::RemovePostYieldListener( const Link<LinkParamNone*,void>& i_rListener )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->maAppData.mpPostYieldListeners )
-    {
-        auto& rYieldListeners = pSVData->maAppData.mpPostYieldListeners->m_aListeners;
-        rYieldListeners.erase( std::remove(rYieldListeners.begin(), rYieldListeners.end(), i_rListener ), rYieldListeners.end() );
-    }
 }
 
 WorkWindow* Application::GetAppWindow()
