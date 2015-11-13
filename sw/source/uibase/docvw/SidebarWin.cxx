@@ -252,6 +252,10 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
         if (pChild == mpVScrollbar.get())
             continue;
 
+        // No point in showing this button till click on it are not handled.
+        if (pChild == mpMenuButton.get())
+            continue;
+
         rRenderContext.Push(PushFlags::MAPMODE);
         Point aOffset(PixelToLogic(pChild->GetPosPixel()));
         MapMode aMapMode(rRenderContext.GetMapMode());
