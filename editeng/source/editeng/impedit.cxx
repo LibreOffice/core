@@ -946,6 +946,13 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
             // LOK output is always in twips, convert from mm100 if necessary.
             if (pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM)
                 aRect = OutputDevice::LogicToLogic(aRect, MAP_100TH_MM, MAP_TWIP);
+            else if (pOutWin->GetMapMode().GetMapUnit() == MAP_TWIP)
+            {
+                // Writer comments: they use editeng, but are separate widgets.
+                Point aOrigin = pOutWin->GetMapMode().GetOrigin();
+                // Move the rectangle, so that we output absolute twips.
+                aRect.Move(aOrigin.getX(), aOrigin.getY());
+            }
             // Let the LOK client decide the cursor width.
             aRect.setWidth(0);
 
