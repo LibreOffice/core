@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_7cb6a63e",
+        "filename": "officecfg/registry/cppheader.xsl",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-13T10:30:58Z",
+      "side": 1,
+      "message": "what other part of the patch makes this become necessary now?",
+      "revId": "1a494d9a00208eef790400bdbd8b3e5c7fed4886",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
