@@ -129,6 +129,12 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
             case R.id.action_search:
                 mContext.showSearchToolbar();
                 return true;
+            case R.id.action_undo:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Undo"));
+                return true;
+            case R.id.action_redo:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Redo"));
+                return true;
         }
         return false;
     }

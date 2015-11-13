@@ -79,5 +79,8 @@
     <string name="server_url_and_port">URL and port of the ownCloud server.</string>
     <string name="user_name">User name</string>
     <string name="password">Password</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_redo">Redo</string>
+
 
 </resources>
