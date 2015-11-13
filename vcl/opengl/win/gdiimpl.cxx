@@ -29,19 +29,8 @@ void WinOpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics*
 rtl::Reference<OpenGLContext> WinOpenGLSalGraphicsImpl::CreateWinContext()
 {
     rtl::Reference<OpenGLContext> pContext = OpenGLContext::Create();
-    pContext->requestSingleBufferedRendering();
     pContext->init( mrParent.mhLocalDC, mrParent.mhWnd );
     return pContext;
-}
-
-bool WinOpenGLSalGraphicsImpl::UseContext( const rtl::Reference<OpenGLContext> &pContext )
-{
-    if( !pContext.is() || !pContext->isInitialized() || IsForeignContext( pContext ) )
-        return false;
-    if( IsOffscreen() )
-        return true;
-    return pContext->getOpenGLWindow().hWnd == mrParent.mhWnd &&
-           pContext->getOpenGLWindow().hDC == mrParent.mhLocalDC;
 }
 
 void WinOpenGLSalGraphicsImpl::Init()
