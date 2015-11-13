@@ -83,7 +83,7 @@ public:
     iterator begin();
     const_iterator begin() const;
     void clear();
-    void reserve(size_t size) { maData.reserve(size); }
+    void reserve(size_t nSize) { maData.reserve(nSize); }
     size_t size() const;
     void push_back(const ScUserListData& r) { maData.push_back(r); }
     void erase(iterator itr);
