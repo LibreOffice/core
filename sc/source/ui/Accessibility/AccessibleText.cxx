@@ -1066,7 +1066,10 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
     ScTextWnd* pTxtWnd = dynamic_cast< ScTextWnd* >(mpWindow.get());
 
     if (pTxtWnd)
+    {
+        assert(!pTxtWnd->IsDisposed());
         pTxtWnd->RemoveAccessibleTextData( *this );
+    }
 
     if (mbEditEngineCreated && mpEditEngine)
     {
@@ -1087,7 +1090,10 @@ void ScAccessibleEditLineTextData::Dispose()
     ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow.get());
 
     if (pTxtWnd)
+    {
+        assert(!pTxtWnd->IsDisposed());
         pTxtWnd->RemoveAccessibleTextData( *this );
+    }
 
     ResetEditMode();
     mpWindow = nullptr;
