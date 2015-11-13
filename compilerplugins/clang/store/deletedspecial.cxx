@@ -118,7 +118,7 @@ bool DeletedSpecial::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
                 || whitelist(decl, "sd::IconCache", "sd/source/ui/inc/tools/IconCache.hxx")
                 || whitelist(decl, "sd::RemoteServer", "sd/source/ui/inc/RemoteServer.hxx")
                 || whitelist(decl, "sd::slidesorter::cache::PageCacheManager", "sd/source/ui/slidesorter/inc/cache/SlsPageCacheManager.hxx")
-                || whitelist(decl, "sfx2::sidebar::CommandInfoProvider", "include/sfx2/sidebar/CommandInfoProvider.hxx")
+                || whitelist(decl, "svt::CommandInfoProvider", "include/svt/commandinfoprovider.hxx")
                 || whitelist(decl, "vcl::SettingsConfigItem", "include/vcl/configsettings.hxx")
                 || whitelist(decl, "writerfilter::ooxml::OOXMLFactory", "writerfilter/source/ooxml/OOXMLFactory.hxx"))
             {
