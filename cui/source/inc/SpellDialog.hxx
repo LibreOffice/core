@@ -80,7 +80,7 @@ protected:
 
 public:
     SentenceEditWindow_Impl(vcl::Window* pParent, WinBits nBits);
-    ~SentenceEditWindow_Impl();
+    virtual ~SentenceEditWindow_Impl();
 
     void            Init(VclPtr<ToolBox> &rToolbar);
     void            SetModifyHdl(const Link<Edit&,void>& rLink) override { m_aModifyLink = rLink;}
