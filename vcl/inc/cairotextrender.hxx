@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
 
 #include "textrender.hxx"
+#include <basebmp/bitmapdevice.hxx>
 #include <vcl/region.hxx>
 #include <deque>
 
@@ -80,6 +81,10 @@ protected:
     virtual cairo_t*            getCairoContext() = 0;
     virtual void                getSurfaceOffset(double& nDX, double& nDY) = 0;
     virtual void                drawSurface(cairo_t* cr) = 0;
+    virtual basebmp::BitmapDeviceSharedPtr createSimpleMask()
+    {
+        return basebmp::BitmapDeviceSharedPtr();
+    }
 
     bool                        setFont( const FontSelectPattern *pEntry, int nFallbackLevel );
 
@@ -127,6 +132,7 @@ public:
     virtual SalLayout*          GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void                DrawServerFontLayout( const ServerFontLayout& ) override;
     virtual SystemFontData      GetSysFontData( int nFallbackLevel ) const override;
+    SalColor                    GetTextColor() const { return mnTextColor; }
 };
 
 #endif
