@@ -317,8 +317,8 @@ public:
     int getRTTI_len(OUString const & rUNOname) throw ();
     __type_info_descriptor * insert_new_type_info_descriptor(OUString const & rUNOname);
 
-    RTTInfos();
-    ~RTTInfos();
+    RTTInfos() throw ();
+    ~RTTInfos() throw ();
 };
 class __type_info
 {
