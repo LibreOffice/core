@@ -47,7 +47,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/config.h"
-#include "sfx2/sidebar/CommandInfoProvider.hxx"
+#include "svtools/commandinfoprovider.hxx"
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 #include "vcl/builder.hxx"
