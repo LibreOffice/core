@@ -126,6 +126,9 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
             case R.id.action_settings:
                 mContext.showSettings();
                 return true;
+            case R.id.action_search:
+                mContext.showSearchToolbar();
+                return true;
         }
         return false;
     }

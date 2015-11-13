@@ -19,6 +19,12 @@
             android:orderInCategory="100"
             app:showAsAction="always"/>
 
+        <item android:id="@+id/action_search"
+              android:title="@string/action_search"
+              android:icon="@drawable/ic_search"
+              android:orderInCategory="100"
+              app:showAsAction="always"/>
+
         <item android:id="@+id/action_save"
             android:title="@string/action_save"
             android:orderInCategory="100" />

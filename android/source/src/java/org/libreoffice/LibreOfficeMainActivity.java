@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -77,6 +78,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private FormattingController mFormattingController;
     private ToolbarController mToolbarController;
     private FontController mFontController;
+    private SearchController mSearchController;
 
     public LibreOfficeMainActivity() {
         mAbout = new LOAbout(this, false);
@@ -127,6 +129,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         });
 
         mFontController = new FontController(this);
+        mSearchController = new SearchController(this);
 
         if (getIntent().getData() != null) {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
@@ -179,6 +182,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         mDocumentOverlay = new DocumentOverlay(mAppContext, layerView);
 
         mToolbarController.setupToolbars();
+    }
+
+    public RectF getCurrentCursorPosition() {
+        return mDocumentOverlay.getCurrentCursorPosition();
     }
 
     private boolean copyFileToTemp() {
@@ -430,6 +437,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             public void run() {
                 findViewById(R.id.toolbar_bottom).setVisibility(View.GONE);
                 findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
+                findViewById(R.id.search_toolbar).setVisibility(View.GONE);
             }
         });
     }
@@ -440,6 +448,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             public void run() {
                 showBottomToolbar();
                 findViewById(R.id.formatting_toolbar).setVisibility(View.VISIBLE);
+                findViewById(R.id.search_toolbar).setVisibility(View.GONE);
                 hideSoftKeyboardDirect();
             }
         });
@@ -451,6 +460,28 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             public void run() {
                 hideBottomToolbar();
                 findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public void showSearchToolbar() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                showBottomToolbar();
+                findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
+                findViewById(R.id.search_toolbar).setVisibility(View.VISIBLE);
+                hideSoftKeyboardDirect();
+            }
+        });
+    }
+
+    public void hideSearchToolbar() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                hideBottomToolbar();
+                findViewById(R.id.search_toolbar).setVisibility(View.GONE);
             }
         });
     }

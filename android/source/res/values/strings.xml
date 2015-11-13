@@ -65,6 +65,7 @@
     <string name="action_keyboard">Show keyboard</string>
     <string name="action_save">Save</string>
     <string name="action_fromat">Enable Format</string>
+    <string name="action_search">Search</string>
 
     <!-- Feedback messages -->
     <string name="message_saved">Save complete</string>
