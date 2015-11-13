@@ -42,7 +42,9 @@
 #include "cellvalue.hxx"
 #include "mtvcellfunc.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
+#include <o3tl/make_unique.hxx>
 
 const sal_uInt16 ROWINFO_MAX = 1024;
 
@@ -677,7 +679,7 @@ void ScDocument::FillInfo(
         pCondFormList->endRendering();
 
     //  bedingte Formatierung auswerten
-    ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
+    std::vector< std::unique_ptr<ScPatternAttr> > aAltPatterns;
     // favour preview over condition
     if (bAnyCondition || bAnyPreview)
     {
@@ -693,8 +695,8 @@ void ScDocument::FillInfo(
                 {
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, pRowInfo[nArrRow].nRowNo, nTab ) )
                     {
-                        aAltPatterns.push_back( new ScPatternAttr( *pInfo->pPatternAttr ) );
-                        pModifiedPatt = &aAltPatterns.back();
+                        aAltPatterns.push_back( o3tl::make_unique<ScPatternAttr>( *pInfo->pPatternAttr ) );
+                        pModifiedPatt = aAltPatterns.back().get();
                         pModifiedPatt->SetStyleSheet( pPreviewStyle );
                     }
                 }
