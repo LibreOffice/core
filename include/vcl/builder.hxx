@@ -107,7 +107,9 @@ public:
     static void     reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
 
     /// Get label of the command (like of .uno:Save) from the description service
-    static          OUString getCommandLabel(const OUString& rCommand, const css::uno::Reference<css::uno::XComponentContext>& rContext, const OUString& rModuleId);
+    static OUString getCommandProperty(const OUString aProperty, const OUString& rCommand,
+                                       const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                                       const OUString& rModuleId);
 
     /// Get image of the command (like of .uno:Save) from the description service
     static Image    getCommandImage(

@@ -606,7 +606,8 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
     uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
     OUString aModuleId(xModuleManager->identify(rFrame));
 
-    OUString aLabel(VclBuilder::getCommandLabel(rCommand, xContext, aModuleId));
+    OUString aLabel(VclBuilder::getCommandProperty("Label", rCommand, xContext, aModuleId));
+    OUString aTooltip(VclBuilder::getCommandProperty("TooltipLabel", rCommand, xContext, aModuleId));
     Image aImage(VclBuilder::getCommandImage(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), xContext, rFrame, aModuleId));
 
     // let's invent an ItemId
@@ -615,6 +616,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
 
     InsertItem(nItemId, aImage, aLabel, nBits, nPos);
     SetItemCommand(nItemId, rCommand);
+    SetQuickHelpText(nItemId, aTooltip);
 
     // set the minimal size
     ImplToolItem* pItem = ImplGetItem( nItemId );

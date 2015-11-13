@@ -892,9 +892,13 @@ namespace
         uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
         OUString aModuleId(xModuleManager->identify(rFrame));
 
-        OUString aLabel(VclBuilder::getCommandLabel(aCommand, xContext, aModuleId));
+        OUString aLabel(VclBuilder::getCommandProperty("Label", aCommand, xContext, aModuleId));
         if (!aLabel.isEmpty())
             pButton->SetText(aLabel);
+
+        OUString aTooltip(VclBuilder::getCommandProperty("Tooltip", aCommand, xContext, aModuleId));
+        if (!aTooltip.isEmpty())
+            pButton->SetQuickHelpText(aTooltip);
 
         Image aImage(VclBuilder::getCommandImage(aCommand, /* bLarge = */ false, xContext, rFrame, aModuleId));
         pButton->SetModeImage(aImage);
@@ -2164,7 +2168,8 @@ void VclBuilder::reorderWithinParent(std::vector<vcl::Window*>& rChilds, bool bI
     }
 }
 
-OUString VclBuilder::getCommandLabel(const OUString& rCommand, const uno::Reference<uno::XComponentContext>& rContext, const OUString& rModuleId)
+OUString VclBuilder::getCommandProperty(const OUString aProperty, const OUString& rCommand,
+                                     const uno::Reference<uno::XComponentContext>& rContext, const OUString& rModuleId)
 {
     if (rCommand.isEmpty())
         return OUString();
@@ -2181,7 +2186,7 @@ OUString VclBuilder::getCommandLabel(const OUString& rCommand, const uno::Refere
             {
                 for ( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
                 {
-                    if (aProperties[i].Name == "Label")
+                    if (aProperties[i].Name == aProperty)
                     {
                         OUString aLabel;
                         if (aProperties[i].Value >>= aLabel)
