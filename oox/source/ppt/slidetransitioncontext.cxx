@@ -131,6 +131,7 @@ SlideTransitionContext::~SlideTransitionContext() throw()
     case PPT_TOKEN( wedge ):
     case P14_TOKEN( vortex ):
     case P14_TOKEN( ripple ):
+    case P14_TOKEN( glitter ):
         // CT_Empty
         if (!mbHasTransition)
         {

@@ -1432,6 +1432,7 @@ public:
                 case animations::TransitionSubType::CORNERSOUT:         //  12
                 case animations::TransitionSubType::VERTICAL:           //  13
                 case animations::TransitionSubType::HORIZONTAL:         //  14
+                case animations::TransitionSubType::DIAMOND:            //  26
                 case animations::TransitionSubType::CIRCLE:             //  27
                 case animations::TransitionSubType::FANOUTHORIZONTAL:   //  55
                 case animations::TransitionSubType::ACROSS:             // 108
@@ -1519,6 +1520,9 @@ public:
                     break;
                 case animations::TransitionSubType::ACROSS:
                     pTransition = makeNByMTileFlip(8,6);
+                    break;
+                case animations::TransitionSubType::DIAMOND:
+                    pTransition = makeGlitter();
                     break;
                 }
         } else if( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) {

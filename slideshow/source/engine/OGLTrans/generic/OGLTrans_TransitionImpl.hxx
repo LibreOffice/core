@@ -236,6 +236,7 @@ std::shared_ptr<OGLTransitionImpl> makeStatic();
 std::shared_ptr<OGLTransitionImpl> makeDissolve();
 std::shared_ptr<OGLTransitionImpl> makeVortex();
 std::shared_ptr<OGLTransitionImpl> makeRipple();
+std::shared_ptr<OGLTransitionImpl> makeGlitter();
 std::shared_ptr<OGLTransitionImpl> makeNewsflash();
 
 /** 2D replacements

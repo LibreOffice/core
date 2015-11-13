@@ -413,6 +413,10 @@ namespace oox { namespace ppt {
             mnTransitionType = TransitionType::MISCSHAPEWIPE;
             mnTransitionSubType = TransitionSubType::HORIZONTAL;
             break;
+        case P14_TOKEN(glitter):
+            mnTransitionType = TransitionType::MISCSHAPEWIPE;
+            mnTransitionSubType = TransitionSubType::DIAMOND;
+            break;
         default:
             mnTransitionType = 0;
             break;

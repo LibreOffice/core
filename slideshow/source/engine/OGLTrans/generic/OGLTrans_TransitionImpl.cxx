@@ -836,6 +836,20 @@ std::shared_ptr<OGLTransitionImpl> makeHelix( sal_uInt16 nRows )
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
+float fdiv(int a, int b)
+{
+    return static_cast<float>(a)/b;
+}
+
+glm::vec2 vec(float x, float y, float nx, float ny)
+{
+    x = x < 0.0 ? 0.0 : x;
+    x = x > nx  ? nx  : x;
+    y = y < 0.0 ? 0.0 : y;
+    y = y > ny  ? ny  : y;
+    return glm::vec2(fdiv(x, nx), fdiv(y, ny));
+}
+
 std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( sal_uInt16 n, sal_uInt16 m )
 {
     double invN(1.0/static_cast<double>(n));
@@ -1649,11 +1663,6 @@ std::shared_ptr<OGLTransitionImpl> makeDissolve()
 namespace
 {
 
-float fdiv(int a, int b)
-{
-    return static_cast<float>(a)/b;
-}
-
 class VortexTransition : public ShaderTransition
 {
 public:
@@ -1861,6 +1870,54 @@ std::shared_ptr<OGLTransitionImpl> makeRipple()
     aSettings.mnRequiredGLVersion = 2.0;
 
     return makeRippleTransition(aLeavingSlide, aEnteringSlide, aSettings);
+}
+
+std::shared_ptr<OGLTransitionImpl> makeGlitter()
+{
+    const int NX = 30, NY = 30;
+
+    Primitives_t aLeavingSlide;
+    Primitives_t aEnteringSlide;
+
+    for (int y = 0; y < NY+2; y+=2)
+    {
+        for (int x = 0; x < NX+2; x+=2)
+        {
+            Primitive Slide;
+
+            if (y % 4 == 0)
+            {
+                Slide.pushTriangle(vec(x-1, y-1, NX, NY), vec(x,   y-2, NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x,   y-2, NX, NY), vec(x+1, y-1, NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x+1, y-1, NX, NY), vec(x+1, y,   NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x+1, y,   NX, NY), vec(x,   y+1, NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x,   y+1, NX, NY), vec(x-1, y,   NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x-1, y,   NX, NY), vec(x-1, y-1, NX, NY), vec(x, y+0.5, NX, NY));
+            }
+            else
+            {
+                Slide.pushTriangle(vec(x-2, y-1, NX, NY), vec(x-1, y-2, NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x-1, y-2, NX, NY), vec(x,   y-1, NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x,   y-1, NX, NY), vec(x,   y,   NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x,   y,   NX, NY), vec(x-1, y+1, NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x-1, y+1, NX, NY), vec(x-2, y,   NX, NY), vec(x, y+0.5, NX, NY));
+                Slide.pushTriangle(vec(x-2, y,   NX, NY), vec(x-2, y-1, NX, NY), vec(x, y+0.5, NX, NY));
+            }
+
+            glm::vec3 center = Slide.getVertices()[2];
+
+            float random = comphelper::rng::uniform_real_distribution(-0.2, std::nextafter(0.2, DBL_MAX));
+
+            Slide.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), center, 180 , true, fdiv(x, NX) + random , 1.0));
+
+            aLeavingSlide.push_back (Slide);
+
+            Slide.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), center, 180 , false, fdiv(x, NX) + random, 1.0));
+            aEnteringSlide.push_back (Slide);
+        }
+    }
+
+    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeNewsflash()

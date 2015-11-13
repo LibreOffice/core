@@ -523,15 +523,17 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
 
     sal_Int32 nTransition = 0;
     const char* pDirection = nullptr;
-    const char* pDirection14 = nullptr;
     const char* pOrientation = nullptr;
     const char* pThruBlk = nullptr;
     const char* pSpokes = nullptr;
+
     char pSpokesTmp[2] = "0";
 
     // p14
     sal_Int32 nTransition14 = 0;
+    const char* pDirection14 = nullptr;
     const char* pInverted = nullptr;
+    const char* pPattern = nullptr; // diamond or hexagon
 
     //p15
     const char* pPresetTransition = nullptr;
@@ -581,11 +583,18 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
                         pPresetTransition = "fallOver";
                         bOOXmlSpecificTransition = true;
                         break;
-                    case animations::TransitionSubType::CORNERSIN:
+                    case animations::TransitionSubType::CORNERSIN: // Inside turning cube
                         pInverted = "true";
-                    case animations::TransitionSubType::CORNERSOUT:
+                    case animations::TransitionSubType::CORNERSOUT: // Outside turning cube
                         nTransition = XML_fade;
                         nTransition14 = XML_prism;
+                        bOOXmlSpecificTransition = true;
+                        break;
+                    case animations::TransitionSubType::DIAMOND: // Glitter
+                        nTransition = XML_fade;
+                        nTransition14 = XML_glitter;
+                        pDirection14 = "l";
+                        pPattern = "hexagon";
                         bOOXmlSpecificTransition = true;
                         break;
                 }
@@ -644,6 +653,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
             pFS->singleElementNS(XML_p14, nTransition14,
                                  XML_isInverted, pInverted,
                                  XML_dir, pDirection14,
+                                 XML_pattern, pPattern,
                                  FSEND );
         }
         else if (pPresetTransition)

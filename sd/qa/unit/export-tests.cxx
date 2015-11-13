@@ -1424,8 +1424,11 @@ void SdExportTest::testExportTransitionsPPTX()
     // RIPPLE
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 71, TransitionType::MISCSHAPEWIPE, TransitionSubType::HORIZONTAL));
 
+    // GLITTER
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 72, TransitionType::MISCSHAPEWIPE, TransitionSubType::DIAMOND));
+
     // NEWSFLASH
-    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 72, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 73, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
