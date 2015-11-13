@@ -279,12 +279,10 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
     rRenderContext.Push(PushFlags::NONE);
 }
 
-vcl::Window* SwSidebarWin::IsHitWindow(const Point& rPointLogic)
+bool SwSidebarWin::IsHitWindow(const Point& rPointLogic)
 {
     Rectangle aRectangleLogic(EditWin().PixelToLogic(GetPosPixel()), EditWin().PixelToLogic(GetSizePixel()));
-    if (aRectangleLogic.IsInside(rPointLogic))
-        return mpSidebarTextControl;
-    return nullptr;
+    return aRectangleLogic.IsInside(rPointLogic);
 }
 
 void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags nInFlags)
@@ -355,10 +353,40 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, D
     }
 }
 
+/// We want to work in absolute twips: so set delta between rChild and rParent as origin on rChild, then disable map mode on rChild.
+static void lcl_setAbsoluteTwips(vcl::Window& rParent, vcl::Window& rChild)
+{
+    Point aOffset(rChild.GetOutOffXPixel() - rParent.GetOutOffXPixel(), rChild.GetOutOffYPixel() - rParent.GetOutOffYPixel());
+    MapMode aMapMode(rChild.GetMapMode());
+    aMapMode.SetOrigin(rChild.PixelToLogic(aOffset));
+    rChild.SetMapMode(aMapMode);
+    rChild.EnableMapMode(false);
+}
+
 void SwSidebarWin::KeyInput(const KeyEvent& rKeyEvent)
 {
     if (mpSidebarTextControl)
+    {
+        mpSidebarTextControl->Push(PushFlags::MAPMODE);
+        lcl_setAbsoluteTwips(EditWin(), *mpSidebarTextControl);
+
         mpSidebarTextControl->KeyInput(rKeyEvent);
+
+        mpSidebarTextControl->Pop();
+    }
+}
+
+void SwSidebarWin::MouseButtonDown(const MouseEvent& rMouseEvent)
+{
+    if (mpSidebarTextControl)
+    {
+        mpSidebarTextControl->Push(PushFlags::MAPMODE);
+        lcl_setAbsoluteTwips(EditWin(), *mpSidebarTextControl);
+
+        mpSidebarTextControl->MouseButtonDown(rMouseEvent);
+
+        mpSidebarTextControl->Pop();
+    }
 }
 
 void SwSidebarWin::SetPosSizePixelRect(long nX, long nY, long nWidth, long nHeight,

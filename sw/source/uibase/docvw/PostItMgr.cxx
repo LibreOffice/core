@@ -1736,9 +1736,9 @@ vcl::Window* SwPostItMgr::IsHitSidebarWindow(const Point& rPointLogic)
             if (!pPostIt)
                 continue;
 
-            if (vcl::Window* pWindow = pPostIt->IsHitWindow(rPointLogic))
+            if (pPostIt->IsHitWindow(rPointLogic))
             {
-                pRet = pWindow;
+                pRet = pPostIt;
                 break;
             }
         }
