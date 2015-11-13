@@ -314,7 +314,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 */
 #define SAL_DEBUG(stream) \
     SAL_DETAIL_LOG_STREAM( \
-        SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG, 0, 0, stream)
+        SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, stream)
 
 #endif
 
