@@ -52,12 +52,20 @@ struct TextureCombo
     std::unique_ptr<OpenGLTexture> mpMask;
 };
 
+class OpenGLFlushIdle;
+
 class VCL_DLLPUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
     friend class OpenGLTests;
 protected:
 
+    /// This context is solely for blitting @maOffscreenTex
+    rtl::Reference<OpenGLContext> mpWindowContext;
+
+    /// This context is whatever is most convenient to render
+    /// to @maOffscreenTex with.
     rtl::Reference<OpenGLContext> mpContext;
+
     SalGraphics& mrParent;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mpProvider;
@@ -67,18 +75,27 @@ protected:
     /// Is it someone else's context we shouldn't be fiddling with ?
     static bool IsForeignContext(const rtl::Reference<OpenGLContext> &xContext);
 
+    /// This idle handler is used to swap buffers after rendering.
+    OpenGLFlushIdle *mpFlush;
+
     // clipping
     vcl::Region maClipRegion;
     bool mbUseScissor;
     bool mbUseStencil;
 
-    bool mbOffscreen;
+    /**
+     * All rendering happens to this off-screen texture. For
+     * non-virtual devices, ie. windows - we will blit it and
+     * swapBuffers later.
+     */
     OpenGLTexture maOffscreenTex;
 
     SalColor mnLineColor;
     SalColor mnFillColor;
 #ifdef DBG_UTIL
     bool mProgramIsSolidColor;
+    sal_uInt32 mnDrawCount;
+    sal_uInt32 mnDrawCountAtFlush;
 #endif
     SalColor mProgramSolidColor;
     double mProgramSolidTransparency;
@@ -131,7 +148,10 @@ public:
     // get the height of the device
     GLfloat GetHeight() const { return mpProvider ? mpProvider->GetHeight() : 1; }
 
-    // check whether this instance is used for offscreen rendering
+    /**
+     * check whether this instance is used for offscreen (Virtual Device)
+     * rendering ie. does it need its own context.
+     */
     bool IsOffscreen() const { return mpProvider == nullptr || mpProvider->IsOffScreen(); }
 
     // operations to do before painting
@@ -144,14 +164,18 @@ protected:
     bool AcquireContext();
     bool ReleaseContext();
 
-    // retrieve the default context for offscreen rendering
+    /// retrieve the default context for offscreen rendering
     static rtl::Reference<OpenGLContext> GetDefaultContext();
 
-    // create a new context for window rendering
+    /// create a new context for rendering to the underlying window
     virtual rtl::Reference<OpenGLContext> CreateWinContext() = 0;
 
-    // check whether the given context can be used by this instance
-    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) = 0;
+    /// check whether the given context can be used for off-screen rendering
+    bool UseContext( const rtl::Reference<OpenGLContext> &pContext )
+    {
+        return pContext->isInitialized() &&  // not released by the OS etc.
+               IsForeignContext( pContext ); // a genuine VCL context.
+    }
 
 public:
     OpenGLSalGraphicsImpl(SalGraphics& pParent, SalGeometryProvider *pProvider);
@@ -328,8 +352,12 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
 
-    virtual OpenGLContext *beginPaint() override;
-private:
+    /// queue an idle flush of contents of the back-buffer to the screen
+    void flush();
+
+public:
+    /// do flush of contents of the back-buffer to the screen & swap.
+    void doFlush();
 };
 
 #endif

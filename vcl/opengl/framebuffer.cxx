@@ -72,6 +72,16 @@ void OpenGLFramebuffer::AttachTexture( const OpenGLTexture& rTexture )
     mnHeight = rTexture.GetHeight();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mnAttachedTexture, 0);
     CHECK_GL_ERROR();
+
+    GLuint nStencil = rTexture.StencilId();
+    if( nStencil )
+    {
+        VCL_GL_INFO( "Attaching stencil " << nStencil << " to framebuffer " << (int)mnId );
+        glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                   GL_RENDERBUFFER, nStencil );
+        CHECK_GL_ERROR();
+    }
+
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     CHECK_GL_ERROR();
     if (status != GL_FRAMEBUFFER_COMPLETE)
@@ -86,6 +96,11 @@ void OpenGLFramebuffer::DetachTexture()
     {
         mnAttachedTexture = 0;
         glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0 );
+        CHECK_GL_ERROR();
+
+        // FIXME: we could make this conditional on having a stencil ?
+        glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                   GL_RENDERBUFFER, 0 );
         CHECK_GL_ERROR();
     }
 }

@@ -58,18 +58,6 @@ rtl::Reference<OpenGLContext> X11OpenGLSalGraphicsImpl::CreateWinContext()
     return pContext;
 }
 
-bool X11OpenGLSalGraphicsImpl::UseContext( const rtl::Reference<OpenGLContext> &pContext )
-{
-    X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
-
-    if( !pContext->isInitialized() || IsForeignContext( pContext ) )
-        return false;
-    if( !pProvider )
-        return pContext->getOpenGLWindow().win != None;
-    else
-        return pContext->getOpenGLWindow().win == pProvider->GetX11Window();
-}
-
 void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
     OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? static_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrParent.GetImpl());
