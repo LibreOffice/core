@@ -34,6 +34,7 @@ endif
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo-1.10.2.android.patch \
+	external/cairo/cairo/cairo.GL_RGBA.patch \
 ))
 endif
 

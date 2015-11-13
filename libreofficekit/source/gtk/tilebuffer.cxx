@@ -28,18 +28,19 @@ float twipToPixel(float fInput, float zoom)
    Tile class member functions
    ----------------------------
 */
-GdkPixbuf* Tile::getBuffer()
+cairo_surface_t* Tile::getBuffer()
 {
     return m_pBuffer;
 }
 
-void Tile::setPixbuf(GdkPixbuf *buffer)
+void Tile::setSurface(cairo_surface_t *buffer)
 {
     if (m_pBuffer == buffer)
         return;
-    g_clear_object(&m_pBuffer);
+    if (m_pBuffer)
+        cairo_surface_destroy(m_pBuffer);
     if (buffer != nullptr)
-        g_object_ref(buffer);
+        cairo_surface_reference(buffer);
     m_pBuffer = buffer;
 }
 

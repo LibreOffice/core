@@ -967,7 +967,7 @@ paintTileCallback(GObject* sourceObject, GAsyncResult* res, gpointer userData)
     GError* error;
 
     error = nullptr;
-    GdkPixbuf* pPixBuf = static_cast<GdkPixbuf*>(paintTileFinish(pDocView, res, &error));
+    cairo_surface_t* pSurface = static_cast<cairo_surface_t*>(paintTileFinish(pDocView, res, &error));
     if (error != nullptr)
     {
         if (error->domain == LOK_TILEBUFFER_ERROR &&
@@ -980,11 +980,11 @@ paintTileCallback(GObject* sourceObject, GAsyncResult* res, gpointer userData)
         return;
     }
 
-    buffer->m_mTiles[index].setPixbuf(pPixBuf);
+    buffer->m_mTiles[index].setSurface(pSurface);
     buffer->m_mTiles[index].valid = true;
     gdk_threads_add_idle(queueDraw, GTK_WIDGET(pDocView));
 
-    g_object_unref(pPixBuf);
+    cairo_surface_destroy(pSurface);
 }
 
 
@@ -1045,8 +1045,8 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
                 g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
                 Tile& currentTile = priv->m_pTileBuffer->getTile(nRow, nColumn, task, priv->lokThreadPool);
-                GdkPixbuf* pPixBuf = currentTile.getBuffer();
-                gdk_cairo_set_source_pixbuf (pCairo, pPixBuf,
+                cairo_surface_t* pSurface = currentTile.getBuffer();
+                cairo_set_source_surface(pCairo, pSurface,
                                              twipToPixel(aTileRectangleTwips.x, priv->m_fZoom),
                                              twipToPixel(aTileRectangleTwips.y, priv->m_fZoom));
                 cairo_paint(pCairo);
@@ -1667,17 +1667,18 @@ paintTileInThread (gpointer data)
         buffer->m_mTiles[index].valid)
         return;
 
-    GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileSizePixels, nTileSizePixels);
-    if (!pPixBuf)
+    cairo_surface_t *pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nTileSizePixels, nTileSizePixels);
+    if (cairo_surface_status(pSurface) != CAIRO_STATUS_SUCCESS)
     {
+        cairo_surface_destroy(pSurface);
         g_task_return_new_error(task,
                                 LOK_TILEBUFFER_ERROR,
                                 LOK_TILEBUFFER_MEMORY,
-                                "Error allocating memory to GdkPixbuf");
+                                "Error allocating Surface");
         return;
     }
 
-    unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
+    unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     GdkRectangle aTileRectangle;
     aTileRectangle.x = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileY;
     aTileRectangle.y = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileX;
@@ -1696,6 +1697,7 @@ paintTileInThread (gpointer data)
                                          aTileRectangle.x, aTileRectangle.y,
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom),
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom));
+    cairo_surface_mark_dirty(pSurface);
 
     // Its likely that while the tilebuffer has changed, one of the paint tile
     // requests has passed the previous check at start of this function, and has
@@ -1711,7 +1713,7 @@ paintTileInThread (gpointer data)
         return;
     }
 
-    g_task_return_pointer(task, pPixBuf, g_object_unref);
+    g_task_return_pointer(task, pSurface, (GDestroyNotify)cairo_surface_destroy);
 }
 
 
