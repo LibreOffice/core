@@ -103,7 +103,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/gtk3gtksys \
     vcl/unx/gtk3/gtk3fpicker \
     vcl/unx/gtk3/cairo_gtk3_cairo \
-    vcl/unx/gtk3/gtk3cairotextrender \
     vcl/unx/gtk3/gtk3gtkprintwrapper \
     vcl/unx/gtk3/gtk3salnativewidgets-gtk \
     vcl/unx/gtk3/gtk3salprn-gtk \

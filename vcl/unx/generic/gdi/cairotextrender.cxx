@@ -532,6 +532,7 @@ SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
     return pLayout;
 }
 
+#if ENABLE_CAIRO_CANVAS
 SystemFontData CairoTextRender::GetSysFontData( int nFallbackLevel ) const
 {
     SystemFontData aSysFontData;
@@ -552,6 +553,7 @@ SystemFontData CairoTextRender::GetSysFontData( int nFallbackLevel ) const
 
     return aSysFontData;
 }
+#endif
 
 bool CairoTextRender::CreateFontSubset(
                                    const OUString& rToFile,
