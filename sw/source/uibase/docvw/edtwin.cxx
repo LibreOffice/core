@@ -2770,14 +2770,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     {
         if (vcl::Window* pWindow = m_rView.GetPostItMgr()->IsHitSidebarWindow(rMEvt.GetPosPixel()))
         {
-            bool bDisableMapMode = pWindow->IsMapModeEnabled();
-            if (bDisableMapMode)
-                pWindow->EnableMapMode(false);
-
             pWindow->MouseButtonDown(rMEvt);
-
-            if (bDisableMapMode)
-                pWindow->EnableMapMode();
             return;
         }
     }
