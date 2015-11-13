@@ -31,7 +31,6 @@ public:
 
 protected:
     virtual rtl::Reference<OpenGLContext> CreateWinContext() override;
-    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) override;
 
     bool RenderTextureCombo(TextureCombo& rCombo, int nX, int nY);
 
