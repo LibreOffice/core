@@ -18,7 +18,6 @@ namespace tools
 {
 namespace cpuid
 {
-    TOOLS_DLLPUBLIC bool hasSSE();
     TOOLS_DLLPUBLIC bool hasSSE2();
 }
 }

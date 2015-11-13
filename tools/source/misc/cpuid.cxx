@@ -36,12 +36,6 @@ static void getCpuId(uint32_t array[4])
 #endif
 }
 
-bool hasSSE()
-{
-    uint32_t cpuInfoArray[] = {0, 0, 0, 0};
-    getCpuId(cpuInfoArray);
-    return (cpuInfoArray[3] & (1 << 25)) != 0;
-}
 bool hasSSE2()
 {
     uint32_t cpuInfoArray[] = {0, 0, 0, 0};
@@ -51,7 +45,6 @@ bool hasSSE2()
 
 #else
 
-bool hasSSE() { return false; }
 bool hasSSE2() { return false; }
 
 #endif
