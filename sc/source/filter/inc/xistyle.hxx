@@ -25,7 +25,6 @@
 #include <vector>
 #include <tools/mempool.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "rangelst.hxx"
 #include "patattr.hxx"
 #include "xladdress.hxx"
@@ -562,7 +561,7 @@ inline bool XclImpXFRange::Contains( SCROW nScRow ) const
 class XclImpXFRangeColumn : private boost::noncopyable
 {
 public:
-    typedef ::boost::ptr_vector<XclImpXFRange> IndexList;
+    typedef std::vector< std::unique_ptr<XclImpXFRange> > IndexList;
 
     inline explicit     XclImpXFRangeColumn() {}
 

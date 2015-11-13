@@ -58,14 +58,15 @@
 #include "root.hxx"
 #include "colrowst.hxx"
 #include <svl/poolcach.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <list>
-
-using ::std::list;
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+
+using ::std::list;
 using namespace ::com::sun::star;
 
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
@@ -1722,7 +1723,7 @@ void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
     OSL_ENSURE( maIndexList.empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
 
     // insert a complete row range with one insert.
-    maIndexList.push_back( new XclImpXFRange( 0, MAXROW, rXFIndex ) );
+    maIndexList.push_back( o3tl::make_unique<XclImpXFRange>( 0, MAXROW, rXFIndex ) );
 }
 
 void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
@@ -1746,7 +1747,7 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
             SCROW nLastScRow = pPrevRange->mnScRow2;
             sal_uLong nIndex = nNextIndex - 1;
             XclImpXFRange* pThisRange = pPrevRange;
-            pPrevRange = (nIndex > 0 && nIndex <= maIndexList.size()) ? &(maIndexList[ nIndex - 1 ]) : nullptr;
+            pPrevRange = (nIndex > 0 && nIndex <= maIndexList.size()) ? maIndexList[ nIndex - 1 ].get() : nullptr;
 
             if( nFirstScRow == nLastScRow )         // replace solely XF
             {
@@ -1793,7 +1794,7 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 
 void XclImpXFRangeColumn::Insert(XclImpXFRange* pXFRange, sal_uLong nIndex)
 {
-    maIndexList.insert( maIndexList.begin() + nIndex, pXFRange );
+    maIndexList.insert( maIndexList.begin() + nIndex, std::unique_ptr<XclImpXFRange>(pXFRange) );
 }
 
 void XclImpXFRangeColumn::Find(
@@ -1809,8 +1810,8 @@ void XclImpXFRangeColumn::Find(
         return;
     }
 
-    rpPrevRange = &maIndexList.front();
-    rpNextRange = &maIndexList.back();
+    rpPrevRange = maIndexList.front().get();
+    rpNextRange = maIndexList.back().get();
 
     // test whether row is at end of list (contained in or behind last range)
     // rpPrevRange will contain a possible existing row
@@ -1841,7 +1842,7 @@ void XclImpXFRangeColumn::Find(
     while( ((rnNextIndex - nPrevIndex) > 1) && (rpPrevRange->mnScRow2 < nScRow) )
     {
         nMidIndex = (nPrevIndex + rnNextIndex) / 2;
-        pMidRange = &maIndexList[nMidIndex];
+        pMidRange = maIndexList[nMidIndex].get();
         OSL_ENSURE( pMidRange, "XclImpXFRangeColumn::Find - missing XF index range" );
         if( nScRow < pMidRange->mnScRow1 )      // row is really before pMidRange
         {
@@ -1859,7 +1860,7 @@ void XclImpXFRangeColumn::Find(
     if( nScRow <= rpPrevRange->mnScRow2 )
     {
         rnNextIndex = nPrevIndex + 1;
-        rpNextRange = &maIndexList[rnNextIndex];
+        rpNextRange = maIndexList[rnNextIndex].get();
     }
 }
 
@@ -1868,8 +1869,8 @@ void XclImpXFRangeColumn::TryConcatPrev( sal_uLong nIndex )
     if( !nIndex || nIndex >= maIndexList.size() )
         return;
 
-    XclImpXFRange& prevRange = maIndexList[ nIndex - 1 ];
-    XclImpXFRange& nextRange = maIndexList[ nIndex ];
+    XclImpXFRange& prevRange = *maIndexList[ nIndex - 1 ];
+    XclImpXFRange& nextRange = *maIndexList[ nIndex ];
 
     if( prevRange.Expand( nextRange ) )
         maIndexList.erase( maIndexList.begin() + nIndex );
@@ -2005,7 +2006,7 @@ void XclImpXFRangeBuffer::Finalize()
             for (XclImpXFRangeColumn::IndexList::iterator itr = rColumn.begin(), itrEnd = rColumn.end();
                  itr != itrEnd; ++itr)
             {
-                XclImpXFRange& rStyle = *itr;
+                XclImpXFRange& rStyle = **itr;
                 const XclImpXFIndex& rXFIndex = rStyle.maXFIndex;
                 XclImpXF* pXF = rXFBuffer.GetXF( rXFIndex.GetXFIndex() );
                 if (!pXF)
