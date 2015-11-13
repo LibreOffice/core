@@ -13,7 +13,7 @@
 
 #include <tools/cpuid.hxx>
 
-#if defined(__LO_SSE2_AVAILABLE__)
+#if defined(LO_SSE2_AVAILABLE)
 #include <emmintrin.h>
 #endif
 
@@ -70,7 +70,7 @@ public:
 private:
     inline double executeSSE2(size_t& i, const double* pCurrent) const
     {
-#if defined(__LO_SSE2_AVAILABLE__)
+#if defined(LO_SSE2_AVAILABLE)
         double fSum = 0.0;
         size_t nRealSize = mnSize - i;
         size_t nUnrolledSize = nRealSize - (nRealSize % 8);

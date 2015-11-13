@@ -16,7 +16,7 @@ namespace tools
 namespace cpuid
 {
 
-#if defined(__LO_SSE2_AVAILABLE__)
+#if defined(LO_SSE2_AVAILABLE)
 
 namespace
 {

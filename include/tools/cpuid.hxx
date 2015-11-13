@@ -15,9 +15,9 @@
 #include <tools/toolsdllapi.h>
 
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)) && defined(__SSE2__)
-#define __LO_SSE2_AVAILABLE__ 1
+#define LO_SSE2_AVAILABLE 1
 #elif defined(_MSC_VER) && (defined(_M_AMD64) || (defined(_M_IX86) && defined(_M_IX86_FP) && _M_IX86_FP >= 2))
-#define __LO_SSE2_AVAILABLE__ 1
+#define LO_SSE2_AVAILABLE 1
 #endif
 
 namespace tools
