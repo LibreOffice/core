@@ -200,12 +200,12 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 
 SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
-    return new SvpSalFrame( this, nullptr, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT, pParent );
+    return new SvpSalFrame( this, nullptr, nStyle, SVP_DEFAULT_BITMAP_FORMAT, pParent );
 }
 
 SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
-    return new SvpSalFrame( this, pParent, nStyle, false, SVP_DEFAULT_BITMAP_FORMAT );
+    return new SvpSalFrame( this, pParent, nStyle, SVP_DEFAULT_BITMAP_FORMAT );
 }
 
 void SvpSalInstance::DestroyFrame( SalFrame* pFrame )
