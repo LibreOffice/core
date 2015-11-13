@@ -327,6 +327,12 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
         if (isTiledRendering() && !pOldRegion)
         {
             bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM;
+
+            Point aOrigin;
+            if (pOutWin->GetMapMode().GetMapUnit() == MAP_TWIP)
+                // Writer comments: they use editeng, but are separate widgets.
+                aOrigin = pOutWin->GetMapMode().GetOrigin();
+
             OString sRectangle;
             // If we are not in selection mode, then the exported selection should be empty.
             if (pEditEngine->pImpEditEngine->IsInSelectionMode())
@@ -340,12 +346,14 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                     Rectangle aStart = Rectangle(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
                     if (bMm100ToTwip)
                         aStart = OutputDevice::LogicToLogic(aStart, MAP_100TH_MM, MAP_TWIP);
+                    aStart.Move(aOrigin.getX(), aOrigin.getY());
                     libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
                     Rectangle& rEnd = aRectangles.back();
                     Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
                     if (bMm100ToTwip)
                         aEnd = OutputDevice::LogicToLogic(aEnd, MAP_100TH_MM, MAP_TWIP);
+                    aEnd.Move(aOrigin.getX(), aOrigin.getY());
                     libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
                 }
 
@@ -355,6 +363,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                     Rectangle& rRectangle = aRectangles[i];
                     if (bMm100ToTwip)
                         rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
+                    rRectangle.Move(aOrigin.getX(), aOrigin.getY());
                     v.push_back(rRectangle.toString().getStr());
                 }
                 sRectangle = comphelper::string::join("; ", v);
