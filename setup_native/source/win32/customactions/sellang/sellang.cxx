@@ -40,7 +40,7 @@
 BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 {
     DWORD sz = 0;
-    if ( MsiGetProperty( hMSI, pPropName, "", &sz ) == ERROR_MORE_DATA ) {
+    if ( MsiGetProperty( hMSI, pPropName, const_cast<char *>(""), &sz ) == ERROR_MORE_DATA ) {
         sz++;
         DWORD nbytes = sz * sizeof( char );
         char* buff = reinterpret_cast<char*>( malloc( nbytes ) );

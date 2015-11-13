@@ -31,7 +31,7 @@ std::string GetOfficeInstallationPath(MSIHANDLE handle)
 {
     std::string progpath;
     DWORD sz = 0;
-    LPTSTR dummy = TEXT("");
+    LPTSTR dummy = const_cast<LPTSTR>(TEXT(""));
 
     if (MsiGetProperty(handle, TEXT("INSTALLLOCATION"), dummy, &sz) == ERROR_MORE_DATA)
     {
@@ -49,7 +49,7 @@ std::string GetOfficeProductName(MSIHANDLE handle)
 {
     std::string productname;
     DWORD sz = 0;
-    LPTSTR dummy = TEXT("");
+    LPTSTR dummy = const_cast<LPTSTR>(TEXT(""));
 
     if (MsiGetProperty(handle, TEXT("ProductName"), dummy, &sz) == ERROR_MORE_DATA)
     {
@@ -67,7 +67,7 @@ std::string GetQuickstarterLinkName(MSIHANDLE handle)
 {
     std::string quickstarterlinkname;
     DWORD sz = 0;
-    LPTSTR dummy = TEXT("");
+    LPTSTR dummy = const_cast<LPTSTR>(TEXT(""));
 
     if (MsiGetProperty(handle, TEXT("Quickstarterlinkname"), dummy, &sz) == ERROR_MORE_DATA)
     {

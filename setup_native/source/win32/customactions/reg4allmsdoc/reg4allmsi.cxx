@@ -134,7 +134,7 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
 bool GetMsiProp( MSIHANDLE handle, LPCSTR name, /*out*/std::string& value )
 {
     DWORD sz = 0;
-    LPSTR dummy = "";
+    LPSTR dummy = const_cast<LPSTR>("");
     if (MsiGetPropertyA(handle, name, dummy, &sz) == ERROR_MORE_DATA)
     {
         sz++;
