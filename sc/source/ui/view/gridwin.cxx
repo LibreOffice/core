@@ -5824,8 +5824,6 @@ void ScGridWindow::updateLibreOfficeKitCellCursor()
 {
     ScDocument* pDoc = pViewData->GetDocument();
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-    // TODO: the zoom levels here should be replaced by the setClientZoom values
-    // in a patch currently in gerrit (https://gerrit.libreoffice.org/#/c/19822/)
     OString aCursor = getCellCursor(pViewData->GetZoomX(), pViewData->GetZoomY());
     pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
 }
