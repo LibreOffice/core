@@ -17,6 +17,7 @@ class SvpSalGraphics;
 class SvpCairoTextRender : public CairoTextRender
 {
 protected:
+    basebmp::BitmapDeviceSharedPtr mxTmpSurface;
     SvpSalGraphics& mrParent;
 
 public:
@@ -27,6 +28,7 @@ public:
     virtual void getSurfaceOffset(double& nDX, double& nDY) override;
     virtual void clipRegion(cairo_t* cr) override;
     virtual void drawSurface(cairo_t* cr) override;
+    virtual basebmp::BitmapDeviceSharedPtr createSimpleMask() override;
 };
 
 #endif

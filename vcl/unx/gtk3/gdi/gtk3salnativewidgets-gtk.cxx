@@ -17,7 +17,6 @@
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include "fontmanager.hxx"
-#include "gtk3cairotextrender.hxx"
 #include "cairo_gtk3_cairo.hxx"
 
 #include <boost/optional.hpp>
@@ -1999,8 +1998,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
       mpFrame( pFrame ),
       mpWindow( pWindow )
 {
-    m_xTextRenderImpl.reset(new SvpCairoTextRender(*this));
-
     if(style_loaded)
         return;
 
