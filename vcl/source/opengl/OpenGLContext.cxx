@@ -1371,6 +1371,8 @@ void OpenGLContext::prepareForYield()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
+    VCL_GL_INFO("vcl.opengl", "clearCurrent - detachframebuffers");
+
     // release all framebuffers from the old context so we can re-attach the
     // texture in the new context
     rtl::Reference<OpenGLContext> pCurrentCtx = pSVData->maGDIData.mpLastContext;
@@ -1537,7 +1539,10 @@ bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
             pFramebuffer->Bind();
         else
             OpenGLFramebuffer::Unbind();
+
+        VCL_GL_INFO( "vcl.opengl", "before assign pFramebuffer" );
         mpCurrentFramebuffer = pFramebuffer;
+        VCL_GL_INFO( "vcl.opengl", "after assign pFramebuffer" );
     }
 
     return true;

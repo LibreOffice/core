@@ -349,6 +349,10 @@ void OpenGLTexture::Bind()
         glBindTexture( GL_TEXTURE_2D, mpImpl->mnTexture );
         CHECK_GL_ERROR();
     }
+    else
+        VCL_GL_INFO( "OpenGLTexture::Binding invalid texture" );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLTexture::Unbind()

@@ -139,6 +139,7 @@ void OpenGLSalGraphicsImpl::Init()
             mpContext->ReleaseFramebuffer( maOffscreenTex );
         }
         maOffscreenTex = OpenGLTexture();
+        VCL_GL_INFO("vcl.opengl", "::Init - re-size offscreen texture");
     }
 
     if( mpWindowContext.is() )
@@ -222,6 +223,7 @@ void OpenGLSalGraphicsImpl::freeResources()
     // TODO Delete shaders, programs and textures if not shared
     if( mpContext.is() && mpContext->isInitialized() )
     {
+        VCL_GL_INFO( "vcl.opengl", "freeResources" );
         mpContext->makeCurrent();
         mpContext->ReleaseFramebuffer( maOffscreenTex );
     }
@@ -388,6 +390,8 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
 {
     bool bClearTexture = false;
 
+    VCL_GL_INFO( "vcl.opengl", "Check Offscreen texture" );
+
     if( !maOffscreenTex )
     {
         maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
@@ -409,6 +413,8 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
     else
     {
         mpFramebuffer = mpContext->AcquireFramebuffer( maOffscreenTex );
+        CHECK_GL_ERROR();
+
         if( bClearTexture )
         {
             glDrawBuffer( GL_COLOR_ATTACHMENT0 );
@@ -417,6 +423,8 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
             // FIXME: use glClearTexImage if we have it ?
         }
     }
+
+    assert( maOffscreenTex );
 
     CHECK_GL_ERROR();
     return true;
@@ -1899,22 +1907,32 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
     assert( !IsOffscreen() );
     assert( mpContext.is() );
 
+    if( !maOffscreenTex )
+    {
+        VCL_GL_INFO( "vcl.opengl", "flushAndSwap - odd no texture !" );
+        return;
+    }
+
     OpenGLZone aZone;
 
     VCL_GL_INFO( "vcl.opengl", "flushAndSwap" );
 
-    glBindTexture( GL_TEXTURE_2D, 0 );
-
     glFlush();
+    // Interesting ! -> this destroys a context [ somehow ] ...
     mpWindowContext->makeCurrent();
     CHECK_GL_ERROR();
 
+    VCL_GL_INFO( "vcl.opengl", "flushAndSwap - acquire default frame buffer" );
+
     mpWindowContext->AcquireDefaultFramebuffer();
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 ); // FIXME: paranoid double check.
     CHECK_GL_ERROR();
 
-    glDisable( GL_SCISSOR_TEST );
+    VCL_GL_INFO( "vcl.opengl", "flushAndSwap - acquired default frame buffer" );
+
+    glDisable( GL_SCISSOR_TEST ); // FIXME: paranoia ...
     CHECK_GL_ERROR();
-    glDisable( GL_STENCIL_TEST );
+    glDisable( GL_STENCIL_TEST ); // FIXME: paranoia ...
     CHECK_GL_ERROR();
 
     glViewport( 0, 0, GetWidth(), GetHeight() );
@@ -1930,8 +1948,12 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     OpenGLProgram *pProgram =
         mpWindowContext->UseProgram( "textureVertexShader", "textureFragmentShader", "" );
-
+    pProgram->Use(); // FIXME: paranoia ...
+    VCL_GL_INFO( "vcl.opengl", "done paranoid re-use." );
     pProgram->SetTexture( "sampler", maOffscreenTex );
+    maOffscreenTex.Bind(); // FIXME: paranoia ...
+
+    VCL_GL_INFO( "vcl.opengl", "bound bits etc." );
 
     GLfloat aTexCoord[8];
     maOffscreenTex.GetCoord( aTexCoord, aPosAry, false );
@@ -1961,6 +1983,8 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     pProgram->Clean();
 
+    glBindTexture( GL_TEXTURE_2D, 0 );
+
     if (!getenv("NO_SWAP"))
     {
         glFlush();
@@ -1969,6 +1993,9 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
         if (!getenv("NO_SLEEP"))
             usleep(500000);
     }
+
+    // Should get a more sensible context (this one) next time.
+    mpContext.clear();
 
     VCL_GL_INFO( "vcl.opengl", "flushAndSwap - end." );
 }
