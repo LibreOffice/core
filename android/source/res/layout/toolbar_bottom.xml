@@ -130,6 +130,45 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:minHeight="50dip"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/search_toolbar"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/search_string"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.2"/>
+
+                <ImageButton
+                    android:id="@+id/button_search_up"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.6"
+                    android:background="@drawable/image_button_background"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_search_direction_down"/>
+
+                <ImageButton
+                    android:id="@+id/button_search_down"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.6"
+                    android:background="@drawable/image_button_background"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_search_direction_up"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

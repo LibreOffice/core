@@ -384,6 +384,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         }
         return null;
     }
+
+    public RectF getCurrentCursorPosition() {
+        return mCursor.mPosition;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
