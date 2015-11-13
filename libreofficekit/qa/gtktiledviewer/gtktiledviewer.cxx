@@ -101,6 +101,7 @@ public:
     GtkToolItem* m_pCenterpara;
     GtkToolItem* m_pRightpara;
     GtkToolItem* m_pJustifypara;
+    GtkWidget* m_pFormulabarEntry;
     GtkWidget* m_pScrolledWindow;
     std::map<GtkToolItem*, std::string> m_aToolItemCommandNames;
     std::map<std::string, GtkToolItem*> m_aCommandNameToolItems;
@@ -135,6 +136,7 @@ public:
         m_pCenterpara(nullptr),
         m_pRightpara(nullptr),
         m_pJustifypara(nullptr),
+        m_pFormulabarEntry(nullptr),
         m_pScrolledWindow(nullptr),
         m_bToolItemBroadcast(true),
         m_pVBox(nullptr),
@@ -632,6 +634,14 @@ static gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer 
     return FALSE;
 }
 
+/// Handles the key-press-event of the formula entry widget.
+static gboolean signalFormulabar(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpointer /*pData*/)
+{
+    // for now it just displays the callback
+    // TODO - submit the edited formula
+    return TRUE;
+}
+
 /// LOKDocView changed edit state -> inform the tool button.
 static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pData*/)
 {
@@ -766,6 +776,13 @@ static void cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
         gtk_adjustment_set_value(vadj, lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), y));
     if (x!=-1)
         gtk_adjustment_set_value(hadj, lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), x));
+}
+
+/// LOKDocView the formula has changed
+static void formulaChanged(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pData*/)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
+    gtk_entry_set_text((GtkEntry*)rWindow.m_pFormulabarEntry, pPayload);
 }
 
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
@@ -1076,6 +1093,12 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pJustifypara, -1);
     g_signal_connect(G_OBJECT(rWindow.m_pJustifypara), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(rWindow, rWindow.m_pJustifypara, ".uno:JustifyPara");
+    // Formula bar
+    GtkToolItem* pFormulaEntryContainer = gtk_tool_item_new();
+    rWindow.m_pFormulabarEntry = gtk_entry_new();
+    gtk_container_add(GTK_CONTAINER(pFormulaEntryContainer), rWindow.m_pFormulabarEntry);
+    g_signal_connect(rWindow.m_pFormulabarEntry, "key-press-event", G_CALLBACK(signalFormulabar), 0);
+    gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), pFormulaEntryContainer, -1);
     gtk_box_pack_start(GTK_BOX(rWindow.m_pVBox), pLowerToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
     // Findbar
@@ -1189,6 +1212,7 @@ static void setupDocView(GtkWidget* pDocView)
     g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), NULL);
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
     g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), NULL);
+    g_signal_connect(pDocView, "formula-changed", G_CALLBACK(formulaChanged), NULL);
 }
 
 int main( int argc, char* argv[] )

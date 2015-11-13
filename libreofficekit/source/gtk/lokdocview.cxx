@@ -184,6 +184,7 @@ enum
     CURSOR_CHANGED,
     SEARCH_RESULT_COUNT,
     COMMAND_RESULT,
+    FORMULA_CHANGED,
 
     LAST_SIGNAL
 };
@@ -493,6 +494,11 @@ static void searchResultCount(LOKDocView* pDocView, const std::string& rString)
 static void commandResult(LOKDocView* pDocView, const std::string& rString)
 {
     g_signal_emit(pDocView, doc_view_signals[COMMAND_RESULT], 0, rString.c_str());
+}
+
+static void formulaChanged(LOKDocView* pDocView, const std::string& rString)
+{
+    g_signal_emit(pDocView, doc_view_signals[FORMULA_CHANGED], 0, rString.c_str());
 }
 
 static void
@@ -807,6 +813,11 @@ callback (gpointer pData)
     case LOK_CALLBACK_UNO_COMMAND_RESULT:
     {
         commandResult(pDocView, pCallback->m_aPayload);
+    }
+    break;
+    case LOK_CALLBACK_CELL_FORMULA:
+    {
+        formulaChanged(pDocView, pCallback->m_aPayload);
     }
     break;
     default:
@@ -2248,6 +2259,20 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
 
+    /**
+     * LOKDocView::formula-changed:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @aCommand: formula text content
+     */
+    doc_view_signals[FORMULA_CHANGED] =
+        g_signal_new("formula-changed",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__STRING,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget*
