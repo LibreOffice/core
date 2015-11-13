@@ -695,11 +695,10 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
             break;
         }
         const char* sError = OpenGLHelper::GLErrorString(glErr);
+        if (!sError)
+            sError = "no message available";
 
-        if (sError)
-            SAL_WARN("vcl.opengl", "GL Error #" << glErr << "(" << sError << ") in File " << pFile << " at line: " << nLine);
-        else
-            SAL_WARN("vcl.opengl", "GL Error #" << glErr << " (no message available) in File " << pFile << " at line: " << nLine);
+        SAL_WARN("vcl.opengl", "GL Error " << std::hex << std::setw(4) << std::setfill('0') << glErr << std::dec << std::setw(0) << std::setfill(' ') << " (" << sError << ") in file " << pFile << " at line " << nLine);
 
         // tdf#93798 - apitrace appears to sometimes cause issues with an infinite loop here.
         if (++nErrors >= 8)
