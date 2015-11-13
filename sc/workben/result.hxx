@@ -22,20 +22,21 @@
 
 #include <vcl/timer.hxx>
 #include <rtl/ustring.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
-typedef boost::ptr_vector<css::uno::Reference< css::sheet::XResultListener >*> XResultListenerArr_Impl;
+#include <vector>
+
+typedef std::vector<css::uno::Reference<css::sheet::XResultListener>> XResultListenerArr_Impl;
 
 class ScAddInResult : public cppu::WeakImplHelper< css::sheet::XVolatileResult>
 {
 private:
     String                  aArg;
     long                    nTickCount;
-    XResultListenerArr_Impl aListeners;
+    XResultListenerArr_Impl m_Listeners;
     Timer                   aTimer;
 
     DECL_LINK( TimeoutHdl, Timer* );
