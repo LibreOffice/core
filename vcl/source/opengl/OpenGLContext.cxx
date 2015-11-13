@@ -124,11 +124,6 @@ void OpenGLContext::requestLegacyContext()
     mbRequestLegacyContext = true;
 }
 
-void OpenGLContext::requestSingleBufferedRendering()
-{
-    mbUseDoubleBufferedRendering = false;
-}
-
 #if defined( _WIN32 )
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

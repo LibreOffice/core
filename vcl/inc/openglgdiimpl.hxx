@@ -131,7 +131,8 @@ public:
     // get the height of the device
     GLfloat GetHeight() const { return mpProvider ? mpProvider->GetHeight() : 1; }
 
-    // check whether this instance is used for offscreen rendering
+    // check whether this instance is used for offscreen (Virtual Device)
+    // rendering ie. does it need its own context.
     bool IsOffscreen() const { return mpProvider == nullptr || mpProvider->IsOffScreen(); }
 
     // operations to do before painting
@@ -147,11 +148,15 @@ protected:
     // retrieve the default context for offscreen rendering
     static rtl::Reference<OpenGLContext> GetDefaultContext();
 
-    // create a new context for window rendering
+    /// create a new context for window rendering
     virtual rtl::Reference<OpenGLContext> CreateWinContext() = 0;
 
-    // check whether the given context can be used by this instance
-    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) = 0;
+    /// check whether the given context can be used for off-screen rendering
+    bool UseContext( const rtl::Reference<OpenGLContext> &pContext )
+    {
+        return pContext->isInitialized() &&  // not released by the OS etc.
+               IsForeignContext( pContext ); // a genuine VCL context.
+    }
 
 public:
     OpenGLSalGraphicsImpl(SalGraphics& pParent, SalGeometryProvider *pProvider);

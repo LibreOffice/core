@@ -97,15 +97,12 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
     while( pContext )
     {
         // check if this context can be used by this SalGraphicsImpl instance
-        if( UseContext( pContext )  )
+        if( UseContext( pContext ) )
             break;
         pContext = pContext->mpPrevContext;
     }
 
-    if( pContext )
-        mpContext = pContext;
-    else
-        mpContext = mbOffscreen ? GetDefaultContext() : CreateWinContext();
+    mpContext = pContext ? pContext : GetDefaultContext();
 
     return mpContext.is();
 }
@@ -124,14 +121,12 @@ void OpenGLSalGraphicsImpl::Init()
     // check if we can simply re-use the same context
     if( mpContext.is() )
     {
-        if( !mpContext->isInitialized() ||
-            !UseContext( mpContext ) )
+        if( !UseContext( mpContext ) )
             ReleaseContext();
     }
 
-    // reset the offscreen texture
-    if( !mbOffscreen ||
-        maOffscreenTex.GetWidth()  != GetWidth() ||
+    // Always create the offscreen texture
+    if( maOffscreenTex.GetWidth()  != GetWidth() ||
         maOffscreenTex.GetHeight() != GetHeight() )
     {
         if( maOffscreenTex && // don't work to release empty textures
