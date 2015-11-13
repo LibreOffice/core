@@ -62,7 +62,7 @@ void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
     m_aTimer.Stop();
     g_bDDTimerStarted = false;
     if(!pSh->IsSelFrmMode())
-        pSh->SetCursor(&rPt, false);
+        pSh->CallSetCursor(&rPt, false);
     m_aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
 }
 

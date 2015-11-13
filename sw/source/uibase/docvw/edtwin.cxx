@@ -635,7 +635,7 @@ IMPL_LINK_NOARG_TYPED(SwEditWin, TimerHandler, Timer *, void)
             rSh.SelectTableRowCol( *m_pRowColumnSelectionStart, &aPos, m_bIsRowDrag );
         }
         else
-            rSh.SetCursor( &aModPt, false );
+            rSh.CallSetCursor( &aModPt, false );
 
         // It can be that a "jump" over a table cannot be accomplished like
         // that. So we jump over the table by Up/Down here.
@@ -2738,7 +2738,7 @@ void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
         // only temporary generate move context because otherwise
         // the query to the content form doesn't work!!!
         SwMvContext aMvContext( &rSh );
-        nTmpSetCrsr = rSh.SetCursor(&rDocPos, bOnlyText);
+        nTmpSetCrsr = rSh.CallSetCursor(&rDocPos, bOnlyText);
         g_bValidCrsrPos = !(CRSR_POSCHG & nTmpSetCrsr);
     }
 
@@ -3248,7 +3248,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             {
                                 // move cursor here so that it is not drawn in the
                                 // frame first; ShowCrsr() happens in LeaveSelFrmMode()
-                                g_bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
+                                g_bValidCrsrPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                                 rSh.LeaveSelFrmMode();
                                 m_rView.AttrChangedNotify( &rSh );
                                 bCallBase = false;
@@ -3638,7 +3638,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                     if (!bEditableField)
                     {
-                        rSh.SetCursor(&aDocPos, bOnlyText);
+                        rSh.CallSetCursor(&aDocPos, bOnlyText);
                         // Unfortunately the cursor may be on field
                         // position or on position after field depending on which
                         // half of the field was clicked on.
@@ -4119,7 +4119,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     {
                         rSh.Drag( &aDocPt, false );
 
-                        g_bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPt, false));
+                        g_bValidCrsrPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPt, false));
                         EnterArea();
                     }
                 }
@@ -4230,7 +4230,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             if( rSh.IsBlockMode() && !rMEvt.IsSynthetic() )
             {
                 rSh.Drag( &aDocPt, false );
-                g_bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPt, false));
+                g_bValidCrsrPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPt, false));
                 EnterArea();
             }
         break;
@@ -4381,7 +4381,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             else
             {
                 const Point aDocPos( PixelToLogic( m_aStartPos ) );
-                g_bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
+                g_bValidCrsrPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                 rSh.Edit();
             }
 
@@ -4529,7 +4529,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         // the query to the content form doesn't work!!!
                         SwMvContext aMvContext( &rSh );
                         const Point aDocPos( PixelToLogic( m_aStartPos ) );
-                        g_bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
+                        g_bValidCrsrPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                     }
                     g_bNoInterrupt = bTmpNoInterrupt;
 
@@ -4598,7 +4598,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                         // the query to the content form doesn't work!!!
                                         SwMvContext aMvContext( &rSh );
                                         const Point aDocPos( PixelToLogic( m_aStartPos ) );
-                                        g_bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
+                                        g_bValidCrsrPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                                     }
                                     else
                                     {
@@ -5739,7 +5739,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         {
             // move cursor here so that it is not drawn in the
             // frame at first; ShowCrsr() happens in LeaveSelFrmMode()
-            g_bValidCrsrPos = !(CRSR_POSCHG & rSh.SetCursor(&aDocPos, false));
+            g_bValidCrsrPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
             rSh.LeaveSelFrmMode();
             m_rView.LeaveDrawCreate();
             m_rView.AttrChangedNotify( &rSh );
@@ -5785,7 +5785,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         {   // create only temporary move context because otherwise
             // the query against the content form doesn't work!!!
             SwMvContext aMvContext( &rSh );
-            rSh.SetCursor(&aDocPos, false);
+            rSh.CallSetCursor(&aDocPos, false);
             bRet = true;
         }
     }

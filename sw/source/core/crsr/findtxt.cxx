@@ -331,7 +331,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         pSdrView->SdrEndTextEdit();
                         const Point aPoint(pSdrView->GetAllMarkedRect().TopLeft());
                         pSdrView->UnmarkAll();
-                        pWrtShell->SetCursor(&aPoint, true);
+                        pWrtShell->CallSetCursor(&aPoint, true);
                         pWrtShell->Edit();
                         bEndedTextEdit = true;
                     }

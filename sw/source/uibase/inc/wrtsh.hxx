@@ -103,7 +103,7 @@ public:
 
     using SwEditShell::Insert;
 
-    long SetCursor    (const Point* pPt, bool bProp) { return (this->*m_fnSetCrsr)(pPt, bProp); }
+    long CallSetCursor(const Point* pPt, bool bProp) { return (this->*m_fnSetCrsr)(pPt, bProp); }
     long Drag         (const Point* pPt, bool bProp) { return (this->*m_fnDrag)(pPt, bProp); }
     long EndDrag      (const Point* pPt, bool bProp) { return (this->*m_fnEndDrag)(pPt, bProp); }
     long KillSelection(const Point* pPt, bool bProp) { return (this->*m_fnKillSel)(pPt, bProp); }
