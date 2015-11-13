@@ -29,6 +29,7 @@
 #include <vcl/group.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/image.hxx>
+#include <vcl/toolbox.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 
@@ -62,6 +63,7 @@ class SentenceEditWindow_Impl : public VclMultiLineEdit
 
 private:
     std::set< sal_uInt16 >      m_aIgnoreErrorsAt;
+    VclPtr<ToolBox>     m_xToolbar;
     sal_uInt16          m_nErrorStart;
     sal_uInt16          m_nErrorEnd;
     bool                m_bIsUndoEditMode;
@@ -71,12 +73,15 @@ private:
     void            CallModifyLink() {m_aModifyLink.Call(*this);}
 
     inline SpellDialog* GetSpellDialog() const;
+
+    DECL_LINK_TYPED(ToolbarHdl, ToolBox*, void);
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
     SentenceEditWindow_Impl(vcl::Window* pParent, WinBits nBits);
 
+    void            Init(VclPtr<ToolBox> &rToolbar);
     void            SetModifyHdl(const Link<Edit&,void>& rLink) override { m_aModifyLink = rLink;}
 
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
@@ -96,6 +101,7 @@ public:
 
     void            ResetModified()   { GetTextEngine()->SetModified(false); m_bIsUndoEditMode = false;}
     virtual bool    IsModified() const override { return GetTextEngine()->IsModified(); }
+    virtual void    dispose() override;
 
     bool            IsUndoEditMode() const { return m_bIsUndoEditMode;}
     void            SetUndoEditMode(bool bSet);
@@ -151,6 +157,7 @@ private:
     VclPtr<PushButton>     m_pOptionsPB;
     VclPtr<PushButton>     m_pUndoPB;
     VclPtr<CloseButton>    m_pClosePB;
+    VclPtr<ToolBox>        m_pToolbar;
 
     OUString        m_sResumeST;
     OUString        m_sIgnoreOnceST;

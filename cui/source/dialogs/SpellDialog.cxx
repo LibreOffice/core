@@ -221,6 +221,8 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     get(m_pOptionsPB, "options");
     get(m_pUndoPB, "undo");
     get(m_pClosePB, "close");
+    get(m_pToolbar, "toolbar");
+    m_pSentenceED->Init(m_pToolbar);
     xSpell = LinguMgr::GetSpellChecker();
     pImpl = new SpellDialog_Impl;
 
@@ -241,8 +243,6 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     Application::PostUserEvent(
         LINK( this, SpellDialog, InitHdl ), nullptr, true );
 }
-
-
 
 SpellDialog::~SpellDialog()
 {
@@ -281,6 +281,7 @@ void SpellDialog::dispose()
     m_pOptionsPB.clear();
     m_pUndoPB.clear();
     m_pClosePB.clear();
+    m_pToolbar.clear();
     SfxModelessDialog::dispose();
 }
 
@@ -316,8 +317,6 @@ void SpellDialog::Init_Impl()
     m_pSentenceED->ClearModifyFlag();
     SvxGetChangeAllList()->clear();
 }
-
-
 
 void SpellDialog::UpdateBoxes_Impl()
 {
@@ -442,6 +441,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
  */
 IMPL_LINK_NOARG_TYPED( SpellDialog, InitHdl, void*, void)
 {
+    m_pToolbar->Disable();
     SetUpdateMode( false );
     //show or hide AutoCorrect depending on the modules abilities
     m_pAutoCorrPB->Show(rParent.HasAutoCorrection());
@@ -1537,9 +1537,44 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         else
             bChange = false;
     }
+    else if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS && m_xToolbar)
+    {
+        m_xToolbar->Enable();
+    }
+    else if(rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && m_xToolbar)
+    {
+        m_xToolbar->Disable();
+    }
     return bChange || VclMultiLineEdit::PreNotify(rNEvt);
 }
 
+void SentenceEditWindow_Impl::Init(VclPtr<ToolBox> &rToolbar)
+{
+    m_xToolbar = rToolbar;
+    m_xToolbar->SetSelectHdl(LINK(this,SentenceEditWindow_Impl,ToolbarHdl));
+}
+
+IMPL_LINK_NOARG_TYPED(SentenceEditWindow_Impl, ToolbarHdl, ToolBox *, void)
+{
+    const sal_uInt16 nCurItemId = m_xToolbar->GetCurItemId();
+    if (nCurItemId == m_xToolbar->GetItemId("paste"))
+        Paste();
+    else if (nCurItemId == m_xToolbar->GetItemId("insert"))
+    {
+        if (Edit::GetGetSpecialCharsFunction())
+        {
+            OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
+            if (!aChars.isEmpty())
+                ReplaceSelected(aChars);
+        }
+    }
+}
+
+void SentenceEditWindow_Impl::dispose()
+{
+    m_xToolbar.clear();
+    VclMultiLineEdit::dispose();
+}
 
 bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, css::uno::Reference<css::linguistic2::XSpellChecker1> xSpell )
 {
