@@ -49,7 +49,6 @@ class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 public:
     typedef std::vector<ScDPItemData> ScDPItemDataVec;
     typedef std::set<ScDPObject*> ScDPObjectSet;
-    typedef std::vector<OUString> LabelsType;
     typedef std::vector<SCROW> IndexArrayType;
 
     struct GroupItems : boost::noncopyable
@@ -118,7 +117,7 @@ private:
     GroupFieldsType maGroupFields;
     mutable StringSetType maStringPool;
 
-    LabelsType maLabelNames; // Stores dimension names and the data layout dimension name at position 0.
+    std::vector<OUString> maLabelNames; // Stores dimension names and the data layout dimension name at position 0.
     mdds::flat_segment_tree<SCROW, bool> maEmptyRows;
     SCROW mnDataSize;
     SCROW mnRowCount;
@@ -174,7 +173,7 @@ public:
      */
     SCROW GetDataSize() const;
     SCROW GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
-    OUString GetDimensionName(LabelsType::size_type nDim) const;
+    OUString GetDimensionName(std::vector<OUString>::size_type nDim) const;
     bool IsRowEmpty(SCROW nRow) const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 

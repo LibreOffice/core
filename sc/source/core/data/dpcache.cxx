@@ -679,7 +679,7 @@ const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
     return nullptr;
 }
 
-OUString ScDPCache::GetDimensionName(LabelsType::size_type nDim) const
+OUString ScDPCache::GetDimensionName(std::vector<OUString>::size_type nDim) const
 {
     OSL_ENSURE(nDim < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
     OSL_ENSURE(maLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
