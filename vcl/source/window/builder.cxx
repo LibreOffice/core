@@ -2168,7 +2168,7 @@ void VclBuilder::reorderWithinParent(std::vector<vcl::Window*>& rChilds, bool bI
     }
 }
 
-OUString VclBuilder::getCommandProperty(const OUString aProperty, const OUString& rCommand,
+OUString VclBuilder::getCommandProperty(const OUString& rProperty, const OUString& rCommand,
                                      const uno::Reference<uno::XComponentContext>& rContext, const OUString& rModuleId)
 {
     if (rCommand.isEmpty())
@@ -2186,7 +2186,7 @@ OUString VclBuilder::getCommandProperty(const OUString aProperty, const OUString
             {
                 for ( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
                 {
-                    if (aProperties[i].Name == aProperty)
+                    if (aProperties[i].Name == rProperty)
                     {
                         OUString aLabel;
                         if (aProperties[i].Value >>= aLabel)
