@@ -44,12 +44,10 @@ private:
 
     SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData = nullptr );
     SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                                     const basebmp::RawMemorySharedArray &pBuffer,
-                                                     const bool bTopDown );
+                                                     const basebmp::RawMemorySharedArray &pBuffer );
     SAL_DLLPRIVATE bool ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                 const basebmp::RawMemorySharedArray &pBuffer,
-                                                const basebmp::RawMemorySharedArray &pAlphaBuffer,
-                                                const bool bTopDown );
+                                                const basebmp::RawMemorySharedArray &pAlphaBuffer );
 
     VirtualDevice (const VirtualDevice &) = delete;
     VirtualDevice & operator= (const VirtualDevice &) = delete;
@@ -127,8 +125,8 @@ public:
                                                                 const Fraction& rScale,
                                                                 const Point& rNewOffset,
                                                                 const basebmp::RawMemorySharedArray &pBuffer,
-                                                                const basebmp::RawMemorySharedArray &pAlphaBuffer,
-                                                                const bool bTopDown = false );
+                                                                const basebmp::RawMemorySharedArray &pAlphaBuffer );
+
     bool                SetOutputSize( const Size& rNewSize, bool bErase = true )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }
 

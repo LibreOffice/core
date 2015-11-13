@@ -42,8 +42,7 @@ public:
 
     virtual bool        SetSize( long nNewDX, long nNewDY ) override;
     virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY,
-                                            const basebmp::RawMemorySharedArray &pBuffer,
-                                            const bool bTopDown
+                                            const basebmp::RawMemorySharedArray &pBuffer
                                           ) override;
 
     // SalGeometryProvider

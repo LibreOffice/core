@@ -52,12 +52,11 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
-    return SetSizeUsingBuffer( nNewDX, nNewDY, basebmp::RawMemorySharedArray(), false );
+    return SetSizeUsingBuffer(nNewDX, nNewDY, basebmp::RawMemorySharedArray());
 }
 
 bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
-                                              const basebmp::RawMemorySharedArray &pBuffer,
-                                              const bool bTopDown )
+                                              const basebmp::RawMemorySharedArray &pBuffer )
 {
     B2IVector aDevSize( nNewDX, nNewDY );
     if( aDevSize.getX() == 0 )
@@ -76,14 +75,14 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
             std::vector< basebmp::Color > aDevPal(2);
             aDevPal[0] = basebmp::Color( 0, 0, 0 );
             aDevPal[1] = basebmp::Color( 0xff, 0xff, 0xff );
-            m_aDevice = createBitmapDevice( aDevSize, bTopDown, nFormat, nStride,
+            m_aDevice = createBitmapDevice( aDevSize, true, nFormat, nStride,
                                             PaletteMemorySharedVector( new std::vector< basebmp::Color >(aDevPal) ) );
         }
         else
         {
             m_aDevice = pBuffer ?
-                          createBitmapDevice( aDevSize, bTopDown, nFormat, nStride, pBuffer, PaletteMemorySharedVector() )
-                        : createBitmapDevice( aDevSize, bTopDown, nFormat, nStride );
+                          createBitmapDevice( aDevSize, true, nFormat, nStride, pBuffer, PaletteMemorySharedVector() )
+                        : createBitmapDevice( aDevSize, true, nFormat, nStride );
         }
 
         // update device in existing graphics
