@@ -36,13 +36,6 @@
 #pragma warning(pop)
 #endif
 
-
-
-// Size of a CLSID as a string
-const int CLSID_STRING_SIZE = 39;
-
-
-
 bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, const char* Value)
 {
     HKEY hSubKey;
