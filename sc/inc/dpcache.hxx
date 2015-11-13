@@ -110,7 +110,7 @@ private:
      */
     mutable ScDPObjectSet maRefObjects;
 
-    typedef boost::ptr_vector<Field> FieldsType;
+    typedef std::vector< std::unique_ptr<Field> > FieldsType;
     typedef boost::ptr_vector<GroupItems> GroupFieldsType;
 
     FieldsType maFields;
