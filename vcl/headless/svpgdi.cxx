@@ -194,7 +194,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
         return false;
     }
 
-    cairo_t* cr = createCairoContext(m_aDevice);
+    cairo_t* cr = getCairoContext();
     if (!cr)
         return bRet;
 
@@ -1072,8 +1072,6 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
     return false;
 }
 
-#if ENABLE_CAIRO_CANVAS
-
 cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer)
 {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
@@ -1097,8 +1095,13 @@ cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr
 #endif
 }
 
-#endif
 
+cairo_t* SvpSalGraphics::getCairoContext() const
+{
+    return SvpSalGraphics::createCairoContext(m_aOrigDevice);
+}
+
+#if ENABLE_CAIRO_CANVAS
 bool SvpSalGraphics::SupportsCairo() const
 {
     return false;
@@ -1124,6 +1127,7 @@ css::uno::Any SvpSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*
     return css::uno::Any();
 }
 
+#endif // ENABLE_CAIRO_CANVAS
 #ifndef IOS
 
 SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
