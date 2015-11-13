@@ -1051,4 +1051,9 @@ OpenGLContext *WinSalGraphics::BeginPaint()
     return mpImpl->beginPaint();
 }
 
+void WinSalGraphics::EndPaint()
+{
+    return mpImpl->endPaint();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

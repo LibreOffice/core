@@ -609,13 +609,9 @@ public:
     /**
      * Instantiate across a paint operation to defer flushing
      * to the end.
-     *
-     * NB. holding a handle avoids problems with
-     * the underlying SalGraphics and it's implementation
-     * changing.
      */
     class PaintScope {
-        void *pHandle;
+        VclPtr<OutputDevice> mpDev;
     public:
         PaintScope(OutputDevice *);
         ~PaintScope();

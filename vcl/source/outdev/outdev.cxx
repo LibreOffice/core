@@ -845,4 +845,26 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     return bDrawn;
 }
 
+OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
+    : mpDev( pDev )
+{
+    SalGraphics *mpGraphics = mpDev->GetGraphics();
+    if (mpGraphics)
+        mpGraphics->BeginPaint();
+}
+
+OutputDevice::PaintScope::~PaintScope()
+{
+    flush();
+}
+
+/// Flush all the queued rendering commands to the screen for this context.
+void OutputDevice::PaintScope::flush()
+{
+    SalGraphics *mpGraphics = mpDev->GetGraphics();
+    if (mpGraphics)
+        mpGraphics->EndPaint();
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

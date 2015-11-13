@@ -135,7 +135,7 @@ void OpenGLSalGraphicsImpl::Init()
     }
 
     if( mpWindowContext.is() )
-        mpWindowContext.reset();
+        mpWindowContext->reset();
     mpWindowContext = CreateWinContext();
 }
 
@@ -201,7 +201,7 @@ void OpenGLSalGraphicsImpl::PostDraw()
         if (!IsOffscreen())
         {
             SAL_DEBUG("PostDraw flush ?");
-            FlushAndSwap();
+            flushAndSwap();
         }
     }
 
@@ -1877,12 +1877,14 @@ OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
     return mpContext.get();
 }
 
-void OpenGLSalGraphicsImpl::FlushAndSwap()
+void OpenGLSalGraphicsImpl::flushAndSwap()
 {
     assert( !IsOffscreen() );
     assert( mpContext.is() );
 
     OpenGLZone aZone;
+
+    VCL_GL_INFO( "vcl.opengl", "flushAndSwap" );
 
 //    glFlush(); - not needed
     mpWindowContext->makeCurrent();
@@ -1904,20 +1906,21 @@ void OpenGLSalGraphicsImpl::FlushAndSwap()
     pProgram->SetTexture( "sampler", maOffscreenTex );
 
     GLfloat aTexCoord[8];
-    maOffscreenTex.GetCoord( aTexCoord, rPosAry, false );
+    maOffscreenTex.GetCoord( aTexCoord, aPosAry, false );
     pProgram->SetTextureCoord( aTexCoord );
 
-    long nX1( rPosAry.mnDestX );
-    long nY1( rPosAry.mnDestY );
-    long nX2( nX1 + rPosAry.mnDestWidth );
-    long nY2( nY1 + rPosAry.mnDestHeight );
+    long nX1( aPosAry.mnDestX );
+    long nY1( aPosAry.mnDestY );
+    long nX2( nX1 + aPosAry.mnDestWidth );
+    long nY2( nY1 + aPosAry.mnDestHeight );
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
+    sal_uInt32 nPoints = 4;
     std::vector<GLfloat> aVertices(nPoints * 2);
     sal_uInt32 i, j;
 
-    for( i = 0, j = 0; i < 4; i++, j += 2 )
+    for( i = 0, j = 0; i < nPoints; i++, j += 2 )
     {
         aVertices[j]   = GLfloat(aPoints[i].mnX);
         aVertices[j+1] = GLfloat(aPoints[i].mnY);
@@ -1939,7 +1942,7 @@ void OpenGLSalGraphicsImpl::endPaint()
     AcquireContext();
     if( mpContext.is() &&
         mpContext->mnPainting == 0 )
-        FlushAndSwap();
+        flushAndSwap();
 }
 
 bool OpenGLSalGraphicsImpl::IsForeignContext(const rtl::Reference<OpenGLContext> &xContext)

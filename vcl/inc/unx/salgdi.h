@@ -264,6 +264,7 @@ public:
     virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const override;
 
     virtual OpenGLContext          *BeginPaint() override;
+    virtual void                    EndPaint() override;
 
     bool TryRenderCachedNativeControl(ControlCacheKey& aControlCacheKey,
                                       int nX, int nY);
