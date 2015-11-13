@@ -7,6 +7,18 @@
            tools:visible="true"
            android:visible="false">
 
+        <item android:id="@+id/action_undo"
+              android:title="@string/action_undo"
+              android:icon="@drawable/ic_undo"
+              android:orderInCategory="100"
+              app:showAsAction="always"/>
+
+        <item android:id="@+id/action_redo"
+              android:title="@string/action_redo"
+              android:icon="@drawable/ic_redo"
+              android:orderInCategory="100"
+              app:showAsAction="always"/>
+
         <item android:id="@+id/action_keyboard"
               android:title="@string/action_keyboard"
               android:icon="@drawable/ic_keyboard"
