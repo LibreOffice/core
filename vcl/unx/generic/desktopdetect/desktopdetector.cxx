@@ -271,7 +271,7 @@ static bool is_kde5_desktop( Display* pDisplay )
 {
     static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
     static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
-    if ( pFullVersion && pSessionVersion && strcmp(pSessionVersion, "5") )
+    if ( pFullVersion && pSessionVersion && strcmp(pSessionVersion, "5") == 0)
         return true;
 
     if ( KDEVersion( pDisplay ) == 5 )
