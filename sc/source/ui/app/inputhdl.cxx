@@ -52,6 +52,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/string.hxx>
 #include <formula/formulahelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "inputwin.hxx"
 #include "tabvwsh.hxx"
@@ -2138,6 +2139,11 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
 
         if ( pInputWin )
             pInputWin->SetTextString( aText );
+
+        ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
+        ScDocument& rDoc = pDocSh->GetDocument();
+        if ( rDoc.GetDrawLayer()->isTiledRendering() )
+            rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
     }
 
     // If the cursor is before the end of a paragraph, parts are being pushed to
@@ -3474,6 +3480,8 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                         if ( pInputWin )
                             pInputWin->SetTextString(aString);
+                        else if ( rDoc.GetDrawLayer()->isTiledRendering() )
+                            rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
                     }
 
                     if ( pInputWin )                        // Named range input

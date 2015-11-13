@@ -209,7 +209,12 @@ typedef enum
      *
      * Payload is a css mouse pointer style.
      */
-    LOK_CALLBACK_MOUSE_POINTER
+    LOK_CALLBACK_MOUSE_POINTER,
+
+    /**
+     * The text content of the formula bar in Calc.
+     */
+    LOK_CALLBACK_CELL_FORMULA
 }
 LibreOfficeKitCallbackType;
 
