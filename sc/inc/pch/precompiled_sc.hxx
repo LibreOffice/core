@@ -40,7 +40,6 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <cassert>
 #include <climits>

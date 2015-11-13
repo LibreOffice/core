@@ -2620,9 +2620,9 @@ bool ScTable::ValidQuery(
     long    nPos = -1;
     QueryEvaluator aEval(*pDocument, *this, rParam, pbTestEqualCondition);
     ScQueryParam::const_iterator it, itBeg = rParam.begin(), itEnd = rParam.end();
-    for (it = itBeg; it != itEnd && it->bDoQuery; ++it)
+    for (it = itBeg; it != itEnd && (*it)->bDoQuery; ++it)
     {
-        const ScQueryEntry& rEntry = *it;
+        const ScQueryEntry& rEntry = **it;
         SCCOL nCol = static_cast<SCCOL>(rEntry.nField);
 
         // We can only handle one single direct query passed as a known pCell,

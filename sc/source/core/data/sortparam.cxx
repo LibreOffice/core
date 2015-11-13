@@ -25,6 +25,8 @@
 
 #include <osl/diagnose.h>
 
+#include <algorithm>
+
 ScSortParam::ScSortParam()
 {
     Clear();
