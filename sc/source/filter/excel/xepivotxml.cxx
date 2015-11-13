@@ -316,8 +316,8 @@ void XclExpXmlPivotTableManager::Initialize()
 
         // Get all pivot objects that reference this cache, and set up an
         // object to cache ID mapping.
-        const ScDPCache::ObjectSetType& rRefs = pCache->GetAllReferences();
-        ScDPCache::ObjectSetType::const_iterator it = rRefs.begin(), itEnd = rRefs.end();
+        const ScDPCache::ScDPObjectSet& rRefs = pCache->GetAllReferences();
+        ScDPCache::ScDPObjectSet::const_iterator it = rRefs.begin(), itEnd = rRefs.end();
         for (; it != itEnd; ++it)
             maCacheIdMap.insert(CacheIdMapType::value_type(*it, aCaches.size()+1));
 

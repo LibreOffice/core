@@ -48,7 +48,7 @@ class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 
 public:
     typedef std::vector<ScDPItemData> ScDPItemDataVec;
-    typedef std::set<ScDPObject*> ObjectSetType;
+    typedef std::set<ScDPObject*> ScDPObjectSet;
     typedef std::vector<OUString> LabelsType;
     typedef std::vector<SCROW> IndexArrayType;
 
@@ -109,7 +109,7 @@ private:
     /**
      * All pivot table objects that references this cache.
      */
-    mutable ObjectSetType maRefObjects;
+    mutable ScDPObjectSet maRefObjects;
 
     typedef boost::ptr_vector<Field> FieldsType;
     typedef boost::ptr_vector<GroupItems> GroupFieldsType;
@@ -129,7 +129,7 @@ public:
     const OUString* InternString(const OUString& rStr) const;
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;
-    const ObjectSetType& GetAllReferences() const;
+    const ScDPObjectSet& GetAllReferences() const;
 
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
     OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;

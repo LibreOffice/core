@@ -930,7 +930,7 @@ void ScDPCache::RemoveReference(ScDPObject* pObj) const
         mpDoc->GetDPCollection()->RemoveCache(this);
 }
 
-const ScDPCache::ObjectSetType& ScDPCache::GetAllReferences() const
+const ScDPCache::ScDPObjectSet& ScDPCache::GetAllReferences() const
 {
     return maRefObjects;
 }
