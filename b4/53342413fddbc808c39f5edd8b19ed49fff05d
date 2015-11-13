@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Caolán McNamara <caolanm@redhat.com>
+Code-Review+2: Michael Stahl <mstahl@redhat.com>
+Submitted-by: Michael Stahl <mstahl@redhat.com>
+Submitted-at: Fri, 13 Nov 2015 10:42:44 +0000
+Reviewed-on: https://gerrit.libreoffice.org/19915
+Project: core
+Branch: refs/heads/libreoffice-5-0
