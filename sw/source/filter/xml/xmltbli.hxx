@@ -47,8 +47,8 @@ namespace com { namespace sun { namespace star {
 
 class SwXMLTableContext : public XMLTextTableContext
 {
-    OUString     aStyleName;
-    OUString     aDfltCellStyleName;
+    OUString     m_aStyleName;
+    OUString     m_aDfltCellStyleName;
 
     //! Holds basic information about a column's width.
     struct ColumnWidthInfo {
@@ -56,39 +56,39 @@ class SwXMLTableContext : public XMLTextTableContext
         bool   isRelative; //!< True for a relative width, false for absolute.
         inline ColumnWidthInfo(sal_uInt16 wdth, bool isRel) : width(wdth), isRelative(isRel) {};
     };
-    std::vector<ColumnWidthInfo> aColumnWidths;
-    std::vector<OUString> *pColumnDefaultCellStyleNames;
+    std::vector<ColumnWidthInfo> m_aColumnWidths;
+    std::vector<OUString> *m_pColumnDefaultCellStyleNames;
 
-    css::uno::Reference< css::text::XTextCursor > xOldCursor;
-    css::uno::Reference< css::text::XTextContent > xTextContent;
+    css::uno::Reference< css::text::XTextCursor > m_xOldCursor;
+    css::uno::Reference< css::text::XTextContent > m_xTextContent;
 
     SwXMLTableRows_Impl * m_pRows;
 
-    SwTableNode         *pTableNode;
-    SwTableBox          *pBox1;
-    const SwStartNode   *pSttNd1;
+    SwTableNode         *m_pTableNode;
+    SwTableBox          *m_pBox1;
+    const SwStartNode   *m_pSttNd1;
 
-    SwTableBoxFormat       *pBoxFormat;
-    SwTableLineFormat      *pLineFormat;
+    SwTableBoxFormat       *m_pBoxFormat;
+    SwTableLineFormat      *m_pLineFormat;
 
     // hash map of shared format, indexed by the (XML) style name,
     // the column width, and protection flag
     typedef std::unordered_map<TableBoxIndex,SwTableBoxFormat*,
                           TableBoxIndexHasher> map_BoxFormat;
-    map_BoxFormat* pSharedBoxFormats;
+    map_BoxFormat* m_pSharedBoxFormats;
 
-    SvXMLImportContextRef   xParentTable;   // if table is a sub table
+    SvXMLImportContextRef   m_xParentTable;   // if table is a sub table
 
-    SwXMLDDETableContext_Impl   *pDDESource;
+    SwXMLDDETableContext_Impl   *m_pDDESource;
 
-    bool            bFirstSection : 1;
-    bool            bRelWidth : 1;
-    bool            bHasSubTables : 1;
+    bool            m_bFirstSection : 1;
+    bool            m_bRelWidth : 1;
+    bool            m_bHasSubTables : 1;
 
-    sal_uInt16              nHeaderRows;
-    sal_uInt32          nCurRow;
-    sal_uInt32          nCurCol;
-    sal_Int32           nWidth;
+    sal_uInt16              m_nHeaderRows;
+    sal_uInt32          m_nCurRow;
+    sal_uInt32          m_nCurCol;
+    sal_Int32           m_nWidth;
 
     SwTableBox *NewTableBox( const SwStartNode *pStNd,
                              SwTableLine *pUpper );
@@ -151,10 +151,10 @@ public:
     inline sal_uInt32 GetColumnCount() const;
     inline bool HasColumnDefaultCellStyleNames() const;
 
-    bool IsInsertCellPossible() const { return nCurCol < GetColumnCount(); }
-    bool IsInsertColPossible() const { return nCurCol < USHRT_MAX; }
-    bool IsInsertRowPossible() const { return nCurRow < USHRT_MAX; }
-    bool IsValid() const { return pTableNode != nullptr; }
+    bool IsInsertCellPossible() const { return m_nCurCol < GetColumnCount(); }
+    bool IsInsertColPossible() const { return m_nCurCol < USHRT_MAX; }
+    bool IsInsertRowPossible() const { return m_nCurRow < USHRT_MAX; }
+    bool IsValid() const { return m_pTableNode != nullptr; }
 
     void InsertCell( const OUString& rStyleName,
                      sal_uInt32 nRowSpan=1U, sal_uInt32 nColSpan=1U,
@@ -179,17 +179,17 @@ public:
 
     virtual void EndElement() override;
 
-    void SetHasSubTables( bool bNew ) { bHasSubTables = bNew; }
+    void SetHasSubTables( bool bNew ) { m_bHasSubTables = bNew; }
 };
 
 inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const
 {
-    return static_cast<SwXMLTableContext *>(&xParentTable);
+    return static_cast<SwXMLTableContext *>(&m_xParentTable);
 }
 
 inline sal_uInt32 SwXMLTableContext::GetColumnCount() const
 {
-    return aColumnWidths.size();
+    return m_aColumnWidths.size();
 }
 
 inline const SwStartNode *SwXMLTableContext::GetLastStartNode() const
@@ -199,7 +199,7 @@ inline const SwStartNode *SwXMLTableContext::GetLastStartNode() const
 
 inline bool SwXMLTableContext::HasColumnDefaultCellStyleNames() const
 {
-    return pColumnDefaultCellStyleNames != nullptr;
+    return m_pColumnDefaultCellStyleNames != nullptr;
 }
 
 #endif
