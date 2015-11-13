@@ -133,6 +133,10 @@ void OpenGLSalGraphicsImpl::Init()
         }
         maOffscreenTex = OpenGLTexture();
     }
+
+    if( mpWindowContext.is() )
+        mpWindowContext.reset();
+    mpWindowContext = CreateWinContext();
 }
 
 // Currently only used to get windows ordering right.
@@ -173,19 +177,13 @@ void OpenGLSalGraphicsImpl::PreDraw()
 
 void OpenGLSalGraphicsImpl::PostDraw()
 {
-    if( mpContext->mnPainting == 0 )
-    {
-        if (!IsOffscreen()) ...
-#warning "Trigger re-rendering of the window if we have one"
-        glFlush();
-    }
     if( mbUseScissor )
     {
         glDisable( GL_SCISSOR_TEST );
         CHECK_GL_ERROR();
     }
-   if( mbUseStencil )
-   {
+    if( mbUseStencil )
+    {
         glDisable( GL_STENCIL_TEST );
         CHECK_GL_ERROR();
     }
@@ -197,6 +195,16 @@ void OpenGLSalGraphicsImpl::PostDraw()
         mProgramIsSolidColor = false;
 #endif
     }
+
+    if( mpContext->mnPainting == 0 )
+    {
+        if (!IsOffscreen())
+        {
+            SAL_DEBUG("PostDraw flush ?");
+            FlushAndSwap();
+        }
+    }
+
     OpenGLZone::leave();
 }
 
@@ -1864,8 +1872,74 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 
 OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
 {
+    SAL_DEBUG( "want to rid ourselves of this method" );
     AcquireContext();
     return mpContext.get();
+}
+
+void OpenGLSalGraphicsImpl::FlushAndSwap()
+{
+    assert( !IsOffscreen() );
+    assert( mpContext.is() );
+
+    OpenGLZone aZone;
+
+//    glFlush(); - not needed
+    mpWindowContext->makeCurrent();
+    CHECK_GL_ERROR();
+
+    mpWindowContext->AcquireDefaultFramebuffer();
+    CHECK_GL_ERROR();
+
+    glViewport( 0, 0, GetWidth(), GetHeight() );
+    ImplInitClipRegion();
+    CHECK_GL_ERROR();
+
+    SalTwoRect aPosAry(0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight(),
+                       0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight());
+
+    OpenGLProgram *pProgram =
+        mpContext->UseProgram( "textureVertexShader", "textureFragmentShader", "" );
+
+    pProgram->SetTexture( "sampler", maOffscreenTex );
+
+    GLfloat aTexCoord[8];
+    maOffscreenTex.GetCoord( aTexCoord, rPosAry, false );
+    pProgram->SetTextureCoord( aTexCoord );
+
+    long nX1( rPosAry.mnDestX );
+    long nY1( rPosAry.mnDestY );
+    long nX2( nX1 + rPosAry.mnDestWidth );
+    long nY2( nY1 + rPosAry.mnDestHeight );
+    const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
+                                 { nX2, nY1 }, { nX2, nY2 }};
+
+    std::vector<GLfloat> aVertices(nPoints * 2);
+    sal_uInt32 i, j;
+
+    for( i = 0, j = 0; i < 4; i++, j += 2 )
+    {
+        aVertices[j]   = GLfloat(aPoints[i].mnX);
+        aVertices[j+1] = GLfloat(aPoints[i].mnY);
+    }
+
+    pProgram->ApplyMatrix(GetWidth(), GetHeight(), 0.0);
+    pProgram->SetVertices( &aVertices[0] );
+    glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+
+    pProgram->Clean();
+
+    mpContext->swapBuffers();
+}
+
+void OpenGLSalGraphicsImpl::endPaint()
+{
+    assert( !IsOffscreen() );
+
+    AcquireContext();
+    if( mpContext.is() &&
+        mpContext->mnPainting == 0 )
+        FlushAndSwap();
 }
 
 bool OpenGLSalGraphicsImpl::IsForeignContext(const rtl::Reference<OpenGLContext> &xContext)

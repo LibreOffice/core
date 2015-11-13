@@ -439,6 +439,7 @@ public:
                                     const OutputDevice *pOutDev );
 
     virtual OpenGLContext      *BeginPaint() { return nullptr; }
+    virtual void                EndPaint()   { }
 
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 

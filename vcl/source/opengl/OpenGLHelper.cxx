@@ -1089,6 +1089,7 @@ OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
     if( pDev->mpGraphics || pDev->AcquireGraphics() )
     {
         OpenGLContext *pContext = pDev->mpGraphics->BeginPaint();
+/*
         if( pContext )
         {
             assert( pContext->mnPainting >= 0 );
@@ -1096,6 +1097,7 @@ OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
             pContext->acquire();
             pHandle = static_cast<void *>( pContext );
         }
+*/
     }
 }
 
@@ -1104,6 +1106,10 @@ OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
  */
 void OutputDevice::PaintScope::flush()
 {
+    if( pDev->mpGraphics || pDev->AcquireGraphics() )
+        pDev->mpGraphics->EndPaint();
+
+#if 0
     if( pHandle )
     {
         OpenGLContext *pContext = static_cast<OpenGLContext *>( pHandle );
@@ -1120,6 +1126,7 @@ void OutputDevice::PaintScope::flush()
         }
         pContext->release();
     }
+#endif
 }
 
 OutputDevice::PaintScope::~PaintScope()

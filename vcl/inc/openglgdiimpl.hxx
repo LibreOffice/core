@@ -160,6 +160,9 @@ protected:
     /// retrieve the default context for offscreen rendering
     static rtl::Reference<OpenGLContext> GetDefaultContext();
 
+    /// flush contents of the back-buffer to the screen & swap.
+    void FlushAndSwap();
+
     /// create a new context for rendering to the underlying window
     virtual rtl::Reference<OpenGLContext> CreateWinContext() = 0;
 
@@ -346,6 +349,7 @@ public:
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
 
     virtual OpenGLContext *beginPaint() override;
+    virtual void           endPaint() override;
 private:
 };
 
