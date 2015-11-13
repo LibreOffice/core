@@ -35,6 +35,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     mnWidth( nWidth ),
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST ),
+    mnOptStencil( 0 ),
     mnFreeSlots(-1)
 {
     glGenTextures( 1, &mnTexture );
@@ -67,6 +68,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     mnWidth( nWidth ),
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST ),
+    mnOptStencil( 0 ),
     mnFreeSlots(-1)
 {
     // FIXME We need the window height here
@@ -99,6 +101,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     mnWidth( nWidth ),
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST ),
+    mnOptStencil( 0 ),
     mnFreeSlots(-1)
 {
     if( !mnTexture )
@@ -126,6 +129,21 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     VCL_GL_INFO( "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " from data" );
 }
 
+GLuint ImplOpenGLTexture::AddStencil()
+{
+    assert( mnOptStencil == 0 );
+
+    glGenRenderbuffers( 1, &mnOptStencil );
+    glBindRenderbuffer( GL_RENDERBUFFER, mnOptStencil );
+    CHECK_GL_ERROR();
+    VCL_GL_INFO( "Allocate stencil " << mnWidth << " x " << mnHeight );
+    glRenderbufferStorage( GL_RENDERBUFFER, GL_STENCIL_INDEX,
+                           mnWidth, mnHeight );
+    CHECK_GL_ERROR();
+
+    return mnOptStencil;
+}
+
 ImplOpenGLTexture::~ImplOpenGLTexture()
 {
     VCL_GL_INFO( "~OpenGLTexture " << mnTexture );
@@ -136,9 +154,11 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
         // Check we have been correctly un-bound from all framebuffers.
         ImplSVData* pSVData = ImplGetSVData();
         rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
-        if (pContext.is())
+        if( pContext.is() )
             pContext->UnbindTextureFromFramebuffers( mnTexture );
 
+        if( mnOptStencil != 0 )
+            glDeleteRenderbuffers( 1, &mnOptStencil );
         glDeleteTextures( 1, &mnTexture );
     }
 }
@@ -279,6 +299,24 @@ int OpenGLTexture::GetHeight() const
     return maRect.GetHeight();
 }
 
+bool OpenGLTexture::HasStencil() const
+{
+    return mpImpl && mpImpl->mnOptStencil != 0;
+}
+
+GLuint OpenGLTexture::StencilId() const
+{
+    return mpImpl ? mpImpl->mnOptStencil : 0;
+}
+
+GLuint OpenGLTexture::AddStencil()
+{
+    if (mpImpl)
+        return mpImpl->AddStencil();
+    else
+        return 0;
+}
+
 void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool bInverted ) const
 {
     VCL_GL_INFO( "Getting coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
@@ -349,6 +387,10 @@ void OpenGLTexture::Bind()
         glBindTexture( GL_TEXTURE_2D, mpImpl->mnTexture );
         CHECK_GL_ERROR();
     }
+    else
+        VCL_GL_INFO( "OpenGLTexture::Binding invalid texture" );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLTexture::Unbind()
