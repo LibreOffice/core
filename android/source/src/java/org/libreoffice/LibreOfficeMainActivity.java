@@ -58,7 +58,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private static GeckoLayerClient mLayerClient;
     private static LOKitThread sLOKitThread;
 
-    private static boolean mEnableEditing;
+    private static boolean mIsExperimentalMode;
 
     private int providerId;
     private URI documentUri;
@@ -89,7 +89,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     }
 
     public static boolean isExperimentalMode() {
-        return mEnableEditing;
+        return mIsExperimentalMode;
     }
 
     public boolean usesTemporaryFile() {
@@ -103,7 +103,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mEnableEditing = sPrefs.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
+        mIsExperimentalMode = sPrefs.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
 
         if (sPrefs.getInt(ASSETS_EXTRACTED_PREFS_KEY, 0) != BuildConfig.VERSION_CODE) {
             if(copyFromAssets(getAssets(), "unpack", getApplicationInfo().dataDir)) {
@@ -302,8 +302,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         Log.i(LOGTAG, "onResume..");
         // check for config change
         boolean bEnableExperimental = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
-        if (bEnableExperimental != mEnableEditing) {
-            mEnableEditing = bEnableExperimental;
+        if (bEnableExperimental != mIsExperimentalMode) {
+            mIsExperimentalMode = bEnableExperimental;
         }
     }
 
