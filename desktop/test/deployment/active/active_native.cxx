@@ -234,11 +234,11 @@ void Dispatch::dispatch(
 static cppu::ImplementationEntry const services[] = {
     { &Provider::static_create, &Provider::static_getImplementationName,
       &Provider::static_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
+      &cppu::createSingleComponentFactory, nullptr, 0 },
     { &Dispatch::static_create, &Dispatch::static_getImplementationName,
       &Dispatch::static_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
+      &cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }
