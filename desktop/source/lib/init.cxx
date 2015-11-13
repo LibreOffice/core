@@ -1016,7 +1016,7 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                aBuffer, aAlphaBuffer, true);
+                aBuffer, aAlphaBuffer);
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
@@ -1043,7 +1043,7 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                aBuffer, aAlphaBuffer, true );
+                aBuffer, aAlphaBuffer);
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
