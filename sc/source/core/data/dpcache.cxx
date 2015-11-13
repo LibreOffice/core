@@ -208,9 +208,9 @@ struct EqualByOrderIndex : std::binary_function<Bucket, Bucket, bool>
 
 class PushBackValue : std::unary_function<Bucket, void>
 {
-    ScDPCache::ItemsType& mrItems;
+    ScDPCache::ScDPItemDataVec& mrItems;
 public:
-    PushBackValue(ScDPCache::ItemsType& _items) : mrItems(_items) {}
+    PushBackValue(ScDPCache::ScDPItemDataVec& _items) : mrItems(_items) {}
     void operator() (const Bucket& v)
     {
         mrItems.push_back(v.maValue);
@@ -810,7 +810,7 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
             return nullptr;
 
         nItemId -= rField.maItems.size();
-        const ItemsType& rGI = rField.mpGroup->maItems;
+        const ScDPItemDataVec& rGI = rField.mpGroup->maItems;
         if (nItemId >= rGI.size())
             return nullptr;
 
@@ -822,7 +822,7 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
     if (nDimPos >= maGroupFields.size())
         return nullptr;
 
-    const ItemsType& rGI = maGroupFields[nDimPos].maItems;
+    const ScDPItemDataVec& rGI = maGroupFields[nDimPos].maItems;
     if (nItemId >= rGI.size())
         return nullptr;
 
@@ -858,7 +858,7 @@ const ScDPCache::IndexArrayType* ScDPCache::GetFieldIndexArray( size_t nDim ) co
     return &maFields[nDim].maData;
 }
 
-const ScDPCache::ItemsType& ScDPCache::GetDimMemberValues(SCCOL nDim) const
+const ScDPCache::ScDPItemDataVec& ScDPCache::GetDimMemberValues(SCCOL nDim) const
 {
     OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
     return maFields.at(nDim).maItems;
@@ -943,7 +943,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
     if (nDim < mnColumnCount)
     {
         // source field.
-        const ItemsType& rItems = maFields[nDim].maItems;
+        const ScDPItemDataVec& rItems = maFields[nDim].maItems;
         for (size_t i = 0, n = rItems.size(); i < n; ++i)
         {
             if (rItems[i] == rItem)
@@ -954,7 +954,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
             return -1;
 
         // grouped source field.
-        const ItemsType& rGI = maFields[nDim].mpGroup->maItems;
+        const ScDPItemDataVec& rGI = maFields[nDim].mpGroup->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
         {
             if (rGI[i] == rItem)
@@ -967,7 +967,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
     nDim -= mnColumnCount;
     if (static_cast<size_t>(nDim) < maGroupFields.size())
     {
-        const ItemsType& rGI = maGroupFields[nDim].maItems;
+        const ScDPItemDataVec& rGI = maGroupFields[nDim].maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
         {
             if (rGI[i] == rItem)
@@ -1071,7 +1071,7 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
     {
-        ItemsType& rItems = maGroupFields.at(nDim).maItems;
+        ScDPItemDataVec& rItems = maGroupFields.at(nDim).maItems;
         rItems.push_back(rData);
         return rItems.size()-1;
     }
@@ -1091,7 +1091,7 @@ void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
             return;
 
         size_t nOffset = maFields[nDim].maItems.size();
-        const ItemsType& rGI = maFields[nDim].mpGroup->maItems;
+        const ScDPItemDataVec& rGI = maFields[nDim].mpGroup->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
             rIds.push_back(static_cast<SCROW>(i + nOffset));
 
@@ -1101,7 +1101,7 @@ void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
     {
-        const ItemsType& rGI = maGroupFields.at(nDim).maItems;
+        const ScDPItemDataVec& rGI = maGroupFields.at(nDim).maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
             rIds.push_back(static_cast<SCROW>(i));
     }
@@ -1182,13 +1182,13 @@ std::ostream& operator<< (::std::ostream& os, const OUString& str)
     return os << OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
 }
 
-void dumpItems(const ScDPCache& rCache, long nDim, const ScDPCache::ItemsType& rItems, size_t nOffset)
+void dumpItems(const ScDPCache& rCache, long nDim, const ScDPCache::ScDPItemDataVec& rItems, size_t nOffset)
 {
     for (size_t i = 0; i < rItems.size(); ++i)
         cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i]) << endl;
 }
 
-void dumpSourceData(const ScDPCache& rCache, long nDim, const ScDPCache::ItemsType& rItems, const ScDPCache::IndexArrayType& rArray)
+void dumpSourceData(const ScDPCache& rCache, long nDim, const ScDPCache::ScDPItemDataVec& rItems, const ScDPCache::IndexArrayType& rArray)
 {
     ScDPCache::IndexArrayType::const_iterator it = rArray.begin(), itEnd = rArray.end();
     for (; it != itEnd; ++it)

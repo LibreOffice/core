@@ -289,8 +289,8 @@ void fillDateGroupDimension(
     double fSourceMax = 0.0;
     bool bFirst = true;
 
-    const ScDPCache::ItemsType& rItems = rCache.GetDimMemberValues(nSourceDim);
-    ScDPCache::ItemsType::const_iterator it = rItems.begin(), itEnd = rItems.end();
+    const ScDPCache::ScDPItemDataVec& rItems = rCache.GetDimMemberValues(nSourceDim);
+    ScDPCache::ScDPItemDataVec::const_iterator it = rItems.begin(), itEnd = rItems.end();
     for (; it != itEnd; ++it)
     {
         const ScDPItemData& rItem = *it;
@@ -404,9 +404,9 @@ void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
         }
     }
 
-    const ScDPCache::ItemsType& rItems = rCache.GetDimMemberValues(nSourceDim);
+    const ScDPCache::ScDPItemDataVec& rItems = rCache.GetDimMemberValues(nSourceDim);
     {
-        ScDPCache::ItemsType::const_iterator it = rItems.begin(), itEnd = rItems.end();
+        ScDPCache::ScDPItemDataVec::const_iterator it = rItems.begin(), itEnd = rItems.end();
         for (; it != itEnd; ++it)
         {
             const ScDPItemData& rItem = *it;
@@ -477,8 +477,8 @@ void ScDPSaveNumGroupDimension::AddToCache(ScDPCache& rCache) const
         double fSourceMax = 0.0;
         bool bFirst = true;
 
-        const ScDPCache::ItemsType& rItems = rCache.GetDimMemberValues(nDim);
-        ScDPCache::ItemsType::const_iterator it = rItems.begin(), itEnd = rItems.end();
+        const ScDPCache::ScDPItemDataVec& rItems = rCache.GetDimMemberValues(nDim);
+        ScDPCache::ScDPItemDataVec::const_iterator it = rItems.begin(), itEnd = rItems.end();
         for (; it != itEnd; ++it)
         {
             const ScDPItemData& rItem = *it;

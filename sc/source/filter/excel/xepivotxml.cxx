@@ -226,9 +226,9 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
             XML_numFmtId, OString::number(0).getStr(),
             FSEND);
 
-        const ScDPCache::ItemsType& rFieldItems = rCache.GetDimMemberValues(i);
+        const ScDPCache::ScDPItemDataVec& rFieldItems = rCache.GetDimMemberValues(i);
 
-        ScDPCache::ItemsType::const_iterator it = rFieldItems.begin(), itEnd = rFieldItems.end();
+        ScDPCache::ScDPItemDataVec::const_iterator it = rFieldItems.begin(), itEnd = rFieldItems.end();
 
         std::set<ScDPItemData::Type> aDPTypes;
         for (; it != itEnd; ++it)

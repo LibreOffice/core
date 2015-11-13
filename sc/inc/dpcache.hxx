@@ -47,14 +47,14 @@ class SC_DLLPUBLIC ScDPCache : boost::noncopyable
     typedef std::unordered_set<OUString, OUStringHash> StringSetType;
 
 public:
-    typedef std::vector<ScDPItemData> ItemsType;
+    typedef std::vector<ScDPItemData> ScDPItemDataVec;
     typedef std::set<ScDPObject*> ObjectSetType;
     typedef std::vector<OUString> LabelsType;
     typedef std::vector<SCROW> IndexArrayType;
 
     struct GroupItems : boost::noncopyable
     {
-        ItemsType maItems;
+        ScDPItemDataVec maItems;
         ScDPNumGroupInfo maInfo;
         sal_Int32 mnGroupType;
 
@@ -72,7 +72,7 @@ public:
         /**
          * Unique values in the field, stored in ascending order.
          */
-        ItemsType maItems;
+        ScDPItemDataVec maItems;
 
         /**
          * Original source data represented as indices to the unique value
@@ -157,7 +157,7 @@ public:
     static SCROW GetOrder( long nDim, SCROW nIndex );
 
     const IndexArrayType* GetFieldIndexArray( size_t nDim ) const;
-    const ItemsType& GetDimMemberValues( SCCOL nDim ) const;
+    const ScDPItemDataVec& GetDimMemberValues( SCCOL nDim ) const;
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(DBConnector& rDB);
 
