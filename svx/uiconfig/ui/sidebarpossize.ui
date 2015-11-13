@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.12"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">-180</property>
-    <property name="upper">359.99</property>
+    <property name="upper">359.99000000000001</property>
     <property name="step_increment">5</property>
     <property name="page_increment">20</property>
   </object>
@@ -38,15 +39,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Horizontal:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -57,7 +56,6 @@
                     <property name="tooltip_markup" translatable="yes">Enter the value for the horizontal position.</property>
                     <property name="tooltip_text" translatable="yes">Enter the value for the horizontal position.</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="horizontallabel"/>
                     </accessibility>
@@ -70,8 +68,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -79,15 +75,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Vertical:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -98,7 +92,6 @@
                     <property name="tooltip_markup" translatable="yes">Enter the value for the vertical position.</property>
                     <property name="tooltip_text" translatable="yes">Enter the value for the vertical position.</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="verticallabel"/>
                     </accessibility>
@@ -111,8 +104,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -120,15 +111,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Width:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -140,7 +129,6 @@
                     <property name="tooltip_markup" translatable="yes">Enter a width for the selected object.</property>
                     <property name="tooltip_text" translatable="yes">Enter a width for the selected object.</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="widthlabel"/>
                     </accessibility>
@@ -153,8 +141,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -162,15 +148,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">H_eight:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -182,7 +166,6 @@
                     <property name="tooltip_markup" translatable="yes">Enter a height for the selected object.</property>
                     <property name="tooltip_text" translatable="yes">Enter a height for the selected object.</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="heightlabel"/>
                     </accessibility>
@@ -195,8 +178,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -229,9 +210,9 @@
               <object class="GtkLabel" id="rotationlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Rotation:</property>
                 <property name="use_underline">True</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -299,10 +280,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Flip:</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -315,16 +296,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="fliplabel"/>
-                            </accessibility>
                             <child>
                               <object class="GtkToolButton" id="flipvertical">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">Flip the selected object vertically.</property>
-                                <property name="tooltip_text" translatable="yes">Flip the selected object vertically.</property>
                                 <property name="action_name">.uno:FlipVertical</property>
                                 <property name="use_underline">True</property>
                               </object>
@@ -337,9 +312,6 @@
                               <object class="GtkToolButton" id="fliphorizontal">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">Flip the selected object horizontally.</property>
-                                <property name="tooltip_text" translatable="yes">Flip the selected object horizontally.</property>
                                 <property name="action_name">.uno:FlipHorizontal</property>
                                 <property name="use_underline">True</property>
                               </object>
@@ -348,6 +320,9 @@
                                 <property name="homogeneous">True</property>
                               </packing>
                             </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="fliplabel"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -387,8 +362,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>
