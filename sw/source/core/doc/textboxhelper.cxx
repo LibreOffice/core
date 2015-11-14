@@ -486,6 +486,12 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             case MID_FRMSIZE_IS_AUTO_HEIGHT:
                 aPropertyName = UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT;
                 break;
+            case MID_FRMSIZE_REL_HEIGHT_RELATION:
+                aPropertyName = UNO_NAME_RELATIVE_HEIGHT_RELATION;
+                break;
+            case MID_FRMSIZE_REL_WIDTH_RELATION:
+                aPropertyName = UNO_NAME_RELATIVE_WIDTH_RELATION;
+                break;
             default:
                 aPropertyName = UNO_NAME_SIZE;
                 bAdjustSize = true;

@@ -2920,6 +2920,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf85232, "tdf85232.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2267), xShape->getPosition().X);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf95775, "tdf95775.docx")
+{
+    // This must not fail in layout
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
