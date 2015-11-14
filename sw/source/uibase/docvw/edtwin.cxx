@@ -3732,6 +3732,15 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 {
     MouseEvent rMEvt(_rMEvt);
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (vcl::Window* pWindow = m_rView.GetPostItMgr()->IsHitSidebarWindow(rMEvt.GetPosPixel()))
+        {
+            pWindow->MouseMove(rMEvt);
+            return;
+        }
+    }
+
     //ignore key modifiers for format paintbrush
     {
         bool bExecFormatPaintbrush = m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard
@@ -4237,6 +4246,15 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
  */
 void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (vcl::Window* pWindow = m_rView.GetPostItMgr()->IsHitSidebarWindow(rMEvt.GetPosPixel()))
+        {
+            pWindow->MouseButtonUp(rMEvt);
+            return;
+        }
+    }
+
     bool bCallBase = true;
 
     bool bCallShadowCrsr = m_bWasShdwCrsr;

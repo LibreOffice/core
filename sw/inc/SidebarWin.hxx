@@ -179,6 +179,8 @@ class SwSidebarWin : public vcl::Window
         virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) override;
         virtual void KeyInput(const KeyEvent& rKeyEvt) override;
         virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
+        virtual void MouseButtonUp(const MouseEvent& rMouseEvent) override;
+        virtual void MouseMove(const MouseEvent& rMouseEvent) override;
         void PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
         /// Is there a matching sub-widget inside this sidebar widget for rPointLogic?
         bool IsHitWindow(const Point& rPointLogic);

@@ -411,6 +411,20 @@ void SwSidebarWin::KeyInput(const KeyEvent& rKeyEvent)
     }
 }
 
+void SwSidebarWin::MouseMove(const MouseEvent& rMouseEvent)
+{
+    if (mpSidebarTextControl)
+    {
+        mpSidebarTextControl->Push(PushFlags::MAPMODE);
+        MouseEvent aMouseEvent(rMouseEvent);
+        lcl_translateTwips(EditWin(), *mpSidebarTextControl, &aMouseEvent);
+
+        mpSidebarTextControl->MouseMove(aMouseEvent);
+
+        mpSidebarTextControl->Pop();
+    }
+}
+
 void SwSidebarWin::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
     if (mpSidebarTextControl)
@@ -420,6 +434,20 @@ void SwSidebarWin::MouseButtonDown(const MouseEvent& rMouseEvent)
         lcl_translateTwips(EditWin(), *mpSidebarTextControl, &aMouseEvent);
 
         mpSidebarTextControl->MouseButtonDown(aMouseEvent);
+
+        mpSidebarTextControl->Pop();
+    }
+}
+
+void SwSidebarWin::MouseButtonUp(const MouseEvent& rMouseEvent)
+{
+    if (mpSidebarTextControl)
+    {
+        mpSidebarTextControl->Push(PushFlags::MAPMODE);
+        MouseEvent aMouseEvent(rMouseEvent);
+        lcl_translateTwips(EditWin(), *mpSidebarTextControl, &aMouseEvent);
+
+        mpSidebarTextControl->MouseButtonUp(aMouseEvent);
 
         mpSidebarTextControl->Pop();
     }
