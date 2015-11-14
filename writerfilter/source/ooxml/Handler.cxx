@@ -125,7 +125,14 @@ void OOXMLOLEHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_OLEObject_r_id:
-        mpFastContext->resolveData(val.getString());
+        try {
+            mpFastContext->resolveData(val.getString());
+        }
+        catch (const ::css::uno::Exception&)
+        {
+            // Can't resolve OLE stream
+            SAL_WARN("OOXMLOLEHandler::attribute", "Failed to open OLE stream!");
+        }
         break;
     default:
         ;

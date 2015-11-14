@@ -2900,6 +2900,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf89165, "tdf89165.docx")
     // This must not hang in layout
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf95777, "tdf95777.docx")
+{
+    // This must not fail on open
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf94374, "hello.docx")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
