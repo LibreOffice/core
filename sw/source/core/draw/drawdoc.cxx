@@ -129,6 +129,12 @@ uno::Reference<embed::XStorage> SwDrawModel::GetDocumentStorage() const
     return m_pDoc->GetDocStorage();
 }
 
+void SwDrawModel::getLibreOfficeKitCallback(LibreOfficeKitCallback& rCallback, void*& rLibreOfficeKitData)
+{
+    rCallback = mpLibreOfficeKitCallback;
+    rLibreOfficeKitData = mpLibreOfficeKitData;
+}
+
 uno::Reference< uno::XInterface > SwDrawModel::createUnoModel()
 {
     uno::Reference< uno::XInterface > xModel;
