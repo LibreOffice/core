@@ -19,6 +19,9 @@
 
 # CppunitTest class
 
+gb_CppunitTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
+gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(SYSTEM_PYTHON),,$(call gb_Package_get_target,python3))
+
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
 gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(INSTDIR)" --batch --command=$(SRCDIR)/solenv/bin/gdbtrycatchtrace-stdout -return-child-result --args
 else ifneq ($(strip $(CPPUNITTRACE)),)
@@ -108,7 +111,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 			|| ($(if $(value gb_CppunitTest_postprocess), \
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1;) \
-				cat $@.log; $(SRCDIR)/solenv/bin/unittest-failed.sh Cppunit $* $(OS)))))
+				cat $@.log; $(gb_CppunitTest_UNITTESTFAILED) Cppunit $*))))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest_get_linktarget,$(1)))
@@ -336,15 +339,7 @@ $(call gb_CppunitTest_get_target,$(1)) : PYTHON_URE := $(true)
 $(call gb_CppunitTest_get_target,$(1)) :\
 	$(call gb_Library_get_target,pythonloader) \
 	$(call gb_Library_get_target,pyuno) \
-	$(if $(filter-out WNT,$(OS)),\
-		$(call gb_Library_get_target,pyuno_wrapper) \
-	) \
-	$(if $(SYSTEM_PYTHON),, \
-		$(if $(filter MACOSX,$(OS)),\
-			$(call gb_GeneratedPackage_get_target,python3),\
-			$(call gb_Package_get_target,python3) \
-		) \
-	) \
+	$(gb_CppunitTest_PYTHONDEPS) \
 	$(call gb_Package_get_target,pyuno_python_scripts)
 
 endef
