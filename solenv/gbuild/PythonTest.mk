@@ -9,15 +9,12 @@
 
 # PythonTest class
 
+gb_PythonTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
+
 ifeq ($(SYSTEM_PYTHON),)
 gb_PythonTest_EXECUTABLE := $(gb_Python_INSTALLED_EXECUTABLE)
 gb_PythonTest_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE_GDB)
-ifeq ($(OS),MACOSX)
-gb_PythonTest_DEPS := $(call gb_GeneratedPackage_get_target,python3)
-else
-gb_PythonTest_DEPS := $(call gb_Package_get_target,python3)
-endif
-gb_PythonTest_DEPS += $(if $(filter-out WNT,$(OS)),$(call gb_Package_get_target,python_shell))
+gb_PythonTest_DEPS ?= $(call gb_Package_get_target,python3) $(call gb_Package_get_target,python_shell)
 else
 gb_PythonTest_EXECUTABLE := $(PYTHON_FOR_BUILD)
 gb_PythonTest_EXECUTABLE_GDB := $(PYTHON_FOR_BUILD)
@@ -63,7 +60,7 @@ $(call gb_PythonTest_get_target,%) :| $(gb_PythonTest_DEPS)
 			|| ($(if $(value gb_CppunitTest_postprocess), \
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
-				cat $@.log; $(SRCDIR)/solenv/bin/unittest-failed.sh Python $*))))
+				cat $@.log; $(gb_PythonTest_UNITTESTFAILED) Python $*))))
 
 # always use udkapi and URE services
 define gb_PythonTest_PythonTest

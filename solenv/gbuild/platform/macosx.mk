@@ -265,6 +265,8 @@ endef
 
 # CppunitTest class
 
+gb_CppunitTest_UNITTESTFAILED := $(GBUILDDIR)/platform/unittest-failed-MACOSX.mk
+gb_CppunitTest_PYTHONDEPS := $(call gb_Library_get_target,pyuno_wrapper) $(if $(SYSTEM_PYTHON),,$(call gb_GeneratedPackage_get_target,python3))
 gb_CppunitTest_CPPTESTPRECOMMAND := \
 	$(call gb_Helper_extend_ld_path,$(gb_Library_DLLDIR):$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs)
 gb_CppunitTest_get_filename = libtest_$(1).dylib
@@ -299,6 +301,7 @@ endef
 
 # PythonTest class
 
+gb_PythonTest_UNITTESTFAILED := $(GBUILDDIR)/platform/unittest-failed-MACOSX.mk
 gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)
 ifneq ($(LIBO_LIB_FOLDER),$(LIBO_URE_LIB_FOLDER))
 gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(INSTROOT)/$(LIBO_LIB_FOLDER)
