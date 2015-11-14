@@ -461,6 +461,9 @@ IMPL_LINK_TYPED( ScTabPageSortFields, SelectHdl, ListBox&, rLb, void )
         if ( (*pIter)->m_pLbSort == &rLb ) break;
     }
 
+    if (pIter == maSortKeyItems.end())
+        return;
+
     // If not selecting the last Listbox, modify the succeeding ones
     ++pIter;
     if ( std::distance(maSortKeyItems.begin(), pIter) < nSortKeyCount )
