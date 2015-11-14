@@ -190,6 +190,12 @@ $(call gb_Helper_abbreviate_dirs,\
 
 endef
 
+# CppunitTest class
+
+ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
+gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(INSTDIR)" --batch --command=$(SRCDIR)/solenv/bin/gdbtrycatchtrace-stdout -return-child-result --args
+endif
+
 # ExternalProject class
 
 gb_ExternalProject_use_autoconf :=
