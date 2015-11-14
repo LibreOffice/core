@@ -124,11 +124,11 @@ static  bool lcl_HasStrongLTR ( const OUString& rText, sal_Int32 nStart, sal_Int
 SwLineLayout::~SwLineLayout()
 {
     Truncate();
-    delete pNext;
+    delete m_pNext;
     if( pBlink )
         pBlink->Delete( this );
-    delete pLLSpaceAdd;
-    delete pKanaComp;
+    delete m_pLLSpaceAdd;
+    delete m_pKanaComp;
 }
 
 SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
@@ -220,7 +220,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
 
 void SwLineLayout::InitSpaceAdd()
 {
-    if ( !pLLSpaceAdd )
+    if ( !m_pLLSpaceAdd )
         CreateSpaceAdd();
     else
         SetLLSpaceAdd( 0, 0 );
@@ -228,7 +228,7 @@ void SwLineLayout::InitSpaceAdd()
 
 void SwLineLayout::CreateSpaceAdd( const long nInit )
 {
-    pLLSpaceAdd = new std::vector<long>;
+    m_pLLSpaceAdd = new std::vector<long>;
     SetLLSpaceAdd( nInit, 0 );
 }
 

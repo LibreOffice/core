@@ -77,25 +77,25 @@ public:
 class SwLineLayout : public SwTextPortion
 {
 private:
-    SwLineLayout *pNext;                // The next Line
-    std::vector<long>* pLLSpaceAdd;     // Used for justified alignment
-    std::deque<sal_uInt16>* pKanaComp;  // Used for Kana compression
-    sal_uInt16 nRealHeight;                 // The height resulting from line spacing and register
-    bool bFormatAdj : 1;
-    bool bDummy     : 1;
-    bool bFntChg    : 1;
-    bool bEndHyph   : 1;
-    bool bMidHyph   : 1;
-    bool bTab       : 1;
-    bool bFly       : 1;
-    bool bRest      : 1;
-    bool bBlinking  : 1;
-    bool bClipping  : 1; // Clipping needed for exact line height
-    bool bContent   : 1; // Text for line numbering
-    bool bRedline   : 1; // The Redlining
-    bool bForcedLeftMargin : 1; // Left adjustment moved by the Fly
-    bool bHanging : 1; // Contains a hanging portion in the margin
-    bool bUnderscore : 1;
+    SwLineLayout *m_pNext;                // The next Line
+    std::vector<long>* m_pLLSpaceAdd;     // Used for justified alignment
+    std::deque<sal_uInt16>* m_pKanaComp;  // Used for Kana compression
+    sal_uInt16 m_nRealHeight;                 // The height resulting from line spacing and register
+    bool m_bFormatAdj : 1;
+    bool m_bDummy     : 1;
+    bool m_bFntChg    : 1;
+    bool m_bEndHyph   : 1;
+    bool m_bMidHyph   : 1;
+    bool m_bTab       : 1;
+    bool m_bFly       : 1;
+    bool m_bRest      : 1;
+    bool m_bBlinking  : 1;
+    bool m_bClipping  : 1; // Clipping needed for exact line height
+    bool m_bContent   : 1; // Text for line numbering
+    bool m_bRedline   : 1; // The Redlining
+    bool m_bForcedLeftMargin : 1; // Left adjustment moved by the Fly
+    bool m_bHanging : 1; // Contains a hanging portion in the margin
+    bool m_bUnderscore : 1;
 
     SwTwips _GetHangingMargin() const;
 
@@ -107,49 +107,49 @@ public:
 
     // Flags
     inline void ResetFlags();
-    inline void SetFormatAdj( const bool bNew ) { bFormatAdj = bNew; }
-    inline bool IsFormatAdj() const { return bFormatAdj; }
-    inline void SetEndHyph( const bool bNew ) { bEndHyph = bNew; }
-    inline bool IsEndHyph() const { return bEndHyph; }
-    inline void SetMidHyph( const bool bNew ) { bMidHyph = bNew; }
-    inline bool IsMidHyph() const { return bMidHyph; }
-    inline void SetFly( const bool bNew ) { bFly = bNew; }
-    inline bool IsFly() const { return bFly; }
-    inline void SetRest( const bool bNew ) { bRest = bNew; }
-    inline bool IsRest() const { return bRest; }
-    inline void SetBlinking( const bool bNew = true ) { bBlinking = bNew; }
-    inline bool IsBlinking() const { return bBlinking; }
-    inline void SetContent( const bool bNew = true ) { bContent = bNew; }
-    inline bool HasContent() const { return bContent; }
-    inline void SetRedline( const bool bNew = true ) { bRedline = bNew; }
-    inline bool HasRedline() const { return bRedline; }
-    inline void SetForcedLeftMargin( const bool bNew = true ) { bForcedLeftMargin = bNew; }
-    inline bool HasForcedLeftMargin() const { return bForcedLeftMargin; }
-    inline void SetHanging( const bool bNew = true ) { bHanging = bNew; }
-    inline void SetUnderscore( const bool bNew = true ) { bUnderscore = bNew; }
-    inline bool HasUnderscore() const { return bUnderscore; }
+    inline void SetFormatAdj( const bool bNew ) { m_bFormatAdj = bNew; }
+    inline bool IsFormatAdj() const { return m_bFormatAdj; }
+    inline void SetEndHyph( const bool bNew ) { m_bEndHyph = bNew; }
+    inline bool IsEndHyph() const { return m_bEndHyph; }
+    inline void SetMidHyph( const bool bNew ) { m_bMidHyph = bNew; }
+    inline bool IsMidHyph() const { return m_bMidHyph; }
+    inline void SetFly( const bool bNew ) { m_bFly = bNew; }
+    inline bool IsFly() const { return m_bFly; }
+    inline void SetRest( const bool bNew ) { m_bRest = bNew; }
+    inline bool IsRest() const { return m_bRest; }
+    inline void SetBlinking( const bool bNew = true ) { m_bBlinking = bNew; }
+    inline bool IsBlinking() const { return m_bBlinking; }
+    inline void SetContent( const bool bNew = true ) { m_bContent = bNew; }
+    inline bool HasContent() const { return m_bContent; }
+    inline void SetRedline( const bool bNew = true ) { m_bRedline = bNew; }
+    inline bool HasRedline() const { return m_bRedline; }
+    inline void SetForcedLeftMargin( const bool bNew = true ) { m_bForcedLeftMargin = bNew; }
+    inline bool HasForcedLeftMargin() const { return m_bForcedLeftMargin; }
+    inline void SetHanging( const bool bNew = true ) { m_bHanging = bNew; }
+    inline void SetUnderscore( const bool bNew = true ) { m_bUnderscore = bNew; }
+    inline bool HasUnderscore() const { return m_bUnderscore; }
 
     // Respecting empty dummy lines
-    inline void SetDummy( const bool bNew ) { bDummy = bNew; }
-    inline bool IsDummy() const { return bDummy; }
+    inline void SetDummy( const bool bNew ) { m_bDummy = bNew; }
+    inline bool IsDummy() const { return m_bDummy; }
 
-    inline void SetClipping( const bool bNew ) { bClipping = bNew; }
-    inline bool IsClipping() const { return bClipping; }
+    inline void SetClipping( const bool bNew ) { m_bClipping = bNew; }
+    inline bool IsClipping() const { return m_bClipping; }
 
     inline SwLineLayout();
     virtual ~SwLineLayout();
 
-    inline SwLineLayout *GetNext() { return pNext; }
-    inline const SwLineLayout *GetNext() const { return pNext; }
-    inline void SetNext( SwLineLayout *pNew ) { pNext = pNew; }
+    inline SwLineLayout *GetNext() { return m_pNext; }
+    inline const SwLineLayout *GetNext() const { return m_pNext; }
+    inline void SetNext( SwLineLayout *pNew ) { m_pNext = pNew; }
 
     void Init( SwLinePortion *pNextPortion = nullptr);
 
     // Collects the data for the line
     void CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf );
 
-    inline void SetRealHeight( sal_uInt16 nNew ) { nRealHeight = nNew; }
-    inline sal_uInt16 GetRealHeight() const { return nRealHeight; }
+    inline void SetRealHeight( sal_uInt16 nNew ) { m_nRealHeight = nNew; }
+    inline sal_uInt16 GetRealHeight() const { return m_nRealHeight; }
 
     // Creates the glue chain for short lines
     SwMarginPortion *CalcLeftMargin();
@@ -161,27 +161,27 @@ public:
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Stuff for justified alignment
-    inline bool IsSpaceAdd() { return pLLSpaceAdd != nullptr; }
+    inline bool IsSpaceAdd() { return m_pLLSpaceAdd != nullptr; }
     void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
     void CreateSpaceAdd( const long nInit = 0 );
-    inline void FinishSpaceAdd() { delete pLLSpaceAdd; pLLSpaceAdd = nullptr; }
-    inline sal_uInt16 GetLLSpaceAddCount() const { return sal::static_int_cast< sal_uInt16 >(pLLSpaceAdd->size()); }
+    inline void FinishSpaceAdd() { delete m_pLLSpaceAdd; m_pLLSpaceAdd = nullptr; }
+    inline sal_uInt16 GetLLSpaceAddCount() const { return sal::static_int_cast< sal_uInt16 >(m_pLLSpaceAdd->size()); }
     inline void SetLLSpaceAdd( long nNew, sal_uInt16 nIdx )
     {
         if ( nIdx == GetLLSpaceAddCount() )
-            pLLSpaceAdd->push_back( nNew );
+            m_pLLSpaceAdd->push_back( nNew );
         else
-            (*pLLSpaceAdd)[ nIdx ] = nNew;
+            (*m_pLLSpaceAdd)[ nIdx ] = nNew;
     }
-    inline long GetLLSpaceAdd( sal_uInt16 nIdx ) { return (*pLLSpaceAdd)[ nIdx ]; }
-    inline void RemoveFirstLLSpaceAdd() { pLLSpaceAdd->erase( pLLSpaceAdd->begin() ); }
-    inline std::vector<long>* GetpLLSpaceAdd() const { return pLLSpaceAdd; }
+    inline long GetLLSpaceAdd( sal_uInt16 nIdx ) { return (*m_pLLSpaceAdd)[ nIdx ]; }
+    inline void RemoveFirstLLSpaceAdd() { m_pLLSpaceAdd->erase( m_pLLSpaceAdd->begin() ); }
+    inline std::vector<long>* GetpLLSpaceAdd() const { return m_pLLSpaceAdd; }
 
     // Stuff for Kana compression
-    inline void SetKanaComp( std::deque<sal_uInt16>* pNew ){ pKanaComp = pNew; }
-    inline void FinishKanaComp() { delete pKanaComp; pKanaComp = nullptr; }
-    inline std::deque<sal_uInt16>* GetpKanaComp() const { return pKanaComp; }
-    inline std::deque<sal_uInt16>& GetKanaComp() { return *pKanaComp; }
+    inline void SetKanaComp( std::deque<sal_uInt16>* pNew ){ m_pKanaComp = pNew; }
+    inline void FinishKanaComp() { delete m_pKanaComp; m_pKanaComp = nullptr; }
+    inline std::deque<sal_uInt16>* GetpKanaComp() const { return m_pKanaComp; }
+    inline std::deque<sal_uInt16>& GetKanaComp() { return *m_pKanaComp; }
 
     /** determine ascent and descent for positioning of as-character anchored
         object
@@ -318,14 +318,14 @@ public:
 
 inline void SwLineLayout::ResetFlags()
 {
-    bFormatAdj = bDummy = bFntChg = bTab = bEndHyph = bMidHyph = bFly
-    = bRest = bBlinking = bClipping = bContent = bRedline
-    = bForcedLeftMargin = bHanging = false;
+    m_bFormatAdj = m_bDummy = m_bFntChg = m_bTab = m_bEndHyph = m_bMidHyph = m_bFly
+    = m_bRest = m_bBlinking = m_bClipping = m_bContent = m_bRedline
+    = m_bForcedLeftMargin = m_bHanging = false;
 }
 
 inline SwLineLayout::SwLineLayout()
-    : pNext( nullptr ), pLLSpaceAdd( nullptr ), pKanaComp( nullptr ), nRealHeight( 0 ),
-      bUnderscore( false )
+    : m_pNext( nullptr ), m_pLLSpaceAdd( nullptr ), m_pKanaComp( nullptr ), m_nRealHeight( 0 ),
+      m_bUnderscore( false )
 {
     ResetFlags();
     SetWhichPor( POR_LAY );
