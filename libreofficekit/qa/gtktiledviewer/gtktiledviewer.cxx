@@ -1094,6 +1094,23 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), rWindow.m_pJustifypara, -1);
     g_signal_connect(G_OBJECT(rWindow.m_pJustifypara), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(rWindow, rWindow.m_pJustifypara, ".uno:JustifyPara");
+    gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), gtk_separator_tool_item_new(), -1);
+
+    // Insert/delete comments.
+    GtkToolItem* pInsertAnnotation = gtk_tool_button_new(nullptr, nullptr);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pInsertAnnotation), "changes-allow-symbolic");
+    gtk_tool_item_set_tooltip_text(pInsertAnnotation, "Insert Comment");
+    gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), pInsertAnnotation, -1);
+    g_signal_connect(G_OBJECT(pInsertAnnotation), "clicked", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(rWindow, pInsertAnnotation, ".uno:InsertAnnotation");
+
+    GtkToolItem* pDeleteComment = gtk_tool_button_new(nullptr, nullptr);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pDeleteComment), "changes-prevent-symbolic");
+    gtk_tool_item_set_tooltip_text(pDeleteComment, "Delete Comment");
+    gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), pDeleteComment, -1);
+    g_signal_connect(G_OBJECT(pDeleteComment), "clicked", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(rWindow, pDeleteComment, ".uno:DeleteComment");
+
     // Formula bar
     GtkToolItem* pFormulaEntryContainer = gtk_tool_item_new();
     rWindow.m_pFormulabarEntry = gtk_entry_new();
