@@ -772,28 +772,37 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         auto aSelected = rPresetList.begin();
         std::advance( aSelected, mpVS_TRANSITION_ICONS->GetSelectItemId() - 1);
 
-        int nVariant = 0;
-        bool bFound = false;
-        for( auto aIter: rPresetList )
+        if( mpLB_VARIANT->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         {
-            if( aIter->getSetId() == (*aSelected)->getSetId() )
+            // Transition with just one effect.
+            aResult = impl::TransitionEffect( **aSelected );
+            aResult.setAllAmbiguous();
+        }
+        else
+        {
+            int nVariant = 0;
+            bool bFound = false;
+            for( auto aIter: rPresetList )
             {
-                if( mpLB_VARIANT->GetSelectEntryPos() == nVariant)
+                if( aIter->getSetId() == (*aSelected)->getSetId() )
                 {
-                    aResult = impl::TransitionEffect( *aIter );
-                    aResult.setAllAmbiguous();
-                    bFound = true;
-                    break;
-                }
-                else
-                {
-                    nVariant++;
+                    if( mpLB_VARIANT->GetSelectEntryPos() == nVariant)
+                    {
+                        aResult = impl::TransitionEffect( *aIter );
+                        aResult.setAllAmbiguous();
+                        bFound = true;
+                        break;
+                    }
+                    else
+                    {
+                        nVariant++;
+                    }
                 }
             }
-        }
-        if( !bFound )
-        {
-            aResult.mnType = 0;
+            if( !bFound )
+            {
+                aResult.mnType = 0;
+            }
         }
         aResult.mbEffectAmbiguous = false;
     }
