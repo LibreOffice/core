@@ -6297,6 +6297,16 @@ void SwEditWin::SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool 
         }
     }
 
+    if (m_rView.GetPostItMgr())
+    {
+        if (sw::sidebarwindows::SwSidebarWin* pWin = m_rView.GetPostItMgr()->GetActiveSidebarWin())
+        {
+            // Editing postit text.
+            pWin->SetCursorLogicPosition(rPosition, bPoint, bClearMark);
+            return;
+        }
+    }
+
     // Not an SwWrtShell, as that would make SwCrsrShell::GetCrsr() inaccessible.
     SwEditShell& rShell = m_rView.GetWrtShell();
 
