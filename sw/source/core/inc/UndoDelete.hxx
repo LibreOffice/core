@@ -36,29 +36,29 @@ class SwUndoDelete
     , private SwUndRng
     , private SwUndoSaveContent
 {
-    SwNodeIndex* pMvStt;            // Position of Nodes in UndoNodes-Array
-    OUString *pSttStr, *pEndStr;
-    SwRedlineData* pRedlData;
-    SwRedlineSaveDatas* pRedlSaveData;
+    SwNodeIndex* m_pMvStt;            // Position of Nodes in UndoNodes-Array
+    OUString *m_pSttStr, *m_pEndStr;
+    SwRedlineData* m_pRedlData;
+    SwRedlineSaveDatas* m_pRedlSaveData;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
-    OUString sTableName;
+    OUString m_sTableName;
 
-    sal_uLong nNode;
-    sal_uLong nNdDiff;           // difference of Nodes before/after Delete
-    sal_uLong nSectDiff;         // diff. of Nodes before/after Move w/ SectionNodes
-    sal_uLong nReplaceDummy;     // diff. to a temporary dummy object
-    sal_uInt16 nSetPos;
+    sal_uLong m_nNode;
+    sal_uLong m_nNdDiff;           // difference of Nodes before/after Delete
+    sal_uLong m_nSectDiff;         // diff. of Nodes before/after Move w/ SectionNodes
+    sal_uLong m_nReplaceDummy;     // diff. to a temporary dummy object
+    sal_uInt16 m_nSetPos;
 
-    bool bGroup : 1;         // TRUE: is already Grouped; see CanGrouping()
-    bool bBackSp : 1;        // TRUE: if Grouped and preceding content deleted
-    bool bJoinNext: 1;       // TRUE: if range is selected forwards
-    bool bTableDelLastNd : 1;  // TRUE: TextNode following Table inserted/deleted
-    bool bDelFullPara : 1;   // TRUE: entire Nodes were deleted
-    bool bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
-    bool bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
-    bool bFromTableCopy : 1; // TRUE: called by SwUndoTableCpyTable
+    bool m_bGroup : 1;         // TRUE: is already Grouped; see CanGrouping()
+    bool m_bBackSp : 1;        // TRUE: if Grouped and preceding content deleted
+    bool m_bJoinNext: 1;       // TRUE: if range is selected forwards
+    bool m_bTableDelLastNd : 1;  // TRUE: TextNode following Table inserted/deleted
+    bool m_bDelFullPara : 1;   // TRUE: entire Nodes were deleted
+    bool m_bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
+    bool m_bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
+    bool m_bFromTableCopy : 1; // TRUE: called by SwUndoTableCpyTable
 
     bool SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTextNode* pSttTextNd, SwTextNode* pEndTextNd );
@@ -88,16 +88,16 @@ public:
 
     bool CanGrouping( SwDoc*, const SwPaM& );
 
-    void SetTableDelLastNd()      { bTableDelLastNd = true; }
+    void SetTableDelLastNd()      { m_bTableDelLastNd = true; }
 
     // for PageDesc/PageBreak Attributes of a table
     void SetPgBrkFlags( bool bPageBreak, bool bPageDesc )
-        { bResetPgDesc = bPageDesc; bResetPgBrk = bPageBreak; }
+        { m_bResetPgDesc = bPageDesc; m_bResetPgBrk = bPageBreak; }
 
     void SetTableName(const OUString & rName);
 
     // SwUndoTableCpyTable needs this information:
-    bool IsDelFullPara() const { return bDelFullPara; }
+    bool IsDelFullPara() const { return m_bDelFullPara; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
 };
