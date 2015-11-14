@@ -180,6 +180,8 @@ class SwSidebarWin : public vcl::Window
         virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, sal_uLong) SAL_OVERRIDE;
         virtual void KeyInput(const KeyEvent& rKeyEvt) SAL_OVERRIDE;
         virtual void MouseButtonDown(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
+        virtual void MouseButtonUp(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
+        virtual void MouseMove(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
         void PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
         /// Is there a matching sub-widget inside this sidebar widget for rPointLogic?
         bool IsHitWindow(const Point& rPointLogic);
