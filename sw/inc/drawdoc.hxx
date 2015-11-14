@@ -42,6 +42,8 @@ public:
 
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::embed::XStorage> GetDocumentStorage() const SAL_OVERRIDE;
+    /// Get the callback and callback data, previously given to registerLibreOfficeKitCallback().
+    void getLibreOfficeKitCallback(LibreOfficeKitCallback& rCallback, void*& rLibreOfficeKitData);
 
     /// For saving of rectangles as control-replacement for versions < 5.0.
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const SAL_OVERRIDE;

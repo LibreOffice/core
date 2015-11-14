@@ -132,6 +132,12 @@ SdrLayerID SwDrawModel::GetControlExportLayerId( const SdrObject & ) const
     return static_cast<SdrLayerID>(m_pDoc->getIDocumentDrawModelAccess().GetHeavenId());
 }
 
+void SwDrawModel::getLibreOfficeKitCallback(LibreOfficeKitCallback& rCallback, void*& rLibreOfficeKitData)
+{
+    rCallback = mpLibreOfficeKitCallback;
+    rLibreOfficeKitData = mpLibreOfficeKitData;
+}
+
 uno::Reference< uno::XInterface > SwDrawModel::createUnoModel()
 {
     uno::Reference< uno::XInterface > xModel;

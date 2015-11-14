@@ -81,6 +81,8 @@
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <comphelper/lok.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
 
 namespace
 {
@@ -530,6 +532,17 @@ void SwSidebarWin::InitControls()
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
 
     mpOutlinerView->SetAttribs(DefaultItem());
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // If there is a callback already registered, inform the new outliner view about it.
+        SwDrawModel* pDrawModel = mrView.GetWrtShellPtr()->getIDocumentDrawModelAccess()->GetDrawModel();
+        LibreOfficeKitCallback pCallback = 0;
+        void* pData = 0;
+        pDrawModel->getLibreOfficeKitCallback(pCallback, pData);
+        mpOutlinerView->setTiledRendering(mrView.GetWrtShellPtr()->isTiledRendering());
+        mpOutlinerView->registerLibreOfficeKitCallback(pCallback, pData);
+    }
 
     //create Scrollbars
     mpVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
