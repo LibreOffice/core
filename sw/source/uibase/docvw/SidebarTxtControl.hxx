@@ -40,6 +40,8 @@ class SidebarTextControl : public Control
 
     protected:
         virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+        /// @see OutputDevice::LogicInvalidate().
+        void LogicInvalidate(const Rectangle* pRectangle) SAL_OVERRIDE;
         virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
