@@ -67,6 +67,7 @@ $(eval $(call gb_CppunitTest_use_components,desktop_lib,\
     xmloff/util/xo \
     i18npool/source/search/i18nsearch \
     filter/source/graphic/graphicfilter \
+    linguistic/source/lng \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,desktop_lib))

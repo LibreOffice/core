@@ -10,6 +10,10 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/XReschedule.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 
 #ifdef WNT
 #include <prewin.h>
@@ -75,6 +79,7 @@ public:
     void testPasteWriter();
     void testRowColumnHeaders();
     void testCommandResult();
+    void testWriterComments();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -89,6 +94,7 @@ public:
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST(testCommandResult);
+    CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -475,6 +481,46 @@ void DesktopLOKTest::testCommandResult()
 
     CPPUNIT_ASSERT_EQUAL(aTree.get_child("commandName").get_value<std::string>(), std::string(".uno:Bold"));
     CPPUNIT_ASSERT_EQUAL(aTree.get_child("success").get_value<bool>(), true);
+}
+
+void DesktopLOKTest::testWriterComments()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    uno::Reference<awt::XReschedule> xToolkit(com::sun::star::awt::Toolkit::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY);
+
+    // Insert a comment at the beginning of the document and wait till the main
+    // loop grabs the focus, so characters end up in the annotation window.
+    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    m_aCommandResultCondition.reset();
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
+    m_aCommandResultCondition.wait(&aTimeValue);
+    CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
+    xToolkit->reschedule();
+
+    // Test that we have a comment.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphEnumeration = xParagraphEnumerationAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphEnumeration->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xTextPortionEnumeration = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xTextPortionEnumeration->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), xTextPortion->getPropertyValue("TextPortionType").get<OUString>());
+
+    // Type "test" and finish editing.
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'e', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 's', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
+
+    // Test that the typed characters ended up in the right window.
+    auto xTextField = xTextPortion->getPropertyValue("TextField").get< uno::Reference<beans::XPropertySet> >();
+    // This was empty, typed characters ended up in the body text.
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xTextField->getPropertyValue("Content").get<OUString>());
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
