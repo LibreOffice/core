@@ -736,6 +736,11 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    FN_OUTLINE_RULE_INDEX // status(final|play)
+    [
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     FN_NUMBER_BULLETS // status(final|play)
     [
         ExecMethod = ExecEnterNum ;
@@ -800,6 +805,11 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_SVX_SET_BULLET
+    [
+        ExecMethod = ExecSetNumber;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_SVX_SET_OUTLINE
     [
         ExecMethod = ExecSetNumber;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";

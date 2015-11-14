@@ -10,7 +10,7 @@
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 
-#include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <svtools/popupwindowcontroller.hxx>
@@ -25,7 +25,7 @@ class NumberingToolBoxControl;
 
 class NumberingPopup : public svtools::ToolbarMenu
 {
-    bool mbBulletItem;
+    NumberingPageType mePageType;
     NumberingToolBoxControl& mrController;
     VclPtr<SvxNumValueSet> mpValueSet;
     DECL_LINK_TYPED( VSSelectToolbarMenuHdl, ToolbarMenu*, void );
@@ -34,7 +34,7 @@ class NumberingPopup : public svtools::ToolbarMenu
 public:
     NumberingPopup( NumberingToolBoxControl& rController,
                     const css::uno::Reference< css::frame::XFrame >& rFrame,
-                    vcl::Window* pParent, bool bBulletItem );
+                    vcl::Window* pParent, NumberingPageType ePageType );
     virtual ~NumberingPopup();
     virtual void dispose() override;
 
@@ -44,7 +44,7 @@ public:
 
 class NumberingToolBoxControl : public svt::PopupWindowController
 {
-    bool mbBulletItem;
+    NumberingPageType mePageType;
 
 public:
     explicit NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -71,31 +71,35 @@ public:
 //class NumberingPopup
 NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
                                 const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                vcl::Window* pParent, bool bBulletItem ) :
+                                vcl::Window* pParent, NumberingPageType ePageType ) :
     ToolbarMenu( rFrame, pParent, WB_STDPOPUP ),
-    mbBulletItem( bBulletItem ),
+    mePageType( ePageType ),
     mrController( rController )
 {
     WinBits nBits = WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NO_DIRECTSELECT;
     mpValueSet = VclPtr<SvxNumValueSet>::Create( this, nBits );
-    mpValueSet->init( mbBulletItem ? NumberingPageType::BULLET : NumberingPageType::SINGLENUM );
+    mpValueSet->init( mePageType );
 
-    if ( !mbBulletItem )
+    if ( mePageType != NumberingPageType::BULLET )
     {
-        css::uno::Reference< css::text::XDefaultNumberingProvider > xDefNum = css::text::DefaultNumberingProvider::create( comphelper::getProcessComponentContext() );
+        css::uno::Reference< css::text::XDefaultNumberingProvider > xDefNum = css::text::DefaultNumberingProvider::create( mrController.getContext() );
         if ( xDefNum.is() )
         {
-            css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aNumberings;
             css::lang::Locale aLocale = GetSettings().GetLanguageTag().getLocale();
-            try
-            {
-                aNumberings = xDefNum->getDefaultContinuousNumberingLevels( aLocale );
-            }
-            catch( css::uno::Exception& )
-            {}
-
             css::uno::Reference< css::text::XNumberingFormatter > xFormat( xDefNum, css::uno::UNO_QUERY );
-            mpValueSet->SetNumberingSettings( aNumberings, xFormat, aLocale );
+
+            if ( mePageType == NumberingPageType::SINGLENUM )
+            {
+                css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aNumberings(
+                    xDefNum->getDefaultContinuousNumberingLevels( aLocale ) );
+                mpValueSet->SetNumberingSettings( aNumberings, xFormat, aLocale );
+            }
+            else if ( mePageType == NumberingPageType::OUTLINE )
+            {
+                css::uno::Sequence< css::uno::Reference< css::container::XIndexAccess > > aOutline(
+                    xDefNum->getDefaultOutlineNumberings( aLocale ) );
+                mpValueSet->SetOutlineNumberingSettings( aOutline, xFormat, aLocale );
+            }
         }
     }
 
@@ -107,19 +111,28 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
     appendEntry( 0, mpValueSet );
     appendSeparator();
 
-    if ( mbBulletItem )
-        appendEntry( 1, SVX_RESSTR( RID_SVXSTR_MOREBULLETS ), ::GetImage( rFrame, ".uno:OutlineBullet", false ) );
+    OUString aMoreItemText;
+    if ( mePageType == NumberingPageType::BULLET )
+    {
+        aMoreItemText = SVX_RESSTR( RID_SVXSTR_MOREBULLETS );
+        AddStatusListener( ".uno:CurrentBulletListType" );
+    }
+    else if ( mePageType == NumberingPageType::SINGLENUM )
+    {
+        aMoreItemText = SVX_RESSTR( RID_SVXSTR_MORENUMBERING );
+        AddStatusListener( ".uno:CurrentNumListType" );
+    }
     else
-        appendEntry( 1, SVX_RESSTR( RID_SVXSTR_MORENUMBERING ), ::GetImage( rFrame, ".uno:OutlineBullet", false ) );
+    {
+        aMoreItemText = SVX_RESSTR( RID_SVXSTR_MORE );
+        AddStatusListener( ".uno:CurrentOutlineType" );
+    }
+
+    appendEntry( 1, aMoreItemText, ::GetImage( rFrame, ".uno:OutlineBullet", false ) );
 
     SetOutputSizePixel( getMenuSize() );
     mpValueSet->SetSelectHdl( LINK( this, NumberingPopup, VSSelectValueSetHdl ) );
     SetSelectHdl( LINK( this, NumberingPopup, VSSelectToolbarMenuHdl ) );
-
-    if ( mbBulletItem )
-        AddStatusListener( ".uno:CurrentBulletListType" );
-    else
-        AddStatusListener( ".uno:CurrentNumListType" );
 }
 
 NumberingPopup::~NumberingPopup()
@@ -160,18 +173,20 @@ void NumberingPopup::VSSelectHdl(void* pControl)
     if ( pControl == mpValueSet )
     {
         sal_uInt16 nSelItem = mpValueSet->GetSelectItemId();
-        css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-        if ( mbBulletItem )
+        if ( mePageType == NumberingPageType::BULLET )
         {
-            aArgs[0].Name = "SetBullet";
-            aArgs[0].Value <<= sal_uInt16( nSelItem );
+            auto aArgs( comphelper::InitPropertySequence( { { "SetBullet", css::uno::makeAny( nSelItem ) } } ) );
             mrController.dispatchCommand( ".uno:SetBullet", aArgs );
+        }
+        else if ( mePageType == NumberingPageType::SINGLENUM )
+        {
+            auto aArgs( comphelper::InitPropertySequence( { { "SetNumber", css::uno::makeAny( nSelItem ) } } ) );
+            mrController.dispatchCommand( ".uno:SetNumber", aArgs );
         }
         else
         {
-            aArgs[0].Name = "SetNumber";
-            aArgs[0].Value <<= sal_uInt16( nSelItem );
-            mrController.dispatchCommand( ".uno:SetNumber", aArgs );
+            auto aArgs( comphelper::InitPropertySequence( { { "SetOutline", css::uno::makeAny( nSelItem ) } } ) );
+            mrController.dispatchCommand( ".uno:SetOutline", aArgs );
         }
     }
     else if ( getSelectedEntryId() == 1 )
@@ -183,9 +198,7 @@ void NumberingPopup::VSSelectHdl(void* pControl)
             // Writer variants
             aPageName = "options";
 
-        css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "Page";
-        aArgs[0].Value <<= aPageName;
+        auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( aPageName ) } } ) );
         mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
     }
 }
@@ -194,13 +207,13 @@ void NumberingPopup::VSSelectHdl(void* pControl)
 //class NumberingToolBoxControl
 NumberingToolBoxControl::NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext ):
     svt::PopupWindowController( rxContext, css::uno::Reference< css::frame::XFrame >(), OUString() ),
-    mbBulletItem( false )
+    mePageType( NumberingPageType::SINGLENUM )
 {
 }
 
 VclPtr<vcl::Window> NumberingToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<NumberingPopup>::Create( *this, m_xFrame, pParent, mbBulletItem );
+    return VclPtr<NumberingPopup>::Create( *this, m_xFrame, pParent, mePageType );
 }
 
 bool NumberingToolBoxControl::IsInImpressDraw()
@@ -228,12 +241,16 @@ void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css
 {
     svt::PopupWindowController::initialize( aArguments );
 
+    if ( m_aCommandURL == ".uno:DefaultBullet" )
+        mePageType = NumberingPageType::BULLET;
+    else if ( m_aCommandURL == ".uno:SetOutline" )
+        mePageType = NumberingPageType::OUTLINE;
+
+    ToolBoxItemBits nBits = ( mePageType == NumberingPageType::OUTLINE ) ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN;
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
-        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN );
-
-    mbBulletItem = m_aCommandURL == ".uno:DefaultBullet";
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | nBits );
 }
 
 OUString SAL_CALL NumberingToolBoxControl::getImplementationName()

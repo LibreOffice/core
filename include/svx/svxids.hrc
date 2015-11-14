@@ -222,6 +222,7 @@
 #define FN_NUM_NUMBERING_ON     (FN_EDIT + 44)  /* Numerierung an */
 #define FN_BUL_NUM_RULE_INDEX   (FN_EDIT + 120) /* Achieving num rule index */
 #define FN_NUM_NUM_RULE_INDEX   (FN_EDIT + 121)
+#define FN_OUTLINE_RULE_INDEX   (FN_EDIT + 122)
 
 #define FN_INSERT               (SID_SW_START +  300)
 #define FN_DELETE_BOOKMARK      (FN_INSERT + 1)
@@ -996,6 +997,7 @@
 
 #define FN_SVX_SET_NUMBER                               ( SID_SVX_START + 1136 )
 #define FN_SVX_SET_BULLET                               ( SID_SVX_START + 1137 )
+#define FN_SVX_SET_OUTLINE                              ( SID_SVX_START + 1138 )
 
 #define SID_ATTR_BORDER_STYLES                          ( SID_SVX_START + 1140 )
 #define SID_ATTR_BORDER_DEFAULT_WIDTH                   ( SID_SVX_START + 1141 )

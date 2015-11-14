@@ -16444,3 +16444,50 @@ SfxVoidItem ParaspaceIncrease SID_PARASPACE_INCREASE
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
+
+SfxVoidItem SetOutline FN_SVX_SET_OUTLINE
+(SfxUInt16Item SetOutline FN_SVX_SET_OUTLINE)
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_ENUMERATION;
+]
+
+SfxUInt16Item CurrentOutlineType FN_OUTLINE_RULE_INDEX
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_ENUMERATION;
+]

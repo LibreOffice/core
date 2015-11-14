@@ -563,6 +563,17 @@
           <value>com.sun.star.comp.svx.NumberingToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="OutlineToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SetOutline</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.NumberingToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="ExtrusionDirectionFloater" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ExtrusionDirectionFloater</value>
