@@ -208,7 +208,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
 
 static void
 lcl_setCharStyle(SwDoc *const pDoc, const uno::Any & rValue, SfxItemSet & rSet)
-    throw (lang::IllegalArgumentException, std::exception)
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SwDocShell *const pDocSh = pDoc->GetDocShell();
     if(pDocSh)
