@@ -665,7 +665,24 @@ void SwSidebarWin::SetPosAndSize()
     {
         bChange = true;
         SetSizePixel(mPosSize.GetSize());
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // Position is not yet set at VCL level, but the map mode should
+            // contain the right origin to emit the correct cursor position.
+            mpSidebarTextControl->Push(PushFlags::MAPMODE);
+            Point aOffset(mPosSize.Left(), mPosSize.Top());
+            aOffset = PixelToLogic(aOffset);
+            MapMode aMapMode(mpSidebarTextControl->GetMapMode());
+            aMapMode.SetOrigin(aOffset);
+            mpSidebarTextControl->SetMapMode(aMapMode);
+            mpSidebarTextControl->EnableMapMode(false);
+        }
+
         DoResize();
+
+        if (comphelper::LibreOfficeKit::isActive())
+            mpSidebarTextControl->Pop();
     }
 
     if (GetPosPixel().X() != mPosSize.TopLeft().X() || (std::abs(GetPosPixel().Y() - mPosSize.TopLeft().Y()) > 5) )
