@@ -69,10 +69,15 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_odfexport \
     CppunitTest_sw_odfimport \
     CppunitTest_sw_uiwriter \
-    CppunitTest_sw_tiledrendering \
     CppunitTest_sw_mailmerge \
     CppunitTest_sw_globalfilter \
 ))
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Module_add_slowcheck_targets,sw,\
+    CppunitTest_sw_tiledrendering \
+))
+endif
 
 ifneq ($(DISABLE_CVE_TESTS),TRUE)
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
