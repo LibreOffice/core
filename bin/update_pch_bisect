@@ -23,9 +23,6 @@ header that compiles fine, however,
 it contains one or more required
 include without which it wouldn't
 compile, which it identifies.
-This mode is used to find source
-files that miss one or more includes
-and rely on pch file to compile.
 
 Usage: ./bin/update_pch_bisect ./vcl/inc/pch/precompiled_vcl.hxx "/opt/lo/bin/make vcl.build" --find-required --verbose
 """
@@ -99,11 +96,11 @@ def bisect(lines, marks, min, max, update, command):
                 marks[min] = TEST_ON
                 update(lines, marks)
                 if command():
-                    log(' Found #{}: {}'.format(min+1, lines[min].strip('\n')))
+                    log(' Found @{}: {}'.format(min+1, lines[min].strip('\n')))
                     marks[min] = GOOD
                     return marks
             else:
-                log(' Found #{}: {}'.format(min+1, lines[min].strip('\n')))
+                log(' Found @{}: {}'.format(min+1, lines[min].strip('\n')))
             # Either way, this one is irrelevant.
             marks[min] = BAD
             return marks
@@ -233,7 +230,7 @@ def main():
 
 if __name__ == '__main__':
 
-    if len(sys.argv) in (3, 5):
+    if len(sys.argv) in (3, 4, 5):
         status = main()
         sys.exit(status)
 
