@@ -194,6 +194,8 @@ public:
     // css::awt::XToolkitExperimental
     virtual void SAL_CALL processEventsToIdle()
         throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getHWOSConfInfo()
+         throw (::css::uno::RuntimeException, ::std::exception) override;
 
     // css::awt::XToolkit
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1911,6 +1913,13 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
 {
     SolarMutexGuard aSolarGuard;
     Scheduler::ProcessTaskScheduling(false);
+}
+
+OUString SAL_CALL VCLXToolkit::getHWOSConfInfo()
+    throw (::css::uno::RuntimeException, ::std::exception)
+{
+    SolarMutexGuard aSolarGuard;
+    return Application::GetHWOSConfInfo();
 }
 
 // css:awt:XToolkitRobot
