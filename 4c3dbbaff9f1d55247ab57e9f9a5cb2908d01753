@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_fc10d6aa",
+        "filename": "include/svtools/commandinfoprovider.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-14T18:08:28Z",
+      "side": 1,
+      "message": "Better to drop rtl prefixes from OUString.",
+      "revId": "4c3dbbaff9f1d55247ab57e9f9a5cb2908d01753",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
