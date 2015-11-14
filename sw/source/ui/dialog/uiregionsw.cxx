@@ -1817,39 +1817,39 @@ SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage( vcl::Window *pParent,
     : SfxTabPage( pParent, "FootnotesEndnotesTabPage", "modules/swriter/ui/footnotesendnotestabpage.ui", &rAttrSet )
 
 {
-    get(pFootnoteNtAtTextEndCB,"ftnntattextend");
+    get(m_pFootnoteNtAtTextEndCB,"ftnntattextend");
 
-    get(pFootnoteNtNumCB,"ftnntnum");
-    get(pFootnoteOffsetLbl,"ftnoffset_label");
-    get(pFootnoteOffsetField,"ftnoffset");
+    get(m_pFootnoteNtNumCB,"ftnntnum");
+    get(m_pFootnoteOffsetLbl,"ftnoffset_label");
+    get(m_pFootnoteOffsetField,"ftnoffset");
 
-    get(pFootnoteNtNumFormatCB,"ftnntnumfmt");
-    get(pFootnotePrefixFT,"ftnprefix_label");
-    get(pFootnotePrefixED,"ftnprefix");
-    get(pFootnoteNumViewBox,"ftnnumviewbox");
-    get(pFootnoteSuffixFT,"ftnsuffix_label");
-    get(pFootnoteSuffixED,"ftnsuffix");
+    get(m_pFootnoteNtNumFormatCB,"ftnntnumfmt");
+    get(m_pFootnotePrefixFT,"ftnprefix_label");
+    get(m_pFootnotePrefixED,"ftnprefix");
+    get(m_pFootnoteNumViewBox,"ftnnumviewbox");
+    get(m_pFootnoteSuffixFT,"ftnsuffix_label");
+    get(m_pFootnoteSuffixED,"ftnsuffix");
 
-    get(pEndNtAtTextEndCB,"endntattextend");
+    get(m_pEndNtAtTextEndCB,"endntattextend");
 
-    get(pEndNtNumCB,"endntnum");
-    get(pEndOffsetLbl,"endoffset_label");
-    get(pEndOffsetField,"endoffset");
+    get(m_pEndNtNumCB,"endntnum");
+    get(m_pEndOffsetLbl,"endoffset_label");
+    get(m_pEndOffsetField,"endoffset");
 
-    get(pEndNtNumFormatCB,"endntnumfmt");
-    get(pEndPrefixFT,"endprefix_label");
-    get(pEndPrefixED,"endprefix");
-    get(pEndNumViewBox,"endnumviewbox");
-    get(pEndSuffixFT,"endsuffix_label");
-    get(pEndSuffixED,"endsuffix");
+    get(m_pEndNtNumFormatCB,"endntnumfmt");
+    get(m_pEndPrefixFT,"endprefix_label");
+    get(m_pEndPrefixED,"endprefix");
+    get(m_pEndNumViewBox,"endnumviewbox");
+    get(m_pEndSuffixFT,"endsuffix_label");
+    get(m_pEndSuffixED,"endsuffix");
 
     Link<Button*,void> aLk( LINK( this, SwSectionFootnoteEndTabPage, FootEndHdl));
-    pFootnoteNtAtTextEndCB->SetClickHdl( aLk );
-    pFootnoteNtNumCB->SetClickHdl( aLk );
-    pEndNtAtTextEndCB->SetClickHdl( aLk );
-    pEndNtNumCB->SetClickHdl( aLk );
-    pFootnoteNtNumFormatCB->SetClickHdl( aLk );
-    pEndNtNumFormatCB->SetClickHdl( aLk );
+    m_pFootnoteNtAtTextEndCB->SetClickHdl( aLk );
+    m_pFootnoteNtNumCB->SetClickHdl( aLk );
+    m_pEndNtAtTextEndCB->SetClickHdl( aLk );
+    m_pEndNtNumCB->SetClickHdl( aLk );
+    m_pFootnoteNtNumFormatCB->SetClickHdl( aLk );
+    m_pEndNtNumFormatCB->SetClickHdl( aLk );
 }
 
 SwSectionFootnoteEndTabPage::~SwSectionFootnoteEndTabPage()
@@ -1859,34 +1859,34 @@ SwSectionFootnoteEndTabPage::~SwSectionFootnoteEndTabPage()
 
 void SwSectionFootnoteEndTabPage::dispose()
 {
-    pFootnoteNtAtTextEndCB.clear();
-    pFootnoteNtNumCB.clear();
-    pFootnoteOffsetLbl.clear();
-    pFootnoteOffsetField.clear();
-    pFootnoteNtNumFormatCB.clear();
-    pFootnotePrefixFT.clear();
-    pFootnotePrefixED.clear();
-    pFootnoteNumViewBox.clear();
-    pFootnoteSuffixFT.clear();
-    pFootnoteSuffixED.clear();
-    pEndNtAtTextEndCB.clear();
-    pEndNtNumCB.clear();
-    pEndOffsetLbl.clear();
-    pEndOffsetField.clear();
-    pEndNtNumFormatCB.clear();
-    pEndPrefixFT.clear();
-    pEndPrefixED.clear();
-    pEndNumViewBox.clear();
-    pEndSuffixFT.clear();
-    pEndSuffixED.clear();
+    m_pFootnoteNtAtTextEndCB.clear();
+    m_pFootnoteNtNumCB.clear();
+    m_pFootnoteOffsetLbl.clear();
+    m_pFootnoteOffsetField.clear();
+    m_pFootnoteNtNumFormatCB.clear();
+    m_pFootnotePrefixFT.clear();
+    m_pFootnotePrefixED.clear();
+    m_pFootnoteNumViewBox.clear();
+    m_pFootnoteSuffixFT.clear();
+    m_pFootnoteSuffixED.clear();
+    m_pEndNtAtTextEndCB.clear();
+    m_pEndNtNumCB.clear();
+    m_pEndOffsetLbl.clear();
+    m_pEndOffsetField.clear();
+    m_pEndNtNumFormatCB.clear();
+    m_pEndPrefixFT.clear();
+    m_pEndPrefixED.clear();
+    m_pEndNumViewBox.clear();
+    m_pEndSuffixFT.clear();
+    m_pEndSuffixED.clear();
     SfxTabPage::dispose();
 }
 
 bool SwSectionFootnoteEndTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    SwFormatFootnoteAtTextEnd aFootnote( pFootnoteNtAtTextEndCB->IsChecked()
-                            ? ( pFootnoteNtNumCB->IsChecked()
-                                ? ( pFootnoteNtNumFormatCB->IsChecked()
+    SwFormatFootnoteAtTextEnd aFootnote( m_pFootnoteNtAtTextEndCB->IsChecked()
+                            ? ( m_pFootnoteNtNumCB->IsChecked()
+                                ? ( m_pFootnoteNtNumFormatCB->IsChecked()
                                     ? FTNEND_ATTXTEND_OWNNUMANDFMT
                                     : FTNEND_ATTXTEND_OWNNUMSEQ )
                                 : FTNEND_ATTXTEND )
@@ -1895,19 +1895,19 @@ bool SwSectionFootnoteEndTabPage::FillItemSet( SfxItemSet* rSet )
     switch( aFootnote.GetValue() )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
-        aFootnote.SetNumType( pFootnoteNumViewBox->GetSelectedNumberingType() );
-        aFootnote.SetPrefix( pFootnotePrefixED->GetText().replaceAll("\\t", "\t") ); // fdo#65666
-        aFootnote.SetSuffix( pFootnoteSuffixED->GetText().replaceAll("\\t", "\t") );
+        aFootnote.SetNumType( m_pFootnoteNumViewBox->GetSelectedNumberingType() );
+        aFootnote.SetPrefix( m_pFootnotePrefixED->GetText().replaceAll("\\t", "\t") ); // fdo#65666
+        aFootnote.SetSuffix( m_pFootnoteSuffixED->GetText().replaceAll("\\t", "\t") );
         // no break;
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
-        aFootnote.SetOffset( static_cast< sal_uInt16 >( pFootnoteOffsetField->GetValue()-1 ) );
+        aFootnote.SetOffset( static_cast< sal_uInt16 >( m_pFootnoteOffsetField->GetValue()-1 ) );
         // no break;
     }
 
-    SwFormatEndAtTextEnd aEnd( pEndNtAtTextEndCB->IsChecked()
-                            ? ( pEndNtNumCB->IsChecked()
-                                ? ( pEndNtNumFormatCB->IsChecked()
+    SwFormatEndAtTextEnd aEnd( m_pEndNtAtTextEndCB->IsChecked()
+                            ? ( m_pEndNtNumCB->IsChecked()
+                                ? ( m_pEndNtNumFormatCB->IsChecked()
                                     ? FTNEND_ATTXTEND_OWNNUMANDFMT
                                     : FTNEND_ATTXTEND_OWNNUMSEQ )
                                 : FTNEND_ATTXTEND )
@@ -1916,13 +1916,13 @@ bool SwSectionFootnoteEndTabPage::FillItemSet( SfxItemSet* rSet )
     switch( aEnd.GetValue() )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
-        aEnd.SetNumType( pEndNumViewBox->GetSelectedNumberingType() );
-        aEnd.SetPrefix( pEndPrefixED->GetText().replaceAll("\\t", "\t") );
-        aEnd.SetSuffix( pEndSuffixED->GetText().replaceAll("\\t", "\t") );
+        aEnd.SetNumType( m_pEndNumViewBox->GetSelectedNumberingType() );
+        aEnd.SetPrefix( m_pEndPrefixED->GetText().replaceAll("\\t", "\t") );
+        aEnd.SetSuffix( m_pEndSuffixED->GetText().replaceAll("\\t", "\t") );
         // no break;
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
-        aEnd.SetOffset( static_cast< sal_uInt16 >( pEndOffsetField->GetValue()-1 ) );
+        aEnd.SetOffset( static_cast< sal_uInt16 >( m_pEndOffsetField->GetValue()-1 ) );
         // no break;
     }
 
@@ -1944,29 +1944,29 @@ void SwSectionFootnoteEndTabPage::ResetState( bool bFootnote,
 
     if( bFootnote )
     {
-        pNtAtTextEndCB = pFootnoteNtAtTextEndCB;
-        pNtNumCB = pFootnoteNtNumCB;
-        pNtNumFormatCB = pFootnoteNtNumFormatCB;
-        pPrefixFT = pFootnotePrefixFT;
-        pPrefixED = pFootnotePrefixED;
-        pSuffixFT = pFootnoteSuffixFT;
-        pSuffixED = pFootnoteSuffixED;
-        pNumViewBox = pFootnoteNumViewBox;
-        pOffsetText = pFootnoteOffsetLbl;
-        pOffsetField = pFootnoteOffsetField;
+        pNtAtTextEndCB = m_pFootnoteNtAtTextEndCB;
+        pNtNumCB = m_pFootnoteNtNumCB;
+        pNtNumFormatCB = m_pFootnoteNtNumFormatCB;
+        pPrefixFT = m_pFootnotePrefixFT;
+        pPrefixED = m_pFootnotePrefixED;
+        pSuffixFT = m_pFootnoteSuffixFT;
+        pSuffixED = m_pFootnoteSuffixED;
+        pNumViewBox = m_pFootnoteNumViewBox;
+        pOffsetText = m_pFootnoteOffsetLbl;
+        pOffsetField = m_pFootnoteOffsetField;
     }
     else
     {
-        pNtAtTextEndCB = pEndNtAtTextEndCB;
-        pNtNumCB = pEndNtNumCB;
-        pNtNumFormatCB = pEndNtNumFormatCB;
-        pPrefixFT = pEndPrefixFT;
-        pPrefixED = pEndPrefixED;
-        pSuffixFT = pEndSuffixFT;
-        pSuffixED = pEndSuffixED;
-        pNumViewBox = pEndNumViewBox;
-        pOffsetText = pEndOffsetLbl;
-        pOffsetField = pEndOffsetField;
+        pNtAtTextEndCB = m_pEndNtAtTextEndCB;
+        pNtNumCB = m_pEndNtNumCB;
+        pNtNumFormatCB = m_pEndNtNumFormatCB;
+        pPrefixFT = m_pEndPrefixFT;
+        pPrefixED = m_pEndPrefixED;
+        pSuffixFT = m_pEndSuffixFT;
+        pSuffixED = m_pEndSuffixED;
+        pNumViewBox = m_pEndNumViewBox;
+        pOffsetText = m_pEndOffsetLbl;
+        pOffsetField = m_pEndOffsetField;
     }
 
     const sal_uInt16 eState = rAttr.GetValue();
@@ -2028,8 +2028,8 @@ VclPtr<SfxTabPage> SwSectionFootnoteEndTabPage::Create( vcl::Window* pParent,
 
 IMPL_LINK_TYPED( SwSectionFootnoteEndTabPage, FootEndHdl, Button *, pBox, void )
 {
-    bool bFoot = pFootnoteNtAtTextEndCB == pBox || pFootnoteNtNumCB == pBox ||
-                    pFootnoteNtNumFormatCB == pBox ;
+    bool bFoot = m_pFootnoteNtAtTextEndCB == pBox || m_pFootnoteNtNumCB == pBox ||
+                    m_pFootnoteNtNumFormatCB == pBox ;
 
     CheckBox *pNumBox, *pNumFormatBox, *pEndBox;
     SwNumberingTypeListBox* pNumViewBox;
@@ -2040,29 +2040,29 @@ IMPL_LINK_TYPED( SwSectionFootnoteEndTabPage, FootEndHdl, Button *, pBox, void )
 
     if( bFoot )
     {
-        pEndBox = pFootnoteNtAtTextEndCB;
-        pNumBox = pFootnoteNtNumCB;
-        pNumFormatBox = pFootnoteNtNumFormatCB;
-        pNumViewBox = pFootnoteNumViewBox;
-        pOffsetText = pFootnoteOffsetLbl;
-        pOffsetField = pFootnoteOffsetField;
-        pPrefixFT = pFootnotePrefixFT;
-        pSuffixFT = pFootnoteSuffixFT;
-        pPrefixED = pFootnotePrefixED;
-        pSuffixED = pFootnoteSuffixED;
+        pEndBox = m_pFootnoteNtAtTextEndCB;
+        pNumBox = m_pFootnoteNtNumCB;
+        pNumFormatBox = m_pFootnoteNtNumFormatCB;
+        pNumViewBox = m_pFootnoteNumViewBox;
+        pOffsetText = m_pFootnoteOffsetLbl;
+        pOffsetField = m_pFootnoteOffsetField;
+        pPrefixFT = m_pFootnotePrefixFT;
+        pSuffixFT = m_pFootnoteSuffixFT;
+        pPrefixED = m_pFootnotePrefixED;
+        pSuffixED = m_pFootnoteSuffixED;
     }
     else
     {
-        pEndBox = pEndNtAtTextEndCB;
-        pNumBox = pEndNtNumCB;
-        pNumFormatBox = pEndNtNumFormatCB;
-        pNumViewBox = pEndNumViewBox;
-        pOffsetText = pEndOffsetLbl;
-        pOffsetField = pEndOffsetField;
-        pPrefixFT = pEndPrefixFT;
-        pSuffixFT = pEndSuffixFT;
-        pPrefixED = pEndPrefixED;
-        pSuffixED = pEndSuffixED;
+        pEndBox = m_pEndNtAtTextEndCB;
+        pNumBox = m_pEndNtNumCB;
+        pNumFormatBox = m_pEndNtNumFormatCB;
+        pNumViewBox = m_pEndNumViewBox;
+        pOffsetText = m_pEndOffsetLbl;
+        pOffsetField = m_pEndOffsetField;
+        pPrefixFT = m_pEndPrefixFT;
+        pSuffixFT = m_pEndSuffixFT;
+        pPrefixED = m_pEndPrefixED;
+        pSuffixED = m_pEndSuffixED;
     }
 
     bool bEnableAtEnd = TRISTATE_TRUE == pEndBox->GetState();

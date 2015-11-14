@@ -196,31 +196,31 @@ public:
 
 class SwSectionFootnoteEndTabPage : public SfxTabPage
 {
-    VclPtr<CheckBox>        pFootnoteNtAtTextEndCB;
+    VclPtr<CheckBox>        m_pFootnoteNtAtTextEndCB;
 
-    VclPtr<CheckBox>        pFootnoteNtNumCB;
-    VclPtr<FixedText>       pFootnoteOffsetLbl;
-    VclPtr<NumericField>    pFootnoteOffsetField;
+    VclPtr<CheckBox>        m_pFootnoteNtNumCB;
+    VclPtr<FixedText>       m_pFootnoteOffsetLbl;
+    VclPtr<NumericField>    m_pFootnoteOffsetField;
 
-    VclPtr<CheckBox>        pFootnoteNtNumFormatCB;
-    VclPtr<FixedText>       pFootnotePrefixFT;
-    VclPtr<Edit>            pFootnotePrefixED;
-    VclPtr<SwNumberingTypeListBox> pFootnoteNumViewBox;
-    VclPtr<FixedText>       pFootnoteSuffixFT;
-    VclPtr<Edit>            pFootnoteSuffixED;
+    VclPtr<CheckBox>        m_pFootnoteNtNumFormatCB;
+    VclPtr<FixedText>       m_pFootnotePrefixFT;
+    VclPtr<Edit>            m_pFootnotePrefixED;
+    VclPtr<SwNumberingTypeListBox> m_pFootnoteNumViewBox;
+    VclPtr<FixedText>       m_pFootnoteSuffixFT;
+    VclPtr<Edit>            m_pFootnoteSuffixED;
 
-    VclPtr<CheckBox>        pEndNtAtTextEndCB;
+    VclPtr<CheckBox>        m_pEndNtAtTextEndCB;
 
-    VclPtr<CheckBox>        pEndNtNumCB;
-    VclPtr<FixedText>       pEndOffsetLbl;
-    VclPtr<NumericField>    pEndOffsetField;
+    VclPtr<CheckBox>        m_pEndNtNumCB;
+    VclPtr<FixedText>       m_pEndOffsetLbl;
+    VclPtr<NumericField>    m_pEndOffsetField;
 
-    VclPtr<CheckBox>        pEndNtNumFormatCB;
-    VclPtr<FixedText>       pEndPrefixFT;
-    VclPtr<Edit>            pEndPrefixED;
-    VclPtr<SwNumberingTypeListBox> pEndNumViewBox;
-    VclPtr<FixedText>       pEndSuffixFT;
-    VclPtr<Edit>            pEndSuffixED;
+    VclPtr<CheckBox>        m_pEndNtNumFormatCB;
+    VclPtr<FixedText>       m_pEndPrefixFT;
+    VclPtr<Edit>            m_pEndPrefixED;
+    VclPtr<SwNumberingTypeListBox> m_pEndNumViewBox;
+    VclPtr<FixedText>       m_pEndSuffixFT;
+    VclPtr<Edit>            m_pEndSuffixED;
 
     DECL_LINK_TYPED( FootEndHdl, Button*, void );
     void ResetState( bool bFootnote, const SwFormatFootnoteEndAtTextEnd& );
