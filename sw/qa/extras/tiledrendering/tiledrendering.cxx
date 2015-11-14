@@ -157,18 +157,6 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 
 void SwTiledRenderingTest::testRegisterCallback()
 {
-#ifdef MACOSX
-    // For some reason this particular test requires window system access on OS X.
-
-    // Without window system access, we do get a number of "<<<WARNING>>>
-    // AquaSalGraphics::CheckContext() FAILED!!!!" [sic] and " <Warning>: CGSConnectionByID: 0 is
-    // not a valid connection ID" warnings while running the other tests, too, but they still
-    // succeed.
-
-    if (!vcl::IsWindowSystemAvailable())
-        return;
-#endif
-
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -177,13 +165,8 @@ void SwTiledRenderingTest::testRegisterCallback()
 
     // Check that the top left 256x256px tile would be invalidated.
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
-#if !defined(WNT) && !defined(MACOSX)
     Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
-    // FIXME - fails on Windows since about cbd48230bb3a90c4c485fa33123c6653234e02e9
-    // [plus minus few commits maybe]
-    // Also on OS X. But is tiled rendering even supposed to work on Windows and OS X?
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
-#endif
 }
 
 void SwTiledRenderingTest::testPostKeyEvent()
@@ -297,9 +280,7 @@ void SwTiledRenderingTest::testSetGraphicSelection()
     Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
-#if !defined(MACOSX) // FIXME
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getHeight() + 1000, aShapeAfter.getHeight());
-#endif
 }
 
 void SwTiledRenderingTest::testResetSelection()
@@ -329,7 +310,6 @@ void SwTiledRenderingTest::testResetSelection()
     CPPUNIT_ASSERT(!pWrtShell->IsSelFrmMode());
 }
 
-#if !(defined WNT || defined MACOSX)
 void lcl_search(bool bBackward)
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -339,11 +319,9 @@ void lcl_search(bool bBackward)
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
 }
-#endif
 
 void SwTiledRenderingTest::testSearch()
 {
-#if !defined(WNT) && !defined(MACOSX)
     comphelper::LibreOfficeKit::setActive();
 
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
@@ -384,12 +362,10 @@ void SwTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
 
     comphelper::LibreOfficeKit::setActive(false);
-#endif
 }
 
 void SwTiledRenderingTest::testSearchViewArea()
 {
-#if !defined(WNT) && !defined(MACOSX)
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Go to the second page, 1-based.
@@ -411,12 +387,10 @@ void SwTiledRenderingTest::testSearchViewArea()
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.
     CPPUNIT_ASSERT_EQUAL(OUString("Heading on second page"), pShellCrsr->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
-#endif
 }
 
 void SwTiledRenderingTest::testSearchTextFrame()
 {
-#if !defined(WNT) && !defined(MACOSX)
     comphelper::LibreOfficeKit::setActive();
 
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
@@ -431,12 +405,10 @@ void SwTiledRenderingTest::testSearchTextFrame()
     CPPUNIT_ASSERT(!m_aTextSelection.isEmpty());
 
     comphelper::LibreOfficeKit::setActive(false);
-#endif
 }
 
 void SwTiledRenderingTest::testSearchTextFrameWrapAround()
 {
-#if !defined(WNT) && !defined(MACOSX)
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -449,12 +421,10 @@ void SwTiledRenderingTest::testSearchTextFrameWrapAround()
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This failed, i.e. the second time 'not found' was reported, instead of wrapping around.
     CPPUNIT_ASSERT(m_bFound);
-#endif
 }
 
 void SwTiledRenderingTest::testDocumentSizeChanged()
 {
-#if !defined(WNT) && !defined(MACOSX)
     // Get the current document size.
     SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
@@ -469,12 +439,10 @@ void SwTiledRenderingTest::testDocumentSizeChanged()
     CPPUNIT_ASSERT_EQUAL(aSize.getWidth(), m_aDocumentSize.getWidth());
     // Document height should be smaller now.
     CPPUNIT_ASSERT(aSize.getHeight() > m_aDocumentSize.getHeight());
-#endif
 }
 
 void SwTiledRenderingTest::testSearchAll()
 {
-#if !defined(WNT) && !defined(MACOSX)
     comphelper::LibreOfficeKit::setActive();
 
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
@@ -492,8 +460,8 @@ void SwTiledRenderingTest::testSearchAll()
     CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
 
     comphelper::LibreOfficeKit::setActive(false);
-#endif
 }
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
