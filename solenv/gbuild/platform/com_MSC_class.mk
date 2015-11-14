@@ -439,6 +439,10 @@ endef
 gb_PythonTest_PRECOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND)
 gb_PythonTest_DEPS := $(call gb_Package_get_target,python3)
 
+ifeq ($(strip $(CPPUNITTRACE)),TRUE)
+gb_CppunitTest_GDBTRACE := '$(DEVENV)' /debugexe
+endif
+
 # SrsPartTarget class
 
 ifeq ($(gb_FULLDEPS),$(true))

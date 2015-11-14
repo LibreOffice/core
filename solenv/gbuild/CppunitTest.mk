@@ -22,11 +22,11 @@
 gb_CppunitTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(SYSTEM_PYTHON),,$(call gb_Package_get_target,python3))
 
-ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
-gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(INSTDIR)" --batch --command=$(SRCDIR)/solenv/bin/gdbtrycatchtrace-stdout -return-child-result --args
-else ifneq ($(strip $(CPPUNITTRACE)),)
+ifeq ($(strip $(gb_CppunitTest_GDBTRACE)),)
+ifneq ($(strip $(CPPUNITTRACE)),)
 gb_CppunitTest_GDBTRACE := $(CPPUNITTRACE)
 gb_CppunitTest__interactive := $(true)
+endif
 endif
 
 ifneq ($(strip $(VALGRIND)),)
