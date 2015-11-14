@@ -216,6 +216,71 @@
               </packing>
             </child>
             <child>
+              <object class="GtkCheckButton" id="extrabits">
+                <property name="label" translatable="yes">_Send OS version &amp; simple hardware info.</property>
+                <property name="tooltip_text" translatable="yes">This information lets us optimize for your hardware &amp; OS.</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">7</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHBox" id="hbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">8</property>
+                <property name="homogeneous">False</property>
+                <child>
+                  <object class="GtkLabel" id="useragent_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="yalign">0</property>
+                    <property name="label" translatable="yes">User Agent:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="useragent_changed">
+                    <property name="visible">False</property>
+                    <property name="can_focus">False</property>
+                    <property name="yalign">0</property>
+                    <property name="label" translatable="yes">Hit apply to update</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="useragent">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">8</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="neverchecked">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>

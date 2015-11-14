@@ -51,6 +51,7 @@
 #include "vcl/scheduler.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/lazydelete.hxx"
+#include "vcl/opengl/OpenGLWrapper.hxx"
 
 #include "salinst.hxx"
 #include "salframe.hxx"
@@ -74,6 +75,7 @@
 
 #include <cassert>
 #include <utility>
+#include <thread>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1160,6 +1162,36 @@ OUString Application::GetAppName()
         return *(pSVData->maAppData.mpAppName);
     else
         return OUString();
+}
+
+OUString Application::GetHWOSConfInfo()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    OUStringBuffer aDetails;
+
+    aDetails.append( "Threads " );
+    aDetails.append( (sal_Int32)
+        std::thread::hardware_concurrency() );
+    aDetails.append( "; " );
+
+    OUString aVersion;
+    if ( pSVData && pSVData->mpDefInst )
+        aVersion = pSVData->mpDefInst->getOSVersion();
+    else
+        aVersion = "-";
+
+    aDetails.append( "Ver: " );
+    aDetails.append( aVersion );
+    aDetails.append( "; " );
+
+    aDetails.append( "Render: " );
+    if ( OpenGLWrapper::isVCLOpenGLEnabled() )
+        aDetails.append( "GL" );
+    else
+        aDetails.append( "default" );
+    aDetails.append( "; " );
+
+    return aDetails.makeStringAndClear();
 }
 
 void Application::SetDisplayName( const OUString& rName )

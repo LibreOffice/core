@@ -29,6 +29,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
+#include <com/sun/star/ucb/XWebDAVCommandEnvironment.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -38,9 +40,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 
-using namespace ::com::sun::star;
-
-// class SvxOnlineUpdateTabPage --------------------------------------------------
+using namespace ::css;
 
 SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptOnlineUpdatePage", "cui/ui/optonlineupdatepage.ui", &rSet)
@@ -56,8 +56,11 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(vcl::Window* pParent, const SfxIt
     get(m_pDestPath, "destpath");
     get(m_pChangePathButton, "changepath");
     get(m_pLastChecked, "lastchecked");
+    get(m_pExtrasCheckBox, "extrabits");
+    get(m_pUserAgentLabel, "useragent");
 
     m_pAutoCheckCheckBox->SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );
+    m_pExtrasCheckBox->SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl ) );
     m_pCheckNowButton->SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, CheckNowHdl_Impl ) );
     m_pChangePathButton->SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, FileDialogHdl_Impl ) );
 
@@ -80,6 +83,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(vcl::Window* pParent, const SfxIt
     m_aLastCheckedTemplate = m_pLastChecked->GetText();
 
     UpdateLastCheckedText();
+    UpdateUserAgent();
 }
 
 SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
@@ -99,9 +103,11 @@ void SvxOnlineUpdateTabPage::dispose()
     m_pDestPath.clear();
     m_pChangePathButton.clear();
     m_pLastChecked.clear();
+    m_pExtrasCheckBox.clear();
+    m_pUserAgentLabel.clear();
+
     SfxTabPage::dispose();
 }
-
 
 void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
 {
@@ -158,6 +164,36 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
     }
 
     m_pLastChecked->SetText( aText );
+}
+
+void SvxOnlineUpdateTabPage::UpdateUserAgent()
+{
+    try {
+        uno::Reference< ucb::XWebDAVCommandEnvironment > xDav(
+            css::deployment::UpdateInformationProvider::create(
+                ::comphelper::getProcessComponentContext() ),
+            css::uno::UNO_QUERY_THROW );
+
+        OUString aPseudoURL = "useragent:normal";
+        if( m_pExtrasCheckBox->IsChecked() )
+            aPseudoURL = "useragent:extended";
+        uno::Sequence< beans::StringPair > aHeaders
+            = xDav->getUserRequestHeaders( aPseudoURL, ucb::WebDAVHTTPMethod(0) );
+
+        for ( auto i = aHeaders.begin(); i != aHeaders.end(); ++i )
+        {
+            if ( i->First == "User-Agent" )
+            {
+                OUString aText = i->Second;
+                aText = aText.replaceAll(";", ";\n");
+                aText = aText.replaceAll("(", "\n(");
+                m_pUserAgentLabel->SetText( aText );
+                break;
+            }
+        }
+    } catch (const uno::Exception &) {
+        SAL_WARN( "cui.options", "Unexpected exception fetching User Agent" );
+    }
 }
 
 VclPtr<SfxTabPage>
@@ -220,14 +256,19 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
         bModified = true;
     }
 
+    if( m_pExtrasCheckBox->IsValueChangedFromSaved() )
+    {
+        bValue = m_pExtrasCheckBox->IsChecked();
+        m_xUpdateAccess->replaceByName( "ExtendedUserAgent", uno::makeAny( bValue ) );
+        bModified = true;
+    }
+
     uno::Reference< util::XChangesBatch > xChangesBatch(m_xUpdateAccess, uno::UNO_QUERY);
     if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
         xChangesBatch->commitChanges();
 
     return bModified;
 }
-
-
 
 void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
 {
@@ -266,16 +307,17 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
     if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sValue, aPath) )
         m_pDestPath->SetText(aPath);
 
+    m_xUpdateAccess->getByName( "ExtendedUserAgent" ) >>= bValue;
+    m_pExtrasCheckBox->Check(bValue);
+    m_pExtrasCheckBox->SaveValue();
+    UpdateUserAgent();
+
     m_pAutoDownloadCheckBox->SaveValue();
 }
-
-
 
 void SvxOnlineUpdateTabPage::FillUserData()
 {
 }
-
-
 
 IMPL_LINK_TYPED( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, Button*, pBox, void )
 {
@@ -286,7 +328,10 @@ IMPL_LINK_TYPED( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, Button*, pBox, void 
     m_pEveryMonthButton->Enable(bEnabled);
 }
 
-
+IMPL_LINK_TYPED( SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, Button*, , void )
+{
+    UpdateUserAgent();
+}
 
 IMPL_LINK_NOARG_TYPED(SvxOnlineUpdateTabPage, FileDialogHdl_Impl, Button*, void)
 {
@@ -307,8 +352,6 @@ IMPL_LINK_NOARG_TYPED(SvxOnlineUpdateTabPage, FileDialogHdl_Impl, Button*, void)
             m_pDestPath->SetText( aFolder );
     }
 }
-
-
 
 IMPL_LINK_NOARG_TYPED(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, Button*, void)
 {

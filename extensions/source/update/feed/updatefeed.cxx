@@ -46,6 +46,8 @@
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/awt/XToolkitExperimental.hpp>
 
 #include <rtl/ref.hxx>
 #include <rtl/bootstrap.hxx>
@@ -136,6 +138,7 @@ class UpdateInformationProvider :
                                     ucb::XWebDAVCommandEnvironment,
                                     lang::XServiceInfo >
 {
+    OUString getUserAgent(bool bExtended);
 public:
     static uno::Reference< uno::XInterface > createInstance(const uno::Reference<uno::XComponentContext>& xContext);
 
@@ -176,7 +179,7 @@ public:
     // XWebDAVCommandEnvironment
     virtual uno::Sequence< beans::StringPair > SAL_CALL getUserRequestHeaders(
         const OUString&,  ucb::WebDAVHTTPMethod )
-        throw ( uno::RuntimeException, std::exception ) override { return m_aRequestHeaderList; };
+        throw ( uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -190,6 +193,7 @@ protected:
 
     virtual ~UpdateInformationProvider();
     static OUString getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item);
+    static uno::Any getConfigurationItemAny(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item);
 
 private:
     uno::Reference< io::XInputStream > load(const OUString& rURL);
@@ -328,7 +332,31 @@ UpdateInformationProvider::UpdateInformationProvider(
     , m_nCommandId(0)
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        css::configuration::theDefaultProvider::get(xContext));
+        css::configuration::theDefaultProvider::get(m_xContext));
+
+    uno::Any aExtended = getConfigurationItemAny(
+        xConfigurationProvider,
+        "org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments",
+        "ExtendedUserAgent");
+    bool bExtendedUserAgent = false;
+    aExtended >>= bExtendedUserAgent;
+
+    OUString aUserAgent = getUserAgent(bExtendedUserAgent);
+
+    m_aRequestHeaderList[0].First = "Accept-Language";
+    m_aRequestHeaderList[0].Second = getConfigurationItem( xConfigurationProvider, "org.openoffice.Setup/L10N", "ooLocale" );
+    if( !aUserAgent.isEmpty() )
+    {
+        m_aRequestHeaderList.realloc(2);
+        m_aRequestHeaderList[1].First = "User-Agent";
+        m_aRequestHeaderList[1].Second = aUserAgent;
+    }
+}
+
+OUString UpdateInformationProvider::getUserAgent(bool bExtended)
+{
+    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
+        css::configuration::theDefaultProvider::get(m_xContext));
 
     OUStringBuffer buf;
     buf.append(
@@ -342,30 +370,52 @@ UpdateInformationProvider::UpdateInformationProvider(
             xConfigurationProvider,
             "org.openoffice.Setup/Product",
             "ooSetupVersion"));
+
     OUString extension(
         getConfigurationItem(
             xConfigurationProvider,
             "org.openoffice.Setup/Product",
             "ooSetupExtension"));
-    if (!extension.isEmpty()) {
+    if (!extension.isEmpty())
         buf.append(extension);
-    }
+
     OUString product(buf.makeStringAndClear());
 
     OUString aUserAgent( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" );
+    OUString aExtended;
+    if( bExtended )
+    {
+        try {
+            uno::Reference< css::awt::XToolkitExperimental > xToolkit(
+                css::awt::Toolkit::create( m_xContext ), uno::UNO_QUERY_THROW );
+            if ( xToolkit.is() )
+                aExtended = xToolkit->getHWOSConfInfo();
+        } catch (const uno::Exception &) {
+            SAL_WARN( "extensions.update", "Failed to find version info from toolkit" );
+        }
+    }
     rtl::Bootstrap::expandMacros( aUserAgent );
     aUserAgent = aUserAgent.replaceAll("<PRODUCT>", product);
+    aUserAgent = aUserAgent.replaceAll("<OPTIONAL_OS_HW_DATA>", aExtended);
     SAL_INFO("extensions.update", "UpdateUserAgent: " << aUserAgent);
 
-    m_aRequestHeaderList[0].First = "Accept-Language";
-    m_aRequestHeaderList[0].Second = getConfigurationItem( xConfigurationProvider, "org.openoffice.Setup/L10N", "ooLocale" );
-    if( !aUserAgent.isEmpty() )
-    {
-        m_aRequestHeaderList.realloc(2);
-        m_aRequestHeaderList[1].First = "User-Agent";
-        m_aRequestHeaderList[1].Second = aUserAgent;
-    }
+    return aUserAgent;
 }
+
+uno::Sequence< beans::StringPair > SAL_CALL UpdateInformationProvider::getUserRequestHeaders(
+    const OUString &aURL, ucb::WebDAVHTTPMethod )
+    throw ( uno::RuntimeException, std::exception )
+{
+    uno::Sequence< beans::StringPair > aPair = m_aRequestHeaderList;
+
+    // Internal use from cui/ some magic URLs
+    if( aPair.getLength() > 1 && aURL.startsWith( "useragent:" ) )
+    {
+        bool bExtended = aURL == "useragent:extended";
+        aPair[1].Second = getUserAgent(bExtended);
+    }
+    return aPair;
+};
 
 uno::Reference< uno::XInterface >
 UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentContext>& xContext)
@@ -383,18 +433,13 @@ UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentCo
     return *new UpdateInformationProvider(xContext, xUniversalContentBroker, xDocumentBuilder, xXPath);
 }
 
-
-
 UpdateInformationProvider::~UpdateInformationProvider()
 {
 }
 
-
-
-OUString
-UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item)
+uno::Any
+UpdateInformationProvider::getConfigurationItemAny(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item)
 {
-    rtl::OUString sRet;
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";
     aProperty.Value = uno::makeAny(node);
@@ -408,11 +453,16 @@ UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServi
             aArgumentList ),
         uno::UNO_QUERY_THROW);
 
-    xNameAccess->getByName(item) >>= sRet;
-    return sRet;
+    return xNameAccess->getByName(item);
 }
 
-
+OUString
+UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item)
+{
+    OUString sRet;
+    getConfigurationItemAny(configurationProvider, node, item) >>= sRet;
+    return sRet;
+}
 
 void
 UpdateInformationProvider::storeCommandInfo(
@@ -424,8 +474,6 @@ UpdateInformationProvider::storeCommandInfo(
     m_nCommandId = nCommandId;
     m_xCommandProcessor = rxCommandProcessor;
 }
-
-
 
 uno::Reference< io::XInputStream >
 UpdateInformationProvider::load(const OUString& rURL)

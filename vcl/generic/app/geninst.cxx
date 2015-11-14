@@ -20,6 +20,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#if defined(LINUX)
+#  include <stdio.h>
+#endif
+
 #include <osl/module.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -126,6 +130,35 @@ bool SalGenericInstance::CheckYieldMutex()
 SalGenericInstance::~SalGenericInstance()
 {
     delete mpSalYieldMutex;
+}
+
+OUString SalGenericInstance::getOSVersion()
+{
+    OUString aKernelVer = "unknown";
+
+// not so generic, but at least shared between all unix backend
+#if defined(LINUX)
+    FILE* pVersion = fopen( "/proc/version", "r" );
+    if ( pVersion )
+    {
+        char aVerBuffer[512];
+        if ( fgets ( aVerBuffer, 511, pVersion ) )
+        {
+            aKernelVer = OUString::createFromAscii( aVerBuffer );
+            sal_Int32 nIndex = 0;
+            // "Linux version 3.16.7-29-desktop ..."
+            OUString aVers = aKernelVer.getToken( 2, ' ', nIndex );
+            // "3.16.7-29-desktop ..."
+            sal_Int32 nTooDetailed = aVers.indexOf( '.', 2);
+            if (nTooDetailed < 1 || nTooDetailed > 8)
+                aKernelVer = "misparse";
+            else // "3.16.7-29-desktop ..."
+                aKernelVer = aVers.copy(0, nTooDetailed);
+        }
+        fclose( pVersion );
+    }
+#endif
+    return aKernelVer;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
