@@ -596,7 +596,7 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
         }
         else
         {
-            throw INVALIDENTRY;
+            throw PoIfstream::Exception();
         }
     }
 }

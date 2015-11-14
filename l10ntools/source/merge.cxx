@@ -45,15 +45,12 @@ namespace
         {
             rPoFile.readEntry( o_rPoEntry );
         }
-        catch( PoIfstream::Exception& aException )
+        catch (const PoIfstream::Exception&)
         {
-            if( aException == PoIfstream::INVALIDENTRY )
-            {
-                printf(
-                    "Warning : %s contains invalid entry\n",
-                    rFileName.getStr() );
-                return false;
-            }
+            printf(
+                "Warning : %s contains invalid entry\n",
+                rFileName.getStr() );
+            return false;
         }
         return true;
     }

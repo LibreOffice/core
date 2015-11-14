@@ -123,7 +123,7 @@ private:
 
 public:
 
-    enum Exception { INVALIDENTRY };
+    class Exception : public std::exception { };
 
             PoIfstream();
             PoIfstream( const OString& rFileName );
