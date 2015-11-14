@@ -2405,6 +2405,14 @@
           <value>15</value>
         </prop>
       </node>
+      <node oor:name=".uno:SetOutline" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Outline Presets</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>15</value>
+        </prop>
+      </node>
       <node oor:name=".uno:BezierConvert" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Convert to Curve</value>

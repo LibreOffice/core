@@ -246,6 +246,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         // Outline numbering has to be painted into the virtual device
         // to get correct lines
         // has to be made again
+        pVDev->SetLineColor(aBackColor);
         pVDev->DrawRect(aOrgRect);
         long nStartX = aOrgRect.TopLeft().X();
         long nStartY = aOrgRect.TopLeft().Y();
@@ -352,6 +353,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
                     Point aLineLeft(aLeft.X(), nLineTop );
                     Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
+                    pVDev->SetLineColor(COL_LIGHTGRAY);
                     pVDev->DrawLine(aLineLeft,  aLineRight);
                 }
 

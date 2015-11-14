@@ -246,15 +246,20 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
     {
     case FN_SVX_SET_NUMBER:
     case FN_SVX_SET_BULLET:
+    case FN_SVX_SET_OUTLINE:
         {
             const SfxUInt16Item* pItem = rReq.GetArg<SfxUInt16Item>(nSlot);
             if ( pItem != nullptr )
             {
                 const sal_uInt16 nChoosenItemIdx = pItem->GetValue();
-                svx::sidebar::NBOTypeMgrBase* pNBOTypeMgr =
-                    nSlot == FN_SVX_SET_NUMBER
-                        ? svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::NUMBERING )
-                        : svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::BULLETS );
+                sal_uInt16 nNBOType = svx::sidebar::eNBOType::BULLETS;
+                if ( nSlot == FN_SVX_SET_NUMBER )
+                    nNBOType = svx::sidebar::eNBOType::NUMBERING;
+                else if ( nSlot == FN_SVX_SET_OUTLINE )
+                    nNBOType = svx::sidebar::eNBOType::OUTLINE;
+
+                svx::sidebar::NBOTypeMgrBase* pNBOTypeMgr = svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( nNBOType );
+
                 if ( pNBOTypeMgr != nullptr )
                 {
                     const SwNumRule* pNumRuleAtCurrentSelection = GetShell().GetNumRuleAtCurrentSelection();

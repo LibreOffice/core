@@ -1828,6 +1828,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
             case FN_BUL_NUM_RULE_INDEX:
             case FN_NUM_NUM_RULE_INDEX:
+            case FN_OUTLINE_RULE_INDEX:
         {
             SwNumRule* pCurRule = const_cast<SwNumRule*>(GetShell().GetNumRuleAtCurrCrsrPos());
             sal_uInt16  nActNumLvl = USHRT_MAX;
@@ -1858,6 +1859,17 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     {
                         const sal_uInt16 nBulIndex = pNumbering->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
                         rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,nBulIndex));
+                    }
+                }
+
+                if ( nWhich == FN_OUTLINE_RULE_INDEX )
+                {
+                    rSet.Put(SfxUInt16Item(FN_OUTLINE_RULE_INDEX, USHRT_MAX));
+                    NBOTypeMgrBase* pOutline = NBOutlineTypeMgrFact::CreateInstance(eNBOType::OUTLINE);
+                    if ( pOutline )
+                    {
+                        const sal_uInt16 nIndex = pOutline->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
+                        rSet.Put(SfxUInt16Item(FN_OUTLINE_RULE_INDEX,nIndex));
                     }
                 }
             }
