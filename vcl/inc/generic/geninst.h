@@ -105,6 +105,8 @@ public:
     bool isPrinterInit() const { return mbPrinterInit; }
     virtual GenPspGraphics     *CreatePrintGraphics() = 0;
 
+    virtual OUString            getOSVersion() override;
+
     // prolly belongs somewhere else ... just a font help
     static void RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection );
     static int  FetchFontSubstitutionFlags();

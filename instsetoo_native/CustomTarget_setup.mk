@@ -143,7 +143,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'ReferenceOOoMajorMinor=4.1' \
 		&& echo 'UpdateID=$(PRODUCTNAME)_$(LIBO_VERSION_MAJOR)_en-US' \
 		&& echo 'UpdateURL=$(if $(ENABLE_ONLINE_UPDATE),http://update.libreoffice.org/check.php$(if $(filter-out WNT,$(OS)),?pkgfmt=$(PKGFORMAT)))' \
-		&& echo 'UpdateUserAgent=<PRODUCT> ($${buildid}; $${_OS}; $${_ARCH}; BundledLanguages=$${AllLanguages})' \
+		&& echo 'UpdateUserAgent=<PRODUCT> ($${buildid}; $${_OS}; $${_ARCH}; <OPTIONAL_OS_HW_DATA>BundledLanguages=$${AllLanguages})' \
 		&& echo 'Vendor=$(OOO_VENDOR)' \
 	) > $@
 
