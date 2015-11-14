@@ -8,35 +8,34 @@
  */
 
 #include "gtk3cairotextrender.hxx"
-#include "headless/svpgdi.hxx"
 
-SvpCairoTextRender::SvpCairoTextRender(SvpSalGraphics& rParent)
+GtkCairoTextRender::GtkCairoTextRender(GtkSalGraphics& rParent)
     : mrParent(rParent)
 {
 }
 
-GlyphCache& SvpCairoTextRender::getPlatformGlyphCache()
+GlyphCache& GtkCairoTextRender::getPlatformGlyphCache()
 {
     return SvpSalGraphics::getPlatformGlyphCache();
 }
 
-cairo_t* SvpCairoTextRender::getCairoContext()
+cairo_t* GtkCairoTextRender::getCairoContext()
 {
     return mrParent.getCairoContext();
 }
 
-void SvpCairoTextRender::getSurfaceOffset(double& nDX, double& nDY)
+void GtkCairoTextRender::getSurfaceOffset(double& nDX, double& nDY)
 {
     nDX = 0;
     nDY = 0;
 }
 
-void SvpCairoTextRender::clipRegion(cairo_t* cr)
+void GtkCairoTextRender::clipRegion(cairo_t* cr)
 {
     mrParent.clipRegion(cr);
 }
 
-void SvpCairoTextRender::drawSurface(cairo_t* /*cr*/)
+void GtkCairoTextRender::drawSurface(cairo_t* /*cr*/)
 {
 }
 

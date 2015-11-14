@@ -11,16 +11,15 @@
 #define INCLUDED_VCL_UNX_GTK3_GDI_GTK3CAIROTEXTRENDER_HXX
 
 #include "cairotextrender.hxx"
+#include <unx/gtk/gtkgdi.hxx>
 
-class SvpSalGraphics;
-
-class SvpCairoTextRender : public CairoTextRender
+class GtkCairoTextRender : public CairoTextRender
 {
 protected:
-    SvpSalGraphics& mrParent;
+    GtkSalGraphics& mrParent;
 
 public:
-    explicit SvpCairoTextRender(SvpSalGraphics& rParent);
+    explicit GtkCairoTextRender(GtkSalGraphics& rParent);
 
     virtual GlyphCache& getPlatformGlyphCache() override;
     virtual cairo_t* getCairoContext() override;

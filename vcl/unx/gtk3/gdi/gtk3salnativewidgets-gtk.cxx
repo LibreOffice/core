@@ -1999,7 +1999,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
       mpFrame( pFrame ),
       mpWindow( pWindow )
 {
-    m_xTextRenderImpl.reset(new SvpCairoTextRender(*this));
+    m_xTextRenderImpl.reset(new GtkCairoTextRender(*this));
 
     if(style_loaded)
         return;
@@ -2122,6 +2122,11 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     getStyleContext(&mpProgressBarStyle, gtk_progress_bar_new());
 
     gtk_widget_show_all(gDumbContainer);
+}
+
+cairo_t* GtkSalGraphics::getCairoContext() const
+{
+    return mpFrame->getCairoContext();
 }
 
 void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)

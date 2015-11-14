@@ -623,7 +623,6 @@ $(eval $(call gb_Library_use_libraries,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-	cairo \
 	freetype \
 ))
 ifneq ($(OS),EMSCRIPTEN)
@@ -654,7 +653,6 @@ $(eval $(call gb_Library_use_static_libraries,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-	cairo \
 	fontconfig \
 	freetype \
 	expat \
