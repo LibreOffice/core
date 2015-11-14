@@ -2909,6 +2909,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf94374, "hello.docx")
     CPPUNIT_ASSERT(paste("tdf94374.docx", xEnd));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf95775, "tdf95775.docx")
+{
+    // This must not fail in layout
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
