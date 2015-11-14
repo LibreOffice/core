@@ -82,6 +82,32 @@
 #include <memory>
 #include <comphelper/lok.hxx>
 
+namespace
+{
+
+/// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
+void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild, MouseEvent* pMouseEvent)
+{
+    // Set map mode, so that callback payloads will contain absolute coordinates instead of relative ones.
+    Point aOffset(rChild.GetOutOffXPixel() - rParent.GetOutOffXPixel(), rChild.GetOutOffYPixel() - rParent.GetOutOffYPixel());
+    aOffset = rChild.PixelToLogic(aOffset);
+    MapMode aMapMode(rChild.GetMapMode());
+    aMapMode.SetOrigin(aOffset);
+    rChild.SetMapMode(aMapMode);
+    rChild.EnableMapMode(false);
+
+    if (pMouseEvent)
+    {
+        // Set event coordinates, so they contain relative coordinates instead of absolute ones.
+        Point aPos = pMouseEvent->GetPosPixel();
+        aPos.Move(-aOffset.getX(), -aOffset.getY());
+        MouseEvent aMouseEvent(aPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(), pMouseEvent->GetButtons(), pMouseEvent->GetModifier());
+        *pMouseEvent = aMouseEvent;
+    }
+}
+
+}
+
 namespace sw { namespace sidebarwindows {
 
 #define METABUTTON_WIDTH        16
@@ -289,6 +315,19 @@ bool SwSidebarWin::IsHitWindow(const Point& rPointLogic)
     return aRectangleLogic.IsInside(rPointLogic);
 }
 
+void SwSidebarWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
+{
+    mpSidebarTextControl->Push(PushFlags::MAPMODE);
+    MouseEvent aMouseEvent(rPosition);
+    lcl_translateTwips(EditWin(), *mpSidebarTextControl, &aMouseEvent);
+    Point aPosition(aMouseEvent.GetPosPixel());
+
+    EditView& rEditView = GetOutlinerView()->GetEditView();
+    rEditView.SetCursorLogicPosition(aPosition, bPoint, bClearMark);
+
+    mpSidebarTextControl->Pop();
+}
+
 void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags nInFlags)
 {
     if (mpMetadataAuthor->IsVisible() )
@@ -354,27 +393,6 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, D
         mpMetadataDate->SetText(sOrigText);
         mpMetadataDate->SetControlFont( aOrigFont );
         mpMetadataDate->SetControlBackground( aOrigBg );
-    }
-}
-
-/// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
-static void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild, MouseEvent* pMouseEvent)
-{
-    // Set map mode, so that callback payloads will contain absolute coordinates instead of relative ones.
-    Point aOffset(rChild.GetOutOffXPixel() - rParent.GetOutOffXPixel(), rChild.GetOutOffYPixel() - rParent.GetOutOffYPixel());
-    aOffset = rChild.PixelToLogic(aOffset);
-    MapMode aMapMode(rChild.GetMapMode());
-    aMapMode.SetOrigin(aOffset);
-    rChild.SetMapMode(aMapMode);
-    rChild.EnableMapMode(false);
-
-    if (pMouseEvent)
-    {
-        // Set event coordinates, so they contain relative coordinates instead of absolute ones.
-        Point aPos = pMouseEvent->GetPosPixel();
-        aPos.Move(-aOffset.getX(), -aOffset.getY());
-        MouseEvent aMouseEvent(aPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(), pMouseEvent->GetButtons(), pMouseEvent->GetModifier());
-        *pMouseEvent = aMouseEvent;
     }
 }
 

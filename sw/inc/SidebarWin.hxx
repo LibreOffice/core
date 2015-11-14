@@ -182,6 +182,8 @@ class SwSidebarWin : public vcl::Window
         void PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
         /// Is there a matching sub-widget inside this sidebar widget for rPointLogic?
         bool IsHitWindow(const Point& rPointLogic);
+        /// Allows adjusting the point or mark of the selection to a document coordinate.
+        void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
 
     protected:
         virtual void    DataChanged( const DataChangedEvent& aEvent) override;
