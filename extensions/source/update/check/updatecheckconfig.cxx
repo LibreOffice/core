@@ -80,13 +80,9 @@ static const sal_Char * const aUpdateEntryProperties[] = {
 
 static const sal_uInt32 nUpdateEntryProperties = SAL_N_ELEMENTS(aUpdateEntryProperties);
 
-
-
 NamedValueByNameAccess::~NamedValueByNameAccess()
 {
 }
-
-
 
 css::uno::Any NamedValueByNameAccess::getValue(const sal_Char * pName)
 {
@@ -99,24 +95,17 @@ css::uno::Any NamedValueByNameAccess::getValue(const sal_Char * pName)
     return css::uno::Any();
 }
 
-
-
-
 bool
 UpdateCheckROModel::isAutoCheckEnabled() const
 {
     return m_aNameAccess.getValue(AUTOCHECK_ENABLED).get<bool>();
 }
 
-
-
 bool
 UpdateCheckROModel::isDownloadPaused() const
 {
     return m_aNameAccess.getValue(DOWNLOAD_PAUSED).get<bool>();
 }
-
-
 
 OUString
 UpdateCheckROModel::getStringValue(const sal_Char * pStr) const
@@ -129,14 +118,10 @@ UpdateCheckROModel::getStringValue(const sal_Char * pStr) const
     return aRet;
 }
 
-
-
 OUString UpdateCheckROModel::getLocalFileName() const
 {
     return getStringValue(LOCAL_FILE);
 };
-
-
 
 sal_Int64 UpdateCheckROModel::getDownloadSize() const
 {
@@ -147,15 +132,11 @@ sal_Int64 UpdateCheckROModel::getDownloadSize() const
     return nRet;
 };
 
-
-
 OUString
 UpdateCheckROModel::getUpdateEntryVersion() const
 {
     return getStringValue(OLD_VERSION);
 }
-
-
 
 void
 UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
@@ -178,9 +159,6 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
             rInfo.ReleaseNotes.push_back(ReleaseNote((sal_Int8) n, aUStr));
     }
 }
-
-
-
 
 OUString UpdateCheckConfig::getDesktopDirectory()
 {
@@ -209,8 +187,6 @@ OUString UpdateCheckConfig::getDesktopDirectory()
     return aRet;
 }
 
-
-
 OUString UpdateCheckConfig::getAllUsersDirectory()
 {
     OUString aRet;
@@ -230,7 +206,6 @@ OUString UpdateCheckConfig::getAllUsersDirectory()
     return aRet;
 }
 
-
 UpdateCheckConfig::UpdateCheckConfig( const uno::Reference<container::XNameContainer>& xContainer,
                                       const uno::Reference<container::XNameContainer>& xAvailableUpdates,
                                       const uno::Reference<container::XNameContainer>& xIgnoredUpdates,
@@ -241,11 +216,8 @@ UpdateCheckConfig::UpdateCheckConfig( const uno::Reference<container::XNameConta
     m_rListener( rListener )
 {}
 
-
 UpdateCheckConfig::~UpdateCheckConfig()
 {}
-
-
 
 ::rtl::Reference< UpdateCheckConfig >
 UpdateCheckConfig::get(
@@ -278,8 +250,6 @@ UpdateCheckConfig::get(
     return new UpdateCheckConfig( xContainer, xUpdateAvail, xIgnoredExt, rListener );
 }
 
-
-
 bool
 UpdateCheckConfig::isAutoCheckEnabled() const
 {
@@ -288,8 +258,6 @@ UpdateCheckConfig::isAutoCheckEnabled() const
     return nValue;
 }
 
-
-
 bool
 UpdateCheckConfig::isAutoDownloadEnabled() const
 {
@@ -297,8 +265,6 @@ UpdateCheckConfig::isAutoDownloadEnabled() const
     const_cast < UpdateCheckConfig *> (this)->getByName( AUTODOWNLOAD_ENABLED ) >>= nValue;
     return nValue;
 }
-
-
 
 OUString
 UpdateCheckConfig::getUpdateEntryVersion() const
@@ -311,8 +277,6 @@ UpdateCheckConfig::getUpdateEntryVersion() const
     return aValue;
 }
 
-
-
 sal_Int64
 UpdateCheckConfig::getLastChecked() const
 {
@@ -324,8 +288,6 @@ UpdateCheckConfig::getLastChecked() const
     return nValue;
 }
 
-
-
 sal_Int64
 UpdateCheckConfig::getCheckInterval() const
 {
@@ -336,8 +298,6 @@ UpdateCheckConfig::getCheckInterval() const
 
     return nValue;
 }
-
-
 
 OUString
 UpdateCheckConfig::getLocalFileName() const
@@ -351,8 +311,6 @@ UpdateCheckConfig::getLocalFileName() const
     return aRet;
 }
 
-
-
 OUString
 UpdateCheckConfig::getDownloadDestination() const
 {
@@ -363,8 +321,6 @@ UpdateCheckConfig::getDownloadDestination() const
 
     return aRet;
 }
-
-
 
 void
 UpdateCheckConfig::storeLocalFileName(const OUString& rLocalFileName, sal_Int64 nFileSize)
@@ -384,8 +340,6 @@ UpdateCheckConfig::storeLocalFileName(const OUString& rLocalFileName, sal_Int64 
     commitChanges();
 }
 
-
-
 void
 UpdateCheckConfig::clearLocalFileName()
 {
@@ -401,16 +355,12 @@ UpdateCheckConfig::clearLocalFileName()
     commitChanges();
 }
 
-
-
 void
 UpdateCheckConfig::storeDownloadPaused(bool paused)
 {
     replaceByName(DOWNLOAD_PAUSED , uno::makeAny(paused));
     commitChanges();
 }
-
-
 
 void
 UpdateCheckConfig::updateLastChecked()
@@ -422,8 +372,6 @@ UpdateCheckConfig::updateLastChecked()
 
     replaceByName(LAST_CHECK, uno::makeAny(lastCheck));
 }
-
-
 
 void
 UpdateCheckConfig::storeUpdateFound( const UpdateInfo& rInfo, const OUString& aCurrentBuild)
@@ -460,8 +408,6 @@ UpdateCheckConfig::storeUpdateFound( const UpdateInfo& rInfo, const OUString& aC
     commitChanges();
 }
 
-
-
 void
 UpdateCheckConfig::clearUpdateFound()
 {
@@ -489,8 +435,6 @@ UpdateCheckConfig::clearUpdateFound()
     commitChanges();
 }
 
-
-
 uno::Sequence< OUString >
 UpdateCheckConfig::getServiceNames()
 {
@@ -498,15 +442,11 @@ UpdateCheckConfig::getServiceNames()
     return aServiceList;
 }
 
-
-
 OUString
 UpdateCheckConfig::getImplName()
 {
     return OUString("vnd.sun.UpdateCheckConfig");
 }
-
-
 
 uno::Type SAL_CALL
 UpdateCheckConfig::getElementType() throw (uno::RuntimeException, std::exception)
@@ -514,15 +454,11 @@ UpdateCheckConfig::getElementType() throw (uno::RuntimeException, std::exception
     return m_xContainer->getElementType();
 }
 
-
-
 sal_Bool SAL_CALL
 UpdateCheckConfig::hasElements() throw (uno::RuntimeException, std::exception)
 {
     return m_xContainer->hasElements();
 }
-
-
 
 uno::Any SAL_CALL
 UpdateCheckConfig::getByName( const OUString& aName )
@@ -539,27 +475,20 @@ UpdateCheckConfig::getByName( const OUString& aName )
         if( aStr.isEmpty() )
             aValue = uno::makeAny(getDesktopDirectory());
     }
-
     return aValue;
 }
 
-
-
 uno::Sequence< OUString > SAL_CALL
-UpdateCheckConfig::getElementNames(  ) throw (uno::RuntimeException, std::exception)
+UpdateCheckConfig::getElementNames() throw (uno::RuntimeException, std::exception)
 {
     return m_xContainer->getElementNames();
 }
-
-
 
 sal_Bool SAL_CALL
 UpdateCheckConfig::hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception)
 {
     return m_xContainer->hasByName( aName );
 }
-
-
 
 void SAL_CALL
 UpdateCheckConfig::replaceByName( const OUString& aName, const uno::Any& aElement )
@@ -568,7 +497,6 @@ UpdateCheckConfig::replaceByName( const OUString& aName, const uno::Any& aElemen
 {
     return m_xContainer->replaceByName( aName, aElement );
 }
-
 
 // XChangesBatch
 
@@ -616,8 +544,6 @@ UpdateCheckConfig::commitChanges()
     }
 }
 
-
-
 sal_Bool SAL_CALL
 UpdateCheckConfig::hasPendingChanges(  ) throw (uno::RuntimeException, std::exception)
 {
@@ -628,8 +554,6 @@ UpdateCheckConfig::hasPendingChanges(  ) throw (uno::RuntimeException, std::exce
     return sal_False;
 }
 
-
-
 uno::Sequence< util::ElementChange > SAL_CALL
 UpdateCheckConfig::getPendingChanges(  ) throw (uno::RuntimeException, std::exception)
 {
@@ -639,7 +563,6 @@ UpdateCheckConfig::getPendingChanges(  ) throw (uno::RuntimeException, std::exce
 
     return uno::Sequence< util::ElementChange >();
 }
-
 
 bool UpdateCheckConfig::storeExtensionVersion( const OUString& rExtensionName,
                                                const OUString& rVersion )
@@ -670,7 +593,6 @@ bool UpdateCheckConfig::storeExtensionVersion( const OUString& rExtensionName,
 
     return bNotify;
 }
-
 
 bool UpdateCheckConfig::checkExtensionVersion( const OUString& rExtensionName,
                                                const OUString& rVersion )
@@ -704,7 +626,6 @@ bool UpdateCheckConfig::checkExtensionVersion( const OUString& rExtensionName,
     return false;
 }
 
-
 OUString UpdateCheckConfig::getSubVersion( const OUString& rVersion,
                                                 sal_Int32 *nIndex )
 {
@@ -716,9 +637,7 @@ OUString UpdateCheckConfig::getSubVersion( const OUString& rVersion,
     return rVersion.getToken( 0, '.', *nIndex );
 }
 
-
-// checks if the second version string is greater than the first one
-
+/// checks if the second version string is greater than the first one
 bool UpdateCheckConfig::isVersionGreater( const OUString& rVersion1,
                                           const OUString& rVersion2 )
 {
@@ -740,10 +659,6 @@ bool UpdateCheckConfig::isVersionGreater( const OUString& rVersion1,
     return false;
 }
 
-
-
-
-
 OUString SAL_CALL
 UpdateCheckConfig::getImplementationName()  throw (uno::RuntimeException, std::exception)
 {
@@ -757,13 +672,10 @@ UpdateCheckConfig::supportsService(OUString const & serviceName)
     return cppu::supportsService(this, serviceName);
 }
 
-
-
 uno::Sequence< OUString > SAL_CALL
 UpdateCheckConfig::getSupportedServiceNames()  throw (uno::RuntimeException, std::exception)
 {
     return getServiceNames();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -367,7 +367,6 @@ UpdateInformationProvider::UpdateInformationProvider(
     }
 }
 
-
 uno::Reference< uno::XInterface >
 UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
