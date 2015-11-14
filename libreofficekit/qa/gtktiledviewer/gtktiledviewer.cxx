@@ -303,6 +303,7 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         }
         gtk_widget_show(rWindow.m_pColumnBar->m_pDrawingArea);
         gtk_widget_queue_draw(rWindow.m_pColumnBar->m_pDrawingArea);
+        gtk_widget_show(rWindow.m_pFormulabarEntry);
     }
 
     return TRUE;
@@ -1188,6 +1189,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_widget_hide(rWindow.m_pCornerButton->m_pDrawingArea);
     gtk_widget_hide(rWindow.m_pRowBar->m_pDrawingArea);
     gtk_widget_hide(rWindow.m_pColumnBar->m_pDrawingArea);
+    gtk_widget_hide(rWindow.m_pFormulabarEntry);
     // Hide the non-progressbar children of the status bar by default.
     gtk_widget_hide(rWindow.m_pStatusbarLabel);
     gtk_widget_hide(rWindow.m_pZoomLabel);
