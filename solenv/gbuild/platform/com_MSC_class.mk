@@ -440,6 +440,10 @@ ifeq ($(SYSTEM_PYTHON),)
 gb_PythonTest_DEPS := $(call gb_Package_get_target,python3)
 endif
 
+ifeq ($(strip $(CPPUNITTRACE)),TRUE)
+gb_CppunitTest_GDBTRACE := '$(DEVENV)' /debugexe
+endif
+
 # SrsPartTarget class
 
 ifeq ($(gb_FULLDEPS),$(true))
