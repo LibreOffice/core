@@ -1841,8 +1841,9 @@ void SwPostItField::dumpAsXml(xmlTextWriterPtr pWriter) const
     SwField::dumpAsXml(pWriter);
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("mpText"));
-    OutlinerParaObject aParaObject(*mpText);
-    aParaObject.dumpAsXml(pWriter);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", mpText);
+    if (mpText)
+        mpText->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 
     xmlTextWriterEndElement(pWriter);
