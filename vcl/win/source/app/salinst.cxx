@@ -115,7 +115,7 @@ class SalYieldMutex : public comphelper::SolarMutex
 
 public: // for ImplSalYield()
     WinSalInstance*             mpInstData;
-    sal_uLong                       mnCount;
+    sal_uLong                   mnCount;
     DWORD                       mnThreadId;
 
 public:
@@ -125,7 +125,7 @@ public:
     virtual void                release();
     virtual bool                tryToAcquire();
 
-    sal_uLong                       GetAcquireCount( sal_uLong nThreadId );
+    sal_uLong                   GetAcquireCount( sal_uLong nThreadId );
 };
 
 SalYieldMutex::SalYieldMutex( WinSalInstance* pInstData )
@@ -1113,5 +1113,41 @@ int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POIN
     return UnhandledExceptionFilter( pExceptionInfo );
 }
 #endif
+
+OUString WinSalInstance::getOSVersion()
+{
+    SalData* pSalData = GetSalData();
+    if ( !pSalData )
+        return OUString("unknown");
+
+    WORD nMajor = 0, nMinor = 0;
+#ifdef _WIN32_WINNT_WINBLUE
+    // Trying to hide the real version info behind an
+    // uber-lame non-forward-compatible, 'compatibility' API
+    // seems unlikely to help OS designers, or API users.
+    nMajor = 30;
+    while( !IsWindowsVersionOrGreater( nMajor, 0, 0 ) && nMajor > 0)
+        nMajor--;
+    nMinor = 30;
+    while( !IsWindowsVersionOrGreater( nMajor, nMinor, 0 ) && nMinor > 0)
+        nMinor--;
+#else
+    OSVERSIONINFO aVersionInfo;
+    memset( &aVersionInfo, 0, sizeof( aVersionInfo ) );
+    aVersionInfo.dwOSVersionInfoSize = sizeof( aVersionInfo );
+    if ( GetVersionEx( &aVersionInfo ) )
+    {
+        nMajor = aVersionInfo.dwMajorVersion;
+        nMinor = aVersionInfo.dwMinorVersion;
+    }
+#endif
+    OUStringBuffer aVer;
+    aVer.append( "Windows " );
+    aVer.append( (sal_Int32)nMajor );
+    aVer.append( "." );
+    aVer.append( (sal_Int32)nMinor );
+
+    return aVer.makeStringAndClear();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

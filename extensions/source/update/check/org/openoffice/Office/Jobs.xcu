@@ -49,6 +49,9 @@
                 <prop oor:name="DownloadPaused" oor:type="xs:boolean" oor:op="replace">
                     <value>false</value>
                 </prop>
+                <prop oor:name="ExtendedUserAgent" oor:type="xs:boolean" oor:op="replace">
+                    <value>false</value>
+                </prop>
             </node>
         </node>
     </node>

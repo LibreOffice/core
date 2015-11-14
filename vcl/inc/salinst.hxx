@@ -172,6 +172,9 @@ public:
     virtual void            updatePrinterUpdate() {}
     virtual void            jobStartedPrinterUpdate() {}
     virtual void            jobEndedPrinterUpdate() {}
+
+    /// get information about underlying versions
+    virtual OUString        getOSVersion() { return OUString("-"); }
 };
 
 // called from SVMain

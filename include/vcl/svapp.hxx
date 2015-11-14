@@ -948,6 +948,11 @@ public:
     */
     static OUString             GetAppName();
 
+    /** Get useful OS, Hardware and configuration information,
+     * cf. Help->About, and User-Agent
+     */
+    static OUString             GetHWOSConfInfo();
+
     /** Load a localized branding PNG file as a bitmap.
 
      @param     pName           Name of the bitmap to load.
