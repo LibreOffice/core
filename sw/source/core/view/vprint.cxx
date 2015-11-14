@@ -682,12 +682,12 @@ SwDrawViewSave::~SwDrawViewSave()
 // OD 09.01.2003 #i6467# - method also called for page preview
 void SwViewShell::PrepareForPrint( const SwPrintData &rOptions )
  {
-    mpOpt->SetGraphic  ( rOptions.bPrintGraphic );
-    mpOpt->SetTable    ( rOptions.bPrintTable );
-    mpOpt->SetDraw     ( rOptions.bPrintDraw  );
-    mpOpt->SetControl  ( rOptions.bPrintControl );
-    mpOpt->SetPageBack ( rOptions.bPrintPageBackground );
-    mpOpt->SetBlackFont( rOptions.bPrintBlackFont );
+    mpOpt->SetGraphic  ( rOptions.m_bPrintGraphic );
+    mpOpt->SetTable    ( rOptions.m_bPrintTable );
+    mpOpt->SetDraw     ( rOptions.m_bPrintDraw  );
+    mpOpt->SetControl  ( rOptions.m_bPrintControl );
+    mpOpt->SetPageBack ( rOptions.m_bPrintPageBackground );
+    mpOpt->SetBlackFont( rOptions.m_bPrintBlackFont );
 
     if ( HasDrawView() )
     {
@@ -695,11 +695,11 @@ void SwViewShell::PrepareForPrint( const SwPrintData &rOptions )
         // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
         if ( !IsPreview() )
         {
-            pDrawView->SetLayerPrintable( "Controls", rOptions.bPrintControl );
+            pDrawView->SetLayerPrintable( "Controls", rOptions.m_bPrintControl );
         }
         else
         {
-            pDrawView->SetLayerVisible( "Controls", rOptions.bPrintControl );
+            pDrawView->SetLayerVisible( "Controls", rOptions.m_bPrintControl );
         }
     }
 }

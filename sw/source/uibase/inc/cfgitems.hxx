@@ -118,7 +118,7 @@ public:
 
     virtual bool         operator==( const SfxPoolItem& ) const override;
 
-    const OUString &GetFax() const              { return sFaxName; }
+    const OUString &GetFax() const              { return m_sFaxName; }
 };
 
 // Item for settings dialog, ShadowCursorPage

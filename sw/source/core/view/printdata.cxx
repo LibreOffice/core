@@ -124,25 +124,25 @@ void SwRenderData::MakeSwPrtOptions(
     ::sw::InitPrintOptionsFromApplication(rOptions, bWeb);
 
     // get print options to use from provided properties
-    rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
-    rOptions.bPrintTable            = true; // for now it was decided that tables should always be printed
-    rOptions.bPrintDraw             = pOpt->IsPrintDrawings();
-    rOptions.bPrintControl          = pOpt->IsPrintFormControls();
-    rOptions.bPrintLeftPages        = pOpt->IsPrintLeftPages();
-    rOptions.bPrintRightPages       = pOpt->IsPrintRightPages();
-    rOptions.bPrintPageBackground   = pOpt->IsPrintPageBackground();
-    rOptions.bPrintEmptyPages       = pOpt->IsPrintEmptyPages( bIsPDFExport );
+    rOptions.m_bPrintGraphic          = pOpt->IsPrintGraphics();
+    rOptions.m_bPrintTable            = true; // for now it was decided that tables should always be printed
+    rOptions.m_bPrintDraw             = pOpt->IsPrintDrawings();
+    rOptions.m_bPrintControl          = pOpt->IsPrintFormControls();
+    rOptions.m_bPrintLeftPages        = pOpt->IsPrintLeftPages();
+    rOptions.m_bPrintRightPages       = pOpt->IsPrintRightPages();
+    rOptions.m_bPrintPageBackground   = pOpt->IsPrintPageBackground();
+    rOptions.m_bPrintEmptyPages       = pOpt->IsPrintEmptyPages( bIsPDFExport );
     // bUpdateFieldsInPrinting  <-- not set here; mail merge only
-    rOptions.bPaperFromSetup        = pOpt->IsPaperFromSetup();
-    rOptions.bPrintReverse          = false; /*handled by print dialog now*/
-    rOptions.bPrintProspect         = pOpt->IsPrintProspect();
-    rOptions.bPrintProspectRTL      = pOpt->IsPrintProspectRTL();
+    rOptions.m_bPaperFromSetup        = pOpt->IsPaperFromSetup();
+    rOptions.m_bPrintReverse          = false; /*handled by print dialog now*/
+    rOptions.m_bPrintProspect         = pOpt->IsPrintProspect();
+    rOptions.m_bPrintProspectRTL      = pOpt->IsPrintProspectRTL();
     // bPrintSingleJobs         <-- not set here; mail merge and or configuration
     // bModified                <-- not set here; mail merge only
-    rOptions.bPrintBlackFont        = pOpt->IsPrintWithBlackTextColor();
-    rOptions.bPrintHiddenText       = pOpt->IsPrintHiddenText();
-    rOptions.bPrintTextPlaceholder  = pOpt->IsPrintTextPlaceholders();
-    rOptions.nPrintPostIts          = pOpt->GetPrintPostItsType();
+    rOptions.m_bPrintBlackFont        = pOpt->IsPrintWithBlackTextColor();
+    rOptions.m_bPrintHiddenText       = pOpt->IsPrintHiddenText();
+    rOptions.m_bPrintTextPlaceholder  = pOpt->IsPrintTextPlaceholders();
+    rOptions.m_nPrintPostIts          = pOpt->GetPrintPostItsType();
 
     //! needs to be set after MakeOptions since the assignment operation in that
     //! function will destroy the pointers

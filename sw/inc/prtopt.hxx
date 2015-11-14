@@ -36,7 +36,7 @@ public:
     virtual ~SwPrintOptions();
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual void            doSetModified( ) override { bModified = true; SetModified();}
+    virtual void            doSetModified( ) override { m_bModified = true; SetModified();}
 
     SwPrintOptions& operator=(const SwPrintData& rData)
     {

@@ -4266,7 +4266,7 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     aRenderViewOptions.SetLineBreak( false );             // breaks (type 1)
     aRenderViewOptions.SetPageBreak( false );             // breaks (type 2)
     aRenderViewOptions.SetColumnBreak( false );           // breaks (type 3)
-    bool bVal = pPrtOptions && pPrtOptions->bPrintHiddenText;
+    bool bVal = pPrtOptions && pPrtOptions->m_bPrintHiddenText;
     if (bContainsHiddenChars)
         aRenderViewOptions.SetShowHiddenChar( bVal );     // hidden text
     if (bContainsHiddenFields)
@@ -4277,7 +4277,7 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     if (bContainsPlaceHolders)
     {
         // should always be printed in PDF export!
-        bVal = !pPrtOptions || pPrtOptions->bPrintTextPlaceholder;
+        bVal = !pPrtOptions || pPrtOptions->m_bPrintTextPlaceholder;
         aRenderViewOptions.SetShowPlaceHolderFields( bVal );
     }
 

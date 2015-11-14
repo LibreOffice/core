@@ -67,11 +67,11 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
     bIsWeb(bWeb)
 {
-    bPrintPageBackground = !bWeb;
-    bPrintBlackFont = bWeb;
-    bPrintTextPlaceholder = bPrintHiddenText = false;
+    m_bPrintPageBackground = !bWeb;
+    m_bPrintBlackFont = bWeb;
+    m_bPrintTextPlaceholder = m_bPrintHiddenText = false;
     if (bWeb)
-        bPrintEmptyPages = false;
+        m_bPrintEmptyPages = false;
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -85,30 +85,30 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
             {
                 switch(nProp)
                 {
-                    case  0: bPrintGraphic      = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case  1: bPrintTable            = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  2: bPrintControl      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  3: bPrintPageBackground= *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  4: bPrintBlackFont        = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  0: m_bPrintGraphic      = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                    case  1: m_bPrintTable            = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  2: m_bPrintControl      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  3: m_bPrintPageBackground= *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  4: m_bPrintBlackFont        = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
                     case  5:
                     {
                         sal_Int32 nTmp = 0;
                         pValues[nProp] >>=  nTmp;
-                        nPrintPostIts = static_cast<SwPostItMode>(nTmp);
+                        m_nPrintPostIts = static_cast<SwPostItMode>(nTmp);
                     }
                     break;
-                    case  6: bPrintReverse      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  7: bPrintProspect      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  8: bPrintProspectRTL  = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  9: bPrintSingleJobs   = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 10: pValues[nProp] >>= sFaxName;  break;
-                    case 11: bPaperFromSetup    = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 12: bPrintDraw         = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 13: bPrintLeftPages    = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 14: bPrintRightPages       = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 15: bPrintEmptyPages       = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 16: bPrintTextPlaceholder = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 17: bPrintHiddenText = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  6: m_bPrintReverse      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  7: m_bPrintProspect      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  8: m_bPrintProspectRTL  = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  9: m_bPrintSingleJobs   = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 10: pValues[nProp] >>= m_sFaxName;  break;
+                    case 11: m_bPaperFromSetup    = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 12: m_bPrintDraw         = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 13: m_bPrintLeftPages    = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 14: m_bPrintRightPages       = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 15: m_bPrintEmptyPages       = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 16: m_bPrintTextPlaceholder = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 17: m_bPrintHiddenText = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
                 }
             }
         }
@@ -118,7 +118,7 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
     // In the UI. (File/Print dialog and Tools/Options/.../Print)
     // And since print graphics is the only available in Writer and WrtierWeb ...
 
-    bPrintDraw = bPrintGraphic;
+    m_bPrintDraw = m_bPrintGraphic;
 }
 
 SwPrintOptions::~SwPrintOptions()
@@ -138,31 +138,31 @@ void SwPrintOptions::ImplCommit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= bPrintGraphic; break;
-            case  1: pValues[nProp] <<= bPrintTable; break;
-            case  2: pValues[nProp] <<= bPrintControl; break;
-            case  3: pValues[nProp] <<= bPrintPageBackground; break;
-            case  4: pValues[nProp] <<= bPrintBlackFont; break;
-            case  5: pValues[nProp] <<=  (sal_Int32)nPrintPostIts       ; break;
-            case  6: pValues[nProp] <<= bPrintReverse; break;
-            case  7: pValues[nProp] <<= bPrintProspect; break;
-            case  8: pValues[nProp] <<= bPrintProspectRTL; break;
-            case  9: pValues[nProp] <<= bPrintSingleJobs; break;
-            case 10: pValues[nProp] <<= sFaxName;  break;
-            case 11: pValues[nProp] <<= bPaperFromSetup; break;
-            case 12: pValues[nProp] <<= bPrintDraw; break;
-            case 13: pValues[nProp] <<= bPrintLeftPages; break;
-            case 14: pValues[nProp] <<= bPrintRightPages; break;
-            case 15: pValues[nProp] <<= bPrintEmptyPages; break;
-            case 16: pValues[nProp] <<= bPrintTextPlaceholder; break;
-            case 17: pValues[nProp] <<= bPrintHiddenText; break;
+            case  0: pValues[nProp] <<= m_bPrintGraphic; break;
+            case  1: pValues[nProp] <<= m_bPrintTable; break;
+            case  2: pValues[nProp] <<= m_bPrintControl; break;
+            case  3: pValues[nProp] <<= m_bPrintPageBackground; break;
+            case  4: pValues[nProp] <<= m_bPrintBlackFont; break;
+            case  5: pValues[nProp] <<=  (sal_Int32)m_nPrintPostIts       ; break;
+            case  6: pValues[nProp] <<= m_bPrintReverse; break;
+            case  7: pValues[nProp] <<= m_bPrintProspect; break;
+            case  8: pValues[nProp] <<= m_bPrintProspectRTL; break;
+            case  9: pValues[nProp] <<= m_bPrintSingleJobs; break;
+            case 10: pValues[nProp] <<= m_sFaxName;  break;
+            case 11: pValues[nProp] <<= m_bPaperFromSetup; break;
+            case 12: pValues[nProp] <<= m_bPrintDraw; break;
+            case 13: pValues[nProp] <<= m_bPrintLeftPages; break;
+            case 14: pValues[nProp] <<= m_bPrintRightPages; break;
+            case 15: pValues[nProp] <<= m_bPrintEmptyPages; break;
+            case 16: pValues[nProp] <<= m_bPrintTextPlaceholder; break;
+            case 17: pValues[nProp] <<= m_bPrintHiddenText; break;
         }
     }
 
     // currently there is just one checkbox for print drawings and print graphics
     // In the UI. (File/Print dialog and Tools/Options/.../Print)
     // And since print graphics is the only available in Writer and WrtierWeb ...
-    bPrintDraw = bPrintGraphic;
+    m_bPrintDraw = m_bPrintGraphic;
 
     PutProperties(aNames, aValues);
 }

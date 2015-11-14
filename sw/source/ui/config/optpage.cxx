@@ -408,37 +408,37 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
     if ( bAttrModified )
     {
         SwAddPrinterItem aAddPrinterAttr (FN_PARAM_ADDPRINTER);
-        aAddPrinterAttr.bPrintGraphic   = m_pGrfCB->IsChecked();
-        aAddPrinterAttr.bPrintTable     = true; // always enabled since CWS printerpullgpages /*aTabCB.IsChecked();*/
-        aAddPrinterAttr.bPrintDraw      = m_pGrfCB->IsChecked(); // UI merged with m_pGrfCB in CWS printerpullgpages
-        aAddPrinterAttr.bPrintControl   = m_pCtrlFieldCB->IsChecked();
-        aAddPrinterAttr.bPrintPageBackground = m_pBackgroundCB->IsChecked();
-        aAddPrinterAttr.bPrintBlackFont = m_pBlackFontCB->IsChecked();
-        aAddPrinterAttr.bPrintHiddenText = m_pPrintHiddenTextCB->IsChecked();
-        aAddPrinterAttr.bPrintTextPlaceholder = m_pPrintTextPlaceholderCB->IsChecked();
+        aAddPrinterAttr.m_bPrintGraphic   = m_pGrfCB->IsChecked();
+        aAddPrinterAttr.m_bPrintTable     = true; // always enabled since CWS printerpullgpages /*aTabCB.IsChecked();*/
+        aAddPrinterAttr.m_bPrintDraw      = m_pGrfCB->IsChecked(); // UI merged with m_pGrfCB in CWS printerpullgpages
+        aAddPrinterAttr.m_bPrintControl   = m_pCtrlFieldCB->IsChecked();
+        aAddPrinterAttr.m_bPrintPageBackground = m_pBackgroundCB->IsChecked();
+        aAddPrinterAttr.m_bPrintBlackFont = m_pBlackFontCB->IsChecked();
+        aAddPrinterAttr.m_bPrintHiddenText = m_pPrintHiddenTextCB->IsChecked();
+        aAddPrinterAttr.m_bPrintTextPlaceholder = m_pPrintTextPlaceholderCB->IsChecked();
 
-        aAddPrinterAttr.bPrintLeftPages     = m_pLeftPageCB->IsChecked();
-        aAddPrinterAttr.bPrintRightPages    = m_pRightPageCB->IsChecked();
-        aAddPrinterAttr.bPrintReverse       = false; // handled by vcl itself since CWS printerpullpages /*aReverseCB.IsChecked()*/;
-        aAddPrinterAttr.bPrintProspect      = m_pProspectCB->IsChecked();
-        aAddPrinterAttr.bPrintProspectRTL   = m_pProspectCB_RTL->IsChecked();
-        aAddPrinterAttr.bPaperFromSetup     = m_pPaperFromSetupCB->IsChecked();
-        aAddPrinterAttr.bPrintEmptyPages    = m_pPrintEmptyPagesCB->IsChecked();
-        aAddPrinterAttr.bPrintSingleJobs    = true; // handled by vcl in new print dialog since CWS printerpullpages /*aSingleJobsCB.IsChecked()*/;
+        aAddPrinterAttr.m_bPrintLeftPages     = m_pLeftPageCB->IsChecked();
+        aAddPrinterAttr.m_bPrintRightPages    = m_pRightPageCB->IsChecked();
+        aAddPrinterAttr.m_bPrintReverse       = false; // handled by vcl itself since CWS printerpullpages /*aReverseCB.IsChecked()*/;
+        aAddPrinterAttr.m_bPrintProspect      = m_pProspectCB->IsChecked();
+        aAddPrinterAttr.m_bPrintProspectRTL   = m_pProspectCB_RTL->IsChecked();
+        aAddPrinterAttr.m_bPaperFromSetup     = m_pPaperFromSetupCB->IsChecked();
+        aAddPrinterAttr.m_bPrintEmptyPages    = m_pPrintEmptyPagesCB->IsChecked();
+        aAddPrinterAttr.m_bPrintSingleJobs    = true; // handled by vcl in new print dialog since CWS printerpullpages /*aSingleJobsCB.IsChecked()*/;
 
-        if (m_pNoRB->IsChecked())  aAddPrinterAttr.nPrintPostIts =
+        if (m_pNoRB->IsChecked())  aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::NONE;
-        if (m_pOnlyRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
+        if (m_pOnlyRB->IsChecked()) aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::Only;
-        if (m_pEndRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
+        if (m_pEndRB->IsChecked()) aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::EndDoc;
-        if (m_pEndPageRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
+        if (m_pEndPageRB->IsChecked()) aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::EndPage;
-        if (m_pInMarginsRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
+        if (m_pInMarginsRB->IsChecked()) aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::InMargins;
 
         const OUString sFax = m_pFaxLB->GetSelectEntry();
-        aAddPrinterAttr.sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
+        aAddPrinterAttr.m_sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
         rCoreSet->Put(aAddPrinterAttr);
     }
     return bAttrModified;
@@ -452,25 +452,25 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_ADDPRINTER , false,
                                     reinterpret_cast<const SfxPoolItem**>(&pAddPrinterAttr) ))
     {
-        m_pGrfCB->Check(pAddPrinterAttr->bPrintGraphic || pAddPrinterAttr->bPrintDraw);
-        m_pCtrlFieldCB->Check(       pAddPrinterAttr->bPrintControl);
-        m_pBackgroundCB->Check(    pAddPrinterAttr->bPrintPageBackground);
-        m_pBlackFontCB->Check(     pAddPrinterAttr->bPrintBlackFont);
-        m_pPrintHiddenTextCB->Check( pAddPrinterAttr->bPrintHiddenText);
-        m_pPrintTextPlaceholderCB->Check(pAddPrinterAttr->bPrintTextPlaceholder);
-        m_pLeftPageCB->Check(      pAddPrinterAttr->bPrintLeftPages);
-        m_pRightPageCB->Check(     pAddPrinterAttr->bPrintRightPages);
-        m_pPaperFromSetupCB->Check(pAddPrinterAttr->bPaperFromSetup);
-        m_pPrintEmptyPagesCB->Check(pAddPrinterAttr->bPrintEmptyPages);
-        m_pProspectCB->Check(      pAddPrinterAttr->bPrintProspect);
-        m_pProspectCB_RTL->Check(      pAddPrinterAttr->bPrintProspectRTL);
+        m_pGrfCB->Check(pAddPrinterAttr->m_bPrintGraphic || pAddPrinterAttr->m_bPrintDraw);
+        m_pCtrlFieldCB->Check(       pAddPrinterAttr->m_bPrintControl);
+        m_pBackgroundCB->Check(    pAddPrinterAttr->m_bPrintPageBackground);
+        m_pBlackFontCB->Check(     pAddPrinterAttr->m_bPrintBlackFont);
+        m_pPrintHiddenTextCB->Check( pAddPrinterAttr->m_bPrintHiddenText);
+        m_pPrintTextPlaceholderCB->Check(pAddPrinterAttr->m_bPrintTextPlaceholder);
+        m_pLeftPageCB->Check(      pAddPrinterAttr->m_bPrintLeftPages);
+        m_pRightPageCB->Check(     pAddPrinterAttr->m_bPrintRightPages);
+        m_pPaperFromSetupCB->Check(pAddPrinterAttr->m_bPaperFromSetup);
+        m_pPrintEmptyPagesCB->Check(pAddPrinterAttr->m_bPrintEmptyPages);
+        m_pProspectCB->Check(      pAddPrinterAttr->m_bPrintProspect);
+        m_pProspectCB_RTL->Check(      pAddPrinterAttr->m_bPrintProspectRTL);
 
-        m_pNoRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::NONE ) ;
-        m_pOnlyRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::Only ) ;
-        m_pEndRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::EndDoc ) ;
-        m_pEndPageRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::EndPage ) ;
-        m_pInMarginsRB->Check (pAddPrinterAttr->nPrintPostIts== SwPostItMode::InMargins ) ;
-        m_pFaxLB->SelectEntry( pAddPrinterAttr->sFaxName );
+        m_pNoRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::NONE ) ;
+        m_pOnlyRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::Only ) ;
+        m_pEndRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndDoc ) ;
+        m_pEndPageRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndPage ) ;
+        m_pInMarginsRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::InMargins ) ;
+        m_pFaxLB->SelectEntry( pAddPrinterAttr->m_sFaxName );
     }
     if (m_pProspectCB->IsChecked())
     {

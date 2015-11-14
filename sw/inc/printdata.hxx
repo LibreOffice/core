@@ -61,49 +61,49 @@ class SwPrintData
 
 public:
 
-    bool bPrintGraphic, bPrintTable, bPrintDraw, bPrintControl, bPrintPageBackground,
-             bPrintBlackFont,
+    bool m_bPrintGraphic, m_bPrintTable, m_bPrintDraw, m_bPrintControl, m_bPrintPageBackground,
+             m_bPrintBlackFont,
              //#i81434# - printing of hidden text
-             bPrintHiddenText, bPrintTextPlaceholder,
-             bPrintLeftPages, bPrintRightPages, bPrintReverse, bPrintProspect,
-             bPrintProspectRTL,
-             bPrintSingleJobs, bPaperFromSetup,
+             m_bPrintHiddenText, m_bPrintTextPlaceholder,
+             m_bPrintLeftPages, m_bPrintRightPages, m_bPrintReverse, m_bPrintProspect,
+             m_bPrintProspectRTL,
+             m_bPrintSingleJobs, m_bPaperFromSetup,
              /// Print empty pages
-             bPrintEmptyPages,
+             m_bPrintEmptyPages,
 
              /// #i56195# no field update while printing mail merge documents
-             bUpdateFieldsInPrinting,
-             bModified;
+             m_bUpdateFieldsInPrinting,
+             m_bModified;
 
-    SwPostItMode    nPrintPostIts;
-    OUString       sFaxName;
+    SwPostItMode    m_nPrintPostIts;
+    OUString       m_sFaxName;
 
     SwPrintData()
     {
         m_pPrintUIOptions       = nullptr;
         m_pRenderData        = nullptr;
 
-        bPrintGraphic           =
-        bPrintTable             =
-        bPrintDraw              =
-        bPrintControl           =
-        bPrintLeftPages         =
-        bPrintRightPages        =
-        bPrintPageBackground    =
-        bPrintEmptyPages        =
-        bUpdateFieldsInPrinting = true;
+        m_bPrintGraphic           =
+        m_bPrintTable             =
+        m_bPrintDraw              =
+        m_bPrintControl           =
+        m_bPrintLeftPages         =
+        m_bPrintRightPages        =
+        m_bPrintPageBackground    =
+        m_bPrintEmptyPages        =
+        m_bUpdateFieldsInPrinting = true;
 
-        bPaperFromSetup         =
-        bPrintReverse           =
-        bPrintProspect          =
-        bPrintProspectRTL       =
-        bPrintSingleJobs        =
-        bModified               =
-        bPrintBlackFont         =
-        bPrintHiddenText        =
-        bPrintTextPlaceholder   = false;
+        m_bPaperFromSetup         =
+        m_bPrintReverse           =
+        m_bPrintProspect          =
+        m_bPrintProspectRTL       =
+        m_bPrintSingleJobs        =
+        m_bModified               =
+        m_bPrintBlackFont         =
+        m_bPrintHiddenText        =
+        m_bPrintTextPlaceholder   = false;
 
-        nPrintPostIts           = SwPostItMode::NONE;
+        m_nPrintPostIts           = SwPostItMode::NONE;
     }
 
     virtual ~SwPrintData() {}
@@ -111,25 +111,25 @@ public:
     bool operator==(const SwPrintData& rData)const
     {
         return
-        bPrintGraphic       ==   rData.bPrintGraphic        &&
-        bPrintTable         ==   rData.bPrintTable          &&
-        bPrintDraw          ==   rData.bPrintDraw           &&
-        bPrintControl       ==   rData.bPrintControl        &&
-        bPrintPageBackground==   rData.bPrintPageBackground &&
-        bPrintBlackFont     ==   rData.bPrintBlackFont      &&
-        bPrintLeftPages     ==   rData.bPrintLeftPages      &&
-        bPrintRightPages    ==   rData.bPrintRightPages     &&
-        bPrintReverse       ==   rData.bPrintReverse        &&
-        bPrintProspect      ==   rData.bPrintProspect       &&
-        bPrintProspectRTL   ==   rData.bPrintProspectRTL    &&
-        bPrintSingleJobs    ==   rData.bPrintSingleJobs     &&
-        bPaperFromSetup     ==   rData.bPaperFromSetup      &&
-        bPrintEmptyPages    ==   rData.bPrintEmptyPages     &&
-        bUpdateFieldsInPrinting == rData.bUpdateFieldsInPrinting &&
-        nPrintPostIts       ==   rData.nPrintPostIts        &&
-        sFaxName            ==   rData.sFaxName             &&
-        bPrintHiddenText    ==   rData.bPrintHiddenText     &&
-        bPrintTextPlaceholder   ==   rData.bPrintTextPlaceholder;
+        m_bPrintGraphic       ==   rData.m_bPrintGraphic        &&
+        m_bPrintTable         ==   rData.m_bPrintTable          &&
+        m_bPrintDraw          ==   rData.m_bPrintDraw           &&
+        m_bPrintControl       ==   rData.m_bPrintControl        &&
+        m_bPrintPageBackground==   rData.m_bPrintPageBackground &&
+        m_bPrintBlackFont     ==   rData.m_bPrintBlackFont      &&
+        m_bPrintLeftPages     ==   rData.m_bPrintLeftPages      &&
+        m_bPrintRightPages    ==   rData.m_bPrintRightPages     &&
+        m_bPrintReverse       ==   rData.m_bPrintReverse        &&
+        m_bPrintProspect      ==   rData.m_bPrintProspect       &&
+        m_bPrintProspectRTL   ==   rData.m_bPrintProspectRTL    &&
+        m_bPrintSingleJobs    ==   rData.m_bPrintSingleJobs     &&
+        m_bPaperFromSetup     ==   rData.m_bPaperFromSetup      &&
+        m_bPrintEmptyPages    ==   rData.m_bPrintEmptyPages     &&
+        m_bUpdateFieldsInPrinting == rData.m_bUpdateFieldsInPrinting &&
+        m_nPrintPostIts       ==   rData.m_nPrintPostIts        &&
+        m_sFaxName            ==   rData.m_sFaxName             &&
+        m_bPrintHiddenText    ==   rData.m_bPrintHiddenText     &&
+        m_bPrintTextPlaceholder   ==   rData.m_bPrintTextPlaceholder;
     }
 
     /** Note: in the context where this class is used the pointers should always be valid
@@ -138,45 +138,45 @@ public:
     void  SetPrintUIOptions( const SwPrintUIOptions *pOpt )     { m_pPrintUIOptions = pOpt; }
     void  SetRenderData( const SwRenderData *pData )            { m_pRenderData = pData; }
 
-    bool IsPrintGraphic() const             { return bPrintGraphic; }
-    bool IsPrintTable() const               { return bPrintTable; }
-    bool IsPrintDraw() const                { return bPrintDraw; }
-    bool IsPrintControl() const             { return bPrintControl; }
-    bool IsPrintLeftPage() const            { return bPrintLeftPages; }
-    bool IsPrintRightPage() const           { return bPrintRightPages; }
-    bool IsPrintReverse() const             { return bPrintReverse; }
-    bool IsPaperFromSetup() const           { return bPaperFromSetup; }
-    bool IsPrintEmptyPages() const          { return bPrintEmptyPages; }
-    bool IsPrintProspect() const            { return bPrintProspect; }
-    bool IsPrintProspectRTL() const         { return bPrintProspectRTL; }
-    bool IsPrintPageBackground() const      { return bPrintPageBackground; }
-    bool IsPrintBlackFont() const           { return bPrintBlackFont; }
-    bool IsPrintSingleJobs() const          { return bPrintSingleJobs; }
-    SwPostItMode GetPrintPostIts() const           { return nPrintPostIts; }
-    const OUString GetFaxName() const      { return sFaxName; }
-    bool IsPrintHiddenText() const          { return bPrintHiddenText; }
-    bool IsPrintTextPlaceholder() const     { return bPrintTextPlaceholder; }
+    bool IsPrintGraphic() const             { return m_bPrintGraphic; }
+    bool IsPrintTable() const               { return m_bPrintTable; }
+    bool IsPrintDraw() const                { return m_bPrintDraw; }
+    bool IsPrintControl() const             { return m_bPrintControl; }
+    bool IsPrintLeftPage() const            { return m_bPrintLeftPages; }
+    bool IsPrintRightPage() const           { return m_bPrintRightPages; }
+    bool IsPrintReverse() const             { return m_bPrintReverse; }
+    bool IsPaperFromSetup() const           { return m_bPaperFromSetup; }
+    bool IsPrintEmptyPages() const          { return m_bPrintEmptyPages; }
+    bool IsPrintProspect() const            { return m_bPrintProspect; }
+    bool IsPrintProspectRTL() const         { return m_bPrintProspectRTL; }
+    bool IsPrintPageBackground() const      { return m_bPrintPageBackground; }
+    bool IsPrintBlackFont() const           { return m_bPrintBlackFont; }
+    bool IsPrintSingleJobs() const          { return m_bPrintSingleJobs; }
+    SwPostItMode GetPrintPostIts() const           { return m_nPrintPostIts; }
+    const OUString GetFaxName() const      { return m_sFaxName; }
+    bool IsPrintHiddenText() const          { return m_bPrintHiddenText; }
+    bool IsPrintTextPlaceholder() const     { return m_bPrintTextPlaceholder; }
 
-    void SetPrintGraphic( bool b )              { doSetModified(); bPrintGraphic = b; }
-    void SetPrintTable( bool b )                { doSetModified(); bPrintTable = b; }
-    void SetPrintDraw( bool b )                 { doSetModified(); bPrintDraw = b; }
-    void SetPrintControl( bool b )              { doSetModified(); bPrintControl = b; }
-    void SetPrintLeftPage( bool b )             { doSetModified(); bPrintLeftPages = b; }
-    void SetPrintRightPage( bool b )            { doSetModified(); bPrintRightPages = b; }
-    void SetPrintReverse( bool b )              { doSetModified(); bPrintReverse = b; }
-    void SetPaperFromSetup( bool b )            { doSetModified(); bPaperFromSetup = b; }
-    void SetPrintEmptyPages( bool b )           { doSetModified(); bPrintEmptyPages = b; }
-    void SetPrintPostIts( SwPostItMode n )      { doSetModified(); nPrintPostIts = n; }
-    void SetPrintProspect( bool b )             { doSetModified(); bPrintProspect = b; }
-    void SetPrintProspect_RTL( bool b )         { doSetModified(); bPrintProspectRTL = b; }
-    void SetPrintPageBackground( bool b )       { doSetModified(); bPrintPageBackground = b; }
-    void SetPrintBlackFont( bool b )            { doSetModified(); bPrintBlackFont = b; }
-    void SetPrintSingleJobs( bool b )           { doSetModified(); bPrintSingleJobs = b; }
-    void SetFaxName( const OUString& rSet )     { sFaxName = rSet; }
-    void SetPrintHiddenText( bool b )           { doSetModified(); bPrintHiddenText = b; }
-    void SetPrintTextPlaceholder( bool b )      { doSetModified(); bPrintTextPlaceholder = b; }
+    void SetPrintGraphic( bool b )              { doSetModified(); m_bPrintGraphic = b; }
+    void SetPrintTable( bool b )                { doSetModified(); m_bPrintTable = b; }
+    void SetPrintDraw( bool b )                 { doSetModified(); m_bPrintDraw = b; }
+    void SetPrintControl( bool b )              { doSetModified(); m_bPrintControl = b; }
+    void SetPrintLeftPage( bool b )             { doSetModified(); m_bPrintLeftPages = b; }
+    void SetPrintRightPage( bool b )            { doSetModified(); m_bPrintRightPages = b; }
+    void SetPrintReverse( bool b )              { doSetModified(); m_bPrintReverse = b; }
+    void SetPaperFromSetup( bool b )            { doSetModified(); m_bPaperFromSetup = b; }
+    void SetPrintEmptyPages( bool b )           { doSetModified(); m_bPrintEmptyPages = b; }
+    void SetPrintPostIts( SwPostItMode n )      { doSetModified(); m_nPrintPostIts = n; }
+    void SetPrintProspect( bool b )             { doSetModified(); m_bPrintProspect = b; }
+    void SetPrintProspect_RTL( bool b )         { doSetModified(); m_bPrintProspectRTL = b; }
+    void SetPrintPageBackground( bool b )       { doSetModified(); m_bPrintPageBackground = b; }
+    void SetPrintBlackFont( bool b )            { doSetModified(); m_bPrintBlackFont = b; }
+    void SetPrintSingleJobs( bool b )           { doSetModified(); m_bPrintSingleJobs = b; }
+    void SetFaxName( const OUString& rSet )     { m_sFaxName = rSet; }
+    void SetPrintHiddenText( bool b )           { doSetModified(); m_bPrintHiddenText = b; }
+    void SetPrintTextPlaceholder( bool b )      { doSetModified(); m_bPrintTextPlaceholder = b; }
 
-    virtual void doSetModified () { bModified = true;}
+    virtual void doSetModified () { m_bModified = true;}
 };
 
 class SwPrintUIOptions : public vcl::PrinterOptionsHelper
@@ -190,15 +190,15 @@ public:
 
     bool processPropertiesAndCheckFormat( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp );
 
-    bool IsPrintFormControls() const            { return getBoolValue( "PrintControls",        m_rDefaultPrintData.bPrintControl ); }
-    bool IsPrintPageBackground() const          { return getBoolValue( "PrintPageBackground",  m_rDefaultPrintData.bPrintPageBackground ); }
-    bool IsPrintProspect() const                { return getBoolValue( "PrintProspect",        m_rDefaultPrintData.bPrintProspect ); }
-    bool IsPrintProspectRTL() const             { return getIntValue( "PrintProspectRTL",      m_rDefaultPrintData.bPrintProspectRTL ? 1 : 0 ) != 0; }
-    bool IsPrintTextPlaceholders() const        { return getBoolValue( "PrintTextPlaceholder", m_rDefaultPrintData.bPrintTextPlaceholder ); }
-    bool IsPrintHiddenText() const              { return getBoolValue( "PrintHiddenText",      m_rDefaultPrintData.bPrintHiddenText ); }
-    bool IsPrintWithBlackTextColor() const      { return getBoolValue( "PrintBlackFonts",      m_rDefaultPrintData.bPrintBlackFont ); }
-    SwPostItMode GetPrintPostItsType() const       { return static_cast< SwPostItMode >(getIntValue( "PrintAnnotationMode", static_cast<sal_uInt16>(m_rDefaultPrintData.nPrintPostIts) )); }
-    bool IsPaperFromSetup() const               { return getBoolValue( "PrintPaperFromSetup",  m_rDefaultPrintData.bPaperFromSetup ); }
+    bool IsPrintFormControls() const            { return getBoolValue( "PrintControls",        m_rDefaultPrintData.m_bPrintControl ); }
+    bool IsPrintPageBackground() const          { return getBoolValue( "PrintPageBackground",  m_rDefaultPrintData.m_bPrintPageBackground ); }
+    bool IsPrintProspect() const                { return getBoolValue( "PrintProspect",        m_rDefaultPrintData.m_bPrintProspect ); }
+    bool IsPrintProspectRTL() const             { return getIntValue( "PrintProspectRTL",      m_rDefaultPrintData.m_bPrintProspectRTL ? 1 : 0 ) != 0; }
+    bool IsPrintTextPlaceholders() const        { return getBoolValue( "PrintTextPlaceholder", m_rDefaultPrintData.m_bPrintTextPlaceholder ); }
+    bool IsPrintHiddenText() const              { return getBoolValue( "PrintHiddenText",      m_rDefaultPrintData.m_bPrintHiddenText ); }
+    bool IsPrintWithBlackTextColor() const      { return getBoolValue( "PrintBlackFonts",      m_rDefaultPrintData.m_bPrintBlackFont ); }
+    SwPostItMode GetPrintPostItsType() const       { return static_cast< SwPostItMode >(getIntValue( "PrintAnnotationMode", static_cast<sal_uInt16>(m_rDefaultPrintData.m_nPrintPostIts) )); }
+    bool IsPaperFromSetup() const               { return getBoolValue( "PrintPaperFromSetup",  m_rDefaultPrintData.m_bPaperFromSetup ); }
 
     bool IsPrintLeftPages() const;
     bool IsPrintRightPages() const;
