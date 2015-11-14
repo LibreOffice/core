@@ -556,9 +556,9 @@ bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
     const bool bRes = parse(sPaintUri,
         //  Begin grammar
         (
-            str_p("url(") >> !( str_p("'") | str_p("\"") ) >> ("#") >>
-            (+alnum_p)[assign_a(o_rPaintUri)] >>
-            !( str_p("'") | str_p("\"") ) >> str_p(")") >>
+            str_p("url(") >> !( str_p("'") ) >> ("#") >>
+            (+(anychar_p - (str_p("'") | str_p(")"))))[assign_a(o_rPaintUri)] >>
+            !( str_p("'") ) >> str_p(")") >>
             *( str_p("none")[assign_a(io_rColor.second,false)] |
                str_p("currentColor")[assign_a(io_rColor.second,true)] |
                ColorGrammar(io_rColor.first)
