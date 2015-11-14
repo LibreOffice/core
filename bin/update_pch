@@ -1,0 +1,1177 @@
+#! /usr/bin/env python
+# -*- Mode: python; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+"""
+This script generates precompiled headers for a given
+module and library.
+
+Given a gmake makefile that belongs to some LO module:
+1) Process the makefile to find source files (process_makefile).
+2) For every source file, find all includes (process_source).
+3) Uncommon and rare includes are filtered (remove_rare).
+4) Conflicting headers are excluded (filter_ignore).
+5) Local files to the source are excluded (Filter_Local).
+6) Fixup missing headers that sources expect (fixup).
+7) The resulting includes are sorted by category (sort_by_category).
+8) The pch file is generated (generate).
+"""
+
+import sys
+import re
+import os
+import unittest
+
+CUTOFF = 1
+EXCLUDE_MODULE = False
+EXCLUDE_LOCAL = False
+EXCLUDE_SYSTEM = True
+SILENT = False
+
+# System includes: oox, sal, sd, svl, vcl
+
+INCLUDE = False
+EXCLUDE = True
+DEFAULTS = \
+{
+#    module.library : (min, system, module, local), best time
+    'accessibility.acc'                 : ( 4, EXCLUDE, INCLUDE, INCLUDE), #   7.8
+    'basctl.basctl'                     : ( 3, EXCLUDE, INCLUDE, EXCLUDE), #  11.9
+    'basegfx.basegfx'                   : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   3.8
+    'basic.sb'                          : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #  10.7
+    'chart2.chartcontroller'            : ( 6, EXCLUDE, INCLUDE, INCLUDE), #  18.4
+    'chart2.chartcore'                  : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #  22.5
+    'chart2.chartopengl'                : (12, EXCLUDE, EXCLUDE, EXCLUDE), #   5.3
+    'comphelper.comphelper'             : ( 4, EXCLUDE, INCLUDE, INCLUDE), #   7.6
+    'configmgr.configmgr'               : ( 6, EXCLUDE, INCLUDE, INCLUDE), #   6.0
+    'connectivity.ado'                  : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #   6.4
+    'connectivity.calc'                 : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #   4.6
+    'connectivity.dbase'                : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   5.2
+    'connectivity.dbpool2'              : ( 5, EXCLUDE, INCLUDE, EXCLUDE), #   3.0
+    'connectivity.dbtools'              : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   0.8
+    'connectivity.file'                 : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   5.1
+    'connectivity.firebird_sdbc'        : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #   5.1
+    'connectivity.flat'                 : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   4.6
+    'connectivity.mysql'                : ( 4, EXCLUDE, INCLUDE, EXCLUDE), #   3.4
+    'connectivity.odbc'                 : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   5.0
+    'connectivity.postgresql-sdbc-impl' : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   6.7
+    'cppcanvas.cppcanvas'               : (11, EXCLUDE, INCLUDE, INCLUDE), #   4.8
+    'cppuhelper.cppuhelper'             : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   4.6
+    'cui.cui'                           : ( 8, EXCLUDE, INCLUDE, EXCLUDE), #  19.7
+    'dbaccess.dba'                      : ( 6, EXCLUDE, INCLUDE, INCLUDE), #  13.8
+    'dbaccess.dbaxml'                   : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #   6.5
+    'dbaccess.dbmm'                     : (10, EXCLUDE, INCLUDE, EXCLUDE), #   4.3
+    'dbaccess.dbu'                      : (12, EXCLUDE, EXCLUDE, EXCLUDE), #  23.6
+    'dbaccess.sdbt'                     : ( 1, EXCLUDE, INCLUDE, EXCLUDE), #   2.9
+    'desktop.deployment'                : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   6.1
+    'desktop.deploymentgui'             : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   5.7
+    'desktop.deploymentmisc'            : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #   3.4
+    'desktop.sofficeapp'                : ( 6, EXCLUDE, INCLUDE, INCLUDE), #   6.5
+    'drawinglayer.drawinglayer'         : ( 4, EXCLUDE, EXCLUDE, EXCLUDE), #   7.4
+    'editeng.editeng'                   : ( 5, EXCLUDE, INCLUDE, EXCLUDE), #  13.0
+    'forms.frm'                         : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #  14.2
+    'framework.fwe'                     : (10, EXCLUDE, INCLUDE, EXCLUDE), #   5.5
+    'framework.fwi'                     : ( 9, EXCLUDE, INCLUDE, EXCLUDE), #   3.4
+    'framework.fwk'                     : ( 7, EXCLUDE, INCLUDE, INCLUDE), #  14.8
+    'framework.fwl'                     : ( 5, EXCLUDE, INCLUDE, INCLUDE), #   5.1
+    'hwpfilter.hwp'                     : ( 3, EXCLUDE, INCLUDE, INCLUDE), #   6.0
+    'lotuswordpro.lwpft'                : ( 2, EXCLUDE, EXCLUDE, EXCLUDE), #  11.6
+    'oox.oox'                           : ( 6, EXCLUDE, EXCLUDE, INCLUDE), #  28.2
+    'package.package2'                  : ( 3, EXCLUDE, INCLUDE, INCLUDE), #   4.5
+    'package.xstor'                     : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   3.8
+    'reportdesign.rpt'                  : ( 9, EXCLUDE, INCLUDE, INCLUDE), #   9.4
+    'reportdesign.rptui'                : ( 4, EXCLUDE, INCLUDE, INCLUDE), #  13.1
+    'reportdesign.rptxml'               : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   7.6
+    'sal.sal'                           : ( 5, EXCLUDE, INCLUDE, INCLUDE), #   4.2
+    'sc.sc'                             : (12, EXCLUDE, INCLUDE, INCLUDE), #  92.6
+    'sc.scfilt'                         : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #  39.9
+    'sc.scui'                           : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #  15.0
+    'sc.vbaobj'                         : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #  17.3
+    'sd.sd'                             : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #  47.4
+    'sd.sdui'                           : ( 4, EXCLUDE, INCLUDE, INCLUDE), #   9.4
+    'sdext.PresentationMinimizer'       : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   4.1
+    'sdext.PresenterScreen'             : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   7.1
+    'sfx2.sfx'                          : ( 3, EXCLUDE, EXCLUDE, EXCLUDE), #  27.4
+    'slideshow.slideshow'               : ( 4, EXCLUDE, INCLUDE, EXCLUDE), #  10.8
+    'sot.sot'                           : ( 5, EXCLUDE, EXCLUDE, INCLUDE), #   3.1
+    'starmath.sm'                       : ( 5, EXCLUDE, EXCLUDE, INCLUDE), #  10.9
+    'svgio.svgio'                       : ( 8, EXCLUDE, EXCLUDE, INCLUDE), #   4.3
+    'svl.svl'                           : ( 6, EXCLUDE, EXCLUDE, EXCLUDE), #   7.6
+    'svtools.svt'                       : ( 4, EXCLUDE, INCLUDE, EXCLUDE), #  17.6
+    'svx.svx'                           : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #  20.7
+    'svx.svxcore'                       : ( 7, EXCLUDE, INCLUDE, EXCLUDE), #  37.0
+    'sw.msword'                         : ( 4, EXCLUDE, INCLUDE, INCLUDE), #  22.4
+    'sw.sw'                             : (11, EXCLUDE, EXCLUDE, INCLUDE), # 212.3
+    'sw.swui'                           : ( 3, EXCLUDE, INCLUDE, INCLUDE), #  26.1
+    'sw.vbaswobj'                       : ( 4, EXCLUDE, INCLUDE, INCLUDE), #  13.1
+    'tools.tl'                          : ( 5, EXCLUDE, EXCLUDE, EXCLUDE), #   4.2
+    'unotools.utl'                      : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   7.0
+    'unoxml.unoxml'                     : ( 1, EXCLUDE, EXCLUDE, EXCLUDE), #   4.6
+    'uui.uui'                           : ( 4, EXCLUDE, EXCLUDE, EXCLUDE), #   4.9
+    'vbahelper.msforms'                 : ( 3, EXCLUDE, INCLUDE, INCLUDE), #   5.2
+    'vbahelper.vbahelper'               : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   7.0
+    'vcl.vcl'                           : ( 6, EXCLUDE, INCLUDE, INCLUDE), #  35.7
+    'writerfilter.writerfilter'         : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #  15.8
+    'xmloff.xo'                         : ( 7, EXCLUDE, INCLUDE, INCLUDE), #  22.1
+    'xmloff.xof'                        : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #   4.4
+    'xmlscript.xmlscript'               : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #   3.6
+    'xmlsecurity.xmlsecurity'           : ( 6, EXCLUDE, INCLUDE, INCLUDE), #   5.1
+    'xmlsecurity.xsec_fw'               : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   2.7
+    'xmlsecurity.xsec_xmlsec'           : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   4.4
+}
+
+def remove_rare(raw, min_use=-1):
+    """ Remove headers not commonly included.
+        The minimum threshold is min_use.
+    """
+    # The minimum number of times a header
+    # must be included to be in the PCH.
+    min_use = min_use if min_use >= 0 else CUTOFF
+
+    out = []
+    if not raw or not len(raw):
+        return out
+
+    inc = sorted(raw)
+    last = inc[0]
+    count = 1
+    for x in range(1, len(inc)):
+        i = inc[x]
+        if i == last:
+            count += 1
+        else:
+            if count >= min_use:
+                out.append(last)
+            last = i
+            count = 1
+
+    # Last group.
+    if count >= min_use:
+        out.append(last)
+
+    return out
+
+def process_list(list, callable):
+    """ Given a list and callable
+        we pass each entry through
+        the callable and only add to
+        the output if not blank.
+    """
+    out = []
+    for i in list:
+        line = callable(i)
+        if line and len(line):
+            out.append(line)
+    return out
+
+def find_files(path, recurse=True):
+    list = []
+    for root, dir, files in os.walk(path):
+        list += map(lambda x: os.path.join(root, x), files)
+    return list
+
+def get_filename(line):
+    """ Strips the line from the
+        '#include' and angled brakets
+        and return the filename only.
+    """
+    if not len(line) or line[0] != '#':
+        return line
+    return re.sub(r'(.*#include\s*)<(.*)>(.*)', r'\2', line)
+
+def is_c_runtime(inc):
+    """ Heuristic-based detection of C/C++
+        runtime headers.
+        They are all-lowercase, with .h or
+        no extension, filename only.
+    """
+    inc = get_filename(inc)
+
+    if inc.endswith('.hxx') or inc.endswith('.hpp'):
+        return False
+
+    for c in inc:
+        if c == '/':
+            return False
+        if c == '.':
+            return inc.endswith('.h')
+        if c.isupper():
+            return False
+
+    return True
+
+def sanitize(raw):
+    """ There are two forms of includes,
+        those with <> and "".
+        Technically, the difference is that
+        the compiler can use an internal
+        representation for an angled include,
+        such that it doesn't have to be a file.
+        For our purposes, there is no difference.
+        Here, we convert everything to angled.
+    """
+    if not raw or not len(raw):
+        return ''
+    raw = raw.strip()
+    if not len(raw):
+        return ''
+    return re.sub(r'(.*#include\s*)\"(.*)\"(.*)', r'#include <\2>', raw)
+
+class Filter_Local(object):
+    """ Filter headers local to a module.
+        allow_public: allows include/module/file.hxx
+                      #include <module/file.hxx>
+        allow_module: allows module/inc/file.hxx
+                      #include <file.hxx>
+        allow_locals: allows module/source/file.hxx and
+                             module/source/inc/file.hxx
+                      #include <file.hxx>
+    """
+    def __init__(self, root, module, allow_public=True, allow_module=True, allow_locals=True):
+        self.root = root
+        self.module = module
+        self.allow_public = allow_public
+        self.allow_module = allow_module
+        self.allow_locals = allow_locals
+        self.public_prefix = '<' + self.module + '/'
+
+        all = find_files(os.path.join(root, module))
+        self.module = []
+        self.locals = []
+        mod_prefix = module + '/inc/'
+        for i in all:
+            if mod_prefix in i:
+                self.module.append(i)
+            else:
+                self.locals.append(i)
+
+    def is_public(self, line):
+        return self.public_prefix in line
+
+    def is_module(self, line):
+        """ Returns True if in module/inc/... """
+        filename = get_filename(line)
+        for i in self.module:
+            if i.endswith(filename):
+                return True
+        return False
+
+    def is_local(self, line):
+        """ Returns True if in module/source/... """
+        filename = get_filename(line)
+        for i in self.locals:
+            if i.endswith(filename):
+                return True
+        return False
+
+    def is_external(self, line):
+        return is_c_runtime(line) and \
+               not self.is_public(line) and \
+               not self.is_module(line) and \
+               not self.is_local(line)
+
+    def find_local_file(self, line):
+        """ Finds the header file in the module dir,
+            but doesn't validate.
+        """
+        filename = get_filename(line)
+        for i in self.locals:
+            if i.endswith(filename):
+                return i
+        for i in self.module:
+            if i.endswith(filename):
+                return i
+        return None
+
+    def proc(self, line):
+        assert line and len(line)
+        assert line[0] != '<' and line[0] != '#'
+
+        filename = get_filename(line)
+
+        # Local with relative path.
+        if filename.startswith('..'):
+            # Exclude for now as we don't have cxx path.
+            return ''
+
+        # Locals are included first (by the compiler).
+        if self.is_local(filename):
+            return line if self.allow_locals and '/inc/' in filename else ''
+
+        # Module headers are next.
+        if self.is_module(filename):
+            return line if self.allow_module else ''
+
+        # Public headers are last.
+        if self.is_public(line):
+            return line if self.allow_public else ''
+
+        # Leave out potentially unrelated files local
+        # to some other module we can't include directly.
+        if '/' not in filename and not self.is_external(filename):
+            return ''
+
+        # Unfiltered.
+        return line
+
+def filter_ignore(line, module):
+    """ Filters includes from known
+        problematic ones.
+        Expects sanitized input.
+    """
+    assert line and len(line)
+
+    # Always include files without extension.
+    if '.' not in line:
+        return line
+
+    # Extract filenames for ease of comparison.
+    line = get_filename(line)
+
+    # Filter out all files that are not normal headers.
+    if not line.endswith('.h') and \
+       not line.endswith('.hxx') and \
+       not line.endswith('.hpp') and \
+       not line.endswith('.hdl'):
+       return ''
+
+    ignore_list = [
+            'LibreOfficeKit/LibreOfficeKitEnums.h', # Needs special directives
+            'LibreOfficeKit/LibreOfficeKitTypes.h', # Needs special directives
+            'jerror.h',     # c++ unfriendly
+            'jpeglib.h',    # c++ unfriendly
+            'svtools/editimplementation.hxx' # no direct include
+        ]
+
+    if module == 'accessibility':
+        ignore_list += [
+            # STR_SVT_ACC_LISTENTRY_SELCTED_STATE redefined from svtools.hrc
+            'accessibility/extended/textwindowaccessibility.hxx',
+            ]
+    if module == 'basic':
+        ignore_list += [
+            'basic/vbahelper.hxx',
+            ]
+    if module == 'connectivity':
+        ignore_list += [
+            'com/sun/star/beans/PropertyAttribute.hpp', # OPTIONAL defined via objbase.h
+            'com/sun/star/sdbcx/Privilege.hpp', # DELETE defined via objbase.h
+            ]
+    if module == 'reportdesign':
+        ignore_list += [
+            'editeng/eeitemid.hxx', # macro redefined in ui/misc/UITools.cxx
+            ]
+    if module == 'sc':
+        ignore_list += [
+            'progress.hxx', # special directives
+            'scslots.hxx',  # special directives
+           ]
+    if module == 'sd':
+        ignore_list += [
+            'sdgslots.hxx', # special directives
+            'sdslots.hxx',  # special directives
+            'svtools/sores.hxx', # redefines BMP_PLUGIN defined in svtools.hrc
+           ]
+    if module == 'sfx2':
+        ignore_list += [
+            'sfx2/recentdocsview.hxx', # Redefines ApplicationType defined in objidl.h
+            'sfx2/sidebar/Sidebar.hxx',
+            'sfx2/sidebar/UnoSidebar.hxx',
+            'sfxslots.hxx', # externally defined types
+            ]
+    if module == 'sot':
+        ignore_list += [
+            'sysformats.hxx',   # Windows headers
+            ]
+    if module == 'svx':
+        ignore_list += [
+            'tbunosearchcontrollers.hxx', # Anonymous namespace
+            ]
+    if module == 'sw':
+        ignore_list += [
+            'com/sun/star/ucb/NameClash.hpp', # conflicts with ERROR from Windows.h
+            ]
+    if module == 'vcl':
+        ignore_list += [
+            'accmgr.hxx',   # redefines ImplAccelList
+            'image.h',
+            'jobset.h',
+            'opengl/gdiimpl.hxx',
+            'opengl/salbmp.hxx',
+            'openglgdiimpl',   # ReplaceTextA
+            'printdlg.hxx',
+            'salinst.hxx',  # GetDefaultPrinterA
+            'salprn.hxx',   # SetPrinterDataA
+            'vcl/jobset.hxx',
+            'vcl/oldprintadaptor.hxx',
+            'vcl/opengl/OpenGLContext.hxx',
+            'vcl/print.hxx',
+            'vcl/prntypes.hxx', # redefines Orientation from filter/jpeg/Exif.hxx
+            'vcl/sysdata.hxx',
+            ]
+    if module == 'xmloff':
+        ignore_list += [
+            'SchXMLExport.hxx', # SchXMLAutoStylePoolP.hxx not found
+            'SchXMLImport.hxx', # enums redefined in draw\sdxmlimp_impl.hxx
+            'XMLEventImportHelper.hxx', # NameMap redefined in XMLEventExport.hxx
+            'xmloff/XMLEventExport.hxx', # enums redefined
+            ]
+
+    for i in ignore_list:
+        if line.startswith(i):
+            return ''
+        if i[0] == '*' and line.endswith(i[1:]):
+            return ''
+        if i[-1] == '*' and line.startswith(i[:-1]):
+            return ''
+
+    return line
+
+def fixup(includes, module):
+    """ Here we add any headers
+        necessary in the pch.
+        These could be known to be very
+        common but for technical reasons
+        left out of the pch by this generator.
+        Or, they could be missing from the
+        source files where they are used
+        (probably because they had been
+        in the old pch, they were missed).
+        Also, these could be headers
+        that make the build faster but
+        aren't added automatically.
+    """
+    fixes = []
+    def append(inc):
+        # Add a space to exclude from
+        # ignore bisecting.
+        line = ' #include <{}>'.format(inc)
+        try:
+            i = fixes.index(inc)
+            fixes[i] = inc
+        except:
+            fixes.append(inc)
+
+    if module == 'basctl':
+        if 'basslots.hxx' in includes:
+            append('sfx2/msg.hxx')
+
+    #if module == 'sc':
+    #    if 'scslots.hxx' in includes:
+    #        append('sfx2/msg.hxx')
+    return fixes
+
+def sort_by_category(list, module, filter_local):
+    """ Move all 'system' headers first.
+        Core files of osl, rtl, sal, next.
+        Everything non-module-specific third.
+        Last, module-specific headers.
+    """
+    sys = []
+    boo = []
+    cor = []
+    rst = []
+    mod = []
+
+    prefix = '<' + module + '/'
+    for i in list:
+        if is_c_runtime(i):
+            sys.append(i)
+        elif '<boost/' in i:
+            boo.append(i)
+        elif '<osl' in i or '<rtl' in i or '<sal' in i or '<vcl' in i:
+            cor.append(i)
+        elif prefix in i:
+            mod.append(i)
+        else:
+            rst.append(i)
+
+    out = []
+    out += sorted(sys)
+    out += sorted(boo)
+    out += sorted(cor)
+    out += sorted(rst)
+    out += sorted(mod)
+    return out
+
+def parse_makefile(groups, lines, lineno, lastif, ifstack):
+
+    inobjects = False
+    inelse = False
+    os_cond_re = re.compile('(ifeq|ifneq)\s*\(\$\(OS\)\,(\w*)\)')
+
+    line = lines[lineno]
+    if line.startswith('if'):
+        lastif = line
+        if ifstack == 0:
+            # Correction if first line is an if.
+            lineno = parse_makefile(groups, lines, lineno, line, ifstack+1)
+    else:
+        lineno -= 1
+
+    while lineno + 1 < len(lines):
+        lineno += 1
+        line = lines[lineno].strip()
+        line = line.rstrip('\\').strip()
+        #print('line #{}: {}'.format(lineno, line))
+        if len(line) == 0:
+            continue
+
+        if line == '))':
+            inobjects = False
+        elif 'add_exception_objects' in line or \
+             'add_cxxobject' in line:
+             inobjects = True
+             #print('inobjects')
+             #if ifstack and not SILENT:
+                #sys.stderr.write('Sources in a conditional, ignoring for now.\n')
+        elif line.startswith('if'):
+            lineno = parse_makefile(groups, lines, lineno, line, ifstack+1)
+            continue
+        elif line.startswith('endif'):
+            if ifstack:
+                return lineno
+            continue
+        elif line.startswith('else'):
+            inelse = True
+        elif inobjects:
+            if EXCLUDE_SYSTEM and ifstack:
+                continue
+            file = line + '.cxx'
+            if ',' in line or '(' in line or ')' in line:
+                #print('passing: ' + line)
+                pass # $if() probably, or something similar
+            else:
+                osname = ''
+                if lastif:
+                    if 'filter' in lastif:
+                        # We can't grok filter, yet.
+                        continue
+                    match = os_cond_re.match(lastif)
+                    if not match:
+                        # We only support OS conditionals.
+                        continue
+                    in_out = match.group(1)
+                    osname = match.group(2) if match else ''
+                    if (in_out == 'ifneq' and not inelse) or \
+                       (in_out == 'ifeq' and inelse):
+                        osname = '!' + osname
+
+                if osname not in groups:
+                    groups[osname] = []
+                groups[osname].append(file)
+
+    return groups
+
+def process_makefile(root, module, makefile):
+    """ Parse a gmake makefile and extract
+        source filenames from it.
+    """
+
+    filename = os.path.join(os.path.join(root, module), makefile)
+    if not os.path.isfile(filename):
+        sys.stderr.write('Error: Module {} has no makefile at {}.'.format(module, filename))
+
+    groups = {'':[], 'ANDROID':[], 'IOS':[], 'WNT':[], 'LINUX':[], 'MACOSX':[]}
+
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        groups = parse_makefile(groups, lines, lineno=0, lastif=None, ifstack=0)
+
+    return groups
+
+def process_source(root, module, filename, maxdepth=0):
+    """ Process a source file to extract
+        included headers.
+        For now, skip on compiler directives.
+        maxdepth is used when processing headers
+        which typically have protecting ifndef.
+    """
+
+    ifdepth = 0
+    lastif = ''
+    raw_includes = []
+    with open(filename, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith('#if'):
+                ifdepth += 1
+                lastif = line
+            elif line.startswith('#endif'):
+                ifdepth -= 1
+                lastif = '#if'
+            elif line.startswith('#include'):
+                if ifdepth <= maxdepth:
+                    line = sanitize(line)
+                    if line:
+                        line = get_filename(line)
+                    if line and len(line):
+                        raw_includes.append(line)
+                elif not SILENT:
+                    sys.stderr.write('#include in {} : {}\n'.format(lastif, line))
+
+    return raw_includes
+
+def explode(root, module, includes, tree, filter_local, recurse):
+    incpath = os.path.join(root, 'include')
+
+    for inc in includes:
+        filename = get_filename(inc)
+        if filename in tree or len(filter_local.proc(filename)) == 0:
+            continue
+
+        try:
+            # Module or Local header.
+            filepath = filter_local.find_local_file(inc)
+            if filepath:
+                #print('trying loc: ' + filepath)
+                incs = process_source(root, module, filepath, maxdepth=1)
+                incs = map(get_filename, incs)
+                incs = process_list(incs, lambda x: filter_ignore(x, module))
+                incs = process_list(incs, filter_local.proc)
+                tree[filename] = incs
+                if recurse:
+                    tree = explode(root, module, incs, tree, filter_local, recurse)
+                #print('{} => {}'.format(filepath, tree[filename]))
+                continue
+        except:
+            pass
+
+        try:
+            # Public header.
+            filepath = os.path.join(incpath, filename)
+            #print('trying pub: ' + filepath)
+            incs = process_source(root, module, filepath, maxdepth=1)
+            incs = map(get_filename, incs)
+            incs = process_list(incs, lambda x: filter_ignore(x, module))
+            incs = process_list(incs, filter_local.proc)
+            tree[filename] = incs
+            if recurse:
+                tree = explode(root, module, incs, tree, filter_local, recurse)
+            #print('{} => {}'.format(filepath, tree[filename]))
+            continue
+        except:
+            pass
+
+        # Failed, but remember to avoid searching again.
+        tree[filename] = []
+
+    return tree
+
+def make_command_line():
+    args = sys.argv[:]
+    # Remove command line flags and
+    # use internal flags.
+    for i in xrange(len(args)-1, 0, -1):
+        if args[i].startswith('--'):
+            args.pop(i)
+
+    args.append('--cutoff=' + str(CUTOFF))
+    if EXCLUDE_SYSTEM:
+        args.append('--exclude:system')
+    else:
+        args.append('--include:system')
+    if EXCLUDE_MODULE:
+        args.append('--exclude:module')
+    else:
+        args.append('--include:module')
+    if EXCLUDE_LOCAL:
+        args.append('--exclude:local')
+    else:
+        args.append('--include:local')
+
+    return ' '.join(args)
+
+def generate_includes(includes):
+    """Generates the include lines of the pch.
+    """
+    lines = []
+    for osname, group in includes.iteritems():
+        if not len(group):
+            continue
+
+        if len(osname):
+            not_eq = ''
+            if osname[0] == '!':
+                not_eq = '!'
+                osname = osname[1:]
+            lines.append('')
+            lines.append('#if {}defined({})'.format(not_eq, osname))
+
+        for i in group:
+            lines.append(i)
+
+        if len(osname):
+            lines.append('#endif')
+
+    return lines
+
+def generate(includes, libname, filename, module):
+    header = \
+"""/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/*
+ This file has been autogenerated by update_pch.sh. It is possible to edit it
+ manually (such as when an include file has been moved/renamed/removed). All such
+ manual changes will be rewritten by the next run of update_pch.sh (which presumably
+ also fixes all possible problems, so it's usually better to use it).
+"""
+
+    footer = \
+"""
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+"""
+    import datetime
+
+    with open(filename, 'w') as f:
+        f.write(header)
+        f.write('\n Generated on {} using:\n {}\n'.format(
+                datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                make_command_line()))
+        f.write('\n If after updating build fails, use the following command to locate conflicting headers:\n ./bin/update_pch_bisect {} "/opt/lo/bin/make {}.build" --find-conflicts\n*/\n'.format(
+                filename, module))
+
+        # svx needs this (sendreportw32.cxx)
+        if module == 'svx' and libname == 'svx':
+            svx_define = """
+#ifdef WNT
+#define UNICODE
+#define _UNICODE
+#endif
+"""
+            f.write(svx_define)
+
+        # Dump the headers.
+        f.write('\n')
+        for i in includes:
+            f.write(i + '\n')
+
+        # ado needs to guard against macro polution
+        if module == 'connectivity' and libname == 'ado':
+            ado_define = """
+// Prevent windows header macro pollution.
+#undef OPTIONAL
+#undef DELETE
+"""
+            f.write(ado_define)
+
+        f.write(footer)
+
+def remove_from_tree(filename, tree):
+    # Remove this file, if top-level.
+    incs = tree.pop(filename, [])
+    for i in incs:
+        tree = remove_from_tree(i, tree)
+
+    # Also remove if included from another.
+    for (k, v) in tree.iteritems():
+        if filename in v:
+            v.remove(filename)
+
+    return tree
+
+def tree_to_list(includes, filename, tree):
+    if filename in includes:
+        return includes
+    includes.append(filename)
+    #incs = tree.pop(filename, [])
+    incs = tree[filename] if filename in tree else []
+    for i in incs:
+        tree_to_list(includes, i, tree)
+
+    return includes
+
+def promote(includes):
+    """ Common library headers are heavily
+        referenced, even if they are included
+        from a few places.
+        Here we separate them to promote
+        their inclusion in the final pch.
+    """
+    promo = []
+    for inc in includes:
+        if inc.startswith('boost') or \
+           inc.startswith('sal') or \
+           inc.startswith('osl') or \
+           inc.startswith('rtl'):
+            promo.append(inc)
+    return promo
+
+def make_pch_filename(root, module, libname):
+    """ PCH files are stored here:
+        <root>/<module>/inc/pch/precompiled_<libname>.hxx
+    """
+
+    path = os.path.join(root, module)
+    path = os.path.join(path, 'inc')
+    path = os.path.join(path, 'pch')
+    path = os.path.join(path, 'precompiled_' + libname + '.hxx')
+    return path
+
+def main():
+
+    global CUTOFF
+    global EXCLUDE_MODULE
+    global EXCLUDE_LOCAL
+    global EXCLUDE_SYSTEM
+    global SILENT
+
+    root = '.'
+    module = sys.argv[1]
+    libname = sys.argv[2]
+    header = make_pch_filename(root, module, libname)
+
+    if not os.path.exists(os.path.join(root, module)):
+        raise Exception('Error: module [' + str(module) +
+            '] not found. Not running from the root of LO repository?')
+
+    key = '{}.{}'.format(module, libname)
+    if key in DEFAULTS:
+        # Load the module-specific defaults.
+        CUTOFF = DEFAULTS[key][0]
+        EXCLUDE_SYSTEM = DEFAULTS[key][1]
+        EXCLUDE_MODULE = DEFAULTS[key][2]
+        EXCLUDE_LOCAL = DEFAULTS[key][3]
+
+    force_update = False
+    for x in xrange(3, len(sys.argv)):
+        i = sys.argv[x]
+        if i.startswith('--cutoff='):
+            CUTOFF = int(i.split('=')[1])
+        elif i.startswith('--exclude:'):
+            cat = i.split(':')[1]
+            if cat == 'module':
+                EXCLUDE_MODULE = True
+            elif cat == 'local':
+                EXCLUDE_LOCAL = True
+            elif cat == 'system':
+                EXCLUDE_SYSTEM = True
+        elif i.startswith('--include:'):
+            cat = i.split(':')[1]
+            if cat == 'module':
+                EXCLUDE_MODULE = False
+            elif cat == 'local':
+                EXCLUDE_LOCAL = False
+            elif cat == 'system':
+                EXCLUDE_SYSTEM = False
+        elif i == '--silent':
+            SILENT = True
+        elif i == '--force':
+            force_update = True
+        else:
+            sys.stderr.write('Unknown option [{}].'.format(i))
+            return 1
+
+    filter_local = Filter_Local(root, module, \
+                                not EXCLUDE_MODULE, \
+                                not EXCLUDE_LOCAL)
+
+    # Read input.
+    makefile = 'Library_{}.mk'.format(libname)
+    groups = process_makefile(root, module, makefile)
+
+    generic = []
+    for osname, group in groups.iteritems():
+        if not len(group):
+            continue
+
+        includes = []
+        for filename in group:
+            includes += process_source(root, module, filename)
+
+        # Save unique top-level includes.
+        unique = set(includes)
+        promoted = promote(unique)
+
+        # Process includes.
+        includes = remove_rare(includes)
+        includes = process_list(includes, lambda x: filter_ignore(x, module))
+        includes = process_list(includes, filter_local.proc)
+
+        # Remove the already included ones.
+        for inc in includes:
+            unique.discard(inc)
+
+        # Explode the excluded ones.
+        tree = {i:[] for i in includes}
+        tree = explode(root, module, unique, tree, filter_local, not EXCLUDE_MODULE)
+
+        # Remove the already included ones from the tree.
+        for inc in includes:
+            filename = get_filename(inc)
+            tree = remove_from_tree(filename, tree)
+
+        extra = []
+        for (k, v) in tree.iteritems():
+            extra += tree_to_list([], k, tree)
+
+        promoted += promote(extra)
+        promoted = process_list(promoted, lambda x: filter_ignore(x, module))
+        promoted = process_list(promoted, filter_local.proc)
+        promoted = set(promoted)
+        # If a promoted header includes others, remove the rest.
+        for (k, v) in tree.iteritems():
+            if k in promoted:
+                for i in v:
+                    promoted.discard(i)
+        includes += [x for x in promoted]
+
+        extra = remove_rare(extra)
+        extra = process_list(extra, lambda x: filter_ignore(x, module))
+        extra = process_list(extra, filter_local.proc)
+        includes += extra
+
+        includes = [x for x in set(includes)]
+        fixes = fixup(includes, module)
+        fixes = map(lambda x: '#include <' + x + '>', fixes)
+
+        includes = map(lambda x: '#include <' + x + '>', includes)
+        sorted = sort_by_category(includes, module, filter_local)
+        includes = fixes + sorted
+
+        if len(osname):
+            for i in generic:
+                if i in includes:
+                    includes.remove(i)
+
+        groups[osname] = includes
+        if not len(osname):
+            generic = includes
+
+    # Open the old pch and compare its contents
+    # with new includes.
+    # Clobber only if they are different.
+    with open(header, 'r') as f:
+        old_pch_lines = [x.strip() for x in f.readlines()]
+        new_lines = generate_includes(groups)
+        # Find the first include in the old pch.
+        start = -1
+        for i in xrange(len(old_pch_lines)):
+            if old_pch_lines[i].startswith('#include'):
+                start = i
+                break
+        # Clobber if there is a mismatch.
+        if force_update or start < 0 or (len(old_pch_lines) - start < len(new_lines)):
+            generate(new_lines, libname, header, module)
+            return 0
+        else:
+            for i in xrange(len(new_lines)):
+                if new_lines[i] != old_pch_lines[start + i]:
+                    generate(new_lines, libname, header, module)
+                    return 0
+            else:
+                # Identical, but see if new pch removed anything.
+                for i in xrange(start + len(new_lines), len(old_pch_lines)):
+                    if '#include' in old_pch_lines[i]:
+                        generate(new_lines, libname, header, module)
+                        return 0
+
+    # Didn't update.
+    return 1
+
+if __name__ == '__main__':
+    """ Process all the includes in a Module
+        to make into a PCH file.
+        Run without arguments for unittests,
+        and to see usage.
+    """
+
+    if len(sys.argv) >= 3:
+        status = main()
+        sys.exit(status)
+
+    print('Usage: {} <Module name> <Library name> [options]'.format(sys.argv[0]))
+    print('    Always run from the root of LO repository.\n')
+    print('    Options:')
+    print('    --cutoff=<count> - Threshold to excluding headers.')
+    print('    --exclude:<category> - Exclude category-specific headers.')
+    print('    --include:<category> - Include category-specific headers.')
+    print('    --force - Force updating the pch even when nothing changes.')
+    print('    Categories:')
+    print('         module - Headers in /inc directory of a module.')
+    print('         local  - Headers local to a source file.')
+    print('         system - Platform-specific headers.')
+    print('    --silent - print only errors.')
+    print('\nRunning unit-tests...')
+
+
+class TestMethods(unittest.TestCase):
+
+    def test_sanitize(self):
+        self.assertEqual(sanitize('#include "blah/file.cxx"'),
+                                '#include <blah/file.cxx>')
+        self.assertEqual(sanitize('  #include\t"blah/file.cxx" '),
+                                '#include <blah/file.cxx>')
+        self.assertEqual(sanitize('  '),
+                                '')
+
+    def test_filter_ignore(self):
+        self.assertEqual(filter_ignore('blah/file.cxx', 'mod'),
+                                     '')
+        self.assertEqual(filter_ignore('vector', 'mod'),
+                                     'vector')
+        self.assertEqual(filter_ignore('file.cxx', 'mod'),
+                                     '')
+
+    def test_remove_rare(self):
+        self.assertEqual(remove_rare([]),
+                                [])
+
+class TestMakefileParser(unittest.TestCase):
+
+    def setUp(self):
+        global EXCLUDE_SYSTEM
+        EXCLUDE_SYSTEM = False
+
+    def test_parse_singleline_eval(self):
+        source = "$(eval $(call gb_Library_Library,sal))"
+        lines = source.split('\n')
+        groups = {'':[]}
+        groups = parse_makefile(groups, lines, 0, None, 0)
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(len(groups['']), 0)
+
+    def test_parse_multiline_eval(self):
+        source = """$(eval $(call gb_Library_set_include,sal,\\
+	$$(INCLUDE) \\
+	-I$(SRCDIR)/sal/inc \\
+))
+"""
+        lines = source.split('\n')
+        groups = {'':[]}
+        groups = parse_makefile(groups, lines, 0, None, 0)
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(len(groups['']), 0)
+
+    def test_parse_multiline_eval_with_if(self):
+        source = """$(eval $(call gb_Library_add_defs,sal,\\
+	$(if $(filter $(OS),IOS), \\
+		-DNO_CHILD_PROCESSES \\
+	) \\
+))
+"""
+        lines = source.split('\n')
+        groups = {'':[]}
+        groups = parse_makefile(groups, lines, 0, None, 0)
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(len(groups['']), 0)
+
+    def test_parse_multiline_add_with_if(self):
+        source = """$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/osl/unx/time \\
+        $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \\
+))
+"""
+        lines = source.split('\n')
+        groups = {'':[]}
+        groups = parse_makefile(groups, lines, 0, None, 0)
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(len(groups['']), 1)
+        self.assertEqual(groups[''][0], 'sal/osl/unx/time.cxx')
+
+    def test_parse_if_else(self):
+        source = """ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/osl/mac/mac \\
+))
+else
+$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/osl/unx/uunxapi \\
+))
+endif
+"""
+        lines = source.split('\n')
+        groups = {'':[]}
+        groups = parse_makefile(groups, lines, 0, None, 0)
+        self.assertEqual(len(groups), 3)
+        self.assertEqual(len(groups['']), 0)
+        self.assertEqual(len(groups['MACOSX']), 1)
+        self.assertEqual(len(groups['!MACOSX']), 1)
+        self.assertEqual(groups['MACOSX'][0], 'sal/osl/mac/mac.cxx')
+        self.assertEqual(groups['!MACOSX'][0], 'sal/osl/unx/uunxapi.cxx')
+
+    def test_parse_nested_if(self):
+        source = """ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/osl/mac/mac \\
+))
+else
+$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/osl/unx/uunxapi \\
+))
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/textenc/context \\
+))
+endif
+endif
+"""
+        lines = source.split('\n')
+        groups = {'':[]}
+        groups = parse_makefile(groups, lines, 0, None, 0)
+        self.assertEqual(len(groups), 4)
+        self.assertEqual(len(groups['']), 0)
+        self.assertEqual(len(groups['MACOSX']), 1)
+        self.assertEqual(len(groups['!MACOSX']), 1)
+        self.assertEqual(len(groups['LINUX']), 1)
+        self.assertEqual(groups['MACOSX'][0], 'sal/osl/mac/mac.cxx')
+        self.assertEqual(groups['!MACOSX'][0], 'sal/osl/unx/uunxapi.cxx')
+        self.assertEqual(groups['LINUX'][0], 'sal/textenc/context.cxx')
+
+    def test_parse_exclude_system(self):
+        source = """ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/osl/mac/mac \\
+))
+else
+$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/osl/unx/uunxapi \\
+))
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/textenc/context \\
+))
+endif
+endif
+"""
+        global EXCLUDE_SYSTEM
+        EXCLUDE_SYSTEM = True
+
+        lines = source.split('\n')
+        groups = {'':[]}
+        groups = parse_makefile(groups, lines, 0, None, 0)
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(len(groups['']), 0)
+
+    def test_parse_filter(self):
+        source = """ifneq ($(filter $(OS),MACOSX IOS),)
+$(eval $(call gb_Library_add_exception_objects,sal,\\
+	sal/osl/unx/osxlocale \\
+))
+endif
+"""
+        # Filter is still unsupported.
+        lines = source.split('\n')
+        groups = {'':[]}
+        groups = parse_makefile(groups, lines, 0, None, 0)
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(len(groups['']), 0)
+
+unittest.main()
+
+# vim: set et sw=4 ts=4 expandtab:
