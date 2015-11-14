@@ -25,6 +25,7 @@
 
 #include <SidebarWin.hxx>
 #include <PostItMgr.hxx>
+#include <edtwin.hxx>
 
 #include <cmdid.h>
 #include <docvw.hrc>
@@ -48,6 +49,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <uitool.hxx>
 #include <view.hxx>
@@ -185,6 +187,30 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const Rectang
                                 rRenderContext.PixelToLogic(GetPosPixel() + Point(0,
                                                                                   GetSizePixel().Height())));
     }
+}
+
+void SidebarTextControl::LogicInvalidate(const Rectangle* pRectangle)
+{
+    OString sRectangle;
+    if (!pRectangle)
+        sRectangle = "EMPTY";
+    else
+    {
+        // Convert from relative twips to absolute ones.
+        Rectangle aRectangle(*pRectangle);
+        vcl::Window& rParent = mrSidebarWin.EditWin();
+        Point aOffset(GetOutOffXPixel() - rParent.GetOutOffXPixel(), GetOutOffYPixel() - rParent.GetOutOffYPixel());
+        rParent.Push(PushFlags::MAPMODE);
+        rParent.EnableMapMode();
+        aOffset = rParent.PixelToLogic(aOffset);
+        rParent.Pop();
+        aRectangle.Move(aOffset.getX(), aOffset.getY());
+
+        sRectangle = aRectangle.toString();
+    }
+
+    SwWrtShell& rWrtShell = mrDocView.GetWrtShell();
+    rWrtShell.libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
