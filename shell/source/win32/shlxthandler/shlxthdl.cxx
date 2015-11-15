@@ -44,9 +44,6 @@ namespace /* private */
     const char* CLSID_ENTRY                         = "CLSID\\{GUID}\\InProcServer32";
     const char* SHELLEX_IID_ENTRY                   = "{EXT}\\shellex\\{GUID}";
     const char* SHELLEX_ENTRY                       = "{EXT}\\shellex";
-    const char* PROPSHEET_ENTRY                     = "{EXT}\\CLSID\\{GUID}\\InProcServer32";
-    const char* EXTENSION_CLSID                     = "{EXT}\\CLSID";
-    const char* EXTENSION_CLSID_GUID                = "{EXT}\\CLSID\\{GUID}";
     const char* FORWARD_PROPSHEET_MYPROPSHEET_ENTRY = "{FWDKEY}\\shellex\\PropertySheetHandlers\\MyPropSheet1";
     const char* FORWARD_PROPSHEET_ENTRY             = "{FWDKEY}\\shellex\\PropertySheetHandlers";
     const char* FORWARD_SHELLEX_ENTRY               = "{FWDKEY}\\shellex";
