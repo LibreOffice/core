@@ -10,6 +10,7 @@
 #include "opengl/x11/X11DeviceInfo.hxx"
 
 #include <vcl/opengl/glxtest.hxx>
+#include <config_features.h>
 #include <rtl/ustring.hxx>
 
 #include <unistd.h>
