@@ -1038,6 +1038,11 @@ AC_ARG_ENABLE(graphite,
         [Disables the compilation of Graphite smart font rendering.])
 )
 
+AC_ARG_ENABLE(breakpad,
+    AS_HELP_STRING([--enable-breakpad],
+        [Enables breakpad for crash reporting.])
+)
+
 AC_ARG_ENABLE(orcus,
     AS_HELP_STRING([--enable-orcus],
         [Enables orcus for extra file import filters for Calc.])
@@ -9073,6 +9078,21 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_GRAPHITE)
+
+dnl ==================================================================
+dnl Breakpad
+dnl ==================================================================
+AC_MSG_CHECKING([whether to enable breakpad])
+if test -z "$enable_breakpad" -o "$enable_breakpad" != no; then
+    AC_MSG_RESULT([yes])
+    ENABLE_BREAKPAD="TRUE"
+    AC_DEFINE(ENABLE_BREAKPAD)
+    AC_DEFINE(HAVE_FEATURE_BREAKPAD, 1)
+    BUILD_TYPE="$BUILD_TYPE BREAKPAD"
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_BREAKPAD)
 
 dnl ===================================================================
 dnl Orcus
