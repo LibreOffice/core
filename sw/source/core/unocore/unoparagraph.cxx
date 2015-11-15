@@ -1442,9 +1442,7 @@ throw (uno::RuntimeException, std::exception)
 uno::Sequence< OUString > SAL_CALL
 SwXParagraph::getAvailableServiceNames() throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextContent";
+    uno::Sequence<OUString> aRet { "com.sun.star.text.TextContent" };
     return aRet;
 }
 

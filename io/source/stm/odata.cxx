@@ -875,8 +875,7 @@ OUString ODataOutputStream_getImplementationName()
 
 Sequence<OUString> ODataOutputStream_getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] =  "com.sun.star.io.DataOutputStream";
+    Sequence<OUString> aRet { "com.sun.star.io.DataOutputStream" };
     return aRet;
 }
 

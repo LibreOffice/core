@@ -55,8 +55,7 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content &rContent, const 
 {
     uno::Reference<io::XInputStream> xInputStream;
 
-    uno::Sequence<rtl::OUString> lPropNames(1);
-    lPropNames[0] = "Title";
+    uno::Sequence<OUString> lPropNames { "Title" };
     try
     {
         const uno::Reference<sdbc::XResultSet> xResultSet(

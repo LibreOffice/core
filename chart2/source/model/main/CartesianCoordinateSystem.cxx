@@ -83,8 +83,7 @@ uno::Reference< util::XCloneable > SAL_CALL CartesianCoordinateSystem::createClo
 // ____ XServiceInfo ____
 Sequence< OUString > CartesianCoordinateSystem::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
+    Sequence<OUString> aServices { CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME };
     return aServices;
 }
 

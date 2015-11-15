@@ -73,8 +73,7 @@ sal_Bool SAL_CALL NameContainer::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
     throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = m_aServicename;
+    Sequence<OUString> aSNS { m_aServicename };
     return aSNS;
 }
 

@@ -1165,8 +1165,7 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
     {
         OSL_FAIL( "Content::onCommandInsert - property value missing!" );
 
-        Sequence< OUString > aProps( 1 );
-        aProps[ 0 ] = PROPERTY_URL;
+        Sequence<OUString> aProps { PROPERTY_URL };
         ucbhelper::cancelCommandExecution(
             makeAny( MissingPropertiesException(
                                 OUString(),

@@ -92,8 +92,7 @@ sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aRet(1);
-    aRet[0] = AVMEDIA_GST_MANAGER_SERVICENAME ;
+    uno::Sequence<OUString> aRet { AVMEDIA_GST_MANAGER_SERVICENAME };
 
     return aRet;
 }

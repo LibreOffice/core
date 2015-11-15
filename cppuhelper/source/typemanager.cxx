@@ -1978,8 +1978,7 @@ css::uno::Sequence< rtl::OUString >
 cppuhelper::TypeManager::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< rtl::OUString > names(1);
-    names[0] = "com.sun.star.reflection.TypeDescriptionManager"; //TODO
+    css::uno::Sequence<OUString> names { "com.sun.star.reflection.TypeDescriptionManager" }; //TODO
     return names;
 }
 

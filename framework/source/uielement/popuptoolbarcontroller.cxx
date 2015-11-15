@@ -284,9 +284,7 @@ sal_Bool WizardsToolbarController::supportsService(OUString const & rServiceName
 css::uno::Sequence<OUString> WizardsToolbarController::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
     return aRet;
 }
 
@@ -329,9 +327,7 @@ sal_Bool OpenToolbarController::supportsService(OUString const & rServiceName)
 css::uno::Sequence<OUString> OpenToolbarController::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
     return aRet;
 }
 
@@ -381,9 +377,7 @@ sal_Bool NewToolbarController::supportsService(OUString const & rServiceName)
 css::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
     return aRet;
 }
 

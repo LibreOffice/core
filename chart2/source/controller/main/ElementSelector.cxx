@@ -268,8 +268,7 @@ css::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSup
 
 Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServices(1);
-    aServices[ 0 ] = "com.sun.star.frame.ToolbarController";
+    Sequence<OUString> aServices { "com.sun.star.frame.ToolbarController" };
     return aServices;
 }
 ElementSelectorToolbarController::ElementSelectorToolbarController( const uno::Reference< uno::XComponentContext > & xContext )

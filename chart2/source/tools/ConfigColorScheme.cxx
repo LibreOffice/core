@@ -168,8 +168,7 @@ void ConfigColorScheme::notify( const OUString & rPropertyName )
 
 Sequence< OUString > ConfigColorScheme::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = "com.sun.star.chart2.ColorScheme";
+    Sequence<OUString> aServices { "com.sun.star.chart2.ColorScheme" };
     return aServices;
 }
 

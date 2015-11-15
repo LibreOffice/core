@@ -234,8 +234,7 @@ sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aRet(1);
-    aRet[0] = AVMEDIA_GST_WINDOW_SERVICENAME ;
+    uno::Sequence<OUString> aRet { AVMEDIA_GST_WINDOW_SERVICENAME };
 
     return aRet;
 }

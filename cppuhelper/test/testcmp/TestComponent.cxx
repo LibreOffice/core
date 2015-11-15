@@ -102,8 +102,7 @@ uno::Reference<uno::XInterface> SAL_CALL TestComponent::create(
 
 uno::Sequence<rtl::OUString> SAL_CALL TestComponent::getSupportedServiceNames_Static()
 {
-    uno::Sequence<rtl::OUString> serviceNames(1);
-    serviceNames[0] = rtl::OUString("com.sun.star.lang.ServiceInfo");
+    uno::Sequence<OUString> serviceNames { rtl::OUString("com.sun.star.lang.ServiceInfo") };
 
     return serviceNames;
 }

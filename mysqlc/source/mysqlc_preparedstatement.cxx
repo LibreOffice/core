@@ -66,8 +66,7 @@ rtl::OUString OPreparedStatement::getImplementationName()
 css::uno::Sequence<rtl::OUString> OPreparedStatement::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence<rtl::OUString> s(1);
-    s[0] = "com.sun.star.sdbc.PreparedStatement";
+    css::uno::Sequence<OUString> s { "com.sun.star.sdbc.PreparedStatement" };
     return s;
 }
 

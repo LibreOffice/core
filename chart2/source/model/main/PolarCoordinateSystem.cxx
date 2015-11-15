@@ -83,8 +83,7 @@ uno::Reference< util::XCloneable > SAL_CALL PolarCoordinateSystem::createClone()
 // ____ XServiceInfo ____
 Sequence< OUString > PolarCoordinateSystem::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = CHART2_COOSYSTEM_POLAR_SERVICE_NAME;
+    Sequence<OUString> aServices { CHART2_COOSYSTEM_POLAR_SERVICE_NAME };
     return aServices;
 }
 

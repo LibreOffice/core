@@ -1353,8 +1353,7 @@ OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException,
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
        throw( uno::RuntimeException, std::exception )
 {
-       uno::Sequence< OUString > aSNS( 1 );
-       aSNS.getArray()[ 0 ] = "com.sun.star.ucb.GIOContent";
+       uno::Sequence<OUString> aSNS { "com.sun.star.ucb.GIOContent" };
        return aSNS;
 }
 

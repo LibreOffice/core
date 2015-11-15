@@ -3435,8 +3435,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
                 bNeedsApply = true;
             }
 
-            uno::Sequence< OUString > aURLSeq( 1 );
-            aURLSeq[ 0 ] = pEntry->GetCommand();
+            uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
 
             try
             {
@@ -3534,8 +3533,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
                     uno::Sequence< uno::Reference< graphic::XGraphic > >
                         aGraphicSeq( 1 );
 
-                    uno::Sequence< OUString > aURLSeq( 1 );
-                    aURLSeq[ 0 ] = pEntry->GetCommand();
+                    uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
 
                     if ( !pEntry->GetBackupGraphic().is() )
                     {
@@ -3604,8 +3602,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
                 aGraphicSeq( 1 );
             aGraphicSeq[ 0 ] = backup;
 
-            uno::Sequence< OUString > aURLSeq( 1 );
-            aURLSeq[ 0 ] = pEntry->GetCommand();
+            uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
 
             try
             {
@@ -5494,8 +5491,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 
                     pTbSymbol->SetItemData(
                         nId, static_cast< void * > ( xGraphic.get() ) );
-                    uno::Sequence< OUString > aImportURL( 1 );
-                    aImportURL[ 0 ] = aURL;
+                    uno::Sequence<OUString> aImportURL { aURL };
                     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
                     aImportGraph[ 0 ] = xGraphic;
                     m_xImportedImageManager->insertImages( GetImageType(), aImportURL, aImportGraph );

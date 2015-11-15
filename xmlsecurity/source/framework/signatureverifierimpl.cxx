@@ -181,9 +181,7 @@ OUString SignatureVerifierImpl_getImplementationName ()
 cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.xml.crypto.sax.SignatureVerifier";
+    cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.SignatureVerifier" };
     return aRet;
 }
 

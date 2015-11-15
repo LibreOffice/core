@@ -156,9 +156,7 @@ OUString SEInitializer_MSCryptImpl_getImplementationName()
 cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames()
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.xml.crypto.SEInitializer";
+    cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.SEInitializer" };
     return aRet;
 }
 

@@ -113,8 +113,7 @@ OUString UcbCommandEnvironment::getImplementationName_Static()
 uno::Sequence< OUString >
 UcbCommandEnvironment::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = "com.sun.star.ucb.CommandEnvironment";
+    uno::Sequence<OUString> aSNS { "com.sun.star.ucb.CommandEnvironment" };
     return aSNS;
 }
 

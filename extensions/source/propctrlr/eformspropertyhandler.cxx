@@ -398,8 +398,7 @@ namespace pcr
         if ( !m_pHelper.get() )
             return Sequence< OUString >();
 
-        Sequence< OUString > aReturn( 1 );
-        aReturn[ 0 ] = PROPERTY_INPUT_REQUIRED;
+        Sequence<OUString> aReturn { PROPERTY_INPUT_REQUIRED };
         return aReturn;
     }
 

@@ -65,8 +65,7 @@ void SAL_CALL DataSource::setData( const Sequence< Reference< chart2::data::XLab
 
 Sequence< OUString > DataSource::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = "com.sun.star.chart2.data.DataSource";
+    Sequence<OUString> aServices { "com.sun.star.chart2.data.DataSource" };
     return aServices;
 }
 

@@ -476,8 +476,7 @@ sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aRet(1);
-    aRet[0] = AVMEDIA_WIN_PLAYER_SERVICENAME ;
+    uno::Sequence<OUString> aRet { AVMEDIA_WIN_PLAYER_SERVICENAME };
 
     return aRet;
 }

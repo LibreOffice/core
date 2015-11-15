@@ -221,9 +221,7 @@ OUString EncryptorImpl_getImplementationName ()
 Sequence< OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.xml.crypto.sax.Encryptor";
+    Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.Encryptor" };
     return aRet;
 }
 

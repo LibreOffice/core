@@ -215,8 +215,7 @@ namespace pcr
         if ( !m_pHelper.get() )
             return Sequence< OUString >();
 
-        Sequence< OUString > aReturn( 1 );
-        aReturn[ 0 ] = PROPERTY_XFORMS_BUTTONTYPE;
+        Sequence<OUString> aReturn { PROPERTY_XFORMS_BUTTONTYPE };
         return aReturn;
     }
 

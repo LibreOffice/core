@@ -502,9 +502,7 @@ OUString DocumentDigitalSignatures::GetImplementationName() throw (RuntimeExcept
 
 Sequence< OUString > DocumentDigitalSignatures::GetSupportedServiceNames() throw (css::uno::RuntimeException)
 {
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.security.DocumentDigitalSignatures";
+    Sequence<OUString> aRet { "com.sun.star.security.DocumentDigitalSignatures" };
     return aRet;
 }
 

@@ -1188,9 +1188,7 @@ OUString T602ImportFilterDialog_getImplementationName ()
 Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] =  "com.sun.star.ui.dialogs.FilterOptionsDialog";
+    Sequence<OUString> aRet { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
     return aRet;
 }
 

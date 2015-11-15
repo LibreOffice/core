@@ -280,8 +280,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
                         }
                         catch(::com::sun::star::lang::IllegalArgumentException& e)
                         {
-                            Sequence< rtl::OUString > aSeq(1);
-                            aSeq[0] = sStyleName;
+                            Sequence<OUString> aSeq { sStyleName };
                             GetImport().SetError(
                                 XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
                                 aSeq,e.Message,nullptr);

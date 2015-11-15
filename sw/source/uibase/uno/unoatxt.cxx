@@ -691,9 +691,7 @@ sal_Bool SwXAutoTextGroup::supportsService(const OUString& rServiceName) throw( 
 
 uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.AutoTextGroup";
+    uno::Sequence<OUString> aRet { "com.sun.star.text.AutoTextGroup" };
     return aRet;
 }
 
@@ -974,9 +972,7 @@ sal_Bool SwXAutoTextEntry::supportsService(const OUString& rServiceName) throw( 
 
 uno::Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.AutoTextEntry";
+    uno::Sequence<OUString> aRet { "com.sun.star.text.AutoTextEntry" };
     return aRet;
 }
 

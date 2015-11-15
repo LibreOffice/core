@@ -312,8 +312,7 @@ sal_Bool AccessibleDialogControlShape::supportsService( const OUString& rService
 
 Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.drawing.AccessibleShape" ;
+    Sequence<OUString> aNames { "com.sun.star.drawing.AccessibleShape" };
     return aNames;
 }
 

@@ -52,8 +52,7 @@ void CustomToolBarImportHelper::applyIcons()
 {
     for ( std::vector< iconcontrolitem >::iterator it = iconcommands.begin(); it != iconcommands.end(); ++it )
     {
-        uno::Sequence< OUString > commands(1);
-        commands[ 0 ] = it->sCommand;
+        uno::Sequence<OUString> commands { it->sCommand };
         uno::Sequence< uno::Reference< graphic::XGraphic > > images(1);
         images[ 0 ] = it->image;
 
@@ -314,8 +313,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                 OUString sBuiltInCmd = helper.MSOTCIDToOOCommand(  *pSpecificInfo->getBtnFace() );
                 if ( !sBuiltInCmd.isEmpty() )
                 {
-                    uno::Sequence< OUString> sCmds(1);
-                    sCmds[ 0 ] = sBuiltInCmd;
+                    uno::Sequence<OUString> sCmds { sBuiltInCmd };
                     uno::Reference< ui::XImageManager > xImageManager( helper.getAppCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
                     // 0 = default image size
                     uno::Sequence< uno::Reference< graphic::XGraphic > > sImages = xImageManager->getImages( 0, sCmds );

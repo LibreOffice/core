@@ -4136,9 +4136,7 @@ sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName) throw( R
 
 Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.LinkTarget";
+    Sequence<OUString> aRet { "com.sun.star.document.LinkTarget" };
 
     return aRet;
 }

@@ -386,8 +386,7 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > aServiceNames(1);
-        aServiceNames[ 0 ] = "com.sun.star.writer.DocumentProperties";
+        css::uno::Sequence<OUString> aServiceNames { "com.sun.star.writer.DocumentProperties" };
         return aServiceNames;
     }
 };

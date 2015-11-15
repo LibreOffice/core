@@ -379,9 +379,7 @@ sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.util.NumberFormatter";
+    uno::Sequence<OUString> aRet { "com.sun.star.util.NumberFormatter" };
     return aRet;
 }
 
@@ -670,9 +668,7 @@ sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceNa
 uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.util.NumberFormats";
+    uno::Sequence<OUString> aRet { "com.sun.star.util.NumberFormats" };
     return aRet;
 }
 
@@ -927,9 +923,7 @@ sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceNam
 uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.util.NumberFormatProperties";
+    uno::Sequence<OUString> aRet { "com.sun.star.util.NumberFormatProperties" };
     return aRet;
 }
 
@@ -1083,9 +1077,7 @@ sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& Se
 uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.util.NumberFormatSettings";
+    uno::Sequence<OUString> aRet { "com.sun.star.util.NumberFormatSettings" };
     return aRet;
 }
 

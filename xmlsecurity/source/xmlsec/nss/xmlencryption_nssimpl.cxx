@@ -333,8 +333,7 @@ Sequence< OUString > SAL_CALL XMLEncryption_NssImpl::getSupportedServiceNames() 
 //Helper for XServiceInfo
 Sequence< OUString > XMLEncryption_NssImpl::impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-    Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames[0] = "com.sun.star.xml.crypto.XMLEncryption";
+    Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.XMLEncryption" };
     return seqServiceNames ;
 }
 

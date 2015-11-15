@@ -235,9 +235,7 @@ OUString SignatureCreatorImpl_getImplementationName ()
 cssu::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.xml.crypto.sax.SignatureCreator";
+    cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.SignatureCreator" };
     return aRet;
 }
 

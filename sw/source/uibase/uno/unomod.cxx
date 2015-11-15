@@ -533,9 +533,7 @@ sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName) throw( 
 
 Sequence< OUString > SwXPrintSettings::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.PrintSettings";
+    Sequence<OUString> aRet { "com.sun.star.text.PrintSettings" };
     return aRet;
 }
 
@@ -997,9 +995,7 @@ sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName) throw( R
 
 Sequence< OUString > SwXViewSettings::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.ViewSettings";
+    Sequence<OUString> aRet { "com.sun.star.text.ViewSettings" };
     return aRet;
 }
 

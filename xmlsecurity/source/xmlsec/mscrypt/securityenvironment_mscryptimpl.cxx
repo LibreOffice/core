@@ -195,8 +195,7 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupportedServi
 //Helper for XServiceInfo
 Sequence< OUString > SecurityEnvironment_MSCryptImpl::impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-    Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames[0] = "com.sun.star.xml.crypto.SecurityEnvironment";
+    Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.SecurityEnvironment" };
     return seqServiceNames ;
 }
 

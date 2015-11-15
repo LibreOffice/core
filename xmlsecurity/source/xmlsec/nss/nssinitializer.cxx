@@ -471,9 +471,7 @@ OUString ONSSInitializer_getImplementationName ()
 cssu::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = NSS_SERVICE_NAME;
+    cssu::Sequence<OUString> aRet { NSS_SERVICE_NAME };
     return aRet;
 }
 

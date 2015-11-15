@@ -162,9 +162,7 @@ sal_Bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServi
 uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNames()
     throw ( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.ui.dialogs.FilterOptionsDialog";
+    uno::Sequence<OUString> aRet { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
     return aRet;
 }
 

@@ -448,8 +448,7 @@ Reference< XPropertySetInfo > Content::getProperties()
 Any Content::getPropertyValue( const OUString& rPropertyName )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    Sequence< OUString > aNames( 1 );
-    aNames.getArray()[ 0 ] = rPropertyName;
+    Sequence<OUString> aNames { rPropertyName };
 
     Sequence< Any > aRet = getPropertyValues( aNames );
     return aRet.getConstArray()[ 0 ];
@@ -460,8 +459,7 @@ Any Content::setPropertyValue( const OUString& rName,
                                 const Any& rValue )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    Sequence< OUString > aNames( 1 );
-    aNames.getArray()[ 0 ] = rName;
+    Sequence<OUString> aNames { rName };
 
     Sequence< Any > aValues( 1 );
     aValues.getArray()[ 0 ] = rValue;

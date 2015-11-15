@@ -1135,9 +1135,7 @@ Sequence< OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames() throw( R
 /* Helper for XServiceInfo */
 Sequence< OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames( 1 );
-    OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = "com.sun.star.ui.dialogs.OfficeFilePicker";
+    Sequence<OUString> seqServiceNames { "com.sun.star.ui.dialogs.OfficeFilePicker" };
     return seqServiceNames ;
 }
 
@@ -1204,9 +1202,7 @@ Sequence< OUString > SAL_CALL SvtRemoteFilePicker::getSupportedServiceNames() th
 /* Helper for XServiceInfo */
 Sequence< OUString > SvtRemoteFilePicker::impl_getStaticSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames( 1 );
-    OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = "com.sun.star.ui.dialogs.RemoteFilePicker";
+    Sequence<OUString> seqServiceNames { "com.sun.star.ui.dialogs.RemoteFilePicker" };
     return seqServiceNames ;
 }
 
