@@ -38,6 +38,7 @@ $(call gb_ExternalProject_get_state_target,poppler,build) :
 			--disable-gtk-test \
 			--disable-utils \
 			--disable-cms \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter WNT MACOSX,$(OS)),--with-font-configuration=win32,--with-font-configuration=fontconfig) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
