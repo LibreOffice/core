@@ -191,20 +191,17 @@ REM Modified from Roberto Benitez&apos;s BaseTools
 REM get the data for the column specified by ColIndex
 REM get type name from metadata
 	
-Dim vValue As Variant, sType As String, vDateTime As Variant
-Dim bNullable As Boolean, bNull As Boolean, oValue As Object
+Dim vValue As Variant, sType As String, vDateTime As Variant, oValue As Object
 
 	On Local Error Goto 0			&apos;	Disable error handler
 	vValue = Null					&apos;	Default value if error
 	sType = poResultSet.MetaData.getColumnTypeName(piColIndex)
 	With poResultSet
-		bNullable = ( .MetaData.IsNullable(piColIndex) = com.sun.star.sdbc.ColumnValue.NULLABLE )
 		Select Case sType
 			Case &quot;ARRAY&quot;:							vValue = .getArray(piColIndex)
 			Case &quot;BINARY&quot;, &quot;VARBINARY&quot;, &quot;LONGVARBINARY&quot;
 													Set oValue = .getBinaryStream(piColIndex)
-													If bNullable Then bNull = .wasNull()
-													If Not bNull Then vValue = CLng(oValue.getLength())		&apos;	Return length, not content
+													If Not .wasNull() Then vValue = CLng(oValue.getLength())		&apos;	Return length, not content
 													oValue.closeInput()
 			Case &quot;BLOB&quot;:							vValue = .getBlob(piColIndex)
 			Case &quot;BIT&quot;, &quot;BOOLEAN&quot;:					vValue = .getBoolean(piColIndex)
@@ -212,8 +209,7 @@ Dim bNullable As Boolean, bNull As Boolean, oValue As Object
 			Case &quot;BYTES&quot;:							vValue = .getBytes(piColIndex)
 			Case &quot;CLOB&quot;:							vValue = .getClob(piColIndex)
 			Case &quot;DATE&quot;:							vDateTime = .getDate(piColIndex)
-													If bNullable Then bNull = .wasNull()
-													If Not bNull Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day))
+													If Not .wasNull() Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day))
 			Case &quot;DOUBLE&quot;, &quot;REAL&quot;:					vValue = .getDouble(piColIndex)
 			Case &quot;FLOAT&quot;:							vValue = .getFloat(piColIndex)
 			Case &quot;INTEGER&quot;, &quot;SMALLINT&quot;:				vValue = .getInt(piColIndex)
@@ -225,18 +221,15 @@ Dim bNullable As Boolean, bNull As Boolean, oValue As Object
 			Case &quot;SHORT&quot;, &quot;TINYINT&quot;:				vValue = .getShort(piColIndex)
 			Case &quot;CHAR&quot;, &quot;VARCHAR&quot;, &quot;LONGVARCHAR&quot;:	vValue = .getString(piColIndex)
 			Case &quot;TIME&quot;:							vDateTime = .getTime(piColIndex)
-													If bNullable Then bNull = .wasNull()
-													If Not bNull Then vValue = TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
+													If Not .wasNull() Then vValue = TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
 			Case &quot;TIMESTAMP&quot;:						vDateTime = .getTimeStamp(piColIndex)
-													If bNullable Then bNull = .wasNull()
-													If Not bNull Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day)) _
+													If Not .wasNull() Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day)) _
 																+ TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
 			Case Else
 				vValue = .getString(piColIndex)						&apos;GIVE STRING A TRY
 				If IsNumeric(vValue) Then vValue = Val(vValue)		&apos;Required when type = &quot;&quot;, sometimes numeric fields are returned as strings (query/MSAccess)
 		End Select
-		If bNullable Then bNull = .wasNull()
-		If bNull Then vValue = Null
+		If .wasNull() Then vValue = Null
 	End With
 	
 	_getResultSetColumnValue = vValue
