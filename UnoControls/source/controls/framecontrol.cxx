@@ -267,8 +267,7 @@ void SAL_CALL FrameControl::unadvise(   const   Type&                       aTyp
 const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
 {
     MutexGuard aGuard( Mutex::getGlobalMutex() );
-    Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = SERVICENAME_FRAMECONTROL;
+    Sequence<OUString> seqServiceNames { SERVICENAME_FRAMECONTROL };
     return seqServiceNames;
 }
 

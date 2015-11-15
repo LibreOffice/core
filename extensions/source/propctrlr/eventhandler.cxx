@@ -491,8 +491,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupported( 1 );
-        aSupported[0] = "com.sun.star.form.inspection.EventHandler";
+        Sequence<OUString> aSupported { "com.sun.star.form.inspection.EventHandler" };
         return aSupported;
     }
 

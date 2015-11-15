@@ -267,8 +267,7 @@ OUString OReportController::getImplementationName_Static() throw( RuntimeExcepti
 
 Sequence< OUString> OReportController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.ReportDesign";
+    Sequence<OUString> aSupported { "com.sun.star.sdb.ReportDesign" };
     return aSupported;
 }
 

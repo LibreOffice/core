@@ -274,8 +274,7 @@ OUString SAL_CALL ExtrusionDirectionControl_getImplementationName()
 
 Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames() throw( RuntimeException )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
+    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
@@ -518,8 +517,7 @@ OUString SAL_CALL ExtrusionDepthController_getImplementationName()
 
 Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( RuntimeException )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
+    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
@@ -791,8 +789,7 @@ OUString SAL_CALL ExtrusionLightingControl_getImplementationName()
 
 Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames() throw( RuntimeException )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
+    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
@@ -935,8 +932,7 @@ OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName()
 
 Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames() throw( RuntimeException )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
+    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 

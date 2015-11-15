@@ -440,8 +440,7 @@ IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
                 InteractionHandler::createWithParent( xContext, nullptr ),
                 UNO_QUERY );
 
-            Sequence< OUString > aPasswd( 1 );
-            aPasswd[0] = m_sPassword;
+            Sequence<OUString> aPasswd { m_sPassword };
 
             xMasterPasswd->add(
                 sUrl, m_sUsername, aPasswd, xInteractionHandler );
@@ -452,8 +451,7 @@ IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
 
     // Get the Content
     ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
-    Sequence< OUString > aProps( 1 );
-    aProps[0] = "Title";
+    Sequence<OUString> aProps { "Title" };
 
     try
     {

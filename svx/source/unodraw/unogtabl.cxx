@@ -65,8 +65,7 @@ OUString SAL_CALL SvxUnoGradientTable::getImplementationName() throw( uno::Runti
 uno::Sequence< OUString > SAL_CALL SvxUnoGradientTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.drawing.GradientTable";
+    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.GradientTable" };
     return aSNS;
 }
 

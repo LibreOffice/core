@@ -131,8 +131,7 @@ Sequence< OUString > SAL_CALL
 TVFactory::getAvailableServiceNames( )
     throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > seq( 1 );
-    seq[0] = "com.sun.star.ucb.HierarchyDataReadAccess";
+    Sequence<OUString> seq { "com.sun.star.ucb.HierarchyDataReadAccess" };
     return seq;
 }
 

@@ -105,8 +105,7 @@ throw ( RuntimeException, std::exception )
 Sequence< OUString > SAL_CALL ActionTriggerSeparatorPropertySet::getSupportedServiceNames()
 throw ( RuntimeException, std::exception )
 {
-    Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames[0] = SERVICENAME_ACTIONTRIGGERSEPARATOR;
+    Sequence<OUString> seqServiceNames { SERVICENAME_ACTIONTRIGGERSEPARATOR };
     return seqServiceNames;
 }
 

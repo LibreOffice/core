@@ -63,8 +63,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL mcnttype_component_getFactory( const sal_Cha
 
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, MIMECONTENTTYPEFACTORY_IMPL_NAME ) ) )
     {
-        Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = "com.sun.star.datatransfer.MimeContentTypeFactory";
+        Sequence<OUString> aSNS { "com.sun.star.datatransfer.MimeContentTypeFactory" };
 
         Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
             static_cast< XMultiServiceFactory* > ( pSrvManager ),

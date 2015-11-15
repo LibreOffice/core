@@ -67,8 +67,7 @@ OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeException)
 
 Sequence< OUString > ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.sdbc.Driver";
+    Sequence<OUString> aSNS { "com.sun.star.sdbc.Driver" };
     return aSNS;
 }
 

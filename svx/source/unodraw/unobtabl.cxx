@@ -85,8 +85,7 @@ OUString SAL_CALL SvxUnoBitmapTable::getImplementationName() throw( uno::Runtime
 uno::Sequence< OUString > SAL_CALL SvxUnoBitmapTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.drawing.BitmapTable";
+    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.BitmapTable" };
     return aSNS;
 }
 

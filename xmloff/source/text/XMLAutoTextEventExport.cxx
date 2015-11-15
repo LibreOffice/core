@@ -212,8 +212,7 @@ void XMLAutoTextEventExport::_ExportContent() {}
 Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames()
     throw()
 {
-    Sequence< OUString > aSeq( 1 );
-    aSeq[0] = XMLAutoTextEventExport_getImplementationName();
+    Sequence<OUString> aSeq { XMLAutoTextEventExport_getImplementationName() };
     return aSeq;
 }
 
@@ -234,8 +233,7 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
 Sequence< OUString > SAL_CALL XMLAutoTextEventExportOOO_getSupportedServiceNames()
     throw()
 {
-    Sequence< OUString > aSeq( 1 );
-    aSeq[0] = XMLAutoTextEventExportOOO_getImplementationName();
+    Sequence<OUString> aSeq { XMLAutoTextEventExportOOO_getImplementationName() };
     return aSeq;
 }
 

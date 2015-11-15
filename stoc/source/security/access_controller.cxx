@@ -911,8 +911,7 @@ sal_Bool AccessController::supportsService( OUString const & serviceName )
 Sequence< OUString > AccessController::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = SERVICE_NAME;
+    Sequence<OUString> aSNS { SERVICE_NAME };
     return aSNS;
 }
 

@@ -38,8 +38,7 @@ OUString SAL_CALL ScDocument_getImplementationName() throw()
 
 uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw()
 {
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq[0] = "com.sun.star.sheet.SpreadsheetDocument";
+    uno::Sequence<OUString> aSeq { "com.sun.star.sheet.SpreadsheetDocument" };
     return aSeq;
 }
 

@@ -100,8 +100,7 @@ sal_Bool OColumn::supportsService( const OUString& _rServiceName ) throw (Runtim
 
 Sequence< OUString > OColumn::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = SERVICE_SDBCX_COLUMN;
+    Sequence<OUString> aSNS { SERVICE_SDBCX_COLUMN };
     return aSNS;
 }
 
@@ -199,8 +198,7 @@ sal_Bool OColumns::supportsService( const OUString& _rServiceName ) throw (Runti
 
 Sequence< OUString > OColumns::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = SERVICE_SDBCX_CONTAINER;
+    Sequence<OUString> aSNS { SERVICE_SDBCX_CONTAINER };
     return aSNS;
 }
 

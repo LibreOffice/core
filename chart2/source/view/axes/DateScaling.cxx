@@ -207,8 +207,7 @@ OUString SAL_CALL InverseDateScaling::getServiceName()
 
 uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq.getArray()[0] = lcl_aServiceName_InverseDateScaling;
+    uno::Sequence<OUString> aSeq { lcl_aServiceName_InverseDateScaling };
     return aSeq;
 }
 

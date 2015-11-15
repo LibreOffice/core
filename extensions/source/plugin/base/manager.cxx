@@ -129,8 +129,7 @@ Sequence< OUString > XPluginManager_Impl::getSupportedServiceNames() throw(  )
 // XPluginManager_Impl
 Sequence< OUString > XPluginManager_Impl::getSupportedServiceNames_Static() throw(  )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.plugin.PluginManager";
+    Sequence<OUString> aSNS { "com.sun.star.plugin.PluginManager" };
     return aSNS;
 }
 

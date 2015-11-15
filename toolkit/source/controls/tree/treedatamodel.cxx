@@ -258,8 +258,7 @@ sal_Bool SAL_CALL MutableTreeDataModel::supportsService( const OUString& Service
 
 Sequence< OUString > SAL_CALL MutableTreeDataModel::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aSeq( 1 );
-    aSeq[0] = "com.sun.star.awt.tree.MutableTreeDataModel";
+    Sequence<OUString> aSeq { "com.sun.star.awt.tree.MutableTreeDataModel" };
     return aSeq;
 }
 
@@ -535,8 +534,7 @@ sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName 
 
 Sequence< OUString > SAL_CALL MutableTreeNode::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aSeq( 1 );
-    aSeq[0] = "com.sun.star.awt.tree.MutableTreeNode";
+    Sequence<OUString> aSeq { "com.sun.star.awt.tree.MutableTreeNode" };
     return aSeq;
 }
 

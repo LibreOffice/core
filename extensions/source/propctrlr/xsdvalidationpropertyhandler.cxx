@@ -93,8 +93,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL XSDValidationPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupported( 1 );
-        aSupported[0] = "com.sun.star.form.inspection.XSDValidationPropertyHandler";
+        Sequence<OUString> aSupported { "com.sun.star.form.inspection.XSDValidationPropertyHandler" };
         return aSupported;
     }
 

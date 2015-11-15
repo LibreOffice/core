@@ -155,8 +155,7 @@ namespace sw
     uno::Sequence< OUString > LayoutDumpFilter::getSupportedServiceNames()
         throw (uno::RuntimeException, std::exception)
     {
-        uno::Sequence< OUString > aSeq( 1 );
-        aSeq[0] = "com.sun.star.document.ExportFilter";
+        uno::Sequence<OUString> aSeq { "com.sun.star.document.ExportFilter" };
         return aSeq;
     }
 

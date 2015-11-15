@@ -106,8 +106,7 @@ Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames() thro
 // ORegistryServiceManager_Static
 Sequence< OUString > ORptTypeDetection::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.document.ExtendedTypeDetection";
+    Sequence<OUString> aSNS { "com.sun.star.document.ExtendedTypeDetection" };
     return aSNS;
 }
 

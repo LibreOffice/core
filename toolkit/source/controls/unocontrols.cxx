@@ -2816,8 +2816,7 @@ void UnoListBoxControl::removeItemListener(const uno::Reference < awt::XItemList
 
 void UnoListBoxControl::addItem( const OUString& aItem, sal_Int16 nPos ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString> aSeq( 1 );
-    aSeq.getArray()[0] = aItem;
+    uno::Sequence<OUString> aSeq { aItem };
     addItems( aSeq, nPos );
 }
 
@@ -3452,8 +3451,7 @@ void SAL_CALL UnoComboBoxControl::itemListChanged( const lang::EventObject& i_rE
 
 void UnoComboBoxControl::addItem( const OUString& aItem, sal_Int16 nPos ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString> aSeq( 1 );
-    aSeq.getArray()[0] = aItem;
+    uno::Sequence<OUString> aSeq { aItem };
     addItems( aSeq, nPos );
 }
 

@@ -509,8 +509,7 @@ sal_Bool FilePolicy::supportsService( OUString const & serviceName )
 Sequence< OUString > FilePolicy::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.security.Policy";
+    Sequence<OUString> aSNS { "com.sun.star.security.Policy" };
     return aSNS;
 }
 

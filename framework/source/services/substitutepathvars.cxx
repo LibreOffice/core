@@ -402,8 +402,7 @@ SubstitutePathVariables_Impl::SubstitutePathVariables_Impl() :
 {
     // Enable notification mechanism
     // We need it to get information about changes outside these class on our configuration branch
-    Sequence< OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = "SharePoints";
+    Sequence<OUString> aNotifySeq { "SharePoints" };
     EnableNotification( aNotifySeq, true );
 }
 
@@ -656,8 +655,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
         aDirProperty += m_aDirPropertyName;
 
         // Read only the directory property
-        Sequence< OUString > aDirPropertySeq( 1 );
-        aDirPropertySeq[0] = aDirProperty;
+        Sequence<OUString> aDirPropertySeq { aDirProperty };
 
         Sequence< Any > aValueSeq = GetProperties( aDirPropertySeq );
         if ( aValueSeq.getLength() == 1 )

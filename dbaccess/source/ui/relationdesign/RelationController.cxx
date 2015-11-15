@@ -103,8 +103,7 @@ OUString ORelationController::getImplementationName_Static() throw( RuntimeExcep
 
 Sequence< OUString> ORelationController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.RelationDesign";
+    Sequence<OUString> aSupported { "com.sun.star.sdb.RelationDesign" };
     return aSupported;
 }
 

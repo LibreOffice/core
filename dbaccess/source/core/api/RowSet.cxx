@@ -2256,8 +2256,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
 
         m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,nullptr,nullptr,nullptr,m_nInAppend);
         xTables = m_pTables;
-        Sequence< OUString> aTableFilter(1);
-        aTableFilter[0] = "%";
+        Sequence<OUString> aTableFilter { "%" };
         m_pTables->construct(aTableFilter,Sequence< OUString>());
     }
 

@@ -108,13 +108,11 @@ int SAL_CALL main(int , char*, char* )
                 xSmplMailMsg->setRecipient( OUString("tino.rachui@germany.sun.com") );
                 xSmplMailMsg->setOriginator( OUString("tino.rachui@germany.sun.com") );
 
-                Sequence< OUString > ccRecips( 1 );
-                ccRecips[0] = "tino.rachui@germany.sun.com";
+                Sequence<OUString> ccRecips { "tino.rachui@germany.sun.com" };
 
                 xSmplMailMsg->setCcRecipient( ccRecips );
 
-                Sequence< OUString > bccRecips( 1 );
-                bccRecips[0] = "tino.rachui@germany.sun.com";
+                Sequence<OUString> bccRecips { "tino.rachui@germany.sun.com" };
 
                 xSmplMailMsg->setBccRecipient( bccRecips );
 

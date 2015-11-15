@@ -118,8 +118,7 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
         // TODO: headers of encripted streams should be copied also
         ::comphelper::OStorageHelper::CopyInputToOutput( xSourceInStream, xDestOutStream );
 
-        uno::Sequence< OUString > aPropNames( 1 );
-        aPropNames[0] = "Compressed";
+        uno::Sequence<OUString> aPropNames { "Compressed" };
 
         if ( nStorageType == embed::StorageFormats::PACKAGE )
         {

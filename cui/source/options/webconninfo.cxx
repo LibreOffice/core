@@ -279,8 +279,7 @@ IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, ChangePasswordHdl, Button*, void)
             if ( pPasswordRequest->isPassword() )
             {
                 OUString aNewPass = pPasswordRequest->getPassword();
-                uno::Sequence< OUString > aPasswd( 1 );
-                aPasswd[0] = aNewPass;
+                uno::Sequence<OUString> aPasswd { aNewPass };
 
                 uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
                     task::PasswordContainer::create(comphelper::getProcessComponentContext()));

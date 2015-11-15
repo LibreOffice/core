@@ -856,8 +856,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 
     Sequence< OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
-        Sequence< OUString > aSNS( 1 );
-        aSNS[0] = "com.sun.star.sdbc.ResultSet";
+        Sequence<OUString> aSNS { "com.sun.star.sdbc.ResultSet" };
         return aSNS;
     }
 

@@ -202,8 +202,7 @@ OUString ThesaurusMenuController::getImplementationName()
 css::uno::Sequence< OUString > ThesaurusMenuController::getSupportedServiceNames()
     throw ( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aRet( 1 );
-    aRet[0] = "com.sun.star.frame.PopupMenuController";
+    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.PopupMenuController" };
     return aRet;
 }
 

@@ -288,8 +288,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupported( 1 );
-        aSupported[0] = "com.sun.star.inspection.GenericPropertyHandler";
+        Sequence<OUString> aSupported { "com.sun.star.inspection.GenericPropertyHandler" };
         return aSupported;
     }
 

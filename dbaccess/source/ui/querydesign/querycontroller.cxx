@@ -120,8 +120,7 @@ namespace dbaui
         }
         static Sequence< OUString > getSupportedServiceNames_Static() throw( RuntimeException )
         {
-            Sequence< OUString> aSupported(1);
-            aSupported.getArray()[0] = "com.sun.star.sdb.ViewDesign";
+            Sequence<OUString> aSupported { "com.sun.star.sdb.ViewDesign" };
             return aSupported;
         }
         static Reference< XInterface > SAL_CALL Create(const Reference< XMultiServiceFactory >& _rM)
@@ -311,8 +310,7 @@ OUString OQueryController::getImplementationName_Static() throw( RuntimeExceptio
 
 Sequence< OUString> OQueryController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< OUString> aSupported(1);
-    aSupported.getArray()[0] = "com.sun.star.sdb.QueryDesign";
+    Sequence<OUString> aSupported { "com.sun.star.sdb.QueryDesign" };
     return aSupported;
 }
 

@@ -62,8 +62,7 @@ namespace connectivity
 
     Sequence< OUString > ParameterSubstitution::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
-        Sequence< OUString > aSNS( 1 );
-        aSNS[0] = "com.sun.star.sdb.ParameterSubstitution";
+        Sequence<OUString> aSNS { "com.sun.star.sdb.ParameterSubstitution" };
         return aSNS;
     }
 

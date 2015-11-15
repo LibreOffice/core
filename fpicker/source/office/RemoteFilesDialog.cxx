@@ -706,8 +706,7 @@ void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUse
                 InteractionHandler::createWithParent( m_xContext, nullptr ),
                 UNO_QUERY );
 
-            Sequence< OUString > aPasswd( 1 );
-            aPasswd[0] = rPassword;
+            Sequence<OUString> aPasswd { rPassword };
 
             if( bPersistent )
                 m_xMasterPasswd->addPersistent(
@@ -901,8 +900,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
                         if ( pPasswordRequest->isPassword() )
                         {
                             OUString aNewPass = pPasswordRequest->getPassword();
-                            Sequence< OUString > aPasswd( 1 );
-                            aPasswd[0] = aNewPass;
+                            Sequence<OUString> aPasswd { aNewPass };
 
                             m_xMasterPasswd->addPersistent(
                                 sUrl, sUserName, aPasswd, xInteractionHandler );

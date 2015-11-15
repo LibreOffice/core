@@ -146,8 +146,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
 
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys!
-    Sequence< OUString > seqNotifyNames( 1 );
-    seqNotifyNames[0] = m_aSecureExtensionsSetName;
+    Sequence<OUString> seqNotifyNames { m_aSecureExtensionsSetName };
     EnableNotification( seqNotifyNames );
 }
 

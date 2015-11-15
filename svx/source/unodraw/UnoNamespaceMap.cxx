@@ -79,8 +79,7 @@ namespace svx
     Sequence< OUString > SAL_CALL NamespaceMap_getSupportedServiceNames()
         throw()
     {
-        Sequence< OUString > aSupportedServiceNames( 1 );
-        aSupportedServiceNames[0] = "com.sun.star.xml.NamespaceMap";
+        Sequence<OUString> aSupportedServiceNames { "com.sun.star.xml.NamespaceMap" };
         return aSupportedServiceNames;
     }
 

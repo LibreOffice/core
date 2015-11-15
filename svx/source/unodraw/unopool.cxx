@@ -404,8 +404,7 @@ OUString SAL_CALL SvxUnoDrawPool::getImplementationName() throw( uno::RuntimeExc
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPool::getSupportedServiceNames(  )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.drawing.Defaults";
+    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.Defaults" };
     return aSNS;
 }
 

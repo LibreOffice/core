@@ -369,8 +369,7 @@ AddonsOptions_Impl::AddonsOptions_Impl()
 
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys!
-    Sequence< OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = "AddonUI";
+    Sequence<OUString> aNotifySeq { "AddonUI" };
     EnableNotification( aNotifySeq );
 }
 

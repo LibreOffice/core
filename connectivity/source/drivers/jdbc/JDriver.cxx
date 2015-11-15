@@ -61,8 +61,7 @@ OUString java_sql_Driver::getImplementationName_Static(  ) throw(RuntimeExceptio
 
 Sequence< OUString > java_sql_Driver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.sdbc.Driver";
+    Sequence<OUString> aSNS { "com.sun.star.sdbc.Driver" };
     return aSNS;
 }
 

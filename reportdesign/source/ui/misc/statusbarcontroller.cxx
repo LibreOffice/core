@@ -52,8 +52,7 @@ OUString OStatusbarController::getImplementationName_Static() throw( RuntimeExce
 
 Sequence< OUString> OStatusbarController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.frame.StatusbarController";
+    Sequence<OUString> aSupported { "com.sun.star.frame.StatusbarController" };
     return aSupported;
 }
 

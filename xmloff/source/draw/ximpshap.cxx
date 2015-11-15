@@ -521,8 +521,7 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
         }
         catch(const uno::Exception& e)
         {
-            uno::Sequence<OUString> aSeq( 1 );
-            aSeq[0] = serviceName;
+            uno::Sequence<OUString> aSeq { serviceName };
             GetImport().SetError( XMLERROR_FLAG_ERROR | XMLERROR_API,
                                   aSeq, e.Message, nullptr );
         }

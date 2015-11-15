@@ -462,8 +462,7 @@ ContextMenuHelper::getImageFromCommandURL( const OUString& aCmdURL ) const
                           ui::ImageType::SIZE_DEFAULT );
 
     uno::Sequence< uno::Reference< graphic::XGraphic > > aGraphicSeq;
-    uno::Sequence< OUString > aImageCmdSeq( 1 );
-    aImageCmdSeq[0] = aCmdURL;
+    uno::Sequence<OUString> aImageCmdSeq { aCmdURL };
 
     if ( m_xDocImageMgr.is() )
     {

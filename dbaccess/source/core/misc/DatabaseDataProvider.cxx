@@ -124,8 +124,7 @@ sal_Bool SAL_CALL DatabaseDataProvider::supportsService( const OUString& _rServi
 
 uno::Sequence< OUString > DatabaseDataProvider::getSupportedServiceNames_Static(  ) throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.chart2.data.DatabaseDataProvider";
+    uno::Sequence<OUString> aSNS { "com.sun.star.chart2.data.DatabaseDataProvider" };
     return aSNS;
 }
 

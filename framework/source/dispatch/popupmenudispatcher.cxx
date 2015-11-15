@@ -91,8 +91,7 @@ css::uno::Sequence< OUString > SAL_CALL PopupMenuDispatcher::getSupportedService
 
 css::uno::Sequence< OUString > PopupMenuDispatcher::impl_getStaticSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = SERVICENAME_PROTOCOLHANDLER;
+    css::uno::Sequence<OUString> seqServiceNames { SERVICENAME_PROTOCOLHANDLER };
     return seqServiceNames;
 }
 

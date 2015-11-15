@@ -1661,8 +1661,7 @@ namespace xmloff
                 // a listbox which has a list-source attribute must have a list-source-type of something
                 // not equal to ValueList.
                 // In this case, the list-source value is simply the one and only element of the ListSource property.
-                Sequence< OUString > aListSourcePropValue( 1 );
-                aListSourcePropValue[0] = _rValue;
+                Sequence<OUString> aListSourcePropValue { _rValue };
                 aListSource.Value <<= aListSourcePropValue;
             }
 

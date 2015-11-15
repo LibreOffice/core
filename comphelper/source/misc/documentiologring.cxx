@@ -49,8 +49,7 @@ OSimpleLogRing::~OSimpleLogRing()
 
 uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames_static()
 {
-    uno::Sequence< OUString > aResult( 1 );
-    aResult[0] = getServiceName_static();
+    uno::Sequence<OUString> aResult { getServiceName_static() };
     return aResult;
 }
 

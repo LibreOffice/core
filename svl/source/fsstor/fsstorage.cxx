@@ -1016,8 +1016,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
         if ( !GetContent() )
             throw io::IOException(); // TODO: error handling
 
-        uno::Sequence< OUString > aProps( 1 );
-        aProps[0] = "Title";
+        uno::Sequence<OUString> aProps { "Title" };
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
         sal_Int32 nSize = 0;
@@ -1122,8 +1121,7 @@ sal_Bool SAL_CALL FSStorage::hasElements()
         if ( !GetContent() )
             throw io::IOException(); // TODO: error handling
 
-        uno::Sequence< OUString > aProps( 1 );
-        aProps[0] = "TargetURL";
+        uno::Sequence<OUString> aProps { "TargetURL" };
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
         uno::Reference< sdbc::XResultSet > xResultSet = GetContent()->createCursor( aProps, eInclude );
