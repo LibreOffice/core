@@ -335,7 +335,7 @@ void myparser::traverse( xmlNodePtr parentNode )
 
             std::string hid;
 
-            if (branch.find("hid") == 0)
+            if (branch.compare("hid") == 0)
             {
                 size_t index = branch.find('/');
                 if (index != std::string::npos)
@@ -493,7 +493,7 @@ bool HelpCompiler::compile()
 
     if ( !bExtensionMode && !fileName.empty())
     {
-        if (fileName.find("/text/") == 0)
+        if (fileName.compare("/text/") == 0)
         {
             int len = strlen("/text/");
             actMod = fileName.substr(len);
