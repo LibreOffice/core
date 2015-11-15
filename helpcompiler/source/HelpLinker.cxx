@@ -400,7 +400,7 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
                 continue;
 
             std::string documentPath = streamTable.document_path;
-            if (documentPath.find("/") == 0)
+            if (documentPath.compare("/") == 0)
                 documentPath = documentPath.substr(1);
 
             std::string documentJarfile = streamTable.document_module + ".jar";
