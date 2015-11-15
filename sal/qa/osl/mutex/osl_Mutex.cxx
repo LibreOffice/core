@@ -727,7 +727,7 @@ namespace osl_ClearableGuard
         TimeValue aTimeVal_after;
         osl_getSystemTime( &aTimeVal_after );
         sal_Int32 nSec = aTimeVal_after.Seconds - aTimeVal_befor.Seconds;
-        printf("nSec is %"SAL_PRIdINT32"\n", nSec);
+        printf("nSec is %" SAL_PRIdINT32"\n", nSec);
 
         myThread.join();
 
