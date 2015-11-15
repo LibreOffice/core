@@ -1010,8 +1010,7 @@ sal_Bool SAXWriter::supportsService(const OUString& ServiceName) throw(std::exce
 // XServiceInfo
 Sequence< OUString > SAXWriter::getSupportedServiceNames() throw (std::exception)
 {
-    Sequence<OUString> seq(1);
-    seq[0] = "com.sun.star.xml.sax.Writer";
+    Sequence<OUString> seq { "com.sun.star.xml.sax.Writer" };
     return seq;
 }
 

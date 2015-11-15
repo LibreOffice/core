@@ -101,8 +101,7 @@ namespace {
 
     css::uno::Sequence<OUString> SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        css::uno::Sequence<OUString> aSupported(1);
-        aSupported.getArray()[0] = "com.sun.star.ui.AddressBookSourceDialog";
+        css::uno::Sequence<OUString> aSupported { "com.sun.star.ui.AddressBookSourceDialog" };
         return aSupported;
     }
 

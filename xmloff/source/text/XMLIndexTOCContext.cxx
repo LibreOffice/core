@@ -212,8 +212,7 @@ void XMLIndexTOCContext::StartElement(
                 catch(const IllegalArgumentException& e)
                 {
                     // illegal argument? Then we can't accept indices here!
-                    Sequence<OUString> aSeq(1);
-                    aSeq[0] = GetLocalName();
+                    Sequence<OUString> aSeq { GetLocalName() };
                     GetImport().SetError(
                         XMLERROR_FLAG_ERROR | XMLERROR_NO_INDEX_ALLOWED_HERE,
                         aSeq, e.Message, nullptr );

@@ -314,8 +314,7 @@ OUString SAL_CALL LocaleBackend::getImplementationName()
 
 uno::Sequence<OUString> SAL_CALL LocaleBackend::getBackendServiceNames()
 {
-    uno::Sequence<OUString> aServiceNameList(1);
-    aServiceNameList[0] = "com.sun.star.configuration.backend.LocaleBackend";
+    uno::Sequence<OUString> aServiceNameList { "com.sun.star.configuration.backend.LocaleBackend" };
     return aServiceNameList ;
 }
 

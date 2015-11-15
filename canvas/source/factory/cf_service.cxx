@@ -198,8 +198,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     {
         // Ugh. Looks like configuration is borked. Fake minimal
         // setup.
-        Sequence<OUString> aServices(1);
-        aServices[0] = "com.sun.star.comp.rendering.Canvas.VCL";
+        Sequence<OUString> aServices { "com.sun.star.comp.rendering.Canvas.VCL" };
         m_aAvailableImplementations.push_back( std::make_pair(OUString("com.sun.star.rendering.Canvas"),
                                                               aServices) );
 

@@ -389,8 +389,7 @@ IMPL_LINK_TYPED(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
             Any aAny(&sDBURL, cppu::UnoType<decltype(sDBURL)>::get());
             xDataProperties->setPropertyValue("URL", aAny);
             //set the filter to the file name without extension
-            uno::Sequence<OUString> aFilters(1);
-            aFilters[0] = sNewName;
+            uno::Sequence<OUString> aFilters { sNewName };
             aAny <<= aFilters;
             xDataProperties->setPropertyValue("TableFilter", aAny);
 

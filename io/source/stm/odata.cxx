@@ -486,8 +486,7 @@ OUString ODataInputStream_getImplementationName()
 
 Sequence<OUString> ODataInputStream_getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.io.DataInputStream";
+    Sequence<OUString> aRet { "com.sun.star.io.DataInputStream" };
     return aRet;
 }
 
@@ -1152,8 +1151,7 @@ OUString OObjectOutputStream_getImplementationName()
 
 Sequence<OUString> OObjectOutputStream_getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.io.ObjectOutputStream";
+    Sequence<OUString> aRet { "com.sun.star.io.ObjectOutputStream" };
     return aRet;
 }
 
@@ -1456,8 +1454,7 @@ OUString OObjectInputStream_getImplementationName()
 
 Sequence<OUString> OObjectInputStream_getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.io.ObjectInputStream";
+    Sequence<OUString> aRet { "com.sun.star.io.ObjectInputStream" };
     return aRet;
 }
 

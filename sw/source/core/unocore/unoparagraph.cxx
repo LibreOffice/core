@@ -368,8 +368,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aPropertyNames(1);
-    aPropertyNames.getArray()[0] = rPropertyName;
+    uno::Sequence<OUString> aPropertyNames { rPropertyName };
     uno::Sequence<uno::Any> aValues(1);
     aValues.getArray()[0] = rValue;
     m_pImpl->SetPropertyValues_Impl( aPropertyNames, aValues );
@@ -381,8 +380,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aPropertyNames(1);
-    aPropertyNames.getArray()[0] = rPropertyName;
+    uno::Sequence<OUString> aPropertyNames { rPropertyName };
     const uno::Sequence< uno::Any > aRet =
         m_pImpl->GetPropertyValues_Impl(aPropertyNames);
     return aRet.getConstArray()[0];

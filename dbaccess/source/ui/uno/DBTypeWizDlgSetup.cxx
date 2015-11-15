@@ -84,8 +84,7 @@ css::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialogSetup::getSupportedService
 
 css::uno::Sequence<OUString> ODBTypeWizDialogSetup::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    css::uno::Sequence<OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.DatabaseWizardDialog";
+    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.DatabaseWizardDialog" };
     return aSupported;
 }
 

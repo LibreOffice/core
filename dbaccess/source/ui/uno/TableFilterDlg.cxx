@@ -69,8 +69,7 @@ css::uno::Sequence<OUString> SAL_CALL OTableFilterDialog::getSupportedServiceNam
 
 css::uno::Sequence<OUString> OTableFilterDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    css::uno::Sequence<OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.TableFilterDialog";
+    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.TableFilterDialog" };
     return aSupported;
 }
 

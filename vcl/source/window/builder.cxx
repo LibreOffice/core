@@ -2226,8 +2226,7 @@ Image VclBuilder::getCommandImage(const OUString& rCommand, bool bLarge,
             uno::Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), uno::UNO_QUERY);
 
             uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
-            uno::Sequence<OUString> aImageCmdSeq(1);
-            aImageCmdSeq[0] = rCommand;
+            uno::Sequence<OUString> aImageCmdSeq { rCommand };
 
             aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
             uno::Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
@@ -2248,8 +2247,7 @@ Image VclBuilder::getCommandImage(const OUString& rCommand, bool bLarge,
         uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
         uno::Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), uno::UNO_QUERY);
 
-        uno::Sequence<OUString> aImageCmdSeq(1);
-        aImageCmdSeq[0] = rCommand;
+        uno::Sequence<OUString> aImageCmdSeq { rCommand };
 
         aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
 

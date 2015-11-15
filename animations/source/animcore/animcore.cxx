@@ -510,8 +510,7 @@ AnimationNode::~AnimationNode()
 
 Sequence<OUString> getSupportedServiceNames_PAR()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.ParallelTimeContainer";
+    Sequence<OUString> aRet { "com.sun.star.animations.ParallelTimeContainer" };
     return aRet;
 }
 
@@ -522,8 +521,7 @@ OUString getImplementationName_PAR()
 
 Sequence<OUString> getSupportedServiceNames_SEQ()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.SequenceTimeContainer";
+    Sequence<OUString> aRet { "com.sun.star.animations.SequenceTimeContainer" };
     return aRet;
 }
 
@@ -534,8 +532,7 @@ OUString getImplementationName_SEQ()
 
 Sequence<OUString> getSupportedServiceNames_ITERATE()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.IterateContainer";
+    Sequence<OUString> aRet { "com.sun.star.animations.IterateContainer" };
     return aRet;
 }
 
@@ -546,8 +543,7 @@ OUString getImplementationName_ITERATE()
 
 Sequence<OUString> getSupportedServiceNames_ANIMATE()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.Animate";
+    Sequence<OUString> aRet { "com.sun.star.animations.Animate" };
     return aRet;
 }
 
@@ -558,8 +554,7 @@ OUString getImplementationName_ANIMATE()
 
 Sequence<OUString> getSupportedServiceNames_SET()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.AnimateSet";
+    Sequence<OUString> aRet { "com.sun.star.animations.AnimateSet" };
     return aRet;
 }
 
@@ -570,8 +565,7 @@ OUString getImplementationName_SET()
 
 Sequence<OUString> getSupportedServiceNames_ANIMATECOLOR()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.AnimateColor";
+    Sequence<OUString> aRet { "com.sun.star.animations.AnimateColor" };
     return aRet;
 }
 
@@ -582,8 +576,7 @@ OUString getImplementationName_ANIMATECOLOR()
 
 Sequence<OUString> getSupportedServiceNames_ANIMATEMOTION()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.AnimateMotion";
+    Sequence<OUString> aRet { "com.sun.star.animations.AnimateMotion" };
     return aRet;
 }
 
@@ -594,8 +587,7 @@ OUString getImplementationName_ANIMATEMOTION()
 
 Sequence<OUString> getSupportedServiceNames_ANIMATETRANSFORM()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.AnimateTransform";
+    Sequence<OUString> aRet { "com.sun.star.animations.AnimateTransform" };
     return aRet;
 }
 
@@ -606,8 +598,7 @@ OUString getImplementationName_ANIMATETRANSFORM()
 
 Sequence<OUString> getSupportedServiceNames_TRANSITIONFILTER()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.TransitionFilter";
+    Sequence<OUString> aRet { "com.sun.star.animations.TransitionFilter" };
     return aRet;
 }
 
@@ -618,8 +609,7 @@ OUString getImplementationName_TRANSITIONFILTER()
 
 Sequence<OUString> getSupportedServiceNames_AUDIO()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.Audio";
+    Sequence<OUString> aRet { "com.sun.star.animations.Audio" };
     return aRet;
 }
 
@@ -630,8 +620,7 @@ OUString getImplementationName_AUDIO()
 
 Sequence<OUString> getSupportedServiceNames_COMMAND()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.Command";
+    Sequence<OUString> aRet { "com.sun.star.animations.Command" };
     return aRet;
 }
 

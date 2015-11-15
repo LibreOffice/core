@@ -492,8 +492,7 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
                 // allowed to throw this exception
                 if ( 0 == ( nPropFlags & MID_FLAG_PROPERTY_MAY_THROW ) )
                 {
-                    Sequence<OUString> aSeq(1);
-                    aSeq[0] = rPropName;
+                    Sequence<OUString> aSeq { rPropName };
                     rImport.SetError(
                         XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_ERROR,
                         aSeq, e.Message, nullptr );
@@ -502,8 +501,7 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
             catch ( const UnknownPropertyException& e )
             {
                 // unknown property: This is always an error!
-                Sequence<OUString> aSeq(1);
-                aSeq[0] = rPropName;
+                Sequence<OUString> aSeq { rPropName };
                 rImport.SetError(
                     XMLERROR_STYLE_PROP_UNKNOWN | XMLERROR_FLAG_ERROR,
                     aSeq, e.Message, nullptr );
@@ -511,8 +509,7 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
             catch ( const PropertyVetoException& e )
             {
                 // property veto: this shouldn't happen
-                Sequence<OUString> aSeq(1);
-                aSeq[0] = rPropName;
+                Sequence<OUString> aSeq { rPropName };
                 rImport.SetError(
                     XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
                     aSeq, e.Message, nullptr );
@@ -520,8 +517,7 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
             catch ( const WrappedTargetException& e )
             {
                 // wrapped target: this shouldn't happen either
-                Sequence<OUString> aSeq(1);
-                aSeq[0] = rPropName;
+                Sequence<OUString> aSeq { rPropName };
                 rImport.SetError(
                     XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
                     aSeq, e.Message, nullptr );
@@ -709,8 +705,7 @@ bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
             sal_Int32 nCount(aResults.getLength());
             for( sal_Int32 i = 0; i < nCount; ++i)
             {
-                Sequence<OUString> aSeq(1);
-                aSeq[0] = aResults[i].Name;
+                Sequence<OUString> aSeq { aResults[i].Name };
                 OUString sMessage;
                 switch (aResults[i].Result)
                 {

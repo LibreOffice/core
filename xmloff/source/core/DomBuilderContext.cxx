@@ -219,8 +219,7 @@ static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
         // both cases are illegal; raise warning (and use only local name)
         xElement = xDocument->createElement( rLocalName );
         {
-            Sequence<OUString> aSeq(1);
-            aSeq[0] = rLocalName;
+            Sequence<OUString> aSeq { rLocalName };
             rImport.SetError(
                 XMLERROR_FLAG_WARNING | XMLERROR_NAMESPACE_TROUBLE, aSeq );
         }

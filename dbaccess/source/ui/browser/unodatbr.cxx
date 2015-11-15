@@ -197,8 +197,7 @@ OUString SbaTableQueryBrowser::getImplementationName_Static() throw(RuntimeExcep
 
 css::uno::Sequence<OUString> SbaTableQueryBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    css::uno::Sequence<OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.DataSourceBrowser";
+    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.DataSourceBrowser" };
     return aSupported;
 }
 

@@ -1711,8 +1711,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
                 xManager->getImageManager(),
                 UNO_QUERY_THROW);
 
-            Sequence<OUString> aCommandList(1);
-            aCommandList[0] = sCommandURL;
+            Sequence<OUString> aCommandList { sCommandURL };
             Sequence<Reference<graphic::XGraphic> > xIconList (
                 xImageManager->getImages(0,aCommandList));
             if ( ! xIconList.hasElements())

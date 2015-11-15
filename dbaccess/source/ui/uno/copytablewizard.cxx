@@ -430,8 +430,7 @@ css::uno::Sequence<OUString> SAL_CALL CopyTableWizard::getSupportedServiceNames(
 
 css::uno::Sequence<OUString> CopyTableWizard::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    css::uno::Sequence<OUString> aSupported(1);
-    aSupported.getArray()[0] = "com.sun.star.sdb.application.CopyTableWizard";
+    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.application.CopyTableWizard" };
     return aSupported;
 }
 

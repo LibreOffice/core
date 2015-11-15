@@ -568,8 +568,7 @@ extern "C"
             {
                 if (rtl_str_compare(pImplName, FILTER_IMPL_NAME) == 0)
                     {
-                        Sequence<OUString> serviceNames(1);
-                        serviceNames.getArray()[0] = FILTER_SERVICE_NAME;
+                        Sequence<OUString> serviceNames { FILTER_SERVICE_NAME };
 
                         css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
@@ -588,8 +587,7 @@ extern "C"
                     }
                 else if (rtl_str_compare(pImplName, TRANSFORMER_IMPL_NAME) == 0)
                     {
-                        Sequence<OUString> serviceNames(1);
-                        serviceNames.getArray()[0] = TRANSFORMER_SERVICE_NAME;
+                        Sequence<OUString> serviceNames { TRANSFORMER_SERVICE_NAME };
                         css::uno::Reference<XSingleServiceFactory>
                                 xFactory(
                                         createSingleFactory(

@@ -69,8 +69,7 @@ css::uno::Sequence<OUString> SAL_CALL OUserSettingsDialog::getSupportedServiceNa
 
 css::uno::Sequence<OUString> OUserSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    css::uno::Sequence<OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.UserAdministrationDialog";
+    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.UserAdministrationDialog" };
     return aSupported;
 }
 

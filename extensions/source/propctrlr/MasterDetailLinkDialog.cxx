@@ -72,8 +72,7 @@ namespace pcr
 
     css::uno::Sequence<OUString> MasterDetailLinkDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
-        css::uno::Sequence<OUString> aSupported(1);
-        aSupported[0] = "com.sun.star.form.MasterDetailLinkDialog";
+        css::uno::Sequence<OUString> aSupported { "com.sun.star.form.MasterDetailLinkDialog" };
         return aSupported;
     }
 

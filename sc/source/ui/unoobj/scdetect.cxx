@@ -325,8 +325,7 @@ sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
 css::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> seqServiceNames(1);
-    seqServiceNames.getArray()[0] = "com.sun.star.frame.ExtendedTypeDetection";
+    uno::Sequence<OUString> seqServiceNames { "com.sun.star.frame.ExtendedTypeDetection" };
     return seqServiceNames;
 }
 

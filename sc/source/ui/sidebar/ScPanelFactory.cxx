@@ -139,8 +139,7 @@ sal_Bool ScPanelFactory::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence<OUString> aServiceNames(1);
-    aServiceNames[0] = "com.sun.star.ui.UIElementFactory";
+    css::uno::Sequence<OUString> aServiceNames { "com.sun.star.ui.UIElementFactory" };
     return aServiceNames;
 }
 

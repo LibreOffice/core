@@ -256,8 +256,7 @@ OUString ODBExport::getImplementationName_Static()
 css::uno::Sequence<OUString> ODBExport::getSupportedServiceNames_Static()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence<OUString> s(1);
-    s[0] = "com.sun.star.document.ExportFilter";
+    css::uno::Sequence<OUString> s { "com.sun.star.document.ExportFilter" };
     return s;
 }
 
