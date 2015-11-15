@@ -82,8 +82,7 @@ OUString SAL_CALL SvxUnoColorTable::getImplementationName() throw( uno::RuntimeE
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.drawing.ColorTable";
+    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.ColorTable" };
     return aSNS;
 }
 

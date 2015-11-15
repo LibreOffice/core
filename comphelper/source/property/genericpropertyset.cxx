@@ -256,8 +256,7 @@ OUString SAL_CALL GenericPropertySet::getImplementationName() throw( RuntimeExce
 Sequence< OUString > SAL_CALL GenericPropertySet::getSupportedServiceNames(  )
     throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.beans.XPropertySet";
+    Sequence<OUString> aSNS { "com.sun.star.beans.XPropertySet" };
     return aSNS;
 }
 

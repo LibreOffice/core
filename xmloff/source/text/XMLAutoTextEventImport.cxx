@@ -108,8 +108,7 @@ Sequence< OUString > SAL_CALL
     XMLAutoTextEventImport_getSupportedServiceNames()
         throw()
 {
-    Sequence< OUString > aSeq( 1 );
-    aSeq[0] = XMLAutoTextEventImport_getImplementationName();
+    Sequence<OUString> aSeq { XMLAutoTextEventImport_getImplementationName() };
     return aSeq;
 }
 

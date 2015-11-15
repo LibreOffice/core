@@ -141,8 +141,7 @@ OUString SAL_CALL SvxUnoMarkerTable::getImplementationName() throw( uno::Runtime
 uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.drawing.MarkerTable";
+    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.MarkerTable" };
     return aSNS;
 }
 

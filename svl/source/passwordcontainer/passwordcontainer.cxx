@@ -265,8 +265,7 @@ void StorageItem::setUseStorage( bool bUse )
 
 bool StorageItem::useStorage()
 {
-    Sequence< OUString > aNodeNames( 1 );
-    aNodeNames[0] = "UseStorage";
+    Sequence<OUString> aNodeNames { "UseStorage" };
 
     Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aNodeNames );
 

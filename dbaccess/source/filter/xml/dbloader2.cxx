@@ -208,8 +208,7 @@ Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames() throw(
 // ORegistryServiceManager_Static
 Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static() throw(  )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.document.ExtendedTypeDetection";
+    Sequence<OUString> aSNS { "com.sun.star.document.ExtendedTypeDetection" };
     return aSNS;
 }
 
@@ -299,8 +298,7 @@ Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames() throw(
 // ORegistryServiceManager_Static
 Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static() throw(  )
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.frame.FrameLoader";
+    Sequence<OUString> aSNS { "com.sun.star.frame.FrameLoader" };
     return aSNS;
 }
 

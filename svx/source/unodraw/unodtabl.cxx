@@ -66,8 +66,7 @@ OUString SAL_CALL SvxUnoDashTable::getImplementationName() throw( uno::RuntimeEx
 uno::Sequence< OUString > SAL_CALL SvxUnoDashTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.drawing.DashTable";
+    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.DashTable" };
     return aSNS;
 }
 

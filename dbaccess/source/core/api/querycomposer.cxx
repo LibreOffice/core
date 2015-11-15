@@ -115,8 +115,7 @@ sal_Bool OQueryComposer::supportsService( const OUString& _rServiceName ) throw 
 
 Sequence< OUString > OQueryComposer::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS[0] = SERVICE_SDB_SQLQUERYCOMPOSER;
+    Sequence<OUString> aSNS { SERVICE_SDB_SQLQUERYCOMPOSER };
     return aSNS;
 }
 

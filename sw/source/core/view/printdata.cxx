@@ -345,8 +345,7 @@ SwPrintUIOptions::SwPrintUIOptions(
         aRLChoices[0] = aLocalizedStrings.GetString( 19 );
         aRLChoices[1] = aLocalizedStrings.GetString( 20 );
         aRLChoices[2] = aLocalizedStrings.GetString( 21 );
-        uno::Sequence< OUString > aRLHelp( 1 );
-        aRLHelp[0] = ".HelpID:vcl:PrintDialog:PrintLeftRightPages:ListBox";
+        uno::Sequence<OUString> aRLHelp { ".HelpID:vcl:PrintDialog:PrintLeftRightPages:ListBox" };
         // create a choice option for all/left/right pages
         // 0 : all pages (left & right)
         // 1 : left pages
@@ -382,8 +381,7 @@ SwPrintUIOptions::SwPrintUIOptions(
         aBRTLChoices[0] = aLocalizedStrings.GetString( 24 );
         aBRTLChoices[1] = aLocalizedStrings.GetString( 25 );
         vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, true );
-        uno::Sequence< OUString > aBRTLHelpIds( 1 );
-        aBRTLHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox";
+        uno::Sequence<OUString> aBRTLHelpIds { ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox" };
         aBrochureRTLOpt.maGroupHint = "LayoutPage";
         // RTL brochure choices
         //      0 : left-to-right

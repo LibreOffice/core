@@ -78,8 +78,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL EFormsPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupported( 1 );
-        aSupported[0] = "com.sun.star.form.inspection.XMLFormsPropertyHandler";
+        Sequence<OUString> aSupported { "com.sun.star.form.inspection.XMLFormsPropertyHandler" };
         return aSupported;
     }
 

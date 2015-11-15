@@ -1382,8 +1382,7 @@ OUString ZipPackageStream::getImplementationName()
 Sequence< OUString > ZipPackageStream::getSupportedServiceNames()
     throw ( RuntimeException, std::exception )
 {
-    Sequence< OUString > aNames( 1 );
-    aNames[0] = "com.sun.star.packages.PackageStream";
+    Sequence<OUString> aNames { "com.sun.star.packages.PackageStream" };
     return aNames;
 }
 

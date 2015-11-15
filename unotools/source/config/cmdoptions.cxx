@@ -169,8 +169,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
 /*TODO: Not used in the moment! see Notify() ...
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys! */
-    Sequence< OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = "Disabled";
+    Sequence<OUString> aNotifySeq { "Disabled" };
     EnableNotification( aNotifySeq, true );
 }
 

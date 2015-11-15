@@ -169,8 +169,7 @@ OUString OApplicationController::getImplementationName_Static() throw( RuntimeEx
 
 Sequence< OUString> OApplicationController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.application.DefaultViewController";
+    Sequence<OUString> aSupported { "com.sun.star.sdb.application.DefaultViewController" };
     return aSupported;
 }
 

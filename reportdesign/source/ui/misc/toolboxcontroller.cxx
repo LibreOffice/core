@@ -66,8 +66,7 @@ OUString OToolboxController::getImplementationName_Static() throw( RuntimeExcept
 
 Sequence< OUString> OToolboxController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.report.ReportToolboxController";
+    Sequence<OUString> aSupported { "com.sun.star.report.ReportToolboxController" };
     return aSupported;
 }
 

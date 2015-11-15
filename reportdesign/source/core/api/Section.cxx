@@ -179,8 +179,7 @@ OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeExceptio
 
 uno::Sequence< OUString> OSection::getSupportedServiceNames_Static() throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString> aSupported(1);
-    aSupported.getArray()[0] = SERVICE_SECTION;
+    uno::Sequence<OUString> aSupported { SERVICE_SECTION };
     return aSupported;
 }
 

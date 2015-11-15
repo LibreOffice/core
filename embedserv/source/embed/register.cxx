@@ -51,8 +51,7 @@ OUString SAL_CALL EmbedServer_getImplementationName() throw()
 
 uno::Sequence< OUString > SAL_CALL EmbedServer_getSupportedServiceNames() throw()
 {
-    uno::Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[0] = "com.sun.star.document.OleEmbeddedServerRegistration";
+    uno::Sequence<OUString> aServiceNames { "com.sun.star.document.OleEmbeddedServerRegistration" };
     return aServiceNames;
 }
 

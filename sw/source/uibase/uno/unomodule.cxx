@@ -40,8 +40,7 @@ OUString SAL_CALL SwUnoModule_getImplementationName() throw()
 
 uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw()
 {
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq[0] = "com.sun.star.text.ModuleDispatcher";
+    uno::Sequence<OUString> aSeq { "com.sun.star.text.ModuleDispatcher" };
     return aSeq;
 }
 

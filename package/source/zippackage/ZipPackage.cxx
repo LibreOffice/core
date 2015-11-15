@@ -1634,8 +1634,7 @@ OUString ZipPackage::static_getImplementationName()
 
 Sequence< OUString > ZipPackage::static_getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aNames( 1 );
-    aNames[0] = "com.sun.star.packages.Package";
+    uno::Sequence<OUString> aNames { "com.sun.star.packages.Package" };
     return aNames;
 }
 

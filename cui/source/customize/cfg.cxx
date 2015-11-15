@@ -934,8 +934,7 @@ uno::Reference< graphic::XGraphic > GetGraphic(
         // TODO handle large graphics
         uno::Sequence< uno::Reference< graphic::XGraphic > > aGraphicSeq;
 
-        uno::Sequence< OUString > aImageCmdSeq( 1 );
-        aImageCmdSeq[0] = rCommandURL;
+        uno::Sequence<OUString> aImageCmdSeq { rCommandURL };
 
         try
         {

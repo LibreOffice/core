@@ -219,8 +219,7 @@ Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
     throw( RuntimeException, std::exception )
 
 {
-    Sequence< OUString > aURLList( 1 );
-    aURLList[0] = "vnd.sun.star.help://*";
+    Sequence<OUString> aURLList { "vnd.sun.star.help://*" };
     return aURLList;
 }
 

@@ -123,8 +123,7 @@ sal_Bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName ) t
 
 uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq[0] = "com.sun.star.drawing.ModuleDispatcher";
+    uno::Sequence<OUString> aSeq { "com.sun.star.drawing.ModuleDispatcher" };
     return aSeq;
 }
 

@@ -450,8 +450,7 @@ sal_Bool SubToolBarController::supportsService( const OUString& rServiceName )
 css::uno::Sequence< OUString > SubToolBarController::getSupportedServiceNames()
     throw ( css::uno::RuntimeException )
 {
-    css::uno::Sequence< OUString > aRet( 1 );
-    aRet[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
     return aRet;
 }
 

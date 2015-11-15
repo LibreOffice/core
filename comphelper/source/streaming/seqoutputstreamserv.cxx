@@ -99,8 +99,7 @@ uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServ
 
 uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames_static()
 {
-    uno::Sequence< OUString > s( 1 );
-    s[0] = "com.sun.star.io.SequenceOutputStream";
+    uno::Sequence<OUString> s { "com.sun.star.io.SequenceOutputStream" };
     return s;
 }
 

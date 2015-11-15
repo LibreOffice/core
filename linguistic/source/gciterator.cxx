@@ -1139,8 +1139,7 @@ static OUString GrammarCheckingIterator_getImplementationName() throw()
 
 static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceNames() throw()
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.linguistic2.ProofreadingIterator";
+    uno::Sequence<OUString> aSNS { "com.sun.star.linguistic2.ProofreadingIterator" };
     return aSNS;
 }
 

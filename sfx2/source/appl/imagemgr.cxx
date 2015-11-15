@@ -122,8 +122,7 @@ Image SAL_CALL GetImage(
     if ( xDocImgMgr.is() )
     {
         Sequence< Reference< css::graphic::XGraphic > > aGraphicSeq;
-        Sequence< OUString > aImageCmdSeq( 1 );
-        aImageCmdSeq[0] = aCommandURL;
+        Sequence<OUString> aImageCmdSeq { aCommandURL };
 
         try
         {
@@ -181,8 +180,7 @@ Image SAL_CALL GetImage(
             }
 
             Sequence< Reference< css::graphic::XGraphic > > aGraphicSeq;
-            Sequence< OUString > aImageCmdSeq( 1 );
-            aImageCmdSeq[0] = aCommandURL;
+            Sequence<OUString> aImageCmdSeq { aCommandURL };
 
             aGraphicSeq = xModuleImageManager->getImages( nImageType, aImageCmdSeq );
 

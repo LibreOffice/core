@@ -436,8 +436,7 @@ sal_Bool OStatement::supportsService( const OUString& _rServiceName ) throw (Run
 
 Sequence< OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = SERVICE_SDBC_STATEMENT;
+    Sequence<OUString> aSNS { SERVICE_SDBC_STATEMENT };
     return aSNS;
 }
 

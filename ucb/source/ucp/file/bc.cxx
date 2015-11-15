@@ -269,8 +269,7 @@ Sequence< OUString > SAL_CALL
 BaseContent::getSupportedServiceNames()
     throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > ret( 1 );
-    ret[0] = "com.sun.star.ucb.FileContent";
+    Sequence<OUString> ret { "com.sun.star.ucb.FileContent" };
     return ret;
 }
 

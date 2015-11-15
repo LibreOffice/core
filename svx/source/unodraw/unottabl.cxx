@@ -65,8 +65,7 @@ OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName() throw( uno::
 uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.drawing.TransparencyGradientTable";
+    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.TransparencyGradientTable" };
     return aSNS;
 }
 

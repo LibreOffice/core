@@ -65,8 +65,7 @@ OUString SAL_CALL SvxUnoHatchTable::getImplementationName() throw( uno::RuntimeE
 uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.drawing.HatchTable";
+    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.HatchTable" };
     return aSNS;
 }
 

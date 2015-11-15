@@ -383,8 +383,7 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
 
 Sequence< OUString > DataInterpreter::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServices( 1 );
-    aServices[0] = "com.sun.star.chart2.DataInterpreter";
+    Sequence<OUString> aServices { "com.sun.star.chart2.DataInterpreter" };
     return aServices;
 }
 

@@ -100,8 +100,7 @@ uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNa
 }
 uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq[0] = "com.sun.star.sheet.FormulaOpCodeMapper";
+    uno::Sequence<OUString> aSeq { "com.sun.star.sheet.FormulaOpCodeMapper" };
     return aSeq;
 }
 

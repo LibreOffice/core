@@ -123,8 +123,7 @@ OUString OTableController::getImplementationName_Static() throw( RuntimeExceptio
 
 Sequence< OUString> OTableController::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.TableDesign";
+    Sequence<OUString> aSupported { "com.sun.star.sdb.TableDesign" };
     return aSupported;
 }
 

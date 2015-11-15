@@ -415,8 +415,7 @@ sal_Bool SAL_CALL FindTextToolbarController::supportsService( const OUString& Se
 
 css::uno::Sequence< OUString > SAL_CALL FindTextToolbarController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
@@ -570,8 +569,7 @@ sal_Bool SAL_CALL UpDownSearchToolboxController::supportsService( const OUString
 
 css::uno::Sequence< OUString > SAL_CALL UpDownSearchToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
@@ -660,8 +658,7 @@ sal_Bool SAL_CALL MatchCaseToolboxController::supportsService( const OUString& S
 
 css::uno::Sequence< OUString > SAL_CALL MatchCaseToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
@@ -754,8 +751,7 @@ sal_Bool SAL_CALL SearchFormattedToolboxController::supportsService( const OUStr
 
 css::uno::Sequence< OUString > SAL_CALL SearchFormattedToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
@@ -848,8 +844,7 @@ sal_Bool SAL_CALL FindAllToolboxController::supportsService( const OUString& Ser
 
 css::uno::Sequence< OUString > SAL_CALL FindAllToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
@@ -932,8 +927,7 @@ sal_Bool SAL_CALL ExitSearchToolboxController::supportsService( const OUString& 
 
 css::uno::Sequence< OUString > SAL_CALL ExitSearchToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
@@ -1027,8 +1021,7 @@ sal_Bool SAL_CALL SearchLabelToolboxController::supportsService( const OUString&
 
 css::uno::Sequence< OUString > SAL_CALL SearchLabelToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS[0] = "com.sun.star.frame.ToolbarController";
+    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
