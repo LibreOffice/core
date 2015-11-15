@@ -565,8 +565,8 @@ void SwSidebarWin::InitControls()
     {
         // If there is a callback already registered, inform the new outliner view about it.
         SwDrawModel* pDrawModel = mrView.GetWrtShellPtr()->getIDocumentDrawModelAccess().GetDrawModel();
-        LibreOfficeKitCallback pCallback = 0;
-        void* pData = 0;
+        LibreOfficeKitCallback pCallback = nullptr;
+        void* pData = nullptr;
         pDrawModel->getLibreOfficeKitCallback(pCallback, pData);
         mpOutlinerView->setTiledRendering(mrView.GetWrtShellPtr()->isTiledRendering());
         mpOutlinerView->registerLibreOfficeKitCallback(pCallback, pData);
