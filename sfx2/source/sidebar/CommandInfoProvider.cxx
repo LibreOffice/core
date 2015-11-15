@@ -241,8 +241,7 @@ OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
     {
         try
         {
-            Sequence<OUString> aCommands(1);
-            aCommands[0] = rsCommandName;
+            Sequence<OUString> aCommands { rsCommandName };
 
             Sequence<Any> aKeyCodes (rxConfiguration->getPreferredKeyEventsForCommandList(aCommands));
             if (aCommands.getLength() == 1)

@@ -331,8 +331,7 @@ Reference<XInterface> SAL_CALL OComponent_CreateInstance( const Reference<XMulti
 
 Sequence<OUString> OComponent_getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = SERVICE_NAME;//ODataInputStream_getImplementationName();
+    Sequence<OUString> aRet { SERVICE_NAME;//ODataInputStream_getImplementationName() };
 
     return aRet;
 }

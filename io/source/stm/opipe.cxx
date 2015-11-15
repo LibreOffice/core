@@ -427,8 +427,7 @@ OUString    OPipeImpl_getImplementationName()
 
 Sequence<OUString> OPipeImpl_getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.io.Pipe";
+    Sequence<OUString> aRet { "com.sun.star.io.Pipe" };
     return aRet;
 }
 }

@@ -323,8 +323,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
             sPrefix += "/";
             sPrefix += pLabels[nLabel];
             sPrefix += "/";
-            Sequence<OUString> aProperties(1);
-            aProperties.getArray()[0] = sPrefix;
+            Sequence<OUString> aProperties { sPrefix };
             aProperties.getArray()[0] += "Name";
             Sequence<Any> aValues = GetProperties( aProperties );
             const Any* pValues = aValues.getConstArray();

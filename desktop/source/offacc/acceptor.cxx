@@ -190,8 +190,7 @@ OUString Acceptor::getImplementationName()
 }
 Sequence<OUString> Acceptor::impl_getSupportedServiceNames()
 {
-    Sequence<OUString> aSequence(1);
-    aSequence[0] = "com.sun.star.office.Acceptor";
+    Sequence<OUString> aSequence { "com.sun.star.office.Acceptor" };
     return aSequence;
 }
 Sequence<OUString> Acceptor::getSupportedServiceNames()

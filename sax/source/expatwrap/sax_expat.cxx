@@ -566,8 +566,7 @@ sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName) throw (std
 // XServiceInfo
 css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames() throw (std::exception)
 {
-    css::uno::Sequence<OUString> seq(1);
-    seq[0] = "com.sun.star.xml.sax.Parser";
+    css::uno::Sequence<OUString> seq { "com.sun.star.xml.sax.Parser" };
     return seq;
 }
 

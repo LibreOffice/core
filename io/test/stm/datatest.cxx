@@ -614,8 +614,7 @@ Reference < XInterface > SAL_CALL OMyPersistObject_CreateInstance(
 
 Sequence<OUString> OMyPersistObject_getSupportedServiceNames( ) throw ()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OMyPersistObject_getImplementationName();
+    Sequence<OUString> aRet { OMyPersistObject_getImplementationName() };
     return aRet;
 }
 

@@ -85,8 +85,7 @@ OUString SbaExternalSourceBrowser::getImplementationName_Static() throw(RuntimeE
 
 css::uno::Sequence<OUString> SbaExternalSourceBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    css::uno::Sequence<OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.FormGridView";
+    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.FormGridView" };
     return aSupported;
 }
 

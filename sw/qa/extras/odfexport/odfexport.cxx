@@ -364,8 +364,7 @@ DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
     uno::Reference<container::XIndexReplace> xLevels(
         getProperty< uno::Reference<container::XIndexReplace> >(xTOCProps,
             "LevelParagraphStyles"));
-    uno::Sequence<OUString> seq(1);
-    seq[0] = "Heading";
+    uno::Sequence<OUString> seq { "Heading" };
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(seq), xLevels->getByIndex(1));
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(uno::Sequence<OUString>()), xLevels->getByIndex(2));
 }

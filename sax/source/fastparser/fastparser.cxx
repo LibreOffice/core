@@ -1355,8 +1355,7 @@ sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
 uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    Sequence<OUString> seq(1);
-    seq[0] = "com.sun.star.xml.sax.FastParser";
+    Sequence<OUString> seq { "com.sun.star.xml.sax.FastParser" };
     return seq;
 }
 

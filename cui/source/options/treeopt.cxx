@@ -268,8 +268,7 @@ MailMergeCfg_Impl::MailMergeCfg_Impl() :
     utl::ConfigItem("Office.Writer/MailMergeWizard"),
     bIsEmailSupported(false)
 {
-    Sequence<OUString> aNames(1);
-    aNames.getArray()[0] = "EMailSupported";
+    Sequence<OUString> aNames { "EMailSupported" };
     const Sequence< Any > aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     if(aValues.getLength() && pValues[0].hasValue())

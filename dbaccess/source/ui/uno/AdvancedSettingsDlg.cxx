@@ -97,8 +97,7 @@ namespace dbaui
 
     css::uno::Sequence<OUString> OAdvancedSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
     {
-        css::uno::Sequence<OUString> aSupported(1);
-        aSupported[0] = "com.sun.star.sdb.AdvancedDatabaseSettingsDialog";
+        css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.AdvancedDatabaseSettingsDialog" };
         return aSupported;
     }
 

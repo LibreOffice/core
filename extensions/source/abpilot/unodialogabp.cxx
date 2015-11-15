@@ -109,8 +109,7 @@ namespace abp
 
     css::uno::Sequence<OUString> OABSPilotUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
-        css::uno::Sequence<OUString> aSupported(1);
-        aSupported[0] = "com.sun.star.ui.dialogs.AddressBookSourcePilot";
+        css::uno::Sequence<OUString> aSupported { "com.sun.star.ui.dialogs.AddressBookSourcePilot" };
         return aSupported;
     }
 

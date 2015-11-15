@@ -2255,14 +2255,12 @@ void SvXMLExport::StartElement(const OUString& rName,
         }
         catch (const SAXInvalidCharacterException& e)
         {
-            Sequence<OUString> aPars(1);
-            aPars[0] = rName;
+            Sequence<OUString> aPars { rName };
             SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, nullptr );
         }
         catch (const SAXException& e)
         {
-            Sequence<OUString> aPars(1);
-            aPars[0] = rName;
+            Sequence<OUString> aPars { rName };
             SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
                       aPars, e.Message, nullptr );
         }
@@ -2281,14 +2279,12 @@ void SvXMLExport::Characters(const OUString& rChars)
         }
         catch (const SAXInvalidCharacterException& e)
         {
-            Sequence<OUString> aPars(1);
-            aPars[0] = rChars;
+            Sequence<OUString> aPars { rChars };
             SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, nullptr );
         }
         catch (const SAXException& e)
         {
-            Sequence<OUString> aPars(1);
-            aPars[0] = rChars;
+            Sequence<OUString> aPars { rChars };
             SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
                       aPars, e.Message, nullptr );
         }
@@ -2328,8 +2324,7 @@ void SvXMLExport::EndElement(const OUString& rName,
         }
         catch (const SAXException& e)
         {
-            Sequence<OUString> aPars(1);
-            aPars[0] = rName;
+            Sequence<OUString> aPars { rName };
             SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,
                       aPars, e.Message, nullptr );
         }

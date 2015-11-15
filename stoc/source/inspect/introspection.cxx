@@ -1696,8 +1696,7 @@ private:
     getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        Sequence<OUString> s(1);
-        s[0] = "com.sun.star.beans.Introspection";
+        Sequence<OUString> s { "com.sun.star.beans.Introspection" };
         return s;
     }
 

@@ -1540,8 +1540,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
         pSourceProps[1] >>= sCommand;
         if(sSource==aDBData.sDataSource && sCommand==aDBData.sCommand)
         {
-            Sequence<OUString> aElements(1);
-            aElements.getArray()[0] = pNames[nNode];
+            Sequence<OUString> aElements { pNames[nNode] };
             ClearNodeElements(OUString(), aElements);
         }
     }

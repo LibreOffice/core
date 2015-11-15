@@ -94,8 +94,7 @@ namespace pcr
 
     css::uno::Sequence<OUString> OControlFontDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
-        css::uno::Sequence<OUString> aSupported(1);
-        aSupported[0] = "com.sun.star.form.ControlFontDialog";
+        css::uno::Sequence<OUString> aSupported { "com.sun.star.form.ControlFontDialog" };
         return aSupported;
     }
 

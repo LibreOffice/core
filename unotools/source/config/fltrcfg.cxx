@@ -156,8 +156,7 @@ void SvtWriterFilterOptions_Impl::ImplCommit()
 {
     SvtAppFilterOptions_Impl::ImplCommit();
 
-    Sequence<OUString> aNames(1);
-    aNames[0] = "Executable";
+    Sequence<OUString> aNames { "Executable" };
     Sequence<Any> aValues(1);
     aValues[0] <<= bLoadExecutable;
 
@@ -168,8 +167,7 @@ void SvtWriterFilterOptions_Impl::Load()
 {
     SvtAppFilterOptions_Impl::Load();
 
-    Sequence<OUString> aNames(1);
-    aNames[0] = "Executable";
+    Sequence<OUString> aNames { "Executable" };
 
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
@@ -204,8 +202,7 @@ void SvtCalcFilterOptions_Impl::ImplCommit()
 {
     SvtAppFilterOptions_Impl::ImplCommit();
 
-    Sequence<OUString> aNames(1);
-    aNames[0] = "Executable";
+    Sequence<OUString> aNames { "Executable" };
     Sequence<Any> aValues(1);
     aValues[0] <<= bLoadExecutable;
 
@@ -216,8 +213,7 @@ void SvtCalcFilterOptions_Impl::Load()
 {
     SvtAppFilterOptions_Impl::Load();
 
-    Sequence<OUString> aNames(1);
-    aNames[0] = "Executable";
+    Sequence<OUString> aNames { "Executable" };
 
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();

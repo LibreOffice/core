@@ -69,8 +69,7 @@ css::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialog::getSupportedServiceNames
 
 css::uno::Sequence<OUString> ODBTypeWizDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
-    css::uno::Sequence<OUString> aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.DataSourceTypeChangeDialog";
+    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.DataSourceTypeChangeDialog" };
     return aSupported;
 }
 

@@ -57,8 +57,7 @@ using namespace ::com::sun::star::linguistic2;
 
 static Sequence< OUString > getSupportedServiceNames_LangGuess_Impl()
 {
-    Sequence<OUString> names(1);
-    names[0] = SERVICENAME;
+    Sequence<OUString> names { SERVICENAME };
     return names;
 }
 

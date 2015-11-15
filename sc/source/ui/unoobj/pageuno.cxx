@@ -58,8 +58,7 @@ sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
 uno::Sequence<OUString> SAL_CALL ScPageObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(1);
-    aRet[0] = "com.sun.star.sheet.SpreadsheetDrawPage";
+    uno::Sequence<OUString> aRet { "com.sun.star.sheet.SpreadsheetDrawPage" };
     return aRet;
 }
 

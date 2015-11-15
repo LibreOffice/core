@@ -52,8 +52,7 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     bIsEnabled(false),
     pImpl(new SvtFontSubstConfig_Impl)
 {
-    Sequence<OUString> aNames(1);
-    aNames.getArray()[0] = cReplacement;
+    Sequence<OUString> aNames { cReplacement };
     Sequence<Any> aValues = GetProperties(aNames);
     DBG_ASSERT(aValues.getConstArray()[0].hasValue(), "no value available");
     if(aValues.getConstArray()[0].hasValue())
@@ -100,8 +99,7 @@ void SvtFontSubstConfig::Notify( const css::uno::Sequence< OUString >& )
 
 void SvtFontSubstConfig::ImplCommit()
 {
-    Sequence<OUString> aNames(1);
-    aNames.getArray()[0] = cReplacement;
+    Sequence<OUString> aNames { cReplacement };
     Sequence<Any> aValues(1);
     aValues.getArray()[0].setValue(&bIsEnabled, cppu::UnoType<bool>::get());
     PutProperties(aNames, aValues);

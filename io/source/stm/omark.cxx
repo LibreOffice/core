@@ -450,8 +450,7 @@ OUString    OMarkableOutputStream_getImplementationName()
 
 Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.io.MarkableOutputStream";
+    Sequence<OUString> aRet { "com.sun.star.io.MarkableOutputStream" };
 
     return aRet;
 }
@@ -945,8 +944,7 @@ OUString    OMarkableInputStream_getImplementationName()
 
 Sequence<OUString> OMarkableInputStream_getSupportedServiceNames()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.io.MarkableInputStream";
+    Sequence<OUString> aRet { "com.sun.star.io.MarkableInputStream" };
     return aRet;
 }
 
