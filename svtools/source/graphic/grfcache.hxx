@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_SOURCE_GRAPHIC_GRFCACHE_HXX
 
 #include <vcl/graph.hxx>
-#include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <list>
 
 
@@ -39,7 +39,7 @@ private:
     typedef std::list< GraphicCacheEntry* > GraphicCacheEntryList;
     typedef std::list< GraphicDisplayCacheEntry* > GraphicDisplayCacheEntryList;
 
-    Timer                   maReleaseTimer;
+    Idle                    maReleaseIdle;
     GraphicCacheEntryList   maGraphicCache;
     GraphicDisplayCacheEntryList maDisplayCache;
     sal_uLong               mnReleaseTimeoutSeconds;
@@ -51,7 +51,9 @@ private:
     GraphicCacheEntry*      ImplGetCacheEntry( const GraphicObject& rObj );
 
 
-                            DECL_LINK_TYPED( ReleaseTimeoutHdl, Timer* pTimer, void );
+                            DECL_LINK_TYPED( ReleaseTimeoutHdl, Idle* pTimer, void );
+
+    sal_uLong               mnReleaseLimit; // tdf#95614 - avoid dead lock
 
 public:
 

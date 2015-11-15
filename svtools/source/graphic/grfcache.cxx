@@ -33,6 +33,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #define MAX_BMP_EXTENT  4096
+#define RELEASE_LIMIT   100
 
 static const char aHexData[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
@@ -805,15 +806,16 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
 }
 
 GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDisplayCacheSize ) :
-    maReleaseTimer          ( "GraphicCache maReleaseTimer" ),
+    maReleaseIdle           ( "GraphicCache maReleaseIdle" ),
     mnReleaseTimeoutSeconds ( 0UL ),
     mnMaxDisplaySize        ( nDisplayCacheSize ),
     mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),
-    mnUsedDisplaySize       ( 0UL )
+    mnUsedDisplaySize       ( 0UL ),
+    mnReleaseLimit          ( 0UL )
 {
-    maReleaseTimer.SetTimeoutHdl( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
-    maReleaseTimer.SetTimeout( 10000 );
-    maReleaseTimer.Start();
+    maReleaseIdle.SetIdleHdl( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
+    maReleaseIdle.SetPriority( SchedulerPriority::LOWEST );
+    maReleaseIdle.Start();
 }
 
 GraphicCache::~GraphicCache()
@@ -933,6 +935,7 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
     GraphicCacheEntryList::iterator it = maGraphicCache.begin();
     while (!bRemoved && it != maGraphicCache.end())
     {
+        mnReleaseLimit++;
         bRemoved = (*it)->ReleaseGraphicObjectReference( rObj );
 
         if( bRemoved && (0 == (*it)->GetGraphicObjectReferenceCount()) )
@@ -959,6 +962,13 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
         }
         else
             ++it;
+    }
+
+    // tdf#95614 - avoid dead lock
+    if (mnReleaseLimit > RELEASE_LIMIT) {
+        maReleaseIdle.Stop();
+        maReleaseIdle.SetPriority( SchedulerPriority::REPAINT );
+        maReleaseIdle.Start();
     }
 
     DBG_ASSERT( bRemoved, "GraphicCache::ReleaseGraphicObject(...): GraphicObject not found in cache" );
@@ -1237,10 +1247,9 @@ GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
     return pRet;
 }
 
-IMPL_LINK_TYPED( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer, void )
+IMPL_LINK_TYPED( GraphicCache, ReleaseTimeoutHdl, Idle*, pTimer, void )
 {
     pTimer->Stop();
-
     ::salhelper::TTimeValue           aCurTime;
     GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
 
@@ -1259,6 +1268,12 @@ IMPL_LINK_TYPED( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer, void )
         }
         else
             ++it;
+    }
+
+    if (mnReleaseLimit > 0) {
+        mnReleaseLimit--;
+        if (mnReleaseLimit == 0)
+            maReleaseIdle.SetPriority( SchedulerPriority::LOWEST );
     }
 
     pTimer->Start();
