@@ -475,8 +475,7 @@ OUString Service::getImplementationName_static() {
 }
 
 css::uno::Sequence< OUString > Service::getSupportedServiceNames_static() {
-    css::uno::Sequence< OUString > names(1);
-    names[0] = "com.sun.star.test.bridges.testacquire";
+    css::uno::Sequence< OUString > names { "com.sun.star.test.bridges.testacquire" };
     return names;
 }
 

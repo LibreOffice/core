@@ -1763,8 +1763,7 @@ static void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XSt
 
     Any xNewStringResourceResolver; xNewStringResourceResolver <<= xStringResourceResolver;
 
-    Sequence< OUString > aPropNames(1);
-    aPropNames[0] = aPropName;
+    Sequence< OUString > aPropNames { aPropName };
 
     const Sequence< Reference< awt::XControl > > aSeq = xContainer->getControls();
     for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )

@@ -170,8 +170,7 @@ sal_Bool ModuleManager::supportsService(OUString const & ServiceName)
 css::uno::Sequence< OUString > ModuleManager::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.frame.ModuleManager";
+    css::uno::Sequence< OUString > s { "com.sun.star.frame.ModuleManager" };
     return s;
 }
 

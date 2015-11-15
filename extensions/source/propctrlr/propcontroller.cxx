@@ -583,8 +583,7 @@ namespace pcr
 
     Sequence< OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(1);
-        aSupported[0] = "com.sun.star.inspection.ObjectInspector";
+        Sequence< OUString > aSupported { "com.sun.star.inspection.ObjectInspector" };
         return aSupported;
     }
 

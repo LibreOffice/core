@@ -248,8 +248,7 @@ namespace logging
 
     Sequence< OUString > SAL_CALL EventLogger::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = "com.sun.star.logging.Logger";
+        Sequence< OUString > aServiceNames { "com.sun.star.logging.Logger" };
         return aServiceNames;
     }
 
@@ -280,8 +279,7 @@ namespace logging
 
     Sequence< OUString > SAL_CALL LoggerPool::getSupportedServiceNames_static()
     {
-        Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = getSingletonName_static();
+        Sequence< OUString > aServiceNames { getSingletonName_static() };
         return aServiceNames;
     }
 

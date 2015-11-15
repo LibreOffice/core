@@ -208,8 +208,7 @@ CharacterClassificationImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 CharacterClassificationImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.i18n.CharacterClassification";
+    Sequence< OUString > aRet { "com.sun.star.i18n.CharacterClassification" };
     return aRet;
 }
 

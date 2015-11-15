@@ -292,8 +292,7 @@ OUString ORptImportHelper::getImplementationName_Static(  ) throw (RuntimeExcept
 
 Sequence< OUString > ORptImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(1);
-    aSupported[0] = SERVICE_IMPORTFILTER;
+    Sequence< OUString > aSupported { SERVICE_IMPORTFILTER };
     return aSupported;
 }
 
@@ -310,8 +309,7 @@ OUString ORptContentImportHelper::getImplementationName_Static(  ) throw (Runtim
 
 Sequence< OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(1);
-    aSupported[0] = SERVICE_IMPORTFILTER;
+    Sequence< OUString > aSupported { SERVICE_IMPORTFILTER };
     return aSupported;
 }
 
@@ -330,8 +328,7 @@ OUString ORptStylesImportHelper::getImplementationName_Static(  ) throw (Runtime
 
 Sequence< OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(1);
-    aSupported[0] = SERVICE_IMPORTFILTER;
+    Sequence< OUString > aSupported { SERVICE_IMPORTFILTER };
     return aSupported;
 }
 
@@ -349,8 +346,7 @@ OUString ORptMetaImportHelper::getImplementationName_Static(  ) throw (RuntimeEx
 
 Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(1);
-    aSupported[0] = SERVICE_IMPORTFILTER;
+    Sequence< OUString > aSupported { SERVICE_IMPORTFILTER };
     return aSupported;
 }
 
@@ -396,8 +392,7 @@ OUString ORptFilter::getImplementationName_Static(  ) throw(uno::RuntimeExceptio
 
 uno::Sequence< OUString > ORptFilter::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = SERVICE_IMPORTFILTER;
+    uno::Sequence< OUString > aServices { SERVICE_IMPORTFILTER };
 
     return aServices;
 }

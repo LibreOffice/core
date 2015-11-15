@@ -1301,8 +1301,7 @@ sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName
 // XServiceInfo
 Sequence< OUString > ImplementationRegistration::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    Sequence< OUString > seqNames(1);
-    seqNames[0] = "com.sun.star.registry.ImplementationRegistration";
+    Sequence< OUString > seqNames { "com.sun.star.registry.ImplementationRegistration" };
     return seqNames;
 }
 

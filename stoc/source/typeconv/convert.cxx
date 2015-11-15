@@ -283,8 +283,7 @@ sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName) throw(
 // XServiceInfo
 Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = "com.sun.star.script.Converter";
+    Sequence< OUString > seqNames { "com.sun.star.script.Converter" };
     return seqNames;
 }
 

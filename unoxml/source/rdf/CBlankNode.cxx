@@ -125,8 +125,7 @@ OUString SAL_CALL _getImplementationName() {
 
 css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.rdf.BlankNode";
+    css::uno::Sequence< OUString > s { "com.sun.star.rdf.BlankNode" };
     return s;
 }
 

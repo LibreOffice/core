@@ -180,8 +180,7 @@ OUString SAL_CALL OImageControl::getImplementationName(  ) throw(uno::RuntimeExc
 
 uno::Sequence< OUString > OImageControl::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = SERVICE_IMAGECONTROL;
+    uno::Sequence< OUString > aServices { SERVICE_IMAGECONTROL };
 
     return aServices;
 }

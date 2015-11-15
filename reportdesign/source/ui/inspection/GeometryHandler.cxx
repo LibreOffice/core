@@ -271,8 +271,7 @@ OUString GeometryHandler::getImplementationName_Static(  ) throw(uno::RuntimeExc
 
 uno::Sequence< OUString > GeometryHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSupported(1);
-    aSupported[0] = "com.sun.star.report.inspection.GeometryHandler";
+    uno::Sequence< OUString > aSupported { "com.sun.star.report.inspection.GeometryHandler" };
     return aSupported;
 }
 

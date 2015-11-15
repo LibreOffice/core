@@ -218,8 +218,7 @@ OUString SAL_CALL OFixedLine::getImplementationName(  ) throw(uno::RuntimeExcept
 
 uno::Sequence< OUString > OFixedLine::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = SERVICE_FIXEDLINE;
+    uno::Sequence< OUString > aServices { SERVICE_FIXEDLINE };
 
     return aServices;
 }

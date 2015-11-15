@@ -1220,8 +1220,7 @@ Calendar_gregorian::supportsService(const OUString& rServiceName) throw( Runtime
 Sequence< OUString > SAL_CALL
 Calendar_gregorian::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cCalendar);
+    Sequence< OUString > aRet { OUString::createFromAscii(cCalendar) };
     return aRet;
 }
 

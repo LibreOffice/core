@@ -625,8 +625,7 @@ OUString SAL_CALL _getImplementationName() {
 
 uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 {
-    uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.inspection.StringRepresentation";
+    uno::Sequence< OUString > s { "com.sun.star.inspection.StringRepresentation" };
     return s;
 }
 

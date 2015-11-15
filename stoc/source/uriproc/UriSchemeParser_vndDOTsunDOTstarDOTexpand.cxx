@@ -193,8 +193,7 @@ sal_Bool Parser::supportsService(OUString const & serviceName)
 css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand";
+    css::uno::Sequence< OUString > s { "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand" };
     return s;
 }
 

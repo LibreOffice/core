@@ -52,8 +52,7 @@ namespace my_sc_impl
 
 Sequence< OUString > SAL_CALL getSupportedServiceNames_MyService1Impl()
 {
-    Sequence< OUString > names(1);
-    names[0] = "my_module.MyService1";
+    Sequence< OUString > names { "my_module.MyService1" };
     return names;
 }
 

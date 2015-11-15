@@ -80,8 +80,7 @@ char const UUIInteractionRequestStringResolver::m_aImplementationName[]
 uno::Sequence< OUString >
 UUIInteractionRequestStringResolver::getSupportedServiceNames_static()
 {
-    uno::Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.task.InteractionRequestStringResolver";
+    uno::Sequence< OUString > aNames { "com.sun.star.task.InteractionRequestStringResolver" };
     return aNames;
 }
 

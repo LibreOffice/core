@@ -1371,8 +1371,7 @@ Sequence< OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  ) th
 
 Sequence< OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.task.PasswordContainer";
+    Sequence< OUString > aRet { "com.sun.star.task.PasswordContainer" };
     return aRet;
 }
 

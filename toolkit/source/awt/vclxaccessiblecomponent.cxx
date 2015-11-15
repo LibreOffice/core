@@ -97,8 +97,7 @@ sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName 
 
 uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.awt.AccessibleWindow";
+    uno::Sequence< OUString > aNames { "com.sun.star.awt.AccessibleWindow" };
     return aNames;
 }
 

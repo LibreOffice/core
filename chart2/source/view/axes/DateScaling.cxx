@@ -106,8 +106,7 @@ OUString SAL_CALL DateScaling::getServiceName()
 
 uno::Sequence< OUString > DateScaling::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq(1);
-    aSeq.getArray()[0] = lcl_aServiceName_DateScaling;
+    uno::Sequence< OUString > aSeq { lcl_aServiceName_DateScaling };
     return aSeq;
 }
 

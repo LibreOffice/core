@@ -80,8 +80,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
         {
             _FILTER_CONFIG_LOG_("FrameLoaderFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
-            css::uno::Sequence< OUString > lTypes(1);
-            lTypes[0] = sLoader;
+            css::uno::Sequence< OUString > lTypes { sLoader };
 
             css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPES, css::uno::makeAny(lTypes) } };
 
@@ -150,8 +149,7 @@ OUString FrameLoaderFactory::impl_getImplementationName()
 
 css::uno::Sequence< OUString > FrameLoaderFactory::impl_getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lServiceNames(1);
-    lServiceNames[0] = "com.sun.star.frame.FrameLoaderFactory";
+    css::uno::Sequence< OUString > lServiceNames { "com.sun.star.frame.FrameLoaderFactory" };
     return lServiceNames;
 }
 

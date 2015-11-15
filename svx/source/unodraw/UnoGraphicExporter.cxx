@@ -1207,8 +1207,7 @@ sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )
     throw(RuntimeException, std::exception)
 {
-    Sequence< OUString > aSupportedServiceNames(1);
-    aSupportedServiceNames[0] = "com.sun.star.drawing.GraphicExportFilter";
+    Sequence< OUString > aSupportedServiceNames { "com.sun.star.drawing.GraphicExportFilter" };
     return aSupportedServiceNames;
 }
 

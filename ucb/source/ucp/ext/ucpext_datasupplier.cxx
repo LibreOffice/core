@@ -171,8 +171,7 @@ namespace ucb { namespace ucp { namespace ext
                 ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment(), m_pImpl->m_xContext );
 
                 // obtain the properties which our result set is set up for from the wrapped content
-                Sequence< OUString > aPropertyNames(1);
-                aPropertyNames[0] = "Title";
+                Sequence< OUString > aPropertyNames { "Title" };
 
                 const Reference< XResultSet > xFolderContent( aWrappedContent.createCursor( aPropertyNames ), UNO_SET_THROW );
                 const Reference< XRow > xContentRow( xFolderContent, UNO_QUERY_THROW );

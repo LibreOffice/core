@@ -294,8 +294,7 @@ namespace {
 
     Sequence< OUString > SAL_CALL Wizard::getSupportedServiceNames() throw(RuntimeException, std::exception)
     {
-        Sequence< OUString > aServices(1);
-        aServices[0] = "com.sun.star.ui.dialogs.Wizard";
+        Sequence< OUString > aServices { "com.sun.star.ui.dialogs.Wizard" };
         return aServices;
     }
 

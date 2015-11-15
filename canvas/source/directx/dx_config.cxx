@@ -43,8 +43,7 @@ namespace dxcanvas
     {
         try
         {
-            uno::Sequence< OUString > aName(1);
-            aName[0] = "DeviceBlacklist";
+            uno::Sequence< OUString > aName { "DeviceBlacklist" };
 
             uno::Sequence< uno::Any > aProps( GetProperties( aName ));
             uno::Sequence< sal_Int32 > aValues;
@@ -96,8 +95,7 @@ namespace dxcanvas
 
         try
         {
-            uno::Sequence< OUString > aName(1);
-            aName[0] = "DeviceBlacklist";
+            uno::Sequence< OUString > aName { "DeviceBlacklist" };
 
             uno::Sequence< sal_Int32 > aValues( sizeof(DeviceInfo)/sizeof(sal_Int32)*maValues.size() );
 

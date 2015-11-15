@@ -162,8 +162,7 @@ UpdateCheckJob::~UpdateCheckJob()
 uno::Sequence< OUString >
 UpdateCheckJob::getServiceNames()
 {
-    uno::Sequence< OUString > aServiceList(1);
-    aServiceList[0] = "com.sun.star.setup.UpdateCheck";
+    uno::Sequence< OUString > aServiceList { "com.sun.star.setup.UpdateCheck" };
     return aServiceList;
 };
 

@@ -73,8 +73,7 @@ sal_Bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString> SAL_CALL SfxMacroLoader::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > aSeq(1);
-    aSeq[0] = "com.sun.star.frame.ProtocolHandler";
+    css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.ProtocolHandler" };
     return aSeq;
 }
 

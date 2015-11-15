@@ -263,8 +263,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = "com.sun.star.frame.PopupMenuControllerFactory";
+        css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.PopupMenuControllerFactory" };
         return aSeq;
     }
 
@@ -315,8 +314,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = "com.sun.star.frame.ToolbarControllerFactory";
+        css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.ToolbarControllerFactory" };
         return aSeq;
     }
 
@@ -367,8 +365,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = "com.sun.star.frame.StatusbarControllerFactory";
+        css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.StatusbarControllerFactory" };
         return aSeq;
     }
 

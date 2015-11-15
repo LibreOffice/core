@@ -226,8 +226,7 @@ sal_Bool SAL_CALL CollatorImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 CollatorImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.i18n.Collator";
+    Sequence< OUString > aRet { "com.sun.star.i18n.Collator" };
     return aRet;
 }
 

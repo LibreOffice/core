@@ -113,8 +113,7 @@ OUString VCLXAccessibleScrollBar::getImplementationName() throw (RuntimeExceptio
 
 Sequence< OUString > VCLXAccessibleScrollBar::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.awt.AccessibleScrollBar";
+    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleScrollBar" };
     return aNames;
 }
 

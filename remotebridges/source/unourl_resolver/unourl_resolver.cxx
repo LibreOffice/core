@@ -49,8 +49,7 @@ namespace unourl_resolver
 
 Sequence< OUString > resolver_getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = "com.sun.star.bridge.UnoUrlResolver";
+    Sequence< OUString > seqNames { "com.sun.star.bridge.UnoUrlResolver" };
     return seqNames;
 }
 

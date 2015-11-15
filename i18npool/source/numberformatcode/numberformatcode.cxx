@@ -275,8 +275,7 @@ sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServi
 css::uno::Sequence< OUString > SAL_CALL
 NumberFormatCodeMapper::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.i18n.NumberFormatMapper";
+    css::uno::Sequence< OUString > aRet { "com.sun.star.i18n.NumberFormatMapper" };
     return aRet;
 }
 

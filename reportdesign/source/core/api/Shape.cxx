@@ -133,8 +133,7 @@ OUString SAL_CALL OShape::getImplementationName(  ) throw(uno::RuntimeException,
 
 uno::Sequence< OUString > OShape::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = SERVICE_SHAPE;
+    uno::Sequence< OUString > aServices { SERVICE_SHAPE };
 
     return aServices;
 }

@@ -258,8 +258,7 @@ namespace dxcanvas
 
     uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
-        uno::Sequence< OUString > aRet(1);
-        aRet[0] = "com.sun.star.rendering.TextLayout";
+        uno::Sequence< OUString > aRet { "com.sun.star.rendering.TextLayout" };
 
         return aRet;
     }

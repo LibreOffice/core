@@ -456,8 +456,7 @@ BreakIterator_Unicode::supportsService(const OUString& rServiceName) throw( uno:
 uno::Sequence< OUString > SAL_CALL
 BreakIterator_Unicode::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cBreakIterator);
+    uno::Sequence< OUString > aRet { OUString::createFromAscii(cBreakIterator) };
     return aRet;
 }
 

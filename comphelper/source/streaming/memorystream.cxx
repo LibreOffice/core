@@ -219,8 +219,7 @@ OUString SAL_CALL UNOMemoryStream::getImplementationName_static()
 
 Sequence< OUString > SAL_CALL UNOMemoryStream::getSupportedServiceNames_static()
 {
-    Sequence< OUString > aSeq(1);
-    aSeq[0] = getImplementationName_static();
+    Sequence< OUString > aSeq { getImplementationName_static() };
     return aSeq;
 }
 

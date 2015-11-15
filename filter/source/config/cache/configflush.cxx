@@ -117,8 +117,7 @@ OUString ConfigFlush::impl_getImplementationName()
 
 css::uno::Sequence< OUString > ConfigFlush::impl_getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lServiceNames(1);
-    lServiceNames[0] = "com.sun.star.document.FilterConfigRefresh";
+    css::uno::Sequence< OUString > lServiceNames { "com.sun.star.document.FilterConfigRefresh" };
     return lServiceNames;
 }
 

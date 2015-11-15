@@ -42,8 +42,7 @@ OEvoabCatalog::OEvoabCatalog(OEvoabConnection* _pCon) :
 void OEvoabCatalog::refreshTables()
 {
     TStringVector aVector;
-    Sequence< OUString > aTypes(1);
-    aTypes[0] = "TABLE";
+    Sequence< OUString > aTypes { "TABLE" };
     Reference< XResultSet > xResult = m_xMetaData->getTables(
         Any(), "%", "%", aTypes);
 

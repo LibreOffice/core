@@ -1574,8 +1574,7 @@ sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName) throw( Runt
 
 Sequence< OUString > SwXBookmarks::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.text.Bookmarks";
+    Sequence< OUString > aRet { "com.sun.star.text.Bookmarks" };
     return aRet;
 }
 

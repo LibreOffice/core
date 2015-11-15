@@ -321,8 +321,7 @@ sal_Bool Factory::supportsService(OUString const & serviceName)
 css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.uri.UriReferenceFactory";
+    css::uno::Sequence< OUString > s { "com.sun.star.uri.UriReferenceFactory" };
     return s;
 }
 

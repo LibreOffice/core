@@ -164,8 +164,7 @@ OUString SAL_CALL OPoolCollection::getImplementationName_Static(  ) throw(Runtim
 
 Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(1);
-    aSupported[0] = "com.sun.star.sdbc.ConnectionPool";
+    Sequence< OUString > aSupported { "com.sun.star.sdbc.ConnectionPool" };
     return aSupported;
 }
 

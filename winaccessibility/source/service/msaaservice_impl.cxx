@@ -47,8 +47,7 @@ namespace my_sc_impl
 
 static Sequence< OUString > getSupportedServiceNames_MSAAServiceImpl()
 {
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = "com.sun.star.accessibility.MSAAService";
+    Sequence< OUString > seqNames { "com.sun.star.accessibility.MSAAService" };
     return seqNames;
 }
 

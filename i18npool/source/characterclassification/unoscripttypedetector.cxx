@@ -77,8 +77,7 @@ UnoScriptTypeDetector::supportsService(const OUString& ServiceName) throw( css::
 css::uno::Sequence< OUString > SAL_CALL
 UnoScriptTypeDetector::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.i18n.ScriptTypeDetector";
+    css::uno::Sequence< OUString > aRet { "com.sun.star.i18n.ScriptTypeDetector" };
     return aRet;
 }
 

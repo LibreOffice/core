@@ -164,8 +164,7 @@ namespace
                 using namespace org::freedesktop::PackageKit;
                 using namespace svtools;
                 Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-                Sequence< OUString > vPackages(1);
-                vPackages[0] = "libreoffice-base";
+                Sequence< OUString > vPackages { "libreoffice-base" };
                 OUString sInteraction;
                 xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
                 // Ill be back (hopefully)!

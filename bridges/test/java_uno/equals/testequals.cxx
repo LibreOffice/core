@@ -120,8 +120,7 @@ Service::get(OUString const & rName) throw (css::uno::RuntimeException)
 
 css::uno::Sequence< OUString > Service::getSupportedServiceNames_static()
 {
-    css::uno::Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.test.bridges.testequals";
+    css::uno::Sequence< OUString > aNames { "com.sun.star.test.bridges.testequals" };
     return aNames;
 }
 

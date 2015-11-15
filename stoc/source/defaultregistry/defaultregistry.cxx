@@ -1196,8 +1196,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames(  )
     throw(RuntimeException, std::exception)
 {
-    Sequence< OUString > seqNames(1);
-    seqNames[0] = "com.sun.star.registry.NestedRegistry";
+    Sequence< OUString > seqNames { "com.sun.star.registry.NestedRegistry" };
     return seqNames;
 }
 

@@ -90,8 +90,7 @@ ChapterCollator::supportsService(const OUString& rServiceName) throw( RuntimeExc
 Sequence< OUString > SAL_CALL
 ChapterCollator::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cChapCollator);
+    Sequence< OUString > aRet { OUString::createFromAscii(cChapCollator) };
     return aRet;
 }
 

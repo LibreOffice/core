@@ -1383,8 +1383,7 @@ css::uno::Sequence< OUString > SAL_CALL
 SfxDocumentMetaData::getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.document.DocumentProperties";
+    css::uno::Sequence< OUString > s { "com.sun.star.document.DocumentProperties" };
     return s;
 }
 

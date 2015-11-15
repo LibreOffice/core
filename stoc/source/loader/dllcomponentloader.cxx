@@ -102,8 +102,7 @@ sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
     throw(css::uno::RuntimeException, std::exception)
 {
-    Sequence< OUString > seqNames(1);
-    seqNames[0] = "com.sun.star.loader.SharedLibrary";
+    Sequence< OUString > seqNames { "com.sun.star.loader.SharedLibrary" };
     return seqNames;
 }
 

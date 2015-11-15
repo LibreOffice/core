@@ -72,8 +72,7 @@ OUString SAL_CALL OFormatCondition::getImplementationName(  ) throw(uno::Runtime
 
 uno::Sequence< OUString > OFormatCondition::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = SERVICE_FORMATCONDITION;
+    uno::Sequence< OUString > aServices { SERVICE_FORMATCONDITION };
 
     return aServices;
 }

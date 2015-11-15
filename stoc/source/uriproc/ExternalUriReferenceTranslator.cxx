@@ -88,8 +88,7 @@ sal_Bool Translator::supportsService(OUString const & serviceName)
 css::uno::Sequence< OUString > Translator::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.uri.ExternalUriReferenceTranslator";
+    css::uno::Sequence< OUString > s { "com.sun.star.uri.ExternalUriReferenceTranslator" };
     return s;
 }
 

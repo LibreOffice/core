@@ -149,8 +149,7 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
 
 Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.datatransfer.clipboard.GenericClipboard";
+    Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.GenericClipboard" };
     return aRet;
 }
 

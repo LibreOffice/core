@@ -2440,8 +2440,7 @@ OUString SAL_CALL _getImplementationName() {
 
 uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 {
-    uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.rdf.Repository";
+    uno::Sequence< OUString > s { "com.sun.star.rdf.Repository" };
     return s;
 }
 

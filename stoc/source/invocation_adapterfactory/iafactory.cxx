@@ -61,8 +61,7 @@ namespace stoc_invadp
 
 static Sequence< OUString > invadp_getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = "com.sun.star.script.InvocationAdapterFactory";
+    Sequence< OUString > seqNames { "com.sun.star.script.InvocationAdapterFactory" };
     return seqNames;
 }
 

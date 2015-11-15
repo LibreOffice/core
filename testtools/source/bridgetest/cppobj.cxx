@@ -937,8 +937,7 @@ void Test_Impl::testConstructorsService(
     Sequence< float > arg22(1); arg22[0] = 0.123f;
     Sequence< double > arg23(1); arg23[0] = 0.456;
     Sequence< sal_Unicode > arg24(1); arg24[0] = 'X';
-    Sequence< OUString > arg25(1);
-    arg25[0] = "test";
+    Sequence< OUString > arg25 { "test" };
     Sequence< Type > arg26(1); arg26[0] = UnoType< Any >::get();
     Sequence< Any > arg27(1); arg27[0] <<= true;
     Sequence< Sequence< sal_Bool > > arg28(1);

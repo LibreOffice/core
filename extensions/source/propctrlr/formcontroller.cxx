@@ -137,8 +137,7 @@ namespace pcr
 
     Sequence< OUString > FormController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(1);
-        aSupported[0] = "com.sun.star.form.PropertyBrowserController";
+        Sequence< OUString > aSupported { "com.sun.star.form.PropertyBrowserController" };
         return aSupported;
     }
 
@@ -265,8 +264,7 @@ namespace pcr
 
     Sequence< OUString > DialogController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(1);
-        aSupported[0] = "com.sun.star.awt.PropertyBrowserController";
+        Sequence< OUString > aSupported { "com.sun.star.awt.PropertyBrowserController" };
         return aSupported;
     }
 

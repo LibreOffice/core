@@ -507,8 +507,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL FormGeometryHandler::getActuatingProperties( ) throw (RuntimeException, std::exception)
     {
-        Sequence< OUString > aInterestedIn(1);
-        aInterestedIn[0] = PROPERTY_TEXT_ANCHOR_TYPE;
+        Sequence< OUString > aInterestedIn { PROPERTY_TEXT_ANCHOR_TYPE };
         return aInterestedIn;
     }
 

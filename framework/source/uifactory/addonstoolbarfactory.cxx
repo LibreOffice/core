@@ -72,8 +72,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = "com.sun.star.ui.ToolBarFactory";
+        css::uno::Sequence< OUString > aSeq { "com.sun.star.ui.ToolBarFactory" };
         return aSeq;
     }
 

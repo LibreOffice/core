@@ -294,8 +294,7 @@ sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceNa
 
 css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.util.JobManager";
+    css::uno::Sequence< OUString > s { "com.sun.star.util.JobManager" };
     return s;
 }
 

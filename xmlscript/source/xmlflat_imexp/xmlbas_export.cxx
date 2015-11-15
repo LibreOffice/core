@@ -48,8 +48,7 @@ namespace xmlscript
 
     Sequence< OUString > getSupportedServiceNames_XMLBasicExporter()
     {
-        Sequence< OUString > aNames(1);
-        aNames.getArray()[0] = "com.sun.star.document.XMLBasicExporter";
+        Sequence< OUString > aNames { "com.sun.star.document.XMLBasicExporter" };
         return aNames;
     }
 
@@ -60,8 +59,7 @@ namespace xmlscript
 
     Sequence< OUString > getSupportedServiceNames_XMLOasisBasicExporter()
     {
-        Sequence< OUString > aNames(1);
-        aNames.getArray()[0] = "com.sun.star.document.XMLOasisBasicExporter";
+        Sequence< OUString > aNames { "com.sun.star.document.XMLOasisBasicExporter" };
         return aNames;
     }
 

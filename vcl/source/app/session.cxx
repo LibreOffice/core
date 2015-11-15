@@ -336,8 +336,7 @@ OUString SAL_CALL vcl_session_getImplementationName()
 
 Sequence< OUString > SAL_CALL vcl_session_getSupportedServiceNames()
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.frame.SessionManagerClient";
+    Sequence< OUString > aRet { "com.sun.star.frame.SessionManagerClient" };
     return aRet;
 }
 

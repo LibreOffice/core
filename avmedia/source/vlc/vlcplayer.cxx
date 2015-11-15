@@ -266,8 +266,7 @@ sal_Bool SAL_CALL VLCPlayer::supportsService( const ::rtl::OUString& serviceName
 ::uno::Sequence< ::rtl::OUString > SAL_CALL VLCPlayer::getSupportedServiceNames()
      throw ( css::uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    aRet[0] = AVMEDIA_VLC_PLAYER_SERVICENAME;
+    uno::Sequence< OUString > aRet { AVMEDIA_VLC_PLAYER_SERVICENAME };
     return aRet;
 }
 

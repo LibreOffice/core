@@ -672,8 +672,7 @@ namespace comphelper
 
     Sequence< OUString > SAL_CALL EnumerableMap::getSupportedServiceNames_static(  )
     {
-        Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = "com.sun.star.container.EnumerableMap";
+        Sequence< OUString > aServiceNames { "com.sun.star.container.EnumerableMap" };
         return aServiceNames;
     }
 

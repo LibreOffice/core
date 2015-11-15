@@ -284,8 +284,7 @@ namespace dbaui
                     Reference<XModifiable> xModi(getDataSourceOrModel(xProp),UNO_QUERY);
                     bool bModified = ( xModi.is() && xModi->isModified() );
 
-                    Sequence< OUString > aNewTableFilter(1);
-                    aNewTableFilter[0] = "%";
+                    Sequence< OUString > aNewTableFilter { "%" };
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aNewTableFilter));
 
                     xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< OUString >() ) );

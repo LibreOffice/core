@@ -886,8 +886,7 @@ private:
 
     Sequence< OUString > SAL_CALL SortableGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = "com.sun.star.awt.grid.SortableGridDataModel";
+        Sequence< OUString > aServiceNames { "com.sun.star.awt.grid.SortableGridDataModel" };
         return aServiceNames;
     }
 

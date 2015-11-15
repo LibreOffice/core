@@ -173,8 +173,7 @@ Sequence< OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames() throw(
 /* Helper for XServiceInfo */
 Sequence< OUString > SvtFolderPicker::impl_getStaticSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames(1);
-    seqServiceNames[0] = "com.sun.star.ui.dialogs.OfficeFolderPicker";
+    Sequence< OUString > seqServiceNames { "com.sun.star.ui.dialogs.OfficeFolderPicker" };
     return seqServiceNames ;
 }
 

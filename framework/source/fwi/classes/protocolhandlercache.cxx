@@ -182,8 +182,7 @@ HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
     : ConfigItem(sPackage)
     , m_pCache(nullptr)
 {
-    css::uno::Sequence< OUString > lListenPaths(1);
-    lListenPaths[0] = SETNAME_HANDLER;
+    css::uno::Sequence< OUString > lListenPaths { SETNAME_HANDLER };
     EnableNotification(lListenPaths);
 }
 

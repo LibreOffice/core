@@ -446,8 +446,7 @@ OUString SAL_CALL getImplementationName() {
 }
 
 css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "test.testtools.bridgetest.Constructors";
+    css::uno::Sequence< OUString > s { "test.testtools.bridgetest.Constructors" };
     return s;
 }
 
@@ -464,8 +463,7 @@ OUString SAL_CALL getImplementationName2() {
 }
 
 css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames2() {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "test.testtools.bridgetest.Constructors2";
+    css::uno::Sequence< OUString > s { "test.testtools.bridgetest.Constructors2" };
     return s;
 }
 
