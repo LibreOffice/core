@@ -30,7 +30,6 @@
 #include "internal/iso8601_converter.hxx"
 
 const bool READONLY  = false;
-const bool WRITEABLE = true;
 
 document_statistic_reader_ptr create_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor)
 {
