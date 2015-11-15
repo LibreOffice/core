@@ -61,9 +61,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        uno::Sequence< OUString > aRet(1);
-        OUString* pArray = aRet.getArray();
-        pArray[0] = "com.sun.star.graphic.GraphicObject";
+        uno::Sequence<OUString> aRet { "com.sun.star.graphic.GraphicObject" };
         return aRet;
     }
 };

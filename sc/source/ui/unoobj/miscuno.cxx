@@ -233,9 +233,7 @@ css::uno::Sequence< OUString >
     SAL_CALL ScIndexEnumeration::getSupportedServiceNames()
     throw(css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = sServiceName;
+    css::uno::Sequence<OUString> aRet { sServiceName };
     return aRet;
 }
 

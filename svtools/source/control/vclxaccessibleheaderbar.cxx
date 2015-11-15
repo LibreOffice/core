@@ -91,8 +91,7 @@ void VCLXAccessibleHeaderBar::FillAccessibleStateSet( utl::AccessibleStateSetHel
 
 Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = "com.sun.star.awt.AccessibleHeaderBar";
+    Sequence<OUString> aNames { "com.sun.star.awt.AccessibleHeaderBar" };
     return aNames;
 }
 

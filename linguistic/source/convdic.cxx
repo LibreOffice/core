@@ -672,8 +672,7 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getSupportedServiceNames(  )
 uno::Sequence< OUString > ConvDic::getSupportedServiceNames_Static()
     throw()
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = SN_CONV_DICTIONARY ;
+    uno::Sequence<OUString> aSNS { SN_CONV_DICTIONARY };
     return aSNS;
 }
 

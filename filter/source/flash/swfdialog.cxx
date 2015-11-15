@@ -55,9 +55,7 @@ OUString SWFDialog_getImplementationName ()
 Sequence< OUString > SAL_CALL SWFDialog_getSupportedServiceNames()
     throw (RuntimeException)
 {
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SERVICE_NAME;
+    Sequence<OUString> aRet { SERVICE_NAME };
     return aRet;
 }
 

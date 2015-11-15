@@ -82,8 +82,7 @@ css::uno::Sequence< OUString > SAL_CALL CreationWizardUnoDlg::getSupportedServic
 
 uno::Sequence< OUString > CreationWizardUnoDlg::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART_WIZARD_DIALOG_SERVICE_NAME;
+    uno::Sequence<OUString> aSNS { CHART_WIZARD_DIALOG_SERVICE_NAME };
     return aSNS;
 }
 

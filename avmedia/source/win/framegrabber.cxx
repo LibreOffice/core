@@ -213,8 +213,7 @@ sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aRet(1);
-    aRet[0] = AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME ;
+    uno::Sequence<OUString> aRet { AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME };
 
     return aRet;
 }

@@ -151,9 +151,7 @@ OUString PlaceWareExportFilter_getImplementationName ()
 Sequence< OUString > SAL_CALL PlaceWareExportFilter_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] =  "com.sun.star.document.ExportFilter";
+    Sequence<OUString> aRet { "com.sun.star.document.ExportFilter" };
     return aRet;
 }
 

@@ -162,9 +162,7 @@ OUString PPPOptimizerDialog_getImplementationName()
 
 Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()
 {
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SERVICE_NAME;
+    Sequence<OUString> aRet { SERVICE_NAME };
     return aRet;
 }
 

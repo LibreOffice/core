@@ -102,8 +102,7 @@ Sequence< OUString > SAL_CALL XMLEncryptionTemplateImpl::getSupportedServiceName
 //Helper for XServiceInfo
 Sequence< OUString > XMLEncryptionTemplateImpl::impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-    Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames[0] = "com.sun.star.xml.crypto.XMLEncryptionTemplate";
+    Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.XMLEncryptionTemplate" };
     return seqServiceNames;
 }
 

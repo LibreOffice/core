@@ -90,9 +90,7 @@ sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) 
 
 css::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.awt.RoadmapItem";
+    css::uno::Sequence<OUString> aRet { "com.sun.star.awt.RoadmapItem" };
     return aRet;
 }
 

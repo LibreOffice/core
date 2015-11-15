@@ -201,8 +201,7 @@ css::uno::Sequence< OUString > SAL_CALL FTPContent::getSupportedServiceNames()
 
 css::uno::Sequence< OUString > FTPContent::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = "com.sun.star.ucb.FTPContent";
+    css::uno::Sequence<OUString> aSNS { "com.sun.star.ucb.FTPContent" };
     return aSNS;
 }
 

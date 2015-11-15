@@ -228,8 +228,7 @@ void FilterDetectDocHandler::parseContentTypesOverride( const AttributeList& rAt
 /* Helper for XServiceInfo */
 Sequence< OUString > FilterDetect_getSupportedServiceNames()
 {
-    Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = "com.sun.star.frame.ExtendedTypeDetection";
+    Sequence<OUString> aServiceNames { "com.sun.star.frame.ExtendedTypeDetection" };
     return aServiceNames;
 }
 

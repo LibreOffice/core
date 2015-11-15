@@ -58,8 +58,7 @@ css::uno::Sequence<OUString> SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames(
 
 uno::Sequence< OUString > ChartTypeUnoDlg::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART_TYPE_DIALOG_SERVICE_NAME;
+    uno::Sequence<OUString> aSNS { CHART_TYPE_DIALOG_SERVICE_NAME };
     return aSNS;
 }
 uno::Sequence< sal_Int8 > SAL_CALL ChartTypeUnoDlg::getImplementationId() throw( uno::RuntimeException, std::exception )

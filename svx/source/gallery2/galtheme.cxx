@@ -1141,8 +1141,7 @@ bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_u
 
         if( bFolder )
         {
-            uno::Sequence< OUString > aProps( 1 );
-            aProps[ 0 ] = "Url";
+            uno::Sequence<OUString> aProps { "Url" };
             uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
             if( xContentAccess.is() )

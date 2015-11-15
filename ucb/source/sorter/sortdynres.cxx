@@ -123,8 +123,7 @@ css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSet::getSupportedServ
 
 css::uno::Sequence< OUString > SortedDynamicResultSet::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = DYNAMIC_RESULTSET_SERVICE_NAME;
+    css::uno::Sequence<OUString> aSNS { DYNAMIC_RESULTSET_SERVICE_NAME };
     return aSNS;
 }
 
@@ -501,8 +500,7 @@ SortedDynamicResultSetFactory_CreateInstance( const css::uno::Reference<
 
 css::uno::Sequence< OUString > SortedDynamicResultSetFactory::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = DYNAMIC_RESULTSET_FACTORY_NAME;
+    css::uno::Sequence<OUString> aSNS { DYNAMIC_RESULTSET_FACTORY_NAME };
     return aSNS;
 }
 

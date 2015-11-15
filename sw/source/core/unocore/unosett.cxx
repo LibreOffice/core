@@ -269,9 +269,7 @@ sal_Bool SwXFootnoteProperties::supportsService(const OUString& rServiceName) th
 
 Sequence< OUString > SwXFootnoteProperties::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.FootnoteSettings";
+    Sequence<OUString> aRet { "com.sun.star.text.FootnoteSettings" };
     return aRet;
 }
 
@@ -573,9 +571,7 @@ sal_Bool SwXEndnoteProperties::supportsService(const OUString& rServiceName) thr
 
 Sequence< OUString > SwXEndnoteProperties::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.FootnoteSettings";
+    Sequence<OUString> aRet { "com.sun.star.text.FootnoteSettings" };
     return aRet;
 }
 
@@ -799,9 +795,7 @@ sal_Bool SwXLineNumberingProperties::supportsService(const OUString& rServiceNam
 
 Sequence< OUString > SwXLineNumberingProperties::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.LineNumberingProperties";
+    Sequence<OUString> aRet { "com.sun.star.text.LineNumberingProperties" };
     return aRet;
 }
 
@@ -1095,9 +1089,7 @@ sal_Bool SwXNumberingRules::supportsService(const OUString& rServiceName) throw(
 
 Sequence< OUString > SwXNumberingRules::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.NumberingRules";
+    Sequence<OUString> aRet { "com.sun.star.text.NumberingRules" };
     return aRet;
 }
 
@@ -2309,9 +2301,7 @@ sal_Bool SwXTextColumns::supportsService(const OUString& rServiceName) throw( Ru
 
 Sequence< OUString > SwXTextColumns::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextColumns";
+    Sequence<OUString> aRet { "com.sun.star.text.TextColumns" };
     return aRet;
 }
 

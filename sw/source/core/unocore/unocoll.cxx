@@ -1306,9 +1306,7 @@ sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName) throw( Run
 
 Sequence< OUString > SwXTextFrames::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextFrames";
+    Sequence<OUString> aRet { "com.sun.star.text.TextFrames" };
     return aRet;
 }
 
@@ -1333,9 +1331,7 @@ sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName) th
 
 Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextGraphicObjects";
+    Sequence<OUString> aRet { "com.sun.star.text.TextGraphicObjects" };
     return aRet;
 }
 
@@ -1360,9 +1356,7 @@ sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) t
 
 Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextEmbeddedObjects";
+    Sequence<OUString> aRet { "com.sun.star.text.TextEmbeddedObjects" };
     return aRet;
 }
 
@@ -1387,9 +1381,7 @@ sal_Bool SwXTextSections::supportsService(const OUString& rServiceName) throw( R
 
 Sequence< OUString > SwXTextSections::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextSections";
+    Sequence<OUString> aRet { "com.sun.star.text.TextSections" };
     return aRet;
 }
 
@@ -1782,9 +1774,7 @@ sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName) throw( Runt
 
 Sequence< OUString > SwXFootnotes::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.Footnotes";
+    Sequence<OUString> aRet { "com.sun.star.text.Footnotes" };
     return aRet;
 }
 
@@ -1882,9 +1872,7 @@ sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName) throw(
 
 Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.ReferenceMarks";
+    Sequence<OUString> aRet { "com.sun.star.text.ReferenceMarks" };
     return aRet;
 }
 

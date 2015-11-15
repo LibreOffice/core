@@ -509,8 +509,7 @@ bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequ
 
 uno::Sequence< OUString > VBAMacroResolver_getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = "com.sun.star.script.vba.VBAMacroResolver";
+    uno::Sequence<OUString> aServiceNames { "com.sun.star.script.vba.VBAMacroResolver" };
     return aServiceNames;
 }
 

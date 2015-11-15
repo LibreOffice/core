@@ -669,8 +669,7 @@ Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames() throw( R
 {
     // service names which are supported only, but cannot be used to created an
     // instance at a service factory
-    Sequence< OUString > aNonCreatableServiceNames( 1 );
-    aNonCreatableServiceNames[ 0 ] = "com.sun.star.form.FormControllerDispatcher";
+    Sequence<OUString> aNonCreatableServiceNames { "com.sun.star.form.FormControllerDispatcher" };
 
     // services which can be used to created an instance at a service factory
     Sequence< OUString > aCreatableServiceNames( getSupportedServiceNames_Static() );

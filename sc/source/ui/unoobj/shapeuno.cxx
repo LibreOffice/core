@@ -1444,8 +1444,7 @@ public:
 
     virtual uno::Sequence< OUString > SAL_CALL getElementNames() throw(uno::RuntimeException, std::exception) override
     {
-        uno::Sequence< OUString > aSeq( 1 );
-        aSeq[ 0 ] = SC_EVENTACC_ONCLICK;
+        uno::Sequence<OUString> aSeq { SC_EVENTACC_ONCLICK };
         return aSeq;
     }
 

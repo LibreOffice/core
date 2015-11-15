@@ -51,8 +51,7 @@ OUString SAL_CALL DocumentPropertiesImport_getImplementationName()
 
 Sequence< OUString > SAL_CALL DocumentPropertiesImport_getSupportedServiceNames()
 {
-    Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = "com.sun.star.document.OOXMLDocumentPropertiesImporter";
+    Sequence<OUString> aServices { "com.sun.star.document.OOXMLDocumentPropertiesImporter" };
     return aServices;
 }
 

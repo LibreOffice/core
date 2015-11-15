@@ -80,9 +80,7 @@ OUString XMLElementWrapper_XmlSecImpl_getImplementationName ()
 cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.xml.wrapper.XMLElementWrapper";
+    cssu::Sequence<OUString> aRet { "com.sun.star.xml.wrapper.XMLElementWrapper" };
     return aRet;
 }
 

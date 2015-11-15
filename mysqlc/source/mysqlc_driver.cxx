@@ -85,8 +85,7 @@ Sequence< rtl::OUString > MysqlCDriver::getSupportedServiceNames_Static()
     OSL_TRACE("MysqlCDriver::getSupportedServiceNames_Static");
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
-    Sequence< rtl::OUString > aSNS(1);
-    aSNS[0] = "com.sun.star.sdbc.Driver";
+    Sequence<OUString> aSNS { "com.sun.star.sdbc.Driver" };
     return aSNS;
 }
 

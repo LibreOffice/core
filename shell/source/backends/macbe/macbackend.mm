@@ -451,8 +451,7 @@ rtl::OUString SAL_CALL MacOSXBackend::getImplementationName(void)
 
 uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getBackendServiceNames(void)
 {
-    uno::Sequence<rtl::OUString> aServiceNameList(1);
-    aServiceNameList[0] = "com.sun.star.configuration.backend.MacOSXBackend";
+    uno::Sequence<OUString> aServiceNameList { "com.sun.star.configuration.backend.MacOSXBackend" };
 
     return aServiceNameList;
 }

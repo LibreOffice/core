@@ -158,9 +158,7 @@ sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rS
 Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceNames()
     throw ( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.drawing.CustomShapeEngine";
+    Sequence<OUString> aRet { "com.sun.star.drawing.CustomShapeEngine" };
     return aRet;
 }
 

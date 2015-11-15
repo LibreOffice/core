@@ -39,8 +39,7 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
 {
     static css::uno::Sequence< OUString > getTitleSequence()
     {
-        css::uno::Sequence< OUString > aSeq( 1 );
-        aSeq[ 0 ] = "Title";
+        css::uno::Sequence<OUString> aSeq { "Title" };
         return aSeq;
     }
     static OUString getTitle( ::ucbhelper::Content &rContent )

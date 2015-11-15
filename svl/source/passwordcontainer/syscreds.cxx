@@ -30,8 +30,7 @@ SysCredentialsConfigItem::SysCredentialsConfigItem(
   m_bInited( false ),
   m_pOwner( pOwner )
 {
-    uno::Sequence< OUString > aNode( 1 );
-    aNode[ 0 ] = "Office.Common/Passwords/AuthenticateUsingSystemCredentials";
+    uno::Sequence<OUString> aNode { "Office.Common/Passwords/AuthenticateUsingSystemCredentials" };
     EnableNotification( aNode );
 }
 
@@ -60,8 +59,7 @@ SysCredentialsConfigItem::getSystemCredentialsURLs()
     if ( !m_bInited )
     {
         // read config item
-        uno::Sequence< OUString > aPropNames( 1 );
-        aPropNames[ 0 ] = "AuthenticateUsingSystemCredentials";
+        uno::Sequence<OUString> aPropNames { "AuthenticateUsingSystemCredentials" };
         uno::Sequence< uno::Any > aAnyValues(
             utl::ConfigItem::GetProperties( aPropNames ) );
 

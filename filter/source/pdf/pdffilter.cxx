@@ -199,9 +199,7 @@ OUString PDFFilter_getImplementationName ()
 
 Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.PDFFilter";
+    Sequence<OUString> aRet { "com.sun.star.document.PDFFilter" };
     return aRet;
 }
 

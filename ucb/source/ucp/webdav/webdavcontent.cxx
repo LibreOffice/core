@@ -450,8 +450,7 @@ OUString SAL_CALL Content::getImplementationName()
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = WEBDAV_CONTENT_SERVICE_NAME;
+    uno::Sequence<OUString> aSNS { WEBDAV_CONTENT_SERVICE_NAME };
     return aSNS;
 }
 
@@ -2409,8 +2408,7 @@ void Content::insert(
     {
         SAL_WARN( "ucb.ucp.webdav", "Content::insert - Title missing!" );
 
-        uno::Sequence< OUString > aProps( 1 );
-        aProps[ 0 ] = "Title";
+        uno::Sequence<OUString> aProps { "Title" };
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::MissingPropertiesException(
                                 OUString(),

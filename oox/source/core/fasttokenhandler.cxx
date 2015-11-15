@@ -38,8 +38,7 @@ OUString SAL_CALL FastTokenHandler_getImplementationName()
 
 Sequence< OUString > SAL_CALL FastTokenHandler_getSupportedServiceNames()
 {
-    Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = "com.sun.star.xml.sax.FastTokenHandler";
+    Sequence<OUString> aServiceNames { "com.sun.star.xml.sax.FastTokenHandler" };
     return aServiceNames;
 }
 

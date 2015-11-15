@@ -1398,8 +1398,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     // Check, if all required properties were set.
     if ( m_aProps.getTitle().isEmpty() )
     {
-        uno::Sequence< OUString > aProps( 1 );
-        aProps[ 0 ] = "Title";
+        uno::Sequence<OUString> aProps { "Title" };
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::MissingPropertiesException(
                                 OUString(),

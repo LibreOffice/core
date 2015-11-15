@@ -2680,9 +2680,7 @@ sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName) thro
 
 uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextFieldMasters";
+    uno::Sequence<OUString> aRet { "com.sun.star.text.TextFieldMasters" };
     return aRet;
 }
 
@@ -2891,9 +2889,7 @@ sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName) throw(
 
 uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextFields";
+    uno::Sequence<OUString> aRet { "com.sun.star.text.TextFields" };
     return aRet;
 }
 
@@ -3004,9 +3000,7 @@ throw (uno::RuntimeException, std::exception)
 uno::Sequence< OUString > SAL_CALL
 SwXFieldEnumeration::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.FieldEnumeration";
+    uno::Sequence<OUString> aRet { "com.sun.star.text.FieldEnumeration" };
     return aRet;
 }
 

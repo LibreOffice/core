@@ -371,8 +371,7 @@ MasterScriptProvider::providerCache()
         if ( !m_pPCache )
         {
             OUString serviceName1 = "com.sun.star.script.provider.ScriptProviderForBasic";
-            Sequence< OUString > blacklist(1);
-            blacklist[ 0 ] = serviceName1;
+            Sequence<OUString> blacklist { serviceName1 };
 
             if ( !m_bIsPkgMSP )
             {

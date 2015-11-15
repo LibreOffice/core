@@ -158,9 +158,7 @@ sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( 
 
 uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.style.StyleFamilies";
+    uno::Sequence<OUString> aRet { "com.sun.star.style.StyleFamilies" };
     return aRet;
 }
 
@@ -391,9 +389,7 @@ sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( un
 
 uno::Sequence< OUString > SwXStyleFamily::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.style.StyleFamily";
+    uno::Sequence<OUString> aRet { "com.sun.star.style.StyleFamily" };
     return aRet;
 }
 

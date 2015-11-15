@@ -192,8 +192,7 @@ css::uno::Sequence< OUString > SAL_CALL SortedResultSet::getSupportedServiceName
 
 css::uno::Sequence< OUString >SortedResultSet::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = RESULTSET_SERVICE_NAME;
+    css::uno::Sequence<OUString> aSNS { RESULTSET_SERVICE_NAME };
     return aSNS;
 }
 

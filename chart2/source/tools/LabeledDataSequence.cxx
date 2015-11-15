@@ -152,8 +152,7 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
 
 Sequence< OUString > LabeledDataSequence::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServices( 1 );
-    aServices[ 0 ] = "com.sun.star.chart2.data.LabeledDataSequence";
+    Sequence<OUString> aServices { "com.sun.star.chart2.data.LabeledDataSequence" };
     return aServices;
 }
 

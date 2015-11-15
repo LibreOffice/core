@@ -195,9 +195,7 @@ OUString ScSpreadsheetSettings::getImplementationName_Static()
 
 uno::Sequence<OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
 {
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCSPREADSHEETSETTINGS_SERVICE;
+    uno::Sequence<OUString> aRet { SCSPREADSHEETSETTINGS_SERVICE };
     return aRet;
 }
 

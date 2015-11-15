@@ -2992,9 +2992,7 @@ sal_Bool SAL_CALL SwXTextCursor::hasElements() throw (uno::RuntimeException, std
 uno::Sequence< OUString > SAL_CALL
 SwXTextCursor::getAvailableServiceNames() throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextContent";
+    uno::Sequence<OUString> aRet { "com.sun.star.text.TextContent" };
     return aRet;
 }
 

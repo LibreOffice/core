@@ -76,8 +76,7 @@ sal_Bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName 
 uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq.getArray()[ 0 ] = "com.sun.star.graphic.GraphicProvider";
+    uno::Sequence<OUString> aSeq { "com.sun.star.graphic.GraphicProvider" };
     return aSeq;
 }
 
