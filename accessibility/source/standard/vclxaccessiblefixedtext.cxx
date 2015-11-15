@@ -76,8 +76,7 @@ OUString VCLXAccessibleFixedText::getImplementationName() throw (RuntimeExceptio
 
 Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.awt.AccessibleFixedText";
+    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleFixedText" };
     return aNames;
 }
 

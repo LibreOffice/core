@@ -85,8 +85,7 @@ TextConversionService::supportsService(const OUString& rServiceName) throw( Runt
 Sequence< OUString > SAL_CALL
 TextConversionService::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(implementationName);
+    Sequence< OUString > aRet { OUString::createFromAscii(implementationName) };
     return aRet;
 }
 

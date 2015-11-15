@@ -428,8 +428,7 @@ uno::Any SwXTextPortion::getPropertyValue(
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aPropertyNames(1);
-    aPropertyNames.getArray()[0] = rPropertyName;
+    uno::Sequence< OUString > aPropertyNames { rPropertyName };
     return GetPropertyValues_Impl(aPropertyNames).getConstArray()[0];
 }
 

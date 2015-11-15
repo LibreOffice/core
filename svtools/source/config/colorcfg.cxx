@@ -332,8 +332,7 @@ bool ColorConfig_Impl::AddScheme(const OUString& rScheme)
 
 bool ColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
-    uno::Sequence< OUString > aElements(1);
-    aElements.getArray()[0] = rScheme;
+    uno::Sequence< OUString > aElements { rScheme };
     return ClearNodeElements("ColorSchemes", aElements);
 }
 

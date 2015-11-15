@@ -66,8 +66,7 @@ namespace migration
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< OUString > aNames(1);
-                aNames.getArray()[0] = "com.sun.star.migration.Wordbooks";
+                static Sequence< OUString > aNames { "com.sun.star.migration.Wordbooks" };
                 pNames = &aNames;
             }
         }

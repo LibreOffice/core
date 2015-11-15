@@ -245,8 +245,7 @@ sal_Bool VCLXAccessibleStatusBarItem::supportsService( const OUString& rServiceN
 
 Sequence< OUString > VCLXAccessibleStatusBarItem::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.awt.AccessibleStatusBarItem";
+    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleStatusBarItem" };
     return aNames;
 }
 

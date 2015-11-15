@@ -50,8 +50,7 @@ OCatalog::OCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
 void OCatalog::refreshTables()
 {
     TStringVector aVector;
-    Sequence< OUString > aTypes(1);
-    aTypes[0] = "%";
+    Sequence< OUString > aTypes { "%" };
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
         "%", "%", aTypes);
 

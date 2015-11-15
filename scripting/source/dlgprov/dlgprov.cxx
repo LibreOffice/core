@@ -73,8 +73,7 @@ namespace comp_DialogModelProvider
 
     uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
     {
-        uno::Sequence< OUString > s(1);
-        s[0] = "com.sun.star.awt.UnoControlDialogModelProvider";
+        uno::Sequence< OUString > s { "com.sun.star.awt.UnoControlDialogModelProvider" };
         return s;
     }
 

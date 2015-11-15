@@ -195,8 +195,7 @@ sal_Bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceNam
 css::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > aSeq(1);
-    aSeq[0] = "com.sun.star.awt.tab.UnoControlTabPage";
+    css::uno::Sequence< OUString > aSeq { "com.sun.star.awt.tab.UnoControlTabPage" };
     return aSeq;
 }
 

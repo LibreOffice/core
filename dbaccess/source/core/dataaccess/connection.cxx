@@ -667,8 +667,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstanceWithArguments( const
 
 Sequence< OUString > SAL_CALL OConnection::getAvailableServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = SERVICE_NAME_SINGLESELECTQUERYCOMPOSER;
+    Sequence< OUString > aRet { SERVICE_NAME_SINGLESELECTQUERYCOMPOSER };
     return aRet;
 }
 

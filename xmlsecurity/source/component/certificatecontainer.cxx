@@ -111,8 +111,7 @@ Sequence< OUString > SAL_CALL
 CertificateContainer::impl_getStaticSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.security.CertificateContainer";
+    Sequence< OUString > aRet { "com.sun.star.security.CertificateContainer" };
     return aRet;
 }
 

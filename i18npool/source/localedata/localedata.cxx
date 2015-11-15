@@ -1609,8 +1609,7 @@ sal_Bool SAL_CALL LocaleDataImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.i18n.LocaleData";
+    Sequence< OUString > aRet { "com.sun.star.i18n.LocaleData" };
     return aRet;
 }
 

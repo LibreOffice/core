@@ -209,8 +209,7 @@ Sequence< OUString > getSupportedServiceNames()
         MutexGuard guard( Mutex::getGlobalMutex() );
         if( !pNames )
         {
-            static Sequence< OUString > seqNames(1);
-            seqNames[0] = "com.sun.star.bridge.example.RemoteClientSample";
+            static Sequence< OUString > seqNames { "com.sun.star.bridge.example.RemoteClientSample" };
             pNames = &seqNames;
         }
     }

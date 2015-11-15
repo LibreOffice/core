@@ -192,8 +192,7 @@ Reference< XInterface > HwpImportFilter_CreateInstance(
 
 Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static() throw ()
 {
-    Sequence< OUString > aRet(1);
-    aRet.getArray()[0] = HwpImportFilter::getImplementationName_Static();
+    Sequence< OUString > aRet { HwpImportFilter::getImplementationName_Static() };
     return aRet;
 }
 

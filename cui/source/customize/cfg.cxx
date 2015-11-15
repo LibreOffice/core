@@ -5255,8 +5255,7 @@ IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, DeleteHdl, Button *, void )
             if ( pTbSymbol->IsItemChecked( nId ) )
             {
                 OUString aSelImageText = pTbSymbol->GetItemText( nId );
-                uno::Sequence< OUString > URLs(1);
-                URLs[0] = aSelImageText;
+                uno::Sequence< OUString > URLs { aSelImageText };
                 pTbSymbol->RemoveItem( pTbSymbol->GetItemPos( nId ) );
                 m_xImportedImageManager->removeImages( GetImageType(), URLs );
                 uno::Reference< css::ui::XUIConfigurationPersistence >

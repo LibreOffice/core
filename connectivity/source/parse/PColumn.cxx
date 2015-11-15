@@ -263,8 +263,7 @@ void OOrderColumn::construct()
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Sequence< OUString > aSupported(1);
-    aSupported[0] = "com.sun.star.sdb.OrderColumn";
+    ::com::sun::star::uno::Sequence< OUString > aSupported { "com.sun.star.sdb.OrderColumn" };
 
     return aSupported;
 }

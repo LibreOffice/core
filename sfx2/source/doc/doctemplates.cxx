@@ -2228,8 +2228,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = "com.sun.star.frame.DocumentTemplates";
+        css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.DocumentTemplates" };
         return aSeq;
     }
 
@@ -2641,8 +2640,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
         aUINames = ReadUINamesForTemplateDir_Impl( aLayerObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
     uno::Reference< XResultSet > xResultSet;
-    Sequence< OUString > aProps(1);
-    aProps[0] = TITLE;
+    Sequence< OUString > aProps { TITLE };
 
     try
     {

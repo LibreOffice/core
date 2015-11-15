@@ -1092,8 +1092,7 @@ sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 TextSearch::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = getServiceName_Static();
+    Sequence< OUString > aRet { getServiceName_Static() };
     return aRet;
 }
 
@@ -1125,8 +1124,7 @@ i18nsearch_component_getFactory( const sal_Char* sImplementationName,
 
     if ( 0 == rtl_str_compare( sImplementationName, cSearchImpl) )
     {
-        css::uno::Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = getServiceName_Static();
+        css::uno::Sequence< OUString > aServiceNames { getServiceName_Static() };
         xFactory = ::cppu::createSingleFactory(
                 pServiceManager, getImplementationName_Static(),
                 &TextSearch_CreateInstance, aServiceNames );

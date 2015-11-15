@@ -209,8 +209,7 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
             throw (css::uno::RuntimeException, std::exception) override
         {
-            css::uno::Sequence< OUString > aSeq(1);
-            aSeq[0] = "com.sun.star.task.StatusIndicatorFactory";
+            css::uno::Sequence< OUString > aSeq { "com.sun.star.task.StatusIndicatorFactory" };
             return aSeq;
         }
 

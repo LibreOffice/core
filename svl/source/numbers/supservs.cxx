@@ -121,8 +121,7 @@ sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const O
 
 Sequence< OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
-    Sequence< OUString > aSupported(1);
-    aSupported.getArray()[0] = "com.sun.star.util.NumberFormatsSupplier";
+    Sequence< OUString > aSupported { "com.sun.star.util.NumberFormatsSupplier" };
     return aSupported;
 }
 

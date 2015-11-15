@@ -139,8 +139,7 @@ namespace frm
 
     Sequence< OUString > FormOperations::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aNames(1);
-        aNames[0] = "com.sun.star.form.runtime.FormOperations";
+        Sequence< OUString > aNames { "com.sun.star.form.runtime.FormOperations" };
         return aNames;
     }
 

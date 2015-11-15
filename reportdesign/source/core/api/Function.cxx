@@ -72,8 +72,7 @@ OUString SAL_CALL OFunction::getImplementationName(  ) throw(uno::RuntimeExcepti
 
 uno::Sequence< OUString > OFunction::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = SERVICE_FUNCTION;
+    uno::Sequence< OUString > aServices { SERVICE_FUNCTION };
 
     return aServices;
 }

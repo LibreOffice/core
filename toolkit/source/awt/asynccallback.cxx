@@ -79,8 +79,7 @@ sal_Bool SAL_CALL AsyncCallback::supportsService(OUString const & serviceName) t
 
 css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.awt.AsyncCallback";
+    css::uno::Sequence< OUString > s { "com.sun.star.awt.AsyncCallback" };
     return s;
 }
 

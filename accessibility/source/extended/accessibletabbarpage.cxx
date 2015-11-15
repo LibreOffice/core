@@ -240,8 +240,7 @@ namespace accessibility
 
     Sequence< OUString > AccessibleTabBarPage::getSupportedServiceNames() throw (RuntimeException, std::exception)
     {
-        Sequence< OUString > aNames(1);
-        aNames[0] = "com.sun.star.awt.AccessibleTabBarPage";
+        Sequence< OUString > aNames { "com.sun.star.awt.AccessibleTabBarPage" };
         return aNames;
     }
 

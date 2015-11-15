@@ -623,8 +623,7 @@ namespace dbaui
             }
 
             // the properties which need to be set on the new content
-            Sequence< OUString > aNewDirectoryProperties(1);
-            aNewDirectoryProperties[0] = "Title";
+            Sequence< OUString > aNewDirectoryProperties { "Title" };
 
             // the values to be set
             Sequence< Any > aNewDirectoryAttributes(1);

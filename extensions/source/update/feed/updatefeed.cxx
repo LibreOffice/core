@@ -719,8 +719,7 @@ UpdateInformationProvider::getInteractionHandler()
 uno::Sequence< OUString >
 UpdateInformationProvider::getServiceNames()
 {
-    uno::Sequence< OUString > aServiceList(1);
-    aServiceList[0] = "com.sun.star.deployment.UpdateInformationProvider";
+    uno::Sequence< OUString > aServiceList { "com.sun.star.deployment.UpdateInformationProvider" };
     return aServiceList;
 };
 

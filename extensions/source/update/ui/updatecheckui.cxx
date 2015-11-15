@@ -69,8 +69,7 @@ using namespace ::com::sun::star;
 
 static uno::Sequence< OUString > getServiceNames()
 {
-    uno::Sequence< OUString > aServiceList(1);
-    aServiceList[0] = "com.sun.star.setup.UpdateCheckUI";
+    uno::Sequence< OUString > aServiceList { "com.sun.star.setup.UpdateCheckUI" };
     return aServiceList;
 }
 

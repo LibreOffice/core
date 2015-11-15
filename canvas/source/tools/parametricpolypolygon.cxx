@@ -211,8 +211,7 @@ namespace canvas
 
     uno::Sequence< OUString > SAL_CALL ParametricPolyPolygon::getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception)
     {
-        uno::Sequence< OUString > aRet(1);
-        aRet[0] = "com.sun.star.rendering.ParametricPolyPolygon";
+        uno::Sequence< OUString > aRet { "com.sun.star.rendering.ParametricPolyPolygon" };
 
         return aRet;
     }

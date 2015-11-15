@@ -148,8 +148,7 @@ InputSequenceCheckerImpl::supportsService(const OUString& rServiceName) throw( R
 Sequence< OUString > SAL_CALL
 InputSequenceCheckerImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(serviceName);
+    Sequence< OUString > aRet { OUString::createFromAscii(serviceName) };
     return aRet;
 }
 

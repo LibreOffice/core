@@ -63,8 +63,7 @@ OUString VCLXAccessiblePopupMenu::getImplementationName() throw (RuntimeExceptio
 
 Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.awt.AccessiblePopupMenu";
+    Sequence< OUString > aNames { "com.sun.star.awt.AccessiblePopupMenu" };
     return aNames;
 }
 

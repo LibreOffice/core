@@ -183,8 +183,7 @@ namespace dbp
                 OUString sStatement = "SELECT " +
                     OUString( getSettings().sListContentField ) +  ", " + OUString( getSettings().sLinkedListField ) +
                     " FROM " + OUString( getSettings().sListContentTable );
-                Sequence< OUString > aListSource(1);
-                aListSource[0] = sStatement;
+                Sequence< OUString > aListSource { sStatement };
                 getContext().xObjectModel->setPropertyValue("ListSource", makeAny(aListSource));
             }
             else

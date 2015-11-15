@@ -494,8 +494,7 @@ UpdateCheckConfig::clearUpdateFound()
 uno::Sequence< OUString >
 UpdateCheckConfig::getServiceNames()
 {
-    uno::Sequence< OUString > aServiceList(1);
-    aServiceList[0] = "com.sun.star.setup.UpdateCheckConfig";
+    uno::Sequence< OUString > aServiceList { "com.sun.star.setup.UpdateCheckConfig" };
     return aServiceList;
 }
 

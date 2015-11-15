@@ -103,8 +103,7 @@ private:
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override
     {
-        css::uno::Sequence< OUString > names(1);
-        names[0] = "com.sun.star.registry.SimpleRegistry";
+        css::uno::Sequence< OUString > names { "com.sun.star.registry.SimpleRegistry" };
         return names;
     }
 

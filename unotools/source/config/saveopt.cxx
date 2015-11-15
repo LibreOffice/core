@@ -784,8 +784,7 @@ SvtLoadOptions_Impl::SvtLoadOptions_Impl()
     : ConfigItem( OUString("Office.Common/Load") )
     , bLoadUserDefinedSettings( false )
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = cUserDefinedSettings;
+    Sequence< OUString > aNames { cUserDefinedSettings };
     Sequence< Any > aValues = GetProperties( aNames );
     EnableNotification( aNames );
     const Any* pValues = aValues.getConstArray();
@@ -800,8 +799,7 @@ SvtLoadOptions_Impl::~SvtLoadOptions_Impl()
 
 void SvtLoadOptions_Impl::ImplCommit()
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = cUserDefinedSettings;
+    Sequence< OUString > aNames { cUserDefinedSettings };
     Sequence< Any > aValues( 1 );
     aValues[0].setValue(&bLoadUserDefinedSettings, cppu::UnoType<bool>::get());
     PutProperties( aNames, aValues );

@@ -333,8 +333,7 @@ namespace logging
 
     Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames_static()
     {
-        Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = "com.sun.star.logging.CsvFormatter";
+        Sequence< OUString > aServiceNames { "com.sun.star.logging.CsvFormatter" };
         return aServiceNames;
     }
 

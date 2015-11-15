@@ -49,8 +49,7 @@ namespace migration
 
     Sequence< OUString > BasicMigration_getSupportedServiceNames()
     {
-        Sequence< OUString > aNames(1);
-        aNames.getArray()[0] = "com.sun.star.migration.Basic";
+        Sequence< OUString > aNames { "com.sun.star.migration.Basic" };
         return aNames;
     }
 

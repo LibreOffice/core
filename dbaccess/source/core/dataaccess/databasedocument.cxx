@@ -2094,8 +2094,7 @@ Reference< XEnumeration > SAL_CALL ODatabaseDocument::getControllers(  ) throw (
 
 Sequence< OUString > SAL_CALL ODatabaseDocument::getAvailableViewControllerNames(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = SERVICE_SDB_APPLICATIONCONTROLLER;
+    Sequence< OUString > aNames { SERVICE_SDB_APPLICATIONCONTROLLER };
     return aNames;
 }
 

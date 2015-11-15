@@ -662,8 +662,7 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     // cache the current configuration settings we're interested in
     implAdjustConfigCache();
     // and register for changes on this settings
-    Sequence< OUString > aNames(1);
-    aNames[0] = "FormControlPilotsEnabled";
+    Sequence< OUString > aNames { "FormControlPilotsEnabled" };
     EnableNotification(aNames);
 }
 
@@ -3531,8 +3530,7 @@ void FmXFormShell::CreateExternalView()
 void FmXFormShell::implAdjustConfigCache()
 {
     // get (cache) the wizard usage flag
-    Sequence< OUString > aNames(1);
-    aNames[0] = "FormControlPilotsEnabled";
+    Sequence< OUString > aNames { "FormControlPilotsEnabled" };
     Sequence< Any > aFlags = GetProperties(aNames);
     if (1 == aFlags.getLength())
         m_bUseWizards = ::cppu::any2bool(aFlags[0]);
@@ -3563,8 +3561,7 @@ void FmXFormShell::SetWizardUsing(bool _bUseThem)
 {
     m_bUseWizards = _bUseThem;
 
-    Sequence< OUString > aNames(1);
-    aNames[0] = "FormControlPilotsEnabled";
+    Sequence< OUString > aNames { "FormControlPilotsEnabled" };
     Sequence< Any > aValues(1);
     aValues[0] <<= m_bUseWizards;
     PutProperties(aNames, aValues);

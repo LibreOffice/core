@@ -141,8 +141,7 @@ sal_Bool SAL_CALL SdHtmlOptionsDialog::supportsService( const OUString& rService
 Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
     throw ( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.ui.dialog.FilterOptionsDialog";
+    Sequence< OUString > aRet { "com.sun.star.ui.dialog.FilterOptionsDialog" };
     return aRet;
 }
 

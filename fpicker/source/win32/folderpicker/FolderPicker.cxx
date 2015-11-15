@@ -51,8 +51,7 @@ namespace
 {
     Sequence< OUString > SAL_CALL FolderPicker_getSupportedServiceNames()
     {
-        Sequence< OUString > aRet(1);
-        aRet[0] = "com.sun.star.ui.dialogs.SystemFolderPicker";
+        Sequence< OUString > aRet { "com.sun.star.ui.dialogs.SystemFolderPicker" };
         return aRet;
     }
 }

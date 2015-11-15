@@ -80,8 +80,7 @@ namespace stringresource
 // component operations
 static Sequence< OUString > getSupportedServiceNames_StringResourceImpl()
 {
-    Sequence< OUString > names(1);
-    names[0] = "com.sun.star.resource.StringResource";
+    Sequence< OUString > names { "com.sun.star.resource.StringResource" };
     return names;
 }
 
@@ -2262,8 +2261,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
 // component operations
 static Sequence< OUString > getSupportedServiceNames_StringResourceWithStorageImpl()
 {
-    Sequence< OUString > names(1);
-    names[0] = "com.sun.star.resource.StringResourceWithStorage";
+    Sequence< OUString > names { "com.sun.star.resource.StringResourceWithStorage" };
     return names;
 }
 
@@ -2587,8 +2585,7 @@ bool StringResourceWithStorageImpl::implLoadLocale( LocaleItem* pLocaleItem )
 // component operations
 static Sequence< OUString > getSupportedServiceNames_StringResourceWithLocationImpl()
 {
-    Sequence< OUString > names(1);
-    names[0] = "com.sun.star.resource.StringResourceWithLocation";
+    Sequence< OUString > names { "com.sun.star.resource.StringResourceWithLocation" };
     return names;
 }
 

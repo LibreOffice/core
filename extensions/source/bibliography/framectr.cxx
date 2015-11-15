@@ -206,8 +206,7 @@ css::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedSer
 {
     // return only top level services ...
     // base services are included there and should be asked by uno-rtti.
-    css::uno::Sequence< OUString > lNames(1);
-    lNames[0] = "com.sun.star.frame.Bibliography";
+    css::uno::Sequence< OUString > lNames { "com.sun.star.frame.Bibliography" };
     return lNames;
 }
 

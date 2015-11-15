@@ -81,8 +81,7 @@ sal_Bool SAL_CALL OBookmarkContainer::supportsService( const OUString& _rService
 
 Sequence< OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
-    Sequence< OUString > aReturn(1);
-    aReturn.getArray()[0] = "com.sun.star.sdb.DefinitionContainer";
+    Sequence< OUString > aReturn { "com.sun.star.sdb.DefinitionContainer" };
     return aReturn;
 }
 

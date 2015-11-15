@@ -533,8 +533,7 @@ OUString SAL_CALL OSDBCDriverManager::getImplementationName_static(  ) throw(Run
 
 Sequence< OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(1);
-    aSupported[0] = getSingletonName_static();
+    Sequence< OUString > aSupported { getSingletonName_static() };
     return aSupported;
 }
 

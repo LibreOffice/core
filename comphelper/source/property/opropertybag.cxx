@@ -78,8 +78,7 @@ namespace comphelper
 
     Sequence< OUString > OPropertyBag::getSupportedServiceNames_static() throw( RuntimeException )
     {
-        Sequence< OUString > aServices(1);
-        aServices[0] = "com.sun.star.beans.PropertyBag";
+        Sequence< OUString > aServices { "com.sun.star.beans.PropertyBag" };
         return aServices;
     }
 

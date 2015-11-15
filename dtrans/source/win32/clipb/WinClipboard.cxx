@@ -44,8 +44,7 @@ namespace
 {
     Sequence< OUString > SAL_CALL WinClipboard_getSupportedServiceNames()
     {
-        Sequence< OUString > aRet(1);
-        aRet[0] = "com.sun.star.datatransfer.clipboard.SystemClipboard";
+        Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
         return aRet;
     }
 }

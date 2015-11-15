@@ -138,8 +138,7 @@ sal_Bool SAL_CALL transliteration_commonclass::supportsService(const OUString& r
 
 Sequence< OUString > SAL_CALL transliteration_commonclass::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.i18n.Transliteration.l10n";
+    Sequence< OUString > aRet { "com.sun.star.i18n.Transliteration.l10n" };
     return aRet;
 }
 

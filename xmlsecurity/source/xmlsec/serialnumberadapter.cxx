@@ -91,8 +91,7 @@ css::uno::Sequence< OUString >
 xml_security::serial_number_adapter::serviceNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.security.SerialNumberAdapter";
+    css::uno::Sequence< OUString > s { "com.sun.star.security.SerialNumberAdapter" };
     return s;
 }
 

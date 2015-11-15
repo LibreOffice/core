@@ -133,8 +133,7 @@ OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException, 
 
 Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.awt.AccessibleButton";
+    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleButton" };
     return aNames;
 }
 

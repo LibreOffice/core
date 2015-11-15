@@ -1460,8 +1460,7 @@ uno::Sequence< OUString > SAL_CALL
     ChartController::getAvailableServiceNames()
         throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aServiceNames(1);
-    aServiceNames[0] = CHART_ACCESSIBLE_TEXT_SERVICE_NAME;
+    uno::Sequence< OUString > aServiceNames { CHART_ACCESSIBLE_TEXT_SERVICE_NAME };
     return aServiceNames;
 }
 

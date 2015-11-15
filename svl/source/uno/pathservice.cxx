@@ -55,8 +55,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw(css::uno::RuntimeException, std::exception) override
         {
-            css::uno::Sequence< OUString > aRet(1);
-            aRet.getArray()[0] = "com.sun.star.config.SpecialConfigManager";
+            css::uno::Sequence< OUString > aRet { "com.sun.star.config.SpecialConfigManager" };
             return aRet;
         }
 

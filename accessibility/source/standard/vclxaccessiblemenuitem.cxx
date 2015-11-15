@@ -171,8 +171,7 @@ OUString VCLXAccessibleMenuItem::getImplementationName() throw (RuntimeException
 
 Sequence< OUString > VCLXAccessibleMenuItem::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.awt.AccessibleMenuItem";
+    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleMenuItem" };
     return aNames;
 }
 

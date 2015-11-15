@@ -48,8 +48,7 @@ static const sal_Int32 CACHE_SIZE = 256;
 
 static Sequence< OUString > core_getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = "com.sun.star.reflection.CoreReflection";
+    Sequence< OUString > seqNames { "com.sun.star.reflection.CoreReflection" };
     return seqNames;
 }
 

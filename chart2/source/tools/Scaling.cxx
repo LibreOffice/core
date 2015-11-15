@@ -79,8 +79,7 @@ OUString SAL_CALL LogarithmicScaling::getServiceName()
 
 uno::Sequence< OUString > LogarithmicScaling::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq(1);
-    aSeq.getArray()[0] = lcl_aServiceName_Logarithmic;
+    uno::Sequence< OUString > aSeq { lcl_aServiceName_Logarithmic };
     return aSeq;
 }
 
@@ -148,8 +147,7 @@ OUString SAL_CALL ExponentialScaling::getServiceName()
 
 uno::Sequence< OUString > ExponentialScaling::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq(1);
-    aSeq.getArray()[0] = lcl_aServiceName_Exponential;
+    uno::Sequence< OUString > aSeq { lcl_aServiceName_Exponential };
     return aSeq;
 }
 
@@ -221,8 +219,7 @@ OUString SAL_CALL LinearScaling::getServiceName()
 
 uno::Sequence< OUString > LinearScaling::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq(1);
-    aSeq.getArray()[0] = lcl_aServiceName_Linear;
+    uno::Sequence< OUString > aSeq { lcl_aServiceName_Linear };
     return aSeq;
 }
 
@@ -293,8 +290,7 @@ PowerScaling::getServiceName()
 
 uno::Sequence< OUString > PowerScaling::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq(1);
-    aSeq.getArray()[0] = lcl_aServiceName_Power;
+    uno::Sequence< OUString > aSeq { lcl_aServiceName_Power };
     return aSeq;
 }
 

@@ -711,8 +711,7 @@ OUString SAL_CALL OReportDefinition::getImplementationName(  ) throw(uno::Runtim
 
 uno::Sequence< OUString > OReportDefinition::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = SERVICE_REPORTDEFINITION;
+    uno::Sequence< OUString > aServices { SERVICE_REPORTDEFINITION };
 
     return aServices;
 }

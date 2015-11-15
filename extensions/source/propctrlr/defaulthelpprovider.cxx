@@ -77,8 +77,7 @@ namespace pcr
 
     Sequence< OUString > DefaultHelpProvider::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(1);
-        aSupported[0] = "com.sun.star.inspection.DefaultHelpProvider";
+        Sequence< OUString > aSupported { "com.sun.star.inspection.DefaultHelpProvider" };
         return aSupported;
     }
 

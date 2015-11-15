@@ -97,8 +97,7 @@ OUString SAL_CALL OReportEngineJFree::getImplementationName(  ) throw(uno::Runti
 
 uno::Sequence< OUString > OReportEngineJFree::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices(1);
-    aServices[0] = "com.sun.star.report.ReportEngine";
+    uno::Sequence< OUString > aServices { "com.sun.star.report.ReportEngine" };
 
     return aServices;
 }

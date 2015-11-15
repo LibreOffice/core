@@ -1060,8 +1060,7 @@ sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
 Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames()
                 throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.text.DefaultNumberingProvider";
+    Sequence< OUString > aRet { "com.sun.star.text.DefaultNumberingProvider" };
     return aRet;
 }
 

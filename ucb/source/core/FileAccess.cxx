@@ -777,8 +777,7 @@ Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMu
 
 Sequence< OUString > FileAccess_getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = SERVICE_NAME;
+    Sequence< OUString > seqNames { SERVICE_NAME };
     return seqNames;
 }
 

@@ -84,8 +84,7 @@ Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !pNames )
         {
-            static Sequence< OUString > aNames(1);
-            aNames.getArray()[0] = "com.sun.star.migration.Extensions";
+            static Sequence< OUString > aNames { "com.sun.star.migration.Extensions" };
             pNames = &aNames;
         }
     }

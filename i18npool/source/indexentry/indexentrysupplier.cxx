@@ -190,8 +190,7 @@ IndexEntrySupplier::supportsService(const OUString& rServiceName) throw( Runtime
 Sequence< OUString > SAL_CALL
 IndexEntrySupplier::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = implementationName;
+    Sequence< OUString > aRet { implementationName };
     return aRet;
 }
 

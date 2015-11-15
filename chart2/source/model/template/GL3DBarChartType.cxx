@@ -142,8 +142,7 @@ OUString SAL_CALL GL3DBarChartType::getChartType()
 uno::Sequence<OUString> GL3DBarChartType::getSupportedPropertyRoles()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aPropRoles(1);
-    aPropRoles[0] = "FillColor";
+    uno::Sequence< OUString > aPropRoles { "FillColor" };
 
     return aPropRoles;
 }

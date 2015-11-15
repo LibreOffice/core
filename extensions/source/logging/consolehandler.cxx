@@ -288,8 +288,7 @@ namespace logging
 
     Sequence< OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames_static()
     {
-        Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = "com.sun.star.logging.ConsoleHandler";
+        Sequence< OUString > aServiceNames { "com.sun.star.logging.ConsoleHandler" };
         return aServiceNames;
     }
 

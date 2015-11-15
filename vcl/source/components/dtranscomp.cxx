@@ -126,8 +126,7 @@ OUString GenericClipboard::getImplementationName_static()
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.datatransfer.clipboard.SystemClipboard";
+    Sequence< OUString > aRet { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
     return aRet;
 }
 

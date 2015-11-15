@@ -1938,8 +1938,7 @@ Any PrinterOptionsHelper::setGroupControlOpt(const OUString& i_rID,
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
     }
-    Sequence< OUString > aIds(1);
-    aIds[0] = i_rID;
+    Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, "Group");
 }
 
@@ -1954,8 +1953,7 @@ Any PrinterOptionsHelper::setSubgroupControlOpt(const OUString& i_rID,
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
     }
-    Sequence< OUString > aIds(1);
-    aIds[0] = i_rID;
+    Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, "Subgroup", nullptr, i_rControlOptions);
 }
 
@@ -1975,8 +1973,7 @@ Any PrinterOptionsHelper::setBoolControlOpt(const OUString& i_rID,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_bValue );
-    Sequence< OUString > aIds(1);
-    aIds[0] = i_rID;
+    Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, "Bool", &aVal, i_rControlOptions);
 }
 
@@ -2029,8 +2026,7 @@ Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rID,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
-    Sequence< OUString > aIds(1);
-    aIds[0] = i_rID;
+    Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, i_rHelpId, "List", &aVal, aOpt);
 }
 
@@ -2063,8 +2059,7 @@ Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
-    Sequence< OUString > aIds(1);
-    aIds[0] = i_rID;
+    Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, "Range", &aVal, aOpt);
 }
 
@@ -2084,8 +2079,7 @@ Any PrinterOptionsHelper::setEditControlOpt(const OUString& i_rID,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_rValue );
-    Sequence< OUString > aIds(1);
-    aIds[0] = i_rID;
+    Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, "Edit", &aVal, i_rControlOptions);
 }
 

@@ -143,8 +143,7 @@ sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
 css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
     throw(css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence< OUString > lServiceNames(1);
-    lServiceNames[0] = "com.sun.star.dialog.RecoveryUI";
+    css::uno::Sequence< OUString > lServiceNames { "com.sun.star.dialog.RecoveryUI" };
     return lServiceNames;
 }
 

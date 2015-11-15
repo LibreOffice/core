@@ -143,8 +143,7 @@ namespace dbmm
 
     Sequence< OUString > SAL_CALL MacroMigrationDialogService::getSupportedServiceNames_static() throw(RuntimeException)
     {
-        Sequence< OUString > aServices(1);
-        aServices[0] = "com.sun.star.sdb.application.MacroMigrationWizard";
+        Sequence< OUString > aServices { "com.sun.star.sdb.application.MacroMigrationWizard" };
         return aServices;
     }
 

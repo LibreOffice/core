@@ -386,8 +386,7 @@ namespace logging
 
     Sequence< OUString > SAL_CALL FileHandler::getSupportedServiceNames_static()
     {
-        Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = "com.sun.star.logging.FileHandler";
+        Sequence< OUString > aServiceNames { "com.sun.star.logging.FileHandler" };
         return aServiceNames;
     }
 

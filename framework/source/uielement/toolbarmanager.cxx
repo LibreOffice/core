@@ -2178,8 +2178,7 @@ bool ToolBarManager::impl_RetrieveShortcutsFromConfiguration(
         try
         {
             css::awt::KeyEvent aKeyEvent;
-            Sequence< OUString > aCommands(1);
-            aCommands[0] = rCommand;
+            Sequence< OUString > aCommands { rCommand };
 
             Sequence< Any > aSeqKeyCode( rAccelCfg->getPreferredKeyEventsForCommandList( aCommands ) );
             if( aSeqKeyCode.getLength() == 1 )

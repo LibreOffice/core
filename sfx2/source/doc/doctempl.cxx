@@ -1616,8 +1616,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
     uno::Reference< XResultSet > xResultSet;
-    Sequence< OUString > aProps(1);
-    aProps[0] = TITLE;
+    Sequence< OUString > aProps { TITLE };
 
     try
     {

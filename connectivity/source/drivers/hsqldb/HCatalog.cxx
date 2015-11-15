@@ -70,8 +70,7 @@ void OHCatalog::refreshTables()
 
 void OHCatalog::refreshViews()
 {
-    Sequence< OUString > aTypes(1);
-    aTypes[0] = "VIEW";
+    Sequence< OUString > aTypes { "VIEW" };
 
     bool bSupportsViews = false;
     try

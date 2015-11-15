@@ -463,8 +463,7 @@ OUString ZipPackageFolder::getImplementationName()
 uno::Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aNames(1);
-    aNames[0] = "com.sun.star.packages.PackageFolder";
+    uno::Sequence< OUString > aNames { "com.sun.star.packages.PackageFolder" };
     return aNames;
 }
 

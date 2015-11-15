@@ -82,8 +82,7 @@ namespace rptxml
 
     Sequence< OUString > ORptExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(1);
-        aSupported[0] = "com.sun.star.document.ExportFilter";
+        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
         return aSupported;
     }
 
@@ -99,8 +98,7 @@ namespace rptxml
 
     Sequence< OUString > ORptContentExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(1);
-        aSupported[0] = "com.sun.star.document.ExportFilter";
+        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
         return aSupported;
     }
 
@@ -118,8 +116,7 @@ namespace rptxml
 
     Sequence< OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(1);
-        aSupported[0] = "com.sun.star.document.ExportFilter";
+        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
         return aSupported;
     }
 
@@ -136,8 +133,7 @@ namespace rptxml
 
     Sequence< OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(1);
-        aSupported[0] = "com.sun.star.document.ExportFilter";
+        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
         return aSupported;
     }
 
@@ -154,8 +150,7 @@ namespace rptxml
 
     Sequence< OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(1);
-        aSupported[0] = "com.sun.star.document.ExportFilter";
+        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
         return aSupported;
     }
 
@@ -316,8 +311,7 @@ OUString ORptExport::getImplementationName_Static(  ) throw(uno::RuntimeExceptio
 
 uno::Sequence< OUString > ORptExport::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices(1);
-    aServices.getArray()[0] = "com.sun.star.document.ExportFilter";
+    uno::Sequence< OUString > aServices { "com.sun.star.document.ExportFilter" };
 
     return aServices;
 }

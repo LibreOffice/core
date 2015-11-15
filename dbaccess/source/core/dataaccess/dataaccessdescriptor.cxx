@@ -188,8 +188,7 @@ namespace dbaccess
 
     Sequence< OUString > SAL_CALL DataAccessDescriptor::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        Sequence< OUString > aServices(1);
-        aServices[0] = "com.sun.star.sdb.DataAccessDescriptor";
+        Sequence< OUString > aServices { "com.sun.star.sdb.DataAccessDescriptor" };
         return aServices;
     }
 
@@ -256,8 +255,7 @@ namespace dbaccess
 
     Sequence< OUString > DataAccessDescriptorFactory::getSupportedServiceNames_static() throw( RuntimeException )
     {
-        Sequence< OUString > aServices(1);
-        aServices[0] = getSingletonName_static();
+        Sequence< OUString > aServices { getSingletonName_static() };
         return aServices;
     }
 

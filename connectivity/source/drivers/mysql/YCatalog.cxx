@@ -73,8 +73,7 @@ void OMySQLCatalog::refreshTables()
 
 void OMySQLCatalog::refreshViews()
 {
-    Sequence< OUString > aTypes(1);
-    aTypes[0] = "VIEW";
+    Sequence< OUString > aTypes { "VIEW" };
 
     // let's simply assume the server is new enough to support views. Current drivers
     // as of this writing might not return the proper information in getTableTypes, so

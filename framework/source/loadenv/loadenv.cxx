@@ -867,8 +867,7 @@ bool LoadEnv::impl_handleContent()
     // <- SAFE -----------------------------------
 
     // query
-    css::uno::Sequence< OUString > lTypeReg(1);
-    lTypeReg[0] = sType;
+    css::uno::Sequence< OUString > lTypeReg { sType };
 
     css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::makeAny(lTypeReg) } };
 
@@ -1154,8 +1153,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     aReadLock.clear();
     // <- SAFE -----------------------------------
 
-    css::uno::Sequence< OUString > lTypesReg(1);
-    lTypesReg[0] = sType;
+    css::uno::Sequence< OUString > lTypesReg { sType };
 
     css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::makeAny(lTypesReg) } };
 
