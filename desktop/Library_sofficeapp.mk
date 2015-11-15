@@ -119,6 +119,10 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
 endif
 endif
 
+ifeq ($(ENABLE_BREAKPAD),TRUE)
+$(eval $(call gb_Library_use_external,sofficeapp,breakpad))
+endif
+
 # LibreOfficeKit bits
 ifneq ($(filter $(OS),ANDROID IOS),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\

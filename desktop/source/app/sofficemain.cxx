@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_features.h>
 
 #include "desktopdllapi.h"
 
@@ -40,6 +41,14 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <unotools/mediadescriptor.hxx>
 
+#if HAVE_FEATURE_BREAKPAD
+
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#include <client/linux/handler/exception_handler.h>
+#endif
+
+#endif
+
 
 #ifdef ANDROID
 #  include <jni.h>
@@ -50,8 +59,30 @@
 #  define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
 #endif
 
+#if HAVE_FEATURE_BREAKPAD
+
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* /*context*/, bool succeeded)
+{
+    // send the minidump to the server (not yet implemented)
+    SAL_WARN("sofficemain", "minidump generated: " << descriptor.path());
+    return succeeded;
+}
+#endif
+
+#endif
+
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
+#if HAVE_FEATURE_BREAKPAD
+
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    google_breakpad::MinidumpDescriptor descriptor("/tmp");
+    google_breakpad::ExceptionHandler eh(descriptor, NULL, dumpCallback, NULL, true, -1);
+#endif
+
+#endif
+
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     /* Run test for OpenGL support in own process to avoid crash with broken
      * OpenGL drivers. Start process as early as possible.

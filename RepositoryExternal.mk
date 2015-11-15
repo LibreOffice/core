@@ -3441,6 +3441,43 @@ endif # SYSTEM_NSS
 
 endif # DESKTOP
 
+ifeq ($(ENABLE_BREAKPAD),TRUE)
+
+# ifneq ($(SYSTEM_LIBBREAKPAD),TRUE)
+
+define gb_LinkTarget__use_breakpad
+$(call gb_LinkTarget_set_include,$(1),\
+    -I$(call gb_UnpackedTarball_get_dir,breakpad)/src \
+    $$(INCLUDE) \
+)
+
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,breakpad)/build/win32/$(wnt_arch_subdir_optional)$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/breakpad.lib,Release/breakpad.lib) \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,breakpad)/src/client/linux/libbreakpad_client.a \
+)
+endif
+
+$(call gb_LinkTarget_use_external_project,$(1),breakpad)
+
+endef
+
+# else # SYSTEM_LIBBREAKPAD
+# 
+# define gb_LinkTarget__use_libgltf
+# $(call gb_LinkTarget_set_include,$(1),\
+# 	$$(INCLUDE) \
+# 	$(LIBBREAKPAD_CFLAGS) \
+# )
+# $(call gb_LinkTarget_add_libs,$(1),$(LIBBREAKPAD_LIBS))
+#
+# endef
+
+endif # SYSTEN_LIBBREAKPAD
+
 ifeq ($(ENABLE_GLTF),TRUE)
 
 ifneq ($(SYSTEM_LIBGLTF),TRUE)
