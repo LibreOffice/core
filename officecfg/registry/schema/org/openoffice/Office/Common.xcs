@@ -1347,7 +1347,7 @@
           <desc>Specifies if single quotes should be replaced.</desc>
           <label>Single quotes - Replace</label>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="SingleQuoteAtStart" oor:type="xs:int">
         <!-- OldPath: AutoCorrect/Options/All -->
