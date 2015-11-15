@@ -1740,7 +1740,8 @@ void FormulaModalDialog::SetFocusWin(vcl::Window *pWin,const OString& nUniqueId)
 
 bool FormulaModalDialog::PreNotify( NotifyEvent& rNEvt )
 {
-    m_pImpl->PreNotify( rNEvt );
+    if (m_pImpl)
+        m_pImpl->PreNotify( rNEvt );
 
     return ModalDialog::PreNotify(rNEvt);
 }
