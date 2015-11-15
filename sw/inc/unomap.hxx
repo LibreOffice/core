@@ -330,6 +330,34 @@ public:
     const SfxItemPropertyMapEntry*  GetPropertyMapEntries(sal_uInt16 PropertyId);
     const SfxItemPropertySet*       GetPropertySet( sal_uInt16 PropertyId );
 
+private:
+    static const SfxItemPropertyMapEntry*  GetTextCursorPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetAccessibilityTextAttrPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetParagraphPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetAutoParaStylePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetCharStylePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetAutoCharStylePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetParaStylePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetConditionalParaStylePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetFrameStylePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetPageStylePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetTablePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetRangePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetSectionPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetFramePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetGraphicPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetEmbeddedPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetIndexMarkPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetContentMarkPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetUserMarkPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetTextTableCursorPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetBookmarkPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetParagraphExtensionsPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetTextPortionExtensionPropertyMap();
+    static const SfxItemPropertyMapEntry*  GetFootnotePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetRedlinePropertyMap();
+    static const SfxItemPropertyMapEntry*  GetRedlinePortionPropertyMap();
+    static       SfxItemPropertyMapEntry*  GetTextDefaultPropertyMap();
 };
 
 extern SwUnoPropertyMapProvider aSwMapProvider;
