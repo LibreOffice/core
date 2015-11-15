@@ -111,6 +111,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,APR,APR_TARBALL) \
 		$(call fetch_Optional,APR,APR_UTIL_TARBALL) \
 		$(call fetch_Optional,BOOST,BOOST_TARBALL) \
+		$(call fetch_Optional,BREAKPAD,BREAKPAD_TARBALL) \
 		$(call fetch_Optional,BSH,BSH_TARBALL) \
 		$(call fetch_Optional,CAIRO,CAIRO_TARBALL) \
 		$(call fetch_Optional,CAIRO,PIXMAN_TARBALL) \

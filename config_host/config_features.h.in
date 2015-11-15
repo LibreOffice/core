@@ -146,4 +146,9 @@
  */
 #define HAVE_FEATURE_COLLADA 0
 
+/*
+ * Whether we support breakpad as crash reporting lib.
+ */
+#define HAVE_FEATURE_BREAKPAD 0
+
 #endif
