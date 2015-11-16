@@ -182,7 +182,6 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
     return rString;
 }
 
-// KRiver added
 ScTypedCaseStrSet::const_iterator findTextAll(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator itPos,
     const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack)
@@ -272,7 +271,6 @@ ScTypedCaseStrSet::const_iterator findTextAll(
         return retit;
     return rDataSet.end(); // no matching text found
 }
-// end KRiver added
 
 void removeChars(OUString& rStr, sal_Unicode c)
 {
@@ -1009,23 +1007,15 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                 aBuf.append(static_cast<sal_Unicode>(0x25BA));
                                 aBuf.append(aNew.copy(nStartPosition));
                                 aNew = aBuf.makeStringAndClear();
-// KRiver exchange
-//                                ShowTipBelow( aNew );
-// KRiver exchange to
                                 ShowTip( aNew );
                                 ShowTipBelow( ppFDesc->getParameterDescription(nActive-1) );
-// end KRiver exchange
                                 bFound = true;
                             }
                         }
                         else
                         {
-// KRiver exchange
-//                            ShowTipBelow( aNew );
-// KRiver exchange to
                             ShowTip( aNew );
                             ShowTipBelow( ppFDesc->getParameterDescription(nActive-1) );
-// end KRiver exchange
                             bFound = true;
                         }
                     }
@@ -1063,7 +1053,6 @@ void ScInputHandler::ShowTipCursor()
     }
 }
 
-// KRiver added
 void ScInputHandler::ShowDescTip( OUString funcName )
 {
     FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
@@ -1080,7 +1069,6 @@ void ScInputHandler::ShowDescTip( OUString funcName )
         }
     }
 }
-// end KRiver added
 
 void ScInputHandler::ShowTip( const OUString& rText )
 {
@@ -1192,21 +1180,6 @@ void ScInputHandler::UseFormulaData()
             OUString aText;
             if ( GetFuncName( aSelText, aText ) )
             {
-// KRiver exchange
-//                // function name is incomplete:
-//                // show first matching function name as tip above cell
-//                OUString aNew;
-//                miAutoPosFormula = pFormulaData->end();
-//                miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
-//                if (miAutoPosFormula != pFormulaData->end())
-//                {
-//                    if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
-//                        aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
-//                    ShowTip( aNew );
-//                    aAutoSearch = aText;
-//                }
-//                return;
-// KRiver exchange for
                 // function name is incomplete:
                 // show matching functions name as tip above cell
                 ::std::vector<OUString> aNewVec;
@@ -1247,7 +1220,6 @@ void ScInputHandler::UseFormulaData()
                     aAutoSearch = aText;
                 }
                 return;
-// end KRiver exchange
             }
 
             // function name is complete:
@@ -1262,17 +1234,6 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pFormulaData )
     {
-// KRiver exchange
-//        OUString aNew;
-//        ScTypedCaseStrSet::const_iterator itNew = findText(*pFormulaData, miAutoPosFormula, aAutoSearch, aNew, bBack);
-//        if (itNew != pFormulaData->end())
-//        {
-//            miAutoPosFormula = itNew;
-//            if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
-//                aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
-//            ShowTip(aNew); // Display a quick help
-//        }
-// KRiver exchange for
         ::std::vector<OUString> aNewVec;
         ScTypedCaseStrSet::const_iterator itNew = findTextAll(*pFormulaData, miAutoPosFormula, aAutoSearch, aNewVec, bBack);
         if (itNew != pFormulaData->end())
@@ -1309,7 +1270,6 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
             ShowTip( tipStr );
             ShowDescTip( discFuncNameStr );
         }
-// end KRiver exchange
     }
 
     // For Tab we always call HideCursor first
@@ -1422,11 +1382,6 @@ void ScInputHandler::PasteFunctionData()
         if (bParInserted)
             AutoParAdded();
     }
-
-// KRiver exchange
-//    HideTip();
-// KRiver exchange to
-// end KRiver exchange
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (pActiveView)
@@ -3426,12 +3381,6 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                     if (pViewFrm)
                         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
                 }
-// KRiver exchange
-//                if( bUsed && bFormulaMode && ( bCursorKey || bInsKey || nCode == KEY_DELETE || nCode == KEY_BACKSPACE ) )
-//                {
-//                    ShowTipCursor();
-//                }
-// KRiver exchange to
                 if( bUsed && bFormulaMode && ( bCursorKey || bInsKey || nCode == KEY_DELETE || nCode == KEY_BACKSPACE ) )
                 {
                     ShowTipCursor();
@@ -3444,7 +3393,6 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                         UseColData();
                 }
 
-// end KRiver exchange
             }
 
             // #i114511# don't count cursor keys as modification
