@@ -51,15 +51,15 @@ public:
                                                     Rectangle &rNativeBoundingRegion,
                                                     Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
     virtual bool        SupportsCairo() const SAL_OVERRIDE;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const SAL_OVERRIDE;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const SAL_OVERRIDE;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
     void WidgetQueueDraw() const;
 
     void updateSettings( AllSettings& rSettings );
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 
-    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) SAL_OVERRIDE;
+    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;

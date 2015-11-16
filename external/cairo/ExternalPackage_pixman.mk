@@ -11,6 +11,11 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,pixman,pixman))
 
 $(eval $(call gb_ExternalPackage_use_external_project,pixman,pixman))
 
+ifneq ($(OS),ANDROID)
+
 $(eval $(call gb_ExternalPackage_add_file,pixman,$(LIBO_LIB_FOLDER)/libpixman-1.so.0,pixman/.libs/libpixman-1.so.0.24.4))
+
+endif
+
 
 # vim: set noet sw=4 ts=4:

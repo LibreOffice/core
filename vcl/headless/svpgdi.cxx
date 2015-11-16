@@ -33,9 +33,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basebmp/scanlineformats.hxx>
 
-#if ENABLE_CAIRO_CANVAS
 #include <cairo.h>
-#endif
 
 #if OSL_DEBUG_LEVEL > 2
 #include <basebmp/debug.hxx>
@@ -96,8 +94,6 @@ bool SvpSalGraphics::drawTransformedBitmap(
     (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
     return false;
 }
-
-#if ENABLE_CAIRO_CANVAS
 
 namespace
 {
@@ -180,13 +176,10 @@ namespace
 }
 #endif
 
-#endif
-
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
 {
     bool bRet = false;
     (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
-#if ENABLE_CAIRO_CANVAS
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
     if (m_bUseLineColor || !m_bUseFillColor)
     {
@@ -229,7 +222,6 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
                                                 extents.y + extents.height));
     }
     bRet = true;
-#endif
 #endif
     return bRet;
 }
@@ -1137,7 +1129,6 @@ SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 
 bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
 {
-#if ENABLE_CAIRO_CANVAS
     if (m_aDrawMode == basebmp::DrawMode::XOR)
         return false;
     if (!isCairoCompatible(m_aDevice))
@@ -1151,10 +1142,6 @@ bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
             return false;
     }
     return false;
-#else
-    (void)eType;
-    return false;
-#endif
 }
 
 #endif
