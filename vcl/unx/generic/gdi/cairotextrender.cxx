@@ -39,8 +39,6 @@
 
 #include <cairo.h>
 #include <cairo-ft.h>
-#include <cairo-xlib.h>
-#include <cairo-xlib-xrender.h>
 
 CairoTextRender::CairoTextRender()
     : mnTextColor(MAKE_SALCOLOR(0x00, 0x00, 0x00)) //black
