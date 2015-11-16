@@ -102,6 +102,7 @@ public:
     void testFdo70807();
     void testImportRTF();
     void testExportRTF();
+    void testTdf67238();
     void testFdo75110();
     void testFdo75898();
     void testFdo74981();
@@ -181,6 +182,7 @@ public:
     CPPUNIT_TEST(testFdo70807);
     CPPUNIT_TEST(testImportRTF);
     CPPUNIT_TEST(testExportRTF);
+    CPPUNIT_TEST(testTdf67238);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST(testFdo74981);
@@ -380,6 +382,99 @@ void SwUiWriterTest::testBookmarkCopy()
         OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
         CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
     }
+}
+
+void SwUiWriterTest::testTdf67238()
+{
+    //create a new writer document
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    //insert a 3X3 table in the newly created document
+    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    const SwTable& rTbl = pWrtShell->InsertTable(TableOpt, 3, 3);
+    //checking for the rows and columns
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
+    //selecting the table
+    pWrtShell->SttDoc();
+    pWrtShell->SelTable();
+    //making the table protected
+    pWrtShell->ProtectCells();
+    //checking each cell's protection, it should be protected
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    //undo the changes, make cells [un]protected
+    rUndoManager.Undo();
+    //checking each cell's protection, it should be [un]protected
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    //redo the changes, make cells protected
+    rUndoManager.Redo();
+    //checking each cell's protection, it should be protected
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    //moving the cursor to the starting of the document
+    pWrtShell->SttDoc();
+    //making the table [un]protected
+    pWrtShell->SelTable();
+    pWrtShell->UnProtectCells();
+    //checking each cell's protection, it should be [un]protected
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    //undo the changes, make cells protected
+    rUndoManager.Undo();
+    //checking each cell's protection, it should be protected
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(((rTbl.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    //redo the changes, make cells [un]protected
+    rUndoManager.Redo();
+    //checking each cell's protection, it should be [un]protected
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("A1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("A2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("A3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("B1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("B2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("B3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+    CPPUNIT_ASSERT(!((rTbl.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
 }
 
 void SwUiWriterTest::testFdo75110()
