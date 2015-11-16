@@ -3431,6 +3431,14 @@ void Test::testFuncSUMPRODUCT()
     sal_uInt16 nError = m_pDoc->GetErrCode(aPos);
     CPPUNIT_ASSERT_MESSAGE("Formula result should be a propagated error", nError);
 
+    // Test ForceArray propagation of SUMPRODUCT parameters to ABS and + operator.
+    // => ABS({-3,4})*({-3,4}+{-3,4}) => {3,4}*{-6,8} => {-18,32} => 14
+    m_pDoc->SetValue(ScAddress(4,0,0), -3.0); // E1
+    m_pDoc->SetValue(ScAddress(4,1,0),  4.0); // E2
+    // Non-intersecting formula in F3.
+    m_pDoc->SetString(ScAddress(5,2,0), "=SUMPRODUCT(ABS(E1:E2);E1:E2+E1:E2)");
+    CPPUNIT_ASSERT_EQUAL(14.0, m_pDoc->GetValue(ScAddress(5,2,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
