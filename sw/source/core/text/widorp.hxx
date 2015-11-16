@@ -26,18 +26,18 @@ class SwTextFrm;
 class SwTextFrmBreak
 {
 private:
-    SwTwips  nRstHeight;
-    SwTwips  nOrigin;
+    SwTwips  m_nRstHeight;
+    SwTwips  m_nOrigin;
 protected:
-    SwTextFrm *pFrm;
-    bool     bBreak;
-    bool     bKeep;
+    SwTextFrm *m_pFrm;
+    bool     m_bBreak;
+    bool     m_bKeep;
 public:
     SwTextFrmBreak( SwTextFrm *pFrm, const SwTwips nRst = 0  );
     bool IsBreakNow( SwTextMargin &rLine );
-    bool IsKeepAlways() const { return bKeep; }
+    bool IsKeepAlways() const { return m_bKeep; }
 
-    inline void SetKeep( const bool bNew ) { bKeep = bNew; }
+    inline void SetKeep( const bool bNew ) { m_bKeep = bNew; }
 
     bool IsInside( SwTextMargin &rLine ) const;
 

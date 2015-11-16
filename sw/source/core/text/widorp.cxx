@@ -55,28 +55,28 @@ inline bool IsNastyFollow( const SwTextFrm *pFrm )
 }
 
 SwTextFrmBreak::SwTextFrmBreak( SwTextFrm *pNewFrm, const SwTwips nRst )
-    : nRstHeight(nRst), pFrm(pNewFrm)
+    : m_nRstHeight(nRst), m_pFrm(pNewFrm)
 {
-    SwSwapIfSwapped swap(pFrm);
-    SWRECTFN( pFrm )
-    nOrigin = (pFrm->*fnRect->fnGetPrtTop)();
-    bKeep = !pFrm->IsMoveable() || IsNastyFollow( pFrm );
-    if( !bKeep && pFrm->IsInSct() )
+    SwSwapIfSwapped swap(m_pFrm);
+    SWRECTFN( m_pFrm )
+    m_nOrigin = (m_pFrm->*fnRect->fnGetPrtTop)();
+    m_bKeep = !m_pFrm->IsMoveable() || IsNastyFollow( m_pFrm );
+    if( !m_bKeep && m_pFrm->IsInSct() )
     {
-        const SwSectionFrm* const pSct = pFrm->FindSctFrm();
-        bKeep = pSct->Lower()->IsColumnFrm() && !pSct->MoveAllowed( pFrm );
+        const SwSectionFrm* const pSct = m_pFrm->FindSctFrm();
+        m_bKeep = pSct->Lower()->IsColumnFrm() && !pSct->MoveAllowed( m_pFrm );
     }
-    bKeep = bKeep || !pFrm->GetTextNode()->GetSwAttrSet().GetSplit().GetValue() ||
-        pFrm->GetTextNode()->GetSwAttrSet().GetKeep().GetValue();
-    bBreak = false;
+    m_bKeep = m_bKeep || !m_pFrm->GetTextNode()->GetSwAttrSet().GetSplit().GetValue() ||
+        m_pFrm->GetTextNode()->GetSwAttrSet().GetKeep().GetValue();
+    m_bBreak = false;
 
-    if( !nRstHeight && !pFrm->IsFollow() && pFrm->IsInFootnote() && pFrm->HasPara() )
+    if( !m_nRstHeight && !m_pFrm->IsFollow() && m_pFrm->IsInFootnote() && m_pFrm->HasPara() )
     {
-        nRstHeight = pFrm->GetFootnoteFrmHeight();
-        nRstHeight += (pFrm->Prt().*fnRect->fnGetHeight)() -
-                      (pFrm->Frm().*fnRect->fnGetHeight)();
-        if( nRstHeight < 0 )
-            nRstHeight = 0;
+        m_nRstHeight = m_pFrm->GetFootnoteFrmHeight();
+        m_nRstHeight += (m_pFrm->Prt().*fnRect->fnGetHeight)() -
+                      (m_pFrm->Frm().*fnRect->fnGetHeight)();
+        if( m_nRstHeight < 0 )
+            m_nRstHeight = 0;
     }
 }
 
@@ -104,28 +104,28 @@ bool SwTextFrmBreak::IsInside( SwTextMargin &rLine ) const
 {
     bool bFit = false;
 
-    SwSwapIfSwapped swap(pFrm);
-    SWRECTFN( pFrm )
+    SwSwapIfSwapped swap(m_pFrm);
+    SWRECTFN( m_pFrm )
     // nOrigin is an absolut value, rLine referes to the swapped situation.
 
     SwTwips nTmpY;
-    if ( pFrm->IsVertical() )
-        nTmpY = pFrm->SwitchHorizontalToVertical( rLine.Y() + rLine.GetLineHeight() );
+    if ( m_pFrm->IsVertical() )
+        nTmpY = m_pFrm->SwitchHorizontalToVertical( rLine.Y() + rLine.GetLineHeight() );
     else
         nTmpY = rLine.Y() + rLine.GetLineHeight();
 
-    SwTwips nLineHeight = (*fnRect->fnYDiff)( nTmpY , nOrigin );
+    SwTwips nLineHeight = (*fnRect->fnYDiff)( nTmpY , m_nOrigin );
 
     // 7455 und 6114: Calculate extra space for bottom border.
-    nLineHeight += (pFrm->*fnRect->fnGetBottomMargin)();
+    nLineHeight += (m_pFrm->*fnRect->fnGetBottomMargin)();
 
-    if( nRstHeight )
-        bFit = nRstHeight >= nLineHeight;
+    if( m_nRstHeight )
+        bFit = m_nRstHeight >= nLineHeight;
     else
     {
         // The Frm has a height to fit on the page.
         SwTwips nHeight =
-            (*fnRect->fnYDiff)( (pFrm->GetUpper()->*fnRect->fnGetPrtBottom)(), nOrigin );
+            (*fnRect->fnYDiff)( (m_pFrm->GetUpper()->*fnRect->fnGetPrtBottom)(), m_nOrigin );
         // If everything is inside the existing frame the result is true;
         bFit = nHeight >= nLineHeight;
 
@@ -133,11 +133,11 @@ bool SwTextFrmBreak::IsInside( SwTextMargin &rLine ) const
         if ( !bFit )
         {
             if ( rLine.GetNext() &&
-                 pFrm->IsInTab() && !pFrm->GetFollow() && !pFrm->GetIndNext() )
+                 m_pFrm->IsInTab() && !m_pFrm->GetFollow() && !m_pFrm->GetIndNext() )
             {
                 // add additional space taken as lower space as last content in a table
                 // for all text lines except the last one.
-                nHeight += pFrm->CalcAddLowerSpaceAsLastInTableCell();
+                nHeight += m_pFrm->CalcAddLowerSpaceAsLastInTableCell();
                 bFit = nHeight >= nLineHeight;
             }
         }
@@ -147,7 +147,7 @@ bool SwTextFrmBreak::IsInside( SwTextMargin &rLine ) const
             // The LineHeight exceeds the current Frm height.
             // Call a test Grow to detect if the Frame could
             // grow the requested area.
-            nHeight += pFrm->GrowTst( LONG_MAX );
+            nHeight += m_pFrm->GrowTst( LONG_MAX );
 
             // The Grow() returns the height by which the Upper of the TextFrm
             // would let the TextFrm grow.
@@ -161,12 +161,12 @@ bool SwTextFrmBreak::IsInside( SwTextMargin &rLine ) const
 
 bool SwTextFrmBreak::IsBreakNow( SwTextMargin &rLine )
 {
-    SwSwapIfSwapped swap(pFrm);
+    SwSwapIfSwapped swap(m_pFrm);
 
     // bKeep is stronger than IsBreakNow()
     // Is there enough space ?
-    if( bKeep || IsInside( rLine ) )
-        bBreak = false;
+    if( m_bKeep || IsInside( rLine ) )
+        m_bBreak = false;
     else
     {
         /* This class assumes that the SwTextMargin is processed from Top to
@@ -179,87 +179,87 @@ bool SwTextFrmBreak::IsBreakNow( SwTextMargin &rLine )
         // 6010: include DropLines
 
         bool bFirstLine = 1 == rLine.GetLineNr() && !rLine.GetPrev();
-        bBreak = true;
-        if( ( bFirstLine && pFrm->GetIndPrev() )
+        m_bBreak = true;
+        if( ( bFirstLine && m_pFrm->GetIndPrev() )
             || ( rLine.GetLineNr() <= rLine.GetDropLines() ) )
         {
-            bKeep = true;
-            bBreak = false;
+            m_bKeep = true;
+            m_bBreak = false;
         }
-        else if(bFirstLine && pFrm->IsInFootnote() && !pFrm->FindFootnoteFrm()->GetPrev())
+        else if(bFirstLine && m_pFrm->IsInFootnote() && !m_pFrm->FindFootnoteFrm()->GetPrev())
         {
-            SwLayoutFrm* pTmp = pFrm->FindFootnoteBossFrm()->FindBodyCont();
+            SwLayoutFrm* pTmp = m_pFrm->FindFootnoteBossFrm()->FindBodyCont();
             if( !pTmp || !pTmp->Lower() )
-                bBreak = false;
+                m_bBreak = false;
         }
     }
 
-    return bBreak;
+    return m_bBreak;
 }
 
 /// OD 2004-02-27 #106629# - no longer inline
 void SwTextFrmBreak::SetRstHeight( const SwTextMargin &rLine )
 {
     // OD, FME 2004-02-27 #106629# - consider bottom margin
-    SWRECTFN( pFrm )
+    SWRECTFN( m_pFrm )
 
-    nRstHeight = (pFrm->*fnRect->fnGetBottomMargin)();
+    m_nRstHeight = (m_pFrm->*fnRect->fnGetBottomMargin)();
 
     if ( bVert )
     {
-           if ( pFrm->IsVertLR() )
-              nRstHeight = (*fnRect->fnYDiff)( pFrm->SwitchHorizontalToVertical( rLine.Y() ) , nOrigin );
+           if ( m_pFrm->IsVertLR() )
+              m_nRstHeight = (*fnRect->fnYDiff)( m_pFrm->SwitchHorizontalToVertical( rLine.Y() ) , m_nOrigin );
            else
-               nRstHeight += nOrigin - pFrm->SwitchHorizontalToVertical( rLine.Y() );
+               m_nRstHeight += m_nOrigin - m_pFrm->SwitchHorizontalToVertical( rLine.Y() );
     }
     else
-        nRstHeight += rLine.Y() - nOrigin;
+        m_nRstHeight += rLine.Y() - m_nOrigin;
 }
 
 WidowsAndOrphans::WidowsAndOrphans( SwTextFrm *pNewFrm, const SwTwips nRst,
     bool bChkKeep   )
     : SwTextFrmBreak( pNewFrm, nRst ), nWidLines( 0 ), nOrphLines( 0 )
 {
-    SwSwapIfSwapped swap(pFrm);
+    SwSwapIfSwapped swap(m_pFrm);
 
-    if( bKeep )
+    if( m_bKeep )
     {
         // 5652: If pararagraph should not be split but is larger than
         // the page, then bKeep is overruled.
-        if( bChkKeep && !pFrm->GetPrev() && !pFrm->IsInFootnote() &&
-            pFrm->IsMoveable() &&
-            ( !pFrm->IsInSct() || pFrm->FindSctFrm()->MoveAllowed(pFrm) ) )
-            bKeep = false;
+        if( bChkKeep && !m_pFrm->GetPrev() && !m_pFrm->IsInFootnote() &&
+            m_pFrm->IsMoveable() &&
+            ( !m_pFrm->IsInSct() || m_pFrm->FindSctFrm()->MoveAllowed(m_pFrm) ) )
+            m_bKeep = false;
         // Even if Keep is set, Orphans has to be respected.
         // e.g. if there are chained frames where a Follow in the last frame
         // receives a Keep, because it is not (forward) movable -
         // nevertheless the paragraph can request lines from the Master
         // because of the Orphan rule.
-        if( pFrm->IsFollow() )
-            nWidLines = pFrm->GetTextNode()->GetSwAttrSet().GetWidows().GetValue();
+        if( m_pFrm->IsFollow() )
+            nWidLines = m_pFrm->GetTextNode()->GetSwAttrSet().GetWidows().GetValue();
     }
     else
     {
-        const SwAttrSet& rSet = pFrm->GetTextNode()->GetSwAttrSet();
+        const SwAttrSet& rSet = m_pFrm->GetTextNode()->GetSwAttrSet();
         const SvxOrphansItem  &rOrph = rSet.GetOrphans();
         if ( rOrph.GetValue() > 1 )
             nOrphLines = rOrph.GetValue();
-        if ( pFrm->IsFollow() )
+        if ( m_pFrm->IsFollow() )
             nWidLines = rSet.GetWidows().GetValue();
 
     }
 
-    if ( bKeep || nWidLines || nOrphLines )
+    if ( m_bKeep || nWidLines || nOrphLines )
     {
         bool bResetFlags = false;
 
-        if ( pFrm->IsInTab() )
+        if ( m_pFrm->IsInTab() )
         {
             // For compatibility reasons, we disable Keep/Widows/Orphans
             // inside splittable row frames:
-            if ( pFrm->GetNextCellLeaf( MAKEPAGE_NONE ) || pFrm->IsInFollowFlowRow() )
+            if ( m_pFrm->GetNextCellLeaf( MAKEPAGE_NONE ) || m_pFrm->IsInFollowFlowRow() )
             {
-                const SwFrm* pTmpFrm = pFrm->GetUpper();
+                const SwFrm* pTmpFrm = m_pFrm->GetUpper();
                 while ( !pTmpFrm->IsRowFrm() )
                     pTmpFrm = pTmpFrm->GetUpper();
                 if ( static_cast<const SwRowFrm*>(pTmpFrm)->IsRowSplitAllowed() )
@@ -267,15 +267,15 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrm *pNewFrm, const SwTwips nRst,
             }
         }
 
-        if( pFrm->IsInFootnote() && !pFrm->GetIndPrev() )
+        if( m_pFrm->IsInFootnote() && !m_pFrm->GetIndPrev() )
         {
             // Inside of footnotes there are good reasons to turn off the Keep attribute
             // as well as Widows/Orphans.
-            SwFootnoteFrm *pFootnote = pFrm->FindFootnoteFrm();
+            SwFootnoteFrm *pFootnote = m_pFrm->FindFootnoteFrm();
             const bool bFt = !pFootnote->GetAttr()->GetFootnote().IsEndNote();
             if( !pFootnote->GetPrev() &&
                 pFootnote->FindFootnoteBossFrm( bFt ) != pFootnote->GetRef()->FindFootnoteBossFrm( bFt )
-                && ( !pFrm->IsInSct() || pFrm->FindSctFrm()->MoveAllowed(pFrm) ) )
+                && ( !m_pFrm->IsInSct() || m_pFrm->FindSctFrm()->MoveAllowed(m_pFrm) ) )
             {
                 bResetFlags = true;
             }
@@ -283,7 +283,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrm *pNewFrm, const SwTwips nRst,
 
         if ( bResetFlags )
         {
-            bKeep = false;
+            m_bKeep = false;
             nOrphLines = 0;
             nWidLines = 0;
         }
@@ -300,9 +300,9 @@ bool WidowsAndOrphans::FindBreak( SwTextFrm *pFrame, SwTextMargin &rLine,
 {
     // OD 2004-02-25 #i16128# - Why member <pFrm> _*and*_ parameter <pFrame>??
     // Thus, assertion on situation, that these are different to figure out why.
-    OSL_ENSURE( pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
+    OSL_ENSURE( m_pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
 
-    SwSwapIfSwapped swap(pFrm);
+    SwSwapIfSwapped swap(m_pFrm);
 
     bool bRet = true;
     sal_uInt16 nOldOrphans = nOrphLines;
@@ -499,14 +499,14 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
         return false;
 
     // Check the Widows-rule
-    if( !nWidLines && !pFrm->IsFollow() )
+    if( !nWidLines && !m_pFrm->IsFollow() )
     {
         // Usually we only have to check for Widows if we are a Follow.
         // On WouldFit the rule has to be checked for the Master too,
         // because we are just in the middle of calculating the break.
         // In Ctor of WidowsAndOrphans the nWidLines are only calced for
         // Follows from the AttrSet - so we catch up now:
-        const SwAttrSet& rSet = pFrm->GetTextNode()->GetSwAttrSet();
+        const SwAttrSet& rSet = m_pFrm->GetTextNode()->GetSwAttrSet();
         nWidLines = rSet.GetWidows().GetValue();
     }
 
