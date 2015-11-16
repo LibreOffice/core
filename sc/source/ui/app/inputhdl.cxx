@@ -182,6 +182,98 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
     return rString;
 }
 
+// KRiver added
+ScTypedCaseStrSet::const_iterator findTextAll(
+    const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator itPos,
+    const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack)
+{
+    rResultVec.clear(); // clear contents
+
+    int nCount = 0;
+    ScTypedCaseStrSet::const_iterator retit;
+    if (bBack) // Backwards
+    {
+        ScTypedCaseStrSet::const_reverse_iterator it, itEnd;
+        if(itPos == rDataSet.end()) {
+            it = rDataSet.rend();
+            --it;
+            itEnd = it;
+        } else {
+            it = rDataSet.rbegin();
+            size_t nPos = std::distance(rDataSet.begin(), itPos);
+            size_t nRPos = rDataSet.size() - 1 - nPos; // if itPos == rDataSet.end(), then nRPos = -1
+            std::advance(it, nRPos);
+            if(it == rDataSet.rend())
+                it = rDataSet.rbegin();
+            itEnd = it;
+        }
+        bool isFirstTime = true;
+
+        while(it != itEnd || isFirstTime) {
+            ++it;
+            if(it == rDataSet.rend()) // go to the first if reach the end
+                it = rDataSet.rbegin();
+
+            if(isFirstTime)
+                isFirstTime = false;
+            const ScTypedStrData& rData = *it;
+            if (rData.GetStringType() == ScTypedStrData::Value)
+                // skip values
+                continue;
+            
+            if (!ScGlobal::GetpTransliteration()->isMatch(rStart, rData.GetString()))
+                // not a match
+                continue;
+
+            rResultVec.push_back(rData.GetString()); // set the match data
+            if(nCount == 0) { // convert the reverse iterator back to iterator.
+                // actually we want to do "retit = it;".
+                retit = rDataSet.begin();
+                size_t nRPos = std::distance(rDataSet.rbegin(), it);
+                size_t nPos = rDataSet.size() - 1 - nRPos;
+                std::advance(retit, nPos);
+            }
+            ++nCount;
+        }
+    }
+    else // Forwards
+    {
+        ScTypedCaseStrSet::const_iterator it, itEnd;
+        it = itPos;
+        if(it == rDataSet.end())
+            it = rDataSet.begin();
+        itEnd = it;
+        bool isFirstTime = true;
+
+        while(it != itEnd || isFirstTime) {
+            ++it;
+            if(it == rDataSet.end()) // go to the first if reach the end
+                it = rDataSet.begin();
+
+            if(isFirstTime)
+                isFirstTime = false;
+            const ScTypedStrData& rData = *it;
+            if (rData.GetStringType() == ScTypedStrData::Value)
+                // skip values
+                continue;
+
+            if (!ScGlobal::GetpTransliteration()->isMatch(rStart, rData.GetString()))
+                // not a match
+                continue;
+
+            rResultVec.push_back(rData.GetString()); // set the match data
+            if(nCount == 0)
+                retit = it; // remember first match iterator
+            ++nCount;
+        }
+    }
+    
+    if(nCount > 0) // at least one function has matched
+        return retit;
+    return rDataSet.end(); // no matching text found
+}
+// end KRiver added
+
 void removeChars(OUString& rStr, sal_Unicode c)
 {
     OUStringBuffer aBuf(rStr);
@@ -917,13 +1009,23 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                 aBuf.append(static_cast<sal_Unicode>(0x25BA));
                                 aBuf.append(aNew.copy(nStartPosition));
                                 aNew = aBuf.makeStringAndClear();
-                                ShowTipBelow( aNew );
+// KRiver exchange
+//                                ShowTipBelow( aNew );
+// KRiver exchange to
+                                ShowTip( aNew );
+                                ShowTipBelow( ppFDesc->getParameterDescription(nActive-1) );
+// end KRiver exchange
                                 bFound = true;
                             }
                         }
                         else
                         {
-                            ShowTipBelow( aNew );
+// KRiver exchange
+//                            ShowTipBelow( aNew );
+// KRiver exchange to
+                            ShowTip( aNew );
+                            ShowTipBelow( ppFDesc->getParameterDescription(nActive-1) );
+// end KRiver exchange
                             bFound = true;
                         }
                     }
@@ -960,6 +1062,25 @@ void ScInputHandler::ShowTipCursor()
         }
     }
 }
+
+// KRiver added
+void ScInputHandler::ShowDescTip( OUString funcName )
+{
+    FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
+    sal_Int32 nNextFStart = 0;
+    const IFunctionDescription* ppFDesc;
+    ::std::vector< OUString> aArgs;
+    OUString eqPlusFuncName = "=" + funcName.copy(0, funcName.getLength());
+    if( aHelper.GetNextFunc( eqPlusFuncName, false, nNextFStart, NULL, &ppFDesc, &aArgs ) ) 
+    {
+        if( !ppFDesc->getFunctionName().isEmpty() )
+        {
+            OUString aFuncDesc( ppFDesc->getDescription());
+            ShowTipBelow( aFuncDesc );
+        }
+    }
+}
+// end KRiver added
 
 void ScInputHandler::ShowTip( const OUString& rText )
 {
@@ -1071,29 +1192,62 @@ void ScInputHandler::UseFormulaData()
             OUString aText;
             if ( GetFuncName( aSelText, aText ) )
             {
+// KRiver exchange
+//                // function name is incomplete:
+//                // show first matching function name as tip above cell
+//                OUString aNew;
+//                miAutoPosFormula = pFormulaData->end();
+//                miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
+//                if (miAutoPosFormula != pFormulaData->end())
+//                {
+//                    if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
+//                        aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
+//                    ShowTip( aNew );
+//                    aAutoSearch = aText;
+//                }
+//                return;
+// KRiver exchange for
                 // function name is incomplete:
-                // show first matching function name as tip above cell
-                OUString aNew;
+                // show matching functions name as tip above cell
+                ::std::vector<OUString> aNewVec;
                 miAutoPosFormula = pFormulaData->end();
-                miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
+                miAutoPosFormula = findTextAll(*pFormulaData, miAutoPosFormula, aText, aNewVec, false);
                 if (miAutoPosFormula != pFormulaData->end())
                 {
-                    // check if partial function name is not Between quotes
-                    bool bBetweenQuotes = false;
-                    for ( int n = 0; n < aSelText.getLength(); n++ )
-                    {
-                        if ( aSelText[ n ] == '"' )
-                            bBetweenQuotes = !bBetweenQuotes;
+                    OUString tipStr;
+                    OUString funcNameStr;
+                    OUString discFuncNameStr;
+                    ::std::vector<OUString>::iterator itStr = aNewVec.begin();
+                    int maxFindNumber = 3;
+                    int remainFindNumber = maxFindNumber;
+                    for( ; itStr != aNewVec.end(); ++itStr ) {
+                        funcNameStr = (*itStr).copy(0, (*itStr).getLength()-1);
+                        if ((*itStr)[(*itStr).getLength()-1] == cParenthesesReplacement) {
+                            //funcNameStr = funcNameStr.copy(0, funcNameStr.getLength()) + "()";
+                        } else {
+                            funcNameStr = funcNameStr.copy(0, funcNameStr.getLength()) + (*itStr).copy((*itStr).getLength()-1, (*itStr).getLength());
+                        }
+                        if(itStr == aNewVec.begin()) {
+                            tipStr = "[";
+                            discFuncNameStr = funcNameStr + "()";
+                        } else {
+                            tipStr = tipStr.copy(0, tipStr.getLength()) + ", ";
+                        }
+                        tipStr = tipStr.copy(0, tipStr.getLength()) + funcNameStr.copy(0, funcNameStr.getLength());
+                        if(itStr == aNewVec.begin())
+                            tipStr = tipStr.copy(0, tipStr.getLength()) + "]";
+                        if(--remainFindNumber <= 0)
+                            break;
                     }
-                    if ( bBetweenQuotes )
-                        return;  // we're between quotes
-
-                    if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
-                        aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
-                    ShowTip( aNew );
+                    int remainNumber = aNewVec.size() - maxFindNumber;
+                    if(remainFindNumber == 0 && remainNumber > 0)
+                        tipStr = tipStr.copy(0, tipStr.getLength()) + " and " + OUString::number(remainNumber, 10) + " more";
+                    ShowTip( tipStr );
+                    ShowDescTip( discFuncNameStr );
                     aAutoSearch = aText;
                 }
                 return;
+// end KRiver exchange
             }
 
             // function name is complete:
@@ -1108,15 +1262,54 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pFormulaData )
     {
-        OUString aNew;
-        ScTypedCaseStrSet::const_iterator itNew = findText(*pFormulaData, miAutoPosFormula, aAutoSearch, aNew, bBack);
+// KRiver exchange
+//        OUString aNew;
+//        ScTypedCaseStrSet::const_iterator itNew = findText(*pFormulaData, miAutoPosFormula, aAutoSearch, aNew, bBack);
+//        if (itNew != pFormulaData->end())
+//        {
+//            miAutoPosFormula = itNew;
+//            if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
+//                aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
+//            ShowTip(aNew); // Display a quick help
+//        }
+// KRiver exchange for
+        ::std::vector<OUString> aNewVec;
+        ScTypedCaseStrSet::const_iterator itNew = findTextAll(*pFormulaData, miAutoPosFormula, aAutoSearch, aNewVec, bBack);
         if (itNew != pFormulaData->end())
         {
             miAutoPosFormula = itNew;
-            if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
-                aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
-            ShowTip(aNew); // Display a quick help
+            OUString tipStr;
+            OUString funcNameStr;
+            OUString discFuncNameStr;
+            ::std::vector<OUString>::iterator itStr = aNewVec.begin();
+            int maxFindNumber = 3;
+            int remainFindNumber = maxFindNumber;
+            for( ; itStr != aNewVec.end(); ++itStr ) {
+                funcNameStr = (*itStr).copy(0, (*itStr).getLength()-1);
+                if ((*itStr)[(*itStr).getLength()-1] == cParenthesesReplacement) {
+                    //funcNameStr = funcNameStr.copy(0, funcNameStr.getLength()) + "()";
+                } else {
+                    funcNameStr = funcNameStr.copy(0, funcNameStr.getLength()) + (*itStr).copy((*itStr).getLength()-1, (*itStr).getLength());
+                }
+                if(itStr == aNewVec.begin()) {
+                    tipStr = "[";
+                    discFuncNameStr = funcNameStr + "()";
+                } else {
+                    tipStr = tipStr.copy(0, tipStr.getLength()) + ", ";
+                }
+                tipStr = tipStr.copy(0, tipStr.getLength()) + funcNameStr.copy(0, funcNameStr.getLength());
+                if(itStr == aNewVec.begin())
+                    tipStr = tipStr.copy(0, tipStr.getLength()) + "]";
+                if(--remainFindNumber <= 0)
+                    break;
+            }
+            int remainNumber = aNewVec.size() - maxFindNumber;
+            if(remainFindNumber == 0 && remainNumber > 0)
+                tipStr = tipStr.copy(0, tipStr.getLength()) + " and " + OUString::number(remainNumber, 10) + " more";
+            ShowTip( tipStr );
+            ShowDescTip( discFuncNameStr );
         }
+// end KRiver exchange
     }
 
     // For Tab we always call HideCursor first
@@ -1230,7 +1423,10 @@ void ScInputHandler::PasteFunctionData()
             AutoParAdded();
     }
 
-    HideTip();
+// KRiver exchange
+//    HideTip();
+// KRiver exchange to
+// end KRiver exchange
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (pActiveView)
@@ -3230,10 +3426,25 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                     if (pViewFrm)
                         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
                 }
+// KRiver exchange
+//                if( bUsed && bFormulaMode && ( bCursorKey || bInsKey || nCode == KEY_DELETE || nCode == KEY_BACKSPACE ) )
+//                {
+//                    ShowTipCursor();
+//                }
+// KRiver exchange to
                 if( bUsed && bFormulaMode && ( bCursorKey || bInsKey || nCode == KEY_DELETE || nCode == KEY_BACKSPACE ) )
                 {
                     ShowTipCursor();
                 }
+                if( bUsed && bFormulaMode && nCode == KEY_BACKSPACE )
+                {
+                    if (bFormulaMode)
+                        UseFormulaData();
+                    else
+                        UseColData();
+                }
+
+// end KRiver exchange
             }
 
             // #i114511# don't count cursor keys as modification
