@@ -8,8 +8,8 @@
  # -D_CRT_SECURE_NO_DEPRECATE is needed to quiet warnings about using standard C functions.
 -CFLAGS+=-GF -nologo
 -CXXFLAGS+=-GF -nologo -EHsc -Zc:wchar_t
-+CFLAGS+=-GF -nologo -Zc:wchar_t-
-+CXXFLAGS+=-GF -nologo -EHsc -Zc:wchar_t-
++CFLAGS+=-GF -nologo -Zc:wchar_t
++CXXFLAGS+=-GF -nologo -EHsc -Zc:wchar_t
  CPPFLAGS+=-D_CRT_SECURE_NO_DEPRECATE
  DEFS+=-DWIN32 -DCYGWINMSVC
  LDFLAGS+=-nologo

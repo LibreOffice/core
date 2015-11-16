@@ -163,7 +163,7 @@ gb_CFLAGS := \
 	-wd4626 \
 	-wd4706 \
 	-wd4800 \
-	-Zc:wchar_t- \
+	-Zc:wchar_t \
 
 gb_CXXFLAGS := \
 	-Gd \
@@ -194,7 +194,7 @@ gb_CXXFLAGS := \
 	-wd4706 \
 	-wd4800 \
 	-wd4913 \
-	-Zc:wchar_t- \
+	-Zc:wchar_t \
 
 
 ifneq ($(ENABLE_LTO),)

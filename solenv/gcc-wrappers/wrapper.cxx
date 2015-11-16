@@ -81,7 +81,7 @@ string processccargs(vector<string> rawargs) {
     else
         args.append(" -MD");
     args.append(" -Gy");
-    args.append(" -Zc:wchar_t-");
+    args.append(" -Zc:wchar_t");
     args.append(" -Ob1 -Oxs -Oy-");
 
     // apparently these must be at the end
