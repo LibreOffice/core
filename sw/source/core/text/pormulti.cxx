@@ -2237,49 +2237,49 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
 // SwTextCursorSave notes the start and current line of a SwTextCursor,
 // sets them to the values for GetCrsrOfst inside a multiportion
 // and restores them in the destructor.
-SwTextCursorSave::SwTextCursorSave( SwTextCursor* pTextCursor,
+SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
                                   SwMultiPortion* pMulti,
                                   SwTwips nY,
                                   sal_uInt16& nX,
                                   sal_Int32 nCurrStart,
                                   long nSpaceAdd )
 {
-    pTextCrsr = pTextCursor;
-    nStart = pTextCursor->m_nStart;
-    pTextCursor->m_nStart = nCurrStart;
-    pCurr = pTextCursor->m_pCurr;
-    pTextCursor->m_pCurr = &pMulti->GetRoot();
-    while( pTextCursor->Y() + pTextCursor->GetLineHeight() < nY &&
-        pTextCursor->Next() )
+    pTextCrsr = pCursor;
+    nStart = pCursor->m_nStart;
+    pCursor->m_nStart = nCurrStart;
+    pCurr = pCursor->m_pCurr;
+    pCursor->m_pCurr = &pMulti->GetRoot();
+    while( pCursor->Y() + pCursor->GetLineHeight() < nY &&
+        pCursor->Next() )
         ; // nothing
-    nWidth = pTextCursor->m_pCurr->Width();
-    nOldProp = pTextCursor->GetPropFont();
+    nWidth = pCursor->m_pCurr->Width();
+    nOldProp = pCursor->GetPropFont();
 
     if ( pMulti->IsDouble() || pMulti->IsBidi() )
     {
-        bSpaceChg = pMulti->ChgSpaceAdd( pTextCursor->m_pCurr, nSpaceAdd );
+        bSpaceChg = pMulti->ChgSpaceAdd( pCursor->m_pCurr, nSpaceAdd );
 
         sal_Int32 nSpaceCnt;
         if ( pMulti->IsDouble() )
         {
-            pTextCursor->SetPropFont( 50 );
+            pCursor->SetPropFont( 50 );
             nSpaceCnt = static_cast<SwDoubleLinePortion*>(pMulti)->GetSpaceCnt();
         }
         else
         {
-            const sal_Int32 nOldIdx = pTextCursor->GetInfo().GetIdx();
-            pTextCursor->GetInfo().SetIdx ( nCurrStart );
-            nSpaceCnt = static_cast<SwBidiPortion*>(pMulti)->GetSpaceCnt(pTextCursor->GetInfo());
-            pTextCursor->GetInfo().SetIdx ( nOldIdx );
+            const sal_Int32 nOldIdx = pCursor->GetInfo().GetIdx();
+            pCursor->GetInfo().SetIdx ( nCurrStart );
+            nSpaceCnt = static_cast<SwBidiPortion*>(pMulti)->GetSpaceCnt(pCursor->GetInfo());
+            pCursor->GetInfo().SetIdx ( nOldIdx );
         }
 
         if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
-            pTextCursor->m_pCurr->Width( static_cast<sal_uInt16>(nWidth + nSpaceAdd * nSpaceCnt / SPACING_PRECISION_FACTOR ) );
+            pCursor->m_pCurr->Width( static_cast<sal_uInt16>(nWidth + nSpaceAdd * nSpaceCnt / SPACING_PRECISION_FACTOR ) );
 
         // For a BidiPortion we have to calculate the offset from the
         // end of the portion
         if ( nX && pMulti->IsBidi() )
-            nX = pTextCursor->m_pCurr->Width() - nX;
+            nX = pCursor->m_pCurr->Width() - nX;
     }
     else
         bSpaceChg = false;
