@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_efb496d2",
+        "filename": "sw/qa/python/check_flies.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-16T17:01:37Z",
+      "side": 1,
+      "message": "this method is never run by the Python unittest framework default runner, it needs to start with the letters \"test\" for that\n\nsee e.g. https://docs.python.org/3/library/unittest.html\n\"The three individual tests are defined with methods whose names start with the letters test. This naming convention informs the test runner about which methods represent tests.\"",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 21
+      },
+      "revId": "dd3e7283cfc44ad4c34ea51311fb80fbb88bff24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_4fca0251",
+        "filename": "sw/qa/python/check_flies.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-16T17:01:37Z",
+      "side": 1,
+      "message": "same here, stopping reviewing here for now, as without being run, the Jenkins results mean nothing",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 27
+      },
+      "revId": "dd3e7283cfc44ad4c34ea51311fb80fbb88bff24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
