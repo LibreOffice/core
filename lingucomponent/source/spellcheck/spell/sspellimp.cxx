@@ -613,8 +613,6 @@ void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener
 OUString SAL_CALL SpellChecker::getImplementationName()
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     return getImplementationName_Static();
 }
 
@@ -627,16 +625,12 @@ sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL SpellChecker::getSupportedServiceNames()
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     return getSupportedServiceNames_Static();
 }
 
 Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
         throw()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     Sequence< OUString > aSNS { SN_SPELLCHECKER };
     return aSNS;
 }

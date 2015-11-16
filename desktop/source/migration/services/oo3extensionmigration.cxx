@@ -61,34 +61,14 @@ static const char sExtensionRootSubDirName[] = "/uno_packages";
 
 OUString OO3ExtensionMigration_getImplementationName()
 {
-    static OUString* pImplName = nullptr;
-    if ( !pImplName )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pImplName )
-        {
-            static OUString aImplName( "com.sun.star.comp.desktop.migration.OOo3Extensions" );
-            pImplName = &aImplName;
-        }
-    }
-    return *pImplName;
+    return OUString( "com.sun.star.comp.desktop.migration.OOo3Extensions" );
 }
 
 
 
 Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
 {
-    static Sequence< OUString >* pNames = nullptr;
-    if ( !pNames )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pNames )
-        {
-            static Sequence< OUString > aNames { "com.sun.star.migration.Extensions" };
-            pNames = &aNames;
-        }
-    }
-    return *pNames;
+    return Sequence< OUString > { "com.sun.star.migration.Extensions" };
 }
 
 
