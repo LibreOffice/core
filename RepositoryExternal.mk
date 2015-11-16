@@ -1272,6 +1272,24 @@ endef
 
 endif # SYSTEM_CAIRO
 
+else ifeq ($(OS),ANDROID)
+
+define gb_LinkTarget__use_cairo
+$(call gb_LinkTarget_use_package,$(1),cairo)
+$(call gb_LinkTarget_use_package,$(1),pixman)
+$(call gb_LinkTarget_use_external,$(1),freetype_headers)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,cairo) \
+	-I$(call gb_UnpackedTarball_get_dir,cairo)/src \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,cairo)/src/.libs -lcairo \
+	-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1 \
+)
+
+endef
+
 endif # CAIRO
 
 ifneq ($(SYSTEM_FREETYPE),)
