@@ -559,10 +559,11 @@ class ReleasePoolHolder
     ~ReleasePoolHolder() { [mpPool release]; }
 };
 
-void AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
     (void) nReleased;
     assert(nReleased == 0); // not implemented
+
     // ensure that the per thread autorelease pool is top level and
     // will therefore not be destroyed by cocoa implicitly
     SalData::ensureThreadAutoreleasePool();
@@ -599,12 +600,13 @@ void AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
             osl_setCondition( maWaitingYieldCond );
             // return if only one event is asked for
             if( ! bHandleAllCurrentEvents )
-                return;
+                return true;
         }
     }
 
     // handle cocoa event queue
     // cocoa events may be only handled in the thread the NSApp was created
+    bool bHadEvent = false;
     if( isNSAppThread() && mnActivePrintJobs == 0 )
     {
         // we need to be woken up by a cocoa-event
@@ -614,7 +616,6 @@ void AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
 
         // handle available events
         NSEvent* pEvent = nil;
-        bool bHadEvent = false;
         do
         {
             sal_uLong nCount = ReleaseYieldMutex();
@@ -709,6 +710,8 @@ void AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
             bInAppEvent = false;
         }
     }
+
+    return bHadEvent;
 }
 
 bool AquaSalInstance::AnyInput( VclInputFlags nType )
