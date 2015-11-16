@@ -63,7 +63,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes">0.00</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -103,7 +102,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes">0.00</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -175,7 +173,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">0.00</property>
                     <property name="adjustment">adjustmentRADIUS</property>
                     <property name="digits">2</property>
                   </object>
@@ -241,7 +238,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">0.00</property>
                     <property name="adjustment">adjustmentSLANT</property>
                     <property name="digits">2</property>
                   </object>
@@ -315,7 +311,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes">0.00</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -355,7 +350,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes">0.00</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
