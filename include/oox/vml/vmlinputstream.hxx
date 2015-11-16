@@ -78,8 +78,8 @@ private:
 private:
     css::uno::Reference< css::io::XTextInputStream2 >
                         mxTextStrm;
-    css::uno::Sequence< sal_Unicode > maOpeningBracket;
-    css::uno::Sequence< sal_Unicode > maClosingBracket;
+    css::uno::Sequence<cppu::UnoCharType> maOpeningBracket;
+    css::uno::Sequence<cppu::UnoCharType> maClosingBracket;
     const OString       maOpeningCData;
     const OString       maClosingCData;
     OString             maBuffer;

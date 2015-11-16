@@ -94,7 +94,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
             if( m_pText2Unicode && m_pUnicode2Text &&
                 m_pText2Unicode->canContinue() && m_pUnicode2Text->canContinue() ) {
 
-                Sequence<sal_Unicode> seqUnicode = m_pText2Unicode->convert( seq );
+                Sequence<cppu::UnoCharType> seqUnicode = m_pText2Unicode->convert( seq );
                 seq = m_pUnicode2Text->convert( seqUnicode.getConstArray(), seqUnicode.getLength() );
             }
 
@@ -383,7 +383,7 @@ void Text2UnicodeConverter::init( rtl_TextEncoding encoding )
 }
 
 
-Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &seqText )
+Sequence<cppu::UnoCharType> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &seqText )
 {
     sal_uInt32 uiInfo;
     sal_Size nSrcCvtBytes   = 0;
@@ -392,7 +392,7 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
 
     // the whole source size
     sal_Int32   nSourceSize = seqText.getLength() + m_seqSource.getLength();
-    Sequence<sal_Unicode>   seqUnicode ( nSourceSize );
+    Sequence<cppu::UnoCharType> seqUnicode ( nSourceSize );
 
     const sal_Int8 *pbSource = seqText.getConstArray();
     std::unique_ptr<sal_Int8[]> pbTempMem;
@@ -486,7 +486,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
         puSource = puTempMem.get();
         nSourceSize += m_seqSource.getLength();
 
-        m_seqSource = Sequence< sal_Unicode > ();
+        m_seqSource = Sequence<cppu::UnoCharType>();
     }
 
 

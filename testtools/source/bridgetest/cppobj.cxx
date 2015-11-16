@@ -125,7 +125,7 @@ class Test_Impl :
     Mutex m_mutex;
 
     Sequence<sal_Bool> _arBool;
-    Sequence<sal_Unicode> _arChar;
+    Sequence<cppu::UnoCharType> _arChar;
     Sequence<sal_Int8> _arByte;
     Sequence<sal_Int16> _arShort;
     Sequence<sal_uInt16> _arUShort;
@@ -729,7 +729,7 @@ Sequence< sal_Bool > SAL_CALL Test_Impl::setSequenceBool(
 Sequence< sal_Unicode > SAL_CALL Test_Impl::setSequenceChar(
         const Sequence< sal_Unicode >& aSeq ) throw (RuntimeException, std::exception)
 {
-    _arChar = aSeq;
+    _arChar = map_char_sequence(aSeq);
     return aSeq;
 }
 
@@ -867,7 +867,7 @@ void SAL_CALL Test_Impl::setSequencesInOut(Sequence< sal_Bool >& aSeqBoolean,
         throw (RuntimeException, std::exception)
 {
     _arBool = aSeqBoolean;
-    _arChar = aSeqChar;
+    _arChar = map_char_sequence(aSeqChar);
     _arByte = aSeqByte;
     _arShort = aSeqShort;
     _arUShort = aSeqUShort;
@@ -905,7 +905,7 @@ void SAL_CALL Test_Impl::setSequencesOut( Sequence< sal_Bool >& aSeqBoolean,
         throw (RuntimeException, std::exception)
 {
     aSeqBoolean = _arBool;
-    aSeqChar = _arChar;
+    aSeqChar = map_char_sequence(_arChar);
     aSeqByte = _arByte;
     aSeqShort = _arShort;
     aSeqUShort = _arUShort;
@@ -936,7 +936,7 @@ void Test_Impl::testConstructorsService(
     Sequence< sal_uInt64 > arg21(1); arg21[0] = SAL_MAX_UINT64;
     Sequence< float > arg22(1); arg22[0] = 0.123f;
     Sequence< double > arg23(1); arg23[0] = 0.456;
-    Sequence< sal_Unicode > arg24(1); arg24[0] = 'X';
+    Sequence<cppu::UnoCharType> arg24(1); arg24[0] = 'X';
     Sequence< OUString > arg25 { "test" };
     Sequence< Type > arg26(1); arg26[0] = UnoType< Any >::get();
     Sequence< Any > arg27(1); arg27[0] <<= true;
@@ -974,7 +974,7 @@ void Test_Impl::testConstructorsService(
         arg21,
         arg22,
         arg23,
-        arg24,
+        map_char_sequence(arg24),
         arg25,
         arg26,
         arg27,
@@ -1117,7 +1117,7 @@ void Test_Impl::testConstructorsService(
         TestPolyStruct<Sequence<sal_Int16> >(arg16),
         TestPolyStruct<Sequence<sal_Int32> >(arg18),
         TestPolyStruct<Sequence<sal_Int64> >(arg20),
-        TestPolyStruct<Sequence<sal_Unicode> >(arg24),
+        TestPolyStruct<Sequence<sal_Unicode> >(map_char_sequence(arg24)),
         TestPolyStruct<Sequence<OUString> >(arg25),
         TestPolyStruct<Sequence<float> >(arg22),
         TestPolyStruct<Sequence<double> >(arg23),

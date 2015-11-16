@@ -153,7 +153,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
 {
     if( mxTextStrm.is() ) try
     {
-        Sequence< sal_Unicode > aDelimiters( 1 );
+        Sequence<cppu::UnoCharType> aDelimiters( 1 );
         aDelimiters[ 0 ] = cChar;
         /*  Always get the delimiter character from the UNO text input stream.
             In difference to this implementation, it will not return it in the
@@ -161,7 +161,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
             character in this call, it will be returned in the next call of one
             of the own member functions. The function createFinalString() adds
             a character that has been buffered in the previous call. */
-        OUString aString = createFinalString( mxTextStrm->readString( aDelimiters, sal_False ) );
+        OUString aString = createFinalString( mxTextStrm->readString( map_char_sequence(aDelimiters), sal_False ) );
         // remove last character from string and remember it for next call
         if( !bIncludeChar && !aString.isEmpty() && (aString[ aString.getLength() - 1 ] == cChar) )
         {

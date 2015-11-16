@@ -71,7 +71,7 @@ class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo 
     bool mbReachedEOF;
 
     void implResizeBuffer();
-    OUString implReadString( const Sequence< sal_Unicode >& Delimiters,
+    OUString implReadString( const Sequence<cppu::UnoCharType>& Delimiters,
         bool bRemoveDelimiter, bool bFindLineEnd )
             throw(IOException, RuntimeException);
     sal_Int32 implReadNext() throw(IOException, RuntimeException);
@@ -153,14 +153,15 @@ void OTextInputStream::implResizeBuffer()
 OUString OTextInputStream::readLine(  )
     throw(IOException, RuntimeException, std::exception)
 {
-    static Sequence< sal_Unicode > aDummySeq;
+    static Sequence<cppu::UnoCharType> aDummySeq;
     return implReadString( aDummySeq, true, true );
 }
 
 OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter )
         throw(IOException, RuntimeException, std::exception)
 {
-    return implReadString( Delimiters, bRemoveDelimiter, false );
+    return implReadString(
+        map_char_sequence(Delimiters), bRemoveDelimiter, false);
 }
 
 sal_Bool OTextInputStream::isEOF()
@@ -173,7 +174,7 @@ sal_Bool OTextInputStream::isEOF()
 }
 
 
-OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimiters,
+OUString OTextInputStream::implReadString( const Sequence<cppu::UnoCharType>& Delimiters,
                                            bool bRemoveDelimiter, bool bFindLineEnd )
         throw(IOException, RuntimeException)
 {

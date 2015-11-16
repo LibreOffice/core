@@ -207,6 +207,33 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
         * reinterpret_cast< const ::com::sun::star::uno::Sequence< sal_Int8 > * >( &rByteSequence ) );
 }
 
+#if defined LIBO_INTERNAL_ONLY
+/** TODO
+
+    @since LibreOffice 5.1
+*/
+inline Sequence<sal_Unicode> const & map_char_sequence(
+    Sequence<cppu::UnoCharType> const & sequence)
+{
+    return reinterpret_cast<Sequence<sal_Unicode> const &>(sequence);
+}
+inline Sequence<sal_Unicode> & map_char_sequence(
+    Sequence<cppu::UnoCharType> & sequence)
+{
+    return reinterpret_cast<Sequence<sal_Unicode> &>(sequence);
+}
+inline Sequence<cppu::UnoCharType> const & map_char_sequence(
+    Sequence<sal_Unicode> const & sequence)
+{
+    return reinterpret_cast<Sequence<cppu::UnoCharType> const &>(sequence);
+}
+inline Sequence<cppu::UnoCharType> & map_char_sequence(
+    Sequence<sal_Unicode> & sequence)
+{
+    return reinterpret_cast<Sequence<cppu::UnoCharType> &>(sequence);
+}
+#endif
+
 }
 }
 }
@@ -221,11 +248,8 @@ getTypeFavourUnsigned(
     if (::com::sun::star::uno::Sequence< T >::s_pType == 0) {
         ::typelib_static_sequence_type_init(
             &::com::sun::star::uno::Sequence< T >::s_pType,
-            (::cppu::getTypeFavourUnsigned(
-                static_cast<
-                typename ::com::sun::star::uno::Sequence< T >::ElementType * >(
-                    0)).
-             getTypeLibType()));
+            (::cppu::getTypeFavourUnsigned(static_cast<T *>(0))
+             .getTypeLibType()));
     }
     return detail::getTypeFromTypeDescriptionReference(
         &::com::sun::star::uno::Sequence< T >::s_pType);
@@ -241,11 +265,7 @@ getTypeFavourChar(
     if (td == NULL) {
         ::typelib_static_sequence_type_init(
             &td,
-            (::cppu::getTypeFavourChar(
-                static_cast<
-                typename ::com::sun::star::uno::Sequence< T >::ElementType * >(
-                    0)).
-             getTypeLibType()));
+            ::cppu::getTypeFavourChar(static_cast<T *>(0)).getTypeLibType());
     }
     return detail::getTypeFromTypeDescriptionReference(&td);
 }

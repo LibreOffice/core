@@ -369,12 +369,12 @@ void InputStream::updateBuffer() throw (IOException, RuntimeException)
 
 OString InputStream::readToElementBegin() throw (IOException, RuntimeException)
 {
-    return OUStringToOString( mxTextStrm->readString( maOpeningBracket, sal_False ), RTL_TEXTENCODING_ISO_8859_1 );
+    return OUStringToOString( mxTextStrm->readString( map_char_sequence(maOpeningBracket), sal_False ), RTL_TEXTENCODING_ISO_8859_1 );
 }
 
 OString InputStream::readToElementEnd() throw (IOException, RuntimeException)
 {
-    OString aText = OUStringToOString( mxTextStrm->readString( maClosingBracket, sal_False ), RTL_TEXTENCODING_ISO_8859_1 );
+    OString aText = OUStringToOString( mxTextStrm->readString( map_char_sequence(maClosingBracket), sal_False ), RTL_TEXTENCODING_ISO_8859_1 );
     OSL_ENSURE( aText.endsWith(">"), "InputStream::readToElementEnd - missing closing bracket of XML element" );
     return aText;
 }

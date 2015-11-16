@@ -30,6 +30,7 @@
 #include <initializer_list>
 #endif
 
+namespace cppu { struct UnoCharType; }
 namespace rtl
 {
 class ByteSequence;
@@ -43,6 +44,20 @@ namespace star
 {
 namespace uno
 {
+
+/// @cond INTERNAL
+namespace detail {
+
+template<typename T> struct SequenceElementType {
+    typedef T type;
+};
+
+template<> struct SequenceElementType<cppu::UnoCharType> {
+    typedef sal_Unicode type;
+};
+
+}
+/// @endcond
 
 /** Template C++ class representing an IDL sequence. Template argument is the
     sequence element type.  C++ Sequences are reference counted and shared,
@@ -80,7 +95,7 @@ public:
 
     /** typedefs the element type of the sequence
     */
-    typedef E ElementType;
+    typedef typename detail::SequenceElementType<E>::type ElementType;
 
     /** Default constructor: Creates an empty sequence.
     */

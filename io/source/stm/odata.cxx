@@ -321,7 +321,7 @@ OUString ODataInputStream::readUTF() throw (IOException, RuntimeException, std::
         nUTFLen = ( sal_Int32 ) nShortLen;
     }
 
-    Sequence<sal_Unicode>   aBuffer( nUTFLen );
+    Sequence<cppu::UnoCharType> aBuffer( nUTFLen );
     sal_Unicode *           pStr = aBuffer.getArray();
 
     sal_Int32 nCount = 0;

@@ -693,7 +693,7 @@ static bool performTest(
             float _arFloat[] = { 1.1f, 2.2f, 3.3f };
             double _arDouble[] = { 1.11, 2.22, 3.33 };
             Sequence<sal_Bool> arBool(_arBool, 3);
-            Sequence<sal_Unicode> arChar( _arChar, 3);
+            Sequence<cppu::UnoCharType> arChar( _arChar, 3);
             Sequence<sal_Int8> arByte(_arByte, 3);
             Sequence<sal_Int16> arShort(_arShort, 3);
             Sequence<sal_uInt16> arUShort(_arUShort, 3);
@@ -731,7 +731,9 @@ static bool performTest(
             bRet &= check(seqBoolRet == arBool, "sequence test");
             Sequence< sal_Int8 > seqByteRet(xBT2->setSequenceByte(arByte));
             bRet &= check(seqByteRet == arByte, "sequence test");
-            Sequence< sal_Unicode > seqCharRet(xBT2->setSequenceChar(arChar));
+            Sequence<cppu::UnoCharType> seqCharRet(
+                map_char_sequence(
+                    xBT2->setSequenceChar(map_char_sequence(arChar))));
             bRet &= check(seqCharRet == arChar, "sequence test");
             Sequence< sal_Int16 > seqShortRet(xBT2->setSequenceShort(arShort));
             bRet &= check(seqShortRet == arShort, "sequence test");
@@ -763,7 +765,7 @@ static bool performTest(
                 xBT2->setSequenceStruct(arStruct));
             bRet &= check(seqStructRet == arStruct, "sequence test");
             Sequence< sal_Bool > arBoolTemp(cloneSequence(arBool));
-            Sequence< sal_Unicode > arCharTemp(cloneSequence<sal_Unicode, cppu::UnoCharType>(arChar));
+            Sequence<cppu::UnoCharType> arCharTemp(cloneSequence(arChar));
             Sequence< sal_Int8 > arByteTemp(cloneSequence(arByte));
             Sequence< sal_Int16 > arShortTemp(cloneSequence(arShort));
             Sequence< sal_uInt16 > arUShortTemp(cloneSequence<sal_uInt16, cppu::UnoUnsignedShortType>(arUShort));
@@ -781,10 +783,11 @@ static bool performTest(
             Sequence< Sequence< sal_Int32 > > arLong2Temp(arLong3[0]);
             Sequence< Sequence< Sequence< sal_Int32 > > > arLong3Temp(arLong3);
             xBT2->setSequencesInOut(
-                arBoolTemp, arCharTemp, arByteTemp, arShortTemp, arUShortTemp,
-                arLongTemp,arULongTemp, arHyperTemp, arUHyperTemp, arFloatTemp,
-                arDoubleTemp, arEnumTemp, arStringTemp, arObjectTemp, arAnyTemp,
-                arLong2Temp, arLong3Temp);
+                arBoolTemp, map_char_sequence(arCharTemp), arByteTemp,
+                arShortTemp, arUShortTemp, arLongTemp,arULongTemp, arHyperTemp,
+                arUHyperTemp, arFloatTemp, arDoubleTemp, arEnumTemp,
+                arStringTemp, arObjectTemp, arAnyTemp, arLong2Temp,
+                arLong3Temp);
             bRet &= check(
                 (arBoolTemp == arBool && arCharTemp == arChar &&
                  arByteTemp == arByte && arShortTemp == arShort &&
@@ -797,7 +800,7 @@ static bool performTest(
                  arLong3Temp == arLong3),
                 "sequence test");
             Sequence< sal_Bool > arBoolOut;
-            Sequence< sal_Unicode > arCharOut;
+            Sequence<cppu::UnoCharType> arCharOut;
             Sequence< sal_Int8 > arByteOut;
             Sequence< sal_Int16 > arShortOut;
             Sequence< sal_uInt16 > arUShortOut;
@@ -814,10 +817,10 @@ static bool performTest(
             Sequence< Sequence< sal_Int32 > > arLong2Out;
             Sequence< Sequence< Sequence< sal_Int32 > > > arLong3Out;
             xBT2->setSequencesOut(
-                arBoolOut, arCharOut, arByteOut, arShortOut, arUShortOut,
-                arLongOut,arULongOut, arHyperOut, arUHyperOut, arFloatOut,
-                arDoubleOut, arEnumOut, arStringOut, arObjectOut, arAnyOut,
-                arLong2Out, arLong3Out);
+                arBoolOut, map_char_sequence(arCharOut), arByteOut, arShortOut,
+                arUShortOut, arLongOut,arULongOut, arHyperOut, arUHyperOut,
+                arFloatOut, arDoubleOut, arEnumOut, arStringOut, arObjectOut,
+                arAnyOut, arLong2Out, arLong3Out);
             bRet &= check(
                 (arBoolOut == arBool && arCharOut == arChar &&
                  arByteOut == arByte && arShortOut == arShort &&
@@ -848,8 +851,10 @@ static bool performTest(
             Sequence< sal_Int8 > arByte;
             Sequence< sal_Int8 > seqByteRet(xBT2->setSequenceByte(arByte));
             bRet &= check(seqByteRet == arByte, "sequence test");
-            Sequence< sal_Unicode > arChar;
-            Sequence< sal_Unicode > seqCharRet(xBT2->setSequenceChar(arChar));
+            Sequence<cppu::UnoCharType> arChar;
+            Sequence<cppu::UnoCharType> seqCharRet(
+                map_char_sequence(
+                    xBT2->setSequenceChar(map_char_sequence(arChar))));
             bRet &= check(seqCharRet == arChar, "sequence test");
             Sequence< sal_Int16 > arShort;
             Sequence< sal_Int16 > seqShortRet(xBT2->setSequenceShort(arShort));

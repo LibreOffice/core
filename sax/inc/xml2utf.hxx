@@ -31,7 +31,7 @@ public:
     Text2UnicodeConverter( const OString & sEncoding );
     ~Text2UnicodeConverter();
 
-    css::uno::Sequence < sal_Unicode > convert( const css::uno::Sequence<sal_Int8> & );
+    css::uno::Sequence<cppu::UnoCharType> convert( const css::uno::Sequence<sal_Int8> & );
     bool canContinue() {  return m_bCanContinue; }
 
 private:
@@ -67,7 +67,7 @@ private:
     bool                            m_bCanContinue;
     bool                            m_bInitialized;
     rtl_TextEncoding                m_rtlEncoding;
-    css::uno::Sequence<sal_Unicode> m_seqSource;
+    css::uno::Sequence<cppu::UnoCharType> m_seqSource;
 };
 
 
