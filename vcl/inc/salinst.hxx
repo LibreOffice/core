@@ -125,10 +125,13 @@ public:
     // return true, if yield mutex is owned by this thread, else false
     virtual bool            CheckYieldMutex() = 0;
 
-    // wait next event and dispatch
-    // must returned by UserEvent (SalFrame::PostEvent)
-    // and timer
-    virtual void            DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) = 0;
+    /**
+     * Wait for the next event (if @bWait) and dispatch it,
+     * includes posted events, and timers.
+     * If @bHandleAllCurrentEvents - dispatch multiple posted
+     * user events. Returns true if events needed processing.
+     */
+    virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) = 0;
     virtual bool            AnyInput( VclInputFlags nType ) = 0;
 
     // menus
