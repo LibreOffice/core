@@ -219,7 +219,8 @@ rtl::OUString OConnection::getImplementationName() throw (css::uno::RuntimeExcep
 css::uno::Sequence<rtl::OUString> OConnection::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence<OUString> s { "com.sun.star.sdbc.Connection" };
+    css::uno::Sequence<rtl::OUString> s(1);
+    s[0] = "com.sun.star.sdbc.Connection";
     return s;
 }
 
