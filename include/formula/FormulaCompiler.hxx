@@ -298,6 +298,10 @@ protected:
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
 
+    /** Whether parameter nParam (0-based) is forced to array for OpCode eOp.
+        Calc: ForceArray or ReferenceOrForceArray type. */
+    virtual bool IsForceArrayParameter( const FormulaToken* pToken, sal_uInt16 nParam ) const;
+
     void AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError ) const;
 
     bool   GetToken();
@@ -328,6 +332,7 @@ protected:
 
     FormulaTokenRef     mpToken;                // current token
     FormulaTokenRef     pCurrentFactorToken;    // current factor token (of Factor() method)
+    sal_uInt16          nCurrentFactorParam;    // current factor token's parameter, 1-based
     FormulaTokenArray*  pArr;
 
     FormulaToken**      pCode;
@@ -358,32 +363,38 @@ private:
     void loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar eGrammar, NonConstOpCodeMapPtr& rxMap,
             SeparatorType eSepType = SEMICOLON_BASE ) const;
 
-    static inline void ForceArrayOperator( FormulaTokenRef& rCurr, const FormulaTokenRef& rPrev )
-        {
-            if ( rPrev && rPrev->HasForceArray() && rCurr->GetOpCode() != ocPush &&
-                    (rCurr->GetType() == svByte || rCurr->GetType() == svJump) &&
-                    !rCurr->HasForceArray() )
-                rCurr->SetForceArray( true);
-        }
+    /** Check pCurrentFactorToken for nParam's (0-based) ForceArray types and
+        set ForceArray at rCurr if so. Set nParam+1 as 1-based
+        nCurrentFactorParam for subsequent ForceArrayOperator() calls.
+     */
+    void CheckSetForceArrayParameter( FormulaTokenRef& rCurr, sal_uInt8 nParam );
+
+    void ForceArrayOperator( FormulaTokenRef& rCurr );
 
     class CurrentFactor
     {
         FormulaTokenRef  pPrevFac;
+        sal_uInt16       nPrevParam;
         FormulaCompiler* pCompiler;
         CurrentFactor( const CurrentFactor& ) SAL_DELETED_FUNCTION;
         CurrentFactor& operator=( const CurrentFactor& ) SAL_DELETED_FUNCTION;
     public:
         explicit CurrentFactor( FormulaCompiler* pComp )
             : pPrevFac( pComp->pCurrentFactorToken )
+            , nPrevParam( pComp->nCurrentFactorParam )
             , pCompiler( pComp )
             {}
         ~CurrentFactor()
-            { pCompiler->pCurrentFactorToken = pPrevFac; }
+            {
+                pCompiler->pCurrentFactorToken = pPrevFac;
+                pCompiler->nCurrentFactorParam = nPrevParam;
+            }
         // yes, this operator= may modify the RValue
         void operator=( FormulaTokenRef& r )
             {
-                ForceArrayOperator( r, pPrevFac);
+                pCompiler->ForceArrayOperator( r );
                 pCompiler->pCurrentFactorToken = r;
+                pCompiler->nCurrentFactorParam = 0;
             }
         void operator=( FormulaToken* p )
             {
