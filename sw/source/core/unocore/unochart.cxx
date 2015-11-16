@@ -1883,16 +1883,16 @@ SwChartDataSequence::SwChartDataSequence(
         SwFrameFormat   &rTableFormat,
         std::shared_ptr<SwUnoCrsr> pTableCursor ) :
     SwClient( &rTableFormat ),
-    aEvtListeners( GetChartMutex() ),
-    aModifyListeners( GetChartMutex() ),
-    aRowLabelText( SW_RES( STR_CHART2_ROW_LABEL_TEXT ) ),
-    aColLabelText( SW_RES( STR_CHART2_COL_LABEL_TEXT ) ),
-    xDataProvider( &rProvider ),
-    pDataProvider( &rProvider ),
-    pTableCrsr( pTableCursor ),
-    _pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
+    m_aEvtListeners( GetChartMutex() ),
+    m_aModifyListeners( GetChartMutex() ),
+    m_aRowLabelText( SW_RES( STR_CHART2_ROW_LABEL_TEXT ) ),
+    m_aColLabelText( SW_RES( STR_CHART2_COL_LABEL_TEXT ) ),
+    m_xDataProvider( &rProvider ),
+    m_pDataProvider( &rProvider ),
+    m_pTableCrsr( pTableCursor ),
+    m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
 {
-    bDisposed = false;
+    m_bDisposed = false;
 
     acquire();
     try
@@ -1901,8 +1901,8 @@ SwChartDataSequence::SwChartDataSequence(
         if (pTable)
         {
             uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
-            pDataProvider->AddDataSequence( *pTable, xRef );
-            pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
+            m_pDataProvider->AddDataSequence( *pTable, xRef );
+            m_pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
         else {
             OSL_FAIL( "table missing" );
@@ -1921,7 +1921,7 @@ SwChartDataSequence::SwChartDataSequence(
 #if OSL_DEBUG_LEVEL > 0
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
-    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*pTableCrsr));
+    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*m_pTableCrsr));
     OSL_ENSURE(pUnoTableCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
     (void) pUnoTableCrsr;
 #endif
@@ -1930,17 +1930,17 @@ SwChartDataSequence::SwChartDataSequence(
 SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     SwChartDataSequenceBaseClass(),
     SwClient( rObj.GetFrameFormat() ),
-    aEvtListeners( GetChartMutex() ),
-    aModifyListeners( GetChartMutex() ),
-    aRole( rObj.aRole ),
-    aRowLabelText( SW_RES(STR_CHART2_ROW_LABEL_TEXT) ),
-    aColLabelText( SW_RES(STR_CHART2_COL_LABEL_TEXT) ),
-    xDataProvider( rObj.pDataProvider ),
-    pDataProvider( rObj.pDataProvider ),
-    pTableCrsr( rObj.pTableCrsr ),
-    _pPropSet( rObj._pPropSet )
+    m_aEvtListeners( GetChartMutex() ),
+    m_aModifyListeners( GetChartMutex() ),
+    m_aRole( rObj.m_aRole ),
+    m_aRowLabelText( SW_RES(STR_CHART2_ROW_LABEL_TEXT) ),
+    m_aColLabelText( SW_RES(STR_CHART2_COL_LABEL_TEXT) ),
+    m_xDataProvider( rObj.m_pDataProvider ),
+    m_pDataProvider( rObj.m_pDataProvider ),
+    m_pTableCrsr( rObj.m_pTableCrsr ),
+    m_pPropSet( rObj.m_pPropSet )
 {
-    bDisposed = false;
+    m_bDisposed = false;
 
     acquire();
     try
@@ -1949,8 +1949,8 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
         if (pTable)
         {
             uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
-            pDataProvider->AddDataSequence( *pTable, xRef );
-            pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
+            m_pDataProvider->AddDataSequence( *pTable, xRef );
+            m_pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
         else {
             OSL_FAIL( "table missing" );
@@ -1969,7 +1969,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
 #if OSL_DEBUG_LEVEL > 0
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
-    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*pTableCrsr));
+    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*m_pTableCrsr));
     OSL_ENSURE(pUnoTableCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
     (void) pUnoTableCrsr;
 #endif
@@ -2006,14 +2006,14 @@ OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     OUString aRes;
     SwFrameFormat* pTableFormat = GetFrameFormat();
     if (pTableFormat)
     {
-        const OUString aCellRange( GetCellRangeName( *pTableFormat, *pTableCrsr ) );
+        const OUString aCellRange( GetCellRangeName( *pTableFormat, *m_pTableCrsr ) );
         OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );
         aRes = pTableFormat->GetName() + "." + aCellRange;
     }
@@ -2025,7 +2025,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     uno::Sequence< OUString > aLabels;
@@ -2039,7 +2039,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
             throw uno::RuntimeException();
         else
         {
-            const OUString aCellRange( GetCellRangeName( *pTableFormat, *pTableCrsr ) );
+            const OUString aCellRange( GetCellRangeName( *pTableFormat, *m_pTableCrsr ) );
             OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );
             bOk = FillRangeDescriptor( aDesc, aCellRange );
             OSL_ENSURE( bOk, "failed to get SwRangeDescriptor" );
@@ -2082,7 +2082,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
             {
                 if (!bReturnEmptyText)
                 {
-                    aText = bUseCol ? aColLabelText : aRowLabelText;
+                    aText = bUseCol ? m_aColLabelText : m_aRowLabelText;
                     sal_Int32 nCol = aDesc.nLeft;
                     sal_Int32 nRow = aDesc.nTop;
                     if (bUseCol)
@@ -2135,7 +2135,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
 
 std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::GetCells()
 {
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
     auto pTableFormat(GetFrameFormat());
     if(!pTableFormat)
@@ -2144,9 +2144,9 @@ std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::Get
     if(pTable->IsTableComplex())
         return std::vector< css::uno::Reference< css::table::XCell > >();
     SwRangeDescriptor aDesc;
-    if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat, *pTableCrsr)))
+    if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat, *m_pTableCrsr)))
         return std::vector< css::uno::Reference< css::table::XCell > >();
-    return SwXCellRange(pTableCrsr, *pTableFormat, aDesc).GetCells();
+    return SwXCellRange(m_pTableCrsr, *pTableFormat, aDesc).GetCells();
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
@@ -2195,7 +2195,7 @@ uno::Reference< util::XCloneable > SAL_CALL SwChartDataSequence::createClone(  )
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
     return new SwChartDataSequence( *this );
 }
@@ -2204,10 +2204,10 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwChartDataSequence::getPrope
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
-    static uno::Reference< beans::XPropertySetInfo > xRes = _pPropSet->getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo > xRes = m_pPropSet->getPropertySetInfo();
     return xRes;
 }
 
@@ -2217,12 +2217,12 @@ void SAL_CALL SwChartDataSequence::setPropertyValue(
     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     if (rPropertyName == UNO_NAME_ROLE)
     {
-        if ( !(rValue >>= aRole) )
+        if ( !(rValue >>= m_aRole) )
             throw lang::IllegalArgumentException();
     }
     else
@@ -2234,12 +2234,12 @@ uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     uno::Any aRes;
     if (rPropertyName == UNO_NAME_ROLE)
-        aRes <<= aRole;
+        aRes <<= m_aRole;
     else
         throw beans::UnknownPropertyException();
 
@@ -2301,9 +2301,9 @@ void SwChartDataSequence::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
     ClientModify(this, pOld, pNew );
 
     // table was deleted or cursor was deleted
-    if(!GetRegisteredIn() || !pTableCrsr)
+    if(!GetRegisteredIn() || !m_pTableCrsr)
     {
-        pTableCrsr.reset(nullptr);
+        m_pTableCrsr.reset(nullptr);
         dispose();
     }
     else
@@ -2316,7 +2316,7 @@ sal_Bool SAL_CALL SwChartDataSequence::isModified(  )
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     return sal_True;
@@ -2327,11 +2327,11 @@ void SAL_CALL SwChartDataSequence::setModified(
     throw (beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     if (bModified)
-        LaunchModifiedEvent( aModifyListeners, dynamic_cast< XModifyBroadcaster * >(this) );
+        LaunchModifiedEvent( m_aModifyListeners, dynamic_cast< XModifyBroadcaster * >(this) );
 }
 
 void SAL_CALL SwChartDataSequence::addModifyListener(
@@ -2339,8 +2339,8 @@ void SAL_CALL SwChartDataSequence::addModifyListener(
     throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
-    if (!bDisposed && rxListener.is())
-        aModifyListeners.addInterface( rxListener );
+    if (!m_bDisposed && rxListener.is())
+        m_aModifyListeners.addInterface( rxListener );
 }
 
 void SAL_CALL SwChartDataSequence::removeModifyListener(
@@ -2348,19 +2348,19 @@ void SAL_CALL SwChartDataSequence::removeModifyListener(
     throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
-    if (!bDisposed && rxListener.is())
-        aModifyListeners.removeInterface( rxListener );
+    if (!m_bDisposed && rxListener.is())
+        m_aModifyListeners.removeInterface( rxListener );
 }
 
 void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
     throw (uno::RuntimeException, std::exception)
 {
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
-    if (rSource.Source == xDataProvider)
+    if (rSource.Source == m_xDataProvider)
     {
-        pDataProvider = nullptr;
-        xDataProvider.clear();
+        m_pDataProvider = nullptr;
+        m_xDataProvider.clear();
     }
 }
 
@@ -2370,20 +2370,20 @@ void SAL_CALL SwChartDataSequence::dispose(  )
     bool bMustDispose( false );
     {
         osl::MutexGuard  aGuard( GetChartMutex() );
-        bMustDispose = !bDisposed;
-        if (!bDisposed)
-            bDisposed = true;
+        bMustDispose = !m_bDisposed;
+        if (!m_bDisposed)
+            m_bDisposed = true;
     }
     if (bMustDispose)
     {
-        bDisposed = true;
-        if (pDataProvider)
+        m_bDisposed = true;
+        if (m_pDataProvider)
         {
             const SwTable* pTable = SwTable::FindTable( GetFrameFormat() );
             if (pTable)
             {
                 uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
-                pDataProvider->RemoveDataSequence( *pTable, xRef );
+                m_pDataProvider->RemoveDataSequence( *pTable, xRef );
             }
             else {
                 OSL_FAIL( "table missing" );
@@ -2409,14 +2409,14 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             if (pLclRegisteredIn && pLclRegisteredIn->HasWriterListeners())
             {
                 pLclRegisteredIn->Remove(this);
-                pTableCrsr.reset(nullptr);
+                m_pTableCrsr.reset(nullptr);
             }
         }
 
         // require listeners to release references to this object
         lang::EventObject aEvtObj( dynamic_cast< chart2::data::XDataSequence * >(this) );
-        aModifyListeners.disposeAndClear( aEvtObj );
-        aEvtListeners.disposeAndClear( aEvtObj );
+        m_aModifyListeners.disposeAndClear( aEvtObj );
+        m_aEvtListeners.disposeAndClear( aEvtObj );
     }
 }
 
@@ -2425,8 +2425,8 @@ void SAL_CALL SwChartDataSequence::addEventListener(
     throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
-    if (!bDisposed && rxListener.is())
-        aEvtListeners.addInterface( rxListener );
+    if (!m_bDisposed && rxListener.is())
+        m_aEvtListeners.addInterface( rxListener );
 }
 
 void SAL_CALL SwChartDataSequence::removeEventListener(
@@ -2434,13 +2434,13 @@ void SAL_CALL SwChartDataSequence::removeEventListener(
     throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard  aGuard( GetChartMutex() );
-    if (!bDisposed && rxListener.is())
-        aEvtListeners.removeInterface( rxListener );
+    if (!m_bDisposed && rxListener.is())
+        m_aEvtListeners.removeInterface( rxListener );
 }
 
 bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 {
-    if (bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException();
 
     // to be set if the last box of the data-sequence was removed here
@@ -2449,10 +2449,10 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
     // if the implementation cursor gets affected (i.e. the box where it is located
     // in gets removed) we need to move it before that... (otherwise it does not need to change)
 
-    const SwStartNode* pPointStartNode = pTableCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
-    const SwStartNode* pMarkStartNode  = pTableCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
+    const SwStartNode* pPointStartNode = m_pTableCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+    const SwStartNode* pMarkStartNode  = m_pTableCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
 
-    if (!pTableCrsr->HasMark() || (pPointStartNode == rBox.GetSttNd()  &&  pMarkStartNode == rBox.GetSttNd()))
+    if (!m_pTableCrsr->HasMark() || (pPointStartNode == rBox.GetSttNd()  &&  pMarkStartNode == rBox.GetSttNd()))
     {
         bNowEmpty = true;
     }
@@ -2522,12 +2522,12 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
             SwPosition aNewPos( *pCNd );   // new position to be used with cursor
 
             // if the mark is to be changed, make sure there is one
-            if (pMarkStartNode == rBox.GetSttNd() && !pTableCrsr->HasMark())
-                pTableCrsr->SetMark();
+            if (pMarkStartNode == rBox.GetSttNd() && !m_pTableCrsr->HasMark())
+                m_pTableCrsr->SetMark();
 
             // set cursor to new position
             SwPosition *pPos = (pPointStartNode == rBox.GetSttNd()) ?
-                        pTableCrsr->GetPoint() : pTableCrsr->GetMark();
+                        m_pTableCrsr->GetPoint() : m_pTableCrsr->GetMark();
             if (pPos)
             {
                 pPos->nNode     = aNewPos.nNode;
@@ -2553,7 +2553,7 @@ void SwChartDataSequence::FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const
         SwTable* pTable = SwTable::FindTable( pTableFormat );
         if(!pTable->IsTableComplex())
         {
-            FillRangeDescriptor( rRangeDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) );
+            FillRangeDescriptor( rRangeDesc, GetCellRangeName( *pTableFormat, *m_pTableCrsr ) );
         }
     }
 }
@@ -2575,7 +2575,7 @@ void SwChartDataSequence::FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const
 bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         sal_Int32 nFirstNew, sal_Int32 nCount )
 {
-    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*pTableCrsr));
+    SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&(*m_pTableCrsr));
     if (!pUnoTableCrsr)
         return false;
 

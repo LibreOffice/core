@@ -251,23 +251,23 @@ class SwChartDataSequence :
     public SwChartDataSequenceBaseClass,
     public SwClient
 {
-    ::cppu::OInterfaceContainerHelper          aEvtListeners;
-    ::cppu::OInterfaceContainerHelper          aModifyListeners;
-    css::chart2::data::DataSequenceRole        aRole;
+    ::cppu::OInterfaceContainerHelper          m_aEvtListeners;
+    ::cppu::OInterfaceContainerHelper          m_aModifyListeners;
+    css::chart2::data::DataSequenceRole        m_aRole;
 
-    OUString  aRowLabelText;
-    OUString  aColLabelText;
+    OUString  m_aRowLabelText;
+    OUString  m_aColLabelText;
 
     // holds a reference to the data-provider to guarantee its lifetime last as
     // long as the pointer may be used.
-    css::uno::Reference< css::chart2::data::XDataProvider >    xDataProvider;
-    SwChartDataProvider *                   pDataProvider;
+    css::uno::Reference< css::chart2::data::XDataProvider >    m_xDataProvider;
+    SwChartDataProvider *                   m_pDataProvider;
 
-    sw::UnoCursorPointer pTableCrsr;   // cursor spanned over cells to use
+    sw::UnoCursorPointer m_pTableCrsr;   // cursor spanned over cells to use
 
-    const SfxItemPropertySet*   _pPropSet;
+    const SfxItemPropertySet*   m_pPropSet;
 
-    bool    bDisposed;
+    bool    m_bDisposed;
 
     SwChartDataSequence( const SwChartDataSequence &rObj );
     SwChartDataSequence & operator = ( const SwChartDataSequence & ) = delete;
