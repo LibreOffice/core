@@ -27,11 +27,24 @@
 class SdrTextObj;
 class SdrPage;
 
+// tdf#93994 abstract class to allow a single owner to register at
+// the outliner. Owners need to derive from it and overload the
+// virtual method. This will be called if large amounts of outliners
+// are in usage
+class SdrOutlinerOwner
+{
+public:
+    virtual void tryToReleaseSdrOutliner() const = 0;
+};
+
 class SVX_DLLPUBLIC SdrOutliner : public Outliner
 {
 protected:
     SdrObjectWeakRef mpTextObj;
     const SdrPage* mpVisualizedPage;
+
+    // tdf#93994 the evtl. registered owner
+    const SdrOutlinerOwner* mpSdrOutlinerOwner;
 
 public:
     SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode );
@@ -45,6 +58,21 @@ public:
     const SdrPage* getVisualizedPage() const { return mpVisualizedPage; }
 
     virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor) override;
+
+    // tdf#93994 allow creator to register as owner
+    void RegisterSdrOutlinerOwner(const SdrOutlinerOwner* pUser)
+    {
+        mpSdrOutlinerOwner = pUser;
+    }
+
+    // tdf#93994 allow to ask the owner to free this outliner
+    void tryToReleaseSdrOutliner()
+    {
+        if(mpSdrOutlinerOwner)
+        {
+            mpSdrOutlinerOwner->tryToReleaseSdrOutliner();
+        }
+    }
 };
 
 #endif // INCLUDED_SVX_SVDOUTL_HXX

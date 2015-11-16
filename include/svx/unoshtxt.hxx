@@ -80,6 +80,9 @@ public:
 
     void UpdateOutliner();
 
+    // tdf#93994 call to offer on-demand release of the internally owned Outliner
+    void tryToReleaseSdrOutliner() const;
+
 private:
     SVX_DLLPRIVATE SvxTextEditSource( SvxTextEditSourceImpl* pImpl );
 

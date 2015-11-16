@@ -22,6 +22,10 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdetc.hxx>
 
+// tdf#93994 define from which number of outliners incarnated it should be
+// tried to relese these by the owner
+#define MAX_NUMBERS_OF_CACHED_OUTLINERS     (20)
+
 SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
 :   mpModel( pModel ),
     mpModeOutline( nullptr ),
@@ -32,6 +36,19 @@ SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
 SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
 {
     SdrOutliner* pOutliner = nullptr;
+
+    // tdf#93994 for text object outliners if we have more than MAX_NUMBERS_OF_CACHED_OUTLINERS
+    // created, try to release one of these first before trying to create another one
+    if((OUTLINERMODE_TEXTOBJECT == nOutlinerMode) && !mpModeText && maActiveOutliners.size() > MAX_NUMBERS_OF_CACHED_OUTLINERS)
+    {
+        // try to free one of the used outliners
+        SdrOutliner* pCandidate = maActiveOutliners.back();
+
+        if(pCandidate)
+        {
+            pCandidate->tryToReleaseSdrOutliner();
+        }
+    }
 
     if( (OUTLINERMODE_OUTLINEOBJECT == nOutlinerMode) && mpModeOutline )
     {
@@ -49,6 +66,10 @@ SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
         Outliner& aDrawOutliner = mpModel->GetDrawOutliner();
         pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
         maActiveOutliners.push_back(pOutliner);
+
+        // tdf#93994 warn if more than a decent amount (MAX_NUMBERS_OF_CACHED_OUTLINERS) of Outliners exist at the same time.
+        // This should never be necessary and is a hint that something is going utterly wrong.
+        SAL_WARN_IF(maActiveOutliners.size() > MAX_NUMBERS_OF_CACHED_OUTLINERS, "svx.form", "SdrOutlinerCache: Very many Outliners created in parallell, this should not be necessary" );
     }
 
     return pOutliner;
