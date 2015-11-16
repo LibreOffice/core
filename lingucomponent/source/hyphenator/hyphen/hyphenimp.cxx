@@ -851,8 +851,6 @@ void SAL_CALL Hyphenator::removeEventListener( const Reference< XEventListener >
 OUString SAL_CALL Hyphenator::getImplementationName()
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     return getImplementationName_Static();
 }
 
@@ -865,16 +863,12 @@ sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     return getSupportedServiceNames_Static();
 }
 
 Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
         throw()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     Sequence< OUString > aSNS { SN_HYPHENATOR };
     return aSNS;
 }

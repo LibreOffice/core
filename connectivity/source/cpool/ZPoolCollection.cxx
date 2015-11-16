@@ -134,7 +134,6 @@ sal_Int32 SAL_CALL OPoolCollection::getLoginTimeout(  ) throw(RuntimeException, 
 
 OUString SAL_CALL OPoolCollection::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
-    MutexGuard aGuard(m_aMutex);
     return getImplementationName_Static();
 }
 

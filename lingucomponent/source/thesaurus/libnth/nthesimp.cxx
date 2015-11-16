@@ -623,7 +623,6 @@ void SAL_CALL Thesaurus::removeEventListener( const Reference< XEventListener >&
 OUString SAL_CALL Thesaurus::getImplementationName()
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
 
@@ -636,15 +635,12 @@ sal_Bool SAL_CALL Thesaurus::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL Thesaurus::getSupportedServiceNames()
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();
 }
 
 Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
         throw()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     Sequence< OUString > aSNS { SN_THESAURUS };
     return aSNS;
 }

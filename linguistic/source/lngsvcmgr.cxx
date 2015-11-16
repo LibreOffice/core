@@ -2026,7 +2026,6 @@ OUString SAL_CALL
     LngSvcMgr::getImplementationName()
         throw(uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
 
@@ -2043,7 +2042,6 @@ uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getSupportedServiceNames()
         throw(uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();
 }
 
@@ -2051,7 +2049,6 @@ uno::Sequence< OUString > SAL_CALL
 uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
         throw()
 {
-    osl::MutexGuard aGuard( GetLinguMutex() );
     uno::Sequence< OUString > aSNS { "com.sun.star.linguistic2.LinguServiceManager" };
     return aSNS;
 }

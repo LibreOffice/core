@@ -43,34 +43,14 @@ namespace migration
 
     OUString WordbookMigration_getImplementationName()
     {
-        static OUString* pImplName = nullptr;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static OUString aImplName( "com.sun.star.comp.desktop.migration.Wordbooks" );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return OUString( "com.sun.star.comp.desktop.migration.Wordbooks" );
     }
 
 
 
     Sequence< OUString > WordbookMigration_getSupportedServiceNames()
     {
-        static Sequence< OUString >* pNames = nullptr;
-        if ( !pNames )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pNames )
-            {
-                static Sequence< OUString > aNames { "com.sun.star.migration.Wordbooks" };
-                pNames = &aNames;
-            }
-        }
-        return *pNames;
+        return Sequence< OUString > { "com.sun.star.migration.Wordbooks" };
     }
 
 
