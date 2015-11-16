@@ -443,9 +443,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             }
             else if (pCursor)
             {
-                SwPaM *const pCrsr = pCursor->GetPaM();
-                *pCrsr->GetPoint() = *aPam.GetPoint();
-                pCrsr->DeleteMark();
+                SwPaM *const pCursorPam = pCursor->GetPaM();
+                *pCursorPam->GetPoint() = *aPam.GetPoint();
+                pCursorPam->DeleteMark();
             }
         }
         break;
