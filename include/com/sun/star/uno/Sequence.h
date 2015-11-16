@@ -90,7 +90,7 @@ public:
 
         @param rSeq another sequence of same type
     */
-    inline Sequence( const Sequence< E > & rSeq );
+    inline Sequence( const Sequence & rSeq );
 
     /** Constructor: Takes over ownership of given sequence.
 
@@ -134,7 +134,7 @@ public:
         @param rSeq another sequence of same type
         @return this sequence
     */
-    inline Sequence< E > & SAL_CALL operator = ( const Sequence< E > & rSeq );
+    inline Sequence & SAL_CALL operator = ( const Sequence & rSeq );
 
     /** Gets length of the sequence.
 
@@ -224,14 +224,14 @@ public:
         @param rSeq another sequence of same type (right side)
         @return true if both sequences are equal, false otherwise
     */
-    inline bool SAL_CALL operator == ( const Sequence< E > & rSeq ) const;
+    inline bool SAL_CALL operator == ( const Sequence & rSeq ) const;
 
     /** Unequality operator: Compares two sequences.
 
         @param rSeq another sequence of same type (right side)
         @return false if both sequences are equal, true otherwise
     */
-    inline bool SAL_CALL operator != ( const Sequence< E > & rSeq ) const;
+    inline bool SAL_CALL operator != ( const Sequence & rSeq ) const;
 
     /** Reallocates sequence to new length.
         If the new length is smaller than the former, then upper elements will
