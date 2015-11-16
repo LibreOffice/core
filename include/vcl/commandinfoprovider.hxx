@@ -21,6 +21,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/keycod.hxx>
+#include <vcl/image.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -76,7 +77,12 @@ public:
 
     /** Returns the shortcut for a command in human-readable form */
     OUString GetCommandShortcut (const OUString& rCommandName,
-                                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                 const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    Image GetImageForCommand(
+        const OUString& rsCommandName,
+        bool bLarge,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Do not call.  Should be part of a local and hidden interface.
     */

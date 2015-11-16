@@ -27,8 +27,9 @@
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ImageType.hpp>
+#include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
-
 
 using namespace css;
 using namespace css::uno;
@@ -61,7 +62,7 @@ namespace
                 mxFrame->removeEventListener(this);
         }
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw (css::uno::RuntimeException, std::exception) override
+            throw (RuntimeException, std::exception) override
         {
             (void)rEvent;
             mrInfoProvider.SetFrame(nullptr);
@@ -151,6 +152,66 @@ OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName,
         return sShortcut;
 
     return OUString();
+}
+
+Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName, bool bLarge,
+                                              const Reference<frame::XFrame>& rxFrame)
+{
+    SetFrame(rxFrame);
+
+    if (rsCommandName.isEmpty())
+        return Image();
+
+    sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
+    if (bLarge)
+        nImageType |= ui::ImageType::SIZE_LARGE;
+
+    try
+    {
+        Reference<frame::XController> xController(rxFrame->getController());
+        Reference<frame::XModel> xModel(xController->getModel());
+
+        Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xModel, UNO_QUERY);
+        if (xSupplier.is())
+        {
+            Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager(), UNO_QUERY);
+            Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), UNO_QUERY);
+
+            Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
+            Sequence<OUString> aImageCmdSeq { rsCommandName };
+
+            aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
+            Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
+            Image aImage(xGraphic);
+
+            if (!!aImage)
+                return aImage;
+        }
+    }
+    catch (Exception&)
+    {
+    }
+
+    try {
+        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(mxContext));
+        Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(GetModuleIdentifier()));
+
+        Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
+        Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), UNO_QUERY);
+
+        Sequence<OUString> aImageCmdSeq { rsCommandName };
+
+        aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
+
+        Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
+
+        return Image(xGraphic);
+    }
+    catch (Exception&)
+    {
+    }
+
+    return Image();
 }
 
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
@@ -262,14 +323,14 @@ OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
             Sequence<Any> aKeyCodes (rxConfiguration->getPreferredKeyEventsForCommandList(aCommands));
             if (aCommands.getLength() == 1)
             {
-                css::awt::KeyEvent aKeyEvent;
+                awt::KeyEvent aKeyEvent;
                 if (aKeyCodes[0] >>= aKeyEvent)
                 {
                     return AWTKey2VCLKey(aKeyEvent).GetName();
                 }
             }
         }
-        catch (lang::IllegalArgumentException&)
+        catch (css::lang::IllegalArgumentException&)
         {
         }
     }
@@ -313,12 +374,12 @@ OUString CommandInfoProvider::GetCommandProperty(const OUString& rsProperty, con
     return OUString();
 }
 
-vcl::KeyCode CommandInfoProvider::AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
+vcl::KeyCode CommandInfoProvider::AWTKey2VCLKey(const awt::KeyEvent& aAWTKey)
 {
-    bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
-    bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
-    bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
-    bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
+    bool bShift = ((aAWTKey.Modifiers & awt::KeyModifier::SHIFT) == awt::KeyModifier::SHIFT );
+    bool bMod1  = ((aAWTKey.Modifiers & awt::KeyModifier::MOD1 ) == awt::KeyModifier::MOD1  );
+    bool bMod2  = ((aAWTKey.Modifiers & awt::KeyModifier::MOD2 ) == awt::KeyModifier::MOD2  );
+    bool bMod3  = ((aAWTKey.Modifiers & awt::KeyModifier::MOD3 ) == awt::KeyModifier::MOD3  );
     sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
 
     return vcl::KeyCode(nKey, bShift, bMod1, bMod2, bMod3);

@@ -7,16 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XModuleManager2.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
-#include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <osl/module.hxx>
@@ -889,10 +880,6 @@ namespace
         if (aCommand.isEmpty())
             return;
 
-        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-        uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
-        OUString aModuleId(xModuleManager->identify(rFrame));
-
         OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommand, rFrame));
         if (!aLabel.isEmpty())
             pButton->SetText(aLabel);
@@ -901,7 +888,7 @@ namespace
         if (!aTooltip.isEmpty())
             pButton->SetQuickHelpText(aTooltip);
 
-        Image aImage(VclBuilder::getCommandImage(aCommand, /* bLarge = */ false, xContext, rFrame, aModuleId));
+        Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommand, /*bLarge=*/ false, rFrame));
         pButton->SetModeImage(aImage);
 
         pButton->SetCommandHandler(aCommand);
@@ -2167,65 +2154,6 @@ void VclBuilder::reorderWithinParent(std::vector<vcl::Window*>& rChilds, bool bI
             nBits |= WB_GROUP;
         rChilds[i]->SetStyle(nBits);
     }
-}
-
-Image VclBuilder::getCommandImage(const OUString& rCommand, bool bLarge,
-        const uno::Reference<uno::XComponentContext>& rContext, const uno::Reference<frame::XFrame>& rFrame,
-        const OUString& rModuleId)
-{
-    if (rCommand.isEmpty())
-        return Image();
-
-    sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
-    if (bLarge)
-        nImageType |= ui::ImageType::SIZE_LARGE;
-
-    try
-    {
-        uno::Reference<frame::XController> xController(rFrame->getController());
-        uno::Reference<frame::XModel> xModel(xController->getModel());
-
-        uno::Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xModel, uno::UNO_QUERY);
-        if (xSupplier.is())
-        {
-            uno::Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager(), uno::UNO_QUERY);
-            uno::Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), uno::UNO_QUERY);
-
-            uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
-            uno::Sequence<OUString> aImageCmdSeq { rCommand };
-
-            aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
-            uno::Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
-            Image aImage(xGraphic);
-
-            if (!!aImage)
-                return aImage;
-        }
-    }
-    catch (uno::Exception&)
-    {
-    }
-
-    try {
-        uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(rContext));
-        uno::Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(rModuleId));
-
-        uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
-        uno::Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), uno::UNO_QUERY);
-
-        uno::Sequence<OUString> aImageCmdSeq { rCommand };
-
-        aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
-
-        uno::Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
-
-        return Image(xGraphic);
-    }
-    catch (uno::Exception&)
-    {
-    }
-
-    return Image();
 }
 
 void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
