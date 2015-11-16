@@ -26,8 +26,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <framework/sfxhelperfunctions.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <svtools/generictoolboxcontroller.hxx>
-#include <svtools/commandinfoprovider.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -123,7 +123,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         // Add tooltip.
         if (xController.is())
         {
-            const OUString sTooltip (svt::CommandInfoProvider::Instance().GetTooltipForCommand(
+            const OUString sTooltip (vcl::CommandInfoProvider::Instance().GetTooltipForCommand(
                     rsCommandName,
                     rxFrame));
             pToolBox->SetQuickHelpText(nItemId, sTooltip);

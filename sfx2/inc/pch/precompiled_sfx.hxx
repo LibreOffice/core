@@ -503,7 +503,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sidebar/Accessible.hxx>
-#include <sfx2/sidebar/CommandInfoProvider.hxx>
+#include <vcl/CommandInfoProvider.hxx>
 #include <sfx2/sidebar/Context.hxx>
 #include <sfx2/sidebar/ControllerFactory.hxx>
 #include <sfx2/sidebar/Deck.hxx>

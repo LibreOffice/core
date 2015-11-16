@@ -32,6 +32,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/IconThemeInfo.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 #include <svdata.hxx>
 #include <brdwin.hxx>
@@ -606,8 +607,8 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
     uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
     OUString aModuleId(xModuleManager->identify(rFrame));
 
-    OUString aLabel(VclBuilder::getCommandProperty("Label", rCommand, xContext, aModuleId));
-    OUString aTooltip(VclBuilder::getCommandProperty("TooltipLabel", rCommand, xContext, aModuleId));
+    OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(rCommand, rFrame));
+    OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
     Image aImage(VclBuilder::getCommandImage(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), xContext, rFrame, aModuleId));
 
     // let's invent an ItemId
