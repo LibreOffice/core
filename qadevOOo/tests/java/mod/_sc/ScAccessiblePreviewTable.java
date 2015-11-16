@@ -104,9 +104,8 @@ public class ScAccessiblePreviewTable extends TestCase {
      * Obtains the accessible object for a table in preview mode.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) throws Exception {
-
-        XCell xCell = null;
+    protected TestEnvironment createTestEnvironment(final TestParameters Param,
+                final PrintWriter log) throws Exception {
 
         log.println("Getting spreadsheet") ;
         XSpreadsheets oSheets = xSheetDoc.getSheets() ;
@@ -115,8 +114,7 @@ public class ScAccessiblePreviewTable extends TestCase {
                 new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
         log.println("Getting a cell from sheet") ;
-        xCell = oSheet.getCellByPosition(0, 0);
-
+        XCell xCell = oSheet.getCellByPosition(0, 0);
         xCell.setFormula("Value");
 
         XModel xModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
@@ -168,7 +166,7 @@ public class ScAccessiblePreviewTable extends TestCase {
         XAccessibleContext zoomIn =
             AccessibilityTools.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
 
-        log.println("Getting "+ zoomIn.getAccessibleName());
+        log.println("Getting \"" + zoomIn.getAccessibleName() + "\" which is a \"" + UnoRuntime.queryInterface(com.sun.star.lang.XServiceInfo.class, zoomIn).getImplementationName() + "\"");
 
         final XAccessibleAction pressZoom = UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
         tEnv.addObjRelation("EventProducer",
@@ -176,7 +174,13 @@ public class ScAccessiblePreviewTable extends TestCase {
                 public void fireEvent() {
                         try {
                             pressZoom.doAccessibleAction(0);
-                        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}
+                            // the action is not triggered on the preview table
+                            // but some toolbar button - this will indirectly
+                            // trigger a table event but only from VCL main loop
+                            utils.waitForEventIdle(Param.getMSF());
+                        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {
+                            log.println("ScAccessiblePreviewTable: IndexOutOfBoundsException from pressZoom.doAccessibleAction(0)");
+                        }
                 }
             });
 
