@@ -128,7 +128,8 @@ const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const
     return pBestMatch;
 }
 
-const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const rtl::OUString& rFactory )
+static const SfxFilter* impl_getExportFilterFromUrl(
+        const rtl::OUString& rUrl, const rtl::OUString& rFactory)
 {
 try
 {
@@ -146,10 +147,8 @@ try
         OUString aTempName;
         FileBase::getSystemPathFromFileURL( rUrl, aTempName );
         OString aSource = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
-        OString aFactory = OUStringToOString ( rFactory, osl_getThreadTextEncoding() );
-        std::cerr << "Error:  no export filter for " << aSource << " found, now using the default filter for " << aFactory << std::endl;
+        std::cerr << "Error: no export filter for " << aSource << " found, aborting." << std::endl;
 
-        pFilter = SfxFilter::GetDefaultFilterFromFactory( rFactory );
     }
 
     return pFilter;
@@ -539,75 +538,82 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                                 aFilter = impl_GuessFilter( aOutFile, aDocService );
                             }
 
-                            sal_Int32 nFilterOptionsIndex = aFilter.indexOf( ':' );
-                            Sequence<PropertyValue> conversionProperties( 0 < nFilterOptionsIndex ? 3 : 2 );
-                            conversionProperties[0].Name = "Overwrite";
-                            conversionProperties[0].Value <<= sal_True;
-
-                            conversionProperties[1].Name = "FilterName";
-                            if( 0 < nFilterOptionsIndex )
+                            if (aFilter.isEmpty())
                             {
-                                conversionProperties[1].Value <<= aFilter.copy( 0, nFilterOptionsIndex );
-
-                                conversionProperties[2].Name = "FilterOptions";
-                                conversionProperties[2].Value <<= aFilter.copy( nFilterOptionsIndex+1 );
+                                std::cerr << "Error: no export filter" << std::endl;
                             }
                             else
                             {
-                                conversionProperties[1].Value <<= aFilter;
-                            }
+                                sal_Int32 nFilterOptionsIndex = aFilter.indexOf(':');
+                                Sequence<PropertyValue> conversionProperties( 0 < nFilterOptionsIndex ? 3 : 2 );
+                                conversionProperties[0].Name = "Overwrite";
+                                conversionProperties[0].Value <<= sal_True;
 
-                            OUString aTempName;
-                            FileBase::getSystemPathFromFileURL( aName, aTempName );
-                            OString aSource8 = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
-                            FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
-                            OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding() );
-                            if( aDispatchRequest.aRequestType != REQUEST_CAT )
-                            {
-                                std::cout << "convert " << aSource8 << " -> " << aTargetURL8;
-                                std::cout << " using filter : " << OUStringToOString( aFilter, osl_getThreadTextEncoding() ) << std::endl;
-                                if( FStatHelper::IsDocument( aOutFile ) )
-                                    std::cout << "Overwriting: " << OUStringToOString( aTempName, osl_getThreadTextEncoding() ) << std::endl ;
-                            }
-                            try
-                            {
-                                xStorable->storeToURL( aOutFile, conversionProperties );
-                            }
-                            catch (const Exception& rException)
-                            {
-                                std::cerr << "Error: Please verify input parameters...";
-                                if (!rException.Message.isEmpty())
-                                    std::cerr << " (" << rException.Message << ")";
-                                std::cerr << std::endl;
-                            }
-
-                            if( aDispatchRequest.aRequestType == REQUEST_CAT )
-                            {
-                                osl::File aFile( fileForCat );
-                                osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
-                                if( aRC != osl::File::E_None )
+                                conversionProperties[1].Name = "FilterName";
+                                if( 0 < nFilterOptionsIndex )
                                 {
-                                    std::cerr << "Error: Cannot read from temp file" << std::endl;
+                                    conversionProperties[1].Value <<= aFilter.copy(0, nFilterOptionsIndex);
+
+                                    conversionProperties[2].Name = "FilterOptions";
+                                    conversionProperties[2].Value <<= aFilter.copy(nFilterOptionsIndex + 1);
                                 }
                                 else
                                 {
-                                    sal_Bool eof;
-                                    for( ;; )
+                                    conversionProperties[1].Value <<= aFilter;
+                                }
+
+                                OUString aTempName;
+                                FileBase::getSystemPathFromFileURL(aName, aTempName);
+                                OString aSource8 = OUStringToOString(aTempName, osl_getThreadTextEncoding());
+                                FileBase::getSystemPathFromFileURL(aOutFile, aTempName);
+                                OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding());
+                                if (aDispatchRequest.aRequestType != REQUEST_CAT)
+                                {
+                                    std::cout << "convert " << aSource8 << " -> " << aTargetURL8;
+                                    std::cout << " using filter : " << OUStringToOString(aFilter, osl_getThreadTextEncoding()) << std::endl;
+                                    if (FStatHelper::IsDocument(aOutFile))
+                                        std::cout << "Overwriting: " << OUStringToOString(aTempName, osl_getThreadTextEncoding()) << std::endl ;
+                                }
+                                try
+                                {
+                                    xStorable->storeToURL(aOutFile, conversionProperties);
+                                }
+                                catch (const Exception& rException)
+                                {
+                                    std::cerr << "Error: Please verify input parameters...";
+                                    if (!rException.Message.isEmpty())
+                                        std::cerr << " (" << rException.Message << ")";
+                                    std::cerr << std::endl;
+                                }
+
+                                if (aDispatchRequest.aRequestType == REQUEST_CAT)
+                                {
+                                    osl::File aFile(fileForCat);
+                                    osl::File::RC aRC = aFile.open(osl_File_OpenFlag_Read);
+                                    if (aRC != osl::File::E_None)
                                     {
-                                        aFile.isEndOfFile( &eof );
-                                        if( eof )
-                                            break;
-                                        rtl::ByteSequence bseq;
-                                        aFile.readLine( bseq );
-                                        unsigned const char * aStr = reinterpret_cast< unsigned char const * >( bseq.getConstArray() );
-                                        for( sal_Int32 i = 0; i < bseq.getLength(); i++ )
-                                        {
-                                            std::cout << aStr[i];
-                                        }
-                                        std::cout << std::endl;
+                                        std::cerr << "Error: Cannot read from temp file" << std::endl;
                                     }
-                                    aFile.close();
-                                    osl::File::remove( fileForCat );
+                                    else
+                                    {
+                                        sal_Bool eof;
+                                        for (;;)
+                                        {
+                                            aFile.isEndOfFile( &eof );
+                                            if (eof)
+                                                break;
+                                            rtl::ByteSequence bseq;
+                                            aFile.readLine(bseq);
+                                            unsigned const char * aStr = reinterpret_cast<unsigned char const *>(bseq.getConstArray());
+                                            for (sal_Int32 i = 0; i < bseq.getLength(); ++i)
+                                            {
+                                                std::cout << aStr[i];
+                                            }
+                                            std::cout << std::endl;
+                                        }
+                                        aFile.close();
+                                        osl::File::remove(fileForCat);
+                                    }
                                 }
                             }
                         }
