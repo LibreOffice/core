@@ -68,8 +68,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL ftransl_component_getFactory( const sal_Char
 
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, IMPL_NAME ) ) )
     {
-        Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( SERVICE_NAME );
+        Sequence< OUString > aSNS { SERVICE_NAME };
 
         Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

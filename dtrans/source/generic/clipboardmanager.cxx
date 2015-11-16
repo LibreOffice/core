@@ -210,9 +210,7 @@ Reference< XInterface > SAL_CALL ClipboardManager_createInstance(
 
 Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames()
 {
-    Sequence < OUString > SupportedServicesNames( 1 );
-    SupportedServicesNames[0] =
-        OUString("com.sun.star.datatransfer.clipboard.ClipboardManager");
+    Sequence < OUString > SupportedServicesNames { "com.sun.star.datatransfer.clipboard.ClipboardManager" };
     return SupportedServicesNames;
 }
 

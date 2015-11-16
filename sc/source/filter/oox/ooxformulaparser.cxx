@@ -120,8 +120,7 @@ sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService 
 
 Sequence< OUString > SAL_CALL OOXMLFormulaParser::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] =  "com.sun.star.sheet.FilterFormulaParser";
+    Sequence< OUString > aServiceNames { "com.sun.star.sheet.FilterFormulaParser" };
     return aServiceNames;
 }
 

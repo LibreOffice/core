@@ -191,9 +191,7 @@ sal_Int16 SvtLanguageOptions::GetI18NScriptTypeOfLanguage( sal_uInt16 nLang )
 SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
     utl::ConfigItem( "System/L10N")
 {
-    uno::Sequence< OUString > aPropertyNames(1);
-    OUString* pNames = aPropertyNames.getArray();
-    pNames[0] = "SystemLocale";
+    uno::Sequence< OUString > aPropertyNames { "SystemLocale" };
     uno::Sequence< uno::Any > aValues = GetProperties( aPropertyNames );
 
     if ( aValues.getLength() )

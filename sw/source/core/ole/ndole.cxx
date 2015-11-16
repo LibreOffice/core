@@ -910,9 +910,7 @@ SwOLELRUCache::SwOLELRUCache()
 
 uno::Sequence< OUString > SwOLELRUCache::GetPropertyNames()
 {
-    Sequence< OUString > aNames( 1 );
-    OUString* pNames = aNames.getArray();
-    pNames[0] = "Writer/OLE_Objects";
+    Sequence< OUString > aNames { "Writer/OLE_Objects" };
     return aNames;
 }
 

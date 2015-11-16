@@ -337,11 +337,7 @@ Reference < XInterface > SAL_CALL ODataStreamTest_CreateInstance( const Referenc
 
 Sequence<OUString> ODataStreamTest_getSupportedServiceNames( int i) throw ()
 {
-    Sequence<OUString> aRet(1);
-
-    aRet.getArray()[0] = ODataStreamTest_getImplementationName( i);
-
-
+    Sequence<OUString> aRet { ODataStreamTest_getImplementationName( i) };
     return aRet;
 }
 
@@ -1062,8 +1058,7 @@ Reference < XInterface > SAL_CALL OObjectStreamTest_CreateInstance( const Refere
 
 Sequence<OUString> OObjectStreamTest_getSupportedServiceNames( int i) throw ()
 {
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OObjectStreamTest_getImplementationName( i);
+    Sequence<OUString> aRet { OObjectStreamTest_getImplementationName( i) };
     return aRet;
 }
 

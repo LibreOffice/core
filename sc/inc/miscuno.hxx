@@ -45,9 +45,7 @@ css::uno::Sequence< OUString >                                   \
     SAL_CALL ClassName::getSupportedServiceNames()                           \
     throw(css::uno::RuntimeException, std::exception)                                   \
 {                                                                                    \
-    css::uno::Sequence< OUString > aRet(1);                      \
-    OUString* pArray = aRet.getArray();                                       \
-    pArray[0] = ServiceAscii;                  \
+    css::uno::Sequence< OUString > aRet { ServiceAscii };                  \
     return aRet;                                                                     \
 }
 

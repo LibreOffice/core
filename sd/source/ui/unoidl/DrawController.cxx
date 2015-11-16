@@ -223,9 +223,7 @@ Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames()
     throw(RuntimeException, std::exception)
 {
     ThrowIfDisposed();
-    Sequence<OUString> aSupportedServices (1);
-    OUString* pServices = aSupportedServices.getArray();
-    pServices[0] = ssServiceName;
+    Sequence<OUString> aSupportedServices { ssServiceName };
     return aSupportedServices;
 }
 

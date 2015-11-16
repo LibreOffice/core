@@ -220,8 +220,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     if(sScheme.isEmpty())
     {
         //detect current scheme name
-        uno::Sequence < OUString > aCurrent(1);
-        aCurrent.getArray()[0] = "CurrentColorScheme";
+        uno::Sequence < OUString > aCurrent { "CurrentColorScheme" };
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     }
@@ -298,8 +297,7 @@ void ColorConfig_Impl::ImplCommit()
 void ColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
-    uno::Sequence < OUString > aCurrent(1);
-    aCurrent.getArray()[0] = "CurrentColorScheme";
+    uno::Sequence < OUString > aCurrent { "CurrentColorScheme" };
     uno::Sequence< uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);

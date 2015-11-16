@@ -35,10 +35,7 @@ uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() thr
 {
     // return only top level services here! All others must be
     // resolved by rtti!
-    uno::Sequence< OUString > aRet ( 1 );
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextDocument";
-
+    uno::Sequence< OUString > aRet { "com.sun.star.text.TextDocument" };
     return aRet;
 }
 

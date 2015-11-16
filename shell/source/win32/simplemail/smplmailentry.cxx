@@ -60,8 +60,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL smplmail_component_getFactory(
 
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, COMP_IMPL_NAME ) ) )
     {
-        Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString(COMP_SERVICE_NAME );
+        Sequence< OUString > aSNS { COMP_SERVICE_NAME };
 
         Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

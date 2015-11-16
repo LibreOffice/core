@@ -395,9 +395,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
             if ( rProps[ 0 ].Name != "Title" )
                 continue;
 
-            Sequence<OUString> aNames(1);
-            OUString* pNames = aNames.getArray();
-            pNames[0] = "Title";
+            Sequence<OUString> aNames { "Title" };
             Sequence< Any > aValues(1);
             Any* pValues = aValues.getArray();
             pValues[0] = makeAny( OUString( aTitle ) );
@@ -668,9 +666,7 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
             if ( rProps[ 0 ].Name != "Title" )
                 continue;
 
-            Sequence<OUString> aNames(1);
-            OUString* pNames = aNames.getArray();
-            pNames[0] = "Title";
+            Sequence<OUString> aNames { "Title" };
             Sequence< Any > aValues(1);
             Any* pValues = aValues.getArray();
             pValues[0] = makeAny( OUString( rTitle ) );

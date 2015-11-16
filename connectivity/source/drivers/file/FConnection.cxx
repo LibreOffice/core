@@ -171,9 +171,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         }
 
         // set fields to fetch
-        Sequence< OUString > aProps(1);
-        OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = "Title";
+        Sequence< OUString > aProps { "Title" };
 
         try
         {
@@ -398,9 +396,7 @@ Reference< XTablesSupplier > OConnection::createCatalog()
 Reference< XDynamicResultSet > OConnection::getDir() const
 {
     Reference<XDynamicResultSet> xContent;
-    Sequence< OUString > aProps(1);
-    OUString* pProps = aProps.getArray();
-    pProps[ 0 ] = "Title";
+    Sequence< OUString > aProps { "Title" };
     try
     {
         Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
