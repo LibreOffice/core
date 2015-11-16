@@ -156,6 +156,7 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
     // TODO: moggi: FIXME nTextPixel_     = GetPixel( nTextColor_ );
 }
 
+// Initialize the SalGraphics, if @pFrame is NULL - this is a vdev.
 void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
                            SalX11Screen nXScreen )
 {
@@ -165,8 +166,8 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
     m_pFrame    = pFrame;
     m_pVDev     = nullptr;
 
-    bWindow_    = true;
-    bVirDev_    = false;
+    bWindow_    = pFrame;
+    bVirDev_    = !pFrame;
 
     SetDrawable( aTarget, nXScreen );
     mxImpl->Init();

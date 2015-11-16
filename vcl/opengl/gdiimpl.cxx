@@ -121,6 +121,11 @@ bool OpenGLSalGraphicsImpl::ReleaseContext()
 
 void OpenGLSalGraphicsImpl::Init()
 {
+    // Our init phase is strange ::Init is called twice for vdevs.
+    // the first time around with a NULL geometry provider.
+    if( !mpProvider )
+        return;
+
     // check if we can simply re-use the same context
     if( mpContext.is() )
     {
@@ -142,11 +147,12 @@ void OpenGLSalGraphicsImpl::Init()
         VCL_GL_INFO("vcl.opengl", "::Init - re-size offscreen texture");
     }
 
-    if( mpWindowContext.is() )
-        mpWindowContext->reset();
-
     if( !IsOffscreen() )
+    {
+        if( mpWindowContext.is() )
+            mpWindowContext->reset();
         mpWindowContext = CreateWinContext();
+    }
 }
 
 // Currently only used to get windows ordering right.
@@ -207,6 +213,11 @@ void OpenGLSalGraphicsImpl::PostDraw()
     }
 
     assert (maOffscreenTex);
+
+    if( IsOffscreen() )
+        assert( !mpWindowContext.is() );
+    else
+        assert( mpWindowContext.is() );
 
     if( mpContext->mnPainting == 0 )
     {
