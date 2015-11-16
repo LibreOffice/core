@@ -884,8 +884,13 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
 OUString ScModelObj::getRowColumnHeaders(const Rectangle& rRectangle)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
+
     if (!pViewData)
         return OUString();
+
+    // update the aLogicMode in ScViewData to something predictable
+    pViewData->SetZoom(Fraction(nTilePixelWidth * TWIPS_PER_PIXEL, nTileTwipWidth),
+                       Fraction(nTilePixelHeight * TWIPS_PER_PIXEL, nTileTwipHeight), true);
 
     ScTabView* pTabView = pViewData->GetView();
     if (!pTabView)
