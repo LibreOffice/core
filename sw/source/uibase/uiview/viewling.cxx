@@ -654,12 +654,12 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 !pCrsrShell->IsTableMode() &&
                 !pCrsr->HasMark() && !pCrsr->IsMultiSelection())
             {
-                SwContentFrm *pFrm = pCrsr->GetContentNode()->getLayoutFrm(
+                SwContentFrm *pContentFrame = pCrsr->GetContentNode()->getLayoutFrm(
                                         pCrsrShell->GetLayout(),
                                         &rPt, &aPoint, false);
-                if (pFrm)
+                if (pContentFrame)
                 {
-                    SwRect aRepaint(static_cast<SwTextFrm*>(pFrm)->_AutoSpell(nullptr, 0));
+                    SwRect aRepaint(static_cast<SwTextFrm*>(pContentFrame)->_AutoSpell(nullptr, 0));
                     if (aRepaint.HasArea())
                         m_pWrtShell->InvalidateWindows(aRepaint);
                 }

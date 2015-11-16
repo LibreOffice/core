@@ -937,13 +937,13 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
 
             // save at
             SfxFrame* pFrm = pItem ? pItem->GetFrame() : nullptr;
-            SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : nullptr;
-            if( pFrame )
+            SfxViewFrame* pViewFrame = pFrm ? pFrm->GetCurrentViewFrame() : nullptr;
+            if (pViewFrame)
             {
                 const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(
-                        pFrame->GetDispatcher()->Execute(
+                        pViewFrame->GetDispatcher()->Execute(
                                 SID_SAVEASDOC, SfxCallMode::SYNCHRON ));
-                SfxObjectShell& rObj = *pFrame->GetObjectShell();
+                SfxObjectShell& rObj = *pViewFrame->GetObjectShell();
                 const SfxMedium* pMedium = rObj.GetMedium();
                 OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
                 // Insert the area with the Doc-Name
@@ -968,15 +968,15 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                     if(pBool->GetValue())
                     {
                         InsertRegion(pCont, &sNewFile);
-                        pFrame->ToTop();
+                        pViewFrame->ToTop();
                     }
                     else
-                        pFrame->GetDispatcher()->Execute(SID_CLOSEWIN,
+                        pViewFrame->GetDispatcher()->Execute(SID_CLOSEWIN,
                                                 SfxCallMode::SYNCHRON);
                 }
                 else
                 {
-                    pFrame->ToTop();
+                    pViewFrame->ToTop();
                     return;
                 }
             }
