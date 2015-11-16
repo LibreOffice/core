@@ -144,7 +144,9 @@ void OpenGLSalGraphicsImpl::Init()
 
     if( mpWindowContext.is() )
         mpWindowContext->reset();
-    mpWindowContext = CreateWinContext();
+
+    if( !IsOffscreen() )
+        mpWindowContext = CreateWinContext();
 }
 
 // Currently only used to get windows ordering right.
@@ -203,6 +205,8 @@ void OpenGLSalGraphicsImpl::PostDraw()
         mProgramIsSolidColor = false;
 #endif
     }
+
+    assert (maOffscreenTex);
 
     if( mpContext->mnPainting == 0 )
     {
@@ -392,8 +396,22 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
 
     VCL_GL_INFO( "vcl.opengl", "Check Offscreen texture" );
 
+    // Always create the offscreen texture
+    if( maOffscreenTex )
+    {
+        if( maOffscreenTex.GetWidth()  != GetWidth() ||
+            maOffscreenTex.GetHeight() != GetHeight() )
+        {
+            mpContext->ReleaseFramebuffer( maOffscreenTex );
+            maOffscreenTex = OpenGLTexture();
+            VCL_GL_INFO( "vcl.opengl", "re-size offscreen texture" );
+        }
+    }
+
     if( !maOffscreenTex )
     {
+        VCL_GL_INFO( "vcl.opengl", "create texture of size "
+                     << GetWidth() << " x " << GetHeight() );
         maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
         bClearTexture = true;
     }
@@ -418,8 +436,8 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
         if( bClearTexture )
         {
             glDrawBuffer( GL_COLOR_ATTACHMENT0 );
-            GLuint clearColor[4] = { 0, 0, 0, 0 };
-            glClearBufferuiv( GL_COLOR, 0, clearColor );
+            GLfloat clearColor[4] = { 1.0, 0, 0, 0 };
+            glClearBufferfv( GL_COLOR, 0, clearColor );
             // FIXME: use glClearTexImage if we have it ?
         }
     }
@@ -1905,6 +1923,7 @@ OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
 void OpenGLSalGraphicsImpl::flushAndSwap()
 {
     assert( !IsOffscreen() );
+    assert( mpWindowContext.is() );
     assert( mpContext.is() );
 
     if( !maOffscreenTex )
@@ -1917,7 +1936,6 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     VCL_GL_INFO( "vcl.opengl", "flushAndSwap" );
 
-    glFlush();
     // Interesting ! -> this destroys a context [ somehow ] ...
     mpWindowContext->makeCurrent();
     CHECK_GL_ERROR();
@@ -1938,6 +1956,7 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
     glViewport( 0, 0, GetWidth(), GetHeight() );
     CHECK_GL_ERROR();
 
+    glDrawBuffer(GL_BACK);
     glClearColor((float)rand()/RAND_MAX, (float)rand()/RAND_MAX,
                  (float)rand()/RAND_MAX, 1.0);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
@@ -1945,6 +1964,7 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     SalTwoRect aPosAry( 0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight(),
                         0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight() );
+    VCL_GL_INFO( "vcl.opengl", "Texture height " << maOffscreenTex.GetHeight() << " vs. window height " << GetHeight() );
 
     OpenGLProgram *pProgram =
         mpWindowContext->UseProgram( "textureVertexShader", "textureFragmentShader", "" );
@@ -1987,15 +2007,10 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     if (!getenv("NO_SWAP"))
     {
-        glFlush();
         mpWindowContext->swapBuffers();
-        glFlush();
         if (!getenv("NO_SLEEP"))
-            usleep(500000);
+            usleep(500 * 1000);
     }
-
-    // Should get a more sensible context (this one) next time.
-    mpContext.clear();
 
     VCL_GL_INFO( "vcl.opengl", "flushAndSwap - end." );
 }
