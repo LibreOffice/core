@@ -181,6 +181,102 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
     return rString;
 }
 
+ScTypedCaseStrSet::const_iterator findTextAll(
+    const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator itPos,
+    const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack)
+{
+    rResultVec.clear(); // clear contents
+
+    size_t nCount = 0;
+    ScTypedCaseStrSet::const_iterator retit;
+    if ( bBack ) // Backwards
+    {
+        ScTypedCaseStrSet::const_reverse_iterator it, itEnd;
+        if ( itPos == rDataSet.end() )
+        {
+            it = rDataSet.rend();
+            --it;
+            itEnd = it;
+        }
+        else
+        {
+            it = rDataSet.rbegin();
+            size_t nPos = std::distance(rDataSet.begin(), itPos);
+            size_t nRPos = rDataSet.size() - 1 - nPos; // if itPos == rDataSet.end(), then nRPos = -1
+            std::advance(it, nRPos);
+            if ( it == rDataSet.rend() )
+                it = rDataSet.rbegin();
+            itEnd = it;
+        }
+        bool bFirstTime = true;
+
+        while ( it != itEnd || bFirstTime )
+        {
+            ++it;
+            if ( it == rDataSet.rend() ) // go to the first if reach the end
+                it = rDataSet.rbegin();
+
+            if ( bFirstTime )
+                bFirstTime = false;
+            const ScTypedStrData& rData = *it;
+            if ( rData.GetStringType() == ScTypedStrData::Value )
+                // skip values
+                continue;
+
+            if ( !ScGlobal::GetpTransliteration()->isMatch(rStart, rData.GetString()) )
+                // not a match
+                continue;
+
+            rResultVec.push_back(rData.GetString()); // set the match data
+            if ( nCount == 0 ) // convert the reverse iterator back to iterator.
+            {
+                // actually we want to do "retit = it;".
+                retit = rDataSet.begin();
+                size_t nRPos = std::distance(rDataSet.rbegin(), it);
+                size_t nPos = rDataSet.size() - 1 - nRPos;
+                std::advance(retit, nPos);
+            }
+            ++nCount;
+        }
+    }
+    else // Forwards
+    {
+        ScTypedCaseStrSet::const_iterator it, itEnd;
+        it = itPos;
+        if ( it == rDataSet.end() )
+            it = rDataSet.begin();
+        itEnd = it;
+        bool bFirstTime = true;
+
+        while ( it != itEnd || bFirstTime )
+        {
+            ++it;
+            if ( it == rDataSet.end() ) // go to the first if reach the end
+                it = rDataSet.begin();
+
+            if ( bFirstTime )
+                bFirstTime = false;
+            const ScTypedStrData& rData = *it;
+            if ( rData.GetStringType() == ScTypedStrData::Value )
+                // skip values
+                continue;
+
+            if ( !ScGlobal::GetpTransliteration()->isMatch(rStart, rData.GetString()) )
+                // not a match
+                continue;
+
+            rResultVec.push_back(rData.GetString()); // set the match data
+            if ( nCount == 0 )
+                retit = it; // remember first match iterator
+            ++nCount;
+        }
+    }
+
+    if ( nCount > 0 ) // at least one function has matched
+        return retit;
+    return rDataSet.end(); // no matching text found
+}
+
 void removeChars(OUString& rStr, sal_Unicode c)
 {
     OUStringBuffer aBuf(rStr);
@@ -914,14 +1010,30 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                 aBuf.append(aNew.copy(0, nStartPosition));
                                 aBuf.append(static_cast<sal_Unicode>(0x25BA));
                                 aBuf.append(aNew.copy(nStartPosition));
+                                nArgs = ppFDesc->getParameterCount();
+                                sal_Int16 nVarArgsSet = 0;
+                                if ( nArgs >= PAIRED_VAR_ARGS )
+                                {
+                                    nVarArgsSet = 2;
+                                    nArgs -= PAIRED_VAR_ARGS - nVarArgsSet;
+                                }
+                                else if ( nArgs >= VAR_ARGS )
+                                {
+                                    nVarArgsSet = 1;
+                                    nArgs -= VAR_ARGS - nVarArgsSet;
+                                }
+                                if ( nVarArgsSet > 0 && nActive > nArgs )
+                                    nActive = nArgs - (nActive - nArgs) % nVarArgsSet;
+                                aBuf.append( ScGlobal::GetRscString( STR_FUNCTIONS_NAMEDESCS ) );
+                                aBuf.append( ppFDesc->getParameterDescription(nActive-1) );
                                 aNew = aBuf.makeStringAndClear();
-                                ShowTipBelow( aNew );
+                                ShowTip( aNew );
                                 bFound = true;
                             }
                         }
                         else
                         {
-                            ShowTipBelow( aNew );
+                            ShowTip( aNew );
                             bFound = true;
                         }
                     }
@@ -1037,7 +1149,58 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
 
     return true;
 }
-
+void ScInputHandler::ShowFuncList( ::std::vector< OUString > & rFuncStrVec )
+{
+    OUString aTipStr;
+    OUString aFuncNameStr;
+    OUString aDescFuncNameStr;
+    ::std::vector<OUString>::iterator itStr = rFuncStrVec.begin();
+    sal_Int32 nMaxFindNumber = 3;
+    sal_Int32 nRemainFindNumber = nMaxFindNumber;
+    for( ; itStr != rFuncStrVec.end(); ++itStr )
+    {
+        if ( (*itStr)[(*itStr).getLength()-1] == cParenthesesReplacement )
+        {
+            aFuncNameStr = (*itStr).copy(0, (*itStr).getLength()-1);
+        } else {
+            aFuncNameStr = (*itStr);
+        }
+        if ( itStr == rFuncStrVec.begin() )
+        {
+            aTipStr = "[";
+            aDescFuncNameStr = aFuncNameStr + "()";
+        } else {
+            aTipStr = aTipStr + ", ";
+        }
+        aTipStr = aTipStr + aFuncNameStr;
+        if ( itStr == rFuncStrVec.begin() )
+            aTipStr += "]";
+        if ( --nRemainFindNumber <= 0 )
+            break;
+    }
+    sal_Int32 nRemainNumber = rFuncStrVec.size() - nMaxFindNumber;
+    if ( nRemainFindNumber == 0 && nRemainNumber > 0 )
+    {
+        OUString aBufStr( aTipStr );
+        OUString aMessage( ScGlobal::GetRscString( STR_FUNCTIONS_FOUND ) );
+        aMessage = aMessage.replaceFirst("%2", OUString::number( nRemainNumber, 10));
+        aMessage = aMessage.replaceFirst("%1", aBufStr);
+        aTipStr = aMessage;
+    }
+    FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
+    sal_Int32 nNextFStart = 0;
+    const IFunctionDescription* ppFDesc;
+    ::std::vector< OUString > aArgs;
+    OUString eqPlusFuncName = "=" + aDescFuncNameStr;
+    if ( aHelper.GetNextFunc( eqPlusFuncName, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
+    {
+        if ( !ppFDesc->getFunctionName().isEmpty() )
+        {
+            aTipStr += ScGlobal::GetRscString( STR_FUNCTIONS_NAMEDESCS ) + ppFDesc->getDescription();
+        }
+    }
+    ShowTip( aTipStr );
+}
 void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -1070,10 +1233,10 @@ void ScInputHandler::UseFormulaData()
             if ( GetFuncName( aSelText, aText ) )
             {
                 // function name is incomplete:
-                // show first matching function name as tip above cell
-                OUString aNew;
+                // show matching functions name as tip above cell
+                ::std::vector<OUString> aNewVec;
                 miAutoPosFormula = pFormulaData->end();
-                miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
+                miAutoPosFormula = findTextAll(*pFormulaData, miAutoPosFormula, aText, aNewVec, false);
                 if (miAutoPosFormula != pFormulaData->end())
                 {
                     // check if partial function name is not Between quotes
@@ -1086,9 +1249,7 @@ void ScInputHandler::UseFormulaData()
                     if ( bBetweenQuotes )
                         return;  // we're between quotes
 
-                    if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
-                        aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
-                    ShowTip( aNew );
+                    ShowFuncList(aNewVec);
                     aAutoSearch = aText;
                 }
                 return;
@@ -1106,14 +1267,12 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pFormulaData )
     {
-        OUString aNew;
-        ScTypedCaseStrSet::const_iterator itNew = findText(*pFormulaData, miAutoPosFormula, aAutoSearch, aNew, bBack);
+        ::std::vector<OUString> aNewVec;
+        ScTypedCaseStrSet::const_iterator itNew = findTextAll(*pFormulaData, miAutoPosFormula, aAutoSearch, aNewVec, bBack);
         if (itNew != pFormulaData->end())
         {
             miAutoPosFormula = itNew;
-            if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
-                aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
-            ShowTip(aNew); // Display a quick help
+            ShowFuncList( aNewVec );
         }
     }
 
@@ -3231,6 +3390,14 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 {
                     ShowTipCursor();
                 }
+                if( bUsed && bFormulaMode && nCode == KEY_BACKSPACE )
+                {
+                    if (bFormulaMode)
+                        UseFormulaData();
+                    else
+                        UseColData();
+                }
+
             }
 
             // #i114511# don't count cursor keys as modification

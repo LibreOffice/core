@@ -208,6 +208,7 @@ public:
     void            ShowTipCursor();
     void            ShowTip( const OUString& rText );     // at Cursor
     void            ShowTipBelow( const OUString& rText );
+    void            ShowFuncList( ::std::vector< OUString > & rFuncStrVec );
 
     void            SetRefScale( const Fraction& rX, const Fraction& rY );
     void            UpdateRefDevice();
