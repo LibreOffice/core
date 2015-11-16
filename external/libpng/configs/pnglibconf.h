@@ -1,9 +1,9 @@
-/* 1.5.18 STANDARD API DEFINITION */
+/* 1.5.24 STANDARD API DEFINITION */
 /* pnglibconf.h - library build configuration */
 
-/* libpng version 1.5.18 - February 6, 2014 */
+/* libpng version 1.5.24 - November 12, 2015 */
 
-/* Copyright (c) 1998-2013 Glenn Randers-Pehrson */
+/* Copyright (c) 1998-2015 Glenn Randers-Pehrson */
 
 /* This code is released under the libpng license. */
 /* For conditions of distribution and use, see the disclaimer */
@@ -95,8 +95,6 @@
 #define PNG_SAVE_INT_32_SUPPORTED
 #define PNG_SEQUENTIAL_READ_SUPPORTED
 #define PNG_SETJMP_SUPPORTED
-#define PNG_SET_CHUNK_CACHE_LIMIT_SUPPORTED
-#define PNG_SET_CHUNK_MALLOC_LIMIT_SUPPORTED
 /*#undef PNG_SET_OPTION_SUPPORTED*/
 #define PNG_SET_USER_LIMITS_SUPPORTED
 #define PNG_STDIO_SUPPORTED
@@ -114,6 +112,7 @@
 #define PNG_WRITE_BGR_SUPPORTED
 #define PNG_WRITE_CHECK_FOR_INVALID_INDEX_SUPPORTED
 #define PNG_WRITE_COMPRESSED_TEXT_SUPPORTED
+#define PNG_WRITE_CUSTOMIZE_COMPRESSION_SUPPORTED
 #define PNG_WRITE_CUSTOMIZE_ZTXT_COMPRESSION_SUPPORTED
 #define PNG_WRITE_FILLER_SUPPORTED
 #define PNG_WRITE_FILTER_SUPPORTED
@@ -172,15 +171,16 @@
 /* end of options */
 /* settings */
 #define PNG_API_RULE 0
-#define PNG_CALLOC_SUPPORTED
-#define PNG_COST_SHIFT 3
 #define PNG_DEFAULT_READ_MACROS 1
 #define PNG_GAMMA_THRESHOLD_FIXED 5000
 #define PNG_MAX_GAMMA_8 11
 #define PNG_QUANTIZE_BLUE_BITS 5
 #define PNG_QUANTIZE_GREEN_BITS 5
 #define PNG_QUANTIZE_RED_BITS 5
-#define PNG_WEIGHT_SHIFT 8
+#define PNG_USER_CHUNK_CACHE_MAX 1000
+#define PNG_USER_CHUNK_MALLOC_MAX 8000000
+#define PNG_USER_HEIGHT_MAX 1000000
+#define PNG_USER_WIDTH_MAX 1000000
 #define PNG_ZBUF_SIZE 8192
 #define PNG_sCAL_PRECISION 5
 /* end of settings */
