@@ -284,7 +284,7 @@ define gb_LinkTarget__use_glyphy
 $(call gb_LinkTarget_use_package,$(1),glyphy)
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,glyphy/include) \
+	-I$(call gb_UnpackedTarball_get_dir,glyphy/src) \
 	$$(INCLUDE) \
 )
 
