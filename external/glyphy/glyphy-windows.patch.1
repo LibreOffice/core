@@ -1,19 +1,531 @@
-commit cfc3157868f691b70c2f0a6daa3c387ca6ef42a9 (HEAD -> master, origin/master, origin/HEAD)
-Author: Tor Lillqvist <tml@collabora.com>
-Date:   Tue Nov 10 00:20:42 2015 +0200
+From cfc3157868f691b70c2f0a6daa3c387ca6ef42a9 Mon Sep 17 00:00:00 2001
+From: Tor Lillqvist <tml@collabora.com>
+Date: Tue, 10 Nov 2015 00:20:42 +0200
+Subject: [PATCH 1/3] Port glyphy-demo to Windows
 
-    Port glyphy-demo to Windows
-    
-    You will need glew and freeglut to build and run it.
-    
-    I have a VS solution for glyphy-demo, but did not commit that as I did
-    not bother to do it "properly", with different projects for the
-    library and the demo executable, Release and Debug configurations etc.
+You will need glew and freeglut to build and run it.
+
+I have a VS solution for glyphy-demo, but did not commit that as I did
+not bother to do it "properly", with different projects for the
+library and the demo executable, Release and Debug configurations etc.
 ---
+ demo/demo-buffer.cc  |  11 ++++
+ demo/demo-common.h   |   6 ++
+ demo/demo-font.cc    | 131 +++++++++++++++++++++++++++++++++++---------
+ demo/demo-font.h     |  21 ++++++-
+ demo/demo-view.cc    |   3 +-
+ demo/glyphy-demo.cc  | 134 ++++++++++++++++++++++++++++++++++++++++++++-
  src/Makefile.am      |   1 +
  src/glyphy-windows.h | 152 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 153 insertions(+)
+ 8 files changed, 429 insertions(+), 30 deletions(-)
+ create mode 100755 src/glyphy-windows.h
 
+diff --git a/demo/demo-buffer.cc b/demo/demo-buffer.cc
+index 698f4ee..8ce5b34 100644
+--- a/demo/demo-buffer.cc
++++ b/demo/demo-buffer.cc
+@@ -106,7 +106,11 @@ demo_buffer_add_text (demo_buffer_t        *buffer,
+ 		      demo_font_t          *font,
+ 		      double                font_size)
+ {
++#ifndef _WIN32
+   FT_Face face = demo_font_get_face (font);
++#else
++  HDC hdc = demo_font_get_face (font);
++#endif
+   glyphy_point_t top_left = buffer->cursor;
+   buffer->cursor.y += font_size /* * font->ascent */;
+   unsigned int unicode;
+@@ -138,7 +142,14 @@ demo_buffer_add_text (demo_buffer_t        *buffer,
+       continue;
+     }
+ 
++#ifndef _WIN32
+     unsigned int glyph_index = FT_Get_Char_Index (face, unicode);
++#else
++    wchar_t wc = unicode; /* FIXME: What about non-BMP chars? */
++    WORD glyph_index;
++    if (GetGlyphIndicesW (hdc, &wc, 1, &glyph_index, GGI_MARK_NONEXISTING_GLYPHS) == GDI_ERROR)
++      die ("GetGlyphIndicesW failed");
++#endif
+     glyph_info_t gi;
+     demo_font_lookup_glyph (font, glyph_index, &gi);
+ 
+diff --git a/demo/demo-common.h b/demo/demo-common.h
+index dd0feb9..da56a88 100644
+--- a/demo/demo-common.h
++++ b/demo/demo-common.h
+@@ -44,6 +44,12 @@
+ #  define HAVE_GLUT 1
+ #endif
+ 
++#ifdef _WIN32
++#  define HAVE_GL 1
++#  define HAVE_GLEW 1
++#  define HAVE_GLUT 1
++#endif
++
+ /* Get Glew out of the way. */
+ #ifdef HAVE_GLEW
+ #  include <GL/glew.h>
+diff --git a/demo/demo-font.cc b/demo/demo-font.cc
+index 4ed4b53..b43b1e3 100644
+--- a/demo/demo-font.cc
++++ b/demo/demo-font.cc
+@@ -22,19 +22,30 @@
+ 
+ #include "demo-font.h"
+ 
++#ifndef _WIN32
+ #include <glyphy-freetype.h>
++#endif
+ 
+-#include <ext/hash_map>
+-
+-using namespace __gnu_cxx; /* This is ridiculous */
++#ifdef _WIN32
++#include <glyphy-windows.h>
++#endif
+ 
++#include <map>
++#include <vector>
+ 
+-typedef hash_map<unsigned int, glyph_info_t> glyph_cache_t;
++typedef std::map<unsigned int, glyph_info_t> glyph_cache_t;
+ 
+ struct demo_font_t {
+   unsigned int   refcount;
+ 
++#ifndef _WIN32
+   FT_Face        face;
++#endif
++
++#ifdef _WIN32
++  HDC            face; /* A memory DC that has the font instance selected into it */
++#endif
++
+   glyph_cache_t *glyph_cache;
+   demo_atlas_t  *atlas;
+   glyphy_arc_accumulator_t *acc;
+@@ -48,7 +59,13 @@ struct demo_font_t {
+ };
+ 
+ demo_font_t *
+-demo_font_create (FT_Face       face,
++demo_font_create (
++#ifndef _WIN32
++		  FT_Face       face,
++#endif
++#ifdef _WIN32
++		  HDC           face,
++#endif
+ 		  demo_atlas_t *atlas)
+ {
+   demo_font_t *font = (demo_font_t *) calloc (1, sizeof (demo_font_t));
+@@ -88,7 +105,12 @@ demo_font_destroy (demo_font_t *font)
+ }
+ 
+ 
++#ifndef _WIN32
+ FT_Face
++#endif
++#ifdef _WIN32
++HDC
++#endif
+ demo_font_get_face (demo_font_t *font)
+ {
+   return font->face;
+@@ -103,27 +125,28 @@ demo_font_get_atlas (demo_font_t *font)
+ 
+ static glyphy_bool_t
+ accumulate_endpoint (glyphy_arc_endpoint_t         *endpoint,
+-		     vector<glyphy_arc_endpoint_t> *endpoints)
++		     std::vector<glyphy_arc_endpoint_t> *endpoints)
+ {
+   endpoints->push_back (*endpoint);
+   return true;
+ }
+ 
+ static void
+-encode_ft_glyph (demo_font_t      *font,
+-		 unsigned int      glyph_index,
+-		 double            tolerance_per_em,
+-		 glyphy_rgba_t    *buffer,
+-		 unsigned int      buffer_len,
+-		 unsigned int     *output_len,
+-		 unsigned int     *nominal_width,
+-		 unsigned int     *nominal_height,
+-		 glyphy_extents_t *extents,
+-		 double           *advance)
++encode_glyph (demo_font_t      *font,
++	      unsigned int      glyph_index,
++	      double            tolerance_per_em,
++	      glyphy_rgba_t    *buffer,
++	      unsigned int      buffer_len,
++	      unsigned int     *output_len,
++	      unsigned int     *nominal_width,
++	      unsigned int     *nominal_height,
++	      glyphy_extents_t *extents,
++	      double           *advance)
+ {
+ /* Used for testing only */
+ #define SCALE  (1. * (1 << 0))
+ 
++#ifndef _WIN32
+   FT_Face face = font->face;
+   if (FT_Err_Ok != FT_Load_Glyph (face,
+ 				  glyph_index,
+@@ -141,7 +164,7 @@ encode_ft_glyph (demo_font_t      *font,
+   unsigned int upem = face->units_per_EM;
+   double tolerance = upem * tolerance_per_em; /* in font design units */
+   double faraway = double (upem) / (MIN_FONT_SIZE * M_SQRT2);
+-  vector<glyphy_arc_endpoint_t> endpoints;
++  std::vector<glyphy_arc_endpoint_t> endpoints;
+ 
+   glyphy_arc_accumulator_reset (font->acc);
+   glyphy_arc_accumulator_set_tolerance (font->acc, tolerance);
+@@ -151,6 +174,55 @@ encode_ft_glyph (demo_font_t      *font,
+ 
+   if (FT_Err_Ok != glyphy_freetype(outline_decompose) (&face->glyph->outline, font->acc))
+     die ("Failed converting glyph outline to arcs");
++#endif
++
++#ifdef _WIN32
++  HDC hdc = font->face;
++
++  GLYPHMETRICS glyph_metrics;
++  MAT2 matrix;
++
++  matrix.eM11.value = 1;
++  matrix.eM11.fract = 0;
++  matrix.eM12.value = 0;
++  matrix.eM12.fract = 0;
++  matrix.eM21.value = 0;
++  matrix.eM21.fract = 0;
++  matrix.eM22.value = 1;
++  matrix.eM22.fract = 0;
++
++  DWORD size = GetGlyphOutlineW (hdc, glyph_index, GGO_NATIVE|GGO_GLYPH_INDEX, &glyph_metrics, 0, NULL, &matrix);
++  if (size == GDI_ERROR)
++    die ("GetGlyphOutlineW failed");
++  std::vector<char> buf(size);
++  size = GetGlyphOutlineW (hdc, glyph_index, GGO_NATIVE|GGO_GLYPH_INDEX, &glyph_metrics, size, buf.data(), &matrix);
++  if (size == GDI_ERROR)
++    die ("GetGlyphOutlineW failed");
++
++  size = GetGlyphOutlineW (hdc, glyph_index, GGO_METRICS|GGO_GLYPH_INDEX, &glyph_metrics, 0, NULL, &matrix);
++  if (size == GDI_ERROR)
++    die ("GetGlyphOutlineW failed");
++
++  OUTLINETEXTMETRICW outline_text_metric;
++  if (!GetOutlineTextMetricsW (hdc, sizeof (OUTLINETEXTMETRICW), &outline_text_metric))
++    die ("GetOutlineTextMetricsW failed");
++
++  unsigned int upem = outline_text_metric.otmEMSquare;
++  double tolerance = upem * tolerance_per_em; /* in font design units */
++  double faraway = double (upem) / (MIN_FONT_SIZE * M_SQRT2);
++  std::vector<glyphy_arc_endpoint_t> endpoints;
++
++  fprintf(stderr, "upem=%u tolerance=%f faraway=%f\n", upem, tolerance, faraway);
++
++  glyphy_arc_accumulator_reset (font->acc);
++  glyphy_arc_accumulator_set_tolerance (font->acc, tolerance);
++  glyphy_arc_accumulator_set_callback (font->acc,
++				       (glyphy_arc_endpoint_accumulator_callback_t) accumulate_endpoint,
++				       &endpoints);
++
++  if (0 != glyphy_windows(outline_decompose) ((TTPOLYGONHEADER *) buf.data(), buf.size(), font->acc))
++    die ("Failed converting glyph outline to arcs");
++#endif
+ 
+   assert (glyphy_arc_accumulator_get_error (font->acc) <= tolerance);
+ 
+@@ -192,7 +264,14 @@ encode_ft_glyph (demo_font_t      *font,
+   glyphy_extents_scale (extents, 1. / upem, 1. / upem);
+   glyphy_extents_scale (extents, SCALE, SCALE);
+ 
++#ifndef _WIN32
+   *advance = face->glyph->metrics.horiAdvance / (double) upem;
++#endif
++
++#ifdef _WIN32
++  *advance = glyph_metrics.gmCellIncX / (double) upem; /* ??? */
++  fprintf(stderr, "======> Advance: %f\n", *advance);
++#endif
+ 
+   if (0)
+     LOGI ("gid%3u: endpoints%3d; err%3g%%; tex fetch%4.1f; mem%4.1fkb\n",
+@@ -217,15 +296,15 @@ _demo_font_upload_glyph (demo_font_t *font,
+   glyphy_rgba_t buffer[4096 * 16];
+   unsigned int output_len;
+ 
+-  encode_ft_glyph (font,
+-		   glyph_index,
+-		   TOLERANCE,
+-		   buffer, ARRAY_LEN (buffer),
+-		   &output_len,
+-		   &glyph_info->nominal_w,
+-		   &glyph_info->nominal_h,
+-		   &glyph_info->extents,
+-		   &glyph_info->advance);
++  encode_glyph (font,
++		glyph_index,
++		TOLERANCE,
++		buffer, ARRAY_LEN (buffer),
++		&output_len,
++		&glyph_info->nominal_w,
++		&glyph_info->nominal_h,
++		&glyph_info->extents,
++		&glyph_info->advance);
+ 
+   glyph_info->is_empty = glyphy_extents_is_empty (&glyph_info->extents);
+   if (!glyph_info->is_empty)
+diff --git a/demo/demo-font.h b/demo/demo-font.h
+index ddc45ed..d4e75ff 100644
+--- a/demo/demo-font.h
++++ b/demo/demo-font.h
+@@ -22,9 +22,17 @@
+ #include "demo-common.h"
+ #include "demo-atlas.h"
+ 
++#ifndef _WIN32
+ #include <ft2build.h>
+ #include FT_FREETYPE_H
++#endif
+ 
++#ifdef _WIN32
++#include <windows.h>
++#define DEFAULT_FONT "Calibri"
++#undef near
++#undef far
++#endif
+ 
+ typedef struct {
+   glyphy_extents_t extents;
+@@ -40,7 +48,13 @@ typedef struct {
+ typedef struct demo_font_t demo_font_t;
+ 
+ demo_font_t *
+-demo_font_create (FT_Face       face,
++demo_font_create (
++#ifndef _WIN32
++		  FT_Face       face,
++#endif
++#ifdef _WIN32
++		  HDC           hdc,
++#endif
+ 		  demo_atlas_t *atlas);
+ 
+ demo_font_t *
+@@ -50,7 +64,12 @@ void
+ demo_font_destroy (demo_font_t *font);
+ 
+ 
++#ifndef _WIN32
+ FT_Face
++#endif
++#ifdef _WIN32
++HDC
++#endif
+ demo_font_get_face (demo_font_t *font);
+ 
+ demo_atlas_t *
+diff --git a/demo/demo-view.cc b/demo/demo-view.cc
+index b60fc24..fee3e23 100644
+--- a/demo/demo-view.cc
++++ b/demo/demo-view.cc
+@@ -27,8 +27,9 @@ extern "C" {
+ #include "matrix4x4.h"
+ }
+ 
++#ifndef _WIN32
+ #include <sys/time.h>
+-
++#endif
+ 
+ struct demo_view_t {
+   unsigned int   refcount;
+diff --git a/demo/glyphy-demo.cc b/demo/glyphy-demo.cc
+index cf412cc..bc71dff 100644
+--- a/demo/glyphy-demo.cc
++++ b/demo/glyphy-demo.cc
+@@ -20,14 +20,15 @@
+ #include <config.h>
+ #endif
+ 
++#ifndef _WIN32
+ #include <libgen.h>
++#include <unistd.h>
++#endif
+ #include <stdio.h>
+ #include <string.h>
+-#include <unistd.h>
+ #include <ctype.h>
+ #include <stdlib.h>
+ 
+-
+ #include "demo-buffer.h"
+ #include "demo-font.h"
+ #include "demo-view.h"
+@@ -39,6 +40,90 @@ static demo_buffer_t *buffer;
+ #define WINDOW_W 700
+ #define WINDOW_H 700
+ 
++#ifdef _WIN32
++
++static int isroot(const char *path)
++{
++  return ((strlen(path) == 1 && path[0] == '/') ||
++	  (strlen(path) == 3 && isalpha(path[0]) && path[1] == ':' && (path[2] == '/' || path[2] == '\\')));
++}
++
++static char *basename(char *path)
++{
++  if (path == NULL || *path == '\0')
++    return ".";
++
++  while ((path[strlen(path)-1] == '/' ||
++	  path[strlen(path)-1] == '\\') &&
++	 !isroot(path))
++    path[strlen(path)-1] = '\0';
++
++  if (isroot(path))
++    return path;
++
++  char *slash = strrchr(path, '/');
++  char *backslash = strrchr(path, '\\');
++
++  if (slash != NULL && (backslash == NULL || backslash < slash))
++    return slash + 1;
++  else if (backslash != NULL && (slash == NULL || slash < backslash))
++    return backslash + 1;
++  else
++    return path;
++}
++
++static int opterr = 1;
++static int optind = 1;
++static int optopt;
++static char *optarg;
++
++static int getopt(int argc, char *argv[], char *opts)
++{
++    static int sp = 1;
++    int c;
++    char *cp;
++
++    if (sp == 1) {
++        if (optind >= argc ||
++            argv[optind][0] != '-' || argv[optind][1] == '\0')
++            return EOF;
++        else if (!strcmp(argv[optind], "--")) {
++            optind++;
++            return EOF;
++        }
++    }
++    optopt = c = argv[optind][sp];
++    if (c == ':' || !(cp = strchr(opts, c))) {
++        fprintf(stderr, ": illegal option -- %c\n", c);
++        if (argv[optind][++sp] == '\0') {
++            optind++;
++            sp = 1;
++        }
++        return '?';
++    }
++    if (*++cp == ':') {
++        if (argv[optind][sp+1] != '\0')
++            optarg = &argv[optind++][sp+1];
++        else if(++optind >= argc) {
++            fprintf(stderr, ": option requires an argument -- %c\n", c);
++            sp = 1;
++            return '?';
++        } else
++            optarg = argv[optind++];
++        sp = 1;
++    } else {
++        if (argv[optind][++sp] == '\0') {
++            sp = 1;
++            optind++;
++        }
++        optarg = NULL;
++    }
++
++    return c;
++}
++
++#endif
++
+ static void
+ reshape_func (int width, int height)
+ {
+@@ -161,6 +246,7 @@ main (int argc, char** argv)
+   vu = demo_view_create (st);
+   demo_view_print_help (vu);
+ 
++#ifndef _WIN32
+   FT_Library ft_library;
+   FT_Init_FreeType (&ft_library);
+   FT_Face ft_face;
+@@ -173,6 +259,42 @@ main (int argc, char** argv)
+   if (!ft_face)
+     die ("Failed to open font file");
+   demo_font_t *font = demo_font_create (ft_face, demo_glstate_get_atlas (st));
++#endif
++
++#ifdef _WIN32
++  HDC hdc = CreateCompatibleDC (GetDC (NULL));
++  if (hdc == NULL)
++    die ("GetDC or CreateCompatibleDC failed");
++
++  /* First create an instance of the font at size 10 to get the OUTLINETEXTMETRIC from which to get
++   * the font's em unit. Then, to get an unmodified not grid-fitted glyph outline, create it anew at
++   * that size. That is  as the doc for GetGlyphOutline() suggests.
++   */
++  HFONT hfont = CreateFontA(10, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_TT_ONLY_PRECIS, CLIP_DEFAULT_PRECIS, PROOF_QUALITY, FF_DONTCARE, font_path);
++  if (hfont == NULL)
++    die ("CreateFontA failed");
++
++  HFONT old_hfont = (HFONT) SelectObject (hdc, hfont);
++  if (old_hfont == NULL)
++    die ("SelectObject failed");
++
++  OUTLINETEXTMETRICW outline_text_metric;
++  if (!GetOutlineTextMetricsW (hdc, sizeof (OUTLINETEXTMETRICW), &outline_text_metric))
++    die ("GetOutlineTextMetricsW failed");
++
++  SelectObject (hdc, old_hfont);
++
++  hfont = CreateFontA (outline_text_metric.otmEMSquare, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_TT_ONLY_PRECIS, CLIP_DEFAULT_PRECIS, PROOF_QUALITY, FF_DONTCARE, font_path);
++  if (hfont == NULL)
++    die ("CreateFontA failed");
++
++  old_hfont = (HFONT) SelectObject (hdc, hfont);
++  if (old_hfont == NULL)
++    die ("SelectObject failed");
++
++  demo_font_t *font = demo_font_create (hdc, demo_glstate_get_atlas (st));
++
++#endif
+ 
+   buffer = demo_buffer_create ();
+   glyphy_point_t top_left = {0, 0};
+@@ -187,8 +309,16 @@ main (int argc, char** argv)
+   demo_buffer_destroy (buffer);
+   demo_font_destroy (font);
+ 
++#ifndef _WIN32
+   FT_Done_Face (ft_face);
+   FT_Done_FreeType (ft_library);
++#endif
++
++#ifdef _WIN32
++  SelectObject (hdc, old_hfont);
++  DeleteObject (hfont);
++  DeleteDC (hdc);
++#endif
+ 
+   demo_view_destroy (vu);
+   demo_glstate_destroy (st);
 diff --git a/src/Makefile.am b/src/Makefile.am
 index 004afd3..ecb76e0 100644
 --- a/src/Makefile.am
@@ -184,3 +696,39 @@ index 0000000..b3c11c8
 +#ifdef __cplusplus
 +}
 +#endif
+-- 
+2.4.3
+
+From 6d4196a2dc59324d14d3d4d721929e851277da97 Mon Sep 17 00:00:00 2001
+From: Tor Lillqvist <tml@collabora.com>
+Date: Tue, 10 Nov 2015 13:35:17 +0200
+Subject: [PATCH 2/3] Bin leftover printf
+
+---
+ demo/demo-font.cc | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/demo/demo-font.cc b/demo/demo-font.cc
+index b43b1e3..c28778e 100644
+--- a/demo/demo-font.cc
++++ b/demo/demo-font.cc
+@@ -212,8 +212,6 @@ encode_glyph (demo_font_t      *font,
+   double faraway = double (upem) / (MIN_FONT_SIZE * M_SQRT2);
+   std::vector<glyphy_arc_endpoint_t> endpoints;
+ 
+-  fprintf(stderr, "upem=%u tolerance=%f faraway=%f\n", upem, tolerance, faraway);
+-
+   glyphy_arc_accumulator_reset (font->acc);
+   glyphy_arc_accumulator_set_tolerance (font->acc, tolerance);
+   glyphy_arc_accumulator_set_callback (font->acc,
+@@ -270,7 +268,6 @@ encode_glyph (demo_font_t      *font,
+ 
+ #ifdef _WIN32
+   *advance = glyph_metrics.gmCellIncX / (double) upem; /* ??? */
+-  fprintf(stderr, "======> Advance: %f\n", *advance);
+ #endif
+ 
+   if (0)
+-- 
+2.4.3
+
