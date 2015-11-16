@@ -31,10 +31,8 @@
 struct SwFindParaFormatColl : public SwFindParas
 {
     const SwTextFormatColl *pFormatColl, *pReplColl;
-    SwCursor& rCursor;
-    SwFindParaFormatColl( const SwTextFormatColl& rFormatColl,
-                        const SwTextFormatColl* pRpColl, SwCursor& rCrsr )
-        : pFormatColl( &rFormatColl ), pReplColl( pRpColl ), rCursor( rCrsr )
+    SwFindParaFormatColl(const SwTextFormatColl& rFormatColl, const SwTextFormatColl* pRpColl)
+        : pFormatColl( &rFormatColl ), pReplColl( pRpColl )
     {}
     virtual ~SwFindParaFormatColl() {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) override;
@@ -86,7 +84,7 @@ sal_uLong SwCursor::Find( const SwTextFormatColl& rFormatColl, SwDocPositions nS
                 &aRewriter );
     }
 
-    SwFindParaFormatColl aSwFindParaFormatColl( rFormatColl, pReplFormatColl, *this );
+    SwFindParaFormatColl aSwFindParaFormatColl(rFormatColl, pReplFormatColl);
 
     sal_uLong nRet = FindAll( aSwFindParaFormatColl, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
