@@ -538,6 +538,16 @@ index 004afd3..ecb76e0 100644
  	$(NULL)
  SHADERS = \
  	glyphy-common.glsl \
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -32,6 +32,7 @@ libglyphy_la_SOURCES = \
+ PUBLICHEADERS = \
+ 	glyphy.h \
+ 	glyphy-freetype.h \
++	glyphy-windows.h \
+ 	$(NULL)
+ 
+ SHADERS = \
 diff --git a/src/glyphy-windows.h b/src/glyphy-windows.h
 new file mode 100755
 index 0000000..b3c11c8
