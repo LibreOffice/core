@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "../../gtk/window/gtksalframe.cxx"
+#include "../gtk/fpicker/resourceprovider.cxx"
+#include "../gtk/fpicker/SalGtkPicker.cxx"
+#include "../gtk/fpicker/SalGtkFilePicker.cxx"
+#include "../gtk/fpicker/SalGtkFolderPicker.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

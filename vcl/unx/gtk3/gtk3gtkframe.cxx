@@ -7,6 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "../../gtk/app/gtksys.cxx"
+#include "../gtk/gtksalframe.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

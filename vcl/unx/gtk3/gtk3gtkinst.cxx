@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "../../gtk/app/gtkinst.cxx"
+#include "../gtk/gtkinst.cxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "com/sun/star/lang/XServiceInfo.hpp"
