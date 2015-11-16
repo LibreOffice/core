@@ -158,6 +158,7 @@ private:
     void            SkipClosingPar();
     bool            GetFuncName( OUString& aStart, OUString& aResult );  // fdo75264
     void            ShowArgumentsTip( OUString& rSelText );
+    void            ShowDescTip( const OUString& rFuncName );
     DECL_LINK_TYPED( ModifyHdl, LinkParamNone*, void );
     DECL_LINK_TYPED( ShowHideTipVisibleParentListener, VclWindowEvent&, void );
     DECL_LINK_TYPED( ShowHideTipVisibleSecParentListener, VclWindowEvent&, void );
@@ -208,6 +209,7 @@ public:
     void            ShowTipCursor();
     void            ShowTip( const OUString& rText );     // at Cursor
     void            ShowTipBelow( const OUString& rText );
+    void            ShowFuncList( ::std::vector< OUString > & rFuncStrVec );
 
     void            SetRefScale( const Fraction& rX, const Fraction& rY );
     void            UpdateRefDevice();
