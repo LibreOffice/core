@@ -16,22 +16,23 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_COMPHELPER_COMMANDINFOPROVIDER_HXX
-#define INCLUDED_COMPHELPER_COMMANDINFOPROVIDER_HXX
+#ifndef INCLUDED_VCL_COMMANDINFOPROVIDER_HXX
+#define INCLUDED_VCL_COMMANDINFOPROVIDER_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
+#include <vcl/keycod.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 
-namespace svt {
+namespace vcl {
 
-/** Provide information about UNO commands like tooltip text with
+/** Provides information about UNO commands like tooltip text with
     keyboard accelerator.
 */
-class SVT_DLLPUBLIC CommandInfoProvider
+class VCL_DLLPUBLIC CommandInfoProvider
 {
 public:
     /** Return the singleton instance.
@@ -103,10 +104,11 @@ public:
     static OUString RetrieveShortcutsFromConfiguration(
         const css::uno::Reference<css::ui::XAcceleratorConfiguration>& rxConfiguration,
         const OUString& rsCommandName);
+    static vcl::KeyCode AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey);
 };
 
-} // end of namespace svt
+} // end of namespace vcl
 
-#endif // INCLUDED_COMPHELPER_COMMANDINFOPROVIDER_HXX
+#endif // INCLUDED_VCL_COMMANDINFOPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

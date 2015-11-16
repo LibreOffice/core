@@ -330,6 +330,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/checksum \
     vcl/source/helper/canvasbitmap \
     vcl/source/helper/canvastools \
+    vcl/source/helper/commandinfoprovider \
     vcl/source/helper/evntpost \
     vcl/source/helper/lazydelete \
     vcl/source/helper/strhelper \

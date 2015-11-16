@@ -23,7 +23,7 @@
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <svtools/commandinfoprovider.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/help.hxx>
@@ -204,7 +204,7 @@ ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()
 
 void ControllerItem::SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nIndex)
 {
-    rToolBox.SetQuickHelpText(nIndex,svt::CommandInfoProvider::Instance().GetTooltipForCommand(".uno:" + msCommandName, mxFrame));
+    rToolBox.SetQuickHelpText(nIndex, vcl::CommandInfoProvider::Instance().GetTooltipForCommand(".uno:" + msCommandName, mxFrame));
     rToolBox.SetHelpText(nIndex, GetHelpText());
     rToolBox.SetItemImage(nIndex, GetIcon());
 }

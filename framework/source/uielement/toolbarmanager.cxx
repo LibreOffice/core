@@ -68,8 +68,8 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
-#include <svtools/commandinfoprovider.hxx>
 #include <svtools/menuoptions.hxx>
 #include <boost/bind.hpp>
 
@@ -1272,8 +1272,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString(svt::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
-                    OUString aTooltipFromCommand(svt::CommandInfoProvider::Instance().GetTooltipForCommand(aCommandURL, m_xFrame, false));
+                    OUString aString(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
+                    OUString aTooltipFromCommand(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommandURL, m_xFrame, false));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     if ( aMenuDesc.is() )
@@ -1289,7 +1289,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         sQuickHelp = aTooltip;
                     else if ( !aTooltipFromCommand.isEmpty() ) // Tooltip from uno command (TooltipLabel)
                         sQuickHelp = aTooltipFromCommand;
-                    OUString sShortCut = svt::CommandInfoProvider::Instance().GetCommandShortcut(aCommandURL, m_xFrame);
+                    OUString sShortCut = vcl::CommandInfoProvider::Instance().GetCommandShortcut(aCommandURL, m_xFrame);
                     if( !sShortCut.isEmpty() )
                     {
                         sQuickHelp += " (";
