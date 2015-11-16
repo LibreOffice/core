@@ -50,12 +50,6 @@ using namespace ::com::sun::star::uno;
 namespace migration
 {
 
-static const char sExtensionSubDir[] = "/user/uno_packages/";
-static const char sSubDirName[] = "cache";
-static const char sDescriptionXmlFile[] = "/description.xml";
-static const char sExtensionRootSubDirName[] = "/uno_packages";
-
-
 // component operations
 
 
@@ -168,7 +162,7 @@ OO3ExtensionMigration::ScanResult OO3ExtensionMigration::scanExtensionFolder( co
                 else
                 {
                     aDirEntryURL = fs.getFileURL();
-                    if ( aDirEntryURL.indexOf( sDescriptionXmlFile ) > 0 )
+                    if ( aDirEntryURL.indexOf( "/description.xml" ) > 0 )
                         aResult = scanDescriptionXml( aDirEntryURL ) ? SCANRESULT_MIGRATE_EXTENSION : SCANRESULT_DONTMIGRATE_EXTENSION;
                 }
             }
@@ -369,9 +363,7 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
     {
         // copy all extensions
         OUString sSourceDir( m_sSourceDir );
-        sSourceDir += sExtensionSubDir;
-        sSourceDir += sSubDirName;
-        sSourceDir += sExtensionRootSubDirName;
+        sSourceDir += "/user/uno_packages/cache/uno_packages";
         TStringVector aExtensionToMigrate;
         scanUserExtensions( sSourceDir, aExtensionToMigrate );
         if ( aExtensionToMigrate.size() > 0 )
