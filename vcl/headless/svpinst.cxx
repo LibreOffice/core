@@ -261,7 +261,7 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
 #endif
 }
 
-void SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
     (void) nReleased;
     assert(nReleased == 0); // not implemented
@@ -328,6 +328,8 @@ void SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
 
         DoReleaseYield(nTimeoutMS);
     }
+
+    return bEvent;
 }
 
 void SvpSalInstance::DoReleaseYield( int nTimeoutMS )

@@ -153,7 +153,7 @@ public:
     virtual         ~SalXLib();
     virtual void    Init();
 
-    virtual void    Yield( bool bWait, bool bHandleAllCurrentEvents );
+    virtual bool    Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual void    Wakeup();
     virtual void    PostUserEvent();
 
@@ -365,7 +365,7 @@ public:
     virtual ~SalX11Display();
 
     virtual bool        Dispatch( XEvent *pEvent ) override;
-    virtual void        Yield();
+    virtual bool        Yield();
     virtual void        PostUserEvent() override;
 
     bool                IsEvent();

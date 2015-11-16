@@ -607,7 +607,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
     return bRet;
 }
 
-void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
+bool SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     blockIdleTimeout = !bWait;
     // check for timeouts here if you want to make screenshots
@@ -630,7 +630,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 if( ! bHandleAllCurrentEvents )
                 {
                     blockIdleTimeout = false;
-                    return;
+                    return true;
                 }
             }
         }
@@ -644,6 +644,8 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     timeval  Timeout      = noyield__;
     timeval *pTimeout     = &Timeout;
+
+    bool bHandledEvent = false;
 
     if (bWait)
     {
@@ -705,7 +707,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if (nFound == 0)
         {
             blockIdleTimeout = false;
-            return;
+            return false;
         }
 
         for ( int nFD = 0; nFD < nFDs_; nFD++ )
@@ -724,6 +726,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                     for( int i = 0; pEntry->IsEventQueued() && i < nMaxEvents; i++ )
                     {
                         pEntry->HandleNextEvent();
+                        bHandledEvent = true;
                         // if a recursive call has done the job
                         // so abort here
                     }
@@ -733,6 +736,8 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         }
     }
     blockIdleTimeout = false;
+
+    return bHandledEvent;
 }
 
 void SalXLib::Wakeup()
