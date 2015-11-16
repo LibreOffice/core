@@ -767,7 +767,7 @@ SvxFieldData* SvxTableField::Clone() const
 
 bool SvxTableField::operator==( const SvxFieldData& rCmp ) const
 {
-    if (dynamic_cast< const SvxTableField *>(&rCmp) != nullptr)
+    if (dynamic_cast<const SvxTableField *>(&rCmp) == nullptr)
         return false;
 
     return mnTab == static_cast<const SvxTableField&>(rCmp).mnTab;
