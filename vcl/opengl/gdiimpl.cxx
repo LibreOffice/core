@@ -166,6 +166,7 @@ void OpenGLSalGraphicsImpl::DeInit()
     // get a shiny new context in AcquireContext:: next PreDraw.
     if( mpContext.is() && !IsOffscreen() )
         mpContext->reset();
+    mpContext.clear();
 }
 
 void OpenGLSalGraphicsImpl::PreDraw()
@@ -1967,7 +1968,6 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
     glViewport( 0, 0, GetWidth(), GetHeight() );
     CHECK_GL_ERROR();
 
-    glDrawBuffer(GL_BACK);
     glClearColor((float)rand()/RAND_MAX, (float)rand()/RAND_MAX,
                  (float)rand()/RAND_MAX, 1.0);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
@@ -1979,50 +1979,54 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     OpenGLProgram *pProgram =
         mpWindowContext->UseProgram( "textureVertexShader", "textureFragmentShader", "" );
-    pProgram->Use(); // FIXME: paranoia ...
-    VCL_GL_INFO( "vcl.opengl", "done paranoid re-use." );
-    pProgram->SetTexture( "sampler", maOffscreenTex );
-    maOffscreenTex.Bind(); // FIXME: paranoia ...
-
-    VCL_GL_INFO( "vcl.opengl", "bound bits etc." );
-
-    GLfloat aTexCoord[8];
-    maOffscreenTex.GetCoord( aTexCoord, aPosAry, false );
-    pProgram->SetTextureCoord( aTexCoord );
-
-    long nX1( aPosAry.mnDestX );
-    long nY1( aPosAry.mnDestY );
-    long nX2( nX1 + aPosAry.mnDestWidth );
-    long nY2( nY1 + aPosAry.mnDestHeight );
-    const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
-                                 { nX2, nY1 }, { nX2, nY2 }};
-
-    sal_uInt32 nPoints = 4;
-    std::vector<GLfloat> aVertices(nPoints * 2);
-    sal_uInt32 i, j;
-
-    for( i = 0, j = 0; i < nPoints; i++, j += 2 )
+    if( !pProgram )
+        VCL_GL_INFO( "vcl.opengl", "Can't compile simple copying shader !" );
+    else
     {
-        aVertices[j]   = GLfloat(aPoints[i].mnX);
-        aVertices[j+1] = GLfloat(aPoints[i].mnY);
+        pProgram->Use(); // FIXME: paranoia ...
+        VCL_GL_INFO( "vcl.opengl", "done paranoid re-use." );
+        pProgram->SetTexture( "sampler", maOffscreenTex );
+        maOffscreenTex.Bind(); // FIXME: paranoia ...
+
+        VCL_GL_INFO( "vcl.opengl", "bound bits etc." );
+
+        GLfloat aTexCoord[8];
+        maOffscreenTex.GetCoord( aTexCoord, aPosAry, false );
+        pProgram->SetTextureCoord( aTexCoord );
+
+        long nX1( aPosAry.mnDestX );
+        long nY1( aPosAry.mnDestY );
+        long nX2( nX1 + aPosAry.mnDestWidth );
+        long nY2( nY1 + aPosAry.mnDestHeight );
+        const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
+                                     { nX2, nY1 }, { nX2, nY2 }};
+
+        sal_uInt32 nPoints = 4;
+        std::vector<GLfloat> aVertices(nPoints * 2);
+        sal_uInt32 i, j;
+
+        for( i = 0, j = 0; i < nPoints; i++, j += 2 )
+        {
+            aVertices[j]   = GLfloat(aPoints[i].mnX);
+            aVertices[j+1] = GLfloat(aPoints[i].mnY);
+        }
+
+        pProgram->ApplyMatrix(GetWidth(), GetHeight(), 0.0);
+        pProgram->SetVertices( &aVertices[0] );
+        if (!getenv("NO_COPY"))
+            glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+
+        pProgram->Clean();
+
+        glBindTexture( GL_TEXTURE_2D, 0 );
+
+        if (!getenv("NO_SWAP"))
+        {
+            mpWindowContext->swapBuffers();
+            if (!getenv("NO_SLEEP"))
+                usleep(500 * 1000);
+        }
     }
-
-    pProgram->ApplyMatrix(GetWidth(), GetHeight(), 0.0);
-    pProgram->SetVertices( &aVertices[0] );
-    if (!getenv("NO_COPY"))
-        glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
-
-    pProgram->Clean();
-
-    glBindTexture( GL_TEXTURE_2D, 0 );
-
-    if (!getenv("NO_SWAP"))
-    {
-        mpWindowContext->swapBuffers();
-        if (!getenv("NO_SLEEP"))
-            usleep(500 * 1000);
-    }
-
     VCL_GL_INFO( "vcl.opengl", "flushAndSwap - end." );
 }
 
