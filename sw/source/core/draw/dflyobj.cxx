@@ -374,9 +374,9 @@ sdr::contact::ViewContact* SwVirtFlyDrawObj::CreateObjectSpecificViewContact()
 
 SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
     SdrVirtObj( rNew ),
-    pFlyFrm( pFly )
+    m_pFlyFrm( pFly )
 {
-    const SvxProtectItem &rP = pFlyFrm->GetFormat()->GetProtect();
+    const SvxProtectItem &rP = m_pFlyFrm->GetFormat()->GetProtect();
     bMovProt = rP.IsPosProtected();
     bSizProt = rP.IsSizeProtected();
 }
@@ -444,7 +444,7 @@ namespace
 void SwVirtFlyDrawObj::wrap_DoPaintObject(
     drawinglayer::geometry::ViewInformation2D const& rViewInformation) const
 {
-    SwViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
+    SwViewShell* pShell = m_pFlyFrm->getRootFrm()->GetCurrShell();
 
     // Only paint when we have a current shell and a DrawingLayer paint is in progress.
     // This avoids evtl. problems with renderers which do processing stuff,
@@ -466,7 +466,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
             // which is slow, wastes memory, and can cause other trouble.
             (void) rViewInformation; // suppress "unused parameter" warning
             assert(comphelper::LibreOfficeKit::isActive() || !rViewInformation.getViewport().isEmpty());
-            if ( !pFlyFrm->IsFlyInCntFrm() )
+            if ( !m_pFlyFrm->IsFlyInCntFrm() )
             {
                 // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
                 // the VCL PixelRenderer resets it at the used OutputDevice. Unfortunately, this
@@ -477,7 +477,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
                 RestoreMapMode aRestoreMapModeIfNeeded( pShell );
 
                 // paint the FlyFrame (use standard VCL-Paint)
-                pFlyFrm->Paint( *pShell->GetOut(), GetFlyFrm()->Frm() );
+                m_pFlyFrm->Paint( *pShell->GetOut(), GetFlyFrm()->Frm() );
             }
         }
     }
@@ -961,23 +961,23 @@ Pointer  SwVirtFlyDrawObj::GetMacroPointer(
 
 bool SwVirtFlyDrawObj::HasMacro() const
 {
-    const SwFormatURL &rURL = pFlyFrm->GetFormat()->GetURL();
+    const SwFormatURL &rURL = m_pFlyFrm->GetFormat()->GetURL();
     return rURL.GetMap() || !rURL.GetURL().isEmpty();
 }
 
 SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) const
 {
-    const SwFormatURL &rURL = pFlyFrm->GetFormat()->GetURL();
+    const SwFormatURL &rURL = m_pFlyFrm->GetFormat()->GetURL();
     if( rURL.GetMap() || !rURL.GetURL().isEmpty() )
     {
         SwRect aRect;
-        if ( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTextFrm() )
+        if ( m_pFlyFrm->Lower() && m_pFlyFrm->Lower()->IsNoTextFrm() )
         {
-            aRect = pFlyFrm->Prt();
-            aRect += pFlyFrm->Frm().Pos();
+            aRect = m_pFlyFrm->Prt();
+            aRect += m_pFlyFrm->Frm().Pos();
         }
         else
-            aRect = pFlyFrm->Frm();
+            aRect = m_pFlyFrm->Frm();
 
         if( aRect.IsInside( rRec.aPos ) )
         {
@@ -989,7 +989,7 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
             if( aRect.IsInside( rRec.aPos ) )
             {
                 if( !rURL.GetMap() ||
-                    pFlyFrm->GetFormat()->GetIMapObject( rRec.aPos, pFlyFrm ))
+                    m_pFlyFrm->GetFormat()->GetIMapObject( rRec.aPos, m_pFlyFrm ))
                     return const_cast<SdrObject*>(static_cast<SdrObject const *>(this));
 
                 return nullptr;

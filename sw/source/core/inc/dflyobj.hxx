@@ -60,7 +60,7 @@ public:
 class SwVirtFlyDrawObj : public SdrVirtObj
 {
 private:
-    SwFlyFrm *pFlyFrm;
+    SwFlyFrm *m_pFlyFrm;
 
 protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
@@ -110,8 +110,8 @@ public:
           SwFrameFormat *GetFormat();
 
     // methods to get pointers for the Fly
-          SwFlyFrm* GetFlyFrm()         { return pFlyFrm; }
-    const SwFlyFrm* GetFlyFrm() const   { return pFlyFrm; }
+          SwFlyFrm* GetFlyFrm()         { return m_pFlyFrm; }
+    const SwFlyFrm* GetFlyFrm() const   { return m_pFlyFrm; }
 
     void SetRect() const;
 
