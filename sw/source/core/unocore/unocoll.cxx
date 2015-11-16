@@ -975,9 +975,7 @@ sal_Bool SwXTextTables::supportsService(const OUString& rServiceName) throw( uno
 
 uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArr = aRet.getArray();
-    pArr[0] = "com.sun.star.text.TextTables";
+    uno::Sequence< OUString > aRet { "com.sun.star.text.TextTables" };
     return aRet;
 }
 

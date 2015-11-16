@@ -326,10 +326,7 @@ OUString    OSaxWriterTest_getImplementationName( ) throw  ()
 
 Sequence<OUString> OSaxWriterTest_getSupportedServiceNames( ) throw  ()
 {
-    Sequence<OUString> aRet(1);
-
-    aRet.getArray()[0] = OSaxWriterTest_getImplementationName( );
-
+    Sequence<OUString> aRet { OSaxWriterTest_getImplementationName( ) };
     return aRet;
 }
 

@@ -750,8 +750,7 @@ uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aSNS( 1 );   // more than 1 service possible
-    aSNS.getArray()[0] = "com.sun.star.linguistic2.DictionaryList";
+    uno::Sequence< OUString > aSNS { "com.sun.star.linguistic2.DictionaryList" };
     return aSNS;
 }
 

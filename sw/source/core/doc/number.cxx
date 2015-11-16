@@ -1359,9 +1359,7 @@ namespace numfunc
 
     css::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames()
     {
-        css::uno::Sequence<OUString> aPropNames(1);
-        OUString* pNames = aPropNames.getArray();
-        pNames[0] = "ChangeIndentOnTabAtFirstPosOfFirstListItem";
+        css::uno::Sequence<OUString> aPropNames { "ChangeIndentOnTabAtFirstPosOfFirstListItem" };
 
         return aPropNames;
     }

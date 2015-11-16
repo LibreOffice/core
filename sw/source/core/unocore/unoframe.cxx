@@ -2384,9 +2384,7 @@ beans::PropertyState SwXFrame::getPropertyState( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aPropertyNames(1);
-    OUString* pNames = aPropertyNames.getArray();
-    pNames[0] = rPropertyName;
+    uno::Sequence< OUString > aPropertyNames { rPropertyName };
     uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aPropertyNames);
     return aStates.getConstArray()[0];
 }

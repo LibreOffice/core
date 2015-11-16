@@ -111,10 +111,7 @@ OUString Graphic::getImplementationName_Static()
 uno::Sequence< OUString > Graphic::getSupportedServiceNames_Static()
     throw()
 {
-    uno::Sequence< OUString > aSeq( 1 );
-
-    aSeq.getArray()[ 0 ] = "com.sun.star.graphic.Graphic";
-
+    uno::Sequence< OUString > aSeq { "com.sun.star.graphic.Graphic" };
     return aSeq;
 }
 

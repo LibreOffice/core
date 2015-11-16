@@ -430,8 +430,7 @@ OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  ) thr
 
 Sequence< OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aModes(1);
-    aModes[1] = "DataMode";
+    Sequence< OUString > aModes { "DataMode" };
     return aModes;
 }
 

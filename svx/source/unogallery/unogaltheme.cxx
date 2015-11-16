@@ -83,10 +83,7 @@ OUString GalleryTheme::getImplementationName_Static()
 uno::Sequence< OUString > GalleryTheme::getSupportedServiceNames_Static()
     throw()
 {
-    uno::Sequence< OUString > aSeq( 1 );
-
-    aSeq.getArray()[ 0 ] = "com.sun.star.gallery.GalleryTheme";
-
+    uno::Sequence< OUString > aSeq { "com.sun.star.gallery.GalleryTheme" };
     return aSeq;
 }
 

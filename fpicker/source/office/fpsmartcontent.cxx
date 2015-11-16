@@ -325,9 +325,7 @@ namespace svt
             if ( !sFolderType.isEmpty() )
             {
                 ucbhelper::Content aCreated;
-                Sequence< OUString > aNames( 1 );
-                OUString* pNames = aNames.getArray();
-                pNames[0] = "Title";
+                Sequence< OUString > aNames { "Title" };
                 Sequence< Any > aValues( 1 );
                 Any* pValues = aValues.getArray();
                 pValues[0] = makeAny( _rTitle );

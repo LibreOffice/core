@@ -166,8 +166,7 @@ namespace connectivity
     }   \
     css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)  \
     {   \
-        css::uno::Sequence< OUString > aSupported(1);   \
-        aSupported[0] = serviceasciiname; \
+        css::uno::Sequence< OUString > aSupported { serviceasciiname }; \
         return aSupported;  \
     }   \
     sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception) \

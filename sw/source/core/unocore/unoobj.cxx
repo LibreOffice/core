@@ -1987,8 +1987,7 @@ beans::PropertyState SwUnoCursorHelper::GetPropertyState(
     const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    uno::Sequence< OUString > aStrings ( 1 );
-    aStrings[0] = rPropertyName;
+    uno::Sequence< OUString > aStrings { rPropertyName };
     uno::Sequence< beans::PropertyState > aSeq =
         GetPropertyStates(rPaM, rPropSet, aStrings,
                 SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY );

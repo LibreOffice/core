@@ -54,10 +54,7 @@ OUString SVGDialog_getImplementationName ()
 Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames()
     throw (RuntimeException)
 {
-    Sequence< OUString > aRet( 1 );
-
-    aRet.getArray()[ 0 ] = SVG_DIALOG_SERVICE_NAME;
-
+    Sequence< OUString > aRet { SVG_DIALOG_SERVICE_NAME };
     return aRet;
 }
 

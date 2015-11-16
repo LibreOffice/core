@@ -367,9 +367,7 @@ static void createUniqueSubEntry(const Reference < XRegistryKey > & xSuperKey,
             }
         } else
         {
-            Sequence<OUString> implEntriesNew(1);
-
-            implEntriesNew.getArray()[0] = value;
+            Sequence<OUString> implEntriesNew { value };
 
             xSuperKey->setAsciiListValue(implEntriesNew);
         }

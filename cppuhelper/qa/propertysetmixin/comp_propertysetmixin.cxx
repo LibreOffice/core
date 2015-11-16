@@ -384,10 +384,9 @@ rtl::OUString SAL_CALL getImplementationName() {
             "test.cppuhelper.propertysetmixin.comp.CppSupplier");
 }
 
-css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() {
-    css::uno::Sequence< rtl::OUString > s(1);
-    s[0] = rtl::OUString(
-            "test.cppuhelper.propertysetmixin.CppSupplier");
+css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+{
+    css::uno::Sequence< rtl::OUString > s { "test.cppuhelper.propertysetmixin.CppSupplier") };
     return s;
 }
 

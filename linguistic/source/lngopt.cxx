@@ -449,8 +449,7 @@ uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aSNS( 1 );    // more than 1 service possible
-    aSNS.getArray()[0] = "com.sun.star.linguistic2.LinguProperties";
+    uno::Sequence< OUString > aSNS { "com.sun.star.linguistic2.LinguProperties" };
     return aSNS;
 }
 

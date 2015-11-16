@@ -69,8 +69,7 @@ namespace framework{
                                                                                                                                                     \
     css::uno::Sequence< OUString > CLASS::impl_getStaticSupportedServiceNames()                                                                     \
     {                                                                                                                                               \
-        css::uno::Sequence< OUString > seqServiceNames( 1 );                                                                                        \
-        seqServiceNames.getArray() [0] = SERVICENAME;                                                                                              \
+        css::uno::Sequence< OUString > seqServiceNames { SERVICENAME };                                                                             \
         return seqServiceNames;                                                                                                                     \
     }                                                                                                                                               \
                                                                                                                                                     \

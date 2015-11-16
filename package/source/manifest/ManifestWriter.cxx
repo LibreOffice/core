@@ -81,8 +81,7 @@ OUString ManifestWriter::static_getImplementationName()
 
 Sequence < OUString > ManifestWriter::static_getSupportedServiceNames()
 {
-    Sequence < OUString > aNames(1);
-    aNames[0] = "com.sun.star.packages.manifest.ManifestWriter";
+    Sequence<OUString> aNames { "com.sun.star.packages.manifest.ManifestWriter" };
     return aNames;
 }
 
