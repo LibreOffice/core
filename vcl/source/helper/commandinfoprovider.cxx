@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/commandinfoprovider.hxx>
-#include <svtools/acceleratorexecute.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -28,6 +27,8 @@
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/awt/KeyModifier.hpp>
+
 
 using namespace css;
 using namespace css::uno;
@@ -43,7 +44,7 @@ namespace
           public FrameListenerInterfaceBase
     {
     public:
-        FrameListener (svt::CommandInfoProvider& rInfoProvider, const Reference<frame::XFrame>& rxFrame)
+        FrameListener (vcl::CommandInfoProvider& rInfoProvider, const Reference<frame::XFrame>& rxFrame)
             : FrameListenerInterfaceBase(m_aMutex),
               mrInfoProvider(rInfoProvider),
               mxFrame(rxFrame)
@@ -68,12 +69,12 @@ namespace
         }
 
     private:
-        svt::CommandInfoProvider& mrInfoProvider;
+        vcl::CommandInfoProvider& mrInfoProvider;
         Reference<frame::XFrame> mxFrame;
     };
 }
 
-namespace svt {
+namespace vcl {
 
 CommandInfoProvider& CommandInfoProvider::Instance()
 {
@@ -264,7 +265,7 @@ OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
                 css::awt::KeyEvent aKeyEvent;
                 if (aKeyCodes[0] >>= aKeyEvent)
                 {
-                    return svt::AcceleratorExecute::st_AWTKey2VCLKey(aKeyEvent).GetName();
+                    return AWTKey2VCLKey(aKeyEvent).GetName();
                 }
             }
         }
@@ -312,6 +313,18 @@ OUString CommandInfoProvider::GetCommandProperty(const OUString& rsProperty, con
     return OUString();
 }
 
-} // end of namespace svt
+vcl::KeyCode CommandInfoProvider::AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
+{
+    bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
+    bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
+    bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
+    bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
+    sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
+
+    return vcl::KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
+}
+
+
+} // end of namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,6 +43,7 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/slider.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
 #include <svids.hrc>
 #include <window.h>
@@ -892,11 +893,11 @@ namespace
         uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
         OUString aModuleId(xModuleManager->identify(rFrame));
 
-        OUString aLabel(VclBuilder::getCommandProperty("Label", aCommand, xContext, aModuleId));
+        OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommand, rFrame));
         if (!aLabel.isEmpty())
             pButton->SetText(aLabel);
 
-        OUString aTooltip(VclBuilder::getCommandProperty("Tooltip", aCommand, xContext, aModuleId));
+        OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommand, rFrame));
         if (!aTooltip.isEmpty())
             pButton->SetQuickHelpText(aTooltip);
 
@@ -2166,41 +2167,6 @@ void VclBuilder::reorderWithinParent(std::vector<vcl::Window*>& rChilds, bool bI
             nBits |= WB_GROUP;
         rChilds[i]->SetStyle(nBits);
     }
-}
-
-OUString VclBuilder::getCommandProperty(const OUString& rProperty, const OUString& rCommand,
-                                     const uno::Reference<uno::XComponentContext>& rContext, const OUString& rModuleId)
-{
-    if (rCommand.isEmpty())
-        return OUString();
-
-    try
-    {
-        uno::Reference<container::XNameAccess> xUICommandLabels;
-        uno::Reference<container::XNameAccess> xUICommandDescription(frame::theUICommandDescription::get(rContext));
-
-        if ((xUICommandDescription->getByName(rModuleId) >>= xUICommandLabels) && xUICommandLabels.is())
-        {
-            uno::Sequence<beans::PropertyValue> aProperties;
-            if (xUICommandLabels->getByName(rCommand) >>= aProperties)
-            {
-                for ( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
-                {
-                    if (aProperties[i].Name == rProperty)
-                    {
-                        OUString aLabel;
-                        if (aProperties[i].Value >>= aLabel)
-                            return aLabel;
-                    }
-                }
-            }
-        }
-    }
-    catch (uno::Exception&)
-    {
-    }
-
-    return OUString();
 }
 
 Image VclBuilder::getCommandImage(const OUString& rCommand, bool bLarge,
