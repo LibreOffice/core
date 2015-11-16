@@ -636,7 +636,8 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
     static_cast<ImplFontAttributes&>(rTo) = mpFontInfo->GetFontAttributes();
 
-    rTo.mbScalableFont  = true;
+    rTo.mbScalableFont  = true; // FIXME: Shouldn't this check FT_IS_SCALABLE( maFaceFT )?
+    rTo.mbTrueTypeFont  = FT_IS_SFNT( maFaceFT ) != 0;
     rTo.mbDevice        = true;
     rTo.mbKernableFont  = FT_HAS_KERNING( maFaceFT ) != 0;
     rTo.mnOrientation = GetFontSelData().mnOrientation;

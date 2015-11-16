@@ -1596,6 +1596,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     // device dependent font attributes
     pMetric->mbDevice       = (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
     pMetric->mbScalableFont = (aWinMetric.tmPitchAndFamily & (TMPF_VECTOR|TMPF_TRUETYPE)) != 0;
+    pMetric->mbTrueTypeFont = (aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0;
     if( pMetric->mbScalableFont )
     {
         // check if there are kern pairs

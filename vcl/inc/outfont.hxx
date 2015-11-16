@@ -173,6 +173,7 @@ public: // TODO: hide members behind accessor methods
     int                 meFamilyType;               // Font Family Type
     bool                mbDevice;                   // Flag for Device Fonts
     bool                mbScalableFont;
+    bool                mbTrueTypeFont;
     bool                mbKernableFont;
     bool                mbFullstopCentered;
 
