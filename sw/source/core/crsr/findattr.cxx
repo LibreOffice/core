@@ -1057,14 +1057,14 @@ struct SwFindParaAttr : public SwFindParas
     bool bValue;
     const SfxItemSet *pSet, *pReplSet;
     const SearchOptions *pSearchOpt;
-    SwCursor& rCursor;
+    SwCursor& m_rCursor;
     utl::TextSearch* pSText;
 
     SwFindParaAttr( const SfxItemSet& rSet, bool bNoCollection,
                     const SearchOptions* pOpt, const SfxItemSet* pRSet,
                     SwCursor& rCrsr )
         : bValue( bNoCollection ), pSet( &rSet ), pReplSet( pRSet ),
-          pSearchOpt( pOpt ), rCursor( rCrsr ),pSText( nullptr ) {}
+          pSearchOpt( pOpt ), m_rCursor( rCrsr ),pSText( nullptr ) {}
 
     virtual ~SwFindParaAttr()   { delete pSText; }
 
@@ -1150,15 +1150,15 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         if( bRegExp )
         {
             pPrevRing = const_cast< SwPaM* >(pRegion)->GetPrev();
-            const_cast< SwPaM* >(pRegion)->GetRingContainer().merge( rCursor.GetRingContainer() );
+            const_cast< SwPaM* >(pRegion)->GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
         std::unique_ptr<OUString> pRepl( (bRegExp) ?
                 ReplaceBackReferences( *pSearchOpt, pCrsr ) : nullptr );
-        rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange( *pCrsr,
+        m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange( *pCrsr,
             (pRepl.get()) ? *pRepl : pSearchOpt->replaceString,
             bRegExp );
-        rCursor.SaveTableBoxContent( pCrsr->GetPoint() );
+        m_rCursor.SaveTableBoxContent( pCrsr->GetPoint() );
 
         if( bRegExp )
         {
