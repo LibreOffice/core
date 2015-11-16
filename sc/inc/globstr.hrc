@@ -703,7 +703,9 @@
 
 #define STR_TABLE_COUNT                 530
 
-#define SC_GLOBSTR_STR_COUNT            531     /**< the count of permanently resident strings */
+#define STR_FUNCTIONS_FOUND             531
+
+#define SC_GLOBSTR_STR_COUNT            532     /**< the count of permanently resident strings */
 
 #endif
 
