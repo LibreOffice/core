@@ -68,6 +68,9 @@
   <anim:par pres:preset-id="glitter">
   <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="diamond"/>
  </anim:par>
+ <anim:par pres:preset-id="honeycomb">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="heart"/>
+ </anim:par>
  <anim:par pres:preset-id="zoom-rotate-in">
   <anim:transitionFilter smil:type="zoom" smil:subtype="rotateIn"/>
  </anim:par>

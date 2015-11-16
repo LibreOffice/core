@@ -1434,6 +1434,7 @@ public:
                 case animations::TransitionSubType::HORIZONTAL:         //  14
                 case animations::TransitionSubType::DIAMOND:            //  26
                 case animations::TransitionSubType::CIRCLE:             //  27
+                case animations::TransitionSubType::HEART:              //  31
                 case animations::TransitionSubType::FANOUTHORIZONTAL:   //  55
                 case animations::TransitionSubType::ACROSS:             // 108
                     return sal_True;
@@ -1523,6 +1524,9 @@ public:
                     break;
                 case animations::TransitionSubType::DIAMOND:
                     pTransition = makeGlitter();
+                    break;
+                case animations::TransitionSubType::HEART:
+                    pTransition = makeHoneycomb();
                     break;
                 }
         } else if( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) {

@@ -237,10 +237,11 @@ std::shared_ptr<OGLTransitionImpl> makeDissolve();
 std::shared_ptr<OGLTransitionImpl> makeVortex();
 std::shared_ptr<OGLTransitionImpl> makeRipple();
 std::shared_ptr<OGLTransitionImpl> makeGlitter();
+std::shared_ptr<OGLTransitionImpl> makeHoneycomb();
 std::shared_ptr<OGLTransitionImpl> makeNewsflash();
 
-/** 2D replacements
-    */
+/** 2D replacements */
+
 std::shared_ptr<OGLTransitionImpl> makeDiamond();
 std::shared_ptr<OGLTransitionImpl> makeFadeSmoothly();
 std::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack();
