@@ -1844,6 +1844,24 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     ::SolarMutexGuard aGuard;
     SdrObject* pObject = mpObj.get();
 
+    // tdf#93994 Allow external user to flush the current UNO API implementation shape
+    // to avoid holding data too long during import, e.g. the created Outliner. This
+    // is a private UNO API slot triggered exclusively by SdXMLCustomShapeContext::EndElement(),
+    // see there for more information
+    const OUString sCustomShapeFlushAfterLoad( "FlushAfterLoad" );
+
+    if(sCustomShapeFlushAfterLoad == aPropertyName)
+    {
+        SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>(pObject);
+
+        if(pCustomShape)
+        {
+            pCustomShape->setUnoShape(nullptr);
+        }
+
+        return;
+    }
+
     bool bCustomShapeGeometry = pObject && aPropertyName == "CustomShapeGeometry";
 
     bool bMirroredX = false;

@@ -3904,6 +3904,28 @@ void SdXMLCustomShapeContext::EndElement()
     }
 
     SdXMLShapeContext::EndElement();
+
+    // tdf#93994 To not hold temp data created during import too long when importing,
+    // trigger this private UNO API slot which allows to flush the UNO API implementation
+    // object that holds that data. Without this, all the data is held internally. This
+    // is basically not wrong, but will crash mem and graphics stuff when more than
+    // 4200 Outliners and corresponding VirtualDevices as ref device are created. Only
+    // and exclusively used by SvxCustomShape::setPropertyValue()
+    try
+    {
+        uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
+        if( xPropSet.is() )
+        {
+            const OUString sCustomShapeFlushAfterLoad( "FlushAfterLoad" );
+            uno::Any aAny;
+            aAny <<= sal_True;
+            xPropSet->setPropertyValue( sCustomShapeFlushAfterLoad, aAny );
+        }
+    }
+    catch(const uno::Exception&)
+    {
+        OSL_FAIL( "could not flush after load" );
+    }
 }
 
 SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
