@@ -25,11 +25,14 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itempool.hxx>
 
+SdrOutlinerOwner::~SdrOutlinerOwner()
+{
+}
 
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
 :   Outliner( pItemPool, nMode ),
-    //mpPaintInfoRec( NULL )
-    mpVisualizedPage(nullptr)
+    mpVisualizedPage(nullptr),
+    mpSdrOutlinerOwner(nullptr)
 {
 }
 

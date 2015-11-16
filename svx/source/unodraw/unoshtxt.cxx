@@ -59,7 +59,6 @@ using ::com::sun::star::uno::XInterface;
 
 // SvxTextEditSourceImpl
 
-
 /** @descr
     <p>This class essentially provides the text and view forwarders. If
     no SdrView is given, this class handles the UNO objects, which are
@@ -80,7 +79,9 @@ using ::com::sun::star::uno::XInterface;
     reflected on the screen. If the object leaves edit mode, the old
     behaviour is restored.</p>
  */
-class SvxTextEditSourceImpl : public SfxListener, public SfxBroadcaster, public sdr::ObjectUser
+
+// tdf#93994 added SdrOutlinerOwner to allow to register as owner of the Outliner (mpOutliner)
+class SvxTextEditSourceImpl : public SfxListener, public SfxBroadcaster, public sdr::ObjectUser, public SdrOutlinerOwner
 {
 private:
     oslInterlockedCount maRefCount;
@@ -121,6 +122,9 @@ private:
 
     void                            dispose();
 
+    // tdf#93994 unified release of mpOutliner
+    void                            freeOutliner();
+
 public:
     SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText );
     SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const vcl::Window& rWindow );
@@ -155,9 +159,34 @@ public:
     void ChangeModel( SdrModel* pNewModel );
 
     void                    UpdateOutliner();
+
+    // tdf#93994 from SdrOutlinerOwner, implemented to free the owned outliner
+    virtual void tryToReleaseSdrOutliner() const;
 };
 
+void SvxTextEditSourceImpl::tryToReleaseSdrOutliner() const
+{
+    // tdf#93994 by request, free the outliner we own
+    const_cast< SvxTextEditSourceImpl* >(this)->freeOutliner();
+}
 
+// tdf#93994 unified release of mpOutliner
+void SvxTextEditSourceImpl::freeOutliner()
+{
+    if(mpOutliner)
+    {
+        if(mpModel)
+        {
+            mpModel->disposeOutliner(mpOutliner);
+        }
+        else
+        {
+            delete mpOutliner;
+        }
+
+        mpOutliner = nullptr;
+    }
+}
 
 SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText )
   : maRefCount      ( 0 ),
@@ -286,14 +315,8 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
         if( mpModel )
             EndListening( *mpModel );
 
-        if( mpOutliner )
-        {
-            if( mpModel )
-                mpModel->disposeOutliner( mpOutliner );
-            else
-                delete mpOutliner;
-            mpOutliner = nullptr;
-        }
+        // tdf#93994 unified release of mpOutliner
+        freeOutliner();
 
         if( mpView )
         {
@@ -488,18 +511,8 @@ void SvxTextEditSourceImpl::dispose()
         mpViewForwarder = nullptr;
     }
 
-    if( mpOutliner )
-    {
-        if( mpModel )
-        {
-            mpModel->disposeOutliner( mpOutliner );
-        }
-        else
-        {
-            delete mpOutliner;
-        }
-        mpOutliner = nullptr;
-    }
+    // tdf#93994 unified release of mpOutliner
+    freeOutliner();
 
     if( mpModel )
     {
@@ -611,6 +624,8 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( m_xLinguServiceManager->getHyphenator(), css::uno::UNO_QUERY );
             if( xHyphenator.is() )
                 mpOutliner->SetHyphenator( xHyphenator );
+
+            mpOutliner->RegisterSdrOutlinerOwner(this);
         }
 
 
@@ -1142,6 +1157,12 @@ void SvxTextEditSource::ChangeModel( SdrModel* pNewModel )
 void SvxTextEditSource::UpdateOutliner()
 {
     mpImpl->UpdateOutliner();
+}
+
+// tdf#93994 forward request to implementation class
+void SvxTextEditSource::tryToReleaseSdrOutliner() const
+{
+    mpImpl->tryToReleaseSdrOutliner();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
