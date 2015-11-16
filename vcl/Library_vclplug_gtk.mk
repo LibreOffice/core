@@ -23,7 +23,7 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
-    -I$(SRCDIR)/vcl/unx/gtk/inc \
+    -I$(SRCDIR)/vcl/unx/gtk \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk,\
@@ -96,12 +96,12 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/a11y/atkvalue \
     vcl/unx/gtk/a11y/atkwindow \
     vcl/unx/gtk/a11y/atkwrapper \
-    vcl/unx/gtk/app/gtkdata \
-    vcl/unx/gtk/app/gtkinst \
-    vcl/unx/gtk/app/gtksys \
-    vcl/unx/gtk/gdi/salnativewidgets-gtk \
-    vcl/unx/gtk/window/gtksalframe \
-    vcl/unx/gtk/window/gtkobject \
+    vcl/unx/gtk/gtkdata \
+    vcl/unx/gtk/gtkinst \
+    vcl/unx/gtk/gtksys \
+    vcl/unx/gtk/salnativewidgets-gtk \
+    vcl/unx/gtk/gtksalframe \
+    vcl/unx/gtk/gtkobject \
     vcl/unx/gtk/fpicker/resourceprovider \
     vcl/unx/gtk/fpicker/SalGtkPicker \
     vcl/unx/gtk/fpicker/SalGtkFilePicker \
@@ -111,18 +111,18 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
 ifneq ($(ENABLE_DBUS),)
 ifneq ($(ENABLE_GIO),)
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
-    vcl/unx/gtk/window/gloactiongroup \
-    vcl/unx/gtk/window/gtksalmenu \
-    vcl/unx/gtk/window/glomenu \
-    vcl/unx/gtk/window/hudawareness \
+    vcl/unx/gtk/gloactiongroup \
+    vcl/unx/gtk/gtksalmenu \
+    vcl/unx/gtk/glomenu \
+    vcl/unx/gtk/hudawareness \
 ))
 endif
 endif
 
 ifeq ($(ENABLE_GTK_PRINT),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
-    vcl/unx/gtk/gdi/gtkprintwrapper \
-    vcl/unx/gtk/gdi/salprn-gtk \
+    vcl/unx/gtk/gtkprintwrapper \
+    vcl/unx/gtk/salprn-gtk \
 ))
 endif
 

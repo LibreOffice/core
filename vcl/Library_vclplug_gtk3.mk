@@ -29,7 +29,7 @@ $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
-    -I$(SRCDIR)/vcl/unx/gtk3/inc \
+    -I$(SRCDIR)/vcl/unx/gtk3 \
 ))
 
 $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3,\
@@ -98,21 +98,21 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/a11y/gtk3atkvalue \
     vcl/unx/gtk3/a11y/gtk3atkwindow \
     vcl/unx/gtk3/a11y/gtk3atkwrapper \
-    vcl/unx/gtk3/app/gtk3gtkdata \
-    vcl/unx/gtk3/app/gtk3gtkinst \
-    vcl/unx/gtk3/app/gtk3gtksys \
-    vcl/unx/gtk3/app/gtk3fpicker \
-    vcl/unx/gtk3/gdi/cairo_gtk3_cairo \
-    vcl/unx/gtk3/gdi/gtk3cairotextrender \
-    vcl/unx/gtk3/gdi/gtk3gtkprintwrapper \
-    vcl/unx/gtk3/gdi/gtk3salnativewidgets-gtk \
-    vcl/unx/gtk3/gdi/gtk3salprn-gtk \
-    vcl/unx/gtk3/window/gtk3gtkframe \
-    vcl/unx/gtk3/window/gtk3gtkobject \
-	vcl/unx/gtk3/window/gtk3gtksalmenu \
-	vcl/unx/gtk3/window/gtk3glomenu \
-	vcl/unx/gtk3/window/gtk3gloactiongroup \
-    vcl/unx/gtk3/window/gtk3hudawareness \
+    vcl/unx/gtk3/gtk3gtkdata \
+    vcl/unx/gtk3/gtk3gtkinst \
+    vcl/unx/gtk3/gtk3gtksys \
+    vcl/unx/gtk3/gtk3fpicker \
+    vcl/unx/gtk3/cairo_gtk3_cairo \
+    vcl/unx/gtk3/gtk3cairotextrender \
+    vcl/unx/gtk3/gtk3gtkprintwrapper \
+    vcl/unx/gtk3/gtk3salnativewidgets-gtk \
+    vcl/unx/gtk3/gtk3salprn-gtk \
+    vcl/unx/gtk3/gtk3gtkframe \
+    vcl/unx/gtk3/gtk3gtkobject \
+	vcl/unx/gtk3/gtk3gtksalmenu \
+	vcl/unx/gtk3/gtk3glomenu \
+	vcl/unx/gtk3/gtk3gloactiongroup \
+    vcl/unx/gtk3/gtk3hudawareness \
 ))
 
 ifeq ($(OS),LINUX)

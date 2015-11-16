@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK3_INC_GTKPRINTWRAPPER_HXX
-#define INCLUDED_VCL_UNX_GTK3_INC_GTKPRINTWRAPPER_HXX
-
-#include "../../gtk/inc/gtkprintwrapper.hxx"
-
-#endif // INCLUDED_VCL_UNX_GTK3_INC_GTKPRINTWRAPPER_HXX
+#include "../gtk/salprn-gtk.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

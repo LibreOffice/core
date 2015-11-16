@@ -16,7 +16,7 @@ $(eval $(call gb_Executable_add_libs,xid-fullscreen-on-all-monitors,\
 endif
 
 $(eval $(call gb_Executable_add_cobjects,xid-fullscreen-on-all-monitors,\
-    vcl/unx/gtk/window/xid_fullscreen_on_all_monitors \
+    vcl/unx/gtk/xid_fullscreen_on_all_monitors \
 ))
 
 # vim: set noet sw=4 ts=4:
