@@ -1863,7 +1863,6 @@ uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL S
 OUString SAL_CALL SwChartDataSource::getImplementationName(  )
     throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
     return OUString("SwChartDataSource");
 }
 

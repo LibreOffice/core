@@ -152,10 +152,7 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
 OUString SAL_CALL BaseContainer::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
     return m_sImplementationName;
-    // <- SAFE
 }
 
 
@@ -169,10 +166,7 @@ sal_Bool SAL_CALL BaseContainer::supportsService(const OUString& sServiceName)
 css::uno::Sequence< OUString > SAL_CALL BaseContainer::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
     return m_lServiceNames;
-    // <- SAFE
 }
 
 

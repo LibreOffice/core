@@ -2036,8 +2036,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceNam
 Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    const OUString aSN( "com.sun.star.document.LinkTargets" );
-    Sequence< OUString > aSeq( &aSN, 1);
+    Sequence< OUString > aSeq { "com.sun.star.document.LinkTargets" };
     return aSeq;
 }
 

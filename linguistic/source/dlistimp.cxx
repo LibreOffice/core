@@ -727,7 +727,6 @@ void DicList::SaveDics()
 
 OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
 
@@ -741,15 +740,12 @@ sal_Bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
         throw(RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();
 }
 
 
 uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
 {
-    osl::MutexGuard aGuard( GetLinguMutex() );
-
     uno::Sequence< OUString > aSNS { "com.sun.star.linguistic2.DictionaryList" };
     return aSNS;
 }

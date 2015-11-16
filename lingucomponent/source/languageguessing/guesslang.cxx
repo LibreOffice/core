@@ -325,7 +325,6 @@ void SAL_CALL LangGuess_Impl::enableLanguages(
 OUString SAL_CALL LangGuess_Impl::getImplementationName(  )
     throw(RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard( GetLangGuessMutex() );
     return OUString( IMPLNAME );
 }
 
@@ -338,7 +337,6 @@ sal_Bool SAL_CALL LangGuess_Impl::supportsService( const OUString& ServiceName )
 Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
     throw(RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard( GetLangGuessMutex() );
     return getSupportedServiceNames_Static();
 }
 

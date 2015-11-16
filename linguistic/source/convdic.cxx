@@ -651,7 +651,6 @@ void SAL_CALL ConvDic::removeFlushListener(
 OUString SAL_CALL ConvDic::getImplementationName(  )
     throw (RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
 
@@ -664,7 +663,6 @@ sal_Bool SAL_CALL ConvDic::supportsService( const OUString& rServiceName )
 uno::Sequence< OUString > SAL_CALL ConvDic::getSupportedServiceNames(  )
     throw (RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();
 }
 

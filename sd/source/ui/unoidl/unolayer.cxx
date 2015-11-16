@@ -478,8 +478,7 @@ sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    OUString aServiceName(UNO_PREFIX "drawing.LayerManager");
-    uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    uno::Sequence< OUString > aSeq { UNO_PREFIX "drawing.LayerManager" };
     return aSeq;
 }
 

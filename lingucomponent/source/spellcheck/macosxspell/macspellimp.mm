@@ -524,8 +524,6 @@ void SAL_CALL
 OUString SAL_CALL MacSpellChecker::getImplementationName()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     return getImplementationName_Static();
 }
 
@@ -538,16 +536,12 @@ sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName 
 Sequence< OUString > SAL_CALL MacSpellChecker::getSupportedServiceNames()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     return getSupportedServiceNames_Static();
 }
 
 Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
         throw()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     Sequence< OUString > aSNS { SN_SPELLCHECKER };
     return aSNS;
 }

@@ -424,7 +424,6 @@ void SAL_CALL
 OUString SAL_CALL LinguProps::getImplementationName()
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
 
@@ -439,7 +438,6 @@ sal_Bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
         throw(RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();
 }
 
@@ -447,8 +445,6 @@ uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
 uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
         throw()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     uno::Sequence< OUString > aSNS { "com.sun.star.linguistic2.LinguProperties" };
     return aSNS;
 }

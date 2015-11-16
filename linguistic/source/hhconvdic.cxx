@@ -113,7 +113,6 @@ void SAL_CALL HHConvDic::addEntry(
 OUString SAL_CALL HHConvDic::getImplementationName(  )
     throw (RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
 
@@ -128,7 +127,6 @@ sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
 uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  )
     throw (RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();
 }
 

@@ -590,7 +590,6 @@ void SAL_CALL ConvDicList::removeEventListener(
 OUString SAL_CALL ConvDicList::getImplementationName()
     throw (RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
 
@@ -603,7 +602,6 @@ sal_Bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
 uno::Sequence< OUString > SAL_CALL ConvDicList::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();
 }
 
