@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/dialogs.hrc>
+#include <comphelper/sequence.hxx>
 
 #include <iostream>
 
@@ -554,7 +555,7 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
         bool bFound = false;
         sal_Int32 counter = 0;
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
-        uno::Sequence<uno::Reference<xml::dom::XDocument> > xCustomXmlDomListTemp(aSeqs.getLength());
+        std::vector< uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
         uno::Sequence<uno::Reference<xml::dom::XDocument> > xCustomXmlDomPropsListTemp(aSeqs.getLength());
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
@@ -581,7 +582,7 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
                 // grabbag list.
                 if(mxCustomXmlProsDom.is() && customXmlTemp.is())
                 {
-                    xCustomXmlDomListTemp[counter] = customXmlTemp;
+                    aCustomXmlDomList.push_back(customXmlTemp);
                     xCustomXmlDomPropsListTemp[counter] = mxCustomXmlProsDom;
                     counter++;
                     resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
@@ -590,9 +591,8 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
             }
         }
 
-        xCustomXmlDomListTemp.realloc(counter);
         xCustomXmlDomPropsListTemp.realloc(counter);
-        mxCustomXmlDomList = xCustomXmlDomListTemp;
+        mxCustomXmlDomList = comphelper::containerToSequence(aCustomXmlDomList);
         mxCustomXmlDomPropsList = xCustomXmlDomPropsListTemp;
     }
 }
