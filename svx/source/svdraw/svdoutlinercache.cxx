@@ -49,6 +49,10 @@ SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
         Outliner& aDrawOutliner = mpModel->GetDrawOutliner();
         pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
         maActiveOutliners.push_back(pOutliner);
+
+        // tdf#93994 warn if more than a decent amount (1000) of Outliners exist at the same time.
+        // This should never be necessary and is a hint that something is going utterly wrong.
+        SAL_WARN_IF(maActiveOutliners.size() >= 1000, "svx.form", "SdrOutlinerCache: Very many Outliners created in parallell, this should not be necessary" );
     }
 
     return pOutliner;
