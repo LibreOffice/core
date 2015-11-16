@@ -2909,6 +2909,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf94374, "hello.docx")
     CPPUNIT_ASSERT(paste("tdf94374.docx", xEnd));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf83300, "tdf83300.docx")
+{
+    // This was 'Contents Heading', which (in the original document) implied 'keep with next' on unexpected paragraphs.
+    CPPUNIT_ASSERT_EQUAL(OUString("TOC Heading"), getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf85232, "tdf85232.docx")
 {
     uno::Reference<drawing::XShapes> xShapes(getShapeByName("Group 219"), uno::UNO_QUERY);
