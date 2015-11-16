@@ -621,7 +621,7 @@ static void ImplSalDispatchMessage( MSG* pMsg )
         ImplSalPostDispatchMsg( pMsg, lResult );
 }
 
-void ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
+bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
@@ -648,10 +648,12 @@ void ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
             ImplSalDispatchMessage( &aMsg );
         }
     }
+    return bWasMsg;
 }
 
-void WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
+    bool bDidWork = false;
     // NOTE: if nReleased != 0 this will be called without SolarMutex
     //       so don't do anything dangerous before releasing it here
     SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
@@ -692,7 +694,7 @@ void WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
     }
     else
     {
-        ImplSalYield( bWait, bHandleAllCurrentEvents );
+        bDidWork = ImplSalYield( bWait, bHandleAllCurrentEvents );
 
         n = nCount;
         while ( n )
@@ -701,6 +703,7 @@ void WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
             n--;
         }
     }
+    return bDidWork;
 }
 
 LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )

@@ -1886,10 +1886,10 @@ bool SalX11Display::IsEvent()
     return false;
 }
 
-void SalX11Display::Yield()
+bool SalX11Display::Yield()
 {
     if( DispatchInternalEvent() )
-        return;
+        return true;
 
     XEvent aEvent;
     DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
@@ -1898,7 +1898,8 @@ void SalX11Display::Yield()
 
     XNextEvent( pDisp_, &aEvent );
 
-    Dispatch( &aEvent );
+    // FIXME: under-convinced by Dispatch boolean return value vs. salframe.
+    bool bProcessedEvent = Dispatch( &aEvent );
 
 #ifdef DBG_UTIL
     if( GetX11SalData()->HasXErrorOccurred() )
@@ -1908,6 +1909,8 @@ void SalX11Display::Yield()
     }
 #endif
     GetX11SalData()->ResetXErrorOccurred();
+
+    return bProcessedEvent;
 }
 
 bool SalX11Display::Dispatch( XEvent *pEvent )

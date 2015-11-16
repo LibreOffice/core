@@ -607,7 +607,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
     return bRet;
 }
 
-void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
+bool SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     blockIdleTimeout = !bWait;
     // check for timeouts here if you want to make screenshots

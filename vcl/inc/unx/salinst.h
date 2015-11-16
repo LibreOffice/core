@@ -71,7 +71,7 @@ public:
     virtual SalBitmap*          CreateSalBitmap() override;
     virtual SalSession*         CreateSalSession() override;
 
-    virtual void                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
+    virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;
 
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) override;

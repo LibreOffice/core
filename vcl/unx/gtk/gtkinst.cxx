@@ -396,12 +396,12 @@ void GtkInstance::RemoveTimer (SalTimer *pTimer)
         m_aTimers.erase( it );
 }
 
-void GtkInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool GtkInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
     (void) nReleased;
     assert(nReleased == 0); // not implemented
     EnsureInit();
-    GetGtkSalData()->Yield( bWait, bHandleAllCurrentEvents );
+    return GetGtkSalData()->Yield( bWait, bHandleAllCurrentEvents );
 }
 
 bool GtkInstance::IsTimerExpired()

@@ -578,9 +578,11 @@ void GtkData::Dispose()
     deInitNWF();
 }
 
-void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
+/// Allows events to be processed, returns true if we processed an event.
+bool GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     blockIdleTimeout = !bWait;
+
     /* #i33212# only enter g_main_context_iteration in one thread at any one
      * time, else one of them potentially will never end as long as there is
      * another thread in there. Having only one yielding thread actually dispatch
@@ -630,6 +632,8 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
             osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
     }
     blockIdleTimeout = false;
+
+    return bWasEvent;
 }
 
 void GtkData::Init()
