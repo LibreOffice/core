@@ -1865,19 +1865,19 @@ bool SwPostItMgr::HasNotes() const
 
 unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
 {
-    unsigned long aWidth = (unsigned long)(mpWrtShell->GetViewOptions()->GetZoom() * 1.8);
+    sal_uInt16 nZoom = mpWrtShell->GetViewOptions()->GetZoom();
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // The output device contains the real wanted scale factor.
+        double fScaleX = mpWrtShell->GetOut()->GetMapMode().GetScaleX();
+        nZoom = fScaleX * 100;
+    }
+    unsigned long aWidth = (unsigned long)(nZoom * 1.8);
+
     if (bPx)
         return aWidth;
     else
-    {
-        bool bEnableMapMode = comphelper::LibreOfficeKit::isActive() && !mpEditWin->IsMapModeEnabled();
-        if (bEnableMapMode)
-            mpEditWin->EnableMapMode();
-        long nRet = mpEditWin->PixelToLogic(Size(aWidth, 0)).Width();
-        if (bEnableMapMode)
-            mpEditWin->EnableMapMode(false);
-        return nRet;
-    }
+        return mpWrtShell->GetOut()->PixelToLogic(Size(aWidth, 0)).Width();
 }
 
 unsigned long SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
@@ -1885,7 +1885,7 @@ unsigned long SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
     if (bPx)
         return 2;
     else
-        return mpEditWin->PixelToLogic(Size(2,0)).Width();
+        return mpWrtShell->GetOut()->PixelToLogic(Size(2,0)).Width();
 }
 
 unsigned long SwPostItMgr::GetNoteWidth()
