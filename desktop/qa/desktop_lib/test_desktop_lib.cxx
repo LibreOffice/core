@@ -409,6 +409,9 @@ void DesktopLOKTest::testRowColumnHeaders()
      * "text" has the header label in UTF-8
      */
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
+
+    pDocument->pClass->initializeForRendering(pDocument);
+
     boost::property_tree::ptree aTree;
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
     std::stringstream aStream(pJSON);
