@@ -15,7 +15,6 @@
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <osl/diagnose.h>
 
-#include <string.h>
 #include <limits.h>
 #include <boost/bind.hpp>
 #include <boost/spirit/include/classic.hpp>
@@ -573,22 +572,20 @@ bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
 
 
 
-bool parseXlinkHref( const char* sXlinkHref, std::string& data )
+bool parseXlinkHref( const char* sXlinkHref, OUString& data )
 {
-    using namespace ::boost::spirit::classic;
+    OUString sLink(OUString::createFromAscii(sXlinkHref));
 
-    data.erase(data.begin(),data.end());
-
-    std::string sLink(sXlinkHref);
-
-    if (!sLink.compare(0,5,"data:"))
+    if (sLink.startsWith("data:"))
     {
+        sal_Int32 nIndex=0;
+        OUString aCurrToken = sLink.getToken(0,',',nIndex);
+
         // the inplace "data" uri
-        size_t position = sLink.rfind(',');
-        if (position > 0 && position < std::string::npos)
+        if ( !aCurrToken.isEmpty() )
         {
-            data = sLink.substr(position+1);
-            OSL_TRACE("%s", data.c_str());
+            data = sLink.copy(nIndex);
+            SAL_INFO("%s", data);
             return true;
         }
     }
