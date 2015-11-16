@@ -40,12 +40,6 @@
 
 #include <unotools/confignode.hxx>
 
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModuleManager2.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-
 using namespace vcl;
 using namespace com::sun::star;
 
@@ -603,13 +597,9 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText,
 
 void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame, ToolBoxItemBits nBits, const Size& rRequestedSize, sal_uInt16 nPos)
 {
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
-    OUString aModuleId(xModuleManager->identify(rFrame));
-
     OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(rCommand, rFrame));
     OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
-    Image aImage(VclBuilder::getCommandImage(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), xContext, rFrame, aModuleId));
+    Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), rFrame));
 
     // let's invent an ItemId
     const sal_uInt16 COMMAND_ITEMID_START = 30000;
