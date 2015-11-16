@@ -2256,7 +2256,7 @@ bool FormulaCompiler::IsForceArrayParameter( const FormulaToken* /*pToken*/, sal
 
 void FormulaCompiler::ForceArrayOperator( FormulaTokenRef& rCurr )
 {
-    if (!pCurrentFactorToken)
+    if (!pCurrentFactorToken || (pCurrentFactorToken.get() == rCurr.get()))
         return;
 
     if (!(rCurr->GetOpCode() != ocPush && (rCurr->GetType() == svByte || rCurr->GetType() == svJump)))
