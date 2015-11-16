@@ -923,6 +923,7 @@ void GenPspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
         static_cast<ImplFontAttributes&>(*pMetric) = aDFA;
         pMetric->mbDevice       = aDFA.mbDevice;
         pMetric->mbScalableFont = true;
+        pMetric->mbTrueTypeFont = false; // FIXME, needed?
 
         pMetric->mnOrientation  = m_pPrinterGfx->GetFontAngle();
         pMetric->mnSlant        = 0;

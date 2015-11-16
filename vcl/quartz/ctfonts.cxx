@@ -136,6 +136,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
 
     // all CoreText fonts are scalable
     rMetric.mbScalableFont = true;
+    rMetric.mbTrueTypeFont = true; // Not sure, but this field is used only for Windows so far
     rMetric.mbKernableFont = true;
 }
 
