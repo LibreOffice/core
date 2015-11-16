@@ -1732,4 +1732,14 @@ OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const O
     return mpCurrentProgram;
 }
 
+void OpenGLContext::UseNoProgram()
+{
+    if( mpCurrentProgram == NULL )
+        return;
+
+    mpCurrentProgram = NULL;
+    glUseProgram( 0 );
+    CHECK_GL_ERROR();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
