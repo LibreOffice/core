@@ -288,10 +288,15 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,glyphy)/src/.libs/libglyphy.lib \
+)
+else
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,glyphy)/src/.libs -lglyphy \
 )
-
+endif
 endef
 
 endif # SYSTEM_GLYPHY
