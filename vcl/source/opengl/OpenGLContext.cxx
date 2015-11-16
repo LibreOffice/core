@@ -706,9 +706,7 @@ bool GLWindow::HasGLXExtension( const char* name ) const
 bool OpenGLContext::ImplInit()
 {
     if (!m_aGLWin.dpy)
-    {
         return false;
-    }
 
     OpenGLZone aZone;
 
@@ -722,11 +720,10 @@ bool OpenGLContext::ImplInit()
     if (!g_vShareList.empty())
         pSharedCtx = g_vShareList.front();
 
-#ifdef DBG_UTIL
     if (glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
-        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering, true);
+        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering, false);
         if (!pFBC)
             return false;
 
@@ -734,23 +731,27 @@ bool OpenGLContext::ImplInit()
         {
             int pContextAttribs[] =
             {
+#if 0 // defined(DBG_UTIL)
                 GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
                 GLX_CONTEXT_MINOR_VERSION_ARB, 2,
+#endif
                 None
+
             };
             m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], pSharedCtx, /* direct, not via X */ GL_TRUE, pContextAttribs);
             SAL_INFO_IF(m_aGLWin.ctx, "vcl.opengl", "created a 3.2 core context");
         }
         else
             SAL_WARN("vcl.opengl", "unable to find correct FBC");
-
     }
-#endif
 
     if (!m_aGLWin.ctx)
     {
         if (!m_aGLWin.vi)
            return false;
+
+        SAL_WARN("vcl.opengl", "attempting to create a non-double-buffered "
+                               "visual matching the context");
 
         m_aGLWin.ctx = glXCreateContext(m_aGLWin.dpy,
                 m_aGLWin.vi,
