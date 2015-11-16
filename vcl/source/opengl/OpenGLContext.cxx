@@ -742,7 +742,7 @@ bool OpenGLContext::ImplInit()
                 GLX_CONTEXT_MINOR_VERSION_ARB, 2,
                 None
             };
-            m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], pSharedCtx, GL_TRUE, pContextAttribs);
+            m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], pSharedCtx, /* direct, not via X */ GL_TRUE, pContextAttribs);
             SAL_INFO_IF(m_aGLWin.ctx, "vcl.opengl", "created a 3.2 core context");
         }
         else
@@ -759,7 +759,7 @@ bool OpenGLContext::ImplInit()
         m_aGLWin.ctx = glXCreateContext(m_aGLWin.dpy,
                 m_aGLWin.vi,
                 pSharedCtx,
-                GL_TRUE);
+                GL_TRUE /* direct, not via X server */);
     }
 
     if( m_aGLWin.ctx )
