@@ -17,7 +17,7 @@ It's a solution for people requiring an easy-to-understand, simple-to-use system
 <p>
 For power users and enterprise requirements, it provides native-support drivers
 for some of the most-widely employed multi-user database engines:
-MySQL, Adabas D, MS Access and PostgreSQL.
+PostgreSQL, MySQL and MS Access.
 In addition, the built-in support for JDBC- and ODBC-standard drivers allows you
 to connect to virtually any other existing database engine as well.
 </p>

@@ -110,24 +110,23 @@ public class sdbcx
     public void createConnection() throws com.sun.star.uno.Exception
     {
         // create the Driver with the implementation name
-        Object aDriver = xORB.createInstance("com.sun.star.comp.sdbcx.adabas.ODriver");
+        Object aDriver = xORB.createInstance("org.openoffice.comp.connectivity.pq.Driver.noext");
         // query for the interface
         com.sun.star.sdbc.XDriver xDriver;
         xDriver = UnoRuntime.queryInterface(XDriver.class,aDriver);
         if(xDriver != null)
         {
             // first create the needed url
-            String adabasURL = "sdbc:adabas::MYDB0";
+            String URL = "sdbc:postgresql:dbname=MYDB0";
             // second create the necessary properties
-            com.sun.star.beans.PropertyValue [] adabasProps = new com.sun.star.beans.PropertyValue[]
+            com.sun.star.beans.PropertyValue [] Props = new com.sun.star.beans.PropertyValue[]
             {
                 new com.sun.star.beans.PropertyValue("user",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
                 new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE)
             };
 
-
-            // now create a connection to adabas
-            con = xDriver.connect(adabasURL,adabasProps);
+            // now create a connection to the database
+            con = xDriver.connect(URL, Props);
             if(con != null)
             {
                 System.out.println("Connection could be created!");

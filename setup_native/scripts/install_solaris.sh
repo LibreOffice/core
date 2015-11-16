@@ -166,7 +166,6 @@ else
   #
 
   cat > /tmp/userinstall_filer.$$ << EOF
-/SUNWadabas/d
 /^SUNWj[0-9]/d
 /-desktop-int/d
 /-shared-mime-info/d

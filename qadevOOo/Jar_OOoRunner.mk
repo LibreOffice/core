@@ -853,7 +853,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/xml/_UserDefinedAttributesSupplier \
     qadevOOo/tests/java/mod/_acceptor/Acceptor \
     qadevOOo/tests/java/mod/_acceptor/uno/Acceptor \
-    qadevOOo/tests/java/mod/_adabas/ODriver \
     qadevOOo/tests/java/mod/_ado/ODriver \
     qadevOOo/tests/java/mod/_basctl/AccessibleShape \
     qadevOOo/tests/java/mod/_brdgfctr/BridgeFactory \
