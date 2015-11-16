@@ -99,7 +99,11 @@ public:
 #endif
 };
 
+#ifdef SAL_LOG_WARN
 #define CHECK_GL_ERROR() OpenGLHelper::checkGLError(__FILE__, __LINE__)
+#else
+#define CHECK_GL_ERROR() do { } while (false)
+#endif
 
 #endif
 
