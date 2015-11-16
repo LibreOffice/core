@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "faac7902_6fd8a61e",
+        "filename": "solenv/gbuild/platform/unittest-failed-WNT.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-16T17:39:29Z",
+      "side": 1,
+      "message": "Does it? I thought that was a sideeffect of you doing a full build with CPPUNITTRACE, thus firing a lot of MSVS at the same time ...\n\nAlso I assume something (for a test in sw) like \"make sw.clean \u0026\u0026 make sw debug\u003dT\" works too, so suggesting \"--enable-debug\" isnt universally true/needed.\n\nToo complex to put in this short help blurb IMHO. Suggestions in a follow-up change welcome of course.",
+      "parentUuid": "faac7902_0f411a0c",
+      "revId": "0ea8d0ea87b4a77f34fea574b0c39a0e737435cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_ef45b617",
         "filename": "solenv/gbuild/platform/unittest-failed-WNT.sh",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-16T11:37:21Z",
       "side": 1,
       "message": "How about\nmake $1Test_$2 TRACE\u003d{debug|memory}\n\nIt gets complicated giving the user multiple options",
+      "revId": "0ea8d0ea87b4a77f34fea574b0c39a0e737435cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_ef02d66e",
+        "filename": "solenv/gbuild/platform/unittest-failed-WNT.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-16T17:39:29Z",
+      "side": 1,
+      "message": "Would break backwards compatibility and possibly a few scripts depending on this.\n\nIf its really that relevant, it might be done in a incompatible follow-up change steamlining those on all platforms (including the weird DEBUGCPPUNIT on *nix platforms), if properly warned and announced.",
+      "parentUuid": "faac7902_ef45b617",
       "revId": "0ea8d0ea87b4a77f34fea574b0c39a0e737435cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
