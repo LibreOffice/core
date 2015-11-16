@@ -703,7 +703,10 @@
 
 #define STR_TABLE_COUNT                 530
 
-#define SC_GLOBSTR_STR_COUNT            531     /**< the count of permanently resident strings */
+#define STR_FUNCTIONS_FOUND             531
+#define STR_FUNCTIONS_NAMEDESCS         532
+
+#define SC_GLOBSTR_STR_COUNT            533     /**< the count of permanently resident strings */
 
 #endif
 
