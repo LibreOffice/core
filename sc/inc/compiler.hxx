@@ -462,6 +462,8 @@ private:
     virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
     virtual void LocalizeString( OUString& rName ) const SAL_OVERRIDE;   // modify rName - input: exact name
 
+    virtual bool IsForceArrayParameter( const formula::FormulaToken* pToken, sal_uInt16 nParam ) const;
+
     /// Access the CharTable flags
     inline sal_uLong GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : 0; }
