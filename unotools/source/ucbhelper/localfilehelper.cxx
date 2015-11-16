@@ -47,9 +47,7 @@ typedef ::std::vector< OUString* > StringList_Impl;
             rFolder, Reference< XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
-        ::com::sun::star::uno::Sequence< OUString > aProps(1);
-        OUString* pProps = aProps.getArray();
-        pProps[0] = "Url";
+        ::com::sun::star::uno::Sequence< OUString > aProps { "Url" };
 
         try
         {

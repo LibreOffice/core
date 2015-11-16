@@ -917,8 +917,7 @@ NativeNumberSupplierService::supportsService(const OUString& rServiceName) throw
 Sequence< OUString > SAL_CALL
 NativeNumberSupplierService::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii( implementationName );
+    Sequence< OUString > aRet { OUString::createFromAscii( implementationName ) };
     return aRet;
 }
 

@@ -138,10 +138,7 @@ OUString GalleryItem::getImplementationName_Static()
 uno::Sequence< OUString > GalleryItem::getSupportedServiceNames_Static()
     throw()
 {
-    uno::Sequence< OUString > aSeq( 1 );
-
-    aSeq.getArray()[ 0 ] = "com.sun.star.gallery.GalleryItem";
-
+    uno::Sequence< OUString > aSeq { "com.sun.star.gallery.GalleryItem" };
     return aSeq;
 }
 

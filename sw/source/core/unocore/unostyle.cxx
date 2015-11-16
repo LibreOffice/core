@@ -2822,9 +2822,7 @@ beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
         throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aNames(1);
-    OUString* pNames = aNames.getArray();
-    pNames[0] = rPropertyName;
+    uno::Sequence< OUString > aNames { rPropertyName };
     uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aNames);
     return aStates.getConstArray()[0];
 }
@@ -4800,9 +4798,7 @@ beans::PropertyState SwXAutoStyle::getPropertyState( const OUString& rPropertyNa
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< OUString > aNames(1);
-    OUString* pNames = aNames.getArray();
-    pNames[0] = rPropertyName;
+    uno::Sequence< OUString > aNames { rPropertyName };
     uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aNames);
     return aStates.getConstArray()[0];
 }

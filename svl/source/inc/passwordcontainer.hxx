@@ -206,9 +206,7 @@ public:
         mainCont( point ),
         hasEncoded( false )
     {
-        css::uno::Sequence< OUString > aNode( 1 );
-        *aNode.getArray()  = path;
-        *aNode.getArray() += "/Store";
+        css::uno::Sequence< OUString > aNode { path + "/Store" };
         EnableNotification( aNode );
     }
 

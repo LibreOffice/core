@@ -875,8 +875,7 @@ Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // more than 1 service is possible, too
-    aSNS.getArray()[0] = SN_HYPHENATOR;
+    Sequence< OUString > aSNS { SN_HYPHENATOR };
     return aSNS;
 }
 

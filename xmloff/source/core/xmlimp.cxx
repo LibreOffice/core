@@ -712,8 +712,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         {
             OUString aMsg( "Root element unknown" );
             Reference<xml::sax::XLocator> xDummyLocator;
-            Sequence < OUString > aParams(1);
-            aParams.getArray()[0] = rName;
+            Sequence < OUString > aParams { rName };
 
             SetError( XMLERROR_FLAG_SEVERE|XMLERROR_UNKNOWN_ROOT,
                       aParams, aMsg, xDummyLocator );
@@ -1808,9 +1807,7 @@ void SvXMLImport::SetError(
     sal_Int32 nId,
     const OUString& rMsg1)
 {
-    Sequence<OUString> aSeq(1);
-    OUString* pSeq = aSeq.getArray();
-    pSeq[0] = rMsg1;
+    Sequence<OUString> aSeq { rMsg1 };
     SetError( nId, aSeq );
 }
 

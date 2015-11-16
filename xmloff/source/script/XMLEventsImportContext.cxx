@@ -200,9 +200,7 @@ void XMLEventsImportContext::AddEventValues(
                 xEvents->replaceByName(rEventName, aAny);
             } catch ( const IllegalArgumentException & rException )
             {
-                Sequence<OUString> aMsgParams(1);
-
-                aMsgParams[0] = rEventName;
+                Sequence<OUString> aMsgParams { rEventName };
 
                 GetImport().SetError(XMLERROR_FLAG_ERROR |
                                      XMLERROR_ILLEGAL_EVENT,

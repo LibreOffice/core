@@ -229,9 +229,7 @@ throw ( RuntimeException, std::exception )
 Sequence< OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNames()
 throw ( RuntimeException, std::exception )
 {
-    Sequence< OUString > seqServiceNames( 1 );
-
-    seqServiceNames[0] = SERVICENAME_ACTIONTRIGGERCONTAINER;
+    Sequence< OUString > seqServiceNames { SERVICENAME_ACTIONTRIGGERCONTAINER };
     return seqServiceNames;
 }
 
