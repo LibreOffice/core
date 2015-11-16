@@ -56,7 +56,7 @@ inline Sequence< E >::Sequence()
 }
 
 template< class E >
-inline Sequence< E >::Sequence( const Sequence< E > & rSeq )
+inline Sequence< E >::Sequence( const Sequence & rSeq )
 {
     osl_atomic_increment( &rSeq._pSequence->nRefCount );
     _pSequence = rSeq._pSequence;
@@ -116,7 +116,7 @@ inline Sequence< E >::~Sequence()
 }
 
 template< class E >
-inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq )
+inline Sequence< E > & Sequence< E >::operator = ( const Sequence & rSeq )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     ::uno_type_sequence_assign(
@@ -125,20 +125,20 @@ inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq )
 }
 
 template< class E >
-inline bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
+inline bool Sequence< E >::operator == ( const Sequence & rSeq ) const
 {
     if (_pSequence == rSeq._pSequence)
         return true;
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     return ::uno_type_equalData(
-        const_cast< Sequence< E > * >( this ), rType.getTypeLibType(),
-        const_cast< Sequence< E > * >( &rSeq ), rType.getTypeLibType(),
+        const_cast< Sequence * >( this ), rType.getTypeLibType(),
+        const_cast< Sequence * >( &rSeq ), rType.getTypeLibType(),
         cpp_queryInterface,
         cpp_release );
 }
 
 template< class E >
-inline bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const
+inline bool Sequence< E >::operator != ( const Sequence & rSeq ) const
 {
     return (! operator == ( rSeq ));
 }
