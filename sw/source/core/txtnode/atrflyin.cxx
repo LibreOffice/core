@@ -255,9 +255,9 @@ SwFlyInCntFrm *SwTextFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     // Dabei wird eine sofortige Neuformatierung von pCurrFrm angestossen.
     // Die Rekursion wird durch den Lockmechanismus in SwTextFrm::Format()
     // abgewuergt.
-    SwFrm* pCurrFrame = const_cast< SwFrm* >(pCurrFrm);
-    SwFlyInCntFrm *pFly = new SwFlyInCntFrm( static_cast<SwFlyFrameFormat*>(pFrameFormat), pCurrFrame, pCurrFrame );
-    pCurrFrame->AppendFly( pFly );
+    SwFrm* pCurrentFrame = const_cast<SwFrm*>(pCurrFrm);
+    SwFlyInCntFrm *pFly = new SwFlyInCntFrm(static_cast<SwFlyFrameFormat*>(pFrameFormat), pCurrentFrame, pCurrentFrame);
+    pCurrentFrame->AppendFly(pFly);
     pFly->RegistFlys();
 
     // 7922: Wir muessen dafuer sorgen, dass der Inhalt des FlyInCnt
