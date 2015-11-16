@@ -253,8 +253,7 @@ OUString TextOutputStream_getImplementationName()
 
 Sequence< OUString > TextOutputStream_getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] =  SERVICE_NAME;
+    Sequence< OUString > seqNames { SERVICE_NAME };
     return seqNames;
 }
 

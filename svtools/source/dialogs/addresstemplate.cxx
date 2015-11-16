@@ -360,9 +360,7 @@ void AssignmentPersistentData::ImplCommit()
 
     void AssignmentPersistentData::setStringProperty(const sal_Char* _pLocalName, const OUString& _rValue)
     {
-        Sequence< OUString > aNames(1);
-        Sequence< Any > aValues(1);
-        aNames[0] = OUString::createFromAscii(_pLocalName);
+        Sequence< OUString > aNames { OUString::createFromAscii(_pLocalName) };
         aValues[0] <<= _rValue;
         PutProperties(aNames, aValues);
     }

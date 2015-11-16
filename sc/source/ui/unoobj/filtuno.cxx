@@ -62,12 +62,10 @@ static void load_CharSet( rtl_TextEncoding &nCharSet, bool bExport )
 {
     Sequence<Any> aValues;
     const Any *pProperties;
-    Sequence<OUString> aNames(1);
-    OUString* pNames = aNames.getArray();
+    Sequence<OUString> aNames { DBF_CHAR_SET };
     ScLinkConfigItem aItem( OUString::createFromAscii(
                                 bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
 
-    pNames[0] = DBF_CHAR_SET;
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
 
@@ -89,12 +87,10 @@ static void save_CharSet( rtl_TextEncoding nCharSet, bool bExport )
 {
     Sequence<Any> aValues;
     Any *pProperties;
-    Sequence<OUString> aNames(1);
-    OUString* pNames = aNames.getArray();
+    Sequence<OUString> aNames { DBF_CHAR_SET };
     ScLinkConfigItem aItem( OUString::createFromAscii(
                                 bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
 
-    pNames[0] = DBF_CHAR_SET;
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
     pProperties[0] <<= (sal_Int32) nCharSet;

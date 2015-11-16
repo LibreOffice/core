@@ -3771,9 +3771,7 @@ sal_Bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
 Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames()
                                                 throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pNames = aRet.getArray();
-    pNames[0] = "com.sun.star.document.LinkTargets";
+    Sequence< OUString > aRet { "com.sun.star.document.LinkTargets" };
     return aRet;
 }
 
@@ -4059,9 +4057,7 @@ sal_Bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
 Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames()
                                                     throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pNames = aRet.getArray();
-    pNames[0] = "com.sun.star.document.LinkTargets";
+    Sequence< OUString > aRet { "com.sun.star.document.LinkTargets" };
     return aRet;
 }
 

@@ -145,8 +145,7 @@ namespace
 
     css::uno::Sequence< OUString> initialColumns()
     {
-        css::uno::Sequence< OUString> result = css::uno::Sequence< OUString>(1);
-        result[0] = "message";
+        css::uno::Sequence< OUString> result { "message" };
         return result;
     };
 }

@@ -245,8 +245,7 @@ XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 css::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    css::uno::Sequence< OUString > aSNS( 1 );               \
-    aSNS.getArray()[ 0 ] = Service1;                                        \
+    css::uno::Sequence< OUString > aSNS { Service1 };                       \
     return aSNS;                                                            \
 }
 
@@ -268,8 +267,7 @@ XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                  \
 css::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    css::uno::Sequence< OUString > aSNS( 1 );               \
-    aSNS.getArray()[ 0 ] = Service1;                                        \
+    css::uno::Sequence< OUString > aSNS { Service1; }                       \
     return aSNS;                                                            \
 }
 
@@ -281,8 +279,7 @@ XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                                  
 css::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    css::uno::Sequence< OUString > aSNS( 1 );               \
-    aSNS.getArray()[ 0 ] = Service1;                                        \
+    css::uno::Sequence< OUString > aSNS { Service1 };                       \
     return aSNS;                                                            \
 }
 

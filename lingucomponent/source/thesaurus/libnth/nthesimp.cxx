@@ -645,8 +645,7 @@ Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // more than 1 service is possible, too
-    aSNS.getArray()[0] = SN_THESAURUS;
+    Sequence< OUString > aSNS { SN_THESAURUS };
     return aSNS;
 }
 

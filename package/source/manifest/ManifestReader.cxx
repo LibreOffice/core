@@ -94,8 +94,7 @@ OUString ManifestReader::static_getImplementationName()
 
 Sequence < OUString > ManifestReader::static_getSupportedServiceNames()
 {
-    Sequence < OUString > aNames(1);
-    aNames[0] = "com.sun.star.packages.manifest.ManifestReader";
+    Sequence < OUString > aNames { "com.sun.star.packages.manifest.ManifestReader" };
     return aNames;
 }
 

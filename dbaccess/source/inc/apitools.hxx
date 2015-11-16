@@ -92,8 +92,7 @@ public:
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED1(classname, serviceasciiname)   \
     css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)  \
     {   \
-        css::uno::Sequence< OUString > aSupported(1);   \
-        aSupported[0] = serviceasciiname; \
+        css::uno::Sequence< OUString > aSupported { serviceasciiname }; \
         return aSupported;  \
     }   \
 
@@ -104,8 +103,7 @@ public:
     }   \
     css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException)   \
     {   \
-        css::uno::Sequence< OUString > aSupported(1);   \
-        aSupported[0] = serviceasciiname; \
+        css::uno::Sequence< OUString > aSupported { serviceasciiname }; \
         return aSupported;  \
     }   \
 

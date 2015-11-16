@@ -1569,9 +1569,7 @@ bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 
         // now get the content of the Group
         uno::Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps( 1 );
-
-        aProps[0] = TARGET_URL;
+        Sequence< OUString > aProps { TARGET_URL };
 
         try
         {
@@ -1686,9 +1684,7 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
        try
        {
         uno::Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps( 1 );
-
-        aProps[0] = TARGET_URL;
+        Sequence< OUString > aProps { TARGET_URL };
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = aGroup.createCursor( aProps, eInclude );
 
@@ -2574,8 +2570,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     // now get the content of the Group
     Content                 aContent;
     uno::Reference< XResultSet > xResultSet;
-    Sequence< OUString >    aProps(1);
-    aProps[0] = TITLE;
+    Sequence< OUString >    aProps { TITLE };
 
     try
     {

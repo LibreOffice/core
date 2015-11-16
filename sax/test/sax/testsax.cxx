@@ -99,10 +99,7 @@ OUString    OSaxParserTest_getImplementationName( ) throw ()
 
 Sequence<OUString> OSaxParserTest_getSupportedServiceNames( ) throw ()
 {
-    Sequence<OUString> aRet(1);
-
-    aRet.getArray()[0] = OSaxParserTest_getImplementationName( );
-
+    Sequence<OUString> aRet { OSaxParserTest_getImplementationName() };
     return aRet;
 }
 

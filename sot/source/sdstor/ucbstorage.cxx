@@ -2060,8 +2060,7 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
                 if ( rProps[ 0 ].Name != "Title" )
                     continue;
 
-                Sequence < OUString > aNames(1);
-                aNames[0] = "Title";
+                Sequence < OUString > aNames { "Title" };
                 Sequence < Any > aValues(1);
                 aValues[0] = makeAny( OUString( m_aName ) );
 

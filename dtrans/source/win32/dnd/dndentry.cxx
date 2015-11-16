@@ -53,8 +53,7 @@ dnd_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*
 
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDSOURCE_IMPL_NAME ) ) )
     {
-        Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( DNDSOURCE_SERVICE_NAME );
+        Sequence< OUString > aSNS { DNDSOURCE_SERVICE_NAME };
 
         xFactory= createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -65,8 +64,7 @@ dnd_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*
     }
     else if( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDTARGET_IMPL_NAME ) ) )
     {
-        Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( DNDTARGET_SERVICE_NAME );
+        Sequence< OUString > aSNS { DNDTARGET_SERVICE_NAME };
 
         xFactory= createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

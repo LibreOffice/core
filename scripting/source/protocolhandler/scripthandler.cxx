@@ -469,9 +469,7 @@ throw( RuntimeException, std::exception )
 Sequence< OUString > ScriptProtocolHandler::impl_getStaticSupportedServiceNames()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [ 0 ] =
-        OUString::createFromAscii( ::scripting_protocolhandler::MYSERVICENAME );
+    Sequence< OUString > seqServiceNames { ::scripting_protocolhandler::MYSERVICENAME };
     return seqServiceNames ;
 }
 

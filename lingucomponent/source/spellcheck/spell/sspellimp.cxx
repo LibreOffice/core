@@ -637,8 +637,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // more than 1 service is possible, too
-    aSNS.getArray()[0] = SN_SPELLCHECKER;
+    Sequence< OUString > aSNS { SN_SPELLCHECKER };
     return aSNS;
 }
 

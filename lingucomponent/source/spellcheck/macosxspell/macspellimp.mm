@@ -548,8 +548,7 @@ Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
-    aSNS.getArray()[0] = SN_SPELLCHECKER;
+    Sequence< OUString > aSNS { SN_SPELLCHECKER };
     return aSNS;
 }
 

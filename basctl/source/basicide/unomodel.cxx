@@ -99,9 +99,7 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames() throw( uno::Runt
 
 uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.script.BasicIDE" ;
+    uno::Sequence< OUString > aRet { "com.sun.star.script.BasicIDE" };
     return aRet;
 }
 

@@ -2052,9 +2052,7 @@ uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
         throw()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-
-    uno::Sequence< OUString > aSNS( 1 );    // more than 1 service possible
-    aSNS.getArray()[0] = "com.sun.star.linguistic2.LinguServiceManager";
+    uno::Sequence< OUString > aSNS { "com.sun.star.linguistic2.LinguServiceManager" };
     return aSNS;
 }
 

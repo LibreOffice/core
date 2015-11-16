@@ -186,8 +186,7 @@ OUString FilterDetect_getImplementationName ()
 
 Sequence< OUString > FilterDetect_getSupportedServiceNames()
 {
-    Sequence < OUString > aRet(1);
-    aRet[0] = "com.sun.star.document.ExtendedTypeDetection";
+    Sequence < OUString > aRet { "com.sun.star.document.ExtendedTypeDetection" };
     return aRet;
 }
 
