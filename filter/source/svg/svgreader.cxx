@@ -44,7 +44,6 @@
 
 #include <boost/bind.hpp>
 #include <map>
-#include <string.h>
 
 #define OASIS_STR "urn:oasis:names:tc:opendocument:xmlns:"
 
@@ -1489,10 +1488,10 @@ struct ShapeWritingVisitor
 
                 OUString sValue = xElem->hasAttribute("href") ? xElem->getAttribute("href") : "";
                 OString aValueUtf8( sValue.getStr(), sValue.getLength(), RTL_TEXTENCODING_UTF8 );
-                std::string sLinkValue;
+                OUString sLinkValue;
                 parseXlinkHref(aValueUtf8.getStr(), sLinkValue);
 
-                if (!sLinkValue.empty())
+                if (!sLinkValue.isEmpty())
                     writeBinaryData(xAttrs, xUnoAttrs, xElem, basegfx::B2DRange(x,y,x+width,y+height), sLinkValue);
                 break;
             }
@@ -1592,7 +1591,7 @@ struct ShapeWritingVisitor
                         const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
                         const uno::Reference<xml::dom::XElement>&       /* xElem */,
                         const basegfx::B2DRange&                        rShapeBounds,
-                        const std::string&                              data)
+                        const OUString&                                 data)
     {
         xAttrs->Clear();
         xAttrs->AddAttribute( "svg:x", OUString::number(pt2mm(rShapeBounds.getMinX()))+"mm");
@@ -1607,7 +1606,7 @@ struct ShapeWritingVisitor
 
         mxDocumentHandler->startElement("office:binary-data", xUnoAttrs);
 
-        mxDocumentHandler->characters(OUString::createFromAscii(data.c_str()));
+        mxDocumentHandler->characters(data);
 
         mxDocumentHandler->endElement("office:binary-data");
 

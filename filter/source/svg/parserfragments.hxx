@@ -12,7 +12,7 @@
 #include <sal/config.h>
 #include <vector>
 #include <utility>
-#include <string>
+#include <rtl/ustring.hxx>
 
 namespace basegfx
 {
@@ -60,7 +60,7 @@ namespace svgi
                         const char*                         sPaintUri );
 
     /// Parse given string for the xlink attribute
-    bool parseXlinkHref( const char* xlink, std::string& data );
+    bool parseXlinkHref( const char* xlink, OUString& data );
 
 } // namespace svgi
 
