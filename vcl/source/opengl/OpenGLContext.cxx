@@ -71,10 +71,6 @@ OpenGLContext::OpenGLContext():
 {
     VCL_GL_INFO("vcl.opengl", "new context: " << this);
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
-    mbPixmap = false;
-#endif
-
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maGDIData.mpLastContext )
     {
@@ -727,7 +723,7 @@ bool OpenGLContext::ImplInit()
         pSharedCtx = g_vShareList.front();
 
 #ifdef DBG_UTIL
-    if (!mbPixmap && glXCreateContextAttribsARB && !mbRequestLegacyContext)
+    if (glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
         GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering, true);
@@ -772,7 +768,7 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
-    if( !glXMakeCurrent( m_aGLWin.dpy, mbPixmap ? m_aGLWin.glPix : m_aGLWin.win, m_aGLWin.ctx ) )
+    if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
     {
         SAL_WARN("vcl.opengl", "unable to select current GLX context");
         return false;
@@ -788,12 +784,7 @@ bool OpenGLContext::ImplInit()
     SAL_INFO("vcl.opengl", "available GL  extensions: " << m_aGLWin.GLExtensions);
 
     XWindowAttributes xWinAttr;
-    if( mbPixmap )
-    {
-        m_aGLWin.Width = 0; // FIXME: correct ?
-        m_aGLWin.Height = 0;
-    }
-    else if( !XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr ) )
+    if( !XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr ) )
     {
         SAL_WARN("vcl.opengl", "Failed to get window attributes on " << m_aGLWin.win);
         m_aGLWin.Width = 0;
@@ -1278,9 +1269,6 @@ void OpenGLContext::reset()
             SAL_WARN("vcl.opengl", "glError: " << glGetError());
         }
         glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
-
-        if (mbPixmap && m_aGLWin.glPix != None)
-            glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
         m_aGLWin.ctx = nullptr;
     }
 #endif
@@ -1358,9 +1346,8 @@ bool OpenGLContext::isCurrent()
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     return false;
 #elif defined( UNX )
-    GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
     return (m_aGLWin.ctx && glXGetCurrentContext() == m_aGLWin.ctx &&
-            glXGetCurrentDrawable() == nDrawable);
+            glXGetCurrentDrawable() == m_aGLWin.win;
 #endif
 }
 
@@ -1432,10 +1419,9 @@ void OpenGLContext::makeCurrent()
 
     if (m_aGLWin.dpy)
     {
-        GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
-        if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
+        if (!glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ))
         {
-            SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed on drawable " << nDrawable << " pixmap? " << mbPixmap);
+            SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed on drawable " << nDrawable);
             return;
         }
     }
@@ -1497,7 +1483,7 @@ void OpenGLContext::swapBuffers()
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
-    glXSwapBuffers(m_aGLWin.dpy, mbPixmap ? m_aGLWin.glPix : m_aGLWin.win);
+    glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
 #endif
 }
 

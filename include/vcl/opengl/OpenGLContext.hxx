@@ -84,7 +84,6 @@ struct GLWindow
 #endif
     XVisualInfo*       vi;
     GLXContext         ctx;
-    GLXPixmap           glPix;
 
     bool HasGLXExtension( const char* name ) const;
     const char*             GLXExtensions;
@@ -115,7 +114,6 @@ struct GLWindow
 #endif
         vi(nullptr),
         ctx(nullptr),
-        glPix(0),
         GLXExtensions(nullptr),
 #endif
         bpp(0),
@@ -230,9 +228,6 @@ private:
     int  mnRefCount;
     bool mbRequestLegacyContext;
     bool mbUseDoubleBufferedRendering;
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
-    bool mbPixmap; // is a pixmap instead of a window
-#endif
 
     int mnFramebufferCount;
     OpenGLFramebuffer* mpCurrentFramebuffer;
