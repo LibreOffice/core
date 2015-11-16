@@ -738,6 +738,12 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 endif
 
+ifeq ($(OS), WNT)
+$(eval $(call gb_Library_use_externals,vcl,\
+	glyphy \
+))
+endif
+
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
 	-lm $(DLOPEN_LIBS) \
