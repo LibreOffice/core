@@ -70,13 +70,13 @@ inline Sequence< E >::Sequence(
 }
 
 template< class E >
-inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
+inline Sequence< E >::Sequence( const ElementType * pElements, sal_Int32 len )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
-        const_cast< E * >( pElements ), len, cpp_acquire );
+        const_cast< ElementType * >( pElements ), len, cpp_acquire );
     if (! success)
         throw ::std::bad_alloc();
 }
@@ -94,10 +94,12 @@ inline Sequence< E >::Sequence( sal_Int32 len )
 }
 
 #if defined LIBO_INTERNAL_ONLY
-template<typename E> Sequence<E>::Sequence(std::initializer_list<E> init) {
+template<typename E> Sequence<E>::Sequence(
+    std::initializer_list<ElementType> init)
+{
     if (!uno_type_sequence_construct(
             &_pSequence, cppu::getTypeFavourUnsigned(this).getTypeLibType(),
-            const_cast<E *>(init.begin()), init.size(), cpp_acquire))
+            const_cast<ElementType *>(init.begin()), init.size(), cpp_acquire))
     {
         throw std::bad_alloc();
     }
@@ -144,7 +146,7 @@ inline bool Sequence< E >::operator != ( const Sequence & rSeq ) const
 }
 
 template< class E >
-inline E * Sequence< E >::getArray()
+inline typename Sequence<E>::ElementType * Sequence< E >::getArray()
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     bool success =
@@ -153,33 +155,37 @@ inline E * Sequence< E >::getArray()
         cpp_acquire, cpp_release );
     if (! success)
         throw ::std::bad_alloc();
-    return reinterpret_cast< E * >( _pSequence->elements );
+    return reinterpret_cast< ElementType * >( _pSequence->elements );
 }
 
-template<class E> E * Sequence<E>::begin() { return getArray(); }
+template<class E> typename Sequence<E>::ElementType * Sequence<E>::begin()
+{ return getArray(); }
 
-template<class E> E const * Sequence<E>::begin() const
+template<class E> typename Sequence<E>::ElementType const * Sequence<E>::begin()
+    const
 { return getConstArray(); }
 
-template<class E> E * Sequence<E>::end() { return begin() + getLength(); }
-
-template<class E> E const * Sequence<E>::end() const
+template<class E> typename Sequence<E>::ElementType * Sequence<E>::end()
 { return begin() + getLength(); }
 
-template< class E >
-inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
+template<class E> typename Sequence<E>::ElementType const * Sequence<E>::end()
+    const
+{ return begin() + getLength(); }
+
+template<class E> inline typename Sequence<E>::ElementType &
+Sequence< E >::operator [] ( sal_Int32 nIndex )
 {
     // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
     assert(nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < static_cast<sal_uInt32>(getLength()));
     return getArray()[ nIndex ];
 }
 
-template< class E >
-inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
+template<class E> inline typename Sequence<E>::ElementType const &
+Sequence< E >::operator [] ( sal_Int32 nIndex ) const
 {
     // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
     assert(nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < static_cast<sal_uInt32>(getLength()));
-    return reinterpret_cast< const E * >( _pSequence->elements )[ nIndex ];
+    return reinterpret_cast<const ElementType *>(_pSequence->elements)[nIndex];
 }
 
 template< class E >

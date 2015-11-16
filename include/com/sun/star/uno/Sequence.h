@@ -105,7 +105,7 @@ public:
         @param pElements an array of elements
         @param len length of array
     */
-    inline Sequence( const E * pElements, sal_Int32 len );
+    inline Sequence( const ElementType * pElements, sal_Int32 len );
 
     /** Constructor: Creates a default constructed sequence of given length.
 
@@ -120,7 +120,7 @@ public:
 
         @since LibreOffice 5.0
      */
-    inline Sequence(std::initializer_list<E> init);
+    inline Sequence(std::initializer_list<ElementType> init);
 #endif
 
     /** Destructor: Releases sequence handle. Last handle will destruct
@@ -157,8 +157,8 @@ public:
 
         @return pointer to elements array
     */
-    inline const E * SAL_CALL getConstArray() const
-        { return reinterpret_cast< const E * >( _pSequence->elements ); }
+    inline const ElementType * SAL_CALL getConstArray() const
+        { return reinterpret_cast<const ElementType *>(_pSequence->elements); }
 
     /** Gets a pointer to elements array for reading and writing.
         In general if the sequence has a handle acquired by other sequences
@@ -169,35 +169,35 @@ public:
 
         @return pointer to elements array
     */
-    inline E * SAL_CALL getArray();
+    inline ElementType * SAL_CALL getArray();
 
     /** This function allows to use Sequence in standard algorightms, like std::find
         and others.
 
         @since LibreOffice 4.2
     */
-    inline E * begin();
+    inline ElementType * begin();
 
     /** This function allows to use Sequence in standard algorightms, like std::find
         and others.
 
         @since LibreOffice 4.2
     */
-    inline E const * begin() const;
+    inline ElementType const * begin() const;
 
     /** This function allows to use Sequence in standard algorightms, like std::find
         and others.
 
         @since LibreOffice 4.2
     */
-    inline E * end();
+    inline ElementType * end();
 
     /** This function allows to use Sequence in standard algorightms, like std::find
         and others.
 
         @since LibreOffice 4.2
     */
-    inline E const * end() const;
+    inline ElementType const * end() const;
 
     /** Non-const index operator: Obtains a reference to element indexed at
         given position.
@@ -209,7 +209,7 @@ public:
         @param nIndex index
         @return non-const C++ reference to element
     */
-    inline E & SAL_CALL operator [] ( sal_Int32 nIndex );
+    inline ElementType & SAL_CALL operator [] ( sal_Int32 nIndex );
 
     /** Const index operator: Obtains a reference to element indexed at
         given position.  The implementation does not check for array bounds!
@@ -217,7 +217,7 @@ public:
         @param nIndex index
         @return const C++ reference to element
     */
-    inline const E & SAL_CALL operator [] ( sal_Int32 nIndex ) const;
+    inline const ElementType & SAL_CALL operator [] ( sal_Int32 nIndex ) const;
 
     /** Equality operator: Compares two sequences.
 
