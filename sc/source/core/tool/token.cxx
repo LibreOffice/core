@@ -252,7 +252,7 @@ void ScRawToken::SetOpCode( OpCode e )
         default:
             eType = svByte;
             sbyte.cByte = 0;
-            sbyte.bHasForceArray = ScParameterClassification::HasForceArray( eOp);
+            sbyte.bHasForceArray = false;
     }
 }
 

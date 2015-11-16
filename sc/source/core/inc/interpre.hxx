@@ -32,6 +32,7 @@
 #include "calcconfig.hxx"
 #include "token.hxx"
 #include "math.hxx"
+#include "parclass.hxx"
 
 #include <map>
 #include <memory>
@@ -918,7 +919,8 @@ inline void ScInterpreter::MatrixDoubleRefToMatrix()
 
 inline bool ScInterpreter::MatrixParameterConversion()
 {
-    if ( (bMatrixFormula || pCur->HasForceArray()) && !pJumpMatrix && sp > 0 )
+    if ( (bMatrixFormula || pCur->HasForceArray() || ScParameterClassification::HasForceArray( pCur->GetOpCode())) &&
+            !pJumpMatrix && sp > 0 )
         return ConvertMatrixParameters();
     return false;
 }
