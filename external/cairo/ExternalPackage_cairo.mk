@@ -11,6 +11,10 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,cairo,cairo))
 
 $(eval $(call gb_ExternalPackage_use_external_project,cairo,cairo))
 
+ifneq ($(OS),ANDROID)
+
 $(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo.so.2,src/.libs/libcairo.so.2.11000.2))
+
+endif
 
 # vim: set noet sw=4 ts=4:
