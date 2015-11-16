@@ -112,7 +112,7 @@ public class ScAccessiblePreviewTable extends TestCase {
      * Obtains the accessible object for a table in preview mode.
      */
     @Override
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(final TestParameters Param, final PrintWriter log) {
 
         XCell xCell = null;
 
@@ -198,7 +198,7 @@ public class ScAccessiblePreviewTable extends TestCase {
         XAccessibleContext zoomIn =
             AccessibilityTools.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
 
-        log.println("Getting "+ zoomIn.getAccessibleName());
+        log.println("Getting \"" + zoomIn.getAccessibleName() + "\" which is a \"" + UnoRuntime.queryInterface(com.sun.star.lang.XServiceInfo.class, zoomIn).getImplementationName() + "\"");
 
         final XAccessibleAction pressZoom = UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
         tEnv.addObjRelation("EventProducer",
@@ -206,7 +206,13 @@ public class ScAccessiblePreviewTable extends TestCase {
                 public void fireEvent() {
                         try {
                             pressZoom.doAccessibleAction(0);
-                        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}
+                            // the action is not triggered on the preview table
+                            // but some toolbar button - this will indirectly
+                            // trigger a table event but only from VCL main loop
+                            utils.waitForEventIdle(Param.getMSF());
+                        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {
+                            log.println("ScAccessiblePreviewTable: IndexOutOfBoundsException from pressZoom.doAccessibleAction(0)");
+                        }
                 }
             });
 
