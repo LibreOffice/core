@@ -91,7 +91,6 @@ namespace framework
 
 static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]    = "HelpURL";
-static const char ITEM_DESCRIPTOR_TOOLTIP[]    = "Tooltip";
 static const char ITEM_DESCRIPTOR_CONTAINER[]  = "ItemDescriptorContainer";
 static const char ITEM_DESCRIPTOR_LABEL[]      = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]       = "Type";
@@ -1203,7 +1202,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         OUString                    aCommandURL;
         OUString                    aLabel;
         OUString                    aHelpURL;
-        OUString                    aTooltip;
         sal_uInt16                  nType( css::ui::ItemType::DEFAULT );
         sal_uInt16                  nWidth( 0 );
         sal_uInt32                  nStyle( 0 );
@@ -1256,8 +1254,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     }
                     else if ( aProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
                         aProp[i].Value >>= aHelpURL;
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_TOOLTIP )
-                        aProp[i].Value >>= aTooltip;
                     else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
                         aProp[i].Value >>= aLabel;
                     else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
@@ -1273,7 +1269,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
                     OUString aString(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
-                    OUString aTooltipFromCommand(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommandURL, m_xFrame, false));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     if ( aMenuDesc.is() )
@@ -1283,20 +1278,9 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     }
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
-                    OUString sQuickHelp( aString );
-                    // Use custom tooltip if available
-                    if ( !aTooltip.isEmpty() ) // Tooltip from menu xml file (toolbar:tooltip)
-                        sQuickHelp = aTooltip;
-                    else if ( !aTooltipFromCommand.isEmpty() ) // Tooltip from uno command (TooltipLabel)
-                        sQuickHelp = aTooltipFromCommand;
-                    OUString sShortCut = vcl::CommandInfoProvider::Instance().GetCommandShortcut(aCommandURL, m_xFrame);
-                    if( !sShortCut.isEmpty() )
-                    {
-                        sQuickHelp += " (";
-                        sQuickHelp += sShortCut;
-                        sQuickHelp += ")";
-                    }
-                    m_pToolBar->SetQuickHelpText( nId, sQuickHelp );
+                    OUString sTooltip = vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommandURL, m_xFrame);
+                    if (!sTooltip.isEmpty())
+                        m_pToolBar->SetQuickHelpText( nId, sTooltip );
 
                     if ( !aLabel.isEmpty() )
                     {

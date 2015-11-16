@@ -49,7 +49,6 @@ namespace framework
 // Property names of a menu/menu item ItemDescriptor
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
-static const char ITEM_DESCRIPTOR_TOOLTIP[]     = "Tooltip";
 static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
@@ -59,7 +58,6 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
                                       OUString&                        rCommandURL,
                                       OUString&                        rLabel,
                                       OUString&                        rHelpURL,
-                                      OUString&                        rTooltip,
                                       sal_Int16&                       rStyle,
                                       sal_Int16&                       rWidth,
                                       bool&                            rVisible,
@@ -74,8 +72,6 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
         }
         else if ( rProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
             rProp[i].Value >>= rHelpURL;
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_TOOLTIP )
-            rProp[i].Value >>= rTooltip;
         else if ( rProp[i].Name == ITEM_DESCRIPTOR_LABEL )
             rProp[i].Value >>= rLabel;
         else if ( rProp[i].Name == ITEM_DESCRIPTOR_TYPE )
@@ -131,7 +127,6 @@ ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_CO
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_HELPID            },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMSTYLE         },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_UINAME            },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_TOOLTIP           },
 };
 
 OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XIndexContainer >& rItemContainer ) :
@@ -140,7 +135,6 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_aLabel( ITEM_DESCRIPTOR_LABEL ),
     m_aStyle( ITEM_DESCRIPTOR_STYLE ),
     m_aHelpURL( ITEM_DESCRIPTOR_HELPURL ),
-    m_aTooltip( ITEM_DESCRIPTOR_TOOLTIP ),
     m_aIsVisible( ITEM_DESCRIPTOR_VISIBLE ),
     m_aCommandURL( ITEM_DESCRIPTOR_COMMANDURL )
  {
@@ -295,7 +289,6 @@ throw(  SAXException, RuntimeException, std::exception )
                 OUString        aLabel;
                 OUString        aCommandURL;
                 OUString        aHelpURL;
-                OUString        aTooltip;
                 OUString        aBitmapName;
                 sal_uInt16      nItemBits( 0 );
                 bool        bVisible( true );
@@ -353,12 +346,6 @@ throw(  SAXException, RuntimeException, std::exception )
                             }
                             break;
 
-                            case TB_ATTRIBUTE_TOOLTIP:
-                            {
-                                aTooltip = xAttribs->getValueByIndex( n );
-                            }
-                            break;
-
                             case TB_ATTRIBUTE_STYLE:
                             {
                                 // read space separated item style list
@@ -409,14 +396,13 @@ throw(  SAXException, RuntimeException, std::exception )
 
                 if ( !aCommandURL.isEmpty() )
                 {
-                    Sequence< PropertyValue > aToolbarItemProp( 7 );
+                    Sequence< PropertyValue > aToolbarItemProp( 6 );
                     aToolbarItemProp[0].Name = m_aCommandURL;
                     aToolbarItemProp[1].Name = m_aHelpURL;
                     aToolbarItemProp[2].Name = m_aLabel;
                     aToolbarItemProp[3].Name = m_aType;
                     aToolbarItemProp[4].Name = m_aStyle;
                     aToolbarItemProp[5].Name = m_aIsVisible;
-                    aToolbarItemProp[6].Name = m_aTooltip;
 
                     //fix for fdo#39370
                     /// check whether RTL interface or not
@@ -441,7 +427,6 @@ throw(  SAXException, RuntimeException, std::exception )
                     aToolbarItemProp[3].Value = makeAny( css::ui::ItemType::DEFAULT );
                     aToolbarItemProp[4].Value <<= nItemBits;
                     aToolbarItemProp[5].Value <<= bVisible;
-                    aToolbarItemProp[6].Value <<= aTooltip;
 
                     m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
                 }
@@ -727,15 +712,14 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
             OUString    aCommandURL;
             OUString    aLabel;
             OUString    aHelpURL;
-            OUString    aTooltip;
             bool    bVisible( true );
             sal_Int16   nType( css::ui::ItemType::DEFAULT );
             sal_Int16   nWidth( 0 );
             sal_Int16   nStyle( 0 );
 
-            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible, nType );
+            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, nStyle, nWidth, bVisible, nType );
             if ( nType == css::ui::ItemType::DEFAULT )
-                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible );
+                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, nStyle, nWidth, bVisible );
             else if ( nType == css::ui::ItemType::SEPARATOR_SPACE )
                 WriteToolBoxSpace();
             else if ( nType == css::ui::ItemType::SEPARATOR_LINE )
@@ -757,7 +741,6 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const OUString& rCommandURL,
     const OUString& rLabel,
     const OUString& rHelpURL,
-    const OUString& rTooltip,
     sal_Int16       nStyle,
     sal_Int16       nWidth,
     bool        bVisible )
@@ -793,13 +776,6 @@ throw ( SAXException, RuntimeException )
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_HELPID,
                              m_aAttributeType,
                              rHelpURL );
-    }
-
-    if ( !rTooltip.isEmpty() )
-    {
-        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_TOOLTIP,
-                             m_aAttributeType,
-                             rTooltip );
     }
 
     if ( nStyle > 0 )

@@ -55,7 +55,6 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
             TB_ATTRIBUTE_HELPID,
             TB_ATTRIBUTE_STYLE,
             TB_ATTRIBUTE_UINAME,
-            TB_ATTRIBUTE_TOOLTIP,
             TB_XML_ENTRY_COUNT
         };
 
@@ -139,7 +138,6 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
         OUString                                                  m_aLabel;
         OUString                                                  m_aStyle;
         OUString                                                  m_aHelpURL;
-        OUString                                                  m_aTooltip;
         OUString                                                  m_aIsVisible;
         OUString                                                  m_aCommandURL;
 };
@@ -157,7 +155,7 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler
               css::uno::RuntimeException );
 
     protected:
-        void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, const OUString& aTooltip, sal_Int16 nStyle,
+        void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle,
                                        sal_Int16 nWidth, bool bVisible ) throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );

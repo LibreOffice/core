@@ -42,7 +42,6 @@
 #define ATTRIBUTE_WIDTH             "width"
 #define ATTRIBUTE_USER              "userdefined"
 #define ATTRIBUTE_HELPID            "helpid"
-#define ATTRIBUTE_TOOLTIP           "tooltip"
 #define ATTRIBUTE_ITEMSTYLE         "style"
 
 #define ELEMENT_NS_TOOLBAR          "toolbar:toolbar"
