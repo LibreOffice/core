@@ -65,7 +65,6 @@ SharedStringPool::SharedStringPool( const CharClass* pCharClass ) :
 
 SharedStringPool::~SharedStringPool()
 {
-    delete mpImpl;
 }
 
 SharedString SharedStringPool::intern( const OUString& rStr )

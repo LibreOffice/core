@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <memory>
 
 class SvNumberFormatter;
 class SvNumFmtSuppl_Impl;
@@ -51,7 +52,7 @@ class SVL_DLLPUBLIC SvNumberFormatsSupplierObj : public cppu::WeakAggImplHelper2
                                     css::lang::XUnoTunnel>
 {
 private:
-    SvNumFmtSuppl_Impl* pImpl;
+    std::unique_ptr<SvNumFmtSuppl_Impl> pImpl;
 
 public:
                                 SvNumberFormatsSupplierObj();

@@ -40,18 +40,17 @@ public:
 
 // Default ctor for getReflection
 SvNumberFormatsSupplierObj::SvNumberFormatsSupplierObj()
+    : pImpl( new SvNumFmtSuppl_Impl(nullptr) )
 {
-    pImpl = new SvNumFmtSuppl_Impl(nullptr);
 }
 
 SvNumberFormatsSupplierObj::SvNumberFormatsSupplierObj(SvNumberFormatter* pForm)
+    : pImpl( new SvNumFmtSuppl_Impl(pForm) )
 {
-    pImpl = new SvNumFmtSuppl_Impl(pForm);
 }
 
 SvNumberFormatsSupplierObj::~SvNumberFormatsSupplierObj()
 {
-    delete pImpl;
 }
 
 ::comphelper::SharedMutex& SvNumberFormatsSupplierObj::getSharedMutex() const

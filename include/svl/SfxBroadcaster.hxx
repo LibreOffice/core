@@ -20,6 +20,7 @@
 #define INCLUDED_SVL_BRDCST_HXX
 
 #include <svl/svldllapi.h>
+#include <memory>
 
 class SfxListener;
 class SfxHint;
@@ -28,7 +29,7 @@ class SfxBroadcasterTest;
 class SVL_DLLPUBLIC SfxBroadcaster
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
 private:
     void                    AddListener( SfxListener& rListener );

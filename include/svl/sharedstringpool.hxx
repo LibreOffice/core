@@ -12,6 +12,7 @@
 
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
+#include <memory>
 
 class CharClass;
 
@@ -27,7 +28,7 @@ class SharedString;
 class SVL_DLLPUBLIC SharedStringPool
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     SharedStringPool( const SharedStringPool& ) = delete;
     SharedStringPool& operator=( const SharedStringPool& ) = delete;

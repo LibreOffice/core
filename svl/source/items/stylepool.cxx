@@ -467,6 +467,7 @@ IStylePoolIteratorAccess* StylePool::createIterator( const bool bSkipUnusedItemS
     return pImpl->createIterator( bSkipUnusedItemSets, bSkipIgnorableItems );
 }
 
-StylePool::~StylePool() { delete pImpl; }
+StylePool::~StylePool()
+{}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

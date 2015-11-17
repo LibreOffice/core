@@ -169,7 +169,6 @@ SfxUndoActions::SfxUndoActions( const SfxUndoActions& r ) :
 
 SfxUndoActions::~SfxUndoActions()
 {
-    delete mpImpl;
 }
 
 bool SfxUndoActions::empty() const
@@ -1335,7 +1334,6 @@ SfxListUndoAction::SfxListUndoAction(
 
 SfxListUndoAction::~SfxListUndoAction()
 {
-    delete mpImpl;
 }
 
 void SfxListUndoAction::Undo()

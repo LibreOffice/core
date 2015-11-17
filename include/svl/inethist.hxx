@@ -23,6 +23,7 @@
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <tools/urlobj.hxx>
+#include <memory>
 
 class INetURLHistory_Impl;
 class SVL_DLLPUBLIC INetURLHistory : public SfxBroadcaster
@@ -35,7 +36,7 @@ class SVL_DLLPUBLIC INetURLHistory : public SfxBroadcaster
 
     /** Representation.
     */
-    INetURLHistory_Impl *m_pImpl;
+    std::unique_ptr<INetURLHistory_Impl> m_pImpl;
 
     /** Construction/Destruction.
     */

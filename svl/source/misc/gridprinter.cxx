@@ -64,7 +64,6 @@ GridPrinter::GridPrinter( size_t nRows, size_t nCols, bool bPrint ) :
 
 GridPrinter::~GridPrinter()
 {
-    delete mpImpl;
 }
 
 void GridPrinter::set( size_t nRow, size_t nCol, const OUString& rStr )

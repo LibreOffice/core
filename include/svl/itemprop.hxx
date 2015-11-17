@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svl/svldllapi.h>
 #include <vector>
+#include <memory>
 
 /// map a property between beans::XPropertySet and SfxPoolItem
 struct SfxItemPropertyMapEntry
@@ -87,7 +88,7 @@ typedef std::vector< SfxItemPropertyNamedEntry > PropertyEntryVector_t;
 class SfxItemPropertyMap_Impl;
 class SVL_DLLPUBLIC SfxItemPropertyMap
 {
-    SfxItemPropertyMap_Impl* m_pImpl;
+    std::unique_ptr<SfxItemPropertyMap_Impl> m_pImpl;
 public:
     SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries );
     SfxItemPropertyMap( const SfxItemPropertyMap& rSource );
@@ -156,7 +157,7 @@ public:
 struct SfxItemPropertySetInfo_Impl;
 class SVL_DLLPUBLIC SfxItemPropertySetInfo : public cppu::WeakImplHelper1<css::beans::XPropertySetInfo>
 {
-    SfxItemPropertySetInfo_Impl* m_pImpl;
+    std::unique_ptr<SfxItemPropertySetInfo_Impl> m_pImpl;
 
 public:
     SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap );

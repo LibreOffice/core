@@ -12,6 +12,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svl/svldllapi.h>
+#include <memory>
 
 namespace svl {
 
@@ -22,7 +23,7 @@ namespace svl {
 class SVL_DLLPUBLIC GridPrinter
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
 public:
     GridPrinter( size_t nRows, size_t nCols, bool bPrint = true );

@@ -71,13 +71,12 @@ SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries 
 }
 
 SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMap& rSource ) :
-    m_pImpl( new SfxItemPropertyMap_Impl( rSource.m_pImpl ) )
+    m_pImpl( new SfxItemPropertyMap_Impl( rSource.m_pImpl.get() ) )
 {
 }
 
 SfxItemPropertyMap::~SfxItemPropertyMap()
 {
-    delete m_pImpl;
 }
 
 const SfxItemPropertySimpleEntry* SfxItemPropertyMap::getByName( const OUString &rName ) const
@@ -344,7 +343,6 @@ Sequence< Property > SAL_CALL SfxItemPropertySetInfo::getProperties(  )
 SfxItemPropertySetInfo::~SfxItemPropertySetInfo()
 {
     delete m_pImpl->m_pOwnMap;
-    delete m_pImpl;
 }
 
 Property SAL_CALL SfxItemPropertySetInfo::getPropertyByName( const OUString& rName )

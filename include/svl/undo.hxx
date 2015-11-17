@@ -83,7 +83,7 @@ typedef sal_Int32 UndoStackMark;
 class SVL_DLLPUBLIC SfxUndoActions
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
 public:
     SfxUndoActions();
@@ -133,7 +133,7 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 */
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
 public:
 

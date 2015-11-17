@@ -58,8 +58,6 @@ SfxListener::~SfxListener()
         SfxBroadcaster *pBC = mpImpl->maBCs[nPos];
         pBC->RemoveListener(*this);
     }
-
-    delete mpImpl;
 }
 
 

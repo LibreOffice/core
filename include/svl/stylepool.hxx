@@ -29,7 +29,7 @@ class IStylePoolIteratorAccess;
 class SVL_DLLPUBLIC StylePool
 {
 private:
-    StylePoolImpl *pImpl;
+    std::unique_ptr<StylePoolImpl> pImpl;
 public:
     typedef std::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 

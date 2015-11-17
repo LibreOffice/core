@@ -64,8 +64,6 @@ SfxBroadcaster::~SfxBroadcaster()
         if (pListener)
             pListener->RemoveBroadcaster_Impl(*this);
     }
-
-    delete mpImpl;
 }
 
 
