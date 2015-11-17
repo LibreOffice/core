@@ -33,7 +33,6 @@ UUIInteractionRequestStringResolver::UUIInteractionRequestStringResolver(
 
 UUIInteractionRequestStringResolver::~UUIInteractionRequestStringResolver()
 {
-    delete m_pImpl;
 }
 
 OUString SAL_CALL

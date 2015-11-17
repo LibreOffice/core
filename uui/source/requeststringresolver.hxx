@@ -25,6 +25,7 @@
 #include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <memory>
 
 class UUIInteractionHelper;
 
@@ -47,7 +48,7 @@ public:
     rServiceFactory);
 
 private:
-    UUIInteractionHelper * m_pImpl;
+    std::unique_ptr<UUIInteractionHelper> m_pImpl;
 
     UUIInteractionRequestStringResolver(UUIInteractionRequestStringResolver &) = delete;
     void operator =(UUIInteractionRequestStringResolver&) = delete;

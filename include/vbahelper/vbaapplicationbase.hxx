@@ -23,6 +23,7 @@
 #include <ooo/vba/XApplicationBase.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <sfx2/objsh.hxx>
+#include <memory>
 
 typedef InheritedHelperInterfaceWeakImpl< ov::XApplicationBase > ApplicationBase_BASE;
 
@@ -30,7 +31,7 @@ struct VbaApplicationBase_Impl;
 
 class VBAHELPER_DLLPUBLIC VbaApplicationBase : public ApplicationBase_BASE
 {
-    VbaApplicationBase_Impl* m_pImpl;
+    std::unique_ptr<VbaApplicationBase_Impl> m_pImpl;
 
 protected:
     VbaApplicationBase( const css::uno::Reference< css::uno::XComponentContext >& xContext );

@@ -26,6 +26,7 @@
 #include <vcl/dndhelp.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/window.hxx>
+#include <memory>
 
 class TextEngine;
 class OutputDevice;
@@ -53,10 +54,10 @@ class VCL_DLLPUBLIC TextView : public vcl::unohelper::DragAndDropClient
     friend class        ExtTextView;
 
 private:
-    ImpTextView*        mpImpl;
+    std::unique_ptr<ImpTextView>  mpImpl;
 
-                        TextView( const TextView& ) : vcl::unohelper::DragAndDropClient()       {}
-    TextView&           operator=( const TextView& )        { return *this; }
+                        TextView( const TextView& ) = delete;
+    TextView&           operator=( const TextView& ) = delete;
 
 protected:
     void                ShowSelection();

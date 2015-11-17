@@ -243,7 +243,6 @@ TextView::~TextView()
         mpImpl->mpWindow->SetCursor( nullptr );
     delete mpImpl->mpCursor;
     delete mpImpl->mpDDInfo;
-    delete mpImpl;
 }
 
 void TextView::Invalidate()

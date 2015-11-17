@@ -175,7 +175,6 @@ VbaApplicationBase::VbaApplicationBase( const uno::Reference< uno::XComponentCon
 
 VbaApplicationBase::~VbaApplicationBase()
 {
-    delete m_pImpl;
 }
 
 sal_Bool SAL_CALL
