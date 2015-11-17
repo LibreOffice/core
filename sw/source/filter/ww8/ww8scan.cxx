@@ -89,7 +89,7 @@ namespace
             if (rStrm.good())
             {
                 sal_Unicode cBraces(0);
-                rStrm.ReadUInt16( cBraces );
+                rStrm.ReadUtf16( cBraces );
                 if (rStrm.good() && cBraces == 0)
                     bRet = true;
             }

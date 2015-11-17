@@ -116,7 +116,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                         {
                             sal_Unicode* pWString = reinterpret_cast<sal_Unicode*>(pString);
                             for (sal_uInt32 i = 0; i < nItemSize; ++i)
-                                ReadUInt16( pWString[ i ] );
+                                ReadUtf16( pWString[ i ] );
                             rString = OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
                         }
                         else
@@ -165,7 +165,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                 {
                     sal_Unicode* pString = new sal_Unicode[ nItemSize ];
                     for (sal_uInt32 i = 0; i < nItemSize; ++i)
-                        ReadUInt16( pString[ i ] );
+                        ReadUtf16( pString[ i ] );
                     if ( pString[ nItemSize - 1 ] == 0 )
                     {
                         if ( (sal_uInt16)nItemSize > 1 )
@@ -304,7 +304,7 @@ void Section::GetDictionary(Dictionary& rDict)
             {
                 sal_Unicode* pWString = new sal_Unicode[nSize];
                 for (sal_uInt32 j = 0; j < nSize; ++j)
-                    aStream.ReadUInt16(pWString[j]);
+                    aStream.ReadUtf16(pWString[j]);
                 aString = OUString(pWString, lcl_getMaxSafeStrLen(nSize));
                 delete[] pWString;
             }

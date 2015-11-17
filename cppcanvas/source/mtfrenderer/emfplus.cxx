@@ -1185,7 +1185,7 @@ namespace cppcanvas
                     sal_Unicode *chars = static_cast<sal_Unicode *>(alloca( sizeof( sal_Unicode ) * length ));
 
                     for( sal_uInt32 i = 0; i < length; i++ )
-                        s.ReadUInt16( chars[ i ] );
+                        s.ReadUtf16( chars[ i ] );
 
                     family = OUString( chars, length );
                     SAL_INFO("cppcanvas.emf", "EMF+\tfamily: " << OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()); // TODO: can we just use family?

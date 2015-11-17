@@ -108,7 +108,7 @@ enum StgEntryTime {                     // time codes:
 //StructuredStorageDirectoryEntry
 class StgEntry
 {                        // directory entry
-    sal_uInt16  m_nName[ 32 ];                // 00 name as WCHAR
+    sal_Unicode m_nName[ 32 ];                // 00 name as WCHAR
     sal_uInt16  m_nNameLen;                   // 40 size of name in bytes including 00H
     sal_uInt8   m_cType;                      // 42 entry type
     sal_uInt8   m_cFlags;                     // 43 0 or 1 (tree balance?)

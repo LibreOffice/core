@@ -989,6 +989,19 @@ SvStream& SvStream::ReadUChar( unsigned char& r )
     return *this;
 }
 
+SvStream& SvStream::ReadUtf16(sal_Unicode& r)
+{
+    sal_uInt16 n = 0;
+    READNUMBER_WITHOUT_SWAP(sal_uInt16, n)
+    if (good())
+    {
+        if (m_isSwap)
+            SwapUShort(n);
+        r = sal_Unicode(n);
+    }
+    return *this;
+}
+
 SvStream& SvStream::ReadCharAsBool( bool& r )
 {
     if ((m_isIoRead || !m_isConsistent) &&

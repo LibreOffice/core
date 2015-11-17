@@ -283,6 +283,7 @@ public:
     SvStream&       ReadSChar( signed char& rChar );
     SvStream&       ReadChar( char& rChar );
     SvStream&       ReadUChar( unsigned char& rChar );
+    SvStream&       ReadUtf16( sal_Unicode& rUtf16 );
     SvStream&       ReadCharAsBool( bool& rBool );
     SvStream&       ReadFloat( float& rFloat );
     SvStream&       ReadDouble( double& rDouble );

@@ -1353,7 +1353,7 @@ bool ImplSdPPTImport::Import()
             sal_Unicode nChar;
             for ( sal_uInt32 i2 = 0; i2 < 32; i2++ )
             {
-                rStCtrl.ReadUInt16( nChar );
+                rStCtrl.ReadUtf16( nChar );
                 if ( nChar )
                     aCustomShow.append( nChar );
                 else

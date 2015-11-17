@@ -6749,7 +6749,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                         for (int nLen = 0; nLen < 64; ++nLen)
                                                         {
                                                             sal_Unicode n(0);
-                                                            rIn.ReadUInt16( n );
+                                                            rIn.ReadUtf16( n );
 
                                                             // Collect quoted characters into aStr
                                                             if ( n == '\'')

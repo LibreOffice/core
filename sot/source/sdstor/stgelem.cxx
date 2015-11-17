@@ -368,7 +368,7 @@ bool StgEntry::Load(const void* pFrom, sal_uInt32 nBufSize, sal_uInt64 nUnderlyi
 
     SvMemoryStream r( const_cast<void *>(pFrom), nBufSize, StreamMode::READ );
     for( short i = 0; i < 32; i++ )
-        r.ReadUInt16( m_nName[ i ] );            // 00 name as WCHAR
+        r.ReadUtf16( m_nName[ i ] );             // 00 name as WCHAR
     r.ReadUInt16( m_nNameLen )                   // 40 size of name in bytes including 00H
      .ReadUChar( m_cType )                      // 42 entry type
      .ReadUChar( m_cFlags )                     // 43 0 or 1 (tree balance?)

@@ -3001,7 +3001,7 @@ SfxPoolItem* SvxTwoLinesItem::Create( SvStream & rStrm, sal_uInt16 /*nVer*/) con
 {
     bool _bOn;
     sal_Unicode cStart, cEnd;
-    rStrm.ReadCharAsBool( _bOn ).ReadUInt16( cStart ).ReadUInt16( cEnd );
+    rStrm.ReadCharAsBool( _bOn ).ReadUtf16( cStart ).ReadUtf16( cEnd );
     return new SvxTwoLinesItem( _bOn, cStart, cEnd, Which() );
 }
 

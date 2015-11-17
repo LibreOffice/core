@@ -2867,7 +2867,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
         nChar = nChar8;
     }
     else
-        pS->ReadUInt16( nChar );
+        pS->ReadUtf16( nChar );
 
     /*
     bad character, old mathtype < 3 has these
