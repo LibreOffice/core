@@ -177,6 +177,7 @@ void OpenGLSalGraphicsImpl::PreDraw()
     CHECK_GL_ERROR();
 
     glViewport( 0, 0, GetWidth(), GetHeight() );
+    CHECK_GL_ERROR();
     ImplInitClipRegion();
 
     CHECK_GL_ERROR();
@@ -187,9 +188,15 @@ void OpenGLSalGraphicsImpl::PostDraw()
     if( !mbOffscreen && mpContext->mnPainting == 0 )
         glFlush();
     if( mbUseScissor )
+    {
         glDisable( GL_SCISSOR_TEST );
-    if( mbUseStencil )
+        CHECK_GL_ERROR();
+    }
+   if( mbUseStencil )
+   {
         glDisable( GL_STENCIL_TEST );
+        CHECK_GL_ERROR();
+    }
     if( mpProgram )
     {
         mpProgram->Clean();
@@ -198,8 +205,6 @@ void OpenGLSalGraphicsImpl::PostDraw()
         mProgramIsSolidColor = false;
 #endif
     }
-
-    CHECK_GL_ERROR();
     OpenGLZone::leave();
 }
 
@@ -222,12 +227,18 @@ void OpenGLSalGraphicsImpl::freeResources()
 void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMask )
 {
     glEnable( GL_STENCIL_TEST );
+    CHECK_GL_ERROR();
     glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
+    CHECK_GL_ERROR();
     glStencilMask( nMask );
+    CHECK_GL_ERROR();
     glStencilFunc( GL_NEVER, nMask, 0xFF );
+    CHECK_GL_ERROR();
     glStencilOp( GL_REPLACE, GL_KEEP, GL_KEEP );
+    CHECK_GL_ERROR();
 
     glClear( GL_STENCIL_BUFFER_BIT );
+    CHECK_GL_ERROR();
     if( UseSolid( MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ) ) )
     {
         if( rClip.getRegionBand() )
@@ -237,9 +248,10 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
     }
 
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
+    CHECK_GL_ERROR();
     glStencilMask( 0x00 );
+    CHECK_GL_ERROR();
     glDisable( GL_STENCIL_TEST );
-
     CHECK_GL_ERROR();
 }
 
@@ -253,6 +265,7 @@ void OpenGLSalGraphicsImpl::ImplInitClipRegion()
         {
             Rectangle aRect( maClipRegion.GetBoundRect() );
             glScissor( aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth() + 1, aRect.GetHeight() + 1 );
+            CHECK_GL_ERROR();
         }
         else if( !maClipRegion.IsEmpty() )
         {
@@ -261,14 +274,17 @@ void OpenGLSalGraphicsImpl::ImplInitClipRegion()
     }
 
     if( mbUseScissor )
+    {
         glEnable( GL_SCISSOR_TEST );
+        CHECK_GL_ERROR();
+    }
     if( mbUseStencil )
     {
         glStencilFunc( GL_EQUAL, 1, 0x1 );
+        CHECK_GL_ERROR();
         glEnable( GL_STENCIL_TEST );
+        CHECK_GL_ERROR();
     }
-
-    CHECK_GL_ERROR();
 }
 
 const vcl::Region& OpenGLSalGraphicsImpl::getClipRegion() const
@@ -477,7 +493,6 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
     ApplyProgramMatrices(0.5f);
     mpProgram->SetVertices( pPoint );
     glDrawArrays( GL_POINTS, 0, 1 );
-
     CHECK_GL_ERROR();
 }
 
@@ -495,7 +510,6 @@ void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double
     ApplyProgramMatrices(0.5f);
     mpProgram->SetVertices( pPoints );
     glDrawArrays( GL_LINES, 0, 2 );
-
     CHECK_GL_ERROR();
 }
 
@@ -517,8 +531,6 @@ void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, doub
         return;
     }
     ImplDrawLineAA( nX1, nY1, nX2, nY2 );
-
-    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, double nY2, bool edge )
@@ -655,7 +667,6 @@ void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, 
     mpProgram->SetTextureCoord( aTexCoord );
     mpProgram->SetVertices( vertices );
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
-
     CHECK_GL_ERROR();
 }
 
@@ -692,6 +703,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     ApplyProgramMatrices();
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+    CHECK_GL_ERROR();
 
     if( !blockAA && mrParent.getAntiAliasB2DDraw())
     {
@@ -715,8 +727,6 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
             UseSolid( lastSolidColor, lastSolidTransparency );
         }
     }
-
-    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, bool blockAA )
@@ -737,6 +747,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, b
     ApplyProgramMatrices();
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+    CHECK_GL_ERROR();
 
     if( !blockAA && mrParent.getAntiAliasB2DDraw())
     {
@@ -760,8 +771,6 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, b
             UseSolid( lastSolidColor, lastSolidTransparency );
         }
     }
-
-    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA )
@@ -789,6 +798,7 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
     ApplyProgramMatrices();
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+    CHECK_GL_ERROR();
 
     if( !blockAA && mrParent.getAntiAliasB2DDraw())
     {
@@ -812,8 +822,6 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
             UseSolid( lastSolidColor, lastSolidTransparency );
         }
     }
-
-    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeight )
@@ -904,7 +912,6 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
     ApplyProgramMatrices();
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLES, 0, aVertices.size() / 2 );
-
     CHECK_GL_ERROR();
 }
 
@@ -1026,9 +1033,8 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     mpProgram->SetTextureCoord( aTexCoord );
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
-    mpProgram->Clean();
-
     CHECK_GL_ERROR();
+    mpProgram->Clean();
 }
 
 void OpenGLSalGraphicsImpl::DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted, bool bPremultiplied )
@@ -1293,6 +1299,7 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
         ApplyProgramMatrices(0.5f);
         mpProgram->SetVertices(pPoints);
         glDrawArrays(GL_LINE_LOOP, 0, 4);
+        CHECK_GL_ERROR();
     }
 
     PostDraw();
@@ -1614,9 +1621,9 @@ SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
     PreDraw();
     nY = GetHeight() - nY - 1;
     glReadPixels( nX, nY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
+    CHECK_GL_ERROR();
     PostDraw();
 
-    CHECK_GL_ERROR();
     return MAKE_SALCOLOR( pixel[0], pixel[1], pixel[2] );
 }
 
@@ -1689,9 +1696,12 @@ bool OpenGLSalGraphicsImpl::blendBitmap(
     VCL_GL_INFO( "vcl.opengl", "::blendBitmap" );
     PreDraw();
     glEnable( GL_BLEND );
+    CHECK_GL_ERROR();
     glBlendFunc( GL_ZERO, GL_SRC_COLOR );
+    CHECK_GL_ERROR();
     DrawTexture( rTexture, rPosAry );
     glDisable( GL_BLEND );
+    CHECK_GL_ERROR();
     PostDraw();
     return true;
 }
@@ -1820,12 +1830,16 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     if( mbUseStencil )
     {
         glEnable( GL_STENCIL_TEST );
+        CHECK_GL_ERROR();
         glStencilFunc( GL_EQUAL, 3, 0xFF );
+        CHECK_GL_ERROR();
     }
     else
     {
         glEnable( GL_STENCIL_TEST );
+        CHECK_GL_ERROR();
         glStencilFunc( GL_EQUAL, 2, 0xFF );
+        CHECK_GL_ERROR();
     }
 #endif
 
@@ -1854,11 +1868,13 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 
 #if FIXME_BROKEN_STENCIL_FOR_GRADIENTS
     if( !mbUseStencil )
+    {
         glDisable( GL_STENCIL_TEST );
+        CHECK_GL_ERROR();
+    }
 #endif
     PostDraw();
 
-    CHECK_GL_ERROR();
     return true;
 }
 

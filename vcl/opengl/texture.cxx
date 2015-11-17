@@ -38,18 +38,26 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     mnFreeSlots(-1)
 {
     glGenTextures( 1, &mnTexture );
+    CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, mnTexture );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    CHECK_GL_ERROR();
     if( bAllocate )
+    {
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr );
+        CHECK_GL_ERROR();
+    }
     glBindTexture( GL_TEXTURE_2D, 0 );
+    CHECK_GL_ERROR();
 
     VCL_GL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " allocate" );
-
-    CHECK_GL_ERROR();
 }
 
 // texture with content retrieved from FBO
@@ -65,18 +73,23 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     // nY = GetHeight() - nHeight - nY;
 
     glGenTextures( 1, &mnTexture );
+    CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, mnTexture );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    CHECK_GL_ERROR();
     glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nX, nY, nWidth, nHeight, 0 );
     CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, 0 );
+    CHECK_GL_ERROR();
 
     VCL_GL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " from x" << nX << ", y" << nY );
-
-    CHECK_GL_ERROR();
 }
 
 // texture from buffer data
@@ -89,19 +102,28 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     mnFreeSlots(-1)
 {
     if( !mnTexture )
+    {
         glGenTextures( 1, &mnTexture );
+        CHECK_GL_ERROR();
+    }
     glBindTexture( GL_TEXTURE_2D, mnTexture );
+    CHECK_GL_ERROR();
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    CHECK_GL_ERROR();
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    CHECK_GL_ERROR();
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, mnWidth, mnHeight, 0, nFormat, nType, pData );
+    CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, 0 );
+    CHECK_GL_ERROR();
 
     VCL_GL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " from data" );
-
-    CHECK_GL_ERROR();
 }
 
 ImplOpenGLTexture::~ImplOpenGLTexture()
@@ -126,13 +148,16 @@ bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, in
     if (!pData || mnTexture == 0)
         return false;
     glBindTexture(GL_TEXTURE_2D, mnTexture);
+    CHECK_GL_ERROR();
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    CHECK_GL_ERROR();
     glTexSubImage2D(GL_TEXTURE_2D, 0, nX, mnHeight - nY - nHeight, nWidth, nHeight, nFormat, nType, pData);
+    CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, 0);
+    CHECK_GL_ERROR();
 
     VCL_GL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " Insert buff. to " << nX << " " << nY
                                              << " size " << nWidth << "x" << nHeight << " from data" );
-    CHECK_GL_ERROR();
 
     return true;
 }
@@ -311,26 +336,28 @@ void OpenGLTexture::SetFilter( GLenum nFilter )
     {
         mpImpl->mnFilter = nFilter;
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, nFilter );
+        CHECK_GL_ERROR();
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, nFilter );
+        CHECK_GL_ERROR();
     }
-
-    CHECK_GL_ERROR();
 }
 
 void OpenGLTexture::Bind()
 {
     if( mpImpl )
+    {
         glBindTexture( GL_TEXTURE_2D, mpImpl->mnTexture );
-
-    CHECK_GL_ERROR();
+        CHECK_GL_ERROR();
+    }
 }
 
 void OpenGLTexture::Unbind()
 {
     if( mpImpl )
+    {
         glBindTexture( GL_TEXTURE_2D, 0 );
-
-    CHECK_GL_ERROR();
+        CHECK_GL_ERROR();
+    }
 }
 
 void OpenGLTexture::SaveToFile(const OUString& rFileName)
@@ -349,8 +376,6 @@ void OpenGLTexture::SaveToFile(const OUString& rFileName)
     {
         SAL_WARN("vcl.opengl", "Error writing png to " << rFileName);
     }
-
-    CHECK_GL_ERROR();
 }
 
 void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
@@ -367,8 +392,10 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
     {
         Bind();
         glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+        CHECK_GL_ERROR();
         // XXX: Call not available with GLES 2.0
         glGetTexImage( GL_TEXTURE_2D, 0, nFormat, nType, pData );
+        CHECK_GL_ERROR();
         Unbind();
     }
     else
@@ -383,11 +410,11 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
         rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
         OpenGLFramebuffer* pFramebuffer = pContext->AcquireFramebuffer(*this);
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        CHECK_GL_ERROR();
         glReadPixels(nX, nY, nWidth, nHeight, nFormat, nType, pData);
+        CHECK_GL_ERROR();
         OpenGLContext::ReleaseFramebuffer(pFramebuffer);
     }
-
-    CHECK_GL_ERROR();
 }
 
 OpenGLTexture::operator bool() const

@@ -197,7 +197,6 @@ int InitTempWindow(HWND *hwnd, int width, int height, const PIXELFORMATDESCRIPTO
         return -1;
     }
 
-    CHECK_GL_ERROR();
     return 0;
 }
 
@@ -1612,6 +1611,7 @@ OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rText
     BindFramebuffer( pFramebuffer );
     pFramebuffer->AttachTexture( rTexture );
     glViewport( 0, 0, rTexture.GetWidth(), rTexture.GetHeight() );
+    CHECK_GL_ERROR();
 
     return pFramebuffer;
 }

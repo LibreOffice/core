@@ -96,8 +96,10 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
     // TODO: lfrb: What if offscreen?
     pData = static_cast<char*>(malloc( pPixmap->GetWidth() * pPixmap->GetHeight() * 4 ));
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+    CHECK_GL_ERROR();
     glReadPixels( nX, GetHeight() - nY, pPixmap->GetWidth(), pPixmap->GetHeight(),
                   GL_RGBA, GL_UNSIGNED_BYTE, pData );
+    CHECK_GL_ERROR();
 
     pImage = XCreateImage( pDisplay, aVisualInfo.visual, 24, ZPixmap, 0, pData,
                            pPixmap->GetWidth(), pPixmap->GetHeight(), 8, 0 );
@@ -108,7 +110,6 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
     XFreeGC( pDisplay, aGC );
     XDestroyImage( pImage );
 
-    CHECK_GL_ERROR();
     return true;
 }
 
@@ -154,6 +155,7 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask
     rCombo.mpTexture.reset(new OpenGLTexture(pPixmap->GetWidth(), pPixmap->GetHeight(), false));
 
     glActiveTexture( GL_TEXTURE0 );
+    CHECK_GL_ERROR();
     rCombo.mpTexture->Bind();
     glXBindTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT, nullptr );
     rCombo.mpTexture->Unbind();

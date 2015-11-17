@@ -22,12 +22,14 @@ OpenGLFramebuffer::OpenGLFramebuffer() :
     mpNextFramebuffer( nullptr )
 {
     glGenFramebuffers( 1, &mnId );
+    CHECK_GL_ERROR();
     VCL_GL_INFO( "vcl.opengl", "Created framebuffer " << (int)mnId );
 }
 
 OpenGLFramebuffer::~OpenGLFramebuffer()
 {
     glDeleteFramebuffers( 1, &mnId );
+    CHECK_GL_ERROR();
 }
 
 void OpenGLFramebuffer::Bind()
@@ -40,8 +42,8 @@ void OpenGLFramebuffer::Bind()
 void OpenGLFramebuffer::Unbind()
 {
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    VCL_GL_INFO( "vcl.opengl", "Binding default framebuffer" );
     CHECK_GL_ERROR();
+    VCL_GL_INFO( "vcl.opengl", "Binding default framebuffer" );
 }
 
 bool OpenGLFramebuffer::IsFree() const
@@ -69,18 +71,19 @@ void OpenGLFramebuffer::AttachTexture( const OpenGLTexture& rTexture )
     mnWidth = rTexture.GetWidth();
     mnHeight = rTexture.GetHeight();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mnAttachedTexture, 0);
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    CHECK_GL_ERROR();
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    CHECK_GL_ERROR();
+    if (status != GL_FRAMEBUFFER_COMPLETE)
     {
         SAL_WARN("vcl.opengl", "Framebuffer incomplete");
     }
-    CHECK_GL_ERROR();
 }
 
 void OpenGLFramebuffer::DetachTexture()
 {
     if( mnAttachedTexture != 0 )
     {
-        CHECK_GL_ERROR();
         mnAttachedTexture = 0;
         glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0 );
         CHECK_GL_ERROR();
