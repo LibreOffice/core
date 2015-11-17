@@ -56,7 +56,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     bool bRet = false;
 
     const jchar* pJLibName = pJEnv->GetStringChars(jLibName, nullptr);
-    OUString aLibName(pJLibName);
+    OUString aLibName(reinterpret_cast<sal_Unicode const *>(pJLibName));
     pJEnv->ReleaseStringChars(jLibName, pJLibName);
 
 #ifdef DISABLE_DYNLOADING
@@ -138,7 +138,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     jobject jSMgr, jobject jRegKey, jobject loader )
 {
     const jchar* pJLibName = pJEnv->GetStringChars(jLibName, nullptr);
-    OUString aLibName(pJLibName);
+    OUString aLibName(reinterpret_cast<sal_Unicode const *>(pJLibName));
     pJEnv->ReleaseStringChars(jLibName, pJLibName);
 
 #ifdef DISABLE_DYNLOADING
