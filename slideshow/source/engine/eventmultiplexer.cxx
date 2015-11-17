@@ -177,7 +177,6 @@ struct EventMultiplexerImpl
         maViewRepaintHandlers(),
         maShapeListenerHandlers(),
         maUserPaintEventHandlers(),
-        maShapeCursorHandlers(),
         maMouseClickHandlers(),
         maMouseDoubleClickHandlers(),
         maMouseMoveHandlers(),
@@ -235,9 +234,6 @@ struct EventMultiplexerImpl
         UserPaintEventHandlerSharedPtr,
         std::vector<UserPaintEventHandlerSharedPtr> >     ImplUserPaintEventHandlers;
     typedef ThreadUnsafeListenerContainer<
-        ShapeCursorEventHandlerSharedPtr,
-        std::vector<ShapeCursorEventHandlerSharedPtr> >   ImplShapeCursorHandlers;
-    typedef ThreadUnsafeListenerContainer<
         PrioritizedHandlerEntry<HyperlinkHandler>,
         std::vector<PrioritizedHandlerEntry<HyperlinkHandler> > > ImplHyperLinkHandlers;
 
@@ -292,7 +288,6 @@ struct EventMultiplexerImpl
     ImplRepaintHandlers                 maViewRepaintHandlers;
     ImplShapeListenerHandlers           maShapeListenerHandlers;
     ImplUserPaintEventHandlers          maUserPaintEventHandlers;
-    ImplShapeCursorHandlers             maShapeCursorHandlers;
     ImplMouseHandlers                   maMouseClickHandlers;
     ImplMouseHandlers                   maMouseDoubleClickHandlers;
     ImplMouseHandlers                   maMouseMoveHandlers;
@@ -1002,15 +997,6 @@ bool EventMultiplexer::notifyShapeListenerRemoved(
     return mpImpl->maShapeListenerHandlers.applyAll(
         [&xListener, &xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
         { return pHandler->listenerRemoved( xListener, xShape ); } );
-}
-
-bool EventMultiplexer::notifyShapeCursorChange(
-    const uno::Reference<drawing::XShape>&  xShape,
-    sal_Int16                               nPointerShape )
-{
-    return mpImpl->maShapeCursorHandlers.applyAll(
-        [&xShape, &nPointerShape]( const ShapeCursorEventHandlerSharedPtr& pHandler )
-        { return pHandler->cursorChanged( xShape, nPointerShape ); } );
 }
 
 bool EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )

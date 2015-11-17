@@ -147,10 +147,10 @@ public:
     Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId);
     void RemoveMenuBarButton(sal_uInt16 nId);
     bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId);
-    virtual void SetMBWHideAccel (bool val) { mbHideAccel = val; }
-    virtual bool GetMBWHideAccel (void) const { return mbHideAccel; }
-    virtual void SetMBWMenuKey (bool val) { mbMenuKey = val; }
-    virtual bool GetMBWMenuKey (void) const { return mbMenuKey; }
+    void SetMBWHideAccel(bool val) { mbHideAccel = val; }
+    bool GetMBWHideAccel() const { return mbHideAccel; }
+    void SetMBWMenuKey(bool val) { mbMenuKey = val; }
+    bool GetMBWMenuKey() const { return mbMenuKey; }
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_MENUBARWINDOW_HXX

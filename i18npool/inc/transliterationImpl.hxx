@@ -108,7 +108,7 @@ private:
     css::uno::Reference< XLocaleData4 > mxLocaledata;
     css::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 
-    virtual bool SAL_CALL loadModuleByName( const OUString& implName,
+    bool SAL_CALL loadModuleByName( const OUString& implName,
         css::uno::Reference<css::i18n::XExtendedTransliteration> & body, const css::lang::Locale& rLocale)
         throw(css::uno::RuntimeException);
 

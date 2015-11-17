@@ -57,7 +57,7 @@ class DetailsContainer
         virtual void setUsername( const OUString& /*rUsername*/ ) { };
         virtual void setPassword( const OUString& ) { };
 
-        virtual void setActive( bool bActive = true );
+        void setActive( bool bActive = true );
 
     protected:
         void notifyChange( );

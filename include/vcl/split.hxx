@@ -68,7 +68,6 @@ public:
     void                StartSplit();
     void                EndSplit();
     void                Split();
-    virtual void        Splitting( Point& rSplitPos );
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;

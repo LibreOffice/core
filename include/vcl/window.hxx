@@ -840,7 +840,6 @@ public:
     virtual void                        KeyUp( const KeyEvent& rKEvt );
     virtual void                        PrePaint(vcl::RenderContext& rRenderContext);
     virtual void                        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
-    virtual void                        PostPaint(vcl::RenderContext& rRenderContext);
     void                                Erase(vcl::RenderContext& rRenderContext);
 
     virtual void Erase() override

@@ -151,7 +151,7 @@ namespace framework{
     static css::uno::Sequence< OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                   );                                                                    \
     static OUString                                         SAL_CALL impl_getStaticImplementationName   (                                   );                                                                    \
     /* Helper for initialization of service by using own reference! */                                                                                                                                            \
-    virtual void                                            SAL_CALL impl_initService                   (                                   );                                                                    \
+    void                                                    SAL_CALL impl_initService                   (                                   );                                                                    \
 
 #define DECLARE_XSERVICEINFO                                                                                                                                                                                                            \
     DECLARE_XSERVICEINFO_NOFACTORY \

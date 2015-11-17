@@ -76,7 +76,7 @@ public:
     virtual void dispose() override;
     virtual void Resize() override;
     virtual short Execute() override;
-    virtual void Show();
+    void Show();
 
     // SvtFileDialog_Base
 
@@ -91,7 +91,7 @@ public:
     virtual const OUString& GetPath() override;
     virtual std::vector<OUString> GetPathList() const override;
     virtual bool ContentIsFolder( const OUString& rURL ) override;
-    virtual bool ContentIsDocument( const OUString& rURL );
+    bool ContentIsDocument( const OUString& rURL );
 
     virtual OUString getCurrentFileText() const override;
     virtual void setCurrentFileText( const OUString& rText, bool bSelectAll = false ) override;

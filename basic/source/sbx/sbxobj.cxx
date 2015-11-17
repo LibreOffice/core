@@ -606,10 +606,6 @@ bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     aDfltProp = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_ASCII_US);
     sal_Size nPos = rStrm.Tell();
     rStrm.ReadUInt32( nSize );
-    if( !LoadPrivateData( rStrm, nVer ) )
-    {
-        return false;
-    }
     sal_Size nNewPos = rStrm.Tell();
     nPos += nSize;
     DBG_ASSERT( nPos >= nNewPos, "SBX: Loaded too much data" );
@@ -647,10 +643,6 @@ bool SbxObject::StoreData( SvStream& rStrm ) const
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aDfltProp, RTL_TEXTENCODING_ASCII_US);
     sal_Size nPos = rStrm.Tell();
     rStrm.WriteUInt32( 0L );
-    if( !StorePrivateData( rStrm ) )
-    {
-        return false;
-    }
     sal_Size nNew = rStrm.Tell();
     rStrm.Seek( nPos );
     rStrm.WriteUInt32( nNew - nPos );

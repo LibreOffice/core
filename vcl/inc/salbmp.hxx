@@ -72,7 +72,7 @@ public:
     virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) = 0;
 
 
-    virtual bool GetChecksum(ChecksumType& rChecksum) const
+    bool GetChecksum(ChecksumType& rChecksum) const
     {
         updateChecksum();
         if (!mbChecksumValid)
@@ -82,7 +82,7 @@ public:
         return mbChecksumValid;
     }
 
-    virtual void InvalidateChecksum()
+    void InvalidateChecksum()
     {
         mbChecksumValid = false;
     }
