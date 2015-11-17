@@ -808,24 +808,6 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     return aPropSeq;
 }
 
-OUString ToolBarManager::RetrieveFromCommand( const OUString & aName, const OUString& aCmdURL )
-{
-    OUString aLabel;
-    Sequence< PropertyValue > aPropSeq;
-
-    // Retrieve popup menu labels
-    aPropSeq = GetPropsForCommand( aCmdURL );
-    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-    {
-        if ( aPropSeq[i].Name == aName )
-        {
-            aPropSeq[i].Value >>= aLabel;
-            break;
-        }
-    }
-    return aLabel;
-}
-
 sal_Int32 ToolBarManager::RetrievePropertiesFromCommand( const OUString& aCmdURL )
 {
     sal_Int32 nProperties(0);

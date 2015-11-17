@@ -144,7 +144,6 @@ class ToolBarManager : public ToolbarManager_Base
         virtual bool MenuItemAllowed( sal_uInt16 ) const;
 
         void RemoveControllers();
-        OUString RetrieveFromCommand( const OUString & aName, const OUString& aCmdURL );
         sal_Int32 RetrievePropertiesFromCommand( const OUString& aCmdURL );
         css::uno::Sequence< css::beans::PropertyValue > GetPropsForCommand( const OUString& rCmdURL );
         void CreateControllers();
@@ -164,9 +163,6 @@ class ToolBarManager : public ToolbarManager_Base
         long HandleClick(void ( SAL_CALL css::frame::XToolbarController::*_pClick )(  ));
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event );
-
-        static bool impl_RetrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg, const OUString& rCommand, OUString& rShortCut );
-        bool RetrieveShortcut( const OUString& rCommandURL, OUString& rShortCut );
 
     protected:
         typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::frame::XStatusListener > > ToolBarControllerMap;
