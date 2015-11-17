@@ -27,7 +27,7 @@ class SalKDEDisplay : public SalX11Display
         explicit SalKDEDisplay( Display* pDisp );
         virtual ~SalKDEDisplay();
         static SalKDEDisplay* self();
-        virtual void Yield() override;
+        virtual bool Yield() override;
         bool checkDirectInputEvent( XEvent* ev );
     private:
         Atom xim_protocol;
