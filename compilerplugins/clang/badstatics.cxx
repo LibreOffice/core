@@ -8,6 +8,7 @@
  */
 
 #include "plugin.hxx"
+#include "typecheck.hxx"
 
 namespace {
 
@@ -64,7 +65,8 @@ public:
             return std::make_pair(false, std::vector<FieldDecl const*>());
         }
         if (   startsWith(type, "class vcl::DeleteOnDeinit")
-            || startsWith(type, "class std::weak_ptr") // not owning
+            || loplugin::TypeCheck(rpType).Class("weak_ptr").StdNamespace()
+                // not owning
             || type == "class ImplWallpaper" // very odd static instance here
             || type == "class Application" // numerous odd subclasses in vclmain::createApplication()
             || type == "class DemoMtfApp" // one of these Application with own VclPtr
