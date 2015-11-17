@@ -466,8 +466,10 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             int nEndRunPos = it->mnEnd;
             int nRunLen = nEndRunPos - nMinRunPos;
             maHbScript = it->maScript;
+            // hb_language_from_string() accept ISO639-3 language tag except for Chinese.
+            LanguageTag &rTag = rArgs.maLanguageTag;
+            OString sLanguage = OUStringToOString( MsLangId::isChinese(rTag.getLanguageType()) ? rTag.getBcp47():rTag.getLanguage() , RTL_TEXTENCODING_UTF8 );
 
-            OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getLanguage(), RTL_TEXTENCODING_UTF8);
 
             static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
 
