@@ -1100,8 +1100,7 @@ void DAVResourceAccess::initialize()
 
 const OUString & DAVResourceAccess::getRequestURI() const
 {
-    OSL_ENSURE( m_xSession.is(),
-                "DAVResourceAccess::getRequestURI - Not initialized!" );
+    assert( m_xSession.is() && "DAVResourceAccess::getRequestURI - Not initialized!" );
 
     // In case a proxy is used we have to use the absolute URI for a request.
     if ( m_xSession->UsesProxy() )
