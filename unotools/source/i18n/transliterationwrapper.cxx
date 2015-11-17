@@ -163,7 +163,7 @@ void TransliterationWrapper::loadModuleByImplName(const OUString& rModuleName,
     try
     {
         setLanguageLocaleImpl( nLang );
-        com::sun::star::lang::Locale aLocale( aLanguageTag.getLocale());
+        css::lang::Locale aLocale( aLanguageTag.getLocale());
         // Reset LanguageTag, so the next call to loadModuleIfNeeded() forces
         // new settings.
         aLanguageTag.reset( LANGUAGE_DONTKNOW);

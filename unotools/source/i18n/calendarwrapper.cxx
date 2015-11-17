@@ -40,7 +40,7 @@ CalendarWrapper::~CalendarWrapper()
 {
 }
 
-void CalendarWrapper::loadDefaultCalendar( const ::com::sun::star::lang::Locale& rLocale )
+void CalendarWrapper::loadDefaultCalendar( const css::lang::Locale& rLocale )
 {
     try
     {
@@ -53,7 +53,7 @@ void CalendarWrapper::loadDefaultCalendar( const ::com::sun::star::lang::Locale&
     }
 }
 
-void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const ::com::sun::star::lang::Locale& rLocale )
+void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const css::lang::Locale& rLocale )
 {
     try
     {
@@ -67,7 +67,7 @@ void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const ::com::sun:
     }
 }
 
-::com::sun::star::uno::Sequence< OUString > CalendarWrapper::getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const
+css::uno::Sequence< OUString > CalendarWrapper::getAllCalendars( const css::lang::Locale& rLocale ) const
 {
     try
     {
@@ -79,7 +79,7 @@ void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const ::com::sun:
         SAL_WARN( "unotools.i18n", "getAllCalendars: Exception caught " << e.Message );
     }
 
-    return ::com::sun::star::uno::Sequence< OUString > (0);
+    return css::uno::Sequence< OUString > (0);
 }
 
 OUString CalendarWrapper::getUniqueID() const
@@ -250,7 +250,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     return 0;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getMonths() const
+css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getMonths() const
 {
     try
     {
@@ -261,10 +261,10 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     {
         SAL_WARN( "unotools.i18n", "getMonths: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
+    return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getDays() const
+css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getDays() const
 {
     try
     {
@@ -275,7 +275,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     {
         SAL_WARN( "unotools.i18n", "getDays: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
+    return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
 }
 
 OUString CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const
@@ -310,7 +310,7 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
 
 // --- XCalendar3 ------------------------------------------------------------
 
-::com::sun::star::i18n::Calendar2 CalendarWrapper::getLoadedCalendar() const
+css::i18n::Calendar2 CalendarWrapper::getLoadedCalendar() const
 {
     try
     {
@@ -321,10 +321,10 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
     {
         SAL_WARN( "unotools.i18n", "getLoadedCalendar2: Exception caught " << e.Message );
     }
-    return ::com::sun::star::i18n::Calendar2();
+    return css::i18n::Calendar2();
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonths() const
+css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonths() const
 {
     try
     {
@@ -335,10 +335,10 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
     {
         SAL_WARN( "unotools.i18n", "getGenitiveMonths: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
+    return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMonths() const
+css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMonths() const
 {
     try
     {
@@ -349,7 +349,7 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
     {
         SAL_WARN( "unotools.i18n", "getPartitiveMonths: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
+    return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

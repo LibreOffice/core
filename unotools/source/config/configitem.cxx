@@ -80,7 +80,7 @@ catch(const Exception& rEx)   \
 namespace utl{
     class ConfigChangeListener_Impl : public cppu::WeakImplHelper
     <
-        com::sun::star::util::XChangesListener
+        css::util::XChangesListener
     >
     {
         public:
@@ -193,7 +193,7 @@ ConfigItem::~ConfigItem()
     ConfigManager::getConfigManager().removeConfigItem(*this);
 }
 
-void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
+void ConfigItem::CallNotify( const css::uno::Sequence<OUString>& rPropertyNames )
 {
     // the call is forwarded to the virtual Notify() method
     // it is pure virtual, so all classes deriving from ConfigItem have to decide how they
@@ -344,7 +344,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
     }
 }
 
-Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Sequence< OUString >& rNames)
+Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUString >& rNames)
 {
     sal_Int32 i;
 

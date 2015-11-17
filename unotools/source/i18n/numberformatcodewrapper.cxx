@@ -40,12 +40,12 @@ NumberFormatCodeWrapper::~NumberFormatCodeWrapper()
 {
 }
 
-void NumberFormatCodeWrapper::setLocale( const ::com::sun::star::lang::Locale& rLocale )
+void NumberFormatCodeWrapper::setLocale( const css::lang::Locale& rLocale )
 {
     aLocale = rLocale;
 }
 
-::com::sun::star::i18n::NumberFormatCode
+css::i18n::NumberFormatCode
 NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
 {
     try
@@ -56,10 +56,10 @@ NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
     {
         SAL_WARN( "unotools.i18n", "getFormatCode: Exception caught!" );
     }
-    return ::com::sun::star::i18n::NumberFormatCode();
+    return css::i18n::NumberFormatCode();
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >
+css::uno::Sequence< css::i18n::NumberFormatCode >
 NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
 {
     try
@@ -70,10 +70,10 @@ NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
     {
         SAL_WARN( "unotools.i18n", "getAllFormatCode: Exception caught!" );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
+    return css::uno::Sequence< css::i18n::NumberFormatCode > (0);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >
+css::uno::Sequence< css::i18n::NumberFormatCode >
 NumberFormatCodeWrapper::getAllFormatCodes() const
 {
     try
@@ -84,7 +84,7 @@ NumberFormatCodeWrapper::getAllFormatCodes() const
     {
         SAL_WARN( "unotools.i18n", "getAllFormatCodes: Exception caught!" );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
+    return css::uno::Sequence< css::i18n::NumberFormatCode > (0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

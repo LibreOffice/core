@@ -45,7 +45,7 @@ private:
     bool            bNotFound;
     sal_Int32       nYear2000;      // two digit year representation
 
-    static const com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static const css::uno::Sequence<OUString> GetPropertyNames();
     void                    Load();
 
     virtual void            ImplCommit() override;
@@ -54,7 +54,7 @@ public:
     SfxMiscCfg( );
     virtual ~SfxMiscCfg( );
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
     bool        IsNotFoundWarning()     const {return bNotFound;}
     void        SetNotFoundWarning( bool bSet);
@@ -151,7 +151,7 @@ void SfxMiscCfg::Load()
     }
 }
 
-void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<OUString>& )
+void SfxMiscCfg::Notify( const css::uno::Sequence<OUString>& )
 {
     Load();
 }

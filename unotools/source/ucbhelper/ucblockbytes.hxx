@@ -86,9 +86,9 @@ class UcbLockBytes : public virtual SvLockBytes
     OUString                m_aRealURL;
     DateTime                m_aExpireDate;
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >  m_xInputStream;
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > m_xOutputStream;
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable >     m_xSeekable;
+    css::uno::Reference < css::io::XInputStream >  m_xInputStream;
+    css::uno::Reference < css::io::XOutputStream > m_xOutputStream;
+    css::uno::Reference < css::io::XSeekable >     m_xSeekable;
     UcbLockBytesHandlerRef  m_xHandler;
 
     ErrCode                 m_nError;
@@ -103,14 +103,14 @@ protected:
 
 public:
                             // properties: Referer, PostMimeType
-    static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XContent >& xContent,
-                                            const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rProps,
+    static UcbLockBytesRef  CreateLockBytes( const css::uno::Reference < css::ucb::XContent >& xContent,
+                                            const css::uno::Sequence < css::beans::PropertyValue >& rProps,
                                             StreamMode eMode,
-                                            const ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler >& xInter,
+                                            const css::uno::Reference < css::task::XInteractionHandler >& xInter,
                                             UcbLockBytesHandler* pHandler=nullptr );
 
-    static UcbLockBytesRef  CreateInputLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xContent );
-    static UcbLockBytesRef  CreateLockBytes( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xContent );
+    static UcbLockBytesRef  CreateInputLockBytes( const css::uno::Reference < css::io::XInputStream >& xContent );
+    static UcbLockBytesRef  CreateLockBytes( const css::uno::Reference < css::io::XStream >& xContent );
 
     // SvLockBytes
     virtual void            SetSynchronMode (bool bSynchron) override;
@@ -127,26 +127,26 @@ public:
                             { return m_nError; }
 
     // calling this method delegates the responsibility to call closeinput to the caller!
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream();
+    css::uno::Reference < css::io::XInputStream > getInputStream();
 
-    bool                    setInputStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > &rxInputStream,
+    bool                    setInputStream_Impl( const css::uno::Reference < css::io::XInputStream > &rxInputStream,
                                                  bool bSetXSeekable = true );
-    bool                    setStream_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > &rxStream );
+    bool                    setStream_Impl( const css::uno::Reference < css::io::XStream > &rxStream );
     void                    terminate_Impl();
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream_Impl() const
+    css::uno::Reference < css::io::XInputStream > getInputStream_Impl() const
                             {
                                 osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
                                 return m_xInputStream;
                             }
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > getOutputStream_Impl() const
+    css::uno::Reference < css::io::XOutputStream > getOutputStream_Impl() const
                             {
                                 osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
                                 return m_xOutputStream;
                             }
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable > getSeekable_Impl() const
+    css::uno::Reference < css::io::XSeekable > getSeekable_Impl() const
                             {
                                 osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
                                 return m_xSeekable;

@@ -62,7 +62,7 @@ const LanguageTag& CharClass::getLanguageTag() const
     return maLanguageTag;
 }
 
-const ::com::sun::star::lang::Locale& CharClass::getMyLocale() const
+const css::lang::Locale& CharClass::getMyLocale() const
 {
     ::osl::MutexGuard aGuard( aMutex );
     return maLanguageTag.getLocale();
@@ -385,7 +385,7 @@ sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_In
     }
 }
 
-::com::sun::star::i18n::ParseResult CharClass::parseAnyToken(
+css::i18n::ParseResult CharClass::parseAnyToken(
             const OUString& rStr,
             sal_Int32 nPos,
             sal_Int32 nStartCharFlags,
@@ -409,7 +409,7 @@ sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_In
     }
 }
 
-::com::sun::star::i18n::ParseResult CharClass::parsePredefinedToken(
+css::i18n::ParseResult CharClass::parsePredefinedToken(
             sal_Int32 nTokenType,
             const OUString& rStr,
             sal_Int32 nPos,

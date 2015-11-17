@@ -404,7 +404,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     NameToHandleMap aTempHashMap;
     for ( sal_Int32 n = 0; n < aPathPropSeq.getLength(); n++ )
     {
-        const com::sun::star::beans::Property& aProperty = aPathPropSeq[n];
+        const css::beans::Property& aProperty = aPathPropSeq[n];
         aTempHashMap.insert( NameToHandleMap::value_type( aProperty.Name, aProperty.Handle ));
     }
 

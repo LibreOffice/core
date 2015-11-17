@@ -96,14 +96,14 @@ public:
     GlobalEventConfig_Impl( );
     virtual ~GlobalEventConfig_Impl( );
 
-    void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
+    void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
-    void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
-    bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
-    bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException);
+    bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException);
+    static css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException);
+    bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException);
     OUString GetEventName( GlobalEventId nID );
 };
 
@@ -150,7 +150,7 @@ void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
                                         pIt != m_lFrames.end();
                                       ++pIt                     )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame(pIt->get(), ::com::sun::star::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XFrame > xFrame(pIt->get(), css::uno::UNO_QUERY);
         if (xFrame.is())
             xFrame->contextChanged();
     }
@@ -336,7 +336,7 @@ GlobalEventConfig::~GlobalEventConfig()
     }
 }
 
-Reference< container::XNameReplace > SAL_CALL GlobalEventConfig::getEvents() throw (::com::sun::star::uno::RuntimeException, std::exception)
+Reference< container::XNameReplace > SAL_CALL GlobalEventConfig::getEvents() throw (css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     Reference< container::XNameReplace > ret(this);

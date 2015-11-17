@@ -59,7 +59,7 @@ public:
 
 //  override methods of baseclass
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
 //  public interface
 

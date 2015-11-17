@@ -681,7 +681,7 @@ void SvtSecurityOptions_Impl::ImplCommit()
                             OUString aPrefix(
                                 PROPERTYNAME_MACRO_TRUSTEDAUTHORS "/a"
                                 + OUString::number(i) + "/");
-                            Sequence< com::sun::star::beans::PropertyValue >    lPropertyValues( 3 );
+                            Sequence< css::beans::PropertyValue >    lPropertyValues( 3 );
                             lPropertyValues[ 0 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
                             lPropertyValues[ 0 ].Value <<= m_seqTrustedAuthors[ i ][0];
                             lPropertyValues[ 1 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER;

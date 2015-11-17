@@ -107,7 +107,7 @@ namespace utl
         stopAllComponentListening( );
     }
 
-    void OEventListenerAdapter::stopComponentListening( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComp )
+    void OEventListenerAdapter::stopComponentListening( const css::uno::Reference< css::lang::XComponent >& _rxComp )
     {
         if ( m_pImpl->aListeners.empty() )
             return;

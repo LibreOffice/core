@@ -85,11 +85,8 @@ std::vector<OUString> getContents(OUString const & url) {
         std::vector<OUString> cs;
         ucbhelper::Content c(content(url));
         css::uno::Sequence<OUString> args { "Title" };
-        css::uno::Reference<css::sdbc::XResultSet> res(
-            c.createCursor(args),
-            css::uno::UNO_SET_THROW);
-        css::uno::Reference<com::sun::star::ucb::XContentAccess> acc(
-            res, css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::sdbc::XResultSet> res( c.createCursor(args), css::uno::UNO_SET_THROW);
+        css::uno::Reference<css::ucb::XContentAccess> acc( res, css::uno::UNO_QUERY_THROW);
         while (res->next()) {
             cs.push_back(acc->queryContentIdentifierString());
         }

@@ -74,7 +74,7 @@ public:
                                 SvtSysLocaleOptions_Impl();
     virtual                     ~SvtSysLocaleOptions_Impl();
 
-    virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void                Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
             const OUString&     GetLocaleString() const
                                     { return m_aLocaleString; }

@@ -26,7 +26,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
 
-ProgressHandlerWrap::ProgressHandlerWrap( ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > xSI )
+ProgressHandlerWrap::ProgressHandlerWrap( css::uno::Reference< css::task::XStatusIndicator > xSI )
 : m_xStatusIndicator( xSI )
 {
 }
