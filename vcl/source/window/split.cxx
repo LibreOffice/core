@@ -233,8 +233,6 @@ void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
             else
                 aPos.Y() = mnLastSplitPos;
             ImplSplitMousePos( aPos );
-            Splitting( aPos );
-            ImplSplitMousePos( aPos );
             long nTemp = mnSplitPos;
             if ( mbHorzSplit )
                 SetSplitPosPixel( aPos.X() );
@@ -282,8 +280,6 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
     {
         //Point aNewPos = mpRefWin->ScreenToOutputPixel( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
         Point aNewPos = mpRefWin->NormalizedScreenToOutputPixel( OutputToNormalizedScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
-        ImplSplitMousePos( aNewPos );
-        Splitting( aNewPos );
         ImplSplitMousePos( aNewPos );
 
         if ( mbHorzSplit )
@@ -407,8 +403,6 @@ void Splitter::ImplKbdTracking( vcl::KeyCode aKeyCode )
                 break;
             }
             ImplSplitMousePos( aNewPos );
-            Splitting( aNewPos );
-            ImplSplitMousePos( aNewPos );
 
             if ( mbHorzSplit )
             {
@@ -453,10 +447,6 @@ void Splitter::EndSplit()
     maEndSplitHdl.Call( this );
 }
 
-void Splitter::Splitting( Point& /* rSplitPos */ )
-{
-}
-
 void Splitter::SetDragRectPixel( const Rectangle& rDragRect, vcl::Window* _pRefWin )
 {
     maDragRect = rDragRect;
@@ -483,8 +473,6 @@ void Splitter::StartDrag()
 
     // Start-Position ermitteln
     maDragPos = mpRefWin->GetPointerPosPixel();
-    ImplSplitMousePos( maDragPos );
-    Splitting( maDragPos );
     ImplSplitMousePos( maDragPos );
     if ( mbHorzSplit )
         mnStartSplitPos = maDragPos.X();
@@ -516,8 +504,6 @@ void Splitter::ImplStartKbdSplitting()
     else
         maDragPos = Point( aSize.Width()/2, ImplSplitterActive() ? aPos.Y() : mnSplitPos );
     ImplSplitMousePos( maDragPos );
-    Splitting( maDragPos );
-    ImplSplitMousePos( maDragPos );
     if ( mbHorzSplit )
         mnStartSplitPos = maDragPos.X();
     else
@@ -539,8 +525,6 @@ void Splitter::ImplRestoreSplitter()
             aPos.Y() = mnLastSplitPos;
     }
 
-    ImplSplitMousePos( aPos );
-    Splitting( aPos );
     ImplSplitMousePos( aPos );
     long nTemp = mnSplitPos;
     if ( mbHorzSplit )
@@ -631,8 +615,6 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
                     aPos.X() = 0;
                 else
                     aPos.Y() = 0;
-                ImplSplitMousePos( aPos );
-                Splitting( aPos );
                 ImplSplitMousePos( aPos );
                 long nTemp = mnSplitPos;
                 if ( mbHorzSplit )

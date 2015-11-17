@@ -143,9 +143,9 @@ public:
     static void ActivateToolPanel( const css::uno::Reference< css::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL );
 
     // interne Handler
-    SAL_DLLPRIVATE virtual bool SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
-    SAL_DLLPRIVATE virtual const SvBorder& GetBorderPixelImpl( const SfxViewShell *pSh ) const;
-    SAL_DLLPRIVATE virtual void InvalidateBorderImpl( const SfxViewShell *pSh );
+    SAL_DLLPRIVATE bool SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
+    SAL_DLLPRIVATE const SvBorder& GetBorderPixelImpl( const SfxViewShell *pSh ) const;
+    SAL_DLLPRIVATE void InvalidateBorderImpl( const SfxViewShell *pSh );
 
     virtual SfxObjectShell* GetObjectShell() override;
     sal_uInt16              GetCurViewId() const;

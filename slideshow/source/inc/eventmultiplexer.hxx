@@ -124,23 +124,6 @@ public:
 
 typedef ::boost::shared_ptr< UserPaintEventHandler > UserPaintEventHandlerSharedPtr;
 
-/** Interface for handling view events.
-
-    Classes implementing this interface can be added to an
-    EventMultiplexer object, and are called from there to
-    handle view events.
-*/
-class ShapeCursorEventHandler
-{
-public:
-    virtual ~ShapeCursorEventHandler() {}
-
-    virtual bool cursorChanged( const css::uno::Reference< css::drawing::XShape>&   xShape,
-                                      sal_Int16                                nCursor ) = 0;
-};
-
-typedef ::boost::shared_ptr< ShapeCursorEventHandler > ShapeCursorEventHandlerSharedPtr;
-
 /** This class multiplexes user-activated and
     slide-show global events.
 
@@ -531,17 +514,6 @@ public:
      */
     bool notifyShapeListenerRemoved( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
                                      const css::uno::Reference<css::drawing::XShape>&                   xShape );
-
-    /** A new shape cursor was set
-
-        This method announces that the given cursor was set for the
-        specified shape.
-
-        @return true, if at least one handler successfully processed
-        the notification.
-     */
-    bool notifyShapeCursorChange( const css::uno::Reference<css::drawing::XShape>&  xShape,
-                                  sal_Int16                               nPointerShape );
 
     /** Notify a new user paint color
 

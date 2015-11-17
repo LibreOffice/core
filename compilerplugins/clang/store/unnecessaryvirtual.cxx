@@ -13,6 +13,7 @@
 #include <set>
 #include "plugin.hxx"
 #include "compat.hxx"
+#include <fstream>
 
 /**
 Dump a list of virtual methods and a list of methods overriding virtual methods.
@@ -20,18 +21,22 @@ Then we will post-process the 2 lists and find the set of virtual methods which 
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unnecessaryvirtual' check > log.txt
-  $ ./compilerplugins/clang/unnecessaryvirtual.py log.txt > result.txt
+  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unnecessaryvirtual' check
+  $ ./compilerplugins/clang/unnecessaryvirtual.py unnecessaryvirtual.log > result.txt
   $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='removevirtuals' $dir; done
 
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around
 to get it to work :-)
 
-TODO function template instantiations are not handled
 TODO some boost bind stuff appears to confuse it, notably in the xmloff module
+TODO does not find destructors that don't need to be virtual
 */
 
 namespace {
+
+// try to limit the voluminous output a little
+static std::set<std::string> definitionSet;
+static std::set<std::string> overridingSet;
 
 class UnnecessaryVirtual:
     public RecursiveASTVisitor<UnnecessaryVirtual>, public loplugin::Plugin
@@ -39,12 +44,28 @@ class UnnecessaryVirtual:
 public:
     explicit UnnecessaryVirtual(InstantiationData const & data): Plugin(data) {}
 
-    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    virtual void run() override
+    {
+        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
-    bool VisitCXXRecordDecl( const CXXRecordDecl* decl );
+        // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
+        // writing to the same logfile
+        std::string output;
+        for (const std::string & s : definitionSet)
+            output += "definition:\t" + s + "\n";
+        for (const std::string & s : overridingSet)
+            output += "overriding:\t" + s + "\n";
+        ofstream myfile;
+        myfile.open( SRCDIR "/unnecessaryvirtual.log", ios::app | ios::out);
+        myfile << output;
+        myfile.close();
+    }
+    bool shouldVisitTemplateInstantiations () const { return true; }
+
     bool VisitCXXMethodDecl( const CXXMethodDecl* decl );
-    bool VisitCXXConstructExpr( const CXXConstructExpr* expr );
-    void printTemplateInstantiations( const CXXRecordDecl *decl );
+    bool VisitCallExpr(CallExpr* );
+private:
+    std::string fullyQualifiedName(const FunctionDecl* functionDecl);
 };
 
 static std::string niceName(const CXXMethodDecl* functionDecl)
@@ -64,147 +85,48 @@ static std::string niceName(const CXXMethodDecl* functionDecl)
     return s;
 }
 
-static bool startsWith(const std::string& s, const char* other)
+std::string UnnecessaryVirtual::fullyQualifiedName(const FunctionDecl* functionDecl)
 {
-    return s.compare(0, strlen(other), other) == 0;
+    std::string ret = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
+    ret += " ";
+    if (isa<CXXMethodDecl>(functionDecl)) {
+        const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
+        ret += recordDecl->getQualifiedNameAsString();
+        ret += "::";
+    }
+    ret += functionDecl->getNameAsString() + "(";
+    bool bFirst = true;
+    for (const ParmVarDecl *pParmVarDecl : functionDecl->params()) {
+        if (bFirst)
+            bFirst = false;
+        else
+            ret += ",";
+        ret += pParmVarDecl->getType().getCanonicalType().getAsString();
+    }
+    ret += ")";
+    if (isa<CXXMethodDecl>(functionDecl) && dyn_cast<CXXMethodDecl>(functionDecl)->isConst()) {
+        ret += " const";
+    }
+
+    return ret;
 }
 
-static bool isStandardStuff(const std::string& s)
+bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
 {
-    // ignore UNO interface definitions, cannot change those
-    return startsWith(s, "com::sun::star::")
-          // ignore stuff in the C++ stdlib and boost
-          || startsWith(s, "std::") || startsWith(s, "boost::") || startsWith(s, "__gnu_debug::")
-          // can't change our rtl layer
-          || startsWith(s, "rtl::");
-}
+    methodDecl = methodDecl->getCanonicalDecl();
 
-void UnnecessaryVirtual::printTemplateInstantiations( const CXXRecordDecl *recordDecl )
-{
-    for(auto functionDecl = recordDecl->method_begin();
-        functionDecl != recordDecl->method_end(); ++functionDecl)
-    {
-        if (!functionDecl->isUserProvided() || !functionDecl->isVirtual()) {
-            continue;
-        }
-        if (isa<CXXDestructorDecl>(*functionDecl)) {
-            continue;
-        }
-        std::string aNiceName = niceName(*functionDecl);
-        if (isStandardStuff(aNiceName)) {
-            continue;
-        }
-        if (functionDecl->size_overridden_methods() == 0) {
-           cout << "definition:\t" << aNiceName << endl;
-        } else {
-           for (auto iter = functionDecl->begin_overridden_methods();
-                iter != functionDecl->end_overridden_methods(); ++iter)
-           {
-               const CXXMethodDecl *pOverriddenMethod = *iter;
-               // we only care about the first level override to establish that a virtual qualifier was useful.
-               if (pOverriddenMethod->isPure() || pOverriddenMethod->size_overridden_methods() == 0) {
-                   std::string aOverriddenNiceName = niceName(pOverriddenMethod);
-                   if (isStandardStuff(aOverriddenNiceName)) {
-                       continue;
-                   }
-                   cout << "overriding:\t" << aOverriddenNiceName << endl;
-               }
-          }
-        }
-    }
-    for(auto baseSpecifier = recordDecl->bases_begin();
-        baseSpecifier != recordDecl->bases_end(); ++baseSpecifier)
-    {
-        QualType qt = baseSpecifier->getType().getDesugaredType(compiler.getASTContext());
-        if (!qt->isRecordType()) {
-            continue;
-        }
-        const CXXRecordDecl *pSuperclassCXXRecordDecl = qt->getAsCXXRecordDecl();
-        std::string aNiceName = pSuperclassCXXRecordDecl->getQualifiedNameAsString();
-        if (isStandardStuff(aNiceName)) {
-            continue;
-        }
-        printTemplateInstantiations(pSuperclassCXXRecordDecl);
-    }
-}
-
-// I need to check construct expressions to see if we are instantiating any templates
-// which will effectively generate new methods
-bool UnnecessaryVirtual::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
-{
-    if (ignoreLocation(constructExpr)) {
-        return true;
-    }
-    const CXXConstructorDecl* pConstructorDecl = constructExpr->getConstructor();
-    const CXXRecordDecl* recordDecl = pConstructorDecl->getParent();
-    printTemplateInstantiations(recordDecl);
-    return true;
-}
-
-// I need to visit class definitions, so I can scan through the classes they extend to check if
-// we have any template instantiations that will create new methods
-bool UnnecessaryVirtual::VisitCXXRecordDecl( const CXXRecordDecl* recordDecl )
-{
-    if (ignoreLocation(recordDecl)) {
-        return true;
-    }
-    if(!recordDecl->hasDefinition()) {
-        return true;
-    }
-    // ignore uninstantiated templates
-    if (recordDecl->getTemplateInstantiationPattern()) {
-        return true;
-    }
-    // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              recordDecl->getLocation()))) {
-        return true;
-    }
-    for(auto baseSpecifier = recordDecl->bases_begin();
-        baseSpecifier != recordDecl->bases_end(); ++baseSpecifier)
-    {
-        QualType qt = baseSpecifier->getType().getDesugaredType(compiler.getASTContext());
-        if (!qt->isRecordType()) {
-            continue;
-        }
-        const CXXRecordDecl *pSuperclassCXXRecordDecl = qt->getAsCXXRecordDecl();
-        printTemplateInstantiations(pSuperclassCXXRecordDecl);
-    }
-    return true;
-}
-
-bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
-{
-    if (ignoreLocation(functionDecl)) {
-        return true;
-    }
-    functionDecl = functionDecl->getCanonicalDecl();
-    // ignore uninstantiated template methods
-    if (functionDecl->getTemplatedKind() != FunctionDecl::TemplatedKind::TK_NonTemplate
-        || functionDecl->getParent()->getDescribedClassTemplate() != nullptr) {
-        return true;
-    }
-    // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getNameInfo().getLoc()))) {
-        return true;
-    }
-    if (isStandardStuff(functionDecl->getParent()->getQualifiedNameAsString())) {
-        return true;
-    }
-
-    std::string aNiceName = niceName(functionDecl);
+    std::string aNiceName = niceName(methodDecl);
 
     // for destructors, we need to check if any of the superclass' destructors are virtual
-    if (isa<CXXDestructorDecl>(functionDecl)) {
+    if (isa<CXXDestructorDecl>(methodDecl)) {
     /* TODO I need to check if the base class has any virtual functions, since overriding
             classes will simply get a compiler-provided virtual destructor by default.
 
-        if (!functionDecl->isVirtual() && !functionDecl->isPure()) {
+        if (!methodDecl->isVirtual() && !methodDecl->isPure()) {
            return true;
         }
         std::set<std::string> overriddenSet;
-        const CXXRecordDecl *pRecordDecl = functionDecl->getParent();
+        const CXXRecordDecl *pRecordDecl = methodDecl->getParent();
         for(auto baseSpecifier = pRecordDecl->bases_begin();
             baseSpecifier != pRecordDecl->bases_end(); ++baseSpecifier)
         {
@@ -227,29 +149,74 @@ bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
         return true;
     }
 
-    if (!functionDecl->isVirtual()) {
+    if (!methodDecl->isVirtual()) {
         return true;
     }
-    if (isStandardStuff(aNiceName)) {
-        return true;
-    }
-    if (functionDecl->size_overridden_methods() == 0) {
-           cout << "definition:\t" << aNiceName << endl;
+    if (methodDecl->size_overridden_methods() == 0) {
+        // ignore stuff that forms part of the stable URE interface
+        if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
+                                  methodDecl->getNameInfo().getLoc()))) {
+            return true;
+        }
+        // ignore templates and template instantiations,
+        // I just cannot get clang to give me decent overriding method data out of them
+        if (methodDecl->getParent()->getDescribedClassTemplate()
+            || methodDecl->getParent()->getTemplateInstantiationPattern())
+            return true;
+        if (aNiceName.find("processOpCode2") != std::string::npos)
+        {
+            methodDecl->dump();
+            cout << "definition " << aNiceName << endl;
+        }
+        definitionSet.insert(aNiceName);
     } else {
-       for (auto iter = functionDecl->begin_overridden_methods();
-            iter != functionDecl->end_overridden_methods(); ++iter)
+       for (auto iter = methodDecl->begin_overridden_methods();
+            iter != methodDecl->end_overridden_methods(); ++iter)
        {
-           const CXXMethodDecl *pOverriddenMethod = *iter;
+           const CXXMethodDecl *overriddenMethod = *iter;
            // we only care about the first level override to establish that a virtual qualifier was useful.
-           if (pOverriddenMethod->isPure() || pOverriddenMethod->size_overridden_methods() == 0) {
-               std::string aOverriddenNiceName = niceName(pOverriddenMethod);
-               if (isStandardStuff(aOverriddenNiceName)) {
-                   continue;
-               }
-               cout << "overriding:\t" << aOverriddenNiceName << endl;
+           if (overriddenMethod->isPure() || overriddenMethod->size_overridden_methods() == 0) {
+               std::string aOverriddenNiceName = niceName(overriddenMethod);
+               overridingSet.insert(aOverriddenNiceName);
+               if (aNiceName.find("processOpCode2") != std::string::npos)
+               {
+                    methodDecl->dump();
+                    cout << "overriding " << aNiceName << endl;
+                }
            }
       }
     }
+    return true;
+}
+
+// prevent recursive templates from blowing up the stack
+static std::set<std::string> traversedFunctionSet;
+
+bool UnnecessaryVirtual::VisitCallExpr(CallExpr* expr)
+{
+    // Note that I don't ignore ANYTHING here, because I want to get calls to my code that result
+    // from template instantiation deep inside the STL and other external code
+
+    FunctionDecl* calleeFunctionDecl = expr->getDirectCallee();
+    if (calleeFunctionDecl == nullptr) {
+        Expr* callee = expr->getCallee()->IgnoreParenImpCasts();
+        DeclRefExpr* dr = dyn_cast<DeclRefExpr>(callee);
+        if (dr) {
+            calleeFunctionDecl = dyn_cast<FunctionDecl>(dr->getDecl());
+            if (calleeFunctionDecl)
+                goto gotfunc;
+        }
+        return true;
+    }
+
+gotfunc:
+    // if we see a call to a function, it may effectively create new code,
+    // if the function is templated. However, if we are inside a template function,
+    // calling another function on the same template, the same problem occurs.
+    // Rather than tracking all of that, just traverse anything we have not already traversed.
+    if (traversedFunctionSet.insert(fullyQualifiedName(calleeFunctionDecl)).second)
+        TraverseFunctionDecl(calleeFunctionDecl);
+
     return true;
 }
 

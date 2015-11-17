@@ -290,16 +290,6 @@ bool SbxBase::StoreData( SvStream& ) const
     return false;
 }
 
-bool SbxBase::LoadPrivateData( SvStream&, sal_uInt16 )
-{
-    return true;
-}
-
-bool SbxBase::StorePrivateData( SvStream& ) const
-{
-    return true;
-}
-
 bool SbxBase::LoadCompleted()
 {
     return true;

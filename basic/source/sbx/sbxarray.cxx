@@ -492,7 +492,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
     return p;
 }
 
-bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 /*nVer*/ )
 {
     sal_uInt16 nElem;
     Clear();
@@ -517,8 +517,6 @@ bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             break;
         }
     }
-    if( bRes )
-        bRes = LoadPrivateData( rStrm, nVer );
     nFlags = f;
     return bRes;
 }
@@ -545,7 +543,7 @@ bool SbxArray::StoreData( SvStream& rStrm ) const
                 return false;
         }
     }
-    return StorePrivateData( rStrm );
+    return true;
 }
 
 // #100883 Method to set method directly to parameter array

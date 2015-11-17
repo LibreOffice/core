@@ -558,7 +558,7 @@ public:
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
 
     /** called from the SdrObjEditView during text edit when a chain of boxes is to be updated */
-    virtual void onChainingEvent();
+    void onChainingEvent();
 
 
 

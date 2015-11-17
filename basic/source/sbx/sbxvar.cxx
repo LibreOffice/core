@@ -574,11 +574,6 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         pInfo = new SbxInfo;
         pInfo->LoadData( rStrm, (sal_uInt16) cMark );
     }
-    // Load private data only, if it is a SbxVariable
-    if( GetClass() == SbxCLASS_VARIABLE && !LoadPrivateData( rStrm, nVer ) )
-    {
-        return false;
-    }
     Broadcast( SBX_HINT_DATACHANGED );
     nHash =  MakeHashCode( maName );
     SetModified( true );
@@ -625,15 +620,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
     {
         rStrm.WriteUChar( 0 );
     }
-    // Save private data only, if it is a SbxVariable
-    if( GetClass() == SbxCLASS_VARIABLE )
-    {
-        return StorePrivateData( rStrm );
-    }
-    else
-    {
-        return true;
-    }
+    return true;
 }
 
 // SbxInfo

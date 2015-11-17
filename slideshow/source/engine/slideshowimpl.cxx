@@ -1932,9 +1932,6 @@ void SlideShowImpl::setShapeCursor(
         // existing entry found, update with new cursor ID
         aIter->second = nPointerShape;
     }
-
-    maEventMultiplexer.notifyShapeCursorChange(xShape,
-                                               nPointerShape);
 }
 
 bool SlideShowImpl::requestCursor( sal_Int16 nCursorShape )

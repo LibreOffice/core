@@ -78,7 +78,7 @@ public:
 
     SAL_DLLPRIVATE virtual void SetModel(SdrModel* pNewModel) override;
 
-    SAL_DLLPRIVATE virtual void clonedFrom(const FmFormObj* _pSource);
+    SAL_DLLPRIVATE void clonedFrom(const FmFormObj* _pSource);
 
     SAL_DLLPRIVATE static css::uno::Reference< css::uno::XInterface> ensureModelEnv(
                   const css::uno::Reference< css::uno::XInterface>& _rSourceContainer,

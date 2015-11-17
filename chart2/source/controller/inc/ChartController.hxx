@@ -371,7 +371,7 @@ public:
     void execute_MouseButtonUp( const MouseEvent& rMEvt );
     void execute_Resize();
     void execute_Command( const CommandEvent& rCEvt );
-    virtual bool execute_KeyInput( const KeyEvent& rKEvt );
+    bool execute_KeyInput( const KeyEvent& rKEvt );
 
     /** get help text to be shown in a quick help
 
