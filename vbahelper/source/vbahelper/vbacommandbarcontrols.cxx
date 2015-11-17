@@ -266,7 +266,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override
         { return cppu::UnoType<XCommandBarControl>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override
         { return false; }
 };
 

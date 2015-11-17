@@ -37,8 +37,8 @@ typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XControl > ControlImpl_BA
 class ScVbaControl : public ControlImpl_BASE
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XEventListener > m_xEventListener;
-    com::sun::star::uno::Reference< com::sun::star::awt::XControl > m_xEmptyFormControl;
+    css::uno::Reference< css::lang::XEventListener > m_xEventListener;
+    css::uno::Reference< css::awt::XControl > m_xEmptyFormControl;
 protected:
     // awt control has nothing similar to Tag property of Mso controls,
     // whether it is necessary is another question
@@ -78,8 +78,8 @@ public:
     virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL SetFocus(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Move( double Left, double Top, const ::com::sun::star::uno::Any& Width, const ::com::sun::star::uno::Any& Height ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Move( double Left, double Top, const css::uno::Any& Width, const css::uno::Any& Height ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getControlSource() throw (css::uno::RuntimeException, std::exception) override;
@@ -94,11 +94,11 @@ public:
     virtual void SAL_CALL setTag( const OUString& aTag ) throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getTabIndex() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getMousePointer() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getMousePointer() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) throw (css::uno::RuntimeException, std::exception) override;
     //remove resource because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     void removeResource() throw( css::uno::RuntimeException );
-    virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getForeColor() throw (css::uno::RuntimeException);
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

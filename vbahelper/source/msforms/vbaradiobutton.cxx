@@ -37,7 +37,7 @@ ScVbaRadioButton::getCaption() throw (css::uno::RuntimeException, std::exception
 }
 
 void SAL_CALL
-ScVbaRadioButton::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaRadioButton::setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
 }

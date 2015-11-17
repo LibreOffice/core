@@ -44,7 +44,7 @@ ScVbaToggleButton::getCaption() throw (css::uno::RuntimeException, std::exceptio
 }
 
 void SAL_CALL
-ScVbaToggleButton::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaToggleButton::setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
 }

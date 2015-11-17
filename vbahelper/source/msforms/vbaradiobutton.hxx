@@ -33,7 +33,7 @@ public:
     virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setValue(const com::sun::star::uno::Any&) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setValue(const css::uno::Any&) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;

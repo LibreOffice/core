@@ -112,8 +112,8 @@ public:
 // => ctor, createEnumeration & factory method need be defined ( to be called
 // by getByIndex, getByName )
 typedef ::cppu::WeakImplHelper< container::XEnumerationAccess
-    , com::sun::star::container::XIndexAccess
-    , com::sun::star::container::XNameAccess
+    , css::container::XIndexAccess
+    , css::container::XNameAccess
     > DocumentsAccessImpl_BASE;
 
 class DocumentsAccessImpl : public DocumentsAccessImpl_BASE
