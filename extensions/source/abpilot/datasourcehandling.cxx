@@ -219,7 +219,6 @@ namespace abp
     }
     ODataSourceContext::~ODataSourceContext()
     {
-        delete(m_pImpl);
     }
 
 

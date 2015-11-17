@@ -23,12 +23,7 @@
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase.hxx>
-
-/*----------------------------------------
-*
-*   Attributlist implementation
-*
-*----------------------------------------*/
+#include <memory>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::xml::sax;
@@ -57,7 +52,7 @@ public:
     void clear();
 
 private:
-    struct AttributeListImpl_impl *m_pImpl;
+    std::unique_ptr<AttributeListImpl_impl> m_pImpl;
 };
 
 #endif // INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX

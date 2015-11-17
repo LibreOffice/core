@@ -52,10 +52,10 @@ sal_Int16 SAL_CALL AttributeListImpl::getLength() throw (RuntimeException, std::
 }
 
 
-AttributeListImpl::AttributeListImpl( const AttributeListImpl &r ) :
-cppu::WeakImplHelper<css::xml::sax::XAttributeList>( r )
+AttributeListImpl::AttributeListImpl( const AttributeListImpl &r )
+ : cppu::WeakImplHelper<css::xml::sax::XAttributeList>( r ),
+   m_pImpl( new AttributeListImpl_impl )
 {
-    m_pImpl = new AttributeListImpl_impl;
     *m_pImpl = *(r.m_pImpl);
 }
 
@@ -125,14 +125,13 @@ OUString AttributeListImpl::getValueByName(const OUString& sName) throw (Runtime
 
 
 AttributeListImpl::AttributeListImpl()
+    : m_pImpl( new AttributeListImpl_impl )
 {
-    m_pImpl = new AttributeListImpl_impl;
 }
 
 
 AttributeListImpl::~AttributeListImpl()
 {
-    delete m_pImpl;
 }
 
 

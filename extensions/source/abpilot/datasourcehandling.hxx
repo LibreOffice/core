@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <memory>
 
 #include "abptypes.hxx"
 
@@ -45,7 +46,7 @@ namespace abp
     class ODataSourceContext
     {
     private:
-        ODataSourceContextImpl*     m_pImpl;
+        std::unique_ptr<ODataSourceContextImpl>   m_pImpl;
 
     public:
         explicit ODataSourceContext(
