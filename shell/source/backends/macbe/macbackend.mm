@@ -197,7 +197,8 @@ rtl::OUString GetOUString( NSString* pStr )
 
     rtl::OUStringBuffer aBuf( nLen+1 );
     aBuf.setLength( nLen );
-    [pStr getCharacters: const_cast<sal_Unicode*>(aBuf.getStr())];
+    [pStr getCharacters:
+     reinterpret_cast<unichar *>(const_cast<sal_Unicode*>(aBuf.getStr()))];
     return aBuf.makeStringAndClear();
 }
 
