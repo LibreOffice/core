@@ -64,7 +64,7 @@ private:
 
 void TickerThread::execute()
 {
-    OSL_TRACE( "TickerThread: start." );
+    SAL_INFO( "ucb.ucp.webdav", "TickerThread: start." );
 
     // we have to go through the loop more often to be able to finish ~quickly
     const int nNth = 25;
@@ -84,13 +84,13 @@ void TickerThread::execute()
         salhelper::Thread::wait( aTV );
     }
 
-    OSL_TRACE( "TickerThread: stop." );
+    SAL_INFO( "ucb.ucp.webdav", "TickerThread: stop." );
 }
 
 NeonLockStore::NeonLockStore()
     : m_pNeonLockStore( ne_lockstore_create() )
 {
-    OSL_ENSURE( m_pNeonLockStore, "Unable to create neon lock store!" );
+    assert( m_pNeonLockStore && "Unable to create neon lock store!" );
 }
 
 NeonLockStore::~NeonLockStore()
@@ -100,7 +100,7 @@ NeonLockStore::~NeonLockStore()
     aGuard.reset(); // actually no threads should even try to access members now
 
     // release active locks, if any.
-    OSL_ENSURE( m_aLockInfoMap.empty(),
+    assert( m_aLockInfoMap.empty() &&
                 "NeonLockStore::~NeonLockStore - Releasing active locks!" );
 
     LockInfoMap::const_iterator it( m_aLockInfoMap.begin() );

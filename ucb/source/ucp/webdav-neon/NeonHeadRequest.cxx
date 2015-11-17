@@ -44,10 +44,29 @@ void process_headers( ne_request * req,
     void * cursor = nullptr;
     const char * name, *value;
 
+#if defined SAL_LOG_INFO
+    {
+        if( !rHeaderNames.empty() )
+        {
+            std::vector< OUString >::const_iterator it(
+                rHeaderNames.begin() );
+            const std::vector< OUString >::const_iterator end(
+                rHeaderNames.end() );
+
+            while ( it != end )
+            {
+                SAL_INFO( "ucb.ucp.webdav", "HEAD - requested header: " << (*it) );
+                ++it;
+            }
+        }
+    }
+#endif
     while ( ( cursor = ne_response_header_iterate( req, cursor,
                                                    &name, &value ) ) != nullptr ) {
         OUString aHeaderName( OUString::createFromAscii( name ) );
         OUString aHeaderValue( OUString::createFromAscii( value ) );
+
+        SAL_INFO( "ucb.ucp.webdav", "HEAD - received header: " << aHeaderName << ":" << aHeaderValue);
 
         // Note: Empty vector means that all headers are requested.
         bool bIncludeIt = ( rHeaderNames.empty() );
