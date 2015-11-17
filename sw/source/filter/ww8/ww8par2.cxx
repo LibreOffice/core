@@ -658,7 +658,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
     {
         for(sal_Int32 i = 0; i < rAV.cbTextBefore + rAV.cbTextAfter; ++i, pText += 2)
         {
-            sText += OUString(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pText)));
+            sText += OUString(sal_Unicode(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pText))));
         }
     }
 

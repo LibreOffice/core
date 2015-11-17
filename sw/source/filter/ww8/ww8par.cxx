@@ -5597,7 +5597,7 @@ namespace
             sal_Int32 nLen = sUniPassword.getLength();
             if ( nLen <= 15 )
             {
-                sal_Unicode pPassword[16];
+                sal_uInt16 pPassword[16];
                 memset( pPassword, 0, sizeof( pPassword ) );
                 for( sal_Int32 nChar = 0; nChar < nLen; ++nChar )
                     pPassword[nChar] = sUniPassword[nChar];

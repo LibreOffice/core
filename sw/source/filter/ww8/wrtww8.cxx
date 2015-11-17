@@ -3016,7 +3016,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
 
                 rtl_random_destroyPool( aRandomPool );
 
-                sal_Unicode aPassword[16];
+                sal_uInt16 aPassword[16];
                 memset( aPassword, 0, sizeof( aPassword ) );
 
                 OUString sPassword(pPasswordItem->GetValue());

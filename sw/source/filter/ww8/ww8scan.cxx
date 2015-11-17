@@ -80,7 +80,7 @@ namespace
     {
         bool bRet = false;
         sal_uInt32 nOldPos = rStrm.Tell();
-        sal_Unicode nBelt(0);
+        sal_uInt16 nBelt(0);
         rStrm.ReadUInt16( nBelt );
         nBelt *= sizeof(sal_Unicode);
         if (rStrm.good() && (rStrm.remainingSize() >= (nBelt + sizeof(sal_Unicode))))
