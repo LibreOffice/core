@@ -25,8 +25,8 @@
 #include <assert.h>
 #include <math.h>
 
-#include <boost/shared_array.hpp>
 #include <memory>
+#include <vector>
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -83,37 +83,37 @@ namespace
 
 /** Escapes line-ending characters (\n and \r) in input string.
   */
-boost::shared_array<char> lcl_escapeLineFeeds(const char* const i_pStr)
+std::vector<char> lcl_escapeLineFeeds(const char* const i_pStr)
 {
     size_t nLength(strlen(i_pStr));
-    char* pBuffer = new char[2*nLength+1];
+    std::vector<char> pBuffer;
+    pBuffer.reserve(2*nLength+1);
 
     const char* pRead = i_pStr;
-    char* pWrite = pBuffer;
     while( nLength-- )
     {
         if( *pRead == '\r' )
         {
-            *pWrite++ = '\\';
-            *pWrite++ = 'r';
+            pBuffer.push_back('\\');
+            pBuffer.push_back('r');
         }
         else if( *pRead == '\n' )
         {
-            *pWrite++ = '\\';
-            *pWrite++ = 'n';
+            pBuffer.push_back('\\');
+            pBuffer.push_back('n');
         }
         else if( *pRead == '\\' )
         {
-            *pWrite++ = '\\';
-            *pWrite++ = '\\';
+            pBuffer.push_back('\\');
+            pBuffer.push_back('\\');
         }
         else
-            *pWrite++ = *pRead;
+            pBuffer.push_back(*pRead);
         pRead++;
     }
-    *pWrite++ = 0;
+    pBuffer.push_back(0);
 
-    return boost::shared_array<char>(pBuffer);
+    return pBuffer;
 }
 
 }
@@ -574,14 +574,14 @@ void PDFOutDev::processLink(Link* link, Catalog*)
     {
         const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->getCString();
 
-        boost::shared_array<char> pEsc( lcl_escapeLineFeeds(pURI) );
+        std::vector<char> pEsc( lcl_escapeLineFeeds(pURI) );
 
         printf( "drawLink %f %f %f %f %s\n",
                 normalize(x1),
                 normalize(y1),
                 normalize(x2),
                 normalize(y2),
-                pEsc.get() );
+                pEsc.data() );
     }
 }
 
@@ -767,7 +767,7 @@ void PDFOutDev::updateFont(GfxState *state)
 
             aFont = it->second;
 
-            boost::shared_array<char> pEsc( lcl_escapeLineFeeds(aFont.familyName.getCString()) );
+            std::vector<char> pEsc( lcl_escapeLineFeeds(aFont.familyName.getCString()) );
             printf( " %d %d %d %d %f %d %s",
                     aFont.isEmbedded,
                     aFont.isBold,
@@ -775,7 +775,7 @@ void PDFOutDev::updateFont(GfxState *state)
                     aFont.isUnderline,
                     normalize(state->getTransformedFontSize()),
                     nEmbedSize,
-                    pEsc.get() );
+                    pEsc.data() );
         }
         printf( "\n" );
 
@@ -920,8 +920,8 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     for( int i=0; i<uLen; ++i )
     {
         buf[ m_pUtf8Map->mapUnicode(u[i], buf, sizeof(buf)-1) ] = 0;
-        boost::shared_array<char> pEsc( lcl_escapeLineFeeds(buf) );
-        printf( "%s", pEsc.get() );
+        std::vector<char> pEsc( lcl_escapeLineFeeds(buf) );
+        printf( "%s", pEsc.data() );
     }
 
     printf( "\n" );
