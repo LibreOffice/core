@@ -25,6 +25,7 @@
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno
 {
@@ -52,7 +53,7 @@ struct SvLinkSource_Impl;
 class SFX2_DLLPUBLIC SvLinkSource : public SvRefBase
 {
 private:
-    SvLinkSource_Impl*  pImpl; // compatible area
+    std::unique_ptr<SvLinkSource_Impl>  pImpl; // compatible area
 
 public:
 

@@ -210,7 +210,6 @@ SvLinkSource::SvLinkSource()
 
 SvLinkSource::~SvLinkSource()
 {
-    delete pImpl;
 }
 
 

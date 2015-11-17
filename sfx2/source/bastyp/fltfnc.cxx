@@ -182,15 +182,14 @@ const SfxFilter* SfxFilterContainer::GetAnyFilter( SfxFilterFlags nMust, SfxFilt
 
 
 SfxFilterContainer::SfxFilterContainer( const OUString& rName )
+   : pImpl( new SfxFilterContainer_Impl( rName ) )
 {
-    pImpl = new SfxFilterContainer_Impl( rName );
 }
 
 
 
 SfxFilterContainer::~SfxFilterContainer()
 {
-    delete pImpl;
 }
 
 

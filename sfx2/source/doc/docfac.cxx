@@ -122,10 +122,8 @@ SfxObjectFactory::SfxObjectFactory
 
 SfxObjectFactory::~SfxObjectFactory()
 {
-
     delete pImpl->pNameResId;
     delete pImpl->pFilterContainer;
-    delete pImpl;
 }
 
 

@@ -26,6 +26,7 @@
 #include <sfx2/linksrc.hxx>
 #include <sot/exchange.hxx>
 #include <tools/ref.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno
 {
@@ -71,7 +72,7 @@ private:
 
     SvLinkSourceRef         xObj;
     OUString                aLinkName;
-    BaseLink_Impl*          pImpl;
+    std::unique_ptr<BaseLink_Impl>  pImpl;
     sal_uInt16              nObjType;
     bool                    bVisible : 1;
     bool                    bSynchron : 1;

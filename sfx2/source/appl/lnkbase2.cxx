@@ -123,9 +123,9 @@ public:
 
 
 SvBaseLink::SvBaseLink()
-    : m_bIsReadOnly(false)
+    : pImpl ( new BaseLink_Impl ),
+      m_bIsReadOnly(false)
 {
-    pImpl = new BaseLink_Impl();
     nObjType = OBJECT_CLIENT_SO;
     pImplData = new ImplBaseLinkData;
     bVisible = bSynchron = bUseCache = true;
@@ -135,9 +135,9 @@ SvBaseLink::SvBaseLink()
 
 
 SvBaseLink::SvBaseLink( SfxLinkUpdateMode nUpdateMode, SotClipboardFormatId nContentType )
-    : m_bIsReadOnly(false)
+   : pImpl( new BaseLink_Impl ),
+     m_bIsReadOnly(false)
 {
-    pImpl = new BaseLink_Impl();
     nObjType = OBJECT_CLIENT_SO;
     pImplData = new ImplBaseLinkData;
     bVisible = bSynchron = bUseCache = true;
@@ -243,7 +243,6 @@ SvBaseLink::~SvBaseLink()
     }
 
     delete pImplData;
-    delete pImpl;
 }
 
 IMPL_LINK_TYPED( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )

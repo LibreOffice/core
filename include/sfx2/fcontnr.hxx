@@ -31,6 +31,7 @@
 #include <sfx2/docfilt.hxx>
 
 #include <tools/ref.hxx>
+#include <memory>
 
 namespace vcl { class Window; }
 class SfxFilter;
@@ -67,7 +68,7 @@ typedef sal_uIntPtr (*SfxDetectFilter)( SfxMedium& rMedium, const SfxFilter **, 
 
 class SFX2_DLLPUBLIC SfxFilterContainer
 {
-    SfxFilterContainer_Impl *pImpl;
+    std::unique_ptr<SfxFilterContainer_Impl> pImpl;
 
 public:
                         SfxFilterContainer( const OUString& rName );

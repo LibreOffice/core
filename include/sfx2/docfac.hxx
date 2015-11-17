@@ -28,6 +28,7 @@
 #include <rtl/ustring.hxx>
 
 #include <sfx2/objsh.hxx>
+#include <memory>
 
 class SfxMedium;
 class SfxFilter;
@@ -43,7 +44,7 @@ class SFX2_DLLPUBLIC SfxObjectFactory
 {
 private:
     const char*             pShortName;
-    SfxObjectFactory_Impl*  pImpl;      // Additional Data
+    std::unique_ptr<SfxObjectFactory_Impl> pImpl;      // Additional Data
     SfxObjectShellFlags     nFlags;
 
 public:
