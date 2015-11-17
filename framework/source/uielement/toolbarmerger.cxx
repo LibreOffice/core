@@ -33,7 +33,6 @@ static const char MERGE_TOOLBAR_IMAGEID[]         = "ImageIdentifier";
 static const char MERGE_TOOLBAR_CONTEXT[]         = "Context";
 static const char MERGE_TOOLBAR_TARGET[]          = "Target";
 static const char MERGE_TOOLBAR_CONTROLTYPE[]     = "ControlType";
-static const char MERGE_TOOLBAR_WIDTH[]           = "Width";
 
 static const char MERGECOMMAND_ADDAFTER[]         = "AddAfter";
 static const char MERGECOMMAND_ADDBEFORE[]        = "AddBefore";
@@ -121,8 +120,7 @@ bool ToolBarMerger::ConvertSeqSeqToVector(
                                  aAddonToolbarItem.aImageIdentifier,
                                  aAddonToolbarItem.aTarget,
                                  aAddonToolbarItem.aContext,
-                                 aAddonToolbarItem.aControlType,
-                                 aAddonToolbarItem.nWidth );
+                                 aAddonToolbarItem.aControlType );
         rContainer.push_back( aAddonToolbarItem );
     }
 
@@ -186,8 +184,7 @@ void ToolBarMerger::ConvertSequenceToValues(
     OUString& rImageIdentifier,
     OUString& rTarget,
     OUString& rContext,
-    OUString& rControlType,
-    sal_uInt16&      rWidth )
+    OUString& rControlType )
 {
     for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
     {
@@ -203,12 +200,6 @@ void ToolBarMerger::ConvertSequenceToValues(
             rSequence[i].Value >>= rTarget;
         else if ( rSequence[i].Name == MERGE_TOOLBAR_CONTROLTYPE )
             rSequence[i].Value >>= rControlType;
-        else if ( rSequence[i].Name == MERGE_TOOLBAR_WIDTH )
-        {
-            sal_Int32 aValue = 0;
-            rSequence[i].Value >>= aValue;
-            rWidth = sal_uInt16( aValue );
-        }
     }
 }
 
@@ -317,18 +308,17 @@ bool ToolBarMerger::ProcessMergeOperation(
     ToolBox*                               pToolbar,
     sal_uInt16                             nPos,
     sal_uInt16&                            rItemId,
-    CommandToInfoMap&                      rCommandMap,
     const OUString&                 rModuleIdentifier,
     const OUString&                 rMergeCommand,
     const OUString&                 rMergeCommandParameter,
     const AddonToolbarItemContainer&       rItems )
 {
     if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
-        return MergeItems( xFrame, pToolbar, nPos, 1, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        return MergeItems( xFrame, pToolbar, nPos, 1, rItemId, rModuleIdentifier, rItems );
     else if ( rMergeCommand == MERGECOMMAND_ADDBEFORE )
-        return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rModuleIdentifier, rItems );
     else if ( rMergeCommand == MERGECOMMAND_REPLACE )
-        return ReplaceItem( xFrame, pToolbar, nPos, rItemId, rCommandMap, rModuleIdentifier, rItems );
+        return ReplaceItem( xFrame, pToolbar, nPos, rItemId, rModuleIdentifier, rItems );
     else if ( rMergeCommand == MERGECOMMAND_REMOVE )
         return RemoveItems( pToolbar, nPos, rMergeCommandParameter );
 
@@ -386,7 +376,6 @@ bool ToolBarMerger::ProcessMergeFallback(
     ToolBox*                         pToolbar,
     sal_uInt16                       /*nPos*/,
     sal_uInt16&                      rItemId,
-    CommandToInfoMap&                rCommandMap,
     const OUString&           rModuleIdentifier,
     const OUString&           rMergeCommand,
     const OUString&           rMergeFallback,
@@ -402,9 +391,9 @@ bool ToolBarMerger::ProcessMergeFallback(
              ( rMergeCommand == MERGECOMMAND_ADDAFTER ) )
     {
         if ( rMergeFallback == MERGEFALLBACK_ADDFIRST )
-            return MergeItems( xFrame, pToolbar, 0, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+            return MergeItems( xFrame, pToolbar, 0, 0, rItemId, rModuleIdentifier, rItems );
         else if ( rMergeFallback == MERGEFALLBACK_ADDLAST )
-            return MergeItems( xFrame, pToolbar, TOOLBOX_APPEND, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+            return MergeItems( xFrame, pToolbar, TOOLBOX_APPEND, 0, rItemId, rModuleIdentifier, rItems );
     }
 
     return false;
@@ -457,8 +446,7 @@ bool ToolBarMerger::MergeItems(
     sal_uInt16                             nPos,
     sal_uInt16                             nModIndex,
     sal_uInt16&                            rItemId,
-    CommandToInfoMap&                      rCommandMap,
-    const OUString&                 rModuleIdentifier,
+    const OUString&                        rModuleIdentifier,
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     const sal_Int32 nSize( rAddonToolbarItems.size() );
@@ -478,22 +466,7 @@ bool ToolBarMerger::MergeItems(
             if ( rItem.aCommandURL == TOOLBOXITEM_SEPARATOR_STR )
                 pToolbar->InsertSeparator( sal_uInt16( nInsPos ));
             else
-            {
-                CommandToInfoMap::iterator pIter = rCommandMap.find( rItem.aCommandURL );
-                if ( pIter == rCommandMap.end())
-                {
-                    CommandInfo aCmdInfo;
-                    aCmdInfo.nId = rItemId;
-                    const CommandToInfoMap::value_type aValue( rItem.aCommandURL, aCmdInfo );
-                    rCommandMap.insert( aValue );
-                }
-                else
-                {
-                    pIter->second.aIds.push_back( rItemId );
-                }
-
-                ToolBarMerger::CreateToolbarItem( pToolbar, rCommandMap, sal_uInt16( nInsPos ), rItemId, rItem );
-            }
+                ToolBarMerger::CreateToolbarItem( pToolbar, sal_uInt16( nInsPos ), rItemId, rItem );
 
             ++nIndex;
             ++rItemId;
@@ -550,12 +523,11 @@ bool ToolBarMerger::ReplaceItem(
     ToolBox*                               pToolbar,
     sal_uInt16                             nPos,
     sal_uInt16&                            rItemId,
-    CommandToInfoMap&                      rCommandMap,
-    const OUString&                 rModuleIdentifier,
+    const OUString&                        rModuleIdentifier,
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     pToolbar->RemoveItem( nPos );
-    return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rAddonToolbarItems );
+    return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rModuleIdentifier, rAddonToolbarItems );
 }
 
 /**
@@ -631,7 +603,6 @@ bool ToolBarMerger::RemoveItems(
     ToolBox*               pToolbar,
     const OUString& rCommandURL,
     sal_uInt16             nId,
-    sal_uInt16             nWidth,
     const OUString& rControlType )
 {
     ::cppu::OWeakObject* pResult( nullptr );
@@ -639,15 +610,15 @@ bool ToolBarMerger::RemoveItems(
     if ( rControlType == TOOLBARCONTROLLER_BUTTON )
         pResult = new ButtonToolbarController( rxContext, pToolbar, rCommandURL );
     else if ( rControlType == TOOLBARCONTROLLER_COMBOBOX )
-        pResult = new ComboboxToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
+        pResult = new ComboboxToolbarController( rxContext, xFrame, pToolbar, nId, 0, rCommandURL );
     else if ( rControlType == TOOLBARCONTROLLER_EDIT )
-        pResult = new EditToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
+        pResult = new EditToolbarController( rxContext, xFrame, pToolbar, nId, 0, rCommandURL );
     else if ( rControlType == TOOLBARCONTROLLER_SPINFIELD )
-        pResult = new SpinfieldToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
+        pResult = new SpinfieldToolbarController( rxContext, xFrame, pToolbar, nId, 0, rCommandURL );
     else if ( rControlType == TOOLBARCONTROLLER_IMGBUTTON )
         pResult = new ImageButtonToolbarController( rxContext, xFrame, pToolbar, nId, rCommandURL );
     else if ( rControlType == TOOLBARCONTROLLER_DROPDOWNBOX )
-        pResult = new DropdownToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
+        pResult = new DropdownToolbarController( rxContext, xFrame, pToolbar, nId, 0, rCommandURL );
     else if ( rControlType == TOOLBARCONTROLLER_DROPDOWNBTN )
         pResult = new ToggleButtonToolbarController( rxContext, xFrame, pToolbar, nId,
                                                      ToggleButtonToolbarController::STYLE_DROPDOWNBUTTON, rCommandURL );
@@ -660,7 +631,7 @@ bool ToolBarMerger::RemoveItems(
     return pResult;
 }
 
-void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, CommandToInfoMap& rCommandMap, sal_uInt16 nPos, sal_uInt16 nItemId, const AddonToolbarItem& rItem )
+void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, sal_uInt16 nPos, sal_uInt16 nItemId, const AddonToolbarItem& rItem )
 {
     pToolbar->InsertItem( nItemId, rItem.aLabel, ToolBoxItemBits::NONE, nPos );
     pToolbar->SetItemCommand( nItemId, rItem.aCommandURL );
@@ -668,10 +639,6 @@ void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, CommandToInfoMap& rCom
     pToolbar->SetItemText( nItemId, rItem.aLabel );
     pToolbar->EnableItem( nItemId );
     pToolbar->SetItemState( nItemId, TRISTATE_FALSE );
-
-    CommandToInfoMap::iterator pIter = rCommandMap.find( rItem.aCommandURL );
-    if ( pIter != rCommandMap.end() )
-        pIter->second.nWidth = rItem.nWidth;
 
     // Use the user data to store add-on specific data with the toolbar item
     AddonsParams* pAddonParams = new AddonsParams;

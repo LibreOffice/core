@@ -54,7 +54,6 @@ struct AddonToolbarItem
     OUString aTarget;
     OUString aContext;
     OUString aControlType;
-    sal_uInt16      nWidth;
 };
 
 typedef ::std::vector< AddonToolbarItem > AddonToolbarItemContainer;
@@ -80,8 +79,7 @@ class ToolBarMerger
                                                    OUString& rImageIdentifier,
                                                    OUString& rTarget,
                                                    OUString& rContext,
-                                                   OUString& rControlType,
-                                                   sal_uInt16&      rWidth );
+                                                   OUString& rControlType );
 
         static ReferenceToolbarPathInfo FindReferencePoint( ToolBox*               pToolbar,
                                                             const OUString& rReferencePoint );
@@ -90,7 +88,6 @@ class ToolBarMerger
                                                  ToolBox*                         pToolbar,
                                                  sal_uInt16                       nPos,
                                                  sal_uInt16&                      rItemId,
-                                                 CommandToInfoMap&                rCommandMap,
                                                  const OUString&           rModuleIdentifier,
                                                  const OUString&           rMergeCommand,
                                                  const OUString&           rMergeCommandParameter,
@@ -100,7 +97,6 @@ class ToolBarMerger
                                                 ToolBox*                         pToolbar,
                                                 sal_uInt16                       nPos,
                                                 sal_uInt16&                      rItemId,
-                                                CommandToInfoMap&                rCommandMap,
                                                 const OUString&           rModuleIdentifier,
                                                 const OUString&           rMergeCommand,
                                                 const OUString&           rMergeFallback,
@@ -111,7 +107,6 @@ class ToolBarMerger
                                       sal_uInt16                nPos,
                                       sal_uInt16                nModIndex,
                                       sal_uInt16&               rItemId,
-                                      CommandToInfoMap&         rCommandMap,
                                       const OUString&    rModuleIdentifier,
                                       const AddonToolbarItemContainer& rAddonToolbarItems );
 
@@ -119,7 +114,6 @@ class ToolBarMerger
                                        ToolBox*                  pToolbar,
                                        sal_uInt16                nPos,
                                        sal_uInt16&               rItemId,
-                                       CommandToInfoMap&         rCommandMap,
                                        const OUString&    rModuleIdentifier,
                                        const AddonToolbarItemContainer& rAddonToolbarItems );
 
@@ -133,11 +127,9 @@ class ToolBarMerger
             ToolBox*               pToolbar,
             const OUString& rCommandURL,
             sal_uInt16             nId,
-            sal_uInt16             nWidth,
             const OUString& rControlType );
 
         static void CreateToolbarItem( ToolBox* pToolbox,
-                                       CommandToInfoMap& rCommandMap,
                                        sal_uInt16 nPos,
                                        sal_uInt16 nItemId,
                                        const AddonToolbarItem& rAddonToolbarItem );

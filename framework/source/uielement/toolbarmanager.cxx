@@ -95,7 +95,6 @@ static const char ITEM_DESCRIPTOR_CONTAINER[]  = "ItemDescriptorContainer";
 static const char ITEM_DESCRIPTOR_LABEL[]      = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]       = "Type";
 static const char ITEM_DESCRIPTOR_VISIBLE[]    = "IsVisible";
-static const char ITEM_DESCRIPTOR_WIDTH[]      = "Width";
 static const char ITEM_DESCRIPTOR_STYLE[]      = "Style";
 
 static const char MENUPREFIX[]                 = "private:resource/menubar/";
@@ -792,8 +791,6 @@ void ToolBarManager::CreateControllers()
         bool                     bInit( true );
         bool                     bCreate( true );
         Reference< XStatusListener > xController;
-        CommandToInfoMap::iterator pCommandIter = m_aCommandMap.find( aCommandURL );
-        sal_Int16 nWidth = ( pCommandIter != m_aCommandMap.end() ? pCommandIter->second.nWidth : 0 );
 
         svt::ToolboxController* pController( nullptr );
 
@@ -832,13 +829,6 @@ void ToolBarManager::CreateControllers()
             aPropValue.Value    = uno::makeAny( nId );
             aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 
-            if ( nWidth > 0 )
-            {
-                aPropValue.Name     = "Width";
-                aPropValue.Value    <<= nWidth;
-                aPropertyVector.push_back( makeAny( aPropValue ));
-            }
-
             Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
             xController.set( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext( aCommandURL, aArgs, m_xContext ),
                              UNO_QUERY );
@@ -864,7 +854,6 @@ void ToolBarManager::CreateControllers()
                                                          m_pToolBar,
                                                          aCommandURL,
                                                          nId,
-                                                         nWidth,
                                                          aControlType ), UNO_QUERY );
 
                     xController = xStatusListener;
@@ -946,13 +935,6 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Name     = "Identifier";
                 aPropValue.Value    = uno::makeAny( nId );
                 aPropertyVector.push_back( uno::makeAny( aPropValue ) );
-
-                if ( nWidth > 0 )
-                {
-                    aPropValue.Name     = "Width";
-                    aPropValue.Value    <<= nWidth;
-                    aPropertyVector.push_back( makeAny( aPropValue ));
-                }
 
                 Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
                 xInit->initialize( aArgs );
@@ -1131,7 +1113,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         OUString                    aLabel;
         OUString                    aHelpURL;
         sal_uInt16                  nType( css::ui::ItemType::DEFAULT );
-        sal_uInt16                  nWidth( 0 );
         sal_uInt32                  nStyle( 0 );
 
         Reference< XIndexAccess >   aMenuDesc;
@@ -1188,8 +1169,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         aProp[i].Value >>= nType;
                     else if ( aProp[i].Name == ITEM_DESCRIPTOR_VISIBLE )
                         aProp[i].Value >>= bIsVisible;
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_WIDTH )
-                        aProp[i].Value >>= nWidth;
                     else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
                         aProp[i].Value >>= nStyle;
                 }
@@ -1220,22 +1199,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     }
                     m_pToolBar->EnableItem( nId );
                     m_pToolBar->SetItemState( nId, TRISTATE_FALSE );
-
-                    // Fill command map. It stores all our commands and from what
-                    // image manager we got our image. So we can decide if we have to use an
-                    // image from a notification message.
-                    CommandToInfoMap::iterator pIter = m_aCommandMap.find( aCommandURL );
-                    if ( pIter == m_aCommandMap.end())
-                    {
-                        aCmdInfo.nId = nId;
-                        aCmdInfo.nWidth = nWidth;
-                        const CommandToInfoMap::value_type aValue( aCommandURL, aCmdInfo );
-                        m_aCommandMap.insert( aValue );
-                    }
-                    else
-                    {
-                        pIter->second.aIds.push_back( nId );
-                    }
 
                     if ( !bIsVisible )
                         m_pToolBar->HideItem( nId );
@@ -1298,7 +1261,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                                           m_pToolBar,
                                                           aRefPoint.nPos,
                                                           nItemId,
-                                                          m_aCommandMap,
                                                           m_aModuleIdentifier,
                                                           rInstruction.aMergeCommand,
                                                           rInstruction.aMergeCommandParameter,
@@ -1310,7 +1272,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                                          m_pToolBar,
                                                          aRefPoint.nPos,
                                                          nItemId,
-                                                         m_aCommandMap,
                                                          m_aModuleIdentifier,
                                                          rInstruction.aMergeCommand,
                                                          rInstruction.aMergeFallback,

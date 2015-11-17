@@ -228,11 +228,10 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
         OUString   aContext;
         OUString   aTarget;
         OUString   aControlType;
-        sal_uInt16      nWidth( 0 );
 
         const Sequence< PropertyValue >& rSeq = rAddonToolbar[n];
 
-        ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType, nWidth );
+        ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType );
 
         if ( IsCorrectContext( aModuleIdentifier, aContext ))
         {
@@ -308,7 +307,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 {
                     ::cppu::OWeakObject* pController = nullptr;
 
-                    pController = ToolBarMerger::CreateController( m_xContext, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
+                    pController = ToolBarMerger::CreateController( m_xContext, m_xFrame, m_pToolBar, aURL, nId, aControlType );
                     xController.set( pController, UNO_QUERY );
                 }
 
