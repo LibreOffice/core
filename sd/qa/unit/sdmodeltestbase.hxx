@@ -268,10 +268,10 @@ protected:
     const SdrPage* GetPage( int nPage, sd::DrawDocShellRef xDocShRef )
     {
         SdDrawDocument* pDoc =  xDocShRef->GetDoc() ;
-        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
 
         const SdrPage* pPage = pDoc->GetPage( nPage );
-        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
         return pPage;
     }
 
