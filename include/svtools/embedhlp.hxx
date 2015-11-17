@@ -26,6 +26,7 @@
 #include <vcl/graph.hxx>
 #include <tools/mapunit.hxx>
 #include <rtl/ustring.hxx>
+#include <memory>
 
 namespace comphelper
 {
@@ -45,7 +46,7 @@ struct EmbeddedObjectRef_Impl;
 
 class SVT_DLLPUBLIC EmbeddedObjectRef
 {
-    EmbeddedObjectRef_Impl* mpImpl;
+    std::unique_ptr<EmbeddedObjectRef_Impl> mpImpl;
 
     SVT_DLLPRIVATE SvStream* GetGraphicStream( bool bUpdate ) const;
     SVT_DLLPRIVATE void GetReplacement( bool bUpdate );

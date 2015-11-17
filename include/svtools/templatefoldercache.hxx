@@ -22,6 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
+#include <memory>
 
 
 namespace svt
@@ -60,7 +61,7 @@ namespace svt
     class SVT_DLLPUBLIC TemplateFolderCache
     {
     private:
-        TemplateFolderCacheImpl*        m_pImpl;
+        std::unique_ptr<TemplateFolderCacheImpl>     m_pImpl;
 
     public:
         /** ctor.

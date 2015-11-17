@@ -62,7 +62,7 @@ private:
     Link<SvLBoxButtonData*,void> aLink;
     long                    nWidth;
     long                    nHeight;
-    SvLBoxButtonData_Impl*  pImpl;
+    std::unique_ptr<SvLBoxButtonData_Impl> pImpl;
     bool                    bDataOk;
     SvButtonState           eState;
     std::vector<Image>      aBmps;  // indices s. constants BMP_ ....

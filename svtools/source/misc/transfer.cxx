@@ -1279,7 +1279,6 @@ TransferableDataHelper::~TransferableDataHelper()
         delete mpFormats, mpFormats = nullptr;
         delete mpObjDesc, mpObjDesc = nullptr;
     }
-    delete mpImpl;
 }
 
 

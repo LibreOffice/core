@@ -24,6 +24,7 @@
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <unotools/options.hxx>
+#include <memory>
 
 
 namespace svtools{
@@ -108,7 +109,7 @@ public:
 
 class SVT_DLLPUBLIC EditableColorConfig
 {
-    ColorConfig_Impl*   m_pImpl;
+    std::unique_ptr<ColorConfig_Impl> m_pImpl;
     bool                m_bModified;
 public:
     EditableColorConfig();

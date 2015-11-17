@@ -140,7 +140,6 @@ namespace svt { namespace table
 
     UnoControlTableModel::~UnoControlTableModel()
     {
-        DELETEZ( m_pImpl );
     }
 
 

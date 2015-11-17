@@ -316,7 +316,6 @@ SvtScriptedTextHelper::SvtScriptedTextHelper( const SvtScriptedTextHelper& _rCop
 
 SvtScriptedTextHelper::~SvtScriptedTextHelper()
 {
-    delete mpImpl;
 }
 
 void SvtScriptedTextHelper::SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont )

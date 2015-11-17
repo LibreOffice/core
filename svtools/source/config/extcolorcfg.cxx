@@ -624,7 +624,6 @@ EditableExtendedColorConfig::~EditableExtendedColorConfig()
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
         m_pImpl->Commit();
-    delete m_pImpl;
 }
 
 void EditableExtendedColorConfig::DeleteScheme(const OUString& rScheme )

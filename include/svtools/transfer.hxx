@@ -41,6 +41,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <memory>
 
 class BitmapEx;
 class GDIMetaFile;
@@ -280,7 +281,7 @@ private:
     css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
     DataFlavorExVector*                                               mpFormats;
     TransferableObjectDescriptor*                                     mpObjDesc;
-    TransferableDataHelper_Impl*                                      mpImpl;
+    std::unique_ptr<TransferableDataHelper_Impl>                      mpImpl;
 
 protected:
     void                        InitFormats();

@@ -41,8 +41,6 @@ void SvLBoxButtonData::InitData( bool bImagesFromDefault, bool _bRadioBtn, const
 
     aBmps.resize((int)SvBmp::STATICIMAGE+1);
 
-    pImpl = new SvLBoxButtonData_Impl;
-
     bDataOk = false;
     eState = SV_BUTTON_UNCHECKED;
     pImpl->bDefaultImages = bImagesFromDefault;
@@ -53,22 +51,19 @@ void SvLBoxButtonData::InitData( bool bImagesFromDefault, bool _bRadioBtn, const
 }
 
 SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings )
+    : pImpl( new SvLBoxButtonData_Impl )
 {
     InitData( true, false, pControlForSettings );
 }
 
 SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn )
+    : pImpl( new SvLBoxButtonData_Impl )
 {
     InitData( true, _bRadioBtn, pControlForSettings );
 }
 
 SvLBoxButtonData::~SvLBoxButtonData()
 {
-
-    delete pImpl;
-#ifdef DBG_UTIL
-    pImpl = nullptr;
-#endif
 }
 
 void SvLBoxButtonData::CallLink()

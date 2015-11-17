@@ -303,7 +303,6 @@ EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj ) :
 EmbeddedObjectRef::~EmbeddedObjectRef()
 {
     Clear();
-    delete mpImpl;
 }
 
 void EmbeddedObjectRef::Assign( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )

@@ -90,7 +90,6 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
 
 SvtFontSubstConfig::~SvtFontSubstConfig()
 {
-    delete pImpl;
 }
 
 void SvtFontSubstConfig::Notify( const css::uno::Sequence< OUString >& )

@@ -532,7 +532,6 @@ EditableColorConfig::~EditableColorConfig()
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
         m_pImpl->Commit();
-    delete m_pImpl;
 }
 
 uno::Sequence< OUString >  EditableColorConfig::GetSchemeNames() const

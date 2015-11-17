@@ -21,6 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <unotools/configitem.hxx>
+#include <memory>
 
 struct SvtFontSubstConfig_Impl;
 
@@ -37,7 +38,7 @@ class SVT_DLLPUBLIC SvtFontSubstConfig : public utl::ConfigItem
 {
 private:
     bool                        bIsEnabled;
-    SvtFontSubstConfig_Impl*    pImpl;
+    std::unique_ptr<SvtFontSubstConfig_Impl> pImpl;
 
     virtual void                ImplCommit() override;
 

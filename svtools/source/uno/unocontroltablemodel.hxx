@@ -35,6 +35,7 @@
 #include <rtl/ref.hxx>
 
 #include <boost/noncopyable.hpp>
+#include <memory>
 
 
 namespace svt { namespace table
@@ -49,7 +50,7 @@ namespace svt { namespace table
     class UnoControlTableModel : public ITableModel, public ITableDataSort
     {
     private:
-        UnoControlTableModel_Impl*     m_pImpl;
+        std::unique_ptr<UnoControlTableModel_Impl>  m_pImpl;
 
     public:
         UnoControlTableModel();

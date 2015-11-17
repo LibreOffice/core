@@ -22,6 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <memory>
 
 
 class OutputDevice;
@@ -39,7 +40,7 @@ This class provides drawing text with different script types on any output devic
 class SVT_DLLPUBLIC SvtScriptedTextHelper
 {
 private:
-    SvtScriptedTextHelper_Impl* mpImpl;             /// Implementation of class functionality.
+    std::unique_ptr<SvtScriptedTextHelper_Impl> mpImpl;             /// Implementation of class functionality.
 
     SvtScriptedTextHelper&      operator=( const SvtScriptedTextHelper& ) = delete;
 

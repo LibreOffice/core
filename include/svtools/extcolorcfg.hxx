@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
+#include <memory>
 
 
 namespace svtools {
@@ -82,7 +83,7 @@ public:
 
 class SVT_DLLPUBLIC EditableExtendedColorConfig
 {
-    ExtendedColorConfig_Impl*   m_pImpl;
+    std::unique_ptr<ExtendedColorConfig_Impl> m_pImpl;
     bool                        m_bModified;
 public:
     EditableExtendedColorConfig();

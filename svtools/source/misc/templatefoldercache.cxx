@@ -832,7 +832,6 @@ namespace svt
 
     TemplateFolderCache::~TemplateFolderCache( )
     {
-        DELETEZ( m_pImpl );
     }
 
 
