@@ -109,7 +109,7 @@ namespace cairo
 
     VclPtr<VirtualDevice> Gtk3Surface::createVirtualDevice() const
     {
-        return VclPtrInstance<VirtualDevice>(nullptr, Size(1, 1), 0);
+        return VclPtrInstance<VirtualDevice>(nullptr, Size(1, 1), DeviceFormat::FULLCOLOR);
     }
 
 }

@@ -86,12 +86,12 @@ namespace dxcanvas
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(hdc);
-        VirtualDevice aVirtualDevice(&aSystemGraphicsData, Size(1, 1), 0);
+        ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(&aSystemGraphicsData, Size(1, 1), DeviceFormat::FULLCOLOR);
 
         // disable font antialiasing - GDI does not handle alpha
         // surfaces properly.
         if( bAlphaSurface )
-            aVirtualDevice.SetAntialiasing(AntialiasingFlags::DisableText);
+            xVirtualDevice->SetAntialiasing(AntialiasingFlags::DisableText);
 
         if(rText.Length)
         {
@@ -107,7 +107,7 @@ namespace dxcanvas
                     rRenderState.DeviceColor,
                     mxGraphicDevice->getDeviceColorSpace());
             aColor.SetTransparency(0);
-            aVirtualDevice.SetTextColor(aColor);
+            xVirtualDevice->SetTextColor(aColor);
 
             // create the font
             const ::com::sun::star::rendering::FontRequest& rFontRequest = rCanvasFont->getFontRequest();
@@ -134,7 +134,7 @@ namespace dxcanvas
             // adjust to stretched font
             if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
             {
-                const Size aSize = aVirtualDevice.GetFontMetric( aFont ).GetSize();
+                const Size aSize = xVirtualDevice->GetFontMetric( aFont ).GetSize();
                 const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
                 double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
 
@@ -147,7 +147,7 @@ namespace dxcanvas
             }
 
             // set font
-            aVirtualDevice.SetFont(aFont);
+            xVirtualDevice->SetFont(aFont);
 
             // create world transformation matrix
             ::basegfx::B2DHomMatrix aWorldTransform;
@@ -172,7 +172,7 @@ namespace dxcanvas
 
                 aClipPoly.transform(aMatrix);
                 const vcl::Region& rClipRegion = vcl::Region(::tools::PolyPolygon(aClipPoly));
-                aVirtualDevice.IntersectClipRegion(rClipRegion);
+                xVirtualDevice->IntersectClipRegion(rClipRegion);
             }
 
             if(rRenderState.Clip.is())
@@ -180,7 +180,7 @@ namespace dxcanvas
                 ::basegfx::B2DPolyPolygon aClipPoly(dxcanvas::tools::polyPolygonFromXPolyPolygon2D(rRenderState.Clip));
                 aClipPoly.transform(aWorldTransform);
                 const vcl::Region& rClipRegion = vcl::Region(::tools::PolyPolygon(aClipPoly));
-                aVirtualDevice.IntersectClipRegion(rClipRegion);
+                xVirtualDevice->IntersectClipRegion(rClipRegion);
             }
 
             // set world transform
@@ -212,7 +212,7 @@ namespace dxcanvas
                     pDXArray[i] = basegfx::fround( rLogicalAdvancements[i] );
 
                 // draw the String
-                aVirtualDevice.DrawTextArray( aEmptyPoint,
+                xVirtualDevice->DrawTextArray( aEmptyPoint,
                                               aText,
                                               pDXArray.get(),
                                               rText.StartPosition,
@@ -221,7 +221,7 @@ namespace dxcanvas
             else
             {
                 // draw the String
-                aVirtualDevice.DrawText( aEmptyPoint,
+                xVirtualDevice->DrawText( aEmptyPoint,
                                          aText,
                                          rText.StartPosition,
                                          rText.Length );
@@ -242,7 +242,7 @@ namespace dxcanvas
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(GetDC( NULL ));
-        VirtualDevice aVirtualDevice(&aSystemGraphicsData, Size(1, 1), 0);
+        ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(&aSystemGraphicsData, Size(1, 1), DeviceFormat::FULLCOLOR);
 
         // create the font
         const ::com::sun::star::rendering::FontRequest& rFontRequest = rCanvasFont->getFontRequest();
@@ -263,7 +263,7 @@ namespace dxcanvas
         // adjust to stretched font
         if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
         {
-            const Size aSize = aVirtualDevice.GetFontMetric( aFont ).GetSize();
+            const Size aSize = xVirtualDevice->GetFontMetric( aFont ).GetSize();
             const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
             double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
 
@@ -276,11 +276,11 @@ namespace dxcanvas
         }
 
         // set font
-        aVirtualDevice.SetFont(aFont);
+        xVirtualDevice->SetFont(aFont);
 
         // need metrics for Y offset, the XCanvas always renders
         // relative to baseline
-        const ::FontMetric& aMetric( aVirtualDevice.GetFontMetric() );
+        const ::FontMetric& aMetric( xVirtualDevice->GetFontMetric() );
 
         const sal_Int32 nAboveBaseline( -aMetric.GetIntLeading() - aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
@@ -294,7 +294,7 @@ namespace dxcanvas
         else
         {
             return geometry::RealRectangle2D( 0, nAboveBaseline,
-                                              aVirtualDevice.GetTextWidth(
+                                              xVirtualDevice->GetTextWidth(
                                                   rText.Text,
                                                   ::canvas::tools::numeric_cast<sal_uInt16>(rText.StartPosition),
                                                   ::canvas::tools::numeric_cast<sal_uInt16>(rText.Length) ),

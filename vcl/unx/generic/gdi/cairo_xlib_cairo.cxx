@@ -271,7 +271,7 @@ namespace cairo
         return VclPtr<VirtualDevice>(
             VclPtr<VirtualDevice>::Create(&aSystemGraphicsData,
                               Size(width, height),
-                              std::max(getDepth(), 0)));
+                              getFormat()));
     }
 
     /**
@@ -305,6 +305,26 @@ namespace cairo
             return static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth;
 
         return -1;
+    }
+
+    /**
+     * Surface::getFormat:  Get the device format of the Canvas surface.
+     *
+     * @return color format
+     **/
+    DeviceFormat X11Surface::getFormat() const
+    {
+        if (!maSysData.pRenderFormat)
+            return DeviceFormat::FULLCOLOR;
+        switch (static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth)
+        {
+            case 1:
+                return DeviceFormat::BITMASK;
+            case 8:
+                return DeviceFormat::GRAYSCALE;
+            default:
+                return DeviceFormat::FULLCOLOR;
+        }
     }
 }
 

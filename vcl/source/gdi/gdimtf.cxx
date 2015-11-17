@@ -892,7 +892,7 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
                                      const Gradient&      rGrad     )
 {
     // Generate comment, GradientEx and Gradient actions (within DrawGradient)
-    ScopedVclPtrInstance< VirtualDevice > aVDev(  rMapDev, 0  );
+    ScopedVclPtrInstance< VirtualDevice > aVDev(rMapDev, DeviceFormat::FULLCOLOR);
     aVDev->EnableOutput( false );
     GDIMetaFile aGradMtf;
 

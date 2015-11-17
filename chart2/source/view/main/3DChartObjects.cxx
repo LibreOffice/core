@@ -76,7 +76,8 @@ const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
     if(itr != maTextCache.end())
         return *itr->second;
 
-    ScopedVclPtrInstance< VirtualDevice > pDevice(*Application::GetDefaultDevice(), 0, 0);
+    ScopedVclPtrInstance< VirtualDevice > pDevice(*Application::GetDefaultDevice(),
+                                                  DeviceFormat::FULLCOLOR, DeviceFormat::FULLCOLOR);
     vcl::Font aFont;
     if(bIs3dText)
         aFont = vcl::Font("Brillante St",Size(0,0));

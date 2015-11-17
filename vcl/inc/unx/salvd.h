@@ -45,7 +45,7 @@ class X11SalVirtualDevice : public SalVirtualDevice
 
 public:
     X11SalVirtualDevice(SalGraphics *pGraphics, long &nDX, long &nDY,
-            sal_uInt16 nBitCount, const SystemGraphicsData *pData, X11SalGraphics* pNewGraphics);
+            DeviceFormat eFormat, const SystemGraphicsData *pData, X11SalGraphics* pNewGraphics);
 
     virtual ~X11SalVirtualDevice();
 

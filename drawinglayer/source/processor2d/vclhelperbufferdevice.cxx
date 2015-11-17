@@ -54,7 +54,7 @@ namespace
         VDevBuffer();
         virtual ~VDevBuffer();
 
-        VirtualDevice* alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, sal_Int32 nBits);
+        VirtualDevice* alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, bool bMonoChrome);
         void free(VirtualDevice& rDevice);
 
         // Timer virtuals
@@ -87,13 +87,12 @@ namespace
         }
     }
 
-    VirtualDevice* VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, sal_Int32 nBits)
+    VirtualDevice* VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, bool bMonoChrome)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         VirtualDevice* pRetval = 0;
 
-        if (nBits == 0)
-            nBits = rOutDev.GetBitCount();
+        sal_Int32 nBits = bMonoChrome ? 1 : rOutDev.GetBitCount();
 
         bool bOkay(false);
         if(!maFreeBuffers.empty())
@@ -104,7 +103,7 @@ namespace
             {
                 assert(*a && "Empty pointer in VDevBuffer (!)");
 
-                if(nBits == (*a)->GetBitCount())
+                if (nBits == (*a)->GetBitCount())
                 {
                     // candidate is valid due to bit depth
                     if(aFound != maFreeBuffers.end())
@@ -185,8 +184,7 @@ namespace
         // no success yet, create new buffer
         if(!pRetval)
         {
-            pRetval = VclPtr<VirtualDevice>::Create(rOutDev, nBits);
-            maDeviceTemplates[pRetval] = &rOutDev;
+            pRetval = VclPtr<VirtualDevice>::Create(rOutDev, bMonoChrome ? DeviceFormat::BITMASK : DeviceFormat::FULLCOLOR);
             pRetval->SetOutputSizePixel(rSizePixel, bClear);
         }
         else
@@ -268,9 +266,9 @@ namespace drawinglayer
             // rendering, especially shadows, is broken on iOS unless
             // we pass 'true' here. Are virtual devices always de
             // facto cleared when created on other platforms?
-            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 0);
+            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
 #else
-            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, 0);
+            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false);
 #endif
 
             // #i93485# assert when copying from window to VDev is used
@@ -386,7 +384,7 @@ namespace drawinglayer
         assert(mpContent && "impBufferDevice: No content, check isVisible() before accessing (!)");
         if (!mpMask)
         {
-            mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 1);
+            mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, true);
             mpMask->SetMapMode(mpContent->GetMapMode());
 
             // do NOT copy AA flag for mask!
@@ -400,7 +398,7 @@ namespace drawinglayer
         OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
         if(!mpAlpha)
         {
-            mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 0);
+            mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
             mpAlpha->SetMapMode(mpContent->GetMapMode());
 
             // copy AA flag for new target; masking needs to be smooth

@@ -68,10 +68,24 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
 
 SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        long &nDX, long &nDY,
-                                                       sal_uInt16 nBitCount,
+                                                       DeviceFormat eFormat,
                                                        const SystemGraphicsData* pData )
 {
     WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
+
+    sal_uInt16 nBitCount;
+    switch (eFormat)
+    {
+        case DeviceFormat::BITMASK:
+            nBitCount = 1;
+            break;
+        case DeviceFormat::GRAYSCALE:
+            nBitCount = 8;
+            break;
+        default:
+            nBitCount = 0;
+            break;
+    }
 
     HDC     hDC = NULL;
     HBITMAP hBmp = NULL;

@@ -1001,14 +1001,14 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
     SystemGraphicsData aData;
     aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
     // the Size argument is irrelevant, I hope
-    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), (sal_uInt16)0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::FULLCOLOR);
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #elif defined(ANDROID)
     InitSvpForLibreOfficeKit();
 
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)32) ;
+    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::FULLCOLOR) ;
 
     boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
 
@@ -1023,7 +1023,7 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
 #else
     InitSvpForLibreOfficeKit();
 
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)32) ;
+    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::FULLCOLOR) ;
 
     // Set background to transparent by default.
     memset(pBuffer, 0, nCanvasWidth * nCanvasHeight * 4);

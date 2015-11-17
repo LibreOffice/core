@@ -22,6 +22,7 @@
 
 #include <basebmp/bitmapdevice.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/salgtype.hxx>
 #include <vcl/outdev.hxx>
 
 class SalVirtualDevice;
@@ -39,10 +40,11 @@ private:
     VclPtr<VirtualDevice>  mpNext;
     sal_uInt16          mnBitCount;
     bool                mbScreenComp;
-    sal_Int8            mnAlphaDepth;
+    DeviceFormat        meFormat;
+    DeviceFormat        meAlphaFormat;
     sal_uInt8           meRefDevMode;
 
-    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
+    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr );
     SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                      const basebmp::RawMemorySharedArray &pBuffer,
                                                      const bool bTopDown );
@@ -79,7 +81,7 @@ public:
         indicate: take default screen depth. Only 0, 1 and 8
         are allowed here, with 1 denoting binary mask and 8 a graylevel mask.
      */
-    explicit            VirtualDevice( sal_uInt16 nBitCount = 0 );
+    explicit            VirtualDevice(DeviceFormat eFormat = DeviceFormat::FULLCOLOR);
 
     /** Create a virtual device of size 1x1
 
@@ -90,8 +92,8 @@ public:
         Bit depth of the generated virtual device. Use 0 here, to
         indicate: take default screen depth.
      */
-     explicit           VirtualDevice( const OutputDevice& rCompDev,
-                                       sal_uInt16 nBitCount = 0 );
+     explicit           VirtualDevice(const OutputDevice& rCompDev,
+                                      DeviceFormat eFormat = DeviceFormat::FULLCOLOR);
 
     /** Create a virtual device  of size 1x1 with alpha channel
 
@@ -109,14 +111,14 @@ public:
         are allowed here, with 1 denoting binary mask.
      */
      explicit           VirtualDevice( const OutputDevice& rCompDev,
-                                       sal_uInt16 nBitCount, sal_uInt16 nAlphaBitCount );
+                                       DeviceFormat eFormat, DeviceFormat eAlphaFormat);
 
     /** Create a virtual device using an existing system dependent device or graphics context
         Any rendering will happen directly on the context and not on any intermediate bitmap.
         Note: This might not be supported on all platforms !
     */
     explicit            VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
-                                      sal_uInt16 nBitCount);
+                                      DeviceFormat eFormat);
 
     virtual             ~VirtualDevice();
     virtual void        dispose() SAL_OVERRIDE;

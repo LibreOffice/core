@@ -35,32 +35,42 @@
 #include "quartz/utils.h"
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
-    long &nDX, long &nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
+                                                        long &nDX, long &nDY,
+                                                        DeviceFormat eFormat,
+                                                        const SystemGraphicsData *pData )
 {
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
 
 #ifdef IOS
     if( pData )
-        return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+    {
+        return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
+                                         nDX, nDY, eFormat, pData );
+    }
     else
     {
-        AquaSalVirtualDevice* pNew = new AquaSalVirtualDevice( NULL, nDX, nDY, nBitCount, NULL );
+        AquaSalVirtualDevice* pNew = new AquaSalVirtualDevice( NULL, nDX, nDY, eFormat, NULL );
         pNew->SetSize( nDX, nDY );
         return pNew;
     }
 #else
-    return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+    return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
+                                     nDX, nDY, eFormat, pData );
 #endif
 }
 
-AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
-:   mbGraphicsUsed( false )
-,   mxBitmapContext( NULL )
-,   mnBitmapDepth( 0 )
-,   mxLayer( NULL )
+AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY,
+                                            DeviceFormat eFormat, const SystemGraphicsData *pData )
+  : mbGraphicsUsed( false )
+  , mxBitmapContext( nullptr )
+  , mnBitmapDepth( 0 )
+  , mxLayer( nullptr )
 {
-    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this << " size=(" << nDX << "x" << nDY << ") bitcount=" << nBitCount << " pData=" << pData << " context=" << (pData ? pData->rCGContext : 0) );
+    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this
+              << " size=(" << nDX << "x" << nDY << ") bitcount=" << static_cast<int>(eFormat) <<
+              " pData=" << pData << " context=" << (pData ? pData->rCGContext : nullptr) );
+
     if( pGraphic && pData && pData->rCGContext )
     {
         // Create virtual device based on existing SystemGraphicsData
@@ -92,7 +102,18 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
         // create empty new virtual device
         mbForeignContext = false;           // the mxContext is created within VCL
         mpGraphics = new AquaSalGraphics(); // never fails
-        mnBitmapDepth = nBitCount;
+        switch (eFormat)
+        {
+            case DeviceFormat::BITMASK:
+                mnBitmapDepth = 1;
+                break;
+            case DeviceFormat::GRAYSCALE:
+                mnBitmapDepth = 8;
+                break;
+            default:
+                mnBitmapDepth = 0;
+                break;
+        }
 #ifdef MACOSX
         // inherit resolution from reference device
         if( pGraphic )
