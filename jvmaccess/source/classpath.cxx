@@ -74,7 +74,7 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
             }
             jvalue arg;
             arg.l = environment->NewString(
-                static_cast< jchar const * >(url.getStr()),
+                reinterpret_cast< jchar const * >(url.getStr()),
                 static_cast< jsize >(url.getLength()));
             if (arg.l == nullptr) {
                 return nullptr;
