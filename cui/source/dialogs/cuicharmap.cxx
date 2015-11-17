@@ -63,9 +63,10 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     //lock the size request of this widget to the width of all possible entries
     fillAllSubsets(*m_pSubsetLB);
     m_pSubsetLB->set_width_request(m_pSubsetLB->get_preferred_size().Width());
-    get(m_pCharCodeText, "charcodeft");
+    get(m_pHexCodeText, "hexvalue");
+    get(m_pDecimalCodeText, "decimalvalue");
     //lock the size request of this widget to the width of the original .ui string
-    m_pCharCodeText->set_width_request(m_pCharCodeText->get_preferred_size().Width());
+    m_pHexCodeText->set_width_request(m_pHexCodeText->get_preferred_size().Width());
     get(m_pSymbolText, "symboltext");
 
     const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSet, FN_PARAM_1, false);
@@ -117,7 +118,8 @@ void SvxCharacterMap::dispose()
     m_pSubsetLB.clear();
     m_pSymbolText.clear();
     m_pShowChar.clear();
-    m_pCharCodeText.clear();
+    m_pHexCodeText.clear();
+    m_pDecimalCodeText.clear();
     SfxModalDialog::dispose();
 }
 
@@ -368,6 +370,8 @@ void SvxCharacterMap::init()
     m_pShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
     m_pShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
     m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
+    m_pDecimalCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, DecimalCodeChangeHdl ) );
+    m_pHexCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
 
     if( SvxShowCharSet::getSelectedChar() == ' ')
         m_pOKBtn->Disable();
@@ -538,6 +542,8 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
 IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
 {
     OUString aText;
+    OUString aHexText;
+    OUString aDecimalText;
     sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
     bool bSelect = (cChar > 0);
 
@@ -558,19 +564,57 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
     m_pShowChar->SetText( aText );
     m_pShowChar->Update();
 
-    // show char code
+    // show char codes
     if ( bSelect )
     {
+        // Get the hexadecimal code
         char aBuf[32];
-        snprintf( aBuf, sizeof(aBuf), "U+%04X", static_cast<unsigned>(cChar) );
-        if( cChar < 0x0100 )
-            snprintf( aBuf+6, sizeof(aBuf)-6, " (%u)", static_cast<unsigned>(cChar) );
-        aText = OUString::createFromAscii(aBuf);
+        snprintf( aBuf, sizeof(aBuf), "%X", static_cast<unsigned>(cChar) );
+        aHexText = OUString::createFromAscii(aBuf);
+        // Get the decimal code
+        char aDecBuf[32];
+        snprintf( aDecBuf, sizeof(aDecBuf), "%u", static_cast<unsigned>(cChar) );
+        aDecimalText = OUString::createFromAscii(aDecBuf);
     }
-    m_pCharCodeText->SetText( aText );
+
+    // Update the hex and decimal codes only if necessary
+    if (m_pHexCodeText->GetText() != aHexText)
+        m_pHexCodeText->SetText( aHexText );
+    if (m_pDecimalCodeText->GetText() != aDecimalText)
+        m_pDecimalCodeText->SetText( aDecimalText );
 }
 
+void SvxCharacterMap::selectCharByCode(Radix radix)
+{
+    OUString aCodeString;
+    switch(radix)
+    {
+        case Radix::decimal:
+            aCodeString = m_pDecimalCodeText->GetText();
+            break;
+        case Radix::hexadecimal:
+            aCodeString = m_pHexCodeText->GetText();
+            break;
+    }
+    // Convert the code back to a character using the appropriate radix
+    sal_UCS4 cChar = aCodeString.toUInt32(static_cast<sal_Int16> (radix));
+    // Use FontCharMap::HasChar(sal_UCS4 cChar) to see if the desired character is in the font
+    FontCharMapPtr pFontCharMap(new FontCharMap());
+    m_pShowSet->GetFontCharMap(pFontCharMap);
+    if (pFontCharMap->HasChar(cChar))
+        // Select the corresponding character
+        SetChar(cChar);
+}
 
+IMPL_LINK_NOARG_TYPED(SvxCharacterMap, DecimalCodeChangeHdl, Edit&, void)
+{
+    selectCharByCode(Radix::decimal);
+}
+
+IMPL_LINK_NOARG_TYPED(SvxCharacterMap, HexCodeChangeHdl, Edit&, void)
+{
+    selectCharByCode(Radix::hexadecimal);
+}
 
 IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
 {

@@ -804,5 +804,8 @@
     <glade-widget-class title="Ruby RadioButton" name="cuilo-RubyRadioButton"
                         generic-name="RubyRadioButton" parent="GtkRadioButton"
                         icon-name="widget-gtk-radiobutton"/>
+    <glade-widget-class title="Show Text" name="cuilo-SvxShowText"
+                        generic-name="ShowText" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
   </glade-widget-classes>
 </glade-catalog>
