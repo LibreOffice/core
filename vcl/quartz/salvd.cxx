@@ -38,7 +38,7 @@
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
                                                         long &nDX, long &nDY,
-                                                        sal_uInt16 nBitCount,
+                                                        DeviceFormat eFormat,
                                                         const SystemGraphicsData *pData )
 {
     // #i92075# can be called first in a thread
@@ -48,29 +48,29 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     if( pData )
     {
         return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
-                                         nDX, nDY, nBitCount, pData );
+                                         nDX, nDY, eFormat, pData );
     }
     else
     {
-        AquaSalVirtualDevice* pNew = new AquaSalVirtualDevice( NULL, nDX, nDY, nBitCount, NULL );
+        AquaSalVirtualDevice* pNew = new AquaSalVirtualDevice( NULL, nDX, nDY, eFormat, NULL );
         pNew->SetSize( nDX, nDY );
         return pNew;
     }
 #else
     return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ),
-                                     nDX, nDY, nBitCount, pData );
+                                     nDX, nDY, eFormat, pData );
 #endif
 }
 
 AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY,
-                                            sal_uInt16 nBitCount, const SystemGraphicsData *pData )
+                                            DeviceFormat eFormat, const SystemGraphicsData *pData )
   : mbGraphicsUsed( false )
   , mxBitmapContext( nullptr )
   , mnBitmapDepth( 0 )
   , mxLayer( nullptr )
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this
-              << " size=(" << nDX << "x" << nDY << ") bitcount=" << nBitCount <<
+              << " size=(" << nDX << "x" << nDY << ") bitcount=" << static_cast<int>(eFormat) <<
               " pData=" << pData << " context=" << (pData ? pData->rCGContext : nullptr) );
 
     if( pGraphic && pData && pData->rCGContext )
@@ -110,7 +110,18 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
         // create empty new virtual device
         mbForeignContext = false;           // the mxContext is created within VCL
         mpGraphics = new AquaSalGraphics(); // never fails
-        mnBitmapDepth = nBitCount;
+        switch (eFormat)
+        {
+            case DeviceFormat::BITMASK:
+                mnBitmapDepth = 1;
+                break;
+            case DeviceFormat::GRAYSCALE:
+                mnBitmapDepth = 8;
+                break;
+            default:
+                mnBitmapDepth = 0;
+                break;
+        }
 #ifdef MACOSX
         // inherit resolution from reference device
         if( pGraphic )

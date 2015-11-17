@@ -241,7 +241,7 @@ namespace cppcanvas
                     // render our content into an appropriately sized
                     // VirtualDevice with alpha channel
                     ScopedVclPtrInstance<VirtualDevice> aVDev(
-                        *::Application::GetDefaultDevice(), 0, 0 );
+                        *::Application::GetDefaultDevice(), DeviceFormat::FULLCOLOR, DeviceFormat::FULLCOLOR );
                     aVDev->SetOutputSizePixel( aBitmapSizePixel );
                     aVDev->SetMapMode();
 

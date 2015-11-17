@@ -261,9 +261,9 @@ DocumentDeviceManager::~DocumentDeviceManager()
 VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
 {
 #ifdef IOS
-    VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create( 8 );
+    VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create(DeviceFormat::GRAYSCALE);
 #else
-    VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create( 1 );
+    VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create(DeviceFormat::BITMASK);
 #endif
 
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );

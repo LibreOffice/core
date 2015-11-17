@@ -28,6 +28,7 @@
 #include "tools/solar.h"
 #include "displayconnectiondispatch.hxx"
 #include "vcl/dllapi.h"
+#include "vcl/salgtype.hxx"
 #include <sal/types.h>
 
 #include "rtl/ref.hxx"
@@ -90,7 +91,7 @@ public:
     virtual SalVirtualDevice*
                             CreateVirtualDevice( SalGraphics* pGraphics,
                                                  long &rDX, long &rDY,
-                                                 sal_uInt16 nBitCount, const SystemGraphicsData *pData = nullptr ) = 0;
+                                                 DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) = 0;
 
     // Printer
     // pSetupData->mpDriverData can be 0
