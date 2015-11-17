@@ -65,7 +65,8 @@ namespace
     void append(rtl::OUStringBuffer & buffer, CFStringRef string) {
         CFIndex n = CFStringGetLength(string);
         CFStringGetCharacters(
-            string, CFRangeMake(0, n), buffer.appendUninitialized(n));
+            string, CFRangeMake(0, n),
+            reinterpret_cast<UniChar *>(buffer.appendUninitialized(n)));
     }
 }
 
