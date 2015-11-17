@@ -200,6 +200,8 @@ public class FileUtilities {
     }
 
     static void sortFiles(List<IFile> files, int sortMode) {
+        if (files == null)
+            return;
         switch (sortMode) {
             case SORT_AZ:
                 Collections.sort(files , new Comparator<IFile>() {
