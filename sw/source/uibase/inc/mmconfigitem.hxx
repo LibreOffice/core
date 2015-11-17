@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <tools/resary.hxx>
+#include <memory>
 #include <set>
 #include <swdbdata.hxx>
 #include "swdllapi.h"
@@ -37,6 +38,7 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
+class SwMailMergeConfigItem_Impl;
 class SwView;
 namespace sw { namespace mark { class IMark; }}
 
@@ -48,6 +50,7 @@ struct SwDocMergeInfo
 
 class SW_DLLPUBLIC SwMailMergeConfigItem
 {
+    std::unique_ptr<SwMailMergeConfigItem_Impl> m_pImpl;
     //session information - not stored in configuration
     bool m_bAddressInserted;
     bool m_bMergeDone;
