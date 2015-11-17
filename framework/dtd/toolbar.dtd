@@ -29,11 +29,8 @@
 <!ATTLIST toolbar:toolbaritem
 	xlink:href CDATA #REQUIRED
 	toolbar:visible %boolean; "true"
-	toolbar:userdefined %boolean; "false"
 	toolbar:text CDATA #IMPLIED
-	toolbar:width %numeric; "0"
 	toolbar:style CDATA #IMPLIED
-	toolbar:bitmap CDATA #IMPLIED
 	toolbar:helpid CDATA #IMPLIED
 >
 <!ELEMENT toolbar:toolbarspace EMPTY>

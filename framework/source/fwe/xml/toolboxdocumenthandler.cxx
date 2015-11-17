@@ -59,7 +59,6 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
                                       OUString&                        rLabel,
                                       OUString&                        rHelpURL,
                                       sal_Int16&                       rStyle,
-                                      sal_Int16&                       rWidth,
                                       bool&                            rVisible,
                                       sal_Int16&                       rType )
 {
@@ -78,8 +77,6 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
             rProp[i].Value >>= rType;
         else if ( rProp[i].Name == ITEM_DESCRIPTOR_VISIBLE )
             rProp[i].Value >>= rVisible;
-        else if ( rProp[i].Name == "Width" )
-            rProp[i].Value >>= rWidth;
         else if ( rProp[i].Name == ITEM_DESCRIPTOR_STYLE )
             rProp[i].Value >>= rStyle;
     }
@@ -118,12 +115,8 @@ ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_CO
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ELEMENT_TOOLBARBREAK        },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ELEMENT_TOOLBARSEPARATOR    },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_TEXT              },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_BITMAP            },
     { OReadToolBoxDocumentHandler::TB_NS_XLINK,     ATTRIBUTE_URL               },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMBITS          },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_VISIBLE           },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_WIDTH             },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_USER              },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_HELPID            },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMSTYLE         },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_UINAME            },
@@ -289,9 +282,8 @@ throw(  SAXException, RuntimeException, std::exception )
                 OUString        aLabel;
                 OUString        aCommandURL;
                 OUString        aHelpURL;
-                OUString        aBitmapName;
                 sal_uInt16      nItemBits( 0 );
-                bool        bVisible( true );
+                bool            bVisible( true );
 
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
@@ -306,22 +298,12 @@ throw(  SAXException, RuntimeException, std::exception )
                             }
                             break;
 
-                            case TB_ATTRIBUTE_BITMAP:
-                            {
-                                aBitmapName = xAttribs->getValueByIndex( n );
-                            }
                             break;
 
                             case TB_ATTRIBUTE_URL:
                             {
                                 bAttributeURL   = true;
                                 aCommandURL     = xAttribs->getValueByIndex( n ).intern();
-                            }
-                            break;
-
-                            case TB_ATTRIBUTE_ITEMBITS:
-                            {
-                                nItemBits = (sal_uInt16)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
@@ -379,8 +361,7 @@ throw(  SAXException, RuntimeException, std::exception )
                                 while ( nIndex >= 0 );
                             }
                             break;
-                            case TB_ATTRIBUTE_USER:
-                            case TB_ATTRIBUTE_WIDTH:
+
                             default:
                             break;
                         }
@@ -714,12 +695,11 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
             OUString    aHelpURL;
             bool    bVisible( true );
             sal_Int16   nType( css::ui::ItemType::DEFAULT );
-            sal_Int16   nWidth( 0 );
             sal_Int16   nStyle( 0 );
 
-            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, nStyle, nWidth, bVisible, nType );
+            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, nStyle, bVisible, nType );
             if ( nType == css::ui::ItemType::DEFAULT )
-                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, nStyle, nWidth, bVisible );
+                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, nStyle, bVisible );
             else if ( nType == css::ui::ItemType::SEPARATOR_SPACE )
                 WriteToolBoxSpace();
             else if ( nType == css::ui::ItemType::SEPARATOR_LINE )
@@ -742,7 +722,6 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const OUString& rLabel,
     const OUString& rHelpURL,
     sal_Int16       nStyle,
-    sal_Int16       nWidth,
     bool        bVisible )
 throw ( SAXException, RuntimeException )
 {
@@ -795,13 +774,6 @@ throw ( SAXException, RuntimeException )
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_ITEMSTYLE,
                              m_aAttributeType,
                              aValue );
-    }
-
-    if ( nWidth > 0 )
-    {
-        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_WIDTH,
-                             m_aAttributeType,
-                             OUString::number( nWidth) );
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
