@@ -32,7 +32,7 @@ OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexCharacter( const OUStr
     sal_Unicode ch=rIndexEntry.toChar();
     sal_uInt16 first = idx[ ch >> 8 ];
     if (first == 0xFFFF) {
-        // using alphanumeric index for non-define stirng
+        // using alphanumeric index for non-define string
         return OUString(&idxStr[(ch & 0xFF00) ? 0 : ch], 1);
     } else {
         const sal_Unicode *idx2 = strstr(implementationName, "syllable") ? syllable : consonant;

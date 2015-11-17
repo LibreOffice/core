@@ -126,7 +126,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
         }
     }
 
-    // using alphanumeric index for non-define stirng
+    // using alphanumeric index for non-define string
     return OUString(&idxStr[(ch & 0xFFFFFF00) ? 0 : ch], 1);
 }
 
