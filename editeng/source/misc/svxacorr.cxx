@@ -2661,7 +2661,6 @@ SvxAutocorrWordList::SvxAutocorrWordList() : mpImpl(new Impl) {}
 SvxAutocorrWordList::~SvxAutocorrWordList()
 {
     mpImpl->DeleteAndDestroyAll();
-    delete mpImpl;
 }
 
 void SvxAutocorrWordList::DeleteAndDestroyAll()

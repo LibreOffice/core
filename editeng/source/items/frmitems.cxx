@@ -3546,7 +3546,6 @@ SvxBrushItem::SvxBrushItem( const SvxBrushItem& rItem ) :
 SvxBrushItem::~SvxBrushItem()
 {
     delete pImpl->pGraphicObject;
-    delete pImpl;
 }
 
 

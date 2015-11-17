@@ -244,7 +244,6 @@ EditTextObject::EditTextObject( const EditTextObject& r ) :
 
 EditTextObject::~EditTextObject()
 {
-    delete mpImpl;
 }
 
 sal_Int32 EditTextObject::GetParagraphCount() const

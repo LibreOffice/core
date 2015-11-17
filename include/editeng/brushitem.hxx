@@ -23,6 +23,7 @@
 #include <vcl/wall.hxx>
 #include <tools/link.hxx>
 #include <editeng/editengdllapi.h>
+#include <memory>
 
 // class SvxBrushItem ----------------------------------------------------
 
@@ -46,7 +47,7 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
 {
     Color               aColor;
     sal_Int32           nShadingValue;
-    SvxBrushItem_Impl*  pImpl;
+    std::unique_ptr<SvxBrushItem_Impl>  pImpl;
     OUString            maStrLink;
     OUString            maStrFilter;
     SvxGraphicPosition  eGraphicPos;

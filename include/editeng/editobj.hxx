@@ -32,6 +32,7 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 
 #include <vector>
+#include <memory>
 
 class SfxItemPool;
 class SfxStyleSheetPool;
@@ -62,7 +63,7 @@ class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
     friend class editeng::FieldUpdaterImpl;
     friend class ImpEditEngine;
 
-    EditTextObjectImpl* mpImpl;
+    std::unique_ptr<EditTextObjectImpl> mpImpl;
 
     EditTextObject&      operator=( const EditTextObject& ) = delete;
 

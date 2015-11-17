@@ -32,6 +32,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <editeng/mutxhelp.hxx>
+#include <memory>
 
 class SvxUnoFieldData_Impl;
 class SfxItemPropertySet;
@@ -51,7 +52,7 @@ private:
     css::uno::Reference< css::text::XTextRange > mxAnchor;
     const SfxItemPropertySet*   mpPropSet;
     sal_Int32                   mnServiceId;
-    SvxUnoFieldData_Impl*       mpImpl;
+    std::unique_ptr<SvxUnoFieldData_Impl>        mpImpl;
 
 protected:
     css::uno::Sequence< css::uno::Type > maTypeSequence;

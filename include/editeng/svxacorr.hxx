@@ -133,7 +133,7 @@ public:
 class EDITENG_DLLPUBLIC SvxAutocorrWordList
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     SvxAutocorrWordList( const SvxAutocorrWordList& ) = delete;
     const SvxAutocorrWordList& operator= ( const SvxAutocorrWordList& ) = delete;

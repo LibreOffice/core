@@ -11,6 +11,7 @@
 #define INCLUDED_EDITENG_FIELDUPDATER_HXX
 
 #include <editeng/editengdllapi.h>
+#include <memory>
 
 class EditTextObject;
 
@@ -24,7 +25,7 @@ class FieldUpdaterImpl;
  */
 class EDITENG_DLLPUBLIC FieldUpdater
 {
-    FieldUpdaterImpl* mpImpl;
+    std::unique_ptr<FieldUpdaterImpl> mpImpl;
 
     FieldUpdater(); // disabled
 public:

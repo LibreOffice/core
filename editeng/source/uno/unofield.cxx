@@ -377,7 +377,6 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
 
 SvxUnoTextField::~SvxUnoTextField() throw()
 {
-    delete mpImpl;
 }
 
 SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()

@@ -61,7 +61,6 @@ FieldUpdater::FieldUpdater(const FieldUpdater& r) : mpImpl(new FieldUpdaterImpl(
 
 FieldUpdater::~FieldUpdater()
 {
-    delete mpImpl;
 }
 
 void FieldUpdater::updateTableFields(int nTab)
