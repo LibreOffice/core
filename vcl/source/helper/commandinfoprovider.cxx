@@ -214,6 +214,25 @@ Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName, boo
     return Image();
 }
 
+sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
+    const OUString& rsCommandName,
+    const Reference<frame::XFrame>& rxFrame)
+{
+    SetFrame(rxFrame);
+
+    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName));
+    for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
+    {
+        if (aProperties[nIndex].Name == "Properties")
+        {
+            sal_Int32 nValue;
+            aProperties[nIndex].Value >>= nValue;
+            return nValue;
+        }
+    }
+    return 0;
+}
+
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 {
     if (rxFrame != mxCachedDataFrame)
