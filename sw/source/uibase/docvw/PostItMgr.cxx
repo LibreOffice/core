@@ -1865,10 +1865,11 @@ bool SwPostItMgr::HasNotes() const
 
 unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
 {
+    bool bEnableMapMode = !mpWrtShell->GetOut()->IsMapModeEnabled();
     sal_uInt16 nZoom = mpWrtShell->GetViewOptions()->GetZoom();
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && !bEnableMapMode)
     {
-        // The output device contains the real wanted scale factor.
+        // The output device is the tile and contains the real wanted scale factor.
         double fScaleX = mpWrtShell->GetOut()->GetMapMode().GetScaleX();
         nZoom = fScaleX * 100;
     }
@@ -1877,7 +1878,15 @@ unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
     if (bPx)
         return aWidth;
     else
-        return mpWrtShell->GetOut()->PixelToLogic(Size(aWidth, 0)).Width();
+    {
+        if (bEnableMapMode)
+            // The output device is the window.
+            mpWrtShell->GetOut()->EnableMapMode();
+        long nRet = mpWrtShell->GetOut()->PixelToLogic(Size(aWidth, 0)).Width();
+        if (bEnableMapMode)
+            mpWrtShell->GetOut()->EnableMapMode(false);
+        return nRet;
+    }
 }
 
 unsigned long SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
