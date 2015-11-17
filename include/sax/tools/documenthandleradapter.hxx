@@ -88,12 +88,12 @@ namespace sax
         ;
 
     protected:
-        virtual void SAL_CALL
+        void SAL_CALL
         setDelegate(const css::uno::Reference< css::xml::sax::XDocumentHandler >& delegate)
         {
             m_handler = delegate;
         }
-        virtual css::uno::Reference< css::xml::sax::XDocumentHandler > SAL_CALL
+        css::uno::Reference< css::xml::sax::XDocumentHandler > SAL_CALL
         getDelegate()
         {
             return m_handler;
@@ -210,12 +210,12 @@ namespace sax
         {
         }
 
-        virtual void SAL_CALL
+        void SAL_CALL
         setDelegate(const css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >& delegate)
         {
             m_handler = delegate;
         }
-        virtual css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > SAL_CALL
+        css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > SAL_CALL
         getDelegate()
         {
             return m_handler;

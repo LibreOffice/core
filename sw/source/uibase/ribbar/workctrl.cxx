@@ -625,7 +625,7 @@ public:
     virtual ~SwJumpToSpecificBox_Impl();
 
 protected:
-    virtual void    Select();
+    void            Select();
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 

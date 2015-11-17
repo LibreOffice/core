@@ -90,31 +90,31 @@ public:
     virtual css::uno::Sequence< Currency2 > SAL_CALL getAllCurrencies2( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< FormatElement > SAL_CALL getAllFormats( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< Implementation > SAL_CALL getCollatorImplementations( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException, std::exception);
+    OUString SAL_CALL getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException, std::exception);
     virtual css::uno::Sequence< OUString > SAL_CALL getTransliterations( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual ForbiddenCharacters SAL_CALL getForbiddenCharacters( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getReservedWord( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override ;
-    virtual css::uno::Sequence< OUString > SAL_CALL getBreakIteratorRules( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) ;
+    css::uno::Sequence< OUString > SAL_CALL getBreakIteratorRules( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) ;
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getAllInstalledLocaleNames() throw(css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSearchOptions( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getCollationOptions( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::uno::Sequence< beans::PropertyValue > > SAL_CALL getContinuousNumberingLevels( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
-    virtual css::uno::Sequence< css::uno::Reference< container::XIndexAccess > > SAL_CALL getOutlineNumberingLevels( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
+    css::uno::Sequence< css::uno::Sequence< beans::PropertyValue > > SAL_CALL getContinuousNumberingLevels( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
+    css::uno::Sequence< css::uno::Reference< container::XIndexAccess > > SAL_CALL getOutlineNumberingLevels( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
 
     // XLocaleData4
     virtual css::uno::Sequence< OUString > SAL_CALL getDateAcceptancePatterns( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
 
     // following methods are used by indexentry service
-    virtual css::uno::Sequence< OUString > SAL_CALL getIndexAlgorithm( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
-    virtual OUString SAL_CALL getDefaultIndexAlgorithm( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
-    virtual OUString SAL_CALL getIndexKeysByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
-    virtual OUString SAL_CALL getIndexModuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
-    virtual css::uno::Sequence< UnicodeScript > SAL_CALL getUnicodeScripts( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
-    virtual css::uno::Sequence< OUString > SAL_CALL getFollowPageWords( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
-    virtual bool SAL_CALL hasPhonetic( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
-    virtual bool SAL_CALL isPhonetic( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
-    virtual OUString SAL_CALL getHangingCharacters( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
+    css::uno::Sequence< OUString > SAL_CALL getIndexAlgorithm( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
+    OUString SAL_CALL getDefaultIndexAlgorithm( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
+    OUString SAL_CALL getIndexKeysByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
+    OUString SAL_CALL getIndexModuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
+    css::uno::Sequence< UnicodeScript > SAL_CALL getUnicodeScripts( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
+    css::uno::Sequence< OUString > SAL_CALL getFollowPageWords( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
+    bool SAL_CALL hasPhonetic( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException);
+    bool SAL_CALL isPhonetic( const css::lang::Locale& rLocale, const OUString& algorithm ) throw(css::uno::RuntimeException);
+    OUString SAL_CALL getHangingCharacters( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception);
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;

@@ -73,9 +73,6 @@ namespace canvas
          */
         virtual sal_uInt32 getStride() const = 0;
 
-        /** Get format of the color buffer
-         */
-        virtual Format getFormat() const = 0;
     };
 
     typedef std::shared_ptr< IColorBuffer > IColorBufferSharedPtr;

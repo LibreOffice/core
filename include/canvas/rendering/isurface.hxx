@@ -68,8 +68,6 @@ namespace canvas
         virtual bool update( const ::basegfx::B2IPoint& rDestPos,
                              const ::basegfx::B2IRange& rSourceRect,
                              IColorBuffer&              rSource ) = 0;
-
-        virtual ::basegfx::B2IVector getSize() = 0;
     };
 
     typedef std::shared_ptr< ISurface > ISurfaceSharedPtr;

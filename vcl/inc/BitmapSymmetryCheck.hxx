@@ -20,10 +20,10 @@ public:
     BitmapSymmetryCheck();
     virtual ~BitmapSymmetryCheck();
 
-    bool check(Bitmap& rBitmap);
+    static bool check(Bitmap& rBitmap);
 
 protected:
-    virtual bool checkImpl(BitmapReadAccess* pReadAccess);
+    static bool checkImpl(BitmapReadAccess* pReadAccess);
 };
 
 #endif // INCLUDED_VCL_INC_BITMAPSYMMETRYCHECK_HXX

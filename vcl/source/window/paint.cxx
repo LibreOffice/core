@@ -607,8 +607,6 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
         aHelper.DoPaint(pRegion);
     else
         mpWindowImpl->mnPaintFlags = 0;
-
-    PostPaint(*this);
 }
 
 void Window::ImplCallOverlapPaint()
@@ -1025,10 +1023,6 @@ void Window::ImplUpdateAll( bool bOverlapWindows )
 }
 
 void Window::PrePaint(vcl::RenderContext& /*rRenderContext*/)
-{
-}
-
-void Window::PostPaint(vcl::RenderContext& /*rRenderContext*/)
 {
 }
 

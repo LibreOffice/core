@@ -54,8 +54,6 @@ protected:
     SbxBase& operator=( const SbxBase& );
     virtual ~SbxBase();
 
-    virtual bool LoadPrivateData( SvStream&, sal_uInt16 );
-    virtual bool StorePrivateData( SvStream& ) const;
     virtual sal_uInt32 GetCreator() const { return 0;   }
     virtual sal_uInt16 GetVersion() const { return 0;   }
     virtual sal_uInt16 GetSbxId() const   { return 0; }
