@@ -1824,13 +1824,13 @@ void ScViewFunc::SetWidthOrHeight(
     if (rRanges.empty())
         return;
 
-    // use view's mark if none specified
-    if ( !pMarkData )
-        pMarkData = &GetViewData().GetMarkData();
+    // Use view's mark if none specified, but do not modify the original data,
+    // i.e. no MarkToMulti() on that.
+    ScMarkData aMarkData( pMarkData ? *pMarkData : GetViewData().GetMarkData());
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    SCTAB nFirstTab = pMarkData->GetFirstSelected();
+    SCTAB nFirstTab = aMarkData.GetFirstSelected();
     SCTAB nCurTab = GetViewData().GetTabNo();
     SCTAB nTab;
     if (bRecord && !rDoc.IsUndoEnabled())
@@ -1839,7 +1839,7 @@ void ScViewFunc::SetWidthOrHeight(
     ScDocShellModificator aModificator( *pDocSh );
 
     bool bAllowed = true;
-    ScMarkData::iterator itr = pMarkData->begin(), itrEnd = pMarkData->end();
+    ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
     for (; itr != itrEnd && bAllowed; ++itr)
     {
         for (size_t i = 0, n = rRanges.size(); i < n && bAllowed; ++i)
@@ -1886,7 +1886,7 @@ void ScViewFunc::SetWidthOrHeight(
         rDoc.BeginDrawUndo();                          // Drawing Updates
 
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        itr = pMarkData->begin();
+        itr = aMarkData.begin();
         for (; itr != itrEnd; ++itr)
         {
             if (bWidth)
@@ -1918,12 +1918,12 @@ void ScViewFunc::SetWidthOrHeight(
     }
 
     if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
-        pMarkData->MarkToMulti();
+        aMarkData.MarkToMulti();
 
     bool bShow = nSizeTwips > 0 || eMode != SC_SIZE_DIRECT;
     bool bOutline = false;
 
-    itr = pMarkData->begin();
+    itr = aMarkData.begin();
     for (; itr != itrEnd; ++itr)
     {
         nTab = *itr;
@@ -2036,7 +2036,7 @@ void ScViewFunc::SetWidthOrHeight(
     {
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoWidthOrHeight(
-                pDocSh, *pMarkData, nStart, nCurTab, nEnd, nCurTab,
+                pDocSh, aMarkData, nStart, nCurTab, nEnd, nCurTab,
                 pUndoDoc, aUndoRanges, pUndoTab, eMode, nSizeTwips, bWidth));
     }
 
@@ -2044,7 +2044,7 @@ void ScViewFunc::SetWidthOrHeight(
     // the new heights and widths.
     GetViewData().GetView()->RefreshZoom();
 
-    itr = pMarkData->begin();
+    itr = aMarkData.begin();
     for (; itr != itrEnd; ++itr)
         rDoc.UpdatePageBreaks( *itr );
 
@@ -2052,7 +2052,7 @@ void ScViewFunc::SetWidthOrHeight(
 
     if (bPaint)
     {
-        itr = pMarkData->begin();
+        itr = aMarkData.begin();
         for (; itr != itrEnd; ++itr)
         {
             nTab = *itr;
@@ -2087,7 +2087,7 @@ void ScViewFunc::SetWidthOrHeight(
         if (ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh))
         {
             ScRangeList aChangeRanges;
-            itr = pMarkData->begin();
+            itr = aMarkData.begin();
             for (; itr != itrEnd; ++itr)
             {
                 nTab = *itr;
