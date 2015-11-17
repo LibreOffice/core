@@ -98,7 +98,7 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
             {
                 ++nUnique;
                 sFormName = sDOCXForm;
-                sFormName += OUString(nUnique);
+                sFormName += OUString::number(nUnique);
             }
 
             uno::Reference<uno::XInterface> xForm(getServiceFactory()->createInstance("com.sun.star.form.component.Form"));
