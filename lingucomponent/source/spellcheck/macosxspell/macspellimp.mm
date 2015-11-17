@@ -236,11 +236,11 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
     {
         aEnc = 0;
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        NSString* aNSStr = [[NSString alloc] initWithCharacters: nWord.getStr() length: nWord.getLength()];
-        NSString* aLang = [[NSString alloc] initWithCharacters: rLocale.Language.getStr() length: rLocale.Language.getLength()];
+        NSString* aNSStr = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(nWord.getStr()) length: nWord.getLength()];
+        NSString* aLang = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Language.getStr()) length: rLocale.Language.getLength()];
         if(rLocale.Country.getLength()>0)
         {
-            NSString* aCountry = [[NSString alloc] initWithCharacters: rLocale.Country.getStr() length: rLocale.Country.getLength()];
+            NSString* aCountry = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Country.getStr()) length: rLocale.Country.getLength()];
             NSString* aTag = @"_";
             NSString* aTaggedCountry = [aTag stringByAppendingString:aCountry];
             [aLang autorelease];
@@ -339,11 +339,11 @@ Reference< XSpellAlternatives >
     if (n)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        NSString* aNSStr = [[NSString alloc] initWithCharacters: nWord.getStr() length: nWord.getLength()];
-        NSString* aLang = [[NSString alloc] initWithCharacters: rLocale.Language.getStr() length: rLocale.Language.getLength() ];
+        NSString* aNSStr = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(nWord.getStr()) length: nWord.getLength()];
+        NSString* aLang = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Language.getStr()) length: rLocale.Language.getLength() ];
         if(rLocale.Country.getLength()>0)
         {
-            NSString* aCountry = [[NSString alloc] initWithCharacters: rLocale.Country.getStr() length: rLocale.Country.getLength() ];
+            NSString* aCountry = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Country.getStr()) length: rLocale.Country.getLength() ];
             NSString* aTag = @"_";
             NSString* aTaggedCountry = [aTag stringByAppendingString:aCountry];
             [aLang autorelease];
