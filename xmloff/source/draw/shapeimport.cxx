@@ -111,7 +111,8 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,
         const uno::Reference< frame::XModel>& rModel,
         SvXMLImportPropertyMapper *pExtMapper )
-:   mpPageContext(nullptr),
+:   mpImpl( new XMLShapeImportHelperImpl() ),
+    mpPageContext(nullptr),
     mxModel(rModel),
 
     mpPropertySetMapper(nullptr),
@@ -136,7 +137,6 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
     mrImporter( rImporter )
 {
-    mpImpl = new XMLShapeImportHelperImpl();
     mpImpl->mpSortContext = nullptr;
 
     // #88546# init to sal_False
@@ -224,8 +224,6 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
         mpAutoStylesContext->Clear();
         mpAutoStylesContext->ReleaseRef();
     }
-
-    delete mpImpl;
 }
 
 const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()

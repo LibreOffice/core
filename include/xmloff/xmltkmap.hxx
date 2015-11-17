@@ -24,6 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <xmloff/xmltoken.hxx>
+#include <memory>
 
 
 class SvXMLTokenMap_Impl;
@@ -40,7 +41,7 @@ struct SvXMLTokenMapEntry
 
 class XMLOFF_DLLPUBLIC SvXMLTokenMap
 {
-    SvXMLTokenMap_Impl      *m_pImpl;
+    std::unique_ptr<SvXMLTokenMap_Impl>  m_pImpl;
 
 public:
 

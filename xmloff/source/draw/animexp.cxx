@@ -257,15 +257,13 @@ public:
 };
 
 XMLAnimationsExporter::XMLAnimationsExporter( XMLShapeExport* pShapeExp )
+    : mpImpl( new AnimExpImpl )
 {
-    mpImpl = new AnimExpImpl;
     mpImpl->mxShapeExp = pShapeExp;
 }
 
 XMLAnimationsExporter::~XMLAnimationsExporter()
 {
-    delete mpImpl;
-    mpImpl = nullptr;
 }
 
 void XMLAnimationsExporter::prepare( Reference< XShape > xShape, SvXMLExport& )

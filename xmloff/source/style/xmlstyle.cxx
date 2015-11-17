@@ -787,7 +787,6 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
 SvXMLStylesContext::~SvXMLStylesContext()
 {
     delete mpStyleStylesElemTokenMap;
-    delete mpImpl;
 }
 
 SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,

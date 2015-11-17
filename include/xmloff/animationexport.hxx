@@ -27,6 +27,7 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <salhelper/simplereferenceobject.hxx>
+#include <memory>
 
 class SvXMLExport;
 
@@ -36,7 +37,7 @@ class AnimationsExporterImpl;
 
 class XMLOFF_DLLPUBLIC AnimationsExporter : public salhelper::SimpleReferenceObject
 {
-    AnimationsExporterImpl*	mpImpl;
+    std::unique_ptr<AnimationsExporterImpl>  mpImpl;
 
 public:
     AnimationsExporter( SvXMLExport& rExport, const css::uno::Reference< css::beans::XPropertySet >& xPageProps  );

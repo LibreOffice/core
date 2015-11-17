@@ -262,13 +262,12 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 }
 
 SvXMLAutoStylePoolP::SvXMLAutoStylePoolP( SvXMLExport& rExport )
+    : pImpl( new SvXMLAutoStylePoolP_Impl( rExport ) )
 {
-    pImpl = new SvXMLAutoStylePoolP_Impl( rExport );
 }
 
 SvXMLAutoStylePoolP::~SvXMLAutoStylePoolP()
 {
-    delete pImpl;
 }
 
 SvXMLExport& SvXMLAutoStylePoolP::GetExport() const

@@ -84,9 +84,9 @@ SvXMLAttributeList::SvXMLAttributeList( const SvXMLAttributeList &r ) :
 
 SvXMLAttributeList::SvXMLAttributeList( const uno::Reference<
         xml::sax::XAttributeList> & rAttrList )
-    : sType( GetXMLToken(XML_CDATA) )
+    : m_pImpl( new SvXMLAttributeList_Impl),
+      sType( GetXMLToken(XML_CDATA) )
 {
-    m_pImpl = new SvXMLAttributeList_Impl;
 
     SvXMLAttributeList* pImpl =
         SvXMLAttributeList::getImplementation( rAttrList );
@@ -139,16 +139,15 @@ uno::Reference< ::com::sun::star::util::XCloneable >  SvXMLAttributeList::create
 
 
 SvXMLAttributeList::SvXMLAttributeList()
-    : sType( GetXMLToken(XML_CDATA) )
+    : m_pImpl( new SvXMLAttributeList_Impl ),
+      sType( GetXMLToken(XML_CDATA) )
 {
-    m_pImpl = new SvXMLAttributeList_Impl;
 }
 
 
 
 SvXMLAttributeList::~SvXMLAttributeList()
 {
-    delete m_pImpl;
 }
 
 

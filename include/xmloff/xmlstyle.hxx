@@ -27,6 +27,7 @@
 #include <rsc/rscsfx.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
+#include <memory>
 
 class SvXMLStylesContext_Impl;
 class SvXMLUnitConverter;
@@ -154,7 +155,7 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
     const OUString msParaStyleServiceName;
     const OUString msTextStyleServiceName;
 
-    SvXMLStylesContext_Impl *mpImpl;
+    std::unique_ptr<SvXMLStylesContext_Impl> mpImpl;
     SvXMLTokenMap           *mpStyleStylesElemTokenMap;
 
 

@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <cppuhelper/implbase3.hxx>
+#include <memory>
 
 struct SvXMLAttributeList_Impl;
 
@@ -40,7 +41,7 @@ class XMLOFF_DLLPUBLIC SvXMLAttributeList : public ::cppu::WeakImplHelper3<
         css::util::XCloneable,
         css::lang::XUnoTunnel>
 {
-    SvXMLAttributeList_Impl *m_pImpl;
+    std::unique_ptr<SvXMLAttributeList_Impl> m_pImpl;
 
 public:
     SvXMLAttributeList();

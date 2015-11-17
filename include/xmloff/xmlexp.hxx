@@ -61,6 +61,7 @@
 #include <tools/fldunit.hxx>
 
 #include <list>
+#include <memory>
 #include <o3tl/typed_flags_set.hxx>
 
 class SvXMLNamespaceMap;
@@ -115,7 +116,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
              css::container::XNamed,
              css::lang::XUnoTunnel>
 {
-    SvXMLExport_Impl            *mpImpl;            // dummy
+    std::unique_ptr<SvXMLExport_Impl>            mpImpl;            // dummy
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     OUString m_implementationName;

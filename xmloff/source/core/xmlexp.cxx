@@ -591,8 +591,6 @@ SvXMLExport::~SvXMLExport()
 
     if (mxEventListener.is() && mxModel.is())
         mxModel->removeEventListener(mxEventListener);
-
-    delete mpImpl;
 }
 
 // XExporter

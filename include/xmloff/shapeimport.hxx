@@ -35,6 +35,7 @@
 #include <xmloff/table/XMLTableImport.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <vector>
+#include <memory>
 
 class SvXMLImport;
 class SvXMLImportContext;
@@ -268,7 +269,7 @@ struct XMLShapeImportPageContextImpl;
 
 class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceObject
 {
-    XMLShapeImportHelperImpl*   mpImpl;
+    std::unique_ptr<XMLShapeImportHelperImpl> mpImpl;
 
     XMLShapeImportPageContextImpl*  mpPageContext;
 

@@ -21,12 +21,13 @@
 
 
 #include <xmloff/prhdlfac.hxx>
+#include <memory>
 
 class XMLTextPropertyHandlerFactory_Impl;
 
 class XMLTextPropertyHandlerFactory : public XMLPropertyHandlerFactory
 {
-    XMLTextPropertyHandlerFactory_Impl *pImpl;
+    std::unique_ptr<XMLTextPropertyHandlerFactory_Impl> pImpl;
 
 public:
 

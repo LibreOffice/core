@@ -537,7 +537,6 @@ SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
 
 SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
 {
-    delete mpImpl;
 }
 
 void SvXMLExportPropertyMapper::ChainExportMapper(

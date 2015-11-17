@@ -129,9 +129,9 @@ namespace xmloff
             const OUString& _rSubmissionID
         );
 
+        virtual ~OFormLayerXMLImport_Impl();
     protected:
         explicit OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
-        virtual ~OFormLayerXMLImport_Impl();
 
         /** start importing the forms of the given page
         */

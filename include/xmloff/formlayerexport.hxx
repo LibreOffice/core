@@ -29,6 +29,7 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlexppr.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace awt {
     class XControlModel;
@@ -55,7 +56,7 @@ namespace xmloff
         /// our export context
         SvXMLExport&                m_rContext;
         // impl class
-        OFormLayerXMLExport_Impl*   m_pImpl;
+        std::unique_ptr<OFormLayerXMLExport_Impl> m_pImpl;
 
     protected:
         virtual ~OFormLayerXMLExport();
@@ -173,7 +174,7 @@ namespace xmloff
     class XMLOFF_DLLPUBLIC OOfficeFormsExport
     {
     private:
-        OFormsRootExport*   m_pImpl;
+        std::unique_ptr<OFormsRootExport>  m_pImpl;
 
     public:
         OOfficeFormsExport( SvXMLExport& _rExp );

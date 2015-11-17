@@ -33,14 +33,12 @@ namespace xmloff
     //= OFormLayerXMLExport
 
     OFormLayerXMLImport::OFormLayerXMLImport(SvXMLImport& _rImporter)
-        :m_pImpl(nullptr)
+        : m_pImpl( new OFormLayerXMLImport_Impl(_rImporter) )
     {
-        m_pImpl = new OFormLayerXMLImport_Impl(_rImporter);
     }
 
     OFormLayerXMLImport::~OFormLayerXMLImport()
     {
-        delete m_pImpl;
     }
 
     void OFormLayerXMLImport::setAutoStyleContext(SvXMLStylesContext* _pNewContext)

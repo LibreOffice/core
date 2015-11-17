@@ -28,6 +28,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <memory>
 
 enum class SvXmlExportFlags {
     NONE        = 0x0000,
@@ -52,7 +53,7 @@ class SvXMLExport;
 class XMLOFF_DLLPUBLIC SvXMLExportPropertyMapper : public salhelper::SimpleReferenceObject
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
 protected:
 

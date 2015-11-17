@@ -22,6 +22,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
+#include <memory>
 
 class ShowsImpImpl;
 
@@ -29,7 +30,7 @@ class ShowsImpImpl;
 
 class SdXMLShowsContext : public SvXMLImportContext
 {
-    ShowsImpImpl*   mpImpl;
+    std::unique_ptr<ShowsImpImpl>   mpImpl;
 
 public:
 

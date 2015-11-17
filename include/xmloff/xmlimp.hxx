@@ -57,6 +57,7 @@
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
@@ -140,7 +141,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
     css::uno::Reference< css::container::XNameContainer > mxNumberStyles;
     css::uno::Reference< css::lang::XEventListener > mxEventListener;
 
-    SvXMLImport_Impl            *mpImpl;            // dummy
+    std::unique_ptr<SvXMLImport_Impl>  mpImpl;            // dummy
 
     SvXMLNamespaceMap           *mpNamespaceMap;
     SvXMLUnitConverter          *mpUnitConv;

@@ -112,8 +112,6 @@ XMLPropertyHandlerFactory::~XMLPropertyHandlerFactory()
 {
     for( CacheMap::iterator pPos = mpImpl->maHandlerCache.begin(); pPos != mpImpl->maHandlerCache.end(); ++pPos )
         delete pPos->second;
-
-    delete mpImpl;
 }
 
 // Interface

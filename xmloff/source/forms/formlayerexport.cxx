@@ -50,8 +50,6 @@ namespace xmloff
 
     OFormLayerXMLExport::~OFormLayerXMLExport()
     {
-        delete m_pImpl;
-        m_pImpl = nullptr;
     }
 
     bool OFormLayerXMLExport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
@@ -118,14 +116,12 @@ namespace xmloff
 
     //= OOfficeFormsExport
     OOfficeFormsExport::OOfficeFormsExport( SvXMLExport& _rExp )
-        :m_pImpl(nullptr)
+        :m_pImpl( new OFormsRootExport(_rExp) )
     {
-        m_pImpl = new OFormsRootExport(_rExp);
     }
 
     OOfficeFormsExport::~OOfficeFormsExport()
     {
-        delete m_pImpl;
     }
 
 }   // namespace xmloff

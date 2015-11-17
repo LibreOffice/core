@@ -58,23 +58,6 @@ public:
 
 class SvXMLTokenMap_Impl : public std::set<SvXMLTokenMapEntry_Impl> {};
 
-SvXMLTokenMapEntry_Impl const* lcl_Find(
-        SvXMLTokenMap_Impl const* pImpl,
-        sal_uInt16 nKeyPrefix,
-        const OUString& rLName )
-{
-    SvXMLTokenMapEntry_Impl const* pRet = nullptr;
-    SvXMLTokenMapEntry_Impl aTst( nKeyPrefix, rLName );
-
-    SvXMLTokenMap_Impl::iterator it = pImpl->find( aTst );
-    if (it != pImpl->end())
-    {
-        pRet = &*it;
-    }
-
-    return pRet;
-}
-
 SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap )
     : m_pImpl( new SvXMLTokenMap_Impl )
 {
@@ -87,14 +70,20 @@ SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap )
 
 SvXMLTokenMap::~SvXMLTokenMap()
 {
-    delete m_pImpl;
 }
 
 sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
                                const OUString& rLName ) const
 {
-    SvXMLTokenMapEntry_Impl const*const pEntry(
-            lcl_Find(m_pImpl, nKeyPrefix, rLName));
+    SvXMLTokenMapEntry_Impl const* pEntry = nullptr;
+    SvXMLTokenMapEntry_Impl aTst( nKeyPrefix, rLName );
+
+    SvXMLTokenMap_Impl::iterator it = m_pImpl->find( aTst );
+    if (it != m_pImpl->end())
+    {
+        pEntry = &*it;
+    }
+
     if( pEntry )
         return pEntry->GetToken();
     else

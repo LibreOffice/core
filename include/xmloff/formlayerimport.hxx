@@ -28,6 +28,7 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlimppr.hxx>
+#include <memory>
 
 class SvXMLImport;
 class SvXMLImportContext;
@@ -48,7 +49,7 @@ namespace xmloff
     class XMLOFF_DLLPUBLIC OFormLayerXMLImport
                 :public ::salhelper::SimpleReferenceObject
     {
-        OFormLayerXMLImport_Impl*   m_pImpl;
+        std::unique_ptr<OFormLayerXMLImport_Impl>   m_pImpl;
 
     public:
         OFormLayerXMLImport(SvXMLImport& _rImporter);

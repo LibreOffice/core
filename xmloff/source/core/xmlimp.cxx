@@ -464,8 +464,6 @@ SvXMLImport::~SvXMLImport() throw ()
     delete mpNumImport;
     delete mpProgressBarHelper;
 
-    delete mpImpl;
-
     if (mxEventListener.is() && mxModel.is())
         mxModel->removeEventListener(mxEventListener);
 }

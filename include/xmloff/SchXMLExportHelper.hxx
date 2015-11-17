@@ -31,6 +31,7 @@
 
 #include <queue>
 #include <vector>
+#include <memory>
 
 class SvXMLAutoStylePoolP;
 class SvXMLExport;
@@ -60,7 +61,7 @@ private:
     void operator =(SchXMLExportHelper &) = delete;
 
 private:
-    SchXMLExportHelper_Impl* m_pImpl;
+    std::unique_ptr<SchXMLExportHelper_Impl> m_pImpl;
     friend class SchXMLExport;
 };
 

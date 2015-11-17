@@ -150,7 +150,6 @@ XMLPropertySetMapper::XMLPropertySetMapper(
 
 XMLPropertySetMapper::~XMLPropertySetMapper()
 {
-    delete mpImpl;
 }
 
 void XMLPropertySetMapper::AddMapperEntry(

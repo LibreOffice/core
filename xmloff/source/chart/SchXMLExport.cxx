@@ -986,7 +986,6 @@ SchXMLExportHelper::SchXMLExportHelper( SvXMLExport& rExport, SvXMLAutoStylePool
 
 SchXMLExportHelper::~SchXMLExportHelper()
 {
-    delete m_pImpl;
 }
 
 const OUString& SchXMLExportHelper::getChartCLSID()

@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/xmlprmap.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <memory>
 
 class SvXMLExportPropertyMapper;
 class SvXMLNamespaceMap;
@@ -40,7 +41,7 @@ class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public salhelper::SimpleReferenceOb
     friend class Test;
     friend class SvXMLAutoStylePoolP_Impl;
 
-    SvXMLAutoStylePoolP_Impl    *pImpl;
+    std::unique_ptr<SvXMLAutoStylePoolP_Impl>    pImpl;
 
 protected:
 

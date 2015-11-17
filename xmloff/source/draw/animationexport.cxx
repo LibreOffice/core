@@ -1674,13 +1674,12 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
 }
 
 AnimationsExporter::AnimationsExporter( SvXMLExport& rExport, const Reference< XPropertySet >& xPageProps )
+    : mpImpl( new AnimationsExporterImpl( rExport, xPageProps ) )
 {
-    mpImpl = new AnimationsExporterImpl( rExport, xPageProps );
 }
 
 AnimationsExporter::~AnimationsExporter()
 {
-    delete mpImpl;
 }
 
 void AnimationsExporter::prepare( Reference< XAnimationNode > xRootNode )

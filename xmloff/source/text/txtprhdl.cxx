@@ -1448,7 +1448,6 @@ XMLTextPropertyHandlerFactory::XMLTextPropertyHandlerFactory() :
 
 XMLTextPropertyHandlerFactory::~XMLTextPropertyHandlerFactory()
 {
-    delete pImpl;
 }
 
 const XMLPropertyHandler *XMLTextPropertyHandlerFactory::GetPropertyHandler(

@@ -63,9 +63,9 @@ public:
 
 
 SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+:   SvXMLImportContext(rImport, nPrfx, rLocalName),
+    mpImpl(new ShowsImpImpl( rImport ) )
 {
-    mpImpl = new ShowsImpImpl( rImport );
 
     Reference< XCustomPresentationSupplier > xShowsSupplier( rImport.GetModel(), UNO_QUERY );
     if( xShowsSupplier.is() )
@@ -186,8 +186,6 @@ SdXMLShowsContext::~SdXMLShowsContext()
         aAny <<= mpImpl->maCustomShowName;
         mpImpl->mxPresProps->setPropertyValue("CustomShow", aAny );
     }
-
-    delete mpImpl;
 }
 
 SvXMLImportContext * SdXMLShowsContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
