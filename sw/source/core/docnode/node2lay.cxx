@@ -421,13 +421,13 @@ SwFrm* SwNode2LayImpl::GetFrm( const Point* pDocPos,
 }
 
 SwNode2Layout::SwNode2Layout( const SwNode& rNd, sal_uLong nIdx )
+    : pImpl( new SwNode2LayImpl( rNd, nIdx, false ) )
 {
-    pImpl = new SwNode2LayImpl( rNd, nIdx, false );
 }
 
 SwNode2Layout::SwNode2Layout( const SwNode& rNd )
+    : pImpl( new SwNode2LayImpl( rNd, rNd.GetIndex(), true ) )
 {
-    pImpl = new SwNode2LayImpl( rNd, rNd.GetIndex(), true );
     pImpl->SaveUpperFrms();
 }
 
@@ -449,7 +449,6 @@ SwLayoutFrm* SwNode2Layout::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
 
 SwNode2Layout::~SwNode2Layout()
 {
-    delete pImpl;
 }
 
 SwFrm* SwNode2Layout::GetFrm( const Point* pDocPos,

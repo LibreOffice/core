@@ -32,8 +32,8 @@ public:
 };
 
 SvXMLItemMapEntries::SvXMLItemMapEntries( SvXMLItemMapEntry* pEntries )
+   : mpImpl( new SvXMLItemMapEntries_impl )
 {
-    mpImpl = new SvXMLItemMapEntries_impl;
     mpImpl->mpEntries = pEntries;
 
     mpImpl->mnCount = 0;
@@ -46,7 +46,6 @@ SvXMLItemMapEntries::SvXMLItemMapEntries( SvXMLItemMapEntry* pEntries )
 
 SvXMLItemMapEntries::~SvXMLItemMapEntries()
 {
-    delete mpImpl;
 }
 
 SvXMLItemMapEntry* SvXMLItemMapEntries::getByName(  sal_uInt16 nNameSpace,

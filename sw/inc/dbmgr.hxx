@@ -201,7 +201,7 @@ friend class SwConnectionDisposedListener_Impl;
     bool            bMergeLock : 1;     /**< prevent update of database fields while document is
                                              actually printed at the SwViewShell */
     SwDSParams_t    m_DataSourceParams;
-    SwDBManager_Impl*    pImpl;
+    std::unique_ptr<SwDBManager_Impl>  pImpl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
     /// Name of the embedded database that's included in the current document.
     OUString     m_sEmbeddedName;

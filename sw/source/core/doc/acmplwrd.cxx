@@ -225,7 +225,6 @@ SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
 SwAutoCompleteWord::~SwAutoCompleteWord()
 {
     m_WordList.DeleteAndDestroyAll(); // so the assertion below works
-    delete pImpl;
 #if OSL_DEBUG_LEVEL > 0
     sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
     sal_uLong nClients = SwAutoCompleteClient::GetElementCount();

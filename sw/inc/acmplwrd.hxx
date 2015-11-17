@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_ACMPLWRD_HXX
 
 #include <deque>
+#include <memory>
 
 #include <editeng/swafopt.hxx>
 #include <editeng/Trie.hxx>
@@ -42,7 +43,7 @@ class SwAutoCompleteWord
     editeng::Trie m_LookupTree;
     SwAutoCompleteStringPtrDeque aLRULst;
 
-    SwAutoCompleteWord_Impl* pImpl;
+    std::unique_ptr<SwAutoCompleteWord_Impl> pImpl;
     sal_uInt16 nMaxCount, nMinWrdLen;
     bool bLockWordLst;
 

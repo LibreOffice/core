@@ -20,13 +20,14 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_VIEWLAYOUTCTRL_HXX
 
 #include <sfx2/stbitem.hxx>
+#include <memory>
 
 class SwViewLayoutControl : public SfxStatusBarControl
 {
 private:
 
     struct SwViewLayoutControl_Impl;
-    SwViewLayoutControl_Impl* mpImpl;
+    std::unique_ptr<SwViewLayoutControl_Impl> mpImpl;
 
 public:
 

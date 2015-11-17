@@ -23,6 +23,7 @@
 #include <set>
 #include <map>
 #include <vector>
+#include <memory>
 #include <swtypes.hxx>
 #include "wwstyles.hxx"
 #include <rtl/textenc.h>
@@ -180,7 +181,7 @@ namespace sw
         {
         private:
             //I hate these things stupid pImpl things, but its warranted here
-             ::myImplHelpers::StyleMapperImpl<SwTextFormatColl> *mpImpl;
+             std::unique_ptr<::myImplHelpers::StyleMapperImpl<SwTextFormatColl> > mpImpl;
         public:
             explicit ParaStyleMapper(SwDoc &rDoc);
             ~ParaStyleMapper();

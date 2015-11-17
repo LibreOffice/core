@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_NODE2LAY_HXX
 
 #include <tools/solar.h>
+#include <memory>
 
 /**
  * This class connects the Nodes with the Layouts.
@@ -53,7 +54,7 @@ struct SwPosition;
 
 class SwNode2Layout
 {
-    SwNode2LayImpl *pImpl;
+    std::unique_ptr<SwNode2LayImpl> pImpl;
 public:
     /// Use this ctor for collecting the UpperFrms
     SwNode2Layout( const SwNode& rNd );

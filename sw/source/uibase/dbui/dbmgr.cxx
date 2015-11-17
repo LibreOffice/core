@@ -804,7 +804,6 @@ SwDBManager::~SwDBManager()
             }
         }
     }
-    delete pImpl;
 }
 
 // save bulk letters as single documents

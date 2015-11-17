@@ -460,7 +460,6 @@ namespace sw
 
         ParaStyleMapper::~ParaStyleMapper()
         {
-            delete mpImpl;
         }
 
         ParaStyleMapper::StyleResult ParaStyleMapper::GetStyle(

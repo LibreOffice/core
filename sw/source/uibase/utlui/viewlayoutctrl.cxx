@@ -79,7 +79,6 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
 
 SwViewLayoutControl::~SwViewLayoutControl()
 {
-    delete mpImpl;
 }
 
 void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
