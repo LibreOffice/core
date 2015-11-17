@@ -36,15 +36,18 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			) \
 			--without-docs \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
+			--disable-tests \
 			--disable-werror \
 			--disable-weffc \
 			--without-tools \
+			--with-mdds=0.x \
 			$(if $(filter WNT,$(OS_FOR_BUILD)),MKDIR_P="$(shell cygpath -m /usr/bin/mkdir) -p") \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
 			CPPFLAGS="$(CPPFLAGS) $(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
+			CXXFLAGS="$(CXXFLAGS) $(CXXFLAGS_CXX11)" \
 			XML_CFLAGS="$(LIBXML_CFLAGS)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
