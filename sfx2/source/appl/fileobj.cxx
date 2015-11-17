@@ -46,6 +46,8 @@
 #define FILETYPE_GRF        2
 #define FILETYPE_OBJECT     3
 
+AsyncLoads SvFileObject::m_aAsyncLoadsInProgress;
+
 SvFileObject::SvFileObject()
     : nPostUserEventId(0)
     , pDelMed(NULL)
@@ -253,6 +255,13 @@ bool SvFileObject::LoadFile_Impl()
     if( bWaitForData || !bLoadAgain || xMed.Is() )
         return false;
 
+    // avoid loading of the same graphic asynchronously in the same document
+    if ( m_aAsyncLoadsInProgress.find(sFileNm + sReferer) != m_aAsyncLoadsInProgress.end() )
+    {
+       m_aAsyncLoadsInProgress.erase(sFileNm + sReferer);
+       return false;
+    }
+
     // at the moment on the current DocShell
     xMed = new SfxMedium( sFileNm, sReferer, STREAM_STD_READ );
     SvLinkSource::StreamToLoadFrom aStreamToLoadFrom =
@@ -263,6 +272,7 @@ bool SvFileObject::LoadFile_Impl()
 
     if( !bSynchron )
     {
+        m_aAsyncLoadsInProgress.insert(sFileNm + sReferer);
         bLoadAgain = bDataReady = bInNewData = false;
         bWaitForData = true;
 
@@ -503,6 +513,7 @@ IMPL_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, deleteMedium )
     assert(pDelMed == deleteMedium);
     pDelMed = NULL;
     delete deleteMedium;
+    m_aAsyncLoadsInProgress.erase(sFileNm + sReferer);
     return 0;
 }
 
