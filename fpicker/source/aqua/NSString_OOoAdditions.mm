@@ -28,7 +28,7 @@
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "ouString", ouString);
 
-    NSString *string = [[NSString alloc] initWithCharacters:ouString.getStr() length:ouString.getLength()];
+    NSString *string = [[NSString alloc] initWithCharacters:reinterpret_cast<unichar const *>(ouString.getStr()) length:ouString.getLength()];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, string);
     return [string autorelease];
@@ -45,7 +45,7 @@
 
     [self getCharacters:unichars];
 
-    return rtl::OUString(unichars);
+    return rtl::OUString(reinterpret_cast<sal_Unicode *>(unichars));
 }
 
 @end

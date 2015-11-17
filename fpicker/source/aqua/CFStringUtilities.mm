@@ -41,13 +41,13 @@ rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
 
     //DBG_PRINT_EXIT("CFStringUtilities", __func__, unichars);
 
-    return rtl::OUString(unichars);
+    return rtl::OUString(reinterpret_cast<sal_Unicode *>(unichars));
 }
 
 CFStringRef CFStringCreateWithOUString(const rtl::OUString& aString) {
     //DBG_PRINT_ENTRY("CFStringUtilities", __func__);
 
-    CFStringRef ref = CFStringCreateWithCharacters(kCFAllocatorDefault, aString.getStr(), aString.getLength());
+    CFStringRef ref = CFStringCreateWithCharacters(kCFAllocatorDefault, reinterpret_cast<UniChar const *>(aString.getStr()), aString.getLength());
 
     //DBG_PRINT_EXIT("CFStringUtilities", __func__, ref);
 
