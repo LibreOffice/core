@@ -125,9 +125,9 @@ void VirtualDevice::ReleaseGraphics( bool bRelease )
 }
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
-                                    long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
+                                    long nDX, long nDY, DeviceFormat eFormat, const SystemGraphicsData *pData )
 {
-    SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << "," << nBitCount << ")" );
+    SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << "," << static_cast<int>(eFormat) << ")" );
 
     bool bErase = nDX > 0 && nDY > 0;
 
@@ -149,7 +149,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         (void)pOutDev->AcquireGraphics();
     pGraphics = pOutDev->mpGraphics;
     if ( pGraphics )
-        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice( pGraphics, nDX, nDY, nBitCount, pData );
+        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(pGraphics, nDX, nDY, eFormat, pData);
     else
         mpVirDev = nullptr;
     if ( !mpVirDev )
@@ -160,13 +160,23 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
             css::uno::Reference< css::uno::XInterface >() );
     }
 
-    mnBitCount      = ( nBitCount ? nBitCount : pOutDev->GetBitCount() );
+    meFormat        = eFormat;
+    switch (meFormat)
+    {
+        case DeviceFormat::BITMASK:
+            mnBitCount = 1;
+        case DeviceFormat::GRAYSCALE:
+            mnBitCount = 8;
+        default:
+            mnBitCount = pOutDev->GetBitCount();
+            break;
+    }
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
     mbScreenComp    = true;
-    mnAlphaDepth    = -1;
+    meAlphaFormat   = DeviceFormat::NONE;
 
-    if( mnBitCount < 8 )
+    if (meFormat == DeviceFormat::BITMASK)
         SetAntialiasing( AntialiasingFlags::DisableText );
 
     if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
@@ -206,52 +216,46 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     pSVData->maGDIData.mpFirstVirDev = this;
 }
 
-VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
+VirtualDevice::VirtualDevice(DeviceFormat eFormat)
 :   mpVirDev( nullptr ),
     meRefDevMode( REFDEV_NONE )
 {
-    SAL_WARN_IF( nBitCount > 1 && nBitCount != 8, "vcl.gdi",
-                 "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount, not " << nBitCount );
-    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
-    ImplInitVirDev( Application::GetDefaultDevice(), 0, 0, nBitCount );
+    ImplInitVirDev(Application::GetDefaultDevice(), 0, 0, eFormat);
 }
 
-VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount )
+VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat)
     : mpVirDev( nullptr ),
     meRefDevMode( REFDEV_NONE )
 {
-    SAL_WARN_IF( nBitCount > 1 && nBitCount != 8 && nBitCount != rCompDev.GetBitCount(), "vcl.gdi",
-                 "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount, not " << nBitCount );
-    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
-    ImplInitVirDev( &rCompDev, 0, 0, nBitCount );
+    ImplInitVirDev(&rCompDev, 0, 0, eFormat);
 }
 
-VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount, sal_uInt16 nAlphaBitCount )
-    : mpVirDev( nullptr ),
-    meRefDevMode( REFDEV_NONE )
+VirtualDevice::VirtualDevice(const OutputDevice& rCompDev, DeviceFormat eFormat, DeviceFormat eAlphaFormat)
+    : mpVirDev( nullptr )
+    , meRefDevMode( REFDEV_NONE )
 {
-    SAL_WARN_IF( nBitCount > 1 && nBitCount != 8, "vcl.gdi",
-                 "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount, not " << nBitCount );
     SAL_INFO( "vcl.gdi",
-            "VirtualDevice::VirtualDevice( " << nBitCount << ", " << nAlphaBitCount << " )" );
+            "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << ", " << static_cast<int>(eAlphaFormat) << " )" );
 
-    ImplInitVirDev( &rCompDev, 0, 0, nBitCount );
+    ImplInitVirDev(&rCompDev, 0, 0, eFormat);
 
     // Enable alpha channel
-    mnAlphaDepth = sal::static_int_cast<sal_Int8>(nAlphaBitCount);
+    meAlphaFormat = eAlphaFormat;
 }
 
 VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
-                             sal_uInt16 nBitCount)
+                             DeviceFormat eFormat)
 :   mpVirDev( nullptr ),
     meRefDevMode( REFDEV_NONE )
 {
-    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
+    SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
     ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(),
-                   nBitCount, pData);
+                   eFormat, pData);
 }
 
 VirtualDevice::~VirtualDevice()
@@ -337,7 +341,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
                 return false;
         }
 
-        pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice( mpGraphics, nNewWidth, nNewHeight, mnBitCount );
+        pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice(mpGraphics, nNewWidth, nNewHeight, meFormat);
         if ( pNewVirDev )
         {
             SalGraphics* pGraphics = pNewVirDev->AcquireGraphics();
@@ -396,7 +400,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
 {
     if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
     {
-        if( mnAlphaDepth != -1 )
+        if (meAlphaFormat != DeviceFormat::NONE)
         {
             // #110958# Setup alpha bitmap
             if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
@@ -406,7 +410,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
 
             if( !mpAlphaVDev )
             {
-                mpAlphaVDev = VclPtr<VirtualDevice>::Create( *this, mnAlphaDepth );
+                mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meAlphaFormat);
                 mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase,
                                                          pAlphaBuffer);
             }
@@ -449,7 +453,7 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
     const basebmp::RawMemorySharedArray &pBuffer, const basebmp::RawMemorySharedArray &pAlphaBuffer )
 {
     if (pAlphaBuffer)
-        mnAlphaDepth = 8;
+        meAlphaFormat = DeviceFormat::GRAYSCALE;
 
     if (pBuffer) {
         MapMode mm = GetMapMode();

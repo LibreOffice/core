@@ -227,10 +227,10 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 
 SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics */,
                                                        long &nDX, long &nDY,
-                                                       sal_uInt16 nBitCount,
+                                                       DeviceFormat eFormat,
                                                        const SystemGraphicsData* /* pData */ )
 {
-    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
+    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat);
     pNew->SetSize( nDX, nDY );
     return pNew;
 }
@@ -416,7 +416,7 @@ void SvpSalTimer::Start( sal_uLong nMS )
     m_pInstance->StartTimer( nMS );
 }
 
-Format SvpSalInstance::getFormatForBitCount( sal_uInt16 nBitCount )
+Format SvpSalInstance::getBaseBmpFormatForBitCount( sal_uInt16 nBitCount )
 {
     switch( nBitCount )
     {
@@ -439,4 +439,19 @@ Format SvpSalInstance::getFormatForBitCount( sal_uInt16 nBitCount )
      }
 
 }
+
+Format SvpSalInstance::getBaseBmpFormatForDeviceFormat(DeviceFormat eFormat)
+{
+    switch (eFormat)
+    {
+        case DeviceFormat::BITMASK:
+            return Format::OneBitMsbPal;
+        case DeviceFormat::GRAYSCALE:
+            return Format::EightBitPal;
+        default:
+            return SVP_CAIRO_FORMAT;
+    }
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

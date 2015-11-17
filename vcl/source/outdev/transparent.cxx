@@ -431,7 +431,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
         if( !bDrawn )
         {
-            ScopedVclPtrInstance< VirtualDevice > aVDev(  *this, 1  );
+            ScopedVclPtrInstance< VirtualDevice > aVDev(*this, DeviceFormat::BITMASK);
             const Size aDstSz( aDstRect.GetSize() );
             const sal_uInt8 cTrans = (sal_uInt8) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
 
