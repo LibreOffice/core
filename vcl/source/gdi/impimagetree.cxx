@@ -100,8 +100,8 @@ static void loadImageFromStream(std::shared_ptr<SvStream> xStream, OUString cons
 }
 
 ImplImageTree & ImplImageTree::get() {
-    static ImplImageTree instance;
-    return instance;
+    static ImplImageTree s_ImplImageTree;
+    return s_ImplImageTree;
 }
 
 ImplImageTree::ImplImageTree()

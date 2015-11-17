@@ -37,7 +37,7 @@ private:
         IconCache::Instance() is called to the end of the sd module when the
         cache is destroyed from SdGlobalResourceContainer.
     */
-    static IconCache* mpInstance;
+    static IconCache* s_pIconCache;
 
     typedef std::unordered_map<sal_uInt16,Image> ImageContainer;
     ImageContainer maContainer;
@@ -45,7 +45,7 @@ private:
     Image GetIcon (sal_uInt16 nResourceId);
 };
 
-IconCache* IconCache::Implementation::mpInstance = nullptr;
+IconCache* IconCache::Implementation::s_pIconCache = nullptr;
 
 Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
 {
@@ -67,17 +67,17 @@ Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
 //static
 IconCache& IconCache::Instance()
 {
-    if (Implementation::mpInstance == nullptr)
+    if (Implementation::s_pIconCache == nullptr)
     {
         ::osl::GetGlobalMutex aMutexFunctor;
         ::osl::MutexGuard aGuard (aMutexFunctor());
-        if (Implementation::mpInstance == nullptr)
+        if (Implementation::s_pIconCache == nullptr)
         {
             IconCache* pCache = new IconCache ();
             SdGlobalResourceContainer::Instance().AddResource (
                 ::std::unique_ptr<SdGlobalResource>(pCache));
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            Implementation::mpInstance = pCache;
+            Implementation::s_pIconCache = pCache;
         }
     }
     else
@@ -85,9 +85,9 @@ IconCache& IconCache::Instance()
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 
-    DBG_ASSERT(Implementation::mpInstance!=nullptr,
+    DBG_ASSERT(Implementation::s_pIconCache != nullptr,
         "IconCache::Instance(): instance is NULL");
-    return *Implementation::mpInstance;
+    return *Implementation::s_pIconCache;
 }
 
 Image IconCache::GetIcon (sal_uInt16 nResourceId)

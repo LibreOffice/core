@@ -136,7 +136,7 @@ public:
                 || name == "g_pHyphIter" // SwEditShell::HyphEnd()
                 || name == "pFieldEditEngine" // ScGlobal::Clear()
                 || name == "xDrawClipDocShellRef" // ScGlobal::Clear()
-                || name == "instance"
+                || name == "s_ImplImageTree"
                     // ImplImageTree::get(), ImplImageTree::shutDown()
                 || name == "s_pMouseFrame"
                     // vcl/osx/salframeview.mm, mouseEntered/Exited, not owning
@@ -146,7 +146,7 @@ public:
                 || name == "s_pCaptureFrame" // vcl/osx/salframe.cxx, not owning
                 || name == "pBlink"
                     // sw/source/core/text/blink.cxx, _TextFinit()
-                || name == "mpInstance"
+                || name == "s_pIconCache"
                     // sd/source/ui/tools/IconCache.cxx, leaked
                ) // these variables appear unproblematic
             {
