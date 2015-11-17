@@ -111,7 +111,6 @@ DirectoryStream::DirectoryStream(const com::sun::star::uno::Reference<com::sun::
 
 DirectoryStream::~DirectoryStream()
 {
-    delete m_pImpl;
 }
 
 DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)

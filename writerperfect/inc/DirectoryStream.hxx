@@ -11,10 +11,9 @@
 #define INCLUDED_WRITERPERFECT_DIRECTORYSTREAM_HXX
 
 #include <librevenge-stream/librevenge-stream.h>
-
 #include <com/sun/star/uno/Reference.h>
-
 #include <writerperfectdllapi.h>
+#include <memory>
 
 namespace com
 {
@@ -57,7 +56,7 @@ public:
     virtual bool isEnd() override;
 
 private:
-    Impl *m_pImpl;
+    std::unique_ptr<Impl> m_pImpl;
 };
 
 }

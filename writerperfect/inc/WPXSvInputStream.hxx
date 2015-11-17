@@ -11,10 +11,9 @@
 #define INCLUDED_WRITERPERFECT_WPXSVINPUTSTREAM_HXX
 
 #include <librevenge-stream/librevenge-stream.h>
-
 #include <com/sun/star/uno/Reference.h>
-
 #include <writerperfectdllapi.h>
+#include <memory>
 
 namespace com
 {
@@ -55,7 +54,7 @@ public:
     virtual bool isEnd() override;
 
 private:
-    WPXSvInputStreamImpl *mpImpl;
+    std::unique_ptr<WPXSvInputStreamImpl> mpImpl;
 };
 
 }

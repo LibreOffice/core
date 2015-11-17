@@ -817,7 +817,6 @@ WPXSvInputStream::WPXSvInputStream(Reference< XInputStream > xStream) :
 
 WPXSvInputStream::~WPXSvInputStream()
 {
-    delete mpImpl;
 }
 
 #define BUFFER_MAX 65536
