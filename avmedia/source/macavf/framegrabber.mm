@@ -49,7 +49,7 @@ FrameGrabber::~FrameGrabber()
 
 bool FrameGrabber::create( const ::rtl::OUString& rURL )
 {
-    NSString* pNSStr = [NSString stringWithCharacters:rURL.getStr() length:rURL.getLength()];
+    NSString* pNSStr = [NSString stringWithCharacters:reinterpret_cast<unichar const *>(rURL.getStr()) length:rURL.getLength()];
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
         //TODO: 10.11 stringByAddingPercentEscapesUsingEncoding
     NSURL* pNSURL = [NSURL URLWithString: [pNSStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];

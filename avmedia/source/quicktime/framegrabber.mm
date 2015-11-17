@@ -69,7 +69,7 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
     bool bRet = false;
     maURL = rURL;
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
+    NSString* aNSStr = [[[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rURL.getStr()) length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
     NSURL* aURL = [NSURL URLWithString:aNSStr ];
 
     // create the Movie

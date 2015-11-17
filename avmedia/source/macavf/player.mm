@@ -122,7 +122,7 @@ bool Player::handleObservation( NSString* pKeyPath )
 bool Player::create( const ::rtl::OUString& rURL )
 {
     // get the media asset
-    NSString* aNSStr = [NSString stringWithCharacters:rURL.getStr() length:rURL.getLength()];
+    NSString* aNSStr = [NSString stringWithCharacters:reinterpret_cast<unichar const *>(rURL.getStr()) length:rURL.getLength()];
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
         //TODO: 10.11 stringByAddingPercentEscapesUsingEncoding
     NSURL* aNSURL = [NSURL URLWithString: [aNSStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];

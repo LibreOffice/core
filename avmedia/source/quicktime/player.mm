@@ -84,7 +84,7 @@ bool Player::create( const ::rtl::OUString& rURL )
             mpMovie = nil;
         }
 
-        NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
+        NSString* aNSStr = [[[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rURL.getStr()) length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
         NSURL* aURL = [NSURL URLWithString:aNSStr ];
 
         NSError* pErr = nil;
