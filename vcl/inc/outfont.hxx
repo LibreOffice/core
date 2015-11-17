@@ -32,21 +32,12 @@
 #include <unordered_map>
 
 class PhysicalFontFace;
-class PhysicalFontFamily;
-class ImplGetDevFontList;
-class ImplGetDevSizeList;
 class ImplFontEntry;
 class ImplFontCache;
-class ImplPreMatchFontSubstitution;
-class ImplGlyphFallbackFontSubstitution;
-class FontSelectPattern;
 namespace vcl { class Font; }
 class ConvertChar;
-struct FontMatchStatus;
 class OutputDevice;
 class Size;
-
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; }}}}
 
 // - ImplFontAttributes -
 

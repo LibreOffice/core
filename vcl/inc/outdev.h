@@ -33,8 +33,6 @@
 class Size;
 namespace vcl { class Font; }
 class VirtualDevice;
-class ImplGetDevFontList;
-class GetDevSizeList;
 class PhysicalFontCollection;
 enum class AddFontSubstituteFlags;
 

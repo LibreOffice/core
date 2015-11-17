@@ -25,6 +25,9 @@
 #include "outfont.hxx"
 #include "PhysicalFontFamily.hxx"
 
+class ImplGlyphFallbackFontSubstitution;
+class ImplPreMatchFontSubstitution;
+
 // - PhysicalFontCollection -
 
 // TODO: merge with ImplFontCache
