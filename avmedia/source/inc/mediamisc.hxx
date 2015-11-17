@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #ifndef INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 #define INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
+
+#include <config_features.h>
 
 class ResMgr;
 

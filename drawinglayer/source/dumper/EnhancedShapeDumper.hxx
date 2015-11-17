@@ -6,6 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef INCLUDED_DRAWINGLAYER_SOURCE_DUMPER_ENHANCEDSHAPEDUMPER_HXX
+#define INCLUDED_DRAWINGLAYER_SOURCE_DUMPER_ENHANCEDSHAPEDUMPER_HXX
 
 #include <libxml/xmlwriter.h>
 
@@ -27,9 +29,6 @@
 #include <com/sun/star/awt/Size.hpp>
 
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
-
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_DUMPER_ENHANCEDSHAPEDUMPER_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_DUMPER_ENHANCEDSHAPEDUMPER_HXX
 
 class EnhancedShapeDumper
 {

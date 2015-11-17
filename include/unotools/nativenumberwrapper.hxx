@@ -16,10 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <unotools/unotoolsdllapi.h>
 
 #ifndef INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
 #define INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
+
+#include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 
 namespace com { namespace sun { namespace star {

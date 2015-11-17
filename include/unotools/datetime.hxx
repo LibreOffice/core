@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//= conversions UNO3.TimeClass <-> Tools.TimeClass (Date/Time/DateTime)
-#include <unotools/unotoolsdllapi.h>
 
 #ifndef INCLUDED_UNOTOOLS_DATETIME_HXX
 #define INCLUDED_UNOTOOLS_DATETIME_HXX
 
+//= conversions UNO3.TimeClass <-> Tools.TimeClass (Date/Time/DateTime)
+#include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>

@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/unotoolsdllapi.h>
-
 #ifndef INCLUDED_UNOTOOLS_CHARCLASS_HXX
 #define INCLUDED_UNOTOOLS_CHARCLASS_HXX
 
+#include <unotools/unotoolsdllapi.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>

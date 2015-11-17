@@ -16,10 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <unotools/unotoolsdllapi.h>
 
 #ifndef INCLUDED_UNOTOOLS_PROGRESSHANDLERWRAP_HXX
 #define INCLUDED_UNOTOOLS_PROGRESSHANDLERWRAP_HXX
+
+#include <unotools/unotoolsdllapi.h>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>

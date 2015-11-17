@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/bitmapfilter.hxx>
-
 #ifndef INCLUDED_VCL_BITMAPSCALESUPER_HXX
 #define INCLUDED_VCL_BITMAPSCALESUPER_HXX
+
+#include <vcl/bitmapfilter.hxx>
 
 class VCL_DLLPUBLIC BitmapScaleSuper : public BitmapFilter
 {
