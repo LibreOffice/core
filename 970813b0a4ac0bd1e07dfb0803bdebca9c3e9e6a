@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d1cea4b3",
+        "filename": "filter/source/svg/parserfragments.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-17T09:26:49Z",
+      "side": 1,
+      "message": "both the old and new version of determining the data part of the URL have problems (e.g., the old version searches for the last comma, while the data part may contain commas in general; the new version searches for the first comma, while the mediatype part may contain commas in general);  I would suggest to instead use INetURLObject::getData (which decodes the data if \";base64\" is given in the URL; I\u0027m not sure whether that would be a mistake or a fix here, but if it would be a mistake we could extend INetURLObject::getData with a switch to not decode)",
+      "revId": "970813b0a4ac0bd1e07dfb0803bdebca9c3e9e6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_31c45091",
+        "filename": "filter/source/svg/parserfragments.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-17T09:26:49Z",
+      "side": 1,
+      "message": "the first argument to SAL_INFO must be an area code",
+      "revId": "970813b0a4ac0bd1e07dfb0803bdebca9c3e9e6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b1cfa0b2",
+        "filename": "filter/source/svg/parserfragments.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-17T09:26:49Z",
+      "side": 1,
+      "message": "data is no longer cleared when false is returned (which happens to not matter for this function\u0027s single call site)",
+      "revId": "970813b0a4ac0bd1e07dfb0803bdebca9c3e9e6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
