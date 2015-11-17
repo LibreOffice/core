@@ -103,7 +103,6 @@ CommandInfoProvider::~CommandInfoProvider()
     }
 }
 
-
 OUString CommandInfoProvider::GetLabelForCommand (
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
@@ -111,6 +110,29 @@ OUString CommandInfoProvider::GetLabelForCommand (
     SetFrame(rxFrame);
 
     return GetCommandProperty("Name", rsCommandName);
+}
+
+OUString CommandInfoProvider::GetMenuLabelForCommand (
+    const OUString& rsCommandName,
+    const Reference<frame::XFrame>& rxFrame)
+{
+    SetFrame(rxFrame);
+
+    // Here we want to use "Label", not "Name". "Name" is a stripped-down version of "Label" without accelerators
+    // and ellipsis. In the menu, we want to have those accelerators and ellipsis.
+    return GetCommandProperty("Label", rsCommandName);
+}
+
+OUString CommandInfoProvider::GetPopupLabelForCommand (
+    const OUString& rsCommandName,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+{
+    SetFrame(rxFrame);
+
+    OUString sPopupLabel(GetCommandProperty("PopupLabel", rsCommandName));
+    if (!sPopupLabel.isEmpty())
+        return sPopupLabel;
+    return GetCommandProperty("Label", rsCommandName);
 }
 
 OUString CommandInfoProvider::GetTooltipForCommand (
@@ -122,7 +144,7 @@ OUString CommandInfoProvider::GetTooltipForCommand (
 
     OUString sLabel (GetCommandProperty("TooltipLabel", rsCommandName));
     if (sLabel.isEmpty())
-        sLabel = GetLabelForCommand(rsCommandName, rxFrame);
+        sLabel = GetCommandProperty("Name", rsCommandName);
 
     if (bIncludeShortcut) {
         const OUString sShortCut(GetCommandShortcut(rsCommandName, rxFrame));

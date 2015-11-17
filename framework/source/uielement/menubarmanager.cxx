@@ -69,6 +69,7 @@
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -1099,11 +1100,9 @@ OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
     if ( !m_bHasMenuBar )
     {
         // This is a context menu, prefer "PopupLabel" over "Label".
-        OUString aPopupLabel = framework::RetrieveLabelFromCommand(rCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"PopupLabel");
-        if ( !aPopupLabel.isEmpty() )
-            return aPopupLabel;
+        return vcl::CommandInfoProvider::Instance().GetPopupLabelForCommand(rCmdURL, m_xFrame);
     }
-    return framework::RetrieveLabelFromCommand(rCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Label");
+    return vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(rCmdURL, m_xFrame);
 }
 
 bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )

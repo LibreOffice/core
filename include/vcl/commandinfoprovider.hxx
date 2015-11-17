@@ -59,6 +59,14 @@ public:
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
+    OUString GetMenuLabelForCommand (
+        const OUString& rsCommandName,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    OUString GetPopupLabelForCommand (
+        const OUString& rsCommandName,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
     /** Return a tooltip for the given command. Falls back to label if command has no tooltip.
         @param rsCommandName
             The command name is expected to start with .uno:

@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "helper/mischelper.hxx"
 #include "helpid.hrc"
@@ -85,7 +86,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
 
     // insert basic
     OUString aCommand(".uno:MacroDialog");
-    OUString aDisplayName = RetrieveLabelFromCommand( aCommand );
+    OUString aDisplayName = vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(aCommand, m_xFrame);
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
 
@@ -120,12 +121,6 @@ void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& ) th
     {
         fillPopupMenu( m_xPopupMenu );
     }
-}
-
-OUString MacrosMenuController::RetrieveLabelFromCommand(const OUString& rCmdURL)
-{
-    bool bModuleIdentified = !m_aModuleIdentifier.isEmpty();
-    return framework::RetrieveLabelFromCommand(rCmdURL, m_xContext, m_xUICommandLabels, m_xFrame, m_aModuleIdentifier, bModuleIdentified, "Label");
 }
 
 void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId )

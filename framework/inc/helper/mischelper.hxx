@@ -121,14 +121,6 @@ public:
     css::uno::Reference< css::linguistic2::XLanguageGuessing >  GetGuesser() const;
 };
 
-FWI_DLLPUBLIC OUString RetrieveLabelFromCommand( const OUString& aCmdURL
-            ,const css::uno::Reference< css::uno::XComponentContext >&    _xContext
-            ,css::uno::Reference< css::container::XNameAccess >&        _xUICommandLabels
-            ,const css::uno::Reference< css::frame::XFrame >& _xFrame
-            ,OUString& _rModuleIdentifier
-            ,bool& _rIni
-            ,const sal_Char* _pName);
-
 FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
         const css::uno::Reference< css::frame::XFrame > &rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
