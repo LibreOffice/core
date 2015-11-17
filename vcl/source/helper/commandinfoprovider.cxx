@@ -225,7 +225,7 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
     {
         if (aProperties[nIndex].Name == "Properties")
         {
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             aProperties[nIndex].Value >>= nValue;
             return nValue;
         }
