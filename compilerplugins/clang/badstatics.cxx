@@ -144,6 +144,8 @@ public:
                 || name == "s_pCaptureFrame" // vcl/osx/salframe.cxx, not owning
                 || name == "pBlink"
                     // sw/source/core/text/blink.cxx, _TextFinit()
+                || name == "mpInstance"
+                    // sd/source/ui/tools/IconCache.cxx, leaked
                ) // these variables appear unproblematic
             {
                 return true;
