@@ -30,8 +30,8 @@ public:
         }
     }
 
-    static std::pair<bool, FieldDecl const*> isBadStaticType(
-            QualType const& rpType, FieldDecl const*const pCurrentFieldDecl,
+    static std::pair<bool, std::vector<FieldDecl const*>> isBadStaticType(
+            QualType const& rpType, std::vector<FieldDecl const*> & chain,
             std::vector<QualType> const& rParents)
     {
         QualType const pCanonical(rpType.getUnqualifiedType().getCanonicalType());
@@ -42,14 +42,14 @@ public:
             {
                 std::vector<QualType> copy(rParents);
                 copy.push_back(pCanonical);
-                return isBadStaticType(pPointee, pCurrentFieldDecl, copy);
+                return isBadStaticType(pPointee, chain, copy);
             } else {
-                return std::make_pair(false, nullptr);
+                return std::make_pair(false, std::vector<FieldDecl const*>());
             }
         }
         RecordType const*const pRecordType(pCanonical->getAs<RecordType>());
         if (!pRecordType) {
-            return std::make_pair(false, nullptr);
+            return std::make_pair(false, std::vector<FieldDecl const*>());
         }
         auto const type(pCanonical.getAsString());
         if (   type == "class Image"
@@ -57,11 +57,11 @@ public:
             || type == "class BitmapEx"
            )
         {
-            return std::make_pair(true, pCurrentFieldDecl);
+            return std::make_pair(true, chain);
         }
         RecordDecl const*const pDefinition(pRecordType->getDecl()->getDefinition());
         if (!pDefinition) { // maybe no definition if it's a pointer/reference
-            return std::make_pair(false, nullptr);
+            return std::make_pair(false, std::vector<FieldDecl const*>());
         }
         if (   startsWith(type, "class vcl::DeleteOnDeinit")
             || startsWith(type, "class std::weak_ptr") // not owning
@@ -70,31 +70,33 @@ public:
             || type == "class DemoMtfApp" // one of these Application with own VclPtr
            )
         {
-            return std::make_pair(false, nullptr);
+            return std::make_pair(false, std::vector<FieldDecl const*>());
         }
         std::vector<QualType> copy(rParents);
         copy.push_back(pCanonical);
         CXXRecordDecl const*const pDecl(dyn_cast<CXXRecordDecl>(pDefinition));
         assert(pDecl);
         for (auto it = pDecl->field_begin(); it != pDecl->field_end(); ++it) {
-            auto const ret(isBadStaticType((*it)->getType(), *it, copy));
+            chain.push_back(*it);
+            auto const ret(isBadStaticType((*it)->getType(), chain, copy));
+            chain.pop_back();
             if (ret.first) {
                 return ret;
             }
         }
         for (auto it = pDecl->bases_begin(); it != pDecl->bases_end(); ++it) {
-            auto const ret(isBadStaticType((*it).getType(), pCurrentFieldDecl, copy));
+            auto const ret(isBadStaticType((*it).getType(), chain, copy));
             if (ret.first) {
                 return ret;
             }
         }
         for (auto it = pDecl->vbases_begin(); it != pDecl->vbases_end(); ++it) {
-            auto const ret(isBadStaticType((*it).getType(), pCurrentFieldDecl, copy));
+            auto const ret(isBadStaticType((*it).getType(), chain, copy));
             if (ret.first) {
                 return ret;
             }
         }
-        return std::make_pair(false, nullptr);
+        return std::make_pair(false, std::vector<FieldDecl const*>());
     }
 
     bool VisitVarDecl(VarDecl const*const pVarDecl)
@@ -136,18 +138,19 @@ public:
             {
                 return true;
             }
-            auto const ret(isBadStaticType(pVarDecl->getType(), nullptr,
+            std::vector<FieldDecl const*> pad;
+            auto const ret(isBadStaticType(pVarDecl->getType(), pad,
                             std::vector<QualType>()));
             if (ret.first) {
                 report(DiagnosticsEngine::Warning,
                         "bad static variable causes crash on shutdown",
                         pVarDecl->getLocation())
                     << pVarDecl->getSourceRange();
-                if (ret.second != nullptr) {
+                for (auto i: ret.second) {
                     report(DiagnosticsEngine::Note,
-                            "... due to this member",
-                            ret.second->getLocation())
-                        << ret.second->getSourceRange();
+                            "... due to this member of %0",
+                            i->getLocation())
+                        << i->getParent() << i->getSourceRange();
                 }
             }
         }
