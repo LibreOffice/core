@@ -105,8 +105,6 @@ namespace utl
     OEventListenerAdapter::~OEventListenerAdapter()
     {
         stopAllComponentListening( );
-        delete m_pImpl;
-        m_pImpl = nullptr;
     }
 
     void OEventListenerAdapter::stopComponentListening( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComp )

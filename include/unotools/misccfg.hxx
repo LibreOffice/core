@@ -24,12 +24,8 @@
 
 namespace utl
 {
-    class SfxMiscCfg;
-
 class UNOTOOLS_DLLPUBLIC MiscCfg : public detail::Options
 {
-    SfxMiscCfg*     pImpl;
-
 public:
     MiscCfg( );
     virtual ~MiscCfg( );

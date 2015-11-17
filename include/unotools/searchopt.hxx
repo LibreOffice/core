@@ -21,12 +21,13 @@
 #define INCLUDED_UNOTOOLS_SEARCHOPT_HXX
 
 #include <unotools/unotoolsdllapi.h>
+#include <memory>
 
 class SvtSearchOptions_Impl;
 
 class UNOTOOLS_DLLPUBLIC SvtSearchOptions
 {
-    SvtSearchOptions_Impl   *pImpl;
+    std::unique_ptr<SvtSearchOptions_Impl>  pImpl;
 
     SvtSearchOptions( const SvtSearchOptions & ) = delete;
     SvtSearchOptions & operator = ( const SvtSearchOptions & ) = delete;

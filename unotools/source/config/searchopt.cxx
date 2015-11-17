@@ -240,13 +240,12 @@ bool SvtSearchOptions_Impl::Save()
 }
 
 SvtSearchOptions::SvtSearchOptions()
+    : pImpl( new SvtSearchOptions_Impl )
 {
-    pImpl = new SvtSearchOptions_Impl;
 }
 
 SvtSearchOptions::~SvtSearchOptions()
 {
-    delete pImpl;
 }
 
 void SvtSearchOptions::Commit()

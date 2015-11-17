@@ -32,8 +32,9 @@ using namespace com::sun::star::uno;
 
 namespace utl
 {
+class SfxMiscCfg;
 
-static SfxMiscCfg* pOptions = nullptr;
+static SfxMiscCfg* g_pOptions = nullptr;
 static sal_Int32 nRefCount = 0;
 
 class SfxMiscCfg : public utl::ConfigItem
@@ -186,69 +187,68 @@ MiscCfg::MiscCfg( )
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
-    if ( !pOptions )
+    if ( !g_pOptions )
     {
-        pOptions = new SfxMiscCfg;
+        g_pOptions = new SfxMiscCfg;
 
         ItemHolder1::holdConfigItem(E_MISCCFG);
     }
 
     ++nRefCount;
-    pImpl = pOptions;
-    pImpl->AddListener(this);
+    g_pOptions->AddListener(this);
 }
 
 MiscCfg::~MiscCfg( )
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
-    pImpl->RemoveListener(this);
+    g_pOptions->RemoveListener(this);
     if ( !--nRefCount )
     {
-        if ( pOptions->IsModified() )
-            pOptions->Commit();
-        DELETEZ( pOptions );
+        if ( g_pOptions->IsModified() )
+            g_pOptions->Commit();
+        DELETEZ( g_pOptions );
     }
 }
 
 bool MiscCfg::IsNotFoundWarning()   const
 {
-    return pImpl->IsNotFoundWarning();
+    return g_pOptions->IsNotFoundWarning();
 }
 
 void MiscCfg::SetNotFoundWarning(   bool bSet)
 {
-    pImpl->SetNotFoundWarning( bSet );
+    g_pOptions->SetNotFoundWarning( bSet );
 }
 
 bool MiscCfg::IsPaperSizeWarning()  const
 {
-    return pImpl->IsPaperSizeWarning();
+    return g_pOptions->IsPaperSizeWarning();
 }
 
 void MiscCfg::SetPaperSizeWarning(bool bSet)
 {
-    pImpl->SetPaperSizeWarning( bSet );
+    g_pOptions->SetPaperSizeWarning( bSet );
 }
 
 bool MiscCfg::IsPaperOrientationWarning()   const
 {
-    return pImpl->IsPaperOrientationWarning();
+    return g_pOptions->IsPaperOrientationWarning();
 }
 
 void MiscCfg::SetPaperOrientationWarning(   bool bSet)
 {
-    pImpl->SetPaperOrientationWarning( bSet );
+    g_pOptions->SetPaperOrientationWarning( bSet );
 }
 
 sal_Int32 MiscCfg::GetYear2000() const
 {
-    return pImpl->GetYear2000();
+    return g_pOptions->GetYear2000();
 }
 
 void MiscCfg::SetYear2000( sal_Int32 nSet )
 {
-    pImpl->SetYear2000( nSet );
+    g_pOptions->SetYear2000( nSet );
 }
 
 }
