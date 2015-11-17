@@ -89,7 +89,6 @@ class StatusBarManager : public ::cppu::WeakImplHelper<
         DECL_LINK_TYPED(DoubleClick, StatusBar*, void);
 
         void RemoveControllers();
-        OUString RetrieveLabelFromCommand( const OUString& aCmdURL );
         void CreateControllers();
         void UpdateControllers();
         void AddFrameActionListener();

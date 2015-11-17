@@ -48,6 +48,7 @@
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 #include <functional>
 
@@ -300,11 +301,6 @@ void StatusBarManager::RemoveControllers()
     m_aControllerMap.clear();
 }
 
-OUString StatusBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
-{
-    return framework::RetrieveLabelFromCommand(aCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Name");
-}
-
 void StatusBarManager::CreateControllers()
 {
     uno::Reference< awt::XWindow > xStatusbarWindow = VCLUnoHelper::GetInterface( m_pStatusBar );
@@ -475,7 +471,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString( RetrieveLabelFromCommand( aCommandURL ));
+                    OUString aString( vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
                     sal_uInt16        nItemBits( impl_convertItemStyleToItemBits( nStyle ));
 
                     m_pStatusBar->InsertItem( nId, nWidth, nItemBits, nOffset );
