@@ -46,6 +46,8 @@
 #define FILETYPE_GRF        2
 #define FILETYPE_OBJECT     3
 
+FnHashSet SvFileObject::m_aAsyncLoadsInProgress;
+
 SvFileObject::SvFileObject()
     : nPostUserEventId(0)
     , pDelMed(NULL)
@@ -61,6 +63,7 @@ SvFileObject::SvFileObject()
     , bClearMedium(false)
     , bStateChangeCalled(false)
     , bInCallDownload(false)
+    , bAsyncLoadsInProgress(false)
 {
 }
 
@@ -80,6 +83,25 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                                 const OUString & rMimeType,
                                 bool bGetSynchron )
 {
+    // avoid loading of the same graphics asynchronously in the same document
+    if ( !bAsyncLoadsInProgress )
+    {
+        // asynchronous loading of the same graphic in progress?
+        if ( m_aAsyncLoadsInProgress.find(sFileNm + sReferer) != m_aAsyncLoadsInProgress.end() )
+        {
+            // remove graphic id to sign overloading
+            m_aAsyncLoadsInProgress.erase(sFileNm + sReferer);
+            return true;
+        }
+    }
+    else
+    {
+        bAsyncLoadsInProgress = false;
+        // sign of overloading?
+        if ( m_aAsyncLoadsInProgress.find(sFileNm + sReferer) == m_aAsyncLoadsInProgress.end() )
+           return true;
+    }
+
     SotClipboardFormatId nFmt = SotExchange::RegisterFormatMimeType( rMimeType );
     switch( nType )
     {
@@ -253,6 +275,13 @@ bool SvFileObject::LoadFile_Impl()
     if( bWaitForData || !bLoadAgain || xMed.Is() )
         return false;
 
+    // avoid loading of the same graphic asynchronously in the same document
+    if ( m_aAsyncLoadsInProgress.find(sFileNm + sReferer) != m_aAsyncLoadsInProgress.end() )
+    {
+       m_aAsyncLoadsInProgress.erase(sFileNm + sReferer);
+       return false;
+    }
+
     // at the moment on the current DocShell
     xMed = new SfxMedium( sFileNm, sReferer, STREAM_STD_READ );
     SvLinkSource::StreamToLoadFrom aStreamToLoadFrom =
@@ -263,6 +292,8 @@ bool SvFileObject::LoadFile_Impl()
 
     if( !bSynchron )
     {
+        m_aAsyncLoadsInProgress.insert(sFileNm + sReferer);
+        bAsyncLoadsInProgress = true;
         bLoadAgain = bDataReady = bInNewData = false;
         bWaitForData = true;
 
@@ -503,6 +534,7 @@ IMPL_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, deleteMedium )
     assert(pDelMed == deleteMedium);
     pDelMed = NULL;
     delete deleteMedium;
+    m_aAsyncLoadsInProgress.erase(sFileNm + sReferer);
     return 0;
 }
 
