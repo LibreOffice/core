@@ -18,7 +18,7 @@ bool JvmfwkUtil_isLoadableJVM( OUString const & aURL )
     {
         NSAutoreleasePool *pPool = [[NSAutoreleasePool alloc] init];
 
-        NSString *pString = [NSString stringWithCharacters:aURL.getStr() length:aURL.getLength()];
+        NSString *pString = [NSString stringWithCharacters:reinterpret_cast<unichar const *>(aURL.getStr()) length:aURL.getLength()];
         if ( pString )
         {
             NSURL *pURL = nil;
