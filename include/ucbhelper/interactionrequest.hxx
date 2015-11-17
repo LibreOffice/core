@@ -32,6 +32,7 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <memory>
 
 namespace ucbhelper {
 
@@ -63,7 +64,7 @@ class UCBHELPER_DLLPUBLIC InteractionRequest : public cppu::OWeakObject,
                            public css::lang::XTypeProvider,
                            public css::task::XInteractionRequest
 {
-    InteractionRequest_Impl * m_pImpl;
+    std::unique_ptr<InteractionRequest_Impl> m_pImpl;
 
 protected:
     void setRequest( const css::uno::Any & rRequest );
@@ -151,7 +152,7 @@ struct InteractionContinuation_Impl;
   */
 class UCBHELPER_DLLPUBLIC InteractionContinuation : public cppu::OWeakObject
 {
-    InteractionContinuation_Impl * m_pImpl;
+    std::unique_ptr<InteractionContinuation_Impl> m_pImpl;
 
 protected:
     /**

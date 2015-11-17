@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <memory>
 
 
 namespace ucbhelper
@@ -74,7 +75,7 @@ public:
         throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    ContentIdentifier_Impl* m_pImpl;
+    std::unique_ptr<ContentIdentifier_Impl> m_pImpl;
 };
 
 } /* namespace ucbhelper */

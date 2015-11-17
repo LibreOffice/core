@@ -228,7 +228,6 @@ ResultSet::ResultSet(
 // virtual
 ResultSet::~ResultSet()
 {
-    delete m_pImpl;
 }
 
 

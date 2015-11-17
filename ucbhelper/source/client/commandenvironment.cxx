@@ -55,15 +55,14 @@ struct CommandEnvironment_Impl
 CommandEnvironment::CommandEnvironment(
         const Reference< XInteractionHandler >& rxInteractionHandler,
         const Reference< XProgressHandler >& rxProgressHandler )
+    : m_pImpl( new CommandEnvironment_Impl( rxInteractionHandler,
+                                            rxProgressHandler ) )
 {
-    m_pImpl = new CommandEnvironment_Impl( rxInteractionHandler,
-                                           rxProgressHandler );
 }
 
 // virtual
 CommandEnvironment::~CommandEnvironment()
 {
-    delete m_pImpl;
 }
 
 // XCommandEnvironemnt methods.

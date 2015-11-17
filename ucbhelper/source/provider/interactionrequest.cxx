@@ -75,7 +75,6 @@ InteractionRequest::InteractionRequest( const uno::Any & rRequest )
 // virtual
 InteractionRequest::~InteractionRequest()
 {
-    delete m_pImpl;
 }
 
 
@@ -222,7 +221,6 @@ InteractionContinuation::InteractionContinuation(
 // virtual
 InteractionContinuation::~InteractionContinuation()
 {
-    delete m_pImpl;
 }
 
 

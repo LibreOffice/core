@@ -111,7 +111,6 @@ ResultSetMetaData::ResultSetMetaData(
 // virtual
 ResultSetMetaData::~ResultSetMetaData()
 {
-    delete m_pImpl;
 }
 
 

@@ -38,6 +38,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace ucb {
     struct CommandInfo;
@@ -96,7 +97,7 @@ class UCBHELPER_DLLPUBLIC ContentImplHelper :
     friend class PropertySetInfo;
     friend class CommandProcessorInfo;
 
-    ucbhelper_impl::ContentImplHelper_Impl* m_pImpl;
+    std::unique_ptr<ucbhelper_impl::ContentImplHelper_Impl> m_pImpl;
 
 protected:
     osl::Mutex                       m_aMutex;

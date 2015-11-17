@@ -67,7 +67,6 @@ ContentProviderImplHelper::ContentProviderImplHelper(
 // virtual
 ContentProviderImplHelper::~ContentProviderImplHelper()
 {
-    delete m_pImpl;
 }
 
 // XInterface

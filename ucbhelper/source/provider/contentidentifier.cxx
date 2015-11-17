@@ -82,15 +82,14 @@ ContentIdentifier_Impl::ContentIdentifier_Impl(const OUString& rURL )
 
 
 ContentIdentifier::ContentIdentifier( const OUString& rURL )
+    : m_pImpl( new ContentIdentifier_Impl( rURL ) )
 {
-    m_pImpl = new ContentIdentifier_Impl( rURL );
 }
 
 
 // virtual
 ContentIdentifier::~ContentIdentifier()
 {
-    delete m_pImpl;
 }
 
 

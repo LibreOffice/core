@@ -136,7 +136,6 @@ ContentImplHelper::ContentImplHelper(
 // virtual
 ContentImplHelper::~ContentImplHelper()
 {
-    delete m_pImpl;
 }
 
 void SAL_CALL ContentImplHelper::acquire()

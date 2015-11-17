@@ -21,6 +21,7 @@
 #define INCLUDED_UCBHELPER_PROVIDERHELPER_HXX
 
 #include <list>
+#include <memory>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -70,7 +71,7 @@ class UCBHELPER_DLLPUBLIC ContentProviderImplHelper : public cppu::OWeakObject,
 {
     friend class ContentImplHelper;
 
-    ucbhelper_impl::ContentProviderImplHelper_Impl* m_pImpl;
+    std::unique_ptr<ucbhelper_impl::ContentProviderImplHelper_Impl> m_pImpl;
 
 protected:
     osl::Mutex m_aMutex;

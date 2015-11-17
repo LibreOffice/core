@@ -37,6 +37,7 @@
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <memory>
 
 namespace ucbhelper {
 
@@ -70,7 +71,7 @@ class UCBHELPER_DLLPUBLIC ResultSet :
                 public css::sdbc::XCloseable,
                 public css::beans::XPropertySet
 {
-    ResultSet_Impl* m_pImpl;
+    std::unique_ptr<ResultSet_Impl> m_pImpl;
 
 public:
     /**

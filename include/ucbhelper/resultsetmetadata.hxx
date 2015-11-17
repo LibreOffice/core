@@ -21,6 +21,7 @@
 #define INCLUDED_UCBHELPER_RESULTSETMETADATA_HXX
 
 #include <vector>
+#include <memory>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -141,7 +142,7 @@ class UCBHELPER_DLLPUBLIC ResultSetMetaData :
                 public css::sdbc::XResultSetMetaData
 {
 private:
-    ucbhelper_impl::ResultSetMetaData_Impl* m_pImpl;
+    std::unique_ptr<ucbhelper_impl::ResultSetMetaData_Impl> m_pImpl;
 
 protected:
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;

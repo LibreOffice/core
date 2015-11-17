@@ -23,6 +23,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <cppuhelper/implbase1.hxx>
+#include <memory>
 
 namespace ucbhelper
 {
@@ -36,7 +37,7 @@ struct CommandEnvironment_Impl;
 class UCBHELPER_DLLPUBLIC CommandEnvironment :
             public cppu::WeakImplHelper1< css::ucb::XCommandEnvironment >
 {
-    CommandEnvironment_Impl* m_pImpl;
+    std::unique_ptr<CommandEnvironment_Impl> m_pImpl;
 
 private:
     CommandEnvironment( const CommandEnvironment& ) = delete;
