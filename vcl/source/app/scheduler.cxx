@@ -114,6 +114,12 @@ void Scheduler::ImplDeInitScheduler()
 void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce)
 {
     ImplSVData* pSVData = ImplGetSVData();
+    if (pSVData->mbDeInit)
+    {
+        // do not start new timers during shutdown - if that happens after
+        // ImplSalStopTimer() on WNT the timer queue is restarted and never ends
+        return;
+    }
     InitSystemTimer(pSVData);
 
     if ( !nMS )
@@ -215,10 +221,15 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
 
 void Scheduler::Start()
 {
+    ImplSVData *const pSVData = ImplGetSVData();
+    if (pSVData->mbDeInit)
+    {
+        return;
+    }
+
     // Mark timer active
     mbActive = true;
 
-    ImplSVData* pSVData = ImplGetSVData();
     if ( !mpSchedulerData )
     {
         // insert Scheduler
