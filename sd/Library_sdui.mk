@@ -46,7 +46,6 @@ $(eval $(call gb_Library_use_libraries,sdui,\
     cppuhelper \
     editeng \
     i18nlangtag \
-    fwk \
     fwl \
     fwe \
     sal \
