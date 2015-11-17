@@ -38,7 +38,8 @@ TextToPronounce_zh::getPronounce(const sal_Unicode ch)
     if (idx) {
         sal_uInt16 address = idx[0][ch>>8];
         if (address != 0xFFFF)
-            return &idx[2][idx[1][address + (ch & 0xFF)]];
+            return reinterpret_cast<sal_Unicode *>(
+                &idx[2][idx[1][address + (ch & 0xFF)]]);
     }
     return emptyString;
 }

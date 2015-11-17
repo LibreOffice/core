@@ -121,7 +121,10 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
             sal_uInt16 address=idx[0][ch >> 8];
             if (address != 0xFFFF) {
                 address=idx[1][address+(ch & 0xFF)];
-                return idx[2] ? OUString(&idx[2][address]) : OUString(address);
+                return idx[2]
+                    ? OUString(
+                        reinterpret_cast<sal_Unicode *>(&idx[2][address]))
+                    : OUString(sal_Unicode(address));
             }
         }
     }
@@ -190,7 +193,8 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
                     if ( i > 0 && rLocale.Language == "zh" )
                         candidate.append(" ");
                     if (idx[2])
-                        candidate.append(&idx[2][address]);
+                        candidate.append(
+                            reinterpret_cast<sal_Unicode *>(&idx[2][address]));
                     else
                         candidate.append(address);
                 } else

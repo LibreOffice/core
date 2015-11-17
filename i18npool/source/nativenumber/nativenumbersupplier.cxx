@@ -318,7 +318,8 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         multiplierChar = OUString(MultiplierChar_7_CJK[0], ExponentCount_7_CJK*Multiplier_Count);
         decimalChar = OUString(DecimalChar, NumberChar_Count);
         minusChar = OUString(MinusChar, NumberChar_Count);
-        separatorChar = OUString(SeparatorChar, NumberChar_Count);
+        separatorChar = OUString(
+            reinterpret_cast<sal_Unicode *>(SeparatorChar), NumberChar_Count);
 
         for ( i = 0; i < nCount; i++) {
             if ((index = multiplierChar.indexOf(str[i])) >= 0) {
