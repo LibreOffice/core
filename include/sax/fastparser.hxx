@@ -25,6 +25,7 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include <sax/fastsaxdllapi.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace xml { namespace sax {
 
@@ -46,7 +47,7 @@ class FASTSAX_DLLPUBLIC FastSaxParser
                 css::xml::sax::XFastParser,
                 css::lang::XServiceInfo >
 {
-    FastSaxParserImpl* mpImpl;
+    std::unique_ptr<FastSaxParserImpl> mpImpl;
 
 public:
     FastSaxParser();

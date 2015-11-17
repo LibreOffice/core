@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <memory>
 
 namespace sax_expatwrap
 {
@@ -65,7 +66,7 @@ public:
         createClone()   throw(css::uno::RuntimeException, std::exception) override;
 
 private:
-    struct AttributeList_impl *m_pImpl;
+    std::unique_ptr<AttributeList_impl> m_pImpl;
 };
 
 }

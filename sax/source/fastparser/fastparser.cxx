@@ -1288,7 +1288,6 @@ FastSaxParser::FastSaxParser() : mpImpl(new FastSaxParserImpl(this)) {}
 
 FastSaxParser::~FastSaxParser()
 {
-    delete mpImpl;
 }
 
 void FastSaxParser::parseStream( const xml::sax::InputSource& aInputSource )
