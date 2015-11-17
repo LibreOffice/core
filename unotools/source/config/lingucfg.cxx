@@ -160,7 +160,7 @@ public:
     virtual ~SvtLinguConfigItem();
 
     // utl::ConfigItem
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
 
     // make some protected functions of utl::ConfigItem public
     using utl::ConfigItem::GetNodeNames;
@@ -170,15 +170,15 @@ public:
     using utl::ConfigItem::ReplaceSetProperties;
     //using utl::ConfigItem::GetReadOnlyStates;
 
-    com::sun::star::uno::Any
+    css::uno::Any
             GetProperty( const OUString &rPropertyName ) const;
-    com::sun::star::uno::Any
+    css::uno::Any
             GetProperty( sal_Int32 nPropertyHandle ) const;
 
     bool    SetProperty( const OUString &rPropertyName,
-                         const com::sun::star::uno::Any &rValue );
+                         const css::uno::Any &rValue );
     bool    SetProperty( sal_Int32 nPropertyHandle,
-                         const com::sun::star::uno::Any &rValue );
+                         const css::uno::Any &rValue );
 
     const SvtLinguOptions& GetOptions() const;
 

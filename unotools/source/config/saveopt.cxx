@@ -99,7 +99,7 @@ public:
                             SvtSaveOptions_Impl();
                             virtual ~SvtSaveOptions_Impl();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
     bool                    IsUseUserData() const               { return bUseUserData; }
@@ -772,7 +772,7 @@ public:
                             SvtLoadOptions_Impl();
                             virtual ~SvtLoadOptions_Impl();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     void                    SetLoadUserSettings(bool b){bLoadUserDefinedSettings = b; SetModified();}
     bool                IsLoadUserSettings() const {return bLoadUserDefinedSettings;}
@@ -789,7 +789,7 @@ SvtLoadOptions_Impl::SvtLoadOptions_Impl()
     EnableNotification( aNames );
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if (pValues[0].getValueTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
+    if (pValues[0].getValueTypeClass() == css::uno::TypeClass_BOOLEAN)
          bLoadUserDefinedSettings = *static_cast<sal_Bool const *>(pValues[0].getValue());
 }
 

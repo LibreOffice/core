@@ -39,7 +39,7 @@ NativeNumberWrapper::~NativeNumberWrapper()
 OUString
 NativeNumberWrapper::getNativeNumberString(
                     const OUString& rNumberString,
-                    const ::com::sun::star::lang::Locale& rLocale,
+                    const css::lang::Locale& rLocale,
                     sal_Int16 nNativeNumberMode ) const
 {
     try
@@ -56,7 +56,7 @@ NativeNumberWrapper::getNativeNumberString(
 
 i18n::NativeNumberXmlAttributes
 NativeNumberWrapper::convertToXmlAttributes(
-                    const ::com::sun::star::lang::Locale& rLocale,
+                    const css::lang::Locale& rLocale,
                     sal_Int16 nNativeNumberMode ) const
 {
     try

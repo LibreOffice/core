@@ -1209,7 +1209,7 @@ ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
     {
         return ERRCODE_IO_CANTSEEK;
     }
-    catch (const com::sun::star::lang::IllegalArgumentException&)
+    catch (const css::lang::IllegalArgumentException&)
     {
         return ERRCODE_IO_CANTSEEK;
     }

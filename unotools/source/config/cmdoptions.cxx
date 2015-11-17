@@ -85,7 +85,7 @@ class SvtCmdOptions
         CommandHashMap m_aCommandHashMap;
 };
 
-typedef ::std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > > SvtFrameVector;
+typedef ::std::vector< css::uno::WeakReference< css::frame::XFrame > > SvtFrameVector;
 
 class SvtCommandOptions_Impl : public ConfigItem
 {
@@ -115,7 +115,7 @@ class SvtCommandOptions_Impl : public ConfigItem
 
         bool                HasEntries  (   SvtCommandOptions::CmdOption    eOption     ) const;
         bool                Lookup      (   SvtCommandOptions::CmdOption    eCmdOption, const OUString& ) const;
-        void EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
+        void EstablisFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
     private:
 
@@ -215,7 +215,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
                                         pIt != m_lFrames.end();
                                       ++pIt                     )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame(pIt->get(), ::com::sun::star::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XFrame > xFrame(pIt->get(), css::uno::UNO_QUERY);
         if (xFrame.is())
             xFrame->contextChanged();
     }
@@ -257,12 +257,12 @@ bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, co
 
 //  public method
 
-void SvtCommandOptions_Impl::EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+void SvtCommandOptions_Impl::EstablisFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     // check if frame already exists inside list
     // ignore double registrations
     // every frame must be notified one times only!
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > xWeak(xFrame);
+    css::uno::WeakReference< css::frame::XFrame > xWeak(xFrame);
     SvtFrameVector::const_iterator pIt = ::std::find(m_lFrames.begin(), m_lFrames.end(), xWeak);
     if (pIt == m_lFrames.end())
         m_lFrames.push_back(xWeak);
@@ -344,7 +344,7 @@ bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandUR
 
 //  public method
 
-void SvtCommandOptions::EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+void SvtCommandOptions::EstablisFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->EstablisFrameCallback(xFrame);

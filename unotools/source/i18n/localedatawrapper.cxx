@@ -109,7 +109,7 @@ const LanguageTag& LocaleDataWrapper::getLanguageTag() const
     return maLanguageTag;
 }
 
-const ::com::sun::star::lang::Locale& LocaleDataWrapper::getMyLocale() const
+const css::lang::Locale& LocaleDataWrapper::getMyLocale() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     return maLanguageTag.getLocale();
@@ -144,7 +144,7 @@ void LocaleDataWrapper::invalidateData()
 
 /* FIXME-BCP47: locale data should provide a language tag instead that could be
  * passed on. */
-::com::sun::star::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
+css::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
 {
     try
     {
@@ -154,10 +154,10 @@ void LocaleDataWrapper::invalidateData()
     {
         SAL_WARN( "unotools.i18n", "getLanguageCountryInfo: Exception caught " << e.Message );
     }
-    return ::com::sun::star::i18n::LanguageCountryInfo();
+    return css::i18n::LanguageCountryInfo();
 }
 
-::com::sun::star::i18n::LocaleDataItem LocaleDataWrapper::getLocaleItem() const
+css::i18n::LocaleDataItem LocaleDataWrapper::getLocaleItem() const
 {
     try
     {
@@ -167,10 +167,10 @@ void LocaleDataWrapper::invalidateData()
     {
         SAL_WARN( "unotools.i18n", "getLocaleItem: Exception caught " << e.Message );
     }
-    return ::com::sun::star::i18n::LocaleDataItem();
+    return css::i18n::LocaleDataItem();
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies() const
+css::uno::Sequence< css::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies() const
 {
     try
     {
@@ -180,10 +180,10 @@ void LocaleDataWrapper::invalidateData()
     {
         SAL_WARN( "unotools.i18n", "getAllCurrencies: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >(0);
+    return css::uno::Sequence< css::i18n::Currency2 >(0);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > LocaleDataWrapper::getAllFormats() const
+css::uno::Sequence< css::i18n::FormatElement > LocaleDataWrapper::getAllFormats() const
 {
     try
     {
@@ -193,10 +193,10 @@ void LocaleDataWrapper::invalidateData()
     {
         SAL_WARN( "unotools.i18n", "getAllFormats: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement >(0);
+    return css::uno::Sequence< css::i18n::FormatElement >(0);
 }
 
-::com::sun::star::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
+css::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
 {
     try
     {
@@ -206,10 +206,10 @@ void LocaleDataWrapper::invalidateData()
     {
         SAL_WARN( "unotools.i18n", "getForbiddenCharacters: Exception caught " << e.Message );
     }
-    return ::com::sun::star::i18n::ForbiddenCharacters();
+    return css::i18n::ForbiddenCharacters();
 }
 
-::com::sun::star::uno::Sequence< OUString > LocaleDataWrapper::getReservedWord() const
+css::uno::Sequence< OUString > LocaleDataWrapper::getReservedWord() const
 {
     try
     {
@@ -219,10 +219,10 @@ void LocaleDataWrapper::invalidateData()
     {
         SAL_WARN( "unotools.i18n", "getReservedWord: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< OUString >(0);
+    return css::uno::Sequence< OUString >(0);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > LocaleDataWrapper::getAllInstalledLocaleNames() const
+css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getAllInstalledLocaleNames() const
 {
     uno::Sequence< lang::Locale > &rInstalledLocales = InstalledLocales::get();
 
@@ -243,7 +243,7 @@ void LocaleDataWrapper::invalidateData()
 // --- Impl and helpers ----------------------------------------------------
 
 // static
-::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > LocaleDataWrapper::getInstalledLocaleNames()
+css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getInstalledLocaleNames()
 {
     const uno::Sequence< lang::Locale > &rInstalledLocales =
         InstalledLocales::get();
@@ -257,7 +257,7 @@ void LocaleDataWrapper::invalidateData()
 }
 
 // static
-::com::sun::star::uno::Sequence< sal_uInt16 > LocaleDataWrapper::getInstalledLanguageTypes()
+css::uno::Sequence< sal_uInt16 > LocaleDataWrapper::getInstalledLanguageTypes()
 {
     uno::Sequence< sal_uInt16 > &rInstalledLanguageTypes =
         InstalledLanguageTypes::get();
@@ -265,10 +265,9 @@ void LocaleDataWrapper::invalidateData()
     if ( rInstalledLanguageTypes.getLength() )
         return rInstalledLanguageTypes;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
-        getInstalledLocaleNames();
+    css::uno::Sequence< css::lang::Locale > xLoc =  getInstalledLocaleNames();
     sal_Int32 nCount = xLoc.getLength();
-    ::com::sun::star::uno::Sequence< sal_uInt16 > xLang( nCount );
+    css::uno::Sequence< sal_uInt16 > xLang( nCount );
     sal_Int32 nLanguages = 0;
     for ( sal_Int32 i=0; i<nCount; i++ )
     {
@@ -469,7 +468,7 @@ void LocaleDataWrapper::getDefaultCalendarImpl()
     }
 }
 
-const std::shared_ptr< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper::getDefaultCalendar() const
+const std::shared_ptr< css::i18n::Calendar2 > LocaleDataWrapper::getDefaultCalendar() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (!xDefaultCalendar)
@@ -480,12 +479,12 @@ const std::shared_ptr< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper::ge
     return xDefaultCalendar;
 }
 
-const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarDays() const
+const css::uno::Sequence< css::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarDays() const
 {
     return getDefaultCalendar()->Days;
 }
 
-const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarMonths() const
+const css::uno::Sequence< css::i18n::CalendarItem2 > LocaleDataWrapper::getDefaultCalendarMonths() const
 {
     return getDefaultCalendar()->Months;
 }
@@ -1030,7 +1029,7 @@ void LocaleDataWrapper::getDigitGroupingImpl()
     }
 }
 
-const ::com::sun::star::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() const
+const css::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (!aGrouping.getLength() || aGrouping[0] == 0)
@@ -1366,7 +1365,7 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
         sal_Int16 nDisplayMonth, bool bTwoDigitYear ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
-    using namespace ::com::sun::star::i18n;
+    using namespace css::i18n;
     sal_Unicode     aBuf[20];
     sal_Unicode*    pBuf;
     OUString aStr;
@@ -1737,7 +1736,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 
 // --- XLocaleData3 ----------------------------------------------------------
 
-::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() const
+css::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() const
 {
     try
     {
@@ -1747,12 +1746,12 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     {
         SAL_WARN( "unotools.i18n", "getAllCalendars: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 >(0);
+    return css::uno::Sequence< css::i18n::Calendar2 >(0);
 }
 
 // --- XLocaleData4 ----------------------------------------------------------
 
-::com::sun::star::uno::Sequence< OUString > LocaleDataWrapper::getDateAcceptancePatterns() const
+css::uno::Sequence< OUString > LocaleDataWrapper::getDateAcceptancePatterns() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
 
@@ -1771,13 +1770,13 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     {
         SAL_WARN( "unotools.i18n", "getDateAcceptancePatterns: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< OUString >(0);
+    return css::uno::Sequence< OUString >(0);
 }
 
 // --- Override layer --------------------------------------------------------
 
 void LocaleDataWrapper::setDateAcceptancePatterns(
-        const ::com::sun::star::uno::Sequence< OUString > & rPatterns )
+        const css::uno::Sequence< OUString > & rPatterns )
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nWrite );
 

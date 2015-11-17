@@ -16,10 +16,10 @@
 namespace unotools { namespace misc {
 
 class ServiceDocumenter : public ::cppu::WeakImplHelper<
-    ::com::sun::star::script::XServiceDocumenter>
+    css::script::XServiceDocumenter>
 {
     public:
-        ServiceDocumenter(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const& xContext)
+        ServiceDocumenter(css::uno::Reference< css::uno::XComponentContext> const& xContext)
             : m_xContext(xContext)
             , m_sCoreBaseUrl("http://example.com")
             , m_sServiceBaseUrl("http://api.libreoffice.org/docs/idl/ref")

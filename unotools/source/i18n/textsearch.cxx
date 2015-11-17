@@ -98,8 +98,8 @@ namespace
     struct CachedTextSearch
     {
         ::osl::Mutex mutex;
-        ::com::sun::star::util::SearchOptions Options;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XTextSearch > xTextSearch;
+        css::util::SearchOptions Options;
+        css::uno::Reference< css::util::XTextSearch > xTextSearch;
     };
 
     struct theCachedTextSearch
@@ -127,7 +127,7 @@ TextSearch::TextSearch(const SearchParam & rParam, LanguageType eLang )
 {
     if( LANGUAGE_NONE == eLang )
         eLang = LANGUAGE_SYSTEM;
-    ::com::sun::star::lang::Locale aLocale( LanguageTag::convertToLocale( eLang ) );
+    css::lang::Locale aLocale( LanguageTag::convertToLocale( eLang ) );
 
     Init( rParam, aLocale);
 }
@@ -143,7 +143,7 @@ TextSearch::TextSearch( const SearchOptions& rPara )
 }
 
 void TextSearch::Init( const SearchParam & rParam,
-                        const ::com::sun::star::lang::Locale& rLocale )
+                        const css::lang::Locale& rLocale )
 {
     // convert SearchParam to the UNO SearchOptions
     SearchOptions aSOpt;
@@ -180,14 +180,14 @@ void TextSearch::Init( const SearchParam & rParam,
     if( !rParam.IsCaseSensitive() )
     {
         aSOpt.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
-        aSOpt.transliterateFlags |= ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE;
+        aSOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
     }
 
     xTextSearch = getXTextSearch( aSOpt );
 }
 
-void TextSearch::SetLocale( const ::com::sun::star::util::SearchOptions& rOptions,
-                            const ::com::sun::star::lang::Locale& rLocale )
+void TextSearch::SetLocale( const css::util::SearchOptions& rOptions,
+                            const css::lang::Locale& rLocale )
 {
     // convert SearchParam to the UNO SearchOptions
     SearchOptions aSOpt( rOptions );
@@ -207,7 +207,7 @@ TextSearch::~TextSearch()
  */
 bool TextSearch::SearchForward( const OUString &rStr,
                     sal_Int32* pStart, sal_Int32* pEnd,
-                    ::com::sun::star::util::SearchResult* pRes)
+                    css::util::SearchResult* pRes)
 {
     bool bRet = false;
     try

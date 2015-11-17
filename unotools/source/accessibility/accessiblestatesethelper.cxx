@@ -241,22 +241,18 @@ void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
 
 //=====  XTypeProvider  =======================================================
 
-uno::Sequence< ::com::sun::star::uno::Type>
-    AccessibleStateSetHelper::getTypes()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+uno::Sequence< css::uno::Type> AccessibleStateSetHelper::getTypes()
+    throw (css::uno::RuntimeException, std::exception)
 {
-    const ::com::sun::star::uno::Type aTypeList[] = {
+    css::uno::Sequence< css::uno::Type> aTypeSequence {
         cppu::UnoType<XAccessibleStateSet>::get(),
         cppu::UnoType<lang::XTypeProvider>::get()
-        };
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>
-        aTypeSequence (aTypeList, 2);
+    };
     return aTypeSequence;
 }
 
-uno::Sequence<sal_Int8> SAL_CALL
-    AccessibleStateSetHelper::getImplementationId()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+uno::Sequence<sal_Int8> SAL_CALL AccessibleStateSetHelper::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }

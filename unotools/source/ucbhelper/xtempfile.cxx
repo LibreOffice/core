@@ -30,7 +30,7 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
 : ::cppu::PropertySetMixin< css::io::XTempFile >(
     context
     , static_cast< Implements >( IMPLEMENTS_PROPERTY_SET | IMPLEMENTS_FAST_PROPERTY_SET | IMPLEMENTS_PROPERTY_ACCESS )
-    , com::sun::star::uno::Sequence< OUString >() )
+    , css::uno::Sequence< OUString >() )
 , mpStream( nullptr )
 , mbRemoveFile( true )
 , mbInClosed( false )

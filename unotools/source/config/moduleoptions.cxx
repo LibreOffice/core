@@ -294,7 +294,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         //  public interface
 
         bool            IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
-        ::com::sun::star::uno::Sequence < OUString > GetAllServiceNames();
+        css::uno::Sequence < OUString > GetAllServiceNames();
         OUString        GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
         OUString        GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
         static OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   );
@@ -474,7 +474,7 @@ bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eModule
     return bInstalled;
 }
 
-::com::sun::star::uno::Sequence < OUString > SvtModuleOptions_Impl::GetAllServiceNames()
+css::uno::Sequence < OUString > SvtModuleOptions_Impl::GetAllServiceNames()
 {
     std::vector<OUString> aVec;
 
@@ -1163,7 +1163,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
     return EFactory::UNKNOWN_FACTORY;
 }
 
-::com::sun::star::uno::Sequence < OUString > SvtModuleOptions::GetAllServiceNames()
+css::uno::Sequence < OUString > SvtModuleOptions::GetAllServiceNames()
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetAllServiceNames();

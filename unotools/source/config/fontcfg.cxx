@@ -872,7 +872,7 @@ static const enum_convert pWidthNames[] =
     { "ultraexpanded", WIDTH_ULTRA_EXPANDED }
 };
 
-void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Reference< XNameAccess >& rFont,
+void FontSubstConfiguration::fillSubstVector( const css::uno::Reference< XNameAccess >& rFont,
                                               const OUString& rType,
                                               std::vector< OUString >& rSubstVector ) const
 {
@@ -921,7 +921,7 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
     }
 }
 
-FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Reference< XNameAccess >& rFont,
+FontWeight FontSubstConfiguration::getSubstWeight( const css::uno::Reference< XNameAccess >& rFont,
                                                    const OUString& rType ) const
 {
     int weight = -1;
@@ -953,7 +953,7 @@ FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Re
     return (FontWeight)( weight >= 0 ? pWeightNames[weight].nEnum : WEIGHT_DONTKNOW );
 }
 
-FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Reference< XNameAccess >& rFont,
+FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNameAccess >& rFont,
                                                  const OUString& rType ) const
 {
     int width = -1;
@@ -985,7 +985,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Refe
     return (FontWidth)( width >= 0 ? pWidthNames[width].nEnum : WIDTH_DONTKNOW );
 }
 
-ImplFontAttrs FontSubstConfiguration::getSubstType( const com::sun::star::uno::Reference< XNameAccess >& rFont,
+ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< XNameAccess >& rFont,
                                                     const OUString& rType ) const
 {
     unsigned long type = 0;

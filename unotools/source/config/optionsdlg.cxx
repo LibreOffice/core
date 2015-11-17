@@ -57,7 +57,7 @@ private:
 public:
                     SvtOptionsDlgOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     static ::osl::Mutex & getInitMutex();
 

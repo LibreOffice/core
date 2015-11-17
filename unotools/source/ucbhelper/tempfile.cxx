@@ -114,10 +114,8 @@ OUString ConstructTempDir_Impl( const OUString* pParent )
     OUString aName;
     if ( pParent && !pParent->isEmpty() )
     {
-        com::sun::star::uno::Reference<
-            com::sun::star::ucb::XUniversalContentBroker > pBroker(
-                com::sun::star::ucb::UniversalContentBroker::create(
-                    comphelper::getProcessComponentContext() ) );
+        css::uno::Reference< css::ucb::XUniversalContentBroker > pBroker(
+                css::ucb::UniversalContentBroker::create( comphelper::getProcessComponentContext() ) );
 
         // test for valid filename
         OUString aRet;

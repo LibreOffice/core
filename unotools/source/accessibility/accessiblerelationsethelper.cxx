@@ -228,23 +228,19 @@ void AccessibleRelationSetHelper::AddRelation(const AccessibleRelation& rRelatio
 
 //=====  XTypeProvider  =======================================================
 
-uno::Sequence< ::com::sun::star::uno::Type>
-    AccessibleRelationSetHelper::getTypes()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+uno::Sequence< css::uno::Type> AccessibleRelationSetHelper::getTypes()
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
-    const ::com::sun::star::uno::Type aTypeList[] = {
+    css::uno::Sequence< css::uno::Type> aTypeSequence {
         cppu::UnoType<XAccessibleRelationSet>::get(),
         cppu::UnoType<lang::XTypeProvider>::get()
-        };
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>
-        aTypeSequence (aTypeList, 2);
+    };
     return aTypeSequence;
 }
 
-uno::Sequence<sal_Int8> SAL_CALL
-    AccessibleRelationSetHelper::getImplementationId()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+uno::Sequence<sal_Int8> SAL_CALL AccessibleRelationSetHelper::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }

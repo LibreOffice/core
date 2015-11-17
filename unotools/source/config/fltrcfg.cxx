@@ -68,7 +68,7 @@ public:
         bLoadVBA(false),
         bSaveVBA(false)  {}
     virtual ~SvtAppFilterOptions_Impl();
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
     void                    Load();
 
     bool                IsLoad() const {return bLoadVBA;}

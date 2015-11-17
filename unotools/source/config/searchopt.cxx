@@ -59,7 +59,7 @@ public:
     SvtSearchOptions_Impl();
     virtual ~SvtSearchOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     bool            GetFlag( sal_uInt16 nOffset ) const;
     void            SetFlag( sal_uInt16 nOffset, bool bVal );
