@@ -144,7 +144,7 @@ public:
                         pVarDecl->getLocation())
                     << pVarDecl->getSourceRange();
                 if (ret.second != nullptr) {
-                    report(DiagnosticsEngine::Remark,
+                    report(DiagnosticsEngine::Note,
                             "... due to this member",
                             ret.second->getLocation())
                         << ret.second->getSourceRange();
