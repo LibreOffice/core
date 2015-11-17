@@ -323,7 +323,7 @@ void JNI_context::java_exc_occurred() const
         rtl_mem::allocate(
             sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
     rtl_uString * ustr = reinterpret_cast<rtl_uString *>(ustr_mem.get());
-    m_env->GetStringRegion( static_cast<jstring>(jo_descr.get()), 0, len, ustr->buffer );
+    m_env->GetStringRegion( static_cast<jstring>(jo_descr.get()), 0, len, reinterpret_cast<jchar *>(ustr->buffer) );
     if (m_env->ExceptionCheck())
     {
         m_env->ExceptionClear();
@@ -400,7 +400,7 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
                         sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
                 rtl_uString * ustr = reinterpret_cast<rtl_uString *>(ustr_mem.get());
                 m_env->GetStringRegion(
-                    static_cast<jstring>(jo_stack_trace.get()), 0, len, ustr->buffer );
+                    static_cast<jstring>(jo_stack_trace.get()), 0, len, reinterpret_cast<jchar *>(ustr->buffer) );
                 if (assert_no_exception())
                 {
                     ustr->refCount = 1;
