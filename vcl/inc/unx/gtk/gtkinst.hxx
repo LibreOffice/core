@@ -76,7 +76,7 @@ public:
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics*,
                                                      long &nDX, long &nDY,
-                                                     sal_uInt16 nBitCount,
+                                                     DeviceFormat eFormat,
                                                      const SystemGraphicsData* ) override;
     virtual SalBitmap*          CreateSalBitmap() override;
 

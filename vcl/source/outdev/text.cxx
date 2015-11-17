@@ -236,7 +236,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     // cache virtual device for rotation
     if (!mpOutDevData->mpRotateDev)
-        mpOutDevData->mpRotateDev = VclPtr<VirtualDevice>::Create( *this, 1 );
+        mpOutDevData->mpRotateDev = VclPtr<VirtualDevice>::Create(*this, DeviceFormat::BITMASK);
     VirtualDevice* pVDev = mpOutDevData->mpRotateDev;
 
     // size it accordingly
@@ -2508,7 +2508,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font
-    ScopedVclPtrInstance< VirtualDevice > aVDev(  1  );
+    ScopedVclPtrInstance< VirtualDevice > aVDev(DeviceFormat::BITMASK);
     vcl::Font aFont( GetFont() );
     aFont.SetShadow( false );
     aFont.SetOutline( false );
@@ -2732,7 +2732,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
         + mnEmphasisDescent;
     pSalLayout->Release();
 
-    ScopedVclPtrInstance< VirtualDevice > aVDev( 1 );
+    ScopedVclPtrInstance< VirtualDevice > aVDev(DeviceFormat::BITMASK);
 
     vcl::Font aFont(GetFont());
     aFont.SetShadow(false);
