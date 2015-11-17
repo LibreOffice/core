@@ -483,7 +483,9 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             hb_buffer_set_script(pHbBuffer, maHbScript);
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
             hb_buffer_set_flags(pHbBuffer, (hb_buffer_flags_t) nHbFlags);
-            hb_buffer_add_utf16(pHbBuffer, pStr, nLength, nMinRunPos, nRunLen);
+            hb_buffer_add_utf16(
+                pHbBuffer, reinterpret_cast<uint16_t const *>(pStr), nLength,
+                nMinRunPos, nRunLen);
             hb_shape(pHbFont, pHbBuffer, nullptr, 0);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);

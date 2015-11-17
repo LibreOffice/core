@@ -2188,7 +2188,8 @@ std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aCha
     if( aRet.empty() && aChar != 0 )
     {
         sal_Char aBuf[8];
-        sal_Int32 nChars = snprintf( aBuf, sizeof( aBuf ), "uni%.4hX", aChar );
+        sal_Int32 nChars = snprintf(
+            aBuf, sizeof(aBuf), "uni%.4hX", sal_uInt16(aChar));
         aRet.push_back( OString( aBuf, nChars ) );
     }
 

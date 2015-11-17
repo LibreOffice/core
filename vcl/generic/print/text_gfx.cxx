@@ -633,7 +633,7 @@ PrinterGfx::getCharMetric (const Font2 &rFont, sal_Unicode n_char, CharacterMetr
 }
 
 sal_Int32
-PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
+PrinterGfx::GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo, long *pWidthArray)
 {
     Font2 aFont(*this);
     if (aFont.IsSymbolFont() && (nFrom < 256) && (nTo < 256))

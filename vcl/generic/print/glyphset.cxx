@@ -749,7 +749,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
         return false;
 
     // array of unicode source characters
-    sal_Unicode pUChars[256];
+    sal_uInt16 pUChars[256];
 
     // encoding vector maps character encoding to the ordinal number
     // of the glyph in the output file

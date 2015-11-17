@@ -104,7 +104,8 @@ OUString toOUString(const QString& s)
 
 QString toQString(const OUString& s)
 {
-    return QString::fromUtf16(s.getStr(), s.getLength());
+    return QString::fromUtf16(
+        reinterpret_cast<ushort const *>(s.getStr()), s.getLength());
 }
 
 // KDE4FilePicker
