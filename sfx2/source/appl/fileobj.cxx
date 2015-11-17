@@ -253,6 +253,11 @@ bool SvFileObject::LoadFile_Impl()
     if( bWaitForData || !bLoadAgain || xMed.Is() )
         return false;
 
+    // don't try to load again the previous graphic asynchronously
+    static OUString sFileNmPrevGrf("");
+    if( sFileNm == sFileNmPrevGrf )
+        return true;
+
     // at the moment on the current DocShell
     xMed = new SfxMedium( sFileNm, sReferer, STREAM_STD_READ );
     SvLinkSource::StreamToLoadFrom aStreamToLoadFrom =
@@ -263,6 +268,7 @@ bool SvFileObject::LoadFile_Impl()
 
     if( !bSynchron )
     {
+        sFileNmPrevGrf = sFileNm;
         bLoadAgain = bDataReady = bInNewData = false;
         bWaitForData = true;
 
