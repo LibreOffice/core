@@ -285,7 +285,8 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
             continue;
 
         rRenderContext.Push(PushFlags::MAPMODE);
-        Point aOffset(PixelToLogic(pChild->GetPosPixel()));
+        const Fraction& rFraction(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
+        Point aOffset(PixelToLogic(pChild->GetPosPixel() * rFraction.GetDenominator() / rFraction.GetNumerator()));
         MapMode aMapMode(rRenderContext.GetMapMode());
         aMapMode.SetOrigin(aMapMode.GetOrigin() + aOffset);
         rRenderContext.SetMapMode(aMapMode);
@@ -1402,7 +1403,7 @@ sal_Int32 SwSidebarWin::GetMetaButtonAreaWidth()
 
 sal_Int32 SwSidebarWin::GetMetaHeight()
 {
-    const Fraction& f( GetMapMode().GetScaleY() );
+    const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     return POSTIT_META_HEIGHT * f.GetNumerator() / f.GetDenominator();
 }
 
@@ -1413,7 +1414,7 @@ sal_Int32 SwSidebarWin::GetMinimumSizeWithMeta()
 
 sal_Int32 SwSidebarWin::GetMinimumSizeWithoutMeta()
 {
-    const Fraction& f( GetMapMode().GetScaleY() );
+    const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     return POSTIT_MINIMUMSIZE_WITHOUT_META * f.GetNumerator() / f.GetDenominator();
 }
 
