@@ -21,10 +21,9 @@
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_XLIB_CAIRO_HXX
 
 #include <sal/config.h>
-
 #include <sal/types.h>
-
 #include <vcl/cairo.hxx>
+#include <vcl/salgtype.hxx>
 
 struct BitmapSystemData;
 struct SystemEnvData;
@@ -92,6 +91,7 @@ namespace cairo {
         virtual void flush() const override;
 
         int getDepth() const;
+        DeviceFormat getFormat() const;
         X11PixmapSharedPtr getPixmap() const { return mpPixmap; }
         void* getRenderFormat() const { return maSysData.pRenderFormat; }
         long getDrawable() const { return mpPixmap ? mpPixmap->mhDrawable : maSysData.hDrawable; }

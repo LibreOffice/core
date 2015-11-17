@@ -112,7 +112,7 @@ namespace vclcanvas
             // VDev not yet created, do it now. Create an alpha-VDev,
             // if bitmap has transparency.
             mpVDev = maBitmap->IsTransparent() ?
-                VclPtr<VirtualDevice>::Create( mrRefDevice, 0, 0 ) :
+                VclPtr<VirtualDevice>::Create( mrRefDevice, DeviceFormat::FULLCOLOR, DeviceFormat::FULLCOLOR ) :
                 VclPtr<VirtualDevice>::Create( mrRefDevice );
 
             OSL_ENSURE( mpVDev,
