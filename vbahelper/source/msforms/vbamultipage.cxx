@@ -78,7 +78,7 @@ ScVbaMultiPage::getValue() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaMultiPage::setValue( const sal_Int32 _value ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaMultiPage::setValue( const sal_Int32 _value ) throw (css::uno::RuntimeException, std::exception)
 {
     // Openoffice 1 based tab index
     sal_Int32 nVal = _value + 1;

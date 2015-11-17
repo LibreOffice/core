@@ -34,7 +34,7 @@ ScVbaSpinButton::getValue() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaSpinButton::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaSpinButton::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( "SpinValue", _value );
 }

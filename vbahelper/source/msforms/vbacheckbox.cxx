@@ -38,7 +38,7 @@ ScVbaCheckbox::getCaption() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaCheckbox::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaCheckbox::setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
 }

@@ -37,7 +37,7 @@ ScVbaLabel::getCaption() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaLabel::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaLabel::setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
 }
@@ -48,7 +48,7 @@ ScVbaLabel::getValue() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaLabel::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaLabel::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException, std::exception)
 {
     OUString sCaption;
     _value >>= sCaption;
@@ -63,7 +63,7 @@ ScVbaLabel::getAccelerator() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaLabel::setAccelerator( const OUString& /*_accelerator*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaLabel::setAccelerator( const OUString& /*_accelerator*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     // #STUB
 }

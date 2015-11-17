@@ -34,7 +34,7 @@ ScVbaScrollBar::getValue() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaScrollBar::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaScrollBar::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException, std::exception)
 {
     m_xProps->setPropertyValue( "ScrollValue", _value );
 }
