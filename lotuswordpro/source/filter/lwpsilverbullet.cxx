@@ -278,7 +278,7 @@ OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumber)
         strNumChar = "i";
         break;
     case NUMCHAR_other:
-        strNumChar = OUString(pParaNumber->GetNumberChar());
+        strNumChar = OUString(sal_Unicode(pParaNumber->GetNumberChar()));
         break;
     case NUMCHAR_Chinese1:
         {
