@@ -221,7 +221,7 @@ void Formula::makeIdentifier(Node *res)
           indo;
 #else
           rstartEl("math:mi", rList);
-          runistr(getMathMLEntity(tmp->value).c_str());
+          runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
           rendEl("math:mi");
 #endif
           break;
@@ -243,7 +243,7 @@ void Formula::makeIdentifier(Node *res)
           inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value); indo;
 #else
           rstartEl("math:mo", rList);
-          runistr(getMathMLEntity(tmp->value).c_str());
+          runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
           rendEl("math:mo");
 #endif
           break;
@@ -404,7 +404,7 @@ void Formula::makeDecoration(Node *res)
      indo;
 #else
      rstartEl("math:mo", rList);
-     runistr(getMathMLEntity(tmp->value).c_str());
+     runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
      rendEl("math:mo");
 #endif
 
@@ -526,9 +526,9 @@ void Formula::makeFence(Node *res)
                 getMathMLEntity(tmp->next->next->value).c_str());
 #else
      padd("open", "CDATA",
-             OUString(getMathMLEntity(tmp->value).c_str()) );
+             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str())));
      padd("close", "CDATA",
-             OUString(getMathMLEntity(tmp->next->next->value).c_str()) );
+             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->next->next->value).c_str())));
      rstartEl("math:mfenced", rList);
      pList->clear();
 #endif
