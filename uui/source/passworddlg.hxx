@@ -44,7 +44,7 @@ class PasswordDialog : public ModalDialog
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
 
 public:
-    PasswordDialog( vcl::Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, const OUString& aDocURL,
+    PasswordDialog( vcl::Window* pParent, css::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, const OUString& aDocURL,
             bool bOpenToModify = false, bool bIsSimplePasswordRequest = false );
     virtual ~PasswordDialog();
     virtual void dispose() override;
@@ -53,8 +53,8 @@ public:
     OUString        GetPassword() const { return m_pEDPassword->GetText(); }
 
 private:
-    ::com::sun::star::task::PasswordRequestMode     nDialogMode;
-    ResMgr*                                         pResourceMgr;
+    css::task::PasswordRequestMode     nDialogMode;
+    ResMgr*                            pResourceMgr;
 };
 
 #endif // INCLUDED_UUI_SOURCE_PASSWORDDLG_HXX

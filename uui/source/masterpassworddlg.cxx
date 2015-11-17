@@ -35,8 +35,8 @@ IMPL_LINK_NOARG_TYPED(MasterPasswordDialog, OKHdl_Impl, Button*, void)
 
 MasterPasswordDialog::MasterPasswordDialog
 (
-    vcl::Window*                                     pParent,
-    ::com::sun::star::task::PasswordRequestMode aDialogMode,
+    vcl::Window*                                pParent,
+    css::task::PasswordRequestMode              aDialogMode,
     ResMgr*                                     pResMgr
 )
     : ModalDialog(pParent, "MasterPasswordDialog", "uui/ui/masterpassworddlg.ui")
@@ -45,7 +45,7 @@ MasterPasswordDialog::MasterPasswordDialog
 {
     get(m_pEDMasterPassword, "password");
     get(m_pOKBtn, "ok");
-    if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
+    if( nDialogMode == css::task::PasswordRequestMode_PASSWORD_REENTER )
     {
         OUString aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, *pResourceMgr ));
         ScopedVclPtrInstance< MessageDialog > aErrorBox(pParent, aErrorMsg);

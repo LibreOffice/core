@@ -165,7 +165,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
     @seealso    method InetURLObject::getAbbreviated()
     @threadsafe no
 *//*-*************************************************************************************************************/
-class StringCalculator : public ::cppu::WeakImplHelper< ::com::sun::star::util::XStringWidth >
+class StringCalculator : public ::cppu::WeakImplHelper< css::util::XStringWidth >
 {
     public:
         explicit StringCalculator( const OutputDevice* pDevice )
@@ -173,7 +173,7 @@ class StringCalculator : public ::cppu::WeakImplHelper< ::com::sun::star::util::
         {
         }
 
-        sal_Int32 SAL_CALL queryStringWidth( const OUString& sString ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override
+        sal_Int32 SAL_CALL queryStringWidth( const OUString& sString ) throw( css::uno::RuntimeException, std::exception ) override
         {
             return (sal_Int32)(m_pDevice->GetTextWidth(sString));
         }
@@ -207,7 +207,7 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
     else
     {
         // otherwise its really a url ... build short name by using INetURLObject
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > xStringCalculator( new StringCalculator(m_pFtURL) );
+        css::uno::Reference< css::util::XStringWidth > xStringCalculator( new StringCalculator(m_pFtURL) );
         if( xStringCalculator.is() )
         {
             INetURLObject aBuilder   ( sName );

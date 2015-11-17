@@ -36,15 +36,15 @@ class MasterPasswordDialog : public ModalDialog
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
 
 public:
-    MasterPasswordDialog( vcl::Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
+    MasterPasswordDialog( vcl::Window* pParent, css::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
     virtual ~MasterPasswordDialog();
     virtual void dispose() override;
 
     OUString        GetMasterPassword() const { return m_pEDMasterPassword->GetText(); }
 
 private:
-    ::com::sun::star::task::PasswordRequestMode     nDialogMode;
-    ResMgr*                                         pResourceMgr;
+    css::task::PasswordRequestMode     nDialogMode;
+    ResMgr*                            pResourceMgr;
 };
 
 #endif // INCLUDED_UUI_SOURCE_MASTERPASSWORDDLG_HXX
