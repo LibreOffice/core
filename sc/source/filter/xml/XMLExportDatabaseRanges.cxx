@@ -354,7 +354,7 @@ private:
             {
                 OUStringBuffer aBuf;
                 aBuf.append(SC_USERLIST);
-                aBuf.append(aParam.nUserIndex);
+                aBuf.append(static_cast<sal_Int32>(aParam.nUserIndex));
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf.makeStringAndClear());
             }
             else
