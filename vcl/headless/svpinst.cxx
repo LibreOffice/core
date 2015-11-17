@@ -227,10 +227,10 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 
 SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics */,
                                                        long &nDX, long &nDY,
-                                                       sal_uInt16 nBitCount,
+                                                       DeviceFormat eFormat,
                                                        const SystemGraphicsData* /* pData */ )
 {
-    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
+    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat);
     pNew->SetSize( nDX, nDY );
     return pNew;
 }
@@ -420,7 +420,7 @@ void SvpSalInstance::setBitCountFormatMapping( sal_uInt16 nBitCount,
     m_aBitCountFormatMap[nBitCount] = aFormat;
 }
 
-Format SvpSalInstance::getFormatForBitCount( sal_uInt16 nBitCount )
+Format SvpSalInstance::getBaseBmpFormatForBitCount( sal_uInt16 nBitCount )
 {
     BitCountFormatMap::iterator aIt;
     if ( (aIt = m_aBitCountFormatMap.find( nBitCount )) != m_aBitCountFormatMap.end() )
@@ -457,4 +457,31 @@ Format SvpSalInstance::getFormatForBitCount( sal_uInt16 nBitCount )
      }
 
 }
+
+Format SvpSalInstance::getBaseBmpFormatForDeviceFormat(DeviceFormat eFormat)
+{
+    switch (eFormat)
+    {
+        case DeviceFormat::BITMASK:
+            return Format::OneBitMsbPal;
+        case DeviceFormat::GRAYSCALE:
+            return Format::EightBitPal;
+        default:
+        {
+            BitCountFormatMap::iterator aIt;
+            if ( (aIt = m_aBitCountFormatMap.find(32)) != m_aBitCountFormatMap.end() )
+            {
+                return aIt->second;
+            }
+
+#ifdef ANDROID
+            return Format::ThirtyTwoBitTcMaskRGBA;
+#else
+            return Format::ThirtyTwoBitTcMaskBGRX;
+#endif
+        }
+     }
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

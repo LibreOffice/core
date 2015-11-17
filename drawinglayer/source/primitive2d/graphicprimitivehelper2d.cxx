@@ -96,7 +96,8 @@ namespace
         if(maAnimation.Count())
         {
             ScopedVclPtrInstance< VirtualDevice > aVirtualDevice(*Application::GetDefaultDevice());
-            ScopedVclPtrInstance< VirtualDevice > aVirtualDeviceMask(*Application::GetDefaultDevice(), 1L);
+            ScopedVclPtrInstance< VirtualDevice > aVirtualDeviceMask(*Application::GetDefaultDevice(),
+                                                                     DeviceFormat::BITMASK);
 
             // Prepare VirtualDevices and their states
             aVirtualDevice->EnableMapMode(false);
