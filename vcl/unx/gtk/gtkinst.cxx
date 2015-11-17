@@ -315,19 +315,19 @@ void GtkYieldMutex::ThreadsLeave()
 
 SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
                                                     long &nDX, long &nDY,
-                                                    sal_uInt16 nBitCount,
+                                                    DeviceFormat eFormat,
                                                     const SystemGraphicsData *pGd )
 {
     EnsureInit();
 #if GTK_CHECK_VERSION(3,0,0)
     (void)pG; (void) pGd;
-    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
+    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat);
     pNew->SetSize( nDX, nDY );
     return pNew;
 #else
     GtkSalGraphics *pGtkSalGraphics = dynamic_cast<GtkSalGraphics*>(pG);
     assert(pGtkSalGraphics);
-    return CreateX11VirtualDevice(pG, nDX, nDY, nBitCount, pGd,
+    return CreateX11VirtualDevice(pG, nDX, nDY, eFormat, pGd,
             new GtkSalGraphics(pGtkSalGraphics->GetGtkFrame(), pGtkSalGraphics->GetGtkWidget()));
 #endif
 }

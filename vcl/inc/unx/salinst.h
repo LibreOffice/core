@@ -57,11 +57,11 @@ public:
 
     /// Gtk vclplug needs to pass GtkSalGraphics to X11SalVirtualDevice, so create it, and pass as pNewGraphics.
     virtual SalVirtualDevice* CreateX11VirtualDevice(SalGraphics* pGraphics, long &nDX, long &nDY,
-            sal_uInt16 nBitCount, const SystemGraphicsData* pData, X11SalGraphics* pNewGraphics);
+            DeviceFormat eFormat, const SystemGraphicsData* pData, X11SalGraphics* pNewGraphics);
 
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) override;
+                                                     DeviceFormat eFormat, const SystemGraphicsData *pData = NULL ) override;
     virtual void                PostPrintersChanged() override;
     virtual GenPspGraphics     *CreatePrintGraphics() override;
 

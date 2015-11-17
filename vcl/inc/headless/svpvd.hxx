@@ -28,12 +28,12 @@ class SvpSalGraphics;
 
 class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 {
-    sal_uInt16                          m_nBitCount;
+    DeviceFormat                        m_eFormat;
     basebmp::BitmapDeviceSharedPtr      m_aDevice;
     std::list< SvpSalGraphics* >        m_aGraphics;
 
 public:
-    SvpSalVirtualDevice( sal_uInt16 nBitCount ) : m_nBitCount(nBitCount) {}
+    SvpSalVirtualDevice(DeviceFormat eFormat) : m_eFormat(eFormat) {}
     virtual ~SvpSalVirtualDevice();
 
     // SalVirtualDevice
