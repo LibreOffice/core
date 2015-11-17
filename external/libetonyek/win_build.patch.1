@@ -10,4 +10,4 @@ Fix the windows build - fix libtool
 +    mkdir -p $f_ex_an_ar_dir/contexts
      func_show_eval "(cd \$f_ex_an_ar_dir && $AR x \"\$f_ex_an_ar_oldlib\")" \
  		   'stat=$?; rm -f "$lockfile"; exit $stat'
-     if test "$lock_old_archive_extraction" = yes; then
+     if test yes = "$lock_old_archive_extraction"; then

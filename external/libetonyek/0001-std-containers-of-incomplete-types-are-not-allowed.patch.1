@@ -1,0 +1,58 @@
+From 0beaf8ae8d9fc9049ac684ca169295357275eb85 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Wed, 18 Nov 2015 13:19:17 +0100
+Subject: [PATCH] std containers of incomplete types are not allowed
+
+Change-Id: Icd916b4b0e2e2ae87014b6b53dbba5e56aa43846
+---
+ configure.ac       |  1 +
+ src/lib/IWAField.h | 11 +++++++----
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/src/lib/IWAField.h b/src/lib/IWAField.h
+index 3566513..46c2e4c 100644
+--- a/src/lib/IWAField.h
++++ b/src/lib/IWAField.h
+@@ -13,6 +13,7 @@
+ #include <deque>
+ #include <stdexcept>
+ 
++#include <boost/container/deque.hpp>
+ #include <boost/optional.hpp>
+ #include <boost/shared_ptr.hpp>
+ 
+@@ -71,7 +72,7 @@ namespace detail
+ template<IWAField::Tag TagV, typename ValueT, typename Reader>
+ class IWAFieldImpl : public IWAField
+ {
+-  typedef std::deque<ValueT> container_type;
++  typedef boost::container::deque<ValueT> container_type;
+ 
+ public:
+   typedef ValueT value_type;
+@@ -143,9 +144,11 @@ public:
+ 
+   // conversions
+ 
+-  const std::deque<value_type> &repeated() const
++  // TODO: remove this or replace direct use of std::deque by a typedef
++  const std::deque<value_type> repeated() const
+   {
+-    return m_values;
++    const std::deque<value_type> values(m_values.begin(), m_values.end());
++    return values;
+   }
+ 
+   const boost::optional<value_type> optional() const
+@@ -166,7 +169,7 @@ public:
+   }
+ 
+ private:
+-  std::deque<ValueT> m_values;
++  container_type m_values;
+ };
+ 
+ }
+-- 
+2.5.0
+
