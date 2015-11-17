@@ -1,0 +1,393 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_31a3b0a0",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "Umm.. what? Decrementing a reverse iterator that was pointing to rend() (which is \"one before begin()\" so to say) and assigning that to itEnd looks wrong to me. But maybe I\u0027m just not following your thoughts..",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_51ef54b0",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "This at least looks odd.. are you sure about the roles of the *reverse* iterators?",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_7176d83f",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "No trailing white space on lines please.",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_5173d44d",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "No trailing white space on lines please.",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b18e8025",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "No trailing white space on lines please.\n\nHow did you actually manage to commit that change? Normally there\u0027s a commit-hook preventing trailing white space.",
+      "range": {
+        "startLine": 1063,
+        "startChar": 91,
+        "endLine": 1063,
+        "endChar": 92
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_71f2589c",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "What is this fragment?",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_71db781c",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "funcNameStr.copy(0, funcNameStr.getLength())\n\nmakes no sense. The result is identical to funcNameStr, so just use funcNameStr.",
+      "range": {
+        "startLine": 1201,
+        "startChar": 42,
+        "endLine": 1201,
+        "endChar": 86
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_51d8f41d",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "(*itStr).copy((*itStr).getLength()-1, (*itStr).getLength())\n\nis wrong. It copies getLength() characters from behind the string data, which is an access violation.",
+      "range": {
+        "startLine": 1201,
+        "startChar": 89,
+        "endLine": 1201,
+        "endChar": 148
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b1032076",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "Instead,\n\n tipStr \u003d tipStr + \", \";\n\nor\n\n tipStr +\u003d \", \";",
+      "range": {
+        "startLine": 1207,
+        "startChar": 28,
+        "endLine": 1207,
+        "endChar": 79
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_11f5cc82",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "Instead,\n\n tipStr +\u003d funcNameStr;",
+      "range": {
+        "startLine": 1209,
+        "startChar": 24,
+        "endLine": 1209,
+        "endChar": 115
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_31f8d07c",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "Instead,\n\n tipStr +\u003d \"]\";",
+      "range": {
+        "startLine": 1211,
+        "startChar": 28,
+        "endLine": 1211,
+        "endChar": 78
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_11a02c90",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "tipStr.copy(0, tipStr.getLength())\n\nis identical to tipStr, so instead that should be\n\n tipStr \u003d tipStr + \" and \" + ...\n\nBut, these English \" and \" and \" more\" are not localizeable. You\u0027d need a proper resource string for that with %1 and %2 placeholders and replace them in that string with the actual data, for example \"%1 and %2 more\".",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_71ad3888",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "What is this fragment?",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_51c1142e",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "funcNameStr.copy(0, funcNameStr.getLength())\n\nmakes no sense. The result is identical to funcNameStr, so just use funcNameStr.",
+      "range": {
+        "startLine": 1253,
+        "startChar": 34,
+        "endLine": 1253,
+        "endChar": 78
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b1dcc019",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "(*itStr).copy((*itStr).getLength()-1, (*itStr).getLength())\n\nis wrong. It copies getLength() characters from behind the string data, which is an access violation.",
+      "range": {
+        "startLine": 1253,
+        "startChar": 81,
+        "endLine": 1253,
+        "endChar": 140
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_91e1bcd3",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "Instead,\n\n tipStr \u003d tipStr + \", \";\n\nor\n\n tipStr +\u003d \", \";",
+      "range": {
+        "startLine": 1259,
+        "startChar": 20,
+        "endLine": 1259,
+        "endChar": 71
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f1e648e7",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1261,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "Instead,\n\n tipStr +\u003d funcNameStr;",
+      "range": {
+        "startLine": 1261,
+        "startChar": 16,
+        "endLine": 1261,
+        "endChar": 107
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_91089c93",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "Instead,\n\n tipStr +\u003d \"]\";",
+      "range": {
+        "startLine": 1263,
+        "startChar": 20,
+        "endLine": 1263,
+        "endChar": 70
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_11ce6c5a",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T15:25:01Z",
+      "side": 1,
+      "message": "tipStr.copy(0, tipStr.getLength())\n\nis identical to tipStr, so instead that should be\n\n tipStr \u003d tipStr + \" and \" + ...\n\nBut, these English \" and \" and \" more\" are not localizeable. You\u0027d need a proper resource string for that with %1 and %2 placeholders and replace them in that string with the actual data, for example \"%1 and %2 more\".",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
