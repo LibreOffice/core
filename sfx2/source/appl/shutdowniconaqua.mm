@@ -118,7 +118,7 @@ static std::set< OUString > aShortcuts;
 
 static NSString* getAutoreleasedString( const rtl::OUString& rStr )
 {
-    return [[[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()] autorelease];
+    return [[[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rStr.getStr()) length: rStr.getLength()] autorelease];
 }
 
 struct RecentMenuEntry
