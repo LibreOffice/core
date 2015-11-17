@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_711d3866",
+        "filename": "filter/source/svg/parserfragments.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-17T06:37:24Z",
+      "side": 1,
+      "message": "no need to make a copy, just do:\n  sLink.startsWith(\"data:\")",
+      "revId": "7d59bf559ce4ca14676dd46ba302af43e791c198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
