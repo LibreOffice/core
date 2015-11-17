@@ -94,7 +94,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
 : m_xProps( new PropertyValueMap ),
   m_bTrailingSlash( false )
 {
-    OSL_ENSURE( !rResource.uri.isEmpty(),
+    SAL_WARN_IF( rResource.uri.isEmpty(), "ucb.ucp.webdav",
                 "ContentProperties ctor - Empty resource URI!" );
 
     // Title

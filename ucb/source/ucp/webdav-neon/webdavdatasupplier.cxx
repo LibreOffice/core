@@ -378,12 +378,35 @@ bool DataSupplier::getData()
                            propertyNames,
                            resources,
                            getResultSet()->getEnvironment() );
-          }
-          catch ( DAVException & )
+#if defined SAL_LOG_INFO
+            {
+                //print the resource for every URI returned
+                std::vector< DAVResource >::const_iterator it3 = resources.begin();
+                std::vector< DAVResource >::const_iterator end3 = resources.end();
+                while ( it3 != end3 )
+                {
+                    NeonUri aCurrURI( (*it3).uri );
+                    OUString aCurrPath = aCurrURI.GetPath();
+                    aCurrPath = NeonUri::unescape( aCurrPath );
+                    SAL_INFO( "ucb.ucp.webdav", "resource URL: <" << (*it3).uri << ">, unescaped to: <" << aCurrPath << "> )" );
+                    std::vector< DAVPropertyValue >::const_iterator it4 = (*it3).properties.begin();
+                    std::vector< DAVPropertyValue >::const_iterator end4 = (*it3).properties.end();
+                    SAL_INFO( "ucb.ucp.webdav", "  property Names: ");
+                    while ( it4 != end4 )
+                    {
+                        SAL_INFO( "ucb.ucp.webdav", "   " << (*it4).Name );
+                        ++it4;
+                    }
+                    ++it3;
+                }
+            }
+#endif
+        }
+        catch ( DAVException & )
         {
-//          OSL_FAIL( "PROPFIND : DAVException" );
+            SAL_WARN( "ucb.ucp.webdav", "Running PROPFIND: DAVException" );
             m_pImpl->m_bThrowException = true;
-          }
+        }
 
         if ( !m_pImpl->m_bThrowException )
         {

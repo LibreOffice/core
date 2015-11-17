@@ -109,7 +109,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
     DAVPropertyValue thePropertyValue;
     thePropertyValue.IsCaseSensitive = true;
 
-    OSL_ENSURE( pname->nspace, "NPFR_propfind_iter - No namespace!" );
+    SAL_WARN_IF( !pname->nspace, "ucb.ucp.webdav", "NPFR_propfind_iter - No namespace!" );
 
     DAVProperties::createUCBPropName( pname->nspace,
                                       pname->name,
@@ -121,7 +121,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
         if ( UCBDeadPropertyValue::createFromXML(
                  value, thePropertyValue.Value ) )
         {
-            OSL_ENSURE( thePropertyValue.Value.hasValue(),
+            SAL_WARN_IF( !thePropertyValue.Value.hasValue(), "ucb.ucp.webdav",
                         "NPFR_propfind_iter - No value!" );
             bHasValue = true;
         }
