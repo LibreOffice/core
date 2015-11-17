@@ -24,8 +24,6 @@
 #include "odbc/OConnection.hxx"
 #include <rtl/ustrbuf.hxx>
 
-#include <appendsqlwchars.hxx>
-
 #include <string.h>
 #include <string>
 #include <algorithm>
@@ -105,6 +103,20 @@ size_t sqlTypeLen ( SQLSMALLINT _nType )
     // Unknown datatype -> cannot predict length
     default:
         return static_cast<size_t>(-1);
+    }
+}
+
+void appendSQLWCHARs(OUStringBuffer & s, SQLWCHAR const * d, sal_Int32 n)
+{
+    static_assert(
+        sizeof (SQLWCHAR) == sizeof (sal_Unicode) || sizeof (SQLWCHAR) == 4,
+        "bad SQLWCHAR");
+    if (sizeof (SQLWCHAR) == sizeof (sal_Unicode)) {
+        s.append(reinterpret_cast<sal_Unicode const *>(d), n);
+    } else {
+        for (sal_Int32 i = 0; i != n; ++i) {
+            s.appendUtf32(d[i]);
+        }
     }
 }
 }
