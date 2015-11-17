@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_712098f8",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2015-11-17T17:19:11Z",
+      "side": 1,
+      "message": "Iterators in findTextAll() should work as a circular iterator which starts from itPos.\nLet\u0027s assume that the data was {\u0027a\u0027,\u0027b\u0027,\u0027c\u0027}, and iterator should start from \u0027b\u0027. Normal reverse iterator give us \u0027b\u0027, \u0027a\u0027, and null(next to \u0027a\u0027), and circular iterator should give us \u0027b\u0027, \u0027a\u0027, \u0027c\u0027, and null(next to \u0027c\u0027). So, I thought that rstart(\u003d\u0027c\u0027) and rend(\u003d next to \u0027a\u0027) was equal in circular iterator. Thus, \"if(itPos \u003d\u003d end)\", that is to say \"if((reverse iterator)itPos \u003d\u003d --rstart)\", equals to \"if(itPos \u003d\u003d --rend)\".And also, circular reverse iterator end(let \"c_rend\" be this), is next to \u0027c\u0027, equals to \u0027b\u0027, equals to \"c_start\". So I assigned --rend to it and itEnd.\nSorry that this reply is so long.",
+      "parentUuid": "dab17558_31a3b0a0",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_51ef54b0",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 2
@@ -110,6 +128,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_b17840fa",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2015-11-17T17:19:11Z",
+      "side": 1,
+      "message": "If you delete this comment out, the tool tip shows parentheses like \"[SUM()], SUMIF(), SUMIFS() and 10 more\" instead of \"[SUM], SUMIF, SUMIFS and 10 more\".",
+      "parentUuid": "dab17558_71f2589c",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_71db781c",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 2
@@ -144,6 +180,30 @@
       "writtenOn": "2015-11-17T15:25:01Z",
       "side": 1,
       "message": "(*itStr).copy((*itStr).getLength()-1, (*itStr).getLength())\n\nis wrong. It copies getLength() characters from behind the string data, which is an access violation.",
+      "range": {
+        "startLine": 1201,
+        "startChar": 89,
+        "endLine": 1201,
+        "endChar": 148
+      },
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_511d94bc",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2015-11-17T17:19:11Z",
+      "side": 1,
+      "message": "I\u0027m sorry for my lack of understanding for OUString object. I\u0027ll amend them.",
+      "parentUuid": "dab17558_51d8f41d",
       "range": {
         "startLine": 1201,
         "startChar": 89,
@@ -236,6 +296,24 @@
       "writtenOn": "2015-11-17T15:25:01Z",
       "side": 1,
       "message": "tipStr.copy(0, tipStr.getLength())\n\nis identical to tipStr, so instead that should be\n\n tipStr \u003d tipStr + \" and \" + ...\n\nBut, these English \" and \" and \" more\" are not localizeable. You\u0027d need a proper resource string for that with %1 and %2 placeholders and replace them in that string with the actual data, for example \"%1 and %2 more\".",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b15fa074",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2015-11-17T17:19:11Z",
+      "side": 1,
+      "message": "\u003ethese English \" and \" and \" more\" are not localizeable.\nI\u0027m sorry, but I cannot understand what you mean because of my lack of English skills. Could you explain this more specifically to me? You mean, I think, \"SUM, SUMIF and SUMIFS more\" indtead of \"SUM, SUMIF, SUMIFS and 50 more\" is better for example?",
+      "parentUuid": "dab17558_11a02c90",
       "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
