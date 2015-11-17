@@ -142,6 +142,8 @@ public:
                     // vcl/osx/salmenu.cxx, AquaSalMenu::set/unsetMainMenu, not
                     // owning
                 || name == "s_pCaptureFrame" // vcl/osx/salframe.cxx, not owning
+                || name == "pBlink"
+                    // sw/source/core/text/blink.cxx, _TextFinit()
                ) // these variables appear unproblematic
             {
                 return true;
