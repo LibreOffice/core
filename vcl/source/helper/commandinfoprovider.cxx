@@ -250,17 +250,17 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
 {
     SetFrame(rxFrame);
 
+    sal_Int32 nValue = 0;
     const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
     {
         if (aProperties[nIndex].Name == "Properties")
         {
-            sal_Int32 nValue = 0;
             aProperties[nIndex].Value >>= nValue;
-            return nValue;
+            break;
         }
     }
-    return 0;
+    return nValue;
 }
 
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
