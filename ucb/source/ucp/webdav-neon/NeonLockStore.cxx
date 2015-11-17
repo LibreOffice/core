@@ -64,7 +64,7 @@ private:
 
 void TickerThread::execute()
 {
-    OSL_TRACE( "TickerThread: start." );
+    SAL_INFO( "ucb.ucp.webdav", "TickerThread: start." );
 
     // we have to go through the loop more often to be able to finish ~quickly
     const int nNth = 25;
@@ -84,13 +84,24 @@ void TickerThread::execute()
         salhelper::Thread::wait( aTV );
     }
 
-    OSL_TRACE( "TickerThread: stop." );
+    SAL_INFO( "ucb.ucp.webdav", "TickerThread: stop." );
 }
 
 NeonLockStore::NeonLockStore()
     : m_pNeonLockStore( ne_lockstore_create() )
 {
-    OSL_ENSURE( m_pNeonLockStore, "Unable to create neon lock store!" );
+    /*
+     * ne_lockstore_create() never returns a NULL; neon calls abort() in case of an out-of-memory
+     * situation.
+     * Please see:
+     * <http://www.webdav.org/neon/doc/html/refneon.html>
+     * topic title "Memory handling", copied here verbatim:
+     *
+     * "neon does not attempt to cope gracefully with an out-of-memory situation;
+     *  instead, by default, the abort function is called to immediately terminate
+     *  the process. An application may register a custom function which will be
+     *  called before abort in such a situation; see ne_oom_callback."
+     */
 }
 
 NeonLockStore::~NeonLockStore()
@@ -100,8 +111,7 @@ NeonLockStore::~NeonLockStore()
     aGuard.reset(); // actually no threads should even try to access members now
 
     // release active locks, if any.
-    OSL_ENSURE( m_aLockInfoMap.empty(),
-                "NeonLockStore::~NeonLockStore - Releasing active locks!" );
+    SAL_WARN_IF( !m_aLockInfoMap.empty(), "ucb.ucp.webdav", "NeonLockStore::~NeonLockStore - Releasing active locks!" );
 
     LockInfoMap::const_iterator it( m_aLockInfoMap.begin() );
     const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
