@@ -134,6 +134,8 @@
 #include <srcview.hxx>
 #include <edtwin.hxx>
 #include <swdtflvr.hxx>
+#include <SidebarWin.hxx>
+#include <PostItMgr.hxx>
 
 #include <svtools/langtab.hxx>
 #include <svtools/miscopt.hxx>
@@ -3320,6 +3322,16 @@ OString SwXTextDocument::getTextSelection(const char* pMimeType, OString& rUsedM
         {
             // Editing shape text
             EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+            xTransferable = rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
+        }
+    }
+
+    if (SwPostItMgr* pPostItMgr = pDocShell->GetView()->GetPostItMgr())
+    {
+        if (sw::sidebarwindows::SwSidebarWin* pWin = pPostItMgr->GetActiveSidebarWin())
+        {
+            // Editing postit text.
+            EditView& rEditView = pWin->GetOutlinerView()->GetEditView();
             xTransferable = rEditView.GetEditEngine()->CreateTransferable(rEditView.GetSelection());
         }
     }
