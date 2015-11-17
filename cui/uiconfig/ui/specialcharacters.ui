@@ -199,24 +199,113 @@
                 <property name="vexpand">True</property>
                 <child>
                   <object class="cuilo-SvxShowText" id="showchar">
-                        <property name="width_request">80</property>
-                        <property name="height_request">150</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                      </object>
+                    <property name="width_request">80</property>
+                    <property name="height_request">150</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="charcodeft">
+                  <object class="GtkBox" id="box1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="no">    U+FFFF(65535)    </property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="decimallabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Decimal:</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="decimalvalue">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="text">162</property>
+                        <property name="halign">center</property>
+                        <property name="width_chars">11</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="hexlabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Hexadecimal:</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkGrid" id="grid4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <child>
+                          <object class="GtkLabel" id="hexulabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">U+</property>
+                            <property name="selectable">True</property>
+                            <property name="width_chars">3</property>
+                            <property name="single_line_mode">True</property>
+                            <property name="max_width_chars">3</property>
+                            <property name="lines">1</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="hexvalue">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="text">A2</property>
+                            <property name="halign">center</property>
+                            <property name="width_chars">8</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
