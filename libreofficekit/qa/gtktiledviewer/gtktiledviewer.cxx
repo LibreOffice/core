@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include <pwd.h>
 #include <string>
 #include <map>
 #include <iostream>
@@ -118,6 +119,7 @@ public:
     std::shared_ptr<TiledRowColumnBar> m_pRowBar;
     std::shared_ptr<TiledRowColumnBar> m_pColumnBar;
     std::shared_ptr<TiledCornerButton> m_pCornerButton;
+    std::string m_aAuthor;
 
     TiledWindow()
         : m_pDocView(nullptr),
@@ -148,6 +150,8 @@ public:
         m_pFindbarLabel(nullptr),
         m_bFindAll(false)
     {
+        struct passwd* pPasswd = getpwuid(getuid());
+        m_aAuthor = std::string(pPasswd->pw_gecos);
     }
 };
 
@@ -800,7 +804,18 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
         // notify about the finished Save
         gboolean bNotify = (rString == ".uno:Save");
 
-        lok_doc_view_post_command(pLOKDocView, rString.c_str(), nullptr, bNotify);
+        std::string aArguments;
+        if (rString == ".uno:InsertAnnotation" && !rWindow.m_aAuthor.empty())
+        {
+            boost::property_tree::ptree aTree;
+            aTree.put(boost::property_tree::ptree::path_type("Author/type", '/'), "string");
+            aTree.put(boost::property_tree::ptree::path_type("Author/value", '/'), rWindow.m_aAuthor);
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            aArguments = aStream.str();
+        }
+
+        lok_doc_view_post_command(pLOKDocView, rString.c_str(), (aArguments.empty() ? nullptr : aArguments.c_str()), bNotify);
     }
 }
 
