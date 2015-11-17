@@ -604,7 +604,7 @@ void SdImportTest::testFdo71075()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71075.odp"), ODP);
 
     uno::Reference< beans::XPropertySet > xPropSet( getShapeFromPage( 0, 0, xDocShRef ) );
-    aAny = xPropSet->getPropertyValue( OUString("Model") );
+    aAny = xPropSet->getPropertyValue( "Model" );
     CPPUNIT_ASSERT_MESSAGE( "The shape doesn't have the property", aAny.hasValue() );
 
     uno::Reference< chart::XChartDocument > xChartDoc;
