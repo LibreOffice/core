@@ -1281,15 +1281,11 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
 
         CreateProgessDlg(pSourceWindow, pProgressDlg, false, pSourceShell, pParent);
 
-        if(bCreateSinglePrint)
-        {
+        bPageStylesWithHeaderFooter = CreateTargetDocShell(nMaxDumpDocs, false, pSourceWindow, pSourceShell,
+                                                            pSourceDocSh, xTargetDocShell, pTargetDoc, pTargetShell,
+                                                            pTargetView, nStartingPageNo, sStartingPageDesc);
 
-            bPageStylesWithHeaderFooter = CreateTargetDocShell(nMaxDumpDocs, false, pSourceWindow, pSourceShell,
-                                                                pSourceDocSh, xTargetDocShell, pTargetDoc, pTargetShell,
-                                                                pTargetView, nStartingPageNo, sStartingPageDesc);
-
-            sModifiedStartingPageDesc = sStartingPageDesc;
-        }
+        sModifiedStartingPageDesc = sStartingPageDesc;
 
         // Progress, to prohibit KeyInputs
         SfxProgress aProgress(pSourceDocSh, ::aEmptyOUStr, 1);
@@ -1319,6 +1315,15 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
         SwDoc* pWorkDoc            = nullptr;
         SwDBManager* pOldDBManager = nullptr;
 
+        bool      bReverse         = false;
+        sal_Int32 DbEntries        = GetRowCount(),
+                  OneDocPages      = 1,
+                  PrnDocPages      = 1,
+                  PageCounts       = 1,
+                  StartPage        = 0,
+                  nextPage         = 0,
+                  LastOne          = -1;
+
         JobSetup  aJobSetup;
 
         do
@@ -1333,19 +1338,19 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
                 // Create a copy of the source document and work with that one instead of the source.
                 // If we're not in the single file mode (which requires modifying the document for the merging),
                 // it is enough to do this just once.
-                if(1 == nDocNo || bCreateSinglePrint)
-                    CreateWorkDoc(xWorkDocSh, pWorkView, pWorkDoc, pOldDBManager, pSourceDocSh, nMaxDumpDocs, nDocNo);
+                CreateWorkDoc(xWorkDocSh, pWorkView, pWorkDoc, pOldDBManager, pSourceDocSh, nMaxDumpDocs, nDocNo);
 
                 SwWrtShell &rWorkShell = pWorkView->GetWrtShell();
 
                 UpdateExpFields(rWorkShell, xWorkDocSh);
 
-                if(bCreateSinglePrint)
-                    MergeSingleFiles(pWorkDoc, rWorkShell, pTargetShell, pTargetDoc, xWorkDocSh, xTargetDocShell,
-                                     bPageStylesWithHeaderFooter, bSynchronizedDoc, sModifiedStartingPageDesc,
-                                     sStartingPageDesc, nDocNo, nStartRow, nStartingPageNo, targetDocPageCount,
-                                     false, rMergeDescriptor, nMaxDumpDocs);
-                else
+                MergeSingleFiles(pWorkDoc, rWorkShell, pTargetShell, pTargetDoc, xWorkDocSh, xTargetDocShell,
+                                 bPageStylesWithHeaderFooter, bSynchronizedDoc, sModifiedStartingPageDesc,
+                                 sStartingPageDesc, nDocNo, nStartRow, nStartingPageNo, targetDocPageCount,
+                                 false, rMergeDescriptor, nMaxDumpDocs);
+
+
+                if(!bCreateSinglePrint)
                 {
                     if( 1 == nDocNo ) // set up printing only once at the beginning
                     {
@@ -1361,13 +1366,41 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
 
                         // move print options
                         SetPrinterOptions(rMergeDescriptor, aOptions);
-                        pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
-                        prnCtrl = pWorkView->GetPrinterController();
+                        pTargetView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync, DbEntries );
+                        prnCtrl = pTargetView->GetPrinterController();
 
-                        SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
+                        SfxPrinter* pDocPrt = pTargetView->GetPrinter(false);
                         aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
                         bCancel = !Printer::PreparePrintJob( prnCtrl, aJobSetup );
 
+                        StartPage    = 0;
+                        // one documents has count of page(s)
+                        OneDocPages  = prnCtrl->getPageCountProtected() / DbEntries;
+                        // how many pages must be printing, for first calculation (but for only one document it is not right)
+                        PrnDocPages  = prnCtrl->getFilteredPageCount();
+                        const vcl::PrinterController::MultiPageSetup &mp = prnCtrl->getMultipage();
+                        // how many pages must be print on one page
+                        PageCounts   = mp.nRows * mp.nColumns;
+                        LastOne      = (DbEntries * OneDocPages);
+
+                        if(PageCounts < 1)
+                            PageCounts = 1;
+                        else if(PageCounts > LastOne)
+                            PageCounts = LastOne;
+
+                        if(OneDocPages >= PageCounts)
+                            nextPage = 1;
+                        else
+                        {
+                            nextPage = PageCounts / OneDocPages;
+                            if((PageCounts % OneDocPages) > 0)
+                                ++nextPage;
+                        }
+
+
+                        const beans::PropertyValue* pSingleValue = prnCtrl->getValue(OUString("PrintReverse"));
+                        if( pSingleValue )
+                            pSingleValue->Value >>= bReverse;
 
 #if ENABLE_CUPS && !defined(MACOSX)
                         if( !bCancel )
@@ -1375,12 +1408,37 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
 #endif
                     }
 
-                    if( !bCancel && !Printer::ExecutePrintJob( prnCtrl ))
-                        bCancel = true;
+                    if(nextPage == nDocNo)
+                    {   // now all document here, recalculate the Pages exactly
+                        PrnDocPages  = prnCtrl->getFilteredPageCount();
+                        // set the controller in the print modus
+                        prnCtrl->updatePrinterContr(1, PrnDocPages);
+                    }
+
+                    int curPages  = nDocNo * OneDocPages;
+                    int mustPrint = curPages - (PageCounts * StartPage);
+                    if((mustPrint >= PageCounts) || (LastOne <= curPages))
+                    {
+                        int cnt = mustPrint / PageCounts;
+
+                        if((nDocNo == DbEntries) && (cnt > 0) && ((mustPrint % PageCounts) > 0))
+                            ++cnt;
+
+                        do
+                        {
+                            prnCtrl->updatePrinterContr(2, StartPage);
+                            ++StartPage;
+
+                            if( !bCancel && !Printer::ExecutePrintJob( prnCtrl))
+                                bCancel = true;
+                            else if((prnCtrl->getJobState() == view::PrintableState_JOB_SPOOLED) &&
+                                (StartPage < PrnDocPages))
+                                prnCtrl->setJobState(view::PrintableState_JOB_STARTED);
+                        } while(--cnt > 0);
+                    }
                 }
 
-                if(bCreateSinglePrint)
-                    ResetWorkDoc(pWorkDoc, xWorkDocSh, pOldDBManager);
+                ResetWorkDoc(pWorkDoc, xWorkDocSh, pOldDBManager);
             }
 
             nDocNo++;
@@ -1388,7 +1446,7 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
 
             // Freeze the layouts of the target document after the first inserted
             // sub-document, to get the correct PageDesc.
-            if(!bFreezedLayouts && bCreateSinglePrint)
+            if(!bFreezedLayouts)
             {
                 FreezeLayouts(pTargetShell, true);
                 bFreezedLayouts = true;
@@ -1402,10 +1460,9 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
 #if ENABLE_CUPS && !defined(MACOSX)
             psp::PrinterInfoManager::get().flushBatchPrint();
 #endif
-            ResetWorkDoc(pWorkDoc, xWorkDocSh, pOldDBManager);
         }
 
-        MakeEndMailMergeFile(xWorkDocSh, pWorkView, pTargetDoc, pTargetShell, bCreateSinglePrint);
+        MakeEndMailMergeFile(xWorkDocSh, pWorkView, pTargetDoc, pTargetShell, true);
 
         pProgressDlg.disposeAndClear();
 
@@ -1880,6 +1937,11 @@ bool SwDBManager::SavePrintDoc(SfxObjectShellRef xTargetDocShell, SwView *pTarge
         // Leave docshell available for caller (e.g. MM wizard)
         if (!bMergeShell)
             xTargetDocShell->DoClose();
+    }
+    else if(bPrinter)
+    {
+         // Leave docshell available for caller (e.g. MM wizard)
+         xTargetDocShell->DoClose();
     }
 
     return bNoError;
