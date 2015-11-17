@@ -180,9 +180,9 @@ namespace vcl
 
     typedef struct {
         char *family;             /**< family name                                             */
-        sal_uInt16 *ufamily;          /**< family name UCS2                                         */
+        sal_Unicode *ufamily;     /**< family name UCS2                                         */
         char *subfamily;          /**< subfamily name                                          */
-        sal_uInt16 *usubfamily;   /**< subfamily name UCS2 */
+        sal_Unicode *usubfamily;  /**< subfamily name UCS2 */
         char *psname;             /**< PostScript name                                         */
         sal_uInt16 macStyle;      /**< macstyle bits from 'HEAD' table */
         int   weight;             /**< value of WeightClass or 0 if can't be determined        */
@@ -527,9 +527,9 @@ namespace vcl
 
         char        *psname;
         char        *family;
-        sal_uInt16  *ufamily;
+        sal_Unicode *ufamily;
         char        *subfamily;
-        sal_uInt16  *usubfamily;
+        sal_Unicode *usubfamily;
 
         sal_uInt32  ntables;
         sal_uInt32  *goffsets;

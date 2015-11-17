@@ -135,7 +135,7 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     // create the CoreText line layout
     CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( nullptr,
-                                                              pStr + mnMinCharPos,
+                                                              reinterpret_cast<UniChar const *>(pStr + mnMinCharPos),
                                                               mnCharCount,
                                                               kCFAllocatorNull );
     // CFAttributedStringCreate copies the attribues parameter
@@ -213,7 +213,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         CFRelease( mpCTLine );
         const sal_Unicode *pStr = rArgs.mrStr.getStr();
         CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( nullptr,
-                                                                  pStr + mnMinCharPos,
+                                                                  reinterpret_cast<UniChar const *>(pStr + mnMinCharPos),
                                                                   mnCharCount - mnTrailingSpaceCount,
                                                                   kCFAllocatorNull );
         CFAttributedStringRef pAttrStr = CFAttributedStringCreate( nullptr,

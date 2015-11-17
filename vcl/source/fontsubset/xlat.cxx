@@ -171,27 +171,27 @@ sal_uInt16 TranslateChar16(sal_uInt16 src)
 
 void TranslateString12(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    aCC.convertStr( 2, src, dst, n);
+    aCC.convertStr( 2, reinterpret_cast<sal_Unicode *>(src), dst, n);
 }
 
 void TranslateString13(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    aCC.convertStr( 3, src, dst, n);
+    aCC.convertStr( 3, reinterpret_cast<sal_Unicode *>(src), dst, n);
 }
 
 void TranslateString14(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    aCC.convertStr( 4, src, dst, n);
+    aCC.convertStr( 4, reinterpret_cast<sal_Unicode *>(src), dst, n);
 }
 
 void TranslateString15(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    aCC.convertStr( 5, src, dst, n);
+    aCC.convertStr( 5, reinterpret_cast<sal_Unicode *>(src), dst, n);
 }
 
 void TranslateString16(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    aCC.convertStr( 6, src, dst, n);
+    aCC.convertStr( 6, reinterpret_cast<sal_Unicode *>(src), dst, n);
 }
 
 } // namespace vcl

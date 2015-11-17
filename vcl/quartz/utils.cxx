@@ -43,14 +43,14 @@ OUString GetOUString( CFStringRef rStr )
     const UniChar* pConstStr = CFStringGetCharactersPtr( rStr );
     if( pConstStr )
     {
-        return OUString( pConstStr, nLength );
+        return OUString( reinterpret_cast<sal_Unicode const *>(pConstStr), nLength );
     }
 
     UniChar* pStr = static_cast<UniChar*>( rtl_allocateMemory( sizeof(UniChar)*nLength ) );
     CFRange aRange = { 0, nLength };
     CFStringGetCharacters( rStr, aRange, pStr );
 
-    OUString aRet( pStr, nLength );
+    OUString aRet( reinterpret_cast<sal_Unicode *>(pStr), nLength );
     rtl_freeMemory( pStr );
     return aRet;
 }
@@ -70,19 +70,20 @@ OUString GetOUString( NSString* pStr )
 
     OUStringBuffer aBuf( nLen+1 );
     aBuf.setLength( nLen );
-    [pStr getCharacters: const_cast<sal_Unicode*>(aBuf.getStr())];
+    [pStr getCharacters:
+     reinterpret_cast<unichar *>(const_cast<sal_Unicode*>(aBuf.getStr()))];
 
     return aBuf.makeStringAndClear();
 }
 
 CFStringRef CreateCFString( const OUString& rStr )
 {
-    return CFStringCreateWithCharacters(kCFAllocatorDefault, rStr.getStr(), rStr.getLength() );
+    return CFStringCreateWithCharacters(kCFAllocatorDefault, reinterpret_cast<UniChar const *>(rStr.getStr()), rStr.getLength() );
 }
 
 NSString* CreateNSString( const OUString& rStr )
 {
-    return [[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()];
+    return [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rStr.getStr()) length: rStr.getLength()];
 }
 
 std::ostream &operator <<(std::ostream& s, const CGRect &rRect)

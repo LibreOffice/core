@@ -848,7 +848,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
 
 /*- Extracts a string from the name table and allocates memory for it -*/
 
-static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFlag, sal_uInt16** ucs2result )
+static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFlag, sal_Unicode** ucs2result )
 {
     char *res;
     const sal_uInt8* ptr = name + GetUInt16(name, 4, 1) + GetUInt16(name + 6, 12 * n + 10, 1);
@@ -874,7 +874,7 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
         res[len/2] = 0;
         if( ucs2result )
         {
-            *ucs2result = static_cast<sal_uInt16*>(malloc( len+2 ));
+            *ucs2result = static_cast<sal_Unicode*>(malloc( len+2 ));
             for (int i = 0; i < len/2; i++ )
                 (*ucs2result)[i] = GetUInt16( ptr, 2*i, 1 );
             (*ucs2result)[len/2] = 0;

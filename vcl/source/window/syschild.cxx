@@ -182,7 +182,8 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
         if(jsMessage)
         {
             const jchar * jcMessage = pJavaEnv->GetStringChars(jsMessage, nullptr);
-            ouMessage = OUString(jcMessage);
+            ouMessage = OUString(
+                reinterpret_cast<sal_Unicode const *>(jcMessage));
             pJavaEnv->ReleaseStringChars(jsMessage, jcMessage);
         }
 

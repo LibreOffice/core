@@ -296,7 +296,7 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
 #ifdef MACOSX
     const OUString aUILang = Application::GetSettings().GetUILanguageTag().getLanguage();
     CFStringRef pUILang = CFStringCreateWithCharacters( kCFAllocatorDefault,
-                                                        aUILang.getStr(), aUILang.getLength() );
+                                                        reinterpret_cast<UniChar const *>(aUILang.getStr()), aUILang.getLength() );
     CFStringRef pLang = nullptr;
     CFStringRef pFamilyName = static_cast<CFStringRef>(
             CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang ));
