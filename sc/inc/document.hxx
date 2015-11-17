@@ -79,6 +79,7 @@ class RefMovedHint;
 struct SortUndoParam;
 struct ReorderParam;
 class FormulaGroupAreaListener;
+class IconSetBitmapMap;
 
 }
 
@@ -466,6 +467,8 @@ private:
     std::set<ScFormulaCell*> maSubTotalCells;
 
     bool                mbUseEmbedFonts;
+
+    std::unique_ptr<sc::IconSetBitmapMap> m_pIconSetBitmapMap;
 
 public:
     bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
@@ -1871,6 +1874,8 @@ public:
     void CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellValues& rSrc );
 
     std::set<Color> GetDocColors();
+
+    sc::IconSetBitmapMap& GetIconSetBitmapMap();
 
 private:
     ScDocument(const ScDocument& r) = delete;

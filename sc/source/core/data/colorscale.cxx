@@ -1333,10 +1333,9 @@ static const ScIconSetBitmapMap aBitmapMap[] = {
 
 }
 
-BitmapEx& ScIconSetFormat::getBitmap( ScIconSetType eType, sal_Int32 nIndex )
+BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
+        ScIconSetType const eType, sal_Int32 const nIndex)
 {
-    static std::map< sal_Int32, BitmapEx > aIconSetBitmaps;
-
     sal_Int32 nBitmap = -1;
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(aBitmapMap); ++i)
@@ -1349,13 +1348,13 @@ BitmapEx& ScIconSetFormat::getBitmap( ScIconSetType eType, sal_Int32 nIndex )
     }
     assert( nBitmap != -1 );
 
-    std::map<sal_Int32, BitmapEx>::iterator itr = aIconSetBitmaps.find( nBitmap );
-    if(itr != aIconSetBitmaps.end())
+    std::map<sal_Int32, BitmapEx>::iterator itr = rIconSetBitmapMap.find(nBitmap);
+    if (itr != rIconSetBitmapMap.end())
         return itr->second;
 
     BitmapEx aBitmap = BitmapEx(ScResId(nBitmap));
     std::pair<sal_Int32, BitmapEx> aPair( nBitmap, aBitmap );
-    std::pair<std::map<sal_Int32, BitmapEx>::iterator, bool> itrNew = aIconSetBitmaps.insert(aPair);
+    std::pair<std::map<sal_Int32, BitmapEx>::iterator, bool> itrNew = rIconSetBitmapMap.insert(aPair);
     assert(itrNew.second);
 
     return itrNew.first->second;

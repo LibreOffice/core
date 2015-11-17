@@ -873,24 +873,26 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
     }
 }
 
-BitmapEx& getIcon( ScIconSetType eType, sal_Int32 nIndex )
+BitmapEx& getIcon(sc::IconSetBitmapMap & rIconSetBitmapMap, ScIconSetType eType, sal_Int32 nIndex)
 {
-    return ScIconSetFormat::getBitmap( eType, nIndex );
+    return ScIconSetFormat::getBitmap(rIconSetBitmapMap, eType, nIndex);
 }
 
-void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldIconSetInfo, const Rectangle& rRect, long nOneX, long nOneY)
+void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldIconSetInfo, const Rectangle& rRect, long nOneX, long nOneY,
+        sc::IconSetBitmapMap & rIconSetBitmapMap)
 {
     //long nSize = 16;
     ScIconSetType eType = pOldIconSetInfo->eIconSetType;
     sal_Int32 nIndex = pOldIconSetInfo->nIconIndex;
-    BitmapEx& rIcon = getIcon( eType, nIndex );
+    BitmapEx& rIcon = getIcon(rIconSetBitmapMap, eType, nIndex);
     long aOrigSize = std::max<long>(0,std::min(rRect.GetSize().getWidth() - 4 * nOneX, rRect.GetSize().getHeight() -4 * nOneY));
     rRenderContext.DrawBitmapEx( Point( rRect.Left() + 2 * nOneX, rRect.Top() + 2 * nOneY), Size(aOrigSize, aOrigSize), rIcon );
 }
 
 void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
         Rectangle& rRect, long nPosX, long nLayoutSign, long nOneX, long nOneY, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
-        const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo)
+        const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo,
+        sc::IconSetBitmapMap & rIconSetBitmapMap)
 {
     long nSignedOneX = nOneX * nLayoutSign;
     // need to paint if old color scale has been used and now
@@ -907,7 +909,7 @@ void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const Sv
         if( pOldDataBarInfo )
             drawDataBars(rRenderContext, pOldDataBarInfo, rRect, nOneX, nOneY);
         if( pOldIconSetInfo )
-            drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY);
+            drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY, rIconSetBitmapMap);
 
         rRect.Left() = nPosX - nSignedOneX;
     }
@@ -927,7 +929,7 @@ void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const Sv
         if( pOldDataBarInfo )
             drawDataBars(rRenderContext, pOldDataBarInfo, rRect, nOneX, nOneY);
         if( pOldIconSetInfo )
-            drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY);
+            drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY, rIconSetBitmapMap);
 
         rRect.Left() = nPosX - nSignedOneX;
     }
@@ -1087,7 +1089,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     if (bWorksInPixels)
                         nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                    drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo);
+                    drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
 
                     // extend for all merged cells
                     nMergedCells = 1;
@@ -1111,7 +1113,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 if (bWorksInPixels)
                     nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                drawCells(rRenderContext, nullptr, nullptr, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, nullptr, pOldDataBarInfo, nullptr, pOldIconSetInfo);
+                drawCells(rRenderContext, nullptr, nullptr, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, nullptr, pOldDataBarInfo, nullptr, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
 
                 nArrY += nSkip;
             }

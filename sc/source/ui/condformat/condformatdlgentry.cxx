@@ -1418,7 +1418,7 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetT
     maEdEntry( VclPtr<Edit>::Create( this, ScResId( ED_ICON_SET_ENTRY_VALUE ) ) ),
     maLbEntryType( VclPtr<ListBox>::Create( this, ScResId( LB_ICON_SET_ENTRY_TYPE ) ) )
 {
-    maImgIcon->SetImage(Image(ScIconSetFormat::getBitmap(eType, i)));
+    maImgIcon->SetImage(Image(ScIconSetFormat::getBitmap(pDoc->GetIconSetBitmapMap(), eType, i)));
     if(pEntry)
     {
         switch(pEntry->GetType())

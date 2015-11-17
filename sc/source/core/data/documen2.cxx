@@ -1406,4 +1406,14 @@ ScStyleSheet* ScDocument::GetPreviewCellStyle( SCCOL nCol, SCROW nRow, SCTAB nTa
         pRet = pPreviewCellStyle;
     return pRet;
 }
+
+sc::IconSetBitmapMap& ScDocument::GetIconSetBitmapMap()
+{
+    if (!m_pIconSetBitmapMap)
+    {
+        m_pIconSetBitmapMap.reset(new sc::IconSetBitmapMap);
+    }
+    return *m_pIconSetBitmapMap;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

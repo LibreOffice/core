@@ -30,6 +30,10 @@ struct ScDataBarInfo;
 class BitmapEx;
 class ScFormulaListener;
 
+namespace sc {
+    class IconSetBitmapMap : public std::map<sal_Int32, BitmapEx> {};
+}
+
 // don't change the order
 // they are also used in the dialog to determine the position
 // in the list box
@@ -375,7 +379,7 @@ public:
     virtual condformat::ScFormatEntryType GetType() const override;
 
     static ScIconSetMap* getIconSetMap();
-    static BitmapEx& getBitmap( ScIconSetType eType, sal_Int32 nIndex );
+    static BitmapEx& getBitmap(sc::IconSetBitmapMap &, ScIconSetType eType, sal_Int32 nIndex);
 
     typedef ScIconSetFormatData::Entries_t::iterator iterator;
     typedef ScIconSetFormatData::Entries_t::const_iterator const_iterator;
