@@ -30,6 +30,7 @@ import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.sun.star.awt.XToolkitExperimental;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -658,6 +659,17 @@ public class utils {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e);
+        }
+    }
+
+    public static void waitForEventIdle(XMultiServiceFactory xMSF) {
+        try {
+            XToolkitExperimental xToolkit = UnoRuntime.queryInterface(
+                    XToolkitExperimental.class,
+                    xMSF.createInstance("com.sun.star.awt.Toolkit"));
+            xToolkit.processEventsToIdle();
+        } catch (com.sun.star.uno.Exception ex) {
+            throw new RuntimeException(ex);
         }
     }
 
