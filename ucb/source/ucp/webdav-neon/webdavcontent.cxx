@@ -877,20 +877,20 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
                         break;
 
                     default:
-                        OSL_FAIL( "Content::addProperty - "
+                        SAL_WARN( "ucb.ucp.webdav", "Content::addProperty - "
                                     "Unsupported resource type!" );
                         break;
                     }
                 }
                 catch ( uno::Exception const & )
                 {
-                    OSL_FAIL( "Content::addProperty - "
+                    SAL_WARN( "ucb.ucp.webdav", "Content::addProperty - "
                                 "Unable to determine resource type!" );
                 }
             }
             else
             {
-                OSL_FAIL( "Content::addProperty - "
+                SAL_WARN( "ucb.ucp.webdav", "Content::addProperty - "
                             "Unable to determine resource type!" );
             }
         }
@@ -963,20 +963,20 @@ void Content::removeProperty( const OUString& Name,
                             break;
 
                         default:
-                            OSL_FAIL( "Content::removeProperty - "
+                            SAL_WARN( "ucb.ucp.webdav", "Content::removeProperty - "
                                         "Unsupported resource type!" );
                             break;
                     }
                 }
                 catch ( uno::Exception const & )
                 {
-                    OSL_FAIL( "Content::removeProperty - "
+                    SAL_WARN( "ucb.ucp.webdav", "Content::removeProperty - "
                                 "Unable to determine resource type!" );
                 }
             }
             else
             {
-                OSL_FAIL( "Content::removeProperty - "
+                SAL_WARN( "ucb.ucp.webdav", "Content::removeProperty - "
                             "Unable to determine resource type!" );
 //                throw beans::UnknownPropertyException();
             }
@@ -1069,8 +1069,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 
     OUString aURL = m_xIdentifier->getContentIdentifier();
 
-    OSL_ENSURE( !aURL.isEmpty(),
-                "WebdavContent::createNewContent - empty identifier!" );
+    assert( !aURL.isEmpty() && "WebdavContent::createNewContent - empty identifier!" );
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
         aURL += "/";
@@ -1833,8 +1832,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         catch ( DAVException const & e )
         {
-//            OSL_FAIL( //                        "Content::setPropertyValues - PROPPATCH failed!" );
-
+            SAL_WARN( "ucb.ucp.webdav", "Content::setPropertyValues - PROPPATCH failed!" );
             cancelCommandExecution( e, xEnv );
             // unreachable
         }
@@ -2266,7 +2264,7 @@ void Content::insert(
 
     if ( aEscapedTitle.isEmpty() )
     {
-        OSL_FAIL( "Content::insert - Title missing!" );
+        SAL_WARN( "ucb.ucp.webdav", "Content::insert - Title missing!" );
 
         uno::Sequence<OUString> aProps { "Title" };
         ucbhelper::cancelCommandExecution(
@@ -2342,7 +2340,7 @@ void Content::insert(
 //                            break;
 
                     default:
-                        OSL_FAIL( "Content::insert - "
+                        SAL_WARN( "ucb.ucp.webdav", "Content::insert - "
                                     "Unknown interaction selection!" );
                         throw ucb::CommandFailedException(
                                     OUString( "Unknown interaction selection!" ),
@@ -3123,7 +3121,7 @@ bool Content::exchangeIdentity(
     // Already persistent?
     if ( m_bTransient )
     {
-        OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
+        SAL_WARN( "ucb.ucp.webdav", "Content::exchangeIdentity - Not persistent!" );
         return false;
     }
 
@@ -3171,7 +3169,7 @@ bool Content::exchangeIdentity(
         }
     }
 
-    OSL_FAIL( "Content::exchangeIdentity - "
+    SAL_WARN( "ucb.ucp.webdav", "Content::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
     return false;
 }
@@ -3502,6 +3500,7 @@ Content::ResourceType Content::getResourceType(
             "different resource types for <" << rURL << ">: "
             << +eResourceType << " vs. " << +m_eResourceType);
     }
+    SAL_INFO( "ucb.ucp.webdav", "m_eResourceType for <"<<rURL<<">: " << m_eResourceType );
     return m_eResourceType;
 }
 
