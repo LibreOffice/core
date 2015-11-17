@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <tools/toolsdllapi.h>
+#include <memory>
 
 class SvStream;
 
@@ -30,7 +31,7 @@ class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Fraction
 {
     struct Impl;
 
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     bool            HasOverflowValue();
 

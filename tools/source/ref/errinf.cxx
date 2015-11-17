@@ -116,9 +116,9 @@ DynamicErrorInfo::operator sal_uIntPtr() const
 }
 
 DynamicErrorInfo::DynamicErrorInfo(sal_uIntPtr lArgUserId, sal_uInt16 nMask)
-: ErrorInfo(lArgUserId)
+: ErrorInfo(lArgUserId),
+  pImpl(new EDcr_Impl)
 {
-    pImpl=new EDcr_Impl;
     pImpl->RegisterEDcr(this);
     pImpl->nMask=nMask;
 }
@@ -126,7 +126,6 @@ DynamicErrorInfo::DynamicErrorInfo(sal_uIntPtr lArgUserId, sal_uInt16 nMask)
 DynamicErrorInfo::~DynamicErrorInfo()
 {
     EDcr_Impl::UnRegisterEDcr(this);
-    delete pImpl;
 }
 
 ErrorInfo* EDcr_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
@@ -175,8 +174,8 @@ struct ErrorContextImpl
 };
 
 ErrorContext::ErrorContext(vcl::Window *pWinP)
+    : pImpl( new ErrorContextImpl )
 {
-    pImpl = new ErrorContextImpl();
     ErrorContext *&pHdl = TheEDcrData::get().pFirstCtx;
     pImpl->pWin = pWinP;
     pImpl->pNext = pHdl;
@@ -190,7 +189,6 @@ ErrorContext::~ErrorContext()
         ppCtx=&((*ppCtx)->pImpl->pNext);
     if(*ppCtx)
         *ppCtx=(*ppCtx)->pImpl->pNext;
-    delete pImpl;
 }
 
 ErrorContext *ErrorContext::GetContext()
@@ -199,8 +197,8 @@ ErrorContext *ErrorContext::GetContext()
 }
 
 ErrorHandler::ErrorHandler()
+    : pImpl(new ErrHdl_Impl)
 {
-    pImpl=new ErrHdl_Impl;
     EDcrData &pData=TheEDcrData::get();
     ErrorHandler *&pHdl=pData.pFirstHdl;
     pImpl->pNext=pHdl;
@@ -216,7 +214,6 @@ ErrorHandler::~ErrorHandler()
         ppHdl=&((*ppHdl)->pImpl->pNext);
     if(*ppHdl)
         *ppHdl=(*ppHdl)->pImpl->pNext;
-    delete pImpl;
 }
 
 vcl::Window* ErrorContext::GetParent()

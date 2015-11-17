@@ -70,7 +70,6 @@ ResStringArray::ResStringArray( const ResId& rResId ) :
 
 ResStringArray::~ResStringArray()
 {
-    delete mpImpl;
 }
 
 OUString ResStringArray::GetString( sal_uInt32 nIndex ) const

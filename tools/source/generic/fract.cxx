@@ -90,7 +90,6 @@ Fraction::Fraction( double dVal ) : mpImpl(new Impl)
 
 Fraction::~Fraction()
 {
-    delete mpImpl;
 }
 
 bool Fraction::HasOverflowValue()

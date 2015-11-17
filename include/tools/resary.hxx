@@ -21,6 +21,7 @@
 
 #include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>
+#include <memory>
 
 #define RESARRAY_INDEX_NOTFOUND (0xffffffff)
 
@@ -29,7 +30,7 @@ class ResId;
 class TOOLS_DLLPUBLIC ResStringArray
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     ResStringArray( const ResStringArray& ) = delete;
     ResStringArray& operator=( const ResStringArray& ) = delete;
