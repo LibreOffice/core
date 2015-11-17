@@ -668,11 +668,12 @@ void SwSidebarWin::Rescale()
     mpOutliner->SetRefMapMode( aMode );
     SetMapMode( aMode );
     mpSidebarTextControl->SetMapMode( aMode );
+    const Fraction& rFraction = mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY();
     if ( mpMetadataAuthor )
     {
         vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
         sal_Int32 nHeight = aFont.GetHeight();
-        nHeight = nHeight * aMode.GetScaleY().GetNumerator() / aMode.GetScaleY().GetDenominator();
+        nHeight = nHeight * rFraction.GetNumerator() / rFraction.GetDenominator();
         aFont.SetHeight( nHeight );
         mpMetadataAuthor->SetControlFont( aFont );
     }
@@ -680,7 +681,7 @@ void SwSidebarWin::Rescale()
     {
         vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
         sal_Int32 nHeight = aFont.GetHeight();
-        nHeight = nHeight * aMode.GetScaleY().GetNumerator() / aMode.GetScaleY().GetDenominator();
+        nHeight = nHeight * rFraction.GetNumerator() / rFraction.GetDenominator();
         aFont.SetHeight( nHeight );
         mpMetadataDate->SetControlFont( aFont );
     }
