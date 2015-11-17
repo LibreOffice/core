@@ -18,8 +18,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:DBReportOpen" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:DBReportEdit" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:DBReportDelete" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:DBReportRename" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DBReportOpen"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBReportEdit"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBReportDelete"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBReportRename"/>
 </toolbar:toolbar>

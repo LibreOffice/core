@@ -18,5 +18,5 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:SbaNativeSql" toolbar:text="" toolbar:style=""/>
+ <toolbar:toolbaritem xlink:href=".uno:SbaNativeSql"/>
 </toolbar:toolbar>

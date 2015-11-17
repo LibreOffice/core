@@ -18,12 +18,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:ZoomIn" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomOut" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Zoom100Percent" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomOptimal" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomIn"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomOut"/>
+ <toolbar:toolbaritem xlink:href=".uno:Zoom100Percent"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomOptimal"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Draw" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:FormelCursor" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolCatalogue" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Draw"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormelCursor"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolCatalogue"/>
 </toolbar:toolbar>

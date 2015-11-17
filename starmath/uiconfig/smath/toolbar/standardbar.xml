@@ -19,26 +19,26 @@
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:OpenUrl" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:text="" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:NewDoc" toolbar:text="" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:text="" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:text="" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:NewDoc" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:Save"/>
+ <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:helpid="5331"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:text="" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Print" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:SendFax" toolbar:text="" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
+ <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Print"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendFax" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Paste" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Cut"/>
+ <toolbar:toolbaritem xlink:href=".uno:Copy"/>
+ <toolbar:toolbaritem xlink:href=".uno:Paste"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Undo"/>
+ <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:text="" toolbar:visible="false" toolbar:helpid="5402"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelpIndex"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false" toolbar:helpid="5402"/>
 
 </toolbar:toolbar>

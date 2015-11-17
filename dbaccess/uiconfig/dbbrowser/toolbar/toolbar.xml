@@ -18,33 +18,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:RecSave" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:RecSave"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DSBEditDoc" toolbar:text="" toolbar:style=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBEditDoc"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Paste" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Cut"/>
+ <toolbar:toolbaritem xlink:href=".uno:Copy"/>
+ <toolbar:toolbaritem xlink:href=".uno:Paste"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:RecUndo" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:RecUndo"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:RecSearch" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:RecSearch"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Refresh" toolbar:text="" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:Refresh" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:OrderCrit" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Sortup" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:SortDown" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:OrderCrit"/>
+ <toolbar:toolbaritem xlink:href=".uno:Sortup"/>
+ <toolbar:toolbaritem xlink:href=".uno:SortDown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AutoFilter" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:FormFiltered" toolbar:text="" toolbar:style=""/>
- <toolbar:toolbaritem xlink:href=".uno:FilterCrit" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:AutoFilter"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormFiltered"/>
+ <toolbar:toolbaritem xlink:href=".uno:FilterCrit"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:RemoveFilterSort" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:RemoveFilterSort"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DSBInsertColumns" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:DSBInsertContent" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:DSBFormLetter" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:DSBDocumentDataSource" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:DSBrowserExplorer" toolbar:text="" toolbar:style=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBInsertColumns"/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBInsertContent"/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBFormLetter"/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBDocumentDataSource"/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBrowserExplorer"/>
 </toolbar:toolbar>

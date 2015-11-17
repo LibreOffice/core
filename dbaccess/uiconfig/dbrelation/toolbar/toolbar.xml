@@ -18,13 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Save"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:text="" toolbar:style="" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Undo"/>
+ <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AddTable" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:DBAddRelation" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:AddTable"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBAddRelation"/>
 </toolbar:toolbar>

@@ -18,28 +18,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:CharFontName" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontHeight" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Bold"/>
+ <toolbar:toolbaritem xlink:href=".uno:Italic"/>
+ <toolbar:toolbaritem xlink:href=".uno:Underline"/>
+ <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
+ <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:text="" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:text="" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:text="" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:text="" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:text="" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:text="" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:text="" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:text="" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:text="" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:text=""/>
- <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:FontDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog"/>
 </toolbar:toolbar>

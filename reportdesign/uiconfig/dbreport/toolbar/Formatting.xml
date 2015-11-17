@@ -31,7 +31,7 @@
  <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:text="" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontColor" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>

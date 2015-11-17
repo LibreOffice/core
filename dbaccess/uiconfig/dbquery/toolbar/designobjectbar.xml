@@ -18,12 +18,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:AddTable" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:AddTable"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DBViewFunctions" toolbar:text="" toolbar:style=""/>
- <toolbar:toolbaritem xlink:href=".uno:DBViewTableNames" toolbar:text="" toolbar:style=""/>
- <toolbar:toolbaritem xlink:href=".uno:DBViewAliases" toolbar:text="" toolbar:style=""/>
- <toolbar:toolbaritem xlink:href=".uno:DBDistinctValues" toolbar:text="" toolbar:style=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DBViewFunctions"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBViewTableNames"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBViewAliases"/>
+ <toolbar:toolbaritem xlink:href=".uno:DBDistinctValues"/>
  <toolbar:toolbaritem xlink:href=".uno:DBLimit"/>
  <toolbar:toolbaritem xlink:href=".uno:DBQueryPropertiesDialog"/>
 </toolbar:toolbar>
