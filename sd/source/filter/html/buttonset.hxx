@@ -24,6 +24,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vector>
+#include <memory>
 
 class Image;
 class ButtonSetImpl;
@@ -40,7 +41,7 @@ public:
     bool exportButton( int nSet, const OUString& rPath, const OUString& rName );
 
 private:
-    ButtonSetImpl* mpImpl;
+    std::unique_ptr<ButtonSetImpl> mpImpl;
 };
 
 #endif // INCLUDED_SD_SOURCE_FILTER_HTML_BUTTONSET_HXX

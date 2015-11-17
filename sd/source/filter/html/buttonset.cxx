@@ -267,7 +267,6 @@ ButtonSet::ButtonSet()
 
 ButtonSet::~ButtonSet()
 {
-    delete mpImpl;
 }
 
 int ButtonSet::getCount() const
