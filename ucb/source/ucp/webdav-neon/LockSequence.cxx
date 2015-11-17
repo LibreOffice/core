@@ -161,7 +161,7 @@ extern "C" int LockSequence_chardata_callback(
                 pCtx->hasDepth = true;
             }
             else
-                OSL_FAIL( "LockSequence_chardata_callback - Unknown depth!" );
+                SAL_WARN( "ucb.ucp.webdav", "LockSequence_chardata_callback - Unknown depth!" );
             break;
 
         case STATE_OWNER:
@@ -208,7 +208,7 @@ extern "C" int LockSequence_chardata_callback(
             {
                 pCtx->pLock->Timeout = sal_Int64( -1 );
                 pCtx->hasTimeout = true;
-                OSL_FAIL( "LockSequence_chardata_callback - Unknown timeout!" );
+                SAL_WARN( "ucb.ucp.webdav", "LockSequence_chardata_callback - Unknown timeout!" );
             }
             break;
 
