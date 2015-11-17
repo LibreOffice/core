@@ -67,10 +67,10 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     {
         SvpSalInstance* pInst = SvpSalInstance::s_pDefaultInstance;
         assert( pInst );
-        basebmp::Format nFormat = pInst->getFormatForBitCount( m_nBitCount );
+        basebmp::Format nFormat = pInst->getBaseBmpFormatForDeviceFormat(m_eFormat);
         sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(nFormat, aDevSize.getX());
 
-        if ( m_nBitCount == 1 )
+        if (m_eFormat == DeviceFormat::BITMASK)
         {
             std::vector< basebmp::Color > aDevPal(2);
             aDevPal[0] = basebmp::Color( 0, 0, 0 );

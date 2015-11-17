@@ -53,7 +53,7 @@ public:
     virtual void            DestroyObject( SalObject* pObject ) override;
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData ) override;
+                                                     DeviceFormat eFormat, const SystemGraphicsData *pData ) override;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData ) override;
     virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) override;

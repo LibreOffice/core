@@ -129,7 +129,7 @@ public:
     // pData allows for using a system dependent graphics or device context
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = nullptr ) override;
+                                                     DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
 
     // Printer
     // pSetupData->mpDriverData can be 0
@@ -177,7 +177,8 @@ public:
     // previously unchangeable).
     void setBitCountFormatMapping( sal_uInt16 nBitCount, ::basebmp::Format aFormat );
 
-    ::basebmp::Format getFormatForBitCount( sal_uInt16 );
+    ::basebmp::Format getBaseBmpFormatForBitCount(sal_uInt16);
+    ::basebmp::Format getBaseBmpFormatForDeviceFormat(DeviceFormat);
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
