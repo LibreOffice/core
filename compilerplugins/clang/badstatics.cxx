@@ -136,6 +136,12 @@ public:
                 || name == "xDrawClipDocShellRef" // ScGlobal::Clear()
                 || name == "instance"
                     // ImplImageTree::get(), ImplImageTree::shutDown()
+                || name == "s_pMouseFrame"
+                    // vcl/osx/salframeview.mm, mouseEntered/Exited, not owning
+                || name == "pCurrentMenuBar"
+                    // vcl/osx/salmenu.cxx, AquaSalMenu::set/unsetMainMenu, not
+                    // owning
+                || name == "s_pCaptureFrame" // vcl/osx/salframe.cxx, not owning
                ) // these variables appear unproblematic
             {
                 return true;
