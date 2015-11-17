@@ -70,7 +70,7 @@ namespace /* private */
     {
         CFIndex lstr = CFStringGetLength(s);
         for (CFIndex i = 0; i < lstr; i++)
-            buffer.append(CFStringGetCharacterAtIndex(s, i));
+            buffer.append(sal_Unicode(CFStringGetCharacterAtIndex(s, i)));
     }
 
     template <typename T>

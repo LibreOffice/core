@@ -196,7 +196,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
                         candidate.append(
                             reinterpret_cast<sal_Unicode *>(&idx[2][address]));
                     else
-                        candidate.append(address);
+                        candidate.append(sal_Unicode(address));
                 } else
                     candidate.append(" ");
             }
