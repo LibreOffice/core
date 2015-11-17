@@ -127,6 +127,8 @@ inline static void SwapDouble( double& r )
     }
 #endif
 
+static void SwapUnicode(sal_Unicode & r) { r = OSL_SWAPWORD(r); }
+
 //SDO
 
 #define READNUMBER_WITHOUT_SWAP(datatype,value) \
@@ -609,7 +611,7 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
         for( j = n = 0; j < nLen ; ++j )
         {
             if (m_isSwap)
-                SwapUShort( buf[n] );
+                SwapUnicode( buf[n] );
             c = buf[j];
             if ( c == '\n' || c == '\r' )
             {
@@ -651,7 +653,7 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
         sal_Unicode cTemp;
         Read( &cTemp, sizeof(cTemp) );
         if (m_isSwap)
-            SwapUShort( cTemp );
+            SwapUnicode( cTemp );
         if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
             Seek( nOldFilePos );
     }
@@ -729,7 +731,7 @@ sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const OUString& rStr,
         const sal_Unicode* const pStop = pTmp + nLen;
         while ( p < pStop )
         {
-            SwapUShort( *p );
+            SwapUnicode( *p );
             p++;
         }
         nWritten = rStrm.Write( pTmp, nLen * sizeof(sal_Unicode) );
