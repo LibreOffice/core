@@ -146,6 +146,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_91f25c6e",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T19:22:52Z",
+      "side": 1,
+      "message": "With fragment I was more referring to why that commented-out code is there. It makes no sense to have commented-out code, rather provide a description why if the condition is met nothing is done.\n\nHowever, I think you got that wrong. The original code has\n\n if (aNew[aNew.getLength()-1] \u003d\u003d cParenthesesReplacement)\n     aNew \u003d aNew.copy( 0, aNew.getLength()-1) + \"()\";\n\nNow you unconditionally assign\n\n funcNameStr \u003d (*itStr).copy(0, (*itStr).getLength()-1);\n\nand then test\n\n if ((*itStr)[(*itStr).getLength()-1] \u003d\u003d cParenthesesReplacement)\n\nand if the condition is met do nothing. But if the condition was not true the assigned string would still be shortened by one character, which you tried to address in the (wrong) else{} branch. So I think that instead should be\n\n funcNameStr \u003d *itStr;\n if (funcNameStr[funcNameStr.getLength()-1] \u003d\u003d cParenthesesReplacement)\n     funcNameStr \u003d funcNameStr.copy(0,funcNameStr.getLength()-1);\n\nor, with the code following below which may be what you have wanted,\n\n if ((*itStr)[(*itStr).getLength()-1] \u003d\u003d cParenthesesReplacement)\n     funcNameStr \u003d (*itStr).copy(0, (*itStr).getLength()-1);\n else\n     funcNameStr \u003d (*itStr);",
+      "parentUuid": "dab17558_b17840fa",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_71db781c",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 2
@@ -314,6 +332,24 @@
       "side": 1,
       "message": "\u003ethese English \" and \" and \" more\" are not localizeable.\nI\u0027m sorry, but I cannot understand what you mean because of my lack of English skills. Could you explain this more specifically to me? You mean, I think, \"SUM, SUMIF and SUMIFS more\" indtead of \"SUM, SUMIF, SUMIFS and 50 more\" is better for example?",
       "parentUuid": "dab17558_11a02c90",
+      "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_51f9144d",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T19:22:52Z",
+      "side": 1,
+      "message": "Message strings need to be localized/translated for different UI languages, and can\u0027t be hard coded into the code. So we have resource files with strings, from which the messages are translated by different localization teams, see for example sc/source/ui/src/globstr.src for message strings that are repeatedly used. Such string should have placeholders for strings or numbers that are inserted during runtime. For example, in sc/inc/globstr.hrc have\n\n #define STR_FUNCTIONS_FOUND 531\n\nand in sc/source/ui/src/globstr.src have\n\n     String STR_FUNCTIONS_FOUND\n     {\n         Text [ en-US ] \u003d \"%1 and %2 more\";\n     };\n\nand then here in the code obtain the string with\n\n OUString aMessage( ScGlobal::GetRscString( STR_FUNCTIONS_FOUND));\n\nand from that replace %1 with tipStr and %2 with OUString::number(remainNumber, 10), like\n\n aMessage \u003d aMessage.replaceFirst(\"%2\", OUString::number( remainNumber, 10));\n aMessage \u003d aMessage.replaceFirst(\"%1\", tipStr);\n\nBtw, I would appreciate if you would use our usual \"quasi-hungarian prefix notation\", e.g. an object instance has \u0027a\u0027, an integer number \u0027n\u0027 prefix and so on, for example aTipStr, nRemainNumber, ... this helps to make the code look more coherent readable.",
+      "parentUuid": "dab17558_b15fa074",
       "revId": "24c112b8a58a6c598e8a689f4fefb12d286fdf7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

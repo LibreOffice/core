@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_71e538a7",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-17T19:22:52Z",
+      "side": 0,
+      "message": "Oh by the way, you also removed this \"are we in between quotes\" detection, which removing is wrong. With the cursor within a literal string function names are not to be suggested.",
+      "revId": "1ba6f9ca615f55de30547612d67988218a983318",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
