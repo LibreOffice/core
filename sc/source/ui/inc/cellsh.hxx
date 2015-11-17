@@ -26,6 +26,7 @@
 #include <svx/svdmark.hxx>
 #include <unotools/caserotate.hxx>
 #include <tools/link.hxx>
+#include <memory>
 #include "formatsh.hxx"
 #include "address.hxx"
 
@@ -49,7 +50,7 @@ struct CellShell_Impl
 class ScCellShell: public ScFormatShell
 {
 private:
-    CellShell_Impl* pImpl;
+    std::unique_ptr<CellShell_Impl> pImpl;
     bool            bPastePossible;
 
     void        GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats );

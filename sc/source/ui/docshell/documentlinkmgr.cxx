@@ -61,7 +61,6 @@ DocumentLinkManager::DocumentLinkManager( ScDocument& rDoc, SfxObjectShell* pShe
 
 DocumentLinkManager::~DocumentLinkManager()
 {
-    delete mpImpl;
 }
 
 void DocumentLinkManager::setDataStream( DataStream* p )

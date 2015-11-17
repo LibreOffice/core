@@ -25,6 +25,7 @@
 #include <sfx2/lnkbase.hxx>
 
 #include <sfx2/objsh.hxx>
+#include <memory>
 
 class ScDocShell;
 struct TableLink_Impl;
@@ -32,7 +33,7 @@ struct TableLink_Impl;
 class ScTableLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
-    TableLink_Impl* pImpl;
+    std::unique_ptr<TableLink_Impl> pImpl;
     OUString aFileName;
     OUString aFilterName;
     OUString aOptions;

@@ -16,6 +16,7 @@
 #include <rtl/ustring.hxx>
 
 #include <boost/noncopyable.hpp>
+#include <memory>
 
 class EditTextObject;
 class ScDocument;
@@ -39,7 +40,7 @@ enum class SvtScriptType;
  */
 class SC_DLLPUBLIC ScDocumentImport : boost::noncopyable
 {
-    ScDocumentImportImpl* mpImpl;
+    std::unique_ptr<ScDocumentImportImpl> mpImpl;
 
     ScDocumentImport(); // disabled
     ScDocumentImport& operator=(const ScDocumentImport&); //disabled

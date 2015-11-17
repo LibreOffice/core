@@ -2254,7 +2254,6 @@ ScMatrix::ScMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals )
 
 ScMatrix::~ScMatrix()
 {
-    delete pImpl;
 }
 
 ScMatrix* ScMatrix::Clone() const

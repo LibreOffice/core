@@ -15,6 +15,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <memory>
 
 class ScRangeList;
 
@@ -51,7 +52,7 @@ private:
 class QueryRange : public SvtListener::QueryBase
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     QueryRange( const QueryRange& ) = delete;
     QueryRange& operator= ( const QueryRange& ) = delete;

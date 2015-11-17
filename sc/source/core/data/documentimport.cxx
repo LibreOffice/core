@@ -77,9 +77,9 @@ struct ScDocumentImportImpl
 ScDocumentImport::Attrs::Attrs() : mpData(nullptr), mnSize(0), mbLatinNumFmtOnly(false) {}
 
 ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mpImpl(new ScDocumentImportImpl(rDoc)) {}
+
 ScDocumentImport::~ScDocumentImport()
 {
-    delete mpImpl;
 }
 
 ScDocument& ScDocumentImport::getDoc()

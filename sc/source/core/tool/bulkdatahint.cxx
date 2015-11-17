@@ -26,7 +26,6 @@ BulkDataHint::BulkDataHint( ScDocument& rDoc, const ColumnSpanSet* pSpans ) :
 
 BulkDataHint::~BulkDataHint()
 {
-    delete mpImpl;
 }
 
 void BulkDataHint::setSpans( const ColumnSpanSet* pSpans )

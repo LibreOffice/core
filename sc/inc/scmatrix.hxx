@@ -115,7 +115,7 @@ class SC_DLLPUBLIC ScMatrix
 {
     friend class ScMatrixImpl;
 
-    ScMatrixImpl*   pImpl;
+    std::unique_ptr<ScMatrixImpl> pImpl;
     mutable size_t  nRefCnt;    // reference count
 
     // only delete via Delete()

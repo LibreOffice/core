@@ -148,7 +148,6 @@ Test::Test() :
 
 Test::~Test()
 {
-    delete m_pImpl;
 }
 
 ScDocShell& Test::getDocShell()

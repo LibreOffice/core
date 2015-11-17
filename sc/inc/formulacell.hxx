@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_FORMULACELL_HXX
 
 #include <set>
+#include <memory>
 
 #include <boost/noncopyable.hpp>
 
@@ -56,7 +57,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
 {
 private:
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
 public:
 

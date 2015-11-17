@@ -80,7 +80,6 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
 ScAreaLink::~ScAreaLink()
 {
     StopRefreshTimer();
-    delete pImpl;
 }
 
 void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEndEditHdl */ )

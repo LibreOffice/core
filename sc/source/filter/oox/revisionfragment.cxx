@@ -201,7 +201,6 @@ RevisionHeadersFragment::RevisionHeadersFragment(
 
 RevisionHeadersFragment::~RevisionHeadersFragment()
 {
-    delete mpImpl;
 }
 
 oox::core::ContextHandlerRef RevisionHeadersFragment::onCreateContext(
@@ -340,7 +339,6 @@ RevisionLogFragment::RevisionLogFragment(
 
 RevisionLogFragment::~RevisionLogFragment()
 {
-    delete mpImpl;
 }
 
 oox::core::ContextHandlerRef RevisionLogFragment::onCreateContext(

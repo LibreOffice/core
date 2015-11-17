@@ -25,6 +25,7 @@
 #include "address.hxx"
 #include <sfx2/lnkbase.hxx>
 #include "scdllapi.h"
+#include <memory>
 
 class SfxObjectShell;
 struct AreaLink_Impl;
@@ -33,7 +34,7 @@ class Dialog;
 class SC_DLLPUBLIC ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
-    AreaLink_Impl*  pImpl;
+    std::unique_ptr<AreaLink_Impl> pImpl;
     OUString        aFileName;
     OUString        aFilterName;
     OUString        aOptions;

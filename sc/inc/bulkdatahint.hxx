@@ -11,6 +11,7 @@
 #define INCLUDED_SC_BULKDATAHINT_HXX
 
 #include <simplehintids.hxx>
+#include <memory>
 
 class ScDocument;
 
@@ -21,7 +22,7 @@ class ColumnSpanSet;
 class BulkDataHint : public SfxSimpleHint
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     BulkDataHint( const BulkDataHint& ) = delete;
     BulkDataHint& operator= ( const BulkDataHint& ) = delete;

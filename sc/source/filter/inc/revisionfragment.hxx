@@ -11,6 +11,7 @@
 #define INCLUDED_SC_OOX_XLS_REVISIONFRAGMENT_HXX
 
 #include <excelhandlers.hxx>
+#include <memory>
 
 class ScChangeTrack;
 
@@ -19,7 +20,7 @@ namespace oox { namespace xls {
 class RevisionHeadersFragment : public WorkbookFragmentBase
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
 public:
     explicit RevisionHeadersFragment(
@@ -44,7 +45,7 @@ private:
 class RevisionLogFragment : public WorkbookFragmentBase
 {
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
 public:
     explicit RevisionLogFragment(

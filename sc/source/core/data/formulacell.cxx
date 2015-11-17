@@ -559,7 +559,6 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
     SAL_INFO( "sc.core.formulacell", "ScFormulaCellGroup dtor this " << this);
     delete mpCode;
     delete mpCompiledFormula;
-    delete mpImpl;
 }
 
 void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )

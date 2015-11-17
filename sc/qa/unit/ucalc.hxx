@@ -13,6 +13,7 @@
 #include "helper/qahelper.hxx"
 #include "document.hxx"
 #include <stringutil.hxx>
+#include <memory>
 
 struct TestImpl;
 class ScUndoPaste;
@@ -688,7 +689,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    TestImpl* m_pImpl;
+    std::unique_ptr<TestImpl> m_pImpl;
     ScDocument *m_pDoc;
 };
 

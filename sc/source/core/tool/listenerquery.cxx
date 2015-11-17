@@ -79,7 +79,6 @@ QueryRange::QueryRange() :
 
 QueryRange::~QueryRange()
 {
-    delete mpImpl;
 }
 
 void QueryRange::add( const ScRange& rRange )

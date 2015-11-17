@@ -61,7 +61,6 @@ CellValues::CellValues() :
 
 CellValues::~CellValues()
 {
-    delete mpImpl;
 }
 
 void CellValues::transferFrom( ScColumn& rCol, SCROW nRow, size_t nLen )
@@ -316,7 +315,6 @@ TableValues::TableValues( const ScRange& rRange ) :
 
 TableValues::~TableValues()
 {
-    delete mpImpl;
 }
 
 const ScRange& TableValues::getRange() const

@@ -101,7 +101,6 @@ ScTableLink::~ScTableLink()
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (rDoc.IsLinked(nTab) && aFileName.equals(rDoc.GetLinkDoc(nTab)))
             rDoc.SetLink( nTab, ScLinkMode::NONE, "", "", "", "", 0 );
-    delete pImpl;
 }
 
 void ScTableLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl )

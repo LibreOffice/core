@@ -98,7 +98,6 @@ ScCellShell::~ScCellShell()
 
     delete pImpl->m_pLinkedDlg;
     delete pImpl->m_pRequest;
-    delete pImpl;
 }
 
 void ScCellShell::GetBlockState( SfxItemSet& rSet )

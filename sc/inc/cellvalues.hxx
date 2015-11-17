@@ -12,6 +12,7 @@
 
 #include "address.hxx"
 #include <global.hxx>
+#include <memory>
 
 class ScColumn;
 
@@ -40,7 +41,7 @@ struct CellValueSpan
  */
 class CellValues
 {
-    CellValuesImpl* mpImpl;
+    std::unique_ptr<CellValuesImpl> mpImpl;
 
     CellValues( const CellValues& ) = delete;
     CellValues& operator= ( const CellValues& ) = delete;
@@ -86,7 +87,7 @@ class TableValues
 {
     struct Impl;
 
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     TableValues( const TableValues& ) = delete;
     TableValues& operator= ( const TableValues& ) = delete;
