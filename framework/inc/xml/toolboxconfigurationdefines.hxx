@@ -34,13 +34,9 @@
 
 #define ATTRIBUTE_UINAME            "uiname"
 
-#define ATTRIBUTE_BITMAP            "bitmap"
 #define ATTRIBUTE_TEXT              "text"
 #define ATTRIBUTE_URL               "href"
-#define ATTRIBUTE_ITEMBITS          "property"
 #define ATTRIBUTE_VISIBLE           "visible"
-#define ATTRIBUTE_WIDTH             "width"
-#define ATTRIBUTE_USER              "userdefined"
 #define ATTRIBUTE_HELPID            "helpid"
 #define ATTRIBUTE_ITEMSTYLE         "style"
 

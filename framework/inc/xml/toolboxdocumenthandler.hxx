@@ -46,12 +46,8 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
             TB_ELEMENT_TOOLBARBREAK,
             TB_ELEMENT_TOOLBARSEPARATOR,
             TB_ATTRIBUTE_TEXT,
-            TB_ATTRIBUTE_BITMAP,
             TB_ATTRIBUTE_URL,
-            TB_ATTRIBUTE_ITEMBITS,
             TB_ATTRIBUTE_VISIBLE,
-            TB_ATTRIBUTE_WIDTH,
-            TB_ATTRIBUTE_USER,
             TB_ATTRIBUTE_HELPID,
             TB_ATTRIBUTE_STYLE,
             TB_ATTRIBUTE_UINAME,
@@ -155,8 +151,8 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler
               css::uno::RuntimeException );
 
     protected:
-        void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle,
-                                       sal_Int16 nWidth, bool bVisible ) throw
+        void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL,
+                               sal_Int16 nStyle, bool bVisible ) throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
@@ -172,13 +168,13 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
-        css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
-        css::uno::Reference< css::xml::sax::XAttributeList >      m_xEmptyList;
-        css::uno::Reference< css::container::XIndexAccess >           m_rItemAccess;
-        OUString                                                                     m_aXMLToolbarNS;
-        OUString                                                                     m_aXMLXlinkNS;
-        OUString                                                                     m_aAttributeType;
-        OUString                                                                     m_aAttributeURL;
+        css::uno::Reference< css::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
+        css::uno::Reference< css::xml::sax::XAttributeList >   m_xEmptyList;
+        css::uno::Reference< css::container::XIndexAccess >    m_rItemAccess;
+        OUString                                               m_aXMLToolbarNS;
+        OUString                                               m_aXMLXlinkNS;
+        OUString                                               m_aAttributeType;
+        OUString                                               m_aAttributeURL;
 };
 
 } // namespace framework
