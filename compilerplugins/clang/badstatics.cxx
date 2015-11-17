@@ -134,7 +134,8 @@ public:
                 || name == "g_pHyphIter" // SwEditShell::HyphEnd()
                 || name == "pFieldEditEngine" // ScGlobal::Clear()
                 || name == "xDrawClipDocShellRef" // ScGlobal::Clear()
-                || name == "instance" // ImplImageTree::get()
+                || name == "instance"
+                    // ImplImageTree::get(), ImplImageTree::shutDown()
                ) // these variables appear unproblematic
             {
                 return true;
