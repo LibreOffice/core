@@ -730,7 +730,9 @@ OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
         return OString();
 
     const sal_uInt16* pBuffer = &rBuffer [0];
-    return OString( pBuffer, rBuffer.size(), RTL_TEXTENCODING_UTF8 );
+    return OString(
+        reinterpret_cast<sal_Unicode const *>(pBuffer), rBuffer.size(),
+        RTL_TEXTENCODING_UTF8);
 }
 
 OString XclXmlUtils::ToOString( const ScRange& rRange )
@@ -802,7 +804,10 @@ OUString XclXmlUtils::ToOUString( const ScfUInt16Vec& rBuf, sal_Int32 nStart, sa
     if( nLength == -1 || ( nLength > ((sal_Int32)rBuf.size() - nStart) ) )
         nLength = (rBuf.size() - nStart);
 
-    return (nLength > 0) ? OUString( &rBuf[nStart], nLength ) : OUString();
+    return nLength > 0
+        ? OUString(
+            reinterpret_cast<sal_Unicode const *>(&rBuf[nStart]), nLength)
+        : OUString();
 }
 
 OUString XclXmlUtils::ToOUString(
