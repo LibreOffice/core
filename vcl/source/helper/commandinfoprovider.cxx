@@ -38,7 +38,7 @@ using namespace css::uno;
 namespace
 {
     typedef ::cppu::WeakComponentImplHelper <
-        css::lang::XEventListener
+        css::frame::XFrameActionListener
         > FrameListenerInterfaceBase;
     class FrameListener
         : public ::cppu::BaseMutex,
@@ -51,15 +51,23 @@ namespace
               mxFrame(rxFrame)
         {
             if (mxFrame.is())
-                mxFrame->addEventListener(this);
+                mxFrame->addFrameActionListener(this);
         }
         virtual ~FrameListener()
         {
         }
+        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
+            throw (css::uno::RuntimeException, std::exception) override
+        {
+            // The same frame can be reused for a different component, e.g.
+            // starting component from the start center, so need to re-init the cached data.
+            if (aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING)
+                mrInfoProvider.SetFrame(nullptr);
+        }
         virtual void SAL_CALL disposing() override
         {
             if (mxFrame.is())
-                mxFrame->removeEventListener(this);
+                mxFrame->removeFrameActionListener(this);
         }
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
             throw (RuntimeException, std::exception) override
