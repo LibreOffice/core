@@ -24,6 +24,7 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace container {
@@ -118,7 +119,7 @@ public:
     {
     friend class HierarchyEntry;
 
-        iterator_Impl*  m_pImpl;
+        std::unique_ptr<iterator_Impl>  m_pImpl;
 
     public:
         iterator();

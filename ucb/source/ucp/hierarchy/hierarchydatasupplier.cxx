@@ -126,7 +126,6 @@ HierarchyResultSetDataSupplier::HierarchyResultSetDataSupplier(
 // virtual
 HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier()
 {
-    delete m_pImpl;
 }
 
 

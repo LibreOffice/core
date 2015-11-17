@@ -22,6 +22,7 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
+#include <memory>
 
 namespace package_ucp {
 
@@ -30,7 +31,7 @@ class Content;
 
 class DataSupplier : public ::ucbhelper::ResultSetDataSupplier
 {
-    DataSupplier_Impl* m_pImpl;
+    std::unique_ptr<DataSupplier_Impl> m_pImpl;
 
 public:
     DataSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

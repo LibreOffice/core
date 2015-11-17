@@ -36,6 +36,7 @@
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <memory>
 
 
 #define STORE_SERVICE_NAME          "com.sun.star.ucb.Store"
@@ -52,7 +53,7 @@ class UcbStore : public cppu::WeakImplHelper <
     css::lang::XInitialization >
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    UcbStore_Impl* m_pImpl;
+    std::unique_ptr<UcbStore_Impl> m_pImpl;
 
 public:
     explicit UcbStore( const css::uno::Reference< css::uno::XComponentContext >& xContext );
@@ -101,7 +102,7 @@ class PropertySetRegistry : public cppu::WeakImplHelper <
     friend class PersistentPropertySet;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    PropertySetRegistry_Impl* m_pImpl;
+    std::unique_ptr<PropertySetRegistry_Impl> m_pImpl;
 
 private:
     css::uno::Reference< css::lang::XMultiServiceFactory >
@@ -181,7 +182,7 @@ class PersistentPropertySet : public cppu::WeakImplHelper <
     css::beans::XPropertyAccess >
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    PersistentPropertySet_Impl* m_pImpl;
+    std::unique_ptr<PersistentPropertySet_Impl> m_pImpl;
 
 private:
     void notifyPropertyChangeEvent(

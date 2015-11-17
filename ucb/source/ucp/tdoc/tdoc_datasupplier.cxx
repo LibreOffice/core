@@ -119,7 +119,6 @@ ResultSetDataSupplier::ResultSetDataSupplier(
 // virtual
 ResultSetDataSupplier::~ResultSetDataSupplier()
 {
-    delete m_pImpl;
 }
 
 // virtual

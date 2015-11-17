@@ -23,6 +23,7 @@
 #include <rtl/ref.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/resultset.hxx>
+#include <memory>
 
 namespace hierarchy_ucp {
 
@@ -33,7 +34,7 @@ class HierarchyContent;
 class HierarchyResultSetDataSupplier :
         public ::ucbhelper::ResultSetDataSupplier
 {
-    DataSupplier_Impl*  m_pImpl;
+    std::unique_ptr<DataSupplier_Impl>  m_pImpl;
 
 private:
     bool checkResult( const HierarchyEntryData& rResult );

@@ -165,7 +165,6 @@ UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
 // virtual
 UcbStore::~UcbStore()
 {
-    delete m_pImpl;
 }
 
 
@@ -268,7 +267,6 @@ PropertySetRegistry::PropertySetRegistry(
 // virtual
 PropertySetRegistry::~PropertySetRegistry()
 {
-    delete m_pImpl;
 }
 
 
@@ -1156,8 +1154,6 @@ PersistentPropertySet::~PersistentPropertySet()
 {
     // deregister at creator.
     m_pImpl->m_pCreator->remove( this );
-
-    delete m_pImpl;
 }
 
 // XServiceInfo methods.

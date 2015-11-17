@@ -129,7 +129,6 @@ DataSupplier::DataSupplier(
 // virtual
 DataSupplier::~DataSupplier()
 {
-    delete m_pImpl;
 }
 
 

@@ -1069,14 +1069,13 @@ HierarchyEntry::getRootReadAccess()
 
 
 HierarchyEntry::iterator::iterator()
+    : m_pImpl( new iterator_Impl )
 {
-    m_pImpl = new iterator_Impl;
 }
 
 
 HierarchyEntry::iterator::~iterator()
 {
-    delete m_pImpl;
 }
 
 
