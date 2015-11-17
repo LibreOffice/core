@@ -84,6 +84,10 @@ public:
         bool bLarge,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
+    sal_Int32 GetPropertiesForCommand(
+        const OUString& rsCommandName,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
     /** Do not call.  Should be part of a local and hidden interface.
     */
     void SetFrame (const css::uno::Reference<css::frame::XFrame>& rxFrame);

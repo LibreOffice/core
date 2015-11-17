@@ -773,62 +773,8 @@ void ToolBarManager::RemoveControllers()
     m_aControllerMap.clear();
 }
 
-uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const OUString& rCmdURL )
-{
-    Sequence< PropertyValue > aPropSeq;
-
-    // Retrieve properties for command
-    try
-    {
-        if ( !m_bModuleIdentified )
-        {
-            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
-            Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
-
-            m_bModuleIdentified = true;
-            m_aModuleIdentifier = xModuleManager->identify( xIfac );
-
-            if ( !m_aModuleIdentifier.isEmpty() )
-            {
-                Reference< XNameAccess > xNameAccess = frame::theUICommandDescription::get( m_xContext );
-                xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandLabels;
-            }
-        }
-
-        if ( m_xUICommandLabels.is() )
-        {
-            if ( !rCmdURL.isEmpty() )
-                m_xUICommandLabels->getByName( rCmdURL ) >>= aPropSeq;
-        }
-    }
-    catch (const Exception&)
-    {
-    }
-
-    return aPropSeq;
-}
-
-sal_Int32 ToolBarManager::RetrievePropertiesFromCommand( const OUString& aCmdURL )
-{
-    sal_Int32 nProperties(0);
-    Sequence< PropertyValue > aPropSeq;
-
-    // Retrieve popup menu labels
-    aPropSeq = GetPropsForCommand( aCmdURL );
-    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-    {
-        if ( aPropSeq[i].Name == "Properties" )
-        {
-            aPropSeq[i].Value >>= nProperties;
-            break;
-        }
-    }
-    return nProperties;
-}
-
 void ToolBarManager::CreateControllers()
 {
-
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
 
     css::util::URL      aURL;
@@ -932,7 +878,7 @@ void ToolBarManager::CreateControllers()
                             new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
 
                         // Accessibility support: Set toggle button role for specific commands
-                        sal_Int32 nProps = RetrievePropertiesFromCommand( aCommandURL );
+                        sal_Int32 nProps = vcl::CommandInfoProvider::Instance().GetPropertiesForCommand(aCommandURL, m_xFrame);
                         if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
                             m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
                     }
