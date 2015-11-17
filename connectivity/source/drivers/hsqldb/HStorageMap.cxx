@@ -147,7 +147,8 @@ namespace connectivity
                 jboolean bCopy(sal_True);
                 const jchar* pChar = env->GetStringChars(jstr,&bCopy);
                 jsize len = env->GetStringLength(jstr);
-                aStr = OUString(pChar,len);
+                aStr = OUString(
+                    reinterpret_cast<sal_Unicode const *>(pChar), len);
 
                 if(bCopy)
                     env->ReleaseStringChars(jstr,pChar);

@@ -95,7 +95,8 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( nullptr, nullpt
 jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const OUString& _rTemp)
 {
     OSL_ENSURE(pEnv,"Environment is NULL!");
-    jstring pStr = pEnv->NewString(_rTemp.getStr(), _rTemp.getLength());
+    jstring pStr = pEnv->NewString(
+        reinterpret_cast<jchar const *>(_rTemp.getStr()), _rTemp.getLength());
     pEnv->ExceptionClear();
     OSL_ENSURE(pStr,"Could not create a jsstring object!");
     return pStr;
@@ -163,7 +164,7 @@ OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring _Str)
         jboolean bCopy(sal_True);
         const jchar* pChar = pEnv->GetStringChars(_Str,&bCopy);
         jsize len = pEnv->GetStringLength(_Str);
-        aStr = OUString(pChar,len);
+        aStr = OUString(reinterpret_cast<sal_Unicode const *>(pChar), len);
 
         if(bCopy)
             pEnv->ReleaseStringChars(_Str,pChar);
