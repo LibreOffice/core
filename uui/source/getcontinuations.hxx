@@ -31,13 +31,12 @@ namespace com { namespace sun { namespace star {
 
 template< class t1 >
 bool setContinuation(
-    com::sun::star::uno::Reference<
-        com::sun::star::task::XInteractionContinuation > const & rContinuation,
-    com::sun::star::uno::Reference< t1 > * pContinuation)
+    css::uno::Reference< css::task::XInteractionContinuation > const & rContinuation,
+    css::uno::Reference< t1 > * pContinuation)
 {
     if (pContinuation && !pContinuation->is())
     {
-        pContinuation->set(rContinuation, com::sun::star::uno::UNO_QUERY);
+        pContinuation->set(rContinuation, css::uno::UNO_QUERY);
         if (pContinuation->is())
             return true;
     }
@@ -46,12 +45,10 @@ bool setContinuation(
 
 template< class t1, class t2 >
 void getContinuations(
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-                rContinuations,
-    com::sun::star::uno::Reference< t1 > * pContinuation1,
-    com::sun::star::uno::Reference< t2 > * pContinuation2)
+    css::uno::Sequence<
+        css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
+    css::uno::Reference< t1 > * pContinuation1,
+    css::uno::Reference< t2 > * pContinuation2)
 {
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
     {
@@ -64,13 +61,11 @@ void getContinuations(
 
 template< class t1, class t2, class t3 >
 void getContinuations(
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-                rContinuations,
-    com::sun::star::uno::Reference< t1 > * pContinuation1,
-    com::sun::star::uno::Reference< t2 > * pContinuation2,
-    com::sun::star::uno::Reference< t3 > * pContinuation3)
+    css::uno::Sequence<
+        css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
+    css::uno::Reference< t1 > * pContinuation1,
+    css::uno::Reference< t2 > * pContinuation2,
+    css::uno::Reference< t3 > * pContinuation3)
 {
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
     {
@@ -85,14 +80,12 @@ void getContinuations(
 
 template< class t1, class t2, class t3, class t4 >
 void getContinuations(
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-                rContinuations,
-    com::sun::star::uno::Reference< t1 > * pContinuation1,
-    com::sun::star::uno::Reference< t2 > * pContinuation2,
-    com::sun::star::uno::Reference< t3 > * pContinuation3,
-    com::sun::star::uno::Reference< t4 > * pContinuation4)
+    css::uno::Sequence<
+        css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
+    css::uno::Reference< t1 > * pContinuation1,
+    css::uno::Reference< t2 > * pContinuation2,
+    css::uno::Reference< t3 > * pContinuation3,
+    css::uno::Reference< t4 > * pContinuation4)
 {
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
     {

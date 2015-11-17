@@ -48,9 +48,7 @@ class PasswordContainerHelper
 {
 public:
     explicit PasswordContainerHelper(
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > const &
-                xContext );
+        css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 
 
@@ -84,13 +82,10 @@ public:
             False, otherwise.
      */
     bool handleAuthenticationRequest(
-        com::sun::star::ucb::AuthenticationRequest const & rRequest,
-        com::sun::star::uno::Reference<
-            com::sun::star::ucb::XInteractionSupplyAuthentication > const &
-                xSupplyAuthentication,
+        css::ucb::AuthenticationRequest const & rRequest,
+        css::uno::Reference< css::ucb::XInteractionSupplyAuthentication > const & xSupplyAuthentication,
         OUString const & rURL,
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionHandler2 > const & xIH );
+        css::uno::Reference< css::task::XInteractionHandler2 > const & xIH );
 
     /** This member function adds credentials for the given URL to the password
         container.
@@ -121,69 +116,59 @@ public:
     */
     bool addRecord( OUString const & rURL,
                     OUString const & rUsername,
-                    com::sun::star::uno::Sequence< OUString > const &
-                    rPasswords,
-                    com::sun::star::uno::Reference<
-                        com::sun::star::task::XInteractionHandler2 > const & xIH,
+                    css::uno::Sequence< OUString > const & rPasswords,
+                    css::uno::Reference< css::task::XInteractionHandler2 > const & xIH,
                     bool bPersist );
 
 
 
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::task::XPasswordContainer2 > m_xPasswordContainer;
+    css::uno::Reference< css::task::XPasswordContainer2 > m_xPasswordContainer;
 };
 
 
 
 class PasswordContainerInteractionHandler :
-        public cppu::WeakImplHelper< com::sun::star::lang::XServiceInfo,
-                                      com::sun::star::task::XInteractionHandler2 >
+        public cppu::WeakImplHelper< css::lang::XServiceInfo,
+                                     css::task::XInteractionHandler2 >
 {
 public:
     explicit PasswordContainerInteractionHandler(
-        const com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext >& xContext );
+        const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~PasswordContainerInteractionHandler();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
     supportsService( const OUString& ServiceName )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionHandler2
     virtual void SAL_CALL
-    handle( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::task::XInteractionRequest >& Request )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    handle( const css::uno::Reference< css::task::XInteractionRequest >& Request )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL
-    handleInteractionRequest( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::task::XInteractionRequest >& Request )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // Non-UNO interfaces
     static OUString
     getImplementationName_Static();
 
-    static com::sun::star::uno::Sequence< OUString >
+    static css::uno::Sequence< OUString >
     getSupportedServiceNames_Static();
 
-    static com::sun::star::uno::Reference<
-            com::sun::star::lang::XSingleServiceFactory >
-    createServiceFactory( const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > & rxServiceMgr );
+    static css::uno::Reference< css::lang::XSingleServiceFactory >
+    createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory > & rxServiceMgr );
 
 private:
-    //com::sun::star::uno::Reference<
-    //    com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
     PasswordContainerHelper m_aPwContainerHelper;
 };
 

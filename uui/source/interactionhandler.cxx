@@ -35,53 +35,46 @@ using namespace com::sun::star;
 namespace {
 
 class UUIInteractionHandler:
-    public cppu::WeakImplHelper< com::sun::star::lang::XServiceInfo,
-                                  com::sun::star::lang::XInitialization,
-                                  com::sun::star::task::XInteractionHandler2 >,
+    public cppu::WeakImplHelper< css::lang::XServiceInfo,
+                                  css::lang::XInitialization,
+                                  css::task::XInteractionHandler2 >,
     private boost::noncopyable
 {
 private:
     UUIInteractionHelper * m_pImpl;
 
 public:
-    explicit UUIInteractionHandler(com::sun::star::uno::Reference<
-                  com::sun::star::uno::XComponentContext >
-                  const & rxContext);
+    explicit UUIInteractionHandler(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
     virtual ~UUIInteractionHandler();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const &
-                          rServiceName)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName)
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
     initialize(
-        com::sun::star::uno::Sequence< com::sun::star::uno::Any > const &
-            rArguments)
-        throw (com::sun::star::uno::Exception, std::exception) override;
+        css::uno::Sequence< css::uno::Any > const & rArguments)
+        throw (css::uno::Exception, std::exception) override;
 
     virtual void SAL_CALL
-    handle(com::sun::star::uno::Reference<
-           com::sun::star::task::XInteractionRequest > const &
-       rRequest)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    handle(css::uno::Reference< css::task::XInteractionRequest > const & rRequest)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL
         handleInteractionRequest(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _Request
-        )   throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::task::XInteractionRequest >& _Request
+        )   throw ( css::uno::RuntimeException, std::exception ) override;
 };
 
 UUIInteractionHandler::UUIInteractionHandler(
-    uno::Reference< uno::XComponentContext > const &
-        rxContext)
+    uno::Reference< uno::XComponentContext > const & rxContext)
         : m_pImpl(new UUIInteractionHelper(rxContext))
 {
 }

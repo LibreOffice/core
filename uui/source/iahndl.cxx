@@ -302,7 +302,7 @@ namespace
 
     static bool lcl_matchesRequest( const Any& i_rRequest, const OUString& i_rTypeName, const OUString& i_rPropagation )
     {
-        const ::com::sun::star::uno::TypeDescription aTypeDesc( i_rTypeName );
+        const css::uno::TypeDescription aTypeDesc( i_rTypeName );
         const typelib_TypeDescription* pTypeDesc = aTypeDesc.get();
         if ( !pTypeDesc || !pTypeDesc->pWeakRef )
         {
@@ -315,7 +315,7 @@ namespace
 #endif
             return false;
         }
-        const ::com::sun::star::uno::Type aType( pTypeDesc->pWeakRef );
+        const css::uno::Type aType( pTypeDesc->pWeakRef );
 
         const bool bExactMatch = i_rPropagation == "named-only";
         if ( bExactMatch )
