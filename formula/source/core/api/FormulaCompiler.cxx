@@ -2262,15 +2262,15 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef& rCurr )
     if (!(rCurr->GetOpCode() != ocPush && (rCurr->GetType() == svByte || rCurr->GetType() == svJump)))
         return;
 
-    if (pCurrentFactorToken->HasForceArray())
+    if (pCurrentFactorToken->IsInForceArray())
     {
-        rCurr->SetForceArray( true);
+        rCurr->SetInForceArray( true);
         return;
     }
 
     if (nCurrentFactorParam && IsForceArrayParameter( pCurrentFactorToken.get(),
                 static_cast<sal_uInt8>(nCurrentFactorParam - 1)))
-        rCurr->SetForceArray( true);
+        rCurr->SetInForceArray( true);
 }
 
 void FormulaCompiler::CheckSetForceArrayParameter( FormulaTokenRef& rCurr, sal_uInt8 nParam )

@@ -174,15 +174,15 @@ void FormulaToken::SetByte( sal_uInt8 )
     SAL_WARN( "formula.core", "FormulaToken::SetByte: virtual dummy called" );
 }
 
-bool FormulaToken::HasForceArray() const
+bool FormulaToken::IsInForceArray() const
 {
     // ok to be called for any derived class
     return false;
 }
 
-void FormulaToken::SetForceArray( bool )
+void FormulaToken::SetInForceArray( bool )
 {
-    SAL_WARN( "formula.core", "FormulaToken::SetForceArray: virtual dummy called" );
+    SAL_WARN( "formula.core", "FormulaToken::SetInForceArray: virtual dummy called" );
 }
 
 double FormulaToken::GetDouble() const
@@ -333,12 +333,12 @@ bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 
 sal_uInt8 FormulaByteToken::GetByte() const                       { return nByte; }
 void FormulaByteToken::SetByte( sal_uInt8 n )                     { nByte = n; }
-bool FormulaByteToken::HasForceArray() const                 { return bHasForceArray; }
-void FormulaByteToken::SetForceArray( bool b )               { bHasForceArray = b; }
+bool FormulaByteToken::IsInForceArray() const                { return bIsInForceArray; }
+void FormulaByteToken::SetInForceArray( bool b )             { bIsInForceArray = b; }
 bool FormulaByteToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
-        bHasForceArray == r.HasForceArray();
+        bIsInForceArray == r.IsInForceArray();
 }
 
 
@@ -350,13 +350,13 @@ bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 
 
 short* FormulaJumpToken::GetJump() const                     { return pJump; }
-bool FormulaJumpToken::HasForceArray() const                 { return bHasForceArray; }
-void FormulaJumpToken::SetForceArray( bool b )               { bHasForceArray = b; }
+bool FormulaJumpToken::IsInForceArray() const                { return bIsInForceArray; }
+void FormulaJumpToken::SetInForceArray( bool b )             { bIsInForceArray = b; }
 bool FormulaJumpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pJump[0] == r.GetJump()[0] &&
         memcmp( pJump+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0 &&
-        bHasForceArray == r.HasForceArray();
+        bIsInForceArray == r.IsInForceArray();
 }
 FormulaJumpToken::~FormulaJumpToken()
 {

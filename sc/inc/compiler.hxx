@@ -104,7 +104,7 @@ public:
         double      nValue;
         struct {
             sal_uInt8        cByte;
-            bool        bHasForceArray;
+            bool        bIsInForceArray;
         } sbyte;
     };
                 DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken );
@@ -121,7 +121,7 @@ public:
         double       nValue;
         struct {
             sal_uInt8        cByte;
-            bool        bHasForceArray;
+            bool        bIsInForceArray;
         } sbyte;
         ScComplexRefData aRef;
         struct {

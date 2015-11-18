@@ -138,16 +138,16 @@ public:
           which of course is 0 on non-functions. FormulaByteToken and ScExternal do
           override it.
 
-        - HasForceArray() since also this is only used for operators and
-          functions and is 0 for other tokens.
+        - IsInForceArray() since also this is only used for operators and
+          functions and is false for other tokens.
 
         Any other non-overridden method pops up an assertion.
      */
 
     virtual sal_uInt8           GetByte() const;
     virtual void                SetByte( sal_uInt8 n );
-    virtual bool                HasForceArray() const;
-    virtual void                SetForceArray( bool b );
+    virtual bool                IsInForceArray() const;
+    virtual void                SetInForceArray( bool b );
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
     virtual svl::SharedString GetString() const;
@@ -207,30 +207,30 @@ class FORMULA_DLLPUBLIC FormulaByteToken : public FormulaToken
 {
 private:
             sal_uInt8           nByte;
-            bool                bHasForceArray;
+            bool                bIsInForceArray;
 protected:
                                 FormulaByteToken( OpCode e, sal_uInt8 n, StackVar v, bool b ) :
                                     FormulaToken( v,e ), nByte( n ),
-                                    bHasForceArray( b ) {}
+                                    bIsInForceArray( b ) {}
 public:
                                 FormulaByteToken( OpCode e, sal_uInt8 n, bool b ) :
                                     FormulaToken( svByte,e ), nByte( n ),
-                                    bHasForceArray( b ) {}
+                                    bIsInForceArray( b ) {}
                                 FormulaByteToken( OpCode e, sal_uInt8 n ) :
                                     FormulaToken( svByte,e ), nByte( n ),
-                                    bHasForceArray( false ) {}
+                                    bIsInForceArray( false ) {}
                                 FormulaByteToken( OpCode e ) :
                                     FormulaToken( svByte,e ), nByte( 0 ),
-                                    bHasForceArray( false ) {}
+                                    bIsInForceArray( false ) {}
                                 FormulaByteToken( const FormulaByteToken& r ) :
                                     FormulaToken( r ), nByte( r.nByte ),
-                                    bHasForceArray( r.bHasForceArray ) {}
+                                    bIsInForceArray( r.bIsInForceArray ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaByteToken(*this); }
     virtual sal_uInt8           GetByte() const override;
     virtual void                SetByte( sal_uInt8 n ) override;
-    virtual bool                HasForceArray() const override;
-    virtual void                SetForceArray( bool b ) override;
+    virtual bool                IsInForceArray() const override;
+    virtual void                SetInForceArray( bool b ) override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
@@ -365,18 +365,18 @@ class FORMULA_DLLPUBLIC FormulaJumpToken : public FormulaToken
 {
 private:
             short*              pJump;
-            bool                bHasForceArray;
+            bool                bIsInForceArray;
 public:
                                 FormulaJumpToken( OpCode e, short* p ) :
                                     FormulaToken( formula::svJump , e),
-                                    bHasForceArray( false)
+                                    bIsInForceArray( false)
                                 {
                                     pJump = new short[ p[0] + 1 ];
                                     memcpy( pJump, p, (p[0] + 1) * sizeof(short) );
                                 }
                                 FormulaJumpToken( const FormulaJumpToken& r ) :
                                     FormulaToken( r ),
-                                    bHasForceArray( r.bHasForceArray)
+                                    bIsInForceArray( r.bIsInForceArray)
                                 {
                                     pJump = new short[ r.pJump[0] + 1 ];
                                     memcpy( pJump, r.pJump, (r.pJump[0] + 1) * sizeof(short) );
@@ -385,8 +385,8 @@ public:
     virtual short*              GetJump() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new FormulaJumpToken(*this); }
-    virtual bool                HasForceArray() const override;
-    virtual void                SetForceArray( bool b ) override;
+    virtual bool                IsInForceArray() const override;
+    virtual void                SetInForceArray( bool b ) override;
 };
 
 

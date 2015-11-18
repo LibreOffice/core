@@ -252,7 +252,7 @@ void ScRawToken::SetOpCode( OpCode e )
         default:
             eType = svByte;
             sbyte.cByte = 0;
-            sbyte.bHasForceArray = false;
+            sbyte.bIsInForceArray = false;
     }
 }
 
@@ -381,7 +381,7 @@ FormulaToken* ScRawToken::CreateToken() const
     switch ( GetType() )
     {
         case svByte :
-            return new FormulaByteToken( eOp, sbyte.cByte, sbyte.bHasForceArray );
+            return new FormulaByteToken( eOp, sbyte.cByte, sbyte.bIsInForceArray );
         case svDouble :
             IF_NOT_OPCODE_ERROR( ocPush, FormulaDoubleToken);
             return new FormulaDoubleToken( nValue );

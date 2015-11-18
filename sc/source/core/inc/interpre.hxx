@@ -910,7 +910,7 @@ public:
 
 inline void ScInterpreter::MatrixDoubleRefToMatrix()
 {
-    if ( (bMatrixFormula || pCur->HasForceArray()) && GetStackType() == formula::svDoubleRef )
+    if ( (bMatrixFormula || pCur->IsInForceArray()) && GetStackType() == formula::svDoubleRef )
     {
         GetTokenMatrixMap();    // make sure it exists, create if not.
         PopDoubleRefPushMatrix();
@@ -919,7 +919,7 @@ inline void ScInterpreter::MatrixDoubleRefToMatrix()
 
 inline bool ScInterpreter::MatrixParameterConversion()
 {
-    if ( (bMatrixFormula || pCur->HasForceArray() || ScParameterClassification::HasForceArray( pCur->GetOpCode())) &&
+    if ( (bMatrixFormula || pCur->IsInForceArray() || ScParameterClassification::HasForceArray( pCur->GetOpCode())) &&
             !pJumpMatrix && sp > 0 )
         return ConvertMatrixParameters();
     return false;
