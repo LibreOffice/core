@@ -793,8 +793,7 @@ ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
     return mpData->meButtonSize;
 }
 
-/*static*/ Size
-ToolBox::GetDefaultImageSize(bool bLarge)
+/*static*/ Size ToolBox::GetDefaultImageSize(bool bLarge)
 {
     const long TB_SMALLIMAGESIZE = 16;
     if (!bLarge) {

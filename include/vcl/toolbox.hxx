@@ -130,22 +130,22 @@ private:
     long                mnBottomBorder;
     long                mnLastResizeDY;
     long                mnActivateCount;
-    sal_uInt16              mnLastFocusItemId;
-    sal_uInt16              mnFocusPos;
-    sal_uInt16              mnOutStyle;
-    sal_uInt16              mnHighItemId;
-    sal_uInt16              mnCurItemId;
-    sal_uInt16              mnDownItemId;
-    sal_uInt16              mnCurPos;
-    sal_uInt16              mnLines;        // total number of toolbox lines
-    sal_uInt16              mnCurLine;      // the currently visible line
-    sal_uInt16              mnCurLines;     // number of lines due to line breaking
-    sal_uInt16              mnVisLines;     // number of visible lines (for scrolling)
-    sal_uInt16              mnFloatLines;   // number of lines during floating mode
-    sal_uInt16              mnDockLines;
-    sal_uInt16              mnConfigItem;
-    sal_uInt16              mnMouseClicks;
-    sal_uInt16              mnMouseModifier;
+    sal_uInt16          mnLastFocusItemId;
+    sal_uInt16          mnFocusPos;
+    sal_uInt16          mnOutStyle;
+    sal_uInt16          mnHighItemId;
+    sal_uInt16          mnCurItemId;
+    sal_uInt16          mnDownItemId;
+    sal_uInt16          mnCurPos;
+    sal_uInt16          mnLines;        // total number of toolbox lines
+    sal_uInt16          mnCurLine;      // the currently visible line
+    sal_uInt16          mnCurLines;     // number of lines due to line breaking
+    sal_uInt16          mnVisLines;     // number of visible lines (for scrolling)
+    sal_uInt16          mnFloatLines;   // number of lines during floating mode
+    sal_uInt16          mnDockLines;
+    sal_uInt16          mnConfigItem;
+    sal_uInt16          mnMouseClicks;
+    sal_uInt16          mnMouseModifier;
     bool                mbDrag:1,
                         mbSelection:1,
                         mbCommandDrag:1,
@@ -193,7 +193,7 @@ private:
     SAL_DLLPRIVATE void            ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE bool            ImplCalcItem();
-    SAL_DLLPRIVATE sal_uInt16          ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
+    SAL_DLLPRIVATE sal_uInt16      ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bool bLowerIn);
     SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect);
@@ -201,12 +201,12 @@ private:
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
-    SAL_DLLPRIVATE const OUString ImplConvertMenuString( const OUString& rStr );
+    SAL_DLLPRIVATE const OUString  ImplConvertMenuString( const OUString& rStr );
     SAL_DLLPRIVATE bool            ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat = false );
     SAL_DLLPRIVATE bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel = false );
     SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus = false );
     SAL_DLLPRIVATE bool            ImplChangeHighlightUpDn( bool bUp, bool bNoCycle = false );
-    SAL_DLLPRIVATE sal_uInt16          ImplGetItemLine( ImplToolItem* pCurrentItem );
+    SAL_DLLPRIVATE sal_uInt16      ImplGetItemLine( ImplToolItem* pCurrentItem );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( sal_uInt16 nLine );
     SAL_DLLPRIVATE bool            ImplOpenItem( vcl::KeyCode aKeyCode );
     SAL_DLLPRIVATE bool            ImplActivateItem( vcl::KeyCode aKeyCode );

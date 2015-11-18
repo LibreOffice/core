@@ -970,8 +970,7 @@ sal_uInt16 ToolBox::ImplTestLineSize( ToolBox* pThis, const Point& rPos )
     return 0;
 }
 
-void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect,
-                     sal_uInt16 nLineMode )
+void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode )
 {
     bool    mbHorz;
     long    nOneLineSize;
