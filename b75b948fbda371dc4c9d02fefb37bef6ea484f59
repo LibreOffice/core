@@ -16,6 +16,24 @@
       "revId": "b75b948fbda371dc4c9d02fefb37bef6ea484f59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_74c88675",
+        "filename": "i18npool/source/localedata/data/cu_RU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001139
+      },
+      "writtenOn": "2015-11-18T17:24:53Z",
+      "side": 1,
+      "message": "Done\nYes, the numerals are only defined for positive integers.",
+      "parentUuid": "dab17558_b4730eb4",
+      "revId": "b75b948fbda371dc4c9d02fefb37bef6ea484f59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
