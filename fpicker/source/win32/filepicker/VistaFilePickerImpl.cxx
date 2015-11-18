@@ -85,8 +85,6 @@ namespace vista{
 static const ::sal_Int16 INVALID_CONTROL_ID     = -1;
 static const ::sal_Int16 INVALID_CONTROL_ACTION = -1;
 
-typedef ::std::vector< OUString > TStringList;
-
 // Guids used for IFileDialog::SetClientGuid
 static const GUID CLIENTID_FILEDIALOG_SIMPLE        = {0xB8628FD3, 0xA3F5, 0x4845, 0x9B, 0x62, 0xD5, 0x1E, 0xDF, 0x97, 0xC4, 0x83};
 static const GUID CLIENTID_FILEDIALOG_OPTIONS       = {0x93ED486F, 0x0D04, 0x4807, 0x8C, 0x44, 0xAC, 0x26, 0xCB, 0x6C, 0x5D, 0x36};
@@ -836,7 +834,7 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
         return;
 
     // convert and pack results
-    TStringList lFiles;
+    std::vector< OUString > lFiles;
     if (iItem.is())
     {
         const OUString sURL = lcl_getURLFromShellItem(iItem);

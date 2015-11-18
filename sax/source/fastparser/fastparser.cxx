@@ -67,8 +67,6 @@ class FastLocatorImpl;
 struct NamespaceDefine;
 struct Entity;
 
-typedef std::shared_ptr< NamespaceDefine > NamespaceDefineRef;
-
 typedef std::unordered_map< OUString, sal_Int32,
         OUStringHash, std::equal_to< OUString > > NamespaceMap;
 
@@ -181,7 +179,8 @@ struct Entity : public ParserData
     std::stack< SaxContext>               maContextStack;
     // Determines which elements of maNamespaceDefines are valid in current context
     std::stack< sal_uInt32 >              maNamespaceCount;
-    std::vector< NamespaceDefineRef >     maNamespaceDefines;
+    std::vector< std::shared_ptr< NamespaceDefine > >
+                                          maNamespaceDefines;
 
     explicit Entity( const ParserData& rData );
     Entity( const Entity& rEntity );

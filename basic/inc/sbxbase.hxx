@@ -33,15 +33,14 @@ class SbxFactory;
 class SbxVariable;
 class SbxBasicFormater;
 
-typedef std::vector<std::unique_ptr<SbxFactory>> SbxFactories;
-
 // AppData structure for SBX:
 struct SbxAppData
     : private ::boost::noncopyable
 {
     SbxError            eSbxError;  // Error code
-    SbxFactories        m_Factories;
-    SbxBasicFormater    *pBasicFormater;    // Pointer to Format()-Command helper class
+    std::vector<std::unique_ptr<SbxFactory>>
+                        m_Factories;
+    SbxBasicFormater   *pBasicFormater;    // Pointer to Format()-Command helper class
 
     LanguageType        eBasicFormaterLangType;
     // It might be useful to store this class 'global' because some string reosurces are saved here

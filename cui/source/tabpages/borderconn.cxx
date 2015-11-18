@@ -91,8 +91,6 @@ void FrameSelectorWrapper::SetControlValue( const editeng::SvxBorderLine* pLine 
 
 // 3rd: connection ------------------------------------------------------------
 
-typedef sfx::ItemControlConnection< LineItemWrapper, FrameSelectorWrapper > FrameLineConnection;
-
 /* ============================================================================
 SvxMarginItem connection
 ------------------------
@@ -119,10 +117,10 @@ public:
     virtual void        SetControlValue( SvxMarginItem aItem ) override;
 
 private:
-    sfx::Int16MetricFieldWrapper maLeftWrp;
-    sfx::Int16MetricFieldWrapper maRightWrp;
-    sfx::Int16MetricFieldWrapper maTopWrp;
-    sfx::Int16MetricFieldWrapper maBottomWrp;
+    sfx::MetricFieldWrapper<sal_Int16> maLeftWrp;
+    sfx::MetricFieldWrapper<sal_Int16> maRightWrp;
+    sfx::MetricFieldWrapper<sal_Int16> maTopWrp;
+    sfx::MetricFieldWrapper<sal_Int16> maBottomWrp;
 };
 
 MarginControlsWrapper::MarginControlsWrapper(
@@ -213,9 +211,9 @@ public:
     virtual void        SetControlValue( SvxShadowItem aItem ) override;
 
 private:
-    ShadowPosWrapper                maPosWrp;
-    sfx::UShortMetricFieldWrapper   maSizeWrp;
-    sfx::ColorListBoxWrapper        maColorWrp;
+    ShadowPosWrapper                    maPosWrp;
+    sfx::MetricFieldWrapper<sal_uInt16> maSizeWrp;
+    sfx::ColorListBoxWrapper            maColorWrp;
 };
 
 ShadowControlsWrapper::ShadowControlsWrapper(
@@ -271,7 +269,7 @@ ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
 sfx::ItemConnectionBase* CreateFrameLineConnection( sal_uInt16 nSlot,
         FrameSelector& rFrameSel, FrameBorderType eBorder, sfx::ItemConnFlags nFlags )
 {
-    return new FrameLineConnection( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), nFlags );
+    return new sfx::ItemControlConnection< LineItemWrapper, FrameSelectorWrapper >( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), nFlags );
 }
 
 sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,

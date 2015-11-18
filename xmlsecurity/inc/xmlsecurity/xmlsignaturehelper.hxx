@@ -72,9 +72,6 @@ struct XMLSignatureVerifyResult
     }
 };
 
-typedef ::std::vector<XMLSignatureCreationResult> XMLSignatureCreationResults;
-typedef ::std::vector<XMLSignatureVerifyResult> XMLSignatureVerifyResults;
-
 
 
 /**********************************************************
@@ -100,8 +97,10 @@ private:
     ::com::sun::star::uno::Reference< com::sun::star::xml::crypto::XSEInitializer > mxSEInitializer;
     ::com::sun::star::uno::Reference< com::sun::star::xml::crypto::XXMLSecurityContext > mxSecurityContext;
 
-    XMLSignatureCreationResults maCreationResults;
-    XMLSignatureVerifyResults   maVerifyResults;
+    std::vector<XMLSignatureCreationResult>
+                                maCreationResults;
+    std::vector<XMLSignatureVerifyResult>
+                                maVerifyResults;
     XSecController*             mpXSecController;
     bool                        mbError;
     bool mbODFPre1_2;

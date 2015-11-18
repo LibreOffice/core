@@ -288,11 +288,7 @@ public:
 
 
 
-typedef NumericFieldWrapper< sal_uInt16 > UInt16NumericFieldWrapper;
-typedef NumericFieldWrapper< sal_uInt32 > UInt32NumericFieldWrapper;
 
-typedef NumericFieldWrapper< sal_uInt16 > UShortNumericFieldWrapper;
-typedef NumericFieldWrapper< sal_uIntPtr >  ULongNumericFieldWrapper;
 
 
 
@@ -319,14 +315,6 @@ private:
     FieldUnit           meUnit;
 };
 
-
-
-typedef MetricFieldWrapper< sal_Int16 >  Int16MetricFieldWrapper;
-typedef MetricFieldWrapper< sal_uInt16 > UInt16MetricFieldWrapper;
-typedef MetricFieldWrapper< sal_uInt32 > UInt32MetricFieldWrapper;
-
-typedef MetricFieldWrapper< sal_uInt16 > UShortMetricFieldWrapper;
-typedef MetricFieldWrapper< sal_uIntPtr >  ULongMetricFieldWrapper;
 
 
 
@@ -364,11 +352,7 @@ public:
 
 
 
-typedef ListBoxWrapper< sal_uInt16 > UInt16ListBoxWrapper;
-typedef ListBoxWrapper< sal_uInt32 > UInt32ListBoxWrapper;
 
-typedef ListBoxWrapper< sal_uInt16 > UShortListBoxWrapper;
-typedef ListBoxWrapper< sal_uIntPtr >  ULongListBoxWrapper;
 
 
 
@@ -406,11 +390,7 @@ public:
 
 
 
-typedef ValueSetWrapper< sal_uInt16 > UInt16ValueSetWrapper;
-typedef ValueSetWrapper< sal_uInt32 > UInt32ValueSetWrapper;
 
-typedef ValueSetWrapper< sal_uInt16 > UShortValueSetWrapper;
-typedef ValueSetWrapper< sal_uIntPtr >  ULongValueSetWrapper;
 
 
 // Multi control wrappers

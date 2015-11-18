@@ -1251,14 +1251,12 @@ public:
     }
 };
 
-// Plc for Chpx and Papx ( incl PN-Plc )
-typedef std::vector<std::unique_ptr<WW8_WrFkp>> WW8_WrFkpPtrs;
-
 class WW8_WrPlcPn                   // Plc for Page Numbers
 {
 private:
     WW8Export& rWrt;
-    WW8_WrFkpPtrs m_Fkps;
+    // Plc for Chpx and Papx ( incl PN-Plc )
+    std::vector<std::unique_ptr<WW8_WrFkp>> m_Fkps;
     sal_uInt16 nFkpStartPage;
     ePLCFT ePlc;
 

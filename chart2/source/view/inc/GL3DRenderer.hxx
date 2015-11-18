@@ -39,7 +39,6 @@ struct PosVecf3
 };
 
 typedef std::vector <glm::vec3> Vertices3D;
-typedef std::vector <glm::vec2> UVs3D;
 typedef std::vector <glm::vec3> Normals3D;
 
 struct MaterialParameters

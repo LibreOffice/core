@@ -42,7 +42,6 @@ namespace comphelper
         inline void SetInit ( bool bInit) { mbInit = bInit; }
     };
 }
-typedef std::map < sal_uInt8, comphelper::SlaveData* > SlaveMap;
 
 /*
  * A MasterPropertySet implements all of the features of a ChainablePropertySet
@@ -64,7 +63,7 @@ namespace comphelper
         MasterPropertySetInfo *mpInfo;
         SolarMutex* mpMutex;
         sal_uInt8 mnLastId;
-        SlaveMap maSlaveMap;
+        std::map < sal_uInt8, comphelper::SlaveData* >       maSlaveMap;
         css::uno::Reference < css::beans::XPropertySetInfo > mxInfo;
 
         virtual void _preSetValues ()

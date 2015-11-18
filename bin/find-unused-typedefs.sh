@@ -18,9 +18,8 @@
 #   (8) if so, generate a sed command to remove the #define
 #
 bin/find-unused-typedefs.py \
-  | sort \
-  | uniq \
+  | sort -u \
   | xargs -Ixxx -n 1 -P 8 sh -c \
-    "( git grep -w 'xxx' | awk -f bin/find-unused-defines.awk -v p1=xxx ) && echo \"xxx\" 1>&2"
+    '( git grep -w xxx | awk -f bin/find-unused-defines.awk -v p1=xxx ) && echo xxx 1>&2'
 
 

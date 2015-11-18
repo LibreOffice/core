@@ -29,14 +29,13 @@
 
 #include <vector>
 
-typedef std::vector<css::uno::Reference<css::sheet::XResultListener>> XResultListenerArr_Impl;
-
 class ScAddInResult : public cppu::WeakImplHelper< css::sheet::XVolatileResult>
 {
 private:
     String                  aArg;
     long                    nTickCount;
-    XResultListenerArr_Impl m_Listeners;
+    std::vector<css::uno::Reference<css::sheet::XResultListener>>
+                            m_Listeners;
     Timer                   aTimer;
 
     DECL_LINK( TimeoutHdl, Timer* );

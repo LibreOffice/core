@@ -36,7 +36,6 @@ using namespace ::ooo::vba::excel::XlAxisGroup;
 // iteration over the set of Axis(s) in a XIndexAccess implementation
 
 typedef ::std::pair<sal_Int32, sal_Int32 > AxesCoordinate; // type and group combination
-typedef ::std::vector< AxesCoordinate > vecAxesIndices;
 
 namespace {
 
@@ -89,7 +88,7 @@ class AxisIndexWrapper : public ::cppu::WeakImplHelper< container::XIndexAccess 
     // indices -> Axis, currently we create a new Axis object
     // on each getByIndex
     uno::Reference< uno::XComponentContext > mxContext;
-    vecAxesIndices mCoordinates;
+    std::vector< AxesCoordinate > mCoordinates;
     uno::Reference< excel::XChart > mxChart;
 public:
     AxisIndexWrapper( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XChart >& xChart ) : mxContext( xContext ), mxChart( xChart )

@@ -28,7 +28,6 @@ struct _XTrap; // on some older systems this is not declared within Xrender.h
 #include <vcl/salgtype.hxx>
 #include <osl/module.h>
 
-typedef Glyph XRenderGlyph;
 
 class XRenderPeer
 {

@@ -59,8 +59,6 @@ struct SvXMLNumFmtEntry
         aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
 };
 
-typedef std::map<sal_Int32, OUString> SvXMLEmbeddedElementArr;
-
 class SvXMLNumImpData
 {
     SvNumberFormatter*  pFormatter;
@@ -105,7 +103,7 @@ struct SvXMLNumberInfo
     bool        bDecReplace;
     bool        bExpSign;
     double      fDisplayFactor;
-    SvXMLEmbeddedElementArr m_EmbeddedElements;
+    std::map<sal_Int32, OUString> m_EmbeddedElements;
 
     SvXMLNumberInfo()
     {

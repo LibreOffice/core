@@ -257,8 +257,6 @@ private:
     bool mbMSO2007;
 };
 
-typedef ::rtl::Reference< XmlFilterBase > XmlFilterRef;
-
 } // namespace core
 } // namespace oox
 

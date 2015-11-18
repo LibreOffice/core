@@ -25,8 +25,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-typedef std::vector< uno::Reference< text::XDocumentIndex > > XTocVec;
-
 class TablesOfContentsEnumWrapper : public EnumerationHelper_BASE
 {
     uno::Reference< container::XIndexAccess > mxIndexAccess;
@@ -58,7 +56,7 @@ private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< text::XTextDocument > mxTextDocument;
-    XTocVec maToc;
+    std::vector< uno::Reference< text::XDocumentIndex > > maToc;
 
 public:
     TableOfContentsCollectionHelper( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xDoc ) throw ( uno::RuntimeException ): mxParent( xParent ), mxContext( xContext ), mxTextDocument( xDoc )
