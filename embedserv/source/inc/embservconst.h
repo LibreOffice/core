@@ -24,10 +24,6 @@
 
 #include <comphelper/classids.hxx>
 
-#if defined __MINGW32__
-#pragma GCC diagnostic warning "-Wmissing-braces"
-#endif
-
 #define SUPPORTED_FACTORIES_NUM 10
 
 #if defined(__MINGW32__) && !defined(INITGUID)

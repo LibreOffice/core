@@ -27,12 +27,6 @@
 #include <sal/macros.h>
 #include <malloc.h>
 
-#if defined __GNUC__
-#pragma GCC diagnostic warning "-Wmissing-braces"
-#endif
-
-
-
 namespace /* private */
 {
     SHCOLUMNINFO ColumnInfoTable[] =
