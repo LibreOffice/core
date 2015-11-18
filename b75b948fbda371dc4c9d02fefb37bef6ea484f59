@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_b4730eb4",
+        "filename": "i18npool/source/localedata/data/cu_RU.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-18T11:35:15Z",
+      "side": 1,
+      "message": "The native numbers seem to work only for integer values, having [NatNum1]General applied for 12345.6789 results in ҂ві тм҃є,6789 being displayed, which at least looks odd.. ;-)\n\nI suggest to not add this format, but rather keep the formatindex\u003d\"1\" as 0 and here add a [NatNum1]0 instead.",
+      "revId": "b75b948fbda371dc4c9d02fefb37bef6ea484f59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
