@@ -233,7 +233,11 @@ void Test::testUnoType() {
 }
 
 void Test::testGetTypeFavourUnsigned() {
+#if defined SAL_W32 && !defined __MINGW32__ // cf. sal/types.h sal_Unicode
     CPPUNIT_ASSERT(typeid(sal_Unicode) == typeid(sal_uInt16));
+#else
+    CPPUNIT_ASSERT(typeid(sal_Unicode) != typeid(sal_uInt16));
+#endif
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(static_cast<cppu::UnoVoidType *>(nullptr)),
         cppu::UnoType<cppu::UnoVoidType>::get());
@@ -277,9 +281,15 @@ void Test::testGetTypeFavourUnsigned() {
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(static_cast<cppu::UnoCharType *>(nullptr)),
         cppu::UnoType<cppu::UnoCharType>::get());
+#if defined SAL_W32 && !defined __MINGW32__ // cf. sal/types.h sal_Unicode
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(static_cast<sal_Unicode *>(nullptr)),
         cppu::UnoType<cppu::UnoUnsignedShortType>::get());
+#else
+    CPPUNIT_ASSERT_EQUAL(
+        cppu::getTypeFavourUnsigned(static_cast<sal_Unicode *>(nullptr)),
+        cppu::UnoType<cppu::UnoCharType>::get());
+#endif
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(static_cast<OUString *>(nullptr)),
         cppu::UnoType<OUString>::get());
@@ -316,6 +326,7 @@ void Test::testGetTypeFavourUnsigned() {
         cppu::UnoType<
             cppu::UnoSequenceType<
                 cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>>::get());
+#if defined SAL_W32 && !defined __MINGW32__ // cf. sal/types.h sal_Unicode
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
             static_cast<css::uno::Sequence<sal_Unicode> *>(nullptr)),
@@ -329,6 +340,20 @@ void Test::testGetTypeFavourUnsigned() {
         cppu::UnoType<
             cppu::UnoSequenceType<
                 cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>>::get());
+#else
+    CPPUNIT_ASSERT_EQUAL(
+        cppu::getTypeFavourUnsigned(
+            static_cast<css::uno::Sequence<sal_Unicode> *>(nullptr)),
+        cppu::UnoType<cppu::UnoSequenceType<cppu::UnoCharType>>::get());
+    CPPUNIT_ASSERT_EQUAL(
+        cppu::getTypeFavourUnsigned(
+            static_cast<
+                css::uno::Sequence<
+                    css::uno::Sequence<sal_Unicode>> *>(nullptr)),
+        cppu::UnoType<
+            cppu::UnoSequenceType<
+                cppu::UnoSequenceType<cppu::UnoCharType>>>::get());
+#endif
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
             static_cast<css::uno::TypeClass *>(nullptr)),
@@ -399,7 +424,11 @@ void Test::testGetTypeFavourUnsigned() {
 }
 
 void Test::testGetTypeFavourChar() {
+#if defined SAL_W32 && !defined __MINGW32__ // cf. sal/types.h sal_Unicode
     CPPUNIT_ASSERT(typeid(sal_Unicode) == typeid(sal_uInt16));
+#else
+    CPPUNIT_ASSERT(typeid(sal_Unicode) != typeid(sal_uInt16));
+#endif
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(static_cast<cppu::UnoVoidType *>(nullptr)),
         cppu::UnoType<cppu::UnoVoidType>::get());
@@ -419,9 +448,15 @@ void Test::testGetTypeFavourChar() {
         cppu::getTypeFavourChar(
             static_cast<cppu::UnoUnsignedShortType *>(nullptr)),
         cppu::UnoType<cppu::UnoUnsignedShortType>::get());
+#if defined SAL_W32 && !defined __MINGW32__ // cf. sal/types.h sal_Unicode
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(static_cast<sal_uInt16 *>(nullptr)),
         cppu::UnoType<cppu::UnoCharType>::get());
+#else
+    CPPUNIT_ASSERT_EQUAL(
+        cppu::getTypeFavourChar(static_cast<sal_uInt16 *>(nullptr)),
+        cppu::UnoType<cppu::UnoUnsignedShortType>::get());
+#endif
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(static_cast<sal_Int32 *>(nullptr)),
         cppu::UnoType<sal_Int32>::get());
@@ -461,10 +496,18 @@ void Test::testGetTypeFavourChar() {
                 cppu::UnoSequenceType<cppu::UnoUnsignedShortType> *>(nullptr)),
         cppu::UnoType<
             cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>::get());
+#if defined SAL_W32 && !defined __MINGW32__ // cf. sal/types.h sal_Unicode
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
             static_cast<css::uno::Sequence<sal_uInt16> *>(nullptr)),
         cppu::UnoType<cppu::UnoSequenceType<cppu::UnoCharType>>::get());
+#else
+    CPPUNIT_ASSERT_EQUAL(
+        cppu::getTypeFavourChar(
+            static_cast<css::uno::Sequence<sal_uInt16> *>(nullptr)),
+        cppu::UnoType<
+            cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>::get());
+#endif
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
             static_cast<
@@ -474,6 +517,7 @@ void Test::testGetTypeFavourChar() {
         cppu::UnoType<
             cppu::UnoSequenceType<
                 cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>>::get());
+#if defined SAL_W32 && !defined __MINGW32__ // cf. sal/types.h sal_Unicode
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
             static_cast<
@@ -481,6 +525,15 @@ void Test::testGetTypeFavourChar() {
         cppu::UnoType<
             cppu::UnoSequenceType<
                 cppu::UnoSequenceType<cppu::UnoCharType>>>::get());
+#else
+    CPPUNIT_ASSERT_EQUAL(
+        cppu::getTypeFavourChar(
+            static_cast<
+                css::uno::Sequence<css::uno::Sequence<sal_uInt16>> *>(nullptr)),
+        cppu::UnoType<
+            cppu::UnoSequenceType<
+                cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>>::get());
+#endif
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
             static_cast<css::uno::Sequence<sal_Unicode> *>(nullptr)),

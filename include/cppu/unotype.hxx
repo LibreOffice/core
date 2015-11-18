@@ -149,6 +149,15 @@ cppu_detail_getUnoType(
         ::typelib_TypeClass_UNSIGNED_SHORT);
 }
 
+#if LIBO_INTERNAL_ONLY
+inline
+typename std::enable_if<
+    !std::is_same<sal_uInt16, sal_Unicode>::value, css::uno::Type const &>::type
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER sal_uInt16 const *) {
+    return cppu::detail::getTypeFromTypeClass(typelib_TypeClass_UNSIGNED_SHORT);
+}
+#endif
+
 inline css::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_Int32 const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_LONG);
@@ -185,6 +194,15 @@ inline css::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::cppu::UnoCharType const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_CHAR);
 }
+
+#if LIBO_INTERNAL_ONLY
+inline
+typename std::enable_if<
+    !std::is_same<sal_Unicode, sal_uInt16>::value, css::uno::Type const &>::type
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER sal_Unicode const *) {
+    return cppu::detail::getTypeFromTypeClass(typelib_TypeClass_CHAR);
+}
+#endif
 
 inline css::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::rtl::OUString const *) {
