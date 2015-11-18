@@ -218,9 +218,6 @@ struct XclNearest
     inline explicit     XclNearest() : mnPalIndex( 0 ), mnDist( 0 ) {}
 };
 
-typedef ::std::vector< XclRemap >   XclRemapVec;
-typedef ::std::vector< XclNearest > XclNearestVec;
-
 } // namespace
 
 class XclExpPaletteImpl
@@ -373,8 +370,8 @@ void XclExpPaletteImpl::Finalize()
 // --- use default palette and replace colors with nearest used colors ---
 
     nCount = mxColorList->size();
-    XclRemapVec aRemapVec( nCount );
-    XclNearestVec aNearestVec( nCount );
+    std::vector< XclRemap > aRemapVec( nCount );
+    std::vector< XclNearest > aNearestVec( nCount );
 
     // in each run: search the best fitting color and replace a default color with it
     for( sal_uInt32 nRun = 0; nRun < nCount; ++nRun )

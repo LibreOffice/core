@@ -75,7 +75,6 @@ public:
      |   +- BoolItemWrapper   [1]
      |   +- UInt16ItemWrapper   [1]
      |   +- Int32ItemWrapper   [1]
-     |   +- UInt32ItemWrapper   [1]
      |
      +- IdentItemWrapper< ItemT >   [1]
 
@@ -150,7 +149,6 @@ public:
 typedef ValueItemWrapper< SfxBoolItem,   sal_Bool >          BoolItemWrapper;
 typedef ValueItemWrapper< SfxUInt16Item, sal_uInt16 >        UInt16ItemWrapper;
 typedef ValueItemWrapper< SfxInt32Item,  sal_Int32 >         Int32ItemWrapper;
-typedef ValueItemWrapper< SfxUInt32Item, sal_uInt32 >        UInt32ItemWrapper;
 
 
 

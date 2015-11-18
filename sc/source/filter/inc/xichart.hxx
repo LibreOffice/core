@@ -743,7 +743,6 @@ private:
     XclImpChDataFormatRef mxDataFmt;        /// Formatting settings of the error bars.
 };
 
-typedef std::shared_ptr< XclImpChSerErrorBar > XclImpChSerErrorBarRef;
 
 /** Represents the CHSERIES record group describing a data series in a chart.
 
@@ -944,7 +943,6 @@ private:
     sal_uInt16          mnBarDist;          /// Distance between bars (CHDROPBAR record).
 };
 
-typedef std::shared_ptr< XclImpChDropBar > XclImpChDropBarRef;
 
 /** Represents the CHTYPEGROUP record group describing a group of series.
 

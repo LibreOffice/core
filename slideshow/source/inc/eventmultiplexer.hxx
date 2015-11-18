@@ -74,7 +74,6 @@ public:
 };
 
 typedef ::boost::shared_ptr< ViewRepaintHandler > ViewRepaintHandlerSharedPtr;
-typedef ::boost::weak_ptr< ViewRepaintHandler >   ViewRepaintHandlerWeakPtr;
 
 /** Interface for handling hyperlink clicks.
 

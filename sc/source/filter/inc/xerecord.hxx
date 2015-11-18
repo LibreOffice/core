@@ -220,9 +220,6 @@ XclExpValueRecord< Type >* XclExpValueRecord< Type >::SetAttribute( sal_Int32 nI
 /** A record containing an unsigned 16-bit value. */
 typedef XclExpValueRecord< sal_uInt16 >     XclExpUInt16Record;
 
-/** A record containing an unsigned 32-bit value. */
-typedef XclExpValueRecord< sal_uInt32 >     XclExpUInt32Record;
-
 /** A record containing a double value. */
 typedef XclExpValueRecord< double >         XclExpDoubleRecord;
 

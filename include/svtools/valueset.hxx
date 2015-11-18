@@ -178,7 +178,6 @@ to be set (before Show) with SetStyle().
 *************************************************************************/
 
 typedef std::vector<ValueSetItem*> ValueItemList;
-typedef std::unique_ptr<ValueSetItem> ValueSetItemPtr;
 
 // - ValueSet types -
 #define WB_RADIOSEL             ((WinBits)0x00008000)
@@ -201,7 +200,7 @@ private:
     ScopedVclPtr<VirtualDevice> maVirDev;
     Timer           maTimer;
     ValueItemList   mItemList;
-    ValueSetItemPtr mpNoneItem;
+    std::unique_ptr<ValueSetItem> mpNoneItem;
     VclPtr<ScrollBar> mxScrollBar;
     Rectangle       maNoneItemRect;
     Rectangle       maItemListRect;

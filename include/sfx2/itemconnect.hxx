@@ -314,8 +314,6 @@ public:
 
 
 
-typedef NumericConnection< UInt16ItemWrapper > UInt16NumericConnection;
-typedef NumericConnection< UInt32ItemWrapper > UInt32NumericConnection;
 
 
 
@@ -340,11 +338,6 @@ public:
     explicit            MetricConnection( sal_uInt16 nSlot, MetricField& rField,
                             FieldUnit eItemUnit = FUNIT_NONE, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
-
-
-
-typedef MetricConnection< UInt16ItemWrapper > UInt16MetricConnection;
-typedef MetricConnection< UInt32ItemWrapper > UInt32MetricConnection;
 
 
 
@@ -374,8 +367,6 @@ public:
 
 
 
-typedef ListBoxConnection< UInt16ItemWrapper > UInt16ListBoxConnection;
-typedef ListBoxConnection< UInt32ItemWrapper > UInt32ListBoxConnection;
 
 
 
@@ -405,8 +396,6 @@ public:
 
 
 
-typedef ValueSetConnection< UInt16ItemWrapper > UInt16ValueSetConnection;
-typedef ValueSetConnection< UInt32ItemWrapper > UInt32ValueSetConnection;
 
 
 // Array of connections

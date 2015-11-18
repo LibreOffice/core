@@ -79,7 +79,6 @@ namespace rtl {
 }
 
 typedef rtl::OUString ChainLinkId;
-typedef std::map< ChainLinkId, ImpChainLinkProperties *> LinkPropertiesMap;
 
 enum class CursorChainingEvent
 {
@@ -143,7 +142,7 @@ public:
 
 protected:
     TextChain();
-    LinkPropertiesMap maLinkPropertiesMap;
+    std::map< ChainLinkId, ImpChainLinkProperties *> maLinkPropertiesMap;
 
 private:
     friend class SdrModel;

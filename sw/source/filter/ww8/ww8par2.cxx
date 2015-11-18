@@ -88,8 +88,6 @@ public:
     {}
 };
 
-typedef std::vector<std::unique_ptr<WW8SelBoxInfo>> WW8MergeGroups;
-
 WW8TabBandDesc::WW8TabBandDesc()
 {
     memset(this, 0, sizeof(*this));
@@ -122,7 +120,7 @@ class WW8TabDesc: private boost::noncopyable
     SwTableBoxes* pTabBoxes;        // boxes array in current row
     SwTableBox* pTabBox;            // current cell
 
-    WW8MergeGroups m_MergeGroups;   // list of all cells to be merged
+    std::vector<std::unique_ptr<WW8SelBoxInfo>> m_MergeGroups;   // list of all cells to be merged
 
     WW8_TCell* pAktWWCell;
 

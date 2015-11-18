@@ -28,7 +28,6 @@
 #include <set>
 
 class XMLFontAutoStylePool_Impl;
-typedef std::set<OUString> XMLFontAutoStylePoolNames_Impl;
 class SvXMLExport;
 
 class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public salhelper::SimpleReferenceObject
@@ -36,7 +35,7 @@ class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public salhelper::SimpleReferenceO
     SvXMLExport& rExport;
 
     XMLFontAutoStylePool_Impl *pPool;
-    XMLFontAutoStylePoolNames_Impl m_aNames;
+    std::set<OUString> m_aNames;
     bool tryToEmbedFonts;
 
     OUString embedFontFile( const OUString& fontUrl );

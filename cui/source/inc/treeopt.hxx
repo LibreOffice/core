@@ -37,15 +37,14 @@ struct OrderedEntry
         m_nIndex( nIndex ), m_sId( rId ) {}
 };
 
-typedef std::vector< OrderedEntry* > VectorOfOrderedEntries;
 
 // struct Module ---------------------------------------------------------
 
 struct Module
 {
-    OUString           m_sName;
-    bool                    m_bActive;
-    VectorOfOrderedEntries  m_aNodeList;
+    OUString                      m_sName;
+    bool                          m_bActive;
+    std::vector< OrderedEntry* >  m_aNodeList;
 
     Module( const OUString& rName ) : m_sName( rName ), m_bActive( false ) {}
 };
@@ -76,7 +75,6 @@ struct OptionsLeaf
 };
 
 typedef ::std::vector< OptionsLeaf* > VectorOfLeaves;
-typedef ::std::vector< VectorOfLeaves > VectorOfGroupedLeaves;
 
 // struct OptionsNode ----------------------------------------------------
 
@@ -89,7 +87,8 @@ struct OptionsNode
     OUString                m_sGroupId;
     sal_Int32               m_nGroupIndex;
     VectorOfLeaves          m_aLeaves;
-    VectorOfGroupedLeaves   m_aGroupedLeaves;
+    ::std::vector< VectorOfLeaves >
+                            m_aGroupedLeaves;
 
     OptionsNode(    const OUString& rId,
                     const OUString& rLabel,
@@ -133,7 +132,6 @@ struct OptionsPageInfo;
 struct Module;
 class ExtensionsTabPage;
 class SvxColorTabPage;
-typedef std::vector< ExtensionsTabPage* > VectorOfPages;
 
 class OfaTreeOptionsDialog : public SfxModalDialog
 {

@@ -167,7 +167,7 @@ private:
     css::uno::Reference<XFastContextHandler> mxChartShapeContext;
     css::uno::Reference<css::document::XDocumentProperties> mxDocumentProperties;
 
-    core::XmlFilterRef mxFilterBase;
+    ::rtl::Reference< core::XmlFilterBase > mxFilterBase;
     drawingml::ThemePtr mpThemePtr;
     css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
     css::uno::Reference<css::io::XInputStream> mxInputStream;
