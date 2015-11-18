@@ -29,6 +29,9 @@
 #include <docpool.hxx>
 
 #include <formula/vectortoken.hxx>
+
+// RGB is leaked macro from wingdi.h which conflicts in Office/Common.hxx.
+#undef RGB
 #include <officecfg/Office/Common.hxx>
 #include <svl/broadcast.hxx>
 
