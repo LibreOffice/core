@@ -22,16 +22,15 @@
  * and turn off the additional virtual methods which are part of some interfaces when compiled
  * with debug
  */
-#ifdef DEBUG
 #undef DEBUG
-#endif
-
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
+// RGB is leaked macro from wingdi.h which conflicts in Office/Common.hxx.
+#undef RGB
 #include <officecfg/Office/Common.hxx>
 
 #include <sal/types.h>

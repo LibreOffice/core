@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2015-11-18 07:34:26 using:
  ./bin/update_pch xmlsecurity xsec_xmlsec --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -116,5 +116,8 @@
 #include <xmloff/dllapi.h>
 #include <xmlsecurity/biginteger.hxx>
 #include <xmlsecurity/xmlsec-wrapper.h>
+
+// Prevent windows header macro pollution.
+#include <postwin.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
