@@ -32,8 +32,6 @@ namespace com { namespace sun { namespace star { namespace frame {
 
 class ScTabViewShell;
 
-typedef std::vector< css::uno::Reference< css::frame::XStatusListener > > XStatusListenerArr_Impl;
-
 class ScDispatchProviderInterceptor : public cppu::WeakImplHelper<
                                         css::frame::XDispatchProviderInterceptor,
                                         css::lang::XEventListener>,
@@ -91,7 +89,8 @@ class ScDispatch : public cppu::WeakImplHelper<
                                 public SfxListener
 {
     ScTabViewShell*         pViewShell;
-    XStatusListenerArr_Impl aDataSourceListeners;
+    std::vector< css::uno::Reference< css::frame::XStatusListener > >
+                            aDataSourceListeners;
     ScImportParam           aLastImport;
     bool                    bListeningToView;
 

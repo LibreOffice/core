@@ -122,7 +122,6 @@ private:
     const char* mpIconSetName;
 };
 
-typedef std::shared_ptr<XclExpExtDataBar> XclExpExtDataBarRef;
 
 class XclExpExtCfRule : public XclExpRecordBase, protected XclExpRoot
 {
@@ -138,7 +137,6 @@ private:
 };
 
 typedef std::shared_ptr<XclExpExt> XclExpExtRef;
-typedef std::shared_ptr<XclExpExtCfRule> XclExpExtCfRuleRef;
 
 class XclExpExtConditionalFormatting : public XclExpRecordBase, protected XclExpRoot
 {

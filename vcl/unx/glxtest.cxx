@@ -41,10 +41,6 @@ typedef XID GLXPixmap;
 typedef XID GLXDrawable;
 /* GLX 1.3 and later */
 typedef struct __GLXFBConfigRec *GLXFBConfig;
-typedef XID GLXFBConfigID;
-typedef XID GLXContextID;
-typedef XID GLXWindow;
-typedef XID GLXPbuffer;
 #define GLX_RGBA        4
 #define GLX_RED_SIZE    8
 #define GLX_GREEN_SIZE  9

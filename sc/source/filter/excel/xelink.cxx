@@ -859,7 +859,6 @@ void XclExpTabInfo::CalcXclIndexes()
 }
 
 typedef ::std::pair< OUString, SCTAB > XclExpTabName;
-typedef ::std::vector< XclExpTabName >  XclExpTabNameVec;
 
 struct XclExpTabNameSort {
     bool operator ()( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
@@ -872,7 +871,7 @@ struct XclExpTabNameSort {
 void XclExpTabInfo::CalcSortedIndexes()
 {
     ScDocument& rDoc = GetDoc();
-    XclExpTabNameVec aVec( mnScCnt );
+    ::std::vector< XclExpTabName > aVec( mnScCnt );
     SCTAB nScTab;
 
     // fill with sheet names

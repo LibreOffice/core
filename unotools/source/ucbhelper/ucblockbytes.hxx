@@ -74,8 +74,6 @@ public:
                     {}
 };
 
-typedef tools::SvRef<UcbLockBytesHandler> UcbLockBytesHandlerRef;
-
 class UcbLockBytes : public virtual SvLockBytes
 {
     osl::Condition          m_aInitialized;
@@ -89,7 +87,7 @@ class UcbLockBytes : public virtual SvLockBytes
     css::uno::Reference < css::io::XInputStream >  m_xInputStream;
     css::uno::Reference < css::io::XOutputStream > m_xOutputStream;
     css::uno::Reference < css::io::XSeekable >     m_xSeekable;
-    UcbLockBytesHandlerRef  m_xHandler;
+    tools::SvRef<UcbLockBytesHandler>              m_xHandler;
 
     ErrCode                 m_nError;
 

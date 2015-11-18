@@ -58,8 +58,6 @@ class ScDataPilotDescriptorBase;
 
 struct ScSortParam;
 
-typedef std::vector< css::uno::Reference< css::util::XRefreshListener > > XDBRefreshListenerArr_Impl;
-
 class ScDataUnoConversion
 {
 public:
@@ -478,7 +476,8 @@ private:
     ScDocShell*             pDocShell;
     OUString                aName;
     SfxItemPropertySet      aPropSet;
-    XDBRefreshListenerArr_Impl aRefreshListeners;
+    std::vector< css::uno::Reference< css::util::XRefreshListener > >
+                            aRefreshListeners;
     bool                    bIsUnnamed;
     SCTAB                   aTab;
 
