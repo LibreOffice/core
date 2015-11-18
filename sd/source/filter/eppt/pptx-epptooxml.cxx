@@ -597,6 +597,11 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
                         pPattern = "hexagon";
                         bOOXmlSpecificTransition = true;
                         break;
+                    case animations::TransitionSubType::HEART: // Honeycomb
+                        nTransition = XML_fade;
+                        nTransition14 = XML_honeycomb;
+                        bOOXmlSpecificTransition = true;
+                        break;
                 }
                 break;
             }

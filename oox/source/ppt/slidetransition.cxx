@@ -417,6 +417,10 @@ namespace oox { namespace ppt {
             mnTransitionType = TransitionType::MISCSHAPEWIPE;
             mnTransitionSubType = TransitionSubType::DIAMOND;
             break;
+        case P14_TOKEN(honeycomb):
+            mnTransitionType = TransitionType::MISCSHAPEWIPE;
+            mnTransitionSubType = TransitionSubType::HEART;
+            break;
         default:
             mnTransitionType = 0;
             break;
