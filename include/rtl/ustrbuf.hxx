@@ -638,6 +638,11 @@ public:
         return append( &c, 1 );
     }
 
+#if LIBO_INTERNAL_ONLY && (!defined SAL_W32 || defined __MINGW32__)
+        // cf. sal/types.h sal_Unicode
+    void append(sal_uInt16) = delete;
+#endif
+
     /**
         Appends the string representation of the <code>sal_Int32</code>
         argument to this string buffer.
