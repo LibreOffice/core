@@ -28,8 +28,7 @@
 
 namespace x11 {
 
-    class X11Transferable : public ::cppu::WeakImplHelper <
-        ::com::sun::star::datatransfer::XTransferable >
+    class X11Transferable : public ::cppu::WeakImplHelper< css::datatransfer::XTransferable >
     {
         SelectionManager&               m_rManager;
         Atom                m_aSelection;
@@ -41,17 +40,17 @@ namespace x11 {
          * XTransferable
          */
 
-        virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-            throw(::com::sun::star::datatransfer::UnsupportedFlavorException,
-                  ::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception
+        virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor )
+            throw(css::datatransfer::UnsupportedFlavorException,
+                  css::io::IOException,
+                  css::uno::RuntimeException, std::exception
                   ) override;
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
+            throw(css::uno::RuntimeException, std::exception) override;
 
-        virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor )
+            throw(css::uno::RuntimeException, std::exception) override;
     };
 
 } // namespace

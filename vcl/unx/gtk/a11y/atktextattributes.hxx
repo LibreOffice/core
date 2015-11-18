@@ -28,7 +28,7 @@
 
 AtkAttributeSet*
 attribute_set_new_from_property_values(
-    const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAttributeList,
+    const css::uno::Sequence< css::beans::PropertyValue >& rAttributeList,
     bool run_attributes_only,
     AtkText *text);
 
@@ -39,7 +39,7 @@ attribute_set_new_from_extended_attributes(
 bool
 attribute_set_map_to_property_values(
     AtkAttributeSet* attribute_set,
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rValueList );
+    css::uno::Sequence< css::beans::PropertyValue >& rValueList );
 
 AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_set );
 // #i92232#

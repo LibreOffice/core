@@ -35,11 +35,11 @@
 #include <memory>
 #include <vector>
 
-class OSXTransferable : public ::cppu::WeakImplHelper<com::sun::star::datatransfer::XTransferable>,
+class OSXTransferable : public ::cppu::WeakImplHelper<css::datatransfer::XTransferable>,
                         private ::boost::noncopyable
 {
 public:
-  explicit OSXTransferable(com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> rXMimeCntFactory,
+  explicit OSXTransferable(css::uno::Reference< css::datatransfer::XMimeContentTypeFactory> rXMimeCntFactory,
                            DataFlavorMapperPtr_t pDataFlavorMapper,
                            NSPasteboard* pasteboard);
 
@@ -47,27 +47,27 @@ public:
 
   // XTransferable
 
-  virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-    throw( ::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+  virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor )
+    throw( css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception ) override;
 
-  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+  virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
+    throw( css::uno::RuntimeException, std::exception ) override;
 
-  virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+  virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor )
+    throw( css::uno::RuntimeException, std::exception ) override;
 
   // Helper functions not part of the XTransferable interface
 
   void initClipboardItemList();
 
-  //com::sun::star::uno::Any getClipboardItemData(ClipboardItemPtr_t clipboardItem);
+  //css::uno::Any getClipboardItemData(ClipboardItemPtr_t clipboardItem);
 
-  bool compareDataFlavors( const com::sun::star::datatransfer::DataFlavor& lhs,
-                           const com::sun::star::datatransfer::DataFlavor& rhs );
+  bool compareDataFlavors( const css::datatransfer::DataFlavor& lhs,
+                           const css::datatransfer::DataFlavor& rhs );
 
 private:
-  com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor > mFlavorList;
-  ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+  css::uno::Sequence< css::datatransfer::DataFlavor > mFlavorList;
+  css::uno::Reference< css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
   DataFlavorMapperPtr_t mDataFlavorMapper;
   NSPasteboard* mPasteboard;
 };

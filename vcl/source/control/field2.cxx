@@ -153,7 +153,7 @@ static bool ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
         nType = ImplGetCharClass()->getStringType( aCharStr, 0, aCharStr.getLength(),
                 Application::GetSettings().GetLanguageTag().getLocale() );
     }
-    catch (const ::com::sun::star::uno::Exception&)
+    catch (const css::uno::Exception&)
     {
         SAL_WARN( "vcl.control", "ImplIsPatternChar: Exception caught!" );
         DBG_UNHANDLED_EXCEPTION();
@@ -1428,7 +1428,7 @@ DateFormatter::~DateFormatter()
     mpCalendarWrapper = nullptr;
 }
 
-void DateFormatter::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
+void DateFormatter::SetLocale( const css::lang::Locale& rLocale )
 {
     delete mpCalendarWrapper;
     mpCalendarWrapper = nullptr;

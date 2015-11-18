@@ -48,7 +48,7 @@ public:
 
   /* Get the clipboard data in OOo format.
    */
-  virtual com::sun::star::uno::Any getOOoData() = 0;
+  virtual css::uno::Any getOOoData() = 0;
 };
 
 typedef std::unique_ptr<DataProvider> DataProviderPtr_t;
@@ -67,13 +67,13 @@ public:
      mapping from a system data flavor to a OpenOffice data
      flavor.
   */
-  com::sun::star::datatransfer::DataFlavor systemToOpenOfficeFlavor( const NSString* systemDataFlavor) const;
+  css::datatransfer::DataFlavor systemToOpenOfficeFlavor( const NSString* systemDataFlavor) const;
 
   /* Map an OpenOffice data flavor to a system data flavor.
      If there is no suitable mapping available NULL will
      be returned.
   */
-  const NSString* openOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor, bool& rbInternal) const;
+  const NSString* openOfficeToSystemFlavor(const css::datatransfer::DataFlavor& oooDataFlavor, bool& rbInternal) const;
 
   /* Select the best available image data type
      If there is no suitable mapping available NULL will
@@ -85,7 +85,7 @@ public:
      be put on to the system clipboard.
    */
   DataProviderPtr_t getDataProvider( const NSString* systemFlavor,
-                                    const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > rTransferable) const;
+                                    const css::uno::Reference< css::datatransfer::XTransferable > rTransferable) const;
 
   /* Get a data provider which is able to provide 'systemData' in the OOo expected format.
    */
@@ -99,13 +99,13 @@ public:
      Only those DataFlavors for which a suitable mapping to a system
      type exist will be contained in the returned types array.
    */
-  NSArray* flavorSequenceToTypesArray(const com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor>& flavors) const;
+  NSArray* flavorSequenceToTypesArray(const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors) const;
 
   /* Translate a NSArray of system types into a sequence of DataFlavors.
      Only those types for which a suitable mapping to a DataFlavor
      exist will be contained in the new DataFlavor Sequence.
   */
-  com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor> typesArrayToFlavorSequence(NSArray* types) const;
+  css::uno::Sequence<css::datatransfer::DataFlavor> typesArrayToFlavorSequence(NSArray* types) const;
 
   /* Returns an NSArray containing all pasteboard types supported by OOo
    */
@@ -117,7 +117,7 @@ private:
   bool isValidMimeContentType(const OUString& contentType) const;
 
 private:
-  ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+  css::uno::Reference< css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
   typedef std::unordered_map< OUString, NSString*, OUStringHash > OfficeOnlyTypes;
   mutable OfficeOnlyTypes maOfficeOnlyTypes;
 };

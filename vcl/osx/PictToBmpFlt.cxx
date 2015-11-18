@@ -26,8 +26,8 @@
 
 #include "PictToBmpFlt.hxx"
 
-bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
-                 com::sun::star::uno::Sequence<sal_Int8>& rPngData,
+bool ImageToPNG( css::uno::Sequence<sal_Int8>& rImgData,
+                 css::uno::Sequence<sal_Int8>& rPngData,
                  NSBitmapImageFileType eInFormat)
 {
     (void) eInFormat; // Really not needed? Weird.
@@ -50,8 +50,8 @@ bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
     return (nPngSize > 0);
 }
 
-bool PNGToImage( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
-                 com::sun::star::uno::Sequence<sal_Int8>& rImgData,
+bool PNGToImage( css::uno::Sequence<sal_Int8>& rPngData,
+                 css::uno::Sequence<sal_Int8>& rImgData,
                  NSBitmapImageFileType eOutFormat
                 )
 {

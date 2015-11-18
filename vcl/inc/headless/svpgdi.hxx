@@ -152,7 +152,7 @@ public:
                                           double fTransparency,
                                           const ::basegfx::B2DVector& rLineWidths,
                                           basegfx::B2DLineJoin,
-                                          com::sun::star::drawing::LineCap) override;
+                                          css::drawing::LineCap) override;
     virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,

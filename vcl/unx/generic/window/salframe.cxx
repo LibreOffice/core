@@ -537,7 +537,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                                                (mpParent ? mpParent->mnIconID : 1), 32,
                                                Hints.icon_pixmap, Hints.icon_mask, netwm_icon );
             }
-            catch( com::sun::star::uno::Exception& )
+            catch( css::uno::Exception& )
             {
                 // can happen - no ucb during early startup
             }

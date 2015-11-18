@@ -444,7 +444,7 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( vcl::Window *pWindow,
     const Reference< XDragSource >& xSource, const Any& event,
     const Point& rOrigin, const sal_Int8 nDragAction
 )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
     sal_Int32 n = 0;
 

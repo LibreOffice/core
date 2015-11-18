@@ -1069,7 +1069,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
    is not sufficient, since an rtl MD5 digest cannot be created in an arbitrary state
    which would be needed in PDFWriterImpl::computeEncryptionKey.
 */
-class EncHashTransporter : public cppu::WeakImplHelper < com::sun::star::beans::XMaterialHolder >
+class EncHashTransporter : public cppu::WeakImplHelper < css::beans::XMaterialHolder >
 {
     rtlDigest                   maUDigest;
     sal_IntPtr                  maID;

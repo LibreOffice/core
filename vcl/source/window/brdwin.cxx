@@ -1726,7 +1726,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, sal
 
 void ImplBorderWindow::ImplInit( vcl::Window* pParent,
                                  WinBits nStyle, sal_uInt16 nTypeStyle,
-                                 const ::com::sun::star::uno::Any& )
+                                 const css::uno::Any& )
 {
     ImplInit( pParent, nStyle, nTypeStyle, nullptr );
 }
@@ -1821,7 +1821,7 @@ ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent, WinBits nStyle ,
                                     sal_uInt16 nTypeStyle ) :
     Window( WINDOW_BORDERWINDOW )
 {
-    ImplInit( pParent, nStyle, nTypeStyle, ::com::sun::star::uno::Any() );
+    ImplInit( pParent, nStyle, nTypeStyle, css::uno::Any() );
 }
 
 ImplBorderWindow::~ImplBorderWindow()

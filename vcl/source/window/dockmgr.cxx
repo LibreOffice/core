@@ -481,7 +481,7 @@ public:
     virtual ~ImplPopupFloatWin();
     virtual void dispose() override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
     virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -525,7 +525,7 @@ void ImplPopupFloatWin::dispose()
     FloatingWindow::dispose();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ImplPopupFloatWin::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > ImplPopupFloatWin::CreateAccessible()
 {
     // switch off direct accessibilty support for this window
 
@@ -533,7 +533,7 @@ void ImplPopupFloatWin::dispose()
     // as this window is only used as a helper for subtoolbars that are not teared-off, the parent toolbar
     // has to provide accessibility support (as implemented in the toolkit)
     // so the contained toolbar should appear as child of the correponsing toolbar item of the parent toolbar
-    return ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >();
+    return css::uno::Reference< css::accessibility::XAccessible >();
 }
 
 vcl::Window* ImplPopupFloatWin::GetPreferredKeyInputWindow()

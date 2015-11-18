@@ -104,7 +104,7 @@ bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
     return false;
 }
 
-bool SvpSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+bool SvpSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
 {
     return false;
 }

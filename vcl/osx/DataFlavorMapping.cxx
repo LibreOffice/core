@@ -640,7 +640,7 @@ bool DataFlavorMapper::isValidMimeContentType(const OUString& contentType) const
   return result;
 }
 
-NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor>& flavors) const
+NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors) const
 {
   sal_uInt32 nFlavors = flavors.getLength();
   NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 1];
@@ -676,7 +676,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
   return [array autorelease];
 }
 
-com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor> DataFlavorMapper::typesArrayToFlavorSequence(NSArray* types) const
+css::uno::Sequence<css::datatransfer::DataFlavor> DataFlavorMapper::typesArrayToFlavorSequence(NSArray* types) const
 {
   int nFormats = [types count];
   Sequence<DataFlavor> flavors;

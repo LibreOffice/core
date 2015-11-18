@@ -516,7 +516,7 @@ PDFExtOutDevData::~PDFExtOutDevData()
     delete mpGlobalSyncData;
 }
 
-void PDFExtOutDevData::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
+void PDFExtOutDevData::SetDocumentLocale( const css::lang::Locale& rLoc )
 {
     maDocLocale = rLoc;
 }

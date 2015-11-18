@@ -1669,7 +1669,7 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*
     aUserOptions.allowPunctuationOutsideMargin = false;
     aUserOptions.allowHyphenateEnglish = false;
 
-    static const com::sun::star::lang::Locale aDefLocale;
+    static const css::lang::Locale aDefLocale;
     i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, aDefLocale, pLine->GetStart(), aHyphOptions, aUserOptions );
     sal_Int32 nBreakPos = aLBR.breakIndex;
     if ( nBreakPos <= pLine->GetStart() )
@@ -2839,14 +2839,14 @@ uno::Reference< i18n::XBreakIterator > TextEngine::GetBreakIterator()
     return mxBreakIterator;
 }
 
-void TextEngine::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
+void TextEngine::SetLocale( const css::lang::Locale& rLocale )
 {
     maLocale = rLocale;
     delete mpLocaleDataWrapper;
     mpLocaleDataWrapper = nullptr;
 }
 
-::com::sun::star::lang::Locale TextEngine::GetLocale()
+css::lang::Locale TextEngine::GetLocale()
 {
     if ( maLocale.Language.isEmpty() )
     {

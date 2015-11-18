@@ -798,7 +798,7 @@ atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAc
 }
 
 AtkObject *
-atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
+atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
                         AtkObject* parent )
 {
     g_return_val_if_fail( rxAccessible.get() != nullptr, NULL );

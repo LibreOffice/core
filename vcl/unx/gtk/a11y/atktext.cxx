@@ -435,22 +435,22 @@ handle_text_markup_as_run_attribute( css::uno::Reference<css::accessibility::XAc
                                               nEndOffsetTextMarkup );
                     switch ( nTextMarkupType )
                     {
-                        case com::sun::star::text::TextMarkupType::SPELLCHECK:
+                        case css::text::TextMarkupType::SPELLCHECK:
                         {
                             pSet = attribute_set_prepend_misspelled( pSet );
                         }
                         break;
-                        case com::sun::star::text::TextMarkupType::TRACK_CHANGE_INSERTION:
+                        case css::text::TextMarkupType::TRACK_CHANGE_INSERTION:
                         {
                             pSet = attribute_set_prepend_tracked_change_insertion( pSet );
                         }
                         break;
-                        case com::sun::star::text::TextMarkupType::TRACK_CHANGE_DELETION:
+                        case css::text::TextMarkupType::TRACK_CHANGE_DELETION:
                         {
                             pSet = attribute_set_prepend_tracked_change_deletion( pSet );
                         }
                         break;
-                        case com::sun::star::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE:
+                        case css::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE:
                         {
                             pSet = attribute_set_prepend_tracked_change_formatchange( pSet );
                         }
@@ -535,20 +535,20 @@ text_wrapper_get_run_attributes( AtkText        *text,
             // handle misspelled text
             pSet = handle_text_markup_as_run_attribute(
                     pTextMarkup,
-                    com::sun::star::text::TextMarkupType::SPELLCHECK,
+                    css::text::TextMarkupType::SPELLCHECK,
                     offset, pSet, start_offset, end_offset );
             // handle tracked changes
             pSet = handle_text_markup_as_run_attribute(
                     pTextMarkup,
-                    com::sun::star::text::TextMarkupType::TRACK_CHANGE_INSERTION,
+                    css::text::TextMarkupType::TRACK_CHANGE_INSERTION,
                     offset, pSet, start_offset, end_offset );
             pSet = handle_text_markup_as_run_attribute(
                     pTextMarkup,
-                    com::sun::star::text::TextMarkupType::TRACK_CHANGE_DELETION,
+                    css::text::TextMarkupType::TRACK_CHANGE_DELETION,
                     offset, pSet, start_offset, end_offset );
             pSet = handle_text_markup_as_run_attribute(
                     pTextMarkup,
-                    com::sun::star::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE,
+                    css::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE,
                     offset, pSet, start_offset, end_offset );
         }
     }

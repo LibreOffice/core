@@ -417,7 +417,7 @@ namespace vcl
 
         namespace
         {
-            class StandardColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XColorSpace >
+            class StandardColorSpace : public cppu::WeakImplHelper< css::rendering::XColorSpace >
             {
             private:
                 uno::Sequence< sal_Int8 > m_aComponentTags;

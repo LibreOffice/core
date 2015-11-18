@@ -132,17 +132,17 @@ class PDFTestOutputStream : public PDFOutputStream
 {
     public:
     virtual ~PDFTestOutputStream();
-    virtual void write( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xStream );
+    virtual void write( const css::uno::Reference< css::io::XOutputStream >& xStream );
 };
 
 PDFTestOutputStream::~PDFTestOutputStream()
 {
 }
 
-void PDFTestOutputStream::write( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xStream )
+void PDFTestOutputStream::write( const css::uno::Reference< css::io::XOutputStream >& xStream )
 {
     OString aStr( "lalala\ntest\ntest\ntest" );
-    com::sun::star::uno::Sequence< sal_Int8 > aData( aStr.getLength() );
+    css::uno::Sequence< sal_Int8 > aData( aStr.getLength() );
     memcpy( aData.getArray(), aStr.getStr(), aStr.getLength() );
     xStream->writeBytes( aData );
 }
@@ -170,7 +170,7 @@ void doTestCode()
     aContext.SignReason     = "Some valid reason to sign";
     aContext.SignContact    = "signer@example.com";
 
-    com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > xEnc;
+    css::uno::Reference< css::beans::XMaterialHolder > xEnc;
     PDFWriter aWriter( aContext, xEnc );
     aWriter.NewPage( 595, 842 );
     aWriter.BeginStructureElement( PDFWriter::Document );
@@ -1643,7 +1643,7 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         return false;
     }
 
-    if(com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap())
+    if(css::drawing::LineCap_BUTT != rInfo.GetLineCap())
     {
         // LineCap used, ExtLineInfo required
         return false;
@@ -1734,7 +1734,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
 }
 
  PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
-                               const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& xEnc,
+                               const css::uno::Reference< css::beans::XMaterialHolder >& xEnc,
                                PDFWriter& i_rOuterFace)
         :
         m_pReferenceDevice( nullptr ),
@@ -6790,7 +6790,7 @@ bool PDFWriterImpl::finalizeSignature()
     }
 
     // 3- create the PKCS#7 object using NSS
-    com::sun::star::uno::Sequence< sal_Int8 > derEncoded = m_aContext.SignCertificate->getEncoded();
+    css::uno::Sequence< sal_Int8 > derEncoded = m_aContext.SignCertificate->getEncoded();
 
     if (!derEncoded.hasElements())
         return false;
@@ -8239,7 +8239,7 @@ void PDFWriterImpl::sortWidgets()
 
 namespace vcl {
 class PDFStreamIf :
-        public cppu::WeakImplHelper< com::sun::star::io::XOutputStream >
+        public cppu::WeakImplHelper< css::io::XOutputStream >
 {
     PDFWriterImpl*  m_pWriter;
     bool            m_bWrite;
@@ -8247,7 +8247,7 @@ class PDFStreamIf :
     explicit PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
     virtual ~PDFStreamIf();
 
-    virtual void SAL_CALL writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(std::exception) override;
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw(std::exception) override;
     virtual void SAL_CALL flush() throw(std::exception) override;
     virtual void SAL_CALL closeOutput() throw(std::exception) override;
 };
@@ -8257,7 +8257,7 @@ PDFStreamIf::~PDFStreamIf()
 {
 }
 
-void SAL_CALL  PDFStreamIf::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw(std::exception)
+void SAL_CALL  PDFStreamIf::writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw(std::exception)
 {
     if( m_bWrite && aData.getLength() )
     {
@@ -8307,7 +8307,7 @@ bool PDFWriterImpl::emitAdditionalStreams()
             beginCompression();
 
         checkAndEnableStreamEncryption( rStream.m_nStreamObject );
-        com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xStream( new PDFStreamIf( this ) );
+        css::uno::Reference< css::io::XOutputStream > xStream( new PDFStreamIf( this ) );
         assert(rStream.m_pStream);
         if (!rStream.m_pStream)
             return false;
@@ -10585,17 +10585,17 @@ void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter
     // add LineCap
     switch(rIn.GetLineCap())
     {
-        default: /* com::sun::star::drawing::LineCap_BUTT */
+        default: /* css::drawing::LineCap_BUTT */
         {
             rOut.m_eCap = PDFWriter::capButt;
             break;
         }
-        case com::sun::star::drawing::LineCap_ROUND:
+        case css::drawing::LineCap_ROUND:
         {
             rOut.m_eCap = PDFWriter::capRound;
             break;
         }
-        case com::sun::star::drawing::LineCap_SQUARE:
+        case css::drawing::LineCap_SQUARE:
         {
             rOut.m_eCap = PDFWriter::capSquare;
             break;

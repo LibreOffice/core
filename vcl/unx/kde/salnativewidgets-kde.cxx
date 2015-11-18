@@ -1765,7 +1765,7 @@ static Color readColor( KConfig *pConfig, const char *pKey )
 
     Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
 */
-static vcl::Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& rLocale )
+static vcl::Font toFont( const QFont &rQFont, const css::lang::Locale& rLocale )
 {
     psp::FastPrintFontInfo aInfo;
     QFontInfo qFontInfo( rQFont );

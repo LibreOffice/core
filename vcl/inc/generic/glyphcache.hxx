@@ -304,7 +304,7 @@ public:
 
 private:
     ServerFont&             mrServerFont;
-    com::sun::star::uno::Reference<com::sun::star::i18n::XBreakIterator> mxBreak;
+    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
                             ServerFontLayout( const ServerFontLayout& ) = delete;
                             ServerFontLayout& operator=( const ServerFontLayout& ) = delete;

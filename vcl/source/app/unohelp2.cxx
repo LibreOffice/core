@@ -61,14 +61,14 @@ namespace vcl { namespace unohelper {
         }
     }
 
-    // ::com::sun::star::uno::XInterface
+    // css::uno::XInterface
     uno::Any TextDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
     {
         uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< datatransfer::XTransferable* >(this)) );
         return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
     }
 
-    // ::com::sun::star::datatransfer::XTransferable
+    // css::datatransfer::XTransferable
     uno::Any TextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor ) throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
     {
         uno::Any aAny;

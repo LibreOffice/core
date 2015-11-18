@@ -783,8 +783,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
 
 // Shift alpha transparent pixels between cppcanvas/ implementations
 // and vcl in a generally grotesque and under-performing fashion
-bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::rendering::XBitmapCanvas > &xBitmapCanvas,
+bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
                        const Size &rSize )
 {
     uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );

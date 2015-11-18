@@ -1576,7 +1576,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     double fTransparency,
     const ::basegfx::B2DVector& rLineWidth,
     basegfx::B2DLineJoin eLineJoin,
-    com::sun::star::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap)
 {
     const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
 

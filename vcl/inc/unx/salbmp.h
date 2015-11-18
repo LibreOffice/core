@@ -130,9 +130,7 @@ public:
                                 ) override;
 
     virtual bool                Create(
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::rendering::XBitmapCanvas
-                                    >& rBitmapCanvas,
+                                    const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false
                                 ) override;

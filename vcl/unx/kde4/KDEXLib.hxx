@@ -72,9 +72,8 @@ class KDEXLib : public QObject, public SalXLib
         void startTimeoutTimerSignal();
         void startUserEventTimerSignal();
         void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
-        com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
-            createFilePickerSignal( const com::sun::star::uno::Reference<
-                                          com::sun::star::uno::XComponentContext >& );
+        css::uno::Reference< css::ui::dialogs::XFilePicker2 >
+            createFilePickerSignal( const css::uno::Reference< css::uno::XComponentContext >& );
         int getFrameWidthSignal();
 
     public:
@@ -94,9 +93,8 @@ class KDEXLib : public QObject, public SalXLib
         bool allowKdeDialogs() { return m_allowKdeDialogs; }
 
     public Q_SLOTS:
-        com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
-            createFilePicker( const com::sun::star::uno::Reference<
-                                  com::sun::star::uno::XComponentContext >& );
+        css::uno::Reference< css::ui::dialogs::XFilePicker2 >
+            createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& );
         int getFrameWidth();
 };
 

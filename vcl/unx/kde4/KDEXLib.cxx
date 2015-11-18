@@ -74,10 +74,8 @@ KDEXLib::KDEXLib() :
 
     // Create the File picker in the main / GUI thread and block the calling thread until
     // the FilePicker is created.
-    connect( this, SIGNAL( createFilePickerSignal( const com::sun::star::uno::Reference<
-                                                   com::sun::star::uno::XComponentContext >&) ),
-             this, SLOT( createFilePicker( const com::sun::star::uno::Reference<
-                                                 com::sun::star::uno::XComponentContext >&) ),
+    connect( this, SIGNAL( createFilePickerSignal( const css::uno::Reference< css::uno::XComponentContext >&) ),
+             this, SLOT( createFilePicker( const css::uno::Reference< css::uno::XComponentContext >&) ),
              Qt::BlockingQueuedConnection );
 
     connect( this, SIGNAL( getFrameWidthSignal() ),

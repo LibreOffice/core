@@ -31,7 +31,7 @@
 // - AquaA11yEventListener -
 
 class AquaA11yEventListener :
-    public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessibleEventListener >
+    public ::cppu::WeakImplHelper< css::accessibility::XAccessibleEventListener >
 {
 
 public:
@@ -39,17 +39,17 @@ public:
     virtual ~AquaA11yEventListener();
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
     const id m_wrapperObject;
     const sal_Int16 m_role;
-    ::com::sun::star::awt::Rectangle m_oldBounds;
+    css::awt::Rectangle m_oldBounds;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_A11YLISTENER_HXX

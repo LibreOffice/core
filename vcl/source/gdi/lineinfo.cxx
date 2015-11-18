@@ -38,7 +38,7 @@ ImplLineInfo::ImplLineInfo() :
     mnDotLen    ( 0 ),
     mnDistance  ( 0 ),
     meLineJoin  ( basegfx::B2DLineJoin::Round ),
-    meLineCap   ( com::sun::star::drawing::LineCap_BUTT )
+    meLineCap   ( css::drawing::LineCap_BUTT )
 {
 }
 
@@ -172,7 +172,7 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
     }
 }
 
-void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
+void LineInfo::SetLineCap(css::drawing::LineCap eLineCap)
 {
     if(eLineCap != mpImplLineInfo->meLineCap)
     {
@@ -185,7 +185,7 @@ bool LineInfo::IsDefault() const
 {
     return( !mpImplLineInfo->mnWidth
         && ( LINE_SOLID == mpImplLineInfo->meStyle )
-        && ( com::sun::star::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
+        && ( css::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
 }
 
 SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
@@ -218,7 +218,7 @@ SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
     if( aCompat.GetVersion() >= 4 )
     {
         // version 4
-        rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meLineCap = (com::sun::star::drawing::LineCap) nTmp16;
+        rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meLineCap = (css::drawing::LineCap) nTmp16;
     }
 
     return rIStm;

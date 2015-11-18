@@ -30,7 +30,7 @@
 class KeyboardFocusListener : public salhelper::SimpleReferenceObject
 {
 public:
-    virtual void SAL_CALL focusedObjectChanged(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible) = 0;
+    virtual void SAL_CALL focusedObjectChanged(const css::uno::Reference< css::accessibility::XAccessible >& xAccessible) = 0;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_KEYBOARDFOCUSLISTENER_HXX

@@ -497,7 +497,7 @@ public:
     true if a match was found
     false else
      */
-    bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
+    bool matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale );
     static FontConfigFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*));
 
     bool Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes );

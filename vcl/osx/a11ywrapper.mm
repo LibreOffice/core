@@ -972,15 +972,15 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     return hit;
 }
 
-Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point point,
+Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
                                                  Reference < XAccessibleContext > rxAccessibleContext ) {
     Reference < XAccessibleContext > hitChild;
     Reference < XAccessibleContext > emptyReference;
     try {
         Reference < XAccessibleComponent > rxAccessibleComponent ( rxAccessibleContext, UNO_QUERY );
         if ( rxAccessibleComponent.is() ) {
-            com::sun::star::awt::Point location = rxAccessibleComponent -> getLocationOnScreen();
-            com::sun::star::awt::Point hitPoint ( point.X - location.X , point.Y - location.Y);
+            css::awt::Point location = rxAccessibleComponent -> getLocationOnScreen();
+            css::awt::Point hitPoint ( point.X - location.X , point.Y - location.Y);
             Reference < XAccessible > rxAccessible = rxAccessibleComponent -> getAccessibleAtPoint ( hitPoint );
             if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() &&
                  rxAccessible -> getAccessibleContext() -> getAccessibleChildCount() == 0 ) {
@@ -1031,7 +1031,7 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
     }
     Reference < XAccessibleContext > hitChild;
     NSRect screenRect = [ [ NSScreen mainScreen ] frame ];
-    com::sun::star::awt::Point hitPoint ( static_cast<long>(point.x) , static_cast<long>(screenRect.size.height - point.y) );
+    css::awt::Point hitPoint ( static_cast<long>(point.x) , static_cast<long>(screenRect.size.height - point.y) );
     // check child windows first
     NSWindow * window = (NSWindow *) [ self accessibilityAttributeValue: NSAccessibilityWindowAttribute ];
     NSArray * childWindows = [ window childWindows ];

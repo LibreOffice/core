@@ -27,18 +27,18 @@
 
 #include "atkwrapper.hxx"
 
-class AtkListener : public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessibleEventListener >
+class AtkListener : public ::cppu::WeakImplHelper< css::accessibility::XAccessibleEventListener >
 {
 public:
     explicit AtkListener(AtkObjectWrapper * pWrapper);
 
     // XEventListener
-    virtual void disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void disposing( const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleEventListener
-    virtual void notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     AtkObjectWrapper *mpWrapper;
     std::vector< css::uno::Reference< css::accessibility::XAccessible > >
@@ -55,17 +55,17 @@ private:
 
     // Process CHILD_EVENT notifications with a new child added
     void handleChildAdded(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& rxParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxChild);
+        const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent,
+        const css::uno::Reference< css::accessibility::XAccessible>& rxChild);
 
     // Process CHILD_EVENT notifications with a child removed
     void handleChildRemoved(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& rxParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxChild);
+        const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent,
+        const css::uno::Reference< css::accessibility::XAccessible>& rxChild);
 
     // Process INVALIDATE_ALL_CHILDREN notification
     void handleInvalidateChildren(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& rxParent);
+        const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent);
 };
 
 #endif // INCLUDED_VCL_UNX_GTK_A11Y_ATKLISTENER_HXX

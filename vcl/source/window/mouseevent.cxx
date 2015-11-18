@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 
 /** inits this vcl KeyEvent with all settings from the given awt event **/
-MouseEvent::MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent )
+MouseEvent::MouseEvent( const css::awt::MouseEvent& rEvent )
 : maPos( rEvent.X, rEvent.Y )
 , mnMode( MouseEventModifiers::NONE )
 , mnClicks( static_cast< sal_uInt16 >( rEvent.ClickCount ) )
@@ -32,23 +32,23 @@ MouseEvent::MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent )
 {
     if( rEvent.Modifiers )
     {
-        if( (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::SHIFT) != 0 )
+        if( (rEvent.Modifiers & css::awt::KeyModifier::SHIFT) != 0 )
             mnCode |= KEY_SHIFT;
-        if( (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD1) != 0 )
+        if( (rEvent.Modifiers & css::awt::KeyModifier::MOD1) != 0 )
             mnCode |= KEY_MOD1;
-        if( (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD2) != 0 )
+        if( (rEvent.Modifiers & css::awt::KeyModifier::MOD2) != 0 )
             mnCode |= KEY_MOD2;
-        if( (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD3) != 0 )
+        if( (rEvent.Modifiers & css::awt::KeyModifier::MOD3) != 0 )
             mnCode |= KEY_MOD3;
     }
 
     if( rEvent.Buttons )
     {
-        if( (rEvent.Buttons & ::com::sun::star::awt::MouseButton::LEFT) != 0 )
+        if( (rEvent.Buttons & css::awt::MouseButton::LEFT) != 0 )
             mnCode |= MOUSE_LEFT;
-        if( (rEvent.Buttons & ::com::sun::star::awt::MouseButton::RIGHT) != 0 )
+        if( (rEvent.Buttons & css::awt::MouseButton::RIGHT) != 0 )
             mnCode |= MOUSE_RIGHT;
-        if( (rEvent.Buttons & ::com::sun::star::awt::MouseButton::MIDDLE) != 0 )
+        if( (rEvent.Buttons & css::awt::MouseButton::MIDDLE) != 0 )
             mnCode |= MOUSE_MIDDLE;
     }
 }

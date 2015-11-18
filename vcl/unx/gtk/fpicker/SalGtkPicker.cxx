@@ -154,13 +154,13 @@ void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, nullptr);
 }
 
-void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventObject& )
-        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL RunDialog::queryTermination( const css::lang::EventObject& )
+        throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL RunDialog::notifyTermination( const ::com::sun::star::lang::EventObject& )
-        throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL RunDialog::notifyTermination( const css::lang::EventObject& )
+        throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

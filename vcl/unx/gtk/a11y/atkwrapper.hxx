@@ -77,11 +77,11 @@ struct _AtkObjectWrapperClass
 
 GType                  atk_object_wrapper_get_type() G_GNUC_CONST;
 AtkObject *            atk_object_wrapper_ref(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
+    const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
     bool create = true );
 
 AtkObject *            atk_object_wrapper_new(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
+    const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
     AtkObject* parent = nullptr );
 
 void                   atk_object_wrapper_add_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);

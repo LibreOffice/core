@@ -475,9 +475,9 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                         if( pMouseDownWin->ImplGetFrameData()->mbInternalDragGestureRecognizer )
                         {
                             // query DropTarget from child window
-                            ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer =
-                                ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > ( pMouseDownWin->ImplGetWindowImpl()->mxDNDListenerContainer,
-                                    ::com::sun::star::uno::UNO_QUERY );
+                            css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer =
+                                css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > ( pMouseDownWin->ImplGetWindowImpl()->mxDNDListenerContainer,
+                                    css::uno::UNO_QUERY );
 
                             if( xDragGestureRecognizer.is() )
                             {
@@ -487,10 +487,9 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                                     pMouseDownWin->ImplGetFrameData()->mnFirstMouseY ) );
 
                                 // create a uno mouse event out of the available data
-                                ::com::sun::star::awt::MouseEvent aMouseEvent(
-                                    static_cast < ::com::sun::star::uno::XInterface * > ( nullptr ),
+                                css::awt::MouseEvent aMouseEvent( static_cast < css::uno::XInterface * > ( nullptr ),
 #ifdef MACOSX
-                    nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3),
+                                    nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3),
 #else
                                     nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2),
 #endif
@@ -503,12 +502,12 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                                 SolarMutexReleaser aReleaser;
 
                                 // FIXME: where do I get Action from ?
-                                ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > xDragSource = pMouseDownWin->GetDragSource();
+                                css::uno::Reference< css::datatransfer::dnd::XDragSource > xDragSource = pMouseDownWin->GetDragSource();
 
                                 if( xDragSource.is() )
                                 {
                                     static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
-                                        relLoc.X(), relLoc.Y(), xDragSource, ::com::sun::star::uno::makeAny( aMouseEvent ) );
+                                        relLoc.X(), relLoc.Y(), xDragSource, css::uno::makeAny( aMouseEvent ) );
                                 }
                             }
                         }

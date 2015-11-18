@@ -521,9 +521,9 @@ public:
         std::list< PDFStructureElementKid >                 m_aKids;
         PDFStructAttributes                                 m_aAttributes;
         Rectangle                                           m_aBBox;
-        OUString                                       m_aActualText;
-        OUString                                       m_aAltText;
-        com::sun::star::lang::Locale                        m_aLocale;
+        OUString                                            m_aActualText;
+        OUString                                            m_aAltText;
+        css::lang::Locale                                   m_aLocale;
 
         // m_aContents contains the element's marked content sequence
         // as pairs of (page nr, MCID)
@@ -609,7 +609,7 @@ private:
     std::vector<PDFLink>                m_aLinks;
     /* makes correctly encoded for export to PDF URLS
     */
-    com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > m_xTrans;
+    css::uno::Reference< css::util::XURLTransformer > m_xTrans;
     /* maps arbitrary link ids for structure attributes to real link ids
        (for setLinkPropertyId)
     */
@@ -1007,7 +1007,7 @@ i12626
     static sal_Int32 computeAccessPermissions( const vcl::PDFWriter::PDFEncryptionProperties& i_rProperties,
                                                sal_Int32& o_rKeyLength, sal_Int32& o_rRC4KeyLength );
     void setupDocInfo();
-    bool prepareEncryption( const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
+    bool prepareEncryption( const css::uno::Reference< css::beans::XMaterialHolder >& );
 
     // helper for playMetafile
     void implWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient,
@@ -1024,10 +1024,10 @@ i12626
     void appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer );
     void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer );
 public:
-    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >&, PDFWriter& );
+    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >&, PDFWriter& );
     ~PDFWriterImpl();
 
-    static com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
+    static css::uno::Reference< css::beans::XMaterialHolder >
            initEncryption( const OUString& i_rOwnerPassword,
                            const OUString& i_rUserPassword,
                            bool b128Bit );
@@ -1053,7 +1053,7 @@ public:
 
     PDFWriter::PDFVersion getVersion() const { return m_aContext.Version; }
 
-    void setDocumentLocale( const com::sun::star::lang::Locale& rLoc )
+    void setDocumentLocale( const css::lang::Locale& rLoc )
     { m_aContext.DocumentLocale = rLoc; }
 
     /* graphics state */

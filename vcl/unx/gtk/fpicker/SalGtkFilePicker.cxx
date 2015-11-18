@@ -1984,8 +1984,7 @@ SalGtkFilePicker::~SalGtkFilePicker()
 using namespace ::com::sun::star;
 
 uno::Reference< ui::dialogs::XFilePicker2 >
-GtkInstance::createFilePicker( const com::sun::star::uno::Reference<
-                                        com::sun::star::uno::XComponentContext > &xMSF )
+GtkInstance::createFilePicker( const css::uno::Reference< css::uno::XComponentContext > &xMSF )
 {
     return uno::Reference< ui::dialogs::XFilePicker2 >(
                 new SalGtkFilePicker( xMSF ) );

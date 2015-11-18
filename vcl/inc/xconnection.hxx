@@ -34,11 +34,11 @@ namespace vcl {
         public DisplayConnectionDispatch
     {
         ::osl::Mutex                    m_aMutex;
-        ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler > >
+        ::std::list< css::uno::Reference< css::awt::XEventHandler > >
                                         m_aHandlers;
-        ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler > >
+        ::std::list< css::uno::Reference< css::awt::XEventHandler > >
                                         m_aErrorHandlers;
-        ::com::sun::star::uno::Any      m_aAny;
+        css::uno::Any                   m_aAny;
     public:
         DisplayConnection();
         virtual ~DisplayConnection();
@@ -49,11 +49,11 @@ namespace vcl {
         virtual bool dispatchEvent( void* pData, int nBytes ) override;
 
         // XDisplayConnection
-        virtual void SAL_CALL addEventHandler( const ::com::sun::star::uno::Any& window, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler, sal_Int32 eventMask ) throw(std::exception) override;
-        virtual void SAL_CALL removeEventHandler( const ::com::sun::star::uno::Any& window, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler ) throw(std::exception) override;
-        virtual void SAL_CALL addErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler ) throw(std::exception) override;
-        virtual void SAL_CALL removeErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler ) throw(std::exception) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL getIdentifier() throw(std::exception) override;
+        virtual void SAL_CALL addEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler, sal_Int32 eventMask ) throw(std::exception) override;
+        virtual void SAL_CALL removeEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler ) throw(std::exception) override;
+        virtual void SAL_CALL addErrorHandler( const css::uno::Reference< css::awt::XEventHandler >& handler ) throw(std::exception) override;
+        virtual void SAL_CALL removeErrorHandler( const css::uno::Reference< css::awt::XEventHandler >& handler ) throw(std::exception) override;
+        virtual css::uno::Any SAL_CALL getIdentifier() throw(std::exception) override;
 
     };
 

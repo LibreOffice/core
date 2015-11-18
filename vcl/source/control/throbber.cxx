@@ -74,8 +74,8 @@ namespace
         ::std::vector< Image > aImages;
         ENSURE_OR_RETURN( i_imageSet != Throbber::IMAGES_NONE, "lcl_loadImageSet: illegal image set", aImages );
 
-        const Reference< com::sun::star::uno::XComponentContext > aContext( ::comphelper::getProcessComponentContext() );
-        const Reference< XGraphicProvider > xGraphicProvider( com::sun::star::graphic::GraphicProvider::create(aContext) );
+        const Reference< css::uno::XComponentContext > aContext( ::comphelper::getProcessComponentContext() );
+        const Reference< XGraphicProvider > xGraphicProvider( css::graphic::GraphicProvider::create(aContext) );
 
         ::std::vector< OUString > aImageURLs( Throbber::getDefaultImageURLs( i_imageSet ) );
         aImages.reserve( aImageURLs.size() );

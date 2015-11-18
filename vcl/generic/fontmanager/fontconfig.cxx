@@ -1231,7 +1231,7 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(
     return pOptions;
 }
 
-bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale )
+bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale )
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 

@@ -39,7 +39,7 @@ class X11SalGraphics;
 class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
 {
 private:
-    std::unordered_map< Atom, com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboard > > m_aInstances;
+    std::unordered_map< Atom, css::uno::Reference< css::datatransfer::clipboard::XClipboard > > m_aInstances;
 
 protected:
     SalXLib *mpXLib;
@@ -78,10 +78,10 @@ public:
     void                        SetLib( SalXLib *pXLib ) { mpXLib = pXLib; }
 
     // dtrans implementation
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource() override;
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget() override;
+    virtual css::uno::Reference< css::uno::XInterface >
+        CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;
+    virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() override;
+    virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() override;
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 };
 

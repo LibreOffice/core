@@ -953,18 +953,18 @@ bool EnhWMFReader::ReadEnhWMF()
                             case PS_ENDCAP_ROUND :
                                 if ( aSize.Width() )
                                 {
-                                    aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_ROUND );
+                                    aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
                                     break;
                                 }
                             case PS_ENDCAP_SQUARE :
                                 if ( aSize.Width() )
                                 {
-                                    aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_SQUARE );
+                                    aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
                                     break;
                                 }
                             case PS_ENDCAP_FLAT :
                             default :
-                                aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_BUTT );
+                                aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
                         }
                         switch( nStyle & 0xF000 )
                         {

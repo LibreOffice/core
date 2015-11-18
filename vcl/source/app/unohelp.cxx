@@ -44,20 +44,20 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     return i18n::CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
-void vcl::unohelper::NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject )
+void vcl::unohelper::NotifyAccessibleStateEventGlobally( const css::accessibility::AccessibleEventObject& rEventObject )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit > xExtToolkit( Application::GetVCLToolkit(), uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XExtendedToolkit > xExtToolkit( Application::GetVCLToolkit(), uno::UNO_QUERY );
     if ( xExtToolkit.is() )
     {
         // Only for focus events
-        sal_Int16 nType = ::com::sun::star::accessibility::AccessibleStateType::INVALID;
+        sal_Int16 nType = css::accessibility::AccessibleStateType::INVALID;
         rEventObject.NewValue >>= nType;
-        if ( nType == ::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
+        if ( nType == css::accessibility::AccessibleStateType::FOCUSED )
             xExtToolkit->fireFocusGained( rEventObject.Source );
         else
         {
             rEventObject.OldValue >>= nType;
-            if ( nType == ::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
+            if ( nType == css::accessibility::AccessibleStateType::FOCUSED )
                 xExtToolkit->fireFocusLost( rEventObject.Source );
         }
 

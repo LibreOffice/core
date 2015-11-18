@@ -49,8 +49,8 @@ namespace psp
     {
         struct LocaleEqual
         {
-            bool operator()(const com::sun::star::lang::Locale& i_rLeft,
-                            const com::sun::star::lang::Locale& i_rRight) const
+            bool operator()(const css::lang::Locale& i_rLeft,
+                            const css::lang::Locale& i_rRight) const
             {
                 return i_rLeft.Language.equals( i_rRight.Language ) &&
                 i_rLeft.Country.equals( i_rRight.Country ) &&
@@ -60,7 +60,7 @@ namespace psp
 
         struct LocaleHash
         {
-            size_t operator()(const com::sun::star::lang::Locale& rLocale) const
+            size_t operator()(const css::lang::Locale& rLocale) const
             { return
                   (size_t)rLocale.Language.hashCode()
                 ^ (size_t)rLocale.Country.hashCode()
@@ -82,20 +82,20 @@ namespace psp
             const OUString& i_rOption,
             const OUString& i_rValue,
             const OUString& i_rTranslation,
-            const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale()
+            const css::lang::Locale& i_rLocale = css::lang::Locale()
             );
 
         void insertOption( const OUString& i_rKey,
                            const OUString& i_rOption,
                            const OUString& i_rTranslation,
-                           const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() )
+                           const css::lang::Locale& i_rLocale = css::lang::Locale() )
         {
             insertValue( i_rKey, i_rOption, OUString(), i_rTranslation, i_rLocale );
         }
 
         void insertKey( const OUString& i_rKey,
                         const OUString& i_rTranslation,
-                        const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() )
+                        const css::lang::Locale& i_rLocale = css::lang::Locale() )
         {
             insertValue( i_rKey, OUString(), OUString(), i_rTranslation, i_rLocale );
         }
@@ -104,29 +104,29 @@ namespace psp
             const OUString& i_rKey,
             const OUString& i_rOption,
             const OUString& i_rValue,
-            const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale()
+            const css::lang::Locale& i_rLocale = css::lang::Locale()
             ) const;
 
         OUString translateOption( const OUString& i_rKey,
                                        const OUString& i_rOption,
-                                       const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const
+                                       const css::lang::Locale& i_rLocale = css::lang::Locale() ) const
         {
             return translateValue( i_rKey, i_rOption, OUString(), i_rLocale );
         }
 
         OUString translateKey( const OUString& i_rKey,
-                                    const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const
+                                    const css::lang::Locale& i_rLocale = css::lang::Locale() ) const
         {
             return translateValue( i_rKey, OUString(), OUString(), i_rLocale );
         }
     };
 
-    static com::sun::star::lang::Locale normalizeInputLocale(
-        const com::sun::star::lang::Locale& i_rLocale,
+    static css::lang::Locale normalizeInputLocale(
+        const css::lang::Locale& i_rLocale,
         bool bInsertDefault = false
         )
     {
-        com::sun::star::lang::Locale aLoc( i_rLocale );
+        css::lang::Locale aLoc( i_rLocale );
         if( bInsertDefault && aLoc.Language.isEmpty() )
         {
             // empty locale requested, fill in application UI locale
@@ -160,7 +160,7 @@ namespace psp
         const OUString& i_rOption,
         const OUString& i_rValue,
         const OUString& i_rTranslation,
-        const com::sun::star::lang::Locale& i_rLocale
+        const css::lang::Locale& i_rLocale
         )
     {
         OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
@@ -178,7 +178,7 @@ namespace psp
         if( !aKey.isEmpty() && !i_rTranslation.isEmpty() )
         {
             OUString aK( aKey.makeStringAndClear() );
-            com::sun::star::lang::Locale aLoc;
+            css::lang::Locale aLoc;
             /* FIXME-BCP47: using Variant, uppercase? */
             aLoc.Language = i_rLocale.Language.toAsciiLowerCase();
             aLoc.Country  = i_rLocale.Country.toAsciiUpperCase();
@@ -191,7 +191,7 @@ namespace psp
         const OUString& i_rKey,
         const OUString& i_rOption,
         const OUString& i_rValue,
-        const com::sun::star::lang::Locale& i_rLocale
+        const css::lang::Locale& i_rLocale
         ) const
     {
         OUString aResult;
@@ -216,7 +216,7 @@ namespace psp
             {
                 const translation_map& rMap( it->second );
 
-                com::sun::star::lang::Locale aLoc( normalizeInputLocale( i_rLocale, true ) );
+                css::lang::Locale aLoc( normalizeInputLocale( i_rLocale, true ) );
                 /* FIXME-BCP47: use LanguageTag::getFallbackStrings()? */
                 for( int nTry = 0; nTry < 4; nTry++ )
                 {
@@ -986,7 +986,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         /* FIXME-BCP47: really only ISO 639-1 two character language codes?
          * goodnight.. */
         bool bIsGlobalizedLine = false;
-        com::sun::star::lang::Locale aTransLocale;
+        css::lang::Locale aTransLocale;
         if( ( aUniKey.getLength() > 3 && aUniKey[ 2 ] == '.' ) ||
             ( aUniKey.getLength() > 5 && aUniKey[ 2 ] == '_' && aUniKey[ 5 ] == '.' ) )
         {
@@ -1474,7 +1474,7 @@ void PPDParser::getDefaultResolution( int& rXRes, int& rYRes ) const
 }
 
 OUString PPDParser::translateKey( const OUString& i_rKey,
-                                       const com::sun::star::lang::Locale& i_rLocale ) const
+                                       const css::lang::Locale& i_rLocale ) const
 {
     OUString aResult( m_pTranslator->translateKey( i_rKey, i_rLocale ) );
     if( aResult.isEmpty() )
@@ -1484,7 +1484,7 @@ OUString PPDParser::translateKey( const OUString& i_rKey,
 
 OUString PPDParser::translateOption( const OUString& i_rKey,
                                           const OUString& i_rOption,
-                                          const com::sun::star::lang::Locale& i_rLocale ) const
+                                          const css::lang::Locale& i_rLocale ) const
 {
     OUString aResult( m_pTranslator->translateOption( i_rKey, i_rOption, i_rLocale ) );
     if( aResult.isEmpty() )

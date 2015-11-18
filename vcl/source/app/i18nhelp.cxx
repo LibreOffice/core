@@ -32,7 +32,7 @@
 
 using namespace ::com::sun::star;
 
-vcl::I18nHelper::I18nHelper(  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag )
+vcl::I18nHelper::I18nHelper(  const css::uno::Reference< css::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag )
     :
         maLanguageTag( rLanguageTag)
 {

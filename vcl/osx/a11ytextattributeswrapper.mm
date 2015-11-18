@@ -273,10 +273,10 @@ using namespace ::com::sun::star::uno;
                 property.Value >>= alignment;
                 NSNumber *textAlignment = nil;
                 switch(alignment) {
-                    case ::com::sun::star::style::ParagraphAdjust_RIGHT : textAlignment = [NSNumber numberWithInteger:NSRightTextAlignment]    ; break;
-                    case ::com::sun::star::style::ParagraphAdjust_CENTER: textAlignment = [NSNumber numberWithInteger:NSCenterTextAlignment]   ; break;
-                    case ::com::sun::star::style::ParagraphAdjust_BLOCK : textAlignment = [NSNumber numberWithInteger:NSJustifiedTextAlignment]; break;
-                    case ::com::sun::star::style::ParagraphAdjust_LEFT  :
+                    case css::style::ParagraphAdjust_RIGHT : textAlignment = [NSNumber numberWithInteger:NSRightTextAlignment]    ; break;
+                    case css::style::ParagraphAdjust_CENTER: textAlignment = [NSNumber numberWithInteger:NSCenterTextAlignment]   ; break;
+                    case css::style::ParagraphAdjust_BLOCK : textAlignment = [NSNumber numberWithInteger:NSJustifiedTextAlignment]; break;
+                    case css::style::ParagraphAdjust_LEFT  :
                     default                                             : textAlignment = [NSNumber numberWithInteger:NSLeftTextAlignment]     ; break;
                 }
                 NSDictionary *paragraphStyle = [NSDictionary dictionaryWithObjectsAndKeys:textAlignment, @"AXTextAlignment", textAlignment, @"AXVisualTextAlignment", nil];
@@ -303,7 +303,7 @@ using namespace ::com::sun::star::uno;
         if (markupRange.length > 0) {
             markupRange.location -= range.location;
             switch(type) {
-                case ::com::sun::star::text::TextMarkupType::SPELLCHECK: {
+                case css::text::TextMarkupType::SPELLCHECK: {
                     [string addAttribute:NSAccessibilityMisspelledTextAttribute value:[NSNumber numberWithBool:YES] range:markupRange];
                     [string addAttribute:@"AXMarkedMisspelled" value:[NSNumber numberWithBool:YES] range:markupRange];
                     break;
@@ -314,7 +314,7 @@ using namespace ::com::sun::star::uno;
 }
 
 +(void)addMarkup:(XAccessibleTextMarkup*)markup toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
-    [AquaA11yTextAttributesWrapper addMarkup:markup withType:(::com::sun::star::text::TextMarkupType::SPELLCHECK) toString:string inRange:range];
+    [AquaA11yTextAttributesWrapper addMarkup:markup withType:(css::text::TextMarkupType::SPELLCHECK) toString:string inRange:range];
 }
 
 +(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange {

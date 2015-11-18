@@ -399,7 +399,7 @@ static AquaSalFrame* getMouseContainerFrame()
         mpFrame->ToTop( SAL_FRAME_TOTOP_RESTOREWHENMIN | SAL_FRAME_TOTOP_GRABFOCUS );
 }
 
--(::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >)accessibleContext
+-(css::uno::Reference < css::accessibility::XAccessibleContext >)accessibleContext
 {
     return mpFrame -> GetWindow() -> GetAccessible() -> getAccessibleContext();
 }
@@ -1131,7 +1131,7 @@ private:
 -(void)moveBackwardAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_BACKWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveRight: (id)aSender
@@ -1149,189 +1149,189 @@ private:
 -(void)moveForwardAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_FORWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordLeft: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_BACKWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordBackward: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_BACKWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordBackwardAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordLeftAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordRight: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordForward: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordForwardAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordRightAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfLine: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToRightEndOfLine: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfLineAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToRightEndOfLineAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfLine: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToLeftEndOfLine: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfLineAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToLeftEndOfLineAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfParagraph: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfParagraphAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveParagraphForward: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveParagraphForwardAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfParagraph: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveParagraphBackward: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfParagraphAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveParagraphBackwardAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfDocument: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)scrollToEndOfDocument: (id)aSender
 {
     (void)aSender;
     // this is not exactly what we should do, but it makes "End" and "Shift-End" behave consistent
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveToEndOfDocumentAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfDocument: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)scrollToBeginningOfDocument: (id)aSender
 {
     (void)aSender;
     // this is not exactly what we should do, but it makes "Home" and "Shift-Home" behave consistent
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveToBeginningOfDocumentAndModifySelection: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
 -(void)moveUp: (id)aSender
@@ -1374,73 +1374,73 @@ private:
 -(void)deleteWordBackward: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_WORD_BACKWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::DELETE_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)deleteWordForward: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_WORD_FORWARD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::DELETE_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)deleteToBeginningOfLine: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::DELETE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)deleteToEndOfLine: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_END_OF_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::DELETE_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
 -(void)deleteToBeginningOfParagraph: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)deleteToEndOfParagraph: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::DELETE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)insertLineBreak: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::INSERT_LINEBREAK character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::INSERT_LINEBREAK character: 0  modifiers: 0];
 }
 
 -(void)insertParagraphSeparator: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::INSERT_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::INSERT_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)selectWord: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_WORD character: 0  modifiers: 0];
 }
 
 -(void)selectLine: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_LINE character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_LINE character: 0  modifiers: 0];
 }
 
 -(void)selectParagraph: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_PARAGRAPH character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)selectAll: (id)aSender
 {
     (void)aSender;
-    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_ALL character: 0  modifiers: 0];
+    [self sendKeyInputAndReleaseToFrame: css::awt::Key::SELECT_ALL character: 0  modifiers: 0];
 }
 
 -(void)cancelOperation: (id)aSender

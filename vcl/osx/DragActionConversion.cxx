@@ -23,7 +23,7 @@
 using namespace com::sun::star::datatransfer::dnd;
 
 /* Convert office drag actions as defined in
-   <type>com::sun::star::datatransfer::dnd::DNDConstants</type>
+   <type>css::datatransfer::dnd::DNDConstants</type>
    into system conform drag actions.
  */
 unsigned int OfficeToSystemDragActions(sal_Int8 dragActions)
@@ -50,7 +50,7 @@ unsigned int OfficeToSystemDragActions(sal_Int8 dragActions)
 
 /* Convert system conform drag actions into office conform
    drag actions as defined in
-   <type>com::sun::star::datatransfer::dnd::DNDConstants</type>.
+   <type>css::datatransfer::dnd::DNDConstants</type>.
  */
 sal_Int8 SystemToOfficeDragActions(unsigned int dragActions)
 {

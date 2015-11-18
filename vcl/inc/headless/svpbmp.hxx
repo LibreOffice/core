@@ -48,7 +48,7 @@ public:
                                     SalGraphics* pGraphics ) override;
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     sal_uInt16 nNewBitCount ) override;
-    virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& rBitmapCanvas,
+    virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) override;
     virtual void            Destroy() override;

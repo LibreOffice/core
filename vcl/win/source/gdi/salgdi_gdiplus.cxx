@@ -36,7 +36,7 @@ bool WinSalGraphics::drawPolyLine(
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
-    com::sun::star::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap)
 {
     return mpImpl->drawPolyLine(rPolygon, fTransparency, rLineWidths,
             eLineJoin, eLineCap);

@@ -79,9 +79,8 @@ public:
 
     virtual bool hasNativeFileSelection() const override { return true; }
 
-    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
-        createFilePicker( const com::sun::star::uno::Reference<
-                              com::sun::star::uno::XComponentContext >& ) override;
+    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >
+        createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
 };
 
 class KDEXLib : public SalXLib

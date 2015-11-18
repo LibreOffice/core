@@ -39,11 +39,11 @@ class JPEGWriter
 
     bool*               mpExpWasGrey;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
 
 public:
     JPEGWriter( SvStream& rStream,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
+                const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                 bool* pExportWasGrey = nullptr );
 
     virtual ~JPEGWriter() {};

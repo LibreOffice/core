@@ -43,25 +43,25 @@
 class SalGtkPicker
 {
     public:
-                 SalGtkPicker( const ::com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext );
+                 SalGtkPicker( const css::uno::Reference<css::uno::XComponentContext>& xContext );
         virtual ~SalGtkPicker();
     protected:
         osl::Mutex m_rbHelperMtx;
         GtkWidget  *m_pDialog;
     protected:
         void SAL_CALL implsetTitle( const OUString& aTitle )
-            throw( ::com::sun::star::uno::RuntimeException );
+            throw( css::uno::RuntimeException );
 
         void SAL_CALL implsetDisplayDirectory( const OUString& rDirectory )
-            throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
+            throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
         OUString SAL_CALL implgetDisplayDirectory(  )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( css::uno::RuntimeException );
         OUString uritounicode(const gchar *pIn);
         OString unicodetouri(const OUString &rURL);
 
         // to instantiate own services
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         static OUString getResString( sal_Int32 aId );
 };
@@ -73,44 +73,44 @@ class SalGtkPicker
 //https://bugzilla.redhat.com/show_bug.cgi?id=441108
 class RunDialog :
     public cppu::WeakComponentImplHelper<
-        ::com::sun::star::awt::XTopWindowListener,
-        ::com::sun::star::frame::XTerminateListener >
+        css::awt::XTopWindowListener,
+        css::frame::XTerminateListener >
 {
 private:
     osl::Mutex maLock;
     GtkWidget *mpDialog;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit>  mxToolkit;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >  mxDesktop;
+    css::uno::Reference< css::awt::XExtendedToolkit>  mxToolkit;
+    css::uno::Reference< css::frame::XDesktop >  mxDesktop;
 public:
 
     // XTopWindowListener
     using cppu::WeakComponentImplHelperBase::disposing;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override {}
-    virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
-    virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
-    virtual void SAL_CALL windowMinimized( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
-    virtual void SAL_CALL windowNormalized( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
-    virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
-    virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL disposing( const css::lang::EventObject& )
+        throw(css::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL windowOpened( const css::lang::EventObject& e )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowClosing( const css::lang::EventObject& )
+        throw (css::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL windowClosed( const css::lang::EventObject& )
+        throw (css::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL windowMinimized( const css::lang::EventObject& )
+        throw (css::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL windowNormalized( const css::lang::EventObject& )
+        throw (css::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL windowActivated( const css::lang::EventObject& )
+        throw (css::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& )
+        throw (css::uno::RuntimeException, std::exception) override {}
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent )
+        throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent )
+        throw(css::uno::RuntimeException, std::exception) override;
 public:
     RunDialog(GtkWidget *pDialog,
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit > &rToolkit,
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop > &rDesktop
+        css::uno::Reference< css::awt::XExtendedToolkit > &rToolkit,
+        css::uno::Reference< css::frame::XDesktop > &rDesktop
         );
     virtual ~RunDialog();
     gint run();

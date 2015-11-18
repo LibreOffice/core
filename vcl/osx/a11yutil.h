@@ -24,8 +24,8 @@
 
 @interface AquaA11yUtil : NSObject {
 }
-+(NSValue *)vclPointToNSPoint:(::com::sun::star::awt::Point)vclPoint;
-+(::com::sun::star::awt::Point)nsPointToVclPoint:(NSValue *)nsPoint;
++(NSValue *)vclPointToNSPoint:(css::awt::Point)vclPoint;
++(css::awt::Point)nsPointToVclPoint:(NSValue *)nsPoint;
 @end
 
 #endif // INCLUDED_VCL_OSX_A11YUTIL_H

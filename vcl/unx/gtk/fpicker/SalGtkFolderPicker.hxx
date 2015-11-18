@@ -28,41 +28,40 @@
 #include "gtk/fpicker/SalGtkPicker.hxx"
 
 class SalGtkFolderPicker :
-        public SalGtkPicker,
-    public cppu::WeakImplHelper<
-        ::com::sun::star::ui::dialogs::XFolderPicker2 >
+    public SalGtkPicker,
+    public cppu::WeakImplHelper< css::ui::dialogs::XFolderPicker2 >
 {
     public:
 
         // constructor
-        SalGtkFolderPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xServiceMgr );
+        SalGtkFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& xServiceMgr );
 
         // XExecutableDialog functions
 
         virtual void SAL_CALL setTitle( const OUString& aTitle )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int16 SAL_CALL execute(  )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XFolderPicker functions
 
         virtual void SAL_CALL setDisplayDirectory( const OUString& rDirectory )
-            throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL getDisplayDirectory(  )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL getDirectory( )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL setDescription( const OUString& rDescription )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XCancellable
 
         virtual void SAL_CALL cancel( )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
         SalGtkFolderPicker( const SalGtkFolderPicker& ) = delete;

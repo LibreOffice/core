@@ -155,9 +155,9 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     if ( !mpVirDev )
     {
         // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
-        throw ::com::sun::star::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             OUString( "Could not create system bitmap!" ),
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
+            css::uno::Reference< css::uno::XInterface >() );
     }
 
     mnBitCount      = ( nBitCount ? nBitCount : pOutDev->GetBitCount() );

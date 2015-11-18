@@ -98,8 +98,7 @@ public:
     long                                          mnDPIX;           // #i100617# read DPI only once per office life
     long                                          mnDPIY;           // #i100617# read DPI only once per office life
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-                                                  mxClipboard;
+    css::uno::Reference< css::uno::XInterface >   mxClipboard;
 
     SalData();
     ~SalData();

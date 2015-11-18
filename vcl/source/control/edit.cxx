@@ -1315,7 +1315,7 @@ void Edit::ImplCopyToSelectionClipboard()
 {
     if ( GetSelection().Len() )
     {
-        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(GetPrimarySelection());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetPrimarySelection());
         ImplCopy( aSelection );
     }
 }
@@ -1336,7 +1336,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                 SolarMutexReleaser aReleaser;
                 xDataObj = rxClipboard->getContents();
             }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
             {
             }
 
@@ -1353,7 +1353,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                     ShowTruncationWarning( this );
                 ReplaceSelected( aText );
             }
-            catch( const ::com::sun::star::uno::Exception& )
+            catch( const css::uno::Exception& )
             {
             }
         }
@@ -1414,7 +1414,7 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     else if ( rMEvt.IsMiddle() && !mbReadOnly &&
               ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
-        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetPrimarySelection());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(Window::GetPrimarySelection());
         ImplPaste( aSelection );
         ImplModified();
     }
@@ -1534,7 +1534,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
     {
         switch ( nCode )
         {
-            case com::sun::star::awt::Key::SELECT_ALL:
+            case css::awt::Key::SELECT_ALL:
             {
                 ImplSetSelection( Selection( 0, maText.getLength() ) );
                 bDone = true;
@@ -1545,22 +1545,22 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             case KEY_RIGHT:
             case KEY_HOME:
             case KEY_END:
-            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
-            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
-            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
-            case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
-            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
-            case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
-            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
-            case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
-            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
-            case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+            case css::awt::Key::MOVE_WORD_FORWARD:
+            case css::awt::Key::SELECT_WORD_FORWARD:
+            case css::awt::Key::MOVE_WORD_BACKWARD:
+            case css::awt::Key::SELECT_WORD_BACKWARD:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+            case css::awt::Key::MOVE_TO_END_OF_LINE:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            case css::awt::Key::SELECT_TO_END_OF_LINE:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             {
                 if ( !rKEvt.GetKeyCode().IsMod2() )
                 {
@@ -1577,31 +1577,31 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 
                     switch( nCode )
                     {
-                    case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+                    case css::awt::Key::MOVE_WORD_FORWARD:
                         bGoRight = bWord = true;break;
-                    case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+                    case css::awt::Key::SELECT_WORD_FORWARD:
                         bGoRight = bSelect = bWord = true;break;
-                    case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+                    case css::awt::Key::MOVE_WORD_BACKWARD:
                         bGoLeft = bWord = true;break;
-                    case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+                    case css::awt::Key::SELECT_WORD_BACKWARD:
                         bGoLeft = bSelect = bWord = true;break;
-                    case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
-                    case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
-                    case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+                    case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+                    case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+                    case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
                         bSelect = true;
                         // fallthrough intended
-                    case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
-                    case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
-                    case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+                    case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+                    case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+                    case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
                         bGoHome = true;break;
-                    case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
-                    case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
-                    case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+                    case css::awt::Key::SELECT_TO_END_OF_LINE:
+                    case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+                    case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
                         bSelect = true;
                         // fallthrough intended
-                    case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
-                    case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
-                    case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+                    case css::awt::Key::MOVE_TO_END_OF_LINE:
+                    case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+                    case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
                         bGoEnd = true;break;
                     default:
                         break;
@@ -1673,10 +1673,10 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             }
             break;
 
-            case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
-            case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
-            case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
-            case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
+            case css::awt::Key::DELETE_WORD_BACKWARD:
+            case css::awt::Key::DELETE_WORD_FORWARD:
+            case css::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+            case css::awt::Key::DELETE_TO_END_OF_LINE:
             case KEY_BACKSPACE:
             case KEY_DELETE:
             {
@@ -1688,19 +1688,19 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         nMode = EDIT_DELMODE_RESTOFCONTENT;
                     switch( nCode )
                     {
-                    case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+                    case css::awt::Key::DELETE_WORD_BACKWARD:
                         nDel = EDIT_DEL_LEFT;
                         nMode = EDIT_DELMODE_RESTOFWORD;
                         break;
-                    case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+                    case css::awt::Key::DELETE_WORD_FORWARD:
                         nDel = EDIT_DEL_RIGHT;
                         nMode = EDIT_DELMODE_RESTOFWORD;
                         break;
-                    case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+                    case css::awt::Key::DELETE_TO_BEGIN_OF_LINE:
                         nDel = EDIT_DEL_LEFT;
                         nMode = EDIT_DELMODE_RESTOFCONTENT;
                         break;
-                    case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
+                    case css::awt::Key::DELETE_TO_END_OF_LINE:
                         nDel = EDIT_DEL_RIGHT;
                         nMode = EDIT_DELMODE_RESTOFCONTENT;
                         break;
@@ -2641,14 +2641,14 @@ void Edit::Copy()
 {
     if ( !(GetStyle() & WB_PASSWORD ) )
     {
-        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
         ImplCopy( aClipboard );
     }
 }
 
 void Edit::Paste()
 {
-        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
     ImplPaste( aClipboard );
 }
 
@@ -2876,8 +2876,8 @@ void Edit::DeletePopupMenu( PopupMenu* pMenu )
     delete pMenu;
 }
 
-// ::com::sun::star::datatransfer::dnd::XDragGestureListener
-void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+// css::datatransfer::dnd::XDragGestureListener
+void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 
@@ -2913,8 +2913,8 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
     }
 }
 
-// ::com::sun::star::datatransfer::dnd::XDragSourceListener
-void Edit::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+// css::datatransfer::dnd::XDragSourceListener
+void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 
@@ -2939,8 +2939,8 @@ void Edit::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDro
     mpDDInfo = nullptr;
 }
 
-// ::com::sun::star::datatransfer::dnd::XDropTargetListener
-void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+// css::datatransfer::dnd::XDropTargetListener
+void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 
@@ -2987,14 +2987,14 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
     rDTDE.Context->dropComplete( bChanges );
 }
 
-void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( !mpDDInfo )
     {
         mpDDInfo = new DDInfo;
     }
     // search for string data type
-    const Sequence< com::sun::star::datatransfer::DataFlavor >& rFlavors( rDTDE.SupportedDataFlavors );
+    const Sequence< css::datatransfer::DataFlavor >& rFlavors( rDTDE.SupportedDataFlavors );
     sal_Int32 nEle = rFlavors.getLength();
     mpDDInfo->bIsStringSupported = false;
     for( sal_Int32 i = 0; i < nEle; i++ )
@@ -3009,14 +3009,14 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
     }
 }
 
-void Edit::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void Edit::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 
     ImplHideDDCursor();
 }
 
-void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void Edit::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 

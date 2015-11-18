@@ -1014,7 +1014,7 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
 
     switch(eLineCap)
     {
-        default: // com::sun::star::drawing::LineCap_BUTT:
+        default: // css::drawing::LineCap_BUTT:
         {
             aCGLineCap = kCGLineCapButt;
             break;

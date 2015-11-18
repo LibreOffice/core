@@ -43,9 +43,9 @@ protected:
 
     ::osl::Mutex                m_aMutex;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener > m_xListener;
+    css::uno::Reference< css::ui::dialogs::XFilePickerListener > m_xListener;
 
-    bool                    m_bExit;
+    bool                        m_bExit;
     ::osl::Condition            m_aExitCondition;
 
     NotifyType                  m_eNotifyType;
@@ -55,18 +55,18 @@ protected:
 public:
     UnxFilePickerNotifyThread( UnxFilePicker *pUnxFilePicker );
 
-    virtual void SAL_CALL addFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
-        throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL removeFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
-        throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
+        throw( css::uno::RuntimeException );
+    virtual void SAL_CALL removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
+        throw( css::uno::RuntimeException );
 
     void SAL_CALL               exit();
 
     void SAL_CALL               fileSelectionChanged();
     /* TODO
-    void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-    OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
-    void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+    void SAL_CALL directoryChanged( css::ui::dialogs::FilePickerEvent aEvent );
+    OUString SAL_CALL helpRequested( css::ui::dialogs::FilePickerEvent aEvent ) const;
+    void SAL_CALL controlStateChanged( css::ui::dialogs::FilePickerEvent aEvent );
     void SAL_CALL dialogSizeChanged( );
      */
 
