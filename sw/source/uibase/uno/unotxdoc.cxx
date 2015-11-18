@@ -3200,7 +3200,7 @@ OUString SwXTextDocument::getPartName(int nPart)
     return OUString(SW_RES(STR_PAGE)) + OUString::number(nPart + 1);
 }
 
-void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
+void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     SolarMutexGuard aGuard;
 
@@ -3222,6 +3222,12 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // Tiled rendering defaults.
     SwViewOption aViewOption(*pViewShell->GetViewOptions());
     aViewOption.SetHardBlank(false);
+    for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
+    {
+        const beans::PropertyValue& rValue = rArguments[i];
+        if (rValue.Name == ".uno:HideWhitespace" && rValue.Value.has<bool>())
+            aViewOption.SetHideWhitespaceMode(rValue.Value.get<bool>());
+    }
     pViewShell->ApplyViewOptions(aViewOption);
 
     // Disable map mode, so that it's possible to send mouse event coordinates
