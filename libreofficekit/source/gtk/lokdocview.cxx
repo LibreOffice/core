@@ -1240,7 +1240,7 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     }
     else
     {
-        pDocView->m_pImpl->m_pDocument->pClass->initializeForRendering(pDocView->m_pImpl->m_pDocument);
+        pDocView->m_pImpl->m_pDocument->pClass->initializeForRendering(pDocView->m_pImpl->m_pDocument, 0);
         pDocView->m_pImpl->m_pDocument->pClass->registerCallback(pDocView->m_pImpl->m_pDocument, &LOKDocView_Impl::callbackWorker, pDocView);
         pDocView->m_pImpl->m_pDocument->pClass->getDocumentSize(pDocView->m_pImpl->m_pDocument, &pDocView->m_pImpl->m_nDocumentWidthTwips, &pDocView->m_pImpl->m_nDocumentHeightTwips);
         g_timeout_add(600, &LOKDocView_Impl::handleTimeout, pDocView);
