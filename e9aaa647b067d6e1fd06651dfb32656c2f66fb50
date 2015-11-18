@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_14481a2d",
+        "filename": "xmloff/source/meta/MetaExportComponent.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2015-11-18T14:58:33Z",
+      "side": 1,
+      "message": "Please keep includes \"sorted\" - next to what it looks like they belong.\nYou would notice that \u003ccom/sun/star/uno/Reference.hxx\u003e is included twice.",
+      "revId": "e9aaa647b067d6e1fd06651dfb32656c2f66fb50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_745526c5",
+        "filename": "xmloff/source/meta/MetaExportComponent.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2015-11-18T14:58:33Z",
+      "side": 1,
+      "message": "This function needs exactly two parameters like all the others have: XComponentContext and Sequence\u003cAny\u003e.\nSee removed XMLMetaExportComponent_createInstance for how to set parameters in XMLMetaExportComponent constructor.",
+      "revId": "e9aaa647b067d6e1fd06651dfb32656c2f66fb50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
