@@ -263,43 +263,6 @@ public:
 };
 
 
-
-/** Toolbox that implements recent files menu for the Open file toolbar button.
-
-To use that, the appropriate Sfx*Item (like Open, OpenFromCalc, or
-OpenFromWriter) has to have SlotType = SfxStringItem, and the appropriate
-module initialization has to call RegisterControl().
-*/
-class SfxRecentFilesToolBoxControl : public SfxToolBoxControl
-{
-public:
-    // We don't use SFX_DECL_TOOLBOX_CONTROL() here as we need to have this
-    // RegisterControl() marked as SFX2_DLLPUBLIC
-    static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx );
-    static void SFX2_DLLPUBLIC RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=nullptr);
-
-    SfxRecentFilesToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
-    virtual ~SfxRecentFilesToolBoxControl();
-
-protected:
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-};
-
-class SfxSaveAsToolBoxControl : public SfxToolBoxControl
-{
-public:
-    // We don't use SFX_DECL_TOOLBOX_CONTROL() here as we need to have this
-    // RegisterControl() marked as SFX2_DLLPUBLIC
-    static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx );
-    static void SFX2_DLLPUBLIC RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=nullptr);
-
-    SfxSaveAsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
-    virtual ~SfxSaveAsToolBoxControl();
-
-protected:
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-};
-
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
 {
 protected:

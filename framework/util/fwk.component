@@ -188,16 +188,12 @@
       constructor="com_sun_star_comp_framework_TabWindowService_get_implementation">
     <service name="com.sun.star.ui.dialogs.TabContainerWindow"/>
   </implementation>
-  <implementation name="org.apache.openoffice.comp.framework.OpenToolbarController"
-      constructor="org_apache_openoffice_comp_framework_OpenToolbarController_get_implementation">
+  <implementation name="com.sun.star.comp.framework.GenericPopupToolbarController"
+      constructor="com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
   <implementation name="org.apache.openoffice.comp.framework.NewToolbarController"
       constructor="org_apache_openoffice_comp_framework_NewToolbarController_get_implementation">
-    <service name="com.sun.star.frame.ToolbarController"/>
-  </implementation>
-  <implementation name="org.apache.openoffice.comp.framework.WizardsToolbarController"
-      constructor="org_apache_openoffice_comp_framework_WizardsToolbarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.SubToolBarController"

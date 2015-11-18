@@ -105,8 +105,6 @@ using namespace ::com::sun::star::ui;
 
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
-SFX_IMPL_TOOLBOX_CONTROL(SfxRecentFilesToolBoxControl, SfxStringItem);
-SFX_IMPL_TOOLBOX_CONTROL(SfxSaveAsToolBoxControl, SfxStringItem);
 
 static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
 {
@@ -1130,110 +1128,6 @@ void SfxPopupWindow::Delete()
 {
     m_aDeleteLink.Call( this );
     disposeOnce();
-}
-
-
-
-SfxRecentFilesToolBoxControl::SfxRecentFilesToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
-    : SfxToolBoxControl( nSlotId, nId, rBox )
-{
-    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN);
-}
-
-SfxRecentFilesToolBoxControl::~SfxRecentFilesToolBoxControl()
-{
-}
-
-VclPtr<SfxPopupWindow> SfxRecentFilesToolBoxControl::CreatePopupWindow()
-{
-    ToolBox& rBox = GetToolBox();
-    sal_uInt16 nItemId = GetId();
-    ::Rectangle aRect( rBox.GetItemRect( nItemId ) );
-
-    Sequence< Any > aArgs( 3 );
-    PropertyValue aPropValue;
-
-    aPropValue.Name = "CommandURL";
-    aPropValue.Value <<= OUString( ".uno:RecentFileList" );
-    aArgs[0] <<= aPropValue;
-
-    aPropValue.Name = "Frame";
-    aPropValue.Value <<= m_xFrame;
-    aArgs[1] <<= aPropValue;
-
-    aPropValue.Name = "ShowRemote";
-    aPropValue.Value <<= true;
-    aArgs[2] <<= aPropValue;
-
-    uno::Reference< frame::XPopupMenuController > xPopupController( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                "com.sun.star.comp.framework.RecentFilesMenuController", aArgs, m_xContext ), UNO_QUERY );
-
-    uno::Reference< awt::XPopupMenu > xPopupMenu( m_xContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.awt.PopupMenu", m_xContext ), uno::UNO_QUERY );
-
-    if ( xPopupController.is() && xPopupMenu.is() )
-    {
-        xPopupController->setPopupMenu( xPopupMenu );
-
-        rBox.SetItemDown( nItemId, true );
-        Reference< awt::XWindowPeer > xPeer( getParent(), uno::UNO_QUERY );
-
-        if ( xPeer.is() )
-            xPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
-
-        rBox.SetItemDown( nItemId, false );
-    }
-
-    return nullptr;
-}
-
-SfxSaveAsToolBoxControl::SfxSaveAsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
-    : SfxToolBoxControl( nSlotId, nId, rBox )
-{
-    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN);
-}
-
-SfxSaveAsToolBoxControl::~SfxSaveAsToolBoxControl()
-{
-}
-
-VclPtr<SfxPopupWindow> SfxSaveAsToolBoxControl::CreatePopupWindow()
-{
-    ToolBox& rBox = GetToolBox();
-    sal_uInt16 nItemId = GetId();
-    ::Rectangle aRect( rBox.GetItemRect( nItemId ) );
-
-    Sequence< Any > aArgs( 2 );
-    PropertyValue aPropValue;
-
-    aPropValue.Name = "CommandURL";
-    aPropValue.Value <<= OUString( ".uno:SaveAsMenu" );
-    aArgs[0] <<= aPropValue;
-
-    aPropValue.Name = "Frame";
-    aPropValue.Value <<= m_xFrame;
-    aArgs[1] <<= aPropValue;
-
-    uno::Reference< frame::XPopupMenuController > xPopupController( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                "com.sun.star.comp.framework.SaveAsMenuController", aArgs, m_xContext ), UNO_QUERY );
-
-    uno::Reference< awt::XPopupMenu > xPopupMenu( m_xContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.awt.PopupMenu", m_xContext ), uno::UNO_QUERY );
-
-    if ( xPopupController.is() && xPopupMenu.is() )
-    {
-        xPopupController->setPopupMenu( xPopupMenu );
-
-        rBox.SetItemDown( nItemId, true );
-        Reference< awt::XWindowPeer > xPeer( getParent(), uno::UNO_QUERY );
-
-        if ( xPeer.is() )
-            xPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
-
-        rBox.SetItemDown( nItemId, false );
-    }
-
-    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

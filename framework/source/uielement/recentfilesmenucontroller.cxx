@@ -127,7 +127,7 @@ RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno:
     for ( sal_Int32 i = 0; i < args.getLength(); ++i )
     {
         args[i] >>= aPropValue;
-        if ( aPropValue.Name == "ShowRemote" )
+        if ( aPropValue.Name == "InToolbar" )
         {
             aPropValue.Value >>= m_bShowRemote;
             break;

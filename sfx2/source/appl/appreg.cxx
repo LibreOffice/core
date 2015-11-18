@@ -61,8 +61,7 @@ void SfxApplication::Registrations_Impl()
     // Controller
     SfxToolBoxControl::RegisterControl(SID_REPEAT);
     SfxURLToolBoxControl_Impl::RegisterControl(SID_OPENURL);
-    SfxRecentFilesToolBoxControl::RegisterControl( SID_OPENDOC );
-};
+}
 
 
 
