@@ -107,7 +107,7 @@ DEFAULTS = \
     'svx.svx'                           : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #  20.7
     'svx.svxcore'                       : ( 7, EXCLUDE, INCLUDE, EXCLUDE), #  37.0
     'sw.msword'                         : ( 4, EXCLUDE, INCLUDE, INCLUDE), #  22.4
-    'sw.sw'                             : (11, EXCLUDE, EXCLUDE, INCLUDE), # 212.3
+    'sw.sw'                             : ( 7, EXCLUDE, EXCLUDE, INCLUDE), # 129.6
     'sw.swui'                           : ( 3, EXCLUDE, INCLUDE, INCLUDE), #  26.1
     'sw.vbaswobj'                       : ( 4, EXCLUDE, INCLUDE, INCLUDE), #  13.1
     'tools.tl'                          : ( 5, EXCLUDE, EXCLUDE, EXCLUDE), #   4.2
@@ -117,7 +117,7 @@ DEFAULTS = \
     'vbahelper.msforms'                 : ( 3, EXCLUDE, INCLUDE, INCLUDE), #   5.2
     'vbahelper.vbahelper'               : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #   7.0
     'vcl.vcl'                           : ( 6, EXCLUDE, INCLUDE, INCLUDE), #  35.7
-    'writerfilter.writerfilter'         : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #  15.8
+    'writerfilter.writerfilter'         : ( 5, EXCLUDE, EXCLUDE, EXCLUDE), #  19.7/27.3
     'xmloff.xo'                         : ( 7, EXCLUDE, INCLUDE, INCLUDE), #  22.1
     'xmloff.xof'                        : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #   4.4
     'xmlscript.xmlscript'               : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #   3.6
@@ -392,10 +392,6 @@ def filter_ignore(line, module):
     if module == 'svx':
         ignore_list += [
             'tbunosearchcontrollers.hxx', # Anonymous namespace
-            ]
-    if module == 'sw':
-        ignore_list += [
-            'com/sun/star/ucb/NameClash.hpp', # conflicts with ERROR from Windows.h
             ]
     if module == 'vcl':
         ignore_list += [
@@ -748,8 +744,8 @@ def generate(includes, libname, filename, module):
         if module == 'svx' and libname == 'svx':
             svx_define = """
 #ifdef WNT
-#define UNICODE
-#define _UNICODE
+#   define UNICODE
+#   define _UNICODE
 #endif
 """
             f.write(svx_define)
@@ -759,12 +755,14 @@ def generate(includes, libname, filename, module):
         for i in includes:
             f.write(i + '\n')
 
-        # ado needs to guard against macro polution
-        if module == 'connectivity' and libname == 'ado':
+        # Some libraries pull windows headers that aren't self contained.
+        if (module == 'connectivity' and libname == 'ado') or \
+           (module == 'xmlsecurity' and libname == 'xsec_xmlsec'):
             ado_define = """
-// Prevent windows header macro pollution.
-#undef OPTIONAL
-#undef DELETE
+// Cleanup windows header macro pollution.
+#ifdef WNT
+#   include <postwin.h>
+#endif
 """
             f.write(ado_define)
 
@@ -835,8 +833,7 @@ def main():
     header = make_pch_filename(root, module, libname)
 
     if not os.path.exists(os.path.join(root, module)):
-        raise Exception('Error: module [' + str(module) +
-            '] not found. Not running from the root of LO repository?')
+        raise Exception('Error: module [{}] not found.'.format(module))
 
     key = '{}.{}'.format(module, libname)
     if key in DEFAULTS:

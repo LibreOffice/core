@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2015-12-02 12:47:53 using:
  ./bin/update_pch connectivity odbc --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,8 +22,6 @@
 
 #include <algorithm>
 #include <cstddef>
-#include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -38,10 +36,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <sal/typesizes.h>
 #include <salhelper/singletonref.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
