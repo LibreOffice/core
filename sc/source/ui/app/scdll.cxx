@@ -148,9 +148,6 @@ void ScDLL::Init()
     ScMediaShell        ::RegisterInterface(pMod);
     ScPageBreakShell    ::RegisterInterface(pMod);
 
-    SfxRecentFilesToolBoxControl::RegisterControl(SID_OPEN_CALC, pMod);
-    SfxSaveAsToolBoxControl::RegisterControl(SID_SAVEDOC, pMod );
-
     // Own Controller
     ScZoomSliderControl ::RegisterControl(SID_PREVIEW_SCALINGFACTOR, pMod);
 

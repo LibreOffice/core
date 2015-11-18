@@ -892,7 +892,7 @@
           <value>com.sun.star.report.ReportToolboxController</value>
         </prop>
       </node>
-      <node oor:name="org.apache.openoffice.comp.framework.OpenToolbarController" oor:op="replace">
+      <node oor:name="OpenToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:Open</value>
         </prop>
@@ -900,7 +900,52 @@
           <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>org.apache.openoffice.comp.framework.OpenToolbarController</value>
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:RecentFileList</value>
+        </prop>
+      </node>
+      <node oor:name="WriterOpenToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:OpenFromWriter</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.text.TextDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:RecentFileList</value>
+        </prop>
+      </node>
+      <node oor:name="CalcOpenToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:OpenFromCalc</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:RecentFileList</value>
+        </prop>
+      </node>
+      <node oor:name="SaveToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Save</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:SaveAsMenu</value>
         </prop>
       </node>
       <node oor:name="org.apache.openoffice.comp.framework.NewToolbarController" oor:op="replace">
@@ -914,7 +959,7 @@
           <value>org.apache.openoffice.comp.framework.NewToolbarController</value>
         </prop>
       </node>
-      <node oor:name="org.apache.openoffice.comp.framework.WizardsToolbarController" oor:op="replace">
+      <node oor:name="WizardsToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:AutoPilotMenu</value>
         </prop>
@@ -922,7 +967,7 @@
           <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>org.apache.openoffice.comp.framework.WizardsToolbarController</value>
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
         </prop>
       </node>
     </node>

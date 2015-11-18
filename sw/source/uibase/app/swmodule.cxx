@@ -286,7 +286,6 @@ void SwDLL::RegisterControls()
 {
     SwModule* pMod = SW_MOD();
 
-    SfxRecentFilesToolBoxControl::RegisterControl( FN_OPEN_FILE, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
     SwTbxAnchor::RegisterControl(FN_TOOL_ANCHOR, pMod );
     SwTbxFieldCtrl::RegisterControl(FN_INSERT_FIELD_CTRL, pMod );
@@ -295,7 +294,6 @@ void SwDLL::RegisterControls()
 
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 
-    SfxSaveAsToolBoxControl::RegisterControl(SID_SAVEDOC, pMod );
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
     SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );
     SvxUndoRedoControl::RegisterControl(SID_REDO, pMod );

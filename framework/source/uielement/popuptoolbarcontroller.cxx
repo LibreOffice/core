@@ -20,6 +20,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <rtl/ref.hxx>
 #include <svtools/imagemgr.hxx>
@@ -41,8 +42,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
-
-#define UNO_COMMAND_RECENT_FILE_LIST    ".uno:RecentFileList"
 
 using namespace framework;
 
@@ -74,11 +73,11 @@ protected:
     void createPopupMenuController();
 
     css::uno::Reference< css::uno::XComponentContext >      m_xContext;
-    bool                                                m_bHasController;
+    bool                                                    m_bHasController;
+    OUString                                                m_aPopupCommand;
     css::uno::Reference< css::awt::XPopupMenu >             m_xPopupMenu;
 
 private:
-    OUString m_aPopupCommand;
     css::uno::Reference< css::frame::XUIControllerFactory > m_xPopupMenuFactory;
     css::uno::Reference< css::frame::XPopupMenuController > m_xPopupMenuController;
 };
@@ -217,16 +216,11 @@ void PopupMenuToolbarController::createPopupMenuController()
 
     if ( !m_xPopupMenuController.is() )
     {
-        css::uno::Sequence< css::uno::Any > aArgs( 2 );
-        css::beans::PropertyValue aProp;
+        css::uno::Sequence< css::uno::Any > aArgs( 3 );
+        aArgs[0] <<= comphelper::makePropertyValue( "Frame", m_xFrame );
+        aArgs[1] <<= comphelper::makePropertyValue( "ModuleIdentifier", getModuleName() );
+        aArgs[2] <<= comphelper::makePropertyValue( "InToolbar", true );
 
-        aProp.Name = "Frame";
-        aProp.Value <<= m_xFrame;
-        aArgs[0] <<= aProp;
-
-        aProp.Name = "ModuleIdentifier";
-        aProp.Value <<= getModuleName();
-        aArgs[1] <<= aProp;
         try
         {
             m_xPopupMenu.set(
@@ -247,10 +241,11 @@ void PopupMenuToolbarController::createPopupMenuController()
     }
 }
 
-class WizardsToolbarController : public PopupMenuToolbarController
+class GenericPopupToolbarController : public PopupMenuToolbarController
 {
 public:
-    WizardsToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    GenericPopupToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                   const css::uno::Sequence< css::uno::Any >& rxArgs );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException) override;
@@ -260,75 +255,51 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) override;
 
 private:
+    bool m_bSplitButton;
     ToolBoxItemBits getDropDownStyle() const override;
 };
 
-WizardsToolbarController::WizardsToolbarController(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext )
+GenericPopupToolbarController::GenericPopupToolbarController(
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Sequence< css::uno::Any >& rxArgs )
     : PopupMenuToolbarController( xContext )
+    , m_bSplitButton( false )
 {
+    css::beans::PropertyValue aPropValue;
+    for ( const auto& arg: rxArgs )
+    {
+        if ( ( arg >>= aPropValue ) && aPropValue.Name == "Value" )
+        {
+            aPropValue.Value >>= m_aPopupCommand;
+            break;
+        }
+    }
+    if ( !m_aPopupCommand.isEmpty() )
+        m_bSplitButton = true;
 }
 
-OUString WizardsToolbarController::getImplementationName()
+OUString GenericPopupToolbarController::getImplementationName()
     throw (css::uno::RuntimeException)
 {
-    return OUString("org.apache.openoffice.comp.framework.WizardsToolbarController");
+    return OUString("com.sun.star.comp.framework.GenericPopupToolbarController");
 }
 
-sal_Bool WizardsToolbarController::supportsService(OUString const & rServiceName)
+sal_Bool GenericPopupToolbarController::supportsService(OUString const & rServiceName)
     throw (css::uno::RuntimeException)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
-css::uno::Sequence<OUString> WizardsToolbarController::getSupportedServiceNames()
+css::uno::Sequence<OUString> GenericPopupToolbarController::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
     return aRet;
 }
 
-ToolBoxItemBits WizardsToolbarController::getDropDownStyle() const
+ToolBoxItemBits GenericPopupToolbarController::getDropDownStyle() const
 {
-    return ToolBoxItemBits::DROPDOWNONLY;
-}
-
-class OpenToolbarController : public PopupMenuToolbarController
-{
-public:
-    OpenToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException) override;
-
-    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) throw (css::uno::RuntimeException) override;
-
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) override;
-};
-
-OpenToolbarController::OpenToolbarController(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : PopupMenuToolbarController( xContext, UNO_COMMAND_RECENT_FILE_LIST )
-{
-}
-
-OUString OpenToolbarController::getImplementationName()
-    throw (css::uno::RuntimeException)
-{
-    return OUString("org.apache.openoffice.comp.framework.OpenToolbarController");
-}
-
-sal_Bool OpenToolbarController::supportsService(OUString const & rServiceName)
-    throw (css::uno::RuntimeException)
-{
-    return cppu::supportsService( this, rServiceName );
-}
-
-css::uno::Sequence<OUString> OpenToolbarController::getSupportedServiceNames()
-    throw (css::uno::RuntimeException)
-{
-    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
-    return aRet;
+    return m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY;
 }
 
 class NewToolbarController : public PopupMenuToolbarController
@@ -575,19 +546,11 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-org_apache_openoffice_comp_framework_WizardsToolbarController_get_implementation(
+com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<css::uno::Any> const &args)
 {
-    return cppu::acquire(new WizardsToolbarController(context));
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-org_apache_openoffice_comp_framework_OpenToolbarController_get_implementation(
-    css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new OpenToolbarController(context));
+    return cppu::acquire(new GenericPopupToolbarController(context, args));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
