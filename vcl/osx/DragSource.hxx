@@ -70,9 +70,9 @@ class AquaSalFrame;
 @end
 
 class DragSource : public ::cppu::BaseMutex,
-                   public ::cppu::WeakComponentImplHelper< com::sun::star::datatransfer::dnd::XDragSource,
-                                                            com::sun::star::lang::XInitialization,
-                                                            com::sun::star::lang::XServiceInfo >,
+                   public ::cppu::WeakComponentImplHelper< css::datatransfer::dnd::XDragSource,
+                                                            css::lang::XInitialization,
+                                                            css::lang::XServiceInfo >,
                    private ::boost::noncopyable
 {
 public:
@@ -80,47 +80,47 @@ public:
   virtual ~DragSource();
 
   // XInitialization
-  virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-    throw(com::sun::star::uno::Exception, std::exception/*, com::sun::star::uno::RuntimeException*/) override;
+  virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw(css::uno::Exception, std::exception/*, css::uno::RuntimeException*/) override;
 
   // XDragSource
-  virtual sal_Bool SAL_CALL isDragImageSupported(  ) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+  virtual sal_Bool SAL_CALL isDragImageSupported(  ) throw(css::uno::RuntimeException, std::exception) override;
 
   virtual sal_Int32 SAL_CALL getDefaultCursor(sal_Int8 dragAction)
-    throw(com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException, std::exception) override;
+    throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
-  virtual void SAL_CALL startDrag( const com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
+  virtual void SAL_CALL startDrag( const css::datatransfer::dnd::DragGestureEvent& trigger,
                                    sal_Int8 sourceActions,
                                    sal_Int32 cursor,
                                    sal_Int32 image,
-                                   const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& transferable,
-                                   const com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDragSourceListener >& listener )
-    throw(com::sun::star::uno::RuntimeException, std::exception) override;
+                                   const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
+                                   const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener )
+    throw(css::uno::RuntimeException, std::exception) override;
 
   // XServiceInfo
-  virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) override;
+  virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception) override;
+  virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
   void saveMouseEvent(NSEvent* theEvent);
   unsigned int getSupportedDragOperations(bool isLocal) const;
 
 public:
   // The context notifies the XDragSourceListeners
-  com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDragSourceContext > mXCurrentContext;
+  css::uno::Reference< css::datatransfer::dnd::XDragSourceContext > mXCurrentContext;
 
   id mView;
   AquaSalFrame* mpFrame;
   NSEvent* mLastMouseEventBeforeStartDrag;
   DragSourceHelper* mDragSourceHelper;
-  com::sun::star::awt::MouseEvent mMouseEvent;
-  com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > mXTransferable;
-  com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDragSourceListener > mXDragSrcListener;
+  css::awt::MouseEvent mMouseEvent;
+  css::uno::Reference< css::datatransfer::XTransferable > mXTransferable;
+  css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mXDragSrcListener;
   // The mouse button that set off the drag and drop operation
   short m_MouseButton;
   sal_Int8 mDragSourceActions;
 
-  static com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > g_XTransferable;
+  static css::uno::Reference< css::datatransfer::XTransferable > g_XTransferable;
   static NSView* g_DragSourceView;
   static bool    g_DropSuccessSet;
   static bool    g_DropSuccess;

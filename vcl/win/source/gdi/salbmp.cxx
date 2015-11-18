@@ -685,13 +685,13 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
     return bRet;
 }
 
-bool WinSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& rBitmapCanvas, Size& /*rSize*/, bool bMask )
+bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas, Size& /*rSize*/, bool bMask )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >
-        xFastPropertySet( rBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::beans::XFastPropertySet >
+        xFastPropertySet( rBitmapCanvas, css::uno::UNO_QUERY );
 
     if( xFastPropertySet.get() ) {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > args;
+        css::uno::Sequence< css::uno::Any > args;
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
             sal_Int64 aHBmp64;

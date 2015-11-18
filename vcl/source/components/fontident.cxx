@@ -107,46 +107,46 @@ Any SAL_CALL FontIdentificator::getMaterial() throw(RuntimeException, std::excep
     aFD.Type                = 0;
     switch( m_aFont.GetFamily() )
     {
-    case FAMILY_DECORATIVE: aFD.Family = com::sun::star::awt::FontFamily::DECORATIVE;break;
-    case FAMILY_MODERN: aFD.Family = com::sun::star::awt::FontFamily::MODERN;break;
-    case FAMILY_ROMAN: aFD.Family = com::sun::star::awt::FontFamily::ROMAN;break;
-    case FAMILY_SCRIPT: aFD.Family = com::sun::star::awt::FontFamily::SCRIPT;break;
-    case FAMILY_SWISS: aFD.Family = com::sun::star::awt::FontFamily::SWISS;break;
-    case FAMILY_SYSTEM: aFD.Family = com::sun::star::awt::FontFamily::SYSTEM;break;
+    case FAMILY_DECORATIVE: aFD.Family = css::awt::FontFamily::DECORATIVE;break;
+    case FAMILY_MODERN: aFD.Family = css::awt::FontFamily::MODERN;break;
+    case FAMILY_ROMAN: aFD.Family = css::awt::FontFamily::ROMAN;break;
+    case FAMILY_SCRIPT: aFD.Family = css::awt::FontFamily::SCRIPT;break;
+    case FAMILY_SWISS: aFD.Family = css::awt::FontFamily::SWISS;break;
+    case FAMILY_SYSTEM: aFD.Family = css::awt::FontFamily::SYSTEM;break;
     default:
-        aFD.Family = com::sun::star::awt::FontFamily::DONTKNOW;
+        aFD.Family = css::awt::FontFamily::DONTKNOW;
         break;
     }
     switch( m_aFont.GetPitch() )
     {
-    case PITCH_VARIABLE: aFD.Pitch = com::sun::star::awt::FontPitch::VARIABLE;break;
-    case PITCH_FIXED: aFD.Pitch = com::sun::star::awt::FontPitch::FIXED;break;
+    case PITCH_VARIABLE: aFD.Pitch = css::awt::FontPitch::VARIABLE;break;
+    case PITCH_FIXED: aFD.Pitch = css::awt::FontPitch::FIXED;break;
     default:
-        aFD.Pitch = com::sun::star::awt::FontPitch::DONTKNOW;
+        aFD.Pitch = css::awt::FontPitch::DONTKNOW;
         break;
     }
     switch( m_aFont.GetWeight() )
     {
-    case WEIGHT_THIN: aFD.Weight = com::sun::star::awt::FontWeight::THIN;break;
-    case WEIGHT_ULTRALIGHT: aFD.Weight = com::sun::star::awt::FontWeight::ULTRALIGHT;break;
-    case WEIGHT_LIGHT: aFD.Weight = com::sun::star::awt::FontWeight::LIGHT;break;
-    case WEIGHT_SEMILIGHT: aFD.Weight = com::sun::star::awt::FontWeight::SEMILIGHT;break;
+    case WEIGHT_THIN: aFD.Weight = css::awt::FontWeight::THIN;break;
+    case WEIGHT_ULTRALIGHT: aFD.Weight = css::awt::FontWeight::ULTRALIGHT;break;
+    case WEIGHT_LIGHT: aFD.Weight = css::awt::FontWeight::LIGHT;break;
+    case WEIGHT_SEMILIGHT: aFD.Weight = css::awt::FontWeight::SEMILIGHT;break;
     case WEIGHT_MEDIUM:
-    case WEIGHT_NORMAL: aFD.Weight = com::sun::star::awt::FontWeight::NORMAL;break;
-    case WEIGHT_SEMIBOLD: aFD.Weight = com::sun::star::awt::FontWeight::SEMIBOLD;break;
-    case WEIGHT_BOLD: aFD.Weight = com::sun::star::awt::FontWeight::BOLD;break;
-    case WEIGHT_ULTRABOLD: aFD.Weight = com::sun::star::awt::FontWeight::ULTRABOLD;break;
-    case WEIGHT_BLACK: aFD.Weight = com::sun::star::awt::FontWeight::BLACK;break;
+    case WEIGHT_NORMAL: aFD.Weight = css::awt::FontWeight::NORMAL;break;
+    case WEIGHT_SEMIBOLD: aFD.Weight = css::awt::FontWeight::SEMIBOLD;break;
+    case WEIGHT_BOLD: aFD.Weight = css::awt::FontWeight::BOLD;break;
+    case WEIGHT_ULTRABOLD: aFD.Weight = css::awt::FontWeight::ULTRABOLD;break;
+    case WEIGHT_BLACK: aFD.Weight = css::awt::FontWeight::BLACK;break;
     default:
-        aFD.Weight = com::sun::star::awt::FontWeight::DONTKNOW;
+        aFD.Weight = css::awt::FontWeight::DONTKNOW;
         break;
     }
     switch( m_aFont.GetItalic() )
     {
-    case ITALIC_OBLIQUE: aFD.Slant = com::sun::star::awt::FontSlant_OBLIQUE;break;
-    case ITALIC_NORMAL: aFD.Slant = com::sun::star::awt::FontSlant_ITALIC;break;
+    case ITALIC_OBLIQUE: aFD.Slant = css::awt::FontSlant_OBLIQUE;break;
+    case ITALIC_NORMAL: aFD.Slant = css::awt::FontSlant_ITALIC;break;
     default:
-        aFD.Slant = com::sun::star::awt::FontSlant_DONTKNOW;
+        aFD.Slant = css::awt::FontSlant_DONTKNOW;
         break;
     }
     return makeAny( aFD );

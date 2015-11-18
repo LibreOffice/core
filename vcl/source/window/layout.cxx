@@ -28,7 +28,7 @@ VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
 
 sal_uInt16 VclContainer::getDefaultAccessibleRole() const
 {
-    return com::sun::star::accessibility::AccessibleRole::PANEL;
+    return css::accessibility::AccessibleRole::PANEL;
 }
 
 Size VclContainer::GetOptimalSize() const
@@ -327,9 +327,9 @@ sal_uInt16 VclBox::getDefaultAccessibleRole() const
 #if defined(WNT)
     //fdo#74284 call Boxes Panels, keep then as "Filler" under
     //at least Linux seeing as that's what Gtk does for GtkBoxes
-    return com::sun::star::accessibility::AccessibleRole::PANEL;
+    return css::accessibility::AccessibleRole::PANEL;
 #else
-    return com::sun::star::accessibility::AccessibleRole::FILLER;
+    return css::accessibility::AccessibleRole::FILLER;
 #endif
 }
 

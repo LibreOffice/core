@@ -37,18 +37,18 @@
 // rAccessibleXYZ as a field in an Objective-C-Class would not call Con-/Destructor, so use a struct instead
 struct ReferenceWrapper
 {
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleAction > rAccessibleAction;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext > rAccessibleContext;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleComponent > rAccessibleComponent;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleExtendedComponent > rAccessibleExtendedComponent;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleSelection > rAccessibleSelection;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleTable > rAccessibleTable;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleText > rAccessibleText;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleEditableText > rAccessibleEditableText;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleValue > rAccessibleValue;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleTextAttributes > rAccessibleTextAttributes;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleMultiLineText > rAccessibleMultiLineText;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleTextMarkup > rAccessibleTextMarkup;
+    css::uno::Reference < css::accessibility::XAccessibleAction > rAccessibleAction;
+    css::uno::Reference < css::accessibility::XAccessibleContext > rAccessibleContext;
+    css::uno::Reference < css::accessibility::XAccessibleComponent > rAccessibleComponent;
+    css::uno::Reference < css::accessibility::XAccessibleExtendedComponent > rAccessibleExtendedComponent;
+    css::uno::Reference < css::accessibility::XAccessibleSelection > rAccessibleSelection;
+    css::uno::Reference < css::accessibility::XAccessibleTable > rAccessibleTable;
+    css::uno::Reference < css::accessibility::XAccessibleText > rAccessibleText;
+    css::uno::Reference < css::accessibility::XAccessibleEditableText > rAccessibleEditableText;
+    css::uno::Reference < css::accessibility::XAccessibleValue > rAccessibleValue;
+    css::uno::Reference < css::accessibility::XAccessibleTextAttributes > rAccessibleTextAttributes;
+    css::uno::Reference < css::accessibility::XAccessibleMultiLineText > rAccessibleMultiLineText;
+    css::uno::Reference < css::accessibility::XAccessibleTextMarkup > rAccessibleTextMarkup;
 };
 
 @interface AquaA11yWrapper : NSView
@@ -87,22 +87,22 @@ struct ReferenceWrapper
 -(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup;
 -(BOOL)actsAsRadioGroup;
 -(NSWindow*)windowForParent;
--(id)initWithAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) anAccessibleContext;
--(void) setDefaults: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext;
+-(id)initWithAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) anAccessibleContext;
+-(void) setDefaults: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
 -(void) dealloc;
 +(void)setPopupMenuOpen:(BOOL)popupMenuOpen;
--(::com::sun::star::accessibility::XAccessibleAction *)accessibleAction;
--(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
--(::com::sun::star::accessibility::XAccessibleComponent *)accessibleComponent;
--(::com::sun::star::accessibility::XAccessibleExtendedComponent *)accessibleExtendedComponent;
--(::com::sun::star::accessibility::XAccessibleSelection *)accessibleSelection;
--(::com::sun::star::accessibility::XAccessibleTable *)accessibleTable;
--(::com::sun::star::accessibility::XAccessibleText *)accessibleText;
--(::com::sun::star::accessibility::XAccessibleEditableText *)accessibleEditableText;
--(::com::sun::star::accessibility::XAccessibleValue *)accessibleValue;
--(::com::sun::star::accessibility::XAccessibleTextAttributes *)accessibleTextAttributes;
--(::com::sun::star::accessibility::XAccessibleMultiLineText *)accessibleMultiLineText;
--(::com::sun::star::accessibility::XAccessibleTextMarkup *)accessibleTextMarkup;
+-(css::accessibility::XAccessibleAction *)accessibleAction;
+-(css::accessibility::XAccessibleContext *)accessibleContext;
+-(css::accessibility::XAccessibleComponent *)accessibleComponent;
+-(css::accessibility::XAccessibleExtendedComponent *)accessibleExtendedComponent;
+-(css::accessibility::XAccessibleSelection *)accessibleSelection;
+-(css::accessibility::XAccessibleTable *)accessibleTable;
+-(css::accessibility::XAccessibleText *)accessibleText;
+-(css::accessibility::XAccessibleEditableText *)accessibleEditableText;
+-(css::accessibility::XAccessibleValue *)accessibleValue;
+-(css::accessibility::XAccessibleTextAttributes *)accessibleTextAttributes;
+-(css::accessibility::XAccessibleMultiLineText *)accessibleMultiLineText;
+-(css::accessibility::XAccessibleTextMarkup *)accessibleTextMarkup;
 @end
 
 #endif // INCLUDED_VCL_INC_OSX_A11YWRAPPER_H

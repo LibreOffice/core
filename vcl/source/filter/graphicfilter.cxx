@@ -1319,7 +1319,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
-                                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData,
+                                     css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                      WMF_EXTERNALHEADER *pExtHeader )
 {
     OUString                aFilterName;
@@ -2000,7 +2000,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                     {
                         if ( (*pFilterData)[ i ].Name == "AdditionalChunks" )
                         {
-                            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aAdditionalChunkSequence;
+                            css::uno::Sequence< css::beans::PropertyValue > aAdditionalChunkSequence;
                             if ( (*pFilterData)[ i ].Value >>= aAdditionalChunkSequence )
                             {
                                 for ( j = 0; j < aAdditionalChunkSequence.getLength(); j++ )
@@ -2013,7 +2013,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                                             nChunkType <<= 8;
                                             nChunkType |= (sal_uInt8)aAdditionalChunkSequence[ j ].Name[ k ];
                                         }
-                                        com::sun::star::uno::Sequence< sal_Int8 > aByteSeq;
+                                        css::uno::Sequence< sal_Int8 > aByteSeq;
                                         if ( aAdditionalChunkSequence[ j ].Value >>= aByteSeq )
                                         {
                                             std::vector< vcl::PNGWriter::ChunkData >& rChunkData = aPNGWriter.GetChunks();

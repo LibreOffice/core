@@ -568,7 +568,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     sal_Int16 nLineCap(0);
                     rIStm.ReadInt16( nLineCap );
-                    aLineInfo.SetLineCap((com::sun::star::drawing::LineCap)nLineCap);
+                    aLineInfo.SetLineCap((css::drawing::LineCap)nLineCap);
                 }
                 break;
 
@@ -1449,7 +1449,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const LineInfo& rInfo = pAct->GetLineInfo();
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLineJoin::Round != rInfo.GetLineJoin());
-                const bool bLineCap(bFatLine && com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap());
+                const bool bLineCap(bFatLine && css::drawing::LineCap_BUTT != rInfo.GetLineCap());
                 const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
                 if( bFatLine )
@@ -1605,7 +1605,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const sal_uInt16 nPoints(aSimplePoly.GetSize());
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLineJoin::Round != rInfo.GetLineJoin());
-                const bool bLineCap(bFatLine && com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap());
+                const bool bLineCap(bFatLine && css::drawing::LineCap_BUTT != rInfo.GetLineCap());
                 const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
                 if( bFatLine )

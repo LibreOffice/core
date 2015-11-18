@@ -158,12 +158,12 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
              this, SLOT( getCurrentFilterSlot() ), Qt::BlockingQueuedConnection );
 
     // XFilterGroupManager functions
-    connect( this, SIGNAL( appendFilterGroupSignal( const OUString &, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > & ) ),
-             this, SLOT( appendFilterGroupSlot( const OUString &, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( appendFilterGroupSignal( const OUString &, const css::uno::Sequence< css::beans::StringPair > & ) ),
+             this, SLOT( appendFilterGroupSlot( const OUString &, const css::uno::Sequence< css::beans::StringPair > & ) ), Qt::BlockingQueuedConnection );
 
     // XFilePickerControlAccess functions
-    connect( this, SIGNAL( setValueSignal( sal_Int16, sal_Int16, const ::com::sun::star::uno::Any & ) ),
-             this, SLOT( setValueSlot( sal_Int16, sal_Int16, const ::com::sun::star::uno::Any & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( setValueSignal( sal_Int16, sal_Int16, const css::uno::Any & ) ),
+             this, SLOT( setValueSlot( sal_Int16, sal_Int16, const css::uno::Any & ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( getValueSignal( sal_Int16, sal_Int16 ) ),
              this, SLOT( getValueSlot( sal_Int16, sal_Int16 ) ), Qt::BlockingQueuedConnection );
     connect( this, SIGNAL( enableControlSignal( sal_Int16, bool ) ),
@@ -178,8 +178,8 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
              this, SLOT( getSelectedFilesSlot() ), Qt::BlockingQueuedConnection );
 
     // XInitialization
-    connect( this, SIGNAL( initializeSignal( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & ) ),
-             this, SLOT( initializeSlot( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & ) ), Qt::BlockingQueuedConnection );
+    connect( this, SIGNAL( initializeSignal( const css::uno::Sequence< css::uno::Any > & ) ),
+             this, SLOT( initializeSlot( const css::uno::Sequence< css::uno::Any > & ) ), Qt::BlockingQueuedConnection );
 
     // Destructor proxy
     connect( this, SIGNAL( cleanupProxySignal() ), this, SLOT( cleanupProxy() ), Qt::BlockingQueuedConnection );

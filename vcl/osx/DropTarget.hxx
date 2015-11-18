@@ -73,11 +73,11 @@ class AquaSalFrame;
 @end
 
 class DropTarget: public cppu::BaseMutex,
-                  public cppu::WeakComponentImplHelper< com::sun::star::lang::XInitialization,
-                                                         com::sun::star::datatransfer::dnd::XDropTarget,
-                                                         com::sun::star::datatransfer::dnd::XDropTargetDragContext,
-                                                         com::sun::star::datatransfer::dnd::XDropTargetDropContext,
-                                                         com::sun::star::lang::XServiceInfo >,
+                  public cppu::WeakComponentImplHelper< css::lang::XInitialization,
+                                                         css::datatransfer::dnd::XDropTarget,
+                                                         css::datatransfer::dnd::XDropTargetDragContext,
+                                                         css::datatransfer::dnd::XDropTargetDropContext,
+                                                         css::lang::XServiceInfo >,
                   private boost::noncopyable
 {
 public:
@@ -90,35 +90,35 @@ public:
   virtual void SAL_CALL disposing() override;
 
   // XInitialization
-  virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-    throw(com::sun::star::uno::Exception, std::exception) override;
+  virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw(css::uno::Exception, std::exception) override;
 
   // XDropTarget
-  virtual void SAL_CALL addDropTargetListener( const com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener >& dtl )
-    throw(com::sun::star::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl )
+    throw(css::uno::RuntimeException, std::exception) override;
 
-  virtual void SAL_CALL removeDropTargetListener( const com::sun::star::uno::Reference<  com::sun::star::datatransfer::dnd::XDropTargetListener >& dtl )
-    throw(com::sun::star::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL removeDropTargetListener( const css::uno::Reference<  css::datatransfer::dnd::XDropTargetListener >& dtl )
+    throw(css::uno::RuntimeException, std::exception) override;
 
   // Default is not active
-  virtual sal_Bool SAL_CALL isActive() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL setActive(sal_Bool isActive) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual sal_Int8 SAL_CALL getDefaultActions() throw(com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL setDefaultActions(sal_Int8 actions) throw(com::sun::star::uno::RuntimeException, std::exception) override;
+  virtual sal_Bool SAL_CALL isActive() throw(css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL setActive(sal_Bool isActive) throw(css::uno::RuntimeException, std::exception) override;
+  virtual sal_Int8 SAL_CALL getDefaultActions() throw(css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL setDefaultActions(sal_Int8 actions) throw(css::uno::RuntimeException, std::exception) override;
 
   // XDropTargetDragContext
-  virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL rejectDrag() throw(com::sun::star::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL rejectDrag() throw(css::uno::RuntimeException, std::exception) override;
 
   // XDropTargetDragContext
-  virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) throw (com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL rejectDrop() throw (com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL dropComplete(sal_Bool success) throw (com::sun::star::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) throw (css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL rejectDrop() throw (css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL dropComplete(sal_Bool success) throw (css::uno::RuntimeException, std::exception) override;
 
   // XServiceInfo
-  virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (com::sun::star::uno::RuntimeException, std::exception) override;
-  virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) override;
+  virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception) override;
+  virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
   // NSDraggingDestination protocol functions
   NSDragOperation draggingEntered(id sender);
@@ -136,16 +136,16 @@ public:
   sal_Int8 determineDropAction(sal_Int8 dropActions, id sender) const;
 
 private:
-  void fire_drop(const com::sun::star::datatransfer::dnd::DropTargetDropEvent& dte);
-  void fire_dragEnter(const com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee);
-  void fire_dragExit(const com::sun::star::datatransfer::dnd::DropTargetEvent& dte);
-  void fire_dragOver(const com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde);
-  void fire_dropActionChanged(const com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde);
+  void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dte);
+  void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee);
+  void fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte);
+  void fire_dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde);
+  void fire_dropActionChanged(const css::datatransfer::dnd::DropTargetDragEvent& dtde);
 
 private:
-  com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetDragContext > mXCurrentDragContext;
-  com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetDropContext > mXCurrentDropContext;
-  com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboard > mXCurrentDragClipboard;
+  css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext > mXCurrentDragContext;
+  css::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext > mXCurrentDropContext;
+  css::uno::Reference< css::datatransfer::clipboard::XClipboard > mXCurrentDragClipboard;
   DataFlavorMapperPtr_t mDataFlavorMapper;
   id  mView;
   AquaSalFrame* mpFrame;

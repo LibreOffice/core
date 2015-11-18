@@ -24,17 +24,17 @@
 
 /* Transform plain HTML into the format expected by MS Office.
  */
-com::sun::star::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(com::sun::star::uno::Sequence<sal_Int8>& aTextHtml);
+css::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(css::uno::Sequence<sal_Int8>& aTextHtml);
 
 /* Transform the MS Office HTML format into plain HTML.
  */
-com::sun::star::uno::Sequence<sal_Int8> HTMLFormatToTextHtml(const com::sun::star::uno::Sequence<sal_Int8>& aHTMLFormat);
+css::uno::Sequence<sal_Int8> HTMLFormatToTextHtml(const css::uno::Sequence<sal_Int8>& aHTMLFormat);
 
 /* Detects whether the given byte sequence contains the MS Office Html format.
 
    @returns True if the MS Office Html format will be detected False otherwise.
  */
-bool isHTMLFormat (const com::sun::star::uno::Sequence<sal_Int8>& aHtmlSequence);
+bool isHTMLFormat (const css::uno::Sequence<sal_Int8>& aHtmlSequence);
 
 #endif // INCLUDED_VCL_OSX_HTMLFMTFLT_HXX
 

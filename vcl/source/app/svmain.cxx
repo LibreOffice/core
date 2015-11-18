@@ -213,18 +213,18 @@ static Application *        pOwnSvApp = nullptr;
 // Exception handler. pExceptionHandler != NULL => VCL already inited
 static oslSignalHandler pExceptionHandler = nullptr;
 
-class DesktopEnvironmentContext: public cppu::WeakImplHelper< com::sun::star::uno::XCurrentContext >
+class DesktopEnvironmentContext: public cppu::WeakImplHelper< css::uno::XCurrentContext >
 {
 public:
-    explicit DesktopEnvironmentContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx)
+    explicit DesktopEnvironmentContext( const css::uno::Reference< css::uno::XCurrentContext > & ctx)
         : m_xNextContext( ctx ) {}
 
     // XCurrentContext
-    virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name )
+            throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;
+    css::uno::Reference< css::uno::XCurrentContext > m_xNextContext;
 };
 
 uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Name) throw (uno::RuntimeException, std::exception)
@@ -267,8 +267,8 @@ bool InitVCL()
         return false;
 
     // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
-    com::sun::star::uno::setCurrentContext(
-        new DesktopEnvironmentContext( com::sun::star::uno::getCurrentContext() ) );
+    css::uno::setCurrentContext(
+        new DesktopEnvironmentContext( css::uno::getCurrentContext() ) );
 
     // Initialize application instance (should be done after initialization of VCL SAL part)
     if( pSVData->mpApp )
@@ -312,7 +312,7 @@ namespace
   a bundled extension is registered/deregistered during startup, forcing exit
   while the app is still in splash screen.)
  */
-class VCLUnoWrapperDeleter : public cppu::WeakImplHelper<com::sun::star::lang::XEventListener>
+class VCLUnoWrapperDeleter : public cppu::WeakImplHelper<css::lang::XEventListener>
 {
     virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException, std::exception) override;
 };

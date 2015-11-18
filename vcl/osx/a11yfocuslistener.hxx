@@ -38,7 +38,7 @@ public:
     id getFocusedUIElement();
 
     // KeyboardFocusListener
-    virtual void SAL_CALL focusedObjectChanged(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible) override;
+    virtual void SAL_CALL focusedObjectChanged(const css::uno::Reference< css::accessibility::XAccessible >& xAccessible) override;
 };
 
 #endif // INCLUDED_VCL_OSX_A11YFOCUSLISTENER_HXX

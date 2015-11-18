@@ -44,7 +44,7 @@
 -(void)dockMenuItemTriggered: (id)sender;
 -(AquaSalFrame*)getSalFrame;
 -(BOOL)containsMouse;
--(::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >)accessibleContext;
+-(css::uno::Reference < css::accessibility::XAccessibleContext >)accessibleContext;
 
 /* NSDraggingDestination protocol methods
  */
@@ -172,7 +172,7 @@
 -(void)noop: (id)aSender;
 /* set the correct pointer for our view */
 -(void)resetCursorRects;
--(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
+-(css::accessibility::XAccessibleContext *)accessibleContext;
 -(id)parentAttribute;
 -(NSWindow*)windowForParent;
 /*

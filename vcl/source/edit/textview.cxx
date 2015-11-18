@@ -60,7 +60,7 @@
 
 using namespace ::com::sun::star;
 
-class TETextDataObject :    public ::com::sun::star::datatransfer::XTransferable,
+class TETextDataObject :    public css::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
 
 {
@@ -75,15 +75,15 @@ public:
     OUString&        GetText() { return maText; }
     SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::uno::XInterface
+    css::uno::Any                               SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-    // ::com::sun::star::datatransfer::XTransferable
-    ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::datatransfer::XTransferable
+    css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
@@ -163,7 +163,7 @@ struct ImpTextView
     SelectionEngine*    mpSelEngine;
     TextSelFunctionSet* mpSelFuncSet;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
+    css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
     sal_uInt16              mnTravelXPos;
 
@@ -610,22 +610,22 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
             case KEY_END:
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
-            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
-            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
-            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
-            case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
-            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
-            case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
-            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
-            case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
-            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
-            case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+            case css::awt::Key::MOVE_WORD_FORWARD:
+            case css::awt::Key::SELECT_WORD_FORWARD:
+            case css::awt::Key::MOVE_WORD_BACKWARD:
+            case css::awt::Key::SELECT_WORD_BACKWARD:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+            case css::awt::Key::MOVE_TO_END_OF_LINE:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            case css::awt::Key::SELECT_TO_END_OF_LINE:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             {
                 if ( ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                       && !( rKeyEvent.GetKeyCode().IsMod1() && ( nCode == KEY_PAGEUP || nCode == KEY_PAGEDOWN ) ) )
@@ -645,10 +645,10 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
             break;
             case KEY_BACKSPACE:
             case KEY_DELETE:
-            case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
-            case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
-            case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
-            case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
+            case css::awt::Key::DELETE_WORD_BACKWARD:
+            case css::awt::Key::DELETE_WORD_FORWARD:
+            case css::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+            case css::awt::Key::DELETE_TO_END_OF_LINE:
             {
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
                 {
@@ -659,19 +659,19 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
 
                     switch( nCode )
                     {
-                    case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+                    case css::awt::Key::DELETE_WORD_BACKWARD:
                         nDel = DEL_LEFT;
                         nMode = DELMODE_RESTOFWORD;
                         break;
-                    case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+                    case css::awt::Key::DELETE_WORD_FORWARD:
                         nDel = DEL_RIGHT;
                         nMode = DELMODE_RESTOFWORD;
                         break;
-                    case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+                    case css::awt::Key::DELETE_TO_BEGIN_OF_LINE:
                         nDel = DEL_LEFT;
                         nMode = DELMODE_RESTOFCONTENT;
                         break;
-                    case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
+                    case css::awt::Key::DELETE_TO_END_OF_LINE:
                         nDel = DEL_RIGHT;
                         nMode = DELMODE_RESTOFCONTENT;
                         break;
@@ -1133,7 +1133,7 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
         }
     }
@@ -1156,7 +1156,7 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                 SolarMutexReleaser aReleaser;
                 xDataObj = rxClipboard->getContents();
             }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
             {
             }
 
@@ -1180,7 +1180,7 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                     if( bWasTruncated )
                         Edit::ShowTruncationWarning( mpImpl->mpWindow );
                 }
-                catch( const ::com::sun::star::datatransfer::UnsupportedFlavorException& )
+                catch( const css::datatransfer::UnsupportedFlavorException& )
                 {
                 }
             }
@@ -1263,44 +1263,44 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
                             break;
         case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (sal_uInt16)i18n::CharacterIteratorMode::SKIPCHARACTER : (sal_uInt16)i18n::CharacterIteratorMode::SKIPCELL );
                             break;
-        case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+        case css::awt::Key::SELECT_WORD_FORWARD:
                             bSelect = true; // fallthrough intentional
-        case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+        case css::awt::Key::MOVE_WORD_FORWARD:
                             aPaM = CursorWordRight( aPaM );
                             break;
-        case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+        case css::awt::Key::SELECT_WORD_BACKWARD:
                             bSelect = true; // fallthrough intentional
-        case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+        case css::awt::Key::MOVE_WORD_BACKWARD:
                             aPaM = CursorWordLeft( aPaM );
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+        case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
                             bSelect = true; // fallthrough intentional
-        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+        case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
                             aPaM = CursorStartOfLine( aPaM );
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+        case css::awt::Key::SELECT_TO_END_OF_LINE:
                             bSelect = true; // fallthrough intentional
-        case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+        case css::awt::Key::MOVE_TO_END_OF_LINE:
                             aPaM = CursorEndOfLine( aPaM );
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+        case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
                             bSelect = true; // falltthrough intentional
-        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+        case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
                             aPaM = CursorStartOfParagraph( aPaM );
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+        case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
                             bSelect = true; // falltthrough intentional
-        case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+        case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
                             aPaM = CursorEndOfParagraph( aPaM );
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+        case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
                             bSelect = true; // falltthrough intentional
-        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+        case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
                             aPaM = CursorStartOfDoc();
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+        case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
                             bSelect = true; // falltthrough intentional
-        case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+        case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
                             aPaM = CursorEndOfDoc();
                             break;
     }
@@ -1958,7 +1958,7 @@ bool TextView::ImplCheckTextLen( const OUString& rNewText )
     return bOK;
 }
 
-void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( mpImpl->mbClickedInSelection )
     {
@@ -2005,14 +2005,14 @@ void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd:
     }
 }
 
-void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void TextView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     ImpHideDDCursor();
     delete mpImpl->mpDDInfo;
     mpImpl->mpDDInfo = nullptr;
 }
 
-void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 
@@ -2119,17 +2119,17 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
     rDTDE.Context->dropComplete( bChanges );
 }
 
-void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void TextView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void TextView::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
     ImpHideDDCursor();
 }
 
-void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void TextView::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 

@@ -87,12 +87,10 @@ public:
 
     virtual bool hasNativeFileSelection() const override { return true; }
 
-    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
-        createFilePicker( const com::sun::star::uno::Reference<
-                              com::sun::star::uno::XComponentContext >& ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker2 >
-        createFolderPicker( const com::sun::star::uno::Reference<
-                                com::sun::star::uno::XComponentContext >& ) override;
+    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >
+        createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
+    virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
+        createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
 
 #if GTK_CHECK_VERSION(3,0,0)
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;

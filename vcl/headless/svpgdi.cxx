@@ -607,7 +607,7 @@ bool SvpSalGraphics::drawPolyLine(
     double /*fTransparency*/,
     const ::basegfx::B2DVector& /*rLineWidths*/,
     basegfx::B2DLineJoin /*eJoin*/,
-    com::sun::star::drawing::LineCap /*eLineCap*/)
+    css::drawing::LineCap /*eLineCap*/)
 {
     // TODO: implement and advertise OutDevSupport_B2DDraw support
     return false;

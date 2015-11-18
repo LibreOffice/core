@@ -173,11 +173,11 @@ struct ImplFrameData
     bool                mbInSysObjToTopHdl;     //< within a SysChildren's ToTop handler
     bool                mbSysObjFocus;          //< does a SysChild have focus
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > mxDragSource;
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > mxDropTarget;
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
+    css::uno::Reference< css::datatransfer::dnd::XDragSource > mxDragSource;
+    css::uno::Reference< css::datatransfer::dnd::XDropTarget > mxDropTarget;
+    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
+    css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
+    css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxSelection;
 
     bool                mbInternalDragGestureRecognizer;
     VclPtr<VirtualDevice> mpBuffer; ///< Buffer for the double-buffering
@@ -233,7 +233,7 @@ public:
     std::vector<Link<VclWindowEvent&,void>> maChildEventListeners;
 
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::rendering::XCanvas >    mxCanvas;
+    css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
     ImplDelData*        mpFirstDel;
     void*               mpUserData;
@@ -261,8 +261,8 @@ public:
     OUString            maHelpText;
     OUString            maQuickHelpText;
     InputContext        maInputContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > mxWindowPeer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
+    css::uno::Reference< css::awt::XWindowPeer > mxWindowPeer;
+    css::uno::Reference< css::accessibility::XAccessible > mxAccessible;
     std::shared_ptr< VclSizeGroup > m_xSizeGroup;
     std::vector< VclPtr<FixedText> > m_aMnemonicLabels;
     ImplAccessibleInfos* mpAccessibleInfos;
@@ -381,7 +381,7 @@ public:
 
     vcl::RenderSettings maRenderSettings;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
+    css::uno::Reference< css::uno::XInterface > mxDNDListenerContainer;
 };
 
 /// Sets up the buffer to have settings matching the window, and restores the original state in the dtor.

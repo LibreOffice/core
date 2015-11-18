@@ -24,12 +24,18 @@
 
 #include <vector>
 
+using namespace vcl;
+using namespace cppu;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
+
 namespace vcl
 {
     struct AdaptorPage
     {
-        GDIMetaFile                     maPage;
-        com::sun::star::awt::Size       maPageSize;
+        GDIMetaFile          maPage;
+        css::awt::Size       maPageSize;
     };
 
     struct ImplOldStyleAdaptorData
@@ -37,12 +43,6 @@ namespace vcl
         std::vector< AdaptorPage >  maPages;
     };
 }
-
-using namespace vcl;
-using namespace cppu;
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
 
 OldStylePrintAdaptor::OldStylePrintAdaptor( const VclPtr< Printer >& i_xPrinter )
     : PrinterController( i_xPrinter )

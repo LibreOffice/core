@@ -63,9 +63,9 @@ class AquaClipboard;
 @end
 
 class AquaClipboard : public ::cppu::BaseMutex,
-                      public ::cppu::WeakComponentImplHelper< com::sun::star::datatransfer::clipboard::XSystemClipboard,
-                                                               com::sun::star::datatransfer::clipboard::XFlushableClipboard,
-                                                               com::sun::star::lang::XServiceInfo >,
+                      public ::cppu::WeakComponentImplHelper< css::datatransfer::clipboard::XSystemClipboard,
+                                                               css::datatransfer::clipboard::XFlushableClipboard,
+                                                               css::lang::XServiceInfo >,
                       private ::boost::noncopyable
 {
 public:
@@ -87,43 +87,43 @@ public:
 
   // XClipboard
 
-  virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
-    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+  virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getContents()
+    throw( css::uno::RuntimeException, std::exception ) override;
 
-  virtual void SAL_CALL setContents( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+  virtual void SAL_CALL setContents( const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
+                                     const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+    throw( css::uno::RuntimeException, std::exception ) override;
 
   virtual OUString SAL_CALL getName()
-    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    throw( css::uno::RuntimeException, std::exception ) override;
 
   // XClipboardEx
 
   virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    throw( css::uno::RuntimeException, std::exception ) override;
 
   // XClipboardNotifier
 
-  virtual void SAL_CALL addClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+  virtual void SAL_CALL addClipboardListener( const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
+    throw( css::uno::RuntimeException, std::exception ) override;
 
-  virtual void SAL_CALL removeClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+  virtual void SAL_CALL removeClipboardListener( const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
+    throw( css::uno::RuntimeException, std::exception ) override;
 
   // XFlushableClipboard
 
-  virtual void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+  virtual void SAL_CALL flushClipboard( ) throw( css::uno::RuntimeException, std::exception ) override;
 
   // XServiceInfo
 
   virtual OUString SAL_CALL getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw(css::uno::RuntimeException, std::exception) override;
 
   virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw(css::uno::RuntimeException, std::exception) override;
 
-  virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+  virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+    throw(css::uno::RuntimeException, std::exception) override;
 
   /* Get a reference to the used pastboard.
    */
@@ -131,8 +131,8 @@ public:
 
   /* Notify the current clipboard owner that he is no longer the clipboard owner.
    */
-  void fireLostClipboardOwnershipEvent(::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner> oldOwner,
-                                       ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > oldContent);
+  void fireLostClipboardOwnershipEvent(css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner> oldOwner,
+                                       css::uno::Reference< css::datatransfer::XTransferable > oldContent);
 
   void pasteboardChangedOwner();
 
@@ -148,10 +148,10 @@ private:
   void fireClipboardChangedEvent();
 
 private:
-  ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory > mrXMimeCntFactory;
-  ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > mClipboardListeners;
-  ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > mXClipboardContent;
-  com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner > mXClipboardOwner;
+  css::uno::Reference< css::datatransfer::XMimeContentTypeFactory > mrXMimeCntFactory;
+  ::std::list< css::uno::Reference< css::datatransfer::clipboard::XClipboardListener > > mClipboardListeners;
+  css::uno::Reference< css::datatransfer::XTransferable > mXClipboardContent;
+  css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner > mXClipboardOwner;
   DataFlavorMapperPtr_t mpDataFlavorMapper;
   bool mIsSystemPasteboard;
   NSPasteboard* mPasteboard;

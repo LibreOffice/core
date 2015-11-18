@@ -114,7 +114,7 @@ private:
                                       SystemParentData* pParentData );
     void                    ImplInit( vcl::Window* pParent,
                                       WinBits nStyle, sal_uInt16 nTypeStyle,
-                                      const ::com::sun::star::uno::Any& );
+                                      const css::uno::Any& );
 
                             ImplBorderWindow (const ImplBorderWindow &) = delete;
                             ImplBorderWindow& operator= (const ImplBorderWindow &) = delete;

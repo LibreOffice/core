@@ -442,7 +442,7 @@ bool GenPspGraphics::drawPolyLine(
     double /*fTranspareny*/,
     const basegfx::B2DVector& /*rLineWidths*/,
     basegfx::B2DLineJoin /*eJoin*/,
-    com::sun::star::drawing::LineCap /*eLineCap*/)
+    css::drawing::LineCap /*eLineCap*/)
 {
     // TODO: a PS printer can draw B2DPolyLines almost directly
     return false;

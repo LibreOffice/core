@@ -732,7 +732,7 @@ protected:
 
     FilterConfigItem*   pFilterConfigItem;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     // assures aSampledBrush is the actual brush of the GDIMetaFile
 

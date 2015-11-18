@@ -2043,7 +2043,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
-    com::sun::star::drawing::LineCap eLineCap)
+    css::drawing::LineCap eLineCap)
 {
     const sal_uInt32 nCount(rPolygon.count());
 
@@ -2091,18 +2091,18 @@ bool WinSalGraphicsImpl::drawPolyLine(
 
         switch(eLineCap)
         {
-            default: /*com::sun::star::drawing::LineCap_BUTT*/
+            default: /*css::drawing::LineCap_BUTT*/
             {
                 // nothing to do
                 break;
             }
-            case com::sun::star::drawing::LineCap_ROUND:
+            case css::drawing::LineCap_ROUND:
             {
                 Gdiplus::DllExports::GdipSetPenStartCap(pTestPen, Gdiplus::LineCapRound);
                 Gdiplus::DllExports::GdipSetPenEndCap(pTestPen, Gdiplus::LineCapRound);
                 break;
             }
-            case com::sun::star::drawing::LineCap_SQUARE:
+            case css::drawing::LineCap_SQUARE:
             {
                 Gdiplus::DllExports::GdipSetPenStartCap(pTestPen, Gdiplus::LineCapSquare);
                 Gdiplus::DllExports::GdipSetPenEndCap(pTestPen, Gdiplus::LineCapSquare);

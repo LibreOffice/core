@@ -1023,7 +1023,7 @@ attr_compare(const void *p1,const void *p2)
 
 static void
 find_exported_attributes( sal_Int32 *pArray,
-    const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAttributeList )
+    const css::uno::Sequence< css::beans::PropertyValue >& rAttributeList )
 {
     for( sal_Int32 i = 0; i < rAttributeList.getLength(); i++ )
     {

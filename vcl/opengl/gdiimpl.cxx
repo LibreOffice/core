@@ -1412,7 +1412,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
             double fTransparency,
             const ::basegfx::B2DVector& rLineWidth,
             basegfx::B2DLineJoin eLineJoin,
-            com::sun::star::drawing::LineCap eLineCap)
+            css::drawing::LineCap eLineCap)
 {
     VCL_GL_INFO( "vcl.opengl", "::drawPolyLine trans " << fTransparency );
     if( mnLineColor == SALCOLOR_NONE )

@@ -106,7 +106,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     Control::ImplInit( pParent, nStyle, nullptr );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener> xDrop = new DNDEventDispatcher(this);
+    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener> xDrop = new DNDEventDispatcher(this);
 
     if( nStyle & WB_DROPDOWN )
     {

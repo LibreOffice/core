@@ -1440,9 +1440,9 @@ SystemWindowFlags Application::GetSystemWindowMode()
     return ImplGetSVData()->maAppData.mnSysWinMode;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > Application::GetVCLToolkit()
+css::uno::Reference< css::awt::XToolkit > Application::GetVCLToolkit()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > xT;
+    css::uno::Reference< css::awt::XToolkit > xT;
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
     if ( pWrapper )
         xT = pWrapper->GetVCLToolkit();
@@ -1494,7 +1494,7 @@ void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
     pSVData->mpUnoWrapper = pWrapper;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > Application::GetDisplayConnection()
+css::uno::Reference< css::awt::XDisplayConnection > Application::GetDisplayConnection()
 {
     ImplSVData* pSVData = ImplGetSVData();
 

@@ -2889,7 +2889,7 @@ namespace
             if ( aNode.isValid() )
             {
                 bool bTmp = bool();
-                ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString("UIMirroring") );
+                css::uno::Any aValue = aNode.getNodeValue( OUString("UIMirroring") );
                 if( aValue >>= bTmp )
                 {
                     // found true or false; if it was nil, nothing is changed

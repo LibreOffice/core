@@ -72,7 +72,7 @@ sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
 
 void MnemonicGenerator::RegisterMnemonic( const OUString& rKey )
 {
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+    const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service
@@ -116,7 +116,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
     if ( _rKey.isEmpty() || ImplFindMnemonic( _rKey ) )
         return _rKey;
 
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+    const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service

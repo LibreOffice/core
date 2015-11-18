@@ -856,7 +856,7 @@ void UnxFilePicker::initFilePicker()
     return;
 }
 
-void UnxFilePicker::checkFilePicker() throw( ::com::sun::star::uno::RuntimeException )
+void UnxFilePicker::checkFilePicker() throw( css::uno::RuntimeException )
 {
     if ( m_nFilePickerPid > 0 )
     {

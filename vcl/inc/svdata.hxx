@@ -348,7 +348,7 @@ struct ImplSVData
     oslThreadIdentifier     mnMainThreadId;
     rtl::Reference< vcl::DisplayConnection > mxDisplayConnection;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxAccessBridge;
+    css::uno::Reference< css::lang::XComponent > mxAccessBridge;
     vcl::SettingsConfigItem* mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList;
     std::unordered_map< int, OUString >* mpPaperNames;

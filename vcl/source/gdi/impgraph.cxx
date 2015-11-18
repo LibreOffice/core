@@ -357,22 +357,22 @@ void ImpGraphic::ImplClear()
             try
             {
                 ::ucbhelper::Content aCnt( mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                     css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                      comphelper::getProcessComponentContext() );
 
                 aCnt.executeCommand( "delete",
-                                     ::com::sun::star::uno::makeAny( true ) );
+                                     css::uno::makeAny( true ) );
             }
-            catch( const ::com::sun::star::ucb::ContentCreationException& )
+            catch( const css::ucb::ContentCreationException& )
             {
             }
-            catch( const ::com::sun::star::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
             }
-            catch( const ::com::sun::star::ucb::CommandAbortedException& )
+            catch( const css::ucb::CommandAbortedException& )
             {
             }
-            catch( const ::com::sun::star::uno::Exception& )
+            catch( const css::uno::Exception& )
             {
             }
 
@@ -1166,7 +1166,7 @@ bool ImpGraphic::ImplSwapOut()
             {
                 xOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
             }
-            catch( const ::com::sun::star::uno::Exception& )
+            catch( const css::uno::Exception& )
             {
             }
             if( xOStm )
@@ -1187,22 +1187,21 @@ bool ImpGraphic::ImplSwapOut()
                     try
                     {
                         ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                            css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                             comphelper::getProcessComponentContext() );
 
-                        aCnt.executeCommand( "delete",
-                                            ::com::sun::star::uno::makeAny( true ) );
+                        aCnt.executeCommand( "delete", css::uno::makeAny( true ) );
                     }
-                    catch( const ::com::sun::star::ucb::ContentCreationException& )
+                    catch( const css::ucb::ContentCreationException& )
                     {
                     }
-                    catch( const ::com::sun::star::uno::RuntimeException& )
+                    catch( const css::uno::RuntimeException& )
                     {
                     }
-                    catch( const ::com::sun::star::ucb::CommandAbortedException& )
+                    catch( const css::ucb::CommandAbortedException& )
                     {
                     }
-                    catch( const ::com::sun::star::uno::Exception& )
+                    catch( const css::uno::Exception& )
                     {
                     }
                 }
@@ -1264,7 +1263,7 @@ bool ImpGraphic::ImplSwapIn()
             {
                 xIStm.reset(::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
             }
-            catch( const ::com::sun::star::uno::Exception& )
+            catch( const css::uno::Exception& )
             {
             }
 
@@ -1285,22 +1284,21 @@ bool ImpGraphic::ImplSwapIn()
                         try
                         {
                             ::ucbhelper::Content aCnt( aSwapURL,
-                                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                                 css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                                  comphelper::getProcessComponentContext() );
 
-                            aCnt.executeCommand( "delete",
-                                                 ::com::sun::star::uno::makeAny( true ) );
+                            aCnt.executeCommand( "delete", css::uno::makeAny( true ) );
                         }
-                        catch( const ::com::sun::star::ucb::ContentCreationException& )
+                        catch( const css::ucb::ContentCreationException& )
                         {
                         }
-                        catch( const ::com::sun::star::uno::RuntimeException& )
+                        catch( const css::uno::RuntimeException& )
                         {
                         }
-                        catch( const ::com::sun::star::ucb::CommandAbortedException& )
+                        catch( const css::ucb::CommandAbortedException& )
                         {
                         }
-                        catch( const ::com::sun::star::uno::Exception& )
+                        catch( const css::uno::Exception& )
                         {
                         }
 

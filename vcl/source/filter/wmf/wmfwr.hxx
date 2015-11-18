@@ -55,7 +55,7 @@ private:
 
     sal_uLong                   nLastPercent; // with which number pCallback was called last time.
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     SvStream*               pWMF;
     VclPtr<VirtualDevice>   pVirDev;

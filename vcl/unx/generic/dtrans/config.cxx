@@ -32,7 +32,7 @@ class DtransX11ConfigItem : public ::utl::ConfigItem
 {
     sal_Int32           m_nSelectionTimeout;
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
     virtual void ImplCommit() override;
 
 public:

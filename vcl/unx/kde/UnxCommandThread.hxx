@@ -81,19 +81,19 @@ protected:
     ::osl::Mutex                m_aMutex;
 
     YieldingCondition           m_aExecCondition;
-    bool                    m_aResult;
+    bool                        m_aResult;
 
     ::osl::Condition            m_aGetCurrentFilterCondition;
-    OUString             m_aGetCurrentFilter;
+    OUString                    m_aGetCurrentFilter;
 
     ::osl::Condition            m_aGetDirectoryCondition;
-    OUString             m_aGetDirectory;
+    OUString                    m_aGetDirectory;
 
     ::osl::Condition            m_aGetFilesCondition;
-    ::std::list< OUString > m_aGetFiles;
+    ::std::list< OUString >     m_aGetFiles;
 
     ::osl::Condition            m_aGetValueCondition;
-    ::com::sun::star::uno::Any  m_aGetValue;
+    css::uno::Any               m_aGetValue;
 
 public:
     UnxFilePickerCommandThread( UnxFilePickerNotifyThread *pNotifyThread, int nReadFD );
@@ -109,11 +109,11 @@ public:
     OUString SAL_CALL    getDirectory();
 
     ::osl::Condition& SAL_CALL  getFilesCondition() { return m_aGetFilesCondition; }
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles();
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles();
+    css::uno::Sequence< OUString > SAL_CALL getSelectedFiles();
+    css::uno::Sequence< OUString > SAL_CALL getFiles();
 
     ::osl::Condition& SAL_CALL  getValueCondition() { return m_aGetValueCondition; }
-    ::com::sun::star::uno::Any SAL_CALL getValue();
+    css::uno::Any SAL_CALL getValue();
 
 protected:
     virtual void SAL_CALL       run() override;

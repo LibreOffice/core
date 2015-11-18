@@ -28,7 +28,7 @@
 namespace vcl {
 
 class DisplayConnectionDispatch:
-    public cppu::WeakImplHelper< com::sun::star::awt::XDisplayConnection >
+    public cppu::WeakImplHelper< css::awt::XDisplayConnection >
 {
 public:
     virtual bool dispatchEvent(void * pData, int nBytes) = 0;

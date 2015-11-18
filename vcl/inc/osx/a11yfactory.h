@@ -27,12 +27,12 @@
 @interface AquaA11yFactory : NSObject
 {
 }
-+(void)insertIntoWrapperRepository: (NSView *) viewElement forAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext;
-+(AquaA11yWrapper *)wrapperForAccessible: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible >) rxAccessible;
-+(AquaA11yWrapper *)wrapperForAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext;
-+(AquaA11yWrapper *)wrapperForAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext createIfNotExists:(BOOL) bCreate;
-+(AquaA11yWrapper *)wrapperForAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext createIfNotExists:(BOOL) bCreate asRadioGroup:(BOOL) asRadioGroup;
-+(void)removeFromWrapperRepositoryFor: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext;
++(void)insertIntoWrapperRepository: (NSView *) viewElement forAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
++(AquaA11yWrapper *)wrapperForAccessible: (css::uno::Reference < css::accessibility::XAccessible >) rxAccessible;
++(AquaA11yWrapper *)wrapperForAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
++(AquaA11yWrapper *)wrapperForAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext createIfNotExists:(BOOL) bCreate;
++(AquaA11yWrapper *)wrapperForAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext createIfNotExists:(BOOL) bCreate asRadioGroup:(BOOL) asRadioGroup;
++(void)removeFromWrapperRepositoryFor: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
 +(void)registerView: (NSView *) theView;
 +(void)revokeView: (NSView *) theViewt;
 @end

@@ -42,10 +42,10 @@ class AquaA11yFocusTracker : public rtl::Static< AquaA11yFocusTracker, AquaA11yF
 public:
     AquaA11yFocusTracker();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getFocusedObject() { return m_xFocusedObject; };
+    css::uno::Reference< css::accessibility::XAccessible > getFocusedObject() { return m_xFocusedObject; };
 
     // sets the currently focus object and notifies the FocusEventListener (if any)
-    void setFocusedObject(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible);
+    void setFocusedObject(const css::uno::Reference< css::accessibility::XAccessible >& xAccessible);
 
     // may evolve to add/remove later
     void setFocusListener(const rtl::Reference< KeyboardFocusListener >& aFocusListener) { m_aFocusListener = aFocusListener; };
@@ -78,7 +78,7 @@ protected:
 
 private:
     // the accessible object that has the keyboard focus (if any)
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xFocusedObject;
+    css::uno::Reference< css::accessibility::XAccessible > m_xFocusedObject;
 
     // the listener for focus events
     rtl::Reference< KeyboardFocusListener > m_aFocusListener;
@@ -90,7 +90,7 @@ private:
     Link<VclSimpleEvent&,void> m_aWindowEventLink;
 
     // the UNO XAccessibilityEventListener for Documents and other non VCL objects
-    const ::com::sun::star::uno::Reference< DocumentFocusListener > m_xDocumentFocusListener;
+    const css::uno::Reference< DocumentFocusListener > m_xDocumentFocusListener;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_A11YFOCUSTRACKER_HXX

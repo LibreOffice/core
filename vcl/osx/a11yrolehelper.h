@@ -25,7 +25,7 @@
 @interface AquaA11yRoleHelper : NSObject
 {
 }
-+(id)getNativeRoleFrom: (::com::sun::star::accessibility::XAccessibleContext *) accessibleContext;
++(id)getNativeRoleFrom: (css::accessibility::XAccessibleContext *) accessibleContext;
 +(id)getNativeSubroleFrom: (sal_Int16) nRole;
 +(id)getRoleDescriptionFrom: (NSString *) role with: (NSString *) subRole;
 @end

@@ -540,7 +540,7 @@ bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
                                 double i_fTransparency,
                                 const basegfx::B2DVector& i_rLineWidth,
                                 basegfx::B2DLineJoin i_eLineJoin,
-                                com::sun::star::drawing::LineCap i_eLineCap,
+                                css::drawing::LineCap i_eLineCap,
                                 const OutputDevice* i_pOutDev )
 {
     bool bRet = false;

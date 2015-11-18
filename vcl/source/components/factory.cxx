@@ -42,10 +42,10 @@ extern "C" {
 
         if( pXUnoSMgr )
         {
-            Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr(
-                static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pXUnoSMgr )
+            Reference< css::lang::XMultiServiceFactory > xMgr(
+                static_cast< css::lang::XMultiServiceFactory* >( pXUnoSMgr )
                 );
-            Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
+            Reference< css::lang::XSingleServiceFactory > xFactory;
             if( vcl_session_getImplementationName().equalsAscii( pImplementationName ) )
             {
                 xFactory = ::cppu::createOneInstanceFactory(

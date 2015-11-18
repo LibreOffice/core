@@ -34,7 +34,7 @@ class FilterConfigCache
     {
         OUString sInternalFilterName;
         OUString sType;
-        ::com::sun::star::uno::Sequence< OUString > lExtensionList;
+        css::uno::Sequence< OUString > lExtensionList;
         OUString sUIName;
         OUString sDocumentService;
         OUString sFilterService;

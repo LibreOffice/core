@@ -767,7 +767,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
 {
     bool bDone = false;
     sal_uInt16 nCode = rKEvent.GetKeyCode().GetCode();
-    if ( nCode == com::sun::star::awt::Key::SELECT_ALL ||
+    if ( nCode == css::awt::Key::SELECT_ALL ||
          ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() && !rKEvent.GetKeyCode().IsMod2() )
        )
     {

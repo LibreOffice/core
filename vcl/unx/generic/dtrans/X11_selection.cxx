@@ -315,14 +315,14 @@ Cursor SelectionManager::createCursor( const unsigned char* pPointerData, const 
     return aCursor;
 }
 
-void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::com::sun::star::uno::Exception, std::exception)
+void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (css::uno::Exception, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
     if( ! m_xDisplayConnection.is() )
     {
         /*
-         *  first argument must be a ::com::sun::star::awt::XDisplayConnection
+         *  first argument must be a css::awt::XDisplayConnection
          *  from this we will get the XEvents of the vcl event loop by
          *  registering us as XEventHandler on it.
          *
@@ -2796,7 +2796,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                     m_nDropTimeout                  = time( nullptr );
                     // HACK :-)
                     aGuard.clear();
-                    static_cast< X11Clipboard* >( pAdaptor )->setContents( m_xDragSourceTransferable, css::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >() );
+                    static_cast< X11Clipboard* >( pAdaptor )->setContents( m_xDragSourceTransferable, css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >() );
                     aGuard.reset();
                     bCancel = false;
                 }
@@ -3305,7 +3305,7 @@ void SelectionManager::startDrag(
         m_bDropSuccess                  = false;
         m_bWaitingForPrimaryConversion  = false;
         m_nDragButton                   = Button1; // default to left button
-        com::sun::star::awt::MouseEvent aEvent;
+        css::awt::MouseEvent aEvent;
         if( trigger.Event >>= aEvent )
         {
             if( aEvent.Buttons & MouseButton::LEFT )
@@ -3801,15 +3801,15 @@ sal_Bool SelectionManager::handleEvent(const Any& event)
     return true;
 }
 
-void SAL_CALL SelectionManager::disposing( const ::com::sun::star::lang::EventObject& rEvt )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL SelectionManager::disposing( const css::lang::EventObject& rEvt )
+    throw( css::uno::RuntimeException, std::exception )
 {
     if (rEvt.Source == m_xDesktop || rEvt.Source == m_xDisplayConnection)
         shutdown();
 }
 
-void SAL_CALL SelectionManager::queryTermination( const ::com::sun::star::lang::EventObject& )
-    throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL SelectionManager::queryTermination( const css::lang::EventObject& )
+    throw( css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception )
 {
 }
 
@@ -3818,8 +3818,8 @@ void SAL_CALL SelectionManager::queryTermination( const ::com::sun::star::lang::
  * the downing event can be too late if paste are requested during shutdown and ~SfxApplication
  * has been called before vcl is shutdown
  */
-void SAL_CALL SelectionManager::notifyTermination( const ::com::sun::star::lang::EventObject& rEvent )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL SelectionManager::notifyTermination( const css::lang::EventObject& rEvent )
+    throw( css::uno::RuntimeException, std::exception )
 {
     disposing(rEvent);
 }
@@ -3986,7 +3986,7 @@ SelectionManagerHolder::~SelectionManagerHolder()
 {
 }
 
-void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception )
+void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) throw( css::uno::Exception, std::exception )
 {
     OUString aDisplayName;
 
@@ -4021,10 +4021,10 @@ sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction ) throw(
 }
 
 void SelectionManagerHolder::startDrag(
-                                       const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
+                                       const css::datatransfer::dnd::DragGestureEvent& trigger,
                                        sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-                                       const css::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
-                                       const css::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+                                       const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
+                                       const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener
                                        ) throw(std::exception)
 {
     if( m_xRealDragSource.is() )

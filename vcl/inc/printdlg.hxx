@@ -234,7 +234,7 @@ namespace vcl
         void setupOptionalUI();
         void readFromSettings();
         void storeToSettings();
-        com::sun::star::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
+        css::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
 
         virtual void Resize() override;
         virtual void Command( const CommandEvent& ) override;

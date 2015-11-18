@@ -146,13 +146,13 @@ Menu::~Menu()
         MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow.get());
         if( pFloat->pMenu == this )
             pFloat->pMenu = nullptr;
-        pWindow->SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
+        pWindow->SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
     }
 
     // dispose accessible components
     if ( mxAccessible.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComponent( mxAccessible, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::lang::XComponent> xComponent( mxAccessible, css::uno::UNO_QUERY );
         if ( xComponent.is() )
             xComponent->dispose();
     }

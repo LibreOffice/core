@@ -220,7 +220,7 @@ Graphic::Graphic( const GDIMetaFile& rMtf )
     mpImpGraphic = new ImpGraphic( rMtf );
 }
 
-Graphic::Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic )
+Graphic::Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic )
 {
     uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
     const ::Graphic*                        pGraphic = ( xTunnel.is() ?

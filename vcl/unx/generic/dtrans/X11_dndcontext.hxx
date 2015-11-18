@@ -34,14 +34,12 @@ namespace x11 {
     class SelectionManager;
 
     class DropTargetDropContext :
-        public ::cppu::WeakImplHelper<
-    ::com::sun::star::datatransfer::dnd::XDropTargetDropContext
-    >
+        public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
     {
         ::Window                    m_aDropWindow;
         Time                        m_nTimestamp;
         SelectionManager&           m_rManager;
-        com::sun::star::uno::Reference< XInterface >     m_xManagerRef;
+        css::uno::Reference< XInterface >     m_xManagerRef;
     public:
         DropTargetDropContext( ::Window, Time, SelectionManager& );
         virtual ~DropTargetDropContext();
@@ -53,14 +51,12 @@ namespace x11 {
     };
 
     class DropTargetDragContext :
-        public ::cppu::WeakImplHelper<
-    ::com::sun::star::datatransfer::dnd::XDropTargetDragContext
-    >
+        public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
     {
         ::Window                    m_aDropWindow;
         Time                        m_nTimestamp;
         SelectionManager&           m_rManager;
-        com::sun::star::uno::Reference< XInterface >     m_xManagerRef;
+        css::uno::Reference< XInterface >     m_xManagerRef;
     public:
         DropTargetDragContext( ::Window, Time, SelectionManager& );
         virtual ~DropTargetDragContext();
@@ -71,14 +67,12 @@ namespace x11 {
     };
 
     class DragSourceContext :
-        public ::cppu::WeakImplHelper<
-    ::com::sun::star::datatransfer::dnd::XDragSourceContext
-    >
+        public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDragSourceContext>
     {
         ::Window                    m_aDropWindow;
         Time                        m_nTimestamp;
         SelectionManager&           m_rManager;
-        com::sun::star::uno::Reference< XInterface >     m_xManagerRef;
+        css::uno::Reference< XInterface >     m_xManagerRef;
     public:
         DragSourceContext( ::Window, Time, SelectionManager& );
         virtual ~DragSourceContext();

@@ -124,7 +124,7 @@ ImplAccessibleInfos::~ImplAccessibleInfos()
 
 namespace vcl {
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Window::GetAccessible( bool bCreate )
+css::uno::Reference< css::accessibility::XAccessible > Window::GetAccessible( bool bCreate )
 {
     // do not optimize hierarchy for the top level border win (ie, when there is no parent)
     /* // do not optimize accessible hierarchy at all to better reflect real VCL hierarchy
@@ -144,13 +144,13 @@ namespace vcl {
     return mpWindowImpl->mxAccessible;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Window::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > Window::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc( GetComponentInterface(), ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::accessibility::XAccessible > xAcc( GetComponentInterface(), css::uno::UNO_QUERY );
     return xAcc;
 }
 
-void Window::SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > x )
+void Window::SetAccessible( css::uno::Reference< css::accessibility::XAccessible > x )
 {
     mpWindowImpl->mxAccessible = x;
 }

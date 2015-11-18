@@ -31,7 +31,7 @@
 // - DocumentFocusListener -
 
 class DocumentFocusListener :
-    public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessibleEventListener >
+    public ::cppu::WeakImplHelper< css::accessibility::XAccessibleEventListener >
 {
 
 public:
@@ -39,48 +39,48 @@ public:
     explicit DocumentFocusListener(AquaA11yFocusTracker& rTracker);
 
     void attachRecursive(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible
-    ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference< css::accessibility::XAccessible >& xAccessible
+    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
     void attachRecursive(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& xContext
-    ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
+        const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext
+    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
     void attachRecursive(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& xContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet >& xStateSet
-    ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
+        const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext,
+        const css::uno::Reference< css::accessibility::XAccessibleStateSet >& xStateSet
+    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
     void detachRecursive(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible
-    ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference< css::accessibility::XAccessible >& xAccessible
+    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
     void detachRecursive(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& xContext
-    ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
+        const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext
+    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
     void detachRecursive(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& xContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet >& xStateSet
-    ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
+        const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext,
+        const css::uno::Reference< css::accessibility::XAccessibleStateSet >& xStateSet
+    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessible(const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    static css::uno::Reference< css::accessibility::XAccessible > getAccessible(const css::lang::EventObject& aEvent )
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    std::set< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > m_aRefList;
+    std::set< css::uno::Reference< css::uno::XInterface > > m_aRefList;
 
     AquaA11yFocusTracker& m_aFocusTracker;
 };

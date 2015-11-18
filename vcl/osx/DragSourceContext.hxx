@@ -33,7 +33,7 @@
 // An instance of SourceContext only lives as long as the drag and drop
 // operation lasts.
 class DragSourceContext: public cppu::BaseMutex,
-                     public cppu::WeakComponentImplHelper<com::sun::star::datatransfer::dnd::XDragSourceContext>,
+                     public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSourceContext>,
                      private ::boost::noncopyable
 {
 public:
@@ -41,16 +41,16 @@ public:
   virtual ~DragSourceContext();
 
   virtual sal_Int32 SAL_CALL getCurrentCursor(  )
-    throw( com::sun::star::uno::RuntimeException, std::exception) override;
+    throw( css::uno::RuntimeException, std::exception) override;
 
   virtual void SAL_CALL setCursor( sal_Int32 cursorId )
-    throw( com::sun::star::uno::RuntimeException, std::exception) override;
+    throw( css::uno::RuntimeException, std::exception) override;
 
   virtual void SAL_CALL setImage( sal_Int32 imageId )
-    throw( com::sun::star::uno::RuntimeException, std::exception) override;
+    throw( css::uno::RuntimeException, std::exception) override;
 
   virtual void SAL_CALL transferablesFlavorsChanged(  )
-    throw( com::sun::star::uno::RuntimeException, std::exception) override;
+    throw( css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_VCL_OSX_DRAGSOURCECONTEXT_HXX

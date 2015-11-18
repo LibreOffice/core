@@ -46,7 +46,7 @@ DropTarget::~DropTarget()
         m_pSelectionManager->deregisterDropTarget( m_aTargetWindow );
 }
 
-void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception )
+void DropTarget::initialize( const Sequence< Any >& arguments ) throw( css::uno::Exception, std::exception )
 {
     if( arguments.getLength() > 1 )
     {
