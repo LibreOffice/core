@@ -192,7 +192,7 @@ static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
 }
 
 SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
-    : pImpl(0)
+    : pImpl()
     , m_bIsReadOnly(false)
 {
     bVisible = bSynchron = bUseCache = true;
