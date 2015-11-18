@@ -26,7 +26,7 @@ bool SvI18NMap::Add( sal_uInt16 nKind, const OUString& rName,
 {
     SvI18NMapEntry_Key aKey(nKind, rName);
     bool bIsNewInsertion = m_aMap.insert(SvI18NMap_Impl::value_type(aKey, rNewName)).second;
-    DBG_ASSERT( bIsNewInsertion, "SvI18NMap::Add: item registered already" );
+    SAL_INFO_IF(!bIsNewInsertion, "xmloff.core", "SvI18NMap::Add: item with key \"" << rName << "\" registered already, likely invalid input file");
     return bIsNewInsertion;
 }
 
