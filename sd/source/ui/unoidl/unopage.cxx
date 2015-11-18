@@ -73,6 +73,7 @@
 #include "unohelp.hxx"
 #include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdoashp.hxx>
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
@@ -604,6 +605,32 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
     ::SolarMutexGuard aGuard;
 
     throwIfDisposed();
+
+    // tdf#93994 Use a custom slot to have filter code flush the UNO
+    // API implementations of SdrObjCustomShape. Used e.g. by
+    // SdXMLDrawPageContext::EndElement(), see there for more
+    // information
+    if(SvxFmDrawPage::mpPage)
+    {
+        const OUString sFlushCustomShapeUnoApiObjects("FlushCustomShapeUnoApiObjects");
+
+        if(sFlushCustomShapeUnoApiObjects == aPropertyName)
+        {
+            SdrObjListIter aIter(static_cast< SdPage& >(*SvxFmDrawPage::mpPage), IM_DEEPWITHGROUPS);
+
+            while(aIter.IsMore())
+            {
+                SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >(aIter.Next());
+
+                if(pCustomShape)
+                {
+                    pCustomShape->setUnoShape(nullptr);
+                }
+            }
+
+            return;
+        }
+    }
 
     const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 

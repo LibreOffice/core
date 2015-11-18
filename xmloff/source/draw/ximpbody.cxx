@@ -277,6 +277,29 @@ void SdXMLDrawPageContext::EndElement()
         if(xNodeSupplier.is())
             xmloff::AnimationNodeContext::postProcessRootNode( GetSdImport(), xNodeSupplier->getAnimationNode(), xPageProps );
     }
+
+    // tdf#93994 call a custom slot to be able to reset the UNO API
+    // implementations held on the SdrObjects of type
+    // SdrObjCustomShape - those tend to linger until the entire file
+    // is loaded. For large files with a lot of these 32bit systems
+    // may crash due to being out of ressources after ca. 4200
+    // Outliners and VirtualDevices used there as RefDevice
+    try
+    {
+        uno::Reference< beans::XPropertySet > xPropSet(GetLocalShapesContext(), uno::UNO_QUERY);
+
+        if(xPropSet.is())
+        {
+            const OUString sFlushCustomShapeUnoApiObjects("FlushCustomShapeUnoApiObjects");
+            uno::Any aAny;
+            aAny <<= sal_True;
+            xPropSet->setPropertyValue(sFlushCustomShapeUnoApiObjects, aAny);
+        }
+    }
+    catch(const uno::Exception&)
+    {
+        OSL_FAIL("could not flush after load");
+    }
 }
 
 SdXMLBodyContext::SdXMLBodyContext( SdXMLImport& rImport,
