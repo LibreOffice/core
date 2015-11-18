@@ -120,7 +120,6 @@ struct SystemParentData
 
 struct SystemMenuData
 {
-    unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HMENU           hMenu;          // the menu handle of the menu bar
 #elif defined( MACOSX )
