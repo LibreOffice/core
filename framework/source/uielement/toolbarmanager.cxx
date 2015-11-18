@@ -1058,8 +1058,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     if ( m_bDisposed )
         return;
 
-    sal_uInt16    nId( 1 );
-
     Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
     if ( !m_xDocImageManager.is() )
     {
@@ -1175,30 +1173,22 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
-
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
+
+                    m_pToolBar->InsertItem(aCommandURL, m_xFrame, nItemBits);
+                    sal_Int16 nId = m_pToolBar->GetItemId(aCommandURL);
+
                     if ( aMenuDesc.is() )
                     {
                         m_aMenuMap[ nId ] = aMenuDesc;
                         nItemBits |= ToolBoxItemBits::DROPDOWNONLY;
                     }
-                    m_pToolBar->InsertItem( nId, aString, nItemBits );
-                    m_pToolBar->SetItemCommand( nId, aCommandURL );
-                    OUString sTooltip = vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommandURL, m_xFrame);
-                    if (!sTooltip.isEmpty())
-                        m_pToolBar->SetQuickHelpText( nId, sTooltip );
+
 
                     if ( !aLabel.isEmpty() )
-                    {
                         m_pToolBar->SetItemText( nId, aLabel );
-                    }
-                    else
-                    {
-                        m_pToolBar->SetItemText( nId, aString );
-                    }
-                    m_pToolBar->EnableItem( nId );
-                    m_pToolBar->SetItemState( nId, TRISTATE_FALSE );
+                    if ( !bIsVisible )
+                        m_pToolBar->HideItem( nId );
 
                     // Fill command map. It stores all our commands and from what
                     // image manager we got our image. So we can decide if we have to use an
@@ -1214,11 +1204,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     {
                         pIter->second.aIds.push_back( nId );
                     }
-
-                    if ( !bIsVisible )
-                        m_pToolBar->HideItem( nId );
-
-                    ++nId;
                 }
                 else if ( nType == css::ui::ItemType::SEPARATOR_LINE )
                 {
