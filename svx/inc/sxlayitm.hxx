@@ -29,6 +29,7 @@ public:
     SdrLayerIdItem(sal_uInt16 nId=0): SfxUInt16Item(SDRATTR_LAYERID,nId)  {}
     SdrLayerIdItem(SvStream& rIn): SfxUInt16Item(SDRATTR_LAYERID,rIn) {}
     SdrLayerID GetValue() const { return (SdrLayerID)SfxUInt16Item::GetValue(); }
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 class SdrLayerNameItem: public SfxStringItem {
@@ -36,6 +37,7 @@ public:
     SdrLayerNameItem()                   : SfxStringItem() { SetWhich(SDRATTR_LAYERNAME); }
     SdrLayerNameItem(const OUString& rStr) : SfxStringItem(SDRATTR_LAYERNAME,rStr) {}
     SdrLayerNameItem(SvStream& rIn)      : SfxStringItem(SDRATTR_LAYERNAME,rIn)  {}
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 #endif

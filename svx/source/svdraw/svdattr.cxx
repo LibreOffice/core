@@ -2277,5 +2277,14 @@ SfxPoolItem* SdrCustomShapeReplacementURLItem::Clone( SfxItemPool*) const
     return new SdrCustomShapeReplacementURLItem(*this);
 }
 
+SfxPoolItem* SdrLayerIdItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SdrLayerIdItem(*this);
+}
+
+SfxPoolItem* SdrLayerNameItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SdrLayerNameItem(*this);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
