@@ -298,8 +298,6 @@ throw(  SAXException, RuntimeException, std::exception )
                             }
                             break;
 
-                            break;
-
                             case TB_ATTRIBUTE_URL:
                             {
                                 bAttributeURL   = true;
