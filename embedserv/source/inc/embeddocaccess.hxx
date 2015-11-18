@@ -29,12 +29,8 @@
 
 #include <oleidl.h>
 #ifndef __MINGW32__
-#ifdef _MSC_VER
 #pragma warning(disable : 4265)
 #include <atldbcli.h>
-#else
-#include <atlcomcli.h>
-#endif
 #endif
 #include <cppuhelper/weak.hxx>
 
