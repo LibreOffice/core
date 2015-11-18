@@ -1540,6 +1540,61 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
     }
 }
 
+void ToolBox::ImplLoadRes( const ResId& rResId )
+{
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( ! pMgr )
+        return;
+
+    DockingWindow::ImplLoadRes( rResId );
+
+    sal_uLong              nObjMask;
+
+    nObjMask = ReadLongRes();
+
+    if ( nObjMask & RSC_TOOLBOX_BUTTONTYPE )
+        SetButtonType( (ButtonType)ReadLongRes() );
+
+    if ( nObjMask & RSC_TOOLBOX_ALIGN )
+        SetAlign( (WindowAlign)ReadLongRes() );
+
+    if ( nObjMask & RSC_TOOLBOX_LINECOUNT )
+        SetLineCount( sal::static_int_cast<sal_uInt16>(ReadLongRes()) );
+
+    if ( nObjMask & RSC_TOOLBOX_CUSTOMIZE )
+    {
+        bool bCust = ReadShortRes();
+        EnableCustomize( bCust );
+    }
+
+    if ( nObjMask & RSC_TOOLBOX_MENUSTRINGS )
+    {
+        bool bCust = ReadShortRes();
+        EnableMenuStrings( bCust );
+    }
+
+    if ( nObjMask & RSC_TOOLBOX_FLOATLINES )
+        SetFloatingLines( ReadShortRes() );
+
+    if ( nObjMask & RSC_TOOLBOX_ITEMIMAGELIST )
+    {
+        maImageList = ImageList( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
+    }
+
+    if ( nObjMask & RSC_TOOLBOX_ITEMLIST )
+    {
+        sal_uLong nEle = ReadLongRes();
+
+        // insert item
+        for ( sal_uLong i = 0; i < nEle; i++ )
+        {
+            InsertItem( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *pMgr ) );
+            IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
+        }
+    }
+}
+
 ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
     DockingWindow( WINDOW_TOOLBOX )
 {

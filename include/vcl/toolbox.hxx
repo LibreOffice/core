@@ -190,6 +190,7 @@ private:
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    SAL_DLLPRIVATE void            ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE bool            ImplCalcItem();
     SAL_DLLPRIVATE sal_uInt16      ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
@@ -311,6 +312,8 @@ public:
     virtual void        Resizing( Size& rSize ) override;
     virtual Size        GetOptimalSize() const override;
 
+    void                InsertItem( const ResId& rResId,
+                                    sal_uInt16 nPos = TOOLBOX_APPEND );
     /// Insert a command (like '.uno:Save').
     virtual void        InsertItem( const OUString& rCommand,
                                     const css::uno::Reference<css::frame::XFrame>& rFrame,
