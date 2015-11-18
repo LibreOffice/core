@@ -24,6 +24,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <comphelper/sequence.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -458,13 +459,8 @@ beans::PropertyValue TDefTableHandler::getInteropGrabBag(const OUString& aName)
     else
         aRet.Name = aName;
 
-    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
-    beans::PropertyValue* pSeq = aSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
-        *pSeq++ = *i;
+    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_aInteropGrabBag));
     m_aInteropGrabBag.clear();
-
-    aRet.Value = uno::makeAny(aSeq);
     return aRet;
 }
 
