@@ -35,8 +35,8 @@
  <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineFont"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToLower" toolbar:text="lowercase" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToUpper" toolbar:text="UPPERCASE" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToLower" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToUpper" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color"/>
  <toolbar:toolbarseparator/>

@@ -64,7 +64,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SetDocumentProperties" toolbar:text="Properties"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetDocumentProperties"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false" toolbar:helpid="6660"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
