@@ -147,8 +147,8 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rControll
 : svtools::ToolbarMenu(xFrame, pParent, WB_CLIPCHILDREN )
 , mrController( rController )
 , mxFrame(xFrame)
-, mpDisplayModeSet1( 0 )
-, mpDisplayModeSet2( 0 )
+, mpDisplayModeSet1( nullptr )
+, mpDisplayModeSet2( nullptr )
 {
     const sal_Int32 LAYOUT_BORDER_PIX = 7;
 
