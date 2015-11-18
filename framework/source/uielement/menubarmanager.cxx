@@ -66,6 +66,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
@@ -79,16 +80,6 @@
 #include <uielement/menubarmerger.hxx>
 #include <boost/noncopyable.hpp>
 #include <tools/urlobj.hxx>
-
-// Be careful removing this "bad" construct. There are serious problems
-// with #define STRICT and including windows.h. Changing this needs some
-// redesign on other projects, too. Especially sal/main.h which defines
-// HINSTANCE depending on STRICT!!!!!!!!!!!!!!!
-struct SystemMenuData
-{
-    unsigned long nSize;
-    long          hMenu;
-};
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
