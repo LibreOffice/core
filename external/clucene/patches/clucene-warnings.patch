@@ -1,10 +1,9 @@
 --- src/core/CLucene/analysis/AnalysisHeader.h	2012-02-22 12:37:22.531637934 +0000
 +++ src/core/CLucene/analysis/AnalysisHeader.h	2012-02-22 12:39:15.369916728 +0000
-@@ -7,6 +7,12 @@
+@@ -7,6 +7,11 @@
  #ifndef _lucene_analysis_AnalysisHeader_
  #define _lucene_analysis_AnalysisHeader_
  
-+#include <config_global.h>
 +#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
@@ -24,11 +23,10 @@
  #endif
 --- src/core/CLucene/search/Searchable.h	2012-02-22 12:37:22.513637729 +0000
 +++ src/core/CLucene/search/Searchable.h	2012-02-22 12:38:51.073641550 +0000
-@@ -7,6 +7,12 @@
+@@ -7,6 +7,11 @@
  #ifndef _lucene_search_Searcher_
  #define _lucene_search_Searcher_
  
-+#include <config_global.h>
 +#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
@@ -48,11 +46,10 @@
  #endif
 --- src/core/CLucene/store/IndexInput.h	2012-02-22 12:37:22.508637673 +0000
 +++ src/core/CLucene/store/IndexInput.h	2012-02-22 12:39:00.465747935 +0000
-@@ -7,6 +7,12 @@
+@@ -7,6 +7,11 @@
  #ifndef _lucene_store_IndexInput_
  #define _lucene_store_IndexInput_
  
-+#include <config_global.h>
 +#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
@@ -72,11 +69,10 @@
  #endif
 --- src/core/CLucene/util/Array.h	2012-02-22 12:37:22.510637696 +0000
 +++ src/core/CLucene/util/Array.h	2012-02-22 12:38:33.714444884 +0000
-@@ -7,6 +7,13 @@
+@@ -7,6 +7,12 @@
  #ifndef _lucene_util_Array_
  #define _lucene_util_Array_
  
-+#include <config_global.h>
 +#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wshadow"
@@ -97,11 +93,10 @@
  #endif
 --- src/core/CLucene/util/PriorityQueue.h	2012-02-22 12:37:22.510637696 +0000
 +++ src/core/CLucene/util/PriorityQueue.h	2012-02-22 12:38:40.316519685 +0000
-@@ -7,6 +7,12 @@
+@@ -7,6 +7,11 @@
  #ifndef _lucene_util_PriorityQueue_
  #define _lucene_util_PriorityQueue_
  
-+#include <config_global.h>
 +#if defined(__GNUC__)
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wshadow"
