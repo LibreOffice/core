@@ -63,6 +63,9 @@ published interface XButton: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** sets a command string for pushing the button.
+
+        @param Command
+                value can be used to detect which button is pressed.
      */
     [oneway] void setActionCommand( [in] string Command );
 

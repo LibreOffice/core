@@ -225,6 +225,16 @@ published service UnoControlButtonModel
     //-------------------------------------------------------------------------
 
     /** specifies the state of the control.
+
+        If <member>Toggle</member> property is set to <TRUE/>, the pressed state
+        is enabled and its pressed state can be obtained with this property.
+
+        <pre>
+        0: not pressed
+        1: pressed
+        2: don't know
+        </pre>
+        @see <member>Toggle</member>
      */
     [property] short State;
 
