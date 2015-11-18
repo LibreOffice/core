@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_94ed2a28",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-18T13:38:18Z",
+      "side": 1,
+      "message": "funcName.copy(0, funcName.getLength())\n\nis needless, it copies the entire string of funcName, so use\n\n OUString eqPlusFuncName \u003d \"\u003d\" + funcName;",
+      "range": {
+        "startLine": 1062,
+        "startChar": 36,
+        "endLine": 1062,
+        "endChar": 74
+      },
+      "revId": "97f2ea8795c9a67fe0e588494d6518bd3c8d5c7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f4f2b605",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-18T13:38:18Z",
+      "side": 1,
+      "message": "Btw, why the name aDiscFuncNameStr? If it stands for description then use aDescFuncNameStr, it\u0027s not a disc ;-)",
+      "range": {
+        "startLine": 1155,
+        "startChar": 13,
+        "endLine": 1155,
+        "endChar": 29
+      },
+      "revId": "97f2ea8795c9a67fe0e588494d6518bd3c8d5c7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_74e7e640",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3374,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-18T13:38:18Z",
+      "side": 1,
+      "message": "What is this and why?",
+      "revId": "97f2ea8795c9a67fe0e588494d6518bd3c8d5c7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

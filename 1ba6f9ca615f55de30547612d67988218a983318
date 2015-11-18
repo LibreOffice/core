@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_b4e82e18",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-18T13:38:18Z",
+      "side": 0,
+      "message": "This still removes the in-quote check.\n\nWe don\u0027t want function suggestions if the cursor is within a literal string of the formula, for example\n\n \u003dCONCATENATE(\"sum this \";A1)\n\nno function tip if the cursor is behind \"sum",
+      "revId": "1ba6f9ca615f55de30547612d67988218a983318",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_14dada78",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-18T13:38:18Z",
+      "side": 0,
+      "message": "Why remove this? You want the function names tiphelp to disappear if the user has chosen a function, don\u0027t you?",
+      "revId": "1ba6f9ca615f55de30547612d67988218a983318",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
