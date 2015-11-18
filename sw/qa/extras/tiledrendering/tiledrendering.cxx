@@ -93,7 +93,7 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
 
     SwXTextDocument* pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDocument);
-    pTextDocument->initializeForTiledRendering();
+    pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     return pTextDocument;
 }
 
@@ -429,7 +429,6 @@ void SwTiledRenderingTest::testDocumentSizeChanged()
     SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pXTextDocument->initializeForTiledRendering();
     Size aSize = pXTextDocument->getDocumentSize();
 
     // Delete the second page and see how the size changes.

@@ -417,7 +417,7 @@ public:
     /// @see vcl::ITiledRenderable::getPartName().
     virtual OUString getPartName(int nPart) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
-    virtual void initializeForTiledRendering() SAL_OVERRIDE;
+    virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::registerCallback().
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::postKeyEvent().
