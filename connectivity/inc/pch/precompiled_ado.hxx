@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2015-11-18 08:00:25 using:
  ./bin/update_pch connectivity ado --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -70,7 +70,6 @@
 #include <connectivity/sdbcx/IRefreshable.hxx>
 
 // Prevent windows header macro pollution.
-#undef OPTIONAL
-#undef DELETE
+#include <postwin.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
