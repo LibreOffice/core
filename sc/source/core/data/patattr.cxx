@@ -810,7 +810,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     rEditSet.Put( SvxPostureItem    ( eCtlItalic,   EE_CHAR_ITALIC_CTL ) );
     rEditSet.Put( SvxContourItem    ( bOutline,     EE_CHAR_OUTLINE ) );
     rEditSet.Put( SvxShadowedItem   ( bShadow,      EE_CHAR_SHADOW ) );
-    rEditSet.Put( SfxBoolItem       ( EE_PARA_FORBIDDENRULES, bForbidden ) );
+    rEditSet.Put( SvxForbiddenRuleItem(bForbidden, EE_PARA_FORBIDDENRULES) );
     rEditSet.Put( SvxEmphasisMarkItem( eEmphasis,   EE_CHAR_EMPHASISMARK ) );
     rEditSet.Put( SvxCharReliefItem( eRelief,       EE_CHAR_RELIEF ) );
     rEditSet.Put( SvxLanguageItem   ( eLang,        EE_CHAR_LANGUAGE ) );
