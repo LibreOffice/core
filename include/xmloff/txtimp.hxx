@@ -362,6 +362,17 @@ enum XMLTextType
     XML_TEXT_TYPE_CHANGED_REGION
 };
 
+/// variable type (for XMLSetVarFieldImportContext)
+enum VarType
+{
+    VarTypeSimple,
+    VarTypeUserField,
+    VarTypeSequence
+    // see following NOTE!
+};
+
+// NOTE: these values must be distinct from any in "enum VarType" because they
+// are used as keys to SvI18NMap::Add()
 #define XML_TEXT_RENAME_TYPE_FRAME 10
 #define XML_TEXT_RENAME_TYPE_TABLE 20
 

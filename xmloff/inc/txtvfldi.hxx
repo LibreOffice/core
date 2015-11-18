@@ -30,17 +30,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 
 
-
-/// variable type (for XMLSetVarFieldImportContext)
-enum VarType
-{
-    VarTypeSimple,
-    VarTypeUserField,
-    VarTypeSequence
-};
-
-
-
 /** helper class: parses value-type and associated value attributes */
 class XMLValueImportHelper
 {
