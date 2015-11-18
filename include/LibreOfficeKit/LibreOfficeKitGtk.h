@@ -65,6 +65,7 @@ GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* 
  * lok_doc_view_open_document:
  * @pDocView: The #LOKDocView instance
  * @pPath: (transfer full): The path of the document that #LOKDocView widget should try to open
+ * @pRenderingArguments: lok::Document::initializeForRendering() arguments.
  * @cancellable:
  * @callback:
  * @userdata:
@@ -73,6 +74,7 @@ GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* 
  */
 void                           lok_doc_view_open_document          (LOKDocView* pDocView,
                                                                     const gchar* pPath,
+                                                                    const gchar* pRenderingArguments,
                                                                     GCancellable* cancellable,
                                                                     GAsyncReadyCallback callback,
                                                                     gpointer userdata);

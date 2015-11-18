@@ -29,7 +29,9 @@
 
 static int help()
 {
-    fprintf( stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install's-program-directory> <path-to-document>\n" );
+    fprintf(stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install's-program-directory> <path-to-document> [<options> ... ]\n\n");
+    fprintf(stderr, "Options:\n\n");
+    fprintf(stderr, "--hide-whitespace: Hide whitespace between pages in text documents.\n");
     return 1;
 }
 
@@ -475,13 +477,25 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
 }
 
 /// Creates a new model, i.e. LOK init and document load, one view implicitly.
-static void createModelAndView(const char* pLOPath, const char* pDocPath)
+static void createModelAndView(const char* pLOPath, const char* pDocPath, const std::vector<std::string>& rArguments)
 {
     GtkWidget* pDocView = lok_doc_view_new(pLOPath, nullptr, nullptr);
 
     setupWidgetAndCreateWindow(pDocView);
 
-    lok_doc_view_open_document(LOK_DOC_VIEW(pDocView), pDocPath, nullptr, openDocumentCallback, pDocView);
+    boost::property_tree::ptree aTree;
+    for (const std::string& rArgument : rArguments)
+    {
+        if (rArgument == "--hide-whitespace")
+        {
+            aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/type", '/'), "boolean");
+            aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
+        }
+    }
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aArguments = aStream.str();
+    lok_doc_view_open_document(LOK_DOC_VIEW(pDocView), pDocPath, aArguments.c_str(), nullptr, openDocumentCallback, pDocView);
 }
 
 /// Our GtkClipboardGetFunc implementation for HTML.
@@ -1263,7 +1277,10 @@ int main( int argc, char* argv[] )
 
     gtk_init( &argc, &argv );
 
-    createModelAndView(argv[1], argv[2]);
+    std::vector<std::string> aArguments;
+    for (int i = 3; i < argc; ++i)
+        aArguments.push_back(argv[i]);
+    createModelAndView(argv[1], argv[2], aArguments);
 
     gtk_main();
 

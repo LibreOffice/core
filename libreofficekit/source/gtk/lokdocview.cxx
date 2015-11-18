@@ -44,6 +44,7 @@ struct LOKDocViewPrivateImpl
 {
     const gchar* m_aLOPath;
     const gchar* m_aDocPath;
+    std::string m_aRenderingArguments;
     gdouble m_nLoadProgress;
     gboolean m_bIsLoading;
     gboolean m_bCanZoomIn;
@@ -530,7 +531,7 @@ static gboolean postDocumentLoad(gpointer pData)
     LOKDocViewPrivate& priv = getPrivate(pLOKDocView);
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
-    priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, nullptr);
+    priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     g_timeout_add(600, handleTimeout, pLOKDocView);
@@ -2312,6 +2313,7 @@ lok_doc_view_open_document_finish (LOKDocView* pDocView, GAsyncResult* res, GErr
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_open_document (LOKDocView* pDocView,
                             const gchar* pPath,
+                            const gchar* pRenderingArguments,
                             GCancellable* cancellable,
                             GAsyncReadyCallback callback,
                             gpointer userdata)
@@ -2324,6 +2326,7 @@ lok_doc_view_open_document (LOKDocView* pDocView,
     pLOEvent->m_pPath = pPath;
 
     priv->m_aDocPath = pPath;
+    priv->m_aRenderingArguments = pRenderingArguments;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
