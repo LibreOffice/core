@@ -149,6 +149,14 @@ cppu_detail_getUnoType(
         ::typelib_TypeClass_UNSIGNED_SHORT);
 }
 
+#if LIBO_INTERNAL_ONLY && (!defined SAL_W32 || defined __MINGW32__)
+    // cf. sal/types.h sal_Unicode
+inline css::uno::Type const &
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER sal_uInt16 const *) {
+    return cppu::detail::getTypeFromTypeClass(typelib_TypeClass_UNSIGNED_SHORT);
+}
+#endif
+
 inline css::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_Int32 const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_LONG);
@@ -185,6 +193,14 @@ inline css::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::cppu::UnoCharType const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_CHAR);
 }
+
+#if LIBO_INTERNAL_ONLY && (!defined SAL_W32 || defined __MINGW32__)
+    // cf. sal/types.h sal_Unicode
+inline css::uno::Type const &
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER sal_Unicode const *) {
+    return cppu::detail::getTypeFromTypeClass(typelib_TypeClass_CHAR);
+}
+#endif
 
 inline css::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::rtl::OUString const *) {

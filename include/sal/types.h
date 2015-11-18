@@ -149,7 +149,11 @@ typedef unsigned char sal_uChar;
     typedef wchar_t             sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
+#if LIBO_INTERNAL_ONLY && defined __cplusplus
+    typedef char16_t sal_Unicode;
+#else
     typedef sal_uInt16          sal_Unicode;
+#endif
 #endif
 
 typedef void *                   sal_Handle;
