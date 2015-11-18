@@ -87,6 +87,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/protitem.hxx>
 #include <fmtornt.hxx>
+#include <fmteiro.hxx>
 #include <fmturl.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -1007,9 +1008,9 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
     const ::uno::Any* pEdit;
     if(GetProperty(RES_EDIT_IN_READONLY, 0, pEdit))
     {
-        SfxBoolItem aBool(RES_EDIT_IN_READONLY);
-        ((SfxPoolItem&)aBool).PutValue(*pEdit, 0);
-        rSet.Put(aBool);
+        SwFormatEditInReadonly item(RES_EDIT_IN_READONLY);
+        item.PutValue(*pEdit, 0);
+        rSet.Put(item);
     }
     return bRet;
 }
