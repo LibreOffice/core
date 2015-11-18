@@ -205,7 +205,6 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
     if ( m_pVCLMenu )
     {
         SystemMenuData aSystemMenuData;
-        aSystemMenuData.nSize = sizeof( SystemMenuData );
 
         m_pVCLMenu->GetSystemMenuData( &aSystemMenuData );
 #ifdef _WIN32
