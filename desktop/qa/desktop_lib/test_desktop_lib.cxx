@@ -283,7 +283,7 @@ void DesktopLOKTest::testSearchCalc()
     LibLibreOffice_Impl aOffice;
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
-    pDocument->pClass->initializeForRendering(pDocument);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -406,7 +406,7 @@ void DesktopLOKTest::testRowColumnHeaders()
      */
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
 
-    pDocument->pClass->initializeForRendering(pDocument);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
 
     boost::property_tree::ptree aTree;
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");

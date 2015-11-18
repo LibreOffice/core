@@ -256,7 +256,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_initial
     (JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
-    pDocument->pClass->initializeForRendering(pDocument);
+    pDocument->pClass->initializeForRendering(pDocument, NULL);
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Office_saveAs

@@ -261,6 +261,40 @@ static OUString getAbsoluteURL(const char* pURL)
     return OUString();
 }
 
+static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    std::vector<beans::PropertyValue> aArguments;
+    if (pJSON)
+    {
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(pJSON);
+        boost::property_tree::read_json(aStream, aTree);
+
+        for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+        {
+            const std::string& rType = rPair.second.get<std::string>("type");
+            const std::string& rValue = rPair.second.get<std::string>("value");
+
+            beans::PropertyValue aValue;
+            aValue.Name = OUString::fromUtf8(rPair.first.c_str());
+            if (rType == "string")
+                aValue.Value <<= OUString::fromUtf8(rValue.c_str());
+            else if (rType == "boolean")
+                aValue.Value <<= OString(rValue.c_str()).toBoolean();
+            else if (rType == "float")
+                aValue.Value <<= OString(rValue.c_str()).toFloat();
+            else if (rType == "long")
+                aValue.Value <<= OString(rValue.c_str()).toInt32();
+            else if (rType == "unsigned short")
+                aValue.Value <<= static_cast<sal_uInt16>(OString(rValue.c_str()).toUInt32());
+            else
+                SAL_WARN("desktop.lib", "jsonToPropertyValues: unhandled type '"<<rType<<"'");
+            aArguments.push_back(aValue);
+        }
+    }
+    rPropertyValues = comphelper::containerToSequence(aArguments);
+}
+
 extern "C"
 {
 
@@ -281,7 +315,8 @@ void        doc_paintTile(LibreOfficeKitDocument* pThis,
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pWidth,
                                 long* pHeight);
-static void doc_initializeForRendering(LibreOfficeKitDocument* pThis);
+static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
+                                       const char* pArguments);
 
 static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                 LibreOfficeKitCallback pCallback,
@@ -939,12 +974,15 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
     }
 }
 
-static void doc_initializeForRendering(LibreOfficeKitDocument* pThis)
+static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
+                                       const char* pArguments)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
     {
         doc_iniUnoCommands();
+        uno::Sequence<beans::PropertyValue> aPropertyValues;
+        jsonToPropertyValues(pArguments, aPropertyValues);
         pDoc->initializeForTiledRendering();
     }
 }
@@ -986,40 +1024,6 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     }
 
     pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
-}
-
-static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::PropertyValue>& rPropertyValues)
-{
-    std::vector<beans::PropertyValue> aArguments;
-    if (pJSON)
-    {
-        boost::property_tree::ptree aTree;
-        std::stringstream aStream(pJSON);
-        boost::property_tree::read_json(aStream, aTree);
-
-        for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
-        {
-            const std::string& rType = rPair.second.get<std::string>("type");
-            const std::string& rValue = rPair.second.get<std::string>("value");
-
-            beans::PropertyValue aValue;
-            aValue.Name = OUString::fromUtf8(rPair.first.c_str());
-            if (rType == "string")
-                aValue.Value <<= OUString::fromUtf8(rValue.c_str());
-            else if (rType == "boolean")
-                aValue.Value <<= OString(rValue.c_str()).toBoolean();
-            else if (rType == "float")
-                aValue.Value <<= OString(rValue.c_str()).toFloat();
-            else if (rType == "long")
-                aValue.Value <<= OString(rValue.c_str()).toInt32();
-            else if (rType == "unsigned short")
-                aValue.Value <<= static_cast<sal_uInt16>(OString(rValue.c_str()).toUInt32());
-            else
-                SAL_WARN("desktop.lib", "jsonToPropertyValues: unhandled type '"<<rType<<"'");
-            aArguments.push_back(aValue);
-        }
-    }
-    rPropertyValues = comphelper::containerToSequence(aArguments);
 }
 
 /** Class to react on finishing of a dispatched command.

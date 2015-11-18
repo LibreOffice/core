@@ -530,7 +530,7 @@ static gboolean postDocumentLoad(gpointer pData)
     LOKDocViewPrivate& priv = getPrivate(pLOKDocView);
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
-    priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument);
+    priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, nullptr);
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     g_timeout_add(600, handleTimeout, pLOKDocView);

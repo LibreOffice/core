@@ -156,10 +156,22 @@ public:
      * needed to render the document correctly using tiled rendering. This
      * method has to be called right after documentLoad() in case any of the
      * tiled rendering methods are to be used later.
+     *
+     * Example argument string for text documents:
+     *
+     * {
+     *     ".uno:HideWhitespace":
+     *     {
+     *         "type": "boolean",
+     *         "value": "true"
+     *     }
+     * }
+     *
+     * @param pArguments arguments of the rendering
      */
-    inline void initializeForRendering()
+    inline void initializeForRendering(const char* pArguments = NULL)
     {
-        mpDoc->pClass->initializeForRendering(mpDoc);
+        mpDoc->pClass->initializeForRendering(mpDoc, pArguments);
     }
 
     /**

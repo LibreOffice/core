@@ -124,7 +124,8 @@ struct _LibreOfficeKitDocumentClass
                              long* pHeight);
 
     /// @see lok::Document::initializeForRendering().
-    void (*initializeForRendering) (LibreOfficeKitDocument* pThis);
+    void (*initializeForRendering) (LibreOfficeKitDocument* pThis,
+                                    const char* pArguments);
 
     /// @see lok::Document::registerCallback().
     void (*registerCallback) (LibreOfficeKitDocument* pThis,
