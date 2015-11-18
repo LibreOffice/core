@@ -76,7 +76,8 @@ void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)
     for (it = rFieldVector.begin(); it != rFieldVector.end(); ++it)
     {
         ScPivotField& rField = *it;
-        ScItemValue* pItemValue = mpParent->GetItem(rField.nCol);
+        OUString aLabel = mpParent->GetItem( rField.nCol )->maName;
+        ScItemValue* pItemValue = new ScItemValue( aLabel, rField.nCol, rField.nFuncMask );
         InsertEntry(pItemValue->maName, nullptr, false, TREELIST_APPEND, pItemValue);
     }
 }
