@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,glyphy,$(GLYPHY_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,glyphy,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,glyphy,\
+	external/glyphy/glyphy-upstream.patch.1 \
 	external/glyphy/glyphy-windows.patch.1 \
 ))
 

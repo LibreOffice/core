@@ -1,0 +1,211 @@
+From d6d6c61c8d0e336c34ba3f5d9adbe923ffa1cbe3 Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Thu, 6 Aug 2015 15:34:38 +0100
+Subject: [PATCH 2/6] Implement more robust winding-direction algorithm
+
+Fixes 'p' in Comic Sans Bold for example.  That font has many
+self-intersecting contours.  The one in 'p' was causing complete
+winding direction reversal using old algorithm.  Implement area-based
+algorithm.
+---
+ src/glyphy-outline.cc | 67 ++++++++++-----------------------------------------
+ 1 file changed, 13 insertions(+), 54 deletions(-)
+
+diff --git a/src/glyphy-outline.cc b/src/glyphy-outline.cc
+index 3543f3b..ef71247 100644
+--- a/src/glyphy-outline.cc
++++ b/src/glyphy-outline.cc
+@@ -55,65 +55,24 @@ winding (const glyphy_arc_endpoint_t *endpoints,
+   /*
+    * Algorithm:
+    *
+-   * - Find the lowest-x part of the contour,
+-   * - If the point is an endpoint:
+-   *   o compare the angle of the incoming and outgoing edges of that point
+-   *     to find out whether it's CW or CCW,
+-   * - Otherwise, compare the y of the two endpoints of the arc with lowest-x point.
+-   *
+-   * Note:
+-   *
+-   * We can use a simpler algorithm here: Act as if arcs are lines, then use the
+-   * triangle method to calculate the signed area of the contour and get the sign.
+-   * It should work for all cases we care about.  The only case failing would be
+-   * that of two endpoints and two arcs.  But we can even special-case that.
++   * - Approximate arcs with triangles passing through the mid- and end-points,
++   * - Calculate the area of the contour,
++   * - Return sign.
+    */
+ 
+-  unsigned int corner = 1;
+-  for (unsigned int i = 2; i < num_endpoints; i++)
+-    if (endpoints[i].p.x < endpoints[corner].p.x ||
+-	(endpoints[i].p.x == endpoints[corner].p.x &&
+-	 endpoints[i].p.y < endpoints[corner].p.y))
+-      corner = i;
+-
+-  double min_x = endpoints[corner].p.x;
+-  int winner = -1;
+-  Point p0 (0, 0);
+-  for (unsigned int i = 0; i < num_endpoints; i++) {
+-    const glyphy_arc_endpoint_t &endpoint = endpoints[i];
+-    if (endpoint.d == GLYPHY_INFINITY || endpoint.d == 0 /* arcs only, not lines */) {
+-      p0 = endpoint.p;
+-      continue;
+-    }
+-    Arc arc (p0, endpoint.p, endpoint.d);
+-    p0 = endpoint.p;
++  double area = 0;
++  for (unsigned int i = 1; i < num_endpoints; i++)
++  {
++    const glyphy_point_t &p0 = endpoints[i - 1].p;
++    const glyphy_point_t &p1 = endpoints[i].p;
++    double d = endpoints[i].d;
+ 
+-    Point c = arc.center ();
+-    double r = arc.radius ();
+-    if (c.x - r < min_x && arc.wedge_contains_point (c - Vector (r, 0))) {
+-      min_x = c.x - r;
+-      winner = i;
+-    }
+-  }
++    assert (d != GLYPHY_INFINITY);
+ 
+-  if (winner == -1)
+-  {
+-    // Corner is lowest-x.  Find the tangents of the two arcs connected to the
+-    // corner and compare the tangent angles to get contour direction.
+-    const glyphy_arc_endpoint_t ethis = endpoints[corner];
+-    const glyphy_arc_endpoint_t eprev = endpoints[corner - 1];
+-    const glyphy_arc_endpoint_t enext = endpoints[corner < num_endpoints - 1 ? corner + 1 : 1];
+-    double in  = (-Arc (eprev.p, ethis.p, ethis.d).tangents ().second).angle ();
+-    double out = (+Arc (ethis.p, enext.p, enext.d).tangents ().first ).angle ();
+-    return out > in;
++    area += p0.x*p1.y - p0.y*p1.x;
++    area -= .5 * d * ((p1.x-p0.x)*(p1.x-p0.x) + (p1.y-p0.y)*(p1.y-p0.y));
+   }
+-  else
+-  {
+-    // Easy.
+-    return endpoints[winner].d < 0;
+-  }
+-
+-  return false;
++  return area < 0;
+ }
+ 
+ 
+-- 
+2.5.0
+
+From 644c5bab6e7f0e5af8f42fa7a8075372716c66d3 Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Thu, 6 Aug 2015 15:49:37 +0100
+Subject: [PATCH 3/6] Start handling fully-degenerate curves
+
+---
+ src/glyphy-arcs-bezier.hh | 7 +++++++
+ src/glyphy-geometry.hh    | 4 ++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/src/glyphy-arcs-bezier.hh b/src/glyphy-arcs-bezier.hh
+index ab729cb..32b7c8c 100644
+--- a/src/glyphy-arcs-bezier.hh
++++ b/src/glyphy-arcs-bezier.hh
+@@ -103,6 +103,13 @@ class ArcsBezierApproximatorSpringSystem
+ 					    double *perror,
+ 					    unsigned int max_segments = 100)
+   {
++    /* Handle fully-degenerate cases. */
++    Vector v1 (b.p1 - b.p0);
++    Vector v2 (b.p2 - b.p0);
++    Vector v3 (b.p3 - b.p0);
++    if (fabs (v1.cross(v2)) < GLYPHY_EPSILON && fabs (v2.cross(v3)) < GLYPHY_EPSILON)
++      ;//TODO
++
+     std::vector<double> t;
+     std::vector<double> e;
+     double max_e, min_e;
+diff --git a/src/glyphy-geometry.hh b/src/glyphy-geometry.hh
+index f5f6003..3c60856 100644
+--- a/src/glyphy-geometry.hh
++++ b/src/glyphy-geometry.hh
+@@ -99,6 +99,7 @@ struct Vector {
+   inline const Vector normal (void) const; /* ortho().normalized() */
+   inline double angle (void) const;
+ 
++  inline double cross (const Vector &other) const;
+   inline const Vector rebase (const Vector &bx, const Vector &by) const;
+   inline const Vector rebase (const Vector &bx) const;
+ 
+@@ -345,6 +346,9 @@ inline double Vector::angle (void) const {
+   return atan2 (dy, dx);
+ }
+ 
++inline double Vector::cross (const Vector &other) const {
++  return dx * other.dy - dy * other.dx;
++}
+ inline const Vector Vector::rebase (const Vector &bx,
+ 				    const Vector &by) const {
+   return Vector (*this * bx, *this * by);
+-- 
+2.5.0
+
+From 5667ab11a3d5f57bb89c4e8970d26b940d36964a Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Thu, 6 Aug 2015 15:51:15 +0100
+Subject: [PATCH 4/6] Simplify winding()
+
+---
+ src/glyphy-outline.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/glyphy-outline.cc b/src/glyphy-outline.cc
+index ef71247..7fded28 100644
+--- a/src/glyphy-outline.cc
++++ b/src/glyphy-outline.cc
+@@ -69,8 +69,8 @@ winding (const glyphy_arc_endpoint_t *endpoints,
+ 
+     assert (d != GLYPHY_INFINITY);
+ 
+-    area += p0.x*p1.y - p0.y*p1.x;
+-    area -= .5 * d * ((p1.x-p0.x)*(p1.x-p0.x) + (p1.y-p0.y)*(p1.y-p0.y));
++    area += Vector(p0).cross (Vector(p1));
++    area -= .5 * d * (Point(p1) - Point(p0)).len2 ();
+   }
+   return area < 0;
+ }
+-- 
+2.5.0
+
+From 16fa0a713295a76f3075e6732007dca2dd38d11e Mon Sep 17 00:00:00 2001
+From: Behdad Esfahbod <behdad@behdad.org>
+Date: Thu, 6 Aug 2015 16:00:19 +0100
+Subject: [PATCH 5/6] Better handle fully-degenerate curves
+
+---
+ src/glyphy-arcs-bezier.hh | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/glyphy-arcs-bezier.hh b/src/glyphy-arcs-bezier.hh
+index 32b7c8c..ac210c0 100644
+--- a/src/glyphy-arcs-bezier.hh
++++ b/src/glyphy-arcs-bezier.hh
+@@ -108,7 +108,14 @@ class ArcsBezierApproximatorSpringSystem
+     Vector v2 (b.p2 - b.p0);
+     Vector v3 (b.p3 - b.p0);
+     if (fabs (v1.cross(v2)) < GLYPHY_EPSILON && fabs (v2.cross(v3)) < GLYPHY_EPSILON)
+-      ;//TODO
++    {
++      /* Curve has no area.  If endpoints are NOT the same, replace with single
++       * line segment.  Otherwise fully skip. */
++      arcs.clear ();
++      if (b.p0 != b.p1)
++	arcs.push_back (Arc (b.p0, b.p1, 0));
++      return;
++    }
+ 
+     std::vector<double> t;
+     std::vector<double> e;
+-- 
+2.5.0
+
