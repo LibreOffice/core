@@ -66,8 +66,6 @@
 #include "prewin.h"
 
 #include <gdiplus.h>
-#include <gdiplusenums.h>
-#include <gdipluscolor.h>
 #include <shlobj.h>
 
 #ifdef _WIN32_WINNT_WINBLUE

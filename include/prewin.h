@@ -24,33 +24,40 @@
 #define Rectangle    BLA_Rectangle
 #define Folder       WIN_Folder
 #define GradientStyle_RECT  WIN_GradientStyle_RECT
+
 #ifndef IN
-#define IN
+#   define IN
 #endif
 #ifndef OUT
-#define OUT
+#   define OUT
 #endif
 
 #if !defined STRICT
-#define STRICT
+#   define STRICT
 #endif
 #ifdef _MSC_VER
-#pragma warning(push, 1)
-#pragma warning (disable: 4005)
+#   pragma warning(push, 1)
+#   pragma warning (disable: 4005)
 #endif
+
 #include <windows.h>
+
 #ifdef _MSC_VER
-#pragma warning(pop)
+#   pragma warning(pop)
 #endif
+
 #include <shellapi.h>
 #include <commdlg.h>
 #include <dlgs.h>
+
 #ifdef _MSC_VER
-#pragma warning(push, 1)
+#   pragma warning(push, 1)
 #endif
+
 #include <commctrl.h>
+
 #ifdef _MSC_VER
-#pragma warning(pop)
+#   pragma warning(pop)
 #endif
 
 #endif

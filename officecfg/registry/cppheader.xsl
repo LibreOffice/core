@@ -93,8 +93,6 @@
       </xsl:if>
       <xsl:text>#include "comphelper/configuration.hxx"&#xA;</xsl:text>
       <xsl:text>&#xA;</xsl:text>
-      <xsl:text>#undef RGB&#xA;</xsl:text>
-      <xsl:text>&#xA;</xsl:text>
       <xsl:text>namespace officecfg { namespace </xsl:text>
       <xsl:value-of select="$ns1"/>
       <xsl:if test="$ns2">
