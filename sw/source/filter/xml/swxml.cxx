@@ -65,6 +65,7 @@
 #include <poolfmt.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
+#include <fmtrowsplt.hxx>
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
@@ -946,7 +947,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         }
         // Fix #i58251#: Unfortunately is the static default different to SO7 behaviour,
         // so we have to set a dynamic default after importing SO7
-        rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, false ) );
+        rDoc.SetDefault(SwFormatRowSplit(false));
     }
 
     rDoc.PropagateOutlineRule();
