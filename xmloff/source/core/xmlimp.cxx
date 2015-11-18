@@ -190,23 +190,30 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
                             {
                                 mnGeneratorVersion = SvXMLImport::LO_3x;
                             }
-                            else
+                            else if ('4' == loVersion[0])
                             {
-                                SAL_INFO_IF('4' != loVersion[0], "xmloff.core", "unknown LO version: " << loVersion);
-                                if ('4' == loVersion[0] && loVersion.getLength() > 1
+                                if (loVersion.getLength() > 1
                                     && (loVersion[1] == '0' || loVersion[1] == '1'))
                                 {
                                     mnGeneratorVersion = SvXMLImport::LO_41x; // 4.0/4.1
                                 }
-                                else if ('4' == loVersion[0]
-                                    && loVersion.getLength() > 1 && loVersion[1] == '2')
+                                else if (loVersion.getLength() > 1 && '2' == loVersion[1])
                                 {
                                     mnGeneratorVersion = SvXMLImport::LO_42x; // 4.2
                                 }
-                                else
+                                else if (loVersion.getLength() > 1 && '3' == loVersion[1])
                                 {
-                                    mnGeneratorVersion = SvXMLImport::LO_4x;
+                                    mnGeneratorVersion = SvXMLImport::LO_43x; // 4.3
                                 }
+                                else if (loVersion.getLength() > 1 && '4' == loVersion[1])
+                                {
+                                    mnGeneratorVersion = SvXMLImport::LO_44x; // 4.4
+                                }
+                            }
+                            else
+                            {
+                                SAL_INFO_IF('5' != loVersion[0], "xmloff.core", "unknown LO version: " << loVersion);
+                                mnGeneratorVersion = SvXMLImport::LO_5x;
                             }
                             return; // ignore buildIds
                         }
