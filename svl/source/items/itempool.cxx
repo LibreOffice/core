@@ -107,7 +107,7 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
         pRet = pImp->mpSecondary->GetPoolDefaultItem( nWhich );
     else
     {
-        SFX_ASSERT( false, nWhich, "unknown WhichId - cannot get pool default" );
+        assert(false && "unknown WhichId - cannot get pool default");
         pRet = nullptr;
     }
     return pRet;
@@ -277,8 +277,8 @@ void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
                     "these are not static" );
         for ( sal_uInt16 n = 0; n <= pImp->mnEnd - pImp->mnStart; ++n )
         {
-            SFX_ASSERT( (*( pImp->ppStaticDefaults + n ))->Which() == n + pImp->mnStart,
-                        n + pImp->mnStart, "static defaults not sorted" );
+            assert(((*(pImp->ppStaticDefaults + n))->Which() == n + pImp->mnStart)
+                        && "static defaults not sorted" );
             (*( pImp->ppStaticDefaults + n ))->SetKind( SFX_ITEMS_STATICDEFAULT );
             DBG_ASSERT( !(pImp->maPoolItems[n]), "defaults with setitems with items?!" );
         }
@@ -339,8 +339,7 @@ void SfxItemPool::ReleaseDefaults
 
     for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
-        SFX_ASSERT( IsStaticDefaultItem( *(pDefaults+n) ),
-                    n, "this is not a static Default" );
+        assert(IsStaticDefaultItem(*(pDefaults+n)));
         (*( pDefaults + n ))->SetRefCount( 0 );
         if ( bDelete )
             { delete *( pDefaults + n ); *(pDefaults + n) = nullptr; }
@@ -610,7 +609,7 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
         pImp->mpSecondary->SetPoolDefaultItem(rItem);
     else
     {
-        SFX_ASSERT( false, rItem.Which(), "unknown WhichId - cannot set pool default" );
+        assert(false && "unknown WhichId - cannot set pool default");
     }
 }
 
@@ -634,7 +633,7 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
         pImp->mpSecondary->ResetPoolDefaultItem(nWhichId);
     else
     {
-        SFX_ASSERT( false, nWhichId, "unknown WhichId - cannot set pool default" );
+        assert(false && "unknown WhichId - cannot reset pool default");
     }
 }
 
@@ -659,18 +658,17 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     if ( USHRT_MAX == nIndex ||
          IsItemFlag_Impl( nIndex, SfxItemPoolFlags::NOT_POOLABLE ) )
     {
-        SFX_ASSERT( USHRT_MAX != nIndex || rItem.Which() != nWhich ||
-                    !IsDefaultItem(&rItem) || rItem.GetKind() == SFX_ITEMS_DELETEONIDLE,
-                    nWhich, "a non Pool Item is Defaul?!" );
+        assert((USHRT_MAX != nIndex || rItem.Which() != nWhich ||
+            !IsDefaultItem(&rItem) || rItem.GetKind() == SFX_ITEMS_DELETEONIDLE)
+                && "a non Pool Item is Default?!");
         SfxPoolItem *pPoolItem = rItem.Clone(pImp->mpMaster);
         pPoolItem->SetWhich(nWhich);
         AddRef( *pPoolItem );
         return *pPoolItem;
     }
 
-    SFX_ASSERT( !pImp->ppStaticDefaults ||
-                typeid(rItem) == typeid(GetDefaultItem(nWhich)), nWhich,
-                "SFxItemPool: wrong item type in Put" );
+    assert(!pImp->ppStaticDefaults ||
+            typeid(rItem) == typeid(GetDefaultItem(nWhich)));
 
     SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];
     if (!pItemArr)
@@ -741,18 +739,14 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     // 3. not found, so clone to insert into the pointer array.
     SfxPoolItem* pNewItem = rItem.Clone(pImp->mpMaster);
     pNewItem->SetWhich(nWhich);
-#ifdef DBG_UTIL
-    SFX_ASSERT( typeid(rItem) == typeid(*pNewItem), nWhich, "unequal types in Put(): no Clone()?" )
+    assert(typeid(rItem) == typeid(*pNewItem) && "SfxItemPool::Put(): unequal types, no Clone() override?");
     if (dynamic_cast<const SfxSetItem*>(&rItem) == nullptr)
     {
-        SFX_ASSERT( !IsItemFlag(nWhich, SfxItemPoolFlags::POOLABLE) ||
-                    rItem == *pNewItem,
-                    nWhich, "unequal items in Put(): no operator==?" );
-        SFX_ASSERT( !IsItemFlag(*pNewItem, SfxItemPoolFlags::POOLABLE) ||
-                    *pNewItem == rItem,
-                    nWhich, "unequal items in Put(): no operator==?" );
+        assert((!IsItemFlag(nWhich, SfxItemPoolFlags::POOLABLE) || rItem == *pNewItem)
+            && "SfxItemPool::Put(): unequal items: no operator== override?");
+        assert((!IsItemFlag(*pNewItem, SfxItemPoolFlags::POOLABLE) || *pNewItem == rItem)
+            && "SfxItemPool::Put(): unequal items: no operator== override?");
     }
-#endif
     AddRef( *pNewItem, pImp->nInitRefCount );
 
     // 4. finally insert into the pointer array
@@ -794,8 +788,7 @@ void SfxPoolItemArray_Impl::ReHash()
 
 void SfxItemPool::Remove( const SfxPoolItem& rItem )
 {
-    SFX_ASSERT( !IsPoolDefaultItem(&rItem), rItem.Which(),
-                "where's the Pool Default coming from here?" );
+    assert(!IsPoolDefaultItem(&rItem) && "cannot remove Pool Default");
 
     // Find correct Secondary Pool
     const sal_uInt16 nWhich = rItem.Which();
@@ -814,9 +807,8 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     sal_uInt16 nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
     if ( bSID || IsItemFlag_Impl( nIndex, SfxItemPoolFlags::NOT_POOLABLE ) )
     {
-        SFX_ASSERT( USHRT_MAX != nIndex ||
-                    !IsDefaultItem(&rItem), rItem.Which(),
-                    "a non Pool Item is Default?!" );
+        assert((USHRT_MAX != nIndex || !IsDefaultItem(&rItem)) &&
+                    "a non Pool Item is Default?!");
         if ( 0 == ReleaseRef(rItem) )
         {
             SfxPoolItem *pItem = &(SfxPoolItem &)rItem;
@@ -825,7 +817,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
         return;
     }
 
-    SFX_ASSERT( rItem.GetRefCount(), rItem.Which(), "RefCount == 0, Remove impossible" );
+    assert(rItem.GetRefCount() && "RefCount == 0, Remove impossible");
 
     // Static Defaults are just there
     if ( rItem.GetKind() == SFX_ITEMS_STATICDEFAULT &&
@@ -834,7 +826,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
 
     // Find Item in own Pool
     SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];
-    SFX_ASSERT( pItemArr, rItem.Which(), "removing Item not in Pool" );
+    assert(pItemArr && "removing Item not in Pool");
 
     SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::iterator it;
     it = pItemArr->maPtrToIndex.find(const_cast<SfxPoolItem *>(&rItem));
@@ -849,7 +841,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
             ReleaseRef( *p );
         else
         {
-            SFX_ASSERT( false, rItem.Which(), "removing Item without ref" );
+            assert(false && "removing Item without ref");
         }
 
         // FIXME: Hack, for as long as we have problems with the Outliner
@@ -869,7 +861,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     }
 
     // not found
-    SFX_ASSERT( false, rItem.Which(), "removing Item not in Pool" );
+    assert(false && "removing Item not in Pool");
 }
 
 
@@ -952,7 +944,7 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
     {
         if ( pImp->mpSecondary )
             return pImp->mpSecondary->GetItem2( nWhich, nOfst );
-        SFX_ASSERT( false, nWhich, "unknown WhichId - cannot resolve surrogate" );
+        assert(false && "unknown WhichId - cannot resolve surrogate");
         return nullptr;
     }
 
@@ -973,7 +965,7 @@ sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
     {
         if ( pImp->mpSecondary )
             return pImp->mpSecondary->GetItemCount2( nWhich );
-        SFX_ASSERT( false, nWhich, "unknown WhichId - cannot resolve surrogate" );
+        assert(false && "unknown WhichId - cannot resolve surrogate");
         return 0;
     }
 
@@ -1010,7 +1002,7 @@ sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, bool bDeep ) const
     {
         if ( pImp->mpSecondary && bDeep )
             return pImp->mpSecondary->GetSlotId(nWhich);
-        SFX_ASSERT( false, nWhich, "unknown WhichId - cannot get slot-id" );
+        assert(false && "unknown WhichId - cannot get slot-id");
         return 0;
     }
 
@@ -1045,7 +1037,7 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich, bool bDeep ) const
     {
         if ( pImp->mpSecondary && bDeep )
             return pImp->mpSecondary->GetTrueSlotId(nWhich);
-        SFX_ASSERT( false, nWhich, "unknown WhichId - cannot get slot-id" );
+        assert(false && "unknown WhichId - cannot get slot-id");
         return 0;
     }
     return pItemInfos[nWhich - pImp->mnStart]._nSID;
