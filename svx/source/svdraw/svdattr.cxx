@@ -1655,6 +1655,11 @@ bool SdrEdgeNode1HorzDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
+SfxPoolItem* SdrEdgeNode1HorzDistItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SdrEdgeNode1HorzDistItem(*this);
+}
+
 bool SdrEdgeNode1VertDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
@@ -1669,6 +1674,11 @@ bool SdrEdgeNode1VertDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
 
     SetValue( nValue );
     return true;
+}
+
+SfxPoolItem* SdrEdgeNode1VertDistItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SdrEdgeNode1VertDistItem(*this);
 }
 
 bool SdrEdgeNode2HorzDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1687,6 +1697,11 @@ bool SdrEdgeNode2HorzDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
+SfxPoolItem* SdrEdgeNode2HorzDistItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SdrEdgeNode2HorzDistItem(*this);
+}
+
 bool SdrEdgeNode2VertDistItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
@@ -1703,6 +1718,20 @@ bool SdrEdgeNode2VertDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
+SfxPoolItem* SdrEdgeNode2VertDistItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SdrEdgeNode2VertDistItem(*this);
+}
+
+SfxPoolItem* SdrEdgeNode1GlueDistItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SdrEdgeNode1GlueDistItem(*this);
+}
+
+SfxPoolItem* SdrEdgeNode2GlueDistItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SdrEdgeNode2GlueDistItem(*this);
+}
 
 SfxPoolItem* SdrMeasureKindItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrMeasureKindItem(*this); }
 
