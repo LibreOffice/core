@@ -26,7 +26,7 @@ module com { module sun { module star { module tiledrendering {
 
 /** tiled rendering using a system-specific handle to a window
  */
-published interface XTiledRenderable : com::sun::star::uno::XInterface
+interface XTiledRenderable : com::sun::star::uno::XInterface
 {
 
     /** paint a tile to a system-specific window
