@@ -62,6 +62,24 @@
       "revId": "97f2ea8795c9a67fe0e588494d6518bd3c8d5c7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_740366b9",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3374,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2015-11-18T15:29:49Z",
+      "side": 1,
+      "message": "I wanted to show the function description even if I type backspace. For example, \n\"\u003dsu\"\nthen tooltip shows \"[SUBSTITUTE], SUBTOTAL, ...\"\nif I type \u0027m\u0027, \n\"\u003dsum\"\nso tooltip shows \"[SUM], SUMIFS, ...\"\nthen if I use backspace, cell text changes to\n\"\u003dsu\"\nand tooltip disappeared. I wanted to make this tooltip not to disappear but to show \"[SUBSTITUTE], SUBTOTAL, ...\".",
+      "parentUuid": "dab17558_74e7e640",
+      "revId": "97f2ea8795c9a67fe0e588494d6518bd3c8d5c7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
