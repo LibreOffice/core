@@ -78,7 +78,6 @@ namespace /* private */
     const sal_uInt32 MAX_CLIPEVENT_PROCESSING_TIME  = 5000;  // msec
 
     const sal_Bool MANUAL_RESET                     = sal_True;
-    const sal_Bool AUTO_RESET                       = sal_False;
     const sal_Bool INIT_NONSIGNALED                 = sal_False;
 
     /*  Cannot use osl conditions because they are blocking
