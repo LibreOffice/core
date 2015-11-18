@@ -650,9 +650,6 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_Template,              xProperties->getTemplateName() );
 #ifdef OOXTODO
     writeElement( pAppProps, XML_Manager,               "manager" );
-    writeElement( pAppProps, XML_Pages,                 "pages" );
-    writeElement( pAppProps, XML_Words,                 "words" );
-    writeElement( pAppProps, XML_Characters,            "characters" );
     writeElement( pAppProps, XML_PresentationFormat,    "presentation format" );
     writeElement( pAppProps, XML_Lines,                 "lines" );
     writeElement( pAppProps, XML_Slides,                "slides" );
@@ -681,10 +678,33 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
 #endif  /* def OOXTODO */
 
     comphelper::SequenceAsHashMap aStats = xProperties->getDocumentStatistics();
-    comphelper::SequenceAsHashMap::iterator it = aStats.find("ParagraphCount");
+    comphelper::SequenceAsHashMap::iterator it;
+    sal_Int32 nValue = 0;
+
+    it = aStats.find("PageCount");
     if (it != aStats.end())
     {
-            sal_Int32 nValue = 0;
+            if (it->second >>= nValue)
+                writeElement(pAppProps, XML_Pages, nValue);
+    }
+
+    it = aStats.find("WordCount");
+    if (it != aStats.end())
+    {
+            if (it->second >>= nValue)
+                writeElement(pAppProps, XML_Words, nValue);
+    }
+
+    it = aStats.find("CharacterCount");
+    if (it != aStats.end())
+    {
+            if (it->second >>= nValue)
+                writeElement(pAppProps, XML_Characters, nValue);
+    }
+
+    it = aStats.find("ParagraphCount");
+    if (it != aStats.end())
+    {
             if (it->second >>= nValue)
                 writeElement(pAppProps, XML_Paragraphs, nValue);
     }
