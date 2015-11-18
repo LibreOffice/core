@@ -210,7 +210,8 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
 #ifdef _WIN32
         if( SystemType == SystemDependent::SYSTEM_WIN32 )
         {
-            a <<= (long) aSystemMenuData.hMenu;
+            a <<= sal_Int64(
+                reinterpret_cast<sal_IntPtr>(aSystemMenuData.hMenu));
         }
 #else
         (void) SystemType;
