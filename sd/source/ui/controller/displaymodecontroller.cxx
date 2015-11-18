@@ -239,22 +239,8 @@ void DisplayModeToolbarMenu::SelectHdl(void * pControl)
     mrController.setToolboxItemImage( nImage );
 }
 
-OUString DisplayModeController_getImplementationName() throw (css::uno::RuntimeException)
-{
-    return OUString( "com.sun.star.comp.sd.DisplayModeController" );
-}
-
-Sequence< OUString >  DisplayModeController_getSupportedServiceNames() throw( RuntimeException )
-{
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
-    return aSNS;
-}
-
-// class SlideLayoutController
-
-DisplayModeController::DisplayModeController( const Reference< uno::XComponentContext >& rxContext, const OUString& sCommandURL )
-: svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), sCommandURL )
+DisplayModeController::DisplayModeController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext )
+: svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), OUString() )
 {
 }
 
@@ -262,6 +248,10 @@ void SAL_CALL DisplayModeController::initialize( const css::uno::Sequence< css::
         throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::PopupWindowController::initialize( aArguments );
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
     setToolboxItemImage( BMP_DISPLAYMODE_SLIDE );
 }
 
@@ -273,33 +263,33 @@ VclPtr<vcl::Window> DisplayModeController::createPopupWindow( vcl::Window* pPare
 void DisplayModeController::setToolboxItemImage( sal_uInt16 nImage )
 {
     sal_uInt16 nId;
-    ToolBox* pToolBox;
-    getToolboxId( nId, &pToolBox );
-
-    SdResId resId( nImage );
-    BitmapEx aBmp( resId );
-    int targetSize = (pToolBox->GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE) ? 32 : 16;
-    double scale = 1.0f;
-    Size size = aBmp.GetSizePixel();
-    if (size.Width() > targetSize)
-        scale = (double)targetSize / (double)size.Width();
-    if (size.Height() > targetSize)
-        scale = ::std::min( scale, (double)targetSize / (double)size.Height() );
-    aBmp.Scale( scale, scale );
-    pToolBox->SetItemImage( nId, Image( aBmp ) );
-
+    ToolBox* pToolBox = nullptr;
+    if (getToolboxId( nId, &pToolBox )) {
+        SdResId resId( nImage );
+        BitmapEx aBmp( resId );
+        int targetSize = (pToolBox->GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE) ? 32 : 16;
+        double scale = 1.0f;
+        Size size = aBmp.GetSizePixel();
+        if (size.Width() > targetSize)
+            scale = (double)targetSize / (double)size.Width();
+        if (size.Height() > targetSize)
+            scale = ::std::min( scale, (double)targetSize / (double)size.Height() );
+        aBmp.Scale( scale, scale );
+        pToolBox->SetItemImage( nId, Image( aBmp ) );
+    }
 }
 
 // XServiceInfo
 
 OUString SAL_CALL DisplayModeController::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return DisplayModeController_getImplementationName();
+    return OUString( "com.sun.star.comp.sd.DisplayModeController" );;
 }
 
 Sequence< OUString > SAL_CALL DisplayModeController::getSupportedServiceNames(  ) throw( RuntimeException, std::exception )
 {
-    return DisplayModeController_getSupportedServiceNames();
+    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
+    return aRet;
 }
 
 }
@@ -309,7 +299,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_comp_sd_DisplayModeController_get_implementation(::com::sun::star::uno::XComponentContext* context,
                                                               ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::DisplayModeController(context, ".uno:DisplayMode"));
+    return cppu::acquire(new sd::DisplayModeController(context));
 }
 
 

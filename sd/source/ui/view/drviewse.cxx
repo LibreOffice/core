@@ -56,7 +56,6 @@
 #include <tools/urlobj.hxx>
 #include <svl/slstitm.hxx>
 #include <sfx2/ipclient.hxx>
-#include <sfx2/sidebar/Sidebar.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svl/urihelper.hxx>

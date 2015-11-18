@@ -28,8 +28,7 @@ namespace sd
 class DisplayModeController : public svt::PopupWindowController
 {
 public:
-    DisplayModeController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                           const OUString& sCommandURL );
+    DisplayModeController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
