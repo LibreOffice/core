@@ -331,10 +331,10 @@ bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 
 
 
-sal_uInt8 FormulaByteToken::GetByte() const                       { return nByte; }
-void FormulaByteToken::SetByte( sal_uInt8 n )                     { nByte = n; }
-bool FormulaByteToken::IsInForceArray() const                { return bIsInForceArray; }
-void FormulaByteToken::SetInForceArray( bool b )             { bIsInForceArray = b; }
+sal_uInt8   FormulaByteToken::GetByte() const           { return nByte; }
+void        FormulaByteToken::SetByte( sal_uInt8 n )    { nByte = n; }
+bool        FormulaByteToken::IsInForceArray() const    { return bIsInForceArray; }
+void        FormulaByteToken::SetInForceArray( bool b ) { bIsInForceArray = b; }
 bool FormulaByteToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
@@ -342,16 +342,16 @@ bool FormulaByteToken::operator==( const FormulaToken& r ) const
 }
 
 
-FormulaToken* FormulaFAPToken::GetFAPOrigToken() const { return pOrigToken.get(); }
+FormulaToken* FormulaFAPToken::GetFAPOrigToken() const  { return pOrigToken.get(); }
 bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 {
     return FormulaByteToken::operator==( r ) && pOrigToken == r.GetFAPOrigToken();
 }
 
 
-short* FormulaJumpToken::GetJump() const                     { return pJump; }
-bool FormulaJumpToken::IsInForceArray() const                { return bIsInForceArray; }
-void FormulaJumpToken::SetInForceArray( bool b )             { bIsInForceArray = b; }
+short*  FormulaJumpToken::GetJump() const               { return pJump; }
+bool    FormulaJumpToken::IsInForceArray() const        { return bIsInForceArray; }
+void    FormulaJumpToken::SetInForceArray( bool b )     { bIsInForceArray = b; }
 bool FormulaJumpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pJump[0] == r.GetJump()[0] &&
@@ -1686,9 +1686,9 @@ bool FormulaIndexToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && nIndex == r.GetIndex() &&
         mbGlobal == r.IsGlobal();
 }
-const OUString&   FormulaExternalToken::GetExternal() const    { return aExternal; }
-sal_uInt8            FormulaExternalToken::GetByte() const        { return nByte; }
-void            FormulaExternalToken::SetByte( sal_uInt8 n )      { nByte = n; }
+const OUString& FormulaExternalToken::GetExternal() const       { return aExternal; }
+sal_uInt8       FormulaExternalToken::GetByte() const           { return nByte; }
+void            FormulaExternalToken::SetByte( sal_uInt8 n )    { nByte = n; }
 bool FormulaExternalToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
@@ -1696,8 +1696,8 @@ bool FormulaExternalToken::operator==( const FormulaToken& r ) const
 }
 
 
-sal_uInt16          FormulaErrorToken::GetError() const          { return nError; }
-void            FormulaErrorToken::SetError( sal_uInt16 nErr )   { nError = nErr; }
+sal_uInt16      FormulaErrorToken::GetError() const             { return nError; }
+void            FormulaErrorToken::SetError( sal_uInt16 nErr )  { nError = nErr; }
 bool FormulaErrorToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&

@@ -126,8 +126,8 @@ public:
             const_cast<FormulaToken*>(this)->Delete();
     }
 
-    inline oslInterlockedCount GetRef() const { return mnRefCnt; }
-    inline OpCode               GetOpCode() const       { return eOp; }
+    inline oslInterlockedCount GetRef() const       { return mnRefCnt; }
+    inline OpCode              GetOpCode() const    { return eOp; }
 
     /**
         Dummy methods to avoid switches and casts where possible,
@@ -150,23 +150,23 @@ public:
     virtual void                SetInForceArray( bool b );
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
-    virtual svl::SharedString GetString() const;
+    virtual svl::SharedString   GetString() const;
     virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
     virtual bool                IsGlobal() const;
     virtual void                SetGlobal( bool b );
     virtual short*              GetJump() const;
-    virtual const OUString&       GetExternal() const;
+    virtual const OUString&     GetExternal() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
     virtual sal_uInt16          GetError() const;
     virtual void                SetError( sal_uInt16 );
 
-    virtual const ScSingleRefData*    GetSingleRef() const;
-    virtual ScSingleRefData*      GetSingleRef();
+    virtual const ScSingleRefData*  GetSingleRef() const;
+    virtual ScSingleRefData*        GetSingleRef();
     virtual const ScComplexRefData* GetDoubleRef() const;
     virtual ScComplexRefData*       GetDoubleRef();
-    virtual const ScSingleRefData*    GetSingleRef2() const;
-    virtual ScSingleRefData*      GetSingleRef2();
+    virtual const ScSingleRefData*  GetSingleRef2() const;
+    virtual ScSingleRefData*        GetSingleRef2();
     virtual const ScMatrix*     GetMatrix() const;
     virtual ScMatrix*           GetMatrix();
     virtual ScJumpMatrix*       GetJumpMatrix() const;
