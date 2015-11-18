@@ -377,7 +377,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                     uno::UNO_QUERY);
                 aAny = xSDMP->getMenuHandle(
                     aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
-                sal_Int32 tmp;
+                sal_Int64 tmp;
                 if( aAny >>= tmp )
                     m_nMenuHandle = HMENU(tmp);
                 m_xLayoutManager->hideElement(
