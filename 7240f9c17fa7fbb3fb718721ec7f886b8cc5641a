@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_94becad2",
+        "filename": "ucb/source/ucp/webdav-neon/DAVResourceAccess.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-18T16:50:58Z",
+      "side": 1,
+      "message": "This is a good example of an OSL_ENSURE that should apparently be replaced by an assert rather than a SAL_WARN_IF: m_xSession is unconditionally dereferenced below, so must not be null here.\n\nThere cannot be a general formula how to replace OSL_ENSURE---every use has to be inspected individually.",
+      "revId": "7240f9c17fa7fbb3fb718721ec7f886b8cc5641a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
