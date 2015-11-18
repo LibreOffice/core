@@ -87,12 +87,8 @@ static const char*  BITMAP_FILE_NAMES[]   =
 
 namespace framework
 {
-    static GlobalImageList*     pGlobalImageList = nullptr;
-    static const char* ImageType_Prefixes[ImageType_COUNT] =
-    {
-        "cmd/sc_",
-        "cmd/lc_"
-    };
+
+static GlobalImageList*     pGlobalImageList = nullptr;
 
 typedef GraphicNameAccess CmdToXGraphicNameAccess;
 
@@ -117,190 +113,79 @@ static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponen
     return pGlobalImageList;
 }
 
-static OUString getCanonicalName( const OUString& rFileName )
-{
-    bool               bRemoveSlash( true );
-    sal_Int32          nLength = rFileName.getLength();
-    const sal_Unicode* pString = rFileName.getStr();
-
-    OUStringBuffer aBuf( nLength );
-    for ( sal_Int32 i = 0; i < nLength; i++ )
-    {
-        const sal_Unicode c = pString[i];
-        switch ( c )
-        {
-            // map forbidden characters to escape
-            case '/' : if ( !bRemoveSlash )
-                         aBuf.append( "%2f" );
-                       break;
-            case '\\': aBuf.append( "%5c" ); bRemoveSlash = false; break;
-            case ':' : aBuf.append( "%3a" ); bRemoveSlash = false; break;
-            case '*' : aBuf.append( "%2a" ); bRemoveSlash = false; break;
-            case '?' : aBuf.append( "%3f" ); bRemoveSlash = false; break;
-            case '<' : aBuf.append( "%3c" ); bRemoveSlash = false; break;
-            case '>' : aBuf.append( "%3e" ); bRemoveSlash = false; break;
-            case '|' : aBuf.append( "%7c" ); bRemoveSlash = false; break;
-            default: aBuf.append( c ); bRemoveSlash = false;
-        }
-    }
-    return aBuf.makeStringAndClear();
-}
-
 CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier ) :
-    m_bVectorInit( false ),
+    m_bInitialized(false),
     m_aModuleIdentifier( aModuleIdentifier ),
-    m_xContext( rxContext ),
-    m_sIconTheme( SvtMiscOptions().GetIconTheme() )
+    m_xContext( rxContext )
 {
-    for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
-        m_pImageList[n] = nullptr;
 }
 
 CmdImageList::~CmdImageList()
 {
-    for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
-        delete m_pImageList[n];
 }
 
-void CmdImageList::impl_fillCommandToImageNameMap()
+void CmdImageList::initialize()
 {
-    SAL_INFO( "fwk", "framework: CmdImageList::impl_fillCommandToImageNameMap" );
-
-    if ( !m_bVectorInit )
+    if (!m_bInitialized)
     {
-        const OUString aCommandImageList( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST );
-        Sequence< OUString > aCmdImageSeq;
-        uno::Reference< XNameAccess > xCmdDesc = frame::theUICommandDescription::get( m_xContext );
+        const OUString aCommandImageList(UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST);
 
-        if ( !m_aModuleIdentifier.isEmpty() )
+        Sequence<OUString> aCommandImageSeq;
+        uno::Reference<XNameAccess> xCommandDesc = frame::theUICommandDescription::get(m_xContext);
+
+        if (!m_aModuleIdentifier.isEmpty())
         {
             // If we have a module identifier - use to retrieve the command image name list from it.
             // Otherwise we will use the global command image list
             try
             {
-                xCmdDesc->getByName( m_aModuleIdentifier ) >>= xCmdDesc;
-                if ( xCmdDesc.is() )
-                    xCmdDesc->getByName( aCommandImageList ) >>= aCmdImageSeq;
+                xCommandDesc->getByName(m_aModuleIdentifier) >>= xCommandDesc;
+                if (xCommandDesc.is())
+                    xCommandDesc->getByName(aCommandImageList) >>= aCommandImageSeq;
             }
-            catch ( const NoSuchElementException& )
+            catch (const NoSuchElementException&)
             {
                 // Module unknown we will work with an empty command image list!
                 return;
             }
         }
 
-        if ( xCmdDesc.is() )
+        if (xCommandDesc.is())
         {
             try
             {
-                xCmdDesc->getByName( aCommandImageList ) >>= aCmdImageSeq;
+                xCommandDesc->getByName(aCommandImageList) >>= aCommandImageSeq;
             }
-            catch ( const NoSuchElementException& )
+            catch (const NoSuchElementException&)
             {
             }
-            catch ( const WrappedTargetException& )
+            catch (const WrappedTargetException&)
             {
             }
         }
 
-        // We have to map commands which uses special characters like '/',':','?','\','<'.'>','|'
-        OUString aExt = ".png";
-        m_aImageCommandNameVector.resize(aCmdImageSeq.getLength() );
-        m_aImageNameVector.resize( aCmdImageSeq.getLength() );
+        m_aResolver.registerCommands(aCommandImageSeq);
 
-        ::std::copy( aCmdImageSeq.begin(), aCmdImageSeq.end(),
-                     m_aImageCommandNameVector.begin() );
-
-        // Create a image name vector that must be provided to the vcl imagelist. We also need
-        // a command to image name map to speed up access time for image retrieval.
-        OUString aUNOString( ".uno:" );
-        OUString aEmptyString;
-        const sal_uInt32 nCount = m_aImageCommandNameVector.size();
-        for ( sal_uInt32 i = 0; i < nCount; i++ )
-        {
-            OUString aCommandName( m_aImageCommandNameVector[i] );
-            OUString aImageName;
-
-            if ( aCommandName.indexOf( aUNOString ) != 0 )
-            {
-                INetURLObject aUrlObject( aCommandName, INetURLObject::ENCODE_ALL );
-                aImageName = aUrlObject.GetURLPath();
-                aImageName = getCanonicalName( aImageName ); // convert to valid filename
-            }
-            else
-            {
-                // just remove the schema
-                if ( aCommandName.getLength() > 5 )
-                    aImageName = aCommandName.copy( 5 );
-                else
-                    aImageName = aEmptyString;
-
-                // Search for query part.
-                if ( aImageName.indexOf('?') != -1 )
-                    aImageName = getCanonicalName( aImageName ); // convert to valid filename
-            }
-            // Image names are not case-dependent. Always use lower case characters to
-            // reflect this.
-            aImageName += aExt;
-            aImageName = aImageName.toAsciiLowerCase();
-
-            m_aImageNameVector[i] = aImageName;
-            m_aCommandToImageNameMap.insert( CommandToImageNameMap::value_type( aCommandName, aImageName ));
-        }
-
-        m_bVectorInit = true;
+        m_bInitialized = true;
     }
 }
 
-ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
+
+Image CmdImageList::getImageFromCommandURL(sal_Int16 nImageType, const OUString& rCommandURL)
 {
-    SvtMiscOptions aMiscOptions;
-
-    const OUString& rIconTheme = aMiscOptions.GetIconTheme();
-    if ( rIconTheme != m_sIconTheme )
-    {
-        m_sIconTheme = rIconTheme;
-        for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
-            delete m_pImageList[n], m_pImageList[n] = nullptr;
-    }
-
-    if ( !m_pImageList[nImageType] )
-    {
-        m_pImageList[nImageType] = new ImageList( m_aImageNameVector,
-                                                  OUString::createFromAscii( ImageType_Prefixes[nImageType] ) );
-    }
-
-    return m_pImageList[nImageType];
+    initialize();
+    return m_aResolver.getImageFromCommandURL(nImageType, rCommandURL);
 }
 
-
-
-Image CmdImageList::getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL )
+bool CmdImageList::hasImage(sal_Int16 /*nImageType*/, const OUString& rCommandURL)
 {
-    impl_fillCommandToImageNameMap();
-    CommandToImageNameMap::const_iterator pIter = m_aCommandToImageNameMap.find( rCommandURL );
-    if ( pIter != m_aCommandToImageNameMap.end() )
-    {
-        ImageList* pImageList = impl_getImageList( nImageType );
-        return pImageList->GetImage( pIter->second );
-    }
-
-    return Image();
+    initialize();
+    return m_aResolver.hasImage(rCommandURL);
 }
 
-bool CmdImageList::hasImage( sal_Int16 /*nImageType*/, const OUString& rCommandURL )
+std::vector<OUString>& CmdImageList::getImageCommandNames()
 {
-    impl_fillCommandToImageNameMap();
-    CommandToImageNameMap::const_iterator pIter = m_aCommandToImageNameMap.find( rCommandURL );
-    if ( pIter != m_aCommandToImageNameMap.end() )
-        return true;
-    else
-        return false;
-}
-
-::std::vector< OUString >& CmdImageList::getImageCommandNames()
-{
-    return impl_getImageCommandNameVector();
+    return m_aResolver.getCommandNames();
 }
 
 GlobalImageList::GlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext ) :
@@ -330,7 +215,7 @@ bool GlobalImageList::hasImage( sal_Int16 nImageType, const OUString& rCommandUR
 ::std::vector< OUString >& GlobalImageList::getImageCommandNames()
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
-    return impl_getImageCommandNameVector();
+    return CmdImageList::getImageCommandNames();
 }
 
 static bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic, const uno::Reference< XGraphic >& rInGraphic, sal_Int16 nImageType )

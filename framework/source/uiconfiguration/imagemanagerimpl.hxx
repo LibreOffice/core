@@ -41,7 +41,6 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ustring.hxx>
 
-#include <vcl/image.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
@@ -49,33 +48,29 @@
 #include <unordered_map>
 #include <vector>
 
+#include <vcl/CommandImageResolver.hxx>
+
 namespace framework
 {
     class CmdImageList
     {
         public:
-            CmdImageList( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                          const OUString& aModuleIdentifier );
+            CmdImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier);
             virtual ~CmdImageList();
 
-            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL );
-            virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL );
-            virtual ::std::vector< OUString >&      getImageCommandNames();
+            virtual Image getImageFromCommandURL(sal_Int16 nImageType, const OUString& rCommandURL);
+            virtual bool hasImage(sal_Int16 nImageType, const OUString& rCommandURL);
+            virtual std::vector<OUString>& getImageCommandNames();
 
         protected:
-            void                            impl_fillCommandToImageNameMap();
-            ImageList*                      impl_getImageList( sal_Int16 nImageType );
-            std::vector< OUString >&        impl_getImageCommandNameVector() { return m_aImageCommandNameVector;}
+            void initialize();
 
         private:
-            bool                                                   m_bVectorInit;
-            OUString                                               m_aModuleIdentifier;
-            ImageList*                                             m_pImageList[ImageType_COUNT];
-            CommandToImageNameMap                                  m_aCommandToImageNameMap;
-            css::uno::Reference< css::uno::XComponentContext >     m_xContext;
-            ::std::vector< OUString >                              m_aImageNameVector;
-            ::std::vector< OUString >                              m_aImageCommandNameVector;
-            OUString                                               m_sIconTheme;
+            bool m_bInitialized;
+            vcl::CommandImageResolver m_aResolver;
+
+            OUString m_aModuleIdentifier;
+            css::uno::Reference<css::uno::XComponentContext> m_xContext;
     };
 
     class GlobalImageList : public CmdImageList, public salhelper::SimpleReferenceObject
