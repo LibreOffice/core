@@ -2360,7 +2360,7 @@ Size SdXImpressDocument::getDocumentSize()
     return Size(convertMm100ToTwip(aSize.getWidth()), convertMm100ToTwip(aSize.getHeight()));
 }
 
-void SdXImpressDocument::initializeForTiledRendering()
+void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;
 

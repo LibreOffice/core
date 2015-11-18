@@ -983,7 +983,7 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
         doc_iniUnoCommands();
         uno::Sequence<beans::PropertyValue> aPropertyValues;
         jsonToPropertyValues(pArguments, aPropertyValues);
-        pDoc->initializeForTiledRendering();
+        pDoc->initializeForTiledRendering(aPropertyValues);
     }
 }
 

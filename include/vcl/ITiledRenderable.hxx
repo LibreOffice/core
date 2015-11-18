@@ -94,7 +94,7 @@ public:
      * Setup various document properties that are needed for the document to
      * be renderable via tiled rendering.
      */
-    virtual void initializeForTiledRendering() = 0;
+    virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) = 0;
 
     /**
      * Registers a callback that will be invoked whenever the tiled renderer

@@ -120,7 +120,7 @@ SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName)
     mxComponent = loadFromDesktop(getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(pName), "com.sun.star.presentation.PresentationDocument");
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
-    pImpressDocument->initializeForTiledRendering();
+    pImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     return pImpressDocument;
 }
 

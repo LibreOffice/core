@@ -244,7 +244,7 @@ public:
     virtual void setPartMode( int nPartMode ) override;
 
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
-    virtual void initializeForTiledRendering() override;
+    virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
     /// @see vcl::ITiledRenderable::registerCallback().
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) override;
     /// @see vcl::ITiledRenderable::postKeyEvent().

@@ -931,7 +931,7 @@ Pointer ScModelObj::getPointer()
     return pGridWindow->GetPointer();
 }
 
-void ScModelObj::initializeForTiledRendering()
+void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;
     pDocShell->GetDocument().GetDrawLayer()->setTiledRendering(true);

@@ -3200,7 +3200,7 @@ OUString SwXTextDocument::getPartName(int nPart)
     return OUString(SW_RES(STR_PAGE)) + OUString::number(nPart + 1);
 }
 
-void SwXTextDocument::initializeForTiledRendering()
+void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;
 
