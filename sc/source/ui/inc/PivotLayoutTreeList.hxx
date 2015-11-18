@@ -15,6 +15,9 @@
 
 class ScPivotLayoutTreeList : public ScPivotLayoutTreeListBase
 {
+private:
+    std::vector<std::unique_ptr<ScItemValue> > maItemValues;
+
 public:
     ScPivotLayoutTreeList(vcl::Window* pParent, WinBits nBits);
     virtual ~ScPivotLayoutTreeList();
