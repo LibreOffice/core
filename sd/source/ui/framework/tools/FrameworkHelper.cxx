@@ -605,7 +605,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         // and SlideSorterViewShell have no master mode
         DrawViewShell* pDrawViewShell
             = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
-        if (pDrawViewShell != NULL)
+        if (pDrawViewShell != nullptr)
         {
             pCenterViewShell->Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
