@@ -1346,8 +1346,9 @@ DocumentHolder::queryClosing(
         util::CloseVetoException
     )
 {
-    if ( !m_bLink
-      && ( m_xDocument.is() && m_xDocument == aSource.Source || m_xFrame.is() && m_xFrame == aSource.Source ) )
+    if (!m_bLink
+        && ((m_xDocument.is() && m_xDocument == aSource.Source)
+            || (m_xFrame.is() && m_xFrame == aSource.Source)))
         throw util::CloseVetoException();
 }
 
