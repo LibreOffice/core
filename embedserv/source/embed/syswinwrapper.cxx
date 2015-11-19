@@ -98,16 +98,6 @@ HINSTANCE winwrap::CWindow::Instance()
     return m_hInst;
 }
 
-
-
-
-
-//Hatch pattern brush bits
-static WORD g_wHatchBmp[]={0x11, 0x22, 0x44, 0x88, 0x11, 0x22, 0x44, 0x88};
-
-// void DrawShading(LPRECT, HDC, UINT);
-
-
 /*
  * HatchWindowRegister
  *
