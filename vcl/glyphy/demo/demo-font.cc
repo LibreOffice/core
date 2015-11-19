@@ -324,6 +324,7 @@ demo_font_lookup_glyph (demo_font_t  *font,
 void
 demo_font_print_stats (demo_font_t *font)
 {
+  (void) font;
   LOGI ("%3d glyphs; avg num endpoints%6.2f; avg error%5.1f%%; avg tex fetch%5.2f; avg %5.2fkb per glyph\n",
 	font->num_glyphs,
 	(double) font->sum_endpoints / font->num_glyphs,
