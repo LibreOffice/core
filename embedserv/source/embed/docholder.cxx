@@ -574,7 +574,7 @@ BOOL DocumentHolder::InPlaceMenuCreate()
         uno::Sequence<sal_Int8> aProcessIdent(16);
         rtl_getGlobalProcessId((sal_uInt8*)aProcessIdent.getArray());
         uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
-        sal_Int32 tmp;
+        sal_Int64 tmp;
         aAny >>= tmp;
         HWND aHwnd = (HWND) tmp;
         m_pIOleIPFrame->SetMenu(
@@ -1256,7 +1256,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
             if(xSysWin.is()) {
                 aAny = xSysWin->getWindowHandle(
                     aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
-                sal_Int32 tmp;
+                sal_Int64 tmp;
                 if( aAny >>= tmp )
                     SetContainerWindowHandle((HWND) tmp);
             }
