@@ -8,54 +8,46 @@
  *
  */
 
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/DrawViewMode.hpp>
-
-#include <osl/mutex.hxx>
-
-#include <vcl/svapp.hxx>
-#include <vcl/toolbox.hxx>
-
-#include <svl/languageoptions.hxx>
-
-#include <svtools/ctrltool.hxx>
-#include <svtools/ctrlbox.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
+#include <vcl/toolbox.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/processfactory.hxx>
-
-#include <sfx2/imagemgr.hxx>
-
-#include "app.hrc"
-#include "facreg.hxx"
-#include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
-#include "pres.hxx"
-#include "displaymodecontroller.hxx"
-#include "ViewShellBase.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 
 namespace sd
 {
 
 // Component to select which display mode has to be used.
-// Composed of a combobox in the toolbar and a popup menu to select
-// the value
+// Composed of a dropdown button in the toolbar and a
+// popup menu to select the value
+
+class DisplayModeController : public svt::PopupWindowController
+{
+public:
+    DisplayModeController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+
+    void setToolboxItemImage( sal_uInt16 nImage );
+
+    using svt::PopupWindowController::createPopupWindow;
+};
 
 class DisplayModeToolbarMenu : public svtools::ToolbarMenu
 {
@@ -63,7 +55,7 @@ public:
     DisplayModeToolbarMenu( DisplayModeController& rController,
         const Reference< XFrame >& xFrame, vcl::Window* pParent );
     virtual ~DisplayModeToolbarMenu();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
 protected:
     DECL_LINK_TYPED( SelectToolbarMenuHdl, ToolbarMenu*, void );
@@ -155,8 +147,6 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rControll
     OUString aTitle1( SD_RESSTR( STR_DISPLAYMODE_EDITMODES ) );
     OUString aTitle2( SD_RESSTR( STR_DISPLAYMODE_MASTERMODES ) );
 
-    SvtLanguageOptions aLanguageOptions;
-
     SetSelectHdl( LINK( this, DisplayModeToolbarMenu, SelectToolbarMenuHdl ) );
 
     mpDisplayModeSet1 = createEmptyValueSetControl();
@@ -232,14 +222,13 @@ void DisplayModeToolbarMenu::SelectHdl(void * pControl)
         nImage = mastermodes[mpDisplayModeSet2->GetSelectItemId() - 5 ].mnBmpResId;
     }
 
-    Sequence< PropertyValue > aArgs;
     if (!sCommandURL.isEmpty())
-        mrController.dispatchCommand( sCommandURL, aArgs );
+        mrController.dispatchCommand( sCommandURL, Sequence< PropertyValue >() );
 
     mrController.setToolboxItemImage( nImage );
 }
 
-DisplayModeController::DisplayModeController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext )
+DisplayModeController::DisplayModeController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
 : svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), OUString() )
 {
 }
@@ -294,13 +283,11 @@ Sequence< OUString > SAL_CALL DisplayModeController::getSupportedServiceNames(  
 
 }
 
-
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_sd_DisplayModeController_get_implementation(::com::sun::star::uno::XComponentContext* context,
-                                                              ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+com_sun_star_comp_sd_DisplayModeController_get_implementation( css::uno::XComponentContext* context,
+                                                               css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new sd::DisplayModeController(context));
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
