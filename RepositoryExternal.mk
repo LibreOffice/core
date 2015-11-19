@@ -284,7 +284,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(GLYPHY_LIBS))
 endef
 else # !SYSTEM_GLYPHY
 
-$(eval $(gb_Helper_optional,GLYPHY,$(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(call gb_Helper_optional,GLYPHY,$(call gb_Helper_register_packages_for_install,ooo,\
 	glyphy \
 )))
 
