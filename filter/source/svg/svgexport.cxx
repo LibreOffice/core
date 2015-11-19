@@ -68,6 +68,7 @@ static const char    aOOOElemTextField[] = NSPREFIX "text_field";
 static const char    aOOOAttrNumberOfSlides[] = NSPREFIX "number-of-slides";
 static const char    aOOOAttrStartSlideNumber[] = NSPREFIX "start-slide-number";
 static const char    aOOOAttrNumberingType[] = NSPREFIX "page-numbering-type";
+static const char    aOOOAttrUsePositionedChars[] = NSPREFIX "use-positioned-chars";
 
 // ooo xml attributes for meta_slide
 static const char    aOOOAttrSlide[] = NSPREFIX "slide";
@@ -354,7 +355,7 @@ SVGExport::SVGExport(
     // Tiny Opacity (supported from SVG Tiny 1.2)
     mbIsUseOpacity = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_OPACITY, true);
 
-    // Positioned Characters    (Seems to be experimental, as it was always initialized with false)
+    // Positioned Characters    (The old method)
     mbIsUsePositionedCharacters = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_POSITIONED_CHARACTERS, false);
 
 }
@@ -936,6 +937,11 @@ bool SVGFilter::implGenerateMetaData()
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aOOOElemMetaSlides );
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrNumberOfSlides, OUString::number( nCount ) );
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrStartSlideNumber, OUString::number( mnVisiblePage ) );
+
+        if( mpSVGExport->IsUsePositionedCharacters() )
+        {
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrUsePositionedChars, "true" );
+        }
 
         /*
          *  Add a (global) Page Numbering Type attribute for the document
@@ -1811,6 +1817,19 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
                         }
 
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+
+                        // export the shape bounding box
+                        {
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "BoundingBox" );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke", "none" );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "fill", "none" );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( aBoundRect.X ) );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( aBoundRect.Y ) );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( aBoundRect.Width ) );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( aBoundRect.Height ) );
+                            SvXMLElementExport aBB( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
+                        }
+
                         if( !aBookmark.isEmpty() )
                         {
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xlink:href", aBookmark);
