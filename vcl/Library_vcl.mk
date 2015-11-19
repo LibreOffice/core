@@ -283,14 +283,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/graph \
     vcl/source/gdi/graphictools \
     vcl/source/gdi/hatch \
-    vcl/source/gdi/image \
-    vcl/source/gdi/imagerepository \
     vcl/source/gdi/impanmvw \
     vcl/source/gdi/impbmp \
     vcl/source/gdi/impfont \
     vcl/source/gdi/impgraph \
-    vcl/source/gdi/impimage \
-    vcl/source/gdi/impimagetree \
     vcl/source/gdi/impvect \
     vcl/source/gdi/jobset \
     vcl/source/gdi/lineinfo \
@@ -329,6 +325,15 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapTools \
     vcl/source/bitmap/checksum \
     vcl/source/bitmap/CommandImageResolver \
+    vcl/source/image/Image \
+    vcl/source/image/ImageArrayData \
+    vcl/source/image/ImageList \
+    vcl/source/image/ImageRepository \
+    vcl/source/image/ImplImage \
+    vcl/source/image/ImplImageBmp \
+    vcl/source/image/ImplImageData \
+    vcl/source/image/ImplImageList \
+    vcl/source/image/ImplImageTree \
     vcl/source/helper/canvasbitmap \
     vcl/source/helper/canvastools \
     vcl/source/helper/commandinfoprovider \

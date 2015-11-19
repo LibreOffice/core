@@ -1,0 +1,277 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <osl/file.hxx>
+#include <tools/debug.hxx>
+#include <tools/stream.hxx>
+#include <tools/rc.h>
+#include <tools/rc.hxx>
+#include <tools/resmgr.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/image.hxx>
+#include <vcl/imagerepository.hxx>
+#include <vcl/implimagetree.hxx>
+#include <image.h>
+
+#if OSL_DEBUG_LEVEL > 0
+#include <rtl/strbuf.hxx>
+#endif
+
+using namespace ::com::sun::star;
+
+Image::Image() :
+    mpImplData( nullptr )
+{
+}
+
+Image::Image( const ResId& rResId ) :
+    mpImplData( nullptr )
+{
+
+    rResId.SetRT( RSC_IMAGE );
+
+    ResMgr* pResMgr = rResId.GetResMgr();
+    if( pResMgr && pResMgr->GetResource( rResId ) )
+    {
+        pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
+
+        BitmapEx    aBmpEx;
+        sal_uLong       nObjMask = pResMgr->ReadLong();
+
+        if( nObjMask & RSC_IMAGE_IMAGEBITMAP )
+        {
+            aBmpEx = BitmapEx( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
+            pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
+        }
+
+        if( nObjMask & RSC_IMAGE_MASKBITMAP )
+        {
+            if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
+            {
+                const Bitmap aMaskBitmap( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
+                aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskBitmap );
+            }
+
+            pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
+        }
+
+        if( nObjMask & RSC_IMAGE_MASKCOLOR )
+        {
+            if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
+            {
+                const Color aMaskColor( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
+                aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );
+            }
+
+            pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
+        }
+        if( ! aBmpEx.IsEmpty() )
+            ImplInit( aBmpEx );
+    }
+}
+
+Image::Image( const Image& rImage ) :
+    mpImplData( rImage.mpImplData )
+{
+
+    if( mpImplData )
+        ++mpImplData->mnRefCount;
+}
+
+Image::Image( const BitmapEx& rBitmapEx ) :
+    mpImplData( nullptr )
+{
+
+    ImplInit( rBitmapEx );
+}
+
+Image::Image( const Bitmap& rBitmap ) :
+    mpImplData( nullptr )
+{
+
+    ImplInit( rBitmap );
+}
+
+Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
+    mpImplData( nullptr )
+{
+
+    const BitmapEx aBmpEx( rBitmap, rMaskBitmap );
+
+    ImplInit( aBmpEx );
+}
+
+Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
+    mpImplData( nullptr )
+{
+
+    const BitmapEx aBmpEx( rBitmap, rColor );
+
+    ImplInit( aBmpEx );
+}
+
+Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
+    mpImplData( nullptr )
+{
+
+    const Graphic aGraphic( rxGraphic );
+    ImplInit( aGraphic.GetBitmapEx() );
+}
+
+Image::Image( const OUString &rFileUrl ) :
+    mpImplData( nullptr )
+{
+    OUString aTmp;
+    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
+    Graphic aGraphic;
+    const OUString aFilterName( IMP_PNG );
+    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
+    {
+        ImplInit( aGraphic.GetBitmapEx() );
+    }
+}
+
+Image::~Image()
+{
+
+    if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
+        delete mpImplData;
+}
+
+void Image::ImplInit( const BitmapEx& rBmpEx )
+{
+    if( !rBmpEx.IsEmpty() )
+    {
+        mpImplData = new ImplImage;
+
+        if( rBmpEx.GetTransparentType() == TRANSPARENT_NONE )
+        {
+            mpImplData->meType = IMAGETYPE_BITMAP;
+            mpImplData->mpData = new Bitmap( rBmpEx.GetBitmap() );
+        }
+        else
+        {
+            mpImplData->meType = IMAGETYPE_IMAGE;
+            mpImplData->mpData = new ImplImageData( rBmpEx );
+        }
+    }
+}
+
+Size Image::GetSizePixel() const
+{
+
+    Size aRet;
+
+    if( mpImplData )
+    {
+        switch( mpImplData->meType )
+        {
+            case IMAGETYPE_BITMAP:
+                aRet = static_cast< Bitmap* >( mpImplData->mpData )->GetSizePixel();
+            break;
+
+            case IMAGETYPE_IMAGE:
+                aRet = static_cast< ImplImageData* >( mpImplData->mpData )->maBmpEx.GetSizePixel();
+            break;
+        }
+    }
+
+    return aRet;
+}
+
+BitmapEx Image::GetBitmapEx() const
+{
+
+    BitmapEx aRet;
+
+    if( mpImplData )
+    {
+        switch( mpImplData->meType )
+        {
+            case IMAGETYPE_BITMAP:
+                aRet = *static_cast< Bitmap* >( mpImplData->mpData );
+            break;
+
+            case IMAGETYPE_IMAGE:
+                aRet = static_cast< ImplImageData* >( mpImplData->mpData )->maBmpEx;
+            break;
+        }
+    }
+
+    return aRet;
+}
+
+uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
+{
+    const Graphic aGraphic( GetBitmapEx() );
+
+    return aGraphic.GetXGraphic();
+}
+
+Image& Image::operator=( const Image& rImage )
+{
+
+    if( rImage.mpImplData )
+        ++rImage.mpImplData->mnRefCount;
+
+    if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
+        delete mpImplData;
+
+    mpImplData = rImage.mpImplData;
+
+    return *this;
+}
+
+bool Image::operator==( const Image& rImage ) const
+{
+
+    bool bRet = false;
+
+    if( rImage.mpImplData == mpImplData )
+        bRet = true;
+    else if( !rImage.mpImplData || !mpImplData )
+        bRet = false;
+    else if( rImage.mpImplData->mpData == mpImplData->mpData )
+        bRet = true;
+    else if( rImage.mpImplData->meType == mpImplData->meType )
+    {
+        switch( mpImplData->meType )
+        {
+            case IMAGETYPE_BITMAP:
+                bRet = ( *static_cast< Bitmap* >( rImage.mpImplData->mpData ) == *static_cast< Bitmap* >( mpImplData->mpData ) );
+            break;
+
+            case IMAGETYPE_IMAGE:
+                bRet = static_cast< ImplImageData* >( rImage.mpImplData->mpData )->IsEqual( *static_cast< ImplImageData* >( mpImplData->mpData ) );
+            break;
+
+            default:
+                bRet = false;
+            break;
+        }
+    }
+
+    return bRet;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
