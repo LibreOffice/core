@@ -2222,7 +2222,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
 {
     if( ! m_pReferenceDevice )
     {
-        VclPtrInstance<VirtualDevice> pVDev(DeviceFormat::FULLCOLOR);
+        VclPtrInstance<VirtualDevice> pVDev(DeviceFormat::DEFAULT);
 
         m_pReferenceDevice = pVDev;
 

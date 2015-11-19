@@ -44,15 +44,11 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
 {
     assert(mpGraphics);
 
-    // TODO Do we really need the requested bit count?
     sal_uInt16 nBitCount;
     switch (eFormat)
     {
         case DeviceFormat::BITMASK:
             nBitCount = 1;
-            break;
-        case DeviceFormat::GRAYSCALE:
-            nBitCount = 8;
             break;
         default:
             nBitCount = pGraphics->GetBitCount();

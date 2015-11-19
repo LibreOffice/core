@@ -133,18 +133,4 @@ SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
 
 #endif // ENABLE_CAIRO_CANVAS
 
-void SvpSalGraphics::BlendTextColor(const basebmp::Color &rTextColor, const basebmp::BitmapDeviceSharedPtr &rAlphaMask,
-                                    const basegfx::B2IPoint &rDstPoint)
-{
-    // blend text color into target using the glyph's mask
-    const basegfx::B2IBox aSrcRect(basegfx::B2ITuple(0,0), rAlphaMask->getSize());
-    const basegfx::B2IBox aClipRect(rDstPoint, rAlphaMask->getSize());
-
-    SvpSalGraphics::ClipUndoHandle aUndo(this);
-    if (isClippedSetup(aClipRect, aUndo))
-        return;
-
-    m_aDevice->drawMaskedColor(rTextColor, rAlphaMask, aSrcRect, rDstPoint, m_aClipMap);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

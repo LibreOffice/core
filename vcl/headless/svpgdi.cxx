@@ -122,12 +122,6 @@ namespace
 
 #endif
 
-basebmp::BitmapDeviceSharedPtr SvpSalGraphics::createSimpleMask() const
-{
-    return basebmp::createBitmapDevice(m_aOrigDevice->getSize(), true, basebmp::Format::OneBitLsbGrey,
-                cairo_format_stride_for_width(CAIRO_FORMAT_A1, m_aOrigDevice->getSize().getX()));
-}
-
 void SvpSalGraphics::clipRegion(cairo_t* cr)
 {
     RectangleVector aRectangles;

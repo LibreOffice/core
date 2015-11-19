@@ -301,9 +301,8 @@ namespace cairo
      **/
     int X11Surface::getDepth() const
     {
-        if( maSysData.pRenderFormat )
+        if (maSysData.pRenderFormat)
             return static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth;
-
         return -1;
     }
 
@@ -315,15 +314,13 @@ namespace cairo
     DeviceFormat X11Surface::getFormat() const
     {
         if (!maSysData.pRenderFormat)
-            return DeviceFormat::FULLCOLOR;
+            return DeviceFormat::DEFAULT;
         switch (static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth)
         {
             case 1:
                 return DeviceFormat::BITMASK;
-            case 8:
-                return DeviceFormat::GRAYSCALE;
             default:
-                return DeviceFormat::FULLCOLOR;
+                return DeviceFormat::DEFAULT;
         }
     }
 }
