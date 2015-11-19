@@ -37,7 +37,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:helpid="27019"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:helpid="10017"/>
- <toolbar:toolbaritem xlink:href=".uno:CharBackColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharBackColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:helpid="10028"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:helpid="10030"/>

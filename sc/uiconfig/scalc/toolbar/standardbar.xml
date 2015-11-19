@@ -23,7 +23,7 @@
  <toolbar:toolbaritem xlink:href=".uno:NewDoc" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:OpenFromCalc" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:OpenRemote" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:Save"/>
  <toolbar:toolbaritem xlink:href=".uno:SaveAs"/>
  <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>

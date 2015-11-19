@@ -21,9 +21,9 @@
  <toolbar:toolbaritem xlink:href=".uno:OpenUrl" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:helpid="5537"/>
  <toolbar:toolbaritem xlink:href=".uno:NewDoc" toolbar:visible="false" toolbar:helpid="5500"/>
- <toolbar:toolbaritem xlink:href=".uno:OpenFromWriter" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:OpenFromWriter"/>
  <toolbar:toolbaritem xlink:href=".uno:OpenRemote" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:style="dropdown" toolbar:helpid="5505"/>
+ <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:helpid="5505"/>
  <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:helpid="5502"/>
  <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:visible="false" toolbar:helpid="5331"/>
  <toolbar:toolbarseparator/>

@@ -21,9 +21,9 @@
  <toolbar:toolbaritem xlink:href=".uno:OpenUrl" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:helpid="5537"/>
  <toolbar:toolbaritem xlink:href=".uno:NewDoc" toolbar:visible="false" toolbar:helpid="5500"/>
- <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:Open"/>
  <toolbar:toolbaritem xlink:href=".uno:OpenRemote" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:style="dropdown" toolbar:helpid="5505"/>
+ <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:helpid="5505"/>
  <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:helpid="5502"/>
  <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:visible="false" toolbar:helpid="5331"/>
  <toolbar:toolbarseparator/>
@@ -55,7 +55,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:VerticalText"/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
