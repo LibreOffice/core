@@ -1453,15 +1453,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceW
 uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
-    uno::Sequence< OUString > aResult( rMap.size());
-
-    ::std::transform( rMap.begin(), rMap.end(),
-                      aResult.getArray(),
-                      ::o3tl::select1st< tServiceNameMap::value_type >() );
-
-    return aResult;
-
+    return comphelper::mapKeysToSequence( lcl_getStaticServiceNameMap() );
 }
 
 // ____ XAggregation ____

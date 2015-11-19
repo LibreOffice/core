@@ -721,17 +721,7 @@ throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(rBHelper.rMutex);
 
-    Sequence< OUString > aSeq( m_aModuleToCommandFileMap.size() );
-
-    sal_Int32 n = 0;
-    ModuleToCommandFileMap::const_iterator pIter = m_aModuleToCommandFileMap.begin();
-    while ( pIter != m_aModuleToCommandFileMap.end() )
-    {
-        aSeq[n++] = pIter->first;
-        ++pIter;
-    }
-
-    return aSeq;
+    return comphelper::mapKeysToSequence( m_aModuleToCommandFileMap );
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )

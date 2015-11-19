@@ -31,6 +31,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/sequence.hxx>
 #include <svx/dialmgr.hxx>
 #include "svx/unoapi.hxx"
 #include <editeng/unotext.hxx>
@@ -874,16 +875,7 @@ OUString UHashMap::getNameFromId(sal_uInt32 nId)
 
 uno::Sequence< OUString > UHashMap::getServiceNames()
 {
-    const UHashMapImpl &rMap = GetUHashImpl();
-
-    uno::Sequence< OUString > aSeq( rMap.size() );
-    OUString* pStrings = aSeq.getArray();
-
-    int i = 0;
-    for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); ++it)
-        pStrings[i++] = it->first;
-
-    return aSeq;
+    return comphelper::mapKeysToSequence( GetUHashImpl() );
 }
 
 sal_uInt32 UHashMap::getId( const OUString& rCompareString )

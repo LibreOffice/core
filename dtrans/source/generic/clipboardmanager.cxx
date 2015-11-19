@@ -20,6 +20,7 @@
 #include <clipboardmanager.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::datatransfer;
@@ -137,14 +138,7 @@ Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
     if (rBHelper.bInDispose)
         return Sequence< OUString > ();
 
-    Sequence< OUString > aRet(m_aClipboardMap.size());
-    ClipboardMap::iterator iter = m_aClipboardMap.begin();
-    ClipboardMap::iterator imax = m_aClipboardMap.end();
-
-    for (sal_Int32 n = 0; iter != imax; ++iter)
-        aRet[n++] = iter->first;
-
-    return aRet;
+    return comphelper::mapKeysToSequence(m_aClipboardMap);
 }
 
 void SAL_CALL ClipboardManager::dispose()

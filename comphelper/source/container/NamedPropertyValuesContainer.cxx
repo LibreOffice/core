@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -151,13 +152,7 @@ css::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& 
 css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getElementNames(  )
     throw(css::uno::RuntimeException, std::exception)
 {
-    uno::Sequence< OUString > aNames( maProperties.size() );
-    OUString* pNames = aNames.getArray();
-
-    for( const auto& rProperty : maProperties )
-        *pNames++ = rProperty.first;
-
-    return aNames;
+    return comphelper::mapKeysToSequence(maProperties);
 }
 
 sal_Bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName )

@@ -230,13 +230,7 @@ OUString EmbeddedObjectContainer::CreateUniqueObjectName()
 
 uno::Sequence < OUString > EmbeddedObjectContainer::GetObjectNames()
 {
-    uno::Sequence < OUString > aSeq( pImpl->maObjectContainer.size() );
-    OUString* pNames = aSeq.getArray();
-
-    for( const auto& rObj : pImpl->maObjectContainer )
-        *pNames++ = rObj.first;
-
-    return aSeq;
+    return comphelper::mapKeysToSequence(pImpl->maObjectContainer);
 }
 
 bool EmbeddedObjectContainer::HasEmbeddedObjects()

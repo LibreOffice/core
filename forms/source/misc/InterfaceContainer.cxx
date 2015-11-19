@@ -726,14 +726,7 @@ Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName ) throw(NoSu
 
 css::uno::Sequence<OUString> SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeException, std::exception)
 {
-    css::uno::Sequence<OUString> aNameList(m_aItems.size());
-    OUString* pStringArray = aNameList.getArray();
-
-    for (OInterfaceMap::const_iterator i = m_aMap.begin(); i != m_aMap.end(); ++i, ++pStringArray)
-    {
-        *pStringArray = (*i).first;
-    }
-    return aNameList;
+    return comphelper::mapKeysToSequence(m_aMap);
 }
 
 

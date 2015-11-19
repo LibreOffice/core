@@ -520,13 +520,7 @@ ReadOnlyEventsNameContainer::getByName( const OUString& aName ) throw (container
 Sequence< OUString > SAL_CALL
 ReadOnlyEventsNameContainer::getElementNames(  ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > names(m_hEvents.size());
-    OUString* pDest = names.getArray();
-    EventSupplierHash::const_iterator it = m_hEvents.begin();
-    EventSupplierHash::const_iterator it_end = m_hEvents.end();
-    for ( sal_Int32 index = 0; it != it_end; ++index, ++pDest, ++it )
-        *pDest = it->first;
-    return names;
+    return comphelper::mapKeysToSequence(m_hEvents);
 }
 
 sal_Bool SAL_CALL

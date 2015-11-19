@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <comphelper/sequence.hxx>
 
 namespace chart
 {
@@ -65,8 +66,8 @@ void PropertyMapper::setMappedProperties(
         for( sal_Int32 nI=0; nI<aNames.getLength(); ++nI )
             aNewMap[ aNames[nI] ] = aValues[nI];
         lcl_overwriteOrAppendValues( aNewMap, *pOverwriteMap );
-        aNames = ContainerHelper::MapKeysToSequence( aNewMap );
-        aValues = ContainerHelper::MapValuesToSequence( aNewMap );
+        aNames = comphelper::mapKeysToSequence( aNewMap );
+        aValues = comphelper::mapValuesToSequence( aNewMap );
     }
 
     PropertyMapper::setMultiProperties( aNames, aValues, xTarget );

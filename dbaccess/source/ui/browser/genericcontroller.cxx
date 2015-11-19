@@ -1443,14 +1443,7 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
         if ( aIter->second.GroupId != CommandGroup::INTERNAL )
             aCmdHashMap.insert( CommandHashMap::value_type( aIter->second.GroupId, 0 ));
 
-    Sequence< sal_Int16 > aCommandGroups( aCmdHashMap.size() );
-    ::std::transform( aCmdHashMap.begin(),
-        aCmdHashMap.end(),
-        aCommandGroups.getArray(),
-        ::o3tl::select1st< CommandHashMap::value_type >()
-    );
-
-    return aCommandGroups;
+    return comphelper::mapKeysToSequence( aCmdHashMap );
 }
 
 namespace

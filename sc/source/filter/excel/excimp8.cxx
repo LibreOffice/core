@@ -25,6 +25,7 @@
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/fltrcfg.hxx>
 
 #include <vcl/wmf.hxx>
@@ -137,13 +138,7 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException, std::exception) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        uno::Sequence< OUString > aResult( IdToOleNameHash.size() );
-        NamedIndexToOleName::iterator it = IdToOleNameHash.begin();
-        NamedIndexToOleName::iterator it_end = IdToOleNameHash.end();
-        OUString* pName = aResult.getArray();
-        for (; it != it_end; ++it, ++pName )
-            *pName = it->first;
-        return aResult;
+        return comphelper::mapKeysToSequence( IdToOleNameHash);
     }
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) override
     {
