@@ -277,6 +277,14 @@ private:
     GLuint maTexture;
 };
 
+struct Vertex
+{
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec2 texcoord;
+};
+static_assert(sizeof(Vertex) == (3 + 3 + 2) * 4, "Vertex struct has wrong size/alignment");
+
 /** This class is a list of Triangles that will share Operations, and could possibly share
 */
 class Primitive
@@ -290,7 +298,7 @@ public:
     void swap(Primitive& rOther);
 
     void applyOperations(double nTime, double SlideWidthScale, double SlideHeightScale) const;
-    void display(double nTime, double SlideWidthScale, double SlideHeightScale) const;
+    void display(double nTime, double SlideWidthScale, double SlideHeightScale, int first) const;
 
     /** PushBack a vertex,normal, and tex coord. Each SlideLocation is where on the slide is mapped to this location ( from (0,0) to (1,1)  ). This will make sure the correct aspect ratio is used, and helps to make slides begin and end at the correct position. (0,0) is the top left of the slide, and (1,1) is the bottom right.
 
@@ -311,7 +319,24 @@ public:
         @return
         the list of vertices
     */
-    const glm::vec3& getVertex(int n) const {return Vertices[n];}
+    const glm::vec3& getVertex(int n) const {return Vertices[n].position;}
+
+    /** accessor for the size of the vertices data
+
+        @return
+        the size in bytes of the Vertices data
+    */
+    int getVerticesSize() const {return Vertices.size() * sizeof(Vertex);}
+
+    /** copies all vertices to the C array passed
+
+        @return
+        the number of written vertices
+    */
+    int writeVertices(Vertex *location) const {
+        std::copy(Vertices.begin(), Vertices.end(), location);
+        return Vertices.size();
+    }
 
     /** list of Operations to be performed on this primitive.These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
 
@@ -324,15 +349,7 @@ public:
 private:
     /** list of vertices
     */
-    std::vector<glm::vec3> Vertices;
-
-    /** list of Normals
-    */
-    std::vector<glm::vec3> Normals;
-
-    /** list of Texture Coordinates
-    */
-    std::vector<glm::vec2> TexCoords;
+    std::vector<Vertex> Vertices;
 };
 
 /** This class is to be derived to make any operation (transform) you may need in order to construct your transitions

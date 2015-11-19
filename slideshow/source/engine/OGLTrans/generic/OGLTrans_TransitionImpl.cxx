@@ -192,6 +192,58 @@ void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthS
         rOverallOperations[i]->interpolate(nTime,SlideWidthScale,SlideHeightScale);
 }
 
+static void display_primitives(const Primitives_t& primitives, double nTime, double WidthScale, double HeightScale)
+{
+    CHECK_GL_ERROR();
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    CHECK_GL_ERROR();
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+
+    int size = 0;
+    for (const Primitive& primitive: primitives)
+        size += primitive.getVerticesSize();
+
+    CHECK_GL_ERROR();
+    glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STREAM_DRAW);
+    CHECK_GL_ERROR();
+    Vertex *buf = reinterpret_cast<Vertex*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+
+    std::vector<int> first_elements;
+    int last_pos = 0;
+    for (const Primitive& primitive: primitives) {
+        first_elements.push_back(last_pos);
+        int num = primitive.writeVertices(buf);
+        buf += num;
+        last_pos += num;
+    }
+    auto first = first_elements.begin();
+
+    CHECK_GL_ERROR();
+    glUnmapBuffer(GL_ARRAY_BUFFER);
+
+    // State initialization
+    // TODO: move that elsewhere.
+    CHECK_GL_ERROR();
+    glEnableClientState( GL_VERTEX_ARRAY );
+    CHECK_GL_ERROR();
+    glVertexPointer( 3, GL_FLOAT, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, position)) );
+    CHECK_GL_ERROR();
+    glEnableClientState( GL_NORMAL_ARRAY );
+    CHECK_GL_ERROR();
+    glNormalPointer( GL_FLOAT , sizeof(Vertex) , reinterpret_cast<void*>(offsetof(Vertex, normal)) );
+    CHECK_GL_ERROR();
+    glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+    CHECK_GL_ERROR();
+    glTexCoordPointer( 2, GL_FLOAT, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, texcoord)) );
+
+    for (const Primitive& primitive: primitives)
+        primitive.display(nTime, WidthScale, HeightScale, *first++);
+
+    CHECK_GL_ERROR();
+    glDeleteBuffers(1, &buffer);
+}
+
 void
 OGLTransitionImpl::displaySlide(
         const double nTime,
@@ -216,8 +268,7 @@ OGLTransitionImpl::displaySlide(
         glTranslated( 0, 2 - surfaceLevel, 0 );
 
         glCullFace(GL_FRONT);
-        for(size_t i(0); i < primitives.size(); ++i)
-            primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
+        display_primitives(primitives, nTime, SlideWidthScale, SlideHeightScale);
         glCullFace(GL_BACK);
 
         slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
@@ -225,8 +276,7 @@ OGLTransitionImpl::displaySlide(
         glPopMatrix();
     }
 
-    for(size_t i(0); i < primitives.size(); ++i)
-        primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
+    display_primitives(primitives, nTime, SlideWidthScale, SlideHeightScale);
     CHECK_GL_ERROR();
 }
 
@@ -240,7 +290,7 @@ void OGLTransitionImpl::displayScene( double nTime, double SlideWidth, double Sl
     CHECK_GL_ERROR();
 }
 
-void Primitive::display(double nTime, double WidthScale, double HeightScale) const
+void Primitive::display(double nTime, double WidthScale, double HeightScale, int first) const
 {
     CHECK_GL_ERROR();
     glPushMatrix();
@@ -249,19 +299,8 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale) con
     applyOperations( nTime, WidthScale, HeightScale );
 
     CHECK_GL_ERROR();
-    glEnableClientState( GL_VERTEX_ARRAY );
-    CHECK_GL_ERROR();
-    glNormalPointer( GL_FLOAT , 0 , &Normals[0] );
-    CHECK_GL_ERROR();
-    glEnableClientState( GL_NORMAL_ARRAY );
-    CHECK_GL_ERROR();
-    glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-    CHECK_GL_ERROR();
-    glTexCoordPointer( 2, GL_FLOAT, 0, &TexCoords[0] );
-    CHECK_GL_ERROR();
-    glVertexPointer( 3, GL_FLOAT, 0, &Vertices[0] );
-    CHECK_GL_ERROR();
-    glDrawArrays( GL_TRIANGLES, 0, Vertices.size() );
+    glDrawArrays( GL_TRIANGLES, first, Vertices.size() );
+
     CHECK_GL_ERROR();
     glPopMatrix();
     CHECK_GL_ERROR();
@@ -278,22 +317,19 @@ void Primitive::applyOperations(double nTime, double WidthScale, double HeightSc
 
 void SceneObject::display(double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight ) const
 {
+    // fixme: allow various model spaces, now we make it so that
+    // it is regular -1,-1 to 1,1, where the whole display fits in
     CHECK_GL_ERROR();
-    for(size_t i(0); i < maPrimitives.size(); ++i) {
-        // fixme: allow various model spaces, now we make it so that
-        // it is regular -1,-1 to 1,1, where the whole display fits in
-        CHECK_GL_ERROR();
-        glPushMatrix();
-        CHECK_GL_ERROR();
-        if (DispHeight > DispWidth)
-            glScaled(DispHeight/DispWidth, 1, 1);
-        else
-            glScaled(1, DispWidth/DispHeight, 1);
-        maPrimitives[i].display(nTime, 1, 1);
-        CHECK_GL_ERROR();
-        glPopMatrix();
-        CHECK_GL_ERROR();
-    }
+    glPushMatrix();
+    CHECK_GL_ERROR();
+    if (DispHeight > DispWidth)
+        glScaled(DispHeight/DispWidth, 1, 1);
+    else
+        glScaled(1, DispWidth/DispHeight, 1);
+    CHECK_GL_ERROR();
+    display_primitives(maPrimitives, nTime, 1, 1);
+    CHECK_GL_ERROR();
+    glPopMatrix();
     CHECK_GL_ERROR();
 }
 
@@ -1063,8 +1099,6 @@ Primitive& Primitive::operator=(const Primitive& rvalue)
 Primitive::Primitive(const Primitive& rvalue)
     : Operations(rvalue.Operations)
     , Vertices(rvalue.Vertices)
-    , Normals(rvalue.Normals)
-    , TexCoords(rvalue.TexCoords)
 {
 }
 
@@ -1074,8 +1108,6 @@ void Primitive::swap(Primitive& rOther)
 
     swap(Operations, rOther.Operations);
     swap(Vertices, rOther.Vertices);
-    swap(Normals, rOther.Normals);
-    swap(TexCoords, rOther.TexCoords);
 }
 
 void Primitive::pushTriangle(const glm::vec2& SlideLocation0,const glm::vec2& SlideLocation1,const glm::vec2& SlideLocation2)
@@ -1108,17 +1140,9 @@ void Primitive::pushTriangle(const glm::vec2& SlideLocation0,const glm::vec2& Sl
         Verts.push_back(glm::vec3( 2*SlideLocation1.x - 1, -2*SlideLocation1.y + 1 , 0.0 ));
     }
 
-    Vertices.push_back(Verts[0]);
-    Vertices.push_back(Verts[1]);
-    Vertices.push_back(Verts[2]);
-
-    TexCoords.push_back(Texs[0]);
-    TexCoords.push_back(Texs[1]);
-    TexCoords.push_back(Texs[2]);
-
-    Normals.push_back(glm::vec3(0,0,1));//all normals always face the screen when untransformed.
-    Normals.push_back(glm::vec3(0,0,1));//all normals always face the screen when untransformed.
-    Normals.push_back(glm::vec3(0,0,1));//all normals always face the screen when untransformed.
+    Vertices.push_back({Verts[0], glm::vec3(0, 0, 1), Texs[0]}); //all normals always face the screen when untransformed.
+    Vertices.push_back({Verts[1], glm::vec3(0, 0, 1), Texs[1]}); //all normals always face the screen when untransformed.
+    Vertices.push_back({Verts[2], glm::vec3(0, 0, 1), Texs[2]}); //all normals always face the screen when untransformed.
 }
 
 namespace
