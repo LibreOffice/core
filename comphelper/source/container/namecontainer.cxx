@@ -22,6 +22,7 @@
 #include <map>
 
 #include <comphelper/namecontainer.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -160,15 +161,7 @@ Sequence< OUString > SAL_CALL NameContainer::getElementNames(  )
 {
     MutexGuard aGuard( maMutex );
 
-    Sequence< OUString > aNames( maProperties.size() );
-    OUString* pNames = aNames.getArray();
-
-    for( const auto& rProperty : maProperties )
-    {
-        *pNames++ = rProperty.first;
-    }
-
-    return aNames;
+    return comphelper::mapKeysToSequence(maProperties);
 }
 
 sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )

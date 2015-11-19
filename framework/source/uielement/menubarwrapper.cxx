@@ -32,6 +32,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
@@ -302,17 +303,7 @@ throw (css::uno::RuntimeException, std::exception)
 
     fillPopupControllerCache();
 
-    Sequence< OUString > aSeq( m_aPopupControllerCache.size() );
-
-    sal_Int32 i( 0 );
-    PopupControllerCache::const_iterator pIter = m_aPopupControllerCache.begin();
-    while ( pIter != m_aPopupControllerCache.end() )
-    {
-        aSeq[i++] = pIter->first;
-        ++pIter;
-    }
-
-    return aSeq;
+    return comphelper::mapKeysToSequence( m_aPopupControllerCache );
 }
 
 sal_Bool SAL_CALL MenuBarWrapper::hasByName(

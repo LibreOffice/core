@@ -642,9 +642,6 @@ private:
         const css::uno::Sequence< OUString >& RequestedAttributes,
         tPropValMap& rRunAttrSeq);
 
-    static css::uno::Sequence< css::beans::PropertyValue >
-    convertHashMapToSequence(tPropValMap& rAttrSeq);
-
     css::uno::Reference< css::accessibility::XAccessible > m_xAccessible;
     ::TextEngine & m_rEngine;
     ::TextView & m_rView;

@@ -22,6 +22,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "vbawindow.hxx"
 #include "vbaglobals.hxx"
@@ -178,13 +179,7 @@ public:
 
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException, std::exception) override
     {
-        uno::Sequence< OUString > names( namesToIndices.size() );
-        OUString* pString = names.getArray();
-        NameIndexHash::const_iterator it = namesToIndices.begin();
-        NameIndexHash::const_iterator it_end = namesToIndices.end();
-        for ( ; it != it_end; ++it, ++pString )
-            *pString = it->first;
-        return names;
+        return comphelper::mapKeysToSequence( namesToIndices );
     }
 
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) override

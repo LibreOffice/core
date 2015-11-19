@@ -4046,13 +4046,7 @@ void SAL_CALL FormController::invalidateAllFeatures(  ) throw (RuntimeException,
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    Sequence< sal_Int16 > aInterceptedFeatures( m_aFeatureDispatchers.size() );
-    ::std::transform(
-        m_aFeatureDispatchers.begin(),
-        m_aFeatureDispatchers.end(),
-        aInterceptedFeatures.getArray(),
-        ::o3tl::select1st< DispatcherContainer::value_type >()
-    );
+    Sequence< sal_Int16 > aInterceptedFeatures( comphelper::mapKeysToSequence(m_aFeatureDispatchers) );
 
     aGuard.clear();
     if ( aInterceptedFeatures.getLength() )

@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -573,16 +574,7 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
 {
     Guard< Mutex > aGuard( aLock );
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
-
-    Sequence< ScriptEventDescriptor > aSeq( aIt->aEventList.size() );
-    ScriptEventDescriptor * pArray = aSeq.getArray();
-
-    sal_Int32 i = 0;
-    for( const auto& rEvt : aIt->aEventList )
-    {
-        pArray[i++] = rEvt;
-    }
-    return aSeq;
+    return comphelper::containerToSequence<ScriptEventDescriptor>(aIt->aEventList);
 }
 
 

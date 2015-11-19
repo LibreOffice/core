@@ -23,6 +23,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <algorithm>
 #include <vector>
@@ -1101,7 +1102,7 @@ Document::retrieveCharacterAttributes(
         aCharAttrSeq[ pValues->Name ] = *pValues;
     }
 
-    css::uno::Sequence< css::beans::PropertyValue > aRes = convertHashMapToSequence( aCharAttrSeq );
+    css::uno::Sequence< css::beans::PropertyValue > aRes = comphelper::mapValuesToSequence( aCharAttrSeq );
 
     // sort the attributes
     sal_Int32 nLength = aRes.getLength();
@@ -1143,24 +1144,7 @@ Document::retrieveDefaultAttributes(
 
     tPropValMap aDefAttrSeq;
     retrieveDefaultAttributesImpl( pParagraph, RequestedAttributes, aDefAttrSeq );
-    return convertHashMapToSequence( aDefAttrSeq );
-}
-
-// static
-css::uno::Sequence< css::beans::PropertyValue >
-Document::convertHashMapToSequence(tPropValMap& rAttrSeq)
-{
-    css::uno::Sequence< css::beans::PropertyValue > aValues( rAttrSeq.size() );
-    css::beans::PropertyValue* pValues = aValues.getArray();
-    ::sal_Int32 i = 0;
-    for ( tPropValMap::const_iterator aIter  = rAttrSeq.begin();
-          aIter != rAttrSeq.end();
-          ++aIter )
-    {
-        pValues[i] = aIter->second;
-        ++i;
-    }
-    return aValues;
+    return comphelper::mapValuesToSequence( aDefAttrSeq );
 }
 
 void Document::retrieveRunAttributesImpl(
@@ -1233,7 +1217,7 @@ Document::retrieveRunAttributes(
 
     tPropValMap aRunAttrSeq;
     retrieveRunAttributesImpl( pParagraph, Index, RequestedAttributes, aRunAttrSeq );
-    return convertHashMapToSequence( aRunAttrSeq );
+    return comphelper::mapValuesToSequence( aRunAttrSeq );
 }
 
 void Document::changeParagraphText(Paragraph * pParagraph,

@@ -34,6 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -392,10 +393,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequ
         }
     }
 
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aRet( aContainer.size());
-    ::std::copy( aContainer.begin(), aContainer.end(), aRet.getArray());
-
-    return aRet;
+    return comphelper::containerToSequence< Reference< chart2::data::XLabeledDataSequence > >( aContainer );
 }
 
 Reference< chart2::data::XLabeledDataSequence >
@@ -444,8 +442,7 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
             aLabeledSeqVector.push_back( aSeriesSeqVector[nN] );
     }
 
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( aLabeledSeqVector.size() );
-    ::std::copy( aLabeledSeqVector.begin(), aLabeledSeqVector.end(), aSeq.getArray() );
+    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( comphelper::containerToSequence(aLabeledSeqVector) );
 
     return lcl_createDataSource( aSeq );
 }

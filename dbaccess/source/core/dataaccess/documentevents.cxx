@@ -23,6 +23,7 @@
 
 #include <osl/diagnose.h>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -200,14 +201,7 @@ namespace dbaccess
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
-        Sequence< OUString > aNames( m_pData->rEventsData.size() );
-        ::std::transform(
-            m_pData->rEventsData.begin(),
-            m_pData->rEventsData.end(),
-            aNames.getArray(),
-            ::o3tl::select1st< DocumentEventsData::value_type >()
-        );
-        return aNames;
+        return comphelper::mapKeysToSequence( m_pData->rEventsData );
     }
 
     sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& _Name ) throw (RuntimeException, std::exception)

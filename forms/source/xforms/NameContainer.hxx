@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_NAMECONTAINER_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_NAMECONTAINER_HXX
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <map>
 
@@ -123,18 +124,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames()
         throw( css::uno::RuntimeException, std::exception ) override
     {
-        css::uno::Sequence<OUString> aSequence( maItems.size() );
-        typename map_t::const_iterator aIter = maItems.begin();
-        OUString* pStrings = aSequence.getArray();
-        while( aIter != maItems.end() )
-        {
-            *pStrings = aIter->first;
-            ++aIter;
-            ++pStrings;
-        }
-        OSL_ENSURE( pStrings == aSequence.getArray() + aSequence.getLength(),
-                    "sequence not of right size; possible buffer overflow" );
-        return aSequence;
+        return comphelper::mapKeysToSequence(maItems);
     }
 
     virtual sal_Bool SAL_CALL hasByName(

@@ -33,6 +33,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <comphelper/sequence.hxx>
 #include <unotools/datetime.hxx>
 
 using xforms::Convert;
@@ -301,10 +302,7 @@ bool Convert::hasType( const css::uno::Type& rType )
 
 css::uno::Sequence<css::uno::Type> Convert::getTypes()
 {
-    css::uno::Sequence<css::uno::Type> aTypes( maMap.size() );
-    transform( maMap.begin(), maMap.end(), aTypes.getArray(),
-            o3tl::select1st<Map_t::value_type>() );
-    return aTypes;
+    return comphelper::mapKeysToSequence( maMap );
 }
 
 OUString Convert::toXSD( const css::uno::Any& rAny )

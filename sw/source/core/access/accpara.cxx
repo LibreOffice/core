@@ -2074,18 +2074,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
     tAccParaPropValMap aRunAttrSeq;
     _getRunAttributesImpl( nIndex, aRequestedAttributes, aRunAttrSeq );
 
-    uno::Sequence< PropertyValue > aValues( aRunAttrSeq.size() );
-    PropertyValue* pValues = aValues.getArray();
-    sal_Int32 i = 0;
-    for ( tAccParaPropValMap::const_iterator aIter  = aRunAttrSeq.begin();
-          aIter != aRunAttrSeq.end();
-          ++aIter )
-    {
-        pValues[i] = aIter->second;
-        ++i;
-    }
-
-    return aValues;
+    return comphelper::mapValuesToSequence( aRunAttrSeq );
 }
 
 void SwAccessibleParagraph::_getSupplementalAttributesImpl(

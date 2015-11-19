@@ -528,10 +528,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_ensurePropertyMap();
 
-        Sequence< Property > aReturn( m_aProperties.size() );
-        ::std::transform( m_aProperties.begin(), m_aProperties.end(),
-            aReturn.getArray(), ::o3tl::select2nd< PropertyMap::value_type >() );
-        return aReturn;
+        return comphelper::mapValuesToSequence( m_aProperties );
     }
 
     Sequence< OUString > SAL_CALL GenericPropertyHandler::getSupersededProperties( ) throw (RuntimeException, std::exception)

@@ -31,6 +31,7 @@
 #include <unotools/confignode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -825,12 +826,7 @@ namespace sfx2
                     // create a representation of the group which is understandable by the XFilterGroupManager
                     if ( _rGroup.size() )
                     {
-                        Sequence< StringPair > aFilters( _rGroup.size() );
-                        ::std::copy(
-                            _rGroup.begin(),
-                            _rGroup.end(),
-                            aFilters.getArray()
-                        );
+                        Sequence< StringPair > aFilters( comphelper::containerToSequence<StringPair>(_rGroup) );
                         if ( _bAddExtension )
                         {
                             StringPair* pFilters = aFilters.getArray();
