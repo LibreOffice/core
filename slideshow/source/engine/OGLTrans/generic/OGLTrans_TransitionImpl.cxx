@@ -212,7 +212,7 @@ static void display_primitives(const Primitives_t& primitives, double nTime, dou
     CHECK_GL_ERROR();
     glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STREAM_DRAW);
     CHECK_GL_ERROR();
-    Vertex *buf = reinterpret_cast<Vertex*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+    Vertex *buf = static_cast<Vertex*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
 
     std::vector<int> first_elements;
     int last_pos = 0;
