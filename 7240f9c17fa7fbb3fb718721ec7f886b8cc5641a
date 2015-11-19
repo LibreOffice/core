@@ -51,6 +51,24 @@
       "revId": "7240f9c17fa7fbb3fb718721ec7f886b8cc5641a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b4bb0e75",
+        "filename": "ucb/source/ucp/webdav-neon/NeonHeadRequest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-19T12:24:27Z",
+      "side": 1,
+      "message": "actually headers are very interesting when debugging network protocol issues, e.g. i wrote a 150 line LoggingProtocolSocketFactory in swext/ just to look at headers in SSL encrypted connections (which WireShark won\u0027t show you easily)",
+      "parentUuid": "dab17558_7476c63f",
+      "revId": "7240f9c17fa7fbb3fb718721ec7f886b8cc5641a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
