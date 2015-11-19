@@ -772,7 +772,7 @@ int Tracker::HitTestHandles(POINT point) const
     {
         RECT rect = m_rect;
         NormalizeRect(&rect);
-        if ((m_nStyle & dottedLine|solidLine) != 0)
+        if ((m_nStyle & (dottedLine|solidLine)) != 0)
             InflateRect(&rect,+1, +1);
         if (!PtInRect(&rect,point))
             return hitNothing;  // must have been between resize handles
