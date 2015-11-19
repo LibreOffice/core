@@ -55,6 +55,10 @@ wgl::OperatingSystem getOperatingSystem(const OString& rString)
     {
         return wgl::DRIVER_OS_WINDOWS_8_1;
     }
+    else if (rString == "10")
+    {
+        return wgl::DRIVER_OS_WINDOWS_10;
+    }
 
     return wgl::DRIVER_OS_UNKNOWN;
 }

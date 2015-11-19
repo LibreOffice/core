@@ -206,7 +206,7 @@ enum {
     kWindows7 = 0x60001,
     kWindows8 = 0x60002,
     kWindows8_1 = 0x60003,
-    kWindows10 = 0x60004
+    kWindows10 = 0x100000
 };
 
 
@@ -226,6 +226,8 @@ wgl::OperatingSystem WindowsVersionToOperatingSystem(int32_t aWindowsVersion)
             return wgl::DRIVER_OS_WINDOWS_8;
         case kWindows8_1:
             return wgl::DRIVER_OS_WINDOWS_8_1;
+        case kWindows10:
+            return wgl::DRIVER_OS_WINDOWS_10;
         case kWindowsUnknown:
         default:
             return wgl::DRIVER_OS_UNKNOWN;
