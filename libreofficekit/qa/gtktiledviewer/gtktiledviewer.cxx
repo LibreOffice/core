@@ -32,6 +32,7 @@ static int help()
     fprintf(stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install's-program-directory> <path-to-document> [<options> ... ]\n\n");
     fprintf(stderr, "Options:\n\n");
     fprintf(stderr, "--hide-whitespace: Hide whitespace between pages in text documents.\n");
+    fprintf(stderr, "--background-color <color>: Set custom background color, e.g. 'yellow'.\n");
     return 1;
 }
 
@@ -484,12 +485,19 @@ static void createModelAndView(const char* pLOPath, const char* pDocPath, const 
     setupWidgetAndCreateWindow(pDocView);
 
     boost::property_tree::ptree aTree;
-    for (const std::string& rArgument : rArguments)
+    for (size_t i = 0; i < rArguments.size(); ++i)
     {
+        const std::string& rArgument = rArguments[i];
         if (rArgument == "--hide-whitespace")
         {
             aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/type", '/'), "boolean");
             aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
+        }
+        else if (rArgument == "--background-color" && i + 1 < rArguments.size())
+        {
+            GdkRGBA color;
+            gdk_rgba_parse(&color, rArguments[i + 1].c_str());
+            gtk_widget_override_background_color(gtk_widget_get_toplevel(pDocView), GTK_STATE_FLAG_NORMAL, &color);
         }
     }
     std::stringstream aStream;
