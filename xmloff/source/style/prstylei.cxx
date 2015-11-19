@@ -36,6 +36,7 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
+#include <comphelper/sequence.hxx>
 
 //UUUU
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -401,16 +402,10 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                     }
 
                     nCount = aNameSet.size();
-                    Sequence < OUString > aNames( nCount );
-                    OUString *pNames = aNames.getArray();
-                    PropertyNameSet::iterator aIter = aNameSet.begin();
-                    while( aIter != aNameSet.end() )
-                        *pNames++ = *aIter++;
-
-                    Sequence < PropertyState > aStates(
-                        xPropState->getPropertyStates( aNames ) );
+                    Sequence<OUString> aNames( comphelper::containerToSequence<OUString>(aNameSet) );
+                    Sequence < PropertyState > aStates( xPropState->getPropertyStates(aNames) );
                     const PropertyState *pStates = aStates.getConstArray();
-                    pNames = aNames.getArray();
+                    OUString* pNames = aNames.getArray();
 
                     for( i = 0; i < nCount; i++ )
                     {

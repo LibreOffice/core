@@ -34,6 +34,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storinfo.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -1532,7 +1533,6 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
     // creating SdrCustomShapeGeometryItem
 
-    typedef uno::Sequence< beans::PropertyValue > PropSeq;
     typedef std::vector< beans::PropertyValue > PropVec;
     typedef PropVec::iterator PropVecIter;
     PropVecIter aIter;
@@ -1861,15 +1861,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             rSet.Put( XSecondaryFillColorItem( OUString(), rManager.MSO_CLR_ToColor(
                 GetPropertyValue( DFF_Prop_c3DExtrusionColor, 0 ), DFF_Prop_c3DExtrusionColor ) ) );
         // pushing the whole Extrusion element
-        const OUString sExtrusion( "Extrusion" );
-        PropSeq aExtrusionPropSeq( aExtrusionPropVec.size() );
-        aIter = aExtrusionPropVec.begin();
-        aEnd = aExtrusionPropVec.end();
-        beans::PropertyValue* pExtrusionValues = aExtrusionPropSeq.getArray();
-        while ( aIter != aEnd )
-            *pExtrusionValues++ = *aIter++;
-        aProp.Name = sExtrusion;
-        aProp.Value <<= aExtrusionPropSeq;
+        aProp.Name = "Extrusion";
+        aProp.Value <<= comphelper::containerToSequence(aExtrusionPropVec);
         aPropVec.push_back( aProp );
     }
 
@@ -2088,18 +2081,11 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 }
                 if ( !aHandlePropVec.empty() )
                 {
-                    PropSeq aHandlePropSeq( aHandlePropVec.size() );
-                    aIter = aHandlePropVec.begin();
-                    aEnd = aHandlePropVec.end();
-                    beans::PropertyValue* pHandleValues = aHandlePropSeq.getArray();
-                    while ( aIter != aEnd )
-                        *pHandleValues++ = *aIter++;
-                    aHandles[ i ] = aHandlePropSeq;
+                    aHandles[ i ] = comphelper::containerToSequence(aHandlePropVec);
                 }
             }
             // pushing the whole Handles element
-            const OUString sHandles( "Handles" );
-            aProp.Name = sHandles;
+            aProp.Name = "Handles";
             aProp.Value <<= aHandles;
             aPropVec.push_back( aProp );
         }
@@ -2435,15 +2421,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // pushing the whole Path element
         if ( !aPathPropVec.empty() )
         {
-            const OUString sPath( "Path" );
-            PropSeq aPathPropSeq( aPathPropVec.size() );
-            aIter = aPathPropVec.begin();
-            aEnd = aPathPropVec.end();
-            beans::PropertyValue* pPathValues = aPathPropSeq.getArray();
-            while ( aIter != aEnd )
-                *pPathValues++ = *aIter++;
-            aProp.Name = sPath;
-            aProp.Value <<= aPathPropSeq;
+            aProp.Name = "Path";
+            aProp.Value <<= comphelper::containerToSequence(aPathPropVec);
             aPropVec.push_back( aProp );
         }
     }
@@ -2504,15 +2483,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aTextPathPropVec.push_back( aProp );
 
         // pushing the whole TextPath element
-        const OUString sTextPath( "TextPath" );
-        PropSeq aTextPathPropSeq( aTextPathPropVec.size() );
-        aIter = aTextPathPropVec.begin();
-        aEnd = aTextPathPropVec.end();
-        beans::PropertyValue* pTextPathValues = aTextPathPropSeq.getArray();
-        while ( aIter != aEnd )
-            *pTextPathValues++ = *aIter++;
-        aProp.Name = sTextPath;
-        aProp.Value <<= aTextPathPropSeq;
+        aProp.Name = "TextPath";
+        aProp.Value <<= comphelper::containerToSequence(aTextPathPropVec);
         aPropVec.push_back( aProp );
     }
 
@@ -2554,13 +2526,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     }
 
     // creating the whole property set
-    PropSeq aSeq( aPropVec.size() );
-    beans::PropertyValue* pValues = aSeq.getArray();
-    aIter = aPropVec.begin();
-    aEnd = aPropVec.end();
-    while ( aIter != aEnd )
-        *pValues++ = *aIter++;
-    rSet.Put( SdrCustomShapeGeometryItem( aSeq ) );
+    rSet.Put( SdrCustomShapeGeometryItem( comphelper::containerToSequence(aPropVec) ) );
 }
 
 void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const

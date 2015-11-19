@@ -45,6 +45,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <sax/tools/converter.hxx>
+#include <comphelper/sequence.hxx>
 #include <unordered_map>
 
 using namespace ::com::sun::star;
@@ -455,17 +456,9 @@ void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDe
 
     if ( !vDirection.empty() )
     {
-        uno::Sequence< double > aDirectionsSeq( vDirection.size() );
-        std::vector< double >::const_iterator aIter = vDirection.begin();
-        std::vector< double >::const_iterator aEnd = vDirection.end();
-        double* pValues = aDirectionsSeq.getArray();
-
-        while ( aIter != aEnd )
-            *pValues++ = *aIter++;
-
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );
-        aProp.Value <<= aDirectionsSeq;
+        aProp.Value <<= comphelper::containerToSequence(vDirection);
         rDest.push_back( aProp );
     }
 }
@@ -550,17 +543,9 @@ sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::
     }
     if ( !vParameter.empty() )
     {
-        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aParameterSeq( vParameter.size() );
-        std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aIter = vParameter.begin();
-        std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aEnd = vParameter.end();
-        com::sun::star::drawing::EnhancedCustomShapeParameterPair* pValues = aParameterSeq.getArray();
-
-        while ( aIter != aEnd )
-            *pValues++ = *aIter++;
-
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );
-        aProp.Value <<= aParameterSeq;
+        aProp.Value <<= comphelper::containerToSequence(vParameter);
         rDest.push_back( aProp );
     }
     return vParameter.size();
@@ -583,17 +568,9 @@ void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyV
     }
     if ( !vTextFrame.empty() )
     {
-        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrameSeq( vTextFrame.size() );
-        std::vector< com::sun::star::drawing::EnhancedCustomShapeTextFrame >::const_iterator aIter = vTextFrame.begin();
-        std::vector< com::sun::star::drawing::EnhancedCustomShapeTextFrame >::const_iterator aEnd = vTextFrame.end();
-        com::sun::star::drawing::EnhancedCustomShapeTextFrame* pValues = aTextFrameSeq.getArray();
-
-        while ( aIter != aEnd )
-            *pValues++ = *aIter++;
-
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );
-        aProp.Value <<= aTextFrameSeq;
+        aProp.Value <<= comphelper::containerToSequence(vTextFrame);
         rDest.push_back( aProp );
     }
 }
@@ -823,32 +800,16 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
             nParameterCount = 0;
         }
     }
+
     // adding the Coordinates property
-    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > seqCoordinates( vCoordinates.size() );
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aCoordinatesIter = vCoordinates.begin();
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aCoordinatesEnd = vCoordinates.end();
-    com::sun::star::drawing::EnhancedCustomShapeParameterPair* pCoordinateValues = seqCoordinates.getArray();
-
-    while ( aCoordinatesIter != aCoordinatesEnd )
-        *pCoordinateValues++ = *aCoordinatesIter++;
-
     beans::PropertyValue aProp;
     aProp.Name = EASGet( EAS_Coordinates );
-    aProp.Value <<= seqCoordinates;
+    aProp.Value <<= comphelper::containerToSequence(vCoordinates);
     rDest.push_back( aProp );
 
-
     // adding the Segments property
-    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > seqSegments( vSegments.size() );
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >::const_iterator aSegmentsIter = vSegments.begin();
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >::const_iterator aSegmentsEnd = vSegments.end();
-    com::sun::star::drawing::EnhancedCustomShapeSegment* pSegmentValues = seqSegments.getArray();
-
-    while ( aSegmentsIter != aSegmentsEnd )
-        *pSegmentValues++ = *aSegmentsIter++;
-
     aProp.Name = EASGet( EAS_Segments );
-    aProp.Value <<= seqSegments;
+    aProp.Value <<= comphelper::containerToSequence(vSegments);
     rDest.push_back( aProp );
 }
 
@@ -875,17 +836,9 @@ void GetAdjustmentValues( std::vector< com::sun::star::beans::PropertyValue >& r
     sal_Int32 nAdjustmentValues = vAdjustmentValue.size();
     if ( nAdjustmentValues )
     {
-        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( nAdjustmentValues );
-        std::vector< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >::const_iterator aIter = vAdjustmentValue.begin();
-        std::vector< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >::const_iterator aEnd = vAdjustmentValue.end();
-        com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue* pValues = aAdjustmentValues.getArray();
-
-        while ( aIter != aEnd )
-            *pValues++ = *aIter++;
-
         beans::PropertyValue aProp;
         aProp.Name = EASGet( EAS_AdjustmentValues );
-        aProp.Value <<= aAdjustmentValues;
+        aProp.Value <<= comphelper::containerToSequence(vAdjustmentValue);
         rDest.push_back( aProp );
     }
 }
@@ -1155,17 +1108,9 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
 {
     if ( !rElement.empty() )
     {
-        uno::Sequence< beans::PropertyValues > aPropSeq( rElement.size() );
-        std::vector< beans::PropertyValues >::const_iterator aIter = rElement.begin();
-        std::vector< beans::PropertyValues >::const_iterator aEnd = rElement.end();
-        beans::PropertyValues* pValues = aPropSeq.getArray();
-
-        while ( aIter != aEnd )
-            *pValues++ = *aIter++;
-
         beans::PropertyValue aProp;
         aProp.Name = rElementName;
-        aProp.Value <<= aPropSeq;
+        aProp.Value <<= comphelper::containerToSequence(rElement);
         rPropVec.push_back( aProp );
     }
 }
@@ -1176,17 +1121,9 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
 {
     if ( !rElement.empty() )
     {
-        uno::Sequence< OUString > aPropSeq( rElement.size() );
-        std::vector< OUString >::const_iterator aIter = rElement.begin();
-        std::vector< OUString >::const_iterator aEnd = rElement.end();
-        OUString* pValues = aPropSeq.getArray();
-
-        while ( aIter != aEnd )
-            *pValues++ = *aIter++;
-
         beans::PropertyValue aProp;
         aProp.Name = rElementName;
-        aProp.Value <<= aPropSeq;
+        aProp.Value <<= comphelper::containerToSequence(rElement);
         rPropVec.push_back( aProp );
     }
 }
@@ -1197,17 +1134,9 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
 {
     if ( !rElement.empty() )
     {
-        uno::Sequence< beans::PropertyValue > aPropSeq( rElement.size() );
-        std::vector< beans::PropertyValue >::const_iterator aIter = rElement.begin();
-        std::vector< beans::PropertyValue >::const_iterator aEnd = rElement.end();
-        beans::PropertyValue* pValues = aPropSeq.getArray();
-
-        while ( aIter != aEnd )
-            *pValues++ = *aIter++;
-
         beans::PropertyValue aProp;
         aProp.Name = rElementName;
-        aProp.Value <<= aPropSeq;
+        aProp.Value <<= comphelper::containerToSequence(rElement);
         rPropVec.push_back( aProp );
     }
 }
@@ -1450,15 +1379,7 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt1
                     break;
             }
         }
-        beans::PropertyValues aPropSeq( aHandle.size() );
-        std::vector< beans::PropertyValue >::const_iterator aIter = aHandle.begin();
-        std::vector< beans::PropertyValue >::const_iterator aEnd = aHandle.end();
-        beans::PropertyValue* pValues = aPropSeq.getArray();
-
-        while ( aIter != aEnd )
-            *pValues++ = *aIter++;
-
-        maHandles.push_back( aPropSeq );
+        maHandles.push_back( comphelper::containerToSequence(aHandle) );
     }
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 }

@@ -58,6 +58,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
 #include <sax/tools/converter.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "PropertySetMerger.hxx"
 #include <xmloff/families.hxx>
@@ -3864,12 +3865,7 @@ void SdXMLCustomShapeContext::EndElement()
         const OUString sCustomShapeGeometry    (  "CustomShapeGeometry"  );
 
         // converting the vector to a sequence
-        uno::Sequence< beans::PropertyValue > aSeq( maCustomShapeGeometry.size() );
-        beans::PropertyValue* pValues = aSeq.getArray();
-        std::vector< beans::PropertyValue >::const_iterator aIter( maCustomShapeGeometry.begin() );
-        std::vector< beans::PropertyValue >::const_iterator aEnd( maCustomShapeGeometry.end() );
-        while ( aIter != aEnd )
-            *pValues++ = *aIter++;
+        uno::Sequence< beans::PropertyValue > aSeq( comphelper::containerToSequence(maCustomShapeGeometry) );
 
         try
         {
