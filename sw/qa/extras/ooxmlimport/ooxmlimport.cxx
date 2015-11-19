@@ -2933,6 +2933,21 @@ DECLARE_OOXMLIMPORT_TEST(testTdf78902, "tdf78902.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf95755, "tdf95755.docx")
+{
+    /*
+    * The problem was that the width of a second table with single cell was discarded
+    * and resulted in too wide table
+    */
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Any aValue = xTableProperties->getPropertyValue("Width");
+    sal_Int32 nWidth;
+    aValue >>= nWidth;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10659), nWidth);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf95775, "tdf95775.docx")
 {
     // This must not fail in layout
