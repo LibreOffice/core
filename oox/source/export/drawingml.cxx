@@ -2265,8 +2265,21 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
                         rPathProp.Value >>= aPathSize;
                 }
 
-                if ( !aPairs.hasElements() || !aSegments.hasElements() )
+                if ( !aPairs.hasElements() )
                     return;
+
+                if ( !aSegments.hasElements() )
+                {
+                    aSegments = uno::Sequence<drawing::EnhancedCustomShapeSegment>(4);
+                    aSegments[0].Count = 1;
+                    aSegments[0].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+                    aSegments[1].Count = (sal_Int16)std::min( aPairs.getLength() - 1, (sal_Int32)32767 );
+                    aSegments[1].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                    aSegments[2].Count = 0;
+                    aSegments[2].Command = drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
+                    aSegments[3].Count = 0;
+                    aSegments[3].Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                }
 
                 int nExpectedPairCount = 0;
                 for( int j = 0; j < aSegments.getLength(); ++j )
