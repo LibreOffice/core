@@ -42,7 +42,7 @@
 namespace compat {
 
 inline bool isLookupContext(clang::DeclContext const & ctxt) {
-#if (__clang_major__ == 3 && __clang_minor__ > 7) || __clang_major__ > 3
+#if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
     return ctxt.isLookupContext();
 #else
     return !ctxt.isFunctionOrMethod()
