@@ -2032,6 +2032,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Save to Remote Ser~ver</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Save Remote File...</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>

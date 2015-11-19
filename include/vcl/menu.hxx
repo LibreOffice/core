@@ -252,6 +252,11 @@ public:
                     const OString &rIdent = OString(),
                     sal_uInt16 nPos = MENU_APPEND);
     void InsertItem(const ResId& rResId, sal_uInt16 nPos = MENU_APPEND );
+    void InsertItem(const OUString& rCommand,
+                    const css::uno::Reference<css::frame::XFrame>& rFrame,
+                    MenuItemBits nBits = MenuItemBits::NONE,
+                    const OString &rIdent = OString(),
+                    sal_uInt16 nPos = MENU_APPEND);
     void InsertSeparator(const OString &rIdent = OString(), sal_uInt16 nPos = MENU_APPEND);
     void RemoveItem( sal_uInt16 nPos );
     void CopyItem(const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 nNewPos = MENU_APPEND );

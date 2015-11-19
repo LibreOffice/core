@@ -41,6 +41,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
 
 #include <salinst.hxx>
 #include <svdata.hxx>
@@ -524,6 +525,23 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     }
     delete mpLayoutData, mpLayoutData = nullptr;
 }
+
+void Menu::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame,
+                      MenuItemBits nBits, const OString &rIdent, sal_uInt16 nPos)
+{
+    OUString aLabel(CommandInfoProvider::Instance().GetPopupLabelForCommand(rCommand, rFrame));
+    OUString aTooltip(CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
+    Image aImage(CommandInfoProvider::Instance().GetImageForCommand(rCommand, /*bLarge=*/ false, rFrame));
+
+    // let's invent an ItemId
+    const sal_uInt16 COMMAND_ITEMID_START = 30000;
+    sal_uInt16 nItemId = COMMAND_ITEMID_START + GetItemCount();
+
+    InsertItem(nItemId, aLabel, aImage, nBits, rIdent, nPos);
+    SetItemCommand(nItemId, rCommand);
+    SetHelpText(nItemId, aTooltip);
+}
+
 
 void Menu::InsertSeparator(const OString &rIdent, sal_uInt16 nPos)
 {

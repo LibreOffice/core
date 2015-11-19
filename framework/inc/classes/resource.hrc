@@ -51,8 +51,7 @@
 #define STR_CLEAR_RECENT_FILES_HELP             (RID_STR_START+24)
 #define STR_LANGSTATUS_HINT                     (RID_STR_START+25)
 #define STR_OPEN_REMOTE                         (RID_STR_START+26)
-#define STR_REMOTE_FILE                         (RID_STR_START+27)
-#define STR_REMOTE_TITLE                        (RID_STR_START+28)
+#define STR_REMOTE_TITLE                        (RID_STR_START+27)
 
 #define POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION    (RID_MENU_START+0)
 

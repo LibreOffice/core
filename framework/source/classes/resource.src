@@ -119,11 +119,6 @@ String STR_OPEN_REMOTE
     Text [ en-US ] = "Open remote file";
 };
 
-String STR_REMOTE_FILE
-{
-    Text [ en-US ] = "Save Remote File...";
-};
-
 String STR_REMOTE_TITLE
 {
     Text [ en-US ] = " (Remote)";
