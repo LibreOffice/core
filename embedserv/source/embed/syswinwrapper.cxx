@@ -393,14 +393,14 @@ LRESULT APIENTRY winwrap::HatchWndProc(
     HDC         hDC;
     PAINTSTRUCT ps;
 
-    phw=(PCHatchWin)GetWindowLong(hWnd, HWWL_STRUCTURE);
+    phw=(PCHatchWin)GetWindowLongPtr(hWnd, HWWL_STRUCTURE);
     POINT ptMouse;
 
     switch (iMsg)
     {
         case WM_CREATE:
             phw=(PCHatchWin)((LPCREATESTRUCT)lParam)->lpCreateParams;
-            SetWindowLong(hWnd, HWWL_STRUCTURE, (LONG)phw);
+            SetWindowLongPtr(hWnd, HWWL_STRUCTURE, (LONG_PTR)phw);
             break;
         case WM_PAINT:
             hDC=BeginPaint(hWnd,&ps);
