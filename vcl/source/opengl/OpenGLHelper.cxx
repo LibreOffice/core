@@ -918,10 +918,13 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
 
     bool bRet = false;
     if (bForceOpenGL)
+    {
         bRet = true;
-
+    }
     else if (!supportsVCLOpenGL())
+    {
         bRet = false;
+    }
     else
     {
         static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
