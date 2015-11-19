@@ -446,12 +446,9 @@ Format SvpSalInstance::getBaseBmpFormatForDeviceFormat(DeviceFormat eFormat)
     {
         case DeviceFormat::BITMASK:
             return Format::OneBitMsbPal;
-        case DeviceFormat::GRAYSCALE:
-            return Format::EightBitPal;
         default:
             return SVP_CAIRO_FORMAT;
     }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

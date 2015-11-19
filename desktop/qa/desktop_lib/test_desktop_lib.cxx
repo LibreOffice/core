@@ -14,7 +14,7 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
-
+#include <basebmp/bitmapdevice.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/objsh.hxx>
@@ -316,7 +316,9 @@ void DesktopLOKTest::testPaintTile()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     int nCanvasWidth = 100;
     int nCanvasHeight = 300;
-    std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
+    sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(basebmp::Format::ThirtyTwoBitTcMaskBGRX,
+                                                               nCanvasWidth);
+    std::vector<unsigned char> aBuffer(nStride * nCanvasHeight);
     int nTilePosX = 0;
     int nTilePosY = 0;
     int nTileWidth = 1000;

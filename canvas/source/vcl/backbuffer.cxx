@@ -27,7 +27,7 @@ namespace vclcanvas
     BackBuffer::BackBuffer( const OutputDevice& rRefDevice,
                             bool                bMonochromeBuffer ) :
         maVDev( VclPtr<VirtualDevice>::Create( rRefDevice,
-                                   bMonochromeBuffer ? DeviceFormat::BITMASK : DeviceFormat::FULLCOLOR ) )
+                                   bMonochromeBuffer ? DeviceFormat::BITMASK : DeviceFormat::DEFAULT ) )
     {
         if( !bMonochromeBuffer )
         {

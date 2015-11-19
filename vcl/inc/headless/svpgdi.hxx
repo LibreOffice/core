@@ -64,9 +64,6 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 
 public:
     static GlyphCache& getPlatformGlyphCache();
-    void BlendTextColor(const basebmp::Color &rTextColor, const basebmp::BitmapDeviceSharedPtr &rAlphaMask,
-                        const basegfx::B2IPoint &rDstPoint);
-    basebmp::BitmapDeviceSharedPtr createSimpleMask() const;
     void setDevice(basebmp::BitmapDeviceSharedPtr& rDevice);
 
 private:
