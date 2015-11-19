@@ -818,13 +818,13 @@ std::shared_ptr<OGLTransitionImpl> makeHelix( sal_uInt16 nRows )
 
         Tile.pushTriangle(glm::vec2( 1.0 , iPDn ) , glm::vec2( 1.0 , iDn ) , glm::vec2( 0.0 , iPDn ));
 
-        Tile.Operations.push_back( makeSRotate( glm::vec3( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0f , 180 ,
+        Tile.Operations.push_back( makeSRotate( glm::vec3( 0 , 1 , 0 ) , ( Tile.getVertex(1) + Tile.getVertex(3) )/2.0f , 180 ,
                                                 true, std::min(std::max(static_cast<double>(i - nRows/2.0)*invN/2.0,0.0),1.0),
                                                 std::min(std::max(static_cast<double>(i + nRows/2.0)*invN/2.0,0.0),1.0) ) );
 
         aLeavingSlide.push_back(Tile);
 
-        Tile.Operations.push_back( makeSRotate( glm::vec3( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0f , -180 , false,0.0,1.0) );
+        Tile.Operations.push_back( makeSRotate( glm::vec3( 0 , 1 , 0 ) , ( Tile.getVertex(1) + Tile.getVertex(3) )/2.0f , -180 , false,0.0,1.0) );
 
         aEnteringSlide.push_back(Tile);
 
@@ -867,10 +867,10 @@ std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( sal_uInt16 n, sal_uInt16 m 
             aTile.pushTriangle(x21, x11, x12);
             aTile.pushTriangle(x22, x21, x12);
 
-            aTile.Operations.push_back(makeSRotate( glm::vec3(0 , 1, 0), (aTile.getVertices()[1] + aTile.getVertices()[3]) / 2.0f, 180 , true, x11.x * x11.y / 2.0f , ((x22.x * x22.y) + 1.0f) / 2.0f));
+            aTile.Operations.push_back(makeSRotate( glm::vec3(0 , 1, 0), (aTile.getVertex(1) + aTile.getVertex(3)) / 2.0f, 180 , true, x11.x * x11.y / 2.0f , ((x22.x * x22.y) + 1.0f) / 2.0f));
             aLeavingSlide.push_back(aTile);
 
-            aTile.Operations.push_back(makeSRotate( glm::vec3(0 , 1, 0), (aTile.getVertices()[1] + aTile.getVertices()[3]) / 2.0f, -180, false, x11.x * x11.y / 2.0f , ((x22.x * x22.y) + 1.0f) / 2.0f));
+            aTile.Operations.push_back(makeSRotate( glm::vec3(0 , 1, 0), (aTile.getVertex(1) + aTile.getVertex(3)) / 2.0f, -180, false, x11.x * x11.y / 2.0f , ((x22.x * x22.y) + 1.0f) / 2.0f));
             aEnteringSlide.push_back(aTile);
         }
     }
@@ -1901,7 +1901,7 @@ std::shared_ptr<OGLTransitionImpl> makeGlitter()
             Primitive aHexagon;
             createHexagon(aHexagon, x, y, NX, NY);
 
-            glm::vec3 aCenter = aHexagon.getVertices()[2];
+            glm::vec3 aCenter = aHexagon.getVertex(2);
 
             float fRandom = comphelper::rng::uniform_real_distribution(-0.25, std::nextafter(0.2, DBL_MAX));
 

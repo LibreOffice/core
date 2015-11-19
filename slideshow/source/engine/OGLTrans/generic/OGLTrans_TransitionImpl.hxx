@@ -311,7 +311,7 @@ public:
         @return
         the list of vertices
     */
-    const std::vector<glm::vec3>& getVertices() const {return Vertices;}
+    const glm::vec3& getVertex(int n) const {return Vertices[n];}
 
     /** list of Operations to be performed on this primitive.These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
 
