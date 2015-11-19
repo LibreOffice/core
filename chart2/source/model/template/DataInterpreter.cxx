@@ -132,7 +132,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     }
 
     Sequence< Sequence< Reference< XDataSeries > > > aSeries(1);
-    aSeries[0] = ContainerToSequence( aSeriesVec );
+    aSeries[0] = comphelper::containerToSequence( aSeriesVec );
     return InterpretedData( aSeries, xCategories );
 }
 
@@ -308,7 +308,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
         }
     }
 
-    return Reference< data::XDataSource >( DataSourceHelper::createDataSource( ContainerToSequence( aResultVec ) ) );
+    return Reference< data::XDataSource >( DataSourceHelper::createDataSource( comphelper::containerToSequence( aResultVec ) ) );
 }
 
 // convenience methods

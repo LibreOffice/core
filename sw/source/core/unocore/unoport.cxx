@@ -47,6 +47,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 
@@ -702,16 +703,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
             css::uno::Reference<css::uno::XInterface>(), a);
     }
 
-    uno::Sequence< beans::GetDirectPropertyTolerantResult > aResult( aResultVector.size() );
-    std::vector< beans::GetDirectPropertyTolerantResult >::const_iterator aIt = aResultVector.begin();
-    beans::GetDirectPropertyTolerantResult *pResult = aResult.getArray();
-    for( sal_Int32 nResult = 0; nResult < aResult.getLength(); ++nResult )
-    {
-        pResult[nResult] = *aIt;
-        ++aIt;
-    }
-
-    return aResult;
+    return comphelper::containerToSequence(aResultVector);
 }
 
 void SwXTextPortion::addPropertiesChangeListener(

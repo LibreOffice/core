@@ -51,6 +51,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
@@ -396,10 +397,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
             Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
 
             // tell it the objects to inspect
-            Sequence< Reference< XInterface > > aSelection( _rSelection.size() );
-            ::std::copy( _rSelection.begin(), _rSelection.end(), aSelection.getArray() );
-
-            xInspector->inspect( aSelection );
+            xInspector->inspect( comphelper::containerToSequence< Reference< XInterface > >(_rSelection) );
         }
         catch( const VetoException& )
         {

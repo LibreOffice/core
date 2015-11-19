@@ -40,6 +40,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <comphelper/InlineContainer.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <unotools/lingucfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -490,7 +491,7 @@ awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
         ( "CharWordMode")                    // WordLineMode
         ;
 
-    uno::Sequence< OUString > aPropNameSeq( ContainerHelper::ContainerToSequence( aPropNames ));
+    uno::Sequence< OUString > aPropNameSeq( comphelper::containerToSequence( aPropNames ));
     uno::Sequence< uno::Any > aValues( xMultiPropSet->getPropertyValues( aPropNameSeq ));
 
     sal_Int32 i=0;

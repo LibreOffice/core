@@ -29,6 +29,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <comphelper/sequence.hxx>
 
 #define PREFERED_DEFAULT_COLOR 0x0000ff
 
@@ -292,7 +293,7 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
                             nPreferredColor,
                             sal_False ));
             }
-            m_aSelectedRanges = ContainerHelper::ContainerToSequence( aHilightedRanges );
+            m_aSelectedRanges = comphelper::containerToSequence( aHilightedRanges );
         }
     }
 }

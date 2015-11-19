@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <comphelper/sequence.hxx>
 
 namespace chart
 {
@@ -146,7 +147,7 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
         aTypes.push_back( cppu::UnoType<frame::XTerminateListener>::get() );
         aTypes.push_back( cppu::UnoType<ui::dialogs::XExecutableDialog>::get() );
         aTypes.push_back( cppu::UnoType<beans::XPropertySet>::get() );
-        aTypeList = ::chart::ContainerHelper::ContainerToSequence( aTypes );
+        aTypeList = comphelper::containerToSequence( aTypes );
     }
 
     return aTypeList;

@@ -28,6 +28,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <sot/storage.hxx>
 #include <osl/diagnose.h>
@@ -117,7 +118,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
                 else
                     aStorageArgs[0] <<= aMDHelper.URL;
                 aStorageArgs[1] <<= (embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE);
-                aStorageArgs[2] <<= ::chart::ContainerHelper::ContainerToSequence( aPropertiesForStorage );
+                aStorageArgs[2] <<= comphelper::containerToSequence( aPropertiesForStorage );
 
                 xStorage.set(
                     xStorageFact->createInstanceWithArguments( aStorageArgs ),
@@ -181,7 +182,7 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
             Sequence< uno::Any > aStorageArgs( 3 );
             aStorageArgs[0] <<= xStream;
             aStorageArgs[1] <<= (embed::ElementModes::READ | embed::ElementModes::NOCREATE);
-            aStorageArgs[2] <<= ::chart::ContainerHelper::ContainerToSequence( aPropertiesForStorage );
+            aStorageArgs[2] <<= comphelper::containerToSequence( aPropertiesForStorage );
             xStorage.set(
                 xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
         }

@@ -224,15 +224,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
             rProperties.push_back(beans::PropertyValue(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE));
     }
 
-    uno::Sequence< beans::PropertyValue > aRet( rProperties.size() );
-    beans::PropertyValue* pValues = aRet.getArray();
-    PropertyValueVector_t::const_iterator aIt = rProperties.begin();
-    PropertyValueVector_t::const_iterator aEndIt = rProperties.end();
-    for(sal_uInt32 nIndex = 0; aIt != aEndIt; ++aIt,++nIndex)
-    {
-        pValues[nIndex] = *aIt;
-    }
-    return aRet;
+    return comphelper::containerToSequence(rProperties);
 }
 
 uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )

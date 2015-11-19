@@ -600,7 +600,7 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
         }
     }
 
-    return ContainerHelper::ContainerToSequence( aServices );
+    return comphelper::containerToSequence( aServices );
 }
 
 // ____ XServiceInfo ____

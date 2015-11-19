@@ -20,6 +20,7 @@
 #include <ooo/vba/excel/XRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <vector>
 #include "unonames.hxx"
@@ -28,6 +29,7 @@
 #include "vbaworkbook.hxx"
 #include "vbastyles.hxx"
 #include "vbaglobals.hxx"
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
@@ -191,14 +193,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
         aProperty.Name = STYLENAME;
         aProperty.Value = uno::makeAny( sStyleName );
 
-        // convert vector to sequence
-        uno::Sequence< beans::PropertyValue > aPropertyValueList(aPropertyValueVector.size());
-        VecPropValues::iterator it = aPropertyValueVector.begin();
-        VecPropValues::iterator it_end = aPropertyValueVector.end();
-        for ( sal_Int32 index=0; it != it_end; ++it )
-            aPropertyValueList[ index++ ] = *it;
-
-        mxSheetConditionalEntries->addNew(aPropertyValueList);
+        mxSheetConditionalEntries->addNew(comphelper::containerToSequence(aPropertyValueVector));
         for (sal_Int32 i = mxSheetConditionalEntries->getCount()-1; i >= 0; i--)
         {
             uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry( mxSheetConditionalEntries->getByIndex(i), uno::UNO_QUERY_THROW );

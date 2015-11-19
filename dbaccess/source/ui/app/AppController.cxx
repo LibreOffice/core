@@ -1706,9 +1706,7 @@ bool OApplicationController::onContainerSelect(ElementType _eType)
         SelectionByElementType::iterator pendingSelection = m_aPendingSelection.find( _eType );
         if ( pendingSelection != m_aPendingSelection.end() )
         {
-            Sequence< OUString > aSelected( pendingSelection->second.size() );
-            ::std::copy( pendingSelection->second.begin(), pendingSelection->second.end(), aSelected.getArray() );
-            getContainer()->selectElements( aSelected );
+            getContainer()->selectElements( comphelper::containerToSequence(pendingSelection->second) );
 
             m_aPendingSelection.erase( pendingSelection );
         }
@@ -2861,9 +2859,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw
     {
         if ( sel->first == m_eCurrentType )
         {
-            Sequence< OUString > aSelected( sel->second.size() );
-            ::std::copy( sel->second.begin(), sel->second.end(), aSelected.getArray() );
-            getContainer()->selectElements( aSelected );
+            getContainer()->selectElements( comphelper::containerToSequence(sel->second) );
         }
         else
         {

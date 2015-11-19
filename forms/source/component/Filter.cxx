@@ -466,8 +466,7 @@ namespace frm
             }
 
             // fill the list items into our peer
-            Sequence< OUString> aStringSeq( aProposals.size() );
-            ::std::copy( aProposals.begin(), aProposals.end(), aStringSeq.getArray() );
+            Sequence< OUString> aStringSeq( comphelper::containerToSequence(aProposals) );
 
             const Reference< XComboBox >  xComboBox( getPeer(), UNO_QUERY_THROW );
             xComboBox->addItems( aStringSeq, 0 );

@@ -32,25 +32,6 @@ namespace chart
 namespace ContainerHelper
 {
 
-/** converts a standard container into a sequence of the same type
-
-    input:   standard container
-    output:  css::uno::Sequence< container::value_type >
-
-    example:
-
-    ::std::vector< sal_Int32 > aVector;
-    Sequence< sal_Int32 > aSequence( ContainerHelper::ContainerToSequence( aVector ));
- */
-template< class Container >
-    ::com::sun::star::uno::Sequence< typename Container::value_type >
-    ContainerToSequence( const Container & rCont )
-{
-    ::com::sun::star::uno::Sequence< typename Container::value_type > aResult( rCont.size());
-    ::std::copy( rCont.begin(), rCont.end(), aResult.getArray());
-    return aResult;
-}
-
 /** converts a UNO sequence into a standard "Sequence" container. For
     convenience see the methods SequenceToVector, etc. below.
 

@@ -24,6 +24,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -174,25 +175,6 @@ static ::rtl::ByteSequence getBufFromAsciiLine( const OUString& line )
     }
 
     return aResult;
-}
-
-
-static Sequence< OUString > copyVectorToSequence( const vector< OUString >& original )
-{
-    Sequence< OUString > newOne ( original.size() );
-    for( size_t i = 0; i < original.size() ; i++ )
-        newOne[i] = original[i];
-
-    return newOne;
-}
-
-static vector< OUString > copySequenceToVector( const Sequence< OUString >& original )
-{
-    vector< OUString > newOne ( original.getLength() );
-    for( int i = 0; i < original.getLength() ; i++ )
-        newOne[i] = original[i];
-
-    return newOne;
 }
 
 
@@ -618,7 +600,7 @@ UserRecord PasswordContainer::CopyToUserRecord( const NamePassRecord& aRecord, b
         }
     }
 
-    return UserRecord( aRecord.GetUserName(), copyVectorToSequence( aPasswords ) );
+    return UserRecord( aRecord.GetUserName(), comphelper::containerToSequence( aPasswords ) );
 }
 
 
@@ -658,7 +640,7 @@ void SAL_CALL PasswordContainer::addPersistent( const OUString& Url, const OUStr
 void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, char Mode, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException, std::exception)
 {
     NamePassRecord aRecord( UserName );
-    ::std::vector< OUString > aStorePass = copySequenceToVector( Passwords );
+    ::std::vector< OUString > aStorePass = comphelper::sequenceToContainer< std::vector<OUString>, OUString>( Passwords );
 
     if( Mode == PERSISTENT_RECORD )
         aRecord.SetPersPasswords( EncodePasswords( aStorePass, GetMasterPassword( aHandler ) ) );
@@ -1035,7 +1017,7 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
             {
                 sal_Int32 oldLen = aUsers.getLength();
                 aUsers.realloc( oldLen + 1 );
-                aUsers[ oldLen ] = UserRecord( aNPIter->GetUserName(), copyVectorToSequence( DecodePasswords( aNPIter->GetPersPasswords(), GetMasterPassword( xHandler ) ) ) );
+                aUsers[ oldLen ] = UserRecord( aNPIter->GetUserName(), comphelper::containerToSequence( DecodePasswords( aNPIter->GetPersPasswords(), GetMasterPassword( xHandler ) ) ) );
             }
 
         if( aUsers.getLength() )

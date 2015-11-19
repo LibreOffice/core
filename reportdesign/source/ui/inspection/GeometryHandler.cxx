@@ -932,8 +932,7 @@ uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,sal_uInt16 _nRe
 {
     ::std::vector< OUString > aList;
     tools::StringListResource aRes(ModuleRes(_nResId),aList);
-    uno::Sequence< OUString > aSeq(aList.size());
-    ::std::copy( aList.begin(), aList.end(), aSeq.getArray() );
+    uno::Sequence< OUString > aSeq(comphelper::containerToSequence(aList));
 
     uno::Reference< inspection::XStringRepresentation > xConversionHelper = inspection::StringRepresentation::createConstant( m_xContext,m_xTypeConverter,_sConstantName,aSeq);
     if ( _bToControlValue )

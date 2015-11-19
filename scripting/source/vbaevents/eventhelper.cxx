@@ -416,14 +416,7 @@ ScriptEventHelper::getEventListeners()
         }
     }
 
-    Sequence< OUString > sEventMethodNames( eventMethods.size() );
-    std::list< OUString >::const_iterator it = eventMethods.begin();
-    OUString* pDest = sEventMethodNames.getArray();
-
-    for ( ; it != eventMethods.end(); ++it, ++pDest )
-        *pDest = *it;
-
-    return sEventMethodNames;
+    return comphelper::containerToSequence<OUString>(eventMethods);
 }
 
 Sequence< ScriptEventDescriptor >

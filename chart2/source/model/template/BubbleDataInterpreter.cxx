@@ -149,13 +149,13 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
         OSL_ASSERT( xSeries.is() );
         Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY );
         OSL_ASSERT( xSink.is() );
-        xSink->setData( ContainerHelper::ContainerToSequence( aNewData ) );
+        xSink->setData( comphelper::containerToSequence( aNewData ) );
 
         aSeriesVec.push_back( xSeries );
     }
 
     Sequence< Sequence< Reference< XDataSeries > > > aSeries(1);
-    aSeries[0] = ContainerHelper::ContainerToSequence( aSeriesVec );
+    aSeries[0] = comphelper::containerToSequence( aSeriesVec );
     return InterpretedData( aSeries, xCategories );
 }
 

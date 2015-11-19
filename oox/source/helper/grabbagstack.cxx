@@ -10,6 +10,7 @@
 
 #include "oox/helper/grabbagstack.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/sequence.hxx>
 
 namespace oox
 {
@@ -37,14 +38,7 @@ PropertyValue GrabBagStack::getRootProperty()
 
     PropertyValue aProperty;
     aProperty.Name = mCurrentElement.maName;
-
-    Sequence<PropertyValue> aSequence(mCurrentElement.maPropertyList.size());
-    PropertyValue* pSequence = aSequence.getArray();
-    std::vector<PropertyValue>::iterator i;
-    for (i = mCurrentElement.maPropertyList.begin(); i != mCurrentElement.maPropertyList.end(); ++i)
-        *pSequence++ = *i;
-
-    aProperty.Value = makeAny(aSequence);
+    aProperty.Value = makeAny(comphelper::containerToSequence(mCurrentElement.maPropertyList));
 
     return aProperty;
 }
@@ -67,12 +61,7 @@ void GrabBagStack::push(const OUString& aKey)
 void GrabBagStack::pop()
 {
     OUString aName = mCurrentElement.maName;
-    Sequence<PropertyValue> aSequence(mCurrentElement.maPropertyList.size());
-    PropertyValue* pSequence = aSequence.getArray();
-    std::vector<PropertyValue>::iterator i;
-    for (i = mCurrentElement.maPropertyList.begin(); i != mCurrentElement.maPropertyList.end(); ++i)
-        *pSequence++ = *i;
-
+    Sequence<PropertyValue> aSequence(comphelper::containerToSequence(mCurrentElement.maPropertyList));
     mCurrentElement = mStack.top();
     mStack.pop();
     appendElement(aName, makeAny(aSequence));

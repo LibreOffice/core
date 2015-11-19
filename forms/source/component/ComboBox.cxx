@@ -659,14 +659,8 @@ void OComboBoxModel::loadData( bool _bForce )
         return;
     }
 
-    // Create css::uno::Sequence<OUString> for ListBox
-    css::uno::Sequence<OUString> aStringSeq(aStringList.size());
-    OUString* pStringAry = aStringSeq.getArray();
-    for (sal_Int32 i = 0; i<aStringSeq.getLength(); ++i)
-        pStringAry[i] = aStringList[i];
-
     // Set String-Sequence at ListBox
-    setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringSeq ) );
+    setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( comphelper::containerToSequence(aStringList) ) );
 }
 
 

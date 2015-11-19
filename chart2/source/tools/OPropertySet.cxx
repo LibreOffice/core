@@ -22,6 +22,7 @@
 #include "ContainerHelper.hxx"
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -111,7 +112,7 @@ Sequence< uno::Type > SAL_CALL
         aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XMultiPropertyStates ));
         aTypes.push_back( LCL_PROP_CPPUTYPE( XStyleSupplier ));
 
-        aTypeList = ::chart::ContainerHelper::ContainerToSequence( aTypes );
+        aTypeList = comphelper::containerToSequence( aTypes );
     }
 
     return aTypeList;

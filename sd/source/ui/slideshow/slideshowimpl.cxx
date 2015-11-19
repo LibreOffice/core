@@ -479,13 +479,8 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
                     PropertyState_DIRECT_VALUE));
         }
 
-        // Convert vector into uno Sequence.
-        Sequence< PropertyValue > aPropertySequence (aProperties.size());
-        for (int nIndex=0,nCount=aProperties.size();nIndex<nCount; ++nIndex)
-            aPropertySequence[nIndex] = aProperties[nIndex];
-
         if( getSlideAPI( nCurrentSlideNumber, xSlide, xAnimNode ) )
-            xShow->displaySlide( xSlide, xDrawPages, xAnimNode, aPropertySequence );
+            xShow->displaySlide( xSlide, xDrawPages, xAnimNode, comphelper::containerToSequence(aProperties) );
     }
 }
 

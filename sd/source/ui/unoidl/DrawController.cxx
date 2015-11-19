@@ -676,11 +676,8 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
     if (mpPropertyArrayHelper.get() == nullptr)
     {
         ::std::vector<beans::Property> aProperties;
-        FillPropertyTable (aProperties);
-        Sequence<beans::Property> aPropertySequence (aProperties.size());
-        for (size_t i=0; i<aProperties.size(); i++)
-            aPropertySequence[i] = aProperties[i];
-        mpPropertyArrayHelper.reset(new OPropertyArrayHelper(aPropertySequence, sal_False));
+        FillPropertyTable(aProperties);
+        mpPropertyArrayHelper.reset(new OPropertyArrayHelper(comphelper::containerToSequence(aProperties), sal_False));
     }
 
     return *mpPropertyArrayHelper.get();

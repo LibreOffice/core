@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <comphelper/sequence.hxx>
 
 #include "LinePropertiesHelper.hxx"
 #include "UserDefinedProperties.hxx"
@@ -82,7 +83,7 @@ private:
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return comphelper::containerToSequence( aProperties );
     }
 };
 

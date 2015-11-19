@@ -25,6 +25,7 @@
 #include <sbunoobj.hxx>
 
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <algorithm>
 #include <limits.h>
@@ -164,10 +165,7 @@ void SbPropertyValues::removeVetoableChangeListener(
 
 Sequence< PropertyValue > SbPropertyValues::getPropertyValues() throw (css::uno::RuntimeException, std::exception)
 {
-    Sequence<PropertyValue> aRet( m_aPropVals.size() );
-    for (size_t n = 0; n < m_aPropVals.size(); ++n)
-        aRet.getArray()[n] = m_aPropVals[n];
-    return aRet;
+    return comphelper::containerToSequence(m_aPropVals);
 }
 
 

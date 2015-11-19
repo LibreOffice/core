@@ -250,7 +250,7 @@ private:
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return comphelper::containerToSequence( aProperties );
     }
 };
 
@@ -561,7 +561,7 @@ uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::g
     throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
-    return ContainerHelper::ContainerToSequence( m_aCoordSystems );
+    return comphelper::containerToSequence( m_aCoordSystems );
 }
 
 void SAL_CALL Diagram::setCoordinateSystems(

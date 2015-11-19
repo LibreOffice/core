@@ -64,12 +64,7 @@ public:
                 aNames.push_back( xNamed->getName() );
         }
 
-        // copy names to Sequence and return
-        css::uno::Sequence<OUString> aResult( aNames.size() );
-        OUString* pStrings = aResult.getArray();
-        std::copy( aNames.begin(), aNames.end(), pStrings );
-
-        return aResult;
+        return comphelper::containerToSequence(aNames);
     }
 
 protected:

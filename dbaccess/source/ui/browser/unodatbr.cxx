@@ -552,8 +552,7 @@ bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > & i_f
 
         ::std::vector< OUString > aNames( aPropertyValues.getNames() );
         ::std::sort(aNames.begin(), aNames.end());
-        Sequence< OUString > aPropNames( aNames.size() );
-        ::std::copy( aNames.begin(), aNames.end(), aPropNames.getArray() );
+        Sequence< OUString > aPropNames( comphelper::containerToSequence(aNames) );
 
         Sequence< Any > aPropValues( aNames.size() );
         ::std::transform( aNames.begin(), aNames.end(), aPropValues.getArray(), SelectValueByName( aPropertyValues ) );

@@ -177,9 +177,7 @@ namespace frm
             aTypes.push_front( cppu::UnoType<OUString>::get() );
             // push_front, because this is the preferred type
 
-        Sequence< Type > aTypesRet( aTypes.size() );
-        ::std::copy( aTypes.begin(), aTypes.end(), aTypesRet.getArray() );
-        return aTypesRet;
+        return comphelper::containerToSequence<Type>(aTypes);
     }
 
 

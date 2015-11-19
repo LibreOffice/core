@@ -87,6 +87,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
+#include <comphelper/sequence.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
 #include <set>
@@ -207,16 +208,15 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
 }
 
 Reference< chart2::data::XDataSource > lcl_createDataSource(
-    const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aData )
+    const std::vector< Reference< chart2::data::XLabeledDataSequence > > & aData )
 {
-    Reference< uno::XComponentContext > xContext(
-        comphelper::getProcessComponentContext() );
+    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     Reference< chart2::data::XDataSink > xSink(
         xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.chart2.data.DataSource", xContext ),
         uno::UNO_QUERY_THROW );
     if( xSink.is())
-        xSink->setData( aData );
+        xSink->setData( comphelper::containerToSequence(aData) );
 
     return Reference< chart2::data::XDataSource >( xSink, uno::UNO_QUERY );
 }
@@ -239,10 +239,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequ
         }
     }
 
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aRet( aContainer.size());
-    ::std::copy( aContainer.begin(), aContainer.end(), aRet.getArray());
-
-    return aRet;
+    return comphelper::containerToSequence(aContainer);
 }
 
 Reference< chart2::data::XLabeledDataSequence >
@@ -291,10 +288,7 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
             aLabeledSeqVector.push_back( aSeriesSeqVector[nN] );
     }
 
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( aLabeledSeqVector.size() );
-    ::std::copy( aLabeledSeqVector.begin(), aLabeledSeqVector.end(), aSeq.getArray() );
-
-    return lcl_createDataSource( aSeq );
+    return lcl_createDataSource( aLabeledSeqVector );
 }
 
 bool lcl_isSeriesAttachedToFirstAxis(

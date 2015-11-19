@@ -39,6 +39,7 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <comphelper/sequence.hxx>
 
 
 using com::sun::star::uno::Reference;
@@ -636,11 +637,7 @@ bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
         items.push_back( pyObject2Any( rItem.get() ) );
     }
     while( (pItem = PyIter_Next( pObj )) );
-    Sequence<Any> aSeq( items.size() );
-    ::std::list<Any>::iterator it = items.begin();
-    for( int i = 0; it != items.end(); ++it )
-        aSeq[i++] = *it;
-    a <<= aSeq;
+    a <<= comphelper::containerToSequence<Any>(items);
     return true;
 }
 

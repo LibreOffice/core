@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <svl/style.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itempool.hxx>
@@ -356,18 +357,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
     // search model pool for line ends
     createNamesForPool( mpModelPool, XATTR_LINEEND, aNameSet );
 
-    uno::Sequence< OUString > aSeq( aNameSet.size() );
-    OUString* pNames = aSeq.getArray();
-
-    std::set< OUString >::iterator aIter( aNameSet.begin() );
-    const std::set< OUString >::iterator aEnd( aNameSet.end() );
-
-    while( aIter != aEnd )
-    {
-        *pNames++ = *aIter++;
-    }
-
-    return aSeq;
+    return comphelper::containerToSequence<OUString>(aNameSet);
 }
 
 sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )

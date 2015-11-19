@@ -183,7 +183,7 @@ Sequence< Reference< chart2::XDataSeries > > SAL_CALL ChartType::getDataSeries()
 {
     SolarMutexGuard g;
 
-    return ContainerHelper::ContainerToSequence( m_aDataSeries );
+    return comphelper::containerToSequence( m_aDataSeries );
 }
 
 void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XDataSeries > >& aDataSeries )

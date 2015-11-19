@@ -24,6 +24,7 @@
 #include <unotools/configitem.hxx>
 #include <sal/macros.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <set>
 
@@ -88,7 +89,7 @@ void ChartConfigItem::ImplCommit()
 void ChartConfigItem::addPropertyNotification( const OUString & rPropertyName )
 {
     m_aPropertiesToNotify.insert( rPropertyName );
-    EnableNotification( ContainerHelper::ContainerToSequence( m_aPropertiesToNotify ));
+    EnableNotification( comphelper::containerToSequence<OUString>( m_aPropertiesToNotify ));
 }
 
 uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )

@@ -28,6 +28,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -404,14 +405,7 @@ uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
 
     DictionaryVec_t& rDicList = GetOrCreateDicList();
 
-    uno::Sequence< uno::Reference< XDictionary > > aDics( rDicList.size() );
-    uno::Reference< XDictionary > *pDic = aDics.getArray();
-
-    sal_Int32 n = (sal_uInt16) aDics.getLength();
-    for (sal_Int32 i = 0;  i < n;  i++)
-        pDic[i] = rDicList[i];
-
-    return aDics;
+    return comphelper::containerToSequence(rDicList);
 }
 
 uno::Reference< XDictionary > SAL_CALL

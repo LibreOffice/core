@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
@@ -226,18 +227,7 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeExce
     while( aIter.next( aPrefix, aURL ) )
         aPrefixSet.insert( aPrefix );
 
-    Sequence< OUString > aSeq( aPrefixSet.size() );
-    OUString* pPrefixes = aSeq.getArray();
-
-    std::set< OUString >::iterator aPrefixIter( aPrefixSet.begin() );
-    const std::set< OUString >::iterator aEnd( aPrefixSet.end() );
-
-    while( aPrefixIter != aEnd )
-    {
-        *pPrefixes++ = *aPrefixIter++;
-    }
-
-    return aSeq;
+    return comphelper::containerToSequence<OUString>(aPrefixSet);
 }
 
 sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)

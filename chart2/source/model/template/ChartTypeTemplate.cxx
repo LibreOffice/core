@@ -274,7 +274,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
     {
         // interpret new data and re-use existing series
         Sequence< Reference< XDataSeries > > aFlatSeriesSeq(
-            ::chart::ContainerHelper::ContainerToSequence( DiagramHelper::getDataSeriesFromDiagram( xDiagram )));
+            comphelper::containerToSequence( DiagramHelper::getDataSeriesFromDiagram( xDiagram )));
         const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.getLength();
         Reference< chart2::XDataInterpreter > xInterpreter( getDataInterpreter());
         chart2::InterpretedData aData =

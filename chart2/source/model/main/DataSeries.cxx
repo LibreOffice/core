@@ -71,7 +71,7 @@ struct StaticDataSeriesInfoHelper : public rtl::StaticWithInit< ::cppu::OPropert
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return comphelper::containerToSequence( aProperties );
     }
 };
 
@@ -274,7 +274,7 @@ void SAL_CALL DataSeries::getFastPropertyValue
     // special handling for get.  set is not possible for this property
     if( nHandle == DataSeriesProperties::PROP_DATASERIES_ATTRIBUTED_DATA_POINTS )
     {
-        // ToDo: only add those property sets that are really modified
+        // TODO: only add those property sets that are really modified
         uno::Sequence< sal_Int32 > aSeq( m_aAttributedDataPoints.size());
         sal_Int32 * pIndexArray = aSeq.getArray();
         sal_Int32 i = 0;
@@ -331,7 +331,7 @@ Reference< beans::XPropertySet >
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences;
     {
         MutexGuard aGuard( GetMutex() );
-        aSequences = ContainerHelper::ContainerToSequence( m_aDataSequences );
+        aSequences = comphelper::containerToSequence( m_aDataSequences );
     }
 
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
@@ -440,7 +440,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries:
     throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
-    return ContainerHelper::ContainerToSequence( m_aDataSequences );
+    return comphelper::containerToSequence( m_aDataSequences );
 }
 
 // ____ XRegressionCurveContainer ____
@@ -491,7 +491,7 @@ uno::Sequence< uno::Reference< chart2::XRegressionCurve > > SAL_CALL DataSeries:
     throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
-    return ContainerHelper::ContainerToSequence( m_aRegressionCurves );
+    return comphelper::containerToSequence( m_aRegressionCurves );
 }
 
 void SAL_CALL DataSeries::setRegressionCurves(

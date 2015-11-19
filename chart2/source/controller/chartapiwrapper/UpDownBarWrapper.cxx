@@ -26,6 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <comphelper/sequence.hxx>
 
 #include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
@@ -64,7 +65,7 @@ private:
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return comphelper::containerToSequence( aProperties );
     }
 };
 

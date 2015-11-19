@@ -45,6 +45,7 @@
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <comphelper/sequence.hxx>
 
 #include <map>
 
@@ -870,7 +871,7 @@ Sequence< Reference< XAxis > > AxisHelper::getAllAxesOfDiagram(
         }
     }
 
-    return ContainerHelper::ContainerToSequence( aAxisVector );
+    return comphelper::containerToSequence( aAxisVector );
 }
 
 Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Reference< XDiagram >& xDiagram )
@@ -898,7 +899,7 @@ Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Refe
         }
     }
 
-    return ContainerHelper::ContainerToSequence( aGridVector );
+    return comphelper::containerToSequence( aGridVector );
 }
 
 void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityList
