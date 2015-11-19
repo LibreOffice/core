@@ -20,6 +20,10 @@ $(eval $(call gb_Module_add_check_targets,cppuhelper,\
 	CppunitTest_cppuhelper_cppu_ifcontainer \
 	CppunitTest_cppuhelper_cppu_unourl \
 ))
+
 # CppunitTest_cppuhelper_qa_weak depends on module bridges
+$(eval $(call gb_Module_add_subsequentcheck_targets,cppuhelper,\
+	CppunitTest_cppuhelper_qa_weak \
+))
 
 # vim: set noet sw=4 ts=4:
