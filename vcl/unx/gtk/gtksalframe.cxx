@@ -406,7 +406,7 @@ void GtkSalFrame::doKeyCallback( guint state,
     if (keyval == GDK_0)
     {
         fprintf( stderr, "force widget_queue_draw\n");
-        gtk_widget_queue_draw (m_pFixedContainer);
+        gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
         return;
     }
     else if (keyval == GDK_1)

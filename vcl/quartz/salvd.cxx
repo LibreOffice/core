@@ -115,9 +115,11 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
             case DeviceFormat::BITMASK:
                 mnBitmapDepth = 1;
                 break;
+#ifdef IOS
             case DeviceFormat::GRAYSCALE:
                 mnBitmapDepth = 8;
                 break;
+#endif
             default:
                 mnBitmapDepth = 0;
                 break;

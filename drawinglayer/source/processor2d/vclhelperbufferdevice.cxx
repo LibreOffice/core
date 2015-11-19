@@ -162,7 +162,7 @@ namespace
         // no success yet, create new buffer
         if(!pRetval)
         {
-            pRetval = VclPtr<VirtualDevice>::Create(rOutDev, bMonoChrome ? DeviceFormat::BITMASK : DeviceFormat::FULLCOLOR);
+            pRetval = VclPtr<VirtualDevice>::Create(rOutDev, bMonoChrome ? DeviceFormat::BITMASK : DeviceFormat::DEFAULT);
             pRetval->SetOutputSizePixel(rSizePixel, bClear);
         }
         else

@@ -104,9 +104,6 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics* pGraphics, long &nDX, long
         case DeviceFormat::BITMASK:
             nBitCount = 1;
             break;
-        case DeviceFormat::GRAYSCALE:
-            nBitCount = 8;
-            break;
         default:
             nBitCount = pGraphics->GetBitCount();
             break;

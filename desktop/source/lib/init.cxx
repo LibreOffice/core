@@ -879,12 +879,12 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     SystemGraphicsData aData;
     aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
     // the Size argument is irrelevant, I hope
-    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::FULLCOLOR);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #elif defined(ANDROID)
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::FULLCOLOR) ;
+    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
 
     boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
 
@@ -897,20 +897,16 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::FULLCOLOR) ;
+    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
 
     // Set background to transparent by default.
-    memset(pBuffer, 0, nCanvasWidth * nCanvasHeight * 4);
     pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
 
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
 
     // Allocate a separate buffer for the alpha device.
-    std::vector<sal_uInt8> aAlpha(nCanvasWidth * nCanvasHeight);
-    memset(aAlpha.data(), 0, nCanvasWidth * nCanvasHeight);
-// TO_DO: enable alpha
-//    boost::shared_array<sal_uInt8> aAlphaBuffer(aAlpha.data(), NoDelete<sal_uInt8>());
-    boost::shared_array<sal_uInt8> aAlphaBuffer;
+    std::vector<sal_uInt8> aAlpha(nCanvasWidth * nCanvasHeight * 4);
+    boost::shared_array<sal_uInt8> aAlphaBuffer(aAlpha.data(), NoDelete<sal_uInt8>());
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
@@ -924,9 +920,9 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     {
         for (int nCol = 0; nCol < nCanvasWidth; ++nCol)
         {
-            const int nOffset = (nCanvasWidth * nRow) + nCol;
+            const int nOffset = (nCanvasWidth * nRow * 4) + nCol * 4;
             // VCL's transparent is 0, RGBA's transparent is 0xff.
-            pBuffer[nOffset * 4 +3] = 0xff - aAlpha[nOffset];
+            pBuffer[nOffset + 3] = 0xff - aAlpha[nOffset];
         }
     }
 #endif
