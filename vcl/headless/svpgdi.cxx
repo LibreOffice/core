@@ -137,39 +137,11 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
         cairo_clip(cr);
     }
 }
-
-bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
+namespace
 {
-    bool bRet = false;
-    (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-    if (m_bUseLineColor || !m_bUseFillColor)
-        return bRet;
-
-    cairo_t* cr = getCairoContext();
-    if (!cr)
-        return bRet;
-
-    if (!m_aDevice->isTopDown())
+    cairo_rectangle_int_t getFillDamage(cairo_t* cr)
     {
-        cairo_scale(cr, 1, -1.0);
-        cairo_translate(cr, 0.0, -m_aDevice->getSize().getY());
-    }
-
-    clipRegion(cr);
-
-    const double fTransparency = (100 - nTransparency) * (1.0/100);
-    cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
-                              m_aFillColor.getGreen()/255.0,
-                              m_aFillColor.getBlue()/255.0,
-                              fTransparency);
-    cairo_rectangle(cr, nX, nY, nWidth, nHeight);
-
-
-    cairo_rectangle_int_t extents;
-    basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
-    if (xDamageTracker)
-    {
+        cairo_rectangle_int_t extents;
         double x1, y1, x2, y2;
 
         cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
@@ -182,7 +154,35 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 
         cairo_region_get_extents(region, &extents);
         cairo_region_destroy(region);
+
+        return extents;
     }
+}
+
+bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
+{
+    bool bRet = false;
+    (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+    if (m_bUseLineColor || !m_bUseFillColor)
+        return bRet;
+
+    cairo_t* cr = getCairoContext();
+    assert(cr && m_aDevice->isTopDown());
+
+    clipRegion(cr);
+
+    const double fTransparency = (100 - nTransparency) * (1.0/100);
+    cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
+                              m_aFillColor.getGreen()/255.0,
+                              m_aFillColor.getBlue()/255.0,
+                              fTransparency);
+    cairo_rectangle(cr, nX, nY, nWidth, nHeight);
+
+    cairo_rectangle_int_t extents;
+    basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
+    if (xDamageTracker)
+        extents = getFillDamage(cr);
 
     cairo_fill(cr);
 
