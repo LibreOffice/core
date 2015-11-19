@@ -213,7 +213,7 @@ void Interceptor::generateFeatureStateEvent()
 
         for(int i = 0; i < IUL; ++i)
         {
-            if( i == 1 || m_bLink && i != 5 )
+            if( i == 1 || (m_bLink && i != 5) )
                 continue;
 
             cppu::OInterfaceContainerHelper* pICH =
