@@ -421,7 +421,7 @@ public:
     ScFullMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals );
 
     /** Clone the matrix. */
-    ScMatrix* Clone() const;
+    virtual ScMatrix* Clone() const override;
 
     /**
      * Resize the matrix to specified new dimension.
