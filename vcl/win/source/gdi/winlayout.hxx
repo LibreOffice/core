@@ -134,6 +134,9 @@ private:
     int            mnMinKashidaWidth;
     int            mnMinKashidaGlyph;
     bool           mbDisableGlyphInjection;
+    bool           mbUseGLyphy;
+    bool           DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const;
+    bool           DrawCachedGlyphsUsingTextures(SalGraphics& rGraphics) const;
 };
 
 #if ENABLE_GRAPHITE
