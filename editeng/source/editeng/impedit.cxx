@@ -47,6 +47,7 @@
 #include <sot/formats.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1084,6 +1085,11 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         aVisDocStartPos = pOutWin->PixelToLogic( aVisDocStartPos );
         Rectangle aRect( aOutArea );
         pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, ScrollFlags::Clip );
+
+        if (comphelper::LibreOfficeKit::isActive())
+            // Need to invalidate the window, otherwise no tile will be re-painted.
+            pOutWin->Invalidate();
+
         pOutWin->Update();
         pCrsr->SetPos( pCrsr->GetPos() + Point( nRealDiffX, nRealDiffY ) );
         if ( bVisCursor )
