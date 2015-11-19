@@ -5497,7 +5497,7 @@ else
 fi
 
 dnl check for GNU C++ compiler version
-if test "$GXX" = "yes" -a $CXX != "emcc"; then
+if test "$GXX" = "yes" -a "$CXX" != "emcc"; then
     AC_MSG_CHECKING([the GNU C++ compiler version])
 
     _gpp_version=`$CXX -dumpversion`
