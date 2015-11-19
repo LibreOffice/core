@@ -41,10 +41,6 @@ using namespace winwrap;
 #define HWN_BORDERDOUBLECLICKED         1
 #define CBHATCHWNDEXTRA                 (sizeof(LONG))
 #define SZCLASSHATCHWIN                 TEXT("hatchwin")
-#define SendCommand(hWnd, wID, wCode, hControl)                     \
-            SendMessage(hWnd, WM_COMMAND, MAKEWPARAM(wID, wCode)    \
-                        , (LPARAM)hControl)
-
 
 typedef CHatchWin *PCHatchWin;
 
@@ -448,8 +444,10 @@ LRESULT APIENTRY winwrap::HatchWndProc(
              */
             if (NULL!=phw->m_hWndAssociate)
             {
-                SendCommand(phw->m_hWndAssociate, phw->m_uID
-                            , HWN_BORDERDOUBLECLICKED, hWnd);
+                SendMessage(
+                    phw->m_hWndAssociate, WM_COMMAND,
+                    MAKEWPARAM(phw->m_uID, HWN_BORDERDOUBLECLICKED),
+                    (LPARAM) hWnd);
             }
 
             break;
