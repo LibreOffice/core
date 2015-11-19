@@ -2689,20 +2689,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_NAVIGATOR:
-        {
-            if ( rReq.GetArgs() )
-                GetViewFrame()->SetChildWindow(SID_NAVIGATOR,
-                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
-                                        Get(SID_NAVIGATOR)).GetValue());
-            else
-                GetViewFrame()->ToggleChildWindow( SID_NAVIGATOR );
-
-            GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
-            Cancel();
-            rReq.Ignore ();
-        }
-        break;
-
         case SID_SLIDE_TRANSITIONS_PANEL:
         case SID_CUSTOM_ANIMATION_PANEL:
         case SID_GALLERY:
@@ -2717,6 +2703,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 panelId = "GalleryPanel";
             else if (nSId == SID_SLIDE_TRANSITIONS_PANEL)
                 panelId = "SdSlideTransitionPanel";
+            else if (nSId == SID_NAVIGATOR)
+                panelId = "SdNavigatorPanel";
 
             ::sfx2::sidebar::Sidebar::ShowPanel(
                 panelId,
