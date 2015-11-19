@@ -53,6 +53,7 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/evtmethodhelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -773,10 +774,7 @@ namespace pcr
                 PropertyAttribute::BOUND );
         }
 
-        StlSyntaxSequence< Property > aReturn( aOrderedProperties.size() );
-        ::std::transform( aOrderedProperties.begin(), aOrderedProperties.end(), aReturn.begin(),
-                ::o3tl::select2nd< std::map< EventId, Property >::value_type >() );
-        return aReturn;
+        return comphelper::mapValuesToSequence( aOrderedProperties );
     }
 
     Sequence< OUString > SAL_CALL EventHandler::getSupersededProperties( ) throw (RuntimeException, std::exception)

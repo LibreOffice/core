@@ -30,6 +30,7 @@
 
 #include "comphelper/documentinfo.hxx"
 #include "comphelper/namedvaluecollection.hxx"
+#include "comphelper/sequence.hxx"
 
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
@@ -550,17 +551,7 @@ uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
 {
     osl::MutexGuard aGuard( m_aMtx );
 
-    uno::Sequence< OUString > aRet( m_aDocs.size() );
-    sal_Int32 nPos = 0;
-
-    DocumentList::const_iterator it = m_aDocs.begin();
-    while ( it != m_aDocs.end() )
-    {
-        aRet[ nPos ] = (*it).first;
-        ++it;
-        ++nPos;
-    }
-    return aRet;
+    return comphelper::mapKeysToSequence( m_aDocs );
 }
 
 

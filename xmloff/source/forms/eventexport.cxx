@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include "strings.hxx"
 #include <tools/debug.hxx>
+#include <comphelper/sequence.hxx>
 
 namespace xmloff
 {
@@ -106,15 +107,7 @@ namespace xmloff
 
     Sequence< OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  ) throw(RuntimeException, std::exception)
     {
-        Sequence< OUString > aReturn(m_aMappedEvents.size());
-        OUString* pReturn = aReturn.getArray();
-        for (   MapString2PropertyValueSequence::const_iterator aCollect = m_aMappedEvents.begin();
-                aCollect != m_aMappedEvents.end();
-                ++aCollect, ++pReturn
-            )
-            *pReturn = aCollect->first;
-
-        return aReturn;
+        return comphelper::mapKeysToSequence(m_aMappedEvents);
     }
 
     sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName ) throw(RuntimeException, std::exception)

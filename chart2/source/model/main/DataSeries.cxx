@@ -275,18 +275,8 @@ void SAL_CALL DataSeries::getFastPropertyValue
     if( nHandle == DataSeriesProperties::PROP_DATASERIES_ATTRIBUTED_DATA_POINTS )
     {
         // TODO: only add those property sets that are really modified
-        uno::Sequence< sal_Int32 > aSeq( m_aAttributedDataPoints.size());
-        sal_Int32 * pIndexArray = aSeq.getArray();
-        sal_Int32 i = 0;
 
-        for( tDataPointAttributeContainer::const_iterator aIt( m_aAttributedDataPoints.begin());
-             aIt != m_aAttributedDataPoints.end(); ++aIt )
-        {
-            pIndexArray[ i ] = (*aIt).first;
-            ++i;
-        }
-
-        rValue <<= aSeq;
+        rValue <<= comphelper::mapKeysToSequence(m_aAttributedDataPoints);
     }
     else
         OPropertySet::getFastPropertyValue( rValue, nHandle );

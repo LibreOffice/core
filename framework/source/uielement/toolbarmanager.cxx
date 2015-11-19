@@ -1322,18 +1322,9 @@ void ToolBarManager::RequestImages()
 {
 
     // Request images from image manager
-    Sequence< OUString > aCmdURLSeq( m_aCommandMap.size() );
+    Sequence< OUString > aCmdURLSeq( comphelper::mapKeysToSequence(m_aCommandMap) );
     Sequence< Reference< XGraphic > > aDocGraphicSeq;
     Sequence< Reference< XGraphic > > aModGraphicSeq;
-
-    sal_uInt32 i = 0;
-    CommandToInfoMap::iterator pIter = m_aCommandMap.begin();
-    CommandToInfoMap::iterator pEnd = m_aCommandMap.end();
-    while ( pIter != pEnd )
-    {
-        aCmdURLSeq[i++] = pIter->first;
-        ++pIter;
-    }
 
     bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
     sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge() );
@@ -1342,8 +1333,9 @@ void ToolBarManager::RequestImages()
         aDocGraphicSeq = m_xDocImageManager->getImages( p, aCmdURLSeq );
     aModGraphicSeq = m_xModuleImageManager->getImages( p, aCmdURLSeq );
 
-    i = 0;
-    pIter = m_aCommandMap.begin();
+    sal_uInt32 i = 0;
+    CommandToInfoMap::iterator pIter = m_aCommandMap.begin();
+    CommandToInfoMap::iterator pEnd = m_aCommandMap.end();
     while ( pIter != pEnd )
     {
         Image aImage;

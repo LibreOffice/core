@@ -36,6 +36,7 @@
 #include <docsh.hxx>
 #include <xmloff/odffields.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -532,11 +533,7 @@ uno::Sequence<OUString> SwXFieldmarkParameters::getElementNames()
 {
     SolarMutexGuard aGuard;
     IFieldmark::parameter_map_t* pParameters = getCoreParameters();
-    uno::Sequence<OUString> vResult(pParameters->size());
-    OUString* pOutEntry = vResult.getArray();
-    for(IFieldmark::parameter_map_t::iterator pEntry = pParameters->begin(); pEntry!=pParameters->end(); ++pEntry, ++pOutEntry)
-        *pOutEntry = pEntry->first;
-    return vResult;
+    return comphelper::mapKeysToSequence(*pParameters);
 }
 
 sal_Bool SwXFieldmarkParameters::hasByName(const OUString& aName)

@@ -102,13 +102,7 @@ public:
     virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw(RuntimeException, std::exception) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        Sequence< OUString > aResult( things.size() );
-        typename NamedThingsHash::iterator it = things.begin();
-        typename NamedThingsHash::iterator it_end = things.end();
-        OUString* pName = aResult.getArray();
-        for (; it != it_end; ++it, ++pName )
-            *pName = it->first;
-        return aResult;
+        return comphelper::mapKeysToSequence( things );
     }
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(RuntimeException, std::exception) override
     {

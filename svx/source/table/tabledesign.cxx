@@ -36,6 +36,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "svx/unoprov.hxx"
 #include "svx/sdr/table/tabledesign.hxx"
@@ -301,15 +302,7 @@ Sequence< OUString > SAL_CALL TableDesignStyle::getElementNames() throw(RuntimeE
 {
     SolarMutexGuard aGuard;
 
-    const CellStyleNameMap& rMap = getCellStyleNameMap();
-    Sequence< OUString > aRet( rMap.size() );
-    OUString* pName = aRet.getArray();
-
-    CellStyleNameMap::const_iterator iter = rMap.begin();
-    while( iter != rMap.end() )
-        *pName++ = (*iter++).first;
-
-    return aRet;
+    return comphelper::mapKeysToSequence( getCellStyleNameMap() );
 }
 
 

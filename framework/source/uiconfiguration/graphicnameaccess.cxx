@@ -57,15 +57,7 @@ throw(css::uno::RuntimeException, std::exception)
 {
     if ( m_aSeq.getLength() == 0 )
     {
-        uno::Sequence< OUString > aSeq( m_aNameToElementMap.size() );
-        NameGraphicHashMap::const_iterator pIter = m_aNameToElementMap.begin();
-        sal_Int32 i( 0);
-        while ( pIter != m_aNameToElementMap.end())
-        {
-            aSeq[i++] = pIter->first;
-            ++pIter;
-        }
-        m_aSeq = aSeq;
+        m_aSeq = comphelper::mapKeysToSequence(m_aNameToElementMap);
     }
 
     return m_aSeq;

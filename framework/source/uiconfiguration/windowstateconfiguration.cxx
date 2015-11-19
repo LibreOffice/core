@@ -40,6 +40,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
 
 #include <unordered_map>
@@ -1426,17 +1427,7 @@ throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
-    Sequence< OUString > aSeq( m_aModuleToFileHashMap.size() );
-
-    sal_Int32 n = 0;
-    ModuleToWindowStateFileMap::const_iterator pIter = m_aModuleToFileHashMap.begin();
-    while ( pIter != m_aModuleToFileHashMap.end() )
-    {
-        aSeq[n] = pIter->first;
-        ++pIter;
-    }
-
-    return aSeq;
+    return comphelper::mapKeysToSequence( m_aModuleToFileHashMap );
 }
 
 sal_Bool SAL_CALL WindowStateConfiguration::hasByName( const OUString& aName )

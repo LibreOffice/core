@@ -194,12 +194,7 @@ public:
     }
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException, std::exception) override
     {
-        uno::Sequence< OUString > aElements( mTemplateToProject.size() );
-        StringHashMap::iterator it_end = mTemplateToProject.end();
-        sal_Int32 index = 0;
-        for ( StringHashMap::iterator it = mTemplateToProject.begin(); it != it_end; ++it, ++index )
-            aElements[ index ] = it->first;
-        return aElements;
+        return comphelper::mapKeysToSequence( mTemplateToProject );
     }
 
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw ( css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, std::exception ) override

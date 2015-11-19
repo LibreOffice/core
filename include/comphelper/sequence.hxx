@@ -369,6 +369,31 @@ namespace comphelper
         return o_Output;
     }
 
+    /** Copy (keys or values) from a associate container into a Sequence
+
+        @tpl M map container type eg. std::map/std::unordered_map
+
+        @return the generated Sequence
+     */
+    template < typename M >
+    inline css::uno::Sequence< typename M::key_type > mapKeysToSequence( M const& map )
+    {
+        css::uno::Sequence< typename M::key_type > ret( static_cast<sal_Int32>(map.size()) );
+        typename M::key_type* pArray = ret.getArray();
+        for (const auto& i : map)
+            *pArray++ = i.first;
+        return ret;
+    }
+
+    template < typename M >
+    inline css::uno::Sequence< typename M::mapped_type > mapValuesToSequence( M const& map )
+    {
+        css::uno::Sequence< typename M::mapped_type > ret( static_cast<sal_Int32>(map.size()) );
+        typename M::mapped_type* pArray = ret.getArray();
+        for (const auto& i : map)
+            *pArray++ = i.second;
+        return ret;
+    }
 
 }   // namespace comphelper
 

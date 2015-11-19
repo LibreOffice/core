@@ -178,14 +178,7 @@ namespace xforms
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        Sequence< OUString > aNames( m_aRepository.size() );
-        ::std::transform(
-            m_aRepository.begin(),
-            m_aRepository.end(),
-            aNames.getArray(),
-            ::o3tl::select1st< Repository::value_type >()
-        );
-        return aNames;
+        return comphelper::mapKeysToSequence( m_aRepository );
     }
 
 

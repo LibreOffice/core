@@ -70,41 +70,6 @@ template< typename T >
     return SequenceToSTLSequenceContainer< ::std::vector< T > >( rSeq );
 }
 
-/** converts the keys of a Pair Associative Container into a UNO sequence
-
-    example:
-
-    ::std::multimap< sal_Int32, OUString > aMyMultiMap;
-    uno::Sequence< sal_Int32 > aMyKeys( ContainerHelper::MapKeysToSequence( aMyMultiMap ));
-    // note: aMyKeys may contain duplicate keys here
- */
-template< class Map >
-::com::sun::star::uno::Sequence< typename Map::key_type > MapKeysToSequence(
-    const Map & rCont )
-{
-    ::com::sun::star::uno::Sequence< typename Map::key_type > aResult( rCont.size());
-    ::std::transform( rCont.begin(), rCont.end(), aResult.getArray(),
-            ::o3tl::select1st< typename Map::value_type >() );
-    return aResult;
-}
-
-/** converts the values of a Pair Associative Container into a UNO sequence
-
-    example:
-
-    ::std::map< sal_Int32, OUString > aMyMultiMap;
-    uno::Sequence< OUString > aMyValues( ContainerHelper::MapValuesToSequence( aMyMultiMap ));
- */
-template< class Map >
-::com::sun::star::uno::Sequence< typename Map::mapped_type > MapValuesToSequence(
-    const Map & rCont )
-{
-    ::com::sun::star::uno::Sequence< typename Map::mapped_type > aResult( rCont.size());
-    ::std::transform( rCont.begin(), rCont.end(), aResult.getArray(),
-            ::o3tl::select2nd< typename Map::value_type >() );
-    return aResult;
-}
-
 } // namespace ContainerHelper
 } //  namespace chart
 

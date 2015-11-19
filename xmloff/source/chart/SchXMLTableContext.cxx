@@ -30,6 +30,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -1020,9 +1021,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                     if( static_cast<sal_Int32>(aRemainingSeries.size()) != aSeriesSeq.getLength() )
                     {
                         //remove the series that have only hidden data
-                        Sequence< Reference< chart2::XDataSeries > > aRemainingSeriesSeq( aRemainingSeries.size());
-                        ::std::copy( aRemainingSeries.begin(), aRemainingSeries.end(), aRemainingSeriesSeq.getArray());
-                        xSeriesContainer->setDataSeries( aRemainingSeriesSeq );
+                        xSeriesContainer->setDataSeries( comphelper::containerToSequence(aRemainingSeries) );
 
                         //remove unused sequences
                         Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
