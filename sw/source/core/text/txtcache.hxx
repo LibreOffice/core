@@ -24,7 +24,7 @@
 #include "swcache.hxx"
 
 class SwParaPortion;
-class SwTextFrm;
+class SwTextFrame;
 
 class SwTextLine : public SwCacheObj
 {
@@ -33,7 +33,7 @@ class SwTextLine : public SwCacheObj
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextLine)
 
-    SwTextLine( SwTextFrm *pFrm, SwParaPortion *pNew = nullptr );
+    SwTextLine( SwTextFrame *pFrame, SwParaPortion *pNew = nullptr );
     virtual ~SwTextLine();
 
     inline       SwParaPortion *GetPara()       { return pLine; }
@@ -49,7 +49,7 @@ protected:
     virtual SwCacheObj *NewObj() override;
 
 public:
-    explicit SwTextLineAccess( const SwTextFrm *pOwner );
+    explicit SwTextLineAccess( const SwTextFrame *pOwner );
 
     SwParaPortion *GetPara();
 

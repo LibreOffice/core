@@ -27,7 +27,7 @@
 
 class SwRangeRedline;
 class SwExtraRedline;
-class SwUnoCrsr;
+class SwUnoCursor;
 class SwOLENode;
 class SwTable;
 class SwTableLine;

@@ -39,13 +39,13 @@
 
 namespace editeng { class SvxBorderLine; }
 
-class SwFlyFrm;
+class SwFlyFrame;
 class SwTabCols;
 class SvxBrushItem;
 class SvxFrameDirectionItem;
 class SwTableAutoFormat;
-class SwFrm;
-class SwFormatFrmSize;
+class SwFrame;
+class SwFormatFrameSize;
 class SwFormatRowSplit;
 class SdrObject;
 class Color;
@@ -60,9 +60,9 @@ namespace svx
     class ISdrObjectFilter;
 }
 
-// return values for GetFrmType() und GetSelFrmType().
+// return values for GetFrameType() und GetSelFrameType().
 //! values can be combined via logical or
-enum class FrmTypeFlags {
+enum class FrameTypeFlags {
     NONE            =     0,
     PAGE            =     1,
     HEADER          =     2,
@@ -82,7 +82,7 @@ enum class FrmTypeFlags {
 };
 namespace o3tl
 {
-    template<> struct typed_flags<FrmTypeFlags> : is_typed_flags<FrmTypeFlags, 0x7fff> {};
+    template<> struct typed_flags<FrameTypeFlags> : is_typed_flags<FrameTypeFlags, 0x7fff> {};
 }
 
 //! values can be combined via logical or
@@ -92,10 +92,10 @@ enum class GotoObjFlags
     DrawControl    =  1,
     DrawSimple     =  2,
     DrawAny        = DrawControl | DrawSimple,
-    FlyFrm         =  4,
+    FlyFrame         =  4,
     FlyGrf         =  8,
     FlyOLE         = 16,
-    FlyAny         = FlyOLE | FlyGrf | FlyFrm,
+    FlyAny         = FlyOLE | FlyGrf | FlyFrame,
     Any            = FlyAny | DrawAny,
 };
 namespace o3tl
@@ -141,8 +141,8 @@ enum CurRectType
     RECT_PAGE_CALC,             ///< ... page will be formatted if required.
     RECT_PAGE_PRT,              ///< Rect of current PrtArea of page.
     RECT_FRM,                   ///< Rect of current frame.
-    RECT_FLY_EMBEDDED,          ///< Rect of current FlyFrm.
-    RECT_FLY_PRT_EMBEDDED,      ///< Rect of PrtArea of FlyFrm
+    RECT_FLY_EMBEDDED,          ///< Rect of current FlyFrame.
+    RECT_FLY_PRT_EMBEDDED,      ///< Rect of PrtArea of FlyFrame
     RECT_SECTION,               ///< Rect of current section.
     RECT_OUTTABSECTION,         ///< Rect of current section but outside of table.
     RECT_SECTION_PRT,           ///< Rect of current PrtArea of section.
@@ -156,8 +156,8 @@ enum CurRectType
 struct SwGetCurColNumPara
 {
     const SwFrameFormat* pFrameFormat;
-    const SwRect* pPrtRect, *pFrmRect;
-    SwGetCurColNumPara() : pFrameFormat( nullptr ), pPrtRect( nullptr ), pFrmRect( nullptr ) {}
+    const SwRect* pPrtRect, *pFrameRect;
+    SwGetCurColNumPara() : pFrameFormat( nullptr ), pPrtRect( nullptr ), pFrameRect( nullptr ) {}
 };
 
 enum class SwPasteSdr
@@ -207,7 +207,7 @@ private:
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainFrom;
     bool m_bCheckForOLEInCaption;
 
-    SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm( const css::uno::Reference < css::embed::XEmbeddedObject >&  ) const;
+    SAL_DLLPRIVATE SwFlyFrame *FindFlyFrame( const css::uno::Reference < css::embed::XEmbeddedObject >&  ) const;
 
     /// Terminate actions for all shells and call ChangeLink.
     SAL_DLLPRIVATE void EndAllActionAndCall();
@@ -218,14 +218,14 @@ private:
 
     /** Used for mouse operations on a table:
      @return a cell frame that is 'close' to rPt. */
-    SAL_DLLPRIVATE const SwFrm *GetBox( const Point &rPt, bool* pbRow = nullptr, bool* pbCol = nullptr ) const;
+    SAL_DLLPRIVATE const SwFrame *GetBox( const Point &rPt, bool* pbRow = nullptr, bool* pbCol = nullptr ) const;
 
     // 0 == not in any column.
-    SAL_DLLPRIVATE sal_uInt16 _GetCurColNum( const SwFrm *pFrm,
+    SAL_DLLPRIVATE sal_uInt16 _GetCurColNum( const SwFrame *pFrame,
                           SwGetCurColNumPara* pPara ) const;
 
-    SAL_DLLPRIVATE void _GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const;
-    SAL_DLLPRIVATE void _GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const;
+    SAL_DLLPRIVATE void _GetTabCols( SwTabCols &rToFill, const SwFrame *pBox ) const;
+    SAL_DLLPRIVATE void _GetTabRows( SwTabCols &rToFill, const SwFrame *pBox ) const;
 
     SAL_DLLPRIVATE bool ImpEndCreate();
 
@@ -237,7 +237,7 @@ private:
                                 bool bSelectInsert );
 
     /// Get list of marked SdrObjects;
-    /// helper method for GetSelFrmType, IsSelContainsControl.
+    /// helper method for GetSelFrameType, IsSelContainsControl.
     SAL_DLLPRIVATE const SdrMarkList* _GetMarkList() const;
 
     SAL_DLLPRIVATE bool CheckHeadline( bool bRepeat ) const;
@@ -263,7 +263,7 @@ public:
     bool Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
                bool bIsMove = false, bool bSelectInsert = true );
 
-    void SelectFlyFrm( SwFlyFrm& rFrm, bool bNew = false );
+    void SelectFlyFrame( SwFlyFrame& rFrame, bool bNew = false );
 
     /// Is selected frame within another frame?
     const SwFrameFormat* IsFlyInFly();
@@ -301,15 +301,15 @@ public:
      sophisticated one day. */
     bool IsDirectlyInSection() const;
 
-    /** For return values see above FrmType.
+    /** For return values see above FrameType.
      pPt: Cursr or DocPos respectively; bStopAtFly: Stop at flys or continue over anchor.
      Although (0,TRUE) is kind of a standard, the parameters are not defaulted here
      in order to force more conscious use especially of bStopAtFly. */
-    FrmTypeFlags GetFrmType( const Point *pPt, bool bStopAtFly ) const;
-    FrmTypeFlags GetSelFrmType() const;               //Selektion (Drawing)
+    FrameTypeFlags GetFrameType( const Point *pPt, bool bStopAtFly ) const;
+    FrameTypeFlags GetSelFrameType() const;               //Selektion (Drawing)
 
     /** check whether selected frame contains a control;
-     * companion method to GetSelFrmType, used for preventing
+     * companion method to GetSelFrameType, used for preventing
      * drag&drop of controls into header */
     bool IsSelContainsControl() const;
 
@@ -334,7 +334,7 @@ public:
                         bool _bMirror = false,
                         Point* _opRef = nullptr,
                         Size* _opPercent = nullptr,
-                        const SwFormatFrmSize* pFormatFrmSize = nullptr ) const;
+                        const SwFormatFrameSize* pFormatFrameSize = nullptr ) const;
 
     /// Set size of draw objects.
     void SetObjRect( const SwRect& rRect );
@@ -376,12 +376,12 @@ public:
     OUString GetObjDescription() const;
     void SetObjDescription( const OUString& rDescription );
 
-    bool IsFrmSelected() const;
-    bool GetFlyFrmAttr( SfxItemSet &rSet ) const;
-    bool SetFlyFrmAttr( SfxItemSet &rSet );
+    bool IsFrameSelected() const;
+    bool GetFlyFrameAttr( SfxItemSet &rSet ) const;
+    bool SetFlyFrameAttr( SfxItemSet &rSet );
     static SfxItemSet makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor);
-    bool ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = nullptr );
-    const SwFrameFormat *NewFlyFrm( const SfxItemSet &rSet, bool bAnchValid = false,
+    bool ResetFlyFrameAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = nullptr );
+    const SwFrameFormat *NewFlyFrame( const SfxItemSet &rSet, bool bAnchValid = false,
                          SwFrameFormat *pParent = nullptr );
     void SetFlyPos( const Point &rAbsPos);
     Point FindAnchorPos( const Point &rAbsPos, bool bMoveIt = false );
@@ -389,19 +389,19 @@ public:
     /** Determines whether a frame or its environment is vertically formatted and right-to-left.
      also determines, if frame or its environmane is in mongolianlayout (vertical left-to-right)
      - add output parameter <bVertL2R> */
-    bool IsFrmVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
+    bool IsFrameVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
 
     SwFrameFormat* GetSelectedFrameFormat() const; ///< If frame then frame style, else 0.
     void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point* pDocPos = nullptr ); ///< If frame then set frame style.
 
     // Get selected fly
-    SwFlyFrm* GetSelectedFlyFrm() const;
+    SwFlyFrame* GetSelectedFlyFrame() const;
 
     // Get current fly in which the cursor is positioned
-    SwFlyFrm* GetCurrFlyFrm(const bool bCalcFrm = true) const;
+    SwFlyFrame* GetCurrFlyFrame(const bool bCalcFrame = true) const;
 
     // Get selected fly, but if none Get current fly in which the cursor is positioned
-    SwFlyFrm* GetSelectedOrCurrFlyFrm(const bool bCalcFrm = true) const;
+    SwFlyFrame* GetSelectedOrCurrFlyFrame(const bool bCalcFrame = true) const;
 
     /// Find/delete fly containing the cursor.
     SwFrameFormat* WizardGetFly();
@@ -416,8 +416,8 @@ public:
     size_t GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
     const SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false) const;
 
-    /// If a fly is selected, it draws cursor into the first ContentFrm.
-    const SwFrameFormat* SelFlyGrabCrsr();
+    /// If a fly is selected, it draws cursor into the first ContentFrame.
+    const SwFrameFormat* SelFlyGrabCursor();
 
     /// Get FlyFrameFormat; fuer UI Macro Anbindung an Flys
     const SwFrameFormat* GetFlyFrameFormat() const;
@@ -438,14 +438,14 @@ public:
      Else the size is provided via GetCurFlyRect(). */
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = nullptr,
-                                  const SwRect *pFlyFrmRect = nullptr,
-                                  const bool bNoTextFrmPrtAreaChanged = false ) = 0;
+                                  const SwRect *pFlyFrameRect = nullptr,
+                                  const bool bNoTextFramePrtAreaChanged = false ) = 0;
 
     /** Connect objects with ActivateWhenVisible at Paint.
      Called by notxtfrm::Paint, implemented in wrtsh. */
     virtual void ConnectObj( svt::EmbeddedObjectRef&,
                              const SwRect &rPrt,
-                             const SwRect &rFrm ) = 0;
+                             const SwRect &rFrame ) = 0;
 
     /// Check resize of OLE-Object.
     bool IsCheckForOLEInCaption() const         { return m_bCheckForOLEInCaption; }
@@ -579,7 +579,7 @@ public:
     // --> #i972#
     /** for starmath formulas anchored 'as char' it aligns it baseline to baseline
      changing the previous vertical orientation */
-    void AlignFormulaToBaseline( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly = nullptr );
+    void AlignFormulaToBaseline( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, SwFlyFrame * pFly = nullptr );
 
     /// aligns all formulas with anchor 'as char' to baseline
     void AlignAllFormulasToBaseline();
@@ -590,13 +590,13 @@ public:
     /// Convert document position into position relative to the current page.
     Point GetRelativePagePosition(const Point& rDocPos);
 
-    /// Hide or show layout-selection and pass call to CrsrSh.
+    /// Hide or show layout-selection and pass call to CursorSh.
     void ShLooseFcs();
     void ShGetFcs( bool bUpdate = true );
 
     /// PageDescriptor-interface
     void   ChgCurPageDesc( const SwPageDesc& );
-    size_t GetCurPageDesc( const bool bCalcFrm = true ) const;
+    size_t GetCurPageDesc( const bool bCalcFrame = true ) const;
     size_t GetMousePageDesc( const Point &rPt ) const;
     size_t GetPageDescCnt() const;
     SwPageDesc* FindPageDescByName( const OUString& rName,
@@ -616,7 +616,7 @@ public:
 
     /// Page number of the page containing Point, O if no page.
     sal_uInt16 GetPageNumber( const Point &rPoint ) const;
-    bool GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
+    bool GetPageNumber( long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
     SwFlyFrameFormat* InsertObject( const svt::EmbeddedObjectRef&,
                 const SfxItemSet* pFlyAttrSet = nullptr,
@@ -647,10 +647,10 @@ public:
     bool SplitTab( bool bVert = true, sal_uInt16 nCnt = 1, bool bSameHeight = false );
     bool Sort(const SwSortOptions&);    //Sortieren.
 
-    void SetRowHeight( const SwFormatFrmSize &rSz );
+    void SetRowHeight( const SwFormatFrameSize &rSz );
 
     /// Pointer must be destroyed by caller != 0.
-    void GetRowHeight( SwFormatFrmSize *&rpSz ) const;
+    void GetRowHeight( SwFormatFrameSize *&rpSz ) const;
 
     void SetRowSplit( const SwFormatRowSplit &rSz );
     void GetRowSplit( SwFormatRowSplit *&rpSz ) const;
@@ -702,7 +702,7 @@ public:
 
     sal_uInt16 GetRowsToRepeat() const;
     void SetRowsToRepeat( sal_uInt16 nNumOfRows );
-    sal_uInt16 GetVirtPageNum( const bool bCalcFrm = true );
+    sal_uInt16 GetVirtPageNum( const bool bCalcFrame = true );
 
     /** @return the number of table rows currently selected
     if the selection start at the top of the table. */

@@ -29,12 +29,12 @@ class SW_DLLPUBLIC SwTableFormat : public SwFrameFormat
 
 protected:
     SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_FRMFMT, aTableSetRange )
     {}
     SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableSetRange )
     {}
 
 public:
@@ -50,12 +50,12 @@ class SwTableLineFormat : public SwFrameFormat
 
 protected:
     SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_FRMFMT, aTableLineSetRange )
     {}
     SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableLineSetRange )
     {}
 
 public:
@@ -71,12 +71,12 @@ class SW_DLLPUBLIC SwTableBoxFormat : public SwFrameFormat
 
 protected:
     SwTableBoxFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_FRMFMT, aTableBoxSetRange )
     {}
     SwTableBoxFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableBoxSetRange )
     {}
 
    // For recognition of changes (especially TableBoxAttribute).

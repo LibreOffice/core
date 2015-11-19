@@ -96,10 +96,10 @@ static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& 
                                text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     aSet.Put( SwFormatVertOrient( rItem.m_lUpper + static_cast<SwTwips>(nRow) * rItem.m_lVDist,
                                text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
-    const SwFrameFormat *pFormat = rSh.NewFlyFrm(aSet, true,  &rFormat );  // Insert Fly
+    const SwFrameFormat *pFormat = rSh.NewFlyFrame(aSet, true,  &rFormat );  // Insert Fly
     OSL_ENSURE( pFormat, "Fly not inserted" );
 
-    rSh.UnSelectFrm();  //Frame was selected automatically
+    rSh.UnSelectFrame();  //Frame was selected automatically
 
     rSh.SetTextFormatColl( rSh.GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
 
@@ -133,10 +133,10 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
                                text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     aSet.Put( SwFormatVertOrient( rItem.m_lUpper + static_cast<SwTwips>(nRow) * rItem.m_lVDist,
                                text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
-    const SwFrameFormat *pFormat = rSh.NewFlyFrm(aSet, true,  &rFormat );  // Insert Fly
+    const SwFrameFormat *pFormat = rSh.NewFlyFrame(aSet, true,  &rFormat );  // Insert Fly
     OSL_ENSURE( pFormat, "Fly not inserted" );
 
-    rSh.UnSelectFrm();  //Frame was selected automatically
+    rSh.UnSelectFrame();  //Frame was selected automatically
 
     rSh.SetTextFormatColl( rSh.GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
 
@@ -262,7 +262,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             long lPgWidth, lPgHeight;
             lPgWidth  = (rItem.m_lPWidth > MINLAY ? rItem.m_lPWidth : MINLAY);
             lPgHeight = (rItem.m_lPHeight > MINLAY ? rItem.m_lPHeight : MINLAY);
-            rFormat.SetFormatAttr( SwFormatFrmSize( ATT_FIX_SIZE, lPgWidth, lPgHeight ));
+            rFormat.SetFormatAttr( SwFormatFrameSize( ATT_FIX_SIZE, lPgWidth, lPgHeight ));
             // Numbering type
             SvxNumberType aType;
             aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
@@ -292,21 +292,21 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             sal_Int32 iResultHeight = rItem.m_lUpper + (rItem.m_nRows - 1) * rItem.m_lVDist + rItem.m_lHeight - rItem.m_lPHeight;
             sal_Int32 iWidth = (iResultWidth > 0 ? rItem.m_lWidth - (iResultWidth / rItem.m_nCols) - 1 : rItem.m_lWidth);
             sal_Int32 iHeight = (iResultHeight > 0 ? rItem.m_lHeight - (iResultHeight / rItem.m_nRows) - 1 : rItem.m_lHeight);
-            SwFormatFrmSize aFrmSize(  ATT_FIX_SIZE, iWidth, iHeight );
-            pFormat->SetFormatAttr( aFrmSize );
+            SwFormatFrameSize aFrameSize(  ATT_FIX_SIZE, iWidth, iHeight );
+            pFormat->SetFormatAttr( aFrameSize );
 
             //frame represents label itself, no border space
-            SvxULSpaceItem aFrmNoULSpace( 0, 0, RES_UL_SPACE );
-            SvxLRSpaceItem aFrmNoLRSpace( 0, 0, 0, 0, RES_LR_SPACE );
-            pFormat->SetFormatAttr( aFrmNoULSpace );
-            pFormat->SetFormatAttr( aFrmNoLRSpace );
+            SvxULSpaceItem aFrameNoULSpace( 0, 0, RES_UL_SPACE );
+            SvxLRSpaceItem aFrameNoLRSpace( 0, 0, 0, 0, RES_LR_SPACE );
+            pFormat->SetFormatAttr( aFrameNoULSpace );
+            pFormat->SetFormatAttr( aFrameNoLRSpace );
 
             const SwFrameFormat *pFirstFlyFormat = nullptr;
             if ( rItem.m_bPage )
             {
-                SwFormatVertOrient aFrmVertOrient( pFormat->GetVertOrient() );
-                aFrmVertOrient.SetVertOrient( text::VertOrientation::TOP );
-                pFormat->SetFormatAttr(aFrmVertOrient);
+                SwFormatVertOrient aFrameVertOrient( pFormat->GetVertOrient() );
+                aFrameVertOrient.SetVertOrient( text::VertOrientation::TOP );
+                pFormat->SetFormatAttr(aFrameVertOrient);
 
                 for ( sal_Int32 i = 0; i < rItem.m_nRows; ++i )
                 {

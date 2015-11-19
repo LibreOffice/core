@@ -178,15 +178,15 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     else if( eType & nsSelectionType::SEL_FRM )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
-        sString = ::GetOldFrmCat();
-         uno::Reference< text::XTextFramesSupplier >  xFrms(xModel, uno::UNO_QUERY);
-        xNameAccess = xFrms->getTextFrames();
+        sString = ::GetOldFrameCat();
+         uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
+        xNameAccess = xFrames->getTextFrames();
         sObjectName = rSh.GetFlyName();
     }
     else if( eType == nsSelectionType::SEL_TXT )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
-        sString = ::GetOldFrmCat();
+        sString = ::GetOldFrameCat();
     }
     else if( eType & nsSelectionType::SEL_DRW )
     {

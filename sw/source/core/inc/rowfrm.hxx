@@ -26,16 +26,16 @@
 class SwTableLine;
 class SwBorderAttrs;
 
-/// SwRowFrm is one table row in the document layout.
-class SwRowFrm: public SwLayoutFrm
+/// SwRowFrame is one table row in the document layout.
+class SwRowFrame: public SwLayoutFrame
 {
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     /// Only change the Frame size, not the PrtArea SSize
-    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 
     const SwTableLine * m_pTabLine;
-    SwRowFrm * m_pFollowRow;
+    SwRowFrame * m_pFollowRow;
     // #i29550#
     sal_uInt16 mnTopMarginForLowers;
     sal_uInt16 mnBottomMarginForLowers;
@@ -46,14 +46,14 @@ class SwRowFrm: public SwLayoutFrm
     bool m_bIsRowSpanLine;
 
     virtual void DestroyImpl() override;
-    virtual ~SwRowFrm();
+    virtual ~SwRowFrame();
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:
-    SwRowFrm( const SwTableLine &, SwFrm*, bool bInsertContent = true );
+    SwRowFrame( const SwTableLine &, SwFrame*, bool bInsertContent = true );
 
     virtual void Cut() override;
 
@@ -63,7 +63,7 @@ public:
      * been created; the same holds true for the Page at which the Flys
      * are to be registered at.
      */
-    void RegistFlys( SwPageFrm *pPage = nullptr );
+    void RegistFlys( SwPageFrame *pPage = nullptr );
 
     const SwTableLine *GetTabLine() const { return m_pTabLine; }
 
@@ -73,8 +73,8 @@ public:
      */
     void AdjustCells( const SwTwips nHeight, const bool bHeight );
 
-    SwRowFrm* GetFollowRow() const { return m_pFollowRow; }
-    void SetFollowRow( SwRowFrm* pNew ) { m_pFollowRow = pNew; }
+    SwRowFrame* GetFollowRow() const { return m_pFollowRow; }
+    void SetFollowRow( SwRowFrame* pNew ) { m_pFollowRow = pNew; }
 
     // #i29550#
     sal_uInt16 GetTopMarginForLowers() const { return mnTopMarginForLowers; }
@@ -101,7 +101,7 @@ public:
     bool IsRowSpanLine() const { return m_bIsRowSpanLine; }
     void SetRowSpanLine( bool bNew ) { m_bIsRowSpanLine = bNew; }
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwRowFrm)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwRowFrame)
 };
 
 #endif

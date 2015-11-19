@@ -97,7 +97,7 @@ SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
 
     // JP 31.3.00: Inputfields in readonly regions must be allowed to
     //              input any content. - 74639
-    bool bEnable = !rSh.IsCrsrReadonly();
+    bool bEnable = !rSh.IsCursorReadonly();
 
     m_pOKBT->Enable( bEnable );
     m_pEditED->SetReadOnly( !bEnable );

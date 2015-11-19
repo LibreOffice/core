@@ -26,7 +26,7 @@
 class SwFont;
 class SvxBrushItem;
 class SwFormatVertOrient;
-class SwFrm;
+class SwFrame;
 
 class SwFieldPortion : public SwExpandPortion
 {
@@ -138,7 +138,7 @@ public:
                      const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const override;
+    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Field cloner for SplitGlue
@@ -169,7 +169,7 @@ class SwGrfNumPortion : public SwNumberPortion
     SwTwips         nGrfHeight;
     sal_Int16       eOrient;
 public:
-    SwGrfNumPortion( SwFrm *pFrm,
+    SwGrfNumPortion( SwFrame *pFrame,
                      const OUString& rGraphicFollowedBy,
                      const SvxBrushItem* pGrfBrush,
                      const SwFormatVertOrient* pGrfOrient,

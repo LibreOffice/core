@@ -54,7 +54,7 @@ enum
 
 }
 
-static const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox );
+static const SwFrame* lcl_GetBoxFrame( const SwTableBox& rBox );
 static sal_Int32 lcl_GetLongBoxNum( OUString& rStr );
 static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
                                        const SwTableBox* pRefBox,
@@ -91,13 +91,13 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
     // Does it create a recursion?
     SwTableBox* pBox = const_cast<SwTableBox*>(this);
-    if( rCalcPara.pBoxStk->find( pBox ) != rCalcPara.pBoxStk->end() )
+    if( rCalcPara.pBoxStack->find( pBox ) != rCalcPara.pBoxStack->end() )
         return nRet;            // already on the stack: error
 
     // re-start with this box
     rCalcPara.SetLastTableBox( this );
 
-    rCalcPara.pBoxStk->insert( pBox );      // add
+    rCalcPara.pBoxStack->insert( pBox );      // add
     do {        // Middle-Check-Loop, so that we can jump from here. Used so that the box pointer
                 // will be removed from stack at the end.
         SwDoc* pDoc = GetFrameFormat()->GetDoc();
@@ -237,7 +237,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
     if( !rCalcPara.IsStackOverflow() )
     {
-        rCalcPara.pBoxStk->erase( pBox );      // remove from stack
+        rCalcPara.pBoxStack->erase( pBox );      // remove from stack
         rCalcPara.DecStackCnt();
     }
 
@@ -254,12 +254,12 @@ SwTableCalcPara::SwTableCalcPara( SwCalc& rCalculator, const SwTable& rTable )
     : pLastTableBox( nullptr ), nStackCnt( 0 ), nMaxSize( cMAXSTACKSIZE ),
     rCalc( rCalculator ), pTable( &rTable )
 {
-    pBoxStk = new SwTableSortBoxes;
+    pBoxStack = new SwTableSortBoxes;
 }
 
 SwTableCalcPara::~SwTableCalcPara()
 {
-    delete pBoxStk;
+    delete pBoxStack;
 }
 
 bool SwTableCalcPara::CalcWithStackOverflow()
@@ -276,7 +276,7 @@ bool SwTableCalcPara::CalcWithStackOverflow()
         rCalc.SetCalcError( CALC_NOERR );
         aStackOverflows.insert( aStackOverflows.begin() + nCnt++, pBox );
 
-        pBoxStk->erase( pBox );
+        pBoxStack->erase( pBox );
         pBox->GetValue( *this );
     } while( IsStackOverflow() );
 
@@ -285,7 +285,7 @@ bool SwTableCalcPara::CalcWithStackOverflow()
     // if recursion was detected
     nStackCnt = 0;
     rCalc.SetCalcError( CALC_NOERR );
-    pBoxStk->clear();
+    pBoxStack->clear();
 
     while( !rCalc.IsCalcError() && nCnt )
     {
@@ -722,13 +722,13 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const OUString& rNm )
     return pRet;
 }
 
-static const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
+static const SwFrame* lcl_GetBoxFrame( const SwTableBox& rBox )
 {
     SwNodeIndex aIdx( *rBox.GetSttNd() );
     SwContentNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
     OSL_ENSURE( pCNd, "Box has no TextNode" );
     Point aPt;      // get the first frame of the layout - table headline
-    return pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+    return pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
 }
 
 static sal_Int32 lcl_GetLongBoxNum( OUString& rStr )
@@ -921,16 +921,16 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                                 SwSelBoxes& rBoxes )
 {
     // get all selected boxes via layout
-    const SwLayoutFrm *pStt, *pEnd;
-    const SwFrm* pFrm = lcl_GetBoxFrm( rSttBox );
-    pStt = pFrm ? pFrm->GetUpper() : nullptr;
-    pEnd = ( nullptr != (pFrm = lcl_GetBoxFrm( rEndBox ))) ? pFrm->GetUpper() : nullptr;
+    const SwLayoutFrame *pStt, *pEnd;
+    const SwFrame* pFrame = lcl_GetBoxFrame( rSttBox );
+    pStt = pFrame ? pFrame->GetUpper() : nullptr;
+    pEnd = ( nullptr != (pFrame = lcl_GetBoxFrame( rEndBox ))) ? pFrame->GetUpper() : nullptr;
     if( !pStt || !pEnd )
         return ;                        // no valid selection
 
     GetTableSel( pStt, pEnd, rBoxes, nullptr );
 
-    const SwTable* pTable = pStt->FindTabFrm()->GetTable();
+    const SwTable* pTable = pStt->FindTabFrame()->GetTable();
 
     // filter headline boxes
     if( pTable->GetRowsToRepeat() > 0 )
@@ -951,8 +951,8 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
             if( pTable->IsHeadline( *pLine ) )
                 break;      // headline in this area!
 
-            const SwTabFrm *pStartTable = pStt->FindTabFrm();
-            const SwTabFrm *pEndTable = pEnd->FindTabFrm();
+            const SwTabFrame *pStartTable = pStt->FindTabFrame();
+            const SwTabFrame *pEndTable = pEnd->FindTabFrame();
 
             if (pStartTable == pEndTable) // no split table
                 break;

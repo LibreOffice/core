@@ -58,7 +58,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     aRewriter.AddRule(UndoArg1, pLocal->GetName());
 
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_SETFMTCOLL, &aRewriter);
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
 
         if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
@@ -102,8 +102,8 @@ void SwEditShell::FillByEx(SwTextFormatColl* pColl, bool bReset)
         pColl->ResetAllFormatAttr();
     }
 
-    SwPaM * pCrsr = GetCrsr();
-    SwContentNode * pCnt = pCrsr->GetContentNode();
+    SwPaM * pCursor = GetCursor();
+    SwContentNode * pCnt = pCursor->GetContentNode();
     const SfxItemSet* pSet = pCnt->GetpSwAttrSet();
     if( pSet )
     {

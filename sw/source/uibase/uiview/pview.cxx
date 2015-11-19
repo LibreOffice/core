@@ -505,12 +505,12 @@ void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
         {
             // close page preview, set new cursor position and switch to
             // normal view.
-            OUString sNewCrsrPos = OUString::number( aDocPos.X() ) + ";" +
+            OUString sNewCursorPos = OUString::number( aDocPos.X() ) + ";" +
                                    OUString::number( aDocPos.Y() ) + ";";
-            mrView.SetNewCrsrPos( sNewCrsrPos );
+            mrView.SetNewCursorPos( sNewCursorPos );
 
-            SfxViewFrame *pTmpFrm = mrView.GetViewFrame();
-            pTmpFrm->GetBindings().Execute( SID_VIEWSHELL0, nullptr, 0,
+            SfxViewFrame *pTmpFrame = mrView.GetViewFrame();
+            pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr, 0,
                                                     SfxCallMode::ASYNCHRON );
         }
         else if ( bIsDocPos || bPosInEmptyPage )
@@ -957,8 +957,8 @@ MOVEPAGE:
             if(GetViewShell()->IsDummyPage( nSelPage ) && GetViewShell()->IsDummyPage( --nSelPage ))
                 nSelPage +=2;
             SetNewPage( nSelPage );
-            SfxViewFrame *pTmpFrm = GetViewFrame();
-            pTmpFrm->GetBindings().Execute( SID_VIEWSHELL0, nullptr, 0,
+            SfxViewFrame *pTmpFrame = GetViewFrame();
+            pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr, 0,
                                                     SfxCallMode::ASYNCHRON );
         }
         break;
@@ -1226,7 +1226,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
         {
             // Set the current page as the first.
             sal_uInt16 nPhysPg, nVirtPg;
-            static_cast<SwCrsrShell*>(pVS)->GetPageNum( nPhysPg, nVirtPg, true, false );
+            static_cast<SwCursorShell*>(pVS)->GetPageNum( nPhysPg, nVirtPg, true, false );
             if( 1 != pViewWin->GetCol() && 1 == nPhysPg )
                 --nPhysPg;
             pViewWin->SetSttPage( nPhysPg );

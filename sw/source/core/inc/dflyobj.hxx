@@ -23,7 +23,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/svdovirt.hxx>
 
-class SwFlyFrm;
+class SwFlyFrame;
 class SwFrameFormat;
 class SdrObjMacroHitRec;
 
@@ -60,7 +60,7 @@ public:
 class SwVirtFlyDrawObj : public SdrVirtObj
 {
 private:
-    SwFlyFrm *m_pFlyFrm;
+    SwFlyFrame *m_pFlyFrame;
 
 protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
@@ -78,7 +78,7 @@ public:
     basegfx::B2DRange getInnerBound() const;
 
 
-    SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly);
+    SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrame* pFly);
     virtual ~SwVirtFlyDrawObj();
 
     // override method of base class SdrVirtObj
@@ -110,8 +110,8 @@ public:
           SwFrameFormat *GetFormat();
 
     // methods to get pointers for the Fly
-          SwFlyFrm* GetFlyFrm()         { return m_pFlyFrm; }
-    const SwFlyFrm* GetFlyFrm() const   { return m_pFlyFrm; }
+          SwFlyFrame* GetFlyFrame()         { return m_pFlyFrame; }
+    const SwFlyFrame* GetFlyFrame() const   { return m_pFlyFrame; }
 
     void SetRect() const;
 

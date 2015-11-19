@@ -31,7 +31,7 @@ class SwTextPainter : public SwTextCursor
     void CheckSpecialUnderline( const SwLinePortion* pPor,
                                 long nAdjustBaseLine = 0 );
 protected:
-    void CtorInitTextPainter( SwTextFrm *pFrm, SwTextPaintInfo *pInf );
+    void CtorInitTextPainter( SwTextFrame *pFrame, SwTextPaintInfo *pInf );
     explicit SwTextPainter(SwTextNode* pTextNode)
         : SwTextCursor(pTextNode)
         , bPaintDrop(false)
@@ -39,10 +39,10 @@ protected:
     }
 
 public:
-    SwTextPainter(SwTextFrm *pTextFrm, SwTextPaintInfo *pTextPaintInf)
-        : SwTextCursor(pTextFrm->GetTextNode())
+    SwTextPainter(SwTextFrame *pTextFrame, SwTextPaintInfo *pTextPaintInf)
+        : SwTextCursor(pTextFrame->GetTextNode())
     {
-        CtorInitTextPainter( pTextFrm, pTextPaintInf );
+        CtorInitTextPainter( pTextFrame, pTextPaintInf );
     }
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                        const bool bUnderSz );

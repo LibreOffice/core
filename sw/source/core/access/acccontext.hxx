@@ -31,7 +31,7 @@
 
 namespace vcl { class Window; }
 class SwAccessibleMap;
-class SwCrsrShell;
+class SwCursorShell;
 class SdrObject;
 class SwPaM;
 namespace utl {
@@ -55,7 +55,7 @@ class SwAccessibleContext :
 {
     // The implements for the XAccessibleSelection interface has been
     // 'externalized' and wants access to the protected members like
-    // GetMap, GetChild, GetParent, and GetFrm.
+    // GetMap, GetChild, GetParent, and GetFrame.
     friend class SwAccessibleSelectionHelper;
 
 protected:
@@ -117,15 +117,15 @@ protected:
         return GetMap()->GetShell();
     }
 
-    /** convenience method to get SwCrsrShell through accessibility map
-     * @returns SwCrsrShell, or NULL if none is found */
-    SwCrsrShell* GetCrsrShell();
-    const SwCrsrShell* GetCrsrShell() const;
+    /** convenience method to get SwCursorShell through accessibility map
+     * @returns SwCursorShell, or NULL if none is found */
+    SwCursorShell* GetCursorShell();
+    const SwCursorShell* GetCursorShell() const;
 
     // Notify all children that the vis area has changed.
-    // The SwFrm might belong to the current object or to any other child or
+    // The SwFrame might belong to the current object or to any other child or
     // grandchild.
-    void ChildrenScrolled( const SwFrm *pFrm, const SwRect& rOldVisArea );
+    void ChildrenScrolled( const SwFrame *pFrame, const SwRect& rOldVisArea );
 
     // The context's showing state changed. May only be called for context that
     // exist even if they aren't visible.
@@ -140,15 +140,15 @@ protected:
     // The context has to be removed while setting the vis area
     void ScrolledOut( const SwRect& rOldVisArea );
 
-    // Invalidate the states of all children of the specified SwFrm. The
-    // SwFrm might belong the current object or to any child or grandchild!
+    // Invalidate the states of all children of the specified SwFrame. The
+    // SwFrame might belong the current object or to any child or grandchild!
     // #i27301# - use new type definition for <_nStates>
-    void InvalidateChildrenStates( const SwFrm* _pFrm,
+    void InvalidateChildrenStates( const SwFrame* _pFrame,
                                    AccessibleStates _nStates );
 
-    // Dispose children of the specified SwFrm. The SwFrm might belong to
+    // Dispose children of the specified SwFrame. The SwFrame might belong to
     // the current object or to any other child or grandchild.
-    void DisposeChildren( const SwFrm *pFrm,
+    void DisposeChildren( const SwFrame *pFrame,
                           bool bRecursive );
 
     void DisposeShape( const SdrObject *pObj,
@@ -188,13 +188,13 @@ protected:
     {
         m_isRegisteredAtAccessibleMap = false;
     }
-    void RemoveFrmFromAccessibleMap();
+    void RemoveFrameFromAccessibleMap();
 
     virtual ~SwAccessibleContext();
 
 public:
     SwAccessibleContext( SwAccessibleMap *m_pMap, sal_Int16 nRole,
-                         const SwFrm *pFrm );
+                         const SwFrame *pFrame );
 
     // XAccessible
 
@@ -319,14 +319,14 @@ public:
     virtual void Dispose( bool bRecursive = false );
 
     // The child object is not visible an longer and should be destroyed
-    virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrmOrObj, bool bRecursive );
+    virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrameOrObj, bool bRecursive );
 
     // The object has been moved by the layout
-    virtual void InvalidatePosOrSize( const SwRect& rFrm );
+    virtual void InvalidatePosOrSize( const SwRect& rFrame );
 
     // The child object has been moved by the layout
-    virtual void InvalidateChildPosOrSize( const sw::access::SwAccessibleChild& rFrmOrObj,
-                                           const SwRect& rFrm );
+    virtual void InvalidateChildPosOrSize( const sw::access::SwAccessibleChild& rFrameOrObj,
+                                           const SwRect& rFrame );
 
     // The content may have changed (but it hasn't to have changed)
     void InvalidateContent();
@@ -386,7 +386,7 @@ public:
     throw aExcept;
 
 #define CHECK_FOR_DEFUNC_THIS( ifc, ths )                \
-    if( !(GetFrm() && GetMap()) )                        \
+    if( !(GetFrame() && GetMap()) )                        \
     {                                                    \
         css::uno::Reference < ifc > xThis( ths );        \
         css::lang::DisposedException aExcept(            \

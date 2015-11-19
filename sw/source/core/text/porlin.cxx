@@ -98,12 +98,12 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
     sal_uInt16 nPos;
     SwTextPaintInfo aInf( rInf );
 
-    const bool bBidiPor = rInf.GetTextFrm()->IsRightToLeft() !=
+    const bool bBidiPor = rInf.GetTextFrame()->IsRightToLeft() !=
                           bool( TEXT_LAYOUT_BIDI_RTL & rInf.GetOut()->GetLayoutMode() );
 
     sal_uInt16 nDir = bBidiPor ?
                   1800 :
-                  rInf.GetFont()->GetOrientation( rInf.GetTextFrm()->IsVertical() );
+                  rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() );
 
     switch ( nDir )
     {
@@ -222,7 +222,7 @@ SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
     return pPos;
 }
 
-sal_Int32 SwLinePortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
+sal_Int32 SwLinePortion::GetCursorOfst( const sal_uInt16 nOfst ) const
 {
     if( nOfst > ( PrtWidth() / 2 ) )
         return GetLen();
@@ -271,9 +271,9 @@ void SwLinePortion::FormatEOL( SwTextFormatInfo & )
 void SwLinePortion::Move( SwTextPaintInfo &rInf )
 {
     bool bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
-    const bool bFrmDir = rInf.GetTextFrm()->IsRightToLeft();
-    bool bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
-                       (   bFrmDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
+    const bool bFrameDir = rInf.GetTextFrame()->IsRightToLeft();
+    bool bCounterDir = ( ! bFrameDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
+                       (   bFrameDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
 
     if ( InSpaceGrp() && rInf.GetSpaceAdd() )
     {

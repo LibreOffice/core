@@ -37,7 +37,7 @@ class SwFont;
  * held by the corresponding SwTextNode.
  *
  * The SwPortionHandler can be used with the
- * SwTextFrm::VisitPortions(...) method.
+ * SwTextFrame::VisitPortions(...) method.
  */
 class SwPortionHandler
 {

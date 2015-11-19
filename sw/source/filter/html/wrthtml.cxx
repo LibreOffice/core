@@ -91,7 +91,7 @@ static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
-    : m_pHTMLPosFlyFrms(nullptr)
+    : m_pHTMLPosFlyFrames(nullptr)
     , m_pNumRuleInfo(new SwHTMLNumRuleInfo)
     , m_pNextNumRuleInfo(nullptr)
     , m_nHTMLMode(0)
@@ -378,8 +378,8 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
     // das gesamte Dokument geschrieben wird
-    m_pHTMLPosFlyFrms = nullptr;
-    CollectFlyFrms();
+    m_pHTMLPosFlyFrames = nullptr;
+    CollectFlyFrames();
     m_nLastParaToken = 0;
     GetControls();
     CollectLinkTargets();
@@ -438,12 +438,12 @@ sal_uLong SwHTMLWriter::WriteStream()
     }
 
     // loesche die Tabelle mit den freifliegenden Rahmen
-    OSL_ENSURE( !m_pHTMLPosFlyFrms, "Wurden nicht alle Rahmen ausgegeben" );
-    if( m_pHTMLPosFlyFrms )
+    OSL_ENSURE( !m_pHTMLPosFlyFrames, "Wurden nicht alle Rahmen ausgegeben" );
+    if( m_pHTMLPosFlyFrames )
     {
-        m_pHTMLPosFlyFrms->DeleteAndDestroyAll();
-        delete m_pHTMLPosFlyFrms;
-        m_pHTMLPosFlyFrms = nullptr;
+        m_pHTMLPosFlyFrames->DeleteAndDestroyAll();
+        delete m_pHTMLPosFlyFrames;
+        m_pHTMLPosFlyFrames = nullptr;
     }
 
     m_aHTMLControls.DeleteAndDestroyAll();

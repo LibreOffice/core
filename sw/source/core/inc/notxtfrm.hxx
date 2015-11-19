@@ -24,11 +24,11 @@
 class SwNoTextNode;
 class OutputDevice;
 class SwBorderAttrs;
-struct SwCrsrMoveState;
+struct SwCursorMoveState;
 
-class SwNoTextFrm: public SwContentFrm
+class SwNoTextFrame: public SwContentFrame
 {
-    friend void _FrmFinit();
+    friend void _FrameFinit();
 
     const Size& GetSize() const;
 
@@ -38,20 +38,20 @@ class SwNoTextFrm: public SwContentFrm
     void PaintPicture( vcl::RenderContext*, const SwRect& ) const;
 
     virtual void DestroyImpl() override;
-    virtual ~SwNoTextFrm();
+    virtual ~SwNoTextFrame();
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 public:
-    SwNoTextFrm( SwNoTextNode * const, SwFrm* );
+    SwNoTextFrame( SwNoTextNode * const, SwFrame* );
 
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
-                              SwCrsrMoveState* = nullptr) const override;
-    virtual bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
-                     SwCrsrMoveState* = nullptr, bool bTestBackground = false) const override;
+                              SwCursorMoveState* = nullptr) const override;
+    virtual bool GetCursorOfst(SwPosition* pPos, Point& aPoint,
+                     SwCursorMoveState* = nullptr, bool bTestBackground = false) const override;
 
     void GetGrfArea( SwRect &rRect, SwRect * = nullptr, bool bMirror = true ) const;
 

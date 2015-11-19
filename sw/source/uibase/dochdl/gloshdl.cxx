@@ -370,7 +370,7 @@ bool SwGlossaryHdl::ExpandGlossary()
     OUString aShortName;
 
         // use this at text selection
-    if(pWrtShell->SwCrsrShell::HasSelection() && !pWrtShell->IsBlockMode())
+    if(pWrtShell->SwCursorShell::HasSelection() && !pWrtShell->IsBlockMode())
     {
         aShortName = pWrtShell->GetSelText();
     }
@@ -620,10 +620,10 @@ void SwGlossaryHdl::GetMacros( const OUString &rShortName,
 }
 
 // ctor, dtor
-SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrm, SwWrtShell *pSh)
+SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrame, SwWrtShell *pSh)
     : rStatGlossaries( *::GetGlossaries() ),
     aCurGrp( SwGlossaries::GetDefName() ),
-    pViewFrame( pVwFrm ),
+    pViewFrame( pVwFrame ),
     pWrtShell( pSh ),
     pCurGrp( nullptr )
 {

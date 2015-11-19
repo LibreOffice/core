@@ -70,7 +70,7 @@ void SwUndoFormatColl::RepeatImpl(::sw::RepeatContext & rContext)
 
 void SwUndoFormatColl::DoSetFormatColl(SwDoc & rDoc, SwPaM & rPaM)
 {
-    // Only one TextFrmColl can be applied to a section, thus request only in
+    // Only one TextFrameColl can be applied to a section, thus request only in
     // this array.
 
     // does the format still exist?

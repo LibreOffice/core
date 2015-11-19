@@ -25,23 +25,23 @@
 #include "cshtyp.hxx"
 #include "node.hxx"
 
-class SwLayoutFrm;
+class SwLayoutFrame;
 class SwContentNode;
 class SwBorderAttrs;
 class SwAttrSetChg;
-class SwTextFrm;
+class SwTextFrame;
 
 // implemented in cntfrm.cxx, used in cntfrm.cxx and crsrsh.cxx
-extern bool GetFrmInPage( const SwContentFrm*, SwWhichPage, SwPosPage, SwPaM* );
+extern bool GetFrameInPage( const SwContentFrame*, SwWhichPage, SwPosPage, SwPaM* );
 
-class SwContentFrm: public SwFrm, public SwFlowFrm
+class SwContentFrame: public SwFrame, public SwFlowFrame
 {
-    friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );    // calls MakePrtArea
+    friend void MakeNxt( SwFrame *pFrame, SwFrame *pNxt );    // calls MakePrtArea
 
     // parameter <bObjsInNewUpper>  indicates that objects exist in remaining
     // area of new upper
     bool _WouldFit( SwTwips nSpace,
-                    SwLayoutFrm *pNewUpper,
+                    SwLayoutFrame *pNewUpper,
                     bool bTstMove,
                     const bool bObjsInNewUpper );
 
@@ -50,34 +50,34 @@ class SwContentFrm: public SwFrm, public SwFlowFrm
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
 
-    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool& ) override;
+    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool& ) override;
 
-    const SwContentFrm* ImplGetNextContentFrm( bool bFwd ) const;
+    const SwContentFrame* ImplGetNextContentFrame( bool bFwd ) const;
 
 protected:
     bool MakePrtArea( const SwBorderAttrs & );
 
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
-    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 
-    SwContentFrm( SwContentNode * const, SwFrm* );
+    SwContentFrame( SwContentNode * const, SwFrame* );
 
     virtual void DestroyImpl() override;
-    virtual ~SwContentFrm();
+    virtual ~SwContentFrame();
 
 public:
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
+    virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 
     inline const SwContentNode *GetNode() const;
     inline       SwContentNode *GetNode();
 
-    inline const SwContentFrm *GetFollow() const;
-    inline       SwContentFrm *GetFollow();
-    inline const SwContentFrm *GetPrecede() const;
-    SwTextFrm* FindMaster() const;
+    inline const SwContentFrame *GetFollow() const;
+    inline       SwContentFrame *GetFollow();
+    inline const SwContentFrame *GetPrecede() const;
+    SwTextFrame* FindMaster() const;
 
     // layout dependent cursor travelling
     virtual bool LeftMargin( SwPaM * ) const;
@@ -92,51 +92,51 @@ public:
     // bTst indicates that we are currently doing a test formatting
     virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst );
 
-    bool MoveFootnoteCntFwd( bool, SwFootnoteBossFrm* ); // called by MoveFwd if content
+    bool MoveFootnoteCntFwd( bool, SwFootnoteBossFrame* ); // called by MoveFwd if content
 
-    inline  SwContentFrm* GetNextContentFrm() const;
-    inline  SwContentFrm* GetPrevContentFrm() const;
-    static bool CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave, long nBottom, bool bSkipRowSpanCells );
+    inline  SwContentFrame* GetNextContentFrame() const;
+    inline  SwContentFrame* GetPrevContentFrame() const;
+    static bool CalcLowers( SwLayoutFrame* pLay, const SwLayoutFrame* pDontLeave, long nBottom, bool bSkipRowSpanCells );
     void RegisterToNode( SwContentNode& );
 };
 
-inline SwContentFrm* SwContentFrm::GetNextContentFrm() const
+inline SwContentFrame* SwContentFrame::GetNextContentFrame() const
 {
-    if ( GetNext() && GetNext()->IsContentFrm() )
-        return const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(GetNext()));
+    if ( GetNext() && GetNext()->IsContentFrame() )
+        return const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(GetNext()));
     else
-        return const_cast<SwContentFrm*>(ImplGetNextContentFrm( true ));
+        return const_cast<SwContentFrame*>(ImplGetNextContentFrame( true ));
 }
 
-inline SwContentFrm* SwContentFrm::GetPrevContentFrm() const
+inline SwContentFrame* SwContentFrame::GetPrevContentFrame() const
 {
-    if ( GetPrev() && GetPrev()->IsContentFrm() )
-        return const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(GetPrev()));
+    if ( GetPrev() && GetPrev()->IsContentFrame() )
+        return const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(GetPrev()));
     else
-        return const_cast<SwContentFrm*>(ImplGetNextContentFrm( false ));
+        return const_cast<SwContentFrame*>(ImplGetNextContentFrame( false ));
 }
 
-inline SwContentNode *SwContentFrm::GetNode()
+inline SwContentNode *SwContentFrame::GetNode()
 {
     return static_cast< SwContentNode* >( GetDep() );
 }
-inline const SwContentNode *SwContentFrm::GetNode() const
+inline const SwContentNode *SwContentFrame::GetNode() const
 {
     return static_cast< const SwContentNode* >( GetDep() );
 }
 
-inline const SwContentFrm *SwContentFrm::GetFollow() const
+inline const SwContentFrame *SwContentFrame::GetFollow() const
 {
-    return static_cast<const SwContentFrm*>(SwFlowFrm::GetFollow());
+    return static_cast<const SwContentFrame*>(SwFlowFrame::GetFollow());
 }
-inline SwContentFrm *SwContentFrm::GetFollow()
+inline SwContentFrame *SwContentFrame::GetFollow()
 {
-    return static_cast<SwContentFrm*>(SwFlowFrm::GetFollow());
+    return static_cast<SwContentFrame*>(SwFlowFrame::GetFollow());
 }
 
-inline const SwContentFrm *SwContentFrm::GetPrecede() const
+inline const SwContentFrame *SwContentFrame::GetPrecede() const
 {
-    return static_cast<const SwContentFrm*>(SwFlowFrm::GetPrecede());
+    return static_cast<const SwContentFrame*>(SwFlowFrame::GetPrecede());
 }
 
 #endif

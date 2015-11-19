@@ -1069,32 +1069,32 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_FRM_SIZE:
         {
-            const SwFormatFrmSize& rFrmSize = dynamic_cast<const SwFormatFrmSize&>(rItem);
+            const SwFormatFrameSize& rFrameSize = dynamic_cast<const SwFormatFrameSize&>(rItem);
 
             bool bOutHeight = false;
             switch( nMemberId )
             {
                 case MID_FRMSIZE_REL_WIDTH:
-                    if (rFrmSize.GetWidthPercent())
+                    if (rFrameSize.GetWidthPercent())
                     {
                         ::sax::Converter::convertPercent(
-                                aOut, rFrmSize.GetWidthPercent() );
+                                aOut, rFrameSize.GetWidthPercent() );
                         bOk = true;
                     }
                     break;
                 case MID_FRMSIZE_MIN_HEIGHT:
-                    if( ATT_MIN_SIZE == rFrmSize.GetHeightSizeType() )
+                    if( ATT_MIN_SIZE == rFrameSize.GetHeightSizeType() )
                         bOutHeight = true;
                     break;
                 case MID_FRMSIZE_FIX_HEIGHT:
-                    if( ATT_FIX_SIZE == rFrmSize.GetHeightSizeType() )
+                    if( ATT_FIX_SIZE == rFrameSize.GetHeightSizeType() )
                         bOutHeight = true;
                     break;
             }
 
             if( bOutHeight )
             {
-                rUnitConverter.convertMeasureToXML(aOut, rFrmSize.GetHeight());
+                rUnitConverter.convertMeasureToXML(aOut, rFrameSize.GetHeight());
                 bOk = true;
             }
         }

@@ -122,7 +122,7 @@ private:
 
     bool                        m_bIsCollapsed;
 
-    void init(const SwUnoCrsr* pPortionCursor);
+    void init(const SwUnoCursor* pPortionCursor);
 
 protected:
 
@@ -135,7 +135,7 @@ protected:
             throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     void GetPropertyValue( css::uno::Any &rVal,
-                const SfxItemPropertySimpleEntry& rEntry, SwUnoCrsr *pUnoCrsr, SfxItemSet *&pSet );
+                const SfxItemPropertySimpleEntry& rEntry, SwUnoCursor *pUnoCursor, SfxItemSet *&pSet );
 
     css::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> SAL_CALL GetPropertyValuesTolerant_Impl(
         const css::uno::Sequence< OUString >& rPropertyNames, bool bDirectValuesOnly )
@@ -147,11 +147,11 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, css::uno::Reference< css::text::XText > const& rParent, SwTextPortionType   eType   );
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, css::uno::Reference< css::text::XText > const& rParent, SwFrameFormat& rFormat );
+    SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< css::text::XText > const& rParent, SwTextPortionType   eType   );
+    SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< css::text::XText > const& rParent, SwFrameFormat& rFormat );
 
     // for Ruby
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
+    SwXTextPortion(const SwUnoCursor* pPortionCursor,
         SwTextRuby const& rAttr,
         css::uno::Reference< css::text::XText > const& xParent,
         bool bIsEnd );
@@ -225,7 +225,7 @@ public:
 
     SwTextPortionType GetTextPortionType() const { return m_ePortionType; }
 
-    SwUnoCrsr& GetCursor() const
+    SwUnoCursor& GetCursor() const
         { return *m_pUnoCursor; }
 };
 
@@ -237,20 +237,20 @@ class SwXTextPortionEnumeration
         >
 {
     TextRangeList_t m_Portions; // contains all portions, filled by ctor
-    sw::UnoCursorPointer m_pUnoCrsr;
+    sw::UnoCursorPointer m_pUnoCursor;
 
-    SwUnoCrsr& GetCursor() const
-        {return *m_pUnoCrsr;}
+    SwUnoCursor& GetCursor() const
+        {return *m_pUnoCursor;}
 
 protected:
     virtual ~SwXTextPortionEnumeration();
 
 public:
-    SwXTextPortionEnumeration(SwPaM& rParaCrsr,
+    SwXTextPortionEnumeration(SwPaM& rParaCursor,
             css::uno::Reference< css::text::XText > const & xParent,
             const sal_Int32 nStart, const sal_Int32 nEnd );
 
-    SwXTextPortionEnumeration(SwPaM& rParaCrsr,
+    SwXTextPortionEnumeration(SwPaM& rParaCursor,
         TextRangeList_t const & rPortions );
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -292,7 +292,7 @@ private:
 public:
     SwXRedlinePortion(
         SwRangeRedline const& rRedline,
-        SwUnoCrsr const* pPortionCrsr,
+        SwUnoCursor const* pPortionCursor,
         css::uno::Reference< css::text::XText > const& xParent,
         bool const bIsStart);
 

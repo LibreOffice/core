@@ -284,12 +284,12 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                 // Delete frame of the first page
                 if ( pSh->GotoFly(sSendMark) )
                 {
-                    pSh->EnterSelFrmMode();
+                    pSh->EnterSelFrameMode();
                     pSh->DelRight();
                 }
                 if ( pSh->GotoFly(sAddrMark) )
                 {
-                    pSh->EnterSelFrmMode();
+                    pSh->EnterSelFrameMode();
                     pSh->DelRight();
                 }
                 pSh->SttEndDoc(true);
@@ -299,7 +299,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                 pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
 
             // Insert page break
-            if ( pSh->IsCrsrInTable() )
+            if ( pSh->IsCursorInTable() )
             {
                 pSh->SplitNode();
                 pSh->Right( CRSR_SKIP_CHARS, false, 1, false );
@@ -390,7 +390,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pDesc->SetUseOn(nsUseOnPage::PD_ALL);
 
         // Page size
-        rFormat.SetFormatAttr(SwFormatFrmSize(ATT_FIX_SIZE,
+        rFormat.SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE,
                                             nPageW + lLeft, nPageH + lUpper));
 
         // Set type of page numbering
@@ -417,7 +417,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->ChgCurPageDesc(*pDesc);
 
         // Insert Frame
-        SwFlyFrmAttrMgr aMgr(false, pSh, FRMMGR_TYPE_ENVELP);
+        SwFlyFrameAttrMgr aMgr(false, pSh, FRMMGR_TYPE_ENVELP);
         SwFieldMgr aFieldMgr;
         aMgr.SetHeightSizeType(ATT_VAR_SIZE);
 
@@ -430,14 +430,14 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         if (rItem.bSend)
         {
             pSh->SttEndDoc(true);
-            aMgr.InsertFlyFrm(FLY_AT_PAGE,
+            aMgr.InsertFlyFrame(FLY_AT_PAGE,
                 Point(rItem.lSendFromLeft + lLeft, rItem.lSendFromTop  + lUpper),
                 Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
 
-            pSh->EnterSelFrmMode();
+            pSh->EnterSelFrameMode();
             pSh->SetFlyName(sSendMark);
-            pSh->UnSelectFrm();
-            pSh->LeaveSelFrmMode();
+            pSh->UnSelectFrame();
+            pSh->LeaveSelFrameMode();
             pSh->SetTextFormatColl( pSend );
             InsertLabEnvText( *pSh, aFieldMgr, rItem.aSendText );
             aMgr.UpdateAttrMgr();
@@ -446,13 +446,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         // Addressee
         pSh->SttEndDoc(true);
 
-        aMgr.InsertFlyFrm(FLY_AT_PAGE,
+        aMgr.InsertFlyFrame(FLY_AT_PAGE,
             Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
             Size (nPageW - rItem.lAddrFromLeft - 566, 0));
-        pSh->EnterSelFrmMode();
+        pSh->EnterSelFrameMode();
         pSh->SetFlyName(sAddrMark);
-        pSh->UnSelectFrm();
-        pSh->LeaveSelFrmMode();
+        pSh->UnSelectFrame();
+        pSh->LeaveSelFrameMode();
         pSh->SetTextFormatColl( pAddr );
         InsertLabEnvText(*pSh, aFieldMgr, rItem.aAddrText);
 

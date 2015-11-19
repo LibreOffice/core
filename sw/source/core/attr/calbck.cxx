@@ -91,7 +91,7 @@ SwModify::~SwModify()
     OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
 
     if ( IsInCache() )
-        SwFrm::GetCache().Delete( this );
+        SwFrame::GetCache().Delete( this );
 
     if ( IsInSwFntCache() )
         pSwFontCache->Delete( this );
@@ -258,7 +258,7 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
         case RES_BREAK:
             if( IsInCache() )
             {
-                SwFrm::GetCache().Delete( this );
+                SwFrame::GetCache().Delete( this );
                 SetInCache( false );
             }
             break;

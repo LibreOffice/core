@@ -48,21 +48,21 @@ bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* co
     bool bRet = true;
     switch(eFuncId)
     {
-        case BOOKMARK_INDEX:bRet = SwCrsrShell::GotoMark( pMark );break;
-        case BOOKMARK_NEXT: bRet = SwCrsrShell::GoNextBookmark();break;
-        case BOOKMARK_PREV: bRet = SwCrsrShell::GoPrevBookmark();break;
+        case BOOKMARK_INDEX:bRet = SwCursorShell::GotoMark( pMark );break;
+        case BOOKMARK_NEXT: bRet = SwCursorShell::GoNextBookmark();break;
+        case BOOKMARK_PREV: bRet = SwCursorShell::GoPrevBookmark();break;
         default:;//prevent warning
     }
 
-    if( bRet && IsSelFrmMode() )
+    if( bRet && IsSelFrameMode() )
     {
-        UnSelectFrm();
-        LeaveSelFrmMode();
+        UnSelectFrame();
+        LeaveSelFrameMode();
     }
     if( IsSelection() )
     {
         m_fnKillSel = &SwWrtShell::ResetSelect;
-        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
     }
     return bRet;
 }
@@ -71,17 +71,17 @@ bool SwWrtShell::GotoField( const SwFormatField& rField )
 {
     (this->*m_fnKillSel)( nullptr, false );
 
-    bool bRet = SwCrsrShell::GotoFormatField( rField );
-    if( bRet && IsSelFrmMode() )
+    bool bRet = SwCursorShell::GotoFormatField( rField );
+    if( bRet && IsSelFrameMode() )
     {
-        UnSelectFrm();
-        LeaveSelFrmMode();
+        UnSelectFrame();
+        LeaveSelFrameMode();
     }
 
     if( IsSelection() )
     {
         m_fnKillSel = &SwWrtShell::ResetSelect;
-        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
     }
 
     return bRet;
@@ -90,16 +90,16 @@ bool SwWrtShell::GotoField( const SwFormatField& rField )
 bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 {
     (this->*m_fnKillSel)( nullptr, false );
-    bool bRet = SwCrsrShell::GotoFieldmark(pMark);
-    if( bRet && IsSelFrmMode() )
+    bool bRet = SwCursorShell::GotoFieldmark(pMark);
+    if( bRet && IsSelFrameMode() )
     {
-        UnSelectFrm();
-        LeaveSelFrmMode();
+        UnSelectFrame();
+        LeaveSelFrameMode();
     }
     if( IsSelection() )
     {
         m_fnKillSel = &SwWrtShell::ResetSelect;
-        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
     }
     return bRet;
 }

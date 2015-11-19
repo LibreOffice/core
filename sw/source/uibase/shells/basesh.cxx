@@ -172,7 +172,7 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     rSh.GetView().GetViewFrame()->GetTopFrame().GetTargetList(*pList);
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
-    rSh.GetFlyFrmAttr( aSet );
+    rSh.GetFlyFrameAttr( aSet );
     const SwFormatURL &rURL = static_cast<const SwFormatURL&>(aSet.Get( RES_URL ));
     SvxIMapDlgChildWindow::UpdateIMapDlg(
             aGrf, rURL.GetMap(), pList.get(), pEditObj );
@@ -213,7 +213,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
 
             if( rSh.IsNoNum() )
             {
-                rSh.SttCrsrMove();
+                rSh.SttCursorMove();
                 bool bLeft = rSh.Left( CRSR_SKIP_CHARS, true, 1, false  );
                 if( bLeft )
                 {
@@ -225,7 +225,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                     //              of a doc, frame, table or an area.
                     rSh.DelNumRules();
 
-                rSh.EndCrsrMove();
+                rSh.EndCursorMove();
                 break;
             }
 
@@ -285,8 +285,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     // destroyed after the paste.
                     SwView* pView = &rView;
                     SwTransferable::Paste( rSh, aDataHelper );
-                    if( rSh.IsFrmSelected() || rSh.IsObjSelected() )
-                        rSh.EnterSelFrmMode();
+                    if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
+                        rSh.EnterSelFrameMode();
                     pView->AttrChangedNotify( &rSh );
                 }
                 else
@@ -316,8 +316,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         //Done() has to be called before the shell has been removed
                         rReq.Done();
                         bIgnore = true;
-                        if( rSh.IsFrmSelected() || rSh.IsObjSelected())
-                            rSh.EnterSelFrmMode();
+                        if( rSh.IsFrameSelected() || rSh.IsObjSelected())
+                            rSh.EnterSelFrameMode();
                         pView->AttrChangedNotify( &rSh );
                     }
                 }
@@ -348,8 +348,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         }
                     }
 
-                    if (rSh.IsFrmSelected() || rSh.IsObjSelected())
-                        rSh.EnterSelFrmMode();
+                    if (rSh.IsFrameSelected() || rSh.IsObjSelected())
+                        rSh.EnterSelFrameMode();
                     pView->AttrChangedNotify( &rSh );
                 }
                 else
@@ -363,7 +363,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     TransferableDataHelper::CreateFromSystemClipboard( &rSh.GetView().GetEditWin()) );
                 if( aDataHelper.GetXTransferable().is()
                     && SwTransferable::IsPaste( rSh, aDataHelper )
-                    && !rSh.CrsrInsideInputField() )
+                    && !rSh.CursorInsideInputField() )
                 {
                     // Temporary variables, because the shell could already be
                     // destroyed after the paste.
@@ -383,8 +383,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         }
                     }
 
-                    if (rSh.IsFrmSelected() || rSh.IsObjSelected())
-                        rSh.EnterSelFrmMode();
+                    if (rSh.IsFrameSelected() || rSh.IsObjSelected())
+                        rSh.EnterSelFrameMode();
                     pView->AttrChangedNotify( &rSh );
                 }
                 else
@@ -435,7 +435,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 
         case SID_PASTE_SPECIAL:
             if( !GetView().IsPasteSpecialAllowed()
-                || rSh.CrsrInsideInputField() )
+                || rSh.CursorInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -539,7 +539,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             case SID_REPEAT:
             {   // Repeat is only possible if no REDO is possible - UI-Restriction
                 if ((!rSh.GetFirstRedoInfo(nullptr)) &&
-                    !rSh.IsSelFrmMode() &&
+                    !rSh.IsSelFrameMode() &&
                     (UNDO_EMPTY != rSh.GetRepeatInfo(nullptr)))
                 {
                     rSet.Put(SfxStringItem(nWhich, rSh.GetRepeatString()));
@@ -602,7 +602,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 rSh.EndAllTableBoxEdit();
                 rSh.SwViewShell::UpdateFields(true);
 
-                if( rSh.IsCrsrInTable() )
+                if( rSh.IsCursorInTable() )
                 {
                     if( !rSh.IsTableComplexForChart() )
                         SwTableFUNC( &rSh, false).UpdateChart();
@@ -655,16 +655,16 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
             if (pFieldType)
             {
-                if (rSh.IsSelFrmMode())
+                if (rSh.IsSelFrameMode())
                 {
-                    rSh.UnSelectFrm();
-                    rSh.LeaveSelFrmMode();
+                    rSh.UnSelectFrame();
+                    rSh.LeaveSelFrameMode();
                 }
 
                 if (rSh.HasMark())
                 {
                     SwMvContext aMvContext(&rSh);
-                    if (rSh.IsCrsrPtAtEnd())
+                    if (rSh.IsCursorPtAtEnd())
                         rSh.SwapPam();
                     rSh.ClearMark();
                     rSh.EndSelect();
@@ -681,10 +681,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_START_DOC_DIRECT:
         case FN_END_DOC_DIRECT:
         {
-            if (rSh.IsSelFrmMode())
+            if (rSh.IsSelFrameMode())
             {
-                rSh.UnSelectFrm();
-                rSh.LeaveSelFrmMode();
+                rSh.UnSelectFrame();
+                rSh.LeaveSelFrameMode();
             }
             rSh.EnterStdMode();
             nSlot == FN_START_DOC_DIRECT ?
@@ -697,10 +697,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         {
                 bool bSuccess = rSh.GotoObj( nSlot == FN_GOTO_NEXT_OBJ );
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bSuccess));
-                if (bSuccess && !rSh.IsSelFrmMode())
+                if (bSuccess && !rSh.IsSelFrameMode())
                 {
-                    rSh.HideCrsr();
-                    rSh.EnterSelFrmMode();
+                    rSh.HideCursor();
+                    rSh.EnterSelFrameMode();
                     GetView().AttrChangedNotify( &rSh );
                 }
         }
@@ -714,7 +714,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             const int nSelType = rSh.GetSelectionType();
             sal_Int8 nGalleryItemType( pGalleryItem->GetType() );
 
-            if ( (!rSh.IsSelFrmMode() || nSelType & nsSelectionType::SEL_GRF) &&
+            if ( (!rSh.IsSelFrameMode() || nSelType & nsSelectionType::SEL_GRF) &&
                 nGalleryItemType == css::gallery::GalleryItemType::GRAPHIC )
             {
                 SwWait aWait( *rView.GetDocShell(), true );
@@ -729,7 +729,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                 GetView().GetEditWin().GrabFocus();
             }
-            else if(!rSh.IsSelFrmMode() &&
+            else if(!rSh.IsSelFrameMode() &&
                 nGalleryItemType == css::gallery::GalleryItemType::MEDIA  )
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
@@ -915,7 +915,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             pVFrame->ToggleChildWindow( nId );
             pVFrame->GetBindings().Invalidate( SID_IMAP );
 
-            if ( pVFrame->HasChildWindow( nId ) && rSh.IsFrmSelected() )
+            if ( pVFrame->HasChildWindow( nId ) && rSh.IsFrameSelected() )
                 lcl_UpdateIMapDlg( rSh );
         }
         break;
@@ -924,15 +924,15 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             SvxIMapDlg* pDlg = GetIMapDlg(GetView());
 
             // Check, if the allocation is useful or allowed at all.
-            if ( rSh.IsFrmSelected() &&
+            if ( rSh.IsFrameSelected() &&
                  pDlg->GetEditingObject() == rSh.GetIMapInventor() )
             {
                     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
-                    rSh.GetFlyFrmAttr( aSet );
+                    rSh.GetFlyFrameAttr( aSet );
                     SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
                     aURL.SetMap( &pDlg->GetImageMap() );
                     aSet.Put( aURL );
-                    rSh.SetFlyFrmAttr( aSet );
+                    rSh.SetFlyFrameAttr( aSet );
             }
         }
         break;
@@ -963,7 +963,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     rSh.StartAction();
                     SfxItemSet aSet( rSh.GetAttrPool(), RES_SURROUND, RES_SURROUND);
-                    rSh.GetFlyFrmAttr( aSet );
+                    rSh.GetFlyFrameAttr( aSet );
                     SwFormatSurround aSur( static_cast<const SwFormatSurround&>(aSet.Get( RES_SURROUND )) );
                     if ( !aSur.IsContour() )
                     {
@@ -971,7 +971,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         if ( aSur.GetSurround() == SURROUND_NONE )
                             aSur.SetSurround( SURROUND_PARALLEL );
                         aSet.Put( aSur );
-                        rSh.SetFlyFrmAttr( aSet );
+                        rSh.SetFlyFrameAttr( aSet );
                     }
                     const tools::PolyPolygon aPoly( pDlg->GetPolyPolygon() );
                     rSh.SetGraphicPolygon( &aPoly );
@@ -1009,11 +1009,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             rSh.StartUndo();
             if (rSh.IsObjSelected())
                 rSh.ChgAnchor(eSet);
-            else if (rSh.IsFrmSelected())
+            else if (rSh.IsFrameSelected())
             {
                 SwFormatAnchor aAnc(eSet, rSh.GetPhyPageNum());
                 SfxItemSet aSet(SwFEShell::makeItemSetFromFormatAnchor(GetPool(), aAnc));
-                rSh.SetFlyFrmAttr(aSet);
+                rSh.SetFlyFrameAttr(aSet);
             }
             // if new anchor is 'as char' and it is a Math object and the usual
             // pre-conditions are met then align the formula to the baseline of the text
@@ -1027,7 +1027,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if( nHtmlMode )
             {
                 SfxItemSet aSet(GetPool(), RES_SURROUND, RES_HORI_ORIENT);
-                rSh.GetFlyFrmAttr(aSet);
+                rSh.GetFlyFrameAttr(aSet);
 
                 const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND));
                 const SwFormatVertOrient& rVert = static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT));
@@ -1080,7 +1080,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 }
 
                 if( aSet.Count() )
-                    rSh.SetFlyFrmAttr( aSet );
+                    rSh.SetFlyFrameAttr( aSet );
             }
             rSh.EndUndo();
 
@@ -1161,12 +1161,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SwFrameFormat *pFormat = rSh.GetTableFormat();
                 pFormat->SetFormatAttr( *pItem );
             }
-            else if ( rSh.IsFrmSelected() )
+            else if ( rSh.IsFrameSelected() )
             {
                 // Set border attributes via Frame-Manager.
-                SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+                SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
                 aMgr.SetAttrSet( *pArgs );
-                aMgr.UpdateFlyFrm();
+                aMgr.UpdateFlyFrame();
             }
             else
             {
@@ -1193,12 +1193,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 // Set border attributes Get/SetTabBorders()
                 rSh.SetTabBorders(*pArgs);
             }
-            else if ( rSh.IsFrmSelected() )
+            else if ( rSh.IsFrameSelected() )
             {
                 // Set border attributes via Frame-Manager.
-                SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+                SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
                 aMgr.SetAttrSet(*pArgs);
-                aMgr.UpdateFlyFrm();
+                aMgr.UpdateFlyFrame();
             }
             else
             {
@@ -1217,7 +1217,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 // Here the state fpr SID_IMAP / SID_CONTOUR will be handled
 // until the swapping of the graphic is finished.
 
-IMPL_LINK_NOARG_TYPED(SwBaseShell, GraphicArrivedHdl, SwCrsrShell&, void)
+IMPL_LINK_NOARG_TYPED(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
 {
     sal_uInt16 nGrfType;
     SwWrtShell &rSh = GetShell();
@@ -1275,7 +1275,7 @@ IMPL_LINK_NOARG_TYPED(SwBaseShell, GraphicArrivedHdl, SwCrsrShell&, void)
                 if( !bProtect )
                 {
                     SfxItemSet aSet(GetPool(), RES_SURROUND, RES_SURROUND);
-                    rSh.GetFlyFrmAttr(aSet);
+                    rSh.GetFlyFrameAttr(aSet);
                     const SwFormatSurround& rWrap = static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND));
                     bSetState = true;
                     bState = rWrap.IsContour();
@@ -1324,7 +1324,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
         {
             case SID_GALLERY_FORMATS:
                 if ( rSh.IsObjSelected() ||
-                     (rSh.IsSelFrmMode() &&
+                     (rSh.IsSelFrameMode() &&
                       !(rSh.GetSelectionType() & nsSelectionType::SEL_GRF)) )
                     rSet.DisableItem( nWhich );
                 break;
@@ -1338,8 +1338,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 break;
 
             case FN_INSERT_REGION:
-                if( rSh.CrsrInsideInputField()
-                    || rSh.IsSelFrmMode()
+                if( rSh.CursorInsideInputField()
+                    || rSh.IsSelFrameMode()
                     || !rSh.IsInsRegionAvailable() )
                 {
                     rSet.DisableItem( nWhich );
@@ -1348,24 +1348,24 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
             case FN_CONVERT_TABLE_TO_TEXT:
             {
-                FrmTypeFlags eFrmType = rSh.GetFrmType(nullptr,true);
-                if( (eFrmType & FrmTypeFlags::FOOTNOTE) ||
+                FrameTypeFlags eFrameType = rSh.GetFrameType(nullptr,true);
+                if( (eFrameType & FrameTypeFlags::FOOTNOTE) ||
                     !rSh.GetTableFormat() )
                     rSet.DisableItem( nWhich );
             }
             break;
             case FN_CONVERT_TEXT_TO_TABLE:
             {
-                FrmTypeFlags eFrmType = rSh.GetFrmType(nullptr,true);
-                if( (eFrmType & FrmTypeFlags::FOOTNOTE) ||
+                FrameTypeFlags eFrameType = rSh.GetFrameType(nullptr,true);
+                if( (eFrameType & FrameTypeFlags::FOOTNOTE) ||
                     !rSh.IsTextToTableAvailable()  )
                     rSet.DisableItem( nWhich );
             }
             break;
             case FN_CONVERT_TEXT_TABLE:
             {
-                FrmTypeFlags eFrmType = rSh.GetFrmType(nullptr,true);
-                if( (eFrmType & FrmTypeFlags::FOOTNOTE) ||
+                FrameTypeFlags eFrameType = rSh.GetFrameType(nullptr,true);
+                if( (eFrameType & FrameTypeFlags::FOOTNOTE) ||
                     (!rSh.GetTableFormat() && !rSh.IsTextToTableAvailable() ) )
                     rSet.DisableItem( nWhich );
             }
@@ -1381,9 +1381,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     SwFrameFormat *pFormat = rSh.GetTableFormat();
                     aSet.Put(pFormat->GetFormatAttr( nWhich ));
                 }
-                else if( rSh.IsFrmSelected() )
+                else if( rSh.IsFrameSelected() )
                 {
-                    SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+                    SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
                     aSet.Put( aMgr.GetAttrSet() );
                 }
                 else
@@ -1407,7 +1407,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 {
                     const sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
                     const bool bHas = pVFrame->HasChildWindow( nId );
-                    const bool bFrmSel = rSh.IsFrmSelected();
+                    const bool bFrameSel = rSh.IsFrameSelected();
                     const bool bIsGraphicSelection =
                                 rSh.GetSelectionType() == nsSelectionType::SEL_GRF;
 
@@ -1425,7 +1425,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else
                     {
                         if ( !bHas &&
-                             ( !bFrmSel ||
+                             ( !bFrameSel ||
                                ( bIsGraphicSelection &&
                                  rSh.GetGraphicType() == GRAPHIC_NONE ) ) )
                         {
@@ -1434,7 +1434,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         else
                         {
                             SfxBoolItem aBool(nWhich, bHas);
-                            if ( bHas && bFrmSel )
+                            if ( bHas && bFrameSel )
                                 lcl_UpdateIMapDlg( rSh );
                             rSet.Put(aBool);
                         }
@@ -1445,7 +1445,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case SID_IMAP_EXEC:
             {
                 bool bDisable = false;
-                if( !rSh.IsFrmSelected())
+                if( !rSh.IsFrameSelected())
                     bDisable = true;
                 sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
                 if(!bDisable && pVFrame->HasChildWindow( nId ))
@@ -1469,7 +1469,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
             case FN_BACKSPACE:
             case SID_DELETE:
-                if ( ( rSh.HasReadonlySel() && !rSh.CrsrInsideInputField() )
+                if ( ( rSh.HasReadonlySel() && !rSh.CursorInsideInputField() )
                      || rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE )
                 {
                     rSet.DisableItem( nWhich );
@@ -1553,13 +1553,13 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 bool bObj = 0 != rSh.IsObjSelected();
                 bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
-                if( !bParentCntProt && (bObj || rSh.IsFrmSelected()))
+                if( !bParentCntProt && (bObj || rSh.IsFrameSelected()))
                 {
                     SfxItemSet aSet(GetPool(), RES_ANCHOR, RES_ANCHOR);
                     if(bObj)
                         rSh.GetObjAttr(aSet);
                     else
-                        rSh.GetFlyFrmAttr(aSet);
+                        rSh.GetFlyFrameAttr(aSet);
                     RndStdIds eSet = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
                     const bool bSet =
                            ((nWhich == FN_TOOL_ANCHOR_PAGE) &&
@@ -1623,7 +1623,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 bool bObj = 0 != rSh.IsObjSelected();
                 bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
-                if( !bParentCntProt && (bObj || rSh.IsFrmSelected()))
+                if( !bParentCntProt && (bObj || rSh.IsFrameSelected()))
                 {
                     SfxItemSet aSet(GetPool(), RES_OPAQUE, RES_ANCHOR);
                     int nAnchorType;
@@ -1634,7 +1634,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     }
                     else
                     {
-                        rSh.GetFlyFrmAttr(aSet);
+                        rSh.GetFlyFrameAttr(aSet);
                         nAnchorType = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
                     }
                     const SwFormatSurround& rWrap = static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND));
@@ -1697,7 +1697,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                     if( AddGrfUpdateSlot( nWhich ))
                                         rSh.GetGraphic(false);  // start the loading
                                 }
-                                else if( rSh.IsFrmSelected() )
+                                else if( rSh.IsFrameSelected() )
                                 {
                                     // #i102253# applied patch from OD (see task)
                                     bDisable =
@@ -1799,13 +1799,13 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 {
     SwWrtShell &rSh = GetShell();
     bool bObj = 0 != rSh.IsObjSelected();
-    if( bObj || rSh.IsFrmSelected())
+    if( bObj || rSh.IsFrameSelected())
     {
         SfxItemSet aSet(GetPool(), RES_OPAQUE, RES_SURROUND);
         if(bObj)
             rSh.GetObjAttr(aSet);
         else
-            rSh.GetFlyFrmAttr(aSet);
+            rSh.GetFlyFrameAttr(aSet);
         SwFormatSurround aWrap( static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND)) );
         SwSurround nOldSurround(aWrap.GetSurround());
         SwSurround nSurround = SURROUND_PARALLEL;
@@ -1876,18 +1876,18 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 rSh.SelectionToHell();
         }
         else
-            rSh.SetFlyFrmAttr(aSet);
+            rSh.SetFlyFrameAttr(aSet);
     }
 }
 
 //Force update of the status line
 
-void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
+void SwBaseShell::SetFrameMode(FlyMode eMode, SwWrtShell *pSh )
 {
     eFrameMode = eMode;
     SfxBindings &rBnd = pSh->GetView().GetViewFrame()->GetBindings();
 
-    if( eMode == FLY_DRAG || pSh->IsFrmSelected() || pSh->IsObjSelected() )
+    if( eMode == FLY_DRAG || pSh->IsFrameSelected() || pSh->IsObjSelected() )
     {
         const SfxPointItem aTmp1( SID_ATTR_POSITION, pSh->GetAnchorObjDiff());
         const SvxSizeItem  aTmp2( SID_ATTR_SIZE,     pSh->GetObjSize());
@@ -1921,9 +1921,9 @@ SwBaseShell::~SwBaseShell()
     if( rView.GetCurShell() == this )
         rView.ResetSubShell();
 
-    Link<SwCrsrShell&,void> aTmp( LINK( this, SwBaseShell, GraphicArrivedHdl));
+    Link<SwCursorShell&,void> aTmp( LINK( this, SwBaseShell, GraphicArrivedHdl));
     if( aTmp == rView.GetWrtShell().GetGrfArrivedLnk() )
-        rView.GetWrtShell().SetGrfArrivedLnk( Link<SwCrsrShell&,void>() );
+        rView.GetWrtShell().SetGrfArrivedLnk( Link<SwCursorShell&,void>() );
 }
 
 void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
@@ -2158,7 +2158,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
 
         if(nSelType & nsSelectionType::SEL_GRF || nsSelectionType::SEL_FRM & nSelType)
         {
-            rSh.GetFlyFrmAttr(aCoreSet);
+            rSh.GetFlyFrameAttr(aCoreSet);
         }
         else
         {
@@ -2217,7 +2217,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 
         if((nsSelectionType::SEL_FRM & nSelType) || (nsSelectionType::SEL_GRF & nSelType))
         {
-            rSh.GetFlyFrmAttr(aCoreSet);
+            rSh.GetFlyFrameAttr(aCoreSet);
         }
         else
         {
@@ -2286,7 +2286,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
             }
             else
             {
-                rSh.SetFlyFrmAttr(aCoreSet);
+                rSh.SetFlyFrameAttr(aCoreSet);
             }
         }
         else
@@ -2323,9 +2323,9 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
         rSh.GetTabBorders( aCoreSet );
         rSet.Put( aCoreSet );
     }
-    else if ( rSh.IsFrmSelected() )
+    else if ( rSh.IsFrameSelected() )
     {
-        SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+        SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
         rSet.Put( aMgr.GetAttrSet() );
         bPrepare = false;
     }
@@ -2415,10 +2415,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                     pOutSet = pDlg->GetOutputItemSet();
                 }
             }
-            else if ( rSh.IsFrmSelected() )
+            else if ( rSh.IsFrameSelected() )
             {
                 // Set border attributes via Frame-Manager
-                SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+                SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
                 aSet.Put( aMgr.GetAttrSet() );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -2429,7 +2429,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 if ( pDlg->Execute() == RET_OK )
                 {
                     aMgr.SetAttrSet( *pDlg->GetOutputItemSet() );
-                    aMgr.UpdateFlyFrm();
+                    aMgr.UpdateFlyFrame();
                     pOutSet = pDlg->GetOutputItemSet();
                 }
             }
@@ -2485,10 +2485,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                     pOutSet = pDlg->GetOutputItemSet();
                 }
             }
-            else if ( rSh.IsFrmSelected() )
+            else if ( rSh.IsFrameSelected() )
             {
 
-                rSh.GetFlyFrmAttr( aSet );
+                rSh.GetFlyFrameAttr( aSet );
 
                 pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
@@ -2496,7 +2496,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    rSh.SetFlyFrmAttr((SfxItemSet &) *pDlg->GetOutputItemSet() );
+                    rSh.SetFlyFrameAttr((SfxItemSet &) *pDlg->GetOutputItemSet() );
                     pOutSet = pDlg->GetOutputItemSet();
                 }
             }
@@ -2543,7 +2543,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
     const SfxItemSet* pArgs = _rRequest.GetArgs();
     SwWrtShell& rSh = GetShell();
 
-    if ( !( rSh.GetFrmType( nullptr, true ) & FrmTypeFlags::FOOTNOTE ) )
+    if ( !( rSh.GetFrameType( nullptr, true ) & FrameTypeFlags::FOOTNOTE ) )
     {
         SwView &rTempView = GetView(); // Because GetView() does not work after the shell exchange
         bool bHTMLMode = 0 != (::GetHtmlMode(rTempView.GetDocShell())&HTMLMODE_ON);
@@ -2733,13 +2733,13 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
                     rLst.push_back( SW_RESSTR( STR_SWBG_OLE ) );
                     nOlePos = nPos++;
                 }
-                const FrmTypeFlags nType = rSh.GetFrmType(nullptr,true);
-                if ( nType & FrmTypeFlags::HEADER )
+                const FrameTypeFlags nType = rSh.GetFrameType(nullptr,true);
+                if ( nType & FrameTypeFlags::HEADER )
                 {
                     rLst.push_back( SW_RESSTR( STR_SWBG_HEADER ) );
                     nHeaderPos = nPos++;
                 }
-                if ( nType & FrmTypeFlags::FOOTER )
+                if ( nType & FrameTypeFlags::FOOTER )
                 {
                     rLst.push_back( SW_RESSTR( STR_SWBG_FOOTER ) );
                     nFooterPos = nPos;
@@ -2793,7 +2793,7 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
             {
                 SfxItemSet aCoreSet(GetPool(), RES_BACKGROUND, RES_BACKGROUND);
                 aCoreSet.Put( aBrush );
-                rSh.SetFlyFrmAttr( aCoreSet );
+                rSh.SetFlyFrameAttr( aCoreSet );
             }
             else if ( nPos == nPagePos || nPos == nHeaderPos || nPos == nFooterPos )
             {

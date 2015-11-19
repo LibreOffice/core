@@ -80,7 +80,7 @@ class DocumentSettingManager :
     // mbIgnoreTabsAndBlanksForLineCalculation   def = false, hidden
     // mbClipAsCharacterAnchoredWriterFlyFrame   def = false, hidden
     // - Introduced in order to re-activate clipping of as-character anchored
-    //   Writer fly frames in method <SwFlyInCntFrm::MakeAll()> for documents,
+    //   Writer fly frames in method <SwFlyInContentFrame::MakeAll()> for documents,
     //   which are created with version prior SO8/OOo 2.0
     //
     // SO8pp4

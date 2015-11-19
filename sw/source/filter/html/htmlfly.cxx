@@ -35,7 +35,7 @@
 
 using namespace css;
 
-SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
+SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
                                   const SdrObject *pSdrObj,
                                   sal_uInt8 nOutMode ) :
     pFrameFormat( &rPosFly.GetFormat() ),
@@ -69,22 +69,22 @@ SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
     }
 }
 
-bool SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
+bool SwHTMLPosFlyFrame::operator<( const SwHTMLPosFlyFrame& rFrame ) const
 {
-    if( pNdIdx->GetIndex() == rFrm.pNdIdx->GetIndex() )
+    if( pNdIdx->GetIndex() == rFrame.pNdIdx->GetIndex() )
     {
-        if( nContentIdx == rFrm.nContentIdx )
+        if( nContentIdx == rFrame.nContentIdx )
         {
-            if( GetOutPos() == rFrm.GetOutPos() )
-                return nOrdNum < rFrm.nOrdNum;
+            if( GetOutPos() == rFrame.GetOutPos() )
+                return nOrdNum < rFrame.nOrdNum;
             else
-                return GetOutPos() < rFrm.GetOutPos();
+                return GetOutPos() < rFrame.GetOutPos();
         }
         else
-            return nContentIdx < rFrm.nContentIdx;
+            return nContentIdx < rFrame.nContentIdx;
     }
     else
-        return pNdIdx->GetIndex() < rFrm.pNdIdx->GetIndex();
+        return pNdIdx->GetIndex() < rFrame.pNdIdx->GetIndex();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

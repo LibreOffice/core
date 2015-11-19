@@ -191,14 +191,14 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
                                          const OUString& rNamePrefix,
                                             sal_uInt32 nLine )
 {
-    const SwFormatFrmSize *pFrmSize = nullptr;
+    const SwFormatFrameSize *pFrameSize = nullptr;
     const SwFormatRowSplit* pRowSplit = nullptr;
     const SvxBrushItem *pBrush = nullptr;
 
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     const SfxPoolItem *pItem;
     if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, false, &pItem ) )
-        pFrmSize = static_cast<const SwFormatFrmSize *>(pItem);
+        pFrameSize = static_cast<const SwFormatFrameSize *>(pItem);
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_ROW_SPLIT, false, &pItem ) )
         pRowSplit = static_cast<const SwFormatRowSplit *>(pItem);
@@ -207,7 +207,7 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
         pBrush = static_cast<const SvxBrushItem *>(pItem);
 
     // empty styles have not to be exported
-    if( !pFrmSize && !pBrush && !pRowSplit )
+    if( !pFrameSize && !pBrush && !pRowSplit )
         return false;
 
     // order is: -/brush, size/-, size/brush
@@ -215,7 +215,7 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
     SwXMLFrameFormats_Impl::iterator i;
     for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
     {
-        const SwFormatFrmSize *pTestFrmSize = nullptr;
+        const SwFormatFrameSize *pTestFrameSize = nullptr;
         const SwFormatRowSplit* pTestRowSplit = nullptr;
         const SvxBrushItem *pTestBrush = nullptr;
         const SwFrameFormat *pTestFormat = *i;
@@ -223,14 +223,14 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
         if( SfxItemState::SET == rTestSet.GetItemState( RES_FRM_SIZE, false,
                                                   &pItem ) )
         {
-            if( !pFrmSize )
+            if( !pFrameSize )
                 break;
 
-            pTestFrmSize = static_cast<const SwFormatFrmSize *>(pItem);
+            pTestFrameSize = static_cast<const SwFormatFrameSize *>(pItem);
         }
         else
         {
-            if( pFrmSize )
+            if( pFrameSize )
                 continue;
         }
 
@@ -262,9 +262,9 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
                 continue;
         }
 
-        if( pFrmSize &&
-            ( pFrmSize->GetHeightSizeType() != pTestFrmSize->GetHeightSizeType() ||
-              pFrmSize->GetHeight() != pTestFrmSize->GetHeight() ) )
+        if( pFrameSize &&
+            ( pFrameSize->GetHeightSizeType() != pTestFrameSize->GetHeightSizeType() ||
+              pFrameSize->GetHeight() != pTestFrameSize->GetHeight() ) )
             continue;
 
         if( pBrush && (*pBrush != *pTestBrush) )
@@ -701,11 +701,11 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTableNd )
     if( pTableFormat )
     {
         sal_Int16 eTabHoriOri = pTableFormat->GetHoriOrient().GetHoriOrient();
-        const SwFormatFrmSize& rFrmSize = pTableFormat->GetFrmSize();
+        const SwFormatFrameSize& rFrameSize = pTableFormat->GetFrameSize();
 
-        sal_uInt32 nAbsWidth = rFrmSize.GetSize().Width();
+        sal_uInt32 nAbsWidth = rFrameSize.GetSize().Width();
         sal_uInt32 nBaseWidth = 0UL;
-        sal_Int8 nPrcWidth = rFrmSize.GetWidthPercent();
+        sal_Int8 nPrcWidth = rFrameSize.GetWidthPercent();
 
         bool bFixAbsWidth = nPrcWidth != 0 || /*text::*/HoriOrientation::NONE == eTabHoriOri
                                            || /*text::*/HoriOrientation::FULL == eTabHoriOri;

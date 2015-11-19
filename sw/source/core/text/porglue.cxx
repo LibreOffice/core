@@ -34,10 +34,10 @@ SwGluePortion::SwGluePortion( const sal_uInt16 nInitFixWidth )
     SetWhichPor( POR_GLUE );
 }
 
-sal_Int32 SwGluePortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
+sal_Int32 SwGluePortion::GetCursorOfst( const sal_uInt16 nOfst ) const
 {
     if( !GetLen() || nOfst > GetLen() || !Width() )
-        return SwLinePortion::GetCrsrOfst( nOfst );
+        return SwLinePortion::GetCursorOfst( nOfst );
     else
         return nOfst / (Width() / GetLen());
 }

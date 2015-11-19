@@ -258,8 +258,8 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
     // i60591: hennerdrews
     SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
-    SwTextSizeInfo aInf ( GetTextFrm() );
-    SwTextIter aItr ( GetTextFrm(), &aInf );
+    SwTextSizeInfo aInf ( GetTextFrame() );
+    SwTextIter aItr ( GetTextFrame(), &aInf );
 
     if ( rSI.CountKashida() )
     {
@@ -283,7 +283,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
     // #i49277#
     const bool bDoNotJustifyLinesWithManualBreak =
-                GetTextFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
+                GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
 
     SwLinePortion *pPos = pCurrent->GetPortion();
 
@@ -539,7 +539,7 @@ SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     else
     {
         nRealWidth = GetLineWidth();
-        // For each FlyFrm extending into the right margin, we create a FlyPortion.
+        // For each FlyFrame extending into the right margin, we create a FlyPortion.
         const long nLeftMar = GetLeftMargin();
         SwRect aCurrRect( nLeftMar + nPrtWidth, Y() + nRealHeight - nLineHeight,
                           nRealWidth - nPrtWidth, nLineHeight );
@@ -582,7 +582,7 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
     SwGluePortion *pGlue = pLeft; // the last GluePortion
 
     // 2) We attach a right margin:
-    // CalcRightMargin also calculates a possible overlap with FlyFrms.
+    // CalcRightMargin also calculates a possible overlap with FlyFrames.
     CalcRightMargin( pCurrent );
 
     SwLinePortion *pPos = pLeft->GetPortion();
@@ -590,7 +590,7 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 
     // If we only have one line, the text portion is consecutive and we center, then ...
     bool bComplete = 0 == m_nStart;
-    const bool bTabCompat = GetTextFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
+    const bool bTabCompat = GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
     bool bMultiTab = false;
 
     while( pPos )
@@ -683,24 +683,24 @@ void SwTextAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const long nRealWidth,
                                              const SwRect &rCurrRect )
 {
-    SwTextFly aTextFly( GetTextFrm() );
+    SwTextFly aTextFly( GetTextFrame() );
 
     const sal_uInt16 nCurrWidth = m_pCurr->PrtWidth();
     SwFlyPortion *pFlyPortion = nullptr;
 
     SwRect aLineVert( rCurrRect );
-    if ( GetTextFrm()->IsRightToLeft() )
-        GetTextFrm()->SwitchLTRtoRTL( aLineVert );
-    if ( GetTextFrm()->IsVertical() )
-        GetTextFrm()->SwitchHorizontalToVertical( aLineVert );
+    if ( GetTextFrame()->IsRightToLeft() )
+        GetTextFrame()->SwitchLTRtoRTL( aLineVert );
+    if ( GetTextFrame()->IsVertical() )
+        GetTextFrame()->SwitchHorizontalToVertical( aLineVert );
 
     // aFlyRect is document-global!
-    SwRect aFlyRect( aTextFly.GetFrm( aLineVert ) );
+    SwRect aFlyRect( aTextFly.GetFrame( aLineVert ) );
 
-    if ( GetTextFrm()->IsRightToLeft() )
-        GetTextFrm()->SwitchRTLtoLTR( aFlyRect );
-    if ( GetTextFrm()->IsVertical() )
-        GetTextFrm()->SwitchVerticalToHorizontal( aFlyRect );
+    if ( GetTextFrame()->IsRightToLeft() )
+        GetTextFrame()->SwitchRTLtoLTR( aFlyRect );
+    if ( GetTextFrame()->IsVertical() )
+        GetTextFrame()->SwitchVerticalToHorizontal( aFlyRect );
 
     // If a Frame overlapps we open a Portion
     if( aFlyRect.HasArea() )

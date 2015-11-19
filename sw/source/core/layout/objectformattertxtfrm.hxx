@@ -22,23 +22,23 @@
 #include <objectformatter.hxx>
 #include <sal/types.h>
 
-class SwTextFrm;
+class SwTextFrame;
 
 // #i28701#
 // Format floating screen objects, which are anchored at a given anchor text frame
 // and registered at the given page frame.
-class SwObjectFormatterTextFrm : public SwObjectFormatter
+class SwObjectFormatterTextFrame : public SwObjectFormatter
 {
     private:
         // anchor text frame
-        SwTextFrm& mrAnchorTextFrm;
+        SwTextFrame& mrAnchorTextFrame;
 
         // 'master' anchor text frame
-        SwTextFrm* mpMasterAnchorTextFrm;
+        SwTextFrame* mpMasterAnchorTextFrame;
 
-        SwObjectFormatterTextFrm( SwTextFrm& _rAnchorTextFrm,
-                                 const SwPageFrm& _rPageFrm,
-                                 SwTextFrm* _pMasterAnchorTextFrm,
+        SwObjectFormatterTextFrame( SwTextFrame& _rAnchorTextFrame,
+                                 const SwPageFrame& _rPageFrame,
+                                 SwTextFrame* _pMasterAnchorTextFrame,
                                  SwLayAction* _pLayAction );
 
         /** method to invalidate objects, anchored previous to given object at
@@ -107,7 +107,7 @@ class SwObjectFormatterTextFrm : public SwObjectFormatter
 
             #i40141#
         */
-        void _FormatAnchorFrmForCheckMoveFwd();
+        void _FormatAnchorFrameForCheckMoveFwd();
 
         /** method to determine if at least one anchored object has state
             <temporarly consider wrapping style influence> set.
@@ -116,22 +116,22 @@ class SwObjectFormatterTextFrm : public SwObjectFormatter
 
     protected:
 
-        virtual SwFrm& GetAnchorFrm() override;
+        virtual SwFrame& GetAnchorFrame() override;
 
     public:
-        virtual ~SwObjectFormatterTextFrm();
+        virtual ~SwObjectFormatterTextFrame();
 
         // #i40147# - add parameter <_bCheckForMovedFwd>.
         virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                   const bool _bCheckForMovedFwd = false ) override;
         virtual bool DoFormatObjs() override;
 
-        /** method to create an instance of <SwObjectFormatterTextFrm> is
+        /** method to create an instance of <SwObjectFormatterTextFrame> is
             necessary.
         */
-        static SwObjectFormatterTextFrm* CreateObjFormatter(
-                                                SwTextFrm& _rAnchorTextFrm,
-                                                const SwPageFrm& _rPageFrm,
+        static SwObjectFormatterTextFrame* CreateObjFormatter(
+                                                SwTextFrame& _rAnchorTextFrame,
+                                                const SwPageFrame& _rPageFrame,
                                                 SwLayAction* _pLayAction );
 
         /** method to format given anchor text frame and its previous frames
@@ -142,11 +142,11 @@ class SwObjectFormatterTextFrm : public SwObjectFormatter
             to format the frames, which have become invalid due to the anchored
             object formatting in the iterative object positioning algorithm
 
-            @param _rAnchorTextFrm
+            @param _rAnchorTextFrame
             input parameter - reference to anchor text frame, which has to be
             formatted including its previous frames of the page.
         */
-        static void FormatAnchorFrmAndItsPrevs( SwTextFrm& _rAnchorTextFrm );
+        static void FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAnchorTextFrame );
 
         /** method to check the conditions, if 'anchor is moved forward'
 

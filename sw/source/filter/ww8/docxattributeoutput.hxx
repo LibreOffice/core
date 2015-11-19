@@ -609,7 +609,7 @@ protected:
     virtual void ParaSnapToGrid( const SvxParaGridItem& ) override;
 
     /// Sfx item RES_FRM_SIZE
-    virtual void FormatFrameSize( const SwFormatFrmSize& ) override;
+    virtual void FormatFrameSize( const SwFormatFrameSize& ) override;
 
     /// Sfx item RES_PAPER_BIN
     virtual void FormatPaperBin( const SvxPaperBinItem& ) override;

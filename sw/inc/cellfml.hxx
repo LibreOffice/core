@@ -37,7 +37,7 @@ class SwTableCalcPara
     sal_uInt16 nStackCnt, nMaxSize;
 
 public:
-    SwTableSortBoxes *pBoxStk;  ///< stack for recognizing recursion
+    SwTableSortBoxes *pBoxStack;  ///< stack for recognizing recursion
     SwCalc& rCalc;              ///< current Calculator
     const SwTable* pTable;        ///< current table
 

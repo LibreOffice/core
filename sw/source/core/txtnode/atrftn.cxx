@@ -165,7 +165,7 @@ void SwFormatFootnote::SetEndNote( bool b )
     {
         if ( GetTextFootnote() )
         {
-            GetTextFootnote()->DelFrms(nullptr);
+            GetTextFootnote()->DelFrames(nullptr);
         }
         m_bEndNote = b;
     }
@@ -307,9 +307,9 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
             }
             else
                 // Werden die Nodes nicht geloescht mussen sie bei den Seiten
-                // abmeldet (Frms loeschen) werden, denn sonst bleiben sie
+                // abmeldet (Frames loeschen) werden, denn sonst bleiben sie
                 // stehen (Undo loescht sie nicht!)
-                DelFrms( nullptr );
+                DelFrames( nullptr );
         }
         DELETEZ( m_pStartNode );
 
@@ -431,58 +431,58 @@ void SwTextFootnote::MakeNewTextSection( SwNodes& rNodes )
     m_pStartNode = new SwNodeIndex( *pSttNd );
 }
 
-void SwTextFootnote::DelFrms( const SwFrm* pSib )
+void SwTextFootnote::DelFrames( const SwFrame* pSib )
 {
     // delete the FootnoteFrames from the pages
     OSL_ENSURE( m_pTextNode, "SwTextFootnote: where is my TextNode?" );
     if ( !m_pTextNode )
         return;
 
-    const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : nullptr;
-    bool bFrmFnd = false;
+    const SwRootFrame* pRoot = pSib ? pSib->getRootFrame() : nullptr;
+    bool bFrameFnd = false;
     {
-        SwIterator<SwContentFrm,SwTextNode> aIter( *m_pTextNode );
-        for( SwContentFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
+        SwIterator<SwContentFrame,SwTextNode> aIter( *m_pTextNode );
+        for( SwContentFrame* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
         {
-            if( pRoot != pFnd->getRootFrm() && pRoot )
+            if( pRoot != pFnd->getRootFrame() && pRoot )
                 continue;
-            SwPageFrm* pPage = pFnd->FindPageFrm();
+            SwPageFrame* pPage = pFnd->FindPageFrame();
             if( pPage )
             {
                 pPage->RemoveFootnote( pFnd, this );
-                bFrmFnd = true;
+                bFrameFnd = true;
             }
         }
     }
     //JP 13.05.97: falls das Layout vorm loeschen der Fussnoten entfernt
     //              wird, sollte man das ueber die Fussnote selbst tun
-    if ( !bFrmFnd && m_pStartNode )
+    if ( !bFrameFnd && m_pStartNode )
     {
         SwNodeIndex aIdx( *m_pStartNode );
         SwContentNode* pCNd = m_pTextNode->GetNodes().GoNext( &aIdx );
         if( pCNd )
         {
-            SwIterator<SwContentFrm,SwContentNode> aIter( *pCNd );
-            for( SwContentFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
+            SwIterator<SwContentFrame,SwContentNode> aIter( *pCNd );
+            for( SwContentFrame* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
             {
-                if( pRoot != pFnd->getRootFrm() && pRoot )
+                if( pRoot != pFnd->getRootFrame() && pRoot )
                     continue;
-                SwPageFrm* pPage = pFnd->FindPageFrm();
+                SwPageFrame* pPage = pFnd->FindPageFrame();
 
-                SwFrm *pFrm = pFnd->GetUpper();
-                while ( pFrm && !pFrm->IsFootnoteFrm() )
-                    pFrm = pFrm->GetUpper();
+                SwFrame *pFrame = pFnd->GetUpper();
+                while ( pFrame && !pFrame->IsFootnoteFrame() )
+                    pFrame = pFrame->GetUpper();
 
-                SwFootnoteFrm *pFootnote = static_cast<SwFootnoteFrm*>(pFrm);
+                SwFootnoteFrame *pFootnote = static_cast<SwFootnoteFrame*>(pFrame);
                 while ( pFootnote && pFootnote->GetMaster() )
                     pFootnote = pFootnote->GetMaster();
                 OSL_ENSURE( pFootnote->GetAttr() == this, "Footnote mismatch error." );
 
                 while ( pFootnote )
                 {
-                    SwFootnoteFrm *pFoll = pFootnote->GetFollow();
+                    SwFootnoteFrame *pFoll = pFootnote->GetFollow();
                     pFootnote->Cut();
-                    SwFrm::DestroyFrm(pFootnote);
+                    SwFrame::DestroyFrame(pFootnote);
                     pFootnote = pFoll;
                 }
 

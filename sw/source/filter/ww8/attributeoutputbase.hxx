@@ -90,7 +90,7 @@ class SfxPoolItem;
 class SfxItemSet;
 class SvxParaVertAlignItem;
 class SvxParaGridItem;
-class SwFormatFrmSize;
+class SwFormatFrameSize;
 class SvxPaperBinItem;
 class SvxLRSpaceItem;
 class SvxULSpaceItem;
@@ -541,7 +541,7 @@ protected:
     virtual void ParaSnapToGrid( const SvxParaGridItem& ) = 0;
 
     /// Sfx item RES_FRM_SIZE
-    virtual void FormatFrameSize( const SwFormatFrmSize& ) = 0;
+    virtual void FormatFrameSize( const SwFormatFrameSize& ) = 0;
 
     /// Sfx item RES_PAPER_BIN
     virtual void FormatPaperBin( const SvxPaperBinItem& ) = 0;

@@ -231,8 +231,8 @@ void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
             if( bUpdate && (bUI || !bAskUpdate) )
             {
                 SfxMedium* pMedium = m_rDoc.GetDocShell()->GetMedium();
-                SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : nullptr;
-                vcl::Window* pDlgParent = pFrm ? &pFrm->GetWindow() : nullptr;
+                SfxFrame* pFrame = pMedium ? pMedium->GetLoadTargetFrame() : nullptr;
+                vcl::Window* pDlgParent = pFrame ? &pFrame->GetWindow() : nullptr;
 
                 GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
             }

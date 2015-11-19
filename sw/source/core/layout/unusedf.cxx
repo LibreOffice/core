@@ -21,55 +21,55 @@
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
 
-void SwFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
+void SwFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
     OSL_FAIL( "Format() of the base class called." );
 }
 
-void SwFrm::Paint(vcl::RenderContext&, SwRect const&, SwPrintData const*const) const
+void SwFrame::Paint(vcl::RenderContext&, SwRect const&, SwPrintData const*const) const
 {
     OSL_FAIL( "Paint() of the base class called." );
 }
 
-bool SwContentFrm::WouldFit( SwTwips &, bool&, bool )
+bool SwContentFrame::WouldFit( SwTwips &, bool&, bool )
 {
-    OSL_FAIL( "WouldFit of ContentFrm called." );
+    OSL_FAIL( "WouldFit of ContentFrame called." );
     return false;
 }
 
-bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
+bool SwFrame::FillSelection( SwSelectionList& , const SwRect& ) const
 {
     OSL_FAIL( "Don't call this function at the base class!" );
     return false;
 }
 
-bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*, bool  ) const
+bool SwFrame::GetCursorOfst( SwPosition *, Point&, SwCursorMoveState*, bool  ) const
 {
-    OSL_FAIL( "GetCrsrOfst of the base class, hi!" );
+    OSL_FAIL( "GetCursorOfst of the base class, hi!" );
     return false;
 }
 
 #ifdef DBG_UTIL
 
-void SwRootFrm::Cut()
+void SwRootFrame::Cut()
 {
-    OSL_FAIL( "Cut() of RootFrm called." );
+    OSL_FAIL( "Cut() of RootFrame called." );
 }
 
-void SwRootFrm::Paste( SwFrm *, SwFrm * )
+void SwRootFrame::Paste( SwFrame *, SwFrame * )
 {
-    OSL_FAIL( "Paste() of RootFrm called." );
+    OSL_FAIL( "Paste() of RootFrame called." );
 }
 
-void SwFlyFrm::Paste( SwFrm *, SwFrm * )
+void SwFlyFrame::Paste( SwFrame *, SwFrame * )
 {
-    OSL_FAIL( "Paste() of FlyFrm called." );
+    OSL_FAIL( "Paste() of FlyFrame called." );
 }
 
 #endif
 
-bool SwFrm::GetCharRect( SwRect&, const SwPosition&,
-                         SwCrsrMoveState* ) const
+bool SwFrame::GetCharRect( SwRect&, const SwPosition&,
+                         SwCursorMoveState* ) const
 {
     OSL_FAIL( "GetCharRect() of the base called." );
     return false;

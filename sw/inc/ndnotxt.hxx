@@ -28,7 +28,7 @@ namespace tools { class PolyPolygon; }
 class SW_DLLPUBLIC SwNoTextNode : public SwContentNode
 {
     friend class SwNodes;
-    friend class SwNoTextFrm;
+    friend class SwNoTextFrame;
 
     tools::PolyPolygon *pContour;
     bool bAutomaticContour : 1; // automatic contour polygon, not manipulated
@@ -51,7 +51,7 @@ protected:
 public:
     virtual ~SwNoTextNode();
 
-    virtual SwContentFrm *MakeFrm( SwFrm* ) override;
+    virtual SwContentFrame *MakeFrame( SwFrame* ) override;
 
     inline SwGrfFormatColl *GetGrfColl() const { return const_cast<SwGrfFormatColl*>(static_cast<const SwGrfFormatColl*>(GetRegisteredIn())); }
 

@@ -1328,13 +1328,13 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     {
         SV_STAT( nDrawStretchText );
 
-        if ( rInf.GetFrm() )
+        if ( rInf.GetFrame() )
         {
-            if ( rInf.GetFrm()->IsRightToLeft() )
-                rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+            if ( rInf.GetFrame()->IsRightToLeft() )
+                rInf.GetFrame()->SwitchLTRtoRTL( aPos );
 
-            if ( rInf.GetFrm()->IsVertical() )
-                rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+            if ( rInf.GetFrame()->IsVertical() )
+                rInf.GetFrame()->SwitchHorizontalToVertical( aPos );
 
             rInf.SetPos( aPos );
         }
@@ -1373,7 +1373,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     rInf.SetPos(aOldPos);
 }
 
-sal_Int32 SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
+sal_Int32 SwSubFont::_GetCursorOfst( SwDrawTextInfo& rInf )
 {
     if ( !pLastFont || pLastFont->GetOwner()!=m_pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
@@ -1383,9 +1383,9 @@ sal_Int32 SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
     sal_Int32 nLn = rInf.GetLen() == COMPLETE_STRING ? rInf.GetText().getLength()
                                                  : rInf.GetLen();
     rInf.SetLen( nLn );
-    sal_Int32 nCrsr = 0;
+    sal_Int32 nCursor = 0;
     if( IsCapital() && nLn )
-        nCrsr = GetCapitalCrsrOfst( rInf );
+        nCursor = GetCapitalCursorOfst( rInf );
     else
     {
         const OUString oldText = rInf.GetText();
@@ -1393,17 +1393,17 @@ sal_Int32 SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
         rInf.SetKern( CheckKerning() );
         SV_STAT( nGetTextSize );
         if ( !IsCaseMap() )
-            nCrsr = pLastFont->GetCrsrOfst( rInf );
+            nCursor = pLastFont->GetCursorOfst( rInf );
         else
         {
             OUString aTmp = CalcCaseMap( rInf.GetText() );
             rInf.SetText( aTmp );
-            nCrsr = pLastFont->GetCrsrOfst( rInf );
+            nCursor = pLastFont->GetCursorOfst( rInf );
         }
         rInf.SetKern( nOldKern );
         rInf.SetText(oldText);
     }
-    return nCrsr;
+    return nCursor;
 }
 
 void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
@@ -1411,7 +1411,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
     long nOfst;
 
     const sal_uInt16 nDir = UnMapDirection(
-                GetOrientation(), rInf.GetFrm() && rInf.GetFrm()->IsVertical() );
+                GetOrientation(), rInf.GetFrame() && rInf.GetFrame()->IsVertical() );
 
     switch ( GetEscapement() )
     {
@@ -1478,12 +1478,12 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
     OSL_ENSURE( m_bSize, "DrawTextInfo: Undefined Width" );
 #endif
 
-    const bool bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=
+    const bool bBidiPor = ( GetFrame() && GetFrame()->IsRightToLeft() ) !=
                           ( TEXT_LAYOUT_DEFAULT != ( TEXT_LAYOUT_BIDI_RTL & GetpOut()->GetLayoutMode() ) );
 
     nDir = bBidiPor ?
             1800 :
-            UnMapDirection( nDir, GetFrm() && GetFrm()->IsVertical() );
+            UnMapDirection( nDir, GetFrame() && GetFrame()->IsVertical() );
 
     switch ( nDir )
     {

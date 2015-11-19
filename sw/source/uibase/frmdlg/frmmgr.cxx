@@ -45,7 +45,7 @@
 
 using namespace ::com::sun::star;
 
-static sal_uInt16 aFrmMgrRange[] = {
+static sal_uInt16 aFrameMgrRange[] = {
                             RES_FRMATR_BEGIN, RES_FRMATR_END-1,
 
                             //UUUU FillAttribute support
@@ -56,15 +56,15 @@ static sal_uInt16 aFrmMgrRange[] = {
                             0};
 
 // determine frame attributes via Shell
-SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) :
-    m_aSet( static_cast<SwAttrPool&>(pSh->GetAttrPool()), aFrmMgrRange ),
+SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) :
+    m_aSet( static_cast<SwAttrPool&>(pSh->GetAttrPool()), aFrameMgrRange ),
     m_pOwnSh( pSh ),
     m_bAbsPos( false ),
-    m_bNewFrm( bNew ),
+    m_bNewFrame( bNew ),
     m_bIsInVertical( false ),
     m_bIsInVerticalL2R( false )
 {
-    if ( m_bNewFrm )
+    if ( m_bNewFrame )
     {
         // set defaults:
         sal_uInt16 nId = 0;
@@ -75,43 +75,43 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) 
             case FRMMGR_TYPE_GRF:   nId = RES_POOLFRM_GRAPHIC;  break;
         }
         m_aSet.SetParent( &m_pOwnSh->GetFormatFromPool( nId )->GetAttrSet());
-        m_aSet.Put( SwFormatFrmSize( ATT_MIN_SIZE, DFLT_WIDTH, DFLT_HEIGHT ));
+        m_aSet.Put( SwFormatFrameSize( ATT_MIN_SIZE, DFLT_WIDTH, DFLT_HEIGHT ));
         if ( 0 != ::GetHtmlMode(pSh->GetView().GetDocShell()) )
             m_aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::PRINT_AREA ) );
     }
     else if ( nType == FRMMGR_TYPE_NONE )
     {
-        m_pOwnSh->GetFlyFrmAttr( m_aSet );
+        m_pOwnSh->GetFlyFrameAttr( m_aSet );
         bool bRightToLeft;
-        m_bIsInVertical = m_pOwnSh->IsFrmVertical(true, bRightToLeft, m_bIsInVerticalL2R);
+        m_bIsInVertical = m_pOwnSh->IsFrameVertical(true, bRightToLeft, m_bIsInVerticalL2R);
     }
     ::PrepareBoxInfo( m_aSet, *m_pOwnSh );
 }
 
-SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, const SfxItemSet &rSet ) :
+SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, const SfxItemSet &rSet ) :
     m_aSet( rSet ),
     m_pOwnSh( pSh ),
     m_bAbsPos( false ),
-    m_bNewFrm( bNew ),
+    m_bNewFrame( bNew ),
     m_bIsInVertical(false),
     m_bIsInVerticalL2R(false)
 {
     if(!bNew)
     {
         bool bRightToLeft;
-        m_bIsInVertical = pSh->IsFrmVertical(true, bRightToLeft, m_bIsInVerticalL2R);
+        m_bIsInVertical = pSh->IsFrameVertical(true, bRightToLeft, m_bIsInVerticalL2R);
     }
 }
 
 // Initialise
-void SwFlyFrmAttrMgr::UpdateAttrMgr()
+void SwFlyFrameAttrMgr::UpdateAttrMgr()
 {
-    if ( !m_bNewFrm && m_pOwnSh->IsFrmSelected() )
-        m_pOwnSh->GetFlyFrmAttr( m_aSet );
+    if ( !m_bNewFrame && m_pOwnSh->IsFrameSelected() )
+        m_pOwnSh->GetFlyFrameAttr( m_aSet );
     ::PrepareBoxInfo( m_aSet, *m_pOwnSh );
 }
 
-void SwFlyFrmAttrMgr::_UpdateFlyFrm()
+void SwFlyFrameAttrMgr::_UpdateFlyFrame()
 {
     const SfxPoolItem* pItem = nullptr;
 
@@ -128,19 +128,19 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
 }
 
 // change existing Fly-Frame
-void SwFlyFrmAttrMgr::UpdateFlyFrm()
+void SwFlyFrameAttrMgr::UpdateFlyFrame()
 {
-    OSL_ENSURE( m_pOwnSh->IsFrmSelected(),
+    OSL_ENSURE( m_pOwnSh->IsFrameSelected(),
         "no frame selected or no shell, update not possible");
 
-    if( m_pOwnSh->IsFrmSelected() )
+    if( m_pOwnSh->IsFrameSelected() )
     {
         //JP 6.8.2001: set never an invalid anchor into the core.
         const SfxPoolItem *pGItem, *pItem;
         if( SfxItemState::SET == m_aSet.GetItemState( RES_ANCHOR, false, &pItem ))
         {
             SfxItemSet aGetSet( *m_aSet.GetPool(), RES_ANCHOR, RES_ANCHOR );
-            if( m_pOwnSh->GetFlyFrmAttr( aGetSet ) && 1 == aGetSet.Count() &&
+            if( m_pOwnSh->GetFlyFrameAttr( aGetSet ) && 1 == aGetSet.Count() &&
                 SfxItemState::SET == aGetSet.GetItemState( RES_ANCHOR, false, &pGItem )
                 && static_cast<const SwFormatAnchor*>(pGItem)->GetAnchorId() ==
                    static_cast<const SwFormatAnchor*>(pItem)->GetAnchorId() )
@@ -151,25 +151,25 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
         if( m_aSet.Count() )
         {
             m_pOwnSh->StartAllAction();
-            m_pOwnSh->SetFlyFrmAttr( m_aSet );
-            _UpdateFlyFrm();
+            m_pOwnSh->SetFlyFrameAttr( m_aSet );
+            _UpdateFlyFrame();
             m_pOwnSh->EndAllAction();
         }
     }
 }
 
 // insert frame
-bool SwFlyFrmAttrMgr::InsertFlyFrm()
+bool SwFlyFrameAttrMgr::InsertFlyFrame()
 {
     m_pOwnSh->StartAllAction();
 
-    bool bRet = nullptr != m_pOwnSh->NewFlyFrm( m_aSet );
+    bool bRet = nullptr != m_pOwnSh->NewFlyFrame( m_aSet );
 
     // turn on the right mode at the shell, frame got selected automatically.
     if ( bRet )
     {
-        _UpdateFlyFrm();
-        m_pOwnSh->EnterSelFrmMode();
+        _UpdateFlyFrame();
+        m_pOwnSh->EnterSelFrameMode();
         FrameNotify(m_pOwnSh, FLY_DRAG_START);
     }
     m_pOwnSh->EndAllAction();
@@ -178,7 +178,7 @@ bool SwFlyFrmAttrMgr::InsertFlyFrm()
 
 // Insert frames of type eAnchorType. Position and size are being set explicitly.
 // Not-allowed values of the enumeration type get corrected.
-void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
+void SwFlyFrameAttrMgr::InsertFlyFrame(RndStdIds    eAnchorType,
                                    const Point  &rPos,
                                    const Size   &rSize,
                                    bool bAbs )
@@ -196,11 +196,11 @@ void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
 
     SetSize( rSize );
     SetAnchor( eAnchorType );
-    InsertFlyFrm();
+    InsertFlyFrame();
 }
 
 // set anchor
-void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
+void SwFlyFrameAttrMgr::SetAnchor( RndStdIds eId )
 {
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     m_pOwnSh->GetPageNum( nPhyPageNum, nVirtPageNum );
@@ -219,13 +219,13 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 }
 
 // set the attribute for columns
-void SwFlyFrmAttrMgr::SetCol( const SwFormatCol &rCol )
+void SwFlyFrameAttrMgr::SetCol( const SwFormatCol &rCol )
 {
     m_aSet.Put( rCol );
 }
 
 //  set absolute position
-void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
+void SwFlyFrameAttrMgr::SetAbsPos( const Point& rPoint )
 {
     m_bAbsPos = true;
     m_aAbsPos = rPoint;
@@ -238,7 +238,7 @@ void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 }
 
 // check metrics for correctness
-void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
+void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         const SwPosition* pToCharContentPos,
         bool bOnlyPercentRefValue )
 {
@@ -253,7 +253,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
     const RndStdIds eAnchorType = static_cast<RndStdIds >(rVal.nAnchorType);
-    const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(m_aSet.Get(RES_FRM_SIZE));
+    const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(m_aSet.Get(RES_FRM_SIZE));
     m_pOwnSh->CalcBoundRect( aBoundRect, eAnchorType,
                            rVal.nHRelOrient,
                            rVal.nVRelOrient,
@@ -479,28 +479,28 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 }
 
 // correction for border
-SwTwips SwFlyFrmAttrMgr::CalcTopSpace()
+SwTwips SwFlyFrameAttrMgr::CalcTopSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
     const SvxBoxItem&    rBox    = GetBox();
     return rShadow.CalcShadowSpace(SvxShadowItemSide::TOP ) + rBox.CalcLineSpace(SvxBoxItemLine::TOP);
 }
 
-SwTwips SwFlyFrmAttrMgr::CalcBottomSpace()
+SwTwips SwFlyFrameAttrMgr::CalcBottomSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
     const SvxBoxItem& rBox       = GetBox();
     return rShadow.CalcShadowSpace(SvxShadowItemSide::BOTTOM) + rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
 }
 
-SwTwips SwFlyFrmAttrMgr::CalcLeftSpace()
+SwTwips SwFlyFrameAttrMgr::CalcLeftSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
     const SvxBoxItem&    rBox    = GetBox();
     return rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT) + rBox.CalcLineSpace(SvxBoxItemLine::LEFT);
 }
 
-SwTwips SwFlyFrmAttrMgr::CalcRightSpace()
+SwTwips SwFlyFrameAttrMgr::CalcRightSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
     const SvxBoxItem&    rBox    = GetBox();
@@ -508,12 +508,12 @@ SwTwips SwFlyFrmAttrMgr::CalcRightSpace()
 }
 
 // erase attribute from the set
-void SwFlyFrmAttrMgr::DelAttr( sal_uInt16 nId )
+void SwFlyFrameAttrMgr::DelAttr( sal_uInt16 nId )
 {
     m_aSet.ClearItem( nId );
 }
 
-void SwFlyFrmAttrMgr::SetLRSpace( long nLeft, long nRight )
+void SwFlyFrameAttrMgr::SetLRSpace( long nLeft, long nRight )
 {
     OSL_ENSURE( LONG_MAX != nLeft && LONG_MAX != nRight, "Welchen Raend setzen?" );
 
@@ -525,7 +525,7 @@ void SwFlyFrmAttrMgr::SetLRSpace( long nLeft, long nRight )
     m_aSet.Put( aTmp );
 }
 
-void SwFlyFrmAttrMgr::SetULSpace( long nTop, long nBottom )
+void SwFlyFrameAttrMgr::SetULSpace( long nTop, long nBottom )
 {
     OSL_ENSURE(LONG_MAX != nTop && LONG_MAX != nBottom, "Welchen Raend setzen?" );
 
@@ -537,7 +537,7 @@ void SwFlyFrmAttrMgr::SetULSpace( long nTop, long nBottom )
     m_aSet.Put( aTmp );
 }
 
-void SwFlyFrmAttrMgr::SetPos( const Point& rPoint )
+void SwFlyFrameAttrMgr::SetPos( const Point& rPoint )
 {
     SwFormatVertOrient aVertOrient( GetVertOrient() );
     SwFormatHoriOrient aHoriOrient( GetHoriOrient() );
@@ -552,35 +552,35 @@ void SwFlyFrmAttrMgr::SetPos( const Point& rPoint )
     m_aSet.Put( aHoriOrient );
 }
 
-void SwFlyFrmAttrMgr::SetHorzOrientation( sal_Int16 eOrient )
+void SwFlyFrameAttrMgr::SetHorzOrientation( sal_Int16 eOrient )
 {
     SwFormatHoriOrient aHoriOrient( GetHoriOrient() );
     aHoriOrient.SetHoriOrient( eOrient );
     m_aSet.Put( aHoriOrient );
 }
 
-void SwFlyFrmAttrMgr::SetVertOrientation( sal_Int16 eOrient )
+void SwFlyFrameAttrMgr::SetVertOrientation( sal_Int16 eOrient )
 {
     SwFormatVertOrient aVertOrient( GetVertOrient() );
     aVertOrient.SetVertOrient( eOrient );
     m_aSet.Put( aVertOrient );
 }
 
-void SwFlyFrmAttrMgr::SetHeightSizeType( SwFrmSize eType )
+void SwFlyFrameAttrMgr::SetHeightSizeType( SwFrameSize eType )
 {
-    SwFormatFrmSize aSize( GetFrmSize() );
+    SwFormatFrameSize aSize( GetFrameSize() );
     aSize.SetHeightSizeType( eType );
     m_aSet.Put( aSize );
 }
 
-void SwFlyFrmAttrMgr::SetSize( const Size& rSize )
+void SwFlyFrameAttrMgr::SetSize( const Size& rSize )
 {
-    SwFormatFrmSize aSize( GetFrmSize() );
+    SwFormatFrameSize aSize( GetFrameSize() );
     aSize.SetSize(Size(std::max(rSize.Width(), long(MINFLY)), std::max(rSize.Height(), long(MINFLY))));
     m_aSet.Put( aSize );
 }
 
-void SwFlyFrmAttrMgr::SetAttrSet(const SfxItemSet& rSet)
+void SwFlyFrameAttrMgr::SetAttrSet(const SfxItemSet& rSet)
 {
     m_aSet.ClearItem();
     m_aSet.Put( rSet );

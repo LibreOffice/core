@@ -87,21 +87,21 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
     SwTwips nHoriRelPos = 0;
     SwTwips nVertRelPos = 0;
     {
-        const SwFrm* pAnchorFrm = pContact->GetAnchoredObj( &_rSdrObj )->GetAnchorFrm();
-        OSL_ENSURE( !pAnchorFrm ||
-                !pAnchorFrm->IsTextFrm() ||
-                !static_cast<const SwTextFrm*>(pAnchorFrm)->IsFollow(),
+        const SwFrame* pAnchorFrame = pContact->GetAnchoredObj( &_rSdrObj )->GetAnchorFrame();
+        OSL_ENSURE( !pAnchorFrame ||
+                !pAnchorFrame->IsTextFrame() ||
+                !static_cast<const SwTextFrame*>(pAnchorFrame)->IsFollow(),
                 "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow." );
         bool bVert = false;
         bool bR2L = false;
         // #i45952# - use anchor position of anchor frame, if it exist.
         Point aAnchorPos;
-        if ( pAnchorFrm )
+        if ( pAnchorFrame )
         {
             // #i45952#
-            aAnchorPos = pAnchorFrm->GetFrmAnchorPos( ::HasWrap( &_rSdrObj ) );
-            bVert = pAnchorFrm->IsVertical();
-            bR2L = pAnchorFrm->IsRightToLeft();
+            aAnchorPos = pAnchorFrame->GetFrameAnchorPos( ::HasWrap( &_rSdrObj ) );
+            bVert = pAnchorFrame->IsVertical();
+            bR2L = pAnchorFrame->IsRightToLeft();
         }
         else
         {
@@ -399,7 +399,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
             {
                 SwFlyFrameFormat* pFrameFormat =
-                    static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetFormat();
+                    static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->GetFormat();
                 if( pFrameFormat )
                 {
                     getIDocumentLayoutAccess().DelLayoutFormat( pFrameFormat );
@@ -490,7 +490,7 @@ _ZSortFly::_ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* p
         if( pFormat->getIDocumentLayoutAccess().GetCurrentViewShell() )
         {
             // See if there is an SdrObject for it
-            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFormat>( *pFrameFormat ).First();
+            SwFlyFrame* pFly = SwIterator<SwFlyFrame,SwFormat>( *pFrameFormat ).First();
             if( pFly )
                 nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
         }

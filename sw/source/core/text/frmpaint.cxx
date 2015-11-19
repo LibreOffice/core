@@ -60,7 +60,7 @@ class SwExtraPainter
 {
     SwSaveClip aClip;
     SwRect aRect;
-    const SwTextFrm* pTextFrm;
+    const SwTextFrame* pTextFrame;
     SwViewShell *pSh;
     SwFont* pFnt;
     const SwLineNumberInfo &rLineInf;
@@ -72,7 +72,7 @@ class SwExtraPainter
     bool bLineNum;
     inline bool IsClipChg() { return aClip.IsChg(); }
 public:
-    SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
+    SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         const SwLineNumberInfo &rLnInf, const SwRect &rRct,
         sal_Int16 eHor, bool bLnNm );
     ~SwExtraPainter() { delete pFnt; }
@@ -86,12 +86,12 @@ public:
     void PaintRedline( SwTwips nY, long nMax );
 };
 
-SwExtraPainter::SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
+SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
                                 const SwLineNumberInfo &rLnInf, const SwRect &rRct,
                                 sal_Int16 eHor, bool bLnNm )
-    : aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : nullptr )
+    : aClip( pVwSh->GetWin() || pFrame->IsUndersized() ? pVwSh->GetOut() : nullptr )
     , aRect( rRct )
-    , pTextFrm( pFrm )
+    , pTextFrame( pFrame )
     , pSh( pVwSh )
     , pFnt( nullptr )
     , rLineInf( rLnInf )
@@ -102,9 +102,9 @@ SwExtraPainter::SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
     , bGoLeft(false)
     , bLineNum( bLnNm )
 {
-    if( pFrm->IsUndersized() )
+    if( pFrame->IsUndersized() )
     {
-        SwTwips nBottom = pFrm->Frm().Bottom();
+        SwTwips nBottom = pFrame->Frame().Bottom();
         if( aRect.Bottom() > nBottom )
             aRect.Bottom( nBottom );
     }
@@ -121,18 +121,18 @@ SwExtraPainter::SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
             outside of the paint rect
         */
         nDivider = !rLineInf.GetDivider().isEmpty() ? rLineInf.GetDividerCountBy() : 0;
-        nX = pFrm->Frm().Left();
-        SwCharFormat* pFormat = rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(pFrm->GetNode()->getIDocumentStylePoolAccess()) );
+        nX = pFrame->Frame().Left();
+        SwCharFormat* pFormat = rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(pFrame->GetNode()->getIDocumentStylePoolAccess()) );
         OSL_ENSURE( pFormat, "PaintExtraData without CharFormat" );
-        pFnt = new SwFont( &pFormat->GetAttrSet(), pFrm->GetTextNode()->getIDocumentSettingAccess() );
+        pFnt = new SwFont( &pFormat->GetAttrSet(), pFrame->GetTextNode()->getIDocumentSettingAccess() );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
-        pFnt->SetVertical( 0, pFrm->IsVertical() );
-        nLineNr += pFrm->GetAllLines() - pFrm->GetThisLines();
+        pFnt->SetVertical( 0, pFrame->IsVertical() );
+        nLineNr += pFrame->GetAllLines() - pFrame->GetThisLines();
         LineNumberPosition ePos = rLineInf.GetPos();
         if( ePos != LINENUMBER_POS_LEFT && ePos != LINENUMBER_POS_RIGHT )
         {
-            if( pFrm->FindPageFrm()->OnRightPage() )
+            if( pFrame->FindPageFrame()->OnRightPage() )
             {
                 nVirtPageNum = 1;
                 ePos = ePos == LINENUMBER_POS_INSIDE ?
@@ -155,7 +155,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
         else
         {
             bGoLeft = false;
-            nX += pFrm->Frm().Width() + rLineInf.GetPosFromLeft();
+            nX += pFrame->Frame().Width() + rLineInf.GetPosFromLeft();
             if( nX > aRect.Right() )
                 bLineNum = false;
         }
@@ -165,17 +165,17 @@ SwExtraPainter::SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
         if( text::HoriOrientation::INSIDE == eHor || text::HoriOrientation::OUTSIDE == eHor )
         {
             if( !nVirtPageNum )
-                nVirtPageNum = pFrm->FindPageFrm()->OnRightPage() ? 1 : 2;
+                nVirtPageNum = pFrame->FindPageFrame()->OnRightPage() ? 1 : 2;
             if( nVirtPageNum % 2 )
                 eHor = eHor == text::HoriOrientation::INSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
             else
                 eHor = eHor == text::HoriOrientation::OUTSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
         }
-        const SwFrm* pTmpFrm = pFrm->FindTabFrm();
-        if( !pTmpFrm )
-            pTmpFrm = pFrm;
-        nRedX = text::HoriOrientation::LEFT == eHor ? pTmpFrm->Frm().Left() - REDLINE_DISTANCE :
-            pTmpFrm->Frm().Right() + REDLINE_DISTANCE;
+        const SwFrame* pTmpFrame = pFrame->FindTabFrame();
+        if( !pTmpFrame )
+            pTmpFrame = pFrame;
+        nRedX = text::HoriOrientation::LEFT == eHor ? pTmpFrame->Frame().Left() - REDLINE_DISTANCE :
+            pTmpFrame->Frame().Right() + REDLINE_DISTANCE;
     }
 }
 
@@ -195,10 +195,10 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     aDrawInf.SetSmartTags( nullptr );
     aDrawInf.SetLeft( 0 );
     aDrawInf.SetRight( LONG_MAX );
-    aDrawInf.SetFrm( pTextFrm );
+    aDrawInf.SetFrame( pTextFrame );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( false );
-    aDrawInf.SetIgnoreFrmRTL( true );
+    aDrawInf.SetIgnoreFrameRTL( true );
 
     bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
                 pFnt->GetHeight( pSh, *pSh->GetOut() ) > nMax;
@@ -232,7 +232,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
             if( aRct.Intersection( aRect ).IsEmpty() )
                 bPaint = false;
             else
-                aClip.ChgClip( aRect, pTextFrm );
+                aClip.ChgClip( aRect, pTextFrame );
         }
     }
     else if( bGoLeft )
@@ -263,25 +263,25 @@ void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
         {
             if( aRct.Intersection( aRect ).IsEmpty() )
                 return;
-            aClip.ChgClip( aRect, pTextFrm );
+            aClip.ChgClip( aRect, pTextFrame );
         }
     }
     const Color aOldCol( pSh->GetOut()->GetLineColor() );
     pSh->GetOut()->SetLineColor( SW_MOD()->GetRedlineMarkColor() );
 
-    if ( pTextFrm->IsVertical() )
+    if ( pTextFrame->IsVertical() )
     {
-        pTextFrm->SwitchHorizontalToVertical( aStart );
-        pTextFrm->SwitchHorizontalToVertical( aEnd );
+        pTextFrame->SwitchHorizontalToVertical( aStart );
+        pTextFrame->SwitchHorizontalToVertical( aEnd );
     }
 
     pSh->GetOut()->DrawLine( aStart, aEnd );
     pSh->GetOut()->SetLineColor( aOldCol );
 }
 
-void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
+void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 {
-    if( Frm().Top() > rRect.Bottom() || Frm().Bottom() < rRect.Top() )
+    if( Frame().Top() > rRect.Bottom() || Frame().Bottom() < rRect.Top() )
         return;
 
     const SwTextNode& rTextNode = *GetTextNode();
@@ -298,9 +298,9 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
     {
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
             return;
-        SwViewShell *pSh = getRootFrm()->GetCurrShell();
+        SwViewShell *pSh = getRootFrame()->GetCurrShell();
 
-        SwSwapIfNotSwapped swap(const_cast<SwTextFrm *>(this));
+        SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
         SwRect rOldRect( rRect );
 
         if ( IsVertical() )
@@ -316,16 +316,16 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
 
         if( HasPara() )
         {
-            TextFrmLockGuard aLock(const_cast<SwTextFrm*>(this));
+            TextFrameLockGuard aLock(const_cast<SwTextFrame*>(this));
 
             SwTextLineAccess aAccess( this );
             aAccess.GetPara();
 
-            SwTextPaintInfo aInf( const_cast<SwTextFrm*>(this), rRect );
+            SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
 
             aLayoutModeModifier.Modify( false );
 
-            SwTextPainter  aLine( const_cast<SwTextFrm*>(this), &aInf );
+            SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
             bool bNoDummy = !aLine.GetNext(); // Only one empty line!
 
             while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
@@ -390,30 +390,30 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
             if( bLineNum && rLineInf.IsCountBlankLines() &&
                 ( aExtra.HasNumber() || aExtra.HasDivider() ) )
             {
-                aExtra.PaintExtra( Frm().Top()+Prt().Top(), aExtra.GetFont()
+                aExtra.PaintExtra( Frame().Top()+Prt().Top(), aExtra.GetFont()
                     ->GetAscent( pSh, *pSh->GetOut() ), Prt().Height(), bRedLine );
             }
             else if( bRedLine )
-                aExtra.PaintRedline( Frm().Top()+Prt().Top(), Prt().Height() );
+                aExtra.PaintRedline( Frame().Top()+Prt().Top(), Prt().Height() );
         }
 
         (SwRect&)rRect = rOldRect;
     }
 }
 
-SwRect SwTextFrm::Paint()
+SwRect SwTextFrame::Paint()
 {
 #if OSL_DEBUG_LEVEL > 1
-    const SwTwips nDbgY = Frm().Top();
+    const SwTwips nDbgY = Frame().Top();
     (void)nDbgY;
 #endif
 
     // finger layout
-    OSL_ENSURE( GetValidPosFlag(), "+SwTextFrm::Paint: no Calc()" );
+    OSL_ENSURE( GetValidPosFlag(), "+SwTextFrame::Paint: no Calc()" );
 
     SwRect aRet( Prt() );
     if ( IsEmpty() || !HasPara() )
-        aRet += Frm().Pos();
+        aRet += Frame().Pos();
     else
     {
         // We return the right paint rect. Use the calculated PaintOfst as the
@@ -422,7 +422,7 @@ SwRect SwTextFrm::Paint()
         long l;
 
         if ( IsVertLR() ) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
-            rRepaint.Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
+            rRepaint.Chg( ( GetUpper()->Frame() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
 
         if( rRepaint.GetOfst() )
             rRepaint.Left( rRepaint.GetOfst() );
@@ -436,10 +436,10 @@ SwRect SwTextFrm::Paint()
         // In case our left edge is the same as the body frame's left edge,
         // then extend the rectangle to include the page margin as well,
         // otherwise some font will be clipped.
-        SwLayoutFrm* pBodyFrm = GetUpper();
-        if (pBodyFrm->IsBodyFrm() && aRet.Left() == (pBodyFrm->Frm().Left() + pBodyFrm->Prt().Left()))
-            if (SwLayoutFrm* pPageFrm = pBodyFrm->GetUpper())
-                aRet.Left(pPageFrm->Frm().Left());
+        SwLayoutFrame* pBodyFrame = GetUpper();
+        if (pBodyFrame->IsBodyFrame() && aRet.Left() == (pBodyFrame->Frame().Left() + pBodyFrame->Prt().Left()))
+            if (SwLayoutFrame* pPageFrame = pBodyFrame->GetUpper())
+                aRet.Left(pPageFrame->Frame().Left());
 
         if ( IsRightToLeft() )
             SwitchLTRtoRTL( aRet );
@@ -452,9 +452,9 @@ SwRect SwTextFrm::Paint()
     return aRet;
 }
 
-bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
+bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 {
-    SwViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrame()->GetCurrShell();
     if( pSh && ( pSh->GetViewOptions()->IsParagraph() || bInitFont ) )
     {
         bInitFont = false;
@@ -502,13 +502,13 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
                 }
                 pFnt->SetVertical( 0, IsVertical() );
-                SwFrmSwapper aSwapper( this, true );
+                SwFrameSwapper aSwapper( this, true );
                 SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
                 aLayoutModeModifier.Modify( IsRightToLeft() );
 
                 pFnt->Invalidate();
                 pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
-                Point aPos = Frm().Pos() + Prt().Pos();
+                Point aPos = Frame().Pos() + Prt().Pos();
 
                 const SvxLRSpaceItem &rSpace =
                     GetTextNode()->GetSwAttrSet().GetLRSpace();
@@ -530,7 +530,7 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 if ( GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
                      IsInDocBody() )
                 {
-                    SwTextGridItem const*const pGrid(GetGridItem(FindPageFrm()));
+                    SwTextGridItem const*const pGrid(GetGridItem(FindPageFrame()));
                     if ( pGrid )
                     {
                         // center character in grid line
@@ -555,7 +555,7 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     aDrawInf.SetWrong( nullptr );
                     aDrawInf.SetGrammarCheck( nullptr );
                     aDrawInf.SetSmartTags( nullptr );
-                    aDrawInf.SetFrm( this );
+                    aDrawInf.SetFrame( this );
                     aDrawInf.SetFont( pFnt );
                     aDrawInf.SetSnapToGrid( false );
 
@@ -573,23 +573,23 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
     return false;
 }
 
-void SwTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
     // #i16816# tagged pdf support
-    SwViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrame()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, nullptr, nullptr, rRenderContext );
 
-    Frm_Info aFrmInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelperParagraph( nullptr, &aFrmInfo, nullptr, rRenderContext );
+    Frame_Info aFrameInfo( *this );
+    SwTaggedPDFHelper aTaggedPDFHelperParagraph( nullptr, &aFrameInfo, nullptr, rRenderContext );
 
     if( !IsEmpty() || !PaintEmpty( rRect, true ) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        const SwTwips nDbgY = Frm().Top();
+        const SwTwips nDbgY = Frame().Top();
         (void)nDbgY;
 #endif
 
@@ -599,11 +599,11 @@ void SwTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
         // It can happen that the IdleCollector withdrew my cached information
         if( !HasPara() )
         {
-            OSL_ENSURE( GetValidPosFlag(), "+SwTextFrm::Paint: no Calc()" );
+            OSL_ENSURE( GetValidPosFlag(), "+SwTextFrame::Paint: no Calc()" );
 
             // #i29062# pass info that we are currently
             // painting.
-            const_cast<SwTextFrm*>(this)->GetFormatted( true );
+            const_cast<SwTextFrame*>(this)->GetFormatted( true );
             if( IsEmpty() )
             {
                 PaintEmpty( rRect, false );
@@ -611,32 +611,32 @@ void SwTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
             }
             if( !HasPara() )
             {
-                OSL_ENSURE( false, "+SwTextFrm::Paint: missing format information" );
+                OSL_ENSURE( false, "+SwTextFrame::Paint: missing format information" );
                 return;
             }
         }
 
         // We don't want to be interrupted while painting.
         // Do that after thr Format()!
-        TextFrmLockGuard aLock(const_cast<SwTextFrm*>(this));
+        TextFrameLockGuard aLock(const_cast<SwTextFrame*>(this));
 
-        // We only paint the part of the TextFrm which changed, is within the
+        // We only paint the part of the TextFrame which changed, is within the
         // range and was requested to paint.
         // One could think that the area rRect _needs_ to be painted, although
         // rRepaint is set. Indeed, we cannot avoid this problem from a formal
         // perspective. Luckily we can assume rRepaint to be empty when we need
-        // paint the while Frm.
+        // paint the while Frame.
         SwTextLineAccess aAccess( this );
         SwParaPortion *pPara = aAccess.GetPara();
 
         SwRepaint &rRepaint = pPara->GetRepaint();
 
-        // Switch off recycling when in the FlyCntFrm.
+        // Switch off recycling when in the FlyContentFrame.
         // A DrawRect is called for repainting the line anyways.
         if( rRepaint.GetOfst() )
         {
-            const SwFlyFrm *pFly = FindFlyFrm();
-            if( pFly && pFly->IsFlyInCntFrm() )
+            const SwFlyFrame *pFly = FindFlyFrame();
+            if( pFly && pFly->IsFlyInContentFrame() )
                 rRepaint.SetOfst( 0 );
         }
 
@@ -647,7 +647,7 @@ void SwTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
         SwRect aOldRect( rRect );
 
         {
-            SwSwapIfNotSwapped swap(const_cast<SwTextFrm *>(this));
+            SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
 
             if ( IsVertical() )
                 SwitchVerticalToHorizontal( (SwRect&)rRect );
@@ -655,14 +655,14 @@ void SwTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
             if ( IsRightToLeft() )
                 SwitchRTLtoLTR( (SwRect&)rRect );
 
-            SwTextPaintInfo aInf( const_cast<SwTextFrm*>(this), rRect );
+            SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
             aInf.SetWrongList( const_cast<SwTextNode*>(GetTextNode())->GetWrong() );
             aInf.SetGrammarCheckList( const_cast<SwTextNode*>(GetTextNode())->GetGrammarCheck() );
             aInf.SetSmartTags( const_cast<SwTextNode*>(GetTextNode())->GetSmartTags() );
             aInf.GetTextFly().SetTopRule();
 
-            SwTextPainter  aLine( const_cast<SwTextFrm*>(this), &aInf );
-            // Optimization: if no free flying Frm overlaps into our line, the
+            SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
+            // Optimization: if no free flying Frame overlaps into our line, the
             // SwTextFly just switches off
             aInf.GetTextFly().Relax();
 

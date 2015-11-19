@@ -32,17 +32,17 @@
 
 #include <com/sun/star/style/TabStop.hpp>
 
-class SwLayoutFrm;
-class SwRootFrm;
-class SwPageFrm;
-class SwFlyFrm;
-class SwSectionFrm;
-class SwFootnoteFrm;
-class SwFootnoteBossFrm;
-class SwTabFrm;
-class SwRowFrm;
-class SwFlowFrm;
-class SwContentFrm;
+class SwLayoutFrame;
+class SwRootFrame;
+class SwPageFrame;
+class SwFlyFrame;
+class SwSectionFrame;
+class SwFootnoteFrame;
+class SwFootnoteBossFrame;
+class SwTabFrame;
+class SwRowFrame;
+class SwFlowFrame;
+class SwContentFrame;
 class SfxPoolItem;
 class SwAttrSet;
 class SwViewShell;
@@ -54,16 +54,16 @@ class XFillStyleItem;
 class XFillGradientItem;
 class SwSelectionList;
 struct SwPosition;
-struct SwCrsrMoveState;
+struct SwCursorMoveState;
 class SwFormat;
 class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
 
-// Each FrmType is represented here as a bit.
+// Each FrameType is represented here as a bit.
 // The bits must be set in a way that it can be determined with masking of
-// which kind of FrmType an instance is _and_ from what classes it was derived.
+// which kind of FrameType an instance is _and_ from what classes it was derived.
 // Each frame has in its base class a member that must be set by the
 // constructors accordingly.
 #define FRM_ROOT        0x0001
@@ -94,12 +94,12 @@ typedef struct _xmlTextWriter *xmlTextWriterPtr;
 #define FRM_HEADFOOT    0x0018
 #define FRM_BODYFTNC    0x00a0
 
-class SwFrm;
-typedef long (SwFrm:: *SwFrmGet)() const;
-typedef bool (SwFrm:: *SwFrmMax)( long );
-typedef void (SwFrm:: *SwFrmMakePos)( const SwFrm*, const SwFrm*, bool );
+class SwFrame;
+typedef long (SwFrame:: *SwFrameGet)() const;
+typedef bool (SwFrame:: *SwFrameMax)( long );
+typedef void (SwFrame:: *SwFrameMakePos)( const SwFrame*, const SwFrame*, bool );
 typedef long (*SwOperator)( long, long );
-typedef void (SwFrm:: *SwFrmSet)( long, long );
+typedef void (SwFrame:: *SwFrameSet)( long, long );
 
 struct SwRectFnCollection
 {
@@ -129,25 +129,25 @@ struct SwRectFnCollection
     SwRectSet     fnSetPosX;
     SwRectSet     fnSetPosY;
 
-    SwFrmGet      fnGetTopMargin;
-    SwFrmGet      fnGetBottomMargin;
-    SwFrmGet      fnGetLeftMargin;
-    SwFrmGet      fnGetRightMargin;
-    SwFrmSet      fnSetXMargins;
-    SwFrmSet      fnSetYMargins;
-    SwFrmGet      fnGetPrtTop;
-    SwFrmGet      fnGetPrtBottom;
-    SwFrmGet      fnGetPrtLeft;
-    SwFrmGet      fnGetPrtRight;
+    SwFrameGet      fnGetTopMargin;
+    SwFrameGet      fnGetBottomMargin;
+    SwFrameGet      fnGetLeftMargin;
+    SwFrameGet      fnGetRightMargin;
+    SwFrameSet      fnSetXMargins;
+    SwFrameSet      fnSetYMargins;
+    SwFrameGet      fnGetPrtTop;
+    SwFrameGet      fnGetPrtBottom;
+    SwFrameGet      fnGetPrtLeft;
+    SwFrameGet      fnGetPrtRight;
     SwRectDist    fnTopDist;
     SwRectDist    fnBottomDist;
     SwRectDist    fnLeftDist;
     SwRectDist    fnRightDist;
-    SwFrmMax      fnSetLimit;
+    SwFrameMax      fnSetLimit;
     SwRectMax     fnOverStep;
 
     SwRectSetPos  fnSetPos;
-    SwFrmMakePos  fnMakePos;
+    SwFrameMakePos  fnMakePos;
     SwOperator    fnXDiff;
     SwOperator    fnYDiff;
     SwOperator    fnXInc;
@@ -160,35 +160,35 @@ struct SwRectFnCollection
 typedef SwRectFnCollection* SwRectFn;
 
 extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
-#define SWRECTFN( pFrm )    bool bVert = pFrm->IsVertical(); \
-                            bool bRev = pFrm->IsReverse(); \
-                            bool bVertL2R = pFrm->IsVertLR(); \
+#define SWRECTFN( pFrame )    bool bVert = pFrame->IsVertical(); \
+                            bool bRev = pFrame->IsReverse(); \
+                            bool bVertL2R = pFrame->IsVertLR(); \
                             SwRectFn fnRect = bVert ? \
                                 ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
                                 ( bRev ? fnRectB2T : fnRectHori );
-#define SWRECTFNX( pFrm )   bool bVertX = pFrm->IsVertical(); \
-                            bool bRevX = pFrm->IsReverse(); \
-                            bool bVertL2RX = pFrm->IsVertLR(); \
+#define SWRECTFNX( pFrame )   bool bVertX = pFrame->IsVertical(); \
+                            bool bRevX = pFrame->IsReverse(); \
+                            bool bVertL2RX = pFrame->IsVertLR(); \
                             SwRectFn fnRectX = bVertX ? \
                                 ( bRevX ? fnRectVL2R : ( bVertL2RX ? fnRectVertL2R : fnRectVert ) ): \
                                 ( bRevX ? fnRectB2T : fnRectHori );
-#define SWREFRESHFN( pFrm ) { if( bVert != pFrm->IsVertical() || \
-                                  bRev  != pFrm->IsReverse() ) \
-                                bVert = pFrm->IsVertical(); \
-                                bRev = pFrm->IsReverse(); \
-                                bVertL2R = pFrm->IsVertLR(); \
+#define SWREFRESHFN( pFrame ) { if( bVert != pFrame->IsVertical() || \
+                                  bRev  != pFrame->IsReverse() ) \
+                                bVert = pFrame->IsVertical(); \
+                                bRev = pFrame->IsReverse(); \
+                                bVertL2R = pFrame->IsVertLR(); \
                                 fnRect = bVert ? \
                                     ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
                                     ( bRev ? fnRectB2T : fnRectHori ); }
-#define SWRECTFN2( pFrm )   bool bVert = pFrm->IsVertical(); \
-                bool bVertL2R = pFrm->IsVertLR(); \
-                            bool bNeighb = pFrm->IsNeighbourFrm(); \
+#define SWRECTFN2( pFrame )   bool bVert = pFrame->IsVertical(); \
+                bool bVertL2R = pFrame->IsVertLR(); \
+                            bool bNeighb = pFrame->IsNeighbourFrame(); \
                             SwRectFn fnRect = bVert == bNeighb ? \
                                 fnRectHori : ( bVertL2R ? fnRectVertL2R : fnRectVert );
 
-#define POS_DIFF( aFrm1, aFrm2 ) \
-            ( (aFrm1.*fnRect->fnGetTop)() != (aFrm2.*fnRect->fnGetTop)() || \
-            (aFrm1.*fnRect->fnGetLeft)() != (aFrm2.*fnRect->fnGetLeft)() )
+#define POS_DIFF( aFrame1, aFrame2 ) \
+            ( (aFrame1.*fnRect->fnGetTop)() != (aFrame2.*fnRect->fnGetTop)() || \
+            (aFrame1.*fnRect->fnGetLeft)() != (aFrame2.*fnRect->fnGetLeft)() )
 
 // for GetNextLeaf/GetPrevLeaf.
 enum MakePageType
@@ -213,23 +213,23 @@ namespace drawinglayer { namespace attribute {
  * level: pages, headers, footers, etc. (Inside a paragraph SwLinePortion
  * instances are used.)
  */
-class SW_DLLPUBLIC SwFrm: public SwClient, public SfxBroadcaster
+class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
 {
-    // the hidden Frm
-    friend class SwFlowFrm;
-    friend class SwLayoutFrm;
+    // the hidden Frame
+    friend class SwFlowFrame;
+    friend class SwLayoutFrame;
     friend class SwLooping;
 
     // voids lower during creation of a column
-    friend SwFrm *SaveContent( SwLayoutFrm *, SwFrm* pStart );
-    friend void   RestoreContent( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
+    friend SwFrame *SaveContent( SwLayoutFrame *, SwFrame* pStart );
+    friend void   RestoreContent( SwFrame *, SwLayoutFrame *, SwFrame *pSibling, bool bGrow );
 
-    // for validating a mistakenly invalidated one in SwContentFrm::MakeAll
-    friend void ValidateSz( SwFrm *pFrm );
+    // for validating a mistakenly invalidated one in SwContentFrame::MakeAll
+    friend void ValidateSz( SwFrame *pFrame );
     // implemented in text/txtftn.cxx, prevents Footnote oscillation
-    friend void ValidateText( SwFrm *pFrm );
+    friend void ValidateText( SwFrame *pFrame );
 
-    friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );
+    friend void MakeNxt( SwFrame *pFrame, SwFrame *pNxt );
 
     // cache for (border) attributes
     static SwCache *mpCache;
@@ -239,16 +239,16 @@ class SW_DLLPUBLIC SwFrm: public SwClient, public SfxBroadcaster
 
     // #i65250#
     // frame ID is now in general available - used for layout loop control
-    static sal_uInt32 mnLastFrmId;
-    const  sal_uInt32 mnFrmId;
+    static sal_uInt32 mnLastFrameId;
+    const  sal_uInt32 mnFrameId;
 
-    SwRootFrm   *mpRoot;
-    SwLayoutFrm *mpUpper;
-    SwFrm       *mpNext;
-    SwFrm       *mpPrev;
+    SwRootFrame   *mpRoot;
+    SwLayoutFrame *mpUpper;
+    SwFrame       *mpNext;
+    SwFrame       *mpPrev;
 
-    SwFrm *_FindNext();
-    SwFrm *_FindPrev();
+    SwFrame *_FindNext();
+    SwFrame *_FindPrev();
 
     /** method to determine next content frame in the same environment
         for a flow frame (content frame, table frame, section frame)
@@ -274,10 +274,10 @@ class SW_DLLPUBLIC SwFrm: public SwClient, public SfxBroadcaster
         frame has to be in the same footnote frame. This parameter is only
         relevant for flow frames in footnotes.
 
-        @return SwContentFrm*
+        @return SwContentFrame*
         pointer to the found next content frame. It's NULL, if none exists.
     */
-    SwContentFrm* _FindNextCnt( const bool _bInSameFootnote = false );
+    SwContentFrame* _FindNextCnt( const bool _bInSameFootnote = false );
 
     /** method to determine previous content frame in the same environment
         for a flow frame (content frame, table frame, section frame)
@@ -303,26 +303,26 @@ class SW_DLLPUBLIC SwFrm: public SwClient, public SfxBroadcaster
         frame has to be in the same footnote frame. This parameter is only
         relevant for flow frames in footnotes.
 
-        @return SwContentFrm*
+        @return SwContentFrame*
         pointer to the found previous content frame. It's NULL, if none exists.
     */
-    SwContentFrm* _FindPrevCnt( const bool _bInSameFootnote = false );
+    SwContentFrame* _FindPrevCnt( const bool _bInSameFootnote = false );
 
-    void _UpdateAttrFrm( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
-    SwFrm* _GetIndNext();
+    void _UpdateAttrFrame( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
+    SwFrame* _GetIndNext();
     void SetDirFlags( bool bVert );
 
-    const SwLayoutFrm* ImplGetNextLayoutLeaf( bool bFwd ) const;
+    const SwLayoutFrame* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
-    SwPageFrm* ImplFindPageFrm();
+    SwPageFrame* ImplFindPageFrame();
 
 protected:
     SwSortedObjs* mpDrawObjs;    // draw objects, can be 0
 
-    SwRect  maFrm;   // absolute position in document and size of the Frm
-    SwRect  maPrt;   // position relatively to Frm and size of PrtArea
+    SwRect  maFrame;   // absolute position in document and size of the Frame
+    SwRect  maPrt;   // position relatively to Frame and size of PrtArea
 
-    sal_uInt16 mnFrmType;  //Who am I?
+    sal_uInt16 mnFrameType;  //Who am I?
 
     bool mbReverse     : 1; // Next line above/at the right side instead
                                  // under/at the left side of the previous line
@@ -341,17 +341,17 @@ protected:
     bool mbValidLineNum  : 1;
     bool mbFixSize       : 1;
     // if true, frame will be painted completely even content was changed
-    // only partially. For ContentFrms a border (from Action) will exclusively
+    // only partially. For ContentFrames a border (from Action) will exclusively
     // painted if <mbCompletePaint> is true.
     bool mbCompletePaint : 1;
     bool mbRetouche      : 1; // frame is responsible for retouching
 
     bool mbInfInvalid    : 1;  // InfoFlags are invalid
-    bool mbInfBody       : 1;  // Frm is in document body
-    bool mbInfTab        : 1;  // Frm is in a table
-    bool mbInfFly        : 1;  // Frm is in a Fly
-    bool mbInfFootnote        : 1;  // Frm is in a footnote
-    bool mbInfSct        : 1;  // Frm is in a section
+    bool mbInfBody       : 1;  // Frame is in document body
+    bool mbInfTab        : 1;  // Frame is in a table
+    bool mbInfFly        : 1;  // Frame is in a Fly
+    bool mbInfFootnote        : 1;  // Frame is in a footnote
+    bool mbInfSct        : 1;  // Frame is in a section
     bool mbColLocked     : 1;  // lock Grow/Shrink for column-wise section
                                   // or fly frames, will be set in Format
     bool m_isInDestroy : 1;
@@ -361,32 +361,32 @@ protected:
     void ColUnlock()    { mbColLocked = false; }
 
     virtual void DestroyImpl();
-    virtual ~SwFrm();
+    virtual ~SwFrame();
 
-    // Only used by SwRootFrm Ctor to get 'this' into mpRoot...
-    void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
+    // Only used by SwRootFrame Ctor to get 'this' into mpRoot...
+    void setRootFrame( SwRootFrame* pRoot ) { mpRoot = pRoot; }
 
-    SwPageFrm *InsertPage( SwPageFrm *pSibling, bool bFootnote );
+    SwPageFrame *InsertPage( SwPageFrame *pSibling, bool bFootnote );
     void PrepareMake(vcl::RenderContext* pRenderContext);
     void OptPrepareMake();
     void MakePos();
     // Format next frame of table frame to assure keeping attributes.
-    // In case of nested tables method <SwFrm::MakeAll()> is called to
+    // In case of nested tables method <SwFrame::MakeAll()> is called to
     // avoid formatting of superior table frame.
-    friend SwFrm* sw_FormatNextContentForKeep( SwTabFrm* pTabFrm );
+    friend SwFrame* sw_FormatNextContentForKeep( SwTabFrame* pTabFrame );
 
     virtual void MakeAll(vcl::RenderContext* pRenderContext) = 0;
     // adjust frames of a page
     SwTwips AdjustNeighbourhood( SwTwips nDiff, bool bTst = false );
 
     // change only frame size not the size of PrtArea
-    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
+    virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
+    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) = 0;
 
     SwModify        *GetDep()       { return GetRegisteredInNonConst(); }
     const SwModify  *GetDep() const { return GetRegisteredIn(); }
 
-    SwFrm( SwModify*, SwFrm* );
+    SwFrame( SwModify*, SwFrame* );
 
     void CheckDir( sal_uInt16 nDir, bool bVert, bool bOnlyBiDi, bool bBrowse );
 
@@ -424,67 +424,67 @@ public:
     }
 
 
-    sal_uInt16 GetType() const { return mnFrmType; }
+    sal_uInt16 GetType() const { return mnFrameType; }
 
     static SwCache &GetCache()                { return *mpCache; }
     static SwCache *GetCachePtr()             { return mpCache;  }
     static void     SetCache( SwCache *pNew ) { mpCache = pNew;  }
 
-    // change PrtArea size and FrmSize
+    // change PrtArea size and FrameSize
     SwTwips Shrink( SwTwips, bool bTst = false, bool bInfo = false );
     SwTwips Grow  ( SwTwips, bool bTst = false, bool bInfo = false );
 
     // different methods for inserting in layout tree (for performance reasons)
 
     // insert before pBehind or at the end of the chain below mpUpper
-    void InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind );
+    void InsertBefore( SwLayoutFrame* pParent, SwFrame* pBehind );
     // insert after pBefore or at the beginning of the chain below mpUpper
-    void InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore );
+    void InsertBehind( SwLayoutFrame *pParent, SwFrame *pBefore );
     // insert before pBehind or at the end of the chain while considering
     // the siblings of pSct
-    bool InsertGroupBefore( SwFrm* pParent, SwFrm* pWhere, SwFrm* pSct );
+    bool InsertGroupBefore( SwFrame* pParent, SwFrame* pWhere, SwFrame* pSct );
     void RemoveFromLayout();
 
     // For internal use only - who ignores this will be put in a sack and has
     // to stay there for two days
     // Does special treatment for _Get[Next|Prev]Leaf() (for tables).
-    SwLayoutFrm *GetLeaf( MakePageType eMakePage, bool bFwd );
-    SwLayoutFrm *GetNextLeaf   ( MakePageType eMakePage );
-    SwLayoutFrm *GetNextFootnoteLeaf( MakePageType eMakePage );
-    SwLayoutFrm *GetNextSctLeaf( MakePageType eMakePage );
-    SwLayoutFrm *GetNextCellLeaf( MakePageType eMakePage );
-    SwLayoutFrm *GetPrevLeaf   ( MakePageType eMakeFootnote = MAKEPAGE_FTN );
-    SwLayoutFrm *GetPrevFootnoteLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
-    SwLayoutFrm *GetPrevSctLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
-    SwLayoutFrm *GetPrevCellLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
-    const SwLayoutFrm *GetLeaf ( MakePageType eMakePage, bool bFwd,
-                                 const SwFrm *pAnch ) const;
+    SwLayoutFrame *GetLeaf( MakePageType eMakePage, bool bFwd );
+    SwLayoutFrame *GetNextLeaf   ( MakePageType eMakePage );
+    SwLayoutFrame *GetNextFootnoteLeaf( MakePageType eMakePage );
+    SwLayoutFrame *GetNextSctLeaf( MakePageType eMakePage );
+    SwLayoutFrame *GetNextCellLeaf( MakePageType eMakePage );
+    SwLayoutFrame *GetPrevLeaf   ( MakePageType eMakeFootnote = MAKEPAGE_FTN );
+    SwLayoutFrame *GetPrevFootnoteLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
+    SwLayoutFrame *GetPrevSctLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
+    SwLayoutFrame *GetPrevCellLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
+    const SwLayoutFrame *GetLeaf ( MakePageType eMakePage, bool bFwd,
+                                 const SwFrame *pAnch ) const;
 
-    bool WrongPageDesc( SwPageFrm* pNew );
+    bool WrongPageDesc( SwPageFrame* pNew );
 
     //#i28701# - new methods to append/remove drawing objects
     void AppendDrawObj( SwAnchoredObject& _rNewObj );
     void RemoveDrawObj( SwAnchoredObject& _rToRemoveObj );
 
-    // work with chain of FlyFrms
-    void  AppendFly( SwFlyFrm *pNew );
-    void  RemoveFly( SwFlyFrm *pToRemove );
+    // work with chain of FlyFrames
+    void  AppendFly( SwFlyFrame *pNew );
+    void  RemoveFly( SwFlyFrame *pToRemove );
     const SwSortedObjs *GetDrawObjs() const { return mpDrawObjs; }
           SwSortedObjs *GetDrawObjs()         { return mpDrawObjs; }
     // #i28701# - change purpose of method and adjust its name
     void InvalidateObjs( const bool _bInvaPosOnly,
                          const bool _bNoInvaOfAsCharAnchoredObjs = true );
 
-    virtual void PaintBorder( const SwRect&, const SwPageFrm *pPage,
+    virtual void PaintBorder( const SwRect&, const SwPageFrame *pPage,
                               const SwBorderAttrs & ) const;
-    void PaintBaBo( const SwRect&, const SwPageFrm *pPage = nullptr,
+    void PaintBaBo( const SwRect&, const SwPageFrame *pPage = nullptr,
                     const bool bLowerBorder = false, const bool bOnlyTextBackground = false ) const;
-    void PaintBackground( const SwRect&, const SwPageFrm *pPage,
+    void PaintBackground( const SwRect&, const SwPageFrame *pPage,
                           const SwBorderAttrs &,
                           const bool bLowerMode = false,
                           const bool bLowerBorder = false,
                           const bool bOnlyTextBackground = false ) const;
-    void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrm*,
+    void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrame*,
                           const Color *pColor,
                           const editeng::SvxBorderStyle = css::table::BorderLineStyle::SOLID ) const;
 
@@ -493,7 +493,7 @@ public:
 
     // FIXME: EasyHack (refactoring): rename method name in all files
     // retouch, not in the area of the given Rect!
-    void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
+    void Retouche( const SwPageFrame *pPage, const SwRect &rRect ) const;
 
     bool GetBackgroundBrush(
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
@@ -520,11 +520,11 @@ public:
 
     // If frame is inside a split table row, this function returns
     // the corresponding row frame in the follow table.
-    const SwRowFrm* IsInSplitTableRow() const;
+    const SwRowFrame* IsInSplitTableRow() const;
 
     // If frame is inside a follow flow row, this function returns
     // the corresponding row frame master table
-    const SwRowFrm* IsInFollowFlowRow() const;
+    const SwRowFrame* IsInFollowFlowRow() const;
 
     bool IsInBalancedSection() const;
 
@@ -544,24 +544,24 @@ public:
     void CheckDirChange();
     // returns upper left frame position for LTR and
     // upper right frame position for Asian / RTL frames
-    Point   GetFrmAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const;
+    Point   GetFrameAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const;
 
     /** determine, if frame is moveable in given environment
 
         method replaced 'old' method <bool IsMoveable() const>.
         Determines, if frame is moveable in given environment. if no environment
-        is given (parameter _pLayoutFrm == 0L), the movability in the actual
+        is given (parameter _pLayoutFrame == 0L), the movability in the actual
         environment (<this->GetUpper()) is checked.
 
-        @param _pLayoutFrm
+        @param _pLayoutFrame
         input parameter - given environment (layout frame), in which the movability
         will be checked. If not set ( == 0L ), actual environment is taken.
 
         @return boolean, indicating, if frame is moveable in given environment
     */
-    bool IsMoveable( const SwLayoutFrm* _pLayoutFrm = nullptr ) const;
+    bool IsMoveable( const SwLayoutFrame* _pLayoutFrame = nullptr ) const;
 
-    // Is it permitted for the (Text)Frm to add a footnote in the current
+    // Is it permitted for the (Text)Frame to add a footnote in the current
     // environment (not e.g. for repeating table headlines)
     bool IsFootnoteAllowed() const;
 
@@ -569,68 +569,68 @@ public:
 
     virtual void CheckDirection( bool bVert );
 
-    void ReinitializeFrmSizeAttrFlags();
+    void ReinitializeFrameSizeAttrFlags();
 
     const SwAttrSet *GetAttrSet() const;
 
     inline bool HasFixSize() const { return mbFixSize; }
 
     // check all pages (starting from the given) and correct them if needed
-    static void CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields = true, SwPageFrm** ppPrev = nullptr);
+    static void CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields = true, SwPageFrame** ppPrev = nullptr);
 
     // might return 0, with and without const
-    SwFrm               *GetNext()  { return mpNext; }
-    SwFrm               *GetPrev()  { return mpPrev; }
-    SwLayoutFrm         *GetUpper() { return mpUpper; }
-    SwRootFrm           *getRootFrm(){ return mpRoot; }
-    SwPageFrm           *FindPageFrm() { return IsPageFrm() ? reinterpret_cast<SwPageFrm*>(this) : ImplFindPageFrm(); }
-    SwFrm               *FindColFrm();
-    SwRowFrm            *FindRowFrm();
-    SwFootnoteBossFrm   *FindFootnoteBossFrm( bool bFootnotes = false );
-    SwTabFrm            *ImplFindTabFrm();
-    SwFootnoteFrm       *ImplFindFootnoteFrm();
-    SwFlyFrm            *ImplFindFlyFrm();
-    SwSectionFrm        *ImplFindSctFrm();
-    SwFrm               *FindFooterOrHeader();
-    SwFrm               *GetLower();
-    const SwFrm         *GetNext()  const { return mpNext; }
-    const SwFrm         *GetPrev()  const { return mpPrev; }
-    const SwLayoutFrm   *GetUpper() const { return mpUpper; }
-    const SwRootFrm     *getRootFrm()   const { return mpRoot; }
-    inline SwTabFrm     *FindTabFrm();
-    inline SwFootnoteFrm     *FindFootnoteFrm();
-    inline SwFlyFrm     *FindFlyFrm();
-    inline SwSectionFrm *FindSctFrm();
-    inline SwFrm        *FindNext();
+    SwFrame               *GetNext()  { return mpNext; }
+    SwFrame               *GetPrev()  { return mpPrev; }
+    SwLayoutFrame         *GetUpper() { return mpUpper; }
+    SwRootFrame           *getRootFrame(){ return mpRoot; }
+    SwPageFrame           *FindPageFrame() { return IsPageFrame() ? reinterpret_cast<SwPageFrame*>(this) : ImplFindPageFrame(); }
+    SwFrame               *FindColFrame();
+    SwRowFrame            *FindRowFrame();
+    SwFootnoteBossFrame   *FindFootnoteBossFrame( bool bFootnotes = false );
+    SwTabFrame            *ImplFindTabFrame();
+    SwFootnoteFrame       *ImplFindFootnoteFrame();
+    SwFlyFrame            *ImplFindFlyFrame();
+    SwSectionFrame        *ImplFindSctFrame();
+    SwFrame               *FindFooterOrHeader();
+    SwFrame               *GetLower();
+    const SwFrame         *GetNext()  const { return mpNext; }
+    const SwFrame         *GetPrev()  const { return mpPrev; }
+    const SwLayoutFrame   *GetUpper() const { return mpUpper; }
+    const SwRootFrame     *getRootFrame()   const { return mpRoot; }
+    inline SwTabFrame     *FindTabFrame();
+    inline SwFootnoteFrame     *FindFootnoteFrame();
+    inline SwFlyFrame     *FindFlyFrame();
+    inline SwSectionFrame *FindSctFrame();
+    inline SwFrame        *FindNext();
     // #i27138# - add parameter <_bInSameFootnote>
-    SwContentFrm* FindNextCnt( const bool _bInSameFootnote = false );
-    inline SwFrm        *FindPrev();
-    inline const SwPageFrm *FindPageFrm() const;
-    inline const SwFootnoteBossFrm *FindFootnoteBossFrm( bool bFootnote = false ) const;
-    inline const SwFrm     *FindColFrm() const;
-    inline const SwFrm     *FindFooterOrHeader() const;
-    inline const SwTabFrm  *FindTabFrm() const;
-    inline const SwFootnoteFrm  *FindFootnoteFrm() const;
-    inline const SwFlyFrm  *FindFlyFrm() const;
-    inline const SwSectionFrm *FindSctFrm() const;
-    inline const SwFrm     *FindNext() const;
+    SwContentFrame* FindNextCnt( const bool _bInSameFootnote = false );
+    inline SwFrame        *FindPrev();
+    inline const SwPageFrame *FindPageFrame() const;
+    inline const SwFootnoteBossFrame *FindFootnoteBossFrame( bool bFootnote = false ) const;
+    inline const SwFrame     *FindColFrame() const;
+    inline const SwFrame     *FindFooterOrHeader() const;
+    inline const SwTabFrame  *FindTabFrame() const;
+    inline const SwFootnoteFrame  *FindFootnoteFrame() const;
+    inline const SwFlyFrame  *FindFlyFrame() const;
+    inline const SwSectionFrame *FindSctFrame() const;
+    inline const SwFrame     *FindNext() const;
     // #i27138# - add parameter <_bInSameFootnote>
-    const SwContentFrm* FindNextCnt( const bool _bInSameFootnote = false ) const;
-    inline const SwFrm     *FindPrev() const;
-           const SwFrm     *GetLower()  const;
+    const SwContentFrame* FindNextCnt( const bool _bInSameFootnote = false ) const;
+    inline const SwFrame     *FindPrev() const;
+           const SwFrame     *GetLower()  const;
 
-    SwContentFrm* FindPrevCnt( const bool _bInSameFootnote = false );
+    SwContentFrame* FindPrevCnt( const bool _bInSameFootnote = false );
 
-    const SwContentFrm* FindPrevCnt( const bool _bInSameFootnote = false ) const;
+    const SwContentFrame* FindPrevCnt( const bool _bInSameFootnote = false ) const;
 
     // #i79774#
-    SwFrm* _GetIndPrev() const;
-    SwFrm* GetIndPrev() const
+    SwFrame* _GetIndPrev() const;
+    SwFrame* GetIndPrev() const
         { return ( mpPrev || !IsInSct() ) ? mpPrev : _GetIndPrev(); }
 
-    SwFrm* GetIndNext()
+    SwFrame* GetIndNext()
         { return ( mpNext || !IsInSct() ) ? mpNext : _GetIndNext(); }
-    const SwFrm* GetIndNext() const { return const_cast<SwFrm*>(this)->GetIndNext(); }
+    const SwFrame* GetIndNext() const { return const_cast<SwFrame*>(this)->GetIndNext(); }
 
     sal_uInt16 GetPhyPageNum() const;   // page number without offset
     sal_uInt16 GetVirtPageNum() const;  // page number with offset
@@ -638,31 +638,31 @@ public:
     bool WannaRightPage() const;
     bool OnFirstPage() const;
 
-    inline const  SwLayoutFrm *GetPrevLayoutLeaf() const;
-    inline const  SwLayoutFrm *GetNextLayoutLeaf() const;
-    inline SwLayoutFrm *GetPrevLayoutLeaf();
-    inline SwLayoutFrm *GetNextLayoutLeaf();
+    inline const  SwLayoutFrame *GetPrevLayoutLeaf() const;
+    inline const  SwLayoutFrame *GetNextLayoutLeaf() const;
+    inline SwLayoutFrame *GetPrevLayoutLeaf();
+    inline SwLayoutFrame *GetNextLayoutLeaf();
 
     virtual void Calc(vcl::RenderContext* pRenderContext) const; // here might be "formatted"
     inline void OptCalc() const;    // here we assume (for optimization) that
                                     // the predecessors are already formatted
 
     Point   GetRelPos() const;
-    const  SwRect &Frm() const { return maFrm; }
+    const  SwRect &Frame() const { return maFrame; }
     const  SwRect &Prt() const { return maPrt; }
 
     // PaintArea is the area where content might be displayed.
     // The margin of a page or the space between columns belongs to it.
     const SwRect PaintArea() const;
-    // UnionFrm is the union of Frm- and PrtArea, normally identical
-    // to the FrmArea except in case of negative Prt margins.
-    const SwRect UnionFrm( bool bBorder = false ) const;
+    // UnionFrame is the union of Frame- and PrtArea, normally identical
+    // to the FrameArea except in case of negative Prt margins.
+    const SwRect UnionFrame( bool bBorder = false ) const;
 
     // HACK: Here we exceptionally allow direct access to members.
     // This should not delude into changing those value randomly; it is the
     // only option to circumvent compiler problems (same method with public
     // and protected).
-    SwRect &Frm() { return maFrm; }
+    SwRect &Frame() { return maFrame; }
     SwRect &Prt() { return maPrt; }
 
     virtual Size ChgSize( const Size& aNewSize );
@@ -670,7 +670,7 @@ public:
     virtual void Cut() = 0;
     //Add a method to change the acc table dispose state.
     void SetAccTableDispose(bool bDispose) { mbIfAccTableShouldDisposing = bDispose;}
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) = 0;
+    virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) = 0;
 
     void ValidateLineNum() { mbValidLineNum = true; }
 
@@ -680,7 +680,7 @@ public:
     bool GetValidLineNumFlag()const { return mbValidLineNum; }
     bool IsValid() const { return mbValidPos && mbValidSize && mbValidPrtArea; }
 
-    // Only invalidate Frm
+    // Only invalidate Frame
     // #i28701# - add call to method <_ActionOnInvalidation(..)>
     //            for all invalidation methods.
     // #i28701# - use method <_InvalidationAllowed(..)> to
@@ -747,14 +747,14 @@ public:
     */
     void InvalidateNextPrtArea();
 
-    void InvalidatePage( const SwPageFrm *pPage = nullptr ) const;
+    void InvalidatePage( const SwPageFrame *pPage = nullptr ) const;
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
-    virtual bool    GetCrsrOfst( SwPosition *, Point&,
-                                 SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const;
+    virtual bool    GetCursorOfst( SwPosition *, Point&,
+                                 SwCursorMoveState* = nullptr, bool bTestBackground = false ) const;
     virtual bool    GetCharRect( SwRect &, const SwPosition&,
-                                 SwCrsrMoveState* = nullptr ) const;
+                                 SwCursorMoveState* = nullptr ) const;
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const;
 
@@ -765,45 +765,45 @@ public:
                           const void *pVoid = nullptr, bool bNotify = true );
 
     // true if it is the correct class, false otherwise
-    inline bool IsLayoutFrm() const;
-    inline bool IsRootFrm() const;
-    inline bool IsPageFrm() const;
-    inline bool IsColumnFrm() const;
-    inline bool IsFootnoteBossFrm() const;  // footnote bosses might be PageFrms or ColumnFrms
-    inline bool IsHeaderFrm() const;
-    inline bool IsFooterFrm() const;
-    inline bool IsFootnoteContFrm() const;
-    inline bool IsFootnoteFrm() const;
-    inline bool IsBodyFrm() const;
-    inline bool IsColBodyFrm() const;  // implemented in layfrm.hxx, BodyFrm above ColumnFrm
-    inline bool IsPageBodyFrm() const; // implemented in layfrm.hxx, BodyFrm above PageFrm
-    inline bool IsFlyFrm() const;
-    inline bool IsSctFrm() const;
-    inline bool IsTabFrm() const;
-    inline bool IsRowFrm() const;
-    inline bool IsCellFrm() const;
-    inline bool IsContentFrm() const;
-    inline bool IsTextFrm() const;
-    inline bool IsNoTextFrm() const;
-    // Frms where its PrtArea depends on their neighbors and that are
+    inline bool IsLayoutFrame() const;
+    inline bool IsRootFrame() const;
+    inline bool IsPageFrame() const;
+    inline bool IsColumnFrame() const;
+    inline bool IsFootnoteBossFrame() const;  // footnote bosses might be PageFrames or ColumnFrames
+    inline bool IsHeaderFrame() const;
+    inline bool IsFooterFrame() const;
+    inline bool IsFootnoteContFrame() const;
+    inline bool IsFootnoteFrame() const;
+    inline bool IsBodyFrame() const;
+    inline bool IsColBodyFrame() const;  // implemented in layfrm.hxx, BodyFrame above ColumnFrame
+    inline bool IsPageBodyFrame() const; // implemented in layfrm.hxx, BodyFrame above PageFrame
+    inline bool IsFlyFrame() const;
+    inline bool IsSctFrame() const;
+    inline bool IsTabFrame() const;
+    inline bool IsRowFrame() const;
+    inline bool IsCellFrame() const;
+    inline bool IsContentFrame() const;
+    inline bool IsTextFrame() const;
+    inline bool IsNoTextFrame() const;
+    // Frames where its PrtArea depends on their neighbors and that are
     // positioned in the content flow
-    inline bool IsFlowFrm() const;
-    // Frms that are capable of retouching or that might need to retouch behind
+    inline bool IsFlowFrame() const;
+    // Frames that are capable of retouching or that might need to retouch behind
     // themselves
-    inline bool IsRetoucheFrm() const;
-    inline bool IsAccessibleFrm() const;
+    inline bool IsRetoucheFrame() const;
+    inline bool IsAccessibleFrame() const;
 
-    void PrepareCrsr();                 // CrsrShell is allowed to call this
+    void PrepareCursor();                 // CursorShell is allowed to call this
 
-    // Is the Frm (or the section containing it) protected? Same for Fly in
+    // Is the Frame (or the section containing it) protected? Same for Fly in
     // Fly in ... and footnotes
     bool IsProtected() const;
 
     bool IsColLocked()  const { return mbColLocked; }
     bool IsDeleteForbidden()  const { return mbForbidDelete; }
 
-    /// this is the only way to delete a SwFrm instance
-    static void DestroyFrm(SwFrm *const pFrm);
+    /// this is the only way to delete a SwFrame instance
+    static void DestroyFrame(SwFrame *const pFrame);
 
     bool IsInDtor() const { return mbInDtor; }
 
@@ -824,15 +824,15 @@ public:
     bool SetMaxBottom( long );
     bool SetMaxRight( long );
     bool SetMinTop( long );
-    void MakeBelowPos( const SwFrm*, const SwFrm*, bool );
-    void MakeUpperPos( const SwFrm*, const SwFrm*, bool );
-    void MakeLeftPos( const SwFrm*, const SwFrm*, bool );
-    void MakeRightPos( const SwFrm*, const SwFrm*, bool );
-    inline bool IsNeighbourFrm() const
+    void MakeBelowPos( const SwFrame*, const SwFrame*, bool );
+    void MakeUpperPos( const SwFrame*, const SwFrame*, bool );
+    void MakeLeftPos( const SwFrame*, const SwFrame*, bool );
+    void MakeRightPos( const SwFrame*, const SwFrame*, bool );
+    inline bool IsNeighbourFrame() const
         { return (GetType() & FRM_NEIGHBOUR) != 0; }
 
     // #i65250#
-    inline sal_uInt32 GetFrmId() const { return mnFrmId; }
+    inline sal_uInt32 GetFrameId() const { return mnFrameId; }
 
     // NEW TABLES
     // Some functions for covered/covering table cells. This way unnecessary
@@ -862,109 +862,109 @@ public:
     bool IsCollapse() const;
 };
 
-inline bool SwFrm::IsInDocBody() const
+inline bool SwFrame::IsInDocBody() const
 {
     if ( mbInfInvalid )
-        const_cast<SwFrm*>(this)->SetInfFlags();
+        const_cast<SwFrame*>(this)->SetInfFlags();
     return mbInfBody;
 }
-inline bool SwFrm::IsInFootnote() const
+inline bool SwFrame::IsInFootnote() const
 {
     if ( mbInfInvalid )
-        const_cast<SwFrm*>(this)->SetInfFlags();
+        const_cast<SwFrame*>(this)->SetInfFlags();
     return mbInfFootnote;
 }
-inline bool SwFrm::IsInTab() const
+inline bool SwFrame::IsInTab() const
 {
     if ( mbInfInvalid )
-        const_cast<SwFrm*>(this)->SetInfFlags();
+        const_cast<SwFrame*>(this)->SetInfFlags();
     return mbInfTab;
 }
-inline bool SwFrm::IsInFly() const
+inline bool SwFrame::IsInFly() const
 {
     if ( mbInfInvalid )
-        const_cast<SwFrm*>(this)->SetInfFlags();
+        const_cast<SwFrame*>(this)->SetInfFlags();
     return mbInfFly;
 }
-inline bool SwFrm::IsInSct() const
+inline bool SwFrame::IsInSct() const
 {
     if ( mbInfInvalid )
-        const_cast<SwFrm*>(this)->SetInfFlags();
+        const_cast<SwFrame*>(this)->SetInfFlags();
     return mbInfSct;
 }
-bool SwFrm::IsVertical() const
+bool SwFrame::IsVertical() const
 {
     if( mbInvalidVert )
-        const_cast<SwFrm*>(this)->SetDirFlags( true );
+        const_cast<SwFrame*>(this)->SetDirFlags( true );
     return mbVertical;
 }
-inline bool SwFrm::IsVertLR() const
+inline bool SwFrame::IsVertLR() const
 {
     return mbVertLR;
 }
-inline bool SwFrm::IsRightToLeft() const
+inline bool SwFrame::IsRightToLeft() const
 {
     if( mbInvalidR2L )
-        const_cast<SwFrm*>(this)->SetDirFlags( false );
+        const_cast<SwFrame*>(this)->SetDirFlags( false );
     return mbRightToLeft;
 }
 
-inline void SwFrm::SetCompletePaint() const
+inline void SwFrame::SetCompletePaint() const
 {
-    const_cast<SwFrm*>(this)->mbCompletePaint = true;
+    const_cast<SwFrame*>(this)->mbCompletePaint = true;
 }
-inline void SwFrm::ResetCompletePaint() const
+inline void SwFrame::ResetCompletePaint() const
 {
-    const_cast<SwFrm*>(this)->mbCompletePaint = false;
-}
-
-inline void SwFrm::SetRetouche() const
-{
-    const_cast<SwFrm*>(this)->mbRetouche = true;
-}
-inline void SwFrm::ResetRetouche() const
-{
-    const_cast<SwFrm*>(this)->mbRetouche = false;
+    const_cast<SwFrame*>(this)->mbCompletePaint = false;
 }
 
-inline SwLayoutFrm *SwFrm::GetNextLayoutLeaf()
+inline void SwFrame::SetRetouche() const
 {
-    return const_cast<SwLayoutFrm*>(static_cast<const SwFrm*>(this)->GetNextLayoutLeaf());
+    const_cast<SwFrame*>(this)->mbRetouche = true;
 }
-inline SwLayoutFrm *SwFrm::GetPrevLayoutLeaf()
+inline void SwFrame::ResetRetouche() const
 {
-    return const_cast<SwLayoutFrm*>(static_cast<const SwFrm*>(this)->GetPrevLayoutLeaf());
+    const_cast<SwFrame*>(this)->mbRetouche = false;
 }
-inline const SwLayoutFrm *SwFrm::GetNextLayoutLeaf() const
+
+inline SwLayoutFrame *SwFrame::GetNextLayoutLeaf()
+{
+    return const_cast<SwLayoutFrame*>(static_cast<const SwFrame*>(this)->GetNextLayoutLeaf());
+}
+inline SwLayoutFrame *SwFrame::GetPrevLayoutLeaf()
+{
+    return const_cast<SwLayoutFrame*>(static_cast<const SwFrame*>(this)->GetPrevLayoutLeaf());
+}
+inline const SwLayoutFrame *SwFrame::GetNextLayoutLeaf() const
 {
     return ImplGetNextLayoutLeaf( true );
 }
-inline const SwLayoutFrm *SwFrm::GetPrevLayoutLeaf() const
+inline const SwLayoutFrame *SwFrame::GetPrevLayoutLeaf() const
 {
     return ImplGetNextLayoutLeaf( false );
 }
 
-inline void SwFrm::InvalidateSize()
+inline void SwFrame::InvalidateSize()
 {
     if ( mbValidSize )
         ImplInvalidateSize();
 }
-inline void SwFrm::InvalidatePrt()
+inline void SwFrame::InvalidatePrt()
 {
     if ( mbValidPrtArea )
         ImplInvalidatePrt();
 }
-inline void SwFrm::InvalidatePos()
+inline void SwFrame::InvalidatePos()
 {
     if ( mbValidPos )
         ImplInvalidatePos();
 }
-inline void SwFrm::InvalidateLineNum()
+inline void SwFrame::InvalidateLineNum()
 {
     if ( mbValidLineNum )
         ImplInvalidateLineNum();
 }
-inline void SwFrm::InvalidateAll()
+inline void SwFrame::InvalidateAll()
 {
     if ( _InvalidationAllowed( INVALID_ALL ) )
     {
@@ -976,204 +976,204 @@ inline void SwFrm::InvalidateAll()
         _ActionOnInvalidation( INVALID_ALL );
     }
 }
-inline void SwFrm::InvalidateNextPos( bool bNoFootnote )
+inline void SwFrame::InvalidateNextPos( bool bNoFootnote )
 {
-    if ( mpNext && !mpNext->IsSctFrm() )
+    if ( mpNext && !mpNext->IsSctFrame() )
         mpNext->InvalidatePos();
     else
         ImplInvalidateNextPos( bNoFootnote );
 }
 
-inline void SwFrm::OptCalc() const
+inline void SwFrame::OptCalc() const
 {
     if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
-        const_cast<SwFrm*>(this)->OptPrepareMake();
+        const_cast<SwFrame*>(this)->OptPrepareMake();
 }
-inline const SwPageFrm *SwFrm::FindPageFrm() const
+inline const SwPageFrame *SwFrame::FindPageFrame() const
 {
-    return const_cast<SwFrm*>(this)->FindPageFrm();
+    return const_cast<SwFrame*>(this)->FindPageFrame();
 }
-inline const SwFrm *SwFrm::FindColFrm() const
+inline const SwFrame *SwFrame::FindColFrame() const
 {
-    return const_cast<SwFrm*>(this)->FindColFrm();
+    return const_cast<SwFrame*>(this)->FindColFrame();
 }
-inline const SwFrm *SwFrm::FindFooterOrHeader() const
+inline const SwFrame *SwFrame::FindFooterOrHeader() const
 {
-    return const_cast<SwFrm*>(this)->FindFooterOrHeader();
+    return const_cast<SwFrame*>(this)->FindFooterOrHeader();
 }
-inline SwTabFrm *SwFrm::FindTabFrm()
+inline SwTabFrame *SwFrame::FindTabFrame()
 {
-    return IsInTab() ? ImplFindTabFrm() : nullptr;
+    return IsInTab() ? ImplFindTabFrame() : nullptr;
 }
-inline const SwFootnoteBossFrm *SwFrm::FindFootnoteBossFrm( bool bFootnote ) const
+inline const SwFootnoteBossFrame *SwFrame::FindFootnoteBossFrame( bool bFootnote ) const
 {
-    return const_cast<SwFrm*>(this)->FindFootnoteBossFrm( bFootnote );
+    return const_cast<SwFrame*>(this)->FindFootnoteBossFrame( bFootnote );
 }
-inline SwFootnoteFrm *SwFrm::FindFootnoteFrm()
+inline SwFootnoteFrame *SwFrame::FindFootnoteFrame()
 {
-    return IsInFootnote() ? ImplFindFootnoteFrm() : nullptr;
+    return IsInFootnote() ? ImplFindFootnoteFrame() : nullptr;
 }
-inline SwFlyFrm *SwFrm::FindFlyFrm()
+inline SwFlyFrame *SwFrame::FindFlyFrame()
 {
-    return IsInFly() ? ImplFindFlyFrm() : nullptr;
+    return IsInFly() ? ImplFindFlyFrame() : nullptr;
 }
-inline SwSectionFrm *SwFrm::FindSctFrm()
+inline SwSectionFrame *SwFrame::FindSctFrame()
 {
-    return IsInSct() ? ImplFindSctFrm() : nullptr;
+    return IsInSct() ? ImplFindSctFrame() : nullptr;
 }
 
-inline const SwTabFrm *SwFrm::FindTabFrm() const
+inline const SwTabFrame *SwFrame::FindTabFrame() const
 {
-    return IsInTab() ? const_cast<SwFrm*>(this)->ImplFindTabFrm() : nullptr;
+    return IsInTab() ? const_cast<SwFrame*>(this)->ImplFindTabFrame() : nullptr;
 }
-inline const SwFootnoteFrm *SwFrm::FindFootnoteFrm() const
+inline const SwFootnoteFrame *SwFrame::FindFootnoteFrame() const
 {
-    return IsInFootnote() ? const_cast<SwFrm*>(this)->ImplFindFootnoteFrm() : nullptr;
+    return IsInFootnote() ? const_cast<SwFrame*>(this)->ImplFindFootnoteFrame() : nullptr;
 }
-inline const SwFlyFrm *SwFrm::FindFlyFrm() const
+inline const SwFlyFrame *SwFrame::FindFlyFrame() const
 {
-    return IsInFly() ? const_cast<SwFrm*>(this)->ImplFindFlyFrm() : nullptr;
+    return IsInFly() ? const_cast<SwFrame*>(this)->ImplFindFlyFrame() : nullptr;
 }
-inline const SwSectionFrm *SwFrm::FindSctFrm() const
+inline const SwSectionFrame *SwFrame::FindSctFrame() const
 {
-    return IsInSct() ? const_cast<SwFrm*>(this)->ImplFindSctFrm() : nullptr;
+    return IsInSct() ? const_cast<SwFrame*>(this)->ImplFindSctFrame() : nullptr;
 }
-inline SwFrm *SwFrm::FindNext()
+inline SwFrame *SwFrame::FindNext()
 {
     if ( mpNext )
         return mpNext;
     else
         return _FindNext();
 }
-inline const SwFrm *SwFrm::FindNext() const
+inline const SwFrame *SwFrame::FindNext() const
 {
     if ( mpNext )
         return mpNext;
     else
-        return const_cast<SwFrm*>(this)->_FindNext();
+        return const_cast<SwFrame*>(this)->_FindNext();
 }
-inline SwFrm *SwFrm::FindPrev()
+inline SwFrame *SwFrame::FindPrev()
 {
-    if ( mpPrev && !mpPrev->IsSctFrm() )
+    if ( mpPrev && !mpPrev->IsSctFrame() )
         return mpPrev;
     else
         return _FindPrev();
 }
-inline const SwFrm *SwFrm::FindPrev() const
+inline const SwFrame *SwFrame::FindPrev() const
 {
-    if ( mpPrev && !mpPrev->IsSctFrm() )
+    if ( mpPrev && !mpPrev->IsSctFrame() )
         return mpPrev;
     else
-        return const_cast<SwFrm*>(this)->_FindPrev();
+        return const_cast<SwFrame*>(this)->_FindPrev();
 }
 
-inline bool SwFrm::IsLayoutFrm() const
+inline bool SwFrame::IsLayoutFrame() const
 {
     return (GetType() & FRM_LAYOUT) != 0;
 }
-inline bool SwFrm::IsRootFrm() const
+inline bool SwFrame::IsRootFrame() const
 {
-    return mnFrmType == FRM_ROOT;
+    return mnFrameType == FRM_ROOT;
 }
-inline bool SwFrm::IsPageFrm() const
+inline bool SwFrame::IsPageFrame() const
 {
-    return mnFrmType == FRM_PAGE;
+    return mnFrameType == FRM_PAGE;
 }
-inline bool SwFrm::IsColumnFrm() const
+inline bool SwFrame::IsColumnFrame() const
 {
-    return mnFrmType == FRM_COLUMN;
+    return mnFrameType == FRM_COLUMN;
 }
-inline bool SwFrm::IsFootnoteBossFrm() const
+inline bool SwFrame::IsFootnoteBossFrame() const
 {
     return (GetType() & FRM_FTNBOSS) != 0;
 }
-inline bool SwFrm::IsHeaderFrm() const
+inline bool SwFrame::IsHeaderFrame() const
 {
-    return mnFrmType == FRM_HEADER;
+    return mnFrameType == FRM_HEADER;
 }
-inline bool SwFrm::IsFooterFrm() const
+inline bool SwFrame::IsFooterFrame() const
 {
-    return mnFrmType == FRM_FOOTER;
+    return mnFrameType == FRM_FOOTER;
 }
-inline bool SwFrm::IsFootnoteContFrm() const
+inline bool SwFrame::IsFootnoteContFrame() const
 {
-    return mnFrmType == FRM_FTNCONT;
+    return mnFrameType == FRM_FTNCONT;
 }
-inline bool SwFrm::IsFootnoteFrm() const
+inline bool SwFrame::IsFootnoteFrame() const
 {
-    return mnFrmType == FRM_FTN;
+    return mnFrameType == FRM_FTN;
 }
-inline bool SwFrm::IsBodyFrm() const
+inline bool SwFrame::IsBodyFrame() const
 {
-    return mnFrmType == FRM_BODY;
+    return mnFrameType == FRM_BODY;
 }
-inline bool SwFrm::IsFlyFrm() const
+inline bool SwFrame::IsFlyFrame() const
 {
-    return mnFrmType == FRM_FLY;
+    return mnFrameType == FRM_FLY;
 }
-inline bool SwFrm::IsSctFrm() const
+inline bool SwFrame::IsSctFrame() const
 {
-    return mnFrmType == FRM_SECTION;
+    return mnFrameType == FRM_SECTION;
 }
-inline bool SwFrm::IsTabFrm() const
+inline bool SwFrame::IsTabFrame() const
 {
-    return mnFrmType == FRM_TAB;
+    return mnFrameType == FRM_TAB;
 }
-inline bool SwFrm::IsRowFrm() const
+inline bool SwFrame::IsRowFrame() const
 {
-    return mnFrmType == FRM_ROW;
+    return mnFrameType == FRM_ROW;
 }
-inline bool SwFrm::IsCellFrm() const
+inline bool SwFrame::IsCellFrame() const
 {
-    return mnFrmType == FRM_CELL;
+    return mnFrameType == FRM_CELL;
 }
-inline bool SwFrm::IsContentFrm() const
+inline bool SwFrame::IsContentFrame() const
 {
     return (GetType() & FRM_CNTNT) != 0;
 }
-inline bool SwFrm::IsTextFrm() const
+inline bool SwFrame::IsTextFrame() const
 {
-    return mnFrmType == FRM_TXT;
+    return mnFrameType == FRM_TXT;
 }
-inline bool SwFrm::IsNoTextFrm() const
+inline bool SwFrame::IsNoTextFrame() const
 {
-    return mnFrmType == FRM_NOTXT;
+    return mnFrameType == FRM_NOTXT;
 }
-inline bool SwFrm::IsFlowFrm() const
+inline bool SwFrame::IsFlowFrame() const
 {
     return (GetType() & (FRM_CNTNT|FRM_TAB|FRM_SECTION)) != 0;
 }
-inline bool SwFrm::IsRetoucheFrm() const
+inline bool SwFrame::IsRetoucheFrame() const
 {
     return (GetType() & (FRM_CNTNT|FRM_TAB|FRM_SECTION|FRM_FTN)) != 0;
 }
-inline bool SwFrm::IsAccessibleFrm() const
+inline bool SwFrame::IsAccessibleFrame() const
 {
     return (GetType() & FRM_ACCESSIBLE) != 0;
 }
 
-//use this to protect a SwFrm for a given scope from getting deleted
-class SwFrmDeleteGuard
+//use this to protect a SwFrame for a given scope from getting deleted
+class SwFrameDeleteGuard
 {
 private:
-    SwFrm *m_pFrm;
+    SwFrame *m_pFrame;
     bool m_bOldDeleteAllowed;
 public:
-    //Flag pFrm for SwFrmDeleteGuard lifetime that we shouldn't delete
-    //it in e.g. SwSectionFrm::MergeNext etc because we will need it
-    //again after the SwFrmDeleteGuard dtor
-    explicit SwFrmDeleteGuard(SwFrm* pFrm)
-        : m_pFrm(pFrm)
+    //Flag pFrame for SwFrameDeleteGuard lifetime that we shouldn't delete
+    //it in e.g. SwSectionFrame::MergeNext etc because we will need it
+    //again after the SwFrameDeleteGuard dtor
+    explicit SwFrameDeleteGuard(SwFrame* pFrame)
+        : m_pFrame(pFrame)
     {
-        m_bOldDeleteAllowed = m_pFrm && !m_pFrm->IsDeleteForbidden();
+        m_bOldDeleteAllowed = m_pFrame && !m_pFrame->IsDeleteForbidden();
         if (m_bOldDeleteAllowed)
-            m_pFrm->ForbidDelete();
+            m_pFrame->ForbidDelete();
     }
 
-    ~SwFrmDeleteGuard()
+    ~SwFrameDeleteGuard()
     {
         if (m_bOldDeleteAllowed)
-            m_pFrm->AllowDelete();
+            m_pFrame->AllowDelete();
     }
 };
 

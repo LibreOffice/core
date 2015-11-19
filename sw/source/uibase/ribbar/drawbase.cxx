@@ -198,8 +198,8 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                             pSdrView->UnmarkAllPoints();
                     }
                 }
-                if (!m_pSh->IsSelFrmMode())
-                    m_pSh->EnterSelFrmMode();
+                if (!m_pSh->IsSelFrameMode())
+                    m_pSh->EnterSelFrameMode();
 
                 if( (bReturn = m_pSh->BeginMark(m_aStartPos)) )
                     m_pWin->SetDrawAction(true);
@@ -280,18 +280,18 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     aReq.Done();
                 }
                 bAutoCap = true;
-                if(m_pWin->GetFrmColCount() > 1)
+                if(m_pWin->GetFrameColCount() > 1)
                 {
                     SfxItemSet aSet(m_pView->GetPool(),RES_COL,RES_COL);
                     SwFormatCol aCol(static_cast<const SwFormatCol&>(aSet.Get(RES_COL)));
-                    aCol.Init(m_pWin->GetFrmColCount(), aCol.GetGutterWidth(), aCol.GetWishWidth());
+                    aCol.Init(m_pWin->GetFrameColCount(), aCol.GetGutterWidth(), aCol.GetWishWidth());
                     aSet.Put(aCol);
                     // Template AutoUpdate
                     SwFrameFormat* pFormat = m_pSh->GetSelectedFrameFormat();
                     if(pFormat && pFormat->IsAutoUpdateFormat())
                         m_pSh->AutoUpdateFrame(pFormat, aSet);
                     else
-                        m_pSh->SetFlyFrmAttr( aSet );
+                        m_pSh->SetFlyFrameAttr( aSet );
                 }
             }
             if (m_pWin->GetSdrDrawMode() == OBJ_NONE)
@@ -321,7 +321,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 if (aPnt == m_aStartPos && m_pSh->IsObjSelectable(aPnt))
                 {
                     m_pSh->SelectObj(aPnt, ( rMEvt.IsShift() &&
-                                   m_pSh->IsSelFrmMode()) ? SW_ADD_SELECT : 0);
+                                   m_pSh->IsSelFrameMode()) ? SW_ADD_SELECT : 0);
 
                     if (!m_pSh->IsObjSelected())
                     {
@@ -329,8 +329,8 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 
                         m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
 
-                        if (m_pSh->IsSelFrmMode())
-                            m_pSh->LeaveSelFrmMode();
+                        if (m_pSh->IsSelFrameMode())
+                            m_pSh->LeaveSelFrameMode();
                     }
                     m_pView->NoRotate();
 
@@ -340,12 +340,12 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     if (m_pSh->IsObjSelectable(aPnt))
                         m_pSh->SelectObj(aPnt, ( rMEvt.IsShift() &&
-                            m_pSh->IsSelFrmMode() ) ? SW_ADD_SELECT : 0 );
+                            m_pSh->IsSelFrameMode() ) ? SW_ADD_SELECT : 0 );
                     else
                     {
                         m_pView->LeaveDrawCreate();
-                        if (m_pSh->IsSelFrmMode())
-                            m_pSh->LeaveSelFrmMode();
+                        if (m_pSh->IsSelFrameMode())
+                            m_pSh->LeaveSelFrameMode();
                     }
                     m_pView->NoRotate();
 
@@ -378,7 +378,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                         if (!rMEvt.IsShift())
                             pSdrView->UnmarkAllPoints();
                         m_pSh->SelectObj(aPnt, (rMEvt.IsShift() &&
-                                       m_pSh->IsSelFrmMode()) ? SW_ADD_SELECT :0);
+                                       m_pSh->IsSelFrameMode()) ? SW_ADD_SELECT :0);
                     }
 
                     if (!m_pSh->IsObjSelected())
@@ -387,8 +387,8 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 
                         m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
 
-                        if (m_pSh->IsSelFrmMode())
-                            m_pSh->LeaveSelFrmMode();
+                        if (m_pSh->IsSelFrameMode())
+                            m_pSh->LeaveSelFrameMode();
                     }
                     m_pView->NoRotate();
 
@@ -401,8 +401,8 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
             if (!m_pSh->IsObjSelected() && !m_pWin->IsDrawAction())
             {
                 m_pView->LeaveDrawCreate();
-                if (m_pSh->IsSelFrmMode())
-                    m_pSh->LeaveSelFrmMode();
+                if (m_pSh->IsSelFrameMode())
+                    m_pSh->LeaveSelFrameMode();
 
                 m_pView->NoRotate();
                 bReturn = true;
@@ -583,8 +583,8 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
         else
         {
             m_pView->LeaveDrawCreate();
-            if (m_pSh->IsSelFrmMode())
-                m_pSh->LeaveSelFrmMode();
+            if (m_pSh->IsSelFrameMode())
+                m_pSh->LeaveSelFrameMode();
         }
         m_pView->NoRotate();
     }

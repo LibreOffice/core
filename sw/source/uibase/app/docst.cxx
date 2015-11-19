@@ -127,7 +127,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_APPLY:
             {// here the template and its family are passed to the StyleBox
              // so that this family is being showed
-                if(pShell->IsFrmSelected())
+                if(pShell->IsFrameSelected())
                 {
                     SwFrameFormat* pFormat = pShell->GetSelectedFrameFormat();
                     if( pFormat )
@@ -143,7 +143,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             }
             break;
             case SID_STYLE_FAMILY1:
-                if( !pShell->IsFrmSelected() )
+                if( !pShell->IsFrameSelected() )
                 {
                     SwCharFormat* pFormat = pShell->GetCurCharFormat();
                     if(pFormat)
@@ -156,7 +156,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 break;
 
             case SID_STYLE_FAMILY2:
-                if(!pShell->IsFrmSelected())
+                if(!pShell->IsFrameSelected())
                 {
                     SwTextFormatColl* pColl = pShell->GetCurTextFormatColl();
                     if(pColl)
@@ -169,15 +169,15 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
-                        const FrmTypeFlags nSelection = pShell->GetFrmType(nullptr,true);
+                        const FrameTypeFlags nSelection = pShell->GetFrameType(nullptr,true);
                         if(pShell->GetCurTOX())
                             nMask = SWSTYLEBIT_IDX  ;
-                        else if(nSelection & FrmTypeFlags::HEADER     ||
-                                nSelection & FrmTypeFlags::FOOTER     ||
-                                nSelection & FrmTypeFlags::TABLE      ||
-                                nSelection & FrmTypeFlags::FLY_ANY    ||
-                                nSelection & FrmTypeFlags::FOOTNOTE   ||
-                                nSelection & FrmTypeFlags::FTNPAGE)
+                        else if(nSelection & FrameTypeFlags::HEADER     ||
+                                nSelection & FrameTypeFlags::FOOTER     ||
+                                nSelection & FrameTypeFlags::TABLE      ||
+                                nSelection & FrameTypeFlags::FLY_ANY    ||
+                                nSelection & FrameTypeFlags::FOOTNOTE   ||
+                                nSelection & FrameTypeFlags::FTNPAGE)
                             nMask = SWSTYLEBIT_EXTRA;
                         else
                             nMask = SWSTYLEBIT_TEXT;
@@ -196,7 +196,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 else
                 {
                     SwFrameFormat* pFormat = pShell->GetSelectedFrameFormat();
-                    if(pFormat && pShell->IsFrmSelected())
+                    if(pFormat && pShell->IsFrameSelected())
                     {
                         aName = pFormat->GetName();
                         rSet.Put(SfxTemplateItem(nWhich, aName));
@@ -221,7 +221,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             break;
             case SID_STYLE_FAMILY5:
                 {
-                    const SwNumRule* pRule = pShell->GetNumRuleAtCurrCrsrPos();
+                    const SwNumRule* pRule = pShell->GetNumRuleAtCurrCursorPos();
                     if( pRule )
                         aName = pRule->GetName();
 
@@ -237,21 +237,21 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             }
             break;
             case SID_STYLE_UPDATE_BY_EXAMPLE:
-                if( pShell->IsFrmSelected()
+                if( pShell->IsFrameSelected()
                         ? SFX_STYLE_FAMILY_FRAME != nActualFamily
                         : ( SFX_STYLE_FAMILY_FRAME == nActualFamily ||
                             SFX_STYLE_FAMILY_PAGE == nActualFamily ||
-                            (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetNumRuleAtCurrCrsrPos())) )
+                            (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos())) )
                 {
                     rSet.DisableItem( nWhich );
                 }
                 break;
 
             case SID_STYLE_NEW_BY_EXAMPLE:
-                if( (pShell->IsFrmSelected()
+                if( (pShell->IsFrameSelected()
                         ? SFX_STYLE_FAMILY_FRAME != nActualFamily
                         : SFX_STYLE_FAMILY_FRAME == nActualFamily) ||
-                    (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetNumRuleAtCurrCrsrPos()) )
+                    (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetNumRuleAtCurrCursorPos()) )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -429,9 +429,9 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         break;
                         case SFX_STYLE_FAMILY_FRAME:
                         {
-                            SwFrameFormat* pFrm = m_pWrtShell->GetSelectedFrameFormat();
-                            if( pFrm )
-                                aParam = pFrm->GetName();
+                            SwFrameFormat* pFrame = m_pWrtShell->GetSelectedFrameFormat();
+                            if( pFrame )
+                                aParam = pFrame->GetName();
                         }
                         break;
                         case SFX_STYLE_FAMILY_CHAR:
@@ -936,7 +936,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
         }
         case SFX_STYLE_FAMILY_FRAME:
         {
-            if ( pSh->IsFrmSelected() )
+            if ( pSh->IsFrameSelected() )
                 pSh->SetFrameFormat( pStyle->GetFrameFormat() );
             break;
         }
@@ -1051,21 +1051,21 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
         }
         case SFX_STYLE_FAMILY_FRAME:
         {
-            SwFrameFormat* pFrm = pStyle->GetFrameFormat();
-            if( pCurrWrtShell->IsFrmSelected() && pFrm && !pFrm->IsDefault() )
+            SwFrameFormat* pFrame = pStyle->GetFrameFormat();
+            if( pCurrWrtShell->IsFrameSelected() && pFrame && !pFrame->IsDefault() )
             {
                 SfxItemSet aSet( GetPool(), aFrameFormatSetRange );
                 pCurrWrtShell->StartAllAction();
-                pCurrWrtShell->GetFlyFrmAttr( aSet );
+                pCurrWrtShell->GetFlyFrameAttr( aSet );
 
                 // #i105535#
                 // no update of anchor attribute
                 aSet.ClearItem( RES_ANCHOR );
 
-                pFrm->SetFormatAttr( aSet );
+                pFrame->SetFormatAttr( aSet );
 
                     // also apply template to remove hard set attributes
-                pCurrWrtShell->SetFrameFormat( pFrm, true );
+                pCurrWrtShell->SetFrameFormat( pFrame, true );
                 pCurrWrtShell->EndAllAction();
             }
         }
@@ -1087,7 +1087,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
         {
             const SwNumRule* pCurRule;
             if( pStyle->GetNumRule() &&
-                nullptr != ( pCurRule = pCurrWrtShell->GetNumRuleAtCurrCrsrPos() ))
+                nullptr != ( pCurRule = pCurrWrtShell->GetNumRuleAtCurrCursorPos() ))
             {
                 SwNumRule aRule( *pCurRule );
                 // #i91400#
@@ -1165,20 +1165,20 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
         break;
         case SFX_STYLE_FAMILY_FRAME:
         {
-            SwFrameFormat* pFrm = pStyle->GetFrameFormat();
-            if(pCurrWrtShell->IsFrmSelected() && pFrm && !pFrm->IsDefault())
+            SwFrameFormat* pFrame = pStyle->GetFrameFormat();
+            if(pCurrWrtShell->IsFrameSelected() && pFrame && !pFrame->IsDefault())
             {
                 pCurrWrtShell->StartAllAction();
 
                 SfxItemSet aSet(GetPool(), aFrameFormatSetRange );
-                pCurrWrtShell->GetFlyFrmAttr( aSet );
+                pCurrWrtShell->GetFlyFrameAttr( aSet );
 
                 SwFrameFormat* pFFormat = pCurrWrtShell->GetSelectedFrameFormat();
-                pFrm->SetDerivedFrom( pFFormat );
+                pFrame->SetDerivedFrom( pFFormat );
 
-                pFrm->SetFormatAttr( aSet );
+                pFrame->SetFormatAttr( aSet );
                     // also apply template to remove hard set attributes
-                pCurrWrtShell->SetFrameFormat( pFrm );
+                pCurrWrtShell->SetFrameFormat( pFrame );
                 pCurrWrtShell->EndAllAction();
             }
         }
@@ -1225,7 +1225,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
 
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            const SwNumRule* pCurRule = pCurrWrtShell->GetNumRuleAtCurrCrsrPos();
+            const SwNumRule* pCurRule = pCurrWrtShell->GetNumRuleAtCurrCursorPos();
 
             if (pCurRule)
             {

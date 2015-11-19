@@ -33,12 +33,12 @@
 
 // masqueraded copy constructor
 SwEditShell::SwEditShell( SwEditShell& rEdSH, vcl::Window *pWindow )
-    : SwCrsrShell( rEdSH, pWindow )
+    : SwCursorShell( rEdSH, pWindow )
 {
 }
 
 SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOptions )
-    : SwCrsrShell( rDoc, pWindow, pOptions )
+    : SwCursorShell( rDoc, pWindow, pOptions )
 {
     GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
 }
@@ -114,7 +114,7 @@ sal_uInt16 SwEditShell::GetCntType() const
     if( IsTableMode() )
         nRet = CNT_TXT;
     else
-        switch( GetCrsr()->GetNode().GetNodeType() )
+        switch( GetCursor()->GetNode().GetNodeType() )
         {
         case ND_TEXTNODE:   nRet = CNT_TXT; break;
         case ND_GRFNODE:    nRet = CNT_GRF; break;
@@ -161,17 +161,17 @@ SwActContext::~SwActContext()
 SwMvContext::SwMvContext(SwEditShell *pShell)
     : m_rShell(*pShell)
 {
-    m_rShell.SttCrsrMove();
+    m_rShell.SttCursorMove();
 }
 
 SwMvContext::~SwMvContext()
 {
-    m_rShell.EndCrsrMove();
+    m_rShell.EndCursorMove();
 }
 
 SwFrameFormat *SwEditShell::GetTableFormat() // fastest test on a table
 {
-    const SwTableNode* pTableNd = IsCrsrInTable();
+    const SwTableNode* pTableNd = IsCursorInTable();
     return pTableNd ? static_cast<SwFrameFormat*>(pTableNd->GetTable().GetFrameFormat()) : nullptr;
 }
 
@@ -241,17 +241,17 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
 
     StartAllAction();
 
-    SwPaM* pCrsr = getShellCrsr( true );
-    SwTextNode* pTNd = pCrsr->GetNode().GetTextNode();
+    SwPaM* pCursor = getShellCursor( true );
+    SwTextNode* pTNd = pCursor->GetNode().GetTextNode();
 
-    SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, cChar );
+    SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCursor, cChar );
     // FIXME: this _must_ be called with reference to the actual node text!
     OUString const& rNodeText(pTNd->GetText());
     rACorr.DoAutoCorrect( aSwAutoCorrDoc,
-                    rNodeText, pCrsr->GetPoint()->nContent.GetIndex(),
+                    rNodeText, pCursor->GetPoint()->nContent.GetIndex(),
                     cChar, bInsert, GetWin() );
     if( cChar )
-        SaveTableBoxContent( pCrsr->GetPoint() );
+        SaveTableBoxContent( pCursor->GetPoint() );
     EndAllAction();
 }
 
@@ -265,12 +265,12 @@ bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord )
     SET_CURR_SHELL( this );
 
     bool bRet;
-    SwPaM* pCrsr = getShellCrsr( true );
-    const sal_Int32 nPos = pCrsr->GetPoint()->nContent.GetIndex();
-    SwTextNode* pTNd = pCrsr->GetNode().GetTextNode();
+    SwPaM* pCursor = getShellCursor( true );
+    const sal_Int32 nPos = pCursor->GetPoint()->nContent.GetIndex();
+    SwTextNode* pTNd = pCursor->GetNode().GetTextNode();
     if( pTNd && nPos )
     {
-        SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, 0 );
+        SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCursor, 0 );
         bRet = rACorr.GetPrevAutoCorrWord( aSwAutoCorrDoc,
                                             pTNd->GetText(), nPos, rWord );
     }

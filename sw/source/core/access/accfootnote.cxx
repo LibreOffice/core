@@ -45,10 +45,10 @@ const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccess
 SwAccessibleFootnote::SwAccessibleFootnote(
         SwAccessibleMap* pInitMap,
         bool bIsEndnote,
-        const SwFootnoteFrm *pFootnoteFrm ) :
+        const SwFootnoteFrame *pFootnoteFrame ) :
     SwAccessibleContext( pInitMap,
         bIsEndnote ? AccessibleRole::END_NOTE : AccessibleRole::FOOTNOTE,
-        pFootnoteFrm )
+        pFootnoteFrame )
 {
     SolarMutexGuard aGuard;
 
@@ -57,7 +57,7 @@ SwAccessibleFootnote::SwAccessibleFootnote(
 
     OUString sArg;
     const SwTextFootnote *pTextFootnote =
-        static_cast< const SwFootnoteFrm *>( GetFrm() )->GetAttr();
+        static_cast< const SwFootnoteFrame *>( GetFrame() )->GetAttr();
     if( pTextFootnote )
     {
         const SwDoc *pDoc = GetShell()->GetDoc();
@@ -84,7 +84,7 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
 
     OUString sArg;
     const SwTextFootnote *pTextFootnote =
-        static_cast< const SwFootnoteFrm *>( GetFrm() )->GetAttr();
+        static_cast< const SwFootnoteFrame *>( GetFrame() )->GetAttr();
     if( pTextFootnote )
     {
         const SwDoc *pDoc = GetMap()->GetShell()->GetDoc();
@@ -128,9 +128,9 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-bool SwAccessibleFootnote::IsEndnote( const SwFootnoteFrm *pFootnoteFrm )
+bool SwAccessibleFootnote::IsEndnote( const SwFootnoteFrame *pFootnoteFrame )
 {
-    const SwTextFootnote *pTextFootnote = pFootnoteFrm ->GetAttr();
+    const SwTextFootnote *pTextFootnote = pFootnoteFrame ->GetAttr();
     return pTextFootnote && pTextFootnote->GetFootnote().IsEndNote() ;
 }
 

@@ -691,26 +691,26 @@ void SwXMLTableCellContext_Impl::EndElement()
                 xSrcTextCursor->gotoEnd( sal_True );
 
                 // Until we have an API for copying we have to use the core.
-                Reference<XUnoTunnel> xSrcCrsrTunnel( xSrcTextCursor, UNO_QUERY);
-                assert(xSrcCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-                OTextCursorHelper *pSrcTextCrsr = reinterpret_cast< OTextCursorHelper * >(
-                        sal::static_int_cast< sal_IntPtr >( xSrcCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-                assert(pSrcTextCrsr && "SwXTextCursor missing");
-                SwDoc *pDoc = pSrcTextCrsr->GetDoc();
-                const SwPaM *pSrcPaM = pSrcTextCrsr->GetPaM();
+                Reference<XUnoTunnel> xSrcCursorTunnel( xSrcTextCursor, UNO_QUERY);
+                assert(xSrcCursorTunnel.is() && "missing XUnoTunnel for Cursor");
+                OTextCursorHelper *pSrcTextCursor = reinterpret_cast< OTextCursorHelper * >(
+                        sal::static_int_cast< sal_IntPtr >( xSrcCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+                assert(pSrcTextCursor && "SwXTextCursor missing");
+                SwDoc *pDoc = pSrcTextCursor->GetDoc();
+                const SwPaM *pSrcPaM = pSrcTextCursor->GetPaM();
 
                 while( nColRepeat > 1 && GetTable()->IsInsertCellPossible() )
                 {
                     _InsertContent();
 
-                    Reference<XUnoTunnel> xDstCrsrTunnel(
+                    Reference<XUnoTunnel> xDstCursorTunnel(
                         GetImport().GetTextImport()->GetCursor(), UNO_QUERY);
-                    assert(xDstCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-                    OTextCursorHelper *pDstTextCrsr = reinterpret_cast< OTextCursorHelper * >(
-                            sal::static_int_cast< sal_IntPtr >( xDstCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )) );
-                    assert(pDstTextCrsr && "SwXTextCursor missing");
+                    assert(xDstCursorTunnel.is() && "missing XUnoTunnel for Cursor");
+                    OTextCursorHelper *pDstTextCursor = reinterpret_cast< OTextCursorHelper * >(
+                            sal::static_int_cast< sal_IntPtr >( xDstCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )) );
+                    assert(pDstTextCursor && "SwXTextCursor missing");
                     SwPaM aSrcPaM(*pSrcPaM->GetMark(), *pSrcPaM->GetPoint());
-                    SwPosition aDstPos( *pDstTextCrsr->GetPaM()->GetPoint() );
+                    SwPosition aDstPos( *pDstTextCursor->GetPaM()->GetPoint() );
                     pDoc->getIDocumentContentOperations().CopyRange( aSrcPaM, aDstPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
 
                     nColRepeat--;
@@ -801,7 +801,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
             SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
         {
-            const SwFormatFrmSize *pSize = static_cast<const SwFormatFrmSize *>(pItem);
+            const SwFormatFrameSize *pSize = static_cast<const SwFormatFrameSize *>(pItem);
             nWidth = pSize->GetWidth();
             bRelWidth = ATT_VAR_SIZE == pSize->GetHeightSizeType();
         }
@@ -1921,7 +1921,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
     pFrameFormat->ResetAllFormatAttr(); // #i73790# - method renamed
     pFrameFormat->SetFormatAttr( aFillOrder );
 
-    pFrameFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nColWidth ) );
+    pFrameFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nColWidth ) );
 
     SwTableLines& rLines = pBox->GetTabLines();
     bool bSplitted = false;
@@ -2168,7 +2168,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     if (! bModifyLocked)
         pBoxFormat2->UnlockModify();
 
-    pBoxFormat2->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nColWidth ) );
+    pBoxFormat2->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nColWidth ) );
 
     return pBox;
 }
@@ -2702,10 +2702,10 @@ void SwXMLTableContext::MakeTable()
             bSetHoriOrient = true;
         }
 
-        const SwFormatFrmSize *pSize = nullptr;
+        const SwFormatFrameSize *pSize = nullptr;
         if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
-            pSize = static_cast<const SwFormatFrmSize *>(pItem);
+            pSize = static_cast<const SwFormatFrameSize *>(pItem);
 
         switch( eHoriOrient )
         {
@@ -2776,7 +2776,7 @@ void SwXMLTableContext::MakeTable()
     // This must be after the call to _MakeTable, because nWidth might be
     // changed there.
     pFrameFormat->LockModify();
-    SwFormatFrmSize aSize( ATT_VAR_SIZE, m_nWidth );
+    SwFormatFrameSize aSize( ATT_VAR_SIZE, m_nWidth );
     aSize.SetWidthPercent( nPrcWidth );
     pFrameFormat->SetFormatAttr( aSize );
     pFrameFormat->UnlockModify();
@@ -2806,9 +2806,9 @@ void SwXMLTableContext::MakeTable()
     // ??? this is always false: root frame is only created in SwViewShell::Init
     if( m_pTableNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        m_pTableNode->DelFrms();
+        m_pTableNode->DelFrames();
         SwNodeIndex aIdx( *m_pTableNode->EndOfSectionNode(), 1 );
-        m_pTableNode->MakeFrms( &aIdx );
+        m_pTableNode->MakeFrames( &aIdx );
     }
 }
 
@@ -2840,17 +2840,17 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
                     ->InsertTableSection(pPrevSttNd, pStringValueStyleName);
 
     const SwStartNode *pStNd;
-    Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
+    Reference<XUnoTunnel> xCursorTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper * >(
-            sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( xCursorTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper * >(
+            sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+    OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
 
     if( m_bFirstSection )
     {
         // The Cursor already is in the first section
-        pStNd = pTextCrsr->GetPaM()->GetNode().FindTableBoxStartNode();
+        pStNd = pTextCursor->GetPaM()->GetNode().FindTableBoxStartNode();
         m_bFirstSection = false;
         GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
             GetImport().GetTextImport()->GetCursor(), "Standard", true );
@@ -2861,7 +2861,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
                                              : m_pTableNode->EndOfSectionNode();
         // #i78921# - make code robust
-        OSL_ENSURE( pDoc, "<SwXMLTableContext::InsertTableSection(..)> - no <pDoc> at <SwXTextCursor> instance - <SwXTextCurosr> doesn't seem to be registered at a <SwUnoCrsr> instance." );
+        OSL_ENSURE( pDoc, "<SwXMLTableContext::InsertTableSection(..)> - no <pDoc> at <SwXTextCursor> instance - <SwXTextCurosr> doesn't seem to be registered at a <SwUnoCursor> instance." );
         if ( !pDoc )
         {
             pDoc = const_cast<SwDoc*>(pEndNd->GetDoc());

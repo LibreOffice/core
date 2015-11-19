@@ -463,7 +463,7 @@ extern "C"
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwView, AttrChangedNotify, SwCrsrShell*, void)
+IMPL_LINK_NOARG_TYPED(SwView, AttrChangedNotify, SwCursorShell*, void)
 {
      if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( false );
@@ -546,7 +546,7 @@ void SwView::_CheckReadonlyState()
     eStateProtAll = rDis.QueryState( FN_EDIT_REGION, pItem );
     bool bChgd = false;
 
-    if ( !m_pWrtShell->IsCrsrReadonly() )
+    if ( !m_pWrtShell->IsCursorReadonly() )
     {
         static sal_uInt16 aROIds[] =
         {
@@ -725,7 +725,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // If the view is switch from one to another, the 'old' view is given by
     // parameter <pOldSh>.
 
-    m_bCenterCrsr = m_bTopCrsr = m_bAlwaysShowSel = m_bTabColFromDoc = m_bTabRowFromDoc =
+    m_bCenterCursor = m_bTopCursor = m_bAlwaysShowSel = m_bTabColFromDoc = m_bTabRowFromDoc =
     m_bSetTabColFromDoc = m_bSetTabRowFromDoc = m_bAttrChgNotified = m_bAttrChgNotifiedWithRegistrations =
     m_bVerbsActive = m_bDrawRotate = m_bInOuterResizePixel = m_bInInnerResizePixel =
     m_bPasteState = m_bPasteSpecialState = m_bMakeSelectionVisible = false;
@@ -773,10 +773,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         if( dynamic_cast<const SwPagePreview *>(pExistingSh) != nullptr )
         {
             m_sSwViewData = static_cast<SwPagePreview*>(pExistingSh)->GetPrevSwViewData();
-            m_sNewCrsrPos = static_cast<SwPagePreview*>(pExistingSh)->GetNewCrsrPos();
+            m_sNewCursorPos = static_cast<SwPagePreview*>(pExistingSh)->GetNewCursorPos();
             m_nNewPage = static_cast<SwPagePreview*>(pExistingSh)->GetNewPage();
             m_bOldShellWasPagePreview = true;
-            m_bIsPreviewDoubleClick = !m_sNewCrsrPos.isEmpty() || m_nNewPage != USHRT_MAX;
+            m_bIsPreviewDoubleClick = !m_sNewCursorPos.isEmpty() || m_nNewPage != USHRT_MAX;
         }
         else if( dynamic_cast<const SwSrcView *>(pExistingSh) != nullptr )
             bOldShellWasSrcView = true;
@@ -1096,7 +1096,7 @@ void SwView::WriteUserData( OUString &rUserData, bool bBrowse )
     rUserData += OUString::number(
             (sal_uInt16)m_pWrtShell->GetViewOptions()->GetZoomType());//eZoom;
     rUserData += ";";
-    rUserData += FrmTypeFlags::NONE == m_pWrtShell->GetSelFrmType() ? OUString("0") : OUString("1");
+    rUserData += FrameTypeFlags::NONE == m_pWrtShell->GetSelFrameType() ? OUString("0") : OUString("1");
 }
 
 // Set CursorPos
@@ -1132,7 +1132,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
         // because which parameter is evaluated first?
         long nX = rUserData.getToken( 0, ';', nPos ).toInt32(),
              nY = rUserData.getToken( 0, ';', nPos ).toInt32();
-        Point aCrsrPos( nX, nY );
+        Point aCursorPos( nX, nY );
 
         sal_uInt16 nZoomFactor =
             static_cast< sal_uInt16 >( rUserData.getToken(0, ';', nPos ).toInt32() );
@@ -1160,10 +1160,10 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
             }
 
             bool bSelectObj = (0 != rUserData.getToken( nOff, ';', nPos ).toInt32())
-                                && m_pWrtShell->IsObjSelectable( aCrsrPos );
+                                && m_pWrtShell->IsObjSelectable( aCursorPos );
 
             // restore editing position
-            m_pViewImpl->SetRestorePosition(aCrsrPos, bSelectObj);
+            m_pViewImpl->SetRestorePosition(aCursorPos, bSelectObj);
             // set flag value to avoid macro execution.
             bool bSavedFlagValue = m_pWrtShell->IsMacroExecAllowed();
             m_pWrtShell->SetMacroExecAllowed( false );
@@ -1171,11 +1171,11 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
 // go to the last editing position when opening own files
             if(m_bOldShellWasPagePreview || bIsOwnDocument)
             {
-                m_pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
+                m_pWrtShell->SwCursorShell::SetCursor( aCursorPos, !bSelectObj );
                 if( bSelectObj )
                 {
-                    m_pWrtShell->SelectObj( aCrsrPos );
-                    m_pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                    m_pWrtShell->SelectObj( aCursorPos );
+                    m_pWrtShell->EnterSelFrameMode( &aCursorPos );
                 }
             }
 
@@ -1196,21 +1196,21 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
             }
 
             //apply information from print preview - if available
-            if( !m_sNewCrsrPos.isEmpty() )
+            if( !m_sNewCursorPos.isEmpty() )
             {
-                long nXTmp = m_sNewCrsrPos.getToken( 0, ';' ).toInt32(),
-                     nYTmp = m_sNewCrsrPos.getToken( 1, ';' ).toInt32();
-                Point aCrsrPos2( nXTmp, nYTmp );
-                bSelectObj = m_pWrtShell->IsObjSelectable( aCrsrPos2 );
+                long nXTmp = m_sNewCursorPos.getToken( 0, ';' ).toInt32(),
+                     nYTmp = m_sNewCursorPos.getToken( 1, ';' ).toInt32();
+                Point aCursorPos2( nXTmp, nYTmp );
+                bSelectObj = m_pWrtShell->IsObjSelectable( aCursorPos2 );
 
-                m_pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos2 );
+                m_pWrtShell->SwCursorShell::SetCursor( aCursorPos2 );
                 if( bSelectObj )
                 {
-                    m_pWrtShell->SelectObj( aCrsrPos2 );
-                    m_pWrtShell->EnterSelFrmMode( &aCrsrPos2 );
+                    m_pWrtShell->SelectObj( aCursorPos2 );
+                    m_pWrtShell->EnterSelFrameMode( &aCursorPos2 );
                 }
                 m_pWrtShell->MakeSelVisible();
-                m_sNewCrsrPos.clear();
+                m_sNewCursorPos.clear();
             }
             else if(USHRT_MAX != m_nNewPage)
             {
@@ -1254,7 +1254,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         bool bViewLayoutBookMode = pVOpt->IsViewLayoutBookMode();
         sal_Int16 nViewLayoutColumns = pVOpt->GetViewLayoutColumns();
 
-        bool bSelectedFrame = ( m_pWrtShell->GetSelFrmType() != FrmTypeFlags::NONE ),
+        bool bSelectedFrame = ( m_pWrtShell->GetSelFrameType() != FrameTypeFlags::NONE ),
                  bGotVisibleLeft = false,
                  bGotVisibleTop = false, bGotVisibleRight = false,
                  bGotVisibleBottom = false, bGotZoomType = false,
@@ -1326,7 +1326,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         }
         if (bGotVisibleBottom)
         {
-            Point aCrsrPos( nX, nY );
+            Point aCursorPos( nX, nY );
             const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
             if (nBottom <= (m_pWrtShell->GetDocSize().Height()+nAdd) )
             {
@@ -1342,17 +1342,17 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                 }
                 if (bGotIsSelectedFrame)
                 {
-                    bool bSelectObj = bSelectedFrame && m_pWrtShell->IsObjSelectable( aCrsrPos );
+                    bool bSelectObj = bSelectedFrame && m_pWrtShell->IsObjSelectable( aCursorPos );
 
                     // set flag value to avoid macro execution.
                     bool bSavedFlagValue = m_pWrtShell->IsMacroExecAllowed();
                     m_pWrtShell->SetMacroExecAllowed( false );
 // os: changed: The user data has to be read if the view is switched back from page preview
 // go to the last editing position when opening own files
-                    m_pViewImpl->SetRestorePosition(aCrsrPos, bSelectObj);
+                    m_pViewImpl->SetRestorePosition(aCursorPos, bSelectObj);
                     if(m_bOldShellWasPagePreview|| bIsOwnDocument)
                     {
-                        m_pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
+                        m_pWrtShell->SwCursorShell::SetCursor( aCursorPos, !bSelectObj );
 
                         // Update the shell to toggle Header/Footer edit if needed
                         bool bInHeader = true;
@@ -1377,8 +1377,8 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 
                         if( bSelectObj )
                         {
-                            m_pWrtShell->SelectObj( aCrsrPos );
-                            m_pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                            m_pWrtShell->SelectObj( aCursorPos );
+                            m_pWrtShell->EnterSelFrameMode( &aCursorPos );
                         }
                     }
 
@@ -1509,7 +1509,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     pValue++;nIndex++;
 
     pValue->Name = "IsSelectedFrame";
-    pValue->Value <<= FrmTypeFlags::NONE != m_pWrtShell->GetSelFrmType();
+    pValue->Value <<= FrameTypeFlags::NONE != m_pWrtShell->GetSelFrameType();
     nIndex++;
 
     assert(nIndex == NUM_VIEW_SETTINGS);
@@ -1524,9 +1524,9 @@ void SwView::ShowCursor( bool bOn )
     m_pWrtShell->LockView( true );    //lock visible section
 
     if( !bOn )
-        m_pWrtShell->HideCrsr();
-    else if( !m_pWrtShell->IsFrmSelected() && !m_pWrtShell->IsObjSelected() )
-        m_pWrtShell->ShowCrsr();
+        m_pWrtShell->HideCursor();
+    else if( !m_pWrtShell->IsFrameSelected() && !m_pWrtShell->IsObjSelected() )
+        m_pWrtShell->ShowCursor();
 
     if( bUnlockView )
         m_pWrtShell->LockView( false );
@@ -1548,7 +1548,7 @@ ErrCode SwView::DoVerb( long nVerb )
 
 bool SwView::HasSelection( bool  bText ) const
 {
-    return bText ? GetWrtShell().SwCrsrShell::HasSelection()
+    return bText ? GetWrtShell().SwCursorShell::HasSelection()
                  : GetWrtShell().HasSelection();
 }
 

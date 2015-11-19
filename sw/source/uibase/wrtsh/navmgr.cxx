@@ -28,7 +28,7 @@ void SwNavigationMgr::GotoSwPosition(const SwPosition &rPos) {
     // cursor consists of two SwPositions: Point and Mark.
     // Such a pair is called a PaM. SwPaM is derived from SwRing.
     // The Ring contains the single regions of a multi-selection.
-    SwPaM* pPaM = m_rMyShell.GetCrsr();
+    SwPaM* pPaM = m_rMyShell.GetCursor();
 
     if(pPaM->HasMark())
         pPaM->DeleteMark();      // If there was a selection, get rid of it
@@ -77,7 +77,7 @@ void SwNavigationMgr::goBack()  {
 
     if (backEnabled()) {
         /* Trying to get the current cursor */
-        SwPaM* pPaM = m_rMyShell.GetCrsr();
+        SwPaM* pPaM = m_rMyShell.GetCursor();
         if (!pPaM) {
             return;
         }
@@ -162,14 +162,14 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
 
         if (*m_entries.back()->GetPoint() != rPos)
         {
-            sw::UnoCursorPointer pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr(rPos));
+            sw::UnoCursorPointer pCursor(m_rMyShell.GetDoc()->CreateUnoCursor(rPos));
             m_entries.push_back(pCursor);
         }
         bRet = true;
     }
     else {
         if ( (!m_entries.empty() && *m_entries.back()->GetPoint() != rPos) || m_entries.empty() ) {
-            sw::UnoCursorPointer pCursor(m_rMyShell.GetDoc()->CreateUnoCrsr(rPos));
+            sw::UnoCursorPointer pCursor(m_rMyShell.GetDoc()->CreateUnoCursor(rPos));
             m_entries.push_back(pCursor);
             bRet = true;
         }

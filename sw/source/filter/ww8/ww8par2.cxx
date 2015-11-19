@@ -2306,7 +2306,7 @@ void WW8TabDesc::SetSizePosition(SwFrameFormat* pFrameFormat)
     pApply->SetFormatAttr(aItemSet);
     if (pFrameFormat)
     {
-        SwFormatFrmSize aSize = pFrameFormat->GetFrmSize();
+        SwFormatFrameSize aSize = pFrameFormat->GetFrameSize();
         aSize.SetHeightSizeType(ATT_MIN_SIZE);
         aSize.SetHeight(MINLAY);
         pFrameFormat->SetFormatAttr(aSize);
@@ -2418,8 +2418,8 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
     // total width of table
     if( nMaxRight - nMinLeft > MINLAY * nDefaultSwCols )
     {
-        pTable->GetFrameFormat()->SetFormatAttr(SwFormatFrmSize(ATT_FIX_SIZE, nSwWidth));
-        aItemSet.Put(SwFormatFrmSize(ATT_FIX_SIZE, nSwWidth));
+        pTable->GetFrameFormat()->SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE, nSwWidth));
+        aItemSet.Put(SwFormatFrameSize(ATT_FIX_SIZE, nSwWidth));
     }
 
     SvxFrameDirectionItem aDirection(
@@ -3098,7 +3098,7 @@ void WW8TabDesc::AdjustNewBand()
     if( bClaimLineFormat )
     {
         pTabLine->ClaimFrameFormat();            // necessary because of cell height
-        SwFormatFrmSize aF( ATT_MIN_SIZE, 0, 0 );  // default
+        SwFormatFrameSize aF( ATT_MIN_SIZE, 0, 0 );  // default
 
         if (pActBand->nLineHeight == 0)    // 0 = Auto
             aF.SetHeightSizeType( ATT_VAR_SIZE );
@@ -3125,7 +3125,7 @@ void WW8TabDesc::AdjustNewBand()
     short i;    // SW-Index
     short j;    // WW-Index
     short nW;   // Width
-    SwFormatFrmSize aFS( ATT_FIX_SIZE );
+    SwFormatFrameSize aFS( ATT_FIX_SIZE );
     j = pActBand->bLEmptyCol ? -1 : 0;
 
     for( i = 0; i < pActBand->nSwCols; i++ )
@@ -4512,14 +4512,14 @@ void WW8RStyle::Import()
 
 rtl_TextEncoding SwWW8StyInf::GetCharSet() const
 {
-    if ((m_pFormat) && (m_pFormat->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+    if ((m_pFormat) && (m_pFormat->GetFrameDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
         return m_eRTLFontSrcCharSet;
     return m_eLTRFontSrcCharSet;
 }
 
 rtl_TextEncoding SwWW8StyInf::GetCJKCharSet() const
 {
-    if ((m_pFormat) && (m_pFormat->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+    if ((m_pFormat) && (m_pFormat->GetFrameDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
         return m_eRTLFontSrcCharSet;
     return m_eCJKFontSrcCharSet;
 }

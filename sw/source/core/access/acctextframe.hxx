@@ -24,7 +24,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-class SwFlyFrm;
+class SwFlyFrame;
 namespace utl { class AccessibleRelationSetHelper; }
 namespace com { namespace star {
     namespace accessibility { struct AccessibleRelation; }
@@ -43,7 +43,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrm& rFlyFrm );
+    SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrame& rFlyFrame );
 
     virtual css::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & rType )
@@ -122,10 +122,10 @@ public:
 
 private:
     // helper methods for getAccessibleRelationSet:
-    SwFlyFrm* getFlyFrm() const;
+    SwFlyFrame* getFlyFrame() const;
 
     css::accessibility::AccessibleRelation makeRelation(
-        sal_Int16 nType, const SwFlyFrm* pFrm );
+        sal_Int16 nType, const SwFlyFrame* pFrame );
 
 public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet()

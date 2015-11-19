@@ -83,10 +83,10 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     // to the visible layer.
     pNewDrawObj->SetLayer( m_pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
 
-    SfxItemSet aFrmSet( m_pDoc->GetAttrPool(),
+    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
-        Reader::ResetFrameFormatAttrs( aFrmSet );
+        Reader::ResetFrameFormatAttrs( aFrameSet );
 
     sal_uInt16 nLeftSpace = 0, nRightSpace = 0, nUpperSpace = 0, nLowerSpace = 0;
     if( (rPixSpace.Width() || rPixSpace.Height()) && Application::GetDefaultDevice() )
@@ -124,7 +124,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         SvxLRSpaceItem aLRItem( RES_LR_SPACE );
         aLRItem.SetLeft( nLeftSpace );
         aLRItem.SetRight( nRightSpace );
-        aFrmSet.Put( aLRItem );
+        aFrameSet.Put( aLRItem );
     }
 
     // oberen/unteren Rand setzen
@@ -150,7 +150,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         SvxULSpaceItem aULItem( RES_UL_SPACE );
         aULItem.SetUpper( nUpperSpace );
         aULItem.SetLower( nLowerSpace );
-        aFrmSet.Put( aULItem );
+        aFrameSet.Put( aULItem );
     }
 
     SwFormatAnchor aAnchor( FLY_AS_CHAR );
@@ -174,20 +174,20 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.nLeft + nLeftSpace,
                                            rCSS1PropInfo.nTop + nUpperSpace) );
-        aFrmSet.Put( SwFormatSurround(SURROUND_THROUGHT) );
+        aFrameSet.Put( SwFormatSurround(SURROUND_THROUGHT) );
     }
     else if( SVX_ADJUST_LEFT == rCSS1PropInfo.eFloat ||
              text::HoriOrientation::LEFT == eHoriOri )
     {
         aAnchor.SetType( FLY_AT_PARA );
-        aFrmSet.Put( SwFormatSurround(bHidden ? SURROUND_THROUGHT
+        aFrameSet.Put( SwFormatSurround(bHidden ? SURROUND_THROUGHT
                                              : SURROUND_RIGHT) );
         // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
     }
     else if( text::VertOrientation::NONE != eVertOri )
     {
-        aFrmSet.Put( SwFormatVertOrient( 0, eVertOri ) );
+        aFrameSet.Put( SwFormatVertOrient( 0, eVertOri ) );
     }
 
     if (FLY_AT_PAGE == aAnchor.GetAnchorId())
@@ -198,9 +198,9 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     {
         aAnchor.SetAnchor( m_pPam->GetPoint() );
     }
-    aFrmSet.Put( aAnchor );
+    aFrameSet.Put( aAnchor );
 
-    m_pDoc->getIDocumentContentOperations().InsertDrawObj( *m_pPam, *pNewDrawObj, aFrmSet );
+    m_pDoc->getIDocumentContentOperations().InsertDrawObj( *m_pPam, *pNewDrawObj, aFrameSet );
 }
 
 static void PutEEPoolItem( SfxItemSet &rEEItemSet,

@@ -251,7 +251,7 @@ SwFootnoteInfo::SwFootnoteInfo(SwTextFormatColl *pFormat) :
 
 void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 {
-    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
     if( !(GetFootnoteInfo() == rInfo) )
     {
         const SwFootnoteInfo &rOld = GetFootnoteInfo();
@@ -277,7 +277,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 
         if (pTmpRoot)
         {
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+            std::set<SwRootFrame*> aAllLayouts = GetAllLayouts();
             if ( bFootnotePos )
                 for( auto aLayout : aAllLayouts )
                     aLayout->AllRemoveFootnotes();
@@ -323,7 +323,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 
 void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 {
-    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
     if( !(GetEndNoteInfo() == rInfo) )
     {
         if(GetIDocumentUndoRedo().DoesUndo())
@@ -393,7 +393,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                        sal_uInt16 nNumber, bool bIsEndNote )
 {
     SwFootnoteIdxs& rFootnoteArr = GetFootnoteIdxs();
-    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
 
     const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
     const sal_uLong nSttNd = pStt->nNode.GetIndex();

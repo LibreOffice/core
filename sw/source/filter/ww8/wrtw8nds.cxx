@@ -199,8 +199,8 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
      #i2916#
      Get list of any graphics which may be anchored from this paragraph.
     */
-    maFlyFrms = GetFramesInNode(rWr.m_aFrames, rNd);
-    std::sort(maFlyFrms.begin(), maFlyFrms.end(), sortswflys());
+    maFlyFrames = GetFramesInNode(rWr.m_aFrames, rNd);
+    std::sort(maFlyFrames.begin(), maFlyFrames.end(), sortswflys());
 
     /*
      #i18480#
@@ -210,11 +210,11 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     */
     if (rWr.m_bInWriteEscher)
     {
-        for ( auto& aFlyFrm : maFlyFrms )
-            aFlyFrm.ForceTreatAsInline();
+        for ( auto& aFlyFrame : maFlyFrames )
+            aFlyFrame.ForceTreatAsInline();
     }
 
-    maFlyIter = maFlyFrms.begin();
+    maFlyIter = maFlyFrames.begin();
 
     if ( !m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
@@ -347,7 +347,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
      character because anchors in Word appear after the character they are
      anchored to.
     */
-    if (maFlyIter != maFlyFrms.end())
+    if (maFlyIter != maFlyFrames.end())
     {
         const SwPosition &rAnchor = maFlyIter->GetPosition();
 
@@ -510,10 +510,10 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
 
 bool SwWW8AttrIter::IsWatermarkFrame()
 {
-    if (maFlyFrms.size() != 1)
+    if (maFlyFrames.size() != 1)
         return false;
 
-    while ( maFlyIter != maFlyFrms.end() )
+    while ( maFlyIter != maFlyFrames.end() )
     {
         const SdrObject* pSdrObj = maFlyIter->GetFrameFormat().FindRealSdrObject();
 
@@ -532,7 +532,7 @@ bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
 {
     ww8::FrameIter aTmpFlyIter = maFlyIter ;
 
-    while ( aTmpFlyIter != maFlyFrms.end() )
+    while ( aTmpFlyIter != maFlyFrames.end() )
     {
         const SwPosition &rAnchor  = maFlyIter->GetPosition();
         sal_uLong nAnchorPos = rAnchor.nNode.GetIndex();
@@ -552,7 +552,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
     // collection point to first gather info about all of the potentially linked textboxes: to be analyzed later.
     OUString sLinkChainName;
     ww8::FrameIter linkedTextboxesIter = maFlyIter;
-    while ( linkedTextboxesIter != maFlyFrms.end() )
+    while ( linkedTextboxesIter != maFlyFrames.end() )
     {
         uno::Reference< drawing::XShape > xShape;
         ww8::Frame xFrame = *linkedTextboxesIter;
@@ -617,7 +617,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
      May have an anchored graphic to be placed, loop through sorted array
      and output all at this position
     */
-    while ( maFlyIter != maFlyFrms.end() )
+    while ( maFlyIter != maFlyFrames.end() )
     {
         const SwPosition &rAnchor = maFlyIter->GetPosition();
         const sal_Int32 nPos = rAnchor.nContent.GetIndex();
@@ -1495,7 +1495,7 @@ short MSWordExportBase::GetCurrentPageDirection() const
     const SwFrameFormat &rFormat = m_pAktPageDesc
                     ? m_pAktPageDesc->GetMaster()
                     : m_pDoc->GetPageDesc( 0 ).GetMaster();
-    return rFormat.GetFrmDir().GetValue();
+    return rFormat.GetFrameDir().GetValue();
 }
 
 short MSWordExportBase::GetDefaultFrameDirection( ) const
@@ -1506,7 +1506,7 @@ short MSWordExportBase::GetDefaultFrameDirection( ) const
         nDir = GetCurrentPageDirection(  );
     else if ( m_pOutFormatNode )
     {
-        if ( m_bOutFlyFrmAttrs ) //frame
+        if ( m_bOutFlyFrameAttrs ) //frame
         {
             nDir = TrueFrameDirection( *static_cast< const SwFrameFormat * >(m_pOutFormatNode) );
         }
@@ -1543,7 +1543,7 @@ short MSWordExportBase::TrueFrameDirection( const SwFrameFormat &rFlyFormat ) co
     const SvxFrameDirectionItem* pItem = nullptr;
     while ( pFlyFormat )
     {
-        pItem = &pFlyFormat->GetFrmDir();
+        pItem = &pFlyFormat->GetFrameDir();
         if ( FRMDIR_ENVIRONMENT == pItem->GetValue() )
         {
             pItem = nullptr;
@@ -2955,7 +2955,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
             {
                 /* Munge flys in fly into absolutely positioned elements for word 6 */
                 const SwTextNode* pParTextNode = rAnch.GetContentAnchor()->nNode.GetNode().GetTextNode();
-                const SwRect aPageRect = pParTextNode->FindPageFrmRect();
+                const SwRect aPageRect = pParTextNode->FindPageFrameRect();
 
                 aOffset = rFrameFormat.FindLayoutRect().Pos();
                 aOffset -= aPageRect.Pos();
@@ -2998,7 +2998,7 @@ void AttributeOutputBase::OutputFlyFrame( const ww8::Frame& rFormat )
 
     // get the Layout Node-Position
     if (FLY_AT_PAGE == rFormat.GetFrameFormat().GetAnchor().GetAnchorId())
-        aLayPos = rNode.FindPageFrmRect().Pos();
+        aLayPos = rNode.FindPageFrameRect().Pos();
     else
         aLayPos = rNode.FindLayoutRect().Pos();
 

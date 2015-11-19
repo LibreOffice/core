@@ -72,9 +72,9 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
     // The default page size is obtained from the application
     //locale
 
-    SwFormatFrmSize aFrmSize( ATT_FIX_SIZE );
+    SwFormatFrameSize aFrameSize( ATT_FIX_SIZE );
     const Size aPhysSize = SvxPaperInfo::GetDefaultPaperSize();
-    aFrmSize.SetSize( aPhysSize );
+    aFrameSize.SetSize( aPhysSize );
 
     // Prepare for default margins.
     // Margins have a default minimum size.
@@ -110,19 +110,19 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
     aLR.SetRight( nMinRight );
     aLR.SetLeft( nMinLeft );
 
-    rFormat1.SetFormatAttr( aFrmSize );
+    rFormat1.SetFormatAttr( aFrameSize );
     rFormat1.SetFormatAttr( aLR );
     rFormat1.SetFormatAttr( aUL );
 
-    rFormat2.SetFormatAttr( aFrmSize );
+    rFormat2.SetFormatAttr( aFrameSize );
     rFormat2.SetFormatAttr( aLR );
     rFormat2.SetFormatAttr( aUL );
 
-    rFormat3.SetFormatAttr( aFrmSize );
+    rFormat3.SetFormatAttr( aFrameSize );
     rFormat3.SetFormatAttr( aLR );
     rFormat3.SetFormatAttr( aUL );
 
-    rFormat4.SetFormatAttr( aFrmSize );
+    rFormat4.SetFormatAttr( aFrameSize );
     rFormat4.SetFormatAttr( aLR );
     rFormat4.SetFormatAttr( aUL );
 }
@@ -380,7 +380,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     OSL_ENSURE(i < m_PageDescs.size(), "PageDescs is out of range.");
 
     SwPageDesc& rDesc = *m_PageDescs[i];
-    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -884,8 +884,8 @@ void SwDoc::CheckDefaultPageFormat()
         SwFrameFormat& rMaster = rDesc.GetMaster();
         SwFrameFormat& rLeft   = rDesc.GetLeft();
 
-        const SwFormatFrmSize& rMasterSize  = rMaster.GetFrmSize();
-        const SwFormatFrmSize& rLeftSize    = rLeft.GetFrmSize();
+        const SwFormatFrameSize& rMasterSize  = rMaster.GetFrameSize();
+        const SwFormatFrameSize& rLeftSize    = rLeft.GetFrameSize();
 
         const bool bSetSize = LONG_MAX == rMasterSize.GetWidth() ||
                               LONG_MAX == rMasterSize.GetHeight() ||

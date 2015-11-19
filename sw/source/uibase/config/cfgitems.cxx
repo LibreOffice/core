@@ -251,7 +251,7 @@ SwShadowCursorItem::SwShadowCursorItem( const SwShadowCursorItem& rCpy )
 
 SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt, sal_uInt16 _nWhich )
     : SfxPoolItem( _nWhich ),
-    eMode( rVOpt.GetShdwCrsrFillMode() )
+    eMode( rVOpt.GetShdwCursorFillMode() )
     ,bOn( rVOpt.IsShadowCursor() )
 
 {
@@ -277,7 +277,7 @@ void SwShadowCursorItem::operator=( const SwShadowCursorItem& rCpy )
 void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 {
     rVOpt.SetShadowCursor( bOn );
-    rVOpt.SetShdwCrsrFillMode( eMode );
+    rVOpt.SetShdwCursorFillMode( eMode );
 }
 
 #ifdef DBG_UTIL

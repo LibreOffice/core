@@ -25,7 +25,7 @@
 #include "dflyobj.hxx"
 #include <calbck.hxx>
 
-bool SwPosFlyFrmCmp::operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const
+bool SwPosFlyFrameCmp::operator()(const SwPosFlyFramePtr& rA, const SwPosFlyFramePtr& rB) const
 {
     if(rA->GetNdIndex() == rB->GetNdIndex())
     {
@@ -36,7 +36,7 @@ bool SwPosFlyFrmCmp::operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& 
     return rA->GetNdIndex() < rB->GetNdIndex();
 }
 
-SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrameFormat* pFormat,
+SwPosFlyFrame::SwPosFlyFrame( const SwNodeIndex& rIdx, const SwFrameFormat* pFormat,
                             sal_uInt16 nArrPos )
     : m_pFrameFormat( pFormat ), m_pNodeIndex( const_cast<SwNodeIndex*>(&rIdx) )
 {
@@ -51,7 +51,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrameFormat* pFormat,
         if( RES_FLYFRMFMT == pFormat->Which() )
         {
             // Let's see if we have an SdrObject for this
-            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFormat>(*pFormat).First();
+            SwFlyFrame* pFly = SwIterator<SwFlyFrame,SwFormat>(*pFormat).First();
             if( pFly )
             {
                 m_nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
@@ -77,7 +77,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrameFormat* pFormat,
     }
 }
 
-SwPosFlyFrm::~SwPosFlyFrm()
+SwPosFlyFrame::~SwPosFlyFrame()
 {
     const SwFormatAnchor& rAnchor = m_pFrameFormat->GetAnchor();
     if (FLY_AT_PAGE == rAnchor.GetAnchorId())

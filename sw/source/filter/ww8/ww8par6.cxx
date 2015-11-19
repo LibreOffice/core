@@ -215,12 +215,12 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
 
     rFormat.SetFormatAttr(SvxFrameDirectionItem(rSection.meDir, RES_FRAMEDIR));
 
-    SwTwips nTextareaHeight = rFormat.GetFrmSize().GetHeight();
+    SwTwips nTextareaHeight = rFormat.GetFrameSize().GetHeight();
     const SvxULSpaceItem &rUL = ItemGet<SvxULSpaceItem>(rFormat, RES_UL_SPACE);
     nTextareaHeight -= rUL.GetUpper();
     nTextareaHeight -= rUL.GetLower();
 
-    SwTwips nTextareaWidth = rFormat.GetFrmSize().GetWidth();
+    SwTwips nTextareaWidth = rFormat.GetFrameSize().GetWidth();
     const SvxLRSpaceItem &rLR = ItemGet<SvxLRSpaceItem>(rFormat, RES_LR_SPACE);
     nTextareaWidth -= rLR.GetLeft();
     nTextareaWidth -= rLR.GetRight();
@@ -418,7 +418,7 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
     rInPageDesc.SetLandscape(rSection.IsLandScape());
 
     // 2. paper size
-    SwFormatFrmSize aSz( rFormat.GetFrmSize() );
+    SwFormatFrameSize aSz( rFormat.GetFrameSize() );
     aSz.SetWidth(rSection.GetPageWidth());
     aSz.SetHeight(SvxPaperInfo::GetSloppyPaperDimension(rSection.GetPageHeight()));
     rFormat.SetFormatAttr(aSz);
@@ -589,7 +589,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             SvxULSpaceItem aHdUL(pHdFormat->GetULSpace());
             if (!rSection.IsFixedHeightHeader())    //normal
             {
-                pHdFormat->SetFormatAttr(SwFormatFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
+                pHdFormat->SetFormatAttr(SwFormatFrameSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
                 // #i19922# - minimum page header height is now 1mm
                 // use new constant <cMinHdFtHeight>
                 aHdUL.SetLower( writer_cast<sal_uInt16>(rData.nSwHLo - cMinHdFtHeight) );
@@ -600,7 +600,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             {
                 // #i48832# - set correct spacing between header and body.
                 const SwTwips nHdLowerSpace( std::abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
-                pHdFormat->SetFormatAttr(SwFormatFrmSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
+                pHdFormat->SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
                 aHdUL.SetLower( static_cast< sal_uInt16 >(nHdLowerSpace) );
                 pHdFormat->SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
@@ -616,7 +616,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             SvxULSpaceItem aFtUL(pFtFormat->GetULSpace());
             if (!rSection.IsFixedHeightFooter())    //normal
             {
-                pFtFormat->SetFormatAttr(SwFormatFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
+                pFtFormat->SetFormatAttr(SwFormatFrameSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
                 // #i19922# - minimum page header height is now 1mm
                 // use new constant <cMinHdFtHeight>
                 aFtUL.SetUpper( writer_cast<sal_uInt16>(rData.nSwFUp - cMinHdFtHeight) );
@@ -627,7 +627,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             {
                 // #i48832# - set correct spacing between footer and body.
                 const SwTwips nFtUpperSpace( std::abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
-                pFtFormat->SetFormatAttr(SwFormatFrmSize(ATT_FIX_SIZE, 0, rData.nSwFUp + nFtUpperSpace));
+                pFtFormat->SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE, 0, rData.nSwFUp + nFtUpperSpace));
                 aFtUL.SetUpper( static_cast< sal_uInt16 >(nFtUpperSpace) );
                 pFtFormat->SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
@@ -2061,7 +2061,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
         //types of frames, the left right thickness and space makes
         //it wider, but the top bottom spacing and border thickness
         //is placed inside.
-        Put( SwFormatFrmSize( pFS->eHeightFix, pFS->nWidth +
+        Put( SwFormatFrameSize( pFS->eHeightFix, pFS->nWidth +
             aSizeArray[WW8_LEFT] + aSizeArray[WW8_RIGHT],
             pFS->nHeight));
     }
@@ -2097,7 +2097,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
         aSizeArray[WW8_BOT]*=2;
     }
 
-    Put( SwFormatFrmSize( ATT_FIX_SIZE, nWidth+aSizeArray[WW8_LEFT]+
+    Put( SwFormatFrameSize( ATT_FIX_SIZE, nWidth+aSizeArray[WW8_LEFT]+
         aSizeArray[WW8_RIGHT], nHeight+aSizeArray[WW8_TOP]
         + aSizeArray[WW8_BOT]) );
 }
@@ -2121,8 +2121,8 @@ void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
         Put(SwFormatVertOrient(0, text::VertOrientation::TOP, text::RelOrientation::FRAME));
 }
 
-WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk)
-    : pCtrlStck(pStk),
+WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStack)
+    : pCtrlStck(pStack),
     aChrSet(rDoc.GetAttrPool(), RES_CHRATR_BEGIN, RES_CHRATR_END - 1 ),
     aParSet(rDoc.GetAttrPool(), RES_PARATR_BEGIN, RES_PARATR_END - 1 )
 {
@@ -2234,7 +2234,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrameFormat *pFlyFormat,
 
                             if (pTableFormat)
                             {
-                                SwFormatFrmSize aSize = pTableFormat->GetFrmSize();
+                                SwFormatFrameSize aSize = pTableFormat->GetFrameSize();
                                 aSize.SetHeightSizeType(ATT_MIN_SIZE);
                                 aSize.SetHeight(MINLAY);
                                 pFlyFormat->SetFormatAttr(aSize);
@@ -2540,7 +2540,7 @@ void SwWW8ImplReader::StopApo()
         if (m_pSFlyPara->pFlyFormat)
             m_pSFlyPara->pFlyFormat->SetFormatAttr(SvxBrushItem(aBg, RES_BACKGROUND));
 
-        DeleteAnchorStk();
+        DeleteAnchorStack();
         m_pAnchorStck = m_pSFlyPara->pOldAnchorStck;
 
         // When inserting a graphic into the fly frame using the auto
@@ -2552,7 +2552,7 @@ void SwWW8ImplReader::StopApo()
             long nW = m_pSFlyPara->nNewNetWidth;
             nW += m_pSFlyPara->nWidth - m_pSFlyPara->nNetWidth;   // border for it
             m_pSFlyPara->pFlyFormat->SetFormatAttr(
-                SwFormatFrmSize( m_pSFlyPara->eHeightFix, nW, m_pSFlyPara->nHeight ) );
+                SwFormatFrameSize( m_pSFlyPara->eHeightFix, nW, m_pSFlyPara->nHeight ) );
         }
         /*
         Word set *no* width meaning its an automatic width. The
@@ -2567,14 +2567,14 @@ void SwWW8ImplReader::StopApo()
             using namespace sw::util;
             SfxItemSet aFlySet( m_pSFlyPara->pFlyFormat->GetAttrSet() );
 
-            SwFormatFrmSize aSize(ItemGet<SwFormatFrmSize>(aFlySet, RES_FRM_SIZE));
+            SwFormatFrameSize aSize(ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE));
 
             aFlySet.ClearItem(RES_FRM_SIZE);
 
             CalculateFlySize(aFlySet, m_pSFlyPara->pMainTextPos->nNode,
                 m_pSFlyPara->nWidth);
 
-            nNewWidth = ItemGet<SwFormatFrmSize>(aFlySet, RES_FRM_SIZE).GetWidth();
+            nNewWidth = ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE).GetWidth();
 
             aSize.SetWidth(nNewWidth);
             aSize.SetWidthSizeType(ATT_VAR_SIZE);
@@ -2583,8 +2583,8 @@ void SwWW8ImplReader::StopApo()
         }
 
         delete m_pSFlyPara->pMainTextPos, m_pSFlyPara->pMainTextPos = nullptr;
-// To create the SwFrms when inserting into an existing document, fltshell.cxx
-// will call pFlyFrm->MakeFrms() when setting the FltAnchor attribute
+// To create the SwFrames when inserting into an existing document, fltshell.cxx
+// will call pFlyFrame->MakeFrames() when setting the FltAnchor attribute
 
     }
 

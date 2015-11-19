@@ -23,7 +23,7 @@
 #include <tools/mempool.hxx>
 #include "layfrm.hxx"
 
-class SwHeadFootFrm : public SwLayoutFrm
+class SwHeadFootFrame : public SwLayoutFrame
 {
 protected:
     void FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs);
@@ -31,31 +31,31 @@ protected:
     inline bool GetEatSpacing() const; // in hffrm.cxx
 
 public:
-    SwHeadFootFrm(SwFrameFormat * pFrm, SwFrm*, sal_uInt16 aType);
+    SwHeadFootFrame(SwFrameFormat * pFrame, SwFrame*, sal_uInt16 aType);
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
-    virtual SwTwips GrowFrm( SwTwips,
+    virtual SwTwips GrowFrame( SwTwips,
                              bool bTst = false, bool bInfo = false ) override;
-    virtual SwTwips ShrinkFrm( SwTwips,
+    virtual SwTwips ShrinkFrame( SwTwips,
                                bool bTst = false, bool bInfo = false ) override;
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
+    virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
 };
 
 /// Header in the document layout, inside a page.
-class SwHeaderFrm: public SwHeadFootFrm
+class SwHeaderFrame: public SwHeadFootFrame
 {
 public:
-    SwHeaderFrm( SwFrameFormat* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRM_HEADER) {};
+    SwHeaderFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, FRM_HEADER) {};
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwHeaderFrm)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwHeaderFrame)
 };
 
 /// Footer in the document layout, inside a page.
-class SwFooterFrm: public SwHeadFootFrm
+class SwFooterFrame: public SwHeadFootFrame
 {
 public:
-    SwFooterFrm( SwFrameFormat* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRM_FOOTER) {};
+    SwFooterFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, FRM_FOOTER) {};
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwFooterFrm)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwFooterFrame)
 };
 
 #endif

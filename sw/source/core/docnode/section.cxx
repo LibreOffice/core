@@ -317,12 +317,12 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
                 pFormat->ModifyNotification( &aMsgItem, &aMsgItem );
 
                 // Delete all Frames
-                pFormat->DelFrms();
+                pFormat->DelFrames();
             }
         }
         else if (m_Data.IsHiddenFlag()) // show Nodes again
         {
-            // Show all Frames (Child Sections are accounted for by MakeFrms)
+            // Show all Frames (Child Sections are accounted for by MakeFrames)
             // Only if the Parent Section is not restricting us!
             SwSection* pParentSect = pFormat->GetParentSection();
             if( !pParentSect || !pParentSect->IsHiddenFlag() )
@@ -331,7 +331,7 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
                 SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
                 pFormat->ModifyNotification( &aMsgItem, &aMsgItem );
 
-                pFormat->MakeFrms();
+                pFormat->MakeFrames();
             }
         }
     }
@@ -628,8 +628,8 @@ const SwTOXBase* SwSection::GetTOXBase() const
     return pRet;
 }
 
-SwSectionFormat::SwSectionFormat( SwFrameFormat* pDrvdFrm, SwDoc *pDoc )
-    : SwFrameFormat( pDoc->GetAttrPool(), OUString(), pDrvdFrm )
+SwSectionFormat::SwSectionFormat( SwFrameFormat* pDrvdFrame, SwDoc *pDoc )
+    : SwFrameFormat( pDoc->GetAttrPool(), OUString(), pDrvdFrame )
 {
     LockModify();
     SetFormatAttr( *GetDfltAttr( RES_COL ) );
@@ -663,7 +663,7 @@ SwSectionFormat::~SwSectionFormat()
             }
             // mba: test iteration; objects are removed while iterating
             // use hint which allows to specify, if the content shall be saved or not
-            CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( true ) );
+            CallSwClientNotify( SwSectionFrameMoveAndDeleteHint( true ) );
 
             // Raise the Section up
             SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
@@ -680,25 +680,25 @@ SwSection * SwSectionFormat::GetSection() const
     return SwIterator<SwSection,SwSectionFormat>( *this ).First();
 }
 
-// Do not destroy all Frms in aDepend (Frms are recognized with a dynamic_cast).
-void SwSectionFormat::DelFrms()
+// Do not destroy all Frames in aDepend (Frames are recognized with a dynamic_cast).
+void SwSectionFormat::DelFrames()
 {
     SwSectionNode* pSectNd;
     const SwNodeIndex* pIdx = GetContent(false).GetContentIdx();
     if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
         nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
     {
-        // First delete the <SwSectionFrm> of the <SwSectionFormat> instance
+        // First delete the <SwSectionFrame> of the <SwSectionFormat> instance
         // mba: test iteration as objects are removed in iteration
         // use hint which allows to specify, if the content shall be saved or not
-        CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( false ) );
+        CallSwClientNotify( SwSectionFrameMoveAndDeleteHint( false ) );
 
         // Then delete frames of the nested <SwSectionFormat> instances
         SwIterator<SwSectionFormat,SwSectionFormat> aIter( *this );
         SwSectionFormat *pLast = aIter.First();
         while ( pLast )
         {
-            pLast->DelFrms();
+            pLast->DelFrames();
             pLast = aIter.Next();
         }
 
@@ -722,7 +722,7 @@ void SwSectionFormat::DelFrms()
 }
 
 // Create the Views
-void SwSectionFormat::MakeFrms()
+void SwSectionFormat::MakeFrames()
 {
     SwSectionNode* pSectNd;
     const SwNodeIndex* pIdx = GetContent(false).GetContentIdx();
@@ -731,7 +731,7 @@ void SwSectionFormat::MakeFrms()
         nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
     {
         SwNodeIndex aIdx( *pIdx );
-        pSectNd->MakeFrms( &aIdx );
+        pSectNd->MakeFrames( &aIdx );
     }
 }
 
@@ -856,19 +856,19 @@ bool SwSectionFormat::GetInfo( SfxPoolItem& rInfo ) const
 
     case RES_CONTENT_VISIBLE:
         {
-            SwFrm* pFrm = SwIterator<SwFrm,SwFormat>(*this).First();
+            SwFrame* pFrame = SwIterator<SwFrame,SwFormat>(*this).First();
             // if the current section has no own frame search for the children
-            if(!pFrm)
+            if(!pFrame)
             {
                 SwIterator<SwSectionFormat,SwSectionFormat> aFormatIter(*this);
                 SwSectionFormat* pChild = aFormatIter.First();
-                while(pChild && !pFrm)
+                while(pChild && !pFrame)
                 {
-                    pFrm = SwIterator<SwFrm,SwFormat>(*pChild).First();
+                    pFrame = SwIterator<SwFrame,SwFormat>(*pChild).First();
                     pChild = aFormatIter.Next();
                 }
             }
-            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = pFrm;
+            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = pFrame;
         }
         return false;
     }
@@ -1355,17 +1355,17 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 if( pCpyRg )
                 {
                     SwNodeIndex& rInsPos = pPam->GetPoint()->nNode;
-                    bool bCreateFrm = rInsPos.GetIndex() <=
+                    bool bCreateFrame = rInsPos.GetIndex() <=
                                 pDoc->GetNodes().GetEndOfExtras().GetIndex() ||
                                 rInsPos.GetNode().FindTableNode();
 
                     SwTableNumFormatMerge aTNFM( *pSrcDoc, *pDoc );
 
-                    pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( *pCpyRg, 0, rInsPos, nullptr, bCreateFrm );
+                    pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( *pCpyRg, 0, rInsPos, nullptr, bCreateFrame );
                     ++aSave;
 
-                    if( !bCreateFrm )
-                        ::MakeFrms( pDoc, aSave, rInsPos );
+                    if( !bCreateFrame )
+                        ::MakeFrames( pDoc, aSave, rInsPos );
 
                     // Delete last Node, only if it was copied successfully
                     // (the Section contains more than one Node)
@@ -1406,10 +1406,10 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         if( pESh )
         {
             pESh->Push();
-            SwPaM* pCrsr = pESh->GetCrsr();
-            *pCrsr->GetPoint() = *pPam->GetPoint();
+            SwPaM* pCursor = pESh->GetCursor();
+            *pCursor->GetPoint() = *pPam->GetPoint();
             delete pPam;
-            pPam = pCrsr;
+            pPam = pCursor;
         }
 
         SvMemoryStream aStrm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),

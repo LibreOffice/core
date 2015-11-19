@@ -41,7 +41,7 @@ SwEditShell::InsertSection(
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, nullptr );
 
-        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             SwSection const*const pNew =
                 GetDoc()->InsertSwSection( rPaM, rNewData, nullptr, pAttr );
@@ -59,11 +59,11 @@ bool SwEditShell::IsInsRegionAvailable() const
 {
     if( IsTableMode() )
         return false;
-    SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )
+    SwPaM* pCursor = GetCursor();
+    if( pCursor->GetNext() != pCursor )
         return false;
-    if( pCrsr->HasMark() )
-        return 0 != SwDoc::IsInsRegionAvailable( *pCrsr );
+    if( pCursor->HasMark() )
+        return 0 != SwDoc::IsInsRegionAvailable( *pCursor );
 
     return true;
 }
@@ -73,7 +73,7 @@ const SwSection* SwEditShell::GetCurrSection() const
     if( IsTableMode() )
         return nullptr;
 
-    return SwDoc::GetCurrSection( *GetCrsr()->GetPoint() );
+    return SwDoc::GetCurrSection( *GetCursor()->GetPoint() );
 }
 
 /** Deliver the responsible area of the columns.
@@ -82,28 +82,28 @@ const SwSection* SwEditShell::GetCurrSection() const
  */
 SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt )
 {
-    SwFrm *pFrm;
+    SwFrame *pFrame;
     if ( pPt )
     {
-        SwPosition aPos( *GetCrsr()->GetPoint() );
+        SwPosition aPos( *GetCursor()->GetPoint() );
         Point aPt( *pPt );
-        GetLayout()->GetCrsrOfst( &aPos, aPt );
+        GetLayout()->GetCursorOfst( &aPos, aPt );
         SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
-        pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
+        pFrame = pNd->getLayoutFrame( GetLayout(), pPt );
     }
     else
-        pFrm = GetCurrFrm( false );
+        pFrame = GetCurrFrame( false );
 
-    if( bOutOfTab && pFrm )
-        pFrm = pFrm->FindTabFrm();
-    if( pFrm && pFrm->IsInSct() )
+    if( bOutOfTab && pFrame )
+        pFrame = pFrame->FindTabFrame();
+    if( pFrame && pFrame->IsInSct() )
     {
-        SwSectionFrm* pSect = pFrm->FindSctFrm();
+        SwSectionFrame* pSect = pFrame->FindSctFrame();
         OSL_ENSURE( pSect, "GetAnySection: Where's my Sect?" );
         if( pSect->IsInFootnote() && pSect->GetUpper()->IsInSct() )
         {
-            pSect = pSect->GetUpper()->FindSctFrm();
-            OSL_ENSURE( pSect, "GetAnySection: Where's my SectFrm?" );
+            pSect = pSect->GetUpper()->FindSctFrame();
+            OSL_ENSURE( pSect, "GetAnySection: Where's my SectFrame?" );
         }
         return pSect->GetSection();
     }
@@ -181,7 +181,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
     {
         // for all section in the selection
 
-        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             const SwPosition* pStt = rPaM.Start(),
                             * pEnd = rPaM.End();
@@ -251,7 +251,7 @@ void SwEditShell::_SetSectionAttr( SwSectionFormat& rSectFormat,
 sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
 {
     sal_uInt16 nRet = 0;
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
 
         const SwPosition* pStt = rPaM.Start(),
@@ -391,7 +391,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
 */
 bool SwEditShell::CanSpecialInsert() const
 {
-    return nullptr != lcl_SpecialInsertNode( GetCrsr()->GetPoint() );
+    return nullptr != lcl_SpecialInsertNode( GetCursor()->GetPoint() );
 }
 
 /** check whether a node can be special-inserted (alt-Enter), and do so. Return
@@ -402,7 +402,7 @@ bool SwEditShell::DoSpecialInsert()
     bool bRet = false;
 
     // get current node
-    SwPosition* pCursorPos = GetCrsr()->GetPoint();
+    SwPosition* pCursorPos = GetCursor()->GetPoint();
     const SwNode* pInsertNode = lcl_SpecialInsertNode( pCursorPos );
     if( pInsertNode != nullptr )
     {

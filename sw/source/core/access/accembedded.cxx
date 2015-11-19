@@ -37,8 +37,8 @@ const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleEmb
 
 SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
         SwAccessibleMap* pInitMap,
-        const SwFlyFrm* pFlyFrm  ) :
-    SwAccessibleNoTextFrame( pInitMap, AccessibleRole::EMBEDDED_OBJECT, pFlyFrm )
+        const SwFlyFrame* pFlyFrame  ) :
+    SwAccessibleNoTextFrame( pInitMap, AccessibleRole::EMBEDDED_OBJECT, pFlyFrame )
 {
 }
 
@@ -108,16 +108,16 @@ css::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
 
     css::uno::Any strRet;
     OUString style;
-    SwFlyFrm* pFFrm = getFlyFrm();
+    SwFlyFrame* pFFrame = getFlyFrame();
 
-    if( pFFrm )
+    if( pFFrame )
     {
         style = "style:";
-        SwContentFrm* pCFrm;
-        pCFrm = pFFrm->ContainsContent();
-        if( pCFrm )
+        SwContentFrame* pCFrame;
+        pCFrame = pFFrame->ContainsContent();
+        if( pCFrame )
         {
-            SwContentNode* pCNode = pCFrm->GetNode();
+            SwContentNode* pCNode = pCFrame->GetNode();
             if( pCNode )
             {
                 style += static_cast<SwOLENode*>(pCNode)->GetOLEObj().GetStyleString();

@@ -671,7 +671,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
 
             SwRewriter aRewriter;
 
-            aRewriter.AddRule(UndoArg1, m_pSh->GetCrsrDescr());
+            aRewriter.AddRule(UndoArg1, m_pSh->GetCursorDescr());
             aRewriter.AddRule(UndoArg2, OUString(SW_RES(STR_YIELDS)));
 
             OUString aTmpStr( SW_RES(STR_START_QUOTE) );
@@ -728,7 +728,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == MN_IGNORE_SELECTION)
     {
-        SwPaM *pPaM = m_pSh->GetCrsr();
+        SwPaM *pPaM = m_pSh->GetCursor();
         if (pPaM)
             SwEditShell::IgnoreGrammarErrorAt( *pPaM );
     }
@@ -742,7 +742,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                     m_xGrammarResult.aErrors[ m_nGrammarError ].aRuleIdentifier,
                         m_xGrammarResult.aLocale );
                 // refresh the layout of the actual paragraph (faster)
-                SwPaM *pPaM = m_pSh->GetCrsr();
+                SwPaM *pPaM = m_pSh->GetCursor();
                 if (pPaM)
                     SwEditShell::IgnoreGrammarErrorAt( *pPaM );
                 // refresh the layout of all paragraphs (workaround to launch a dictionary event)

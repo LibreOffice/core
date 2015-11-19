@@ -1400,10 +1400,10 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
         pFrameFormat = pBox->ClaimFrameFormat();
 
         // die Breite der Box berechnen
-        SwTwips nFrmWidth = (SwTwips)pLayoutInfo->GetColumn(nCol)
+        SwTwips nFrameWidth = (SwTwips)pLayoutInfo->GetColumn(nCol)
                                                 ->GetRelColWidth();
         for( sal_uInt16 i=1; i<nColSpan; i++ )
-            nFrmWidth += (SwTwips)pLayoutInfo->GetColumn(nCol+i)
+            nFrameWidth += (SwTwips)pLayoutInfo->GetColumn(nCol+i)
                                              ->GetRelColWidth();
 
         // die Umrandung nur an Edit-Boxen setzen (bei der oberen und unteren
@@ -1414,7 +1414,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             bool bSet = (nCellPadding > 0);
 
             SvxBoxItem aBoxItem( RES_BOX );
-            long nInnerFrmWidth = nFrmWidth;
+            long nInnerFrameWidth = nFrameWidth;
 
             if( bTopLine )
             {
@@ -1453,13 +1453,13 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 const SvxBorderLine& rBorderLine =
                     0==nCol ? aLeftBorderLine : aBorderLine;
                 aBoxItem.SetLine( &rBorderLine, SvxBoxItemLine::LEFT );
-                nInnerFrmWidth -= GetBorderWidth( rBorderLine );
+                nInnerFrameWidth -= GetBorderWidth( rBorderLine );
                 bSet = true;
             }
             if( nCol+nColSpan == nCols && bRightBorder )
             {
                 aBoxItem.SetLine( &aRightBorderLine, SvxBoxItemLine::RIGHT );
-                nInnerFrmWidth -= GetBorderWidth( aRightBorderLine );
+                nInnerFrameWidth -= GetBorderWidth( aRightBorderLine );
                 bSet = true;
             }
 
@@ -1471,8 +1471,8 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             {
                 // BorderDist nicht mehr Bestandteil einer Zelle mit fixer Breite
                 sal_uInt16 nBDist = static_cast< sal_uInt16 >(
-                    (2*nCellPadding <= nInnerFrmWidth) ? nCellPadding
-                                                      : (nInnerFrmWidth / 2) );
+                    (2*nCellPadding <= nInnerFrameWidth) ? nCellPadding
+                                                      : (nInnerFrameWidth / 2) );
                 // wir setzen das Item nur, wenn es eine Umrandung gibt
                 // oder eine sheet::Border-Distanz vorgegeben ist. Fehlt letztere,
                 // dann gibt es eine Umrandung, und wir muessen die Distanz
@@ -1670,7 +1670,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
             nRowHeight += GetTopCellSpace( nTopRow, 1, false ) +
                        GetBottomCellSpace( nTopRow, 1, false );
 
-            pFrameFormat->SetFormatAttr( SwFormatFrmSize( ATT_MIN_SIZE, 0, nRowHeight ) );
+            pFrameFormat->SetFormatAttr( SwFormatFrameSize( ATT_MIN_SIZE, 0, nRowHeight ) );
         }
 
         if( pBGBrushItem )
@@ -2525,9 +2525,9 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         if( bPrcWidth && text::HoriOrientation::FULL!=eHoriOri )
         {
             pFrameFormat->LockModify();
-            SwFormatFrmSize aFrmSize( pFrameFormat->GetFrmSize() );
-            aFrmSize.SetWidthPercent( (sal_uInt8)nWidth );
-            pFrameFormat->SetFormatAttr( aFrmSize );
+            SwFormatFrameSize aFrameSize( pFrameFormat->GetFrameSize() );
+            aFrameSize.SetWidthPercent( (sal_uInt8)nWidth );
+            pFrameFormat->SetFormatAttr( aFrameSize );
             pFrameFormat->UnlockModify();
         }
     }
@@ -2638,7 +2638,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
             (pSwTable->GetTabLines())[0]->ClaimFrameFormat();
             (pSwTable->GetTabLines())[0]->GetFrameFormat()
-                ->SetFormatAttr( SwFormatFrmSize( ATT_MIN_SIZE, 0, nHeight ) );
+                ->SetFormatAttr( SwFormatFrameSize( ATT_MIN_SIZE, 0, nHeight ) );
         }
 
         if( GetBGBrush() )
@@ -2662,9 +2662,9 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
                 sal_uInt32 nMin = pLayoutInfo->GetMin();
                 if( nMin > USHRT_MAX )
                     nMin = USHRT_MAX;
-                SwFormatFrmSize aFlyFrmSize( ATT_VAR_SIZE, (SwTwips)nMin, MINLAY );
-                aFlyFrmSize.SetWidthPercent( 100 );
-                pContext->GetFrameFormat()->SetFormatAttr( aFlyFrmSize );
+                SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMin, MINLAY );
+                aFlyFrameSize.SetWidthPercent( 100 );
+                pContext->GetFrameFormat()->SetFormatAttr( aFlyFrameSize );
                 bIsInFlyFrame = false;
             }
             else
@@ -2679,8 +2679,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
                     sal_uInt32 nMax = pLayoutInfo->GetMax();
                     if( nMax > USHRT_MAX )
                         nMax = USHRT_MAX;
-                    SwFormatFrmSize aFlyFrmSize( ATT_VAR_SIZE, (SwTwips)nMax, MINLAY );
-                    pContext->GetFrameFormat()->SetFormatAttr( aFlyFrmSize );
+                    SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMax, MINLAY );
+                    pContext->GetFrameFormat()->SetFormatAttr( aFlyFrameSize );
                     bIsInFlyFrame = false;
                 }
                 else
@@ -3673,10 +3673,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 {
                     // Die Tabelle soll in einen Rahmen geschaufelt werden.
 
-                    SfxItemSet aFrmSet( m_pDoc->GetAttrPool(),
+                    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
                                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
                     if( !pCurTable->IsNewDoc() )
-                        Reader::ResetFrameFormatAttrs( aFrmSet );
+                        Reader::ResetFrameFormatAttrs( aFrameSet );
 
                     SwSurround eSurround = SURROUND_NONE;
                     sal_Int16 eHori;
@@ -3697,26 +3697,26 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         eHori = text::HoriOrientation::LEFT;
                         break;
                     }
-                    SetAnchorAndAdjustment( text::VertOrientation::NONE, eHori, aFrmSet,
+                    SetAnchorAndAdjustment( text::VertOrientation::NONE, eHori, aFrameSet,
                                             true );
-                    aFrmSet.Put( SwFormatSurround(eSurround) );
+                    aFrameSet.Put( SwFormatSurround(eSurround) );
 
-                    SwFormatFrmSize aFrmSize( ATT_VAR_SIZE, 20*MM50, MINLAY );
-                    aFrmSize.SetWidthPercent( 100 );
-                    aFrmSet.Put( aFrmSize );
+                    SwFormatFrameSize aFrameSize( ATT_VAR_SIZE, 20*MM50, MINLAY );
+                    aFrameSize.SetWidthPercent( 100 );
+                    aFrameSet.Put( aFrameSize );
 
                     sal_uInt16 nSpace = pCurTable->GetHSpace();
                     if( nSpace )
-                        aFrmSet.Put( SvxLRSpaceItem(nSpace,nSpace, 0, 0, RES_LR_SPACE) );
+                        aFrameSet.Put( SvxLRSpaceItem(nSpace,nSpace, 0, 0, RES_LR_SPACE) );
                     nSpace = pCurTable->GetVSpace();
                     if( nSpace )
-                        aFrmSet.Put( SvxULSpaceItem(nSpace,nSpace, RES_UL_SPACE) );
+                        aFrameSet.Put( SvxULSpaceItem(nSpace,nSpace, RES_UL_SPACE) );
 
-                    RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aFrmSet.
+                    RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aFrameSet.
                                                 Get( RES_ANCHOR )).
                                                 GetAnchorId();
                     SwFrameFormat *pFrameFormat =  m_pDoc->MakeFlySection(
-                                eAnchorId, m_pPam->GetPoint(), &aFrmSet );
+                                eAnchorId, m_pPam->GetPoint(), &aFrameSet );
 
                     pTCntxt->SetFrameFormat( pFrameFormat );
                     const SwFormatContent& rFlyContent = pFrameFormat->GetContent();
@@ -5006,17 +5006,17 @@ void _TableSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pD
 
         if( pTCntxt->GetFrameFormat() )
         {
-            pTCntxt->GetFrameFormat()->DelFrms();
-            pTableNd->DelFrms();
-            pTCntxt->GetFrameFormat()->MakeFrms();
+            pTCntxt->GetFrameFormat()->DelFrames();
+            pTableNd->DelFrames();
+            pTCntxt->GetFrameFormat()->MakeFrames();
         }
         else
         {
-            pTableNd->DelFrms();
+            pTableNd->DelFrames();
             SwNodeIndex aIdx( *pTableNd->EndOfSectionNode(), 1 );
             OSL_ENSURE( aIdx.GetIndex() <= pTCntxt->GetPos()->nNode.GetIndex(),
                     "unerwarteter Node fuer das Tabellen-Layout" );
-            pTableNd->MakeFrms( &aIdx );
+            pTableNd->MakeFrames( &aIdx );
         }
     }
 

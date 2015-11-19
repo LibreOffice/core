@@ -214,7 +214,7 @@ void SwIndexMarkPane::InitControls()
 
         // only if there are more than one
         // if equal it lands at the same entry
-        pSh->SttCrsrMove();
+        pSh->SttCursorMove();
 
         const SwTOXMark* pMoveMark;
         bool bShow = false;
@@ -247,7 +247,7 @@ void SwIndexMarkPane::InitControls()
             m_pNextSameBT->Show();
             m_pPrevSameBT->Show();
         }
-        pSh->EndCrsrMove();
+        pSh->EndCursorMove();
 
         m_pTypeFT->Show();
 
@@ -258,7 +258,7 @@ void SwIndexMarkPane::InitControls()
     }
     else
     {   // display current selection (first element) ????
-        if (pSh->GetCrsrCnt() < 2)
+        if (pSh->GetCursorCnt() < 2)
         {
             bSelected = !pSh->HasSelection();
             aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
@@ -266,12 +266,12 @@ void SwIndexMarkPane::InitControls()
 
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
-            const FrmTypeFlags nFrmType = pSh->GetFrmType(nullptr,true);
+            const FrameTypeFlags nFrameType = pSh->GetFrameType(nullptr,true);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
             m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
-                !(nFrmType & ( FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER | FrmTypeFlags::FLY_ANY )));
+                !(nFrameType & ( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FLY_ANY )));
             SearchTypeHdl(m_pApplyToAllCB);
         }
 
@@ -346,7 +346,7 @@ void    SwIndexMarkPane::Activate()
     // display current selection (first element) ????
     if(bNewMark)
     {
-        if (pSh->GetCrsrCnt() < 2)
+        if (pSh->GetCursorCnt() < 2)
         {
             bSelected = !pSh->HasSelection();
             aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
@@ -354,12 +354,12 @@ void    SwIndexMarkPane::Activate()
 
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
-            const FrmTypeFlags nFrmType = pSh->GetFrmType(nullptr,true);
+            const FrameTypeFlags nFrameType = pSh->GetFrameType(nullptr,true);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
             m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
-                !(nFrmType & ( FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER | FrmTypeFlags::FLY_ANY )));
+                !(nFrameType & ( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FLY_ANY )));
             SearchTypeHdl(m_pApplyToAllCB);
         }
         ModifyHdl(m_pTypeDCB);
@@ -700,7 +700,7 @@ void SwIndexMarkPane::ModifyHdl(Control* pBox)
         m_pPhoneticED0->Enable(bHasText&&bIsPhoneticReadingEnabled);
     }
     m_pOKBT->Enable(!pSh->HasReadonlySel() &&
-        (!m_pEntryED->GetText().isEmpty() || pSh->GetCrsrCnt(false)));
+        (!m_pEntryED->GetText().isEmpty() || pSh->GetCursorCnt(false)));
 }
 
 IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, NextHdl, Button*, void)
@@ -808,7 +808,7 @@ void SwIndexMarkPane::UpdateDialog()
     m_pTypeDCB->SelectEntry(pMark->GetTOXType()->GetTypeName());
 
     // set Next - Prev - Buttons
-    pSh->SttCrsrMove();
+    pSh->SttCursorMove();
     if( m_pPrevBT->IsVisible() )
     {
         const SwTOXMark* pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_PRV );
@@ -845,7 +845,7 @@ void SwIndexMarkPane::UpdateDialog()
     // we need the point at the start of the attribute
     pSh->SwapPam();
 
-    pSh->EndCrsrMove();
+    pSh->EndCursorMove();
 }
 
 // Remind whether the edit boxes for Phonetic reading are changed manually

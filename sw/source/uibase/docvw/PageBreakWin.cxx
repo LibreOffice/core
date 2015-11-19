@@ -91,8 +91,8 @@ namespace
     }
 }
 
-SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrm *pFrm ) :
-    SwFrameMenuButtonBase( pEditWin, pFrm ),
+SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame ) :
+    SwFrameMenuButtonBase( pEditWin, pFrame ),
     m_pPopupMenu( nullptr ),
     m_pLine( nullptr ),
     m_bIsAppearing( false ),
@@ -223,24 +223,24 @@ void SwPageBreakWin::Select( )
     {
         case FN_PAGEBREAK_EDIT:
             {
-                const SwLayoutFrm* pBodyFrm = static_cast< const SwLayoutFrm* >( GetPageFrame()->Lower() );
-                while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
-                    pBodyFrm = static_cast< const SwLayoutFrm* >( pBodyFrm->GetNext() );
+                const SwLayoutFrame* pBodyFrame = static_cast< const SwLayoutFrame* >( GetPageFrame()->Lower() );
+                while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
+                    pBodyFrame = static_cast< const SwLayoutFrame* >( pBodyFrame->GetNext() );
 
                 SwEditWin* pEditWin = GetEditWin();
 
-                if ( pBodyFrm )
+                if ( pBodyFrame )
                 {
                     SwWrtShell& rSh = pEditWin->GetView().GetWrtShell();
                     bool bOldLock = rSh.IsViewLocked();
                     rSh.LockView( true );
 
-                    if ( pBodyFrm->Lower()->IsTabFrm() )
+                    if ( pBodyFrame->Lower()->IsTabFrame() )
                     {
                         rSh.Push( );
                         rSh.ClearMark();
 
-                        SwContentFrm *pCnt = const_cast< SwContentFrm* >( pBodyFrm->ContainsContent() );
+                        SwContentFrame *pCnt = const_cast< SwContentFrame* >( pBodyFrame->ContainsContent() );
                         SwContentNode* pNd = pCnt->GetNode();
                         rSh.SetSelection( *pNd );
 
@@ -252,7 +252,7 @@ void SwPageBreakWin::Select( )
                     }
                     else
                     {
-                        SwContentFrm *pCnt = const_cast< SwContentFrm* >( pBodyFrm->ContainsContent() );
+                        SwContentFrame *pCnt = const_cast< SwContentFrame* >( pBodyFrame->ContainsContent() );
                         SwContentNode* pNd = pCnt->GetNode();
 
                         SwPaM aPaM( *pNd );
@@ -268,13 +268,13 @@ void SwPageBreakWin::Select( )
             break;
         case FN_PAGEBREAK_DELETE:
             {
-                const SwLayoutFrm* pBodyFrm = static_cast< const SwLayoutFrm* >( GetPageFrame()->Lower() );
-                while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
-                    pBodyFrm = static_cast< const SwLayoutFrm* >( pBodyFrm->GetNext() );
+                const SwLayoutFrame* pBodyFrame = static_cast< const SwLayoutFrame* >( GetPageFrame()->Lower() );
+                while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
+                    pBodyFrame = static_cast< const SwLayoutFrame* >( pBodyFrame->GetNext() );
 
-                if ( pBodyFrm )
+                if ( pBodyFrame )
                 {
-                    SwContentFrm *pCnt = const_cast< SwContentFrm* >( pBodyFrm->ContainsContent() );
+                    SwContentFrame *pCnt = const_cast< SwContentFrame* >( pBodyFrame->ContainsContent() );
                     SwContentNode* pNd = pCnt->GetNode();
 
                     pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( UNDO_UI_DELETE_PAGE_BREAK, nullptr );
@@ -330,37 +330,37 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
         m_pMousePt = pEvtPt;
     }
 
-    const SwPageFrm* pPageFrm = GetPageFrame();
-    const SwFrm* pPrevPage = pPageFrm;
+    const SwPageFrame* pPageFrame = GetPageFrame();
+    const SwFrame* pPrevPage = pPageFrame;
     do
     {
         pPrevPage = pPrevPage->GetPrev();
     }
-    while ( pPrevPage && ( ( pPrevPage->Frm().Top( ) == pPageFrm->Frm().Top( ) )
-                || static_cast< const SwPageFrm* >( pPrevPage )->IsEmptyPage( ) ) );
+    while ( pPrevPage && ( ( pPrevPage->Frame().Top( ) == pPageFrame->Frame().Top( ) )
+                || static_cast< const SwPageFrame* >( pPrevPage )->IsEmptyPage( ) ) );
 
-    Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrm->GetBoundRect(GetEditWin()).SVRect() );
-    Rectangle aFrmRect = GetEditWin()->LogicToPixel( pPageFrm->Frm().SVRect() );
+    Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrame->GetBoundRect(GetEditWin()).SVRect() );
+    Rectangle aFrameRect = GetEditWin()->LogicToPixel( pPageFrame->Frame().SVRect() );
 
-    long nYLineOffset = ( aBoundRect.Top() + aFrmRect.Top() ) / 2;
+    long nYLineOffset = ( aBoundRect.Top() + aFrameRect.Top() ) / 2;
     if ( pPrevPage )
     {
-        Rectangle aPrevFrmRect = GetEditWin()->LogicToPixel( pPrevPage->Frm().SVRect() );
-        nYLineOffset = ( aPrevFrmRect.Bottom() + aFrmRect.Top() ) / 2;
+        Rectangle aPrevFrameRect = GetEditWin()->LogicToPixel( pPrevPage->Frame().SVRect() );
+        nYLineOffset = ( aPrevFrameRect.Bottom() + aFrameRect.Top() ) / 2;
     }
 
     // Get the page + sidebar coords
-    long nPgLeft = aFrmRect.Left();
-    long nPgRight = aFrmRect.Right();
+    long nPgLeft = aFrameRect.Left();
+    long nPgRight = aFrameRect.Right();
 
     unsigned long nSidebarWidth = 0;
     const SwPostItMgr* pPostItMngr = GetEditWin()->GetView().GetWrtShell().GetPostItMgr();
     if ( pPostItMngr && pPostItMngr->HasNotes() && pPostItMngr->ShowNotes() )
         nSidebarWidth = pPostItMngr->GetSidebarBorderWidth( true ) + pPostItMngr->GetSidebarWidth( true );
 
-    if ( pPageFrm->SidebarPosition( ) == sw::sidebarwindows::SidebarPosition::LEFT )
+    if ( pPageFrame->SidebarPosition( ) == sw::sidebarwindows::SidebarPosition::LEFT )
         nPgLeft -= nSidebarWidth;
-    else if ( pPageFrm->SidebarPosition( ) == sw::sidebarwindows::SidebarPosition::RIGHT )
+    else if ( pPageFrame->SidebarPosition( ) == sw::sidebarwindows::SidebarPosition::RIGHT )
         nPgRight += nSidebarWidth;
 
     Size aBtnSize( BUTTON_WIDTH + ARROW_WIDTH, BUTTON_HEIGHT );

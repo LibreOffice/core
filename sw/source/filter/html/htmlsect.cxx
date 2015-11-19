@@ -313,26 +313,26 @@ void SwHTMLParser::NewDivision( int nToken )
             aSection.SetProtectFlag(true);
         }
 
-        SfxItemSet aFrmItemSet( m_pDoc->GetAttrPool(),
+        SfxItemSet aFrameItemSet( m_pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
-            Reader::ResetFrameFormatAttrs(aFrmItemSet );
+            Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
         const SfxPoolItem *pItem;
         if( SfxItemState::SET == aItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
-            aFrmItemSet.Put( *pItem );
+            aFrameItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_BACKGROUND );
         }
         if( SfxItemState::SET == aItemSet.GetItemState( RES_FRAMEDIR, false,
                                                    &pItem ) )
         {
-            aFrmItemSet.Put( *pItem );
+            aFrameItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_FRAMEDIR );
         }
 
-        m_pDoc->InsertSwSection( *m_pPam, aSection, nullptr, &aFrmItemSet, false );
+        m_pDoc->InsertSwSection( *m_pPam, aSection, nullptr, &aFrameItemSet, false );
 
         // ggfs. einen Bereich anspringen
         if( JUMPTO_REGION == m_eJumpTo && aName == m_sJmpMark )
@@ -591,7 +591,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     bool bInCntnr = false;
     auto i = m_aContexts.size();
     while( !bInCntnr && i > m_nContextStMin )
-        bInCntnr = nullptr != m_aContexts[--i]->GetFrmItemSet();
+        bInCntnr = nullptr != m_aContexts[--i]->GetFrameItemSet();
 
     // Parse style sheets, but don't position anything by now.
     bool bStyleParsed = false;
@@ -618,26 +618,26 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     bool bPositioned = false;
     if( bInCntnr || SwCSS1Parser::MayBePositioned( aPropInfo, true ) )
     {
-        SfxItemSet aFrmItemSet( m_pDoc->GetAttrPool(),
+        SfxItemSet aFrameItemSet( m_pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
-            Reader::ResetFrameFormatAttrs(aFrmItemSet );
+            Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, aItemSet, aPropInfo,
-                                aFrmItemSet );
+                                aFrameItemSet );
 
         // The width is either the WIDTH attribute's value or contained
         // in some style option.
-        SetVarSize( aItemSet, aPropInfo, aFrmItemSet, nTwipWidth, nPrcWidth );
+        SetVarSize( aItemSet, aPropInfo, aFrameItemSet, nTwipWidth, nPrcWidth );
 
-        SetSpace( Size(0,0), aItemSet, aPropInfo, aFrmItemSet );
+        SetSpace( Size(0,0), aItemSet, aPropInfo, aFrameItemSet );
 
         // Set some other frame attributes. If the background is set, its
         // it will be cleared here. That for, it won't be set at the section,
         // too.
         SetFrameFormatAttrs( aItemSet, aPropInfo,
                         HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_PADDING|HTML_FF_DIRECTION,
-                        aFrmItemSet );
+                        aFrameItemSet );
 
         // Insert fly frame. If the are columns, the fly frame's name is not
         // the sections name but a generated one.
@@ -648,7 +648,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             aPropInfo.aId.clear();
         }
 
-        InsertFlyFrame( aFrmItemSet, pCntxt, aFlyName, CONTEXT_FLAGS_ABSPOS );
+        InsertFlyFrame( aFrameItemSet, pCntxt, aFlyName, CONTEXT_FLAGS_ABSPOS );
 
         pCntxt->SetPopStack( true );
         bPositioned = true;
@@ -690,10 +690,10 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         OUString aName( m_pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
         SwSectionData aSection( CONTENT_SECTION, aName );
 
-        SfxItemSet aFrmItemSet( m_pDoc->GetAttrPool(),
+        SfxItemSet aFrameItemSet( m_pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
-            Reader::ResetFrameFormatAttrs(aFrmItemSet );
+            Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
         if( nGutter && Application::GetDefaultDevice() )
         {
@@ -706,22 +706,22 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         nPrcWidth = 100;
 
         aFormatCol.Init( nCols, nGutter, USHRT_MAX );
-        aFrmItemSet.Put( aFormatCol );
+        aFrameItemSet.Put( aFormatCol );
 
         const SfxPoolItem *pItem;
         if( SfxItemState::SET == aItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
-            aFrmItemSet.Put( *pItem );
+            aFrameItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_BACKGROUND );
         }
         if( SfxItemState::SET == aItemSet.GetItemState( RES_FRAMEDIR, false,
                                                    &pItem ) )
         {
-            aFrmItemSet.Put( *pItem );
+            aFrameItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_FRAMEDIR );
         }
-        m_pDoc->InsertSwSection( *m_pPam, aSection, nullptr, &aFrmItemSet, false );
+        m_pDoc->InsertSwSection( *m_pPam, aSection, nullptr, &aFrameItemSet, false );
 
         // Jump to section, if this is requested.
         if( JUMPTO_REGION == m_eJumpTo && aName == m_sJmpMark )
@@ -778,7 +778,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
     if( !rName.isEmpty() )
         pFlyFormat->SetName( rName );
 
-    RegisterFlyFrm( pFlyFormat );
+    RegisterFlyFrame( pFlyFormat );
 
     const SwFormatContent& rFlyContent = pFlyFormat->GetContent();
     const SwNodeIndex& rFlyCntIdx = *rFlyContent.GetContentIdx();

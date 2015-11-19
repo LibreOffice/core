@@ -283,12 +283,12 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // und nun noch ALIGN, HSPACE und VSPACE
-    sal_uInt32 nFrmFlags = HTML_FRMOPTS_MARQUEE;
+    sal_uInt32 nFrameFlags = HTML_FRMOPTS_MARQUEE;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
-        nFrmFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
-    OString aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrmFlags );
+        nFrameFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
+    OString aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrameFlags );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
-        rHTMLWrt.OutCSS1_FrameFormatOptions( rFormat, nFrmFlags, &rSdrObject );
+        rHTMLWrt.OutCSS1_FrameFormatOptions( rFormat, nFrameFlags, &rSdrObject );
 
     rWrt.Strm().WriteChar( '>' );
 

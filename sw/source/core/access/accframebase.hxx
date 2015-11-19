@@ -24,7 +24,7 @@
 #include <calbck.hxx>
 #include <pam.hxx>
 
-class SwFlyFrm;
+class SwFlyFrame;
 
 class SwAccessibleFrameBase : public SwAccessibleContext,
                               public SwClient
@@ -37,9 +37,9 @@ protected:
     // This derived class additionally sets SELECTABLE(1), SELECTED(+),
     // FOCUSABLE(1) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
-    SwFlyFrm* getFlyFrm() const;
+    SwFlyFrame* getFlyFrame() const;
     bool GetSelectedState( );
-    SwPaM* GetCrsr();
+    SwPaM* GetCursor();
 
     virtual void _InvalidateCursorPos() override;
     virtual void _InvalidateFocus() override;
@@ -50,11 +50,11 @@ protected:
 public:
     SwAccessibleFrameBase( SwAccessibleMap* pInitMap,
                            sal_Int16 nInitRole,
-                           const SwFlyFrm *pFlyFrm );
+                           const SwFlyFrame *pFlyFrame );
 
     virtual bool HasCursor() override;   // required by map to remember that object
 
-    static sal_uInt8 GetNodeType( const SwFlyFrm *pFlyFrm );
+    static sal_uInt8 GetNodeType( const SwFlyFrame *pFlyFrame );
 
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( bool bRecursive = false ) override;

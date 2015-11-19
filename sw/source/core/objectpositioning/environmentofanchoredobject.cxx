@@ -33,67 +33,67 @@ SwEnvironmentOfAnchoredObject::~SwEnvironmentOfAnchoredObject()
 {}
 
 /** determine environment layout frame for possible horizontal object positions */
-const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
-                                            const SwFrm& _rHoriOrientFrm ) const
+const SwLayoutFrame& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrame(
+                                            const SwFrame& _rHoriOrientFrame ) const
 {
-    const SwFrm* pHoriEnvironmentLayFrm = &_rHoriOrientFrm;
+    const SwFrame* pHoriEnvironmentLayFrame = &_rHoriOrientFrame;
 
     if ( !mbFollowTextFlow )
     {
         // No exception any more for page alignment.
         // the page frame determines the horizontal layout environment.
-        pHoriEnvironmentLayFrm = _rHoriOrientFrm.FindPageFrm();
+        pHoriEnvironmentLayFrame = _rHoriOrientFrame.FindPageFrame();
     }
     else
     {
-        while ( !pHoriEnvironmentLayFrm->IsCellFrm() &&
-                !pHoriEnvironmentLayFrm->IsFlyFrm() &&
-                !pHoriEnvironmentLayFrm->IsPageFrm() )
+        while ( !pHoriEnvironmentLayFrame->IsCellFrame() &&
+                !pHoriEnvironmentLayFrame->IsFlyFrame() &&
+                !pHoriEnvironmentLayFrame->IsPageFrame() )
         {
-            pHoriEnvironmentLayFrm = pHoriEnvironmentLayFrm->GetUpper();
-            OSL_ENSURE( pHoriEnvironmentLayFrm,
-                    "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(..) - no page|fly|cell frame found" );
+            pHoriEnvironmentLayFrame = pHoriEnvironmentLayFrame->GetUpper();
+            OSL_ENSURE( pHoriEnvironmentLayFrame,
+                    "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrame(..) - no page|fly|cell frame found" );
         }
     }
 
-    OSL_ENSURE( dynamic_cast< const SwLayoutFrm *>( pHoriEnvironmentLayFrm ) !=  nullptr,
-                "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(..) - found frame isn't a layout frame" );
+    OSL_ENSURE( dynamic_cast< const SwLayoutFrame *>( pHoriEnvironmentLayFrame ) !=  nullptr,
+                "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrame(..) - found frame isn't a layout frame" );
 
-    return static_cast<const SwLayoutFrm&>(*pHoriEnvironmentLayFrm);
+    return static_cast<const SwLayoutFrame&>(*pHoriEnvironmentLayFrame);
 }
 
 /** determine environment layout frame for possible vertical object positions */
-const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
-                                            const SwFrm& _rVertOrientFrm ) const
+const SwLayoutFrame& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrame(
+                                            const SwFrame& _rVertOrientFrame ) const
 {
-    const SwFrm* pVertEnvironmentLayFrm = &_rVertOrientFrm;
+    const SwFrame* pVertEnvironmentLayFrame = &_rVertOrientFrame;
 
     if ( !mbFollowTextFlow )
     {
         // No exception any more for page alignment.
         // the page frame determines the vertical layout environment.
-        pVertEnvironmentLayFrm = _rVertOrientFrm.FindPageFrm();
+        pVertEnvironmentLayFrame = _rVertOrientFrame.FindPageFrame();
     }
     else
     {
-        while ( !pVertEnvironmentLayFrm->IsCellFrm() &&
-                !pVertEnvironmentLayFrm->IsFlyFrm() &&
-                !pVertEnvironmentLayFrm->IsHeaderFrm() &&
-                !pVertEnvironmentLayFrm->IsFooterFrm() &&
-                !pVertEnvironmentLayFrm->IsFootnoteFrm() &&
-                !pVertEnvironmentLayFrm->IsPageBodyFrm() &&
-                !pVertEnvironmentLayFrm->IsPageFrm() )
+        while ( !pVertEnvironmentLayFrame->IsCellFrame() &&
+                !pVertEnvironmentLayFrame->IsFlyFrame() &&
+                !pVertEnvironmentLayFrame->IsHeaderFrame() &&
+                !pVertEnvironmentLayFrame->IsFooterFrame() &&
+                !pVertEnvironmentLayFrame->IsFootnoteFrame() &&
+                !pVertEnvironmentLayFrame->IsPageBodyFrame() &&
+                !pVertEnvironmentLayFrame->IsPageFrame() )
         {
-            pVertEnvironmentLayFrm = pVertEnvironmentLayFrm->GetUpper();
-            OSL_ENSURE( pVertEnvironmentLayFrm,
-                    "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(..) - proposed frame not found" );
+            pVertEnvironmentLayFrame = pVertEnvironmentLayFrame->GetUpper();
+            OSL_ENSURE( pVertEnvironmentLayFrame,
+                    "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrame(..) - proposed frame not found" );
         }
     }
 
-    OSL_ENSURE( dynamic_cast< const SwLayoutFrm *>( pVertEnvironmentLayFrm ) !=  nullptr,
-                "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(..) - found frame isn't a layout frame" );
+    OSL_ENSURE( dynamic_cast< const SwLayoutFrame *>( pVertEnvironmentLayFrame ) !=  nullptr,
+                "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrame(..) - found frame isn't a layout frame" );
 
-    return static_cast<const SwLayoutFrm&>(*pVertEnvironmentLayFrm);
+    return static_cast<const SwLayoutFrame&>(*pVertEnvironmentLayFrame);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

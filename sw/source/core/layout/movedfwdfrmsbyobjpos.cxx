@@ -23,36 +23,36 @@
 #include <pagefrm.hxx>
 #include <calbck.hxx>
 
-SwMovedFwdFrmsByObjPos::SwMovedFwdFrmsByObjPos()
+SwMovedFwdFramesByObjPos::SwMovedFwdFramesByObjPos()
 {
 }
 
-SwMovedFwdFrmsByObjPos::~SwMovedFwdFrmsByObjPos()
+SwMovedFwdFramesByObjPos::~SwMovedFwdFramesByObjPos()
 {
     Clear();
 }
 
-void SwMovedFwdFrmsByObjPos::Insert( const SwTextFrm& _rMovedFwdFrmByObjPos,
+void SwMovedFwdFramesByObjPos::Insert( const SwTextFrame& _rMovedFwdFrameByObjPos,
                                      const sal_uInt32 _nToPageNum )
 {
-    if ( maMovedFwdFrms.end() ==
-         maMovedFwdFrms.find( _rMovedFwdFrmByObjPos.GetTextNode() ) )
+    if ( maMovedFwdFrames.end() ==
+         maMovedFwdFrames.find( _rMovedFwdFrameByObjPos.GetTextNode() ) )
     {
-        const NodeMapEntry aEntry( _rMovedFwdFrmByObjPos.GetTextNode(), _nToPageNum );
-        maMovedFwdFrms.insert( aEntry );
+        const NodeMapEntry aEntry( _rMovedFwdFrameByObjPos.GetTextNode(), _nToPageNum );
+        maMovedFwdFrames.insert( aEntry );
     }
 }
 
-void SwMovedFwdFrmsByObjPos::Remove( const SwTextFrm& _rTextFrm )
+void SwMovedFwdFramesByObjPos::Remove( const SwTextFrame& _rTextFrame )
 {
-    maMovedFwdFrms.erase( _rTextFrm.GetTextNode() );
+    maMovedFwdFrames.erase( _rTextFrame.GetTextNode() );
 }
 
-bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTextFrm& _rTextFrm,
+bool SwMovedFwdFramesByObjPos::FrameMovedFwdByObjPos( const SwTextFrame& _rTextFrame,
                                                   sal_uInt32& _ornToPageNum ) const
 {
-    NodeMapIter aIter = maMovedFwdFrms.find( _rTextFrm.GetTextNode() );
-    if ( maMovedFwdFrms.end() != aIter )
+    NodeMapIter aIter = maMovedFwdFrames.find( _rTextFrame.GetTextNode() );
+    if ( maMovedFwdFrames.end() != aIter )
     {
         _ornToPageNum = (*aIter).second;
         return true;
@@ -62,33 +62,33 @@ bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTextFrm& _rTextFrm,
 }
 
 // #i26945#
-bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const
+bool SwMovedFwdFramesByObjPos::DoesRowContainMovedFwdFrame( const SwRowFrame& _rRowFrame ) const
 {
-    bool bDoesRowContainMovedFwdFrm( false );
+    bool bDoesRowContainMovedFwdFrame( false );
 
-    const sal_uInt32 nPageNumOfRow = _rRowFrm.FindPageFrm()->GetPhyPageNum();
+    const sal_uInt32 nPageNumOfRow = _rRowFrame.FindPageFrame()->GetPhyPageNum();
 
-    NodeMapIter aIter = maMovedFwdFrms.begin();
-    for ( ; aIter != maMovedFwdFrms.end(); ++aIter )
+    NodeMapIter aIter = maMovedFwdFrames.begin();
+    for ( ; aIter != maMovedFwdFrames.end(); ++aIter )
     {
         const NodeMapEntry& rEntry = *(aIter);
         if ( rEntry.second >= nPageNumOfRow )
         {
-            SwIterator<SwTextFrm,SwTextNode> aFrmIter( *rEntry.first );
-            for( SwTextFrm* pTextFrm = aFrmIter.First(); pTextFrm; pTextFrm = aFrmIter.Next() )
+            SwIterator<SwTextFrame,SwTextNode> aFrameIter( *rEntry.first );
+            for( SwTextFrame* pTextFrame = aFrameIter.First(); pTextFrame; pTextFrame = aFrameIter.Next() )
             {
                 // #115759# - assure that found text frame
                 // is the first one.
-                if ( _rRowFrm.IsAnLower( pTextFrm ) && !pTextFrm->GetIndPrev() )
+                if ( _rRowFrame.IsAnLower( pTextFrame ) && !pTextFrame->GetIndPrev() )
                 {
-                    bDoesRowContainMovedFwdFrm = true;
+                    bDoesRowContainMovedFwdFrame = true;
                     break;
                 }
             }
         }
     }
 
-    return bDoesRowContainMovedFwdFrm;
+    return bDoesRowContainMovedFwdFrame;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -174,7 +174,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             m_pWrtShell->StartAction();
 
                             // remember cursor position data for later restoration of the cursor
-                            const SwPosition *pPoint = m_pWrtShell->GetCrsr()->GetPoint();
+                            const SwPosition *pPoint = m_pWrtShell->GetCursor()->GetPoint();
                             bool bRestoreCursor = pPoint->nNode.GetNode().IsTextNode();
                             const SwNodeIndex aPointNodeIndex( pPoint->nNode );
                             sal_Int32 nPointIndex = pPoint->nContent.GetIndex();
@@ -196,7 +196,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                                 if (!pTextNode || pTextNode->GetText().getLength() < nPointIndex)
                                     nPointIndex = 0;
                                 // restore cursor to its original position
-                                m_pWrtShell->GetCrsr()->GetPoint()->nContent.Assign( pTextNode, nPointIndex );
+                                m_pWrtShell->GetCursor()->GetPoint()->nContent.Assign( pTextNode, nPointIndex );
                             }
 
                             // enable all, restore view and cursor position
@@ -243,11 +243,11 @@ void SwView::StartTextConversion(
     bool bOldIns = m_pWrtShell->IsInsMode();
     m_pWrtShell->SetInsMode();
 
-    const bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection() ||
-        m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
+    const bool bSelection = static_cast<SwCursorShell*>(m_pWrtShell)->HasSelection() ||
+        m_pWrtShell->GetCursor() != m_pWrtShell->GetCursor()->GetNext();
 
     const bool  bStart = bSelection || m_pWrtShell->IsStartOfDoc();
-    const bool  bOther = !bSelection && !(m_pWrtShell->GetFrmType(nullptr,true) & FrmTypeFlags::BODY);
+    const bool  bOther = !bSelection && !(m_pWrtShell->GetFrameType(nullptr,true) & FrameTypeFlags::BODY);
 
     {
         const uno::Reference< uno::XComponentContext > xContext(
@@ -451,12 +451,12 @@ void SwView::HyphenateDocument()
         m_pWrtShell->StartUndo(UNDO_INSATTR);         // valid later
 
         bool bHyphSpecial = xProp.is() && xProp->getIsHyphSpecial();
-        bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection() ||
-            m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
+        bool bSelection = static_cast<SwCursorShell*>(m_pWrtShell)->HasSelection() ||
+            m_pWrtShell->GetCursor() != m_pWrtShell->GetCursor()->GetNext();
         bool bOther = m_pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;
         bool bStart = bSelection || ( !bOther && m_pWrtShell->IsStartOfDoc() );
         bool bStop = false;
-        if( !bOther && !(m_pWrtShell->GetFrmType(nullptr,true) & FrmTypeFlags::BODY) && !bSelection )
+        if( !bOther && !(m_pWrtShell->GetFrameType(nullptr,true) & FrameTypeFlags::BODY) && !bSelection )
         // turned on no special area
         {
             // I want also in special areas hyphenation
@@ -488,8 +488,8 @@ bool SwView::IsValidSelectionForThesaurus() const
     // must not be a multi-selection, and if it is a selection it needs
     // to be within a single paragraph
 
-    const bool bMultiSel = m_pWrtShell->GetCrsr()->IsMultiSelection();
-    const bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection();
+    const bool bMultiSel = m_pWrtShell->GetCursor()->IsMultiSelection();
+    const bool bSelection = static_cast<SwCursorShell*>(m_pWrtShell)->HasSelection();
     return !bMultiSel && (!bSelection || m_pWrtShell->IsSelOnePara() );
 }
 
@@ -527,9 +527,9 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
             ++nRight;
 
         // adjust existing selection
-        SwPaM *pCrsr = m_pWrtShell->GetCrsr();
-        pCrsr->GetPoint()->nContent -= nRight;
-        pCrsr->GetMark()->nContent += nLeft;
+        SwPaM *pCursor = m_pWrtShell->GetCursor();
+        pCursor->GetPoint()->nContent -= nRight;
+        pCursor->GetMark()->nContent += nLeft;
     }
 
     m_pWrtShell->Insert( rSynonmText );
@@ -566,7 +566,7 @@ void SwView::StartThesaurus()
     pVOpt->SetIdle( false );
 
     // get initial LookUp text
-    const bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection();
+    const bool bSelection = static_cast<SwCursorShell*>(m_pWrtShell)->HasSelection();
     OUString aTmp = GetThesaurusLookUpText( bSelection );
 
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
@@ -635,31 +635,31 @@ bool SwView::ExecSpellPopup(const Point& rPt)
     {
         if (m_pWrtShell->GetSelectionType() & nsSelectionType::SEL_DRW_TXT)
             bRet = ExecDrwTextSpellPopup(rPt);
-        else if (!m_pWrtShell->IsSelFrmMode())
+        else if (!m_pWrtShell->IsSelFrameMode())
         {
             const bool bOldViewLock = m_pWrtShell->IsViewLocked();
             m_pWrtShell->LockView( true );
             m_pWrtShell->Push();
             SwRect aToFill;
 
-            SwCrsrShell *pCrsrShell = static_cast<SwCrsrShell*>(m_pWrtShell);
-            SwPaM *pCrsr = pCrsrShell->GetCrsr();
-            SwPosition aPoint(*pCrsr->GetPoint());
+            SwCursorShell *pCursorShell = static_cast<SwCursorShell*>(m_pWrtShell);
+            SwPaM *pCursor = pCursorShell->GetCursor();
+            SwPosition aPoint(*pCursor->GetPoint());
             const SwTextNode *pNode = aPoint.nNode.GetNode().GetTextNode();
 
             // Spell-check in case the idle jobs haven't had a chance to kick in.
             // This makes it possible to suggest spelling corrections for
             // wrong words independent of the spell-checking idle job.
             if (pNode && pNode->IsWrongDirty() &&
-                !pCrsrShell->IsTableMode() &&
-                !pCrsr->HasMark() && !pCrsr->IsMultiSelection())
+                !pCursorShell->IsTableMode() &&
+                !pCursor->HasMark() && !pCursor->IsMultiSelection())
             {
-                SwContentFrm *pContentFrame = pCrsr->GetContentNode()->getLayoutFrm(
-                                        pCrsrShell->GetLayout(),
+                SwContentFrame *pContentFrame = pCursor->GetContentNode()->getLayoutFrame(
+                                        pCursorShell->GetLayout(),
                                         &rPt, &aPoint, false);
                 if (pContentFrame)
                 {
-                    SwRect aRepaint(static_cast<SwTextFrm*>(pContentFrame)->_AutoSpell(nullptr, 0));
+                    SwRect aRepaint(static_cast<SwTextFrame*>(pContentFrame)->_AutoSpell(nullptr, 0));
                     if (aRepaint.HasArea())
                         m_pWrtShell->InvalidateWindows(aRepaint);
                 }

@@ -39,18 +39,18 @@ struct SwFindParaFormatColl : public SwFindParas
     virtual bool IsReplaceMode() const override;
 };
 
-int SwFindParaFormatColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
+int SwFindParaFormatColl::Find( SwPaM* pCursor, SwMoveFn fnMove, const SwPaM* pRegion,
                              bool bInReadOnly )
 {
     int nRet = FIND_FOUND;
     if( bInReadOnly && pReplColl )
         bInReadOnly = false;
 
-    if( !pCrsr->Find( *pFormatColl, fnMove, pRegion, bInReadOnly ) )
+    if( !pCursor->Find( *pFormatColl, fnMove, pRegion, bInReadOnly ) )
         nRet = FIND_NOT_FOUND;
     else if( pReplColl )
     {
-        pCrsr->GetDoc()->SetTextFormatColl( *pCrsr, const_cast<SwTextFormatColl*>(pReplColl) );
+        pCursor->GetDoc()->SetTextFormatColl( *pCursor, const_cast<SwTextFormatColl*>(pReplColl) );
         nRet = FIND_NO_RING;
     }
     return nRet;

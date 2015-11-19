@@ -36,11 +36,11 @@
 
 class SwOneExampleFrame;
 
-class SwFrmCtrlWindow : public VclEventBox
+class SwFrameCtrlWindow : public VclEventBox
 {
     SwOneExampleFrame* pExampleFrame;
 public:
-    SwFrmCtrlWindow(vcl::Window* pParent, SwOneExampleFrame* pFrame);
+    SwFrameCtrlWindow(vcl::Window* pParent, SwOneExampleFrame* pFrame);
 
     virtual void Command( const CommandEvent& rCEvt ) override;
     virtual Size GetOptimalSize() const override;
@@ -73,7 +73,7 @@ class SW_DLLPUBLIC SwOneExampleFrame
     css::uno::Reference< css::frame::XController >    _xController;
     css::uno::Reference< css::text::XTextCursor >     _xCursor;
 
-    VclPtr<SwFrmCtrlWindow> aTopWindow;
+    VclPtr<SwFrameCtrlWindow> aTopWindow;
     Idle            aLoadedIdle;
     Link<SwOneExampleFrame&,void> aInitializedLink;
 

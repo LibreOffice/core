@@ -71,123 +71,123 @@
 
 using namespace ::com::sun::star;
 
-void SwCrsrShell::MoveCrsrToNum()
+void SwCursorShell::MoveCursorToNum()
 {
-    SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCrsrSaveState aSaveState( *m_pCurCrsr );
+    SwCallLink aLk( *this ); // watch Cursor-Moves
+    SwCursorSaveState aSaveState( *m_pCurrentCursor );
     if( ActionPend() )
         return;
     SET_CURR_SHELL( this );
     // try to set cursor onto this position, at half of the char-
     // SRectangle's height
-    Point aPt( m_pCurCrsr->GetPtPos() );
-    SwContentFrm * pFrm = m_pCurCrsr->GetContentNode()->getLayoutFrm( GetLayout(), &aPt,
-                                                m_pCurCrsr->GetPoint() );
-    pFrm->GetCharRect( m_aCharRect, *m_pCurCrsr->GetPoint() );
-    pFrm->Calc(GetOut());
-    if( pFrm->IsVertical() )
+    Point aPt( m_pCurrentCursor->GetPtPos() );
+    SwContentFrame * pFrame = m_pCurrentCursor->GetContentNode()->getLayoutFrame( GetLayout(), &aPt,
+                                                m_pCurrentCursor->GetPoint() );
+    pFrame->GetCharRect( m_aCharRect, *m_pCurrentCursor->GetPoint() );
+    pFrame->Calc(GetOut());
+    if( pFrame->IsVertical() )
     {
         aPt.setX(m_aCharRect.Center().getX());
-        aPt.setY(pFrm->Frm().Top() + GetUpDownX());
+        aPt.setY(pFrame->Frame().Top() + GetUpDownX());
     }
     else
     {
         aPt.setY(m_aCharRect.Center().getY());
-        aPt.setX(pFrm->Frm().Left() + GetUpDownX());
+        aPt.setX(pFrame->Frame().Left() + GetUpDownX());
     }
-    pFrm->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
-    if ( !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+    pFrame->GetCursorOfst( m_pCurrentCursor->GetPoint(), aPt );
+    if ( !m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                 nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
     {
-        UpdateCrsr(SwCrsrShell::UPDOWN |
-                SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                SwCrsrShell::READONLY );
+        UpdateCursor(SwCursorShell::UPDOWN |
+                SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
+                SwCursorShell::READONLY );
     }
 }
 
 /// go to next/previous point on the same level
-bool SwCrsrShell::GotoNextNum()
+bool SwCursorShell::GotoNextNum()
 {
-    if (!SwDoc::GotoNextNum( *m_pCurCrsr->GetPoint() ))
+    if (!SwDoc::GotoNextNum( *m_pCurrentCursor->GetPoint() ))
         return false;
-    MoveCrsrToNum();
+    MoveCursorToNum();
     return true;
 }
 
-bool SwCrsrShell::GotoPrevNum()
+bool SwCursorShell::GotoPrevNum()
 {
-    if (!SwDoc::GotoPrevNum( *m_pCurCrsr->GetPoint() ))
+    if (!SwDoc::GotoPrevNum( *m_pCurrentCursor->GetPoint() ))
         return false;
-    MoveCrsrToNum();
+    MoveCursorToNum();
     return true;
 }
 
 /// jump from content to header
-bool SwCrsrShell::GotoHeaderText()
+bool SwCursorShell::GotoHeaderText()
 {
-    const SwFrm* pFrm = GetCurrFrm()->FindPageFrm();
-    while( pFrm && !pFrm->IsHeaderFrm() )
-        pFrm = pFrm->GetLower();
+    const SwFrame* pFrame = GetCurrFrame()->FindPageFrame();
+    while( pFrame && !pFrame->IsHeaderFrame() )
+        pFrame = pFrame->GetLower();
     // found header, search 1. content frame
-    while( pFrm && !pFrm->IsContentFrm() )
-        pFrm = pFrm->GetLower();
+    while( pFrame && !pFrame->IsContentFrame() )
+        pFrame = pFrame->GetLower();
 
-    if( pFrm )
+    if( pFrame )
     {
         SET_CURR_SHELL( this );
         // get header frame
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCursor *pTmpCrsr = getShellCrsr( true );
-        SwCrsrSaveState aSaveState( *pTmpCrsr );
-        pFrm->Calc(GetOut());
-        Point aPt( pFrm->Frm().Pos() + pFrm->Prt().Pos() );
-        pFrm->GetCrsrOfst( pTmpCrsr->GetPoint(), aPt );
-        if( !pTmpCrsr->IsSelOvr() )
-            UpdateCrsr();
+        SwCallLink aLk( *this ); // watch Cursor-Moves
+        SwCursor *pTmpCursor = getShellCursor( true );
+        SwCursorSaveState aSaveState( *pTmpCursor );
+        pFrame->Calc(GetOut());
+        Point aPt( pFrame->Frame().Pos() + pFrame->Prt().Pos() );
+        pFrame->GetCursorOfst( pTmpCursor->GetPoint(), aPt );
+        if( !pTmpCursor->IsSelOvr() )
+            UpdateCursor();
         else
-            pFrm = nullptr;
+            pFrame = nullptr;
     }
-    return nullptr != pFrm;
+    return nullptr != pFrame;
 }
 
 /// jump from content to footer
-bool SwCrsrShell::GotoFooterText()
+bool SwCursorShell::GotoFooterText()
 {
-    const SwPageFrm* pFrm = GetCurrFrm()->FindPageFrm();
-    if( pFrm )
+    const SwPageFrame* pFrame = GetCurrFrame()->FindPageFrame();
+    if( pFrame )
     {
-        const SwFrm* pLower = pFrm->GetLastLower();
+        const SwFrame* pLower = pFrame->GetLastLower();
 
-        while( pLower && !pLower->IsFooterFrm() )
+        while( pLower && !pLower->IsFooterFrame() )
             pLower = pLower->GetLower();
         // found footer, search 1. content frame
-        while( pLower && !pLower->IsContentFrm() )
+        while( pLower && !pLower->IsContentFrame() )
             pLower = pLower->GetLower();
 
         if( pLower )
         {
-            SwCursor *pTmpCrsr = getShellCrsr( true );
+            SwCursor *pTmpCursor = getShellCursor( true );
             SET_CURR_SHELL( this );
             // get position in footer
-            SwCallLink aLk( *this ); // watch Crsr-Moves
-            SwCrsrSaveState aSaveState( *pTmpCrsr );
+            SwCallLink aLk( *this ); // watch Cursor-Moves
+            SwCursorSaveState aSaveState( *pTmpCursor );
             pLower->Calc(GetOut());
-            Point aPt( pLower->Frm().Pos() + pLower->Prt().Pos() );
-            pLower->GetCrsrOfst( pTmpCrsr->GetPoint(), aPt );
-            if( !pTmpCrsr->IsSelOvr() )
-                UpdateCrsr();
+            Point aPt( pLower->Frame().Pos() + pLower->Prt().Pos() );
+            pLower->GetCursorOfst( pTmpCursor->GetPoint(), aPt );
+            if( !pTmpCursor->IsSelOvr() )
+                UpdateCursor();
             else
-                pFrm = nullptr;
+                pFrame = nullptr;
         }
         else
-            pFrm = nullptr;
+            pFrame = nullptr;
     }
     else
-        pFrm = nullptr;
-    return nullptr != pFrm;
+        pFrame = nullptr;
+    return nullptr != pFrame;
 }
 
-bool SwCrsrShell::SetCrsrInHdFt( size_t nDescNo, bool bInHeader )
+bool SwCursorShell::SetCursorInHdFt( size_t nDescNo, bool bInHeader )
 {
     bool bRet = false;
     SwDoc *pMyDoc = GetDoc();
@@ -198,7 +198,7 @@ bool SwCrsrShell::SetCrsrInHdFt( size_t nDescNo, bool bInHeader )
     if( SIZE_MAX == nDescNo )
     {
         // take the current one
-        const SwPageFrm* pPage = GetCurrFrm()->FindPageFrm();
+        const SwPageFrame* pPage = GetCurrFrame()->FindPageFrame();
         if( pPage && pMyDoc->ContainsPageDesc(
                 pPage->GetPageDesc(), &nDescNo) )
             pDesc = pPage->GetPageDesc();
@@ -232,24 +232,24 @@ bool SwCrsrShell::SetCrsrInHdFt( size_t nDescNo, bool bInHeader )
             if( !pCNd )
                 pCNd = pMyDoc->GetNodes().GoNext( &aIdx );
 
-            Point aPt( m_pCurCrsr->GetPtPos() );
+            Point aPt( m_pCurrentCursor->GetPtPos() );
 
-            if( pCNd && nullptr != pCNd->getLayoutFrm( GetLayout(), &aPt, nullptr, false ) )
+            if( pCNd && nullptr != pCNd->getLayoutFrame( GetLayout(), &aPt, nullptr, false ) )
             {
                 // then we can set the cursor in here
-                SwCallLink aLk( *this ); // watch Crsr-Moves
-                SwCrsrSaveState aSaveState( *m_pCurCrsr );
+                SwCallLink aLk( *this ); // watch Cursor-Moves
+                SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
                 ClearMark();
 
-                SwPosition& rPos = *m_pCurCrsr->GetPoint();
+                SwPosition& rPos = *m_pCurrentCursor->GetPoint();
                 rPos.nNode = *pCNd;
                 rPos.nContent.Assign( pCNd, 0 );
 
-                bRet = !m_pCurCrsr->IsSelOvr();
+                bRet = !m_pCurrentCursor->IsSelOvr();
                 if( bRet )
-                    UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                                SwCrsrShell::READONLY );
+                    UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
+                                SwCursorShell::READONLY );
             }
         }
     }
@@ -257,7 +257,7 @@ bool SwCrsrShell::SetCrsrInHdFt( size_t nDescNo, bool bInHeader )
 }
 
 /// jump to the next index
-bool SwCrsrShell::GotoNextTOXBase( const OUString* pName )
+bool SwCursorShell::GotoNextTOXBase( const OUString* pName )
 {
     bool bRet = false;
 
@@ -271,7 +271,7 @@ bool SwCrsrShell::GotoNextTOXBase( const OUString* pName )
             SwSectionNode const*const pSectNd(
                     pSect->GetFormat()->GetSectionNode());
             if (   pSectNd
-                && m_pCurCrsr->GetPoint()->nNode < pSectNd->GetIndex()
+                && m_pCurrentCursor->GetPoint()->nNode < pSectNd->GetIndex()
                 && (!pFnd  || pFnd->GetIndex() > pSectNd->GetIndex())
                 && (!pName || *pName ==
                     static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()))
@@ -283,10 +283,10 @@ bool SwCrsrShell::GotoNextTOXBase( const OUString* pName )
                 if (pCNd &&
                     pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex())
                 {
-                    SwContentFrm const*const pCFrm(
-                            pCNd->getLayoutFrm(GetLayout()));
-                    if (pCFrm &&
-                        (IsReadOnlyAvailable() || !pCFrm->IsProtected()))
+                    SwContentFrame const*const pCFrame(
+                            pCNd->getLayoutFrame(GetLayout()));
+                    if (pCFrame &&
+                        (IsReadOnlyAvailable() || !pCFrame->IsProtected()))
                     {
                         pFnd = pCNd;
                     }
@@ -296,19 +296,19 @@ bool SwCrsrShell::GotoNextTOXBase( const OUString* pName )
     }
     if( pFnd )
     {
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *m_pCurCrsr );
-        m_pCurCrsr->GetPoint()->nNode = *pFnd;
-        m_pCurCrsr->GetPoint()->nContent.Assign( pFnd, 0 );
-        bRet = !m_pCurCrsr->IsSelOvr();
+        SwCallLink aLk( *this ); // watch Cursor-Moves
+        SwCursorSaveState aSaveState( *m_pCurrentCursor );
+        m_pCurrentCursor->GetPoint()->nNode = *pFnd;
+        m_pCurrentCursor->GetPoint()->nContent.Assign( pFnd, 0 );
+        bRet = !m_pCurrentCursor->IsSelOvr();
         if( bRet )
-            UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+            UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     }
     return bRet;
 }
 
 /// jump to previous index
-bool SwCrsrShell::GotoPrevTOXBase( const OUString* pName )
+bool SwCursorShell::GotoPrevTOXBase( const OUString* pName )
 {
     bool bRet = false;
 
@@ -322,7 +322,7 @@ bool SwCrsrShell::GotoPrevTOXBase( const OUString* pName )
             SwSectionNode const*const pSectNd(
                     pSect->GetFormat()->GetSectionNode());
             if (   pSectNd
-                && m_pCurCrsr->GetPoint()->nNode > pSectNd->EndOfSectionIndex()
+                && m_pCurrentCursor->GetPoint()->nNode > pSectNd->EndOfSectionIndex()
                 && (!pFnd  || pFnd->GetIndex() < pSectNd->GetIndex())
                 && (!pName || *pName ==
                     static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()))
@@ -334,10 +334,10 @@ bool SwCrsrShell::GotoPrevTOXBase( const OUString* pName )
                 if (pCNd &&
                     pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex())
                 {
-                    SwContentFrm const*const pCFrm(
-                            pCNd->getLayoutFrm(GetLayout()));
-                    if (pCFrm &&
-                        (IsReadOnlyAvailable() || !pCFrm->IsProtected()))
+                    SwContentFrame const*const pCFrame(
+                            pCNd->getLayoutFrame(GetLayout()));
+                    if (pCFrame &&
+                        (IsReadOnlyAvailable() || !pCFrame->IsProtected()))
                     {
                         pFnd = pCNd;
                     }
@@ -348,24 +348,24 @@ bool SwCrsrShell::GotoPrevTOXBase( const OUString* pName )
 
     if( pFnd )
     {
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *m_pCurCrsr );
-        m_pCurCrsr->GetPoint()->nNode = *pFnd;
-        m_pCurCrsr->GetPoint()->nContent.Assign( pFnd, 0 );
-        bRet = !m_pCurCrsr->IsSelOvr();
+        SwCallLink aLk( *this ); // watch Cursor-Moves
+        SwCursorSaveState aSaveState( *m_pCurrentCursor );
+        m_pCurrentCursor->GetPoint()->nNode = *pFnd;
+        m_pCurrentCursor->GetPoint()->nContent.Assign( pFnd, 0 );
+        bRet = !m_pCurrentCursor->IsSelOvr();
         if( bRet )
-            UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+            UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     }
     return bRet;
 }
 
 /// jump to index of TOXMark
-bool SwCrsrShell::GotoTOXMarkBase()
+bool SwCursorShell::GotoTOXMarkBase()
 {
     bool bRet = false;
 
     SwTOXMarks aMarks;
-    sal_uInt16 nCnt = SwDoc::GetCurTOXMark( *m_pCurCrsr->GetPoint(), aMarks );
+    sal_uInt16 nCnt = SwDoc::GetCurTOXMark( *m_pCurrentCursor->GetPoint(), aMarks );
     if( nCnt )
     {
         // Take the 1. and get the index type. Search in its dependency list
@@ -385,20 +385,20 @@ bool SwCrsrShell::GotoTOXMarkBase()
                 SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
                 if( !pCNd )
                     pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-                const SwContentFrm* pCFrm;
+                const SwContentFrame* pCFrame;
                 if( pCNd &&
                     pCNd->EndOfSectionIndex() < pSectNd->EndOfSectionIndex() &&
-                    nullptr != ( pCFrm = pCNd->getLayoutFrm( GetLayout() ) ) &&
-                    ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
+                    nullptr != ( pCFrame = pCNd->getLayoutFrame( GetLayout() ) ) &&
+                    ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
                 {
-                    SwCallLink aLk( *this ); // watch Crsr-Moves
-                    SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                    m_pCurCrsr->GetPoint()->nNode = *pCNd;
-                    m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, 0 );
-                    bRet = !m_pCurCrsr->IsInProtectTable() &&
-                            !m_pCurCrsr->IsSelOvr();
+                    SwCallLink aLk( *this ); // watch Cursor-Moves
+                    SwCursorSaveState aSaveState( *m_pCurrentCursor );
+                    m_pCurrentCursor->GetPoint()->nNode = *pCNd;
+                    m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, 0 );
+                    bRet = !m_pCurrentCursor->IsInProtectTable() &&
+                            !m_pCurrentCursor->IsSelOvr();
                     if( bRet )
-                        UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+                        UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
                     break;
                 }
             }
@@ -409,13 +409,13 @@ bool SwCrsrShell::GotoTOXMarkBase()
 
 /// Jump to next/previous table formula
 /// Optionally it is possible to also jump to broken formulas
-bool SwCrsrShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
+bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
 {
     if( IsTableMode() )
         return false;
 
     bool bFnd = false;
-    SwPosition& rPos = *m_pCurCrsr->GetPoint();
+    SwPosition& rPos = *m_pCurrentCursor->GetPoint();
 
     Point aPt;
     SwPosition aFndPos( GetDoc()->GetNodes().GetEndOfContent() );
@@ -436,7 +436,7 @@ bool SwCrsrShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
 
     if( rPos.nNode < GetDoc()->GetNodes().GetEndOfExtras() )
         // also at collection use only the first frame
-        aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetContentNode()->getLayoutFrm( GetLayout(),
+        aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetContentNode()->getLayoutFrame( GetLayout(),
                                 &aPt, &rPos, false ) );
     {
         sal_uInt32 n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
@@ -453,14 +453,14 @@ bool SwCrsrShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                 ( !bOnlyErrors ||
                   !static_cast<const SwTableBoxFormula*>(pItem)->HasValidBoxes() ) )
             {
-                const SwContentFrm* pCFrm;
+                const SwContentFrame* pCFrame;
                 SwNodeIndex aIdx( *pTBox->GetSttNd() );
                 const SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-                if( pCNd && nullptr != ( pCFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, nullptr, false ) ) &&
-                    (IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
+                if( pCNd && nullptr != ( pCFrame = pCNd->getLayoutFrame( GetLayout(), &aPt, nullptr, false ) ) &&
+                    (IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
                 {
                     _SetGetExpField aCmp( *pTBox );
-                    aCmp.SetBodyPos( *pCFrm );
+                    aCmp.SetBodyPos( *pCFrame );
 
                     if( bNext ? ( aCurGEF < aCmp && aCmp < aFndGEF )
                               : ( aCmp < aCurGEF && aFndGEF < aCmp ))
@@ -476,28 +476,28 @@ bool SwCrsrShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
     if( bFnd )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *m_pCurCrsr );
+        SwCallLink aLk( *this ); // watch Cursor-Moves
+        SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
         aFndGEF.GetPosOfContent( rPos );
-        m_pCurCrsr->DeleteMark();
+        m_pCurrentCursor->DeleteMark();
 
-        bFnd = !m_pCurCrsr->IsSelOvr();
+        bFnd = !m_pCurrentCursor->IsSelOvr();
         if( bFnd )
-            UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                        SwCrsrShell::READONLY );
+            UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
+                        SwCursorShell::READONLY );
     }
     return bFnd;
 }
 
 /// jump to next/previous index marker
-bool SwCrsrShell::GotoNxtPrvTOXMark( bool bNext )
+bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
 {
     if( IsTableMode() )
         return false;
 
     bool bFnd = false;
-    SwPosition& rPos = *m_pCurCrsr->GetPoint();
+    SwPosition& rPos = *m_pCurrentCursor->GetPoint();
 
     Point aPt;
     SwPosition aFndPos( GetDoc()->GetNodes().GetEndOfContent() );
@@ -508,7 +508,7 @@ bool SwCrsrShell::GotoNxtPrvTOXMark( bool bNext )
     if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
         // also at collection use only the first frame
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().
-                        GetContentNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, false ) );
+                        GetContentNode()->getLayoutFrame( GetLayout(), &aPt, &rPos, false ) );
 
     {
         const SwTextNode* pTextNd;
@@ -518,18 +518,18 @@ bool SwCrsrShell::GotoNxtPrvTOXMark( bool bNext )
         for( n = 0; n < nMaxItems; ++n )
         {
             const SfxPoolItem* pItem;
-            const SwContentFrm* pCFrm;
+            const SwContentFrame* pCFrame;
 
             if( nullptr != (pItem = GetDoc()->GetAttrPool().GetItem2(
                                         RES_TXTATR_TOXMARK, n ) ) &&
                 nullptr != (pTextTOX = static_cast<const SwTOXMark*>(pItem)->GetTextTOXMark() ) &&
                 ( pTextNd = &pTextTOX->GetTextNode())->GetNodes().IsDocNodes() &&
-                nullptr != ( pCFrm = pTextNd->getLayoutFrm( GetLayout(), &aPt, nullptr, false )) &&
-                ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
+                nullptr != ( pCFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt, nullptr, false )) &&
+                ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
             {
                 SwNodeIndex aNdIndex( *pTextNd ); // UNIX needs this object
                 _SetGetExpField aCmp( aNdIndex, *pTextTOX, nullptr );
-                aCmp.SetBodyPos( *pCFrm );
+                aCmp.SetBodyPos( *pCFrame );
 
                 if( bNext ? ( aCurGEF < aCmp && aCmp < aFndGEF )
                           : ( aCmp < aCurGEF && aFndGEF < aCmp ))
@@ -544,38 +544,38 @@ bool SwCrsrShell::GotoNxtPrvTOXMark( bool bNext )
     if( bFnd )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *m_pCurCrsr );
+        SwCallLink aLk( *this ); // watch Cursor-Moves
+        SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
         aFndGEF.GetPosOfContent( rPos );
 
-        bFnd = !m_pCurCrsr->IsSelOvr();
+        bFnd = !m_pCurrentCursor->IsSelOvr();
         if( bFnd )
-            UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                        SwCrsrShell::READONLY );
+            UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
+                        SwCursorShell::READONLY );
     }
     return bFnd;
 }
 
 /// traveling between marks
-const SwTOXMark& SwCrsrShell::GotoTOXMark( const SwTOXMark& rStart,
+const SwTOXMark& SwCursorShell::GotoTOXMark( const SwTOXMark& rStart,
                                             SwTOXSearch eDir )
 {
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCrsrSaveState aSaveState( *m_pCurCrsr );
+    SwCallLink aLk( *this ); // watch Cursor-Moves
+    SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
     const SwTOXMark& rNewMark = GetDoc()->GotoTOXMark( rStart, eDir,
                                                     IsReadOnlyAvailable() );
     // set position
-    SwPosition& rPos = *GetCrsr()->GetPoint();
+    SwPosition& rPos = *GetCursor()->GetPoint();
     rPos.nNode = rNewMark.GetTextTOXMark()->GetTextNode();
     rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(),
                          rNewMark.GetTextTOXMark()->GetStart() );
 
-    if( !m_pCurCrsr->IsSelOvr() )
-        UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                    SwCrsrShell::READONLY );
+    if( !m_pCurrentCursor->IsSelOvr() )
+        UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
+                    SwCursorShell::READONLY );
 
     return rNewMark;
 }
@@ -599,13 +599,13 @@ void lcl_MakeFieldLst(
                   || static_cast<const SwSetExpField*>(pTextField->GetFormatField().GetField())->GetInputFlag() ) )
         {
             const SwTextNode& rTextNode = pTextField->GetTextNode();
-            const SwContentFrm* pCFrm =
-                rTextNode.getLayoutFrm( rTextNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
-            if ( pCFrm != nullptr
-                 && ( bInReadOnly || !pCFrm->IsProtected() ) )
+            const SwContentFrame* pCFrame =
+                rTextNode.getLayoutFrame( rTextNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+            if ( pCFrame != nullptr
+                 && ( bInReadOnly || !pCFrame->IsProtected() ) )
             {
                 _SetGetExpField* pNew = new _SetGetExpField( SwNodeIndex( rTextNode ), pTextField );
-                pNew->SetBodyPos( *pCFrm );
+                pNew->SetBodyPos( *pCFrame );
                 rLst.insert( pNew );
             }
         }
@@ -614,7 +614,7 @@ void lcl_MakeFieldLst(
 
 static _SetGetExpFields::const_iterator
 lcl_FindField(bool & o_rFound, _SetGetExpFields const& rSrtLst,
-        SwRootFrm *const pLayout, SwTextNode *const pTextNode,
+        SwRootFrame *const pLayout, SwTextNode *const pTextNode,
         SwTextField *const pTextField, SwPosition const& rPos,
         sal_Int32 const nContentOffset)
 {
@@ -634,7 +634,7 @@ lcl_FindField(bool & o_rFound, _SetGetExpFields const& rSrtLst,
     {
         // also at collection use only the first frame
         Point aPt;
-        pSrch->SetBodyPos(*pTextNode->getLayoutFrm(pLayout, &aPt, &rPos, false));
+        pSrch->SetBodyPos(*pTextNode->getLayoutFrame(pLayout, &aPt, &rPos, false));
     }
 
     _SetGetExpFields::const_iterator it = rSrtLst.lower_bound(pSrch.get());
@@ -643,7 +643,7 @@ lcl_FindField(bool & o_rFound, _SetGetExpFields const& rSrtLst,
     return it;
 }
 
-bool SwCrsrShell::MoveFieldType(
+bool SwCursorShell::MoveFieldType(
     const SwFieldType* pFieldType,
     const bool bNext,
     const sal_uInt16 nResType,
@@ -696,12 +696,12 @@ bool SwCrsrShell::MoveFieldType(
         return false;
 
     _SetGetExpFields::const_iterator it;
-    SwCursor* pCrsr = getShellCrsr( true );
+    SwCursor* pCursor = getShellCursor( true );
     {
         // (1998): Always use field for search so that the right one is found as
         // well some are in frames that are anchored to a paragraph that has a
         // field
-        const SwPosition& rPos = *pCrsr->GetPoint();
+        const SwPosition& rPos = *pCursor->GetPoint();
 
         SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
         OSL_ENSURE( pTNd, "No ContentNode" );
@@ -770,40 +770,40 @@ bool SwCrsrShell::MoveFieldType(
     const _SetGetExpField& rFnd = **it;
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCrsrSaveState aSaveState( *pCrsr );
+    SwCallLink aLk( *this ); // watch Cursor-Moves
+    SwCursorSaveState aSaveState( *pCursor );
 
-    rFnd.GetPosOfContent( *pCrsr->GetPoint() );
-    bool bRet = !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+    rFnd.GetPosOfContent( *pCursor->GetPoint() );
+    bool bRet = !m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                      nsSwCursorSelOverFlags::SELOVER_TOGGLE );
     if( bRet )
-        UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+        UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return bRet;
 }
 
-bool SwCrsrShell::GotoFormatField( const SwFormatField& rField )
+bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
 {
     bool bRet = false;
     if( rField.GetTextField() )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); // watch Cursor-Moves
 
-        SwCursor* pCrsr = getShellCrsr( true );
-        SwCrsrSaveState aSaveState( *pCrsr );
+        SwCursor* pCursor = getShellCursor( true );
+        SwCursorSaveState aSaveState( *pCursor );
 
         SwTextNode* pTNd = rField.GetTextField()->GetpTextNode();
-        pCrsr->GetPoint()->nNode = *pTNd;
-        pCrsr->GetPoint()->nContent.Assign( pTNd, rField.GetTextField()->GetStart() );
+        pCursor->GetPoint()->nNode = *pTNd;
+        pCursor->GetPoint()->nContent.Assign( pTNd, rField.GetTextField()->GetStart() );
 
-        bRet = !pCrsr->IsSelOvr();
+        bRet = !pCursor->IsSelOvr();
         if( bRet )
-            UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+            UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     }
     return bRet;
 }
 
-SwTextField * SwCrsrShell::GetTextFieldAtPos(
+SwTextField * SwCursorShell::GetTextFieldAtPos(
     const SwPosition* pPos,
     const bool bIncludeInputFieldAtStart )
 {
@@ -818,77 +818,77 @@ SwTextField * SwCrsrShell::GetTextFieldAtPos(
     return pTextField;
 }
 
-SwField* SwCrsrShell::GetFieldAtCrsr(
-    const SwPaM* pCrsr,
+SwField* SwCursorShell::GetFieldAtCursor(
+    const SwPaM* pCursor,
     const bool bIncludeInputFieldAtStart )
 {
-    SwField* pFieldAtCrsr = nullptr;
+    SwField* pFieldAtCursor = nullptr;
 
-    SwTextField* pTextField = GetTextFieldAtPos( pCrsr->Start(), bIncludeInputFieldAtStart );
+    SwTextField* pTextField = GetTextFieldAtPos( pCursor->Start(), bIncludeInputFieldAtStart );
     if ( pTextField != nullptr
-        && pCrsr->Start()->nNode == pCrsr->End()->nNode )
+        && pCursor->Start()->nNode == pCursor->End()->nNode )
     {
         const sal_Int32 nTextFieldLength =
             pTextField->End() != nullptr
             ? *(pTextField->End()) - pTextField->GetStart()
             : 1;
-        if ( ( pCrsr->End()->nContent.GetIndex() - pCrsr->Start()->nContent.GetIndex() ) <= nTextFieldLength )
+        if ( ( pCursor->End()->nContent.GetIndex() - pCursor->Start()->nContent.GetIndex() ) <= nTextFieldLength )
         {
-            pFieldAtCrsr = const_cast<SwField*>(pTextField->GetFormatField().GetField());
+            pFieldAtCursor = const_cast<SwField*>(pTextField->GetFormatField().GetField());
         }
     }
 
-    return pFieldAtCrsr;
+    return pFieldAtCursor;
 }
 
-SwField* SwCrsrShell::GetCurField( const bool bIncludeInputFieldAtStart ) const
+SwField* SwCursorShell::GetCurField( const bool bIncludeInputFieldAtStart ) const
 {
-    SwPaM* pCrsr = GetCrsr();
-    if ( pCrsr->IsMultiSelection() )
+    SwPaM* pCursor = GetCursor();
+    if ( pCursor->IsMultiSelection() )
     {
         // multi selection not handled.
         return nullptr;
     }
 
-    SwField* pCurField = GetFieldAtCrsr( pCrsr, bIncludeInputFieldAtStart );;
+    SwField* pCurField = GetFieldAtCursor( pCursor, bIncludeInputFieldAtStart );;
     if ( pCurField != nullptr
          && RES_TABLEFLD == pCurField->GetTyp()->Which() )
     {
         // TabellenFormel ? wandel internen in externen Namen um
-        const SwTableNode* pTableNd = IsCrsrInTable();
+        const SwTableNode* pTableNd = IsCursorInTable();
         static_cast<SwTableField*>(pCurField)->PtrToBoxNm( pTableNd ? &pTableNd->GetTable() : nullptr );
     }
 
     return pCurField;
 }
 
-bool SwCrsrShell::CrsrInsideInputField() const
+bool SwCursorShell::CursorInsideInputField() const
 {
-    for(SwPaM& rCrsr : GetCrsr()->GetRingContainer())
+    for(SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
-        if(dynamic_cast<const SwInputField*>(GetFieldAtCrsr( &rCrsr, false )))
+        if(dynamic_cast<const SwInputField*>(GetFieldAtCursor( &rCursor, false )))
             return true;
     }
     return false;
 }
 
-bool SwCrsrShell::PosInsideInputField( const SwPosition& rPos )
+bool SwCursorShell::PosInsideInputField( const SwPosition& rPos )
 {
     return dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, false )) != nullptr;
 }
 
-bool SwCrsrShell::DocPtInsideInputField( const Point& rDocPt ) const
+bool SwCursorShell::DocPtInsideInputField( const Point& rDocPt ) const
 {
-    SwPosition aPos( *(GetCrsr()->Start()) );
+    SwPosition aPos( *(GetCursor()->Start()) );
     Point aDocPt( rDocPt );
-    if ( GetLayout()->GetCrsrOfst( &aPos, aDocPt ) )
+    if ( GetLayout()->GetCursorOfst( &aPos, aDocPt ) )
     {
         return PosInsideInputField( aPos );
     }
     return false;
 }
 
-sal_Int32 SwCrsrShell::StartOfInputFieldAtPos( const SwPosition& rPos )
+sal_Int32 SwCursorShell::StartOfInputFieldAtPos( const SwPosition& rPos )
 {
     const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, true ));
     if ( pTextInputField == nullptr )
@@ -899,7 +899,7 @@ sal_Int32 SwCrsrShell::StartOfInputFieldAtPos( const SwPosition& rPos )
     return pTextInputField->GetStart();
 }
 
-sal_Int32 SwCrsrShell::EndOfInputFieldAtPos( const SwPosition& rPos )
+sal_Int32 SwCursorShell::EndOfInputFieldAtPos( const SwPosition& rPos )
 {
     const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, true ));
     if ( pTextInputField == nullptr )
@@ -910,47 +910,47 @@ sal_Int32 SwCrsrShell::EndOfInputFieldAtPos( const SwPosition& rPos )
     return *(pTextInputField->End());
 }
 
-void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
+void SwCursorShell::GotoOutline( sal_uInt16 nIdx )
 {
-    SwCursor* pCrsr = getShellCrsr( true );
+    SwCursor* pCursor = getShellCursor( true );
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCrsrSaveState aSaveState( *pCrsr );
+    SwCallLink aLk( *this ); // watch Cursor-Moves
+    SwCursorSaveState aSaveState( *pCursor );
 
     const SwNodes& rNds = GetDoc()->GetNodes();
     SwTextNode* pTextNd = rNds.GetOutLineNds()[ nIdx ]->GetTextNode();
-    pCrsr->GetPoint()->nNode = *pTextNd;
-    pCrsr->GetPoint()->nContent.Assign( pTextNd, 0 );
+    pCursor->GetPoint()->nNode = *pTextNd;
+    pCursor->GetPoint()->nContent.Assign( pTextNd, 0 );
 
-    if( !pCrsr->IsSelOvr() )
-        UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+    if( !pCursor->IsSelOvr() )
+        UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
 }
 
-bool SwCrsrShell::GotoOutline( const OUString& rName )
+bool SwCursorShell::GotoOutline( const OUString& rName )
 {
-    SwCursor* pCrsr = getShellCrsr( true );
+    SwCursor* pCursor = getShellCursor( true );
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCrsrSaveState aSaveState( *pCrsr );
+    SwCallLink aLk( *this ); // watch Cursor-Moves
+    SwCursorSaveState aSaveState( *pCursor );
 
     bool bRet = false;
-    if( mpDoc->GotoOutline( *pCrsr->GetPoint(), rName ) && !pCrsr->IsSelOvr() )
+    if( mpDoc->GotoOutline( *pCursor->GetPoint(), rName ) && !pCursor->IsSelOvr() )
     {
-        UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+        UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
         bRet = true;
     }
     return bRet;
 }
 
 /// jump to next node with outline num.
-bool SwCrsrShell::GotoNextOutline()
+bool SwCursorShell::GotoNextOutline()
 {
-    SwCursor* pCrsr = getShellCrsr( true );
+    SwCursor* pCursor = getShellCursor( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = &(pCrsr->GetNode());
+    SwNode* pNd = &(pCursor->GetNode());
     sal_uInt16 nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         ++nPos;
@@ -961,24 +961,24 @@ bool SwCrsrShell::GotoNextOutline()
     pNd = rNds.GetOutLineNds()[ nPos ];
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCrsrSaveState aSaveState( *pCrsr );
-    pCrsr->GetPoint()->nNode = *pNd;
-    pCrsr->GetPoint()->nContent.Assign( pNd->GetTextNode(), 0 );
+    SwCallLink aLk( *this ); // watch Cursor-Moves
+    SwCursorSaveState aSaveState( *pCursor );
+    pCursor->GetPoint()->nNode = *pNd;
+    pCursor->GetPoint()->nContent.Assign( pNd->GetTextNode(), 0 );
 
-    bool bRet = !pCrsr->IsSelOvr();
+    bool bRet = !pCursor->IsSelOvr();
     if( bRet )
-        UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+        UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return bRet;
 }
 
 /// jump to previous node with outline num.
-bool SwCrsrShell::GotoPrevOutline()
+bool SwCursorShell::GotoPrevOutline()
 {
-    SwCursor* pCrsr = getShellCrsr( true );
+    SwCursor* pCursor = getShellCursor( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = &(pCrsr->GetNode());
+    SwNode* pNd = &(pCursor->GetNode());
     sal_uInt16 nPos;
     bool bRet = rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
     if (bRet && nPos)
@@ -986,29 +986,29 @@ bool SwCrsrShell::GotoPrevOutline()
         --nPos; // before
 
         pNd = rNds.GetOutLineNds()[ nPos ];
-        if( pNd->GetIndex() > pCrsr->GetPoint()->nNode.GetIndex() )
+        if( pNd->GetIndex() > pCursor->GetPoint()->nNode.GetIndex() )
             return false;
 
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *pCrsr );
-        pCrsr->GetPoint()->nNode = *pNd;
-        pCrsr->GetPoint()->nContent.Assign( pNd->GetTextNode(), 0 );
+        SwCallLink aLk( *this ); // watch Cursor-Moves
+        SwCursorSaveState aSaveState( *pCursor );
+        pCursor->GetPoint()->nNode = *pNd;
+        pCursor->GetPoint()->nContent.Assign( pNd->GetTextNode(), 0 );
 
-        bRet = !pCrsr->IsSelOvr();
+        bRet = !pCursor->IsSelOvr();
         if( bRet )
-            UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+            UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     }
     return bRet;
 }
 
 /// search "outline position" before previous outline node at given level
-sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
+sal_uInt16 SwCursorShell::GetOutlinePos( sal_uInt8 nLevel )
 {
-    SwPaM* pCrsr = getShellCrsr( true );
+    SwPaM* pCursor = getShellCursor( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = &(pCrsr->GetNode());
+    SwNode* pNd = &(pCursor->GetNode());
     sal_uInt16 nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         nPos++; // is at correct position; take next for while
@@ -1024,7 +1024,7 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     return USHRT_MAX; // no more left
 }
 
-bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
+bool SwCursorShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
                                   bool bWithChildren )
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
@@ -1033,7 +1033,7 @@ bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
         return false;
 
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); // watch Cursor-Moves
 
     if( nSttPos > nEndPos ) // parameters switched?
     {
@@ -1066,57 +1066,57 @@ bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
 
     KillPams();
 
-    SwCrsrSaveState aSaveState( *m_pCurCrsr );
+    SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
     // set end to the end of the previous content node
-    m_pCurCrsr->GetPoint()->nNode = *pSttNd;
-    m_pCurCrsr->GetPoint()->nContent.Assign( pSttNd->GetContentNode(), 0 );
-    m_pCurCrsr->SetMark();
-    m_pCurCrsr->GetPoint()->nNode = *pEndNd;
-    m_pCurCrsr->Move( fnMoveBackward, fnGoNode ); // end of predecessor
+    m_pCurrentCursor->GetPoint()->nNode = *pSttNd;
+    m_pCurrentCursor->GetPoint()->nContent.Assign( pSttNd->GetContentNode(), 0 );
+    m_pCurrentCursor->SetMark();
+    m_pCurrentCursor->GetPoint()->nNode = *pEndNd;
+    m_pCurrentCursor->Move( fnMoveBackward, fnGoNode ); // end of predecessor
 
     // and everything is already selected
-    bool bRet = !m_pCurCrsr->IsSelOvr();
+    bool bRet = !m_pCurrentCursor->IsSelOvr();
     if( bRet )
-        UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+        UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return bRet;
 }
 
 /// jump to reference marker
-bool SwCrsrShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
+bool SwCursorShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
                                     sal_uInt16 nSeqNo )
 {
     SET_CURR_SHELL( this );
-    SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCrsrSaveState aSaveState( *m_pCurCrsr );
+    SwCallLink aLk( *this ); // watch Cursor-Moves
+    SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
     sal_Int32 nPos = -1;
     SwTextNode* pTextNd = SwGetRefFieldType::FindAnchor( GetDoc(), rRefMark,
                                                     nSubType, nSeqNo, &nPos );
     if( pTextNd && pTextNd->GetNodes().IsDocNodes() )
     {
-        m_pCurCrsr->GetPoint()->nNode = *pTextNd;
-        m_pCurCrsr->GetPoint()->nContent.Assign( pTextNd, nPos );
+        m_pCurrentCursor->GetPoint()->nNode = *pTextNd;
+        m_pCurrentCursor->GetPoint()->nContent.Assign( pTextNd, nPos );
 
-        if( !m_pCurCrsr->IsSelOvr() )
+        if( !m_pCurrentCursor->IsSelOvr() )
         {
-            UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+            UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
             return true;
         }
     }
     return false;
 }
 
-bool SwCrsrShell::IsPageAtPos( const Point &rPt ) const
+bool SwCursorShell::IsPageAtPos( const Point &rPt ) const
 {
     if( GetLayout() )
         return nullptr != GetLayout()->GetPageAtPos( rPt );
     return false;
 }
 
-bool SwCrsrShell::GetContentAtPos( const Point& rPt,
+bool SwCursorShell::GetContentAtPos( const Point& rPt,
                                    SwContentAtPos& rContentAtPos,
-                                   bool bSetCrsr,
+                                   bool bSetCursor,
                                    SwRect* pFieldRect )
 {
     SET_CURR_SHELL( this );
@@ -1125,12 +1125,12 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
     if( !IsTableMode() )
     {
         Point aPt( rPt );
-        SwPosition aPos( *m_pCurCrsr->GetPoint() );
+        SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
         SwTextNode* pTextNd;
-        SwContentFrm *pFrm(nullptr);
+        SwContentFrame *pFrame(nullptr);
         SwTextAttr* pTextAttr;
-        SwCrsrMoveState aTmpState;
+        SwCursorMoveState aTmpState;
         aTmpState.m_bFieldInfo = true;
         aTmpState.m_bExactOnly = !( SwContentAtPos::SW_OUTLINE & rContentAtPos.eContentAtPos );
         aTmpState.m_bContentCheck = (SwContentAtPos::SW_CONTENT_CHECK & rContentAtPos.eContentAtPos) != 0;
@@ -1140,7 +1140,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
         aTmpState.m_pSpecialPos = ( SwContentAtPos::SW_SMARTTAG & rContentAtPos.eContentAtPos ) ?
                                 &aSpecialPos : nullptr;
 
-        const bool bCrsrFoundExact = GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState );
+        const bool bCursorFoundExact = GetLayout()->GetCursorOfst( &aPos, aPt, &aTmpState );
         pTextNd = aPos.nNode.GetNode().GetTextNode();
 
         const SwNodes& rNds = GetDoc()->GetNodes();
@@ -1157,7 +1157,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
             }
         }
         else if ( SwContentAtPos::SW_CONTENT_CHECK & rContentAtPos.eContentAtPos
-                  && bCrsrFoundExact )
+                  && bCursorFoundExact )
         {
             bRet = true;
         }
@@ -1171,7 +1171,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
             Size aSizePixel = GetWin()->LogicToPixel(aSizeLogic);
             rContentAtPos.nDist = aSizePixel.Width();
         }
-        else if( bCrsrFoundExact && pTextNd )
+        else if( bCursorFoundExact && pTextNd )
         {
             if( !aTmpState.m_bPosCorr )
             {
@@ -1198,23 +1198,23 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         else
                             bRet = true;
 
-                        if( bRet && bSetCrsr )
+                        if( bRet && bSetCursor )
                         {
-                            SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
-                            m_pCurCrsr->DeleteMark();
-                            *m_pCurCrsr->GetPoint() = aPos;
-                            if( m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION | nsSwCursorSelOverFlags::SELOVER_TOGGLE) )
+                            SwCursorSaveState aSaveState( *m_pCurrentCursor );
+                            SwCallLink aLk( *this ); // watch Cursor-Moves
+                            m_pCurrentCursor->DeleteMark();
+                            *m_pCurrentCursor->GetPoint() = aPos;
+                            if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION | nsSwCursorSelOverFlags::SELOVER_TOGGLE) )
                                 bRet = false;
                             else
-                                UpdateCrsr();
+                                UpdateCursor();
                         }
                         if( bRet )
                         {
                             rContentAtPos.eContentAtPos = SwContentAtPos::SW_SMARTTAG;
 
-                            if( pFieldRect && nullptr != ( pFrm = pTextNd->getLayoutFrm( GetLayout(), &aPt ) ) )
-                                pFrm->GetCharRect( *pFieldRect, aPos, &aTmpState );
+                            if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
+                                pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
                         }
                     }
                 }
@@ -1235,16 +1235,16 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 
                     if ( pField )
                     {
-                        if( pFieldRect && nullptr != ( pFrm = pTextNd->getLayoutFrm( GetLayout(), &aPt ) ) )
-                            pFrm->GetCharRect( *pFieldRect, aPos, &aTmpState );
+                        if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
+                            pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
 
-                        if( bSetCrsr )
+                        if( bSetCursor )
                         {
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
-                            SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                            m_pCurCrsr->DeleteMark();
-                            *m_pCurCrsr->GetPoint() = aPos;
-                            if( m_pCurCrsr->IsSelOvr() )
+                            SwCallLink aLk( *this ); // watch Cursor-Moves
+                            SwCursorSaveState aSaveState( *m_pCurrentCursor );
+                            m_pCurrentCursor->DeleteMark();
+                            *m_pCurrentCursor->GetPoint() = aPos;
+                            if( m_pCurrentCursor->IsSelOvr() )
                             {
                                 // allow click fields in protected sections
                                 // only placeholder is not possible
@@ -1253,7 +1253,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                                     pField = nullptr;
                             }
                             else
-                                UpdateCrsr();
+                                UpdateCursor();
                         }
                         else if( RES_TABLEFLD == pField->Which() &&
                             static_cast<const SwTableField*>(pField)->IsIntrnlName() )
@@ -1279,7 +1279,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 {
                     IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
                     sw::mark::IFieldmark* pFieldBookmark = pMarksAccess->getFieldmarkFor( aPos );
-                    if( bCrsrFoundExact && pTextNd && pFieldBookmark) {
+                    if( bCursorFoundExact && pTextNd && pFieldBookmark) {
                         rContentAtPos.eContentAtPos = SwContentAtPos::SW_FORMCTRL;
                         rContentAtPos.aFnd.pFieldmark = pFieldBookmark;
                         bRet=true;
@@ -1292,9 +1292,9 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     {
                         // over the footnote's char
                         bRet = true;
-                        if( bSetCrsr )
+                        if( bSetCursor )
                         {
-                            *m_pCurCrsr->GetPoint() = aPos;
+                            *m_pCurrentCursor->GetPoint() = aPos;
                             if( !GotoFootnoteAnchor() )
                                 bRet = false;
                         }
@@ -1305,23 +1305,23 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         aPos.nContent.GetIndex(), RES_TXTATR_FTN )) )
                     {
                         bRet = true;
-                        if( bSetCrsr )
+                        if( bSetCursor )
                         {
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
-                            SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                            m_pCurCrsr->GetPoint()->nNode = *static_cast<SwTextFootnote*>(pTextAttr)->GetStartNode();
+                            SwCallLink aLk( *this ); // watch Cursor-Moves
+                            SwCursorSaveState aSaveState( *m_pCurrentCursor );
+                            m_pCurrentCursor->GetPoint()->nNode = *static_cast<SwTextFootnote*>(pTextAttr)->GetStartNode();
                             SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection(
-                                &m_pCurCrsr->GetPoint()->nNode,
+                                &m_pCurrentCursor->GetPoint()->nNode,
                                 true, !IsReadOnlyAvailable() );
 
                             if( pCNd )
                             {
-                                m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, 0 );
-                                if( m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                                m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, 0 );
+                                if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                     nsSwCursorSelOverFlags::SELOVER_TOGGLE ))
                                     bRet = false;
                                 else
-                                    UpdateCrsr();
+                                    UpdateCursor();
                             }
                             else
                                 bRet = false;
@@ -1333,8 +1333,8 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             rContentAtPos.pFndTextAttr = pTextAttr;
                             rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
 
-                            if( pFieldRect && nullptr != ( pFrm = pTextNd->getLayoutFrm( GetLayout(), &aPt ) ) )
-                                pFrm->GetCharRect( *pFieldRect, aPos, &aTmpState );
+                            if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
+                                pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
                         }
                     }
                 }
@@ -1370,16 +1370,16 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     if( pTextAttr )
                     {
                         bRet = true;
-                        if( bSetCrsr )
+                        if( bSetCursor )
                         {
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
-                            SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                            m_pCurCrsr->DeleteMark();
-                            *m_pCurCrsr->GetPoint() = aPos;
-                            if( m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION | nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
+                            SwCallLink aLk( *this ); // watch Cursor-Moves
+                            SwCursorSaveState aSaveState( *m_pCurrentCursor );
+                            m_pCurrentCursor->DeleteMark();
+                            *m_pCurrentCursor->GetPoint() = aPos;
+                            if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION | nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
                                 bRet = false;
                             else
-                                UpdateCrsr();
+                                UpdateCursor();
                         }
 
                         if( bRet )
@@ -1399,8 +1399,8 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             rContentAtPos.pFndTextAttr = pTextAttr;
                             rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
 
-                            if( pFieldRect && nullptr != ( pFrm = pTextNd->getLayoutFrm( GetLayout(), &aPt ) ) )
-                                pFrm->GetCharRect( *pFieldRect, aPos, &aTmpState );
+                            if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
+                                pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
                         }
                     }
                 }
@@ -1415,17 +1415,17 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     if( pTextAttr && !pTextAttr->GetINetFormat().GetValue().isEmpty() )
                     {
                         bRet = true;
-                        if( bSetCrsr )
+                        if( bSetCursor )
                         {
-                            SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
-                            m_pCurCrsr->DeleteMark();
-                            *m_pCurCrsr->GetPoint() = aPos;
-                            if( m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                            SwCursorSaveState aSaveState( *m_pCurrentCursor );
+                            SwCallLink aLk( *this ); // watch Cursor-Moves
+                            m_pCurrentCursor->DeleteMark();
+                            *m_pCurrentCursor->GetPoint() = aPos;
+                            if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                 nsSwCursorSelOverFlags::SELOVER_TOGGLE) )
                                 bRet = false;
                             else
-                                UpdateCrsr();
+                                UpdateCursor();
                         }
                         if( bRet )
                         {
@@ -1437,8 +1437,8 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             rContentAtPos.eContentAtPos = SwContentAtPos::SW_INETATTR;
                             rContentAtPos.pFndTextAttr = pTextAttr;
 
-                            if( pFieldRect && nullptr != ( pFrm = pTextNd->getLayoutFrm( GetLayout(), &aPt ) ) )
-                                pFrm->GetCharRect( *pFieldRect, aPos, &aTmpState );
+                            if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
+                                pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
                         }
                     }
                 }
@@ -1453,8 +1453,8 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         rContentAtPos.pFndTextAttr = nullptr;
                         bRet = true;
 
-                        if( pFieldRect && nullptr != ( pFrm = pTextNd->getLayoutFrm( GetLayout(), &aPt ) ) )
-                            pFrm->GetCharRect( *pFieldRect, aPos, &aTmpState );
+                        if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
+                            pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
                     }
                 }
             }
@@ -1484,22 +1484,22 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 #endif
                     )
                 {
-                    SwFrm* pF = pTextNd->getLayoutFrm( GetLayout(), &aPt );
+                    SwFrame* pF = pTextNd->getLayoutFrame( GetLayout(), &aPt );
                     if( pF )
                     {
                         // then the CellFrame
-                        pFrm = static_cast<SwContentFrm*>(pF);
-                        while( pF && !pF->IsCellFrm() )
+                        pFrame = static_cast<SwContentFrame*>(pF);
+                        while( pF && !pF->IsCellFrame() )
                             pF = pF->GetUpper();
                     }
 
                     if( aTmpState.m_bPosCorr )
                     {
-                        if( pF && !pF->Frm().IsInside( aPt ))
+                        if( pF && !pF->Frame().IsInside( aPt ))
                             pF = nullptr;
                     }
                     else if( !pF )
-                        pF = pFrm;
+                        pF = pFrame;
 
                     if( pF ) // only then it is valid
                     {
@@ -1514,16 +1514,16 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->PtrToBoxNm( &pTableNd->GetTable() );
 
                         bRet = true;
-                        if( bSetCrsr )
+                        if( bSetCursor )
                         {
-                            SwCallLink aLk( *this ); // watch Crsr-Moves
-                            SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                            *m_pCurCrsr->GetPoint() = aPos;
-                            if( m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                            SwCallLink aLk( *this ); // watch Cursor-Moves
+                            SwCursorSaveState aSaveState( *m_pCurrentCursor );
+                            *m_pCurrentCursor->GetPoint() = aPos;
+                            if( m_pCurrentCursor->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                 nsSwCursorSelOverFlags::SELOVER_TOGGLE) )
                                 bRet = false;
                             else
-                                UpdateCrsr();
+                                UpdateCursor();
                         }
 
                         if( bRet )
@@ -1531,7 +1531,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             if( pFieldRect )
                             {
                                 *pFieldRect = pF->Prt();
-                                *pFieldRect += pF->Frm().Pos();
+                                *pFieldRect += pF->Frame().Pos();
                             }
                             rContentAtPos.pFndTextAttr = nullptr;
                             rContentAtPos.aFnd.pAttr = pItem;
@@ -1633,13 +1633,13 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 }
 
 // #i90516#
-const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
+const SwPostItField* SwCursorShell::GetPostItFieldAtCursor() const
 {
     const SwPostItField* pPostItField = nullptr;
 
     if ( !IsTableMode() )
     {
-        const SwPosition* pCursorPos = _GetCrsr()->GetPoint();
+        const SwPosition* pCursorPos = _GetCursor()->GetPoint();
         const SwTextNode* pTextNd = pCursorPos->nNode.GetNode().GetTextNode();
         if ( pTextNd )
         {
@@ -1681,10 +1681,10 @@ bool SwContentAtPos::IsInProtectSect() const
         }
     }
 
-    const SwContentFrm* pFrm;
+    const SwContentFrame* pFrame;
     return pNd && ( pNd->IsInProtectSect() ||
-                    ( nullptr != ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false)) &&
-                        pFrm->IsProtected() ));
+                    ( nullptr != ( pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false)) &&
+                        pFrame->IsProtected() ));
 }
 
 bool SwContentAtPos::IsInRTLText()const
@@ -1706,46 +1706,46 @@ bool SwContentAtPos::IsInRTLText()const
     }
     if(pNd)
     {
-        SwIterator<SwTextFrm,SwTextNode> aIter(*pNd);
-        SwTextFrm* pTmpFrm = aIter.First();
-        while( pTmpFrm )
+        SwIterator<SwTextFrame,SwTextNode> aIter(*pNd);
+        SwTextFrame* pTmpFrame = aIter.First();
+        while( pTmpFrame )
         {
-                if ( !pTmpFrm->IsFollow())
+                if ( !pTmpFrame->IsFollow())
                 {
-                    bRet = pTmpFrm->IsRightToLeft();
+                    bRet = pTmpFrame->IsRightToLeft();
                     break;
                 }
-            pTmpFrm = aIter.Next();
+            pTmpFrame = aIter.Next();
         }
     }
     return bRet;
 }
 
-bool SwCrsrShell::SelectText( const sal_Int32 nStart,
+bool SwCursorShell::SelectText( const sal_Int32 nStart,
                                  const sal_Int32 nEnd )
 {
     SET_CURR_SHELL( this );
     bool bRet = false;
 
     SwCallLink aLk( *this );
-    SwCrsrSaveState aSaveState( *m_pCurCrsr );
+    SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
-    SwPosition& rPos = *m_pCurCrsr->GetPoint();
-    m_pCurCrsr->DeleteMark();
+    SwPosition& rPos = *m_pCurrentCursor->GetPoint();
+    m_pCurrentCursor->DeleteMark();
     rPos.nContent = nStart;
-    m_pCurCrsr->SetMark();
+    m_pCurrentCursor->SetMark();
     rPos.nContent = nEnd;
 
-    if( !m_pCurCrsr->IsSelOvr() )
+    if( !m_pCurrentCursor->IsSelOvr() )
     {
-        UpdateCrsr();
+        UpdateCursor();
         bRet = true;
     }
 
     return bRet;
 }
 
-bool SwCrsrShell::SelectTextAttr( sal_uInt16 nWhich,
+bool SwCursorShell::SelectTextAttr( sal_uInt16 nWhich,
                                      bool bExpand,
                                      const SwTextAttr* pTextAttr )
 {
@@ -1756,7 +1756,7 @@ bool SwCrsrShell::SelectTextAttr( sal_uInt16 nWhich,
     {
         if( !pTextAttr )
         {
-            SwPosition& rPos = *m_pCurCrsr->GetPoint();
+            SwPosition& rPos = *m_pCurrentCursor->GetPoint();
             SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
             pTextAttr = (pTextNd)
                 ? pTextNd->GetTextAttrAt(rPos.nContent.GetIndex(),
@@ -1774,33 +1774,33 @@ bool SwCrsrShell::SelectTextAttr( sal_uInt16 nWhich,
     return bRet;
 }
 
-bool SwCrsrShell::GotoINetAttr( const SwTextINetFormat& rAttr )
+bool SwCursorShell::GotoINetAttr( const SwTextINetFormat& rAttr )
 {
     bool bRet = false;
     if( rAttr.GetpTextNode() )
     {
-        SwCursor* pCrsr = getShellCrsr( true );
+        SwCursor* pCursor = getShellCursor( true );
 
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *pCrsr );
+        SwCallLink aLk( *this ); // watch Cursor-Moves
+        SwCursorSaveState aSaveState( *pCursor );
 
-        pCrsr->GetPoint()->nNode = *rAttr.GetpTextNode();
-        pCrsr->GetPoint()->nContent.Assign( const_cast<SwTextNode*>(rAttr.GetpTextNode()),
+        pCursor->GetPoint()->nNode = *rAttr.GetpTextNode();
+        pCursor->GetPoint()->nContent.Assign( const_cast<SwTextNode*>(rAttr.GetpTextNode()),
                                             rAttr.GetStart() );
-        bRet = !pCrsr->IsSelOvr();
+        bRet = !pCursor->IsSelOvr();
         if( bRet )
-            UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+            UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     }
     return bRet;
 }
 
-const SwFormatINetFormat* SwCrsrShell::FindINetAttr( const OUString& rName ) const
+const SwFormatINetFormat* SwCursorShell::FindINetAttr( const OUString& rName ) const
 {
     return mpDoc->FindINetAttr( rName );
 }
 
-bool SwCrsrShell::GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
+bool SwCursorShell::GetShadowCursorPos( const Point& rPt, SwFillMode eFillMode,
                                 SwRect& rRect, sal_Int16& rOrient )
 {
 
@@ -1811,16 +1811,16 @@ bool SwCrsrShell::GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
         && GetDoc()->GetIDocumentUndoRedo().DoesUndo())
     {
         Point aPt( rPt );
-        SwPosition aPos( *m_pCurCrsr->GetPoint() );
+        SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
-        SwFillCrsrPos aFPos( eFillMode );
-        SwCrsrMoveState aTmpState( &aFPos );
+        SwFillCursorPos aFPos( eFillMode );
+        SwCursorMoveState aTmpState( &aFPos );
 
-        if( GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState ) &&
+        if( GetLayout()->GetCursorOfst( &aPos, aPt, &aTmpState ) &&
             !aPos.nNode.GetNode().IsProtect())
         {
             // start position in protected section?
-            rRect = aFPos.aCrsr;
+            rRect = aFPos.aCursor;
             rOrient = aFPos.eOrient;
             bRet = true;
         }
@@ -1828,7 +1828,7 @@ bool SwCrsrShell::GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
     return bRet;
 }
 
-bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
+bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
 {
     SET_CURR_SHELL( this );
     bool bRet = false;
@@ -1837,14 +1837,14 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
         && GetDoc()->GetIDocumentUndoRedo().DoesUndo())
     {
         Point aPt( rPt );
-        SwPosition aPos( *m_pCurCrsr->GetPoint() );
+        SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
-        SwFillCrsrPos aFPos( eFillMode );
-        SwCrsrMoveState aTmpState( &aFPos );
+        SwFillCursorPos aFPos( eFillMode );
+        SwCursorMoveState aTmpState( &aFPos );
 
-        if( GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState ) )
+        if( GetLayout()->GetCursorOfst( &aPos, aPt, &aTmpState ) )
         {
-            SwCallLink aLk( *this ); // watch Crsr-Moves
+            SwCallLink aLk( *this ); // watch Cursor-Moves
             StartAction();
 
             SwContentNode* pCNd = aPos.nNode.GetNode().GetContentNode();
@@ -1884,18 +1884,18 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 GetDoc()->getIDocumentContentOperations().AppendTextNode( aPos );
                 if( !n && pNextFormat )
                 {
-                    *m_pCurCrsr->GetPoint() = aPos;
-                    GetDoc()->SetTextFormatColl( *m_pCurCrsr, pNextFormat, false );
+                    *m_pCurrentCursor->GetPoint() = aPos;
+                    GetDoc()->SetTextFormatColl( *m_pCurrentCursor, pNextFormat, false );
                 }
                 if( n < aFPos.nColumnCnt )
                 {
-                    *m_pCurCrsr->GetPoint() = aPos;
-                    GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurCrsr,
+                    *m_pCurrentCursor->GetPoint() = aPos;
+                    GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurrentCursor,
                             SvxFormatBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ) );
                 }
             }
 
-            *m_pCurCrsr->GetPoint() = aPos;
+            *m_pCurrentCursor->GetPoint() = aPos;
             switch( aFPos.eMode )
             {
             case FILL_INDENT:
@@ -1916,7 +1916,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     if( SVX_ADJUST_LEFT != rAdj.GetAdjust() )
                         aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
 
-                    GetDoc()->getIDocumentContentOperations().InsertItemSet( *m_pCurCrsr, aSet );
+                    GetDoc()->getIDocumentContentOperations().InsertItemSet( *m_pCurrentCursor, aSet );
                 }
                 else {
                     OSL_ENSURE( false, "No ContentNode" );
@@ -1932,7 +1932,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     if (aFPos.nSpaceCnt)
                         comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceCnt, ' ');
                     if (!sInsert.isEmpty())
-                        GetDoc()->getIDocumentContentOperations().InsertString( *m_pCurCrsr, sInsert.makeStringAndClear());
+                        GetDoc()->getIDocumentContentOperations().InsertString( *m_pCurrentCursor, sInsert.makeStringAndClear());
                 }
                 // no break - still need to set orientation
             case FILL_MARGIN:
@@ -1950,7 +1950,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     default:
                         break;
                     }
-                    GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurCrsr, aAdj );
+                    GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurrentCursor, aAdj );
                 }
                 break;
             }
@@ -1964,84 +1964,84 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
     return bRet;
 }
 
-const SwRangeRedline* SwCrsrShell::SelNextRedline()
+const SwRangeRedline* SwCursorShell::SelNextRedline()
 {
     const SwRangeRedline* pFnd = nullptr;
     if( !IsTableMode() )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *m_pCurCrsr );
+        SwCallLink aLk( *this ); // watch Cursor-Moves
+        SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
-        pFnd = GetDoc()->getIDocumentRedlineAccess().SelNextRedline( *m_pCurCrsr );
-        if( pFnd && !m_pCurCrsr->IsInProtectTable() && !m_pCurCrsr->IsSelOvr() )
-            UpdateCrsr( SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+        pFnd = GetDoc()->getIDocumentRedlineAccess().SelNextRedline( *m_pCurrentCursor );
+        if( pFnd && !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr() )
+            UpdateCursor( SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
         else
             pFnd = nullptr;
     }
     return pFnd;
 }
 
-const SwRangeRedline* SwCrsrShell::SelPrevRedline()
+const SwRangeRedline* SwCursorShell::SelPrevRedline()
 {
     const SwRangeRedline* pFnd = nullptr;
     if( !IsTableMode() )
     {
         SET_CURR_SHELL( this );
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *m_pCurCrsr );
+        SwCallLink aLk( *this ); // watch Cursor-Moves
+        SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
-        pFnd = GetDoc()->getIDocumentRedlineAccess().SelPrevRedline( *m_pCurCrsr );
-        if( pFnd && !m_pCurCrsr->IsInProtectTable() && !m_pCurCrsr->IsSelOvr() )
-            UpdateCrsr( SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+        pFnd = GetDoc()->getIDocumentRedlineAccess().SelPrevRedline( *m_pCurrentCursor );
+        if( pFnd && !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr() )
+            UpdateCursor( SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
         else
             pFnd = nullptr;
     }
     return pFnd;
 }
 
-const SwRangeRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, bool bSelect )
+const SwRangeRedline* SwCursorShell::_GotoRedline( sal_uInt16 nArrPos, bool bSelect )
 {
     const SwRangeRedline* pFnd = nullptr;
-    SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCrsrSaveState aSaveState( *m_pCurCrsr );
+    SwCallLink aLk( *this ); // watch Cursor-Moves
+    SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
     pFnd = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable()[ nArrPos ];
     if( pFnd )
     {
-        *m_pCurCrsr->GetPoint() = *pFnd->Start();
+        *m_pCurrentCursor->GetPoint() = *pFnd->Start();
 
         SwContentNode* pCNd;
-        SwNodeIndex* pIdx = &m_pCurCrsr->GetPoint()->nNode;
+        SwNodeIndex* pIdx = &m_pCurrentCursor->GetPoint()->nNode;
         if( !pIdx->GetNode().IsContentNode() &&
             nullptr != ( pCNd = GetDoc()->GetNodes().GoNextSection( pIdx,
                                     true, IsReadOnlyAvailable() )) )
         {
             if( *pIdx <= pFnd->End()->nNode )
-                m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, 0 );
+                m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, 0 );
             else
                 pFnd = nullptr;
         }
 
         if( pFnd && bSelect )
         {
-            m_pCurCrsr->SetMark();
+            m_pCurrentCursor->SetMark();
             if( nsRedlineType_t::REDLINE_FMTCOLL == pFnd->GetType() )
             {
                 pCNd = pIdx->GetNode().GetContentNode();
-                m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
-                m_pCurCrsr->GetMark()->nContent.Assign( pCNd, 0 );
+                m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+                m_pCurrentCursor->GetMark()->nContent.Assign( pCNd, 0 );
             }
             else
-                *m_pCurCrsr->GetPoint() = *pFnd->End();
+                *m_pCurrentCursor->GetPoint() = *pFnd->End();
 
-            pIdx = &m_pCurCrsr->GetPoint()->nNode;
+            pIdx = &m_pCurrentCursor->GetPoint()->nNode;
             if( !pIdx->GetNode().IsContentNode() &&
                 nullptr != ( pCNd = SwNodes::GoPrevSection( pIdx,
                                             true, IsReadOnlyAvailable() )) )
             {
-                if( *pIdx >= m_pCurCrsr->GetMark()->nNode )
-                    m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+                if( *pIdx >= m_pCurrentCursor->GetMark()->nNode )
+                    m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
                 else
                     pFnd = nullptr;
             }
@@ -2049,26 +2049,26 @@ const SwRangeRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, bool bSelec
 
         if( !pFnd )
         {
-            m_pCurCrsr->DeleteMark();
-            m_pCurCrsr->RestoreSavePos();
+            m_pCurrentCursor->DeleteMark();
+            m_pCurrentCursor->RestoreSavePos();
         }
-        else if( bSelect && *m_pCurCrsr->GetMark() == *m_pCurCrsr->GetPoint() )
-            m_pCurCrsr->DeleteMark();
+        else if( bSelect && *m_pCurrentCursor->GetMark() == *m_pCurrentCursor->GetPoint() )
+            m_pCurrentCursor->DeleteMark();
 
-        if( pFnd && !m_pCurCrsr->IsInProtectTable() && !m_pCurCrsr->IsSelOvr() )
-            UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE
-                        | SwCrsrShell::READONLY );
+        if( pFnd && !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr() )
+            UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE
+                        | SwCursorShell::READONLY );
         else
         {
             pFnd = nullptr;
             if( bSelect )
-                m_pCurCrsr->DeleteMark();
+                m_pCurrentCursor->DeleteMark();
         }
     }
     return pFnd;
 }
 
-const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect )
+const SwRangeRedline* SwCursorShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect )
 {
     const SwRangeRedline* pFnd = nullptr;
     if( !IsTableMode() )
@@ -2094,7 +2094,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect
                 {
                     // Check for overlaps. These can happen when FormatColl-
                     // Redlines were stretched over a whole paragraph
-                    SwPaM* pCur = m_pCurCrsr;
+                    SwPaM* pCur = m_pCurrentCursor;
                     SwPaM* pNextPam = pCur->GetNext();
                     SwPosition* pCStt = pCur->Start(), *pCEnd = pCur->End();
                     while( pCur != pNextPam )
@@ -2161,7 +2161,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect
                     if( pTmp )
                     {
                         // create new cursor
-                        CreateCrsr();
+                        CreateCursor();
                         bCheck = true;
                     }
                     nArrPos = nFndPos;
@@ -2177,7 +2177,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect
     return pFnd;
 }
 
-bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
+bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
 {
     SwNodes& rNds = GetDoc()->GetNodes();
     const SwNode* pBodyEndNd = &rNds.GetEndOfContent();
@@ -2186,13 +2186,13 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
     Point aPt;
 
     _SetGetExpField aCmpPos( SwPosition( bNext ? *pBodyEndNd : *pBodySttNd ) );
-    _SetGetExpField aCurPos( bNext ? *m_pCurCrsr->End() : *m_pCurCrsr->Start() );
+    _SetGetExpField aCurPos( bNext ? *m_pCurrentCursor->End() : *m_pCurrentCursor->Start() );
     if( aCurPos.GetNode() < nBodySttNdIdx )
     {
         const SwContentNode* pCNd = aCurPos.GetNodeFromContent()->GetContentNode();
-        SwContentFrm* pFrm;
-        if( pCNd && nullptr != ( pFrm = pCNd->getLayoutFrm( GetLayout(), &aPt )) )
-            aCurPos.SetBodyPos( *pFrm );
+        SwContentFrame* pFrame;
+        if( pCNd && nullptr != ( pFrame = pCNd->getLayoutFrame( GetLayout(), &aPt )) )
+            aCurPos.SetBodyPos( *pFrame );
     }
 
     // check first all the hyperlink fields
@@ -2210,10 +2210,10 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
                     SwTextINetFormat& rAttr = *pFnd;
                     SwPosition aTmpPos( *pTextNd );
                     _SetGetExpField aPos( aTmpPos.nNode, rAttr );
-                    SwContentFrm* pFrm;
+                    SwContentFrame* pFrame;
                     if( pTextNd->GetIndex() < nBodySttNdIdx &&
-                        nullptr != ( pFrm = pTextNd->getLayoutFrm( GetLayout(), &aPt )) )
-                        aPos.SetBodyPos( *pFrm );
+                        nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt )) )
+                        aPos.SetBodyPos( *pFrame );
 
                     if( bNext
                         ? ( aPos < aCmpPos && aCurPos < aPos )
@@ -2241,7 +2241,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
             const SwFormatURL& rURLItem = pFormat->GetURL();
             if( rURLItem.GetMap() || !rURLItem.GetURL().isEmpty() )
             {
-                SwFlyFrm* pFly = pFormat->GetFrm( &aPt );
+                SwFlyFrame* pFly = pFormat->GetFrame( &aPt );
                 SwPosition aTmpPos( *pBodySttNd );
                 if( pFly &&
                     GetBodyTextNode( *GetDoc(), aTmpPos, *pFly->GetLower() ) )
@@ -2269,17 +2269,17 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         // found a text attribute ?
         if( pFndAttr )
         {
-            SwCrsrSaveState aSaveState( *m_pCurCrsr );
+            SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
-            aCmpPos.GetPosOfContent( *m_pCurCrsr->GetPoint() );
-            m_pCurCrsr->DeleteMark();
-            m_pCurCrsr->SetMark();
-            m_pCurCrsr->GetPoint()->nContent = *pFndAttr->End();
+            aCmpPos.GetPosOfContent( *m_pCurrentCursor->GetPoint() );
+            m_pCurrentCursor->DeleteMark();
+            m_pCurrentCursor->SetMark();
+            m_pCurrentCursor->GetPoint()->nContent = *pFndAttr->End();
 
-            if( !m_pCurCrsr->IsInProtectTable() && !m_pCurCrsr->IsSelOvr() )
+            if( !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr() )
             {
-                UpdateCrsr( SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|
-                                    SwCrsrShell::READONLY );
+                UpdateCursor( SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|
+                                    SwCursorShell::READONLY );
                 bRet = true;
             }
         }
@@ -2296,10 +2296,10 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         }
         else // then is it a fly
         {
-            SwFlyFrm* pFly = pFndFormat->GetFrm(&aPt);
+            SwFlyFrame* pFly = pFndFormat->GetFrame(&aPt);
             if( pFly )
             {
-                static_cast<SwFEShell*>(this)->SelectFlyFrm( *pFly, true );
+                static_cast<SwFEShell*>(this)->SelectFlyFrame( *pFly, true );
                 MakeSelVisible();
                 bRet = true;
             }

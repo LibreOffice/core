@@ -28,10 +28,10 @@
 #include <swfont.hxx>
 #include <flyfrm.hxx>
 
-class SwPageFrm;
-class SwFlyFrm;
-class SwContentFrm;
-class SwRootFrm;
+class SwPageFrame;
+class SwFlyFrame;
+class SwContentFrame;
+class SwRootFrame;
 class SwDoc;
 class SwAttrSet;
 class SdrObject;
@@ -54,7 +54,7 @@ class SwRegionRects;
 #define GRFNUM_REPLACE 2
 
 void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
-                       SwFrm *pFrm, SwPageFrm *pPage, SwDoc* doc );
+                       SwFrame *pFrame, SwPageFrame *pPage, SwDoc* doc );
 
 // draw background with brush or graphics
 // The 6th parameter indicates that the method should consider background
@@ -100,81 +100,81 @@ void PaintCharacterBorder(
 
 // get Fly, if no List is given use the current shell
 // Implementation in feshview.cxx
-SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh );
+SwFlyFrame *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh );
 
-SwFrm *SaveContent( SwLayoutFrm *pLay, SwFrm *pStart = nullptr );
-void RestoreContent( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow );
+SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart = nullptr );
+void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling, bool bGrow );
 
-// Get ContentNodes, create ContentFrms, and add them to LayFrm.
-void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc, sal_uLong nIndex,
+// Get ContentNodes, create ContentFrames, and add them to LayFrame.
+void _InsertCnt( SwLayoutFrame *pLay, SwDoc *pDoc, sal_uLong nIndex,
                  bool bPages = false, sal_uLong nEndIndex = 0,
-                 SwFrm *pPrv = nullptr );
+                 SwFrame *pPrv = nullptr );
 
 // Creation of frames for a specific section (uses _InsertCnt)
-void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
+void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                             const SwNodeIndex &rEndIdx );
 
 // prevent creation of Flys in _InsertCnt, e.g. for table headlines
 extern bool bDontCreateObjects;
 
-// for FlyCnts, see SwFlyAtCntFrm::MakeAll()
+// for FlyCnts, see SwFlyAtContentFrame::MakeAll()
 extern bool bSetCompletePaintOnInvalidate;
 
 // for table settings via keyboard
-long CalcRowRstHeight( SwLayoutFrm *pRow );
-long CalcHeightWithFlys( const SwFrm *pFrm );
+long CalcRowRstHeight( SwLayoutFrame *pRow );
+long CalcHeightWithFlys( const SwFrame *pFrame );
 
-SwPageFrm *InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
+SwPageFrame *InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
                           bool bOdd, bool bFirst, bool bInsertEmpty, bool bFootnote,
-                          SwFrm *pSibling );
+                          SwFrame *pSibling );
 
 // connect Flys with page
-void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
+void RegistFlys( SwPageFrame*, const SwLayoutFrame* );
 
 // notification of Fly's background if needed
-void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
+void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
              const SwRect* pOldRect = nullptr );
 
 void Notify_Background( const SdrObject* pObj,
-                        SwPageFrm* pPage,
+                        SwPageFrame* pPage,
                         const SwRect& rRect,
                         const PrepareHint eHint,
                         const bool bInva );
 
-const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos );
+const SwFrame* GetVirtualUpper( const SwFrame* pFrame, const Point& rPos );
 
-bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj );
+bool Is_Lower_Of( const SwFrame *pCurrFrame, const SdrObject* pObj );
 
 // FIXME: EasyHack (refactoring): rename method and parameter name in all files
-const SwFrm *FindKontext( const SwFrm *pFrm, sal_uInt16 nAdditionalKontextTyp );
+const SwFrame *FindKontext( const SwFrame *pFrame, sal_uInt16 nAdditionalKontextTyp );
 
-bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
+bool IsFrameInSameKontext( const SwFrame *pInnerFrame, const SwFrame *pFrame );
 
-const SwFrm * FindPage( const SwRect &rRect, const SwFrm *pPage );
+const SwFrame * FindPage( const SwRect &rRect, const SwFrame *pPage );
 
-// used by SwContentNode::GetFrm and SwFlyFrm::GetFrm
-SwFrm* GetFrmOfModify( const SwRootFrm* pLayout,
+// used by SwContentNode::GetFrame and SwFlyFrame::GetFrame
+SwFrame* GetFrameOfModify( const SwRootFrame* pLayout,
                        SwModify const&,
-                       sal_uInt16 const nFrmType,
+                       sal_uInt16 const nFrameType,
                        const Point* = nullptr,
                        const SwPosition *pPos = nullptr,
-                       const bool bCalcFrm = false );
+                       const bool bCalcFrame = false );
 
 // Should extra data (redline stroke, line numbers) be painted?
 bool IsExtraData( const SwDoc *pDoc );
 
 // #i11760# - method declaration <CalcContent(..)>
-void CalcContent( SwLayoutFrm *pLay,
+void CalcContent( SwLayoutFrame *pLay,
                 bool bNoColl = false,
                 bool bNoCalcFollow = false );
 
 // Notify classes memorize the current sizes in their constructor and do
 // the necessary notifications in their destructor if needed
-class SwFrmNotify
+class SwFrameNotify
 {
 protected:
-    SwFrm *mpFrm;
-    const SwRect maFrm;
+    SwFrame *mpFrame;
+    const SwRect maFrame;
     const SwRect maPrt;
     SwTwips mnFlyAnchorOfst;
     SwTwips mnFlyAnchorOfstNoWrap;
@@ -182,24 +182,24 @@ protected:
     bool     mbInvaKeep;
     bool     mbValidSize;
     // #i49383#
-    bool mbFrmDeleted;
+    bool mbFrameDeleted;
 
 public:
-    SwFrmNotify( SwFrm *pFrm );
-    ~SwFrmNotify();
+    SwFrameNotify( SwFrame *pFrame );
+    ~SwFrameNotify();
 
-    const SwRect &Frm() const { return maFrm; }
+    const SwRect &Frame() const { return maFrame; }
     void SetInvaKeep() { mbInvaKeep = true; }
 };
 
-class SwLayNotify : public SwFrmNotify
+class SwLayNotify : public SwFrameNotify
 {
     bool bLowersComplete;
 
-    SwLayoutFrm *GetLay() { return static_cast<SwLayoutFrm*>(mpFrm); }
+    SwLayoutFrame *GetLay() { return static_cast<SwLayoutFrame*>(mpFrame); }
 
 public:
-    SwLayNotify( SwLayoutFrm *pLayFrm );
+    SwLayNotify( SwLayoutFrame *pLayFrame );
     ~SwLayNotify();
 
     void SetLowersComplete( bool b ) { bLowersComplete = b; }
@@ -208,16 +208,16 @@ public:
 
 class SwFlyNotify : public SwLayNotify
 {
-    SwPageFrm *pOldPage;
-    const SwRect aFrmAndSpace;
-    SwFlyFrm *GetFly() { return static_cast<SwFlyFrm*>(mpFrm); }
+    SwPageFrame *pOldPage;
+    const SwRect aFrameAndSpace;
+    SwFlyFrame *GetFly() { return static_cast<SwFlyFrame*>(mpFrame); }
 
 public:
-    SwFlyNotify( SwFlyFrm *pFlyFrm );
+    SwFlyNotify( SwFlyFrame *pFlyFrame );
     ~SwFlyNotify();
 };
 
-class SwContentNotify : public SwFrmNotify
+class SwContentNotify : public SwFrameNotify
 {
 private:
     // #i11859#
@@ -228,10 +228,10 @@ private:
     bool        mbInvalidatePrevPrtArea;
     bool        mbBordersJoinedWithPrev;
 
-    SwContentFrm *GetCnt();
+    SwContentFrame *GetCnt();
 
 public:
-    SwContentNotify( SwContentFrm *pCntFrm );
+    SwContentNotify( SwContentFrame *pContentFrame );
     ~SwContentNotify();
 
     // #i25029#
@@ -310,32 +310,32 @@ class SwBorderAttrs : public SwCacheObj
 
     void _IsLine();
 
-    // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+    // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
-    void _GetTopLine   ( const SwFrm& _rFrm,
-                         const SwFrm* _pPrevFrm = nullptr );
-    void _GetBottomLine( const SwFrm& _rFrm );
+    void _GetTopLine   ( const SwFrame& _rFrame,
+                         const SwFrame* _pPrevFrame = nullptr );
+    void _GetBottomLine( const SwFrame& _rFrame );
 
     // calculate cached values <m_bJoinedWithPrev> and <m_bJoinedWithNext>
-    // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+    // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
-    void _CalcJoinedWithPrev( const SwFrm& _rFrm,
-                              const SwFrm* _pPrevFrm = nullptr );
-    void _CalcJoinedWithNext( const SwFrm& _rFrm );
+    void _CalcJoinedWithPrev( const SwFrame& _rFrame,
+                              const SwFrame* _pPrevFrame = nullptr );
+    void _CalcJoinedWithNext( const SwFrame& _rFrame );
 
     // internal helper method for _CalcJoinedWithPrev and _CalcJoinedWithNext
-    bool _JoinWithCmp( const SwFrm& _rCallerFrm,
-                       const SwFrm& _rCmpFrm ) const;
+    bool _JoinWithCmp( const SwFrame& _rCallerFrame,
+                       const SwFrame& _rCmpFrame ) const;
 
     // Are the left and right line and the LRSpace equal?
     bool CmpLeftRight( const SwBorderAttrs &rCmpAttrs,
-                       const SwFrm *pCaller,
-                       const SwFrm *pCmp ) const;
+                       const SwFrame *pCaller,
+                       const SwFrame *pCmp ) const;
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwBorderAttrs)
 
-    SwBorderAttrs( const SwModify *pOwner, const SwFrm *pConstructor );
+    SwBorderAttrs( const SwModify *pOwner, const SwFrame *pConstructor );
     virtual ~SwBorderAttrs();
 
     inline const SwAttrSet      &GetAttrSet() const { return m_rAttrSet;  }
@@ -349,8 +349,8 @@ public:
     inline sal_uInt16 CalcRightLine() const;
     inline sal_uInt16 CalcTop() const;
     inline sal_uInt16 CalcBottom() const;
-           long CalcLeft( const SwFrm *pCaller ) const;
-           long CalcRight( const SwFrm *pCaller ) const;
+           long CalcLeft( const SwFrame *pCaller ) const;
+           long CalcRight( const SwFrame *pCaller ) const;
 
     inline bool IsLine() const;
 
@@ -359,30 +359,30 @@ public:
     inline bool IsBorderDist() const { return m_bBorderDist; }
 
     // Should upper (or lower) border be evaluated for this frame?
-    // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+    // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
-    inline sal_uInt16 GetTopLine   ( const SwFrm& _rFrm,
-                                 const SwFrm* _pPrevFrm = nullptr ) const;
-    inline sal_uInt16 GetBottomLine( const SwFrm& _rFrm ) const;
+    inline sal_uInt16 GetTopLine   ( const SwFrame& _rFrame,
+                                 const SwFrame* _pPrevFrame = nullptr ) const;
+    inline sal_uInt16 GetBottomLine( const SwFrame& _rFrame ) const;
     inline void   SetGetCacheLine( bool bNew ) const;
 
     // Accessors for cached values <m_bJoinedWithPrev> and <m_bJoinedWithNext>
-    // #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+    // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
     // borders/shadow have to be joined with previous frame.
-    bool JoinedWithPrev( const SwFrm& _rFrm,
-                         const SwFrm* _pPrevFrm = nullptr ) const;
-    bool JoinedWithNext( const SwFrm& _rFrm ) const;
+    bool JoinedWithPrev( const SwFrame& _rFrame,
+                         const SwFrame* _pPrevFrame = nullptr ) const;
+    bool JoinedWithNext( const SwFrame& _rFrame ) const;
 };
 
 class SwBorderAttrAccess : public SwCacheAccess
 {
-    const SwFrm *pConstructor;      //opt: for passing on to SwBorderAttrs
+    const SwFrame *pConstructor;      //opt: for passing on to SwBorderAttrs
 
 protected:
     virtual SwCacheObj *NewObj() override;
 
 public:
-    SwBorderAttrAccess( SwCache &rCache, const SwFrm *pOwner );
+    SwBorderAttrAccess( SwCache &rCache, const SwFrame *pOwner );
 
     SwBorderAttrs *Get();
 };
@@ -392,12 +392,12 @@ public:
 // SortArray needs to be traversed.
 class SwOrderIter
 {
-    const SwPageFrm *m_pPage;
+    const SwPageFrame *m_pPage;
     const SdrObject *m_pCurrent;
     const bool m_bFlysOnly;
 
 public:
-    SwOrderIter( const SwPageFrm *pPage, bool bFlysOnly = true );
+    SwOrderIter( const SwPageFrame *pPage, bool bFlysOnly = true );
 
     void             Current( const SdrObject *pNew ) { m_pCurrent = pNew; }
     const SdrObject *operator()() const { return m_pCurrent; }
@@ -429,21 +429,21 @@ public:
 };
 
 // Should upper (or lower) border be evaluated for this frame?
-// #i25029# - If <_pPrevFrm> is set, its value is taken for testing, if
+// #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
 // borders/shadow have to be joined with previous frame.
-inline sal_uInt16 SwBorderAttrs::GetTopLine ( const SwFrm& _rFrm,
-                                          const SwFrm* _pPrevFrm ) const
+inline sal_uInt16 SwBorderAttrs::GetTopLine ( const SwFrame& _rFrame,
+                                          const SwFrame* _pPrevFrame ) const
 {
-    if ( !m_bCachedGetTopLine || _pPrevFrm )
+    if ( !m_bCachedGetTopLine || _pPrevFrame )
     {
-        const_cast<SwBorderAttrs*>(this)->_GetTopLine( _rFrm, _pPrevFrm );
+        const_cast<SwBorderAttrs*>(this)->_GetTopLine( _rFrame, _pPrevFrame );
     }
     return m_nGetTopLine;
 }
-inline sal_uInt16 SwBorderAttrs::GetBottomLine( const SwFrm& _rFrm ) const
+inline sal_uInt16 SwBorderAttrs::GetBottomLine( const SwFrame& _rFrame ) const
 {
     if ( !m_bCachedGetBottomLine )
-        const_cast<SwBorderAttrs*>(this)->_GetBottomLine( _rFrm );
+        const_cast<SwBorderAttrs*>(this)->_GetBottomLine( _rFrame );
     return m_nGetBottomLine;
 }
 inline void SwBorderAttrs::SetGetCacheLine( bool bNew ) const
@@ -507,7 +507,7 @@ inline bool SwBorderAttrs::IsLine() const
     #i102458#
     Add output parameter <obIsLineSpacingProportional>
 
-    @param rFrm
+    @param rFrame
     input parameter - frame, for which the spacing values are determined.
 
     @param onPrevLowerSpacing
@@ -518,7 +518,7 @@ inline bool SwBorderAttrs::IsLine() const
 
     @param obIsLineSpacingProportional
 */
-void GetSpacingValuesOfFrm( const SwFrm& rFrm,
+void GetSpacingValuesOfFrame( const SwFrame& rFrame,
                             SwTwips& onLowerSpacing,
                             SwTwips& onLineSpacing,
                             bool& obIsLineSpacingProportional );
@@ -535,7 +535,7 @@ void GetSpacingValuesOfFrm( const SwFrm& rFrm,
         pointer to the found content frame or 0
 */
 
-const SwContentFrm* GetCellContent( const SwLayoutFrm& rCell_ );
+const SwContentFrame* GetCellContent( const SwLayoutFrame& rCell_ );
 
 /** helper class to check if a frame has been deleted during an operation
  *  WARNING! This should only be used as a last and desperate means to make the
@@ -545,19 +545,19 @@ const SwContentFrm* GetCellContent( const SwLayoutFrm& rCell_ );
 class SwDeletionChecker
 {
 private:
-    const SwFrm* mpFrm;
+    const SwFrame* mpFrame;
     const SwModify* mpRegIn;
 
 public:
-    SwDeletionChecker( const SwFrm* pFrm )
-            : mpFrm( pFrm ),
-              mpRegIn( pFrm ? const_cast<SwFrm*>(pFrm)->GetRegisteredIn() : nullptr )
+    SwDeletionChecker( const SwFrame* pFrame )
+            : mpFrame( pFrame ),
+              mpRegIn( pFrame ? const_cast<SwFrame*>(pFrame)->GetRegisteredIn() : nullptr )
     {
     }
 
     /**
      *  return
-     *    true if mpFrm != 0 and mpFrm is not client of pRegIn
+     *    true if mpFrame != 0 and mpFrame is not client of pRegIn
      *    false otherwise
      */
     bool HasBeenDeleted();

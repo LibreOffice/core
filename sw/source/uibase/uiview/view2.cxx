@@ -249,7 +249,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             }
         }
 
-        SwFlyFrmAttrMgr aFrameManager( true, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
+        SwFlyFrameAttrMgr aFrameManager( true, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
         SwWrtShell& rShell = GetWrtShell();
 
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
@@ -324,11 +324,11 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     // pool formats
 
-    const ::std::vector<OUString>& rFrmPoolArr(
+    const ::std::vector<OUString>& rFramePoolArr(
             SwStyleNameMapper::GetFrameFormatUINameArray());
-    for( size_t i = 0; i < rFrmPoolArr.size(); ++i )
+    for( size_t i = 0; i < rFramePoolArr.size(); ++i )
     {
-        aFormats.push_back(rFrmPoolArr[i]);
+        aFormats.push_back(rFramePoolArr[i]);
     }
 
     std::sort(aFormats.begin(), aFormats.end());
@@ -465,7 +465,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
         // #i123922# no new FrameFormat for replace mode, only when new object was created,
         // else this would reset the current setting for the frame holding the graphic
-        if ( !bReplaceMode && rSh.IsFrmSelected() )
+        if ( !bReplaceMode && rSh.IsFrameSelected() )
         {
             SwFrameFormat* pFormat = pDoc->FindFrameFormatByName( sGraphicFormat );
             if(!pFormat)
@@ -558,9 +558,9 @@ void SwView::Execute(SfxRequest &rReq)
             Rectangle aVis( GetVisArea() );
             SwEditWin& rTmpWin = GetEditWin();
             if ( FN_PAGEUP == nSlot || FN_PAGEUP_SEL == nSlot )
-                PageUpCrsr(FN_PAGEUP_SEL == nSlot);
+                PageUpCursor(FN_PAGEUP_SEL == nSlot);
             else
-                PageDownCrsr(FN_PAGEDOWN_SEL == nSlot);
+                PageDownCursor(FN_PAGEDOWN_SEL == nSlot);
 
             rReq.SetReturnValue(SfxBoolItem(nSlot,
                                                 aVis != GetVisArea()));
@@ -672,7 +672,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_REDLINE_REJECT_DIRECT:
         {
             SwDoc *pDoc = m_pWrtShell->GetDoc();
-            SwPaM *pCursor = m_pWrtShell->GetCrsr();
+            SwPaM *pCursor = m_pWrtShell->GetCursor();
             if( pCursor->HasMark())
             {
                 if (FN_REDLINE_ACCEPT_DIRECT == nSlot)
@@ -723,7 +723,7 @@ void SwView::Execute(SfxRequest &rReq)
 
         case FN_REDLINE_PREV_CHANGE:
         {
-            const SwPaM *pCursor = m_pWrtShell->GetCrsr();
+            const SwPaM *pCursor = m_pWrtShell->GetCursor();
             const SwPosition initialCursorStart = *pCursor->Start();
             const SwRangeRedline *pPrev = m_pWrtShell->SelPrevRedline();
 
@@ -807,7 +807,7 @@ void SwView::Execute(SfxRequest &rReq)
             if ( m_pWrtShell->HasDrawView() && m_pWrtShell->GetDrawView()->IsDragObj() )
             {
                 m_pWrtShell->BreakDrag();
-                m_pWrtShell->EnterSelFrmMode();
+                m_pWrtShell->EnterSelFrameMode();
             }
             else if ( m_pWrtShell->IsDrawCreate() )
             {
@@ -854,8 +854,8 @@ void SwView::Execute(SfxRequest &rReq)
                 const SwFrameFormat* pFormat = m_pWrtShell->GetFlyFrameFormat();
                 if(m_pWrtShell->GotoFly( pFormat->GetName(), FLYCNTTYPE_FRM ))
                 {
-                    m_pWrtShell->HideCrsr();
-                    m_pWrtShell->EnterSelFrmMode();
+                    m_pWrtShell->HideCursor();
+                    m_pWrtShell->EnterSelFrameMode();
                 }
             }
             else
@@ -929,7 +929,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             m_pWrtShell->StartAction();
             m_pWrtShell->EnterStdMode();
-            bool bOldCrsrInReadOnly = m_pWrtShell->IsReadOnlyAvailable();
+            bool bOldCursorInReadOnly = m_pWrtShell->IsReadOnlyAvailable();
             m_pWrtShell->SetReadOnlyAvailable( true );
 
             for( int i = 0; i < 2; ++i )
@@ -965,7 +965,7 @@ void SwView::Execute(SfxRequest &rReq)
                         pBase = nullptr;
                 }
             }
-            m_pWrtShell->SetReadOnlyAvailable( bOldCrsrInReadOnly );
+            m_pWrtShell->SetReadOnlyAvailable( bOldCursorInReadOnly );
             m_pWrtShell->EndAction();
         }
         break;
@@ -1226,15 +1226,15 @@ void SwView::Execute(SfxRequest &rReq)
         case SID_RESTORE_EDITING_VIEW:
         {
             //#i33307# restore editing position
-            Point aCrsrPos;
+            Point aCursorPos;
             bool bSelectObj;
-            if(m_pViewImpl->GetRestorePosition(aCrsrPos, bSelectObj))
+            if(m_pViewImpl->GetRestorePosition(aCursorPos, bSelectObj))
             {
-                m_pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
+                m_pWrtShell->SwCursorShell::SetCursor( aCursorPos, !bSelectObj );
                 if( bSelectObj )
                 {
-                    m_pWrtShell->SelectObj( aCrsrPos );
-                    m_pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                    m_pWrtShell->SelectObj( aCursorPos );
+                    m_pWrtShell->EnterSelFrameMode( &aCursorPos );
                 }
             }
         }
@@ -1298,19 +1298,19 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
         OUString sCurrentSectionName = CurrSect->GetSectionName();
         if(sCurrentSectionName != m_sOldSectionName)
         {
-            SwCrsrShell::FireSectionChangeEvent(2, 1);
+            SwCursorShell::FireSectionChangeEvent(2, 1);
         }
         m_sOldSectionName = sCurrentSectionName;
     }
     else if (!m_sOldSectionName.isEmpty())
     {
-        SwCrsrShell::FireSectionChangeEvent(2, 1);
+        SwCursorShell::FireSectionChangeEvent(2, 1);
         m_sOldSectionName= OUString();
     }
     //get column change event
     if(rShell.bColumnChange())
     {
-        SwCrsrShell::FireColumnChangeEvent(2, 1);
+        SwCursorShell::FireColumnChangeEvent(2, 1);
     }
 
     while( nWhich )
@@ -1321,14 +1321,14 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 // number of pages, log. page number
                 sal_uInt16 nPage, nLogPage;
                 OUString sDisplay;
-                rShell.GetPageNumber( -1, rShell.IsCrsrVisible(), nPage, nLogPage, sDisplay );
+                rShell.GetPageNumber( -1, rShell.IsCursorVisible(), nPage, nLogPage, sDisplay );
                 rSet.Put( SfxStringItem( FN_STAT_PAGE,
                             GetPageStr( nPage, nLogPage, sDisplay) ));
                 //if existing page number is not equal to old page number, send out this event.
                 if (m_nOldPageNum != nLogPage )
                 {
                     if (m_nOldPageNum != 0)
-                        SwCrsrShell::FirePageChangeEvent(m_nOldPageNum, nLogPage);
+                        SwCursorShell::FirePageChangeEvent(m_nOldPageNum, nLogPage);
                     m_nOldPageNum = nLogPage;
                 }
                 const sal_uInt16 nCnt = GetWrtShell().GetPageCnt();
@@ -1466,11 +1466,11 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             case SID_ATTR_POSITION:
             case SID_ATTR_SIZE:
             {
-                if( !rShell.IsFrmSelected() && !rShell.IsObjSelected() )
-                    SwBaseShell::_SetFrmMode( FLY_DRAG_END );
+                if( !rShell.IsFrameSelected() && !rShell.IsObjSelected() )
+                    SwBaseShell::_SetFrameMode( FLY_DRAG_END );
                 else
                 {
-                    FlyMode eFrameMode = SwBaseShell::GetFrmMode();
+                    FlyMode eFrameMode = SwBaseShell::GetFrameMode();
                     if ( eFrameMode == FLY_DRAG_START || eFrameMode == FLY_DRAG )
                     {
                         if ( nWhich == SID_ATTR_POSITION )
@@ -1485,7 +1485,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             break;
             case SID_TABLE_CELL:
 
-            if( rShell.IsFrmSelected() || rShell.IsObjSelected() )
+            if( rShell.IsFrameSelected() || rShell.IsObjSelected() )
             {
                 // #i39171# Don't put a SvxSizeItem into a slot which is defined as SfxStringItem.
                 // SvxPosSizeStatusBarControl no longer resets to empty display if only one slot
@@ -1495,7 +1495,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             else
             {
                 OUString sStr;
-                if( rShell.IsCrsrInTable() )
+                if( rShell.IsCursorInTable() )
                 {
                     // table name + cell coordinate
                     sStr = rShell.GetTableFormat()->GetName();
@@ -1530,7 +1530,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     }
                 }
 
-                const SwNumRule* pNumRule = rShell.GetNumRuleAtCurrCrsrPos();
+                const SwNumRule* pNumRule = rShell.GetNumRuleAtCurrCursorPos();
                 const bool bOutlineNum = pNumRule && pNumRule->IsOutlineRule();
 
                 if (pNumRule && !bOutlineNum )  // cursor in numbering
@@ -1776,7 +1776,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case SID_ATTR_SIZE:
         {
             sal_uInt16 nId = 0;
-            if( rSh.IsCrsrInTable() )
+            if( rSh.IsCursorInTable() )
                 nId = FN_FORMAT_TABLE_DLG;
             else if( rSh.GetCurTOX() )
                 nId = FN_INSERT_MULTI_TOX;
@@ -1784,7 +1784,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 nId = FN_EDIT_REGION;
             else
             {
-                const SwNumRule* pNumRule = rSh.GetNumRuleAtCurrCrsrPos();
+                const SwNumRule* pNumRule = rSh.GetNumRuleAtCurrCursorPos();
                 if( pNumRule )  // cursor in numbering
                 {
                     if( pNumRule->IsAutoRule() )
@@ -1795,7 +1795,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                         nId = 0;
                     }
                 }
-                else if( rSh.IsFrmSelected() )
+                else if( rSh.IsFrameSelected() )
                     nId = FN_FORMAT_FRAME_DLG;
                 else if( rSh.IsObjSelected() )
                     nId = SID_ATTR_TRANSFORM;
@@ -1877,15 +1877,15 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
     }
 }
 
-void SwView::InsFrmMode(sal_uInt16 nCols)
+void SwView::InsFrameMode(sal_uInt16 nCols)
 {
     if ( m_pWrtShell->HasWholeTabSelection() )
     {
-        SwFlyFrmAttrMgr aMgr( true, m_pWrtShell, FRMMGR_TYPE_TEXT );
+        SwFlyFrameAttrMgr aMgr( true, m_pWrtShell, FRMMGR_TYPE_TEXT );
 
         const SwFrameFormat &rPageFormat =
                 m_pWrtShell->GetPageDesc(m_pWrtShell->GetCurPageDesc()).GetMaster();
-        SwTwips lWidth = rPageFormat.GetFrmSize().GetWidth();
+        SwTwips lWidth = rPageFormat.GetFrameSize().GetWidth();
         const SvxLRSpaceItem &rLR = rPageFormat.GetLRSpace();
         lWidth -= rLR.GetLeft() + rLR.GetRight();
         aMgr.SetSize(Size(lWidth, aMgr.GetSize().Height()));
@@ -1895,10 +1895,10 @@ void SwView::InsFrmMode(sal_uInt16 nCols)
             aCol.Init( nCols, aCol.GetGutterWidth(), aCol.GetWishWidth() );
             aMgr.SetCol( aCol );
         }
-        aMgr.InsertFlyFrm();
+        aMgr.InsertFlyFrame();
     }
     else
-        GetEditWin().InsFrm(nCols);
+        GetEditWin().InsFrame(nCols);
 }
 
 /// show "edit link" dialog
@@ -1919,9 +1919,9 @@ bool SwView::JumpToSwMark( const OUString& rMark )
     if( !rMark.isEmpty() )
     {
         // place bookmark at top-center
-        bool bSaveCC = IsCrsrAtCenter();
-        bool bSaveCT = IsCrsrAtTop();
-        SetCrsrAtTop( true );
+        bool bSaveCC = IsCursorAtCenter();
+        bool bSaveCT = IsCursorAtTop();
+        SetCursorAtTop( true );
 
         // For scrolling the FrameSet, the corresponding shell needs to have the focus.
         bool bHasShFocus = m_pWrtShell->HasShFcs();
@@ -2015,13 +2015,13 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                 if( FLYCNTTYPE_FRM == eFlyType )
                 {
                     // TextFrames: set Cursor in the frame
-                    m_pWrtShell->UnSelectFrm();
-                    m_pWrtShell->LeaveSelFrmMode();
+                    m_pWrtShell->UnSelectFrame();
+                    m_pWrtShell->LeaveSelFrameMode();
                 }
                 else
                 {
-                    m_pWrtShell->HideCrsr();
-                    m_pWrtShell->EnterSelFrmMode();
+                    m_pWrtShell->HideCursor();
+                    m_pWrtShell->EnterSelFrameMode();
                 }
             }
         }
@@ -2035,7 +2035,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
             m_bMakeSelectionVisible = true;
 
         // reset ViewStatus
-        SetCrsrAtTop( bSaveCT, bSaveCC );
+        SetCursorAtTop( bSaveCT, bSaveCC );
 
         if( !bHasShFocus )
             m_pWrtShell->ShLooseFcs();
@@ -2200,7 +2200,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                         ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                         uno::Reference<text::XTextRange> const xInsertPosition(
                             SwXTextRange::CreateXTextRange(*pDoc,
-                                *m_pWrtShell->GetCrsr()->GetPoint(), nullptr));
+                                *m_pWrtShell->GetCursor()->GetPoint(), nullptr));
                         nErrno = pDocSh->ImportFrom(*pMedium, xInsertPosition)
                                     ? 0 : ERR_SWG_READ_ERROR;
                     }

@@ -527,7 +527,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 if(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()
                    && (FLY_AT_PARA == pFormat->GetAnchor().GetAnchorId()))
                 {
-                    pFormat->MakeFrms();
+                    pFormat->MakeFrames();
                 }
             }
         }

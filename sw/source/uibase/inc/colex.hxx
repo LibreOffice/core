@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwColumnOnlyExample : public vcl::Window
 private:
     Size        m_aWinSize;
 
-    Size        m_aFrmSize;
+    Size        m_aFrameSize;
     SwFormatCol    m_aCols;
 
 protected:

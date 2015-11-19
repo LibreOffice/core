@@ -151,7 +151,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, rSh.GetRowsToRepeat() ) );
     rSet.Put( pFormat->GetShadow() );
     rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, rSh.GetBoxAlign()));
-    rSet.Put( pFormat->GetFrmDir() );
+    rSet.Put( pFormat->GetFrameDir() );
 
     SvxULSpaceItem aULSpace( pFormat->GetULSpace() );
     rSet.Put( aULSpace );
@@ -182,8 +182,8 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
 
     // Table variant: If multiple table cells are selected.
-    rSh.GetCrsr();                  //Thus GetCrsrCnt() returns the right thing
-    aBoxInfo.SetTable          ((rSh.IsTableMode() && rSh.GetCrsrCnt() > 1) ||
+    rSh.GetCursor();                  //Thus GetCursorCnt() returns the right thing
+    aBoxInfo.SetTable          ((rSh.IsTableMode() && rSh.GetCursorCnt() > 1) ||
                                     !bTableSel);
     // Always show distance field.
     aBoxInfo.SetDist           (true);
@@ -368,7 +368,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         }
         else
         {
-            SwFormatFrmSize aSz( ATT_VAR_SIZE, nWidth );
+            SwFormatFrameSize aSz( ATT_VAR_SIZE, nWidth );
             if(pRep->GetWidthPercent())
             {
                 aSz.SetWidthPercent( (sal_uInt8)pRep->GetWidthPercent() );
@@ -451,7 +451,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();
 
-    // At first the slots which doesn't need a FrmMgr.
+    // At first the slots which doesn't need a FrameMgr.
     bool bMore = false;
     const SfxPoolItem* pItem = nullptr;
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -689,7 +689,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             break;
         case FN_TABLE_OPTIMAL_HEIGHT:
         {
-            const SwFormatFrmSize aSz;
+            const SwFormatFrameSize aSz;
             rSh.SetRowHeight( aSz );
             bCallDone = true;
             break;
@@ -1240,7 +1240,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 break;
 
             case FN_INSERT_TABLE:
-                if ( rSh.CrsrInsideInputField() )
+                if ( rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem( nSlot );
                 }
@@ -1249,7 +1249,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_OPTIMAL_HEIGHT:
             {
                 // Disable if auto height already is enabled.
-                SwFormatFrmSize *pSz;
+                SwFormatFrameSize *pSz;
                 rSh.GetRowHeight( pSz );
                 if ( pSz )
                 {
@@ -1381,7 +1381,7 @@ SwTableShell::SwTableShell(SwView &_rView) :
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Table));
 }
 
-void SwTableShell::GetFrmBorderState(SfxItemSet &rSet)
+void SwTableShell::GetFrameBorderState(SfxItemSet &rSet)
 {
     SfxItemSet aCoreSet( GetPool(),
                          RES_BOX, RES_BOX,
@@ -1444,7 +1444,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();
 
-    // At first the slots, which doesn't need a FrmMgr.
+    // At first the slots, which doesn't need a FrameMgr.
     const SfxPoolItem* pItem = nullptr;
     const sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)

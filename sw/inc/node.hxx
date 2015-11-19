@@ -32,11 +32,11 @@
 #include <memory>
 #include <vector>
 
-class SwContentFrm;
+class SwContentFrame;
 class SwContentNode;
 class SwDoc;
 class SwEndNode;
-class SwFrm;
+class SwFrame;
 class SwFrameFormat;
 class SwGrfNode;
 class SwNoTextNode;
@@ -48,8 +48,8 @@ class SwSectionFormat;
 class SwTOXBase;
 class SwSectionNode;
 class SwStartNode;
-class SwTabFrm;
-class SwRootFrm;
+class SwTabFrame;
+class SwRootFrame;
 class SwTable;
 class SwTableNode;
 class SwTableBox;
@@ -380,9 +380,9 @@ protected:
 
 public:
 
-    /** MakeFrm will be called for a certain layout
-       pSib is another SwFrm of the same layout (e.g. the SwRootFrm itself, a sibling, the parent) */
-    virtual SwContentFrm *MakeFrm( SwFrm* pSib ) = 0;
+    /** MakeFrame will be called for a certain layout
+       pSib is another SwFrame of the same layout (e.g. the SwRootFrame itself, a sibling, the parent) */
+    virtual SwContentFrame *MakeFrame( SwFrame* pSib ) = 0;
 
     virtual SwContentNode *SplitContentNode(const SwPosition & ) = 0;
 
@@ -399,30 +399,30 @@ public:
     bool GoNext(SwIndex *, sal_uInt16 nMode ) const;
     bool GoPrevious(SwIndex *, sal_uInt16 nMode ) const;
 
-    /// Replacement for good old GetFrm(..):
-    SwContentFrm *getLayoutFrm( const SwRootFrm*,
+    /// Replacement for good old GetFrame(..):
+    SwContentFrame *getLayoutFrame( const SwRootFrame*,
                         const Point* pDocPos = nullptr,
                         const SwPosition *pPos = nullptr,
-                        const bool bCalcFrm = true ) const;
+                        const bool bCalcFrame = true ) const;
     /** @return the real size of the frame or an empty rectangle if
        no layout exists. Needed for export filters. */
     SwRect FindLayoutRect( const bool bPrtArea = false,
                             const Point* pPoint = nullptr,
-                            const bool bCalcFrm = false  ) const;
-    SwRect FindPageFrmRect( const bool bPrtArea = false,
+                            const bool bCalcFrame = false  ) const;
+    SwRect FindPageFrameRect( const bool bPrtArea = false,
                             const Point* pPoint = nullptr,
-                            const bool bCalcFrm = false  ) const;
+                            const bool bCalcFrame = false  ) const;
 
     /** Method creates all views of document for given node. The content
        frames that are created are put in the respective layout. */
-    void MakeFrms( SwContentNode& rNode );
+    void MakeFrames( SwContentNode& rNode );
 
     /** Method deletes all views of document for the node. The content-
         frames are removed from the respective layout.
 
         Add an input param to identify if acc table should be disposed
     */
-    void DelFrms( bool bIsAccTableDispose = true );
+    void DelFrames( bool bIsAccTableDispose = true );
 
     /** @return count of elements of node content. Default is 1.
        There are differences between text node and formula node. */
@@ -502,18 +502,18 @@ public:
 
     const SwTable& GetTable() const { return *m_pTable; }
     SwTable& GetTable() { return *m_pTable; }
-    SwTabFrm *MakeFrm( SwFrm* );
+    SwTabFrame *MakeFrame( SwFrame* );
 
-    /// Creates the frms for the table node (i.e. the TabFrms).
-    void MakeFrms( SwNodeIndex* pIdxBehind );
+    /// Creates the frms for the table node (i.e. the TabFrames).
+    void MakeFrames( SwNodeIndex* pIdxBehind );
 
     /** Method deletes all views of document for the node.
        The content frames are removed from the respective layout. */
-    void DelFrms();
+    void DelFrames();
 
     /** Method creates all views of the document for the previous node.
        The content frames that are created are put into the respective layout. */
-    void MakeFrms( const SwNodeIndex & rIdx );
+    void MakeFrames( const SwNodeIndex & rIdx );
 
     SwTableNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
     void SetNewTable( SwTable* , bool bNewFrames=true );
@@ -547,21 +547,21 @@ public:
     const SwSection& GetSection() const { return *m_pSection; }
           SwSection& GetSection()       { return *m_pSection; }
 
-    SwFrm *MakeFrm( SwFrm* );
+    SwFrame *MakeFrame( SwFrame* );
 
-    /** Creates the frms for the SectionNode (i.e. the SectionFrms).
+    /** Creates the frms for the SectionNode (i.e. the SectionFrames).
        On default the frames are created until the end of the range.
-       When another NodeIndex pEnd is passed a MakeFrms is called up to it.
+       When another NodeIndex pEnd is passed a MakeFrames is called up to it.
        Used by TableToText. */
-    void MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEnd = nullptr );
+    void MakeFrames( SwNodeIndex* pIdxBehind, SwNodeIndex* pEnd = nullptr );
 
     /** Method deletes all views of document for the node. The
      content frames are removed from the respective layout. */
-    void DelFrms();
+    void DelFrames();
 
     /** Method creates all views of document for the previous node.
        The content frames created are put into the respective layout. */
-    void MakeFrms( const SwNodeIndex & rIdx );
+    void MakeFrames( const SwNodeIndex & rIdx );
 
     SwSectionNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 

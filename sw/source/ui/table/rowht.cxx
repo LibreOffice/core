@@ -38,13 +38,13 @@
 void SwTableHeightDlg::Apply()
 {
     SwTwips nHeight = static_cast< SwTwips >(m_pHeightEdit->Denormalize(m_pHeightEdit->GetValue(FUNIT_TWIP)));
-    SwFormatFrmSize aSz(ATT_FIX_SIZE, 0, nHeight);
+    SwFormatFrameSize aSz(ATT_FIX_SIZE, 0, nHeight);
 
-    SwFrmSize eFrmSize = m_pAutoHeightCB->IsChecked() ?
+    SwFrameSize eFrameSize = m_pAutoHeightCB->IsChecked() ?
         ATT_MIN_SIZE : ATT_FIX_SIZE;
-    if(eFrmSize != aSz.GetHeightSizeType())
+    if(eFrameSize != aSz.GetHeightSizeType())
     {
-        aSz.SetHeightSizeType(eFrmSize);
+        aSz.SetHeightSizeType(eFrameSize);
     }
     rSh.SetRowHeight( aSz );
 }
@@ -63,7 +63,7 @@ SwTableHeightDlg::SwTableHeightDlg(vcl::Window *pParent, SwWrtShell &rS)
     m_pHeightEdit->SetMin(MINLAY, FUNIT_TWIP);
     if(!m_pHeightEdit->GetMin())
         m_pHeightEdit->SetMin(1);
-    SwFormatFrmSize *pSz;
+    SwFormatFrameSize *pSz;
     rSh.GetRowHeight( pSz );
     if ( pSz )
     {

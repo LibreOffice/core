@@ -24,8 +24,8 @@
 #include <frame.hxx>
 
 class SdrObject;
-class SwFrm;
-class SwFlyFrm;
+class SwFrame;
+class SwFlyFrame;
 class SwContact;
 class SwFrameFormat;
 class SwRect;
@@ -49,7 +49,7 @@ namespace objectpositioning
         // #i26791# - anchored object the object belongs to;
         SwAnchoredObject* mpAnchoredObj;
         // frame the object is anchored at
-        SwFrm* mpAnchorFrm;
+        SwFrame* mpAnchorFrame;
         // contact object
         SwContact* mpContact;
         // frame format
@@ -62,7 +62,7 @@ namespace objectpositioning
 
         /** determine information about object
 
-            member <mbIsObjFly>, <mpAnchoredObj>, <mpAnchorFrm>, <mpContact>
+            member <mbIsObjFly>, <mpAnchoredObj>, <mpAnchorFrame>, <mpContact>
             and <mpFrameFormat> are set
         */
         void _GetInfoAboutObj();
@@ -72,11 +72,11 @@ namespace objectpositioning
         SwTwips _ImplAdjustVertRelPos( const SwTwips nTopOfAnch,
                                        const bool bVert,
                                        const bool bVertL2R,
-                                       const SwFrm&  rPageAlignLayFrm,
+                                       const SwFrame&  rPageAlignLayFrame,
                                        const SwTwips nProposedRelPosY,
                                        const bool bFollowTextFlow,
                                        const bool bCheckBottom = true ) const;
-        SwTwips _ImplAdjustHoriRelPos( const SwFrm&  _rPageAlignLayFrm,
+        SwTwips _ImplAdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
                                        const SwTwips _nProposedRelPosX ) const;
 
     protected:
@@ -96,9 +96,9 @@ namespace objectpositioning
         {
             return *mpAnchoredObj;
         }
-        inline SwFrm& GetAnchorFrm() const
+        inline SwFrame& GetAnchorFrame() const
         {
-            return *mpAnchorFrm;
+            return *mpAnchorFrame;
         }
         inline SwContact& GetContact() const
         {
@@ -116,7 +116,7 @@ namespace objectpositioning
 
         // virtual methods providing data for to character anchored objects.
         virtual bool IsAnchoredToChar() const;
-        virtual const SwFrm* ToCharOrientFrm() const;
+        virtual const SwFrame* ToCharOrientFrame() const;
         virtual const SwRect* ToCharRect() const;
         // #i22341#
         virtual SwTwips ToCharTopOfLine() const;
@@ -126,25 +126,25 @@ namespace objectpositioning
 
             #i11860#
         */
-        static SwTwips _GetTopForObjPos( const SwFrm& _rFrm,
+        static SwTwips _GetTopForObjPos( const SwFrame& _rFrame,
                                   const SwRectFn& _fnRect,
                                   const bool _bVert );
 
-        void _GetVertAlignmentValues( const SwFrm& _rVertOrientFrm,
-                                      const SwFrm& _rPageAlignLayFrm,
+        void _GetVertAlignmentValues( const SwFrame& _rVertOrientFrame,
+                                      const SwFrame& _rPageAlignLayFrame,
                                       const sal_Int16 _eRelOrient,
                                       SwTwips&      _orAlignAreaHeight,
                                       SwTwips&      _orAlignAreaOffset ) const;
 
-        // #i26791# - add output parameter <_roVertOffsetToFrmAnchorPos>
-        SwTwips _GetVertRelPos( const SwFrm& _rVertOrientFrm,
-                                const SwFrm& _rPageAlignLayFrm,
+        // #i26791# - add output parameter <_roVertOffsetToFrameAnchorPos>
+        SwTwips _GetVertRelPos( const SwFrame& _rVertOrientFrame,
+                                const SwFrame& _rPageAlignLayFrame,
                                 const sal_Int16 _eVertOrient,
                                 const sal_Int16 _eRelOrient,
                                 const SwTwips          _nVertPos,
                                 const SvxLRSpaceItem& _rLRSpacing,
                                 const SvxULSpaceItem& _rULSpacing,
-                                SwTwips& _roVertOffsetToFrmAnchorPos ) const;
+                                SwTwips& _roVertOffsetToFrameAnchorPos ) const;
 
         /** adjust calculated vertical in order to keep object inside
             'page' alignment layout frame.
@@ -168,7 +168,7 @@ namespace objectpositioning
             input parameter - boolean, indicating, if object is in mongolian
             layout (vertical left-to-right layout).
 
-            @param rPageAlignLayFrm
+            @param rPageAlignLayFrame
             input parameter - layout frame, which determines the 'page area'
             the object has to be vertical positioned in.
 
@@ -188,14 +188,14 @@ namespace objectpositioning
         inline SwTwips _AdjustVertRelPos( const SwTwips nTopOfAnch,
                                           const bool bVert,
                                           const bool bVertL2R,
-                                          const SwFrm& rPageAlignLayFrm,
+                                          const SwFrame& rPageAlignLayFrame,
                                           const SwTwips nProposedRelPosY,
                                           const bool bFollowTextFlow,
                                           const bool bCheckBottom = true ) const
         {
             return !mbDoNotCaptureAnchoredObj
                    ? _ImplAdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
-                                            rPageAlignLayFrm,
+                                            rPageAlignLayFrame,
                                             nProposedRelPosY,
                                             bFollowTextFlow,
                                             bCheckBottom )
@@ -205,9 +205,9 @@ namespace objectpositioning
         /** calculate relative horizontal position
 
             #i26791# - add output parameter
-            <_roHoriOffsetToFrmAnchorPos>
+            <_roHoriOffsetToFrameAnchorPos>
 
-            @param _rHoriOrientFrm
+            @param _rHoriOrientFrame
             input parameter - frame the horizontal position of the object
             is oriented at.
 
@@ -232,20 +232,20 @@ namespace objectpositioning
             @param _nRelPosY
             input parameter - relative vertical position
 
-            @param _roHoriOffsetToFrmAnchorPos
+            @param _roHoriOffsetToFrameAnchorPos
             output parameter - 'horizontal' offset to frame anchor position
             according to the alignment
 
             @return relative horizontal position in SwTwips
         */
-        SwTwips _CalcRelPosX( const SwFrm& _rHoriOrientFrm,
+        SwTwips _CalcRelPosX( const SwFrame& _rHoriOrientFrame,
                               const SwEnvironmentOfAnchoredObject& _rEnvOfObj,
                               const SwFormatHoriOrient& _rHoriOrient,
                               const SvxLRSpaceItem& _rLRSpacing,
                               const SvxULSpaceItem& _rULSpacing,
                               const bool _bObjWrapThrough,
                               const SwTwips _nRelPosY,
-                              SwTwips& _roHoriOffsetToFrmAnchorPos
+                              SwTwips& _roHoriOffsetToFrameAnchorPos
                             ) const;
 
         /** adjust calculated horizontal in order to keep object inside
@@ -255,7 +255,7 @@ namespace objectpositioning
             to private method <_ImplAdjustHoriRelPos>, which is only
             called, if <mbDoNotCaptureAnchoredObj> not set.
 
-            @param _rPageAlignLayFrm
+            @param _rPageAlignLayFrame
             input parameter - layout frame, which determines the 'page area'
             the object has to be horizontal positioned in.
 
@@ -265,11 +265,11 @@ namespace objectpositioning
 
             @return adjusted relative horizontal position in SwTwips.
         */
-        inline SwTwips _AdjustHoriRelPos( const SwFrm&  _rPageAlignLayFrm,
+        inline SwTwips _AdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
                                           const SwTwips _nProposedRelPosX ) const
         {
             return !mbDoNotCaptureAnchoredObj
-                   ? _ImplAdjustHoriRelPos( _rPageAlignLayFrm, _nProposedRelPosX )
+                   ? _ImplAdjustHoriRelPos( _rPageAlignLayFrame, _nProposedRelPosX )
                    : _nProposedRelPosX;
         }
 
@@ -294,11 +294,11 @@ namespace objectpositioning
 
         /** determine alignment values for horizontal position of object
 
-            @param _rHoriOrientFrm
+            @param _rHoriOrientFrame
             input parameter - frame the horizontal position of the object
             is oriented at.
 
-            @param _rPageAlignLayFrm
+            @param _rPageAlignLayFrame
             input parameter - layout frame, which determines the 'page area'
             the object has to be horizontal positioned in.
 
@@ -313,7 +313,7 @@ namespace objectpositioning
             @param _bObjWrapThrough
             input parameter - boolean indicating, if object has wrap mode
             'wrap through'.
-            important note: value is only relevant, if _rHoriOrientFrm is
+            important note: value is only relevant, if _rHoriOrientFrame is
                             a text frame.
 
             @param _orAlignAreaWidth
@@ -329,8 +329,8 @@ namespace objectpositioning
             output parameter - boolean indicating, that object is aligned
             to 'page area'.
         */
-        void _GetHoriAlignmentValues( const SwFrm&  _rHoriOrientFrm,
-                                      const SwFrm&  _rPageAlignLayFrm,
+        void _GetHoriAlignmentValues( const SwFrame&  _rHoriOrientFrame,
+                                      const SwFrame&  _rPageAlignLayFrame,
                                       const sal_Int16 _eRelOrient,
                                       const bool    _bObjWrapThrough,
                                       SwTwips&      _orAlignAreaWidth,
@@ -340,7 +340,7 @@ namespace objectpositioning
         /** adjust calculated horizontal position in order to draw object
             aside other objects with same positioning
 
-            @param _rHoriOrientFrm
+            @param _rHoriOrientFrame
             input parameter - frame the horizontal position of the object
             is oriented at.
 
@@ -368,7 +368,7 @@ namespace objectpositioning
 
             @return adjusted relative horizontal position in SwTwips
         */
-        SwTwips _AdjustHoriRelPosForDrawAside( const SwFrm&  _rHoriOrientFrm,
+        SwTwips _AdjustHoriRelPosForDrawAside( const SwFrame&  _rHoriOrientFrame,
                                                const SwTwips _nProposedRelPosX,
                                                const SwTwips _nRelPosY,
                                                const sal_Int16 _eHoriOrient,
@@ -406,9 +406,9 @@ namespace objectpositioning
             @return boolean indicating, if object has to be drawn aside
             given fly frame.
         */
-        bool _DrawAsideFly( const SwFlyFrm* _pFly,
+        bool _DrawAsideFly( const SwFlyFrame* _pFly,
                             const SwRect&   _rObjRect,
-                            const SwFrm*    _pObjContext,
+                            const SwFrame*    _pObjContext,
                             const sal_uLong     _nObjIndex,
                             const bool      _bEvenPage,
                             const sal_Int16 _eHoriOrient,

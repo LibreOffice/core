@@ -87,12 +87,12 @@ namespace sw
                 utl::MediaDescriptor::PROP_OUTPUTSTREAM(),
                 uno::Reference< io::XOutputStream >() );
 
-        // Actually get the SwRootFrm to call dumpAsXml
+        // Actually get the SwRootFrame to call dumpAsXml
         uno::Reference< lang::XUnoTunnel > xDocTunnel( m_xSrcDoc, uno::UNO_QUERY );
         SwXTextDocument* pXDoc = UnoTunnelGetImplementation< SwXTextDocument >( xDocTunnel );
         if ( pXDoc )
         {
-            SwRootFrm* pLayout = pXDoc->GetDocShell()->GetWrtShell()->GetLayout();
+            SwRootFrame* pLayout = pXDoc->GetDocShell()->GetWrtShell()->GetLayout();
 
             // Get sure that the whole layout is processed: set a visible area
             // even though there isn't any need of it

@@ -78,7 +78,7 @@ class SwTextFormatter : public SwTextPainter
 
         Determines the next object, that reaches into the rest of the line and
         constructs the appropriate FlyPortion.
-        SwTextFly::GetFrm(const SwRect&, bool) will be needed for this.
+        SwTextFly::GetFrame(const SwRect&, bool) will be needed for this.
 
         The right edge can be shortened by flys
      */
@@ -151,12 +151,12 @@ public:
     // Amongst others for DropCaps
     bool CalcOnceMore();
 
-    void CtorInitTextFormatter( SwTextFrm *pFrm, SwTextFormatInfo *pInf );
-    SwTextFormatter(SwTextFrm *pTextFrm, SwTextFormatInfo *pTextFormatInf)
-        : SwTextPainter(pTextFrm->GetTextNode())
+    void CtorInitTextFormatter( SwTextFrame *pFrame, SwTextFormatInfo *pInf );
+    SwTextFormatter(SwTextFrame *pTextFrame, SwTextFormatInfo *pTextFormatInf)
+        : SwTextPainter(pTextFrame->GetTextNode())
         , bUnclipped(false)
     {
-        CtorInitTextFormatter( pTextFrm, pTextFormatInf );
+        CtorInitTextFormatter( pTextFrame, pTextFormatInf );
     }
     virtual ~SwTextFormatter();
 
@@ -188,7 +188,7 @@ public:
     void Insert( SwLineLayout *pLine );
 
     // The remaining height to the page border
-    sal_uInt16 GetFrmRstHeight() const;
+    sal_uInt16 GetFrameRstHeight() const;
 
     // How wide would you be without any bounds (Flys etc.)?
     SwTwips _CalcFitToContent( );

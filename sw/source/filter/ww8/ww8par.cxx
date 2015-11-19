@@ -302,9 +302,9 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     // target frame
     if( ::get_flag( nFlags, WW8_HLINK_FRAME ) )
     {
-        OUString sFrmName;
-        lclAppendString32(sFrmName, rStrm, true);
-        hlStr.tarFrm = sFrmName;
+        OUString sFrameName;
+        lclAppendString32(sFrameName, rStrm, true);
+        hlStr.tarFrame = sFrameName;
     }
 
         // UNC path
@@ -1174,8 +1174,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             {
                 pInfo->SetShapeId( rObjData.nShapeId );
                 pInfo->SetHlink( hlStr.hLinkAddr );
-                if (!hlStr.tarFrm.isEmpty())
-                    pInfo->SetTarFrm( hlStr.tarFrm );
+                if (!hlStr.tarFrame.isEmpty())
+                    pInfo->SetTarFrame( hlStr.tarFrame );
                 OUString aNameStr = GetPropertyString( DFF_Prop_wzName, rSt );
                 if (!aNameStr.isEmpty())
                     pInfo->SetName( aNameStr );
@@ -1493,18 +1493,18 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwPaM aRegion(rTmpPos);
                 if (rEntry.MakeRegion(pDoc, aRegion, false))
                 {
-                    SwFrameFormat *pFrm;
+                    SwFrameFormat *pFrame;
                     // If we have just one single inline graphic then
                     // don't insert a field for the single frame, set
                     // the frames hyperlink field attribute directly.
-                    if (nullptr != (pFrm = SwWW8ImplReader::ContainsSingleInlineGraphic(aRegion)))
+                    if (nullptr != (pFrame = SwWW8ImplReader::ContainsSingleInlineGraphic(aRegion)))
                     {
                         const SwFormatINetFormat *pAttr = static_cast<const SwFormatINetFormat *>(
                             rEntry.pAttr);
                         SwFormatURL aURL;
                         aURL.SetURL(pAttr->GetValue(), false);
                         aURL.SetTargetFrameName(pAttr->GetTargetFrame());
-                        pFrm->SetFormatAttr(aURL);
+                        pFrame->SetFormatAttr(aURL);
                     }
                     else
                     {
@@ -2117,14 +2117,14 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->m_bFirstPara = mbFirstPara;
 
     // Close all attributes as attributes could be created that extend the Fly
-    pRdr->DeleteCtrlStk();
+    pRdr->DeleteCtrlStack();
     pRdr->m_pCtrlStck = mpOldStck;
 
     pRdr->m_pRedlineStack->closeall(*pRdr->m_pPaM->GetPoint());
     delete pRdr->m_pRedlineStack;
     pRdr->m_pRedlineStack = mpOldRedlines;
 
-    pRdr->DeleteAnchorStk();
+    pRdr->DeleteAnchorStack();
     pRdr->m_pAnchorStck = mpOldAnchorStck;
 
     *pRdr->m_pPaM->GetPoint() = maTmpPos;
@@ -2246,22 +2246,22 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
     SwFormatAnchor aAnch( pFrame->GetAnchor() );
     aAnch.SetType( FLY_AT_PARA );
     pFrame->SetFormatAttr( aAnch );
-    SwFormatFrmSize aSz(ATT_MIN_SIZE, nPageWidth, MINLAY);
-    SwFrmSize eFrmSize = ATT_MIN_SIZE;
-    if( eFrmSize != aSz.GetWidthSizeType() )
-        aSz.SetWidthSizeType( eFrmSize );
+    SwFormatFrameSize aSz(ATT_MIN_SIZE, nPageWidth, MINLAY);
+    SwFrameSize eFrameSize = ATT_MIN_SIZE;
+    if( eFrameSize != aSz.GetWidthSizeType() )
+        aSz.SetWidthSizeType( eFrameSize );
     pFrame->SetFormatAttr(aSz);
     pFrame->SetFormatAttr(SwFormatSurround(SURROUND_THROUGHT));
     pFrame->SetFormatAttr(SwFormatHoriOrient(0, text::HoriOrientation::LEFT)); //iFOO
 
     // #i43427# - send frame for header/footer into background.
     pFrame->SetFormatAttr( SvxOpaqueItem( RES_OPAQUE, false ) );
-    SdrObject* pFrmObj = CreateContactObject( pFrame );
-    OSL_ENSURE( pFrmObj,
+    SdrObject* pFrameObj = CreateContactObject( pFrame );
+    OSL_ENSURE( pFrameObj,
             "<SwWW8ImplReader::Read_HdFtTextAsHackedFrame(..)> - missing SdrObject instance" );
-    if ( pFrmObj )
+    if ( pFrameObj )
     {
-        pFrmObj->SetOrdNum( 0L );
+        pFrameObj->SetOrdNum( 0L );
     }
     MoveInsideFly(pFrame);
 
@@ -4275,10 +4275,10 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     m_pStrm->SetEndian( SvStreamEndian::LITTLE );
     m_aApos.push_back(false);
 
-    mpCrsr = m_rDoc.CreateUnoCrsr(rPos);
+    mpCursor = m_rDoc.CreateUnoCursor(rPos);
 }
 
-void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
+void SwWW8ImplReader::DeleteStack(SwFltControlStack* pStck)
 {
     if( pStck )
     {
@@ -4934,7 +4934,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
             pDocShell->SetReadOnlyUI();
     }
 
-    m_pPaM = mpCrsr.get();
+    m_pPaM = mpCursor.get();
 
     m_pCtrlStck = new SwWW8FltControlStack( &m_rDoc, m_nFieldFlags, *this );
 
@@ -5258,7 +5258,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
             eMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
     }
 
-    m_aInsertedTables.DelAndMakeTableFrms();
+    m_aInsertedTables.DelAndMakeTableFrames();
     m_aSectionManager.InsertSegments();
 
     m_vColl.clear();
@@ -5280,11 +5280,11 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     m_pDataStream = nullptr;
     m_pTableStream = nullptr;
 
-    DeleteCtrlStk();
+    DeleteCtrlStack();
     m_pRedlineStack->closeall(*m_pPaM->GetPoint());
     delete m_pRedlineStack;
-    DeleteAnchorStk();
-    DeleteRefStks();
+    DeleteAnchorStack();
+    DeleteRefStacks();
 
     // For i120928,achieve the graphics from the special bookmark with is for graphic bullet
     {
@@ -5370,7 +5370,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     SAL_WARN_IF(m_pTableEndPaM, "sw.ww8", "document ended without table ending");
     m_pTableEndPaM.reset();  //ensure this is deleted before pPaM
-    mpCrsr.reset();
+    mpCursor.reset();
     m_pPaM = nullptr;
     m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
 

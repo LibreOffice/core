@@ -63,7 +63,7 @@ class SwCharURLPage : public SfxTabPage
     VclPtr<FixedText>          m_pTextFT;
     VclPtr<Edit>               m_pTextED;
     VclPtr<Edit>               m_pNameED;
-    VclPtr<ComboBox>           m_pTargetFrmLB;
+    VclPtr<ComboBox>           m_pTargetFrameLB;
     VclPtr<PushButton>         m_pURLPB;
     VclPtr<PushButton>         m_pEventPB;
     VclPtr<ListBox>            m_pVisitedLB;

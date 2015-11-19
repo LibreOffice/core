@@ -525,8 +525,8 @@ public:
 
     void SetHlink( const OUString& rHlink ) { maHlink = rHlink; }
     const OUString& GetHlink() const { return maHlink; }
-    void SetTarFrm( const OUString& rTarFrm ) { maTarFrm = rTarFrm; }
-    const OUString& GetTarFrm() const { return maTarFrm; }
+    void SetTarFrame( const OUString& rTarFrame ) { maTarFrame = rTarFrame; }
+    const OUString& GetTarFrame() const { return maTarFrame; }
     void SetShapeId( const sal_Int32& rShapeId ) { mnShapeId = rShapeId; }
     const sal_Int32& GetShapeId() const { return mnShapeId; }
     void SetName( const OUString& rName ) { maNameStr = rName; }
@@ -536,13 +536,13 @@ private:
     sal_Int32 mnShapeId;
     OUString maHlink;
     OUString maNameStr;
-    OUString maTarFrm;
+    OUString maTarFrame;
 };
 
 struct HyperLinksTable
 {
     OUString hLinkAddr;
-    OUString tarFrm;
+    OUString tarFrame;
 };
 
 namespace sw
@@ -1091,7 +1091,7 @@ private:
 
 // general stuff
     SwDoc& m_rDoc;
-    std::shared_ptr<SwUnoCrsr> mpCrsr;
+    std::shared_ptr<SwUnoCursor> mpCursor;
     SwPaM* m_pPaM;
 
     SwWW8FltControlStack* m_pCtrlStck;    // stack for the attributes
@@ -1395,16 +1395,16 @@ private:
     void CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
                            SwPageDesc* pNewPageDesc, sal_uInt8 nCode );
 
-    void DeleteStk(SwFltControlStack* prStck);
-    void DeleteCtrlStk()    { DeleteStk( m_pCtrlStck  ); m_pCtrlStck   = nullptr; }
-    void DeleteRefStks()
+    void DeleteStack(SwFltControlStack* prStck);
+    void DeleteCtrlStack()    { DeleteStack( m_pCtrlStck  ); m_pCtrlStck   = nullptr; }
+    void DeleteRefStacks()
     {
-        DeleteStk( m_pReffedStck );
+        DeleteStack( m_pReffedStck );
         m_pReffedStck = nullptr;
-        DeleteStk( m_pReffingStck );
+        DeleteStack( m_pReffingStck );
         m_pReffingStck = nullptr;
     }
-    void DeleteAnchorStk()  { DeleteStk( m_pAnchorStck ); m_pAnchorStck = nullptr; }
+    void DeleteAnchorStack()  { DeleteStack( m_pAnchorStck ); m_pAnchorStck = nullptr; }
     void emulateMSWordAddTextToParagraph(const OUString& rAddString);
     void simpleAddTextToParagraph(const OUString& rAddString);
     bool HandlePageBreakChar();

@@ -326,9 +326,9 @@ bool SwOLENode::SavePersistentData()
               the chart again. Then chart core function will call the class
               ExplicitCategoryProvider to create data source. In this step, when SW data
               source provider create the data source, an UnoActionRemoveContext
-              will mess with the layout and create a new SwFlyFrm.
+              will mess with the layout and create a new SwFlyFrame.
               But later in SwUndoFlyBase::DelFly, it will clear anchor related attributes
-              of SwFlyFrm. Then finally null pointer occur.
+              of SwFlyFrame. Then finally null pointer occur.
               Resolution:
               In pCnt->RemoveEmbeddedObject in SaveSection process of table chart,
               only remove the object from the object container, without removing it's
@@ -780,10 +780,10 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         {
             // We could not load this part (probably broken)
             Rectangle aArea;
-            SwFrm *pFrm = pOLENd->getLayoutFrm(nullptr);
-            if ( pFrm )
+            SwFrame *pFrame = pOLENd->getLayoutFrame(nullptr);
+            if ( pFrame )
             {
-                Size aSz( pFrm->Frm().SSize() );
+                Size aSz( pFrame->Frame().SSize() );
                 const MapMode aSrc ( MAP_TWIP );
                 const MapMode aDest( MAP_100TH_MM );
                 aSz = OutputDevice::LogicToLogic( aSz, aSrc, aDest );

@@ -86,7 +86,7 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
 
-    SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pTmpRoot &&
         !SfxProgress::GetActiveProgress( m_rDoc.GetDocShell() ) )
     {
@@ -110,8 +110,8 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
             if (bIsOnlineSpell && bIsAutoGrammar)
                 StartGrammarChecking( m_rDoc );
         }
-        std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
-        std::set<SwRootFrm*>::iterator pLayIter = aAllLayouts.begin();
+        std::set<SwRootFrame*> aAllLayouts = m_rDoc.GetAllLayouts();
+        std::set<SwRootFrame*>::iterator pLayIter = aAllLayouts.begin();
         for ( ;pLayIter != aAllLayouts.end();++pLayIter )
         {
             if ((*pLayIter)->IsIdleFormat())

@@ -30,40 +30,40 @@ using namespace std;
 
 namespace
 {
-    struct CrsrStateHelper
+    struct CursorStateHelper
     {
-        explicit CrsrStateHelper(SwCrsrShell& rShell)
+        explicit CursorStateHelper(SwCursorShell& rShell)
             : m_aLink(rShell)
-            , m_pCrsr(rShell.GetSwCrsr())
-            , m_aSaveState(*m_pCrsr)
+            , m_pCursor(rShell.GetSwCursor())
+            , m_aSaveState(*m_pCursor)
         { }
 
-        void SetCrsrToMark(::sw::mark::IMark const * const pMark)
+        void SetCursorToMark(::sw::mark::IMark const * const pMark)
         {
-            *(m_pCrsr->GetPoint()) = pMark->GetMarkStart();
+            *(m_pCursor->GetPoint()) = pMark->GetMarkStart();
             if(pMark->IsExpanded())
             {
-                m_pCrsr->SetMark();
-                *(m_pCrsr->GetMark()) = pMark->GetMarkEnd();
+                m_pCursor->SetMark();
+                *(m_pCursor->GetMark()) = pMark->GetMarkEnd();
             }
         }
 
         /// returns true if the Cursor had been rolled back
         bool RollbackIfIllegal()
         {
-            if(m_pCrsr->IsSelOvr(nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION
+            if(m_pCursor->IsSelOvr(nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION
                 | nsSwCursorSelOverFlags::SELOVER_TOGGLE))
             {
-                m_pCrsr->DeleteMark();
-                m_pCrsr->RestoreSavePos();
+                m_pCursor->DeleteMark();
+                m_pCursor->RestoreSavePos();
                 return true;
             }
             return false;
         }
 
         SwCallLink m_aLink;
-        SwCursor* m_pCrsr;
-        SwCrsrSaveState m_aSaveState;
+        SwCursor* m_pCursor;
+        SwCursorSaveState m_aSaveState;
     };
 
     static bool lcl_ReverseMarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
@@ -78,8 +78,8 @@ namespace
     }
 }
 
-// at CurCrsr.SPoint
-::sw::mark::IMark* SwCrsrShell::SetBookmark(
+// at CurrentCursor.SPoint
+::sw::mark::IMark* SwCursorShell::SetBookmark(
     const vcl::KeyCode& rCode,
     const OUString& rName,
     const OUString& rShortName,
@@ -87,7 +87,7 @@ namespace
 {
     StartAction();
     ::sw::mark::IMark* pMark = getIDocumentMarkAccess()->makeMark(
-        *GetCrsr(),
+        *GetCursor(),
         rName,
         eMark);
     ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
@@ -99,36 +99,36 @@ namespace
     EndAction();
     return pMark;
 }
-// set CurCrsr.SPoint
+// set CurrentCursor.SPoint
 
-bool SwCrsrShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart)
+bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart)
 {
-    // watch Crsr-Moves
-    CrsrStateHelper aCrsrSt(*this);
+    // watch Cursor-Moves
+    CursorStateHelper aCursorSt(*this);
     if ( bAtStart )
-        *(aCrsrSt.m_pCrsr)->GetPoint() = pMark->GetMarkStart();
+        *(aCursorSt.m_pCursor)->GetPoint() = pMark->GetMarkStart();
     else
-        *(aCrsrSt.m_pCrsr)->GetPoint() = pMark->GetMarkEnd();
+        *(aCursorSt.m_pCursor)->GetPoint() = pMark->GetMarkEnd();
 
-    if(aCrsrSt.RollbackIfIllegal()) return false;
+    if(aCursorSt.RollbackIfIllegal()) return false;
 
-    UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+    UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return true;
 }
 
-bool SwCrsrShell::GotoMark(const ::sw::mark::IMark* const pMark)
+bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark)
 {
-    // watch Crsr-Moves
-    CrsrStateHelper aCrsrSt(*this);
-    aCrsrSt.SetCrsrToMark(pMark);
+    // watch Cursor-Moves
+    CursorStateHelper aCursorSt(*this);
+    aCursorSt.SetCursorToMark(pMark);
 
-    if(aCrsrSt.RollbackIfIllegal()) return false;
+    if(aCursorSt.RollbackIfIllegal()) return false;
 
-    UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+    UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return true;
 }
 
-bool SwCrsrShell::GoNextBookmark()
+bool SwCursorShell::GoNextBookmark()
 {
     IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
     IDocumentMarkAccess::container_t vCandidates;
@@ -136,19 +136,19 @@ bool SwCrsrShell::GoNextBookmark()
         upper_bound( // finds the first that is starting after
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
-            *GetCrsr()->GetPoint(),
+            *GetCursor()->GetPoint(),
             sw::mark::CompareIMarkStartsAfter()),
         pMarkAccess->getBookmarksEnd(),
         back_inserter(vCandidates),
         &lcl_IsInvisibleBookmark);
 
-    // watch Crsr-Moves
-    CrsrStateHelper aCrsrSt(*this);
+    // watch Cursor-Moves
+    CursorStateHelper aCursorSt(*this);
     IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
     for(; ppMark!=vCandidates.end(); ++ppMark)
     {
-        aCrsrSt.SetCrsrToMark(ppMark->get());
-        if(!aCrsrSt.RollbackIfIllegal())
+        aCursorSt.SetCursorToMark(ppMark->get());
+        if(!aCursorSt.RollbackIfIllegal())
             break; // found legal move
     }
     if(ppMark==vCandidates.end())
@@ -157,11 +157,11 @@ bool SwCrsrShell::GoNextBookmark()
         return false;
     }
 
-    UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+    UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return true;
 }
 
-bool SwCrsrShell::GoPrevBookmark()
+bool SwCursorShell::GoPrevBookmark()
 {
     IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
     // candidates from which to choose the mark before
@@ -172,7 +172,7 @@ bool SwCrsrShell::GoPrevBookmark()
         upper_bound(
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
-            *GetCrsr()->GetPoint(),
+            *GetCursor()->GetPoint(),
             sw::mark::CompareIMarkStartsAfter()),
         back_inserter(vCandidates),
         &lcl_IsInvisibleBookmark);
@@ -181,19 +181,19 @@ bool SwCrsrShell::GoPrevBookmark()
         vCandidates.end(),
         &lcl_ReverseMarkOrderingByEnd);
 
-    // watch Crsr-Moves
-    CrsrStateHelper aCrsrSt(*this);
+    // watch Cursor-Moves
+    CursorStateHelper aCursorSt(*this);
     IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
     for(; ppMark!=vCandidates.end(); ++ppMark)
     {
-        // ignoring those not ending before the Crsr
+        // ignoring those not ending before the Cursor
         // (we were only able to eliminate those starting
-        // behind the Crsr by the upper_bound(..)
+        // behind the Cursor by the upper_bound(..)
         // above)
-        if(!(**ppMark).EndsBefore(*GetCrsr()->GetPoint()))
+        if(!(**ppMark).EndsBefore(*GetCursor()->GetPoint()))
             continue;
-        aCrsrSt.SetCrsrToMark(ppMark->get());
-        if(!aCrsrSt.RollbackIfIllegal())
+        aCursorSt.SetCursorToMark(ppMark->get());
+        if(!aCursorSt.RollbackIfIllegal())
             break; // found legal move
     }
     if(ppMark==vCandidates.end())
@@ -202,47 +202,47 @@ bool SwCrsrShell::GoPrevBookmark()
         return false;
     }
 
-    UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+    UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return true;
 }
 
-bool SwCrsrShell::IsFormProtected()
+bool SwCursorShell::IsFormProtected()
 {
     return getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM);
 }
 
-::sw::mark::IFieldmark* SwCrsrShell::GetCurrentFieldmark()
+::sw::mark::IFieldmark* SwCursorShell::GetCurrentFieldmark()
 {
     // TODO: Refactor
-    SwPosition pos(*GetCrsr()->GetPoint());
+    SwPosition pos(*GetCursor()->GetPoint());
     return getIDocumentMarkAccess()->getFieldmarkFor(pos);
 }
 
-::sw::mark::IFieldmark* SwCrsrShell::GetFieldmarkAfter()
+::sw::mark::IFieldmark* SwCursorShell::GetFieldmarkAfter()
 {
-    SwPosition pos(*GetCrsr()->GetPoint());
+    SwPosition pos(*GetCursor()->GetPoint());
     return getIDocumentMarkAccess()->getFieldmarkAfter(pos);
 }
 
-::sw::mark::IFieldmark* SwCrsrShell::GetFieldmarkBefore()
+::sw::mark::IFieldmark* SwCursorShell::GetFieldmarkBefore()
 {
-    SwPosition pos(*GetCrsr()->GetPoint());
+    SwPosition pos(*GetCursor()->GetPoint());
     return getIDocumentMarkAccess()->getFieldmarkBefore(pos);
 }
 
-bool SwCrsrShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
+bool SwCursorShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 {
     if(pMark==nullptr) return false;
 
-    // watch Crsr-Moves
-    CrsrStateHelper aCrsrSt(*this);
-    aCrsrSt.SetCrsrToMark(pMark);
-    ++aCrsrSt.m_pCrsr->GetPoint()->nContent;
-    --aCrsrSt.m_pCrsr->GetMark()->nContent;
+    // watch Cursor-Moves
+    CursorStateHelper aCursorSt(*this);
+    aCursorSt.SetCursorToMark(pMark);
+    ++aCursorSt.m_pCursor->GetPoint()->nContent;
+    --aCursorSt.m_pCursor->GetMark()->nContent;
 
-    if(aCrsrSt.RollbackIfIllegal()) return false;
+    if(aCursorSt.RollbackIfIllegal()) return false;
 
-    UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+    UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
     return true;
 }
 

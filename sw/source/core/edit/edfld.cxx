@@ -171,7 +171,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
     StartAllAction();
     StartUndo( UNDO_DELETE );
     Push();
-    SwPaM* pPaM = GetCrsr();
+    SwPaM* pPaM = GetCursor();
     // TODO: this is really hackish
     SwFieldHint aHint( pPaM );
     SwIterator<SwClient,SwFieldType> aIter(*pType);
@@ -197,7 +197,7 @@ void SwEditShell::Insert2(SwField& rField, const bool bForceExpandHints)
         ? SetAttrMode::FORCEHINTEXPAND
         : SetAttrMode::DEFAULT;
 
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer()) // for each PaM
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer()) // for each PaM
     {
         const bool bSuccess(GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, aField, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
@@ -258,13 +258,13 @@ void SwEditShell::UpdateFields( SwField &rField )
         if( RES_GETREFFLD == nFieldWhich )
             pMsgHint = &aRefMkHt;
 
-        SwPaM* pCrsr = GetCrsr();
+        SwPaM* pCursor = GetCursor();
         SwTextField *pTextField;
         SwFormatField *pFormatField;
 
-        if ( !pCrsr->IsMultiSelection() && !pCrsr->HasMark())
+        if ( !pCursor->IsMultiSelection() && !pCursor->HasMark())
         {
-            pTextField = GetTextFieldAtPos( pCrsr->Start(), true );
+            pTextField = GetTextFieldAtPos( pCursor->Start(), true );
 
             if (!pTextField) // #i30221#
                 pTextField = lcl_FindInputField( GetDoc(), rField);
@@ -282,7 +282,7 @@ void SwEditShell::UpdateFields( SwField &rField )
         SwMsgPoolItem aFieldHint( RES_TXTATR_FIELD );  // Search-Hint
         SwMsgPoolItem aAnnotationFieldHint( RES_TXTATR_ANNOTATION );
         SwMsgPoolItem aInputFieldHint( RES_TXTATR_INPUTFIELD );
-        for(SwPaM& rPaM : GetCrsr()->GetRingContainer()) // for each PaM
+        for(SwPaM& rPaM : GetCursor()->GetRingContainer()) // for each PaM
         {
             if( rPaM.HasMark() && bOkay )    // ... with selection
             {

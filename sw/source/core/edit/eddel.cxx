@@ -94,7 +94,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
         SwPaM * pPam = &rPam;
         if (bSelectAll)
         {
-            assert(dynamic_cast<SwShellCrsr*>(&rPam)); // must be corrected pam
+            assert(dynamic_cast<SwShellCursor*>(&rPam)); // must be corrected pam
             pNewPam.reset(new SwPaM(*rPam.GetMark(), *rPam.GetPoint()));
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
@@ -115,11 +115,11 @@ long SwEditShell::Delete()
 {
     SET_CURR_SHELL( this );
     long nRet = 0;
-    if ( !HasReadonlySel() || CrsrInsideInputField() )
+    if ( !HasReadonlySel() || CursorInsideInputField() )
     {
         StartAllAction();
 
-        bool bUndo = GetCrsr()->GetNext() != GetCrsr();
+        bool bUndo = GetCursor()->GetNext() != GetCursor();
         if( bUndo ) // more than one selection?
         {
             SwRewriter aRewriter;
@@ -128,7 +128,7 @@ long SwEditShell::Delete()
             GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_DELETE, &aRewriter);
         }
 
-        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             DeleteSel( rPaM, &bUndo );
         }
@@ -159,7 +159,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
         SwPosition * pPos = nullptr;
         std::shared_ptr<SwPosition> pInsertPos;
         sal_uInt16 nMove = 0;
-        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             if( !pPos )
             {
@@ -171,17 +171,17 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                     continue;
                 }
                 else
-                    pPos = pDestShell->GetCrsr()->GetPoint();
+                    pPos = pDestShell->GetCursor()->GetPoint();
             }
             if( IsBlockMode() )
             {   // In block mode different insert positions will be calculated
                 // by simulated cursor movements from the given first insert position
                 if( nMove )
                 {
-                    SwCursor aCrsr( *pPos, nullptr, false);
-                    if( aCrsr.UpDown( false, nMove, nullptr, 0 ) )
+                    SwCursor aCursor( *pPos, nullptr, false);
+                    if( aCursor.UpDown( false, nMove, nullptr, 0 ) )
                     {
-                        pInsertPos.reset( new SwPosition( *aCrsr.GetPoint() ) );
+                        pInsertPos.reset( new SwPosition( *aCursor.GetPoint() ) );
                         aInsertList.push_back( pInsertPos );
                     }
                 }
@@ -207,7 +207,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     std::list< std::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
     pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         if( !pPos )
         {
@@ -219,7 +219,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                 continue;
             }
             else
-                pPos = pDestShell->GetCrsr()->GetPoint();
+                pPos = pDestShell->GetCursor()->GetPoint();
         }
         if( !bFirstMove )
         {
@@ -257,22 +257,22 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     // Maybe nothing has been moved?
     if( !bFirstMove )
     {
-        SwPaM* pCrsr = pDestShell->GetCrsr();
-        pCrsr->SetMark();
-        pCrsr->GetPoint()->nNode = aSttNdIdx.GetIndex()+1;
-        pCrsr->GetPoint()->nContent.Assign( pCrsr->GetContentNode(),nSttCntIdx);
-        pCrsr->Exchange();
+        SwPaM* pCursor = pDestShell->GetCursor();
+        pCursor->SetMark();
+        pCursor->GetPoint()->nNode = aSttNdIdx.GetIndex()+1;
+        pCursor->GetPoint()->nContent.Assign( pCursor->GetContentNode(),nSttCntIdx);
+        pCursor->Exchange();
     }
     else
     {
         // If the cursor moved during move process, move also its GetMark
-        pDestShell->GetCrsr()->SetMark();
-        pDestShell->GetCrsr()->DeleteMark();
+        pDestShell->GetCursor()->SetMark();
+        pDestShell->GetCursor()->DeleteMark();
     }
 #if OSL_DEBUG_LEVEL > 0
 // check if the indices are registered in the correct nodes
 {
-    for(SwPaM& rCmp : pDestShell->GetCrsr()->GetRingContainer())
+    for(SwPaM& rCmp : pDestShell->GetCursor()->GetRingContainer())
     {
         OSL_ENSURE( rCmp.GetPoint()->nContent.GetIdxReg()
                     == rCmp.GetContentNode(), "Point in wrong Node" );
@@ -288,7 +288,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
     pDestShell->EndAllAction();
 
-    pDestShell->SaveTableBoxContent( pDestShell->GetCrsr()->GetPoint() );
+    pDestShell->SaveTableBoxContent( pDestShell->GetCursor()->GetPoint() );
 
     return bRet;
 }
@@ -310,7 +310,7 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
-        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             if( rPaM.HasMark() && *rPaM.GetMark() != *rPaM.GetPoint() )
             {
@@ -333,13 +333,13 @@ bool SwEditShell::DelFullPara()
     bool bRet = false;
     if( !IsTableMode() )
     {
-        SwPaM* pCrsr = GetCrsr();
+        SwPaM* pCursor = GetCursor();
         // no multi selection
-        if( !pCrsr->IsMultiSelection() && !HasReadonlySel() )
+        if( !pCursor->IsMultiSelection() && !HasReadonlySel() )
         {
             SET_CURR_SHELL( this );
             StartAllAction();
-            bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( *pCrsr );
+            bRet = GetDoc()->getIDocumentContentOperations().DelFullPara( *pCursor );
             EndAllAction();
         }
     }

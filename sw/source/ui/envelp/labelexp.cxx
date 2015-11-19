@@ -107,7 +107,7 @@ IMPL_LINK_NOARG_TYPED(SwVisitingCardPage, FrameControlInitializedHdl, SwOneExamp
     OUString sEntry;
     if( pSel )
         sEntry = *static_cast<OUString*>(pSel->GetUserData());
-    uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
+    uno::Reference< text::XTextCursor > & xCursor = pExampleFrame->GetTextCursor();
     OUString uEntry(sEntry);
 
     if(LISTBOX_ENTRY_NOTFOUND != m_pAutoTextGroupLB->GetSelectEntryPos())
@@ -124,7 +124,7 @@ IMPL_LINK_NOARG_TYPED(SwVisitingCardPage, FrameControlInitializedHdl, SwOneExamp
             aEntry >>= xEntry;
             if(xEntry.is())
             {
-                uno::Reference< text::XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
+                uno::Reference< text::XTextRange >  xRange(xCursor, uno::UNO_QUERY);
                 xEntry->applyTo(xRange);
             }
             UpdateFields();

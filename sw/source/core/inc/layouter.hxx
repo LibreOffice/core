@@ -24,18 +24,18 @@
 
 class SwEndnoter;
 class SwDoc;
-class SwSectionFrm;
-class SwFootnoteFrm;
-class SwPageFrm;
+class SwSectionFrame;
+class SwFootnoteFrame;
+class SwPageFrame;
 class SwLooping;
 
-class SwMovedFwdFrmsByObjPos;
-class SwTextFrm;
-class SwRowFrm;
+class SwMovedFwdFramesByObjPos;
+class SwTextFrame;
+class SwRowFrame;
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
-class SwFlowFrm;
-class SwLayoutFrm;
+class SwFlowFrame;
+class SwLayoutFrame;
 
 #define LOOP_PAGE 1
 
@@ -43,11 +43,11 @@ class SwLayouter
 {
     SwEndnoter* mpEndnoter;
     SwLooping* mpLooping;
-    void _CollectEndnotes( SwSectionFrm* pSect );
-    bool StartLooping( SwPageFrm* pPage );
+    void _CollectEndnotes( SwSectionFrame* pSect );
+    bool StartLooping( SwPageFrame* pPage );
 
     // --> #i28701#
-    SwMovedFwdFrmsByObjPos* mpMovedFwdFrms;
+    SwMovedFwdFramesByObjPos* mpMovedFwdFrames;
     // --> #i35911#
     SwObjsMarkedAsTmpConsiderWrapInfluence* mpObjsTmpConsiderWrapInfl;
 
@@ -57,7 +57,7 @@ public:
     struct tMoveBwdLayoutInfoKey
     {
         // frame ID of flow frame
-        sal_uInt32 mnFrmId;
+        sal_uInt32 mnFrameId;
         // position of new upper frame
         SwTwips mnNewUpperPosX;
         SwTwips mnNewUpperPosY;
@@ -73,7 +73,7 @@ private:
     {
         size_t operator()( const tMoveBwdLayoutInfoKey& p_key ) const
         {
-            return p_key.mnFrmId;
+            return p_key.mnFrameId;
         }
     };
     struct fMoveBwdLayoutInfoKeyEq
@@ -81,7 +81,7 @@ private:
         bool operator()( const tMoveBwdLayoutInfoKey& p_key1,
                          const tMoveBwdLayoutInfoKey& p_key2 ) const
         {
-            return p_key1.mnFrmId == p_key2.mnFrmId &&
+            return p_key1.mnFrameId == p_key2.mnFrameId &&
                    p_key1.mnNewUpperPosX == p_key2.mnNewUpperPosX &&
                    p_key1.mnNewUpperPosY == p_key2.mnNewUpperPosY &&
                    p_key1.mnNewUpperWidth == p_key2.mnNewUpperWidth &&
@@ -95,32 +95,32 @@ private:
 public:
     SwLayouter();
     ~SwLayouter();
-    void InsertEndnotes( SwSectionFrm* pSect );
-    void CollectEndnote( SwFootnoteFrm* pFootnote );
+    void InsertEndnotes( SwSectionFrame* pSect );
+    void CollectEndnote( SwFootnoteFrame* pFootnote );
     bool HasEndnotes() const;
 
-    void LoopControl( SwPageFrm* pPage, sal_uInt8 nLoop );
+    void LoopControl( SwPageFrame* pPage, sal_uInt8 nLoop );
     void EndLoopControl();
-    void LoopingLouieLight( const SwDoc& rDoc, const SwTextFrm& rFrm );
+    void LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame );
 
-    static void CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect );
-    static bool Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFootnoteFrm* pFootnote );
-    static bool StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage );
+    static void CollectEndnotes( SwDoc* pDoc, SwSectionFrame* pSect );
+    static bool Collecting( SwDoc* pDoc, SwSectionFrame* pSect, SwFootnoteFrame* pFootnote );
+    static bool StartLoopControl( SwDoc* pDoc, SwPageFrame *pPage );
 
     // --> #i28701#
-    static void ClearMovedFwdFrms( const SwDoc& _rDoc );
-    static void InsertMovedFwdFrm( const SwDoc& _rDoc,
-                                   const SwTextFrm& _rMovedFwdFrmByObjPos,
+    static void ClearMovedFwdFrames( const SwDoc& _rDoc );
+    static void InsertMovedFwdFrame( const SwDoc& _rDoc,
+                                   const SwTextFrame& _rMovedFwdFrameByObjPos,
                                    const sal_uInt32 _nToPageNum );
-    static bool FrmMovedFwdByObjPos( const SwDoc& _rDoc,
-                                     const SwTextFrm& _rTextFrm,
+    static bool FrameMovedFwdByObjPos( const SwDoc& _rDoc,
+                                     const SwTextFrame& _rTextFrame,
                                      sal_uInt32& _ornToPageNum );
     // --> #i40155# - unmark given frame as to be moved forward.
-    static void RemoveMovedFwdFrm( const SwDoc& _rDoc,
-                                   const SwTextFrm& _rTextFrm );
+    static void RemoveMovedFwdFrame( const SwDoc& _rDoc,
+                                   const SwTextFrame& _rTextFrame );
     // --> #i26945#
-    static bool DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
-                                           const SwRowFrm& _rRowFrm );
+    static bool DoesRowContainMovedFwdFrame( const SwDoc& _rDoc,
+                                           const SwRowFrame& _rRowFrame );
 
     // --> #i35911#
     static void ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc );
@@ -129,12 +129,12 @@ public:
                                         SwAnchoredObject& _rAnchoredObj );
     // --> #i65250#
     static bool MoveBwdSuppressed( const SwDoc& p_rDoc,
-                                   const SwFlowFrm& p_rFlowFrm,
-                                   const SwLayoutFrm& p_rNewUpperFrm );
+                                   const SwFlowFrame& p_rFlowFrame,
+                                   const SwLayoutFrame& p_rNewUpperFrame );
     static void ClearMoveBwdLayoutInfo( const SwDoc& p_rDoc );
 };
 
-extern void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTextFrm& rTextFrm );
+extern void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTextFrame& rTextFrame );
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_LAYOUTER_HXX
 

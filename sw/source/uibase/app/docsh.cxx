@@ -160,7 +160,7 @@ bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
 
 // Prepare loading
 Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
-                                    SwCrsrShell *pCrsrShell,
+                                    SwCursorShell *pCursorShell,
                                     SwPaM* pPaM )
 {
     bool bAPICall = false;
@@ -189,8 +189,8 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         : SW_STREAM_READER & pRead->GetReaderType() )
     {
         *ppRdr = pPaM ? new SwReader( rMedium, aFileName, *pPaM ) :
-            pCrsrShell ?
-                new SwReader( rMedium, aFileName, *pCrsrShell->GetCrsr() )
+            pCursorShell ?
+                new SwReader( rMedium, aFileName, *pCursorShell->GetCursor() )
                     : new SwReader( rMedium, aFileName, m_pDoc );
     }
     else
@@ -368,11 +368,11 @@ bool SwDocShell::Save()
     }
     SetError( nErr ? nErr : nVBWarning, OSL_LOG_PREFIX );
 
-    SfxViewFrame *const pFrm =
+    SfxViewFrame *const pFrame =
         (m_pWrtShell) ? m_pWrtShell->GetView().GetViewFrame() : nullptr;
-    if( pFrm )
+    if( pFrame )
     {
-        pFrm->GetBindings().SetState(SfxBoolItem(SID_DOC_MODIFIED, false));
+        pFrame->GetBindings().SetState(SfxBoolItem(SID_DOC_MODIFIED, false));
     }
     return !IsError( nErr );
 }
@@ -516,7 +516,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // Increase RSID
         m_pDoc->setRsid( m_pDoc->getRsid() );
 
-        m_pDoc->cleanupUnoCrsrTable();
+        m_pDoc->cleanupUnoCursorTable();
     }
     SetError( nErr ? nErr : nVBWarning, OSL_LOG_PREFIX );
 
@@ -876,7 +876,7 @@ Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
         SwNodeIndex aIdx( m_pDoc->GetNodes().GetEndOfExtras(), 1 );
         SwContentNode* pNd = m_pDoc->GetNodes().GoNext( &aIdx );
 
-        const SwRect aPageRect = pNd->FindPageFrmRect();
+        const SwRect aPageRect = pNd->FindPageFrameRect();
         Rectangle aRect(aPageRect.SVRect());
 
         // tdf#81219 sanitize - nobody is interested in a thumbnail where's
@@ -963,16 +963,16 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             // Disable "multiple layout"
             if ( !bDisable )
             {
-                SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
-                while (pTmpFrm)     // Look for Preview
+                SfxViewFrame *pTmpFrame = SfxViewFrame::GetFirst(this);
+                while (pTmpFrame)     // Look for Preview
                 {
-                    if ( dynamic_cast<SwView*>( pTmpFrm->GetViewShell() ) &&
-                         static_cast<SwView*>(pTmpFrm->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
+                    if ( dynamic_cast<SwView*>( pTmpFrame->GetViewShell() ) &&
+                         static_cast<SwView*>(pTmpFrame->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
                     {
                         bDisable = true;
                         break;
                     }
-                    pTmpFrm = SfxViewFrame::GetNext(*pTmpFrm, this);
+                    pTmpFrame = SfxViewFrame::GetNext(*pTmpFrame, this);
                 }
             }
             // End of disabled "multiple layout"
@@ -1179,7 +1179,7 @@ void SwDocShell::RemoveOLEObjects()
 
 // When a document is loaded, SwDoc::PrtOLENotify is called to update
 // the sizes of math objects. However, for objects that do not have a
-// SwFrm at this time, only a flag is set (bIsOLESizeInvalid) and the
+// SwFrame at this time, only a flag is set (bIsOLESizeInvalid) and the
 // size change takes place later, while calculating the layout in the
 // idle handler. If this document is saved now, it is saved with invalid
 // sizes. For this reason, the layout has to be calculated before a document is

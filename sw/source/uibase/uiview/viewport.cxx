@@ -400,7 +400,7 @@ void SwView::CalcPt( Point *pPt, const Rectangle &rRect,
 
 bool SwView::IsScroll( const Rectangle &rRect ) const
 {
-    return m_bCenterCrsr || m_bTopCrsr || !m_aVisArea.IsInside(rRect);
+    return m_bCenterCursor || m_bTopCursor || !m_aVisArea.IsInside(rRect);
 }
 
 void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRangeY )
@@ -422,7 +422,7 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
         {
             // If we are not supposed to be centered, lying in the VisArea
             // and are not covered by the dialogue ...
-            if ( !m_bCenterCrsr && aOldVisArea.IsInside( rRect )
+            if ( !m_bCenterCursor && aOldVisArea.IsInside( rRect )
                  && ( rRect.Left() > aDlgRect.Right()
                       || rRect.Right() < aDlgRect.Left()
                       || rRect.Top() > aDlgRect.Bottom()
@@ -449,7 +449,7 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
     }
 
     //s.o. !IsScroll()
-    if( !(m_bCenterCrsr || m_bTopCrsr) && m_aVisArea.IsInside( rRect ) )
+    if( !(m_bCenterCursor || m_bTopCursor) && m_aVisArea.IsInside( rRect ) )
     {
         m_aVisArea = aOldVisArea;
         return;
@@ -470,7 +470,7 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
                 static_cast< sal_uInt16 >((aVisSize.Width() - aSize.Width()) / 2),
                 static_cast< sal_uInt16 >((aVisSize.Height()- aSize.Height())/ 2) );
 
-        if( m_bTopCrsr )
+        if( m_bTopCursor )
         {
             const long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
             aPt.Y() = std::min( std::max( nBorder, rRect.Top() ),
@@ -482,12 +482,12 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
         SetVisArea( aPt );
         return;
     }
-    if( !m_bCenterCrsr )
+    if( !m_bCenterCursor )
     {
         Point aPt( m_aVisArea.TopLeft() );
         CalcPt( &aPt, rRect, nRangeX, nRangeY );
 
-        if( m_bTopCrsr )
+        if( m_bTopCursor )
         {
             const long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
             aPt.Y() = std::min( std::max( nBorder, rRect.Top() ),
@@ -619,14 +619,14 @@ long SwView::PhyPageDown()
     return 1;
 }
 
-bool SwView::PageUpCrsr( bool bSelect )
+bool SwView::PageUpCursor( bool bSelect )
 {
     if ( !bSelect )
     {
-        const FrmTypeFlags eType = m_pWrtShell->GetFrmType(nullptr,true);
-        if ( eType & FrmTypeFlags::FOOTNOTE )
+        const FrameTypeFlags eType = m_pWrtShell->GetFrameType(nullptr,true);
+        if ( eType & FrameTypeFlags::FOOTNOTE )
         {
-            m_pWrtShell->MoveCrsr();
+            m_pWrtShell->MoveCursor();
             m_pWrtShell->GotoFootnoteAnchor();
             m_pWrtShell->Right(CRSR_SKIP_CHARS, false, 1, false );
             return true;
@@ -635,8 +635,8 @@ bool SwView::PageUpCrsr( bool bSelect )
 
     SwTwips lOff = 0;
     if ( GetPageScrollUpOffset( lOff ) &&
-         (m_pWrtShell->IsCrsrReadonly() ||
-          !m_pWrtShell->PageCrsr( lOff, bSelect )) &&
+         (m_pWrtShell->IsCursorReadonly() ||
+          !m_pWrtShell->PageCursor( lOff, bSelect )) &&
          PageUp() )
     {
         m_pWrtShell->ResetCursorStack();
@@ -645,12 +645,12 @@ bool SwView::PageUpCrsr( bool bSelect )
     return false;
 }
 
-bool SwView::PageDownCrsr(bool bSelect)
+bool SwView::PageDownCursor(bool bSelect)
 {
     SwTwips lOff = 0;
     if ( GetPageScrollDownOffset( lOff ) &&
-         (m_pWrtShell->IsCrsrReadonly() ||
-          !m_pWrtShell->PageCrsr( lOff, bSelect )) &&
+         (m_pWrtShell->IsCursorReadonly() ||
+          !m_pWrtShell->PageCursor( lOff, bSelect )) &&
          PageDown() )
     {
         m_pWrtShell->ResetCursorStack();

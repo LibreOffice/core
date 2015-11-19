@@ -34,12 +34,12 @@
 
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
-struct FrmMap;
+struct FrameMap;
 // OD 12.11.2003 #i22341#
 struct SwPosition;
 
 // frame dialog
-class SwFrmPage: public SfxTabPage
+class SwFramePage: public SfxTabPage
 {
     // size
     VclPtr<FixedText>       m_pWidthFT;
@@ -120,8 +120,8 @@ class SwFrmPage: public SfxTabPage
     sal_Int16 m_nOldV;
     sal_Int16 m_nOldVRel;
 
-    FrmMap* m_pVMap;
-    FrmMap* m_pHMap;
+    FrameMap* m_pVMap;
+    FrameMap* m_pHMap;
 
     bool    m_bAllowVertPositioning;
     bool    m_bIsMathOLE;
@@ -154,29 +154,29 @@ class SwFrmPage: public SfxTabPage
     void            Init(const SfxItemSet& rSet, bool bReset = false);
     // OD 12.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in the alignment.
-    sal_Int32       FillPosLB( const FrmMap* _pMap,
+    sal_Int32       FillPosLB( const FrameMap* _pMap,
                                const sal_Int16 _nAlign,
                                const sal_Int16 _nRel,
                                ListBox& _rLB );
     // OD 14.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in their string entries.
-    sal_uLong       FillRelLB( const FrmMap* _pMap,
+    sal_uLong       FillRelLB( const FrameMap* _pMap,
                                const sal_uInt16 _nLBSelPos,
                                const sal_Int16 _nAlign,
                                const sal_Int16 _nRel,
                                ListBox& _rLB,
                                FixedText& _rFT );
-    sal_Int32       GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
-    static sal_Int16 GetAlignment(FrmMap *pMap, sal_Int32 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
-    static sal_Int16 GetRelation(FrmMap *pMap, ListBox &rRelationLB);
+    sal_Int32       GetMapPos( const FrameMap *pMap, ListBox &rAlignLB );
+    static sal_Int16 GetAlignment(FrameMap *pMap, sal_Int32 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
+    static sal_Int16 GetRelation(FrameMap *pMap, ListBox &rRelationLB);
     RndStdIds       GetAnchor();
 
-    void setOptimalFrmWidth();
+    void setOptimalFrameWidth();
     void setOptimalRelWidth();
 
     void            EnableGraficMode();   // hides auto check boxes and re-org controls for "Real Size" button
 
-    SwWrtShell *getFrmDlgParentShell();
+    SwWrtShell *getFrameDlgParentShell();
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -184,8 +184,8 @@ class SwFrmPage: public SfxTabPage
     static const sal_uInt16 aPageRg[];
 
 public:
-    SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFrmPage();
+    SwFramePage(vcl::Window *pParent, const SfxItemSet &rSet);
+    virtual ~SwFramePage();
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
@@ -196,7 +196,7 @@ public:
 
     void            SetNewFrame(bool bNewFrame) { m_bNew      = bNewFrame; }
     void            SetFormatUsed(bool bFormat);
-    void            SetFrmType(const OUString &rType) { m_sDlgType  = rType; }
+    void            SetFrameType(const OUString &rType) { m_sDlgType  = rType; }
     inline bool     IsInGraficMode() { return m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog"; }
     void            EnableVerticalPositioning( bool bEnable );
 };
@@ -243,7 +243,7 @@ public:
     virtual sfxpg DeactivatePage(SfxItemSet *pSet) override;
 };
 
-class SwFrmURLPage : public SfxTabPage
+class SwFrameURLPage : public SfxTabPage
 {
     // hyperlink
     VclPtr<Edit>            pURLED;
@@ -261,8 +261,8 @@ class SwFrmURLPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwFrmURLPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFrmURLPage();
+    SwFrameURLPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    virtual ~SwFrameURLPage();
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
@@ -271,7 +271,7 @@ public:
     virtual void Reset(const SfxItemSet *rSet) override;
 };
 
-class SwFrmAddPage : public SfxTabPage
+class SwFrameAddPage : public SfxTabPage
 {
     VclPtr<VclContainer> m_pNameFrame;
     VclPtr<FixedText>    m_pNameFT;
@@ -310,8 +310,8 @@ class SwFrmAddPage : public SfxTabPage
     static const sal_uInt16 aAddPgRg[];
 
 public:
-    SwFrmAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFrmAddPage();
+    SwFrameAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    virtual ~SwFrameAddPage();
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
@@ -321,7 +321,7 @@ public:
     virtual void Reset(const SfxItemSet *rSet) override;
 
     void            SetFormatUsed(bool bFormat);
-    void            SetFrmType(const OUString &rType) { m_sDlgType = rType; }
+    void            SetFrameType(const OUString &rType) { m_sDlgType = rType; }
     void            SetNewFrame(bool bNewFrame) { m_bNew  = bNewFrame; }
     void            SetShell(SwWrtShell* pSh) { m_pWrtSh  = pSh; }
 

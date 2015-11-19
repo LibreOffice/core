@@ -192,8 +192,8 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     SwWrtShell* pSh = pDocShell->GetWrtShell();
     if (pSh)
     {
-        SwPaM* pShellCrsr = pSh->GetCrsr();
-        nCurrentPage = pShellCrsr->GetPageNum();
+        SwPaM* pShellCursor = pSh->GetCursor();
+        nCurrentPage = pShellCursor->GetPageNum();
     }
     else if (!bSwSrcView)
     {
@@ -707,17 +707,17 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
     return xRet;
 }
 
-SwUnoCrsr* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
+SwUnoCursor* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCursor)
 {
     getText();
     XText *const pText = xBodyText.get();
     SwXBodyText* pBText = static_cast<SwXBodyText*>(pText);
     SwXTextCursor *const pXTextCursor = pBText->CreateTextCursor(true);
-    xCrsr.set( static_cast<text::XWordCursor*>(pXTextCursor) );
+    xCursor.set( static_cast<text::XWordCursor*>(pXTextCursor) );
 
-    auto& rUnoCrsr(pXTextCursor->GetCursor());
-    rUnoCrsr.SetRemainInSection(false);
-    return &rUnoCrsr;
+    auto& rUnoCursor(pXTextCursor->GetCursor());
+    rUnoCursor.SetRemainInSection(false);
+    return &rUnoCursor;
 }
 
 sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor > & xDesc)
@@ -728,8 +728,8 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
         throw RuntimeException();
 
-    Reference< XTextCursor >  xCrsr;
-    auto pUnoCrsr(CreateCursorForSearch(xCrsr));
+    Reference< XTextCursor >  xCursor;
+    auto pUnoCursor(CreateCursorForSearch(xCursor));
 
     const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
             xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
@@ -743,7 +743,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     SwDocPositions eEnd = pSearch->bBack ? DOCPOS_START : DOCPOS_END;
 
     // Search should take place anywhere
-    pUnoCrsr->SetRemainInSection(false);
+    pUnoCursor->SetRemainInSection(false);
     sal_uInt32 nResult;
     UnoActionContext aContext(pDocShell->GetDoc());
     //try attribute search first
@@ -762,7 +762,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         pSearch->FillSearchItemSet(aSearch);
         pSearch->FillReplaceItemSet(aReplace);
         bool bCancel;
-        nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
+        nResult = (sal_Int32)pUnoCursor->Find( aSearch, !pSearch->bStyles,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges,
                     !pSearch->sSearchText.isEmpty() ? &aSearchOpt : nullptr,
@@ -770,11 +770,11 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     }
     else if(pSearch->bStyles)
     {
-        SwTextFormatColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
-        SwTextFormatColl *pReplaceColl = lcl_GetParaStyle(pSearch->sReplaceText, pUnoCrsr->GetDoc());
+        SwTextFormatColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCursor->GetDoc());
+        SwTextFormatColl *pReplaceColl = lcl_GetParaStyle(pSearch->sReplaceText, pUnoCursor->GetDoc());
 
         bool bCancel;
-        nResult = pUnoCrsr->Find( *pSearchColl,
+        nResult = pUnoCursor->Find( *pSearchColl,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges, pReplaceColl );
 
@@ -784,7 +784,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         //todo/mba: assuming that notes should be omitted
         bool bSearchInNotes = false;
         bool bCancel;
-        nResult = pUnoCrsr->Find( aSearchOpt, bSearchInNotes,
+        nResult = pUnoCursor->Find( aSearchOpt, bSearchInNotes,
             eStart, eEnd, bCancel,
             (FindRanges)eRanges,
             true );
@@ -804,8 +804,8 @@ Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor()
 
 // Used for findAll/First/Next
 
-SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
-                                     Reference< XTextCursor > & xCrsr,
+SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
+                                     Reference< XTextCursor > & xCursor,
                                      bool bAll,
                                      sal_Int32& nResult,
                                      Reference< XInterface >  xLastResult)
@@ -814,7 +814,7 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
     if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
         return nullptr;
 
-    auto pUnoCrsr(CreateCursorForSearch(xCrsr));
+    auto pUnoCursor(CreateCursorForSearch(xCursor));
     const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
         xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
 
@@ -822,17 +822,17 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
     if(xLastResult.is())
     {
         Reference<XUnoTunnel> xCursorTunnel( xLastResult, UNO_QUERY);
-        OTextCursorHelper* pPosCrsr = nullptr;
+        OTextCursorHelper* pPosCursor = nullptr;
         if(xCursorTunnel.is())
         {
-            pPosCrsr = reinterpret_cast<OTextCursorHelper*>(xCursorTunnel->getSomething(
+            pPosCursor = reinterpret_cast<OTextCursorHelper*>(xCursorTunnel->getSomething(
                                     OTextCursorHelper::getUnoTunnelId()));
         }
-        SwPaM* pCrsr = pPosCrsr ? pPosCrsr->GetPaM() : nullptr;
-        if(pCrsr)
+        SwPaM* pCursor = pPosCursor ? pPosCursor->GetPaM() : nullptr;
+        if(pCursor)
         {
-            *pUnoCrsr->GetPoint() = *pCrsr->End();
-            pUnoCrsr->DeleteMark();
+            *pUnoCursor->GetPoint() = *pCursor->End();
+            pUnoCursor->DeleteMark();
         }
         else
         {
@@ -844,15 +844,15 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
             }
             if(!pRange)
                 return nullptr;
-            pRange->GetPositions(*pUnoCrsr);
-            if(pUnoCrsr->HasMark())
+            pRange->GetPositions(*pUnoCursor);
+            if(pUnoCursor->HasMark())
             {
-                if(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark())
-                    pUnoCrsr->Exchange();
-                pUnoCrsr->DeleteMark();
+                if(*pUnoCursor->GetPoint() < *pUnoCursor->GetMark())
+                    pUnoCursor->Exchange();
+                pUnoCursor->DeleteMark();
             }
         }
-        const SwNode& rRangeNode = pUnoCrsr->GetNode();
+        const SwNode& rRangeNode = pUnoCursor->GetNode();
         bParentInExtra = rRangeNode.FindFlyStartNode() ||
                             rRangeNode.FindFootnoteStartNode() ||
                             rRangeNode.FindHeaderStartNode() ||
@@ -892,18 +892,18 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
                                 0);
             pSearch->FillSearchItemSet(aSearch);
             bool bCancel;
-            nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
+            nResult = (sal_Int32)pUnoCursor->Find( aSearch, !pSearch->bStyles,
                         eStart, eEnd, bCancel,
                         (FindRanges)eRanges,
                         !pSearch->sSearchText.isEmpty() ? &aSearchOpt : nullptr );
         }
         else if(pSearch->bStyles)
         {
-            SwTextFormatColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
+            SwTextFormatColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCursor->GetDoc());
             //pSearch->sReplaceText
             SwTextFormatColl *pReplaceColl = nullptr;
             bool bCancel;
-            nResult = (sal_Int32)pUnoCrsr->Find( *pSearchColl,
+            nResult = (sal_Int32)pUnoCursor->Find( *pSearchColl,
                         eStart, eEnd, bCancel,
                         (FindRanges)eRanges, pReplaceColl );
         }
@@ -912,7 +912,7 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
             //todo/mba: assuming that notes should be omitted
             bool bSearchInNotes = false;
             bool bCancel;
-            nResult = (sal_Int32)pUnoCrsr->Find( aSearchOpt, bSearchInNotes,
+            nResult = (sal_Int32)pUnoCursor->Find( aSearchOpt, bSearchInNotes,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges );
         }
@@ -921,7 +921,7 @@ SwUnoCrsr* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > &
         //second step - find in other
         eRanges = FND_IN_OTHER;
     }
-    return pUnoCrsr;
+    return pUnoCursor;
 }
 
 Reference< XIndexAccess >
@@ -931,12 +931,12 @@ Reference< XIndexAccess >
     SolarMutexGuard aGuard;
     Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
-    Reference< XTextCursor >  xCrsr;
-    auto pResultCrsr(FindAny(xDesc, xCrsr, true, nResult, xTmp));
-    if(!pResultCrsr)
+    Reference< XTextCursor >  xCursor;
+    auto pResultCursor(FindAny(xDesc, xCursor, true, nResult, xTmp));
+    if(!pResultCursor)
         throw RuntimeException();
     Reference< XIndexAccess >  xRet;
-    xRet = SwXTextRanges::Create( (nResult) ? &(*pResultCrsr) : nullptr );
+    xRet = SwXTextRanges::Create( (nResult) ? &(*pResultCursor) : nullptr );
     return xRet;
 }
 
@@ -946,17 +946,17 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     SolarMutexGuard aGuard;
     Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
-    Reference< XTextCursor >  xCrsr;
-    auto pResultCrsr(FindAny(xDesc, xCrsr, false, nResult, xTmp));
-    if(!pResultCrsr)
+    Reference< XTextCursor >  xCursor;
+    auto pResultCursor(FindAny(xDesc, xCursor, false, nResult, xTmp));
+    if(!pResultCursor)
         throw RuntimeException();
     Reference< XInterface >  xRet;
     if(nResult)
     {
         const uno::Reference< text::XText >  xParent =
             ::sw::CreateParentXText(*pDocShell->GetDoc(),
-                    *pResultCrsr->GetPoint());
-        xRet = *new SwXTextCursor(xParent, *pResultCrsr);
+                    *pResultCursor->GetPoint());
+        xRet = *new SwXTextCursor(xParent, *pResultCursor);
     }
     return xRet;
 }
@@ -968,20 +968,20 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     SolarMutexGuard aGuard;
     Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
-    Reference< XTextCursor >  xCrsr;
+    Reference< XTextCursor >  xCursor;
     if(!xStartAt.is())
         throw RuntimeException();
-    auto pResultCrsr(FindAny(xDesc, xCrsr, false, nResult, xStartAt));
-    if(!pResultCrsr)
+    auto pResultCursor(FindAny(xDesc, xCursor, false, nResult, xStartAt));
+    if(!pResultCursor)
         throw RuntimeException();
     Reference< XInterface >  xRet;
     if(nResult)
     {
         const uno::Reference< text::XText >  xParent =
             ::sw::CreateParentXText(*pDocShell->GetDoc(),
-                    *pResultCrsr->GetPoint());
+                    *pResultCursor->GetPoint());
 
-        xRet = *new SwXTextCursor(xParent, *pResultCrsr);
+        xRet = *new SwXTextCursor(xParent, *pResultCursor);
     }
     return xRet;
 }
@@ -1413,15 +1413,15 @@ void    SwXTextDocument::InitNewDoc()
 
     if(mxXTextFrames.is())
     {
-        XNameAccess* pFrms = mxXTextFrames.get();
-        static_cast<SwXTextFrames*>(pFrms)->Invalidate();
+        XNameAccess* pFrames = mxXTextFrames.get();
+        static_cast<SwXTextFrames*>(pFrames)->Invalidate();
         mxXTextFrames.clear();
     }
 
     if(mxXGraphicObjects.is())
     {
-        XNameAccess* pFrms = mxXGraphicObjects.get();
-        static_cast<SwXTextGraphicObjects*>(pFrms)->Invalidate();
+        XNameAccess* pFrames = mxXGraphicObjects.get();
+        static_cast<SwXTextGraphicObjects*>(pFrames)->Invalidate();
         mxXGraphicObjects.clear();
     }
 
@@ -3188,7 +3188,7 @@ int SwXTextDocument::getPart()
 
     sal_uInt16 nPage, nLogPage;
     OUString sDisplay;
-    pWrtShell->GetPageNumber(-1, pWrtShell->IsCrsrVisible(), nPage, nLogPage, sDisplay);
+    pWrtShell->GetPageNumber(-1, pWrtShell->IsCursorVisible(), nPage, nLogPage, sDisplay);
 
     return nPage - 1;
 }

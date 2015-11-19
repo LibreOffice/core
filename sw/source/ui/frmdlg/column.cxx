@@ -135,7 +135,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     {
         const SwFrameFormat* pFormat = rSh.GetFlyFrameFormat() ;
         pFrameSet = new SfxItemSet(rWrtShell.GetAttrPool(), aSectIds );
-        pFrameSet->Put(pFormat->GetFrmSize());
+        pFrameSet->Put(pFormat->GetFrameSize());
         pFrameSet->Put(pFormat->GetCol());
         pColPgSet = pFrameSet;
     }
@@ -150,7 +150,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
                                     0 );
 
         const SwFrameFormat &rFormat = pPageDesc->GetMaster();
-        nPageWidth = rFormat.GetFrmSize().GetSize().Width();
+        nPageWidth = rFormat.GetFrameSize().GetSize().Width();
 
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rFormat.GetLRSpace();
         const SvxBoxItem& rBox = (const SvxBoxItem&) rFormat.GetBox();
@@ -270,17 +270,17 @@ void SwColumnDlg::ObjectHdl(ListBox* pBox)
         case LISTBOX_SELECTION  :
             pSet = pSelectionSet;
             if( pSelectionSet )
-                pSet->Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
+                pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_SECTION    :
         case LISTBOX_SECTIONS   :
             pSet = pSectionSet;
-            pSet->Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
+            pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_PAGE       :
             nWidth = nPageWidth;
             pSet = pPageSet;
-            pSet->Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
+            pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_FRAME:
             pSet = pFrameSet;
@@ -290,7 +290,7 @@ void SwColumnDlg::ObjectHdl(ListBox* pBox)
     bool bIsSection = pSet == pSectionSet || pSet == pSelectionSet;
     pTabPage->ShowBalance(bIsSection);
     pTabPage->SetInSection(bIsSection);
-    pTabPage->SetFrmMode(true);
+    pTabPage->SetFrameMode(true);
     pTabPage->SetPageWidth(nWidth);
     if( pSet )
         pTabPage->Reset(pSet);
@@ -363,12 +363,12 @@ IMPL_LINK_NOARG_TYPED(SwColumnDlg, OkHdl, Button*, void)
         aTmp.Put(*pFrameSet);
         rWrtShell.StartAction();
         rWrtShell.Push();
-        rWrtShell.SetFlyFrmAttr( aTmp );
+        rWrtShell.SetFlyFrameAttr( aTmp );
         // undo the frame selection again
-        if(rWrtShell.IsFrmSelected())
+        if(rWrtShell.IsFrameSelected())
         {
-            rWrtShell.UnSelectFrm();
-            rWrtShell.LeaveSelFrmMode();
+            rWrtShell.UnSelectFrame();
+            rWrtShell.LeaveSelFrameMode();
         }
         rWrtShell.Pop();
         rWrtShell.EndAction();
@@ -412,7 +412,7 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     , nMinWidth(MINLAY)
     , pModifiedField(nullptr)
     , bFormat(false)
-    , bFrm(false)
+    , bFrame(false)
     , bHtmlMode(false)
     , bLockUpdate(false)
 {
@@ -439,7 +439,7 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     get(m_pDefaultVS, "valueset");
     get(m_pPgeExampleWN, "pageexample");
-    get(m_pFrmExampleWN, "frameexample");
+    get(m_pFrameExampleWN, "frameexample");
 
     connectPercentField(aEd1, "width1mf");
     connectPercentField(aEd2, "width2mf");
@@ -583,7 +583,7 @@ void SwColumnPage::dispose()
     m_pTextDirectionFT.clear();
     m_pTextDirectionLB.clear();
     m_pPgeExampleWN.clear();
-    m_pFrmExampleWN.clear();
+    m_pFrameExampleWN.clear();
     SfxTabPage::dispose();
 }
 
@@ -628,13 +628,13 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     m_pCLNrEdt->SetMax(std::max((sal_uInt16)m_pCLNrEdt->GetMax(), nCols));
     m_pCLNrEdt->SetLast(std::max(nCols,(sal_uInt16)m_pCLNrEdt->GetMax()));
 
-    if(bFrm)
+    if(bFrame)
     {
         if(bFormat)                     // there is no size here
             pColMgr->SetActualWidth(FRAME_FORMAT_WIDTH);
         else
         {
-            const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(rSet->Get(RES_FRM_SIZE));
+            const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(rSet->Get(RES_FRM_SIZE));
             const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(rSet->Get(RES_BOX));
             pColMgr->SetActualWidth((sal_uInt16)rSize.GetSize().Width() - rBox.GetDistance());
         }
@@ -795,10 +795,10 @@ IMPL_LINK_NOARG_TYPED( SwColumnPage, UpdateColMgr, Edit&, void )
     //prompt example window
     if(!bLockUpdate)
     {
-        if(bFrm)
+        if(bFrame)
         {
-            m_pFrmExampleWN->SetColumns( pColMgr->GetColumns() );
-            m_pFrmExampleWN->Invalidate();
+            m_pFrameExampleWN->SetColumns( pColMgr->GetColumns() );
+            m_pFrameExampleWN->Invalidate();
         }
         else
             m_pPgeExampleWN->Invalidate();
@@ -1235,7 +1235,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
                     rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
     }
 
-    if (!bFrm)
+    if (!bFrame)
     {
         if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
         {
@@ -1269,7 +1269,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
                 UpdateColMgr( *m_pLineWidthEdit );
             }
         }
-        m_pFrmExampleWN->Hide();
+        m_pFrameExampleWN->Hide();
         m_pPgeExampleWN->UpdateExample( rSet, pColMgr );
         m_pPgeExampleWN->Show();
 
@@ -1277,10 +1277,10 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
     else
     {
         m_pPgeExampleWN->Hide();
-        m_pFrmExampleWN->Show();
+        m_pFrameExampleWN->Show();
 
         // Size
-        const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(rSet.Get(RES_FRM_SIZE));
+        const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(rSet.Get(RES_FRM_SIZE));
         const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
 
         sal_uInt16 nTotalWish;
@@ -1302,7 +1302,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         }
         bool bPercent;
         // only relative data in frame format
-        if ( bFormat || (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrmSize::SYNCED) )
+        if ( bFormat || (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrameSize::SYNCED) )
         {
             // set value for 100%
             aEd1.SetRefValue(nTotalWish);
@@ -1371,9 +1371,9 @@ IMPL_LINK_TYPED( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void )
     }
 }
 
-void SwColumnPage::SetFrmMode(bool bMod)
+void SwColumnPage::SetFrameMode(bool bMod)
 {
-    bFrm = bMod;
+    bFrame = bMod;
 }
 
 void SwColumnPage::SetInSection(bool bSet)

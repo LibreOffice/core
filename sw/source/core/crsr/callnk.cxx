@@ -36,31 +36,31 @@
 #include <breakit.hxx>
 #include <vcl/window.hxx>
 
-SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktContent,
+SwCallLink::SwCallLink( SwCursorShell & rSh, sal_uLong nAktNode, sal_Int32 nAktContent,
                         sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )
     : rShell( rSh ), nNode( nAktNode ), nContent( nAktContent ),
-      nNdTyp( nAktNdTyp ), nLeftFrmPos( nLRPos ),
+      nNdTyp( nAktNdTyp ), nLeftFramePos( nLRPos ),
       bHasSelection( bAktSelection )
 {
 }
 
-SwCallLink::SwCallLink( SwCrsrShell & rSh )
+SwCallLink::SwCallLink( SwCursorShell & rSh )
     : rShell( rSh )
 {
     // remember SPoint-values of current cursor
-    SwPaM* pCrsr = rShell.IsTableMode() ? rShell.GetTableCrs() : rShell.GetCrsr();
-    SwNode& rNd = pCrsr->GetPoint()->nNode.GetNode();
+    SwPaM* pCursor = rShell.IsTableMode() ? rShell.GetTableCrs() : rShell.GetCursor();
+    SwNode& rNd = pCursor->GetPoint()->nNode.GetNode();
     nNode = rNd.GetIndex();
-    nContent = pCrsr->GetPoint()->nContent.GetIndex();
+    nContent = pCursor->GetPoint()->nContent.GetIndex();
     nNdTyp = rNd.GetNodeType();
-    bHasSelection = ( *pCrsr->GetPoint() != *pCrsr->GetMark() );
+    bHasSelection = ( *pCursor->GetPoint() != *pCursor->GetMark() );
 
     if( rNd.IsTextNode() )
-        nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), *rNd.GetTextNode(), nContent,
+        nLeftFramePos = SwCallLink::getLayoutFrame( rShell.GetLayout(), *rNd.GetTextNode(), nContent,
                                             !rShell.ActionPend() );
     else
     {
-        nLeftFrmPos = 0;
+        nLeftFramePos = 0;
 
         // A special treatment for SwFeShell:
         // When deleting the header/footer, footnotes SwFeShell sets the
@@ -72,30 +72,30 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     }
 }
 
-static void lcl_notifyRow(const SwContentNode* pNode, SwCrsrShell& rShell)
+static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell& rShell)
 {
     if ( !pNode )
         return;
 
-    SwFrm *const pMyFrm = pNode->getLayoutFrm( rShell.GetLayout() );
-    if ( !pMyFrm )
+    SwFrame *const pMyFrame = pNode->getLayoutFrame( rShell.GetLayout() );
+    if ( !pMyFrame )
         return;
 
     // We need to emulated a change of the row height in order
     // to have the complete row redrawn
-    SwRowFrm *const pRow = pMyFrm->FindRowFrm();
+    SwRowFrame *const pRow = pMyFrame->FindRowFrame();
     if ( !pRow )
         return;
 
     const SwTableLine* pLine = pRow->GetTabLine( );
     // Avoid redrawing the complete row if there are no nested tables
-    for (SwFrm *pCell = pRow->GetLower(); pCell; pCell = pCell->GetNext())
+    for (SwFrame *pCell = pRow->GetLower(); pCell; pCell = pCell->GetNext())
     {
-        for (SwFrm *pContent = pCell->GetLower(); pContent; pContent = pContent->GetNext())
+        for (SwFrame *pContent = pCell->GetLower(); pContent; pContent = pContent->GetNext())
         {
             if (pContent->GetType() == FRM_TAB)
             {
-                SwFormatFrmSize pSize = pLine->GetFrameFormat()->GetFrmSize();
+                SwFormatFrameSize pSize = pLine->GetFrameFormat()->GetFrameSize();
                 pRow->ModifyNotification(nullptr, &pSize);
                 return;
             }
@@ -110,8 +110,8 @@ SwCallLink::~SwCallLink()
 
     // If travelling over Nodes check formats and register them anew at the
     // new Node.
-    SwPaM* pCurCrsr = rShell.IsTableMode() ? rShell.GetTableCrs() : rShell.GetCrsr();
-    SwContentNode * pCNd = pCurCrsr->GetContentNode();
+    SwPaM* pCurrentCursor = rShell.IsTableMode() ? rShell.GetTableCrs() : rShell.GetCursor();
+    SwContentNode * pCNd = pCurrentCursor->GetContentNode();
     if( !pCNd )
         return;
 
@@ -125,9 +125,9 @@ SwCallLink::~SwCallLink()
     }
     lcl_notifyRow(pNode, rShell);
 
-    sal_Int32 nCmp, nAktContent = pCurCrsr->GetPoint()->nContent.GetIndex();
+    sal_Int32 nCmp, nAktContent = pCurrentCursor->GetPoint()->nContent.GetIndex();
     sal_uInt16 nNdWhich = pCNd->GetNodeType();
-    sal_uLong nAktNode = pCurCrsr->GetPoint()->nNode.GetIndex();
+    sal_uLong nAktNode = pCurrentCursor->GetPoint()->nNode.GetIndex();
 
     // Register the Shell as dependent at the current Node. By doing this all
     // attribute changes can be signaled over the link.
@@ -141,7 +141,7 @@ SwCallLink::~SwCallLink()
         // That can be done in one go by the handler.
         rShell.CallChgLnk();
     }
-    else if( !bHasSelection != !(*pCurCrsr->GetPoint() != *pCurCrsr->GetMark()) )
+    else if( !bHasSelection != !(*pCurrentCursor->GetPoint() != *pCurrentCursor->GetMark()) )
     {
         // always call change link when selection changes
         rShell.CallChgLnk();
@@ -151,12 +151,12 @@ SwCallLink::~SwCallLink()
     {
         // If travelling with left/right only and the frame is
         // unchanged (columns!) then check text hints.
-        if( nLeftFrmPos == SwCallLink::getLayoutFrm( rShell.GetLayout(), *pCNd->GetTextNode(), nAktContent,
+        if( nLeftFramePos == SwCallLink::getLayoutFrame( rShell.GetLayout(), *pCNd->GetTextNode(), nAktContent,
                                                     !rShell.ActionPend() ) &&
             (( nCmp = nContent ) + 1 == nAktContent ||          // Right
             nContent -1 == ( nCmp = nAktContent )) )            // Left
         {
-            if( nCmp == nAktContent && pCurCrsr->HasMark() ) // left & select
+            if( nCmp == nAktContent && pCurrentCursor->HasMark() ) // left & select
                 ++nCmp;
 
             if ( pCNd->GetTextNode()->HasHints() )
@@ -210,12 +210,12 @@ SwCallLink::~SwCallLink()
             rShell.CallChgLnk();
     }
 
-    const SwFrm* pFrm;
-    const SwFlyFrm *pFlyFrm;
-    if( !rShell.ActionPend() && nullptr != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(), nullptr, nullptr, false) ) &&
-        nullptr != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
+    const SwFrame* pFrame;
+    const SwFlyFrame *pFlyFrame;
+    if( !rShell.ActionPend() && nullptr != ( pFrame = pCNd->getLayoutFrame(rShell.GetLayout(), nullptr, nullptr, false) ) &&
+        nullptr != ( pFlyFrame = pFrame->FindFlyFrame() ) && !rShell.IsTableMode() )
     {
-        const SwNodeIndex* pIndex = pFlyFrm->GetFormat()->GetContent().GetContentIdx();
+        const SwNodeIndex* pIndex = pFlyFrame->GetFormat()->GetContent().GetContentIdx();
         OSL_ENSURE( pIndex, "Fly without Content" );
 
         if (!pIndex)
@@ -225,22 +225,22 @@ SwCallLink::~SwCallLink()
 
         if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > nNode ||
             nNode > rStNd.EndOfSectionIndex() )
-            rShell.GetFlyMacroLnk().Call( pFlyFrm->GetFormat() );
+            rShell.GetFlyMacroLnk().Call( pFlyFrame->GetFormat() );
     }
 }
 
-long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrm )
+long SwCallLink::getLayoutFrame( const SwRootFrame* pRoot, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrame )
 {
-    SwTextFrm* pFrm = static_cast<SwTextFrm*>(rNd.getLayoutFrm(pRoot,nullptr,nullptr,bCalcFrm));
-    SwTextFrm* pNext;
-    if ( pFrm && !pFrm->IsHiddenNow() )
+    SwTextFrame* pFrame = static_cast<SwTextFrame*>(rNd.getLayoutFrame(pRoot,nullptr,nullptr,bCalcFrame));
+    SwTextFrame* pNext;
+    if ( pFrame && !pFrame->IsHiddenNow() )
     {
-        if( pFrm->HasFollow() )
-            while( nullptr != ( pNext = pFrm->GetFollow() ) &&
+        if( pFrame->HasFollow() )
+            while( nullptr != ( pNext = pFrame->GetFollow() ) &&
                     nCntPos >= pNext->GetOfst() )
-                pFrm = pNext;
+                pFrame = pNext;
 
-        return pFrm->Frm().Left();
+        return pFrame->Frame().Left();
     }
     return 0;
 }

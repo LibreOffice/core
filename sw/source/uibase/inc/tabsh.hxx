@@ -41,7 +41,7 @@ private:
 public:
     void    Execute(SfxRequest &);
     void    GetState(SfxItemSet &);
-    void    GetFrmBorderState(SfxItemSet &rSet);
+    void    GetFrameBorderState(SfxItemSet &rSet);
     void    GetLineStyleState(SfxItemSet &rSet);
     void    ExecTableStyle(SfxRequest& rReq);
 

@@ -99,8 +99,8 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
                     pSh->SetModified();
                     pSh->DelSelectedObj();
 
-                    if( pSh->IsSelFrmMode() )
-                        pSh->LeaveSelFrmMode();
+                    if( pSh->IsSelFrameMode() )
+                        pSh->LeaveSelFrameMode();
 
                     GetView().AttrChangedNotify( pSh );
                 }

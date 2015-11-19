@@ -24,11 +24,11 @@
 #include <libxml/xmlwriter.h>
 
 class SdrObject;
-class SwFrm;
-class SwLayoutFrm;
-class SwTextFrm;
+class SwFrame;
+class SwLayoutFrame;
+class SwTextFrame;
 
-class SwPageFrm;
+class SwPageFrame;
 class SwObjPositioningInProgress;
 
 class SwFrameFormat;
@@ -37,8 +37,8 @@ class SwFormatAnchor;
 /** wrapper class for the positioning of Writer fly frames and drawing objects
 
     Purpose of this class is to provide a unified interface for the positioning
-    of Writer fly frames (derived classes of <SwFlyFrm>) and of drawing objects
-    (derived classes of <SwDrawFrm>).
+    of Writer fly frames (derived classes of <SwFlyFrame>) and of drawing objects
+    (derived classes of <SwDrawFrame>).
 
     @author OD
 */
@@ -48,10 +48,10 @@ class SW_DLLPUBLIC SwAnchoredObject
         // drawing object representing the anchored object in the drawing layer
         SdrObject* mpDrawObj;
         // frame the object is anchored at
-        SwFrm* mpAnchorFrm;
+        SwFrame* mpAnchorFrame;
         // #i28701 - page frame the object is registered at
         // note: no page frame for as-character anchored objects
-        SwPageFrm* mpPageFrm;
+        SwPageFrame* mpPageFrame;
         // current relative position (relative to anchor position of anchor frame)
         Point maRelPos;
 
@@ -71,7 +71,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         // Layout frame vertical position is orient at - typically its the upper
         // of the anchor frame, but it could also by the upper of a follow or
         // a following layout frame in the text flow.
-        const SwLayoutFrm* mpVertPosOrientFrm;
+        const SwLayoutFrame* mpVertPosOrientFrame;
 
         // i#i28701 boolean, indicating that the object
         // positioning algorithm is in progress.
@@ -103,7 +103,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         // considered during its positioning.
         // This boolean is used, if compatibility option 'Consider wrapping style
         // influence on object positioning' is OFF and a positioning loop is
-        // detected in method <SwFlyAtCntFrm::MakeAll()> or method
+        // detected in method <SwFlyAtContentFrame::MakeAll()> or method
         // <SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()>.
         // The boolean is reset to <false>, when the layout process for a
         // page frame starts.
@@ -131,19 +131,19 @@ class SW_DLLPUBLIC SwAnchoredObject
             For to-character anchored Writer fly frames the member <maLastCharRect>
             is updated. This is checked for change and depending on the applied
             positioning, it's decided, if the Writer fly frame has to be invalidated.
-            improvement - add second parameter <_rAnchorCharFrm>
+            improvement - add second parameter <_rAnchorCharFrame>
 
             @author OD
 
             @param _rAnch
             input parameter - reference to anchor position
 
-            @param _rAnchorCharFrm
+            @param _rAnchorCharFrame
             input parameter - reference to the text frame containing the anchor
             character.
         */
         void _CheckCharRect( const SwFormatAnchor& _rAnch,
-                             const SwTextFrm& _rAnchorCharFrm );
+                             const SwTextFrame& _rAnchorCharFrame );
 
         /** check top of line
 
@@ -157,23 +157,23 @@ class SW_DLLPUBLIC SwAnchoredObject
             @param _rAnch
             input parameter - reference to anchor position
 
-            @param _rAnchorCharFrm
+            @param _rAnchorCharFrame
             input parameter - reference to the text frame containing the anchor
             character.
         */
         void _CheckTopOfLine( const SwFormatAnchor& _rAnch,
-                              const SwTextFrm& _rAnchorCharFrm );
+                              const SwTextFrame& _rAnchorCharFrame );
 
         // method <sw_HideObj(..)> sets needed data structure values for the
         // object positioning
-        friend bool sw_HideObj( const SwTextFrm& _rFrm,
+        friend bool sw_HideObj( const SwTextFrame& _rFrame,
                                  const RndStdIds _eAnchorType,
                                  const sal_Int32 _nObjAnchorPos,
                                  SwAnchoredObject* _pAnchoredObj );
     protected:
         SwAnchoredObject();
 
-        void SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFrm );
+        void SetVertPosOrientFrame( const SwLayoutFrame& _rVertPosOrientFrame );
 
         /** method to assure that anchored object is registered at the correct
             page frame
@@ -215,24 +215,24 @@ class SW_DLLPUBLIC SwAnchoredObject
         const SdrObject* GetDrawObj() const { return mpDrawObj; }
         SdrObject* DrawObj() { return mpDrawObj; }
 
-        // accessors to member <mpAnchorFrm>
-        const SwFrm* GetAnchorFrm() const { return mpAnchorFrm; }
-        SwFrm* AnchorFrm() { return mpAnchorFrm; }
-        void ChgAnchorFrm( SwFrm* _pNewAnchorFrm );
+        // accessors to member <mpAnchorFrame>
+        const SwFrame* GetAnchorFrame() const { return mpAnchorFrame; }
+        SwFrame* AnchorFrame() { return mpAnchorFrame; }
+        void ChgAnchorFrame( SwFrame* _pNewAnchorFrame );
         /** determine anchor frame containing the anchor position
 
-            the anchor frame, which is determined, is <mpAnchorFrm>
+            the anchor frame, which is determined, is <mpAnchorFrame>
             for an at-page, at-frame or at-paragraph anchored object
             and the anchor character frame for an at-character and as-character
             anchored object.
 
             @author OD
         */
-        SwFrm* GetAnchorFrmContainingAnchPos();
+        SwFrame* GetAnchorFrameContainingAnchPos();
 
-        SwPageFrm* GetPageFrm() { return mpPageFrm; }
-        const SwPageFrm* GetPageFrm() const { return mpPageFrm; }
-        void SetPageFrm( SwPageFrm* _pNewPageFrm );
+        SwPageFrame* GetPageFrame() { return mpPageFrame; }
+        const SwPageFrame* GetPageFrame() const { return mpPageFrame; }
+        void SetPageFrame( SwPageFrame* _pNewPageFrame );
 
         /** method to determine the page frame, on which the 'anchor' of
             the given anchored object is.
@@ -248,30 +248,30 @@ class SW_DLLPUBLIC SwAnchoredObject
             input parameter - anchored object, for which the page frame of its
             'anchor' has to be determined.
 
-            @return SwPageFrm&
+            @return SwPageFrame&
             page frame, the 'anchor' of the given anchored object is on
         */
-        SwPageFrm* FindPageFrmOfAnchor();
+        SwPageFrame* FindPageFrameOfAnchor();
 
         /** get frame, which contains the anchor character, if the object
             is anchored at-character or as-character.
 
             @author OD
 
-            @return SwTextFrm*
+            @return SwTextFrame*
             text frame containing the anchor character. It's NULL, if the object
             isn't anchored at-character resp. as-character.
         */
-        SwTextFrm* FindAnchorCharFrm();
+        SwTextFrame* FindAnchorCharFrame();
 
         // accessors to data of position calculation:
         // frame vertical position is orient at
-        const SwLayoutFrm* GetVertPosOrientFrm() const
+        const SwLayoutFrame* GetVertPosOrientFrame() const
         {
-            return mpVertPosOrientFrm;
+            return mpVertPosOrientFrame;
         }
-        // method to clear member <mpVertPosOrientFrm>
-        void ClearVertPosOrientFrm();
+        // method to clear member <mpVertPosOrientFrame>
+        void ClearVertPosOrientFrame();
 
         /** check anchor character rectangle and top of line
 
@@ -290,8 +290,8 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to member <maLastCharRect>
         const SwRect& GetLastCharRect() const { return maLastCharRect;}
-        SwTwips GetRelCharX( const SwFrm* pFrm ) const;
-        SwTwips GetRelCharY( const SwFrm* pFrm ) const;
+        SwTwips GetRelCharX( const SwFrame* pFrame ) const;
+        SwTwips GetRelCharY( const SwFrame* pFrame ) const;
         void AddLastCharY( long nDiff );
         void ResetLastCharRectHeight();
 
@@ -345,7 +345,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @author OD
         */
-        virtual void NotifyBackground( SwPageFrm* _pPageFrm,
+        virtual void NotifyBackground( SwPageFrame* _pPageFrame,
                                        const SwRect& _rRect,
                                        PrepareHint _eHint ) = 0;
 
@@ -489,7 +489,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @return Point - determined relative position
         */
-        Point GetRelPosToAnchorFrm() const;
+        Point GetRelPosToAnchorFrame() const;
 
         /** method to determine position of anchored object relative to
             page frame
@@ -512,7 +512,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @return Point - determined relative position
         */
-        Point GetRelPosToPageFrm( const bool _bFollowTextFlow,
+        Point GetRelPosToPageFrame( const bool _bFollowTextFlow,
                                   bool& _obRelToTableCell ) const;
 
         /** method to determine position of anchored object relative to

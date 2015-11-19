@@ -70,24 +70,24 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 
-static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
+static void lcl_GetLayTree( const SwFrame* pFrame, std::vector<const SwFrame*>& rArr )
 {
-    while( pFrm )
+    while( pFrame )
     {
-        if( pFrm->IsBodyFrm() ) // unspectacular
-            pFrm = pFrm->GetUpper();
+        if( pFrame->IsBodyFrame() ) // unspectacular
+            pFrame = pFrame->GetUpper();
         else
         {
-            rArr.push_back( pFrm );
+            rArr.push_back( pFrame );
 
             // this is the last page
-            if( pFrm->IsPageFrm() )
+            if( pFrame->IsPageFrame() )
                 break;
 
-            if( pFrm->IsFlyFrm() )
-                pFrm = static_cast<const SwFlyFrm*>(pFrm)->GetAnchorFrm();
+            if( pFrame->IsFlyFrame() )
+                pFrame = static_cast<const SwFlyFrame*>(pFrame)->GetAnchorFrame();
             else
-                pFrm = pFrm->GetUpper();
+                pFrame = pFrame->GetUpper();
         }
     }
 }
@@ -95,20 +95,20 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
                     const SwTextNode& rBehindNd, sal_Int32 nSttPos )
 {
-    const SwTextFrm *pMyFrm = static_cast<SwTextFrm*>(rMyNd.getLayoutFrm( rMyNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false) ),
-                   *pFrm = static_cast<SwTextFrm*>(rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false) );
+    const SwTextFrame *pMyFrame = static_cast<SwTextFrame*>(rMyNd.getLayoutFrame( rMyNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false) ),
+                   *pFrame = static_cast<SwTextFrame*>(rBehindNd.getLayoutFrame( rBehindNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false) );
 
-    while( pFrm && !pFrm->IsInside( nSttPos ) )
-        pFrm = pFrm->GetFollow();
-    while( pMyFrm && !pMyFrm->IsInside( nMySttPos ) )
-        pMyFrm = pMyFrm->GetFollow();
+    while( pFrame && !pFrame->IsInside( nSttPos ) )
+        pFrame = pFrame->GetFollow();
+    while( pMyFrame && !pMyFrame->IsInside( nMySttPos ) )
+        pMyFrame = pMyFrame->GetFollow();
 
-    if( !pFrm || !pMyFrm || pFrm == pMyFrm )
+    if( !pFrame || !pMyFrame || pFrame == pMyFrame )
         return false;
 
-    std::vector<const SwFrm*> aRefArr, aArr;
-    ::lcl_GetLayTree( pFrm, aRefArr );
-    ::lcl_GetLayTree( pMyFrm, aArr );
+    std::vector<const SwFrame*> aRefArr, aArr;
+    ::lcl_GetLayTree( pFrame, aRefArr );
+    ::lcl_GetLayTree( pMyFrame, aArr );
 
     size_t nRefCnt = aRefArr.size() - 1, nCnt = aArr.size() - 1;
     bool bVert = false;
@@ -117,9 +117,9 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
     // Loop as long as a frame does not equal?
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
     {
-        const SwFrm* pTmpFrm = aArr[ nCnt ];
-        bVert = pTmpFrm->IsVertical();
-        bR2L = pTmpFrm->IsRightToLeft();
+        const SwFrame* pTmpFrame = aArr[ nCnt ];
+        bVert = pTmpFrame->IsVertical();
+        bR2L = pTmpFrame->IsRightToLeft();
         --nCnt, --nRefCnt;
     }
 
@@ -132,65 +132,65 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
             --nRefCnt;
     }
 
-    const SwFrm* pRefFrm = aRefArr[ nRefCnt ];
-    const SwFrm* pFieldFrm = aArr[ nCnt ];
+    const SwFrame* pRefFrame = aRefArr[ nRefCnt ];
+    const SwFrame* pFieldFrame = aArr[ nCnt ];
 
     // different frames, check their Y-/X-position
     bool bRefIsLower = false;
-    if( ( FRM_COLUMN | FRM_CELL ) & pFieldFrm->GetType() ||
-        ( FRM_COLUMN | FRM_CELL ) & pRefFrm->GetType() )
+    if( ( FRM_COLUMN | FRM_CELL ) & pFieldFrame->GetType() ||
+        ( FRM_COLUMN | FRM_CELL ) & pRefFrame->GetType() )
     {
-        if( pFieldFrm->GetType() == pRefFrm->GetType() )
+        if( pFieldFrame->GetType() == pRefFrame->GetType() )
         {
             // here, the X-pos is more important
             if( bVert )
             {
                 if( bR2L )
-                    bRefIsLower = pRefFrm->Frm().Top() < pFieldFrm->Frm().Top() ||
-                            ( pRefFrm->Frm().Top() == pFieldFrm->Frm().Top() &&
-                              pRefFrm->Frm().Left() < pFieldFrm->Frm().Left() );
+                    bRefIsLower = pRefFrame->Frame().Top() < pFieldFrame->Frame().Top() ||
+                            ( pRefFrame->Frame().Top() == pFieldFrame->Frame().Top() &&
+                              pRefFrame->Frame().Left() < pFieldFrame->Frame().Left() );
                 else
-                    bRefIsLower = pRefFrm->Frm().Top() < pFieldFrm->Frm().Top() ||
-                            ( pRefFrm->Frm().Top() == pFieldFrm->Frm().Top() &&
-                              pRefFrm->Frm().Left() > pFieldFrm->Frm().Left() );
+                    bRefIsLower = pRefFrame->Frame().Top() < pFieldFrame->Frame().Top() ||
+                            ( pRefFrame->Frame().Top() == pFieldFrame->Frame().Top() &&
+                              pRefFrame->Frame().Left() > pFieldFrame->Frame().Left() );
             }
             else if( bR2L )
-                bRefIsLower = pRefFrm->Frm().Left() > pFieldFrm->Frm().Left() ||
-                            ( pRefFrm->Frm().Left() == pFieldFrm->Frm().Left() &&
-                              pRefFrm->Frm().Top() < pFieldFrm->Frm().Top() );
+                bRefIsLower = pRefFrame->Frame().Left() > pFieldFrame->Frame().Left() ||
+                            ( pRefFrame->Frame().Left() == pFieldFrame->Frame().Left() &&
+                              pRefFrame->Frame().Top() < pFieldFrame->Frame().Top() );
             else
-                bRefIsLower = pRefFrm->Frm().Left() < pFieldFrm->Frm().Left() ||
-                            ( pRefFrm->Frm().Left() == pFieldFrm->Frm().Left() &&
-                              pRefFrm->Frm().Top() < pFieldFrm->Frm().Top() );
-            pRefFrm = nullptr;
+                bRefIsLower = pRefFrame->Frame().Left() < pFieldFrame->Frame().Left() ||
+                            ( pRefFrame->Frame().Left() == pFieldFrame->Frame().Left() &&
+                              pRefFrame->Frame().Top() < pFieldFrame->Frame().Top() );
+            pRefFrame = nullptr;
         }
-        else if( ( FRM_COLUMN | FRM_CELL ) & pFieldFrm->GetType() )
-            pFieldFrm = aArr[ nCnt - 1 ];
+        else if( ( FRM_COLUMN | FRM_CELL ) & pFieldFrame->GetType() )
+            pFieldFrame = aArr[ nCnt - 1 ];
         else
-            pRefFrm = aRefArr[ nRefCnt - 1 ];
+            pRefFrame = aRefArr[ nRefCnt - 1 ];
     }
 
-    if( pRefFrm ) // misuse as flag
+    if( pRefFrame ) // misuse as flag
     {
         if( bVert )
         {
             if( bR2L )
-                bRefIsLower = pRefFrm->Frm().Left() < pFieldFrm->Frm().Left() ||
-                            ( pRefFrm->Frm().Left() == pFieldFrm->Frm().Left() &&
-                                pRefFrm->Frm().Top() < pFieldFrm->Frm().Top() );
+                bRefIsLower = pRefFrame->Frame().Left() < pFieldFrame->Frame().Left() ||
+                            ( pRefFrame->Frame().Left() == pFieldFrame->Frame().Left() &&
+                                pRefFrame->Frame().Top() < pFieldFrame->Frame().Top() );
             else
-                bRefIsLower = pRefFrm->Frm().Left() > pFieldFrm->Frm().Left() ||
-                            ( pRefFrm->Frm().Left() == pFieldFrm->Frm().Left() &&
-                                pRefFrm->Frm().Top() < pFieldFrm->Frm().Top() );
+                bRefIsLower = pRefFrame->Frame().Left() > pFieldFrame->Frame().Left() ||
+                            ( pRefFrame->Frame().Left() == pFieldFrame->Frame().Left() &&
+                                pRefFrame->Frame().Top() < pFieldFrame->Frame().Top() );
         }
         else if( bR2L )
-            bRefIsLower = pRefFrm->Frm().Top() < pFieldFrm->Frm().Top() ||
-                        ( pRefFrm->Frm().Top() == pFieldFrm->Frm().Top() &&
-                            pRefFrm->Frm().Left() > pFieldFrm->Frm().Left() );
+            bRefIsLower = pRefFrame->Frame().Top() < pFieldFrame->Frame().Top() ||
+                        ( pRefFrame->Frame().Top() == pFieldFrame->Frame().Top() &&
+                            pRefFrame->Frame().Left() > pFieldFrame->Frame().Left() );
         else
-            bRefIsLower = pRefFrm->Frm().Top() < pFieldFrm->Frm().Top() ||
-                        ( pRefFrm->Frm().Top() == pFieldFrm->Frm().Top() &&
-                            pRefFrm->Frm().Left() < pFieldFrm->Frm().Left() );
+            bRefIsLower = pRefFrame->Frame().Top() < pFieldFrame->Frame().Top() ||
+                        ( pRefFrame->Frame().Top() == pFieldFrame->Frame().Top() &&
+                            pRefFrame->Frame().Left() < pFieldFrame->Frame().Left() );
     }
     return bRefIsLower;
 }
@@ -420,17 +420,17 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
     case REF_PAGE:
     case REF_PAGE_PGDESC:
         {
-            const SwTextFrm* pFrm = static_cast<SwTextFrm*>(pTextNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false)),
-                        *pSave = pFrm;
-            while( pFrm && !pFrm->IsInside( nNumStart ) )
-                pFrm = pFrm->GetFollow();
+            const SwTextFrame* pFrame = static_cast<SwTextFrame*>(pTextNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false)),
+                        *pSave = pFrame;
+            while( pFrame && !pFrame->IsInside( nNumStart ) )
+                pFrame = pFrame->GetFollow();
 
-            if( pFrm || nullptr != ( pFrm = pSave ))
+            if( pFrame || nullptr != ( pFrame = pSave ))
             {
-                sal_uInt16 nPageNo = pFrm->GetVirtPageNum();
-                const SwPageFrm *pPage;
+                sal_uInt16 nPageNo = pFrame->GetVirtPageNum();
+                const SwPageFrame *pPage;
                 if( REF_PAGE_PGDESC == GetFormat() &&
-                    nullptr != ( pPage = pFrm->FindPageFrm() ) &&
+                    nullptr != ( pPage = pFrame->FindPageFrame() ) &&
                     pPage->GetPageDesc() )
                     sText = pPage->GetPageDesc()->GetNumType().GetNumStr( nPageNo );
                 else
@@ -442,13 +442,13 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
     case REF_CHAPTER:
         {
             // a bit tricky: search any frame
-            const SwFrm* pFrm = pTextNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
-            if( pFrm )
+            const SwFrame* pFrame = pTextNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
+            if( pFrame )
             {
                 SwChapterFieldType aFieldTyp;
                 SwChapterField aField( &aFieldTyp, 0 );
                 aField.SetLevel( MAXLEVEL - 1 );
-                aField.ChangeExpansion( pFrm, pTextNd, true );
+                aField.ChangeExpansion( pFrame, pTextNd, true );
                 sText = aField.GetNumber();
             }
         }

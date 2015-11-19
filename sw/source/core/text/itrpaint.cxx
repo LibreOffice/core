@@ -69,9 +69,9 @@ bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
            SVX_CASEMAP_KAPITAELCHEN == rFnt.GetCaseMap();
 }
 
-void SwTextPainter::CtorInitTextPainter( SwTextFrm *pNewFrm, SwTextPaintInfo *pNewInf )
+void SwTextPainter::CtorInitTextPainter( SwTextFrame *pNewFrame, SwTextPaintInfo *pNewInf )
 {
-    CtorInitTextCursor( pNewFrm, pNewInf );
+    CtorInitTextCursor( pNewFrame, pNewInf );
     m_pInf = pNewInf;
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
@@ -195,7 +195,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetPos().Y() + nTmpHeight > rPaint.Top() + rPaint.Height() )
         {
             bClip = false;
-            rClip.ChgClip( rPaint, m_pFrm, m_pCurr->HasUnderscore() );
+            rClip.ChgClip( rPaint, m_pFrame, m_pCurr->HasUnderscore() );
         }
 #if OSL_DEBUG_LEVEL > 1
         static bool bClipAlways = false;
@@ -224,7 +224,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     if( m_pCurr->IsClipping() )
     {
-        rClip.ChgClip( aLineRect, m_pFrm );
+        rClip.ChgClip( aLineRect, m_pFrame );
         bClip = false;
     }
 
@@ -234,9 +234,9 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // Baseline-Ausgabe auch bei nicht-TextPortions (vgl. TabPor mit Fill)
     // if no special vertical alignment is used,
     // we calculate Y value for the whole line
-    SwTextGridItem const*const pGrid(GetGridItem(GetTextFrm()->FindPageFrm()));
+    SwTextGridItem const*const pGrid(GetGridItem(GetTextFrame()->FindPageFrame()));
     const bool bAdjustBaseLine =
-        ( !GetTextFrm()->IsVertical() || GetLineInfo().HasSpecialAlign( true ) ) && (! GetTextFrm()->IsInFly()) &&
+        ( !GetTextFrame()->IsVertical() || GetLineInfo().HasSpecialAlign( true ) ) && (! GetTextFrame()->IsInFly()) &&
         ( nullptr != pGrid );
     const SwTwips nLineBaseLine = GetInfo().GetPos().Y() + nTmpAscent;
     if ( ! bAdjustBaseLine )
@@ -329,7 +329,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 ) > nMaxRight )
         {
             bClip = false;
-            rClip.ChgClip( rPaint, m_pFrm, m_pCurr->HasUnderscore() );
+            rClip.ChgClip( rPaint, m_pFrame, m_pCurr->HasUnderscore() );
         }
 
         // Portions, which lay "below" the text like post-its
@@ -414,7 +414,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         if( !GetNextLine() &&
             GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreview() &&
-            GetInfo().GetOpt().IsParagraph() && !GetTextFrm()->GetFollow() &&
+            GetInfo().GetOpt().IsParagraph() && !GetTextFrame()->GetFollow() &&
             GetInfo().GetIdx() >= GetInfo().GetText().getLength() )
         {
             const SwTmpEndPortion aEnd( *pEndTempl );
@@ -430,10 +430,10 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if( GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreview() )
         {
             const bool bNextUndersized =
-                ( GetTextFrm()->GetNext() &&
-                  0 == GetTextFrm()->GetNext()->Prt().Height() &&
-                  GetTextFrm()->GetNext()->IsTextFrm() &&
-                  static_cast<SwTextFrm*>(GetTextFrm()->GetNext())->IsUndersized() ) ;
+                ( GetTextFrame()->GetNext() &&
+                  0 == GetTextFrame()->GetNext()->Prt().Height() &&
+                  GetTextFrame()->GetNext()->IsTextFrame() &&
+                  static_cast<SwTextFrame*>(GetTextFrame()->GetNext())->IsUndersized() ) ;
 
             if( bUnderSz || bNextUndersized )
             {
@@ -444,7 +444,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                     GetInfo().DrawRedArrow( *pArrow );
 
                 // GetInfo().Y() must be current baseline
-                SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTextFrm()->Frm().Bottom();
+                SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTextFrame()->Frame().Bottom();
                 if( ( nDiff > 0 &&
                       ( GetEnd() < GetInfo().GetText().getLength() ||
                         ( nDiff > nTmpHeight/2 && GetPrevLine() ) ) ) ||
@@ -461,7 +461,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     if( m_pCurr->IsClipping() )
-        rClip.ChgClip( rPaint, m_pFrm );
+        rClip.ChgClip( rPaint, m_pFrame );
 }
 
 void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
@@ -544,7 +544,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     {
         // here starts the algorithm for calculating the underline font
         SwScriptInfo& rScriptInfo = GetInfo().GetParaPortion()->GetScriptInfo();
-        SwAttrIter aIter( *GetInfo().GetTextFrm()->GetTextNode(),
+        SwAttrIter aIter( *GetInfo().GetTextFrame()->GetTextNode(),
                           rScriptInfo );
 
         sal_Int32 nTmpIdx = nIndx;

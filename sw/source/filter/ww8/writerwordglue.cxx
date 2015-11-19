@@ -66,7 +66,7 @@ namespace myImplHelpers
         height, which is totally nonoptimum, but the best we can do.
         */
         long nDist=0;
-        const SwFormatFrmSize& rSz = rFormat.GetFrmSize();
+        const SwFormatFrameSize& rSz = rFormat.GetFrameSize();
 
         const SwHeaderAndFooterEatSpacingItem &rSpacingCtrl =
             sw::util::ItemGet<SwHeaderAndFooterEatSpacingItem>
@@ -80,7 +80,7 @@ namespace myImplHelpers
                 nDist += aRect.Height();
             else
             {
-                const SwFormatFrmSize& rSize = rFormat.GetFrmSize();
+                const SwFormatFrameSize& rSize = rFormat.GetFrameSize();
                 if (ATT_VAR_SIZE != rSize.GetHeightSizeType())
                     nDist += rSize.GetHeight();
                 else
@@ -367,8 +367,8 @@ namespace sw
             const SwColumns& rFollowColumns = rFollowCols.GetColumns();
             SvxLRSpaceItem aOneLR = lcl_getWordLRSpace(rTitleFormat);
             SvxLRSpaceItem aTwoLR = lcl_getWordLRSpace(rFollowFormat);
-            const SwFormatFrmSize& rFirstFrmSize = rTitleFormat.GetFrmSize();
-            const SwFormatFrmSize& rFollowFrmSize = rFollowFormat.GetFrmSize();
+            const SwFormatFrameSize& rFirstFrameSize = rTitleFormat.GetFrameSize();
+            const SwFormatFrameSize& rFollowFrameSize = rFollowFormat.GetFrameSize();
 
             if (rFirstColumns.size() != rFollowColumns.size())
             {
@@ -377,7 +377,7 @@ namespace sw
             }
             else if (aOneLR != aTwoLR)
                 bPlausableSingleWordSection = false;
-            else if (rFirstFrmSize != rFollowFrmSize)
+            else if (rFirstFrameSize != rFollowFrameSize)
                 bPlausableSingleWordSection = false;
             else
             {

@@ -29,21 +29,21 @@
 #include <deque>
 #include <vector>
 
-class SwCrsrShell;
+class SwCursorShell;
 class SwCursor;
 class SwTableCursor;
-class SwFrm;
-class SwTabFrm;
+class SwFrame;
+class SwTabFrame;
 class SwTableBox;
 class SwTableLine;
-class SwLayoutFrm;
+class SwLayoutFrame;
 class SwPaM;
 class SwNode;
 class SwTable;
 class SwUndoTableMerge;
-class SwCellFrm;
+class SwCellFrame;
 
-typedef ::std::deque< SwCellFrm* > SwCellFrms;
+typedef ::std::deque< SwCellFrame* > SwCellFrames;
 
 struct CompareSwSelBoxes
 {
@@ -70,23 +70,23 @@ namespace nsSwTableSearchType
     const SwTableSearchType TBLSEARCH_NO_UNION_CORRECT = 0x10; // Do not correct collected Union.
 }
 
-SW_DLLPUBLIC void GetTableSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
+SW_DLLPUBLIC void GetTableSel( const SwCursorShell& rShell, SwSelBoxes& rBoxes,
                 const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
-void GetTableSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
+void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
                 const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
-// As before, but don't start from selection but from Start- EndFrms.
-void GetTableSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
-                SwSelBoxes& rBoxes, SwCellFrms* pCells,
+// As before, but don't start from selection but from Start- EndFrames.
+void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
+                SwSelBoxes& rBoxes, SwCellFrames* pCells,
                 const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
 // As before but directly via PaMs.
-void GetTableSelCrs( const SwCrsrShell& rShell, SwSelBoxes& rBoxes );
-void GetTableSelCrs( const SwTableCursor& rTableCrsr, SwSelBoxes& rBoxes );
+void GetTableSelCrs( const SwCursorShell& rShell, SwSelBoxes& rBoxes );
+void GetTableSelCrs( const SwTableCursor& rTableCursor, SwSelBoxes& rBoxes );
 
 // Collect boxes relevant for auto sum.
-bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
+bool GetAutoSumSel( const SwCursorShell&, SwCellFrames& );
 
 // Check if the SelBoxes contains protected Boxes.
 bool HasProtectedCells( const SwSelBoxes& rBoxes );
@@ -95,9 +95,9 @@ bool HasProtectedCells( const SwSelBoxes& rBoxes );
 bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd);
 
 // Check if cell is part of SSelection.
-// (Became a function, in order to make sure that GetTableSel() and MakeTableCrsr()
+// (Became a function, in order to make sure that GetTableSel() and MakeTableCursor()
 // have always the same concept of the selection.
-bool IsFrmInTableSel( const SwRect& rUnion, const SwFrm* pCell );
+bool IsFrameInTableSel( const SwRect& rUnion, const SwFrame* pCell );
 
 // Determine boxes to be merged.
 // In this process the rectangle gets "adapted" on the base of the layout,
@@ -113,25 +113,25 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes );
 bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 
 // Check if Split or InsertCol lead to a box becoming smaller than MINLAY.
-bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
+bool CheckSplitCells( const SwCursorShell& rShell, sal_uInt16 nDiv,
                         const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
-bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
+bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
                         const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
 // For working on tab selection also for split tables.
 class SwSelUnion
 {
     SwRect   m_aUnion;        // The rectangle enclosing the selection.
-    SwTabFrm *m_pTable;       // The (Follow-)Table for the Union.
+    SwTabFrame *m_pTable;       // The (Follow-)Table for the Union.
 
 public:
-    SwSelUnion( const SwRect &rRect, SwTabFrm *pTab ) :
+    SwSelUnion( const SwRect &rRect, SwTabFrame *pTab ) :
         m_aUnion( rRect ), m_pTable( pTab ) {}
 
     const SwRect&   GetUnion() const { return m_aUnion; }
           SwRect&   GetUnion()       { return m_aUnion; }
-    const SwTabFrm *GetTable() const { return m_pTable; }
-          SwTabFrm *GetTable()       { return m_pTable; }
+    const SwTabFrame *GetTable() const { return m_pTable; }
+          SwTabFrame *GetTable()       { return m_pTable; }
 };
 
 // Determines tables affected by a table selection and union rectangles
@@ -142,8 +142,8 @@ typedef std::vector<SwSelUnion> SwSelUnions;
 // - also for split tables.
 // If a parameter is passed that != nsSwTableSearchType::TBLSEARCH_NONE
 // the selection is extended in the given direction.
-void MakeSelUnions( SwSelUnions&, const SwLayoutFrm *pStart,
-                    const SwLayoutFrm *pEnd,
+void MakeSelUnions( SwSelUnions&, const SwLayoutFrame *pStart,
+                    const SwLayoutFrame *pEnd,
                     const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
 
 // These classes copy the current table selections (rBoxes) into a
@@ -181,9 +181,9 @@ public:
     void SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable );
     void SetTableLines( const SwTable &rTable );
     //Add an input param to identify if acc table should be disposed
-    void DelFrms ( SwTable &rTable, bool bAccTableDispose = false );
-    void MakeFrms( SwTable &rTable );
-    void MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
+    void DelFrames ( SwTable &rTable, bool bAccTableDispose = false );
+    void MakeFrames( SwTable &rTable );
+    void MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
                                        const bool bBehind );
     bool AreLinesToRestore( const SwTable &rTable ) const;
 

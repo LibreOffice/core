@@ -88,10 +88,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::smarttags;
 
-// Wir ersparen uns in Hyphenate ein GetFrm()
+// Wir ersparen uns in Hyphenate ein GetFrame()
 // Achtung: in edlingu.cxx stehen die Variablen!
 extern const SwTextNode *pLinguNode;
-extern       SwTextFrm  *pLinguFrm;
+extern       SwTextFrame  *pLinguFrame;
 
 /*
  * This has basically the same function as SwScriptInfo::MaskHiddenRanges,
@@ -177,32 +177,32 @@ lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
 /**
  * Used for spell checking. Calculates a rectangle for repaint.
  */
-static SwRect lcl_CalculateRepaintRect( SwTextFrm& rTextFrm, sal_Int32 nChgStart, sal_Int32 nChgEnd )
+static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgStart, sal_Int32 nChgEnd )
 {
     SwRect aRect;
 
-    SwTextNode *pNode = rTextFrm.GetTextNode();
+    SwTextNode *pNode = rTextFrame.GetTextNode();
 
     SwNodeIndex aNdIdx( *pNode );
     SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
-    SwCrsrMoveState aTmpState( MV_NONE );
+    SwCursorMoveState aTmpState( MV_NONE );
     aTmpState.m_b2Lines = true;
-    rTextFrm.GetCharRect( aRect, aPos, &aTmpState );
+    rTextFrame.GetCharRect( aRect, aPos, &aTmpState );
     // information about end of repaint area
     Sw2LinesPos* pEnd2Pos = aTmpState.m_p2Lines;
 
-    const SwTextFrm *pEndFrm = &rTextFrm;
+    const SwTextFrame *pEndFrame = &rTextFrame;
 
-    while( pEndFrm->HasFollow() &&
-           nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
-        pEndFrm = pEndFrm->GetFollow();
+    while( pEndFrame->HasFollow() &&
+           nChgEnd >= pEndFrame->GetFollow()->GetOfst() )
+        pEndFrame = pEndFrame->GetFollow();
 
     if ( pEnd2Pos )
     {
         // we are inside a special portion, take left border
-        SWRECTFN( pEndFrm )
+        SWRECTFN( pEndFrame )
         (aRect.*fnRect->fnSetTop)( (pEnd2Pos->aLine.*fnRect->fnGetTop)() );
-        if ( pEndFrm->IsRightToLeft() )
+        if ( pEndFrame->IsRightToLeft() )
             (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
         else
             (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
@@ -214,28 +214,28 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrm& rTextFrm, sal_Int32 nChgStart
     aTmpState.m_p2Lines = nullptr;
     SwRect aTmp;
     aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
-    rTextFrm.GetCharRect( aTmp, aPos, &aTmpState );
+    rTextFrame.GetCharRect( aTmp, aPos, &aTmpState );
 
     // i63141: GetCharRect(..) could cause a formatting,
-    // during the formatting SwTextFrms could be joined, deleted, created...
-    // => we have to reinit pStartFrm and pEndFrm after the formatting
-    const SwTextFrm* pStartFrm = &rTextFrm;
-    while( pStartFrm->HasFollow() &&
-           nChgStart >= pStartFrm->GetFollow()->GetOfst() )
-        pStartFrm = pStartFrm->GetFollow();
-    pEndFrm = pStartFrm;
-    while( pEndFrm->HasFollow() &&
-           nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
-        pEndFrm = pEndFrm->GetFollow();
+    // during the formatting SwTextFrames could be joined, deleted, created...
+    // => we have to reinit pStartFrame and pEndFrame after the formatting
+    const SwTextFrame* pStartFrame = &rTextFrame;
+    while( pStartFrame->HasFollow() &&
+           nChgStart >= pStartFrame->GetFollow()->GetOfst() )
+        pStartFrame = pStartFrame->GetFollow();
+    pEndFrame = pStartFrame;
+    while( pEndFrame->HasFollow() &&
+           nChgEnd >= pEndFrame->GetFollow()->GetOfst() )
+        pEndFrame = pEndFrame->GetFollow();
 
     // information about start of repaint area
     Sw2LinesPos* pSt2Pos = aTmpState.m_p2Lines;
     if ( pSt2Pos )
     {
         // we are inside a special portion, take right border
-        SWRECTFN( pStartFrm )
+        SWRECTFN( pStartFrame )
         (aTmp.*fnRect->fnSetTop)( (pSt2Pos->aLine.*fnRect->fnGetTop)() );
-        if ( pStartFrm->IsRightToLeft() )
+        if ( pStartFrame->IsRightToLeft() )
             (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
         else
             (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
@@ -246,45 +246,45 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrm& rTextFrm, sal_Int32 nChgStart
 
     bool bSameFrame = true;
 
-    if( rTextFrm.HasFollow() )
+    if( rTextFrame.HasFollow() )
     {
-        if( pEndFrm != pStartFrm )
+        if( pEndFrame != pStartFrame )
         {
             bSameFrame = false;
-            SwRect aStFrm( pStartFrm->PaintArea() );
+            SwRect aStFrame( pStartFrame->PaintArea() );
             {
-                SWRECTFN( pStartFrm )
-                (aTmp.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
-                (aTmp.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
-                (aTmp.*fnRect->fnSetBottom)( (aStFrm.*fnRect->fnGetBottom)() );
+                SWRECTFN( pStartFrame )
+                (aTmp.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
+                (aTmp.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
+                (aTmp.*fnRect->fnSetBottom)( (aStFrame.*fnRect->fnGetBottom)() );
             }
-            aStFrm = pEndFrm->PaintArea();
+            aStFrame = pEndFrame->PaintArea();
             {
-                SWRECTFN( pEndFrm )
-                (aRect.*fnRect->fnSetTop)( (aStFrm.*fnRect->fnGetTop)() );
-                (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
-                (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
+                SWRECTFN( pEndFrame )
+                (aRect.*fnRect->fnSetTop)( (aStFrame.*fnRect->fnGetTop)() );
+                (aRect.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
+                (aRect.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
             }
             aRect.Union( aTmp );
             while( true )
             {
-                pStartFrm = pStartFrm->GetFollow();
-                if( pStartFrm == pEndFrm )
+                pStartFrame = pStartFrame->GetFollow();
+                if( pStartFrame == pEndFrame )
                     break;
-                aRect.Union( pStartFrm->PaintArea() );
+                aRect.Union( pStartFrame->PaintArea() );
             }
         }
     }
     if( bSameFrame )
     {
-        SWRECTFN( pStartFrm )
+        SWRECTFN( pStartFrame )
         if( (aTmp.*fnRect->fnGetTop)() == (aRect.*fnRect->fnGetTop)() )
             (aRect.*fnRect->fnSetLeft)( (aTmp.*fnRect->fnGetLeft)() );
         else
         {
-            SwRect aStFrm( pStartFrm->PaintArea() );
-            (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
-            (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
+            SwRect aStFrame( pStartFrame->PaintArea() );
+            (aRect.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
+            (aRect.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
             (aRect.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetTop)() );
         }
 
@@ -644,7 +644,7 @@ void SwTextNode::RstTextAttr(
             m_pSwpHints->MergePortions(*this);
         }
 
-        // TextFrm's respond to aHint, others to aNew
+        // TextFrame's respond to aHint, others to aNew
         SwUpdateAttr aHint(
             nMin,
             nMax,
@@ -941,7 +941,7 @@ bool SwScanner::NextWord()
 
 bool SwTextNode::Spell(SwSpellArgs* pArgs)
 {
-    // Die Aehnlichkeiten zu SwTextFrm::_AutoSpell sind beabsichtigt ...
+    // Die Aehnlichkeiten zu SwTextFrame::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 
     // modify string according to redline information and hidden text
@@ -1238,7 +1238,7 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
 
 // Die Aehnlichkeiten zu SwTextNode::Spell sind beabsichtigt ...
 // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
-SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
+SwRect SwTextFrame::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
 {
     SwRect aRect;
 #if OSL_DEBUG_LEVEL > 1
@@ -1403,7 +1403,7 @@ SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
             aRect = lcl_CalculateRepaintRect( *this, nChgStart, nChgEnd );
 
             // fdo#71558 notify misspelled word to accessibility
-            SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : nullptr;
+            SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
             if( pViewSh )
                 pViewSh->InvalidateAccessibleParaAttrs( *this );
         }
@@ -1438,7 +1438,7 @@ SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
     @param nActPos ???
     @return SwRect Repaint area
 */
-SwRect SwTextFrm::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActPos*/ )
+SwRect SwTextFrame::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActPos*/ )
 {
     SwRect aRet;
     SwTextNode *pNode = GetTextNode();
@@ -1557,7 +1557,7 @@ SwRect SwTextFrm::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActPos
 }
 
 // Wird vom CollectAutoCmplWords gerufen
-void SwTextFrm::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos )
+void SwTextFrame::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos )
 {
     SwTextNode *pNode = GetTextNode();
     if( pNode != pActNode || !nActPos )
@@ -1606,7 +1606,7 @@ void SwTextFrm::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos 
         pNode->SetAutoCompleteWordDirty( false );
 }
 
-/** Findet den TextFrm und sucht dessen CalcHyph */
+/** Findet den TextFrame und sucht dessen CalcHyph */
 bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     // Abkuerzung: am Absatz ist keine Sprache eingestellt:
@@ -1618,38 +1618,38 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         return false;
     }
 
-    SwTextFrm *pFrm = ::sw::SwHyphIterCacheLastTxtFrm(this,
+    SwTextFrame *pFrame = ::sw::SwHyphIterCacheLastTextFrame(this,
         [&rHyphInf, this]() {
-            return static_cast<SwTextFrm*>(this->getLayoutFrm(
+            return static_cast<SwTextFrame*>(this->getLayoutFrame(
                 this->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                rHyphInf.GetCrsrPos()));
+                rHyphInf.GetCursorPos()));
         });
-    if( pFrm )
-        pFrm = &(pFrm->GetFrmAtOfst( rHyphInf.nStart ));
+    if( pFrame )
+        pFrame = &(pFrame->GetFrameAtOfst( rHyphInf.nStart ));
     else
     {
         // 4935: Seit der Trennung ueber Sonderbereiche sind Faelle
         // moeglich, in denen kein Frame zum Node vorliegt.
         // Also keinOSL_ENSURE
-        OSL_ENSURE( pFrm, "!SwTextNode::Hyphenate: can't find any frame" );
+        OSL_ENSURE( pFrame, "!SwTextNode::Hyphenate: can't find any frame" );
         return false;
     }
 
-    while( pFrm )
+    while( pFrame )
     {
-        if( pFrm->Hyphenate( rHyphInf ) )
+        if( pFrame->Hyphenate( rHyphInf ) )
         {
             // Das Layout ist nicht robust gegen "Direktformatierung"
             // (7821, 7662, 7408); vgl. layact.cxx,
             // SwLayAction::_TurboAction(), if( !pCnt->IsValid() ...
-            pFrm->SetCompletePaint();
+            pFrame->SetCompletePaint();
             return true;
         }
-        pFrm = pFrm->GetFollow();
-        if( pFrm )
+        pFrame = pFrame->GetFollow();
+        if( pFrame )
         {
-            rHyphInf.nEnd = rHyphInf.nEnd - (pFrm->GetOfst() - rHyphInf.nStart);
-            rHyphInf.nStart = pFrm->GetOfst();
+            rHyphInf.nEnd = rHyphInf.nEnd - (pFrame->GetOfst() - rHyphInf.nStart);
+            rHyphInf.nStart = pFrame->GetOfst();
         }
     }
     return false;

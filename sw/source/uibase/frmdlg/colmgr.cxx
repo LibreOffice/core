@@ -115,7 +115,7 @@ SwColMgr::SwColMgr(const SfxItemSet& rSet, sal_uInt16 nActWidth) :
 {
     if(nWidth == USHRT_MAX)
     {
-        nWidth = (sal_uInt16)static_cast<const SwFormatFrmSize&>(rSet.Get(RES_FRM_SIZE)).GetWidth();
+        nWidth = (sal_uInt16)static_cast<const SwFormatFrameSize&>(rSet.Get(RES_FRM_SIZE)).GetWidth();
         if (nWidth < MINLAY)
             nWidth = USHRT_MAX;
         const SvxLRSpaceItem &rLR = static_cast<const SvxLRSpaceItem&>(rSet.Get(RES_LR_SPACE));

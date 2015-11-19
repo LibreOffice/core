@@ -52,11 +52,11 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 
     StartAllAction();
 
-    SwPageFrm *pPage = GetCurrFrm()->FindPageFrm();
-    const SwFrm *pFlow = nullptr;
+    SwPageFrame *pPage = GetCurrFrame()->FindPageFrame();
+    const SwFrame *pFlow = nullptr;
     ::boost::optional<sal_uInt16> oPageNumOffset;
 
-    OSL_ENSURE( !GetCrsr()->HasMark(), "ChgCurPageDesc only without selection!");
+    OSL_ENSURE( !GetCursor()->HasMark(), "ChgCurPageDesc only without selection!");
 
     SET_CURR_SHELL( this );
     while ( pPage )
@@ -65,7 +65,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         if ( pFlow )
         {
             if ( pFlow->IsInTab() )
-                pFlow = pFlow->FindTabFrm();
+                pFlow = pFlow->FindTabFrame();
             const SwFormatPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if( rPgDesc.GetPageDesc() )
             {
@@ -74,15 +74,15 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
                 break;
             }
         }
-        pPage = static_cast<SwPageFrm*>( pPage->GetPrev() );
+        pPage = static_cast<SwPageFrame*>( pPage->GetPrev() );
     }
     if ( !pPage )
     {
-        pPage = static_cast<SwPageFrm*>(GetLayout()->Lower());
+        pPage = static_cast<SwPageFrame*>(GetLayout()->Lower());
         pFlow = pPage->FindFirstBodyContent();
         if ( !pFlow )
         {
-            pPage   = static_cast<SwPageFrm*>(pPage->GetNext());
+            pPage   = static_cast<SwPageFrame*>(pPage->GetNext());
             pFlow = pPage->FindFirstBodyContent();
             OSL_ENSURE( pFlow, "Dokuemnt ohne Inhalt?!?" );
         }
@@ -93,10 +93,10 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     aNew.SetNumOffset( oPageNumOffset );
 
     if ( pFlow->IsInTab() )
-        GetDoc()->SetAttr( aNew, *const_cast<SwFormat*>(static_cast<SwFormat const *>(pFlow->FindTabFrm()->GetFormat())) );
+        GetDoc()->SetAttr( aNew, *const_cast<SwFormat*>(static_cast<SwFormat const *>(pFlow->FindTabFrame()->GetFormat())) );
     else
     {
-        SwPaM aPaM( *static_cast<const SwContentFrm*>(pFlow)->GetNode() );
+        SwPaM aPaM( *static_cast<const SwContentFrame*>(pFlow)->GetNode() );
         GetDoc()->getIDocumentContentOperations().InsertPoolItem( aPaM, aNew );
     }
     EndAllActionAndCall();
@@ -143,12 +143,12 @@ size_t SwFEShell::GetMousePageDesc( const Point &rPt ) const
 {
     if( GetLayout() )
     {
-        const SwPageFrm* pPage =
-            static_cast<const SwPageFrm*>( GetLayout()->Lower() );
+        const SwPageFrame* pPage =
+            static_cast<const SwPageFrame*>( GetLayout()->Lower() );
         if( pPage )
         {
-            while( pPage->GetNext() && rPt.Y() > pPage->Frm().Bottom() )
-                pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+            while( pPage->GetNext() && rPt.Y() > pPage->Frame().Bottom() )
+                pPage = static_cast<const SwPageFrame*>( pPage->GetNext() );
             SwDoc *pMyDoc = GetDoc();
             size_t nPos;
             if (pMyDoc->ContainsPageDesc( pPage->GetPageDesc(), &nPos ) )
@@ -158,12 +158,12 @@ size_t SwFEShell::GetMousePageDesc( const Point &rPt ) const
     return 0;
 }
 
-size_t SwFEShell::GetCurPageDesc( const bool bCalcFrm ) const
+size_t SwFEShell::GetCurPageDesc( const bool bCalcFrame ) const
 {
-    const SwFrm *pFrm = GetCurrFrm( bCalcFrm );
-    if ( pFrm )
+    const SwFrame *pFrame = GetCurrFrame( bCalcFrame );
+    if ( pFrame )
     {
-        const SwPageFrm *pPage = pFrm->FindPageFrm();
+        const SwPageFrame *pPage = pFrame->FindPageFrame();
         if ( pPage )
         {
             size_t nPos;
@@ -179,45 +179,45 @@ size_t SwFEShell::GetCurPageDesc( const bool bCalcFrm ) const
 const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
 {
     const SwContentNode* pCNd;
-    const SwFrm* pMkFrm, *pPtFrm;
+    const SwFrame* pMkFrame, *pPtFrame;
     const SwPageDesc* pFnd, *pRetDesc = reinterpret_cast<SwPageDesc*>(sal_IntPtr(-1));
     const Point aNulPt;
 
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
 
         if( nullptr != (pCNd = rPaM.GetContentNode() ) &&
-            nullptr != ( pPtFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, nullptr, false )) )
-            pPtFrm = pPtFrm->FindPageFrm();
+            nullptr != ( pPtFrame = pCNd->getLayoutFrame( GetLayout(), &aNulPt, nullptr, false )) )
+            pPtFrame = pPtFrame->FindPageFrame();
         else
-            pPtFrm = nullptr;
+            pPtFrame = nullptr;
 
         if( rPaM.HasMark() &&
             nullptr != (pCNd = rPaM.GetContentNode( false ) ) &&
-            nullptr != ( pMkFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, nullptr, false )) )
-            pMkFrm = pMkFrm->FindPageFrm();
+            nullptr != ( pMkFrame = pCNd->getLayoutFrame( GetLayout(), &aNulPt, nullptr, false )) )
+            pMkFrame = pMkFrame->FindPageFrame();
         else
-            pMkFrm = pPtFrm;
+            pMkFrame = pPtFrame;
 
-        if( !pMkFrm || !pPtFrm )
+        if( !pMkFrame || !pPtFrame )
             pFnd = nullptr;
-        else if( pMkFrm == pPtFrm )
-            pFnd = static_cast<const SwPageFrm*>(pMkFrm)->GetPageDesc();
+        else if( pMkFrame == pPtFrame )
+            pFnd = static_cast<const SwPageFrame*>(pMkFrame)->GetPageDesc();
         else
         {
-            // swap pointer if PtFrm before MkFrm
-            if( static_cast<const SwPageFrm*>(pMkFrm)->GetPhyPageNum() >
-                static_cast<const SwPageFrm*>(pPtFrm)->GetPhyPageNum() )
+            // swap pointer if PtFrame before MkFrame
+            if( static_cast<const SwPageFrame*>(pMkFrame)->GetPhyPageNum() >
+                static_cast<const SwPageFrame*>(pPtFrame)->GetPhyPageNum() )
             {
-                const SwFrm* pTmp = pMkFrm; pMkFrm = pPtFrm; pPtFrm = pTmp;
+                const SwFrame* pTmp = pMkFrame; pMkFrame = pPtFrame; pPtFrame = pTmp;
             }
 
-            // now check from MkFrm to PtFrm for equal PageDescs
-            pFnd = static_cast<const SwPageFrm*>(pMkFrm)->GetPageDesc();
-            while( pFnd && pMkFrm != pPtFrm )
+            // now check from MkFrame to PtFrame for equal PageDescs
+            pFnd = static_cast<const SwPageFrame*>(pMkFrame)->GetPageDesc();
+            while( pFnd && pMkFrame != pPtFrame )
             {
-                pMkFrm = pMkFrm->GetNext();
-                if( !pMkFrm || pFnd != static_cast<const SwPageFrm*>(pMkFrm)->GetPageDesc() )
+                pMkFrame = pMkFrame->GetNext();
+                if( !pMkFrame || pFnd != static_cast<const SwPageFrame*>(pMkFrame)->GetPageDesc() )
                     pFnd = nullptr;
             }
         }

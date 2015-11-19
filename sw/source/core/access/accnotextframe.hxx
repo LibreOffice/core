@@ -29,7 +29,7 @@ namespace com { namespace star {
     namespace accessibility { struct AccessibleRelation; }
 } }
 
-class SwFlyFrm;
+class SwFlyFrame;
 class SwNoTextNode;
 class SwAccessibleNoTextHyperlink;
 
@@ -53,7 +53,7 @@ protected:
 public:
     SwAccessibleNoTextFrame( SwAccessibleMap* pInitMap,
                              sal_Int16 nInitRole,
-                             const SwFlyFrm *pFlyFrm );
+                             const SwFlyFrame *pFlyFrame );
 
     // XAccessibleContext
 

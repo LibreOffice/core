@@ -32,13 +32,13 @@ class SwAttrPool;
 class SwFormatAutoFormat;
 class SwChapterField;
 class SwChapterFieldType;
-class SwContentFrm;
+class SwContentFrame;
 class SwContentNode;
 class SwDoc;
 class SwForm;
 struct SwFormToken;
 class SwPageDesc;
-class SwRootFrm;
+class SwRootFrame;
 class SwTextAttr;
 class SwTextNode;
 struct SwTOXSortTabBase;
@@ -138,7 +138,7 @@ private:
     /** Generate the text for a chapter token.
      */
     OUString
-    GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwContentFrm* contentFrame,
+    GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwContentFrame* contentFrame,
             const SwContentNode *contentNode) const;
 
     /** Obtain a ChapterField to use for the text generation.
@@ -147,7 +147,7 @@ private:
      */
     virtual SwChapterField
     ObtainChapterField(SwChapterFieldType* chapterFieldType, const SwFormToken* chapterToken,
-            const SwContentFrm* contentFrame, const SwContentNode *contentNode) const;
+            const SwContentFrame* contentFrame, const SwContentNode *contentNode) const;
 
     friend class ::ToxTextGeneratorTest;
 };

@@ -41,12 +41,12 @@
 
 using namespace com::sun::star;
 
-SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
+SwFlyFrame *SwFEShell::FindFlyFrame( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
-    SwFlyFrm *pFly = GetSelectedFlyFrm();
-    if ( pFly && pFly->Lower() && pFly->Lower()->IsNoTextFrm() )
+    SwFlyFrame *pFly = GetSelectedFlyFrame();
+    if ( pFly && pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
     {
-        SwOLENode *pNd = static_cast<SwNoTextFrm*>(pFly->Lower())->GetNode()->GetOLENode();
+        SwOLENode *pNd = static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetOLENode();
         if ( !pNd || pNd->GetOLEObj().GetOleRef() != xObj )
             pFly = nullptr;
     }
@@ -68,15 +68,15 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
                  static_cast<SwOLENode*>(pNd)->GetOLEObj().GetOleRef() == xObj )
             {
                 bExist = true;
-                SwFrm *pFrm = static_cast<SwOLENode*>(pNd)->getLayoutFrm( GetLayout() );
-                if ( pFrm )
-                    pFly = pFrm->FindFlyFrm();
+                SwFrame *pFrame = static_cast<SwOLENode*>(pNd)->getLayoutFrame( GetLayout() );
+                if ( pFrame )
+                    pFly = pFrame->FindFlyFrame();
                 break;
             }
             nSttIdx = pStNd->EndOfSectionIndex() + 1;
         }
 
-        OSL_ENSURE( bExist, "OLE-Object unknown and FlyFrm not found." );
+        OSL_ENSURE( bExist, "OLE-Object unknown and FlyFrame not found." );
         (void)bExist;
     }
     return pFly;

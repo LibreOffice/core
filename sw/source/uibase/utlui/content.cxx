@@ -570,21 +570,21 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             for(size_t i = 0; i < nMemberCount; ++i)
             {
                 const SwFrameFormat* pFrameFormat = pWrtShell->GetFlyNum(i,eType,/*bIgnoreTextBoxes=*/true);
-                const OUString sFrmName = pFrameFormat->GetName();
+                const OUString sFrameName = pFrameFormat->GetName();
 
                 SwContent* pCnt;
                 if(ContentTypeId::GRAPHIC == nContentType)
                 {
                     OUString sLink;
                     pWrtShell->GetGrfNms( &sLink, nullptr, static_cast<const SwFlyFrameFormat*>( pFrameFormat));
-                    pCnt = new SwGraphicContent(this, sFrmName,
+                    pCnt = new SwGraphicContent(this, sFrameName,
                                 INetURLObject::decode( sLink,
                                            INetURLObject::DECODE_UNAMBIGUOUS ),
                                 pFrameFormat->FindLayoutRect(false, &aNullPt).Top());
                 }
                 else
                 {
-                    pCnt = new SwContent(this, sFrmName,
+                    pCnt = new SwContent(this, sFrameName,
                             pFrameFormat->FindLayoutRect(false, &aNullPt).Top() );
                 }
                 if( !pFrameFormat->GetInfo( aAskItem ) &&
@@ -3130,8 +3130,8 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, EditEntryMode nMode)
                 uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
                 uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
                 xNameAccess = xGraphics->getGraphicObjects();
-                uno::Reference< text::XTextFramesSupplier >  xFrms(xModel, uno::UNO_QUERY);
-                xSecond = xFrms->getTextFrames();
+                uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
+                xSecond = xFrames->getTextFrames();
                 uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
                 xThird = xObjs->getEmbeddedObjects();
             }
@@ -3148,17 +3148,17 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, EditEntryMode nMode)
             else if(nMode == EditEntryMode::RENAME)
             {
                 uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XTextFramesSupplier >  xFrms(xModel, uno::UNO_QUERY);
+                uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
                 uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
                 if(ContentTypeId::FRAME == nType)
                 {
-                    xNameAccess = xFrms->getTextFrames();
+                    xNameAccess = xFrames->getTextFrames();
                     xSecond = xObjs->getEmbeddedObjects();
                 }
                 else
                 {
                     xNameAccess = xObjs->getEmbeddedObjects();
-                    xSecond = xFrms->getTextFrames();
+                    xSecond = xFrames->getTextFrames();
                 }
                 uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
                 xThird = xGraphics->getGraphicObjects();
@@ -3340,7 +3340,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                             *static_cast<SwURLFieldContent*>(pCnt)->GetINetAttr() ))
             {
                 m_pActiveShell->Right( CRSR_SKIP_CHARS, true, 1, false);
-                m_pActiveShell->SwCrsrShell::SelectTextAttr( RES_TXTATR_INETFMT, true );
+                m_pActiveShell->SwCursorShell::SelectTextAttr( RES_TXTATR_INETFMT, true );
             }
 
         }
@@ -3368,7 +3368,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         break;
         case ContentTypeId::DRAWOBJECT:
         {
-            SwPosition aPos = *m_pActiveShell->GetCrsr()->GetPoint();
+            SwPosition aPos = *m_pActiveShell->GetCursor()->GetPoint();
             SdrView* pDrawView = m_pActiveShell->GetDrawView();
             if (pDrawView)
             {
@@ -3398,8 +3398,8 @@ void SwContentTree::GotoContent(SwContent* pCnt)
     }
     if(bSel)
     {
-        m_pActiveShell->HideCrsr();
-        m_pActiveShell->EnterSelFrmMode();
+        m_pActiveShell->HideCursor();
+        m_pActiveShell->EnterSelFrameMode();
     }
     SwView& rView = m_pActiveShell->GetView();
     rView.StopShellTimer();

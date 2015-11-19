@@ -154,12 +154,12 @@ class SwUndoInsertLabel : public SwUndo
 {
     union {
         struct {
-            // for NoTextFrms
+            // for NoTextFrames
             SwUndoInsLayFormat* pUndoFly;
             SwUndoFormatAttr* pUndoAttr;
         } OBJECT;
         struct {
-            // for tables or TextFrms
+            // for tables or TextFrames
             SwUndoDelete* pUndoInsNd;
             sal_uLong nNode;
         } NODE;

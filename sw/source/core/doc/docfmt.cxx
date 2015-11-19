@@ -259,7 +259,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         SwIndex& rSt = pPam->GetPoint()->nContent;
         sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
 
-        // Special case: if the Crsr is located within a URL attribute, we take over it's area
+        // Special case: if the Cursor is located within a URL attribute, we take over it's area
         SwTextAttr const*const pURLAttr(
             pTextNd->GetTextAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
         if (pURLAttr && !pURLAttr->GetINetFormat().GetValue().isEmpty())
@@ -1401,7 +1401,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                             bool bCopyPoolIds )
 {
     bool bNotifyLayout = false;
-    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
 
     rDstDesc.SetLandscape( rSrcDesc.GetLandscape() );
     rDstDesc.SetNumType( rSrcDesc.GetNumType() );

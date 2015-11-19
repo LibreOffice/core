@@ -140,7 +140,7 @@ private:
     SwFormatFootnoteAtTextEnd        m_FootnoteNtAtEnd;
     SwFormatEndAtTextEnd        m_EndNtAtEnd;
     SwFormatNoBalancedColumns  m_Balance;
-    SvxFrameDirectionItem   m_FrmDirItem;
+    SvxFrameDirectionItem   m_FrameDirItem;
     SvxLRSpaceItem          m_LRSpaceItem;
     const size_t            m_nArrPos;
     // shows, if maybe textcontent is in the region
@@ -158,7 +158,7 @@ public:
     SwFormatFootnoteAtTextEnd&       GetFootnoteNtAtEnd()     { return m_FootnoteNtAtEnd; }
     SwFormatEndAtTextEnd&       GetEndNtAtEnd()     { return m_EndNtAtEnd; }
     SwFormatNoBalancedColumns& GetBalance()        { return m_Balance; }
-    SvxFrameDirectionItem&  GetFrmDir()         { return m_FrmDirItem; }
+    SvxFrameDirectionItem&  GetFrameDir()         { return m_FrameDirItem; }
     SvxLRSpaceItem&         GetLRSpace()        { return m_LRSpaceItem; }
 
     size_t              GetArrPos() const { return m_nArrPos; }
@@ -182,7 +182,7 @@ public:
 SectRepr::SectRepr( size_t nPos, SwSection& rSect )
     : m_SectionData( rSect )
     , m_Brush( RES_BACKGROUND )
-    , m_FrmDirItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR )
+    , m_FrameDirItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR )
     , m_LRSpaceItem( RES_LR_SPACE )
     , m_nArrPos(nPos)
     , m_bContent(m_SectionData.GetLinkFileName().isEmpty())
@@ -196,7 +196,7 @@ SectRepr::SectRepr( size_t nPos, SwSection& rSect )
         m_FootnoteNtAtEnd = pFormat->GetFootnoteAtTextEnd();
         m_EndNtAtEnd = pFormat->GetEndAtTextEnd();
         m_Balance.SetValue(pFormat->GetBalancedColumns().GetValue());
-        m_FrmDirItem = pFormat->GetFrmDir();
+        m_FrameDirItem = pFormat->GetFrameDir();
         m_LRSpaceItem = pFormat->GetLRSpace();
     }
 }
@@ -797,8 +797,8 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OkHdl, Button*, void)
             if( pFormat->GetBalancedColumns() != pRepr->GetBalance() )
                 pSet->Put( pRepr->GetBalance() );
 
-            if( pFormat->GetFrmDir() != pRepr->GetFrmDir() )
-                pSet->Put( pRepr->GetFrmDir() );
+            if( pFormat->GetFrameDir() != pRepr->GetFrameDir() )
+                pSet->Put( pRepr->GetFrameDir() );
 
             if( pFormat->GetLRSpace() != pRepr->GetLRSpace())
                 pSet->Put( pRepr->GetLRSpace());
@@ -1056,7 +1056,7 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OptionsHdl, Button*, void)
         aSet.Put( pSectRepr->GetFootnoteNtAtEnd() );
         aSet.Put( pSectRepr->GetEndNtAtEnd() );
         aSet.Put( pSectRepr->GetBalance() );
-        aSet.Put( pSectRepr->GetFrmDir() );
+        aSet.Put( pSectRepr->GetFrameDir() );
         aSet.Put( pSectRepr->GetLRSpace() );
 
         const SwSectionFormats& rDocFormats = rSh.GetDoc()->GetSections();
@@ -1068,7 +1068,7 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OptionsHdl, Button*, void)
         if (!nWidth)
             nWidth = USHRT_MAX;
 
-        aSet.Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth));
+        aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
         ScopedVclPtrInstance< SwSectionPropertyTabDialog > aTabDlg(this, aSet, rSh);
@@ -1079,7 +1079,7 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OptionsHdl, Button*, void)
             {
                 const SfxPoolItem *pColItem, *pBrushItem,
                                   *pFootnoteItem, *pEndItem, *pBalanceItem,
-                                  *pFrmDirItem, *pLRSpaceItem;
+                                  *pFrameDirItem, *pLRSpaceItem;
                 SfxItemState eColState = pOutSet->GetItemState(
                                         RES_COL, false, &pColItem );
                 SfxItemState eBrushState = pOutSet->GetItemState(
@@ -1090,8 +1090,8 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OptionsHdl, Button*, void)
                                         RES_END_AT_TXTEND, false, &pEndItem );
                 SfxItemState eBalanceState = pOutSet->GetItemState(
                                         RES_COLUMNBALANCE, false, &pBalanceItem );
-                SfxItemState eFrmDirState = pOutSet->GetItemState(
-                                        RES_FRAMEDIR, false, &pFrmDirItem );
+                SfxItemState eFrameDirState = pOutSet->GetItemState(
+                                        RES_FRAMEDIR, false, &pFrameDirItem );
                 SfxItemState eLRState = pOutSet->GetItemState(
                                         RES_LR_SPACE, false, &pLRSpaceItem);
 
@@ -1100,7 +1100,7 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OptionsHdl, Button*, void)
                     SfxItemState::SET == eFootnoteState ||
                     SfxItemState::SET == eEndState ||
                     SfxItemState::SET == eBalanceState||
-                    SfxItemState::SET == eFrmDirState||
+                    SfxItemState::SET == eFrameDirState||
                     SfxItemState::SET == eLRState)
                 {
                     SvTreeListEntry* pSelEntry = m_pTree->FirstSelected();
@@ -1117,8 +1117,8 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OptionsHdl, Button*, void)
                             pRepr->GetEndNtAtEnd() = *static_cast<const SwFormatEndAtTextEnd*>(pEndItem);
                         if( SfxItemState::SET == eBalanceState )
                             pRepr->GetBalance().SetValue(static_cast<const SwFormatNoBalancedColumns*>(pBalanceItem)->GetValue());
-                        if( SfxItemState::SET == eFrmDirState )
-                            pRepr->GetFrmDir().SetValue(static_cast<const SvxFrameDirectionItem*>(pFrmDirItem)->GetValue());
+                        if( SfxItemState::SET == eFrameDirState )
+                            pRepr->GetFrameDir().SetValue(static_cast<const SvxFrameDirectionItem*>(pFrameDirItem)->GetValue());
                         if( SfxItemState::SET == eLRState )
                             pRepr->GetLRSpace() = *static_cast<const SvxLRSpaceItem*>(pLRSpaceItem);
 
@@ -1443,7 +1443,7 @@ void SwInsertSectionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nColumnPageId)
     {
-        const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(GetInputSetImpl()->Get(RES_FRM_SIZE));
+        const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(GetInputSetImpl()->Get(RES_FRM_SIZE));
         static_cast<SwColumnPage&>(rPage).SetPageWidth(rSize.GetWidth());
         static_cast<SwColumnPage&>(rPage).ShowBalance(true);
         static_cast<SwColumnPage&>(rPage).SetInSection(true);
@@ -1464,12 +1464,12 @@ short   SwInsertSectionTabDialog::Ok()
             "SwInsertSectionTabDialog: no SectionData?");
     const SfxItemSet* pOutputItemSet = GetOutputItemSet();
     rWrtSh.InsertSection(*m_pSectionData, pOutputItemSet);
-    SfxViewFrame* pViewFrm = rWrtSh.GetView().GetViewFrame();
+    SfxViewFrame* pViewFrame = rWrtSh.GetView().GetViewFrame();
     uno::Reference< frame::XDispatchRecorder > xRecorder =
-            pViewFrm->GetBindings().GetRecorder();
+            pViewFrame->GetBindings().GetRecorder();
     if ( xRecorder.is() )
     {
-        SfxRequest aRequest( pViewFrm, FN_INSERT_REGION);
+        SfxRequest aRequest( pViewFrame, FN_INSERT_REGION);
         const SfxPoolItem* pCol;
         if(SfxItemState::SET == pOutputItemSet->GetItemState(RES_COL, false, &pCol))
         {

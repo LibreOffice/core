@@ -68,7 +68,7 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                                 SVX_EVENT_IMAGE_LOAD);
         }
         // no break;
-    case MACASSGN_FRMURL:           // Frm - URL-Attributes
+    case MACASSGN_FRMURL:           // Frame - URL-Attributes
         {
             if( !bHtmlMode &&
                 (MACASSGN_FRMURL == eType || MACASSGN_ALLFRM == eType))

@@ -27,7 +27,7 @@
 
 class IntlWrapper;
 
-/// Connection (text flow) between two FlyFrms.
+/// Connection (text flow) between two FlyFrames.
 class SW_DLLPUBLIC SwFormatChain: public SfxPoolItem
 {
     SwClient aPrev, ///< Previous SwFlyFrameFormat (if existent).

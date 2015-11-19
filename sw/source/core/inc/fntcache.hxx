@@ -110,7 +110,7 @@ public:
     void   DrawText( SwDrawTextInfo &rInf );
     /// determine the TextSize (of the printer)
     Size  GetTextSize( SwDrawTextInfo &rInf );
-    sal_Int32 GetCrsrOfst( SwDrawTextInfo &rInf );
+    sal_Int32 GetCursorOfst( SwDrawTextInfo &rInf );
 
     void CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut );
     void CreatePrtFont( const OutputDevice& rOut );

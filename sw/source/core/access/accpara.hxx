@@ -34,7 +34,7 @@
 #include <unordered_map>
 
 class SwField;
-class SwTextFrm;
+class SwTextFrame;
 class SwTextNode;
 class SwPaM;
 class SwAccessiblePortionData;
@@ -238,7 +238,7 @@ protected:
 public:
 
     SwAccessibleParagraph( SwAccessibleMap& rInitMap,
-                           const SwTextFrm& rTextFrm );
+                           const SwTextFrame& rTextFrame );
 
     inline operator css::accessibility::XAccessibleText *();
 

@@ -34,10 +34,10 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
     public:
         explicit SidebarWinAccessibleContext( SwSidebarWin& rSidebarWin,
                                               SwViewShell& rViewShell,
-                                              const SwFrm* pAnchorFrm )
+                                              const SwFrame* pAnchorFrame )
             : VCLXAccessibleComponent( rSidebarWin.GetWindowPeer() )
             , mrViewShell( rViewShell )
-            , mpAnchorFrm( pAnchorFrm )
+            , mpAnchorFrame( pAnchorFrame )
             , maMutex()
         {
             rSidebarWin.SetAccessibleRole( css::accessibility::AccessibleRole::COMMENT );
@@ -46,11 +46,11 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         virtual ~SidebarWinAccessibleContext()
         {}
 
-        void ChangeAnchor( const SwFrm* pAnchorFrm )
+        void ChangeAnchor( const SwFrame* pAnchorFrame )
         {
             osl::MutexGuard aGuard(maMutex);
 
-            mpAnchorFrm = pAnchorFrm;
+            mpAnchorFrame = pAnchorFrame;
         }
 
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
@@ -60,10 +60,10 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
             css::uno::Reference< css::accessibility::XAccessible > xAccParent;
 
-            if ( mpAnchorFrm &&
+            if ( mpAnchorFrame &&
                  mrViewShell.GetAccessibleMap() )
             {
-                xAccParent = mrViewShell.GetAccessibleMap()->GetContext( mpAnchorFrm, false );
+                xAccParent = mrViewShell.GetAccessibleMap()->GetContext( mpAnchorFrame, false );
             }
 
             return xAccParent;
@@ -75,10 +75,10 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
             sal_Int32 nIndex( -1 );
 
-            if ( mpAnchorFrm && GetWindow() &&
+            if ( mpAnchorFrame && GetWindow() &&
                  mrViewShell.GetAccessibleMap() )
             {
-                nIndex = mrViewShell.GetAccessibleMap()->GetChildIndex( *mpAnchorFrm,
+                nIndex = mrViewShell.GetAccessibleMap()->GetChildIndex( *mpAnchorFrame,
                                                                         *GetWindow() );
             }
 
@@ -87,7 +87,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
     private:
         SwViewShell& mrViewShell;
-        const SwFrm* mpAnchorFrm;
+        const SwFrame* mpAnchorFrame;
 
         ::osl::Mutex maMutex;
 };
@@ -99,7 +99,7 @@ SidebarWinAccessible::SidebarWinAccessible( SwSidebarWin& rSidebarWin,
     : VCLXWindow()
     , mrSidebarWin( rSidebarWin )
     , mrViewShell( rViewShell )
-    , mpAnchorFrm( rSidebarItem.maLayoutInfo.mpAnchorFrm )
+    , mpAnchorFrame( rSidebarItem.maLayoutInfo.mpAnchorFrame )
     , bAccContextCreated( false )
 {
     SetWindow( &mrSidebarWin );
@@ -121,7 +121,7 @@ void SidebarWinAccessible::ChangeSidebarItem( const SwSidebarItem& rSidebarItem 
                         dynamic_cast<SidebarWinAccessibleContext*>(xAcc.get());
             if ( pAccContext )
             {
-                pAccContext->ChangeAnchor( rSidebarItem.maLayoutInfo.mpAnchorFrm );
+                pAccContext->ChangeAnchor( rSidebarItem.maLayoutInfo.mpAnchorFrame );
             }
         }
     }
@@ -132,7 +132,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SidebarWinAccessib
     SidebarWinAccessibleContext* pAccContext =
                                 new SidebarWinAccessibleContext( mrSidebarWin,
                                                                  mrViewShell,
-                                                                 mpAnchorFrm );
+                                                                 mpAnchorFrame );
     css::uno::Reference< css::accessibility::XAccessibleContext > xAcc( pAccContext );
     bAccContextCreated = true;
     return xAcc;

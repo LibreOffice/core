@@ -13,7 +13,7 @@
 
 #include <vcl/menubtn.hxx>
 
-class SwPageFrm;
+class SwPageFrame;
 
 /** Class for the page break control window.
 
@@ -33,7 +33,7 @@ class SwPageBreakWin : public SwFrameMenuButtonBase
     const Point*          m_pMousePt;
 
 public:
-    SwPageBreakWin( SwEditWin* pEditWin, const SwFrm *pFrm );
+    SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame );
     virtual ~SwPageBreakWin();
     virtual void dispose() override;
 

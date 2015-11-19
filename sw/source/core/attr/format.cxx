@@ -40,9 +40,9 @@ using namespace com::sun::star;
 
 
 SwFormat::SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-              const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrm,
+              const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame,
               sal_uInt16 nFormatWhich )
-    : SwModify( pDrvdFrm ),
+    : SwModify( pDrvdFrame ),
     m_aFormatName( OUString::createFromAscii(pFormatNm) ),
     m_aSet( rPool, pWhichRanges ),
     m_nWhichId( nFormatWhich ),
@@ -54,14 +54,14 @@ SwFormat::SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
     m_bAutoFormat = true;
     m_bWritten = m_bFormatInDTOR = m_bHidden = false;
 
-    if( pDrvdFrm )
-        m_aSet.SetParent( &pDrvdFrm->m_aSet );
+    if( pDrvdFrame )
+        m_aSet.SetParent( &pDrvdFrame->m_aSet );
 }
 
 SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
-              const sal_uInt16* pWhichRanges, SwFormat* pDrvdFrm,
+              const sal_uInt16* pWhichRanges, SwFormat* pDrvdFrame,
               sal_uInt16 nFormatWhich )
-    : SwModify( pDrvdFrm ),
+    : SwModify( pDrvdFrame ),
     m_aFormatName( rFormatNm ),
     m_aSet( rPool, pWhichRanges ),
     m_nWhichId( nFormatWhich ),
@@ -73,8 +73,8 @@ SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
     m_bAutoFormat = true;
     m_bWritten = m_bFormatInDTOR = m_bHidden = false;
 
-    if( pDrvdFrm )
-        m_aSet.SetParent( &pDrvdFrm->m_aSet );
+    if( pDrvdFrame )
+        m_aSet.SetParent( &pDrvdFrame->m_aSet );
 }
 
 SwFormat::SwFormat( const SwFormat& rFormat )
@@ -106,7 +106,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
 
     if ( IsInCache() )
     {
-        SwFrm::GetCache().Delete( this );
+        SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
     SetInSwFntCache( false );
@@ -180,7 +180,7 @@ void SwFormat::CopyAttrs( const SwFormat& rFormat, bool bReplace )
     // copy only array with attributes delta
     if ( IsInCache() )
     {
-        SwFrm::GetCache().Delete( this );
+        SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
     SetInSwFntCache( false );
@@ -376,7 +376,7 @@ bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
 
     if ( IsInCache() )
     {
-        SwFrm::GetCache().Delete( this );
+        SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
     SetInSwFntCache( false );
@@ -571,7 +571,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
 
     if ( IsInCache() )
     {
-        SwFrm::GetCache().Delete( this );
+        SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
     SetInSwFntCache( false );
@@ -707,7 +707,7 @@ sal_uInt16 SwFormat::ResetAllFormatAttr()
 
     if ( IsInCache() )
     {
-        SwFrm::GetCache().Delete( this );
+        SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
     SetInSwFntCache( false );
@@ -740,7 +740,7 @@ void SwFormat::DelDiffs( const SfxItemSet& rSet )
 
     if ( IsInCache() )
     {
-        SwFrm::GetCache().Delete( this );
+        SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
     SetInSwFntCache( false );

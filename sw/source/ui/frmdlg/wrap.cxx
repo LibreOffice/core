@@ -403,12 +403,12 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     if (!m_bDrawMode)
     {
         SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell() : m_pWrtSh;
-        SwFlyFrmAttrMgr aMgr( m_bNew, pSh, static_cast<const SwAttrSet&>(GetItemSet()) );
+        SwFlyFrameAttrMgr aMgr( m_bNew, pSh, static_cast<const SwAttrSet&>(GetItemSet()) );
         SvxSwFrameValidation aVal;
 
         // size
-        const SwFormatFrmSize& rFrmSize = static_cast<const SwFormatFrmSize&>(rSet.Get(RES_FRM_SIZE));
-        Size aSize = rFrmSize.GetSize();
+        const SwFormatFrameSize& rFrameSize = static_cast<const SwFormatFrameSize&>(rSet.Get(RES_FRM_SIZE));
+        Size aSize = rFrameSize.GetSize();
 
         // margin
         const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rSet.Get(RES_UL_SPACE));
@@ -423,8 +423,8 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         const SwFormatVertOrient& rVert = static_cast<const SwFormatVertOrient&>(rSet.Get(RES_VERT_ORIENT));
 
         aVal.nAnchorType = static_cast< sal_Int16 >(m_nAnchorId);
-        aVal.bAutoHeight = rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE;
-        aVal.bAutoWidth = rFrmSize.GetWidthSizeType() == ATT_MIN_SIZE;
+        aVal.bAutoHeight = rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE;
+        aVal.bAutoWidth = rFrameSize.GetWidthSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
         // #i18732#
         aVal.bFollowTextFlow =
@@ -438,15 +438,15 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.nVPos = rVert.GetPos();
         aVal.nVRelOrient = rVert.GetRelationOrient();
 
-        if (rFrmSize.GetWidthPercent() && rFrmSize.GetWidthPercent() != SwFormatFrmSize::SYNCED)
-            aSize.Width() = aSize.Width() * rFrmSize.GetWidthPercent() / 100;
+        if (rFrameSize.GetWidthPercent() && rFrameSize.GetWidthPercent() != SwFormatFrameSize::SYNCED)
+            aSize.Width() = aSize.Width() * rFrameSize.GetWidthPercent() / 100;
 
-        if (rFrmSize.GetHeightPercent() && rFrmSize.GetHeightPercent() != SwFormatFrmSize::SYNCED)
-            aSize.Height() = aSize.Height() * rFrmSize.GetHeightPercent() / 100;
+        if (rFrameSize.GetHeightPercent() && rFrameSize.GetHeightPercent() != SwFormatFrameSize::SYNCED)
+            aSize.Height() = aSize.Height() * rFrameSize.GetHeightPercent() / 100;
 
         aVal.nWidth  = aSize.Width();
         aVal.nHeight = aSize.Height();
-        m_aFrmSize = aSize;
+        m_aFrameSize = aSize;
 
         aMgr.ValidateMetrics(aVal, nullptr);
 

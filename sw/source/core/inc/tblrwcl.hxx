@@ -38,7 +38,7 @@ class SwHistory;
 class SwContentNode;
 class SfxPoolItem;
 class SwShareBoxFormats;
-class SwFormatFrmSize;
+class SwFormatFrameSize;
 struct _CpyPara;
 struct _InsULPara;
 
@@ -190,7 +190,7 @@ public:
 
     void AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNew );
 
-    void SetSize( SwTableBox& rBox, const SwFormatFrmSize& rSz );
+    void SetSize( SwTableBox& rBox, const SwFormatFrameSize& rSz );
     void SetAttr( SwTableBox& rBox, const SfxPoolItem& rItem );
     void SetAttr( SwTableLine& rLine, const SfxPoolItem& rItem );
 

@@ -1777,7 +1777,7 @@ void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
     aData.eOldAnchorType = m_eNewAnchorType;
 
     aData.bOldOutTable = m_bOutTable;
-    aData.bOldFlyFrmAttrs = m_bOutFlyFrmAttrs;
+    aData.bOldFlyFrameAttrs = m_bOutFlyFrameAttrs;
     aData.bOldStartTOX = m_bStartTOX;
     aData.bOldInWriteTOX = m_bInWriteTOX;
 
@@ -1785,7 +1785,7 @@ void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
 
     m_bOutTable = false;
     // Caution: bIsInTable should not be set here
-    m_bOutFlyFrmAttrs = false;
+    m_bOutFlyFrameAttrs = false;
     m_bStartTOX = false;
     m_bInWriteTOX = false;
 
@@ -1803,7 +1803,7 @@ void MSWordExportBase::RestoreData()
     m_pOrigPam = rData.pOldEnd;
 
     m_bOutTable = rData.bOldOutTable;
-    m_bOutFlyFrmAttrs = rData.bOldFlyFrmAttrs;
+    m_bOutFlyFrameAttrs = rData.bOldFlyFrameAttrs;
     m_bStartTOX = rData.bOldStartTOX;
     m_bInWriteTOX = rData.bOldInWriteTOX;
 
@@ -2035,7 +2035,7 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
 
     // Zeilenhoehe ausgeben   sprmTDyaRowHeight
     long nHeight = 0;
-    const SwFormatFrmSize& rLSz = pLineFormat->GetFrmSize();
+    const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
     if ( ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
     {
         if ( ATT_MIN_SIZE == rLSz.GetHeightSizeType() )
@@ -2256,7 +2256,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
     if (!pFormat)
         return;
 
-    const SwFormatFrmSize &rSize = pFormat->GetFrmSize();
+    const SwFormatFrameSize &rSize = pFormat->GetFrameSize();
     int nWidthPercent = rSize.GetWidthPercent();
     bool bManualAligned = pFormat->GetHoriOrient().GetHoriOrient() == text::HoriOrientation::NONE;
     if ( (pFormat->GetHoriOrient().GetHoriOrient() == text::HoriOrientation::FULL) || bManualAligned )
@@ -2284,7 +2284,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
             if ( 0 == ( nPageSize = aRect.Width() ) )
             {
                 const SvxLRSpaceItem& rLR = pParentFormat->GetLRSpace();
-                nPageSize = pParentFormat->GetFrmSize().GetWidth() - rLR.GetLeft()
+                nPageSize = pParentFormat->GetFrameSize().GetWidth() - rLR.GetLeft()
                 - rLR.GetRight();
             }
         }
@@ -2922,7 +2922,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     m_nFormatCollStart = m_nCharFormatStart + m_pDoc->GetCharFormats()->size() - 1;
 
     m_bStyDef = m_bBreakBefore = m_bOutKF =
-        m_bOutFlyFrmAttrs = m_bOutPageDescs = m_bOutTable = m_bOutFirstPage =
+        m_bOutFlyFrameAttrs = m_bOutPageDescs = m_bOutTable = m_bOutFirstPage =
         m_bOutGrf = m_bInWriteEscher = m_bStartTOX =
         m_bInWriteTOX = false;
 
@@ -3384,7 +3384,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_bStyDef(false)
     , m_bBreakBefore(false)
     , m_bOutKF(false)
-    , m_bOutFlyFrmAttrs(false)
+    , m_bOutFlyFrameAttrs(false)
     , m_bOutPageDescs(false)
     , m_bOutFirstPage(false)
     , m_bOutTable(false)

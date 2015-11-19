@@ -22,27 +22,27 @@
 
 #include <tools/solar.h>
 
-class SwCrsrShell;
+class SwCursorShell;
 class SwTextNode;
-class SwRootFrm;
+class SwRootFrame;
 
 class SwCallLink
 {
 public:
-    SwCrsrShell & rShell;
+    SwCursorShell & rShell;
     sal_uLong nNode;
     sal_Int32 nContent;
     sal_uInt8 nNdTyp;
-    long nLeftFrmPos;
+    long nLeftFramePos;
     bool bHasSelection;
 
-    explicit SwCallLink( SwCrsrShell & rSh );
-    SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktContent,
+    explicit SwCallLink( SwCursorShell & rSh );
+    SwCallLink( SwCursorShell & rSh, sal_uLong nAktNode, sal_Int32 nAktContent,
                                     sal_uInt8 nAktNdTyp, long nLRPos,
                                     bool bAktSelection );
     ~SwCallLink();
 
-    static long getLayoutFrm( const SwRootFrm*, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrm );
+    static long getLayoutFrame( const SwRootFrame*, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrame );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX

@@ -30,7 +30,7 @@
 
 void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
 {
-    SwRootFrm* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
     if (  pTmpRoot &&
          (rNew.IsCountBlankLines() != mpLineNumberInfo->IsCountBlankLines() ||
           rNew.IsRestartEachPage() != mpLineNumberInfo->IsRestartEachPage()) )
@@ -136,7 +136,7 @@ void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
 {
     CheckRegistration( pOld, pNew );
     SwDoc *pDoc = static_cast<SwCharFormat*>(GetRegisteredIn())->GetDoc();
-    SwRootFrm* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRoot )
     {
         pRoot->StartAllAction();

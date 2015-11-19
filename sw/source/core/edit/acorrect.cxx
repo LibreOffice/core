@@ -37,40 +37,40 @@
 
 using namespace ::com::sun::star;
 
-class _PaMIntoCrsrShellRing
+class _PaMIntoCursorShellRing
 {
-    SwCrsrShell& rSh;
-    SwPaM &rDelPam, &rCrsr;
+    SwCursorShell& rSh;
+    SwPaM &rDelPam, &rCursor;
     SwPaM* pPrevDelPam;
-    SwPaM* pPrevCrsr;
+    SwPaM* pPrevCursor;
 
     static void RemoveFromRing( SwPaM& rPam, SwPaM* pPrev );
 public:
-    _PaMIntoCrsrShellRing( SwCrsrShell& rSh, SwPaM& rCrsr, SwPaM& rPam );
-    ~_PaMIntoCrsrShellRing();
+    _PaMIntoCursorShellRing( SwCursorShell& rSh, SwPaM& rCursor, SwPaM& rPam );
+    ~_PaMIntoCursorShellRing();
 };
 
-_PaMIntoCrsrShellRing::_PaMIntoCrsrShellRing( SwCrsrShell& rCSh,
-                                            SwPaM& rShCrsr, SwPaM& rPam )
-    : rSh( rCSh ), rDelPam( rPam ), rCrsr( rShCrsr )
+_PaMIntoCursorShellRing::_PaMIntoCursorShellRing( SwCursorShell& rCSh,
+                                            SwPaM& rShCursor, SwPaM& rPam )
+    : rSh( rCSh ), rDelPam( rPam ), rCursor( rShCursor )
 {
-    SwPaM* pShCrsr = rSh._GetCrsr();
+    SwPaM* pShCursor = rSh._GetCursor();
 
     pPrevDelPam = rDelPam.GetPrev();
-    pPrevCrsr = rCrsr.GetPrev();
+    pPrevCursor = rCursor.GetPrev();
 
-    rDelPam.GetRingContainer().merge( pShCrsr->GetRingContainer() );
-    rCrsr.GetRingContainer().merge( pShCrsr->GetRingContainer() );
+    rDelPam.GetRingContainer().merge( pShCursor->GetRingContainer() );
+    rCursor.GetRingContainer().merge( pShCursor->GetRingContainer() );
 }
 
-_PaMIntoCrsrShellRing::~_PaMIntoCrsrShellRing()
+_PaMIntoCursorShellRing::~_PaMIntoCursorShellRing()
 {
     // and take out the Pam again:
     RemoveFromRing( rDelPam, pPrevDelPam );
-    RemoveFromRing( rCrsr, pPrevCrsr );
+    RemoveFromRing( rCursor, pPrevCursor );
 }
 
-void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, SwPaM* pPrev )
+void _PaMIntoCursorShellRing::RemoveFromRing( SwPaM& rPam, SwPaM* pPrev )
 {
     SwPaM* p;
     SwPaM* pNext = &rPam;
@@ -83,7 +83,7 @@ void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, SwPaM* pPrev )
 
 SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
                                 sal_Unicode cIns )
-    : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( nullptr )
+    : rEditSh( rEditShell ), rCursor( rPam ), pIdx( nullptr )
     , m_nEndUndoCounter(0)
     , bUndoIdInitialized( cIns == 0 )
 {
@@ -105,7 +105,7 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
     {
         // so that also the DelPam be moved,  include it in the
         // Shell-Cursr-Ring !!
-        _PaMIntoCrsrShellRing aTmp( rEditSh, rCrsr, rDelPam );
+        _PaMIntoCursorShellRing aTmp( rEditSh, rCursor, rDelPam );
         pDoc->getIDocumentContentOperations().DeleteAndJoin( rDelPam );
     }
     else
@@ -116,7 +116,7 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
 
 bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 {
-    const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
+    const SwNodeIndex& rNd = rCursor.GetPoint()->nNode;
     SwPaM aSel( rNd, nStt, rNd, nEnd );
     DeleteSel( aSel );
 
@@ -127,7 +127,7 @@ bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 
 bool SwAutoCorrDoc::Insert( sal_Int32 nPos, const OUString& rText )
 {
-    SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
+    SwPaM aPam( rCursor.GetPoint()->nNode.GetNode(), nPos );
     rEditSh.GetDoc()->getIDocumentContentOperations().InsertString( aPam, rText );
     if( !bUndoIdInitialized )
     {
@@ -148,10 +148,10 @@ bool SwAutoCorrDoc::Replace( sal_Int32 nPos, const OUString& rText )
 
 bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const OUString& rText )
 {
-    SwPaM* pPam = &rCrsr;
+    SwPaM* pPam = &rCursor;
     if( pPam->GetPoint()->nContent.GetIndex() != nPos )
     {
-        pPam = new SwPaM( *rCrsr.GetPoint() );
+        pPam = new SwPaM( *rCursor.GetPoint() );
         pPam->GetPoint()->nContent = nPos;
     }
 
@@ -187,7 +187,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
             }
             else
             {
-                _PaMIntoCrsrShellRing aTmp( rEditSh, rCrsr, *pPam );
+                _PaMIntoCursorShellRing aTmp( rEditSh, rCursor, *pPam );
 
                 pPam->SetMark();
                 pPam->GetPoint()->nContent = std::min<sal_Int32>(
@@ -223,7 +223,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
         }
     }
 
-    if( pPam != &rCrsr )
+    if( pPam != &rCursor )
         delete pPam;
 
     return true;
@@ -232,7 +232,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
 bool SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                                         SfxPoolItem& rItem )
 {
-    const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
+    const SwNodeIndex& rNd = rCursor.GetPoint()->nNode;
     SwPaM aPam( rNd, nStt, rNd, nEnd );
 
     SfxItemPool& rPool = rEditSh.GetDoc()->GetAttrPool();
@@ -254,7 +254,7 @@ bool SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
 
 bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL )
 {
-    const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
+    const SwNodeIndex& rNd = rCursor.GetPoint()->nNode;
     SwPaM aPam( rNd, nStt, rNd, nEnd );
 
     SfxItemSet aSet( rEditSh.GetDoc()->GetAttrPool(),
@@ -277,7 +277,7 @@ OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
     OUString const* pStr(nullptr);
 
     if( bAtNormalPos || !pIdx )
-        pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
+        pIdx = new SwNodeIndex( rCursor.GetPoint()->nNode, -1 );
     else
         --(*pIdx);
 
@@ -305,7 +305,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
     // Found a beginning of a paragraph or a Blank,
     // search for the word Kuerzel (Shortcut) in the Auto
-    SwTextNode* pTextNd = rCrsr.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rCursor.GetNode().GetTextNode();
     OSL_ENSURE( pTextNd, "where is the TextNode?" );
 
     bool bRet = false;
@@ -329,7 +329,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         // replace also last colon of keywords surrounded by colons (for example, ":name:")
         bool replaceLastChar = pFnd->GetShort()[0] == ':' && pFnd->GetShort().endsWith(":");
 
-        const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
+        const SwNodeIndex& rNd = rCursor.GetPoint()->nNode;
         SwPaM aPam( rNd, rSttPos, rNd, nEndPos + (replaceLastChar ? 1 : 0) );
 
         if( pFnd->IsTextOnly() )
@@ -355,7 +355,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 if( pPara )
                 {
                     OSL_ENSURE( !pIdx, "who has not deleted his Index?" );
-                    pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
+                    pIdx = new SwNodeIndex( rCursor.GetPoint()->nNode, -1 );
                 }
 
                 SwDoc* pAutoDoc = aTBlks.GetDoc();
@@ -410,7 +410,7 @@ void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                             const OUString& rExceptWord,
                                             sal_Unicode cChar )
 {
-    sal_uLong nNode = pIdx ? pIdx->GetIndex() : rCrsr.GetPoint()->nNode.GetIndex();
+    sal_uLong nNode = pIdx ? pIdx->GetIndex() : rCursor.GetPoint()->nNode.GetIndex();
     LanguageType eLang = GetLanguage(nPos, false);
     rEditSh.GetDoc()->SetAutoCorrExceptWord( new SwAutoCorrExceptWord( nFlag,
                                         nNode, nPos, rExceptWord, cChar, eLang ));
@@ -422,7 +422,7 @@ LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos, bool bPrevPara ) const
 
     SwTextNode* pNd = (( bPrevPara && pIdx )
                             ? *pIdx
-                            : rCrsr.GetPoint()->nNode ).GetNode().GetTextNode();
+                            : rCursor.GetPoint()->nNode ).GetNode().GetTextNode();
 
     if( pNd )
         eRet = pNd->GetLang( nPos );

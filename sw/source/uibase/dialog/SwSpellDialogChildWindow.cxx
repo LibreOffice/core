@@ -226,24 +226,24 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                     m_pSpellState->m_bStartedInSelection = true;
                 }
                 // determine if the selection is outside of the body text
-                bOtherText = !(pWrtShell->GetFrmType(nullptr,true) & FrmTypeFlags::BODY);
+                bOtherText = !(pWrtShell->GetFrameType(nullptr,true) & FrameTypeFlags::BODY);
                 m_pSpellState->m_SpellStartPosition = bOtherText ? SPELL_START_OTHER : SPELL_START_BODY;
                 if(bOtherText)
                 {
-                    m_pSpellState->pOtherCursor = new SwPaM(*pWrtShell->GetCrsr()->GetPoint());
+                    m_pSpellState->pOtherCursor = new SwPaM(*pWrtShell->GetCursor()->GetPoint());
                     m_pSpellState->m_bStartedInOther = true;
                     pWrtShell->SpellStart( DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_CURR );
                 }
                 else
                 {
-                    SwPaM* pCrsr = pWrtShell->GetCrsr();
+                    SwPaM* pCursor = pWrtShell->GetCursor();
                     // mark the start position only if not at start of doc
                     if(!pWrtShell->IsStartOfDoc())
                     {
                         m_pSpellState->m_xStartRange =
                             SwXTextRange::CreateXTextRange(
                                 *pWrtShell->GetDoc(),
-                                *pCrsr->Start(), pCrsr->End());
+                                *pCursor->Start(), pCursor->End());
                     }
                     pWrtShell->SpellStart( DOCPOS_START, DOCPOS_END, DOCPOS_CURR );
                 }
@@ -323,7 +323,7 @@ The code below would only be part of the solution.
                 if (!m_pSpellState->m_bStartedInSelection)
                 {
                     // find out which text has been spelled body or other
-                    bOtherText = !(pWrtShell->GetFrmType(nullptr,true) & FrmTypeFlags::BODY);
+                    bOtherText = !(pWrtShell->GetFrameType(nullptr,true) & FrameTypeFlags::BODY);
                     if(bOtherText && m_pSpellState->m_bStartedInOther && m_pSpellState->pOtherCursor)
                     {
                         m_pSpellState->m_bStartedInOther = false;
@@ -541,7 +541,7 @@ void SwSpellDialogChildWindow::GetFocus()
                 case SHELL_MODE_TABLE_TEXT:
                 case SHELL_MODE_TABLE_LIST_TEXT:
                 {
-                    SwPaM* pCursor = pWrtShell->GetCrsr();
+                    SwPaM* pCursor = pWrtShell->GetCursor();
                     if(m_pSpellState->m_pPointNode != &pCursor->GetNode() ||
                         m_pSpellState->m_pMarkNode != &pCursor->GetNode(false)||
                         m_pSpellState->m_nPointPos != pCursor->GetPoint()->nContent.GetIndex()||
@@ -598,7 +598,7 @@ void SwSpellDialogChildWindow::LoseFocus()
             case SHELL_MODE_TABLE_LIST_TEXT:
             {
                 // store a node pointer and a pam-position to be able to check on next GetFocus();
-                SwPaM* pCursor = pWrtShell->GetCrsr();
+                SwPaM* pCursor = pWrtShell->GetCursor();
                 m_pSpellState->m_pPointNode = &pCursor->GetNode();
                 m_pSpellState->m_pMarkNode = &pCursor->GetNode(false);
                 m_pSpellState->m_nPointPos = pCursor->GetPoint()->nContent.GetIndex();
@@ -670,8 +670,8 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
 
         case SHELL_MODE_FRAME:
         {
-            rShell.UnSelectFrm();
-            rShell.LeaveSelFrmMode();
+            rShell.UnSelectFrame();
+            rShell.LeaveSelFrameMode();
             rView.AttrChangedNotify(&rShell);
         }
         break;

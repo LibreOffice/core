@@ -29,7 +29,7 @@
 
 class _SetGetExpFields;
 class SwTextField;
-class SwFrm;
+class SwFrame;
 class OutlinerParaObject;
 class SwTextAPIObject;
 class SwFormatField;
@@ -273,7 +273,7 @@ public:
     SwDocStatField( SwDocStatFieldType*,
                     sal_uInt16 nSubType = 0, sal_uInt32 nFormat = 0);
 
-    void ChangeExpansion( const SwFrm* pFrm );
+    void ChangeExpansion( const SwFrame* pFrame );
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
@@ -619,7 +619,7 @@ public:
 
     void SetText( const OUString& rText )      { sText = rText; }
 
-    void ChangeExpansion( const SwFrm* pFrm, const SwTextField* pField );
+    void ChangeExpansion( const SwFrame* pFrame, const SwTextField* pField );
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };

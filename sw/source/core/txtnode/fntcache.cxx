@@ -254,14 +254,14 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
 
    if ( rData.bSwitchL2R )
    {
-       rData.rInf.GetFrm()->SwitchLTRtoRTL( rStart );
-       rData.rInf.GetFrm()->SwitchLTRtoRTL( rEnd );
+       rData.rInf.GetFrame()->SwitchLTRtoRTL( rStart );
+       rData.rInf.GetFrame()->SwitchLTRtoRTL( rEnd );
    }
 
    if ( rData.bSwitchH2V )
    {
-       rData.rInf.GetFrm()->SwitchHorizontalToVertical( rStart );
-       rData.rInf.GetFrm()->SwitchHorizontalToVertical( rEnd );
+       rData.rInf.GetFrame()->SwitchHorizontalToVertical( rStart );
+       rData.rInf.GetFrame()->SwitchHorizontalToVertical( rEnd );
    }
 }
 
@@ -872,9 +872,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // HACK: UNDERLINE_WAVE must not be abused any more, hence the grey wave
     // line of the ExtendedAttributeSets will appear in the font color first
 
-    const bool bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
-    const bool bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
-                            ! rInf.IsIgnoreFrmRTL();
+    const bool bSwitchH2V = rInf.GetFrame() && rInf.GetFrame()->IsVertical();
+    const bool bSwitchL2R = rInf.GetFrame() && rInf.GetFrame()->IsRightToLeft() &&
+                            ! rInf.IsIgnoreFrameRTL();
     const ComplexTextLayoutMode nMode = rInf.GetOut().GetLayoutMode();
     const bool bBidiPor = ( bSwitchL2R !=
                             ( TEXT_LAYOUT_DEFAULT != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
@@ -897,7 +897,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             nPixWidth = rInf.GetOut().PixelToLogic( aTmp ).Width();
         }
 
-        aTextOriginPos.X() += rInf.GetFrm()->IsRightToLeft() ? 0 : nPixWidth;
+        aTextOriginPos.X() += rInf.GetFrame()->IsRightToLeft() ? 0 : nPixWidth;
     }
 
     Color aOldColor( pTmpFont->GetColor() );
@@ -912,10 +912,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     // ASIAN LINE AND CHARACTER GRID MODE START
 
-    if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
+    if ( rInf.GetFrame() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
 
         // ASIAN LINE AND CHARACTER GRID MODE: Do we want to snap asian characters to the grid?
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars())
@@ -1012,7 +1012,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                               aTextOriginPos.X() + rInf.GetPos().X() ;
 
             if ( bSwitchH2V )
-                rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
+                rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                 pKernArray, rInf.GetIdx(), rInf.GetLen() );
@@ -1025,10 +1025,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // For text grid refactor
     // ASIAN LINE AND CHARACTER GRID MODE START: not snap to characters
 
-    if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
+    if ( rInf.GetFrame() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
 
         // ASIAN LINE AND CHARACTER GRID MODE - do not snap to characters
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
@@ -1044,7 +1044,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                 rInf.GetIdx(), rInf.GetLen() );
             if ( bSwitchH2V )
-                rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
+                rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
             if ( rInf.GetSpace() || rInf.GetKanaComp())
             {
                 long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
@@ -1169,10 +1169,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
 
         if ( bSwitchL2R )
-            rInf.GetFrm()->SwitchLTRtoRTL( aTextOriginPos );
+            rInf.GetFrame()->SwitchLTRtoRTL( aTextOriginPos );
 
         if ( bSwitchH2V )
-            rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
+            rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
         // In the good old days we used to have a simple DrawText if the
         // output device is the printer. Now we need a DrawTextArray if
@@ -1559,10 +1559,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                           ( rInf.GetSpace() / SPACING_PRECISION_FACTOR );
 
             if ( bSwitchL2R )
-                rInf.GetFrm()->SwitchLTRtoRTL( aTextOriginPos );
+                rInf.GetFrame()->SwitchLTRtoRTL( aTextOriginPos );
 
             if ( bSwitchH2V )
-                rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
+                rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
 #if defined(MACOSX) || defined(IOS)
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
@@ -1701,14 +1701,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                         if ( bSwitchL2R )
                         {
-                            rInf.GetFrm()->SwitchLTRtoRTL( aCurrPos );
-                            rInf.GetFrm()->SwitchLTRtoRTL( aEnd );
+                            rInf.GetFrame()->SwitchLTRtoRTL( aCurrPos );
+                            rInf.GetFrame()->SwitchLTRtoRTL( aEnd );
                         }
 
                         if ( bSwitchH2V )
                         {
-                            rInf.GetFrm()->SwitchHorizontalToVertical( aCurrPos );
-                            rInf.GetFrm()->SwitchHorizontalToVertical( aEnd );
+                            rInf.GetFrame()->SwitchHorizontalToVertical( aCurrPos );
+                            rInf.GetFrame()->SwitchHorizontalToVertical( aEnd );
                         }
                         rInf.GetOut().DrawWaveLine( aCurrPos, aEnd );
 
@@ -1749,10 +1749,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             {
 
                 if ( bSwitchL2R )
-                    rInf.GetFrm()->SwitchLTRtoRTL( aTextOriginPos );
+                    rInf.GetFrame()->SwitchLTRtoRTL( aTextOriginPos );
 
                 if ( bSwitchH2V )
-                    rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
+                    rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
 #if defined(MACOSX) || defined(IOS)
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray + nOffs,
@@ -1811,10 +1811,10 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
     }
 
-    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
+    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
@@ -1853,10 +1853,10 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     }
 
     //for textgrid refactor
-    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
+    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
             const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
@@ -1998,7 +1998,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     return aTextSize;
 }
 
-sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
+sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
 {
     long nSpaceAdd =       rInf.GetSpace() / SPACING_PRECISION_FACTOR;
     const long nSperren = -rInf.GetSperren() / SPACING_PRECISION_FACTOR;
@@ -2092,10 +2092,10 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     long nSpaceSum = 0;
     long nKernSum = 0;
 
-    if ( rInf.GetFrm() && rInf.GetLen() && rInf.SnapToGrid() &&
+    if ( rInf.GetFrame() && rInf.GetLen() && rInf.SnapToGrid() &&
          rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
@@ -2119,10 +2119,10 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     }
 
     //for textgrid refactor
-    if ( rInf.GetFrm() && rInf.GetLen() && rInf.SnapToGrid() &&
+    if ( rInf.GetFrame() && rInf.GetLen() && rInf.SnapToGrid() &&
          rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
 
@@ -2328,10 +2328,10 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
     sal_Int32 nLn = rInf.GetLen() == COMPLETE_STRING
         ? rInf.GetText().getLength() : rInf.GetLen();
 
-    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() &&
+    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() &&
          rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
@@ -2362,10 +2362,10 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
     }
 
     //for text grid enhancement
-    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
+    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
             const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
@@ -2545,7 +2545,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                 /// OD 21.08.2002 #99657#
                 ///     There is a user defined setting for the background, if there
                 ///     is a background brush and its color is *not* "no fill"/"auto fill".
-                if( GetFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false ) )
+                if( GetFrame()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false ) )
                 {
                     if (aFillAttributes.get() && aFillAttributes->isUsed())
                     {

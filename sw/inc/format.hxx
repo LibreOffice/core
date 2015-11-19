@@ -63,9 +63,9 @@ class SW_DLLPUBLIC SwFormat : public SwModify
 
 protected:
     SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-            const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrm, sal_uInt16 nFormatWhich );
+            const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
     SwFormat( SwAttrPool& rPool, const OUString &rFormatNm, const sal_uInt16* pWhichRanges,
-            SwFormat *pDrvdFrm, sal_uInt16 nFormatWhich );
+            SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
     SwFormat( const SwFormat& rFormat );
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
@@ -190,7 +190,7 @@ public:
 
     /// Frame-attributes - implemented in frmatr.hxx.
     inline const SwFormatFillOrder           &GetFillOrder( bool = true ) const;
-    inline const SwFormatFrmSize             &GetFrmSize( bool = true ) const;
+    inline const SwFormatFrameSize             &GetFrameSize( bool = true ) const;
     inline const SwFormatHeader          &GetHeader( bool = true ) const;
     inline const SwFormatFooter          &GetFooter( bool = true ) const;
     inline const SwFormatSurround            &GetSurround( bool = true ) const;
@@ -223,7 +223,7 @@ public:
     inline const SwFormatFootnoteAtTextEnd     &GetFootnoteAtTextEnd( bool = true ) const;
     inline const SwFormatEndAtTextEnd     &GetEndAtTextEnd( bool = true ) const;
     inline const SwFormatNoBalancedColumns &GetBalancedColumns( bool = true ) const;
-    inline const SvxFrameDirectionItem    &GetFrmDir( bool = true ) const;
+    inline const SvxFrameDirectionItem    &GetFrameDir( bool = true ) const;
     inline const SwTextGridItem         &GetTextGrid( bool = true ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( bool = true ) const;
     // #i18732#

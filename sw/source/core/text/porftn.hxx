@@ -21,7 +21,7 @@
 
 #include "porfld.hxx"
 
-class SwTextFrm;
+class SwTextFrame;
 class SwTextFootnote;
 
 class SwFootnotePortion : public SwFieldPortion
@@ -84,7 +84,7 @@ class SwErgoSumPortion : public SwFieldPortion
 {
 public:
     SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const override;
+    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Field cloner for SplitGlue

@@ -106,7 +106,7 @@ namespace
         const SvxLRSpaceItem& rLR = rPgDscFormat.GetLRSpace();
         const long nLeft = rLR.GetLeft();
         const long nRight = rLR.GetRight();
-        const long nWidth = rPgDscFormat.GetFrmSize().GetWidth();
+        const long nWidth = rPgDscFormat.GetFrameSize().GetWidth();
         return nWidth - nLeft - nRight;
     }
 
@@ -266,14 +266,14 @@ namespace
     static void lcl_PutStdPageSizeIntoItemSet( SwDoc* pDoc, SfxItemSet& rSet )
     {
         SwPageDesc* pStdPgDsc = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
-        SwFormatFrmSize aFrmSz( pStdPgDsc->GetMaster().GetFrmSize() );
+        SwFormatFrameSize aFrameSz( pStdPgDsc->GetMaster().GetFrameSize() );
         if( pStdPgDsc->GetLandscape() )
         {
-            SwTwips nTmp = aFrmSz.GetHeight();
-            aFrmSz.SetHeight( aFrmSz.GetWidth() );
-            aFrmSz.SetWidth( nTmp );
+            SwTwips nTmp = aFrameSz.GetHeight();
+            aFrameSz.SetHeight( aFrameSz.GetWidth() );
+            aFrameSz.SetWidth( nTmp );
         }
-        rSet.Put( aFrmSz );
+        rSet.Put( aFrameSz );
     }
 }
 
@@ -1328,7 +1328,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatSurround( SURROUND_PARALLEL ));
             // Set the default width to 3.5 cm, use the minimum value for the height
-            aSet.Put( SwFormatFrmSize( ATT_MIN_SIZE,
+            aSet.Put( SwFormatFrameSize( ATT_MIN_SIZE,
                     GetMetricVal( CM_1 ) * 3 + GetMetricVal( CM_05 ),
                     MM50 ));
         }
@@ -1477,7 +1477,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         {
             Size aPSize( SvxPaperInfo::GetPaperSize( PAPER_ENV_C65 ) );
             LandscapeSwap( aPSize );
-            aSet.Put( SwFormatFrmSize( ATT_FIX_SIZE, aPSize.Width(), aPSize.Height() ));
+            aSet.Put( SwFormatFrameSize( ATT_FIX_SIZE, aPSize.Width(), aPSize.Height() ));
             aLR.SetLeft( 0 ); aLR.SetRight( 0 );
             aUL.SetUpper( 0 ); aUL.SetLower( 0 );
             aSet.Put( aLR );
@@ -1519,14 +1519,14 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
     case RES_POOLPAGE_LANDSCAPE:    // "Landscape"
         {
             SwPageDesc* pStdPgDsc = GetPageDescFromPool( RES_POOLPAGE_STANDARD );
-            SwFormatFrmSize aFrmSz( pStdPgDsc->GetMaster().GetFrmSize() );
+            SwFormatFrameSize aFrameSz( pStdPgDsc->GetMaster().GetFrameSize() );
             if ( !pStdPgDsc->GetLandscape() )
             {
-                const SwTwips nTmp = aFrmSz.GetHeight();
-                aFrmSz.SetHeight( aFrmSz.GetWidth() );
-                aFrmSz.SetWidth( nTmp );
+                const SwTwips nTmp = aFrameSz.GetHeight();
+                aFrameSz.SetHeight( aFrameSz.GetWidth() );
+                aFrameSz.SetWidth( nTmp );
             }
-            aSet.Put( aFrmSz );
+            aSet.Put( aFrameSz );
             aSet.Put( aLR );
             aSet.Put( aUL );
             pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );

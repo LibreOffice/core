@@ -32,9 +32,9 @@
 class SfxPoolItem;
 class SwFrameFormat;
 class SwFlyFrameFormat;
-class SwFlyFrm;
-class SwFrm;
-class SwPageFrm;
+class SwFlyFrame;
+class SwFrame;
+class SwPageFrame;
 class SwVirtFlyDrawObj;
 class SwFormatAnchor;
 class SwFlyDrawObj;
@@ -54,7 +54,7 @@ inline const SwFrameFormat *FindFrameFormat( const SdrObject *pObj )
 {   return ::FindFrameFormat( const_cast<SdrObject*>(pObj) ); }
 bool HasWrap( const SdrObject* pObj );
 
-void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );
+void setContextWritingMode( SdrObject* pObj, SwFrame* pAnchor );
 
 /// @return BoundRect plus distance.
 SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
@@ -253,8 +253,8 @@ class SwDrawVirtObj : public SdrVirtObj
         /// connection to writer layout
         const SwAnchoredObject& GetAnchoredObj() const { return maAnchoredDrawObj; }
         SwAnchoredObject& AnchoredObj() { return maAnchoredDrawObj; }
-        const SwFrm* GetAnchorFrm() const;
-        SwFrm* AnchorFrm();
+        const SwFrame* GetAnchorFrame() const;
+        SwFrame* AnchorFrame();
         void RemoveFromWriterLayout();
 
         /// connection to drawing layer
@@ -363,10 +363,10 @@ class SwDrawContact : public SwContact
 
         /** unary function used by <list> iterator to find a 'virtual' drawing
          object anchored at a given frame */
-        struct VirtObjAnchoredAtFrmPred
+        struct VirtObjAnchoredAtFramePred
         {
-            const SwFrm* mpAnchorFrm;
-            VirtObjAnchoredAtFrmPred( const SwFrm& _rAnchorFrm );
+            const SwFrame* mpAnchorFrame;
+            VirtObjAnchoredAtFramePred( const SwFrame& _rAnchorFrame );
             bool operator() ( const SwDrawVirtObj* _pDrawVirtObj );
         };
 
@@ -396,25 +396,25 @@ class SwDrawContact : public SwContact
         virtual SdrObject* GetMaster() override;
         virtual void SetMaster( SdrObject* _pNewMaster ) override;
 
-        const SwFrm* GetAnchorFrm( const SdrObject* _pDrawObj = nullptr ) const;
-        SwFrm* GetAnchorFrm( SdrObject* _pDrawObj = nullptr );
+        const SwFrame* GetAnchorFrame( const SdrObject* _pDrawObj = nullptr ) const;
+        SwFrame* GetAnchorFrame( SdrObject* _pDrawObj = nullptr );
 
-        inline const SwPageFrm* GetPageFrm() const
+        inline const SwPageFrame* GetPageFrame() const
         {
-            return maAnchoredDrawObj.GetPageFrm();
+            return maAnchoredDrawObj.GetPageFrame();
         }
-        inline SwPageFrm* GetPageFrm()
+        inline SwPageFrame* GetPageFrame()
         {
-            return maAnchoredDrawObj.GetPageFrm();
+            return maAnchoredDrawObj.GetPageFrame();
         }
-        void SetPageFrm( SwPageFrm* _pNewPageFrm )
+        void SetPageFrame( SwPageFrame* _pNewPageFrame )
         {
-            return maAnchoredDrawObj.SetPageFrm( _pNewPageFrm );
+            return maAnchoredDrawObj.SetPageFrame( _pNewPageFrame );
         }
         void ChkPage();
-        SwPageFrm* FindPage( const SwRect &rRect );
+        SwPageFrame* FindPage( const SwRect &rRect );
 
-        /** Inserts SdrObject in the arrays of the layout ((SwPageFrm and SwFrm).
+        /** Inserts SdrObject in the arrays of the layout ((SwPageFrame and SwFrame).
          The anchor is determined according to the attribute SwFormatAnchor.
          If required the object gets unregistered with the old anchor. */
         void ConnectToLayout( const SwFormatAnchor *pAnch = nullptr );
@@ -436,7 +436,7 @@ class SwDrawContact : public SwContact
 
         /** get drawing object ('master' or 'virtual')
          by frame. */
-        SdrObject* GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm );
+        SdrObject* GetDrawObjectByAnchorFrame( const SwFrame& _rAnchorFrame );
 
         /// Virtual methods of SdrObjUserCall.
         virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect) override;

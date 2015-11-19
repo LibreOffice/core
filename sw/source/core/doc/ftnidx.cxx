@@ -170,8 +170,8 @@ void SwFootnoteIdxs::UpdateAllFootnote()
 
     SwUpdFootnoteEndNtAtEnd aNumArr;
 
-    SwRootFrm* pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
-    std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
+    SwRootFrame* pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    std::set<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
     // For normal Footnotes per-chapter and per-document numbering are treated separately.
     // For Endnotes we only have document-wise numbering.
     if( FTNNUM_CHAPTER == rFootnoteInfo.eNum )

@@ -25,7 +25,7 @@
 #include <format.hxx>
 #include "swdllapi.h"
 
-class SwFlyFrm;
+class SwFlyFrame;
 class SwAnchoredObject;
 class Graphic;
 class ImageMap;
@@ -51,14 +51,14 @@ protected:
     SwFrameFormat(
         SwAttrPool& rPool,
         const sal_Char* pFormatNm,
-        SwFrameFormat *pDrvdFrm,
+        SwFrameFormat *pDrvdFrame,
         sal_uInt16 nFormatWhich = RES_FRMFMT,
         const sal_uInt16* pWhichRange = nullptr);
 
     SwFrameFormat(
         SwAttrPool& rPool,
         const OUString &rFormatNm,
-        SwFrameFormat *pDrvdFrm,
+        SwFrameFormat *pDrvdFrame,
         sal_uInt16 nFormatWhich = RES_FRMFMT,
         const sal_uInt16* pWhichRange = nullptr);
 
@@ -67,11 +67,11 @@ protected:
 public:
     virtual ~SwFrameFormat();
 
-    /// Destroys all Frms in aDepend (Frms are identified via dynamic_cast).
-    virtual void DelFrms();
+    /// Destroys all Frames in aDepend (Frames are identified via dynamic_cast).
+    virtual void DelFrames();
 
     /// Creates the views.
-    virtual void MakeFrms();
+    virtual void MakeFrames();
 
     virtual Graphic MakeGraphic( ImageMap* pMap = nullptr );
 
@@ -80,14 +80,14 @@ public:
         rPoint - test on DocPosition.
         pFly - optional FlyFrame, in case it is already known. */
     IMapObject* GetIMapObject( const Point& rPoint,
-                                const SwFlyFrm *pFly = nullptr ) const;
+                                const SwFlyFrame *pFly = nullptr ) const;
 
     /** @return the real size of the frame - or an empty rectangle
        if no layout exists.
        If pPoint is given, look for the frame closest to it. */
     SwRect FindLayoutRect( const bool bPrtArea = false,
                            const Point* pPoint = nullptr,
-                           const bool bCalcFrm = false ) const;
+                           const bool bCalcFrame = false ) const;
 
     /** Searches SdrObject. SdrObjUserCall is client of the format.
        The UserCall knows its SdrObject. */
@@ -97,7 +97,7 @@ public:
 
     /** @return the SdrObject, that is connected to the ContactObject.
        Only DrawFrameFormats are connected to the "real SdrObject". FlyFrameFormats
-       are connected to a Master and all FlyFrms has the "real SdrObject".
+       are connected to a Master and all FlyFrames has the "real SdrObject".
        "Real SdrObject" has position and a Z-order. */
           SdrObject *FindSdrObject();
     const SdrObject *FindSdrObject() const
@@ -152,32 +152,32 @@ class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
        it stores the previous position of Prt rectangle from RequestObjectResize
        so it can be used to move frames of non-resizable objects to align them correctly
        when they get borders (this is done in SwWrtShell::CalcAndGetScale) */
-    Point   m_aLastFlyFrmPrtRectPos;
+    Point   m_aLastFlyFramePrtRectPos;
 
     SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) = delete;
     SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) = delete;
 
 protected:
     SwFlyFrameFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FLYFRMFMT )
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_FLYFRMFMT )
     {}
     SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FLYFRMFMT )
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT )
     {}
 
 public:
     virtual ~SwFlyFrameFormat();
 
     /// Creates the views.
-    virtual void MakeFrms() override;
+    virtual void MakeFrames() override;
 
-    SwFlyFrm* GetFrm( const Point* pDocPos = nullptr,
-                      const bool bCalcFrm = false ) const;
+    SwFlyFrame* GetFrame( const Point* pDocPos = nullptr,
+                      const bool bCalcFrame = false ) const;
 
     SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = nullptr,
-                                      const bool bCalcFrm = false ) const;
+                                      const bool bCalcFrame = false ) const;
 
     virtual Graphic MakeGraphic( ImageMap* pMap = nullptr ) override;
 
@@ -214,8 +214,8 @@ public:
     */
     bool IsBackgroundBrushInherited() const;
 
-    const Point & GetLastFlyFrmPrtRectPos() const       { return m_aLastFlyFrmPrtRectPos; }
-    void SetLastFlyFrmPrtRectPos( const Point &rPoint ) { m_aLastFlyFrmPrtRectPos = rPoint; }
+    const Point & GetLastFlyFramePrtRectPos() const       { return m_aLastFlyFramePrtRectPos; }
+    void SetLastFlyFramePrtRectPos( const Point &rPoint ) { m_aLastFlyFramePrtRectPos = rPoint; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrameFormat)
 };
@@ -240,8 +240,8 @@ class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
 
 protected:
     SwDrawFrameFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_DRAWFRMFMT ),
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_DRAWFRMFMT ),
           m_pSdrObjectCached(nullptr),
 
           meLayoutDir( SwFrameFormat::HORI_L2R ),
@@ -252,8 +252,8 @@ protected:
 
     {}
     SwDrawFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_DRAWFRMFMT ),
+                    SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_DRAWFRMFMT ),
           m_pSdrObjectCached(nullptr),
           meLayoutDir( SwFrameFormat::HORI_L2R ),
 
@@ -267,11 +267,11 @@ public:
 
     /** DrawObjects are removed from the arrays at the layout.
      The DrawObjects are marked as deleted. */
-    virtual void DelFrms() override;
+    virtual void DelFrames() override;
 
     /** Register DrawObjects in the arrays at layout.
      Reset delete marks. */
-    virtual void MakeFrms() override;
+    virtual void MakeFrames() override;
 
     virtual Graphic MakeGraphic( ImageMap* pMap = nullptr ) override;
 

@@ -166,7 +166,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     //viewdata of the previous SwView and the new crsrposition
     OUString sSwViewData;
     //and the new cursor position if the user double click in the PagePreview
-    OUString sNewCrsrPos;
+    OUString sNewCursorPos;
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16 nNewPage;
     // visible range
@@ -256,8 +256,8 @@ public:
     bool HandleWheelCommands( const CommandEvent& );
 
     OUString GetPrevSwViewData() const       { return sSwViewData; }
-    void SetNewCrsrPos( const OUString& rStr ) { sNewCrsrPos = rStr; }
-    const OUString& GetNewCrsrPos() const           { return sNewCrsrPos; }
+    void SetNewCursorPos( const OUString& rStr ) { sNewCursorPos = rStr; }
+    const OUString& GetNewCursorPos() const           { return sNewCursorPos; }
 
     sal_uInt16 GetNewPage() const {return nNewPage;}
     void SetNewPage(sal_uInt16 nSet)  {nNewPage = nSet;}

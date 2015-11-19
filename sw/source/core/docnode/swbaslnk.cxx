@@ -68,11 +68,11 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     {
         SwIterator<SwClient,SwGrfNode> aIter(rGrfNd);
         for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
-            if(dynamic_cast<const SwContentFrm*>( pLast) ==  nullptr)
+            if(dynamic_cast<const SwContentFrame*>( pLast) ==  nullptr)
                 pLast->ModifyNotification(&rItem, &rItem);
     }
     {
-        SwIterator<SwContentFrm,SwGrfNode> aIter(rGrfNd);
+        SwIterator<SwContentFrame,SwGrfNode> aIter(rGrfNd);
         for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
             pLast->ModifyNotification(&rItem, &rItem);
     }
@@ -322,10 +322,10 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
                                rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
             aCalcSz.Height()+= rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
                                rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
-            const SwFormatFrmSize& rOldAttr = pFormat->GetFrmSize();
+            const SwFormatFrameSize& rOldAttr = pFormat->GetFrameSize();
             if( rOldAttr.GetSize() != aCalcSz )
             {
-                SwFormatFrmSize aAttr( rOldAttr  );
+                SwFormatFrameSize aAttr( rOldAttr  );
                 aAttr.SetSize( aCalcSz );
                 pFormat->SetFormatAttr( aAttr );
                 bRet = true;

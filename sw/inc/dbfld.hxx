@@ -25,7 +25,7 @@
 
 class SwDoc;
 class SwTextField;
-class SwFrm;
+class SwFrame;
 
 // Database field.
 class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType

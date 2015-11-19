@@ -740,10 +740,10 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         pCurrRedline = pSh->GetCurrRedline();
         if( !pCurrRedline )
         {
-            pSh->SwCrsrShell::Push();
+            pSh->SwCursorShell::Push();
             if( nullptr == (pCurrRedline = pSh->SelNextRedline()))
                 pCurrRedline = pSh->SelPrevRedline();
-            pSh->SwCrsrShell::Pop( false );
+            pSh->SwCursorShell::Pop( false );
         }
     }
     else
@@ -1035,7 +1035,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                 // disable commenting for protected areas
                 if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, true)) != nullptr)
                 {
-                    if( pSh->IsCrsrPtAtEnd() )
+                    if( pSh->IsCursorPtAtEnd() )
                         pSh->SwapPam();
                     pSh->SetInSelect();
                 }

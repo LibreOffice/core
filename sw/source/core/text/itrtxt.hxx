@@ -22,9 +22,9 @@
 #include "itratr.hxx"
 #include "inftxt.hxx"
 
-class SwTextFrm;
+class SwTextFrame;
 struct SwPosition;
-struct SwCrsrMoveState;
+struct SwCursorMoveState;
 class SwMarginPortion;
 class SwFlyPortion;
 
@@ -32,7 +32,7 @@ class SwTextIter : public SwAttrIter
 {
 protected:
     SwLineInfo m_aLineInf;
-    SwTextFrm  *m_pFrm;
+    SwTextFrame  *m_pFrame;
     SwTextInfo *m_pInf;
     SwLineLayout *m_pCurr;
     SwLineLayout *m_pPrev;
@@ -52,10 +52,10 @@ protected:
 
     // Reset in the first line
     void Init();
-    void CtorInitTextIter( SwTextFrm *pFrm, SwTextInfo *pInf );
+    void CtorInitTextIter( SwTextFrame *pFrame, SwTextInfo *pInf );
     explicit SwTextIter(SwTextNode* pTextNode)
         : SwAttrIter(pTextNode)
-        , m_pFrm(nullptr)
+        , m_pFrame(nullptr)
         , m_pInf(nullptr)
         , m_pCurr(nullptr)
         , m_pPrev(nullptr)
@@ -73,13 +73,13 @@ protected:
     {
     }
 public:
-    SwTextIter(SwTextFrm *pTextFrm, SwTextInfo *pTextInf)
-        : SwAttrIter(pTextFrm->GetTextNode())
+    SwTextIter(SwTextFrame *pTextFrame, SwTextInfo *pTextInf)
+        : SwAttrIter(pTextFrame->GetTextNode())
         , m_bOneBlock(false)
         , m_bLastBlock(false)
         , m_bLastCenter(false)
     {
-        CtorInitTextIter(pTextFrm, pTextInf);
+        CtorInitTextIter(pTextFrame, pTextInf);
     }
     inline const SwLineLayout *GetCurr() const { return m_pCurr; } // NEVER 0!
     inline const SwLineLayout *GetNext() const { return m_pCurr->GetNext(); }
@@ -102,7 +102,7 @@ public:
     const SwLineLayout *Next();
     const SwLineLayout *Prev();
 
-    // Skips the FlyFrms dummy line
+    // Skips the FlyFrames dummy line
     const SwLineLayout *NextLine();
     const SwLineLayout *PrevLine();
     const SwLineLayout *GetNextLine() const;
@@ -132,8 +132,8 @@ public:
     inline bool SeekAndChgBefore( SwTextSizeInfo &rInf );
     inline bool SeekStartAndChg( SwTextSizeInfo &rInf, const bool bPara=false );
 
-    inline SwTextFrm *GetTextFrm() { return m_pFrm; }
-    inline const SwTextFrm *GetTextFrm() const { return m_pFrm; }
+    inline SwTextFrame *GetTextFrame() { return m_pFrame; }
+    inline const SwTextFrame *GetTextFrame() const { return m_pFrame; }
 
     // Counts consecutive hyphens in order to be within the boundary given by MaxHyphens
     void CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const;
@@ -157,7 +157,7 @@ protected:
     // For FormatQuoVadis
     inline void Right( const SwTwips nNew ) { nRight = nNew; }
 
-    void CtorInitTextMargin( SwTextFrm *pFrm, SwTextSizeInfo *pInf );
+    void CtorInitTextMargin( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
     explicit SwTextMargin(SwTextNode* pTextNode)
         : SwTextIter(pTextNode)
         , nLeft(0)
@@ -172,10 +172,10 @@ protected:
     {
     }
 public:
-    SwTextMargin(SwTextFrm *pTextFrm, SwTextSizeInfo *pTextSizeInf)
-        : SwTextIter(pTextFrm->GetTextNode())
+    SwTextMargin(SwTextFrame *pTextFrame, SwTextSizeInfo *pTextSizeInf)
+        : SwTextIter(pTextFrame->GetTextNode())
     {
-        CtorInitTextMargin( pTextFrm, pTextSizeInf );
+        CtorInitTextMargin( pTextFrame, pTextSizeInf );
     }
     inline SwTwips GetLeftMargin() const;
     inline SwTwips Left() const;
@@ -223,7 +223,7 @@ public:
 
 class SwTextAdjuster : public SwTextMargin
 {
-    // Adjusts the portion, if we have adjustment and FlyFrms
+    // Adjusts the portion, if we have adjustment and FlyFrames
     void CalcFlyAdjust( SwLineLayout *pCurr );
 
     // Calls SplitGlues and CalcBlockAdjust
@@ -243,8 +243,8 @@ protected:
         SwTwips nReal = 0, bool bSkipKashida = false );
     SwTwips CalcKanaAdj( SwLineLayout *pCurr );
 public:
-    inline SwTextAdjuster( SwTextFrm *pTextFrm, SwTextSizeInfo *pTextSizeInf ) : SwTextMargin(pTextFrm!=nullptr?pTextFrm->GetTextNode():nullptr)
-           { CtorInitTextMargin( pTextFrm, pTextSizeInf ); }
+    inline SwTextAdjuster( SwTextFrame *pTextFrame, SwTextSizeInfo *pTextSizeInf ) : SwTextMargin(pTextFrame!=nullptr?pTextFrame->GetTextNode():nullptr)
+           { CtorInitTextMargin( pTextFrame, pTextSizeInf ); }
 
     // Is overloaded by SwTextFormatter due to UpdatePos
     void CalcAdjLine( SwLineLayout *pCurr );
@@ -269,24 +269,24 @@ class SwTextCursor : public SwTextAdjuster
 
     // Ambiguities
     static bool bRightMargin;
-    void _GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* );
+    void _GetCharRect(SwRect *, const sal_Int32, SwCursorMoveState* );
 protected:
-    void CtorInitTextCursor( SwTextFrm *pFrm, SwTextSizeInfo *pInf );
+    void CtorInitTextCursor( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
     explicit SwTextCursor(SwTextNode* pTextNode) : SwTextAdjuster(pTextNode) { }
 public:
-    SwTextCursor( SwTextFrm *pTextFrm, SwTextSizeInfo *pTextSizeInf )
-        : SwTextAdjuster(pTextFrm->GetTextNode())
+    SwTextCursor( SwTextFrame *pTextFrame, SwTextSizeInfo *pTextSizeInf )
+        : SwTextAdjuster(pTextFrame->GetTextNode())
     {
-        CtorInitTextCursor(pTextFrm, pTextSizeInf);
+        CtorInitTextCursor(pTextFrame, pTextSizeInf);
     }
-    bool GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = nullptr,
+    bool GetCharRect(SwRect *, const sal_Int32, SwCursorMoveState* = nullptr,
         const long nMax = 0 );
-    bool GetEndCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = nullptr,
+    bool GetEndCharRect(SwRect *, const sal_Int32, SwCursorMoveState* = nullptr,
         const long nMax = 0 );
-    sal_Int32 GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
-                bool bChgNode, SwCrsrMoveState* = nullptr ) const;
+    sal_Int32 GetCursorOfst( SwPosition *pPos, const Point &rPoint,
+                bool bChgNode, SwCursorMoveState* = nullptr ) const;
     // Respects ambiguities: For the implementation see below
-    const SwLineLayout *CharCrsrToLine( const sal_Int32 nPos );
+    const SwLineLayout *CharCursorToLine( const sal_Int32 nPos );
 
     // calculates baseline for portion rPor
     // bAutoToCentered indicates, if AUTOMATIC mode means CENTERED or BASELINE

@@ -86,11 +86,11 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         SwTableNode* pTableNd = rDoc.GetNodes()[ nTableNd ]->GetTableNode();
 
-        // #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrames' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         SwNode2Layout aNode2Layout( *pTableNd );
 
-        pTableNd->DelFrms();
+        pTableNd->DelFrames();
         const SwTable& rTable = pTableNd->GetTable();
 
         SwMovedBoxes aMovedList;
@@ -110,10 +110,10 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         }
 
         // Restore table frames:
-        // #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrames' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         const sal_uLong nIdx = pTableNd->GetIndex();
-        aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
+        aNode2Layout.RestoreUpperFrames( rDoc.GetNodes(), nIdx, nIdx + 1 );
     }
     else
     {
@@ -165,11 +165,11 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 
         SwTableNode* pTableNd = rDoc.GetNodes()[ nTableNd ]->GetTableNode();
 
-        // #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrames' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         SwNode2Layout aNode2Layout( *pTableNd );
 
-        pTableNd->DelFrms();
+        pTableNd->DelFrames();
         const SwTable& rTable = pTableNd->GetTable();
 
         SwMovedBoxes aMovedList;
@@ -193,10 +193,10 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         }
 
         // Restore table frames:
-        // #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrames' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         const sal_uLong nIdx = pTableNd->GetIndex();
-        aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
+        aNode2Layout.RestoreUpperFrames( rDoc.GetNodes(), nIdx, nIdx + 1 );
     }
     else
     {
