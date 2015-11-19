@@ -109,7 +109,7 @@ demo_atlas_alloc (demo_atlas_t  *at,
 		  unsigned int  *px,
 		  unsigned int  *py)
 {
-  GLuint w, h, x, y;
+  GLuint w, h, x = 0, y = 0;
 
   w = at->item_w;
   h = (len + w - 1) / w;
