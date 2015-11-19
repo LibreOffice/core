@@ -4861,6 +4861,11 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                     case NF_SYMBOLTYPE_THSEP :
                         aStr.append( rLocWrp.getNumThousandSep() );
                         break;
+                    case NF_SYMBOLTYPE_EXP :
+                        // tdf#95677: Excel does not support exponent without sign
+                        aStr.append( rKeywords[NF_KEY_E] );
+                        aStr.append( "+" );
+                        break;
                     case NF_SYMBOLTYPE_DATESEP :
                         aStr.append( rLocWrp.getDateSep() );
                         break;
