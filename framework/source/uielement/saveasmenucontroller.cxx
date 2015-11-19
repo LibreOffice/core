@@ -40,9 +40,6 @@ using namespace framework;
 
 namespace {
 
-static const char CMD_SAVEAS[]       = ".uno:SaveAs";
-static const char CMD_SAVE_REMOTE[]  = ".uno:SaveAsRemote";
-
 class SaveAsMenuController :  public svt::PopupMenuControllerBase
 {
     using svt::PopupMenuControllerBase::disposing;
@@ -75,7 +72,6 @@ public:
     virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException, std::exception ) override;
 
     // XMenuListener
-    virtual void SAL_CALL itemSelected( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException, std::exception) override;
 
     // XEventListener
@@ -113,8 +109,8 @@ void SaveAsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
 
     if ( pVCLPopupMenu )
     {
-        pVCLPopupMenu->InsertItem( CMD_SAVEAS, m_xFrame );
-        pVCLPopupMenu->InsertItem( CMD_SAVE_REMOTE, m_xFrame );
+        pVCLPopupMenu->InsertItem( ".uno:SaveAs", m_xFrame );
+        pVCLPopupMenu->InsertItem( ".uno:SaveAsRemote", m_xFrame );
     }
 }
 
@@ -137,28 +133,6 @@ void SAL_CALL SaveAsMenuController::statusChanged( const FeatureStateEvent& Even
 {
     osl::MutexGuard aLock( m_aMutex );
     m_bDisabled = !Event.IsEnabled;
-}
-
-void SAL_CALL SaveAsMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException, std::exception)
-{
-    Reference< css::awt::XPopupMenu > xPopupMenu;
-
-    osl::ClearableMutexGuard aLock( m_aMutex );
-    xPopupMenu = m_xPopupMenu;
-    aLock.clear();
-
-    if ( xPopupMenu.is() )
-    {
-        const OUString aCommand( xPopupMenu->getCommand( rEvent.MenuId ) );
-        OSL_TRACE( "SaveAsMenuController::itemSelected() - Command : %s",
-                   OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-        Sequence< PropertyValue > aArgsList( 0 );
-        if ( aCommand == CMD_SAVE_REMOTE )
-            dispatchCommand( CMD_SAVE_REMOTE, aArgsList );
-        else if ( aCommand == CMD_SAVEAS )
-            dispatchCommand( CMD_SAVEAS, aArgsList );
-    }
 }
 
 void SAL_CALL SaveAsMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
