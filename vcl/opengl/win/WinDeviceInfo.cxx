@@ -200,13 +200,13 @@ uint32_t ParseIDFromDeviceID(const OUString &key, const char *prefix, int length
 // based on http://msdn.microsoft.com/en-us/library/ms724834(VS.85).aspx
 enum {
     kWindowsUnknown = 0,
-    kWindowsXP = 0x50001,
-    kWindowsServer2003 = 0x50002,
-    kWindowsVista = 0x60000,
-    kWindows7 = 0x60001,
-    kWindows8 = 0x60002,
-    kWindows8_1 = 0x60003,
-    kWindows10 = 0x100000
+    kWindowsXP =         0x00050001,
+    kWindowsServer2003 = 0x00050002,
+    kWindowsVista =      0x00060000,
+    kWindows7 =          0x00060001,
+    kWindows8 =          0x00060002,
+    kWindows8_1 =        0x00060003,
+    kWindows10 =         0x000A0000  // Major 10 Minor 0
 };
 
 
