@@ -475,7 +475,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
         if (ScCalcConfig::isOpenCLEnabled())
             switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect);
 #endif
-        static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_BROKEN_SOFTWARE_INTERPRETER") != nullptr);
+        static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr);
 
         if ( !msInstance && bAllowSoftwareInterpreter ) // software fallback
         {
@@ -499,7 +499,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rP
 bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation)
 {
     bool bOpenCLEnabled = ScCalcConfig::isOpenCLEnabled();
-    static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_BROKEN_SOFTWARE_INTERPRETER") != nullptr);
+    static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr);
     if (!bOpenCLEnabled || (bAllowSoftwareInterpreter && rDeviceId == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME))
     {
         if(msInstance)
