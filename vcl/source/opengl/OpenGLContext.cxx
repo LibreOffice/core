@@ -437,7 +437,7 @@ debug_callback(GLenum source, GLenum type, GLuint id,
         return;
 
     SAL_WARN("vcl.opengl", "OpenGL debug message: source: " << getSourceString(source) << ", type: "
-            << getTypeString(type) << ", id: " << id << ", severity: " << getSeverityString(severity) << " with message: " << message);
+            << getTypeString(type) << ", id: " << id << ", severity: " << getSeverityString(severity) << ", with message: " << message);
 }
 
 }
