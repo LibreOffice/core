@@ -191,24 +191,28 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const Rectang
 
 void SidebarTextControl::LogicInvalidate(const Rectangle* pRectangle)
 {
-    OString sRectangle;
+    Rectangle aRectangle;
+
     if (!pRectangle)
-        sRectangle = "EMPTY";
-    else
     {
-        // Convert from relative twips to absolute ones.
-        Rectangle aRectangle(*pRectangle);
-        vcl::Window& rParent = mrSidebarWin.EditWin();
-        Point aOffset(GetOutOffXPixel() - rParent.GetOutOffXPixel(), GetOutOffYPixel() - rParent.GetOutOffYPixel());
-        rParent.Push(PushFlags::MAPMODE);
-        rParent.EnableMapMode();
-        aOffset = rParent.PixelToLogic(aOffset);
-        rParent.Pop();
-        aRectangle.Move(aOffset.getX(), aOffset.getY());
-
-        sRectangle = aRectangle.toString();
+        Push(PushFlags::MAPMODE);
+        EnableMapMode();
+        aRectangle = Rectangle(Point(0, 0), PixelToLogic(GetSizePixel()));
+        Pop();
     }
+    else
+        aRectangle = *pRectangle;
 
+    // Convert from relative twips to absolute ones.
+    vcl::Window& rParent = mrSidebarWin.EditWin();
+    Point aOffset(GetOutOffXPixel() - rParent.GetOutOffXPixel(), GetOutOffYPixel() - rParent.GetOutOffYPixel());
+    rParent.Push(PushFlags::MAPMODE);
+    rParent.EnableMapMode();
+    aOffset = rParent.PixelToLogic(aOffset);
+    rParent.Pop();
+    aRectangle.Move(aOffset.getX(), aOffset.getY());
+
+    OString sRectangle = aRectangle.toString();
     SwWrtShell& rWrtShell = mrDocView.GetWrtShell();
     rWrtShell.libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
