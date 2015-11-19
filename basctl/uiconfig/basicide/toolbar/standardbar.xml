@@ -22,7 +22,6 @@
  <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Save"/>
- <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Print"/>
