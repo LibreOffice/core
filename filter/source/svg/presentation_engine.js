@@ -741,6 +741,7 @@ var aOOOAttrNumberOfSlides = 'number-of-slides';
 var aOOOAttrStartSlideNumber= 'start-slide-number';
 var aOOOAttrNumberingType = 'page-numbering-type';
 var aOOOAttrListItemNumberingType= 'numbering-type';
+var aOOOAttrUsePositionedChars = 'use-positioned-chars';
 
 var aOOOAttrSlide = 'slide';
 var aOOOAttrMaster = 'master';
@@ -1185,6 +1186,8 @@ function MetaDocument()
     this.nStartSlideNumber = parseInt( aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrStartSlideNumber ) ) || 0;
     // - the numbering type used in the presentation, default type is arabic.
     this.sPageNumberingType = aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberingType ) || 'arabic';
+    // - the way text is exported
+    this.bIsUsePositionedChars = ( aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrUsePositionedChars ) === 'true' );
 
     // The <defs> element used for wrapping <clipPath>.
     this.aClipPathGroup = getElementByClassName( ROOT_NODE, aClipPathGroupClassName );
@@ -1434,7 +1437,7 @@ initMasterPage : function()
     // created by an other slide that target the same master page.
     if( !this.theMetaDoc.aMasterPageSet.hasOwnProperty( sMasterPageId ) )
     {
-        this.theMetaDoc.aMasterPageSet[ sMasterPageId ] = new MasterPage( sMasterPageId );
+        this.theMetaDoc.aMasterPageSet[ sMasterPageId ] = new MasterPage( sMasterPageId, this );
 
         // We initialize aTextFieldHandlerSet[ sMasterPageId ] to an empty
         // collection.
@@ -1623,9 +1626,10 @@ getSlideAnimationsRoot : function()
  *      A string representing the value of the id attribute of the master page
  *      element to be handled.
  */
-function MasterPage( sMasterPageId )
+function MasterPage( sMasterPageId, aMetaSlide )
 {
     this.id = sMasterPageId;
+    this.metaSlide = aMetaSlide;
 
     // The master page element to be handled.
     this.element = document.getElementById( this.id );
@@ -1771,12 +1775,10 @@ PlaceholderShape.prototype.init = function()
             // We exploit such a feature and the exported text adjust attribute
             // value in order to set up correctly the position and text
             // adjustment for the placeholder element.
-            var aSVGRectElemSet = aTextFieldElement.getElementsByTagName( 'rect' );
-            // As far as text field element exporting is implemented it should
-            // be only one <rect> element!
-            if( aSVGRectElemSet.length === 1)
+            var aSVGRectElem = getElementByClassName( aTextFieldElement, 'BoundingBox' );
+            if( aSVGRectElem )
             {
-                var aRect = new Rectangle( aSVGRectElemSet[0] );
+                var aRect = new Rectangle( aSVGRectElem );
                 var sTextAdjust = getOOOAttribute( aTextFieldElement, aOOOAttrTextAdjust ) || 'left';
                 var sTextAnchor, sX;
                 if( sTextAdjust == 'left' )
@@ -1801,26 +1803,29 @@ PlaceholderShape.prototype.init = function()
                     aPlaceholderElement.setAttribute( 'x', sX );
             }
 
-            this.element = aTextFieldElement;
-            this.textElement = aPlaceholderElement;
-
-            // We remove all text lines but the first one used as placeholder.
-            var aTextLineGroupElem = this.textElement.parentNode.parentNode;
-            if( aTextLineGroupElem )
+            // date/time fields were not exported correctly when positioned chars are used
+            if( this.masterPage.metaSlide.theMetaDoc.bIsUsePositionedChars )
             {
-                // Just to be sure it is the element we are looking for.
-                var sFontFamilyAttr = aTextLineGroupElem.getAttribute( 'font-family' );
-                if( sFontFamilyAttr )
+                // We remove all text lines but the first one used as placeholder.
+                var aTextLineGroupElem = aPlaceholderElement.parentNode.parentNode;
+                if( aTextLineGroupElem )
                 {
-                    var aChildSet = getElementChildren( aTextLineGroupElem );
-                    if( aChildSet.length > 1  )
-                        var i = 1;
-                    for( ; i < aChildSet.length; ++i )
+                    // Just to be sure it is the element we are looking for.
+                    var sFontFamilyAttr = aTextLineGroupElem.getAttribute( 'font-family' );
+                    if( sFontFamilyAttr )
                     {
-                        aTextLineGroupElem.removeChild( aChildSet[i] );
+                        var aChildSet = getElementChildren( aTextLineGroupElem );
+                        if( aChildSet.length > 1  )
+                            var i = 1;
+                        for( ; i < aChildSet.length; ++i )
+                        {
+                            aTextLineGroupElem.removeChild( aChildSet[i] );
+                        }
                     }
                 }
             }
+            this.element = aTextFieldElement;
+            this.textElement = aPlaceholderElement;
         }
     }
 };
