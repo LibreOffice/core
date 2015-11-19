@@ -81,9 +81,12 @@
 #include <filter/msfilter/util.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/svxenum.hxx>
+#include <editeng/unonames.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/unoshape.hxx>
+
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -1494,10 +1497,42 @@ OUString DrawingML::GetFieldValue( css::uno::Reference< css::text::XTextRange > 
                     GET( aFieldValue, Representation)
 
                 }
+                else if(aFieldKind == "Date")
+                {
+                    sal_Int32 nNumFmt = -1;
+                    rXPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
+                    switch(nNumFmt)
+                    {
+                        case SVXDATEFORMAT_STDSMALL:
+                        case SVXDATEFORMAT_A: aFieldValue = "datetime"; // 13/02/96
+                                              break;
+                        case SVXDATEFORMAT_B: aFieldValue = "datetime1"; // 13/02/1996
+                                              break;
+                        case SVXDATEFORMAT_STDBIG:
+                        case SVXDATEFORMAT_D: aFieldValue = "datetime3"; // 13 February 1996
+                                              break;
+                    }
+                }
+                else if(aFieldKind == "ExtTime")
+                {
+                    sal_Int32 nNumFmt = -1;
+                    rXPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
+                    switch(nNumFmt)
+                    {
+                        case SVXTIMEFORMAT_STANDARD:
+                        case SVXTIMEFORMAT_24_HMS:  aFieldValue = "datetime11"; // 13:49:38
+                                                    break;
+                        case SVXTIMEFORMAT_24_HM:   aFieldValue = "datetime10"; // 13:49
+                                                    break;
+                        case SVXTIMEFORMAT_12_HM:   aFieldValue = "datetime12"; // 01:49 PM
+                                                    break;
+                        case SVXTIMEFORMAT_12_HMS:  aFieldValue = "datetime13"; // 01:49:38 PM
+                                                    break;
+                    }
+                }
             }
         }
     }
-
     return aFieldValue;
 }
 
@@ -1568,7 +1603,6 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
 
     Reference< XPropertySet > xPropSet( rRun, uno::UNO_QUERY );
     WriteRunProperties( xPropSet, bIsURLField );
-
     mpFS->startElementNS( XML_a, XML_t, FSEND );
     mpFS->writeEscaped( sText );
     mpFS->endElementNS( XML_a, XML_t );
