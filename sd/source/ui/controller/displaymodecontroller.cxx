@@ -8,6 +8,7 @@
  *
  */
 
+#include <memory>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
