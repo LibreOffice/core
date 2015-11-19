@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,desktop_lib, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
+	basebmp \
 	comphelper \
 	cppu \
 	cppuhelper \

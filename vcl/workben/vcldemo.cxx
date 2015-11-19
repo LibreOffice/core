@@ -789,7 +789,7 @@ public:
             if ((int)eType < RENDER_AS_BITMAPEX)
                 pNested = VclPtr<VirtualDevice>::Create(rDev).get();
             else
-                pNested = VclPtr<VirtualDevice>::Create(rDev,DeviceFormat::FULLCOLOR,DeviceFormat::FULLCOLOR).get();
+                pNested = VclPtr<VirtualDevice>::Create(rDev,DeviceFormat::DEFAULT,DeviceFormat::DEFAULT).get();
 
             pNested->SetOutputSizePixel(r.GetSize());
             Rectangle aWhole(Point(0,0), r.GetSize());

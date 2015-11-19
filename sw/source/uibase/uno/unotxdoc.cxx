@@ -3426,7 +3426,7 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     sal_Int64 nWindowHandle;
     Parent >>= nWindowHandle;
     aData.hWnd = (HWND) nWindowHandle;
-    ScopedVclPtrInstance<VirtualDevice> xDevice(&aData, Size(1, 1), DeviceFormat::FULLCOLOR);
+    ScopedVclPtrInstance<VirtualDevice> xDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
     paintTile(*xDevice, nOutputWidth, nOutputHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     #else
     // TODO: support other platforms
