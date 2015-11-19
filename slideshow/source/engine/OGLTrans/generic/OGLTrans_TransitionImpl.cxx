@@ -251,14 +251,9 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale) con
     CHECK_GL_ERROR();
     glEnableClientState( GL_VERTEX_ARRAY );
     CHECK_GL_ERROR();
-    if(!Normals.empty())
-    {
-        CHECK_GL_ERROR();
-        glNormalPointer( GL_FLOAT , 0 , &Normals[0] );
-        CHECK_GL_ERROR();
-        glEnableClientState( GL_NORMAL_ARRAY );
-        CHECK_GL_ERROR();
-    }
+    glNormalPointer( GL_FLOAT , 0 , &Normals[0] );
+    CHECK_GL_ERROR();
+    glEnableClientState( GL_NORMAL_ARRAY );
     CHECK_GL_ERROR();
     glEnableClientState( GL_TEXTURE_COORD_ARRAY );
     CHECK_GL_ERROR();
