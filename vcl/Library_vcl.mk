@@ -41,6 +41,7 @@ $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
 	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(MINGW_SYSROOT)/include/gdiplus) \
+	$(if $(filter WNT,$(OS)),-I$(SRCDIR)/vcl/inc/glyphy/demo) \
 ))
 
 ifeq ($(ENABLE_DBUS),TRUE)
@@ -690,6 +691,7 @@ endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+	vcl/glyphy/demo \
 	vcl/opengl/win/gdiimpl \
 	vcl/opengl/win/WinDeviceInfo \
 	vcl/opengl/win/blocklist_parser \

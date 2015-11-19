@@ -33,6 +33,7 @@
 
 #include "sft.hxx"
 #include "sallayout.hxx"
+#include "glyphy/demo.hxx"
 
 #include <cstdio>
 #include <cstdlib>
@@ -45,8 +46,6 @@
 #include <winver.h>
 
 #include <unordered_map>
-
-typedef std::unordered_map<int,int> IntMap;
 
 // Graphite headers
 #include <config_graphite.h>
@@ -67,33 +66,13 @@ const int GLYPH_SPACE_RATIO = 8;
 const int GLYPH_OFFSET_RATIO = GLYPH_SPACE_RATIO * 2;
 }
 
-struct OpenGLGlyphCacheChunk
-{
-    WORD mnFirstGlyph;
-    int mnGlyphCount;
-    std::vector<Rectangle> maLocation;
-    std::shared_ptr<OpenGLTexture> mpTexture;
-    int mnAscent;
-    int mnHeight;
-    bool mbVertical;
-
-    int getExtraSpace() const
-    {
-        return std::max(mnHeight / GLYPH_SPACE_RATIO, 4);
-    }
-
-    int getExtraOffset() const
-    {
-        return std::max(mnHeight / GLYPH_OFFSET_RATIO, 2);
-    }
-};
-
 // win32 specific physical font instance
 class ImplWinFontEntry : public ImplFontEntry
 {
 public:
     explicit                ImplWinFontEntry( FontSelectPattern& );
     virtual                 ~ImplWinFontEntry();
+    void                    setupGLyphy(HDC hDC);
 
 private:
     // TODO: also add HFONT??? Watch out for issues with too many active fonts...
@@ -103,161 +82,30 @@ public:
                             { return maScriptCache; }
 private:
     mutable SCRIPT_CACHE    maScriptCache;
-    std::vector<OpenGLGlyphCacheChunk> maOpenGLGlyphCache;
 
 public:
-    int                     GetCachedGlyphWidth( int nCharCode ) const;
-    void                    CacheGlyphWidth( int nCharCode, int nCharWidth );
-
     bool                    InitKashidaHandling( HDC );
     int                     GetMinKashidaWidth() const { return mnMinKashidaWidth; }
     int                     GetMinKashidaGlyph() const { return mnMinKashidaGlyph; }
 
+    static GLuint             mnGLyphyProgram;
+    GLyphyDemo::demo_atlas_t* mpGLyphyAtlas;
+    GLyphyDemo::demo_font_t*  mpGLyphyFont;
+
 private:
-    IntMap                  maWidthMap;
     mutable int             mnMinKashidaWidth;
     mutable int             mnMinKashidaGlyph;
-
-public:
-    bool                    GlyphIsCached(int nGlyphIndex) const;
-    bool                    AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics);
-    const OpenGLGlyphCacheChunk&  GetCachedGlyphChunkFor(int nGlyphIndex) const;
+    bool                    mbGLyphySetupCalled;
 };
 
-#ifdef SAL_LOG_INFO
+GLuint ImplWinFontEntry::mnGLyphyProgram = 0;
 
-namespace {
+#if 0
 
-char ColorFor(COLORREF aColor)
-{
-    if (aColor == RGB(0xFF, 0xFF, 0xFF))
-        return ' ';
-    else if (aColor == RGB(0x00, 0x00, 0x00))
-        return 'X';
-
-    return '0' + (10*(GetRValue(aColor) + GetGValue(aColor) + GetBValue(aColor))) / (0xFF*3);
-}
-
-void DumpGlyphBitmap(HDC hDC)
-{
-    HBITMAP hBitmap = static_cast<HBITMAP>(GetCurrentObject(hDC, OBJ_BITMAP));
-    if (hBitmap == NULL)
-    {
-        SAL_WARN("vcl.gdi", "GetCurrentObject failed: " << WindowsErrorString(GetLastError()));
-        return;
-    }
-
-    BITMAP aBitmap;
-    if (!GetObjectW(hBitmap, sizeof(aBitmap), &aBitmap))
-    {
-        SAL_WARN("vcl.gdi", "GetObjectW failed: " << WindowsErrorString(GetLastError()));
-        return;
-    }
-
-    SAL_INFO("vcl.gdi.opengl", "Bitmap " << hBitmap << ": " << aBitmap.bmWidth << "x" << aBitmap.bmHeight << ":");
-
-    std::ostringstream sLine("\n");
-    for (long y = 0; y < aBitmap.bmHeight; y++)
-    {
-        for (long x = 0; x < std::min(75l, aBitmap.bmWidth); x++)
-            sLine << ColorFor(GetPixel(hDC, x, y));
-        if (y < aBitmap.bmHeight - 1)
-            sLine << "\n";
-    }
-    SAL_INFO("vcl.gdi.opengl", sLine.str());
-}
-
-} // anonymous namespace
-
-#endif // SAL_LOG_INFO
-
-template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const std::vector<OpenGLGlyphCacheChunk>& rCache )
-{
-    stream << "{";
-    for (auto i = rCache.cbegin(); i != rCache.cend(); ++i)
-    {
-        stream << "[" << i->mnFirstGlyph;
-        if (i->mnGlyphCount > 1)
-            stream << ".." << (i->mnFirstGlyph + i->mnGlyphCount - 1);
-        stream << "]";
-        if (i+1 != rCache.cend())
-        {
-            stream << ",";
-            assert(i->mnFirstGlyph + i->mnGlyphCount <= (i+1)->mnFirstGlyph);
-        }
-    }
-
-    return stream << "}";
-}
-
-inline void ImplWinFontEntry::CacheGlyphWidth( int nCharCode, int nCharWidth )
-{
-    maWidthMap[ nCharCode ] = nCharWidth;
-}
-
-inline int ImplWinFontEntry::GetCachedGlyphWidth( int nCharCode ) const
-{
-    IntMap::const_iterator it = maWidthMap.find( nCharCode );
-    if( it == maWidthMap.end() )
-        return -1;
-    return it->second;
-}
-
-bool ImplWinFontEntry::GlyphIsCached(int nGlyphIndex) const
+bool ImplWinFontEntry::AddGlyphToCache(WORD nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics)
 {
     if (nGlyphIndex == DROPPED_OUTGLYPH)
         return true;
-
-    for (size_t i = 0; i < maOpenGLGlyphCache.size(); i++)
-        if (nGlyphIndex >= maOpenGLGlyphCache[i].mnFirstGlyph &&
-            nGlyphIndex < maOpenGLGlyphCache[i].mnFirstGlyph + maOpenGLGlyphCache[i].mnGlyphCount)
-            return true;
-
-    return false;
-}
-
-bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics)
-{
-    const int DEFAULT_CHUNK_SIZE = 20;
-
-    if (nGlyphIndex == DROPPED_OUTGLYPH)
-        return true;
-
-    SAL_INFO("vcl.gdi.opengl", "this=" << this << " " << nGlyphIndex << " old: " << maOpenGLGlyphCache);
-
-    auto n = maOpenGLGlyphCache.begin();
-    while (n != maOpenGLGlyphCache.end() &&
-           nGlyphIndex > n->mnFirstGlyph)
-        ++n;
-    assert(n == maOpenGLGlyphCache.end() || nGlyphIndex < n->mnFirstGlyph);
-
-    int nCount = DEFAULT_CHUNK_SIZE;
-    if (n != maOpenGLGlyphCache.end() && nGlyphIndex + nCount >= n->mnFirstGlyph)
-        nCount = n->mnFirstGlyph - nGlyphIndex;
-
-    if (nCount < DEFAULT_CHUNK_SIZE)
-    {
-        if (n == maOpenGLGlyphCache.begin())
-        {
-            nGlyphIndex = std::max(0, n->mnFirstGlyph - DEFAULT_CHUNK_SIZE);
-        }
-        else
-        {
-            nGlyphIndex = std::max(n[-1].mnFirstGlyph + n[-1].mnGlyphCount,
-                                   n->mnFirstGlyph - DEFAULT_CHUNK_SIZE);
-        }
-        nCount = n->mnFirstGlyph - nGlyphIndex;
-    }
-
-    OpenGLGlyphCacheChunk aChunk;
-    aChunk.mnFirstGlyph = nGlyphIndex;
-    aChunk.mnGlyphCount = nCount;
-
-    std::vector<WORD> aGlyphIndices(nCount);
-    for (int i = 0; i < nCount; i++)
-        aGlyphIndices[i] = nGlyphIndex + i;
 
     HDC hDC = CreateCompatibleDC(rLayout.mhDC);
     if (hDC == NULL)
@@ -275,7 +123,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
 
     SIZE aSize;
 
-    if (!GetTextExtentExPointI(hDC, aGlyphIndices.data(), nCount, 0, NULL, NULL, &aSize))
+    if (!GetTextExtentExPointI(hDC, &nGlyphIndex, 1, 0, NULL, NULL, &aSize))
     {
         SAL_WARN("vcl.gdi", "GetTextExtentExPointI failed: " << WindowsErrorString(GetLastError()));
         SelectObject(hDC, hOrigFont);
@@ -283,8 +131,8 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         return false;
     }
 
-    std::vector<ABC> aABC(nCount);
-    if (!GetCharABCWidthsI(hDC, 0, nCount, aGlyphIndices.data(), aABC.data()))
+    ABC aABC;
+    if (!GetCharABCWidthsI(hDC, 0, 1, &nGlyphIndex, &aABC))
     {
         SAL_WARN("vcl.gdi", "GetCharABCWidthsI failed: " << WindowsErrorString(GetLastError()));
         SelectObject(hDC, hOrigFont);
@@ -292,10 +140,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         return false;
     }
 
-    std::ostringstream sLine;
-    for (int i = 0; i < nCount; i++)
-        sLine << aABC[i].abcA << ":" << aABC[i].abcB << ":" << aABC[i].abcC << " ";
-    SAL_INFO("vcl.gdi.opengl", "ABC widths: " << sLine.str());
+    SAL_INFO("vcl.gdi.opengl", "ABC width: " << aABC.abcA << ":" << aABC.abcB << ":" << aABC.abcC);
 
     TEXTMETRICW aTextMetric;
     if (!GetTextMetricsW(hDC, &aTextMetric))
@@ -304,25 +149,6 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         SelectObject(hDC, hOrigFont);
         DeleteDC(hDC);
         return false;
-    }
-    aChunk.mnAscent = aTextMetric.tmAscent;
-    aChunk.mnHeight = aTextMetric.tmHeight;
-
-    // Try hard to avoid overlap as we want to be able to use
-    // individual rectangles for each glyph. The ABC widths don't
-    // take anti-aliasing into consideration. Let's hope that leaving
-    // "extra" space inbetween glyphs will help.
-    std::vector<int> aDX(nCount);
-    int totWidth = 0;
-    for (int i = 0; i < nCount; i++)
-    {
-        aDX[i] = aABC[i].abcB + std::abs(aABC[i].abcC);
-        if (i == 0)
-            aDX[0] += std::abs(aABC[0].abcA);
-        if (i < nCount-1)
-            aDX[i] += std::abs(aABC[i+1].abcA);
-        aDX[i] += aChunk.getExtraSpace();
-        totWidth += aDX[i];
     }
 
     LOGFONTW aLogfont;
@@ -349,120 +175,73 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
              " Orientation=" << aLogfont.lfOrientation <<
              " Ascent=" << aTextMetric.tmAscent <<
              " InternalLeading=" << aTextMetric.tmInternalLeading <<
-             " Size=(" << aSize.cx << "," << aSize.cy << ") totWidth=" << totWidth);
+             " Size=(" << aSize.cx << "," << aSize.cy << ")");
 
     if (SelectObject(hDC, hOrigFont) == NULL)
         SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
     if (!DeleteDC(hDC))
         SAL_WARN("vcl.gdi", "DeleteDC failed: " << WindowsErrorString(GetLastError()));
 
-    // Leave extra space also at top and bottom
-    int nBitmapWidth, nBitmapHeight;
-    if (sFaceName[0] == '@')
-    {
-        nBitmapWidth = aSize.cy + aChunk.getExtraSpace();
-        nBitmapHeight = totWidth;
-        aChunk.mbVertical = true;
-    }
-    else
-    {
-        nBitmapWidth = totWidth;
-        nBitmapHeight = aSize.cy + aChunk.getExtraSpace();
-        aChunk.mbVertical = false;
-    }
-
-    if (aChunk.mbVertical && aLogfont.lfEscapement != 2700)
-        return false;
-
-    OpenGLCompatibleDC aDC(rGraphics, 0, 0, nBitmapWidth, nBitmapHeight);
-
-    HFONT hNonAntialiasedFont = NULL;
-
-#ifdef DBG_UTIL
-    static bool bNoAntialias = (std::getenv("VCL_GLYPH_CACHING_HACK_NO_ANTIALIAS") != NULL);
-    if (bNoAntialias)
-    {
-        aLogfont.lfQuality = NONANTIALIASED_QUALITY;
-        hNonAntialiasedFont = CreateFontIndirectW(&aLogfont);
-        if (hNonAntialiasedFont == NULL)
-        {
-            SAL_WARN("vcl.gdi", "CreateFontIndirect failed: " << WindowsErrorString(GetLastError()));
-            return false;
-        }
-    }
-#endif
-
-    hOrigFont = SelectFont(aDC.getCompatibleHDC(), hNonAntialiasedFont != NULL ? hNonAntialiasedFont : rLayout.mhFont);
-    if (hOrigFont == NULL)
-    {
-        SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
-        return false;
-    }
-
-    SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
-    SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
-
-    aDC.fill(MAKE_SALCOLOR(0xff, 0xff, 0xff));
-
-    int nY =  aChunk.getExtraOffset();
-    int nX =  nY;
-    if (aChunk.mbVertical)
-        nX += aDX[0];
-    if (!ExtTextOutW(aDC.getCompatibleHDC(), nX, nY, ETO_GLYPH_INDEX, NULL, aGlyphIndices.data(), nCount, aDX.data()))
-    {
-        SAL_WARN("vcl.gdi", "ExtTextOutW failed: " << WindowsErrorString(GetLastError()));
-        SelectFont(aDC.getCompatibleHDC(), hOrigFont);
-        if (hNonAntialiasedFont != NULL)
-            DeleteObject(hNonAntialiasedFont);
-        return false;
-    }
-
-    aChunk.maLocation.resize(nCount);
-    UINT nPos = 0;
-    for (int i = 0; i < nCount; i++)
-    {
-        if (aChunk.mbVertical)
-        {
-            aChunk.maLocation[i].Left() = 0;
-            aChunk.maLocation[i].Right() = nBitmapWidth;
-            aChunk.maLocation[i].Top() = nPos;
-            aChunk.maLocation[i].Bottom() = nPos + aDX[i];
-            nPos = aChunk.maLocation[i].Bottom();
-        }
-        else
-        {
-            aChunk.maLocation[i].Left() = nPos;
-            aChunk.maLocation[i].Right() = nPos + aDX[i];
-            nPos = aChunk.maLocation[i].Right();
-            aChunk.maLocation[i].Top() = 0;
-            aChunk.maLocation[i].Bottom() = aSize.cy + aChunk.getExtraSpace();
-        }
-    }
-
-    aChunk.mpTexture = std::unique_ptr<OpenGLTexture>(aDC.getTexture());
-
-    maOpenGLGlyphCache.insert(n, aChunk);
-
-    SelectFont(aDC.getCompatibleHDC(), hOrigFont);
-    if (hNonAntialiasedFont != NULL)
-        DeleteObject(hNonAntialiasedFont);
-
-#ifdef SAL_LOG_INFO
-    SAL_INFO("vcl.gdi.opengl", "this=" << this << " now: " << maOpenGLGlyphCache);
-    DumpGlyphBitmap(aDC.getCompatibleHDC());
-#endif
+    // FIXME HERE, in case this code snipet actually is needed any more?
 
     return true;
 }
 
-const OpenGLGlyphCacheChunk& ImplWinFontEntry::GetCachedGlyphChunkFor(int nGlyphIndex) const
+#endif
+
+void ImplWinFontEntry::setupGLyphy(HDC hDC)
 {
-    auto i = maOpenGLGlyphCache.cbegin();
-    while (i != maOpenGLGlyphCache.cend() && nGlyphIndex >= i->mnFirstGlyph + i->mnGlyphCount)
-        ++i;
-    assert(i != maOpenGLGlyphCache.cend());
-    assert(nGlyphIndex >= i->mnFirstGlyph && nGlyphIndex < i->mnFirstGlyph + i->mnGlyphCount);
-    return *i;
+    if (mbGLyphySetupCalled)
+        return;
+
+    mbGLyphySetupCalled = true;
+
+    // First get the OUTLINETEXTMETRIC to find the font's em unit. Then, to get an unmodified (not
+    // grid-fitted) glyph outline, create the font anew at that size. That is as the doc for
+    // GetGlyphOutline() suggests.
+    OUTLINETEXTMETRICW aOutlineTextMetric;
+    if (!GetOutlineTextMetricsW (hDC, sizeof (OUTLINETEXTMETRICW), &aOutlineTextMetric))
+    {
+        SAL_WARN("vcl.gdi.opengl", "GetOutlineTextMetricsW failed: " << WindowsErrorString(GetLastError()));
+        return;
+    }
+
+    HFONT hFont = (HFONT)GetCurrentObject(hDC, OBJ_FONT);
+    LOGFONTW aLogFont;
+    GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
+
+    HDC hNewDC = GetDC(NULL);
+    if (hNewDC == NULL)
+    {
+        SAL_WARN("vcl.gdi.opengl", "GetDC failed: " << WindowsErrorString(GetLastError()));
+        return;
+    }
+
+    hNewDC = CreateCompatibleDC(hNewDC);
+    if (hNewDC == NULL)
+    {
+        SAL_WARN("vcl.gdi.opengl", "CreateCompatibleDC failed: " << WindowsErrorString(GetLastError()));
+        return;
+    }
+
+    aLogFont.lfHeight = aOutlineTextMetric.otmEMSquare;
+    hFont = CreateFontIndirectW(&aLogFont);
+    if (hFont == NULL)
+    {
+        SAL_WARN("vcl.gdi.opengl", "CreateFontIndirectW failed: " << WindowsErrorString(GetLastError()));
+        return;
+    }
+    if (SelectObject(hNewDC, hFont) == NULL)
+    {
+        SAL_WARN("vcl.gdi.opengl", "SelectObject failed: " << WindowsErrorString(GetLastError()));
+        return;
+    }
+
+    if (mnGLyphyProgram == 0)
+        mnGLyphyProgram = GLyphyDemo::demo_shader_create_program();
+
+    mpGLyphyAtlas = GLyphyDemo::demo_atlas_create(2048, 1024, 64, 8);
+    mpGLyphyFont = GLyphyDemo::demo_font_create(hNewDC, mpGLyphyAtlas);
 }
 
 WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE, bool bUseOpenGL)
@@ -1765,20 +1544,26 @@ void UniscribeLayout::DrawTextImpl(HDC hDC) const
         DeleteFont(SelectFont(hDC, hOrigFont));
 }
 
-bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
+bool UniscribeLayout::CacheGlyphs(SalGraphics&) const
 {
     static bool bDoGlyphCaching = (std::getenv("SAL_DISABLE_GLYPH_CACHING") == NULL);
 
     if (!bDoGlyphCaching)
         return false;
 
+    if (!mrWinFontEntry.maMetric.mbTrueTypeFont)
+        return false;
+
+    mrWinFontEntry.setupGLyphy(mhDC);
+
     for (int i = 0; i < mnGlyphCount; i++)
     {
-        if (mrWinFontEntry.GlyphIsCached(mpOutGlyphs[i]))
+        if (mpOutGlyphs[i] == DROPPED_OUTGLYPH)
             continue;
 
-        if (!mrWinFontEntry.AddChunkOfGlyphs(mpOutGlyphs[i], *this, rGraphics))
-            return false;
+        GLyphyDemo::glyph_info_t aGI;
+        VCL_GL_INFO("vcl.opengl", "Calling demo_font_lookup_glyph");
+        GLyphyDemo::demo_font_lookup_glyph( mrWinFontEntry.mpGLyphyFont, mpOutGlyphs[i], &aGI );
     }
 
     return true;
@@ -1787,19 +1572,52 @@ bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
 bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
 {
     WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
-    HDC hDC = rWinGraphics.getHDC();
 
     Rectangle aRect;
     GetBoundRect(rGraphics, aRect);
-
-    COLORREF color = GetTextColor(hDC);
-    SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
 
     WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(rWinGraphics.mpImpl.get());
     if (!pImpl)
         return false;
 
     pImpl->PreDraw();
+
+    rGraphics.GetOpenGLContext()->UseNoProgram();
+    glUseProgram( mrWinFontEntry.mnGLyphyProgram );
+    CHECK_GL_ERROR();
+    GLyphyDemo::demo_atlas_set_uniforms( mrWinFontEntry.mpGLyphyAtlas );
+
+    GLint nLoc;
+
+    nLoc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_debug" );
+    CHECK_GL_ERROR();
+    glUniform1f( nLoc, 0 ); // FIXME: Try to get the "debug" thing displayed first
+    CHECK_GL_ERROR();
+
+    nLoc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_contrast" );
+    CHECK_GL_ERROR();
+    glUniform1f( nLoc, 1 );
+    CHECK_GL_ERROR();
+
+    nLoc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_gamma_adjust" );
+    CHECK_GL_ERROR();
+    glUniform1f( nLoc, 1 );
+    CHECK_GL_ERROR();
+
+    nLoc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_outline" );
+    CHECK_GL_ERROR();
+    glUniform1f( nLoc, false );
+    CHECK_GL_ERROR();
+
+    nLoc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_outline_thickness" );
+    CHECK_GL_ERROR();
+    glUniform1f( nLoc, 1 );
+    CHECK_GL_ERROR();
+
+    nLoc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_boldness" );
+    CHECK_GL_ERROR();
+    glUniform1f( nLoc, 0 );
+    CHECK_GL_ERROR();
 
     // FIXME: This code snippet is mostly copied from the one in
     // UniscribeLayout::DrawTextImpl. Should be factored out.
@@ -1842,35 +1660,97 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
         // positioning) match.
         const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
 
+        double font_size = mrWinFontEntry.maFontSelData.mfExactHeight; // ???
+
+        // font_size = 1; // ???
+
+        std::vector<GLyphyDemo::glyph_vertex_t> vertices;
         for (int i = nMinGlyphPos; i < nEndGlyphPos; i++)
         {
             // Ignore dropped glyphs.
             if (mpOutGlyphs[i] == DROPPED_OUTGLYPH)
                 continue;
 
-            assert(mrWinFontEntry.GlyphIsCached(mpOutGlyphs[i]));
+            // Total crack
+            GLyphyDemo::glyphy_point_t pt;
+            pt.x = nAdvance + aPos.X() + mpGlyphOffsets[i].du;
+            pt.y = aPos.Y() + mpGlyphOffsets[i].dv;
+            GLyphyDemo::glyph_info_t gi;
+            GLyphyDemo::demo_font_lookup_glyph( mrWinFontEntry.mpGLyphyFont, mpOutGlyphs[i], &gi );
+            GLyphyDemo::demo_shader_add_glyph_vertices( pt, font_size, &gi, &vertices, NULL );
 
-            const OpenGLGlyphCacheChunk& rChunk = mrWinFontEntry.GetCachedGlyphChunkFor(mpOutGlyphs[i]);
-            const int n = mpOutGlyphs[i] - rChunk.mnFirstGlyph;
-
-            if (rChunk.mbVertical)
-            {
-                SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
-                                   rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
-                                   aPos.X(), nAdvance + aPos.Y(),
-                                   rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
-                pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
-            }
-            else
-            {
-                SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
-                                   rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
-                                   nAdvance + aPos.X() + mpGlyphOffsets[i].du - rChunk.getExtraOffset(), aPos.Y() + mpGlyphOffsets[i].dv - rChunk.mnAscent - rChunk.getExtraOffset(),
-                                   rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
-                pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
-            }
             nAdvance += pGlyphWidths[i];
         }
+
+        GLfloat mat[16];
+        GLyphyDemo::m4LoadIdentity( mat );
+
+        GLint viewport[4];
+        glGetIntegerv( GL_VIEWPORT, viewport );
+        CHECK_GL_ERROR();
+
+        double width = viewport[2];
+        double height = viewport[3];
+
+#if 0
+        // Based on demo_view_apply_transform(). I don't really understand it.
+
+        // No scaling, no translation needed here
+
+        // Perspective (but why would we want that in LO; it's needed in glyphy-demo because there
+        // you can rotate the "sheet" the text is drawn on)
+        {
+            double d = std::max( width, height );
+            double near = d / 4;
+            double far = near + d;
+            double factor = near / (2 * near + d);
+            GLyphyDemo::m4Frustum( mat, -width * factor, width * factor, -height * factor, height * factor, near, far );
+            GLyphyDemo::m4Translate( mat, 0, 0, -(near + d * 0.5) );
+        }
+
+        // No rotation here
+
+        // Fix 'up'
+        GLyphyDemo::m4Scale( mat, 1, -1, 1 );
+
+        // Foo
+        // GLyphyDemo::m4Scale( mat, 0.5, 0.5, 1 );
+
+        // The "Center buffer" part in demo_view_display()
+        GLyphyDemo::m4Translate( mat, width/2, height/2, 0 );
+
+#else
+        // Crack that just happens to show something (even if not completely in correct location) in
+        // some cases, but not all. I don't understand why.
+        double scale = std::max( 2/width, 2/height );
+        GLyphyDemo::m4Scale( mat, scale, -scale, 1);
+        GLyphyDemo::m4Translate( mat, -width/2, -height/2, 0 );
+#endif
+
+        GLuint u_matViewProjection_loc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_matViewProjection" );
+        CHECK_GL_ERROR();
+        glUniformMatrix4fv( u_matViewProjection_loc, 1, GL_FALSE, mat );
+        CHECK_GL_ERROR();
+
+        GLuint a_glyph_vertex_loc = glGetAttribLocation( mrWinFontEntry.mnGLyphyProgram, "a_glyph_vertex" );
+        GLuint buf_name;
+        glGenBuffers( 1, &buf_name );
+        CHECK_GL_ERROR();
+        glBindBuffer( GL_ARRAY_BUFFER, buf_name );
+        CHECK_GL_ERROR();
+
+        glBufferData( GL_ARRAY_BUFFER,  sizeof(GLyphyDemo::glyph_vertex_t) * vertices.size(), (const char *) &vertices[0], GL_STATIC_DRAW );
+        CHECK_GL_ERROR();
+        glEnableVertexAttribArray( a_glyph_vertex_loc );
+        CHECK_GL_ERROR();
+        glVertexAttribPointer( a_glyph_vertex_loc, 4, GL_FLOAT, GL_FALSE, sizeof(GLyphyDemo::glyph_vertex_t), 0 );
+        CHECK_GL_ERROR();
+        glDrawArrays( GL_TRIANGLES, 0, vertices.size() );
+        CHECK_GL_ERROR();
+        glDisableVertexAttribArray( a_glyph_vertex_loc );
+        CHECK_GL_ERROR();
+        glDeleteBuffers( 1, &buf_name );
+        CHECK_GL_ERROR();
     }
     pImpl->PostDraw();
 
@@ -2625,11 +2505,14 @@ int    WinSalGraphics::GetMinKashidaWidth()
 
 ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
 :   ImplFontEntry( rFSD )
-,   maWidthMap( 512 )
+,    mpGLyphyAtlas( nullptr )
+,    mpGLyphyFont( nullptr )
 ,    mnMinKashidaWidth( -1 )
 ,    mnMinKashidaGlyph( -1 )
 {
     maScriptCache = NULL;
+    mpGLyphyFont = NULL;
+    mbGLyphySetupCalled = false;
 }
 
 ImplWinFontEntry::~ImplWinFontEntry()
