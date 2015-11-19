@@ -177,9 +177,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             (See 17.18.87 of the ISO/IEC 29500-1:2011.)
                             */
                             bool bFixed = true;
-                            sal_Int32 nRowFixedWidth = 0;
                             IntVectorPtr pCellWidths = getCurrentCellWidths();
-                            // Step 1. Check whether all cells have fixed widths in the given row of table.
+                            // Check whether all cells have fixed widths in the given row of table.
                             for (std::vector<sal_Int32>::const_iterator aValIter = pCellWidths->begin(); aValIter != pCellWidths->end(); ++aValIter)
                             {
                                 if (*aValIter == -1)
@@ -187,14 +186,11 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                                     bFixed = false;
                                     break;
                                 }
-                                // Sum the width of cells to find the total width of given row
-                                nRowFixedWidth += (*aValIter);
                             }
 
-                            // Check whether the total width of given row is compared with the maximum value of rows (m_nMaxFixedWidth).
                             if (!bFixed)
                             {
-                                // Set the width type of table with 'Auto' and set the width value to 100(%)
+                                // Set the width type of table with 'Auto' and set the width value to 0 (as per grid values)
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 0 );
                             }
@@ -523,7 +519,7 @@ void DomainMapperTableManager::endOfRowAction()
     // into two tables if those are different. We surely don't want to do anything
     // if we don't have any row yet.
     TablePositionHandlerPtr pTmpPosition = m_aTmpPosition.back();
-    TablePropertyMapPtr pTmpTableProperties = m_aTmpTableProperties.back( );
+    TablePropertyMapPtr pTablePropMap = m_aTmpTableProperties.back( );
     TablePositionHandlerPtr pCurrentPosition = m_aTablePositions.back();
     bool bSamePosition = ( pTmpPosition == pCurrentPosition ) ||
                          ( pTmpPosition && pCurrentPosition && *pTmpPosition == *pCurrentPosition );
@@ -533,6 +529,7 @@ void DomainMapperTableManager::endOfRowAction()
         IntVectorPtr pTmpTableGrid = m_aTableGrid.back();
         IntVectorPtr pTmpGridSpans = m_aGridSpans.back();
         IntVectorPtr pTmpCellWidths = m_aCellWidths.back();
+        sal_uInt32 nTmpCell = m_nCell.back();
 
         // endLevel and startLevel are taking care of the non finished row
         // to carry it over to the next table
@@ -544,9 +541,11 @@ void DomainMapperTableManager::endOfRowAction()
         m_aTableGrid.pop_back();
         m_aGridSpans.pop_back();
         m_aCellWidths.pop_back();
+        m_nCell.pop_back();
         m_aTableGrid.push_back(pTmpTableGrid);
         m_aGridSpans.push_back(pTmpGridSpans);
         m_aCellWidths.push_back(pTmpCellWidths);
+        m_nCell.push_back(nTmpCell);
     }
 
     // Push the tmp position now that we compared it
@@ -633,21 +632,20 @@ void DomainMapperTableManager::endOfRowAction()
          * If table width property set earlier is smaller than the current table width,
          * then replace the TABLE_WIDTH property, set earlier.
          */
-        TablePropertyMapPtr propMap = m_aTmpTableProperties.back();
         sal_Int32 nTableWidth(0);
         sal_Int32 nTableWidthType(text::SizeType::VARIABLE);
-        propMap->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
-        propMap->getValue( TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType );
+        pTablePropMap->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
+        pTablePropMap->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
         if ((nTableWidthType == text::SizeType::FIX) && (nTableWidth < m_nTableWidth))
         {
-            propMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
+            pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH, m_nTableWidth);
         }
         if (nTableWidthType == text::SizeType::VARIABLE )
         {
             if(nTableWidth > 100 || nTableWidth <= 0)
             {
-                propMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth);
-                propMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX);
+                pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH, m_nTableWidth);
+                pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX);
             }
         }
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
@@ -734,7 +732,7 @@ void DomainMapperTableManager::endOfRowAction()
     }
 
     // Now that potentially opened table is closed, save the table properties
-    TableManager::insertTableProps( pTmpTableProperties );
+    TableManager::insertTableProps(pTablePropMap);
 
     m_aTmpTableProperties.pop_back();
     TablePropertyMapPtr pEmptyTableProps( new TablePropertyMap() );
