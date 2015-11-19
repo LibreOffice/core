@@ -315,12 +315,6 @@ class SetNodeHash : public std::unordered_map< OUString                    ,
                                                OUStringHash                  ,
                                                std::equal_to< OUString > >
 {
-    // member
-
-    public:
-        OUStringList  lAddedItems;
-        OUStringList  lChangedItems;
-        OUStringList  lRemovedItems;
 };
 
 // Use these hashes to implement different tables which assign types to frame loader or detect services.
@@ -334,93 +328,6 @@ class PerformanceHash   :   public  std::unordered_map< OUString,
 {
 };
 
-
-// Use private static data container to hold all values of configuration!
-
-class DataContainer
-{
-    public:
-
-    /** @short  identifies different sets of the TypeDetection configuration package.
-
-        @descr  Most functions on top of this configuration package are the same ...
-                but must be executed on different places inside this configuration structures.
-                These enum values can be used ate some interface methods to specify, which
-                configuration set should be used.
-                Further it must be possible to start the same action for more than one cfg type.
-                That's why these values must be interpreted as flags. Means: its values must be
-                in range [2^n]!
-      */
-    enum ECFGType
-    {
-        E_TYPE           =  1,
-        E_FILTER         =  2,
-        E_DETECTSERVICE  =  4,
-        E_FRAMELOADER    =  8,
-        E_CONTENTHANDLER = 16,
-
-        E_ALL            = E_TYPE | E_FILTER | E_DETECTSERVICE | E_FRAMELOADER | E_CONTENTHANDLER
-    };
-
-    public:
-
-        DataContainer();
-
-        SetNodeHash< FileType > m_aTypeCache;               /// hold all information about registered file types
-        SetNodeHash< Filter >   m_aFilterCache;             /// hold all information about registered filters
-        SetNodeHash< Detector > m_aDetectorCache;           /// hold all information about registered detect services
-        SetNodeHash< Loader >   m_aLoaderCache;             /// hold all information about registered loader services
-        SetNodeHash< ContentHandler > m_aContentHandlerCache;     /// hold all information about registered content handler services
-        PerformanceHash         m_aFastFilterCache;         /// hold all registered filter for a special file type
-        PerformanceHash         m_aFastDetectorCache;       /// hold all registered detect services for a special file type
-        PerformanceHash         m_aFastLoaderCache;         /// hold all registered loader services for a special file type
-        PerformanceHash         m_aFastContentHandlerCache; /// hold all registered content handler services for a special file type
-        OUStringHashMap         m_aPreferredTypesCache;     /// assignment of extensions to preferred types for it
-        Loader                  m_aGenericLoader;           /// information about our default frame loader
-        OUString                m_sLocale;                  /// current set locale of configuration to handle right UIName from set of all UINames!
-        bool                    m_bTypesModified;
-        bool                    m_bFiltersModified;
-        bool                    m_bDetectorsModified;
-        bool                    m_bLoadersModified;
-        bool                    m_bHandlersModified;
-};
-
-/*-************************************************************************************************************
-    @short          capsulate configuration access for filter configuration
-    @descr          We use the ConfigItem mechanism to read/write values from/to configuration.
-                    This implementation could be used to handle standard AND additional filter configurations in the same way.
-                    We set a data container pointer for filling or reading ... this class use it temp.
-                    After successfully calling of read(), we can use filled container directly or merge it with an existing one.
-                    After successfully calling of write() all values of given data container are flushed to our configuration.
-    @base           ConfigItem
-
-    @devstatus      ready to use
-    @threadsafe     no
-*//*-*************************************************************************************************************/
-class FilterCFGAccess : public ::utl::ConfigItem
-{
-
-    //  interface
-
-    public:
-                                    FilterCFGAccess ( const OUString& sPath                                  ,
-                                                            sal_Int32        nVersion = DEFAULT_FILTERCACHE_VERSION ,
-                                                            ConfigItemMode   nMode    = DEFAULT_FILTERCACHE_MODE    ); // open configuration
-        virtual                     ~FilterCFGAccess(                                                               );
-
-    //  member
-
-    private:
-        EFilterPackage  m_ePackage;   // ... not really used yet! should split configuration in STANDARD and ADDITIONAL filter
-        sal_Int32       m_nVersion;   // file format version of configuration! (necessary for "xml2xcd" transformation!)
-        sal_Int32       m_nKeyCountTypes;   // follow key counts present count of configuration properties for types/filters ... and depends from m_nVersion - must be set right!
-        sal_Int32       m_nKeyCountFilters;
-        sal_Int32       m_nKeyCountDetectors;
-        sal_Int32       m_nKeyCountLoaders;
-        sal_Int32       m_nKeyCountContentHandlers;
-        OUString m_sProductName;
-        OUString m_sFormatVersion;
-};
 
 }       //  namespace framework
 

@@ -71,9 +71,6 @@ class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper< css::xml::
 
     private:
 
-        /** @short  needed to read the xml configuration. */
-        css::uno::Reference< css::xml::sax::XDocumentHandler > m_xReader;
-
         /** @short  reference to the outside container, where this
                     reader/writer must work on. */
         AcceleratorCache& m_rContainer;

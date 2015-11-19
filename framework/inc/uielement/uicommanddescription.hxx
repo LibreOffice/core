@@ -95,7 +95,6 @@ public:
         UICommandDescription( const css::uno::Reference< css::uno::XComponentContext>& rxContext, bool  );
         void impl_fillElements(const sal_Char* _pName);
 
-        bool                                                      m_bConfigRead;
         OUString                                                  m_aPrivateResourceURL;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         ModuleToCommandFileMap                                    m_aModuleToCommandFileMap;

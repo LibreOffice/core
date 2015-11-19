@@ -60,7 +60,6 @@ CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponent
     , m_aAsyncCallback(
         new vcl::EventPoster(LINK(this, CloseDispatcher, impl_asyncCallback)))
     , m_eOperation(E_CLOSE_DOC)
-    , m_lStatusListener(m_mutex)
     , m_pSysWindow(nullptr)
 {
     uno::Reference<frame::XFrame> xTarget = static_impl_searchRightTargetFrame(xFrame, sTarget);

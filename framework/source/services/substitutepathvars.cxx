@@ -292,7 +292,6 @@ private:
 struct FixedVariable
 {
     const char*     pVarName;
-    sal_Int32       nStrLen;
     PreDefVariable  nEnumValue;
     bool            bAbsPath;
 };
@@ -344,25 +343,25 @@ static const sal_Int16 aEnvPrioTable[ET_COUNT] =
 // Table with all fixed/predefined variables supported.
 static const FixedVariable aFixedVarTable[] =
 {
-    { RTL_CONSTASCII_STRINGPARAM("$(inst)"),        PREDEFVAR_INST,         true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(prog)"),        PREDEFVAR_PROG,         true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(user)"),        PREDEFVAR_USER,         true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(work)"),        PREDEFVAR_WORK,         true  },      // Special variable (transient)!
-    { RTL_CONSTASCII_STRINGPARAM("$(home)"),        PREDEFVAR_HOME,         true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(temp)"),        PREDEFVAR_TEMP,         true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(path)"),        PREDEFVAR_PATH,         true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(langid)"),      PREDEFVAR_LANGID,       false },
-    { RTL_CONSTASCII_STRINGPARAM("$(vlang)"),       PREDEFVAR_VLANG,        false },
-    { RTL_CONSTASCII_STRINGPARAM("$(instpath)"),    PREDEFVAR_INSTPATH,     true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(progpath)"),    PREDEFVAR_PROGPATH,     true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(userpath)"),    PREDEFVAR_USERPATH,     true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(insturl)"),     PREDEFVAR_INSTURL,      true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(progurl)"),     PREDEFVAR_PROGURL,      true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(userurl)"),     PREDEFVAR_USERURL,      true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(workdirurl)"),  PREDEFVAR_WORKDIRURL,   true  },  // Special variable (transient) and don't use for resubstitution!
-    { RTL_CONSTASCII_STRINGPARAM("$(baseinsturl)"), PREDEFVAR_BASEINSTURL,  true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(userdataurl)"), PREDEFVAR_USERDATAURL,  true  },
-    { RTL_CONSTASCII_STRINGPARAM("$(brandbaseurl)"),PREDEFVAR_BRANDBASEURL, true  }
+    { "$(inst)",        PREDEFVAR_INST,         true  },
+    { "$(prog)",        PREDEFVAR_PROG,         true  },
+    { "$(user)",        PREDEFVAR_USER,         true  },
+    { "$(work)",        PREDEFVAR_WORK,         true  },      // Special variable (transient)!
+    { "$(home)",        PREDEFVAR_HOME,         true  },
+    { "$(temp)",        PREDEFVAR_TEMP,         true  },
+    { "$(path)",        PREDEFVAR_PATH,         true  },
+    { "$(langid)",      PREDEFVAR_LANGID,       false },
+    { "$(vlang)",       PREDEFVAR_VLANG,        false },
+    { "$(instpath)",    PREDEFVAR_INSTPATH,     true  },
+    { "$(progpath)",    PREDEFVAR_PROGPATH,     true  },
+    { "$(userpath)",    PREDEFVAR_USERPATH,     true  },
+    { "$(insturl)",     PREDEFVAR_INSTURL,      true  },
+    { "$(progurl)",     PREDEFVAR_PROGURL,      true  },
+    { "$(userurl)",     PREDEFVAR_USERURL,      true  },
+    { "$(workdirurl)",  PREDEFVAR_WORKDIRURL,   true  },  // Special variable (transient) and don't use for resubstitution!
+    { "$(baseinsturl)", PREDEFVAR_BASEINSTURL,  true  },
+    { "$(userdataurl)", PREDEFVAR_USERDATAURL,  true  },
+    { "$(brandbaseurl)",PREDEFVAR_BRANDBASEURL, true  }
 };
 
 //      Implementation helper classes

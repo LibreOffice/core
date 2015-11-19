@@ -131,14 +131,11 @@ static sal_uInt16 impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 StatusBarManager::StatusBarManager(
     const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Reference< frame::XFrame >& rFrame,
-    const OUString& rResourceName,
     StatusBar* pStatusBar ) :
     m_bDisposed( false ),
     m_bFrameActionRegistered( false ),
     m_bUpdateControllers( false ),
-    m_bModuleIdentified( false ),
     m_pStatusBar( pStatusBar ),
-    m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
     m_aListenerContainer( m_mutex ),
     m_xContext( rxContext )

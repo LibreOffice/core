@@ -443,9 +443,6 @@ private:
     sal_Bool m_dbg_bMakeItFaster;
     #endif
 
-    // HACK ... TODO
-    css::uno::Reference< css::task::XStatusIndicator > m_xExternalProgress;
-
 // interface
 
 public:

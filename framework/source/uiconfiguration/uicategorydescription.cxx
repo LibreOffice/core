@@ -51,12 +51,6 @@ using namespace framework;
 
 namespace {
 
-struct ModuleToCategory
-{
-    const char* pModuleId;
-    const char* pCommands;
-};
-
 static const char GENERIC_MODULE_NAME[]                     = "generic";
 static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.Office.UI.";
 static const char CONFIGURATION_CATEGORY_ELEMENT_ACCESS[]   = "/Commands/Categories";

@@ -1221,7 +1221,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 // Check if we have to create a popup menu for a uno based popup menu controller.
                 // We have to set an empty popup menu into our menu structure so the controller also
                 // works with inplace OLE. Remove old dummy popup menu!
-                MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
+                MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xDispatch );
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pNewPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( nItemId, pNewPopupMenu );
@@ -1343,7 +1343,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 m_bRetrieveImages = true;
             }
 
-            MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
+            MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xDispatch );
             pItemHandler->aMenuItemURL = aItemCommand;
 
             if ( m_xPopupMenuControllerFactory.is() &&
@@ -1875,7 +1875,6 @@ void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sI
     Reference< XDispatch > xDispatch;
     MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                 _nItemId,
-                                                xSubMenuManager,
                                                 xDispatch );
     pMenuItemHandler->aMenuItemURL = _sItemCommand;
     m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
@@ -1930,7 +1929,6 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
 
             MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                         nItemId,
-                                                        xSubMenuManager,
                                                         xDispatch );
             m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
         }
@@ -1939,7 +1937,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
             if ( pAddonMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
             {
                 MenuAttributes* pAddonAttributes = reinterpret_cast<MenuAttributes *>(pAddonMenu->GetUserValue( nItemId ));
-                MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
+                MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, xDispatch );
 
                 if ( pAddonAttributes )
                 {

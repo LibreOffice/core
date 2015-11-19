@@ -54,7 +54,6 @@ class StatusBarManager : public ::cppu::WeakImplHelper<
     public:
         StatusBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                           const css::uno::Reference< css::frame::XFrame >& rFrame,
-                          const OUString& rResourceName,
                           StatusBar* pStatusBar );
         virtual ~StatusBarManager();
 
@@ -100,12 +99,9 @@ class StatusBarManager : public ::cppu::WeakImplHelper<
         bool                                                                  m_bDisposed : 1,
                                                                               m_bFrameActionRegistered : 1,
                                                                               m_bUpdateControllers : 1;
-        bool                                                                  m_bModuleIdentified;
         VclPtr<StatusBar>                                                     m_pStatusBar;
         OUString                                                              m_aModuleIdentifier;
-        OUString                                                              m_aResourceName;
         css::uno::Reference< css::frame::XFrame >                             m_xFrame;
-        css::uno::Reference< css::container::XNameAccess >                    m_xUICommandLabels;
         StatusBarControllerMap                                                m_aControllerMap;
         osl::Mutex                                                            m_mutex;
         ::cppu::OMultiTypeInterfaceContainerHelper                            m_aListenerContainer;   /// container for ALL Listener

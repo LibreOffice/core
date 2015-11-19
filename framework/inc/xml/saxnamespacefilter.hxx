@@ -84,7 +84,6 @@ class FWE_DLLPUBLIC SaxNamespaceFilter :
         css::uno::Reference< css::xml::sax::XLocator >          m_xLocator;
         css::uno::Reference< css::xml::sax::XDocumentHandler>   xDocumentHandler;
         NamespaceStack                                          m_aNamespaceStack;
-        sal_Int32                                               m_nDepth;
 
         OUString m_aXMLAttributeNamespace;
         OUString m_aXMLAttributeType;
