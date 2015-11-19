@@ -992,11 +992,11 @@ void SmParser::DoTable()
 void SmParser::DoAlign()
     // parse alignment info (if any), then go on with rest of expression
 {
-    SmStructureNode *pSNode = nullptr;
+    std::unique_ptr<SmStructureNode> pSNode;
 
     if (TokenInGroup(TGALIGN))
     {
-        pSNode = new SmAlignNode(m_aCurToken);
+        pSNode.reset(new SmAlignNode(m_aCurToken));
 
         NextToken();
 
@@ -1004,7 +1004,6 @@ void SmParser::DoAlign()
         if (TokenInGroup(TGALIGN))
         {
             Error(PE_DOUBLE_ALIGN);
-            delete pSNode;
             return;
         }
     }
@@ -1014,7 +1013,7 @@ void SmParser::DoAlign()
     if (pSNode)
     {
         pSNode->SetSubNode(0, popOrZero(m_aNodeStack));
-        m_aNodeStack.push_front(std::unique_ptr<SmStructureNode>(pSNode));
+        m_aNodeStack.push_front(std::move(pSNode));
     }
 }
 
