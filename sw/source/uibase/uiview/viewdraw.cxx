@@ -240,8 +240,8 @@ void SwView::ExecDraw(SfxRequest& rReq)
             SetDrawFuncPtr(nullptr);
         }
 
-        if (m_pWrtShell->IsObjSelected() && !m_pWrtShell->IsSelFrmMode())
-            m_pWrtShell->EnterSelFrmMode();
+        if (m_pWrtShell->IsObjSelected() && !m_pWrtShell->IsSelFrameMode())
+            m_pWrtShell->EnterSelFrameMode();
         LeaveDrawCreate();
 
         GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
@@ -252,7 +252,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
     LeaveDrawCreate();
 
-    if (m_pWrtShell->IsFrmSelected())
+    if (m_pWrtShell->IsFrameSelected())
         m_pWrtShell->EnterStdMode();  // because bug #45639
 
     SwDrawBase* pFuncPtr = nullptr;
@@ -383,8 +383,8 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
     else
     {
-        if (m_pWrtShell->IsObjSelected() && !m_pWrtShell->IsSelFrmMode())
-            m_pWrtShell->EnterSelFrmMode();
+        if (m_pWrtShell->IsObjSelected() && !m_pWrtShell->IsSelFrameMode())
+            m_pWrtShell->EnterSelFrameMode();
     }
 
     if(bEndTextEdit && pSdrView && pSdrView->IsTextEdit())
@@ -411,7 +411,7 @@ void SwView::ExitDraw()
         }
         while( pTest && pTest != this && pTest != m_pShell);
         if(pTest == m_pShell &&
-            // don't call LeaveSelFrmMode() etc. for the below,
+            // don't call LeaveSelFrameMode() etc. for the below,
             // because objects may still be selected:
             dynamic_cast< const SwDrawBaseShell *>( m_pShell ) ==  nullptr &&
             dynamic_cast< const SwBezierShell *>( m_pShell ) ==  nullptr &&
@@ -429,8 +429,8 @@ void SwView::ExitDraw()
 
             if (GetDrawFuncPtr())
             {
-                if (m_pWrtShell->IsSelFrmMode())
-                    m_pWrtShell->LeaveSelFrmMode();
+                if (m_pWrtShell->IsSelFrameMode())
+                    m_pWrtShell->LeaveSelFrameMode();
                 GetDrawFuncPtr()->Deactivate();
 
                 SetDrawFuncPtr(nullptr);
@@ -656,7 +656,7 @@ void SwView::SetSelDrawSlot()
 
 bool SwView::AreOnlyFormsSelected() const
 {
-    if ( GetWrtShell().IsFrmSelected() )
+    if ( GetWrtShell().IsFrameSelected() )
         return false;
 
     bool bForm = true;

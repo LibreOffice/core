@@ -725,7 +725,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     bool bEmptyValue = false;
     uno::Any aTmp = xPropSet->getPropertyValue( "ClassId" );
     sal_Int16 nClassId = *static_cast<sal_Int16 const *>(aTmp.getValue());
-    sal_uInt32 nFrmOpts = HTML_FRMOPTS_CONTROL;
+    sal_uInt32 nFrameOpts = HTML_FRMOPTS_CONTROL;
     switch( nClassId )
     {
     case form::FormComponentType::CHECKBOX:
@@ -914,7 +914,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
     case form::FormComponentType::IMAGEBUTTON:
         eType = TYPE_IMAGE;
-        nFrmOpts = HTML_FRMOPTS_IMG_CONTROL;
+        nFrameOpts = HTML_FRMOPTS_IMG_CONTROL;
         break;
 
     default:                // kennt HTML nicht
@@ -1024,13 +1024,13 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     {
         // Wenn Zeichen-Objekte nicht absolut positioniert werden duerfen,
         // das entsprechende Flag loeschen.
-        nFrmOpts |= (TYPE_IMAGE == eType
+        nFrameOpts |= (TYPE_IMAGE == eType
                             ? HTML_FRMOPTS_IMG_CONTROL_CSS1
                             : HTML_FRMOPTS_CONTROL_CSS1);
     }
     OString aEndTags;
-    if( nFrmOpts != 0 )
-        aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrmOpts );
+    if( nFrameOpts != 0 )
+        aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrameOpts );
 
     if( rHTMLWrt.m_bCfgOutStyles )
     {
@@ -1138,7 +1138,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             }
         }
 
-        rHTMLWrt.OutCSS1_FrameFormatOptions( rFormat, nFrmOpts, &rFormObj,
+        rHTMLWrt.OutCSS1_FrameFormatOptions( rFormat, nFrameOpts, &rFormObj,
                                         &aItemSet );
     }
 
@@ -1313,22 +1313,22 @@ void SwHTMLWriter::GetControls()
     // Ueber dieses Array laesst sich dann feststellen, wo form::Forms geoeffnet
     // und geschlossen werden muessen.
 
-    if( m_pHTMLPosFlyFrms )
+    if( m_pHTMLPosFlyFrames )
     {
         // die absatz-gebundenen Controls einsammeln
-        for( size_t i=0; i<m_pHTMLPosFlyFrms->size(); i++ )
+        for( size_t i=0; i<m_pHTMLPosFlyFrames->size(); i++ )
         {
-            const SwHTMLPosFlyFrm* pPosFlyFrm = (*m_pHTMLPosFlyFrms)[ i ];
-            if( HTML_OUT_CONTROL != pPosFlyFrm->GetOutFn() )
+            const SwHTMLPosFlyFrame* pPosFlyFrame = (*m_pHTMLPosFlyFrames)[ i ];
+            if( HTML_OUT_CONTROL != pPosFlyFrame->GetOutFn() )
                 continue;
 
-            const SdrObject *pSdrObj = pPosFlyFrm->GetSdrObject();
+            const SdrObject *pSdrObj = pPosFlyFrame->GetSdrObject();
             OSL_ENSURE( pSdrObj, "Wo ist das SdrObject?" );
             if( !pSdrObj )
                 continue;
 
             AddControl( m_aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj),
-                        pPosFlyFrm->GetNdIndex().GetIndex() );
+                        pPosFlyFrame->GetNdIndex().GetIndex() );
         }
     }
 

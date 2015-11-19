@@ -196,10 +196,10 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     }
 
     // Size setzen
-    SwFormatFrmSize aFrmSize( ATT_FIX_SIZE, aTwipSz.Width(), aTwipSz.Height() );
-    aFrmSize.SetWidthPercent( nPrcWidth );
-    aFrmSize.SetHeightPercent( nPrcHeight );
-    rFlyItemSet.Put( aFrmSize );
+    SwFormatFrameSize aFrameSize( ATT_FIX_SIZE, aTwipSz.Width(), aTwipSz.Height() );
+    aFrameSize.SetWidthPercent( nPrcWidth );
+    aFrameSize.SetHeightPercent( nPrcHeight );
+    rFlyItemSet.Put( aFrameSize );
 }
 
 void SwHTMLParser::SetSpace( const Size& rPixSpace,
@@ -386,7 +386,7 @@ void SwHTMLParser::InsertEmbed()
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     // Die Default-Werte umsetzen (ausser Hoehe/Breite, das macht schon
-    // SetFrmSize() fuer uns)
+    // SetFrameSize() fuer uns)
     if( eVertOri==text::VertOrientation::NONE && eHoriOri==text::HoriOrientation::NONE )
         eVertOri = text::VertOrientation::TOP;
     if( USHRT_MAX==aSpace.Width() )
@@ -395,7 +395,7 @@ void SwHTMLParser::InsertEmbed()
         aSpace.Height() = 0;
     if( bHidden )
     {
-        // Size (0,0) wird in SetFrmSize auf (MINFLY, MINFLY) umgebogen
+        // Size (0,0) wird in SetFrameSize auf (MINFLY, MINFLY) umgebogen
         aSize.Width() = 0; aSize.Height() = 0;
         aSpace.Width() = 0; aSpace.Height() = 0;
         bPrcWidth = bPrcHeight = false;
@@ -437,35 +437,35 @@ void SwHTMLParser::InsertEmbed()
         }
     }
 
-    SfxItemSet aFrmSet( m_pDoc->GetAttrPool(),
+    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
-        Reader::ResetFrameFormatAttrs( aFrmSet );
+        Reader::ResetFrameFormatAttrs( aFrameSet );
 
     // den Anker setzen
     if( !bHidden )
     {
-        SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrmSet );
+        SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrameSet );
     }
     else
     {
         SwFormatAnchor aAnchor( FLY_AT_PARA );
         aAnchor.SetAnchor( m_pPam->GetPoint() );
-        aFrmSet.Put( aAnchor );
-        aFrmSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME) );
-        aFrmSet.Put( SwFormatSurround( SURROUND_THROUGHT ) );
-        aFrmSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
+        aFrameSet.Put( aAnchor );
+        aFrameSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME) );
+        aFrameSet.Put( SwFormatSurround( SURROUND_THROUGHT ) );
+        aFrameSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
     }
 
     // und noch die Groesse des Rahmens
     Size aDfltSz( HTML_DFLT_EMBED_WIDTH, HTML_DFLT_EMBED_HEIGHT );
     SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
-                aFrmSet );
-    SetSpace( aSpace, aItemSet, aPropInfo, aFrmSet );
+                aFrameSet );
+    SetSpace( aSpace, aItemSet, aPropInfo, aFrameSet );
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, nullptr, nullptr );
+        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet, nullptr, nullptr );
 
     // Namen am FrameFormat setzen
     if( !aName.isEmpty() )
@@ -480,10 +480,10 @@ void SwHTMLParser::InsertEmbed()
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     if( !bHidden )
     {
-        // HIDDEN-Plugins sollen absatzgebunden bleiben. Da RegisterFlyFrm
+        // HIDDEN-Plugins sollen absatzgebunden bleiben. Da RegisterFlyFrame
         // absatzgebundene Rahmen mit DUrchlauf in am Zeichen gebundene
         // Rahmen umwandelt, muessen die Frames hier von Hand angelegt werden.
-        RegisterFlyFrm( pFlyFormat );
+        RegisterFlyFrame( pFlyFormat );
     }
 }
 
@@ -611,18 +611,18 @@ void SwHTMLParser::NewObject()
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
-    SfxItemSet& rFrmSet = m_pAppletImpl->GetItemSet();
+    SfxItemSet& rFrameSet = m_pAppletImpl->GetItemSet();
     if( !IsNewDoc() )
-        Reader::ResetFrameFormatAttrs( rFrmSet );
+        Reader::ResetFrameFormatAttrs( rFrameSet );
 
     // den Anker und die Ausrichtung setzen
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, rFrmSet );
+    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, rFrameSet );
 
     // und noch die Groesse des Rahmens
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
     SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
-                rFrmSet );
-    SetSpace( aSpace, aItemSet, aPropInfo, rFrmSet );
+                rFrameSet );
+    SetSpace( aSpace, aItemSet, aPropInfo, rFrameSet );
 }
 #endif
 
@@ -650,7 +650,7 @@ void SwHTMLParser::EndObject()
         pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
 
         // Ggf Frames anlegen und auto-geb. Rahmen registrieren
-        RegisterFlyFrm( pFlyFormat );
+        RegisterFlyFrame( pFlyFormat );
 
         delete m_pAppletImpl;
         m_pAppletImpl = nullptr;
@@ -746,18 +746,18 @@ void SwHTMLParser::InsertApplet()
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
-    SfxItemSet& rFrmSet = m_pAppletImpl->GetItemSet();
+    SfxItemSet& rFrameSet = m_pAppletImpl->GetItemSet();
     if( !IsNewDoc() )
-        Reader::ResetFrameFormatAttrs( rFrmSet );
+        Reader::ResetFrameFormatAttrs( rFrameSet );
 
     // den Anker und die Ausrichtung setzen
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, rFrmSet );
+    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, rFrameSet );
 
     // und noch die Groesse des Rahmens
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
     SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
-                rFrmSet );
-    SetSpace( aSpace, aItemSet, aPropInfo, rFrmSet );
+                rFrameSet );
+    SetSpace( aSpace, aItemSet, aPropInfo, rFrameSet );
 }
 #endif
 
@@ -784,7 +784,7 @@ void SwHTMLParser::EndApplet()
     pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
-    RegisterFlyFrm( pFlyFormat );
+    RegisterFlyFrame( pFlyFormat );
 
     delete m_pAppletImpl;
     m_pAppletImpl = nullptr;
@@ -929,23 +929,23 @@ void SwHTMLParser::InsertFloatingFrame()
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     // den Itemset holen
-    SfxItemSet aFrmSet( m_pDoc->GetAttrPool(),
+    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
-        Reader::ResetFrameFormatAttrs( aFrmSet );
+        Reader::ResetFrameFormatAttrs( aFrameSet );
 
     // den Anker und die Ausrichtung setzen
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrmSet );
+    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrameSet );
 
     // und noch die Groesse des Rahmens
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
     SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
-                aFrmSet );
-    SetSpace( aSpace, aItemSet, aPropInfo, aFrmSet );
+                aFrameSet );
+    SetSpace( aSpace, aItemSet, aPropInfo, aFrameSet );
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, nullptr, nullptr );
+        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet, nullptr, nullptr );
 
     // den alternativen Namen setzen
     SwNoTextNode *pNoTextNd =
@@ -954,16 +954,16 @@ void SwHTMLParser::InsertFloatingFrame()
     pNoTextNd->SetTitle( aAlt );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
-    RegisterFlyFrm( pFlyFormat );
+    RegisterFlyFrame( pFlyFormat );
 
     m_bInFloatingFrame = true;
 }
 
-sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
+sal_uInt16 SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
 {
     SwOLEObj& rObj = const_cast<SwOLENode*>(rNode.GetOLENode())->GetOLEObj();
 
-    SwHTMLFrmType eType = HTML_FRMTYPE_OLE;
+    SwHTMLFrameType eType = HTML_FRMTYPE_OLE;
 
     uno::Reference < embed::XClassifiedObject > xClass ( rObj.GetOleRef(), uno::UNO_QUERY );
     SvGlobalName aClass( xClass->getClassID() );
@@ -1013,7 +1013,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         return rWrt;
     }
 
-    sal_uLong nFrmOpts;
+    sal_uLong nFrameOpts;
 
     // wenn meoglich vor dem "Objekt" einen Zeilen-Umbruch ausgeben
     if( rHTMLWrt.m_bLFPossible )
@@ -1065,12 +1065,12 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         {
             // Das Plugin ist HIDDEN
             sOut.append(' ').append(OOO_STRING_SW_HTML_O_Hidden);
-            nFrmOpts = HTML_FRMOPTS_HIDDEN_EMBED;
+            nFrameOpts = HTML_FRMOPTS_HIDDEN_EMBED;
             bHiddenEmbed = true;
         }
         else
         {
-            nFrmOpts = bInCntnr ? HTML_FRMOPTS_EMBED_CNTNR
+            nFrameOpts = bInCntnr ? HTML_FRMOPTS_EMBED_CNTNR
                                 : HTML_FRMOPTS_EMBED;
         }
     }
@@ -1125,7 +1125,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         if( bScript )
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_mayscript);
 
-        nFrmOpts = bInCntnr ? HTML_FRMOPTS_APPLET_CNTNR
+        nFrameOpts = bInCntnr ? HTML_FRMOPTS_APPLET_CNTNR
                             : HTML_FRMOPTS_APPLET;
     }
     else
@@ -1140,7 +1140,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
                                         rHTMLWrt.m_eDestEnc,
                                         &rHTMLWrt.m_aNonConvertableCharacters );
 
-        nFrmOpts = bInCntnr ? HTML_FRMOPTS_IFRAME_CNTNR
+        nFrameOpts = bInCntnr ? HTML_FRMOPTS_IFRAME_CNTNR
                             : HTML_FRMOPTS_IFRAME;
     }
 
@@ -1148,10 +1148,10 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
 
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
-        nFrmOpts |= HTML_FRMOPTS_OLE_CSS1;
-    OString aEndTags = rHTMLWrt.OutFrameFormatOptions( rFrameFormat, pOLENd->GetTitle(), nFrmOpts );
+        nFrameOpts |= HTML_FRMOPTS_OLE_CSS1;
+    OString aEndTags = rHTMLWrt.OutFrameFormatOptions( rFrameFormat, pOLENd->GetTitle(), nFrameOpts );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
-        rHTMLWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrmOpts );
+        rHTMLWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameOpts );
 
     if( aGlobName == SvGlobalName( SO3_APPLET_CLASSID ) )
     {

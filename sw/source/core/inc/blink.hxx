@@ -21,8 +21,8 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_BLINK_HXX
 
 class SwLinePortion;
-class SwRootFrm;
-class SwTextFrm;
+class SwRootFrame;
+class SwTextFrame;
 
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
@@ -35,27 +35,27 @@ class SwBlinkPortion
 {
     Point               aPos;
     const SwLinePortion *pPor;
-    const SwRootFrm     *pFrm;
+    const SwRootFrame     *pFrame;
     sal_uInt16              nDir;
 
 public:
     SwBlinkPortion(const SwLinePortion* pPortion, sal_uInt16 nDirection)
         : pPor(pPortion)
-        , pFrm(nullptr)
+        , pFrame(nullptr)
         , nDir(nDirection)
     {
     }
     SwBlinkPortion(const SwBlinkPortion* pBlink, const SwLinePortion* pPort)
         : aPos(pBlink->aPos)
         , pPor(pPort)
-        , pFrm(pBlink->pFrm)
+        , pFrame(pBlink->pFrame)
         , nDir(pBlink->nDir)
     {
     }
     void SetPos( const Point& aNew ){ aPos = aNew; }
     const Point& GetPos() const{ return aPos; }
-    void SetRootFrm( const SwRootFrm* pNew ){ pFrm = pNew; }
-    const SwRootFrm* GetRootFrm() const{ return pFrm; }
+    void SetRootFrame( const SwRootFrame* pNew ){ pFrame = pNew; }
+    const SwRootFrame* GetRootFrame() const{ return pFrame; }
     const SwLinePortion *GetPortion() const{ return pPor; }
     sal_uInt16 GetDirection() const { return nDir; }
     bool operator<( const SwBlinkPortion& rBlinkPortion ) const
@@ -80,10 +80,10 @@ public:
     DECL_LINK_TYPED( Blinker, Timer *, void );
 
     void Insert( const Point& rPoint, const SwLinePortion* pPor,
-                 const SwTextFrm *pTextFrm, sal_uInt16 nDir );
+                 const SwTextFrame *pTextFrame, sal_uInt16 nDir );
     void Replace( const SwLinePortion* pOld, const SwLinePortion* pNew );
     void Delete( const SwLinePortion* pPor );
-    void FrmDelete( const SwRootFrm* pRoot );
+    void FrameDelete( const SwRootFrame* pRoot );
     bool IsVisible() const { return bVisible ; }
 };
 

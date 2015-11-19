@@ -43,11 +43,11 @@
 
 using namespace ::com::sun::star;
 
-void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrm* pFrm )
+void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame* pFrame )
 {
     // during HTML-Import it can happen, that no layout exists
-    SwRootFrm* pRootFrm = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
-    pShell = pRootFrm ? pRootFrm->GetCurrShell() : nullptr;
+    SwRootFrame* pRootFrame = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
+    pShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
 
     pScriptInfo = &rScrInf;
 
@@ -64,14 +64,14 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     // set font to vertical if frame layout is vertical
     bool bVertLayout = false;
     bool bRTL = false;
-    if ( pFrm )
+    if ( pFrame )
     {
-        if ( pFrm->IsVertical() )
+        if ( pFrame->IsVertical() )
         {
             bVertLayout = true;
             pFnt->SetVertical( pFnt->GetOrientation(), true );
         }
-        bRTL = pFrm->IsRightToLeft();
+        bRTL = pFrame->IsRightToLeft();
     }
 
     // Initialize the default attribute of the attribute handler

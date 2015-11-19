@@ -573,7 +573,7 @@ void _InitCore()
     aAttrTab[ RES_PARATR_LIST_ISCOUNTED - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, true );
 
     aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] =            new SwFormatFillOrder;
-    aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] =              new SwFormatFrmSize;
+    aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] =              new SwFormatFrameSize;
     aAttrTab[ RES_PAPER_BIN- POOLATTR_BEGIN ] =             new SvxPaperBinItem( RES_PAPER_BIN );
     aAttrTab[ RES_LR_SPACE- POOLATTR_BEGIN ] =              new SvxLRSpaceItem( RES_LR_SPACE );
     aAttrTab[ RES_UL_SPACE- POOLATTR_BEGIN ] =              new SvxULSpaceItem( RES_UL_SPACE );
@@ -733,7 +733,7 @@ void _InitCore()
     SwBreakIt::_Create( ::comphelper::getProcessComponentContext() );
     pCheckIt = nullptr;
 
-    _FrmInit();
+    _FrameInit();
     _TextInit();
 
     SwSelPaintRects::s_pMapMode = new MapMode;
@@ -755,7 +755,7 @@ void _InitCore()
 
 void _FinitCore()
 {
-    _FrmFinit();
+    _FrameFinit();
     _TextFinit();
 
     sw::proofreadingiterator::dispose();

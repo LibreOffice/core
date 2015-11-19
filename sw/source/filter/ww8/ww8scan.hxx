@@ -821,7 +821,7 @@ enum ManTypes // enums for PLCFMan-ctor
 struct WW8PLCFxDesc
 {
     WW8PLCFx* pPLCFx;
-    ::std::stack<sal_uInt16>* pIdStk;  // memory for Attr-Id for Attr-end(s)
+    ::std::stack<sal_uInt16>* pIdStack;  // memory for Attr-Id for Attr-end(s)
     const sal_uInt8* pMemPos;// where are the Sprm(s)
     long nOrigSprmsLen;
 
@@ -852,7 +852,7 @@ struct WW8PLCFxDesc
     //existing ones.
     WW8PLCFxDesc()
         : pPLCFx(nullptr)
-        , pIdStk(nullptr)
+        , pIdStack(nullptr)
         , pMemPos(nullptr)
         , nOrigSprmsLen(0)
         , nStartPos(WW8_CP_MAX)

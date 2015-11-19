@@ -179,10 +179,10 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     rSh.EndAllAction();
 
-    if ( rSh.IsFrmSelected() )
+    if ( rSh.IsFrameSelected() )
     {
-        GetEditWin().StopInsFrm();
-        rSh.EnterSelFrmMode();
+        GetEditWin().StopInsFrame();
+        rSh.EnterSelFrameMode();
     }
 
     // remember category
@@ -191,9 +191,9 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     else if( eType & nsSelectionType::SEL_TBL)
         SetOldTabCat(rName);
     else if( eType & nsSelectionType::SEL_FRM)
-        SetOldFrmCat(rName);
+        SetOldFrameCat(rName);
     else if( eType == nsSelectionType::SEL_TXT)
-        SetOldFrmCat(rName);
+        SetOldFrameCat(rName);
     else if( eType & nsSelectionType::SEL_DRW)
         SetOldDrwCat(rName);
 }

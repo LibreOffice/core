@@ -23,7 +23,7 @@
 #include "acccontext.hxx"
 
 /**
- * accessibility implementation for the page (SwPageFrm)
+ * accessibility implementation for the page (SwPageFrame)
  * The page is _only_ visible in the page preview. For the regular
  * document view, it doesn't make sense to add this additional element
  * into the hierarchy. For the page preview, however, the page is the
@@ -50,8 +50,8 @@ protected:
 
 public:
     // convenience constructor to avoid typecast;
-    // may only be called with SwPageFrm argument
-    SwAccessiblePage( SwAccessibleMap* pInitMap, const SwFrm* pFrame );
+    // may only be called with SwPageFrame argument
+    SwAccessiblePage( SwAccessibleMap* pInitMap, const SwFrame* pFrame );
 
     // XAccessibleContext methods that need to be overridden
 

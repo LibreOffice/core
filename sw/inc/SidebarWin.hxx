@@ -41,7 +41,7 @@ class SwEditWin;
 class SwView;
 class Edit;
 class MenuButton;
-class SwFrm;
+class SwFrame;
 
 namespace sw { namespace overlay {
     class OverlayRanges;
@@ -247,7 +247,7 @@ class SwSidebarWin : public vcl::Window
         bool            mbIsFollow;
 
         SwSidebarItem& mrSidebarItem;
-        const SwFrm* mpAnchorFrm;
+        const SwFrame* mpAnchorFrame;
 };
 
 } } // eof namespace sw::sidebarwindows

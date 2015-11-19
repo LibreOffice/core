@@ -325,7 +325,7 @@ namespace
         }
         else
             aInfo.mbSelected = false;
-        rnBorder += pBox->GetFrameFormat()->GetFrmSize().GetWidth();
+        rnBorder += pBox->GetFrameFormat()->GetFrameSize().GetWidth();
         const sal_uInt16 nLeftCol = rnCol;
         while( rpCol != maCols.end() && *rpCol < rnBorder )
         {
@@ -701,7 +701,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
     aFndBox.SetTableLines( *this );
     if( bClear )
         aFndBox.ClearLineBehind();
-    aFndBox.DelFrms( *this );
+    aFndBox.DelFrames( *this );
 
     // copy boxes
     aTarget.copyBoxes( rCpyTable, *this, pUndo );
@@ -709,7 +709,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
     // adjust row span attributes accordingly
 
     // make frames
-    aFndBox.MakeFrms( *this );
+    aFndBox.MakeFrames( *this );
 
     return true;
 }
@@ -736,7 +736,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
 
     // First delete the Table's Frames
     _FndBox aFndBox( nullptr, nullptr );
-    aFndBox.DelFrms( pTableNd->GetTable() );
+    aFndBox.DelFrames( pTableNd->GetTable() );
 
     SwDoc* pCpyDoc = rCpyTable.GetFrameFormat()->GetDoc();
 
@@ -794,7 +794,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
         }
     }
 
-    aFndBox.MakeFrms( pTableNd->GetTable() );     // Create the Frames anew
+    aFndBox.MakeFrames( pTableNd->GetTable() );     // Create the Frames anew
     return true;
 }
 
@@ -994,7 +994,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
     // Delete the Frames
     aFndBox.SetTableLines( *this );
     //Not dispose accessible table
-    aFndBox.DelFrms( *this );
+    aFndBox.DelFrames( *this );
 
     if( 1 == rCpyTable.GetTabSortBoxes().size() )
     {
@@ -1020,7 +1020,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
             }
         }
 
-    aFndBox.MakeFrms( *this );
+    aFndBox.MakeFrames( *this );
     return true;
 }
 

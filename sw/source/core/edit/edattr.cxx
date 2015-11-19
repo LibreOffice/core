@@ -63,7 +63,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
 {
     // ??? pPaM can be different from the Cursor ???
-    if( GetCrsrCnt() > getMaxLookup() )
+    if( GetCursorCnt() > getMaxLookup() )
     {
         rSet.InvalidateAllItems();
         return false;
@@ -172,12 +172,12 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
 {
-    return GetPaMAttr( GetCrsr(), rSet, bMergeIndentValuesOfNumRule );
+    return GetPaMAttr( GetCursor(), rSet, bMergeIndentValuesOfNumRule );
 }
 
 bool SwEditShell::GetCurParAttr( SfxItemSet& rSet) const
 {
-    return GetPaMParAttr( GetCrsr(), rSet );
+    return GetPaMParAttr( GetCursor(), rSet );
 }
 
 bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
@@ -234,7 +234,7 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
 
 SwTextFormatColl* SwEditShell::GetCurTextFormatColl( ) const
 {
-    return GetPaMTextFormatColl( GetCrsr() );
+    return GetPaMTextFormatColl( GetCursor() );
 }
 
 SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
@@ -284,7 +284,7 @@ SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
 std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell::GetItemWithPaM( sal_uInt16 nWhich )
 {
     std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> vItem;
-    for(SwPaM& rCurrentPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rCurrentPaM : GetCursor()->GetRingContainer())
     { // for all the point and mark (selections)
 
         // get the start and the end node of the current selection
@@ -384,13 +384,13 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
 bool SwEditShell::GetCurFootnote( SwFormatFootnote* pFillFootnote )
 {
     // The cursor must be positioned on the current footnotes anchor:
-    SwPaM* pCrsr = GetCrsr();
-    SwTextNode* pTextNd = pCrsr->GetNode().GetTextNode();
+    SwPaM* pCursor = GetCursor();
+    SwTextNode* pTextNd = pCursor->GetNode().GetTextNode();
     if( !pTextNd )
         return false;
 
     SwTextAttr *const pFootnote = pTextNd->GetTextAttrForCharAt(
-        pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
     if( pFootnote && pFillFootnote )
     {
         // Transfer data from the attribute
@@ -406,10 +406,10 @@ bool SwEditShell::SetCurFootnote( const SwFormatFootnote& rFillFootnote )
     bool bChgd = false;
     StartAllAction();
 
-    for(SwPaM& rCrsr : GetCrsr()->GetRingContainer())
+    for(SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
         bChgd |=
-            mpDoc->SetCurFootnote( rCrsr, rFillFootnote.GetNumStr(), rFillFootnote.GetNumber(), rFillFootnote.IsEndNote() );
+            mpDoc->SetCurFootnote( rCursor, rFillFootnote.GetNumStr(), rFillFootnote.GetNumber(), rFillFootnote.IsEndNote() );
 
     }
 
@@ -480,7 +480,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
     if( !nDefDist )
         return false;
 
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         sal_uLong nSttNd = rPaM.GetMark()->nNode.GetIndex(),
               nEndNd = rPaM.GetPoint()->nNode.GetIndex();
@@ -499,13 +499,13 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
                     long nNext = rLS.GetTextLeft() + nDefDist;
                     if( bModulus )
                         nNext = ( nNext / nDefDist ) * nDefDist;
-                    SwFrm* pFrm = pCNd->getLayoutFrm( GetLayout() );
-                    if ( pFrm )
+                    SwFrame* pFrame = pCNd->getLayoutFrame( GetLayout() );
+                    if ( pFrame )
                     {
-                        const sal_uInt16 nFrmWidth = static_cast<sal_uInt16>( pFrm->IsVertical() ?
-                                                 pFrm->Frm().Height() :
-                                                 pFrm->Frm().Width() );
-                        bRet = nFrmWidth > ( nNext + MM50 );
+                        const sal_uInt16 nFrameWidth = static_cast<sal_uInt16>( pFrame->IsVertical() ?
+                                                 pFrame->Frame().Height() :
+                                                 pFrame->Frame().Width() );
+                        bRet = nFrameWidth > ( nNext + MM50 );
                     }
                     else
                         bRet = false;
@@ -524,17 +524,17 @@ void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
     StartAllAction();
     StartUndo( UNDO_START );
 
-    SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Multiple selection ?
+    SwPaM* pCursor = GetCursor();
+    if( pCursor->GetNext() != pCursor )         // Multiple selection ?
     {
-        SwPamRanges aRangeArr( *pCrsr );
-        SwPaM aPam( *pCrsr->GetPoint() );
+        SwPamRanges aRangeArr( *pCursor );
+        SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->MoveLeftMargin( aRangeArr.SetPam( n, aPam ),
                                         bRight, bModulus );
     }
     else
-        GetDoc()->MoveLeftMargin( *pCrsr, bRight, bModulus );
+        GetDoc()->MoveLeftMargin( *pCursor, bRight, bModulus );
 
     EndUndo( UNDO_END );
     EndAllAction();
@@ -639,7 +639,7 @@ SvtScriptType SwEditShell::GetScriptType() const
     SvtScriptType nRet = SvtScriptType::NONE;
 
     {
-        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             const SwPosition *pStt = rPaM.Start(),
                              *pEnd = pStt == rPaM.GetMark()
@@ -749,8 +749,8 @@ SvtScriptType SwEditShell::GetScriptType() const
 
 sal_uInt16 SwEditShell::GetCurLang() const
 {
-    const SwPaM* pCrsr = GetCrsr();
-    const SwPosition& rPos = *pCrsr->GetPoint();
+    const SwPaM* pCursor = GetCursor();
+    const SwPosition& rPos = *pCursor->GetPoint();
     const SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
     sal_uInt16 nLang;
     if( pTNd )
@@ -758,7 +758,7 @@ sal_uInt16 SwEditShell::GetCurLang() const
         //JP 24.9.2001: if exist no selection, then get the language before
         //              the current character!
         sal_Int32 nPos = rPos.nContent.GetIndex();
-        if( nPos && !pCrsr->HasMark() )
+        if( nPos && !pCursor->HasMark() )
             --nPos;
         nLang = pTNd->GetLang( nPos );
     }
@@ -769,17 +769,17 @@ sal_uInt16 SwEditShell::GetCurLang() const
 
 sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
 {
-    const SwPaM* pCrsr = GetCrsr();
-    const SwPosition* pStt = pCrsr->Start();
+    const SwPaM* pCursor = GetCursor();
+    const SwPosition* pStt = pCursor->Start();
     const SwTextNode* pTNd = pStt->nNode.GetNode().GetTextNode();
     OSL_ENSURE( pTNd, "no textnode available" );
 
     sal_uInt16 nScaleWidth;
     if( pTNd )
     {
-        const SwPosition* pEnd = pStt == pCrsr->GetPoint()
-                                        ? pCrsr->GetMark()
-                                        : pCrsr->GetPoint();
+        const SwPosition* pEnd = pStt == pCursor->GetPoint()
+                                        ? pCursor->GetMark()
+                                        : pCursor->GetPoint();
         const sal_Int32 nStt = pStt->nContent.GetIndex();
         const sal_Int32 nEnd = pStt->nNode == pEnd->nNode
             ? pEnd->nContent.GetIndex()

@@ -61,11 +61,11 @@ using namespace ::com::sun::star::frame;
 
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
 {
-    bool const bCrsrIsVisible(m_pWrtShell->IsCrsrVisible());
+    bool const bCursorIsVisible(m_pWrtShell->IsCursorVisible());
     _SetZoom( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
     // fdo#40465 force the cursor to stay in view whilst zooming
-    if (bCrsrIsVisible)
-        m_pWrtShell->ShowCrsr();
+    if (bCursorIsVisible)
+        m_pWrtShell->ShowCursor();
 }
 
 void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
@@ -329,7 +329,7 @@ IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
         case NID_GRF:
         case NID_OLE:
         {
-            GotoObjFlags eType = GotoObjFlags::FlyFrm;
+            GotoObjFlags eType = GotoObjFlags::FlyFrame;
             if(m_nMoveType == NID_GRF)
                 eType = GotoObjFlags::FlyGrf;
             else if(m_nMoveType == NID_OLE)
@@ -339,8 +339,8 @@ IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
                         rSh.GotoPrevFly(eType);
             if(bSuccess)
             {
-                rSh.HideCrsr();
-                rSh.EnterSelFrmMode();
+                rSh.HideCursor();
+                rSh.EnterSelFrameMode();
             }
         }
         break;
@@ -370,7 +370,7 @@ IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
             bNext ? rSh.GotoNextOutline() : rSh.GotoPrevOutline();
         break;
         case NID_SEL :
-            bNext ? rSh.GoNextCrsr() : rSh.GoPrevCrsr();
+            bNext ? rSh.GoNextCursor() : rSh.GoPrevCursor();
         break;
         case NID_FTN:
             rSh.EnterStdMode();
@@ -381,7 +381,7 @@ IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
         case NID_MARK:
         {
             // unselect
-            rSh.MoveCrsr();
+            rSh.MoveCursor();
             rSh.EnterStdMode();
 
             // collect navigator reminders
@@ -434,7 +434,7 @@ IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
         if(m_pSrchItem)
         {
             bool bBackward = m_pSrchItem->GetBackward();
-            if (rSh.HasSelection() && bNext != rSh.IsCrsrPtAtEnd())
+            if (rSh.HasSelection() && bNext != rSh.IsCursorPtAtEnd())
                 rSh.SwapPam();
             m_pSrchItem->SetBackward(!bNext);
             SfxRequest aReq(FN_REPEAT_SEARCH, SfxCallMode::SLOT, GetPool());

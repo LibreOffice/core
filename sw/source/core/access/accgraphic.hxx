@@ -29,7 +29,7 @@ protected:
 
 public:
     SwAccessibleGraphic( SwAccessibleMap* pInitMap,
-                         const SwFlyFrm *pFlyFrm );
+                         const SwFlyFrame *pFlyFrame );
 
     // XServiceInfo
 

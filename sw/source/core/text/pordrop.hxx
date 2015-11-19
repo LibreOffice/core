@@ -85,7 +85,7 @@ public:
             void PaintDrop( const SwTextPaintInfo &rInf ) const;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const override;
+    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
 
     inline sal_uInt16 GetLines() const { return nLines; }
     inline sal_uInt16 GetDistance() const { return nDistance; }

@@ -10,8 +10,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRAMECONTROL_HXX
 
 class SwEditWin;
-class SwPageFrm;
-class SwFrm;
+class SwPageFrame;
+class SwFrame;
 class Point;
 
 /// Abstract interface to be implemented by writer FrameControls
@@ -25,7 +25,7 @@ public:
     /// Returns true if the point is inside the control.
     virtual bool Contains( const Point &rDocPt ) const = 0;
 
-    virtual const SwFrm* GetFrame() = 0;
+    virtual const SwFrame* GetFrame() = 0;
     virtual SwEditWin*   GetEditWin() = 0;
 };
 
@@ -51,18 +51,18 @@ public:
 class SwFrameMenuButtonBase : public MenuButton, public ISwFrameControl
 {
     VclPtr<SwEditWin>     m_pEditWin;
-    const SwFrm*          m_pFrm;
+    const SwFrame*          m_pFrame;
 
 protected:
     virtual ~SwFrameMenuButtonBase() { disposeOnce(); }
     virtual void dispose() override;
 
 public:
-    SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrm* pFrm );
+    SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame* pFrame );
 
-    virtual const SwFrm* GetFrame()   override { return m_pFrm; }
+    virtual const SwFrame* GetFrame()   override { return m_pFrame; }
     virtual SwEditWin*   GetEditWin() override { return m_pEditWin; }
-    const SwPageFrm*     GetPageFrame();
+    const SwPageFrame*     GetPageFrame();
 };
 
 #endif

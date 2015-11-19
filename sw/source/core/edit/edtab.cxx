@@ -96,7 +96,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOp
                                          const SwTableAutoFormat* pTAFormat )
 {
     StartAllAction();
-    SwPosition* pPos = GetCrsr()->GetPoint();
+    SwPosition* pPos = GetCursor()->GetPoint();
 
     bool bEndUndo = 0 != pPos->nContent.GetIndex();
     if( bEndUndo )
@@ -126,7 +126,7 @@ bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     SwWait aWait( *GetDoc()->GetDocShell(), true );
     bool bRet = false;
     StartAllAction();
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         if( rPaM.HasMark() )
             bRet |= nullptr != GetDoc()->TextToTable( rInsTableOpts, rPaM, cCh,
@@ -140,15 +140,15 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
     bool bRet = false;
-    SwPaM* pCrsr = GetCrsr();
+    SwPaM* pCursor = GetCursor();
     const SwTableNode* pTableNd =
-            GetDoc()->IsIdxInTable( pCrsr->GetPoint()->nNode );
+            GetDoc()->IsIdxInTable( pCursor->GetPoint()->nNode );
     if( IsTableMode() )
     {
         ClearMark();
-        pCrsr = GetCrsr();
+        pCursor = GetCursor();
     }
-    else if( !pTableNd || pCrsr->GetNext() != pCrsr )
+    else if( !pTableNd || pCursor->GetNext() != pCursor )
         return bRet;
 
     // TL_CHART2:
@@ -159,25 +159,25 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
 
     // move current Cursor out of the listing area
     SwNodeIndex aTabIdx( *pTableNd );
-    pCrsr->DeleteMark();
-    pCrsr->GetPoint()->nNode = *pTableNd->EndOfSectionNode();
-    pCrsr->GetPoint()->nContent.Assign( nullptr, 0 );
+    pCursor->DeleteMark();
+    pCursor->GetPoint()->nNode = *pTableNd->EndOfSectionNode();
+    pCursor->GetPoint()->nContent.Assign( nullptr, 0 );
     // move sPoint and Mark out of the area!
-    pCrsr->SetMark();
-    pCrsr->DeleteMark();
+    pCursor->SetMark();
+    pCursor->DeleteMark();
 
     //Modified for bug #i119954# Application crashed if undo/redo covert nest table to text
     StartUndo();
     bRet = ConvertTableToText( pTableNd, cCh );
     EndUndo();
     //End  for bug #i119954#
-    pCrsr->GetPoint()->nNode = aTabIdx;
+    pCursor->GetPoint()->nNode = aTabIdx;
 
-    SwContentNode* pCNd = pCrsr->GetContentNode();
+    SwContentNode* pCNd = pCursor->GetContentNode();
     if( !pCNd )
-        pCrsr->Move( fnMoveForward, fnGoContent );
+        pCursor->Move( fnMoveForward, fnGoContent );
     else
-        pCrsr->GetPoint()->nContent.Assign( pCNd, 0 );
+        pCursor->GetPoint()->nContent.Assign( pCNd, 0 );
 
     EndAllAction();
     return bRet;
@@ -186,7 +186,7 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
 bool SwEditShell::IsTextToTableAvailable() const
 {
     bool bOnlyText = false;
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         if( rPaM.HasMark() && *rPaM.GetPoint() != *rPaM.GetMark() )
         {
@@ -217,7 +217,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
                                   sal_uInt16 nRows, sal_uInt16 nCols,
                                   sal_Int16 eAdj )
 {
-    SwPosition* pPos = GetCrsr()->GetPoint();
+    SwPosition* pPos = GetCursor()->GetPoint();
 
     StartAllAction();
 
@@ -247,7 +247,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
 /** update fields of a listing */
 void SwEditShell::UpdateTable()
 {
-    const SwTableNode* pTableNd = IsCrsrInTable();
+    const SwTableNode* pTableNd = IsCursorInTable();
 
     // Keine Arme keine Kekse
     if( pTableNd )
@@ -269,7 +269,7 @@ void SwEditShell::UpdateTable()
 TableChgMode SwEditShell::GetTableChgMode() const
 {
     TableChgMode eMode;
-    const SwTableNode* pTableNd = IsCrsrInTable();
+    const SwTableNode* pTableNd = IsCursorInTable();
     if( pTableNd )
         eMode = pTableNd->GetTable().GetTableChgMode();
     else
@@ -279,7 +279,7 @@ TableChgMode SwEditShell::GetTableChgMode() const
 
 void SwEditShell::SetTableChgMode( TableChgMode eMode )
 {
-    const SwTableNode* pTableNd = IsCrsrInTable();
+    const SwTableNode* pTableNd = IsCursorInTable();
 
     if( pTableNd )
     {
@@ -300,13 +300,13 @@ bool SwEditShell::GetTableBoxFormulaAttrs( SfxItemSet& rSet ) const
     else
     {
         do {
-            SwFrm *pFrm = GetCurrFrm();
+            SwFrame *pFrame = GetCurrFrame();
             do {
-                pFrm = pFrm->GetUpper();
-            } while ( pFrm && !pFrm->IsCellFrm() );
-            if ( pFrm )
+                pFrame = pFrame->GetUpper();
+            } while ( pFrame && !pFrame->IsCellFrame() );
+            if ( pFrame )
             {
-                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox()));
+                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()));
                 aBoxes.insert( pBox );
             }
         } while( false );
@@ -342,13 +342,13 @@ void SwEditShell::SetTableBoxFormulaAttrs( const SfxItemSet& rSet )
     else
     {
         do {
-            SwFrm *pFrm = GetCurrFrm();
+            SwFrame *pFrame = GetCurrFrame();
             do {
-                pFrm = pFrm->GetUpper();
-            } while ( pFrm && !pFrm->IsCellFrm() );
-            if ( pFrm )
+                pFrame = pFrame->GetUpper();
+            } while ( pFrame && !pFrame->IsCellFrame() );
+            if ( pFrame )
             {
-                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox()));
+                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()));
                 aBoxes.insert( pBox );
             }
         } while( false );
@@ -375,12 +375,12 @@ bool SwEditShell::IsTableBoxTextFormat() const
 
     const SwTableBox *pBox = nullptr;
     {
-        SwFrm *pFrm = GetCurrFrm();
+        SwFrame *pFrame = GetCurrFrame();
         do {
-            pFrm = pFrm->GetUpper();
-        } while ( pFrm && !pFrm->IsCellFrm() );
-        if ( pFrm )
-            pBox = static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
+            pFrame = pFrame->GetUpper();
+        } while ( pFrame && !pFrame->IsCellFrame() );
+        if ( pFrame )
+            pBox = static_cast<const SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
     }
 
     if( !pBox )
@@ -415,12 +415,12 @@ OUString SwEditShell::GetTableBoxText() const
     {
         const SwTableBox *pBox = nullptr;
         {
-            SwFrm *pFrm = GetCurrFrm();
+            SwFrame *pFrame = GetCurrFrame();
             do {
-                pFrm = pFrm->GetUpper();
-            } while ( pFrm && !pFrm->IsCellFrm() );
-            if ( pFrm )
-                pBox = static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
+                pFrame = pFrame->GetUpper();
+            } while ( pFrame && !pFrame->IsCellFrame() );
+            if ( pFrame )
+                pBox = static_cast<const SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
         }
 
         sal_uLong nNd;
@@ -433,13 +433,13 @@ OUString SwEditShell::GetTableBoxText() const
 bool SwEditShell::SplitTable( sal_uInt16 eMode )
 {
     bool bRet = false;
-    SwPaM *pCrsr = GetCrsr();
-    if( pCrsr->GetNode().FindTableNode() )
+    SwPaM *pCursor = GetCursor();
+    if( pCursor->GetNode().FindTableNode() )
     {
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
-        bRet = GetDoc()->SplitTable( *pCrsr->GetPoint(), eMode, true );
+        bRet = GetDoc()->SplitTable( *pCursor->GetPoint(), eMode, true );
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
         ClearFEShellTabCols();
@@ -451,13 +451,13 @@ bool SwEditShell::SplitTable( sal_uInt16 eMode )
 bool SwEditShell::MergeTable( bool bWithPrev, sal_uInt16 nMode )
 {
     bool bRet = false;
-    SwPaM *pCrsr = GetCrsr();
-    if( pCrsr->GetNode().FindTableNode() )
+    SwPaM *pCursor = GetCursor();
+    if( pCursor->GetNode().FindTableNode() )
     {
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
-        bRet = GetDoc()->MergeTable( *pCrsr->GetPoint(), bWithPrev, nMode );
+        bRet = GetDoc()->MergeTable( *pCursor->GetPoint(), bWithPrev, nMode );
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
         ClearFEShellTabCols();
@@ -469,8 +469,8 @@ bool SwEditShell::MergeTable( bool bWithPrev, sal_uInt16 nMode )
 bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
 {
     bool bRet = false;
-    const SwPaM *pCrsr = GetCrsr();
-    const SwTableNode* pTableNd = pCrsr->GetNode().FindTableNode();
+    const SwPaM *pCursor = GetCursor();
+    const SwTableNode* pTableNd = pCursor->GetNode().FindTableNode();
     if( pTableNd && dynamic_cast< const SwDDETable* >(&pTableNd->GetTable()) ==  nullptr)
     {
         bool bNew = pTableNd->GetTable().IsNewModel();
@@ -515,7 +515,7 @@ bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
 /** create InsertDB as table Undo */
 void SwEditShell::AppendUndoForInsertFromDB( bool bIsTable )
 {
-    GetDoc()->AppendUndoForInsertFromDB( *GetCrsr(), bIsTable );
+    GetDoc()->AppendUndoForInsertFromDB( *GetCursor(), bIsTable );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

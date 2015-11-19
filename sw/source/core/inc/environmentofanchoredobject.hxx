@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_ENVIRONMENTOFANCHOREDOBJECT_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_ENVIRONMENTOFANCHOREDOBJECT_HXX
 
-class SwFrm;
-class SwLayoutFrm;
+class SwFrame;
+class SwLayoutFrame;
 
 namespace objectpositioning
 {
@@ -56,7 +56,7 @@ namespace objectpositioning
             - no exception any more. Thus remove
             parameter <_bForPageAlignment>
 
-            @param _rHoriOrientFrm
+            @param _rHoriOrientFrame
             input parameter - frame, at which the horizontal position is
             oriented at (typically it's the anchor frame).
             starting point for the search of the layout frame.
@@ -64,7 +64,7 @@ namespace objectpositioning
             @return reference to the layout frame, which determines the
             the horizontal environment the object has to be positioned in.
         */
-        const SwLayoutFrm& GetHoriEnvironmentLayoutFrm( const SwFrm& _rHoriOrientFrm ) const;
+        const SwLayoutFrame& GetHoriEnvironmentLayoutFrame( const SwFrame& _rHoriOrientFrame ) const;
 
         /** determine environment layout frame for possible vertical object
             positions respectively for alignments to 'page areas'
@@ -81,7 +81,7 @@ namespace objectpositioning
             - no exception any more. Thus remove
             parameter <_bForPageAlignment>
 
-            @param _rVertOrientFrm
+            @param _rVertOrientFrame
             input parameter - frame, at which the vertical position is
             oriented at (typically it's the anchor frame).
             starting point for the search of the layout frame.
@@ -89,7 +89,7 @@ namespace objectpositioning
             @return reference to the layout frame, which determines the
             the vertical environment the object has to be positioned in.
         */
-        const SwLayoutFrm& GetVertEnvironmentLayoutFrm( const SwFrm& _rVertOrientFrm ) const;
+        const SwLayoutFrame& GetVertEnvironmentLayoutFrame( const SwFrame& _rVertOrientFrame ) const;
     };
 }
 

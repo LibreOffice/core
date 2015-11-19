@@ -21,34 +21,34 @@
 
 #include <crsrsh.hxx>
 
-class SwCrsrShell;
+class SwCursorShell;
 struct SwPosition;
 class Point;
 
  /** Access to the block cursor
 
-    A block cursor contains a SwShellCrsr and additional information about
+    A block cursor contains a SwShellCursor and additional information about
     the rectangle which has been created by pressing the mouse button and
     moving the mouse.
 
-    It's simply an aggregation of a SwShellCrsr and a rectangle defined by
+    It's simply an aggregation of a SwShellCursor and a rectangle defined by
     a start and an end point.
 */
 class SwBlockCursor
 {
-    SwShellCrsr aCursor;
+    SwShellCursor aCursor;
     Point *pStartPt;
     Point *pEndPt;
 
 public:
-    SwBlockCursor( const SwCrsrShell& rCrsrSh, const SwPosition &rPos ) :
-        aCursor( rCrsrSh, rPos ), pStartPt(nullptr), pEndPt(nullptr) {}
+    SwBlockCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos ) :
+        aCursor( rCursorSh, rPos ), pStartPt(nullptr), pEndPt(nullptr) {}
     /** Access to the shell cursor
 
-        @return SwShellCrsr& which represents the start and end position of the
+        @return SwShellCursor& which represents the start and end position of the
         current block selection
     */
-    SwShellCrsr& getShellCrsr();
+    SwShellCursor& getShellCursor();
     /** Defines the starting vertex of the block selection
 
         @param rPt

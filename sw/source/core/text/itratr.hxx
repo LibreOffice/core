@@ -32,7 +32,7 @@ class SwAttrSet;
 class SwTextNode;
 class SwRedlineItr;
 class SwViewShell;
-class SwTextFrm;
+class SwTextFrame;
 
 class SwAttrIter
 {
@@ -64,7 +64,7 @@ private:
 protected:
     void Chg( SwTextAttr *pHt );
     void Rst( SwTextAttr *pHt );
-    void CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrm* pFrm = nullptr );
+    void CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame* pFrame = nullptr );
     explicit SwAttrIter(SwTextNode* pTextNode)
         : pShell(nullptr)
         , pFnt(nullptr)

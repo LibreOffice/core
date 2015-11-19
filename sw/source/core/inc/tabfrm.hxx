@@ -27,13 +27,13 @@ class SwTable;
 class SwBorderAttrs;
 class SwAttrSetChg;
 
-/// SwTabFrm is one table in the document layout, containing rows (which contain cells).
-class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
+/// SwTabFrame is one table in the document layout, containing rows (which contain cells).
+class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
 {
-    friend void CalcContent( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
+    friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl, bool bNoCalcFollow );
 
     // does the special treatment for _Get[Next|Prev]Leaf()
-    using SwFrm::GetLeaf;
+    using SwFrame::GetLeaf;
 
     SwTable * m_pTable;
 
@@ -46,7 +46,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     bool m_bLockBackMove    :1; /// The Master took care of the BackMove test
     bool m_bResizeHTMLTable :1; /// Call the Resize of the HTMLTableLayout in the MakeAll
                                 /// This is an optimization, so that we don't have to call
-                                /// it in ContentFrm::Grow; there it might be called for
+                                /// it in ContentFrame::Grow; there it might be called for
                                 /// _every_ Cell
 
     bool m_bONECalcLowers   :1; /// Primarily for the StarONE SS
@@ -62,7 +62,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
                                 //  want any notification to the master table
 
     bool m_bRestrictTableGrowth :1;     // Usually, the table may grow infinitely,
-                                        // as the table can be split in SwTabFrm::MakeAll
+                                        // as the table can be split in SwTabFrame::MakeAll
                                         // In MakeAll, this flag is set to indicate that
                                         // the table may only grow inside its upper. This
                                         // is necessary, in order to let the text flow into
@@ -86,7 +86,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     bool m_bInRecalcLowerRow : 1;
 
     /**
-     * Split() splits the Frm at the specified position: a Follow is
+     * Split() splits the Frame at the specified position: a Follow is
      * created and constructed and inserted directly after this.
      * Join() gets the Follow's content and destroys it.
      */
@@ -99,30 +99,30 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
         SwAttrSetChg *pa = nullptr,
         SwAttrSetChg *pb = nullptr );
 
-    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat ) override;
+    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool bHead, bool &rReformat ) override;
 
     virtual void DestroyImpl() override;
-    virtual ~SwTabFrm();
+    virtual ~SwTabFrame();
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     // only changes the Framesize, not the PrtArea size
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 
 public:
-    SwTabFrm( SwTable &, SwFrm* );  // calling Regist Flys always after creation _and_pasting!
-    SwTabFrm( SwTabFrm & ); // _only_ for the creation of follows
+    SwTabFrame( SwTable &, SwFrame* );  // calling Regist Flys always after creation _and_pasting!
+    SwTabFrame( SwTabFrame & ); // _only_ for the creation of follows
 
-    void JoinAndDelFollows();   // for DelFrms of the TableNodes!
+    void JoinAndDelFollows();   // for DelFrames of the TableNodes!
 
     // calls thr RegistFlys of the rows
     void RegistFlys();
 
-    inline const SwTabFrm *GetFollow() const;
-    inline       SwTabFrm *GetFollow();
-    SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
+    inline const SwTabFrame *GetFollow() const;
+    inline       SwTabFrame *GetFollow();
+    SwTabFrame* FindMaster( bool bFirstMaster = false ) const;
 
     virtual bool GetInfo( SfxPoolItem &rHint ) const override;
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
@@ -130,13 +130,13 @@ public:
     virtual void CheckDirection( bool bVert ) override;
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
+    virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 
     virtual bool Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = nullptr, bool bNotify = true ) override;
 
-                 SwContentFrm *FindLastContent();
-    inline const SwContentFrm *FindLastContent() const;
+                 SwContentFrame *FindLastContent();
+    inline const SwContentFrame *FindLastContent() const;
 
     const SwTable *GetTable() const { return m_pTable; }
           SwTable *GetTable()       { return m_pTable; }
@@ -156,8 +156,8 @@ public:
 
     bool HasFollowFlowLine() const { return m_bHasFollowFlowLine; }
     void SetFollowFlowLine(bool bNew) { m_bHasFollowFlowLine = bNew; }
-    //return the SwTabFrm (if any) that this SwTabFrm is a follow flow line for
-    SwTabFrm* GetFollowFlowLineFor();
+    //return the SwTabFrame (if any) that this SwTabFrame is a follow flow line for
+    SwTabFrame* GetFollowFlowLineFor();
 
     bool IsRebuildLastLine() const { return m_bIsRebuildLastLine; }
     void SetRebuildLastLine(bool bNew) { m_bIsRebuildLastLine = bNew; }
@@ -208,8 +208,8 @@ public:
 
     SwTwips CalcHeightOfFirstContentLine() const;
 
-    bool IsInHeadline( const SwFrm& rFrm ) const;
-    SwRowFrm* GetFirstNonHeadlineRow() const;
+    bool IsInHeadline( const SwFrame& rFrame ) const;
+    SwRowFrame* GetFirstNonHeadlineRow() const;
 
     bool IsLayoutSplitAllowed() const;
 
@@ -220,21 +220,21 @@ public:
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrame)
 };
 
-inline const SwContentFrm *SwTabFrm::FindLastContent() const
+inline const SwContentFrame *SwTabFrame::FindLastContent() const
 {
-    return const_cast<SwTabFrm*>(this)->FindLastContent();
+    return const_cast<SwTabFrame*>(this)->FindLastContent();
 }
 
-inline const SwTabFrm *SwTabFrm::GetFollow() const
+inline const SwTabFrame *SwTabFrame::GetFollow() const
 {
-    return static_cast<const SwTabFrm*>(SwFlowFrm::GetFollow());
+    return static_cast<const SwTabFrame*>(SwFlowFrame::GetFollow());
 }
-inline SwTabFrm *SwTabFrm::GetFollow()
+inline SwTabFrame *SwTabFrame::GetFollow()
 {
-    return static_cast<SwTabFrm*>(SwFlowFrm::GetFollow());
+    return static_cast<SwTabFrame*>(SwFlowFrame::GetFollow());
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_TABFRM_HXX

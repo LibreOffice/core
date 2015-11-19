@@ -35,13 +35,13 @@ class SfxPrinter;
 class SwViewShell;
 class SwViewOption;
 class SwContentOptPage;
-class SwShdwCrsrOptionsTabPage;
+class SwShdwCursorOptionsTabPage;
 
 // OS 12.01.95
 // Item for settings dialog - document view
 class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
 {
-    friend class SwShdwCrsrOptionsTabPage;
+    friend class SwShdwCursorOptionsTabPage;
     friend class SwModule;
 
     bool bParagraphEnd      :1;

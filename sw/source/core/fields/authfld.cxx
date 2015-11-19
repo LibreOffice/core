@@ -260,16 +260,16 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
             const SwTextNode& rFieldTextNode = pTextField->GetTextNode();
             SwPosition aFieldPos(rFieldTextNode);
             SwDoc& rDoc = *const_cast<SwDoc*>(rFieldTextNode.GetDoc());
-            SwContentFrm *pFrm = rFieldTextNode.getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
+            SwContentFrame *pFrame = rFieldTextNode.getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
             const SwTextNode* pTextNode = nullptr;
-            if(pFrm && !pFrm->IsInDocBody())
-                pTextNode = GetBodyTextNode( rDoc, aFieldPos, *pFrm );
+            if(pFrame && !pFrame->IsInDocBody())
+                pTextNode = GetBodyTextNode( rDoc, aFieldPos, *pFrame );
             //if no text node could be found or the field is in the document
             //body the directly available text node will be used
             if(!pTextNode)
                 pTextNode = &rFieldTextNode;
             if (!pTextNode->GetText().isEmpty() &&
-                pTextNode->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+                pTextNode->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ) &&
                 pTextNode->GetNodes().IsDocNodes() )
             {
                 SwTOXAuthority* pNew = new SwTOXAuthority( *pTextNode,

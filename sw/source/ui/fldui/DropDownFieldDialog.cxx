@@ -65,7 +65,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &r
         m_pListItemsLB->SelectEntry(pDropField->GetSelectedItem());
     }
 
-    bool bEnable = !rSh.IsCrsrReadonly();
+    bool bEnable = !rSh.IsCursorReadonly();
     m_pOKPB->Enable( bEnable );
 
     m_pListItemsLB->GrabFocus();

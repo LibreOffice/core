@@ -421,7 +421,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
             }
             if (!bVert)
             {
-                SwTwips nHeight = rFlyFormat.GetFrmSize().GetHeight();
+                SwTwips nHeight = rFlyFormat.GetFrameSize().GetHeight();
                 nHeight/=20; //nHeight was in twips, want it in half points, but
                              //then half of total height.
                 long nFontHeight = static_cast<const SvxFontHeightItem&>(

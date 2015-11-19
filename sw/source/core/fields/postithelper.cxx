@@ -48,19 +48,19 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
     if ( pTextNode == nullptr )
         return aRet;
 
-    SwIterator<SwTextFrm,SwContentNode> aIter( *pTextNode );
-    for( SwTextFrm* pTextFrm = aIter.First(); pTextFrm != nullptr; pTextFrm = aIter.Next() )
+    SwIterator<SwTextFrame,SwContentNode> aIter( *pTextNode );
+    for( SwTextFrame* pTextFrame = aIter.First(); pTextFrame != nullptr; pTextFrame = aIter.Next() )
     {
-        if( !pTextFrm->IsFollow() )
+        if( !pTextFrame->IsFollow() )
         {
-            pTextFrm = pTextFrm->GetFrmAtPos( rAnchorPos );
-            SwPageFrm *pPage = pTextFrm ? pTextFrm->FindPageFrm() : nullptr;
+            pTextFrame = pTextFrame->GetFrameAtPos( rAnchorPos );
+            SwPageFrame *pPage = pTextFrame ? pTextFrame->FindPageFrame() : nullptr;
             if ( pPage != nullptr && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
             {
                 aRet = VISIBLE;
 
-                o_rInfo.mpAnchorFrm = pTextFrm;
-                pTextFrm->GetCharRect( o_rInfo.mPosition, rAnchorPos );
+                o_rInfo.mpAnchorFrame = pTextFrame;
+                pTextFrame->GetCharRect( o_rInfo.mPosition, rAnchorPos );
                 if ( pAnnotationStartPos != nullptr )
                 {
                     o_rInfo.mnStartNodeIdx = pAnnotationStartPos->nNode.GetIndex();
@@ -71,7 +71,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                     o_rInfo.mnStartNodeIdx = 0;
                     o_rInfo.mnStartContent = -1;
                 }
-                o_rInfo.mPageFrame = pPage->Frm();
+                o_rInfo.mPageFrame = pPage->Frame();
                 o_rInfo.mPagePrtArea = pPage->Prt();
                 o_rInfo.mPagePrtArea.Pos() += o_rInfo.mPageFrame.Pos();
                 o_rInfo.mnPageNumber = pPage->GetPhyPageNum();
@@ -100,13 +100,13 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
              : aRet;
 }
 
-long SwPostItHelper::getLayoutHeight( const SwRootFrm* pRoot )
+long SwPostItHelper::getLayoutHeight( const SwRootFrame* pRoot )
 {
-    long nRet = pRoot ? pRoot->Frm().Height() : 0;
+    long nRet = pRoot ? pRoot->Frame().Height() : 0;
     return nRet;
 }
 
-void SwPostItHelper::setSidebarChanged( SwRootFrm* pRoot, bool bBrowseMode )
+void SwPostItHelper::setSidebarChanged( SwRootFrame* pRoot, bool bBrowseMode )
 {
     if( pRoot )
     {
@@ -116,14 +116,14 @@ void SwPostItHelper::setSidebarChanged( SwRootFrm* pRoot, bool bBrowseMode )
     }
 }
 
-unsigned long SwPostItHelper::getPageInfo( SwRect& rPageFrm, const SwRootFrm* pRoot, const Point& rPoint )
+unsigned long SwPostItHelper::getPageInfo( SwRect& rPageFrame, const SwRootFrame* pRoot, const Point& rPoint )
 {
     unsigned long nRet = 0;
-    const SwFrm* pPage = pRoot->GetPageAtPos( rPoint, nullptr, true );
+    const SwFrame* pPage = pRoot->GetPageAtPos( rPoint, nullptr, true );
     if( pPage )
     {
         nRet = pPage->GetPhyPageNum();
-        rPageFrm = pPage->Frm();
+        rPageFrame = pPage->Frame();
     }
     return nRet;
 }

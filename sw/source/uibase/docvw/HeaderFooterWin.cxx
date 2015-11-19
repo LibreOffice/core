@@ -124,8 +124,8 @@ namespace
     }
 }
 
-SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrm *pFrm, bool bHeader ) :
-    SwFrameMenuButtonBase( pEditWin, pFrm ),
+SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame, bool bHeader ) :
+    SwFrameMenuButtonBase( pEditWin, pFrame ),
     m_bIsHeader( bHeader ),
     m_pPopupMenu( nullptr ),
     m_pLine( nullptr ),

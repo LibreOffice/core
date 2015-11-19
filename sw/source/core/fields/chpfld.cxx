@@ -98,18 +98,18 @@ SwField* SwChapterField::Copy() const
 }
 
 // #i53420#
-void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
+void SwChapterField::ChangeExpansion(const SwFrame* pFrame,
                                       const SwContentNode* pContentNode,
                                       bool bSrchNum )
 {
-    OSL_ENSURE( pFrm, "In which frame am I?" );
+    OSL_ENSURE( pFrame, "In which frame am I?" );
     SwDoc* pDoc = const_cast<SwDoc*>(pContentNode->GetDoc());
 
     const SwTextNode* pTextNode = dynamic_cast<const SwTextNode*>(pContentNode);
-    if ( !pTextNode || !pFrm->IsInDocBody() )
+    if ( !pTextNode || !pFrame->IsInDocBody() )
     {
         SwPosition aDummyPos( pDoc->GetNodes().GetEndOfContent() );
-        pTextNode = GetBodyTextNode( *pDoc, aDummyPos, *pFrm );
+        pTextNode = GetBodyTextNode( *pDoc, aDummyPos, *pFrame );
     }
 
     if ( pTextNode )

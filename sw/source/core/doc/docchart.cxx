@@ -118,7 +118,7 @@ void SwDoc::_UpdateCharts( const SwTable& rTable, SwViewShell const & rVSh ) con
         SwOLENode *pONd;
         if( nullptr != ( pONd = aIdx.GetNode().GetOLENode() ) &&
             aName == pONd->GetChartTableName() &&
-            pONd->getLayoutFrm( rVSh.GetLayout() ) )
+            pONd->getLayoutFrame( rVSh.GetLayout() ) )
         {
             SwChartDataProvider *pPCD = getIDocumentChartDataProviderAccess().GetChartDataProvider();
             if (pPCD)

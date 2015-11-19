@@ -24,7 +24,7 @@
 
 class SwViewShell;
 class SwSidebarItem;
-class SwFrm;
+class SwFrame;
 
 namespace sw { namespace sidebarwindows {
 
@@ -46,7 +46,7 @@ class SidebarWinAccessible : public VCLXWindow
     private:
         SwSidebarWin& mrSidebarWin;
         SwViewShell& mrViewShell;
-        const SwFrm* mpAnchorFrm;
+        const SwFrame* mpAnchorFrame;
         bool bAccContextCreated;
 };
 

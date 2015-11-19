@@ -90,9 +90,9 @@ long SwWrtShell::DelLine()
         // remember the old cursor
     Push();
     ClearMark();
-    SwCrsrShell::LeftMargin();
+    SwCursorShell::LeftMargin();
     SetMark();
-    SwCrsrShell::RightMargin();
+    SwCursorShell::RightMargin();
 
     long nRet = Delete();
     Pop(false);
@@ -104,7 +104,7 @@ long SwWrtShell::DelLine()
 long SwWrtShell::DelToStartOfLine()
 {
     OpenMark();
-    SwCrsrShell::LeftMargin();
+    SwCursorShell::LeftMargin();
     long nRet = Delete();
     CloseMark( 0 != nRet );
     return nRet;
@@ -113,7 +113,7 @@ long SwWrtShell::DelToStartOfLine()
 long SwWrtShell::DelToEndOfLine()
 {
     OpenMark();
-    SwCrsrShell::RightMargin();
+    SwCursorShell::RightMargin();
     long nRet = Delete();
     CloseMark( 0 != nRet );
     return 1;
@@ -132,15 +132,15 @@ long SwWrtShell::DelLeft()
         DelSelectedObj();
 
         // #108205# Set cursor to remembered position.
-        SetCrsr(&aTmpPt);
+        SetCursor(&aTmpPt);
 
-        LeaveSelFrmMode();
-        UnSelectFrm();
+        LeaveSelFrameMode();
+        UnSelectFrame();
 
         nSelType = GetSelectionType();
         if ( nCmp & nSelType )
         {
-            EnterSelFrmMode();
+            EnterSelFrameMode();
             GotoNextFly();
         }
 
@@ -176,29 +176,29 @@ long SwWrtShell::DelLeft()
 
     // JP 29.06.95: never erase a table standing in front of it.
     bool bSwap = false;
-    const SwTableNode * pWasInTableNd = SwCrsrShell::IsCrsrInTable();
+    const SwTableNode * pWasInTableNd = SwCursorShell::IsCursorInTable();
 
-    if( SwCrsrShell::IsSttPara())
+    if( SwCursorShell::IsSttPara())
     {
         // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
         const SwStartNode * pSNdOld = pWasInTableNd ?
-                                      GetSwCrsr()->GetNode().FindTableBoxStartNode() :
+                                      GetSwCursor()->GetNode().FindTableBoxStartNode() :
                                       nullptr;
 
         // If the cursor is at the beginning of a paragraph, try to step
         // backwards. On failure we are done.
-        if( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
+        if( !SwCursorShell::Left(1,CRSR_SKIP_CHARS) )
             return 0;
 
         // If the cursor entered or left a table (or both) we are done. No step
         // back.
-        const SwTableNode* pIsInTableNd = SwCrsrShell::IsCrsrInTable();
+        const SwTableNode* pIsInTableNd = SwCursorShell::IsCursorInTable();
         if( pIsInTableNd != pWasInTableNd )
             return 0;
 
         const SwStartNode* pSNdNew = pIsInTableNd ?
-                                     GetSwCrsr()->GetNode().FindTableBoxStartNode() :
+                                     GetSwCursor()->GetNode().FindTableBoxStartNode() :
                                      nullptr;
 
         // #i4032# Don't actually call a 'delete' if we
@@ -207,18 +207,18 @@ long SwWrtShell::DelLeft()
             return 0;
 
         OpenMark();
-        SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
-        SwCrsrShell::SwapPam();
+        SwCursorShell::Right(1,CRSR_SKIP_CHARS);
+        SwCursorShell::SwapPam();
         bSwap = true;
     }
     else
     {
         OpenMark();
-        SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
+        SwCursorShell::Left(1,CRSR_SKIP_CHARS);
     }
     long nRet = Delete();
     if( !nRet && bSwap )
-        SwCrsrShell::SwapPam();
+        SwCursorShell::SwapPam();
     CloseMark( 0 != nRet );
     return nRet;
 }
@@ -270,23 +270,23 @@ long SwWrtShell::DelRight()
                 EnterStdMode();
         }
 
-        pWasInTableNd = IsCrsrInTable();
+        pWasInTableNd = IsCursorInTable();
 
-        if( nsSelectionType::SEL_TXT & nSelection && SwCrsrShell::IsSttPara() &&
-            SwCrsrShell::IsEndPara() )
+        if( nsSelectionType::SEL_TXT & nSelection && SwCursorShell::IsSttPara() &&
+            SwCursorShell::IsEndPara() )
         {
             // save cursor
-            SwCrsrShell::Push();
+            SwCursorShell::Push();
 
             bool bDelFull = false;
-            if ( SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
+            if ( SwCursorShell::Right(1,CRSR_SKIP_CHARS) )
             {
-                const SwTableNode * pCurrTableNd = IsCrsrInTable();
+                const SwTableNode * pCurrTableNd = IsCursorInTable();
                 bDelFull = pCurrTableNd && pCurrTableNd != pWasInTableNd;
             }
 
             // restore cursor
-            SwCrsrShell::Pop( false );
+            SwCursorShell::Pop( false );
 
             if( bDelFull )
             {
@@ -299,44 +299,44 @@ long SwWrtShell::DelRight()
         {
             // #108049# Save the startnode of the current cell
             const SwStartNode * pSNdOld;
-            pSNdOld = GetSwCrsr()->GetNode().FindTableBoxStartNode();
+            pSNdOld = GetSwCursor()->GetNode().FindTableBoxStartNode();
 
-            if ( SwCrsrShell::IsEndPara() )
+            if ( SwCursorShell::IsEndPara() )
             {
                 // #i41424# Introduced a couple of
                 // Push()-Pop() pairs here. The reason for this is that a
                 // Right()-Left() combination does not make sure, that
                 // the cursor will be in its initial state, because there
                 // may be a numbering in front of the next paragraph.
-                SwCrsrShell::Push();
+                SwCursorShell::Push();
 
-                if ( SwCrsrShell::Right(1, CRSR_SKIP_CHARS) )
+                if ( SwCursorShell::Right(1, CRSR_SKIP_CHARS) )
                 {
-                    if (IsCrsrInTable() || (pWasInTableNd != IsCrsrInTable()))
+                    if (IsCursorInTable() || (pWasInTableNd != IsCursorInTable()))
                     {
                         /** #108049# Save the startnode of the current
                             cell. May be different to pSNdOld as we have
                             moved. */
-                        const SwStartNode * pSNdNew = GetSwCrsr()
+                        const SwStartNode * pSNdNew = GetSwCursor()
                             ->GetNode().FindTableBoxStartNode();
 
                         /** #108049# Only move instead of deleting if we
                             have moved to a different cell */
                         if (pSNdOld != pSNdNew)
                         {
-                            SwCrsrShell::Pop();
+                            SwCursorShell::Pop();
                             break;
                         }
                     }
                 }
 
                 // restore cursor
-                SwCrsrShell::Pop( false );
+                SwCursorShell::Pop( false );
             }
         }
 
         OpenMark();
-        SwCrsrShell::Right(1,CRSR_SKIP_CELLS);
+        SwCursorShell::Right(1,CRSR_SKIP_CELLS);
         nRet = Delete();
         CloseMark( 0 != nRet );
         break;
@@ -354,12 +354,12 @@ long SwWrtShell::DelRight()
             DelSelectedObj();
 
             // #108205# Set cursor to remembered position.
-            SetCrsr(&aTmpPt);
+            SetCursor(&aTmpPt);
 
-            LeaveSelFrmMode();
-            UnSelectFrm();
-            OSL_ENSURE( !IsFrmSelected(),
-                    "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" );
+            LeaveSelFrameMode();
+            UnSelectFrame();
+            OSL_ENSURE( !IsFrameSelected(),
+                    "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrame()> should unmark all objects" );
             // leave draw mode, if necessary.
             {
                 if (GetView().GetDrawFuncPtr())
@@ -374,7 +374,7 @@ long SwWrtShell::DelRight()
             }
         }
 
-        // <IsFrmSelected()> can't be true - see above.
+        // <IsFrameSelected()> can't be true - see above.
         {
             nSelection = GetSelectionType();
             if ( nsSelectionType::SEL_FRM & nSelection ||
@@ -382,7 +382,7 @@ long SwWrtShell::DelRight()
                  nsSelectionType::SEL_OLE & nSelection ||
                  nsSelectionType::SEL_DRW & nSelection )
             {
-                EnterSelFrmMode();
+                EnterSelFrameMode();
                 GotoNextFly();
             }
         }
@@ -454,12 +454,12 @@ long SwWrtShell::DelToEndOfSentence()
     {
         Push();
         ClearMark();
-        if (SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
+        if (SwCursorShell::Right(1,CRSR_SKIP_CHARS))
         {
             SetMark();
             if (!IsEndPara()) // can only be at the end if it's empty
             {   // for an empty paragraph this would actually select the _next_
-                SwCrsrShell::MovePara(fnParaCurr, fnParaEnd);
+                SwCursorShell::MovePara(fnParaCurr, fnParaEnd);
             }
             if (!IsEndOfDoc()) // do not delete last paragraph in body text
             {

@@ -538,14 +538,14 @@ namespace SwLangHelper
     {
         // string for guessing language
         OUString aText;
-        SwPaM *pCrsr = rSh.GetCrsr();
-        SwTextNode *pNode = pCrsr->GetNode().GetTextNode();
+        SwPaM *pCursor = rSh.GetCursor();
+        SwTextNode *pNode = pCursor->GetNode().GetTextNode();
         if (pNode)
         {
             aText = pNode->GetText();
             if (!aText.isEmpty())
             {
-                sal_Int32 nEnd = pCrsr->GetPoint()->nContent.GetIndex();
+                sal_Int32 nEnd = pCursor->GetPoint()->nContent.GetIndex();
                 // at most 100 chars to the left...
                 const sal_Int32 nStt = nEnd > 100 ? nEnd - 100 : 0;
                 // ... and 100 to the right of the cursor position

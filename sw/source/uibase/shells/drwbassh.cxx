@@ -227,7 +227,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, nAnchor));
                         bool bRTL;
                         bool bVertL2R;
-                        aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrmVertical(true, bRTL, bVertL2R)));
+                        aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrameVertical(true, bRTL, bVertL2R)));
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_RTL_TEXT, bRTL));
 
                         SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
@@ -268,7 +268,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                 SfxItemState::SET != pOutSet->GetItemState(
                                     SID_ATTR_TRANSFORM_POS_Y, false );
 
-                            SfxItemSet aFrmAttrSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END - 1);
+                            SfxItemSet aFrameAttrSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END - 1);
 
                             bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 
@@ -283,7 +283,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                 {
                                     SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
                                     aAnchor.SetType((RndStdIds)static_cast<const SfxInt16Item*>(pAnchorItem)->GetValue());
-                                    aFrmAttrSet.Put( aAnchor );
+                                    aFrameAttrSet.Put( aAnchor );
                                 }
                             }
                             const SfxPoolItem* pHoriOrient = nullptr;
@@ -306,7 +306,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                     aHOrient.SetPos( static_cast<const SfxInt32Item*>(pHoriPosition)->GetValue());
                                 if(pHoriMirror)
                                     aHOrient.SetPosToggle( static_cast<const SfxBoolItem*>(pHoriMirror)->GetValue());
-                                aFrmAttrSet.Put(aHOrient);
+                                aFrameAttrSet.Put(aHOrient);
                             }
 
                             const SfxPoolItem* pVertOrient = nullptr;
@@ -325,15 +325,15 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                         static_cast<const SfxInt16Item*>(pVertRelation)->GetValue());
                                 if(pVertPosition)
                                     aVOrient.SetPos( static_cast<const SfxInt32Item*>(pVertPosition)->GetValue());
-                                aFrmAttrSet.Put( aVOrient );
+                                aFrameAttrSet.Put( aVOrient );
                             }
                             const SfxPoolItem* pFollowItem = nullptr;
                             pOutSet->GetItemState(RES_FOLLOW_TEXT_FLOW, false, &pFollowItem);
                             if(pFollowItem)
-                                aFrmAttrSet.Put(*pFollowItem);
+                                aFrameAttrSet.Put(*pFollowItem);
 
-                            if(aFrmAttrSet.Count())
-                                pSh->SetDrawingAttr(aFrmAttrSet);
+                            if(aFrameAttrSet.Count())
+                                pSh->SetDrawingAttr(aFrameAttrSet);
 
                             rBind.InvalidateAll(false);
 
@@ -380,9 +380,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     GetView().LeaveDrawCreate();    // Switch to selection mode
                 }
 
-                if (pSh->IsSelFrmMode())
+                if (pSh->IsSelFrameMode())
                 {
-                    pSh->LeaveSelFrmMode();
+                    pSh->LeaveSelFrameMode();
                     // #105852# FME
                 }
             }
@@ -779,7 +779,7 @@ IMPL_LINK_TYPED(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValid
     {
         bool bRTL;
         bool bVertL2R;
-        bIsInVertical = pSh->IsFrmVertical(true, bRTL, bVertL2R);
+        bIsInVertical = pSh->IsFrameVertical(true, bRTL, bVertL2R);
     }
     if(bIsInVertical)
     {

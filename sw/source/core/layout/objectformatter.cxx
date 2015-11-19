@@ -64,23 +64,23 @@ class SwPageNumAndTypeOfAnchors
         {
             tEntry* pNewEntry = new tEntry();
             pNewEntry->mpAnchoredObj = &_rAnchoredObj;
-            // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
-            // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+            // #i33751#, #i34060# - method <GetPageFrameOfAnchor()>
+            // is replaced by method <FindPageFrameOfAnchor()>. It's return value
             // have to be checked.
-            SwPageFrm* pPageFrmOfAnchor = _rAnchoredObj.FindPageFrmOfAnchor();
-            if ( pPageFrmOfAnchor )
+            SwPageFrame* pPageFrameOfAnchor = _rAnchoredObj.FindPageFrameOfAnchor();
+            if ( pPageFrameOfAnchor )
             {
-                pNewEntry->mnPageNumOfAnchor = pPageFrmOfAnchor->GetPhyPageNum();
+                pNewEntry->mnPageNumOfAnchor = pPageFrameOfAnchor->GetPhyPageNum();
             }
             else
             {
                 pNewEntry->mnPageNumOfAnchor = 0;
             }
             // --> #i26945# - collect type of anchor
-            SwTextFrm* pAnchorCharFrm = _rAnchoredObj.FindAnchorCharFrm();
-            if ( pAnchorCharFrm )
+            SwTextFrame* pAnchorCharFrame = _rAnchoredObj.FindAnchorCharFrame();
+            if ( pAnchorCharFrame )
             {
-                pNewEntry->mbAnchoredAtMaster = !pAnchorCharFrm->IsFollow();
+                pNewEntry->mbAnchoredAtMaster = !pAnchorCharFrame->IsFollow();
             }
             else
             {
@@ -132,12 +132,12 @@ class SwPageNumAndTypeOfAnchors
         }
 };
 
-SwObjectFormatter::SwObjectFormatter( const SwPageFrm& _rPageFrm,
+SwObjectFormatter::SwObjectFormatter( const SwPageFrame& _rPageFrame,
                                       SwLayAction* _pLayAction,
                                       const bool _bCollectPgNumOfAnchors )
-    : mrPageFrm( _rPageFrm ),
+    : mrPageFrame( _rPageFrame ),
       mbFormatOnlyAsCharAnchored( false ),
-      mbConsiderWrapOnObjPos( _rPageFrm.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ),
+      mbConsiderWrapOnObjPos( _rPageFrame.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ),
       mpLayAction( _pLayAction ),
       // --> #i26945#
       mpPgNumAndTypeOfAnchors( _bCollectPgNumOfAnchors ? new SwPageNumAndTypeOfAnchors() : nullptr )
@@ -150,22 +150,22 @@ SwObjectFormatter::~SwObjectFormatter()
 }
 
 SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(
-                                                      SwFrm& _rAnchorFrm,
-                                                      const SwPageFrm& _rPageFrm,
+                                                      SwFrame& _rAnchorFrame,
+                                                      const SwPageFrame& _rPageFrame,
                                                       SwLayAction* _pLayAction )
 {
     SwObjectFormatter* pObjFormatter = nullptr;
-    if ( _rAnchorFrm.IsTextFrm() )
+    if ( _rAnchorFrame.IsTextFrame() )
     {
-        pObjFormatter = SwObjectFormatterTextFrm::CreateObjFormatter(
-                                            static_cast<SwTextFrm&>(_rAnchorFrm),
-                                            _rPageFrm, _pLayAction );
+        pObjFormatter = SwObjectFormatterTextFrame::CreateObjFormatter(
+                                            static_cast<SwTextFrame&>(_rAnchorFrame),
+                                            _rPageFrame, _pLayAction );
     }
-    else if ( _rAnchorFrm.IsLayoutFrm() )
+    else if ( _rAnchorFrame.IsLayoutFrame() )
     {
-        pObjFormatter = SwObjectFormatterLayFrm::CreateObjFormatter(
-                                        static_cast<SwLayoutFrm&>(_rAnchorFrm),
-                                        _rPageFrm, _pLayAction );
+        pObjFormatter = SwObjectFormatterLayFrame::CreateObjFormatter(
+                                        static_cast<SwLayoutFrame&>(_rAnchorFrame),
+                                        _rPageFrame, _pLayAction );
     }
     else
     {
@@ -177,15 +177,15 @@ SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(
 
 /** method to format all floating screen objects at the given anchor frame
 */
-bool SwObjectFormatter::FormatObjsAtFrm( SwFrm& _rAnchorFrm,
-                                         const SwPageFrm& _rPageFrm,
+bool SwObjectFormatter::FormatObjsAtFrame( SwFrame& _rAnchorFrame,
+                                         const SwPageFrame& _rPageFrame,
                                          SwLayAction* _pLayAction )
 {
     bool bSuccess( true );
 
     // create corresponding object formatter
     SwObjectFormatter* pObjFormatter =
-        SwObjectFormatter::CreateObjFormatter( _rAnchorFrm, _rPageFrm, _pLayAction );
+        SwObjectFormatter::CreateObjFormatter( _rAnchorFrame, _rPageFrame, _pLayAction );
 
     if ( pObjFormatter )
     {
@@ -200,23 +200,23 @@ bool SwObjectFormatter::FormatObjsAtFrm( SwFrm& _rAnchorFrm,
 /** method to format a given floating screen object
 */
 bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
-                                   SwFrm* _pAnchorFrm,
-                                   const SwPageFrm* _pPageFrm,
+                                   SwFrame* _pAnchorFrame,
+                                   const SwPageFrame* _pPageFrame,
                                    SwLayAction* _pLayAction )
 {
     bool bSuccess( true );
 
-    OSL_ENSURE( _pAnchorFrm || _rAnchoredObj.GetAnchorFrm(),
+    OSL_ENSURE( _pAnchorFrame || _rAnchoredObj.GetAnchorFrame(),
             "<SwObjectFormatter::FormatObj(..)> - missing anchor frame" );
-    SwFrm& rAnchorFrm = _pAnchorFrm ? *(_pAnchorFrm) : *(_rAnchoredObj.AnchorFrm());
+    SwFrame& rAnchorFrame = _pAnchorFrame ? *(_pAnchorFrame) : *(_rAnchoredObj.AnchorFrame());
 
-    OSL_ENSURE( _pPageFrm || rAnchorFrm.FindPageFrm(),
+    OSL_ENSURE( _pPageFrame || rAnchorFrame.FindPageFrame(),
             "<SwObjectFormatter::FormatObj(..)> - missing page frame" );
-    const SwPageFrm& rPageFrm = _pPageFrm ? *(_pPageFrm) : *(rAnchorFrm.FindPageFrm());
+    const SwPageFrame& rPageFrame = _pPageFrame ? *(_pPageFrame) : *(rAnchorFrame.FindPageFrame());
 
     // create corresponding object formatter
     SwObjectFormatter* pObjFormatter =
-        SwObjectFormatter::CreateObjFormatter( rAnchorFrm, rPageFrm, _pLayAction );
+        SwObjectFormatter::CreateObjFormatter( rAnchorFrame, rPageFrame, _pLayAction );
 
     if ( pObjFormatter )
     {
@@ -238,18 +238,18 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
     <SwLayAction::FormatLayout(..)>. Thus, its code for the formatting have
     to be synchronised.
 */
-void SwObjectFormatter::_FormatLayout( SwLayoutFrm& _rLayoutFrm )
+void SwObjectFormatter::_FormatLayout( SwLayoutFrame& _rLayoutFrame )
 {
-    _rLayoutFrm.Calc(_rLayoutFrm.getRootFrm()->GetCurrShell()->GetOut());
+    _rLayoutFrame.Calc(_rLayoutFrame.getRootFrame()->GetCurrShell()->GetOut());
 
-    SwFrm* pLowerFrm = _rLayoutFrm.Lower();
-    while ( pLowerFrm )
+    SwFrame* pLowerFrame = _rLayoutFrame.Lower();
+    while ( pLowerFrame )
     {
-        if ( pLowerFrm->IsLayoutFrm() )
+        if ( pLowerFrame->IsLayoutFrame() )
         {
-            _FormatLayout( *(static_cast<SwLayoutFrm*>(pLowerFrm)) );
+            _FormatLayout( *(static_cast<SwLayoutFrame*>(pLowerFrame)) );
         }
-        pLowerFrm = pLowerFrm->GetNext();
+        pLowerFrame = pLowerFrame->GetNext();
     }
 }
 
@@ -260,14 +260,14 @@ void SwObjectFormatter::_FormatLayout( SwLayoutFrm& _rLayoutFrm )
 */
 void SwObjectFormatter::_FormatObjContent( SwAnchoredObject& _rAnchoredObj )
 {
-    if ( dynamic_cast<const SwFlyFrm*>( &_rAnchoredObj) ==  nullptr )
+    if ( dynamic_cast<const SwFlyFrame*>( &_rAnchoredObj) ==  nullptr )
     {
         // only Writer fly frames have content
         return;
     }
 
-    SwFlyFrm& rFlyFrm = static_cast<SwFlyFrm&>(_rAnchoredObj);
-    SwContentFrm* pContent = rFlyFrm.ContainsContent();
+    SwFlyFrame& rFlyFrame = static_cast<SwFlyFrame&>(_rAnchoredObj);
+    SwContentFrame* pContent = rFlyFrame.ContainsContent();
 
     while ( pContent )
     {
@@ -277,18 +277,18 @@ void SwObjectFormatter::_FormatObjContent( SwAnchoredObject& _rAnchoredObj )
         // format floating screen objects at content text frame
         // #i23129#, #i36347# - pass correct page frame to
         // the object formatter
-        if ( pContent->IsTextFrm() &&
-             !SwObjectFormatter::FormatObjsAtFrm( *pContent,
-                                                  *(pContent->FindPageFrm()),
+        if ( pContent->IsTextFrame() &&
+             !SwObjectFormatter::FormatObjsAtFrame( *pContent,
+                                                  *(pContent->FindPageFrame()),
                                                   GetLayAction() ) )
         {
             // restart format with first content
-            pContent = rFlyFrm.ContainsContent();
+            pContent = rFlyFrame.ContainsContent();
             continue;
         }
 
         // continue with next content
-        pContent = pContent->GetNextContentFrm();
+        pContent = pContent->GetNextContentFrame();
     }
 }
 
@@ -312,13 +312,13 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
         mpPgNumAndTypeOfAnchors->Collect( _rAnchoredObj );
     }
 
-    if ( dynamic_cast<const SwFlyFrm*>( &_rAnchoredObj) !=  nullptr )
+    if ( dynamic_cast<const SwFlyFrame*>( &_rAnchoredObj) !=  nullptr )
     {
-        SwFlyFrm& rFlyFrm = static_cast<SwFlyFrm&>(_rAnchoredObj);
+        SwFlyFrame& rFlyFrame = static_cast<SwFlyFrame&>(_rAnchoredObj);
         // --> #i34753# - reset flag, which prevents a positioning
-        if ( rFlyFrm.IsFlyLayFrm() )
+        if ( rFlyFrame.IsFlyLayFrame() )
         {
-            static_cast<SwFlyLayFrm&>(rFlyFrm).SetNoMakePos( false );
+            static_cast<SwFlyLayFrame&>(rFlyFrame).SetNoMakePos( false );
         }
 
         // #i81146# new loop control
@@ -328,7 +328,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
         do {
             if ( mpLayAction )
             {
-                mpLayAction->FormatLayoutFly( &rFlyFrm );
+                mpLayAction->FormatLayoutFly( &rFlyFrame );
                 // --> consider, if the layout action
                 // has to be restarted due to a delete of a page frame.
                 if ( mpLayAction->IsAgain() )
@@ -338,22 +338,22 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             }
             else
             {
-                _FormatLayout( rFlyFrm );
+                _FormatLayout( rFlyFrame );
             }
             // --> #i34753# - prevent further positioning, if
             // to-page|to-fly anchored Writer fly frame is already clipped.
-            if ( rFlyFrm.IsFlyLayFrm() && rFlyFrm.IsClipped() )
+            if ( rFlyFrame.IsFlyLayFrame() && rFlyFrame.IsClipped() )
             {
-                static_cast<SwFlyLayFrm&>(rFlyFrm).SetNoMakePos( true );
+                static_cast<SwFlyLayFrame&>(rFlyFrame).SetNoMakePos( true );
             }
             // #i23129#, #i36347# - pass correct page frame
             // to the object formatter
-            SwObjectFormatter::FormatObjsAtFrm( rFlyFrm,
-                                                *(rFlyFrm.FindPageFrm()),
+            SwObjectFormatter::FormatObjsAtFrame( rFlyFrame,
+                                                *(rFlyFrame.FindPageFrame()),
                                                 mpLayAction );
             if ( mpLayAction )
             {
-                mpLayAction->_FormatFlyContent( &rFlyFrm );
+                mpLayAction->_FormatFlyContent( &rFlyFrame );
                 // --> consider, if the layout action
                 // has to be restarted due to a delete of a page frame.
                 if ( mpLayAction->IsAgain() )
@@ -363,21 +363,21 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             }
             else
             {
-                _FormatObjContent( rFlyFrm );
+                _FormatObjContent( rFlyFrame );
             }
 
             if ( ++nLoopControlRuns >= nLoopControlMax )
             {
                 OSL_FAIL( "LoopControl in SwObjectFormatter::_FormatObj: Stage 3!!!" );
-                rFlyFrm.ValidateThisAndAllLowers( 2 );
+                rFlyFrame.ValidateThisAndAllLowers( 2 );
                 nLoopControlRuns = 0;
             }
 
         // --> #i57917#
         // stop formatting of anchored object, if restart of layout process is requested.
-        } while ( !rFlyFrm.IsValid() &&
+        } while ( !rFlyFrame.IsValid() &&
                   !_rAnchoredObj.RestartLayoutProcess() &&
-                  rFlyFrm.GetAnchorFrm() == &GetAnchorFrm() );
+                  rFlyFrame.GetAnchorFrame() == &GetAnchorFrame() );
     }
     else if ( dynamic_cast<const SwAnchoredDrawObject*>( &_rAnchoredObj) !=  nullptr )
     {
@@ -394,21 +394,21 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
     Thus, the objects, whose anchor character is inside the follow text
     frame can be formatted.
 */
-bool SwObjectFormatter::_FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm )
+bool SwObjectFormatter::_FormatObjsAtFrame( SwTextFrame* _pMasterTextFrame )
 {
     // --> #i26945#
-    SwFrm* pAnchorFrm( nullptr );
-    if ( GetAnchorFrm().IsTextFrm() &&
-         static_cast<SwTextFrm&>(GetAnchorFrm()).IsFollow() &&
-         _pMasterTextFrm )
+    SwFrame* pAnchorFrame( nullptr );
+    if ( GetAnchorFrame().IsTextFrame() &&
+         static_cast<SwTextFrame&>(GetAnchorFrame()).IsFollow() &&
+         _pMasterTextFrame )
     {
-        pAnchorFrm = _pMasterTextFrm;
+        pAnchorFrame = _pMasterTextFrame;
     }
     else
     {
-        pAnchorFrm = &GetAnchorFrm();
+        pAnchorFrame = &GetAnchorFrame();
     }
-    if ( !pAnchorFrm->GetDrawObjs() )
+    if ( !pAnchorFrame->GetDrawObjs() )
     {
         // nothing to do, if no floating screen object is registered at the anchor frame.
         return true;
@@ -416,9 +416,9 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm )
 
     bool bSuccess( true );
 
-    for ( size_t i = 0; i < pAnchorFrm->GetDrawObjs()->size(); ++i )
+    for ( size_t i = 0; i < pAnchorFrame->GetDrawObjs()->size(); ++i )
     {
-        SwAnchoredObject* pAnchoredObj = (*pAnchorFrm->GetDrawObjs())[i];
+        SwAnchoredObject* pAnchoredObj = (*pAnchorFrame->GetDrawObjs())[i];
 
         // check, if object's anchor is on the given page frame or
         // object is registered at the given page frame.
@@ -429,24 +429,24 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm )
         // If the anchor follow text frame is in the same body as its 'master'
         // text frame, do not format the anchored object.
         // E.g., this situation can occur during the table row splitting algorithm.
-        SwTextFrm* pAnchorCharFrm = pAnchoredObj->FindAnchorCharFrm();
+        SwTextFrame* pAnchorCharFrame = pAnchoredObj->FindAnchorCharFrame();
         const bool bAnchoredAtFollowInSameBodyAsMaster =
-                pAnchorCharFrm && pAnchorCharFrm->IsFollow() &&
-                pAnchorCharFrm != pAnchoredObj->GetAnchorFrm() &&
-                pAnchorCharFrm->FindBodyFrm() ==
-                    static_cast<SwTextFrm*>(pAnchoredObj->AnchorFrm())->FindBodyFrm();
+                pAnchorCharFrame && pAnchorCharFrame->IsFollow() &&
+                pAnchorCharFrame != pAnchoredObj->GetAnchorFrame() &&
+                pAnchorCharFrame->FindBodyFrame() ==
+                    static_cast<SwTextFrame*>(pAnchoredObj->AnchorFrame())->FindBodyFrame();
         if ( bAnchoredAtFollowInSameBodyAsMaster )
         {
             continue;
         }
-        // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
-        // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+        // #i33751#, #i34060# - method <GetPageFrameOfAnchor()>
+        // is replaced by method <FindPageFrameOfAnchor()>. It's return value
         // have to be checked.
-        SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
-        OSL_ENSURE( pPageFrmOfAnchor,
-                "<SwObjectFormatter::_FormatObjsAtFrm()> - missing page frame." );
+        SwPageFrame* pPageFrameOfAnchor = pAnchoredObj->FindPageFrameOfAnchor();
+        OSL_ENSURE( pPageFrameOfAnchor,
+                "<SwObjectFormatter::_FormatObjsAtFrame()> - missing page frame." );
         // --> #i26945#
-        if ( pPageFrmOfAnchor && pPageFrmOfAnchor == &mrPageFrm )
+        if ( pPageFrameOfAnchor && pPageFrameOfAnchor == &mrPageFrame )
         {
             // if format of object fails, stop formatting and pass fail to
             // calling method via the return value.
@@ -456,18 +456,18 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm )
                 break;
             }
 
-            // considering changes at <pAnchorFrm->GetDrawObjs()> during
+            // considering changes at <pAnchorFrame->GetDrawObjs()> during
             // format of the object.
-            if ( !pAnchorFrm->GetDrawObjs() ||
-                 i > pAnchorFrm->GetDrawObjs()->size() )
+            if ( !pAnchorFrame->GetDrawObjs() ||
+                 i > pAnchorFrame->GetDrawObjs()->size() )
             {
                 break;
             }
             else
             {
                 const size_t nActPosOfObj =
-                    pAnchorFrm->GetDrawObjs()->ListPosOf( *pAnchoredObj );
-                if ( nActPosOfObj == pAnchorFrm->GetDrawObjs()->size() ||
+                    pAnchorFrame->GetDrawObjs()->ListPosOf( *pAnchoredObj );
+                if ( nActPosOfObj == pAnchorFrame->GetDrawObjs()->size() ||
                      nActPosOfObj > i )
                 {
                     --i;
@@ -478,7 +478,7 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm )
                 }
             }
         }
-    } // end of loop on <pAnchorFrm->.GetDrawObjs()>
+    } // end of loop on <pAnchorFrame->.GetDrawObjs()>
 
     return bSuccess;
 }

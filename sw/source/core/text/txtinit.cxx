@@ -38,8 +38,8 @@
 #include "txtfly.hxx"
 #include "dbg_lay.hxx"
 
-SwCache *SwTextFrm::pTextCache = nullptr;
-long SwTextFrm::nMinPrtLine = 0;
+SwCache *SwTextFrame::pTextCache = nullptr;
+long SwTextFrame::nMinPrtLine = 0;
 SwContourCache *pContourCache = nullptr;
 SwDropCapCache *pDropCapCache = nullptr;
 
@@ -57,12 +57,12 @@ void _TextInit()
 {
     pFntCache = new SwFntCache; // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
     pSwFontCache = new SwFontCache; // Cache for SwTextFormatColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
-    SwCache *pTextCache = new SwCache( 250 // Cache for SwTextFrm -> SwTextLine = { SwParaPortion* pLine }
+    SwCache *pTextCache = new SwCache( 250 // Cache for SwTextFrame -> SwTextLine = { SwParaPortion* pLine }
 #ifdef DBG_UTIL
-    , "static SwTextFrm::pTextCache"
+    , "static SwTextFrame::pTextCache"
 #endif
     );
-    SwTextFrm::SetTextCache( pTextCache );
+    SwTextFrame::SetTextCache( pTextCache );
     pWaveCol = new Color( COL_GRAY );
     PROTOCOL_INIT
 }
@@ -70,7 +70,7 @@ void _TextInit()
 void _TextFinit()
 {
     PROTOCOL_STOP
-    delete SwTextFrm::GetTextCache();
+    delete SwTextFrame::GetTextCache();
     delete pSwFontCache;
     delete pFntCache;
     delete pBlink;

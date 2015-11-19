@@ -404,7 +404,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
     }
 
     // It is possible, that Init is called more than once, e.g., in a
-    // SwTextFrm::FormatOnceMore situation.
+    // SwTextFrame::FormatOnceMore situation.
     delete pFnt;
     pFnt = new SwFont( rFnt );
 }

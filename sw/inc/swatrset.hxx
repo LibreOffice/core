@@ -58,7 +58,7 @@ class SvxCharHiddenItem;
 
 // Frame attributes
 class SwFormatFillOrder;
-class SwFormatFrmSize;
+class SwFormatFrameSize;
 class SvxPaperBinItem;
 class SvxLRSpaceItem;
 class SvxULSpaceItem;
@@ -256,7 +256,7 @@ public:
 
     // Frame attributes. Implementation in frmatr.hxx.
     inline const SwFormatFillOrder       &GetFillOrder( bool = true ) const;
-    inline const SwFormatFrmSize             &GetFrmSize( bool = true ) const;
+    inline const SwFormatFrameSize             &GetFrameSize( bool = true ) const;
     inline const SvxPaperBinItem      &GetPaperBin( bool = true ) const;
     inline const SvxLRSpaceItem           &GetLRSpace( bool = true ) const;
     inline const SvxULSpaceItem           &GetULSpace( bool = true ) const;
@@ -287,7 +287,7 @@ public:
     inline const SwFormatFootnoteAtTextEnd     &GetFootnoteAtTextEnd( bool = true ) const;
     inline const SwFormatEndAtTextEnd     &GetEndAtTextEnd( bool = true ) const;
     inline const SwFormatNoBalancedColumns &GetBalancedColumns( bool = true ) const;
-    inline const SvxFrameDirectionItem    &GetFrmDir( bool = true ) const;
+    inline const SvxFrameDirectionItem    &GetFrameDir( bool = true ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( bool = true ) const;
     inline const SwFormatFollowTextFlow    &GetFollowTextFlow(bool = true) const;
     inline const SwFormatWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(bool = true) const;

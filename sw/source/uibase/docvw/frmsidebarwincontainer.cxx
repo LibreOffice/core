@@ -50,56 +50,56 @@ namespace {
 
     typedef ::std::map < SidebarWinKey, VclPtr<sw::sidebarwindows::SwSidebarWin>, SidebarWinOrder > SidebarWinContainer;
 
-    struct FrmKey
+    struct FrameKey
     {
-        const SwFrm* mpFrm;
+        const SwFrame* mpFrame;
 
-        explicit FrmKey( const SwFrm* pFrm )
-            : mpFrm( pFrm )
+        explicit FrameKey( const SwFrame* pFrame )
+            : mpFrame( pFrame )
         {}
 
-        bool operator < ( const FrmKey& rFrmKey ) const
+        bool operator < ( const FrameKey& rFrameKey ) const
         {
-            return mpFrm < rFrmKey.mpFrm;
+            return mpFrame < rFrameKey.mpFrame;
         }
     };
 
-    struct FrmOrder
+    struct FrameOrder
     {
-        bool operator()( const FrmKey& rFrmKeyA,
-                             const FrmKey& rFrmKeyB ) const
+        bool operator()( const FrameKey& rFrameKeyA,
+                             const FrameKey& rFrameKeyB ) const
         {
-            return rFrmKeyA < rFrmKeyB;
+            return rFrameKeyA < rFrameKeyB;
         }
     };
 
-    typedef ::std::map < FrmKey, SidebarWinContainer, FrmOrder > _FrmSidebarWinContainer;
+    typedef ::std::map < FrameKey, SidebarWinContainer, FrameOrder > _FrameSidebarWinContainer;
 }
 
 namespace sw { namespace sidebarwindows {
 
-class FrmSidebarWinContainer : public _FrmSidebarWinContainer
+class FrameSidebarWinContainer : public _FrameSidebarWinContainer
 {
 };
 
-SwFrmSidebarWinContainer::SwFrmSidebarWinContainer()
-    : mpFrmSidebarWinContainer( new FrmSidebarWinContainer() )
+SwFrameSidebarWinContainer::SwFrameSidebarWinContainer()
+    : mpFrameSidebarWinContainer( new FrameSidebarWinContainer() )
 {}
 
-SwFrmSidebarWinContainer::~SwFrmSidebarWinContainer()
+SwFrameSidebarWinContainer::~SwFrameSidebarWinContainer()
 {
-    mpFrmSidebarWinContainer->clear();
-    delete mpFrmSidebarWinContainer;
+    mpFrameSidebarWinContainer->clear();
+    delete mpFrameSidebarWinContainer;
 }
 
-bool SwFrmSidebarWinContainer::insert( const SwFrm& rFrm,
+bool SwFrameSidebarWinContainer::insert( const SwFrame& rFrame,
                                        const SwFormatField& rFormatField,
                                        SwSidebarWin& rSidebarWin )
 {
     bool bInserted( false );
 
-    FrmKey aFrmKey( &rFrm );
-    SidebarWinContainer& rSidebarWinContainer = (*mpFrmSidebarWinContainer)[ aFrmKey ];
+    FrameKey aFrameKey( &rFrame );
+    SidebarWinContainer& rSidebarWinContainer = (*mpFrameSidebarWinContainer)[ aFrameKey ];
 
     SidebarWinKey aSidebarWinKey( rFormatField.GetTextField()->GetStart() );
     if ( rSidebarWinContainer.empty() ||
@@ -112,16 +112,16 @@ bool SwFrmSidebarWinContainer::insert( const SwFrm& rFrm,
     return bInserted;
 }
 
-bool SwFrmSidebarWinContainer::remove( const SwFrm& rFrm,
+bool SwFrameSidebarWinContainer::remove( const SwFrame& rFrame,
                                        const SwSidebarWin& rSidebarWin )
 {
     bool bRemoved( false );
 
-    FrmKey aFrmKey( &rFrm );
-    FrmSidebarWinContainer::iterator aFrmIter = mpFrmSidebarWinContainer->find( aFrmKey );
-    if ( aFrmIter != mpFrmSidebarWinContainer->end() )
+    FrameKey aFrameKey( &rFrame );
+    FrameSidebarWinContainer::iterator aFrameIter = mpFrameSidebarWinContainer->find( aFrameKey );
+    if ( aFrameIter != mpFrameSidebarWinContainer->end() )
     {
-        SidebarWinContainer& rSidebarWinContainer = (*aFrmIter).second;
+        SidebarWinContainer& rSidebarWinContainer = (*aFrameIter).second;
         for ( SidebarWinContainer::iterator aIter = rSidebarWinContainer.begin();
               aIter != rSidebarWinContainer.end();
               ++aIter )
@@ -138,30 +138,30 @@ bool SwFrmSidebarWinContainer::remove( const SwFrm& rFrm,
     return bRemoved;
 }
 
-bool SwFrmSidebarWinContainer::empty( const SwFrm& rFrm )
+bool SwFrameSidebarWinContainer::empty( const SwFrame& rFrame )
 {
     bool bEmpty( true );
 
-    FrmKey aFrmKey( &rFrm );
-    FrmSidebarWinContainer::iterator aFrmIter = mpFrmSidebarWinContainer->find( aFrmKey );
-    if ( aFrmIter != mpFrmSidebarWinContainer->end() )
+    FrameKey aFrameKey( &rFrame );
+    FrameSidebarWinContainer::iterator aFrameIter = mpFrameSidebarWinContainer->find( aFrameKey );
+    if ( aFrameIter != mpFrameSidebarWinContainer->end() )
     {
-        bEmpty = (*aFrmIter).second.empty();
+        bEmpty = (*aFrameIter).second.empty();
     }
 
     return bEmpty;
 }
 
-SwSidebarWin* SwFrmSidebarWinContainer::get( const SwFrm& rFrm,
+SwSidebarWin* SwFrameSidebarWinContainer::get( const SwFrame& rFrame,
                                              const sal_Int32 nIndex )
 {
     SwSidebarWin* pRet( nullptr );
 
-    FrmKey aFrmKey( &rFrm );
-    FrmSidebarWinContainer::iterator aFrmIter = mpFrmSidebarWinContainer->find( aFrmKey );
-    if ( aFrmIter != mpFrmSidebarWinContainer->end() )
+    FrameKey aFrameKey( &rFrame );
+    FrameSidebarWinContainer::iterator aFrameIter = mpFrameSidebarWinContainer->find( aFrameKey );
+    if ( aFrameIter != mpFrameSidebarWinContainer->end() )
     {
-        SidebarWinContainer& rSidebarWinContainer = (*aFrmIter).second;
+        SidebarWinContainer& rSidebarWinContainer = (*aFrameIter).second;
         sal_Int32 nCounter( nIndex );
         for ( SidebarWinContainer::iterator aIter = rSidebarWinContainer.begin();
               nCounter >= 0 && aIter != rSidebarWinContainer.end();
@@ -180,16 +180,16 @@ SwSidebarWin* SwFrmSidebarWinContainer::get( const SwFrm& rFrm,
     return pRet;
 }
 
-void SwFrmSidebarWinContainer::getAll( const SwFrm& rFrm,
+void SwFrameSidebarWinContainer::getAll( const SwFrame& rFrame,
                                        std::vector< vcl::Window* >* pSidebarWins )
 {
     pSidebarWins->clear();
 
-    FrmKey aFrmKey( &rFrm );
-    FrmSidebarWinContainer::iterator aFrmIter = mpFrmSidebarWinContainer->find( aFrmKey );
-    if ( aFrmIter != mpFrmSidebarWinContainer->end() )
+    FrameKey aFrameKey( &rFrame );
+    FrameSidebarWinContainer::iterator aFrameIter = mpFrameSidebarWinContainer->find( aFrameKey );
+    if ( aFrameIter != mpFrameSidebarWinContainer->end() )
     {
-        SidebarWinContainer& rSidebarWinContainer = (*aFrmIter).second;
+        SidebarWinContainer& rSidebarWinContainer = (*aFrameIter).second;
         for ( SidebarWinContainer::iterator aIter = rSidebarWinContainer.begin();
               aIter != rSidebarWinContainer.end();
               ++aIter )

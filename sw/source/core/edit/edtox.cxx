@@ -60,7 +60,7 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
 {
     bool bInsAtPos = rMark.IsAlternativeText();
     StartAllAction();
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         const SwPosition *pStt = rPaM.Start(),
                          *pEnd = rPaM.End();
@@ -92,7 +92,7 @@ void SwEditShell::DeleteTOXMark( SwTOXMark* pMark )
 /// Collect all listing markers
 sal_uInt16 SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
 {
-    return SwDoc::GetCurTOXMark( *GetCrsr()->Start(), rMarks );
+    return SwDoc::GetCurTOXMark( *GetCursor()->Start(), rMarks );
 }
 
 bool SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase)
@@ -136,7 +136,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 
     // Insert listing
     const SwTOXBaseSection* pTOX = mpDoc->InsertTableOf(
-                                        *GetCrsr()->GetPoint(), rTOX, pSet, true );
+                                        *GetCursor()->GetPoint(), rTOX, pSet, true );
     OSL_ENSURE(pTOX, "No current TOx");
 
     // start formatting
@@ -145,7 +145,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     // insert page numbering
     const_cast<SwTOXBaseSection*>(pTOX)->UpdatePageNum();
 
-    pTOX->SetPosAtStartEnd( *GetCrsr()->GetPoint() );
+    pTOX->SetPosAtStartEnd( *GetCursor()->GetPoint() );
 
     // Fix for empty listing
     InvalidateWindows( maVisArea );
@@ -180,7 +180,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 
         // correct Cursor
         if( bInIndex )
-            pTOX->SetPosAtStartEnd( *GetCrsr()->GetPoint() );
+            pTOX->SetPosAtStartEnd( *GetCursor()->GetPoint() );
 
         // start formatting
         CalcLayout();
@@ -199,7 +199,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 /// Get current listing before or at the Cursor
 const SwTOXBase* SwEditShell::GetCurTOX() const
 {
-    return SwDoc::GetCurTOX( *GetCrsr()->GetPoint() );
+    return SwDoc::GetCurTOX( *GetCursor()->GetPoint() );
 }
 
 bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )

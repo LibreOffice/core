@@ -39,8 +39,8 @@ SW_DLLPUBLIC OUString GetOldGrfCat();
 SW_DLLPUBLIC void SetOldGrfCat(const OUString& sStr);
 SW_DLLPUBLIC OUString GetOldTabCat();
 SW_DLLPUBLIC void SetOldTabCat(const OUString& sStr);
-SW_DLLPUBLIC OUString GetOldFrmCat();
-SW_DLLPUBLIC void SetOldFrmCat(const OUString& sStr);
+SW_DLLPUBLIC OUString GetOldFrameCat();
+SW_DLLPUBLIC void SetOldFrameCat(const OUString& sStr);
 SW_DLLPUBLIC OUString GetOldDrwCat();
 SW_DLLPUBLIC void SetOldDrwCat(const OUString& sStr);
 

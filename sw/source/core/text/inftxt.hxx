@@ -47,7 +47,7 @@ class SwLineLayout;
 class SwLinePortion;
 class SwParaPortion;
 class SwTabPortion;
-class SwTextFrm;
+class SwTextFrame;
 class SwTextSizeInfo;
 class SwViewOption;
 class SwViewShell;
@@ -128,9 +128,9 @@ protected:
     {}
 
 public:
-    void CtorInitTextInfo( SwTextFrm *pFrm );
+    void CtorInitTextInfo( SwTextFrame *pFrame );
     SwTextInfo( const SwTextInfo &rInf );
-    explicit SwTextInfo( SwTextFrm *pFrm ) { CtorInitTextInfo( pFrm ); }
+    explicit SwTextInfo( SwTextFrame *pFrame ) { CtorInitTextInfo( pFrame ); }
     SwParaPortion *GetParaPortion() { return m_pPara; }
     const SwParaPortion *GetParaPortion() const { return m_pPara; }
     sal_Int32 GetTextStart() const { return m_nTextStart; }
@@ -162,7 +162,7 @@ protected:
 
     SwFont *m_pFnt;
     SwUnderlineFont *m_pUnderFnt; // Font for underlining
-    SwTextFrm *m_pFrm;
+    SwTextFrame *m_pFrame;
     const SwViewOption *m_pOpt;
     const OUString *m_pText;
     sal_Int32 m_nIdx, m_nLen;
@@ -187,7 +187,7 @@ protected:
     sal_uInt8 m_nDirection : 2; // writing direction: 0/90/180/270 degree
 
 protected:
-    void CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrm *pFrm, SwFont *pFnt = nullptr,
+    void CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, SwFont *pFnt = nullptr,
                    const sal_Int32 nIdx = 0,
                    const sal_Int32 nLen = COMPLETE_STRING );
     SwTextSizeInfo();
@@ -197,7 +197,7 @@ public:
                    const sal_Int32 nIdx = 0,
                    const sal_Int32 nLen = COMPLETE_STRING );
 
-    SwTextSizeInfo( SwTextFrm *pTextFrm, SwFont *pTextFnt = nullptr,
+    SwTextSizeInfo( SwTextFrame *pTextFrame, SwFont *pTextFnt = nullptr,
                    const sal_Int32 nIndex = 0,
                    const sal_Int32 nLength = COMPLETE_STRING );
 
@@ -296,11 +296,11 @@ public:
     void NoteAnimation() const;
 
     // Home is where Your heart is...
-    inline SwTextFrm *GetTextFrm() { return m_pFrm; }
-    inline const SwTextFrm *GetTextFrm() const { return m_pFrm; }
+    inline SwTextFrame *GetTextFrame() { return m_pFrame; }
+    inline const SwTextFrame *GetTextFrame() const { return m_pFrame; }
 
     inline bool HasHint( sal_Int32 nPos ) const
-        { return _HasHint( m_pFrm->GetTextNode(), nPos ); }
+        { return _HasHint( m_pFrame->GetTextNode(), nPos ); }
     static bool _HasHint( const SwTextNode* pTextNode, sal_Int32 nPos );
 
     // If Kana Compression is enabled, a minimum and maximum portion width
@@ -360,7 +360,7 @@ class SwTextPaintInfo : public SwTextSizeInfo
     std::vector<long>* pSpaceAdd;
     const SvxBrushItem *pBrushItem; // For the background
     SwRect      aItemRect;          // Also for the background
-    SwTextFly    aTextFly;    // Calculate the FlyFrm
+    SwTextFly    aTextFly;    // Calculate the FlyFrame
     Point       aPos;       // Paint position
     SwRect      aPaintRect; // Original paint rect (from Layout paint)
 
@@ -392,12 +392,12 @@ public:
     SwTextPaintInfo( const SwTextPaintInfo &rInf );
     SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* pText );
 
-    void CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrm *pFrame, const SwRect &rPaint );
+    void CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const SwRect &rPaint );
 
     const SvxBrushItem *GetBrushItem() const { return pBrushItem; }
     const SwRect       &GetBrushRect() const { return aItemRect;  }
 
-    SwTextPaintInfo( SwTextFrm *pFrame, const SwRect &rPaint );
+    SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint );
 
     inline SwTwips X() const { return aPos.X(); }
     inline void X( const long nNew ) { aPos.X() = nNew; }
@@ -545,9 +545,9 @@ class SwTextFormatInfo : public SwTextPaintInfo
     bool _CheckFootnotePortion( SwLineLayout* pCurr );
 
 public:
-    void CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwTextFrm *pFrm, const bool bInterHyph = false,
+    void CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const bool bInterHyph = false,
         const bool bQuick = false, const bool bTst = false );
-    SwTextFormatInfo(OutputDevice* pRenderContext, SwTextFrm *pFrame, const bool bInterHyphL = false,
+    SwTextFormatInfo(OutputDevice* pRenderContext, SwTextFrame *pFrame, const bool bInterHyphL = false,
             const bool bQuickL = false, const bool bTst = false);
 
     // For the formatting inside a double line in a line (multi-line portion)
@@ -628,7 +628,7 @@ public:
 
     inline void SetParaFootnote();
 
-    // FlyFrms
+    // FlyFrames
     inline SwFlyPortion *GetFly() { return m_pFly; }
     inline void SetFly( SwFlyPortion *pNew ) { m_pFly = pNew; }
 
@@ -792,12 +792,12 @@ inline sal_Int32 SwTextFormatInfo::GetReformatStart() const
 
 inline const SwAttrSet& SwTextFormatInfo::GetCharAttr() const
 {
-    return GetTextFrm()->GetTextNode()->GetSwAttrSet();
+    return GetTextFrame()->GetTextNode()->GetSwAttrSet();
 }
 
 inline void SwTextFormatInfo::SetParaFootnote()
 {
-    GetTextFrm()->SetFootnote( true );
+    GetTextFrame()->SetFootnote( true );
 }
 
 #endif

@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 SwShadowCursor::~SwShadowCursor()
 {
     if( USHRT_MAX != nOldMode )
-        DrawCrsr( aOldPt, nOldHeight, nOldMode );
+        DrawCursor( aOldPt, nOldHeight, nOldMode );
 }
 
 void SwShadowCursor::SetPos( const Point& rPt, long nHeight, sal_uInt16 nMode )
@@ -38,9 +38,9 @@ void SwShadowCursor::SetPos( const Point& rPt, long nHeight, sal_uInt16 nMode )
     if( aOldPt != aPt || nOldHeight != nHeight || nOldMode != nMode )
     {
         if( USHRT_MAX != nOldMode )
-            DrawCrsr( aOldPt, nOldHeight, nOldMode );
+            DrawCursor( aOldPt, nOldHeight, nOldMode );
 
-        DrawCrsr( aPt, nHeight, nMode );
+        DrawCursor( aPt, nHeight, nMode );
         nOldMode = nMode;
         nOldHeight = nHeight;
         aOldPt = aPt;
@@ -66,7 +66,7 @@ void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, bool bLeft )
     }
 }
 
-void SwShadowCursor::DrawCrsr( const Point& rPt, long nHeight, sal_uInt16 nMode )
+void SwShadowCursor::DrawCursor( const Point& rPt, long nHeight, sal_uInt16 nMode )
 {
     nHeight = (((nHeight / 4)+1) * 4) + 1;
 
@@ -93,7 +93,7 @@ void SwShadowCursor::DrawCrsr( const Point& rPt, long nHeight, sal_uInt16 nMode 
 void SwShadowCursor::Paint()
 {
     if( USHRT_MAX != nOldMode )
-        DrawCrsr( aOldPt, nOldHeight, nOldMode );
+        DrawCursor( aOldPt, nOldHeight, nOldMode );
 }
 
 Rectangle SwShadowCursor::GetRect() const

@@ -469,26 +469,26 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         OTextCursorHelper *const pCursor =
             ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
 
-        SwCursor aCrsr(*aPam.GetPoint(), nullptr, false);
-        SwUnoCursorHelper::SelectPam(aCrsr, true);
-        aCrsr.Left(1, CRSR_SKIP_CHARS, false, false);
+        SwCursor aCursor(*aPam.GetPoint(), nullptr, false);
+        SwUnoCursorHelper::SelectPam(aCursor, true);
+        aCursor.Left(1, CRSR_SKIP_CHARS, false, false);
         // here, the PaM needs to be moved:
         if (pRange)
         {
-            pRange->SetPositions(aCrsr);
+            pRange->SetPositions(aCursor);
         }
         else
         {
-            SwPaM *const pUnoCrsr = pCursor->GetPaM();
-            *pUnoCrsr->GetPoint() = *aCrsr.GetPoint();
-            if (aCrsr.HasMark())
+            SwPaM *const pUnoCursor = pCursor->GetPaM();
+            *pUnoCursor->GetPoint() = *aCursor.GetPoint();
+            if (aCursor.HasMark())
             {
-                pUnoCrsr->SetMark();
-                *pUnoCrsr->GetMark() = *aCrsr.GetMark();
+                pUnoCursor->SetMark();
+                *pUnoCursor->GetMark() = *aCursor.GetMark();
             }
             else
             {
-                pUnoCrsr->DeleteMark();
+                pUnoCursor->DeleteMark();
             }
         }
     }
@@ -2564,7 +2564,7 @@ throw (uno::RuntimeException, std::exception)
 
     SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
     SwPosition aPos(rNode);
-    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos));
+    auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
     pUnoCursor->Move(fnMoveBackward, fnGoDoc);
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_BODY);
 }
@@ -2745,28 +2745,28 @@ SwXHeadFootText::createTextCursor() throw (uno::RuntimeException, std::exception
     SwPosition aPos(rNode);
     SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
             (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER, aPos);
-    auto& rUnoCrsr(pXCursor->GetCursor());
-    rUnoCrsr.Move(fnMoveForward, fnGoNode);
+    auto& rUnoCursor(pXCursor->GetCursor());
+    rUnoCursor.Move(fnMoveForward, fnGoNode);
 
     // save current start node to be able to check if there is content
     // after the table - otherwise the cursor would be in the body text!
     SwStartNode const*const pOwnStartNode = rNode.FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     // is there a table here?
-    SwTableNode* pTableNode = rUnoCrsr.GetNode().FindTableNode();
+    SwTableNode* pTableNode = rUnoCursor.GetNode().FindTableNode();
     SwContentNode* pCont = nullptr;
     while (pTableNode)
     {
-        rUnoCrsr.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
-        pCont = GetDoc()->GetNodes().GoNext(&rUnoCrsr.GetPoint()->nNode);
+        rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
+        pCont = GetDoc()->GetNodes().GoNext(&rUnoCursor.GetPoint()->nNode);
         pTableNode = pCont->FindTableNode();
     }
     if (pCont)
     {
-        rUnoCrsr.GetPoint()->nContent.Assign(pCont, 0);
+        rUnoCursor.GetPoint()->nContent.Assign(pCont, 0);
     }
     SwStartNode const*const pNewStartNode =
-        rUnoCrsr.GetNode().FindSttNodeByType(
+        rUnoCursor.GetNode().FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     if (!pNewStartNode || (pNewStartNode != pOwnStartNode))
     {
@@ -2826,7 +2826,7 @@ throw (uno::RuntimeException, std::exception)
     const SwFormatContent& rFlyContent = rHeadFootFormat.GetContent();
     const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
-    auto pUnoCursor(GetDoc()->CreateUnoCrsr(aPos));
+    auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     return SwXParagraphEnumeration::Create(this, pUnoCursor, (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
 }

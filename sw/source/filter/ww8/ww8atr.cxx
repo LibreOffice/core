@@ -822,11 +822,11 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                     }
                 }
 
-                m_bOutFlyFrmAttrs = true;
+                m_bOutFlyFrameAttrs = true;
                 //script doesn't matter if not exporting chp
                 OutputItemSet(aSet, true, false,
                     i18n::ScriptType::LATIN, m_bExportModeRTF);
-                m_bOutFlyFrmAttrs = false;
+                m_bOutFlyFrameAttrs = false;
 
                 bCallOutSet = false;
             }
@@ -2925,9 +2925,9 @@ void AttributeOutputBase::TextFlyContent( const SwFormatFlyCnt& rFlyContent )
         aLayPos = pTextNd->FindLayoutRect( false, &aLayPos ).Pos();
 
         SwPosition aPos( *pTextNd );
-        ww8::Frame aFrm( *rFlyContent.GetFrameFormat(), aPos );
+        ww8::Frame aFrame( *rFlyContent.GetFrameFormat(), aPos );
 
-        OutputFlyFrame_Impl( aFrm, aLayPos );
+        OutputFlyFrame_Impl( aFrame, aLayPos );
     }
 }
 
@@ -3284,9 +3284,9 @@ void WW8AttributeOutput::ParaNumRule_Impl(const SwTextNode* /*pTextNd*/,
 
 /* File FRMATR.HXX */
 
-void WW8AttributeOutput::FormatFrameSize( const SwFormatFrmSize& rSize )
+void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
 {
-    if( m_rWW8Export.m_bOutFlyFrmAttrs )                   // Flys
+    if( m_rWW8Export.m_bOutFlyFrameAttrs )                   // Flys
     {
         if( m_rWW8Export.m_bOutGrf )
             return;                // Fly um Grafik -> Auto-Groesse
@@ -3621,7 +3621,7 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
 {
     // Flys fehlen noch ( siehe RTF )
 
-    if ( m_rWW8Export.m_bOutFlyFrmAttrs )                   // Flys
+    if ( m_rWW8Export.m_bOutFlyFrameAttrs )                   // Flys
     {
         // sprmPDxaFromText10
         m_rWW8Export.InsUInt16( NS_sprm::LN_PDxaFromText10 );
@@ -3670,7 +3670,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
 {
     // Flys fehlen noch ( siehe RTF )
 
-    if ( m_rWW8Export.m_bOutFlyFrmAttrs )                   // Flys
+    if ( m_rWW8Export.m_bOutFlyFrameAttrs )                   // Flys
     {
         // sprmPDyaFromText
         m_rWW8Export.InsUInt16( NS_sprm::LN_PDyaFromText );
@@ -3728,7 +3728,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
 
 void WW8AttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
 {
-    if ( m_rWW8Export.m_bOutFlyFrmAttrs )
+    if ( m_rWW8Export.m_bOutFlyFrameAttrs )
     {
         m_rWW8Export.InsUInt16( NS_sprm::LN_PWr );
 
@@ -3741,7 +3741,7 @@ void WW8AttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyVe
 {
 //!!!! Ankertyp und entsprechende Umrechnung fehlt noch
 
-    if ( m_rWW8Export.m_bOutFlyFrmAttrs )
+    if ( m_rWW8Export.m_bOutFlyFrameAttrs )
     {
         short nPos;
         switch( rFlyVert.GetVertOrient() )
@@ -3779,7 +3779,7 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyH
     }
 
 //!!!! Ankertyp und entsprechende Umrechnung fehlt noch
-    if ( m_rWW8Export.m_bOutFlyFrmAttrs )
+    if ( m_rWW8Export.m_bOutFlyFrameAttrs )
     {
         short nPos;
         switch( rFlyHori.GetHoriOrient() )
@@ -3812,7 +3812,7 @@ void WW8AttributeOutput::FormatAnchor( const SwFormatAnchor& rAnchor )
 {
     OSL_ENSURE( m_rWW8Export.m_pParentFrame, "Anchor without mpParentFrame !!" );
 
-    if ( m_rWW8Export.m_bOutFlyFrmAttrs )
+    if ( m_rWW8Export.m_bOutFlyFrameAttrs )
     {
         sal_uInt8 nP = 0;
         switch ( rAnchor.GetAnchorId() )
@@ -4134,7 +4134,7 @@ SwTwips WW8Export::CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const
         : &m_pDoc->GetPageDesc(0).GetMaster();
 
     const SvxLRSpaceItem& rLR = pFormat->GetLRSpace();
-    SwTwips nPageSize = pFormat->GetFrmSize().GetWidth();
+    SwTwips nPageSize = pFormat->GetFrameSize().GetWidth();
     rLeft = rLR.GetLeft();
     rRight = rLR.GetRight();
     return nPageSize;
@@ -4188,17 +4188,17 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
     const SwColumns& rColumns = rCol.GetColumns();
 
     sal_uInt16 nCols = rColumns.size();
-    if ( 1 < nCols && !GetExport( ).m_bOutFlyFrmAttrs )
+    if ( 1 < nCols && !GetExport( ).m_bOutFlyFrameAttrs )
     {
         // dann besorge mal die Seitenbreite ohne Raender !!
 
         const SwFrameFormat* pFormat = GetExport( ).m_pAktPageDesc ? &GetExport( ).m_pAktPageDesc->GetMaster() : &const_cast<const SwDoc *>(GetExport( ).m_pDoc)->GetPageDesc(0).GetMaster();
-        const SvxFrameDirectionItem &frameDirection = pFormat->GetFrmDir();
+        const SvxFrameDirectionItem &frameDirection = pFormat->GetFrameDir();
         SwTwips nPageSize;
         if ( frameDirection.GetValue() == FRMDIR_VERT_TOP_RIGHT || frameDirection.GetValue() == FRMDIR_VERT_TOP_LEFT )
         {
             const SvxULSpaceItem &rUL = pFormat->GetULSpace();
-            nPageSize = pFormat->GetFrmSize().GetHeight();
+            nPageSize = pFormat->GetFrameSize().GetHeight();
             nPageSize -= rUL.GetUpper() + rUL.GetLower();
 
             const SwFormatHeader *header = dynamic_cast<const SwFormatHeader *>(pFormat->GetAttrSet().GetItem(RES_HEADER));
@@ -4207,7 +4207,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
                 const SwFrameFormat *headerFormat = header->GetHeaderFormat();
                 if (headerFormat)
                 {
-                    nPageSize -= headerFormat->GetFrmSize().GetHeight();
+                    nPageSize -= headerFormat->GetFrameSize().GetHeight();
                 }
             }
             const SwFormatFooter *footer = dynamic_cast<const SwFormatFooter *>(pFormat->GetAttrSet().GetItem(RES_FOOTER));
@@ -4216,14 +4216,14 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
                 const SwFrameFormat *footerFormat = footer->GetFooterFormat();
                 if ( footerFormat )
                 {
-                    nPageSize -= footerFormat->GetFrmSize().GetHeight();
+                    nPageSize -= footerFormat->GetFrameSize().GetHeight();
                 }
             }
         }
         else
         {
             const SvxLRSpaceItem &rLR = pFormat->GetLRSpace();
-            nPageSize = pFormat->GetFrmSize().GetWidth();
+            nPageSize = pFormat->GetFrameSize().GetWidth();
             nPageSize -= rLR.GetLeft() + rLR.GetRight();
             //i120133: The Section width should consider page indent value.
             nPageSize -= rCol.GetAdjustValue();
@@ -4420,7 +4420,7 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
             nDir = m_rWW8Export.GetCurrentPageDirection();
         else if ( m_rWW8Export.m_pOutFormatNode )
         {
-            if ( m_rWW8Export.m_bOutFlyFrmAttrs )  //frame
+            if ( m_rWW8Export.m_bOutFlyFrameAttrs )  //frame
             {
                 nDir = m_rWW8Export.TrueFrameDirection(
                     *static_cast<const SwFrameFormat*>(m_rWW8Export.m_pOutFormatNode) );
@@ -4466,7 +4466,7 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
         m_rWW8Export.InsUInt16( NS_sprm::LN_SFBiDi );
         m_rWW8Export.pO->push_back( bBiDi ? 1 : 0 );
     }
-    else if ( !m_rWW8Export.m_bOutFlyFrmAttrs )  //paragraph/style
+    else if ( !m_rWW8Export.m_bOutFlyFrameAttrs )  //paragraph/style
     {
         m_rWW8Export.InsUInt16( NS_sprm::LN_PFBiDi );
         m_rWW8Export.pO->push_back( bBiDi ? 1 : 0 );
@@ -4965,7 +4965,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
 
         case RES_FRM_SIZE:
-            FormatFrameSize( static_cast< const SwFormatFrmSize& >( rHt ) );
+            FormatFrameSize( static_cast< const SwFormatFrameSize& >( rHt ) );
             break;
         case RES_PAPER_BIN:
             FormatPaperBin( static_cast< const SvxPaperBinItem& >( rHt ) );

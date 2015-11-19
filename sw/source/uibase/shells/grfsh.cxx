@@ -85,13 +85,13 @@ class SwGrfShell::SwExternalToolEdit
 {
 private:
     SwWrtShell *const m_pShell;
-    ::std::shared_ptr<SwUnoCrsr> const m_pCursor;
+    ::std::shared_ptr<SwUnoCursor> const m_pCursor;
 
 public:
     explicit SwExternalToolEdit(SwWrtShell *const pShell)
         : m_pShell(pShell)
         , m_pCursor( // need only Point, must point to SwGrfNode
-            pShell->GetDoc()->CreateUnoCrsr(
+            pShell->GetDoc()->CreateUnoCursor(
                 *pShell->GetCurrentShellCursor().GetPoint()))
     {
     }
@@ -211,7 +211,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_GRAFIC_DLG:
         case FN_DRAW_WRAP_DLG:
         {
-            SwFlyFrmAttrMgr aMgr( false, &rSh, rSh.IsFrmSelected() ?
+            SwFlyFrameAttrMgr aMgr( false, &rSh, rSh.IsFrameSelected() ?
                                                FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
             const SwViewOption* pVOpt = rSh.GetViewOptions();
             SwViewOption aUsrPref( *pVOpt );
@@ -259,9 +259,9 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
 
             const SwRect* pRect = &rSh.GetAnyCurRect(RECT_PAGE);
-            SwFormatFrmSize aFrmSize( ATT_VAR_SIZE, pRect->Width(), pRect->Height());
-            aFrmSize.SetWhich( GetPool().GetWhich( SID_ATTR_PAGE_SIZE ) );
-            aSet.Put( aFrmSize );
+            SwFormatFrameSize aFrameSize( ATT_VAR_SIZE, pRect->Width(), pRect->Height());
+            aFrameSize.SetWhich( GetPool().GetWhich( SID_ATTR_PAGE_SIZE ) );
+            aSet.Put( aFrameSize );
 
             aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
             if ( nSlot == FN_FORMAT_GRAFIC_DLG )
@@ -271,19 +271,19 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
 
             pRect = &rSh.GetAnyCurRect(RECT_PAGE_PRT);
-            aFrmSize.SetWidth( pRect->Width() );
-            aFrmSize.SetHeight( pRect->Height() );
-            aFrmSize.SetWhich( GetPool().GetWhich(FN_GET_PRINT_AREA) );
-            aSet.Put( aFrmSize );
+            aFrameSize.SetWidth( pRect->Width() );
+            aFrameSize.SetHeight( pRect->Height() );
+            aFrameSize.SetWhich( GetPool().GetWhich(FN_GET_PRINT_AREA) );
+            aSet.Put( aFrameSize );
 
             aSet.Put( aMgr.GetAttrSet() );
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
             // At percentage values initialize size
-            SwFormatFrmSize aSizeCopy = static_cast<const SwFormatFrmSize&>(aSet.Get(RES_FRM_SIZE));
-            if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != SwFormatFrmSize::SYNCED)
+            SwFormatFrameSize aSizeCopy = static_cast<const SwFormatFrameSize&>(aSet.Get(RES_FRM_SIZE));
+            if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != SwFormatFrameSize::SYNCED)
                 aSizeCopy.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
-            if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != SwFormatFrmSize::SYNCED)
+            if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != SwFormatFrameSize::SYNCED)
                 aSizeCopy.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
             // and now set the size for "external" tabpages
             {
@@ -291,8 +291,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 aSet.Put( aSzItm );
 
                 Size aSz( aSizeCopy.GetWidthPercent(), aSizeCopy.GetHeightPercent() );
-                if( SwFormatFrmSize::SYNCED == aSz.Width() )   aSz.Width() = 0;
-                if( SwFormatFrmSize::SYNCED == aSz.Height() )  aSz.Height() = 0;
+                if( SwFormatFrameSize::SYNCED == aSz.Width() )   aSz.Width() = 0;
+                if( SwFormatFrameSize::SYNCED == aSz.Height() )  aSz.Height() = 0;
 
                 aSzItm.SetSize( aSz );
                 aSzItm.SetWhich( SID_ATTR_GRAF_FRMSIZE_PERCENT );
@@ -344,7 +344,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "no dialog factory!");
-            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog("PictureDialog",
+            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("PictureDialog",
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
                                                     aSet, false));
@@ -360,11 +360,11 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 const SfxPoolItem* pItem;
                 SfxItemSet* pSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
                 rReq.Done(*pSet);
-                // change the 2 frmsize SizeItems to the correct SwFrmSizeItem
+                // change the 2 frmsize SizeItems to the correct SwFrameSizeItem
                 if( SfxItemState::SET == pSet->GetItemState(
                                 SID_ATTR_GRAF_FRMSIZE, false, &pItem ))
                 {
-                    SwFormatFrmSize aSize;
+                    SwFormatFrameSize aSize;
                     const Size& rSz = static_cast<const SvxSizeItem*>(pItem)->GetSize();
                     aSize.SetWidth( rSz.Width() );
                     aSize.SetHeight( rSz.Height() );
@@ -396,7 +396,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 {
                     aMgr.SetAttrSet(*pSet);
                 }
-                aMgr.UpdateFlyFrm();
+                aMgr.UpdateFlyFrame();
 
                 bool bApplyUsrPref = false;
                 if (SfxItemState::SET == pSet->GetItemState(
@@ -665,7 +665,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             if( bParentCntProt || !bIsGrfContent )
                 bDisable = true;
             else if ( nWhich == SID_INSERT_GRAPHIC
-                      && rSh.CrsrInsideInputField() )
+                      && rSh.CursorInsideInputField() )
             {
                 bDisable = true;
             }
@@ -857,12 +857,12 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     aTransform.rotate(aRotation);
     rShell.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aGraphic));
 
-    SwFlyFrmAttrMgr aManager(false, &rShell, rShell.IsFrmSelected() ? FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
+    SwFlyFrameAttrMgr aManager(false, &rShell, rShell.IsFrameSelected() ? FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
     const long nRotatedWidth = aManager.GetSize().Height();
     const long nRotatedHeight = aManager.GetSize().Width();
     Size aSize(nRotatedWidth, nRotatedHeight);
     aManager.SetSize(aSize);
-    aManager.UpdateFlyFrm();
+    aManager.UpdateFlyFrame();
 
     SfxItemSet aSet( rShell.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
     rShell.GetCurAttr( aSet );

@@ -385,8 +385,8 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
 {
     SvxBrushItem aBrushItem( RES_BACKGROUND );
     SvxBoxItem aBoxItem( RES_BOX );
-    SvxFrameDirectionItem aFrmDirItem(FRMDIR_ENVIRONMENT, RES_FRAMEDIR);
-    bool bSetBrush = pBrush!=nullptr, bSetBox = false, bSetFrmDir = false;
+    SvxFrameDirectionItem aFrameDirItem(FRMDIR_ENVIRONMENT, RES_FRAMEDIR);
+    bool bSetBrush = pBrush!=nullptr, bSetBox = false, bSetFrameDir = false;
     if( pBrush )
         aBrushItem = *pBrush;
 
@@ -413,13 +413,13 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
         if( SfxItemState::SET == pItemSet2->GetItemState( RES_FRAMEDIR, false, &pItem ) )
         {
             // eine Umrandung wird gesetzt
-            aFrmDirItem = *static_cast< const SvxFrameDirectionItem *>( pItem );
+            aFrameDirItem = *static_cast< const SvxFrameDirectionItem *>( pItem );
             pItemSet2->ClearItem( RES_FRAMEDIR );
-            bSetFrmDir = true;
+            bSetFrameDir = true;
         }
     }
 
-    if( bSetBrush || bSetBox || bSetFrmDir )
+    if( bSetBrush || bSetBox || bSetFrameDir )
     {
         static sal_uInt16 aPoolIds[] = { RES_POOLPAGE_HTML, RES_POOLPAGE_FIRST,
                                      RES_POOLPAGE_LEFT, RES_POOLPAGE_RIGHT };
@@ -434,8 +434,8 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
                     rMaster.SetFormatAttr( aBrushItem );
                 if( bSetBox )
                     rMaster.SetFormatAttr( aBoxItem );
-                if( bSetFrmDir )
-                    rMaster.SetFormatAttr( aFrmDirItem );
+                if( bSetFrameDir )
+                    rMaster.SetFormatAttr( aFrameDirItem );
 
                 ChgPageDesc( pPageDesc, aNewPageDesc );
             }
@@ -512,7 +512,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
     {
         if( rPropInfo.eSizeType == SVX_CSS1_STYPE_TWIP )
         {
-            rMaster.SetFormatAttr( SwFormatFrmSize( ATT_FIX_SIZE, rPropInfo.nWidth,
+            rMaster.SetFormatAttr( SwFormatFrameSize( ATT_FIX_SIZE, rPropInfo.nWidth,
                                            rPropInfo.nHeight ) );
             bChanged = true;
         }
@@ -522,17 +522,17 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
             // Groesse der Vorlage erhalten. Bei "landscape" und "portrait"
             // wird das Landscape-Flag gesetzt und evtl. die Breite/Hoehe
             // vertauscht.
-            SwFormatFrmSize aFrmSz( rMaster.GetFrmSize() );
+            SwFormatFrameSize aFrameSz( rMaster.GetFrameSize() );
             bool bLandscape = aNewPageDesc.GetLandscape();
             if( ( bLandscape &&
                   rPropInfo.eSizeType == SVX_CSS1_STYPE_PORTRAIT ) ||
                 ( !bLandscape &&
                   rPropInfo.eSizeType == SVX_CSS1_STYPE_LANDSCAPE ) )
             {
-                SwTwips nTmp = aFrmSz.GetHeight();
-                aFrmSz.SetHeight( aFrmSz.GetWidth() );
-                aFrmSz.SetWidth( nTmp );
-                rMaster.SetFormatAttr( aFrmSz );
+                SwTwips nTmp = aFrameSz.GetHeight();
+                aFrameSz.SetHeight( aFrameSz.GetWidth() );
+                aFrameSz.SetWidth( nTmp );
+                rMaster.SetFormatAttr( aFrameSz );
                 aNewPageDesc.SetLandscape( !bLandscape );
                 bChanged = true;
             }
@@ -1943,7 +1943,7 @@ bool SwHTMLParser::ParseStyleOptions( const OUString &rStyle,
 
 void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
                                            const SvxCSS1PropertyInfo &rPropInfo,
-                                           SfxItemSet &rFrmItemSet )
+                                           SfxItemSet &rFrameItemSet )
 {
     SwFormatAnchor aAnchor;
 
@@ -2039,20 +2039,20 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
             eSurround = SURROUND_RIGHT;
         }
     }
-    rFrmItemSet.Put( aAnchor );
+    rFrameItemSet.Put( aAnchor );
 
     // Absolut Positioniert mit Durchlauf
-    rFrmItemSet.Put( SwFormatHoriOrient( nHoriPos, eHoriOri, eHoriRel ) );
-    rFrmItemSet.Put( SwFormatVertOrient( nVertPos, eVertOri, eVertRel ) );
-    rFrmItemSet.Put( SwFormatSurround( eSurround ) );
+    rFrameItemSet.Put( SwFormatHoriOrient( nHoriPos, eHoriOri, eHoriRel ) );
+    rFrameItemSet.Put( SwFormatVertOrient( nVertPos, eVertOri, eVertRel ) );
+    rFrameItemSet.Put( SwFormatSurround( eSurround ) );
 }
 
 void SwHTMLParser::SetVarSize( SfxItemSet & /*rItemSet*/,
                                SvxCSS1PropertyInfo &rPropInfo,
-                               SfxItemSet &rFrmItemSet,
+                               SfxItemSet &rFrameItemSet,
                                SwTwips nDfltWidth, sal_uInt8 nDfltPrcWidth )
 {
-    SwFrmSize eSize = ATT_MIN_SIZE;
+    SwFrameSize eSize = ATT_MIN_SIZE;
     SwTwips nWidth = nDfltWidth, nHeight = MINFLY;
     sal_uInt8 nPrcWidth = nDfltPrcWidth, nPrcHeight = 0;
     switch( rPropInfo.eWidthType )
@@ -2082,16 +2082,16 @@ void SwHTMLParser::SetVarSize( SfxItemSet & /*rItemSet*/,
         ;
     }
 
-    SwFormatFrmSize aFrmSize( eSize, nWidth, nHeight );
-    aFrmSize.SetWidthPercent( nPrcWidth );
-    aFrmSize.SetHeightPercent( nPrcHeight );
-    rFrmItemSet.Put( aFrmSize );
+    SwFormatFrameSize aFrameSize( eSize, nWidth, nHeight );
+    aFrameSize.SetWidthPercent( nPrcWidth );
+    aFrameSize.SetHeightPercent( nPrcHeight );
+    rFrameItemSet.Put( aFrameSize );
 }
 
 void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
                                    SvxCSS1PropertyInfo & /*rPropInfo*/,
                                    sal_uInt16 nFlags,
-                                   SfxItemSet &rFrmItemSet )
+                                   SfxItemSet &rFrameItemSet )
 {
     const SfxPoolItem *pItem;
     if( (nFlags & HTML_FF_BOX) != 0 &&
@@ -2102,11 +2102,11 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
             SvxBoxItem aBoxItem( *static_cast<const SvxBoxItem *>(pItem) );
             // Alle 4 Seiten gleichzeitig auf 0 setzen
             aBoxItem.SetDistance( 0 );
-            rFrmItemSet.Put( aBoxItem );
+            rFrameItemSet.Put( aBoxItem );
         }
         else
         {
-            rFrmItemSet.Put( *pItem );
+            rFrameItemSet.Put( *pItem );
         }
         rItemSet.ClearItem( RES_BOX );
     }
@@ -2114,14 +2114,14 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
     if( (nFlags & HTML_FF_BACKGROUND) != 0 &&
         SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, true, &pItem ) )
     {
-        rFrmItemSet.Put( *pItem );
+        rFrameItemSet.Put( *pItem );
         rItemSet.ClearItem( RES_BACKGROUND );
     }
 
     if( (nFlags & HTML_FF_DIRECTION) != 0 &&
         SfxItemState::SET==rItemSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
-        rFrmItemSet.Put( *pItem );
+        rFrameItemSet.Put( *pItem );
         rItemSet.ClearItem( RES_FRAMEDIR );
     }
 }

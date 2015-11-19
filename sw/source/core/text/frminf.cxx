@@ -49,14 +49,14 @@ sal_Int32 SwTextMargin::GetTextEnd() const
 }
 
 // Does the paragraph fit into one line?
-bool SwTextFrmInfo::IsOneLine() const
+bool SwTextFrameInfo::IsOneLine() const
 {
-    const SwLineLayout *pLay = pFrm->GetPara();
+    const SwLineLayout *pLay = pFrame->GetPara();
     if( !pLay )
         return false;
 
     // For follows false of course
-    if( pFrm->GetFollow() )
+    if( pFrame->GetFollow() )
         return false;
 
     pLay = pLay->GetNext();
@@ -70,20 +70,20 @@ bool SwTextFrmInfo::IsOneLine() const
 }
 
 // Is the line filled for X percent?
-bool SwTextFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
+bool SwTextFrameInfo::IsFilled( const sal_uInt8 nPercent ) const
 {
-    const SwLineLayout *pLay = pFrm->GetPara();
+    const SwLineLayout *pLay = pFrame->GetPara();
     if( !pLay )
         return false;
 
-    long nWidth = pFrm->Prt().Width();
+    long nWidth = pFrame->Prt().Width();
     nWidth *= nPercent;
     nWidth /= 100;
     return sal_uInt16(nWidth) <= pLay->Width();
 }
 
 // Where does the text start (without whitespace)? (document global)
-SwTwips SwTextFrmInfo::GetLineStart( const SwTextCursor &rLine )
+SwTwips SwTextFrameInfo::GetLineStart( const SwTextCursor &rLine )
 {
     const sal_Int32 nTextStart = rLine.GetTextStart();
     if( rLine.GetStart() == nTextStart )
@@ -97,28 +97,28 @@ SwTwips SwTextFrmInfo::GetLineStart( const SwTextCursor &rLine )
 }
 
 // Where does the text start (without whitespace)? (relative in the Frame)
-SwTwips SwTextFrmInfo::GetLineStart() const
+SwTwips SwTextFrameInfo::GetLineStart() const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrm*>(pFrm) );
-    SwTextCursor aLine( const_cast<SwTextFrm*>(pFrm), &aInf );
-    return GetLineStart( aLine ) - pFrm->Frm().Left() - pFrm->Prt().Left();
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
+    SwTextCursor aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
+    return GetLineStart( aLine ) - pFrame->Frame().Left() - pFrame->Prt().Left();
 }
 
 // Calculates the character's position and returns the middle position
-SwTwips SwTextFrmInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
+SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
 {
-    SWRECTFN( pFrm )
-    SwFrmSwapper aSwapper( pFrm, true );
+    SWRECTFN( pFrame )
+    SwFrameSwapper aSwapper( pFrame, true );
 
-    SwTextSizeInfo aInf( const_cast<SwTextFrm*>(pFrm) );
-    SwTextCursor aLine( const_cast<SwTextFrm*>(pFrm), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
+    SwTextCursor aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
 
     SwTwips nStt, nNext;
     SwRect aRect;
     if( static_cast<SwTextCursor&>(aLine).GetCharRect( &aRect, nChar ) )
     {
         if ( bVert )
-            pFrm->SwitchHorizontalToVertical( aRect );
+            pFrame->SwitchHorizontalToVertical( aRect );
 
         nStt = (aRect.*fnRect->fnGetLeft)();
     }
@@ -126,22 +126,22 @@ SwTwips SwTextFrmInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
         nStt = aLine.GetLineStart();
 
     if( !bCenter )
-        return nStt - (pFrm->Frm().*fnRect->fnGetLeft)();
+        return nStt - (pFrame->Frame().*fnRect->fnGetLeft)();
 
     if( static_cast<SwTextCursor&>(aLine).GetCharRect( &aRect, nChar+1 ) )
     {
         if ( bVert )
-            pFrm->SwitchHorizontalToVertical( aRect );
+            pFrame->SwitchHorizontalToVertical( aRect );
 
         nNext = (aRect.*fnRect->fnGetLeft)();
     }
     else
         nNext = aLine.GetLineStart();
 
-    return (( nNext + nStt ) / 2 ) - (pFrm->Frm().*fnRect->fnGetLeft)();
+    return (( nNext + nStt ) / 2 ) - (pFrame->Frame().*fnRect->fnGetLeft)();
 }
 
-SwPaM *AddPam( SwPaM *pPam, const SwTextFrm* pTextFrm,
+SwPaM *AddPam( SwPaM *pPam, const SwTextFrame* pTextFrame,
                 const sal_Int32 nPos, const sal_Int32 nLen )
 {
     if( nLen )
@@ -160,7 +160,7 @@ SwPaM *AddPam( SwPaM *pPam, const SwTextFrm* pTextFrm,
         }
 
         SwIndex &rContent = pPam->GetPoint()->nContent;
-        rContent.Assign( const_cast<SwTextNode*>(pTextFrm->GetTextNode()), nPos );
+        rContent.Assign( const_cast<SwTextNode*>(pTextFrame->GetTextNode()), nPos );
         pPam->SetMark();
         rContent += nLen;
     }
@@ -168,10 +168,10 @@ SwPaM *AddPam( SwPaM *pPam, const SwTextFrm* pTextFrm,
 }
 
 // Accumulates the whitespace at line start and end in the Pam
-void SwTextFrmInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
+void SwTextFrameInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrm*>(pFrm) );
-    SwTextMargin aLine( const_cast<SwTextFrm*>(pFrm), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
+    SwTextMargin aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
     SwPaM *pPam = &rPam;
     bool bFirstLine = true;
     do {
@@ -182,7 +182,7 @@ void SwTextFrmInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
             // Do NOT include the blanks/tabs from the first line
             // in the selection
             if( !bFirstLine && nPos > aLine.GetStart() )
-                pPam = AddPam( pPam, pFrm, aLine.GetStart(),
+                pPam = AddPam( pPam, pFrame, aLine.GetStart(),
                                 nPos - aLine.GetStart() );
 
             // Do NOT include the blanks/tabs from the last line
@@ -196,7 +196,7 @@ void SwTextFrmInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
                     sal_uInt16 nOff = !bWithLineBreak && CH_BREAK ==
                                 aLine.GetInfo().GetChar( aLine.GetEnd() - 1 )
                                 ? 1 : 0;
-                    pPam = AddPam( pPam, pFrm, nPos, aLine.GetEnd() - nPos - nOff );
+                    pPam = AddPam( pPam, pFrame, nPos, aLine.GetEnd() - nPos - nOff );
                 }
             }
         }
@@ -207,10 +207,10 @@ void SwTextFrmInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 
 // Is there a bullet/symbol etc. at the text position?
 // Fonts: CharSet, SYMBOL und DONTKNOW
-bool SwTextFrmInfo::IsBullet( sal_Int32 nTextStart ) const
+bool SwTextFrameInfo::IsBullet( sal_Int32 nTextStart ) const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrm*>(pFrm) );
-    SwTextMargin aLine( const_cast<SwTextFrm*>(pFrm), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
+    SwTextMargin aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
     aInf.SetIdx( nTextStart );
     return aLine.IsSymbol( nTextStart );
 }
@@ -219,10 +219,10 @@ bool SwTextFrmInfo::IsBullet( sal_Int32 nTextStart ) const
 // The precondition for a positive or negative first line indent:
 // All lines (except for the first one) have the same left margin.
 // We do not want to be so picky and work with a tolerance of TOLERANCE twips.
-SwTwips SwTextFrmInfo::GetFirstIndent() const
+SwTwips SwTextFrameInfo::GetFirstIndent() const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrm*>(pFrm) );
-    SwTextCursor aLine( const_cast<SwTextFrm*>(pFrm), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
+    SwTextCursor aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
     const SwTwips nFirst = GetLineStart( aLine );
     const SwTwips TOLERANCE = 20;
 
@@ -251,18 +251,18 @@ SwTwips SwTextFrmInfo::GetFirstIndent() const
     return 1;
 }
 
-sal_Int32 SwTextFrmInfo::GetBigIndent( sal_Int32& rFndPos,
-                                    const SwTextFrm *pNextFrm ) const
+sal_Int32 SwTextFrameInfo::GetBigIndent( sal_Int32& rFndPos,
+                                    const SwTextFrame *pNextFrame ) const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrm*>(pFrm) );
-    SwTextCursor aLine( const_cast<SwTextFrm*>(pFrm), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
+    SwTextCursor aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
     SwTwips nNextIndent = 0;
 
-    if( pNextFrm )
+    if( pNextFrame )
     {
         // I'm a single line
-        SwTextSizeInfo aNxtInf( const_cast<SwTextFrm*>(pNextFrm) );
-        SwTextCursor aNxtLine( const_cast<SwTextFrm*>(pNextFrm), &aNxtInf );
+        SwTextSizeInfo aNxtInf( const_cast<SwTextFrame*>(pNextFrame) );
+        SwTextCursor aNxtLine( const_cast<SwTextFrame*>(pNextFrame), &aNxtInf );
         nNextIndent = GetLineStart( aNxtLine );
     }
     else
@@ -279,7 +279,7 @@ sal_Int32 SwTextFrmInfo::GetBigIndent( sal_Int32& rFndPos,
         return 0;
 
     const Point aPoint( nNextIndent, aLine.Y() );
-    rFndPos = aLine.GetCrsrOfst( nullptr, aPoint, false );
+    rFndPos = aLine.GetCursorOfst( nullptr, aPoint, false );
     if( 1 >= rFndPos )
         return 0;
 
@@ -302,7 +302,7 @@ sal_Int32 SwTextFrmInfo::GetBigIndent( sal_Int32& rFndPos,
 
     SwRect aRect;
     return aLine.GetCharRect( &aRect, rFndPos )
-            ? static_cast<sal_Int32>(aRect.Left() - pFrm->Frm().Left() - pFrm->Prt().Left())
+            ? static_cast<sal_Int32>(aRect.Left() - pFrame->Frame().Left() - pFrame->Prt().Left())
             : 0;
 }
 

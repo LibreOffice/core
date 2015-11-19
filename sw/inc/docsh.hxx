@@ -45,7 +45,7 @@ class SwWrtShell;
 class SwFEShell;
 class Reader;
 class SwReader;
-class SwCrsrShell;
+class SwCursorShell;
 class SwSrcView;
 class SwPaM;
 class SwgReaderOption;
@@ -228,7 +228,7 @@ public:
 
     /// For inserting document.
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
-                            SwCrsrShell* pCrsrSh = nullptr, SwPaM* pPaM = nullptr);
+                            SwCursorShell* pCursorSh = nullptr, SwPaM* pPaM = nullptr);
 
 #if defined WNT
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,

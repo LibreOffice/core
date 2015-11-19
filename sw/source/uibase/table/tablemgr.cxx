@@ -205,13 +205,13 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     pSh->StartAllAction();
 
     OUString aName;
-    if (pSh->IsCrsrInTable())
+    if (pSh->IsCursorInTable())
     {
         aName = pSh->GetTableFormat()->GetName();
         // insert node before table
         pSh->MoveTable( fnTableCurr, fnTableStart );
         pSh->Up( false );
-        if ( pSh->IsCrsrInTable() )
+        if ( pSh->IsCursorInTable() )
         {
             if ( aName != pSh->GetTableFormat()->GetName() )
                 pSh->Down( false ); // two adjacent tables

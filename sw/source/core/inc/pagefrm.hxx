@@ -25,12 +25,12 @@
 
 #include <SidebarWindowsTypes.hxx>
 
-class SwFlyFrm;
+class SwFlyFrame;
 class SwFlyFrameFormat;
 class SwPageDesc;
-class SwContentFrm;
+class SwContentFrame;
 struct SwPosition;
-struct SwCrsrMoveState;
+struct SwCursorMoveState;
 class SwAttrSetChg;
 namespace vcl { class Font; }
 class SwSortedObjs;
@@ -44,9 +44,9 @@ enum SwPageChg
 };
 
 /// A page of the document layout.
-class SwPageFrm: public SwFootnoteBossFrm
+class SwPageFrame: public SwFootnoteBossFrame
 {
-    friend class SwFrm;
+    friend class SwFrame;
 
     SwSortedObjs *m_pSortedObjs;
 
@@ -103,7 +103,7 @@ class SwPageFrm: public SwFootnoteBossFrm
                                      bool bRightSidebar );
 
     virtual void DestroyImpl() override;
-    virtual ~SwPageFrm();
+    virtual ~SwPageFrame();
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
@@ -114,9 +114,9 @@ protected:
     size_t GetContentHeight(const long nTop, const long nBottom) const;
 
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrame)
 
-    SwPageFrm( SwFrameFormat*, SwFrm*, SwPageDesc* );
+    SwPageFrame( SwFrameFormat*, SwFrame*, SwPageDesc* );
 
     /// Make this public, so that the SwViewShell can access it when switching from browse mode
     /// Add/remove header/footer
@@ -129,19 +129,19 @@ public:
     void AppendDrawObjToPage( SwAnchoredObject& _rNewObj );
     void RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj );
 
-    void AppendFlyToPage( SwFlyFrm *pNew );
-    void RemoveFlyFromPage( SwFlyFrm *pToRemove );
-    void MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest ); // Optimized Remove/Append
+    void AppendFlyToPage( SwFlyFrame *pNew );
+    void RemoveFlyFromPage( SwFlyFrame *pToRemove );
+    void MoveFly( SwFlyFrame *pToMove, SwPageFrame *pDest ); // Optimized Remove/Append
 
     void  SetPageDesc( SwPageDesc *, SwFrameFormat * );
           SwPageDesc *GetPageDesc() { return m_pDesc; }
     const SwPageDesc *GetPageDesc() const { return m_pDesc; }
           SwPageDesc *FindPageDesc();
 
-                 SwContentFrm  *FindLastBodyContent();
-    inline       SwContentFrm  *FindFirstBodyContent();
-    inline const SwContentFrm  *FindFirstBodyContent() const;
-    inline const SwContentFrm  *FindLastBodyContent() const;
+                 SwContentFrame  *FindLastBodyContent();
+    inline       SwContentFrame  *FindFirstBodyContent();
+    inline const SwContentFrame  *FindFirstBodyContent() const;
+    inline const SwContentFrame  *FindLastBodyContent() const;
 
     SwRect GetBoundRect(OutputDevice* pOutputDevice) const;
 
@@ -160,27 +160,27 @@ public:
     void PrepareRegisterChg();
 
     // Appends a fly frame - the given one or a new one - at the page frame.
-    // Needed for <Modify> and <MakeFrms>
+    // Needed for <Modify> and <MakeFrames>
     // - return value not needed any more
     // - second parameter is of type <SwFlyFrameFormat*>
     // - third parameter only needed for assertion, but calling method assures
     //   this assertion. Thus, delete it.
-    void PlaceFly( SwFlyFrm* pFly, SwFlyFrameFormat* pFormat );
+    void PlaceFly( SwFlyFrame* pFly, SwFlyFrameFormat* pFormat );
 
-    virtual bool GetCrsrOfst( SwPosition *, Point&,
-                              SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const override;
+    virtual bool GetCursorOfst( SwPosition *, Point&,
+                              SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
     /// Get info from Client
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
+    virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
     virtual void CheckDirection( bool bVert ) override;
     void CheckGrid( bool bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
     bool HasGrid() const { return m_bHasGrid; }
 
     void PaintDecorators( ) const;
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
+    virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
     virtual void PaintBreak() const override;
 
     /// Paint line number etc.
@@ -234,7 +234,7 @@ public:
     bool IsInvalidAutoCompleteWords() const { return m_bInvalidAutoCmplWrds; }
     bool IsInvalidWordCount() const { return m_bInvalidWordCount; }
 
-    /** SwPageFrm::GetDrawBackgrdColor
+    /** SwPageFrame::GetDrawBackgrdColor
 
         determine the color, that is respectively will be drawn as background
         for the page frame.
@@ -324,7 +324,7 @@ public:
     const SwRect PrtWithoutHeaderAndFooter() const;
 
     // in case this is am empty page, this function returns the 'reference' page
-    const SwPageFrm& GetFormatPage() const;
+    const SwPageFrame& GetFormatPage() const;
 
     /// If in header or footer area, it also indicates the exact area in rControl.
     /// Header or footer must be active, otherwise returns false.
@@ -336,100 +336,100 @@ public:
     static SwTwips GetSidebarBorderWidth( const SwViewShell* );
 };
 
-inline SwContentFrm *SwPageFrm::FindFirstBodyContent()
+inline SwContentFrame *SwPageFrame::FindFirstBodyContent()
 {
-    SwLayoutFrm *pBody = FindBodyCont();
+    SwLayoutFrame *pBody = FindBodyCont();
     return pBody ? pBody->ContainsContent() : nullptr;
 }
-inline const SwContentFrm *SwPageFrm::FindFirstBodyContent() const
+inline const SwContentFrame *SwPageFrame::FindFirstBodyContent() const
 {
-    const SwLayoutFrm *pBody = FindBodyCont();
+    const SwLayoutFrame *pBody = FindBodyCont();
     return pBody ? pBody->ContainsContent() : nullptr;
 }
-inline const SwContentFrm *SwPageFrm::FindLastBodyContent() const
+inline const SwContentFrame *SwPageFrame::FindLastBodyContent() const
 {
-    return const_cast<SwPageFrm*>(this)->FindLastBodyContent();
+    return const_cast<SwPageFrame*>(this)->FindLastBodyContent();
 }
-inline void SwPageFrm::InvalidateFlyLayout() const
+inline void SwPageFrame::InvalidateFlyLayout() const
 {
-    const_cast<SwPageFrm*>(this)->m_bInvalidFlyLayout = true;
+    const_cast<SwPageFrame*>(this)->m_bInvalidFlyLayout = true;
 }
-inline void SwPageFrm::InvalidateFlyContent() const
+inline void SwPageFrame::InvalidateFlyContent() const
 {
-    const_cast<SwPageFrm*>(this)->m_bInvalidFlyContent = true;
+    const_cast<SwPageFrame*>(this)->m_bInvalidFlyContent = true;
 }
-inline void SwPageFrm::InvalidateFlyInCnt() const
+inline void SwPageFrame::InvalidateFlyInCnt() const
 {
-    const_cast<SwPageFrm*>(this)->m_bInvalidFlyInCnt = true;
+    const_cast<SwPageFrame*>(this)->m_bInvalidFlyInCnt = true;
 }
-inline void SwPageFrm::InvalidateLayout() const
+inline void SwPageFrame::InvalidateLayout() const
 {
-    const_cast<SwPageFrm*>(this)->m_bInvalidLayout = true;
+    const_cast<SwPageFrame*>(this)->m_bInvalidLayout = true;
 }
-inline void SwPageFrm::InvalidateContent() const
+inline void SwPageFrame::InvalidateContent() const
 {
-    const_cast<SwPageFrm*>(this)->m_bInvalidContent = true;
+    const_cast<SwPageFrame*>(this)->m_bInvalidContent = true;
 }
-inline void SwPageFrm::InvalidateSpelling() const
+inline void SwPageFrame::InvalidateSpelling() const
 {
-    const_cast<SwPageFrm*>(this)->m_bInvalidSpelling = true;
-}
-
-inline void SwPageFrm::InvalidateSmartTags() const
-{
-   const_cast<SwPageFrm*>(this)->m_bInvalidSmartTags = true;
-}
-inline void SwPageFrm::InvalidateAutoCompleteWords() const
-{
-    const_cast<SwPageFrm*>(this)->m_bInvalidAutoCmplWrds = true;
-}
-inline void SwPageFrm::InvalidateWordCount() const
-{
-    const_cast<SwPageFrm*>(this)->m_bInvalidWordCount = true;
-}
-inline void SwPageFrm::ValidateFlyLayout() const
-{
-    const_cast<SwPageFrm*>(this)->m_bInvalidFlyLayout = false;
-}
-inline void SwPageFrm::ValidateFlyContent() const
-{
-    const_cast<SwPageFrm*>(this)->m_bInvalidFlyContent = false;
-}
-inline void SwPageFrm::ValidateFlyInCnt() const
-{
-    const_cast<SwPageFrm*>(this)->m_bInvalidFlyInCnt = false;
-}
-inline void SwPageFrm::ValidateLayout() const
-{
-    const_cast<SwPageFrm*>(this)->m_bInvalidLayout = false;
-}
-inline void SwPageFrm::ValidateContent() const
-{
-    const_cast<SwPageFrm*>(this)->m_bInvalidContent = false;
-}
-inline void SwPageFrm::ValidateSpelling() const
-{
-    const_cast<SwPageFrm*>(this)->m_bInvalidSpelling = false;
+    const_cast<SwPageFrame*>(this)->m_bInvalidSpelling = true;
 }
 
-inline void SwPageFrm::ValidateSmartTags() const
+inline void SwPageFrame::InvalidateSmartTags() const
 {
-   const_cast<SwPageFrm*>(this)->m_bInvalidSmartTags = false;
+   const_cast<SwPageFrame*>(this)->m_bInvalidSmartTags = true;
 }
-inline void SwPageFrm::ValidateAutoCompleteWords() const
+inline void SwPageFrame::InvalidateAutoCompleteWords() const
 {
-    const_cast<SwPageFrm*>(this)->m_bInvalidAutoCmplWrds = false;
+    const_cast<SwPageFrame*>(this)->m_bInvalidAutoCmplWrds = true;
 }
-inline void SwPageFrm::ValidateWordCount() const
+inline void SwPageFrame::InvalidateWordCount() const
 {
-    const_cast<SwPageFrm*>(this)->m_bInvalidWordCount = false;
+    const_cast<SwPageFrame*>(this)->m_bInvalidWordCount = true;
+}
+inline void SwPageFrame::ValidateFlyLayout() const
+{
+    const_cast<SwPageFrame*>(this)->m_bInvalidFlyLayout = false;
+}
+inline void SwPageFrame::ValidateFlyContent() const
+{
+    const_cast<SwPageFrame*>(this)->m_bInvalidFlyContent = false;
+}
+inline void SwPageFrame::ValidateFlyInCnt() const
+{
+    const_cast<SwPageFrame*>(this)->m_bInvalidFlyInCnt = false;
+}
+inline void SwPageFrame::ValidateLayout() const
+{
+    const_cast<SwPageFrame*>(this)->m_bInvalidLayout = false;
+}
+inline void SwPageFrame::ValidateContent() const
+{
+    const_cast<SwPageFrame*>(this)->m_bInvalidContent = false;
+}
+inline void SwPageFrame::ValidateSpelling() const
+{
+    const_cast<SwPageFrame*>(this)->m_bInvalidSpelling = false;
 }
 
-inline bool SwPageFrm::IsInvalid() const
+inline void SwPageFrame::ValidateSmartTags() const
+{
+   const_cast<SwPageFrame*>(this)->m_bInvalidSmartTags = false;
+}
+inline void SwPageFrame::ValidateAutoCompleteWords() const
+{
+    const_cast<SwPageFrame*>(this)->m_bInvalidAutoCmplWrds = false;
+}
+inline void SwPageFrame::ValidateWordCount() const
+{
+    const_cast<SwPageFrame*>(this)->m_bInvalidWordCount = false;
+}
+
+inline bool SwPageFrame::IsInvalid() const
 {
     return (m_bInvalidContent || m_bInvalidLayout || m_bInvalidFlyInCnt);
 }
-inline bool SwPageFrm::IsInvalidFly() const
+inline bool SwPageFrame::IsInvalidFly() const
 {
     return m_bInvalidFlyLayout || m_bInvalidFlyContent;
 }
@@ -437,7 +437,7 @@ inline bool SwPageFrm::IsInvalidFly() const
 
 class SwTextGridItem;
 
-SwTextGridItem const* GetGridItem(SwPageFrm const*const);
+SwTextGridItem const* GetGridItem(SwPageFrame const*const);
 
 sal_uInt16 GetGridWidth(SwTextGridItem const&, SwDoc const&);
 

@@ -143,7 +143,7 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
     const size_t nCnt = pTmp->Count();
     if(nCnt)
     {
-        pTmp->PushCrsr();
+        pTmp->PushCursor();
 
         bool bCancel = false;
         OString aDlgPos;
@@ -162,7 +162,7 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
                 pTmp->GetField( i )->GetTyp()->UpdateFields();
             }
         }
-        pTmp->PopCrsr();
+        pTmp->PopCursor();
     }
 
     if( !pLst )
@@ -379,7 +379,7 @@ void SwWrtShell::ClickToField( const SwField& rField )
 
     case RES_GETREFFLD:
         StartAllAction();
-        SwCrsrShell::GotoRefMark( static_cast<const SwGetRefField&>(rField).GetSetRefName(),
+        SwCursorShell::GotoRefMark( static_cast<const SwGetRefField&>(rField).GetSetRefName(),
                                     static_cast<const SwGetRefField&>(rField).GetSubType(),
                                     static_cast<const SwGetRefField&>(rField).GetSeqNo() );
         EndAllAction();
@@ -468,7 +468,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
         return ;
 
     // The shell could be 0 also!!!!!
-    if ( dynamic_cast<const SwCrsrShell*>( &rVSh) ==  nullptr )
+    if ( dynamic_cast<const SwCursorShell*>( &rVSh) ==  nullptr )
         return;
 
     // We are doing tiledRendering, let the client handles the URL loading.
@@ -478,7 +478,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
         return;
     }
 
-    //A CrsrShell is always a WrtShell
+    //A CursorShell is always a WrtShell
     SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
 
     SwDocShell* pDShell = rSh.GetView().GetDocShell();
@@ -497,8 +497,8 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
     OUString sReferer;
     if( pDShell && pDShell->GetMedium() )
         sReferer = pDShell->GetMedium()->GetName();
-    SfxViewFrame* pViewFrm = rSh.GetView().GetViewFrame();
-    SfxFrameItem aView( SID_DOCFRAME, pViewFrm );
+    SfxViewFrame* pViewFrame = rSh.GetView().GetViewFrame();
+    SfxFrameItem aView( SID_DOCFRAME, pViewFrame );
     SfxStringItem aName( SID_FILE_NAME, rURL );
     SfxStringItem aTargetFrameName( SID_TARGETNAME, sTargetFrame );
     SfxStringItem aReferer( SID_REFERER, sReferer );
@@ -519,7 +519,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
                 nullptr
     };
 
-    pViewFrm->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr, 0,
+    pViewFrame->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr, 0,
             SfxCallMode::ASYNCHRON|SfxCallMode::RECORD );
 }
 

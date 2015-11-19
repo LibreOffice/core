@@ -88,7 +88,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Prototypes
-static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
+static void lcl_FrameGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
 static const SwFrameFormat* lcl_GetFrameFormatByName(SwWrtShell& rSh, const OUString& rName)
 {
     const size_t nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
@@ -116,7 +116,7 @@ void SwFrameShell::InitInterface_Impl()
 
 void SwFrameShell::Execute(SfxRequest &rReq)
 {
-    //First those who do not need FrmMgr.
+    //First those who do not need FrameMgr.
     SwWrtShell &rSh = GetShell();
     bool bMore = false;
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -126,7 +126,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     switch ( nSlot )
     {
         case FN_FRAME_TO_ANCHOR:
-            if ( rSh.IsFrmSelected() )
+            if ( rSh.IsFrameSelected() )
             {
                 rSh.GotoFlyAnchor();
                 rSh.EnterStdMode();
@@ -166,7 +166,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     nCols = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
 
                 SfxItemSet aSet(GetPool(),RES_COL,RES_COL);
-                rSh.GetFlyFrmAttr( aSet );
+                rSh.GetFlyFrameAttr( aSet );
                 SwFormatCol aCol(static_cast<const SwFormatCol&>(aSet.Get(RES_COL)));
                 // GutterWidth will not always passed, hence get firstly
                 // (see view2: Execute on this slot)
@@ -184,7 +184,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 else
                 {
                     rSh.StartAllAction();
-                    rSh.SetFlyFrmAttr( aSet );
+                    rSh.SetFlyFrameAttr( aSet );
                     rSh.SetModified();
                     rSh.EndAllAction();
                 }
@@ -201,7 +201,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 const OUString& rTarget = rHLinkItem.GetTargetFrame();
 
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
-                rSh.GetFlyFrmAttr( aSet );
+                rSh.GetFlyFrameAttr( aSet );
                 SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
 
                 OUString sOldName(rHLinkItem.GetName().toAsciiUpperCase());
@@ -222,7 +222,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aURL.SetTargetFrameName(rTarget);
 
                 aSet.Put( aURL );
-                rSh.SetFlyFrmAttr( aSet );
+                rSh.SetFlyFrameAttr( aSet );
             }
         }
         break;
@@ -264,7 +264,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         return;
     }
 
-    SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+    SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
     bool bUpdateMgr = true;
     bool bCopyToFormat = false;
     switch ( nSlot )
@@ -429,12 +429,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 }
 
                 const SwRect &rPg = rSh.GetAnyCurRect(RECT_PAGE);
-                SwFormatFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
-                aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
-                aSet.Put(aFrmSize);
+                SwFormatFrameSize aFrameSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
+                aFrameSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
+                aSet.Put(aFrameSize);
 
                 const SwRect &rPr = rSh.GetAnyCurRect(RECT_PAGE_PRT);
-                SwFormatFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
+                SwFormatFrameSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
                 aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
                 aSet.Put(aPrtSize);
 
@@ -442,10 +442,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
                 // On % values initialize size
-                SwFormatFrmSize& rSize = const_cast<SwFormatFrmSize&>(static_cast<const SwFormatFrmSize&>(aSet.Get(RES_FRM_SIZE)));
-                if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrmSize::SYNCED)
+                SwFormatFrameSize& rSize = const_cast<SwFormatFrameSize&>(static_cast<const SwFormatFrameSize&>(aSet.Get(RES_FRM_SIZE)));
+                if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrameSize::SYNCED)
                     rSize.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
-                if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != SwFormatFrmSize::SYNCED)
+                if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != SwFormatFrameSize::SYNCED)
                     rSize.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
 
                 // disable vertical positioning for Math Objects anchored 'as char' if baseline alignment is activated
@@ -463,7 +463,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact);
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog(
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog(
                                                         nSel & nsSelectionType::SEL_GRF ? OUString("PictureDialog") :
                                                         nSel & nsSelectionType::SEL_OLE ? OUString("ObjectDialog"):
                                                                                         OUString("FrameDialog"),
@@ -651,7 +651,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         }
         else
         {
-            aMgr.UpdateFlyFrm();
+            aMgr.UpdateFlyFrame();
         }
     }
 
@@ -661,7 +661,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
     bool bHtmlMode = 0 != ::GetHtmlMode(rSh.GetView().GetDocShell());
-    if (rSh.IsFrmSelected())
+    if (rSh.IsFrameSelected())
     {
         SfxItemSet aSet( rSh.GetAttrPool(),
                             RES_LR_SPACE, RES_UL_SPACE,
@@ -669,15 +669,15 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             RES_OPAQUE, RES_OPAQUE,
                             RES_PRINT, RES_OPAQUE,
                             0 );
-        rSh.GetFlyFrmAttr( aSet );
+        rSh.GetFlyFrameAttr( aSet );
 
         bool bProtect = rSh.IsSelObjProtected(FlyProtectFlags::Pos) != FlyProtectFlags::NONE;
         bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
         bProtect |= bParentCntProt;
 
-        const FrmTypeFlags eFrmType = rSh.GetFrmType(nullptr,true);
-        SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+        const FrameTypeFlags eFrameType = rSh.GetFrameType(nullptr,true);
+        SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
 
         SfxWhichIter aIter( rSet );
         sal_uInt16 nWhich = aIter.FirstWhich();
@@ -687,7 +687,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
             {
                 case RES_FRM_SIZE:
                 {
-                    SwFormatFrmSize aSz(aMgr.GetFrmSize());
+                    SwFormatFrameSize aSz(aMgr.GetFrameSize());
                     rSet.Put(aSz);
                 }
                 break;
@@ -711,7 +711,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_HORZ_CENTER:
                 case FN_FRAME_ALIGN_HORZ_RIGHT:
                 case FN_FRAME_ALIGN_HORZ_LEFT:
-                    if ( (eFrmType & FrmTypeFlags::FLY_INCNT) ||
+                    if ( (eFrameType & FrameTypeFlags::FLY_INCNT) ||
                          bProtect ||
                          ((nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER) &&
                           bHtmlMode ))
@@ -723,7 +723,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_CHAR_TOP:
                 case FN_FRAME_ALIGN_VERT_CHAR_CENTER:
                 case FN_FRAME_ALIGN_VERT_CHAR_BOTTOM:
-                    if ( !(eFrmType & FrmTypeFlags::FLY_INCNT) || bProtect
+                    if ( !(eFrameType & FrameTypeFlags::FLY_INCNT) || bProtect
                          || (bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich) )
                         rSet.DisableItem( nWhich );
                 break;
@@ -735,12 +735,12 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_TOP:
                 case FN_FRAME_ALIGN_VERT_CENTER:
                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                    if ( bProtect || (bHtmlMode && eFrmType & FrmTypeFlags::FLY_ATCNT))
+                    if ( bProtect || (bHtmlMode && eFrameType & FrameTypeFlags::FLY_ATCNT))
                         rSet.DisableItem( nWhich );
                     else
                     {
                         sal_uInt16 nId = 0;
-                        if (eFrmType & FrmTypeFlags::FLY_INCNT)
+                        if (eFrameType & FrameTypeFlags::FLY_INCNT)
                         {
                             switch (nWhich)
                             {
@@ -769,8 +769,8 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                                     const SwFrameFormat* pFormat = rSh.IsFlyInFly();
                                     if (pFormat)
                                     {
-                                        const SwFormatFrmSize& rFrmSz = pFormat->GetFrmSize();
-                                        if (rFrmSz.GetHeightSizeType() != ATT_FIX_SIZE)
+                                        const SwFormatFrameSize& rFrameSz = pFormat->GetFrameSize();
+                                        if (rFrameSz.GetHeightSizeType() != ATT_FIX_SIZE)
                                         {
                                             rSet.DisableItem( nWhich );
                                             break;
@@ -801,7 +801,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                     const SfxPoolItem* pItem;
 
                     SfxItemSet aURLSet(GetPool(), RES_URL, RES_URL);
-                    rSh.GetFlyFrmAttr( aURLSet );
+                    rSh.GetFlyFrameAttr( aURLSet );
 
                     if(SfxItemState::SET == aURLSet.GetItemState(RES_URL, true, &pItem))
                     {
@@ -948,7 +948,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
     bool bDefault = false;
-    if (!rSh.IsFrmSelected())
+    if (!rSh.IsFrameSelected())
         return;
     // At first pick the default BoxItem out of the pool.
     // If unequal to regular box item, then it has already
@@ -958,7 +958,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     SfxItemSet aFrameSet(rSh.GetAttrPool(), RES_BOX, RES_BOX);
 
-    rSh.GetFlyFrmAttr( aFrameSet );
+    rSh.GetFlyFrameAttr( aFrameSet );
     const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aFrameSet.Get(RES_BOX));
 
     if (pPoolBoxItem == &rBoxItem)
@@ -981,13 +981,13 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     const SvxBorderLine* pBorderLine;
 
                     if ((pBorderLine = aBoxItem.GetTop()) != nullptr)
-                        lcl_FrmGetMaxLineWidth(pBorderLine, aBorderLine);
+                        lcl_FrameGetMaxLineWidth(pBorderLine, aBorderLine);
                     if ((pBorderLine = aBoxItem.GetBottom()) != nullptr)
-                        lcl_FrmGetMaxLineWidth(pBorderLine, aBorderLine);
+                        lcl_FrameGetMaxLineWidth(pBorderLine, aBorderLine);
                     if ((pBorderLine = aBoxItem.GetLeft()) != nullptr)
-                        lcl_FrmGetMaxLineWidth(pBorderLine, aBorderLine);
+                        lcl_FrameGetMaxLineWidth(pBorderLine, aBorderLine);
                     if ((pBorderLine = aBoxItem.GetRight()) != nullptr)
-                        lcl_FrmGetMaxLineWidth(pBorderLine, aBorderLine);
+                        lcl_FrameGetMaxLineWidth(pBorderLine, aBorderLine);
 
                     if(aBorderLine.GetOutWidth() == 0)
                     {
@@ -1117,11 +1117,11 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
         rSh.AutoUpdateFrame(pFormat, aFrameSet);
     }
     else
-        rSh.SetFlyFrmAttr( aFrameSet );
+        rSh.SetFlyFrameAttr( aFrameSet );
 
 }
 
-static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
+static void lcl_FrameGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
 {
     if(pBorderLine->GetWidth() > rBorderLine.GetWidth())
         rBorderLine.SetWidth(pBorderLine->GetWidth());
@@ -1137,7 +1137,7 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 
     if (bParentCntProt)
     {
-        if (rSh.IsFrmSelected())
+        if (rSh.IsFrameSelected())
             rSet.DisableItem( SID_FRAME_LINECOLOR );
 
         rSet.DisableItem( SID_ATTR_BORDER );
@@ -1145,11 +1145,11 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
     }
     else
     {
-        if (rSh.IsFrmSelected())
+        if (rSh.IsFrameSelected())
         {
             SfxItemSet aFrameSet( rSh.GetAttrPool(), RES_BOX, RES_BOX );
 
-            rSh.GetFlyFrmAttr(aFrameSet);
+            rSh.GetFlyFrameAttr(aFrameSet);
 
             const SvxBorderLine* pLine = static_cast<const SvxBoxItem&>(aFrameSet.Get(RES_BOX)).GetTop();
             rSet.Put(SvxColorItem(pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR));
@@ -1165,7 +1165,7 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     {
         rSet.DisableItem(FN_INSERT_FRAME);
     }
-    else if ( GetShell().CrsrInsideInputField() )
+    else if ( GetShell().CursorInsideInputField() )
     {
         rSet.DisableItem(FN_INSERT_FRAME);
     }
@@ -1176,9 +1176,9 @@ void SwFrameShell::GetDrawAttrStateTextFrame(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
 
-    if(rSh.IsFrmSelected())
+    if(rSh.IsFrameSelected())
     {
-        rSh.GetFlyFrmAttr(rSet);
+        rSh.GetFlyFrameAttr(rSet);
     }
     else
     {
@@ -1199,9 +1199,9 @@ void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest& rReq)
 
     if(pArgs)
     {
-        if(rSh.IsFrmSelected())
+        if(rSh.IsFrameSelected())
         {
-            rSh.SetFlyFrmAttr(const_cast< SfxItemSet& >(*pArgs));
+            rSh.SetFlyFrameAttr(const_cast< SfxItemSet& >(*pArgs));
         }
         else
         {
@@ -1243,14 +1243,14 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
         {
             SwWrtShell& rSh = GetShell();
 
-            if(rSh.IsFrmSelected())
+            if(rSh.IsFrameSelected())
             {
                 SdrView* pView = rSh.GetDrawView();
                 SdrModel* pDoc = pView->GetModel();
                 SfxItemSet aNewAttr(pDoc->GetItemPool());
 
                 // get attributes from FlyFrame
-                rSh.GetFlyFrmAttr(aNewAttr);
+                rSh.GetFlyFrameAttr(aNewAttr);
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
@@ -1264,7 +1264,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
                 if(RET_OK == pDlg->Execute())
                 {
                     // set attributes at FlyFrame
-                    rSh.SetFlyFrmAttr(const_cast< SfxItemSet& >(*pDlg->GetOutputItemSet()));
+                    rSh.SetFlyFrameAttr(const_cast< SfxItemSet& >(*pDlg->GetOutputItemSet()));
 
                     static sal_uInt16 aInval[] =
                     {
@@ -1304,7 +1304,7 @@ void SwFrameShell::DisableStateTextFrame(SfxItemSet &rSet)
             {
                 SwWrtShell& rSh = GetShell();
 
-                if(!rSh.IsFrmSelected())
+                if(!rSh.IsFrameSelected())
                 {
                     rSet.DisableItem(nWhich);
                 }

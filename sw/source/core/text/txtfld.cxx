@@ -54,16 +54,16 @@
 #include <IDocumentSettingAccess.hxx>
 #include <svl/itemiter.hxx>
 
-static bool lcl_IsInBody( SwFrm *pFrm )
+static bool lcl_IsInBody( SwFrame *pFrame )
 {
-    if ( pFrm->IsInDocBody() )
+    if ( pFrame->IsInDocBody() )
         return true;
     else
     {
-        const SwFrm *pTmp = pFrm;
-        const SwFlyFrm *pFly;
-        while ( nullptr != (pFly = pTmp->FindFlyFrm()) )
-            pTmp = pFly->GetAnchorFrm();
+        const SwFrame *pTmp = pFrame;
+        const SwFlyFrame *pFly;
+        while ( nullptr != (pFly = pTmp->FindFlyFrame()) )
+            pTmp = pFly->GetAnchorFrame();
         return pTmp->IsInDocBody();
     }
 }
@@ -72,7 +72,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                                                 const SwTextAttr *pHint ) const
 {
     SwExpandPortion *pRet = nullptr;
-    SwFrm *pFrame = m_pFrm;
+    SwFrame *pFrame = m_pFrame;
     SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
     const bool bName = rInf.GetOpt().IsFieldName();
 
@@ -154,14 +154,14 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             {
                 SwPageNumberFieldType *pPageNr = static_cast<SwPageNumberFieldType *>(pField->GetTyp());
 
-                const SwRootFrm* pTmpRootFrm = pSh->GetLayout();
-                const bool bVirt = pTmpRootFrm->IsVirtPageNum();
+                const SwRootFrame* pTmpRootFrame = pSh->GetLayout();
+                const bool bVirt = pTmpRootFrame->IsVirtPageNum();
 
                 sal_uInt16 nVirtNum = pFrame->GetVirtPageNum();
-                sal_uInt16 nNumPages = pTmpRootFrm->GetPageNum();
+                sal_uInt16 nNumPages = pTmpRootFrame->GetPageNum();
                 sal_Int16 nNumFormat = -1;
                 if(SVX_NUM_PAGEDESC == pField->GetFormat())
-                    nNumFormat = pFrame->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType();
+                    nNumFormat = pFrame->FindPageFrame()->GetPageDesc()->GetNumType().GetNumberingType();
                 static_cast<SwPageNumberField*>(pField)
                     ->ChangeExpansion(nVirtNum, nNumPages);
                 pPageNr->ChangeExpansion(pDoc,
@@ -279,7 +279,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         if( !bName )
         {
             pTmpFnt = new SwFont( *pFnt );
-            pTmpFnt->SetDiffFnt( &pChFormat->GetAttrSet(), m_pFrm->GetTextNode()->getIDocumentSettingAccess() );
+            pTmpFnt->SetDiffFnt( &pChFormat->GetAttrSet(), m_pFrame->GetTextNode()->getIDocumentSettingAccess() );
         }
         {
             OUString const aStr( (bName)
@@ -406,7 +406,7 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
  */
 static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFormatInfo& rInf, const IDocumentSettingAccess* pIDSA )
 {
-    SwTextNode* node = rInf.GetTextFrm()->GetTextNode();
+    SwTextNode* node = rInf.GetTextFrame()->GetTextNode();
     if( !pIDSA->get(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
         return;
     if( SwpHints* hints = node->GetpSwpHints())
@@ -454,7 +454,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
         return nullptr;
 
     SwNumberPortion *pRet = nullptr;
-    const SwTextNode* pTextNd = GetTextFrm()->GetTextNode();
+    const SwTextNode* pTextNd = GetTextFrame()->GetTextNode();
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
 
     // Has a "valid" number?
@@ -478,7 +478,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
         if( SVX_NUM_BITMAP == rNumFormat.GetNumberingType() )
         {
-            pRet = new SwGrfNumPortion( const_cast<SwTextFrm*>(GetTextFrm()),
+            pRet = new SwGrfNumPortion( const_cast<SwTextFrame*>(GetTextFrame()),
                                         pTextNd->GetLabelFollowedBy(),
                                         rNumFormat.GetBrush(),
                                         rNumFormat.GetGraphicOrientation(),
@@ -545,7 +545,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
                 // we do not allow a vertical font
                 pNumFnt->SetVertical( pNumFnt->GetOrientation(),
-                                      m_pFrm->IsVertical() );
+                                      m_pFrame->IsVertical() );
 
                 // --> OD 2008-01-23 #newlistelevelattrs#
                 pRet = new SwBulletPortion( rNumFormat.GetBulletChar(),
@@ -590,7 +590,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     checkApplyParagraphMarkFormatToNumbering( pNumFnt, rInf, pIDSA );
 
                     // we do not allow a vertical font
-                    pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrm->IsVertical() );
+                    pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
 
                     pRet = new SwNumberPortion( aText, pNumFnt,
                                                 bLeft, bCenter, nMinDist,

@@ -120,7 +120,7 @@ public:
     sal_Int32 WriteGrfBullet(const Graphic&);
     sal_Int32 WriteOLEFlyFrame(const SwFrameFormat& rFormat, sal_uInt32 nShapeId);
     void WriteEmptyFlyFrame(const SwFrameFormat& rFormat, sal_uInt32 nShapeId);
-    virtual void WriteFrmExtraData(const SwFrameFormat&);
+    virtual void WriteFrameExtraData(const SwFrameFormat&);
     virtual void WritePictures();
     virtual ~SwBasicEscherEx();
     //i120927,this function is added to export hyperlink info,such as graphic/frame/OLE
@@ -148,7 +148,7 @@ private:
     void MakeZOrderArrAndFollowIds(std::vector<DrawObj>& rSrcArr,
         DrawObjPointerVector& rDstArr);
 
-    sal_Int32 WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,
+    sal_Int32 WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
         DrawObjPointerVector &rPVec);
     sal_Int32 WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId,
         sal_uInt32 nTextBox, DrawObjPointerVector &rPVec);
@@ -166,7 +166,7 @@ public:
     void FinishEscher();
     virtual void WritePictures() override;
 
-    virtual void WriteFrmExtraData(const SwFrameFormat& rFormat) override;
+    virtual void WriteFrameExtraData(const SwFrameFormat& rFormat) override;
 
     EscherExHostAppData* StartShape(const css::uno::Reference< css::drawing::XShape > &, const Rectangle*) override {return &aHostData;}
 private:

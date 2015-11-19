@@ -147,7 +147,7 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
 
 void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
 {
-    // Move only the Crsr. Bookmarks/TOXMarks/etc. are done by the corresponding
+    // Move only the Cursor. Bookmarks/TOXMarks/etc. are done by the corresponding
     // JoinNext/JoinPrev
     SwNodeIndex aIdx( rPos.nNode.GetNode().GetNodes(), nIdx );
     ::PaMCorrRel( aIdx, rPos );

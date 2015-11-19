@@ -22,8 +22,8 @@
 #include <inftxt.hxx>
 #include <porexp.hxx>
 
-sal_Int32 SwExpandPortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
-{ return SwLinePortion::GetCrsrOfst( nOfst ); }
+sal_Int32 SwExpandPortion::GetCursorOfst( const sal_uInt16 nOfst ) const
+{ return SwLinePortion::GetCursorOfst( nOfst ); }
 
 bool SwExpandPortion::GetExpText( const SwTextSizeInfo&, OUString &rText ) const
 {

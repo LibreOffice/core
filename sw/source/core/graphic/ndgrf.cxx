@@ -206,7 +206,7 @@ bool SwGrfNode::ReRead(
 
             if( refLink.Is() )
             {
-                if( getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
+                if( getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
                 {
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     ModifyNotification( &aMsgHint, &aMsgHint );
@@ -316,9 +316,9 @@ SwGrfNode::~SwGrfNode()
         // To do this stuff correctly, a reference counting on shared streams
         // inside one document has to be implemented.
     }
-    //#39289# delete frames already here since the Frms' dtor needs the graphic for its StopAnimation
+    //#39289# delete frames already here since the Frames' dtor needs the graphic for its StopAnimation
     if( HasWriterListeners() )
-        DelFrms();
+        DelFrames();
 }
 
 /// allow reaction on change of content of GraphicObject
@@ -811,12 +811,12 @@ void SwGrfNode::ScaleImageMap()
     Fraction aScaleX( 1, 1 );
     Fraction aScaleY( 1, 1 );
 
-    const SwFormatFrmSize& rFrmSize = pFormat->GetFrmSize();
+    const SwFormatFrameSize& rFrameSize = pFormat->GetFrameSize();
     const SvxBoxItem& rBox = pFormat->GetBox();
 
-    if( !rFrmSize.GetWidthPercent() )
+    if( !rFrameSize.GetWidthPercent() )
     {
-        SwTwips nWidth = rFrmSize.GetWidth();
+        SwTwips nWidth = rFrameSize.GetWidth();
 
         nWidth -= rBox.CalcLineSpace(SvxBoxItemLine::LEFT) +
                   rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
@@ -829,9 +829,9 @@ void SwGrfNode::ScaleImageMap()
             bScale = true;
         }
     }
-    if( !rFrmSize.GetHeightPercent() )
+    if( !rFrameSize.GetHeightPercent() )
     {
-        SwTwips nHeight = rFrmSize.GetHeight();
+        SwTwips nHeight = rFrameSize.GetHeight();
 
         nHeight -= rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
                    rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
@@ -990,7 +990,7 @@ IMPL_LINK_TYPED( SwGrfNode, SwapGraphic, const GraphicObject*, pGrfObj, SvStream
 
 /// returns the Graphic-Attr-Structure filled with our graphic attributes
 GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
-                                        const SwFrm* pFrm ) const
+                                        const SwFrame* pFrame ) const
 {
     const SwAttrSet& rSet = GetSwAttrSet();
 
@@ -998,7 +998,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 
     const SwMirrorGrf & rMirror = rSet.GetMirrorGrf();
     BmpMirrorFlags nMirror = BmpMirrorFlags::NONE;
-    if( rMirror.IsGrfToggle() && pFrm && !pFrm->FindPageFrm()->OnRightPage() )
+    if( rMirror.IsGrfToggle() && pFrame && !pFrame->FindPageFrame()->OnRightPage() )
     {
         switch( rMirror.GetValue() )
         {
@@ -1071,8 +1071,8 @@ bool SwGrfNode::IsSelected() const
         const SwNode* pN = this;
         for(const SwViewShell& rCurrentShell : pESh->GetRingContainer())
         {
-            if( dynamic_cast<const SwEditShell*>( &rCurrentShell) != nullptr && pN == &static_cast<const SwCrsrShell*>(&rCurrentShell)
-                                ->GetCrsr()->GetPoint()->nNode.GetNode() )
+            if( dynamic_cast<const SwEditShell*>( &rCurrentShell) != nullptr && pN == &static_cast<const SwCursorShell*>(&rCurrentShell)
+                                ->GetCursor()->GetPoint()->nNode.GetNode() )
             {
                 bRet = true;
                 break;

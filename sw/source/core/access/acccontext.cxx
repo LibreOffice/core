@@ -97,43 +97,43 @@ vcl::Window *SwAccessibleContext::GetWindow()
 }
 
 // get SwViewShell from accessibility map, and cast to cursor shell
-SwCrsrShell* SwAccessibleContext::GetCrsrShell()
+SwCursorShell* SwAccessibleContext::GetCursorShell()
 {
-    SwCrsrShell* pCrsrShell;
+    SwCursorShell* pCursorShell;
     SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : nullptr;
     OSL_ENSURE( pViewShell, "no view shell" );
-    if( pViewShell && dynamic_cast<const SwCrsrShell*>( pViewShell) !=  nullptr )
-        pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
+    if( pViewShell && dynamic_cast<const SwCursorShell*>( pViewShell) !=  nullptr )
+        pCursorShell = static_cast<SwCursorShell*>( pViewShell );
     else
-        pCrsrShell = nullptr;
+        pCursorShell = nullptr;
 
-    return pCrsrShell;
+    return pCursorShell;
 }
 
-const SwCrsrShell* SwAccessibleContext::GetCrsrShell() const
+const SwCursorShell* SwAccessibleContext::GetCursorShell() const
 {
-    // just like non-const GetCrsrShell
-    const SwCrsrShell* pCrsrShell;
+    // just like non-const GetCursorShell
+    const SwCursorShell* pCursorShell;
     const SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : nullptr;
     OSL_ENSURE( pViewShell, "no view shell" );
-    if( pViewShell && dynamic_cast<const SwCrsrShell*>( pViewShell) !=  nullptr )
-        pCrsrShell = static_cast<const SwCrsrShell*>( pViewShell );
+    if( pViewShell && dynamic_cast<const SwCursorShell*>( pViewShell) !=  nullptr )
+        pCursorShell = static_cast<const SwCursorShell*>( pViewShell );
     else
-        pCrsrShell = nullptr;
+        pCursorShell = nullptr;
 
-    return pCrsrShell;
+    return pCursorShell;
 }
 
 enum class Action { NONE, SCROLLED, SCROLLED_WITHIN,
                           SCROLLED_IN, SCROLLED_OUT };
 
-void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
+void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
                                             const SwRect& rOldVisArea )
 {
     const SwRect& rNewVisArea = GetVisArea();
-    const bool bVisibleChildrenOnly = SwAccessibleChild( pFrm ).IsVisibleChildrenOnly();
+    const bool bVisibleChildrenOnly = SwAccessibleChild( pFrame ).IsVisibleChildrenOnly();
 
-    const SwAccessibleChildSList aList( *pFrm, *(GetMap()) );
+    const SwAccessibleChildSList aList( *pFrame, *(GetMap()) );
     SwAccessibleChildSList::const_iterator aIter( aList.begin() );
     while( aIter != aList.end() )
     {
@@ -182,11 +182,11 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
             }
             if( Action::NONE != eAction )
             {
-                if ( rLower.GetSwFrm() )
+                if ( rLower.GetSwFrame() )
                 {
                     OSL_ENSURE( !rLower.AlwaysIncludeAsChild(),
                             "<SwAccessibleContext::ChildrenScrolled(..)> - always included child not considered!" );
-                    const SwFrm* pLower( rLower.GetSwFrm() );
+                    const SwFrame* pLower( rLower.GetSwFrame() );
                     ::rtl::Reference< SwAccessibleContext > xAccImpl =
                         GetMap()->GetContextImpl( pLower );
                     if( xAccImpl.is() )
@@ -256,13 +256,13 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                 }
             }
         }
-        else if ( rLower.GetSwFrm() &&
+        else if ( rLower.GetSwFrame() &&
                   ( !bVisibleChildrenOnly ||
                     aBox.IsOver( rOldVisArea ) ||
                     aBox.IsOver( rNewVisArea ) ) )
         {
             // There are no unaccessible SdrObjects that need to be notified
-            ChildrenScrolled( rLower.GetSwFrm(), rOldVisArea );
+            ChildrenScrolled( rLower.GetSwFrame(), rOldVisArea );
         }
         ++aIter;
     }
@@ -272,7 +272,7 @@ void SwAccessibleContext::Scrolled( const SwRect& rOldVisArea )
 {
     SetVisArea( GetMap()->GetVisArea() );
 
-    ChildrenScrolled( GetFrm(), rOldVisArea );
+    ChildrenScrolled( GetFrame(), rOldVisArea );
 
     bool bIsOldShowingState;
     bool bIsNewShowingState = IsShowing( *(GetMap()) );
@@ -291,7 +291,7 @@ void SwAccessibleContext::ScrolledWithin( const SwRect& rOldVisArea )
 {
     SetVisArea( GetMap()->GetVisArea() );
 
-    ChildrenScrolled( GetFrm(), rOldVisArea );
+    ChildrenScrolled( GetFrame(), rOldVisArea );
 
     FireVisibleDataEvent();
 }
@@ -305,7 +305,7 @@ void SwAccessibleContext::ScrolledIn()
             "Vis area of child is wrong. Did it exist already?" );
 
     // Send child event at parent. That's all we have to do here.
-    const SwFrm* pParent = GetParent();
+    const SwFrame* pParent = GetParent();
     ::rtl::Reference< SwAccessibleContext > xParentImpl(
          GetMap()->GetContextImpl( pParent, false ) );
     uno::Reference < XAccessibleContext > xThis( this );
@@ -341,7 +341,7 @@ void SwAccessibleContext::ScrolledOut( const SwRect& rOldVisArea )
     // because this call will only dispose children that are in the
     // new vis area. The children we want to dispose however are in the
     // old vis area all.
-    ChildrenScrolled( GetFrm(), rOldVisArea );
+    ChildrenScrolled( GetFrame(), rOldVisArea );
 
     // Broadcast a state changed event for the showing state.
     // It might be that the child is freshly created just to send
@@ -350,16 +350,16 @@ void SwAccessibleContext::ScrolledOut( const SwRect& rOldVisArea )
 }
 
 // #i27301# - use new type definition for <_nStates>
-void SwAccessibleContext::InvalidateChildrenStates( const SwFrm* _pFrm,
+void SwAccessibleContext::InvalidateChildrenStates( const SwFrame* _pFrame,
                                                     AccessibleStates _nStates )
 {
-    const SwAccessibleChildSList aVisList( GetVisArea(), *_pFrm, *(GetMap()) );
+    const SwAccessibleChildSList aVisList( GetVisArea(), *_pFrame, *(GetMap()) );
 
     SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
     while( aIter != aVisList.end() )
     {
         const SwAccessibleChild& rLower = *aIter;
-        const SwFrm* pLower = rLower.GetSwFrm();
+        const SwFrame* pLower = rLower.GetSwFrame();
         if( pLower )
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl;
@@ -383,15 +383,15 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrm* _pFrm,
     }
 }
 
-void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
+void SwAccessibleContext::DisposeChildren( const SwFrame *pFrame,
                                            bool bRecursive )
 {
-    const SwAccessibleChildSList aVisList( GetVisArea(), *pFrm, *(GetMap()) );
+    const SwAccessibleChildSList aVisList( GetVisArea(), *pFrame, *(GetMap()) );
     SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
     while( aIter != aVisList.end() )
     {
         const SwAccessibleChild& rLower = *aIter;
-        const SwFrm* pLower = rLower.GetSwFrm();
+        const SwFrame* pLower = rLower.GetSwFrame();
         if( pLower )
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl;
@@ -432,8 +432,8 @@ void SwAccessibleContext::_InvalidateFocus()
 
 void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
 {
-    OSL_ENSURE( GetFrm(), "fire event for disposed frame?" );
-    if( !GetFrm() )
+    OSL_ENSURE( GetFrame(), "fire event for disposed frame?" );
+    if( !GetFrame() )
         return;
 
     if( !rEvent.Source.is() )
@@ -512,7 +512,7 @@ bool SwAccessibleContext::IsEditableState()
 
 SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *const pMap,
                                           sal_Int16 const nRole,
-                                          const SwFrm *pF )
+                                          const SwFrame *pF )
     : SwAccessibleFrame( pMap->GetVisArea().SVRect(), pF,
                          pMap->GetShell()->IsPreview() )
     , m_pMap( pMap )
@@ -528,7 +528,7 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *const pMap,
 SwAccessibleContext::~SwAccessibleContext()
 {
     SolarMutexGuard aGuard;
-    RemoveFrmFromAccessibleMap();
+    RemoveFrameFromAccessibleMap();
 }
 
 uno::Reference< XAccessibleContext > SAL_CALL
@@ -575,10 +575,10 @@ uno::Reference< XAccessible> SAL_CALL
     }
 
     uno::Reference< XAccessible > xChild;
-    if( aChild.GetSwFrm() )
+    if( aChild.GetSwFrame() )
     {
         ::rtl::Reference < SwAccessibleContext > xChildImpl(
-                GetMap()->GetContextImpl( aChild.GetSwFrm(), !m_isDisposing )  );
+                GetMap()->GetContextImpl( aChild.GetSwFrame(), !m_isDisposing )  );
         if( xChildImpl.is() )
         {
             xChildImpl->SetParent( this );
@@ -608,7 +608,7 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent()
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    const SwFrm *pUpper = GetParent();
+    const SwFrame *pUpper = GetParent();
     OSL_ENSURE( pUpper != nullptr || m_isDisposing, "no upper found" );
 
     uno::Reference< XAccessible > xAcc;
@@ -633,7 +633,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent()
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    const SwFrm *pUpper = GetParent();
+    const SwFrame *pUpper = GetParent();
     OSL_ENSURE( pUpper != nullptr || m_isDisposing, "no upper found" );
 
     sal_Int32 nIndex = -1;
@@ -643,7 +643,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent()
             GetMap()->GetContextImpl(pUpper, !m_isDisposing) );
         OSL_ENSURE( xAccImpl.is() || m_isDisposing, "no parent found" );
         if( xAccImpl.is() )
-            nIndex = xAccImpl->GetChildIndex( *(GetMap()), SwAccessibleChild(GetFrm()) );
+            nIndex = xAccImpl->GetChildIndex( *(GetMap()), SwAccessibleChild(GetFrame()) );
     }
 
     return nIndex;
@@ -776,18 +776,18 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
-    if( !GetFrm()->IsRootFrm() )
+    if( !GetFrame()->IsRootFrame() )
     {
-        SwRect aLogBounds( GetBounds( *(GetMap()), GetFrm() ) ); // twip rel to doc root
+        SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
         Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
         aPixPoint.setX(aPixPoint.getX() + aPixPos.getX());
         aPixPoint.setY(aPixPoint.getY() + aPixPos.getY());
     }
 
     const SwAccessibleChild aChild( GetChildAtPixel( aPixPoint, *(GetMap()) ) );
-    if( aChild.GetSwFrm() )
+    if( aChild.GetSwFrame() )
     {
-        xAcc = GetMap()->GetContext( aChild.GetSwFrm() );
+        xAcc = GetMap()->GetContext( aChild.GetSwFrame() );
     }
     else if( aChild.GetDrawObject() )
     {
@@ -826,30 +826,30 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(bool bRelative)
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
-    const SwFrm *pParent = GetParent();
+    const SwFrame *pParent = GetParent();
     OSL_ENSURE( pParent, "no Parent found" );
     vcl::Window *pWin = GetWindow();
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin && pParent )
 
-    SwRect aLogBounds( GetBounds( *(GetMap()), GetFrm() ) ); // twip rel to doc root
+    SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
     Rectangle aPixBounds( 0, 0, 0, 0 );
-    if( GetFrm()->IsPageFrm() &&
-        static_cast < const SwPageFrm * >( GetFrm() )->IsEmptyPage() )
+    if( GetFrame()->IsPageFrame() &&
+        static_cast < const SwPageFrame * >( GetFrame() )->IsEmptyPage() )
     {
         OSL_ENSURE( GetShell()->IsPreview(), "empty page accessible?" );
         if( GetShell()->IsPreview() )
         {
             // adjust method call <GetMap()->GetPreviewPageSize()>
             sal_uInt16 nPageNum =
-                static_cast < const SwPageFrm * >( GetFrm() )->GetPhyPageNum();
+                static_cast < const SwPageFrame * >( GetFrame() )->GetPhyPageNum();
             aLogBounds.SSize( GetMap()->GetPreviewPageSize( nPageNum ) );
         }
     }
     if( !aLogBounds.IsEmpty() )
     {
         aPixBounds = GetMap()->CoreToPixel( aLogBounds.SVRect() );
-        if( !pParent->IsRootFrm() && bRelative)
+        if( !pParent->IsRootFrame() && bRelative)
         {
             SwRect aParentLogBounds( GetBounds( *(GetMap()), pParent ) ); // twip rel to doc root
             Point aParentPixPos( GetMap()->CoreToPixel( aParentLogBounds.SVRect() ).TopLeft() );
@@ -910,30 +910,30 @@ void SAL_CALL SwAccessibleContext::grabFocus()
 
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    if( GetFrm()->IsFlyFrm() )
+    if( GetFrame()->IsFlyFrame() )
     {
         const SdrObject *pObj =
-            static_cast < const SwFlyFrm * >( GetFrm() )->GetVirtDrawObj();
+            static_cast < const SwFlyFrame * >( GetFrame() )->GetVirtDrawObj();
         if( pObj )
             Select( const_cast < SdrObject * >( pObj ), false );
     }
     else
     {
-        const SwContentFrm *pCFrm = nullptr;
-        if( GetFrm()->IsContentFrm() )
-            pCFrm = static_cast< const SwContentFrm * >( GetFrm() );
-        else if( GetFrm()->IsLayoutFrm() )
-            pCFrm = static_cast< const SwLayoutFrm * >( GetFrm() )->ContainsContent();
+        const SwContentFrame *pCFrame = nullptr;
+        if( GetFrame()->IsContentFrame() )
+            pCFrame = static_cast< const SwContentFrame * >( GetFrame() );
+        else if( GetFrame()->IsLayoutFrame() )
+            pCFrame = static_cast< const SwLayoutFrame * >( GetFrame() )->ContainsContent();
 
-        if( pCFrm && pCFrm->IsTextFrm() )
+        if( pCFrame && pCFrame->IsTextFrame() )
         {
-            const SwTextFrm *pTextFrm = static_cast< const SwTextFrm * >( pCFrm );
-            const SwTextNode *pTextNd = pTextFrm->GetTextNode();
+            const SwTextFrame *pTextFrame = static_cast< const SwTextFrame * >( pCFrame );
+            const SwTextNode *pTextNd = pTextFrame->GetTextNode();
             if( pTextNd )
             {
                 // create pam for selection
                 SwIndex aIndex( const_cast< SwTextNode * >( pTextNd ),
-                                pTextFrm->GetOfst() );
+                                pTextFrame->GetOfst() );
                 SwPosition aStartPos( *pTextNd, aIndex );
                 SwPaM aPaM( aStartPos );
 
@@ -1026,7 +1026,7 @@ void SwAccessibleContext::Dispose( bool bRecursive )
 {
     SolarMutexGuard aGuard;
 
-    OSL_ENSURE( GetFrm() && GetMap(), "already disposed" );
+    OSL_ENSURE( GetFrame() && GetMap(), "already disposed" );
     OSL_ENSURE( GetMap()->GetVisArea() == GetVisArea(),
                 "invalid vis area for dispose" );
 
@@ -1034,7 +1034,7 @@ void SwAccessibleContext::Dispose( bool bRecursive )
 
     // dispose children
     if( bRecursive )
-        DisposeChildren( GetFrm(), bRecursive );
+        DisposeChildren( GetFrame(), bRecursive );
 
     // get parent
     uno::Reference< XAccessible > xParent( GetWeakParent() );
@@ -1065,58 +1065,58 @@ void SwAccessibleContext::Dispose( bool bRecursive )
         m_nClientId =  0;
     }
 
-    RemoveFrmFromAccessibleMap();
-    ClearFrm();
+    RemoveFrameFromAccessibleMap();
+    ClearFrame();
     m_pMap = nullptr;
 
     m_isDisposing = false;
 }
 
-void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
+void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrameOrObj,
                                         bool bRecursive )
 {
     SolarMutexGuard aGuard;
 
-    if ( IsShowing( *(GetMap()), rChildFrmOrObj ) ||
-         rChildFrmOrObj.AlwaysIncludeAsChild() ||
-         !SwAccessibleChild( GetFrm() ).IsVisibleChildrenOnly() )
+    if ( IsShowing( *(GetMap()), rChildFrameOrObj ) ||
+         rChildFrameOrObj.AlwaysIncludeAsChild() ||
+         !SwAccessibleChild( GetFrame() ).IsVisibleChildrenOnly() )
     {
         // If the object could have existed before, than there is nothing to do,
         // because no wrapper exists now and therefore no one is interested to
         // get notified of the movement.
-        if( rChildFrmOrObj.GetSwFrm() )
+        if( rChildFrameOrObj.GetSwFrame() )
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl =
-                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm() );
+                    GetMap()->GetContextImpl( rChildFrameOrObj.GetSwFrame() );
             xAccImpl->Dispose( bRecursive );
         }
-        else if ( rChildFrmOrObj.GetDrawObject() )
+        else if ( rChildFrameOrObj.GetDrawObject() )
         {
             ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl =
-                    GetMap()->GetContextImpl( rChildFrmOrObj.GetDrawObject(),
+                    GetMap()->GetContextImpl( rChildFrameOrObj.GetDrawObject(),
                                               this );
-            DisposeShape( rChildFrmOrObj.GetDrawObject(),
+            DisposeShape( rChildFrameOrObj.GetDrawObject(),
                           xAccImpl.get() );
         }
-        else if ( rChildFrmOrObj.GetWindow() )
+        else if ( rChildFrameOrObj.GetWindow() )
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
             uno::Reference< XAccessible > xAcc =
-                                    rChildFrmOrObj.GetWindow()->GetAccessible();
+                                    rChildFrameOrObj.GetWindow()->GetAccessible();
             aEvent.OldValue <<= xAcc;
             FireAccessibleEvent( aEvent );
         }
     }
-    else if( bRecursive && rChildFrmOrObj.GetSwFrm() )
-        DisposeChildren( rChildFrmOrObj.GetSwFrm(), bRecursive );
+    else if( bRecursive && rChildFrameOrObj.GetSwFrame() )
+        DisposeChildren( rChildFrameOrObj.GetSwFrame(), bRecursive );
 }
 
 void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
 {
     SolarMutexGuard aGuard;
 
-    OSL_ENSURE( GetFrm() && !GetFrm()->Frm().IsEmpty(), "context should have a size" );
+    OSL_ENSURE( GetFrame() && !GetFrame()->Frame().IsEmpty(), "context should have a size" );
 
     bool bIsOldShowingState;
     bool bIsNewShowingState = IsShowing( *(GetMap()) );
@@ -1144,47 +1144,47 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
 }
 
 void SwAccessibleContext::InvalidateChildPosOrSize(
-                    const SwAccessibleChild& rChildFrmOrObj,
-                    const SwRect& rOldFrm )
+                    const SwAccessibleChild& rChildFrameOrObj,
+                    const SwRect& rOldFrame )
 {
     SolarMutexGuard aGuard;
 
-    OSL_ENSURE( !rChildFrmOrObj.GetSwFrm() ||
-            !rChildFrmOrObj.GetSwFrm()->Frm().IsEmpty(),
+    OSL_ENSURE( !rChildFrameOrObj.GetSwFrame() ||
+            !rChildFrameOrObj.GetSwFrame()->Frame().IsEmpty(),
             "child context should have a size" );
 
-    if ( rChildFrmOrObj.AlwaysIncludeAsChild() )
+    if ( rChildFrameOrObj.AlwaysIncludeAsChild() )
     {
         // nothing to do;
         return;
     }
 
-    const bool bVisibleChildrenOnly = SwAccessibleChild( GetFrm() ).IsVisibleChildrenOnly();
-    const bool bNew = rOldFrm.IsEmpty() ||
-                     ( rOldFrm.Left() == 0 && rOldFrm.Top() == 0 );
-    if( IsShowing( *(GetMap()), rChildFrmOrObj ) )
+    const bool bVisibleChildrenOnly = SwAccessibleChild( GetFrame() ).IsVisibleChildrenOnly();
+    const bool bNew = rOldFrame.IsEmpty() ||
+                     ( rOldFrame.Left() == 0 && rOldFrame.Top() == 0 );
+    if( IsShowing( *(GetMap()), rChildFrameOrObj ) )
     {
         // If the object could have existed before, than there is nothing to do,
         // because no wrapper exists now and therefore no one is interested to
         // get notified of the movement.
-        if( bNew || (bVisibleChildrenOnly && !IsShowing( rOldFrm )) )
+        if( bNew || (bVisibleChildrenOnly && !IsShowing( rOldFrame )) )
         {
-            if( rChildFrmOrObj.GetSwFrm() )
+            if( rChildFrameOrObj.GetSwFrame() )
             {
                 // The frame becomes visible. A child event must be send.
                 ::rtl::Reference< SwAccessibleContext > xAccImpl =
-                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm() );
+                    GetMap()->GetContextImpl( rChildFrameOrObj.GetSwFrame() );
                 xAccImpl->ScrolledIn();
             }
-            else if ( rChildFrmOrObj.GetDrawObject() )
+            else if ( rChildFrameOrObj.GetDrawObject() )
             {
                 ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl =
-                        GetMap()->GetContextImpl( rChildFrmOrObj.GetDrawObject(),
+                        GetMap()->GetContextImpl( rChildFrameOrObj.GetDrawObject(),
                                                   this );
                 // #i37790#
                 if ( xAccImpl.is() )
                 {
-                    ScrolledInShape( rChildFrmOrObj.GetDrawObject(),
+                    ScrolledInShape( rChildFrameOrObj.GetDrawObject(),
                                      xAccImpl.get() );
                 }
                 else
@@ -1192,11 +1192,11 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                     OSL_FAIL( "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - no accessible shape found." );
                 }
             }
-            else if ( rChildFrmOrObj.GetWindow() )
+            else if ( rChildFrameOrObj.GetWindow() )
             {
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::CHILD;
-                aEvent.NewValue <<= (rChildFrmOrObj.GetWindow()->GetAccessible());
+                aEvent.NewValue <<= (rChildFrameOrObj.GetWindow()->GetAccessible());
                 FireAccessibleEvent( aEvent );
             }
         }
@@ -1208,24 +1208,24 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
         // no notifications for grandchildren are required. If the are
         // grandgrandchildren, they would be notified by the layout.
         if( bVisibleChildrenOnly &&
-            !bNew && IsShowing( rOldFrm ) )
+            !bNew && IsShowing( rOldFrame ) )
         {
-            if( rChildFrmOrObj.GetSwFrm() )
+            if( rChildFrameOrObj.GetSwFrame() )
             {
                 ::rtl::Reference< SwAccessibleContext > xAccImpl =
-                    GetMap()->GetContextImpl( rChildFrmOrObj.GetSwFrm() );
+                    GetMap()->GetContextImpl( rChildFrameOrObj.GetSwFrame() );
                 xAccImpl->SetParent( this );
                 xAccImpl->Dispose( true );
             }
-            else if ( rChildFrmOrObj.GetDrawObject() )
+            else if ( rChildFrameOrObj.GetDrawObject() )
             {
                 ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl =
-                        GetMap()->GetContextImpl( rChildFrmOrObj.GetDrawObject(),
+                        GetMap()->GetContextImpl( rChildFrameOrObj.GetDrawObject(),
                                                   this );
-                DisposeShape( rChildFrmOrObj.GetDrawObject(),
+                DisposeShape( rChildFrameOrObj.GetDrawObject(),
                           xAccImpl.get() );
             }
-            else if ( rChildFrmOrObj.GetWindow() )
+            else if ( rChildFrameOrObj.GetWindow() )
             {
                 OSL_FAIL( "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - not expected to handle dispose of child of type <vcl::Window>." );
             }
@@ -1292,7 +1292,7 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
             }
         }
 
-        InvalidateChildrenStates( GetFrm(), _nStates );
+        InvalidateChildrenStates( GetFrame(), _nStates );
     }
 }
 
@@ -1330,19 +1330,19 @@ bool SwAccessibleContext::HasCursor()
 bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
                                   bool bAdd )
 {
-    SwCrsrShell* pCrsrShell = GetCrsrShell();
-    if( !pCrsrShell )
+    SwCursorShell* pCursorShell = GetCursorShell();
+    if( !pCursorShell )
         return false;
 
-    SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
-                                ? static_cast<SwFEShell*>( pCrsrShell )
+    SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCursorShell) !=  nullptr
+                                ? static_cast<SwFEShell*>( pCursorShell )
                                 : nullptr;
     // Get rid of activated OLE object
     if( pFEShell )
         pFEShell->FinishOLEObj();
 
-    SwWrtShell* pWrtShell = dynamic_cast<const SwWrtShell*>( pCrsrShell) !=  nullptr
-                                ? static_cast<SwWrtShell*>( pCrsrShell )
+    SwWrtShell* pWrtShell = dynamic_cast<const SwWrtShell*>( pCursorShell) !=  nullptr
+                                ? static_cast<SwWrtShell*>( pCursorShell )
                                 : nullptr;
 
     bool bRet = false;
@@ -1360,28 +1360,28 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     {
         // Get rid of frame selection. If there is one, make text cursor
         // visible again.
-        bool bCallShowCrsr = false;
-        if( pFEShell && (pFEShell->IsFrmSelected() ||
+        bool bCallShowCursor = false;
+        if( pFEShell && (pFEShell->IsFrameSelected() ||
                          pFEShell->IsObjSelected()) )
         {
             Point aPt( LONG_MIN, LONG_MIN );
             pFEShell->SelectObj( aPt );
-            bCallShowCrsr = true;
+            bCallShowCursor = true;
         }
-        pCrsrShell->KillPams();
+        pCursorShell->KillPams();
         if( pWrtShell && pPaM->HasMark() )
             // We have to do this or SwWrtShell can't figure out that it needs
             // to kill the selection later, when the user moves the cursor.
             pWrtShell->SttSelect();
-        pCrsrShell->SetSelection( *pPaM );
+        pCursorShell->SetSelection( *pPaM );
         if( pPaM->HasMark() && *pPaM->GetPoint() == *pPaM->GetMark())
             // Setting a "Selection" that starts and ends at the same spot
             // should remove the selection rather than create an empty one, so
             // that we get defined behavior if accessibility sets the cursor
             // later.
-            pCrsrShell->ClearMark();
-        if( bCallShowCrsr )
-            pCrsrShell->ShowCrsr();
+            pCursorShell->ClearMark();
+        if( bCallShowCursor )
+            pCursorShell->ShowCursor();
         bRet = true;
     }
 
@@ -1411,22 +1411,22 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
     return sStr;
 }
 
-void SwAccessibleContext::RemoveFrmFromAccessibleMap()
+void SwAccessibleContext::RemoveFrameFromAccessibleMap()
 {
-    if (m_isRegisteredAtAccessibleMap && GetFrm() && GetMap())
-        GetMap()->RemoveContext( GetFrm() );
+    if (m_isRegisteredAtAccessibleMap && GetFrame() && GetMap())
+        GetMap()->RemoveContext( GetFrame() );
 }
 
 bool SwAccessibleContext::HasAdditionalAccessibleChildren()
 {
     bool bRet( false );
 
-    if ( GetFrm()->IsTextFrm() )
+    if ( GetFrame()->IsTextFrame() )
     {
         SwPostItMgr* pPostItMgr = GetMap()->GetShell()->GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         {
-            bRet = pPostItMgr->HasFrmConnectedSidebarWins( *(GetFrm()) );
+            bRet = pPostItMgr->HasFrameConnectedSidebarWins( *(GetFrame()) );
         }
     }
 
@@ -1438,13 +1438,13 @@ vcl::Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 
 {
     vcl::Window* pAdditionalAccessibleChild( nullptr );
 
-    if ( GetFrm()->IsTextFrm() )
+    if ( GetFrame()->IsTextFrame() )
     {
         SwPostItMgr* pPostItMgr = GetMap()->GetShell()->GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         {
             pAdditionalAccessibleChild =
-                    pPostItMgr->GetSidebarWinForFrmByIndex( *(GetFrm()), nIndex );
+                    pPostItMgr->GetSidebarWinForFrameByIndex( *(GetFrame()), nIndex );
         }
     }
 
@@ -1454,12 +1454,12 @@ vcl::Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 
 /** #i88070# - get all additional accessible children */
 void SwAccessibleContext::GetAdditionalAccessibleChildren( std::vector< vcl::Window* >* pChildren )
 {
-    if ( GetFrm()->IsTextFrm() )
+    if ( GetFrame()->IsTextFrame() )
     {
         SwPostItMgr* pPostItMgr = GetMap()->GetShell()->GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         {
-            pPostItMgr->GetAllSidebarWinForFrm( *(GetFrm()), pChildren );
+            pPostItMgr->GetAllSidebarWinForFrame( *(GetFrame()), pChildren );
         }
     }
 }

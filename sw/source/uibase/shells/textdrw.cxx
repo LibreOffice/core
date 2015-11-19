@@ -120,7 +120,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
 
         if (rSh.IsObjSelected())
         {
-            rSh.UnSelectFrm();
+            rSh.UnSelectFrame();
         }
     }
     rSh.EndUndo( UNDO_UI_INSERT_URLBTN );

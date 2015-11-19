@@ -37,16 +37,16 @@
 using namespace sw::access;
 
 SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
-                                            const SwFrm& rFrm,
+                                            const SwFrame& rFrame,
                                             SwAccessibleMap& rAccMap )
     : nHellId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetHellId() )
     , nControlsId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetControlsId() )
 {
-    const bool bVisibleChildrenOnly = SwAccessibleChild( &rFrm ).IsVisibleChildrenOnly();
+    const bool bVisibleChildrenOnly = SwAccessibleChild( &rFrame ).IsVisibleChildrenOnly();
 
     sal_uInt32 nPos = 0;
-    SwAccessibleChild aLower( rFrm.GetLower() );
-    while( aLower.GetSwFrm() )
+    SwAccessibleChild aLower( rFrame.GetLower() );
+    while( aLower.GetSwFrame() )
     {
         if ( !bVisibleChildrenOnly ||
              aLower.AlwaysIncludeAsChild() ||
@@ -55,15 +55,15 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
             insert( nPos++, SwAccessibleChildMapKey::TEXT, aLower );
         }
 
-        aLower = aLower.GetSwFrm()->GetNext();
+        aLower = aLower.GetSwFrame()->GetNext();
     }
 
-    if ( rFrm.IsPageFrm() )
+    if ( rFrame.IsPageFrame() )
     {
         OSL_ENSURE( bVisibleChildrenOnly, "page frame within tab frame???" );
-        const SwPageFrm *pPgFrm =
-            static_cast< const SwPageFrm * >( &rFrm );
-        const SwSortedObjs *pObjs = pPgFrm->GetSortedObjs();
+        const SwPageFrame *pPgFrame =
+            static_cast< const SwPageFrame * >( &rFrame );
+        const SwSortedObjs *pObjs = pPgFrame->GetSortedObjs();
         if ( pObjs )
         {
             for( size_t i=0; i<pObjs->size(); ++i )
@@ -76,9 +76,9 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
             }
         }
     }
-    else if( rFrm.IsTextFrm() )
+    else if( rFrame.IsTextFrame() )
     {
-        const SwSortedObjs *pObjs = rFrm.GetDrawObjs();
+        const SwSortedObjs *pObjs = rFrame.GetDrawObjs();
         if ( pObjs )
         {
             for( size_t i=0; i<pObjs->size(); ++i )
@@ -96,7 +96,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
 
         {
             ::rtl::Reference < SwAccessibleContext > xAccImpl =
-                                rAccMap.GetContextImpl( &rFrm, false );
+                                rAccMap.GetContextImpl( &rFrame, false );
             if( xAccImpl.is() )
             {
                 SwAccessibleContext* pAccImpl = xAccImpl.get();
@@ -149,12 +149,12 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
     return insert( aEntry );
 }
 
-bool SwAccessibleChildMap::IsSortingRequired( const SwFrm& rFrm )
+bool SwAccessibleChildMap::IsSortingRequired( const SwFrame& rFrame )
 {
-    return ( rFrm.IsPageFrm() &&
-             static_cast< const SwPageFrm& >( rFrm ).GetSortedObjs() ) ||
-           ( rFrm.IsTextFrm() &&
-             rFrm.GetDrawObjs() );
+    return ( rFrame.IsPageFrame() &&
+             static_cast< const SwPageFrame& >( rFrame ).GetSortedObjs() ) ||
+           ( rFrame.IsTextFrame() &&
+             rFrame.GetDrawObjs() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -866,7 +866,7 @@ void SwTableAutoFormat::RestoreTableProperties(SwTable &table) const
     pFormat->SetFormatAttr(rSet);
 
     SwEditShell *pShell = pDoc->GetEditShell();
-    pDoc->SetRowSplit(*pShell->getShellCrsr(false), SwFormatRowSplit(m_bRowSplit));
+    pDoc->SetRowSplit(*pShell->getShellCursor(false), SwFormatRowSplit(m_bRowSplit));
 
     table.SetRowsToRepeat(m_aRepeatHeading);
 }
@@ -883,7 +883,7 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
 
     SwEditShell *pShell = pDoc->GetEditShell();
     SwFormatRowSplit *pRowSplit = nullptr;
-    SwDoc::GetRowSplit(*pShell->getShellCrsr(false), pRowSplit);
+    SwDoc::GetRowSplit(*pShell->getShellCursor(false), pRowSplit);
     m_bRowSplit = pRowSplit && pRowSplit->GetValue();
     delete pRowSplit;
     pRowSplit = nullptr;

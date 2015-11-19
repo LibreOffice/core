@@ -153,35 +153,35 @@ public class CheckBookmarks {
                     xText.createTextCursor(),
                     "P" + nPara + "word" + nBookmark,
                     "P" + nPara + "word" + nBookmark);
-                XTextCursor xWordCrsr = xText.createTextCursor();
-                xWordCrsr.setString(" ");
+                XTextCursor xWordCursor = xText.createTextCursor();
+                xWordCursor.setString(" ");
             }
-            XTextCursor xParaCrsr = xText.createTextCursor();
-            XTextRange xParaCrsrAsRange = UnoRuntime.queryInterface(
+            XTextCursor xParaCursor = xText.createTextCursor();
+            XTextRange xParaCursorAsRange = UnoRuntime.queryInterface(
                 XTextRange.class,
-                xParaCrsr);
-            xText.insertControlCharacter(xParaCrsrAsRange, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false);
+                xParaCursor);
+            xText.insertControlCharacter(xParaCursorAsRange, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false);
         }
     }
 
     private void insertRandomParts(long seed)
     {
         java.util.Random rnd = new java.util.Random(seed);
-        XTextCursor xCrsr = m_xDoc.getText().createTextCursor();
+        XTextCursor xCursor = m_xDoc.getText().createTextCursor();
         for(int i=0; i<600; i++) {
-            xCrsr.goRight((short)rnd.nextInt(100), false);
-            xCrsr.setString(Long.toString(rnd.nextLong()));
+            xCursor.goRight((short)rnd.nextInt(100), false);
+            xCursor.setString(Long.toString(rnd.nextLong()));
         }
     }
 
     private void deleteRandomParts(long seed)
     {
         java.util.Random rnd = new java.util.Random(seed);
-        XTextCursor xCrsr = m_xDoc.getText().createTextCursor();
+        XTextCursor xCursor = m_xDoc.getText().createTextCursor();
         for(int i=0; i<600; i++) {
-            xCrsr.goRight((short)rnd.nextInt(100), false);
-            xCrsr.goRight((short)rnd.nextInt(20), true);
-            xCrsr.setString("");
+            xCursor.goRight((short)rnd.nextInt(100), false);
+            xCursor.goRight((short)rnd.nextInt(20), true);
+            xCursor.setString("");
         }
     }
 
@@ -189,13 +189,13 @@ public class CheckBookmarks {
     {
         XText xText = m_xDoc.getText();
         java.util.Random rnd = new java.util.Random(seed);
-        XTextCursor xCrsr = m_xDoc.getText().createTextCursor();
+        XTextCursor xCursor = m_xDoc.getText().createTextCursor();
         for(int i=0; i<30; i++) {
-            xCrsr.goRight((short)rnd.nextInt(300), false);
-            XTextRange xCrsrAsRange = UnoRuntime.queryInterface(
+            xCursor.goRight((short)rnd.nextInt(300), false);
+            XTextRange xCursorAsRange = UnoRuntime.queryInterface(
                 XTextRange.class,
-                xCrsr);
-            xText.insertControlCharacter(xCrsrAsRange, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false);
+                xCursor);
+            xText.insertControlCharacter(xCursorAsRange, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false);
         }
     }
 

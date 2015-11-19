@@ -991,9 +991,9 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
         case LTYPE_FLY:
         case LTYPE_OBJECT:
             {
-                SwFlyFrm* pFly;
-                SwContentFrm *pCnt = pCNd->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
-                if( pCnt && nullptr != ( pFly = pCnt->FindFlyFrm() ) )
+                SwFlyFrame* pFly;
+                SwContentFrame *pCnt = pCNd->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
+                if( pCnt && nullptr != ( pFly = pCnt->FindFlyFrame() ) )
                     nIdx = pFly->GetFormat()->GetContent().GetContentIdx()->GetIndex();
             }
             break;

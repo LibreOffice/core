@@ -1095,8 +1095,8 @@ void SwGlossaryDlg::ResumeShowAutoText()
             m_xAutoText = text::AutoTextContainer::create( comphelper::getProcessComponentContext() );
         }
 
-        uno::Reference< XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
-        if(xCrsr.is())
+        uno::Reference< XTextCursor > & xCursor = pExampleFrame->GetTextCursor();
+        if(xCursor.is())
         {
             if (!sShortName.isEmpty())
             {
@@ -1108,7 +1108,7 @@ void SwGlossaryDlg::ResumeShowAutoText()
                     uno::Any aEntry(xGroup->getByName(uShortName));
                     uno::Reference< XAutoTextEntry >  xEntry;
                     aEntry >>= xEntry;
-                    uno::Reference< XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
+                    uno::Reference< XTextRange >  xRange(xCursor, uno::UNO_QUERY);
                     xEntry->applyTo(xRange);
                 }
             }

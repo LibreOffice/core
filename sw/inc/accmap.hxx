@@ -37,9 +37,9 @@
 class SwAccessibleParagraph;
 class SwViewShell;
 class Rectangle;
-class SwFrm;
-class SwTextFrm;
-class SwPageFrm;
+class SwFrame;
+class SwTextFrame;
+class SwPageFrame;
 class SwAccessibleContext;
 class SwAccessibleContextMap_Impl;
 class SwAccessibleEventList_Impl;
@@ -79,7 +79,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 {
     mutable ::osl::Mutex maMutex;
     ::osl::Mutex maEventMutex;
-    SwAccessibleContextMap_Impl *mpFrmMap;
+    SwAccessibleContextMap_Impl *mpFrameMap;
     SwAccessibleShapeMap_Impl *mpShapeMap;
     SwShapeList_Impl *mpShapes;
     SwAccessibleEventList_Impl *mpEvents;
@@ -107,12 +107,12 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 
     void InvalidateShapeSelection();
 
-    //mpSelectedFrmMap contains the old selected objects.
-    SwAccessibleContextMap_Impl *mpSeletedFrmMap;
+    //mpSelectedFrameMap contains the old selected objects.
+    SwAccessibleContextMap_Impl *mpSeletedFrameMap;
     //IvalidateShapeInParaSelection() method is responsible for the updating the selected states of the objects.
     void InvalidateShapeInParaSelection();
 
-    void _InvalidateRelationSet( const SwFrm* pFrm, bool bFrom );
+    void _InvalidateRelationSet( const SwFrame* pFrame, bool bFrom );
 
     css::uno::Reference<css::accessibility::XAccessible>
             _GetDocumentView( bool bPagePreview );
@@ -136,14 +136,14 @@ public:
     css::uno::Reference<css::accessibility::XAccessible> GetDocumentPreview(
                             const std::vector<PreviewPage*>& _rPreviewPages,
                             const Fraction&  _rScale,
-                            const SwPageFrm* _pSelectedPageFrm,
+                            const SwPageFrame* _pSelectedPageFrame,
                             const Size&      _rPreviewWinSize );
 
     ::rtl::Reference < SwAccessibleContext > GetContextImpl(
-                                                 const SwFrm *pFrm,
+                                                 const SwFrame *pFrame,
                                                 bool bCreate = true );
     css::uno::Reference<css::accessibility::XAccessible> GetContext(
-                                                 const SwFrm *pFrm,
+                                                 const SwFrame *pFrame,
                                                 bool bCreate = true );
 
     ::rtl::Reference < ::accessibility::AccessibleShape > GetContextImpl(
@@ -180,25 +180,25 @@ public:
     */
     Size GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const;
 
-    void RemoveContext( const SwFrm *pFrm );
+    void RemoveContext( const SwFrame *pFrame );
     void RemoveContext( const SdrObject *pObj );
 
     // Dispose frame and its children if bRecursive is set
-    void Dispose( const SwFrm* pFrm,
+    void Dispose( const SwFrame* pFrame,
                   const SdrObject* pObj,
                   vcl::Window* pWindow,
                   bool bRecursive = false );
 
-    void InvalidatePosOrSize( const SwFrm* pFrm,
+    void InvalidatePosOrSize( const SwFrame* pFrame,
                               const SdrObject* pObj,
                               vcl::Window* pWindow,
-                              const SwRect& rOldFrm );
+                              const SwRect& rOldFrame );
 
-    void InvalidateContent( const SwFrm *pFrm );
+    void InvalidateContent( const SwFrame *pFrame );
 
-    void InvalidateAttr( const SwTextFrm& rTextFrm );
+    void InvalidateAttr( const SwTextFrame& rTextFrame );
 
-    void InvalidateCursorPosition( const SwFrm *pFrm );
+    void InvalidateCursorPosition( const SwFrame *pFrame );
     void InvalidateFocus();
     void SetCursorContext(
         const ::rtl::Reference < SwAccessibleContext >& rCursorContext );
@@ -206,15 +206,15 @@ public:
     // Invalidate state of whole tree. If an action is open, this call
     // is processed when the last action ends.
     void InvalidateStates( AccessibleStates _nStates,
-                           const SwFrm* _pFrm = nullptr );
+                           const SwFrame* _pFrame = nullptr );
 
-    void InvalidateRelationSet( const SwFrm* pMaster, const SwFrm* pFollow );
+    void InvalidateRelationSet( const SwFrame* pMaster, const SwFrame* pFollow );
 
     /** invalidation CONTENT_FLOWS_FROM/_TO relation of a paragraph
 
         @author OD
 
-        @param _rTextFrm
+        @param _rTextFrame
         input parameter - reference to paragraph, whose CONTENT_FLOWS_FROM/_TO
         has to be invalidated.
 
@@ -222,14 +222,14 @@ public:
         input parameter - boolean indicating, if relation CONTENT_FLOWS_FROM
         (value <true>) or CONTENT_FLOWS_TO (value <false>) has to be invalidated.
     */
-    void InvalidateParaFlowRelation( const SwTextFrm& _rTextFrm,
+    void InvalidateParaFlowRelation( const SwTextFrame& _rTextFrame,
                                      const bool _bFrom );
 
     /** invalidation of text selection of a paragraph
 
         @author OD
     */
-    void InvalidateParaTextSelection( const SwTextFrm& _rTextFrm );
+    void InvalidateParaTextSelection( const SwTextFrame& _rTextFrame );
 
     /** invalidation of text selection of all paragraphs
 
@@ -237,17 +237,17 @@ public:
     */
     void InvalidateTextSelectionOfAllParas();
 
-    sal_Int32 GetChildIndex( const SwFrm& rParentFrm,
+    sal_Int32 GetChildIndex( const SwFrame& rParentFrame,
                              vcl::Window& rChild ) const;
 
     // update preview data (and fire events if necessary)
     void UpdatePreview( const std::vector<PreviewPage*>& _rPreviewPages,
                         const Fraction&  _rScale,
-                        const SwPageFrm* _pSelectedPageFrm,
+                        const SwPageFrame* _pSelectedPageFrame,
                         const Size&      _rPreviewWinSize );
 
     void InvalidatePreviewSelection( sal_uInt16 nSelPage );
-    bool IsPageSelected( const SwPageFrm *pPageFrm ) const;
+    bool IsPageSelected( const SwPageFrame *pPageFrame ) const;
 
     void FireEvents();
 

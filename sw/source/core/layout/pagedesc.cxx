@@ -113,14 +113,14 @@ void SwPageDesc::Mirror()
     SfxItemSet aSet( *m_Master.GetAttrSet().GetPool(),
                      m_Master.GetAttrSet().GetRanges() );
     aSet.Put( aLR );
-    aSet.Put( m_Master.GetFrmSize() );
+    aSet.Put( m_Master.GetFrameSize() );
     aSet.Put( m_Master.GetPaperBin() );
     aSet.Put( m_Master.GetULSpace() );
     aSet.Put( m_Master.GetBox() );
     aSet.Put( m_Master.makeBackgroundBrushItem() );
     aSet.Put( m_Master.GetShadow() );
     aSet.Put( m_Master.GetCol() );
-    aSet.Put( m_Master.GetFrmDir() );
+    aSet.Put( m_Master.GetFrameDir() );
     m_Left.SetFormatAttr( aSet );
 }
 
@@ -185,35 +185,35 @@ void SwPageDesc::RegisterChange()
 
     m_nRegHeight = 0;
     {
-        SwIterator<SwFrm,SwFormat> aIter( GetMaster() );
-        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        SwIterator<SwFrame,SwFormat> aIter( GetMaster() );
+        for( SwFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
-            if( pLast->IsPageFrm() )
-                static_cast<SwPageFrm*>(pLast)->PrepareRegisterChg();
+            if( pLast->IsPageFrame() )
+                static_cast<SwPageFrame*>(pLast)->PrepareRegisterChg();
         }
     }
     {
-        SwIterator<SwFrm,SwFormat> aIter( GetLeft() );
-        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        SwIterator<SwFrame,SwFormat> aIter( GetLeft() );
+        for( SwFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
-            if( pLast->IsPageFrm() )
-                static_cast<SwPageFrm*>(pLast)->PrepareRegisterChg();
+            if( pLast->IsPageFrame() )
+                static_cast<SwPageFrame*>(pLast)->PrepareRegisterChg();
         }
     }
     {
-        SwIterator<SwFrm,SwFormat> aIter( GetFirstMaster() );
-        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        SwIterator<SwFrame,SwFormat> aIter( GetFirstMaster() );
+        for( SwFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
-            if( pLast->IsPageFrm() )
-                static_cast<SwPageFrm*>(pLast)->PrepareRegisterChg();
+            if( pLast->IsPageFrame() )
+                static_cast<SwPageFrame*>(pLast)->PrepareRegisterChg();
         }
     }
     {
-        SwIterator<SwFrm,SwFormat> aIter( GetFirstLeft() );
-        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        SwIterator<SwFrame,SwFormat> aIter( GetFirstLeft() );
+        for( SwFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
-            if( pLast->IsPageFrm() )
-                static_cast<SwPageFrm*>(pLast)->PrepareRegisterChg();
+            if( pLast->IsPageFrame() )
+                static_cast<SwPageFrame*>(pLast)->PrepareRegisterChg();
         }
     }
 }
@@ -231,10 +231,10 @@ void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     }
 }
 
-static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
+static const SwFrame* lcl_GetFrameOfNode( const SwNode& rNd )
 {
     const SwModify* pMod;
-    sal_uInt16 nFrmType = FRM_CNTNT;
+    sal_uInt16 nFrameType = FRM_CNTNT;
 
     if( rNd.IsContentNode() )
     {
@@ -243,22 +243,22 @@ static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
     else if( rNd.IsTableNode() )
     {
         pMod = static_cast<const SwTableNode&>(rNd).GetTable().GetFrameFormat();
-        nFrmType = FRM_TAB;
+        nFrameType = FRM_TAB;
     }
     else
         pMod = nullptr;
 
     Point aNullPt;
-    return pMod ? ::GetFrmOfModify( nullptr, *pMod, nFrmType, &aNullPt )
+    return pMod ? ::GetFrameOfModify( nullptr, *pMod, nFrameType, &aNullPt )
                 : nullptr;
 }
 
 const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
 {
     const SwPageDesc* pRet = nullptr;
-    const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
-    if (pChkFrm && nullptr != (pChkFrm = pChkFrm->FindPageFrm()))
-        pRet = static_cast<const SwPageFrm*>(pChkFrm)->GetPageDesc();
+    const SwFrame* pChkFrame = lcl_GetFrameOfNode( rNd );
+    if (pChkFrame && nullptr != (pChkFrame = pChkFrame->FindPageFrame()))
+        pRet = static_cast<const SwPageFrame*>(pChkFrame)->GetPageDesc();
     return pRet;
 }
 
@@ -267,19 +267,19 @@ const SwFrameFormat* SwPageDesc::GetPageFormatOfNode( const SwNode& rNd,
 {
     // which PageDescFormat is valid for this node?
     const SwFrameFormat* pRet;
-    const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
+    const SwFrame* pChkFrame = lcl_GetFrameOfNode( rNd );
 
-    if( pChkFrm && nullptr != ( pChkFrm = pChkFrm->FindPageFrm() ))
+    if( pChkFrame && nullptr != ( pChkFrame = pChkFrame->FindPageFrame() ))
     {
         const SwPageDesc* pPd = bCheckForThisPgDc ? this :
-                                static_cast<const SwPageFrm*>(pChkFrm)->GetPageDesc();
+                                static_cast<const SwPageFrame*>(pChkFrame)->GetPageDesc();
         pRet = &pPd->GetMaster();
-        OSL_ENSURE( static_cast<const SwPageFrm*>(pChkFrm)->GetPageDesc() == pPd, "Wrong node for detection of page format!" );
+        OSL_ENSURE( static_cast<const SwPageFrame*>(pChkFrame)->GetPageDesc() == pPd, "Wrong node for detection of page format!" );
         // this page is assigned to which format?
-        if( !pChkFrm->KnowsFormat(*pRet) )
+        if( !pChkFrame->KnowsFormat(*pRet) )
         {
             pRet = &pPd->GetLeft();
-            OSL_ENSURE( pChkFrm->KnowsFormat(*pRet), "Wrong node for detection of page format!" );
+            OSL_ENSURE( pChkFrame->KnowsFormat(*pRet), "Wrong node for detection of page format!" );
         }
     }
     else
@@ -292,11 +292,11 @@ bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
     bool bRet = false;
     if( GetFollow() && this != GetFollow() )
     {
-        const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
-        if( pChkFrm && nullptr != ( pChkFrm = pChkFrm->FindPageFrm() ) &&
-            pChkFrm->IsPageFrm() &&
-            ( !pChkFrm->GetNext() || GetFollow() ==
-                        static_cast<const SwPageFrm*>(pChkFrm->GetNext())->GetPageDesc() ))
+        const SwFrame* pChkFrame = lcl_GetFrameOfNode( rNd );
+        if( pChkFrame && nullptr != ( pChkFrame = pChkFrame->FindPageFrame() ) &&
+            pChkFrame->IsPageFrame() &&
+            ( !pChkFrame->GetNext() || GetFollow() ==
+                        static_cast<const SwPageFrame*>(pChkFrame->GetNext())->GetPageDesc() ))
             // the page on which the follow points was found
             bRet = true;
     }

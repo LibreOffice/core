@@ -80,7 +80,7 @@ class SwDocShell;
 class UnoActionContext;
 class SwXBodyText;
 class SwXDrawPage;
-class SwUnoCrsr;
+class SwUnoCursor;
 class SwXDocumentPropertyHelper;
 class SfxViewFrame;
 class SwPrintUIOptions;
@@ -448,9 +448,9 @@ public:
 
     void                        InitNewDoc();
 
-    SwUnoCrsr* CreateCursorForSearch(css::uno::Reference< css::text::XTextCursor > & xCrsr);
-    SwUnoCrsr* FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
-                                            css::uno::Reference< css::text::XTextCursor > & xCrsr, bool bAll,
+    SwUnoCursor* CreateCursorForSearch(css::uno::Reference< css::text::XTextCursor > & xCursor);
+    SwUnoCursor* FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
+                                            css::uno::Reference< css::text::XTextCursor > & xCursor, bool bAll,
                                             sal_Int32& nResult,
                                             css::uno::Reference< css::uno::XInterface >  xLastResult);
 

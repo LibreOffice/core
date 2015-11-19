@@ -158,12 +158,12 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
             {
                 // Then get the 'anchor' (body) position
                 Point aPt;
-                const SwContentFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
-                if( pFrm )
+                const SwContentFrame* pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+                if( pFrame )
                 {
                     SwPosition aPos( *pNd );
                     const SwDoc& rDoc = *pNd->GetDoc();
-                    bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrm );
+                    bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
                     OSL_ENSURE(bResult, "where is the text node");
                     (void) bResult; // unused in non-debug
                     nPos = aPos.nNode.GetIndex();

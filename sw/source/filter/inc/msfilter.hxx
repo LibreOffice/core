@@ -310,7 +310,7 @@ namespace sw
             their layout frms deleted and recalculated. This TableManager
             detects the necessity to do this, and all tables inserted into
             a document should be registered with this manager with
-            InsertTable, and before finialization DelAndMakeTableFrms should
+            InsertTable, and before finialization DelAndMakeTableFrames should
             be called.
 
             @author
@@ -323,7 +323,7 @@ namespace sw
         public:
             typedef std::map<InsertedTableClient *, SwNodeIndex *> TableMap;
             typedef TableMap::iterator TableMapIter;
-            void DelAndMakeTableFrms();
+            void DelAndMakeTableFrames();
             void InsertTable(SwTableNode &rTableNode, SwPaM &rPaM);
             explicit InsertedTablesManager(const SwDoc &rDoc);
         private:

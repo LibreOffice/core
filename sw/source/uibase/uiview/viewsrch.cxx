@@ -108,15 +108,15 @@ static void lcl_addContainerToJson(boost::property_tree::ptree& rTree, const OSt
 static void lcl_emitSearchResultCallbacks(SvxSearchItem* pSearchItem, SwWrtShell* pWrtShell)
 {
     // Emit a callback also about the selection rectangles, grouped by matches.
-    if (SwPaM* pPaM = pWrtShell->GetCrsr())
+    if (SwPaM* pPaM = pWrtShell->GetCursor())
     {
         std::vector<OString> aMatches;
         for (SwPaM& rPaM : pPaM->GetRingContainer())
         {
-            if (SwShellCrsr* pShellCrsr = dynamic_cast<SwShellCrsr*>(&rPaM))
+            if (SwShellCursor* pShellCursor = dynamic_cast<SwShellCursor*>(&rPaM))
             {
                 std::vector<OString> aSelectionRectangles;
-                pShellCrsr->SwSelPaintRects::Show(&aSelectionRectangles);
+                pShellCursor->SwSelPaintRects::Show(&aSelectionRectangles);
                 std::vector<OString> aRect;
                 for (size_t i = 0; i < aSelectionRectangles.size(); ++i)
                 {
@@ -313,7 +313,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                             m_pWrtShell->Push();
                         OUString aReplace( m_pSrchItem->GetReplaceString() );
                         SearchOptions aTmp( m_pSrchItem->GetSearchOptions() );
-                        OUString *pBackRef = ReplaceBackReferences( aTmp, m_pWrtShell->GetCrsr() );
+                        OUString *pBackRef = ReplaceBackReferences( aTmp, m_pWrtShell->GetCursor() );
                         if( pBackRef )
                             m_pSrchItem->SetReplaceString( *pBackRef );
                         Replace();
@@ -382,7 +382,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                         if (!m_pSrchItem->GetSelection())
                         {
                             // create it just to overwrite it with stack cursor
-                            m_pWrtShell->CreateCrsr();
+                            m_pWrtShell->CreateCursor();
                             // i#8288 restore the original cursor position
                             m_pWrtShell->Pop(false);
                         }
@@ -526,7 +526,7 @@ bool SwView::SearchAndWrap(bool bApi)
     // selection closest to the end being searched to as to exclude the selected
     // region from the search. (This doesn't work in the case of multiple
     // selected regions as the cursor doesn't mark the selection in that case.)
-    m_pWrtShell->GetCrsr()->Normalize( m_pSrchItem->GetBackward() );
+    m_pWrtShell->GetCursor()->Normalize( m_pSrchItem->GetBackward() );
 
     if (!m_pWrtShell->HasSelection() && (m_pSrchItem->HasStartPoint()))
     {
@@ -535,7 +535,7 @@ bool SwView::SearchAndWrap(bool bApi)
         // cursor position.
         SwEditShell& rShell = GetWrtShell();
         Point aPosition(m_pSrchItem->GetStartPointX(), m_pSrchItem->GetStartPointY());
-        rShell.SetCrsr(aPosition);
+        rShell.SetCursor(aPosition);
     }
 
         // If you want to search in selected areas, they must not be unselected.
@@ -546,10 +546,10 @@ bool SwView::SearchAndWrap(bool bApi)
     if( FUNC_Search( aOpts ) )
     {
         m_bFound = true;
-        if(m_pWrtShell->IsSelFrmMode())
+        if(m_pWrtShell->IsSelFrameMode())
         {
-            m_pWrtShell->UnSelectFrm();
-            m_pWrtShell->LeaveSelFrmMode();
+            m_pWrtShell->UnSelectFrame();
+            m_pWrtShell->LeaveSelFrameMode();
         }
         m_pWrtShell->Pop();
         m_pWrtShell->EndAllAction();
@@ -703,8 +703,8 @@ void SwView::Replace()
         {
             /* check that the selection match the search string*/
             //save state
-            SwPosition aStartPos = (* m_pWrtShell->GetSwCrsr()->Start());
-            SwPosition aEndPos = (* m_pWrtShell->GetSwCrsr()->End());
+            SwPosition aStartPos = (* m_pWrtShell->GetSwCursor()->Start());
+            SwPosition aEndPos = (* m_pWrtShell->GetSwCursor()->End());
             bool   bHasSelection = m_pSrchItem->GetSelection();
             SvxSearchCmd nOldCmd = m_pSrchItem->GetCommand();
 
@@ -722,13 +722,13 @@ void SwView::Replace()
 
                 if(! m_pSrchItem->GetBackward() )
                 {
-                    (* m_pWrtShell->GetSwCrsr()->Start()) = aStartPos;
-                    (* m_pWrtShell->GetSwCrsr()->End()) = aEndPos;
+                    (* m_pWrtShell->GetSwCursor()->Start()) = aStartPos;
+                    (* m_pWrtShell->GetSwCursor()->End()) = aEndPos;
                 }
                 else
                 {
-                    (* m_pWrtShell->GetSwCrsr()->Start()) = aEndPos;
-                    (* m_pWrtShell->GetSwCrsr()->End()) = aStartPos;
+                    (* m_pWrtShell->GetSwCursor()->Start()) = aEndPos;
+                    (* m_pWrtShell->GetSwCursor()->End()) = aStartPos;
                 }
                 bReqReplace = false;
             }
@@ -910,8 +910,8 @@ void SwView::StateSearch(SfxItemSet &rSet)
                 if( m_bJustOpened && m_pWrtShell->IsSelection() )
                 {
                     OUString aText;
-                    if( 1 == m_pWrtShell->GetCrsrCnt() &&
-                        !( aText = m_pWrtShell->SwCrsrShell::GetSelText() ).isEmpty() )
+                    if( 1 == m_pWrtShell->GetCursorCnt() &&
+                        !( aText = m_pWrtShell->SwCursorShell::GetSelText() ).isEmpty() )
                     {
                         m_pSrchItem->SetSearchString( aText );
                         m_pSrchItem->SetSelection( false );

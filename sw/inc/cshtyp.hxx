@@ -23,21 +23,21 @@
 #include "swdllapi.h"
 
 class SwPaM;
-class SwContentFrm;
-class SwLayoutFrm;
+class SwContentFrame;
+class SwLayoutFrame;
 
 // Structure for SwPaM. Contains the method-pointers for cursor movement.
 struct SwMoveFnCollection;
 typedef SwMoveFnCollection* SwMoveFn;
 
-// Type definition for CrsrShell.
-// Direction-parameter for MovePage (initialized in SwContentFrm).
-typedef SwLayoutFrm * (*SwWhichPage)( const SwLayoutFrm * );
-typedef SwContentFrm  * (*SwPosPage)( const SwLayoutFrm * );
+// Type definition for CursorShell.
+// Direction-parameter for MovePage (initialized in SwContentFrame).
+typedef SwLayoutFrame * (*SwWhichPage)( const SwLayoutFrame * );
+typedef SwContentFrame  * (*SwPosPage)( const SwLayoutFrame * );
 extern SwWhichPage fnPagePrev, fnPageCurr, fnPageNext;
 extern SwPosPage fnPageStart, fnPageEnd;
 
-// Direction-parameter for MovePara (initialized in SwContentFrm).
+// Direction-parameter for MovePara (initialized in SwContentFrame).
 typedef SwMoveFnCollection* SwPosPara;
 typedef bool (*SwWhichPara)( SwPaM&, SwPosPara );
 extern SwWhichPara fnParaPrev, fnParaCurr, fnParaNext;
@@ -56,8 +56,8 @@ extern SwWhichTable fnTablePrev, fnTableCurr, fnTableNext;
 extern SwPosTable fnTableStart, fnTableEnd;
 
 // Direction-parameter for MoveColumn
-typedef SwLayoutFrm * (*SwWhichColumn)( const SwLayoutFrm * );
-typedef SwContentFrm  * (*SwPosColumn)( const SwLayoutFrm * );
+typedef SwLayoutFrame * (*SwWhichColumn)( const SwLayoutFrame * );
+typedef SwContentFrame  * (*SwPosColumn)( const SwLayoutFrame * );
 extern SwWhichColumn fnColumnPrev, fnColumnCurr, fnColumnNext;
 extern SwPosColumn fnColumnStart, fnColumnEnd;
 

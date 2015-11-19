@@ -84,7 +84,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
 {
     SolarMutexGuard aGuard;
 
-    // Get the respective child as SwFrm (also do index checking), ...
+    // Get the respective child as SwFrame (also do index checking), ...
     const SwAccessibleChild aChild = m_rContext.GetChild( *(m_rContext.GetMap()),
                                                         nChildIndex );
     if( !aChild.IsValid() )
@@ -97,20 +97,20 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     {
         const SdrObject *pObj = aChild.GetDrawObject();
         if( pObj )
-            m_rContext.Select( const_cast< SdrObject *>( pObj ), nullptr==aChild.GetSwFrm());
+            m_rContext.Select( const_cast< SdrObject *>( pObj ), nullptr==aChild.GetSwFrame());
     }
     // no frame shell, or no frame, or no fly frame -> can't select
 }
 
-//When the selected state of the SwFrmOrObj is setted, return true.
+//When the selected state of the SwFrameOrObj is setted, return true.
 static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
                                      SwAccessibleContext* pContext,
                                      SwAccessibleMap* pMap)
 {
     Reference< XAccessible > xAcc;
-    if ( aChild.GetSwFrm() )
+    if ( aChild.GetSwFrame() )
     {
-        xAcc = pMap->GetContext( aChild.GetSwFrm(), false );
+        xAcc = pMap->GetContext( aChild.GetSwFrame(), false );
     }
     else if ( aChild.GetDrawObject() )
     {
@@ -144,7 +144,7 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
 {
     SolarMutexGuard aGuard;
 
-    // Get the respective child as SwFrm (also do index checking), ...
+    // Get the respective child as SwFrame (also do index checking), ...
     const SwAccessibleChild aChild = m_rContext.GetChild( *(m_rContext.GetMap()),
                                                         nChildIndex );
     if( !aChild.IsValid() )
@@ -155,15 +155,15 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     const SwFEShell* pFEShell = GetFEShell();
     if( pFEShell )
     {
-        if ( aChild.GetSwFrm() != nullptr )
+        if ( aChild.GetSwFrame() != nullptr )
         {
-            bRet = (pFEShell->GetSelectedFlyFrm() == aChild.GetSwFrm());
+            bRet = (pFEShell->GetSelectedFlyFrame() == aChild.GetSwFrame());
         }
         else if ( aChild.GetDrawObject() )
         {
             bRet = pFEShell->IsObjSelected( *aChild.GetDrawObject() );
         }
-        //If the SwFrmOrObj is not selected directly in the UI, we should check whether it is selected in the selection cursor.
+        //If the SwFrameOrObj is not selected directly in the UI, we should check whether it is selected in the selection cursor.
         if( !bRet )
         {
             if( lcl_getSelectedState( aChild, &m_rContext, m_rContext.GetMap() ) )
@@ -194,11 +194,11 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
         {
             const SwAccessibleChild& rChild = *aIter;
             const SdrObject* pObj = rChild.GetDrawObject();
-            const SwFrm* pFrm = rChild.GetSwFrm();
-            if( pObj && !(pFrm != nullptr && pFEShell->IsObjSelected()) )
+            const SwFrame* pFrame = rChild.GetSwFrame();
+            if( pObj && !(pFrame != nullptr && pFEShell->IsObjSelected()) )
             {
-                m_rContext.Select( const_cast< SdrObject *>( pObj ), nullptr==pFrm );
-                if( pFrm )
+                m_rContext.Select( const_cast< SdrObject *>( pObj ), nullptr==pFrame );
+                if( pFrame )
                     break;
             }
             ++aIter;
@@ -217,8 +217,8 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     const SwFEShell* pFEShell = GetFEShell();
     if( pFEShell != nullptr )
     {
-        const SwFlyFrm* pFlyFrm = pFEShell->GetSelectedFlyFrm();
-        if( pFlyFrm )
+        const SwFlyFrame* pFlyFrame = pFEShell->GetSelectedFlyFrame();
+        if( pFlyFrame )
         {
             nCount = 1;
         }
@@ -237,9 +237,9 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                 while( aIter != aEndIter && static_cast<size_t>(nCount) < nSelObjs )
                 {
                     const SwAccessibleChild& rChild = *aIter;
-                    if( rChild.GetDrawObject() && !rChild.GetSwFrm() &&
+                    if( rChild.GetDrawObject() && !rChild.GetSwFrame() &&
                         SwAccessibleFrame::GetParent(rChild, m_rContext.IsInPagePreview())
-                           == m_rContext.GetFrm() &&
+                           == m_rContext.GetFrame() &&
                         pFEShell->IsObjSelected( *rChild.GetDrawObject() ) )
                     {
                         nCount++;
@@ -248,7 +248,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                 }
             }
         }
-        //If the SwFrmOrObj is not selected directly in the UI,
+        //If the SwFrameOrObj is not selected directly in the UI,
         //we should check whether it is selected in the selection cursor.
         if( nCount == 0 )
         {
@@ -286,25 +286,25 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
         throwIndexOutOfBoundsException();
 
     SwAccessibleChild aChild;
-    const SwFlyFrm *pFlyFrm = pFEShell->GetSelectedFlyFrm();
-    if( pFlyFrm )
+    const SwFlyFrame *pFlyFrame = pFEShell->GetSelectedFlyFrame();
+    if( pFlyFrame )
     {
         if( 0 == nSelectedChildIndex )
         {
-            if(SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrm), m_rContext.IsInPagePreview()) == m_rContext.GetFrm() )
+            if(SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrame), m_rContext.IsInPagePreview()) == m_rContext.GetFrame() )
             {
-                aChild = pFlyFrm;
+                aChild = pFlyFrame;
             }
             else
             {
-                const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+                const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
                 if (pFrameFormat)
                 {
                     const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
                     if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
                     {
-                        const SwFrm  *pParaFrm =  SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrm), m_rContext.IsInPagePreview() );
-                        aChild  = pParaFrm;
+                        const SwFrame  *pParaFrame =  SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrame), m_rContext.IsInPagePreview() );
+                        aChild  = pParaFrame;
                     }
                 }
             }
@@ -324,9 +324,9 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
         while( aIter != aEndIter && !aChild.IsValid() )
         {
             const SwAccessibleChild& rChild = *aIter;
-            if( rChild.GetDrawObject() && !rChild.GetSwFrm() &&
+            if( rChild.GetDrawObject() && !rChild.GetSwFrame() &&
                 SwAccessibleFrame::GetParent(rChild, m_rContext.IsInPagePreview()) ==
-                    m_rContext.GetFrm() &&
+                    m_rContext.GetFrame() &&
                 pFEShell->IsObjSelected( *rChild.GetDrawObject() ) )
             {
                 if( 0 == nSelectedChildIndex )
@@ -343,10 +343,10 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
 
     OSL_ENSURE( m_rContext.GetMap() != nullptr, "We need the map." );
     Reference< XAccessible > xChild;
-    if( aChild.GetSwFrm() )
+    if( aChild.GetSwFrame() )
     {
         ::rtl::Reference < SwAccessibleContext > xChildImpl(
-                m_rContext.GetMap()->GetContextImpl( aChild.GetSwFrm() ) );
+                m_rContext.GetMap()->GetContextImpl( aChild.GetSwFrame() ) );
         if( xChildImpl.is() )
         {
             xChildImpl->SetParent( &m_rContext );

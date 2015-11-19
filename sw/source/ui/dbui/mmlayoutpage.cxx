@@ -296,17 +296,17 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
     else
         aSet.Put(SwFormatHoriOrient( rDestination.X(), text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     aSet.Put(SwFormatVertOrient( rDestination.Y(), text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-    aSet.Put(SwFormatFrmSize( ATT_MIN_SIZE, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
+    aSet.Put(SwFormatFrameSize( ATT_MIN_SIZE, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
     // the example gets a border around the frame, the real document doesn't get one
     if(!bExample)
         aSet.Put(SvxBoxItem( RES_BOX ));
     aSet.Put(SwFormatSurround( SURROUND_NONE ));
 
-    rShell.NewFlyFrm(aSet, true );
+    rShell.NewFlyFrame(aSet, true );
     SwFrameFormat* pRet = rShell.GetFlyFrameFormat();
     OSL_ENSURE( pRet, "Fly not inserted" );
 
-    rShell.UnSelectFrm();
+    rShell.UnSelectFrame();
     const Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
     if(bExample)
     {
@@ -423,7 +423,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     const SwRect& rPageRect = rShell.GetAnyCurRect(RECT_PAGE);
     const Point aGreetingPos( DEFAULT_LEFT_DISTANCE + rPageRect.Left(), GREETING_TOP_DISTANCE );
 
-    const bool bRet = rShell.SetShadowCrsrPos( aGreetingPos, FILL_SPACE );
+    const bool bRet = rShell.SetShadowCursorPos( aGreetingPos, FILL_SPACE );
 
     if(!bRet)
     {
@@ -654,8 +654,8 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExample
     aZoom <<= (sal_Int16)DocumentZoomType::ENTIRE_PAGE;
     m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
 
-    const SwFormatFrmSize& rPageSize = m_pExampleWrtShell->GetPageDesc(
-                                     m_pExampleWrtShell->GetCurPageDesc()).GetMaster().GetFrmSize();
+    const SwFormatFrameSize& rPageSize = m_pExampleWrtShell->GetPageDesc(
+                                     m_pExampleWrtShell->GetCurPageDesc()).GetMaster().GetFrameSize();
     m_pLeftMF->SetMax(rPageSize.GetWidth() - DEFAULT_LEFT_DISTANCE);
     m_pTopMF->SetMax(rPageSize.GetHeight() - DEFAULT_TOP_DISTANCE);
 }
@@ -702,7 +702,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, SpinField&, 
         else
             aSet.Put(SwFormatHoriOrient( nLeft, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
         aSet.Put(SwFormatVertOrient( nTop, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-        m_pExampleWrtShell->GetDoc()->SetFlyFrmAttr( *m_pAddressBlockFormat, aSet );
+        m_pExampleWrtShell->GetDoc()->SetFlyFrameAttr( *m_pAddressBlockFormat, aSet );
     }
 }
 

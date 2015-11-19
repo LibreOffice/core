@@ -49,7 +49,7 @@ bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
 SW_DLLPUBLIC SwContentNode* GoNextNds( SwNodeIndex * pIdx, bool );
 SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 
-// Funktionsdefinitionen fuer die SwCrsrShell
+// Funktionsdefinitionen fuer die SwCursorShell
 bool GoPrevPara( SwPaM&, SwPosPara);
 bool GoCurrPara( SwPaM&, SwPosPara);
 bool GoNextPara( SwPaM&, SwPosPara);

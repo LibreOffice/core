@@ -593,7 +593,7 @@ void RtfExport::ExportDocument_Impl()
             if (rPageDesc.GetLandscape())
                 Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LANDSCAPE);
 
-            const SwFormatFrmSize& rSz = rFormatPage.GetFrmSize();
+            const SwFormatFrameSize& rSz = rFormatPage.GetFrameSize();
             // Clipboard document is always created without a printer, then
             // the size will be always LONG_MAX! Solution then is to use A4
             if (LONG_MAX == rSz.GetHeight() || LONG_MAX == rSz.GetWidth())

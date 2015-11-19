@@ -28,10 +28,10 @@
 #include <section.hxx>
 #include <trvlreg.hxx>
 
-bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+bool GotoPrevRegion( SwPaM& rCurrentCursor, SwPosRegion fnPosRegion,
                         bool bInReadOnly )
 {
-    SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
+    SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
     if( pNd )
         aIdx.Assign( *pNd, - 1 );
@@ -60,7 +60,7 @@ bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                     --aIdx;
                     continue;
                 }
-                rCurCrsr.GetPoint()->nContent.Assign( pCNd, 0 );
+                rCurrentCursor.GetPoint()->nContent.Assign( pCNd, 0 );
             }
             else
             {
@@ -72,19 +72,19 @@ bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                     aIdx.Assign( *pNd, - 1 );
                     continue;
                 }
-                rCurCrsr.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+                rCurrentCursor.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
             }
-            rCurCrsr.GetPoint()->nNode = aIdx;
+            rCurrentCursor.GetPoint()->nNode = aIdx;
             return true;
         }
     } while( pNd );
     return false;
 }
 
-bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+bool GotoNextRegion( SwPaM& rCurrentCursor, SwPosRegion fnPosRegion,
                         bool bInReadOnly )
 {
-    SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
+    SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
     if( pNd )
         aIdx.Assign( *pNd->EndOfSectionNode(), - 1 );
@@ -114,7 +114,7 @@ bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                     aIdx.Assign( *pNd->EndOfSectionNode(), +1 );
                     continue;
                 }
-                rCurCrsr.GetPoint()->nContent.Assign( pCNd, 0 );
+                rCurrentCursor.GetPoint()->nContent.Assign( pCNd, 0 );
             }
             else
             {
@@ -126,23 +126,23 @@ bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                     ++aIdx;
                     continue;
                 }
-                rCurCrsr.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+                rCurrentCursor.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
             }
-            rCurCrsr.GetPoint()->nNode = aIdx;
+            rCurrentCursor.GetPoint()->nNode = aIdx;
             return true;
         }
     } while( pNd );
     return false;
 }
 
-bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+bool GotoCurrRegion( SwPaM& rCurrentCursor, SwPosRegion fnPosRegion,
                         bool bInReadOnly )
 {
-    SwSectionNode* pNd = rCurCrsr.GetNode().FindSectionNode();
+    SwSectionNode* pNd = rCurrentCursor.GetNode().FindSectionNode();
     if( !pNd )
         return false;
 
-    SwPosition* pPos = rCurCrsr.GetPoint();
+    SwPosition* pPos = rCurrentCursor.GetPoint();
     bool bMoveBackward = fnPosRegion == fnMoveBackward;
 
     SwContentNode* pCNd;
@@ -165,15 +165,15 @@ bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     return nullptr != pCNd;
 }
 
-bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+bool GotoCurrRegionAndSkip( SwPaM& rCurrentCursor, SwPosRegion fnPosRegion,
                                 bool bInReadOnly )
 {
-    SwNode& rCurrNd = rCurCrsr.GetNode();
+    SwNode& rCurrNd = rCurrentCursor.GetNode();
     SwSectionNode* pNd = rCurrNd.FindSectionNode();
     if( !pNd )
         return false;
 
-    SwPosition* pPos = rCurCrsr.GetPoint();
+    SwPosition* pPos = rCurrentCursor.GetPoint();
     const sal_Int32 nCurrCnt = pPos->nContent.GetIndex();
     bool bMoveBackward = fnPosRegion == fnMoveBackward;
 
@@ -212,7 +212,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
 bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
-    SwCrsrSaveState aSaveState( *this );
+    SwCursorSaveState aSaveState( *this );
     return !dynamic_cast<SwTableCursor*>(this) &&
             (*fnWhichRegion)( *this, fnPosRegion, IsReadOnlyAvailable()  ) &&
             !IsSelOvr() &&
@@ -220,12 +220,12 @@ bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion 
              GetPoint()->nContent.GetIndex() != m_pSavePos->nContent);
 }
 
-bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
+bool SwCursorShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
-    SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
-    bool bRet = !m_pTableCrsr && m_pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
+    SwCallLink aLk( *this ); // watch Cursor-Moves;call Link if needed
+    bool bRet = !m_pTableCursor && m_pCurrentCursor->MoveRegion( fnWhichRegion, fnPosRegion );
     if( bRet )
-        UpdateCrsr();
+        UpdateCursor();
     return bRet;
 }
 
@@ -244,7 +244,7 @@ bool SwCursor::GotoRegion( const OUString& rName )
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {
             // area in normal nodes array
-            SwCrsrSaveState aSaveState( *this );
+            SwCursorSaveState aSaveState( *this );
 
             GetPoint()->nNode = *pIdx;
             Move( fnMoveForward, fnGoContent );
@@ -254,13 +254,13 @@ bool SwCursor::GotoRegion( const OUString& rName )
     return bRet;
 }
 
-bool SwCrsrShell::GotoRegion( const OUString& rName )
+bool SwCursorShell::GotoRegion( const OUString& rName )
 {
-    SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
-    bool bRet = !m_pTableCrsr && m_pCurCrsr->GotoRegion( rName );
+    SwCallLink aLk( *this ); // watch Cursor-Moves;call Link if needed
+    bool bRet = !m_pTableCursor && m_pCurrentCursor->GotoRegion( rName );
     if( bRet )
-        UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                    SwCrsrShell::READONLY );
+        UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
+                    SwCursorShell::READONLY );
     return bRet;
 }
 

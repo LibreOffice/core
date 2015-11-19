@@ -532,12 +532,12 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // Delete HTML layout
     pTableNd->GetTable().SetHTMLTableLayout( nullptr );
 
-    // #i37739# A simple 'MakeFrms' after the node sorting
+    // #i37739# A simple 'MakeFrames' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
     SwNode2Layout aNode2Layout( *pTableNd );
 
     // Delete the Table's Frames
-    pTableNd->DelFrms();
+    pTableNd->DelFrames();
     // ? TL_CHART2: ?
 
     SwUndoSort* pUndoSort = nullptr;
@@ -581,10 +581,10 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     }
 
     // Restore table frames:
-    // #i37739# A simple 'MakeFrms' after the node sorting
+    // #i37739# A simple 'MakeFrames' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
     const sal_uLong nIdx = pTableNd->GetIndex();
-    aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
+    aNode2Layout.RestoreUpperFrames( GetNodes(), nIdx, nIdx + 1 );
 
     // TL_CHART2: need to inform chart of probably changed cell names
     UpdateCharts( pTableNd->GetTable().GetFrameFormat()->GetName() );

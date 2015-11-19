@@ -92,7 +92,7 @@ bool SwEditShell::AcceptRedlinesInSelection()
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( *GetCrsr(), true );
+    bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( *GetCursor(), true );
     EndAllAction();
     return bRet;
 }
@@ -101,7 +101,7 @@ bool SwEditShell::RejectRedlinesInSelection()
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( *GetCrsr(), true );
+    bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( *GetCursor(), true );
     EndAllAction();
     return bRet;
 }
@@ -110,7 +110,7 @@ bool SwEditShell::RejectRedlinesInSelection()
 bool SwEditShell::SetRedlineComment( const OUString& rS )
 {
     bool bRet = false;
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         bRet = bRet || GetDoc()->getIDocumentRedlineAccess().SetRedlineComment( rPaM, rS );
     }
@@ -120,7 +120,7 @@ bool SwEditShell::SetRedlineComment( const OUString& rS )
 
 const SwRangeRedline* SwEditShell::GetCurrRedline() const
 {
-    return GetDoc()->getIDocumentRedlineAccess().GetRedline( *GetCrsr()->GetPoint(), nullptr );
+    return GetDoc()->getIDocumentRedlineAccess().GetRedline( *GetCursor()->GetPoint(), nullptr );
 }
 
 void SwEditShell::UpdateRedlineAttr()

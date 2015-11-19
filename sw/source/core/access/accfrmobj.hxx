@@ -23,7 +23,7 @@
 #include <vcl/vclptr.hxx>
 
 class SwAccessibleMap;
-class SwFrm;
+class SwFrame;
 class SdrObject;
 namespace vcl { class Window; }
 class SwRect;
@@ -35,9 +35,9 @@ class SwAccessibleChild
     public:
         SwAccessibleChild();
         explicit SwAccessibleChild( const SdrObject* pDrawObj );
-        explicit SwAccessibleChild( const SwFrm* pFrm );
+        explicit SwAccessibleChild( const SwFrame* pFrame );
         explicit SwAccessibleChild( vcl::Window* pWindow );
-        SwAccessibleChild( const SwFrm* pFrm,
+        SwAccessibleChild( const SwFrame* pFrame,
                            const SdrObject* pDrawObj,
                            vcl::Window* pWindow );
 
@@ -45,18 +45,18 @@ class SwAccessibleChild
         SwAccessibleChild& operator=( const SwAccessibleChild& r );
 
         SwAccessibleChild& operator=( const SdrObject* pDrawObj );
-        SwAccessibleChild& operator=( const SwFrm* pFrm );
+        SwAccessibleChild& operator=( const SwFrame* pFrame );
         SwAccessibleChild& operator=( vcl::Window* pWindow );
 
         bool operator==( const SwAccessibleChild& r ) const;
 
         bool IsValid() const;
 
-        const SwFrm* GetSwFrm() const { return mpFrm; }
+        const SwFrame* GetSwFrame() const { return mpFrame; }
         const SdrObject* GetDrawObject() const { return mpDrawObj; }
         vcl::Window* GetWindow() const { return mpWindow; }
 
-        const SwFrm* GetParent( const bool bInPagePreview ) const;
+        const SwFrame* GetParent( const bool bInPagePreview ) const;
 
         bool IsAccessible( bool bPagePreview ) const;
         bool IsBoundAsChar() const;
@@ -70,12 +70,12 @@ class SwAccessibleChild
         bool AlwaysIncludeAsChild() const;
 
     private:
-        const SwFrm* mpFrm;
+        const SwFrame* mpFrame;
         const SdrObject* mpDrawObj;
         VclPtr<vcl::Window> mpWindow;
 
         void Init( const SdrObject* pDrawObj );
-        void Init( const SwFrm* pFrm );
+        void Init( const SwFrame* pFrame );
         void Init( vcl::Window* pWindow );
 };
 

@@ -704,24 +704,24 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 
                     // get the values of all SetExpression fields that are valid
                     // until the table
-                    SwFrm* pFrm = nullptr;
+                    SwFrame* pFrame = nullptr;
                     if( pTableNd->GetIndex() < m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
                     {
                         // is in the special section, that's expensive!
                         Point aPt;      // return the first frame of the layout - Tab.Headline!!
-                        pFrm = rTextNd.getLayoutFrm( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt );
-                        if( pFrm )
+                        pFrame = rTextNd.getLayoutFrame( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt );
+                        if( pFrame )
                         {
                             SwPosition aPos( *pTableNd );
-                            if( GetBodyTextNode( m_rDoc, aPos, *pFrm ) )
+                            if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
                                 FieldsToCalc( *pCalc, _SetGetExpField(
                                     aPos.nNode, pFormatField->GetTextField(),
                                     &aPos.nContent ));
                             else
-                                pFrm = nullptr;
+                                pFrame = nullptr;
                         }
                     }
-                    if( !pFrm )
+                    if( !pFrame )
                     {
                         // create index to determine the TextNode
                         SwNodeIndex aIdx( rTextNd );
@@ -769,7 +769,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 
                     // get the values of all SetExpression fields that are valid
                     // until the table
-                    SwFrm* pFrm = nullptr;
+                    SwFrame* pFrame = nullptr;
                     if( pTableNd->GetIndex() < m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
                     {
                         // is in the special section, that's expensive!
@@ -779,16 +779,16 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         if( !pCNd )
                             pCNd = m_rDoc.GetNodes().GoNext( &aCNdIdx );
 
-                        if( pCNd && nullptr != (pFrm = pCNd->getLayoutFrm( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt )) )
+                        if( pCNd && nullptr != (pFrame = pCNd->getLayoutFrame( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt )) )
                         {
                             SwPosition aPos( *pCNd );
-                            if( GetBodyTextNode( m_rDoc, aPos, *pFrm ) )
+                            if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
                                 FieldsToCalc( *pCalc, _SetGetExpField( aPos.nNode ));
                             else
-                                pFrm = nullptr;
+                                pFrame = nullptr;
                         }
                     }
-                    if( !pFrm )
+                    if( !pFrame )
                     {
                         // create index to determine the TextNode
                         SwNodeIndex aIdx( *pTableNd );

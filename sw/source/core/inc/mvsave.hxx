@@ -130,8 +130,8 @@ public:
 };
 
 /**
- * Function declarations so that everything below the CrsrShell can
- * move the Crsr once in a while.
+ * Function declarations so that everything below the CursorShell can
+ * move the Cursor once in a while.
  * These functions do not call the SwDoc::Corr methods!
  */
 void PaMCorrAbs( const SwPaM& rRange,

@@ -266,7 +266,7 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 }
                 break;
         case RES_DOCPOS_UPDATE:
-                // Je nach DocPos aktualisieren (SwTextFrm::Modify())
+                // Je nach DocPos aktualisieren (SwTextFrame::Modify())
                 pTextNd->ModifyNotification( pNew, this );
                 return;
 

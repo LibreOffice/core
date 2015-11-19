@@ -634,8 +634,8 @@ struct SwFindParaText : public SwFindParas
     bool m_bReplace;
     bool m_bSearchInNotes;
 
-    SwFindParaText( const SearchOptions& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCrsr )
-        : m_rSearchOpt( rOpt ), m_rCursor( rCrsr ), m_aSText( rOpt ), m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
+    SwFindParaText( const SearchOptions& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCursor )
+        : m_rSearchOpt( rOpt ), m_rCursor( rCursor ), m_aSText( rOpt ), m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
     {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) override;
     virtual bool IsReplaceMode() const override;
@@ -646,19 +646,19 @@ SwFindParaText::~SwFindParaText()
 {
 }
 
-int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
+int SwFindParaText::Find( SwPaM* pCursor, SwMoveFn fnMove,
                           const SwPaM* pRegion, bool bInReadOnly )
 {
     if( bInReadOnly && m_bReplace )
         bInReadOnly = false;
 
-    const bool bFnd = pCrsr->Find( m_rSearchOpt, m_bSearchInNotes, m_aSText, fnMove, pRegion, bInReadOnly );
+    const bool bFnd = pCursor->Find( m_rSearchOpt, m_bSearchInNotes, m_aSText, fnMove, pRegion, bInReadOnly );
 
     if( bFnd && m_bReplace ) // replace string
     {
         // use replace method in SwDoc
         const bool bRegExp(SearchAlgorithms_REGEXP == m_rSearchOpt.algorithmType);
-        SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
+        SwIndex& rSttCntIdx = pCursor->Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
         // add to shell-cursor-ring so that the regions will be moved eventually
         SwPaM* pPrev(nullptr);
@@ -669,13 +669,13 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         }
 
         std::unique_ptr<OUString> pRepl( (bRegExp)
-                ? ReplaceBackReferences( m_rSearchOpt, pCrsr ) : nullptr );
+                ? ReplaceBackReferences( m_rSearchOpt, pCursor ) : nullptr );
         bool const bReplaced =
             m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
-                *pCrsr,
+                *pCursor,
                 (pRepl.get()) ? *pRepl : m_rSearchOpt.replaceString,
                 bRegExp );
-        m_rCursor.SaveTableBoxContent( pCrsr->GetPoint() );
+        m_rCursor.SaveTableBoxContent( pCursor->GetPoint() );
 
         if( bRegExp )
         {
@@ -691,12 +691,12 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         if (bRegExp && !bReplaced)
         {   // fdo#80715 avoid infinite loop if join failed
             bool bRet = ((fnMoveForward == fnMove) ? &GoNextPara : &GoPrevPara)
-                (*pCrsr, fnMove);
+                (*pCursor, fnMove);
             (void) bRet;
             assert(bRet); // if join failed, next node must be SwTextNode
         }
         else
-            pCrsr->Start()->nContent = nSttCnt;
+            pCursor->Start()->nContent = nSttCnt;
         return FIND_NO_RING;
     }
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;

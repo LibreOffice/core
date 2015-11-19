@@ -28,7 +28,7 @@
 class SwTextField;
 class SwIndex;
 class SwNodeIndex;
-class SwContentFrm;
+class SwContentFrame;
 class SwSectionNode;
 class SwSection;
 class SwTextTOXMark;
@@ -100,7 +100,7 @@ public:
     const SwNode* GetNodeFromContent() const;
     sal_Int32 GetCntPosFromContent() const;
 
-    void SetBodyPos( const SwContentFrm& rFrm );
+    void SetBodyPos( const SwContentFrame& rFrame );
 };
 
 class _SetGetExpFields : public o3tl::sorted_vector<_SetGetExpField*, o3tl::less_ptr_to<_SetGetExpField> >

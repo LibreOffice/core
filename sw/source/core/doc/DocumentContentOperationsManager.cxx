@@ -843,7 +843,7 @@ namespace
                     }
                     else
                     {
-                        pSrch->DelFrms(nullptr);
+                        pSrch->DelFrames(nullptr);
                         rFootnoteArr.erase( rFootnoteArr.begin() + nPos );
                         if( bSaveFootnote )
                             rSaveArr.insert( pSrch );
@@ -871,7 +871,7 @@ namespace
                     }
                     else
                     {
-                        pSrch->DelFrms(nullptr);
+                        pSrch->DelFrames(nullptr);
                         rFootnoteArr.erase( rFootnoteArr.begin() + nPos );
                         if( bSaveFootnote )
                             rSaveArr.insert( pSrch );
@@ -1295,7 +1295,7 @@ namespace //local functions originally from docfmt.cxx
                 sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
                 const OUString& rStr = pTextNd->GetText();
 
-                // Special case: if the Crsr is located within a URL attribute, we take over it's area
+                // Special case: if the Cursor is located within a URL attribute, we take over it's area
                 SwTextAttr const*const pURLAttr(
                     pTextNd->GetTextAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
                 if (pURLAttr && !pURLAttr->GetINetFormat().GetValue().isEmpty())
@@ -1721,7 +1721,7 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
     _DelBookmarks(aSttIdx, aEndIdx);
 
     {
-        // move all Crsr/StkCrsr/UnoCrsr out of the to-be-deleted area
+        // move all Cursor/StackCursor/UnoCursor out of the to-be-deleted area
         SwNodeIndex aMvStt( aSttIdx, 1 );
         SwDoc::CorrAbs( aMvStt, aEndIdx, SwPosition( aSttIdx ), true );
     }
@@ -2217,8 +2217,8 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
         pSaveInsPos = new SwNodeIndex( rRange.aStart, -1 );
 
     // move the Nodes
-    bool bNoDelFrms = bool(SwMoveFlags::NO_DELFRMS & eMvFlags);
-    if( m_rDoc.GetNodes()._MoveNodes( rRange, m_rDoc.GetNodes(), rPos, !bNoDelFrms ) )
+    bool bNoDelFrames = bool(SwMoveFlags::NO_DELFRMS & eMvFlags);
+    if( m_rDoc.GetNodes()._MoveNodes( rRange, m_rDoc.GetNodes(), rPos, !bNoDelFrames ) )
     {
         ++aIdx;     // again back to old position
         if( pSaveInsPos )
@@ -2774,11 +2774,11 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
     if( m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // create layout representation
-        pFormat->MakeFrms();
+        pFormat->MakeFrames();
         // #i42319# - follow-up of #i35635#
         // move object to visible layer
         // #i79391#
-        if ( pContact->GetAnchorFrm() )
+        if ( pContact->GetAnchorFrame() )
         {
             pContact->MoveObjToVisibleLayer( &rDrawObj );
         }
@@ -3127,7 +3127,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     const sal_Int32 nEndContentIndex,
     const SwNodeIndex& rInsPos,
     const std::pair<const SwPaM&, const SwPosition&>* pCopiedPaM /*and real insert pos*/,
-    const bool bMakeNewFrms,
+    const bool bMakeNewFrames,
     const bool bDelRedlines,
     const bool bCopyFlyAtFly ) const
 {
@@ -3140,7 +3140,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
 
     SwNodeIndex aSavePos( rInsPos, -1 );
     bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
-    m_rDoc.GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrms, true );
+    m_rDoc.GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrames, true );
     ++aSavePos;
     if( bEndIsEqualEndPos )
         const_cast<SwNodeIndex&>(rRg.aEnd) = aSavePos;
@@ -4103,7 +4103,7 @@ static void lcl_PopNumruleState( SfxItemState aNumRuleState, const SwNumRuleItem
 }
 
 bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
-        const bool bMakeNewFrms, const bool bCopyAll,
+        const bool bMakeNewFrames, const bool bCopyAll,
         SwPaM *const pCpyRange ) const
 {
     SwDoc* pDoc = rPos.nNode.GetNode().GetDoc();
@@ -4127,7 +4127,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwUndoCpyDoc* pUndo = nullptr;
     // lcl_DeleteRedlines may delete the start or end node of the cursor when
     // removing the redlines so use cursor that is corrected by PaMCorrAbs
-    std::shared_ptr<SwUnoCrsr> const pCopyPam(pDoc->CreateUnoCrsr(rPos));
+    std::shared_ptr<SwUnoCursor> const pCopyPam(pDoc->CreateUnoCursor(rPos));
 
     SwTableNumFormatMerge aTNFM( m_rDoc, *pDoc );
 
@@ -4417,13 +4417,13 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( aInsPos == pEnd->nNode )
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
-                CopyWithFlyInFly( aRg, 0, aInsPos, &tmp, bMakeNewFrms, false );
+                CopyWithFlyInFly( aRg, 0, aInsPos, &tmp, bMakeNewFrames, false );
                 ++aSaveIdx;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTextNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, &tmp, bMakeNewFrms, false );
+                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, &tmp, bMakeNewFrames, false );
 
             bCopyBookmarks = false;
 

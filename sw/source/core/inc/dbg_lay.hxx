@@ -58,7 +58,7 @@
 #include "swtypes.hxx"
 
 class SwImplProtocol;
-class SwFrm;
+class SwFrame;
 class SwImplEnterLeave;
 
 class SwProtocol
@@ -71,7 +71,7 @@ public:
     static sal_uLong Record() { return nRecord; }
     static void SetRecord( sal_uLong nNew ) { nRecord = nNew; }
     static bool Record( sal_uLong nFunc ) { return 0 != (( nFunc | PROT_INIT ) & nRecord); }
-    static void Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAction, void* pParam );
+    static void Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAction, void* pParam );
     static void Init();
     static void Stop();
 };
@@ -79,14 +79,14 @@ public:
 class SwEnterLeave
 {
     SwImplEnterLeave* pImpl;
-    void Ctor( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, void* pPar );
+    void Ctor( const SwFrame* pFrame, sal_uLong nFunc, sal_uLong nAct, void* pPar );
     void Dtor();
 
 public:
-    SwEnterLeave( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, void* pPar )
+    SwEnterLeave( const SwFrame* pFrame, sal_uLong nFunc, sal_uLong nAct, void* pPar )
     {
         if( SwProtocol::Record( nFunc ) )
-            Ctor( pFrm, nFunc, nAct, pPar );
+            Ctor( pFrame, nFunc, nAct, pPar );
         else
             pImpl = nullptr;
     }
@@ -97,18 +97,18 @@ public:
     }
 };
 
-#define PROTOCOL( pFrm, nFunc, nAct, pPar ) {   if( SwProtocol::Record( nFunc ) )\
-                                                    SwProtocol::Record( pFrm, nFunc, nAct, pPar ); }
+#define PROTOCOL( pFrame, nFunc, nAct, pPar ) {   if( SwProtocol::Record( nFunc ) )\
+                                                    SwProtocol::Record( pFrame, nFunc, nAct, pPar ); }
 #define PROTOCOL_INIT SwProtocol::Init();
 #define PROTOCOL_STOP SwProtocol::Stop();
-#define PROTOCOL_ENTER( pFrm, nFunc, nAct, pPar ) SwEnterLeave aEnter( pFrm, nFunc, nAct, pPar );
+#define PROTOCOL_ENTER( pFrame, nFunc, nAct, pPar ) SwEnterLeave aEnter( pFrame, nFunc, nAct, pPar );
 
 #else
 
-#define PROTOCOL( pFrm, nFunc, nAct, pPar )
+#define PROTOCOL( pFrame, nFunc, nAct, pPar )
 #define PROTOCOL_INIT
 #define PROTOCOL_STOP
-#define PROTOCOL_ENTER( pFrm, nFunc, nAct, pPar )
+#define PROTOCOL_ENTER( pFrame, nFunc, nAct, pPar )
 
 #endif
 

@@ -154,7 +154,7 @@ class SwCalc
     SwHash*     VarTable[ TBLSZ ];
     OUString    aVarName, sCurrSym;
     OUString    sCommand;
-    std::vector<const SwUserFieldType*> aRekurStk;
+    std::vector<const SwUserFieldType*> aRekurStack;
     SwSbxValue  nLastLeft;
     SwSbxValue  nNumberValue;
     SwCalcExp   aErrExpr;

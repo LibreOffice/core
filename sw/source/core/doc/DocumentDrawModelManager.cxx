@@ -165,7 +165,7 @@ void DocumentDrawModelManager::InitDrawModel()
     {
         for(SwViewShell& rViewSh : pSh->GetRingContainer())
         {
-            SwRootFrm* pRoot =  rViewSh.GetLayout();
+            SwRootFrame* pRoot =  rViewSh.GetLayout();
             if( pRoot && !pRoot->GetDrawPage() )
             {
                 // Disable "multiple layout" for the moment:
@@ -174,7 +174,7 @@ void DocumentDrawModelManager::InitDrawModel()
                 // mpDrawModel->InsertPage( pDrawPage );
                 SdrPage* pDrawPage = pMasterPage;
                 pRoot->SetDrawPage( pDrawPage );
-                pDrawPage->SetSize( pRoot->Frm().SSize() );
+                pDrawPage->SetSize( pRoot->Frame().SSize() );
             }
         }
     }
@@ -344,12 +344,12 @@ SdrLayerID DocumentDrawModelManager::GetInvisibleLayerIdByVisibleOne( const SdrL
 
 bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem)
 {
-    SwPosFlyFrms aFrames = m_rDoc.GetAllFlyFormats(&rPaM, /*bDrawAlso=*/true);
+    SwPosFlyFrames aFrames = m_rDoc.GetAllFlyFormats(&rPaM, /*bDrawAlso=*/true);
 
-    for (const SwPosFlyFrmPtr& pPosFlyFrm : aFrames)
+    for (const SwPosFlyFramePtr& pPosFlyFrame : aFrames)
     {
         // Filter for at-paragraph anchored draw frames.
-        const SwFrameFormat& rFrameFormat = pPosFlyFrm->GetFormat();
+        const SwFrameFormat& rFrameFormat = pPosFlyFrame->GetFormat();
         const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
         if (rAnchor.GetAnchorId() != FLY_AT_PARA || rFrameFormat.Which() != RES_DRAWFRMFMT)
             continue;

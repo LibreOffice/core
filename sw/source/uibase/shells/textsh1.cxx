@@ -309,7 +309,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aRewriter.AddRule( UndoArg2, SW_RES(STR_YIELDS) );
                 aRewriter.AddRule( UndoArg3, sReplacement );
                 rWrtSh.StartUndo(UNDO_REPLACE, &aRewriter);
-                rWrtSh.GetCrsr()->Normalize(false);
+                rWrtSh.GetCursor()->Normalize(false);
                 rWrtSh.ClearMark();
                 for( sal_uInt32 i=aToggle.CharsToDelete(); i > 0; --i )
                     rWrtSh.DelLeft();
@@ -753,7 +753,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if(pField && pField->GetTypeId() == TYP_GETREFFLD)
             {
                 rWrtSh.StartAllAction();
-                rWrtSh.SwCrsrShell::GotoRefMark( static_cast<SwGetRefField*>(pField)->GetSetRefName(),
+                rWrtSh.SwCursorShell::GotoRefMark( static_cast<SwGetRefField*>(pField)->GetSetRefName(),
                                     static_cast<SwGetRefField*>(pField)->GetSubType(),
                                     static_cast<SwGetRefField*>(pField)->GetSeqNo() );
                 rWrtSh.EndAllAction();
@@ -792,7 +792,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aFieldMgr.UpdateCurField( aFieldMgr.GetCurField()->GetFormat(), OUString(), sFormula );
                 else if( !sFormula.isEmpty() )
                 {
-                    if( rWrtSh.IsCrsrInTable() )
+                    if( rWrtSh.IsCursorInTable() )
                     {
                         SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
                         aSet.Put( SwTableBoxFormula( sFormula ));
@@ -911,7 +911,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
 
             if ( !pPaM )
-                pPaM = rWrtSh.GetCrsr();
+                pPaM = rWrtSh.GetCursor();
 
             FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &GetView()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
@@ -987,7 +987,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             ::SwToSfxPageDescAttr( aCoreSet );
 
             // Properties of numbering
-            if (rWrtSh.GetNumRuleAtCurrCrsrPos())
+            if (rWrtSh.GetNumRuleAtCurrCursorPos())
             {
                 SfxBoolItem aStart( FN_NUMBER_NEWSTART, rWrtSh.IsNumRuleStart( pPaM ) );
                 aCoreSet.Put(aStart);
@@ -1160,7 +1160,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             //Above code demonstrates that when the cursor is at the start of a paragraph which has bullet,
             //press TAB will increase the bullet level.
             //So I copied from that ^^
-            if ( rWrtSh.GetNumRuleAtCurrCrsrPos() && !rWrtSh.HasReadonlySel() )
+            if ( rWrtSh.GetNumRuleAtCurrCursorPos() && !rWrtSh.HasReadonlySel() )
             {
                 rWrtSh.NumUpDown( SID_INC_INDENT == nSlot );
             }
@@ -1346,7 +1346,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             rWrtSh.SetReadonlySelectionOption(
                 !rWrtSh.GetViewOptions()->IsSelectionInReadonly());
-            rWrtSh.ShowCrsr();
+            rWrtSh.ShowCursor();
         }
     break;
     case FN_SELECTION_MODE_DEFAULT:
@@ -1495,7 +1495,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         break;
 
         case FN_NUMBER_NEWSTART :
-            if(!rSh.GetNumRuleAtCurrCrsrPos())
+            if(!rSh.GetNumRuleAtCurrCursorPos())
                     rSet.DisableItem(nWhich);
             else
                 rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
@@ -1513,7 +1513,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem(nWhich);
                 }
                 else if ( nWhich == FN_EDIT_FORMULA
-                          && rSh.CrsrInsideInputField() )
+                          && rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -1524,12 +1524,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_FOOTNOTE:
         case FN_INSERT_FOOTNOTE_DLG:
             {
-                const FrmTypeFlags nNoType =
-                    FrmTypeFlags::FLY_ANY | FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER | FrmTypeFlags::FOOTNOTE;
-                if ( rSh.GetFrmType(nullptr,true) & nNoType )
+                const FrameTypeFlags nNoType =
+                    FrameTypeFlags::FLY_ANY | FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FOOTNOTE;
+                if ( rSh.GetFrameType(nullptr,true) & nNoType )
                     rSet.DisableItem(nWhich);
 
-                if ( rSh.CrsrInsideInputField() )
+                if ( rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -1540,16 +1540,16 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_INSERTDOC:
         case FN_INSERT_GLOSSARY:
         case FN_EXPAND_GLOSSARY:
-            if ( rSh.CrsrInsideInputField() )
+            if ( rSh.CursorInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
             break;
 
         case FN_INSERT_TABLE:
-            if ( rSh.CrsrInsideInputField()
+            if ( rSh.CursorInsideInputField()
                  || rSh.GetTableFormat()
-                 || (rSh.GetFrmType(nullptr,true) & FrmTypeFlags::FOOTNOTE) )
+                 || (rSh.GetFrameType(nullptr,true) & FrameTypeFlags::FOOTNOTE) )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1578,7 +1578,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             //if the paragrah has bullet we'll do the following things:
             //1: if the bullet level is the first level, disable the decrease-indent button
             //2: if the bullet level is the last level, disable the increase-indent button
-            if ( rSh.GetNumRuleAtCurrCrsrPos() && !rSh.HasReadonlySel() )
+            if ( rSh.GetNumRuleAtCurrCursorPos() && !rSh.HasReadonlySel() )
             {
                 const sal_uInt8 nLevel = rSh.GetNumLevel();
                 if ( ( nLevel == ( MAXLEVEL - 1 ) && nWhich == SID_INC_INDENT )
@@ -1648,7 +1648,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case FN_INSERT_BOOKMARK:
             if( rSh.IsTableMode()
-                || rSh.CrsrInsideInputField() )
+                || rSh.CursorInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1656,7 +1656,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case FN_INSERT_BREAK:
             if ( rSh.HasReadonlySel()
-                 && !rSh.CrsrInsideInputField() )
+                 && !rSh.CursorInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1665,7 +1665,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_BREAK_DLG:
         case FN_INSERT_COLUMN_BREAK:
         case FN_INSERT_PAGEBREAK:
-            if( rSh.CrsrInsideInputField() )
+            if( rSh.CursorInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1688,7 +1688,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     SvtCJKOptions aCJKOptions;
                     if( !aCJKOptions.IsRubyEnabled()
-                        || rSh.CrsrInsideInputField() )
+                        || rSh.CursorInsideInputField() )
                     {
                         GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                         rSet.DisableItem(nWhich);
@@ -1702,7 +1702,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if( GetView().GetDocShell()->IsReadOnly()
                     || ( !GetView().GetViewFrame()->HasChildWindow(nWhich)
                          && rSh.HasReadonlySel() )
-                    || rSh.CrsrInsideInputField() )
+                    || rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -1830,7 +1830,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_NUM_NUM_RULE_INDEX:
             case FN_OUTLINE_RULE_INDEX:
         {
-            SwNumRule* pCurRule = const_cast<SwNumRule*>(GetShell().GetNumRuleAtCurrCrsrPos());
+            SwNumRule* pCurRule = const_cast<SwNumRule*>(GetShell().GetNumRuleAtCurrCursorPos());
             sal_uInt16  nActNumLvl = USHRT_MAX;
             if( pCurRule )
             {

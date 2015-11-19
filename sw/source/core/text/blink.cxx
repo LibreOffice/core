@@ -68,8 +68,8 @@ IMPL_LINK_NOARG_TYPED(SwBlink, Blinker, Timer *, void)
         for (SwBlinkSet::iterator it = m_List.begin(); it != m_List.end(); )
         {
             const SwBlinkPortion* pTmp = it->get();
-            if( pTmp->GetRootFrm() &&
-                pTmp->GetRootFrm()->GetCurrShell() )
+            if( pTmp->GetRootFrame() &&
+                pTmp->GetRootFrame()->GetCurrShell() )
             {
                 ++it;
 
@@ -104,7 +104,7 @@ IMPL_LINK_NOARG_TYPED(SwBlink, Blinker, Timer *, void)
 
                 Rectangle aRefresh( aPos, Size( nWidth, nHeight ) );
                 aRefresh.Right() += ( aRefresh.Bottom()- aRefresh.Top() ) / 8;
-                pTmp->GetRootFrm()
+                pTmp->GetRootFrame()
                     ->GetCurrShell()->InvalidateWindows( aRefresh );
             }
             else // Portions without a shell can be removed from the list
@@ -116,7 +116,7 @@ IMPL_LINK_NOARG_TYPED(SwBlink, Blinker, Timer *, void)
 }
 
 void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
-                      const SwTextFrm *pTextFrm, sal_uInt16 nDir )
+                      const SwTextFrame *pTextFrame, sal_uInt16 nDir )
 {
     std::unique_ptr<SwBlinkPortion> pBlinkPor(new SwBlinkPortion(pPor, nDir));
 
@@ -128,9 +128,9 @@ void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
     else
     {
         pBlinkPor->SetPos( rPoint );
-        pBlinkPor->SetRootFrm( pTextFrm->getRootFrm() );
+        pBlinkPor->SetRootFrame( pTextFrame->getRootFrame() );
         m_List.insert(std::move(pBlinkPor));
-        pTextFrm->SetBlinkPor();
+        pTextFrame->SetBlinkPor();
         if( pPor->IsLayPortion() || pPor->IsParaPortion() )
             const_cast<SwLineLayout*>(static_cast<const SwLineLayout*>(pPor))->SetBlinking();
 
@@ -161,11 +161,11 @@ void SwBlink::Delete( const SwLinePortion* pPor )
     m_List.erase( pBlinkPortion );
 }
 
-void SwBlink::FrmDelete( const SwRootFrm* pRoot )
+void SwBlink::FrameDelete( const SwRootFrame* pRoot )
 {
     for (SwBlinkSet::iterator it = m_List.begin(); it != m_List.end(); )
     {
-        if (pRoot == (*it)->GetRootFrm())
+        if (pRoot == (*it)->GetRootFrame())
             m_List.erase( it++ );
         else
             ++it;

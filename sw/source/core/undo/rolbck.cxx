@@ -428,7 +428,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTextFootnote* pTextFootnote, sal_u
     SwNode* pSaveNd = pDoc->GetNodes()[ m_nNodeIndex ];
 
     // keep pointer to StartNode of FootnoteSection and reset its attribute for now
-    // (as a result, its/all Frms will be deleted automatically)
+    // (as a result, its/all Frames will be deleted automatically)
     SwNodeIndex aSttIdx( *pTextFootnote->GetStartNode() );
     pTextFootnote->SetStartNode( nullptr, false );
 
@@ -889,9 +889,9 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
         aTmp.SetAnchor( &aPos );
 
         // so the Layout does not get confused
-        if ( !pCNd || !pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false ) )
+        if ( !pCNd || !pCNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false ) )
         {
-            m_rFormat.DelFrms();
+            m_rFormat.DelFrames();
         }
 
         m_rFormat.SetFormatAttr( aTmp );

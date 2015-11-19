@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 // no include "dbgoutsw.hxx" here!!!!!!
 
 extern bool g_bNoInterrupt;
-extern bool g_bFrmDrag;
+extern bool g_bFrameDrag;
 extern bool g_bDDTimerStarted;
 
 bool g_bExecuteDrag = false;
@@ -61,7 +61,7 @@ void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 {
     m_aTimer.Stop();
     g_bDDTimerStarted = false;
-    if(!pSh->IsSelFrmMode())
+    if(!pSh->IsSelFrameMode())
         pSh->CallSetCursor(&rPt, false);
     m_aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
 }
@@ -87,7 +87,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, true, true))
             //We are not selecting and aren't at a selection
             bStart = true;
-        else if ( !g_bFrmDrag && rSh.IsSelFrmMode() &&
+        else if ( !g_bFrameDrag && rSh.IsSelFrameMode() &&
                     rSh.IsInsideSelectedObj( aDocPos ) )
         {
             //We are not dragging internally and are not at an
@@ -95,7 +95,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 
             bStart = true;
         }
-        else if( !g_bFrmDrag && m_rView.GetDocShell()->IsReadOnly() &&
+        else if( !g_bFrameDrag && m_rView.GetDocShell()->IsReadOnly() &&
                 OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
         {
             rSh.LockPaint();
@@ -115,7 +115,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         {
             m_bMBPressed = false;
             ReleaseMouse();
-            g_bFrmDrag = false;
+            g_bFrameDrag = false;
             g_bExecuteDrag = true;
             SwEditWin::m_nDDStartPosY = aDocPos.Y();
             SwEditWin::m_nDDStartPosX = aDocPos.X();
@@ -123,7 +123,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
             StartExecuteDrag();
             if( bDelSelect )
             {
-                rSh.UnSelectFrm();
+                rSh.UnSelectFrame();
                 rSh.UnlockPaint();
             }
         }
@@ -165,7 +165,7 @@ void SwEditWin::DropCleanup()
     if ( m_pUserMarker )
         CleanupDropUserMarker();
     else
-        rSh.UnSetVisCrsr();
+        rSh.UnSetVisibleCursor();
 
 }
 
@@ -395,9 +395,9 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             //Drawing objects in Headers/Footers are not allowed
 
             SwWrtShell *pSrcSh = pMod->m_pDragDrop->GetShell();
-            if( (pSrcSh->GetSelFrmType() == FrmTypeFlags::DRAWOBJ) &&
+            if( (pSrcSh->GetSelFrameType() == FrameTypeFlags::DRAWOBJ) &&
                 pSrcSh->IsSelContainsControl() &&
-                 (rSh.GetFrmType( &aDocPt, false ) & (FrmTypeFlags::HEADER|FrmTypeFlags::FOOTER)) )
+                 (rSh.GetFrameType( &aDocPt, false ) & (FrameTypeFlags::HEADER|FrameTypeFlags::FOOTER)) )
             {
                 bCleanup = true;
             }
@@ -418,7 +418,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             if ( bCleanup )
             {
                 CleanupDropUserMarker();
-                rSh.UnSetVisCrsr();
+                rSh.UnSetVisibleCursor();
                 return DND_ACTION_NONE;
             }
         }
@@ -449,11 +449,11 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             CleanupDropUserMarker();
             SwContentAtPos aCont( SwContentAtPos::SW_CONTENT_CHECK );
             if(rSh.GetContentAtPos(aDocPt, aCont))
-                rSh.SwCrsrShell::SetVisCrsr( aDocPt );
+                rSh.SwCursorShell::SetVisibleCursor( aDocPt );
         }
         else
         {
-            rSh.UnSetVisCrsr();
+            rSh.UnSetVisibleCursor();
 
             if ( m_pUserMarkerObj != pObj )
             {
@@ -470,7 +470,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     }
 
     CleanupDropUserMarker();
-    rSh.UnSetVisCrsr();
+    rSh.UnSetVisibleCursor();
     return DND_ACTION_NONE;
 }
 
@@ -481,7 +481,7 @@ IMPL_LINK_NOARG_TYPED(SwEditWin, DDHandler, Timer *, void)
     m_aTimer.SetTimeout(240);
     m_bMBPressed = false;
     ReleaseMouse();
-    g_bFrmDrag = false;
+    g_bFrameDrag = false;
 
     if ( m_rView.GetViewFrame() )
     {

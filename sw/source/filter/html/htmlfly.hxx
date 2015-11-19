@@ -26,11 +26,11 @@
 class SdrObject;
 class SwFrameFormat;
 class SwNodeIndex;
-class SwPosFlyFrm;
+class SwPosFlyFrame;
 
 // ACHTUNG: Die Werte dieses Enumgs gehen direkt in die
 // Augabe Tabelle!!!
-enum SwHTMLFrmType
+enum SwHTMLFrameType
 {
     HTML_FRMTYPE_TABLE,
     HTML_FRMTYPE_TABLE_CAP,
@@ -76,28 +76,28 @@ enum SwHTMLFrmType
 const sal_uInt16 MAX_FRMTYPES = HTML_FRMTYPE_END;
 const sal_uInt16 MAX_BROWSERS = 4;
 
-extern sal_uInt8 aHTMLOutFrmPageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrmParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrmParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrmParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
 
-class SwHTMLPosFlyFrm
+class SwHTMLPosFlyFrame
 {
     const SwFrameFormat      *pFrameFormat;       // der Rahmen
     const SdrObject     *pSdrObject;    // ggf. Sdr-Objekt
     SwNodeIndex         *pNdIdx;        // Node-Index
-    sal_uInt32              nOrdNum;        // Aus SwPosFlyFrm
+    sal_uInt32              nOrdNum;        // Aus SwPosFlyFrame
     sal_Int32          nContentIdx;      // seine Position im Content
     sal_uInt8               nOutputMode;    // Ausgabe-Infos
 
 public:
 
-    SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
+    SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
                      const SdrObject *pSdrObj, sal_uInt8 nOutMode );
 
-    bool operator==( const SwHTMLPosFlyFrm& ) const { return false; }
-    bool operator<( const SwHTMLPosFlyFrm& ) const;
+    bool operator==( const SwHTMLPosFlyFrame& ) const { return false; }
+    bool operator<( const SwHTMLPosFlyFrame& ) const;
 
     const SwFrameFormat& GetFormat() const { return *pFrameFormat; }
     const SdrObject *GetSdrObject() const { return pSdrObject; }
@@ -115,9 +115,9 @@ public:
     sal_uInt8 GetOutPos() const { return nOutputMode & HTML_POS_MASK; }
 };
 
-class SwHTMLPosFlyFrms
-    : public o3tl::sorted_vector<SwHTMLPosFlyFrm*,
-                o3tl::less_ptr_to<SwHTMLPosFlyFrm>,
+class SwHTMLPosFlyFrames
+    : public o3tl::sorted_vector<SwHTMLPosFlyFrame*,
+                o3tl::less_ptr_to<SwHTMLPosFlyFrame>,
                 o3tl::find_partialorder_ptrequals>
 {};
 

@@ -136,7 +136,7 @@ void SwListShell::Execute(SfxRequest &rReq)
     SwWrtShell& rSh = GetShell();
 
     // #i35572#
-    const SwNumRule* pCurRule = rSh.GetNumRuleAtCurrCrsrPos();
+    const SwNumRule* pCurRule = rSh.GetNumRuleAtCurrCursorPos();
     OSL_ENSURE( pCurRule, "SwListShell::Execute without NumRule" );
     bool bOutline = pCurRule && pCurRule->IsOutlineRule();
 
@@ -260,7 +260,7 @@ void SwListShell::GetState(SfxItemSet &rSet)
             break;
 
             case FN_NUM_BULLET_NONUM:
-                if ( rSh.CrsrInsideInputField() )
+                if ( rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }

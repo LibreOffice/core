@@ -106,7 +106,7 @@ public:
  * Access to complete m_eUse including the information on header and footer
  * via ReadUseOn(), WriteUseOn() (for Filter and CopyCTor)!
  *
- * The Frmformats for header/footer are adjusted by the UI according to
+ * The Frameformats for header/footer are adjusted by the UI according to
  * the attributes for header and footer at master (height, margin, back-
  * ground ...)
  * Header/footer for left hand pages are copied or mirrored (Chg at

@@ -103,7 +103,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
             @author OD
         */
-        void _InvalidatePage( SwPageFrm* _pPageFrm );
+        void _InvalidatePage( SwPageFrame* _pPageFrame );
 
     protected:
         virtual void ObjectAttachedToAnchorFrame() override;
@@ -154,21 +154,21 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
             @author OD
 
-            @param <_pNewAnchorFrm>
+            @param <_pNewAnchorFrame>
             input parameter - new anchor frame for the anchored object.
 
             @param <_pNewObjRect>
             optional input parameter - proposed new object rectangle. If not
             provided the current object rectangle is taken.
         */
-        void AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
+        void AdjustPositioningAttr( const SwFrame* _pNewAnchorFrame,
                                     const SwRect* _pNewObjRect = nullptr );
 
         /** method to notify background of drawing object
 
             @author OD
         */
-        virtual void NotifyBackground( SwPageFrm* _pPageFrm,
+        virtual void NotifyBackground( SwPageFrame* _pPageFrame,
                                        const SwRect& _rRect,
                                        PrepareHint _eHint ) override;
 

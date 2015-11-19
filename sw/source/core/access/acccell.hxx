@@ -24,7 +24,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <accselectionhelper.hxx>
 
-class SwCellFrm;
+class SwCellFrame;
 class SwAccessibleTable;
 class SwFrameFormat;
 
@@ -40,7 +40,7 @@ class SwAccessibleCell : public SwAccessibleContext,
     bool    IsSelected();
 
     bool _InvalidateMyCursorPos();
-    bool _InvalidateChildrenCursorPos( const SwFrm *pFrm );
+    bool _InvalidateChildrenCursorPos( const SwFrame *pFrame );
 
     rtl::Reference<SwAccessibleTable> m_pAccTable;
 
@@ -54,7 +54,7 @@ protected:
     virtual ~SwAccessibleCell();
 
 public:
-    SwAccessibleCell( SwAccessibleMap* pInitMap, const SwCellFrm *pCellFrm );
+    SwAccessibleCell( SwAccessibleMap* pInitMap, const SwCellFrame *pCellFrame );
 
     virtual bool HasCursor() override;   // required by map to remember that object
 
@@ -85,7 +85,7 @@ public:
 
     virtual void Dispose( bool bRecursive = false ) override;
 
-    virtual void InvalidatePosOrSize( const SwRect& rFrm ) override;
+    virtual void InvalidatePosOrSize( const SwRect& rFrame ) override;
 
     // XInterface
 

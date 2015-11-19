@@ -81,10 +81,10 @@ SwWriteTableCol::SwWriteTableCol(sal_uInt32 nPosition)
 sal_uInt32 SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 {
     const SwFrameFormat *pFormat = pBox->GetFrameFormat();
-    const SwFormatFrmSize& aFrmSize=
-        static_cast<const SwFormatFrmSize&>(pFormat->GetFormatAttr( RES_FRM_SIZE ));
+    const SwFormatFrameSize& aFrameSize=
+        static_cast<const SwFormatFrameSize&>(pFormat->GetFormatAttr( RES_FRM_SIZE ));
 
-    return sal::static_int_cast<sal_uInt32>(aFrmSize.GetSize().Width());
+    return sal::static_int_cast<sal_uInt32>(aFrameSize.GetSize().Width());
 }
 
 long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
@@ -151,7 +151,7 @@ long SwWriteTable::GetLineHeight( const SwTableBox *pBox )
 
     long nHeight = 0;
     if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
-        nHeight = static_cast<const SwFormatFrmSize*>(pItem)->GetHeight();
+        nHeight = static_cast<const SwFormatFrameSize*>(pItem)->GetHeight();
 
     return nHeight;
 }
@@ -587,7 +587,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
 
         long nHeight = 0;
         if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
-            nHeight = static_cast<const SwFormatFrmSize*>(pItem)->GetHeight();
+            nHeight = static_cast<const SwFormatFrameSize*>(pItem)->GetHeight();
 
         const SvxBrushItem *pBrushItem, *pLineBrush = pParentBrush;
         if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,

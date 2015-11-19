@@ -52,11 +52,11 @@ static bool lcl_IsDropFlyInter( const SwTextFormatInfo &rInf,
     const SwTextFly& rTextFly = rInf.GetTextFly();
     if( rTextFly.IsOn() )
     {
-        SwRect aRect( rInf.GetTextFrm()->Frm().Pos(), Size( nWidth, nHeight) );
-        aRect.Pos() += rInf.GetTextFrm()->Prt().Pos();
+        SwRect aRect( rInf.GetTextFrame()->Frame().Pos(), Size( nWidth, nHeight) );
+        aRect.Pos() += rInf.GetTextFrame()->Prt().Pos();
         aRect.Pos().X() += rInf.X();
         aRect.Pos().Y() = rInf.Y();
-        aRect = rTextFly.GetFrm( aRect );
+        aRect = rTextFly.GetFrame( aRect );
         return aRect.HasArea();
     }
 
@@ -190,19 +190,19 @@ bool SwTextNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDesce
     }
 
     // get text frame
-    SwIterator<SwTextFrm,SwTextNode> aIter( *this );
-    for( SwTextFrm* pLastFrm = aIter.First(); pLastFrm; pLastFrm = aIter.Next() )
+    SwIterator<SwTextFrame,SwTextNode> aIter( *this );
+    for( SwTextFrame* pLastFrame = aIter.First(); pLastFrame; pLastFrame = aIter.Next() )
     {
         // Only (master-) text frames can have a drop cap.
-        if ( !pLastFrm->IsFollow() )
+        if ( !pLastFrame->IsFollow() )
         {
 
-            if( !pLastFrm->HasPara() )
-                pLastFrm->GetFormatted();
+            if( !pLastFrame->HasPara() )
+                pLastFrame->GetFormatted();
 
-            if ( !pLastFrm->IsEmpty() )
+            if ( !pLastFrame->IsEmpty() )
             {
-                const SwParaPortion* pPara = pLastFrm->GetPara();
+                const SwParaPortion* pPara = pLastFrame->GetPara();
                 OSL_ENSURE( pPara, "GetDropSize could not find the ParaPortion, I'll guess the drop cap size" );
 
                 if ( pPara )
@@ -324,7 +324,7 @@ void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
         aClipRect.Intersection( rInf.GetPaintRect() );
     }
     SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
-    aClip.ChgClip( aClipRect, rInf.GetTextFrm() );
+    aClip.ChgClip( aClipRect, rInf.GetTextFrame() );
 
     // Just do, what we always do ...
     PaintText( rInf );
@@ -347,10 +347,10 @@ void SwDropPortion::Paint( const SwTextPaintInfo &rInf ) const
 
         // make sure that font is not rotated
         SwFont* pTmpFont = nullptr;
-        if ( rInf.GetFont()->GetOrientation( rInf.GetTextFrm()->IsVertical() ) )
+        if ( rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() ) )
         {
             pTmpFont = new SwFont( *rInf.GetFont() );
-            pTmpFont->SetVertical( 0, rInf.GetTextFrm()->IsVertical() );
+            pTmpFont->SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
         }
 
         SwFontSave aFontSave( rInf, pTmpFont );
@@ -422,7 +422,7 @@ SwPosSize SwDropPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
     return aPosSize;
 }
 
-sal_Int32 SwDropPortion::GetCrsrOfst( const sal_uInt16 ) const
+sal_Int32 SwDropPortion::GetCursorOfst( const sal_uInt16 ) const
 {
     return 0;
 }
@@ -510,7 +510,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         return nullptr;
 
     sal_Int32 nPorLen = pDropFormat->GetWholeWord() ? 0 : pDropFormat->GetChars();
-    nPorLen = m_pFrm->GetTextNode()->GetDropLen( nPorLen );
+    nPorLen = m_pFrame->GetTextNode()->GetDropLen( nPorLen );
     if( !nPorLen )
     {
         static_cast<SwTextFormatter*>(this)->ClearDropFormat();
@@ -563,11 +563,11 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         if ( pFormat )
         {
             const SwAttrSet& rSet = pFormat->GetAttrSet();
-            pTmpFnt->SetDiffFnt( &rSet, m_pFrm->GetTextNode()->getIDocumentSettingAccess() );
+            pTmpFnt->SetDiffFnt( &rSet, m_pFrame->GetTextNode()->getIDocumentSettingAccess() );
         }
 
         // we do not allow a vertical font for the drop portion
-        pTmpFnt->SetVertical( 0, rInf.GetTextFrm()->IsVertical() );
+        pTmpFnt->SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
 
         // find next attribute change / script change
         const sal_Int32 nTmpIdx = nNextChg;
@@ -855,7 +855,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
             // respect to a common baseline : 0
 
             // get descent and ascent from union
-            if ( rInf.GetTextFrm()->IsVertical() )
+            if ( rInf.GetTextFrame()->IsVertical() )
             {
                 nDescent = aCommonRect.Left();
                 nAscent = aCommonRect.Right();

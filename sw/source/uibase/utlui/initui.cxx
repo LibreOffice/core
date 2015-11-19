@@ -51,7 +51,7 @@ enum CachedStringID
 {
     OldGrfCat,
     OldTabCat,
-    OldFrmCat,
+    OldFrameCat,
     OldDrwCat,
     CurrGlosGroup,
     CachedStrings
@@ -106,14 +106,14 @@ void SetOldTabCat(const OUString& sStr)
     SetCachedString(OldTabCat, sStr);
 }
 
-OUString GetOldFrmCat()
+OUString GetOldFrameCat()
 {
-    return GetCachedString(OldFrmCat);
+    return GetCachedString(OldFrameCat);
 }
 
-void SetOldFrmCat(const OUString& sStr)
+void SetOldFrameCat(const OUString& sStr)
 {
-    SetCachedString(OldFrmCat, sStr);
+    SetCachedString(OldFrameCat, sStr);
 }
 
 OUString GetOldDrwCat()

@@ -203,17 +203,17 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFo
     OUString tmpTextMark;
 
     OUString rUrl = pINetFormatArg->GetURL();
-    OUString rTarFrm = pINetFormatArg->GetTargetFrameName();
+    OUString rTarFrame = pINetFormatArg->GetTargetFrameName();
     sal_uInt32          mnFlags = 0;
 
     INetURLObject aUrlObj( rUrl );
     const INetProtocol eProtocol = aUrlObj.GetProtocol();
 
     //Target Frame
-    if (!rTarFrm.isEmpty())
+    if (!rTarFrame.isEmpty())
     {
-        SwWW8Writer::WriteLong(tmpStrm, rTarFrm.getLength()+1);
-        SwWW8Writer::WriteString16(tmpStrm, rTarFrm, false);
+        SwWW8Writer::WriteLong(tmpStrm, rTarFrame.getLength()+1);
+        SwWW8Writer::WriteString16(tmpStrm, rTarFrame, false);
 
         tmpStrm.WriteUInt16( 0 );
 
@@ -743,7 +743,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 // the Object is not visible - so get the values from
                 // the format. The Position may not be correct.
                 if( aLayRect.IsEmpty() )
-                    aRect.SetSize( rFormat.GetFrmSize().GetSize() );
+                    aRect.SetSize( rFormat.GetFrameSize().GetSize() );
                 else
                 {
                     // #i56090# Do not only consider the first client
@@ -1572,7 +1572,7 @@ SwBasicEscherEx::~SwBasicEscherEx()
 {
 }
 
-void SwBasicEscherEx::WriteFrmExtraData(const SwFrameFormat&)
+void SwBasicEscherEx::WriteFrameExtraData(const SwFrameFormat&)
 {
     AddAtom(4, ESCHER_ClientAnchor);
     GetStream().WriteUInt32( 0x80000000 );
@@ -1583,7 +1583,7 @@ void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrameFormat& rFormat, sal_uInt3
     OpenContainer(ESCHER_SpContainer);
     AddShape(ESCHER_ShpInst_PictureFrame, 0xa00, nShapeId);
     // store anchor attribute
-    WriteFrmExtraData(rFormat);
+    WriteFrameExtraData(rFormat);
 
     AddAtom(6, DFF_msofbtUDefProp, 3, 1); //Prop id is 0xF122
     GetStream().WriteUInt16( 0x053F ).WriteUInt32( nInlineHack );
@@ -1739,7 +1739,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
     aPropOpt.Commit( GetStream() );
 
     // store anchor attribute
-    WriteFrmExtraData( rFormat );
+    WriteFrameExtraData( rFormat );
 
     CloseContainer();   // ESCHER_SpContainer
     return nBorderThick;
@@ -1897,7 +1897,7 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrameFormat& rFormat, sal_uI
         aPropOpt.Commit(GetStream());
 
         // store anchor attribute
-        WriteFrmExtraData( rFormat );
+        WriteFrameExtraData( rFormat );
 
         CloseContainer();   // ESCHER_SpContainer
     }
@@ -2326,7 +2326,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                 case ww8::Frame::eTextBox:
                 case ww8::Frame::eOle:
                 case ww8::Frame::eGraphic:
-                    nBorderThick = WriteFlyFrm(*pObj, nShapeId, aSorted);
+                    nBorderThick = WriteFlyFrame(*pObj, nShapeId, aSorted);
                     break;
                 case ww8::Frame::eFormControl:
                     WriteOCXControl(rFormat, nShapeId = GenerateShapeId());
@@ -2489,7 +2489,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
     // This is the case for drawing objects, which are anchored inside a page
     // header/footer of an *unused* page style.
     if ( dynamic_cast<SwAnchoredDrawObject*>(pAnchoredObj) &&
-         !pAnchoredObj->GetAnchorFrm() )
+         !pAnchoredObj->GetAnchorFrame() )
     {
         return false;
     }
@@ -2596,7 +2596,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                     _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
                     // #i33818#
                     bool bRelToTableCell( false );
-                    aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
+                    aPos = pAnchoredObj->GetRelPosToPageFrame( bFollowTextFlow,
                                                              bRelToTableCell );
                     if ( bRelToTableCell )
                     {
@@ -2606,7 +2606,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                 else if ( eHoriConv == CONV2COL )
                 {
                     _iorHoriOri.SetRelationOrient( text::RelOrientation::FRAME );
-                    aPos = pAnchoredObj->GetRelPosToAnchorFrm();
+                    aPos = pAnchoredObj->GetRelPosToAnchorFrame();
                 }
                 else if ( eHoriConv == CONV2CHAR )
                 {
@@ -2707,7 +2707,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                     _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
                     // #i33818#
                     bool bRelToTableCell( false );
-                    aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
+                    aPos = pAnchoredObj->GetRelPosToPageFrame( bFollowTextFlow,
                                                              bRelToTableCell );
                     if ( bRelToTableCell )
                     {
@@ -2717,7 +2717,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
                 else if ( eVertConv == CONV2PARA )
                 {
                     _iorVertOri.SetRelationOrient( text::RelOrientation::FRAME );
-                    aPos = pAnchoredObj->GetRelPosToAnchorFrm();
+                    aPos = pAnchoredObj->GetRelPosToAnchorFrame();
                 }
                 else if ( eVertConv == CONV2LINE )
                 {
@@ -2871,7 +2871,7 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
     }
 }
 
-void SwEscherEx::WriteFrmExtraData( const SwFrameFormat& rFormat )
+void SwEscherEx::WriteFrameExtraData( const SwFrameFormat& rFormat )
 {
     aWinwordAnchoring.SetAnchoring(rFormat);
     aWinwordAnchoring.WriteData(*this);
@@ -2883,7 +2883,7 @@ void SwEscherEx::WriteFrmExtraData( const SwFrameFormat& rFormat )
     GetStream().WriteInt32( 1 );
 }
 
-sal_Int32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,
+sal_Int32 SwEscherEx::WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
     DrawObjPointerVector &rPVec)
 {
     const SwFrameFormat &rFormat = rObj.maContent.GetFrameFormat();
@@ -3033,7 +3033,7 @@ sal_Int32 SwEscherEx::WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId
     aPropOpt.Commit( GetStream() );
 
     // store anchor attribute
-    WriteFrmExtraData( rFormat );
+    WriteFrameExtraData( rFormat );
 
     AddAtom( 4, ESCHER_ClientTextbox ); GetStream().WriteUInt32( nTextBox );
 
@@ -3090,7 +3090,7 @@ void SwEscherEx::WriteOCXControl( const SwFrameFormat& rFormat, sal_uInt32 nShap
         aPropOpt.Commit( GetStream() );
 
         // store anchor attribute
-        WriteFrmExtraData( rFormat );
+        WriteFrameExtraData( rFormat );
 
         CloseContainer();   // ESCHER_SpContainer
     }

@@ -172,7 +172,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                  throw uno::RuntimeException();
              uno::Reference< text::XTextRange >  xAnchor = pxIndexSectionsArr[nTOXIndex]->xContainerSection->getAnchor();
              xAnchor = xAnchor->getStart();
-             uno::Reference< text::XTextCursor >  xCrsr = xAnchor->getText()->createTextCursorByRange(xAnchor);
+             uno::Reference< text::XTextCursor >  xCursor = xAnchor->getText()->createTextCursorByRange(xAnchor);
 
              uno::Reference< lang::XMultiServiceFactory >  xFact(xModel, uno::UNO_QUERY);
 
@@ -180,8 +180,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     nTOXIndex <= TOX_AUTHORITIES ? nTOXIndex : TOX_USER] ));
              pxIndexSectionsArr[nTOXIndex]->xDocumentIndex.set(xFact->createInstance(sIndexTypeName), uno::UNO_QUERY);
              uno::Reference< text::XTextContent >  xContent(pxIndexSectionsArr[nTOXIndex]->xDocumentIndex, uno::UNO_QUERY);
-             uno::Reference< text::XTextRange >  xRg(xCrsr, uno::UNO_QUERY);
-             xCrsr->getText()->insertTextContent(xRg, xContent, sal_False);
+             uno::Reference< text::XTextRange >  xRg(xCursor, uno::UNO_QUERY);
+             xCursor->getText()->insertTextContent(xRg, xContent, sal_False);
          }
          for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
          {

@@ -270,9 +270,9 @@ public:
     virtual const SwDoc*        GetDoc() const override;
     virtual SwDoc*              GetDoc() override;
 
-    const SwUnoCrsr&            GetCrsr() const;
-    SwUnoCrsr&                  GetCrsr();
-    sw::UnoCursorPointer m_pUnoCrsr;
+    const SwUnoCursor&            GetCursor() const;
+    SwUnoCursor&                  GetCursor();
+    sw::UnoCursorPointer m_pUnoCursor;
     SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     virtual ~SwXTextTableCursor() { };
 };
@@ -456,7 +456,7 @@ class SwXCellRange : public cppu::WeakImplHelper
     SwRangeDescriptor           aRgDesc;
     const SfxItemPropertySet*   m_pPropSet;
 
-    sw::UnoCursorPointer m_pTableCrsr;
+    sw::UnoCursorPointer m_pTableCursor;
 
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
@@ -465,7 +465,7 @@ class SwXCellRange : public cppu::WeakImplHelper
     void setLabelDescriptions(const css::uno::Sequence<OUString>& rDesc, bool bRow);
 
 public:
-    SwXCellRange(sw::UnoCursorPointer pCrsr, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
+    SwXCellRange(sw::UnoCursorPointer pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
         { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
     virtual ~SwXCellRange() {};
@@ -540,7 +540,7 @@ public:
     sal_uInt16      getRowCount();
     sal_uInt16      getColumnCount();
 
-    const SwUnoCrsr* GetTableCrsr() const;
+    const SwUnoCursor* GetTableCursor() const;
 };
 
 class SwXTableRows final : public cppu::WeakImplHelper

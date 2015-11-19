@@ -55,7 +55,7 @@ SwUndoFlyBase::~SwUndoFlyBase()
         delete pFrameFormat;
 }
 
-void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
+void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
 
@@ -117,9 +117,9 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         pCNd->GetTextNode()->InsertItem( aFormat, nCntPos, nCntPos );
     }
 
-    pFrameFormat->MakeFrms();
+    pFrameFormat->MakeFrames();
 
-    if( bShowSelFrm )
+    if( bShowSelFrame )
     {
         rContext.SetSelections(pFrameFormat, nullptr);
     }
@@ -153,7 +153,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 {
     bDelFormat = true;                 // delete Format in DTOR
-    pFrameFormat->DelFrms();                 // destroy Frms
+    pFrameFormat->DelFrames();                 // destroy Frames
 
     // all Uno objects should now log themselves off
     {
@@ -226,7 +226,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 SwUndoInsLayFormat::SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx )
     : SwUndoFlyBase( pFormat, RES_DRAWFRMFMT == pFormat->Which() ?
                                             UNDO_INSDRAWFMT : UNDO_INSLAYFMT ),
-    mnCrsrSaveIndexPara( nNodeIdx ), mnCrsrSaveIndexPos( nCntIdx )
+    mnCursorSaveIndexPara( nNodeIdx ), mnCursorSaveIndexPos( nCntIdx )
 {
     const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
     nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
@@ -264,17 +264,17 @@ void SwUndoInsLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     if( rContent.GetContentIdx() )  // no content
     {
         bool bRemoveIdx = true;
-        if( mnCrsrSaveIndexPara > 0 )
+        if( mnCursorSaveIndexPara > 0 )
         {
             SwTextNode *const pNode =
-                rDoc.GetNodes()[mnCrsrSaveIndexPara]->GetTextNode();
+                rDoc.GetNodes()[mnCursorSaveIndexPara]->GetTextNode();
             if( pNode )
             {
                 SwNodeIndex aIdx( rDoc.GetNodes(),
                         rContent.GetContentIdx()->GetIndex() );
                 SwNodeIndex aEndIdx( rDoc.GetNodes(),
                         aIdx.GetNode().EndOfSectionIndex() );
-                SwIndex aIndex( pNode, mnCrsrSaveIndexPos );
+                SwIndex aIndex( pNode, mnCursorSaveIndexPos );
                 SwPosition aPos( *pNode, aIndex );
                 SwDoc::CorrAbs( aIdx, aEndIdx, aPos, true );
                 bRemoveIdx = false;
@@ -395,7 +395,7 @@ lcl_GetSwUndoId(SwFrameFormat *const pFrameFormat)
 
 SwUndoDelLayFormat::SwUndoDelLayFormat( SwFrameFormat* pFormat )
     : SwUndoFlyBase( pFormat, lcl_GetSwUndoId(pFormat) )
-    , bShowSelFrm( true )
+    , bShowSelFrame( true )
 {
     SwDoc* pDoc = pFormat->GetDoc();
     DelFly( pDoc );
@@ -428,7 +428,7 @@ SwRewriter SwUndoDelLayFormat::GetRewriter() const
 
 void SwUndoDelLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    InsFly( rContext, bShowSelFrm );
+    InsFly( rContext, bShowSelFrame );
 }
 
 void SwUndoDelLayFormat::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -539,7 +539,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     if( rDoc.GetFrameFormats()->Contains( pOldFormat ) )
     {
         if( bAnchorChgd )
-            pFrameFormat->DelFrms();
+            pFrameFormat->DelFrames();
 
         if( pFrameFormat->DerivedFrom() != pOldFormat )
             pFrameFormat->SetDerivedFrom( pOldFormat );
@@ -565,7 +565,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
             if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
             {
                 // With InContents it's tricky: the text attribute needs to be
-                // deleted. Unfortunately, this not only destroys the Frms but
+                // deleted. Unfortunately, this not only destroys the Frames but
                 // also the format. To prevent that, first detach the
                 // connection between attribute and format.
                 const SwPosition *pPos = rOldAnch.GetContentAnchor();
@@ -598,7 +598,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
                     nOldContent, 0 );
             }
 
-            pFrameFormat->MakeFrms();
+            pFrameFormat->MakeFrames();
         }
         rContext.SetSelections(pFrameFormat, nullptr);
     }

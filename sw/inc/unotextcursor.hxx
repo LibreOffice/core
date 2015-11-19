@@ -45,7 +45,7 @@
 
 class SwDoc;
 struct SwPosition;
-class SwUnoCrsr;
+class SwUnoCursor;
 
 typedef ::cppu::WeakImplHelper
 <   css::lang::XServiceInfo
@@ -89,7 +89,7 @@ public:
             SwPaM const& rSourceCursor,
             const enum CursorType eType = CURSOR_ALL);
 
-    SwUnoCrsr& GetCursor();
+    SwUnoCursor& GetCursor();
     bool IsAtEndOfMeta() const;
 
     void DeleteAndInsert(OUString const& rText,

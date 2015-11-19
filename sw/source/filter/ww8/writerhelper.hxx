@@ -96,7 +96,7 @@ namespace ww8
     public:
         enum WriterSource {eTextBox, eGraphic, eOle, eDrawing, eFormControl,eBulletGrf};
     private:
-        const SwFrameFormat* mpFlyFrm;
+        const SwFrameFormat* mpFlyFrame;
         SwPosition maPos;
         Size maSize;
         // #i43447# - Size of the frame in the layout.
@@ -110,7 +110,7 @@ namespace ww8
         bool mbForBullet:1;
         Graphic maGrf;
     public:
-        Frame(const SwFrameFormat &rFlyFrm, const SwPosition &rPos);
+        Frame(const SwFrameFormat &rFlyFrame, const SwPosition &rPos);
         Frame(const Graphic&, const SwPosition &);
 
         /** Get the writer SwFrameFormat that this object describes
@@ -118,7 +118,7 @@ namespace ww8
             @return
             The wrapped SwFrameFormat
         */
-        const SwFrameFormat &GetFrameFormat() const { return *mpFlyFrm; }
+        const SwFrameFormat &GetFrameFormat() const { return *mpFlyFrame; }
 
         /** Get the position this frame is anchored at
 
@@ -179,7 +179,7 @@ namespace ww8
             if (mbForBullet && rOther.mbForBullet)
                 return (maGrf == rOther.maGrf);
             else if ((!mbForBullet) && (!rOther.mbForBullet))
-                return (mpFlyFrm == rOther.mpFlyFrm);
+                return (mpFlyFrame == rOther.mpFlyFrame);
 
             return false;
         }

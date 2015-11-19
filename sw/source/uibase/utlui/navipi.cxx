@@ -98,7 +98,7 @@ void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
         if(bWithChildren && nMove > 1 &&
                 nLastOutlinePos < nTarget)
         {
-            if(!rSh.IsCrsrPtAtEnd())
+            if(!rSh.IsCursorPtAtEnd())
                 rSh.SwapPam();
             nMove -= nLastOutlinePos - nSource;
         }
@@ -113,12 +113,12 @@ void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
 
 // After goto cancel the status frame selection
 
-static void lcl_UnSelectFrm(SwWrtShell *pSh)
+static void lcl_UnSelectFrame(SwWrtShell *pSh)
 {
-    if (pSh->IsFrmSelected())
+    if (pSh->IsFrameSelected())
     {
-        pSh->UnSelectFrm();
-        pSh->LeaveSelFrmMode();
+        pSh->UnSelectFrame();
+        pSh->LeaveSelFrameMode();
     }
 }
 
@@ -243,9 +243,9 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
 
         case FN_SELECT_FOOTER:
         {
-            rSh.MoveCrsr();
-            const FrmTypeFlags eType = rSh.GetFrmType(nullptr,false);
-            if (eType & FrmTypeFlags::FOOTER)
+            rSh.MoveCursor();
+            const FrameTypeFlags eType = rSh.GetFrameType(nullptr,false);
+            if (eType & FrameTypeFlags::FOOTER)
             {
                 if (rSh.EndPg())
                     nFuncId = FN_END_OF_PAGE;
@@ -257,9 +257,9 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
         break;
         case FN_SELECT_HEADER:
         {
-            rSh.MoveCrsr();
-            const FrmTypeFlags eType = rSh.GetFrmType(nullptr,false);
-            if (eType & FrmTypeFlags::HEADER)
+            rSh.MoveCursor();
+            const FrameTypeFlags eType = rSh.GetFrameType(nullptr,false);
+            if (eType & FrameTypeFlags::HEADER)
             {
                 if (rSh.SttPg())
                     nFuncId = FN_START_OF_PAGE;
@@ -271,10 +271,10 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
         break;
         case FN_SELECT_FOOTNOTE:
         {
-            rSh.MoveCrsr();
-            const FrmTypeFlags eFrmType = rSh.GetFrmType(nullptr,false);
+            rSh.MoveCursor();
+            const FrameTypeFlags eFrameType = rSh.GetFrameType(nullptr,false);
                 // Jump from the footnote to the anchor.
-            if (eFrmType & FrmTypeFlags::FOOTNOTE)
+            if (eFrameType & FrameTypeFlags::FOOTNOTE)
             {
                 if (rSh.GotoFootnoteAnchor())
                     nFuncId = FN_FOOTNOTE_TO_ANCHOR;
@@ -326,7 +326,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
     }
     if (nFuncId)
     {
-        lcl_UnSelectFrm(&rSh);
+        lcl_UnSelectFrame(&rSh);
     }
     if(bFocusToDoc)
         pView->GetEditWin().GrabFocus();

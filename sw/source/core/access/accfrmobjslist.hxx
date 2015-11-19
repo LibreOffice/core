@@ -76,27 +76,27 @@ public:
 class SwAccessibleChildSList
 {
     const SwRect maVisArea;
-    const SwFrm& mrFrm;
+    const SwFrame& mrFrame;
     const bool mbVisibleChildrenOnly;
     SwAccessibleMap& mrAccMap;
 
 public:
     typedef SwAccessibleChildSList_const_iterator const_iterator;
 
-    inline SwAccessibleChildSList( const SwFrm& rFrm,
+    inline SwAccessibleChildSList( const SwFrame& rFrame,
                                    SwAccessibleMap& rAccMap )
         : maVisArea()
-        , mrFrm( rFrm )
+        , mrFrame( rFrame )
         , mbVisibleChildrenOnly( false )
         , mrAccMap( rAccMap )
     {}
 
     inline SwAccessibleChildSList( const SwRect& rVisArea,
-                                   const SwFrm& rFrm,
+                                   const SwFrame& rFrame,
                                    SwAccessibleMap& rAccMap )
         : maVisArea( rVisArea )
-        , mrFrm( rFrm )
-        , mbVisibleChildrenOnly( sw::access::SwAccessibleChild( &rFrm ).IsVisibleChildrenOnly() )
+        , mrFrame( rFrame )
+        , mbVisibleChildrenOnly( sw::access::SwAccessibleChild( &rFrame ).IsVisibleChildrenOnly() )
         , mrAccMap( rAccMap )
     {
     }
@@ -111,9 +111,9 @@ public:
         return SwAccessibleChildSList_const_iterator( *this );
     }
 
-    inline const SwFrm& GetFrm() const
+    inline const SwFrame& GetFrame() const
     {
-        return mrFrm;
+        return mrFrame;
     }
 
     inline bool IsVisibleChildrenOnly() const

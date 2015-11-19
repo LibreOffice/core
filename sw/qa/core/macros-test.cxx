@@ -439,8 +439,8 @@ void SwMacrosTest::testFindReplace()
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc *const pDoc = pTextDoc->GetDocShell()->GetDoc();
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-    // use a UnoCrsr so it will be corrected when deleting nodes
-    auto pPaM(pDoc->CreateUnoCrsr(SwPosition(aIdx)));
+    // use a UnoCursor so it will be corrected when deleting nodes
+    auto pPaM(pDoc->CreateUnoCursor(SwPosition(aIdx)));
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     rIDCO.InsertString(*pPaM, "foo");

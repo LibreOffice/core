@@ -158,7 +158,7 @@ SwViewOption::SwViewOption() :
     mnViewLayoutColumns( 0 ),
     m_nPagePreviewRow( 1 ),
     m_nPagePreviewCol( 2 ),
-    m_nShadowCrsrFillMode( FILL_TAB ),
+    m_nShadowCursorFillMode( FILL_TAB ),
     m_bReadonly(false),
     m_bStarOneSetting(false),
     m_bIsPagePreview(false),
@@ -235,7 +235,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     m_nCore2Options   = rVOpt.m_nCore2Options  ;
     m_aRetouchColor  = rVOpt.GetRetoucheColor();
     m_sSymbolFont     = rVOpt.m_sSymbolFont;
-    m_nShadowCrsrFillMode = rVOpt.m_nShadowCrsrFillMode;
+    m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
     m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
@@ -276,7 +276,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     m_nCore2Options   = rVOpt.m_nCore2Options;
     m_aRetouchColor  = rVOpt.GetRetoucheColor();
     m_sSymbolFont     = rVOpt.m_sSymbolFont;
-    m_nShadowCrsrFillMode = rVOpt.m_nShadowCrsrFillMode;
+    m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
     m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;

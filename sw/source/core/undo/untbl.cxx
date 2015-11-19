@@ -130,7 +130,7 @@ public:
 
     void RestoreAttr( SwTable& rTable, bool bModifyBox = false );
     void SaveContentAttrs( SwDoc* pDoc );
-    void CreateNew( SwTable& rTable, bool bCreateFrms = true,
+    void CreateNew( SwTable& rTable, bool bCreateFrames = true,
                     bool bRestoreChart = true );
     bool IsNewModel() const { return m_bNewModel; }
 };
@@ -256,7 +256,7 @@ void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwTableNode* pTableNd = aIdx.GetNode().GetTableNode();
     OSL_ENSURE( pTableNd, "no TableNode" );
-    pTableNd->DelFrms();
+    pTableNd->DelFrames();
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         rDoc.getIDocumentRedlineAccess().DeleteRedline( *pTableNd, true, USHRT_MAX );
@@ -443,17 +443,17 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
-    SwNodeIndex aFrmIdx( rDoc.GetNodes(), nSttNd );
+    SwNodeIndex aFrameIdx( rDoc.GetNodes(), nSttNd );
     SwNodeIndex aEndIdx( rDoc.GetNodes(), nEndNd );
 
-    pPam->GetPoint()->nNode = aFrmIdx;
+    pPam->GetPoint()->nNode = aFrameIdx;
     pPam->SetMark();
     pPam->GetPoint()->nNode = aEndIdx;
     rDoc.DelNumRules( *pPam );
     pPam->DeleteMark();
 
     // now collect all Uppers
-    SwNode2Layout aNode2Layout( aFrmIdx.GetNode() );
+    SwNode2Layout aNode2Layout( aFrameIdx.GetNode() );
 
     // create TableNode structure
     SwTableNode* pTableNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, *m_pBoxSaves );
@@ -490,7 +490,7 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
         pHistory->SetTmpEnd( nTmpEnd );
     }
 
-    aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(),
+    aNode2Layout.RestoreUpperFrames( rDoc.GetNodes(),
                                    pTableNd->GetIndex(), pTableNd->GetIndex()+1 );
 
     // Is a table selection requested?
@@ -525,7 +525,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         for( n = pTableNd->GetIndex() + 1; n < nTmpEnd; ++n )
         {
             if( ( pNd = (*this)[ n ] )->IsContentNode() )
-                static_cast<SwContentNode*>(pNd)->DelFrms();
+                static_cast<SwContentNode*>(pNd)->DelFrames();
             pNd->m_pStartOfSection = pTableNd;
         }
     }
@@ -726,7 +726,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( pDelBoxes )
     {
-        pTNd->DelFrms();
+        pTNd->DelFrames();
         SwTable& rTable = pTNd->GetTable();
         for( size_t n = pDelBoxes->size(); n; )
         {
@@ -753,7 +753,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwNodeIndex & rIdx = aPam.GetPoint()->nNode;
 
-            // than move, relatively, the Crsr/etc. again
+            // than move, relatively, the Cursor/etc. again
             RemoveIdxRel( rIdx.GetIndex()+1, *pPos );
 
             rIdx.GetNode().GetContentNode()->JoinNext();
@@ -771,7 +771,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
             aPam.GetMark()->nContent.Assign( nullptr, 0 );
             aPam.GetPoint()->nContent.Assign( nullptr, 0 );
 
-            // than move, relatively, the Crsr/etc. again
+            // than move, relatively, the Cursor/etc. again
             pPos->nContent.Assign(pTextNd, pTextNd->GetText().getLength());
             RemoveIdxRel( nEndNode + 1, *pPos );
 
@@ -921,7 +921,7 @@ void _SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
 {
     m_bModifyBox = bMdfyBox;
 
-    // first, get back attributes of TableFrmFormat
+    // first, get back attributes of TableFrameFormat
     SwFrameFormat* pFormat = rTable.GetFrameFormat();
     SfxItemSet& rFormatSet  = (SfxItemSet&)pFormat->GetAttrSet();
     rFormatSet.ClearItem();
@@ -929,13 +929,13 @@ void _SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
 
     if( pFormat->IsInCache() )
     {
-        SwFrm::GetCache().Delete( pFormat );
+        SwFrame::GetCache().Delete( pFormat );
         pFormat->SetInCache( false );
     }
 
     // for safety, invalidate all TableFrames
-    SwIterator<SwTabFrm,SwFormat> aIter( *pFormat );
-    for( SwTabFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+    SwIterator<SwTabFrame,SwFormat> aIter( *pFormat );
+    for( SwTabFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         if( pLast->GetTable() == &rTable )
         {
             pLast->InvalidateAll();
@@ -972,13 +972,13 @@ void _SaveTable::SaveContentAttrs( SwDoc* pDoc )
     m_pLine->SaveContentAttrs(pDoc);
 }
 
-void _SaveTable::CreateNew( SwTable& rTable, bool bCreateFrms,
+void _SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
                             bool bRestoreChart )
 {
     _FndBox aTmpBox( nullptr, nullptr );
-    aTmpBox.DelFrms( rTable );
+    aTmpBox.DelFrames( rTable );
 
-    // first, get back attributes of TableFrmFormat
+    // first, get back attributes of TableFrameFormat
     SwFrameFormat* pFormat = rTable.GetFrameFormat();
     SfxItemSet& rFormatSet  = (SfxItemSet&)pFormat->GetAttrSet();
     rFormatSet.ClearItem();
@@ -986,7 +986,7 @@ void _SaveTable::CreateNew( SwTable& rTable, bool bCreateFrms,
 
     if( pFormat->IsInCache() )
     {
-        SwFrm::GetCache().Delete( pFormat );
+        SwFrame::GetCache().Delete( pFormat );
         pFormat->SetInCache( false );
     }
 
@@ -1068,8 +1068,8 @@ void _SaveTable::CreateNew( SwTable& rTable, bool bCreateFrms,
     aParent.GetTabLines().erase( aParent.GetTabLines().begin(), aParent.GetTabLines().begin() + n );
     assert(aParent.GetTabLines().empty());
 
-    if( bCreateFrms )
-        aTmpBox.MakeFrms( rTable );
+    if( bCreateFrames )
+        aTmpBox.MakeFrames( rTable );
     if( bRestoreChart )
     {
         // TL_CHART2: need to inform chart of probably changed cell names
@@ -1093,20 +1093,20 @@ void _SaveTable::NewFrameFormat( const SwTableLine* pTableLn, const SwTableBox* 
         m_aFrameFormats[nFormatPos] = pFormat;
     }
 
-    // first re-assign Frms
-    SwIterator<SwTabFrm,SwFormat> aIter( *pOldFormat );
-    for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+    // first re-assign Frames
+    SwIterator<SwTabFrame,SwFormat> aIter( *pOldFormat );
+    for( SwFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        if( pTableLn ? static_cast<SwRowFrm*>(pLast)->GetTabLine() == pTableLn
-                    : static_cast<SwCellFrm*>(pLast)->GetTabBox() == pTableBx )
+        if( pTableLn ? static_cast<SwRowFrame*>(pLast)->GetTabLine() == pTableLn
+                    : static_cast<SwCellFrame*>(pLast)->GetTabBox() == pTableBx )
         {
             pLast->RegisterToFormat(*pFormat);
             pLast->InvalidateAll();
-            pLast->ReinitializeFrmSizeAttrFlags();
+            pLast->ReinitializeFrameSizeAttrFlags();
             if ( !pTableLn )
             {
-                static_cast<SwCellFrm*>(pLast)->SetDerivedVert( false );
-                static_cast<SwCellFrm*>(pLast)->CheckDirChange();
+                static_cast<SwCellFrame*>(pLast)->SetDerivedVert( false );
+                static_cast<SwCellFrame*>(pLast)->CheckDirChange();
             }
         }
     }
@@ -1774,11 +1774,11 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    // fdo#57197: before deleting the SwTableBoxes, delete the SwTabFrms
+    // fdo#57197: before deleting the SwTableBoxes, delete the SwTabFrames
     aTmpBox.SetTableLines(aDelBoxes, pTableNd->GetTable());
-    aTmpBox.DelFrms(pTableNd->GetTable());
+    aTmpBox.DelFrames(pTableNd->GetTable());
 
-    // do this _after_ deleting Frms because disposing SwAccessible requires
+    // do this _after_ deleting Frames because disposing SwAccessible requires
     // connection to the nodes, see SwAccessibleChild::IsAccessible()
     for (size_t i = 0; i < aDelNodes.size(); ++i)
     {
@@ -2932,7 +2932,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
             SwTable::SelLineFromBox( pBox, aSelBoxes );
             _FndBox aTmpBox( nullptr, nullptr );
             aTmpBox.SetTableLines( aSelBoxes, rTable );
-            aTmpBox.DelFrms( rTable );
+            aTmpBox.DelFrames( rTable );
             rTable.DeleteSel( pDoc, aSelBoxes, nullptr, nullptr, false, false );
         }
         break;
@@ -3028,13 +3028,13 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
     // get lines for layout update
     _FndBox aFndBox( nullptr, nullptr );
     aFndBox.SetTableLines( *pTable );
-    aFndBox.DelFrms( *pTable );
+    aFndBox.DelFrames( *pTable );
     // ? TL_CHART2: notification or locking of controller required ?
 
     SwTableNode* pNew = pDoc->GetNodes().SplitTable( rIdx );
 
     // update layout
-    aFndBox.MakeFrms( *pTable );
+    aFndBox.MakeFrames( *pTable );
     // ? TL_CHART2: notification or locking of controller required ?
 
     if( bWithPrev )
@@ -3057,7 +3057,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // create frames for the new table
     SwNodeIndex aTmpIdx( *pNew );
-    pNew->MakeFrms( &aTmpIdx );
+    pNew->MakeFrames( &aTmpIdx );
 
     // position cursor somewhere in content
     SwContentNode* pCNd = pDoc->GetNodes().GoNext( &rIdx );

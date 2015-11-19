@@ -1076,11 +1076,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             SfxProgress aProgress(pSourceDocSh, ::aEmptyOUStr, 1);
 
             // lock all dispatchers
-            SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst(pSourceDocSh);
-            while (pViewFrm)
+            SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(pSourceDocSh);
+            while (pViewFrame)
             {
-                pViewFrm->GetDispatcher()->Lock(true);
-                pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourceDocSh);
+                pViewFrame->GetDispatcher()->Lock(true);
+                pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pSourceDocSh);
             }
 
             sal_Int32 nDocNo = 1;
@@ -1565,11 +1565,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 SWUnoHelper::UCB_DeleteFile( *aFileIter );
 
             // unlock all dispatchers
-            pViewFrm = SfxViewFrame::GetFirst(pSourceDocSh);
-            while (pViewFrm)
+            pViewFrame = SfxViewFrame::GetFirst(pSourceDocSh);
+            while (pViewFrame)
             {
-                pViewFrm->GetDispatcher()->Lock(false);
-                pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourceDocSh);
+                pViewFrame->GetDispatcher()->Lock(false);
+                pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pSourceDocSh);
             }
 
             SW_MOD()->SetView(&pSourceShell->GetView());

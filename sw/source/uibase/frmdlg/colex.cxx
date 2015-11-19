@@ -357,7 +357,7 @@ VCL_BUILDER_FACTORY(SwColExample)
 
 SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
     : Window(pParent)
-    , m_aFrmSize(1,1)
+    , m_aFrameSize(1,1)
 {
     SetMapMode( MapMode( MAP_TWIP ) );
     m_aWinSize = GetOptimalSize();
@@ -368,10 +368,10 @@ SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
 
     SetBorderStyle( WindowBorderStyle::MONO );
 
-    m_aFrmSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
-    ::FitToActualSize(m_aCols, (sal_uInt16)m_aFrmSize.Width());
+    m_aFrameSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
+    ::FitToActualSize(m_aCols, (sal_uInt16)m_aFrameSize.Width());
 
-    long nHeight = m_aFrmSize.Height();
+    long nHeight = m_aFrameSize.Height();
     Fraction aScale( m_aWinSize.Height(), nHeight );
     MapMode aMapMode( GetMapMode() );
     aMapMode.SetScaleX( aScale );
@@ -398,9 +398,9 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const Rectan
     rRenderContext.DrawRect(aCompleteRect);
 
     rRenderContext.SetLineColor(rFieldTextColor);
-    Point aTL((aLogSize.Width() - m_aFrmSize.Width()) / 2,
-              (aLogSize.Height() - m_aFrmSize.Height()) / 2);
-    Rectangle aRect(aTL, m_aFrmSize);
+    Point aTL((aLogSize.Width() - m_aFrameSize.Width()) / 2,
+              (aLogSize.Height() - m_aFrameSize.Height()) / 2);
+    Rectangle aRect(aTL, m_aFrameSize);
 
     //draw a shadow rectangle
     rRenderContext.SetFillColor(Color(COL_GRAY));
@@ -446,15 +446,15 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const Rectan
     {
         rRenderContext.DrawRect(aRect);
         rRenderContext.SetFillColor(rFieldColor);
-        Rectangle aFrmRect(aTL, m_aFrmSize);
+        Rectangle aFrameRect(aTL, m_aFrameSize);
         long nSum = aTL.X();
         for (sal_uInt16 i = 0; i < nColCount; i++)
         {
             const SwColumn* pCol = &rCols[i];
-            aFrmRect.Left() = nSum + pCol->GetLeft(); //nSum + pCol->GetLeft() + aTL.X();
+            aFrameRect.Left() = nSum + pCol->GetLeft(); //nSum + pCol->GetLeft() + aTL.X();
             nSum += pCol->GetWishWidth();
-            aFrmRect.Right() = nSum - pCol->GetRight();
-            rRenderContext.DrawRect(aFrmRect);
+            aFrameRect.Right() = nSum - pCol->GetRight();
+            rRenderContext.DrawRect(aFrameRect);
         }
         if (bLines)
         {
@@ -474,7 +474,7 @@ void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
 {
     m_aCols = rCol;
     sal_uInt16 nWishSum = m_aCols.GetWishWidth();
-    long nFrmWidth = m_aFrmSize.Width();
+    long nFrameWidth = m_aFrameSize.Width();
     SwColumns& rCols = m_aCols.GetColumns();
     sal_uInt16 nColCount = rCols.size();
 
@@ -482,15 +482,15 @@ void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
     {
         SwColumn* pCol = &rCols[i];
         long nWish = pCol->GetWishWidth();
-        nWish *= nFrmWidth;
+        nWish *= nFrameWidth;
         nWish /= nWishSum;
         pCol->SetWishWidth((sal_uInt16)nWish);
         long nLeft = pCol->GetLeft();
-        nLeft *= nFrmWidth;
+        nLeft *= nFrameWidth;
         nLeft /= nWishSum;
         pCol->SetLeft((sal_uInt16)nLeft);
         long nRight = pCol->GetRight();
-        nRight *= nFrmWidth;
+        nRight *= nFrameWidth;
         nRight /= nWishSum;
         pCol->SetRight((sal_uInt16)nRight);
     }

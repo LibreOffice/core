@@ -22,8 +22,8 @@
 
 #include "acccontext.hxx"
 
-class SwHeaderFrm;
-class SwFooterFrm;
+class SwHeaderFrame;
+class SwFooterFrame;
 
 class SwAccessibleHeaderFooter : public SwAccessibleContext
 {
@@ -32,9 +32,9 @@ protected:
 
 public:
     SwAccessibleHeaderFooter( SwAccessibleMap* pInitMap,
-                              const SwHeaderFrm* pHdFrm );
+                              const SwHeaderFrame* pHdFrame );
     SwAccessibleHeaderFooter( SwAccessibleMap* pInitMap,
-                              const SwFooterFrm* pFtFrm );
+                              const SwFooterFrame* pFtFrame );
 
     // XAccessibleContext
 

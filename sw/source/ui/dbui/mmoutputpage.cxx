@@ -552,11 +552,11 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SaveStartHdl_Impl, Button*, pButton, void
     OSL_ENSURE( pSourceView, "source view missing");
     if(pSourceView)
     {
-        SfxViewFrame* pSourceViewFrm = pSourceView->GetViewFrame();
+        SfxViewFrame* pSourceViewFrame = pSourceView->GetViewFrame();
         uno::Reference< frame::XFrame > xFrame =
-                pSourceViewFrm->GetFrame().GetFrameInterface();
+                pSourceViewFrame->GetFrame().GetFrameInterface();
         xFrame->getContainerWindow()->setVisible(sal_True);
-        pSourceViewFrm->GetDispatcher()->Execute(SID_SAVEDOC, SfxCallMode::SYNCHRON);
+        pSourceViewFrame->GetDispatcher()->Execute(SID_SAVEDOC, SfxCallMode::SYNCHRON);
         xFrame->getContainerWindow()->setVisible(sal_False);
         SwDocShell* pDocShell = pSourceView->GetDocShell();
         //if the document has been saved its URL has to be stored for
@@ -594,7 +594,7 @@ int SwMailMergeOutputPage::documentStartPageNumber( int document ) const
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     SwView* pTargetView = rConfigItem.GetTargetView();
     assert( pTargetView );
-    SwCrsrShell& shell = pTargetView->GetWrtShell();
+    SwCursorShell& shell = pTargetView->GetWrtShell();
     const SwDocMergeInfo& info = rConfigItem.GetDocumentMergeInfo( document );
     sal_uInt16 page, dummy;
     shell.Push();

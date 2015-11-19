@@ -272,7 +272,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         const Size aSizeTwip = OutputDevice::LogicToLogic(
             aGraph.GetPrefSize(), aGraph.GetPrefMapMode(), MAP_TWIP );
 
-        pTempSet->Put( SwFormatFrmSize( ATT_FIX_SIZE, aSizeTwip.Width(),
+        pTempSet->Put( SwFormatFrameSize( ATT_FIX_SIZE, aSizeTwip.Width(),
             aSizeTwip.Height() ) );
         pTempSet->Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
 
@@ -380,8 +380,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
     if (pFlySet)
     {
-        if (const SwFormatFrmSize* pSize =
-            static_cast<const SwFormatFrmSize*>(pFlySet->GetItem(RES_FRM_SIZE, false)))
+        if (const SwFormatFrameSize* pSize =
+            static_cast<const SwFormatFrameSize*>(pFlySet->GetItem(RES_FRM_SIZE, false)))
         {
             aRect.SetSize(pSize->GetSize());
         }

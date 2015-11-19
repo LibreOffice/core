@@ -38,23 +38,23 @@ const sal_Char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessi
 
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
         SwAccessibleMap* pInitMap,
-        const SwHeaderFrm* pHdFrm    ) :
-    SwAccessibleContext( pInitMap, AccessibleRole::HEADER, pHdFrm )
+        const SwHeaderFrame* pHdFrame    ) :
+    SwAccessibleContext( pInitMap, AccessibleRole::HEADER, pHdFrame )
 {
     SolarMutexGuard aGuard;
 
-    OUString sArg( OUString::number( pHdFrm->GetPhyPageNum() ) );
+    OUString sArg( OUString::number( pHdFrame->GetPhyPageNum() ) );
     SetName( GetResource( STR_ACCESS_HEADER_NAME, &sArg ) );
 }
 
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
         SwAccessibleMap* pInitMap,
-        const SwFooterFrm* pFtFrm    ) :
-    SwAccessibleContext( pInitMap, AccessibleRole::FOOTER, pFtFrm )
+        const SwFooterFrame* pFtFrame    ) :
+    SwAccessibleContext( pInitMap, AccessibleRole::FOOTER, pFtFrame )
 {
     SolarMutexGuard aGuard;
 
-    OUString sArg( OUString::number( pFtFrm->GetPhyPageNum() ) );
+    OUString sArg( OUString::number( pFtFrame->GetPhyPageNum() ) );
     SetName( GetResource( STR_ACCESS_FOOTER_NAME, &sArg ) );
 }
 

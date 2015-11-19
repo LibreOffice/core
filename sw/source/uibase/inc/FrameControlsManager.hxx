@@ -18,12 +18,12 @@
 #include <memory>
 #include <vector>
 
-class SwPageFrm;
+class SwPageFrame;
 class SwEditWin;
 
 typedef std::shared_ptr< SwFrameControl > SwFrameControlPtr;
 
-typedef std::map<const SwFrm*, SwFrameControlPtr> SwFrameControlPtrMap;
+typedef std::map<const SwFrame*, SwFrameControlPtr> SwFrameControlPtrMap;
 
 /** A container for the Header/Footer, or PageBreak controls.
 */
@@ -41,15 +41,15 @@ class SwFrameControlsManager
         SwFrameControlsManager( const SwFrameControlsManager& rCopy );
         const SwFrameControlsManager& operator=( const SwFrameControlsManager& rCopy );
 
-        SwFrameControlPtr GetControl( FrameControlType eType, const SwFrm* pFrm );
-        void RemoveControls( const SwFrm* pFrm );
-        void RemoveControlsByType( FrameControlType eType, const SwFrm* pFrm );
+        SwFrameControlPtr GetControl( FrameControlType eType, const SwFrame* pFrame );
+        void RemoveControls( const SwFrame* pFrame );
+        void RemoveControlsByType( FrameControlType eType, const SwFrame* pFrame );
         void HideControls( FrameControlType eType );
         void SetReadonlyControls( bool bReadonly );
 
         // Helper methods
-        void SetHeaderFooterControl( const SwPageFrm* pPageFrm, FrameControlType eType, Point aOffset );
-        void SetPageBreakControl( const SwPageFrm* pPageFrm );
+        void SetHeaderFooterControl( const SwPageFrame* pPageFrame, FrameControlType eType, Point aOffset );
+        void SetPageBreakControl( const SwPageFrame* pPageFrame );
 };
 
 #endif

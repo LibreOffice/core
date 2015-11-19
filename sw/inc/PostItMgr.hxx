@@ -57,10 +57,10 @@ namespace sw { namespace annotation {
 }}
 namespace sw { namespace sidebarwindows {
     class SwSidebarWin;
-    class SwFrmSidebarWinContainer;
+    class SwFrameSidebarWinContainer;
 }}
 class SwSidebarItem;
-class SwFrm;
+class SwFrame;
 namespace vcl { class Window; }
 struct ImplSVEvent;
 
@@ -158,8 +158,8 @@ class SwPostItMgr: public SfxListener
         OutlinerParaObject*             mpAnswer;
         bool                            mbIsShowAnchor;
 
-        // data structure to collect the <SwSidebarWin> instances for certain <SwFrm> instances.
-        sw::sidebarwindows::SwFrmSidebarWinContainer* mpFrmSidebarWinContainer;
+        // data structure to collect the <SwSidebarWin> instances for certain <SwFrame> instances.
+        sw::sidebarwindows::SwFrameSidebarWinContainer* mpFrameSidebarWinContainer;
 
         typedef std::list<sw::sidebarwindows::SwSidebarWin*>::iterator  SwSidebarWin_iterator;
 
@@ -277,15 +277,15 @@ class SwPostItMgr: public SfxListener
 
         void AssureStdModeAtShell();
 
-        void ConnectSidebarWinToFrm( const SwFrm& rFrm,
+        void ConnectSidebarWinToFrame( const SwFrame& rFrame,
                                      const SwFormatField& rFormatField,
                                      sw::sidebarwindows::SwSidebarWin& rSidebarWin );
-        void DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
+        void DisconnectSidebarWinFromFrame( const SwFrame& rFrame,
                                           sw::sidebarwindows::SwSidebarWin& rSidebarWin );
-        bool HasFrmConnectedSidebarWins( const SwFrm& rFrm );
-        vcl::Window* GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
+        bool HasFrameConnectedSidebarWins( const SwFrame& rFrame );
+        vcl::Window* GetSidebarWinForFrameByIndex( const SwFrame& rFrame,
                                             const sal_Int32 nIndex );
-        void GetAllSidebarWinForFrm( const SwFrm& rFrm,
+        void GetAllSidebarWinForFrame( const SwFrame& rFrame,
                                      std::vector< vcl::Window* >* pChildren );
 
         void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);

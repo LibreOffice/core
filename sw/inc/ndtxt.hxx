@@ -45,7 +45,7 @@ namespace utl {
 }
 
 class SwTextFormatColl;
-class SwContentFrm;
+class SwContentFrame;
 class SwTextField;
 class SwTextInputField;
 class SfxItemSet;
@@ -76,7 +76,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
     /// For creating the first TextNode.
     friend class SwDoc;         ///< CTOR and AppendTextNode()
     friend class SwNodes;
-    friend class SwTextFrm;
+    friend class SwTextFrame;
     friend class SwScriptInfo;
 
     /** May be 0. It is only then not 0 if it contains hard attributes.
@@ -180,7 +180,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
 
     const SwTextInputField* GetOverlappingInputField( const SwTextAttr& rTextAttr ) const;
 
-    void DelFrms_TextNodePart();
+    void DelFrames_TextNodePart();
 
 public:
     enum class WrongState { TODO, PENDING, DONE };
@@ -352,7 +352,7 @@ public:
             const css::uno::Sequence<sal_Int32>& rOffsets );
 
     /// Virtual methods from ContentNode.
-    virtual SwContentFrm *MakeFrm( SwFrm* ) override;
+    virtual SwContentFrame *MakeFrame( SwFrame* ) override;
     virtual SwContentNode *SplitContentNode( const SwPosition & ) override;
     virtual SwContentNode *JoinNext() override;
     virtual SwContentNode *JoinPrev() override;
@@ -674,7 +674,7 @@ public:
     bool IsSymbol( const sal_Int32 nBegin ) const; // In itratr.cxx.
     virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const override;
 
-    /// Interactive hyphenation: we find TextFrm and call its CalcHyph.
+    /// Interactive hyphenation: we find TextFrame and call its CalcHyph.
     bool Hyphenate( SwInterHyphInfo &rHyphInf );
     void DelSoftHyph( const sal_Int32 nStart, const sal_Int32 nEnd );
 

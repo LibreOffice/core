@@ -44,12 +44,12 @@ using utl::AccessibleRelationSetHelper;
 const SwNoTextNode *SwAccessibleNoTextFrame::GetNoTextNode() const
 {
     const SwNoTextNode *pNd  = nullptr;
-    const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm *>( GetFrm() );
-    if( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTextFrm() )
+    const SwFlyFrame *pFlyFrame = static_cast< const SwFlyFrame *>( GetFrame() );
+    if( pFlyFrame->Lower() && pFlyFrame->Lower()->IsNoTextFrame() )
     {
-        const SwContentFrm *pCntFrm =
-            static_cast<const SwContentFrm *>( pFlyFrm->Lower() );
-        const SwContentNode* pSwContentNode = pCntFrm->GetNode();
+        const SwContentFrame *pContentFrame =
+            static_cast<const SwContentFrame *>( pFlyFrame->Lower() );
+        const SwContentNode* pSwContentNode = pContentFrame->GetNode();
         if(pSwContentNode != nullptr)
         {
             pNd = pSwContentNode->GetNoTextNode();
@@ -62,8 +62,8 @@ const SwNoTextNode *SwAccessibleNoTextFrame::GetNoTextNode() const
 SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
         SwAccessibleMap* pInitMap,
         sal_Int16 nInitRole,
-        const SwFlyFrm* pFlyFrm  ) :
-    SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrm ),
+        const SwFlyFrame* pFlyFrame  ) :
+    SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrame ),
     aDepend( this, const_cast < SwNoTextNode * >( GetNoTextNode() ) ),
     msTitle(),
     msDesc()
@@ -138,7 +138,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
         // intentional no break here
         case RES_DESCRIPTION_CHANGED:
         {
-            if ( pNd && GetFrm() )
+            if ( pNd && GetFrame() )
             {
                 const OUString sOldDesc( msDesc );
 
@@ -311,7 +311,7 @@ throw (uno::RuntimeException, std::exception)
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
     sal_Int32 nCount = 0;
-    SwFormatURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFormat()->GetURL() );
+    SwFormatURL aURL( static_cast<const SwLayoutFrame*>(GetFrame())->GetFormat()->GetURL() );
 
     if(aURL.GetMap() || !aURL.GetURL().isEmpty())
         nCount = 1;
@@ -328,7 +328,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     uno::Reference< XAccessibleHyperlink > xRet;
 
-    SwFormatURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFormat()->GetURL() );
+    SwFormatURL aURL( static_cast<const SwLayoutFrame*>(GetFrame())->GetFormat()->GetURL() );
 
     if( nLinkIndex > 0 )
         throw lang::IndexOutOfBoundsException();
@@ -337,7 +337,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     {
         if ( !alink.is() )
         {
-            alink = new SwAccessibleNoTextHyperlink( this, GetFrm() );
+            alink = new SwAccessibleNoTextHyperlink( this, GetFrame() );
         }
 
         return alink;

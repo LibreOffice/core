@@ -23,7 +23,7 @@
 #include <swtypes.hxx>
 
 class SwViewShell;
-class SwRootFrm;
+class SwRootFrame;
 class SwFrameFormat;
 class SfxItemSet;
 class SwLayouter;
@@ -39,8 +39,8 @@ public:
     */
     virtual const SwViewShell* GetCurrentViewShell() const = 0;
     virtual       SwViewShell* GetCurrentViewShell() = 0;
-    virtual const SwRootFrm* GetCurrentLayout() const = 0;
-    virtual       SwRootFrm* GetCurrentLayout() = 0;
+    virtual const SwRootFrame* GetCurrentLayout() const = 0;
+    virtual       SwRootFrame* GetCurrentLayout() = 0;
     virtual bool HasLayout() const = 0;
 
     /** !!!The old layout must be deleted!!!
@@ -64,7 +64,7 @@ public:
     /**
     */
     virtual SwFrameFormat* CopyLayoutFormat( const SwFrameFormat& rSrc, const SwFormatAnchor& rNewAnchor,
-                                     bool bSetTextFlyAtt, bool bMakeFrms ) = 0;
+                                     bool bSetTextFlyAtt, bool bMakeFrames ) = 0;
 
 protected:
 

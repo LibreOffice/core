@@ -125,9 +125,9 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         // end of "disable multiple layouts"
         if( !mpLayout )
         {
-            // switched to two step construction because creating the layout in SwRootFrm needs a valid pLayout set
-            mpLayout = SwRootFrmPtr(new SwRootFrm(mpDoc->GetDfltFrameFormat(), this),
-                                    &SwFrm::DestroyFrm);
+            // switched to two step construction because creating the layout in SwRootFrame needs a valid pLayout set
+            mpLayout = SwRootFramePtr(new SwRootFrame(mpDoc->GetDfltFrameFormat(), this),
+                                    &SwFrame::DestroyFrame);
             mpLayout->Init( mpDoc->GetDfltFrameFormat() );
         }
     }
@@ -216,8 +216,8 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     }
 
     // extend format cache.
-    if ( SwTextFrm::GetTextCache()->GetCurMax() < 2550 )
-        SwTextFrm::GetTextCache()->IncreaseMax( 100 );
+    if ( SwTextFrame::GetTextCache()->GetCurMax() < 2550 )
+        SwTextFrame::GetTextCache()->IncreaseMax( 100 );
     if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess().GetDrawModel() )
         Imp()->MakeDrawView();
 
@@ -291,8 +291,8 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     }
 
     // extend format cache.
-    if ( SwTextFrm::GetTextCache()->GetCurMax() < 2550 )
-        SwTextFrm::GetTextCache()->IncreaseMax( 100 );
+    if ( SwTextFrame::GetTextCache()->GetCurMax() < 2550 )
+        SwTextFrame::GetTextCache()->IncreaseMax( 100 );
     if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess().GetDrawModel() )
         Imp()->MakeDrawView();
 
@@ -324,11 +324,11 @@ SwViewShell::~SwViewShell()
                 {
                     if( pGNd->IsAnimated() )
                     {
-                        SwIterator<SwFrm,SwGrfNode> aIter( *pGNd );
-                        for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+                        SwIterator<SwFrame,SwGrfNode> aIter( *pGNd );
+                        for( SwFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
                         {
-                            OSL_ENSURE( pFrm->IsNoTextFrm(), "GraphicNode with Text?" );
-                            static_cast<SwNoTextFrm*>(pFrm)->StopAnimation( mpOut );
+                            OSL_ENSURE( pFrame->IsNoTextFrame(), "GraphicNode with Text?" );
+                            static_cast<SwNoTextFrame*>(pFrame)->StopAnimation( mpOut );
                         }
                     }
                 }
@@ -339,7 +339,7 @@ SwViewShell::~SwViewShell()
         }
 
         delete mpImp; // Delete first, so that the LayoutViews are destroyed.
-        mpImp = nullptr;   // Set to zero, because ~SwFrm relies on it.
+        mpImp = nullptr;   // Set to zero, because ~SwFrame relies on it.
 
         if ( mpDoc )
         {
@@ -352,8 +352,8 @@ SwViewShell::~SwViewShell()
         delete mpOpt;
 
         // resize format cache.
-        if ( SwTextFrm::GetTextCache()->GetCurMax() > 250 )
-            SwTextFrm::GetTextCache()->DecreaseMax( 100 );
+        if ( SwTextFrame::GetTextCache()->GetCurMax() > 250 )
+            SwTextFrame::GetTextCache()->DecreaseMax( 100 );
 
         // Remove from PaintQueue if necessary
         SwPaintQueue::Remove( this );

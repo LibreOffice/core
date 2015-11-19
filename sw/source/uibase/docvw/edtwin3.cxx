@@ -78,8 +78,8 @@ void PageNumNotify( SwViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
 
 void FrameNotify( SwViewShell* pVwSh, FlyMode eMode )
 {
-    if ( dynamic_cast< const SwCrsrShell *>( pVwSh ) !=  nullptr )
-        SwBaseShell::SetFrmMode( eMode, static_cast<SwWrtShell*>(pVwSh) );
+    if ( dynamic_cast< const SwCursorShell *>( pVwSh ) !=  nullptr )
+        SwBaseShell::SetFrameMode( eMode, static_cast<SwWrtShell*>(pVwSh) );
 }
 
 // Notify for page number update

@@ -47,7 +47,7 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
     // are set to the desired value. This value will be passed on to the
     // InPlaceClient.
     // The core accepts or formats the adjusted values not necessarily.
-    // If the Ole-Frm is formatted, then the CalcAndSetScale() of the WrtShell
+    // If the Ole-Frame is formatted, then the CalcAndSetScale() of the WrtShell
     // will be called. There the scaling of the SwOleClient is set if necessary.
 
     SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
@@ -78,18 +78,18 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 
     rSh.EndAllAction();
 
-    SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     nullptr, GetObject() )),
+    SwRect aFrame( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     nullptr, GetObject() )),
            aPrt( rSh.GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, GetObject() ));
-    aLogRect.SetPos( aPrt.Pos() + aFrm.Pos() );
+    aLogRect.SetPos( aPrt.Pos() + aFrame.Pos() );
     aLogRect.SetSize( aPrt.SSize() );
 }
 
 void SwOleClient::ObjectAreaChanged()
 {
     SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
-    SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     nullptr, GetObject() ));
-    if ( !aFrm.IsOver( rSh.VisArea() ) )
-        rSh.MakeVisible( aFrm );
+    SwRect aFrame( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     nullptr, GetObject() ));
+    if ( !aFrame.IsOver( rSh.VisArea() ) )
+        rSh.MakeVisible( aFrame );
 }
 
 void SwOleClient::ViewChanged()

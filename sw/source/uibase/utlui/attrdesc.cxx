@@ -222,7 +222,7 @@ bool SwParaConnectBorderItem::GetPresentation
 
 // Frame attribute
 
-bool SwFormatFrmSize::GetPresentation
+bool SwFormatFrameSize::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
@@ -244,7 +244,7 @@ bool SwFormatFrmSize::GetPresentation
     }
     if ( ATT_VAR_SIZE != GetHeightSizeType() )
     {
-        const sal_uInt16 nId = ATT_FIX_SIZE == m_eFrmHeightType ?
+        const sal_uInt16 nId = ATT_FIX_SIZE == m_eFrameHeightType ?
                                 STR_FRM_FIXEDHEIGHT : STR_FRM_MINHEIGHT;
         rText = rText + ", " + SW_RESSTR( nId ) + " ";
         if ( GetHeightPercent() )
@@ -337,7 +337,7 @@ bool SwFormatSurround::GetPresentation
     return true;
 }
 
-//VertOrientation, how and by what orientate the FlyFrm in the vertical?
+//VertOrientation, how and by what orientate the FlyFrame in the vertical?
 
 bool SwFormatVertOrient::GetPresentation
 (
@@ -383,7 +383,7 @@ bool SwFormatVertOrient::GetPresentation
     return true;
 }
 
-//HoriOrientation, how and by what orientate the FlyFrm in the horizontal?
+//HoriOrientation, how and by what orientate the FlyFrame in the horizontal?
 
 bool SwFormatHoriOrient::GetPresentation
 (

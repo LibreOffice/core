@@ -130,7 +130,7 @@ static bool lcl_IsInSameTableBox( SwNodes& _rNds,
     return true;
 }
 
-static void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
+static void lcl_CheckEmptyLayFrame( SwNodes& rNds, SwSectionData& rSectionData,
                         const SwNode& rStt, const SwNode& rEnd )
 {
     SwNodeIndex aIdx( rStt );
@@ -174,7 +174,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             pEnd->nNode.GetNode().GetContentNode()->Len() ==
             pEnd->nContent.GetIndex() )
         {
-            ::lcl_CheckEmptyLayFrm( GetNodes(),
+            ::lcl_CheckEmptyLayFrame( GetNodes(),
                                     rNewData,
                                     pStt->nNode.GetNode(),
                                     pEnd->nNode.GetNode() );
@@ -667,7 +667,7 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
                     pIdx->GetNode().GetSectionNode();
                 if (pSectNd)
                 {
-                    ::lcl_CheckEmptyLayFrm( GetNodes(), rNewData,
+                    ::lcl_CheckEmptyLayFrame( GetNodes(), rNewData,
                                 *pSectNd, *pSectNd->EndOfSectionNode() );
                 }
             }
@@ -762,8 +762,8 @@ void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
             _SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) <= nEnd )
         {
             // If the Nodes are not deleted, they need to deregister at the Pages
-            // (delete Frms) or else they will remain there (Undo does not delete them!)
-            pSrch->DelFrms(nullptr);
+            // (delete Frames) or else they will remain there (Undo does not delete them!)
+            pSrch->DelFrames(nullptr);
             ++nPos;
         }
 
@@ -771,8 +771,8 @@ void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
             _SwTextFootnote_GetIndex( (pSrch = rFootnoteArr[ nPos ]) ) >= nStt )
         {
             // If the Nodes are not deleted, they need to deregister at the Pages
-            // (delete Frms) or else they will remain there (Undo does not delete them!)
-            pSrch->DelFrms(nullptr);
+            // (delete Frames) or else they will remain there (Undo does not delete them!)
+            pSrch->DelFrames(nullptr);
         }
     }
 }
@@ -788,7 +788,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                                 SwSectionData const& rSectionData,
                                 SwTOXBase const*const pTOXBase,
                                 SwNodeIndex const*const pEnde,
-                                bool const bInsAtStart, bool const bCreateFrms)
+                                bool const bInsAtStart, bool const bCreateFrames)
 {
     SwNodeIndex aInsPos( rNdIdx );
     if( !pEnde ) // No Area, thus create a new Section before/after it
@@ -882,7 +882,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                     pTNd->SetAttr( rSet );
             }
             // Do not forget to create the Frame!
-            pCpyTNd->MakeFrms( *pTNd );
+            pCpyTNd->MakeFrames( *pTNd );
         }
         else
             new SwTextNode( aInsPos, GetDoc()->GetDfltTextFormatColl() );
@@ -894,13 +894,13 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
     // We could optimize this, by not removing already contained Frames and recreating them,
     // but by simply rewiring them
-    bool bInsFrm = bCreateFrms && !pSectNd->GetSection().IsHidden() &&
+    bool bInsFrame = bCreateFrames && !pSectNd->GetSection().IsHidden() &&
                    GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     SwNode2Layout *pNode2Layout = nullptr;
-    if( bInsFrm )
+    if( bInsFrame )
     {
         SwNodeIndex aTmp( *pSectNd );
-        if( !pSectNd->GetNodes().FindPrvNxtFrmNode( aTmp, pSectNd->EndOfSectionNode() ) )
+        if( !pSectNd->GetNodes().FindPrvNxtFrameNode( aTmp, pSectNd->EndOfSectionNode() ) )
             // Collect all Uppers
             pNode2Layout = new SwNode2Layout( *pSectNd );
     }
@@ -926,34 +926,34 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             {
                 static_cast<SwSectionNode*>(pNd)->GetSection().GetFormat()->
                                     SetDerivedFrom( pSectFormat );
-                static_cast<SwSectionNode*>(pNd)->DelFrms();
+                static_cast<SwSectionNode*>(pNd)->DelFrames();
                 n = pNd->EndOfSectionIndex();
             }
             else
             {
                 if( pNd->IsTableNode() )
-                    static_cast<SwTableNode*>(pNd)->DelFrms();
+                    static_cast<SwTableNode*>(pNd)->DelFrames();
 
                 if( ULONG_MAX == nSkipIdx )
                     nSkipIdx = pNd->EndOfSectionIndex();
             }
         }
         else if( pNd->IsContentNode() )
-            static_cast<SwContentNode*>(pNd)->DelFrms();
+            static_cast<SwContentNode*>(pNd)->DelFrames();
     }
 
     sw_DeleteFootnote( pSectNd, nStart, nEnde );
 
-    if( bInsFrm )
+    if( bInsFrame )
     {
         if( pNode2Layout )
         {
             sal_uLong nIdx = pSectNd->GetIndex();
-            pNode2Layout->RestoreUpperFrms( pSectNd->GetNodes(), nIdx, nIdx + 1 );
+            pNode2Layout->RestoreUpperFrames( pSectNd->GetNodes(), nIdx, nIdx + 1 );
             delete pNode2Layout;
         }
         else
-            pSectNd->MakeFrms( &aInsPos );
+            pSectNd->MakeFrames( &aInsPos );
     }
 
     return pSectNd;
@@ -1004,7 +1004,7 @@ SwSectionNode::~SwSectionNode()
 {
     // mba: test if iteration works as clients will be removed in callback
     // use hint which allows to specify, if the content shall be saved or not
-    m_pSection->GetFormat()->CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( true ) );
+    m_pSection->GetFormat()->CallSwClientNotify( SwSectionFrameMoveAndDeleteHint( true ) );
     SwSectionFormat* pFormat = m_pSection->GetFormat();
     if( pFormat )
     {
@@ -1016,15 +1016,15 @@ SwSectionNode::~SwSectionNode()
     }
 }
 
-SwFrm *SwSectionNode::MakeFrm( SwFrm *pSib )
+SwFrame *SwSectionNode::MakeFrame( SwFrame *pSib )
 {
     m_pSection->m_Data.SetHiddenFlag(false);
-    return new SwSectionFrm( *m_pSection, pSib );
+    return new SwSectionFrame( *m_pSection, pSib );
 }
 
 // Creates all Document Views for the precedeing Node.
 // The created ContentFrames are attached to the corresponding Layout
-void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
+void SwSectionNode::MakeFrames(const SwNodeIndex & rIdx )
 {
     // Take my succsessive or preceding ContentFrame
     SwNodes& rNds = GetNodes();
@@ -1042,16 +1042,16 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                     return;
             }
             pCNd = aIdx.GetNode().GetContentNode();
-            pCNd->MakeFrms( static_cast<SwContentNode&>(rIdx.GetNode()) );
+            pCNd->MakeFrames( static_cast<SwContentNode&>(rIdx.GetNode()) );
         }
         else
         {
             SwNode2Layout aNode2Layout( *this, rIdx.GetIndex() );
-            SwFrm *pFrm;
-            while( nullptr != (pFrm = aNode2Layout.NextFrm()) )
+            SwFrame *pFrame;
+            while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
             {
-                OSL_ENSURE( pFrm->IsSctFrm(), "Depend of Section not a Section." );
-                SwFrm *pNew = rIdx.GetNode().GetContentNode()->MakeFrm( pFrm );
+                OSL_ENSURE( pFrame->IsSctFrame(), "Depend of Section not a Section." );
+                SwFrame *pNew = rIdx.GetNode().GetContentNode()->MakeFrame( pFrame );
 
                 SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
 
@@ -1073,14 +1073,14 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 bool bInitNewSect = false;
                 if( pS )
                 {
-                    SwSectionFrm *pSct = new SwSectionFrm( pS->GetSection(), pFrm );
+                    SwSectionFrame *pSct = new SwSectionFrame( pS->GetSection(), pFrame );
                     // prepare <Init()> of new section frame.
                     bInitNewSect = true;
-                    SwLayoutFrm* pUp = pSct;
+                    SwLayoutFrame* pUp = pSct;
                     while( pUp->Lower() )  // for columned sections
                     {
-                        OSL_ENSURE( pUp->Lower()->IsLayoutFrm(),"Who's in there?" );
-                        pUp = static_cast<SwLayoutFrm*>(pUp->Lower());
+                        OSL_ENSURE( pUp->Lower()->IsLayoutFrame(),"Who's in there?" );
+                        pUp = static_cast<SwLayoutFrame*>(pUp->Lower());
                     }
                     pNew->Paste( pUp );
                     // #i27138#
@@ -1088,15 +1088,15 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                     // CONTENT_FLOWS_FROM/_TO relation.
                     // Relation CONTENT_FLOWS_FROM for next paragraph will change
                     // and relation CONTENT_FLOWS_TO for previous paragraph will change.
-                    if ( pNew->IsTextFrm() )
+                    if ( pNew->IsTextFrame() )
                     {
-                        SwViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
+                        SwViewShell* pViewShell( pNew->getRootFrame()->GetCurrShell() );
                         if ( pViewShell && pViewShell->GetLayout() &&
                              pViewShell->GetLayout()->IsAnyShellAccessible() )
                         {
                             pViewShell->InvalidateAccessibleParaFlowRelation(
-                                dynamic_cast<SwTextFrm*>(pNew->FindNextCnt( true )),
-                                dynamic_cast<SwTextFrm*>(pNew->FindPrevCnt( true )) );
+                                dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
+                                dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt( true )) );
                         }
                     }
                     pNew = pSct;
@@ -1105,36 +1105,36 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 // If a Node got Frames attached before or after
                 if ( rIdx < GetIndex() )
                     // the new one precedes me
-                    pNew->Paste( pFrm->GetUpper(), pFrm );
+                    pNew->Paste( pFrame->GetUpper(), pFrame );
                 else
                     // the new one succeeds me
-                    pNew->Paste( pFrm->GetUpper(), pFrm->GetNext() );
+                    pNew->Paste( pFrame->GetUpper(), pFrame->GetNext() );
                 // #i27138#
                 // notify accessibility paragraphs objects about changed
                 // CONTENT_FLOWS_FROM/_TO relation.
                 // Relation CONTENT_FLOWS_FROM for next paragraph will change
                 // and relation CONTENT_FLOWS_TO for previous paragraph will change.
-                if ( pNew->IsTextFrm() )
+                if ( pNew->IsTextFrame() )
                 {
-                    SwViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
+                    SwViewShell* pViewShell( pNew->getRootFrame()->GetCurrShell() );
                     if ( pViewShell && pViewShell->GetLayout() &&
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
                     {
                         pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrm*>(pNew->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrm*>(pNew->FindPrevCnt( true )) );
+                            dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
+                            dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt( true )) );
                     }
                 }
                 if ( bInitNewSect )
-                    static_cast<SwSectionFrm*>(pNew)->Init();
+                    static_cast<SwSectionFrame*>(pNew)->Init();
             }
         }
     }
 }
 
-// Create a new SectionFrm for every occurrence in the Layout and insert before
-// the corresponding ContentFrm
-void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
+// Create a new SectionFrame for every occurrence in the Layout and insert before
+// the corresponding ContentFrame
+void SwSectionNode::MakeFrames( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
 {
     OSL_ENSURE( pIdxBehind, "no Index" );
     SwNodes& rNds = GetNodes();
@@ -1148,13 +1148,13 @@ void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
     {
         SwNodeIndex *pEnd = pEndIdx ? pEndIdx :
                             new SwNodeIndex( *EndOfSectionNode(), 1 );
-        ::MakeFrms( pDoc, *pIdxBehind, *pEnd );
+        ::MakeFrames( pDoc, *pIdxBehind, *pEnd );
         if( !pEndIdx )
             delete pEnd;
     }
 }
 
-void SwSectionNode::DelFrms()
+void SwSectionNode::DelFrames()
 {
     sal_uLong nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
     if( nStt >= nEnd )
@@ -1163,7 +1163,7 @@ void SwSectionNode::DelFrms()
     }
 
     SwNodes& rNds = GetNodes();
-    m_pSection->GetFormat()->DelFrms();
+    m_pSection->GetFormat()->DelFrames();
 
     // Update our Flag
     m_pSection->m_Data.SetHiddenFlag(true);
@@ -1246,7 +1246,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
 
     // Delete all Frames from the copied Area. They are created when creating
     // the SectionFrames.
-    pSectNd->DelFrms();
+    pSectNd->DelFrames();
 
     // Copy the Links/Server
     if( pNewSect->IsLinkType() ) // Add the Link

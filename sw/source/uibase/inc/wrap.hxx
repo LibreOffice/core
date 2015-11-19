@@ -68,7 +68,7 @@ class SwWrapTabPage: public SfxTabPage
     RndStdIds           m_nAnchorId;
     sal_uInt16              m_nHtmlMode;
 
-    Size m_aFrmSize;
+    Size m_aFrameSize;
     SwWrtShell*         m_pWrtSh;
 
     bool m_bFormat;

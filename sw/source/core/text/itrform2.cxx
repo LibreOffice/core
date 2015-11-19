@@ -87,9 +87,9 @@ inline void ClearFly( SwTextFormatInfo &rInf )
     rInf.SetFly(nullptr);
 }
 
-void SwTextFormatter::CtorInitTextFormatter( SwTextFrm *pNewFrm, SwTextFormatInfo *pNewInf )
+void SwTextFormatter::CtorInitTextFormatter( SwTextFrame *pNewFrame, SwTextFormatInfo *pNewInf )
 {
-    CtorInitTextPainter( pNewFrm, pNewInf );
+    CtorInitTextPainter( pNewFrame, pNewInf );
     m_pInf = pNewInf;
     pDropFormat = GetInfo().GetDropFormat();
     pMulti = nullptr;
@@ -136,15 +136,15 @@ void SwTextFormatter::Insert( SwLineLayout *pLay )
         m_pCurr = pLay;
 }
 
-sal_uInt16 SwTextFormatter::GetFrmRstHeight() const
+sal_uInt16 SwTextFormatter::GetFrameRstHeight() const
 {
     // We want the rest height relative to the page.
-    // If we're in a table, then pFrm->GetUpper() is not the page.
+    // If we're in a table, then pFrame->GetUpper() is not the page.
 
-    // GetFrmRstHeight() is being called with Footnote.
-    // Wrong: const SwFrm *pUpper = pFrm->GetUpper();
-    const SwFrm *pPage = static_cast<const SwFrm*>(m_pFrm->FindPageFrm());
-    const SwTwips nHeight = pPage->Frm().Top()
+    // GetFrameRstHeight() is being called with Footnote.
+    // Wrong: const SwFrame *pUpper = pFrame->GetUpper();
+    const SwFrame *pPage = static_cast<const SwFrame*>(m_pFrame->FindPageFrame());
+    const SwTwips nHeight = pPage->Frame().Top()
                           + pPage->Prt().Top()
                           + pPage->Prt().Height() - Y();
     if( 0 > nHeight )
@@ -380,11 +380,11 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     SwLinePortion *pPor = NewPortion( rInf );
 
     // Asian grid stuff
-    SwTextGridItem const*const pGrid(GetGridItem(m_pFrm->FindPageFrm()));
+    SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
     const bool bHasGrid = pGrid && rInf.SnapToGrid() &&
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
-    const SwDoc *pDoc = rInf.GetTextFrm()->GetNode()->GetDoc();
+    const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
     const sal_uInt16 nGridWidth = (bHasGrid) ? GetGridWidth(*pGrid, *pDoc) : 0;
 
     // used for grid mode only:
@@ -491,19 +491,19 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
             // if we have a new GridKernPortion, we initially calculate
             // its size so that its ends on the grid
-            const SwPageFrm* pPageFrm = m_pFrm->FindPageFrm();
-            const SwLayoutFrm* pBody = pPageFrm->FindBodyCont();
-            SWRECTFN( pPageFrm )
+            const SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
+            const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
+            SWRECTFN( pPageFrame )
 
             const long nGridOrigin = pBody ?
                                     (pBody->*fnRect->fnGetPrtLeft)() :
-                                    (pPageFrm->*fnRect->fnGetPrtLeft)();
+                                    (pPageFrame->*fnRect->fnGetPrtLeft)();
 
             SwTwips nStartX = rInf.X() + GetLeftMargin();
             if ( bVert )
             {
                 Point aPoint( nStartX, 0 );
-                m_pFrm->SwitchHorizontalToVertical( aPoint );
+                m_pFrame->SwitchHorizontalToVertical( aPoint );
                 nStartX = aPoint.Y();
             }
 
@@ -878,7 +878,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 pPor = new SwFieldMarkPortion();
             else if (rInf.GetText()[rInf.GetIdx()]==CH_TXT_ATR_FORMELEMENT)
             {
-                SwTextNode *pNd = rInf.GetTextFrm()->GetTextNode();
+                SwTextNode *pNd = rInf.GetTextFrame()->GetTextNode();
                 const SwDoc *doc = pNd->GetDoc();
                 SwIndex aIndex(pNd, rInf.GetIdx());
                 SwPosition aPosition(*pNd, aIndex);
@@ -1022,7 +1022,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
     }
 
     // We can stand in the follow, it's crucial that
-    // pFrm->GetOfst() == 0!
+    // pFrame->GetOfst() == 0!
     if( rInf.GetIdx() )
     {
         // We now too can elongate FootnotePortions and ErgoSumPortions
@@ -1030,7 +1030,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         // 1. The ErgoSumTexts
         if( !rInf.IsErgoDone() )
         {
-            if( m_pFrm->IsInFootnote() && !m_pFrm->GetIndPrev() )
+            if( m_pFrame->IsInFootnote() && !m_pFrame->GetIndPrev() )
                 pPor = static_cast<SwLinePortion*>(NewErgoSumPortion( rInf ));
             rInf.SetErgoDone( true );
         }
@@ -1038,8 +1038,8 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         // 2. Arrow portions
         if( !pPor && !rInf.IsArrowDone() )
         {
-            if( m_pFrm->GetOfst() && !m_pFrm->IsFollow() &&
-                rInf.GetIdx() == m_pFrm->GetOfst() )
+            if( m_pFrame->GetOfst() && !m_pFrame->IsFollow() &&
+                rInf.GetIdx() == m_pFrame->GetOfst() )
                 pPor = new SwArrowPortion( *m_pCurr );
             rInf.SetArrowDone( true );
         }
@@ -1048,7 +1048,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         if ( ! pPor && ! m_pCurr->GetPortion() )
         {
             SwTextGridItem const*const pGrid(
-                    GetGridItem(GetTextFrm()->FindPageFrm()));
+                    GetGridItem(GetTextFrame()->FindPageFrame()));
             if ( pGrid )
                 pPor = new SwKernPortion( *m_pCurr );
         }
@@ -1073,7 +1073,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
             OSL_ENSURE( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
                      "Rotated number portion trouble" );
 
-            const bool bFootnoteNum = m_pFrm->IsFootnoteNumFrm();
+            const bool bFootnoteNum = m_pFrame->IsFootnoteNumFrame();
             rInf.GetParaPortion()->SetFootnoteNum( bFootnoteNum );
             if( bFootnoteNum )
                 pPor = static_cast<SwLinePortion*>(NewFootnoteNumPortion( rInf ));
@@ -1081,10 +1081,10 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         }
 
         // 6. The ErgoSumTexts of course also exist in the TextMaster,
-        // it's crucial whether the SwFootnoteFrm is aFollow
+        // it's crucial whether the SwFootnoteFrame is aFollow
         if( !rInf.IsErgoDone() && !pPor && ! rInf.IsMulti() )
         {
-            if( m_pFrm->IsInFootnote() && !m_pFrm->GetIndPrev() )
+            if( m_pFrame->IsInFootnote() && !m_pFrame->GetIndPrev() )
                 pPor = static_cast<SwLinePortion*>(NewErgoSumPortion( rInf ));
             rInf.SetErgoDone( true );
         }
@@ -1096,7 +1096,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
                      "Rotated number portion trouble" );
 
             // If we're in the follow, then of course not
-            if( GetTextFrm()->GetTextNode()->GetNumRule() )
+            if( GetTextFrame()->GetTextNode()->GetNumRule() )
                 pPor = static_cast<SwLinePortion*>(NewNumberPortion( rInf ));
             rInf.SetNumDone( true );
         }
@@ -1108,7 +1108,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         if ( !pPor && !m_pCurr->GetPortion() )
         {
             SwTextGridItem const*const pGrid(
-                    GetGridItem(GetTextFrm()->FindPageFrm()));
+                    GetGridItem(GetTextFrame()->FindPageFrame()));
             if ( pGrid )
                 pPor = new SwKernPortion( *m_pCurr );
         }
@@ -1116,8 +1116,8 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
 
         // 10. Decimal tab portion at the beginning of each line in table cells
         if ( !pPor && !m_pCurr->GetPortion() &&
-             GetTextFrm()->IsInTab() &&
-             GetTextFrm()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) )
+             GetTextFrame()->IsInTab() &&
+             GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) )
         {
             pPor = NewTabPortion( rInf, true );
         }
@@ -1194,7 +1194,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         }
         // Ein fieser Sonderfall: ein Rahmen ohne Umlauf kreuzt den
         // Footnote-Bereich. Wir muessen die Footnote-Portion als Zeilenrest
-        // bekanntgeben, damit SwTextFrm::Format nicht abbricht
+        // bekanntgeben, damit SwTextFrame::Format nicht abbricht
         // (die Textmasse wurde ja durchformatiert).
         if( rInf.GetRest() )
             rInf.SetNewLine( true );
@@ -1257,7 +1257,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                     if ( rInf.SnapToGrid() )
                     {
                         SwTextGridItem const*const pGrid(
-                                GetGridItem(GetTextFrm()->FindPageFrm()));
+                                GetGridItem(GetTextFrame()->FindPageFrame()));
                         if ( pGrid )
                         {
                             bRubyTop = ! pGrid->GetRubyTextBelow();
@@ -1266,12 +1266,12 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                     }
 
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
-                                              *GetTextFrm()->GetTextNode()->getIDocumentSettingAccess(),
+                                              *GetTextFrame()->GetTextNode()->getIDocumentSettingAccess(),
                                               nEnd, 0, pRubyPos );
                 }
                 else if( SW_MC_ROTATE == pCreate->nId )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd,
-                                                 GetTextFrm()->IsRightToLeft() );
+                                                 GetTextFrame()->IsRightToLeft() );
                 else
                     pTmp = new SwDoubleLinePortion( *pCreate, nEnd );
 
@@ -1346,7 +1346,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                     // We have a decimal tab portion in the line and the next character has to be
                     // aligned at the tab stop position. We store the width from the beginning of
                     // the tab stop portion up to the portion containint the decimal separator:
-                  if ( GetTextFrm()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
+                  if ( GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
                          POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
                     {
                         OSL_ENSURE( rInf.X() >= pLastTabPortion->Fix(), "Decimal tab stop position cannot be calculated" );
@@ -1403,7 +1403,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
             if ( pTextFootnote )
             {
                 SwFormatFootnote& rFootnote = (SwFormatFootnote&)pTextFootnote->GetFootnote();
-                const SwDoc *pDoc = rInf.GetTextFrm()->GetNode()->GetDoc();
+                const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
                 const SwEndNoteInfo* pInfo;
                 if( rFootnote.IsEndNote() )
                     pInfo = &pDoc->GetEndNoteInfo();
@@ -1432,7 +1432,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
 
             if ( pNumFnt )
             {
-                sal_uInt16 nDir = pNumFnt->GetOrientation( rInf.GetTextFrm()->IsVertical() );
+                sal_uInt16 nDir = pNumFnt->GetOrientation( rInf.GetTextFrame()->IsVertical() );
                 if ( 0 != nDir )
                 {
                     delete pPor;
@@ -1477,7 +1477,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
 
 sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
 {
-    OSL_ENSURE( ! m_pFrm->IsVertical() || m_pFrm->IsSwapped(),
+    OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "SwTextFormatter::FormatLine( nStartPos ) with unswapped frame" );
 
     // For the formatting routines, we set pOut to the reference device.
@@ -1552,8 +1552,8 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
         if( GetInfo().IsStop() )
         {
             m_pCurr->SetLen( 0 );
-            m_pCurr->Height( GetFrmRstHeight() + 1 );
-            m_pCurr->SetRealHeight( GetFrmRstHeight() + 1 );
+            m_pCurr->Height( GetFrameRstHeight() + 1 );
+            m_pCurr->SetRealHeight( GetFrameRstHeight() + 1 );
             m_pCurr->Width(0);
             m_pCurr->Truncate();
             return nStartPos;
@@ -1616,7 +1616,7 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
     // In case of compat mode, it's possible that a tab portion is wider after
     // formatting than before. If this is the case, we also have to make sure
     // the SwLineLayout is wider as well.
-    if (GetInfo().GetTextFrm()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN))
+    if (GetInfo().GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN))
     {
         sal_uInt16 nSum = 0;
         SwLinePortion* pPor = m_pCurr->GetFirstPortion();
@@ -1693,7 +1693,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
     sal_uInt16 nLineHeight = m_pCurr->Height();
     m_pCurr->SetClipping( false );
 
-    SwTextGridItem const*const pGrid(GetGridItem(m_pFrm->FindPageFrm()));
+    SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
     if ( pGrid && GetInfo().SnapToGrid() )
     {
         const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
@@ -1736,7 +1736,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
     // Zeile am Absatzende geben (bei leeren Abs?tzen oder nach einem
     // Shift-Return), die das Register durchaus beachten soll.
     if( !m_pCurr->IsDummy() || ( !m_pCurr->GetNext() &&
-        GetStart() >= GetTextFrm()->GetText().getLength() && !bNewLine ) )
+        GetStart() >= GetTextFrame()->GetText().getLength() && !bNewLine ) )
     {
         const SvxLineSpacingItem *pSpace = m_aLineInf.GetLineSpacing();
         if( pSpace )
@@ -1747,7 +1747,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                     // shrink first line of paragraph too on spacing < 100%
                     if (IsParaLine() &&
                         pSpace->GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP
-                        && GetTextFrm()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
+                        && GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
                     {
                         long nTmp = pSpace->GetPropLineSpace();
                         // Word will render < 50% too but it's just not readable
@@ -1795,7 +1795,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 default: OSL_FAIL( ": unknown LineSpaceRule" );
             }
             // Note: for the _first_ line the line spacing of the previous
-            // paragraph is applied in SwFlowFrm::CalcUpperSpace()
+            // paragraph is applied in SwFlowFrame::CalcUpperSpace()
             if( !IsParaLine() )
                 switch( pSpace->GetInterLineSpaceRule() )
                 {
@@ -1832,9 +1832,9 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         if( IsRegisterOn() )
         {
             SwTwips nTmpY = Y() + m_pCurr->GetAscent() + nLineHeight - m_pCurr->Height();
-            SWRECTFN( m_pFrm )
+            SWRECTFN( m_pFrame )
             if ( bVert )
-                nTmpY = m_pFrm->SwitchHorizontalToVertical( nTmpY );
+                nTmpY = m_pFrame->SwitchHorizontalToVertical( nTmpY );
             nTmpY = (*fnRect->fnYDiff)( nTmpY, RegStart() );
             const sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
             if( nDiff )
@@ -1865,9 +1865,9 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
          nTmpRight > USHRT_MAX ||
          nTmpFirst > USHRT_MAX )
     {
-        SWRECTFN( rInf.GetTextFrm() )
-        nTmpLeft = (rInf.GetTextFrm()->Frm().*fnRect->fnGetLeft)();
-        nTmpRight = (rInf.GetTextFrm()->Frm().*fnRect->fnGetRight)();
+        SWRECTFN( rInf.GetTextFrame() )
+        nTmpLeft = (rInf.GetTextFrame()->Frame().*fnRect->fnGetLeft)();
+        nTmpRight = (rInf.GetTextFrame()->Frame().*fnRect->fnGetRight)();
         nTmpFirst = nTmpLeft;
     }
 
@@ -1917,8 +1917,8 @@ SwTwips SwTextFormatter::CalcBottomLine() const
     SwTwips nMin = GetInfo().GetTextFly().GetMinBottom();
     if( nMin && ++nMin > nRet )
     {
-        SwTwips nDist = m_pFrm->Frm().Height() - m_pFrm->Prt().Height()
-                        - m_pFrm->Prt().Top();
+        SwTwips nDist = m_pFrame->Frame().Height() - m_pFrame->Prt().Height()
+                        - m_pFrame->Prt().Top();
         if( nRet + nDist < nMin )
         {
             const bool bRepaint = HasTruncLines() &&
@@ -1966,7 +1966,7 @@ bool SwTextFormatter::AllowRepaintOpt() const
             else
             {
                 // ????: Blank in der letzten Masterzeile (blocksat.sdw)
-                bOptimizeRepaint = nullptr == m_pCurr->GetNext() && !m_pFrm->GetFollow();
+                bOptimizeRepaint = nullptr == m_pCurr->GetNext() && !m_pFrame->GetFollow();
                 if ( bOptimizeRepaint )
                 {
                     SwLinePortion *pPos = m_pCurr->GetFirstPortion();
@@ -1999,7 +1999,7 @@ bool SwTextFormatter::AllowRepaintOpt() const
 
 void SwTextFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 {
-    OSL_ENSURE( ! m_pFrm->IsVertical() || m_pFrm->IsSwapped(),
+    OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "SwTextFormatter::CalcUnclipped with unswapped frame" );
 
     long nFlyAsc, nFlyDesc;
@@ -2012,7 +2012,7 @@ void SwTextFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     sal_Int32 nStartIdx, bool bAlways ) const
 {
-    OSL_ENSURE( ! m_pFrm->IsVertical() || m_pFrm->IsSwapped(),
+    OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "SwTextFormatter::UpdatePos with unswapped frame" );
 
     if( GetInfo().IsTest() )
@@ -2084,10 +2084,10 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
             else
             {
                 Point aBase( aTmpInf.GetPos() );
-                if ( GetInfo().GetTextFrm()->IsVertical() )
-                    GetInfo().GetTextFrm()->SwitchHorizontalToVertical( aBase );
+                if ( GetInfo().GetTextFrame()->IsVertical() )
+                    GetInfo().GetTextFrame()->SwitchHorizontalToVertical( aBase );
 
-                static_cast<SwFlyCntPortion*>(pPos)->SetBase( *aTmpInf.GetTextFrm(),
+                static_cast<SwFlyCntPortion*>(pPos)->SetBase( *aTmpInf.GetTextFrame(),
                     aBase, nTmpAscent, nTmpDescent, nFlyAsc,
                     nFlyDesc, nFlags );
             }
@@ -2133,7 +2133,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
 
 void SwTextFormatter::AlignFlyInCntBase( long nBaseLine ) const
 {
-    OSL_ENSURE( ! m_pFrm->IsVertical() || m_pFrm->IsSwapped(),
+    OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "SwTextFormatter::AlignFlyInCntBase with unswapped frame" );
 
     if( GetInfo().IsTest() )
@@ -2162,15 +2162,15 @@ void SwTextFormatter::AlignFlyInCntBase( long nBaseLine ) const
             else
             {
                 Point aBase;
-                if ( GetInfo().GetTextFrm()->IsVertical() )
+                if ( GetInfo().GetTextFrame()->IsVertical() )
                 {
-                    nBaseLine = GetInfo().GetTextFrm()->SwitchHorizontalToVertical( nBaseLine );
+                    nBaseLine = GetInfo().GetTextFrame()->SwitchHorizontalToVertical( nBaseLine );
                     aBase = Point( nBaseLine, static_cast<SwFlyCntPortion*>(pPos)->GetRefPoint().Y() );
                 }
                 else
                     aBase = Point( static_cast<SwFlyCntPortion*>(pPos)->GetRefPoint().X(), nBaseLine );
 
-                static_cast<SwFlyCntPortion*>(pPos)->SetBase( *GetInfo().GetTextFrm(), aBase, nTmpAscent, nTmpDescent,
+                static_cast<SwFlyCntPortion*>(pPos)->SetBase( *GetInfo().GetTextFrame(), aBase, nTmpAscent, nTmpDescent,
                     nFlyAsc, nFlyDesc, nFlags );
             }
         }
@@ -2189,11 +2189,11 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
         SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
 
         SwRect aLineVert( aLine );
-        if ( m_pFrm->IsVertical() )
-            m_pFrm->SwitchHorizontalToVertical( aLineVert );
-        SwRect aInter( rInf.GetTextFly().GetFrm( aLineVert ) );
-        if ( m_pFrm->IsVertical() )
-            m_pFrm->SwitchVerticalToHorizontal( aInter );
+        if ( m_pFrame->IsVertical() )
+            m_pFrame->SwitchHorizontalToVertical( aLineVert );
+        SwRect aInter( rInf.GetTextFly().GetFrame( aLineVert ) );
+        if ( m_pFrame->IsVertical() )
+            m_pFrame->SwitchVerticalToHorizontal( aInter );
 
         if( !aInter.HasArea() )
             return false;
@@ -2209,11 +2209,11 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
             aLine.Width( pPos->Width() );
 
             aLineVert = aLine;
-            if ( m_pFrm->IsVertical() )
-                m_pFrm->SwitchHorizontalToVertical( aLineVert );
-            aInter = rInf.GetTextFly().GetFrm( aLineVert );
-            if ( m_pFrm->IsVertical() )
-                m_pFrm->SwitchVerticalToHorizontal( aInter );
+            if ( m_pFrame->IsVertical() )
+                m_pFrame->SwitchHorizontalToVertical( aLineVert );
+            aInter = rInf.GetTextFly().GetFrame( aLineVert );
+            if ( m_pFrame->IsVertical() )
+                m_pFrame->SwitchVerticalToHorizontal( aInter );
 
             // New flys from below?
             if( !pPos->IsFlyPortion() )
@@ -2312,18 +2312,18 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
                   + nLeftMar - nLeftMin , nHeight );
 
     SwRect aLineVert( aLine );
-    if ( m_pFrm->IsRightToLeft() )
-        m_pFrm->SwitchLTRtoRTL( aLineVert );
+    if ( m_pFrame->IsRightToLeft() )
+        m_pFrame->SwitchLTRtoRTL( aLineVert );
 
-    if ( m_pFrm->IsVertical() )
-        m_pFrm->SwitchHorizontalToVertical( aLineVert );
-    SwRect aInter( rTextFly.GetFrm( aLineVert ) );
+    if ( m_pFrame->IsVertical() )
+        m_pFrame->SwitchHorizontalToVertical( aLineVert );
+    SwRect aInter( rTextFly.GetFrame( aLineVert ) );
 
-    if ( m_pFrm->IsRightToLeft() )
-        m_pFrm->SwitchRTLtoLTR( aInter );
+    if ( m_pFrame->IsRightToLeft() )
+        m_pFrame->SwitchRTLtoLTR( aInter );
 
-    if ( m_pFrm->IsVertical() )
-        m_pFrm->SwitchVerticalToHorizontal( aInter );
+    if ( m_pFrame->IsVertical() )
+        m_pFrame->SwitchVerticalToHorizontal( aInter );
 
     if( aInter.IsOver( aLine ) )
     {
@@ -2331,21 +2331,21 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         bool bForced = false;
         if( aInter.Left() <= nLeftMin )
         {
-            SwTwips nFrmLeft = GetTextFrm()->Frm().Left();
-            if( GetTextFrm()->Prt().Left() < 0 )
-                nFrmLeft += GetTextFrm()->Prt().Left();
-            if( aInter.Left() < nFrmLeft )
-                aInter.Left( nFrmLeft );
+            SwTwips nFrameLeft = GetTextFrame()->Frame().Left();
+            if( GetTextFrame()->Prt().Left() < 0 )
+                nFrameLeft += GetTextFrame()->Prt().Left();
+            if( aInter.Left() < nFrameLeft )
+                aInter.Left( nFrameLeft );
 
             long nAddMar = 0;
-            if ( m_pFrm->IsRightToLeft() )
+            if ( m_pFrame->IsRightToLeft() )
             {
-                nAddMar = m_pFrm->Frm().Right() - Right();
+                nAddMar = m_pFrame->Frame().Right() - Right();
                 if ( nAddMar < 0 )
                     nAddMar = 0;
             }
             else
-                nAddMar = nLeftMar - nFrmLeft;
+                nAddMar = nLeftMar - nFrameLeft;
 
             aInter.Width( aInter.Width() + nAddMar );
             // For a negative first line indent, we set this flag to show
@@ -2399,8 +2399,8 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
             // That means we can comfortably grow up to this value; that's how
             // we save a few empty lines.
             long nNextTop = rTextFly.GetNextTop();
-            if ( m_pFrm->IsVertical() )
-                nNextTop = m_pFrm->SwitchVerticalToHorizontal( nNextTop );
+            if ( m_pFrame->IsVertical() )
+                nNextTop = m_pFrame->SwitchVerticalToHorizontal( nNextTop );
             if( nNextTop > aInter.Bottom() )
             {
                 SwTwips nH = nNextTop - aInter.Top();
@@ -2435,26 +2435,26 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         if( pFly->Fix() < rInf.Width() )
             rInf.Width( pFly->Fix() );
 
-        SwTextGridItem const*const pGrid(GetGridItem(m_pFrm->FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
         if ( pGrid )
         {
-            const SwPageFrm* pPageFrm = m_pFrm->FindPageFrm();
-            const SwLayoutFrm* pBody = pPageFrm->FindBodyCont();
+            const SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
+            const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
 
-            SWRECTFN( pPageFrm )
+            SWRECTFN( pPageFrame )
 
             const long nGridOrigin = pBody ?
                                     (pBody->*fnRect->fnGetPrtLeft)() :
-                                    (pPageFrm->*fnRect->fnGetPrtLeft)();
+                                    (pPageFrame->*fnRect->fnGetPrtLeft)();
 
-            const SwDoc *pDoc = rInf.GetTextFrm()->GetNode()->GetDoc();
+            const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
             SwTwips nStartX = GetLeftMargin();
             if ( bVert )
             {
                 Point aPoint( nStartX, 0 );
-                m_pFrm->SwitchHorizontalToVertical( aPoint );
+                m_pFrame->SwitchHorizontalToVertical( aPoint );
                 nStartX = aPoint.Y();
             }
 
@@ -2476,12 +2476,12 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
                                                    SwTextAttr *pHint ) const
 {
     SwFlyCntPortion *pRet = nullptr;
-    const SwFrm *pFrame = static_cast<SwFrm*>(m_pFrm);
+    const SwFrame *pFrame = static_cast<SwFrame*>(m_pFrame);
 
-    SwFlyInCntFrm *pFly;
+    SwFlyInContentFrame *pFly;
     SwFrameFormat* pFrameFormat = static_cast<SwTextFlyCnt*>(pHint)->GetFlyCnt().GetFrameFormat();
     if( RES_FLYFRMFMT == pFrameFormat->Which() )
-        pFly = static_cast<SwTextFlyCnt*>(pHint)->GetFlyFrm(pFrame);
+        pFly = static_cast<SwTextFlyCnt*>(pHint)->GetFlyFrame(pFrame);
     else
         pFly = nullptr;
     // aBase is the document-global position, from which the new extra portion is placed
@@ -2500,15 +2500,15 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     // he actually never was in.
     sal_uInt16 nAscent = 0;
 
-    const bool bTextFrmVertical = GetInfo().GetTextFrm()->IsVertical();
+    const bool bTextFrameVertical = GetInfo().GetTextFrame()->IsVertical();
 
     const bool bUseFlyAscent = pFly && pFly->GetValidPosFlag() &&
-                               0 != ( bTextFrmVertical ?
+                               0 != ( bTextFrameVertical ?
                                       pFly->GetRefPoint().X() :
                                       pFly->GetRefPoint().Y() );
 
     if ( bUseFlyAscent )
-         nAscent = static_cast<sal_uInt16>( std::abs( int( bTextFrmVertical ?
+         nAscent = static_cast<sal_uInt16>( std::abs( int( bTextFrameVertical ?
                                                   pFly->GetRelPos().X() :
                                                   pFly->GetRelPos().Y() ) ) );
 
@@ -2532,15 +2532,15 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     }
 
     Point aTmpBase( aBase );
-    if ( GetInfo().GetTextFrm()->IsVertical() )
-        GetInfo().GetTextFrm()->SwitchHorizontalToVertical( aTmpBase );
+    if ( GetInfo().GetTextFrame()->IsVertical() )
+        GetInfo().GetTextFrame()->SwitchHorizontalToVertical( aTmpBase );
 
     if( pFly )
     {
-        pRet = new SwFlyCntPortion( *GetInfo().GetTextFrm(), pFly, aTmpBase,
+        pRet = new SwFlyCntPortion( *GetInfo().GetTextFrame(), pFly, aTmpBase,
                                     nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
         // We need to make sure that our font is set again in the OutputDevice
-        // It could be that the FlyInCnt was added anew and GetFlyFrm() would
+        // It could be that the FlyInCnt was added anew and GetFlyFrame() would
         // in turn cause, that it'd be created anew again.
         // This one's frames get formatted right away, which change the font and
         // we have a bug (3322).
@@ -2552,17 +2552,17 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
             if( !rInf.IsTest() )
             {
                 aTmpBase = aBase;
-                if ( GetInfo().GetTextFrm()->IsVertical() )
-                    GetInfo().GetTextFrm()->SwitchHorizontalToVertical( aTmpBase );
+                if ( GetInfo().GetTextFrame()->IsVertical() )
+                    GetInfo().GetTextFrame()->SwitchHorizontalToVertical( aTmpBase );
 
-                pRet->SetBase( *rInf.GetTextFrm(), aTmpBase, nTmpAscent,
+                pRet->SetBase( *rInf.GetTextFrame(), aTmpBase, nTmpAscent,
                                nTmpDescent, nFlyAsc, nFlyDesc, nMode );
             }
         }
     }
     else
     {
-        pRet = new SwFlyCntPortion( *rInf.GetTextFrm(), static_cast<SwDrawContact*>(pFrameFormat->FindContactObj()),
+        pRet = new SwFlyCntPortion( *rInf.GetTextFrame(), static_cast<SwDrawContact*>(pFrameFormat->FindContactObj()),
            aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
     }
     return pRet;

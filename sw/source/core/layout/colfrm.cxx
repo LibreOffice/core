@@ -32,16 +32,16 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
-SwColumnFrm::SwColumnFrm( SwFrameFormat *pFormat, SwFrm* pSib ):
-    SwFootnoteBossFrm( pFormat, pSib )
+SwColumnFrame::SwColumnFrame( SwFrameFormat *pFormat, SwFrame* pSib ):
+    SwFootnoteBossFrame( pFormat, pSib )
 {
-    mnFrmType = FRM_COLUMN;
-    SwBodyFrm* pColBody = new SwBodyFrm( pFormat->GetDoc()->GetDfltFrameFormat(), pSib );
-    pColBody->InsertBehind( this, nullptr ); // ColumnFrms now with BodyFrm
+    mnFrameType = FRM_COLUMN;
+    SwBodyFrame* pColBody = new SwBodyFrame( pFormat->GetDoc()->GetDfltFrameFormat(), pSib );
+    pColBody->InsertBehind( this, nullptr ); // ColumnFrames now with BodyFrame
     SetMaxFootnoteHeight( LONG_MAX );
 }
 
-void SwColumnFrm::DestroyImpl()
+void SwColumnFrame::DestroyImpl()
 {
     SwFrameFormat *pFormat = GetFormat();
     SwDoc *pDoc;
@@ -53,53 +53,53 @@ void SwColumnFrm::DestroyImpl()
         pDoc->DelFrameFormat( pFormat );
     }
 
-    SwFootnoteBossFrm::DestroyImpl();
+    SwFootnoteBossFrame::DestroyImpl();
 }
 
-SwColumnFrm::~SwColumnFrm()
+SwColumnFrame::~SwColumnFrame()
 {
 }
 
-static void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
+static void lcl_RemoveColumns( SwLayoutFrame *pCont, sal_uInt16 nCnt )
 {
-    OSL_ENSURE( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrm(),
+    OSL_ENSURE( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrame(),
             "no columns to remove." );
 
-    SwColumnFrm *pColumn = static_cast<SwColumnFrm*>(pCont->Lower());
+    SwColumnFrame *pColumn = static_cast<SwColumnFrame*>(pCont->Lower());
     sw_RemoveFootnotes( pColumn, true, true );
     while ( pColumn->GetNext() )
     {
-        OSL_ENSURE( pColumn->GetNext()->IsColumnFrm(),
+        OSL_ENSURE( pColumn->GetNext()->IsColumnFrame(),
                 "neighbor of ColumnFrame is no ColumnFrame." );
-        pColumn = static_cast<SwColumnFrm*>(pColumn->GetNext());
+        pColumn = static_cast<SwColumnFrame*>(pColumn->GetNext());
     }
     for ( sal_uInt16 i = 0; i < nCnt; ++i )
     {
-        SwColumnFrm *pTmp = static_cast<SwColumnFrm*>(pColumn->GetPrev());
+        SwColumnFrame *pTmp = static_cast<SwColumnFrame*>(pColumn->GetPrev());
         pColumn->Cut();
-        SwFrm::DestroyFrm(pColumn); //format is going to be destroyed in the DTor if needed.
+        SwFrame::DestroyFrame(pColumn); //format is going to be destroyed in the DTor if needed.
         pColumn = pTmp;
     }
 }
 
-static SwLayoutFrm * lcl_FindColumns( SwLayoutFrm *pLay, sal_uInt16 nCount )
+static SwLayoutFrame * lcl_FindColumns( SwLayoutFrame *pLay, sal_uInt16 nCount )
 {
-    SwFrm *pCol = pLay->Lower();
-    if ( pLay->IsPageFrm() )
-        pCol = static_cast<SwPageFrm*>(pLay)->FindBodyCont()->Lower();
+    SwFrame *pCol = pLay->Lower();
+    if ( pLay->IsPageFrame() )
+        pCol = static_cast<SwPageFrame*>(pLay)->FindBodyCont()->Lower();
 
-    if ( pCol && pCol->IsColumnFrm() )
+    if ( pCol && pCol->IsColumnFrame() )
     {
-        SwFrm *pTmp = pCol;
+        SwFrame *pTmp = pCol;
         sal_uInt16 i;
         for ( i = 0; pTmp; pTmp = pTmp->GetNext(), ++i )
             /* do nothing */;
-        return i == nCount ? static_cast<SwLayoutFrm*>(pCol) : nullptr;
+        return i == nCount ? static_cast<SwLayoutFrame*>(pCol) : nullptr;
     }
     return nullptr;
 }
 
-static bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
+static bool lcl_AddColumns( SwLayoutFrame *pCont, sal_uInt16 nCount )
 {
     SwDoc *pDoc = pCont->GetFormat()->GetDoc();
     const bool bMod = pDoc->getIDocumentState().IsModified();
@@ -108,16 +108,16 @@ static bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
     //the same column settings we can add them to the same format.
     //The neighbour can be searched using the format, however the owner of the
     //attribute depends on the frame type.
-    SwLayoutFrm *pAttrOwner = pCont;
-    if ( pCont->IsBodyFrm() )
-        pAttrOwner = pCont->FindPageFrm();
-    SwLayoutFrm *pNeighbourCol = nullptr;
-    SwIterator<SwLayoutFrm,SwFormat> aIter( *pAttrOwner->GetFormat() );
-    SwLayoutFrm *pNeighbour = aIter.First();
+    SwLayoutFrame *pAttrOwner = pCont;
+    if ( pCont->IsBodyFrame() )
+        pAttrOwner = pCont->FindPageFrame();
+    SwLayoutFrame *pNeighbourCol = nullptr;
+    SwIterator<SwLayoutFrame,SwFormat> aIter( *pAttrOwner->GetFormat() );
+    SwLayoutFrame *pNeighbour = aIter.First();
 
     sal_uInt16 nAdd = 0;
-    SwFrm *pCol = pCont->Lower();
-    if ( pCol && pCol->IsColumnFrm() )
+    SwFrame *pCol = pCont->Lower();
+    if ( pCol && pCol->IsColumnFrame() )
         for ( nAdd = 1; pCol; pCol = pCol->GetNext(), ++nAdd )
             /* do nothing */;
     while ( pNeighbour )
@@ -130,23 +130,23 @@ static bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
     }
 
     bool bRet;
-    SwTwips nMax = pCont->IsPageBodyFrm() ?
-                   pCont->FindPageFrm()->GetMaxFootnoteHeight() : LONG_MAX;
+    SwTwips nMax = pCont->IsPageBodyFrame() ?
+                   pCont->FindPageFrame()->GetMaxFootnoteHeight() : LONG_MAX;
     if ( pNeighbourCol )
     {
         bRet = false;
-        SwFrm *pTmp = pCont->Lower();
+        SwFrame *pTmp = pCont->Lower();
         while ( pTmp )
         {
             pTmp = pTmp->GetNext();
-            pNeighbourCol = static_cast<SwLayoutFrm*>(pNeighbourCol->GetNext());
+            pNeighbourCol = static_cast<SwLayoutFrame*>(pNeighbourCol->GetNext());
         }
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
-            SwColumnFrm *pTmpCol = new SwColumnFrm( pNeighbourCol->GetFormat(), pCont );
+            SwColumnFrame *pTmpCol = new SwColumnFrame( pNeighbourCol->GetFormat(), pCont );
             pTmpCol->SetMaxFootnoteHeight( nMax );
             pTmpCol->InsertBefore( pCont, nullptr );
-            pNeighbourCol = static_cast<SwLayoutFrm*>(pNeighbourCol->GetNext());
+            pNeighbourCol = static_cast<SwLayoutFrame*>(pNeighbourCol->GetNext());
         }
     }
     else
@@ -155,7 +155,7 @@ static bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
             SwFrameFormat *pFormat = pDoc->MakeFrameFormat( aEmptyOUStr, pDoc->GetDfltFrameFormat());
-            SwColumnFrm *pTmp = new SwColumnFrm( pFormat, pCont );
+            SwColumnFrame *pTmp = new SwColumnFrame( pFormat, pCont );
             pTmp->SetMaxFootnoteHeight( nMax );
             pTmp->Paste( pCont );
         }
@@ -176,23 +176,23 @@ static bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
  * @param rNew
  * @param bChgFootnote if true, the columnframe will be inserted or removed, if necessary.
  */
-void SwLayoutFrm::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew,
+void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew,
     const bool bChgFootnote )
 {
     if ( rOld.GetNumCols() <= 1 && rNew.GetNumCols() <= 1 && !bChgFootnote )
         return;
     // #i97379#
     // If current lower is a no text frame, then columns are not allowed
-    if ( Lower() && Lower()->IsNoTextFrm() &&
+    if ( Lower() && Lower()->IsNoTextFrame() &&
          rNew.GetNumCols() > 1 )
     {
         return;
     }
 
     sal_uInt16 nNewNum, nOldNum = 1;
-    if( Lower() && Lower()->IsColumnFrm() )
+    if( Lower() && Lower()->IsColumnFrame() )
     {
-        SwFrm* pCol = Lower();
+        SwFrame* pCol = Lower();
         while( nullptr != (pCol=pCol->GetNext()) )
             ++nOldNum;
     }
@@ -200,8 +200,8 @@ void SwLayoutFrm::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew,
     if( !nNewNum )
         ++nNewNum;
     bool bAtEnd;
-    if( IsSctFrm() )
-        bAtEnd = static_cast<SwSectionFrm*>(this)->IsAnyNoteAtEnd();
+    if( IsSctFrame() )
+        bAtEnd = static_cast<SwSectionFrame*>(this)->IsAnyNoteAtEnd();
     else
         bAtEnd = false;
 
@@ -209,22 +209,22 @@ void SwLayoutFrm::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew,
     bool bAdjustAttributes = nOldNum != rOld.GetNumCols();
 
     //The content is saved and restored if the column count is different.
-    SwFrm *pSave = nullptr;
+    SwFrame *pSave = nullptr;
     if( nOldNum != nNewNum || bChgFootnote )
     {
         SwDoc *pDoc = GetFormat()->GetDoc();
         OSL_ENSURE( pDoc, "FrameFormat doesn't return a document." );
         // SaveContent would also suck up the content of the footnote container
         // and store it within the normal text flow.
-        if( IsPageBodyFrm() )
-            pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->RemoveFootnotes( static_cast<SwPageFrm*>(GetUpper()) );
+        if( IsPageBodyFrame() )
+            pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->RemoveFootnotes( static_cast<SwPageFrame*>(GetUpper()) );
         pSave = ::SaveContent( this );
 
         //If columns exist, they get deleted if a column count of 0 or 1 is requested.
         if ( nNewNum == 1 && !bAtEnd )
         {
             ::lcl_RemoveColumns( this, nOldNum );
-            if ( IsBodyFrm() )
+            if ( IsBodyFrame() )
                 SetFrameFormat( pDoc->GetDfltFrameFormat() );
             else
                 GetFormat()->SetFormatAttr( SwFormatFillOrder() );
@@ -234,11 +234,11 @@ void SwLayoutFrm::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew,
         }
         if ( nOldNum == 1 )
         {
-            if ( IsBodyFrm() )
+            if ( IsBodyFrame() )
                 SetFrameFormat( pDoc->GetColumnContFormat() );
             else
                 GetFormat()->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
-            if( !Lower() || !Lower()->IsColumnFrm() )
+            if( !Lower() || !Lower()->IsColumnFrame() )
                 --nOldNum;
         }
         if ( nOldNum > nNewNum )
@@ -278,15 +278,15 @@ void SwLayoutFrm::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew,
     //actions during setup.
     if ( pSave )
     {
-        OSL_ENSURE( Lower() && Lower()->IsLayoutFrm() &&
-                static_cast<SwLayoutFrm*>(Lower())->Lower() &&
-                static_cast<SwLayoutFrm*>(Lower())->Lower()->IsLayoutFrm(),
-                "no column body." );   // ColumnFrms contain BodyFrms
-        ::RestoreContent( pSave, static_cast<SwLayoutFrm*>(static_cast<SwLayoutFrm*>(Lower())->Lower()), nullptr, true );
+        OSL_ENSURE( Lower() && Lower()->IsLayoutFrame() &&
+                static_cast<SwLayoutFrame*>(Lower())->Lower() &&
+                static_cast<SwLayoutFrame*>(Lower())->Lower()->IsLayoutFrame(),
+                "no column body." );   // ColumnFrames contain BodyFrames
+        ::RestoreContent( pSave, static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(Lower())->Lower()), nullptr, true );
     }
 }
 
-void SwLayoutFrm::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttributes )
+void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttributes )
 {
     if( !Lower()->GetNext() )
     {
@@ -306,10 +306,10 @@ void SwLayoutFrm::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribute
         if ( !bAdjustAttributes )
         {
             long nAvail = (Prt().*fnRect->fnGetWidth)();
-            for ( SwLayoutFrm *pCol = static_cast<SwLayoutFrm*>(Lower());
+            for ( SwLayoutFrame *pCol = static_cast<SwLayoutFrame*>(Lower());
                   pCol;
-                  pCol = static_cast<SwLayoutFrm*>(pCol->GetNext()) )
-                nAvail -= (pCol->Frm().*fnRect->fnGetWidth)();
+                  pCol = static_cast<SwLayoutFrame*>(pCol->GetNext()) )
+                nAvail -= (pCol->Frame().*fnRect->fnGetWidth)();
             if ( !nAvail )
                 return;
         }
@@ -322,7 +322,7 @@ void SwLayoutFrm::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribute
     const sal_uInt16 nMin = bLine ? sal_uInt16( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
 
     const bool bR2L = IsRightToLeft();
-    SwFrm *pCol = bR2L ? GetLastLower() : Lower();
+    SwFrame *pCol = bR2L ? GetLastLower() : Lower();
 
     // #i27399#
     // bOrtho means we have to adjust the column frames manually. Otherwise
@@ -344,12 +344,12 @@ void SwLayoutFrm::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribute
 
             pCol->ChgSize( aColSz );
 
-            // With this, the ColumnBodyFrms from page columns gets adjusted and
+            // With this, the ColumnBodyFrames from page columns gets adjusted and
             // their bFixHeight flag is set so they won't shrink/grow.
-            // Don't use the flag with frame columns because BodyFrms in frame
+            // Don't use the flag with frame columns because BodyFrames in frame
             // columns can grow/shrink.
-            if( IsBodyFrm() )
-                static_cast<SwLayoutFrm*>(pCol)->Lower()->ChgSize( aColSz );
+            if( IsBodyFrame() )
+                static_cast<SwLayoutFrame*>(pCol)->Lower()->ChgSize( aColSz );
 
             nAvail -= nWidth;
         }
@@ -393,8 +393,8 @@ void SwLayoutFrm::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribute
                 aUL.SetUpper( pC->GetUpper());
                 aUL.SetLower( pC->GetLower());
 
-                static_cast<SwLayoutFrm*>(pCol)->GetFormat()->SetFormatAttr( aLR );
-                static_cast<SwLayoutFrm*>(pCol)->GetFormat()->SetFormatAttr( aUL );
+                static_cast<SwLayoutFrame*>(pCol)->GetFormat()->SetFormatAttr( aLR );
+                static_cast<SwLayoutFrame*>(pCol)->GetFormat()->SetFormatAttr( aUL );
             }
 
             nGutter += aLR.GetLeft() + aLR.GetRight();
@@ -426,8 +426,8 @@ void SwLayoutFrm::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribute
 
             pCol->ChgSize( aColSz );
 
-            if( IsBodyFrm() )
-                static_cast<SwLayoutFrm*>(pCol)->Lower()->ChgSize( aColSz );
+            if( IsBodyFrame() )
+                static_cast<SwLayoutFrame*>(pCol)->Lower()->ChgSize( aColSz );
 
             nAvail -= nWidth;
         }

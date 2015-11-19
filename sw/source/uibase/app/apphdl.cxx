@@ -252,8 +252,8 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
         const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
                             pView->GetViewFrame()->GetDispatcher()->Execute(SID_NEWDOCDIRECT,
                                 SfxCallMode::SYNCHRON, &aFactory, 0L));
-        SfxFrame* pFrm = pItem ? pItem->GetFrame() : nullptr;
-        SfxViewFrame* pViewFrame = pFrm ? pFrm->GetCurrentViewFrame() : nullptr;
+        SfxFrame* pFrame = pItem ? pItem->GetFrame() : nullptr;
+        SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : nullptr;
         pNewView = pViewFrame ? dynamic_cast<SwView*>( pViewFrame->GetViewShell() ) : nullptr;
     }
 

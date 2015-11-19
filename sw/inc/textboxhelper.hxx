@@ -60,7 +60,7 @@ public:
     static void getProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, css::uno::Any& rValue);
 
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
-    static void syncFlyFrmAttr(SwFrameFormat& rShape, SfxItemSet& rSet);
+    static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet& rSet);
 
     /// If we have an associated TextFrame, then return that.
     static SwFrameFormat* findTextBox(const SwFrameFormat* pShape);
@@ -73,7 +73,7 @@ public:
     /**
      * Look up TextFrames in a document, which are in fact TextBoxes.
      *
-     * If rNode has a matching SwContentFrm, then only TextBoxes of rNode are
+     * If rNode has a matching SwContentFrame, then only TextBoxes of rNode are
      * returned.
      */
     static std::set<const SwFrameFormat*> findTextBoxes(const SwNode& rNode);

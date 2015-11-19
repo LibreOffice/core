@@ -59,7 +59,7 @@ using namespace ::com::sun::star::i18n;
 
 static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
 {
-    if( rWrtSh.IsSelFrmMode() || rWrtSh.IsObjSelected() )
+    if( rWrtSh.IsSelFrameMode() || rWrtSh.IsObjSelected() )
         rWrtSh.EnterStdMode();
 }
 
@@ -174,19 +174,19 @@ void SwHHCWrapper::GetNextPortion(
     m_nUnitOffset  = 0;
 
     // build last pos from currently selected text
-    SwPaM* pCrsr = m_rWrtShell.GetCrsr();
-    m_nLastPos =  pCrsr->Start()->nContent.GetIndex();
+    SwPaM* pCursor = m_rWrtShell.GetCursor();
+    m_nLastPos =  pCursor->Start()->nContent.GetIndex();
 }
 
 void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd )
 {
-    SwPaM *pCrsr = m_rWrtShell.GetCrsr();
-    pCrsr->GetPoint()->nContent = m_nLastPos;
-    pCrsr->DeleteMark();
+    SwPaM *pCursor = m_rWrtShell.GetCursor();
+    pCursor->GetPoint()->nContent = m_nLastPos;
+    pCursor->DeleteMark();
 
     m_rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ false,
                   (sal_uInt16) (m_nUnitOffset + nUnitStart), true );
-    pCrsr->SetMark();
+    pCursor->SetMark();
     m_rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ true,
                   (sal_uInt16) (nUnitEnd - nUnitStart), true );
     // end selection now. Otherwise SHIFT+HOME (extending the selection)
@@ -215,7 +215,7 @@ void SwHHCWrapper::HandleNewUnit(
 void SwHHCWrapper::ChangeText( const OUString &rNewText,
         const OUString& rOrigText,
         const uno::Sequence< sal_Int32 > *pOffsets,
-        SwPaM *pCrsr )
+        SwPaM *pCursor )
 {
     //!! please see also TextConvWrapper::ChangeText with is a modified
     //!! copy of this code
@@ -224,10 +224,10 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
     if (rNewText.isEmpty())
         return;
 
-    if (pOffsets && pCrsr)  // try to keep as much attributation as possible ?
+    if (pOffsets && pCursor)  // try to keep as much attributation as possible ?
     {
         // remember cursor start position for later setting of the cursor
-        const SwPosition *pStart = pCrsr->Start();
+        const SwPosition *pStart = pCursor->Start();
         const sal_Int32 nStartIndex = pStart->nContent.GetIndex();
         const SwNodeIndex aStartNodeIndex  = pStart->nNode;
         SwTextNode *pStartTextNode = aStartNodeIndex.GetNode().GetTextNode();
@@ -274,9 +274,9 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
 
                     // set selection to sub string to be replaced in original text
                     sal_Int32 nChgInNodeStartIndex = nStartIndex + nCorrectionOffset + nChgPos;
-                    OSL_ENSURE( m_rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" );
-                    m_rWrtShell.GetCrsr()->GetMark()->nContent.Assign( pStartTextNode, nChgInNodeStartIndex );
-                    m_rWrtShell.GetCrsr()->GetPoint()->nContent.Assign( pStartTextNode, nChgInNodeStartIndex + nChgLen );
+                    OSL_ENSURE( m_rWrtShell.GetCursor()->HasMark(), "cursor misplaced (nothing selected)" );
+                    m_rWrtShell.GetCursor()->GetMark()->nContent.Assign( pStartTextNode, nChgInNodeStartIndex );
+                    m_rWrtShell.GetCursor()->GetPoint()->nContent.Assign( pStartTextNode, nChgInNodeStartIndex + nChgLen );
 
                     // replace selected sub string with the corresponding
                     // sub string from the new text while keeping as
@@ -307,7 +307,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
         // (as it would happen after ChangeText_impl (Delete and Insert)
         // of the whole text in the 'else' branch below)
         m_rWrtShell.ClearMark();
-        m_rWrtShell.GetCrsr()->Start()->nContent.Assign( pStartTextNode, nStartIndex + nConvTextLen );
+        m_rWrtShell.GetCursor()->Start()->nContent.Assign( pStartTextNode, nStartIndex + nConvTextLen );
     }
     else
     {
@@ -332,9 +332,9 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         m_rWrtShell.Insert( rNewText );
 
         // select new inserted text (currently the Point is right after the new text)
-        if (!m_rWrtShell.GetCrsr()->HasMark())
-            m_rWrtShell.GetCrsr()->SetMark();
-        SwPosition *pMark = m_rWrtShell.GetCrsr()->GetMark();
+        if (!m_rWrtShell.GetCursor()->HasMark())
+            m_rWrtShell.GetCursor()->SetMark();
+        SwPosition *pMark = m_rWrtShell.GetCursor()->GetMark();
         pMark->nContent = pMark->nContent.GetIndex() - rNewText.getLength();
 
         // since 'SetAttr' below functions like merging with the attributes
@@ -447,7 +447,7 @@ void SwHHCWrapper::ReplaceUnit(
         pRuby->SetAdjustment( RubyAdjust_CENTER );
 
 #if OSL_DEBUG_LEVEL > 1
-        SwPaM *pPaM = m_rWrtShell.GetCrsr();
+        SwPaM *pPaM = m_rWrtShell.GetCursor();
         (void)pPaM;
 #endif
         m_rWrtShell.SetAttrItem(*pRuby);
@@ -463,7 +463,7 @@ void SwHHCWrapper::ReplaceUnit(
         // Thus we do this only for Chinese translation...
         const bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
         if (bIsChineseConversion)
-            ChangeText( aNewText, rOrigText, &rOffsets, m_rWrtShell.GetCrsr() );
+            ChangeText( aNewText, rOrigText, &rOffsets, m_rWrtShell.GetCursor() );
         else
             ChangeText( aNewText, rOrigText, nullptr, nullptr );
 
@@ -471,7 +471,7 @@ void SwHHCWrapper::ReplaceUnit(
         if (bIsChineseConversion)
         {
             m_rWrtShell.SetMark();
-            m_rWrtShell.GetCrsr()->GetMark()->nContent -= aNewText.getLength();
+            m_rWrtShell.GetCursor()->GetMark()->nContent -= aNewText.getLength();
 
             OSL_ENSURE( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                     "SwHHCWrapper::ReplaceUnit : unexpected target language" );
@@ -520,9 +520,9 @@ void SwHHCWrapper::Convert()
 {
     OSL_ENSURE( m_pConvArgs == nullptr, "NULL pointer expected" );
     {
-        SwPaM *pCrsr = m_pView->GetWrtShell().GetCrsr();
-        SwPosition* pSttPos = pCrsr->Start();
-        SwPosition* pEndPos = pCrsr->End();
+        SwPaM *pCursor = m_pView->GetWrtShell().GetCursor();
+        SwPosition* pSttPos = pCursor->Start();
+        SwPosition* pEndPos = pCursor->End();
 
         if (pSttPos->nNode.GetNode().IsTextNode() &&
             pEndPos->nNode.GetNode().IsTextNode())
@@ -568,7 +568,7 @@ void SwHHCWrapper::Convert()
         // convertible unit in order for the text conversion to give
         // the correct result for that. Since it is easier to obtain
         // the start of the word we use that though.
-        if (!pCrsr->HasMark())   // is not a selection?
+        if (!pCursor->HasMark())   // is not a selection?
         {
             // since #118246 / #117803 still occurs if the cursor is placed
             // between the two chinese characters to be converted (because both

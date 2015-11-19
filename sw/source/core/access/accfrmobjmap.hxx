@@ -27,7 +27,7 @@
 
 class SwAccessibleMap;
 class SwRect;
-class SwFrm;
+class SwFrame;
 class SdrObject;
 
 class SwAccessibleChildMapKey
@@ -75,9 +75,9 @@ public:
     /* MT: Need to get this position parameter stuff in dev300 somehow...
     //This methods are used to insert an object to the map, adding a position parameter.
     ::std::pair< iterator, bool > insert( sal_uInt32 nOrd, Point nPos,
-                                          const SwFrmOrObj& rLower );
+                                          const SwFrameOrObj& rLower );
     ::std::pair< iterator, bool > insert( const SdrObject *pObj,
-                                          const SwFrmOrObj& rLower,
+                                          const SwFrameOrObj& rLower,
                                           const SwDoc *pDoc,
                                           Point nPos);
     */
@@ -113,10 +113,10 @@ private:
 
 public:
     SwAccessibleChildMap( const SwRect& rVisArea,
-                          const SwFrm& rFrm,
+                          const SwFrame& rFrame,
                           SwAccessibleMap& rAccMap );
 
-    static bool IsSortingRequired( const SwFrm& rFrm );
+    static bool IsSortingRequired( const SwFrame& rFrame );
 
     const_iterator cbegin() const { return maMap.cbegin(); }
     const_iterator cend() const { return maMap.cend(); }

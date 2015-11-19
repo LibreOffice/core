@@ -41,7 +41,7 @@
 
 struct SwPosition;
 class SwPaM;
-class SwUnoCrsr;
+class SwUnoCursor;
 class SwStartNode;
 class SwTextNode;
 class SwTable;
@@ -277,7 +277,7 @@ struct SwXParagraphEnumeration
 {
     static SwXParagraphEnumeration* Create(
         css::uno::Reference< css::text::XText > const & xParent,
-        std::shared_ptr<SwUnoCrsr> pCursor,
+        std::shared_ptr<SwUnoCursor> pCursor,
         const CursorType eType,
         SwStartNode const*const pStartNode = nullptr,
         SwTable const*const pTable = nullptr);

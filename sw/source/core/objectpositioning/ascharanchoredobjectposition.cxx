@@ -60,13 +60,13 @@ SwAsCharAnchoredObjectPosition::SwAsCharAnchoredObjectPosition(
 SwAsCharAnchoredObjectPosition::~SwAsCharAnchoredObjectPosition()
 {}
 
-/** method to cast <SwAnchoredObjectPosition::GetAnchorFrm()> to needed type */
-const SwTextFrm& SwAsCharAnchoredObjectPosition::GetAnchorTextFrm() const
+/** method to cast <SwAnchoredObjectPosition::GetAnchorFrame()> to needed type */
+const SwTextFrame& SwAsCharAnchoredObjectPosition::GetAnchorTextFrame() const
 {
-    OSL_ENSURE( dynamic_cast<const SwTextFrm*>( &GetAnchorFrm() ) !=  nullptr,
-            "SwAsCharAnchoredObjectPosition::GetAnchorTextFrm() - wrong anchor frame type" );
+    OSL_ENSURE( dynamic_cast<const SwTextFrame*>( &GetAnchorFrame() ) !=  nullptr,
+            "SwAsCharAnchoredObjectPosition::GetAnchorTextFrame() - wrong anchor frame type" );
 
-    return static_cast<const SwTextFrm&>(GetAnchorFrm());
+    return static_cast<const SwTextFrame&>(GetAnchorFrame());
 }
 
 /** calculate position for object
@@ -78,11 +78,11 @@ const SwTextFrm& SwAsCharAnchoredObjectPosition::GetAnchorTextFrm() const
 */
 void SwAsCharAnchoredObjectPosition::CalcPosition()
 {
-    const SwTextFrm& rAnchorFrm = GetAnchorTextFrm();
+    const SwTextFrame& rAnchorFrame = GetAnchorTextFrame();
     // swap anchor frame, if swapped. Note: destructor takes care of the 'undo'
-    SwFrmSwapper aFrmSwapper( &rAnchorFrm, false );
+    SwFrameSwapper aFrameSwapper( &rAnchorFrame, false );
 
-    SWRECTFN( ( &rAnchorFrm ) )
+    SWRECTFN( ( &rAnchorFrame ) )
 
     Point aAnchorPos( mrProposedAnchorPos );
 
@@ -96,12 +96,12 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     const SvxULSpaceItem& rULSpace = rFrameFormat.GetULSpace();
     SwTwips nLRSpaceLeft, nLRSpaceRight, nULSpaceUpper, nULSpaceLower;
     {
-        if ( rAnchorFrm.IsVertical() )
+        if ( rAnchorFrame.IsVertical() )
         {
             // Seems to be easier to do it all the horizontal way
             // So, from now on think horizontal.
-            rAnchorFrm.SwitchVerticalToHorizontal( aObjBoundRect );
-            rAnchorFrm.SwitchVerticalToHorizontal( aAnchorPos );
+            rAnchorFrame.SwitchVerticalToHorizontal( aObjBoundRect );
+            rAnchorFrame.SwitchVerticalToHorizontal( aAnchorPos );
 
             // convert the spacing values
             nLRSpaceLeft = rULSpace.GetUpper();
@@ -111,7 +111,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         }
         else
         {
-            if ( rAnchorFrm.IsRightToLeft() )
+            if ( rAnchorFrame.IsRightToLeft() )
             {
                 nLRSpaceLeft = rLRSpace.GetRight();
                 nLRSpaceRight = rLRSpace.GetLeft();
@@ -141,9 +141,9 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     if( !IsObjFly() )
     {
         SwRect aSnapRect = GetObject().GetSnapRect();
-        if ( rAnchorFrm.IsVertical() )
+        if ( rAnchorFrame.IsVertical() )
         {
-            rAnchorFrm.SwitchVerticalToHorizontal( aSnapRect );
+            rAnchorFrame.SwitchVerticalToHorizontal( aSnapRect );
         }
 
         if( mnFlags & AS_CHAR_ULSPACE )
@@ -222,13 +222,13 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             // Note: Use copy of <aAnchorPos>, because it's needed for
             //       setting relative position.
             Point aAbsAnchorPos( aAnchorPos );
-            if ( rAnchorFrm.IsRightToLeft() )
+            if ( rAnchorFrame.IsRightToLeft() )
             {
-                rAnchorFrm.SwitchLTRtoRTL( aAbsAnchorPos );
+                rAnchorFrame.SwitchLTRtoRTL( aAbsAnchorPos );
                 aAbsAnchorPos.X() -= nObjWidth;
             }
-            if ( rAnchorFrm.IsVertical() )
-                rAnchorFrm.SwitchHorizontalToVertical( aAbsAnchorPos );
+            if ( rAnchorFrame.IsVertical() )
+                rAnchorFrame.SwitchHorizontalToVertical( aAbsAnchorPos );
 
             // set proposed anchor position at the drawing object.
             // OD 2004-04-06 #i26791# - distinction between 'master' drawing
@@ -238,16 +238,16 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             // move drawing object to set its correct relative position.
             {
                 SwRect aSnapRect = GetObject().GetSnapRect();
-                if ( rAnchorFrm.IsVertical() )
-                    rAnchorFrm.SwitchVerticalToHorizontal( aSnapRect );
+                if ( rAnchorFrame.IsVertical() )
+                    rAnchorFrame.SwitchVerticalToHorizontal( aSnapRect );
 
                 Point aDiff;
-                if ( rAnchorFrm.IsRightToLeft() )
+                if ( rAnchorFrame.IsRightToLeft() )
                     aDiff = aRelPos + aAbsAnchorPos - aSnapRect.TopLeft();
                 else
                     aDiff = aRelPos + aAnchorPos - aSnapRect.TopLeft();
 
-                if ( rAnchorFrm.IsVertical() )
+                if ( rAnchorFrame.IsVertical() )
                     aDiff = Point( -aDiff.Y(), aDiff.X() );
 
                 // OD 2004-04-06 #i26791# - distinction between 'master' drawing
@@ -257,13 +257,13 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         }
 
         // switch horizontal, LTR anchor position to absolute values.
-        if ( rAnchorFrm.IsRightToLeft() )
+        if ( rAnchorFrame.IsRightToLeft() )
         {
-            rAnchorFrm.SwitchLTRtoRTL( aAnchorPos );
+            rAnchorFrame.SwitchLTRtoRTL( aAnchorPos );
             aAnchorPos.X() -= nObjWidth;
         }
-        if ( rAnchorFrm.IsVertical() )
-            rAnchorFrm.SwitchHorizontalToVertical( aAnchorPos );
+        if ( rAnchorFrame.IsVertical() )
+            rAnchorFrame.SwitchHorizontalToVertical( aAnchorPos );
 
         // #i44347# - keep last object rectangle at anchored object
        OSL_ENSURE( dynamic_cast<const SwAnchoredDrawObject*>( &GetAnchoredObj() ) !=  nullptr,
@@ -278,14 +278,14 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         // relative position and its relative position attribute.
         // Note: The relative position contains the spacing values.
         Point aRelAttr;
-        if ( rAnchorFrm.IsRightToLeft() )
+        if ( rAnchorFrame.IsRightToLeft() )
         {
-            rAnchorFrm.SwitchLTRtoRTL( aAnchorPos );
+            rAnchorFrame.SwitchLTRtoRTL( aAnchorPos );
             aAnchorPos.X() -= nObjWidth;
         }
-        if ( rAnchorFrm.IsVertical() )
+        if ( rAnchorFrame.IsVertical() )
         {
-            rAnchorFrm.SwitchHorizontalToVertical( aAnchorPos );
+            rAnchorFrame.SwitchHorizontalToVertical( aAnchorPos );
             aRelAttr = Point( -nRelPos, 0 );
             aRelPos = Point( -aRelPos.Y(), aRelPos.X() );
         }
@@ -293,18 +293,18 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             aRelAttr = Point( 0, nRelPos );
 
         // OD 2004-03-23 #i26791#
-        OSL_ENSURE( dynamic_cast<const SwFlyInCntFrm*>( &GetAnchoredObj()) !=  nullptr,
+        OSL_ENSURE( dynamic_cast<const SwFlyInContentFrame*>( &GetAnchoredObj()) !=  nullptr,
                 "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong anchored object." );
-        const SwFlyInCntFrm& rFlyInCntFrm =
-                static_cast<const SwFlyInCntFrm&>(GetAnchoredObj());
+        const SwFlyInContentFrame& rFlyInContentFrame =
+                static_cast<const SwFlyInContentFrame&>(GetAnchoredObj());
         if ( !(mnFlags & AS_CHAR_QUICK) &&
-             ( aAnchorPos != rFlyInCntFrm.GetRefPoint() ||
-               aRelAttr != rFlyInCntFrm.GetCurrRelPos() ) )
+             ( aAnchorPos != rFlyInContentFrame.GetRefPoint() ||
+               aRelAttr != rFlyInContentFrame.GetCurrRelPos() ) )
         {
             // set new anchor position and relative position
-            SwFlyInCntFrm* pFlyInCntFrm = &(const_cast<SwFlyInCntFrm&>(rFlyInCntFrm));
-            pFlyInCntFrm->SetRefPoint( aAnchorPos, aRelAttr, aRelPos );
-            if( nObjWidth != (pFlyInCntFrm->Frm().*fnRect->fnGetWidth)() )
+            SwFlyInContentFrame* pFlyInContentFrame = &(const_cast<SwFlyInContentFrame&>(rFlyInContentFrame));
+            pFlyInContentFrame->SetRefPoint( aAnchorPos, aRelAttr, aRelPos );
+            if( nObjWidth != (pFlyInContentFrame->Frame().*fnRect->fnGetWidth)() )
             {
                 // recalculate object bound rectangle, if object width has changed.
                 aObjBoundRect = GetAnchoredObj().GetObjRect();
@@ -314,7 +314,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                 aObjBoundRect.Height( aObjBoundRect.Height() + rULSpace.GetLower() );
             }
         }
-        OSL_ENSURE( (rFlyInCntFrm.Frm().*fnRect->fnGetHeight)(),
+        OSL_ENSURE( (rFlyInContentFrame.Frame().*fnRect->fnGetHeight)(),
             "SwAnchoredObjectPosition::CalcPosition(..) - fly frame has an invalid height" );
     }
 

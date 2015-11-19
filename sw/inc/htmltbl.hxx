@@ -327,7 +327,7 @@ public:
     static sal_uInt16 GetBrowseWidth( const SwDoc& rDoc );
 
     /// Calculates available width by table-frame.
-    sal_uInt16 GetBrowseWidthByTabFrm( const SwTabFrm& rTabFrm ) const;
+    sal_uInt16 GetBrowseWidthByTabFrame( const SwTabFrame& rTabFrame ) const;
 
     /** Calculates available width by the table-frame or
      static GetBrowseWidth if no layout exists. */

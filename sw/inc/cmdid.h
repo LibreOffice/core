@@ -600,7 +600,7 @@
 #define FN_NAVIGATION_BACK                  (FN_EXTRA2 + 115)
 #define FN_NAVIGATION_FORWARD               (FN_EXTRA2 + 116)
 
-// #i972: bool items to be passed to SwFrmPage for evaluation
+// #i972: bool items to be passed to SwFramePage for evaluation
 #define FN_OLE_IS_MATH                      (FN_EXTRA2 + 114)
 #define FN_MATH_BASELINE_ALIGNMENT          (FN_EXTRA2 + 115)
 

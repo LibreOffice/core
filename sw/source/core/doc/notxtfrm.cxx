@@ -94,7 +94,7 @@ inline bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
 }
 
 static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
-                           const SwViewShell &rSh, const SwNoTextFrm *pFrm,
+                           const SwViewShell &rSh, const SwNoTextFrame *pFrame,
                            bool bDefect )
 {
     static vcl::Font *pFont = nullptr;
@@ -110,7 +110,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
 
     Color aCol( COL_RED );
     FontUnderline eUnderline = UNDERLINE_NONE;
-    const SwFormatURL &rURL = pFrm->FindFlyFrm()->GetFormat()->GetURL();
+    const SwFormatURL &rURL = pFrame->FindFlyFrame()->GetFormat()->GetURL();
     if( !rURL.GetURL().isEmpty() || rURL.GetMap() )
     {
         bool bVisited = false;
@@ -143,31 +143,31 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
     Graphic::DrawEx( rSh.GetOut(), rText, *pFont, rBmp, rRect.Pos(), rRect.SSize() );
 }
 
-SwNoTextFrm::SwNoTextFrm(SwNoTextNode * const pNode, SwFrm* pSib )
-    : SwContentFrm( pNode, pSib )
+SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
+    : SwContentFrame( pNode, pSib )
 {
     InitCtor();
 }
 
 /// Initialization: Currently add the Frame to the Cache
-void SwNoTextFrm::InitCtor()
+void SwNoTextFrame::InitCtor()
 {
-    mnFrmType = FRM_NOTXT;
+    mnFrameType = FRM_NOTXT;
 }
 
-SwContentFrm *SwNoTextNode::MakeFrm( SwFrm* pSib )
+SwContentFrame *SwNoTextNode::MakeFrame( SwFrame* pSib )
 {
-    return new SwNoTextFrm(this, pSib);
+    return new SwNoTextFrame(this, pSib);
 }
 
-void SwNoTextFrm::DestroyImpl()
+void SwNoTextFrame::DestroyImpl()
 {
     StopAnimation();
 
-    SwContentFrm::DestroyImpl();
+    SwContentFrame::DestroyImpl();
 }
 
-SwNoTextFrm::~SwNoTextFrm()
+SwNoTextFrame::~SwNoTextFrame()
 {
 }
 
@@ -176,7 +176,7 @@ void SetOutDev( SwViewShell *pSh, OutputDevice *pOut )
     pSh->mpOut = pOut;
 }
 
-static void lcl_ClearArea( const SwFrm &rFrm,
+static void lcl_ClearArea( const SwFrame &rFrame,
                     vcl::RenderContext &rOut, const SwRect& rPtArea,
                     const SwRect &rGrfArea )
 {
@@ -190,7 +190,7 @@ static void lcl_ClearArea( const SwFrm &rFrm,
         //UUUU
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
-        if ( rFrm.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false ) )
+        if ( rFrame.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false ) )
         {
             SwRegionRects const region(rPtArea);
             const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, region, rOut));
@@ -206,7 +206,7 @@ static void lcl_ClearArea( const SwFrm &rFrm,
         else
         {
             rOut.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
-            rOut.SetFillColor( rFrm.getRootFrm()->GetCurrShell()->Imp()->GetRetoucheColor());
+            rOut.SetFillColor( rFrame.getRootFrame()->GetCurrShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
             for( const auto &rRegion : aRegion )
                 rOut.DrawRect( rRegion.SVRect() );
@@ -215,12 +215,12 @@ static void lcl_ClearArea( const SwFrm &rFrm,
     }
 }
 
-void SwNoTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwNoTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
-    if ( Frm().IsEmpty() )
+    if ( Frame().IsEmpty() )
         return;
 
-    const SwViewShell* pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell* pSh = getRootFrame()->GetCurrShell();
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
@@ -232,8 +232,8 @@ void SwNoTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
             if ( aText.isEmpty() && pNd->IsGrfNode() )
                 GetRealURL( *static_cast<const SwGrfNode*>(pNd), aText );
             if( aText.isEmpty() )
-                aText = FindFlyFrm()->GetFormat()->GetName();
-            lcl_PaintReplacement( Frm(), aText, *pSh, this, false );
+                aText = FindFlyFrame()->GetFormat()->GetName();
+            lcl_PaintReplacement( Frame(), aText, *pSh, this, false );
         }
         return;
     }
@@ -255,11 +255,11 @@ void SwNoTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
         pGrfNd->SetFrameInPaint( true );
 
     // #i13147# - add 2nd parameter with value <true> to
-    // method call <FindFlyFrm().GetContour(..)> to indicate that it is called
+    // method call <FindFlyFrame().GetContour(..)> to indicate that it is called
     // for paint in order to avoid load of the intrinsic graphic.
     if ( ( !rRenderContext.GetConnectMetaFile() ||
            !pSh->GetWin() ) &&
-         FindFlyFrm()->GetContour( aPoly, true )
+         FindFlyFrame()->GetContour( aPoly, true )
        )
     {
         rRenderContext.SetClipRegion(vcl::Region(aPoly));
@@ -269,24 +269,24 @@ void SwNoTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
     SwRect aOrigPaint( rRect );
     if ( HasAnimation() && pSh->GetWin() )
     {
-        aOrigPaint = Frm(); aOrigPaint += Prt().Pos();
+        aOrigPaint = Frame(); aOrigPaint += Prt().Pos();
     }
 
-    SwRect aGrfArea( Frm() );
+    SwRect aGrfArea( Frame() );
     SwRect aPaintArea( aGrfArea );
 
     // In case the picture fly frm was clipped, render it with the origin
     // size instead of scaling it
     if ( rNoTNd.getIDocumentSettingAccess()->get( DocumentSettingId::CLIPPED_PICTURES ) )
     {
-        const SwFlyFreeFrm *pFly = dynamic_cast< const SwFlyFreeFrm* >( FindFlyFrm() );
+        const SwFlyFreeFrame *pFly = dynamic_cast< const SwFlyFreeFrame* >( FindFlyFrame() );
         if( pFly )
-            aGrfArea = SwRect( Frm().Pos( ), pFly->GetUnclippedFrm( ).SSize( ) );
+            aGrfArea = SwRect( Frame().Pos( ), pFly->GetUnclippedFrame( ).SSize( ) );
     }
 
     aPaintArea._Intersection( aOrigPaint );
 
-    SwRect aNormal( Frm().Pos() + Prt().Pos(), Prt().SSize() );
+    SwRect aNormal( Frame().Pos() + Prt().Pos(), Prt().SSize() );
     aNormal.Justify(); // Normalized rectangle for the comparisons
 
     if( aPaintArea.IsOver( aNormal ) )
@@ -336,7 +336,7 @@ static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 }
 
 /** Calculate the Bitmap's position and the size within the passed rectangle */
-void SwNoTextFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
+void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
                              bool ) const
 {
     // Currently only used for scaling, cropping and mirroring the contour of graphics!
@@ -351,7 +351,7 @@ void SwNoTextFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
 
     if( rAttrSet.GetMirrorGrf().IsGrfToggle() )
     {
-        if( !(FindPageFrm()->GetVirtPageNum() % 2) )
+        if( !(FindPageFrame()->GetVirtPageNum() % 2) )
         {
             switch ( nMirror )
             {
@@ -414,7 +414,7 @@ void SwNoTextFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
 
     Size  aVisSz( Prt().SSize() );
     Size  aGrfSz( aVisSz );
-    Point aVisPt( Frm().Pos() + Prt().Pos() );
+    Point aVisPt( Frame().Pos() + Prt().Pos() );
     Point aGrfPt( aVisPt );
 
     // Set the "visible" rectangle first
@@ -454,19 +454,19 @@ void SwNoTextFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
 }
 
 /** By returning the surrounding Fly's size which equals the graphic's size */
-const Size& SwNoTextFrm::GetSize() const
+const Size& SwNoTextFrame::GetSize() const
 {
     // Return the Frame's size
-    const SwFrm *pFly = FindFlyFrm();
+    const SwFrame *pFly = FindFlyFrame();
     if( !pFly )
         pFly = this;
     return pFly->Prt().SSize();
 }
 
-void SwNoTextFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
+void SwNoTextFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     SwContentNotify aNotify( this );
-    SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
+    SwBorderAttrAccess aAccess( SwFrame::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
@@ -474,19 +474,19 @@ void SwNoTextFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         MakePos();
 
         if ( !mbValidSize )
-            Frm().Width( GetUpper()->Prt().Width() );
+            Frame().Width( GetUpper()->Prt().Width() );
 
         MakePrtArea( rAttrs );
 
         if ( !mbValidSize )
         {   mbValidSize = true;
-            Format(getRootFrm()->GetCurrShell()->GetOut());
+            Format(getRootFrame()->GetCurrShell()->GetOut());
         }
     }
 }
 
 /** Calculate the Bitmap's site, if needed */
-void SwNoTextFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
+void SwNoTextFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
     const Size aNewSize( GetSize() );
 
@@ -500,16 +500,16 @@ void SwNoTextFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         Shrink( std::min(Prt().Height(), -nChgHght) );
 }
 
-bool SwNoTextFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
-                              SwCrsrMoveState *pCMS ) const
+bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
+                              SwCursorMoveState *pCMS ) const
 {
     if ( &rPos.nNode.GetNode() != static_cast<SwNode const *>(GetNode()) )
         return false;
 
-    Calc(getRootFrm()->GetCurrShell()->GetOut());
-    SwRect aFrameRect( Frm() );
+    Calc(getRootFrame()->GetCurrShell()->GetOut());
+    SwRect aFrameRect( Frame() );
     rRect = aFrameRect;
-    rRect.Pos( Frm().Pos() + Prt().Pos() );
+    rRect.Pos( Frame().Pos() + Prt().Pos() );
     rRect.SSize( Prt().SSize() );
 
     rRect.Justify();
@@ -536,8 +536,8 @@ bool SwNoTextFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
     return true;
 }
 
-bool SwNoTextFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
-                             SwCrsrMoveState*, bool ) const
+bool SwNoTextFrame::GetCursorOfst(SwPosition* pPos, Point& ,
+                             SwCursorMoveState*, bool ) const
 {
     SwContentNode* pCNd = const_cast<SwContentNode*>(GetNode());
     pPos->nNode = *pCNd;
@@ -546,26 +546,26 @@ bool SwNoTextFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
 }
 
 #define CLEARCACHE {\
-    SwFlyFrm* pFly = FindFlyFrm();\
+    SwFlyFrame* pFly = FindFlyFrame();\
     if( pFly && pFly->GetFormat()->GetSurround().IsContour() )\
     {\
         ClrContourCache( pFly->GetVirtDrawObj() );\
-        pFly->NotifyBackground( FindPageFrm(), Prt(), PREP_FLY_ATTR_CHG );\
+        pFly->NotifyBackground( FindPageFrame(), Prt(), PREP_FLY_ATTR_CHG );\
     }\
 }
 
-void SwNoTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     sal_uInt16 nWhich = pNew ? pNew->Which() : pOld ? pOld->Which() : 0;
 
     // #i73788#
-    // no <SwContentFrm::Modify(..)> for RES_LINKED_GRAPHIC_STREAM_ARRIVED
+    // no <SwContentFrame::Modify(..)> for RES_LINKED_GRAPHIC_STREAM_ARRIVED
     if ( RES_GRAPHIC_PIECE_ARRIVED != nWhich &&
          RES_GRAPHIC_ARRIVED != nWhich &&
          RES_GRF_REREAD_AND_INCACHE != nWhich &&
          RES_LINKED_GRAPHIC_STREAM_ARRIVED != nWhich )
     {
-        SwContentFrm::Modify( pOld, pNew );
+        SwContentFrame::Modify( pOld, pNew );
     }
 
     bool bComplete = true;
@@ -594,9 +594,9 @@ void SwNoTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         if( rShell.GetWin() )
                         {
                             if( rShell.IsPreview() )
-                                ::RepaintPagePreview( &rShell, Frm().SVRect() );
+                                ::RepaintPagePreview( &rShell, Frame().SVRect() );
                             else
-                                rShell.GetWin()->Invalidate( Frm().SVRect() );
+                                rShell.GetWin()->Invalidate( Frame().SVRect() );
                         }
                     }
                 }
@@ -639,7 +639,7 @@ void SwNoTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
             CLEARCACHE
 
-            SwRect aRect( Frm() );
+            SwRect aRect( Frame() );
 
             SwViewShell *pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
             if( !pVSh )
@@ -831,9 +831,9 @@ void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
 
     @todo use aligned rectangle for drawing graphic.
     @todo pixel-align coordinations for drawing graphic. */
-void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea ) const
+void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea ) const
 {
-    SwViewShell* pShell = getRootFrm()->GetCurrShell();
+    SwViewShell* pShell = getRootFrame()->GetCurrShell();
 
     SwNoTextNode& rNoTNd = const_cast<SwNoTextNode&>(*static_cast<const SwNoTextNode*>(GetNode()));
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
@@ -923,10 +923,10 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
                                           pShell->GetWin();
 
                 if( bAnimate &&
-                    FindFlyFrm() != ::GetFlyFromMarked( nullptr, pShell ))
+                    FindFlyFrame() != ::GetFlyFromMarked( nullptr, pShell ))
                 {
                     OutputDevice* pVout;
-                    if( pOut == pShell->GetOut() && SwRootFrm::FlushVout() )
+                    if( pOut == pShell->GetOut() && SwRootFrame::FlushVout() )
                         pVout = pOut, pOut = pShell->GetOut();
                     else if( pShell->GetWin() &&
                              OUTDEV_VIRDEV == pOut->GetOutDevType() )
@@ -1041,13 +1041,13 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
                 ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
 
             sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
-            if ( !bPrn && dynamic_cast< const SwCrsrShell *>( pShell ) !=  nullptr && (
+            if ( !bPrn && dynamic_cast< const SwCursorShell *>( pShell ) !=  nullptr && (
                     (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
                     pOLENd->GetOLEObj().GetObject().IsGLChart()))
             {
-                const SwFlyFrm *pFly = FindFlyFrm();
+                const SwFlyFrame *pFly = FindFlyFrame();
                 assert( pFly != nullptr );
-                static_cast<SwFEShell*>(pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
+                static_cast<SwFEShell*>(pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frame());
             }
         }
 
@@ -1059,9 +1059,9 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
     }
 }
 
-bool SwNoTextFrm::IsTransparent() const
+bool SwNoTextFrame::IsTransparent() const
 {
-    const SwViewShell* pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell* pSh = getRootFrame()->GetCurrShell();
     if ( !pSh || !pSh->GetViewOptions()->IsGraphic() )
         return true;
 
@@ -1073,7 +1073,7 @@ bool SwNoTextFrm::IsTransparent() const
     return true;
 }
 
-void SwNoTextFrm::StopAnimation( OutputDevice* pOut ) const
+void SwNoTextFrame::StopAnimation( OutputDevice* pOut ) const
 {
     // Stop animated graphics
     const SwGrfNode* pGrfNd = dynamic_cast< const SwGrfNode* >(GetNode()->GetGrfNode());
@@ -1084,7 +1084,7 @@ void SwNoTextFrm::StopAnimation( OutputDevice* pOut ) const
     }
 }
 
-bool SwNoTextFrm::HasAnimation() const
+bool SwNoTextFrame::HasAnimation() const
 {
     const SwGrfNode* pGrfNd = GetNode()->GetGrfNode();
     return pGrfNd && pGrfNd->IsAnimated();

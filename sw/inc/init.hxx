@@ -49,8 +49,8 @@ private:
 }
 
 // layout/newfrm.cxx
-void _FrmInit();
-void _FrmFinit();
+void _FrameInit();
+void _FrameFinit();
 void SetShell( SwViewShell *pSh );
 
 // text/txtfrm.cxx

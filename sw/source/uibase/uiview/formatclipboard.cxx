@@ -118,7 +118,7 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
         rSet.Put( pFrameFormat->GetPageDesc() );
         rSet.Put( pFrameFormat->GetLayoutSplit() );
         rSet.Put( pFrameFormat->GetKeep() );
-        rSet.Put( pFrameFormat->GetFrmDir() );
+        rSet.Put( pFrameFormat->GetFrameDir() );
     }
 
     SwFormatRowSplit* pSplit = nullptr;
@@ -288,12 +288,12 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         // get the current PaM, the cursor
         // if there several selection it currently point
         // on the last (sort by there creation time) selection
-        SwPaM* pCrsr = rWrtShell.GetCrsr();
+        SwPaM* pCursor = rWrtShell.GetCursor();
 
-        bool bHasSelection = pCrsr->HasMark();
+        bool bHasSelection = pCursor->HasMark();
         bool bForwardSelection = false;
 
-        if(!bHasSelection && pCrsr->IsMultiSelection())
+        if(!bHasSelection && pCursor->IsMultiSelection())
         {
             // if cursor has multiple selections
 
@@ -301,18 +301,18 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             rWrtShell.KillPams();
 
             // reset the cursor to the remaining selection
-            pCrsr = rWrtShell.GetCrsr();
+            pCursor = rWrtShell.GetCursor();
             bHasSelection = true;
         }
 
         bool dontMove = false;
         if (bHasSelection)
         {
-            bForwardSelection = (*pCrsr->GetPoint()) > (*pCrsr->GetMark());
+            bForwardSelection = (*pCursor->GetPoint()) > (*pCursor->GetMark());
 
             // clear the selection leaving just the cursor
-            pCrsr->DeleteMark();
-            pCrsr->SetMark();
+            pCursor->DeleteMark();
+            pCursor->SetMark();
         }
         else
         {
@@ -325,7 +325,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             // revert left and right
             if ( rightToLeft )
             {
-                if (pCrsr->GetPoint()->nContent == 0)
+                if (pCursor->GetPoint()->nContent == 0)
                     dontMove = true;
                 else
                     bForwardSelection = !bForwardSelection;
@@ -334,13 +334,13 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 
         // move the cursor in order to select one character
         if (!dontMove)
-            pCrsr->Move( bForwardSelection ? fnMoveBackward : fnMoveForward );
+            pCursor->Move( bForwardSelection ? fnMoveBackward : fnMoveForward );
     }
 
     if(pItemSet_TextAttr)
     {
         if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF) )
-            rWrtShell.GetFlyFrmAttr(*pItemSet_TextAttr);
+            rWrtShell.GetFlyFrameAttr(*pItemSet_TextAttr);
         else
         {
             // get the text attributes from named and automatic formatting
@@ -556,7 +556,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
 
                 // apply the character automatic attributes
                 if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF) )
-                    rWrtShell.SetFlyFrmAttr(*pTemplateItemSet);
+                    rWrtShell.SetFlyFrameAttr(*pTemplateItemSet);
                 else if ( !bNoCharacterFormats )
                     rWrtShell.SetAttrSet(*pTemplateItemSet);
             }

@@ -97,14 +97,14 @@ SwField* SwInputFieldList::GetField(size_t nId)
 }
 
 /// save cursor
-void SwInputFieldList::PushCrsr()
+void SwInputFieldList::PushCursor()
 {
     pSh->Push();
     pSh->ClearMark();
 }
 
 /// get cursor
-void SwInputFieldList::PopCrsr()
+void SwInputFieldList::PopCursor()
 {
     pSh->Pop(false);
 }
@@ -113,7 +113,7 @@ void SwInputFieldList::PopCrsr()
 void SwInputFieldList::GotoFieldPos(size_t nId)
 {
     pSh->StartAllAction();
-    (*pSrtLst)[ nId ]->GetPosOfContent( *pSh->GetCrsr()->GetPoint() );
+    (*pSrtLst)[ nId ]->GetPosOfContent( *pSh->GetCursor()->GetPoint() );
     pSh->EndAllAction();
 }
 

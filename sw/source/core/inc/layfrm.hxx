@@ -22,51 +22,51 @@
 #include "frame.hxx"
 
 class SwAnchoredObject;
-class SwContentFrm;
-class SwFlowFrm;
+class SwContentFrame;
+class SwFlowFrame;
 class SwFormatCol;
-struct SwCrsrMoveState;
+struct SwCursorMoveState;
 class SwFrameFormat;
 class SwBorderAttrs;
-class SwFormatFrmSize;
-class SwCellFrm;
+class SwFormatFrameSize;
+class SwCellFrame;
 
-class SwLayoutFrm: public SwFrm
+class SwLayoutFrame: public SwFrame
 {
-    // The SwFrm in disguise
-    friend class SwFlowFrm;
-    friend class SwFrm;
+    // The SwFrame in disguise
+    friend class SwFlowFrame;
+    friend class SwFrame;
 
     // Releases the Lower while restructuring columns
-    friend SwFrm* SaveContent( SwLayoutFrm *, SwFrm * );
-    friend void   RestoreContent( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
+    friend SwFrame* SaveContent( SwLayoutFrame *, SwFrame * );
+    friend void   RestoreContent( SwFrame *, SwLayoutFrame *, SwFrame *pSibling, bool bGrow );
 
 #ifdef DBG_UTIL
-    //removes empty SwSectionFrms from a chain
-    friend SwFrm* SwClearDummies( SwFrm* pFrm );
+    //removes empty SwSectionFrames from a chain
+    friend SwFrame* SwClearDummies( SwFrame* pFrame );
 #endif
 
 protected:
 
     virtual void DestroyImpl() override;
-    virtual ~SwLayoutFrm();
+    virtual ~SwLayoutFrame();
 
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
-    SwFrm * m_pLower;
-    std::vector<SwAnchoredObject*> m_VertPosOrientFrmsFor;
+    SwFrame * m_pLower;
+    std::vector<SwAnchoredObject*> m_VertPosOrientFramesFor;
 
-    virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) override;
-    virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 
-    long CalcRel( const SwFormatFrmSize &rSz, bool bWidth ) const;
+    long CalcRel( const SwFormatFrameSize &rSz, bool bWidth ) const;
 
 public:
     // --> #i28701#
 
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
-    void RefreshLaySubsidiary( const SwPageFrm*, const SwRect& ) const;
+    virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const;
+    void RefreshLaySubsidiary( const SwPageFrame*, const SwRect& ) const;
     void RefreshExtraData( const SwRect & ) const;
 
     /// Change size of lowers proportionally
@@ -79,36 +79,36 @@ public:
 
     /// Paints the column separation line for the inner columns
     void PaintColLines( const SwRect &, const SwFormatCol &,
-                        const SwPageFrm * ) const;
+                        const SwPageFrame * ) const;
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
-    virtual bool GetCrsrOfst( SwPosition *, Point&,
-                               SwCrsrMoveState* = nullptr, bool bTestBackground = false ) const override;
+    virtual bool GetCursorOfst( SwPosition *, Point&,
+                               SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
+    virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 
     /**
      * Finds the closest Content for the SPoint
-     * Is used for Pages, Flys and Cells if GetCrsrOfst failed
+     * Is used for Pages, Flys and Cells if GetCursorOfst failed
      */
-    const SwContentFrm* GetContentPos( Point &rPoint, const bool bDontLeave,
+    const SwContentFrame* GetContentPos( Point &rPoint, const bool bDontLeave,
                                    const bool bBodyOnly = false,
                                    const bool bCalc = false,
-                                   const SwCrsrMoveState *pCMS = nullptr,
+                                   const SwCursorMoveState *pCMS = nullptr,
                                    const bool bDefaultExpand = true ) const;
 
-    SwLayoutFrm( SwFrameFormat*, SwFrm* );
+    SwLayoutFrame( SwFrameFormat*, SwFrame* );
 
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
-    const SwFrm *Lower() const { return m_pLower; }
-          SwFrm *Lower()       { return m_pLower; }
-    const SwContentFrm *ContainsContent() const;
-    inline SwContentFrm *ContainsContent();
-    const SwCellFrm *FirstCell() const;
-    inline SwCellFrm *FirstCell();
+    const SwFrame *Lower() const { return m_pLower; }
+          SwFrame *Lower()       { return m_pLower; }
+    const SwContentFrame *ContainsContent() const;
+    inline SwContentFrame *ContainsContent();
+    const SwCellFrame *FirstCell() const;
+    inline SwCellFrame *FirstCell();
 
     /**
      * Method <ContainsAny()> doesn't investigate content of footnotes by default.
@@ -117,9 +117,9 @@ public:
      * It's default is <false>, still indicating that content of footnotes isn't
      * investigated for sections.
      */
-    const SwFrm *ContainsAny( const bool _bInvestigateFootnoteForSections = false ) const;
-    inline SwFrm *ContainsAny( const bool _bInvestigateFootnoteForSections = false );
-    bool IsAnLower( const SwFrm * ) const;
+    const SwFrame *ContainsAny( const bool _bInvestigateFootnoteForSections = false ) const;
+    inline SwFrame *ContainsAny( const bool _bInvestigateFootnoteForSections = false );
+    bool IsAnLower( const SwFrame * ) const;
 
     virtual const SwFrameFormat *GetFormat() const;
     virtual       SwFrameFormat *GetFormat();
@@ -131,8 +131,8 @@ public:
      * @returns true if at least one Footnote was moved
      * Calls the page number update if bFootnoteNums is set
      */
-    bool MoveLowerFootnotes( SwContentFrm *pStart, SwFootnoteBossFrm *pOldBoss,
-                        SwFootnoteBossFrm *pNewBoss, const bool bFootnoteNums );
+    bool MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFrame *pOldBoss,
+                        SwFootnoteBossFrame *pNewBoss, const bool bFootnoteNums );
 
     // --> #i28701# - change purpose of method and its name
     // --> #i44016# - add parameter <_bUnlockPosOfObjs> to
@@ -162,30 +162,30 @@ public:
         refactoring of pseudo-local method <lcl_Apres(..)> in
         <txtftn.cxx> for #104840#.
 
-        @param _aCheckRefLayFrm
-        constant reference of an instance of class <SwLayoutFrm> which
+        @param _aCheckRefLayFrame
+        constant reference of an instance of class <SwLayoutFrame> which
         is used as the reference for the relative position check.
 
         @return true, if <this> is positioned before the layout frame <p>
     */
-    bool IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const;
+    bool IsBefore( const SwLayoutFrame* _pCheckRefLayFrame ) const;
 
-    const SwFrm* GetLastLower() const;
-    inline SwFrm* GetLastLower();
+    const SwFrame* GetLastLower() const;
+    inline SwFrame* GetLastLower();
 
     virtual void PaintBreak() const;
 
-    void SetVertPosOrientFrmFor(SwAnchoredObject *pObj)
+    void SetVertPosOrientFrameFor(SwAnchoredObject *pObj)
     {
-        m_VertPosOrientFrmsFor.push_back(pObj);
+        m_VertPosOrientFramesFor.push_back(pObj);
     }
 
-    void ClearVertPosOrientFrmFor(SwAnchoredObject *pObj)
+    void ClearVertPosOrientFrameFor(SwAnchoredObject *pObj)
     {
-        m_VertPosOrientFrmsFor.erase(
-            std::remove(m_VertPosOrientFrmsFor.begin(),
-                m_VertPosOrientFrmsFor.end(), pObj),
-            m_VertPosOrientFrmsFor.end());
+        m_VertPosOrientFramesFor.erase(
+            std::remove(m_VertPosOrientFramesFor.begin(),
+                m_VertPosOrientFramesFor.end(), pObj),
+            m_VertPosOrientFramesFor.end());
     }
 };
 
@@ -193,37 +193,37 @@ public:
  * In order to save us from duplicating implementations, we cast here
  * a little.
  */
-inline SwContentFrm* SwLayoutFrm::ContainsContent()
+inline SwContentFrame* SwLayoutFrame::ContainsContent()
 {
-    return const_cast<SwContentFrm*>(static_cast<const SwLayoutFrm*>(this)->ContainsContent());
+    return const_cast<SwContentFrame*>(static_cast<const SwLayoutFrame*>(this)->ContainsContent());
 }
 
-inline SwCellFrm* SwLayoutFrm::FirstCell()
+inline SwCellFrame* SwLayoutFrame::FirstCell()
 {
-    return const_cast<SwCellFrm*>(static_cast<const SwLayoutFrm*>(this)->FirstCell());
+    return const_cast<SwCellFrame*>(static_cast<const SwLayoutFrame*>(this)->FirstCell());
 }
 
-inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFootnoteForSections )
+inline SwFrame* SwLayoutFrame::ContainsAny( const bool _bInvestigateFootnoteForSections )
 {
-    return const_cast<SwFrm*>(static_cast<const SwLayoutFrm*>(this)->ContainsAny( _bInvestigateFootnoteForSections ));
+    return const_cast<SwFrame*>(static_cast<const SwLayoutFrame*>(this)->ContainsAny( _bInvestigateFootnoteForSections ));
 }
 
 /**
- * These SwFrm inlines are here, so that frame.hxx does not need to include layfrm.hxx
+ * These SwFrame inlines are here, so that frame.hxx does not need to include layfrm.hxx
  */
-inline bool SwFrm::IsColBodyFrm() const
+inline bool SwFrame::IsColBodyFrame() const
 {
-    return mnFrmType == FRM_BODY && GetUpper()->IsColumnFrm();
+    return mnFrameType == FRM_BODY && GetUpper()->IsColumnFrame();
 }
 
-inline bool SwFrm::IsPageBodyFrm() const
+inline bool SwFrame::IsPageBodyFrame() const
 {
-    return mnFrmType == FRM_BODY && GetUpper()->IsPageFrm();
+    return mnFrameType == FRM_BODY && GetUpper()->IsPageFrame();
 }
 
-inline SwFrm* SwLayoutFrm::GetLastLower()
+inline SwFrame* SwLayoutFrame::GetLastLower()
 {
-    return const_cast<SwFrm*>(static_cast<const SwLayoutFrm*>(this)->GetLastLower());
+    return const_cast<SwFrame*>(static_cast<const SwLayoutFrame*>(this)->GetLastLower());
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_LAYFRM_HXX

@@ -89,9 +89,9 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                 else
                 {
                     pSh->DelSelectedObj();
-                    if (pSh->IsSelFrmMode())
+                    if (pSh->IsSelFrameMode())
                     {
-                        pSh->LeaveSelFrmMode();
+                        pSh->LeaveSelFrameMode();
                         pSh->NoEdit();
                     }
                     GetView().AttrChangedNotify(pSh); // Shell change if applicable...

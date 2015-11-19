@@ -228,7 +228,7 @@ public:
 
 class SwTextCursorSave
 {
-    SwTextCursor* pTextCrsr;
+    SwTextCursor* pTextCursor;
     SwLineLayout* pCurr;
     sal_Int32 nStart;
     sal_uInt16 nWidth;

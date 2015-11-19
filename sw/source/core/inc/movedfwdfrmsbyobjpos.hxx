@@ -23,36 +23,36 @@
 #include <sal/types.h>
 
 class SwTextNode;
-class SwTextFrm;
+class SwTextFrame;
 // --> #i26945#
-class SwRowFrm;
+class SwRowFrame;
 
 typedef std::map< const SwTextNode*, const sal_uInt32 > NodeMap;
 typedef std::map< const SwTextNode*, const sal_uInt32 >::const_iterator NodeMapIter;
 typedef NodeMap::value_type NodeMapEntry;
 
-class SwMovedFwdFrmsByObjPos
+class SwMovedFwdFramesByObjPos
 {
     private:
-        NodeMap maMovedFwdFrms;
+        NodeMap maMovedFwdFrames;
 
     public:
-        SwMovedFwdFrmsByObjPos();
-        ~SwMovedFwdFrmsByObjPos();
+        SwMovedFwdFramesByObjPos();
+        ~SwMovedFwdFramesByObjPos();
 
-        void Insert( const SwTextFrm& _rMovedFwdFrmByObjPos,
+        void Insert( const SwTextFrame& _rMovedFwdFrameByObjPos,
                      const sal_uInt32 _nToPageNum );
 
         // --> #i40155#
-        void Remove( const SwTextFrm& _rTextFrm );
+        void Remove( const SwTextFrame& _rTextFrame );
 
-        bool FrmMovedFwdByObjPos( const SwTextFrm& _rTextFrm,
+        bool FrameMovedFwdByObjPos( const SwTextFrame& _rTextFrame,
                                   sal_uInt32& _ornToPageNum ) const;
 
         // --> #i26945#
-        bool DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const;
+        bool DoesRowContainMovedFwdFrame( const SwRowFrame& _rRowFrame ) const;
 
-        void Clear() { maMovedFwdFrms.clear(); };
+        void Clear() { maMovedFwdFrames.clear(); };
 };
 
 #endif

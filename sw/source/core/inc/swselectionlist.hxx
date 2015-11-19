@@ -22,7 +22,7 @@
 #include <list>
 
 class SwPaM;
-class SwFrm;
+class SwFrame;
 
 /** This class is used as parameter for creation of a block cursor selection
 
@@ -40,15 +40,15 @@ class SwFrm;
 class SwSelectionList
 {
     std::list< SwPaM* > aList;  // container for the selected text portions
-    const SwFrm* pContext;      // the context of these text portions
+    const SwFrame* pContext;      // the context of these text portions
 public:
     /** Ctor to create an empty list for a given context
 
         @param pInitCxt
-        The frame (normally a SwTextFrm) where the block cursor selection starts,
+        The frame (normally a SwTextFrame) where the block cursor selection starts,
         it will be used to get the allowed context for the text selections.
     */
-    explicit SwSelectionList( const SwFrm* pInitCxt );
+    explicit SwSelectionList( const SwFrame* pInitCxt );
 
     /** Start of the container for the selected text portions
     */
@@ -83,7 +83,7 @@ public:
 
         @return true, if the context of the frame is equal to the one of the list
     */
-    bool checkContext( const SwFrm* pCheck );
+    bool checkContext( const SwFrame* pCheck );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SWSELECTIONLIST_HXX

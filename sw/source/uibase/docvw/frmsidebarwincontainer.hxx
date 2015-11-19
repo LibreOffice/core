@@ -22,38 +22,38 @@
 #include <sal/types.h>
 #include <vector>
 
-class SwFrm;
+class SwFrame;
 class SwFormatField;
 namespace vcl { class Window; }
 
 namespace sw { namespace sidebarwindows {
 
 class SwSidebarWin;
-class FrmSidebarWinContainer;
+class FrameSidebarWinContainer;
 
-class SwFrmSidebarWinContainer
+class SwFrameSidebarWinContainer
 {
     public:
-        SwFrmSidebarWinContainer();
-        ~SwFrmSidebarWinContainer();
+        SwFrameSidebarWinContainer();
+        ~SwFrameSidebarWinContainer();
 
-        bool insert( const SwFrm& rFrm,
+        bool insert( const SwFrame& rFrame,
                      const SwFormatField& rFormatField,
                      SwSidebarWin& rSidebarWin );
 
-        bool remove( const SwFrm& rFrm,
+        bool remove( const SwFrame& rFrame,
                      const SwSidebarWin& rSidebarWin );
 
-        bool empty( const SwFrm& rFrm );
+        bool empty( const SwFrame& rFrame );
 
-        SwSidebarWin* get( const SwFrm& rFrm,
+        SwSidebarWin* get( const SwFrame& rFrame,
                            const sal_Int32 nIndex );
 
-        void getAll( const SwFrm& rFrm,
+        void getAll( const SwFrame& rFrame,
                      std::vector< vcl::Window* >* pSidebarWins );
 
     private:
-        FrmSidebarWinContainer* mpFrmSidebarWinContainer;
+        FrameSidebarWinContainer* mpFrameSidebarWinContainer;
 };
 
 } } // eof of namespace sw::sidebarwindows::

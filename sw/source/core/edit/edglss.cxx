@@ -39,7 +39,7 @@
 void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const OUString& rStr )
 {
     StartAllAction();
-    GetDoc()->InsertGlossary( rGlossary, rStr, *GetCrsr(), this );
+    GetDoc()->InsertGlossary( rGlossary, rStr, *GetCursor(), this );
     EndAllAction();
 }
 
@@ -96,7 +96,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
     {
         KillPams();
 
-        SwPaM* pCrsr = GetCrsr();
+        SwPaM* pCursor = GetCursor();
 
         SwNodeIndex aStt( pMyDoc->GetNodes().GetEndOfExtras(), 1 );
         SwContentNode* pContentNd = pMyDoc->GetNodes().GoNext( &aStt );
@@ -104,16 +104,16 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
         if( !pNd )
             pNd = pContentNd;
 
-        pCrsr->GetPoint()->nNode = *pNd;
+        pCursor->GetPoint()->nNode = *pNd;
         if( pNd == pContentNd )
-            pCrsr->GetPoint()->nContent.Assign( pContentNd, 0 );
-        pCrsr->SetMark();
+            pCursor->GetPoint()->nContent.Assign( pContentNd, 0 );
+        pCursor->SetMark();
 
         // then until the end of the Node array
-        pCrsr->GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
-        pContentNd = pCrsr->GetContentNode();
+        pCursor->GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
+        pContentNd = pCursor->GetContentNode();
         if( pContentNd )
-            pCrsr->GetPoint()->nContent.Assign( pContentNd, pContentNd->Len() );
+            pCursor->GetPoint()->nContent.Assign( pContentNd, pContentNd->Len() );
 
         OUString sBuf;
         if( GetSelectedText( sBuf, GETSELTXT_PARABRK_TO_ONLYCR ) && !sBuf.isEmpty() )
@@ -205,12 +205,12 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     }
     else
     {
-        bool bColSel = _GetCrsr()->IsColumnSelection();
+        bool bColSel = _GetCursor()->IsColumnSelection();
         if( bColSel && pInsDoc->IsClipBoard() )
             pInsDoc->SetColumnSelection( true );
         bool bSelectAll = StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false);
         {
-            for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+            for(SwPaM& rPaM : GetCursor()->GetRingContainer())
             {
                 if( !rPaM.HasMark() )
                 {
@@ -263,7 +263,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
  */
 bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
 {
-    GetCrsr();  // creates all cursors if needed
+    GetCursor();  // creates all cursors if needed
     if( IsSelOnePara() )
     {
         rBuf = GetSelText();

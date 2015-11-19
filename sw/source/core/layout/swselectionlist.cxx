@@ -30,49 +30,49 @@ namespace {
 
         A context is the environment where text is allowed to flow.
         The context is represented by
-        - the SwRootFrm if the frame is part of a page body
-        - the SwHeaderFrm if the frame is part of a page header
-        - the SwFooterFrm if the frame is part of a page footer
-        - the (master) SwFootnoteFrm if the frame is part of footnote
-        - the (first) SwFlyFrm if the frame is part of a (linked) fly frame
+        - the SwRootFrame if the frame is part of a page body
+        - the SwHeaderFrame if the frame is part of a page header
+        - the SwFooterFrame if the frame is part of a page footer
+        - the (master) SwFootnoteFrame if the frame is part of footnote
+        - the (first) SwFlyFrame if the frame is part of a (linked) fly frame
 
-        @param pFrm
+        @param pFrame
         the given frame
 
-        @return the context of the frame, represented by a SwFrm*
+        @return the context of the frame, represented by a SwFrame*
     */
-    const SwFrm* getContext( const SwFrm* pFrm )
+    const SwFrame* getContext( const SwFrame* pFrame )
     {
-        while( pFrm )
+        while( pFrame )
         {
-            if( pFrm->IsRootFrm() || pFrm->IsHeaderFrm() || pFrm->IsFooterFrm() )
+            if( pFrame->IsRootFrame() || pFrame->IsHeaderFrame() || pFrame->IsFooterFrame() )
                 break;
-            if( pFrm->IsFlyFrm() )
+            if( pFrame->IsFlyFrame() )
             {
-                const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>( pFrm );
+                const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>( pFrame );
                 while( pFly->GetPrevLink() )
                     pFly = pFly->GetPrevLink();
                 break;
             }
-            if( pFrm->IsFootnoteFrm() )
+            if( pFrame->IsFootnoteFrame() )
             {
-                const SwFootnoteFrm* pFootnote = static_cast<const SwFootnoteFrm*>( pFrm );
+                const SwFootnoteFrame* pFootnote = static_cast<const SwFootnoteFrame*>( pFrame );
                 while( pFootnote->GetMaster() )
                     pFootnote = pFootnote->GetMaster();
                 break;
             }
-            pFrm = pFrm->GetUpper();
+            pFrame = pFrame->GetUpper();
         }
-        return pFrm;
+        return pFrame;
     }
 }
 
-SwSelectionList::SwSelectionList( const SwFrm* pInitCxt ) :
+SwSelectionList::SwSelectionList( const SwFrame* pInitCxt ) :
     pContext( getContext( pInitCxt ) )
 {
 }
 
-bool SwSelectionList::checkContext( const SwFrm* pCheck )
+bool SwSelectionList::checkContext( const SwFrame* pCheck )
 {
     pCheck = getContext( pCheck );
     if( !pContext )
