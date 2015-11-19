@@ -279,7 +279,7 @@ OUString getCurrentModuleIdentifier_Impl()
         }
         catch (const css::frame::UnknownModuleException&)
         {
-            SAL_INFO( "sfx2.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): unknown module (help in help?)" );
+            SAL_INFO( "sfx.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): unknown module (help in help?)" );
         }
         catch (const Exception&)
         {

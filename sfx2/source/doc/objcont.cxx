@@ -660,12 +660,12 @@ bool SfxObjectShell::IsModifyPasswordEntered()
 
 void SfxObjectShell::libreOfficeKitCallback(int /*nType*/, const char* /*pPayload*/) const
 {
-    SAL_INFO("tiled-rendering", "SfxObjectShell::libreOfficeKitCallback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
+    SAL_INFO("sfx.tiledrendering", "SfxObjectShell::libreOfficeKitCallback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
 }
 
 bool SfxObjectShell::isTiledRendering() const
 {
-    SAL_INFO("tiled-rendering", "SfxObjectShell::isTiledRendering interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
+    SAL_INFO("sfx.tiledrendering", "SfxObjectShell::isTiledRendering interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
     return false;
 }
 

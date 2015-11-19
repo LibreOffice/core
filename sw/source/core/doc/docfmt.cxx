@@ -1584,7 +1584,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
                     // automatic SwNumRules, because all should have been
                     // created by the style copying!
                     // So just warn and ignore.
-                    SAL_WARN( "sw.styles", "Found unknown auto SwNumRule during reset!" );
+                    SAL_WARN( "sw.core", "Found unknown auto SwNumRule during reset!" );
                 }
             }
         }

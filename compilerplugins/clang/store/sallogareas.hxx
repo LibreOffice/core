@@ -30,6 +30,7 @@ class SalLogAreas
         bool VisitCallExpr( const CallExpr* call );
     private:
         void checkArea( StringRef area, SourceLocation location );
+        void checkAreaSyntax(StringRef area, SourceLocation location);
         void readLogAreas();
         const FunctionDecl* inFunction;
         SourceLocation lastSalDetailLogStreamMacro;

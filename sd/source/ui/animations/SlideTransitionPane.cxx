@@ -1153,7 +1153,7 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
     SAL_INFO( "sd.transitions", "Transition presets by offsets:");
     for( auto aIter: rPresetList )
     {
-        SAL_INFO( "sd.transitions ", nPresetOffset++ << " " <<
+        SAL_INFO( "sd.transitions", nPresetOffset++ << " " <<
                   aIter->getPresetId() << ": " << aIter->getSetId() );
     }
 

@@ -417,7 +417,7 @@ void AddonsOptions_Impl::Notify( const Sequence< OUString >& /*lPropertyNames*/ 
 
 void AddonsOptions_Impl::ImplCommit()
 {
-    SAL_WARN("framework", "AddonsOptions_Impl::ImplCommit(): Not implemented yet!");
+    SAL_WARN("fwk", "AddonsOptions_Impl::ImplCommit(): Not implemented yet!");
 }
 
 //  public method

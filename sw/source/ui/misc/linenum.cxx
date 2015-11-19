@@ -41,7 +41,7 @@ static rtl::Reference<SwDocStyleSheet> lcl_getDocStyleSheet(const OUString& rNam
     sal_uInt16 nFamily = SFX_STYLE_FAMILY_PARA;
     SfxStyleSheetBasePool* mpBase =  pSh->GetView().GetDocShell()->GetStyleSheetPool();
     SfxStyleSheetBase* pStyle = mpBase->Find(rName, (SfxStyleFamily)nFamily);
-    SAL_WARN_IF( !pStyle, "linenumbering.ui", "Style not found" );
+    SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
     if(!pStyle)
         return nullptr;
     return new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pStyle));

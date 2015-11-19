@@ -245,7 +245,7 @@ void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
         if ( pF->nTypeId == rFact.nTypeId &&
             (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
-            SAL_INFO("sfx2.appl", "TbxController-Registering is not clearly defined!");
+            SAL_INFO("sfx.appl", "TbxController-Registering is not clearly defined!");
         }
     }
 #endif
@@ -267,7 +267,7 @@ void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
         if ( pF->nTypeId == rFact.nTypeId &&
             (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
-            SAL_INFO("sfx2.appl", "TbxController-Registering is not clearly defined!");
+            SAL_INFO("sfx.appl", "TbxController-Registering is not clearly defined!");
         }
     }
 #endif
@@ -289,7 +289,7 @@ void SfxModule::RegisterMenuControl( const SfxMenuCtrlFactory& rFact )
         if ( pF->nTypeId == rFact.nTypeId &&
             (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
-            SAL_INFO("sfx2.appl", "MenuController-Registering is not clearly defined!");
+            SAL_INFO("sfx.appl", "MenuController-Registering is not clearly defined!");
         }
     }
 #endif

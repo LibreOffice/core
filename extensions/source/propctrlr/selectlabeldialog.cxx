@@ -179,7 +179,7 @@ namespace pcr
             xContainer->getByIndex(i) >>= xAsSet;
             if (!xAsSet.is())
             {
-                SAL_INFO("extensions", "OSelectLabelDialog::InsertEntries : strange : a form component which isn't a property set !");
+                SAL_INFO("extensions.propctrlr", "OSelectLabelDialog::InsertEntries : strange : a form component which isn't a property set !");
                 continue;
             }
 

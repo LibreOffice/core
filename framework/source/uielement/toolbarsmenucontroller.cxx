@@ -553,7 +553,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
         VCLXPopupMenu* pXPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( xPopupMenu ));
         PopupMenu*     pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : nullptr;
 
-        SAL_WARN_IF(!pVCLPopupMenu, "framework", "worrying lack of popup menu");
+        SAL_WARN_IF(!pVCLPopupMenu, "fwk.uielement", "worrying lack of popup menu");
         if (!pVCLPopupMenu)
             return;
 

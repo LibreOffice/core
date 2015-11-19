@@ -384,7 +384,7 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor) throw 
                 return OUString(constFilterName);
         }
     } catch (css::io::IOException & e) {
-        SAL_WARN("filter", "caught IOException " + e.Message);
+        SAL_WARN("filter.svg", "caught IOException " + e.Message);
     }
     return OUString();
 }

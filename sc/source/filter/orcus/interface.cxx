@@ -244,7 +244,7 @@ double translateToInternal(double nVal, orcus::length_unit_t unit)
             return nVal * 20.0 * 72.0 / 2.54;
             break;
         case orcus::length_unit_unknown:
-            SAL_WARN("sc,orcus", "unknown unit");
+            SAL_WARN("sc.orcus", "unknown unit");
             break;
         default:
             break;

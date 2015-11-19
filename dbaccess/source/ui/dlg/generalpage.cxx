@@ -411,7 +411,7 @@ namespace dbaui
         const sal_Int32 nSelected = _rBox.GetSelectEntryPos();
         if (static_cast<size_t>(nSelected) >= m_aEmbeddedURLPrefixes.size() )
         {
-            SAL_WARN("dbaccess.ui.OGeneralPage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
+            SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
             return;
         }
         const OUString sURLPrefix = m_aEmbeddedURLPrefixes[ nSelected ];
@@ -431,7 +431,7 @@ namespace dbaui
         const sal_Int32 nSelected = _rBox.GetSelectEntryPos();
         if (static_cast<size_t>(nSelected) >= m_aURLPrefixes.size() )
         {
-            SAL_WARN("dbaccess.ui.OGeneralPage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
+            SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
             return;
         }
         const OUString sURLPrefix = m_aURLPrefixes[ nSelected ];

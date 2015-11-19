@@ -629,9 +629,9 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
         CreateTabData( tabs );
 
     // sanity check - we shouldn't need something this low / big
-    SAL_WARN_IF(rNewX < Fraction(1, 100) || rNewX > Fraction(100, 1), "sal_viewdata",
+    SAL_WARN_IF(rNewX < Fraction(1, 100) || rNewX > Fraction(100, 1), "sc.viewdata",
                 "fraction rNewX not sensible: " << (double) rNewX);
-    SAL_WARN_IF(rNewY < Fraction(1, 100) || rNewY > Fraction(100, 1), "sal_viewdata",
+    SAL_WARN_IF(rNewY < Fraction(1, 100) || rNewY > Fraction(100, 1), "sc.viewdata",
                 "fraction rNewY not sensible: " << (double) rNewY);
 
     if ( bAll )

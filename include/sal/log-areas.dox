@@ -61,7 +61,6 @@ certain functionality.
 @li @c chart2
 @li @c chart2.3dopengl
 @li @c chart2.areachart
-@li @c chart2.barchart3D
 @li @c chart2.opengl
 @li @c chart2.tools
 
@@ -117,15 +116,23 @@ certain functionality.
 @li @c sc.core.formulacell - ScFormulaCell and group
 @li @c sc.core.grouparealistener - sc::FormulaGroupAreaListener
 @li @c sc.filter - Calc filter
+@li @c sc.orcus
+@li @c sc.orcus.autofilter
+@li @c sc.orcus.condformat
+@li @c sc.orcus.style
+@li @c sc.orcus.table
 @li @c sc.ui - Calc UI
+@li @c sc.viewdata
 
 @section desktop
 
 @li @c desktop
 @li @c desktop.app
 @li @c desktop.deployment
+@li @c desktop.lib
 @li @c desktop.migration
 @li @c desktop.offacc
+@li @c desktop.opengl
 @li @c desktop.splash
 @li @c desktop.test
 
@@ -138,6 +145,7 @@ certain functionality.
 @li @c sd.slideshow
 @li @c sd.sls - slidesorter
 @li @c sd.tools
+@li @c sd.transitions
 @li @c sd.ui
 @li @c sd.view
 @li @c sdremote
@@ -178,6 +186,7 @@ certain functionality.
 @li @c filter.os2met
 @li @c filter.pdf
 @li @c filter.pict
+@li @c filter.svg
 @li @c filter.tiff
 @li @c filter.xmlfa
 @li @c filter.xslt - xslt import/export
@@ -190,6 +199,7 @@ certain functionality.
 @li @c oox.drawingml - DrawingML
 @li @c oox.drawingml.gradient
 @li @c oox.ppt - pptx filter
+@li @c oox.shape
 @li @c oox.storage - ZipStorage class
 @li @c oox.xmlstream - XmlStream class
 
@@ -286,6 +296,7 @@ certain functionality.
 @li @c sfx.doc
 @li @c sfx.notify
 @li @c sfx.sidebar
+@li @c sfx.tiledrendering
 @li @c sfx.view
 
 @section slideshow
@@ -318,6 +329,7 @@ certain functionality.
 @section svx
 
 @li @c svx
+@li @c svx.chaining
 @li @c svx.dialog
 @li @c svx.fmcomp
 @li @c svx.form
@@ -332,6 +344,7 @@ certain functionality.
 
 @section toolkit
 
+@li @c toolkit
 @li @c toolkit.controls
 
 @section tools
@@ -392,12 +405,15 @@ certain functionality.
 @li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.
 @li @c vcl.gdi.fontmetric
 @li @c vcl.gtk - Gtk+ 2/3 plugin
+@li @c vcl.gtk3
 @li @c vcl.harfbuzz - HarfBuzz text layout
 @li @c vcl.headless - bitmap-based backend
 @li @c vcl.helper
+@li @c vcl.icontest
 @li @c vcl.kde - KDE
 @li @c vcl.kde4 - KDE4
 @li @c vcl.layout - Widget layout
+@li @c vcl.pdfwriter
 @li @c vcl.plugadapt - the Unix/X11 backend plugin mechanism
 @li @c vcl.opengl
 @li @c vcl.osx
@@ -478,7 +494,7 @@ certain functionality.
 @li @c dbaccess
 @li @c dbaccess.core
 @li @c dbaccess.ui
-@li @c dbaccess.ui.OGeneralPage
+@li @c dbaccess.ui.generalpage
 
 @section avmedia
 
@@ -499,6 +515,7 @@ certain functionality.
 @li @c helpcompiler
 @li @c jvmaccess
 @li @c linguistic
+@li @c lwp - lotuswordpro
 @li @c mysqlc
 @li @c registry
 @li @c reportdesign

@@ -358,7 +358,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
         sal_uInt16 nOldSize;
         nOldSize = pStrm->ReaduInt16();
         SAL_WARN_IF( (nOldSize == 0) != (nOldValueType == EXC_CHTR_TYPE_EMPTY),
-            "sc.xcl97",
+            "sc.filter",
             "XclImpChangeTrack::ReadChTrCellContent - old value mismatch" );
         pStrm->Ignore( 4 );
         switch( nValueType & EXC_CHTR_TYPE_FORMATMASK )

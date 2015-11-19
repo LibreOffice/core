@@ -107,8 +107,37 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
         {
         report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend include/sal/log-areas.dox)",
             location ) << area;
+        checkAreaSyntax(area, location);
         }
     }
+
+void SalLogAreas::checkAreaSyntax(StringRef area, SourceLocation location) {
+    for (std::size_t i = 0;;) {
+        std::size_t j = area.find('.', i);
+        if (j == StringRef::npos) {
+            j = area.size();
+        }
+        if (j == i) {
+            goto bad;
+        }
+        for (; i != j; ++i) {
+            auto c = area[i];
+            if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z'))) {
+                goto bad;
+            }
+        }
+        if (j == area.size()) {
+            return;
+        }
+        i = j + 1;
+    }
+bad:
+    report(
+        DiagnosticsEngine::Warning,
+        "invalid log area syntax '%0'%1 (see include/sal/log.hxx for details)",
+        location)
+        << area << (location.isValid() ? "" : " in include/sal/log-areas.dox");
+}
 
 void SalLogAreas::readLogAreas()
     {
@@ -122,10 +151,13 @@ void SalLogAreas::readLogAreas()
             {
             pos += strlen( "@li @c " );
             size_t end = line.find( ' ', pos );
+            std::string area;
             if( end == string::npos )
-                logAreas.insert( line.substr( pos ));
+                area = line.substr( pos );
             else if( pos != end )
-                logAreas.insert( line.substr( pos, end - pos ));
+                area = line.substr( pos, end - pos );
+            checkAreaSyntax(area, SourceLocation());
+            logAreas.insert(area);
             }
         }
     // If you get this error message, you possibly have too old icecream (ICECC_EXTRAFILES is needed).

@@ -148,7 +148,7 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
     uno::Reference<frame::XController> const xController(rxFrame->getController());
     if (!xController.is()) // this may happen during dispose of Draw controller but perhaps it's a bug
     {
-        SAL_WARN("sfx2.sidebar", "GetSidebarControllerForFrame: frame has no XController");
+        SAL_WARN("sfx.sidebar", "GetSidebarControllerForFrame: frame has no XController");
         return nullptr;
     }
     uno::Reference<ui::XContextChangeEventListener> const xListener(

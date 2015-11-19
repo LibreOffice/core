@@ -2109,7 +2109,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
                         aValue.PutDouble( aNumber );
                     else
                         aValue.PutString( aString );
-                    SAL_INFO( "sw.dbmgr", "'" << pColNames[nCol] << "': " << aNumber << " / " << aString );
+                    SAL_INFO( "sw.ui", "'" << pColNames[nCol] << "': " << aNumber << " / " << aString );
                     rCalc.VarChange( pColNames[nCol], aValue );
                 }
             }
@@ -2117,7 +2117,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
             {
                 SwSbxValue aValue;
                 aValue.PutString( aString );
-                SAL_INFO( "sw.dbmgr", "'" << pColNames[nCol] << "': " << aString );
+                SAL_INFO( "sw.ui", "'" << pColNames[nCol] << "': " << aString );
                 rCalc.VarChange( pColNames[nCol], aValue );
             }
         }
