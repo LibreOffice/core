@@ -96,7 +96,7 @@ void main( void )
         v_textureSelect = 1;
     }
 
-    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * v;
+    gl_Position = gl_ModelViewProjectionMatrix * v;
 
     v_texturePosition = gl_MultiTexCoord0.xy;
 }
