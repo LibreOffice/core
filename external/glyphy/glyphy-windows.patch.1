@@ -742,3 +742,35 @@ index b43b1e3..c28778e 100644
 -- 
 2.4.3
 
+From 45ad6c9336e78b0fc5aeec4cd7d602333751a93f Mon Sep 17 00:00:00 2001
+From: Tor Lillqvist <tml@collabora.com>
+Date: Thu, 19 Nov 2015 15:31:04 +0200
+Subject: [PATCH] Bin two initialized but unused variables
+
+---
+ src/glyphy-windows.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/glyphy-windows.h b/src/glyphy-windows.h
+index b3c11c8..5912073 100644
+--- a/src/glyphy-windows.h
++++ b/src/glyphy-windows.h
+@@ -79,7 +79,6 @@ glyphy_windows(outline_decompose) (const TTPOLYGONHEADER    *outline,
+   const TTPOLYGONHEADER *polygon = outline;
+   const TTPOLYGONHEADER *outline_end = (const TTPOLYGONHEADER*) ((char *)outline + outline_size);
+ 
+-  int polygon_count = 0;
+   while (polygon < outline_end)
+   {
+     if (((char *)polygon + polygon->cb) > (char *) outline_end)
+@@ -92,7 +91,6 @@ glyphy_windows(outline_decompose) (const TTPOLYGONHEADER    *outline,
+ 
+     const TTPOLYCURVE *curve = (const TTPOLYCURVE*) (polygon + 1);
+     const TTPOLYCURVE *curve_end = (const TTPOLYCURVE*) ((char *)polygon + polygon->cb);
+-    int curve_count = 0;
+     while (curve < curve_end)
+     {
+       if (((char *) &curve->apfx[curve->cpfx]) > (char *) curve_end)
+-- 
+2.5.0
+
