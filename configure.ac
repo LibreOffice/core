@@ -3267,69 +3267,6 @@ else
 fi
 AC_SUBST(CROSS_COMPILING)
 
-# ===================================================================
-# check various GCC options that Clang does not support now but maybe
-# will somewhen in the future, check them even for GCC, so that the
-# flags are set
-# ===================================================================
-
-HAVE_GCC_GGDB2=
-HAVE_GCC_FINLINE_LIMIT=
-HAVE_GCC_FNO_INLINE=
-if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([whether $CC supports -ggdb2])
-    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
-        # Option just ignored and silly warning that isn't a real
-        # warning printed
-        :
-    else
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS -Werror -ggdb2"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_GGDB2=TRUE ],[])
-        CFLAGS=$save_CFLAGS
-    fi
-    if test "$HAVE_GCC_GGDB2" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
-
-    AC_MSG_CHECKING([whether $CC supports -finline-limit=0])
-    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
-        # As above
-        :
-    else
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS -Werror -finline-limit=0"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FINLINE_LIMIT=TRUE ],[])
-        CFLAGS=$save_CFLAGS
-    fi
-    if test "$HAVE_GCC_FINLINE_LIMIT" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
-
-    AC_MSG_CHECKING([whether $CC supports -fno-inline])
-    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
-        # Ditto
-        :
-    else
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS -Werror -fno-inline"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_INLINE=TRUE ],[])
-        CFLAGS=$save_CFLAGS
-    fi
-    if test "$HAVE_GCC_FNO_INLINE" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AC_SUBST(HAVE_GCC_GGDB2)
-AC_SUBST(HAVE_GCC_FINLINE_LIMIT)
-AC_SUBST(HAVE_GCC_FNO_INLINE)
-
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING( for -Bsymbolic-functions linker support )
@@ -3825,7 +3762,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 
 if test "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([the Clang version])
-    clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC -E -P /dev/stdin`
+    clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC -E -P -`
     CLANG_FULL_VERSION=`echo __clang_version__ | $CC -E -P -`
     CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
     AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
@@ -3861,6 +3798,69 @@ if test "$CCACHE" != ""; then
     CFLAGS=$save_CFLAGS
     AC_LANG_POP([C])
 fi
+
+# ===================================================================
+# check various GCC options that Clang does not support now but maybe
+# will somewhen in the future, check them even for GCC, so that the
+# flags are set
+# ===================================================================
+
+HAVE_GCC_GGDB2=
+HAVE_GCC_FINLINE_LIMIT=
+HAVE_GCC_FNO_INLINE=
+if test "$GCC" = "yes"; then
+    AC_MSG_CHECKING([whether $CC supports -ggdb2])
+    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
+        # Option just ignored and silly warning that isn't a real
+        # warning printed
+        :
+    else
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -ggdb2"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_GGDB2=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+    fi
+    if test "$HAVE_GCC_GGDB2" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+
+    AC_MSG_CHECKING([whether $CC supports -finline-limit=0])
+    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
+        # As above
+        :
+    else
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -finline-limit=0"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FINLINE_LIMIT=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+    fi
+    if test "$HAVE_GCC_FINLINE_LIMIT" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+
+    AC_MSG_CHECKING([whether $CC supports -fno-inline])
+    if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
+        # Ditto
+        :
+    else
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -fno-inline"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_FNO_INLINE=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+    fi
+    if test "$HAVE_GCC_FNO_INLINE" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST(HAVE_GCC_GGDB2)
+AC_SUBST(HAVE_GCC_FINLINE_LIMIT)
+AC_SUBST(HAVE_GCC_FNO_INLINE)
 
 dnl ===================================================================
 dnl  Test the gcc version
