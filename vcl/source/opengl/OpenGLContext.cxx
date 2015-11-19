@@ -1734,10 +1734,10 @@ OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const O
 
 void OpenGLContext::UseNoProgram()
 {
-    if( mpCurrentProgram == NULL )
+    if( mpCurrentProgram == nullptr )
         return;
 
-    mpCurrentProgram = NULL;
+    mpCurrentProgram = nullptr;
     glUseProgram( 0 );
     CHECK_GL_ERROR();
 }
