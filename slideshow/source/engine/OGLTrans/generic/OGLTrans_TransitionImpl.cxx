@@ -1525,16 +1525,16 @@ void ShaderTransition::impl_preparePermShader()
             CHECK_GL_ERROR();
         }
 
-        glActiveTexture(GL_TEXTURE1);
-        CHECK_GL_ERROR();
-        if( !m_nHelperTexture )
-            initPermTexture( &m_nHelperTexture );
-
-        glActiveTexture(GL_TEXTURE0);
-        CHECK_GL_ERROR();
-
         location = glGetUniformLocation( m_nProgramObject, "permTexture" );
         if( location != -1 ) {
+            glActiveTexture(GL_TEXTURE1);
+            CHECK_GL_ERROR();
+            if( !m_nHelperTexture )
+                initPermTexture( &m_nHelperTexture );
+
+            glActiveTexture(GL_TEXTURE0);
+            CHECK_GL_ERROR();
+
             glUniform1i( location, 1 );  // texture unit 1
             CHECK_GL_ERROR();
         }
