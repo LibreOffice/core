@@ -664,7 +664,6 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_HeadingPairs,          "heading pairs" );
     writeElement( pAppProps, XML_TitlesOfParts,         "titles of parts" );
     writeElement( pAppProps, XML_LinksUpToDate,         "links up-to-date" );
-    writeElement( pAppProps, XML_CharactersWithSpaces,  "characters with spaces" );
     writeElement( pAppProps, XML_SharedDoc,             "shared doc" );
     writeElement( pAppProps, XML_HyperlinkBase,         "hyperlink base" );
     writeElement( pAppProps, XML_HLinks,                "hlinks" );
@@ -695,11 +694,18 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
                 writeElement(pAppProps, XML_Words, nValue);
     }
 
-    it = aStats.find("CharacterCount");
+    it = aStats.find("NonWhitespaceCharacterCount");
     if (it != aStats.end())
     {
             if (it->second >>= nValue)
                 writeElement(pAppProps, XML_Characters, nValue);
+    }
+
+    it = aStats.find("CharacterCount");
+    if (it != aStats.end())
+    {
+            if (it->second >>= nValue)
+                writeElement(pAppProps, XML_CharactersWithSpaces, nValue);
     }
 
     it = aStats.find("ParagraphCount");
