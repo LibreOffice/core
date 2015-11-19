@@ -371,7 +371,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
     else
     {
         SCROW nLastNonFilteredRow = -1;
-        if (!bAll && rSearchItem.GetRowDirection())
+        if (rSearchItem.GetRowDirection())
         {
             nCol++;
             while (!bFound && (nRow <= nLastRow))
