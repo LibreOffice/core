@@ -8813,8 +8813,10 @@ AS_IF([test "$with_system_glew" = "yes"],
 dnl ===================================================================
 dnl Check for system glyphy
 dnl ===================================================================
-if test $_os = Linux -o $_os = WINNT; then
-    libo_CHECK_SYSTEM_MODULE([glyphy], [GLYPHY], [glyphy >= 0.12.0], ["-I${WORKDIR}/UnpackedTarball/glyphy/src"])
+dnl We currently use GLyphy only on Windows
+if test $_os = WINNT; then
+    # libo_CHECK_SYSTEM_MODULE([glyphy], [GLYPHY], [glyphy >= 0.12.0], ["-I${WORKDIR}/UnpackedTarball/glyphy/src"])
+    BUILD_TYPE="$BUILD_TYPE GLYPHY"
 fi
 
 dnl ===================================================================

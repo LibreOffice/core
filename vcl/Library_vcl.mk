@@ -755,10 +755,6 @@ $(eval $(call gb_Library_add_libs,vcl,\
 	-lXext \
 ))
 
-$(eval $(call gb_Library_use_externals,vcl,\
-	glyphy \
-))
-
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/x11/X11DeviceInfo \
 ))
