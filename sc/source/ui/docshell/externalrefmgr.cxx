@@ -616,7 +616,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
             return TokenArrayRef();
         }
 
-        ScMatrixRef xMat = new ScMatrix(
+        ScMatrixRef xMat = new ScFullMatrix(
             static_cast<SCSIZE>(nDataCol2-nDataCol1+1), static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
 
         // Only fill non-empty cells, for better performance.
@@ -1502,7 +1502,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         else
             pUsedRange.reset(new ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
 
-        ScMatrixRef xMat = new ScMatrix(
+        ScMatrixRef xMat = new ScFullMatrix(
             static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
 
         ColumnBatch<svl::SharedString> aStringBatch(pHostDoc, pSrcDoc, CELLTYPE_STRING, CELLTYPE_EDIT);
@@ -1584,7 +1584,7 @@ static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScRange& rRange)
 {
     SCSIZE nC = static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1);
     SCSIZE nR = static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1);
-    ScMatrixRef xMat = new ScMatrix(nC, nR);
+    ScMatrixRef xMat = new ScFullMatrix(nC, nR);
 
     ScMatrixToken aToken(xMat);
     unique_ptr<ScTokenArray> pArray(new ScTokenArray);

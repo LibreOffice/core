@@ -153,7 +153,7 @@ void ScXMLDDELinkContext::EndElement()
             OSL_ENSURE( static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size(),
                     "ScXMLDDELinkContext::EndElement: adapted matrix dimension doesn't match either");
         }
-        ScMatrixRef pMatrix = new ScMatrix(static_cast<SCSIZE>(nColumns), static_cast<SCSIZE>(nRows), 0.0);
+        ScMatrixRef pMatrix = new ScFullMatrix(static_cast<SCSIZE>(nColumns), static_cast<SCSIZE>(nRows), 0.0);
         sal_Int32 nCol(0);
         sal_Int32 nRow(-1);
         sal_Int32 nIndex(0);

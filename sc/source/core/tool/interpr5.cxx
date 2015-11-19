@@ -319,9 +319,9 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
 {
     ScMatrixRef pMat;
     if (bEmpty)
-        pMat = new ScMatrix(nC, nR);
+        pMat = new ScFullMatrix(nC, nR);
     else
-        pMat = new ScMatrix(nC, nR, 0.0);
+        pMat = new ScFullMatrix(nC, nR, 0.0);
 
     pMat->SetErrorInterpreter( this);
     // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
@@ -463,17 +463,17 @@ ScMatrixRef ScInterpreter::GetMatrix()
             }
             if (pToken->GetType() == svDouble)
             {
-                pMat = new ScMatrix(1, 1, 0.0);
+                pMat = new ScFullMatrix(1, 1, 0.0);
                 pMat->PutDouble(pToken->GetDouble(), 0, 0);
             }
             else if (pToken->GetType() == svString)
             {
-                pMat = new ScMatrix(1, 1, 0.0);
+                pMat = new ScFullMatrix(1, 1, 0.0);
                 pMat->PutString(pToken->GetString(), 0, 0);
             }
             else
             {
-                pMat = new ScMatrix(1, 1);
+                pMat = new ScFullMatrix(1, 1);
             }
         }
         break;

@@ -2169,7 +2169,7 @@ formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol1, SCROW nRo
     if (!ValidCol(nCol1) || !ValidCol(nCol2) || !ValidRow(nRow1) || !ValidRow(nRow2))
         return formula::FormulaTokenRef();
 
-    ScMatrixRef pMat(new ScMatrix(nCol2-nCol1+1, nRow2-nRow1+1, 0.0));
+    ScMatrixRef pMat(new ScFullMatrix(nCol2-nCol1+1, nRow2-nRow1+1, 0.0));
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
     {
         if (!aCol[nCol].ResolveStaticReference(*pMat, nCol2-nCol1, nRow1, nRow2))

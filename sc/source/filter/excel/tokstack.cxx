@@ -786,7 +786,7 @@ const TokenId TokenPool::StoreMatrix()
     pElement[ nElementAkt ] = nP_MatrixAkt;
     pType[ nElementAkt ] = T_Matrix;
 
-    pM = new ScMatrix( 0, 0 );
+    pM = new ScFullMatrix( 0, 0 );
     pM->IncRef( );
     ppP_Matrix[ nP_MatrixAkt ] = pM;
 

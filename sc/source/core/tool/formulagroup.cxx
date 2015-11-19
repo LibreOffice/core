@@ -376,7 +376,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                     if (!p2->IsEndFixed())
                         nRowEnd += i;
                     size_t nRowSize = nRowEnd - nRowStart + 1;
-                    ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize));
+                    ScMatrixRef pMat(new ScFullMatrix(nColSize, nRowSize));
 
                     size_t nDataRowEnd = p2->GetArrayLength() - 1;
                     if (nRowStart > nDataRowEnd)

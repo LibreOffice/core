@@ -864,7 +864,7 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix( svl::SharedStringPool& rPool ) c
     OSL_ENSURE( mnScCols * mnScRows == maValueList.size(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
     if( mnScCols && mnScRows && static_cast< sal_uLong >( mnScCols * mnScRows ) <= maValueList.size() )
     {
-        xScMatrix = new ScMatrix(mnScCols, mnScRows, 0.0);
+        xScMatrix = new ScFullMatrix(mnScCols, mnScRows, 0.0);
         XclImpValueList::const_iterator itValue = maValueList.begin();
         for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         {

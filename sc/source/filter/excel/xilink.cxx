@@ -270,7 +270,7 @@ sal_uInt16 XclImpTabInfo::GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMa
 // External names =============================================================
 
 XclImpExtName::MOper::MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm) :
-    mxCached(new ScMatrix(0,0))
+    mxCached(new ScFullMatrix(0,0))
 {
     SCSIZE nLastCol = rStrm.ReaduInt8();
     SCSIZE nLastRow = rStrm.ReaduInt16();
