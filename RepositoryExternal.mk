@@ -284,9 +284,9 @@ $(call gb_LinkTarget_add_libs,$(1),$(GLYPHY_LIBS))
 endef
 else # !SYSTEM_GLYPHY
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+$(eval $(gb_Helper_optional,GLYPHY,$(call gb_Helper_register_packages_for_install,ooo,\
 	glyphy \
-))
+)))
 
 define gb_LinkTarget__use_glyphy
 $(call gb_LinkTarget_use_package,$(1),glyphy)
