@@ -275,13 +275,11 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
     {
         vcl::Window* pChild = GetChild(i);
 
-        // This would at the moment just draw a gray rectangle at the top right
-        // corner, need to sort out later.
-        if (pChild == mpVScrollbar.get())
-            continue;
-
         // No point in showing this button till click on it are not handled.
         if (pChild == mpMenuButton.get())
+            continue;
+
+        if (!pChild->IsVisible())
             continue;
 
         rRenderContext.Push(PushFlags::MAPMODE);
