@@ -78,6 +78,7 @@
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 
 #include <svx/unoshape.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <functional>
 #include <map>
@@ -2063,7 +2064,7 @@ uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
             }
         }
     }
-    return ContainerHelper::ContainerToSequence( aRetVector );
+    return comphelper::containerToSequence( aRetVector );
 }
 
 namespace

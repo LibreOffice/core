@@ -720,7 +720,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
                         , lcl_aCategoriesRoleName ) ) );
         }
         //don't add the created sequences to the map as they are used temporarily only ...
-        return new DataSource( ContainerHelper::ContainerToSequence(aComplexCategories) );
+        return new DataSource( comphelper::containerToSequence(aComplexCategories) );
     }
 
     OSL_ASSERT( aRangeRepresentation == lcl_aCompleteRange );
@@ -772,7 +772,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
             aResultLSeqVec.push_back( *aIt );
     }
 
-    return new DataSource( ContainerHelper::ContainerToSequence(aResultLSeqVec) );
+    return new DataSource( comphelper::containerToSequence(aResultLSeqVec) );
 }
 
 Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
@@ -893,7 +893,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
             ? m_aInternalData.getComplexColumnLabel( nIndex )
             : m_aInternalData.getComplexRowLabel( nIndex );
         if( !aComplexLabel.empty() )
-            aResult = ContainerHelper::ContainerToSequence(aComplexLabel);
+            aResult = comphelper::containerToSequence(aComplexLabel);
     }
     else if( aRange.match( lcl_aCategoriesPointRangeNamePrefix ) )
     {
@@ -902,7 +902,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
             ? m_aInternalData.getComplexRowLabel( nPointIndex )
             : m_aInternalData.getComplexColumnLabel( nPointIndex );
         if( !aComplexCategory.empty() )
-            aResult = ContainerHelper::ContainerToSequence(aComplexCategory);
+            aResult = comphelper::containerToSequence(aComplexCategory);
     }
     else if( aRange.match( lcl_aCategoriesLevelRangeNamePrefix ) )
     {
@@ -1305,7 +1305,7 @@ Sequence< Sequence< Type > > lcl_convertVectorVectorToSequenceSequence( const ve
     {
         aRet.realloc(nOuterCount);
         for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-            aRet[nN]= ContainerHelper::ContainerToSequence( rIn[nN] );
+            aRet[nN]= comphelper::containerToSequence( rIn[nN] );
     }
     return aRet;
 }
@@ -1332,7 +1332,7 @@ Sequence< Sequence< OUString > > lcl_convertComplexAnyVectorToStringSequence( co
     {
         aRet.realloc(nOuterCount);
         for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-            aRet[nN]= lcl_AnyToStringSequence( ContainerHelper::ContainerToSequence( rIn[nN] ) );
+            aRet[nN]= lcl_AnyToStringSequence( comphelper::containerToSequence( rIn[nN] ) );
     }
     return aRet;
 }

@@ -37,6 +37,7 @@
 #include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <sot/filelist.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -421,16 +422,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
     {
     }
 
-    Sequence< DataFlavor >          aRet( mpFormats->size() );
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_uInt32                      nCurPos = 0;
-
-    while( aIter != aEnd )
-    {
-        aRet[ nCurPos++ ] = *aIter++;
-    }
-
-    return aRet;
+    return comphelper::containerToSequence<DataFlavor>(*mpFormats);
 }
 
 

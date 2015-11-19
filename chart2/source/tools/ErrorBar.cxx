@@ -440,7 +440,7 @@ void SAL_CALL ErrorBar::setData( const uno::Sequence< uno::Reference< chart2::da
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ErrorBar::getDataSequences()
     throw (uno::RuntimeException, std::exception)
 {
-    return ContainerHelper::ContainerToSequence( m_aDataSequences );
+    return comphelper::containerToSequence( m_aDataSequences );
 }
 
 uno::Sequence< OUString > ErrorBar::getSupportedServiceNames_Static()

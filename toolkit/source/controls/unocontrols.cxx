@@ -2549,12 +2549,7 @@ void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& 
 
 void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< OUString >& i_rStringItems )
 {
-    Sequence< OUString > aStringItems( i_rStringItems.size() );
-    ::std::copy(
-        i_rStringItems.begin(),
-        i_rStringItems.end(),
-        aStringItems.getArray()
-    );
+    Sequence< OUString > aStringItems( comphelper::containerToSequence(i_rStringItems) );
     m_xData->m_bSettingLegacyProperty = true;
     try
     {

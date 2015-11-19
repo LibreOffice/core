@@ -79,6 +79,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace std;
 using namespace osl;
@@ -1017,16 +1018,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     pEntry->nSize = pEntry->nCompressedSize = -1;
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
-    // Convert vector into a uno::Sequence
-    uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
-    sal_Int32 nInd = 0;
-    for ( vector < uno::Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
-         aIter != aEnd;
-         ++aIter, ++nInd )
-    {
-        aManifestSequence[nInd] = ( *aIter );
-    }
-    xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
+    xWriter->writeManifestSequence ( xManOutStream,  comphelper::containerToSequence(aManList) );
 
     sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
     pBuffer->realloc( nBufferLength );

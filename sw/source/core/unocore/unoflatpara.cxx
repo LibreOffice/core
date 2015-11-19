@@ -47,6 +47,7 @@
 #include <viewopt.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -107,17 +108,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     if (rPropertyName == "FieldPositions")
     {
-        uno::Sequence<sal_Int32> ret(GetConversionMap().getFieldPositions().size());
-        std::copy(GetConversionMap().getFieldPositions().begin(),
-                GetConversionMap().getFieldPositions().end(), ret.begin());
-        return uno::makeAny(ret);
+        return uno::makeAny( comphelper::containerToSequence( GetConversionMap().getFieldPositions() ) );
     }
     else if (rPropertyName == "FootnotePositions")
     {
-        uno::Sequence<sal_Int32> ret(GetConversionMap().getFootnotePositions().size());
-        std::copy(GetConversionMap().getFootnotePositions().begin(),
-                GetConversionMap().getFootnotePositions().end(), ret.begin());
-        return uno::makeAny(ret);
+        return uno::makeAny( comphelper::containerToSequence( GetConversionMap().getFootnotePositions() ) );
     }
     return uno::Any();
 }

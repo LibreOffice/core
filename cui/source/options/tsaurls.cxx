@@ -10,6 +10,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
+#include <comphelper/sequence.hxx>
 
 #include "tsaurls.hxx"
 
@@ -52,12 +53,7 @@ IMPL_LINK_NOARG_TYPED(TSAURLsDialog, OKHdl_Impl, Button*, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    css::uno::Sequence<OUString> aNewValue(m_aURLs.size());
-    size_t n(0);
-
-    for (auto i = m_aURLs.cbegin(); i != m_aURLs.cend(); ++i)
-        aNewValue[n++] = *i;
-    officecfg::Office::Common::Security::Scripting::TSAURLs::set(aNewValue, batch);
+    officecfg::Office::Common::Security::Scripting::TSAURLs::set(comphelper::containerToSequence<OUString>(m_aURLs), batch);
     batch->commit();
 
     EndDialog(RET_OK);

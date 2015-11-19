@@ -751,10 +751,7 @@ throw (css::uno::RuntimeException, lang::IllegalAccessException)
         ImageList* pImageList = implts_getUserImageList( ImageType(i));
         pImageList->GetImageNames( aUserImageNames );
 
-        Sequence< OUString > aRemoveList( aUserImageNames.size() );
-        const sal_uInt32 nCount = aUserImageNames.size();
-        for ( sal_uInt32 j = 0; j < nCount; j++ )
-            aRemoveList[j] = aUserImageNames[j];
+        Sequence< OUString > aRemoveList( comphelper::containerToSequence(aUserImageNames) );
 
         // Remove images
         removeImages( sal_Int16( i ), aRemoveList );

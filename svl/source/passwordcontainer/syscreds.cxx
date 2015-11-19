@@ -20,6 +20,7 @@
 #include "syscreds.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <osl/diagnose.h>
+#include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;
 
@@ -185,19 +186,7 @@ void SysCredentialsConfig::writeCfg()
 
     OSL_ENSURE( m_bCfgInited, "SysCredentialsConfig::writeCfg : not initialized!" );
 
-    uno::Sequence< OUString > aURLs( m_aCfgContainer.size() );
-    StringSet::const_iterator it = m_aCfgContainer.begin();
-    const StringSet::const_iterator end = m_aCfgContainer.end();
-    sal_Int32 n = 0;
-
-    while ( it != end )
-    {
-        aURLs[ n ] = *it;
-        ++it;
-        ++n;
-    }
-
-    m_aConfigItem.setSystemCredentialsURLs( aURLs );
+    m_aConfigItem.setSystemCredentialsURLs( comphelper::containerToSequence<OUString>(m_aCfgContainer) );
 }
 
 OUString SysCredentialsConfig::find( OUString const & aURL )

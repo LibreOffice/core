@@ -172,12 +172,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
 
 beans::PropertyValues StyleSheetEntry::GetInteropGrabBagSeq()
 {
-    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
-    beans::PropertyValue* pSeq = aSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
-        *pSeq++ = *i;
-
-    return aSeq;
+    return comphelper::containerToSequence(m_aInteropGrabBag);
 }
 
 beans::PropertyValue StyleSheetEntry::GetInteropGrabBag()
@@ -831,21 +826,13 @@ void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>
         if (!m_pImpl->m_pCurrentEntry->aLsdExceptions.empty())
         {
             std::vector<beans::PropertyValue>& rLsdExceptions = m_pImpl->m_pCurrentEntry->aLsdExceptions;
-            uno::Sequence<beans::PropertyValue> aLsdExceptions(rLsdExceptions.size());
-            beans::PropertyValue* pLsdExceptions = aLsdExceptions.getArray();
-            for (std::vector<beans::PropertyValue>::iterator i = rLsdExceptions.begin(); i != rLsdExceptions.end(); ++i)
-                *pLsdExceptions++ = *i;
-
             beans::PropertyValue aValue;
             aValue.Name = "lsdExceptions";
-            aValue.Value = uno::makeAny(aLsdExceptions);
+            aValue.Value = uno::makeAny( comphelper::containerToSequence(rLsdExceptions) );
             rLatentStyles.push_back(aValue);
         }
 
-        uno::Sequence<beans::PropertyValue> aLatentStyles(rLatentStyles.size());
-        beans::PropertyValue* pLatentStyles = aLatentStyles.getArray();
-        for (std::vector<beans::PropertyValue>::iterator i = rLatentStyles.begin(); i != rLatentStyles.end(); ++i)
-            *pLatentStyles++ = *i;
+        uno::Sequence<beans::PropertyValue> aLatentStyles( comphelper::containerToSequence(rLatentStyles) );
 
         // We can put all latent style info directly to the document interop
         // grab bag, as we can be sure that only a single style entry has

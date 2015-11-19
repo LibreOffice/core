@@ -23,6 +23,7 @@
 
 #include <osl/diagnose.h>
 #include <svl/poolitem.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <unofldmid.h>
 #include <unoprnms.hxx>
@@ -120,18 +121,7 @@ void SwDropDownField::SetItems(const uno::Sequence<OUString> & rItems)
 
 uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
 {
-    uno::Sequence<OUString> aSeq( aValues.size() );
-    OUString* pSeq = aSeq.getArray();
-    int i = 0;
-    vector<OUString>::const_iterator aIt;
-
-    for (aIt = aValues.begin(); aIt != aValues.end(); ++aIt)
-    {
-        pSeq[i] = *aIt;
-        i++;
-    }
-
-    return aSeq;
+    return comphelper::containerToSequence(aValues);
 }
 
 

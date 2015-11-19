@@ -21,6 +21,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <fstream>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/graph.hxx>
 #include <map>
@@ -748,13 +749,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }
 
-        uno::Sequence< beans::PropertyValue > sProps( props.size() );
-        beans::PropertyValue* pProp = sProps.getArray();
-
-        for ( std::vector< css::beans::PropertyValue >::iterator it = props.begin(); it != props.end(); ++it, ++pProp )
-            *pProp = *it;
-
-        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
+        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( comphelper::containerToSequence(props) ) );
     }
     return true;
 }

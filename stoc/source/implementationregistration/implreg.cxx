@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <uno/mapping.hxx>
 #include <osl/thread.h>
@@ -1633,19 +1634,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 
                         if (!implNames.empty())
                         {
-                            std::list<OUString>::const_iterator iter = implNames.begin();
-
-                            Sequence<OUString> seqImpl(implNames.size());
-                            OUString *pImplNames = seqImpl.getArray();
-
-                            sal_Int32 index = 0;
-                            while (iter != implNames.end())
-                            {
-                                pImplNames[index] = *iter;
-                                index++;
-                                ++iter;
-                            }
-
+                            Sequence<OUString> seqImpl(comphelper::containerToSequence<OUString>(implNames));
                             xImpl->closeKey();
                             return seqImpl;
                         }

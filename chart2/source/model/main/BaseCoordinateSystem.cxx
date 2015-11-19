@@ -95,7 +95,7 @@ private:
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return comphelper::containerToSequence( aProperties );
     }
 };
 
@@ -298,7 +298,7 @@ void SAL_CALL BaseCoordinateSystem::removeChartType( const Reference< chart2::XC
 Sequence< Reference< chart2::XChartType > > SAL_CALL BaseCoordinateSystem::getChartTypes()
     throw (uno::RuntimeException, std::exception)
 {
-    return ContainerHelper::ContainerToSequence( m_aChartTypes );
+    return comphelper::containerToSequence( m_aChartTypes );
 }
 
 void SAL_CALL BaseCoordinateSystem::setChartTypes( const Sequence< Reference< chart2::XChartType > >& aChartTypes )

@@ -123,7 +123,7 @@ private:
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return comphelper::containerToSequence( aProperties );
     }
 
 };
@@ -243,7 +243,7 @@ uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRo
 
     aMandRoles.push_back( "values-last");
 
-    return ContainerHelper::ContainerToSequence( aMandRoles );
+    return comphelper::containerToSequence( aMandRoles );
 }
 
 Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
@@ -265,7 +265,7 @@ Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
         aOptRoles.push_back( "values-max");
     }
 
-    return ContainerHelper::ContainerToSequence( aOptRoles );
+    return comphelper::containerToSequence( aOptRoles );
 }
 
 OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()

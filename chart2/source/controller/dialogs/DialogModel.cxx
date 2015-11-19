@@ -39,6 +39,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <comphelper/sequence.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -343,7 +344,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
                 aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq ));
             }
 
-            xSink->setData( ContainerToSequence( aNewSequences ));
+            xSink->setData( comphelper::containerToSequence( aNewSequences ));
         }
     }
 
@@ -506,7 +507,7 @@ void addNewSeriesToContainer(
         ++aIt;
 
     aSeries.insert(aIt, xNewSeries);
-    xSeriesCnt->setDataSeries(ContainerToSequence(aSeries));
+    xSeriesCnt->setDataSeries(comphelper::containerToSequence(aSeries));
 }
 
 }
@@ -735,7 +736,7 @@ bool DialogModel::setData(
             applyInterpretedData(
                 xInterpreter->interpretDataSource(
                     xDataSource, rArguments,
-                    ContainerToSequence( aSeriesToReUse )),
+                    comphelper::containerToSequence( aSeriesToReUse )),
                 aSeriesToReUse,
                 true /* bSetStyles */);
 

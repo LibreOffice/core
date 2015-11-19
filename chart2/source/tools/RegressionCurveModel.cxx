@@ -156,7 +156,7 @@ private:
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return comphelper::containerToSequence( aProperties );
     }
 };
 

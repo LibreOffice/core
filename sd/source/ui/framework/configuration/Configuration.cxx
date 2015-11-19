@@ -168,12 +168,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
         aResources.push_back(*iResource);
     }
 
-    // Copy the resources from the vector into a new sequence.
-    Sequence<Reference<XResourceId> > aResult (aResources.size());
-    for (size_t nIndex=0; nIndex<aResources.size(); ++nIndex)
-        aResult[nIndex] = aResources[nIndex];
-
-    return aResult;
+    return comphelper::containerToSequence(aResources);
 }
 
 sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxResourceId)

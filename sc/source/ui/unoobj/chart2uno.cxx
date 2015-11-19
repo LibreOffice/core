@@ -57,6 +57,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <rtl/math.hxx>
 #include <boost/checked_delete.hpp>
@@ -102,14 +103,6 @@ const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDataSequencePropertyMap_Impl;
-}
-
-template< typename T >
-css::uno::Sequence< T > lcl_VectorToSequence( const ::std::vector< T > & rCont )
-{
-    css::uno::Sequence< T > aResult( rCont.size());
-    ::std::copy( rCont.begin(), rCont.end(), aResult.getArray());
-    return aResult;
 }
 
 struct lcl_appendTableNumber : public ::std::unary_function< SCTAB, void >
@@ -1794,7 +1787,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         SolarMutexGuard aGuard;
         OSL_ENSURE( m_pDocument, "No Document -> no detectArguments" );
         if(!m_pDocument ||!xDataSource.is())
-            return lcl_VectorToSequence( aResult );
+            return comphelper::containerToSequence( aResult );
 
         sal_Int32 nDataInRows = 0;
         sal_Int32 nDataInCols = 0;
@@ -1980,7 +1973,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         uno::Reference< chart2::data::XDataSource > xCompareDataSource;
         try
         {
-            xCompareDataSource.set( this->createDataSource( lcl_VectorToSequence( aResult ) ) );
+            xCompareDataSource.set( this->createDataSource( comphelper::containerToSequence( aResult ) ) );
         }
         catch( const lang::IllegalArgumentException & )
         {
@@ -2039,12 +2032,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         {
             aResult.push_back(
                 beans::PropertyValue( OUString("SequenceMapping"), -1,
-                    uno::makeAny( lcl_VectorToSequence(aSequenceMappingVector) )
+                    uno::makeAny( comphelper::containerToSequence(aSequenceMappingVector) )
                     , beans::PropertyState_DIRECT_VALUE ));
         }
     }
 
-    return lcl_VectorToSequence( aResult );
+    return comphelper::containerToSequence( aResult );
 }
 
 sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& aRangeRepresentation )
@@ -2414,21 +2407,7 @@ uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > SAL_CALL
 ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
-    LabeledList::const_iterator aItr(m_aLabeledSequences.begin());
-    LabeledList::const_iterator aEndItr(m_aLabeledSequences.end());
-
-    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aRet(m_aLabeledSequences.size());
-
-    sal_Int32 i = 0;
-    while (aItr != aEndItr)
-    {
-        aRet[i] = *aItr;
-        ++i;
-        ++aItr;
-    }
-
-    return aRet;
+    return comphelper::containerToSequence< uno::Reference< chart2::data::XLabeledDataSequence> >(m_aLabeledSequences);
 }
 
 void ScChart2DataSource::AddLabeledSequence(const uno::Reference < chart2::data::XLabeledDataSequence >& xNew)

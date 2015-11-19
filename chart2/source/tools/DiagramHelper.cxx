@@ -58,6 +58,7 @@
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -753,7 +754,7 @@ Sequence< Sequence< Reference< XDataSeries > > >
             }
         }
     }
-    return ContainerHelper::ContainerToSequence( aResult );
+    return comphelper::containerToSequence( aResult );
 }
 
 Reference< XChartType >
@@ -1266,7 +1267,7 @@ Sequence< Reference< XChartType > >
         }
     }
 
-    return ContainerHelper::ContainerToSequence( aResult );
+    return comphelper::containerToSequence( aResult );
 }
 
 bool DiagramHelper::areChartTypesCompatible( const Reference< ::chart2::XChartType >& xFirstType,

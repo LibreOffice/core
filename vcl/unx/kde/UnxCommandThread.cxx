@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <iostream>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 
@@ -268,12 +269,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rComman
         }
         else if ( aType == "stringList" )
         {
-            uno::Sequence< OUString > aSequence( aList.size() );
-            sal_Int32 nIdx = 0;
-            for ( ::std::list< OUString >::const_iterator it = aList.begin(); it != aList.end(); ++it, ++nIdx )
-                aSequence[nIdx] = (*it);
-
-            m_aGetValue <<= aSequence;
+            m_aGetValue <<= comphelper::containerToSequence<OUString>(aList);
             m_aGetValueCondition.set();
         }
         else

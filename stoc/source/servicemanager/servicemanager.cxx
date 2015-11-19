@@ -33,6 +33,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -860,14 +861,7 @@ Sequence< OUString > OServiceManager::getUniqueAvailableServiceNames(
         aNameSet.insert( (*aIt++).first );
     */
 
-    Sequence< OUString > aNames( aNameSet.size() );
-    OUString * pArray = aNames.getArray();
-    sal_Int32 i = 0;
-    HashSet_OWString::iterator next = aNameSet.begin();
-    while( next != aNameSet.end() )
-        pArray[i++] = (*next++);
-
-    return aNames;
+    return comphelper::containerToSequence<OUString>(aNameSet);
 }
 
 // XMultiComponentFactory

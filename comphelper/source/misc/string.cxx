@@ -33,6 +33,7 @@
 
 #include <comphelper/string.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
@@ -265,9 +266,7 @@ uno::Sequence< OUString >
           vec.push_back(kw);
       }
     } while (idx >= 0);
-    uno::Sequence< OUString > kws(vec.size());
-    std::copy(vec.begin(), vec.end(), kws.begin());
-    return kws;
+    return comphelper::containerToSequence(vec);
 }
 
 OString join(const OString& rSeparator, const std::vector<OString>& rSequence)

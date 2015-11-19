@@ -20,6 +20,7 @@
 #include <ManifestReader.hxx>
 #include <ManifestImport.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -59,12 +60,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
         aParserInput.sSystemId = "META-INF/manifest.xml";
         xParser->setDocumentHandler ( xFilter );
         xParser->parseStream( aParserInput );
-        aManifestSequence.realloc ( aManVector.size() );
-        Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
-        ::std::vector < Sequence < PropertyValue > >::const_iterator aIter = aManVector.begin();
-        ::std::vector < Sequence < PropertyValue > >::const_iterator aEnd = aManVector.end();
-        while( aIter != aEnd )
-            *pSequence++ = (*aIter++);
+        aManifestSequence = comphelper::containerToSequence(aManVector);
     }
     catch (SAXParseException& e)
     {

@@ -228,7 +228,7 @@ uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType
 
     ::std::sort( aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess() );
 
-    return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+    return comphelper::containerToSequence( aProperties );
 }
 
 struct StaticSeriesWrapperPropertyArray_Initializer

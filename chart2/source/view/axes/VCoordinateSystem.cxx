@@ -38,6 +38,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <comphelper/sequence.hxx>
 
 #include <rtl/math.hxx>
 
@@ -218,7 +219,7 @@ Sequence< Reference< beans::XPropertySet > > VCoordinateSystem::getGridListFromA
         aRet.insert( aRet.end(), aSubGrids.begin(), aSubGrids.end() );
     }
 
-    return ContainerHelper::ContainerToSequence( aRet );
+    return comphelper::containerToSequence( aRet );
 }
 
 void VCoordinateSystem::impl_adjustDimension( sal_Int32& rDimensionIndex )

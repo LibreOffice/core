@@ -24,6 +24,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
 #include <osl/thread.h>
@@ -106,10 +107,7 @@ void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
             if (!aTok.isEmpty())
                 aVec.push_back( aTok);
         }
-        uno::Sequence< OUString > aSeq( aVec.size());
-        for (sal_Int32 i=0; i < aSeq.getLength(); ++i)
-            aSeq[i] = aVec[i];
-        pLocaleData->setDateAcceptancePatterns( aSeq);
+        pLocaleData->setDateAcceptancePatterns( comphelper::containerToSequence(aVec) );
     }
 }
 

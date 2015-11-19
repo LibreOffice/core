@@ -19,8 +19,10 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <fstream>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/graph.hxx>
 #include <map>
+
 using namespace com::sun::star;
 
 typedef std::map< sal_Int16, OUString > IdToString;
@@ -301,13 +303,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
             sProps[ 0 ].Value = uno::makeAny( ui::ItemType::SEPARATOR_LINE );
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }
-        uno::Sequence< beans::PropertyValue > sProps( props.size() );
-        beans::PropertyValue* pProp = sProps.getArray();
-
-        for ( std::vector< css::beans::PropertyValue >::iterator it = props.begin(); it != props.end(); ++it, ++pProp )
-            *pProp = *it;
-
-        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
+        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( comphelper::containerToSequence(props) ) );
     }
     return true;
 }

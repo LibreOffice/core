@@ -260,7 +260,7 @@ Reference< chart2::data::XDataSource >
     getDataSource( const Sequence< Reference< chart2::XDataSeries > > & aSeries )
 {
     return Reference< chart2::data::XDataSource >(
-        new DataSource(ContainerHelper::ContainerToSequence(getAllDataSequences(aSeries))));
+        new DataSource(comphelper::containerToSequence(getAllDataSequences(aSeries))));
 }
 
 namespace
@@ -529,7 +529,7 @@ void deleteSeries(
         if( aIt != aSeries.end())
         {
             aSeries.erase( aIt );
-            xSeriesCnt->setDataSeries( ContainerHelper::ContainerToSequence( aSeries ));
+            xSeriesCnt->setDataSeries( comphelper::containerToSequence( aSeries ));
         }
     }
     catch( const uno::Exception & ex )

@@ -127,7 +127,7 @@ private:
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return comphelper::containerToSequence( aProperties );
     }
 };
 
@@ -394,7 +394,7 @@ void StockChartTypeTemplate::createChartTypes(
         }
 
         Reference< XChartTypeContainer > xCTCnt( rCoordSys[ 0 ], uno::UNO_QUERY_THROW );
-        xCTCnt->setChartTypes( ::chart::ContainerHelper::ContainerToSequence(aChartTypeVec) );
+        xCTCnt->setChartTypes( comphelper::containerToSequence(aChartTypeVec) );
     }
     catch( const uno::Exception & ex )
     {

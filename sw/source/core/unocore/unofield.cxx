@@ -2825,14 +2825,7 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames()
         }
     }
 
-    uno::Sequence< OUString > aSeq( static_cast<sal_Int32>(aFieldNames.size()) );
-    OUString* pArray = aSeq.getArray();
-    for (size_t i = 0; i<aFieldNames.size(); ++i)
-    {
-        pArray[i] = aFieldNames[i];
-    }
-
-    return aSeq;
+    return comphelper::containerToSequence(aFieldNames);
 }
 
 sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::RuntimeException, std::exception )

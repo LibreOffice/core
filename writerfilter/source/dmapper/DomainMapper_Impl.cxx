@@ -5227,14 +5227,8 @@ void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rIntero
         return;
     beans::PropertyValue aProperty;
     aProperty.Name = aKey;
-
-    uno::Sequence<beans::PropertyValue> aSeq(rValue.size());
-    beans::PropertyValue* pSeq = aSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = rValue.begin(); i != rValue.end(); ++i)
-        *pSeq++ = *i;
-
+    aProperty.Value = uno::makeAny(comphelper::containerToSequence(rValue));
     rValue.clear();
-    aProperty.Value = uno::makeAny(aSeq);
     rInteropGrabBag.push_back(aProperty);
 }
 

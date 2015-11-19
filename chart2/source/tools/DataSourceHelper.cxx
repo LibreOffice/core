@@ -243,7 +243,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
 
     ::std::vector< Reference< chart2::XDataSeries > > xSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     uno::Reference< chart2::data::XDataSource > xSeriesSource(
-        DataSeriesHelper::getDataSource( ContainerHelper::ContainerToSequence(xSeriesVector) ) );
+        DataSeriesHelper::getDataSource( comphelper::containerToSequence(xSeriesVector) ) );
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSeqences( xSeriesSource->getDataSequences() );
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format
@@ -260,10 +260,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
             aResultVector.push_back( aDataSeqences[nN] );
     }
 
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aResultSequence( aResultVector.size() );
-    ::std::copy( aResultVector.begin(), aResultVector.end(), aResultSequence.getArray() );
-
-    return new DataSource( aResultSequence );
+    return new DataSource( comphelper::containerToSequence(aResultVector) );
 }
 
 uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
@@ -287,7 +284,7 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
         }
     }
 
-    return ContainerHelper::ContainerToSequence( aResult );
+    return comphelper::containerToSequence( aResult );
 }
 
 uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges( const uno::Reference< frame::XModel > & xChartModel )
@@ -325,7 +322,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
     }
 
     return uno::Reference< chart2::data::XDataSource >(
-        new DataSource( ContainerHelper::ContainerToSequence( aResult )));
+        new DataSource( comphelper::containerToSequence( aResult )));
 }
 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
@@ -351,7 +348,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
     }
 
     return uno::Reference< chart2::data::XDataSource >(
-        new DataSource( ContainerHelper::ContainerToSequence( aResult )));
+        new DataSource( comphelper::containerToSequence( aResult )));
 }
 
 bool DataSourceHelper::detectRangeSegmentation(
@@ -537,7 +534,7 @@ Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference<
                 aResult.push_back( xValues->getSourceRangeRepresentation());
         }
     }
-    return ContainerHelper::ContainerToSequence( aResult );
+    return comphelper::containerToSequence( aResult );
 }
 
 } //namespace chart

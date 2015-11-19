@@ -1019,9 +1019,7 @@ Sequence< Type > OFormattedModel::getSupportedBindingTypes()
         aTypes.push_front(cppu::UnoType< sal_Bool >::get() );
         break;
     }
-    Sequence< Type > aTypesRet( aTypes.size() );
-    ::std::copy( aTypes.begin(), aTypes.end(), aTypesRet.getArray() );
-    return aTypesRet;
+    return comphelper::containerToSequence<Type>(aTypes);
 }
 
 Any OFormattedModel::getDefaultForReset() const

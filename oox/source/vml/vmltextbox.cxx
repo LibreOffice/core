@@ -27,6 +27,7 @@
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <comphelper/sequence.hxx>
 
 namespace oox {
 namespace vml {
@@ -120,11 +121,7 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
             aPropertyValue.Value = uno::makeAny(rFont.moColor.get().toUInt32(16));
             aPropVec.push_back(aPropertyValue);
         }
-        uno::Sequence<beans::PropertyValue> aPropSeq(aPropVec.size());
-        beans::PropertyValue* pValues = aPropSeq.getArray();
-        for (std::vector<beans::PropertyValue>::iterator i = aPropVec.begin(); i != aPropVec.end(); ++i)
-            *pValues++ = *i;
-        xTextAppend->appendTextPortion(aIt->maText, aPropSeq);
+        xTextAppend->appendTextPortion(aIt->maText, comphelper::containerToSequence(aPropVec));
     }
 
     // Remove the last character of the shape text, if it would be a newline.
