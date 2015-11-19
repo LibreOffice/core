@@ -41,6 +41,15 @@
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
 
+inline bool isLookupContext(clang::DeclContext const & ctxt) {
+#if (__clang_major__ == 3 && __clang_minor__ > 7) || __clang_major__ > 3
+    return ctxt.isLookupContext();
+#else
+    return !ctxt.isFunctionOrMethod()
+        && ctxt.getDeclKind() != clang::Decl::LinkageSpec;
+#endif
+}
+
 inline bool isExternCContext(clang::DeclContext const & ctxt) {
 #if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
     return ctxt.isExternCContext();

@@ -12,10 +12,10 @@
 
 #include <cstddef>
 
-#include <iostream>
-
 #include <clang/AST/DeclBase.h>
 #include <clang/AST/Type.h>
+
+#include "compat.hxx"
 
 namespace loplugin {
 
@@ -72,7 +72,7 @@ public:
     TerminalCheck GlobalNamespace() const {
         return TerminalCheck(
             context_ != nullptr
-            && ((context_->isLookupContext()
+            && ((compat::isLookupContext(*context_)
                  ? context_ : context_->getLookupParent())
                 ->isTranslationUnit()));
     }
