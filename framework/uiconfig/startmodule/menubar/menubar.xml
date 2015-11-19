@@ -21,6 +21,7 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:AddDirect"/>
             <menu:menuitem menu:id=".uno:Open"/>
+            <menu:menuitem menu:id=".uno:OpenRemote"/>
             <menu:menuitem menu:id=".uno:RecentFileList"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
