@@ -8813,7 +8813,9 @@ AS_IF([test "$with_system_glew" = "yes"],
 dnl ===================================================================
 dnl Check for system glyphy
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([glyphy], [GLYPHY], [glyphy >= 0.12.0], ["-I${WORKDIR}/UnpackedTarball/glyphy/include"])
+if test $_os = Linux -o $_os = WINNT; then
+    libo_CHECK_SYSTEM_MODULE([glyphy], [GLYPHY], [glyphy >= 0.12.0], ["-I${WORKDIR}/UnpackedTarball/glyphy/src"])
+fi
 
 dnl ===================================================================
 dnl Check for system vigra
