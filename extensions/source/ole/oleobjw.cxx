@@ -78,16 +78,16 @@ namespace ole_adapter
 // called.
 // Before UNO object is wrapped to COM object this map is checked
 // to see if the UNO object is already a wrapper.
-std::unordered_map<sal_uInt32, sal_uInt32> AdapterToWrapperMap;
+std::unordered_map<sal_uIntPtr, sal_uIntPtr> AdapterToWrapperMap;
 // key: XInterface of the wrapper object.
 // value: XInterface of the Interface created by the Invocation Adapter Factory.
 // A COM wrapper is responsible for removing the corresponding entry
 // in AdapterToWrappperMap if it is being destroyed. Because the wrapper does not
 // know about its adapted interface it uses WrapperToAdapterMap to get the
 // adapted interface which is then used to locate the entry in AdapterToWrapperMap.
-std::unordered_map<sal_uInt32,sal_uInt32> WrapperToAdapterMap;
+std::unordered_map<sal_uIntPtr,sal_uIntPtr> WrapperToAdapterMap;
 
-std::unordered_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
+std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > ComPtrToWrapperMap;
 /*****************************************************************************
 
     class implementation IUnknownWrapper_Impl
@@ -114,17 +114,17 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 #endif
 
     // remove entries in global maps
-    typedef std::unordered_map<sal_uInt32, sal_uInt32>::iterator _IT;
-    _IT it= WrapperToAdapterMap.find( (sal_uInt32) xIntRoot);
+    typedef std::unordered_map<sal_uIntPtr, sal_uIntPtr>::iterator _IT;
+    _IT it= WrapperToAdapterMap.find( (sal_uIntPtr) xIntRoot);
     if( it != WrapperToAdapterMap.end())
     {
-        sal_uInt32 adapter= it->second;
+        sal_uIntPtr adapter= it->second;
 
         AdapterToWrapperMap.erase( adapter);
         WrapperToAdapterMap.erase( it);
     }
 
-     IT_Com it_c= ComPtrToWrapperMap.find( (sal_uInt32) m_spUnknown.p);
+     IT_Com it_c= ComPtrToWrapperMap.find( (sal_uIntPtr) m_spUnknown.p);
     if(it_c != ComPtrToWrapperMap.end())
         ComPtrToWrapperMap.erase(it_c);
 }
@@ -156,7 +156,7 @@ Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection(
     return ret;
 }
 
-Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException)
 {
     Any aResult;
     try
@@ -184,7 +184,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyN
     return aResult;
 }
 
-Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException)
 {
     Any aResult;
     try
@@ -302,8 +302,8 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
             throw UnknownPropertyException(msg);
         }
 
-        if ( (! aDescPut && aDescGet) || aVarDesc
-             && aVarDesc->wVarFlags == VARFLAG_FREADONLY )
+        if ( (! aDescPut && aDescGet)
+             || (aVarDesc && aVarDesc->wVarFlags == VARFLAG_FREADONLY) )
         {
             //read-only
             OUString msg("[automation bridge] Property " + aPropertyName +
@@ -614,8 +614,8 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
             FuncDesc aDescPut(pInfo);
             VarDesc aVarDesc(pInfo);
             getPropDesc( aName, & aDescGet, & aDescPut, & aVarDesc);
-            if (aDescGet  && aDescGet->cParams > 0
-                || aDescPut && aDescPut->cParams > 0)
+            if ((aDescGet && aDescGet->cParams > 0)
+                || (aDescPut && aDescPut->cParams > 0))
                 ret = sal_True;
         }
         else
@@ -1556,7 +1556,7 @@ void IUnknownWrapper_Impl::getMethodInfo(const OUString& sName, TypeDescription&
     if( desc.is())
     {
         typelib_TypeDescription* pMember= desc.get();
-        if( pMember->eTypeClass == TypeClass_INTERFACE_METHOD )
+        if( pMember->eTypeClass == typelib_TypeClass_INTERFACE_METHOD )
             methodInfo= pMember;
     }
 }
@@ -1567,7 +1567,7 @@ void IUnknownWrapper_Impl::getAttributeInfo(const OUString& sName, TypeDescripti
     if( desc.is())
     {
         typelib_TypeDescription* pMember= desc.get();
-        if( pMember->eTypeClass == TypeClass_INTERFACE_ATTRIBUTE )
+        if( pMember->eTypeClass == typelib_TypeClass_INTERFACE_ATTRIBUTE )
         {
             attributeInfo= ((typelib_InterfaceAttributeTypeDescription*)pMember)->pAttributeTypeRef;
         }
@@ -2204,7 +2204,6 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
     OSL_ASSERT( * pFuncDesc == 0);
     buildComTlbIndex();
     typedef TLBFuncIndexMap::const_iterator cit;
-        typedef TLBFuncIndexMap::iterator it;
     //We assume there is only one entry with the function name. A property
     //would have two entries.
     cit itIndex= m_mapComFunc.find(sFuncName);

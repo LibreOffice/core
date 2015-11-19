@@ -143,8 +143,8 @@ css::uno::Sequence<OUString> EmbedServer_Impl::getSupportedServiceNames()
 
 EmbedProviderFactory_Impl::EmbedProviderFactory_Impl(const uno::Reference<lang::XMultiServiceFactory>& xFactory, const GUID* pGuid)
     : m_refCount( 0L )
-    , m_xFactory( xFactory )
     , m_guid( *pGuid )
+    , m_xFactory( xFactory )
 {
 }
 

@@ -67,7 +67,7 @@ extern "C" const GUID IID_IDispatchEx;
 
 namespace ole_adapter
 {
-std::unordered_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
+std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
 static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr);
@@ -87,8 +87,8 @@ static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
 
 InterfaceOleWrapper_Impl::InterfaceOleWrapper_Impl( Reference<XMultiServiceFactory>& xFactory,
                                                     sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
-        m_defaultValueType( 0),
-        UnoConversionUtilities<InterfaceOleWrapper_Impl>( xFactory, unoWrapperClass, comWrapperClass)
+        UnoConversionUtilities<InterfaceOleWrapper_Impl>( xFactory, unoWrapperClass, comWrapperClass),
+        m_defaultValueType( 0)
 {
 }
 
@@ -96,7 +96,7 @@ InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
 {
     MutexGuard guard(getBridgeMutex());
     // remove entries in global map
-    IT_Uno it= UnoObjToWrapperMap.find( (sal_uInt32) m_xOrigin.get());
+    IT_Uno it= UnoObjToWrapperMap.find( (sal_uIntPtr) m_xOrigin.get());
     if(it != UnoObjToWrapperMap.end())
         UnoObjToWrapperMap.erase(it);
 }
@@ -373,10 +373,10 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
                 // Get the IN-param at index "0"
                 IDispatch* pdisp= pdispparams->rgvarg[i].pdispVal;
 
-                OLECHAR* sindex= L"0";
+                OLECHAR const * sindex= L"0";
                 DISPID id;
                 DISPPARAMS noParams= {0,0,0,0};
-                if(SUCCEEDED( hr= pdisp->GetIDsOfNames( IID_NULL, &sindex, 1, LOCALE_USER_DEFAULT, &id)))
+                if(SUCCEEDED( hr= pdisp->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sindex), 1, LOCALE_USER_DEFAULT, &id)))
                     hr= pdisp->Invoke( id, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
                                        & noParams, & varParam, NULL, NULL);
                 if( FAILED( hr))
@@ -570,10 +570,10 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
         if (spValueDest)
         {
             VARIANT_BOOL varBool= VARIANT_FALSE;
-            if( SUCCEEDED( hr= spValueDest->IsOutParam( &varBool) )
-                && varBool == VARIANT_TRUE  ||
-                SUCCEEDED(hr= spValueDest->IsInOutParam( &varBool) )
-                && varBool == VARIANT_TRUE )
+            if ((SUCCEEDED(hr = spValueDest->IsOutParam(&varBool))
+                 && varBool == VARIANT_TRUE)
+                || (SUCCEEDED(hr = spValueDest->IsInOutParam(&varBool))
+                    && varBool == VARIANT_TRUE))
             {
                 if( SUCCEEDED( spValueDest->Set( CComVariant(), *pSource)))
                     ret= sal_True;

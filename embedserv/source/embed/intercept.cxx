@@ -97,8 +97,8 @@ Interceptor::Interceptor(
     : m_xOleAccess( xOleAccess ),
       m_xDocHLocker( static_cast< ::cppu::OWeakObject* >( pDocH ) ),
       m_pDocH(pDocH),
-      m_pStatCL(0),
       m_pDisposeEventListeners(0),
+      m_pStatCL(0),
       m_bLink( bLink )
 {
     m_aInterceptedURL[0] = ".uno:Save";
@@ -213,7 +213,7 @@ void Interceptor::generateFeatureStateEvent()
 
         for(int i = 0; i < IUL; ++i)
         {
-            if( i == 1 || m_bLink && i != 5 )
+            if( i == 1 || (m_bLink && i != 5) )
                 continue;
 
             cppu::OInterfaceContainerHelper* pICH =
