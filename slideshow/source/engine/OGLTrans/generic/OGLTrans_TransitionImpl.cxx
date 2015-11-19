@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <GL/glew.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
@@ -188,8 +189,12 @@ void OGLTransitionImpl::display( double nTime, sal_Int32 glLeavingSlideTex, sal_
 void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale )
 {
     const Operations_t& rOverallOperations(maScene.getOperations());
+    glm::mat4 matrix;
     for(size_t i(0); i != rOverallOperations.size(); ++i)
-        rOverallOperations[i]->interpolate(nTime,SlideWidthScale,SlideHeightScale);
+        rOverallOperations[i]->interpolate(matrix, nTime, SlideWidthScale, SlideHeightScale);
+    CHECK_GL_ERROR();
+    glMultMatrixf(glm::value_ptr(matrix));
+    CHECK_GL_ERROR();
 }
 
 static void display_primitives(const Primitives_t& primitives, double nTime, double WidthScale, double HeightScale)
@@ -264,8 +269,10 @@ OGLTransitionImpl::displaySlide(
         /* reflected slides */
         glPushMatrix();
 
-        glScaled( 1, -1, 1 );
-        glTranslated( 0, 2 - surfaceLevel, 0 );
+        glm::mat4 matrix;
+        matrix = glm::scale(matrix, glm::vec3(1, -1, 1));
+        matrix = glm::translate(matrix, glm::vec3(0, 2 - surfaceLevel, 0));
+        glMultMatrixf(glm::value_ptr(matrix));
 
         glCullFace(GL_FRONT);
         display_primitives(primitives, nTime, SlideWidthScale, SlideHeightScale);
@@ -308,10 +315,13 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale, int
 
 void Primitive::applyOperations(double nTime, double WidthScale, double HeightScale) const
 {
-    CHECK_GL_ERROR();
+    glm::mat4 matrix;
     for(size_t i(0); i < Operations.size(); ++i)
-        Operations[i]->interpolate( nTime ,WidthScale,HeightScale);
-    glScaled(WidthScale,HeightScale,1);
+        Operations[i]->interpolate(matrix, nTime, WidthScale, HeightScale);
+    matrix = glm::scale(matrix, glm::vec3(WidthScale, HeightScale, 1));
+    CHECK_GL_ERROR();
+    // TODO: replace that with an uniform upload instead.
+    glMultMatrixf(glm::value_ptr(matrix));
     CHECK_GL_ERROR();
 }
 
@@ -322,10 +332,12 @@ void SceneObject::display(double nTime, double /* SlideWidth */, double /* Slide
     CHECK_GL_ERROR();
     glPushMatrix();
     CHECK_GL_ERROR();
+    glm::mat4 matrix;
     if (DispHeight > DispWidth)
-        glScaled(DispHeight/DispWidth, 1, 1);
+        matrix = glm::scale(matrix, glm::vec3(DispHeight/DispWidth, 1, 1));
     else
-        glScaled(1, DispWidth/DispHeight, 1);
+        matrix = glm::scale(matrix, glm::vec3(1, DispWidth/DispHeight, 1));
+    glMultMatrixf(glm::value_ptr(matrix));
     CHECK_GL_ERROR();
     display_primitives(maPrimitives, nTime, 1, 1);
     CHECK_GL_ERROR();
@@ -992,74 +1004,69 @@ inline double intervalInter(double t, double T0, double T1)
     return ( t - T0 ) / ( T1 - T0 );
 }
 
-void STranslate::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
+void STranslate::interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const
 {
-    CHECK_GL_ERROR();
     if(t <= mnT0)
         return;
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*t*vector.x,SlideHeightScale*t*vector.y,t*vector.z);
-    CHECK_GL_ERROR();
+    matrix = glm::translate(matrix, glm::vec3(SlideWidthScale*t*vector.x, SlideHeightScale*t*vector.y, t*vector.z));
 }
 
-void SRotate::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
+void SRotate::interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const
 {
-    CHECK_GL_ERROR();
     if(t <= mnT0)
         return;
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*origin.x,SlideHeightScale*origin.y,origin.z);
-    glScaled(SlideWidthScale,SlideHeightScale,1);
-    glRotated(t*angle,axis.x,axis.y,axis.z);
-    glScaled(1/SlideWidthScale,1/SlideHeightScale,1);
-    glTranslated(-SlideWidthScale*origin.x,-SlideHeightScale*origin.y,-origin.z);
-    CHECK_GL_ERROR();
+    glm::vec3 translation_vector(SlideWidthScale*origin.x, SlideHeightScale*origin.y, origin.z);
+    glm::vec3 scale_vector(SlideWidthScale, SlideHeightScale, 1);
+    matrix = glm::translate(matrix, translation_vector);
+    matrix = glm::scale(matrix, scale_vector);
+    matrix = glm::rotate(matrix, static_cast<float>(t*angle), axis);
+    matrix = glm::scale(matrix, 1.f / scale_vector);
+    matrix = glm::translate(matrix, -translation_vector);
 }
 
-void SScale::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
+void SScale::interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const
 {
-    CHECK_GL_ERROR();
     if(t <= mnT0)
         return;
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*origin.x,SlideHeightScale*origin.y,origin.z);
-    glScaled((1-t) + t*scale.x,(1-t) + t*scale.y,(1-t) + t*scale.z);
-    glTranslated(-SlideWidthScale*origin.x,-SlideHeightScale*origin.y,-origin.z);
-    CHECK_GL_ERROR();
+    glm::vec3 translation_vector(SlideWidthScale*origin.x, SlideHeightScale*origin.y, origin.z);
+    matrix = glm::translate(matrix, translation_vector);
+    matrix = glm::scale(matrix, static_cast<float>(1 - t) + static_cast<float>(t) * scale);
+    matrix = glm::translate(matrix, -translation_vector);
 }
 
-void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
+void RotateAndScaleDepthByWidth::interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const
 {
-    CHECK_GL_ERROR();
     if(t <= mnT0)
         return;
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*origin.x,SlideHeightScale*origin.y,SlideWidthScale*origin.z);
-    glRotated(t*angle,axis.x,axis.y,axis.z);
-    glTranslated(-SlideWidthScale*origin.x,-SlideHeightScale*origin.y,-SlideWidthScale*origin.z);
-    CHECK_GL_ERROR();
+    glm::vec3 translation_vector(SlideWidthScale*origin.x, SlideHeightScale*origin.y, SlideWidthScale*origin.z);
+    matrix = glm::translate(matrix, translation_vector);
+    matrix = glm::rotate(matrix, static_cast<float>(t*angle), axis);
+    matrix = glm::translate(matrix, -translation_vector);
 }
 
-void RotateAndScaleDepthByHeight::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
+void RotateAndScaleDepthByHeight::interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const
 {
-    CHECK_GL_ERROR();
     if(t <= mnT0)
         return;
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*origin.x,SlideHeightScale*origin.y,SlideHeightScale*origin.z);
-    glRotated(t*angle,axis.x,axis.y,axis.z);
-    glTranslated(-SlideWidthScale*origin.x,-SlideHeightScale*origin.y,-SlideHeightScale*origin.z);
-    CHECK_GL_ERROR();
+    glm::vec3 translation_vector(SlideWidthScale*origin.x, SlideHeightScale*origin.y, SlideHeightScale*origin.z);
+    matrix = glm::translate(matrix, translation_vector);
+    matrix = glm::rotate(matrix, static_cast<float>(t*angle), axis);
+    matrix = glm::translate(matrix, -translation_vector);
 }
 
 SEllipseTranslate::SEllipseTranslate(double dWidth, double dHeight, double dStartPosition,
@@ -1072,7 +1079,7 @@ SEllipseTranslate::SEllipseTranslate(double dWidth, double dHeight, double dStar
     endPosition = dEndPosition;
 }
 
-void SEllipseTranslate::interpolate(double t,double /* SlideWidthScale */,double /* SlideHeightScale */) const
+void SEllipseTranslate::interpolate(glm::mat4& matrix, double t, double /* SlideWidthScale */, double /* SlideHeightScale */) const
 {
     if(t <= mnT0)
         return;
@@ -1086,7 +1093,7 @@ void SEllipseTranslate::interpolate(double t,double /* SlideWidthScale */,double
     x = width*(cos (a2) - cos (a1))/2;
     y = height*(sin (a2) - sin (a1))/2;
 
-    glTranslated(x, 0, y);
+    matrix = glm::translate(matrix, glm::vec3(x, 0, y));
 }
 
 Primitive& Primitive::operator=(const Primitive& rvalue)

@@ -384,7 +384,7 @@ public:
         height of slide divided by height of window
 
     */
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const = 0;
+    virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const = 0;
 
 protected:
     Operation(bool bInterpolate, double nT0, double nT1):
@@ -396,7 +396,7 @@ protected:
 class SRotate: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const override;
+    virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
     /** Constructor
 
@@ -445,7 +445,7 @@ makeSRotate(const glm::vec3& Axis, const glm::vec3& Origin, double Angle,
 class SScale: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const override;
+    virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
     /** Constructor
 
@@ -480,7 +480,7 @@ makeSScale(const glm::vec3& Scale, const glm::vec3& Origin,bool bInter, double T
 class STranslate: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const override;
+    virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
     /** Constructor
 
@@ -513,7 +513,7 @@ makeSTranslate(const glm::vec3& Vector,bool bInter, double T0, double T1);
 class SEllipseTranslate: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const override;
+    virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
     /** Constructor
 
@@ -551,7 +551,7 @@ makeSEllipseTranslate(double dWidth, double dHeight, double dStartPosition, doub
 class RotateAndScaleDepthByWidth: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const override;
+    virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
     RotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
     virtual ~RotateAndScaleDepthByWidth(){}
@@ -569,7 +569,7 @@ makeRotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,dou
 class RotateAndScaleDepthByHeight: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const override;
+    virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
     RotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
     virtual ~RotateAndScaleDepthByHeight(){}

@@ -27,6 +27,8 @@
  ************************************************************************/
 
 #include <sal/types.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <memory>
 
@@ -1021,9 +1023,6 @@ void OGLTransitionerImpl::impl_createTexture(
 
 void OGLTransitionerImpl::prepareEnvironment()
 {
-    CHECK_GL_ERROR();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
     double EyePos(10.0);
     double RealF(1.0);
     double RealN(-1.0);
@@ -1037,14 +1036,23 @@ void OGLTransitionerImpl::prepareEnvironment()
     double ClipR(RealR*8.0);
     double ClipB(RealB*8.0);
     double ClipT(RealT*8.0);
+
+    CHECK_GL_ERROR();
+    glMatrixMode(GL_PROJECTION);
+    glm::mat4 projection = glm::frustum<float>(ClipL, ClipR, ClipB, ClipT, ClipN, ClipF);
     //This scaling is to take the plane with BottomLeftCorner(-1,-1,0) and TopRightCorner(1,1,0) and map it to the screen after the perspective division.
-    glScaled( 1.0 / ( ( ( RealR * 2.0 * ClipN ) / ( EyePos * ( ClipR - ClipL ) ) ) - ( ( ClipR + ClipL ) / ( ClipR - ClipL ) ) ),
-              1.0 / ( ( ( RealT * 2.0 * ClipN ) / ( EyePos * ( ClipT - ClipB ) ) ) - ( ( ClipT + ClipB ) / ( ClipT - ClipB ) ) ),
-              1.0 );
-    glFrustum(ClipL,ClipR,ClipB,ClipT,ClipN,ClipF);
+    glm::vec3 scale(1.0 / (((RealR * 2.0 * ClipN) / (EyePos * (ClipR - ClipL))) - ((ClipR + ClipL) / (ClipR - ClipL))),
+                    1.0 / (((RealT * 2.0 * ClipN) / (EyePos * (ClipT - ClipB))) - ((ClipT + ClipB) / (ClipT - ClipB))),
+                    1.0);
+    projection = glm::scale(projection, scale);
+    CHECK_GL_ERROR();
+    glLoadMatrixf(glm::value_ptr(projection));
+
+    CHECK_GL_ERROR();
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslated(0,0,-EyePos);
+    glm::mat4 modelview = glm::translate(glm::mat4(), glm::vec3(0, 0, -EyePos));
+    CHECK_GL_ERROR();
+    glLoadMatrixf(glm::value_ptr(modelview));
     CHECK_GL_ERROR();
 }
 
