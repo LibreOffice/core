@@ -165,8 +165,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     {
         case DeviceFormat::BITMASK:
             mnBitCount = 1;
-        case DeviceFormat::GRAYSCALE:
-            mnBitCount = 8;
         default:
             mnBitCount = pOutDev->GetBitCount();
             break;
@@ -453,7 +451,7 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
     const basebmp::RawMemorySharedArray &pBuffer, const basebmp::RawMemorySharedArray &pAlphaBuffer )
 {
     if (pAlphaBuffer)
-        meAlphaFormat = DeviceFormat::GRAYSCALE;
+        meAlphaFormat = DeviceFormat::DEFAULT;
 
     if (pBuffer) {
         MapMode mm = GetMapMode();

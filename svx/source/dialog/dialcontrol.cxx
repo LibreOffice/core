@@ -35,7 +35,7 @@ namespace svx {
 const long DIAL_OUTER_WIDTH = 8;
 
 DialControlBmp::DialControlBmp(vcl::Window& rParent) :
-    VirtualDevice(rParent, DeviceFormat::FULLCOLOR, DeviceFormat::FULLCOLOR),
+    VirtualDevice(rParent, DeviceFormat::DEFAULT, DeviceFormat::DEFAULT),
     mbEnabled(true),
     mrParent(rParent),
     mnCenterX(0),

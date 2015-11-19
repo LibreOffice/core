@@ -81,10 +81,6 @@ protected:
     virtual cairo_t*            getCairoContext() = 0;
     virtual void                getSurfaceOffset(double& nDX, double& nDY) = 0;
     virtual void                drawSurface(cairo_t* cr) = 0;
-    virtual basebmp::BitmapDeviceSharedPtr createSimpleMask()
-    {
-        return basebmp::BitmapDeviceSharedPtr();
-    }
 
     bool                        setFont( const FontSelectPattern *pEntry, int nFallbackLevel );
 

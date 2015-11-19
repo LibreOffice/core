@@ -22,7 +22,14 @@
 
 #include <sal/types.h>
 
-enum class DeviceFormat { NONE = -1, FULLCOLOR = 0, BITMASK = 1, GRAYSCALE = 8 };
+enum class DeviceFormat {
+                            NONE = -1,
+                            DEFAULT = 0,
+                            BITMASK = 1,
+#ifdef IOS
+                            GRAYSCALE = 8
+#endif
+                        };
 
 typedef sal_uInt32 SalColor;
 #define MAKE_SALCOLOR( r, g, b )    ((SalColor)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))

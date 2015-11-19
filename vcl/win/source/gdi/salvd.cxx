@@ -79,9 +79,6 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         case DeviceFormat::BITMASK:
             nBitCount = 1;
             break;
-        case DeviceFormat::GRAYSCALE:
-            nBitCount = 8;
-            break;
         default:
             nBitCount = 0;
             break;
