@@ -178,9 +178,11 @@ public class ScAccessiblePreviewTable extends TestCase {
                             // but some toolbar button - this will indirectly
                             // trigger a table event but only from VCL main loop
                             utils.waitForEventIdle(Param.getMSF());
+                            // sadly it turns out that idle is not enough...
+                            Thread.sleep(500);
                         } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {
                             log.println("ScAccessiblePreviewTable: IndexOutOfBoundsException from pressZoom.doAccessibleAction(0)");
-                        }
+                        } catch (InterruptedException ex) {}
                 }
             });
 
