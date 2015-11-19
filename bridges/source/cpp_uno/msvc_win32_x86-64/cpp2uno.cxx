@@ -375,7 +375,7 @@ extern "C" char privateSnippetExecutor;
 
 unsigned char * codeSnippet(
     unsigned char * code,
-    char param_kind[4],
+    RegParamKind param_kind[4],
     sal_Int32 nFunctionIndex,
     sal_Int32 nVtableOffset )
 {
@@ -495,7 +495,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         TYPELIB_DANGER_GET( &pTD, type->ppMembers[ member ] );
         assert(pTD);
 
-        char param_kind[4];
+        RegParamKind param_kind[4];
         int nr = 0;
 
         for (int i = 0; i < 4; ++i)
