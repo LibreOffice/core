@@ -36,6 +36,7 @@ namespace CPPU_CURRENT_NAMESPACE
 const DWORD MSVC_ExceptionCode = 0xe06d7363;
 const long MSVC_magic_number = 0x19930520L;
 
+typedef enum { REGPARAM_INT, REGPARAM_FLT } RegParamKind;
 
 type_info * mscx_getRTTI( OUString const & rUNOname );
 
