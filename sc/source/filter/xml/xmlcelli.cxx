@@ -1439,7 +1439,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                 ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCellPos);
                 if (pFCell)
                 {
-                    ScMatrixRef pMat(new ScMatrix(nMatrixCols, nMatrixRows));
+                    ScMatrixRef pMat(new ScFullMatrix(nMatrixCols, nMatrixRows));
                     if (bFormulaTextResult && maStringValue)
                     {
                         if (!IsPossibleErrorString())

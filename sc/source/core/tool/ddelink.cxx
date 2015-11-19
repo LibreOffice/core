@@ -89,7 +89,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     bool bHasValue;
     rStream.ReadCharAsBool( bHasValue );
     if ( bHasValue )
-        pResult = new ScMatrix(0, 0);
+        pResult = new ScFullMatrix(0, 0);
 
     if (rHdr.BytesLeft())       // neu in 388b und der 364w (RealTime-Client) Version
         rStream.ReadUChar( nMode );
@@ -155,7 +155,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     else                                // Daten aufteilen
     {
         //  Matrix immer neu anlegen, damit bIsString nicht durcheinanderkommt
-        pResult = new ScMatrix(nCols, nRows, 0.0);
+        pResult = new ScFullMatrix(nCols, nRows, 0.0);
 
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
         svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();

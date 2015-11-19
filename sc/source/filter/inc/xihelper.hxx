@@ -329,7 +329,7 @@ public:
     explicit            XclImpCachedMatrix( XclImpStream& rStrm );
                         ~XclImpCachedMatrix();
 
-    /** Creates a new ScMatrix object and fills it with the contained values. */
+    /** Creates a new ScFullMatrix object and fills it with the contained values. */
     ScMatrixRef CreateScMatrix( svl::SharedStringPool& rPool ) const;
 
 private:

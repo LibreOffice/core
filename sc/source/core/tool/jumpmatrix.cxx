@@ -29,7 +29,7 @@ const SCSIZE kBufferThreshhold = 128;
 
 ScJumpMatrix::ScJumpMatrix(SCSIZE nColsP, SCSIZE nRowsP)
     : pJump(new ScJumpMatrixEntry[nColsP * nRowsP])
-    , pMat(new ScMatrix(nColsP, nRowsP))
+    , pMat(new ScFullMatrix(nColsP, nRowsP))
     , pParams(nullptr)
     , nCols(nColsP)
     , nRows(nRowsP)
