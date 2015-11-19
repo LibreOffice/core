@@ -172,14 +172,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     }
 
     cairo_t* cr = getCairoContext();
-    if (!cr)
-        return bRet;
-
-    if (!m_aDevice->isTopDown())
-    {
-        cairo_scale(cr, 1, -1.0);
-        cairo_translate(cr, 0.0, -m_aDevice->getSize().getY());
-    }
+    assert(cr && m_aDevice->isTopDown());
 
     clipRegion(cr);
 
@@ -727,14 +720,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
     }
 
     cairo_t* cr = getCairoContext();
-    if (!cr)
-        return false;
-
-    if (!m_aDevice->isTopDown())
-    {
-        cairo_scale(cr, 1, -1.0);
-        cairo_translate(cr, 0.0, -m_aDevice->getSize().getY());
-    }
+    assert(cr && m_aDevice->isTopDown());
 
     clipRegion(cr);
 
