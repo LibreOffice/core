@@ -22,10 +22,26 @@
 #pragma warning (push,1)
 #pragma warning (disable:4668)
 #pragma warning (disable:4548)
+
 #include "oleidl.h"
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wall"
+#pragma clang diagnostic ignored "-Wint-to-pointer-cast"
+#pragma clang diagnostic ignored "-Winvalid-noreturn"
+#pragma clang diagnostic ignored "-Wmicrosoft"
+#pragma clang diagnostic ignored "-Wnon-pod-varargs"
+#endif
+
 #include <atlbase.h>
+
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+
 #pragma warning (pop)
+
 #include "osl/diagnose.h"
 
 namespace ole_adapter

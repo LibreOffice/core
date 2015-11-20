@@ -40,11 +40,26 @@
 #include <prewin.h>
 #include <list>
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wall"
+#pragma clang diagnostic ignored "-Wattributes"
+#pragma clang diagnostic ignored "-Wdelete-incomplete"
+#pragma clang diagnostic ignored "-Wint-to-pointer-cast"
+#pragma clang diagnostic ignored "-Winvalid-noreturn"
+#pragma clang diagnostic ignored "-Wmicrosoft"
+#pragma clang diagnostic ignored "-Wnon-pod-varargs"
+#endif
+
 // from oleobjw.hxx
 #include <atlbase.h>
 // from jscriptclasses.hxx
 extern CComModule _Module;
 #include <atlcom.h>
+
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 // from unoobjw.cxx
 #include <olectl.h>
