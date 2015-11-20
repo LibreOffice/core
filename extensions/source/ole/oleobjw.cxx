@@ -2204,7 +2204,6 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
     OSL_ASSERT( * pFuncDesc == 0);
     buildComTlbIndex();
     typedef TLBFuncIndexMap::const_iterator cit;
-        typedef TLBFuncIndexMap::iterator it;
     //We assume there is only one entry with the function name. A property
     //would have two entries.
     cit itIndex= m_mapComFunc.find(sFuncName);
