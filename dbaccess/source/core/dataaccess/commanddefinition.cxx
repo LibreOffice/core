@@ -20,29 +20,17 @@
 #include "commanddefinition.hxx"
 #include "apitools.hxx"
 #include "dbastrings.hrc"
-#include "module_dba.hxx"
-#include "services.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <tools/debug.hxx>
-#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::osl;
-using namespace ::comphelper;
-using namespace ::cppu;
-
-// OCommandDefinition
-extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition()
-{
-    static ::dba::OAutoRegistration< ::dbaccess::OCommandDefinition > aAutoRegistration;
-}
 
 namespace dbaccess
 {
@@ -99,33 +87,18 @@ IMPLEMENT_GETTYPES2(OCommandDefinition,OCommandDefinition_Base,OComponentDefinit
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP)
 
-OUString OCommandDefinition::getImplementationName_static(  ) throw(RuntimeException)
+OUString SAL_CALL OCommandDefinition::getImplementationName() throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.dba.OCommandDefinition");
 }
 
-OUString SAL_CALL OCommandDefinition::getImplementationName(  ) throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
-    return getImplementationName_static();
-}
-
-Sequence< OUString > OCommandDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
-{
-    Sequence< OUString > aServices(3);
-    aServices.getArray()[0] = "com.sun.star.sdb.QueryDefinition";
-    aServices.getArray()[1] = "com.sun.star.sdb.CommandDefinition";
-    aServices.getArray()[2] = "com.sun.star.ucb.Content";
-    return aServices;
-}
-
-Sequence< OUString > SAL_CALL OCommandDefinition::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
-{
-    return getSupportedServiceNames_static();
-}
-
-Reference< XInterface > OCommandDefinition::Create(const Reference< XComponentContext >& _rxContext)
-{
-    return *(new OCommandDefinition( _rxContext, nullptr, TContentPtr( new OCommandDefinition_Impl ) ) );
+    return {
+        "com.sun.star.sdb.QueryDefinition",
+        "com.sun.star.sdb.CommandDefinition",
+        "com.sun.star.ucb.Content"
+    };
 }
 
 void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)
@@ -149,5 +122,13 @@ void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLEx
 }
 
 }   // namespace dbaccess
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_dba_OCommandDefinition(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new dbaccess::OCommandDefinition(
+            context, nullptr, dbaccess::TContentPtr( new dbaccess::OCommandDefinition_Impl )));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

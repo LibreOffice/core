@@ -58,15 +58,13 @@ class OCommandDefinition   : public OComponentDefinition
 protected:
     virtual ~OCommandDefinition();
 
-    OCommandDefinition(const css::uno::Reference< css::uno::XComponentContext >&
-        ,const css::uno::Reference< css::uno::XInterface >&   _xParentContainer
-        ,const TContentPtr& _pImpl
-        );
-
     inline const OCommandDefinition_Impl& getCommandDefinition() const { return dynamic_cast< const OCommandDefinition_Impl& >( *m_pImpl.get() ); }
     inline       OCommandDefinition_Impl& getCommandDefinition()       { return dynamic_cast<       OCommandDefinition_Impl& >( *m_pImpl.get() ); }
 
 public:
+    OCommandDefinition(const css::uno::Reference< css::uno::XComponentContext >& ,
+        const css::uno::Reference< css::uno::XInterface >& _xParentContainer,
+        const TContentPtr& _pImpl);
 
     OCommandDefinition(
              const css::uno::Reference< css::uno::XInterface >& _rxContainer
@@ -86,12 +84,6 @@ public:
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
-
-// css::lang::XServiceInfo - static methods
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
-    static OUString getImplementationName_static() throw( css::uno::RuntimeException );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     // XRename
     virtual void SAL_CALL rename( const OUString& newName ) throw (css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
@@ -125,7 +117,11 @@ public:
         { OComponentDefinition::removeEventListener(p1); }
 
     // OPropertySetHelper
-    DECLARE_PROPERTYCONTAINER_DEFAULTS( );
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo()
+        throw(css::uno::RuntimeException, std::exception) override;
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual cppu::IPropertyArrayHelper* createArrayHelper() const override;
+
 
 private:
     // helper
