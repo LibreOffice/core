@@ -156,7 +156,7 @@ Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection(
     return ret;
 }
 
-Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException)
 {
     Any aResult;
     try
@@ -184,7 +184,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyN
     return aResult;
 }
 
-Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException)
 {
     Any aResult;
     try
