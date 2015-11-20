@@ -53,7 +53,6 @@ namespace reportdesign
         ::sal_Int16                                         nFontRelief;
         ::sal_Int32                                         nTextColor;
         ::sal_Int32                                         nTextLineColor;
-        ::sal_Int32                                         nCharUnderlineColor;
         ::sal_Int32                                         nBackgroundColor;
         OUString                                            sCharCombinePrefix;
         OUString                                            sCharCombineSuffix;

@@ -93,13 +93,6 @@ public:
         {}
     };
     typedef ::std::pair< OUString ,OUString> TStringPair;
-    typedef struct
-    {
-        OUString sText;
-        OUString sField;
-        OUString sDecimal;
-        OUString sThousand;
-    } TDelimiter;
     typedef ::std::vector< OUString>                         TStringVec;
     typedef ::std::map< Reference<XPropertySet> ,OUString >  TPropertyStyleMap;
     typedef ::std::map< Reference<XPropertySet> ,  TStringVec>      TGridStyleMap;
@@ -109,8 +102,6 @@ public:
     typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
 private:
     ::std::unique_ptr< TStringPair >                m_aAutoIncrement;
-    ::std::unique_ptr< TDelimiter >                 m_aDelimiter;
-    ::std::vector< Any >                            m_aDataSourceSettings;
     TSectionsGrid                                   m_aSectionsGrid;
 
     TPropertyStyleMap                               m_aAutoStyleNames;
@@ -118,7 +109,6 @@ private:
     TGridStyleMap                                   m_aRowStyleNames;
     TGroupFunctionMap                               m_aGroupFunctionMap;
 
-    OUString                                 m_sCharSet;
     OUString                                 m_sTableStyle;
     OUString                                 m_sCellStyle;
     OUString                                 m_sColumnStyle;

@@ -164,7 +164,6 @@ struct XmlFilterBaseImpl
     Reference<XComponentContext>   mxContext;
     FastParser                     maFastParser;
     const OUString                 maBinSuffix;
-    const OUString                 maVmlSuffix;
     RelationsMap                   maRelationsMap;
     TextFieldStack                 maTextFieldStack;
 
@@ -175,8 +174,7 @@ struct XmlFilterBaseImpl
 XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     mxContext(rxContext),
     maFastParser( rxContext ),
-    maBinSuffix( ".bin" ),
-    maVmlSuffix( ".vml" )
+    maBinSuffix( ".bin" )
 {
     // register XML namespaces
     registerNamespaces(maFastParser);

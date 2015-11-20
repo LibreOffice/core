@@ -56,7 +56,6 @@ class ZipFile
 protected:
     ::osl::Mutex    m_aMutex;
 
-    OUString sComment;       /* zip file comment */
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
     ZipUtils::Inflater aInflater;

@@ -30,7 +30,6 @@ namespace rptxml
     {
     protected:
         css::uno::Reference< css::report::XReportComponent >  m_xComponent;
-        OUString m_sName;
         OUString m_sTextStyleName;
 
         OXMLComponent(const OXMLComponent&);

@@ -27,16 +27,13 @@ namespace rptui
     {
         OUString sColumnName;
         OUString sLabel;
-        bool bColumn;
         ColumnInfo(const OUString& i_sColumnName,const OUString& i_sLabel)
             : sColumnName(i_sColumnName)
             , sLabel(i_sLabel)
-            , bColumn(true)
         {
         }
         ColumnInfo(const OUString& i_sColumnName)
             : sColumnName(i_sColumnName)
-            , bColumn(false)
         {
         }
     };

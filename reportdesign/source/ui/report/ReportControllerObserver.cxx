@@ -51,26 +51,19 @@ typedef std::map<uno::Reference< beans::XPropertySet >, AllProperties> PropertyS
 class OXReportControllerObserverImpl: private boost::noncopyable
 {
 public:
-    const OReportController&                            m_rReportController;
     ::std::vector< uno::Reference< container::XChild> > m_aSections;
     ::osl::Mutex                                        m_aMutex;
     oslInterlockedCount                                 m_nLocks;
     bool                                                m_bReadOnly;
 
-    explicit OXReportControllerObserverImpl(const OReportController& _rController);
-    ~OXReportControllerObserverImpl();
+    explicit OXReportControllerObserverImpl();
 };
 
 
 
-    OXReportControllerObserverImpl::OXReportControllerObserverImpl(const OReportController& _rController)
-            :m_rReportController(_rController)
-            ,m_nLocks(0)
+    OXReportControllerObserverImpl::OXReportControllerObserverImpl()
+            :m_nLocks(0)
             ,m_bReadOnly(false)
-    {
-    }
-
-    OXReportControllerObserverImpl::~OXReportControllerObserverImpl()
     {
     }
 
@@ -80,7 +73,7 @@ public:
 
 
     OXReportControllerObserver::OXReportControllerObserver(const OReportController& _rController)
-            :m_pImpl(new OXReportControllerObserverImpl(_rController) )
+            :m_pImpl(new OXReportControllerObserverImpl )
             ,m_aFormattedFieldBeautifier(_rController)
             ,m_aFixedTextColor(_rController)
     {

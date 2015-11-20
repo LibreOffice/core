@@ -61,13 +61,11 @@ protected:
     ::std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rManVector;
 
     const OUString sFileEntryElement;
-    const OUString sManifestElement;
     const OUString sEncryptionDataElement;
     const OUString sAlgorithmElement;
     const OUString sStartKeyAlgElement;
     const OUString sKeyDerivationElement;
 
-    const OUString sCdataAttribute;
     const OUString sMediaTypeAttribute;
     const OUString sVersionAttribute;
     const OUString sFullPathAttribute;
@@ -94,8 +92,6 @@ protected:
     const OUString sEncryptionAlgProperty;
     const OUString sStartKeyAlgProperty;
     const OUString sDigestAlgProperty;
-
-    const OUString sWhiteSpace;
 
     const OUString sSHA256_URL;
     const OUString sSHA1_Name;

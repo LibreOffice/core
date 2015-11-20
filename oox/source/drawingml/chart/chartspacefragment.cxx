@@ -32,8 +32,7 @@ namespace chart {
 using namespace ::oox::core;
 
 ChartSpaceFragment::ChartSpaceFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, ChartSpaceModel& rModel ) :
-    FragmentBase< ChartSpaceModel >( rFilter, rFragmentPath, rModel ),
-    mpFilterBase(rFilter)
+    FragmentBase< ChartSpaceModel >( rFilter, rFragmentPath, rModel )
 {
 }
 
