@@ -30,13 +30,11 @@ namespace canvas
         ::basegfx::B2IPoint maPos;
         ::basegfx::B2ISize  maSize;
         ::basegfx::B2IPoint maBackup;
-        bool                bEnabled;
 
         explicit SurfaceRect( const ::basegfx::B2ISize &rSize ) :
             maPos(),
             maSize(rSize),
-            maBackup(),
-            bEnabled(true)
+            maBackup()
         {
         }
 
