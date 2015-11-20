@@ -42,7 +42,6 @@
 #include <sys/stat.h>
 #endif
 
-#include <stdio.h>
 
 inline void dbgOut( const basebmp::BitmapDeviceSharedPtr&
 #if OSL_DEBUG_LEVEL > 2
@@ -1068,7 +1067,7 @@ cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr
 {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
     if (!isCairoCompatible(rBuffer))
-        return NULL;
+        return nullptr;
 
     basegfx::B2IVector size = rBuffer->getSize();
     sal_Int32 nStride = rBuffer->getScanlineStride();
