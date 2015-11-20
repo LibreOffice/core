@@ -81,7 +81,6 @@ struct AstExprValue
         bool            bval;       // Contains boolean expression value
         float           fval;       // Contains 32-bit float expr value
         double          dval;       // Contains 64-bit float expr value
-        sal_uInt32      eval;       // Contains enumeration value
     } u;
     ExprType et;
 };

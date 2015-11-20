@@ -26,10 +26,8 @@
 struct SvNamePos
 {
     SvGlobalName    aUUId;
-    sal_uInt32          nStmPos;
-    SvNamePos( const SvGlobalName & rName, sal_uInt32 nPos )
-        : aUUId( rName )
-        , nStmPos( nPos ) {}
+    SvNamePos( const SvGlobalName & rName )
+        : aUUId( rName ) {}
 };
 
 class SvMetaModule : public SvMetaExtern
