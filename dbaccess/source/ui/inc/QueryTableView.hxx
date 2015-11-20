@@ -25,15 +25,6 @@
 
 namespace dbaui
 {
-    struct TabWinsChangeNotification
-    {
-        enum ACTION_TYPE    { AT_ADDED_WIN, AT_REMOVED_WIN };
-        ACTION_TYPE         atActionPerformed;
-        OUString            strAffectedTable;
-
-        TabWinsChangeNotification(ACTION_TYPE at, const OUString& str) : atActionPerformed(at), strAffectedTable(str) { }
-    };
-
     class OQueryTabWinUndoAct;
     class OQueryTableConnection;
     class OQueryTableWindow;

@@ -62,14 +62,11 @@ struct DataSupplier_Impl
 {
     osl::Mutex                                   m_aMutex;
     ResultList                                   m_aResults;
-    rtl::Reference< ODocumentContainer >             m_xContent;
-      sal_Int32                                  m_nOpenMode;
-      bool                                   m_bCountFinal;
+    rtl::Reference< ODocumentContainer >         m_xContent;
+    bool                                         m_bCountFinal;
 
-    DataSupplier_Impl( const rtl::Reference< ODocumentContainer >& rContent,
-                       sal_Int32 nOpenMode )
+    DataSupplier_Impl( const rtl::Reference< ODocumentContainer >& rContent )
     : m_xContent(rContent)
-    , m_nOpenMode( nOpenMode )
     , m_bCountFinal( false ) {}
     ~DataSupplier_Impl();
 };
@@ -90,9 +87,8 @@ DataSupplier_Impl::~DataSupplier_Impl()
 
 // DataSupplier Implementation.
 
-DataSupplier::DataSupplier( const rtl::Reference< ODocumentContainer >& rContent,
-                            sal_Int32 nOpenMode )
-: m_pImpl( new DataSupplier_Impl( rContent,nOpenMode ) )
+DataSupplier::DataSupplier( const rtl::Reference< ODocumentContainer >& rContent )
+: m_pImpl( new DataSupplier_Impl( rContent ) )
 {
 
 }

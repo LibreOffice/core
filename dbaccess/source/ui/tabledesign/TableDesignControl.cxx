@@ -41,7 +41,6 @@ OTableRowView::OTableRowView(vcl::Window* pParent)
     ,m_nDataPos(-1)
     ,m_nCurrentPos(-1)
     ,m_nCurUndoActId(0)
-    ,m_bCurrentModified(false)
     ,m_bClipboardFilled(false)
 {
 

@@ -37,7 +37,6 @@ namespace dbaui
     class OConnectionTabPageSetup : public OConnectionHelper
     {
         friend class VclPtr<OConnectionTabPageSetup>;
-        bool            m_bUserGrabFocus : 1;
     protected:
 
         VclPtr<FixedText>           m_pHelpText;

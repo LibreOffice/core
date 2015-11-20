@@ -217,7 +217,6 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XComponentContext >&
     ,m_pTreeModel(nullptr)
     ,m_pCurrentlyDisplayed(nullptr)
     ,m_nAsyncDrop(nullptr)
-    ,m_nBorder(1)
     ,m_bQueryEscapeProcessing( false )
     ,m_bShowMenu(false)
     ,m_bInSuspend(false)

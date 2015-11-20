@@ -55,6 +55,8 @@ for d in definitionSet:
         continue
     if (definitionToSourceLocationMap[d].startswith("include/")):
         continue
+    if (definitionToSourceLocationMap[d].startswith("external/")):
+        continue
 
     tmp1set.add((clazz, definitionToSourceLocationMap[d]))
 

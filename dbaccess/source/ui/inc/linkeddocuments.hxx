@@ -51,7 +51,6 @@ namespace dbaui
         css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >
                     m_xDocumentUI;
         VclPtr<vcl::Window>    m_pDialogParent;
-        OUString    m_sCurrentlyEditing;
         OUString    m_sDataSourceName;
 
     public:

@@ -77,7 +77,6 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     ,m_xConnection(_rxConn)
     ,m_pColumnMediator( nullptr )
     ,m_pWarnings( nullptr )
-    ,m_bCaseSensitiv(true)
     ,m_eDoingCurrently(NONE)
 {
     registerProperties();

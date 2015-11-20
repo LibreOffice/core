@@ -94,7 +94,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_pCacheSet(nullptr)
     ,m_pMatrix(nullptr)
     ,m_pInsertMatrix(nullptr)
-    ,m_nLastColumnIndex(0)
     ,m_nFetchSize(0)
     ,m_nRowCount(0)
     ,m_nPrivileges( Privilege::SELECT )

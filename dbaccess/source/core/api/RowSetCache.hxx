@@ -77,8 +77,6 @@ namespace dbaccess
         ORowSetMatrix*                  m_pInsertMatrix;        // represent the rows which should be inserted normally this is only one
         ORowSetMatrix::iterator         m_aInsertRow;           // represent a insert row
 
-        sal_Int32                       m_nLastColumnIndex;     // the last column ask for, used for wasNull()
-
         connectivity::OSQLTable         m_aUpdateTable;         // used for updates/deletes and inserts
 
         sal_Int32                   m_nFetchSize;

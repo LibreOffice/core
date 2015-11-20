@@ -34,8 +34,7 @@ class DataSupplier : public ucbhelper::ResultSetDataSupplier
     ::std::unique_ptr<DataSupplier_Impl> m_pImpl;
 
 public:
-    DataSupplier( const rtl::Reference< ODocumentContainer >& rxContent,
-                  sal_Int32 nOpenMode );
+    DataSupplier( const rtl::Reference< ODocumentContainer >& rxContent );
     virtual ~DataSupplier();
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;

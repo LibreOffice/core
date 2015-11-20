@@ -1371,9 +1371,7 @@ sal_Int32 ORowSetBase::impl_getRowCount() const
 struct ORowSetNotifierImpl
 {
     ::std::vector<sal_Int32>    aChangedColumns;
-    ::std::vector<Any>          aChangedBookmarks;
     ORowSetValueVector::Vector  aRow;
-
 };
 
 

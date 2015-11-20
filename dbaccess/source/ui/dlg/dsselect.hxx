@@ -44,19 +44,22 @@ protected:
     VclPtr<ListBox>        m_pDatasource;
     VclPtr<OKButton>       m_pOk;
     VclPtr<CancelButton>   m_pCancel;
-    SfxItemSet*     m_pOutputSet;
 #ifdef HAVE_ODBC_ADMINISTRATION
     VclPtr<PushButton>     m_pManageDatasources;
     ::std::unique_ptr< OOdbcManagement >
-                    m_pODBCManagement;
+    m_pODBCManagement;
 #endif
 
 public:
-    ODatasourceSelectDialog( vcl::Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet = nullptr );
+    ODatasourceSelectDialog( vcl::Window* _pParent, const StringBag& _rDatasources );
     virtual ~ODatasourceSelectDialog();
     virtual void dispose() override;
-    OUString GetSelected() const { return m_pDatasource->GetSelectEntry();}
-    void     Select( const OUString& _rEntry ) { m_pDatasource->SelectEntry(_rEntry); }
+    OUString GetSelected() const {
+        return m_pDatasource->GetSelectEntry();
+    }
+    void     Select( const OUString& _rEntry ) {
+        m_pDatasource->SelectEntry(_rEntry);
+    }
 
     virtual bool    Close() override;
 

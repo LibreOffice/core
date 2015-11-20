@@ -219,10 +219,6 @@ namespace dbaui
 
         ImplSVEvent *                 m_nAsyncDropEvent;
 
-        sal_uInt16                    m_nCurrentActionColId;
-            // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
-            // and aren't selected, so we have to track this column id
-
         bool                          m_bActivatingForDrop;
 
     public:

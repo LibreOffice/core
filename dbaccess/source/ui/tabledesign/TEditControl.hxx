@@ -43,7 +43,6 @@ namespace dbaui
             NONE
         };
 
-        ::std::vector< ::std::shared_ptr<OTableRow> > m_aUndoList;
         ::std::vector< ::std::shared_ptr<OTableRow> >*    m_pRowList;
 
         VclPtr<OSQLNameEdit>               pNameCell;

@@ -60,7 +60,6 @@ public:
     OUString                   m_sTblLabel;
     OUString                   m_aName;
     const IObjectNameCheck&    m_rObjectNameCheck;
-    OUString                   m_sParentURL;
     css::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;
     sal_Int32                  m_nType;
     sal_Int32                  m_nFlags;
@@ -79,11 +78,11 @@ public:
 } // dbaui
 
 OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
-                        const sal_Int32& _rType,
-                        const Reference< XConnection>& _xConnection,
-                        const OUString& rDefault,
-                        const IObjectNameCheck& _rObjectNameCheck,
-                        sal_Int32 _nFlags)
+                               const sal_Int32& _rType,
+                               const Reference< XConnection>& _xConnection,
+                               const OUString& rDefault,
+                               const IObjectNameCheck& _rObjectNameCheck,
+                               sal_Int32 _nFlags)
     : m_aQryLabel(ModuleRes(STR_QRY_LABEL))
     , m_sTblLabel(ModuleRes(STR_TBL_LABEL))
     , m_aName(rDefault)
@@ -103,8 +102,7 @@ OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
     if ( _xConnection.is() )
         m_xMetaData = _xConnection->getMetaData();
 
-    if ( m_xMetaData.is() )
-    {
+    if ( m_xMetaData.is() ) {
         OUString sExtraNameChars( m_xMetaData->getExtraNameCharacters() );
         m_pCatalog->setAllowedChars( sExtraNameChars );
         m_pSchema->setAllowedChars( sExtraNameChars );
@@ -116,9 +114,9 @@ OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
 }
 
 OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
-                        const OUString& rDefault,
-                        const IObjectNameCheck& _rObjectNameCheck,
-                        sal_Int32 _nFlags)
+                               const OUString& rDefault,
+                               const IObjectNameCheck& _rObjectNameCheck,
+                               sal_Int32 _nFlags)
     : m_aQryLabel(ModuleRes(STR_QRY_LABEL))
     , m_sTblLabel(ModuleRes(STR_TBL_LABEL))
     , m_aName(rDefault)
@@ -143,36 +141,32 @@ using namespace ::com::sun::star::lang;
 
 namespace
 {
-    typedef Reference< XResultSet > (SAL_CALL XDatabaseMetaData::*FGetMetaStrings)();
+typedef Reference< XResultSet > (SAL_CALL XDatabaseMetaData::*FGetMetaStrings)();
 
-    void lcl_fillComboList( ComboBox& _rList, const Reference< XConnection >& _rxConnection,
-        FGetMetaStrings _GetAll, const OUString& _rCurrent )
-    {
-        try
-        {
-            Reference< XDatabaseMetaData > xMetaData( _rxConnection->getMetaData(), UNO_QUERY_THROW );
+void lcl_fillComboList( ComboBox& _rList, const Reference< XConnection >& _rxConnection,
+                        FGetMetaStrings _GetAll, const OUString& _rCurrent )
+{
+    try {
+        Reference< XDatabaseMetaData > xMetaData( _rxConnection->getMetaData(), UNO_QUERY_THROW );
 
-            Reference< XResultSet > xRes = (xMetaData.get()->*_GetAll)();
-            Reference< XRow > xRow( xRes, UNO_QUERY_THROW );
-            OUString sValue;
-            while ( xRes->next() )
-            {
-                sValue = xRow->getString( 1 );
-                if ( !xRow->wasNull() )
-                    _rList.InsertEntry( sValue );
-            }
-
-            sal_Int32 nPos = _rList.GetEntryPos( OUString( _rCurrent ) );
-            if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
-                _rList.SelectEntryPos( nPos );
-            else
-                _rList.SelectEntryPos( 0 );
+        Reference< XResultSet > xRes = (xMetaData.get()->*_GetAll)();
+        Reference< XRow > xRow( xRes, UNO_QUERY_THROW );
+        OUString sValue;
+        while ( xRes->next() ) {
+            sValue = xRow->getString( 1 );
+            if ( !xRow->wasNull() )
+                _rList.InsertEntry( sValue );
         }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+
+        sal_Int32 nPos = _rList.GetEntryPos( OUString( _rCurrent ) );
+        if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+            _rList.SelectEntryPos( nPos );
+        else
+            _rList.SelectEntryPos( 0 );
+    } catch( const Exception& ) {
+        DBG_UNHANDLED_EXCEPTION();
     }
+}
 }
 
 OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
@@ -187,82 +181,72 @@ OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
 {
     m_pImpl = new OSaveAsDlgImpl(this,_rType,_xConnection,rDefault,_rObjectNameCheck,_nFlags);
 
-    switch (_rType)
-    {
-        case CommandType::QUERY:
-            implInitOnlyTitle(m_pImpl->m_aQryLabel);
-            break;
+    switch (_rType) {
+    case CommandType::QUERY:
+        implInitOnlyTitle(m_pImpl->m_aQryLabel);
+        break;
 
-        case CommandType::TABLE:
-            OSL_ENSURE( m_pImpl->m_xMetaData.is(), "OSaveAsDlg::OSaveAsDlg: no meta data for entering table names: this will crash!" );
-            {
-                m_pImpl->m_pLabel->SetText(m_pImpl->m_sTblLabel);
-                if(m_pImpl->m_xMetaData.is() && !m_pImpl->m_xMetaData->supportsCatalogsInTableDefinitions())
-                {
-                    m_pImpl->m_pCatalogLbl->Hide();
-                    m_pImpl->m_pCatalog->Hide();
-                }
-                else
-                {
-                    // now fill the catalogs
-                    lcl_fillComboList( *m_pImpl->m_pCatalog, _xConnection,
-                        &XDatabaseMetaData::getCatalogs, _xConnection->getCatalog() );
-                }
-
-                if ( !m_pImpl->m_xMetaData->supportsSchemasInTableDefinitions())
-                {
-                    m_pImpl->m_pSchemaLbl->Hide();
-                    m_pImpl->m_pSchema->Hide();
-                }
-                else
-                {
-                    lcl_fillComboList( *m_pImpl->m_pSchema, _xConnection,
-                        &XDatabaseMetaData::getSchemas, m_pImpl->m_xMetaData->getUserName() );
-                }
-
-                OSL_ENSURE(m_pImpl->m_xMetaData.is(),"The metadata can not be null!");
-                if(m_pImpl->m_aName.indexOf('.') != -1)
-                {
-                    OUString sCatalog,sSchema,sTable;
-                    ::dbtools::qualifiedNameComponents(m_pImpl->m_xMetaData,
-                                                        m_pImpl->m_aName,
-                                                        sCatalog,
-                                                        sSchema,
-                                                        sTable,
-                                                        ::dbtools::eInDataManipulation);
-
-                    sal_Int32 nPos = m_pImpl->m_pCatalog->GetEntryPos(OUString(sCatalog));
-                    if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
-                        m_pImpl->m_pCatalog->SelectEntryPos(nPos);
-
-                    if ( !sSchema.isEmpty() )
-                    {
-                        nPos = m_pImpl->m_pSchema->GetEntryPos(OUString(sSchema));
-                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
-                            m_pImpl->m_pSchema->SelectEntryPos(nPos);
-                    }
-                    m_pImpl->m_pTitle->SetText(sTable);
-                }
-                else
-                    m_pImpl->m_pTitle->SetText(m_pImpl->m_aName);
-                m_pImpl->m_pTitle->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
-
-                sal_Int32 nLength =  m_pImpl->m_xMetaData.is() ? m_pImpl->m_xMetaData->getMaxTableNameLength() : 0;
-                nLength = nLength ? nLength : EDIT_NOLIMIT;
-
-                m_pImpl->m_pTitle->SetMaxTextLen(nLength);
-                m_pImpl->m_pSchema->SetMaxTextLen(nLength);
-                m_pImpl->m_pCatalog->SetMaxTextLen(nLength);
-
-                bool bCheck = _xConnection.is() && isSQL92CheckEnabled(_xConnection);
-                m_pImpl->m_pTitle->setCheck(bCheck); // enable non valid sql chars as well
-                m_pImpl->m_pSchema->setCheck(bCheck); // enable non valid sql chars as well
-                m_pImpl->m_pCatalog->setCheck(bCheck); // enable non valid sql chars as well
+    case CommandType::TABLE:
+        OSL_ENSURE( m_pImpl->m_xMetaData.is(), "OSaveAsDlg::OSaveAsDlg: no meta data for entering table names: this will crash!" );
+        {
+            m_pImpl->m_pLabel->SetText(m_pImpl->m_sTblLabel);
+            if(m_pImpl->m_xMetaData.is() && !m_pImpl->m_xMetaData->supportsCatalogsInTableDefinitions()) {
+                m_pImpl->m_pCatalogLbl->Hide();
+                m_pImpl->m_pCatalog->Hide();
+            } else {
+                // now fill the catalogs
+                lcl_fillComboList( *m_pImpl->m_pCatalog, _xConnection,
+                                   &XDatabaseMetaData::getCatalogs, _xConnection->getCatalog() );
             }
-            break;
 
-        default:
-            OSL_FAIL( "OSaveAsDlg::OSaveAsDlg: Type not supported yet!" );
+            if ( !m_pImpl->m_xMetaData->supportsSchemasInTableDefinitions()) {
+                m_pImpl->m_pSchemaLbl->Hide();
+                m_pImpl->m_pSchema->Hide();
+            } else {
+                lcl_fillComboList( *m_pImpl->m_pSchema, _xConnection,
+                                   &XDatabaseMetaData::getSchemas, m_pImpl->m_xMetaData->getUserName() );
+            }
+
+            OSL_ENSURE(m_pImpl->m_xMetaData.is(),"The metadata can not be null!");
+            if(m_pImpl->m_aName.indexOf('.') != -1) {
+                OUString sCatalog,sSchema,sTable;
+                ::dbtools::qualifiedNameComponents(m_pImpl->m_xMetaData,
+                                                   m_pImpl->m_aName,
+                                                   sCatalog,
+                                                   sSchema,
+                                                   sTable,
+                                                   ::dbtools::eInDataManipulation);
+
+                sal_Int32 nPos = m_pImpl->m_pCatalog->GetEntryPos(OUString(sCatalog));
+                if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+                    m_pImpl->m_pCatalog->SelectEntryPos(nPos);
+
+                if ( !sSchema.isEmpty() ) {
+                    nPos = m_pImpl->m_pSchema->GetEntryPos(OUString(sSchema));
+                    if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
+                        m_pImpl->m_pSchema->SelectEntryPos(nPos);
+                }
+                m_pImpl->m_pTitle->SetText(sTable);
+            } else
+                m_pImpl->m_pTitle->SetText(m_pImpl->m_aName);
+            m_pImpl->m_pTitle->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+
+            sal_Int32 nLength =  m_pImpl->m_xMetaData.is() ? m_pImpl->m_xMetaData->getMaxTableNameLength() : 0;
+            nLength = nLength ? nLength : EDIT_NOLIMIT;
+
+            m_pImpl->m_pTitle->SetMaxTextLen(nLength);
+            m_pImpl->m_pSchema->SetMaxTextLen(nLength);
+            m_pImpl->m_pCatalog->SetMaxTextLen(nLength);
+
+            bool bCheck = _xConnection.is() && isSQL92CheckEnabled(_xConnection);
+            m_pImpl->m_pTitle->setCheck(bCheck); // enable non valid sql chars as well
+            m_pImpl->m_pSchema->setCheck(bCheck); // enable non valid sql chars as well
+            m_pImpl->m_pCatalog->setCheck(bCheck); // enable non valid sql chars as well
+        }
+        break;
+
+    default:
+        OSL_FAIL( "OSaveAsDlg::OSaveAsDlg: Type not supported yet!" );
     }
 
     implInit();
@@ -295,22 +279,20 @@ void OSaveAsDlg::dispose()
 
 IMPL_LINK_TYPED(OSaveAsDlg, ButtonClickHdl, Button *, pButton, void)
 {
-    if (pButton == m_pImpl->m_pPB_OK)
-    {
+    if (pButton == m_pImpl->m_pPB_OK) {
         m_pImpl->m_aName = m_pImpl->m_pTitle->GetText();
 
         OUString sNameToCheck( m_pImpl->m_aName );
 
-        if ( m_pImpl->m_nType == CommandType::TABLE )
-        {
+        if ( m_pImpl->m_nType == CommandType::TABLE ) {
             sNameToCheck = ::dbtools::composeTableName(
-                m_pImpl->m_xMetaData,
-                getCatalog(),
-                getSchema(),
-                sNameToCheck,
-                false,  // no quoting
-                ::dbtools::eInDataManipulation
-            );
+                               m_pImpl->m_xMetaData,
+                               getCatalog(),
+                               getSchema(),
+                               sNameToCheck,
+                               false,  // no quoting
+                               ::dbtools::eInDataManipulation
+                           );
         }
 
         SQLExceptionInfo aNameError;
@@ -342,8 +324,7 @@ void OSaveAsDlg::implInitOnlyTitle(const OUString& _rLabel)
 
 void OSaveAsDlg::implInit()
 {
-    if ( 0 == ( m_pImpl->m_nFlags & SAD_ADDITIONAL_DESCRIPTION ) )
-    {
+    if ( 0 == ( m_pImpl->m_nFlags & SAD_ADDITIONAL_DESCRIPTION ) ) {
         // hide the description window
         m_pImpl->m_pDescription->Hide();
     }
@@ -358,8 +339,17 @@ void OSaveAsDlg::implInit()
     m_pImpl->m_pTitle->GrabFocus();
 }
 
-OUString OSaveAsDlg::getName() const      { return m_pImpl->m_aName; }
-OUString OSaveAsDlg::getCatalog() const   { return m_pImpl->m_pCatalog->IsVisible() ? m_pImpl->m_pCatalog->GetText() : OUString(); }
-OUString OSaveAsDlg::getSchema() const    { return m_pImpl->m_pSchema->IsVisible() ? m_pImpl->m_pSchema->GetText() : OUString(); }
+OUString OSaveAsDlg::getName() const
+{
+    return m_pImpl->m_aName;
+}
+OUString OSaveAsDlg::getCatalog() const
+{
+    return m_pImpl->m_pCatalog->IsVisible() ? m_pImpl->m_pCatalog->GetText() : OUString();
+}
+OUString OSaveAsDlg::getSchema() const
+{
+    return m_pImpl->m_pSchema->IsVisible() ? m_pImpl->m_pSchema->GetText() : OUString();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

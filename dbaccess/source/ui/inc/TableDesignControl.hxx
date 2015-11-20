@@ -41,7 +41,6 @@ namespace dbaui
         sal_uInt16  m_nCurUndoActId;
 
     protected:
-        bool    m_bCurrentModified;
         bool    m_bClipboardFilled;
 
     public:

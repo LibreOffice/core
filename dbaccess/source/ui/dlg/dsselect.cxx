@@ -47,10 +47,10 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
-ODatasourceSelectDialog::ODatasourceSelectDialog(vcl::Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet)
+
+ODatasourceSelectDialog::ODatasourceSelectDialog(vcl::Window* _pParent, const StringBag& _rDatasources)
     : ModalDialog(_pParent, "ChooseDataSourceDialog",
         "dbaccess/ui/choosedatasourcedialog.ui")
-    , m_pOutputSet(_pOutputSet)
 {
     get(m_pDatasource, "treeview");
     m_pDatasource->set_height_request(m_pDatasource->GetTextHeight() * 6);

@@ -106,8 +106,6 @@ namespace dbaui
         SvTreeListEntry*        m_pCurrentlyDisplayed;
         ImplSVEvent *           m_nAsyncDrop;
 
-        sal_Int16               m_nBorder;              // sal_True when border should be shown
-
         bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
         bool                m_bShowMenu;            // if sal_True the menu should be visible otherwise not
         bool                m_bInSuspend;

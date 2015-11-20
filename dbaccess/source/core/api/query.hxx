@@ -65,7 +65,6 @@ protected:
     css::uno::Reference< css::beans::XPropertySetInfo >       m_xCommandPropInfo;
     ::rtl::Reference< OContainerMediator >                    m_pColumnMediator;
     ::dbtools::WarningsContainer*                             m_pWarnings;
-    bool                                                      m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
 
     // possible actions on our "aggregate"
     enum AGGREGATE_ACTION { NONE, SETTING_PROPERTIES, FLUSHING };
