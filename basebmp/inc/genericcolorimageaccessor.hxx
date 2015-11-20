@@ -33,20 +33,12 @@ namespace basebmp
     class GenericColorImageAccessor
     {
         BitmapDeviceSharedPtr mpDevice;
-        DrawMode              meDrawMode;
 
     public:
         typedef Color value_type;
 
         explicit GenericColorImageAccessor( BitmapDeviceSharedPtr const& rTarget ) :
-            mpDevice(rTarget),
-            meDrawMode(DrawMode::Paint)
-        {}
-
-        GenericColorImageAccessor( BitmapDeviceSharedPtr const& rTarget,
-                                   DrawMode                     eDrawMode ) :
-            mpDevice(rTarget),
-            meDrawMode(eDrawMode)
+            mpDevice(rTarget)
         {}
 
         template< typename Iterator >
