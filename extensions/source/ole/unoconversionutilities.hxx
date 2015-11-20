@@ -108,7 +108,8 @@ public:
     {}
 
     UnoConversionUtilities( const Reference<XMultiServiceFactory> & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass )
-        : m_smgr( xFactory), m_nComWrapperClass( comWrapperClass), m_nUnoWrapperClass( unoWrapperClass)
+        : m_nUnoWrapperClass(unoWrapperClass),
+          m_nComWrapperClass(comWrapperClass), m_smgr(xFactory)
     {}
 
     virtual ~UnoConversionUtilities() {}
