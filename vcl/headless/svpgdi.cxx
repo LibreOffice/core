@@ -29,6 +29,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basebmp/scanlineformats.hxx>
@@ -129,6 +130,27 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
         cairo_clip(cr);
     }
 }
+namespace
+{
+    cairo_rectangle_int_t getFillDamage(cairo_t* cr)
+    {
+        cairo_rectangle_int_t extents;
+        double x1, y1, x2, y2;
+
+        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        cairo_region_t *region = cairo_region_create_rectangle(&extents);
+
+        cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        cairo_region_intersect_rectangle(region, &extents);
+
+        cairo_region_get_extents(region, &extents);
+        cairo_region_destroy(region);
+
+        return extents;
+    }
+}
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
 {
@@ -136,7 +158,10 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
     if (m_bUseLineColor || !m_bUseFillColor)
-        return bRet;
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaRect case");
+        return false;
+    }
 
     cairo_t* cr = getCairoContext();
     if (!cr)
@@ -157,24 +182,10 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
                               fTransparency);
     cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-
     cairo_rectangle_int_t extents;
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
     if (xDamageTracker)
-    {
-        double x1, y1, x2, y2;
-
-        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
-        cairo_region_t *region = cairo_region_create_rectangle(&extents);
-
-        cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
-        cairo_region_intersect_rectangle(region, &extents);
-
-        cairo_region_get_extents(region, &extents);
-        cairo_region_destroy(region);
-    }
+        extents = getFillDamage(cr);
 
     cairo_fill(cr);
 
@@ -635,10 +646,118 @@ bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
     return false;
 }
 
-bool SvpSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, bool bClosePath)
 {
-    // TODO: maybe BaseBmp can draw B2DPolyPolygons directly
-    return false;
+    // short circuit if there is nothing to do
+    const int nPointCount = rPolygon.count();
+    if( nPointCount <= 0 )
+    {
+        return;
+    }
+
+    const bool bHasCurves = rPolygon.areControlPointsUsed();
+    for( int nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++ )
+    {
+        int nClosedIdx = nPointIdx;
+        if( nPointIdx >= nPointCount )
+        {
+            // prepare to close last curve segment if needed
+            if( bClosePath && (nPointIdx == nPointCount) )
+            {
+                nClosedIdx = 0;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        basegfx::B2DPoint aPoint = rPolygon.getB2DPoint( nClosedIdx );
+
+        if( !nPointIdx )
+        {
+            // first point => just move there
+            cairo_move_to(cr, aPoint.getX(), aPoint.getY());
+            continue;
+        }
+
+        bool bPendingCurve = false;
+        if( bHasCurves )
+        {
+            bPendingCurve = rPolygon.isNextControlPointUsed( nPrevIdx );
+            bPendingCurve |= rPolygon.isPrevControlPointUsed( nClosedIdx );
+        }
+
+        if( !bPendingCurve )    // line segment
+        {
+            cairo_line_to(cr, aPoint.getX(), aPoint.getY());
+        }
+        else                        // cubic bezier segment
+        {
+            basegfx::B2DPoint aCP1 = rPolygon.getNextControlPoint( nPrevIdx );
+            basegfx::B2DPoint aCP2 = rPolygon.getPrevControlPoint( nClosedIdx );
+            cairo_curve_to(cr, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(),
+                               aPoint.getX(), aPoint.getY());
+        }
+    }
+
+    if( bClosePath )
+    {
+        cairo_close_path(cr);
+    }
+}
+#endif
+
+bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
+{
+    bool bRet = false;
+    (void)rPolyPoly; (void)fTransparency;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+    if (m_bUseLineColor || !m_bUseFillColor)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygon case");
+        return false;
+    }
+
+    cairo_t* cr = getCairoContext();
+    if (!cr)
+        return false;
+
+    if (!m_aDevice->isTopDown())
+    {
+        cairo_scale(cr, 1, -1.0);
+        cairo_translate(cr, 0.0, -m_aDevice->getSize().getY());
+    }
+
+    clipRegion(cr);
+
+    cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
+                              m_aFillColor.getGreen()/255.0,
+                              m_aFillColor.getBlue()/255.0,
+                              1.0-fTransparency);
+
+    for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
+        AddPolygonToPath(cr, *pPoly, true);
+
+    cairo_rectangle_int_t extents;
+    basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
+    if (xDamageTracker)
+        extents = getFillDamage(cr);
+
+    cairo_fill(cr);
+
+    cairo_surface_flush(cairo_get_target(cr));
+    cairo_destroy(cr); // unref
+
+    if (xDamageTracker)
+    {
+        xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
+                                                extents.y + extents.height));
+    }
+    bRet = true;
+#endif
+    return bRet;
 }
 
 void SvpSalGraphics::copyArea( long nDestX,
@@ -870,9 +989,19 @@ SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 
 bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
 {
-    return m_aDrawMode != basebmp::DrawMode::XOR &&
-           OutDevSupport_TransparentRect == eType &&
-           isCairoCompatible(m_aDevice);
+    if (m_aDrawMode == basebmp::DrawMode::XOR)
+        return false;
+    if (!isCairoCompatible(m_aDevice))
+        return false;
+    switch (eType)
+    {
+        case OutDevSupport_TransparentRect:
+        case OutDevSupport_B2DDraw:
+            return true;
+        case OutDevSupport_B2DClip: //what's this one ?
+            return false;
+    }
+    return false;
 }
 
 #endif
