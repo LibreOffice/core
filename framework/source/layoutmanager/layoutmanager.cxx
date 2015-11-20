@@ -782,9 +782,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
         if ( pSysWindow )
         {
             if ( bSetVisible )
-            {
                 pSysWindow->SetMenuBar(pMenuBar);
-            }
             else
                 pSysWindow->SetMenuBar( nullptr );
         }
@@ -1461,7 +1459,7 @@ throw (RuntimeException, std::exception)
         {
             // #i38743# don't create a menubar if frame isn't top
             if ( !bInPlaceMenu && !m_xMenuBar.is() && implts_isFrameOrWindowTop( xFrame ))
-            {
+                {
                 m_xMenuBar = implts_createElement( aName );
                 if ( m_xMenuBar.is() )
                 {
@@ -1502,11 +1500,6 @@ throw (RuntimeException, std::exception)
                                     implts_updateMenuBarClose();
                                 }
                             }
-                        }
-                        if (getenv("LO_USE_NOTEBOOKBAR"))
-                        {
-                            pSysWindow->CreateNotebookBar("vcl/ui/notebookbar.ui", m_xFrame);
-                            pSysWindow->SetMenuBarMode(MenuBarMode::Hide);
                         }
                     }
                 }
