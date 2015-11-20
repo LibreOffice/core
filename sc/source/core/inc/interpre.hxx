@@ -101,6 +101,17 @@ enum ScIterFuncIfs
     ifCOUNTIFS    // Multi-Conditional count
 };
 
+enum ScETSType
+{
+    etsAdd,
+    etsMult,
+    etsSeason,
+    etsPIAdd,
+    etsPIMult,
+    etsStatAdd,
+    etsStatMult
+};
+
 struct FormulaTokenRef_less
 {
     bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaConstTokenRef& r2 ) const
@@ -748,6 +759,8 @@ bool CheckMatrix(bool _bLOG,sal_uInt8& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX
 void ScLinest();
 void ScLogest();
 void ScForecast();
+double LinearForecast( ScMatrixRef rMat1, ScMatrixRef rMat2, double fVal );
+void ScForecast_Ets( ScETSType eETSType );
 void ScNoName();
 void ScBadName();
 // Statistics:
