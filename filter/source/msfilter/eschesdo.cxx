@@ -68,16 +68,12 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
     , mpPicStrm(nullptr)
     , mpHostAppData(nullptr)
     , mnPagesWritten(0)
-    , mnShapeMasterTitle(0)
-    , mnShapeMasterBody(0)
     , mnIndices(0)
     , mnOutlinerCount(0)
-    , mnPrevTextStyle(0)
     , mnStatMaxValue(0)
     , mnEffectCount(0)
     , mbIsTitlePossible(false)
     , mbStatusIndicator(false)
-    , mbStatus(false)
 {
 }
 

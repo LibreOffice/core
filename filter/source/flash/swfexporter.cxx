@@ -62,15 +62,9 @@ using com::sun::star::lang::XServiceInfo;
 
 
 PageInfo::PageInfo()
-        : meFadeEffect( FadeEffect_NONE )
-        , meFadeSpeed( AnimationSpeed_MEDIUM )
-        , mnDuration( 0 )
-        , mnChange( 0 )
-        , mnBackgroundID( 0 )
+        : mnBackgroundID( 0 )
         , mnObjectsID( 0)
         , mnForegroundID( 0)
-        , mbBackgroundVisible( false )
-        , mbBackgroundObjectsVisible( false )
 {
 }
 

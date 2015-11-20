@@ -70,8 +70,7 @@ public:
 
     sal_Int32       mnPresOrder;
 
-    css::presentation::ClickAction     meClickAction;
-    OUString maBookmark;
+    OUString        maBookmark;
 
     sal_Int32       mnDimColor;
     bool            mbDimHide;
@@ -89,7 +88,6 @@ public:
         meTextEffect( css::presentation::AnimationEffect_NONE ),
         meEffectSpeed( css::presentation::AnimationSpeed_MEDIUM ),
         mnPresOrder( 0 ),
-        meClickAction( css::presentation::ClickAction_NONE ),
         mnDimColor( 0 ),
         mbDimHide( false ),
         mbDimPrev( false ),
@@ -99,31 +97,11 @@ public:
 };
 
 
-struct ShapeAnimationInfo
-{
-    ShapeInfo* mpShapeInfo;
-    sal_uInt16  mnDepth;
-
-    ShapeAnimationInfo( ShapeInfo* pShapeInfo, sal_uInt16 nDepth ) : mpShapeInfo( pShapeInfo ), mnDepth( nDepth ) {}
-};
-
-
-
-
 struct PageInfo
 {
-    css::presentation::FadeEffect      meFadeEffect;
-    css::presentation::AnimationSpeed  meFadeSpeed;
-
-    sal_Int32       mnDuration;
-    sal_Int32       mnChange;
-
     sal_uInt16      mnBackgroundID;
     sal_uInt16      mnObjectsID;
     sal_uInt16      mnForegroundID;
-
-    bool            mbBackgroundVisible;
-    bool            mbBackgroundObjectsVisible;
 
     ::std::vector<ShapeInfo*>
                     maShapesVector;

@@ -68,8 +68,8 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > const & rModel )
     , mnElementSize(0)
     , mpGDIMetaFile(nullptr)
 {
-    pElement = new CGMElements( *this );
-    pCopyOfE = new CGMElements( *this );
+    pElement = new CGMElements;
+    pCopyOfE = new CGMElements;
 }
 
 CGM::~CGM()

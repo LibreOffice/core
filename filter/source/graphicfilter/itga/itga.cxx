@@ -57,12 +57,11 @@ struct TGAFileFooter
 struct TGAExtension
 {
     sal_uInt16      nExtensionSize;
-    char        sAuthorName[41];
-    char        sAuthorComment[324];
-    char        sDateTimeStamp[12];
-    char        sJobNameID[41];
-    sal_uInt16      nJobTime[3];
-    char        sSoftwareID[41];
+    char            sAuthorName[41];
+    char            sAuthorComment[324];
+    char            sDateTimeStamp[12];
+    char            sJobNameID[41];
+    char            sSoftwareID[41];
     sal_uInt16      nSoftwareVersionNumber;
     sal_uInt8       nSoftwareVersionLetter;
     sal_uInt32      nKeyColor;

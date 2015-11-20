@@ -72,7 +72,6 @@ struct Gradient
     GradientType          meType;
     union
     {
-        double test;
         struct
         {
             double                mfX1;

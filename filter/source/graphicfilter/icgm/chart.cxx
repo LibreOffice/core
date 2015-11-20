@@ -21,9 +21,8 @@
 #include <chart.hxx>
 
 
-CGMChart::CGMChart(CGM& rCGM)
-    : mpCGM(&rCGM)
-    , mnCurrentFileType(0)
+CGMChart::CGMChart()
+    : mnCurrentFileType(0)
 {
     for ( sal_Int8 i = 0; i < 7; i++ )
     {

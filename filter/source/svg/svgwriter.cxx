@@ -98,8 +98,6 @@ SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFont
     , mrFontExport( rFontExport )
     , mpElemFont( nullptr )
     , mpElemPaint( nullptr )
-    , maLineJoin(basegfx::B2DLineJoin::NONE)
-    , maLineCap(css::drawing::LineCap_BUTT)
 {
 }
 

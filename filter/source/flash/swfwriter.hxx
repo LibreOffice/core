@@ -413,9 +413,6 @@ private:
     sal_uInt16 mnNextId;
     sal_uInt32  mnFrames;
 
-//  css::uno::Reference< css::io::XOutputStream > mxOutStream;
-    oslFileHandle mxOutStream;
-
     utl::TempFile maMovieTempFile;
     utl::TempFile maFontsTempFile;
 

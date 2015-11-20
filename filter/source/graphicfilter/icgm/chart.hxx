@@ -113,26 +113,6 @@ struct BulletOption
     }
 };
 
-struct BulDef
-{
-    char            btype;
-    char            bsize;
-    char            bcolor;
-    char            bnumber;
-    BulDef()
-        : btype(0)
-        , bsize(0)
-        , bcolor(0)
-        , bnumber(0)
-    {
-    }
-};
-
-typedef struct BulletLines
-{
-    BulDef          nBulDef[ 48 ];
-} BulletLines;
-
 struct IntSettings
 {
     sal_uInt16          nCountry;
@@ -215,19 +195,17 @@ class CGMChart
     friend class CGMImpressOutAct;
 
     protected:
-        CGM*                    mpCGM;
         sal_Int8                mnCurrentFileType;
         ::std::vector< TextEntry* > maTextEntryList;
         DataNode                mDataNode[ 7 ];
         ChartZone               mChartZone;
         PageOrientDim           mPageOrientDim;
         BulletOption            mBulletOption;
-        BulletLines             mBulletLines;
         ZoneOption              mZoneOption;
         IntSettings             mIntSettings;
 
     public:
-                                CGMChart( CGM& rCGM );
+                                CGMChart();
                                 ~CGMChart();
 
         void                    DeleteTextEntry( TextEntry* );

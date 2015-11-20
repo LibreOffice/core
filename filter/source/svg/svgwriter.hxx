@@ -97,9 +97,6 @@ private:
     SvXMLElementExport*        mpElemFont;
     SvXMLElementExport*        mpElemPaint;
 
-    basegfx::B2DLineJoin       maLineJoin;
-    css::drawing::LineCap      maLineCap;
-
                              SVGAttributeWriter();
 
     static double            ImplRound( double fVal, sal_Int32 nDecs = 3 );

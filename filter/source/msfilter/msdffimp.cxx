@@ -152,11 +152,9 @@ static sal_uInt32 nMSOleObjCntr = 0;
 
 struct SvxMSDffBLIPInfo
 {
-    sal_uInt16 nBLIPType;   ///< type of BLIP: e.g. 6 for PNG
     sal_uLong  nFilePos;    ///< offset of the BLIP in data strem
-    sal_uLong  nBLIPSize;   ///< number of bytes that the BLIP needs in stream
-    SvxMSDffBLIPInfo(sal_uInt16 nBType, sal_uLong nFPos, sal_uLong nBSize):
-        nBLIPType( nBType ), nFilePos( nFPos ), nBLIPSize( nBSize ){}
+    SvxMSDffBLIPInfo(sal_uLong nFPos):
+        nFilePos( nFPos ) {}
 };
 
 /// the following will be sorted by the order of their appearance:
@@ -5886,7 +5884,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                     nBLIPCount++;
 
                 // now save the info for later access
-                m_pBLIPInfos->push_back(SvxMSDffBLIPInfo(nInst, nBLIPPos, nBLIPLen));
+                m_pBLIPInfos->push_back(SvxMSDffBLIPInfo(nBLIPPos));
             }
             rSt.SeekRel( nLength );
         }

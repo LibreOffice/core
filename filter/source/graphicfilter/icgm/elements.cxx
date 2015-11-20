@@ -23,8 +23,7 @@
 
 
 
-CGMElements::CGMElements( CGM& rCGM ) :
-    mpCGM ( &rCGM )
+CGMElements::CGMElements()
 {
     Init();
 };

@@ -60,14 +60,6 @@ using namespace ::com::sun::star::uno;
 
 // -----------------------------field-types------------------------------
 
-struct ChrSet
-{
-    struct ChrSet * pSucc;
-    sal_uInt8 nSet;
-    OUString aName;
-    FontWeight eWeight;
-};
-
 struct StackMember
 {
     struct      StackMember * pSucc;
@@ -146,7 +138,6 @@ private:
     vcl::Font           maFont;
     vcl::Font           maLastFont;
     sal_uInt8           nChrSet;
-    ChrSet*             pChrSetList;        // list of character sets
     sal_uInt8           nNextChrSetId;      // first unused ChrSet-Id
 
     PSLZWCTreeNode*     pTable;             // LZW compression data
@@ -283,7 +274,6 @@ PSWriter::PSWriter()
     , maFont()
     , maLastFont()
     , nChrSet(0)
-    , pChrSetList(nullptr)
     , nNextChrSetId(0)
     , pTable(nullptr)
     , pPrefix(nullptr)
@@ -407,7 +397,6 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     }
 
     // global default value setting
-    ChrSet*         pCS;
     StackMember*    pGS;
 
     if (rGraphic.GetType() == GRAPHIC_GDIMETAFILE)
@@ -447,7 +436,6 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     bRegionChanged = false;
 
     nChrSet = 0x00;
-    pChrSetList = nullptr;
     nNextChrSetId = 1;
 
     if( pMTF->GetActionSize() )
@@ -463,12 +451,6 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
             rTargetStream.WriteUInt32( nPSPosition );
             rTargetStream.WriteUInt32( nPosition - nPSPosition );
             rTargetStream.Seek( nPosition );
-        }
-        while( pChrSetList )
-        {
-            pCS=pChrSetList;
-            pChrSetList=pCS->pSucc;
-            delete pCS;
         }
         while( pGDIStack )
         {
