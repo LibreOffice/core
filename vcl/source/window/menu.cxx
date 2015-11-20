@@ -533,9 +533,7 @@ void Menu::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFra
     OUString aTooltip(CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
     Image aImage(CommandInfoProvider::Instance().GetImageForCommand(rCommand, /*bLarge=*/ false, rFrame));
 
-    // let's invent an ItemId
-    const sal_uInt16 COMMAND_ITEMID_START = 30000;
-    sal_uInt16 nItemId = COMMAND_ITEMID_START + GetItemCount();
+    sal_uInt16 nItemId = GetItemCount() + 1;
 
     InsertItem(nItemId, aLabel, aImage, nBits, rIdent, nPos);
     SetItemCommand(nItemId, rCommand);

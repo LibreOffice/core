@@ -601,10 +601,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
     OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
     Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), rFrame));
 
-    // let's invent an ItemId
-    const sal_uInt16 COMMAND_ITEMID_START = 30000;
-    sal_uInt16 nItemId = COMMAND_ITEMID_START + GetItemCount();
-
+    sal_uInt16 nItemId = GetItemCount() + 1;
     InsertItem(nItemId, aImage, aLabel, nBits, nPos);
     SetItemCommand(nItemId, rCommand);
     SetQuickHelpText(nItemId, aTooltip);
