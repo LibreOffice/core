@@ -10,6 +10,7 @@
 #include "sdmodeltestbase.hxx"
 #include "Outliner.hxx"
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
@@ -61,6 +62,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -139,6 +141,7 @@ public:
     void testBnc822341();
 #endif
     void testTdf80224();
+    void testTdf92527();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testFdo90607);
@@ -181,6 +184,7 @@ public:
     CPPUNIT_TEST(testTdf80224);
 
     CPPUNIT_TEST(testExportTransitionsPPTX);
+    CPPUNIT_TEST(testTdf92527);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1280,6 +1284,54 @@ void SdExportTest::testExportTransitionsPPTX()
 
     // NEWSFLASH
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 74, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
+}
+
+void SdExportTest::testTdf92527()
+{
+    // We draw a diamond in an empty document. A newly created diamond shape does not have
+    // CustomShapeGeometry - Path - Segments property, and previously DrawingML exporter
+    // did not export custom shapes which did not have CustomShapeGeometry - Path - Segments property.
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/empty.fodp"), FODG );
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape1(xFactory->createInstance("com.sun.star.drawing.CustomShape"), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc1(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage1(xDoc1->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    xPage1->add(xShape1);
+    xShape1->setSize(awt::Size(10000, 10000));
+    xShape1->setPosition(awt::Point(1000, 1000));
+    uno::Sequence<beans::PropertyValue> aShapeGeometry(comphelper::InitPropertySequence(
+        {
+            {"Type", uno::makeAny(OUString("diamond"))},
+        }));
+    uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
+    xPropertySet1->setPropertyValue("CustomShapeGeometry", uno::makeAny(aShapeGeometry));
+
+    xDocShRef = saveAndReload(xDocShRef, PPTX);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc2(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage2(xDoc2->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape2(xPage2->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropertySet2( xShape2, uno::UNO_QUERY_THROW );
+    uno::Sequence<beans::PropertyValue> aProps;
+    xPropertySet2->getPropertyValue("CustomShapeGeometry") >>= aProps;
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "Path")
+            aPathProps = rProp.Value.get< uno::Sequence<beans::PropertyValue> >();
+    }
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+    for (int i = 0; i < aPathProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aPathProps[i];
+        if (rProp.Name == "Coordinates")
+            aCoordinates = rProp.Value.get< uno::Sequence<drawing::EnhancedCustomShapeParameterPair> >();
+    }
+
+    // 5 coordinate pairs, 1 MoveTo, 4 LineTo
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aCoordinates.getLength());
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
