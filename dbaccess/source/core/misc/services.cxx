@@ -58,7 +58,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
     static bool bInit = false;
     if (!bInit)
     {
-        createRegistryInfo_ODatabaseDocument();
         createRegistryInfo_DataAccessDescriptorFactory();
         bInit = true;
     }
