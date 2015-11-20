@@ -3975,7 +3975,12 @@ StackVar ScInterpreter::Interpret()
                 case ocGrowth           : ScGrowth();                   break;
                 case ocLinest           : ScLinest();                   break;
                 case ocLogest           : ScLogest();                   break;
+                case ocForecast_LIN     :
                 case ocForecast         : ScForecast();                 break;
+                case ocForecast_ETS     : ScForecast_Ets();             break;
+                case ocForecast_ETS_CI  : ScForecast_Ets_CI();          break;
+                case ocForecast_ETS_SE  : ScForecast_Ets_SE();          break;
+                case ocForecast_ETS_ST  : ScForecast_Ets_ST();          break;
                 case ocGammaLn          :
                 case ocGammaLn_MS       : ScLogGamma();                 break;
                 case ocGamma            : ScGamma();                    break;
