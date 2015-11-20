@@ -302,6 +302,56 @@ ToolBoxItemBits GenericPopupToolbarController::getDropDownStyle() const
     return m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY;
 }
 
+class SaveToolbarController : public PopupMenuToolbarController
+{
+public:
+    SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException ) override;
+    virtual sal_Bool SAL_CALL supportsService( OUString const & rServiceName ) throw ( css::uno::RuntimeException ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException ) override;
+};
+
+SaveToolbarController::SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+    : PopupMenuToolbarController( rxContext, ".uno:SaveAsMenu" )
+{
+}
+
+void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+    {
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~( rEvent.IsEnabled ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN ) );
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) |  ( rEvent.IsEnabled ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
+    }
+}
+
+OUString SaveToolbarController::getImplementationName()
+    throw ( css::uno::RuntimeException )
+{
+    return OUString("com.sun.star.comp.framework.SaveToolbarController");
+}
+
+sal_Bool SaveToolbarController::supportsService( OUString const & rServiceName )
+    throw ( css::uno::RuntimeException )
+{
+    return cppu::supportsService( this, rServiceName );
+}
+
+css::uno::Sequence< OUString > SaveToolbarController::getSupportedServiceNames()
+    throw ( css::uno::RuntimeException )
+{
+    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
+    return aRet;
+}
+
 class NewToolbarController : public PopupMenuToolbarController
 {
 public:
@@ -551,6 +601,14 @@ com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation(
     css::uno::Sequence<css::uno::Any> const &args)
 {
     return cppu::acquire(new GenericPopupToolbarController(context, args));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_SaveToolbarController_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SaveToolbarController(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
