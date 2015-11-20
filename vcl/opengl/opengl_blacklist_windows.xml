@@ -6,14 +6,166 @@
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
+
+<!--
+    entry attributes:
+    os - "all", "xp", "server2003", "vista", "7", "8", "8_1", "10"
+    vendor - "all", "intel", "ati", "amd", "nvidia", "microsoft"
+    compare - "less", "less_equal", "greater", "greater_equal", "equal", "not_equal", "between_exclusive", "between_inclusive", "between_inclusive_start"
+    version
+    minVersion
+    maxVersion
+-->
+
 <root>
     <whitelist>
-        <entry os="7" vendor="intel" compare="equal" version="10.18.10.3412">
-            <device id="all"/>
-            <msg>Moggi's Windows OpenGL driver</msg>
-        </entry>
     </whitelist>
     <blacklist>
+        <entry os="all" vendor="intel" compare="greater" version="15.40.4.64.4256"> <!-- 15.40.4.64.4256 -->
+            <device id="all"/>
+        </entry>
+        <entry os="all" vendor="ati" compare="less" version="15.200.1062.1004"> <!-- 150.200 -->
+            <device id="all"/>
+        </entry>
+        <entry os="all" vendor="amd" compare="less" version="15.200.1062.1004"> <!-- 150.200 -->
+            <device id="all"/>
+        </entry>
+        <entry os="all" vendor="nvidia" compare="less" version="10.18.13.5362"> <!-- 353.62 -->
+            <device id="all"/>
+        </entry>
+        <entry os="all" vendor="microsoft" compare="less" version="6.2.0.0"> <!-- 6.2.0.0 -->
+            <device id="all"/>
+        </entry>
 
+        <entry os="xp" vendor="all">
+            <device id="all"/>
+        </entry>
+        <entry os="server2003" vendor="all">
+            <device id="all"/>
+        </entry>
+        <entry os="vista" vendor="all">
+            <device id="all"/>
+        </entry>
+
+        <entry os="all" vendor="intel">
+            <!-- IntelGMA500 -->
+            <device id="0x8108"/>
+            <device id="0x8109"/>
+
+            <!-- IntelGMA900 -->
+            <device id="0x2582"/> <!-- IntelGMA900_1 -->
+            <device id="0x2782"/> <!-- IntelGMA900_2 -->
+            <device id="0x2592"/> <!-- IntelGMA900_3 -->
+            <device id="0x2792"/> <!-- IntelGMA900_4 -->
+
+            <!-- IntelGMA950 -->
+            <device id="0x2772"/> <!-- Intel945G_1 -->
+            <device id="0x2776"/> <!-- Intel945G_2 -->
+            <device id="0x27a2"/> <!-- Intel945_1 -->
+            <device id="0x27a6"/> <!-- Intel945_2 -->
+            <device id="0x27ae"/> <!-- Intel945_3 -->
+
+            <!-- IntelGMA3150 -->
+            <device id="0xa001"/> <!-- IntelGMA3150_Nettop_1 -->
+            <device id="0xa002"/> <!-- IntelGMA3150_Nettop_2 -->
+            <device id="0xa011"/> <!-- IntelGMA3150_Netbook_1 -->
+            <device id="0xa012"/> <!-- IntelGMA3150_Netbook_2 -->
+
+            <!-- IntelGMAX3000 -->
+            <device id="0x2972"/> <!-- Intel946GZ_1 -->
+            <device id="0x2973"/> <!-- Intel946GZ_2 -->
+            <device id="0x2982"/> <!-- IntelG35_1 -->
+            <device id="0x2983"/> <!-- IntelG35_2 -->
+            <device id="0x2992"/> <!-- IntelQ965_1 -->
+            <device id="0x2993"/> <!-- IntelQ965_2 -->
+            <device id="0x29a2"/> <!-- IntelG965_1 -->
+            <device id="0x29a3"/> <!-- IntelG965_2 -->
+            <device id="0x29b2"/> <!-- IntelQ35_1 -->
+            <device id="0x29b3"/> <!-- IntelQ35_2 -->
+            <device id="0x29c2"/> <!-- IntelG33_1 -->
+            <device id="0x29c3"/> <!-- IntelG33_2 -->
+            <device id="0x29d2"/> <!-- IntelQ33_1 -->
+            <device id="0x29d3"/> <!-- IntelQ33_2 -->
+            <device id="0x2a02"/> <!-- IntelGL960_1 -->
+            <device id="0x2a03"/> <!-- IntelGL960_2 -->
+            <device id="0x2a12"/> <!-- IntelGM965_1 -->
+            <device id="0x2a13"/> <!-- IntelGM965_2 -->
+
+            <!-- IntelGMAX4500HD -->
+            <device id="0x2a42"/> <!-- IntelGMA4500MHD_1 -->
+            <device id="0x2a43"/> <!-- IntelGMA4500MHD_2 -->
+            <device id="0x2e42"/> <!-- IntelB43_1 -->
+            <device id="0x2e43"/> <!-- IntelB43_2 -->
+            <device id="0x2e92"/> <!-- IntelB43_3 -->
+            <device id="0x2e93"/> <!-- IntelB43_4 -->
+            <device id="0x2e32"/> <!-- IntelG41_1 -->
+            <device id="0x2e33"/> <!-- IntelG41_2 -->
+            <device id="0x2e22"/> <!-- IntelG45_1 -->
+            <device id="0x2e23"/> <!-- IntelG45_2 -->
+            <device id="0x2e12"/> <!-- IntelQ45_1 -->
+            <device id="0x2e13"/> <!-- IntelQ45_2 -->
+            <device id="0x0042"/> <!-- IntelHDGraphics -->
+            <device id="0x0046"/> <!-- IntelMobileHDGraphics -->
+            <device id="0x0102"/> <!-- IntelSandyBridge_1 -->
+            <device id="0x0106"/> <!-- IntelSandyBridge_2 -->
+            <device id="0x0112"/> <!-- IntelSandyBridge_3 -->
+            <device id="0x0116"/> <!-- IntelSandyBridge_4 -->
+            <device id="0x0122"/> <!-- IntelSandyBridge_5 -->
+            <device id="0x0126"/> <!-- IntelSandyBridge_6 -->
+            <device id="0x010a"/> <!-- IntelSandyBridge_7 -->
+            <device id="0x0080"/> <!-- IntelIvyBridge -->
+
+            <!-- IntelHD3000 -->
+            <device id="0x0126"/>
+
+            <!-- IntelMobileHDGraphics -->
+            <device id="0x0046"/>
+        </entry>
+
+        <entry os="all" vendor="ati">
+            <!-- RadeonX1000 -->
+            <device id="0x7187"/>
+            <device id="0x7210"/>
+            <device id="0x71de"/>
+            <device id="0x7146"/>
+            <device id="0x7142"/>
+            <device id="0x7109"/>
+            <device id="0x71c5"/>
+            <device id="0x71c0"/>
+            <device id="0x7240"/>
+            <device id="0x7249"/>
+            <device id="0x7291"/>
+        </entry>
+
+        <entry os="all" vendor="nvidia">
+            <!-- Geforce7300GT -->
+            <device id="0x0393"/>
+
+            <!-- Nvidia310M -->
+            <device id="0x0A70"/>
+
+            <!-- NvidiaBlockD3D9Layers -->
+            // Glitches whilst scrolling (see bugs 612007, 644787, 645872)
+            <device id="0x00f3"/> <!-- NV43 [GeForce 6200 (TM)] -->
+            <device id="0x0146"/> <!-- NV43 [Geforce Go 6600TE/6200TE (TM)] -->
+            <device id="0x014f"/> <!-- NV43 [GeForce 6200 (TM)] -->
+            <device id="0x0161"/> <!-- NV44 [GeForce 6200 TurboCache (TM)] -->
+            <device id="0x0162"/> <!-- NV44 [GeForce 6200SE TurboCache (TM)] -->
+            <device id="0x0163"/> <!-- NV44 [GeForce 6200 LE (TM)] -->
+            <device id="0x0164"/> <!-- NV44 [GeForce Go 6200 (TM)] -->
+            <device id="0x0167"/> <!-- NV43 [GeForce Go 6200/6400 (TM)] -->
+            <device id="0x0168"/> <!-- NV43 [GeForce Go 6200/6400 (TM)] -->
+            <device id="0x0169"/> <!-- NV44 [GeForce 6250 (TM)] -->
+            <device id="0x0222"/> <!-- NV44 [GeForce 6200 A-LE (TM)] -->
+            <device id="0x0240"/> <!-- C51PV [GeForce 6150 (TM)] -->
+            <device id="0x0241"/> <!-- C51 [GeForce 6150 LE (TM)] -->
+            <device id="0x0244"/> <!-- C51 [Geforce Go 6150 (TM)] -->
+            <device id="0x0245"/> <!-- C51 [Quadro NVS 210S/GeForce 6150LE (TM)] -->
+            <device id="0x0247"/> <!-- C51 [GeForce Go 6100 (TM)] -->
+            <device id="0x03d0"/> <!-- C61 [GeForce 6150SE nForce 430 (TM)] -->
+            <device id="0x03d1"/> <!-- C61 [GeForce 6100 nForce 405 (TM)] -->
+            <device id="0x03d2"/> <!-- C61 [GeForce 6100 nForce 400 (TM)] -->
+            <device id="0x03d5"/> <!-- C61 [GeForce 6100 nForce 420 (TM)] -->
+        </entry>
     </blacklist>
 </root>
