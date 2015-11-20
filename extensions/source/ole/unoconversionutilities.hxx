@@ -2071,7 +2071,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
                 else
                 {
                     // type after conversion must be the element type of the sequence
-                    OSL_ENSURE( (any.getValueTypeClass() == typeElement), "wrong conversion");
+                    OSL_ENSURE(any.getValueTypeClass() == css::uno::TypeClass(typeElement), "wrong conversion");
                     uno_type_assignData( pDest, pSeqElemDescRef,const_cast<void*>( any.getValue()), any.getValueTypeRef(),
                                          cpp_queryInterface, cpp_acquire, cpp_release);
                 }
