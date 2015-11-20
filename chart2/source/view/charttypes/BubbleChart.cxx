@@ -109,8 +109,8 @@ void BubbleChart::calculateBubbleSizeScalingFactor()
     drawing::Position3D aSceneMinPos( m_pMainPosHelper->transformLogicToScene( m_pMainPosHelper->getLogicMinX(),m_pMainPosHelper->getLogicMinY(),fLogicZ, false ) );
     drawing::Position3D aSceneMaxPos( m_pMainPosHelper->transformLogicToScene( m_pMainPosHelper->getLogicMaxX(),m_pMainPosHelper->getLogicMaxY(),fLogicZ, false ) );
 
-    awt::Point aScreenMinPos( LabelPositionHelper(m_pMainPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory).transformSceneToScreenPosition( aSceneMinPos ) );
-    awt::Point aScreenMaxPos( LabelPositionHelper(m_pMainPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory).transformSceneToScreenPosition( aSceneMaxPos ) );
+    awt::Point aScreenMinPos( LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory).transformSceneToScreenPosition( aSceneMinPos ) );
+    awt::Point aScreenMaxPos( LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory).transformSceneToScreenPosition( aSceneMaxPos ) );
 
     sal_Int32 nWidth = abs( aScreenMaxPos.X - aScreenMinPos.X );
     sal_Int32 nHeight = abs( aScreenMaxPos.Y - aScreenMinPos.Y );
@@ -380,7 +380,7 @@ void BubbleChart::createShapes()
                                 break;
                             }
 
-                            awt::Point aScreenPosition2D( LabelPositionHelper(pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
+                            awt::Point aScreenPosition2D( LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
                                 .transformSceneToScreenPosition( aScenePosition3D ) );
                             sal_Int32 nOffset = 0;
                             if(LABEL_ALIGN_CENTER!=eAlignment)

@@ -59,9 +59,6 @@ struct LightSource
     glm::vec4   lightColor;
     glm::vec4   positionWorldspace;
     float  lightPower;
-    float  pad1;
-    float  pad2;
-    float  pad3;
 };
 
 struct GlobalLights

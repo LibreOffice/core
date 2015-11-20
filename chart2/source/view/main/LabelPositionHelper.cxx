@@ -33,12 +33,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 LabelPositionHelper::LabelPositionHelper(
-                    PlottingPositionHelper* pPosHelper
-                    , sal_Int32 nDimensionCount
+                      sal_Int32 nDimensionCount
                     , const uno::Reference< drawing::XShapes >& xLogicTarget
                     , AbstractShapeFactory* pShapeFactory )
-                    : m_pPosHelper(pPosHelper)
-                    , m_nDimensionCount(nDimensionCount)
+                    : m_nDimensionCount(nDimensionCount)
                     , m_xLogicTarget(xLogicTarget)
                     , m_pShapeFactory(pShapeFactory)
 {

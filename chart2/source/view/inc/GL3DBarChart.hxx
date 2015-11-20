@@ -151,11 +151,8 @@ private:
     {
         glm::vec3 maPos;
         float mnVal;
-        sal_Int32 mnIndex;
-        sal_Int32 mnSeriesIndex;
 
-        BarInformation(const glm::vec3& rPos, float nVal,
-                sal_Int32 nIndex, sal_Int32 nSeriesIndex);
+        BarInformation(const glm::vec3& rPos, float nVal);
     };
 
     std::map<sal_uInt32, const BarInformation> maBarMap;

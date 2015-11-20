@@ -35,7 +35,7 @@ PolarLabelPositionHelper::PolarLabelPositionHelper(
                     , sal_Int32 nDimensionCount
                     , const uno::Reference< drawing::XShapes >& xLogicTarget
                     , AbstractShapeFactory* pShapeFactory )
-                    : LabelPositionHelper( pPosHelper, nDimensionCount, xLogicTarget, pShapeFactory )
+                    : LabelPositionHelper( nDimensionCount, xLogicTarget, pShapeFactory )
                     , m_pPosHelper(pPosHelper)
 {
 }

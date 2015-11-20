@@ -263,7 +263,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
 
     drawing::Position3D aScenePosition3D( pPosHelper->
             transformScaledLogicToScene( fX, fY, fZ, true ) );
-    return LabelPositionHelper(pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
+    return LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
         .transformSceneToScreenPosition( aScenePosition3D );
 }
 

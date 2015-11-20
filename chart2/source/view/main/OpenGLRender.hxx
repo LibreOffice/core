@@ -187,8 +187,6 @@ private:
     float m_BackgroundColor[16];
 
     std::list <PointList> m_PieSegment2DShapePointList;
-    PointList m_Symbol2DPointList;
-    std::list<PointList> m_Symbol2DShapePointList;
 
     GLuint m_SymbolProID;
     GLuint m_SymbolVertexID;

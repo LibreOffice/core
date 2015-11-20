@@ -38,8 +38,7 @@ class LabelPositionHelper
 {
 public:
     LabelPositionHelper(
-        PlottingPositionHelper* pPosHelper
-        , sal_Int32 nDimensionCount
+          sal_Int32 nDimensionCount
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
         , AbstractShapeFactory* pShapeFactory );
     virtual ~LabelPositionHelper();
@@ -59,7 +58,6 @@ private:
     LabelPositionHelper();
 
 protected:
-    PlottingPositionHelper*  m_pPosHelper;
     sal_Int32                m_nDimensionCount;
 
 private:

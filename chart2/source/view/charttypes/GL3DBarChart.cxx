@@ -575,12 +575,9 @@ GL3DBarChart::GL3DBarChart(
     mpWindow->getContext().resetCurrent();
 }
 
-GL3DBarChart::BarInformation::BarInformation(const glm::vec3& rPos, float nVal,
-        sal_Int32 nIndex, sal_Int32 nSeriesIndex):
+GL3DBarChart::BarInformation::BarInformation(const glm::vec3& rPos, float nVal):
     maPos(rPos),
-    mnVal(nVal),
-    mnIndex(nIndex),
-    mnSeriesIndex(nSeriesIndex)
+    mnVal(nVal)
 {
 }
 
@@ -711,7 +708,7 @@ void GL3DBarChart::create3DShapes(const std::vector<std::unique_ptr<VDataSeries>
 
             maBarMap.insert(std::pair<sal_uInt32, BarInformation>(nId,
                         BarInformation(glm::vec3(nXPos, nYPos, float(nVal/nMaxVal)),
-                            nVal, nIndex, nSeriesIndex)));
+                            nVal)));
             recordBarHistory(nId, nVal);
             if (mbBenchMarkMode)
             {
