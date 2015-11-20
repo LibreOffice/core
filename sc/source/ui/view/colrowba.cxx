@@ -28,6 +28,7 @@
 #include "appoptio.hxx"
 #include "globstr.hrc"
 #include "markdata.hxx"
+#include "tabview.hxx"
 #include <columnspanset.hxx>
 
 // STATIC DATA -----------------------------------------------------------
@@ -53,9 +54,9 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
 }
 
 ScColBar::ScColBar( vcl::Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
-                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
-            ScHeaderControl( pParent, pEng, MAXCOL+1, false ),
-            pViewData( pData ),
+                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+                    ScTabView* pTab ) :
+            ScHeaderControl( pParent, pEng, MAXCOL+1, false, pTab, pData ),
             eWhich( eWhichPos ),
             pFuncSet( pFunc )
 {
@@ -183,7 +184,7 @@ void ScColBar::SelectWindow()
 bool ScColBar::IsDisabled() const
 {
     ScModule* pScMod = SC_MOD();
-    return pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    return pScMod->IsModalMode();
 }
 
 bool ScColBar::ResizeAllowed() const
@@ -212,9 +213,9 @@ bool ScColBar::IsLayoutRTL() const        // override only for columns
 }
 
 ScRowBar::ScRowBar( vcl::Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
-                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
-            ScHeaderControl( pParent, pEng, MAXROW+1, true ),
-            pViewData( pData ),
+                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+                    ScTabView* pTab ) :
+            ScHeaderControl( pParent, pEng, MAXROW+1, true, pTab, pData ),
             eWhich( eWhichPos ),
             pFuncSet( pFunc )
 {
@@ -337,7 +338,7 @@ void ScRowBar::SelectWindow()
 bool ScRowBar::IsDisabled() const
 {
     ScModule* pScMod = SC_MOD();
-    return pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    return pScMod->IsModalMode();
 }
 
 bool ScRowBar::ResizeAllowed() const
