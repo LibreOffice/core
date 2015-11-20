@@ -6906,7 +6906,7 @@ SfxVoidItem NextPage SID_GO_TO_NEXT_PAGE
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
+    AccelConfig = FALSE,
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -6930,7 +6930,7 @@ SfxVoidItem PreviousPage SID_GO_TO_PREVIOUS_PAGE
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
+    AccelConfig = FALSE,
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -6954,7 +6954,7 @@ SfxVoidItem FirstPage SID_GO_TO_FIRST_PAGE
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
+    AccelConfig = FALSE,
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -6978,7 +6978,7 @@ SfxVoidItem LastPage SID_GO_TO_LAST_PAGE
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
+    AccelConfig = FALSE,
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
