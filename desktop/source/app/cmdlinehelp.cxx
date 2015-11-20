@@ -128,7 +128,7 @@ namespace desktop
         "--cat files\n"\
         "      Dump text content of the files to console\n"\
         "      Eg. --cat *.odt\n"\
-        "--pidfile file\n"\
+        "--pidfile=file\n"\
         "      Store soffice.bin pid to file.\n"\
         "-env:<VAR>[=<VALUE>]\n"\
         "      Set a bootstrap variable.\n"\
