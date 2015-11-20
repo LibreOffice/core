@@ -22,9 +22,12 @@
 #include <sfx2/linksrc.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <unordered_set>
 
 class Graphic;
 namespace sfx2 { class FileDialogHelper; }
+
+typedef std::unordered_set< OUString, OUStringHash, ::std::equal_to< OUString > > FnHashSet;
 
 class SvFileObject : public sfx2::SvLinkSource
 {
@@ -36,6 +39,7 @@ class SvFileObject : public sfx2::SvLinkSource
     ImplSVEvent*                nPostUserEventId;
     tools::SvRef<SfxMedium>     mxDelMed;
     VclPtr<vcl::Window>         pOldParent;
+    static FnHashSet            m_aAsyncLoadsInProgress;
 
     sal_uInt8 nType;
 
@@ -49,6 +53,7 @@ class SvFileObject : public sfx2::SvLinkSource
     bool bClearMedium : 1;
     bool bStateChangeCalled : 1;
     bool bInCallDownload : 1;
+    bool bAsyncLoadsInProgress : 1;
 
     bool GetGraphic_Impl( Graphic&, SvStream* pStream = nullptr );
     bool LoadFile_Impl();
