@@ -1556,7 +1556,7 @@ void IUnknownWrapper_Impl::getMethodInfo(const OUString& sName, TypeDescription&
     if( desc.is())
     {
         typelib_TypeDescription* pMember= desc.get();
-        if( pMember->eTypeClass == TypeClass_INTERFACE_METHOD )
+        if( pMember->eTypeClass == typelib_TypeClass_INTERFACE_METHOD )
             methodInfo= pMember;
     }
 }
@@ -1567,7 +1567,7 @@ void IUnknownWrapper_Impl::getAttributeInfo(const OUString& sName, TypeDescripti
     if( desc.is())
     {
         typelib_TypeDescription* pMember= desc.get();
-        if( pMember->eTypeClass == TypeClass_INTERFACE_ATTRIBUTE )
+        if( pMember->eTypeClass == typelib_TypeClass_INTERFACE_ATTRIBUTE )
         {
             attributeInfo= ((typelib_InterfaceAttributeTypeDescription*)pMember)->pAttributeTypeRef;
         }
