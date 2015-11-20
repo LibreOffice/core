@@ -11,6 +11,7 @@ $(eval $(call gb_Package_Package,slideshow_opengl_shader,$(SRCDIR)/slideshow/ope
 
 $(eval $(call gb_Package_add_files,slideshow_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
 		basicVertexShader.glsl \
+		basicFragmentShader.glsl \
 		dissolveFragmentShader.glsl \
 		staticFragmentShader.glsl \
 		vortexFragmentShader.glsl \

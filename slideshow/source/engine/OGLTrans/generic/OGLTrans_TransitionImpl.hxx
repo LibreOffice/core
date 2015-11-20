@@ -168,8 +168,6 @@ protected:
         , maSettings(rSettings)
     {}
 
-    OGLTransitionImpl() {}
-
     TransitionScene const& getScene() const
     {
         return maScene;
