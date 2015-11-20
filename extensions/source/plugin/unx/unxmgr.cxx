@@ -207,9 +207,9 @@ static void CheckPluginRegistryFiles( const OString& rPath, list< PluginDescript
     struct dirent* pDirEnt = nullptr;
     struct stat aStat;
     struct dirent u;
-    while( pDIR && ! readdir_r( pDIR, &u.asDirent, &pDirEnt ) && pDirEnt )
+    while( pDIR && ! readdir_r( pDIR, &u, &pDirEnt ) && pDirEnt )
     {
-        char* pBaseName = u.asDirent.d_name;
+        char* pBaseName = u.d_name;
         if( rtl_str_compare( ".", pBaseName ) && rtl_str_compare( "..", pBaseName ) )
         {
             OStringBuffer aBuf( 1024 );
@@ -269,9 +269,9 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
             {
                 DIR* pDIR = opendir(aPath.getStr());
                 struct dirent* pDirEnt = nullptr;
-                while( pDIR && ! readdir_r( pDIR, &u.asDirent, &pDirEnt ) && pDirEnt )
+                while( pDIR && ! readdir_r( pDIR, &u, &pDirEnt ) && pDirEnt )
                 {
-                    char* pBaseName = u.asDirent.d_name;
+                    char* pBaseName = u.d_name;
                     if( pBaseName[0] != '.' ||
                         pBaseName[1] != '.' ||
                         pBaseName[2] != 0 )
