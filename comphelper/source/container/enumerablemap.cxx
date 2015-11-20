@@ -205,9 +205,6 @@ namespace comphelper
     private:
         ::osl::Mutex        m_aMutex;
         MapData             m_aData;
-
-        ::std::vector< css::uno::WeakReference< XInterface > >
-                            m_aDependentComponents;
     };
 
 
