@@ -1162,7 +1162,6 @@ namespace cppcanvas
 
         struct EMFPFont : public EMFPObject
         {
-            sal_uInt32 version;
             float emSize;
             sal_uInt32 sizeUnit;
             sal_Int32 fontFlags;
