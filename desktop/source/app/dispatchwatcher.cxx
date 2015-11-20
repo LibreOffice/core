@@ -82,7 +82,6 @@ struct DispatchHolder
         aURL( rURL ), xDispatch( rDispatch ) {}
 
     URL aURL;
-    OUString cwdUrl;
     Reference< XDispatch > xDispatch;
 };
 

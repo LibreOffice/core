@@ -181,21 +181,15 @@ struct UpdateDialog::Index
 {
     Kind          m_eKind;
     bool          m_bIgnored;
-    sal_uInt16        m_nID;
-    sal_uInt16        m_nIndex;
-    OUString m_aName;
+    sal_uInt16    m_nIndex;
+    OUString      m_aName;
 
-    Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, const OUString &rName );
+    Index( Kind theKind, sal_uInt16 nIndex, const OUString &rName ) :
+        m_eKind( theKind ),
+        m_bIgnored( false ),
+        m_nIndex( nIndex ),
+        m_aName( rName ) {}
 };
-
-
-UpdateDialog::Index::Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, const OUString &rName ):
-    m_eKind( theKind ),
-    m_bIgnored( false ),
-    m_nID( nID ),
-    m_nIndex( nIndex ),
-    m_aName( rName )
-{}
 
 
 
@@ -738,7 +732,7 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
                                      dp_gui::UpdateData & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_enabledUpdates.size() );
-    UpdateDialog::Index *pEntry = new UpdateDialog::Index( ENABLED_UPDATE, m_nLastID, nIndex, name );
+    UpdateDialog::Index *pEntry = new UpdateDialog::Index( ENABLED_UPDATE, nIndex, name );
 
     data.m_nID = m_nLastID;
     m_nLastID += 1;
@@ -764,7 +758,7 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
 void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_disabledUpdates.size() );
-    UpdateDialog::Index *pEntry = new UpdateDialog::Index( DISABLED_UPDATE, m_nLastID, nIndex, data.name );
+    UpdateDialog::Index *pEntry = new UpdateDialog::Index( DISABLED_UPDATE, nIndex, data.name );
 
     data.m_nID = m_nLastID;
     m_nLastID += 1;
@@ -780,7 +774,7 @@ void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
 void UpdateDialog::addSpecificError( UpdateDialog::SpecificError & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_specificErrors.size() );
-    UpdateDialog::Index *pEntry = new UpdateDialog::Index( SPECIFIC_ERROR, m_nLastID, nIndex, data.name );
+    UpdateDialog::Index *pEntry = new UpdateDialog::Index( SPECIFIC_ERROR, nIndex, data.name );
 
     data.m_nID = m_nLastID;
     m_nLastID += 1;

@@ -202,14 +202,6 @@ private:
     struct StrSyncRepository : public ::dp_misc::StaticResourceString<
         StrSyncRepository, RID_STR_SYNCHRONIZING_REPOSITORY> {};
 
-    struct ExtensionInfos
-    {
-        OUString identifier;
-        OUString fileName;
-        OUString displayName;
-        OUString version;
-    };
-
     css::uno::Reference< css::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPackageManagerFactory;
 

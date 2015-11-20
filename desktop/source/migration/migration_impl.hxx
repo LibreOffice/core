@@ -137,20 +137,6 @@ struct MigrationItem
 typedef std::unordered_map< OUString, std::vector< MigrationItem >,
                             OUStringHash, std::equal_to< OUString > > MigrationHashMap;
 
-struct MigrationItemInfo
-{
-    OUString m_sResourceURL;
-    MigrationItem m_aMigrationItem;
-
-    MigrationItemInfo(){}
-
-    MigrationItemInfo(const OUString& sResourceURL, const MigrationItem& aMigrationItem)
-    : m_sResourceURL(sResourceURL), m_aMigrationItem(aMigrationItem)
-    {
-    }
-};
-
-
 /**
     information for the UI elements to be migrated for one module
 */
