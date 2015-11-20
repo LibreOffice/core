@@ -166,83 +166,83 @@ SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
                                              SmCaretPos position,
                                              Point offset,
                                              bool caretVisible )
- : rDev( rDevice )
+    : mrDev( rDevice )
+    , maPos( position )
+    , maOffset( offset )
+    , mbCaretVisible( caretVisible )
 {
-    pos = position;
-    Offset = offset;
-    isCaretVisible = caretVisible;
     SAL_WARN_IF( !position.IsValid(), "starmath", "Cannot draw invalid position!" );
     if( !position.IsValid( ) )
         return;
 
     //Save device state
-    rDev.Push( PushFlags::FONT | PushFlags::MAPMODE | PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR );
+    mrDev.Push( PushFlags::FONT | PushFlags::MAPMODE | PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR );
 
-    pos.pSelectedNode->Accept( this );
+    maPos.pSelectedNode->Accept( this );
     //Restore device state
-    rDev.Pop( );
+    mrDev.Pop( );
 }
 
 void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
 {
-    long i = pos.Index;
+    long i = maPos.Index;
 
-    rDev.SetFont( pNode->GetFont( ) );
+    mrDev.SetFont( pNode->GetFont( ) );
 
     //Find the line
     SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
 
     //Find coordinates
-    long left = pNode->GetLeft( ) + rDev.GetTextWidth( pNode->GetText( ), 0, i ) + Offset.X( );
-    long top = pLine->GetTop( ) + Offset.Y( );
+    long left = pNode->GetLeft( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, i ) + maOffset.X( );
+    long top = pLine->GetTop( ) + maOffset.Y( );
     long height = pLine->GetHeight( );
-    long left_line = pLine->GetLeft( ) + Offset.X( );
-    long right_line = pLine->GetRight( ) + Offset.X( );
+    long left_line = pLine->GetLeft( ) + maOffset.X( );
+    long right_line = pLine->GetRight( ) + maOffset.X( );
 
     //Set color
-    rDev.SetLineColor( Color( COL_BLACK ) );
+    mrDev.SetLineColor( Color( COL_BLACK ) );
 
-    if ( isCaretVisible ) {
+    if ( mbCaretVisible ) {
         //Draw vertical line
         Point p1( left, top );
         Point p2( left, top + height );
-        rDev.DrawLine( p1, p2 );
+        mrDev.DrawLine( p1, p2 );
     }
 
     //Underline the line
     Point pLeft( left_line, top + height );
     Point pRight( right_line, top + height );
-    rDev.DrawLine( pLeft, pRight );
+    mrDev.DrawLine( pLeft, pRight );
 }
 
 void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
 {
-    rDev.SetLineColor( Color( COL_BLACK ) );
+    mrDev.SetLineColor( Color( COL_BLACK ) );
 
     //Find the line
     SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
 
     //Find coordinates
-    long left = pNode->GetLeft( ) + Offset.X( ) + ( pos.Index == 1 ? pNode->GetWidth( ) : 0 );
-    long top = pLine->GetTop( ) + Offset.Y( );
+    long left = pNode->GetLeft( ) + maOffset.X( ) + ( maPos.Index == 1 ? pNode->GetWidth( ) : 0 );
+    long top = pLine->GetTop( ) + maOffset.Y( );
     long height = pLine->GetHeight( );
-    long left_line = pLine->GetLeft( ) + Offset.X( );
-    long right_line = pLine->GetRight( ) + Offset.X( );
+    long left_line = pLine->GetLeft( ) + maOffset.X( );
+    long right_line = pLine->GetRight( ) + maOffset.X( );
 
     //Set color
-    rDev.SetLineColor( Color( COL_BLACK ) );
+    mrDev.SetLineColor( Color( COL_BLACK ) );
 
-    if ( isCaretVisible ) {
+    if ( mbCaretVisible ) {
         //Draw vertical line
         Point p1( left, top );
         Point p2( left, top + height );
-        rDev.DrawLine( p1, p2 );
+        mrDev.DrawLine( p1, p2 );
     }
 
     //Underline the line
     Point pLeft( left_line, top + height );
     Point pRight( right_line, top + height );
-    rDev.DrawLine( pLeft, pRight );
+    mrDev.DrawLine( pLeft, pRight );
 }
 
 // SmCaretPos2LineVisitor
