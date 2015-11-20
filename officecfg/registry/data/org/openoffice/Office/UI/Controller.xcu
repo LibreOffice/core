@@ -942,10 +942,7 @@
           <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
-        </prop>
-        <prop oor:name="Value">
-          <value>.uno:SaveAsMenu</value>
+          <value>com.sun.star.comp.framework.SaveToolbarController</value>
         </prop>
       </node>
       <node oor:name="org.apache.openoffice.comp.framework.NewToolbarController" oor:op="replace">

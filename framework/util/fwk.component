@@ -192,6 +192,10 @@
       constructor="com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.framework.SaveToolbarController"
+      constructor="com_sun_star_comp_framework_SaveToolbarController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="org.apache.openoffice.comp.framework.NewToolbarController"
       constructor="org_apache_openoffice_comp_framework_NewToolbarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
