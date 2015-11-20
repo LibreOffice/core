@@ -19,10 +19,10 @@
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:Text"/>
- <toolbar:toolbaritem xlink:href=".uno:TextFitToSizeTool" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:TextFitToSizeTool"/>
  <toolbar:toolbaritem xlink:href=".uno:DrawCaption"/>
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:VerticalText"/>
- <toolbar:toolbaritem xlink:href=".uno:VerticalTextFitToSizeTool" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:VerticalTextFitToSizeTool"/>
  <toolbar:toolbaritem xlink:href=".uno:VerticalCaption"/>
 </toolbar:toolbar>

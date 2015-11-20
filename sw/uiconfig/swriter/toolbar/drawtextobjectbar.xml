@@ -49,9 +49,9 @@
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
  <toolbar:toolbarseparator/>
@@ -62,6 +62,6 @@
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:SelectAll"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>
 </toolbar:toolbar>

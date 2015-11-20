@@ -18,13 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:Cube" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Sphere" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Cylinder" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Cone" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Cube"/>
+ <toolbar:toolbaritem xlink:href=".uno:Sphere"/>
+ <toolbar:toolbaritem xlink:href=".uno:Cylinder"/>
+ <toolbar:toolbaritem xlink:href=".uno:Cone"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Cyramid" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Torus" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Shell3D" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:HalfSphere" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Cyramid"/>
+ <toolbar:toolbaritem xlink:href=".uno:Torus"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shell3D"/>
+ <toolbar:toolbaritem xlink:href=".uno:HalfSphere"/>
 </toolbar:toolbar>

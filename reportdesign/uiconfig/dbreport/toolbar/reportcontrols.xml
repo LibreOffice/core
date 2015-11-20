@@ -27,8 +27,8 @@
  <toolbar:toolbaritem xlink:href=".uno:ImageControl"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:HFixedLine" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:VFixedLine" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:HFixedLine"/>
+ <toolbar:toolbaritem xlink:href=".uno:VFixedLine"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:visible="false"/>

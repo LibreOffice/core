@@ -20,8 +20,8 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BezierMove" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:BezierInsert" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierMove"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierInsert"/>
  <toolbar:toolbaritem xlink:href=".uno:BezierDelete"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BezierConvert"/>
@@ -29,9 +29,9 @@
  <toolbar:toolbaritem xlink:href=".uno:BezierClose"/>
  <toolbar:toolbaritem xlink:href=".uno:BezierCutLine"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BezierEdge" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:BezierSmooth" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:BezierSymmetric" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierEdge"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierSmooth"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierSymmetric"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BezierEliminatePoints"/>
