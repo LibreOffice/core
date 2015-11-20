@@ -68,7 +68,7 @@ struct WeakConnection
 
 /** template implementation to hold a weak reference to an instance of type reference_type */
 template <class reference_type>
-class WeakReference
+class SAL_WARN_UNUSED WeakReference
 {
 public:
     /** constructs an empty reference */
