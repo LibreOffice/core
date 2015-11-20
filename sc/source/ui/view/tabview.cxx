@@ -1480,10 +1480,10 @@ void ScTabView::UpdateShow()
 
     if (bShowH && bHeader && !pColBar[SC_SPLIT_RIGHT])
         pColBar[SC_SPLIT_RIGHT] = VclPtr<ScColBar>::Create( pFrameWin, &aViewData, SC_SPLIT_RIGHT,
-                                                &aHdrFunc, pHdrSelEng );
+                                                            &aHdrFunc, pHdrSelEng, this );
     if (bShowV && bHeader && !pRowBar[SC_SPLIT_TOP])
         pRowBar[SC_SPLIT_TOP] = VclPtr<ScRowBar>::Create( pFrameWin, &aViewData, SC_SPLIT_TOP,
-                                                &aHdrFunc, pHdrSelEng );
+                                                          &aHdrFunc, pHdrSelEng, this );
 
         // show Windows
 

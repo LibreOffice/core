@@ -32,6 +32,8 @@
 #include "gridmerg.hxx"
 #include "document.hxx"
 #include "markdata.hxx"
+#include "tabview.hxx"
+#include "viewdata.hxx"
 
 #define SC_DRAG_MIN     2
 
@@ -45,7 +47,8 @@
 #define SC_HDRPAINT_COUNT       7
 
 ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelectionEngine,
-                                  SCCOLROW nNewSize, bool bNewVertical ) :
+                                  SCCOLROW nNewSize, bool bNewVertical, ScTabView* pTab,
+                                  ScViewData* pData ) :
             Window      ( pParent ),
             pSelEngine  ( pSelectionEngine ),
             bVertical   ( bNewVertical ),
@@ -58,7 +61,10 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
             nDragStart  ( 0 ),
             nDragPos    ( 0 ),
             bDragMoved  ( false ),
-            bIgnoreMove ( false )
+            bIgnoreMove ( false ),
+            pTabView    ( pTab ),
+            bDoneInitRef( false ),
+            pViewData   ( pData )
 {
     // --- RTL --- no default mirroring for this window, the spreadsheet itself
     // is also not mirrored
@@ -652,10 +658,31 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
 
     bool bIsBorder;
     SCCOLROW nHitNo = GetMousePos( rMEvt, bIsBorder );
+    bool bFormulaMode = SC_MOD()->IsFormulaMode();
     if (!IsSelectionAllowed(nHitNo))
         return;
     if ( ! rMEvt.IsLeft() )
         return;
+    if ( bFormulaMode )
+    {
+        if( !pTabView )
+            return;
+        SCTAB nTab = pViewData->GetTabNo();
+        if( !rMEvt.IsShift() )
+            pTabView->DoneRefMode();
+        bDoneInitRef = true;
+        if( !bVertical )
+        {
+            pTabView->InitRefMode( nHitNo, 0, nTab, SC_REFTYPE_REF );
+            pTabView->UpdateRef( nHitNo, MAXROW, nTab );
+        }
+        else
+        {
+            pTabView->InitRefMode( 0, nHitNo, nTab, SC_REFTYPE_REF );
+            pTabView->UpdateRef( MAXCOL, nHitNo, nTab );
+        }
+        return;
+    }
     if ( bIsBorder && ResizeAllowed() )
     {
         nDragNo = nHitNo;
@@ -714,6 +741,13 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     if ( IsDisabled() )
         return;
 
+    if ( SC_MOD()->IsFormulaMode() )
+    {
+        SC_MOD()->EndReference();
+        bDoneInitRef = false;
+        return;
+    }
+
     SetMarking( false );
     bIgnoreMove = false;
 
@@ -764,6 +798,22 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
     if ( IsDisabled() )
     {
         SetPointer( Pointer( PointerStyle::Arrow ) );
+        return;
+    }
+
+    bool bFormulaMode = SC_MOD()->IsFormulaMode();
+    if ( bFormulaMode && rMEvt.IsLeft() && bDoneInitRef )
+    {
+        if( !pTabView )
+            return;
+        bool bTmp;
+        SCCOLROW nHitNo = GetMousePos( rMEvt, bTmp );
+        SCTAB nTab = pViewData->GetTabNo();
+        if( !bVertical )
+            pTabView->UpdateRef( nHitNo, MAXROW, nTab );
+        else
+            pTabView->UpdateRef( MAXCOL, nHitNo, nTab );
+
         return;
     }
 
