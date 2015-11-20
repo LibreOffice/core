@@ -98,9 +98,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
         /** @short  for asynchronous operations we must hold us self alive! */
         css::uno::Reference< css::uno::XInterface > m_xSelfHold;
 
-        /** @short  list of registered status listener */
-        osl::Mutex m_mutex;
-
         /** @short  holded alive for internally asynchronous operations! */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
 

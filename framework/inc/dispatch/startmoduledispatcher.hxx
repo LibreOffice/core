@@ -58,9 +58,6 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper<
                    uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-        /** @short  list of registered status listener */
-        osl::Mutex m_mutex;
-
     // native interface
 
     public:
