@@ -85,8 +85,6 @@ class OComponentDefinition  :public OContentHelper
                             ,public OComponentDefinition_BASE
                             ,public ::comphelper::OPropertyArrayUsageHelper< OComponentDefinition >
 {
-    OComponentDefinition();
-
 protected:
     css::uno::Reference< OColumns >     m_xColumns;
     rtl::Reference<OColumnPropertyListener> m_xColumnPropertyListener;
@@ -95,15 +93,14 @@ protected:
     virtual ~OComponentDefinition();
     virtual void SAL_CALL disposing() override;
 
-protected:
-    OComponentDefinition(const css::uno::Reference< css::uno::XComponentContext >&
-        ,const css::uno::Reference< css::uno::XInterface >&   _xParentContainer
-        ,const TContentPtr& _pImpl
-        ,bool _bTable = true);
-
     const   OComponentDefinition_Impl& getDefinition() const { return dynamic_cast< const OComponentDefinition_Impl& >( *m_pImpl.get() ); }
             OComponentDefinition_Impl& getDefinition()       { return dynamic_cast<       OComponentDefinition_Impl& >( *m_pImpl.get() ); }
 public:
+    OComponentDefinition(
+        const css::uno::Reference< css::uno::XComponentContext >&,
+        const css::uno::Reference< css::uno::XInterface >& _xParentContainer,
+        const TContentPtr& _pImpl,
+        bool _bTable = true);
 
     OComponentDefinition(
              const css::uno::Reference< css::uno::XInterface >& _rxContainer
@@ -124,11 +121,6 @@ public:
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
-
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
-    static OUString getImplementationName_static() throw( css::uno::RuntimeException );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     // XInitialization
     virtual void SAL_CALL initialize( css::uno::Sequence< css::uno::Any > const & rArguments) throw (css::uno::Exception, std::exception) override;

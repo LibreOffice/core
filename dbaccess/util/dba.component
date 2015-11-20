@@ -30,7 +30,8 @@
     <service name="com.sun.star.sdb.CommandDefinition"/>
     <service name="com.sun.star.sdb.QueryDefinition"/>
   </implementation>
-  <implementation name="com.sun.star.comp.dba.OComponentDefinition">
+  <implementation name="com.sun.star.comp.dba.OComponentDefinition"
+      constructor="com_sun_star_comp_dba_OComponentDefinition">
     <service name="com.sun.star.sdb.TableDefinition"/>
   </implementation>
   <implementation name="com.sun.star.comp.dba.ODatabaseContext">
