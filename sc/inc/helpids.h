@@ -632,5 +632,13 @@
 #define HID_FUNC_CEIL_MATH                                      "SC_HID_FUNC_CEIL_MATH"
 #define HID_FUNC_FLOOR_MATH                                     "SC_HID_FUNC_FLOOR_MATH"
 #define HID_FUNC_FLOOR_PRECISE                                  "SC_HID_FUNC_FLOOR_PRECISE"
+#define HID_FUNC_FORECAST_ETS_ADD                               "SC_HID_FUNC_FORECAST_ETS_AD"
+#define HID_FUNC_FORECAST_ETS_MUL                               "SC_HID_FUNC_FORECAST_ETS_ML"
+#define HID_FUNC_FORECAST_ETS_PIA                               "SC_HID_FUNC_FORECAST_ETS_PIA"
+#define HID_FUNC_FORECAST_ETS_PIM                               "SC_HID_FUNC_FORECAST_ETS_PIM"
+#define HID_FUNC_FORECAST_ETS_SEA                               "SC_HID_FUNC_FORECAST_ETS_SEA"
+#define HID_FUNC_FORECAST_ETS_STA                               "SC_HID_FUNC_FORECAST_ETS_STA"
+#define HID_FUNC_FORECAST_ETS_STM                               "SC_HID_FUNC_FORECAST_ETS_STM"
+#define HID_FUNC_FORECAST_LIN                                   "SC_HID_FUNC_FORECAST_LIN"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

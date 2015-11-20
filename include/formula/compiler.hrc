@@ -485,7 +485,15 @@
 #define SC_OPCODE_NETWORKDAYS       474
 #define SC_OPCODE_FLOOR_MATH        475
 #define SC_OPCODE_FLOOR_PRECISE     476
-#define SC_OPCODE_STOP_2_PAR        477     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_FORECAST_ETS_ADD  477
+#define SC_OPCODE_FORECAST_ETS_SEA  478
+#define SC_OPCODE_FORECAST_ETS_MUL  479
+#define SC_OPCODE_FORECAST_ETS_PIA  480
+#define SC_OPCODE_FORECAST_ETS_PIM  481
+#define SC_OPCODE_FORECAST_ETS_STA  482
+#define SC_OPCODE_FORECAST_ETS_STM  483
+#define SC_OPCODE_FORECAST_LIN      484
+#define SC_OPCODE_STOP_2_PAR        485     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */
