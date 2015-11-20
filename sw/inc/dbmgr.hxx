@@ -34,12 +34,19 @@
 #include <memory>
 #include <vector>
 
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <unotools/tempfile.hxx>
+#include <sfx2/objsh.hxx>
+#include <dbui.hxx>
+
+
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XConnection;
         class XStatement;
         class XDataSource;
         class XResultSet;
+        class xRowSet;
     }
     namespace beans{
 
@@ -82,6 +89,8 @@ class SwMailMergeConfigItem;
 class SwCalc;
 class INetURLObject;
 class SwDocShell;
+class SwDoc;
+class SfxFilter;
 
 enum DBManagerOptions
 {
@@ -103,10 +112,10 @@ struct SwDSParam : public SwDBData
     css::util::Date  aNullDate;
 
     css::uno::Reference<css::util::XNumberFormatter>    xFormatter;
-    css::uno::Reference< css::sdbc::XConnection>       xConnection;
-    css::uno::Reference< css::sdbc::XStatement>        xStatement;
-    css::uno::Reference< css::sdbc::XResultSet>        xResultSet;
-    css::uno::Sequence<  css::uno::Any >               aSelection;
+    css::uno::Reference<css::sdbc::XConnection>         xConnection;
+    css::uno::Reference<css::sdbc::XStatement>          xStatement;
+    css::uno::Reference<css::sdbc::XResultSet>          xResultSet;
+    css::uno::Sequence< css::uno::Any >                 aSelection;
     bool bScrollable;
     bool bEndOfDB;
     bool bAfterSelection;
@@ -144,7 +153,7 @@ struct SwMergeDescriptor
 {
     DBManagerOptions                                    nMergeType;
     SwWrtShell&                                         rSh;
-    const svx::ODataAccessDescriptor&                 rDescriptor;
+    const svx::ODataAccessDescriptor&                   rDescriptor;
     OUString                                            sSaveToFilter; ///< export filter to save resulting files
     OUString                                            sSaveToFilterOptions;
     css::uno::Sequence< css::beans::PropertyValue >     aSaveToFilterData;
@@ -158,16 +167,15 @@ struct SwMergeDescriptor
 
     css::uno::Reference< css::mail::XSmtpService >      xSmtpServer;
 
-    bool                                            bSendAsHTML;
-    bool                                            bSendAsAttachment;
-
-    bool                                            bPrintAsync;
-    bool                                            bCreateSingleFile;
-    bool                                            bSubjectIsFilename;
+    bool                                                bSendAsHTML;
+    bool                                                bSendAsAttachment;
+    bool                                                bPrintAsync;
+    bool                                                bCreateSingleFile;
+    bool                                                bSubjectIsFilename;
 
     SwMailMergeConfigItem*                              pMailMergeConfigItem;
 
-    css::uno::Sequence<  css::beans::PropertyValue >  aPrintOptions;
+    css::uno::Sequence<  css::beans::PropertyValue >    aPrintOptions;
 
     SwMergeDescriptor( DBManagerOptions nType, SwWrtShell& rShell, svx::ODataAccessDescriptor& rDesc ) :
         nMergeType(nType),
@@ -194,20 +202,20 @@ friend class SwConnectionDisposedListener_Impl;
 
     OUString            sEMailAddrField;      ///< Mailing: Column name of email address.
     OUString            sSubject;           ///< Mailing: Subject
-    bool            bCancel;            ///< Mail merge canceled.
-    bool            bInitDBFields : 1;
-    bool            bInMerge    : 1;    ///< merge process active
-    bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
-    bool            bMergeLock : 1;     /**< prevent update of database fields while document is
+    bool                bCancel;            ///< Mail merge canceled.
+    bool                bInitDBFields : 1;
+    bool                bInMerge      : 1;    ///< merge process active
+    bool                bMergeSilent  : 1;   ///< suppress display of dialogs/boxes (used when called over API)
+    bool                bMergeLock    : 1;     /**< prevent update of database fields while document is
                                              actually printed at the SwViewShell */
-    SwDSParams_t    m_DataSourceParams;
+    SwDSParams_t        m_DataSourceParams;
     std::unique_ptr<SwDBManager_Impl>  pImpl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
     /// Name of the embedded database that's included in the current document.
-    OUString     m_sEmbeddedName;
+    OUString            m_sEmbeddedName;
 
     /// The document that owns this manager.
-    SwDoc* m_pDoc;
+    SwDoc*              m_pDoc;
 
     SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, bool bCreate);
     SAL_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, bool bCreate);
@@ -220,10 +228,85 @@ friend class SwConnectionDisposedListener_Impl;
     /// Insert a single data record as text into document.
     SAL_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
-    /// merge to file _and_ merge to e-Mail
+    /// merge to file _and_ merge to e-Mail and to Shell
     SAL_DLLPRIVATE bool          MergeMailFiles(SwWrtShell* pSh,
                                         const SwMergeDescriptor& rMergeDescriptor, vcl::Window* pParent );
-    SAL_DLLPRIVATE bool          ToNextRecord(SwDSParam* pParam);
+    /// merge to printer
+    SAL_DLLPRIVATE bool          MergeMailPrinter(SwWrtShell* pSh,
+                                        const SwMergeDescriptor& rMergeDescriptor, vcl::Window* pParent );
+    SAL_DLLPRIVATE bool          ToNextRecord(SwDSParam* pParam, bool bReset = false);
+
+    SAL_DLLPRIVATE static css::uno::Reference< css::sdbc::XRowSet>
+        GetRowSet(css::uno::Reference< css::sdbc::XConnection>,
+        const OUString& rTableOrQuery, SwDBSelect   eTableOrQuery);
+
+
+    SAL_DLLPRIVATE static css::uno::Reference< css::beans::XPropertySet>
+        GetRowSupplier(css::uno::Reference< css::sdbc::XConnection> xConnection,
+        const OUString& rTableOrQuery,  SwDBSelect   eTableOrQuery);
+
+
+    SAL_DLLPRIVATE void CreateDumpDocs(sal_Int32 &nMaxDumpDocs);
+
+    SAL_DLLPRIVATE void SetSourceProp(SwDocShell* pSourceDocSh);
+
+    SAL_DLLPRIVATE void GetPathAddress(OUString &sPath, OUString &sAddress,
+                                      css::uno::Reference< css::beans::XPropertySet > xColumnProp);
+
+    SAL_DLLPRIVATE bool CreateNewTemp(OUString &sPath, const OUString &sAddress,
+                                      std::unique_ptr< utl::TempFile > &aTempFile,
+                                      const SwMergeDescriptor& rMergeDescriptor,  const SfxFilter* pStoreToFilter);
+
+    SAL_DLLPRIVATE void UpdateProgressDlg(bool bMergeShell,  VclPtr<CancelableDialog> pProgressDlg, bool createTempFile,
+                                          std::unique_ptr< INetURLObject > &aTempFileURL,
+                                          SwDocShell *pSourceDocSh, sal_Int32 nDocNo);
+
+    SAL_DLLPRIVATE bool CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
+                                             SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh,
+                                             SfxObjectShellRef &xTargetDocShell, SwDoc *&pTargetDoc,
+                                             SwWrtShell *&pTargetShell, SwView  *&pTargetView,
+                                             sal_uInt16 &nStartingPageNo, OUString &sStartingPageDesc);
+
+    SAL_DLLPRIVATE void LockUnlockDisp(bool Lock, SwDocShell *pSourceDocSh);
+
+    SAL_DLLPRIVATE void CreateProgessDlg(vcl::Window *&pSourceWindow, VclPtr<CancelableDialog> &pProgressDlg,
+                                         bool bMergeShell, SwWrtShell *pSourceShell, vcl::Window *pParent);
+
+    SAL_DLLPRIVATE void CreateWorkDoc(SfxObjectShellLock &xWorkDocSh, SwView *&pWorkView, SwDoc *&pWorkDoc, SwDBManager *&pOldDBManager,
+                                      SwDocShell *pSourceDocSh, sal_Int32 nMaxDumpDocs,  sal_Int32 nDocNo);
+
+    SAL_DLLPRIVATE void UpdateExpFields(SwWrtShell& rWorkShell, SfxObjectShellLock xWorkDocSh);
+
+    SAL_DLLPRIVATE void CreateStoreToFilter(const SfxFilter *&pStoreToFilter, const OUString *&pStoreToFilterOptions,
+                                            SwDocShell *pSourceDocSh, bool bEMail, const SwMergeDescriptor &rMergeDescriptor);
+
+    SAL_DLLPRIVATE void MergeSingleFiles(SwDoc *pWorkDoc, SwWrtShell &rWorkShell, SwWrtShell *pTargetShell, SwDoc *pTargetDoc,
+                                         SfxObjectShellLock &xWorkDocSh, SfxObjectShellRef xTargetDocShell,
+                                         bool bPageStylesWithHeaderFooter, bool bSynchronizedDoc,
+                                         OUString &sModifiedStartingPageDesc, OUString &sStartingPageDesc, sal_Int32 nDocNo,
+                                         long nStartRow, sal_uInt16 nStartingPageNo, int &targetDocPageCount, const bool bMergeShell,
+                                         const SwMergeDescriptor& rMergeDescriptor, sal_Int32 nMaxDumpDocs);
+
+    SAL_DLLPRIVATE void ResetWorkDoc(SwDoc *pWorkDoc, SfxObjectShellLock &xWorkDocSh, SwDBManager *pOldDBManager);
+
+    SAL_DLLPRIVATE void FreezeLayouts(SwWrtShell *pTargetShell, bool freeze);
+
+    SAL_DLLPRIVATE void MakeEndMailMergeFile(SfxObjectShellLock xWorkDocSh, SwView *pWorkView, SwDoc *pTargetDoc,
+                                             SwWrtShell *pTargetShell, bool bCreateSingleFile);
+
+    SAL_DLLPRIVATE bool SavePrintDoc(SfxObjectShellRef xTargetDocShell, SwView *pTargetView,
+                                     const SwMergeDescriptor &rMergeDescriptor,
+                                     std::unique_ptr< utl::TempFile > &aTempFile,
+                                     const SfxFilter *&pStoreToFilter, const OUString *&pStoreToFilterOptions,
+                                     const bool bMergeShell, bool bCreateSingleFile, const bool bPrinter);
+
+
+    SAL_DLLPRIVATE void SetPrinterOptions(const SwMergeDescriptor &rMergeDescriptor,
+                                          css::uno::Sequence< css::beans::PropertyValue > &aOptions);
+
+    SAL_DLLPRIVATE void RemoveTmpFiles(::std::vector< OUString> &aFilesToRemove);
+
+
 
     SwDBManager(SwDBManager const&) = delete;
     SwDBManager& operator=(SwDBManager const&) = delete;
@@ -277,6 +360,13 @@ public:
                             css::uno::Reference< css::beans::XPropertySet> xColumn,
                             SvNumberFormatter* pNFormatr,
                             long nLanguage );
+
+    sal_Int32   GetRowCount(const OUString& rDBName, const OUString& rTableName);
+
+    static sal_Int32 GetRowCount(css::uno::Reference< css::sdbc::XConnection> xConnection,
+                                 const OUString& rTableName);
+
+    sal_Int32 GetRowCount() const;
 
     sal_uLong GetColumnFormat( const OUString& rDBName,
                             const OUString& rTableName,
@@ -407,8 +497,8 @@ public:
             The active connection which may be <NULL/>.
         @return
             The new created RowSet.
-
     */
+
     static css::uno::Reference< css::sdbc::XResultSet>
             createCursor(   const OUString& _sDataSourceName,
                             const OUString& _sCommand,
