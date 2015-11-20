@@ -55,6 +55,8 @@
 
 using namespace ::com::sun::star;
 
+namespace sdecl = comphelper::service_decl;
+
 namespace dxcanvas
 {
     /// Actual canonical implementation of the GraphicsProvider interface
@@ -217,7 +219,6 @@ namespace dxcanvas
         return xRet;
     }
 
-    namespace sdecl = comphelper::service_decl;
     sdecl::class_<Canvas, sdecl::with_args<true> > serviceImpl1(&initCanvas);
     const sdecl::ServiceDecl dxCanvasDecl(
         serviceImpl1,
@@ -244,7 +245,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL gdipluscanvas_component_getFactory( sal_Char const* pImplName,
                                          void*, void* )
 {
-    return component_getFactoryHelper( pImplName, dxcanvas::dxCanvasDecl, dxcanvas::dxBitmapCanvasDecl );
+    return sdecl::component_getFactoryHelper( pImplName, {&dxcanvas::dxCanvasDecl, &dxcanvas::dxBitmapCanvasDecl} );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
