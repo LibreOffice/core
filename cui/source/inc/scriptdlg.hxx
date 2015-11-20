@@ -153,7 +153,6 @@ protected:
     const OUString m_createDupStr;
     const OUString m_createErrTitleStr;
     const OUString m_renameErrStr;
-    const OUString m_renameDupStr;
     const OUString m_renameErrTitleStr;
 
     DECL_LINK_TYPED( ScriptSelectHdl, SvTreeListBox *, void );

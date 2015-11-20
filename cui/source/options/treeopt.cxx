@@ -1870,7 +1870,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
         if ( rModuleIdentifier == sModule )
         {
             // current active module found
-            pModule = new Module( sModule );
+            pModule = new Module;
             pModule->m_bActive = true;
 
             Reference< XNameAccess > xModAccess;
@@ -1955,7 +1955,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             if ( !sTemp.isEmpty() )
                 sLabel = sTemp;
             OptionsNode* pNode =
-                new OptionsNode( sNodeId, sLabel, sPageURL, bAllModules, sGroupId, nGroupIndex );
+                new OptionsNode( sNodeId, sLabel, sPageURL, bAllModules );
 
             if ( rExtensionId.isEmpty() && !isNodeActive( pNode, pModule ) )
             {
@@ -1988,7 +1988,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                         if ( rExtensionId.isEmpty() || sId == rExtensionId )
                         {
                             OptionsLeaf* pLeaf = new OptionsLeaf(
-                                sId, sLeafLabel, sLeafURL, sEventHdl, sLeafGrpId, nLeafGrpIdx );
+                                sLeafLabel, sLeafURL, sEventHdl, sLeafGrpId, nLeafGrpIdx );
 
                             if ( !sLeafGrpId.isEmpty() )
                             {

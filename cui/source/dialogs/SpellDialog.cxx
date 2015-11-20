@@ -1105,7 +1105,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                     if( xNamed.is() )
                         sServiceName = xNamed->getName();
                     SpellErrorDescription aDesc( false, aStart->xAlternatives->getWord(),
-                                    aStart->xAlternatives->getLocale(), aStart->xAlternatives->getAlternatives(), nullptr, sServiceName);
+                                    aStart->xAlternatives->getLocale(), aStart->xAlternatives->getAlternatives(), nullptr);
                     m_pSentenceED->SetAttrib( SpellErrorAttrib(aDesc), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
                 }
                 else if(aStart->bIsGrammarError )
@@ -1129,7 +1129,6 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                         LanguageTag::convertToLocale( aStart->eLanguage ),
                         aStart->aGrammarError.aSuggestions,
                         aStart->xGrammarChecker,
-                        xInfo->getImplementationName(),
                         &aStart->sDialogTitle,
                         &aStart->aGrammarError.aFullComment,
                         &aStart->aGrammarError.aRuleIdentifier,
@@ -1801,7 +1800,7 @@ void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xA
         if (xNamed.is())
             sServiceName = xNamed->getName();
     }
-    SpellErrorDescription aDesc( false, aWord, aLocale, aAlts, nullptr, sServiceName);
+    SpellErrorDescription aDesc( false, aWord, aLocale, aAlts, nullptr);
     GetTextEngine()->SetAttrib( SpellErrorAttrib(aDesc), 0, m_nErrorStart, m_nErrorEnd );
 }
 

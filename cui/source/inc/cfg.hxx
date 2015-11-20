@@ -671,8 +671,6 @@ public:
 struct SvxIconSelectorToolBoxItem
 {
     Image aImg;
-    OUString aText;
-    void* pData;
 };
 
 class SvxIconSelectorDialog : public ModalDialog

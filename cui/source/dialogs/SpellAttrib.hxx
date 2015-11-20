@@ -41,7 +41,6 @@ struct SpellErrorDescription
     OUString                                     sExplanationURL;
     css::lang::Locale                      aLocale;
     css::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
-    OUString                                     sServiceName; ///< service name of GrammarChecker/SpellChecker
     css::uno::Sequence< OUString >  aSuggestions;
     OUString                                     sRuleId;
 
@@ -53,7 +52,6 @@ struct SpellErrorDescription
                       const css::lang::Locale& rLocale,
                       const css::uno::Sequence< OUString >& rSuggestions,
                       css::uno::Reference< css::linguistic2::XProofreader > rxGrammarChecker,
-                      const OUString& rServiceName,
                       const OUString* pDialogTitle = nullptr,
                       const OUString* pExplanation = nullptr,
                       const OUString* pRuleId = nullptr,
@@ -65,7 +63,6 @@ struct SpellErrorDescription
         sExplanationURL( ),
         aLocale( rLocale ),
         xGrammarChecker( rxGrammarChecker ),
-        sServiceName( rServiceName ),
         aSuggestions( rSuggestions )
         {
             if( pDialogTitle )

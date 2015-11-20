@@ -366,7 +366,6 @@ struct SvxConfigGroupBoxResource_Impl : public Resource
     OUString m_sProdMacros;
     OUString m_sMacros;
     OUString m_sDlgMacros;
-    OUString m_aHumanAppName;
     OUString m_aStrGroupStyles;
     Image m_collapsedImage;
     Image m_expandedImage;
@@ -384,7 +383,6 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
     m_sMacros(CUI_RESSTR(STR_BASICMACROS)),
     m_sDlgMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
-    m_aHumanAppName(CUI_RESSTR(STR_HUMAN_APPNAME)),
     m_aStrGroupStyles(CUI_RESSTR(STR_GROUP_STYLES)),
     m_collapsedImage(CUI_RES(BMP_COLLAPSED)),
     m_expandedImage(CUI_RES(BMP_EXPANDED))
