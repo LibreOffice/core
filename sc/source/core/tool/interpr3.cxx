@@ -4394,50 +4394,70 @@ void ScInterpreter::ScForecast()
         return;
     }
     double fVal = GetDouble();
+
+    double fForecast = LinearForecast( pMat1, pMat2, fVal );
+    if ( !nGlobalError )
+        PushDouble( fForecast );
+}
+
+double ScInterpreter::LinearForecast( ScMatrixRef rMat1, ScMatrixRef rMat2, double fVal )
+{
+    SCSIZE nC1, nC2;
+    SCSIZE nR1, nR2;
+    rMat1->GetDimensions( nC1, nR1 );
+    rMat2->GetDimensions( nC2, nR2 );
     // #i78250# numerical stability improved
     double fCount           = 0.0;
     double fSumX            = 0.0;
     double fSumY            = 0.0;
 
-    for (SCSIZE i = 0; i < nC1; i++)
+    for ( SCSIZE i = 0; i < nC1; i++ )
     {
-        for (SCSIZE j = 0; j < nR1; j++)
+        for ( SCSIZE j = 0; j < nR1; j++ )
         {
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+            if ( !rMat1->IsString( i, j ) && !rMat2->IsString( i, j ) )
             {
-                double fValX = pMat1->GetDouble(i,j);
-                double fValY = pMat2->GetDouble(i,j);
+                double fValX = rMat1->GetDouble( i, j );
+                double fValY = rMat2->GetDouble( i, j );
                 fSumX += fValX;
                 fSumY += fValY;
                 fCount++;
             }
         }
     }
-    if (fCount < 1.0)
+
+    if ( fCount < 1.0 )
+    {
         PushNoValue();
+        return 0.0;
+    }
     else
     {
         double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
         double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
         double fMeanX = fSumX / fCount;
         double fMeanY = fSumY / fCount;
-        for (SCSIZE i = 0; i < nC1; i++)
+        for ( SCSIZE i = 0; i < nC1; i++ )
         {
-            for (SCSIZE j = 0; j < nR1; j++)
+            for ( SCSIZE j = 0; j < nR1; j++ )
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if ( !rMat1->IsString( i, j ) && !rMat2->IsString( i, j ) )
                 {
-                    double fValX = pMat1->GetDouble(i,j);
-                    double fValY = pMat2->GetDouble(i,j);
-                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
-                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
+                    double fValX = rMat1->GetDouble( i, j );
+                    double fValY = rMat2->GetDouble( i, j );
+                    fSumDeltaXDeltaY += ( fValX - fMeanX ) * ( fValY - fMeanY );
+                    fSumSqrDeltaX    += ( fValX - fMeanX ) * ( fValX - fMeanX );
                 }
             }
         }
-        if (fSumSqrDeltaX == 0.0)
-            PushError( errDivisionByZero);
+
+        if ( fSumSqrDeltaX == 0.0 )
+        {
+            PushError( errDivisionByZero );
+            return 0.0;
+        }
         else
-            PushDouble( fMeanY + fSumDeltaXDeltaY / fSumSqrDeltaX * (fVal - fMeanX));
+            return( fMeanY + fSumDeltaXDeltaY / fSumSqrDeltaX * ( fVal - fMeanX ) );
     }
 }
 
