@@ -334,7 +334,6 @@ OBoundControl::OBoundControl( const Reference< XComponentContext >& _rxContext,
     :OControl( _rxContext, _rAggregateService, _bSetDelegator )
     ,m_bLocked(false)
     ,m_aOriginalFont( EmptyFontDescriptor() )
-    ,m_nOriginalTextLineColor( 0 )
 {
 }
 

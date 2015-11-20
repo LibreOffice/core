@@ -181,8 +181,6 @@ public:
     // remember sizes
     OUString                        _aIniKey;
 
-    bool                        _bFolderHasOpened;
-
                             SvtExpFileDlg_Impl( WinBits nBits );
                             ~SvtExpFileDlg_Impl();
 

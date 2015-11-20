@@ -52,7 +52,6 @@ namespace framework
          };
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
         css::uno::Reference< css::frame::XDispatchProvider >  m_xDispatchProvider;
-        OUString                                              m_aModuleIdentifier;
         css::uno::Reference< css::container::XNameAccess >    m_xUICommandLabels;
 
         public:

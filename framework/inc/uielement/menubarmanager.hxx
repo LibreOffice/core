@@ -173,17 +173,12 @@ class MenuBarManager : public css::frame::XStatusListener                ,
                              css::uno::Reference< css::frame::XStatusListener >& xManager,
                              css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
                              nItemId( aItemId ),
-                             bCheckHide( true ),
                              xSubMenuManager( xManager ),
                              xMenuItemDispatch( rDispatch ) {}
 
             sal_uInt16                                                        nItemId;
-            bool                                                              bCheckHide;
             OUString                                                          aTargetFrame;
             OUString                                                          aMenuItemURL;
-            OUString                                                          aFilter;
-            OUString                                                          aPassword;
-            OUString                                                          aTitle;
             css::uno::Reference< css::frame::XStatusListener >                xSubMenuManager;
             css::uno::Reference< css::frame::XDispatch >                      xMenuItemDispatch;
             css::uno::Reference< css::frame::XPopupMenuController >           xPopupMenuController;

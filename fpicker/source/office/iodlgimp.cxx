@@ -239,8 +239,7 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     _bDoubleClick       ( false ),
     m_bNeedDelayedFilterExecute ( false ),
     _pDefaultFilter     ( nullptr ),
-    _bMultiSelection    ( false ),
-    _bFolderHasOpened   ( false )
+    _bMultiSelection    ( false )
 {
 }
 

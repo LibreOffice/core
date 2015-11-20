@@ -146,7 +146,6 @@ public:
     ::std::map<FormulaToken*,sheet::FormulaToken>           m_aTokenMap;
     IFormulaEditorHelper*                                   m_pHelper;
     VclPtr<Dialog>          m_pParent;
-    IControlReferenceHandler*  m_pDlg;
     VclPtr<TabControl>      m_pTabCtrl;
     VclPtr<VclVBox>         m_pParaWinBox;
     VclPtr<ParaWin>         pParaWin;
@@ -187,7 +186,6 @@ public:
 
     const OUString  aTitle1;
     const OUString  aTitle2;
-    const OUString  aTxtEnd;
     OUString  aTxtOk;     // behind aBtnEnd
     FormulaHelper   m_aFormulaHelper;
 
@@ -233,14 +231,12 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     m_pBinaryOpCodesEnd(nullptr),
     m_pHelper       (_pHelper),
     m_pParent       (pParent),
-    m_pDlg          (_pDlg),
     pTheRefEdit     (nullptr),
     pTheRefButton   (nullptr),
     pMEdit          (nullptr),
     bUserMatrixFlag (false),
     aTitle1         ( ModuleRes( STR_TITLE1 ) ),
     aTitle2         ( ModuleRes( STR_TITLE2 ) ),
-    aTxtEnd         ( ModuleRes( STR_END ) ),
     m_aFormulaHelper(_pFunctionMgr),
     bIsShutDown     (false),
     bMakingTree     (false),

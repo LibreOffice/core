@@ -269,10 +269,8 @@ class OBoundControl :public OControl
 protected:
     bool            m_bLocked : 1;
 
-    OUString        m_sOriginalHelpText;                // as long as the text/value is invalid, we change the help text of our peer
     css::awt::FontDescriptor
                     m_aOriginalFont;                    // as long as the text/value is invalid, we also change the font
-    sal_Int32       m_nOriginalTextLineColor;           // (we add red underlining)
 
 public:
     OBoundControl(
