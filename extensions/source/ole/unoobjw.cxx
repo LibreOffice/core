@@ -570,10 +570,10 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
         if (spValueDest)
         {
             VARIANT_BOOL varBool= VARIANT_FALSE;
-            if( SUCCEEDED( hr= spValueDest->IsOutParam( &varBool) )
-                && varBool == VARIANT_TRUE  ||
-                SUCCEEDED(hr= spValueDest->IsInOutParam( &varBool) )
-                && varBool == VARIANT_TRUE )
+            if ((SUCCEEDED(hr = spValueDest->IsOutParam(&varBool))
+                 && varBool == VARIANT_TRUE)
+                || (SUCCEEDED(hr = spValueDest->IsInOutParam(&varBool))
+                    && varBool == VARIANT_TRUE))
             {
                 if( SUCCEEDED( spValueDest->Set( CComVariant(), *pSource)))
                     ret= sal_True;
