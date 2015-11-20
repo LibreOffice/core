@@ -117,11 +117,11 @@ public:
     void Visit( SmTextNode* pNode ) override;
     using SmDefaultingVisitor::Visit;
 private:
-    OutputDevice &rDev;
-    SmCaretPos pos;
+    OutputDevice &mrDev;
+    SmCaretPos maPos;
     /** Offset to draw from */
-    Point Offset;
-    bool isCaretVisible;
+    Point maOffset;
+    bool mbCaretVisible;
 protected:
     /** Default method for drawing pNodes */
     void DefaultVisit( SmNode* pNode ) override;
