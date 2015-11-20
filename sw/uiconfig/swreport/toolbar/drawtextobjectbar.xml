@@ -35,14 +35,14 @@
  <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
  <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight"/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom"/>

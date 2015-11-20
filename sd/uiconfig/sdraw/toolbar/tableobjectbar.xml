@@ -30,9 +30,9 @@
  <toolbar:toolbaritem xlink:href=".uno:SplitCell"/>
  <toolbar:toolbaritem xlink:href=".uno:OptimizeTable" toolbar:style="dropdown"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:CellVertTop" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CellVertCenter" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CellVertBottom" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertRows"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertColumns"/>

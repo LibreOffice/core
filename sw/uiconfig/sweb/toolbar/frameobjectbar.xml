@@ -20,20 +20,20 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:WrapOff" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapOn" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapThrough" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapOff"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapOn"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapThrough"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignRight"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignTop"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignBottom"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>

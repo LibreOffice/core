@@ -18,45 +18,45 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:SelectMode" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ManageLanguage"/>
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:TestMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowPropBrowser"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertPushbutton" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertImageControl" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertPushbutton"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertImageControl"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Checkbox" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Radiobutton" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Checkbox"/>
+ <toolbar:toolbaritem xlink:href=".uno:Radiobutton"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFixedText" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertEdit" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFixedText"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertEdit"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertListbox" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Combobox" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertListbox"/>
+ <toolbar:toolbaritem xlink:href=".uno:Combobox"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:VScrollbar" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:HScrollbar" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:VScrollbar"/>
+ <toolbar:toolbaritem xlink:href=".uno:HScrollbar"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Groupbox" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:ProgressBar" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Groupbox"/>
+ <toolbar:toolbaritem xlink:href=".uno:ProgressBar"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:HFixedLine" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:VFixedLine" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:HFixedLine"/>
+ <toolbar:toolbaritem xlink:href=".uno:VFixedLine"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:AddDateField" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertTimeField" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:AddDateField"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertTimeField"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertNumericField" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertCurrencyField" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertNumericField"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertCurrencyField"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFormattedField" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertPatternField" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFormattedField"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertPatternField"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFileControl" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertTreeControl" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFileControl"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertTreeControl"/>
  <toolbar:toolbarbreak/>
-<toolbar:toolbaritem xlink:href=".uno:SpinButton" toolbar:style="radio"/>
+<toolbar:toolbaritem xlink:href=".uno:SpinButton"/>
  <toolbar:toolbarbreak/>
 </toolbar:toolbar>

@@ -69,8 +69,8 @@
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SelectAll" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false"/>

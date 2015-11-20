@@ -18,13 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:ConvertInto3DLathe" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CrookRotate" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:Mirror"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConvertInto3DLathe"/>
+ <toolbar:toolbaritem xlink:href=".uno:CrookRotate"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:CrookSlant" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Shear" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:InteractiveTransparence" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:InteractiveGradient" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:CrookSlant"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shear"/>
+ <toolbar:toolbaritem xlink:href=".uno:InteractiveTransparence"/>
+ <toolbar:toolbaritem xlink:href=".uno:InteractiveGradient"/>
 </toolbar:toolbar>

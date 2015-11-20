@@ -18,13 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Square" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Rect_Rounded" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Square_Rounded" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Rect"/>
+ <toolbar:toolbaritem xlink:href=".uno:Square"/>
+ <toolbar:toolbaritem xlink:href=".uno:Rect_Rounded"/>
+ <toolbar:toolbaritem xlink:href=".uno:Square_Rounded"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Rect_Unfilled" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Square_Unfilled" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Rect_Rounded_Unfilled" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Square_Rounded_Unfilled" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Rect_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:Square_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:Rect_Rounded_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:Square_Rounded_Unfilled"/>
 </toolbar:toolbar>

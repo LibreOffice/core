@@ -18,19 +18,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Circle" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Pie" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CirclePie" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:EllipseCut" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CircleCut" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Ellipse"/>
+ <toolbar:toolbaritem xlink:href=".uno:Circle"/>
+ <toolbar:toolbaritem xlink:href=".uno:Pie"/>
+ <toolbar:toolbaritem xlink:href=".uno:CirclePie"/>
+ <toolbar:toolbaritem xlink:href=".uno:EllipseCut"/>
+ <toolbar:toolbaritem xlink:href=".uno:CircleCut"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Ellipse_Unfilled" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Circle_Unfilled" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Pie_Unfilled" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CirclePie_Unfilled" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:EllipseCut_Unfilled" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CircleCut_Unfilled" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:Arc" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CircleArc" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Ellipse_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:Circle_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:Pie_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:CirclePie_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:EllipseCut_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:CircleCut_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:Arc"/>
+ <toolbar:toolbaritem xlink:href=".uno:CircleArc"/>
 </toolbar:toolbar>
