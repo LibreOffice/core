@@ -2033,6 +2033,31 @@ void Test::testMatrixComparisonWithErrors()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testMatrixConditionalBooleanResult()
+{
+    m_pDoc->InsertTab(0, "foo");
+
+    // Create matrix formulas in A1:B1,A2:B2,A3:B3,A4:B4 producing mixed
+    // boolean and numeric results in an unformatted area.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula( 0,0, 1,0, aMark, "=IF({1,0};TRUE();42)");  // {TRUE,42}
+    m_pDoc->InsertMatrixFormula( 0,1, 1,1, aMark, "=IF({0,1};TRUE();42)");  // {42,1} aim for {42,TRUE}
+    m_pDoc->InsertMatrixFormula( 0,2, 1,2, aMark, "=IF({1,0};42;FALSE())"); // {42,0} aim for {42,FALSE}
+    m_pDoc->InsertMatrixFormula( 0,3, 1,3, aMark, "=IF({0,1};42;FALSE())"); // {FALSE,42}
+
+    CPPUNIT_ASSERT_EQUAL( OUString("TRUE"),  m_pDoc->GetString(0,0,0));
+    CPPUNIT_ASSERT_EQUAL( OUString("42"),    m_pDoc->GetString(1,0,0));
+    CPPUNIT_ASSERT_EQUAL( OUString("42"),    m_pDoc->GetString(0,1,0));
+    //CPPUNIT_ASSERT_EQUAL( OUString("TRUE"),  m_pDoc->GetString(1,1,0));   // not yet
+    CPPUNIT_ASSERT_EQUAL( OUString("42"),    m_pDoc->GetString(0,2,0));
+    //CPPUNIT_ASSERT_EQUAL( OUString("FALSE"), m_pDoc->GetString(1,2,0));   // not yet
+    CPPUNIT_ASSERT_EQUAL( OUString("FALSE"), m_pDoc->GetString(0,3,0));
+    CPPUNIT_ASSERT_EQUAL( OUString("42"),    m_pDoc->GetString(1,3,0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testEnterMixedMatrix()
 {
     m_pDoc->InsertTab(0, "foo");
