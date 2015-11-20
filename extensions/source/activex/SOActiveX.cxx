@@ -276,7 +276,7 @@ HRESULT CSOActiveX::TerminateOffice()
     if ( SUCCEEDED( hr ) )
     {
         if ( ( aFrames.vt == ( VT_ARRAY | VT_DISPATCH ) || aFrames.vt == ( VT_ARRAY | VT_VARIANT ) )
-          && ( !aFrames.parray || aFrames.parray->cDims == 1 && aFrames.parray->rgsabound[0].cElements == 0 ) )
+          && ( !aFrames.parray || (aFrames.parray->cDims == 1 && aFrames.parray->rgsabound[0].cElements == 0) ) )
         {
             // there is no frames open
             // TODO: check whether the frames are hidden if they are open?
