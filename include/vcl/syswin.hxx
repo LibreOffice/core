@@ -28,7 +28,6 @@
 
 class ModalDialog;
 class MenuBar;
-class NotebookBarWindow;
 class TaskPaneList;
 class VclContainer;
 
@@ -237,8 +236,6 @@ public:
     void            SetMenuBar(MenuBar* pMenuBar);
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
     void            SetMenuBarMode( MenuBarMode nMode );
-
-    void            CreateNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
 
     TaskPaneList*   GetTaskPaneList();
     void            GetWindowStateData( WindowStateData& rData ) const;
