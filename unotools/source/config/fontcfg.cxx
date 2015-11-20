@@ -988,28 +988,27 @@ FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNam
 ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< XNameAccess >& rFont,
                                                     const OUString& rType ) const
 {
-    unsigned long type = 0;
+    sal_uLong type = 0;
     try
     {
         Any aAny = rFont->getByName( rType );
-        if( aAny.getValueTypeClass() == TypeClass_STRING )
+        if( aAny.getValueTypeClass() != TypeClass_STRING )
+            return ImplFontAttrs::None;
+        const OUString* pLine = static_cast<const OUString*>(aAny.getValue());
+        if( pLine->isEmpty() )
+            return ImplFontAttrs::None;
+        sal_Int32 nIndex = 0;
+        while( nIndex != -1 )
         {
-            const OUString* pLine = static_cast<const OUString*>(aAny.getValue());
-            if( !pLine->isEmpty() )
-            {
-                sal_Int32 nIndex = 0;
-                while( nIndex != -1 )
+            OUString aToken( pLine->getToken( 0, ',', nIndex ) );
+            for( int k = 0; k < 32; k++ )
+                if( aToken.equalsIgnoreAsciiCaseAscii( pAttribNames[k] ) )
                 {
-                    OUString aToken( pLine->getToken( 0, ',', nIndex ) );
-                    for( int k = 0; k < 32; k++ )
-                        if( aToken.equalsIgnoreAsciiCaseAscii( pAttribNames[k] ) )
-                        {
-                            type |= 1 << k;
-                            break;
-                        }
+                    type |= 1UL << k;
+                    break;
                 }
-            }
         }
+        assert(((type & ~o3tl::typed_flags<ImplFontAttrs>::mask) == 0) && "invalid font attributes");
     }
     catch (const NoSuchElementException&)
     {
