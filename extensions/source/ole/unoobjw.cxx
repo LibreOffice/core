@@ -373,10 +373,10 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
                 // Get the IN-param at index "0"
                 IDispatch* pdisp= pdispparams->rgvarg[i].pdispVal;
 
-                OLECHAR* sindex= L"0";
+                OLECHAR const * sindex= L"0";
                 DISPID id;
                 DISPPARAMS noParams= {0,0,0,0};
-                if(SUCCEEDED( hr= pdisp->GetIDsOfNames( IID_NULL, &sindex, 1, LOCALE_USER_DEFAULT, &id)))
+                if(SUCCEEDED( hr= pdisp->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sindex), 1, LOCALE_USER_DEFAULT, &id)))
                     hr= pdisp->Invoke( id, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
                                        & noParams, & varParam, NULL, NULL);
                 if( FAILED( hr))
