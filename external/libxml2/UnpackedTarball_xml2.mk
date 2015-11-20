@@ -13,7 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,xml2,$(LIBXML_TARBALL),,libxml2))
 
 $(eval $(call gb_UnpackedTarball_add_patches,xml2,\
 	external/libxml2/libxml2-config.patch.1 \
-	external/libxml2/libxml2-freebsd.patch.1 \
 	external/libxml2/libxml2-global-symbols.patch \
 	external/libxml2/libxml2-vc10.patch \
 	$(if $(filter ANDROID,$(OS)),external/libxml2/libxml2-android.patch) \

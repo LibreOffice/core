@@ -1,3 +1,5 @@
+Add SOLARINC, and disable SSE2 default for MSVC2012
+
 --- build/libxml2-2.7.6/win32/Makefile.msvc.old	2010-09-20 20:22:41.500000000 +0200
 +++ build/libxml2-2.7.6/win32/Makefile.msvc	2010-09-20 20:23:00.250000000 +0200
 @@ -59,6 +59,7 @@
