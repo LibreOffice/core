@@ -2559,10 +2559,22 @@
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
           </prop>
         </node>
+        <node oor:name="PAGEDOWN" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:NextPage</value>
+          </prop>
+        </node>
         <node oor:name="PAGEDOWN_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:NextAnnotation</value>
+          </prop>
+        </node>
+        <node oor:name="PAGEUP" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:PreviousPage</value>
           </prop>
         </node>
         <node oor:name="PAGEUP_MOD1_MOD2" oor:op="replace">
@@ -2700,6 +2712,12 @@
             <value xml:lang="es">.uno:SelectAll</value>
           </prop>
         </node>
+        <node oor:name="END" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:LastPage</value>
+          </prop>
+        </node>
         <node oor:name="END_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2832,6 +2850,12 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
+          </prop>
+        </node>
+        <node oor:name="HOME" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:FirstPage</value>
           </prop>
         </node>
         <node oor:name="HOME_SHIFT_MOD1" oor:op="replace">
