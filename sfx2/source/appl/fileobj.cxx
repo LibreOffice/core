@@ -46,8 +46,6 @@
 #define FILETYPE_GRF        2
 #define FILETYPE_OBJECT     3
 
-FnHashSet SvFileObject::m_aAsyncLoadsInProgress;
-
 SvFileObject::SvFileObject()
     : nPostUserEventId(nullptr)
     , mxDelMed()
@@ -81,26 +79,6 @@ bool SvFileObject::GetData( css::uno::Any & rData,
                                 const OUString & rMimeType,
                                 bool bGetSynchron )
 {
-
-    // avoid loading of the same graphics asynchronously in the same document
-    if ( !bAsyncLoadsInProgress )
-    {
-        // asynchronous loading of the same graphic in progress?
-        if ( m_aAsyncLoadsInProgress.find(sFileNm + sReferer) != m_aAsyncLoadsInProgress.end() )
-        {
-            // remove graphic id to sign overloading
-            m_aAsyncLoadsInProgress.erase(sFileNm + sReferer);
-            return true;
-        }
-    }
-    else
-    {
-        bAsyncLoadsInProgress = false;
-        // sign of overloading?
-        if ( m_aAsyncLoadsInProgress.find(sFileNm + sReferer) == m_aAsyncLoadsInProgress.end() )
-           return true;
-    }
-
     SotClipboardFormatId nFmt = SotExchange::RegisterFormatMimeType( rMimeType );
     switch( nType )
     {
@@ -284,8 +262,6 @@ bool SvFileObject::LoadFile_Impl()
 
     if( !bSynchron )
     {
-        m_aAsyncLoadsInProgress.insert(sFileNm + sReferer);
-        bAsyncLoadsInProgress = true;
         bLoadAgain = bDataReady = bInNewData = false;
         bWaitForData = true;
 
@@ -519,7 +495,6 @@ IMPL_LINK_NOARG_TYPED( SvFileObject, DelMedium_Impl, void*, void )
 {
     nPostUserEventId = nullptr;
     mxDelMed.Clear();
-    m_aAsyncLoadsInProgress.erase(sFileNm + sReferer);
 }
 
 IMPL_LINK_TYPED( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
