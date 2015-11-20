@@ -126,7 +126,7 @@ void ManageLanguageDialog::FillLanguageBox()
                 sLanguage += " " + m_sDefLangStr;
             }
             const sal_Int32 nPos = m_pLanguageLB->InsertEntry( sLanguage );
-            m_pLanguageLB->SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
+            m_pLanguageLB->SetEntryData( nPos, new LanguageEntry( pLocale[i], bIsDefault ) );
         }
     }
     else

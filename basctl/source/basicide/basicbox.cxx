@@ -418,7 +418,7 @@ void LanguageBox::FillBox()
                 sLanguage += m_sDefaultLanguageStr;
             }
             sal_Int32 nPos = InsertEntry( sLanguage );
-            SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
+            SetEntryData( nPos, new LanguageEntry( pLocale[i], bIsDefault ) );
 
             if ( bIsCurrent )
                 nSelPos = nPos;

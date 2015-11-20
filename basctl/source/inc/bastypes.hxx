@@ -273,12 +273,11 @@ public:
     {
     private:
         ScriptDocument  m_aDocument;
-        OUString        m_aLibName;
         OUString        m_aCurrentName;
         ItemType        m_eCurrentType;
 
     public:
-        Item (ScriptDocument const&, OUString const& rLibName, OUString const& rCurrentName, ItemType eCurrentType);
+        Item (ScriptDocument const&, OUString const& rCurrentName, ItemType eCurrentType);
         ~Item ();
         const OUString& GetCurrentName()        const { return m_aCurrentName; }
         ItemType        GetCurrentType()        const { return m_eCurrentType; }

@@ -34,14 +34,11 @@ class LocalizationMgr;
 
 struct LanguageEntry
 {
-    OUString                        m_sLanguage;
     css::lang::Locale               m_aLocale;
     bool                            m_bIsDefault;
 
-    LanguageEntry( const OUString& _rLanguage,
-                   const css::lang::Locale& _rLocale,
+    LanguageEntry( const css::lang::Locale& _rLocale,
                    bool _bIsDefault ) :
-        m_sLanguage( _rLanguage ),
         m_aLocale( _rLocale ),
         m_bIsDefault( _bIsDefault ) {}
 };

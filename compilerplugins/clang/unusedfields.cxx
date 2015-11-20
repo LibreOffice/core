@@ -170,8 +170,49 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
 {
     fieldDecl = fieldDecl->getCanonicalDecl();
 
-    if( !ignoreLocation( fieldDecl ))
-        definitionSet.insert(niceName(fieldDecl));
+    if( ignoreLocation( fieldDecl ))
+        return true;
+
+    QualType type = fieldDecl->getType();
+    // unwrap array types
+    while (type->isArrayType())
+        type = type->getAsArrayTypeUnsafe()->getElementType();
+
+    if( CXXRecordDecl* recordDecl = type->getAsCXXRecordDecl() )
+    {
+        bool warn_unused = false;
+        if( recordDecl->hasAttrs())
+        {
+                // Clang currently has no support for custom attributes, but
+                // the annotate attribute comes close, so check for __attribute__((annotate("lo_warn_unused")))
+                for( specific_attr_iterator<AnnotateAttr> i = recordDecl->specific_attr_begin<AnnotateAttr>(),
+                 e = recordDecl->specific_attr_end<AnnotateAttr>();
+                 i != e;
+                 ++i )
+                {
+                    if( (*i)->getAnnotation() == "lo_warn_unused" )
+                    {
+                        warn_unused = true;
+                        break;
+                    }
+                }
+        }
+        if( !warn_unused )
+        {
+            string n = recordDecl->getQualifiedNameAsString();
+            if( n == "rtl::OUString" )
+                warn_unused = true;
+            // Check some common non-LO types.
+            if( n == "std::string" || n == "std::basic_string"
+                || n == "std::list" || n == "std::__debug::list"
+                || n == "std::vector" || n == "std::__debug::vector" )
+                warn_unused = true;
+        }
+        if (!warn_unused)
+            return true;
+    }
+
+    definitionSet.insert(niceName(fieldDecl));
     return true;
 }
 

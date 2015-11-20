@@ -732,7 +732,7 @@ void LibInfos::InsertInfo (
 {
     Key aKey(rDocument, rLibName);
     m_aMap.erase(aKey);
-    m_aMap.insert(Map::value_type(aKey, Item(rDocument, rLibName, rCurrentName, eCurrentType)));
+    m_aMap.insert(Map::value_type(aKey, Item(rDocument, rCurrentName, eCurrentType)));
 }
 
 void LibInfos::RemoveInfoFor (ScriptDocument const& rDocument)
@@ -772,12 +772,10 @@ size_t LibInfos::Key::Hash::operator () (Key const& rKey) const
 
 LibInfos::Item::Item (
     ScriptDocument const& rDocument,
-    OUString const& rLibName,
     OUString const& rCurrentName,
     ItemType eCurrentType
 ) :
     m_aDocument(rDocument),
-    m_aLibName(rLibName),
     m_aCurrentName(rCurrentName),
     m_eCurrentType(eCurrentType)
 { }
