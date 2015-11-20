@@ -96,20 +96,6 @@ protected:
     formula::StackVar eType;
 };
 
-struct ScDoubleRawToken: private ScRawTokenBase
-{
-public:
-    union
-    {   // union only to assure alignment identical to ScRawToken
-        double      nValue;
-        struct {
-            sal_uInt8        cByte;
-            bool        bIsInForceArray;
-        } sbyte;
-    };
-                DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken );
-};
-
 struct ScRawToken: private ScRawTokenBase
 {
     friend class ScCompiler;

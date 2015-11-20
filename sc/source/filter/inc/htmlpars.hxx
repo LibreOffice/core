@@ -102,27 +102,26 @@ struct ScHTMLTableStackEntry
     ScRangeListRef      xLockedList;
     ScEEParseEntry*     pCellEntry;
     ScHTMLColOffset*    pLocalColOffset;
-    sal_uLong               nFirstTableCell;
-    SCCOL               nColCnt;
+    sal_uLong           nFirstTableCell;
     SCROW               nRowCnt;
     SCCOL               nColCntStart;
     SCCOL               nMaxCol;
-    sal_uInt16              nTable;
-    sal_uInt16              nTableWidth;
-    sal_uInt16              nColOffset;
-    sal_uInt16              nColOffsetStart;
+    sal_uInt16          nTable;
+    sal_uInt16          nTableWidth;
+    sal_uInt16          nColOffset;
+    sal_uInt16          nColOffsetStart;
     bool                bFirstRow;
                         ScHTMLTableStackEntry( ScEEParseEntry* pE,
                                 const ScRangeListRef& rL, ScHTMLColOffset* pTO,
                                 sal_uLong nFTC,
-                                SCCOL nCol, SCROW nRow,
+                                SCROW nRow,
                                 SCCOL nStart, SCCOL nMax, sal_uInt16 nTab,
                                 sal_uInt16 nTW, sal_uInt16 nCO, sal_uInt16 nCOS,
                                 bool bFR )
                             : xLockedList( rL ), pCellEntry( pE ),
                             pLocalColOffset( pTO ),
                             nFirstTableCell( nFTC ),
-                            nColCnt( nCol ), nRowCnt( nRow ),
+                            nRowCnt( nRow ),
                             nColCntStart( nStart ), nMaxCol( nMax ),
                             nTable( nTab ), nTableWidth( nTW ),
                             nColOffset( nCO ), nColOffsetStart( nCOS ),

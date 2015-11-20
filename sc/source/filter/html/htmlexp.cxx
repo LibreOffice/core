@@ -208,7 +208,6 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     ScExportBase( rStrmP, pDocP, rRangeP ),
     aBaseURL( rBaseURL ),
     aStreamPath( rStreamPathP ),
-    aFilterOptions( rFilterOptions ),
     pAppWin( Application::GetDefaultDevice() ),
     nUsedTables( 0 ),
     nIndent( 0 ),

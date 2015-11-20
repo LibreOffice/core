@@ -477,8 +477,6 @@ enum FuncParamConversion
 struct FunctionParamInfo
 {
     FuncParamValidity   meValid;        /// Parameter validity.
-    FuncParamConversion meConv;         /// Token class conversion type.
-    bool                mbValType;      /// Data type (false = REFTYPE, true = VALTYPE).
 };
 
 // Function data ==============================================================

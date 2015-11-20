@@ -83,7 +83,6 @@ static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
 
 CommentModel::CommentModel()
     : mnAuthorId(-1)
-    , mnObjId(BIFF_OBJ_INVALID_ID)
     , mbAutoFill(false)
     , mbAutoScale(false)
     , mbColHidden(false)

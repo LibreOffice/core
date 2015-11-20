@@ -47,7 +47,6 @@ struct LotusContext
 
     SvxHorJustifyItem *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
     ScProtectionAttr* pAttrUnprot;
-    SfxUInt32Item**   pAttrValForms;
 
     FormCache*       pValueFormCache; // -> in memory.cxx initialisiert
 
@@ -66,7 +65,6 @@ struct LotusContext
         , pAttrRepeat(nullptr)
         , pAttrStandard(nullptr)
         , pAttrUnprot(nullptr)
-        , pAttrValForms(nullptr)
         , pValueFormCache(nullptr)
     {
     }

@@ -108,7 +108,6 @@ class ScHTMLExport : public ScExportBase
     ScHTMLStyle      aHTMLStyle;
     OUString         aBaseURL;
     OUString         aStreamPath;
-    OUString         aFilterOptions;
     OUString         aCId;           // Content-Id for Mail-Export
     VclPtr<OutputDevice> pAppWin;        // for Pixel-work
     FileNameMapPtr   pFileNameMap;        // for CopyLocalFileToINet

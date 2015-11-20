@@ -115,7 +115,6 @@ struct FilterCriterionModel
     css::uno::Any       maValue; /// Comparison operand.
     sal_Int32           mnOperator;     /// Comparison operator.
     sal_uInt8           mnDataType;     /// Operand data type (BIFF only).
-    sal_uInt8           mnStrLen;       /// Length of string operand (BIFF5-BIFF8 only).
 
     explicit            FilterCriterionModel();
 

@@ -95,9 +95,8 @@ class SC_DLLPUBLIC ScTabViewShell: public SfxViewShell, public ScDBFunc
 private:
     SvxHtmlOptions          aHTMLOpt;
     ObjectSelectionType     eCurOST;
-    sal_uInt16                  nDrawSfxId;
-    sal_uInt16                  nCtrlSfxId;
-    sal_uInt16                  nFormSfxId;
+    sal_uInt16              nDrawSfxId;
+    sal_uInt16              nFormSfxId;
     OUString                sDrawCustom;                // current custom shape type
     ScDrawShell*            pDrawShell;
     ScDrawTextObjectBar*    pDrawTextShell;
@@ -149,18 +148,14 @@ private:
 
     bool                    bDontSwitch;                // Don't turn off EditShell
     bool                    bInFormatDialog;            // for GetSelectionText
-    bool                    bPrintSelected;             // for result of SvxPrtQryBox
 
     bool                    bReadOnly;                  // to detect status changes
 
     bool                    bIsActive;
 
-    SbxObject*              pScSbxObject;
-
     bool                    bChartAreaValid; // if chart is drawn
     bool                    bForceFocusOnCurCell; // #i123629#
 
-    OUString                aEditChartName;
     ScRangeListRef          aChartSource;
     Rectangle               aChartPos;
     SCTAB                   nChartDestTab;

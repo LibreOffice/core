@@ -66,7 +66,6 @@ const sal_uInt16 BIFF12_EXTNAME_ICONIFIED   = 0x0020;
 } // namespace
 
 ExternalNameModel::ExternalNameModel() :
-    mbBuiltIn( false ),
     mbNotify( false ),
     mbPreferPic( false ),
     mbStdDocName( false ),

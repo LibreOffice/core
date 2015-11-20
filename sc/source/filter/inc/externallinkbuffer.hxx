@@ -40,7 +40,6 @@ namespace xls {
 
 struct ExternalNameModel
 {
-    bool                mbBuiltIn;          /// Name is a built-in name.
     bool                mbNotify;           /// Notify application on data change.
     bool                mbPreferPic;        /// Picture link.
     bool                mbStdDocName;       /// Name is the StdDocumentName for DDE.
@@ -270,7 +269,6 @@ private:
     OUString            maTargetUrl;        /// Target link, DDE topic, OLE target.
     css::uno::Reference< css::sheet::XExternalDocLink >
                         mxDocLink;          /// Interface for an external document.
-    Int16Vector         maCalcSheets;       /// Internal sheet indexes.
     Int32Vector         maSheetCaches;      /// External sheet cache indexes.
     ExternalNameVector  maExtNames;         /// Defined names in external document.
 };

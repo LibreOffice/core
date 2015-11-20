@@ -30,9 +30,8 @@ struct CellValueSpan
 {
     SCROW mnRow1;
     SCROW mnRow2;
-    CellType meType;
 
-    CellValueSpan( SCROW nRow1, SCROW nRow2, CellType eType );
+    CellValueSpan( SCROW nRow1, SCROW nRow2 );
 };
 
 /**

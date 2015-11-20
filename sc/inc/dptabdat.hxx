@@ -93,8 +93,6 @@ public:
         ScDPResultMember*               pColRoot;
         ScDPResultMember*               pRowRoot;
 
-        bool                            bRepeatIfEmpty;
-
         CalcInfo();
     };
 

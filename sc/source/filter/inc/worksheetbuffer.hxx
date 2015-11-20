@@ -38,11 +38,10 @@ struct SheetInfoModel
 {
     OUString     maRelId;        /// Relation identifier for the sheet substream.
     OUString     maName;         /// Original name of the sheet.
-    sal_Int64           mnBiffHandle;   /// BIFF record handle of the sheet substream.
-    sal_Int32           mnSheetId;      /// Sheet identifier.
-    sal_Int32           mnState;        /// Visibility state.
+    sal_Int32    mnSheetId;      /// Sheet identifier.
+    sal_Int32    mnState;        /// Visibility state.
 
-    explicit            SheetInfoModel();
+    explicit     SheetInfoModel();
 };
 
 /** Stores information about all sheets in a spreadsheet document.

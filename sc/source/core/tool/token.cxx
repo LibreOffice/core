@@ -197,8 +197,6 @@ namespace
 // Since RawTokens are temporary for the compiler, don't align on 4k and waste memory.
 // ScRawToken size is FixMembers + MAXSTRLEN + ~4 ~= 1036
 IMPL_FIXEDMEMPOOL_NEWDEL( ScRawToken )
-// Some ScDoubleRawToken, FixMembers + sizeof(double) ~= 16
-IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken )
 
 // Need a whole bunch of ScSingleRefToken
 IMPL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken )

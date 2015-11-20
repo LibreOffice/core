@@ -3094,11 +3094,10 @@ class RangeNameInserter : public ::std::unary_function<ScMyNamedExpression, void
 {
     ScDocument* mpDoc;
     ScRangeName& mrRangeName;
-    ScXMLImport& mrXmlImport;
 
 public:
-    RangeNameInserter(ScDocument* pDoc, ScRangeName& rRangeName, ScXMLImport& rXmlImport) :
-        mpDoc(pDoc), mrRangeName(rRangeName), mrXmlImport(rXmlImport) {}
+    RangeNameInserter(ScDocument* pDoc, ScRangeName& rRangeName) :
+        mpDoc(pDoc), mrRangeName(rRangeName) {}
 
     void operator() (const std::unique_ptr<ScMyNamedExpression>& p) const
     {
@@ -3148,7 +3147,7 @@ void ScXMLImport::SetNamedRanges()
 
     // Insert the namedRanges
     ScRangeName* pRangeNames = pDoc->GetRangeName();
-    ::std::for_each(pNamedExpressions->begin(), pNamedExpressions->end(), RangeNameInserter(pDoc, *pRangeNames, *this));
+    ::std::for_each(pNamedExpressions->begin(), pNamedExpressions->end(), RangeNameInserter(pDoc, *pRangeNames));
 }
 
 void ScXMLImport::SetSheetNamedRanges()
@@ -3164,7 +3163,7 @@ void ScXMLImport::SetSheetNamedRanges()
             continue;
 
         const ScMyNamedExpressions& rNames = *itr.second;
-        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(pDoc, *pRangeNames, *this));
+        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(pDoc, *pRangeNames));
     }
 }
 

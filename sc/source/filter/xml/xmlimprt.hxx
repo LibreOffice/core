@@ -767,7 +767,6 @@ class SolarMutexGuard;
 
 struct tScMyCellRange
 {
-    SCTAB Sheet;
     sal_Int32 StartColumn, EndColumn;
     sal_Int32 StartRow, EndRow;
 };
@@ -836,7 +835,6 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
 
     mutable std::unique_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    std::list<SvXMLImportContext*>      aViewContextList;
     ScMyStylesImportHelper*        pStylesImportHelper;
     OUString                       sNumberFormat;
     OUString                       sLocale;

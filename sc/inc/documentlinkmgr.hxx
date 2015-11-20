@@ -34,7 +34,7 @@ class DocumentLinkManager : boost::noncopyable
     std::unique_ptr<DocumentLinkManagerImpl> mpImpl;
 
 public:
-    DocumentLinkManager( ScDocument& rDoc, SfxObjectShell* pShell );
+    DocumentLinkManager( SfxObjectShell* pShell );
     ~DocumentLinkManager();
 
     void setDataStream( DataStream* p );

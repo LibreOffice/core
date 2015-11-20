@@ -53,12 +53,16 @@ for d in definitionSet:
         continue
     if d in callSet:
         continue
-    if (definitionToSourceLocationMap[d].startswith("include/")):
+    srcLoc = definitionToSourceLocationMap[d];
+    if (srcLoc.startswith("include/")):
         continue
-    if (definitionToSourceLocationMap[d].startswith("external/")):
+    if (srcLoc.startswith("external/")):
+        continue
+    # this is all representations of on-disk data structures
+    if (srcLoc == "sc/source/filter/inc/scflt.hxx"):
         continue
 
-    tmp1set.add((clazz, definitionToSourceLocationMap[d]))
+    tmp1set.add((clazz, srcLoc))
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):

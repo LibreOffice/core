@@ -1070,7 +1070,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         Colonize( pActEntry );
         aTableStack.push( new ScHTMLTableStackEntry(
             pActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
-            nColCnt, nRowCnt, nColCntStart, nMaxCol, nTable,
+            nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
         sal_uInt16 nLastWidth = nTableWidth;
@@ -1132,7 +1132,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         }
         aTableStack.push( new ScHTMLTableStackEntry(
             pActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
-            nColCnt, nRowCnt, nColCntStart, nMaxCol, nTable,
+            nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
         // As soon as we have multiple tables we need to be tolerant with the offsets.

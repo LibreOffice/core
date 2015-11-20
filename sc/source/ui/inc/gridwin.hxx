@@ -161,9 +161,6 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     SvtScriptType           nPageScript;
 
-    long                    nLastClickX;
-    long                    nLastClickY;
-
     SCCOL                   nDragStartX;
     SCROW                   nDragStartY;
     SCCOL                   nDragEndX;

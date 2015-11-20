@@ -308,8 +308,7 @@ bool ScValueIterator::GetNext(double& rValue, sal_uInt16& rErr)
     return GetThis(rValue, rErr);
 }
 
-ScDBQueryDataIterator::DataAccess::DataAccess(const ScDBQueryDataIterator* pParent) :
-    mpParent(pParent)
+ScDBQueryDataIterator::DataAccess::DataAccess()
 {
 }
 
@@ -342,8 +341,8 @@ bool ScDBQueryDataIterator::IsQueryValid(
     return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, pCell);
 }
 
-ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc)
-    : DataAccess(pParent)
+ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument* pDoc)
+    : DataAccess()
     , mpCells(nullptr)
     , mpParam(pParam)
     , mpDoc(pDoc)
@@ -522,8 +521,8 @@ void ScDBQueryDataIterator::DataAccessInternal::incPos()
         incBlock();
 }
 
-ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryDataIterator* pParent, ScDBQueryParamMatrix* pParam)
-    : DataAccess(pParent)
+ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(ScDBQueryParamMatrix* pParam)
+    : DataAccess()
     , mpParam(pParam)
     , mnCurRow(0)
 {
@@ -764,13 +763,13 @@ ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryPar
         case ScDBQueryParamBase::INTERNAL:
         {
             ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pParam);
-            mpData.reset(new DataAccessInternal(this, p, pDocument));
+            mpData.reset(new DataAccessInternal(p, pDocument));
         }
         break;
         case ScDBQueryParamBase::MATRIX:
         {
             ScDBQueryParamMatrix* p = static_cast<ScDBQueryParamMatrix*>(pParam);
-            mpData.reset(new DataAccessMatrix(this, p));
+            mpData.reset(new DataAccessMatrix(p));
         }
     }
 }

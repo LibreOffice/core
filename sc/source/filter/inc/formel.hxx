@@ -86,7 +86,6 @@ protected:
     ScAddress           aEingPos;
     ConvErr             eStatus;
     sal_Char*           pBuffer;        // universal buffer
-    sal_uInt16              nBufferSize;    // ...and its size
 
     ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer );
     virtual             ~ConverterBase();

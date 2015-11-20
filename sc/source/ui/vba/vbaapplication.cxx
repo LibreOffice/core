@@ -101,7 +101,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 /** Global application settings shared by all open workbooks. */
 struct ScVbaAppSettings
 {
-    sal_Int32 mnCalculation;
     bool mbDisplayAlerts;
     bool mbEnableEvents;
     bool mbExcel4Menus;
@@ -112,7 +111,6 @@ struct ScVbaAppSettings
 };
 
 ScVbaAppSettings::ScVbaAppSettings() :
-    mnCalculation( excel::XlCalculation::xlCalculationAutomatic ),
     mbDisplayAlerts( true ),
     mbEnableEvents( true ),
     mbExcel4Menus( false ),

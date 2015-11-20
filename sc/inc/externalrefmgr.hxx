@@ -430,7 +430,6 @@ public:
         OUString maRelativeName;
         OUString maFilterName;
         OUString maFilterOptions;
-        bool bUnsaved;
 
         void maybeCreateRealFileName(const OUString& rOwnDocName);
     };

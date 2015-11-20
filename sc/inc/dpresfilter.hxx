@@ -60,10 +60,9 @@ private:
 
     struct DimensionNode : boost::noncopyable
     {
-        const MemberNode* mpParent;
         MembersType maChildMembers;
 
-        DimensionNode(const MemberNode* pParent);
+        DimensionNode();
         ~DimensionNode();
 
 #if DEBUG_PIVOT_TABLE
@@ -73,11 +72,10 @@ private:
 
     struct MemberNode : boost::noncopyable
     {
-        const DimensionNode* mpParent;
         ValuesType maValues;
         DimensionsType maChildDimensions;
 
-        MemberNode(const DimensionNode* pParent);
+        MemberNode();
         ~MemberNode();
 
 #if DEBUG_PIVOT_TABLE

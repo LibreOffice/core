@@ -24,29 +24,10 @@ struct BlockPos
     size_t mnEnd;
 };
 
-CellType toCellType( mdds::mtv::element_t eType )
-{
-    switch (eType)
-    {
-        case element_type_numeric:
-            return CELLTYPE_VALUE;
-        case element_type_string:
-            return CELLTYPE_STRING;
-        case element_type_edittext:
-            return CELLTYPE_EDIT;
-        case element_type_formula:
-            return CELLTYPE_FORMULA;
-        default:
-            ;
-    }
-
-    return CELLTYPE_NONE;
 }
 
-}
-
-CellValueSpan::CellValueSpan( SCROW nRow1, SCROW nRow2, CellType eType ) :
-    mnRow1(nRow1), mnRow2(nRow2), meType(eType) {}
+CellValueSpan::CellValueSpan( SCROW nRow1, SCROW nRow2 ) :
+    mnRow1(nRow1), mnRow2(nRow2) {}
 
 struct CellValuesImpl : boost::noncopyable
 {
@@ -163,7 +144,7 @@ std::vector<CellValueSpan> CellValues::getNonEmptySpans() const
             // Record this span.
             size_t nRow1 = it->position;
             size_t nRow2 = nRow1 + it->size - 1;
-            aRet.push_back(CellValueSpan(nRow1, nRow2, toCellType(it->type)));
+            aRet.push_back(CellValueSpan(nRow1, nRow2));
         }
     }
     return aRet;

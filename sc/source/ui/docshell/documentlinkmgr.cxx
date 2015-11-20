@@ -33,13 +33,12 @@ namespace sc {
 
 struct DocumentLinkManagerImpl : boost::noncopyable
 {
-    ScDocument& mrDoc;
     SfxObjectShell* mpShell;
     std::unique_ptr<DataStream> mpDataStream;
     std::unique_ptr<sfx2::LinkManager> mpLinkManager;
 
-    DocumentLinkManagerImpl( ScDocument& rDoc, SfxObjectShell* pShell ) :
-        mrDoc(rDoc), mpShell(pShell), mpDataStream(nullptr), mpLinkManager(nullptr) {}
+    DocumentLinkManagerImpl( SfxObjectShell* pShell ) :
+        mpShell(pShell), mpDataStream(nullptr), mpLinkManager(nullptr) {}
 
     ~DocumentLinkManagerImpl()
     {
@@ -56,8 +55,8 @@ struct DocumentLinkManagerImpl : boost::noncopyable
     }
 };
 
-DocumentLinkManager::DocumentLinkManager( ScDocument& rDoc, SfxObjectShell* pShell ) :
-    mpImpl(new DocumentLinkManagerImpl(rDoc, pShell)) {}
+DocumentLinkManager::DocumentLinkManager( SfxObjectShell* pShell ) :
+    mpImpl(new DocumentLinkManagerImpl(pShell)) {}
 
 DocumentLinkManager::~DocumentLinkManager()
 {

@@ -130,7 +130,6 @@ class ScXMLExport : public SvXMLExport
     sal_uInt16                  nCurrentTable;
     bool                        bHasRowHeader;
     bool                        bRowHeaderOpen;
-    bool                        mbShowProgress;
 
     sal_Int32       GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const;
     void            CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount);

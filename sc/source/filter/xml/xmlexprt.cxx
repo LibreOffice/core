@@ -364,8 +364,7 @@ ScXMLExport::ScXMLExport(
     nProgressCount(0),
     nCurrentTable(0),
     bHasRowHeader(false),
-    bRowHeaderOpen(false),
-    mbShowProgress( false )
+    bRowHeaderOpen(false)
 {
     if (getExportFlags() & SvXMLExportFlags::CONTENT)
     {

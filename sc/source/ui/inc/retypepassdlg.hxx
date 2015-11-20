@@ -83,7 +83,6 @@ private:
     OUString        maTextNotPassProtected;
     OUString        maTextHashBad;
     OUString        maTextHashGood;
-    OUString        maTextHashRegen;
 
     DECL_LINK_TYPED( OKHdl, Button*, void );
     DECL_LINK_TYPED( RetypeBtnHdl, Button*, void );
@@ -96,7 +95,6 @@ private:
     ::std::vector<TableItem> maTableItems;
 
     DocProtectionPtr    mpDocItem;
-    size_t              mnCurScrollPos;
     ScPasswordHash      meDesiredHash;
 };
 

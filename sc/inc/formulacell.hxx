@@ -72,7 +72,6 @@ public:
     bool mbSubTotal:1;
 
     sal_uInt8 meCalcState;
-    sal_uInt8 meKernelState;
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();

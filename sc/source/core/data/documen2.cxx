@@ -176,7 +176,6 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nMacroInterpretLevel(0),
         nInterpreterTableOpLevel(0),
         nSrcVer( SC_CURRENT_VERSION ),
-        nSrcMaxRow( MAXROW ),
         nFormulaTrackCount(0),
         eHardRecalcState(HARDRECALCSTATE_OFF),
         nVisibleTab( 0 ),
@@ -201,9 +200,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         bInDtorClear( false ),
         bExpandRefs( false ),
         bDetectiveDirty( false ),
-        nMacroCallMode( SC_MACROCALL_ALLOWED ),
         bHasMacroFunc( false ),
-        nVisSpellState( 0 ),
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),
         bPastingDrawFromOtherDoc( false ),
@@ -266,7 +263,7 @@ const sfx2::LinkManager* ScDocument::GetLinkManager() const
 sc::DocumentLinkManager& ScDocument::GetDocLinkManager()
 {
     if (!mpDocLinkMgr)
-        mpDocLinkMgr.reset(new sc::DocumentLinkManager(*this, pShell));
+        mpDocLinkMgr.reset(new sc::DocumentLinkManager(pShell));
     return *mpDocLinkMgr;
 }
 

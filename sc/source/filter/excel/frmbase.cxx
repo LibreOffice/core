@@ -168,8 +168,7 @@ const ScRange* _ScRangeListTabs::Next ()
 ConverterBase::ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer ) :
     aPool(rSPool),
     aEingPos( 0, 0, 0 ),
-    eStatus( ConvOK ),
-    nBufferSize( nNewBuffer )
+    eStatus( ConvOK )
 {
     OSL_ENSURE( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
     pBuffer = new sal_Char[ nNewBuffer ];

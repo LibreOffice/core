@@ -32,9 +32,7 @@ struct CommentModel
     css::table::CellRangeAddress
                         maRange;            /// Position of the comment in the worksheet.
     RichStringRef       mxText;             /// Formatted text of the comment (not used in BIFF8).
-    OUString            maAuthor;           /// Comment author (BIFF8 only).
     sal_Int32           mnAuthorId;         /// Identifier of the comment's author (OOXML and BIFF12 only).
-    sal_uInt16          mnObjId;            /// Drawing object identifier (BIFF8 only).
     bool                mbAutoFill;         /// Auto Selection of comment object's fill style
     bool                mbAutoScale;        /// Auto Scale comment text
     bool                mbColHidden;        /// Comment cell's Column is Hidden

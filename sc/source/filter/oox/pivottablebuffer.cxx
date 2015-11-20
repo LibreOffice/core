@@ -862,8 +862,6 @@ PTDefinitionModel::PTDefinitionModel() :
     mnPageWrap( 0 ),
     mnIndent( 1 ),
     mnChartFormat( 0 ),
-    mnRowFields( 0 ),
-    mnColFields( 0 ),
     mbDataOnRows( false ),
     mbShowError( false ),
     mbShowMissing( true ),

@@ -60,15 +60,6 @@ enum XclTracerId
     eTraceLength         /// this *should* always be the final entry
 };
 
-struct XclTracerDetails
-{
-    XclTracerId                 meProblemId;    /// Excel Import Trace index.
-    sal_uInt32                  mnID;           /// actual ID Index trace tag Value
-    const sal_Char*             mpContext;      /// Context for problem e.g. Limits
-    const sal_Char*             mpDetail;       /// Context Detail e.g. SheetX
-    const sal_Char*             mpProblem;      /// Description of problem
-};
-
 /** This class wraps an MSFilterTracer to create trace logs for import/export filters. */
 class XclTracer
 {

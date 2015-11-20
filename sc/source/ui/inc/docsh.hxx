@@ -102,8 +102,6 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     ScDBData*           pOldAutoDBRange;
 
-    ScSbxDocHelper*     pDocHelper;
-
     ScAutoStyleList*    pAutoStyleList;
     ScPaintLockData*    pPaintLockData;
     ScOptSolverSave*    pSolverSaveData;

@@ -548,8 +548,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mnFormatType(css::util::NumberFormat::NUMBER),
     mbInvariant(false),
     mbSubTotal(false),
-    meCalcState(sc::GroupCalcEnabled),
-    meKernelState(sc::OpenCLKernelNone)
+    meCalcState(sc::GroupCalcEnabled)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCellGroup ctor this " << this);
 }

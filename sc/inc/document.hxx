@@ -394,7 +394,6 @@ private:
     sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter
     sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
     sal_uInt16              nSrcVer;                        // file version (load/save)
-    SCROW                   nSrcMaxRow;                     // number of lines to load/save
     sal_uInt16              nFormulaTrackCount;
     HardRecalcState         eHardRecalcState;               // off, temporary, eternal
     SCTAB                   nVisibleTab;                    // for OLE etc., don't use inside ScDocument
@@ -437,10 +436,7 @@ private:
     // for detective update, is set for each change of a formula
     bool                bDetectiveDirty;
 
-    sal_uInt8               nMacroCallMode;     // Macros per warning dialog disabled?
     bool                bHasMacroFunc;      // valid only after loading
-
-    sal_uInt8               nVisSpellState;
 
     sal_uInt8               nAsianCompression;
     sal_uInt8               nAsianKerning;

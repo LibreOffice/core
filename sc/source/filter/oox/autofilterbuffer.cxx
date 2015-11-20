@@ -318,8 +318,7 @@ ApiFilterSettings Top10Filter::finalizeImport( sal_Int32 /*nMaxCount*/ )
 
 FilterCriterionModel::FilterCriterionModel() :
     mnOperator( XML_equal ),
-    mnDataType( BIFF_FILTER_DATATYPE_NONE ),
-    mnStrLen( 0 )
+    mnDataType( BIFF_FILTER_DATATYPE_NONE )
 {
 }
 

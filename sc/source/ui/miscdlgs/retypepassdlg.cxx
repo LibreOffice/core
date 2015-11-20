@@ -32,10 +32,8 @@ ScRetypePassDlg::ScRetypePassDlg(vcl::Window* pParent) :
     maTextNotPassProtected(ScResId(STR_NOT_PASS_PROTECTED)),
     maTextHashBad(ScResId(STR_HASH_BAD)),
     maTextHashGood(ScResId(STR_HASH_GOOD)),
-    maTextHashRegen(ScResId(STR_HASH_REGENERATED)),
 
     mpDocItem(static_cast<ScDocProtection*>(nullptr)),
-    mnCurScrollPos(0),
     meDesiredHash(PASSHASH_SHA1)
 {
     get(mpBtnOk ,"ok");

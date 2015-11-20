@@ -241,8 +241,8 @@ bool lcl_fillQueryEntries(
 
 }
 
-ScDBRangeBase::ScDBRangeBase(ScDocument* pDoc, RefType eType) :
-    mpDoc(pDoc), meType(eType)
+ScDBRangeBase::ScDBRangeBase(ScDocument* pDoc) :
+    mpDoc(pDoc)
 {
 }
 
@@ -269,7 +269,7 @@ void ScDBRangeBase::fillQueryOptions(ScQueryParamBase* pParam)
 }
 
 ScDBInternalRange::ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange) :
-    ScDBRangeBase(pDoc, INTERNAL), maRange(rRange)
+    ScDBRangeBase(pDoc), maRange(rRange)
 {
 }
 
@@ -384,7 +384,7 @@ bool ScDBInternalRange::isRangeEqual(const ScRange& rRange) const
 }
 
 ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat) :
-    ScDBRangeBase(pDoc, EXTERNAL), mpMatrix(pMat)
+    ScDBRangeBase(pDoc), mpMatrix(pMat)
 {
     SCSIZE nC, nR;
     mpMatrix->GetDimensions(nC, nR);

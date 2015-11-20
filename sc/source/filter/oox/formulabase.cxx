@@ -265,18 +265,18 @@ const sal_uInt8 V = BIFF_TOKCLASS_VAL;
 const sal_uInt8 A = BIFF_TOKCLASS_ARR;
 
 // abbreviations for parameter infos
-#define RO   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_ORG, false }
-#define RA   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_ARR, false }
-#define RR   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_RPT, false }
-#define RX   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_RPX, false }
-#define VO   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_ORG, true  }
-#define VV   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_VAL, true  }
-#define VA   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_ARR, true  }
-#define VR   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_RPT, true  }
-#define VX   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_RPX, true  }
-#define RO_E { FUNC_PARAM_EXCELONLY, FUNC_PARAMCONV_ORG, false }
-#define VR_E { FUNC_PARAM_EXCELONLY, FUNC_PARAMCONV_RPT, true  }
-#define C    { FUNC_PARAM_CALCONLY,  FUNC_PARAMCONV_ORG, false }
+#define RO   { FUNC_PARAM_REGULAR }
+#define RA   { FUNC_PARAM_REGULAR }
+#define RR   { FUNC_PARAM_REGULAR }
+#define RX   { FUNC_PARAM_REGULAR }
+#define VO   { FUNC_PARAM_REGULAR  }
+#define VV   { FUNC_PARAM_REGULAR  }
+#define VA   { FUNC_PARAM_REGULAR  }
+#define VR   { FUNC_PARAM_REGULAR  }
+#define VX   { FUNC_PARAM_REGULAR  }
+#define RO_E { FUNC_PARAM_EXCELONLY }
+#define VR_E { FUNC_PARAM_EXCELONLY  }
+#define C    { FUNC_PARAM_CALCONLY }
 
 // Note: parameter types of all macro sheet functions (FUNCFLAG_MACROFUNC/FUNCFLAG_MACROCMD) untested!
 

@@ -239,8 +239,6 @@ struct PTDefinitionModel : public AutoFormatModel
     sal_Int32           mnPageWrap;
     sal_Int32           mnIndent;
     sal_Int32           mnChartFormat;
-    sal_uInt16          mnRowFields;
-    sal_uInt16          mnColFields;
     bool                mbDataOnRows;
     bool                mbShowError;
     bool                mbShowMissing;

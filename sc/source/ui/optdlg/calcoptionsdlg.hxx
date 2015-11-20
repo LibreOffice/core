@@ -79,9 +79,6 @@ private:
     OUString maSoftware;
 
     ScCalcConfig maConfig;
-#if HAVE_FEATURE_OPENCL
-    std::vector<OpenCLPlatformInfo> maPlatformInfo;
-#endif
 
     bool mbSelectedEmptyStringAsZero;
     bool mbWriteConfig;

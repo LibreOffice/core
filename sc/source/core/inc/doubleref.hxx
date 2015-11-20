@@ -74,7 +74,7 @@ public:
     virtual bool isRangeEqual(const ScRange& rRange) const = 0;
 
 protected:
-    ScDBRangeBase(ScDocument* pDoc, RefType eType);
+    ScDBRangeBase(ScDocument* pDoc);
     ScDocument* getDoc() const { return mpDoc;}
 
     /**
@@ -87,7 +87,6 @@ private:
     ScDBRangeBase(); // disabled
 
     ScDocument* mpDoc;
-    RefType meType;
 };
 
 class ScDBInternalRange : public ScDBRangeBase

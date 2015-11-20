@@ -30,8 +30,7 @@ size_t ScDPResultTree::NamePairHash::operator() (const NamePairType& rPair) cons
     return aHash(rPair.first) + aHash(rPair.second);
 }
 
-ScDPResultTree::DimensionNode::DimensionNode(const MemberNode* pParent) :
-    mpParent(pParent) {}
+ScDPResultTree::DimensionNode::DimensionNode() {}
 
 ScDPResultTree::DimensionNode::~DimensionNode()
 {
@@ -60,8 +59,7 @@ void ScDPResultTree::DimensionNode::dump(int nLevel) const
 }
 #endif
 
-ScDPResultTree::MemberNode::MemberNode(const DimensionNode* pParent) :
-    mpParent(pParent) {}
+ScDPResultTree::MemberNode::MemberNode() {}
 
 ScDPResultTree::MemberNode::~MemberNode()
 {
@@ -87,7 +85,7 @@ void ScDPResultTree::MemberNode::dump(int nLevel) const
 }
 #endif
 
-ScDPResultTree::ScDPResultTree() : mpRoot(new MemberNode(nullptr)) {}
+ScDPResultTree::ScDPResultTree() : mpRoot(new MemberNode) {}
 ScDPResultTree::~ScDPResultTree()
 {
     delete mpRoot;
@@ -120,7 +118,7 @@ void ScDPResultTree::add(
         {
             // New dimenison.  Insert it.
             std::pair<DimensionsType::iterator, bool> r =
-                rDims.insert(DimensionsType::value_type(aUpperName, new DimensionNode(pMemNode)));
+                rDims.insert(DimensionsType::value_type(aUpperName, new DimensionNode));
 
             if (!r.second)
                 // Insertion failed!
@@ -141,7 +139,7 @@ void ScDPResultTree::add(
             // New member.  Insert it.
             std::pair<MembersType::iterator, bool> r =
                 rMembers.insert(
-                    MembersType::value_type(aUpperName, new MemberNode(pDim)));
+                    MembersType::value_type(aUpperName, new MemberNode));
 
             if (!r.second)
                 // Insertion failed!
@@ -192,7 +190,7 @@ void ScDPResultTree::clear()
 {
     maPrimaryDimName = EMPTY_OUSTRING;
     delete mpRoot;
-    mpRoot = new MemberNode(nullptr);
+    mpRoot = new MemberNode;
 }
 
 const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
