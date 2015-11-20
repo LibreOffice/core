@@ -51,8 +51,7 @@ struct TransitionSettings
     TransitionSettings() :
         mbUseMipMapLeaving( true ),
         mbUseMipMapEntering( true ),
-        mnRequiredGLVersion( 1.0 ),
-        mbReflectSlides( false )
+        mnRequiredGLVersion( 1.0 )
     {
     }
 
@@ -64,11 +63,6 @@ struct TransitionSettings
     /** which GL version does the transition require
      */
     float mnRequiredGLVersion;
-
-    /** Whether to reflect slides, the reflection happens on flat surface beneath the slides.
-     ** Now it only works with slides which keep their rectangular shape together.
-     */
-    bool mbReflectSlides;
 };
 
 typedef std::vector<Primitive> Primitives_t;

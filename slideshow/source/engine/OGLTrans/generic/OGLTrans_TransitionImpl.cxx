@@ -93,53 +93,6 @@ void OGLTransitionImpl::finish()
     finishTransition();
 }
 
-static void blendSlide( double depth )
-{
-    CHECK_GL_ERROR();
-    double showHeight = -1 + depth*2;
-    GLfloat reflectionColor[] = {0, 0, 0, 0.25};
-
-    glDisable( GL_DEPTH_TEST );
-    glBegin( GL_QUADS );
-    glColor4fv( reflectionColor );
-    glVertex3f( -1, -1, 0 );
-    glColor4f( 0, 0, 0, 1 );
-    glVertex3f(-1,  showHeight, 0 );
-    glVertex3f( 1,  showHeight, 0 );
-    glColor4fv( reflectionColor );
-    glVertex3f( 1, -1, 0 );
-    glEnd();
-
-    glBegin( GL_QUADS );
-    glColor4f( 0, 0, 0, 1 );
-    glVertex3f( -1, showHeight, 0 );
-    glVertex3f( -1,  1, 0 );
-    glVertex3f(  1,  1, 0 );
-    glVertex3f(  1, showHeight, 0 );
-    glEnd();
-    glEnable( GL_DEPTH_TEST );
-    CHECK_GL_ERROR();
-}
-
-static void slideShadow( double nTime, const Primitive& primitive, double sw, double sh )
-{
-    CHECK_GL_ERROR();
-    double reflectionDepth = 0.3;
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDisable(GL_LIGHTING);
-
-    glPushMatrix();
-    primitive.applyOperations( nTime, sw, sh );
-    blendSlide( reflectionDepth );
-    glPopMatrix();
-
-    glDisable(GL_BLEND);
-    glEnable(GL_LIGHTING);
-    CHECK_GL_ERROR();
-}
-
 void OGLTransitionImpl::prepare( double, double, double, double, double )
 {
 }
@@ -256,33 +209,8 @@ OGLTransitionImpl::displaySlide(
         double SlideWidthScale, double SlideHeightScale )
 {
     CHECK_GL_ERROR();
-    //TODO change to foreach
     glBindTexture(GL_TEXTURE_2D, glSlideTex);
     CHECK_GL_ERROR();
-
-    // display slide reflection
-    // note that depth test is turned off while blending the shadow
-    // so the slides has to be rendered in right order, see rochade as example
-    if( maSettings.mbReflectSlides ) {
-        double surfaceLevel = -0.04;
-
-        /* reflected slides */
-        glPushMatrix();
-
-        glm::mat4 matrix;
-        matrix = glm::scale(matrix, glm::vec3(1, -1, 1));
-        matrix = glm::translate(matrix, glm::vec3(0, 2 - surfaceLevel, 0));
-        glMultMatrixf(glm::value_ptr(matrix));
-
-        glCullFace(GL_FRONT);
-        display_primitives(primitives, nTime, SlideWidthScale, SlideHeightScale);
-        glCullFace(GL_BACK);
-
-        slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
-
-        glPopMatrix();
-    }
-
     display_primitives(primitives, nTime, SlideWidthScale, SlideHeightScale);
     CHECK_GL_ERROR();
 }
@@ -493,6 +421,69 @@ void ShaderTransition::impl_setTextureUniforms()
 namespace
 {
 
+class ReflectionTransition : public ShaderTransition
+{
+public:
+    ReflectionTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
+        : ShaderTransition(rScene, rSettings)
+    {}
+
+private:
+    virtual GLuint makeShader() const override;
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+
+    virtual void impl_prepareTransition() override {
+        glDisable(GL_CULL_FACE);
+    }
+
+    virtual void impl_finishTransition() override {
+        glEnable(GL_CULL_FACE);
+    }
+};
+
+GLuint ReflectionTransition::makeShader() const
+{
+    return OpenGLHelper::LoadShaders( "reflectionVertexShader", "reflectionFragmentShader" );
+}
+
+void ReflectionTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
+                                              double SlideWidthScale, double SlideHeightScale )
+{
+    CHECK_GL_ERROR();
+    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
+
+    sal_Int32 texture;
+    Primitives_t slide;
+    if (nTime < 0.5) {
+        texture = glLeavingSlideTex;
+        slide = getScene().getLeavingSlide();
+    } else {
+        texture = glEnteringSlideTex;
+        slide = getScene().getEnteringSlide();
+    }
+
+    displaySlide( nTime, texture, slide, SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
+}
+
+std::shared_ptr<OGLTransitionImpl>
+makeReflectionTransition(
+        const Primitives_t& rLeavingSlidePrimitives,
+        const Primitives_t& rEnteringSlidePrimitives,
+        const Operations_t& rOverallOperations,
+        const TransitionSettings& rSettings = TransitionSettings())
+{
+    return std::make_shared<ReflectionTransition>(
+            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, SceneObjects_t()),
+            rSettings)
+        ;
+}
+
+}
+
+namespace
+{
+
 class SimpleTransition : public ShaderTransition
 {
 public:
@@ -639,17 +630,22 @@ std::shared_ptr<OGLTransitionImpl> makeFallLeaving()
 std::shared_ptr<OGLTransitionImpl> makeTurnAround()
 {
     Primitive Slide;
-
     TransitionSettings aSettings;
-    aSettings.mbReflectSlides = true;
 
     Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
     Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back(Slide);
 
+    Slide.Operations.push_back(makeSScale(glm::vec3(1, -1, 1), glm::vec3(0, -1.02, 0), false, -1, 0));
+    aLeavingPrimitives.push_back(Slide);
+
+    Slide.Operations.clear();
     Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0),-180,false,0.0,1.0));
     Primitives_t aEnteringPrimitives;
+    aEnteringPrimitives.push_back(Slide);
+
+    Slide.Operations.push_back(makeSScale(glm::vec3(1, -1, 1), glm::vec3(0, -1.02, 0), false, -1, 0));
     aEnteringPrimitives.push_back(Slide);
 
     Operations_t aOperations;
@@ -657,7 +653,7 @@ std::shared_ptr<OGLTransitionImpl> makeTurnAround()
     aOperations.push_back(makeSTranslate(glm::vec3(0, 0, 1.5), true, 0.5, 1));
     aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0),glm::vec3(0, 0, 0), -180, true, 0.0, 1.0));
 
-    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations, aSettings);
+    return makeReflectionTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations, aSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeTurnDown()
@@ -755,15 +751,15 @@ std::shared_ptr<OGLTransitionImpl> makeIris()
 namespace
 {
 
-class RochadeTransition : public SimpleTransition
+class RochadeTransition : public ReflectionTransition
 {
 public:
     RochadeTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : SimpleTransition(rScene, rSettings)
+        : ReflectionTransition(rScene, rSettings)
     {}
 
 private:
-    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+    virtual void displaySlides_(double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale) override;
 };
 
 void RochadeTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
@@ -798,9 +794,7 @@ makeRochadeTransition(
 std::shared_ptr<OGLTransitionImpl> makeRochade()
 {
     Primitive Slide;
-
     TransitionSettings aSettings;
-    aSettings.mbReflectSlides = true;
 
     double w, h;
 
@@ -815,12 +809,18 @@ std::shared_ptr<OGLTransitionImpl> makeRochade()
     Primitives_t aLeavingSlide;
     aLeavingSlide.push_back(Slide);
 
+    Slide.Operations.push_back(makeSScale(glm::vec3(1, -1, 1), glm::vec3(0, -1.02, 0), false, -1, 0));
+    aLeavingSlide.push_back(Slide);
+
     Slide.Operations.clear();
     Slide.Operations.push_back(makeSEllipseTranslate(w, h, 0.75, 0.25, true, 0, 1));
     Slide.Operations.push_back(makeSTranslate(glm::vec3(0, 0, -h), false, -1, 0));
     Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), -45, true, 0, 1));
     Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), 45, false, -1, 0));
     Primitives_t aEnteringSlide;
+    aEnteringSlide.push_back(Slide);
+
+    Slide.Operations.push_back(makeSScale(glm::vec3(1, -1, 1), glm::vec3(0, -1.02, 0), false, -1, 0));
     aEnteringSlide.push_back(Slide);
 
     return makeRochadeTransition(aLeavingSlide, aEnteringSlide, aSettings);
