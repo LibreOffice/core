@@ -302,6 +302,7 @@ endef
 # PythonTest class
 
 gb_PythonTest_UNITTESTFAILED := $(GBUILDDIR)/platform/unittest-failed-MACOSX.mk
+gb_PythonTest_DEPS := $(call gb_GeneratedPackage_get_target,python3) $(call gb_Package_get_target,python_shell)
 gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)
 ifneq ($(LIBO_LIB_FOLDER),$(LIBO_URE_LIB_FOLDER))
 gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(INSTROOT)/$(LIBO_LIB_FOLDER)
