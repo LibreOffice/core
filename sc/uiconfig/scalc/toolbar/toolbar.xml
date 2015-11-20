@@ -18,8 +18,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:InsertCtrl" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:InsCellsCtrl" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertCtrl"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsCellsCtrl"/>
  <toolbar:toolbaritem xlink:href=".uno:Config"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AutoFormat"/>

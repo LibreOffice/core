@@ -19,13 +19,13 @@
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:FormatLine"/>
- <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineEndStyle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:XLineStyle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
  <toolbar:toolbarseparator/>

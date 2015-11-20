@@ -35,8 +35,8 @@
  <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:Color"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignLeft"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter"/>

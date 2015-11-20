@@ -28,7 +28,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:MergeCells"/>
  <toolbar:toolbaritem xlink:href=".uno:SplitCell"/>
- <toolbar:toolbaritem xlink:href=".uno:OptimizeTable" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:OptimizeTable"/>
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>

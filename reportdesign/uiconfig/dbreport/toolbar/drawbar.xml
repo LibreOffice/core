@@ -18,10 +18,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes"/>
 </toolbar:toolbar>

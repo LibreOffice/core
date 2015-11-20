@@ -25,9 +25,9 @@
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltLeft" toolbar:helpid="10963"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltRight" toolbar:helpid="10964"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionDepthFloater" toolbar:style="dropdownonly"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionDirectionFloater" toolbar:style="dropdownonly"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionLightingFloater" toolbar:style="dropdownonly"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionSurfaceFloater" toolbar:style="dropdownonly"/>
- <toolbar:toolbaritem xlink:href=".uno:Extrusion3DColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionDepthFloater"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionDirectionFloater"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionLightingFloater"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionSurfaceFloater"/>
+ <toolbar:toolbaritem xlink:href=".uno:Extrusion3DColor"/>
 </toolbar:toolbar>

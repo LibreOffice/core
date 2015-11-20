@@ -39,7 +39,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>

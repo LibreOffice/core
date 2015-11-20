@@ -20,7 +20,7 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="10143" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:style="dropdown" toolbar:helpid="10172"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:helpid="10172"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:helpid="10301"/>
  <toolbar:toolbaritem xlink:href=".uno:XLineStyle" toolbar:helpid="10169"/>

@@ -36,13 +36,13 @@
  <toolbar:toolbaritem xlink:href=".uno:SplitCell"/>
  <toolbar:toolbaritem xlink:href=".uno:SplitTable"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:OptimizeTable" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:OptimizeTable"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
  <toolbar:toolbaritem xlink:href=".uno:AutoFormat"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>

@@ -37,7 +37,7 @@
  <toolbar:toolbaritem xlink:href=".uno:OutlineFont"/>
  <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:Color"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>

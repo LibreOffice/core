@@ -30,7 +30,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:RecSearch"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Refresh" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:Refresh"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:OrderCrit"/>
  <toolbar:toolbaritem xlink:href=".uno:Sortup"/>

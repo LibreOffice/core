@@ -33,7 +33,7 @@
  <toolbar:toolbaritem xlink:href=".uno:AutoControlFocus"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TransformDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:visible="false"/>

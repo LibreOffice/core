@@ -32,9 +32,10 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AdvancedMode" toolbar:style="radio dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:AdvancedMode"/>
  <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectPosition"/>
 </toolbar:toolbar>
+

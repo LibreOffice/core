@@ -20,7 +20,7 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOff"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOn"/>
@@ -48,7 +48,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ChainFrames"/>
  <toolbar:toolbaritem xlink:href=".uno:UnhainFrames"/>

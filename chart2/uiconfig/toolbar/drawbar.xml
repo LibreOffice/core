@@ -28,10 +28,10 @@
  <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:helpid="10253"/>
  <toolbar:toolbaritem xlink:href=".uno:DrawCaption" toolbar:helpid="10254"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:style="dropdown" toolbar:helpid="11002"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:style="dropdown" toolbar:helpid="11003"/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:style="dropdown" toolbar:helpid="11004"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:style="dropdown" toolbar:helpid="11005"/>
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:style="dropdown" toolbar:helpid="11006"/>
- <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:style="dropdown" toolbar:helpid="11007"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="11003"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="11004"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="11005"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="11006"/>
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="11007"/>
 </toolbar:toolbar>

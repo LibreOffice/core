@@ -38,13 +38,13 @@
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
  <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ChainFrames"/>
  <toolbar:toolbaritem xlink:href=".uno:UnhainFrames"/>

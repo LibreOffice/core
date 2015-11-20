@@ -20,9 +20,9 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkShapeType" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontworkShapeType"/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkSameLetterHeights"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkAlignmentFloater" toolbar:style="dropdownonly"/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkCharacterSpacingFloater" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontworkAlignmentFloater"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontworkCharacterSpacingFloater"/>
 </toolbar:toolbar>
