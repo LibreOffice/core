@@ -78,7 +78,7 @@ inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent( ToolBox* pDropBox,
 #define TOOLBOX_ITEM_NOTFOUND       ((sal_uInt16)0xFFFF)
 
 // item ids in the custom menu may not exceed this constant
-#define TOOLBOX_MENUITEM_START      ((sal_uInt16)0xE000)
+#define TOOLBOX_MENUITEM_START      ((sal_uInt16)0x1000)
 
 // defines for the menubutton
 #define TOOLBOX_MENUTYPE_NONE           ((sal_uInt16)0x0000)    // no menu at all, scrolling by spin buttons
