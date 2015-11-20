@@ -177,7 +177,6 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 ToolBox* pToolBar ) :
     m_bDisposed( false ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
-    m_bModuleIdentified( false ),
     m_bAddedToTaskPaneList( true ),
     m_bFrameActionRegistered( false ),
     m_bUpdateControllers( false ),
@@ -189,8 +188,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xFrame( rFrame ),
     m_aListenerContainer( m_mutex ),
     m_xContext( rxContext ),
-    m_sIconTheme( SvtMiscOptions().GetIconTheme() ),
-    m_bAcceleratorCfg( false )
+    m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
     OSL_ASSERT( m_xContext.is() );
 

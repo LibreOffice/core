@@ -166,7 +166,6 @@ namespace framework
             ::cppu::OWeakObject*                                                            m_pOwner;
             rtl::Reference< GlobalImageList >                                               m_pGlobalImageList;
             CmdImageList*                                                                   m_pDefaultImageList;
-            OUString                                                                   m_aXMLPostfix;
             OUString                                                                   m_aModuleIdentifier;
             OUString                                                                   m_aResourceString;
             osl::Mutex m_mutex;

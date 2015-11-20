@@ -594,7 +594,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
         case E_STARTMODULEDISPATCHER :
                 {
-                    StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( m_xContext, xOwner );
+                    StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( m_xContext );
                     xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;

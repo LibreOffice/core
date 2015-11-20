@@ -48,11 +48,8 @@ namespace framework{
 #endif
 namespace fpf = ::framework::pattern::frame;
 
-StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
-                                             const css::uno::Reference< css::frame::XFrame >&              xFrame)
+StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext)
     : m_xContext         (rxContext                         )
-    , m_xOwner           (xFrame                        )
-    , m_lStatusListener  (m_mutex)
 {
 }
 

@@ -507,7 +507,6 @@ ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext
     m_xContext( rxContext )
     , m_pOwner(pOwner)
     , m_pDefaultImageList( nullptr )
-    , m_aXMLPostfix( ".xml" )
     , m_aResourceString( ModuleImageList )
     , m_aListenerContainer( m_mutex )
     , m_bUseGlobal(_bUseGlobal)

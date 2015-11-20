@@ -118,11 +118,6 @@ class ToolBarManager : public ToolbarManager_Base
             css::uno::Reference< css::frame::XLayoutManager >   xLayoutManager;
             css::uno::Reference< css::awt::XWindow >            xWindow;
         };
-        struct ControllerParams
-        {
-            sal_Int16 nWidth;
-        };
-        typedef std::vector< ControllerParams > ControllerParamsVector;
 
     protected:
         DECL_LINK_TYPED( Command, CommandEvent const *, void );
@@ -173,7 +168,6 @@ class ToolBarManager : public ToolbarManager_Base
 
         bool m_bDisposed : 1,
              m_bSmallSymbols : 1,
-             m_bModuleIdentified : 1,
              m_bAddedToTaskPaneList : 1,
              m_bFrameActionRegistered : 1,
              m_bUpdateControllers : 1,
@@ -206,7 +200,6 @@ class ToolBarManager : public ToolbarManager_Base
         Timer                                                                                  m_aAsyncUpdateControllersTimer;
         OUString                                                                               m_sIconTheme;
         MenuDescriptionMap m_aMenuMap;
-        bool                                                                               m_bAcceleratorCfg;
         css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
         css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
         css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;

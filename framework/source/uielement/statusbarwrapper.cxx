@@ -111,7 +111,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                     sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
 
                     pStatusBar = VclPtr<FrameworkStatusBar>::Create( pWindow, nStyles );
-                    pStatusBarManager = new StatusBarManager( m_xContext, xFrame, m_aResourceURL, pStatusBar );
+                    pStatusBarManager = new StatusBarManager( m_xContext, xFrame, pStatusBar );
                     static_cast<FrameworkStatusBar*>(pStatusBar)->SetStatusBarManager( pStatusBarManager );
                     m_xStatusBarManager.set( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
                     pStatusBar->SetUniqueId( HID_STATUSBAR );

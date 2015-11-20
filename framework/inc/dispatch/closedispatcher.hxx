@@ -100,7 +100,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
 
         /** @short  list of registered status listener */
         osl::Mutex m_mutex;
-        ListenerHash m_lStatusListener;
 
         /** @short  holded alive for internally asynchronous operations! */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;

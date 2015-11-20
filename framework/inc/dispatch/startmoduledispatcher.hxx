@@ -58,12 +58,8 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper<
                    uno resources. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-        /** @short  our "context" frame. */
-        css::uno::WeakReference< css::frame::XFrame > m_xOwner;
-
         /** @short  list of registered status listener */
         osl::Mutex m_mutex;
-        ListenerHash m_lStatusListener;
 
     // native interface
 
@@ -80,8 +76,7 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper<
             @param  xFrame
                     the frame where the corresponding dispatch was started.
          */
-        StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
-                              const css::uno::Reference< css::frame::XFrame >&              xFrame);
+        StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext);
 
         /** @short  does nothing real. */
         virtual ~StartModuleDispatcher();
