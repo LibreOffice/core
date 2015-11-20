@@ -63,13 +63,11 @@
 XFDate::XFDate()
 {
     m_bFixed = false;
-    memset(&m_aDateTime, 0, sizeof(m_aDateTime));
     m_bValued = false;
 }
 
 XFDate::~XFDate()
 {
-
 }
 
 void    XFDate::ToXml(IXFStream *pStrm)

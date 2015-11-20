@@ -175,9 +175,6 @@ class XFListLevelImage : public XFListLevel
 public:
     virtual void    ToXml(IXFStream *pStrm) override;
 private:
-    sal_Int16       m_nWidth;
-    sal_Int16       m_nHeight;
-    OUString   m_strBinaryData;
 };
 
 class XFListStyle : public XFStyle

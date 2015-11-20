@@ -241,7 +241,6 @@ protected:
 
     XFContentContainer* m_pXFContainer; //Current container for VO_PARA
 
-    OUString m_TabStyleName;
     enum
     {
         /* bit definitions for the paragraph object flags */

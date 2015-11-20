@@ -128,8 +128,6 @@ private:
     LwpAtomHolder m_DestPGName[MAX_LEVELS];
     sal_uInt32 m_nFlags[MAX_LEVELS];
 
-    std::vector<std::pair<OUString,OUString> > m_TOCList;
-
     OUString m_TabStyleName;
 
     XFContentContainer* m_pCont;

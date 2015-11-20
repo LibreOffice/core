@@ -462,17 +462,6 @@ enum enumXFIndexTemplate
     enumXFIndexTemplateBibliography,
 };
 
-struct XFDateTime
-{
-    sal_Int32 nYear;
-    sal_Int32 nMonth;
-    sal_Int32 nDay;
-    sal_Int32 nHour;
-    sal_Int32 nMinute;
-    sal_Int32 nSecond;
-    sal_Int32 nMillSecond;
-};
-
 enum enumXFRubyPosition
 {
     enumXFRubyLeft = 4,

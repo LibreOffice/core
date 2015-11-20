@@ -1874,7 +1874,6 @@ LwpPlacableLayout::LwpPlacableLayout( LwpObjectHeader &objHdr, LwpSvStream* pStr
     , m_nWrapType(0)
     , m_nBuoyancy(0)
     , m_nBaseLineOffset(0)
-    , m_nPageNumber(0)
 {}
 
 LwpPlacableLayout::~LwpPlacableLayout()

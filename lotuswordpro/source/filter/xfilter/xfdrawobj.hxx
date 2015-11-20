@@ -99,7 +99,6 @@ public:
 
 protected:
     rtl::Reference<XFContentContainer>  m_aContents;
-    OUString        m_strTextStyle;
     double          m_fRotate;
     XFPoint         m_aRotatePoint;
     double          m_fScaleX;

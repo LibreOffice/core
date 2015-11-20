@@ -430,7 +430,6 @@ protected:
     sal_Int32 m_nBaseLineOffset;
     LwpAtomHolder m_Script;
     LwpObjectID m_LayRelativity;
-    sal_uInt16 m_nPageNumber;//for frame anchored to page
     rtl::Reference<XFFont> m_pFont;//for frame position
 };
 #endif
