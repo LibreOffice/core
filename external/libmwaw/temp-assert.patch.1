@@ -1,0 +1,34 @@
+--- libmwaw/src/lib/GreatWksText.cxx.orig	2015-11-20 23:25:45.858196735 +0100
++++ libmwaw/src/lib/GreatWksText.cxx	2015-11-20 23:26:57.664191166 +0100
+@@ -426,6 +426,8 @@
+   m_document(document), m_parserState(document.m_parserState), m_state(new GreatWksTextInternal::State),
+   m_mainParser(&document.getMainParser())
+ {
++	if (m_parserState.get() < (void*) 0x1000)
++		abort();
+ }
+ 
+ GreatWksText::~GreatWksText()
+@@ -857,7 +859,11 @@
+ //////////////////////////////////////////////
+ bool GreatWksText::readFontNames()
+ {
++	if (m_parserState.get() < (void*) 0x1000)
++		abort();
+   MWAWInputStreamPtr &input= m_parserState->m_input;
++	if (input.get() < (void*) 0x1000)
++		abort();
+   long pos=input->tell();
+   libmwaw::DebugFile &ascFile = m_parserState->m_asciiFile;
+   libmwaw::DebugStream f;
+--- libmwaw/src/lib/GreatWksDocument.cxx.orig	2015-11-23 22:41:21.233264400 +0100
++++ libmwaw/src/lib/GreatWksDocument.cxx	2015-11-23 22:41:54.975262474 +0100
+@@ -81,6 +81,8 @@
+   m_parser(&parser), m_graphParser(), m_textParser(),
+   m_getMainSection(0), m_newPage(0)
+ {
++	if (parser.getParserState().get() != m_parserState.get())
++		abort();
+   m_state.reset(new GreatWksDocumentInternal::State);
+ 
+   m_graphParser.reset(new GreatWksGraph(*this));

@@ -37,6 +37,7 @@ endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
     external/libmwaw/c++11-narrowing.patch \
+    external/libmwaw/temp-assert.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
