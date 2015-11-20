@@ -302,8 +302,8 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
             throw UnknownPropertyException(msg);
         }
 
-        if ( (! aDescPut && aDescGet) || aVarDesc
-             && aVarDesc->wVarFlags == VARFLAG_FREADONLY )
+        if ( (! aDescPut && aDescGet)
+             || (aVarDesc && aVarDesc->wVarFlags == VARFLAG_FREADONLY) )
         {
             //read-only
             OUString msg("[automation bridge] Property " + aPropertyName +
@@ -614,8 +614,8 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
             FuncDesc aDescPut(pInfo);
             VarDesc aVarDesc(pInfo);
             getPropDesc( aName, & aDescGet, & aDescPut, & aVarDesc);
-            if (aDescGet  && aDescGet->cParams > 0
-                || aDescPut && aDescPut->cParams > 0)
+            if ((aDescGet && aDescGet->cParams > 0)
+                || (aDescPut && aDescPut->cParams > 0))
                 ret = sal_True;
         }
         else
