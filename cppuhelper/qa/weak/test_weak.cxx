@@ -38,7 +38,7 @@ class Reference: public cppu::WeakImplHelper1< css::uno::XReference > {
 public:
     Reference(): m_disposed(false) {}
 
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException) {
+    void SAL_CALL dispose() throw (css::uno::RuntimeException) override {
         m_disposed = true;
         handleDispose();
     }
@@ -54,14 +54,14 @@ private:
 
 class RuntimeExceptionReference: public Reference {
 protected:
-    virtual void handleDispose() {
+    void handleDispose() override {
         throw css::uno::RuntimeException();
     }
 };
 
 class DisposedExceptionReference: public Reference {
 protected:
-    virtual void handleDispose() {
+    void handleDispose() override {
         throw css::lang::DisposedException();
     }
 };
