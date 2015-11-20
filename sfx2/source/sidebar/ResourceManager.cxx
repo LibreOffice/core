@@ -54,6 +54,40 @@ bool getBool(utl::OConfigurationNode const & aNode, const char* pNodeName)
     return comphelper::getBOOL(aNode.getNodeValue(pNodeName));
 }
 
+css::uno::Sequence<OUString> BuildContextList (ContextList rContextList, bool isEnabled)
+{
+    const ::std::vector<ContextList::Entry>& entries = rContextList.GetEntries();
+
+     css::uno::Sequence<OUString> result(entries.size());
+     long i = 0;
+
+    for (::std::vector<ContextList::Entry>::const_iterator iEntry(entries.begin()), iEnd(entries.end());
+                                                            iEntry!=iEnd; ++iEntry)
+         {
+            OUString appName = iEntry->maContext.msApplication;
+            OUString contextName = iEntry->maContext.msContext;
+            OUString menuCommand = iEntry->msMenuCommand;
+
+            OUString visibility;
+            if (isEnabled)
+                visibility = "visible";
+            else
+                visibility = "hidden";
+
+            OUString element = appName + ", " + contextName +", " + visibility;
+
+            if (menuCommand != "")
+                element += ", "+menuCommand;
+
+            result[i] = element;
+
+            i++;
+        }
+
+    return result;
+
+}
+
 } //end anonymous namespace
 
 ResourceManager::ResourceManager()
@@ -380,40 +414,6 @@ void ResourceManager::ReadPanelList()
     // of the deck vector.
     if (nWriteIndex<nCount)
         maPanels.resize(nWriteIndex);
-}
-
-css::uno::Sequence<OUString> ResourceManager::BuildContextList (ContextList rContextList, bool isEnabled)
-{
-    const ::std::vector<ContextList::Entry>& entries = rContextList.GetEntries();
-
-     css::uno::Sequence<OUString> result(entries.size());
-     long i = 0;
-
-    for (::std::vector<ContextList::Entry>::const_iterator iEntry(entries.begin()), iEnd(entries.end());
-                                                            iEntry!=iEnd; ++iEntry)
-         {
-            OUString appName = iEntry->maContext.msApplication;
-            OUString contextName = iEntry->maContext.msContext;
-            OUString menuCommand = iEntry->msMenuCommand;
-
-            OUString visibility;
-            if (isEnabled)
-                visibility = "visible";
-            else
-                visibility = "hidden";
-
-            OUString element = appName + ", " + contextName +", " + visibility;
-
-            if (menuCommand != "")
-                element += ", "+menuCommand;
-
-            result[i] = element;
-
-            i++;
-        }
-
-    return result;
-
 }
 
 void ResourceManager::ReadContextList (
