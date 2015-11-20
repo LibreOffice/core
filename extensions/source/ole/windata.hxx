@@ -41,8 +41,8 @@ public:
     VARDESC* m_pVarDesc;
 
     VarDesc(ITypeInfo* pTypeInfo) :
-      m_pVarDesc(NULL),
-      m_pTypeInfo(pTypeInfo)
+      m_pTypeInfo(pTypeInfo),
+      m_pVarDesc(NULL)
    {
        OSL_ASSERT(pTypeInfo);
    }
@@ -81,8 +81,8 @@ class FuncDesc
 public:
 
     FuncDesc(ITypeInfo * pTypeInfo) :
-        m_pFuncDesc(NULL),
-        m_pTypeInfo(pTypeInfo)
+        m_pTypeInfo(pTypeInfo),
+        m_pFuncDesc(NULL)
         {
             OSL_ASSERT(pTypeInfo);
         }
@@ -159,8 +159,8 @@ public:
     TYPEATTR* m_pTypeAttr;
 
     TypeAttr(ITypeInfo* pTypeInfo) :
-      m_pTypeAttr( NULL ),
-      m_pTypeInfo( pTypeInfo )
+      m_pTypeInfo( pTypeInfo ),
+      m_pTypeAttr( NULL )
    {
        OSL_ASSERT(pTypeInfo);
    }
