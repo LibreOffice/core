@@ -36,8 +36,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
 
-#include "notebookbarwindow.hxx"
-
 using namespace ::com::sun::star::uno;
 
 // useful caption height for title bar buttons
@@ -1834,7 +1832,6 @@ void ImplBorderWindow::dispose()
     delete mpBorderView;
     mpBorderView = nullptr;
     mpMenuBarWindow.clear();
-    mpNotebookBarWindow.disposeAndClear();
     vcl::Window::dispose();
 }
 
@@ -1915,14 +1912,12 @@ void ImplBorderWindow::Resize()
     {
         vcl::Window* pClientWindow = ImplGetClientWindow();
 
-        sal_Int32 nLeftBorder;
-        sal_Int32 nTopBorder;
-        sal_Int32 nRightBorder;
-        sal_Int32 nBottomBorder;
-        mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
-
-        if (mpMenuBarWindow)
+        if ( mpMenuBarWindow )
         {
+            sal_Int32 nLeftBorder;
+            sal_Int32 nTopBorder;
+            sal_Int32 nRightBorder;
+            sal_Int32 nBottomBorder;
             long nMenuHeight = mpMenuBarWindow->GetSizePixel().Height();
             if ( mbMenuHide )
             {
@@ -1935,20 +1930,13 @@ void ImplBorderWindow::Resize()
                 if ( !nMenuHeight )
                     nMenuHeight = mnOrgMenuHeight;
             }
-            mpMenuBarWindow->setPosSizePixel(
-                    nLeftBorder, nTopBorder,
-                    aSize.Width()-nLeftBorder-nRightBorder, nMenuHeight);
-
-            // shift the notebookbar down accordingly
-            nTopBorder += nMenuHeight;
-        }
-
-        if (mpNotebookBarWindow)
-        {
-            long nNotebookBarHeight = mpNotebookBarWindow->GetSizePixel().Height();
-            mpNotebookBarWindow->setPosSizePixel(
-                    nLeftBorder, nTopBorder,
-                    aSize.Width() - nLeftBorder - nRightBorder, nNotebookBarHeight);
+            mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
+            mpMenuBarWindow->setPosSizePixel( nLeftBorder,
+                                              nTopBorder,
+                                              aSize.Width()-nLeftBorder-nRightBorder,
+                                              nMenuHeight,
+                                              PosSizeFlags::Pos |
+                                              PosSizeFlags::Width | PosSizeFlags::Height );
         }
 
         GetBorder( pClientWindow->mpWindowImpl->mnLeftBorder, pClientWindow->mpWindowImpl->mnTopBorder,
@@ -2175,23 +2163,12 @@ void ImplBorderWindow::SetMenuBarMode( bool bHide )
     UpdateMenuHeight();
 }
 
-void ImplBorderWindow::SetNotebookBarWindow(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
-{
-    mpNotebookBarWindow = VclPtr<NotebookBarWindow>::Create(this, "NotebookBar", rUIXMLDescription, rFrame);
-    Resize();
-    mpNotebookBarWindow->Show();
-}
-
 void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                   sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
-    mpBorderView->GetBorder(rLeftBorder, rTopBorder, rRightBorder, rBottomBorder);
-
-    if (mpMenuBarWindow && !mbMenuHide)
+    mpBorderView->GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
+    if ( mpMenuBarWindow && !mbMenuHide )
         rTopBorder += mpMenuBarWindow->GetSizePixel().Height();
-
-    if (mpNotebookBarWindow)
-        rTopBorder += mpNotebookBarWindow->GetSizePixel().Height();
 }
 
 long ImplBorderWindow::CalcTitleWidth() const
