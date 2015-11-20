@@ -14,7 +14,7 @@ gb_PythonTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 ifeq ($(SYSTEM_PYTHON),)
 gb_PythonTest_EXECUTABLE := $(gb_Python_INSTALLED_EXECUTABLE)
 gb_PythonTest_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE_GDB)
-gb_PythonTest_DEPS ?= $(call gb_Package_get_target,python3) $(call gb_Package_get_target,python_shell)
+gb_PythonTest_DEPS ?= $(if $(filter MACOSX,$(OS)),$(call gb_GeneratedPackage_get_target,python3),$(call gb_Package_get_target,python3)) $(call gb_Package_get_target,python_shell)
 else
 gb_PythonTest_EXECUTABLE := $(PYTHON_FOR_BUILD)
 gb_PythonTest_EXECUTABLE_GDB := $(PYTHON_FOR_BUILD)
