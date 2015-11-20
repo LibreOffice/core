@@ -31,8 +31,6 @@ namespace abp
         VclPtr<PushButton> m_pInvokeAdminDialog;
         VclPtr<FixedText>  m_pErrorMessage;
 
-        bool        m_bSuccessfullyExecutedDialog;
-
     public:
         explicit AdminDialogInvokationPage(OAddessBookSourcePilot* _pParent);
         virtual ~AdminDialogInvokationPage();

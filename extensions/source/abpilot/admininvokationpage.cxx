@@ -27,7 +27,6 @@ namespace abp
     AdminDialogInvokationPage::AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent )
         : AddressBookSourcePage(_pParent, "InvokeAdminPage",
             "modules/sabpilot/ui/invokeadminpage.ui")
-        , m_bSuccessfullyExecutedDialog(false)
     {
         get(m_pInvokeAdminDialog, "settings");
         get(m_pErrorMessage, "warning");

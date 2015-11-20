@@ -33,7 +33,6 @@ namespace dbp
         StringArray     aValues;
         OUString        sDefaultField;
         OUString        sDBField;
-        OUString        sName;
     };
 
     class OGroupBoxWizard : public OControlWizard

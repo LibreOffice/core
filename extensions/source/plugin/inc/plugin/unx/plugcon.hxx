@@ -98,7 +98,6 @@ public:
     char*                       pMimeType;
     void*                       pShell;
     void*                       pWidget;
-    void*                       pForm;
 
     GtkWidget*                  pGtkWindow;
     GtkWidget*                  pGtkWidget;

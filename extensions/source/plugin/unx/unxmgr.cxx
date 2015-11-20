@@ -178,12 +178,6 @@ static bool CheckPlugin( const OString& rPath, list< PluginDescription* >& rDesc
     return nDescriptions > 0;
 }
 
-union maxDirent
-{
-    char aBuffer[ sizeof( struct dirent ) + PATH_MAX +1 ];
-    struct dirent asDirent;
-};
-
 static void CheckPluginRegistryFiles( const OString& rPath, list< PluginDescription* >& rDescriptions )
 {
     OStringBuffer aPath( 1024 );
@@ -212,7 +206,7 @@ static void CheckPluginRegistryFiles( const OString& rPath, list< PluginDescript
     DIR* pDIR = opendir( rPath.getStr() );
     struct dirent* pDirEnt = nullptr;
     struct stat aStat;
-    maxDirent u;
+    struct dirent u;
     while( pDIR && ! readdir_r( pDIR, &u.asDirent, &pDirEnt ) && pDirEnt )
     {
         char* pBaseName = u.asDirent.d_name;
@@ -267,7 +261,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         OString aSearchPath = aSearchBuffer.makeStringAndClear();
 
         sal_Int32 nIndex = 0;
-        maxDirent u;
+        struct dirent u;
         do
         {
             OString aPath(aSearchPath.getToken(0, ':', nIndex));
