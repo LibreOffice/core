@@ -1934,9 +1934,7 @@ void ImplBorderWindow::Resize()
             mpMenuBarWindow->setPosSizePixel( nLeftBorder,
                                               nTopBorder,
                                               aSize.Width()-nLeftBorder-nRightBorder,
-                                              nMenuHeight,
-                                              PosSizeFlags::Pos |
-                                              PosSizeFlags::Width | PosSizeFlags::Height );
+                                              nMenuHeight);
         }
 
         GetBorder( pClientWindow->mpWindowImpl->mnLeftBorder, pClientWindow->mpWindowImpl->mnTopBorder,
