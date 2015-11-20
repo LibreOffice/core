@@ -27,9 +27,7 @@
 #include "RowSet.hxx"
 #include "dbastrings.hrc"
 #include "sdbcoretools.hxx"
-#include "services.hxx"
 #include "SingleSelectQueryComposer.hxx"
-#include "module_dba.hxx"
 #include "CRowSetColumn.hxx"
 #include "CRowSetDataColumn.hxx"
 #include "RowSetCache.hxx"
@@ -76,6 +74,7 @@
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/solar.h>
 #include <unotools/configmgr.hxx>
 
 using namespace utl;
@@ -483,15 +482,10 @@ Any SAL_CALL ORowSet::queryAggregation( const Type& rType ) throw(RuntimeExcepti
     return aRet;
 }
 
-OUString ORowSet::getImplementationName_static(  ) throw(RuntimeException)
+// css::XServiceInfo
+OUString SAL_CALL ORowSet::getImplementationName() throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.dba.ORowSet");
-}
-
-// css::XServiceInfo
-OUString SAL_CALL ORowSet::getImplementationName(  ) throw(RuntimeException, std::exception)
-{
-    return getImplementationName_static();
 }
 
 sal_Bool SAL_CALL ORowSet::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
@@ -499,7 +493,7 @@ sal_Bool SAL_CALL ORowSet::supportsService( const OUString& _rServiceName ) thro
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > ORowSet::getSupportedServiceNames_static(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL ORowSet::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 5 );
     aSNS[0] = SERVICE_SDBC_RESULTSET;
@@ -508,11 +502,6 @@ Sequence< OUString > ORowSet::getSupportedServiceNames_static(  ) throw (Runtime
     aSNS[3] = SERVICE_SDB_RESULTSET;
     aSNS[4] = SERVICE_SDB_ROWSET;
     return aSNS;
-}
-
-Sequence< OUString > SAL_CALL ORowSet::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
-{
-    return getSupportedServiceNames_static();
 }
 
 // OComponentHelper
