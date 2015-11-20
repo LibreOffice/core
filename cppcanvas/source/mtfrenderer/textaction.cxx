@@ -1531,7 +1531,6 @@ namespace cppcanvas
                                const ::Color&                                       rShadowColor,
                                const ::basegfx::B2DRectangle&                       rOutlineBounds,
                                const uno::Reference< rendering::XPolyPolygon2D >&   rTextPoly,
-                               const ::std::vector< sal_Int32 >&                    rPolygonGlyphMap,
                                const uno::Sequence< double >&                       rOffsets,
                                VirtualDevice&                                       rVDev,
                                const CanvasSharedPtr&                               rCanvas,
@@ -1543,7 +1542,6 @@ namespace cppcanvas
                                const ::Color&                                       rShadowColor,
                                const ::basegfx::B2DRectangle&                       rOutlineBounds,
                                const uno::Reference< rendering::XPolyPolygon2D >&   rTextPoly,
-                               const ::std::vector< sal_Int32 >&                    rPolygonGlyphMap,
                                const uno::Sequence< double >&                       rOffsets,
                                VirtualDevice&                                       rVDev,
                                const CanvasSharedPtr&                               rCanvas,
@@ -1573,15 +1571,6 @@ namespace cppcanvas
 
                 uno::Reference< rendering::XPolyPolygon2D >         mxTextPoly;
 
-                /** This vector denotes the index of the start polygon
-                    for the respective glyph sequence.
-
-                    To get a polygon index range for a given character
-                    index i, take [ maPolygonGlyphMap[i],
-                    maPolygonGlyphMap[i+1] ). Note that this is wrong
-                    for BiDi
-                 */
-                const ::std::vector< sal_Int32 >                    maPolygonGlyphMap;
                 const uno::Sequence< double >                       maOffsets;
                 const CanvasSharedPtr                               mpCanvas;
                 rendering::RenderState                              maState;
@@ -1616,13 +1605,11 @@ namespace cppcanvas
                                           const ::Color&                                        rShadowColor,
                                           const ::basegfx::B2DRectangle&                        rOutlineBounds,
                                           const uno::Reference< rendering::XPolyPolygon2D >&    rTextPoly,
-                                          const ::std::vector< sal_Int32 >&                     rPolygonGlyphMap,
                                           const uno::Sequence< double >&                        rOffsets,
                                           VirtualDevice&                                        rVDev,
                                           const CanvasSharedPtr&                                rCanvas,
                                           const OutDevState&                                    rState  ) :
                 mxTextPoly( rTextPoly ),
-                maPolygonGlyphMap( rPolygonGlyphMap ),
                 maOffsets( rOffsets ),
                 mpCanvas( rCanvas ),
                 maState(),
@@ -1659,14 +1646,12 @@ namespace cppcanvas
                                           const ::Color&                                        rShadowColor,
                                           const ::basegfx::B2DRectangle&                        rOutlineBounds,
                                           const uno::Reference< rendering::XPolyPolygon2D >&    rTextPoly,
-                                          const ::std::vector< sal_Int32 >&                     rPolygonGlyphMap,
                                           const uno::Sequence< double >&                        rOffsets,
                                           VirtualDevice&                                        rVDev,
                                           const CanvasSharedPtr&                                rCanvas,
                                           const OutDevState&                                    rState,
                                           const ::basegfx::B2DHomMatrix&                        rTextTransform ) :
                 mxTextPoly( rTextPoly ),
-                maPolygonGlyphMap( rPolygonGlyphMap ),
                 maOffsets( rOffsets ),
                 mpCanvas( rCanvas ),
                 maState(),
@@ -1968,11 +1953,6 @@ namespace cppcanvas
                 if( !bHaveOutlines )
                     return ActionSharedPtr();
 
-                ::std::vector< sal_Int32 > aPolygonGlyphMap;
-
-                // first glyph starts at polygon index 0
-                aPolygonGlyphMap.push_back( 0 );
-
                 // remove offsetting from mapmode transformation
                 // (outline polygons must stay at origin, only need to
                 // be scaled)
@@ -2013,12 +1993,6 @@ namespace cppcanvas
                             aResultingPolyPolygon.append( aPoly );
                         }
                     }
-
-                    // TODO(F3): Depending on the semantics of
-                    // GetTextOutlines(), this here is wrong!
-
-                    // calc next glyph index
-                    aPolygonGlyphMap.push_back( aResultingPolyPolygon.count() );
                 }
 
                 const uno::Sequence< double > aCharWidthSeq(
@@ -2045,7 +2019,6 @@ namespace cppcanvas
                             rShadowColor,
                             ::basegfx::tools::getRange(aResultingPolyPolygon),
                             xTextPoly,
-                            aPolygonGlyphMap,
                             aCharWidthSeq,
                             rVDev,
                             rCanvas,
@@ -2063,7 +2036,6 @@ namespace cppcanvas
                             rShadowColor,
                             ::basegfx::tools::getRange(aResultingPolyPolygon),
                             xTextPoly,
-                            aPolygonGlyphMap,
                             aCharWidthSeq,
                             rVDev,
                             rCanvas,
