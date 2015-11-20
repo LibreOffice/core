@@ -87,8 +87,8 @@ static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
 
 InterfaceOleWrapper_Impl::InterfaceOleWrapper_Impl( Reference<XMultiServiceFactory>& xFactory,
                                                     sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
-        m_defaultValueType( 0),
-        UnoConversionUtilities<InterfaceOleWrapper_Impl>( xFactory, unoWrapperClass, comWrapperClass)
+        UnoConversionUtilities<InterfaceOleWrapper_Impl>( xFactory, unoWrapperClass, comWrapperClass),
+        m_defaultValueType( 0)
 {
 }
 
