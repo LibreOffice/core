@@ -2401,7 +2401,6 @@ void Test::testFunctionLists()
         "TODAY",
         "WEEKDAY",
         "WEEKNUM",
-        "WEEKNUM_OOO",
         "WEEKS",
         "WEEKSINYEAR",
         "WORKDAY.INTL",
@@ -2621,6 +2620,14 @@ void Test::testFunctionLists()
         "FISHER",
         "FISHERINV",
         "FORECAST",
+        "FORECAST.ETS.ADD",
+        "FORECAST.ETS.MULT",
+        "FORECAST.ETS.PI.ADD",
+        "FORECAST.ETS.PI.MULT",
+        "FORECAST.ETS.SEASONALITY",
+        "FORECAST.ETS.STAT.ADD",
+        "FORECAST.ETS.STAT.MULT",
+        "FORECAST.LINEAR",
         "FTEST",
         "GAMMA",
         "GAMMA.DIST",
@@ -5713,7 +5720,7 @@ void Test::testCondFormatInsertDeleteSheets()
     ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
     const ScConditionalFormat* pCheck = pList->GetFormat(nKey);
-    CPPUNIT_ASSERT_MESSAGE("Wrong conditional format instance.", pCheck == pFormat);
+    CPPUNIT_ASSERT_MESSAGE("Wrong condntional format instance.", pCheck == pFormat);
 
     // ... and its range is B2:B4.
     ScRangeList aCheckRange = pCheck->GetRange();

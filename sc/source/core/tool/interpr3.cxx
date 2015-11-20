@@ -154,7 +154,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
         {
             fAx = fRx; fAy = fRy;
         }
-        // if last iteration brought to small advance, then do bisection next
+        // if last interration brought to small advance, then do bisection next
         // time, for safety
         bHasToInterpolate = bHasToInterpolate && (fabs(fRy) * 2.0 <= fabs(fQy));
         ++nCount;
@@ -943,7 +943,7 @@ static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
 
     const double fMaxIter = 50000.0;
     // loop security, normal cases converge in less than 100 iterations.
-    // FIXME: You will get so much iterations for fX near mean,
+    // FIXME: You will get so much iteratons for fX near mean,
     // I do not know a better algorithm.
     bool bfinished = false;
     do
@@ -3349,12 +3349,6 @@ void ScInterpreter::ScMedian()
 double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile )
 {
     size_t nSize = rArray.size();
-    if (rArray.empty() || nSize == 0 || nGlobalError)
-    {
-        SetError( errNoValue);
-        return 0.0;
-    }
-
     if (nSize == 1)
         return rArray[0];
     else
@@ -3420,6 +3414,11 @@ void ScInterpreter::ScPercentile( bool bInclusive )
     }
     vector<double> aArray;
     GetNumberSequenceArray( 1, aArray, false );
+    if (aArray.empty() || aArray.size() == 0 || nGlobalError)
+    {
+        SetError( errNoValue);
+        return;
+    }
     if ( bInclusive )
         PushDouble( GetPercentile( aArray, alpha ));
     else
@@ -3438,6 +3437,11 @@ void ScInterpreter::ScQuartile( bool bInclusive )
     }
     vector<double> aArray;
     GetNumberSequenceArray( 1, aArray, false );
+    if (aArray.empty() || aArray.size() == 0 || nGlobalError)
+    {
+        SetError( errNoValue);
+        return;
+    }
     if ( bInclusive )
         PushDouble( fFlag == 2.0 ? GetMedian( aArray ) : GetPercentile( aArray, 0.25 * fFlag ) );
     else
@@ -4393,6 +4397,18 @@ void ScInterpreter::ScForecast()
         return;
     }
     double fVal = GetDouble();
+
+    double fForecast = LinearForecast( pMat1, pMat2, fVal );
+    if ( !nGlobalError )
+        PushDouble( fForecast );
+}
+
+double ScInterpreter::LinearForecast( ScMatrixRef rMat1, ScMatrixRef rMat2, double fVal )
+{
+    SCSIZE nC1, nC2;
+    SCSIZE nR1, nR2;
+    rMat1->GetDimensions( nC1, nR1 );
+    rMat2->GetDimensions( nC2, nR2 );
     // #i78250# numerical stability improved
     double fCount           = 0.0;
     double fSumX            = 0.0;
@@ -4402,18 +4418,22 @@ void ScInterpreter::ScForecast()
     {
         for (SCSIZE j = 0; j < nR1; j++)
         {
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+            if (!rMat1->IsString(i,j) && !rMat2->IsString(i,j))
             {
-                double fValX = pMat1->GetDouble(i,j);
-                double fValY = pMat2->GetDouble(i,j);
+                double fValX = rMat1->GetDouble(i,j);
+                double fValY = rMat2->GetDouble(i,j);
                 fSumX += fValX;
                 fSumY += fValY;
                 fCount++;
             }
         }
     }
+
     if (fCount < 1.0)
+    {
         PushNoValue();
+        return 0.0;
+    }
     else
     {
         double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
@@ -4424,19 +4444,23 @@ void ScInterpreter::ScForecast()
         {
             for (SCSIZE j = 0; j < nR1; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (!rMat1->IsString(i,j) && !rMat2->IsString(i,j))
                 {
-                    double fValX = pMat1->GetDouble(i,j);
-                    double fValY = pMat2->GetDouble(i,j);
+                    double fValX = rMat1->GetDouble(i,j);
+                    double fValY = rMat2->GetDouble(i,j);
                     fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
                     fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
                 }
             }
         }
+
         if (fSumSqrDeltaX == 0.0)
-            PushError( errDivisionByZero);
+        {
+            PushError( errDivisionByZero );
+            return 0.0;
+        }
         else
-            PushDouble( fMeanY + fSumDeltaXDeltaY / fSumSqrDeltaX * (fVal - fMeanX));
+            return( fMeanY + fSumDeltaXDeltaY / fSumSqrDeltaX * ( fVal - fMeanX ) );
     }
 }
 
