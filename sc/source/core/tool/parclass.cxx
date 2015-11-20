@@ -212,6 +212,10 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocNetWorkdays_MS,  {{ Value, Value, Value, Reference                       }, 0 }},
     { ocWorkday_MS,      {{ Value, Value, Value, Reference                       }, 0 }},
     { ocAggregate,       {{ Value, Value, Reference                              }, 1 }},
+    { ocForecast_ETS,    {{ ForceArray, ForceArray, ForceArray, Value, Value, Value          }, 0 }},
+    { ocForecast_ETS_CI, {{ ForceArray, ForceArray, ForceArray, Value, Value, Value, Value   }, 0 }},
+    { ocForecast_ETS_SE, {{ ForceArray, ForceArray, ForceArray, Value, Value                 }, 0 }},
+    { ocForecast_ETS_ST, {{ ForceArray, ForceArray, Value, Value, Value, Value               }, 0 }},
     // Excel doubts:
     // ocN, ocT: Excel says (and handles) Reference, error? This means no
     // position dependent SingleRef if DoubleRef, and no array calculation,
