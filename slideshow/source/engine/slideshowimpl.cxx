@@ -2422,7 +2422,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL slideshow_component_getFactory( sal_Char const* pImplName,
                                          void*, void* )
 {
-    return component_getFactoryHelper( pImplName, slideShowDecl );
+    return sdecl::component_getFactoryHelper( pImplName, {&slideShowDecl} );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

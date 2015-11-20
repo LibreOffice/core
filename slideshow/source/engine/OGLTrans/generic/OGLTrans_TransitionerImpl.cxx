@@ -1569,7 +1569,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL ogltrans_component_getFactory( sal_Char const* pImplName,
                                          void*, void* )
 {
-    return component_getFactoryHelper( pImplName, OGLTransitionFactoryDecl );
+    return sdecl::component_getFactoryHelper( pImplName, {&OGLTransitionFactoryDecl} );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

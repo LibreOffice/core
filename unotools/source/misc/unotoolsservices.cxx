@@ -20,8 +20,8 @@ extern sdecl::ServiceDecl const ServiceDocumenterDecl;
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL utl_component_getFactory(
     sal_Char const* pImplName, void*, void*)
 {
-    return component_getFactoryHelper( pImplName,
-            OTempFileServiceDecl, ServiceDocumenterDecl);
+    return sdecl::component_getFactoryHelper( pImplName,
+            {&OTempFileServiceDecl, &ServiceDocumenterDecl});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

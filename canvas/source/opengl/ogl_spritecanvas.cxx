@@ -29,6 +29,8 @@
 
 using namespace ::com::sun::star;
 
+namespace sdecl = comphelper::service_decl;
+
 namespace oglcanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
@@ -173,7 +175,6 @@ namespace oglcanvas
         return xRet;
     }
 
-    namespace sdecl = comphelper::service_decl;
     sdecl::class_<SpriteCanvas, sdecl::with_args<true> > serviceImpl(&initCanvas);
     const sdecl::ServiceDecl oglSpriteCanvasDecl(
         serviceImpl,
@@ -186,7 +187,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL oglcanvas_component_getFactory( sal_Char const* pImplName,
                                          void*, void* )
 {
-    return component_getFactoryHelper( pImplName, oglcanvas::oglSpriteCanvasDecl );
+    return sdecl::component_getFactoryHelper( pImplName, {&oglcanvas::oglSpriteCanvasDecl} );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

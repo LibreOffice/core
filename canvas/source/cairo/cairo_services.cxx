@@ -40,6 +40,8 @@ using namespace ::com::sun::star;
 #  error "The cairo canvas should not be enabled on Windows or Mac cf fdo#46901"
 #endif
 
+namespace sdecl = comphelper::service_decl;
+
 namespace cairocanvas
 {
     static uno::Reference<uno::XInterface> initCanvas( Canvas* pCanvas )
@@ -49,7 +51,6 @@ namespace cairocanvas
         return xRet;
     }
 
-    namespace sdecl = comphelper::service_decl;
     sdecl::class_< Canvas, sdecl::with_args<true> > serviceImpl1(&initCanvas);
     const sdecl::ServiceDecl cairoCanvasDecl(
         serviceImpl1,
@@ -76,7 +77,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL cairocanvas_component_getFactory( sal_Char const* pImplName,
                                          void*, void* )
 {
-    return component_getFactoryHelper( pImplName, cairocanvas::cairoCanvasDecl, cairocanvas::cairoSpriteCanvasDecl );
+    return sdecl::component_getFactoryHelper( pImplName, {&cairocanvas::cairoCanvasDecl, &cairocanvas::cairoSpriteCanvasDecl} );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

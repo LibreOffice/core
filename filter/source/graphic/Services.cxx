@@ -42,11 +42,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL graphicfilter_component_getFactor
 {
     if ( rtl_str_compare (pImplementationName, GRAPHIC_EXPORT_FILTER_SERVICE) == 0 )
     {
-        return component_getFactoryHelper( pImplementationName, graphicExportFilter );
+        return comphelper::service_decl::component_getFactoryHelper( pImplementationName, {&graphicExportFilter} );
     }
     else if ( rtl_str_compare (pImplementationName, GRAPHIC_EXPORT_DIALOG_SERVICE) == 0 )
     {
-        return component_getFactoryHelper( pImplementationName, graphicExportDialog );
+        return comphelper::service_decl::component_getFactoryHelper( pImplementationName, {&graphicExportDialog} );
     }
     return nullptr;
 }

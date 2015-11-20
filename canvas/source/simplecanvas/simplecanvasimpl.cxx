@@ -381,7 +381,7 @@ namespace
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL simplecanvas_component_getFactory( sal_Char const* pImplName,
                                          void*, void* )
 {
-    return component_getFactoryHelper( pImplName, simpleCanvasDecl );
+    return sdecl::component_getFactoryHelper( pImplName, {&simpleCanvasDecl} );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

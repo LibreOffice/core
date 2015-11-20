@@ -41,10 +41,10 @@
 
 using namespace ::com::sun::star;
 
+namespace sdecl = comphelper::service_decl;
+
 namespace vclcanvas
 {
-    namespace sdecl = comphelper::service_decl;
-
     static uno::Reference<uno::XInterface> initCanvas( Canvas* pCanvas )
     {
         uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pCanvas));
@@ -77,7 +77,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL vclcanvas_component_getFactory( sal_Char const* pImplName,
                                          void*, void* )
 {
-    return component_getFactoryHelper( pImplName, vclcanvas::vclCanvasDecl, vclcanvas::vclSpriteCanvasDecl );
+    return sdecl::component_getFactoryHelper( pImplName, {&vclcanvas::vclCanvasDecl, &vclcanvas::vclSpriteCanvasDecl} );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

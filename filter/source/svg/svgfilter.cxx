@@ -413,11 +413,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL svgfilter_component_getFactory(
 {
     if ( rtl_str_compare (pImplName, SVG_FILTER_IMPL_NAME) == 0 )
     {
-        return component_getFactoryHelper( pImplName, svgFilter );
+        return sdecl::component_getFactoryHelper( pImplName, {&svgFilter} );
     }
     else if ( rtl_str_compare (pImplName, SVG_WRITER_IMPL_NAME) == 0 )
     {
-        return component_getFactoryHelper( pImplName, svgWriter );
+        return sdecl::component_getFactoryHelper( pImplName, {&svgWriter} );
     }
     return nullptr;
 }

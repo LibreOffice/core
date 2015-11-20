@@ -52,9 +52,9 @@ extern sdecl::ServiceDecl const serviceDecl;
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL vbaswobj_component_getFactory(
     const sal_Char * pImplName, void *, void *)
 {
-    void* pRet = component_getFactoryHelper(pImplName,
-            globals::serviceDecl, ::document::serviceDecl,
-            wrapformat::serviceDecl, vbaeventshelper::serviceDecl );
+    void* pRet = sdecl::component_getFactoryHelper(pImplName,
+            {&globals::serviceDecl, &::document::serviceDecl,
+             &wrapformat::serviceDecl, &vbaeventshelper::serviceDecl} );
     OSL_TRACE("Ret is 0x%p", pRet);
     return pRet;
 }

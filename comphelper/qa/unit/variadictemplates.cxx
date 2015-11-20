@@ -10,7 +10,6 @@
 #include <boost/optional.hpp>
 #include <sal/types.h>
 #include <comphelper/unwrapargs.hxx>
-#include <comphelper/servicedecl.hxx>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
@@ -22,11 +21,9 @@ class VariadicTemplatesTest : public CppUnit::TestFixture
 {
 public:
     void testUnwrapArgs();
-    void testServiceDecl();
 
     CPPUNIT_TEST_SUITE(VariadicTemplatesTest);
     CPPUNIT_TEST(testUnwrapArgs);
-    CPPUNIT_TEST(testServiceDecl);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -89,19 +86,6 @@ inline void unwrapArgsBaseline(
     ::detail::extract( seq, 3, v3, xErrorContext );
     ::detail::extract( seq, 4, v4, xErrorContext );
 }
-
-struct DummyStruct {
-    sal_uInt32 m_x;
-
-    DummyStruct( sal_uInt32 x ): m_x( x ) { }
-    DummyStruct() : m_x( 0 ) { }
-
-    void* getFactory( const char* ) const {
-        if( m_x == 42 )
-            return new int( m_x );
-        return nullptr;
-    }
-};
 
 }
 
@@ -191,40 +175,6 @@ void VariadicTemplatesTest::testUnwrapArgs() {
                                     err1.ArgumentPosition == err2.ArgumentPosition );
         }
     }
-}
-
-void VariadicTemplatesTest::testServiceDecl() {
-    DummyStruct dummy1( 42 );
-    DummyStruct dummy2;
-    DummyStruct dummy3;
-    void* pRet = ::comphelper::service_decl::component_getFactoryHelper( "test",
-                                                                         dummy3,
-                                                                         dummy2,
-                                                                         dummy1 );
-
-    CPPUNIT_ASSERT_MESSAGE( "pRet != 0",
-                            pRet != nullptr );
-
-    sal_uInt32* pnRet = static_cast< sal_uInt32* >( pRet );
-
-    CPPUNIT_ASSERT_MESSAGE( "*pnRet == 42",
-                            *pnRet == 42 );
-    delete pnRet;
-
-    pRet = ::comphelper::service_decl::component_getFactoryHelper( "test",
-                                                                   dummy1,
-                                                                   dummy2,
-                                                                   dummy2 );
-
-    CPPUNIT_ASSERT_MESSAGE( "pRet != nullptr",
-                            pRet != nullptr );
-
-    pnRet = static_cast< sal_uInt32* >( pRet );
-
-    CPPUNIT_ASSERT_MESSAGE( "*pnRet == 42",
-                            *pnRet == 42 );
-
-    delete pnRet;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VariadicTemplatesTest);

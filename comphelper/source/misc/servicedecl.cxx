@@ -25,6 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <cassert>
 #include <vector>
 #include <boost/noncopyable.hpp>
 
@@ -149,6 +150,19 @@ bool ServiceDecl::supportsService( OUString const& name ) const
 OUString ServiceDecl::getImplementationName() const
 {
     return OUString::createFromAscii(m_pImplName);
+}
+
+void* component_getFactoryHelper( const sal_Char* pImplName,
+                                  std::initializer_list<ServiceDecl const *> args )
+{
+    for (auto const i: args) {
+        assert(i != nullptr);
+        void * fac = i->getFactory(pImplName);
+        if (fac != nullptr) {
+            return fac;
+        }
+    }
+    return nullptr;
 }
 
 } // namespace service_decl

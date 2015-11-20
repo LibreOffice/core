@@ -45,6 +45,7 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace sdecl = comphelper::service_decl;
 
 namespace dp_gui {
 
@@ -303,7 +304,6 @@ void ServiceImpl::trigger( OUString const &rEvent ) throw (RuntimeException, std
     startExecuteModal( Reference< ui::dialogs::XDialogClosedListener >() );
 }
 
-namespace sdecl = comphelper::service_decl;
 sdecl::class_<ServiceImpl, sdecl::with_args<true> > serviceSI;
 sdecl::ServiceDecl const serviceDecl(
     serviceSI,
@@ -328,8 +328,9 @@ extern "C" {
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL deploymentgui_component_getFactory(
     sal_Char const * pImplName, void *, void *)
 {
-    return component_getFactoryHelper(
-        pImplName, dp_gui::serviceDecl, dp_gui::licenseDecl, dp_gui::updateDecl );
+    return sdecl::component_getFactoryHelper(
+        pImplName,
+        {&dp_gui::serviceDecl, &dp_gui::licenseDecl, &dp_gui::updateDecl});
 }
 
 } // extern "C"

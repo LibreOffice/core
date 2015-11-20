@@ -57,8 +57,8 @@ extern "C"
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL vbaobj_component_getFactory(
         const sal_Char * pImplName, void *, void *)
     {
-    void* pRet =  component_getFactoryHelper(
-            pImplName, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl );
+    void* pRet = sdecl::component_getFactoryHelper(
+            pImplName, {&range::serviceDecl, &workbook::serviceDecl, &worksheet::serviceDecl, &window::serviceDecl, &hyperlink::serviceDecl, &application::serviceDecl} );
     return pRet;
     }
 }
