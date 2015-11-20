@@ -39,10 +39,9 @@
 #include <memory>
 
 IndexerPreProcessor::IndexerPreProcessor
-    ( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
+    ( const fs::path& fsIndexBaseDir,
       const fs::path& idxCaptionStylesheet, const fs::path& idxContentStylesheet )
-        : m_aModuleName( aModuleName )
-        , m_fsIndexBaseDir( fsIndexBaseDir )
+        : m_fsIndexBaseDir( fsIndexBaseDir )
 {
     m_fsCaptionFilesDirName = fsIndexBaseDir / "caption";
     fs::create_directory( m_fsCaptionFilesDirName );
@@ -270,9 +269,7 @@ void HelpLinker::addBookmark( FILE* pFile_DBHelp, std::string thishid,
 void HelpLinker::initIndexerPreProcessor()
 {
     delete m_pIndexerPreProcessor;
-    std::string mod = module;
-    std::transform (mod.begin(), mod.end(), mod.begin(), tocharlower);
-    m_pIndexerPreProcessor = new IndexerPreProcessor( mod, indexDirParentName,
+    m_pIndexerPreProcessor = new IndexerPreProcessor( indexDirParentName,
          idxCaptionStylesheet, idxContentStylesheet );
 }
 

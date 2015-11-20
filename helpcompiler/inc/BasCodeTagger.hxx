@@ -30,7 +30,6 @@ class L10N_DLLPUBLIC BasicCodeTagger
     xmlDocPtr             m_pDocument;
     std::list<xmlNodePtr> m_BasicCodeContainerTags;
     LibXmlTreeWalker   *m_pXmlTreeWalker;
-    std::list<std::string>  m_BasicCodeStringList;
     SyntaxHighlighter     m_Highlighter;
     bool m_bTaggingCompleted;
     void tagParagraph( xmlNodePtr paragraph );

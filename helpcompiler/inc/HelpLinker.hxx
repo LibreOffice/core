@@ -30,7 +30,6 @@
 class L10N_DLLPUBLIC IndexerPreProcessor
 {
 private:
-    std::string       m_aModuleName;
     fs::path          m_fsIndexBaseDir;
     fs::path          m_fsCaptionFilesDirName;
     fs::path          m_fsContentFilesDirName;
@@ -39,7 +38,7 @@ private:
     xsltStylesheetPtr m_xsltStylesheetPtrContent;
 
 public:
-    IndexerPreProcessor( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
+    IndexerPreProcessor( const fs::path& fsIndexBaseDir,
          const fs::path& idxCaptionStylesheet, const fs::path& idxContentStylesheet );
     ~IndexerPreProcessor();
 

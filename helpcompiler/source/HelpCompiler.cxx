@@ -263,7 +263,6 @@ public:
     }
     void traverse( xmlNodePtr parentNode );
 private:
-    std::string module;
     std::string dump(xmlNodePtr node);
 };
 
