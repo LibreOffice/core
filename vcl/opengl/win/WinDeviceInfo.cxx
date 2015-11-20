@@ -413,17 +413,6 @@ DriverInfo::DriverInfo(OperatingSystem os, const OUString& vendor,
         maSuggestedVersion = OStringToOUString(OString(suggestedVersion), RTL_TEXTENCODING_UTF8);
 }
 
-DriverInfo::DriverInfo(const DriverInfo& aOrig)
-    : meOperatingSystem(aOrig.meOperatingSystem),
-    mnOperatingSystemVersion(aOrig.mnOperatingSystemVersion),
-    maAdapterVendor(aOrig.maAdapterVendor),
-    mbWhitelisted(aOrig.mbWhitelisted),
-    meComparisonOp(aOrig.meComparisonOp),
-    mnDriverVersion(aOrig.mnDriverVersion),
-    mnDriverVersionMax(aOrig.mnDriverVersionMax)
-{
-}
-
 DriverInfo::~DriverInfo()
 {
 }
@@ -490,12 +479,10 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
             continue;
         }
 
-        if (std::none_of(maDriverInfo[i].maDevices.begin(), maDriverInfo[i].maDevices.end(), [](const OUString& rString){ return rString == "all"; } ))
+        if (std::none_of(maDriverInfo[i].maDevices.begin(), maDriverInfo[i].maDevices.end(), compareIgnoreAsciiCase("all")) &&
+            std::none_of(maDriverInfo[i].maDevices.begin(), maDriverInfo[i].maDevices.end(), compareIgnoreAsciiCase(maAdapterDeviceID)))
         {
-            if (std::none_of(maDriverInfo[i].maDevices.begin(), maDriverInfo[i].maDevices.end(), compareIgnoreAsciiCase(maAdapterDeviceID)))
-            {
-                continue;
-            }
+            continue;
         }
 
         switch (maDriverInfo[i].meComparisonOp)

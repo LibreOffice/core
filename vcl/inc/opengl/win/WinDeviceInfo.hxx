@@ -67,7 +67,6 @@ struct DriverInfo
             uint64_t driverVersion, bool bWhiteListed = false, const char *suggestedVersion = nullptr);
 
     DriverInfo();
-    DriverInfo(const DriverInfo&);
     ~DriverInfo();
 
     OperatingSystem meOperatingSystem;

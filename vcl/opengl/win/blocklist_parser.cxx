@@ -105,6 +105,36 @@ wgl::VersionComparisonOp getComparison(const OString& rString)
     throw InvalidFileException();
 }
 
+OUString getVendor(const OString& rString)
+{
+    if (rString == "all")
+    {
+        return "";
+    }
+    else if (rString == "intel")
+    {
+        return "0x8086";
+    }
+    else if (rString == "nvidia")
+    {
+        return "0x10de";
+    }
+    else if (rString == "amd")
+    {
+        return "0x1022";
+    }
+    else if (rString == "ati")
+    {
+        return "0x1002";
+    }
+    else if (rString == "microsoft")
+    {
+        return "0x1414";
+    }
+
+    throw InvalidFileException();
+}
+
 uint64_t getVersion(const OString& rString)
 {
     OUString aString = OStringToOUString(rString, RTL_TEXTENCODING_UTF8);
@@ -121,7 +151,66 @@ uint64_t getVersion(const OString& rString)
 
 }
 
-void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlReader& rReader)
+void WinBlocklistParser::handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlReader& rReader)
+{
+    int nLevel = 1;
+    bool bInMsg = false;
+
+    while(true)
+    {
+        xmlreader::Span name;
+        int nsId;
+
+        xmlreader::XmlReader::Result res = rReader.nextItem(
+                xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+
+        OString aId(name.begin, name.length);
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            ++nLevel;
+            if (nLevel > 2)
+                throw InvalidFileException();
+
+            if (name.equals("msg"))
+            {
+                bInMsg = true;
+            }
+            else if (name.equals("device"))
+            {
+                int nsIdDeveice;
+                while (rReader.nextAttribute(&nsIdDeveice, &name))
+                {
+                    if (name.equals("id"))
+                    {
+                        name = rReader.getAttributeValue(false);
+                        OString aDeviceId(name.begin, name.length);
+                        rDriver.maDevices.push_back(OStringToOUString(aDeviceId, RTL_TEXTENCODING_UTF8));
+                    }
+                }
+            }
+            else
+                throw InvalidFileException();
+        }
+        else if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+            bInMsg = false;
+            if (!nLevel)
+                break;
+        }
+        else if (res == xmlreader::XmlReader::RESULT_TEXT)
+        {
+            if (bInMsg)
+            {
+                OString sMsg(name.begin, name.length);
+                rDriver.maMsg = OStringToOUString(sMsg, RTL_TEXTENCODING_UTF8);
+            }
+        }
+    }
+}
+
+void WinBlocklistParser::handleEntry(wgl::DriverInfo& rDriver, xmlreader::XmlReader& rReader)
 {
     if (meBlockType == BlockType::WHITELIST)
     {
@@ -151,10 +240,7 @@ void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlRe
         {
             name = rReader.getAttributeValue(false);
             OString sVendor(name.begin, name.length);
-
-            // TODO: moggi: check that only valid vendors are imported
-            OUString aVendor = OStringToOUString(sVendor, RTL_TEXTENCODING_UTF8);
-            rDriver.maAdapterVendor = aVendor;
+            rDriver.maAdapterVendor = getVendor(sVendor);
         }
         else if (name.equals("compare"))
         {
@@ -187,55 +273,7 @@ void WinBlocklistParser::handleDevice(wgl::DriverInfo& rDriver, xmlreader::XmlRe
         }
     }
 
-    int nLevel = 1;
-    bool bInMsg = false;
-    while(true)
-    {
-        xmlreader::Span name;
-        int nsId;
-
-        xmlreader::XmlReader::Result res = rReader.nextItem(
-                xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
-
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
-        {
-            ++nLevel;
-            if (nLevel > 2)
-                throw InvalidFileException();
-
-            if (name.equals("msg"))
-            {
-                bInMsg = true;
-            }
-            else if (name.equals("device"))
-            {
-                bool bSuccess = rReader.nextAttribute(&nsId, &name);
-                if (!bSuccess || !name.equals("id"))
-                    throw InvalidFileException();
-
-                name = rReader.getAttributeValue(false);
-                OString aDeviceId(name.begin, name.length);
-                rDriver.maDevices.push_back(OStringToOUString(aDeviceId, RTL_TEXTENCODING_UTF8));
-            }
-            else
-                throw InvalidFileException();
-        }
-        else if (res == xmlreader::XmlReader::RESULT_END)
-        {
-            --nLevel;
-            bInMsg = false;
-            if (!nLevel)
-                break;
-        }
-        else if (res == xmlreader::XmlReader::RESULT_TEXT)
-        {
-            if (bInMsg)
-            {
-                OString sMsg(name.begin, name.length);
-                rDriver.maMsg = OStringToOUString(sMsg, RTL_TEXTENCODING_UTF8);
-            }
-        }
-    }
+    handleDevices(rDriver, rReader);
 }
 
 void WinBlocklistParser::handleList(xmlreader::XmlReader& rReader)
@@ -253,13 +291,13 @@ void WinBlocklistParser::handleList(xmlreader::XmlReader& rReader)
             if (name.equals("entry"))
             {
                 wgl::DriverInfo aDriver;
-                handleDevice(aDriver, rReader);
+                handleEntry(aDriver, rReader);
                 mrDriverList.push_back(aDriver);
             }
             else if (name.equals("entryRange"))
             {
                 wgl::DriverInfo aDriver;
-                handleDevice(aDriver, rReader);
+                handleEntry(aDriver, rReader);
                 mrDriverList.push_back(aDriver);
             }
             else
