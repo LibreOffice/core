@@ -76,7 +76,7 @@ css::uno::Sequence<OUString> BuildContextList (ContextList rContextList, bool is
 
             OUString element = appName + ", " + contextName +", " + visibility;
 
-            if (menuCommand != "")
+            if (!menuCommand.isEmpty())
                 element += ", "+menuCommand;
 
             result[i] = element;
