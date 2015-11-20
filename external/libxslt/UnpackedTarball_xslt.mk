@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,xslt,\
 	$(if $(filter ANDROID,$(OS)),external/libxslt/libxslt-android.patch) \
 	external/libxslt/libxslt-config-guess.patch.0 \
 	external/libxslt/rpath.patch.0 \
+	external/libxslt/0001-Fix-for-type-confusion-in-preprocessing-attributes.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
