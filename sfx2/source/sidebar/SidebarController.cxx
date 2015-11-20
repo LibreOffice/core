@@ -615,7 +615,7 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId)
                     // Depending on the context we have to change the command
                     // for the "more options" dialog.
                     PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
-                    if (pTitleBar != NULL)
+                    if (pTitleBar != nullptr)
                     {
                         pTitleBar->SetMoreOptionsCommand(
                             rPanelContexDescriptor.msMenuCommand,
