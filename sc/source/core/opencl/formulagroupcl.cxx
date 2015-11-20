@@ -145,7 +145,6 @@ std::string StackVarEnumToString(StackVar const e)
     return std::to_string(static_cast<int>(e));
 }
 
-#ifdef SAL_LOG_INFO
 std::string linenumberify(const std::string& s)
 {
     std::stringstream ss;
@@ -161,7 +160,6 @@ std::string linenumberify(const std::string& s)
         ss << "/*" << std::setw(4) << linenumber++ << "*/ " << s.substr(start, std::string::npos);
     return ss.str();
 }
-#endif
 
 bool AllStringsAreNull(const rtl_uString* const* pStringArray, size_t nLength)
 {
