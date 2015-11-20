@@ -39,7 +39,8 @@
     <service name="com.sun.star.document.OfficeDocument"/>
     <service name="com.sun.star.sdb.OfficeDatabaseDocument"/>
   </implementation>
-  <implementation name="com.sun.star.comp.dba.ODatabaseSource">
+  <implementation name="com.sun.star.comp.dba.ODatabaseSource"
+      constructor="com_sun_star_comp_dba_ODatabaseSource">
     <service name="com.sun.star.sdb.DataSource"/>
     <service name="com.sun.star.sdb.DocumentDataSource"/>
   </implementation>

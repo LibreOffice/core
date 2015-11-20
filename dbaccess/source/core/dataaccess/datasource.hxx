@@ -129,12 +129,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-// css::lang::XServiceInfo - static methods
-    static css::uno::Sequence< OUString > getSupportedServiceNames_static() throw( css::uno::RuntimeException );
-    static OUString getImplementationName_static() throw( css::uno::RuntimeException );
-    static css::uno::Reference< css::uno::XInterface >
-        SAL_CALL Create(const css::uno::Reference< css::uno::XComponentContext >&);
-
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
 
