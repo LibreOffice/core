@@ -585,7 +585,7 @@ bool parseXlinkHref( const char* sXlinkHref, OUString& data )
         if ( !aCurrToken.isEmpty() )
         {
             data = sLink.copy(nIndex);
-            SAL_INFO("%s", data);
+            SAL_INFO("filter.svg", data);
             return true;
         }
     }

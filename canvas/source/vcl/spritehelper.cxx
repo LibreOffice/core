@@ -93,7 +93,7 @@ namespace vclcanvas
         }
 
         // log output pos in device pixel
-        SAL_INFO("canva.vcl", "SpriteHelper::redraw(): output pos is (" <<
+        SAL_INFO("canvas.vcl", "SpriteHelper::redraw(): output pos is (" <<
                  rPos.getX() << "," << rPos.getY() << ")");
 
         const double fAlpha( getAlpha() );

@@ -3777,14 +3777,11 @@ void DynamicKernel::CodeGen()
     decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
         DK->GenSlidingWindowDeclRef() << ";\n}\n";
     mFullProgramSrc = decl.str();
-#ifdef SAL_LOG_INFO
-    std::stringstream area;
-    if (mKernelSignature[0] == '_')
-        area << "sc.opencl.source." << mKernelSignature.substr(1, std::string::npos);
-    else
-        area << "sc.opencl.source." << mKernelSignature;
-    SAL_INFO(area.str().c_str(), "Program to be compiled:\n" << linenumberify(mFullProgramSrc));
-#endif
+    SAL_INFO(
+        "sc.opencl.source",
+        (mKernelSignature[0] == '_'
+         ? mKernelSignature.substr(1, std::string::npos) : mKernelSignature)
+        << " program to be compiled:\n" << linenumberify(mFullProgramSrc));
 }
 
 std::string DynamicKernel::GetMD5()

@@ -64,7 +64,7 @@ PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWind
         pFrameData->mpBuffer->SetBackground(pWindow->GetBackground());
     }
     //else
-        //SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
+        //SAL_WARN("vcl.window", "the root of the double-buffering hierarchy should not have a transparent background");
 
     PushFlags nFlags = PushFlags::NONE;
     nFlags |= PushFlags::CLIPREGION;
@@ -273,7 +273,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     pWindowImpl->mnPaintFlags = 0;
     if (!pWindowImpl->maInvalidateRegion.IsEmpty())
     {
-        VCL_GL_INFO("vcl.opengl", "PaintHelper::DoPaint on " <<
+        VCL_GL_INFO("PaintHelper::DoPaint on " <<
                     typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "' begin");
 
         OutputDevice::PaintScope aScope( m_pWindow );
@@ -286,7 +286,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         // but we are in the middle of double-buffered paint, we might be
         // losing information
         if (pFrameData->mbInBufferedPaint && !m_pWindow->SupportsDoubleBuffering())
-            SAL_WARN("vcl.doublebuffering", "non-double buffered window in the double-buffered hierarchy, painting directly: " << typeid(*m_pWindow.get()).name());
+            SAL_WARN("vcl.window", "non-double buffered window in the double-buffered hierarchy, painting directly: " << typeid(*m_pWindow.get()).name());
 
         if (pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
         {
@@ -306,7 +306,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             m_pWindow->Paint(*m_pWindow, m_aPaintRect);
         }
 
-        VCL_GL_INFO("vcl.opengl", "PaintHelper::DoPaint end on " <<
+        VCL_GL_INFO("PaintHelper::DoPaint end on " <<
                     typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "'");
     }
 }

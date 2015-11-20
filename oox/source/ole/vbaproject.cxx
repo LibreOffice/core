@@ -327,7 +327,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
             break;
         }
     }
-    SAL_WARN_IF( nModuleCount != maModules.size(), "oox.ole", "VbaProject::importVba - invalid module count" );
+    SAL_WARN_IF( nModuleCount != maModules.size(), "oox", "VbaProject::importVba - invalid module count" );
 
     /*  The directory does not contain the real type of the modules, it
         distinguishes only between 'procedural' and 'document' (the latter

@@ -478,7 +478,7 @@ void IcnCursor_Impl::SetDeltas()
     if( !nDeltaWidth )
     {
         nDeltaWidth = 1;
-        SAL_INFO("svctools", "SetDeltas:Bad width");
+        SAL_INFO("svtools", "SetDeltas:Bad width");
     }
 }
 

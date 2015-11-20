@@ -24,13 +24,13 @@
 #endif
 
 /// Helper to do a SAL_INFO as well as a GL log.
-#define VCL_GL_INFO(area,stream) \
+#define VCL_GL_INFO(stream) \
     do { \
         if (SAL_DETAIL_ENABLE_LOG_INFO && OpenGLHelper::isVCLOpenGLEnabled()) \
         { \
             ::std::ostringstream detail_stream; \
             detail_stream << stream;            \
-            OpenGLHelper::debugMsgStream((area),detail_stream); \
+            OpenGLHelper::debugMsgStream(detail_stream); \
         } \
     } while (false)
 
@@ -75,8 +75,8 @@ public:
      * Insert a glDebugMessage into the queue - helpful for debugging
      * with apitrace to annotate the output and correlate it with code.
      */
-    static void debugMsgPrint(const char *pArea, const char *pFormat, ...);
-    static void debugMsgStream(const char *pArea, std::ostringstream const &pStream);
+    static void debugMsgPrint(const char *pFormat, ...);
+    static void debugMsgStream(std::ostringstream const &pStream);
 
     /**
      * checks if the device/driver pair is on our OpenGL blacklist

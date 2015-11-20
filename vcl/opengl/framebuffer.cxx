@@ -23,7 +23,7 @@ OpenGLFramebuffer::OpenGLFramebuffer() :
 {
     glGenFramebuffers( 1, &mnId );
     CHECK_GL_ERROR();
-    VCL_GL_INFO( "vcl.opengl", "Created framebuffer " << (int)mnId );
+    VCL_GL_INFO( "Created framebuffer " << (int)mnId );
 }
 
 OpenGLFramebuffer::~OpenGLFramebuffer()
@@ -34,7 +34,7 @@ OpenGLFramebuffer::~OpenGLFramebuffer()
 
 void OpenGLFramebuffer::Bind()
 {
-    VCL_GL_INFO( "vcl.opengl", "Binding framebuffer " << (int)mnId );
+    VCL_GL_INFO( "Binding framebuffer " << (int)mnId );
     glBindFramebuffer( GL_FRAMEBUFFER, mnId );
     CHECK_GL_ERROR();
 }
@@ -43,7 +43,7 @@ void OpenGLFramebuffer::Unbind()
 {
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     CHECK_GL_ERROR();
-    VCL_GL_INFO( "vcl.opengl", "Binding default framebuffer" );
+    VCL_GL_INFO( "Binding default framebuffer" );
 }
 
 bool OpenGLFramebuffer::IsFree() const
@@ -66,7 +66,7 @@ void OpenGLFramebuffer::AttachTexture( const OpenGLTexture& rTexture )
     if( rTexture.Id() == mnAttachedTexture )
         return;
 
-    VCL_GL_INFO( "vcl.opengl", "Attaching texture " << rTexture.Id() << " to framebuffer " << (int)mnId );
+    VCL_GL_INFO( "Attaching texture " << rTexture.Id() << " to framebuffer " << (int)mnId );
     mnAttachedTexture = rTexture.Id();
     mnWidth = rTexture.GetWidth();
     mnHeight = rTexture.GetHeight();

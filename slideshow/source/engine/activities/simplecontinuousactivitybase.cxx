@@ -88,7 +88,7 @@ namespace slideshow
             // time line.
             if( nFractionElapsedTime < nFractionRequiredCalls )
             {
-                SAL_INFO("slidewho.verbose", "SimpleContinuousActivityBase::calcTimeLag(): t=" <<
+                SAL_INFO("slideshow.verbose", "SimpleContinuousActivityBase::calcTimeLag(): t=" <<
                          nFractionElapsedTime <<
                          " is based on time");
                 return 0.0;

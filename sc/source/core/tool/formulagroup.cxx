@@ -479,7 +479,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 
         if ( !msInstance && bAllowSoftwareInterpreter ) // software fallback
         {
-            SAL_INFO("sc.formulagroup", "Create S/W interpreter");
+            SAL_INFO("sc.core.formulagroup", "Create S/W interpreter");
             msInstance = new sc::FormulaGroupInterpreterSoftware();
         }
     }

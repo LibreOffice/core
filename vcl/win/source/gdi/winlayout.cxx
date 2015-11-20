@@ -1833,7 +1833,7 @@ bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
                 continue;
 
             GLyphyDemo::glyph_info_t aGI;
-            VCL_GL_INFO("vcl.opengl", "Calling demo_font_lookup_glyph");
+            VCL_GL_INFO("Calling demo_font_lookup_glyph");
             GLyphyDemo::demo_font_lookup_glyph( mrWinFontEntry.mpGLyphyFont, mpOutGlyphs[i], &aGI );
         }
     }

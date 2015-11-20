@@ -58,7 +58,7 @@ struct RandomNumberGenerator
         }
         catch (std::runtime_error& e)
         {
-            SAL_WARN("comphelper.random", "Using std::random_device failed: " << e.what());
+            SAL_WARN("comphelper", "Using std::random_device failed: " << e.what());
             global_rng.seed(time(nullptr));
         }
     }

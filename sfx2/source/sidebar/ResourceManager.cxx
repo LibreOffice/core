@@ -440,7 +440,7 @@ void ResourceManager::ReadContextList (
             }
             else
             {
-                SAL_WARN("sfx2.sidebar", "application name " << sApplicationName << " not recognized");
+                SAL_WARN("sfx.sidebar", "application name " << sApplicationName << " not recognized");
                 continue;
             }
         }
@@ -454,7 +454,7 @@ void ResourceManager::ReadContextList (
         const EnumContext::Context eContext (EnumContext::GetContextEnum(sContextName));
         if (eContext == EnumContext::Context_Unknown)
         {
-            SAL_WARN("sfx2.sidebar", "context name " << sContextName << " not recognized");
+            SAL_WARN("sfx.sidebar", "context name " << sContextName << " not recognized");
             continue;
         }
 

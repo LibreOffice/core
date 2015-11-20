@@ -396,14 +396,14 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
         OString aFileName =
                 createFileName(rVertexShaderName, rFragmentShaderName, rDigest);
         bBinaryResult = loadProgramBinary(ProgramID, aFileName);
-        VCL_GL_INFO("vcl.opengl", "Load binary shader from '" << aFileName << "'" << bBinaryResult);
+        VCL_GL_INFO("Load binary shader from '" << aFileName << "'" << bBinaryResult);
         CHECK_GL_ERROR();
     }
 
     if( bBinaryResult != GL_FALSE )
         return ProgramID;
 
-    VCL_GL_INFO("vcl.opengl", "Load shader: vertex " << rVertexShaderName << " fragment " << rFragmentShaderName);
+    VCL_GL_INFO("Load shader: vertex " << rVertexShaderName << " fragment " << rFragmentShaderName);
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
     GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
@@ -954,12 +954,12 @@ bool OpenGLWrapper::isVCLOpenGLEnabled()
     return OpenGLHelper::isVCLOpenGLEnabled();
 }
 
-void OpenGLHelper::debugMsgStream(const char *pArea, std::ostringstream const &pStream)
+void OpenGLHelper::debugMsgStream(std::ostringstream const &pStream)
 {
-    debugMsgPrint(pArea, "%s", pStream.str().c_str());
+    debugMsgPrint("%s", pStream.str().c_str());
 }
 
-void OpenGLHelper::debugMsgPrint(const char *pArea, const char *pFormat, ...)
+void OpenGLHelper::debugMsgPrint(const char *pFormat, ...)
 {
     va_list aArgs;
     va_start (aArgs, pFormat);
@@ -975,7 +975,7 @@ void OpenGLHelper::debugMsgPrint(const char *pArea, const char *pFormat, ...)
     if (!bHasContext)
         strcat(pStr, "- no GL context");
 
-    SAL_INFO(pArea, pStr);
+    SAL_INFO("vcl.opengl", pStr);
 
     if (bHasContext)
     {

@@ -69,7 +69,7 @@ OpenGLContext::OpenGLContext():
     mpPrevContext(nullptr),
     mpNextContext(nullptr)
 {
-    VCL_GL_INFO("vcl.opengl", "new context: " << this);
+    VCL_GL_INFO("new context: " << this);
 
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maGDIData.mpLastContext )
@@ -87,7 +87,7 @@ OpenGLContext::OpenGLContext():
 
 OpenGLContext::~OpenGLContext()
 {
-    VCL_GL_INFO("vcl.opengl", "delete context: " << this);
+    VCL_GL_INFO("delete context: " << this);
     assert (mnRefCount == 0);
 
     mnRefCount = 1; // guard the shutdown paths.
@@ -511,7 +511,7 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
     if( dpy == nullptr || !glXQueryExtension( dpy, nullptr, nullptr ) )
         return nullptr;
 
-    VCL_GL_INFO("vcl.opengl", "window: " << win);
+    VCL_GL_INFO("window: " << win);
 
     XWindowAttributes xattr;
     if( !XGetWindowAttributes( dpy, win, &xattr ) )
@@ -598,7 +598,7 @@ Visual* getVisual(Display* dpy, Window win)
         SAL_WARN("vcl.opengl", "Failed to get window attributes for getVisual " << win);
         xattr.visual = nullptr;
     }
-    VCL_GL_INFO("vcl.opengl", "using VisualID " << xattr.visual);
+    VCL_GL_INFO("using VisualID " << xattr.visual);
     return xattr.visual;
 }
 
@@ -716,7 +716,7 @@ bool OpenGLContext::ImplInit()
     TempErrorHandler aErrorHandler(m_aGLWin.dpy, unxErrorHandler);
 #endif
 
-    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
+    VCL_GL_INFO("OpenGLContext::ImplInit----start");
 
     if (!g_vShareList.empty())
         pSharedCtx = g_vShareList.front();
@@ -811,7 +811,7 @@ bool OpenGLContext::ImplInit()
             if( errorTriggered )
                 SAL_WARN("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
             else
-                VCL_GL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
+                VCL_GL_INFO("set swap interval to 1 (enable vsync)");
         }
     }
 
@@ -841,7 +841,7 @@ bool OpenGLContext::ImplInit()
 {
     OpenGLZone aZone;
 
-    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
+    VCL_GL_INFO("OpenGLContext::ImplInit----start");
     // PixelFormat tells Windows how we want things to be
     PIXELFORMATDESCRIPTOR PixelFormatFront =
     {
@@ -984,7 +984,7 @@ bool OpenGLContext::ImplInit()
 {
     OpenGLZone aZone;
 
-    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
+    VCL_GL_INFO("OpenGLContext::ImplInit----start");
     NSOpenGLView* pView = getOpenGLView();
     OpenGLWrapper::makeCurrent(pView);
 
@@ -997,7 +997,7 @@ bool OpenGLContext::ImplInit()
 
 bool OpenGLContext::ImplInit()
 {
-    VCL_GL_INFO("vcl.opengl", "OpenGLContext not implemented for this platform");
+    VCL_GL_INFO("OpenGLContext not implemented for this platform");
     return false;
 }
 
@@ -1021,7 +1021,7 @@ bool OpenGLContext::InitGLEW()
             bGlewInit = true;
     }
 
-    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----end");
+    VCL_GL_INFO("OpenGLContext::ImplInit----end");
     mbInitialized = true;
     return true;
 }
@@ -1047,7 +1047,7 @@ void OpenGLContext::InitGLEWDebugging()
     }
 
     // Test hooks for inserting tracing messages into the stream
-    VCL_GL_INFO("vcl.opengl", "LibreOffice GLContext initialized: " << this);
+    VCL_GL_INFO("LibreOffice GLContext initialized: " << this);
 #endif
 }
 
@@ -1322,7 +1322,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 
     if( vi )
     {
-        VCL_GL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
+        VCL_GL_INFO("using VisualID " << vi->visualid);
         aWinData.pVisual = static_cast<void*>(vi->visual);
     }
 #endif
@@ -1436,7 +1436,7 @@ void OpenGLContext::registerAsCurrent()
 
     // move the context to the end of the contexts list
     static int nSwitch = 0;
-    VCL_GL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
+    VCL_GL_INFO("******* CONTEXT SWITCH " << ++nSwitch << " *********");
     if( mpNextContext )
     {
         if( mpPrevContext )

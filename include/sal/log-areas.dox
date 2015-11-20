@@ -24,6 +24,9 @@ certain functionality.
 @li @c sal.debug - SAL debugging functionality
 @li @c sal.file
 @li @c sal.osl - SAL OSL library
+@li @c sal.osl.condition
+@li @c sal.osl.mutex
+@li @c sal.osl.pipe
 @li @c sal.rtl - SAL RTL library
 @li @c sal.rtl.xub - SAL RTL warnings related to possible String->OUString conversion issues.
 @li @c sal.textenc - the textencoding SAL library
@@ -62,6 +65,8 @@ certain functionality.
 @li @c chart2.3dopengl
 @li @c chart2.areachart
 @li @c chart2.opengl
+@li @c chart2.pie.label.bestfit
+@li @c chart2.pie.label.bestfit.inside
 @li @c chart2.tools
 
 @section connectivity
@@ -90,6 +95,7 @@ certain functionality.
 
 @li @c cppu
 @li @c cppu.log
+@li @c cppu.threadpool
 @li @c cppu.unsafebridge
 
 @section cppuhelper
@@ -108,19 +114,20 @@ certain functionality.
 @section Calc
 
 @li @c sc
+@li @c sc.core
+@li @c sc.core.formulacell - ScFormulaCell and group
+@li @c sc.core.formulagroup
+@li @c sc.core.grouparealistener - sc::FormulaGroupAreaListener
+@li @c sc.filter - Calc filter
 @li @c sc.opencl - OpenCL-related stuff in general
 @li @c sc.opencl.source - Generated OpenCL source code
 @li @c sc.opencl.thread - Background thread to compile OpenCL kernels
-@li @c sc.qa
-@li @c sc.core
-@li @c sc.core.formulacell - ScFormulaCell and group
-@li @c sc.core.grouparealistener - sc::FormulaGroupAreaListener
-@li @c sc.filter - Calc filter
 @li @c sc.orcus
 @li @c sc.orcus.autofilter
 @li @c sc.orcus.condformat
 @li @c sc.orcus.style
 @li @c sc.orcus.table
+@li @c sc.qa
 @li @c sc.ui - Calc UI
 @li @c sc.viewdata
 
@@ -155,6 +162,7 @@ certain functionality.
 @section editeng
 
 @li @c editeng
+@li @c editeng.chaining
 @li @c editeng.items
 
 @section embeddedobj
@@ -194,6 +202,7 @@ certain functionality.
 @section oox
 
 @li @c oox
+@li @c oox.chart
 @li @c oox.cscode - see oox/source/drawingml/customshapes/README
 @li @c oox.csdata - see oox/source/drawingml/customshapes/README
 @li @c oox.drawingml - DrawingML
@@ -304,6 +313,7 @@ certain functionality.
 @li @c slideshow
 @li @c slideshow.eventqueue
 @li @c slideshow.opengl
+@li @c slideshow.verbose
 
 @section sot
 
@@ -352,6 +362,7 @@ certain functionality.
 @li @c tools
 @li @c tools.datetime
 @li @c tools.debug
+@li @c tools.fraction
 @li @c tools.generic
 @li @c tools.memtools
 @li @c tools.rc - resource manager
@@ -400,6 +411,7 @@ certain functionality.
 @li @c vcl.ct - CoreText-using code for OS X and iOS
 @li @c vcl.debugevent
 @li @c vcl.emf - EMF/EMF+ processing
+@li @c vcl.eventtesting
 @li @c vcl.filter
 @li @c vcl.fonts - font-specific code
 @li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.
@@ -458,6 +470,7 @@ certain functionality.
 @li @c writerfilter
 @li @c writerfilter.dmapper
 @li @c writerfilter.rtf
+@li @c writerfilter.ooxml
 @li @c writerfilter.profile - load times of filters
 
 @section writerperfect
@@ -501,11 +514,13 @@ certain functionality.
 @li @c avmedia
 @li @c avmedia.gstreamer
 @li @c avmedia.opengl - OpenGL models
+@li @c avmedia.quicktime
 
 @section other
 
 @li @c accessibility
 @li @c basebmp
+@li @c basegfx
 @li @c binaryurp
 @li @c configmgr
 @li @c configmgr.dconf
@@ -517,6 +532,9 @@ certain functionality.
 @li @c linguistic
 @li @c lwp - lotuswordpro
 @li @c mysqlc
+@li @c opencl
+@li @c opencl.device
+@li @c opencl.file
 @li @c registry
 @li @c reportdesign
 @li @c rsc
