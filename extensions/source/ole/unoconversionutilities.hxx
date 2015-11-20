@@ -1652,11 +1652,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
 // UNO wrapper than the original UNO object is being extracted, queried for "aType" (if
 // it is no struct) and returned.
 template<class T>
-#ifdef __MINGW32__
 Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type& aType)
-#else
-Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type& aType= Type())
-#endif
 {
     //To allow passing "Nothing" in VS 2008 we need to accept VT_EMPTY
     if (pVar->vt != VT_UNKNOWN && pVar->vt != VT_DISPATCH && pVar->vt != VT_EMPTY)
