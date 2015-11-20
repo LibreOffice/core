@@ -289,8 +289,22 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
         aMapMode.SetOrigin(aMapMode.GetOrigin() + aOffset);
         rRenderContext.SetMapMode(aMapMode);
 
+        bool bPopChild = false;
+        if (pChild->GetMapMode().GetMapUnit() != rRenderContext.GetMapMode().GetMapUnit())
+        {
+            // This is needed for the scrollbar that has its map unit in pixels.
+            pChild->Push(PushFlags::MAPMODE);
+            bPopChild = true;
+            pChild->EnableMapMode();
+            aMapMode = pChild->GetMapMode();
+            aMapMode.SetMapUnit(rRenderContext.GetMapMode().GetMapUnit());
+            pChild->SetMapMode(aMapMode);
+        }
+
         pChild->Paint(rRenderContext, rRect);
 
+        if (bPopChild)
+            pChild->Pop();
         rRenderContext.Pop();
     }
 
