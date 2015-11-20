@@ -29,6 +29,8 @@
 // Size of the sliders
 #define HDR_SLIDERSIZE      2
 
+class ScTabView;
+
 class ScHeaderControl : public vcl::Window
 {
 private:
@@ -57,6 +59,8 @@ private:
 
     bool            bIgnoreMove;
 
+    bool            bDoneInitRef;
+
     long            GetScrPos( SCCOLROW nEntryNo ) const;
     SCCOLROW        GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) const;
     bool            IsSelectionAllowed(SCCOLROW nPos) const;
@@ -67,6 +71,8 @@ private:
     void            DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor );
 
 protected:
+    ScTabView*      pTabView;
+
                     // Window overrides
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
@@ -102,7 +108,7 @@ protected:
 
 public:
             ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelectionEngine,
-                                SCCOLROW nNewSize, bool bNewVertical );
+                             SCCOLROW nNewSize, bool bNewVertical, ScTabView* pTab );
             virtual ~ScHeaderControl();
 
     void    SetIgnoreMove(bool bSet)            { bIgnoreMove = bSet; }

@@ -25,16 +25,17 @@
 
 class ScHeaderFunctionSet;
 class ScHeaderSelectionEngine;
+class ScTabView;
 
 class ScColBar : public ScHeaderControl
 {
-    ScViewData*              pViewData;
     ScHSplitPos              eWhich;
     ScHeaderFunctionSet*     pFuncSet;
 
 public:
-                ScColBar( vcl::Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
-                            ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
+                ScColBar( vcl::Window* pParent, ScHSplitPos eWhichPos,
+                          ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+                          ScTabView* pTab );
                 virtual ~ScColBar();
 
     virtual SCCOLROW    GetPos() const override;
@@ -60,13 +61,13 @@ public:
 
 class ScRowBar : public ScHeaderControl
 {
-    ScViewData*              pViewData;
     ScVSplitPos              eWhich;
     ScHeaderFunctionSet*     pFuncSet;
 
 public:
-                ScRowBar( vcl::Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
-                            ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
+                ScRowBar( vcl::Window* pParent, ScVSplitPos eWhichPos,
+                          ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+                          ScTabView* pTab );
                 virtual ~ScRowBar();
 
     virtual SCCOLROW    GetPos() const override;

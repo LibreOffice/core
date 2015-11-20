@@ -28,6 +28,7 @@
 #include "appoptio.hxx"
 #include "globstr.hrc"
 #include "markdata.hxx"
+#include "tabview.hxx"
 #include <columnspanset.hxx>
 
 // STATIC DATA -----------------------------------------------------------
@@ -52,10 +53,10 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
     }
 }
 
-ScColBar::ScColBar( vcl::Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
-                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
-            ScHeaderControl( pParent, pEng, MAXCOL+1, false ),
-            pViewData( pData ),
+ScColBar::ScColBar( vcl::Window* pParent, ScHSplitPos eWhichPos,
+                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+                    ScTabView* pTab ) :
+            ScHeaderControl( pParent, pEng, MAXCOL+1, false, pTab ),
             eWhich( eWhichPos ),
             pFuncSet( pFunc )
 {
@@ -68,22 +69,23 @@ ScColBar::~ScColBar()
 
 inline bool ScColBar::UseNumericHeader() const
 {
-    return pViewData->GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1;
+    return pTabView->GetViewData().GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1;
 }
 
 SCCOLROW ScColBar::GetPos() const
 {
-    return pViewData->GetPosX(eWhich);
+    return pTabView->GetViewData().GetPosX(eWhich);
 }
 
 sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo ) const
 {
-    ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
+    const ScViewData& rViewData = pTabView->GetViewData();
+    ScDocument* pDoc = rViewData.GetDocument();
+    SCTAB nTab = rViewData.GetTabNo();
     if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
         return 0;
     else
-        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
+        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), rViewData.GetPPTX() );
 }
 
 OUString ScColBar::GetEntryText( SCCOLROW nEntryNo ) const
@@ -95,6 +97,7 @@ OUString ScColBar::GetEntryText( SCCOLROW nEntryNo ) const
 
 void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
+    const ScViewData& rViewData = pTabView->GetViewData();
     sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
     if (nNewSize < 10) nNewSize = 10; // pixels
@@ -105,9 +108,9 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTX() );
+        nSizeTwips = (sal_uInt16) ( nNewSize / rViewData.GetPPTX() );
 
-    ScMarkData& rMark = pViewData->GetMarkData();
+    const ScMarkData& rMark = rViewData.GetMarkData();
 
     std::vector<sc::ColRowSpan> aRanges;
     if ( rMark.IsColumnMarked( static_cast<SCCOL>(nPos) ) )
@@ -136,32 +139,33 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         aRanges.push_back(sc::ColRowSpan(nPos,nPos));
     }
 
-    pViewData->GetView()->SetWidthOrHeight(true, aRanges, eMode, nSizeTwips);
+    rViewData.GetView()->SetWidthOrHeight(true, aRanges, eMode, nSizeTwips);
 }
 
 void ScColBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
 {
     std::vector<sc::ColRowSpan> aRanges(1, sc::ColRowSpan(nStart,nEnd));
-    pViewData->GetView()->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, 0);
+    pTabView->GetViewData().GetView()->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, 0);
 }
 
 void ScColBar::SetMarking( bool bSet )
 {
-    pViewData->GetMarkData().SetMarking( bSet );
+    pTabView->GetViewData().GetMarkData().SetMarking( bSet );
     if (!bSet)
     {
-        pViewData->GetView()->UpdateAutoFillMark();
+        pTabView->GetViewData().GetView()->UpdateAutoFillMark();
     }
 }
 
 void ScColBar::SelectWindow()
 {
-    ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    const ScViewData& rViewData = pTabView->GetViewData();
+    ScTabViewShell* pViewSh = rViewData.GetViewShell();
 
     pViewSh->SetActive();           // Appear and SetViewFrame
     pViewSh->DrawDeselectAll();
 
-    ScSplitPos eActive = pViewData->GetActivePart();
+    ScSplitPos eActive = rViewData.GetActivePart();
     if (eWhich==SC_SPLIT_LEFT)
     {
         if (eActive==SC_SPLIT_TOPRIGHT)     eActive=SC_SPLIT_TOPLEFT;
@@ -183,12 +187,13 @@ void ScColBar::SelectWindow()
 bool ScColBar::IsDisabled() const
 {
     ScModule* pScMod = SC_MOD();
-    return pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    return pScMod->IsModalMode();
 }
 
 bool ScColBar::ResizeAllowed() const
 {
-    return !pViewData->HasEditView( pViewData->GetActivePart() );
+    const ScViewData& rViewData = pTabView->GetViewData();
+    return !rViewData.HasEditView( rViewData.GetActivePart() );
 }
 
 void ScColBar::DrawInvert( long nDragPosP )
@@ -197,24 +202,25 @@ void ScColBar::DrawInvert( long nDragPosP )
     Update();
     Invert(aRect);
 
-    pViewData->GetView()->InvertVertical(eWhich,nDragPosP);
+    pTabView->GetViewData().GetView()->InvertVertical(eWhich,nDragPosP);
 }
 
 OUString ScColBar::GetDragHelp( long nVal )
 {
-    long nTwips = (long) ( nVal / pViewData->GetPPTX() );
+    long nTwips = (long) ( nVal / pTabView->GetViewData().GetPPTX() );
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
 bool ScColBar::IsLayoutRTL() const        // override only for columns
 {
-    return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+    const ScViewData& rViewData = pTabView->GetViewData();
+    return rViewData.GetDocument()->IsLayoutRTL( rViewData.GetTabNo() );
 }
 
-ScRowBar::ScRowBar( vcl::Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
-                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng ) :
-            ScHeaderControl( pParent, pEng, MAXROW+1, true ),
-            pViewData( pData ),
+ScRowBar::ScRowBar( vcl::Window* pParent, ScVSplitPos eWhichPos,
+                    ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng,
+                    ScTabView* pTab ) :
+            ScHeaderControl( pParent, pEng, MAXROW+1, true, pTab ),
             eWhich( eWhichPos ),
             pFuncSet( pFunc )
 {
@@ -227,19 +233,20 @@ ScRowBar::~ScRowBar()
 
 SCCOLROW ScRowBar::GetPos() const
 {
-    return pViewData->GetPosY(eWhich);
+    return pTabView->GetViewData().GetPosY(eWhich);
 }
 
 sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo ) const
 {
-    ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
+    const ScViewData& rViewData = pTabView->GetViewData();
+    ScDocument* pDoc = rViewData.GetDocument();
+    SCTAB nTab = rViewData.GetTabNo();
     SCROW nLastRow = -1;
     if (pDoc->RowHidden(nEntryNo, nTab, nullptr, &nLastRow))
         return 0;
     else
         return (sal_uInt16) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
-                    nTab ), pViewData->GetPPTY() );
+                    nTab ), rViewData.GetPPTY() );
 }
 
 OUString ScRowBar::GetEntryText( SCCOLROW nEntryNo ) const
@@ -249,6 +256,7 @@ OUString ScRowBar::GetEntryText( SCCOLROW nEntryNo ) const
 
 void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
+    const ScViewData& rViewData = pTabView->GetViewData();
     sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
     if (nNewSize < 10) nNewSize = 10; // pixels
@@ -259,9 +267,9 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTY() );
+        nSizeTwips = (sal_uInt16) ( nNewSize / rViewData.GetPPTY() );
 
-    ScMarkData& rMark = pViewData->GetMarkData();
+    const ScMarkData& rMark = rViewData.GetMarkData();
 
     std::vector<sc::ColRowSpan> aRanges;
     if ( rMark.IsRowMarked( nPos ) )
@@ -290,32 +298,33 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         aRanges.push_back(sc::ColRowSpan(nPos,nPos));
     }
 
-    pViewData->GetView()->SetWidthOrHeight(false, aRanges, eMode, nSizeTwips);
+    rViewData.GetView()->SetWidthOrHeight(false, aRanges, eMode, nSizeTwips);
 }
 
 void ScRowBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
 {
     std::vector<sc::ColRowSpan> aRange(1, sc::ColRowSpan(nStart,nEnd));
-    pViewData->GetView()->SetWidthOrHeight(false, aRange, SC_SIZE_DIRECT, 0);
+    pTabView->GetViewData().GetView()->SetWidthOrHeight(false, aRange, SC_SIZE_DIRECT, 0);
 }
 
 void ScRowBar::SetMarking( bool bSet )
 {
-    pViewData->GetMarkData().SetMarking( bSet );
+    pTabView->GetViewData().GetMarkData().SetMarking( bSet );
     if (!bSet)
     {
-        pViewData->GetView()->UpdateAutoFillMark();
+        pTabView->GetViewData().GetView()->UpdateAutoFillMark();
     }
 }
 
 void ScRowBar::SelectWindow()
 {
-    ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    const ScViewData& rViewData = pTabView->GetViewData();
+    ScTabViewShell* pViewSh = rViewData.GetViewShell();
 
     pViewSh->SetActive();           // Appear and SetViewFrame
     pViewSh->DrawDeselectAll();
 
-    ScSplitPos eActive = pViewData->GetActivePart();
+    ScSplitPos eActive = rViewData.GetActivePart();
     if (eWhich==SC_SPLIT_TOP)
     {
         if (eActive==SC_SPLIT_BOTTOMLEFT)   eActive=SC_SPLIT_TOPLEFT;
@@ -337,12 +346,13 @@ void ScRowBar::SelectWindow()
 bool ScRowBar::IsDisabled() const
 {
     ScModule* pScMod = SC_MOD();
-    return pScMod->IsFormulaMode() || pScMod->IsModalMode();
+    return pScMod->IsModalMode();
 }
 
 bool ScRowBar::ResizeAllowed() const
 {
-    return !pViewData->HasEditView( pViewData->GetActivePart() );
+    const ScViewData& rViewData = pTabView->GetViewData();
+    return !rViewData.HasEditView( rViewData.GetActivePart() );
 }
 
 void ScRowBar::DrawInvert( long nDragPosP )
@@ -351,25 +361,27 @@ void ScRowBar::DrawInvert( long nDragPosP )
     Update();
     Invert(aRect);
 
-    pViewData->GetView()->InvertHorizontal(eWhich,nDragPosP);
+    pTabView->GetViewData().GetView()->InvertHorizontal(eWhich,nDragPosP);
 }
 
 OUString ScRowBar::GetDragHelp( long nVal )
 {
-    long nTwips = (long) ( nVal / pViewData->GetPPTY() );
+    long nTwips = (long) ( nVal / pTabView->GetViewData().GetPPTY() );
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
 }
 
 SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo ) const // override only for rows
 {
-    ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
+    const ScViewData& rViewData = pTabView->GetViewData();
+    ScDocument* pDoc = rViewData.GetDocument();
+    SCTAB nTab = rViewData.GetTabNo();
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
 bool ScRowBar::IsMirrored() const // override only for rows
 {
-    return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+    const ScViewData& rViewData = pTabView->GetViewData();
+    return rViewData.GetDocument()->IsLayoutRTL( rViewData.GetTabNo() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
