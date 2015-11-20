@@ -39,8 +39,6 @@
 #include <brdwin.hxx>
 #include <window.h>
 
-#include "notebookbarwindow.hxx"
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
@@ -967,11 +965,6 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
                 mpImplData->mpTaskPaneList->AddWindow( pNewWindow );
         }
     }
-}
-
-void SystemWindow::CreateNotebookBar(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame)
-{
-    static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetNotebookBarWindow(rUIXMLDescription, rFrame);
 }
 
 void SystemWindow::SetMenuBarMode( MenuBarMode nMode )
