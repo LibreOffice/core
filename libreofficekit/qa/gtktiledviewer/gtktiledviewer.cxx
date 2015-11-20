@@ -19,6 +19,8 @@
 #include <boost/optional.hpp>
 #include <gdk/gdkkeysyms.h>
 
+#include <sal/types.h>
+
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -497,7 +499,9 @@ static void createModelAndView(const char* pLOPath, const char* pDocPath, const 
         {
             GdkRGBA color;
             gdk_rgba_parse(&color, rArguments[i + 1].c_str());
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             gtk_widget_override_background_color(gtk_widget_get_toplevel(pDocView), GTK_STATE_FLAG_NORMAL, &color);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
         }
     }
     std::stringstream aStream;
