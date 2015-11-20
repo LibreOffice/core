@@ -61,7 +61,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
         createRegistryInfo_OCommandDefinition();
         createRegistryInfo_OComponentDefinition();
         createRegistryInfo_ODatabaseDocument();
-        createRegistryInfo_ODatabaseSource();
         createRegistryInfo_DataAccessDescriptorFactory();
         bInit = true;
     }
