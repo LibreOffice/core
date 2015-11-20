@@ -22,15 +22,15 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ControlProperties"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Label" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:Edit" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:ImageControl" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:Label"/>
+ <toolbar:toolbaritem xlink:href=".uno:Edit"/>
+ <toolbar:toolbaritem xlink:href=".uno:ImageControl"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HFixedLine" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:VFixedLine" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="radio auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:visible="false"/>
 </toolbar:toolbar>

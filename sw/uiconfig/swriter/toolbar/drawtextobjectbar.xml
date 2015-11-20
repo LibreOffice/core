@@ -39,10 +39,10 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>

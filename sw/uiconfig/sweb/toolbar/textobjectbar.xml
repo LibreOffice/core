@@ -42,7 +42,7 @@
  <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:helpid="10028"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:helpid="10030"/>
  <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:helpid="10029"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:visible="false" toolbar:helpid="10034"/>

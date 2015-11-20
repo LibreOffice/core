@@ -22,10 +22,10 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:style="auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Bold"/>
+ <toolbar:toolbaritem xlink:href=".uno:Italic"/>
+ <toolbar:toolbaritem xlink:href=".uno:Underline"/>
+ <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
  <toolbar:toolbarseparator/>
@@ -40,19 +40,19 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignBlock"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio auto" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio auto" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
  <toolbar:toolbarseparator/>

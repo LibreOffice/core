@@ -54,7 +54,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Text"/>
  <toolbar:toolbaritem xlink:href=".uno:VerticalText"/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678" toolbar:visible="false"/>
@@ -62,17 +62,17 @@
  <toolbar:toolbaritem xlink:href=".uno:AdvancedMode" toolbar:style="radio dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition"/>
  <toolbar:toolbaritem xlink:href=".uno:DistributeSelection" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="10299"/>
  <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false" toolbar:helpid="10371"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:style="auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126"/>
- <toolbar:toolbaritem xlink:href=".uno:GlueEditMode" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueEditMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>

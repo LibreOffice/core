@@ -24,17 +24,17 @@
  <toolbar:toolbaritem xlink:href=".uno:ControlProperties"/>
  <toolbar:toolbaritem xlink:href=".uno:FormProperties"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:CheckBox" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:Edit" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:CheckBox"/>
+ <toolbar:toolbaritem xlink:href=".uno:Edit"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:FormattedField" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:Pushbutton" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormattedField"/>
+ <toolbar:toolbaritem xlink:href=".uno:Pushbutton"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:RadioButton" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:ListBox" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:RadioButton"/>
+ <toolbar:toolbaritem xlink:href=".uno:ListBox"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:ComboBox" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:Label" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:ComboBox"/>
+ <toolbar:toolbaritem xlink:href=".uno:Label"/>
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:FormDesignTools"/>
  <toolbar:toolbaritem xlink:href=".uno:MoreControls"/>

@@ -20,9 +20,9 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:SelectObject"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomMode"/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:style="dropdown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:style="radio" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
@@ -30,41 +30,41 @@
  <toolbar:toolbaritem xlink:href=".uno:FillColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line"/>
- <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:LineToolbox" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox" toolbar:style="radio dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineToolbox"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:Objects3DToolbox" toolbar:style="radio dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:Objects3DToolbox"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode"/>
  <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition"/>
  <toolbar:toolbaritem xlink:href=".uno:DistributeSelection"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="10299"/>
  <toolbar:toolbaritem xlink:href=".uno:Crop"/>
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126"/>
- <toolbar:toolbaritem xlink:href=".uno:GlueEditMode" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueEditMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ChangeBezier" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ChangePolygon" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ConvertInto3D" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ConvertInto3DLatheFast" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertToolbox" toolbar:style="radio dropdown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertToolbox" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:visible="false"/>
 </toolbar:toolbar>

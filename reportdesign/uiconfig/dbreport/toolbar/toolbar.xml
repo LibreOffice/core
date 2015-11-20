@@ -29,8 +29,8 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AddField" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:ReportNavigator" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AddField"/>
+ <toolbar:toolbaritem xlink:href=".uno:ReportNavigator"/>
  <toolbar:toolbaritem xlink:href=".uno:DbSortingAndGrouping"/>
  <toolbar:toolbaritem xlink:href=".uno:ExecuteReport"/>
  <toolbar:toolbarseparator/>

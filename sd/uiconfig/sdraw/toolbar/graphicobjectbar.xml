@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafMode"/>
  <toolbar:toolbarseparator/>
@@ -35,6 +35,6 @@
  <toolbar:toolbaritem xlink:href=".uno:AdvancedMode" toolbar:style="radio dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition"/>
 </toolbar:toolbar>

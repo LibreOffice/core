@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafMode"/>
  <toolbar:toolbarseparator/>
@@ -35,9 +35,9 @@
  <toolbar:toolbaritem xlink:href=".uno:TransformDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:CustomAnimation" toolbar:style="auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CustomAnimation" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AnimationEffects" toolbar:visible="false"/>
 </toolbar:toolbar>

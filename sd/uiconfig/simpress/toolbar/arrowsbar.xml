@@ -19,15 +19,15 @@
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:Line"/>
- <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:LineArrowCircle" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:LineArrowSquare" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowCircle"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowSquare"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Line_Diagonal" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:LineArrowStart" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:LineCircleArrow" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:LineSquareArrow" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Line_Diagonal"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowStart"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineCircleArrow"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineSquareArrow"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:MeasureLine" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:LineArrows" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:MeasureLine"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrows"/>
 </toolbar:toolbar>

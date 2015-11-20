@@ -38,17 +38,17 @@
  <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:style="radio auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:WrapText"/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignTop"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignVCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignBottom"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>

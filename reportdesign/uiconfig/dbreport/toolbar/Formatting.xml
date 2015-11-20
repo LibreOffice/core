@@ -28,10 +28,10 @@
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
  <toolbar:toolbaritem xlink:href=".uno:Underline"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>

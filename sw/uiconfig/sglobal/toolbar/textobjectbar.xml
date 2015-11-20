@@ -32,10 +32,10 @@
  <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>

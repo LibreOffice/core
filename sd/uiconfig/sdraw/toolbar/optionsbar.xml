@@ -18,23 +18,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:ClickChangeRotation" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:ClickChangeRotation"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:HelplinesVisible" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesVisible"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:HelplinesUse" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:SnapBorder" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:SnapFrame" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:SnapPoints" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridUse"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesUse"/>
+ <toolbar:toolbaritem xlink:href=".uno:SnapBorder"/>
+ <toolbar:toolbaritem xlink:href=".uno:SnapFrame"/>
+ <toolbar:toolbaritem xlink:href=".uno:SnapPoints"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:QuickEdit" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:PickThrough" toolbar:style="auto"/>
- <toolbar:toolbaritem xlink:href=".uno:DoubleClickTextEdit" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:QuickEdit"/>
+ <toolbar:toolbaritem xlink:href=".uno:PickThrough"/>
+ <toolbar:toolbaritem xlink:href=".uno:DoubleClickTextEdit"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SolidCreate" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:SolidCreate"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeaveAllGroups" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeaveAllGroups"/>
 </toolbar:toolbar>

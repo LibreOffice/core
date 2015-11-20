@@ -53,10 +53,10 @@
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
  <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter" toolbar:visible="false"/>

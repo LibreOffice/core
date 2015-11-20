@@ -43,7 +43,7 @@
  <toolbar:toolbaritem xlink:href=".uno:EnterGroup" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:LeaveGroup" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible"/>
  <toolbar:toolbaritem xlink:href=".uno:GridUse"/>

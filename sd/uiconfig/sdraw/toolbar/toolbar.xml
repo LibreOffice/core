@@ -39,20 +39,20 @@
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:LineToolbox" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox" toolbar:style="radio dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineToolbox"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:Objects3DToolbox" toolbar:style="radio dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:Objects3DToolbox"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:GlueEditMode" toolbar:style="auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueEditMode" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ChangeBezier" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ChangePolygon" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ConvertInto3D" toolbar:visible="false"/>

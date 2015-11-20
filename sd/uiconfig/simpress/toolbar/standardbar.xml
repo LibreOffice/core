@@ -48,14 +48,14 @@
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomMode" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:style="dropdown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Text"/>
  <toolbar:toolbaritem xlink:href=".uno:VerticalText"/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>

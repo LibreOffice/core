@@ -18,12 +18,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:SpinButton" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:Imagebutton" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpinButton"/>
+ <toolbar:toolbaritem xlink:href=".uno:Imagebutton"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:DateField" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:TimeField" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:DateField"/>
+ <toolbar:toolbaritem xlink:href=".uno:TimeField"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:NumericField" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:GroupBox" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumericField"/>
+ <toolbar:toolbaritem xlink:href=".uno:GroupBox"/>
 </toolbar:toolbar>
