@@ -67,7 +67,7 @@ extern "C" const GUID IID_IDispatchEx;
 
 namespace ole_adapter
 {
-std::unordered_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
+std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
 static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr);
@@ -96,7 +96,7 @@ InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
 {
     MutexGuard guard(getBridgeMutex());
     // remove entries in global map
-    IT_Uno it= UnoObjToWrapperMap.find( (sal_uInt32) m_xOrigin.get());
+    IT_Uno it= UnoObjToWrapperMap.find( (sal_uIntPtr) m_xOrigin.get());
     if(it != UnoObjToWrapperMap.end())
         UnoObjToWrapperMap.erase(it);
 }
