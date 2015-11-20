@@ -1859,15 +1859,50 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 bContentChanged = true;
         }
 
+        ScFormulaResult aNewResult( p->GetResultToken().get());
+
         if( mbNeedsNumberFormat )
         {
+            bool bSetFormat = true;
+            const short nOldFormatType = nFormatType;
             nFormatType = p->GetRetFormatType();
             sal_Int32 nFormatIndex = p->GetRetFormatIndex();
 
-            // don't set text format as hard format
-            if(nFormatType == css::util::NumberFormat::TEXT)
-                nFormatIndex = 0;
-            else if((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+            if (nFormatType == css::util::NumberFormat::TEXT)
+            {
+                // Don't set text format as hard format.
+                bSetFormat = false;
+            }
+            else if (nFormatType == css::util::NumberFormat::LOGICAL && cMatrixFlag != MM_NONE)
+            {
+                // In a matrix range do not set an (inherited) logical format
+                // as hard format if the value does not represent a strict TRUE
+                // or FALSE value. But do set for a top left error value so
+                // following matrix cells can inherit for non-error values.
+                // This solves a problem with IF() expressions in array context
+                // where incidentally the top left element results in logical
+                // type but some others don't. It still doesn't solve the
+                // reverse case though, where top left is not logical type but
+                // some other elements should be. We'd need to transport type
+                // or format information on arrays.
+                StackVar eNewCellResultType = aNewResult.GetCellResultType();
+                if (eNewCellResultType != svError || cMatrixFlag == MM_REFERENCE)
+                {
+                    double fVal;
+                    if (eNewCellResultType != svDouble)
+                    {
+                        bSetFormat = false;
+                        nFormatType = nOldFormatType;   // that? or number?
+                    }
+                    else if ((fVal = aNewResult.GetDouble()) != 1.0 && fVal != 0.0)
+                    {
+                        bSetFormat = false;
+                        nFormatType = css::util::NumberFormat::NUMBER;
+                    }
+                }
+            }
+
+            if (bSetFormat && (nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                 nFormatIndex = ScGlobal::GetStandardFormat(*pDocument->GetFormatTable(),
                         nFormatIndex, nFormatType);
 
@@ -1879,7 +1914,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             // XXX if mbNeedsNumberFormat was set even if the current format
             // was not General then we'd have to obtain the current format here
             // and check at least the types.
-            if ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+            if (bSetFormat && (nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
             {
                 // set number format explicitly
                 pDocument->SetNumberFormat( aPos, nFormatIndex );
@@ -1897,7 +1932,6 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             // Also handle special cases of initial results after loading.
             if ( !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
             {
-                ScFormulaResult aNewResult( p->GetResultToken().get());
                 StackVar eOld = aResult.GetCellResultType();
                 StackVar eNew = aNewResult.GetCellResultType();
                 if ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) )
@@ -1921,7 +1955,6 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
         else
         {
-            ScFormulaResult aNewResult( p->GetResultToken().get());
             StackVar eOld = aResult.GetCellResultType();
             StackVar eNew = aNewResult.GetCellResultType();
             bChanged = (eOld != eNew ||
