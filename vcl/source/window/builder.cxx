@@ -1668,10 +1668,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
             else
             {
-                const sal_uInt16 COMMAND_ITEMID_START = 30000;
-                nItemId = COMMAND_ITEMID_START + pToolBox->GetItemCount();
-                pToolBox->InsertItem(nItemId,
-                    OStringToOUString(extractLabel(rMap), RTL_TEXTENCODING_UTF8), nBits);
+                nItemId = pToolBox->GetItemCount() + 1;
+                pToolBox->InsertItem(nItemId, OStringToOUString(extractLabel(rMap), RTL_TEXTENCODING_UTF8), nBits);
                 pToolBox->SetItemCommand(nItemId, aCommand);
                 pToolBox->SetHelpId(nItemId, m_sHelpRoot + id);
             }
