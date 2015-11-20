@@ -1985,11 +1985,11 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         DISPPARAMS param= {0,0,0,0};
         CComVariant result;
 
-        OLECHAR* sLength= L"length";
+        OLECHAR const * sLength= L"length";
 
         // Get the length of the array. Can also be obtained throu GetNextDispID. The
         // method only returns DISPIDs of the array data. Their names are like "0", "1" etc.
-        if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, &sLength , 1, LOCALE_USER_DEFAULT, &dispid)))
+        if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, const_cast<OLECHAR **>(&sLength), 1, LOCALE_USER_DEFAULT, &dispid)))
             throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
                                      "Conversion of dispatch object to Sequence failed!");
         if( FAILED( hr= pdispEx->InvokeEx(dispid, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
@@ -2258,12 +2258,13 @@ sal_Bool UnoConversionUtilities<T>::isJScriptArray(const VARIANT* rvar)
 {
     OSL_ENSURE( rvar->vt == VT_DISPATCH, "param is not a VT_DISPATCH");
     HRESULT hr;
-    OLECHAR* sindex= L"0";
+    OLECHAR const * sindex= L"0";
     DISPID id;
     if ( rvar->vt == VT_DISPATCH && rvar->pdispVal )
     {
-        hr= rvar->pdispVal->GetIDsOfNames( IID_NULL, &sindex, 1,
-            LOCALE_USER_DEFAULT, &id);
+        hr= rvar->pdispVal->GetIDsOfNames(
+            IID_NULL, const_cast<OLECHAR **>(&sindex), 1, LOCALE_USER_DEFAULT,
+            &id);
 
         if( SUCCEEDED ( hr) )
             return sal_True;
