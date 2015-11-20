@@ -1367,51 +1367,22 @@ std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts 
 namespace
 {
 
-class FadeSmoothlyTransition : public SimpleTransition
+class FadeSmoothlyTransition : public ShaderTransition
 {
 public:
     FadeSmoothlyTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : SimpleTransition(rScene, rSettings)
+        : ShaderTransition(rScene, rSettings)
     {}
 
 private:
-    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+    virtual GLuint makeShader() const override;
+    virtual void impl_prepareTransition() override {}
+    virtual void impl_finishTransition() override {}
 };
 
-void FadeSmoothlyTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+GLuint FadeSmoothlyTransition::makeShader() const
 {
-    CHECK_GL_ERROR();
-    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
-
-    CHECK_GL_ERROR();
-    glDisable(GL_DEPTH_TEST);
-
-    CHECK_GL_ERROR();
-    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
-    CHECK_GL_ERROR();
-
-    CHECK_GL_ERROR();
-    glDisable(GL_LIGHTING);
-    CHECK_GL_ERROR();
-    glEnable(GL_BLEND);
-    CHECK_GL_ERROR();
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    CHECK_GL_ERROR();
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    CHECK_GL_ERROR();
-    glColor4f( 1, 1, 1, nTime );
-    CHECK_GL_ERROR();
-    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
-    CHECK_GL_ERROR();
-    glDisable(GL_BLEND);
-    CHECK_GL_ERROR();
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    CHECK_GL_ERROR();
-    glEnable(GL_LIGHTING);
-    CHECK_GL_ERROR();
-
-    glEnable(GL_DEPTH_TEST);
-    CHECK_GL_ERROR();
+    return OpenGLHelper::LoadShaders( "basicVertexShader", "fadeFragmentShader" );
 }
 
 std::shared_ptr<OGLTransitionImpl>
@@ -1448,41 +1419,22 @@ std::shared_ptr<OGLTransitionImpl> makeFadeSmoothly()
 namespace
 {
 
-class FadeThroughBlackTransition : public SimpleTransition
+class FadeThroughBlackTransition : public ShaderTransition
 {
 public:
     FadeThroughBlackTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : SimpleTransition(rScene, rSettings)
+        : ShaderTransition(rScene, rSettings)
     {}
 
 private:
-    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+    virtual GLuint makeShader() const override;
+    virtual void impl_prepareTransition() override {}
+    virtual void impl_finishTransition() override {}
 };
 
-void FadeThroughBlackTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+GLuint FadeThroughBlackTransition::makeShader() const
 {
-    CHECK_GL_ERROR();
-    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
-
-    glDisable(GL_DEPTH_TEST);
-
-    glDisable(GL_LIGHTING);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    if( nTime < 0.5 ) {
-        glColor4f( 1, 1, 1, 1 - nTime*2 );
-        displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
-    } else {
-        glColor4f( 1, 1, 1, (nTime - 0.5)*2 );
-        displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
-    }
-    glDisable(GL_BLEND);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    glEnable(GL_LIGHTING);
-
-    glEnable(GL_DEPTH_TEST);
-    CHECK_GL_ERROR();
+    return OpenGLHelper::LoadShaders( "basicVertexShader", "fadeBlackFragmentShader" );
 }
 
 std::shared_ptr<OGLTransitionImpl>

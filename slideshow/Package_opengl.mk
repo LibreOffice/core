@@ -13,6 +13,8 @@ $(eval $(call gb_Package_add_files,slideshow_opengl_shader,$(LIBO_ETC_FOLDER)/op
 		basicVertexShader.glsl \
 		basicFragmentShader.glsl \
 		dissolveFragmentShader.glsl \
+		fadeBlackFragmentShader.glsl \
+		fadeFragmentShader.glsl \
 		staticFragmentShader.glsl \
 		vortexFragmentShader.glsl \
 		vortexVertexShader.glsl \
