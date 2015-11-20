@@ -22,11 +22,8 @@
 
 #include <vcl/window.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
-
 class ImplBorderWindowView;
 enum class DrawButtonFlags;
-class NotebookBarWindow;
 
 #define BORDERWINDOW_STYLE_OVERLAP          ((sal_uInt16)0x0001)
 #define BORDERWINDOW_STYLE_BORDER           ((sal_uInt16)0x0002)
@@ -88,7 +85,6 @@ class ImplBorderWindow : public vcl::Window
 private:
     ImplBorderWindowView*   mpBorderView;
     VclPtr<vcl::Window>     mpMenuBarWindow;
-    VclPtr<NotebookBarWindow> mpNotebookBarWindow;
     long                    mnMinWidth;
     long                    mnMinHeight;
     long                    mnMaxWidth;
@@ -161,8 +157,6 @@ public:
     void                    UpdateMenuHeight();
     void                    SetMenuBarWindow( vcl::Window* pWindow );
     void                    SetMenuBarMode( bool bHide );
-
-    void                    SetNotebookBarWindow(const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame>& rFrame);
 
     void                    SetMinOutputSize( long nWidth, long nHeight )
                                 { mnMinWidth = nWidth; mnMinHeight = nHeight; }
