@@ -92,12 +92,10 @@ namespace basegfx
             ActiveEdge( const B2DRectangle& rRect,
                         const double&       fInvariantCoord,
                         std::ptrdiff_t      nPolyIdx,
-                        EdgeType            eEdgeType,
                         EdgeDirection       eEdgeDirection ) :
                 mfInvariantCoord(fInvariantCoord),
                 mpAssociatedRect( &rRect ),
                 mnPolygonIdx( nPolyIdx ),
-                meEdgeType( eEdgeType ),
                 meEdgeDirection( eEdgeDirection )
             {}
 
@@ -134,9 +132,6 @@ namespace basegfx
                 -1 denotes no assigned polygon
              */
             std::ptrdiff_t      mnPolygonIdx;
-
-            /// 'upper' or 'lower' edge of original rectangle.
-            EdgeType            meEdgeType;
 
             /// 'left' or 'right'
             EdgeDirection       meEdgeDirection;
@@ -640,7 +635,6 @@ namespace basegfx
                     rRect,
                     rRect.getMinY(),
                     bGoesDown ? nIdxPolygon : -1,
-                    ActiveEdge::UPPER,
                     bGoesDown ? ActiveEdge::PROCEED_LEFT : ActiveEdge::PROCEED_RIGHT) );
             // lower edge
             aNewEdges.push_back(
@@ -648,7 +642,6 @@ namespace basegfx
                     rRect,
                     rRect.getMaxY(),
                     bGoesDown ? -1 : nIdxPolygon,
-                    ActiveEdge::LOWER,
                     bGoesDown ? ActiveEdge::PROCEED_RIGHT : ActiveEdge::PROCEED_LEFT ) );
 
             // furthermore, have to respect a special tie-breaking
