@@ -86,10 +86,10 @@ void ScTabView::Init()
     pHdrSelEng = new ScHeaderSelectionEngine( pFrameWin, &aHdrFunc );
 
     pColBar[SC_SPLIT_LEFT] = VclPtr<ScColBar>::Create( pFrameWin, &aViewData, SC_SPLIT_LEFT,
-                                                &aHdrFunc, pHdrSelEng );
+                                                       &aHdrFunc, pHdrSelEng, this );
     pColBar[SC_SPLIT_RIGHT] = nullptr;
     pRowBar[SC_SPLIT_BOTTOM] = VclPtr<ScRowBar>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOM,
-                                                &aHdrFunc, pHdrSelEng );
+                                                         &aHdrFunc, pHdrSelEng, this );
     pRowBar[SC_SPLIT_TOP] = nullptr;
     for (i=0; i<2; i++)
         pColOutline[i] = pRowOutline[i] = nullptr;
