@@ -132,7 +132,7 @@ const DeckDescriptor* ResourceManager::ImplGetDeckDescriptor(const OUString& rsD
         if (iDeck->msId.equals(rsDeckId))
             return &*iDeck;
     }
-    return NULL;
+    return nullptr;
 }
 const DeckDescriptor* ResourceManager::GetDeckDescriptor(const OUString& rsDeckId) const
 {
@@ -153,7 +153,7 @@ const PanelDescriptor* ResourceManager::ImplGetPanelDescriptor(const OUString& r
         if (iPanel->msId.equals(rsPanelId))
             return &*iPanel;
     }
-    return NULL;
+    return nullptr;
 }
 const PanelDescriptor* ResourceManager::GetPanelDescriptor(const OUString& rsPanelId) const
 {
