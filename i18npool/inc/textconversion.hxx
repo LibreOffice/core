@@ -152,7 +152,6 @@ private:
 
 // for SChines/TChinese word conversion
 typedef struct {
-    sal_uInt16 start;
     sal_Int16 count;
 } STC_WordIndex;
 

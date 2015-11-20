@@ -93,8 +93,6 @@ protected:
     } character, sentence, line, *icuBI;
     BI_Data words[4]; // 4 is css::i18n::WordType enumeration size
 
-    sal_Int16 aBreakType;
-
     void SAL_CALL loadICUBreakIterator(const css::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char* name, const OUString& rText) throw(css::uno::RuntimeException);
 };

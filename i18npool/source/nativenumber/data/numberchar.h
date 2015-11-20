@@ -259,12 +259,6 @@ static const sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
     {0x4EAC, 0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE}    // Japanese Traditional
 };
 
-typedef struct {
-    sal_Int16 ExponentCount;
-    sal_Int16* MultiplierExponent;
-    sal_Unicode *MultiplierChar;
-} Multiplier;
-
 } } } }
 
 #endif // INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H

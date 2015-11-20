@@ -44,7 +44,6 @@ BreakIterator_Unicode::BreakIterator_Unicode()
     : cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" )    // implementation name
     , lineRule( "line" )
     , icuBI( nullptr )
-    , aBreakType(0)
 {
 }
 
