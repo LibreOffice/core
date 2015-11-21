@@ -107,9 +107,9 @@ void ScPivotFilterDlg::dispose()
     m_pBtnRegExp.clear();
     m_pBtnUnique.clear();
     m_pFtDbArea.clear();
-    for (auto a : aValueEdArr) a.clear();
-    for (auto a : aFieldLbArr) a.clear();
-    for (auto a : aCondLbArr) a.clear();
+    for (auto& a : aValueEdArr) a.clear();
+    for (auto& a : aFieldLbArr) a.clear();
+    for (auto& a : aCondLbArr) a.clear();
     ModalDialog::dispose();
 }
 

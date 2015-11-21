@@ -142,7 +142,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
 
                 OJoinTableView* pView = static_cast<OJoinTableView*>(m_pTabWin->getTableView());
                 OSL_ENSURE(pView,"No OJoinTableView!");
-                for (auto conn : pView->getTableConnections())
+                for (auto& conn : pView->getTableConnections())
                     conn->RecalcLines();
 
                 pView->InvalidateConnections();

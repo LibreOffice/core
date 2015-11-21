@@ -5950,8 +5950,11 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
     Rectangle aBoundingBox;
     std::vector<OString> aRectangles;
 
-    for (auto aRectangle : rRectangles)
+    for (const auto& rRectangle : rRectangles)
     {
+        // We explicitly create a copy, since we need to expand
+        // the rectangle before coordinate conversion
+        Rectangle aRectangle(rRectangle);
         aRectangle.Right() += 1;
         aRectangle.Bottom() += 1;
 

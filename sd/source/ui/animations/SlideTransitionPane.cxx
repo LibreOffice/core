@@ -361,7 +361,7 @@ size_t getPresetOffset( const sd::impl::TransitionEffect &rEffect )
     sd::TransitionPresetPtr pFound;
 
     size_t nIdx = 0;
-    for( auto aIt: rPresetList )
+    for( const auto& aIt: rPresetList )
     {
         if( rEffect.operator==( *aIt ))
             break;
@@ -782,7 +782,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         {
             int nVariant = 0;
             bool bFound = false;
-            for( auto aIter: rPresetList )
+            for( const auto& aIter: rPresetList )
             {
                 if( aIter->getSetId() == (*aSelected)->getSetId() )
                 {
@@ -1039,7 +1039,7 @@ void SlideTransitionPane::updateVariants( size_t nPresetOffset )
 
         // Fill in the variant listbox
         size_t nFirstItem = 0, nItem = 1;
-        for( auto aIt: rPresetList )
+        for( const auto& aIt: rPresetList )
         {
             if( aIt->getSetId().equals( (*pFound)->getSetId() ) )
             {
@@ -1117,7 +1117,7 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
 
     size_t nPresetOffset = 0;
-    for( auto aIter: rPresetList )
+    for( const auto& aIter: rPresetList )
     {
         TransitionPresetPtr pPreset = aIter;
         const OUString sLabel( pPreset->getSetLabel() );
@@ -1151,7 +1151,7 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
 
     nPresetOffset = 0;
     SAL_INFO( "sd.transitions", "Transition presets by offsets:");
-    for( auto aIter: rPresetList )
+    for( const auto& aIter: rPresetList )
     {
         SAL_INFO( "sd.transitions", nPresetOffset++ << " " <<
                   aIter->getPresetId() << ": " << aIter->getSetId() );

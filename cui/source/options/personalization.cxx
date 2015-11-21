@@ -102,9 +102,9 @@ void SelectPersonaDialog::dispose()
     m_pEdit.clear();
     m_pSearchButton.clear();
     m_pProgressLabel.clear();
-    for (VclPtr<PushButton> vp : m_vResultList)
+    for (VclPtr<PushButton>& vp : m_vResultList)
         vp.clear();
-    for (VclPtr<PushButton> vp : m_vSearchSuggestions)
+    for (VclPtr<PushButton>& vp : m_vSearchSuggestions)
         vp.clear();
     m_pOkButton.clear();
     m_pCancelButton.clear();

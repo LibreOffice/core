@@ -346,13 +346,13 @@ void ScOptSolverDlg::dispose()
     m_pBtnCancel.clear();
     m_pBtnSolve.clear();
     mpEdActive.clear();
-    for (auto p : mpLeftButton)
+    for (auto& p : mpLeftButton)
         p.clear();
-    for (auto p : mpRightButton)
+    for (auto& p : mpRightButton)
         p.clear();
-    for (auto p : mpOperator)
+    for (auto& p : mpOperator)
         p.clear();
-    for (auto p : mpDelButton)
+    for (auto& p : mpDelButton)
         p.clear();
     ScAnyRefDlg::dispose();
 }

@@ -31,7 +31,7 @@ void unotools::misc::ServiceDocumenter::showInterfaceDocs(const Reference<XTypeP
         return;
     auto xMSF(m_xContext->getServiceManager());
     Reference<system::XSystemShellExecute> xShell(xMSF->createInstanceWithContext("com.sun.star.system.SystemShellExecute", m_xContext), uno::UNO_QUERY);
-    for(auto aType : xTypeProvider->getTypes())
+    for(const auto& aType : xTypeProvider->getTypes())
     {
         auto sUrl = aType.getTypeName();
         sal_Int32 nIdx = 0;
@@ -48,7 +48,7 @@ void unotools::misc::ServiceDocumenter::showServiceDocs(const Reference<XService
         return;
     auto xMSF(m_xContext->getServiceManager());
     Reference<system::XSystemShellExecute> xShell(xMSF->createInstanceWithContext("com.sun.star.system.SystemShellExecute", m_xContext), uno::UNO_QUERY);
-    for(auto sService : xService->getSupportedServiceNames())
+    for(const auto& sService : xService->getSupportedServiceNames())
     {
         auto sUrl = sService;
         sal_Int32 nIdx = 0;

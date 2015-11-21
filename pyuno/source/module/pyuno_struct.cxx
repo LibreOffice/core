@@ -111,7 +111,7 @@ PyObject* PyUNOStruct_dir( PyObject *self )
     try
     {
         member_list = PyList_New( 0 );
-        for( auto aMember : me->members->xInvocation->getMemberNames() )
+        for( const auto& aMember : me->members->xInvocation->getMemberNames() )
         {
             // setitem steals a reference
             PyList_Append( member_list, ustring2PyString( aMember ).getAcquired() );

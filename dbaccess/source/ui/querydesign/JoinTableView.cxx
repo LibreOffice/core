@@ -950,7 +950,7 @@ void OJoinTableView::InvalidateConnections()
 void OJoinTableView::DrawConnections(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     // draw Joins
-    for(auto connection : m_vTableConnection)
+    for(const auto& connection : m_vTableConnection)
         connection->Draw(rRenderContext, rRect);
     // finally redraw the selected one above all others
     if (GetSelectedConn())
