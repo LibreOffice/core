@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "MNSProfileDiscover.hxx"
 #include "MConnection.hxx"
 #include "MDriver.hxx"
 #include "MDatabaseMetaData.hxx"
@@ -51,7 +50,6 @@ OConnection::OConnection(MorkDriver* _pDriver)
     ,m_aColumnAlias( _pDriver->getFactory() )
 {
     m_pDriver->acquire();
-    m_pProfileAccess = new ProfileAccess();
     m_pBook = new MorkParser();
     m_pHistory = new MorkParser();
 }
@@ -62,7 +60,6 @@ OConnection::~OConnection()
         close();
     m_pDriver->release();
     m_pDriver = nullptr;
-    delete m_pProfileAccess;
     delete m_pBook;
     delete m_pHistory;
 }
@@ -121,9 +118,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     // production?
     if (unittestIndex == -1)
     {
-        OUString defaultProfile = m_pProfileAccess->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
-        OUString path = m_pProfileAccess->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
-        SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
+        OUString path = m_pDriver->getProfilePath();
         SAL_INFO("connectivity.mork", "ProfilePath: " << path);
         abook = path + "/abook.mab";
         history = path + "/history.mab";

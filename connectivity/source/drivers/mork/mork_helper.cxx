@@ -1,9 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#include "MNSProfileDiscover.hxx"
+
 #include "MorkParser.hxx"
-
-
-using namespace connectivity::mork;
+#include <iostream>
 
 bool openAddressBook(const std::string& path)
 {
@@ -35,20 +33,21 @@ bool openAddressBook(const std::string& path)
     return true;
 }
 
-int main(void)
+int main(int argc, char* argv[])
 {
-  ProfileAccess* access = new ProfileAccess();
-  OUString defaultProfile = access->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
-  SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
+    if (argc < 2)
+    {
+        std::cerr << "Usage: " << argv[0] << " <path-to>/abook.mab" << std::endl;
+        std::cerr << "Example: " << argv[0] << " /home/johndoe/.thunderbird/m0tpqlky.default/abook.mab" << std::endl;
 
-  OUString profilePath = access->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
-  SAL_INFO("connectivity.mork", "ProfilePath: " << profilePath);
+        return 1;
+    }
 
-  profilePath += "/abook.mab";
+    OString aOString(argv[1]);
+    SAL_INFO("connectivity.mork", "abook.mab: " << aOString);
+    openAddressBook(aOString.getStr());
 
-  SAL_INFO("connectivity.mork", "abook.mab: " << profilePath);
-  OString aOString = OUStringToOString( profilePath, RTL_TEXTENCODING_UTF8 );
-  openAddressBook(aOString.getStr());
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
