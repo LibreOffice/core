@@ -10,7 +10,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "MDriver.hxx"
 #include "MConnection.hxx"
-#include "MNSProfileDiscover.hxx"
+
+#include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#include <com/sun/star/mozilla/MozillaProductType.hpp>
 
 #include "resource/mork_res.hrc"
 #include "resource/common_res.hrc"
@@ -33,8 +35,6 @@ MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const 
     m_xFactory(context_->getServiceManager(), css::uno::UNO_QUERY)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::MorkDriver()" );
-//    css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceFactory(;
-    assert(context.is());
 }
 
 // static ServiceInfo
@@ -77,6 +77,25 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
     SAL_INFO("connectivity.mork", "=> MorkDriver::connect()" );
 
     (void) url; (void) info; // avoid warnings
+
+    // Profile discovery
+    css::uno::Reference<css::uno::XInterface> xInstance = context_->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", context_);
+    OSL_ENSURE( xInstance.is(), "failed to create instance" );
+
+    css::uno::Reference<::com::sun::star::mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance, css::uno::UNO_QUERY);
+    OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
+
+    if (xMozillaBootstrap.is())
+    {
+        OUString defaultProfile = xMozillaBootstrap->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
+
+        if (!defaultProfile.isEmpty())
+        {
+            m_sProfilePath = xMozillaBootstrap->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
+            SAL_INFO("connectivity.mork", "Using Thunderbird profile " << m_sProfilePath);
+        }
+    }
+
     css::uno::Reference< css::sdbc::XConnection > xCon;
     OConnection* pCon = new OConnection(this);
     xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)

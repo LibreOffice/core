@@ -30,7 +30,6 @@ namespace connectivity
     namespace mork
     {
         class MorkDriver;
-        class ProfileAccess;
         class ErrorDescriptor;
 
         typedef connectivity::OMetaConnection OConnection_BASE; // implements basics and text encoding
@@ -48,8 +47,6 @@ namespace connectivity
             MorkDriver*                             m_pDriver;      //  Pointer to the owning
                                                                     //  driver object
             OColumnAlias    m_aColumnAlias;
-            // Profile Access
-            ProfileAccess* m_pProfileAccess;
             // Mork Parser (abook)
             MorkParser* m_pBook;
             // Mork Parser (history)
