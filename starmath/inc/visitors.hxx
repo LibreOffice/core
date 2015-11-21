@@ -134,23 +134,24 @@ class SmCaretPos2LineVisitor : public SmDefaultingVisitor
 {
 public:
     /** Given position and device this constructor will compute a line for the caret */
-    SmCaretPos2LineVisitor( OutputDevice *pDevice, SmCaretPos position ) {
-        pDev = pDevice;
-        pos = position;
+    SmCaretPos2LineVisitor( OutputDevice *pDevice, SmCaretPos position )
+        : mpDev( pDevice )
+        , maPos( position )
+    {
         SAL_WARN_IF( !position.IsValid(), "starmath", "Cannot draw invalid position!" );
 
-        pos.pSelectedNode->Accept( this );
+        maPos.pSelectedNode->Accept( this );
     }
     virtual ~SmCaretPos2LineVisitor() {}
     void Visit( SmTextNode* pNode ) override;
     using SmDefaultingVisitor::Visit;
     SmCaretLine GetResult( ){
-        return line;
+        return maLine;
     }
 private:
-    SmCaretLine line;
-    VclPtr<OutputDevice> pDev;
-    SmCaretPos pos;
+    SmCaretLine maLine;
+    VclPtr<OutputDevice> mpDev;
+    SmCaretPos maPos;
 protected:
     /** Default method for computing lines for pNodes */
     void DefaultVisit( SmNode* pNode ) override;

@@ -250,31 +250,31 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
 void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
 {
     //Save device state
-    pDev->Push( PushFlags::FONT | PushFlags::TEXTCOLOR );
+    mpDev->Push( PushFlags::FONT | PushFlags::TEXTCOLOR );
 
-    long i = pos.Index;
+    long i = maPos.Index;
 
-    pDev->SetFont( pNode->GetFont( ) );
+    mpDev->SetFont( pNode->GetFont( ) );
 
     //Find coordinates
-    long left = pNode->GetLeft( ) + pDev->GetTextWidth( pNode->GetText( ), 0, i );
+    long left = pNode->GetLeft( ) + mpDev->GetTextWidth( pNode->GetText( ), 0, i );
     long top = pNode->GetTop( );
     long height = pNode->GetHeight( );
 
-    line = SmCaretLine( left, top, height );
+    maLine = SmCaretLine( left, top, height );
 
     //Restore device state
-    pDev->Pop( );
+    mpDev->Pop( );
 }
 
 void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
 {
     //Vertical line ( code from SmCaretDrawingVisitor )
     Point p1 = pNode->GetTopLeft( );
-    if( pos.Index == 1 )
+    if( maPos.Index == 1 )
         p1.Move( pNode->GetWidth( ), 0 );
 
-    line = SmCaretLine( p1.X( ), p1.Y( ), pNode->GetHeight( ) );
+    maLine = SmCaretLine( p1.X( ), p1.Y( ), pNode->GetHeight( ) );
 }
 
 
