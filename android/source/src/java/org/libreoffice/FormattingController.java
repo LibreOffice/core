@@ -85,10 +85,10 @@ public class FormattingController implements View.OnClickListener {
                         buttonId = R.id.button_italic;
                         break;
                     case Document.UNDERLINE:
-                        buttonId = R.id.button_strikethrough;
+                        buttonId = R.id.button_underlined;
                         break;
                     case Document.STRIKEOUT:
-                        buttonId = R.id.button_underlined;
+                        buttonId = R.id.button_strikethrough;
                         break;
                     case Document.ALIGN_LEFT:
                         buttonId = R.id.button_align_left;
