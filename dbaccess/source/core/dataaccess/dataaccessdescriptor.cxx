@@ -18,8 +18,6 @@
  */
 
 #include "dbastrings.hrc"
-#include "module_dba.hxx"
-#include "services.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -28,6 +26,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/XDataAccessDescriptorFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -36,28 +35,20 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-namespace dbaccess
+namespace
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XResultSet;
-    using ::com::sun::star::sdb::XDataAccessDescriptorFactory;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::PropertyValue;
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
@@ -211,10 +202,7 @@ namespace dbaccess
     }
 
     // DataAccessDescriptorFactory
-    typedef ::cppu::WeakImplHelper<   XServiceInfo
-                                  ,   XDataAccessDescriptorFactory
-                                  >   DataAccessDescriptorFactory_Base;
-    class DataAccessDescriptorFactory : public DataAccessDescriptorFactory_Base
+    class DataAccessDescriptorFactory: public ::cppu::WeakImplHelper<XServiceInfo, css::sdb::XDataAccessDescriptorFactory>
     {
     public:
         // XServiceInfo
@@ -222,16 +210,9 @@ namespace dbaccess
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) override;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
 
-        // XServiceInfo - static versions
-        static Sequence< OUString >  getSupportedServiceNames_static() throw( RuntimeException );
-        static OUString              getImplementationName_static() throw( RuntimeException );
-        static Reference< XInterface >      Create(const Reference< XComponentContext >& _rxContext);
-        static OUString              getSingletonName_static();
-
         // XDataAccessDescriptorFactory
         virtual Reference< XPropertySet > SAL_CALL createDataAccessDescriptor(  ) throw (RuntimeException, std::exception) override;
 
-    protected:
         explicit DataAccessDescriptorFactory( const Reference< XComponentContext >& _rxContext );
         virtual ~DataAccessDescriptorFactory();
 
@@ -248,30 +229,9 @@ namespace dbaccess
     {
     }
 
-    OUString DataAccessDescriptorFactory::getSingletonName_static()
-    {
-        return OUString( "com.sun.star.sdb.DataAccessDescriptorFactory" );
-    }
-
-    Sequence< OUString > DataAccessDescriptorFactory::getSupportedServiceNames_static() throw( RuntimeException )
-    {
-        Sequence< OUString > aServices { getSingletonName_static() };
-        return aServices;
-    }
-
-    OUString DataAccessDescriptorFactory::getImplementationName_static() throw( RuntimeException )
-    {
-        return OUString( "com.sun.star.comp.dba.DataAccessDescriptorFactory" );
-    }
-
-    Reference< XInterface > DataAccessDescriptorFactory::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *( new DataAccessDescriptorFactory( _rxContext ) );
-    }
-
     OUString SAL_CALL DataAccessDescriptorFactory::getImplementationName() throw (RuntimeException, std::exception)
     {
-        return getImplementationName_static();
+        return OUString( "com.sun.star.comp.dba.DataAccessDescriptorFactory" );
     }
 
     sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
@@ -279,9 +239,10 @@ namespace dbaccess
         return cppu::supportsService(this, rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL DataAccessDescriptorFactory::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL DataAccessDescriptorFactory::getSupportedServiceNames() throw (RuntimeException, std::exception)
     {
-        return getSupportedServiceNames_static();
+        Sequence< OUString > aServices { "com.sun.star.sdb.DataAccessDescriptorFactory" };
+        return aServices;
     }
 
     Reference< XPropertySet > SAL_CALL DataAccessDescriptorFactory::createDataAccessDescriptor(  ) throw (RuntimeException, std::exception)
@@ -289,11 +250,28 @@ namespace dbaccess
         return new DataAccessDescriptor( m_xContext );
     }
 
-} // namespace dbaccess
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(new DataAccessDescriptorFactory(context))
+    {}
 
-extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory()
+    css::uno::Reference<cppu::OWeakObject> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_dba_DataAccessDescriptorFactory(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::dba::OSingletonRegistration< ::dbaccess::DataAccessDescriptorFactory > aAutoRegistration;
+    return cppu::acquire(Singleton::get(context).instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

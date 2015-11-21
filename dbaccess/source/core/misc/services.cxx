@@ -19,13 +19,11 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include "module_dba.hxx"
 #include <osl/diagnose.h>
 #include "DatabaseDataProvider.hxx"
 #include "dbadllapi.hxx"
 
 #include <../dataaccess/databasecontext.hxx>
-#include <services.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -51,34 +49,13 @@ namespace dba{
     };
 }
 
-// The prescribed C api must be complied with
-// It consists of three functions which must be exported by the module.
-extern "C" void SAL_CALL createRegistryInfo_DBA()
-{
-    static bool bInit = false;
-    if (!bInit)
-    {
-        createRegistryInfo_DataAccessDescriptorFactory();
-        bInit = true;
-    }
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dba_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* pRegistryKey)
 {
-    createRegistryInfo_DBA();
-
-    Reference<XInterface> xRet(::dba::DbaModule::getInstance().getComponentFactory(
-        OUString::createFromAscii(pImplementationName)));
-
-    if (xRet.is())
-        xRet->acquire();
-    else
-        return cppu::component_getFactoryHelper(
+    return cppu::component_getFactoryHelper(
             pImplementationName, pServiceManager, pRegistryKey, dba::entries);
-    return xRet.get();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
