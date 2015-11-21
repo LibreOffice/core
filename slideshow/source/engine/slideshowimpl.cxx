@@ -1447,7 +1447,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
         //Get shapes for the slide
         css::uno::Reference< css::drawing::XShapes > Shapes(rPoly.first, css::uno::UNO_QUERY);
         //Retrieve polygons for one slide
-        for( const auto pPolyPoly : aPolygons )
+        for( const auto& pPolyPoly : aPolygons )
         {
             ::basegfx::B2DPolyPolygon b2DPolyPoly = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(pPolyPoly->getUNOPolyPolygon());
 

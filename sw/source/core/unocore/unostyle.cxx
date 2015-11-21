@@ -987,7 +987,7 @@ public:
             { m_vPropertyValues.clear(); }
     void Apply(SwXStyle& rStyle)
     {
-        for(auto pPropertyPair : m_vPropertyValues)
+        for(auto& pPropertyPair : m_vPropertyValues)
         {
             if(pPropertyPair.second.hasValue())
                 rStyle.setPropertyValue(pPropertyPair.first, pPropertyPair.second);

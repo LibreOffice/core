@@ -137,7 +137,7 @@ namespace comphelper
     void OWrappedAccessibleChildrenManager::dispose()
     {
         // dispose our children
-        for( const auto rChild : m_aChildrenMap )
+        for( const auto& rChild : m_aChildrenMap )
         {
             Reference< XComponent > xComp( rChild.first, UNO_QUERY );
             if( xComp.is() )

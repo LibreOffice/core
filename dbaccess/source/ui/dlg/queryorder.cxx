@@ -138,8 +138,8 @@ void DlgOrderCrit::dispose()
     m_pLB_ORDERVALUE2.clear();
     m_pLB_ORDERFIELD3.clear();
     m_pLB_ORDERVALUE3.clear();
-    for (auto a : m_aColumnList) a.clear();
-    for (auto a : m_aValueList) a.clear();
+    for (auto& a : m_aColumnList) a.clear();
+    for (auto& a : m_aValueList) a.clear();
     ModalDialog::dispose();
 }
 
