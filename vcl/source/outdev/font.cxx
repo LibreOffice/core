@@ -224,7 +224,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.mpImplMetric->mnExtLeading  = ImplDevicePixelToLogicHeight( GetFontExtLeading() );
     aMetric.mpImplMetric->mnLineHeight  = ImplDevicePixelToLogicHeight( pMetric->mnAscent+pMetric->mnDescent+mnEmphasisAscent+mnEmphasisDescent );
     aMetric.mpImplMetric->mnSlant       = ImplDevicePixelToLogicHeight( pMetric->mnSlant );
-
+    aMetric.mpImplMetric->mnBulletOffset= pMetric->mnBulletOffset;
     SAL_INFO("vcl.gdi.fontmetric", "OutputDevice::GetFontMetric:" << aMetric);
 
     return aMetric;
@@ -1747,6 +1747,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     , meFamilyType(FAMILY_DONTKNOW)
     , mbScalableFont(false)
     , mbFullstopCentered(false)
+    , mnBulletOffset( 0 )
     , mnUnderlineSize( 0 )
     , mnUnderlineOffset( 0 )
     , mnBUnderlineSize( 0 )
@@ -1889,6 +1890,9 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
         bCentered = nB > (((nH >> 1)+nH)>>3);
     }
     mbFullstopCentered = bCentered ;
+
+    mnBulletOffset = ( pDev->GetTextWidth( OUString( sal_Unicode( 0x20 ) ) ) - pDev->GetTextWidth( OUString( sal_Unicode( 0xb7 ) ) ) ) >> 1 ;
+
 }
 
 void ImplFontMetricData::ImplInitAboveTextLineSize()
