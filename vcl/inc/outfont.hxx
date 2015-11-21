@@ -184,6 +184,7 @@ public: // TODO: hide members behind accessor methods
     bool                mbScalableFont;
     bool                mbKernableFont;
     bool                mbFullstopCentered;
+    long                mnBulletOffset;             // Offset to position non-print character
 
     // font metrics that are usually derived from the measurements
     long                mnUnderlineSize;            // Lineheight of Underline
