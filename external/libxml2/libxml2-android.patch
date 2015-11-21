@@ -1,18 +1,3 @@
---- misc/libxml2-2.7.6/ltmain.sh
-+++ misc/build/libxml2-2.7.6/ltmain.sh
-@@ -3228,6 +3228,12 @@
- 	  func_warning "\`-release' is ignored for convenience libraries"
-       else
- 
-+	# Force no versioning suffix for Android thanks to silly
-+	# apkbuilder which doesn't add extra native libs unless their
-+	# name ends with .so
-+
-+	version_type=none
-+
- 	# Parse the version information argument.
- 	save_ifs="$IFS"; IFS=':'
- 	set dummy $vinfo 0 0 0
 --- misc/libxml2-2.7.6/trionan.c
 +++ misc/build/libxml2-2.7.6/trionan.c
 @@ -327,7 +327,7 @@
