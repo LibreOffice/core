@@ -50,6 +50,7 @@ public:
     WrapPolygon::Pointer_t move(const css::awt::Point & rMove);
     WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY);
     WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size & rSrcSize);
+    WrapPolygon::Pointer_t correctWordWrapPolygonPixel(const css::awt::Size & rSrcSize);
     css::drawing::PointSequenceSequence getPointSequenceSequence() const;
 };
 

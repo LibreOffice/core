@@ -111,6 +111,29 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
     return pResult;
 }
 
+WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygonPixel(const awt::Size & rSrcSize)
+{
+    WrapPolygon::Pointer_t pResult;
+
+    /*
+    * https://msdn.microsoft.com/en-us/library/ee342530.aspx
+    *
+    * Image wrapping polygons in Microsoft Word use a fixed coordinate space
+    * that is 21600 units x 21600 units. Coordinate (0,0) is the upper left
+    * corner of the image and coordinate (21600,21600) is the lower right
+    * corner of the image. Microsoft Word scales the size of the wrapping
+    * polygon units to fit the size of the image. The 21600 value is a legacy
+    * artifact from the drawing layer of early versions of Microsoft Office.
+    */
+    const long nWrap100Percent = 21600;
+
+    Fraction aScaleX(rSrcSize.Width, nWrap100Percent);
+    Fraction aScaleY(rSrcSize.Height, nWrap100Percent);
+    pResult = scale(aScaleX, aScaleY);
+
+    return pResult;
+}
+
 drawing::PointSequenceSequence WrapPolygon::getPointSequenceSequence() const
 {
     drawing::PointSequenceSequence aPolyPolygon(1L);
