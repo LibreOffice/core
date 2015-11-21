@@ -151,6 +151,40 @@
           </maxInclusive>
         </constraints>
       </prop>
+      <prop oor:name="loInetConnectTimeout" oor:type="xs:int">
+        <info>
+          <desc>Specifies the timeout when first open a connection to a Web/WebDAV server. Time in seconds</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="5">
+            <info>
+              <desc>Specifies the minimum number of second allowed.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="180">
+            <info>
+              <desc>Specifies the maximum number of second allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="loInetReadTimeout" oor:type="xs:int">
+        <info>
+          <desc>Specifies the timeout when waiting for an answer from a Web/WebDAV server. Time in seconds</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="30">
+            <info>
+              <desc>Specifies the minimum number of second allowed.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="180">
+            <info>
+              <desc>Specifies the maximum number of second allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
