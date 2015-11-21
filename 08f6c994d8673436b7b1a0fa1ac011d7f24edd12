@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_da5cf9ef",
+        "filename": "svx/inc/sxmovitm.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-21T17:52:34Z",
+      "side": 1,
+      "message": "i think you need to use \"override\" keyword on these or the build breaks with clang",
+      "revId": "08f6c994d8673436b7b1a0fa1ac011d7f24edd12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
