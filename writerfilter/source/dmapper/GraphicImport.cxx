@@ -1136,7 +1136,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
         if(xGraphic.is())
         {
             uno::Reference< beans::XPropertySet > xGraphicObjectProperties(
-            m_xTextFactory->createInstance("com.sun.star.text.TextGraphicObject"),
+                m_xTextFactory->createInstance("com.sun.star.text.TextGraphicObject"),
                 uno::UNO_QUERY_THROW);
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_GRAPHIC), uno::makeAny( xGraphic ));
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
@@ -1320,20 +1320,37 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
 
             //there seems to be no way to detect the original size via _real_ API
             uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
-            awt::Size aGraphicSize, aGraphicSizePixel;
-            xGraphicProperties->getPropertyValue(getPropertyName( PROP_SIZE100th_M_M )) >>= aGraphicSize;
-            xGraphicProperties->getPropertyValue(getPropertyName( PROP_SIZE_PIXEL )) >>= aGraphicSizePixel;
 
-            uno::Any aContourPolyPolygon;
-            if( aGraphicSize.Width && aGraphicSize.Height &&
-                m_pImpl->mpWrapPolygon.get() != nullptr)
+            if (m_pImpl->mpWrapPolygon.get() != nullptr)
             {
-                WrapPolygon::Pointer_t pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygon(aGraphicSize);
-                aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
+                uno::Any aContourPolyPolygon;
+                awt::Size aGraphicSize;
+                WrapPolygon::Pointer_t pCorrected;
+                xGraphicProperties->getPropertyValue(getPropertyName(PROP_SIZE100th_M_M)) >>= aGraphicSize;
+                if (aGraphicSize.Width && aGraphicSize.Height)
+                {
+                    pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygon(aGraphicSize);
+                }
+                else
+                {
+                    xGraphicProperties->getPropertyValue(getPropertyName(PROP_SIZE_PIXEL)) >>= aGraphicSize;
+                    if (aGraphicSize.Width && aGraphicSize.Height)
+                    {
+                        pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygonPixel(aGraphicSize);
+                    }
+                }
+                if (pCorrected)
+                {
+                    aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
+                    xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_CONTOUR_POLY_POLYGON),
+                        aContourPolyPolygon);
+                    // We should bring it to front, even if wp:anchor's behindDoc="1",
+                    // because otherwise paragraph background (if set) overlaps the graphic
+                    // TODO: if paragraph's background becomes bottommost, then remove this hack
+                    xGraphicObjectProperties->setPropertyValue("Opaque", uno::makeAny(true));
+                }
             }
 
-            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_CONTOUR_POLY_POLYGON),
-                                                           aContourPolyPolygon);
 
             if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {

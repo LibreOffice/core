@@ -2931,6 +2931,30 @@ DECLARE_OOXMLIMPORT_TEST(testTdf95775, "tdf95775.docx")
     // This must not fail in layout
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf60351, "tdf60351.docx")
+{
+    // Get the first image in the document and check its contour polygon.
+    // It should contain 6 points. Check their coordinates.
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    css::drawing::PointSequenceSequence aPolyPolygon;
+    xPropertySet->getPropertyValue("ContourPolyPolygon") >>= aPolyPolygon;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aPolyPolygon.getLength());
+    const css::drawing::PointSequence& aPolygon = aPolyPolygon[0];
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6),   aPolygon.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),   aPolygon[0].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),   aPolygon[0].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(316), aPolygon[1].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),   aPolygon[1].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(316), aPolygon[2].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(316), aPolygon[2].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(158), aPolygon[3].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(298), aPolygon[3].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),   aPolygon[4].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(316), aPolygon[4].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),   aPolygon[5].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),   aPolygon[5].Y);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
