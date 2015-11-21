@@ -2025,7 +2025,7 @@ struct SvxStyleToolBoxControl::Impl
                 Reference<container::XNameAccess> xParaStyles;
                     xStylesSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>=
                     xParaStyles;
-                static const sal_Char* aWriterStyles[] =
+                static const std::vector<OUString> aWriterStyles =
                 {
                     "Text body",
                     "Quotations",
@@ -2035,12 +2035,12 @@ struct SvxStyleToolBoxControl::Impl
                     "Heading 2",
                     "Heading 3"
                 };
-                for( sal_uInt32 nStyle = 0; nStyle < sizeof( aWriterStyles ) / sizeof( sal_Char*); ++nStyle )
+                for( const OUString& aStyle: aWriterStyles )
                 {
                     try
                     {
                         Reference< beans::XPropertySet > xStyle;
-                        xParaStyles->getByName( OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
+                        xParaStyles->getByName( aStyle ) >>= xStyle;
                         OUString sName;
                         xStyle->getPropertyValue("DisplayName") >>= sName;
                         if( !sName.isEmpty() )
