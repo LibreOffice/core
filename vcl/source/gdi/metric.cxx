@@ -32,6 +32,7 @@ ImplFontMetric::ImplFontMetric()
     mnExtLeading( 0 ),
     mnLineHeight( 0 ),
     mnSlant( 0 ),
+    mnBulletOffset( 0 ),
     mnMiscFlags( 0 ),
     mnRefCount( 1 )
 {}
@@ -154,6 +155,11 @@ long FontMetric::GetSlant() const
 bool FontMetric::IsFullstopCentered() const
 {
     return mpImplMetric->IsFullstopCentered();
+}
+
+long FontMetric::GetBulletOffset() const
+{
+    return mpImplMetric->GetBulletOffset();
 }
 
 FontMetric& FontMetric::operator =( const FontMetric& rMetric )

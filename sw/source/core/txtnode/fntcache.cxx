@@ -1781,6 +1781,28 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pTmpFont->SetOverline(UNDERLINE_NONE);
                     pTmpFont->SetStrikeout(STRIKEOUT_NONE);
                     rInf.GetOut().SetFont( *pTmpFont );
+                    long nShift = rInf.GetOut( ).GetFontMetric( ).GetBulletOffset( );
+                    if ( nShift )
+                    {
+                        long nAdd = 0;
+
+                        if (aBulletOverlay.getLength() > nTmpIdx &&
+                            aBulletOverlay[ nTmpIdx ] == CH_BULLET )
+                        {
+                            if (bSwitchH2V)
+                                aTextOriginPos.Y() += nShift ;
+                            else
+                                aTextOriginPos.X() += nShift ;
+                            nAdd = nShift ;
+                        }
+                        for( sal_Int32 i = 1 ; i < nLen ; ++i )
+                        {
+                            if ( aBulletOverlay[ i + nTmpIdx ] == CH_BULLET )
+                                pKernArray [ i - 1 ] += nShift ;
+                            if ( nAdd )
+                                pKernArray [ i - 1 ] -= nAdd;
+                        }
+                    }
                     rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, pKernArray + nOffs,
                                                  nTmpIdx + nOffs , nLen - nOffs );
                     pTmpFont->SetColor( aPreviousColor );

@@ -73,6 +73,7 @@ public:
     long                GetLineHeight() const;
     long                GetSlant() const;
     bool                IsFullstopCentered() const;
+    long                GetBulletOffset() const;
 
     FontMetric&         operator=( const FontMetric& rMetric );
     bool                operator==( const FontMetric& rMetric ) const;
