@@ -292,21 +292,21 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     rHTMLWrt.m_pFootEndNotes->insert( rHTMLWrt.m_pFootEndNotes->begin() + nPos, pTextFootnote );
 
     OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"");
+    sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_anchor) + " " +
+                OString(OOO_STRING_SVTOOLS_HTML_O_class) + "=\"");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
-    sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
+    sOut.append("\" " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
-    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_anchor).append("\" ")
-        .append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"#");
+    sOut.append(OString(OOO_STRING_SVTOOLS_HTML_FTN_anchor) + "\" " +
+                OString(OOO_STRING_SVTOOLS_HTML_O_href) + "=\"#");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
-    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol).append('\"');
+    sOut.append(OString(OOO_STRING_SVTOOLS_HTML_FTN_symbol) + "\"");
     if( !rFormatFootnote.GetNumStr().isEmpty() )
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
-    sOut.append('>');
+        sOut.append(" " + OString(OOO_STRING_SVTOOLS_HTML_O_sdfixed));
+    sOut.append(">");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript );
 
