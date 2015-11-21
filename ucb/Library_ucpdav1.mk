@@ -33,6 +33,10 @@ $(eval $(call gb_Library_use_externals,ucpdav1,\
 	openssl \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,ucpdav1,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-neon/ContentProperties \
 	ucb/source/ucp/webdav-neon/DateTimeHelper \

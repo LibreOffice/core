@@ -60,6 +60,8 @@ extern "C" {
 #include "LinkSequence.hxx"
 #include "UCBDeadPropertyValue.hxx"
 
+#include <officecfg/Inet.hxx>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
@@ -790,6 +792,26 @@ void NeonSession::Init()
         ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
         ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
 #endif
+        // set timeout to connect
+        // if connect_timeout is not set, neon returns NE_CONNECT when the TCP socket default
+        // timeout elapses
+        // whith connect_timeout set neon returns NE_TIMEOUT if elapsed when the connection
+        // didn't succeed
+        // grab it from configuration
+        uno::Reference< uno::XComponentContext > rContext = m_xFactory->getComponentContext();
+
+        // set the timeout (in seconds) used when making a connection
+        int nConnectTimeout = officecfg::Inet::Settings::ConnectTimeout::get( rContext );
+        ne_set_connect_timeout( m_pHttpSession,
+                                std::max( nConnectTimeoutMin,
+                                          std::min( nConnectTimeout, nConnectTimeoutMax ) ) );
+
+        // provides a read time out facility as well
+        // set the timeout (in seconds) used when reading from a socket.
+        int nReadTimeout =  officecfg::Inet::Settings::ReadTimeout::get( rContext );
+        ne_set_read_timeout( m_pHttpSession,
+                             std::max( nReadTimeoutMin,
+                                       std::min( nReadTimeout, nReadTimeoutMax ) ) );
     }
 }
 

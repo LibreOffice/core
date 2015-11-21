@@ -67,6 +67,11 @@ private:
     static bool          m_bGlobalsInited;
     static NeonLockStore m_aNeonLockStore;
 
+    static const int    nConnectTimeoutMax = 180;
+    static const int    nConnectTimeoutMin = 2;
+    static const int    nReadTimeoutMax = 180;
+    static const int    nReadTimeoutMin = 20;
+
 protected:
     virtual ~NeonSession();
 
