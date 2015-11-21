@@ -27,7 +27,6 @@
 #include "databaseregistrations.hxx"
 #include "datasource.hxx"
 #include "dbastrings.hrc"
-#include "module_dba.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
