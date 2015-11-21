@@ -51,6 +51,8 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
     , mnFillColor(SALCOLOR_NONE)
 #ifdef DBG_UTIL
     , mProgramIsSolidColor(false)
+    , mnDrawCount(0)
+    , mnDrawCountAtFlush(0)
 #endif
     , mProgramSolidColor(SALCOLOR_NONE)
     , mProgramSolidTransparency(0.0)
@@ -59,6 +61,14 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
 
 OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 {
+#ifdef DBG_UTIL
+    if( !IsOffscreen() )
+    {
+        // Check that all SalGraphics have flushed before being destroyed
+        assert( mnDrawCountAtFlush == mnDrawCount );
+    }
+#endif
+
     ReleaseContext();
 }
 
@@ -144,7 +154,7 @@ void OpenGLSalGraphicsImpl::Init()
             mpContext->ReleaseFramebuffer( maOffscreenTex );
         }
         maOffscreenTex = OpenGLTexture();
-        VCL_GL_INFO("vcl.opengl", "::Init - re-size offscreen texture");
+        VCL_GL_INFO("::Init - re-size offscreen texture");
     }
 
     if( !IsOffscreen() )
@@ -172,6 +182,8 @@ void OpenGLSalGraphicsImpl::DeInit()
 void OpenGLSalGraphicsImpl::PreDraw()
 {
     OpenGLZone::enter();
+
+    mnDrawCount++;
 
     if( !AcquireContext() )
     {
@@ -239,7 +251,7 @@ void OpenGLSalGraphicsImpl::freeResources()
     // TODO Delete shaders, programs and textures if not shared
     if( mpContext.is() && mpContext->isInitialized() )
     {
-        VCL_GL_INFO( "vcl.opengl", "freeResources" );
+        VCL_GL_INFO( "freeResources" );
         mpContext->makeCurrent();
         mpContext->ReleaseFramebuffer( maOffscreenTex );
     }
@@ -406,7 +418,7 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
 {
     bool bClearTexture = false;
 
-    VCL_GL_INFO( "vcl.opengl", "Check Offscreen texture" );
+    VCL_GL_INFO( "Check Offscreen texture" );
 
     // Always create the offscreen texture
     if( maOffscreenTex )
@@ -416,13 +428,13 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
         {
             mpContext->ReleaseFramebuffer( maOffscreenTex );
             maOffscreenTex = OpenGLTexture();
-            VCL_GL_INFO( "vcl.opengl", "re-size offscreen texture" );
+            VCL_GL_INFO( "re-size offscreen texture" );
         }
     }
 
     if( !maOffscreenTex )
     {
-        VCL_GL_INFO( "vcl.opengl", "create texture of size "
+        VCL_GL_INFO( "create texture of size "
                      << GetWidth() << " x " << GetHeight() );
         maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
         bClearTexture = true;
@@ -1940,25 +1952,27 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     if( !maOffscreenTex )
     {
-        VCL_GL_INFO( "vcl.opengl", "flushAndSwap - odd no texture !" );
+        VCL_GL_INFO( "flushAndSwap - odd no texture !" );
         return;
     }
 
+    mnDrawCountAtFlush = mnDrawCount;
+
     OpenGLZone aZone;
 
-    VCL_GL_INFO( "vcl.opengl", "flushAndSwap" );
+    VCL_GL_INFO( "flushAndSwap" );
 
     // Interesting ! -> this destroys a context [ somehow ] ...
     mpWindowContext->makeCurrent();
     CHECK_GL_ERROR();
 
-    VCL_GL_INFO( "vcl.opengl", "flushAndSwap - acquire default frame buffer" );
+    VCL_GL_INFO( "flushAndSwap - acquire default frame buffer" );
 
     mpWindowContext->AcquireDefaultFramebuffer();
     glBindFramebuffer( GL_FRAMEBUFFER, 0 ); // FIXME: paranoid double check.
     CHECK_GL_ERROR();
 
-    VCL_GL_INFO( "vcl.opengl", "flushAndSwap - acquired default frame buffer" );
+    VCL_GL_INFO( "flushAndSwap - acquired default frame buffer" );
 
     glDisable( GL_SCISSOR_TEST ); // FIXME: paranoia ...
     CHECK_GL_ERROR();
@@ -1975,20 +1989,20 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
 
     SalTwoRect aPosAry( 0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight(),
                         0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight() );
-    VCL_GL_INFO( "vcl.opengl", "Texture height " << maOffscreenTex.GetHeight() << " vs. window height " << GetHeight() );
+    VCL_GL_INFO( "Texture height " << maOffscreenTex.GetHeight() << " vs. window height " << GetHeight() );
 
     OpenGLProgram *pProgram =
         mpWindowContext->UseProgram( "textureVertexShader", "textureFragmentShader", "" );
     if( !pProgram )
-        VCL_GL_INFO( "vcl.opengl", "Can't compile simple copying shader !" );
+        VCL_GL_INFO( "Can't compile simple copying shader !" );
     else
     {
         pProgram->Use(); // FIXME: paranoia ...
-        VCL_GL_INFO( "vcl.opengl", "done paranoid re-use." );
+        VCL_GL_INFO( "done paranoid re-use." );
         pProgram->SetTexture( "sampler", maOffscreenTex );
         maOffscreenTex.Bind(); // FIXME: paranoia ...
 
-        VCL_GL_INFO( "vcl.opengl", "bound bits etc." );
+        VCL_GL_INFO( "bound bits etc." );
 
         GLfloat aTexCoord[8];
         maOffscreenTex.GetCoord( aTexCoord, aPosAry, false );
@@ -2027,7 +2041,7 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
                 usleep(500 * 1000);
         }
     }
-    VCL_GL_INFO( "vcl.opengl", "flushAndSwap - end." );
+    VCL_GL_INFO( "flushAndSwap - end." );
 }
 
 void OpenGLSalGraphicsImpl::endPaint()

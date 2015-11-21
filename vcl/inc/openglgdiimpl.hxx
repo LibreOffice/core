@@ -89,6 +89,8 @@ protected:
     SalColor mnFillColor;
 #ifdef DBG_UTIL
     bool mProgramIsSolidColor;
+    sal_uInt32 mnDrawCount;
+    sal_uInt32 mnDrawCountAtFlush;
 #endif
     SalColor mProgramSolidColor;
     double mProgramSolidTransparency;
