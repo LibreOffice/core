@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_5ae4893a",
+        "filename": "sfx2/source/appl/fileobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2015-11-21T14:20:07Z",
+      "side": 1,
+      "message": "FnHashSet ? - what is the function ? surely a better, more descriptive type name is possible",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 9
+      },
+      "revId": "da0c90561547a78b4d7177e7b67af858af5bb7c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_7ae7cd40",
+        "filename": "sfx2/source/appl/fileobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2015-11-21T14:20:07Z",
+      "side": 1,
+      "message": "Why are we erasing here ? this seems inexplicable to me; I commented on it before; you seem to have responded to the comment - but this is not clear.\n\nAlso - I suggested a much clearer name for this hash; but ... this is not it \u003d)",
+      "range": {
+        "startLine": 261,
+        "startChar": 7,
+        "endLine": 261,
+        "endChar": 18
+      },
+      "revId": "da0c90561547a78b4d7177e7b67af858af5bb7c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
