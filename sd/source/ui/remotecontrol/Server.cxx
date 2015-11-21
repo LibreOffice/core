@@ -114,7 +114,7 @@ void RemoteServer::execute()
             && aLine.equals( "LO_SERVER_CLIENT_PAIR" ) &&
             pSocket->readLine( aLine ) )
         {
-            OString aName( aLine );
+            OString aClientName( aLine );
 
             if ( ! pSocket->readLine( aLine ) )
             {
@@ -129,7 +129,7 @@ void RemoteServer::execute()
             MutexGuard aGuard( sDataMutex );
             std::shared_ptr< ClientInfoInternal > pClient(
                 new ClientInfoInternal(
-                    OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
+                    OStringToOUString( aClientName, RTL_TEXTENCODING_UTF8 ),
                     false, pSocket, OStringToOUString( aPin,
                                                                  RTL_TEXTENCODING_UTF8 ) ) );
             mAvailableClients.push_back( pClient );
@@ -146,11 +146,11 @@ void RemoteServer::execute()
             Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
             Sequence< OUString > aNames = xConfig->getElementNames();
             bool aFound = false;
-            for ( int i = 0; i < aNames.getLength(); i++ )
+            for ( const OUString& aName: aNames ) // should be const&
             {
-                if ( aNames[i].equals( pClient->mName ) )
+                if ( aName.equals( pClient->mName ) )
                 {
-                    Reference<XNameAccess> xSetItem( xConfig->getByName(aNames[i]), UNO_QUERY );
+                    Reference<XNameAccess> xSetItem( xConfig->getByName(aName), UNO_QUERY );
                     Any axPin(xSetItem->getByName("PIN"));
                     OUString sPin;
                     axPin >>= sPin;
