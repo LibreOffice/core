@@ -93,8 +93,7 @@ ImageList::ImageList( const ResId& rResId ) :
 }
 
 ImageList::ImageList( const ::std::vector< OUString >& rNameVector,
-                      const OUString& rPrefix,
-                      const Color* ) :
+                      const OUString& rPrefix) :
     mpImplData( nullptr ),
     mnInitSize( 1 ),
     mnGrowSize( 4 )

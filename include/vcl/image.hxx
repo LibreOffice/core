@@ -83,9 +83,8 @@ class VCL_DLLPUBLIC ImageList
 public:
                     explicit ImageList( sal_uInt16 nInit = 8, sal_uInt16 nGrow = 4 );
                     explicit ImageList( const ResId& rResId );
-                    ImageList( const ::std::vector< OUString >& rNameVector,
-                               const OUString& rPrefix,
-                               const Color* pMaskColor = nullptr );
+                    ImageList( const std::vector<OUString>& rNameVector,
+                               const OUString& rPrefix);
                     ImageList( const ImageList& rImageList );
                     ~ImageList();
 
