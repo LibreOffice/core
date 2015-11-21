@@ -1419,7 +1419,7 @@ void PowerPointExport::WriteAuthors()
                          FSNS( XML_xmlns, XML_p ), "http://schemas.openxmlformats.org/presentationml/2006/main",
                          FSEND );
 
-    for( AuthorsMap::value_type i : maAuthors ) {
+    for( const AuthorsMap::value_type& i : maAuthors ) {
         pFS->singleElementNS( XML_p, XML_cmAuthor,
                               XML_id, I32S( i.second.nId ),
                               XML_name, USS( i.first ),

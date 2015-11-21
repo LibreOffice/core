@@ -893,7 +893,7 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
             // the Connections
             auto rTableCon = pUndoAction->GetTabConnList();
-            for(auto conn : rTableCon)
+            for(const auto& conn : rTableCon)
                 addConnection(conn); // add all connections from the undo action
 
             rTableCon.clear();
@@ -935,7 +935,7 @@ void OQueryTableView::InsertField(const OTableFieldDescRef& rInfo)
 
 bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const
 {
-    for(auto conn : getTableConnections())
+    for(const auto& conn : getTableConnections())
     {
         OQueryTableConnection* pTemp = static_cast<OQueryTableConnection*>(conn.get());
         if (pTemp->IsVisited() &&

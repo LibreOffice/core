@@ -3692,7 +3692,7 @@ void SwXCellRange::setLabelDescriptions(const uno::Sequence<OUString>& rDesc, bo
     if (sal::static_int_cast<sal_uInt32>(rDesc.getLength()) != vCells.size())
         throw uno::RuntimeException("Too few or too many descriptions", static_cast<cppu::OWeakObject*>(this));
     auto pDescIterator(rDesc.begin());
-    for(auto xCell : vCells)
+    for(auto& xCell : vCells)
         uno::Reference<text::XText>(xCell, uno::UNO_QUERY_THROW)->setString(*pDescIterator++);
 }
 void SwXCellRange::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
