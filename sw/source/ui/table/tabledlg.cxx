@@ -788,7 +788,7 @@ void SwTableColumnPage::dispose()
     m_pSpaceED.clear();
     m_pUpBtn.clear();
     m_pDownBtn.clear();
-    for (auto p : m_pTextArr)
+    for (auto& p : m_pTextArr)
         p.clear();
     SfxTabPage::dispose();
 }

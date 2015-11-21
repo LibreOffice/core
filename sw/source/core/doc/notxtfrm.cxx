@@ -588,7 +588,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 if( pNd->GetGrfObj().IsCached( pVSh->GetOut(), Point(),
                             Prt().SSize(), &pNd->GetGraphicAttr( aAttr, this ) ))
                 {
-                    for(SwViewShell rShell : pVSh->GetRingContainer())
+                    for(SwViewShell& rShell : pVSh->GetRingContainer())
                     {
                         SET_CURR_SHELL( &rShell );
                         if( rShell.GetWin() )

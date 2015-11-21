@@ -1973,7 +1973,7 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
     ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
 
     // now search boxes for each entry and emit
-    for ( auto rSelUnion : aUnions )
+    for ( const auto& rSelUnion : aUnions )
     {
         const SwTabFrame *pTable = rSelUnion.GetTable();
 

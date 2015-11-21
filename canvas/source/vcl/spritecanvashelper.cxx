@@ -375,7 +375,7 @@ namespace vclcanvas
             // opaque sprite content)
 
             // repaint all affected sprites directly to output device
-            for( const auto rComponent : rUpdateArea.maComponentList )
+            for( const auto& rComponent : rUpdateArea.maComponentList )
             {
                 const ::canvas::Sprite::Reference& rSprite( rComponent.second.getSprite() );
 

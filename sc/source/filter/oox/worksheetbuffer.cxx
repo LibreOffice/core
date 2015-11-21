@@ -234,7 +234,7 @@ void WorksheetBuffer::finalizeImport( sal_Int16 nActiveSheet )
 {
     ScDocument& rDoc = getScDocument();
 
-    for ( auto aSheetInfo: maSheetInfos )
+    for ( const auto& aSheetInfo: maSheetInfos )
     {
         // make sure at least 1 sheet (the active one) is visible
         if ( aSheetInfo->mnCalcSheet == nActiveSheet)
