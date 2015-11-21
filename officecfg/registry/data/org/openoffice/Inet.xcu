@@ -60,5 +60,11 @@
       <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetHTTPSProxyPort"/>
       <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetHTTPSProxyPort"/>
     </prop>
+    <prop oor:name="loInetConnectTimeout">
+      <value>20</value>
+    </prop>
+    <prop oor:name="loInetReadTimeout">
+      <value>120</value>
+    </prop>
   </node>
 </oor:component-data>

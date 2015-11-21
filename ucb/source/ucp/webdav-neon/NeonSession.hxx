@@ -36,6 +36,7 @@
 #include "NeonTypes.hxx"
 #include "NeonLockStore.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 namespace ucbhelper { class ProxyDecider; }
 
@@ -269,6 +270,9 @@ private:
         bool bAppendTrailingZeroByte );
 
     OUString makeAbsoluteURL( OUString const & rURL ) const;
+
+    int getInt32CheckAndCast( const uno::Reference< container::XNameAccess >& xNameAccess,
+                              const OUString& aName, sal_Int32 nMax,  sal_Int32 nMin, sal_Int32 nDefault );
 };
 
 } // namespace webdav_ucp

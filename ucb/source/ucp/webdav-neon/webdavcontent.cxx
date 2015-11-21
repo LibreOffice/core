@@ -3285,6 +3285,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
 //    case DAVException::DAV_HTTP_AUTHPROXY:
 //        break;
 
+    case DAVException::DAV_HTTP_TIMEOUT:
     case DAVException::DAV_HTTP_CONNECT:
         aException <<=
             ucb::InteractiveNetworkConnectException(
@@ -3293,10 +3294,6 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
                 task::InteractionClassification_ERROR,
                 e.getData() );
         break;
-
-// @@@ No matching InteractiveNetwork*Exception
-//    case DAVException::DAV_HTTP_TIMEOUT:
-//        break;
 
 // @@@ No matching InteractiveNetwork*Exception
 //     case DAVException::DAV_HTTP_REDIRECT:
@@ -3369,6 +3366,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
 bool Content::shouldAccessNetworkAfterException( const DAVException & e )
 {
     if ( ( e.getStatus() == SC_NOT_FOUND ) ||
+         ( e.getError() == DAVException::DAV_HTTP_TIMEOUT ) ||
          ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) ||
          ( e.getError() == DAVException::DAV_HTTP_CONNECT ) ||
          ( e.getError() == DAVException::DAV_HTTP_AUTH ) ||
