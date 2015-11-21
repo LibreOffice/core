@@ -100,6 +100,7 @@ private:
     long                mnExtLeading;  // External Leading
     long                mnLineHeight;  // Ascent+Descent+EmphasisMark
     long                mnSlant;       // Slant
+    long                mnBulletOffset;// Offset for non-priting character
     sal_uInt16          mnMiscFlags;   // Misc Flags
     sal_uInt32          mnRefCount;    // Reference Counter
 
@@ -118,6 +119,7 @@ public:
     long                GetSlant() const        { return mnSlant; }
     bool                IsFullstopCentered() const { return  ((mnMiscFlags & FULLSTOP_CENTERED_FLAG ) != 0); }
 
+    long                GetBulletOffset() const { return mnBulletOffset; }
     bool                IsScalable() const      { return ((mnMiscFlags & SCALABLE_FLAG) != 0); }
 
     bool                operator==( const ImplFontMetric& ) const;
