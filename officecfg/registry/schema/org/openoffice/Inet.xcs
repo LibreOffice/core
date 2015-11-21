@@ -151,6 +151,18 @@
           </maxInclusive>
         </constraints>
       </prop>
+      <prop oor:name="ConnectTimeout" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the timeout when first open a connection to a Web/WebDAV server. Time in seconds. Minimum allowed 5 sec maximum 180 sec.</desc>
+        </info>
+	<value>20</value>
+      </prop>
+      <prop oor:name="ReadTimeout" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the timeout when waiting for data from a Web/WebDAV server. Time in seconds. Minimum allowed 20 sec maximum 180 sec.</desc>
+        </info>
+	<value>60</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
