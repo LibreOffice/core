@@ -26,12 +26,20 @@ class SdrMoveXItem: public SdrMetricItem {
 public:
     SdrMoveXItem(long n=0): SdrMetricItem(SDRATTR_MOVEX,n)        {}
     SdrMoveXItem(SvStream& rIn): SdrMetricItem(SDRATTR_MOVEX,rIn) {}
+    SfxPoolItem* Clone(SfxItemPool*) const override
+    {
+        return new SdrMoveXItem(*this);
+    }
 };
 
 class SdrMoveYItem: public SdrMetricItem {
 public:
     SdrMoveYItem(long n=0): SdrMetricItem(SDRATTR_MOVEY,n)        {}
     SdrMoveYItem(SvStream& rIn): SdrMetricItem(SDRATTR_MOVEY,rIn) {}
+    SfxPoolItem* Clone(SfxItemPool*) const override
+    {
+        return new SdrMoveYItem(*this);
+    }
 };
 
 #endif
