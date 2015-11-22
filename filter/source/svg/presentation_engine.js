@@ -9445,7 +9445,7 @@ function SlideTransition( aAnimationsRootElement, aSlideId )
     if( aAnimationsRootElement )
     {
         if( aAnimationsRootElement.firstElementChild &&
-            ( aAnimationsRootElement.firstElementChild.getAttribute( 'begin' ) === (this.sSlideId + '.begin') ) )
+            ( aAnimationsRootElement.firstElementChild.getAttributeNS( NSS['smil'], 'begin' ) === (this.sSlideId + '.begin') ) )
         {
             var aTransitionFilterElement = aAnimationsRootElement.firstElementChild.firstElementChild;
             if( aTransitionFilterElement && ( aTransitionFilterElement.localName === 'transitionFilter' ) )
@@ -9583,7 +9583,7 @@ SlideTransition.prototype.parseElement = function()
 
     // type attribute
     this.eTransitionType = undefined;
-    var sTypeAttr = aAnimElem.getAttribute( 'type' );
+    var sTypeAttr = aAnimElem.getAttributeNS( NSS['smil'], 'type' );
     if( sTypeAttr && aTransitionTypeInMap[ sTypeAttr ] )
     {
         this.eTransitionType = aTransitionTypeInMap[ sTypeAttr ];
@@ -9595,7 +9595,7 @@ SlideTransition.prototype.parseElement = function()
 
     // subtype attribute
     this.eTransitionSubType = undefined;
-    var sSubTypeAttr = aAnimElem.getAttribute( 'subtype' );
+    var sSubTypeAttr = aAnimElem.getAttributeNS( NSS['smil'], 'subtype' );
     if( sSubTypeAttr && aTransitionSubtypeInMap[ sSubTypeAttr ] )
     {
         this.eTransitionSubType = aTransitionSubtypeInMap[ sSubTypeAttr ];
@@ -9608,7 +9608,7 @@ SlideTransition.prototype.parseElement = function()
 
     // direction attribute
     this.bReverseDirection = false;
-    var sDirectionAttr = aAnimElem.getAttribute( 'direction' );
+    var sDirectionAttr = aAnimElem.getAttributeNS( NSS['smil'], 'direction' );
     if( sDirectionAttr == 'reverse' )
         this.bReverseDirection = true;
 
@@ -9619,7 +9619,7 @@ SlideTransition.prototype.parseElement = function()
           this.eTransitionSubType == FADEOVERCOLOR_TRANS_SUBTYPE ||
           this.eTransitionSubType == FADETOCOLOR_TRANS_SUBTYPE ) )
     {
-        var sColorAttr = aAnimElem.getAttribute( 'fadeColor' );
+        var sColorAttr = aAnimElem.getAttributeNS( NSS['smil'], 'fadeColor' );
         if( sColorAttr )
             this.sFadeColor = sColorAttr;
         else
@@ -9629,7 +9629,7 @@ SlideTransition.prototype.parseElement = function()
 
     // dur attribute
     this.aDuration = null;
-    var sDurAttr = aAnimElem.getAttribute( 'dur' );
+    var sDurAttr = aAnimElem.getAttributeNS( NSS['smil'], 'dur' );
     this.aDuration = new Duration( sDurAttr );
     if( !this.aDuration.isSet() )
     {
