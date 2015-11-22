@@ -28,9 +28,9 @@ namespace cppu_threadpool {
 
     JobQueue::JobQueue() :
         m_nToDo( 0 ),
-        m_bSuspended( false )
+        m_bSuspended( false ),
+        m_DisposedCallerAdmin( DisposedCallerAdmin::getInstance() )
     {
-        m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
     }
 
     void JobQueue::add( void *pThreadSpecificData, RequestFun * doRequest )

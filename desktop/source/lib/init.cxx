@@ -434,11 +434,12 @@ static void                    lo_registerCallback (LibreOfficeKit* pThis,
 static char* lo_getFilterTypes(LibreOfficeKit* pThis);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
-    : maThread(nullptr)
+    : m_pOfficeClass( gOfficeClass.lock() )
+    , maThread(nullptr)
     , mpCallback(nullptr)
     , mpCallbackData(nullptr)
 {
-    if(!(m_pOfficeClass = gOfficeClass.lock())) {
+    if(!m_pOfficeClass) {
         m_pOfficeClass.reset(new LibreOfficeKitClass);
         m_pOfficeClass->nSize = sizeof(LibreOfficeKitClass);
 
