@@ -1109,7 +1109,7 @@ Const cstMaxRows = 200
 								vTdClass() = _AddArray(vTdClass, &quot;char&quot;)
 								Print #piFile, &quot;     &lt;td&quot; &amp; _OutputClassToHTML(vTdClass) &amp; &quot;&gt;&quot; &amp; _OutputStringToHTML(vDataCell) &amp; &quot;&lt;/td&gt;&quot;
 							Case Else
-								Print #piFile, &quot;     &lt;td&quot; &amp; _OutputClassToHTML(vTdClass) &amp; &quot;&gt;&quot; &amp; _CStr(vDataCell) &amp; &quot;&lt;/td&quot;
+								Print #piFile, &quot;     &lt;td&quot; &amp; _OutputClassToHTML(vTdClass) &amp; &quot;&gt;&quot; &amp; _CStr(vDataCell) &amp; &quot;&lt;/td&gt;&quot;
 						End Select
 					End If
 				Next i
@@ -1131,7 +1131,8 @@ Error_Function:
 	TraceError(TRACEWARNING, Err, &quot;_OutputDataToHTML&quot;, Erl)
 	_OutputDataToHTML = False
 	Resume Exit_Function
-End Function
+End Function	&apos;	_OutputDataToHTML
+
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _OutputDateToHTML(ByVal psDate As Date) As String
 &apos;	Converts input date to HTML compatible string
@@ -1184,7 +1185,7 @@ Dim i As Integer, l As Long
 	vPatterns = Array( _
 					&quot;&amp;quot;&quot;, &quot;&amp;amp;&quot;, &quot;&amp;apos;&quot;, &quot;&amp;lt;&quot;, &quot;&amp;gt;&quot;, &quot;&amp;nbsp;&quot; _
 					, &quot;&lt;pre&gt;&quot;, &quot;&lt;/pre&gt;&quot;, &quot;&lt;br&gt;&quot; _
-					, &quot;&lt;a href=&quot;&quot;&quot;, &quot;&lt;/a&gt;&quot;, &quot;&lt;img src=&quot;&quot;&quot; _
+					, &quot;&lt;a href=&quot;&quot;&quot;, &quot;&lt;a id=&quot;&quot;&quot;, &quot;&lt;/a&gt;&quot;, &quot;&lt;img src=&quot;&quot;&quot; _
 					, &quot;&lt;b&gt;&quot;, &quot;&lt;/b&gt;&quot;, &quot;&lt;u&gt;&quot;, &quot;&lt;/u&gt;&quot;, &quot;&lt;i&gt;&quot;, &quot;&lt;/i&gt;&quot; _
 					)
 
@@ -1210,14 +1211,14 @@ Dim i As Integer, l As Long
 		&apos;	Process hyperlink patterns and keep others
 		If Len(sPattern) &gt; 0 Then
 			Select Case LCase(sPattern)
-				Case &quot;&lt;a href=&quot;&quot;&quot;, &quot;&lt;img src=&quot;&quot;&quot;
+				Case &quot;&lt;a href=&quot;&quot;&quot;, &quot;&lt;a id=&quot;&quot;&quot;, &quot;&lt;img src=&quot;&quot;&quot;
 					&apos;	Up to next quote, url-encode
 					lNextQuote = 0
 					lUrl = lPattern + Len(sPattern)
 					lNextQuote = InStr(lUrl, psString, &quot;&quot;&quot;&quot;, 1)
 					If lNextQuote = 0 Then lNextQuote = Len(psString)			&apos;	Should not happen but, if quoted string not closed ...
 					sUrl = Mid(psString, lUrl, lNextQuote - lUrl)
-					sOutput = sOutput &amp; sPattern &amp; ConvertToUrl(sUrl) &amp; &quot;&quot;&quot;&quot;
+					sOutput = sOutput &amp; sPattern &amp; Iif(sPattern = &quot;&lt;a id=&quot;&quot;&quot;, sUrl, ConvertToUrl(sUrl)) &amp; &quot;&quot;&quot;&quot;
 					lCurrentChar = lNextQuote + 1
 					bQuote = False
 					bTagEnd = False
