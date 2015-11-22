@@ -1401,12 +1401,11 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     {
                         uno::Any aRet;
                         uno::Sequence< sal_Int16 > aOutArgsIndex;
+                        uno::Sequence<uno::Any> aParams;
                         uno::Sequence< uno::Any > aOutArgs;
-                        uno::Sequence< uno::Any >* pInArgs =
-                            new uno::Sequence< uno::Any >(0);
 
                         ErrCode eErr = mpDocSh->CallXScript( aMacro,
-                            *pInArgs, aRet, aOutArgsIndex, aOutArgs);
+                            aParams, aRet, aOutArgsIndex, aOutArgs);
 
                         // Check the return value from the script
                         bool bTmp = false;
