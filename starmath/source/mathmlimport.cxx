@@ -990,7 +990,6 @@ void SmXMLFencedContext_Impl::EndElement()
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.aText = ",";
-    aToken.eType = TLEFT;
     aToken.nLevel = 5;
 
     aToken.eType = TLPARENT;
