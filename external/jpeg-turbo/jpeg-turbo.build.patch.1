@@ -1,53 +1,28 @@
-diff -ur jpeg.org/configure jpeg/configure
---- jpeg.org/configure	2014-11-14 12:05:43.345386578 +0100
-+++ jpeg/configure	2014-11-14 12:08:59.077388882 +0100
-@@ -22977,10 +22977,6 @@
- else
-   rm -rf conftest*
-   echo "$as_me:$LINENO: result: no" >&5
--echo "${ECHO_T}no" >&6
--  { { echo "$as_me:$LINENO: error: configuration problem: maybe object file format mismatch." >&5
--echo "$as_me: error: configuration problem: maybe object file format mismatch." >&2;}
--   { (exit 1); exit 1; }; }
- fi
- 
- 
-@@ -23179,10 +23175,6 @@
- else
-   rm -rf conftest*
-   echo "$as_me:$LINENO: result: no" >&5
--echo "${ECHO_T}no" >&6
--  { { echo "$as_me:$LINENO: error: configuration problem: maybe object file format mismatch." >&5
--echo "$as_me: error: configuration problem: maybe object file format mismatch." >&2;}
--   { (exit 1); exit 1; }; }
- fi
- 
- 
 diff -ur jpeg.org/Makefile.am jpeg/Makefile.am
 --- jpeg.org/Makefile.am	2014-11-14 12:05:43.349386578 +0100
 +++ jpeg/Makefile.am	2014-11-14 12:06:21.005387021 +0100
-@@ -160,8 +160,6 @@
+@@ -174,8 +174,6 @@
  	rm -rf `find $(distdir) -name .svn`
  
  
 -SUBDIRS += md5
 -
- MD5_JPEG_INT = 9a68f56bc76e466aa7e52f415d0f4a5f
- MD5_JPEG_FAST = 0e1502e7fa421835e376a314fac2a39f
- MD5_JPEG_FAST_100 = 7bf72a8e741d64eecb960c97323af77c
-diff -ur jpeg.org/Makefile.in jpeg/Makefile.in
---- jpeg.org/Makefile.in	2014-11-14 12:05:43.333386578 +0100
-+++ jpeg/Makefile.in	2014-11-14 12:20:00.689396668 +0100
-@@ -264,7 +264,7 @@
- HEADERS = $(include_HEADERS) $(nodist_include_HEADERS)
+ if WITH_12BIT
+ 
+ TESTORIG = testorig12.jpg
+diff -ru jpeg-turbo.orig/Makefile.in jpeg-turbo/Makefile.in
+--- jpeg-turbo.orig/Makefile.in	2015-09-21 20:48:45.000000000 +0200
++++ jpeg-turbo/Makefile.in	2015-11-22 16:17:10.326527000 +0100
+@@ -405,7 +405,7 @@
  ETAGS = etags
  CTAGS = ctags
+ CSCOPE = cscope
 -DIST_SUBDIRS = java simd md5
 +DIST_SUBDIRS = java simd
- DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
- distdir = $(PACKAGE)-$(VERSION)
- top_distdir = $(distdir)
-@@ -442,7 +442,7 @@
+ am__DIST_COMMON = $(dist_man1_MANS) $(srcdir)/Makefile.in \
+ 	$(srcdir)/config.h.in $(srcdir)/jconfig.h.in \
+ 	$(srcdir)/jconfigint.h.in $(srcdir)/libjpeg.map.in \
+@@ -622,7 +622,7 @@
  	jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
  	jquant2.c jutils.c jmemmgr.c jmemnobs.c $(am__append_3) \
  	$(am__append_4) $(am__append_5) $(am__append_10)
@@ -56,3 +31,28 @@ diff -ur jpeg.org/Makefile.in jpeg/Makefile.in
  @WITH_TURBOJPEG_TRUE@libturbojpeg_la_SOURCES = $(libjpeg_la_SOURCES) \
  @WITH_TURBOJPEG_TRUE@	turbojpeg.c turbojpeg.h transupp.c \
  @WITH_TURBOJPEG_TRUE@	transupp.h jdatadst-tj.c jdatasrc-tj.c \
+diff -ru jpeg-turbo.orig/configure jpeg-turbo/configure
+--- jpeg-turbo.orig/configure   2015-09-21 20:48:41.000000000 +0200
++++ jpeg-turbo/configure        2015-11-22 15:23:25.387071000 +0100
+@@ -14630,9 +14630,7 @@
+ $as_echo "yes" >&6; }
+ else
+   rm -rf conftest*
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-  as_fn_error $? "configuration problem: maybe object file format mismatch." "$LINENO" 5
++  $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ fi
+
+
+@@ -14828,9 +14826,7 @@
+ $as_echo "yes" >&6; }
+ else
+   rm -rf conftest*
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-  as_fn_error $? "configuration problem: maybe object file format mismatch." "$LINENO" 5
++  $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ fi
+
+
