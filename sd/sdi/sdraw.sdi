@@ -4205,7 +4205,7 @@ SfxVoidItem DisplayMode SID_DISPLAY_MODE
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
 ]
 
