@@ -713,16 +713,7 @@ SwCalcOper SwCalc::GetToken()
             }
             aVarName = aName;
             eCurrOper = CALC_NAME;
-            // Deal with specific "foo" case
-            if (sLowerCaseName.equals("foo"))
-            {
-                // "foo" function doesn't really exist but is sometimes used
-                // internally for setProperties method for example
-                // (see PythonTest_sw_python, set_expression)
-                bSetError = (sCommand.startsWith("foo("))?true:false;
-            }
-            else
-                bSetError = true;
+            bSetError = false;
         }
         else if ( aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
         {
