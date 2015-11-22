@@ -25,6 +25,7 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <memory>
 #include <vector>
 
 class SfxBindings;
