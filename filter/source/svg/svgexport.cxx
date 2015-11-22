@@ -44,6 +44,9 @@
 #include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmltoken.hxx>
 #include <xmloff/animationexport.hxx>
 
 #include <boost/preprocessor/repetition/repeat.hpp>
@@ -52,7 +55,7 @@
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::geometry;
 using namespace ::com::sun::star;
-
+using namespace ::xmloff::token;
 
 // - ooo elements and attributes -
 
@@ -358,6 +361,21 @@ SVGExport::SVGExport(
     // Positioned Characters    (The old method)
     mbIsUsePositionedCharacters = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_POSITIONED_CHARACTERS, false);
 
+    // add namespaces
+    _GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_PRESENTATION),
+        GetXMLToken(XML_N_PRESENTATION),
+        XML_NAMESPACE_PRESENTATION);
+
+    _GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_SMIL),
+        GetXMLToken(XML_N_SMIL_COMPAT),
+        XML_NAMESPACE_SMIL);
+
+    _GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_ANIMATION),
+        GetXMLToken(XML_N_ANIMATION),
+        XML_NAMESPACE_ANIMATION);
 }
 
 
@@ -366,7 +384,6 @@ SVGExport::~SVGExport()
 {
     GetDocHandler()->endDocument();
 }
-
 
 
 // - ObjectRepresentation -
@@ -809,6 +826,9 @@ bool SVGFilter::implExportDocument()
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", constSvgNamespace );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", "http://xml.openoffice.org/svg/export" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", "http://www.w3.org/1999/xlink" );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:presentation", "http://sun.com/xmlns/staroffice/presentation" );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:smil", "http://www.w3.org/2001/SMIL20/" );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:anim", "urn:oasis:names:tc:opendocument:xmlns:animation:1.0" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xml:space", "preserve" );
 
     mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", true, true );
