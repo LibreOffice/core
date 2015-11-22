@@ -89,7 +89,6 @@ modules/dbquery/toolbar/sqlobjectbar.xml
 modules/dbquery/toolbar/toolbar.xml
 modules/dbrelation/toolbar/toolbar.xml
 modules/dbtable/toolbar/toolbar.xml
-modules/StartModule/toolbar/standardbar.xml
 modules/schart/toolbar/arrowshapes.xml
 modules/schart/toolbar/basicshapes.xml
 modules/schart/toolbar/calloutshapes.xml
