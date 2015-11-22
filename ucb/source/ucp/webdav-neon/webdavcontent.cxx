@@ -3488,6 +3488,15 @@ Content::ResourceType Content::getResourceType(
                 *networkAccessAllowed = *networkAccessAllowed
                     && shouldAccessNetworkAfterException(e);
             }
+            // if the two net event below happen, something
+            // serious to the connection is going on
+            // so break the command flow
+            if ( ( e.getError() == DAVException::DAV_HTTP_TIMEOUT ) ||
+                 ( e.getError() == DAVException::DAV_HTTP_CONNECT ) )
+            {
+                cancelCommandExecution( e, xEnv );
+                // unreachable
+            }
         }
     }
 
