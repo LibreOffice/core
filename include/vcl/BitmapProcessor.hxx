@@ -16,6 +16,7 @@ class BitmapProcessor
 {
 public:
     static BitmapEx createLightImage(const BitmapEx& rBitmapEx);
+    static BitmapEx createDisabledImage(const BitmapEx& rBitmapEx);
 };
 
 #endif // INCLUDED_VCL_BITMAP_PROCESSOR_HXX

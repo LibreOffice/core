@@ -55,4 +55,76 @@ BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
     return BitmapEx(aDarkBitmap, rBitmapEx.GetAlpha());
 }
 
+BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
+{
+    const Size aSize(rBitmapEx.GetSizePixel());
+
+    Bitmap aGrey(aSize, 8, &Bitmap::GetGreyPalette(256));
+    AlphaMask aGreyAlpha(aSize);
+
+    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    BitmapReadAccess* pRead(aBitmap.AcquireReadAccess());
+
+    BitmapWriteAccess* pGrey(aGrey.AcquireWriteAccess());
+    BitmapWriteAccess* pGreyAlpha(aGreyAlpha.AcquireWriteAccess());
+
+    BitmapEx aReturnBitmap;
+
+    if (rBitmapEx.IsTransparent())
+    {
+        AlphaMask aBitmapAlpha(rBitmapEx.GetAlpha());
+        BitmapReadAccess* pReadAlpha(aBitmapAlpha.AcquireReadAccess());
+
+        if (pRead && pReadAlpha && pGrey && pGreyAlpha)
+        {
+            BitmapColor aGreyValue(0);
+            BitmapColor aGreyAlphaValue(0);
+
+            for (int nY = 0; nY < aSize.Height(); ++nY)
+            {
+                for (int nX = 0; nX < aSize.Width(); ++nX)
+                {
+                    aGreyValue.SetIndex(pRead->GetLuminance(nY, nX));
+                    pGrey->SetPixel(nY, nX, aGreyValue);
+
+                    const BitmapColor aBitmapAlphaValue(pReadAlpha->GetPixel(nY, nX));
+
+                    aGreyAlphaValue.SetIndex(sal_uInt8(std::min(aBitmapAlphaValue.GetIndex() + 178ul, 255ul)));
+                    pGreyAlpha->SetPixel(nY, nX, aGreyAlphaValue);
+                }
+            }
+        }
+        aBitmapAlpha.ReleaseAccess(pReadAlpha);
+        aReturnBitmap = BitmapEx(aGrey, aGreyAlpha);
+    }
+    else
+    {
+        if (pRead && pGrey && pGreyAlpha)
+        {
+            BitmapColor aGreyValue(0);
+            BitmapColor aGreyAlphaValue(0);
+
+            for (int nY = 0; nY < aSize.Height(); ++nY)
+            {
+                for (int nX = 0; nX < aSize.Width(); ++nX)
+                {
+                    aGreyValue.SetIndex(pRead->GetLuminance(nY, nX));
+                    pGrey->SetPixel(nY, nX, aGreyValue);
+
+                    aGreyAlphaValue.SetIndex(128);
+                    pGreyAlpha->SetPixel(nY, nX, aGreyAlphaValue);
+                }
+            }
+        }
+        aReturnBitmap = BitmapEx(aGrey);
+    }
+
+    Bitmap::ReleaseAccess(pRead);
+
+    Bitmap::ReleaseAccess(pGrey);
+    aGreyAlpha.ReleaseAccess(pGreyAlpha);
+
+    return aReturnBitmap;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
