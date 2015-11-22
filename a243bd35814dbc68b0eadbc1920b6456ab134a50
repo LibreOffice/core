@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_5a1769ed",
+        "filename": "connectivity/source/drivers/mork/mork_helper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-11-22T07:41:23Z",
+      "side": 1,
+      "message": "Unneeded blank.",
+      "range": {
+        "startLine": 40,
+        "startChar": 46,
+        "endLine": 40,
+        "endChar": 47
+      },
+      "revId": "a243bd35814dbc68b0eadbc1920b6456ab134a50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_9ad71123",
+        "filename": "connectivity/source/drivers/mork/mork_helper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-11-22T07:41:23Z",
+      "side": 1,
+      "message": "johndoe?",
+      "range": {
+        "startLine": 41,
+        "startChar": 55,
+        "endLine": 41,
+        "endChar": 61
+      },
+      "revId": "a243bd35814dbc68b0eadbc1920b6456ab134a50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_bad2d532",
+        "filename": "connectivity/source/drivers/mork/mork_helper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-11-22T07:41:23Z",
+      "side": 1,
+      "message": "Unneeded blank.",
+      "range": {
+        "startLine": 41,
+        "startChar": 48,
+        "endLine": 41,
+        "endChar": 49
+      },
+      "revId": "a243bd35814dbc68b0eadbc1920b6456ab134a50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
