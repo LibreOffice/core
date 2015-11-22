@@ -44,9 +44,10 @@ namespace com { namespace sun { namespace star { namespace container {
 class SVX_DLLPUBLIC SvxSmartTagsControl : public SfxMenuControl
 {
 private:
-    PopupMenu*                  mpMenu;
+    std::unique_ptr< PopupMenu > mpMenu;
+    std::vector< std::unique_ptr< PopupMenu > > maSubMenus;
     Menu&                       mrParent;
-    const SvxSmartTagItem*      mpSmartTagItem;
+    std::unique_ptr< const SvxSmartTagItem >    mpSmartTagItem;
 
     struct InvokeAction
     {

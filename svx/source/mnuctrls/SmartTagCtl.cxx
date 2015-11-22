@@ -45,7 +45,7 @@ SvxSmartTagsControl::SvxSmartTagsControl
     mrParent    ( rMenu ),
     mpSmartTagItem( nullptr )
 {
-    rMenu.SetPopupMenu( _nId, mpMenu );
+    rMenu.SetPopupMenu( _nId, mpMenu.get() );
 }
 
 
@@ -93,12 +93,13 @@ void SvxSmartTagsControl::FillMenu()
         const OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, rLocale);
 
         // no sub-menus if there's only one smart tag type listed:
-        PopupMenu* pSbMenu = mpMenu;
+        PopupMenu* pSbMenu = mpMenu.get();
         if ( 1 < rActionComponentsSequence.getLength() )
         {
             mpMenu->InsertItem(nMenuId, aSmartTagCaption, MenuItemBits::NONE, OString(), nMenuPos++);
             pSbMenu = new PopupMenu;
             mpMenu->SetPopupMenu( nMenuId++, pSbMenu );
+            maSubMenus.push_back( std::unique_ptr< PopupMenu >( pSbMenu ) );
         }
         pSbMenu->SetSelectHdl( LINK( this, SvxSmartTagsControl, MenuSelect ) );
 
@@ -145,8 +146,7 @@ void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const S
         const SvxSmartTagItem* pSmartTagItem = dynamic_cast<const SvxSmartTagItem*>( pState  );
         if ( nullptr != pSmartTagItem )
         {
-            delete mpSmartTagItem;
-            mpSmartTagItem = new SvxSmartTagItem( *pSmartTagItem );
+            mpSmartTagItem.reset( new SvxSmartTagItem( *pSmartTagItem ) );
             FillMenu();
         }
     }
@@ -192,8 +192,6 @@ IMPL_LINK_TYPED( SvxSmartTagsControl, MenuSelect, Menu *, pMen, bool )
 
 SvxSmartTagsControl::~SvxSmartTagsControl()
 {
-    delete mpSmartTagItem;
-    delete mpMenu;
 }
 
 
