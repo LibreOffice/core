@@ -1317,16 +1317,21 @@ SwSbxValue SwCalc::Prim()
         break;
 
     case CALC_NAME:
-        if( GetToken() == CALC_ASSIGN )
+        switch(SwCalcOper nOper = GetToken())
         {
-            SwCalcExp* n = VarInsert( aVarName );
-            GetToken();
-            nErg = n->nValue = Expr();
-        }
-        else
-        {
-            nErg = VarLook( aVarName )->nValue;
-            bChkPow = true;
+            case CALC_ASSIGN:
+            {
+                SwCalcExp* n = VarInsert(aVarName);
+                GetToken();
+                nErg = n->nValue = Expr();
+            }
+            break;
+            default:
+                nErg = VarLook(aVarName)->nValue;
+                if (nErg.IsVoidValue() && (nOper == CALC_LP))
+                    eError = CALC_SYNTAX;
+                else
+                    bChkPow = true;
         }
         break;
 
