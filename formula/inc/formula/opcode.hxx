@@ -393,6 +393,10 @@ enum OpCodeEnum
         ocEuroConvert       = SC_OPCODE_EUROCONVERT,
         ocNumberValue       = SC_OPCODE_NUMBERVALUE,
         ocXor               = SC_OPCODE_XOR,
+    //bitwise functions
+        ocBitAnd            = SC_OPCODE_BITAND,
+        ocBitOr             = SC_OPCODE_BITOR,
+        ocBitXor            = SC_OPCODE_BITXOR,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,

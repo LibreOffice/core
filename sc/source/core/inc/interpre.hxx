@@ -142,6 +142,15 @@ class ScInterpreter
     friend class ScChiSqDistFunction;
 
 public:
+    struct bitOperations {
+        enum bitArithmetic
+        {
+            BITAND,
+            BITOR,
+            BITXOR
+        };
+    };
+
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
 
     static void GlobalExit();           // aus ScGlobal::Clear() gerufen
@@ -513,6 +522,10 @@ void ScLookup();
 void ScHLookup();
 void ScVLookup();
 void ScSubTotal();
+void ScBitAnd();
+void ScBitOr();
+void ScBitXor();
+void ScBitArithmeticOps( bitOperations::bitArithmetic );
 
 // If upon call rMissingField==sal_True then the database field parameter may be
 // missing (Xcl DCOUNT() syntax), or may be faked as missing by having the

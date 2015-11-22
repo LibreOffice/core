@@ -1141,6 +1141,72 @@ void ScInterpreter::ScGreaterEqual()
         PushInt( Compare() >= 0 );
 }
 
+void ScInterpreter::ScBitAnd() {
+    ScBitArithmeticOps(bitOperations::BITAND);
+}
+
+void ScInterpreter::ScBitOr() {
+    ScBitArithmeticOps(bitOperations::BITOR);
+}
+
+void ScInterpreter::ScBitXor() {
+    ScBitArithmeticOps(bitOperations::BITXOR);
+}
+
+/* Helper function that calculates the result in bitwise arithmetic operations helping avoid code repetition */
+static void doOperation( sal_uInt64 val, ScInterpreter::bitOperations::bitArithmetic bitOp, sal_uInt64 &res, sal_Bool &first )
+{
+    if ( first )
+    {
+        res = val;
+        first = sal_False;
+    }
+    else
+    {
+        if (bitOp == ScInterpreter::bitOperations::BITAND)
+            res = res & val;
+        else if (bitOp == ScInterpreter::bitOperations::BITOR)
+            res = res | val;
+        else if (bitOp == ScInterpreter::bitOperations::BITXOR)
+            res = res ^ val;
+    }
+}
+
+void ScInterpreter::ScBitArithmeticOps(bitOperations::bitArithmetic bitOp)
+{
+    nFuncFmtType = NUMBERFORMAT_NUMBER;
+    short nParamCount = GetByte();
+    static const sal_uInt64 max_val = SAL_CONST_UINT64( 281474976710656 );
+    static const int NUMBER_OF_ARGUMENTS = 2;
+
+    if ( MustHaveParamCount( nParamCount, NUMBER_OF_ARGUMENTS ) )
+    {
+        double *arguments = new double[NUMBER_OF_ARGUMENTS];
+
+        for (int i=0; i<NUMBER_OF_ARGUMENTS; i++)
+        {
+            arguments[i] = ::rtl::math::approxFloor( GetDouble() );
+            if ( arguments[i] < 0 || arguments[i] > max_val )
+            {
+                PushIllegalArgument();
+            }
+        }
+
+        sal_uInt64 res = 0;
+        sal_Bool first = sal_True;
+
+
+        for (int i=0; i<NUMBER_OF_ARGUMENTS; i++)
+        {
+            doOperation( ( sal_uInt64 )arguments[i], bitOp, res, first );
+        }
+
+        delete[] arguments;
+        PushDouble( (double) res );
+
+    }
+}
+
 
 void ScInterpreter::ScAnd()
 {

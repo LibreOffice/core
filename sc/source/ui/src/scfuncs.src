@@ -9433,6 +9433,106 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The number of characters for the text." ;
         };
     };
+
+    // -=*# Resource for function BITAND #*=-
+    Resource SC_OPCODE_BITAND
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the bitwise AND of two integers" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_BITAND );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number1" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Number2" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+    };
+
+    // -=*# Resource for function BITOR #*=-
+    Resource SC_OPCODE_BITOR
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the bitwise OR of two integers" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_BITOR );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number1" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Number2" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+    };
+
+    // -=*# Resource for function BITXOR #*=-
+    Resource SC_OPCODE_BITXOR
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the bitwise XOR of two integers" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_BITXOR );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number1" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Number2" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+    };
+
 };
 
 #if defined(U2S)

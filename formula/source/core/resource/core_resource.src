@@ -349,6 +349,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_GAMMA { Text = "GAMMA" ; };
     String SC_OPCODE_CHISQ_DIST { Text = "CHISQDIST" ; };
     String SC_OPCODE_CHISQ_INV { Text = "CHISQINV" ;};
+    String SC_OPCODE_BITAND { Text= "BITAND" ; };
+    String SC_OPCODE_BITOR { Text= "BITOR" ; };
+    String SC_OPCODE_BITXOR { Text= "BITXOR" ; };
 
     /* BEGIN defined ERROR.TYPE() values. */
     String SC_OPCODE_ERROR_NULL    { Text = "#NULL!"  ; };
@@ -686,6 +689,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_GAMMA { Text = "GAMMA" ; };
     String SC_OPCODE_CHISQ_DIST { Text = "CHISQDIST" ; };
     String SC_OPCODE_CHISQ_INV { Text = "CHISQINV" ;};
+    String SC_OPCODE_BITAND { Text = "BITAND" ; };
+    String SC_OPCODE_BITOR { Text = "BITOR" ; };
+    String SC_OPCODE_BITXOR { Text = "BITXOR" ; };
 
     /* BEGIN defined ERROR.TYPE() values. */
     String SC_OPCODE_ERROR_NULL    { Text = "#NULL!"  ; };
@@ -1909,6 +1915,18 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_CHISQ_INV
     {
         Text [ en-US ] = "CHISQINV" ;
+    };
+    String SC_OPCODE_BITAND
+    {
+        Text [ en-US ] = "BITAND";
+    };
+    String SC_OPCODE_BITOR
+    {
+        Text [ en-US ] = "BITOR";
+    };
+    String SC_OPCODE_BITXOR
+    {
+        Text [ en-US ] = "BITXOR";
     };
     /* BEGIN defined ERROR.TYPE() values. */
     /* ERROR.TYPE( #NULL! ) == 1 */

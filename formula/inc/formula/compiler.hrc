@@ -397,9 +397,13 @@
 #define SC_OPCODE_RIGHTB            401
 #define SC_OPCODE_LEFTB             402
 #define SC_OPCODE_MIDB              403
-#define SC_OPCODE_STOP_2_PAR        404
+#define SC_OPCODE_BITAND            404
+#define SC_OPCODE_BITOR             405
+#define SC_OPCODE_BITXOR            406
 
-#define SC_OPCODE_LAST_OPCODE_ID    403      /* last OpCode */
+#define SC_OPCODE_STOP_2_PAR        407
+
+#define SC_OPCODE_LAST_OPCODE_ID    406      /* last OpCode */
 
 /*** Interna ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999
