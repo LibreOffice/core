@@ -1207,11 +1207,6 @@ void SdPageObjsTLB::DoDrag()
 
         bIsInDrag = true;
 
-        // object is destroyed by internal reference mechanism
-        SdTransferable* pTransferable =
-                new SdPageObjsTLB::SdPageObjsTransferable(
-                            *this, aBookmark, *pDocShell, eDragType);
-
         // Get the view.
         ::sd::ViewShell* pViewShell = GetViewShellForDocShell(*pDocShell);
         if (pViewShell == nullptr)
@@ -1225,6 +1220,11 @@ void SdPageObjsTLB::DoDrag()
             OSL_ASSERT(pView!=nullptr);
             return;
         }
+
+        // object is destroyed by internal reference mechanism
+        SdTransferable* pTransferable =
+                new SdPageObjsTLB::SdPageObjsTransferable(
+                            *this, aBookmark, *pDocShell, eDragType);
 
         SdrObject* pObject = nullptr;
         void* pUserData = GetCurEntry()->GetUserData();
