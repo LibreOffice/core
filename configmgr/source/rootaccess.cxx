@@ -61,9 +61,10 @@ RootAccess::RootAccess(
     Components & components, OUString const & pathRepresentation,
     OUString const & locale, bool update):
     Access(components), pathRepresentation_(pathRepresentation),
-    locale_(locale), update_(update), finalized_(false), alive_(true)
+    locale_(locale),
+    lock_( lock() ),
+    update_(update), finalized_(false), alive_(true)
 {
-    lock_ = lock();
 }
 
 Path RootAccess::getAbsolutePath() {

@@ -101,9 +101,9 @@ namespace cppu_threadpool
 
 
 
-    ThreadPool::ThreadPool()
+    ThreadPool::ThreadPool() :
+        m_DisposedCallerAdmin( DisposedCallerAdmin::getInstance() )
     {
-        m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
     }
 
     ThreadPool::~ThreadPool()

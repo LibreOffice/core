@@ -170,9 +170,9 @@ Components::WriteThread::WriteThread(
     rtl::Reference< WriteThread > * reference, Components & components,
     OUString const & url, Data const & data):
     Thread("configmgrWriter"), reference_(reference), components_(components),
-    url_(url), data_(data)
+    url_(url), data_(data),
+    lock_( lock() )
 {
-    lock_ = lock();
     assert(reference != nullptr);
 }
 

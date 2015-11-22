@@ -1303,9 +1303,8 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
 }
 
 Access::Access(Components & components):
-    components_(components), disposed_(false)
+    components_(components), disposed_(false), lock_( lock() )
 {
-    lock_ = lock();
 }
 
 Access::~Access() {}

@@ -93,9 +93,9 @@ class Service:
 public:
     explicit Service(
         css::uno::Reference< css::uno::XComponentContext > const context):
-        ServiceBase(m_aMutex), context_(context), default_(true)
+        ServiceBase(m_aMutex), context_(context), default_(true),
+        lock_( lock() )
     {
-        lock_ = lock();
         assert(context.is());
     }
 
@@ -103,9 +103,9 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const context,
         OUString const & locale):
         ServiceBase(m_aMutex), context_(context), locale_(locale),
-        default_(false)
+        default_(false),
+        lock_( lock() )
     {
-        lock_ = lock();
         assert(context.is());
     }
 

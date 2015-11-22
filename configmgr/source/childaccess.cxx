@@ -76,18 +76,18 @@ ChildAccess::ChildAccess(
     rtl::Reference< Access > const & parent, OUString const & name,
     rtl::Reference< Node > const & node):
     Access(components), root_(root), parent_(parent), name_(name), node_(node),
-    inTransaction_(false)
+    inTransaction_(false),
+    lock_( lock() )
 {
-    lock_ = lock();
     assert(root.is() && parent.is() && node.is());
 }
 
 ChildAccess::ChildAccess(
     Components & components, rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    Access(components), root_(root), node_(node), inTransaction_(false)
+    Access(components), root_(root), node_(node), inTransaction_(false),
+    lock_( lock() )
 {
-    lock_ = lock();
     assert(root.is() && node.is());
 }
 
