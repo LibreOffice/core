@@ -78,6 +78,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
 #include <bordertest.hxx>
 
@@ -2929,6 +2930,34 @@ DECLARE_OOXMLIMPORT_TEST(testTdf85232, "tdf85232.docx")
 DECLARE_OOXMLIMPORT_TEST(testTdf95775, "tdf95775.docx")
 {
     // This must not fail in layout
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf95970, "tdf95970.docx")
+{
+    // First shape: the rotation should be an -12.94 deg, it should be mirrored.
+    // Proper color order of image on test doc (left->right):
+    // top row: green, red
+    // bottom row: yellow, blue
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY_THROW);
+    sal_Int32 aRotate;
+    xPropertySet->getPropertyValue("RotateAngle") >>= aRotate;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(34706), aRotate);
+
+    bool bIsMirrored;
+    xPropertySet->getPropertyValue("IsMirrored") >>= bIsMirrored;
+    CPPUNIT_ASSERT(bIsMirrored);
+    drawing::HomogenMatrix3 aTransform;
+    xPropertySet->getPropertyValue("Transformation") >>= aTransform;
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line1.Column1,  4767.0507250872988));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line1.Column2, -1269.0985325236848));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line1.Column3,  696.73611111111109));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line2.Column1,  1095.3035265135941));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line2.Column2,  5523.4525711162969));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line2.Column3,  672.04166666666663));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line3.Column1,  0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line3.Column2,  0.0));
+    CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line3.Column3,  1.0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
