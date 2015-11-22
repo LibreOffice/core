@@ -100,17 +100,6 @@ struct ImplImageList
     void RemoveImage( sal_uInt16 nPos );
 };
 
-// - ImplImageRefData -
-
-struct ImplImageRefData
-{
-    ImplImageList*  mpImplData;
-    sal_uInt16          mnIndex;
-
-                    ImplImageRefData() {}    // Um Warning zu umgehen
-                    ~ImplImageRefData();
-};
-
 // - ImpImageData -
 
 struct ImplImageData
