@@ -27,6 +27,10 @@ class SdrEdgeLineDeltaAnzItem: public SfxUInt16Item {
 public:
     SdrEdgeLineDeltaAnzItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ,nVal) {}
     SdrEdgeLineDeltaAnzItem(SvStream& rIn): SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ,rIn)  {}
+    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    {
+        return new SdrEdgeLineDeltaAnzItem(*this);
+    }
 };
 
 inline SdrMetricItem makeSdrEdgeLine1DeltaItem(long nVal) {
