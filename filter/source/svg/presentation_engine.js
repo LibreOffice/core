@@ -775,6 +775,9 @@ NSS['rdf']='http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 NSS['xlink']='http://www.w3.org/1999/xlink';
 NSS['xml']='http://www.w3.org/XML/1998/namespace';
 NSS['ooo'] = 'http://xml.openoffice.org/svg/export';
+NSS['presentation'] = 'http://sun.com/xmlns/staroffice/presentation';
+NSS['smil'] = 'http://www.w3.org/2001/SMIL20/';
+NSS['anim'] = 'urn:oasis:names:tc:opendocument:xmlns:animation:1.0';
 
 // Presentation modes.
 var SLIDE_MODE = 1;
@@ -5113,13 +5116,13 @@ BaseNode.prototype.parseElement = function()
 
     // begin attribute
     this.aBegin = null;
-    var sBeginAttr = aAnimElem.getAttribute( 'begin' );
+    var sBeginAttr = aAnimElem.getAttributeNS( NSS['smil'], 'begin' );
     this.aBegin = new Timing( this, sBeginAttr );
     this.aBegin.parse();
 
     // end attribute
     this.aEnd = null;
-    var sEndAttr = aAnimElem.getAttribute( 'end' );
+    var sEndAttr = aAnimElem.getAttributeNS( NSS['smil'], 'end' );
     if( sEndAttr )
     {
         this.aEnd = new Timing( this, sEndAttr );
@@ -5128,7 +5131,7 @@ BaseNode.prototype.parseElement = function()
 
     // dur attribute
     this.aDuration = null;
-    var sDurAttr = aAnimElem.getAttribute( 'dur' );
+    var sDurAttr = aAnimElem.getAttributeNS( NSS['smil'], 'dur' );
     this.aDuration = new Duration( sDurAttr );
     if( !this.aDuration.isSet() )
     {
@@ -5139,21 +5142,21 @@ BaseNode.prototype.parseElement = function()
     }
 
     // fill attribute
-    var sFillAttr = aAnimElem.getAttribute( 'fill' );
+    var sFillAttr = aAnimElem.getAttributeNS( NSS['smil'], 'fill' );
     if( sFillAttr && aFillModeInMap[ sFillAttr ])
         this.eFillMode = aFillModeInMap[ sFillAttr ];
     else
         this.eFillMode = FILL_MODE_DEFAULT;
 
     // restart attribute
-    var sRestartAttr = aAnimElem.getAttribute( 'restart' );
+    var sRestartAttr = aAnimElem.getAttributeNS( NSS['smil'], 'restart' );
     if( sRestartAttr && aRestartModeInMap[ sRestartAttr ] )
         this.eRestartMode = aRestartModeInMap[ sRestartAttr ];
     else
         this.eRestartMode = RESTART_MODE_DEFAULT;
 
     // repeatCount attribute
-    var sRepeatCount = aAnimElem.getAttribute( 'repeatCount' );
+    var sRepeatCount = aAnimElem.getAttributeNS( NSS['smil'], 'repeatCount' );
     if( !sRepeatCount )
         this.nReapeatCount = 1;
     else
@@ -5163,7 +5166,7 @@ BaseNode.prototype.parseElement = function()
 
     // accelerate attribute
     this.nAccelerate = 0.0;
-    var sAccelerateAttr = aAnimElem.getAttribute( 'accelerate' );
+    var sAccelerateAttr = aAnimElem.getAttributeNS( NSS['smil'], 'accelerate' );
     if( sAccelerateAttr )
         this.nAccelerate = parseFloat( sAccelerateAttr );
     if( this.nAccelerate == NaN )
@@ -5171,7 +5174,7 @@ BaseNode.prototype.parseElement = function()
 
     // decelerate attribute
     this.nDecelerate = 0.0;
-    var sDecelerateAttr = aAnimElem.getAttribute( 'decelerate' );
+    var sDecelerateAttr = aAnimElem.getAttributeNS( NSS['smil'], 'decelerate' );
     if( sDecelerateAttr )
         this.nDecelerate = parseFloat( sDecelerateAttr );
     if( this.nDecelerate == NaN )
@@ -5179,7 +5182,7 @@ BaseNode.prototype.parseElement = function()
 
     // autoReverse attribute
     this.bAutoreverse = false;
-    var sAutoReverseAttr = aAnimElem.getAttribute( 'autoReverse' );
+    var sAutoReverseAttr = aAnimElem.getAttributeNS( NSS['smil'], 'autoReverse' );
     if( sAutoReverseAttr == 'true' )
         this.bAutoreverse = true;
 
@@ -5637,7 +5640,7 @@ AnimationBaseNode.prototype.parseElement = function()
 
     // targetElement attribute
     this.aTargetElement = null;
-    var sTargetElementAttr = aAnimElem.getAttribute( 'targetElement' );
+    var sTargetElementAttr = aAnimElem.getAttributeNS( NSS['smil'], 'targetElement' );
     if( sTargetElementAttr )
         this.aTargetElement = document.getElementById( sTargetElementAttr );
 
@@ -5648,11 +5651,11 @@ AnimationBaseNode.prototype.parseElement = function()
     }
 
     // sub-item attribute for text animated element
-    var sSubItemAttr = aAnimElem.getAttribute( 'sub-item' );
+    var sSubItemAttr = aAnimElem.getAttributeNS( NSS['smil'], 'sub-item' );
     this.bIsTargetTextElement = ( sSubItemAttr && ( sSubItemAttr === 'text' ) );
 
     // additive attribute
-    var sAdditiveAttr = aAnimElem.getAttribute( 'additive' );
+    var sAdditiveAttr = aAnimElem.getAttributeNS( NSS['smil'], 'additive' );
     if( sAdditiveAttr && aAddittiveModeInMap[sAdditiveAttr] )
         this.eAdditiveMode = aAddittiveModeInMap[sAdditiveAttr];
     else
@@ -5671,9 +5674,9 @@ AnimationBaseNode.prototype.parseElement = function()
     if( this.aTargetElement )
     {
         // set up target element initial visibility
-        if( aAnimElem.getAttribute( 'attributeName' ) === 'visibility' )
+        if( aAnimElem.getAttributeNS( NSS['smil'], 'attributeName' ) === 'visibility' )
         {
-            if( aAnimElem.getAttribute( 'to' ) === 'visible' )
+            if( aAnimElem.getAttributeNS( NSS['smil'], 'to' ) === 'visible' )
                 this.aTargetElement.setAttribute( 'visibility', 'hidden' );
         }
 
@@ -5879,7 +5882,7 @@ AnimationBaseNode2.prototype.parseElement = function()
     var aAnimElem = this.aElement;
 
     // attributeName attribute
-    this.sAttributeName = aAnimElem.getAttribute( 'attributeName' );
+    this.sAttributeName = aAnimElem.getAttributeNS( NSS['smil'], 'attributeName' );
     if( !this.sAttributeName )
     {
         this.eCurrentState = INVALID_NODE;
@@ -5887,7 +5890,7 @@ AnimationBaseNode2.prototype.parseElement = function()
     }
 
     // to attribute
-    this.aToValue = aAnimElem.getAttribute( 'to' );
+    this.aToValue = aAnimElem.getAttributeNS( NSS['smil'], 'to' );
 
     return bRet;
 };
@@ -5945,25 +5948,25 @@ AnimationBaseNode3.prototype.parseElement = function()
 
     // accumulate attribute
     this.eAccumulate = ACCUMULATE_MODE_NONE;
-    var sAccumulateAttr = aAnimElem.getAttribute( 'accumulate' );
+    var sAccumulateAttr = aAnimElem.getAttributeNS( NSS['smil'], 'accumulate' );
     if( sAccumulateAttr == 'sum' )
         this.eAccumulate = ACCUMULATE_MODE_SUM;
 
     // calcMode attribute
     this.eCalcMode = CALC_MODE_LINEAR;
-    var sCalcModeAttr = aAnimElem.getAttribute( 'calcMode' );
+    var sCalcModeAttr = aAnimElem.getAttributeNS( NSS['smil'], 'calcMode' );
     if( sCalcModeAttr && aCalcModeInMap[ sCalcModeAttr ] )
         this.eCalcMode = aCalcModeInMap[ sCalcModeAttr ];
 
     // from attribute
-    this.aFromValue = aAnimElem.getAttribute( 'from' );
+    this.aFromValue = aAnimElem.getAttributeNS( NSS['smil'], 'from' );
 
     // by attribute
-    this.aByValue = aAnimElem.getAttribute( 'by' );
+    this.aByValue = aAnimElem.getAttributeNS( NSS['smil'], 'by' );
 
     // keyTimes attribute
     this.aKeyTimes = new Array();
-    var sKeyTimesAttr = aAnimElem.getAttribute( 'keyTimes' );
+    var sKeyTimesAttr = aAnimElem.getAttributeNS( NSS['smil'], 'keyTimes' );
     sKeyTimesAttr = removeWhiteSpaces( sKeyTimesAttr );
     if( sKeyTimesAttr )
     {
@@ -5973,7 +5976,7 @@ AnimationBaseNode3.prototype.parseElement = function()
     }
 
     // values attribute
-    var sValuesAttr = aAnimElem.getAttribute( 'values' );
+    var sValuesAttr = aAnimElem.getAttributeNS( NSS['smil'], 'values' );
     if( sValuesAttr )
     {
         this.aValues = sValuesAttr.split( ';' );
@@ -6078,7 +6081,7 @@ BaseContainerNode.prototype.parseElement= function()
 
     // node-type attribute
     this.eImpressNodeType = IMPRESS_DEFAULT_NODE;
-    var sNodeTypeAttr = aAnimElem.getAttribute( 'node-type' );
+    var sNodeTypeAttr = aAnimElem.getAttributeNS( NSS['presentation'], 'node-type' );
     if( sNodeTypeAttr && aImpressNodeTypeInMap[ sNodeTypeAttr ] )
         this.eImpressNodeType = aImpressNodeTypeInMap[ sNodeTypeAttr ];
     this.bMainSequenceRootNode = ( this.eImpressNodeType == IMPRESS_MAIN_SEQUENCE_NODE );
@@ -6086,13 +6089,13 @@ BaseContainerNode.prototype.parseElement= function()
 
     // preset-class attribute
     this.ePresetClass =  undefined;
-    var sPresetClassAttr = aAnimElem.getAttribute( 'preset-class' );
+    var sPresetClassAttr = aAnimElem.getAttributeNS( NSS['presentation'], 'preset-class' );
     if( sPresetClassAttr && aPresetClassInMap[ sPresetClassAttr ] )
         this.ePresetClass = aPresetClassInMap[ sPresetClassAttr ];
 
     // preset-id attribute
     this.ePresetId =  undefined;
-    var sPresetIdAttr = aAnimElem.getAttribute( 'preset-id' );
+    var sPresetIdAttr = aAnimElem.getAttributeNS( NSS['presentation'], 'preset-id' );
     if( sPresetIdAttr && aPresetIdInMap[ sPresetIdAttr ] )
         this.ePresetId = aPresetIdInMap[ sPresetIdAttr ];
 
@@ -6794,13 +6797,13 @@ AnimationColorNode.prototype.parseElement = function()
 
     // color-interpolation attribute
     this.eColorInterpolation = COLOR_SPACE_RGB;
-    var sColorInterpolationAttr = aAnimElem.getAttribute( 'color-interpolation' );
+    var sColorInterpolationAttr = aAnimElem.getAttributeNS( NSS['anim'], 'color-interpolation' );
     if( sColorInterpolationAttr && aColorSpaceInMap[ sColorInterpolationAttr ] )
         this.eColorInterpolation = aColorSpaceInMap[ sColorInterpolationAttr ];
 
     // color-interpolation-direction attribute
     this.eColorInterpolationDirection = CLOCKWISE;
-    var sColorInterpolationDirectionAttr = aAnimElem.getAttribute( 'color-interpolation-direction' );
+    var sColorInterpolationDirectionAttr = aAnimElem.getAttributeNS( NSS['anim'], 'color-interpolation-direction' );
     if( sColorInterpolationDirectionAttr && aClockDirectionInMap[ sColorInterpolationDirectionAttr ] )
         this.eColorInterpolationDirection = aClockDirectionInMap[ sColorInterpolationDirectionAttr ];
 
@@ -6963,7 +6966,7 @@ AnimationTransitionFilterNode.prototype.parseElement = function()
 
     // type attribute
     this.eTransitionType = undefined;
-    var sTypeAttr = aAnimElem.getAttribute( 'type' );
+    var sTypeAttr = aAnimElem.getAttributeNS( NSS['smil'], 'type' );
     if( sTypeAttr && aTransitionTypeInMap[ sTypeAttr ] )
     {
         this.eTransitionType = aTransitionTypeInMap[ sTypeAttr ];
@@ -6976,7 +6979,7 @@ AnimationTransitionFilterNode.prototype.parseElement = function()
 
     // subtype attribute
     this.eTransitionSubType = undefined;
-    var sSubTypeAttr = aAnimElem.getAttribute( 'subtype' );
+    var sSubTypeAttr = aAnimElem.getAttributeNS( NSS['smil'], 'subtype' );
     if( sSubTypeAttr && aTransitionSubtypeInMap[ sSubTypeAttr ] )
     {
         this.eTransitionSubType = aTransitionSubtypeInMap[ sSubTypeAttr ];
@@ -6989,13 +6992,13 @@ AnimationTransitionFilterNode.prototype.parseElement = function()
 
     // direction attribute
     this.bReverseDirection = false;
-    var sDirectionAttr = aAnimElem.getAttribute( 'direction' );
+    var sDirectionAttr = aAnimElem.getAttributeNS( NSS['smil'], 'direction' );
     if( sDirectionAttr == 'reverse' )
         this.bReverseDirection = true;
 
     // mode attribute:
     this.eTransitionMode = TRANSITION_MODE_IN;
-    var sModeAttr = aAnimElem.getAttribute( 'mode' );
+    var sModeAttr = aAnimElem.getAttributeNS( NSS['smil'], 'mode' );
     if( sModeAttr === 'out' )
         this.eTransitionMode = TRANSITION_MODE_OUT;
 
