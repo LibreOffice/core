@@ -3505,6 +3505,14 @@ Content::ResourceType Content::getResourceType(
             *networkAccessAllowed = *networkAccessAllowed
                 && shouldAccessNetworkAfterException(e);
         }
+        // if the two net events below happen, something
+        // is going on to the connection so break the command flow
+        if ( ( e.getError() == DAVException::DAV_HTTP_TIMEOUT ) ||
+             ( e.getError() == DAVException::DAV_HTTP_CONNECT ) )
+        {
+            cancelCommandExecution( e, xEnv );
+            // unreachable
+        }
 
         // cancel command execution is case that no user authentication data has been provided.
         if ( e.getError() == DAVException::DAV_HTTP_NOAUTH )
