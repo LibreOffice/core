@@ -3776,7 +3776,6 @@ function PriorityQueue( aCompareFunc )
 {
     this.aSequence = new Array();
     this.aCompareFunc = aCompareFunc;
-    this.bSorted = true;
 }
 
 PriorityQueue.prototype.clone = function()
@@ -3793,18 +3792,11 @@ PriorityQueue.prototype.clone = function()
         }
     }
     aCopy.aSequence = dest;
-    aCopy.bSorted = this.bSorted;
-
     return aCopy;
 };
 
 PriorityQueue.prototype.top = function()
 {
-    if( !this.bSorted )
-    {
-        this.aSequence.sort(this.aCompareFunc)
-        this.bSorted = true;
-    }
     return this.aSequence[this.aSequence.length - 1];
 };
 
@@ -3815,26 +3807,21 @@ PriorityQueue.prototype.isEmpty = function()
 
 PriorityQueue.prototype.push = function( aValue )
 {
-    this.bSorted = false;
-    this.aSequence.push( aValue );
+    this.aSequence.unshift( aValue );
+    this.aSequence.sort(this.aCompareFunc);
 };
 
 PriorityQueue.prototype.clear = function()
 {
-    this.bSorted = true;
     this.aSequence = new Array();
 };
 
 PriorityQueue.prototype.pop = function()
 {
-    if( !this.bSorted )
-    {
-        this.aSequence.sort(this.aCompareFunc)
-        this.bSorted = true;
-    }
-
     return this.aSequence.pop();
 };
+
+
 
 
 /**********************************************************************************************
@@ -10353,14 +10340,27 @@ function PriorityEntry( aValue, nPriority )
  *      An instance of type PriorityEntry.
  *  @param aRhsEntry
  *      An instance of type PriorityEntry.
- *  @return {Boolean}
- *      True if the first entry has higher priority of the second entry,
- *      false otherwise.
+ *  @return {Integer}
+ *      -1 if the left entry has lower priority of the right entry,
+ *       1 if the left entry has higher priority of the right entry,
+ *       0 if the two entry have the same priority
  */
 PriorityEntry.compare = function( aLhsEntry, aRhsEntry )
 {
-    return ( aLhsEntry.nPriority < aRhsEntry.nPriority );
+    if ( aLhsEntry.nPriority < aRhsEntry.nPriority )
+    {
+        return -1;
+    }
+    else if (aLhsEntry.nPriority > aRhsEntry.nPriority)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 };
+
 
 
 
@@ -12907,7 +12907,18 @@ function EventEntry( aEvent, nTime )
 
 EventEntry.compare = function( aLhsEventEntry, aRhsEventEntry )
 {
-    return ( aLhsEventEntry.nActivationTime > aRhsEventEntry.nActivationTime );
+    if ( aLhsEventEntry.nActivationTime > aRhsEventEntry.nActivationTime )
+    {
+        return -1;
+    }
+    else if ( aLhsEventEntry.nActivationTime < aRhsEventEntry.nActivationTime )
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 };
 
 
