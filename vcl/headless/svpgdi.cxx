@@ -132,6 +132,16 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
 }
 namespace
 {
+#if CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR < 10
+    struct cairo_rectangle_int_t
+    {
+        double x;
+        double y;
+        double width;
+        double height;
+    }
+#endif
+
     cairo_rectangle_int_t getFillDamage(cairo_t* cr)
     {
         cairo_rectangle_int_t extents;
@@ -139,6 +149,7 @@ namespace
 
         cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
         extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+#if CAIRO_VERSION_MAJOR > 1 || (CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 10)
         cairo_region_t *region = cairo_region_create_rectangle(&extents);
 
         cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
@@ -147,6 +158,7 @@ namespace
 
         cairo_region_get_extents(region, &extents);
         cairo_region_destroy(region);
+#endif
 
         return extents;
     }
