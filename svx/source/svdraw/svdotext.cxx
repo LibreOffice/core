@@ -1722,6 +1722,9 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         aScale.setY(fabs(aScale.getY()));
         fRotate = fmod(fRotate + F_PI, F_2PI);
     }
+    // flip?
+    bool bFlipX = basegfx::fTools::less(aScale.getX(), 0.0),
+         bFlipY = basegfx::fTools::less(aScale.getY(), 0.0);
 
     // reset object shear and rotations
     aGeo.nRotationAngle = 0;
@@ -1776,6 +1779,16 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         aGeoStat.nShearAngle = FRound((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
+    }
+
+    // flip?
+    if (bFlipX)
+    {
+        Mirror(Point(), Point(0, 1));
+    }
+    if (bFlipY)
+    {
+        Mirror(Point(), Point(1, 0));
     }
 
     // rotation?
