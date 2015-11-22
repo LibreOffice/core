@@ -1326,7 +1326,10 @@ SwSbxValue SwCalc::Prim()
         else
         {
             nErg = VarLook( aVarName )->nValue;
-            bChkPow = true;
+            if (nErg.IsVoidValue())
+                eError = CALC_SYNTAX;
+            else
+                bChkPow = true;
         }
         break;
 
