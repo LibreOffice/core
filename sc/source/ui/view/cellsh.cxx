@@ -712,6 +712,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     GetViewData()->GetSimpleArea( aMarkRange );
                     SCCOL nCol1, nCol2;
                     SCROW nRow1, nRow2;
+                    SCSIZE nSelected, nTotal;
                     nCol1 = aMarkRange.aStart.Col();
                     nRow1 = aMarkRange.aStart.Row();
                     nCol2 = aMarkRange.aEnd.Col();
@@ -722,6 +723,17 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         aStr = aStr.replaceAll( "$1", OUString::number( nRow2 - nRow1 + 1 ));
                         aStr = aStr.replaceAll( "$2", OUString::number( nCol2 - nCol1 + 1 ));
                         rSet.Put( SfxStringItem( nWhich, aStr ) );
+                    }
+                    else
+                    {
+                        pDoc->GetFilterSelCount( nPosX, nPosY, nTab, nSelected, nTotal );
+                        if( nTotal )
+                        {
+                            OUString aStr = ScGlobal::GetRscString( STR_FILTER_SELCOUNT );
+                            aStr = aStr.replaceAll( "$1", OUString::number( nSelected ) );
+                            aStr = aStr.replaceAll( "$2", OUString::number( nTotal ) );
+                            rSet.Put( SfxStringItem( nWhich, aStr ) );
+                        }
                     }
                 }
                 break;

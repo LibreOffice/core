@@ -171,6 +171,13 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         mpFilteredRows->insertSegment(nStartRow, nSize, true);
         mpHiddenRows->insertSegment(nStartRow, nSize, true);
 
+        if( ( nStartRow <= maFilteredRowCount.nEndRow ) && ( maFilteredRowCount.nCount != SAL_MAX_INT32 ) )
+        {
+            if( nStartRow < maFilteredRowCount.nStartRow )
+                maFilteredRowCount.nStartRow += nSize;
+            maFilteredRowCount.nEndRow += nSize;
+        }
+
         if (!maRowManualBreaks.empty())
         {
             // Copy all breaks up to nStartRow (non-inclusive).
@@ -216,6 +223,53 @@ void ScTable::DeleteRow(
             if (pOutlineTable->DeleteRow( nStartRow, nSize ))
                 if (pUndoOutline)
                     *pUndoOutline = true;
+
+        if( ( maFilteredRowCount.nCount != SAL_MAX_INT32 ) && ( nStartRow <= maFilteredRowCount.nEndRow ) )
+        {
+            SCROW nEndRow = nStartRow + nSize - 1;
+            // rows to be deleted has some overlap with autofilter
+            if( nEndRow >= maFilteredRowCount.nStartRow  )
+            {
+                SCROW nStartRowInside = ( nStartRow >= maFilteredRowCount.nStartRow ) ? nStartRow : maFilteredRowCount.nStartRow;
+                SCROW nEndRowInside = ( nEndRow <= maFilteredRowCount.nEndRow ) ? nEndRow : maFilteredRowCount.nEndRow;
+
+                // All rows inside the autofilter are to be deleted, so set dirty flag.
+                if( ( nStartRowInside == maFilteredRowCount.nStartRow ) && ( nEndRowInside == maFilteredRowCount.nEndRow ) )
+                    maFilteredRowCount.nCount = SAL_MAX_INT32;
+                else
+                {
+                    SCSIZE nChange = 0;
+                    ScFlatBoolRowSegments::RangeData aData;
+                    SCROW nRowItr = nStartRowInside;
+                    while( nRowItr <= nEndRowInside )
+                    {
+                        if( !mpFilteredRows->getRangeData( nRowItr, aData ) )
+                            break;
+                        if( aData.mnRow2 > nEndRowInside )
+                            aData.mnRow2 = nEndRowInside;
+
+                        if( aData.mbValue )
+                            nChange += aData.mnRow2 - nRowItr + 1;
+
+                        nRowItr = aData.mnRow2 + 1;
+                    }
+                    if( nStartRowInside == maFilteredRowCount.nStartRow )
+                        maFilteredRowCount.nStartRow = ( nEndRowInside + 1 - nSize );
+
+                    if( nEndRowInside == maFilteredRowCount.nEndRow )
+                        maFilteredRowCount.nEndRow = ( nStartRowInside - 1 );
+                    else
+                        maFilteredRowCount.nEndRow -= nSize;
+                    maFilteredRowCount.nCount -= nChange;
+                }
+            }
+            // No overlap but the rows to be deleted are above the autofilter area.
+            else
+            {
+                maFilteredRowCount.nStartRow -= nSize;
+                maFilteredRowCount.nEndRow -= nSize;
+            }
+        }
 
         mpFilteredRows->removeSegment(nStartRow, nStartRow+nSize);
         mpHiddenRows->removeSegment(nStartRow, nStartRow+nSize);
