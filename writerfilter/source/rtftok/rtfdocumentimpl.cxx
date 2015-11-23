@@ -228,6 +228,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_bNeedCrOrig(false),
       m_bNeedPar(true),
       m_bNeedFinalPar(false),
+      m_bNeedTableBreak(false),
       m_aListTableSprms(),
       m_aSettingsTableAttributes(),
       m_aSettingsTableSprms(),
@@ -624,6 +625,8 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
         Mapper().endSectionGroup();
     m_bNeedPar = false;
     m_bNeedSect = false;
+
+    m_bNeedTableBreak = true;
 }
 
 void RTFDocumentImpl::seek(sal_Size nPos)
@@ -2127,6 +2130,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         if (m_aStates.top().eDestination == Destination::FOOTNOTESEPARATOR)
             break; // just ignore it - only thing we read in here is CHFTNSEP
+        m_bNeedTableBreak = false;
         checkFirstRun();
         bool bNeedPap = m_bNeedPap;
         checkNeedPap();
@@ -4206,6 +4210,11 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     break;
     case RTF_CELLX:
     {
+        if(m_bNeedTableBreak && !m_bFirstRun)
+            dispatchSymbol(RTF_PAR);
+
+        m_bNeedTableBreak = false;
+
         int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination) ? m_nNestedCurrentCellX : m_nTopLevelCurrentCellX);
         int nCellX = nParam - rCurrentCellX;
         const int COL_DFLT_WIDTH = 41; // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.
