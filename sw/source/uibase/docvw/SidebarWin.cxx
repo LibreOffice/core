@@ -283,8 +283,7 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
             continue;
 
         rRenderContext.Push(PushFlags::MAPMODE);
-        const Fraction& rFraction(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
-        Point aOffset(PixelToLogic(pChild->GetPosPixel() * rFraction.GetDenominator() / rFraction.GetNumerator()));
+        Point aOffset(PixelToLogic(pChild->GetPosPixel()));
         MapMode aMapMode(rRenderContext.GetMapMode());
         aMapMode.SetOrigin(aMapMode.GetOrigin() + aOffset);
         rRenderContext.SetMapMode(aMapMode);
@@ -298,6 +297,8 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
             pChild->EnableMapMode();
             aMapMode = pChild->GetMapMode();
             aMapMode.SetMapUnit(rRenderContext.GetMapMode().GetMapUnit());
+            aMapMode.SetScaleX(rRenderContext.GetMapMode().GetScaleX());
+            aMapMode.SetScaleY(rRenderContext.GetMapMode().GetScaleY());
             pChild->SetMapMode(aMapMode);
         }
 

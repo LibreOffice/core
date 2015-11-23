@@ -1881,6 +1881,15 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);
 
+    // Update scaling of SwEditWin and its sub-widgets, needed for comments.
+    if (GetWin() && GetWin()->GetMapMode().GetScaleX() != scaleX)
+    {
+        double fScale = scaleX;
+        SwViewOption aOption(*GetViewOptions());
+        aOption.SetZoom(fScale * 100);
+        ApplyViewOptions(aOption);
+    }
+
     Rectangle aOutRect = Rectangle(Point(tilePosX, tilePosY),
                                    rDevice.PixelToLogic(Size(contextWidth, contextHeight)));
 
