@@ -143,6 +143,16 @@ public:
                                 nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     }
 
+    /**
+     * Gets the tile mode: the pixel format used for the pBuffer of paintTile().
+     *
+     * @return an element of the LibreOfficeKitTileMode enum.
+     */
+    inline int getTileMode()
+    {
+        return mpDoc->pClass->getTileMode(mpDoc);
+    }
+
     /// Get the document sizes in TWIPs.
     inline void getDocumentSize(long* pWidth, long* pHeight)
     {

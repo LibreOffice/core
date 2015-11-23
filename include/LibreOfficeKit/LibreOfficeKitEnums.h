@@ -35,6 +35,13 @@ LibreOfficeKitPartMode;
 
 typedef enum
 {
+    LOK_TILEMODE_RGBA,
+    LOK_TILEMODE_ARGB
+}
+LibreOfficeKitTileMode;
+
+typedef enum
+{
     /**
      * Any tiles which are over the rectangle described in the payload are no
      * longer valid.

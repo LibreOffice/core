@@ -312,6 +312,7 @@ void        doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
+static int doc_getTileMode(LibreOfficeKitDocument* pThis);
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pWidth,
                                 long* pHeight);
@@ -385,6 +386,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPartName = doc_getPartName;
         m_pDocumentClass->setPartMode = doc_setPartMode;
         m_pDocumentClass->paintTile = doc_paintTile;
+        m_pDocumentClass->getTileMode = doc_getTileMode;
         m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
         m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
         m_pDocumentClass->registerCallback = doc_registerCallback;
@@ -956,6 +958,11 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     (void) nTileWidth;
     (void) nTileHeight;
 #endif
+}
+
+static int doc_getTileMode(LibreOfficeKitDocument* /*pThis*/)
+{
+    return LOK_TILEMODE_RGBA;
 }
 
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
