@@ -559,7 +559,7 @@ class ReleasePoolHolder
     ~ReleasePoolHolder() { [mpPool release]; }
 };
 
-bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+SalYieldResult AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
     (void) nReleased;
     assert(nReleased == 0); // not implemented
@@ -600,7 +600,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
             osl_setCondition( maWaitingYieldCond );
             // return if only one event is asked for
             if( ! bHandleAllCurrentEvents )
-                return true;
+                return SalYieldResult::EVENT;
         }
     }
 
@@ -711,7 +711,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
         }
     }
 
-    return bHadEvent;
+    return bHadEvent ? SalYieldResult::EVENT : SalYieldResult::TIMEOUT;
 }
 
 bool AquaSalInstance::AnyInput( VclInputFlags nType )

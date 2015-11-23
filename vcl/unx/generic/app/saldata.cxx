@@ -606,7 +606,8 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
     return bRet;
 }
 
-bool SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
+SalYieldResult
+SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     blockIdleTimeout = !bWait;
     // check for timeouts here if you want to make screenshots
@@ -629,7 +630,7 @@ bool SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 if( ! bHandleAllCurrentEvents )
                 {
                     blockIdleTimeout = false;
-                    return true;
+                    return SalYieldResult::EVENT;
                 }
             }
         }
@@ -706,7 +707,7 @@ bool SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if (nFound == 0)
         {
             blockIdleTimeout = false;
-            return false;
+            return SalYieldResult::TIMEOUT;
         }
 
         for ( int nFD = 0; nFD < nFDs_; nFD++ )
@@ -736,7 +737,8 @@ bool SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
     blockIdleTimeout = false;
 
-    return bHandledEvent;
+    return bHandledEvent ? SalYieldResult::EVENT
+                         : SalYieldResult::TIMEOUT;
 }
 
 void SalXLib::Wakeup()

@@ -94,8 +94,10 @@ public:
 
     // Process one pending Timer with highhest priority
     static void CallbackTaskScheduling( bool ignore );
+    /// Calculate minimum timeout - and return its value.
+    static sal_uInt64 CalculateMinimumTimeout();
     /// Process one pending task ahead of time with highhest priority.
-    static void ProcessTaskScheduling( bool bTimer );
+    static void       ProcessTaskScheduling( bool bTimer );
 };
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX

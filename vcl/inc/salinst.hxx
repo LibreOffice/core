@@ -60,6 +60,8 @@ class Menu;
 enum class VclInputFlags;
 enum class SalFrameStyleFlags;
 
+enum SalYieldResult { EVENT, TIMEOUT };
+
 class VCL_PLUGIN_PUBLIC SalInstance
 {
 private:
@@ -132,7 +134,7 @@ public:
      * If @bHandleAllCurrentEvents - dispatch multiple posted
      * user events. Returns true if events needed processing.
      */
-    virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) = 0;
+    virtual SalYieldResult  DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) = 0;
     virtual bool            AnyInput( VclInputFlags nType ) = 0;
 
     // menus
