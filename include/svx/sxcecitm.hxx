@@ -83,6 +83,10 @@ class SdrCaptionEscAbsItem: public SdrMetricItem {
 public:
     SdrCaptionEscAbsItem(long nEscAbs=0): SdrMetricItem(SDRATTR_CAPTIONESCABS,nEscAbs) {}
     SdrCaptionEscAbsItem(SvStream& rIn) : SdrMetricItem(SDRATTR_CAPTIONESCABS,rIn)     {}
+    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    {
+        return new SdrCaptionEscAbsItem(*this);
+    }
 };
 
 #endif
