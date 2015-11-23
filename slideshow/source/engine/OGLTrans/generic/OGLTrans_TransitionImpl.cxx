@@ -591,6 +591,7 @@ std::shared_ptr<OGLTransitionImpl> makeTurnAround()
 {
     Primitive Slide;
     TransitionSettings aSettings;
+    aSettings.mnRequiredGLVersion = 3.0;
 
     Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
     Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
@@ -755,6 +756,7 @@ std::shared_ptr<OGLTransitionImpl> makeRochade()
 {
     Primitive Slide;
     TransitionSettings aSettings;
+    aSettings.mnRequiredGLVersion = 3.0;
 
     double w, h;
 
@@ -1407,7 +1409,6 @@ std::shared_ptr<OGLTransitionImpl> makeStatic()
 
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
-    aSettings.mnRequiredGLVersion = 2.0;
 
     return makeStaticNoiseTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
@@ -1458,7 +1459,6 @@ std::shared_ptr<OGLTransitionImpl> makeDissolve()
 
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
-    aSettings.mnRequiredGLVersion = 2.0;
 
     return makeDissolveTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
@@ -1607,7 +1607,6 @@ std::shared_ptr<OGLTransitionImpl> makeVortex()
 
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
-    aSettings.mnRequiredGLVersion = 2.0;
 
     return makeVortexTransition(aLeavingSlide, aEnteringSlide, aSettings, NX, NY);
 }
@@ -1679,7 +1678,6 @@ std::shared_ptr<OGLTransitionImpl> makeRipple()
 
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
-    aSettings.mnRequiredGLVersion = 2.0;
 
     return makeRippleTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
