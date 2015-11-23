@@ -221,8 +221,8 @@ bool Image::operator==(const Image& rImage) const
         bRet = true;
     else if (!rImage.mpImplData || !mpImplData)
         bRet = false;
-    else if (rImage.mpImplData->mpBitmapEx == mpImplData->mpBitmapEx)
-        bRet = (rImage.mpImplData->mpBitmapEx == mpImplData->mpBitmapEx);
+    else
+        bRet = *rImage.mpImplData->mpBitmapEx == *mpImplData->mpBitmapEx;
 
     return bRet;
 }
