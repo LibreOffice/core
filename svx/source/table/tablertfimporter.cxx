@@ -51,10 +51,9 @@ struct RTFCellDefault
 {
     SfxItemSet          maItemSet;
     sal_Int32           mnCol;
-    sal_uInt16              mnTwips;         // right border of the cell
     sal_Int32           mnColSpan;   // MergeCell if >1, merged cells if 0
 
-    explicit RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnCol(0), mnTwips(0 ), mnColSpan(1) {}
+    explicit RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnCol(0), mnColSpan(1) {}
 };
 
 typedef std::vector< std::shared_ptr< RTFCellDefault > > RTFCellDefaultVector;
@@ -64,9 +63,8 @@ struct RTFCellInfo
     SfxItemSet          maItemSet;
     sal_Int32           mnStartPara;
     sal_Int32           mnParaCount;
-    sal_Int32           mnColSpan;
 
-    explicit RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0), mnColSpan(0) {}
+    explicit RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0) {}
 };
 
 typedef std::shared_ptr< RTFCellInfo > RTFCellInfoPtr;

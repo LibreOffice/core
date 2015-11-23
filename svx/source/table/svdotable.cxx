@@ -205,7 +205,6 @@ public:
     CellPos maEditPos;
     TableStyleSettings maTableStyle;
     Reference< XIndexAccess > mxTableStyle;
-    bool mbModifyPending;
 
     void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
 
@@ -262,7 +261,6 @@ sal_Int32 SdrTableObjImpl::lastColCount;
 SdrTableObjImpl::SdrTableObjImpl()
 : mpTableObj( nullptr )
 , mpLayouter( nullptr )
-, mbModifyPending( false )
 {
 }
 

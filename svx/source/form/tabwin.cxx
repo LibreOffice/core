@@ -76,10 +76,8 @@ namespace {
 struct ColumnInfo
 {
     OUString sColumnName;
-    OUString sLabel;
-    ColumnInfo(const OUString& i_sColumnName,const OUString& i_sLabel)
+    ColumnInfo(const OUString& i_sColumnName)
         : sColumnName(i_sColumnName)
-        , sLabel(i_sLabel)
     {
     }
 };
@@ -98,9 +96,9 @@ static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< conta
         if ( xColumn->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
             xColumn->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
         if ( !sLabel.isEmpty() )
-            _rListBox.InsertEntry( sLabel, nullptr, false, TREELIST_APPEND, new ColumnInfo(*pEntries,sLabel) );
+            _rListBox.InsertEntry( sLabel, nullptr, false, TREELIST_APPEND, new ColumnInfo(*pEntries) );
         else
-            _rListBox.InsertEntry( *pEntries, nullptr, false, TREELIST_APPEND, new ColumnInfo(*pEntries,sLabel) );
+            _rListBox.InsertEntry( *pEntries, nullptr, false, TREELIST_APPEND, new ColumnInfo(*pEntries) );
     }
 }
 

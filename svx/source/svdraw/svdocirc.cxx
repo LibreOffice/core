@@ -363,8 +363,6 @@ struct ImpCircUser : public SdrDragStatUserData
     long                        nWdt;
     long                        nStart;
     long                        nEnd;
-    long                        nAngle;
-    bool                        bRight; // not yet implemented
 
 public:
     ImpCircUser()
@@ -372,9 +370,7 @@ public:
         nHgt(0),
         nWdt(0),
         nStart(0),
-        nEnd(0),
-        nAngle(0),
-        bRight(false)
+        nEnd(0)
     {}
     void SetCreateParams(SdrDragStat& rStat);
 };

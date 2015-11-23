@@ -221,7 +221,6 @@ public:
 private:
     struct Data
     {
-        CellVector  maCells;
         sal_Int32   mnRow;
         sal_Int32   mnHeight;
         bool    mbOptimalHeight;

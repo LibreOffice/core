@@ -848,7 +848,7 @@ namespace accessibility
         ::accessibility::AccessibleParaManager::WeakChild >
     {
     public:
-        explicit AccessibleTextHelper_UpdateChildBounds( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
+        explicit AccessibleTextHelper_UpdateChildBounds() {}
         ::accessibility::AccessibleParaManager::WeakChild operator()( const ::accessibility::AccessibleParaManager::WeakChild& rChild )
         {
             // retrieve hard reference from weak one
@@ -875,15 +875,12 @@ namespace accessibility
             // identity transform
             return rChild;
         }
-
-    private:
-        AccessibleTextHelper_Impl&  mrImpl;
     };
 
     void AccessibleTextHelper_Impl::UpdateBoundRect()
     {
         // send BOUNDRECT_CHANGED to affected children
-        AccessibleTextHelper_UpdateChildBounds aFunctor( *this );
+        AccessibleTextHelper_UpdateChildBounds aFunctor;
         ::std::transform( maParaManager.begin(), maParaManager.end(), maParaManager.begin(), aFunctor );
     }
 

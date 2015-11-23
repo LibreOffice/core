@@ -53,7 +53,6 @@ protected:
     BitmapEx                aThumbBmp; // Allow transparence to survive
     GDIMetaFile             aThumbMtf;
     INetURLObject           aURL;
-    OUString                aUserName;
     OUString                aTitle;
     bool                    bIsValid;
     bool                    bIsThumbBmp;

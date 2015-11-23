@@ -47,8 +47,6 @@ struct NotifyPosSize
 {
     Size    aPictureSize;
     Point   aMousePos;
-    bool    bPictureSize;
-    bool    bMousePos;
 };
 
 #define SVD_IMAP_USERDATA   0x0001
