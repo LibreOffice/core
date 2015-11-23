@@ -50,7 +50,7 @@
                     <value>false</value>
                 </prop>
                 <prop oor:name="ExtendedUserAgent" oor:type="xs:boolean" oor:op="replace">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
             </node>
         </node>
