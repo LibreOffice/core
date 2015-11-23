@@ -167,8 +167,8 @@ public:
 
     virtual GenPspGraphics *CreatePrintGraphics() override;
 
-    ::basebmp::Format getBaseBmpFormatForBitCount(sal_uInt16);
-    ::basebmp::Format getBaseBmpFormatForDeviceFormat(DeviceFormat);
+    static ::basebmp::Format getBaseBmpFormatForBitCount(sal_uInt16);
+    static ::basebmp::Format getBaseBmpFormatForDeviceFormat(DeviceFormat);
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX

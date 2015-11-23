@@ -45,7 +45,7 @@ bool SvpSalBitmap::Create( const Size& rSize,
 
     SvpSalInstance* pInst = SvpSalInstance::s_pDefaultInstance;
     assert( pInst );
-    basebmp::Format nFormat = pInst->getBaseBmpFormatForBitCount( nBitCount );
+    basebmp::Format nFormat = SvpSalInstance::getBaseBmpFormatForBitCount( nBitCount );
 
     B2IVector aSize( rSize.Width(), rSize.Height() );
     if( aSize.getX() == 0 )
