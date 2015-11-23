@@ -92,9 +92,19 @@ void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild, MouseEvent* p
 {
     // Set map mode, so that callback payloads will contain absolute coordinates instead of relative ones.
     Point aOffset(rChild.GetOutOffXPixel() - rParent.GetOutOffXPixel(), rChild.GetOutOffYPixel() - rParent.GetOutOffYPixel());
+    if (!rChild.IsMapModeEnabled())
+    {
+        MapMode aMapMode(rChild.GetMapMode());
+        aMapMode.SetMapUnit(MAP_TWIP);
+        aMapMode.SetScaleX(rParent.GetMapMode().GetScaleX());
+        aMapMode.SetScaleY(rParent.GetMapMode().GetScaleY());
+        rChild.SetMapMode(aMapMode);
+        rChild.EnableMapMode();
+    }
     aOffset = rChild.PixelToLogic(aOffset);
     MapMode aMapMode(rChild.GetMapMode());
     aMapMode.SetOrigin(aOffset);
+    aMapMode.SetMapUnit(rParent.GetMapMode().GetMapUnit());
     rChild.SetMapMode(aMapMode);
     rChild.EnableMapMode(false);
 
@@ -106,6 +116,31 @@ void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild, MouseEvent* p
         MouseEvent aMouseEvent(aPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(), pMouseEvent->GetButtons(), pMouseEvent->GetModifier());
         *pMouseEvent = aMouseEvent;
     }
+}
+
+/// Decide which one from the children of rParent should get rMouseEvent.
+vcl::Window* lcl_getHitWindow(sw::sidebarwindows::SwSidebarWin& rParent, const MouseEvent& rMouseEvent)
+{
+    vcl::Window* pRet = 0;
+
+    rParent.EditWin().Push(PushFlags::MAPMODE);
+    rParent.EditWin().EnableMapMode();
+    for (sal_Int16 i = rParent.GetChildCount() - 1; i >= 0; --i)
+    {
+        vcl::Window* pChild = rParent.GetChild(i);
+
+        Point aPosition(rParent.GetPosPixel());
+        aPosition.Move(pChild->GetPosPixel().getX(), pChild->GetPosPixel().getY());
+        Size aSize(rParent.GetSizePixel());
+        Rectangle aRectangleLogic(rParent.EditWin().PixelToLogic(aPosition), rParent.EditWin().PixelToLogic(aSize));
+        if (aRectangleLogic.IsInside(rMouseEvent.GetPosPixel()))
+        {
+            pRet = pChild;
+            break;
+        }
+    }
+    rParent.EditWin().Pop();
+    return pRet;
 }
 
 }
@@ -441,29 +476,29 @@ void SwSidebarWin::MouseMove(const MouseEvent& rMouseEvent)
 
 void SwSidebarWin::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
-    if (mpSidebarTextControl)
+    if (vcl::Window* pHit = lcl_getHitWindow(*this, rMouseEvent))
     {
-        mpSidebarTextControl->Push(PushFlags::MAPMODE);
+        pHit->Push(PushFlags::MAPMODE);
         MouseEvent aMouseEvent(rMouseEvent);
-        lcl_translateTwips(EditWin(), *mpSidebarTextControl, &aMouseEvent);
+        lcl_translateTwips(EditWin(), *pHit, &aMouseEvent);
 
-        mpSidebarTextControl->MouseButtonDown(aMouseEvent);
+        pHit->MouseButtonDown(aMouseEvent);
 
-        mpSidebarTextControl->Pop();
+        pHit->Pop();
     }
 }
 
 void SwSidebarWin::MouseButtonUp(const MouseEvent& rMouseEvent)
 {
-    if (mpSidebarTextControl)
+    if (vcl::Window* pHit = lcl_getHitWindow(*this, rMouseEvent))
     {
-        mpSidebarTextControl->Push(PushFlags::MAPMODE);
+        pHit->Push(PushFlags::MAPMODE);
         MouseEvent aMouseEvent(rMouseEvent);
-        lcl_translateTwips(EditWin(), *mpSidebarTextControl, &aMouseEvent);
+        lcl_translateTwips(EditWin(), *pHit, &aMouseEvent);
 
-        mpSidebarTextControl->MouseButtonUp(aMouseEvent);
+        pHit->MouseButtonUp(aMouseEvent);
 
-        mpSidebarTextControl->Pop();
+        pHit->Pop();
     }
 }
 
