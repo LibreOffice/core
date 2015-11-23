@@ -118,6 +118,9 @@ struct _LibreOfficeKitDocumentClass
                        const int nTileWidth,
                        const int nTileHeight);
 
+    /// @see lok::Document::getTileMode().
+    int (*getTileMode) (LibreOfficeKitDocument* pThis);
+
     /// @see lok::Document::getDocumentSize().
     void (*getDocumentSize) (LibreOfficeKitDocument* pThis,
                              long* pWidth,
