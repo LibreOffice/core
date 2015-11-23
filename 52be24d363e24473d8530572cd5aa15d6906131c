@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "dab17558_baedb590",
+        "filename": "sw/source/core/bastyp/calc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-11-23T12:37:44Z",
+      "side": 1,
+      "message": "I tested this, and it worked for me:\n\n    case CALC_NAME:\n        switch(SwCalcOper nOper \u003d GetToken())\n        {\n        case CALC_ASSIGN:\n            {\n                SwCalcExp* n \u003d VarInsert(aVarName);\n                GetToken();\n                nErg \u003d n-\u003enValue \u003d Expr();\n            }\n            break;\n        default:\n            nErg \u003d VarLook(aVarName)-\u003enValue;\n            if (nErg.IsVoidValue() \u0026\u0026 (nOper \u003d\u003d CALC_LP))\n                eError \u003d CALC_SYNTAX;\n            else\n                bChkPow \u003d true;\n        }\n        break;\n\nNote that I had to call GetToken() only once, since it pops the token and second call gives improper result. It was called once anyway.",
+      "range": {
+        "startLine": 1319,
+        "startChar": 4,
+        "endLine": 1319,
+        "endChar": 19
+      },
+      "revId": "52be24d363e24473d8530572cd5aa15d6906131c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_7ae50da7",
         "filename": "sw/source/core/bastyp/calc.cxx",
         "patchSetId": 1
