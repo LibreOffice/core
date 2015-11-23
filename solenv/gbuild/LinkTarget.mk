@@ -821,12 +821,14 @@ gb_BUILD_HELPER_LIBS := basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \
+	i18nlangtag \
 	reg \
 	sal \
 	salhelper \
 	sax \
 	store \
 	tl \
+	ucbhelper \
 	unoidl \
 	xmlreader \
 

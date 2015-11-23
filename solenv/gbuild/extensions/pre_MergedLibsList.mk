@@ -30,6 +30,7 @@ MERGE_LIBRARY_LIST := \
 	fwi \
 	fwk \
 	$(call gb_Helper_optional,DESKTOP,helplinker) \
+	i18nlangtag \
 	i18npool \
 	i18nutil \
 	lng \
@@ -51,6 +52,7 @@ MERGE_LIBRARY_LIST := \
 	tl \
 	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
 	ucb1 \
+	ucbhelper \
 	ucpexpand1 \
 	ucpfile1 \
 	unoxml \
