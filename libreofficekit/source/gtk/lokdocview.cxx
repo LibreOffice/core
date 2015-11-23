@@ -1713,7 +1713,7 @@ paintTileInThread (gpointer data)
         return;
     }
 
-    g_task_return_pointer(task, pSurface, (GDestroyNotify)cairo_surface_destroy);
+    g_task_return_pointer(task, pSurface, reinterpret_cast<GDestroyNotify>(cairo_surface_destroy));
 }
 
 
