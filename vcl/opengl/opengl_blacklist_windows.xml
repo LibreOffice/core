@@ -21,7 +21,7 @@
     <whitelist>
     </whitelist>
     <blacklist>
-        <entry os="all" vendor="intel" compare="greater" version="15.40.4.64.4256"> <!-- 15.40.4.64.4256 -->
+        <entry os="all" vendor="intel" compare="less" version="15.40.4.64.4256"> <!-- 15.40.4.64.4256 -->
             <device id="all"/>
         </entry>
         <entry os="all" vendor="ati" compare="less" version="15.200.1062.1004"> <!-- 150.200 -->
@@ -145,7 +145,7 @@
             <device id="0x0A70"/>
 
             <!-- NvidiaBlockD3D9Layers -->
-            // Glitches whilst scrolling (see bugs 612007, 644787, 645872)
+            <!-- Glitches whilst scrolling (see bugs 612007, 644787, 645872) -->
             <device id="0x00f3"/> <!-- NV43 [GeForce 6200 (TM)] -->
             <device id="0x0146"/> <!-- NV43 [Geforce Go 6600TE/6200TE (TM)] -->
             <device id="0x014f"/> <!-- NV43 [GeForce 6200 (TM)] -->
