@@ -301,7 +301,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             for ( sal_Int32 k = 0; k < nGroups; k++ )
             {
                 const sal_Int32 nStart = sres.startOffset[k] - nExtraOffset;
-                assert(nStart >= 0); // if not (e.g. searching for $ with ICU regex engine), then what?
+                assert(nStart >= 0);
                 sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
