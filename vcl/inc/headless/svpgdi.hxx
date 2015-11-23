@@ -28,7 +28,7 @@
 
 #include "salgdi.hxx"
 #include "sallayout.hxx"
-#include "textrender.hxx"
+#include "svpcairotextrender.hxx"
 
 #ifdef IOS
 #define SvpSalGraphics AquaSalGraphics
@@ -79,7 +79,7 @@ private:
 
 protected:
     vcl::Region                         m_aClipRegion;
-    std::unique_ptr<TextRenderImpl>     m_xTextRenderImpl;
+    SvpCairoTextRender                  m_aTextRenderImpl;
 
 protected:
     virtual bool blendBitmap( const SalTwoRect&, const SalBitmap& rBitmap ) override;

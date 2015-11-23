@@ -20,7 +20,7 @@
 #include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
 #ifndef IOS
-#include "svpcairotextrender.hxx"
+#include "headless/svpcairotextrender.hxx"
 #endif
 #include "saldatabasic.hxx"
 
@@ -221,9 +221,9 @@ SvpSalGraphics::SvpSalGraphics() :
     m_bUseFillColor( false ),
     m_aFillColor( COL_WHITE ),
     m_aDrawMode( basebmp::DrawMode::Paint ),
-    m_bClipSetup( false )
+    m_bClipSetup( false ),
+    m_aTextRenderImpl(*this)
 {
-    m_xTextRenderImpl.reset(new SvpCairoTextRender(*this));
 }
 
 SvpSalGraphics::~SvpSalGraphics()
@@ -234,7 +234,7 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
 {
     m_aOrigDevice = rDevice;
     ResetClipRegion();
-    m_xTextRenderImpl->setDevice(rDevice);
+    m_aTextRenderImpl.setDevice(rDevice);
 }
 
 void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
