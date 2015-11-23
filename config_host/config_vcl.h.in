@@ -6,8 +6,8 @@ Settings about vcl
 #ifndef CONFIG_VCL_H
 #define CONFIG_VCL_H
 
-/* nature of the device pixel coordinate system
- * either use sal_Int32 or double for coordinates
+/* Nature of the device pixel coordinate system.
+ * We either use long or double for coordinates.
  */
 #define VCL_FLOAT_DEVICE_PIXEL 0
 
