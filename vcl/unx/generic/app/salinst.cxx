@@ -151,7 +151,7 @@ bool X11SalInstance::AnyInput(VclInputFlags nType)
     return bRet;
 }
 
-bool X11SalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+SalYieldResult X11SalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
     (void) nReleased;
     assert(nReleased == 0); // not implemented

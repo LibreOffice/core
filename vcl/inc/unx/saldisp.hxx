@@ -153,7 +153,7 @@ public:
     virtual         ~SalXLib();
     virtual void    Init();
 
-    virtual bool    Yield( bool bWait, bool bHandleAllCurrentEvents );
+    virtual SalYieldResult Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual void    Wakeup();
     virtual void    PostUserEvent();
 

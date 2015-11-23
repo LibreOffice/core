@@ -30,9 +30,8 @@ void Timer::SetDeletionFlags()
     }
 }
 
-bool Timer::ReadyForSchedule( bool bTimer ) const
+bool Timer::ReadyForSchedule( bool /* bTimerOnly */ ) const
 {
-    (void)bTimer;
     return (mpSchedulerData->mnUpdateTime + mnTimeout) <= tools::Time::GetSystemTicks();
 }
 

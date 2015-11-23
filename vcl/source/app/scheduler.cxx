@@ -41,7 +41,7 @@ void ImplSchedulerData::Invoke()
     mbInScheduler = false;
 }
 
-ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimer )
+ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplSchedulerData *pMostUrgent = nullptr;
@@ -49,7 +49,7 @@ ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimer )
     for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
         if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete || pSchedulerData->mnUpdateStack >= pSVData->mnUpdateStack
-            || !pSchedulerData->mpScheduler->ReadyForSchedule( bTimer ) || !pSchedulerData->mpScheduler->IsActive())
+            || !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly ) || !pSchedulerData->mpScheduler->IsActive())
             continue;
         if (!pMostUrgent)
             pMostUrgent = pSchedulerData;
