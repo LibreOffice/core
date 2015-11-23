@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_3a89c5cb",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4865,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-23T14:24:07Z",
+      "side": 1,
+      "message": "Rather use rKeywords[NF_KEY_E] instead of hard coded \"E\", in case a map insists on lower case \u0027e\u0027 or such. I\u0027ll submit an amended commit.",
+      "range": {
+        "startLine": 4865,
+        "startChar": 38,
+        "endLine": 4865,
+        "endChar": 39
+      },
+      "revId": "b5e69a7aa39a31b89917d7f251550bb04183293f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
