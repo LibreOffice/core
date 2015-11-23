@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_folders.h>
 
 #include "desktopdllapi.h"
 
@@ -60,26 +61,39 @@
 
 #if HAVE_FEATURE_BREAKPAD
 
+OString getLibDir()
+{
+    OUString aOriginal = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER;
+    rtl::Bootstrap::expandMacros(aOriginal);
+
+    return rtl::OUStringToOString(aOriginal, RTL_TEXTENCODING_UTF8);
+}
+
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* /*context*/, bool succeeded)
 {
     // send the minidump to the server (not yet implemented)
-    SAL_WARN("sofficemain", "minidump generated: " << descriptor.path());
+    SAL_WARN("crashreport", "minidump generated: " << descriptor.path());
+    OString aCommand = getLibDir().copy(7) + "/minidump_upload -p LibreOffice -v \"5.1.0.0\" ";
+    aCommand = aCommand + descriptor.path() + " " + "http://libreofficecrash.org/submit";
+    int retVal = std::system(aCommand.getStr());
+    SAL_WARN_IF(retVal != 0, "crashreport", "Failed to upload minidump. Error Code: " << retVal);
     return succeeded;
 }
 #endif
 
 #endif
-
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if HAVE_FEATURE_BREAKPAD
+    //limit the amount of code that needs to be executed before the crash reporting
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     google_breakpad::MinidumpDescriptor descriptor("/tmp");
     google_breakpad::ExceptionHandler eh(descriptor, NULL, dumpCallback, NULL, true, -1);
-#endif
+#else
 
+#endif
 #endif
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
