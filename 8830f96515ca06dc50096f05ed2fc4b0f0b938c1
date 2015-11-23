@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_da1079ab",
+        "filename": "sfx2/source/appl/fileobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2015-11-23T10:06:15Z",
+      "side": 1,
+      "message": "Why have this variable rather than using an empty-hash (and hence no lookup match) ?",
+      "revId": "8830f96515ca06dc50096f05ed2fc4b0f0b938c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_fa0bbd7b",
+        "filename": "sfx2/source/appl/fileobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2015-11-23T10:06:15Z",
+      "side": 1,
+      "message": "If the load of this filename is in-progress - then we prematurely remove it from being in-progress here, before it is loaded (right?) - why ?",
+      "range": {
+        "startLine": 93,
+        "startChar": 36,
+        "endLine": 93,
+        "endChar": 41
+      },
+      "revId": "8830f96515ca06dc50096f05ed2fc4b0f0b938c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
