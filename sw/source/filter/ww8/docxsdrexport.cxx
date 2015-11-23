@@ -490,7 +490,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         else
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
-            sal_Int64 nTwipstoEMU = TwipsToEMU(aPos.X);
+            sal_Int64 nPosXEMU = TwipsToEMU(aPos.X);
 
             /* Absolute Position Offset Value is of type Int. Hence it should not be greater than
              * Maximum value for Int OR Less than the Minimum value for Int.
@@ -503,32 +503,32 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
              * Please refer : http://www.schemacentral.com/sc/xsd/t-xsd_int.html
              */
 
-            if (nTwipstoEMU > MAX_INTEGER_VALUE)
+            if (nPosXEMU > MAX_INTEGER_VALUE)
             {
-                nTwipstoEMU = MAX_INTEGER_VALUE;
+                nPosXEMU = MAX_INTEGER_VALUE;
             }
-            else if (nTwipstoEMU < MIN_INTEGER_VALUE)
+            else if (nPosXEMU < MIN_INTEGER_VALUE)
             {
-                nTwipstoEMU = MIN_INTEGER_VALUE;
+                nPosXEMU = MIN_INTEGER_VALUE;
             }
-            m_pImpl->m_pSerializer->write(nTwipstoEMU);
+            m_pImpl->m_pSerializer->write(nPosXEMU);
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_posOffset);
         }
         m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_positionH);
         m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_positionV, XML_relativeFrom, relativeFromV, FSEND);
 
-        sal_Int64 nTwipstoEMU = TwipsToEMU(aPos.Y);
+        sal_Int64 nPosYEMU = TwipsToEMU(aPos.Y);
 
         // tdf#93675, 0 below line/paragraph and/or top line/paragraph with
         // wrap top+bottom or other wraps is affecting the line directly
         // above the anchor line, which seems odd, but a tiny adjustment
         // here to bring the top down convinces msoffice to wrap like us
-        if (nTwipstoEMU == 0 &&
+        if (nPosYEMU == 0 &&
                 (strcmp(relativeFromV, "line") == 0 || strcmp(relativeFromV, "paragraph") == 0) &&
                 (!alignV || strcmp(alignV, "top") == 0))
         {
             alignV = nullptr;
-            nTwipstoEMU = 635;
+            nPosYEMU = 635;
         }
 
         if (alignV != nullptr)
@@ -540,15 +540,15 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         else
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
-            if (nTwipstoEMU > MAX_INTEGER_VALUE)
+            if (nPosYEMU > MAX_INTEGER_VALUE)
             {
-                nTwipstoEMU = MAX_INTEGER_VALUE;
+                nPosYEMU = MAX_INTEGER_VALUE;
             }
-            else if (nTwipstoEMU < MIN_INTEGER_VALUE)
+            else if (nPosYEMU < MIN_INTEGER_VALUE)
             {
-                nTwipstoEMU = MIN_INTEGER_VALUE;
+                nPosYEMU = MIN_INTEGER_VALUE;
             }
-            m_pImpl->m_pSerializer->write(nTwipstoEMU);
+            m_pImpl->m_pSerializer->write(nPosYEMU);
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_posOffset);
         }
         m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_positionV);
