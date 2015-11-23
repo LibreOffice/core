@@ -43,8 +43,6 @@
 using namespace vcl;
 using namespace com::sun::star;
 
-#define TB_SEP_SIZE             8
-
 ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
         m_pLayoutData( nullptr )
 {
@@ -383,8 +381,7 @@ void ToolBox::ImplUpdateItem( sal_uInt16 nIndex )
         if ( nIndex == 0xFFFF )
         {
             // #i52217# no immediate draw as this might lead to paint problems
-            Invalidate( Rectangle( mnLeftBorder, mnTopBorder,
-                                    mnDX-mnRightBorder-1, mnDY-mnBottomBorder-1 ) );
+            Invalidate( Rectangle( mnLeftBorder, mnTopBorder, mnDX-mnRightBorder-1, mnDY-mnBottomBorder-1 ) );
         }
         else
         {
@@ -522,8 +519,7 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
         bNewCalc = true;
 
         DBG_ASSERT( aItem.mnId, "ToolBox::InsertItem(): ItemId == 0" );
-        DBG_ASSERT( GetItemPos( aItem.mnId ) == TOOLBOX_ITEM_NOTFOUND,
-                    "ToolBox::InsertItem(): ItemId already exists" );
+        DBG_ASSERT( GetItemPos( aItem.mnId ) == TOOLBOX_ITEM_NOTFOUND, "ToolBox::InsertItem(): ItemId already exists" );
     }
 
     // create item and add to list
@@ -538,15 +534,15 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                          ToolBoxItemBits nBits, sal_uInt16 nPos )
+void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, ToolBoxItemBits nBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "ToolBox::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
                 "ToolBox::InsertItem(): ItemId already exists" );
 
     // create item and add to list
-    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), ImplToolItem( nItemId, rImage, nBits ) );
+    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(),
+                             ImplToolItem( nItemId, rImage, nBits ) );
     SetItemImage(nItemId, rImage);
     mpData->ImplClearLayoutData();
 
@@ -557,16 +553,16 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >(nNewPos ) );
 }
 
-void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                          const OUString& rText,
-                          ToolBoxItemBits nBits, sal_uInt16 nPos )
+void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, const OUString& rText, ToolBoxItemBits nBits,
+                          sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "ToolBox::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
                 "ToolBox::InsertItem(): ItemId already exists" );
 
     // create item and add to list
-    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), ImplToolItem( nItemId, rImage, ImplConvertMenuString( rText ), nBits ) );
+    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(),
+                             ImplToolItem( nItemId, rImage, ImplConvertMenuString( rText ), nBits ) );
     SetItemImage(nItemId, rImage);
     mpData->ImplClearLayoutData();
 
@@ -577,15 +573,15 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText,
-                          ToolBoxItemBits nBits, sal_uInt16 nPos )
+void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText, ToolBoxItemBits nBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "ToolBox::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
                 "ToolBox::InsertItem(): ItemId already exists" );
 
     // create item and add to list
-    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), ImplToolItem( nItemId, ImplConvertMenuString( rText ), nBits ) );
+    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(),
+                             ImplToolItem( nItemId, ImplConvertMenuString( rText ), nBits ) );
     mpData->ImplClearLayoutData();
 
     ImplInvalidate( true );
@@ -595,11 +591,13 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText,
     CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame, ToolBoxItemBits nBits, const Size& rRequestedSize, sal_uInt16 nPos)
+void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame, ToolBoxItemBits nBits,
+                         const Size& rRequestedSize, sal_uInt16 nPos)
 {
     OUString aLabel(vcl::CommandInfoProvider::Instance().GetLabelForCommand(rCommand, rFrame));
     OUString aTooltip(vcl::CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
-    Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), rFrame));
+    Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(
+        rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), rFrame));
 
     sal_uInt16 nItemId = GetItemCount() + 1;
     InsertItem(nItemId, aImage, aLabel, nBits, nPos);
