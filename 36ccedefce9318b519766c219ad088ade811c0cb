@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a503d60c",
+        "filename": "svx/source/svdraw/svdotext.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2015-11-23T16:24:04Z",
+      "side": 1,
+      "message": "flip should happen before shear - it is part of scale. The order is scale, shear, rotate and translate to assemble the full object transformation.",
+      "range": {
+        "startLine": 1784,
+        "startChar": 7,
+        "endLine": 1784,
+        "endChar": 11
+      },
+      "revId": "36ccedefce9318b519766c219ad088ade811c0cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
