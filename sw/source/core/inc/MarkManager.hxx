@@ -116,9 +116,6 @@ namespace sw {
             // container for annotation marks
             container_t m_vAnnotationMarks;
 
-            // container for all marks except annotation marks
-            container_t m_vCommonMarks;
-
             SwDoc * const m_pDoc;
     };
     } // namespace mark

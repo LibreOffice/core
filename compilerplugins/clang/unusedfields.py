@@ -59,7 +59,8 @@ for d in definitionSet:
     if (srcLoc.startswith("external/")):
         continue
     # this is all representations of on-disk data structures
-    if (srcLoc == "sc/source/filter/inc/scflt.hxx"):
+    if (srcLoc.startswith("sc/source/filter/inc/scflt.hxx")
+        or srcLoc.startswith("sw/source/filter/ww8/")):
         continue
 
     tmp1set.add((clazz, srcLoc))

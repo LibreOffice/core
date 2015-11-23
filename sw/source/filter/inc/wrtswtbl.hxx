@@ -251,7 +251,6 @@ protected:
     bool m_bGetLineHeightCalled : 1;
 #endif
 
-    bool bColsOption : 1;
     bool bColTags : 1;
     bool bLayoutExport : 1;
     bool bCollectBorderWidth : 1;

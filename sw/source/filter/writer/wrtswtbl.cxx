@@ -732,7 +732,7 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, lo
 #ifdef DBG_UTIL
     m_bGetLineHeightCalled(false),
 #endif
-    bColsOption(false), bColTags(true), bLayoutExport(false),
+    bColTags(true), bLayoutExport(false),
     bCollectBorderWidth(true)
 {
     sal_uInt32 nParentWidth = nBaseWidth + nLeftSub + nRightSub;
@@ -765,7 +765,6 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
 #ifdef DBG_UTIL
     m_bGetLineHeightCalled(false),
 #endif
-    bColsOption(pLayoutInfo->HasColsOption()),
     bColTags(pLayoutInfo->HasColTags()), bLayoutExport(true),
     bCollectBorderWidth(pLayoutInfo->HaveBordersChanged())
 {

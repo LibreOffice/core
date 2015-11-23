@@ -94,8 +94,7 @@ SwXMLExport::SwXMLExport(
     bSavedShowChanges( false ),
     doc( nullptr ),
     sNumberFormat("NumberFormat"),
-    sIsProtected("IsProtected"),
-    sCell("Cell")
+    sIsProtected("IsProtected")
 {
     _InitItemExport();
 }

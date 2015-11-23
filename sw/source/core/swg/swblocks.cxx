@@ -57,7 +57,7 @@ sal_uInt16 SwImpBlocks::Hash( const OUString& r )
 
 SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong )
     : aShort( rShort ), aLong( rLong ), aPackageName (rShort),
-    bIsOnlyTextFlagInit( false ), bIsOnlyText( false ), bInPutMuchBlocks(false)
+    bIsOnlyTextFlagInit( false ), bIsOnlyText( false )
 {
     nHashS = SwImpBlocks::Hash( rShort );
     nHashL = SwImpBlocks::Hash( rLong );
@@ -65,7 +65,7 @@ SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong )
 
 SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName)
     : aShort( rShort ), aLong( rLong ), aPackageName (rPackageName),
-    bIsOnlyTextFlagInit( false ), bIsOnlyText( false ), bInPutMuchBlocks(false)
+    bIsOnlyTextFlagInit( false ), bIsOnlyText( false )
 {
     nHashS = SwImpBlocks::Hash( rShort );
     nHashL = SwImpBlocks::Hash( rLong );

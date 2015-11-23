@@ -101,7 +101,6 @@ class SwXMLExport : public SvXMLExport
     // string constants for table cell export
     const OUString sNumberFormat;
     const OUString sIsProtected;
-    const OUString sCell;
 
     void setBlockMode();
 private:

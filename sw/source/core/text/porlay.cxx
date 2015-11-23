@@ -1955,13 +1955,6 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
 }
 
 SwParaPortion::SwParaPortion()
-    : m_bFlag00(false)
-    , m_bFlag11(false)
-    , m_bFlag12(false)
-    , m_bFlag13(false)
-    , m_bFlag14(false)
-    , m_bFlag15(false)
-    , m_bFlag16(false)
 {
     FormatReset();
     m_bFlys = m_bFootnoteNum = m_bMargin = false;

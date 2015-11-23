@@ -211,7 +211,6 @@ public:
 struct SwHTMLFormatInfo
 {
     const SwFormat *pFormat;      // das Format selbst
-    const SwFormat *pRefFormat;   // das Vergleichs-Format
 
     OString aToken;          // das auszugebende Token
     OUString aClass;          // die auszugebende Klasse
@@ -230,7 +229,6 @@ struct SwHTMLFormatInfo
     // Konstruktor fuer einen Dummy zum Suchen
     explicit SwHTMLFormatInfo( const SwFormat *pF ) :
         pFormat( pF ),
-        pRefFormat(nullptr),
         pItemSet( nullptr ),
         nLeftMargin( 0 ),
         nRightMargin( 0 ),
@@ -624,7 +622,6 @@ struct HTMLSaveData
     bool bOldOutHeader : 1;
     bool bOldOutFooter : 1;
     bool bOldOutFlyFrame : 1;
-    const SwFlyFrameFormat* pOldFlyFormat;
 
     HTMLSaveData( SwHTMLWriter&, sal_uLong nStt, sal_uLong nEnd,
                   bool bSaveNum=true,

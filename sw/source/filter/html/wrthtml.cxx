@@ -1417,7 +1417,6 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
     , bOldOutHeader(rWrt.m_bOutHeader)
     , bOldOutFooter(rWrt.m_bOutFooter)
     , bOldOutFlyFrame(rWrt.m_bOutFlyFrame)
-    , pOldFlyFormat(nullptr)
 {
     bOldWriteAll = rWrt.bWriteAll;
 

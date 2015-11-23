@@ -58,9 +58,7 @@ void SwXMLTextBlocks::ResetBlockMode ( )
 SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     : SwImpBlocks(rFile)
     , bAutocorrBlock(false)
-    , bBlock(false)
     , nFlags(0)
-    , nCurBlk(0)
 {
     SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
     if( !pDocSh->DoInitNew() )
@@ -104,9 +102,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
 SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg, const OUString& rName )
     : SwImpBlocks( rName )
     , bAutocorrBlock(false)
-    , bBlock(false)
     , nFlags(0)
-    , nCurBlk(0)
 {
     SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
     if( !pDocSh->DoInitNew() )

@@ -359,7 +359,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     OUString      m_aPathToFile;
     OUString      m_sBaseURL;
-    OUString      m_sSaveBaseURL;
     OUString      m_aBasicLib;
     OUString      m_aBasicModule;
     OUString      m_aScriptSource;  // Inhalt des aktuellen Script-Blocks
@@ -451,7 +450,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     bool m_bLBEntrySelected : 1;  // Ist der aktuelle Listbox-Eintrag selekt.
     bool m_bTAIgnoreNewPara : 1;  // naechstes LF in TextArea ignorieren?
     bool m_bFixMarqueeWidth : 1;  // Groesse einer Laufschrift anpassen?
-    bool m_bFixMarqueeHeight : 1;
 
     bool m_bUpperSpace : 1;       // obererer Absatz-Abstand wird benoetigt
     bool m_bNoParSpace : 1;

@@ -30,8 +30,6 @@ class SwFlyAtCntFrm;
 // bound in Content.
 class SwFlyFreeFrm : public SwFlyFrm
 {
-    SwPageFrm *pPage;   // page where the Fly is registered
-
     // #i34753# - flag for at-page anchored Writer fly frames
     // to prevent a positioning - call of method <MakeObjPos()> -, if Writer
     // fly frame is already clipped during its format by the object formatter.

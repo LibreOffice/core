@@ -430,7 +430,6 @@ struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
 
     bool bOverride  :1;// Flag, ob die NumRule nicht in maLSTInfos steht,
                         //   sondern fuer m_LFOInfos NEU angelegt wurde
-    bool bSimpleList:1;// Flag, ob diese NumRule nur einen Level verwendet
     bool bUsedInDoc :1;// Flag, ob diese NumRule im Doc verwendet wird,
                                                      //   oder beim Reader-Ende geloescht werden sollte
     bool bLSTbUIDSet    :1;// Flag, ob bUsedInDoc in maLSTInfos gesetzt wurde,
@@ -445,7 +444,6 @@ WW8LFOInfo::WW8LFOInfo(const WW8LFO& rLFO)
     , nIdLst(rLFO.nIdLst)
     , nLfoLvl(rLFO.nLfoLvl)
     , bOverride(rLFO.nLfoLvl != 0)
-    , bSimpleList(rLFO.bSimpleList)
     , bUsedInDoc(false)
     , bLSTbUIDSet(false)
 {

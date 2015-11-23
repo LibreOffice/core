@@ -341,14 +341,13 @@ public:
     VclPtr<OutputDevice> pOut;
     SwViewShell const * pSh;
     sal_uLong &rMin;
-    sal_uLong &rMax;
     sal_uLong &rAbsMin;
     long nRowWidth;
     long nWordWidth;
     long nWordAdd;
     sal_Int32 nNoLineBreak;
-    SwMinMaxArgs( OutputDevice* pOutI, SwViewShell const * pShI, sal_uLong& rMinI, sal_uLong &rMaxI, sal_uLong &rAbsI )
-        : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
+    SwMinMaxArgs( OutputDevice* pOutI, SwViewShell const * pShI, sal_uLong& rMinI, sal_uLong &rAbsI )
+        : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rAbsMin( rAbsI )
         { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = COMPLETE_STRING; }
     void Minimum( long nNew ) const { if( (long)rMin < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
@@ -617,7 +616,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
     sal_Int32 nLen = m_Text.getLength();
     long nAktWidth = 0;
     long nAdd = 0;
-    SwMinMaxArgs aArg( pOut, pSh, rMin, rMax, rAbsMin );
+    SwMinMaxArgs aArg( pOut, pSh, rMin, rAbsMin );
     while( nIdx < nLen )
     {
         sal_Int32 nNextChg = aIter.GetNextAttr();

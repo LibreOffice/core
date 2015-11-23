@@ -231,14 +231,8 @@ private:
 
 public:
 
-#if OSL_DEBUG_LEVEL > 0
-    bool mbLocked;
-#endif
     explicit SwAccessibleShapeMap_Impl( SwAccessibleMap *pMap )
         : maMap()
-#if OSL_DEBUG_LEVEL > 0
-        , mbLocked( false )
-#endif
     {
         maInfo.SetSdrView( pMap->GetShell()->GetDrawView() );
         maInfo.SetWindow( pMap->GetShell()->GetWin() );

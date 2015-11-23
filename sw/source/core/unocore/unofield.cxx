@@ -427,12 +427,10 @@ public:
     OUString        m_sParam1;  // Content / Database / NumberingSeparator
     OUString        m_sParam2;  // -    /DataTablename
     OUString        m_sParam3;  // -    /DataFieldName
-    OUString        m_sParam4;
     OUString        m_sParam5;  // -    /DataBaseURL
-    OUString        m_sParam6;  // -    /DataBaseResource
     double          m_fParam1;  // Value / -
     sal_Int8        m_nParam1;  // ChapterNumberingLevel
-    bool        m_bParam1;  // IsExpression
+    bool            m_bParam1;  // IsExpression
     sal_Int32       m_nParam2;
 
     Impl(SwModify *const pModify,
@@ -1086,8 +1084,6 @@ struct SwFieldProperties_Impl
     OUString    sPar2;
     OUString    sPar3;
     OUString    sPar4;
-    OUString    sPar5;
-    OUString    sPar6;
     Date            aDate;
     double          fDouble;
     uno::Sequence<beans::PropertyValue> aPropSeq;

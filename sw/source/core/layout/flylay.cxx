@@ -45,7 +45,6 @@ using namespace ::com::sun::star;
 
 SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFormat, pSib, pAnch ),
-    pPage( nullptr ),
     // #i34753#
     mbNoMakePos( false ),
     // #i37068#

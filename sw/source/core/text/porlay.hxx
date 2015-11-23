@@ -247,16 +247,8 @@ class SwParaPortion : public SwLineLayout
     bool m_bFollowField   : 1; // We have a bit of field left for the Follow
 
     bool m_bFixLineHeight : 1; // Fixed line height
-    bool m_bFootnoteNum    : 1; // contains a footnotenumberportion
-    bool m_bMargin    : 1; // contains a hanging punctuation in the margin
-
-    bool m_bFlag00    : 1;
-    bool m_bFlag11    : 1;
-    bool m_bFlag12    : 1;
-    bool m_bFlag13    : 1;
-    bool m_bFlag14    : 1;
-    bool m_bFlag15    : 1;
-    bool m_bFlag16    : 1;
+    bool m_bFootnoteNum   : 1; // contains a footnotenumberportion
+    bool m_bMargin        : 1; // contains a hanging punctuation in the margin
 
 public:
     SwParaPortion();

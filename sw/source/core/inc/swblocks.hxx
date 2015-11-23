@@ -38,7 +38,6 @@ public:
     OUString aPackageName;         /// Package name
     bool bIsOnlyTextFlagInit : 1;   /// Is the Flag valid?
     bool bIsOnlyText : 1;           /// Unformatted text
-    bool bInPutMuchBlocks : 1;     /// Put serveral block entries
 
     SwBlockName( const OUString& rShort, const OUString& rLong );
     SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName );

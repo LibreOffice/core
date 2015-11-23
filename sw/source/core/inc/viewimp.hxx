@@ -76,9 +76,6 @@ class SwViewShellImp
 
     SwAccessibleMap *m_pAccessibleMap;    // Accessible wrappers
 
-    mutable const SdrObject * m_pSdrObjectCached;
-    mutable OUString m_sSdrObjectCachedComment;
-
     bool m_bFirstPageInvalid : 1; // Pointer to the first Page invalid?
     bool m_bResetHdlHiddenPaint : 1; // Ditto
     bool m_bSmoothUpdate : 1; // For SmoothScroll

@@ -35,7 +35,6 @@ class SwXMLTextBlocks : public SwImpBlocks
 {
 protected:
     bool                    bAutocorrBlock;
-    bool                    bBlock;
     SfxObjectShellRef       xDocShellRef;
     sal_uInt16              nFlags;
     OUString                aPackageName;
@@ -49,7 +48,6 @@ protected:
 public:
     css::uno::Reference < css::embed::XStorage > xBlkRoot;
     css::uno::Reference < css::embed::XStorage > xRoot;
-    short               nCurBlk;
     SwXMLTextBlocks( const OUString& rFile );
     SwXMLTextBlocks( const css::uno::Reference < css::embed::XStorage >&, const OUString& rFile );
     void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyText = false );

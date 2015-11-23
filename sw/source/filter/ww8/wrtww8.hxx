@@ -437,7 +437,6 @@ struct MSWordSaveData
 
     bool bOldWriteAll : 1;          ///< WW8Export only
     bool bOldOutTable : 1;
-    bool bOldIsInTable: 1;
     bool bOldFlyFrmAttrs : 1;
     bool bOldStartTOX : 1;
     bool bOldInWriteTOX : 1;

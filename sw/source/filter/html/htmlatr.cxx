@@ -232,7 +232,6 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
                               LanguageType eDfltLang,
                               sal_uInt16 nCSS1Script, bool bHardDrop )
     : pFormat(pF)
-    , pRefFormat(nullptr)
     , pItemSet(nullptr)
     , nLeftMargin(0)
     , nRightMargin(0)

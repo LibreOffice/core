@@ -1373,14 +1373,12 @@ struct _InsULPara
     bool bUL : 1;           // Upper-Left(true) or Lower-Right(false) ?
 
     SwTableBox* pLeftBox;
-    SwTableBox* pRightBox;
-    SwTableBox* pMergeBox;
 
     _InsULPara( SwTableNode* pTNd, bool bUpperLower, bool bUpper,
-                SwTableBox* pLeft, SwTableBox* pMerge, SwTableBox* pRight,
+                SwTableBox* pLeft,
                 SwTableLine* pLine=nullptr, SwTableBox* pBox=nullptr )
         : pTableNd( pTNd ), pInsLine( pLine ), pInsBox( pBox ),
-        pLeftBox( pLeft ), pRightBox( pRight ), pMergeBox( pMerge )
+        pLeftBox( pLeft )
         {   bUL_LR = bUpperLower; bUL = bUpper; }
 
     void SetLeft( SwTableBox* pBox=nullptr )
@@ -1617,7 +1615,7 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     // This contains all Lines that are above the selected Area,
     // thus they form a Upper/Lower Line
-    _InsULPara aPara( pTableNd, true, true, pLeftBox, pMergeBox, pRightBox, pInsLine );
+    _InsULPara aPara( pTableNd, true, true, pLeftBox, pInsLine );
 
     // Move the overlapping upper/lower Lines of the selected Area
     for (auto & it : pFndBox->GetLines().front()->GetBoxes())

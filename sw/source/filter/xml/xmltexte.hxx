@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star { namespace style {
 
 class SwXMLTextParagraphExport : public XMLTextParagraphExport
 {
-    const OUString sTextTable;
     const OUString sEmbeddedObjectProtocol;
     const OUString sGraphicObjectProtocol;
 

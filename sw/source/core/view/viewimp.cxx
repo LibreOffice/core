@@ -95,7 +95,6 @@ SwViewShellImp::SwViewShellImp( SwViewShell *pParent ) :
     m_pLayAction( nullptr ),
     m_pIdleAct( nullptr ),
     m_pAccessibleMap( nullptr ),
-    m_pSdrObjectCached(nullptr),
     m_bFirstPageInvalid( true ),
     m_bResetHdlHiddenPaint( false ),
     m_bSmoothUpdate( false ),

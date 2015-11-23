@@ -174,7 +174,6 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& _rAutoStylePool ) :
     XMLTextParagraphExport( rExp, _rAutoStylePool ),
-    sTextTable( "TextTable" ),
     sEmbeddedObjectProtocol( "vnd.sun.star.EmbeddedObject:" ),
     sGraphicObjectProtocol( "vnd.sun.star.GraphicObject:" ),
     aAppletClassId( SO3_APPLET_CLASSID ),
