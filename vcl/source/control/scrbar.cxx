@@ -897,7 +897,19 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
 
     if (rMEvt.IsLeft() || rMEvt.IsMiddle() || rMEvt.IsRight())
     {
-        const Point&        rMousePos = rMEvt.GetPosPixel();
+        Point aPosPixel;
+        if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MAP_TWIP)
+        {
+            // rMEvt coordinates are in twips.
+            Push(PushFlags::MAPMODE);
+            EnableMapMode();
+            MapMode aMapMode = GetMapMode();
+            aMapMode.SetOrigin(Point(0, 0));
+            SetMapMode(aMapMode);
+            aPosPixel = LogicToPixel(rMEvt.GetPosPixel());
+            Pop();
+        }
+        const Point&        rMousePos = (GetMapMode().GetMapUnit() != MAP_TWIP ? rMEvt.GetPosPixel() : aPosPixel);
         sal_uInt16          nTrackFlags = 0;
         bool                bHorizontal = ( GetStyle() & WB_HORZ ) != 0;
         bool                bIsInside = false;
