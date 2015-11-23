@@ -40,14 +40,12 @@ namespace svt
     struct TabDeckLayouter_Data
     {
         TabAlignment                    eAlignment;
-        IToolPanelDeck&                 rPanels;
         VclPtr< PanelTabBar >           pTabBar;
         AccessibleFactoryAccess         aAccessibleFactory;
 
         TabDeckLayouter_Data( vcl::Window& i_rParent, IToolPanelDeck& i_rPanels,
                 const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
             :eAlignment( i_eAlignment )
-            ,rPanels( i_rPanels )
             ,pTabBar( VclPtr<PanelTabBar>::Create( i_rParent, i_rPanels, i_eAlignment, i_eItemContent ) )
         {
             pTabBar->Show();

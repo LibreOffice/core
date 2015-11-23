@@ -59,7 +59,6 @@ struct ValueSetItem
     Color               maColor;
     OUString            maText;
     void*               mpData;
-    bool                mbSelected;
     css::uno::Reference< css::accessibility::XAccessible > mxAcc;
 
     explicit ValueSetItem( ValueSet& rParent );

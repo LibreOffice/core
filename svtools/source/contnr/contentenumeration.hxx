@@ -39,16 +39,15 @@ namespace svt
     struct SortingData_Impl
     {
     private:
-        OUString maFilename;     // only filename in upper case - for compare purposes
-        OUString maTitle;        //  -> be careful when changing maTitle to update maFilename only when new
-        OUString maLowerTitle;
+        OUString    maFilename;     // only filename in upper case - for compare purposes
+        OUString    maTitle;        //  -> be careful when changing maTitle to update maFilename only when new
+        OUString    maLowerTitle;
 
 
     public:
-        OUString maType;
-        OUString maTargetURL;
-        OUString maImageURL;
-        OUString maDisplayText;
+        OUString    maType;
+        OUString    maTargetURL;
+        OUString    maDisplayText;
         DateTime    maModDate;
         Image       maImage;
         sal_Int64   maSize;
