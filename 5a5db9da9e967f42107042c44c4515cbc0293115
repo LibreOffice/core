@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_7a586d57",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-23T15:12:42Z",
+      "side": 1,
+      "message": "Um.. what? It\u0027s clearly not a good strategy to have it crash for users just to get bug reports ... but maybe I misunderstood.\n\nI\u0027d rather get clarified if nStart\u003c0 *can* actually happen. The assert() with its comment doesn\u0027t make sense to me. Nowhere in c00601dab0f5533b152cd63cec0a89bfec1ba95f I said that a position before nStart would be returned.\n\nI\u0027ll check that.",
+      "parentUuid": "faac7902_ececa791",
+      "revId": "5a5db9da9e967f42107042c44c4515cbc0293115",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_4c3fb325",
         "filename": "i18npool/source/search/textsearch.cxx",
         "patchSetId": 1
