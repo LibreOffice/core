@@ -723,6 +723,18 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         aStr = aStr.replaceAll( "$2", OUString::number( nCol2 - nCol1 + 1 ));
                         rSet.Put( SfxStringItem( nWhich, aStr ) );
                     }
+                    else
+                    {
+                        SCSIZE nSelected, nTotal;
+                        pDoc->GetFilterSelCount( nPosX, nPosY, nTab, nSelected, nTotal );
+                        if( nTotal )
+                        {
+                            OUString aStr = ScGlobal::GetRscString( STR_FILTER_SELCOUNT );
+                            aStr = aStr.replaceAll( "$1", OUString::number( nSelected ) );
+                            aStr = aStr.replaceAll( "$2", OUString::number( nTotal ) );
+                            rSet.Put( SfxStringItem( nWhich, aStr ) );
+                        }
+                    }
                 }
                 break;
 
