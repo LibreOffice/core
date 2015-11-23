@@ -80,9 +80,9 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
             BitmapColor aGreyValue(0);
             BitmapColor aGreyAlphaValue(0);
 
-            for (int nY = 0; nY < aSize.Height(); ++nY)
+            for (long nY = 0; nY < aSize.Height(); ++nY)
             {
-                for (int nX = 0; nX < aSize.Width(); ++nX)
+                for (long nX = 0; nX < aSize.Width(); ++nX)
                 {
                     aGreyValue.SetIndex(pRead->GetLuminance(nY, nX));
                     pGrey->SetPixel(nY, nX, aGreyValue);
@@ -104,9 +104,9 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
             BitmapColor aGreyValue(0);
             BitmapColor aGreyAlphaValue(0);
 
-            for (int nY = 0; nY < aSize.Height(); ++nY)
+            for (long nY = 0; nY < aSize.Height(); ++nY)
             {
-                for (int nX = 0; nX < aSize.Width(); ++nX)
+                for (long nX = 0; nX < aSize.Width(); ++nX)
                 {
                     aGreyValue.SetIndex(pRead->GetLuminance(nY, nX));
                     pGrey->SetPixel(nY, nX, aGreyValue);
