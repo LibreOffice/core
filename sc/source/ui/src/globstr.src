@@ -589,6 +589,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "$1 rows, $2 columns selected";
     };
+    String STR_FILTER_SELCOUNT
+    {
+        Text [ en-US ] = "$1 of $2 records found";
+    };
     String STR_COLUMN
     {
         Text [ en-US ] = "Column" ;

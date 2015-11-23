@@ -705,7 +705,9 @@
 
 #define STR_FUNCTIONS_FOUND             531
 
-#define SC_GLOBSTR_STR_COUNT            532     /**< the count of permanently resident strings */
+#define STR_FILTER_SELCOUNT             532
+
+#define SC_GLOBSTR_STR_COUNT            533     /**< the count of permanently resident strings */
 
 #endif
 
