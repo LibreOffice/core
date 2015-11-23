@@ -139,7 +139,7 @@ namespace
         double y;
         double width;
         double height;
-    }
+    };
 #endif
 
     cairo_rectangle_int_t getFillDamage(cairo_t* cr)
