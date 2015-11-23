@@ -36,7 +36,7 @@ LibreOfficeKitPartMode;
 typedef enum
 {
     LOK_TILEMODE_RGBA,
-    LOK_TILEMODE_ARGB
+    LOK_TILEMODE_BGRA
 }
 LibreOfficeKitTileMode;
 
