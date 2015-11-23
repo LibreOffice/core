@@ -189,11 +189,8 @@ ShellResource::ShellResource()
     aCalc_Default( SW_RES( STR_CALC_DEFAULT ) ),
     aCalc_Error( SW_RES( STR_CALC_ERROR ) ),
 
-    aGetRefField_Up( SW_RES( STR_GETREFFLD_UP ) ),
-    aGetRefField_Down( SW_RES( STR_GETREFFLD_DOWN ) ),
     // #i81002#
     aGetRefField_RefItemNotFound( SW_RES( STR_GETREFFLD_REFITEMNOTFOUND ) ),
-    aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
     aFixedStr( SW_RES( STR_FIELD_FIXED )),
     sDurationFormat( SW_RES( STR_DURATION_FORMAT )),

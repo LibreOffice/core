@@ -120,8 +120,6 @@ public:
     sal_Int32 nEnd;
     sal_Int32 nWordStart;
     sal_Int32 nWordLen;
-    sal_Int32 nHyphPos;
-    sal_uInt16 nMinTrail;
 
     SwInterHyphInfo( const Point &rCrsrPos, sal_Int32 nStartPos = 0,
         sal_Int32 nLength = SAL_MAX_INT32 )
@@ -131,7 +129,6 @@ public:
         , nStart(nStartPos)
         , nEnd(nLength == SAL_MAX_INT32 ? SAL_MAX_INT32 : nStartPos + nLength)
         , nWordStart(0), nWordLen(0)
-        , nHyphPos(0), nMinTrail(0)
     {
     }
     sal_Int32 GetEnd() const

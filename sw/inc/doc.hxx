@@ -309,8 +309,6 @@ class SW_DLLPUBLIC SwDoc :
     SwDBManager         *mpDBManager;            /**< Pointer to the DBManager for
                                          evaluation of DB-fields. */
 
-    SwDoc           *mpGlossaryDoc;      //< Pointer to glossary-document.
-
     SwNumRule       *mpOutlineRule;
     SwFootnoteInfo       *mpFootnoteInfo;
     SwEndNoteInfo   *mpEndNoteInfo;
@@ -352,16 +350,12 @@ private:
 
     // other
 
-    sal_uInt16  mnUndoCnt;           //< Count of Undo Actions.
-    sal_uInt16  mnUndoSttEnd;        //< != 0 -> within parentheses.
-
     sal_uInt32  mnRsid;              //< current session ID of the document
     sal_uInt32  mnRsidRoot;          //< session ID when the document was created
 
     sal_Int32   mReferenceCount;
 
-    bool mbGlossDoc              : 1;    //< TRUE: glossary document.
-    bool mbDtor                  : 1;    /**< TRUE: is in SwDoc DTOR.
+   bool mbDtor                  : 1;    /**< TRUE: is in SwDoc DTOR.
                                                and unfortunately temorarily also in
                                                SwSwgReader::InLayout() when flawed
                                                frames need deletion. */
@@ -376,7 +370,6 @@ private:
                                                 View
                                                 notification of OLE-Objects PrtOLENotify() is required. */
     bool mbAllOLENotify          : 1;    //< True: Notification of all objects is required.
-    bool mbIsRedlineMove         : 1;    //< True: Redlines are moved into to / out of the section.
     bool mbInsOnlyTextGlssry      : 1;    //< True: insert 'only text' glossary into doc
     bool mbContains_MSVBasic     : 1;    //< True: MS-VBasic exist is in our storage
     bool mbClipBoard             : 1;    //< TRUE: this document represents the clipboard

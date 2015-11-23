@@ -236,7 +236,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     m_bTopCrsr : 1,
                     m_bAlwaysShowSel : 1,
                     m_bTabColFromDoc : 1,
-                    m_bNumIndentFromDoc : 1, // #i23726#
                     m_bTabRowFromDoc : 1,
                     m_bSetTabColFromDoc : 1 ,
                     m_bSetTabRowFromDoc : 1,

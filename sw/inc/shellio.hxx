@@ -460,7 +460,6 @@ typedef tools::SvRef<Writer> WriterRef;
 class SW_DLLPUBLIC StgWriter : public Writer
 {
 protected:
-    OUString aFltName;
     tools::SvRef<SotStorage> pStg;
     css::uno::Reference < css::embed::XStorage > xStg;
 

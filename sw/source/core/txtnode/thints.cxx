@@ -87,7 +87,6 @@ using namespace ::com::sun::star::i18n;
 
 SwpHints::SwpHints()
     : m_pHistory(nullptr)
-    , m_bFontChange(true)
     , m_bInSplitNode(false)
     , m_bCalcHiddenParaField(false)
     , m_bHasHiddenParaField(false)

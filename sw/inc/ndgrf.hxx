@@ -40,7 +40,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
     GraphicObject *mpReplacementGraphic;
     tools::SvRef<sfx2::SvBaseLink> refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
-    OUString aLowResGrf;                   ///< HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
     bool bInSwapIn              :1;
 
     bool bGraphicArrived        :1;

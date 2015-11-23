@@ -89,7 +89,6 @@ private:
 
     SwRegHistory* m_pHistory;                   ///< for Undo
 
-    bool          m_bFontChange          : 1;   ///< font change
     /// true: the Node is in Split and Frames are moved
     bool          m_bInSplitNode         : 1;
     /// m_bHasHiddenParaField is invalid, call CalcHiddenParaField()

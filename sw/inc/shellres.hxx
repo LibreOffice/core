@@ -41,13 +41,8 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     OUString        aCalc_Default;
     OUString        aCalc_Error;
 
-    // For GetRefField - up/down.
-    OUString        aGetRefField_Up;
-    OUString        aGetRefField_Down;
     // For GetRefField - referenced item not found.
     OUString        aGetRefField_RefItemNotFound;
-    // For dynamic menu - string "all".
-    OUString        aStrAllPageHeadFoot;
     // For some list boxes - string "none"
     OUString        aStrNone;
     // For fixed fields.
