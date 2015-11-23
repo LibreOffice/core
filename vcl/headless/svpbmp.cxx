@@ -43,8 +43,6 @@ bool SvpSalBitmap::Create( const Size& rSize,
 {
     SAL_INFO( "vcl.headless", "SvpSalBitmap::Create(" << rSize.Width() << "," << rSize.Height() << "," << nBitCount << ")" );
 
-    SvpSalInstance* pInst = SvpSalInstance::s_pDefaultInstance;
-    assert( pInst );
     basebmp::Format nFormat = SvpSalInstance::getBaseBmpFormatForBitCount( nBitCount );
 
     B2IVector aSize( rSize.Width(), rSize.Height() );

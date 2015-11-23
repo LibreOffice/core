@@ -65,8 +65,6 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         aDevSize.setY( 1 );
     if( ! m_aDevice.get() || m_aDevice->getSize() != aDevSize )
     {
-        SvpSalInstance* pInst = SvpSalInstance::s_pDefaultInstance;
-        assert( pInst );
         basebmp::Format nFormat = SvpSalInstance::getBaseBmpFormatForDeviceFormat(m_eFormat);
         sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(nFormat, aDevSize.getX());
 
