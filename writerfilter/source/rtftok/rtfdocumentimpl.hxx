@@ -479,6 +479,8 @@ private:
     bool m_bNeedPar;
     /// If set, an empty paragraph will be added at the end of the document.
     bool m_bNeedFinalPar;
+    /// If the document needs a page break
+    bool m_bNeedTableBreak;
     /// The list table and list override table combined.
     RTFSprms m_aListTableSprms;
     /// The settings table attributes.

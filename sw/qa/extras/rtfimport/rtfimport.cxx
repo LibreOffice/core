@@ -2373,6 +2373,12 @@ DECLARE_RTFIMPORT_TEST(testTdf59454, "tdf59454.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFIMPORT_TEST(testBreakpageTable, "breakpage-table.rtf")
+{
+    // This was 1, missing break with new page and table
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
