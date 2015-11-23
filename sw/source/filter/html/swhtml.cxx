@@ -61,6 +61,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/flstitem.hxx>
+#include <svx/unobrushitemhelper.hxx>
 
 #include <frmatr.hxx>
 #include <charatr.hxx>
@@ -2870,6 +2871,20 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                     OSL_ENSURE( false,
                             "LRSpace ueber mehrere Absaetze gesetzt!" );
                     // no break (shouldn't reach this point anyway)
+
+                // tdf#94088 expand RES_BACKGROUND to the new fill attribute
+                // definitions in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST].
+                // This is the right place in the future if the adapted fill attributes
+                // may be handled more directly in HTML import to handle them.
+                case RES_BACKGROUND:
+                {
+                    const SvxBrushItem& rBrush = static_cast< SvxBrushItem& >(*pAttr->pItem);
+                    SfxItemSet aNewSet(m_pDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+
+                    setSvxBrushItemAsFillAttributesToTargetSet(rBrush, aNewSet);
+                    m_pDoc->getIDocumentContentOperations().InsertItemSet(*pAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
+                    break;
+                }
                 default:
 
                     // ggfs. ein Bookmark anspringen

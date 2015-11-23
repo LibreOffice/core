@@ -3904,7 +3904,6 @@ void SvxBrushItem::PurgeMedium() const
     DELETEZ( pImpl->pStream );
 }
 
-
 const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) const
 {
     if ( bLoadAgain && !maStrLink.isEmpty() && !pImpl->pGraphicObject )
@@ -3913,26 +3912,53 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         if (SvtSecurityOptions().isUntrustedReferer(referer)) {
             return nullptr;
         }
+
+        // tdf#94088 prepare graphic and state
+        Graphic aGraphic;
+        bool bGraphicLoaded = false;
+
+        // try to create stream directly from given URL
         pImpl->pStream = utl::UcbStreamHelper::CreateStream( maStrLink, STREAM_STD_READ );
+
+        // tdf#94088 if we have a stream, try to load it directly as graphic
         if( pImpl->pStream && !pImpl->pStream->GetError() )
         {
-            Graphic aGraphic;
-            int nRes;
-            pImpl->pStream->Seek( STREAM_SEEK_TO_BEGIN );
-            nRes = GraphicFilter::GetGraphicFilter().
-                ImportGraphic( aGraphic, maStrLink, *pImpl->pStream,
-                               GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::DontSetLogsizeForJpeg );
-
-            if( nRes != GRFILTER_OK )
+            if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, maStrLink, *pImpl->pStream,
+                GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::DontSetLogsizeForJpeg ))
             {
-                bLoadAgain = false;
+                bGraphicLoaded = true;
             }
-            else
+        }
+
+        // tdf#94088 if no succeeded, try if the string (which is not epty) contains
+        // a 'data:' scheme url and try to load that (embedded graphics)
+        if(!bGraphicLoaded)
+        {
+            INetURLObject aGraphicURL( maStrLink );
+
+            if( INetProtocol::Data == aGraphicURL.GetProtocol() )
             {
-                pImpl->pGraphicObject = new GraphicObject;
-                pImpl->pGraphicObject->SetGraphic( aGraphic );
-                const_cast < SvxBrushItem*> (this)->ApplyGraphicTransparency_Impl();
-             }
+                std::unique_ptr<SvMemoryStream> const pStream(aGraphicURL.getData());
+                if (pStream)
+                {
+                    if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *pStream))
+                    {
+                        bGraphicLoaded = true;
+
+                        // tdf#94088 delete the no longer needed data scheme URL which
+                        // is potentially pretty // large, containing a base64 encoded copy of the graphic
+                        const_cast< SvxBrushItem* >(this)->maStrLink.clear();
+                    }
+                }
+            }
+        }
+
+        // tdf#94088 when we got a graphic, set it
+        if(bGraphicLoaded && GRAPHIC_NONE != aGraphic.GetType())
+        {
+            pImpl->pGraphicObject = new GraphicObject;
+            pImpl->pGraphicObject->SetGraphic( aGraphic );
+            const_cast < SvxBrushItem*> (this)->ApplyGraphicTransparency_Impl();
         }
         else
         {
