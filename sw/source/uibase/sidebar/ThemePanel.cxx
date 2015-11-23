@@ -108,13 +108,11 @@ public:
 
 class StyleSet
 {
-    OUString maName;
     std::vector<StyleRedefinition> maStyles;
 
 public:
-    explicit StyleSet(const OUString& aName)
-        : maName(aName)
-        , maStyles()
+    explicit StyleSet()
+        : maStyles()
     {}
 
     void add(StyleRedefinition aRedefinition)
@@ -137,7 +135,7 @@ public:
 
 StyleSet setupThemes()
 {
-    StyleSet aSet("Default");
+    StyleSet aSet;
 
     {
         StyleRedefinition aRedefinition("Heading 1");
@@ -428,24 +426,19 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 namespace sw { namespace sidebar {
 
 VclPtr<vcl::Window> ThemePanel::Create (vcl::Window* pParent,
-                                        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                        SfxBindings* pBindings)
+                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", nullptr, 0);
     if (!rxFrame.is())
         throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", nullptr, 1);
-    if (pBindings == nullptr)
-        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<ThemePanel>::Create(pParent, rxFrame, pBindings);
+    return VclPtr<ThemePanel>::Create(pParent, rxFrame);
 }
 
 ThemePanel::ThemePanel(vcl::Window* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                       SfxBindings* pBindings)
+                       const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "ThemePanel", "modules/swriter/ui/sidebartheme.ui", rxFrame)
-    , mpBindings(pBindings)
     , maColorSets()
 {
     get(mpListBoxFonts, "listbox_fonts");

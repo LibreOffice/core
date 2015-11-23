@@ -156,13 +156,13 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/StylePresetsPanel"))
     {
-        VclPtr<vcl::Window> pPanel = sw::sidebar::StylePresetsPanel::Create(pParentWindow, xFrame, pBindings);
+        VclPtr<vcl::Window> pPanel = sw::sidebar::StylePresetsPanel::Create(pParentWindow, xFrame);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
     }
     else if (rsResourceURL.endsWith("/ThemePanel"))
     {
-        VclPtr<vcl::Window> pPanel = sw::sidebar::ThemePanel::Create(pParentWindow, xFrame, pBindings);
+        VclPtr<vcl::Window> pPanel = sw::sidebar::ThemePanel::Create(pParentWindow, xFrame);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
     }

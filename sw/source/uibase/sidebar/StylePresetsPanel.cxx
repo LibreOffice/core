@@ -144,24 +144,19 @@ BitmapEx CreatePreview(OUString& aUrl, OUString& aName)
 }
 
 VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
-                                        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                        SfxBindings* pBindings)
+                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException("no parent Window given to StylePresetsPanel::Create", nullptr, 0);
     if (!rxFrame.is())
         throw css::lang::IllegalArgumentException("no XFrame given to StylePresetsPanel::Create", nullptr, 1);
-    if (pBindings == nullptr)
-        throw css::lang::IllegalArgumentException("no SfxBindings given to StylePresetsPanel::Create", nullptr, 2);
 
-    return VclPtr<StylePresetsPanel>::Create(pParent, rxFrame, pBindings);
+    return VclPtr<StylePresetsPanel>::Create(pParent, rxFrame);
 }
 
 StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
-                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                               SfxBindings* pBindings)
+                               const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame)
-    , mpBindings(pBindings)
 {
     get(mpValueSet, "valueset");
 
@@ -187,7 +182,7 @@ void StylePresetsPanel::RefreshList()
                 OUString aURL = aTemplates.GetPath(i,j);
                 BitmapEx aPreview = CreatePreview(aURL, aName);
                 mpValueSet->InsertItem(j, Image(aPreview), aName);
-                maTemplateEntries.push_back(std::unique_ptr<TemplateEntry>(new TemplateEntry(aName, aURL)));
+                maTemplateEntries.push_back(std::unique_ptr<TemplateEntry>(new TemplateEntry(aURL)));
                 mpValueSet->SetItemData(j, maTemplateEntries.back().get());
             }
         }
