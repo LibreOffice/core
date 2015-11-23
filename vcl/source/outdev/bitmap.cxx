@@ -1297,44 +1297,6 @@ void OutputDevice::DrawTransformedBitmapEx(
     }
 }
 
-namespace
-{
-    BitmapEx makeDisabledBitmap(const Bitmap &rBitmap)
-    {
-        const Size aTotalSize( rBitmap.GetSizePixel() );
-        Bitmap aGrey( aTotalSize, 8, &Bitmap::GetGreyPalette( 256 ) );
-        AlphaMask aGreyAlphaMask( aTotalSize );
-        BitmapReadAccess*  pBmp = const_cast<Bitmap&>(rBitmap).AcquireReadAccess();
-        BitmapWriteAccess* pGrey = aGrey.AcquireWriteAccess();
-        BitmapWriteAccess* pGreyAlphaMask = aGreyAlphaMask.AcquireWriteAccess();
-
-        if( pBmp && pGrey && pGreyAlphaMask )
-        {
-            BitmapColor aGreyVal( 0 );
-            BitmapColor aGreyAlphaMaskVal( 0 );
-            const int nLeft = 0, nRight = aTotalSize.Width();
-            const int nTop = 0, nBottom = nTop + aTotalSize.Height();
-
-            for( int nY = nTop; nY < nBottom; ++nY )
-            {
-                for( int nX = nLeft; nX < nRight; ++nX )
-                {
-                    aGreyVal.SetIndex( pBmp->GetLuminance( nY, nX ) );
-                    pGrey->SetPixel( nY, nX, aGreyVal );
-
-                    aGreyAlphaMaskVal.SetIndex( static_cast< sal_uInt8 >( 128ul ) );
-                    pGreyAlphaMask->SetPixel( nY, nX, aGreyAlphaMaskVal );
-                }
-            }
-        }
-
-        Bitmap::ReleaseAccess( pBmp );
-        Bitmap::ReleaseAccess( pGrey );
-        Bitmap::ReleaseAccess( pGreyAlphaMask );
-        return BitmapEx( aGrey, aGreyAlphaMask );
-    }
-}
-
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
 {
     assert(!is_double_buffered_window());
@@ -1349,52 +1311,13 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
 
     bool bIsSizeValid = rSize.getWidth() != 0 && rSize.getHeight() != 0;
 
-    if( rImage.mpImplData && !ImplIsRecordLayout() )
+    if (!ImplIsRecordLayout())
     {
-        switch( rImage.mpImplData->meType )
-        {
-            case IMAGETYPE_BITMAP:
-            {
-                const Bitmap &rBitmap = *static_cast< Bitmap* >( rImage.mpImplData->mpData );
-                if( nStyle & DrawImageFlags::Disable )
-                {
-                    if ( bIsSizeValid )
-                        DrawBitmapEx( rPos, rSize, makeDisabledBitmap(rBitmap) );
-                    else
-                        DrawBitmapEx( rPos, makeDisabledBitmap(rBitmap) );
-                }
-                else
-                {
-                    if ( bIsSizeValid )
-                        DrawBitmap( rPos, rSize, rBitmap );
-                    else
-                        DrawBitmap( rPos, rBitmap );
-                }
-            }
-            break;
-
-            case IMAGETYPE_IMAGE:
-            {
-                ImplImageData* pData = static_cast< ImplImageData* >( rImage.mpImplData->mpData );
-
-                if ( !pData->mpImageBitmap )
-                {
-                    const Size aSize( pData->maBmpEx.GetSizePixel() );
-
-                    pData->mpImageBitmap = new ImplImageBmp;
-                    pData->mpImageBitmap->Create( pData->maBmpEx, aSize.Width(), aSize.Height(), 1 );
-                }
-
-                if ( bIsSizeValid )
-                    pData->mpImageBitmap->Draw( this, rPos, nStyle, &rSize );
-                else
-                    pData->mpImageBitmap->Draw( this, rPos, nStyle );
-            }
-            break;
-
-            default:
-            break;
-        }
+        Image& rNonConstImage = const_cast<Image&>(rImage);
+        if (bIsSizeValid)
+            rNonConstImage.Draw(this, rPos, nStyle, &rSize);
+        else
+            rNonConstImage.Draw(this, rPos, nStyle);
     }
 }
 

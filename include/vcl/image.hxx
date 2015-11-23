@@ -25,6 +25,8 @@
 #include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <vcl/bitmapex.hxx>
+#include <vcl/outdev.hxx>
+
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <vector>
@@ -70,6 +72,8 @@ public:
     Image&          operator=( const Image& rImage );
     bool            operator==( const Image& rImage ) const;
     bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
+
+    void Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = nullptr);
 
 private:
 

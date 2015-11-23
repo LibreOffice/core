@@ -31,23 +31,14 @@
 
 ImplImage::ImplImage()
     : mnRefCount(1)
-    , mpData(nullptr)
-    , meType(IMAGETYPE_BITMAP)
+    , maBitmapChecksum(0)
+    , mpBitmapEx()
+    , maDisabledBitmapEx()
 {
 }
 
 ImplImage::~ImplImage()
 {
-    switch( meType )
-    {
-        case IMAGETYPE_BITMAP:
-            delete static_cast< Bitmap* >( mpData );
-        break;
-
-        case IMAGETYPE_IMAGE:
-            delete static_cast< ImplImageData* >( mpData );
-        break;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

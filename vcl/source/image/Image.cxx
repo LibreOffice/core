@@ -33,6 +33,8 @@
 #include <vcl/implimagetree.hxx>
 #include <image.h>
 
+#include <vcl/BitmapProcessor.hxx>
+
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>
 #endif
@@ -153,47 +155,26 @@ Image::Image( const OUString &rFileUrl ) :
 
 Image::~Image()
 {
-
     if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
         delete mpImplData;
 }
 
-void Image::ImplInit( const BitmapEx& rBmpEx )
+void Image::ImplInit(const BitmapEx& rBitmapEx)
 {
-    if( !rBmpEx.IsEmpty() )
+    if (!rBitmapEx.IsEmpty())
     {
         mpImplData = new ImplImage;
-
-        if( rBmpEx.GetTransparentType() == TRANSPARENT_NONE )
-        {
-            mpImplData->meType = IMAGETYPE_BITMAP;
-            mpImplData->mpData = new Bitmap( rBmpEx.GetBitmap() );
-        }
-        else
-        {
-            mpImplData->meType = IMAGETYPE_IMAGE;
-            mpImplData->mpData = new ImplImageData( rBmpEx );
-        }
+        mpImplData->mpBitmapEx.reset(new BitmapEx(rBitmapEx));
     }
 }
 
 Size Image::GetSizePixel() const
 {
-
     Size aRet;
 
-    if( mpImplData )
+    if (mpImplData && mpImplData->mpBitmapEx)
     {
-        switch( mpImplData->meType )
-        {
-            case IMAGETYPE_BITMAP:
-                aRet = static_cast< Bitmap* >( mpImplData->mpData )->GetSizePixel();
-            break;
-
-            case IMAGETYPE_IMAGE:
-                aRet = static_cast< ImplImageData* >( mpImplData->mpData )->maBmpEx.GetSizePixel();
-            break;
-        }
+        aRet = mpImplData->mpBitmapEx->GetSizePixel();
     }
 
     return aRet;
@@ -201,21 +182,11 @@ Size Image::GetSizePixel() const
 
 BitmapEx Image::GetBitmapEx() const
 {
-
     BitmapEx aRet;
 
-    if( mpImplData )
+    if (mpImplData && mpImplData->mpBitmapEx)
     {
-        switch( mpImplData->meType )
-        {
-            case IMAGETYPE_BITMAP:
-                aRet = *static_cast< Bitmap* >( mpImplData->mpData );
-            break;
-
-            case IMAGETYPE_IMAGE:
-                aRet = static_cast< ImplImageData* >( mpImplData->mpData )->maBmpEx;
-            break;
-        }
+        aRet = BitmapEx(*mpImplData->mpBitmapEx);
     }
 
     return aRet;
@@ -242,36 +213,80 @@ Image& Image::operator=( const Image& rImage )
     return *this;
 }
 
-bool Image::operator==( const Image& rImage ) const
+bool Image::operator==(const Image& rImage) const
 {
-
     bool bRet = false;
 
-    if( rImage.mpImplData == mpImplData )
+    if (rImage.mpImplData == mpImplData)
         bRet = true;
-    else if( !rImage.mpImplData || !mpImplData )
+    else if (!rImage.mpImplData || !mpImplData)
         bRet = false;
-    else if( rImage.mpImplData->mpData == mpImplData->mpData )
-        bRet = true;
-    else if( rImage.mpImplData->meType == mpImplData->meType )
-    {
-        switch( mpImplData->meType )
-        {
-            case IMAGETYPE_BITMAP:
-                bRet = ( *static_cast< Bitmap* >( rImage.mpImplData->mpData ) == *static_cast< Bitmap* >( mpImplData->mpData ) );
-            break;
-
-            case IMAGETYPE_IMAGE:
-                bRet = static_cast< ImplImageData* >( rImage.mpImplData->mpData )->IsEqual( *static_cast< ImplImageData* >( mpImplData->mpData ) );
-            break;
-
-            default:
-                bRet = false;
-            break;
-        }
-    }
+    else if (rImage.mpImplData->mpBitmapEx == mpImplData->mpBitmapEx)
+        bRet = (rImage.mpImplData->mpBitmapEx == mpImplData->mpBitmapEx);
 
     return bRet;
+}
+
+void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize)
+{
+    if (mpImplData == nullptr || !mpImplData->mpBitmapEx || !pOutDev->IsDeviceOutputNecessary())
+        return;
+
+    const Point aSrcPos(0, 0);
+    Size aBitmapSizePixel = mpImplData->mpBitmapEx->GetSizePixel();
+
+    Size aOutSize = pSize ? *pSize : pOutDev->PixelToLogic(aBitmapSizePixel);
+
+    if (nStyle & DrawImageFlags::Disable)
+    {
+        BitmapChecksum aChecksum = mpImplData->mpBitmapEx->GetChecksum();
+        if (mpImplData->maBitmapChecksum != aChecksum)
+        {
+            mpImplData->maBitmapChecksum = aChecksum;
+            mpImplData->maDisabledBitmapEx = BitmapProcessor::createDisabledImage(*mpImplData->mpBitmapEx);
+        }
+        pOutDev->DrawBitmapEx(rPos, aOutSize, aSrcPos, aBitmapSizePixel, mpImplData->maDisabledBitmapEx);
+    }
+    else
+    {
+        if (nStyle & (DrawImageFlags::ColorTransform | DrawImageFlags::Highlight |
+                      DrawImageFlags::Deactive | DrawImageFlags::SemiTransparent))
+        {
+            BitmapEx aTempBitmapEx(*mpImplData->mpBitmapEx);
+
+            if (nStyle & (DrawImageFlags::Highlight | DrawImageFlags::Deactive))
+            {
+                const StyleSettings& rSettings = pOutDev->GetSettings().GetStyleSettings();
+                Color aColor;
+                if (nStyle & DrawImageFlags::Highlight)
+                    aColor = rSettings.GetHighlightColor();
+                else
+                    aColor = rSettings.GetDeactiveColor();
+
+                BitmapProcessor::colorizeImage(aTempBitmapEx, aColor);
+            }
+
+            if (nStyle & DrawImageFlags::SemiTransparent)
+            {
+                if (aTempBitmapEx.IsTransparent())
+                {
+                    Bitmap aAlphaBmp(aTempBitmapEx.GetAlpha().GetBitmap());
+                    aAlphaBmp.Adjust(50);
+                    aTempBitmapEx = BitmapEx(aTempBitmapEx.GetBitmap(), AlphaMask(aAlphaBmp));
+                }
+                else
+                {
+                    sal_uInt8 cErase = 128;
+                    aTempBitmapEx = BitmapEx(aTempBitmapEx.GetBitmap(), AlphaMask(aTempBitmapEx.GetSizePixel(), &cErase));
+                }
+            }
+            pOutDev->DrawBitmapEx(rPos, aOutSize, aSrcPos, aTempBitmapEx.GetSizePixel(), aTempBitmapEx);
+        }
+        else
+        {
+            pOutDev->DrawBitmapEx(rPos, aOutSize, aSrcPos, mpImplData->mpBitmapEx->GetSizePixel(), *mpImplData->mpBitmapEx);
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

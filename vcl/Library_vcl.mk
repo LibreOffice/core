@@ -330,8 +330,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/image/ImageList \
     vcl/source/image/ImageRepository \
     vcl/source/image/ImplImage \
-    vcl/source/image/ImplImageBmp \
-    vcl/source/image/ImplImageData \
     vcl/source/image/ImplImageList \
     vcl/source/image/ImplImageTree \
     vcl/source/helper/canvasbitmap \
