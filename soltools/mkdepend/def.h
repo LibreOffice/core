@@ -128,7 +128,6 @@ struct  inclist {
     char        *i_file;       /* path name of the include file */
     struct inclist  **i_list;  /* list of files it itself includes */
     int         i_listlen;     /* length of i_list */
-    boolean     i_defchecked;  /* whether defines have been checked */
     boolean     i_notified;    /* whether we have revealed includes */
     boolean     i_marked;      /* whether it's in the makefile */
     boolean     i_searched;    /* whether we have read this */
