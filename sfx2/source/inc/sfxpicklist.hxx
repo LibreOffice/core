@@ -33,13 +33,11 @@ class SfxPickList : public SfxListener
 {
     struct PickListEntry
     {
-        PickListEntry( const OUString& _aName, const OUString& _aFilter, const OUString& _aTitle ) :
-            aName( _aName ), aFilter( _aFilter ), aTitle( _aTitle ) {}
+        PickListEntry( const OUString& _aName, const OUString& _aFilter ) :
+            aName( _aName ), aFilter( _aFilter ) {}
 
         OUString aName;
         OUString aFilter;
-        OUString aTitle;
-        OUString aOptions;
     };
 
     std::vector< PickListEntry* >   m_aPicklistVector;

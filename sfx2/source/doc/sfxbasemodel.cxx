@@ -204,7 +204,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     bool                                                       m_bClosing               ;
     bool                                                       m_bSaving                ;
     bool                                                       m_bSuicide               ;
-    bool                                                       m_bInitialized           ;
     bool                                                       m_bExternalTitle         ;
     bool                                                       m_bModifiedSinceLastSave ;
     Reference< view::XPrintable>                               m_xPrintable             ;
@@ -227,7 +226,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bClosing              ( false     )
             ,   m_bSaving               ( false     )
             ,   m_bSuicide              ( false     )
-            ,   m_bInitialized          ( false     )
             ,   m_bExternalTitle        ( false     )
             ,   m_bModifiedSinceLastSave( false     )
             ,   m_pStorageModifyListen  ( nullptr          )

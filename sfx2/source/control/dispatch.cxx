@@ -126,7 +126,6 @@ struct SfxDispatcher_Impl
     SfxObjectBars_Impl   aObjBars[SFX_OBJECTBAR_MAX];
     SfxObjectBars_Impl   aFixedObjBars[SFX_OBJECTBAR_MAX];
     std::vector<sal_uInt32> aChildWins;
-    sal_uInt32           nEventId;      // EventId UserEvent
     bool                 bNoUI;         // UI only from Parent Dispatcher
     bool                 bReadOnly;     // Document is ReadOnly
     bool                 bQuiet;        // Only use parent dispatcher

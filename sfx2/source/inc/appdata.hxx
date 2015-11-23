@@ -98,8 +98,6 @@ public:
 
     // global pointers
     SfxItemPool*                        pPool;
-    SvtSaveOptions*                     pSaveOptions;
-    SvtHelpOptions*                     pHelpOptions;
 
     // "current" functionality
     SfxProgress*                        pProgress;
@@ -117,7 +115,6 @@ public:
     SfxViewFrameArr_Impl*       pViewFrames;
     SfxViewShellArr_Impl*       pViewShells;
     SfxObjectShellArr_Impl*     pObjShells;
-    ResMgr*                     pSfxResManager;
     SfxBasicManagerHolder*      pBasicManager;
     SfxBasicManagerCreationListener*
                                 pBasMgrListener;
@@ -127,14 +124,10 @@ public:
     SfxInterface**              pInterfaces;
     ::rtl::Reference<sfx2::sidebar::Theme> m_pSidebarTheme;
 
-    sal_uInt16                      nDocNo;             // current Doc-Number (AutoName)
-    sal_uInt16                      nInterfaces;
+    sal_uInt16                  nInterfaces;
 
-    bool                        bDispatcherLocked:1;    // do nothing
     bool                        bDowning:1;   // sal_True on Exit and afterwards
     bool                        bInQuit : 1;
-    bool                        bInvalidateOnUnlock : 1;
-    bool                        bODFVersionWarningLater : 1;
 
                                 SfxAppData_Impl( SfxApplication* );
                                 ~SfxAppData_Impl();

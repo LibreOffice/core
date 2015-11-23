@@ -203,7 +203,6 @@ public:
     const SfxFilter* m_pFilter;
     std::unique_ptr<SfxFilter> m_pCustomFilter;
 
-    SfxMedium*       pAntiImpl;
     SvStream* m_pInStream;
     SvStream* m_pOutStream;
 
@@ -239,7 +238,7 @@ public:
 
     util::DateTime m_aDateTime;
 
-    explicit SfxMedium_Impl( SfxMedium* pAntiImplP );
+    explicit SfxMedium_Impl();
     ~SfxMedium_Impl();
 
     OUString getFilterMimeType()
@@ -247,7 +246,7 @@ public:
 };
 
 
-SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
+SfxMedium_Impl::SfxMedium_Impl() :
     m_nStorOpenMode(SFX_STREAM_READWRITE),
     m_eError(SVSTREAM_OK),
     bUpdatePickList(true),
@@ -272,7 +271,6 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_pSet(nullptr),
     m_pURLObj(nullptr),
     m_pFilter(nullptr),
-    pAntiImpl( pAntiImplP ),
     m_pInStream(nullptr),
     m_pOutStream(nullptr),
     pOrigFilter( nullptr ),
@@ -2602,7 +2600,7 @@ void SfxMedium::Init_Impl()
 }
 
 
-SfxMedium::SfxMedium() : pImp(new SfxMedium_Impl(this))
+SfxMedium::SfxMedium() : pImp(new SfxMedium_Impl)
 {
     Init_Impl();
 }
@@ -2943,7 +2941,7 @@ void SfxMedium::CompleteReOpen()
 }
 
 SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
-    pImp(new SfxMedium_Impl(this))
+    pImp(new SfxMedium_Impl)
 {
     pImp->m_pSet = pInSet;
     pImp->m_pFilter = pFlt;
@@ -2953,7 +2951,7 @@ SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, const SfxFilte
 }
 
 SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
-    pImp(new SfxMedium_Impl(this))
+    pImp(new SfxMedium_Impl)
 {
     pImp->m_pSet = pInSet;
     SfxItemSet * s = GetItemSet();
@@ -2967,7 +2965,7 @@ SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode
 }
 
 SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
-    pImp(new SfxMedium_Impl(this))
+    pImp(new SfxMedium_Impl)
 {
     SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     pImp->m_pSet = pParams;
@@ -3037,7 +3035,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const SfxItemSet* p ) :
-    pImp(new SfxMedium_Impl(this))
+    pImp(new SfxMedium_Impl)
 {
     OUString aType = SfxFilter::GetTypeFromStorage(rStor);
     pImp->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4EA( aType );
@@ -3056,7 +3054,7 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
 
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const OUString &rTypeName, const SfxItemSet* p ) :
-    pImp(new SfxMedium_Impl(this))
+    pImp(new SfxMedium_Impl)
 {
     pImp->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4EA( rTypeName );
     DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );

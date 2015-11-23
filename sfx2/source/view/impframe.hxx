@@ -40,14 +40,12 @@ public:
     sal_uInt32                nType;
     SfxViewFrame*             pCurrentViewFrame;
     SfxFrameDescriptor*       pDescr;
-    sal_uInt16                nLocks;
     bool                      bClosing : 1;
     bool                      bPrepClosing : 1;
     bool                      bInCancelTransfers : 1;
     bool                      bOwnsBindings : 1;
     bool                      bReleasingComponent : 1;
     bool                      bInPlace : 1;
-    SfxFrame*                 pFrame;
     SfxWorkWindow*            pWorkWin;
     SvBorder                  aBorder;
     // formerly SfxTopFrame
@@ -56,18 +54,16 @@ public:
     bool                      bLockResize;
     bool                      bMenuBarOn;
 
-    explicit SfxFrame_Impl( SfxFrame* pAntiImplP )
+    explicit SfxFrame_Impl()
         :nType( 0L )
         ,pCurrentViewFrame( nullptr )
         ,pDescr( nullptr )
-        ,nLocks( 0 )
         ,bClosing(false)
         ,bPrepClosing(false)
         ,bInCancelTransfers( false )
         ,bOwnsBindings( false )
         ,bReleasingComponent( false )
         ,bInPlace( false )
-        ,pFrame( pAntiImplP )
         ,pWorkWin( nullptr )
         ,pExternalContainerWindow( nullptr )
         ,bHidden( false )

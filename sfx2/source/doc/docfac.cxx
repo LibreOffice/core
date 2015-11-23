@@ -65,17 +65,12 @@ struct SfxObjectFactory_Impl
     OUString             aServiceName;
     SfxFilterContainer*         pFilterContainer;
     SfxModule*                  pModule;
-    sal_uInt16                  nImageId;
-    OUString                    aStandardTemplate;
-    bool                    bTemplateInitialized;
     SvGlobalName                aClassName;
 
     SfxObjectFactory_Impl() :
         pNameResId          ( nullptr ),
         pFilterContainer    ( nullptr ),
-        pModule             ( nullptr ),
-        nImageId            ( 0 ),
-        bTemplateInitialized( false )
+        pModule             ( nullptr )
         {}
 };
 

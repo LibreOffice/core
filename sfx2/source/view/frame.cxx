@@ -83,7 +83,7 @@ SfxPoolItem* SfxUnoFrameItem::CreateDefault()
 }
 void SfxFrame::Construct_Impl()
 {
-    pImp = new SfxFrame_Impl( this );
+    pImp = new SfxFrame_Impl;
     if ( !pFramesArr_Impl )
         pFramesArr_Impl = new SfxFrameArr_Impl;
     pFramesArr_Impl->push_back( this );

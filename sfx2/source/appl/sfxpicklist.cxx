@@ -300,7 +300,7 @@ void SfxPickList::CreatePickListEntries()
         aURL.SetSmartURL( sURL );
         aURL.SetPass( OUString() );
 
-        PickListEntry *pPick = new PickListEntry( aURL.GetMainURL( INetURLObject::NO_DECODE ), sFilter, sTitle );
+        PickListEntry *pPick = new PickListEntry( aURL.GetMainURL( INetURLObject::NO_DECODE ), sFilter );
         m_aPicklistVector.push_back( pPick );
     }
 }

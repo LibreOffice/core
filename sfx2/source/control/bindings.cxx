@@ -85,13 +85,11 @@ typedef std::vector<SfxStateCache*> SfxStateCacheArr_Impl;
 
 struct SfxFoundCache_Impl
 {
-    sal_uInt16      nSlotId;   // the Slot-Id
     sal_uInt16      nWhichId;  // If available: Which-Id, else: nSlotId
     const SfxSlot*  pSlot;     // Pointer to <Master-Slot>
     SfxStateCache*  pCache;    // Pointer to StatusCache, if possible NULL
 
-    SfxFoundCache_Impl(sal_uInt16 nS, sal_uInt16 nW, const SfxSlot *pS, SfxStateCache *pC ):
-        nSlotId(nS),
+    SfxFoundCache_Impl(sal_uInt16 nW, const SfxSlot *pS, SfxStateCache *pC ):
         nWhichId(nW),
         pSlot(pS),
         pCache(pC)
@@ -444,9 +442,7 @@ void SfxBindings::Update_Impl
         // When pCache == NULL and no SlotServer
         // (for example due to locked Dispatcher! ),
         // obviously do not try to update
-        SfxFoundCache_Impl aFoundCache(
-                            pCache->GetId(), 0,
-                            pRealSlot, pCache );
+        SfxFoundCache_Impl aFoundCache(0, pRealSlot, pCache );
         UpdateControllers_Impl( nullptr, aFoundCache, nullptr, SfxItemState::DISABLED);
     }
 }
@@ -1360,7 +1356,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
 
     // the RealSlot is always on
     SfxFoundCache_Impl *pFound = new SfxFoundCache_Impl(
-        pRealSlot->GetSlotId(), pRealSlot->GetWhich(rPool), pRealSlot, pCache );
+        pRealSlot->GetWhich(rPool), pRealSlot, pCache );
     rFound.push_back( pFound );
 
     // Search through the bindings for slots served by the same function. This ,    // will only affect slots which are present in the found interface.
@@ -1420,7 +1416,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
         if ( bInsert && bSameMethod )
         {
             SfxFoundCache_Impl *pFoundCache = new SfxFoundCache_Impl(
-                pSibling->GetSlotId(), pSibling->GetWhich(rPool),
+                pSibling->GetWhich(rPool),
                 pSibling, pSiblingCache );
 
             rFound.push_back( pFoundCache );

@@ -159,8 +159,6 @@ private:
     class DeletionWatcher;
     friend class DeletionWatcher;
 
-    bool mbIgnoreSelect;
-
     void ReadResource();
     void ClearResource();
     void impl_clear();
@@ -202,7 +200,6 @@ protected:
 
     bool bDontUpdate :1;
     bool bIsWater :1;
-    bool bEnabled :1;
     bool bUpdate :1;
     bool bUpdateFamily :1;
     bool bCanEdit :1;

@@ -156,15 +156,6 @@ enum class SfxDockingConfig
 };
 
 
-struct SfxObjectBarList_Impl
-{
-    std::deque<SfxObjectBar_Impl>   aArr;
-    sal_uInt16                  nAct;
-
-    SfxObjectBar_Impl       operator[] ( sal_uInt16 n )
-                            { return aArr[n]; }
-};
-
 #define SFX_SPLITWINDOWS_LEFT   0
 #define SFX_SPLITWINDOWS_TOP    2
 #define SFX_SPLITWINDOWS_RIGHT  1

@@ -657,8 +657,7 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
 // Constructor
 
 SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window* pW, bool )
-    : mbIgnoreSelect(false)
-    , pBindings(pB)
+    : pBindings(pB)
     , pWindow(pW)
     , pModule(nullptr)
     , pIdle(nullptr)
@@ -679,7 +678,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
 
     , bDontUpdate(false)
     , bIsWater(false)
-    , bEnabled(true)
     , bUpdate(false)
     , bUpdateFamily(false)
     , bCanEdit(false)
