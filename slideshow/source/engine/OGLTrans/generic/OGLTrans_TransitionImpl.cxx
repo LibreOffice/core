@@ -81,6 +81,27 @@ void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
         rSceneObjects[i]->prepare();
     }
 
+    m_nProgramObject = makeShader();
+
+    CHECK_GL_ERROR();
+    if( m_nProgramObject ) {
+        glUseProgram( m_nProgramObject );
+        CHECK_GL_ERROR();
+
+        GLint location = glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
+        if( location != -1 ) {
+            glUniform1i( location, 0 );  // texture unit 0
+            CHECK_GL_ERROR();
+        }
+
+        location = glGetUniformLocation( m_nProgramObject, "enteringSlideTexture" );
+        if( location != -1 ) {
+            glUniform1i( location, 2 );  // texture unit 2
+            CHECK_GL_ERROR();
+        }
+    }
+    CHECK_GL_ERROR();
+
     prepareTransition( glLeavingSlideTex, glEnteringSlideTex );
 }
 
@@ -92,6 +113,13 @@ void OGLTransitionImpl::finish()
     }
 
     finishTransition();
+
+    CHECK_GL_ERROR();
+    if( m_nProgramObject ) {
+        glDeleteProgram( m_nProgramObject );
+        m_nProgramObject = 0;
+    }
+    CHECK_GL_ERROR();
 }
 
 void OGLTransitionImpl::prepare( double, double, double, double, double )
@@ -115,9 +143,20 @@ void OGLTransitionImpl::displaySlides_( double nTime, sal_Int32 glLeavingSlideTe
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
+    if( m_nProgramObject ) {
+        GLint location = glGetUniformLocation( m_nProgramObject, "time" );
+        if( location != -1 ) {
+            glUniform1f( location, nTime );
+        }
+    }
+
     glEnable(GL_TEXTURE_2D);
-    displaySlide( nTime, glLeavingSlideTex, maScene.getLeavingSlide(), SlideWidthScale, SlideHeightScale );
-    displaySlide( nTime, glEnteringSlideTex, maScene.getEnteringSlide(), SlideWidthScale, SlideHeightScale );
+    glActiveTexture( GL_TEXTURE2 );
+    glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
+    glActiveTexture( GL_TEXTURE0 );
+
+    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
 }
 
 void OGLTransitionImpl::display( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
@@ -326,118 +365,22 @@ void Iris::finish()
 namespace
 {
 
-class ShaderTransition : public OGLTransitionImpl
-{
-protected:
-    ShaderTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : OGLTransitionImpl(rScene, rSettings)
-    {}
-
-private:
-    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
-    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
-    virtual void finishTransition() override;
-    virtual GLuint makeShader() const;
-
-    void impl_setTextureUniforms();
-    virtual void impl_prepareTransition() = 0;
-    virtual void impl_finishTransition() = 0;
-
-protected:
-    /** GLSL program object
-     */
-    GLuint m_nProgramObject = 0;
-};
-
-void ShaderTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
-                                              double SlideWidthScale, double SlideHeightScale )
-{
-    CHECK_GL_ERROR();
-    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
-
-    if( m_nProgramObject ) {
-        GLint location = glGetUniformLocation( m_nProgramObject, "time" );
-        if( location != -1 ) {
-            glUniform1f( location, nTime );
-        }
-    }
-
-    glActiveTexture( GL_TEXTURE2 );
-    glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
-    glActiveTexture( GL_TEXTURE0 );
-
-    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
-    CHECK_GL_ERROR();
-}
-
-GLuint ShaderTransition::makeShader() const
-{
-    return OpenGLHelper::LoadShaders( "basicVertexShader", "basicFragmentShader" );
-}
-
-void ShaderTransition::prepareTransition( sal_Int32 /* glLeavingSlideTex */, sal_Int32 /* glEnteringSlideTex */ )
-{
-    m_nProgramObject = makeShader();
-
-    impl_setTextureUniforms();
-    impl_prepareTransition();
-}
-
-void ShaderTransition::finishTransition()
-{
-    CHECK_GL_ERROR();
-    impl_finishTransition();
-    CHECK_GL_ERROR();
-    if( m_nProgramObject ) {
-        glDeleteProgram( m_nProgramObject );
-        m_nProgramObject = 0;
-    }
-    CHECK_GL_ERROR();
-}
-
-void ShaderTransition::impl_setTextureUniforms()
-{
-    CHECK_GL_ERROR();
-    if( m_nProgramObject ) {
-        glUseProgram( m_nProgramObject );
-        CHECK_GL_ERROR();
-
-        GLint location = glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
-        if( location != -1 ) {
-            glUniform1i( location, 0 );  // texture unit 0
-            CHECK_GL_ERROR();
-        }
-
-        location = glGetUniformLocation( m_nProgramObject, "enteringSlideTexture" );
-        if( location != -1 ) {
-            glUniform1i( location, 2 );  // texture unit 2
-            CHECK_GL_ERROR();
-        }
-    }
-    CHECK_GL_ERROR();
-}
-
-}
-
-namespace
-{
-
-class ReflectionTransition : public ShaderTransition
+class ReflectionTransition : public OGLTransitionImpl
 {
 public:
     ReflectionTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : ShaderTransition(rScene, rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
     {}
 
 private:
     virtual GLuint makeShader() const override;
     virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
 
-    virtual void impl_prepareTransition() override {
+    virtual void prepareTransition( sal_Int32, sal_Int32 ) override {
         glDisable(GL_CULL_FACE);
     }
 
-    virtual void impl_finishTransition() override {
+    virtual void finishTransition() override {
         glEnable(GL_CULL_FACE);
     }
 };
@@ -485,20 +428,24 @@ makeReflectionTransition(
 namespace
 {
 
-class SimpleTransition : public ShaderTransition
+class SimpleTransition : public OGLTransitionImpl
 {
 public:
     SimpleTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : ShaderTransition(rScene, rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
     {
     }
 
 private:
-    virtual void impl_finishTransition() override {}
-    virtual void impl_prepareTransition() override {}
+    virtual GLuint makeShader() const override;
 
     virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
 };
+
+GLuint SimpleTransition::makeShader() const
+{
+    return OpenGLHelper::LoadShaders( "basicVertexShader", "basicFragmentShader" );
+}
 
 void SimpleTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
                                               double SlideWidthScale, double SlideHeightScale )
@@ -1193,17 +1140,15 @@ std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts 
 namespace
 {
 
-class FadeSmoothlyTransition : public ShaderTransition
+class FadeSmoothlyTransition : public OGLTransitionImpl
 {
 public:
     FadeSmoothlyTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : ShaderTransition(rScene, rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
     {}
 
 private:
     virtual GLuint makeShader() const override;
-    virtual void impl_prepareTransition() override {}
-    virtual void impl_finishTransition() override {}
 };
 
 GLuint FadeSmoothlyTransition::makeShader() const
@@ -1245,17 +1190,15 @@ std::shared_ptr<OGLTransitionImpl> makeFadeSmoothly()
 namespace
 {
 
-class FadeThroughBlackTransition : public ShaderTransition
+class FadeThroughBlackTransition : public OGLTransitionImpl
 {
 public:
     FadeThroughBlackTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : ShaderTransition(rScene, rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
     {}
 
 private:
     virtual GLuint makeShader() const override;
-    virtual void impl_prepareTransition() override {}
-    virtual void impl_finishTransition() override {}
 };
 
 GLuint FadeThroughBlackTransition::makeShader() const
@@ -1297,23 +1240,23 @@ std::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack()
 namespace
 {
 
-class PermTextureTransition : public ShaderTransition
+class PermTextureTransition : public OGLTransitionImpl
 {
 protected:
     PermTextureTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : ShaderTransition(rScene, rSettings)
+        : OGLTransitionImpl(rScene, rSettings)
         , m_nHelperTexture(0)
     {}
 
-    virtual void impl_finishTransition() override;
-    virtual void impl_prepareTransition() override;
+    virtual void finishTransition() override;
+    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
 
 private:
     /** various data */
     GLuint m_nHelperTexture;
 };
 
-void PermTextureTransition::impl_finishTransition()
+void PermTextureTransition::finishTransition()
 {
     CHECK_GL_ERROR();
     if ( m_nHelperTexture )
@@ -1383,7 +1326,7 @@ static void initPermTexture(GLuint *texID)
     CHECK_GL_ERROR();
 }
 
-void PermTextureTransition::impl_prepareTransition()
+void PermTextureTransition::prepareTransition( sal_Int32, sal_Int32 )
 {
     CHECK_GL_ERROR();
     if( m_nProgramObject ) {
@@ -1530,7 +1473,7 @@ private:
 
     virtual GLuint makeShader() const override;
 
-    virtual void impl_prepareTransition() override;
+    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
 
     GLint mnTileInfoLocation;
     GLuint mnTileInfoBuffer;
@@ -1565,10 +1508,10 @@ GLuint VortexTransition::makeShader() const
     return OpenGLHelper::LoadShaders( "vortexVertexShader", "vortexFragmentShader" );
 }
 
-void VortexTransition::impl_prepareTransition()
+void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
 {
     CHECK_GL_ERROR();
-    PermTextureTransition::impl_prepareTransition();
+    PermTextureTransition::prepareTransition( glLeavingSlideTex, glEnteringSlideTex );
     CHECK_GL_ERROR();
 
     if (m_nProgramObject)
@@ -1660,19 +1603,18 @@ std::shared_ptr<OGLTransitionImpl> makeVortex()
 namespace
 {
 
-class RippleTransition : public ShaderTransition
+class RippleTransition : public OGLTransitionImpl
 {
 public:
     RippleTransition(const TransitionScene& rScene, const TransitionSettings& rSettings, const glm::vec2& rCenter)
-        : ShaderTransition(rScene, rSettings),
+        : OGLTransitionImpl(rScene, rSettings),
           maCenter(rCenter)
     {
     }
 
 private:
     virtual GLuint makeShader() const override;
-    virtual void impl_prepareTransition() override;
-    virtual void impl_finishTransition() override {}
+    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
 
     glm::vec2 maCenter;
 };
@@ -1682,7 +1624,7 @@ GLuint RippleTransition::makeShader() const
     return OpenGLHelper::LoadShaders( "basicVertexShader", "rippleFragmentShader" );
 }
 
-void RippleTransition::impl_prepareTransition()
+void RippleTransition::prepareTransition( sal_Int32, sal_Int32 )
 {
     if (m_nProgramObject)
     {

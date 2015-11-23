@@ -202,9 +202,20 @@ private:
       */
     virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
 
+    /** This function is called in prepare method to create the GL program.
+      *
+      * It is a pure virtual to make sure no class will use a default one.
+      */
+    virtual GLuint makeShader() const = 0;
+
 private:
     TransitionScene maScene;
     const TransitionSettings maSettings;
+
+protected:
+    /** GLSL program object
+     */
+    GLuint m_nProgramObject = 0;
 };
 
 
