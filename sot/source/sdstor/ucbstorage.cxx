@@ -480,7 +480,6 @@ public:
     SvStream*                   m_pSource;      // original stream, only for storages on a stream
     ErrCode                     m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
-    bool                        m_bModified;    // only modified elements will be sent to the original content
     bool                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
     bool                        m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
                                                 // this means that the root storage does an autocommit when its external
@@ -1516,7 +1515,6 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
     //, m_pStream( NULL )
     , m_nError( 0 )
     , m_nMode( nMode )
-    , m_bModified( false )
     , m_bCommited( false )
     , m_bDirect( bDirect )
     , m_bIsRoot( bIsRoot )
@@ -1549,7 +1547,6 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     //, m_pStream( NULL )
     , m_nError( 0 )
     , m_nMode( nMode )
-    , m_bModified( false )
     , m_bCommited( false )
     , m_bDirect( bDirect )
     , m_bIsRoot( bIsRoot )
@@ -1600,7 +1597,6 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     , m_pTempFile( new ::utl::TempFile )
     , m_pSource( &rStream )
     , m_nError( 0 )
-    , m_bModified( false )
     , m_bCommited( false )
     , m_bDirect( bDirect )
     , m_bIsRoot( true )
