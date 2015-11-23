@@ -1108,10 +1108,10 @@ Reference<XComponentContext> raise_uno_process(
             url, comphelper::containerToSequence(args) );
     }
     catch (...) {
-        OUString sMsg = "error starting process: " + url;
+        OUStringBuffer sMsg = "error starting process: " + url;
         for(const auto& arg : args)
-            sMsg += " " + arg;
-        throw uno::RuntimeException(sMsg);
+            sMsg.append(" ").append(arg);
+        throw uno::RuntimeException(sMsg.makeStringAndClear());
     }
     try {
         return Reference<XComponentContext>(
