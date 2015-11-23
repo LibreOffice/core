@@ -247,7 +247,6 @@ public:
     SharedBitmapDescriptor mpBackground;
     PaneStyleContainer maPaneStyles;
     ViewStyleContainer maViewStyles;
-    ViewDescriptorContainer maViewDescriptors;
     StyleAssociationContainer maStyleAssociations;
     Reference<container::XHierarchicalNameAccess> mxThemeRoot;
     std::shared_ptr<PresenterBitmapContainer> mpIconContainer;

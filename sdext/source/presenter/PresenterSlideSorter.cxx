@@ -119,7 +119,6 @@ public:
     sal_Int32 mnRowCount;
     sal_Int32 mnColumnCount;
     sal_Int32 mnSlideCount;
-    sal_Int32 mnSlideIndexAtMouse;
     sal_Int32 mnFirstVisibleColumn;
     sal_Int32 mnLastVisibleColumn;
     sal_Int32 mnFirstVisibleRow;
@@ -1140,7 +1139,6 @@ PresenterSlideSorter::Layout::Layout (
       mnRowCount(1),
       mnColumnCount(1),
       mnSlideCount(0),
-      mnSlideIndexAtMouse(-1),
       mnFirstVisibleColumn(-1),
       mnLastVisibleColumn(-1),
       mnFirstVisibleRow(-1),

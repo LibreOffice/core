@@ -35,7 +35,6 @@ class FileOpenDialog
         OUString maName;
         OUString maType;
         OUString maUIName;
-        OUString maFilter;
         sal_Int32 maFlags;
         css::uno::Sequence< OUString > maExtensions;
 
