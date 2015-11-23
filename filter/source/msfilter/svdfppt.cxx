@@ -4900,82 +4900,179 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
             aSet.mpArry[ PPT_ParaAttr_BuHardFont  ] = ( nBulFlg & 2 ) ? 1 : 0;
             aSet.mpArry[ PPT_ParaAttr_BuHardColor ] = ( nBulFlg & 4 ) ? 1 : 0;
 
+            // NOTE: one might think that the hard-coded numbers here are the
+            // same as the PPT_ParaAttr_* constants, but it's NOT always true!
             if ( nMask & 0x0080 )   // buChar
+            {
                 rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BulletChar ] );
+                if (!rIn.good())
+                {
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_BulletChar);
+                }
+            }
             if ( nMask & 0x0010 )   // buTypeface
+            {
                 rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BulletFont ] );
+                if (!rIn.good())
+                {
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_BulletFont);
+                }
+            }
             if ( nMask & 0x0040 )   // buSize
             {
                 rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BulletHeight ] );
-                if ( ! ( ( nMask & ( 1 << PPT_ParaAttr_BuHardHeight ) )
-                         && ( nBulFlg & ( 1 << PPT_ParaAttr_BuHardHeight ) ) ) )
-                    aSet.mnAttrSet ^= 0x40;
+                if (!rIn.good()
+                    || !((nMask & (1 << PPT_ParaAttr_BuHardHeight))
+                         && (nBulFlg & (1 << PPT_ParaAttr_BuHardHeight))))
+                {
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_BulletHeight);
+                }
             }
             if ( nMask & 0x0020 )   // buColor
             {
                 sal_uInt32 nVal32, nHiByte;
                 rIn.ReadUInt32( nVal32 );
-                nHiByte = nVal32 >> 24;
-                if ( nHiByte <= 8 )
-                    nVal32 = nHiByte | PPT_COLSCHEME;
-                aSet.mnBulletColor = nVal32;
+                if (!rIn.good())
+                {
+                    aSet.mnBulletColor = 0; // no flag for this? default it
+                }
+                else
+                {
+                    nHiByte = nVal32 >> 24;
+                    if ( nHiByte <= 8 )
+                        nVal32 = nHiByte | PPT_COLSCHEME;
+                    aSet.mnBulletColor = nVal32;
+                }
             }
             if ( nMask & 0x0800 )   // pfAlignment
             {
                 rIn.ReadUInt16( nDummy16 );
-                aSet.mpArry[ PPT_ParaAttr_Adjust ] = nDummy16 & 3;
+                if (!rIn.good())
+                {
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_Adjust);
+                }
+                else
+                {
+                    aSet.mpArry[ PPT_ParaAttr_Adjust ] = nDummy16 & 3;
+                }
             }
             if ( nMask & 0x1000 )   // pfLineSpacing
+            {
                 rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_LineFeed ] );
+                if (!rIn.good())
+                {
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_LineFeed);
+                }
+            }
             if ( nMask & 0x2000 )   // pfSpaceBefore
+            {
                 rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_UpperDist ] );
+                if (!rIn.good())
+                {
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_UpperDist);
+                }
+            }
             if ( nMask & 0x4000 )   // pfSpaceAfter
+            {
                 rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_LowerDist ] );
+                if (!rIn.good())
+                {
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_LowerDist);
+                }
+            }
             if ( nMask & 0x100 )    // pfLeftMargin
             {
                 rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_TextOfs ] );
-                aSet.mnAttrSet |= 1 << PPT_ParaAttr_TextOfs;
+                if (!rIn.good())
+                {
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_TextOfs);
+                }
+                else
+                {
+                    aSet.mnAttrSet |= 1 << PPT_ParaAttr_TextOfs;
+                }
             }
             if ( nMask & 0x400 )    // pfIndent
             {
                 rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BulletOfs ] );
-                aSet.mnAttrSet |= 1 << PPT_ParaAttr_BulletOfs;
+                if (!rIn.good())
+                {
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_BulletOfs);
+                }
+                else
+                {
+                    aSet.mnAttrSet |= 1 << PPT_ParaAttr_BulletOfs;
+                }
             }
             if ( nMask & 0x8000 )   // pfDefaultTabSize
+            {
                 rIn.ReadUInt16( nDummy16 );
+                if (!rIn.good())
+                {
+                    // TODO?
+                }
+            }
             if ( nMask & 0x100000 ) // pfTabStops
             {
                 sal_uInt16 i, nDistance, nAlignment, nNumberOfTabStops = 0;
                 rIn.ReadUInt16( nNumberOfTabStops );
-                const size_t nMinRecordSize = 4;
-                const size_t nMaxRecords = rIn.remainingSize() / nMinRecordSize;
-                if (nNumberOfTabStops > nMaxRecords)
+                if (!rIn.good())
                 {
-                    SAL_WARN("filter.ms", "Parsing error: " << nMaxRecords <<
-                             " max possible entries, but " << nNumberOfTabStops << " claimed, truncating");
-                    nNumberOfTabStops = nMaxRecords;
+                    // TODO?
                 }
-                for ( i = 0; i < nNumberOfTabStops; i++ )
+                else
                 {
-                    rIn.ReadUInt16( nDistance )
-                       .ReadUInt16( nAlignment );
+                    const size_t nMinRecordSize = 4;
+                    const size_t nMaxRecords = rIn.remainingSize() / nMinRecordSize;
+                    if (nNumberOfTabStops > nMaxRecords)
+                    {
+                        SAL_WARN("filter.ms", "Parsing error: " << nMaxRecords <<
+                                 " max possible entries, but " << nNumberOfTabStops << " claimed, truncating");
+                        nNumberOfTabStops = nMaxRecords;
+                    }
+                    for (i = 0; i < nNumberOfTabStops; ++i)
+                    {
+                        rIn.ReadUInt16( nDistance )
+                           .ReadUInt16( nAlignment );
+                    }
                 }
             }
             if ( nMask & 0x10000 )  // pfBaseLine
+            {
                 rIn.ReadUInt16( nDummy16 );
+                if (!rIn.good())
+                {
+                    // TODO?
+                }
+            }
             if ( nMask & 0xe0000 )  // pfCharWrap, pfWordWrap, pfOverflow
             {
                 rIn.ReadUInt16( nDummy16 );
-                if ( nMask & 0x20000 )
-                    aSet.mpArry[ PPT_ParaAttr_AsianLB_1 ] = nDummy16 & 1;
-                if ( nMask & 0x40000 )
-                    aSet.mpArry[ PPT_ParaAttr_AsianLB_2 ] = ( nDummy16 >> 1 ) & 1;
-                if ( nMask & 0x80000 )
-                    aSet.mpArry[ PPT_ParaAttr_AsianLB_3 ] = ( nDummy16 >> 2 ) & 1;
-                aSet.mnAttrSet |= ( ( nMask >> 17 ) & 7 ) << PPT_ParaAttr_AsianLB_1;
+                if (!rIn.good())
+                {   // clear flag to avoid invalid access
+                    aSet.mnAttrSet &= ~((1 << PPT_ParaAttr_AsianLB_1)
+                                      | (1 << PPT_ParaAttr_AsianLB_2)
+                                      | (1 << PPT_ParaAttr_AsianLB_3));
+                }
+                else
+                {
+                    if (nMask & 0x20000)
+                        aSet.mpArry[PPT_ParaAttr_AsianLB_1] = nDummy16 & 1;
+                    if (nMask & 0x40000)
+                        aSet.mpArry[PPT_ParaAttr_AsianLB_2] = (nDummy16 >> 1) & 1;
+                    if (nMask & 0x80000)
+                        aSet.mpArry[PPT_ParaAttr_AsianLB_3] = (nDummy16 >> 2) & 1;
+                    aSet.mnAttrSet |= ((nMask >> 17) & 7) << PPT_ParaAttr_AsianLB_1;
+                }
             }
             if ( nMask & 0x200000 ) // pfTextDirection
+            {
                 rIn.ReadUInt16( aSet.mpArry[ PPT_ParaAttr_BiDi ] );
+                if (!rIn.good())
+                {   // clear flag to avoid invalid access
+                    aSet.mnAttrSet &= ~(1 << PPT_ParaAttr_BiDi);
+                }
+            }
         }
         else
             nCharCount = nStringLen;
@@ -5033,7 +5130,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     sal_uInt16  nStringLen = aString.getLength();
 
     rIn.ReadUInt16( nDummy16 );
-    nCharCount = nDummy16;
+    nCharCount = (rIn.good()) ? nDummy16 : 0;
     rIn.ReadUInt16( nDummy16 );
     nCharsToRead = nStringLen - ( nCharAnzRead + nCharCount );
     if ( nCharsToRead < 0 )
