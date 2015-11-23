@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_7ae50da7",
+        "filename": "sw/source/core/bastyp/calc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-11-23T12:11:24Z",
+      "side": 1,
+      "message": "I suppose it only has to return error if GetToken() returns CALC_LP, so that only functions with unknown names result in errors, but not unknown variables. See bug 61228 comment 8 for my reasoning.\nOtherwise, I suppose, it\u0027s a proper place for this! :)",
+      "range": {
+        "startLine": 1330,
+        "startChar": 16,
+        "endLine": 1330,
+        "endChar": 37
+      },
+      "revId": "52be24d363e24473d8530572cd5aa15d6906131c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
