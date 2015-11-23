@@ -263,19 +263,6 @@ protected:
     Primitives_t maPrimitives;
 };
 
-class Iris : public SceneObject
-{
-public:
-    Iris ();
-
-    virtual void prepare() override;
-    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const override;
-    virtual void finish() override;
-
-private:
-    GLuint maTexture;
-};
-
 struct Vertex
 {
     glm::vec3 position;

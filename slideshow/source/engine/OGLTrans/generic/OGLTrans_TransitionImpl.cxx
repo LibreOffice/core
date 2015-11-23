@@ -327,11 +327,21 @@ SceneObject::~SceneObject()
 {
 }
 
-Iris::Iris()
-    : SceneObject()
-    , maTexture(0)
+namespace
 {
-}
+
+class Iris : public SceneObject
+{
+public:
+    Iris() = default;
+
+    virtual void prepare() override;
+    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const override;
+    virtual void finish() override;
+
+private:
+    GLuint maTexture = 0;
+};
 
 void Iris::display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) const
 {
@@ -360,6 +370,8 @@ void Iris::finish()
     CHECK_GL_ERROR();
     glDeleteTextures(1, &maTexture);
     CHECK_GL_ERROR();
+}
+
 }
 
 namespace
