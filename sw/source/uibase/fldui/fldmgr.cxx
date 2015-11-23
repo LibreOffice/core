@@ -217,7 +217,6 @@ inline sal_uInt16 GetPackCount() {  return sizeof(aSwFields) / sizeof(SwFieldPac
 
 // FieldManager controls inserting and updating of fields
 SwFieldMgr::SwFieldMgr(SwWrtShell* pSh ) :
-    pModule(nullptr),
     pMacroItem(nullptr),
     pWrtShell(pSh),
     bEvalExp(true)

@@ -265,7 +265,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         sal_Int32 nCount = aColNames.getLength();
         for (sal_Int32 n = 0; n < nCount; ++n)
         {
-            SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n], (sal_uInt16)n );
+            SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n] );
             Any aCol = xCols->getByName(pColNames[n]);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
@@ -491,7 +491,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton, void )
                             : *m_pLbTableCol )
                         : *m_pLbTextDbColumn;
 
-    SwInsDBColumn aSrch( rBox.GetSelectEntry(), 0 );
+    SwInsDBColumn aSrch( rBox.GetSelectEntry() );
     SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
 
     bool bFromDB = m_pRbDbFormatFromDb == pButton;
@@ -547,7 +547,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void 
                     nTopPos = m_pLbTableCol->GetTopEntry();
 
             // look for the right InsertPos!!
-            SwInsDBColumn aSrch( m_pLbTableCol->GetEntry( nDelPos ), 0 );
+            SwInsDBColumn aSrch( m_pLbTableCol->GetEntry( nDelPos ) );
             SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
             if( it == aDBColumns.begin() || (it+1) == aDBColumns.end() )
                 nInsPos = it - aDBColumns.begin();
@@ -795,7 +795,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, SelectHdl, ListBox&, rBox, void )
                                     : m_pLbTextDbColumn.get() )
                             : &rBox;
 
-    SwInsDBColumn aSrch( pGetBox->GetSelectEntry(), 0 );
+    SwInsDBColumn aSrch( pGetBox->GetSelectEntry() );
     SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
 
     if( &rBox == m_pLbDbFormatFromUsr )
@@ -890,7 +890,7 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
         if( -1 != ( nEndPos = sText.indexOf( cDBFieldEnd, nSttPos+1 )))
         {
             // Text in <> brackets found: what is it:
-            SwInsDBColumn aSrch( sText.copy( nSttPos, nEndPos - nSttPos ), 0);
+            SwInsDBColumn aSrch( sText.copy( nSttPos, nEndPos - nSttPos ));
             SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
             if( it != aDBColumns.end() )
             {
@@ -1006,7 +1006,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         std::vector<SwInsDBColumn*> aColFields;
         for( sal_Int32 n = 0; n < nCols; ++n )
         {
-            SwInsDBColumn aSrch( m_pLbTableCol->GetEntry( n ), 0 );
+            SwInsDBColumn aSrch( m_pLbTableCol->GetEntry( n ) );
             SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
             if (it != aDBColumns.end())
                 aColFields.push_back(*it);
@@ -1698,7 +1698,7 @@ void SwInsertDBColAutoPilot::Load()
                     continue;
                 sal_Int16 nIndex = 0;
                 pSubProps[1] >>= nIndex;
-                SwInsDBColumn* pInsDBColumn = new SwInsDBColumn(sColumn, nIndex);
+                SwInsDBColumn* pInsDBColumn = new SwInsDBColumn(sColumn);
                 if(pSubProps[2].hasValue())
                     pInsDBColumn->bHasFormat = *static_cast<sal_Bool const *>(pSubProps[2].getValue());
                 if(pSubProps[3].hasValue())

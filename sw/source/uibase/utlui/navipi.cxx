@@ -665,7 +665,6 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     m_nAutoMarkIdx(1),
     m_nRegionMode(RegionMode::NONE),
 
-    m_bSmallMode(false),
     m_bIsZoomedIn(false),
     m_bPageCtrlsVisible(false),
     m_bGlobalMode(false)

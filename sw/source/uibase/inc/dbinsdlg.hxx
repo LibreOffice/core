@@ -63,16 +63,14 @@ struct SwInsDBColumn
     sal_Int32 nDBNumFormat;
     sal_uInt32 nUsrNumFormat;
     LanguageType eUsrNumFormatLng;
-    sal_uInt16 nCol;
     bool bHasFormat : 1;
     bool bIsDBFormat : 1;
 
-    SwInsDBColumn( const OUString& rStr, sal_uInt16 nColumn )
+    SwInsDBColumn( const OUString& rStr )
         : sColumn( rStr ),
         nDBNumFormat( 0 ),
         nUsrNumFormat( 0 ),
         eUsrNumFormatLng( LANGUAGE_SYSTEM ),
-        nCol( nColumn ),
         bHasFormat(false),
         bIsDBFormat(true)
     {}

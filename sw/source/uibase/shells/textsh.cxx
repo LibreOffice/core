@@ -925,7 +925,7 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
 }
 
 SwTextShell::SwTextShell(SwView &_rView) :
-    SwBaseShell(_rView), pPostItFieldMgr( nullptr )
+    SwBaseShell(_rView)
 {
     SetName("Text");
     SetHelpId(SW_TEXTSHELL);

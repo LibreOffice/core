@@ -100,7 +100,6 @@ class SW_DLLPUBLIC SwFieldMgr
 {
 private:
     SwField*            pCurField;
-    SbModule*           pModule;
     const SvxMacroItem* pMacroItem;
     SwWrtShell*         pWrtShell; // can be ZERO too!
     OUString          aCurPar1;

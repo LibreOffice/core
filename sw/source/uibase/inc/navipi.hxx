@@ -90,7 +90,6 @@ class SwNavigationPI : public vcl::Window,
     short   m_nZoomOutInit;
     short   m_nZoomOut;
 
-    bool    m_bSmallMode : 1;
     bool    m_bIsZoomedIn : 1;
     bool    m_bPageCtrlsVisible : 1;
     bool    m_bGlobalMode : 1;

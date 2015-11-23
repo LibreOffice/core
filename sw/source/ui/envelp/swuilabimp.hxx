@@ -90,8 +90,6 @@ class SwVisitingCardPage : public SfxTabPage
     VclPtr<ListBox>        m_pAutoTextGroupLB;
     VclPtr<vcl::Window>    m_pExampleWIN;
 
-    OUString        sTempURL;
-
     SwLabItem       aLabItem;
 
     SwOneExampleFrame*  pExampleFrame;

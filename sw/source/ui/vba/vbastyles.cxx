@@ -148,13 +148,12 @@ struct MSOStyleNameTable
 {
     const sal_Char* pMSOStyleName;
     const sal_Char* pOOoStyleName;
-    const sal_Char* pOOoStyleType;
 };
 
 static const MSOStyleNameTable aMSOStyleNameTable[] =
 {
-    { "Normal", "Default", "ParagraphStyles" },
-    { nullptr, nullptr, nullptr }
+    { "Normal", "Default" },
+    { nullptr, nullptr }
 };
 
 class StyleCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAccess,

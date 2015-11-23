@@ -36,13 +36,6 @@ class SwWrtShell;
 class SvxBrushItem;
 class SwOutlineTabDialog;
 
-struct SwBmpItemInfo
-{
-    SvxBrushItem*   pBrushItem;
-    sal_uInt16          nItemId;
-};
-
-
 class SwNumPositionTabPage : public SfxTabPage
 {
     VclPtr<ListBox> m_pLevelLB;

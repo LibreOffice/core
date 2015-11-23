@@ -30,7 +30,6 @@ class SvxHyperlinkItem;
 
 class SW_DLLPUBLIC SwTextShell: public SwBaseShell
 {
-    SwFieldMgr*   pPostItFieldMgr;
     RotateTransliteration m_aRotateCase;
 
     void InsertSymbol( SfxRequest& );

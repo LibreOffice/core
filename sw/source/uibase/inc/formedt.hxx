@@ -57,11 +57,6 @@ class SwIdxFormDlg : public SvxStandardDialog
     VclPtr<PushButton>      m_aAssignBT;
     VclPtr<FixedLine>       m_aFormatFL;
 
-    SwWrtShell     &m_rSh;
-    SwForm         *m_pForm;
-    sal_uInt16          m_nAktLevel;
-    bool            m_bLastLinkIsEnd;
-
 public:
     SwIdxFormDlg( vcl::Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
     virtual ~SwIdxFormDlg();

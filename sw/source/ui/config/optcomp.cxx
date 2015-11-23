@@ -56,14 +56,13 @@ struct CompatibilityItem
     bool        m_bConsiderWrappingStyle;
     bool        m_bExpandWordSpace;
     bool        m_bIsDefault;
-    bool        m_bIsUser;
 
     CompatibilityItem( const OUString& _rName, const OUString& _rModule,
                        bool _bUsePrtMetrics, bool _bAddSpacing, bool _bAddSpacingAtPages,
                        bool _bUseOurTabStops, bool _bNoExtLeading, bool _bUseLineSpacing,
                        bool _bAddTableSpacing, bool _bUseObjPos, bool _bUseOurTextWrapping,
                        bool _bConsiderWrappingStyle, bool _bExpandWordSpace,
-                       bool _bIsDefault, bool _bIsUser ) :
+                       bool _bIsDefault ) :
 
         m_sName                 ( _rName ),
         m_sModule               ( _rModule ),
@@ -78,8 +77,7 @@ struct CompatibilityItem
         m_bUseOurTextWrapping   ( _bUseOurTextWrapping ),
         m_bConsiderWrappingStyle( _bConsiderWrappingStyle ),
         m_bExpandWordSpace      ( _bExpandWordSpace ),
-        m_bIsDefault            ( _bIsDefault ),
-        m_bIsUser               ( _bIsUser ) {}
+        m_bIsDefault            ( _bIsDefault ) {}
 };
 
 #include <vector>
@@ -275,8 +273,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
             bUseLineSpacing, bAddTableSpacing, bUseObjPos,
             bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace,
-            bIsDefaultEntry,
-            bIsUserEntry );
+            bIsDefaultEntry );
         m_pImpl->m_aList.push_back( aItem );
 
         if ( aItem.m_bIsDefault )

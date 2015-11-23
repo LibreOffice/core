@@ -63,7 +63,6 @@ using namespace ::com::sun::star::beans;
 
 struct SwConnectionData
 {
-    OUString                sSourceName;
     Reference<XConnection>  xConnection;
 };
 
