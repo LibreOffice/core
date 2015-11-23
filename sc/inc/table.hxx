@@ -117,6 +117,16 @@ class ScHint;
 class ScTable : private boost::noncopyable
 {
 private:
+    // To store an Autofilter's filtered row count
+    struct FilteredRowCountData {
+        SCROW nStartRow;
+        SCROW nEndRow;
+        SCSIZE nCount;
+        FilteredRowCountData(SCROW nRow1, SCROW nRow2, SCSIZE nVal) :
+            nStartRow(nRow1), nEndRow(nRow2), nCount(nVal)
+        {}
+    };
+
     typedef ::std::vector< ScRange > ScRangeVec;
 
     ScColumn        aCol[MAXCOLCOUNT];
@@ -151,6 +161,7 @@ private:
     std::unique_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
     std::unique_ptr<ScFlatBoolColSegments>  mpFilteredCols;
     std::unique_ptr<ScFlatBoolRowSegments>  mpFilteredRows;
+    FilteredRowCountData                    maFilteredRowCount;
 
     ::std::set<SCROW>                      maRowPageBreaks;
     ::std::set<SCROW>                      maRowManualBreaks;
