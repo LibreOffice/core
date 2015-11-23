@@ -48,89 +48,11 @@
 #include <vector>
 #include <math.h>
 
-#define SMALLBUTTON_HSIZE           7
-#define SMALLBUTTON_VSIZE           7
-
-#define SMALLBUTTON_OFF_NORMAL_X    3
-#define SMALLBUTTON_OFF_NORMAL_Y    3
-
-#define TB_TEXTOFFSET           2
-#define TB_IMAGETEXTOFFSET      3
-#define TB_LINESPACING          3
-#define TB_SPIN_SIZE            14
-#define TB_SPIN_OFFSET          2
-#define TB_BORDER_OFFSET1       4
-#define TB_BORDER_OFFSET2       2
-#define TB_CUSTOMIZE_OFFSET     2
-#define TB_RESIZE_OFFSET        3
-#define TB_MAXLINES             5
-#define TB_MAXNOSCROLL          32765
-
-#define TB_MIN_WIN_WIDTH        20
-
-#define TB_CALCMODE_HORZ        1
-#define TB_CALCMODE_VERT        2
-#define TB_CALCMODE_FLOAT       3
-
-#define TB_WBLINESIZING         (WB_SIZEABLE | WB_DOCKABLE | WB_SCROLL)
-
-#define DOCK_LINEHSIZE          ((sal_uInt16)0x0001)
-#define DOCK_LINEVSIZE          ((sal_uInt16)0x0002)
-#define DOCK_LINERIGHT          ((sal_uInt16)0x1000)
-#define DOCK_LINEBOTTOM         ((sal_uInt16)0x2000)
-#define DOCK_LINELEFT           ((sal_uInt16)0x4000)
-#define DOCK_LINETOP            ((sal_uInt16)0x8000)
-#define DOCK_LINEOFFSET         3
-
-typedef ::std::vector< VclPtr<ToolBox> > ImplTBList;
-
-class ImplTBDragMgr
+void ImplTBDragMgr::HideDragRect()
 {
-private:
-    ImplTBList*     mpBoxList;
-    VclPtr<ToolBox> mpDragBox;
-    Point           maMouseOff;
-    Rectangle       maRect;
-    Rectangle       maStartRect;
-    Accelerator     maAccel;
-    long            mnMinWidth;
-    long            mnMaxWidth;
-    sal_uInt16          mnLineMode;
-    sal_uInt16          mnStartLines;
-    void*           mpCustomizeData;
-    bool            mbResizeMode;
-    bool            mbShowDragRect;
-
-public:
-                    ImplTBDragMgr();
-                    ~ImplTBDragMgr();
-
-    void            push_back( ToolBox* pBox )
-                        { mpBoxList->push_back( pBox ); }
-    void            erase( ToolBox* pBox )
-                    {
-                        for ( ImplTBList::iterator it = mpBoxList->begin(); it != mpBoxList->end(); ++it ) {
-                            if ( *it == pBox ) {
-                                mpBoxList->erase( it );
-                                break;
-                            }
-                        }
-                    }
-    size_t          size() const
-                    { return mpBoxList->size(); }
-
-    ToolBox*        FindToolBox( const Rectangle& rRect );
-
-    void            StartDragging( ToolBox* pDragBox,
-                                   const Point& rPos, const Rectangle& rRect,
-                                   sal_uInt16 nLineMode, bool bResizeItem,
-                                   void* pData = nullptr );
-    void            Dragging( const Point& rPos );
-    void            EndDragging( bool bOK = true );
-    void            HideDragRect() { if ( mbShowDragRect ) mpDragBox->HideTracking(); }
-    void            UpdateDragRect();
-    DECL_LINK_TYPED( SelectHdl, Accelerator&, void );
-};
+     if ( mbShowDragRect )
+         mpDragBox->HideTracking();
+}
 
 static ImplTBDragMgr* ImplGetTBDragMgr()
 {
@@ -142,8 +64,6 @@ static ImplTBDragMgr* ImplGetTBDragMgr()
 
 int ToolBox::ImplGetDragWidth( ToolBox* pThis )
 {
-    #define TB_DRAGWIDTH 8  // the default width of the grip
-
     int nWidth = TB_DRAGWIDTH;
     if( pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
@@ -854,14 +774,12 @@ Size ToolBox::ImplCalcFloatSize( ToolBox* pThis, sal_uInt16& rLines )
     }
 
     sal_uInt16 i = 0;
-    while ( i + 1u < pThis->maFloatSizes.size() &&
-            rLines < pThis->maFloatSizes[i].mnLines )
+    while ( i + 1u < pThis->maFloatSizes.size() && rLines < pThis->maFloatSizes[i].mnLines )
     {
         i++;
     }
 
-    Size aSize( pThis->maFloatSizes[i].mnWidth,
-                pThis->maFloatSizes[i].mnHeight );
+    Size aSize( pThis->maFloatSizes[i].mnWidth, pThis->maFloatSizes[i].mnHeight );
     rLines = pThis->maFloatSizes[i].mnLines;
 
     return aSize;
@@ -1409,13 +1327,9 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     DockingWindow::ImplInit( pParent, nStyle & ~(WB_BORDER) );
 
-    // always set WB_TABSTOP for ToolBars !!!  if( mnWinStyle & WB_TABSTOP )
-    {
-        // dockingwindow's ImplInit removes some bits, so restore them here
-        // to allow keyboard handling for toolbars
-        ImplGetWindowImpl()->mnStyle |= WB_TABSTOP|WB_NODIALOGCONTROL;
-        ImplGetWindowImpl()->mnStyle &= ~WB_DIALOGCONTROL;
-    }
+    // dockingwindow's ImplInit removes some bits, so restore them here to allow keyboard handling for toolbars
+    ImplGetWindowImpl()->mnStyle |= WB_TABSTOP|WB_NODIALOGCONTROL; // always set WB_TABSTOP for ToolBars
+    ImplGetWindowImpl()->mnStyle &= ~WB_DIALOGCONTROL;
 
     ImplInitSettings(true, true, true);
 }
@@ -2949,7 +2863,8 @@ void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 n
     }
 }
 
-void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow )
+void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight,
+                             bool bChecked, bool bEnabled, bool bIsWindow )
 {
     // draws toolbar button background either native or using a coloured selection
     // if bIsWindow is true, the corresponding item is a control and only a selection border will be drawn
@@ -2971,7 +2886,8 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
     }
 
     if (!bNativeOk)
-        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, bIsWindow ? 3 : highlight, bChecked, true, bIsWindow, nullptr, 2);
+        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, bIsWindow ? 3 : highlight,
+                                                  bChecked, true, bIsWindow, nullptr, 2);
 }
 
 void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint, bool bLayout)
@@ -3092,7 +3008,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
             mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }
-        rRenderContext.DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), DrawTextFlags::Mnemonic, pVector, pDisplayText );
+        rRenderContext.DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), DrawTextFlags::Mnemonic,
+                                     pVector, pDisplayText );
         if (bClip)
             rRenderContext.SetClipRegion();
         rRenderContext.SetFont(aOldFont);
@@ -3189,7 +3106,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder(rRenderContext, pItem);
             else
-                ImplDrawButton(rRenderContext, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow);
+                ImplDrawButton(rRenderContext, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE,
+                               pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow);
 
             if( nHighlight != 0 )
             {
@@ -3243,7 +3161,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder(rRenderContext, pItem);
             else
-                ImplDrawButton(rRenderContext, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow );
+                ImplDrawButton(rRenderContext, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE,
+                               pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow );
         }
 
         DrawTextFlags nTextStyle = DrawTextFlags::NONE;
@@ -3285,7 +3204,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
                 if( bHasOpenPopup )
                     ImplDrawFloatwinBorder(rRenderContext, pItem);
                 else
-                    ImplDrawButton(rRenderContext, aDropDownRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), false);
+                    ImplDrawButton(rRenderContext, aDropDownRect, nHighlight, pItem->meState == TRISTATE_TRUE,
+                                   pItem->mbEnabled && IsEnabled(), false);
             }
         }
         ImplDrawDropdownArrow(rRenderContext, aDropDownRect, bSetColor, bRotate);
@@ -5642,9 +5562,7 @@ void ToolBox::ImplDisableFlatButtons()
         bInit = true;
         HKEY hkey;
 
-        if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
-            "Software\\LibreOffice\\Accessibility\\AtToolSupport",
-            &hkey) )
+        if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER, "Software\\LibreOffice\\Accessibility\\AtToolSupport", &hkey) )
         {
             DWORD dwType = 0;
             sal_uInt8 Data[6]; // possible values: "true", "false", "1", "0", DWORD

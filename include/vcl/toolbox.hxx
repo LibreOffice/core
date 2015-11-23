@@ -37,41 +37,6 @@ struct ImplToolBoxPrivateData;
 class  ImplTrackRect;
 class  PopupMenu;
 
-#define TOOLBOX_CUSTOMIZE_RESIZE        ((sal_uInt16)0xFFFE)
-
-class VCL_DLLPUBLIC ToolBoxCustomizeEvent
-{
-private:
-    VclPtr<ToolBox> mpTargetBox;
-    void*       mpData;
-    sal_uInt16      mnIdFrom;
-    sal_uInt16      mnPosTo;
-
-public:
-                ToolBoxCustomizeEvent();
-                ToolBoxCustomizeEvent( ToolBox* pDropBox,
-                                       sal_uInt16 nId, sal_uInt16 nPos = 0,
-                                       void* pUserData = nullptr );
-};
-
-inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent()
-{
-    mpTargetBox = nullptr;
-    mnIdFrom    = 0;
-    mnPosTo     = 0;
-    mpData      = nullptr;
-}
-
-inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent( ToolBox* pDropBox,
-                                                     sal_uInt16 nId, sal_uInt16 nPos,
-                                                     void* pUserData )
-{
-    mpTargetBox = pDropBox;
-    mnIdFrom    = nId;
-    mnPosTo     = nPos;
-    mpData      = pUserData;
-}
-
 #define TOOLBOX_STYLE_FLAT          ((sal_uInt16)0x0004)
 
 #define TOOLBOX_APPEND              ((sal_uInt16)0xFFFF)
@@ -84,6 +49,44 @@ inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent( ToolBox* pDropBox,
 #define TOOLBOX_MENUTYPE_NONE           ((sal_uInt16)0x0000)    // no menu at all, scrolling by spin buttons
 #define TOOLBOX_MENUTYPE_CLIPPEDITEMS   ((sal_uInt16)0x0001)    // menu will contain "more" indicator
 #define TOOLBOX_MENUTYPE_CUSTOMIZE      ((sal_uInt16)0x0002)    // menu will contain "customization" and "more" indicator
+
+#define SMALLBUTTON_HSIZE           7
+#define SMALLBUTTON_VSIZE           7
+
+#define SMALLBUTTON_OFF_NORMAL_X    3
+#define SMALLBUTTON_OFF_NORMAL_Y    3
+
+#define TB_TEXTOFFSET           2
+#define TB_IMAGETEXTOFFSET      3
+#define TB_LINESPACING          3
+#define TB_SPIN_SIZE            14
+#define TB_SPIN_OFFSET          2
+#define TB_BORDER_OFFSET1       4
+#define TB_BORDER_OFFSET2       2
+#define TB_CUSTOMIZE_OFFSET     2
+#define TB_RESIZE_OFFSET        3
+#define TB_MAXLINES             5
+#define TB_MAXNOSCROLL          32765
+
+#define TB_MIN_WIN_WIDTH        20
+#define TB_DRAGWIDTH            8  // the default width of the drag grip
+#define TB_SEP_SIZE             8  // Separator size
+
+#define TB_CALCMODE_HORZ        1
+#define TB_CALCMODE_VERT        2
+#define TB_CALCMODE_FLOAT       3
+
+#define TB_WBLINESIZING         (WB_SIZEABLE | WB_DOCKABLE | WB_SCROLL)
+
+#define DOCK_LINEHSIZE          ((sal_uInt16)0x0001)
+#define DOCK_LINEVSIZE          ((sal_uInt16)0x0002)
+#define DOCK_LINERIGHT          ((sal_uInt16)0x1000)
+#define DOCK_LINEBOTTOM         ((sal_uInt16)0x2000)
+#define DOCK_LINELEFT           ((sal_uInt16)0x4000)
+#define DOCK_LINETOP            ((sal_uInt16)0x8000)
+#define DOCK_LINEOFFSET         3
+
+typedef ::std::vector< VclPtr<ToolBox> > ImplTBList;
 
 // small or large force an exact toolbox size for proper alignemnt
 // dontcare will let the toolbox decide about its size
@@ -102,13 +105,61 @@ struct ImplToolSize
     sal_uInt16 mnLines;
 };
 
+
+class ImplTBDragMgr
+{
+private:
+    ImplTBList*     mpBoxList;
+    VclPtr<ToolBox> mpDragBox;
+    Point           maMouseOff;
+    Rectangle       maRect;
+    Rectangle       maStartRect;
+    Accelerator     maAccel;
+    long            mnMinWidth;
+    long            mnMaxWidth;
+    sal_uInt16      mnLineMode;
+    sal_uInt16      mnStartLines;
+    void*           mpCustomizeData;
+    bool            mbResizeMode;
+    bool            mbShowDragRect;
+
+public:
+                    ImplTBDragMgr();
+                    ~ImplTBDragMgr();
+
+    void            push_back( ToolBox* pBox )
+                        { mpBoxList->push_back( pBox ); }
+    void            erase( ToolBox* pBox )
+                    {
+                        for ( ImplTBList::iterator it = mpBoxList->begin(); it != mpBoxList->end(); ++it ) {
+                            if ( *it == pBox ) {
+                                mpBoxList->erase( it );
+                                break;
+                            }
+                        }
+                    }
+    size_t          size() const
+                    { return mpBoxList->size(); }
+
+    ToolBox*        FindToolBox( const Rectangle& rRect );
+
+    void            StartDragging( ToolBox* pDragBox, const Point& rPos, const Rectangle& rRect, sal_uInt16 nLineMode,
+                                   bool bResizeItem, void* pData = nullptr );
+    void            Dragging( const Point& rPos );
+    void            EndDragging( bool bOK = true );
+    void            HideDragRect();
+    void            UpdateDragRect();
+    DECL_LINK_TYPED( SelectHdl, Accelerator&, void );
+};
+
+
 class VCL_DLLPUBLIC ToolBox : public DockingWindow
 {
     friend class FloatingWindow;
     friend class ImplTBDragMgr;
 
 private:
-    ImplToolBoxPrivateData*     mpData;
+    ImplToolBoxPrivateData*   mpData;
     std::vector<ImplToolSize> maFloatSizes;
     ImageList           maImageList;
     Idle                maIdle;
@@ -117,8 +168,8 @@ private:
     Rectangle           maOutDockRect;
     Rectangle           maInDockRect;
     Rectangle           maPaintRect;
-    VclPtr<FloatingWindow>  mpFloatWin;
-    sal_uInt16              mnKeyModifier;
+    VclPtr<FloatingWindow> mpFloatWin;
+    sal_uInt16          mnKeyModifier;
     long                mnDX;
     long                mnDY;
     long                mnMaxItemWidth;    // max item width
@@ -334,12 +385,10 @@ public:
                                       ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                       sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertSpace( sal_uInt16 nPos = TOOLBOX_APPEND );
-    void                InsertSeparator( sal_uInt16 nPos = TOOLBOX_APPEND,
-                                         sal_uInt16 nPixSize = 0 );
+    void                InsertSeparator( sal_uInt16 nPos = TOOLBOX_APPEND, sal_uInt16 nPixSize = 0 );
     void                InsertBreak( sal_uInt16 nPos = TOOLBOX_APPEND );
     void                RemoveItem( sal_uInt16 nPos );
-    void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
-                                  sal_uInt16 nNewPos = TOOLBOX_APPEND );
+    void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId, sal_uInt16 nNewPos = TOOLBOX_APPEND );
     void                Clear();
 
     const ImageList&    GetImageList() const { return maImageList; }
@@ -469,7 +518,6 @@ public:
 
     // enable/disable undocking
     void                Lock( bool bLock = true );
-
     // read configuration to determine locking behaviour
     static bool         AlwaysLocked();
 
