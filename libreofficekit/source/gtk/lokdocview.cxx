@@ -1081,7 +1081,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     if (priv->m_bEdit && priv->m_bCursorVisible && !isEmptyRectangle(priv->m_aVisibleCursor) && priv->m_aTextSelectionRectangles.empty())
     {
         // Have a cursor, but no selection: we need the middle handle.
-        gchar* handleMiddlePath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_middle.png", NULL);
+        gchar* handleMiddlePath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_middle.png", NULL);
         if (!priv->m_pHandleMiddle)
         {
             priv->m_pHandleMiddle = cairo_image_surface_create_from_png(handleMiddlePath);
@@ -1109,7 +1109,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (!isEmptyRectangle(priv->m_aTextSelectionStart))
         {
             // Have a start position: we need a start handle.
-            gchar* handleStartPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_start.png", NULL);
+            gchar* handleStartPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_start.png", NULL);
             if (!priv->m_pHandleStart)
             {
                 priv->m_pHandleStart = cairo_image_surface_create_from_png(handleStartPath);
@@ -1121,7 +1121,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (!isEmptyRectangle(priv->m_aTextSelectionEnd))
         {
             // Have a start position: we need an end handle.
-            gchar* handleEndPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_end.png", NULL);
+            gchar* handleEndPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_image_end.png", NULL);
             if (!priv->m_pHandleEnd)
             {
                 priv->m_pHandleEnd = cairo_image_surface_create_from_png(handleEndPath);
