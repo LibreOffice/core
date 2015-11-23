@@ -52,7 +52,6 @@ public:
 protected:
     ::sd::View* mpView;
     ViewShell*  mpViewSh;
-    sal_uInt16          nMappedSlotFilter;
 };
 
 } // end of namespace sd

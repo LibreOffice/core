@@ -111,12 +111,6 @@ private:
 
     ::std::vector<Link<LinkParamNone*,void>> maSelectionChangeListeners;
 
-    /** This array stores the indices of the  selected page descriptors at
-        the time when the edit mode is switched to EM_MASTERPAGE.  With this
-        we can restore the selection when switching back to EM_PAGE mode.
-    */
-    ::std::vector<SdPage*> maSelectionBeforeSwitch;
-
     /** When this flag is set then on the next call to Paint() the selection
         is moved into the visible area.
     */

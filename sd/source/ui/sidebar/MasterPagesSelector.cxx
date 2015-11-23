@@ -75,7 +75,6 @@ MasterPagesSelector::MasterPagesSelector (
       maMutex(),
       mpContainer(rpContainer),
       mrDocument(rDocument),
-      mbSmallPreviewSize(false),
       mrBase(rBase),
       mnDefaultClickAction(SID_TP_APPLY_TO_ALL_SLIDES),
       maPreviewUpdateQueue(),

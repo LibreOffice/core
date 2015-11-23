@@ -75,22 +75,13 @@ using namespace ::com::sun::star;
 
 struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
-    DropTargetHelper&       mrTargetHelper;
     VclPtr< ::sd::Window>    mpTargetWindow;
-    sal_uInt16                  mnPage;
-    sal_uInt16                  mnLayer;
 
     SdNavigatorDropEvent (
         const ExecuteDropEvent& rEvt,
-        DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow,
-        sal_uInt16 nPage,
-        sal_uInt16 nLayer )
+        ::sd::Window* pTargetWindow )
         : ExecuteDropEvent( rEvt ),
-          mrTargetHelper( rTargetHelper ),
-          mpTargetWindow( pTargetWindow ),
-          mnPage( nPage ),
-          mnLayer( nLayer )
+          mpTargetWindow( pTargetWindow )
     {}
 };
 
@@ -623,7 +614,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
     return nRet;
 }
 
-sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                               ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer )
 {
     SdrPageView*    pPV = GetSdrPageView();
@@ -721,8 +712,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                     {
                         // insert bookmark from own navigator (handled async. due to possible message box )
                         Application::PostUserEvent( LINK( this, View, ExecuteNavigatorDrop ),
-                                                    new SdNavigatorDropEvent( rEvt, rTargetHelper, pTargetWindow,
-                                                                              nPage, nLayer ) );
+                                                    new SdNavigatorDropEvent( rEvt, pTargetWindow ) );
                         nRet = nDropAction;
                     }
                     else

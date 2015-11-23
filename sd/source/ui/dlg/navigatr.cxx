@@ -65,14 +65,12 @@ static const sal_uInt16 nShowAllShapesFilter=2;
  */
 SdNavigatorWin::SdNavigatorWin(
     vcl::Window* pParent,
-    ::sd::NavigatorChildWindow* pChWinCtxt,
     const SdResId& rSdResId,
     SfxBindings* pInBindings)
     : vcl::Window( pParent, rSdResId )
     , maToolbox ( VclPtr<ToolBox>::Create( this, SdResId( 1 ) ) )
     , maTlbObjects( VclPtr<SdPageObjsTLB>::Create( this, SdResId( TLB_OBJECTS ) ) )
     , maLbDocs ( VclPtr<ListBox>::Create( this, SdResId( LB_DOCS ) ) )
-    , mpChildWinContext( pChWinCtxt )
     , mbDocImported ( false )
       // On changes of the DragType: adjust SelectionMode of TLB!
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )

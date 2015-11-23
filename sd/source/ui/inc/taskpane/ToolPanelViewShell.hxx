@@ -84,11 +84,6 @@ private:
     std::unique_ptr< ToolPanelViewShell_Impl >   mpImpl;
 
     std::shared_ptr<TaskPaneShellManager> mpSubShellManager;
-
-    /** The id of the menu in the menu bar/tool box of the parent docking
-        window.
-    */
-    sal_uInt16 mnMenuId;
 };
 
 } } // end of namespace ::sd::toolpanel

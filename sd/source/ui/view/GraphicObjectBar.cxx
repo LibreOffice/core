@@ -65,9 +65,8 @@ GraphicObjectBar::GraphicObjectBar (
     ViewShell* pSdViewShell,
     ::sd::View* pSdView )
     : SfxShell (pSdViewShell->GetViewShell()),
-      mpView     ( pSdView ),
-      mpViewSh ( pSdViewShell ),
-      nMappedSlotFilter ( SID_GRFFILTER_INVERT )
+      mpView   ( pSdView ),
+      mpViewSh ( pSdViewShell )
 {
     DrawDocShell* pDocShell = mpViewSh->GetDocSh();
 

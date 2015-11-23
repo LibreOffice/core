@@ -111,7 +111,6 @@ protected:
     std::shared_ptr<MasterPageContainer> mpContainer;
 
     SdDrawDocument& mrDocument;
-    bool mbSmallPreviewSize;
     ViewShellBase& mrBase;
     /** Slot that is executed as default action when the left mouse button is
         clicked over a master page.

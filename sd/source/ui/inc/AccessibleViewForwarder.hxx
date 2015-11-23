@@ -84,7 +84,6 @@ public:
 protected:
     SdrPaintView* mpView;
     sal_uInt16 mnWindowId;
-    OutputDevice& mrDevice;
 
 private:
     AccessibleViewForwarder (AccessibleViewForwarder&) = delete;

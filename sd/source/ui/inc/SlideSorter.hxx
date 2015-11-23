@@ -221,7 +221,6 @@ private:
     ViewShell* mpViewShell;
     ViewShellBase* mpViewShellBase;
     VclPtr<sd::Window> mpContentWindow;
-    bool mbOwnesContentWindow;
     VclPtr<ScrollBar> mpHorizontalScrollBar;
     VclPtr<ScrollBar> mpVerticalScrollBar;
     VclPtr<ScrollBarBox> mpScrollBarBox;

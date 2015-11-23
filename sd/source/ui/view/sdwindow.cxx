@@ -65,7 +65,6 @@ Window::Window(vcl::Window* pParent)
       mbCalcMinZoomByMinSide(true),
       mbCenterAllowed(true),
       mnTicks (0),
-      mbDraggedFrom(false),
       mpViewShell(nullptr),
       mbUseDropScroll (true)
 {

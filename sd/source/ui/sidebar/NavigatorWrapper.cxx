@@ -35,7 +35,6 @@ NavigatorWrapper::NavigatorWrapper (
       mrViewShellBase(rViewShellBase),
       maNavigator(VclPtr<SdNavigatorWin>::Create(
         this,
-        nullptr,
         SdResId(FLT_NAVIGATOR),
         pBindings))
 {

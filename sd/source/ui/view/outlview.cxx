@@ -77,15 +77,6 @@ namespace sd {
 // PROCESS_WITH_PROGRESS_THRESHOLD pages are concerned
 #define PROCESS_WITH_PROGRESS_THRESHOLD  5
 
-struct SdParaAndPos
-{
-    Paragraph* pPara;
-    sal_uInt16     nPos;
-};
-
-// - OutlineView -
-
-
 OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineViewShell& rOutlineViewShell)
 : ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewShell)
 , mrOutlineViewShell(rOutlineViewShell)
@@ -1376,7 +1367,7 @@ sal_Int8 OutlineView::AcceptDrop( const AcceptDropEvent&, DropTargetHelper&, ::s
     return DND_ACTION_NONE;
 }
 
-sal_Int8 OutlineView::ExecuteDrop( const ExecuteDropEvent&, DropTargetHelper&, ::sd::Window*, sal_uInt16, sal_uInt16)
+sal_Int8 OutlineView::ExecuteDrop( const ExecuteDropEvent&, ::sd::Window*, sal_uInt16, sal_uInt16)
 {
     return DND_ACTION_NONE;
 }

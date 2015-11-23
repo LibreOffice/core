@@ -136,11 +136,9 @@ struct PPTExOleObjEntry
 
 struct TextRuleEntry
 {
-    int                 nPageNumber;
     SvMemoryStream*     pOut;
 
-    explicit TextRuleEntry( int nPg ) :
-        nPageNumber( nPg ),
+    explicit TextRuleEntry() :
         pOut ( nullptr ){};
 
     ~TextRuleEntry() { delete pOut; };
@@ -191,7 +189,6 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 
         sal_uInt32          mnDrawings;         // number of Slides +  masterpages + notes +  handout
         sal_uInt32          mnPagesWritten;
-        sal_uInt32          mnUniqueSlideIdentifier;
         sal_uInt32          mnTxId;             // Identifier determined by the HOST (PP) ????
         sal_uInt32          mnDiaMode;          // 0 -> manual
                                                 // 1 -> semi-automatic

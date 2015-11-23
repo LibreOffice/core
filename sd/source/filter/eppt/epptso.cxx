@@ -3309,7 +3309,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         else
                             nTextType = EPP_TEXTTYPE_Title;
 
-                        TextRuleEntry aTextRule( nPageNumber );
+                        TextRuleEntry aTextRule;
                         SvMemoryStream aExtBu( 0x200, 0x200 );
                         ImplGetText();
                         ImplWriteTextStyleAtom( *pClientTextBox, nTextType, nPObjects, &aTextRule, aExtBu, nullptr );

@@ -66,7 +66,6 @@ public:
 SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mrController(rSlideSorter.GetController()),
-      maSelectionBeforeSwitch(),
       mbIsMakeSelectionVisiblePending(true),
       mnInsertionPosition(-1),
       mnAnimationId(Animator::NotAnAnimationId),

@@ -29,8 +29,7 @@
  *  dialog to adjust print options
  */
 SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
-    SfxTabPage          ( pParent, "prntopts" , "modules/simpress/ui/prntopts.ui" , &rInAttrs ),
-    rOutAttrs           ( rInAttrs )
+    SfxTabPage          ( pParent, "prntopts" , "modules/simpress/ui/prntopts.ui" , &rInAttrs )
 {
     get( m_pFrmContent , "contentframe" );
     get( m_pCbxDraw , "drawingcb" );

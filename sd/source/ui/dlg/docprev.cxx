@@ -74,7 +74,7 @@ VCL_BUILDER_DECL_FACTORY(SdDocPreviewWin)
 }
 
 SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
-: Control(pParent, nStyle), pMetaFile( nullptr ), bInEffect(false), mpObj(nullptr), mnShowPage(0)
+: Control(pParent, nStyle), pMetaFile( nullptr ), mpObj(nullptr), mnShowPage(0)
 {
     SetBorderStyle( WindowBorderStyle::MONO );
     svtools::ColorConfig aColorConfig;

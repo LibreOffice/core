@@ -62,18 +62,15 @@ public:
     FolderDescriptor (
         int nPriority,
         const OUString& rsTitle,
-        const OUString& rsTargetDir,
         const OUString& rsContentIdentifier,
         const Reference<css::ucb::XCommandEnvironment>& rxFolderEnvironment)
         : mnPriority(nPriority),
           msTitle(rsTitle),
-          msTargetDir(rsTargetDir),
           msContentIdentifier(rsContentIdentifier),
           mxFolderEnvironment(rxFolderEnvironment)
     { }
     int mnPriority;
     OUString msTitle;
-    OUString msTargetDir;
     OUString msContentIdentifier;
     //    Reference<sdbc::XResultSet> mxFolderResultSet;
     Reference<css::ucb::XCommandEnvironment> mxFolderEnvironment;
@@ -340,7 +337,6 @@ TemplateScanner::State TemplateScanner::GatherFolderList()
                     FolderDescriptor(
                         Classify(sTitle,sTargetDir),
                         sTitle,
-                        sTargetDir,
                         aId,
                         mxFolderEnvironment));
             }
@@ -362,7 +358,6 @@ TemplateScanner::State TemplateScanner::ScanFolder()
         mpFolderDescriptors->erase(mpFolderDescriptors->begin());
 
         OUString sTitle (aDescriptor.msTitle);
-        OUString sTargetDir (aDescriptor.msTargetDir);
         OUString aId (aDescriptor.msContentIdentifier);
 
         maFolderContent = ::ucbhelper::Content (aId, aDescriptor.mxFolderEnvironment, comphelper::getProcessComponentContext());
@@ -370,7 +365,7 @@ TemplateScanner::State TemplateScanner::ScanFolder()
         {
             // Scan the folder and insert it into the list of template
             // folders.
-            mpTemplateDirectory = new TemplateDir (sTitle, sTargetDir);
+            mpTemplateDirectory = new TemplateDir (sTitle);
             mpTemplateDirectory->EnableSorting(mbEntrySortingEnabled);
             // Continue with scanning all entries in the folder.
             eNextState = INITIALIZE_ENTRY_SCAN;

@@ -128,12 +128,10 @@ public:
     */
     static const EventId EID_EDIT_MODE_MASTER       = 0x00080000;
 
-    const ViewShellBase& mrBase;
     EventId meEventId;
     const void* mpUserData;
 
     EventMultiplexerEvent (
-        const ViewShellBase& rBase,
         EventId eEventId,
         const void* pUserData);
 };

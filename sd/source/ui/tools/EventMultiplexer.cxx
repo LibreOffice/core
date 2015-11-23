@@ -77,8 +77,6 @@ public:
 
     void CallListeners (EventMultiplexerEvent& rEvent);
 
-    ViewShellBase& GetViewShellBase() const { return mrBase; }
-
     //===== lang::XEventListener ==============================================
     virtual void SAL_CALL
         disposing (const css::lang::EventObject& rEventObject)
@@ -197,7 +195,7 @@ void EventMultiplexer::MultiplexEvent(
     EventMultiplexerEvent::EventId eEventId,
     void* pUserData )
 {
-    EventMultiplexerEvent aEvent (mpImpl->GetViewShellBase(), eEventId, pUserData);
+    EventMultiplexerEvent aEvent(eEventId, pUserData);
     mpImpl->CallListeners(aEvent);
 }
 
@@ -684,7 +682,7 @@ void EventMultiplexer::Implementation::CallListeners (
     EventMultiplexerEvent::EventId eId,
     void* pUserData)
 {
-    EventMultiplexerEvent aEvent (mrBase, eId, pUserData);
+    EventMultiplexerEvent aEvent(eId, pUserData);
     CallListeners(aEvent);
 }
 
@@ -708,13 +706,10 @@ IMPL_LINK_NOARG_TYPED(EventMultiplexer::Implementation, SlideSorterSelectionChan
 //===== EventMultiplexerEvent =================================================
 
 EventMultiplexerEvent::EventMultiplexerEvent (
-    const ViewShellBase& rBase,
     EventId eEventId,
     const void* pUserData)
-    : mrBase(rBase),
-      meEventId(eEventId),
+    : meEventId(eEventId),
       mpUserData(pUserData)
-
 {
 }
 

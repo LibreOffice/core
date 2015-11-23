@@ -259,14 +259,13 @@ struct PPTExCharSheet
 
 struct PPTExParaLevel
 {
-    bool        mbIsBullet;
+    bool            mbIsBullet;
     sal_uInt16      mnBulletChar;
     sal_uInt16      mnBulletFont;
     sal_uInt16      mnBulletHeight;
     sal_uInt32      mnBulletColor;
 
     sal_uInt16      mnAdjust;
-    sal_Int16       mnOOAdjust;
     sal_uInt16      mnLineFeed;
     sal_uInt16      mnUpperDist;
     sal_uInt16      mnLowerDist;
@@ -274,7 +273,7 @@ struct PPTExParaLevel
     sal_uInt16      mnBulletOfs;
     sal_uInt16      mnDefaultTab;
 
-    bool        mbExtendedBulletsUsed;
+    bool            mbExtendedBulletsUsed;
     sal_uInt16      mnBulletId;
     sal_uInt16      mnBulletStart;
     sal_uInt32      mnMappedNumType;

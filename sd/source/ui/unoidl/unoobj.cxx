@@ -262,17 +262,6 @@ const SvEventDescription* ImplGetSupportedMacroItems()
     return aMacroDescriptionsImpl;
 }
 
-/**
- * compare function for QSort
- */
-struct SortStruct
-{
-    SdrObject*  pObj;
-    sal_uInt32      nOrder;
-};
-
-typedef SortStruct  SORT;
-
 SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
 :   mpShape( pShape ),
     mpPropSet( pModel?

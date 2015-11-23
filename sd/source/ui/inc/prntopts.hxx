@@ -52,8 +52,6 @@ private:
     VclPtr<CheckBox>            m_pCbxBack;
     VclPtr<CheckBox>            m_pCbxPaperbin;
 
-    const SfxItemSet&   rOutAttrs;
-
     DECL_LINK_TYPED( ClickCheckboxHdl, Button*, void );
     DECL_LINK_TYPED( ClickBookletHdl, Button*, void );
 

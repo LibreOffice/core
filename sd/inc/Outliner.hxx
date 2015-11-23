@@ -226,9 +226,6 @@ private:
     /// The number of pages in the current view.
     sal_uInt16 mnPageCount;
 
-    /// Number of objects on the current page / in the current selection.
-    sal_Int32 mnObjectCount;
-
     /** A <TRUE/> value indicates that the end of the find&replace or spell
         check has been reached.
     */
@@ -261,12 +258,6 @@ private:
         process the mark list is modified.
     */
     ::std::vector<SdrObjectWeakRef> maMarkListCopy;
-
-    /**  This flag indicates that only the current view is to be used for
-         searching and spelling.  Automatically switching to other view does
-         not take place when this flag is set.
-    */
-    bool mbProcessCurrentViewOnly;
 
     /** Current object that may be a text object.  The object pointer to
         corresponds to <member>mnObjIndex</member>.  While iterating over the
@@ -325,12 +316,6 @@ private:
         position is initially set to the where the search begins.
     */
     ::sd::outliner::IteratorPosition maLastValidPosition;
-
-    /** This flag remembers a selection change between a call to the
-        selection change listener callback and the next
-        <member>DetectChange()</member> method call.
-    */
-    bool mbSelectionHasChanged;
 
     /** This flag indicates whether a selection change event is expected due
         to a programatical change of the selection.

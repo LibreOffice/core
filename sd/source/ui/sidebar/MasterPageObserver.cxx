@@ -199,7 +199,6 @@ void MasterPageObserver::Implementation::AddEventListener (
             {
               MasterPageObserverEvent aEvent (
                   MasterPageObserverEvent::ET_MASTER_PAGE_EXISTS,
-                  *aDocumentIterator->first,
                   *aNameIterator);
               SendEvent (aEvent);
             }
@@ -301,7 +300,6 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
 
             MasterPageObserverEvent aEvent (
                 MasterPageObserverEvent::ET_MASTER_PAGE_ADDED,
-                rDocument,
                 *I);
             SendEvent (aEvent);
         }
@@ -321,7 +319,6 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
 
             MasterPageObserverEvent aEvent (
                 MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED,
-                rDocument,
                 *I);
             SendEvent (aEvent);
         }

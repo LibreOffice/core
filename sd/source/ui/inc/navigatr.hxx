@@ -92,7 +92,6 @@ public:
     */
     SdNavigatorWin(
         vcl::Window* pParent,
-        ::sd::NavigatorChildWindow* pChildWinContext,
         const SdResId& rSdResId,
         SfxBindings* pBindings);
     void SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest);
@@ -121,7 +120,6 @@ private:
     VclPtr<SdPageObjsTLB>       maTlbObjects;
     VclPtr<ListBox>             maLbDocs;
 
-    ::sd::NavigatorChildWindow*     mpChildWinContext;
     Size                        maSize;
     Size                        maMinSize;
     bool                        mbDocImported;

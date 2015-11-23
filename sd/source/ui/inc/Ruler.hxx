@@ -49,7 +49,6 @@ public:
 
     using ::Ruler::SetNullOffset;
 protected:
-    ::sd::View* pSdView;
     VclPtr< ::sd::Window> pSdWin;
     DrawViewShell* pDrViewShell;
     RulerCtrlItem* pCtrlItem;

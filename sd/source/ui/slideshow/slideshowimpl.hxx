@@ -330,7 +330,6 @@ private:
     DrawDocShell* mpDocSh;
     SdDrawDocument* mpDoc;
 
-    SfxItemSet*     mpNewAttr;
     VclPtr<vcl::Window>    mpParentWindow;
     VclPtr<ShowWindow>     mpShowWindow;
     VclPtr<PushButton>     mpTimeButton;
@@ -346,22 +345,16 @@ private:
     OUString        maCharBuffer;
     Pointer         maOldPointer;
     Pointer         maPencil;
-    std::vector< VclPtr< ::sd::Window> > maDrawModeWindows;
     VclPtr< ::sd::Window>   mpOldActiveWindow;
     Link<StarBASIC*,bool>   maStarBASICGlobalErrorHdl;
     unsigned long   mnChildMask;
-    bool            mbGridVisible;
-    bool            mbBordVisible;
-    bool            mbSlideBorderVisible;
-    bool            mbSetOnlineSpelling;
     bool            mbDisposed;
     bool            mbAutoSaveWasOn;
     bool            mbRehearseTimings;
-    bool            mbDesignMode;
     bool            mbIsPaused;
     bool            mbWasPaused;        // used to cache pause state during context menu
     bool            mbInputFreeze;
-    bool        mbActive;
+    bool            mbActive;
 
     PresentationSettings maPresSettings;
     sal_Int32       mnUserPaintColor;
@@ -369,10 +362,6 @@ private:
     bool            mbUsePen;
     double          mdUserPaintStrokeWidth;
 
-    /// used in updateHdl to prevent recursive calls
-    sal_Int32       mnEntryCounter;
-
-    sal_Int32       mnLastSlideNumber;
     WrappedShapeEventImplMap    maShapeEventMap;
 
     OUString msOnClick;

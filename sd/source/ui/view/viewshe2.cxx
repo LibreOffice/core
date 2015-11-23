@@ -944,13 +944,13 @@ sal_Int8 ViewShell::AcceptDrop (
 
 sal_Int8 ViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,
-    DropTargetHelper& rTargetHelper,
+    DropTargetHelper& /*rTargetHelper*/,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
     sal_uInt16 nLayer)
 {
     ::sd::View* pView = GetView();
-    return( pView ? pView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
+    return pView ? pView->ExecuteDrop( rEvt, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE;
 }
 
 void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse)

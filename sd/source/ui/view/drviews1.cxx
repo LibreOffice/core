@@ -1259,7 +1259,7 @@ sal_Int8 DrawViewShell::AcceptDrop (
 
 sal_Int8 DrawViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,
-    DropTargetHelper& rTargetHelper,
+    DropTargetHelper& /*rTargetHelper*/,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
     sal_uInt16 nLayer)
@@ -1271,7 +1271,7 @@ sal_Int8 DrawViewShell::ExecuteDrop (
         return DND_ACTION_NONE;
 
     Broadcast(ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
-    sal_Int8 nResult (mpDrawView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ));
+    sal_Int8 nResult (mpDrawView->ExecuteDrop( rEvt, pTargetWindow, nPage, nLayer ));
     Broadcast(ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
 
     return nResult;

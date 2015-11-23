@@ -164,7 +164,6 @@ protected:
     bool mbCalcMinZoomByMinSide;
     bool mbCenterAllowed;
     long mnTicks;
-    bool mbDraggedFrom;
 
     ViewShell* mpViewShell;
     bool mbUseDropScroll;

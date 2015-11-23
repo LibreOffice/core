@@ -68,8 +68,6 @@ public:
     */
     css::uno::Reference<css::drawing::framework::XConfiguration> mxRequestedConfiguration;
 
-    ViewShellBase* mpBase;
-
     std::shared_ptr<ResourceFactoryManager> mpResourceFactoryContainer;
 
     std::shared_ptr<ConfigurationControllerResourceManager> mpResourceManager;
@@ -550,7 +548,6 @@ ConfigurationController::Implementation::Implementation (
     : mxControllerManager(rxController, UNO_QUERY_THROW),
       mpBroadcaster(new ConfigurationControllerBroadcaster(&rController)),
       mxRequestedConfiguration(new Configuration(&rController, true)),
-      mpBase(nullptr),
       mpResourceFactoryContainer(new ResourceFactoryManager(mxControllerManager)),
       mpResourceManager(
           new ConfigurationControllerResourceManager(mpResourceFactoryContainer,mpBroadcaster)),

@@ -83,50 +83,42 @@ char const sXML_styleStreamName[] = "styles.xml";
 char const sXML_contentStreamName[] = "content.xml";
 char const sXML_settingsStreamName[] = "settings.xml";
 
-char const sXML_export_impress_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisExporter";
 char const sXML_export_impress_meta_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisMetaExporter";
 char const sXML_export_impress_styles_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisStylesExporter";
 char const sXML_export_impress_content_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisContentExporter";
 char const sXML_export_impress_settings_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisSettingsExporter";
 
-char const sXML_export_draw_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisExporter";
 char const sXML_export_draw_meta_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisMetaExporter";
 char const sXML_export_draw_styles_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisStylesExporter";
 char const sXML_export_draw_content_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisContentExporter";
 char const sXML_export_draw_settings_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisSettingsExporter";
 
-char const sXML_import_impress_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisImporter";
 char const sXML_import_impress_meta_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisMetaImporter";
 char const sXML_import_impress_styles_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisStylesImporter";
 char const sXML_import_impress_content_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisContentImporter";
 char const sXML_import_impress_settings_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisSettingsImporter";
 
-char const sXML_import_draw_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisImporter";
 char const sXML_import_draw_meta_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisMetaImporter";
 char const sXML_import_draw_styles_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisStylesImporter";
 char const sXML_import_draw_content_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisContentImporter";
 char const sXML_import_draw_settings_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisSettingsImporter";
 
 // OOo
-char const sXML_export_impress_ooo_service[] = "com.sun.star.comp.Impress.XMLExporter";
 char const sXML_export_impress_meta_ooo_service[] = "com.sun.star.comp.Impress.XMLMetaExporter";
 char const sXML_export_impress_styles_ooo_service[] = "com.sun.star.comp.Impress.XMLStylesExporter";
 char const sXML_export_impress_content_ooo_service[] = "com.sun.star.comp.Impress.XMLContentExporter";
 char const sXML_export_impress_settings_ooo_service[] = "com.sun.star.comp.Impress.XMLSettingsExporter";
 
-char const sXML_export_draw_ooo_service[] = "com.sun.star.comp.Draw.XMLExporter";
 char const sXML_export_draw_meta_ooo_service[] = "com.sun.star.comp.Draw.XMLMetaExporter";
 char const sXML_export_draw_styles_ooo_service[] = "com.sun.star.comp.Draw.XMLStylesExporter";
 char const sXML_export_draw_content_ooo_service[] = "com.sun.star.comp.Draw.XMLContentExporter";
 char const sXML_export_draw_settings_ooo_service[] = "com.sun.star.comp.Draw.XMLSettingsExporter";
 
-char const sXML_import_impress_ooo_service[] = "com.sun.star.comp.Impress.XMLImporter";
 char const sXML_import_impress_meta_ooo_service[] = "com.sun.star.comp.Impress.XMLMetaImporter";
 char const sXML_import_impress_styles_ooo_service[] = "com.sun.star.comp.Impress.XMLStylesImporter";
 char const sXML_import_impress_content_ooo_service[] = "com.sun.star.comp.Impress.XMLContentImporter";
 char const sXML_import_impress_settings_ooo_service[] = "com.sun.star.comp.Impress.XMLSettingsImporter";
 
-char const sXML_import_draw_ooo_service[] = "com.sun.star.comp.Draw.XMLImporter";
 char const sXML_import_draw_meta_ooo_service[] = "com.sun.star.comp.Draw.XMLMetaImporter";
 char const sXML_import_draw_styles_ooo_service[] = "com.sun.star.comp.Draw.XMLStylesImporter";
 char const sXML_import_draw_content_ooo_service[] = "com.sun.star.comp.Draw.XMLContentImporter";
@@ -140,7 +132,6 @@ struct XML_SERVICEMAP
 
 struct XML_SERVICES
 {
-    const sal_Char* mpAll;
     const sal_Char* mpMeta;
     const sal_Char* mpStyles;
     const sal_Char* mpContent;
@@ -151,15 +142,15 @@ XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
 {
     static XML_SERVICES gServices[] =
     {
-        { sXML_export_impress_oasis_service, sXML_export_impress_meta_oasis_service, sXML_export_impress_styles_oasis_service, sXML_export_impress_content_oasis_service, sXML_export_impress_settings_oasis_service },
-        { sXML_export_draw_oasis_service, sXML_export_draw_meta_oasis_service, sXML_export_draw_styles_oasis_service, sXML_export_draw_content_oasis_service, sXML_export_draw_settings_oasis_service },
-        { sXML_import_impress_oasis_service, sXML_import_impress_meta_oasis_service, sXML_import_impress_styles_oasis_service, sXML_import_impress_content_oasis_service, sXML_import_impress_settings_oasis_service },
-        { sXML_import_draw_oasis_service, sXML_import_draw_meta_oasis_service, sXML_import_draw_styles_oasis_service, sXML_import_draw_content_oasis_service, sXML_import_draw_settings_oasis_service },
+        { sXML_export_impress_meta_oasis_service, sXML_export_impress_styles_oasis_service, sXML_export_impress_content_oasis_service, sXML_export_impress_settings_oasis_service },
+        { sXML_export_draw_meta_oasis_service, sXML_export_draw_styles_oasis_service, sXML_export_draw_content_oasis_service, sXML_export_draw_settings_oasis_service },
+        { sXML_import_impress_meta_oasis_service, sXML_import_impress_styles_oasis_service, sXML_import_impress_content_oasis_service, sXML_import_impress_settings_oasis_service },
+        { sXML_import_draw_meta_oasis_service, sXML_import_draw_styles_oasis_service, sXML_import_draw_content_oasis_service, sXML_import_draw_settings_oasis_service },
 
-        { sXML_export_impress_ooo_service, sXML_export_impress_meta_ooo_service, sXML_export_impress_styles_ooo_service, sXML_export_impress_content_ooo_service, sXML_export_impress_settings_ooo_service },
-        { sXML_export_draw_ooo_service, sXML_export_draw_meta_ooo_service, sXML_export_draw_styles_ooo_service, sXML_export_draw_content_ooo_service, sXML_export_draw_settings_ooo_service },
-        { sXML_import_impress_ooo_service, sXML_import_impress_meta_ooo_service, sXML_import_impress_styles_ooo_service, sXML_import_impress_content_ooo_service, sXML_import_impress_settings_ooo_service },
-        { sXML_import_draw_ooo_service, sXML_import_draw_meta_ooo_service, sXML_import_draw_styles_ooo_service, sXML_import_draw_content_ooo_service, sXML_import_draw_settings_ooo_service },
+        { sXML_export_impress_meta_ooo_service, sXML_export_impress_styles_ooo_service, sXML_export_impress_content_ooo_service, sXML_export_impress_settings_ooo_service },
+        { sXML_export_draw_meta_ooo_service, sXML_export_draw_styles_ooo_service, sXML_export_draw_content_ooo_service, sXML_export_draw_settings_ooo_service },
+        { sXML_import_impress_meta_ooo_service, sXML_import_impress_styles_ooo_service, sXML_import_impress_content_ooo_service, sXML_import_impress_settings_ooo_service },
+        { sXML_import_draw_meta_ooo_service, sXML_import_draw_styles_ooo_service, sXML_import_draw_content_ooo_service, sXML_import_draw_settings_ooo_service },
     };
 
     return &gServices[ (bImport ? 2 : 0) + ((nStoreVer == SOFFICE_FILEFORMAT_60) ? 4 : 0) + (bDraw ? 1 : 0 ) ];
