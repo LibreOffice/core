@@ -29,11 +29,13 @@
 #version 120
 
 varying vec2 v_texturePosition;
+varying vec3 v_normal;
 
 void main( void )
 {
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
     v_texturePosition = gl_MultiTexCoord0.xy;
+    v_normal = normalize(gl_NormalMatrix * gl_Normal);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

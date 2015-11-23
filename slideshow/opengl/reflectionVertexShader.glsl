@@ -28,13 +28,15 @@
 
 #version 130
 
-varying float v_isShadow;
 varying vec2 v_texturePosition;
+varying vec3 v_normal;
+varying float v_isShadow;
 
 void main( void )
 {
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
     v_texturePosition = gl_MultiTexCoord0.xy;
+    v_normal = normalize(gl_NormalMatrix * gl_Normal);
     v_isShadow = float(gl_VertexID >= 6);
 }
 

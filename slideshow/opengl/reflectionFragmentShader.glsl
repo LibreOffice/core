@@ -31,9 +31,15 @@
 uniform sampler2D slideTexture;
 varying float v_isShadow;
 varying vec2 v_texturePosition;
+varying vec3 v_normal;
 
 void main() {
+    vec3 lightVector = vec3(0.0, 0.0, 1.0);
+    float light = max(dot(lightVector, v_normal), 0.0);
     vec4 fragment = texture2D(slideTexture, v_texturePosition);
+    vec4 black = vec4(0.0, 0.0, 0.0, fragment.a);
+    fragment = mix(black, fragment, light);
+
     if (v_isShadow > 0.5) {
         if (v_texturePosition.y > 1.0 - 0.3)
             gl_FragColor = mix(fragment, vec4(0.0, 0.0, 0.0, 0.0), (1.0 - v_texturePosition.y) / 0.3);

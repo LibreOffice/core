@@ -30,10 +30,14 @@
 
 uniform sampler2D slideTexture;
 varying vec2 v_texturePosition;
+varying vec3 v_normal;
 
 void main() {
-     // TODO: handle lighting.
-     gl_FragColor = texture2D(slideTexture, v_texturePosition);
+    vec3 lightVector = vec3(0.0, 0.0, 1.0);
+    float light = max(dot(lightVector, v_normal), 0.0);
+    vec4 fragment = texture2D(slideTexture, v_texturePosition);
+    vec4 black = vec4(0.0, 0.0, 0.0, fragment.a);
+    gl_FragColor = mix(black, fragment, light);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
