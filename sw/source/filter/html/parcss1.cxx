@@ -1239,7 +1239,17 @@ bool CSS1Expression::GetURL( OUString& rURL  ) const
     if( aValue.getLength() > 5 )
     {
         rURL = aValue.copy( 4, aValue.getLength() - 5 );
-        rURL = comphelper::string::strip(rURL, ' ');
+
+        // tdf#94088 original stripped only spaces, but there may also be
+        // double quotes in CSS style URLs, so be prepared to spaces followed
+        // by a single quote followed by spaces
+        const sal_Unicode aSpace(' ');
+        const sal_Unicode aSingleQuote('\'');
+
+        rURL = comphelper::string::strip(rURL, aSpace);
+        rURL = comphelper::string::strip(rURL, aSingleQuote);
+        rURL = comphelper::string::strip(rURL, aSpace);
+
         bRet = true;
     }
 
