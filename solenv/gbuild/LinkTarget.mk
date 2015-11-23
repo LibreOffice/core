@@ -818,6 +818,7 @@ endef
 
 # libraries which are merged but need to be built for gb_BUILD_HELPER_TOOLS
 gb_BUILD_HELPER_LIBS := basegfx \
+	comphelper \
 	cppu \
 	cppuhelper \
 	reg \

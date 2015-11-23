@@ -14,6 +14,7 @@ MERGE_LIBRARY_LIST := \
 	$(if $(filter $(OS),ANDROID),,basebmp) \
 	basegfx \
 	canvastools \
+	comphelper \
 	configmgr \
 	cppcanvas \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
