@@ -178,11 +178,7 @@ void xml_parser::parse(const char* XmlData, size_t Length, bool IsFinal)
             XML_Parse(xml_parser_, XmlData, static_cast<int>(Length), IsFinal))
     {
         throw xml_parser_exception(
-            XML_ErrorString(XML_GetErrorCode(xml_parser_)),
-            (int)XML_GetErrorCode(xml_parser_),
-            XML_GetCurrentLineNumber(xml_parser_),
-            XML_GetCurrentColumnNumber(xml_parser_),
-            XML_GetCurrentByteIndex(xml_parser_));
+            XML_ErrorString(XML_GetErrorCode(xml_parser_)));
     }
 }
 

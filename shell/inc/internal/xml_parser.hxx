@@ -30,22 +30,10 @@ class xml_parser_exception : public std::runtime_error
 public:
 
     xml_parser_exception(
-        const std::string& error_msg,
-        int error_code,
-        int line_number,
-        int column_number,
-        long byte_index) :
-        std::runtime_error(error_msg),
-        error_code_(error_code),
-        line_number_(line_number),
-        column_number_(column_number),
-        byte_index_(byte_index)
+        const std::string& error_msg) :
+        std::runtime_error(error_msg)
     {}
 
-    int  error_code_;
-    int  line_number_;
-    int  column_number_;
-    long byte_index_;
 };
 
 
