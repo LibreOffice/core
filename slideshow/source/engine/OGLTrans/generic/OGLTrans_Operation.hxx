@@ -236,16 +236,17 @@ class RotateAndScaleDepthByWidth: public Operation
 public:
     virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
-    RotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
+    RotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1);
     virtual ~RotateAndScaleDepthByWidth(){}
 private:
     glm::vec3 axis;
     glm::vec3 origin;
     double angle;
+    bool scale;
 };
 
 std::shared_ptr<RotateAndScaleDepthByWidth>
-makeRotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
+makeRotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1);
 
 /** Same as SRotate, except the depth is scaled by the width of the slide divided by the height of the window.
 */
@@ -254,16 +255,17 @@ class RotateAndScaleDepthByHeight: public Operation
 public:
     virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
-    RotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
+    RotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1);
     virtual ~RotateAndScaleDepthByHeight(){}
 private:
     glm::vec3 axis;
     glm::vec3 origin;
     double angle;
+    bool scale;
 };
 
 std::shared_ptr<RotateAndScaleDepthByHeight>
-makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
+makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1);
 
 #endif // INCLUDED_SLIDESHOW_OPERATIONS_HXX_
 

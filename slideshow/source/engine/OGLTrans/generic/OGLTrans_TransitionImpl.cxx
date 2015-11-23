@@ -535,13 +535,13 @@ std::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft()
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,-1),90,false,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,-1),90,false,false,0.0,1.0));
 
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back(Slide);
 
     Operations_t aOperations;
-    aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,-1),-90,true,0.0,1.0));
+    aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,-1),-90,false,true,0.0,1.0));
 
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
 }
@@ -556,13 +556,13 @@ std::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft()
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,1),-90,false,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,1),-90,false,false,0.0,1.0));
 
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back(Slide);
 
     Operations_t aOperations;
-    aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,1),90,true,0.0,1.0));
+    aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,1),90,false,true,0.0,1.0));
 
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
 }
@@ -577,7 +577,7 @@ std::shared_ptr<OGLTransitionImpl> makeFallLeaving()
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(1,0,0),glm::vec3(0,-1,0), 90,true,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(1,0,0),glm::vec3(0,-1,0), 90,true,true,0.0,1.0));
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back(Slide);
 
@@ -602,7 +602,7 @@ std::shared_ptr<OGLTransitionImpl> makeTurnAround()
     aLeavingPrimitives.push_back(Slide);
 
     Slide.Operations.clear();
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0),-180,false,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0),-180,true,false,0.0,1.0));
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back(Slide);
 
@@ -612,7 +612,7 @@ std::shared_ptr<OGLTransitionImpl> makeTurnAround()
     Operations_t aOperations;
     aOperations.push_back(makeSTranslate(glm::vec3(0, 0, -1.5),true, 0, 0.5));
     aOperations.push_back(makeSTranslate(glm::vec3(0, 0, 1.5), true, 0.5, 1));
-    aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0),glm::vec3(0, 0, 0), -180, true, 0.0, 1.0));
+    aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0),glm::vec3(0, 0, 0), -180, true, true, 0.0, 1.0));
 
     return makeReflectionTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations, aSettings);
 }
@@ -767,7 +767,7 @@ std::shared_ptr<OGLTransitionImpl> makeRochade()
     Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
 
     Slide.Operations.push_back(makeSEllipseTranslate(w, h, 0.25, -0.25, true, 0, 1));
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), -45, true, 0, 1));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), -45, true, true, 0, 1));
     Primitives_t aLeavingSlide;
     aLeavingSlide.push_back(Slide);
 
@@ -777,8 +777,8 @@ std::shared_ptr<OGLTransitionImpl> makeRochade()
     Slide.Operations.clear();
     Slide.Operations.push_back(makeSEllipseTranslate(w, h, 0.75, 0.25, true, 0, 1));
     Slide.Operations.push_back(makeSTranslate(glm::vec3(0, 0, -h), false, -1, 0));
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), -45, true, 0, 1));
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), 45, false, -1, 0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), -45, true, true, 0, 1));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), 45, true, false, -1, 0));
     Primitives_t aEnteringSlide;
     aEnteringSlide.push_back(Slide);
 
@@ -1129,11 +1129,11 @@ std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts 
         if( vertical ) {
             Slide.pushTriangle (glm::vec2 (ln,0), glm::vec2 (n,0), glm::vec2 (ln,1));
             Slide.pushTriangle (glm::vec2 (n,0), glm::vec2 (ln,1), glm::vec2 (n,1));
-            Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0), glm::vec3(n + ln - 1, 0, -t30*p), -120, true, 0.0, 1.0));
+            Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0), glm::vec3(n + ln - 1, 0, -t30*p), -120, true, true, 0.0, 1.0));
         } else {
             Slide.pushTriangle (glm::vec2 (0,ln), glm::vec2 (1,ln), glm::vec2 (0,n));
             Slide.pushTriangle (glm::vec2 (1,ln), glm::vec2 (0,n), glm::vec2 (1,n));
-            Slide.Operations.push_back(makeRotateAndScaleDepthByHeight(glm::vec3(1, 0, 0), glm::vec3(0, 1 - n - ln, -t30*p), -120, true, 0.0, 1.0));
+            Slide.Operations.push_back(makeRotateAndScaleDepthByHeight(glm::vec3(1, 0, 0), glm::vec3(0, 1 - n - ln, -t30*p), -120, true, true, 0.0, 1.0));
         }
         aLeavingSlide.push_back (Slide);
 

@@ -49,20 +49,22 @@ SScale::SScale(const glm::vec3& Scale, const glm::vec3& Origin,
 }
 
 RotateAndScaleDepthByWidth::RotateAndScaleDepthByWidth(const glm::vec3& Axis,
-        const glm::vec3& Origin, double Angle, bool bInter, double T0, double T1):
+        const glm::vec3& Origin, double Angle, bool bScale, bool bInter, double T0, double T1):
     Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
-    angle(Angle)
+    angle(Angle),
+    scale(bScale)
 {
 }
 
 RotateAndScaleDepthByHeight::RotateAndScaleDepthByHeight(const glm::vec3& Axis,
-        const glm::vec3& Origin, double Angle, bool bInter, double T0, double T1):
+        const glm::vec3& Origin, double Angle, bool bScale, bool bInter, double T0, double T1):
     Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
-    angle(Angle)
+    angle(Angle),
+    scale(bScale)
 {
 }
 
@@ -98,15 +100,15 @@ makeSEllipseTranslate(double dWidth, double dHeight, double dStartPosition, doub
 }
 
 std::shared_ptr<RotateAndScaleDepthByWidth>
-makeRotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1)
+makeRotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1)
 {
-    return std::make_shared<RotateAndScaleDepthByWidth>(Axis, Origin, Angle, bInter, T0, T1);
+    return std::make_shared<RotateAndScaleDepthByWidth>(Axis, Origin, Angle, bScale, bInter, T0, T1);
 }
 
 std::shared_ptr<RotateAndScaleDepthByHeight>
-makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1)
+makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bScale, bool bInter, double T0, double T1)
 {
-    return std::make_shared<RotateAndScaleDepthByHeight>(Axis, Origin, Angle, bInter, T0, T1);
+    return std::make_shared<RotateAndScaleDepthByHeight>(Axis, Origin, Angle, bScale, bInter, T0, T1);
 }
 
 inline double intervalInter(double t, double T0, double T1)
@@ -132,7 +134,7 @@ void SRotate::interpolate(glm::mat4& matrix, double t, double SlideWidthScale, d
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
     glm::vec3 translation_vector(SlideWidthScale*origin.x, SlideHeightScale*origin.y, origin.z);
-    glm::vec3 scale_vector(SlideWidthScale, SlideHeightScale, 1);
+    glm::vec3 scale_vector(SlideWidthScale * SlideWidthScale, SlideHeightScale * SlideHeightScale, 1);
     matrix = glm::translate(matrix, translation_vector);
     matrix = glm::scale(matrix, scale_vector);
     matrix = glm::rotate(matrix, static_cast<float>(t*angle), axis);
@@ -161,8 +163,13 @@ void RotateAndScaleDepthByWidth::interpolate(glm::mat4& matrix, double t, double
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
     glm::vec3 translation_vector(SlideWidthScale*origin.x, SlideHeightScale*origin.y, SlideWidthScale*origin.z);
+    glm::vec3 scale_vector(SlideWidthScale * SlideWidthScale, SlideHeightScale * SlideHeightScale, 1);
     matrix = glm::translate(matrix, translation_vector);
+    if (scale)
+        matrix = glm::scale(matrix, scale_vector);
     matrix = glm::rotate(matrix, static_cast<float>(t*angle), axis);
+    if (scale)
+        matrix = glm::scale(matrix, 1.f / scale_vector);
     matrix = glm::translate(matrix, -translation_vector);
 }
 
@@ -174,8 +181,13 @@ void RotateAndScaleDepthByHeight::interpolate(glm::mat4& matrix, double t, doubl
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
     glm::vec3 translation_vector(SlideWidthScale*origin.x, SlideHeightScale*origin.y, SlideHeightScale*origin.z);
+    glm::vec3 scale_vector(SlideWidthScale * SlideWidthScale, SlideHeightScale * SlideHeightScale, 1);
     matrix = glm::translate(matrix, translation_vector);
+    if (scale)
+        matrix = glm::scale(matrix, scale_vector);
     matrix = glm::rotate(matrix, static_cast<float>(t*angle), axis);
+    if (scale)
+        matrix = glm::scale(matrix, 1.f / scale_vector);
     matrix = glm::translate(matrix, -translation_vector);
 }
 
