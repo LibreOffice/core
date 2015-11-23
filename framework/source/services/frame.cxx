@@ -402,7 +402,6 @@ private:
     SvtCommandOptions                                                       m_aCommandOptions;           /// ref counted class to support disabling commands defined by configuration file
     bool                                                                    m_bSelfClose;                /// in case of CloseVetoException on method close() was thrown by ourself - we must close ourself later if no internal processes are running
     bool                                                                    m_bIsHidden;                 /// indicates, if this frame is used in hidden mode or not
-    static css::uno::WeakReference< css::frame::XFrame2 >                   m_xCloserFrame;              /// holds the only frame, which must show the special closer menu item (can be NULL!)
     css::uno::Reference< css::frame::XLayoutManager2 >                      m_xLayoutManager;            /// is used to layout the child windows of the frame.
     css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper;
     css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper;
@@ -413,8 +412,6 @@ protected:
 
     FrameContainer                                                          m_aChildFrameContainer;   /// array of child frames
 };
-
-css::uno::WeakReference< css::frame::XFrame2 > Frame::m_xCloserFrame;
 
 //  XInterface, XTypeProvider, XServiceInfo
 
@@ -3206,15 +3203,16 @@ void Frame::impl_checkMenuCloser()
     // Only if the closer state must be moved from one frame to another one
     // or must be enabled/disabled at all.
     SolarMutexGuard aGuard;
-
-    css::uno::Reference< css::frame::XFrame2 > xCloserFrame (m_xCloserFrame.get(), css::uno::UNO_QUERY);
+    // Holds the only frame, which must show the special closer menu item (can be NULL!)
+    static css::uno::WeakReference< css::frame::XFrame2 > s_xCloserFrame;
+    css::uno::Reference< css::frame::XFrame2 > xCloserFrame (s_xCloserFrame.get(), css::uno::UNO_QUERY);
     if (xCloserFrame!=xNewCloserFrame)
     {
         if (xCloserFrame.is())
             impl_setCloser(xCloserFrame, false);
         if (xNewCloserFrame.is())
             impl_setCloser(xNewCloserFrame, true);
-        m_xCloserFrame = xNewCloserFrame;
+        s_xCloserFrame = xNewCloserFrame;
     }
 }
 
