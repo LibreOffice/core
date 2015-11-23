@@ -404,15 +404,18 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
             for ( sal_Int32 k = 0; k < nGroups; k++ )
             {
                 const sal_Int32 nStart = sres.startOffset[k];
-                if (endPos > 0 || nStart > 0)
+                assert(nStart >= 0);
+                if (nStart > 0)
                     sres.startOffset[k] = offset[(nStart <= nOffsets ? nStart : nOffsets) - 1] + 1;
+                else
+                    sres.startOffset[k] = offset[0];
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
                 //               next position behind the last found character!
                 //               "a b c" find "b" must return 2,3 and not 2,4!!!
                 const sal_Int32 nStop = sres.endOffset[k];
-                if (endPos > 0 || nStop > 0)
-                    sres.endOffset[k] = (nStop < nOffsets ? offset[nStop] : (offset[nOffsets - 1] + 1));
+                assert(nStop >= 0);
+                sres.endOffset[k] = (nStop < nOffsets ? offset[nStop] : (offset[nOffsets - 1] + 1));
             }
         }
     }
