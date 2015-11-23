@@ -141,7 +141,6 @@ public:
         value, or start fresh each time.
     */
     FromToByActivity(
-        const OptionalValueType&                      rFrom,
         const OptionalValueType&                      rTo,
         const OptionalValueType&                      rBy,
         const ActivityParameters&                     rParms,
@@ -149,9 +148,6 @@ public:
         const Interpolator< ValueType >&              rInterpolator,
         bool                                          bCumulative )
         : BaseType( rParms ),
-          maFrom( rFrom ),
-          maTo( rTo ),
-          maBy( rBy ),
           mpFormula( rParms.mpFormula ),
           maStartValue(),
           maEndValue(),
@@ -273,10 +269,6 @@ public:
     }
 
 private:
-    const OptionalValueType                 maFrom;
-    const OptionalValueType                 maTo;
-    const OptionalValueType                 maBy;
-
     ExpressionNodeSharedPtr                 mpFormula;
 
     ValueType                               maStartValue;
@@ -346,7 +338,6 @@ AnimationActivitySharedPtr createFromToByActivity(
 
     return AnimationActivitySharedPtr(
         new FromToByActivity<BaseType, AnimationType>(
-            aFrom,
             aTo,
             aBy,
             rParms,
