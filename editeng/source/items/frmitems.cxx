@@ -83,6 +83,7 @@
 #include <editeng/editerr.hxx>
 #include <libxml/xmlwriter.h>
 #include <o3tl/enumrange.hxx>
+#include <sax/tools/converter.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -3905,7 +3906,6 @@ void SvxBrushItem::PurgeMedium() const
     DELETEZ( pImpl->pStream );
 }
 
-
 const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) const
 {
     if ( bLoadAgain && !maStrLink.isEmpty() && !pImpl->pGraphicObject )
@@ -3914,7 +3914,61 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         if (SvtSecurityOptions().isUntrustedReferer(referer)) {
             return nullptr;
         }
+
+        // remember if this was a direct graphic import from base64 appended to maStrLink
+        bool bDirectBase64GraphicImported(false);
+
+        // try to create stream directly from given URL
         pImpl->pStream = utl::UcbStreamHelper::CreateStream( maStrLink, STREAM_STD_READ );
+
+        if(!pImpl->pStream)
+        {
+            // tdf#94088 The given URL may directly contain the 64bit encoded graphic
+            // as 'data:' statement. It contains '<mimetype>;base64,<base64data>',
+            // see SvxBrushItem::Store above and follow what the HTML export does
+            // in OutCSS1_SvxBrush. Re-import that data here.
+
+            // check for the tokens to ensure this case is used, check if
+            // indices are plausible
+            const sal_Int32 nIndexOfData = maStrLink.indexOf("'data:");
+            const sal_Int32 nIndexOfBase64 = maStrLink.indexOf("base64");
+
+            if(nIndexOfData >= 0 && nIndexOfBase64 >= 0 && nIndexOfBase64 > nIndexOfData)
+            {
+                // calculate the indices to extract the base64-encoded data, check if plausible
+                const sal_Int32 nStartIndex = nIndexOfBase64 + 7; // url + "base64,"
+                const sal_Int32 nEndCharLen = 1; // "'"
+                const sal_Int32 nCopyLen = maStrLink.getLength() - nStartIndex - nEndCharLen;
+
+                // mimetype is currently not needed, keep code for the case this changes
+                // const OUString aMimetype = maStrLink.copy(nIndexOfData + 6, (nIndexOfBase64 - 4) - (nIndexOfData + 5));
+
+                if(nCopyLen > 0)
+                {
+                    // get the base64 data, decode it, ckeck if okay
+                    const OUString graphicAsBase64 = maStrLink.copy(nStartIndex, nCopyLen);
+                    uno::Sequence<sal_Int8> aTargetData;
+
+                    sax::Converter::decodeBase64(aTargetData, graphicAsBase64);
+
+                    if(aTargetData.getLength() > 0)
+                    {
+                        // construct a SvMemoryStream with the decoded data, make sure
+                        // it knows that the buffer is owned by it
+                        const sal_uInt32 nMemoryNeeded = aTargetData.getLength();
+                        sal_Int8* pCopy = new sal_Int8[nMemoryNeeded];
+                        memcpy(pCopy, aTargetData.getArray(), aTargetData.getLength());
+                        SvMemoryStream* pSvMemoryStream = new SvMemoryStream((void*)pCopy, nMemoryNeeded, StreamMode::READ);
+                        pSvMemoryStream->ObjectOwnsMemory(true);
+                        pImpl->pStream = pSvMemoryStream;
+
+                        // remember base64 import
+                        bDirectBase64GraphicImported = true;
+                    }
+                }
+            }
+        }
+
         if( pImpl->pStream && !pImpl->pStream->GetError() )
         {
             Graphic aGraphic;
@@ -3933,7 +3987,13 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
                 pImpl->pGraphicObject = new GraphicObject;
                 pImpl->pGraphicObject->SetGraphic( aGraphic );
                 const_cast < SvxBrushItem*> (this)->ApplyGraphicTransparency_Impl();
-             }
+            }
+
+            if(bDirectBase64GraphicImported)
+            {
+                // remove the base64 encoded data from maStrLink, this is no longer needed.
+                const_cast< SvxBrushItem* >(this)->maStrLink.clear();
+            }
         }
         else
         {

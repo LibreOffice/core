@@ -20,6 +20,9 @@
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 
+// tdf#94088 SdrAllFillAttributesHelper needed
+#include <svx/unobrushitemhelper.hxx>
+
 #include "shellio.hxx"
 #include "wrt_fn.hxx"
 #include "node.hxx"
@@ -54,6 +57,11 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
     }
     const SfxPoolItem* pItem(nullptr);
     FnAttrOut pOut;
+
+    // tdf#94088 check if any FillAttribute is used [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+    // while processing the items
+    bool bFillItemUsed = false;
+
     if( !bDeep || !pSet->GetParent() )
     {
         OSL_ENSURE( rSet.Count(), "It has been handled already, right?" );
@@ -61,8 +69,17 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         pItem = aIter.GetCurItem();
         do {
             // pTab only covers POOLATTR_BEGIN..POOLATTR_END.
-            if( pItem->Which() <= POOLATTR_END && nullptr != ( pOut = pTab[ pItem->Which() - RES_CHRATR_BEGIN] ))
+            if( pItem->Which() <= POOLATTR_END )
+            {
+                if( nullptr != ( pOut = pTab[ pItem->Which() - RES_CHRATR_BEGIN]) )
+                {
                     (*pOut)( rWrt, *pItem );
+                }
+            }
+            else if(XATTR_FILLSTYLE == pItem->Which())
+            {
+                bFillItemUsed = true;
+            }
         } while( !aIter.IsAtEnd() && nullptr != ( pItem = aIter.NextItem() ) );
     }
     else
@@ -76,11 +93,35 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
                     *pItem != rPool.GetDefaultItem( nWhich )
                     || ( pSet->GetParent() &&
                         *pItem != pSet->GetParent()->Get( nWhich ))
-                )) && nullptr != ( pOut = pTab[ nWhich - RES_CHRATR_BEGIN] ))
+                )))
+            {
+                if( nullptr != ( pOut = pTab[ nWhich - RES_CHRATR_BEGIN] ))
+                {
                     (*pOut)( rWrt, *pItem );
+                }
+                else if(XATTR_FILLSTYLE == pItem->Which())
+                {
+                    bFillItemUsed = true;
+                }
+            }
             nWhich = aIter.NextWhich();
         }
     }
+
+    if(bFillItemUsed)
+    {
+        // tdf#94088 if used, construct a SvxBrushItem and export it using the
+        // existing mechanisms.
+        // This is the right place in the future if the adapted fill attributes
+        // may be handled more directly in HTML export to handle them.
+        const SvxBrushItem aSvxBrushItem = getSvxBrushItemFromSourceSet(*pSet, RES_BACKGROUND, bDeep);
+
+        if( nullptr != ( pOut = pTab[RES_BACKGROUND - RES_CHRATR_BEGIN] ))
+        {
+            (*pOut)( rWrt, aSvxBrushItem );
+        }
+    }
+
     return rWrt;
 }
 
