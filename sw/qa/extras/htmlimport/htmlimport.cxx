@@ -11,6 +11,8 @@
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <vcl/GraphicNativeTransform.hxx>
 #include <sfx2/linkmgr.hxx>
 
@@ -81,6 +83,46 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
             CPPUNIT_ASSERT(pGrfNode->GetGrfObj().GetType() != GRAPHIC_NONE);
             break;
         }
+    }
+}
+
+DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFilled.html")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // The document contains embedded pictures inlined for PageBackground and
+    // ParagraphBackground, check for their existance after import
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwEditShell* pEditShell = pDoc->GetEditShell();
+    CPPUNIT_ASSERT(pEditShell);
+
+    // images are not linked, check for zero links
+    const sfx2::LinkManager& rLinkManager = pEditShell->GetLinkManager();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rLinkManager.GetLinks().size());
+
+    // get the pageStyle where the PageBackgroundFill is defined. Caution: for
+    // HTML mode this is *not* called 'Default Style', but 'HTML'. Name is empty
+    // due to being loaded embedded. BitmapMode is repeat.
+    uno::Reference<beans::XPropertySet> xPageProperties1(getStyles("PageStyles")->getByName("HTML"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPageProperties1, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPageProperties1, "FillBitmapName"));
+    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xPageProperties1, "FillBitmapMode"));
+
+    // we should have one paragraph
+    const int nParagraphs = getParagraphs();
+    CPPUNIT_ASSERT_EQUAL(1, nParagraphs);
+
+    if(nParagraphs)
+    {
+        // get the paragraph
+        uno::Reference< text::XTextRange > xPara = getParagraph( 0 );
+        uno::Reference< beans::XPropertySet > xParagraphProperties( xPara, uno::UNO_QUERY);
+
+        // check for Bitmap FillStyle, name empty, repeat
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xParagraphProperties, "FillStyle"));
+        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xParagraphProperties, "FillBitmapName"));
+        CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xParagraphProperties, "FillBitmapMode"));
     }
 }
 
