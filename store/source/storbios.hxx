@@ -131,8 +131,6 @@ public:
         /** Representation.
          */
         OStorePageDescriptor m_aDescr;
-        sal_uInt32           m_nSize;
-        sal_uInt32           m_nMagic;
 
         /** Construction.
          */
@@ -216,7 +214,7 @@ inline bool OStorePageBIOS::isValid() const
 }
 
 inline OStorePageBIOS::ScanContext::ScanContext()
-    : m_aDescr (0, 0, 0), m_nSize (0), m_nMagic (0)
+    : m_aDescr (0, 0, 0)
 {
 }
 
