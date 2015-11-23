@@ -30,6 +30,10 @@ class SdrCaptionGapItem: public SdrMetricItem {
 public:
     SdrCaptionGapItem(long nGap=0)  : SdrMetricItem(SDRATTR_CAPTIONGAP,nGap) {}
     SdrCaptionGapItem(SvStream& rIn): SdrMetricItem(SDRATTR_CAPTIONGAP,rIn)  {}
+    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    {
+        return new SdrCaptionGapItem(*this);
+    }
 };
 
 #endif

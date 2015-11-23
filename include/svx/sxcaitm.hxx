@@ -37,6 +37,10 @@ class SdrCaptionAngleItem: public SdrAngleItem {
 public:
     SdrCaptionAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_CAPTIONANGLE,nAngle) {}
     SdrCaptionAngleItem(SvStream& rIn): SdrAngleItem(SDRATTR_CAPTIONANGLE,rIn)    {}
+    virtual SfxPoolItem* Clone(SfxItemPool*) const override
+    {
+        return new SdrCaptionAngleItem(*this);
+    }
 };
 
 #endif
