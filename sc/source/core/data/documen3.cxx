@@ -1463,6 +1463,32 @@ bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
     return ValidTab(nTab) && maTabs[nTab] && maTabs[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
+void ScDocument::GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& nSelected, SCSIZE& nTotal )
+{
+    nSelected = 0;
+    nTotal = 0;
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    {
+        const ScDBData* pDBData = GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
+        if( pDBData && pDBData->HasAutoFilter() )
+        {
+            SCTAB nAreaTab;
+            SCCOL nStartCol;
+            SCROW nStartRow;
+            SCCOL nEndCol;
+            SCROW nEndRow;
+            pDBData->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
+
+            if( pDBData->HasHeader() )
+                ++nStartRow;
+
+            nTotal = nEndRow - nStartRow + 1;
+            nSelected = CountNonFilteredRows( nStartRow, nEndRow, nTab );
+
+        }
+    }
+}
+
 /**
  * Entries for AutoFilter listbox
  */
