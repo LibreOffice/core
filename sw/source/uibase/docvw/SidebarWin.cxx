@@ -121,7 +121,7 @@ void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild, MouseEvent* p
 /// Decide which one from the children of rParent should get rMouseEvent.
 vcl::Window* lcl_getHitWindow(sw::sidebarwindows::SwSidebarWin& rParent, const MouseEvent& rMouseEvent)
 {
-    vcl::Window* pRet = 0;
+    vcl::Window* pRet = nullptr;
 
     rParent.EditWin().Push(PushFlags::MAPMODE);
     rParent.EditWin().EnableMapMode();
