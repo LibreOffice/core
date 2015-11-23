@@ -41,6 +41,7 @@ ifeq ($(strip $(OS)),MACOSX)
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
     slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
     slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_Operation \
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,OGLTrans,\
@@ -59,12 +60,14 @@ $(eval $(call gb_Library_use_system_win32_libs,OGLTrans,\
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
     slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
     slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_Operation \
 ))
 
 else
 $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
     slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl \
     slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionImpl \
+    slideshow/source/engine/OGLTrans/generic/OGLTrans_Operation \
 ))
 
 $(eval $(call gb_Library_add_libs,OGLTrans,\
