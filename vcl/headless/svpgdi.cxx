@@ -68,17 +68,20 @@ rDevice
 
 bool SvpSalGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& /*rBitmap*/ )
 {
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::blendBitmap case");
     return false;
 }
 
 bool SvpSalGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, const SalBitmap&, const SalBitmap& )
 {
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::blendAlphaBitmap case");
     return false;
 }
 
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect&, const SalBitmap& /*rSourceBitmap*/, const SalBitmap& /*rAlphaBitmap*/ )
 {
     // TODO(P3) implement alpha blending
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
     return false;
 }
 
@@ -91,6 +94,7 @@ bool SvpSalGraphics::drawTransformedBitmap(
 {
     // here direct support for transformed bitmaps can be implemented
     (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
     return false;
 }
 
@@ -671,6 +675,7 @@ bool SvpSalGraphics::drawPolyLine(
     css::drawing::LineCap /*eLineCap*/)
 {
     // TODO: implement and advertise OutDevSupport_B2DDraw support
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLine case");
     return false;
 }
 
@@ -678,6 +683,7 @@ bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
                                          const SalPoint*,
                                          const sal_uInt8* )
 {
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLineBezier case");
     return false;
 }
 
@@ -685,6 +691,7 @@ bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
                                         const SalPoint*,
                                         const sal_uInt8* )
 {
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolygonBezier case");
     return false;
 }
 
@@ -693,6 +700,7 @@ bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
                                             const SalPoint* const*,
                                             const sal_uInt8* const* )
 {
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygonBezier case");
     return false;
 }
 
