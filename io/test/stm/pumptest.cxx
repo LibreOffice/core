@@ -63,7 +63,7 @@ static void mywait()
 class OPumpTest : public WeakImplHelper < XSimpleTest >
 {
 public:
-    OPumpTest( const Reference< XMultiServiceFactory >  & rFactory );
+    explicit OPumpTest( const Reference< XMultiServiceFactory >  & rFactory );
     ~OPumpTest();
 
 public: // implementation names

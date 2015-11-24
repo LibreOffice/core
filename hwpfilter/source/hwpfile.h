@@ -70,7 +70,7 @@ struct ColumnInfo{
     int start_page;
     bool bIsSet;
     ColumnDef *coldef;
-    ColumnInfo(int num){
+    explicit ColumnInfo(int num){
         start_page = num;
         bIsSet = false;
         coldef = NULL;

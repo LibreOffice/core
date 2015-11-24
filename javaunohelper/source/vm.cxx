@@ -47,7 +47,7 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 public:
-    inline SingletonFactory( ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
+    explicit SingletonFactory( ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
         : t_impl( m_mutex ),
           m_vm_access( vm_access )
         {}

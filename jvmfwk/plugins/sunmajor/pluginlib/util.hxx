@@ -65,7 +65,7 @@ bool makeDriveLetterSame(OUString * fileURL);
 struct InfoFindSame
 {
     OUString sJava;
-    InfoFindSame(const OUString& sJavaHome):sJava(sJavaHome){}
+    explicit InfoFindSame(const OUString& sJavaHome):sJava(sJavaHome){}
 
     bool operator () (const rtl::Reference<VendorBase> & aVendorInfo)
     {
@@ -76,7 +76,7 @@ struct InfoFindSame
 struct SameOrSubDirJREMap
 {
     OUString s1;
-    SameOrSubDirJREMap(const OUString& s):s1(s){
+    explicit SameOrSubDirJREMap(const OUString& s):s1(s){
     }
 
     bool operator () (const std::pair<const OUString, rtl::Reference<VendorBase> > & s2)

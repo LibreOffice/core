@@ -1120,7 +1120,7 @@ class TestTabRefAbsHandler
     SCTAB mnTab;
     bool mbTestResult;
 public:
-    TestTabRefAbsHandler(SCTAB nTab) : mnTab(nTab), mbTestResult(false) {}
+    explicit TestTabRefAbsHandler(SCTAB nTab) : mnTab(nTab), mbTestResult(false) {}
 
     void operator() (size_t /*nRow*/, const ScFormulaCell* pCell)
     {
@@ -2906,7 +2906,7 @@ class FindUsedRowsHandler
     UsedRowsType& mrUsed;
     UsedRowsType::const_iterator miUsed;
 public:
-    FindUsedRowsHandler(UsedRowsType& rUsed) : mrUsed(rUsed), miUsed(rUsed.begin()) {}
+    explicit FindUsedRowsHandler(UsedRowsType& rUsed) : mrUsed(rUsed), miUsed(rUsed.begin()) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
@@ -3024,7 +3024,7 @@ class CompileDBFormulaHandler
     sc::CompileFormulaContext& mrCxt;
 
 public:
-    CompileDBFormulaHandler( sc::CompileFormulaContext& rCxt ) :
+    explicit CompileDBFormulaHandler( sc::CompileFormulaContext& rCxt ) :
         mrCxt(rCxt) {}
 
     void operator() (size_t, ScFormulaCell* p)
@@ -3037,7 +3037,7 @@ struct CompileColRowNameFormulaHandler
 {
     sc::CompileFormulaContext& mrCxt;
 public:
-    CompileColRowNameFormulaHandler( sc::CompileFormulaContext& rCxt ) : mrCxt(rCxt) {}
+    explicit CompileColRowNameFormulaHandler( sc::CompileFormulaContext& rCxt ) : mrCxt(rCxt) {}
 
     void operator() (size_t, ScFormulaCell* p)
     {
@@ -3122,7 +3122,7 @@ class UpdateSubTotalHandler
     }
 
 public:
-    UpdateSubTotalHandler(ScFunctionData& rData) : mrData(rData) {}
+    explicit UpdateSubTotalHandler(ScFunctionData& rData) : mrData(rData) {}
 
     void operator() (size_t /*nRow*/, double fVal)
     {

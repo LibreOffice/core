@@ -160,7 +160,7 @@ class ThreadSafeValue
     T   m_nFlag;
     Mutex   m_aMutex;
 public:
-    ThreadSafeValue(T n = 0): m_nFlag(n) {}
+    explicit ThreadSafeValue(T n = 0): m_nFlag(n) {}
     T getValue()
         {
             //block if already acquired by another thread.
@@ -1749,7 +1749,7 @@ public:
     // a public char member for test result checking
     char m_Char_Test;
     // for pass thread-special data to thread
-    myKeyThread(const char cData)
+    explicit myKeyThread(const char cData)
         : m_Char_Test(0)
         {
             m_nData = cData;

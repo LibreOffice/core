@@ -113,7 +113,7 @@ class TextSearch: public cppu::WeakImplHelper
                             throw(css::uno::RuntimeException);
 
 public:
-    TextSearch(
+    explicit TextSearch(
         const css::uno::Reference < css::uno::XComponentContext >& rxContext );
 
     virtual ~TextSearch();

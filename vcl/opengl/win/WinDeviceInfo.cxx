@@ -436,8 +436,8 @@ namespace {
 
 struct compareIgnoreAsciiCase
 {
-    compareIgnoreAsciiCase(const OUString& rString):
-        maString(rString)
+    explicit compareIgnoreAsciiCase(const OUString& rString)
+        : maString(rString)
     {
     }
 

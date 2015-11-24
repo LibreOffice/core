@@ -58,7 +58,7 @@ namespace remotebridges_officeclient {
 class OfficeClientMain : public WeakImplHelper1< XMain >
 {
 public:
-    OfficeClientMain( const Reference< XMultiServiceFactory > &r ) :
+    explicit OfficeClientMain( const Reference< XMultiServiceFactory > &r ) :
         m_xSMgr( r )
         {}
 public:     // Methods

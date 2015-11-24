@@ -67,7 +67,7 @@ public:
     int m_nPositionPixel;
     TiledBarType m_eType;
 
-    TiledRowColumnBar(TiledBarType eType);
+    explicit TiledRowColumnBar(TiledBarType eType);
     static gboolean draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData);
     gboolean drawImpl(GtkWidget* pWidget, cairo_t* pCairo);
     static gboolean docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);

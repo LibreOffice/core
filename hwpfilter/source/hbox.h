@@ -47,7 +47,7 @@ struct HBox
  * Construct a HBox object with parameter hch.
  * @param hch 16bit character being able to have Korean character.
  */
-        HBox( hchar hch );
+        explicit HBox( hchar hch );
         virtual ~HBox();
 /**
  * @returns The Size of HBox object
@@ -75,7 +75,7 @@ struct SkipData: public HBox
     hchar dummy;
     char  *data_block;
 
-    SkipData(hchar);
+    explicit SkipData(hchar);
     virtual ~SkipData();
     virtual bool Read(HWPFile &hwpf) override;
 };
@@ -321,7 +321,7 @@ struct FBox: public HBox
 
     FBox      *prev, *next;
 
-    FBox( hchar hch );
+    explicit FBox( hchar hch );
     virtual ~FBox();
 };
 

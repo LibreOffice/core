@@ -43,7 +43,7 @@ class LinkedList
 
 public:
     /// construct list with one element (pItem) or no element (pItem == NULL)
-    LinkedList( T* pItem = 0 );
+    explicit LinkedList( T* pItem = 0 );
     ~LinkedList();
 };
 
@@ -59,7 +59,7 @@ class LinkedListIterator
 
 public:
     /// construct list with single element
-    LinkedListIterator( LinkedList<T>* pList = 0 );
+    explicit LinkedListIterator( LinkedList<T>* pList = 0 );
     ~LinkedListIterator();
 
     // bug-compatible with original LinkedList.h/cxx: Ignore parameter!

@@ -69,7 +69,7 @@ namespace io_acceptor {
 
     {
     public:
-        SocketConnection( const OUString & sConnectionDescription );
+        explicit SocketConnection( const OUString & sConnectionDescription );
         virtual ~SocketConnection();
 
         virtual sal_Int32 SAL_CALL read( css::uno::Sequence< sal_Int8 >& aReadBytes,
@@ -135,7 +135,7 @@ namespace io_acceptor {
     struct callError {
         const Any & any;
 
-        callError(const Any & any);
+        explicit callError(const Any & any);
 
         void operator () (Reference<XStreamListener> xStreamListener);
     };

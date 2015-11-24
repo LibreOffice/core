@@ -82,8 +82,8 @@ protected:
 
     PreRelease m_preRelease;
 public:
-    SunVersion(const char * szVer);
-    SunVersion(const OUString& usVer);
+    explicit SunVersion(const char * szVer);
+    explicit SunVersion(const OUString& usVer);
     ~SunVersion();
 
     /**

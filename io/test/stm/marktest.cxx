@@ -45,7 +45,7 @@ using namespace ::com::sun::star::test;
 class OMarkableOutputStreamTest : public WeakImplHelper< XSimpleTest >
 {
 public:
-    OMarkableOutputStreamTest( const Reference< XMultiServiceFactory > & rFactory );
+    explicit OMarkableOutputStreamTest( const Reference< XMultiServiceFactory > & rFactory );
     ~OMarkableOutputStreamTest();
 
 public: // implementation names
@@ -403,7 +403,7 @@ OUString    OMarkableOutputStreamTest_getImplementationName() throw ()
 class OMarkableInputStreamTest : public WeakImplHelper< XSimpleTest >
 {
 public:
-    OMarkableInputStreamTest( const Reference< XMultiServiceFactory > & rFactory );
+    explicit OMarkableInputStreamTest( const Reference< XMultiServiceFactory > & rFactory );
     ~OMarkableInputStreamTest();
 
 public: // implementation names

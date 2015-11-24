@@ -378,8 +378,8 @@ namespace sd
 class TransitionPane : public ValueSet
 {
 public:
-    TransitionPane( vcl::Window *pParent ) :
-        ValueSet( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER |
+    explicit TransitionPane( vcl::Window *pParent )
+        : ValueSet( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER |
                   WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL )
     {
         EnableFullItemMode( false );

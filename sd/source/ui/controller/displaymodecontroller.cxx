@@ -32,7 +32,7 @@ namespace sd
 class DisplayModeController : public svt::PopupWindowController
 {
 public:
-    DisplayModeController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit DisplayModeController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 

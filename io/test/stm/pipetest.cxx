@@ -94,7 +94,7 @@ private:
 class OPipeTest : public WeakImplHelper < XSimpleTest >
 {
 public:
-    OPipeTest( const Reference< XMultiServiceFactory >  & rFactory );
+    explicit OPipeTest( const Reference< XMultiServiceFactory >  & rFactory );
     ~OPipeTest();
 
 public: // implementation names

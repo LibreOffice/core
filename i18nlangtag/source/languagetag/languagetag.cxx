@@ -1058,7 +1058,7 @@ bool LanguageTagImpl::canonicalize()
     struct dumper
     {
         lt_tag_t** mpp;
-        dumper( lt_tag_t** pp ) : mpp( *pp ? NULL : pp) {}
+        explicit dumper( lt_tag_t** pp ) : mpp( *pp ? NULL : pp) {}
         ~dumper() { if (mpp && *mpp) lt_tag_dump( *mpp); }
     };
     dumper aDumper( &mpImplLangtag);

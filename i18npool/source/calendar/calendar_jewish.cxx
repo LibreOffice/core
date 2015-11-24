@@ -136,7 +136,7 @@ private:
 public:
     HebrewDate(sal_Int32 m, sal_Int32 d, sal_Int32 y) { month = m; day = d; year = y; }
 
-    HebrewDate(sal_Int32 d) { // Computes the Hebrew date from the absolute date.
+    explicit HebrewDate(sal_Int32 d) { // Computes the Hebrew date from the absolute date.
     year = (d + HebrewEpoch) / 366; // Approximation from below.
     // Search forward for year from the approximation.
     while (d >= HebrewDate(7,1,year + 1))
@@ -214,7 +214,7 @@ private:
 public:
     GregorianDate(int m, int d, int y) { month = m; day = d; year = y; }
 
-    GregorianDate(int d) { // Computes the Gregorian date from the absolute date.
+    explicit GregorianDate(int d) { // Computes the Gregorian date from the absolute date.
         // Search forward year by year from approximate year
         year = d/366;
         while (d >= GregorianDate(1,1,year+1))

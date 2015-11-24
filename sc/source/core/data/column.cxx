@@ -997,7 +997,7 @@ class CopyTextAttrToClipHandler
     sc::CellTextAttrStoreType::iterator miPos;
 
 public:
-    CopyTextAttrToClipHandler( sc::CellTextAttrStoreType& rAttrs ) :
+    explicit CopyTextAttrToClipHandler( sc::CellTextAttrStoreType& rAttrs ) :
         mrDestAttrs(rAttrs), miPos(mrDestAttrs.begin()) {}
 
     void operator() ( const sc::CellTextAttrStoreType::value_type& aNode, size_t nOffset, size_t nDataSize )
@@ -2305,7 +2305,7 @@ class FormulaGroupPicker : public SharedTopFormulaCellPicker
     std::vector<sc::FormulaGroupEntry>& mrGroups;
 
 public:
-    FormulaGroupPicker( std::vector<sc::FormulaGroupEntry>& rGroups ) : mrGroups(rGroups) {}
+    explicit FormulaGroupPicker( std::vector<sc::FormulaGroupEntry>& rGroups ) : mrGroups(rGroups) {}
 
     virtual ~FormulaGroupPicker() {}
 
@@ -2596,7 +2596,7 @@ class UpdateCompileHandler
 {
     bool mbForceIfNameInUse:1;
 public:
-    UpdateCompileHandler(bool bForceIfNameInUse) :
+    explicit UpdateCompileHandler(bool bForceIfNameInUse) :
         mbForceIfNameInUse(bForceIfNameInUse) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
@@ -2609,7 +2609,7 @@ class TabNoSetter
 {
     SCTAB mnTab;
 public:
-    TabNoSetter(SCTAB nTab) : mnTab(nTab) {}
+    explicit TabNoSetter(SCTAB nTab) : mnTab(nTab) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
@@ -2621,7 +2621,7 @@ class UsedRangeNameFinder
 {
     std::set<sal_uInt16>& mrIndexes;
 public:
-    UsedRangeNameFinder(std::set<sal_uInt16>& rIndexes) : mrIndexes(rIndexes) {}
+    explicit UsedRangeNameFinder(std::set<sal_uInt16>& rIndexes) : mrIndexes(rIndexes) {}
 
     void operator() (size_t /*nRow*/, const ScFormulaCell* pCell)
     {
@@ -2668,7 +2668,7 @@ class SetDirtyOnRangeHandler
     sc::SingleColumnSpanSet maValueRanges;
     ScColumn& mrColumn;
 public:
-    SetDirtyOnRangeHandler(ScColumn& rColumn) : mrColumn(rColumn) {}
+    explicit SetDirtyOnRangeHandler(ScColumn& rColumn) : mrColumn(rColumn) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* p)
     {
@@ -2712,7 +2712,7 @@ class SetTableOpDirtyOnRangeHandler
     sc::SingleColumnSpanSet maValueRanges;
     ScColumn& mrColumn;
 public:
-    SetTableOpDirtyOnRangeHandler(ScColumn& rColumn) : mrColumn(rColumn) {}
+    explicit SetTableOpDirtyOnRangeHandler(ScColumn& rColumn) : mrColumn(rColumn) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* p)
     {
@@ -2800,7 +2800,7 @@ class CompileAllHandler
 {
     sc::CompileFormulaContext& mrCxt;
 public:
-    CompileAllHandler( sc::CompileFormulaContext& rCxt ) : mrCxt(rCxt) {}
+    explicit CompileAllHandler( sc::CompileFormulaContext& rCxt ) : mrCxt(rCxt) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
@@ -2914,7 +2914,7 @@ class FindEditCellsHandler
     sc::CellStoreType::iterator miCellPos;
 
 public:
-    FindEditCellsHandler(ScColumn& rCol) :
+    explicit FindEditCellsHandler(ScColumn& rCol) :
         mrColumn(rCol),
         miAttrPos(rCol.GetCellAttrStore().begin()),
         miCellPos(rCol.GetCellStore().begin()) {}

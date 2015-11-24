@@ -41,7 +41,7 @@ class Meaning :
     Meaning & operator = (const Meaning &) = delete;
 
 public:
-    Meaning(const OUString &rTerm);
+    explicit Meaning(const OUString &rTerm);
     virtual ~Meaning();
 
     // XMeaning

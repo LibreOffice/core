@@ -1178,7 +1178,7 @@ class OObjectInputStream:
         XObjectInputStream, XMarkableStream >
 {
 public:
-    OObjectInputStream( const Reference < XComponentContext > &r)
+    explicit OObjectInputStream( const Reference < XComponentContext > &r)
         : m_rSMgr( r->getServiceManager() )
         , m_rCxt( r )
         , m_bValidMarkable(false)

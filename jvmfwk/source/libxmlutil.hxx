@@ -49,7 +49,7 @@ class CXPathContextPtr
     CXPathContextPtr & operator = (const CXPathContextPtr&) = delete;
 public:
     CXPathContextPtr();
-    CXPathContextPtr(xmlXPathContextPtr aContext);
+    explicit CXPathContextPtr(xmlXPathContextPtr aContext);
     CXPathContextPtr & operator = (xmlXPathContextPtr pObj);
     ~CXPathContextPtr();
     xmlXPathContext* operator -> () { return _object;}
@@ -66,7 +66,7 @@ class CXmlDocPtr
 public:
     CXmlDocPtr & operator = (const CXmlDocPtr&);
     CXmlDocPtr();
-    CXmlDocPtr(xmlDoc* aDoc);
+    explicit CXmlDocPtr(xmlDoc* aDoc);
     /** Takes ownership of xmlDoc
      */
     CXmlDocPtr & operator = (xmlDoc* pObj);
@@ -84,8 +84,8 @@ class CXmlCharPtr
     CXmlCharPtr & operator = (const CXmlCharPtr&) = delete;
 public:
     CXmlCharPtr();
-    CXmlCharPtr(xmlChar* aDoc);
-    CXmlCharPtr(const OUString &);
+    explicit CXmlCharPtr(xmlChar* aDoc);
+    explicit CXmlCharPtr(const OUString &);
     ~CXmlCharPtr();
     CXmlCharPtr & operator = (xmlChar* pObj);
     operator xmlChar* () const { return _object;}

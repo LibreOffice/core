@@ -294,8 +294,8 @@ class AttachFormulaCellsHandler
     sc::StartListeningContext& mrCxt;
 
 public:
-    AttachFormulaCellsHandler( sc::StartListeningContext& rCxt ) :
-        mrCxt(rCxt) {}
+    explicit AttachFormulaCellsHandler(sc::StartListeningContext& rCxt)
+        : mrCxt(rCxt) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
@@ -2937,8 +2937,8 @@ class GroupFormulaCells
     std::vector<ScAddress>* mpGroupPos;
 
 public:
-    GroupFormulaCells( std::vector<ScAddress>* pGroupPos ) :
-        mpGroupPos(pGroupPos) {}
+    explicit GroupFormulaCells(std::vector<ScAddress>* pGroupPos)
+        : mpGroupPos(pGroupPos) {}
 
     void operator() (sc::CellStoreType::value_type& node)
     {

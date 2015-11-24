@@ -52,7 +52,7 @@ namespace stoc_connector
         Reference< XMultiComponentFactory > _xSMgr;
         Reference< XComponentContext > _xCtx;
     public:
-        OConnector(const Reference< XComponentContext > &xCtx);
+        explicit OConnector(const Reference< XComponentContext > &xCtx);
         virtual ~OConnector();
         // Methods
         virtual Reference< XConnection > SAL_CALL connect(

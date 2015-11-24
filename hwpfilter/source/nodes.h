@@ -62,7 +62,7 @@ enum IDLIST {
 
 class Node{
 public:
-     Node(int _id) : id(_id)
+     explicit Node(int _id) : id(_id)
      {
           value = NULL;
           child = NULL;

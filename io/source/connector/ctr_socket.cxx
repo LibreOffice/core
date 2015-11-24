@@ -56,7 +56,7 @@ namespace stoc_connector {
     struct callError {
         const Any & any;
 
-        callError(const Any & any);
+        explicit callError(const Any & any);
 
         void operator () (Reference<XStreamListener> xStreamListener);
     };

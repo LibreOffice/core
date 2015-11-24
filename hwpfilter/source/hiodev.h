@@ -80,7 +80,7 @@ class HStreamIODev : public HIODev
         std::unique_ptr<HStream> _stream;
         gz_stream *_gzfp;
     public:
-        HStreamIODev(HStream* stream);
+        explicit HStreamIODev(HStream* stream);
         virtual ~HStreamIODev();
 /**
  * Check whether the stream is available

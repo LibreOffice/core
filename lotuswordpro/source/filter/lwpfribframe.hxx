@@ -83,7 +83,7 @@ private:
 class LwpFribRubyFrame : public LwpFrib
 {
 public:
-    LwpFribRubyFrame( LwpPara* pPara) : LwpFrib(pPara){}
+    explicit LwpFribRubyFrame(LwpPara* pPara) : LwpFrib(pPara){}
     virtual ~LwpFribRubyFrame(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpRubyLayout* GetLayout();

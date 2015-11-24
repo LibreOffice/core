@@ -31,7 +31,7 @@ struct EmPicture
     char  type[16];
     uchar *data;
 
-    EmPicture(size_t size);
+    explicit EmPicture(size_t size);
     ~EmPicture(void);
 
     bool Read(HWPFile& hwpf);
@@ -60,7 +60,7 @@ struct OlePicture
 #else
     char *pis;
 #endif
-    OlePicture(int tsize);
+    explicit OlePicture(int tsize);
     ~OlePicture(void);
 
     bool Read(HWPFile& hwpf);

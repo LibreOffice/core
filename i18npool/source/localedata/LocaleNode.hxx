@@ -71,7 +71,7 @@ class Attr {
     Sequence <OUString> value;
 
 public:
-    Attr (const Reference< XAttributeList > & attr);
+    explicit Attr (const Reference< XAttributeList > & attr);
     const OUString& getValueByName (const sal_Char *str) const;
     sal_Int32 getLength() const;
     const OUString& getTypeByIndex (sal_Int32 idx) const;

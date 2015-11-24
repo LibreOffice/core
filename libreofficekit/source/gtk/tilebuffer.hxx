@@ -242,7 +242,7 @@ struct LOEvent
     ///@}
 
     /// Constructor to instantiate an object of type `type`.
-    LOEvent(int type)
+    explicit LOEvent(int type)
         : m_nType(type)
         , m_pCommand(nullptr)
         , m_pArguments(nullptr)

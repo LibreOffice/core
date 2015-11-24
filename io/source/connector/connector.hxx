@@ -60,7 +60,7 @@ namespace stoc_connector
 
     {
     public:
-        PipeConnection( const OUString &sConnectionDescription );
+        explicit PipeConnection( const OUString &sConnectionDescription );
         virtual ~PipeConnection();
 
         virtual sal_Int32 SAL_CALL read( css::uno::Sequence< sal_Int8 >& aReadBytes,
@@ -89,7 +89,7 @@ namespace stoc_connector
 
     {
     public:
-        SocketConnection( const OUString & sConnectionDescription  );
+        explicit SocketConnection( const OUString & sConnectionDescription  );
         virtual ~SocketConnection();
 
         virtual sal_Int32 SAL_CALL read( css::uno::Sequence< sal_Int8 >& aReadBytes,

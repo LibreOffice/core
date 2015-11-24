@@ -65,7 +65,7 @@ struct resource {
 class IncreaseThread : public Thread
 {
 public:
-    IncreaseThread( struct resource *pData ): pResource( pData ) { }
+    explicit IncreaseThread( struct resource *pData ): pResource( pData ) { }
 
     virtual ~IncreaseThread( )
     {
@@ -93,7 +93,7 @@ protected:
 class DecreaseThread : public Thread
 {
 public:
-    DecreaseThread( struct resource *pData ): pResource( pData ) { }
+    explicit DecreaseThread( struct resource *pData ): pResource( pData ) { }
 
     virtual ~DecreaseThread( )
     {
@@ -130,7 +130,7 @@ class PutThread : public Thread
 {
 public:
     //get the struct pointer to write data to buffer
-    PutThread( struct chain* pData ): pChain( pData ) { }
+    explicit PutThread( struct chain* pData ): pChain( pData ) { }
 
     virtual ~PutThread( )
     {
@@ -168,7 +168,7 @@ class HoldThread : public Thread
 {
 public:
     //get the Mutex pointer to operate
-    HoldThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
+    explicit HoldThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
 
     virtual ~HoldThread( )
     {
@@ -190,7 +190,7 @@ class WaitThread : public Thread
 {
 public:
     //get the Mutex pointer to operate
-    WaitThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
+    explicit WaitThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
 
     virtual ~WaitThread( )
     {
@@ -525,7 +525,7 @@ class GuardThread : public Thread
 {
 public:
     //get the Mutex pointer to operate
-    GuardThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
+    explicit GuardThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
 
     virtual ~GuardThread( )
     {
@@ -606,7 +606,7 @@ class ClearGuardThread : public Thread
 {
 public:
     //get the Mutex pointer to operate
-    ClearGuardThread( Mutex* pMutex ): pMyMutex( pMutex ) {}
+    explicit ClearGuardThread( Mutex* pMutex ): pMyMutex( pMutex ) {}
 
     virtual ~ClearGuardThread( )
     {
@@ -743,7 +743,7 @@ class ResetGuardThread : public Thread
 {
 public:
     //get the Mutex pointer to operate
-    ResetGuardThread( Mutex* pMutex ): pMyMutex( pMutex ) {}
+    explicit ResetGuardThread( Mutex* pMutex ): pMyMutex( pMutex ) {}
 
     virtual ~ResetGuardThread( )
     {

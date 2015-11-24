@@ -222,7 +222,7 @@ rtl::Bootstrap * getBootstrap()
 class FileHandleGuard: private boost::noncopyable
 {
 public:
-    inline FileHandleGuard(oslFileHandle & rHandle):
+    explicit FileHandleGuard(oslFileHandle & rHandle):
         m_rHandle(rHandle) {}
 
     inline ~FileHandleGuard();
@@ -255,7 +255,7 @@ public:
         RESULT_ERROR
     };
 
-    inline FileHandleReader(oslFileHandle & rHandle):
+    explicit FileHandleReader(oslFileHandle & rHandle):
         m_aGuard(rHandle), m_nSize(0), m_nIndex(0), m_bLf(false) {}
 
     Result readLine(OString * pLine);
@@ -339,7 +339,7 @@ class AsynchReader: public salhelper::Thread
     void execute() override;
 public:
 
-    AsynchReader(oslFileHandle & rHandle);
+    explicit AsynchReader(oslFileHandle & rHandle);
 
     /** only call this function after this thread has finished.
 

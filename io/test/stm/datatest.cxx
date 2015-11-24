@@ -63,7 +63,7 @@ class ODataStreamTest :
         public WeakImplHelper< XSimpleTest >
 {
 public:
-    ODataStreamTest( const Reference < XMultiServiceFactory > & rFactory ) :
+    explicit ODataStreamTest( const Reference < XMultiServiceFactory > & rFactory ) :
         m_rFactory( rFactory )
         {}
 
@@ -374,7 +374,7 @@ public:
         m_c( 429 ),
         m_s( OUString( "foo"  ) )
         {}
-    MyPersistObject( const OUString & sServiceName ) : m_sServiceName( sServiceName )
+    explicit MyPersistObject( const OUString & sServiceName ) : m_sServiceName( sServiceName )
         {}
 
 
@@ -628,7 +628,7 @@ class OObjectStreamTest :
         public ODataStreamTest
 {
 public:
-    OObjectStreamTest( const Reference < XMultiServiceFactory > &r) : ODataStreamTest(r) {}
+    explicit OObjectStreamTest( const Reference < XMultiServiceFactory > &r) : ODataStreamTest(r) {}
 
 public:
     virtual void SAL_CALL testInvariant(const OUString& TestName,

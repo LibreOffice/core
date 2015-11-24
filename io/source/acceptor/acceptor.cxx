@@ -49,7 +49,7 @@ namespace io_acceptor
     class OAcceptor : public WeakImplHelper< XAcceptor, XServiceInfo >
     {
     public:
-        OAcceptor(const Reference< XComponentContext > & xCtx);
+        explicit OAcceptor(const Reference< XComponentContext > & xCtx);
         virtual ~OAcceptor();
     public:
         // Methods
