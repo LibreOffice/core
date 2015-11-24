@@ -5841,27 +5841,6 @@ using namespace std;
     AC_SUBST(MINGW_GXXDLL)
 fi
 
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-    AC_DEFINE(HAVE_FMERGENEUTRALITEMS)
-fi
-
-if test "$WITH_MINGW" = "yes"; then
-    AC_MSG_CHECKING([for fMergeNeutralItems in SCRIPT_CONTROL])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-    [
-    #include <usp10.h>
-    ],
-    [
-    SCRIPT_CONTROL c;
-    c.fMergeNeutralItems = 1;
-    ])],
-    [
-    AC_MSG_RESULT(yes)
-    AC_DEFINE(HAVE_FMERGENEUTRALITEMS)
-    ],
-    [AC_MSG_RESULT(no)])
-fi
-
 dnl *************************************************************
 dnl Testing for exception handling - dwarf2 or sjlj exceptions...
 dnl *************************************************************
@@ -12970,7 +12949,6 @@ AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_orcus.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
-AC_CONFIG_HEADERS([config_host/config_mingw.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_opengl.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])

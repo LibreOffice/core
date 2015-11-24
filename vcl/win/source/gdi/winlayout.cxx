@@ -56,8 +56,6 @@
 
 #define DROPPED_OUTGLYPH 0xFFFF
 
-#include <config_mingw.h>
-
 namespace
 {
 // Extra space at the top and bottom of the glyph in total = tmHeight / GLYPH_SPACE_RATIO;
@@ -866,9 +864,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
     aScriptControl.fNeutralOverride = aScriptState.fOverrideDirection;
     aScriptControl.fContextDigits   = bool(rArgs.mnFlags & SalLayoutFlags::SubstituteDigits);
-#if HAVE_FMERGENEUTRALITEMS
     aScriptControl.fMergeNeutralItems = true;
-#endif
+
     // determine relevant substring and work only on it
     // when Bidi status is unknown we need to look at the whole string though
     mnSubStringMin = 0;
