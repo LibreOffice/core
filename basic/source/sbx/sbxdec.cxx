@@ -239,7 +239,11 @@ bool SbxDecimal::setString( OUString* pOUString )
 
 bool SbxDecimal::getChar( sal_Unicode& rVal )
 {
-    bool bRet = ( VarUI2FromDec( &maDec, &rVal ) == S_OK );
+    USHORT n;
+    bool bRet = ( VarUI2FromDec( &maDec, &n ) == S_OK );
+    if (bRet) {
+        rVal = n;
+    }
     return bRet;
 }
 

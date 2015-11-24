@@ -50,8 +50,8 @@ VistaFilePickerEventHandler::VistaFilePickerEventHandler(IVistaFilePickerInterna
     : m_nRefCount           (0       )
     , m_nListenerHandle     (0       )
     , m_pDialog             (        )
-    , m_lListener           (m_aMutex)
     , m_pInternalNotify     (pInternalNotify)
+    , m_lListener           (m_aMutex)
 {
 }
 
@@ -220,9 +220,6 @@ void SAL_CALL VistaFilePickerEventHandler::removeFilePickerListener( const css::
 
 void VistaFilePickerEventHandler::startListening( const TFileDialog& pBroadcaster )
 {
-    static const sal_Bool STARTUP_SUSPENDED = sal_True;
-    static const sal_Bool STARTUP_WORKING   = sal_False;
-
     if (m_pDialog.is())
         return;
 

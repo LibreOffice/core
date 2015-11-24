@@ -22,6 +22,7 @@
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterTimer.hxx"
 
+#include <algorithm>
 #include <cmath>
 
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>

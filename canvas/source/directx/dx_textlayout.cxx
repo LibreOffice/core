@@ -209,17 +209,6 @@ namespace dxcanvas
         return maText;
     }
 
-    namespace
-    {
-        // TODO(P2): Check whether this gets inlined. If not, make functor
-        // out of it
-        inline Gdiplus::PointF gdiPlusPointFromDx( const double& dx )
-        {
-            return Gdiplus::PointF( static_cast<Gdiplus::REAL>(dx),
-                                    0.0f );
-        }
-    }
-
     bool TextLayout::draw( const GraphicsSharedPtr&                           rGraphics,
                            const rendering::ViewState&                        rViewState,
                            const rendering::RenderState&                      rRenderState,

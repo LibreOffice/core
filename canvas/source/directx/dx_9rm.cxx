@@ -263,27 +263,6 @@ namespace dxcanvas
         static sal_uInt32 gNumSurfaces = 0;
 #endif
 
-        void fillRect( sal_uInt32 *pDest,
-                       sal_uInt32 dwWidth,
-                       sal_uInt32 dwHeight,
-                       sal_uInt32 dwPitch,
-                       sal_uInt32 dwColor )
-        {
-            for(sal_uInt32 i=0; i<dwWidth; ++i)
-            {
-                pDest[i]=dwColor;
-                pDest[((dwHeight-1)*dwPitch)+i]=dwColor;
-            }
-
-            for(sal_uInt32 j=0; j<dwHeight; ++j)
-            {
-                pDest[0]=dwColor;
-                pDest[dwWidth-1]=dwColor;
-                pDest += dwPitch;
-            }
-        }
-
-
         // DXSurface::DXSurface
 
 

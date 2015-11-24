@@ -10,12 +10,10 @@
 #ifndef INCLUDED_VCL_INC_GLYPHY_DEMO_HXX
 #define INCLUDED_VCL_INC_GLYPHY_DEMO_HXX
 
-namespace GLyphyDemo {
 #include "demo-atlas.h"
 #include "demo-buffer.h"
 #include "demo-font.h"
 #include "demo-shader.h"
 #include "matrix4x4.h"
-}
 
 #endif // INCLUDED_VCL_INC_GLYPHY_DEMO_HXX

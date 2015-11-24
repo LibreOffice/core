@@ -53,7 +53,6 @@ namespace
 {
     // controlling event notifications
     const bool STARTUP_SUSPENDED = true;
-    const bool STARTUP_ALIVE     = false;
 
     uno::Sequence<OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {

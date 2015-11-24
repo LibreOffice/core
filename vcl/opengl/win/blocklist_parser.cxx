@@ -11,9 +11,9 @@
 
 WinBlocklistParser::WinBlocklistParser(const OUString& rURL,
         std::vector<wgl::DriverInfo>& rDriverList)
-    : maURL(rURL)
+    : meBlockType(BlockType::UNKNOWN)
     , mrDriverList(rDriverList)
-    , meBlockType(BlockType::UNKNOWN)
+    , maURL(rURL)
 {
 }
 

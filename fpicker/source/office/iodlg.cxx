@@ -238,7 +238,7 @@ namespace
         }
     }
 
-
+#if defined( UNX )
     bool lcl_getHomeDirectory( const OUString& _rForURL, OUString& /* [out] */ _rHomeDir )
     {
         _rHomeDir.clear();
@@ -273,7 +273,7 @@ namespace
         }
         return !_rHomeDir.isEmpty();
     }
-
+#endif
 
     static OUString lcl_ensureFinalSlash( const OUString& _rDir )
     {
