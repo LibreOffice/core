@@ -123,6 +123,24 @@
       "revId": "7240f9c17fa7fbb3fb718721ec7f886b8cc5641a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_05abc28a",
+        "filename": "ucb/source/ucp/webdav-neon/NeonHeadRequest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-24T10:17:55Z",
+      "side": 1,
+      "message": "Probably some clarification is needed on my part.\nHere header has the meaning Michael assumed.\nFrom the single log it\u0027s unclear, but the following is the logging of an open command:\n\nContent::execute: start: command: open, env: present\nGET - relative URL \u003c/static/v1/widgets/176275667-css_bundle_v2.css\u003e\nNeonSession_CertificationNotify called\n(pkix_CacheCert_Add: PKIX_PL_HashTable_Add for Certs skipped: entry existed\n...\n(pkix_CacheCert_Add: PKIX_PL_HashTable_Add for Certs skipped: entry existed\nreceived headers:\n x-content-type-options: nosniff\n x-xss-protection: 1; mode\u003dblock\n last-modified: Thu, 05 Nov 2015 04:19:18 GMT\n date: Fri, 06 Nov 2015 03:47:39 GMT\n expires: Sat, 05 Nov 2016 03:47:39 GMT\n content-length: 8965\n cache-control: public, max-age\u003d31536000\n alternate-protocol: 443:quic,p\u003d1\n content-encoding: gzip\n vary: Accept-Encoding\n alt-svc: quic\u003d\":443\"; p\u003d\"1\"; ma\u003d604800\n server: sffe\n content-type: text/css\n age: 1577320\nContent::execute: end: command: open\n\nEven if the logs are mixed up, knowing how the software works, for me it\u0027s quite obvious the \u0027received heders:\u0027 in this log are referred to to GET method just above, though probably changing the wording in \u0027GET received headers:\u0027 would be better.\n\nThis shots contains other logs I needed for this capture, not proposed in this patch set.\n\nI hope I didn\u0027t make thing more confusing :).",
+      "parentUuid": "dab17558_c5b9baee",
+      "revId": "7240f9c17fa7fbb3fb718721ec7f886b8cc5641a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
