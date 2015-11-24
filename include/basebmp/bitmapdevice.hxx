@@ -665,8 +665,7 @@ sal_Int32 BASEBMP_DLLPUBLIC getBitmapDeviceStrideForWidth(Format nScanlineFormat
  */
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector& rSize,
                                                             bool                      bTopDown,
-                                                            Format                    nScanlineFormat,
-                                                            sal_Int32                 nScanlineStride );
+                                                            Format                    nScanlineFormat );
 
 /** Function to create a BitmapDevice for given scanline format
     with the given palette
@@ -678,7 +677,6 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
                                                             bool                             bTopDown,
                                                             Format                           nScanlineFormat,
-                                                            sal_Int32                        nScanlineStride,
                                                             const PaletteMemorySharedVector& rPalette );
 
 /** Function to create a BitmapDevice for given scanline format
@@ -690,7 +688,6 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
                                                             bool                             bTopDown,
                                                             Format                           nScanlineFormat,
-                                                            sal_Int32                        nScanlineStride,
                                                             const RawMemorySharedArray&      rMem,
                                                             const PaletteMemorySharedVector& rPalette );
 
@@ -722,8 +719,8 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC subsetBitmapDevice( const BitmapDeviceSh
     copied, only the size can be varied. Note that the prototype's
     bitmap content is <em>not</em> copied, only a palette (if any).
  */
-BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC cloneBitmapDevice( const basegfx::B2IVector&    rSize,
-                                                           const BitmapDeviceSharedPtr& rProto );
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC cloneBitmapDevice(const basegfx::B2IVector& rSize,
+                                                          const BitmapDeviceSharedPtr& rProto);
 
 }
 

@@ -291,8 +291,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             aFrameSize.setX( 1 );
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(m_nScanlineFormat, aFrameSize.getX());
-        m_aFrame = createBitmapDevice( aFrameSize, true, m_nScanlineFormat, nStride );
+        m_aFrame = createBitmapDevice( aFrameSize, true, m_nScanlineFormat );
         if (m_bDamageTracking)
             m_aFrame->setDamageTracker(
                 basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );
