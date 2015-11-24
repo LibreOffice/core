@@ -769,7 +769,7 @@ void ScannerManager::ReleaseData()
     }
 }
 
-awt::Size ScannerManager::getSize() throw()
+awt::Size ScannerManager::getSize() throw(std::exception)
 {
     awt::Size   aRet;
     HGLOBAL     hDIB = (HGLOBAL)(sal_IntPtr) mpData;
@@ -794,7 +794,7 @@ awt::Size ScannerManager::getSize() throw()
     return aRet;
 }
 
-uno::Sequence< sal_Int8 > ScannerManager::getDIB() throw()
+uno::Sequence< sal_Int8 > ScannerManager::getDIB() throw(std::exception)
 {
     uno::Sequence< sal_Int8 > aRet;
 
@@ -854,7 +854,7 @@ uno::Sequence< sal_Int8 > ScannerManager::getDIB() throw()
     return aRet;
 }
 
-uno::Sequence< ScannerContext > SAL_CALL ScannerManager::getAvailableScanners() throw()
+uno::Sequence< ScannerContext > SAL_CALL ScannerManager::getAvailableScanners() throw(std::exception)
 {
     osl::MutexGuard aGuard( maProtector );
     uno::Sequence< ScannerContext >   aRet( 1 );
@@ -880,7 +880,7 @@ sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rCont
 }
 
 void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const uno::Reference< lang::XEventListener >& rxListener )
-    throw( ScannerException )
+    throw( ScannerException, std::exception )
 {
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
@@ -893,7 +893,7 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
 }
 
 ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
-    throw( ScannerException )
+    throw( ScannerException, std::exception )
 {
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
@@ -905,7 +905,7 @@ ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
 }
 
 uno::Reference< awt::XBitmap > SAL_CALL ScannerManager::getBitmap( const ScannerContext& /*rContext*/ )
-    throw( ScannerException )
+    throw( ScannerException, std::exception )
 {
     osl::MutexGuard aGuard( maProtector );
     return uno::Reference< awt::XBitmap >( this );

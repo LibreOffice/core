@@ -112,8 +112,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         }
         wcscpy(
             cmd + pathsize,
-            (L"\\unoinfo.exe\" c++" +
-             (pathsize == 1 || cmd[pathsize - 1] != L'\\' ? 0 : 1)));
+            &L"\\unoinfo.exe\" c++"[
+                pathsize == 1 || cmd[pathsize - 1] != L'\\' ? 0 : 1]);
         sec.nLength = sizeof (SECURITY_ATTRIBUTES);
         sec.lpSecurityDescriptor = NULL;
         sec.bInheritHandle = TRUE;

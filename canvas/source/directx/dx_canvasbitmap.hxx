@@ -70,15 +70,15 @@ namespace dxcanvas
         virtual void disposeThis() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) override;
 
         // BitmapProvider
-        virtual IBitmapSharedPtr getBitmap() const { return mpBitmap; }
+        virtual IBitmapSharedPtr getBitmap() const override { return mpBitmap; }
 
-        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (css::uno::RuntimeException);
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&)  throw (css::uno::RuntimeException) {}
+        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (css::uno::RuntimeException) override;
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&)  throw (css::uno::RuntimeException) override {}
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a

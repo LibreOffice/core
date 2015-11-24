@@ -406,7 +406,7 @@ bool CClassFactory::IsLocked()
 }
 
 
-extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
+STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
     OutputDebugStringFormat( "DllGetClassObject.\n" );
     *ppv = 0;
@@ -423,7 +423,7 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 }
 
 
-extern "C" STDAPI DllCanUnloadNow()
+STDAPI DllCanUnloadNow()
 {
     OutputDebugStringFormat( "DllCanUnloadNow.\n" );
     if (CClassFactory::IsLocked() || g_DllRefCnt > 0)

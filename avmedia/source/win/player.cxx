@@ -47,7 +47,7 @@ namespace avmedia { namespace win {
 
 LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
-    Player* pPlayer = (Player*) ::GetWindowLong( hWnd, 0 );
+    Player* pPlayer = (Player*) ::GetWindowLongPtr( hWnd, 0 );
     bool    bProcessed = true;
 
     if( pPlayer )
@@ -113,7 +113,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 Player::~Player()
 {
     if( mnFrameWnd )
-        ::DestroyWindow( (HWND) mnFrameWnd );
+        ::DestroyWindow( mnFrameWnd );
 
     ::CoUninitialize();
 }
@@ -207,7 +207,7 @@ const IVideoWindow* Player::getVideoWindow() const
     return mpVW;
 }
 
-void Player::setNotifyWnd( int nNotifyWnd )
+void Player::setNotifyWnd( HWND nNotifyWnd )
 {
     mbAddWindow = false;
     if( mpME )
@@ -266,14 +266,14 @@ void SAL_CALL Player::start(  )
             }
             if ( !mnFrameWnd )
             {
-                mnFrameWnd = (int) ::CreateWindow( mpWndClass->lpszClassName, NULL,
+                mnFrameWnd = ::CreateWindow( mpWndClass->lpszClassName, NULL,
                                            0,
                                            0, 0, 0, 0,
                                            (HWND) NULL, NULL, mpWndClass->hInstance, 0 );
                 if ( mnFrameWnd )
                 {
-                    ::ShowWindow((HWND) mnFrameWnd, SW_HIDE);
-                    ::SetWindowLong( (HWND) mnFrameWnd, 0, (DWORD) this );
+                    ::ShowWindow(mnFrameWnd, SW_HIDE);
+                    ::SetWindowLongPtr( mnFrameWnd, 0, (LONG_PTR) this );
                     // mpVW->put_Owner( (OAHWND) mnFrameWnd );
                     setNotifyWnd( mnFrameWnd );
                 }

@@ -32,6 +32,7 @@
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <boost/bind.hpp>
+#include <algorithm>
 #include <memory>
 #include <math.h>
 

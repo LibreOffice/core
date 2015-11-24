@@ -206,6 +206,9 @@ private:
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw(css::uno::RuntimeException);
     SVX_DLLPRIVATE virtual ~Cell() throw();
 
+    Cell(Cell const &) = delete;
+    void operator =(Cell const &) = delete;
+
     const SvxItemPropertySet* mpPropSet;
 
     sdr::properties::TextProperties*    mpProperties;

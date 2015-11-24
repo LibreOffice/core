@@ -44,8 +44,6 @@
 #include "dx_impltools.hxx"
 #include "dx_textlayout_drawhelper.hxx"
 
-class css::rendering::XCanvasFont;
-
 using namespace ::com::sun::star;
 
 

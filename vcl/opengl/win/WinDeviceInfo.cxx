@@ -16,8 +16,11 @@
 #include <setupapi.h>
 #include <algorithm>
 #include <cstdint>
+
+#include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/stream.hxx>
 
 OUString* WinOpenGLDeviceInfo::mpDeviceVendors[wgl::DeviceVendorMax];
 std::vector<wgl::DriverInfo> WinOpenGLDeviceInfo::maDriverInfo;
@@ -63,10 +66,8 @@ void GetDLLVersion(const sal_Unicode* aDLLPath, OUString& aVersion)
     vers[2] = HIWORD(fileVersLS);
     vers[3] = LOWORD(fileVersLS);
 
-    char buf[256];
-    sprintf(buf, "%d.%d.%d.%d", vers[0], vers[1], vers[2], vers[3]);
-    OString aBuf(buf);
-    aVersion = OStringToOUString(aBuf, RTL_TEXTENCODING_UTF8);
+    aVersion = OUString::number(vers[0]) + "." + OUString::number(vers[1])
+        + "." + OUString::number(vers[2]) + "." + OUString::number(vers[3]);
 }
 
 /*
@@ -169,19 +170,6 @@ bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destS
     return retval;
 }
 
-// The driver ID is a string like PCI\VEN_15AD&DEV_0405&SUBSYS_040515AD, possibly
-// followed by &REV_XXXX.  We uppercase the string, and strip the &REV_ part
-// from it, if found.
-void normalizeDriverId(OUString& driverid)
-{
-    driverid = driverid.toAsciiUpperCase();
-    int32_t rev = driverid.indexOf("&REV_");
-    if (rev != -1)
-    {
-        driverid = driverid.copy(0, rev - 1);
-    }
-}
-
 // The device ID is a string like PCI\VEN_15AD&DEV_0405&SUBSYS_040515AD
 // this function is used to extract the id's out of it
 uint32_t ParseIDFromDeviceID(const OUString &key, const char *prefix, int length)
@@ -246,7 +234,9 @@ int32_t WindowsOSVersion()
         vinfo.dwOSVersionInfoSize = sizeof (vinfo);
 #pragma warning(push)
 #pragma warning(disable:4996)
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         if (!GetVersionEx(&vinfo))
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         {
 #pragma warning(pop)
             winVersion = kWindowsUnknown;

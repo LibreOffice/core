@@ -128,7 +128,15 @@ enum parseKey {
     NONE
 };
 
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-register"
+#pragma clang diagnostic ignored "-Wextra-tokens"
+#endif
 #include "hash.cxx"
+#if defined _MSC_VER && defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 class Parser
 {

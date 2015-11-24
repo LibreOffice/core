@@ -67,8 +67,8 @@ class SvAddressParser_Impl
 {
     enum State { BEFORE_COLON, BEFORE_LESS, AFTER_LESS, AFTER_GREATER };
 
-    enum TokenType { TOKEN_QUOTED = 0x80000000, TOKEN_DOMAIN, TOKEN_COMMENT,
-                     TOKEN_ATOM };
+    enum TokenType: sal_uInt32 {
+        TOKEN_QUOTED = 0x80000000, TOKEN_DOMAIN, TOKEN_COMMENT, TOKEN_ATOM };
 
     sal_Unicode const * m_pInputPos;
     sal_Unicode const * m_pInputEnd;

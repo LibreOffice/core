@@ -118,14 +118,14 @@ namespace dxcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XBufferController (partial)
-        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException) override;
+        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException) override;
 
         // XSpriteCanvas (partial)
-        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException) override;
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException) override;
 
         /// Retrieve rendermodule object for this Canvas
         const IDXRenderModuleSharedPtr& getRenderModule() const;
@@ -134,7 +134,7 @@ namespace dxcanvas
         const DXSurfaceBitmapSharedPtr& getBackBuffer() const;
 
         // BitmapProvider
-        virtual IBitmapSharedPtr getBitmap() const;
+        virtual IBitmapSharedPtr getBitmap() const override;
 
      private:
         css::uno::Sequence< css::uno::Any >                maArguments;
