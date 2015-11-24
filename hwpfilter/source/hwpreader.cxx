@@ -2724,7 +2724,12 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
     }
     if( d->bFirstPara && d->bInBody )
     {
-        strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
+        strcpy(
+            buf,
+            "[\xEB\xAC\xB8\xEC\x84\x9C\xEC\x9D\x98 \xEC\xB2\x98\xEC\x9D\x8C]");
+            // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
+            // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
+            // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
         padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
         rstartEl("text:bookmark", rList);
         pList->clear();
@@ -2795,7 +2800,12 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
     if( d->bFirstPara && d->bInBody )
     {
 /* for HWP's Bookmark */
-        strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
+        strcpy(
+            buf,
+            "[\xEB\xAC\xB8\xEC\x84\x9C\xEC\x9D\x98 \xEC\xB2\x98\xEC\x9D\x8C]");
+            // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
+            // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
+            // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
         padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
         rstartEl("text:bookmark", rList);
         pList->clear();
@@ -2874,7 +2884,12 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         if ( !pstart ) {
             STARTP;
         }
-        strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
+        strcpy(
+            buf,
+            "[\xEB\xAC\xB8\xEC\x84\x9C\xEC\x9D\x98 \xEC\xB2\x98\xEC\x9D\x8C]");
+            // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
+            // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
+            // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
         padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
         rstartEl("text:bookmark", rList);
         pList->clear();
@@ -4788,7 +4803,13 @@ void HwpReader::parsePara(HWPPara * para, bool bParaStart)
             if( d->bFirstPara && d->bInBody )
             {
 /* for HWP's Bookmark */
-                strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
+                strcpy(
+                    buf,
+                    "[\xEB\xAC\xB8\xEC\x84\x9C\xEC\x9D\x98"
+                        " \xEC\xB2\x98\xEC\x9D\x8C]");
+                    // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
+                    // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
+                    // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
                 padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
                 rstartEl("text:bookmark", rList);
                 pList->clear();
