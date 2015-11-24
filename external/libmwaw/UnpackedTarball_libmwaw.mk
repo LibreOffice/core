@@ -37,6 +37,7 @@ endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
     external/libmwaw/c++11-narrowing.patch \
+	external/libmwaw/0001-if-ptr-to-member-var.-is-defined-ensure-the-class-is.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
