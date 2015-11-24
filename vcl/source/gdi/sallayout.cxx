@@ -51,27 +51,6 @@
 #include <algorithm>
 #include <memory>
 
-#ifdef DEBUG
-//#define MULTI_SL_DEBUG
-#endif
-
-#ifdef MULTI_SL_DEBUG
-#include <string>
-FILE * mslLogFile = NULL;
-FILE * mslLog()
-{
-#ifdef _MSC_VER
-    std::string logFileName(getenv("TEMP"));
-    logFileName.append("\\msllayout.log");
-    if (mslLogFile == NULL) mslLogFile = fopen(logFileName.c_str(),"w");
-    else fflush(mslLogFile);
-    return mslLogFile;
-#else
-    return stdout;
-#endif
-}
-#endif
-
 std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
 {
 #ifndef SAL_LOG_INFO
@@ -1623,10 +1602,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nStartNew[ nLevel ] = nStartOld[ nLevel ] = 0;
         nValid[ nLevel ] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
             nStartNew[ nLevel ], &nGlyphAdv[ nLevel ], &nCharPos[ nLevel ] );
-#ifdef MULTI_SL_DEBUG
-        if (nValid[nLevel]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d x%d a%d c%ld %x\n", n, nStartOld[nLevel], nStartNew[nLevel], aPos.X(), (long)nGlyphAdv[nLevel], nCharPos[nLevel],
-            rArgs.mrStr[nCharPos[nLevel]]);
-#endif
+
         if( (n > 0) && !nValid[ nLevel ] )
         {
             // an empty fallback layout can be released
@@ -1694,9 +1670,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 nStartOld[0] = nStartNew[0];
                 nValid[0] = mpLayouts[0]->GetNextGlyphs( 1, &nDummy, aPos,
                     nStartNew[0], &nGlyphAdv[0], &nCharPos[0] );
-#ifdef MULTI_SL_DEBUG
-                if (nValid[0]) fprintf(mslLog(), "layout[0]->GetNextGlyphs %d,%d x%d a%ld c%d %x\n", nStartOld[0], nStartNew[0], aPos.X(), (long)nGlyphAdv[0], nCharPos[0], rArgs.mrStr[nCharPos[0]]);
-#endif
+
                 if( !nValid[0] )
                    break;
             }
@@ -1714,9 +1688,6 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             int nOrigCharPos = nCharPos[n];
             nValid[n] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
                                                      nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
-#ifdef MULTI_SL_DEBUG
-            if (nValid[n]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d a%ld c%d %x\n", n, nStartOld[n], nStartNew[n], (long)nGlyphAdv[n], nCharPos[n], rArgs.mrStr[nCharPos[n]]);
-#endif
             // break after last glyph of active layout
             if( !nValid[n] )
             {
@@ -1792,18 +1763,6 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // the run advance is the width from the first char
             // in the run to the first char in the next run
             nRunAdvance = 0;
-#ifdef MULTI_SL_DEBUG
-            const bool bLTR = !(vRtl[nActiveCharPos - mnMinCharPos]);//(nActiveCharPos < nCharPos[0]);
-            int nOldRunAdv = 0;
-            int nDXIndex = nCharPos[0] - mnMinCharPos - bLTR;
-            if( nDXIndex >= 0 )
-                nOldRunAdv += aMultiArgs.mpDXArray[ nDXIndex ];
-            nDXIndex = nActiveCharPos - mnMinCharPos - bLTR;
-            if( nDXIndex >= 0 )
-                nOldRunAdv -= aMultiArgs.mpDXArray[ nDXIndex ];
-            if( !bLTR )
-                nOldRunAdv = -nOldRunAdv;
-#endif
             nActiveCharIndex = nActiveCharPos - mnMinCharPos;
             if (nActiveCharIndex >= 0 && vRtl[nActiveCharIndex])
             {
@@ -1811,9 +1770,6 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                   nRunAdvance -= aMultiArgs.mpDXArray[nRunVisibleEndChar - 1 - mnMinCharPos];
               if (nLastRunEndChar > mnMinCharPos && nLastRunEndChar <= mnEndCharPos)
                   nRunAdvance += aMultiArgs.mpDXArray[nLastRunEndChar - 1 - mnMinCharPos];
-#ifdef MULTI_SL_DEBUG
-              fprintf(mslLog(), "rtl visible %d-%d,%d-%d adv%d(%d)\n", nLastRunEndChar-1, nRunVisibleEndChar-1, nActiveCharPos - bLTR, nCharPos[0] - bLTR, nRunAdvance, nOldRunAdv);
-#endif
             }
             else
             {
@@ -1821,9 +1777,6 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                   nRunAdvance += aMultiArgs.mpDXArray[nRunVisibleEndChar - mnMinCharPos];
                 if (nLastRunEndChar >= mnMinCharPos)
                   nRunAdvance -= aMultiArgs.mpDXArray[nLastRunEndChar - mnMinCharPos];
-#ifdef MULTI_SL_DEBUG
-                fprintf(mslLog(), "visible %d-%d,%d-%d adv%d(%d)\n", nLastRunEndChar, nRunVisibleEndChar, nActiveCharPos - bLTR, nCharPos[0] - bLTR, nRunAdvance, nOldRunAdv);
-#endif
             }
             nLastRunEndChar = nRunVisibleEndChar;
             nRunVisibleEndChar = nCharPos[0];
