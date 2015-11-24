@@ -331,7 +331,6 @@ IMPL_LINK_NOARG_TYPED(CertificateViewerDetailsTP, ElementSelectHdl, SvTreeListBo
 struct CertPath_UserData
 {
     css::uno::Reference< css::security::XCertificate > mxCert;
-    OUString                                        maStatus;
     bool mbValid;
 
     CertPath_UserData( css::uno::Reference< css::security::XCertificate > xCert, bool bValid):

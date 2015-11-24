@@ -303,12 +303,6 @@ private:
     bool m_bIsSAXEventKeeperSticky;
 
     /*
-     * fast property vector
-     */
-    std::vector< sal_Int32 > m_vFastPropertyIndexs;
-    std::vector< com::sun::star::uno::Any > m_vFastPropertyValues;
-
-    /*
       * error message pointer
       */
     const char *m_pErrorMessage;
