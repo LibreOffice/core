@@ -48,7 +48,7 @@ class WindowContentFactoryManager : private cppu::BaseMutex,
                                     public WindowContentFactoryManager_BASE
 {
 public:
-    WindowContentFactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext );
+    explicit WindowContentFactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext );
     virtual ~WindowContentFactoryManager();
 
     virtual OUString SAL_CALL getImplementationName()

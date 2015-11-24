@@ -54,7 +54,7 @@ class AddonsToolBarFactory :  public ::cppu::WeakImplHelper< css::lang::XService
                                                               css::ui::XUIElementFactory >
 {
 public:
-    AddonsToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit AddonsToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~AddonsToolBarFactory();
 
     virtual OUString SAL_CALL getImplementationName()

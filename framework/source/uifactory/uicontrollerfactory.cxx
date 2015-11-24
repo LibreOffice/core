@@ -246,7 +246,7 @@ throw (RuntimeException, std::exception)
 class PopupMenuControllerFactory :  public UIControllerFactory
 {
 public:
-    PopupMenuControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit PopupMenuControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -297,7 +297,7 @@ struct PopupMenuControllerFactorySingleton:
 class ToolbarControllerFactory :  public UIControllerFactory
 {
 public:
-    ToolbarControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit ToolbarControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -348,7 +348,7 @@ struct ToolbarControllerFactorySingleton:
 class StatusbarControllerFactory :  public UIControllerFactory
 {
 public:
-    StatusbarControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit StatusbarControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

@@ -83,7 +83,7 @@ public:
         return aSeq;
     }
 
-    UIConfigurationManager( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    explicit UIConfigurationManager( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
     virtual ~UIConfigurationManager();
 
     // XComponent

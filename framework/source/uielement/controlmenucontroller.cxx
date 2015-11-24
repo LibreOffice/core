@@ -178,7 +178,7 @@ class ControlMenuController :  public svt::PopupMenuControllerBase
     using svt::PopupMenuControllerBase::disposing;
 
 public:
-    ControlMenuController( const uno::Reference< uno::XComponentContext >& xContext );
+    explicit ControlMenuController( const uno::Reference< uno::XComponentContext >& xContext );
     virtual ~ControlMenuController();
 
     // XServiceInfo

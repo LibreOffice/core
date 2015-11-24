@@ -1282,7 +1282,7 @@ class WindowStateConfiguration : private cppu::BaseMutex,
                                  public WindowStateConfiguration_BASE
 {
 public:
-    WindowStateConfiguration( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit WindowStateConfiguration( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~WindowStateConfiguration();
 
     virtual OUString SAL_CALL getImplementationName()

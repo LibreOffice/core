@@ -56,7 +56,7 @@ class ObjectMenuController :  public svt::PopupMenuControllerBase
     using svt::PopupMenuControllerBase::disposing;
 
 public:
-    ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~ObjectMenuController();
 
     // XServiceInfo

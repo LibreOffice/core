@@ -713,7 +713,7 @@ class QuietInteractionContext:
     private boost::noncopyable
 {
 public:
-    QuietInteractionContext(
+    explicit QuietInteractionContext(
         css::uno::Reference< css::uno::XCurrentContext >
             const & context):
         context_(context) {}

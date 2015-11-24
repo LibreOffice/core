@@ -305,7 +305,7 @@ ToolBoxItemBits GenericPopupToolbarController::getDropDownStyle() const
 class SaveToolbarController : public PopupMenuToolbarController
 {
 public:
-    SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
@@ -355,7 +355,7 @@ css::uno::Sequence< OUString > SaveToolbarController::getSupportedServiceNames()
 class NewToolbarController : public PopupMenuToolbarController
 {
 public:
-    NewToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit NewToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

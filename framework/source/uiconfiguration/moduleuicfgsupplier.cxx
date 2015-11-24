@@ -62,7 +62,7 @@ class ModuleUIConfigurationManagerSupplier : private cppu::BaseMutex,
                                              public ModuleUIConfigurationManagerSupplier_BASE
 {
 public:
-    ModuleUIConfigurationManagerSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit ModuleUIConfigurationManagerSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ModuleUIConfigurationManagerSupplier();
 
     virtual OUString SAL_CALL getImplementationName()

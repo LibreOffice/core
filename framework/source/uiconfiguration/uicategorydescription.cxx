@@ -379,7 +379,7 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
 class UICategoryDescription :  public UICommandDescription
 {
 public:
-    UICategoryDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit UICategoryDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UICategoryDescription();
 
     virtual OUString SAL_CALL getImplementationName()

@@ -356,7 +356,7 @@ class UIElementFactoryManager : private cppu::BaseMutex,
 {
     virtual void SAL_CALL disposing() override;
 public:
-    UIElementFactoryManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit UIElementFactoryManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UIElementFactoryManager();
 
     virtual OUString SAL_CALL getImplementationName()

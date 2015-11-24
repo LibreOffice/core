@@ -45,7 +45,7 @@ class SaveAsMenuController :  public svt::PopupMenuControllerBase
     using svt::PopupMenuControllerBase::disposing;
 
 public:
-    SaveAsMenuController( const uno::Reference< uno::XComponentContext >& xContext );
+    explicit SaveAsMenuController( const uno::Reference< uno::XComponentContext >& xContext );
     virtual ~SaveAsMenuController();
 
     // XServiceInfo

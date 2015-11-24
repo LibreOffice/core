@@ -40,7 +40,7 @@ namespace {
 class StatusBarFactory :  public MenuBarFactory
 {
 public:
-    StatusBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit StatusBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

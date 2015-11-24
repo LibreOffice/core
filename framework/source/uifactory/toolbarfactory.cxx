@@ -38,7 +38,7 @@ namespace {
 class ToolBarFactory :  public MenuBarFactory
 {
 public:
-    ToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit ToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
