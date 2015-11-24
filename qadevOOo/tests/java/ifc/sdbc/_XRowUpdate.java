@@ -22,6 +22,7 @@ import java.util.List;
 
 import lib.MultiMethodTest;
 import lib.Status;
+import util.utils;
 import util.ValueComparer;
 
 import com.sun.star.io.XDataInputStream;
@@ -353,7 +354,7 @@ public class _XRowUpdate extends MultiMethodTest {
             double newVal = 1.1 + row.getDouble(idx) ;
             oObj.updateDouble(idx, newVal) ;
             double getVal = row.getDouble(idx) ;
-            result = newVal == getVal ;
+            result = utils.approxEqual(newVal, getVal);
         } catch (SQLException e) {
             e.printStackTrace(log) ;
             result = false ;
