@@ -656,7 +656,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 pList->clear();
                 rendEl( "draw:gradient");
             }
-                                                  /* 해칭 */
+                                                  /* hatch */
             else if( prop->pattern_type >> 24 & 0x01 )
             {
                 int type = prop->pattern_type & 0xffffff;
@@ -2430,7 +2430,7 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
  */
 void HwpReader::makeFStyle(FBoxStyle * fstyle)
 {
-                                                  /* 캡션 exist */
+                                                  /* caption exist */
     if( ( fstyle->boxtype == 'G' || fstyle->boxtype == 'X' ) && fstyle->cap_len > 0 )
     {
         makeCaptionStyle(fstyle);
@@ -3243,7 +3243,7 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
         }
 
     }
-    else if( hbox->type[0] == 3 && hbox->type[1] == 2 ) /* 만든날짜 */
+    else if( hbox->type[0] == 3 && hbox->type[1] == 2 ) /* creation date */
      {
          if( hbox->m_pDate )
              padd("style:data-style-name", sXML_CDATA,
