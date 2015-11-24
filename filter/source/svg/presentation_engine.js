@@ -5638,7 +5638,7 @@ AnimationBaseNode.prototype.parseElement = function()
     }
 
     // sub-item attribute for text animated element
-    var sSubItemAttr = aAnimElem.getAttributeNS( NSS['smil'], 'sub-item' );
+    var sSubItemAttr = aAnimElem.getAttributeNS( NSS['anim'], 'sub-item' );
     this.bIsTargetTextElement = ( sSubItemAttr && ( sSubItemAttr === 'text' ) );
 
     // additive attribute
@@ -9185,7 +9185,7 @@ function AnimatedTextElement( aElement, aEventMultiplexer )
         var aBulletCharGroupElem = getElementByClassName( aTextShapeGroup, 'BulletChars' );
         if( aBulletCharGroupElem )
         {
-            var aBulletPlaceholderElem = getElementByClassName( aElement.firstElementChild, 'BulletPlaceholder' );
+            var aBulletPlaceholderElem = getElementByClassName( aElement, 'BulletPlaceholder' );
             if( aBulletPlaceholderElem )
             {
                 var sId = aBulletPlaceholderElem.getAttribute( 'id' );
