@@ -241,7 +241,7 @@ public:
      * @param pCommand uno command to be posted to the document, like ".uno:Bold"
      * @param pArguments arguments of the uno command.
      */
-    inline void postUnoCommand(const char* pCommand, const char* pArguments = 0, bool bNotifyWhenFinished = false)
+    inline void postUnoCommand(const char* pCommand, const char* pArguments = NULL, bool bNotifyWhenFinished = false)
     {
         mpDoc->pClass->postUnoCommand(mpDoc, pCommand, pArguments, bNotifyWhenFinished);
     }
@@ -264,7 +264,7 @@ public:
      * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
      * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
      */
-    inline char* getTextSelection(const char* pMimeType, char** pUsedMimeType = 0)
+    inline char* getTextSelection(const char* pMimeType, char** pUsedMimeType = NULL)
     {
         return mpDoc->pClass->getTextSelection(mpDoc, pMimeType, pUsedMimeType);
     }
