@@ -34,10 +34,6 @@
 #include <iostream>
 #include <locale.h>
 #include <sal/types.h>
-// #i42367# prevent MS compiler from using system locale for parsing
-#ifdef _MSC_VER
-#pragma setlocale("C")
-#endif
 
 // To be shorten source code by realking
 #define hconv(x)        hstr2ucsstr(x).c_str()
