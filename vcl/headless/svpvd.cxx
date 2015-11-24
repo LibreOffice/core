@@ -66,21 +66,20 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     if( ! m_aDevice.get() || m_aDevice->getSize() != aDevSize )
     {
         basebmp::Format nFormat = SvpSalInstance::getBaseBmpFormatForDeviceFormat(m_eFormat);
-        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(nFormat, aDevSize.getX());
 
         if (m_eFormat == DeviceFormat::BITMASK)
         {
             std::vector< basebmp::Color > aDevPal(2);
             aDevPal[0] = basebmp::Color( 0, 0, 0 );
             aDevPal[1] = basebmp::Color( 0xff, 0xff, 0xff );
-            m_aDevice = createBitmapDevice( aDevSize, true, nFormat, nStride,
+            m_aDevice = createBitmapDevice( aDevSize, true, nFormat,
                                             PaletteMemorySharedVector( new std::vector< basebmp::Color >(aDevPal) ) );
         }
         else
         {
             m_aDevice = pBuffer ?
-                          createBitmapDevice( aDevSize, true, nFormat, nStride, pBuffer, PaletteMemorySharedVector() )
-                        : createBitmapDevice( aDevSize, true, nFormat, nStride );
+                          createBitmapDevice( aDevSize, true, nFormat, pBuffer, PaletteMemorySharedVector() )
+                        : createBitmapDevice( aDevSize, true, nFormat );
         }
 
         // update device in existing graphics
