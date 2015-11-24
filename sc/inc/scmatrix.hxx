@@ -40,6 +40,8 @@ class ScInterpreter;
 class SvNumberFormatter;
 class ScMatrixImpl;
 
+namespace formula { class DoubleVectorRefToken; }
+
 namespace sc {
 
 struct Compare;
@@ -106,7 +108,7 @@ struct ScMatrixValue
     }
 };
 
-/// Abstract base class for ScFullMatrix and ScSubMatrix implementations.
+/// Abstract base class for ScFullMatrix and ScVectorRefMatrix implementations.
 class SC_DLLPUBLIC ScMatrix
 {
     mutable size_t  nRefCnt;    // reference count
@@ -602,6 +604,202 @@ public:
 #if DEBUG_MATRIX
     void Dump() const;
 #endif
+};
+
+class SC_DLLPUBLIC ScVectorRefMatrix : public ScMatrix
+{
+    const formula::DoubleVectorRefToken* mpToken;
+    ScInterpreter* mpErrorInterpreter;
+
+    SCSIZE mnRowStart;
+    SCSIZE mnRowSize;
+
+    // only delete via Delete()
+    virtual ~ScVectorRefMatrix();
+
+    ScVectorRefMatrix( const ScVectorRefMatrix& ) = delete;
+    ScVectorRefMatrix& operator=( const ScVectorRefMatrix&) = delete;
+
+public:
+
+    ScVectorRefMatrix(const formula::DoubleVectorRefToken* pToken, SCSIZE nRowStart, SCSIZE nRowSize);
+
+    /** Clone the matrix. */
+    virtual ScMatrix* Clone() const override;
+
+    /**
+     * Resize the matrix to specified new dimension.
+     */
+    virtual void Resize(SCSIZE nC, SCSIZE nR) override;
+
+    virtual void Resize(SCSIZE nC, SCSIZE nR, double fVal) override;
+
+    /** Clone the matrix and extend it to the new size. nNewCols and nNewRows
+        MUST be at least of the size of the original matrix. */
+    virtual ScMatrix* CloneAndExtend(SCSIZE nNewCols, SCSIZE nNewRows) const override;
+
+    virtual void SetErrorInterpreter(ScInterpreter* p) override;
+    virtual void GetDimensions(SCSIZE& rC, SCSIZE& rR) const override;
+    virtual SCSIZE GetElementCount() const override;
+    virtual bool ValidColRow( SCSIZE nC, SCSIZE nR) const override;
+
+    /** For a row vector or column vector, if the position does not point into
+        the vector but is a valid column or row offset it is adapted such that
+        it points to an element to be replicated, same column row 0 for a row
+        vector, same row column 0 for a column vector. Else, for a 2D matrix,
+        returns false.
+     */
+    virtual bool ValidColRowReplicated(SCSIZE & rC, SCSIZE & rR) const override;
+
+    /** Checks if the matrix position is within the matrix. If it is not, for a
+        row vector or column vector the position is adapted such that it points
+        to an element to be replicated, same column row 0 for a row vector,
+        same row column 0 for a column vector. Else, for a 2D matrix and
+        position not within matrix, returns false.
+     */
+    virtual bool ValidColRowOrReplicated(SCSIZE & rC, SCSIZE & rR) const override;
+
+    virtual void PutDouble(double fVal, SCSIZE nC, SCSIZE nR) override;
+    virtual void PutDouble(double fVal, SCSIZE nIndex) override;
+    virtual void PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR) override;
+
+    virtual void PutString(const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR) override;
+    virtual void PutString(const svl::SharedString& rStr, SCSIZE nIndex) override;
+    virtual void PutString(const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR) override;
+
+    virtual void PutEmpty(SCSIZE nC, SCSIZE nR) override;
+
+    /// Jump sal_False without path
+    virtual void PutEmptyPath(SCSIZE nC, SCSIZE nR) override;
+    virtual void PutError(sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR ) override;
+    virtual void PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR) override;
+
+    virtual void FillDouble(double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2) override;
+
+    /** Put a column vector of doubles, starting at row nR, must fit into dimensions. */
+    virtual void PutDoubleVector(const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR) override;
+
+    /** Put a column vector of strings, starting at row nR, must fit into dimensions. */
+    virtual void PutStringVector(const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR) override;
+
+    /** Put a column vector of empties, starting at row nR, must fit into dimensions. */
+    virtual void PutEmptyVector(SCSIZE nCount, SCSIZE nC, SCSIZE nR) override;
+
+    /** Put a column vector of empty results, starting at row nR, must fit into dimensions. */
+    virtual void PutEmptyResultVector(SCSIZE nCount, SCSIZE nC, SCSIZE nR) override;
+
+    /** Put a column vector of empty paths, starting at row nR, must fit into dimensions. */
+    virtual void PutEmptyPathVector(SCSIZE nCount, SCSIZE nC, SCSIZE nR) override;
+
+    /** May be used before obtaining the double value of an element to avoid
+        passing its NAN around.
+        @ATTENTION: MUST NOT be used if the element is a string!
+                    Use GetErrorIfNotString() instead if not sure.
+        @returns 0 if no error, else one of err... constants */
+    virtual sal_uInt16 GetError(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return 0.0 if empty or empty path, else value or DoubleError.
+    virtual double GetDouble(SCSIZE nC, SCSIZE nR) const override;
+    /// @return 0.0 if empty or empty path, else value or DoubleError.
+    virtual double GetDouble(SCSIZE nIndex) const override;
+
+    /// @return empty string if empty or empty path, else string content.
+    virtual svl::SharedString GetString(SCSIZE nC, SCSIZE nR) const override;
+    /// @return empty string if empty or empty path, else string content.
+    virtual svl::SharedString GetString(SCSIZE nIndex) const override;
+
+    /** @returns the matrix element's string if one is present, otherwise the
+        numerical value formatted as string, or in case of an error the error
+        string is returned; an empty string for empty, a "FALSE" string for
+        empty path. */
+    virtual svl::SharedString GetString(SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const override;
+
+    /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
+    /// an empty string!
+    virtual ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
+    virtual bool IsString(SCSIZE nIndex) const override;
+
+    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
+    virtual bool IsString(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return <TRUE/> if empty or empty cell or empty result, not empty path.
+    virtual bool IsEmpty(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return <TRUE/> if empty cell, not empty or empty result or empty path.
+    virtual bool IsEmptyCell(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return <TRUE/> if empty result, not empty or empty cell or empty path.
+    virtual bool IsEmptyResult(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return <TRUE/> if empty path, not empty or empty cell or empty result.
+    virtual bool IsEmptyPath(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return <TRUE/> if value or boolean.
+    virtual bool IsValue(SCSIZE nIndex) const override;
+
+    /// @return <TRUE/> if value or boolean.
+    virtual bool IsValue(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return <TRUE/> if value or boolean or empty or empty path.
+    virtual bool IsValueOrEmpty(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return <TRUE/> if boolean.
+    virtual bool IsBoolean(SCSIZE nC, SCSIZE nR) const override;
+
+    /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
+    virtual bool IsNumeric() const override;
+
+    virtual void MatTrans(ScMatrix& mRes) const override;
+    virtual void MatCopy (ScMatrix& mRes) const override;
+
+    // Convert ScInterpreter::CompareMat values (-1,0,1) to boolean values
+    virtual void CompareEqual() override;
+    virtual void CompareNotEqual() override;
+    virtual void CompareLess() override;
+    virtual void CompareGreater() override;
+    virtual void CompareLessEqual() override;
+    virtual void CompareGreaterEqual() override;
+
+    virtual double And() const override;       // logical AND of all matrix values, or NAN
+    virtual double Or() const override;        // logical OR of all matrix values, or NAN
+    virtual double Xor() const override;       // logical XOR of all matrix values, or NAN
+
+    virtual IterateResult Sum(bool bTextAsZero) const override;
+    virtual IterateResult SumSquare(bool bTextAsZero) const override;
+    virtual IterateResult Product(bool bTextAsZero) const override;
+    virtual size_t Count(bool bCountStrings) const override;
+    virtual size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const override;
+    virtual size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const override;
+
+    virtual double GetMaxValue(bool bTextAsZero) const override;
+    virtual double GetMinValue(bool bTextAsZero) const override;
+
+    virtual ScMatrixRef CompareMatrix(sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = nullptr) const override;
+
+    /**
+     * Convert the content of matrix into a linear array of numeric values.
+     * String elements are mapped to NaN's and empty elements are mapped to
+     * either NaN or zero values.
+     *
+     * @param bEmptyAsZero if true empty elements are mapped to zero values,
+     *                     otherwise they become NaN values.
+     */
+    virtual void GetDoubleArray(std::vector<double>& rVector, bool bEmptyAsZero = true) const override;
+    virtual void MergeDoubleArray(std::vector<double>& rVector, Op eOp) const override;
+
+    virtual void NotOp(ScMatrix& rMat) override;
+    virtual void NegOp(ScMatrix& rMat) override;
+    virtual void AddOp(double fVal, ScMatrix& rMat) override;
+    virtual void SubOp(bool bFlag, double fVal, ScMatrix& rMat) override;
+    virtual void MulOp(double fVal, ScMatrix& rMat) override;
+    virtual void DivOp(bool bFlag, double fVal, ScMatrix& rMat) override;
+    virtual void PowOp(bool bFlag, double fVal, ScMatrix& rMat) override;
+
+    virtual std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp) override;
+
+    ScVectorRefMatrix& operator+=(const ScVectorRefMatrix& r);
 };
 
 inline void intrusive_ptr_add_ref(const ScMatrix* p)

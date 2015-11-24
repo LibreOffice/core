@@ -369,12 +369,17 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                 case formula::svDoubleVectorRef:
                 {
                     const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
-                    const std::vector<formula::VectorRefArray>& rArrays = p2->GetArrays();
-                    size_t nColSize = rArrays.size();
+                    //const std::vector<formula::VectorRefArray>& rArrays = p2->GetArrays();
+                    //size_t nColSize = rArrays.size();
                     size_t nRowStart = p2->IsStartFixed() ? 0 : i;
                     size_t nRowEnd = p2->GetRefRowSize() - 1;
                     if (!p2->IsEndFixed())
                         nRowEnd += i;
+
+                    assert(nRowStart <= nRowEnd);
+                    ScMatrixRef pMat(new ScVectorRefMatrix(p2, nRowStart, nRowEnd - nRowStart + 1));
+
+                    /*
                     size_t nRowSize = nRowEnd - nRowStart + 1;
                     ScMatrixRef pMat(new ScFullMatrix(nColSize, nRowSize));
 
@@ -416,6 +421,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                             fillMatrix(*pMat, nCol, pNums, nRowSize);
                         }
                     }
+                    */
 
                     if (p2->IsStartFixed() && p2->IsEndFixed())
                     {
