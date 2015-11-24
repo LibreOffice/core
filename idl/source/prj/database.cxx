@@ -463,7 +463,7 @@ void SvIdlDataBase::WriteError( const OString& rErrWrn,
                                 sal_uLong nRow, sal_uLong nColumn )
 {
     // error treatment
-    fprintf( stderr, "\n%s --- %s: ( %ld, %ld )\n",
+    fprintf( stderr, "\n%s --- %s: ( %" SAL_PRIuUINTPTR ", %" SAL_PRIuUINTPTR " )\n",
              rFileName.getStr(), rErrWrn.getStr(), nRow, nColumn );
 
     if( !rErrorText.isEmpty() )

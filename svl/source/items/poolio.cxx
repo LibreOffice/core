@@ -27,6 +27,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/filerec.hxx>
 #include "poolio.hxx"
+#include <algorithm>
 #include <memory>
 
 /**

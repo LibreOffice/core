@@ -1280,6 +1280,9 @@ sal_uLong WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, Pr
             if ( nRet && (nRet != GDI_ERROR) )
                 return TRUE;
             return FALSE;
+
+        default:
+            break;
     }
 
     return 0;

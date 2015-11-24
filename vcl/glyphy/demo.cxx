@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
 #include <prewin.h>
 #include <postwin.h>
 
-namespace GLyphyDemo {
 #include "demo/demo-atlas.cc"
 #include "demo/demo-buffer.cc"
 #include "demo/demo-font.cc"
 #include "demo/demo-shader.cc"
 #include "demo/matrix4x4.c"
-}
