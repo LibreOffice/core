@@ -40,28 +40,28 @@ namespace chelp {
 
     class ResultSetBase
         : public cppu::OWeakObject,
-          public com::sun::star::lang::XComponent,
-          public com::sun::star::sdbc::XRow,
-          public com::sun::star::sdbc::XResultSet,
-          public com::sun::star::sdbc::XCloseable,
-          public com::sun::star::sdbc::XResultSetMetaDataSupplier,
-          public com::sun::star::beans::XPropertySet,
-          public com::sun::star::ucb::XContentAccess
+          public css::lang::XComponent,
+          public css::sdbc::XRow,
+          public css::sdbc::XResultSet,
+          public css::sdbc::XCloseable,
+          public css::sdbc::XResultSetMetaDataSupplier,
+          public css::beans::XPropertySet,
+          public css::ucb::XContentAccess
     {
     public:
 
-        ResultSetBase( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >&  rxContext,
-                       const com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >&  xProvider,
-                       const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq,
-                       const com::sun::star::uno::Sequence< com::sun::star::ucb::NumberedSortingInfo >& seqSort );
+        ResultSetBase( const css::uno::Reference< css::uno::XComponentContext >&  rxContext,
+                       const css::uno::Reference< css::ucb::XContentProvider >&  xProvider,
+                       const css::uno::Sequence< css::beans::Property >& seq,
+                       const css::uno::Sequence< css::ucb::NumberedSortingInfo >& seqSort );
 
         virtual ~ResultSetBase();
 
         // XInterface
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         queryInterface(
-            const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Type& aType )
+            throw( css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         acquire(
@@ -77,24 +77,24 @@ namespace chelp {
         virtual void SAL_CALL
         dispose(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         addEventListener(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::lang::XEventListener >& xListener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
-        removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
 
         // XRow
         virtual sal_Bool SAL_CALL
         wasNull(
             void )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception ) override
         {
             if( 0<= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 m_nWasNull = m_aItems[m_nRow]->wasNull();
@@ -106,8 +106,8 @@ namespace chelp {
         virtual OUString SAL_CALL
         getString(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getString( columnIndex );
@@ -118,8 +118,8 @@ namespace chelp {
         virtual sal_Bool SAL_CALL
         getBoolean(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBoolean( columnIndex );
@@ -130,8 +130,8 @@ namespace chelp {
         virtual sal_Int8 SAL_CALL
         getByte(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getByte( columnIndex );
@@ -143,8 +143,8 @@ namespace chelp {
         getShort(
             sal_Int32 columnIndex )
             throw(
-                com::sun::star::sdbc::SQLException,
-                com::sun::star::uno::RuntimeException, std::exception) override
+                css::sdbc::SQLException,
+                css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getShort( columnIndex );
@@ -155,8 +155,8 @@ namespace chelp {
         virtual sal_Int32 SAL_CALL
         getInt(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getInt( columnIndex );
@@ -167,8 +167,8 @@ namespace chelp {
         virtual sal_Int64 SAL_CALL
         getLong(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getLong( columnIndex );
@@ -179,8 +179,8 @@ namespace chelp {
         virtual float SAL_CALL
         getFloat(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getFloat( columnIndex );
@@ -191,8 +191,8 @@ namespace chelp {
         virtual double SAL_CALL
         getDouble(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getDouble( columnIndex );
@@ -200,137 +200,137 @@ namespace chelp {
                 return double( 0 );
         }
 
-        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL
         getBytes(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBytes( columnIndex );
             else
-                return com::sun::star::uno::Sequence< sal_Int8 >();
+                return css::uno::Sequence< sal_Int8 >();
         }
 
-        virtual com::sun::star::util::Date SAL_CALL
+        virtual css::util::Date SAL_CALL
         getDate(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getDate( columnIndex );
             else
-                return com::sun::star::util::Date();
+                return css::util::Date();
         }
 
-        virtual com::sun::star::util::Time SAL_CALL
+        virtual css::util::Time SAL_CALL
         getTime(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getTime( columnIndex );
             else
-                return com::sun::star::util::Time();
+                return css::util::Time();
         }
 
-        virtual com::sun::star::util::DateTime SAL_CALL
+        virtual css::util::DateTime SAL_CALL
         getTimestamp(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getTimestamp( columnIndex );
             else
-                return com::sun::star::util::DateTime();
+                return css::util::DateTime();
         }
 
-        virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
+        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
         getBinaryStream(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBinaryStream( columnIndex );
             else
-                return com::sun::star::uno::Reference< com::sun::star::io::XInputStream >();
+                return css::uno::Reference< css::io::XInputStream >();
         }
 
-        virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
+        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
         getCharacterStream(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getCharacterStream( columnIndex );
             else
-                return com::sun::star::uno::Reference< com::sun::star::io::XInputStream >();
+                return css::uno::Reference< css::io::XInputStream >();
         }
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         getObject(
             sal_Int32 columnIndex,
-            const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& typeMap )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            const css::uno::Reference< css::container::XNameAccess >& typeMap )
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getObject( columnIndex,typeMap );
             else
-                return com::sun::star::uno::Any();
+                return css::uno::Any();
         }
 
-        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRef > SAL_CALL
+        virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL
         getRef(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getRef( columnIndex );
             else
-                return com::sun::star::uno::Reference< com::sun::star::sdbc::XRef >();
+                return css::uno::Reference< css::sdbc::XRef >();
         }
 
-        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XBlob > SAL_CALL
+        virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL
         getBlob(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBlob( columnIndex );
             else
-                return com::sun::star::uno::Reference< com::sun::star::sdbc::XBlob >();
+                return css::uno::Reference< css::sdbc::XBlob >();
         }
 
-        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XClob > SAL_CALL
+        virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL
         getClob(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getClob( columnIndex );
             else
-                return com::sun::star::uno::Reference< com::sun::star::sdbc::XClob >();
+                return css::uno::Reference< css::sdbc::XClob >();
         }
 
-        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XArray > SAL_CALL
+        virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL
         getArray(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getArray( columnIndex );
             else
-                return com::sun::star::uno::Reference< com::sun::star::sdbc::XArray >();
+                return css::uno::Reference< css::sdbc::XArray >();
         }
 
 
@@ -339,215 +339,215 @@ namespace chelp {
         virtual sal_Bool SAL_CALL
         next(
             void )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isBeforeFirst(
             void )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isAfterLast(
             void )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isFirst(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         isLast(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         beforeFirst(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         afterLast(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         first(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         last(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL
         getRow(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         absolute(
             sal_Int32 row )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         relative(
             sal_Int32 rows )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         previous(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         refreshRow(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         rowUpdated(
             void )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         rowInserted(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         rowDeleted(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
 
-        virtual  com::sun::star::uno::Reference<  com::sun::star::uno::XInterface > SAL_CALL
+        virtual  css::uno::Reference<  css::uno::XInterface > SAL_CALL
         getStatement(
             void  )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         // XCloseable
 
         virtual void SAL_CALL
         close(
             void )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
         // XContentAccess
 
         virtual OUString SAL_CALL
         queryContentIdentifierString(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
+        virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
         queryContentIdentifier(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
+        virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
         queryContent(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XResultSetMetaDataSupplier
-        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData > SAL_CALL
+        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
         getMetaData(
             void )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException, std::exception) override;
 
 
         // XPropertySet
-        virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-            throw( com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL setPropertyValue(
             const OUString& aPropertyName,
-            const com::sun::star::uno::Any& aValue )
-            throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::beans::PropertyVetoException,
-                   com::sun::star::lang::IllegalArgumentException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Any& aValue )
+            throw( css::beans::UnknownPropertyException,
+                   css::beans::PropertyVetoException,
+                   css::lang::IllegalArgumentException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException, std::exception) override;
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         getPropertyValue(
             const OUString& PropertyName )
-            throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::beans::UnknownPropertyException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         addPropertyChangeListener(
             const OUString& aPropertyName,
-            const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& xListener )
-            throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener )
+            throw( css::beans::UnknownPropertyException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         removePropertyChangeListener(
             const OUString& aPropertyName,
-            const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& aListener )
-            throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener )
+            throw( css::beans::UnknownPropertyException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         addVetoableChangeListener(
             const OUString& PropertyName,
-            const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
-            throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+            throw( css::beans::UnknownPropertyException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& PropertyName,
-            const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
-            throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+            throw( css::beans::UnknownPropertyException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException, std::exception) override;
 
     protected:
 
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  m_xContext;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >  m_xProvider;
+        css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+        css::uno::Reference< css::ucb::XContentProvider >  m_xProvider;
         sal_Int32                           m_nRow;
         bool                                m_nWasNull;
         bool                                m_bRowCountFinal;
 
-        typedef std::vector< com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > > IdentSet;
-        typedef std::vector< com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > >              ItemSet;
+        typedef std::vector< css::uno::Reference< css::ucb::XContentIdentifier > > IdentSet;
+        typedef std::vector< css::uno::Reference< css::sdbc::XRow > >              ItemSet;
         typedef std::vector< OUString >                                                             PathSet;
 
         IdentSet                            m_aIdents;
         ItemSet                             m_aItems;
         PathSet                             m_aPath;
 
-        com::sun::star::uno::Sequence< com::sun::star::beans::Property >           m_sProperty;
-        com::sun::star::uno::Sequence< com::sun::star::ucb::NumberedSortingInfo >  m_sSortingInfo;
+        css::uno::Sequence< css::beans::Property >           m_sProperty;
+        css::uno::Sequence< css::ucb::NumberedSortingInfo >  m_sSortingInfo;
 
         osl::Mutex                          m_aMutex;
         cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;

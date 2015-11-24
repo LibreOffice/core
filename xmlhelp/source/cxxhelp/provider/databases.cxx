@@ -1372,7 +1372,7 @@ inline bool isLetter( sal_Unicode c )
 }
 
 void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage )
+    css::uno::Reference< css::deployment::XPackage > xPackage )
 {
     rv.clear();
     OUString aExtensionPath = xPackage->getURL();

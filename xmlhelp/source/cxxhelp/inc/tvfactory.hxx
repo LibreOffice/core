@@ -39,7 +39,7 @@ class TVFactory: public cppu::WeakImplHelper <
     {
     public:
 
-        TVFactory( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+        TVFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
         virtual ~TVFactory();
 
@@ -47,57 +47,57 @@ class TVFactory: public cppu::WeakImplHelper <
         virtual OUString SAL_CALL
         getImplementationName(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Bool SAL_CALL
         supportsService(
             const OUString& ServiceName )
-            throw(com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw(css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XMultiServiceFactory
 
-        virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         createInstance(
             const OUString& aServiceSpecifier )
-            throw( com::sun::star::uno::Exception,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::Exception,
+                   css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         createInstanceWithArguments(
             const OUString& ServiceSpecifier,
-            const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& Arguments )
-            throw( com::sun::star::uno::Exception,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< css::uno::Any >& Arguments )
+            throw( css::uno::Exception,
+                   css::uno::RuntimeException, std::exception) override;
 
-        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        virtual css::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames( )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // Other
 
         static OUString SAL_CALL getImplementationName_static();
 
-        static com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
 
-        static com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > SAL_CALL
+        static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
         createServiceFactory(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxServiceMgr );
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr );
 
-        static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL
         CreateInstance(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMultiServiceFactory );
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& xMultiServiceFactory );
 
 
     private:
 
         // Members
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >      m_xContext;
-        com::sun::star::uno::Reference< com::sun::star::uno::XInterface >             m_xHDS;
+        css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+        css::uno::Reference< css::uno::XInterface >             m_xHDS;
     };
 
 }

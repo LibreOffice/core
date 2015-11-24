@@ -75,15 +75,15 @@ namespace treeview {
 
         // XNameAccess
 
-        virtual com::sun::star::uno::Type SAL_CALL
+        virtual css::uno::Type SAL_CALL
         getElementType(  )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override
+            throw( css::uno::RuntimeException, std::exception ) override
         {
             return cppu::UnoType<void>::get();
         }
 
         virtual sal_Bool SAL_CALL hasElements()
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override
+            throw( css::uno::RuntimeException, std::exception ) override
         {
             return true;
         }
@@ -92,8 +92,8 @@ namespace treeview {
 
         virtual void SAL_CALL
         addChangesListener(
-            const com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override
+            const css::uno::Reference< css::util::XChangesListener >& aListener )
+            throw( css::uno::RuntimeException, std::exception ) override
         {
             // read only
             (void)aListener;
@@ -101,8 +101,8 @@ namespace treeview {
 
         virtual void SAL_CALL
         removeChangesListener(
-            const com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override
+            const css::uno::Reference< css::util::XChangesListener >& aListener )
+            throw( css::uno::RuntimeException, std::exception ) override
         {
             // read only
             (void)aListener;
@@ -111,21 +111,21 @@ namespace treeview {
         // XComponent
 
         virtual void SAL_CALL dispose( )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override
+            throw( css::uno::RuntimeException, std::exception ) override
         {
         }
 
         virtual void SAL_CALL addEventListener(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override
+            const css::uno::Reference< css::lang::XEventListener >& xListener )
+            throw( css::uno::RuntimeException, std::exception ) override
         {
             (void)xListener;
         }
 
         virtual void SAL_CALL
         removeEventListener(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override
+            const css::uno::Reference< css::lang::XEventListener >& aListener )
+            throw( css::uno::RuntimeException, std::exception ) override
         {
             (void)aListener;
         }
@@ -133,30 +133,30 @@ namespace treeview {
         // Abstract functions
         // XNameAccess
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         getByName( const OUString& aName )
-            throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) override = 0;
+            throw( css::container::NoSuchElementException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException, std::exception) override = 0;
 
-        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames( )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+            throw( css::uno::RuntimeException, std::exception ) override = 0;
 
         virtual sal_Bool SAL_CALL
         hasByName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+            throw( css::uno::RuntimeException, std::exception ) override = 0;
 
         // XHierarchicalNameAccess
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName )
-            throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+            throw( css::container::NoSuchElementException,
+                   css::uno::RuntimeException, std::exception ) override = 0;
 
         virtual sal_Bool SAL_CALL
         hasByHierarchicalName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override = 0;
+            throw( css::uno::RuntimeException, std::exception ) override = 0;
 
     }; // end class TVBase
 
@@ -172,30 +172,30 @@ namespace treeview {
 
         // XNameAccess
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         getByName( const OUString& aName )
-            throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::container::NoSuchElementException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException, std::exception) override;
 
-        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames( )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Bool SAL_CALL
         hasByName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XHierarchicalNameAccess
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName )
-            throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::container::NoSuchElementException,
+                   css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Bool SAL_CALL
         hasByHierarchicalName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
 
@@ -212,56 +212,56 @@ namespace treeview {
 
         TVChildTarget( const ConfigData& configData,TVDom* tvDom );
 
-        TVChildTarget( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+        TVChildTarget( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
         virtual ~TVChildTarget();
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         getByName( const OUString& aName )
-            throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::container::NoSuchElementException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException, std::exception) override;
 
-        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        virtual css::uno::Sequence< OUString > SAL_CALL
         getElementNames( )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Bool SAL_CALL
         hasByName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XHierarchicalNameAccess
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         getByHierarchicalName( const OUString& aName )
-            throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::container::NoSuchElementException,
+                   css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Bool SAL_CALL
         hasByHierarchicalName( const OUString& aName )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
         std::vector< rtl::Reference< TVRead > >   Elements;
 
         static ConfigData init(
-            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+            const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        static css::uno::Reference< css::lang::XMultiServiceFactory >
         getConfiguration(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
-        getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& rxProvider,
+        static css::uno::Reference< css::container::XHierarchicalNameAccess >
+        getHierAccess( const css::uno::Reference<  css::lang::XMultiServiceFactory >& rxProvider,
                        const char* file );
 
         static OUString
-        getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+        getKey( const css::uno::Reference< css::container::XHierarchicalNameAccess >& xHierAccess,
                 const char* key );
 
         static bool
         getBooleanKey(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+                    const css::uno::Reference< css::container::XHierarchicalNameAccess >& xHierAccess,
                     const char* key);
 
         static void subst( OUString& instpath );
@@ -287,38 +287,38 @@ namespace treeview {
         void init();
 
     private:
-        static com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetHelpPackageFromPackage
-            ( const com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-              com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+        static css::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
+            ( const css::uno::Reference< css::deployment::XPackage > xPackage,
+              css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
     protected:
-        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextUserHelpPackage
-            ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
-        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextSharedHelpPackage
-            ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
-        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextBundledHelpPackage
-            ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+        css::uno::Reference< css::deployment::XPackage > implGetNextUserHelpPackage
+            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        css::uno::Reference< css::deployment::XPackage > implGetNextSharedHelpPackage
+            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        css::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
+            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
         void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+            css::uno::Reference< css::deployment::XPackage > xPackage );
 
         osl::Mutex                                                                  m_aMutex;
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 >   m_xSFA;
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
 
         IteratorState                                                               m_eState;
         OUString                                                               m_aLanguage;
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-            < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
+        css::uno::Sequence< css::uno::Reference
+            < css::deployment::XPackage > >                              m_aUserPackagesSeq;
         bool                                                                        m_bUserPackagesLoaded;
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-            < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
+        css::uno::Sequence< css::uno::Reference
+            < css::deployment::XPackage > >                              m_aSharedPackagesSeq;
         bool                                                                        m_bSharedPackagesLoaded;
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-            < com::sun::star::deployment::XPackage > >                              m_aBundledPackagesSeq;
+        css::uno::Sequence< css::uno::Reference
+            < css::deployment::XPackage > >                              m_aBundledPackagesSeq;
         bool                                                                        m_bBundledPackagesLoaded;
 
         int                                                                         m_iUserPackage;
@@ -339,7 +339,7 @@ namespace treeview {
     private:
         OUString expandURL( const OUString& aURL );
         OUString implGetTreeFileFromPackage( sal_Int32& rnFileSize,
-            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+            css::uno::Reference< css::deployment::XPackage > xPackage );
 
     }; // end class TreeFileIterator
 

@@ -58,10 +58,10 @@ namespace helpdatafileproxy {
         OUString       m_aFileURL;
         StringToDataMap*    m_pStringToDataMap;
         StringToValPosMap*  m_pStringToValPosMap;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 >
+        css::uno::Reference< css::ucb::XSimpleFileAccess3 >
                             m_xSFA;
 
-        com::sun::star::uno::Sequence< sal_Int8 >
+        css::uno::Sequence< sal_Int8 >
                             m_aItData;
         const char*         m_pItData;
         int                 m_nItRead;
@@ -74,7 +74,7 @@ namespace helpdatafileproxy {
         //SimpleFileAccess requires file URLs as arguments. Passing file path may work but fails
         //for example when using long file paths on Windows, which start with "\\?\"
         Hdf( const OUString& rFileURL,
-            com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 > xSFA )
+            css::uno::Reference< css::ucb::XSimpleFileAccess3 > xSFA )
                 : m_aFileURL( rFileURL )
                 , m_pStringToDataMap( nullptr )
                 , m_pStringToValPosMap( nullptr )
