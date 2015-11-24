@@ -318,6 +318,9 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     static bool addFontconfigDir(const OString& rDirectory);
 
     std::set<OString> m_aPreviousLangSupportRequests;
+#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+    std::vector<OString> m_aCurrentRequests;
+#endif
     Timer m_aFontInstallerTimer;
 
 #if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
