@@ -167,19 +167,6 @@ bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destS
     return retval;
 }
 
-// The driver ID is a string like PCI\VEN_15AD&DEV_0405&SUBSYS_040515AD, possibly
-// followed by &REV_XXXX.  We uppercase the string, and strip the &REV_ part
-// from it, if found.
-void normalizeDriverId(OUString& driverid)
-{
-    driverid = driverid.toAsciiUpperCase();
-    int32_t rev = driverid.indexOf("&REV_");
-    if (rev != -1)
-    {
-        driverid = driverid.copy(0, rev - 1);
-    }
-}
-
 // The device ID is a string like PCI\VEN_15AD&DEV_0405&SUBSYS_040515AD
 // this function is used to extract the id's out of it
 uint32_t ParseIDFromDeviceID(const OUString &key, const char *prefix, int length)
