@@ -1501,7 +1501,7 @@ bool ScInterpreter::ConvertMatrixParameters()
             GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur,
                         xNew));
         }
-        PushTempToken( xNew.get());
+        PushTempTokenWithoutError( xNew.get());
         // set continuation point of path for main code line
         aCode.Jump( nNext, nNext);
         return true;
