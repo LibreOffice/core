@@ -159,6 +159,24 @@
       "revId": "7240f9c17fa7fbb3fb718721ec7f886b8cc5641a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_45db0aee",
+        "filename": "ucb/source/ucp/webdav-neon/NeonHeadRequest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-24T13:28:04Z",
+      "side": 1,
+      "message": "Please try to make individual SAL_INFOs reasonably self-contained.  A \"received headers:\" message is not self-contained.\n\nBoth Jan and I pointed out reasons why SAL_INFO messages may not be sequenced as anticipated.",
+      "parentUuid": "dab17558_05abc28a",
+      "revId": "7240f9c17fa7fbb3fb718721ec7f886b8cc5641a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
