@@ -621,7 +621,7 @@ public class AnyConverter
                 break;
             case TypeClass.ENUM_value:
                 if (tc == TypeClass.ENUM_value &&
-                    (destType.equals( type ) /* optional destType */))
+                    (null == destTClass || destType.equals( type ) /* optional destType */))
                 {
                     return object;
                 }
