@@ -129,7 +129,6 @@ private:
 
     css::uno::WeakReference<css::frame::XController> mxControllerWeak;
     css::uno::WeakReference<css::frame::XFrame> mxFrameWeak;
-    css::uno::WeakReference<css::view::XSelectionSupplier> mxSlideSorterSelectionWeak;
     SdDrawDocument* mpDocument;
     css::uno::WeakReference<css::drawing::framework::XConfigurationController>
          mxConfigurationControllerWeak;
@@ -210,7 +209,6 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
       mbListeningToFrame (false),
       mxControllerWeak(nullptr),
       mxFrameWeak(nullptr),
-      mxSlideSorterSelectionWeak(nullptr),
       mpDocument(nullptr),
       mxConfigurationControllerWeak()
 {
