@@ -43,8 +43,6 @@ import com.sun.star.uno.XInterface;
 */
 public class _XAcceptor extends MultiMethodTest {
 
-    protected PrintWriter log_ ;
-
     /**
     * Calls <code>accept()</code> method in a separate thread.
     * Then stores exception thrown by call if it occurred, or
@@ -97,8 +95,6 @@ public class _XAcceptor extends MultiMethodTest {
     public void before() throws StatusException {
         connectString = (String)
             tEnv.getObjRelation("XAcceptor.connectStr") ;
-
-        log_ = log ;
 
         if (connectString == null)
             throw new StatusException("No object relation found",
