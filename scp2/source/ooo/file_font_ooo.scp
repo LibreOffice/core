@@ -99,9 +99,6 @@ STD_FONT_FILE( gid_File_Fnt_Tinos_Bold, Tinos-Bold.ttf, Tinos Bold)
 STD_FONT_FILE( gid_File_Fnt_Tinos_Italic, Tinos-Italic.ttf, Tinos Italic)
 STD_FONT_FILE( gid_File_Fnt_Tinos_BoldItalic, Tinos-BoldItalic.ttf, Tinos Bold Italic)
 
-// Symbol Neu
-STD_FONT_FILE( gid_File_Fnt_SymbolNeu, SymbolNeu.ttf, Symbol Neu) 
-
 #endif // WNT
 
 #endif // WITH_CATB_FONTS

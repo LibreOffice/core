@@ -234,14 +234,14 @@ if (SYSTEM_CURL != YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS == YES)
-    MD5 = 161462de16e2ca79873bc2b0d2e6c74c
-    name = dejavu-fonts-ttf-2.34.tar.bz2
-    URL1 = http://sourceforge.net/projects/dejavu/files/dejavu/2.34/dejavu-fonts-ttf-2.34.tar.bz2/download
+    MD5 = 59eaca5acf5c7c8212e92778e3e01f32
+    name = dejavu-fonts-ttf-2.35.tar.bz2
+    URL1 = http://sourceforge.net/projects/dejavu/files/dejavu/2.35/$(name)/download
     # URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS==YES)
-    MD5 = cfa8bec07bf5b6856dd20f0cb28b3929
-    name = croscorefonts-1.23.0.tar.gz
+    MD5 = 3c90ac73fd13bd79684d9dc073840328
+    name = croscorefonts-1.31.0.tar.bz2
     URL1 = http://gsdview.appspot.com/chromeos-localmirror/distfiles/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 

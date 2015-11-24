@@ -37,8 +37,8 @@ TARGET=ttf_croscore
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=croscorefonts-1.23.0
-TARFILE_MD5=cfa8bec07bf5b6856dd20f0cb28b3929
+TARFILE_NAME=croscorefonts-1.31.0
+TARFILE_MD5=3c90ac73fd13bd79684d9dc073840328
 
 PATCH_FILES=
 

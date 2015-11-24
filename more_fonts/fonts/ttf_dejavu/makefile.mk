@@ -39,9 +39,9 @@ TARGET=ttf_dejavu
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=dejavu-fonts-ttf-2.34
-TARFILE_MD5=161462de16e2ca79873bc2b0d2e6c74c
-TARFILE_ROOTDIR=dejavu-fonts-ttf-2.34
+TARFILE_NAME=dejavu-fonts-ttf-2.35
+TARFILE_MD5=59eaca5acf5c7c8212e92778e3e01f32
+TARFILE_ROOTDIR=dejavu-fonts-ttf-2.35
 
 PATCH_FILES=
 
