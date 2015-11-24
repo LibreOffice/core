@@ -1319,6 +1319,12 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             return;
         }
 
+        if (!ScCalcConfig::isOpenCLEnabled() && getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr && ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
+        {
+            meVectorState = FormulaVectorDisabled;
+            return;
+        }
+
         // We support vectorization for the following opcodes.
         switch (eOp)
         {
@@ -1555,6 +1561,16 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         eOp <= SC_OPCODE_STOP_UN_OP &&
         ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly &&
         ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->end())
+    {
+        meVectorState = FormulaVectorDisabled;
+        return;
+    }
+
+    if (eOp >= SC_OPCODE_START_BIN_OP &&
+        eOp <= SC_OPCODE_STOP_UN_OP &&
+        !ScCalcConfig::isOpenCLEnabled() &&
+        getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr &&
+        ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
     {
         meVectorState = FormulaVectorDisabled;
         return;

@@ -86,6 +86,15 @@ void ScCalcConfig::setOpenCLConfigToDefault()
         ocSlope,
         ocSumIfs}));
 
+    // opcodes that are known to work well with the software interpreter
+    static OpCodeSet pDefaultSwInterpreterSubsetOpCodes(new std::set<OpCode>({
+        ocAdd,
+        ocSub,
+        ocMul,
+        ocDiv,
+        ocSum,
+        ocProduct}));
+
     // Note that these defaults better be kept in sync with those in
     // officecfg/registry/schema/org/openoffice/Office/Calc.xcs.
     // Crazy.
@@ -93,6 +102,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 100;
     mpOpenCLSubsetOpCodes = pDefaultOpenCLSubsetOpCodes;
+    mpSwInterpreterSubsetOpCodes = pDefaultSwInterpreterSubsetOpCodes;
 }
 
 void ScCalcConfig::reset()
@@ -127,6 +137,7 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
            maOpenCLDevice == r.maOpenCLDevice &&
            mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize &&
            *mpOpenCLSubsetOpCodes == *r.mpOpenCLSubsetOpCodes &&
+           *mpSwInterpreterSubsetOpCodes == *r.mpSwInterpreterSubsetOpCodes &&
            true;
 }
 
