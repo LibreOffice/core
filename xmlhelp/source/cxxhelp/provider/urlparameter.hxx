@@ -114,7 +114,7 @@ namespace chelp {
 
         URLParameter( const OUString& aURL,
                       Databases* pDatabases )
-            throw( com::sun::star::ucb::IllegalIdentifierException );
+            throw( css::ucb::IllegalIdentifierException );
 
         bool isActive() const { return !m_aActive.isEmpty() && m_aActive == "true"; }
         bool isQuery() const { return m_aId.isEmpty() && !m_aQuery.isEmpty(); }
@@ -165,15 +165,15 @@ namespace chelp {
 
         OString getByName( const char* par );
 
-        void open( const com::sun::star::ucb::Command& aCommand,
+        void open( const css::ucb::Command& aCommand,
                    sal_Int32 CommandId,
-                   const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& Environment,
-                   const com::sun::star::uno::Reference< com::sun::star::io::XActiveDataSink >& xDataSink );
+                   const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment,
+                   const css::uno::Reference< css::io::XActiveDataSink >& xDataSink );
 
-        void open( const com::sun::star::ucb::Command& aCommand,
+        void open( const css::ucb::Command& aCommand,
                    sal_Int32 CommandId,
-                   const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& Environment,
-                   const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xDataSink );
+                   const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment,
+                   const css::uno::Reference< css::io::XOutputStream >& xDataSink );
 
     private:
 
@@ -226,7 +226,7 @@ namespace chelp {
 
         void readHelpDataFile();
 
-        void parse() throw( com::sun::star::ucb::IllegalIdentifierException );
+        void parse() throw( css::ucb::IllegalIdentifierException );
 
         bool scheme();
 

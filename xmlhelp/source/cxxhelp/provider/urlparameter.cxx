@@ -80,7 +80,7 @@ using namespace chelp;
 
 URLParameter::URLParameter( const OUString& aURL,
                             Databases* pDatabases )
-    throw( com::sun::star::ucb::IllegalIdentifierException )
+    throw( css::ucb::IllegalIdentifierException )
     : m_pDatabases( pDatabases ),
       m_aURL( aURL )
 {
@@ -425,7 +425,7 @@ void URLParameter::open( const Command& aCommand,
 }
 
 
-void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierException )
+void URLParameter::parse() throw( css::ucb::IllegalIdentifierException )
 {
     m_aExpr = m_aURL;
 
@@ -438,7 +438,7 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
         ! query() ||
         m_aLanguage.isEmpty() ||
         m_aSystem.isEmpty() )
-        throw com::sun::star::ucb::IllegalIdentifierException();
+        throw css::ucb::IllegalIdentifierException();
 }
 
 

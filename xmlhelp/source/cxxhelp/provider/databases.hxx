@@ -101,9 +101,9 @@ namespace chelp {
         private:
 
             OUString key;
-            com::sun::star::uno::Sequence< OUString > listId;
-            com::sun::star::uno::Sequence< OUString > listAnchor;
-            com::sun::star::uno::Sequence< OUString > listTitle;
+            css::uno::Sequence< OUString > listId;
+            css::uno::Sequence< OUString > listAnchor;
+            css::uno::Sequence< OUString > listTitle;
 
             void init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids );
         };
@@ -112,22 +112,22 @@ namespace chelp {
 
         ~KeywordInfo() { };
 
-        com::sun::star::uno::Sequence< OUString >&
+        css::uno::Sequence< OUString >&
         getKeywordList() { return listKey; }
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > >&
+        css::uno::Sequence< css::uno::Sequence< OUString > >&
         getIdList() { return listId; }
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > >&
+        css::uno::Sequence< css::uno::Sequence< OUString > >&
         getAnchorList() { return listAnchor; }
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > >&
+        css::uno::Sequence< css::uno::Sequence< OUString > >&
         getTitleList() { return listTitle; }
 
     private:
 
-        com::sun::star::uno::Sequence< OUString > listKey;
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > > listId,listAnchor,listTitle;
+        css::uno::Sequence< OUString > listKey;
+        css::uno::Sequence< css::uno::Sequence< OUString > > listId,listAnchor,listTitle;
     };  // end class KeywordInfo
 
     class Databases
@@ -143,7 +143,7 @@ namespace chelp {
                  const OUString& productName,
                  const OUString& productVersion,
                  const OUString& styleSheet,
-                 com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext );
+                 css::uno::Reference< css::uno::XComponentContext > xContext );
 
         ~Databases();
 
@@ -168,7 +168,7 @@ namespace chelp {
          *  The following method returns the Collator for the given language-country combination
          */
 
-        com::sun::star::uno::Reference< com::sun::star::i18n::XCollator >
+        css::uno::Reference< css::i18n::XCollator >
         getCollator( const OUString& Language,
                      const OUString& System );   // System not used by current implementation
         //                                            // of XCollator
@@ -202,11 +202,11 @@ namespace chelp {
          *  Has the purpose of forcing the jarfile to stay open
          */
 
-        com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
+        css::uno::Reference< css::container::XHierarchicalNameAccess >
         jarFile( const OUString& jar,
                  const OUString& Language );
 
-        com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
+        css::uno::Reference< css::container::XHierarchicalNameAccess >
         findJarFileForPath( const OUString& jar, const OUString& Language,
             const OUString& path, OUString* o_pExtensionPath = nullptr,
             OUString* o_pExtensionRegistryPath = nullptr );
@@ -232,14 +232,14 @@ namespace chelp {
         OUString expandURL( const OUString& aURL );
 
         static OUString expandURL( const OUString& aURL,
-            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext );
+            css::uno::Reference< css::uno::XComponentContext > xContext );
 
     private:
 
-        osl::Mutex                                                                     m_aMutex;
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >       m_xContext;
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiComponentFactory > m_xSMgr;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 >      m_xSFA;
+        osl::Mutex                                               m_aMutex;
+        css::uno::Reference< css::uno::XComponentContext >       m_xContext;
+        css::uno::Reference< css::lang::XMultiComponentFactory > m_xSMgr;
+        css::uno::Reference< css::ucb::XSimpleFileAccess3 >      m_xSFA;
 
         bool   m_bShowBasic;
         char*  m_pErrorDoc;
@@ -281,16 +281,16 @@ namespace chelp {
 
         typedef
         std::unordered_map<
-        OUString,
-             ::com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >,
-            OUStringHash >         ZipFileTable;
+             OUString,
+             css::uno::Reference< css::container::XHierarchicalNameAccess >,
+             OUStringHash >         ZipFileTable;
         ZipFileTable m_aZipFileTable;   // No closing of an once opened jarfile
 
         typedef
         std::unordered_map<
-        OUString,
-             ::com::sun::star::uno::Reference< com::sun::star::i18n::XCollator >,
-            OUStringHash >      CollatorTable;
+             OUString,
+             css::uno::Reference< css::i18n::XCollator >,
+             OUStringHash >      CollatorTable;
         CollatorTable    m_aCollatorTable;
 
 
@@ -330,60 +330,60 @@ namespace chelp {
         static ExtensionHelpExistanceMap    aHelpExistanceMap;
 
     public:
-        ExtensionIteratorBase( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext,
+        ExtensionIteratorBase( css::uno::Reference< css::uno::XComponentContext > xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage );
         ExtensionIteratorBase( Databases& rDatabases, const OUString& aInitialModule,
             const OUString& aLanguage );
         void init();
 
     private:
-        static com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetHelpPackageFromPackage
-            ( const com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-              com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+        static css::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
+            ( const css::uno::Reference< css::deployment::XPackage > xPackage,
+              css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
     protected:
-        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextUserHelpPackage
-            ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
-        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextSharedHelpPackage
-            ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
-        com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextBundledHelpPackage
-        ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
+        css::uno::Reference< css::deployment::XPackage > implGetNextUserHelpPackage
+            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        css::uno::Reference< css::deployment::XPackage > implGetNextSharedHelpPackage
+            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        css::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
+        ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
         OUString implGetFileFromPackage( const OUString& rFileExtension,
-            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+            css::uno::Reference< css::deployment::XPackage > xPackage );
         void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+            css::uno::Reference< css::deployment::XPackage > xPackage );
 
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 >   m_xSFA;
-        Databases&                                                                  m_rDatabases;
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
+        Databases&                                            m_rDatabases;
 
-        IteratorState                                                               m_eState;
+        IteratorState                                         m_eState;
 
-        OUString                                                               m_aInitialModule;
-        OUString                                                               m_aLanguage;
+        OUString                                              m_aInitialModule;
+        OUString                                              m_aLanguage;
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-            < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
-        bool                                                                        m_bUserPackagesLoaded;
+        css::uno::Sequence< css::uno::Reference
+            < css::deployment::XPackage > >                   m_aUserPackagesSeq;
+        bool                                                  m_bUserPackagesLoaded;
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-            < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
-        bool                                                                        m_bSharedPackagesLoaded;
+        css::uno::Sequence< css::uno::Reference
+            < css::deployment::XPackage > >                   m_aSharedPackagesSeq;
+        bool                                                  m_bSharedPackagesLoaded;
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-            < com::sun::star::deployment::XPackage > >                              m_aBundledPackagesSeq;
-        bool                                                                        m_bBundledPackagesLoaded;
+        css::uno::Sequence< css::uno::Reference
+            < css::deployment::XPackage > >                   m_aBundledPackagesSeq;
+        bool                                                  m_bBundledPackagesLoaded;
 
-        int                                                                         m_iUserPackage;
-        int                                                                         m_iSharedPackage;
-        int                                                                         m_iBundledPackage;
+        int                                                   m_iUserPackage;
+        int                                                   m_iSharedPackage;
+        int                                                   m_iBundledPackage;
 
     }; // end class ExtensionIteratorBase
 
     class DataBaseIterator : public ExtensionIteratorBase
     {
     public:
-        DataBaseIterator( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext,
+        DataBaseIterator( css::uno::Reference< css::uno::XComponentContext > xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage, bool bHelpText )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
                 , m_bHelpText( bHelpText )
@@ -398,7 +398,7 @@ namespace chelp {
 
     private:
         helpdatafileproxy::Hdf* implGetHdfFromPackage(
-            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
+            css::uno::Reference< css::deployment::XPackage > xPackage,
             OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
 
         bool                                                                        m_bHelpText;
@@ -408,7 +408,7 @@ namespace chelp {
     class KeyDataBaseFileIterator : public ExtensionIteratorBase
     {
     public:
-        KeyDataBaseFileIterator( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext,
+        KeyDataBaseFileIterator( css::uno::Reference< css::uno::XComponentContext > xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
@@ -417,25 +417,25 @@ namespace chelp {
 
     private:
         OUString implGetDbFileFromPackage(
-            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+            css::uno::Reference< css::deployment::XPackage > xPackage );
 
     }; // end class KeyDataBaseFileIterator
 
     class JarFileIterator : public ExtensionIteratorBase
     {
     public:
-        JarFileIterator( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext,
+        JarFileIterator( css::uno::Reference< css::uno::XComponentContext > xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
 
-        com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
-            nextJarFile( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
+        css::uno::Reference< css::container::XHierarchicalNameAccess >
+            nextJarFile( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle,
                             OUString* o_pExtensionPath = nullptr, OUString* o_pExtensionRegistryPath = nullptr );
 
     private:
-        com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
-            implGetJarFromPackage(com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
+        css::uno::Reference< css::container::XHierarchicalNameAccess >
+            implGetJarFromPackage(css::uno::Reference< css::deployment::XPackage > xPackage,
                 OUString* o_pExtensionPath = nullptr, OUString* o_pExtensionRegistryPath = nullptr );
 
     }; // end class JarFileIterator
@@ -452,7 +452,7 @@ namespace chelp {
 
     private:
         OUString implGetIndexFolderFromPackage( bool& o_rbTemporary,
-            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+            css::uno::Reference< css::deployment::XPackage > xPackage );
 
     }; // end class KeyDataBaseFileIterator
 

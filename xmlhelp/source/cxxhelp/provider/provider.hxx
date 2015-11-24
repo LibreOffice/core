@@ -48,12 +48,12 @@ namespace chelp {
 
     class ContentProvider :
         public ::ucbhelper::ContentProviderImplHelper,
-        public ::com::sun::star::container::XContainerListener,
-        public ::com::sun::star::lang::XComponent
+        public css::container::XContainerListener,
+        public css::lang::XComponent
     {
     public:
         explicit ContentProvider(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         virtual ~ContentProvider();
 
@@ -99,18 +99,18 @@ namespace chelp {
 
         virtual void SAL_CALL
         dispose(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
-        addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) override
         {
             (void)xListener;
         }
 
         virtual void SAL_CALL
-        removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+            throw (css::uno::RuntimeException, std::exception) override
         {
             (void)aListener;
         }
@@ -118,29 +118,29 @@ namespace chelp {
         // XConainerListener ( derive from XEventListener )
 
         virtual void SAL_CALL
-        disposing( const ::com::sun::star::lang::EventObject& /*Source*/ )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        disposing( const css::lang::EventObject& /*Source*/ )
+            throw (css::uno::RuntimeException, std::exception) override
         {
             m_xContainer.clear();
         }
 
         virtual void SAL_CALL
-        elementInserted( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        elementInserted( const css::container::ContainerEvent& Event )
+            throw (css::uno::RuntimeException, std::exception) override
         {
             (void)Event;
         }
 
         virtual void SAL_CALL
-        elementRemoved( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        elementRemoved( const css::container::ContainerEvent& Event )
+            throw (css::uno::RuntimeException, std::exception) override
         {
             (void)Event;
         }
 
         virtual void SAL_CALL
-        elementReplaced( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        elementReplaced( const css::container::ContainerEvent& Event )
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // Non-interface methods.
 
@@ -150,27 +150,26 @@ namespace chelp {
         bool           isInitialized;
         OUString  m_aScheme;
         Databases*     m_pDatabases;
-        com::sun::star::uno::Reference<com::sun::star::container::XContainer> m_xContainer;
+        css::uno::Reference<css::container::XContainer> m_xContainer;
 
         // private methods
 
         void init();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        css::uno::Reference< css::lang::XMultiServiceFactory >
         getConfiguration() const;
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
-        getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& sProvider,
+        static css::uno::Reference< css::container::XHierarchicalNameAccess >
+        getHierAccess( const css::uno::Reference<  css::lang::XMultiServiceFactory >& sProvider,
                        const char* file );
 
         static OUString
-        getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+        getKey( const css::uno::Reference< css::container::XHierarchicalNameAccess >& xHierAccess,
                 const char* key );
 
         static bool
         getBooleanKey(
-                    const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+                    const css::uno::Reference< css::container::XHierarchicalNameAccess >& xHierAccess,
                     const char* key);
 
         static void subst( OUString& instpath );
