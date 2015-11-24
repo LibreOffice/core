@@ -41,7 +41,6 @@ struct GPUEnv
 {
     //share vb in all modules in hb library
     cl_platform_id mpPlatformID;
-    cl_device_type mDevType;
     cl_context mpContext;
     cl_device_id mpDevID;
     cl_command_queue mpCmdQueue[OPENCL_CMDQUEUE_SIZE];

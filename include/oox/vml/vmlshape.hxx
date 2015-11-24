@@ -206,7 +206,6 @@ struct ShapeModel
     OUString     maControl1;         ///< Bezier control point 1
     OUString     maControl2;         ///< Bezier control point 2
     OUString     maVmlPath;          ///< VML path for this shape
-    OUString     maEditAs;           ///< VML EditAs for shape
 
     explicit            ShapeModel();
                         ~ShapeModel();

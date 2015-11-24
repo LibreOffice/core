@@ -96,7 +96,6 @@ struct StdHlinkInfo
     OUString     maTarget;
     OUString     maLocation;
     OUString     maDisplay;
-    OUString     maFrame;
 };
 
 

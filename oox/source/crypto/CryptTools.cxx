@@ -16,10 +16,9 @@ namespace core {
 
 using namespace std;
 
-Crypto::Crypto(CryptoType type)
-    : mType(type)
+Crypto::Crypto()
 #if USE_TLS_NSS
-    , mContext(nullptr)
+    : mContext(nullptr)
     , mSecParam(nullptr)
     , mSymKey(nullptr)
 #endif
@@ -111,7 +110,7 @@ void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoT
 // DECRYPT
 
 Decrypt::Decrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type) :
-    Crypto(type)
+    Crypto()
 {
 #if USE_TLS_OPENSSL
     EVP_CIPHER_CTX_init( &mContext );
@@ -159,7 +158,7 @@ sal_uInt32 Decrypt::aes128ecb(vector<sal_uInt8>& output, vector<sal_uInt8>& inpu
 // ENCRYPT
 
 Encrypt::Encrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type) :
-    Crypto(type)
+    Crypto()
 {
 #if USE_TLS_OPENSSL
     EVP_CIPHER_CTX_init( &mContext );

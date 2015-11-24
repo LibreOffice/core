@@ -53,7 +53,6 @@ public:
     };
 
 protected:
-    CryptoType mType;
 #if USE_TLS_OPENSSL
     EVP_CIPHER_CTX mContext;
 #endif
@@ -75,7 +74,7 @@ protected:
 #endif
 
 protected:
-    Crypto(CryptoType type);
+    Crypto();
 
 public:
     virtual ~Crypto();

@@ -135,10 +135,6 @@ private:
     /** Stream property for a picture or mouse icon. */
     struct PictureProperty : public ComplexProperty
     {
-        StreamDataSequence& mrPicData;
-
-        explicit            PictureProperty( StreamDataSequence& rPicData ) :
-                                mrPicData( rPicData ) {}
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm ) override;
     };
 
@@ -149,10 +145,6 @@ private:
     ComplexPropVector   maLargeProps;       ///< Stores info for all used large properties.
     ComplexPropVector   maStreamProps;      ///< Stores info for all used stream data properties.
     AxPairData          maDummyPairData;    ///< Dummy pair for unsupported properties.
-    StreamDataSequence  maDummyPicData;     ///< Dummy picture for unsupported properties.
-    OUString            maDummyString;      ///< Dummy string for unsupported properties.
-    ::std::vector< OUString >
-                        maDummyStringArray; ///< Dummy string array for unsupported properties.
     sal_Int16           mnBlockSize;
     sal_Int64           mnPropFlagsStart;     ///< pos of Prop flags
     sal_Int64           mnPropFlags;        ///< Flags specifying existing properties.

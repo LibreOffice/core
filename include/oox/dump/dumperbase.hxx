@@ -251,46 +251,6 @@ struct ItemFormat
 
 
 
-struct Address
-{
-    sal_Int32           mnCol;
-    sal_Int32           mnRow;
-                        Address() : mnCol( 0 ), mnRow( 0 ) {}
-    explicit            Address( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
-};
-
-
-
-struct Range
-{
-    Address             maFirst;
-    Address             maLast;
-    Range() {}
-};
-
-
-
-typedef ::std::vector< Range > RangeList;
-
-
-
-struct TokenAddress : public Address
-{
-    bool                mbRelCol;
-    bool                mbRelRow;
-    TokenAddress() : mbRelCol( false ), mbRelRow( false ) {}
-};
-
-
-
-struct TokenRange
-{
-    TokenAddress        maFirst;
-    TokenAddress        maLast;
-    TokenRange() {}
-};
-
-
 
 
 /** Static helper functions for formatted output to strings. */
