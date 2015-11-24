@@ -1058,7 +1058,19 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
     }
     else
     {
-        const Point rMousePos = rTEvt.GetMouseEvent().GetPosPixel();
+        Point aPosPixel;
+        if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MAP_TWIP)
+        {
+            // rTEvt coordinates are in twips.
+            Push(PushFlags::MAPMODE);
+            EnableMapMode();
+            MapMode aMapMode = GetMapMode();
+            aMapMode.SetOrigin(Point(0, 0));
+            SetMapMode(aMapMode);
+            aPosPixel = LogicToPixel(rTEvt.GetMouseEvent().GetPosPixel());
+            Pop();
+        }
+        const Point rMousePos = (GetMapMode().GetMapUnit() != MAP_TWIP ? rTEvt.GetMouseEvent().GetPosPixel() : aPosPixel);
 
         // Dragging is treated in a special way
         if ( meScrollType == SCROLL_DRAG )
