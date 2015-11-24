@@ -31,6 +31,7 @@ protected:
     /// @see OutputDevice::LogicInvalidate().
     void LogicInvalidate(const Rectangle* pRectangle) override;
     void MouseMove(const MouseEvent& rMouseEvent) override;
+    void MouseButtonUp(const MouseEvent& rMouseEvent) override;
 public:
     SidebarScrollBar(SwSidebarWin& rSidebarWin, WinBits nStyle, SwView& rView);
     virtual ~SidebarScrollBar();
