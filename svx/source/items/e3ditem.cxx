@@ -95,6 +95,8 @@ SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/
 
 bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
+    assert(!isnan(aVal.getX()) && !isnan(aVal.getY()) && !isnan(aVal.getZ()));
+
     drawing::Direction3D aDirection;
 
     // Werte eintragen
@@ -117,6 +119,9 @@ bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     aVal.setX(aDirection.DirectionX);
     aVal.setY(aDirection.DirectionY);
     aVal.setZ(aDirection.DirectionZ);
+
+    assert(!isnan(aVal.getX()) && !isnan(aVal.getY()) && !isnan(aVal.getZ()));
+
     return true;
 }
 

@@ -64,7 +64,16 @@ SdXML3DLightContext::SdXML3DLightContext(
             }
             case XML_TOK_3DLIGHT_DIRECTION:
             {
-                SvXMLUnitConverter::convertB3DVector(maDirection, sValue);
+                ::basegfx::B3DVector aVal;
+                SvXMLUnitConverter::convertB3DVector(aVal, sValue);
+                if (!isnan(aVal.getX()) && !isnan(aVal.getY()) && !isnan(aVal.getZ()))
+                {
+                    maDirection = aVal;
+                }
+                else
+                {
+                    SAL_WARN("xmloff", "NaNs found in light direction: " << sValue);
+                }
                 break;
             }
             case XML_TOK_3DLIGHT_ENABLED:
