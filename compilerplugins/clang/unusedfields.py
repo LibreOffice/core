@@ -6,6 +6,7 @@ import io
 
 definitionSet = set()
 definitionToSourceLocationMap = dict()
+definitionToTypeMap = dict()
 callSet = set()
 sourceLocationSet = set()
 # things we need to exclude for reasons like :
@@ -26,12 +27,14 @@ with io.open(sys.argv[1], "rb", buffering=1024*1024) as txt:
         if line.startswith("definition:\t"):
             idx1 = line.find("\t",12)
             idx2 = line.find("\t",idx1+1)
-            funcInfo = (normalizeTypeParams(line[12:idx1]), normalizeTypeParams(line[idx1+1:idx2]))
+            idx3 = line.find("\t",idx2+1)
+            funcInfo = (normalizeTypeParams(line[12:idx1]), line[idx1+1:idx2])
             definitionSet.add(funcInfo)
-            definitionToSourceLocationMap[funcInfo] = line[idx2+1:].strip()
+            definitionToTypeMap[funcInfo] = line[idx2+1:idx3].strip()
+            definitionToSourceLocationMap[funcInfo] = line[idx3+1:].strip()
         elif line.startswith("touch:\t"):
             idx1 = line.find("\t",7)
-            callInfo = (normalizeTypeParams(line[7:idx1]), normalizeTypeParams(line[idx1+1:].strip()))
+            callInfo = (normalizeTypeParams(line[7:idx1]), line[idx1+1:].strip())
             callSet.add(callInfo)
 
 # Invert the definitionToSourceLocationMap
@@ -67,7 +70,7 @@ for d in definitionSet:
         or srcLoc.startswith("vcl/inc/unx/gtk/gloactiongroup.h")):
         continue
 
-    tmp1set.add((clazz, srcLoc))
+    tmp1set.add((clazz + " " + definitionToTypeMap[d], srcLoc))
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):

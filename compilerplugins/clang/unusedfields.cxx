@@ -41,6 +41,7 @@ struct MyFieldInfo
 {
     std::string parentClass;
     std::string fieldName;
+    std::string fieldType;
     std::string sourceLocation;
 
     bool operator < (const MyFieldInfo &other) const
@@ -77,7 +78,7 @@ public:
             output += "touch:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : definitionSet)
         {
-            output += "definition:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.sourceLocation + "\n";
+            output += "definition:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation + "\n";
         }
         ofstream myfile;
         myfile.open( SRCDIR "/unusedfields.log", ios::app | ios::out);
@@ -101,6 +102,7 @@ MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
     MyFieldInfo aInfo;
     aInfo.parentClass = fieldDecl->getParent()->getQualifiedNameAsString();
     aInfo.fieldName = fieldDecl->getNameAsString();
+    aInfo.fieldType = fieldDecl->getType().getAsString();
 
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( fieldDecl->getLocation() );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
@@ -181,28 +183,10 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
 
     if( CXXRecordDecl* recordDecl = type->getAsCXXRecordDecl() )
     {
-        bool warn_unused = false;
-        if( recordDecl->hasAttrs())
-        {
-                // Clang currently has no support for custom attributes, but
-                // the annotate attribute comes close, so check for __attribute__((annotate("lo_warn_unused")))
-                for( specific_attr_iterator<AnnotateAttr> i = recordDecl->specific_attr_begin<AnnotateAttr>(),
-                 e = recordDecl->specific_attr_end<AnnotateAttr>();
-                 i != e;
-                 ++i )
-                {
-                    if( (*i)->getAnnotation() == "lo_warn_unused" )
-                    {
-                        warn_unused = true;
-                        break;
-                    }
-                }
-        }
+        bool warn_unused = recordDecl->hasAttr<WarnUnusedAttr>();
         if( !warn_unused )
         {
             string n = recordDecl->getQualifiedNameAsString();
-            if( n == "rtl::OUString" )
-                warn_unused = true;
             // Check some common non-LO types.
             if( n == "std::string" || n == "std::basic_string"
                 || n == "std::list" || n == "std::__debug::list"
