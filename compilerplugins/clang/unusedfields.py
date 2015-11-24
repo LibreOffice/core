@@ -60,7 +60,11 @@ for d in definitionSet:
         continue
     # this is all representations of on-disk data structures
     if (srcLoc.startswith("sc/source/filter/inc/scflt.hxx")
-        or srcLoc.startswith("sw/source/filter/ww8/")):
+        or srcLoc.startswith("sw/source/filter/ww8/")
+        or srcLoc.startswith("vcl/source/filter/sgvmain.hxx")
+        or srcLoc.startswith("vcl/source/filter/sgfbram.hxx")
+        or srcLoc.startswith("vcl/inc/unx/XIM.h")
+        or srcLoc.startswith("vcl/inc/unx/gtk/gloactiongroup.h")):
         continue
 
     tmp1set.add((clazz, srcLoc))

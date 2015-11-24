@@ -63,8 +63,6 @@ namespace cairo
         hDrawable(0),
         pVisual(nullptr),
         nScreen(0),
-        nDepth(-1),
-        aColormap(-1),
         pRenderFormat(nullptr)
     {}
 
@@ -73,8 +71,6 @@ namespace cairo
         hDrawable(pSysDat.hDrawable),
         pVisual(pSysDat.pVisual),
         nScreen(pSysDat.nScreen),
-        nDepth(pSysDat.nDepth),
-        aColormap(pSysDat.aColormap),
         pRenderFormat(pSysDat.pXRenderFormat)
     {}
 
@@ -83,8 +79,6 @@ namespace cairo
         hDrawable(pSysDat.aWindow),
         pVisual(pSysDat.pVisual),
         nScreen(pSysDat.nScreen),
-        nDepth(pSysDat.nDepth),
-        aColormap(pSysDat.aColormap),
         pRenderFormat(nullptr)
     {}
 

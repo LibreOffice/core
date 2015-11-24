@@ -449,8 +449,7 @@ struct SaveStruct
     WinMtfClipPath      aClipPath;
     XForm               aXForm;
 
-    bool            bRecordPath;
-    bool            bFillStyleSelected;
+    bool                bFillStyleSelected;
 };
 
 typedef std::shared_ptr<SaveStruct> SaveStructPtr;

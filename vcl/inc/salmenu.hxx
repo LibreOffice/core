@@ -36,7 +36,7 @@ struct SalItemParams
     MenuItemType    eType;                  // MenuItem-Type
     MenuItemBits    nBits;                  // MenuItem-Bits
     Menu*           pMenu;                  // Pointer to Menu
-    OUString   aText;                  // Menu-Text
+    OUString        aText;                  // Menu-Text
     Image           aImage;                 // Image
 };
 
