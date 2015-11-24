@@ -58,6 +58,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     typedef std::shared_ptr<std::set<OpCode>> OpCodeSet;
 
     OpCodeSet mpOpenCLSubsetOpCodes;
+    OpCodeSet mpSwInterpreterSubsetOpCodes;
 
     ScCalcConfig();
 
