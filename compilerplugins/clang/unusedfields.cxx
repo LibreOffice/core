@@ -169,6 +169,7 @@ gotfunc:
 bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
 {
     fieldDecl = fieldDecl->getCanonicalDecl();
+    const FieldDecl* canonicalDecl = fieldDecl;
 
     if( ignoreLocation( fieldDecl ))
         return true;
@@ -212,7 +213,7 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
             return true;
     }
 
-    definitionSet.insert(niceName(fieldDecl));
+    definitionSet.insert(niceName(canonicalDecl));
     return true;
 }
 

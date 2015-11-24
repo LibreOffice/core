@@ -289,7 +289,6 @@ struct INetURLObject::SchemeInfo
 {
     sal_Char const * m_pScheme;
     sal_Char const * m_pPrefix;
-    sal_uInt16 m_nDefaultPort;
     bool m_bAuthority;
     bool m_bUser;
     bool m_bAuth;
@@ -316,89 +315,89 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
 {
     static o3tl::enumarray<INetProtocol, SchemeInfo> const map = {
         SchemeInfo{
-            "", "", 0, false, false, false, false, false, false, false, false},
+            "", "", false, false, false, false, false, false, false, false},
         SchemeInfo{
-            "ftp", "ftp://", 21, true, true, false, true, true, true, true,
+            "ftp", "ftp://", true, true, false, true, true, true, true,
             false},
         SchemeInfo{
-            "http", "http://", 80, true, false, false, false, true, true, true,
+            "http", "http://", true, false, false, false, true, true, true,
             true},
         SchemeInfo{
-            "file", "file://", 0, true, false, false, false, true, false, true,
+            "file", "file://", true, false, false, false, true, false, true,
             false},
         SchemeInfo{
-            "mailto", "mailto:", 0, false, false, false, false, false, false,
+            "mailto", "mailto:", false, false, false, false, false, false,
             false, true},
         SchemeInfo{
-            "vnd.sun.star.webdav", "vnd.sun.star.webdav://", 80, true, false,
+            "vnd.sun.star.webdav", "vnd.sun.star.webdav://", true, false,
             false, false, true, true, true, true},
         SchemeInfo{
-            "private", "private:", 0, false, false, false, false, false, false,
+            "private", "private:", false, false, false, false, false, false,
             false, true},
         SchemeInfo{
-            "vnd.sun.star.help", "vnd.sun.star.help://", 0, true, false, false,
+            "vnd.sun.star.help", "vnd.sun.star.help://", true, false, false,
             false, false, false, true, true},
         SchemeInfo{
-            "https", "https://", 443, true, false, false, false, true, true,
+            "https", "https://", true, false, false, false, true, true,
             true, true},
         SchemeInfo{
-            "slot", "slot:", 0, false, false, false, false, false, false, false,
+            "slot", "slot:", false, false, false, false, false, false, false,
             true},
         SchemeInfo{
-            "macro", "macro:", 0, false, false, false, false, false, false,
+            "macro", "macro:", false, false, false, false, false, false,
             false, true},
         SchemeInfo{
-            "javascript", "javascript:", 0, false, false, false, false, false,
+            "javascript", "javascript:", false, false, false, false, false,
             false, false, false},
         SchemeInfo{
-            "data", "data:", 0, false, false, false, false, false, false, false,
+            "data", "data:", false, false, false, false, false, false, false,
             false},
         SchemeInfo{
-            "cid", "cid:", 0, false, false, false, false, false, false, false,
+            "cid", "cid:", false, false, false, false, false, false, false,
             false},
         SchemeInfo{
-            "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, true, false, false,
+            "vnd.sun.star.hier", "vnd.sun.star.hier:", true, false, false,
             false, false, false, true, false},
         SchemeInfo{
-            ".uno", ".uno:", 0, false, false, false, false, false, false, false,
+            ".uno", ".uno:", false, false, false, false, false, false, false,
             true},
         SchemeInfo{
-            ".component", ".component:", 0, false, false, false, false, false,
+            ".component", ".component:", false, false, false, false, false,
             false, false, true},
         SchemeInfo{
-            "vnd.sun.star.pkg", "vnd.sun.star.pkg://", 0, true, false, false,
+            "vnd.sun.star.pkg", "vnd.sun.star.pkg://", true, false, false,
             false, false, false, true, true},
         SchemeInfo{
-            "ldap", "ldap://", 389, true, false, false, false, true, true,
+            "ldap", "ldap://", true, false, false, false, true, true,
             false, true},
         SchemeInfo{
-            "db", "db:", 0, false, false, false, false, false, false, false,
+            "db", "db:", false, false, false, false, false, false, false,
             false},
         SchemeInfo{
-            "vnd.sun.star.cmd", "vnd.sun.star.cmd:", 0, false, false, false,
+            "vnd.sun.star.cmd", "vnd.sun.star.cmd:", false, false, false,
             false, false, false, false, false},
         SchemeInfo{
-            "telnet", "telnet://", 23, true, true, false, true, true, true,
+            "telnet", "telnet://", true, true, false, true, true, true,
             true, false},
         SchemeInfo{
-            "vnd.sun.star.expand", "vnd.sun.star.expand:", 0, false, false,
+            "vnd.sun.star.expand", "vnd.sun.star.expand:", false, false,
             false, false, false, false, false, false},
         SchemeInfo{
-            "vnd.sun.star.tdoc", "vnd.sun.star.tdoc:", 0, false, false, false,
+            "vnd.sun.star.tdoc", "vnd.sun.star.tdoc:", false, false, false,
             false, false, false, true, false},
         SchemeInfo{
-            "", "", 0, false, false, false, false, true, true, true, false },
+            "", "", false, false, false, false, true, true, true, false },
         SchemeInfo{
-            "smb", "smb://", 139, true, true, false, true, true, true, true,
+            "smb", "smb://", true, true, false, true, true, true, true,
             true},
         SchemeInfo{
-            "hid", "hid:", 0, false, false, false, false, false, false, false,
+            "hid", "hid:", false, false, false, false, false, false, false,
             true},
         SchemeInfo{
-            "sftp", "sftp://", 22, true, true, false, true, true, true, true,
+            "sftp", "sftp://", true, true, false, true, true, true, true,
             true},
         SchemeInfo{
-            "vnd.libreoffice.cmis", "vnd.libreoffice.cmis://", 0, true, true,
+            "vnd.libreoffice.cmis", "vnd.libreoffice.cmis://", true, true,
             false, false, true, false, true, true} };
     return map[eTheScheme];
 };
