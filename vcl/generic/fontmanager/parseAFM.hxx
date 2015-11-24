@@ -203,9 +203,8 @@ typedef struct _t_ligature
 typedef struct
 {
     int code,       /* key: C */
-        wx,     /* key: WX */
-        w0x,        /* key: W0X */
-        wy;     /* together wx and wy are associated with key: W */
+        wx,         /* key: WX */
+        wy;         /* together wx and wy are associated with key: W */
     char *name;     /* key: N */
     BBox charBBox;  /* key: B */
     Ligature *ligs; /* key: L (linked list; not a fixed number of Ls */

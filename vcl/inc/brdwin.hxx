@@ -198,7 +198,6 @@ struct ImplBorderFrameData
     long                     mnNoTitleTop;
     long                     mnBorderSize;
     long                     mnTitleHeight;
-    long                     mnTitleOff;
     sal_uInt16               mnHitTest;
     DrawButtonFlags          mnPinState;
     DrawButtonFlags          mnCloseState;

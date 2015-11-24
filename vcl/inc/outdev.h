@@ -84,8 +84,6 @@ protected:
 
 struct ImplFontSubstEntry
 {
-    OUString                  maName;
-    OUString                  maReplaceName;
     OUString                  maSearchName;
     OUString                  maSearchReplaceName;
     AddFontSubstituteFlags    mnFlags;

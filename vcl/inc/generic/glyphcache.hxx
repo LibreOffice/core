@@ -125,18 +125,6 @@ private:
     Size                    maSize;
 };
 
-// the glyph specific data needed by a GlyphCachePeer is usually trivial,
-// not attaching it to the corresponding GlyphData would be overkill;
-// this is currently only used by the headless (aka svp) plugin, where meInfo is
-// basebmp::Format and mpData is SvpGcpHelper*
-struct ExtGlyphData
-{
-    basebmp::Format  meInfo;
-    SvpGcpHelper*    mpData;
-
-    ExtGlyphData() : meInfo(basebmp::Format::NONE), mpData(nullptr) {}
-};
-
 class GlyphData
 {
 public:
@@ -233,8 +221,6 @@ private:
     // 16.16 fixed point values used for a rotated font
     long                    mnCos;
     long                    mnSin;
-
-    bool                    mbCollectedZW;
 
     int                     mnWidth;
     int                     mnPrioEmbedded;

@@ -53,7 +53,7 @@ enum class InputContextFlags;
 #define SALEVENT_FONTCHANGED            ((sal_uInt16)18)
 #define SALEVENT_WHEELMOUSE             ((sal_uInt16)21)
 #define SALEVENT_USEREVENT              ((sal_uInt16)22)
-#define SALEVENT_MOUSEACTIVATE          ((sal_uInt16)23)
+// unused
 #define SALEVENT_EXTTEXTINPUT           ((sal_uInt16)24)
 #define SALEVENT_ENDEXTTEXTINPUT        ((sal_uInt16)25)
 #define SALEVENT_EXTTEXTINPUTPOS        ((sal_uInt16)26)
@@ -159,13 +159,6 @@ struct SalWheelMouseEvent
     SalWheelMouseEvent()
     : mnTime( 0 ), mnX( 0 ), mnY( 0 ), mnDelta( 0 ), mnNotchDelta( 0 ), mnScrollLines( 0 ), mnCode( 0 ), mbHorz( false ), mbDeltaIsPixel( false )
     {}
-};
-
-// MOUSEACTIVATE
-struct SalMouseActivateEvent
-{
-    long            mnX;            // X-Position (Pixel, TopLeft-Output)
-    long            mnY;            // Y-Position (Pixel, TopLeft-Output)
 };
 
 // EXTTEXTINPUT

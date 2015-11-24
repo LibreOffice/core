@@ -3183,24 +3183,6 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     return nRet;
 }
 
-static long ImplHandleMouseActivateMsg( HWND hWnd )
-{
-    WinSalFrame* pFrame = GetWindowPtr( hWnd );
-    if ( !pFrame )
-        return 0;
-
-    if ( pFrame->mbFloatWin )
-        return TRUE;
-
-    SalMouseActivateEvent   aMouseActivateEvt;
-    POINT                   aPt;
-    GetCursorPos( &aPt );
-    ScreenToClient( hWnd, &aPt );
-    aMouseActivateEvt.mnX = aPt.x;
-    aMouseActivateEvt.mnY = aPt.y;
-    return pFrame->CallCallback( SALEVENT_MOUSEACTIVATE, &aMouseActivateEvt );
-}
-
 static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     DBG_ASSERT( nMsg == WM_MOUSEWHEEL ||
@@ -5533,17 +5515,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_MOUSEACTIVATE:
-            if ( LOWORD( lParam ) == HTCLIENT )
-            {
-                ImplSalYieldMutexAcquireWithWait();
-                nRet = ImplHandleMouseActivateMsg( hWnd );
-                ImplSalYieldMutexRelease();
-                if ( nRet )
-                {
-                    nRet = MA_NOACTIVATE;
-                    rDef = FALSE;
-                }
-            }
             break;
 
         case WM_KEYDOWN:

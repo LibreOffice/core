@@ -512,7 +512,6 @@ void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
 
 struct YieldEntry
 {
-    YieldEntry* next;       // pointer to next entry
     int         fd;         // file descriptor for reading
     void*           data;       // data for predicate and callback
     YieldFunc       pending;    // predicate (determins pending events)

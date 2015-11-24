@@ -2437,9 +2437,6 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
             bRet = ImplHandleSalMouseButtonUp( pWindow, &aSalMouseEvent );
         }
         break;
-        case SALEVENT_MOUSEACTIVATE:
-            bRet = false;
-            break;
         case SALEVENT_KEYINPUT:
             {
             SalKeyEvent const * pKeyEvt = static_cast<SalKeyEvent const *>(pEvent);

@@ -62,11 +62,6 @@ namespace vcl
     typedef sal_Int32       F16Dot16;           /**< fixed: 16.16 */
 /*@}*/
 
-    typedef struct {
-        sal_uInt16 s;
-        sal_uInt16 d;
-    } sal_uInt16pair;
-
 /** Return value of OpenTTFont() and CreateT3FromTTGlyphs() */
     enum SFErrCodes {
         SF_OK,                              /**< no error                                     */
