@@ -400,8 +400,8 @@ Reference<XInputStream> ZipStorageImpl::createStream(const rtl::OUString &rPath)
 class WPXSvInputStreamImpl
 {
 public:
-    explicit WPXSvInputStreamImpl(::com::sun::star::uno::Reference<
-                                  ::com::sun::star::io::XInputStream > xStream);
+    explicit WPXSvInputStreamImpl(css::uno::Reference<
+                                  css::io::XInputStream > xStream);
     ~WPXSvInputStreamImpl();
 
     bool isStructured();
@@ -429,9 +429,9 @@ private:
     static librevenge::RVNGInputStream *createWPXStream(const Reference<XInputStream> &rxStream);
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > mxSeekable;
-    ::com::sun::star::uno::Sequence< sal_Int8 > maData;
+    css::uno::Reference< css::io::XInputStream > mxStream;
+    css::uno::Reference< css::io::XSeekable > mxSeekable;
+    css::uno::Sequence< sal_Int8 > maData;
     std::unique_ptr< OLEStorageImpl > mpOLEStorage;
     std::unique_ptr< ZipStorageImpl > mpZipStorage;
     bool mbCheckedOLE;

@@ -22,16 +22,16 @@
 class NumbersImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {
 public:
-    explicit NumbersImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit NumbersImportFilter(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdsGenerator>(rxContext) {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) override;
@@ -40,14 +40,14 @@ private:
 };
 
 OUString NumbersImportFilter_getImplementationName()
-throw (::com::sun::star::uno::RuntimeException);
+throw (css::uno::RuntimeException);
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL NumbersImportFilter_getSupportedServiceNames()
-throw (::com::sun::star::uno::RuntimeException);
+css::uno::Sequence< OUString > SAL_CALL NumbersImportFilter_getSupportedServiceNames()
+throw (css::uno::RuntimeException);
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL NumbersImportFilter_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext)
-throw (::com::sun::star::uno::Exception);
+css::uno::Reference< css::uno::XInterface >
+SAL_CALL NumbersImportFilter_createInstance(const css::uno::Reference< css::uno::XComponentContext > &rContext)
+throw (css::uno::Exception);
 
 #endif
 

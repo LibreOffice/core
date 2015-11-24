@@ -48,14 +48,14 @@ namespace detail
 template<class Generator>
 class ImportFilterImpl : public cppu::WeakImplHelper
     <
-    com::sun::star::document::XFilter,
-    com::sun::star::document::XImporter,
-    com::sun::star::document::XExtendedFilterDetection,
-    com::sun::star::lang::XInitialization
+    css::document::XFilter,
+    css::document::XImporter,
+    css::document::XExtendedFilterDetection,
+    css::lang::XInitialization
     >
 {
 public:
-    ImportFilterImpl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    ImportFilterImpl(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
         : mxContext(rxContext)
     {
     }
@@ -65,8 +65,8 @@ public:
     }
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &rDescriptor)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence< css::beans::PropertyValue > &rDescriptor)
+    throw (css::uno::RuntimeException, std::exception) override
     {
         utl::MediaDescriptor aDescriptor(rDescriptor);
         css::uno::Reference < css::io::XInputStream > xInputStream;
@@ -102,20 +102,20 @@ public:
     }
 
     virtual void SAL_CALL cancel()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override
+    throw (css::uno::RuntimeException, std::exception) override
     {
     }
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &xDoc)
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL setTargetDocument(const css::uno::Reference< css::lang::XComponent > &xDoc)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override
     {
         mxDoc = xDoc;
     }
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &Descriptor)
-    throw(com::sun::star::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor)
+    throw(css::uno::RuntimeException, std::exception) override
     {
         OUString sTypeName;
         sal_Int32 nLength = Descriptor.getLength();
@@ -152,8 +152,8 @@ public:
     }
 
     // XInitialization
-    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > &aArguments)
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > &aArguments)
+    throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override
     {
         css::uno::Sequence < css::beans::PropertyValue > aAnySeq;
         sal_Int32 nLength = aArguments.getLength();
@@ -177,10 +177,10 @@ private:
     virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, Generator &rGenerator, utl::MediaDescriptor &rDescriptor) = 0;
     virtual void doRegisterHandlers(Generator &) {};
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::lang::XComponent > mxDoc;
     OUString msFilterName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
+    css::uno::Reference< css::xml::sax::XDocumentHandler > mxHandler;
 };
 
 }
@@ -188,10 +188,10 @@ private:
 /** A base class for import filters.
  */
 template<class Generator>
-struct ImportFilter : public cppu::ImplInheritanceHelper<detail::ImportFilterImpl<Generator>, com::sun::star::lang::XServiceInfo>
+struct ImportFilter : public cppu::ImplInheritanceHelper<detail::ImportFilterImpl<Generator>, css::lang::XServiceInfo>
 {
     ImportFilter(const css::uno::Reference<css::uno::XComponentContext> &rxContext)
-        : cppu::ImplInheritanceHelper<detail::ImportFilterImpl<Generator>, com::sun::star::lang::XServiceInfo>(rxContext)
+        : cppu::ImplInheritanceHelper<detail::ImportFilterImpl<Generator>, css::lang::XServiceInfo>(rxContext)
     {
     }
 };

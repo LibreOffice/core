@@ -71,14 +71,14 @@ private:
     virtual bool load(const OUString &, const OUString &rURL, const OUString &,
                       SfxFilterFlags, SotClipboardFormatId, unsigned int) override;
 
-    void impl_detectFilterName(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName);
+    void impl_detectFilterName(css::uno::Sequence<css::beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName);
 
 private:
     const rtl::OUString m_aFactoryURL;
-    com::sun::star::uno::Reference<com::sun::star::frame::XDesktop2> m_xDesktop;
-    com::sun::star::uno::Reference<com::sun::star::ucb::XSimpleFileAccess> m_xFileAccess;
-    com::sun::star::uno::Reference<com::sun::star::document::XFilter> m_xFilter;
-    com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> m_xTypeMap;
+    css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+    css::uno::Reference<css::ucb::XSimpleFileAccess> m_xFileAccess;
+    css::uno::Reference<css::document::XFilter> m_xFilter;
+    css::uno::Reference<css::container::XNameAccess> m_xTypeMap;
 };
 
 }

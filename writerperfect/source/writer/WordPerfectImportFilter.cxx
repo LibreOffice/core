@@ -94,7 +94,7 @@ static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, libr
     return true;
 }
 
-bool SAL_CALL WordPerfectImportFilter::importImpl(const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
+bool SAL_CALL WordPerfectImportFilter::importImpl(const Sequence< css::beans::PropertyValue > &aDescriptor)
 throw (RuntimeException, std::exception)
 {
     sal_Int32 nLength = aDescriptor.getLength();
@@ -160,7 +160,7 @@ throw (RuntimeException, std::exception)
     return false;
 }
 
-sal_Bool SAL_CALL WordPerfectImportFilter::filter(const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
+sal_Bool SAL_CALL WordPerfectImportFilter::filter(const Sequence< css::beans::PropertyValue > &aDescriptor)
 throw (RuntimeException, std::exception)
 {
     return importImpl(aDescriptor);
@@ -171,8 +171,8 @@ throw (RuntimeException, std::exception)
 }
 
 // XImporter
-void SAL_CALL WordPerfectImportFilter::setTargetDocument(const Reference< ::com::sun::star::lang::XComponent > &xDoc)
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL WordPerfectImportFilter::setTargetDocument(const Reference< css::lang::XComponent > &xDoc)
+throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
@@ -309,7 +309,7 @@ throw (RuntimeException, std::exception)
             ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(nullptr);
             aPasswdDlg->SetMinLen(0);
             if (!aPasswdDlg->Execute())
-                return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
+                return css::ui::dialogs::ExecutableDialogResults::CANCEL;
             msPassword = aPasswdDlg->GetPassword().getStr();
             aUtf8Passwd = OUStringToOString(msPassword, RTL_TEXTENCODING_UTF8);
             if (libwpd::WPD_PASSWORD_MATCH_OK == libwpd::WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
@@ -317,10 +317,10 @@ throw (RuntimeException, std::exception)
             else
                 unsuccessfulAttempts++;
             if (unsuccessfulAttempts == 3) // timeout after 3 password atempts
-                return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
+                return css::ui::dialogs::ExecutableDialogResults::CANCEL;
         }
     }
-    return com::sun::star::ui::dialogs::ExecutableDialogResults::OK;
+    return css::ui::dialogs::ExecutableDialogResults::OK;
 }
 
 Sequence<PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValues() throw(RuntimeException, std::exception)
@@ -335,8 +335,8 @@ Sequence<PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValue
 }
 
 void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues(const Sequence<PropertyValue> &aProps)
-throw(com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::PropertyVetoException,
-      com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception)
+throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+      css::lang::IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception)
 {
     const PropertyValue *pPropArray = aProps.getConstArray();
     long nPropCount = aProps.getLength();
