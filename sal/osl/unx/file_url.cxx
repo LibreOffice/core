@@ -263,9 +263,11 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         if( ( 1 == pTmp->length ) || ( (sal_Unicode)'/' == pTmp->buffer[1] ) )
         {
             rtl_uString *pTmp2 = NULL;
+            oslSecurity pSecTemp;
 
             /* osl_getHomeDir returns file URL */
-            osl_getHomeDir( osl_getCurrentSecurity(), &pTmp2 );
+            osl_getHomeDir( pSecTemp = osl_getCurrentSecurity(), &pTmp2 );
+            osl_freeSecurityHandle( pSecTemp );
 
             /* remove "file://" prefix */
             rtl_uString_newFromStr_WithLength( &pTmp2, pTmp2->buffer + 7, pTmp2->length - 7 );
