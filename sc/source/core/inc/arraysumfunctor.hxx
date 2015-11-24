@@ -11,6 +11,7 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_ARRAYSUMFUNCTOR_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_ARRAYSUMFUNCTOR_HXX
 
+#include <cstdint>
 #include <tools/cpuid.hxx>
 
 #if defined(LO_SSE2_AVAILABLE)

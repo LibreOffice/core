@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <arraysumfunctor.hxx>
 #include "scmatrix.hxx"
 #include "global.hxx"
 #include "address.hxx"
 #include <formula/errorcodes.hxx>
+#include <formula/vectortoken.hxx>
 #include "interpre.hxx"
 #include "mtvelements.hxx"
 #include "compare.hxx"
@@ -279,9 +281,9 @@ public:
     double Or() const;
     double Xor() const;
 
-    ScFullMatrix::IterateResult Sum(bool bTextAsZero) const;
-    ScFullMatrix::IterateResult SumSquare(bool bTextAsZero) const;
-    ScFullMatrix::IterateResult Product(bool bTextAsZero) const;
+    ScMatrix::IterateResult Sum(bool bTextAsZero) const;
+    ScMatrix::IterateResult SumSquare(bool bTextAsZero) const;
+    ScMatrix::IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const;
@@ -299,7 +301,7 @@ public:
     void ApplyOperation(T aOp, ScMatrixImpl& rMat);
 
     template<typename T>
-    std::vector<ScFullMatrix::IterateResult> ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp);
+    std::vector<ScMatrix::IterateResult> ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp);
 
 #if DEBUG_MATRIX
     void Dump() const;
@@ -999,13 +1001,13 @@ template<typename _Op>
 class WalkElementBlocks
 {
     _Op maOp;
-    ScFullMatrix::IterateResult maRes;
+    ScMatrix::IterateResult maRes;
     bool mbFirst:1;
     bool mbTextAsZero:1;
 public:
     WalkElementBlocks(bool bTextAsZero) : maRes(_Op::InitVal, _Op::InitVal, 0), mbFirst(true), mbTextAsZero(bTextAsZero) {}
 
-    const ScFullMatrix::IterateResult& getResult() const { return maRes; }
+    const ScMatrix::IterateResult& getResult() const { return maRes; }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
@@ -1068,7 +1070,7 @@ template<typename _Op>
 class WalkElementBlocksMultipleValues
 {
     const std::vector<std::unique_ptr<_Op>>& maOp;
-    std::vector<ScFullMatrix::IterateResult> maRes;
+    std::vector<ScMatrix::IterateResult> maRes;
     bool mbFirst:1;
     bool mbTextAsZero:1;
 public:
@@ -1082,7 +1084,7 @@ public:
         maRes.emplace_back(0.0, 0.0, 0); // count
     }
 
-    const std::vector<ScFullMatrix::IterateResult>& getResult() const { return maRes; }
+    const std::vector<ScMatrix::IterateResult>& getResult() const { return maRes; }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
@@ -1752,7 +1754,7 @@ public:
 namespace {
 
 template<typename TOp>
-ScFullMatrix::IterateResult GetValueWithCount(bool bTextAsZero, const MatrixImplType& maMat)
+ScMatrix::IterateResult GetValueWithCount(bool bTextAsZero, const MatrixImplType& maMat)
 {
     WalkElementBlocks<TOp> aFunc(bTextAsZero);
     maMat.walk(aFunc);
@@ -1761,17 +1763,17 @@ ScFullMatrix::IterateResult GetValueWithCount(bool bTextAsZero, const MatrixImpl
 
 }
 
-ScFullMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
 {
     return GetValueWithCount<sc::op::Sum>(bTextAsZero, maMat);
 }
 
-ScFullMatrix::IterateResult ScMatrixImpl::SumSquare(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrixImpl::SumSquare(bool bTextAsZero) const
 {
     return GetValueWithCount<sc::op::SumSquare>(bTextAsZero, maMat);
 }
 
-ScFullMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
 {
     return GetValueWithCount<sc::op::Product>(bTextAsZero, maMat);
 }
@@ -2160,7 +2162,7 @@ void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
 }
 
 template<typename T>
-std::vector<ScFullMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp)
+std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp)
 {
     WalkElementBlocksMultipleValues<T> aFunc(bTextAsZero, aOp);
     maMat.walk(aFunc);
@@ -2550,17 +2552,17 @@ double ScFullMatrix::Xor() const
     return pImpl->Xor();
 }
 
-ScFullMatrix::IterateResult ScFullMatrix::Sum(bool bTextAsZero) const
+ScMatrix::IterateResult ScFullMatrix::Sum(bool bTextAsZero) const
 {
     return pImpl->Sum(bTextAsZero);
 }
 
-ScFullMatrix::IterateResult ScFullMatrix::SumSquare(bool bTextAsZero) const
+ScMatrix::IterateResult ScFullMatrix::SumSquare(bool bTextAsZero) const
 {
     return pImpl->SumSquare(bTextAsZero);
 }
 
-ScFullMatrix::IterateResult ScFullMatrix::Product(bool bTextAsZero) const
+ScMatrix::IterateResult ScFullMatrix::Product(bool bTextAsZero) const
 {
     return pImpl->Product(bTextAsZero);
 }
@@ -2815,7 +2817,7 @@ void ScFullMatrix::PowOp( bool bFlag, double fVal, ScMatrix& rMat)
     }
 }
 
-std::vector<ScFullMatrix::IterateResult> ScFullMatrix::Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp)
+std::vector<ScMatrix::IterateResult> ScFullMatrix::Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp)
 {
     return pImpl->ApplyCollectOperation(bTextAsZero, aOp);
 }
@@ -2832,5 +2834,437 @@ void ScFullMatrix::Dump() const
     pImpl->Dump();
 }
 #endif
+
+ScVectorRefMatrix::ScVectorRefMatrix(const formula::DoubleVectorRefToken* pToken, SCSIZE nRowStart, SCSIZE nRowSize)
+    : ScMatrix()
+    , mpToken(pToken)
+    , mnRowStart(nRowStart)
+    , mnRowSize(nRowSize)
+{
+}
+
+ScVectorRefMatrix::~ScVectorRefMatrix()
+{
+}
+
+ScMatrix* ScVectorRefMatrix::Clone() const
+{
+    throw std::runtime_error("ScVectorRefMatrix::Clone() called");
+}
+
+void ScVectorRefMatrix::Resize(SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::Resize called");
+}
+
+void ScVectorRefMatrix::Resize(SCSIZE nC, SCSIZE nR, double fVal)
+{
+    throw std::runtime_error("ScVectorRefMatrix::Resize called");
+}
+
+ScMatrix* ScVectorRefMatrix::CloneAndExtend(SCSIZE nNewCols, SCSIZE nNewRows) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::CloneAndExtend called");
+}
+
+void ScVectorRefMatrix::SetErrorInterpreter(ScInterpreter* p)
+{
+    mpErrorInterpreter = p;
+}
+
+void ScVectorRefMatrix::GetDimensions(SCSIZE& rC, SCSIZE& rR) const
+{
+    rC = mpToken->GetArrays().size();
+    rR = mnRowSize;
+}
+
+SCSIZE ScVectorRefMatrix::GetElementCount() const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetElementCount called");
+}
+
+bool ScVectorRefMatrix::ValidColRow(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::ValidColRow called");
+}
+
+bool ScVectorRefMatrix::ValidColRowReplicated(SCSIZE & rC, SCSIZE & rR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::ValidColRowReplicated called");
+}
+
+bool ScVectorRefMatrix::ValidColRowOrReplicated(SCSIZE & rC, SCSIZE & rR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::ValidColRowOrReplicated called");
+}
+
+void ScVectorRefMatrix::PutDouble(double fVal, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutDouble called");
+}
+
+void ScVectorRefMatrix::PutDouble(double fVal, SCSIZE nIndex)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutDouble called");
+}
+
+void ScVectorRefMatrix::PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutDouble called");
+}
+
+void ScVectorRefMatrix::PutString(const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutString called");
+}
+
+void ScVectorRefMatrix::PutString(const svl::SharedString& rStr, SCSIZE nIndex)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutString called");
+}
+
+void ScVectorRefMatrix::PutString(const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutString called");
+}
+
+void ScVectorRefMatrix::PutEmpty(SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutEmpty called");
+}
+
+void ScVectorRefMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutEmptyPath called");
+}
+
+void ScVectorRefMatrix::PutError(sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutError called");
+}
+
+void ScVectorRefMatrix::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutBoolean called");
+}
+
+void ScVectorRefMatrix::FillDouble(double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2)
+{
+    throw std::runtime_error("ScVectorRefMatrix::FillDouble called");
+}
+
+void ScVectorRefMatrix::PutDoubleVector(const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutDoubleVector called");
+}
+
+void ScVectorRefMatrix::PutStringVector(const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutStringVector called");
+}
+
+void ScVectorRefMatrix::PutEmptyVector(SCSIZE nCount, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutEmptyVector called");
+}
+
+void ScVectorRefMatrix::PutEmptyResultVector(SCSIZE nCount, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutEmptyResultVector called");
+}
+
+void ScVectorRefMatrix::PutEmptyPathVector(SCSIZE nCount, SCSIZE nC, SCSIZE nR)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PutEmptyPathVector called");
+}
+
+sal_uInt16 ScVectorRefMatrix::GetError(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetError called");
+}
+
+double ScVectorRefMatrix::GetDouble(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetDouble called");
+}
+
+double ScVectorRefMatrix::GetDouble(SCSIZE nIndex) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetDouble called");
+}
+
+svl::SharedString ScVectorRefMatrix::GetString(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetString called");
+}
+
+svl::SharedString ScVectorRefMatrix::GetString(SCSIZE nIndex) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetString called");
+}
+
+svl::SharedString ScVectorRefMatrix::GetString(SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetString called");
+}
+
+ScMatrixValue ScVectorRefMatrix::Get(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::Get called");
+}
+
+bool ScVectorRefMatrix::IsString(SCSIZE nIndex) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsString called");
+}
+
+bool ScVectorRefMatrix::IsString(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsString called");
+}
+
+bool ScVectorRefMatrix::IsEmpty(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsEmpty called");
+}
+
+bool ScVectorRefMatrix::IsEmptyCell(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsEmptyCell called");
+}
+
+bool ScVectorRefMatrix::IsEmptyResult(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsEmptyResult called");
+}
+
+bool ScVectorRefMatrix::IsEmptyPath(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsEmptyPath called");
+}
+
+bool ScVectorRefMatrix::IsValue(SCSIZE nIndex) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsValue called");
+}
+
+bool ScVectorRefMatrix::IsValue(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsValue called");
+}
+
+bool ScVectorRefMatrix::IsValueOrEmpty(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsValueOrEmpty called");
+}
+
+bool ScVectorRefMatrix::IsBoolean(SCSIZE nC, SCSIZE nR) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsBoolean called");
+}
+
+bool ScVectorRefMatrix::IsNumeric() const
+{
+    throw std::runtime_error("ScVectorRefMatrix::IsNumeric called");
+}
+
+void ScVectorRefMatrix::MatTrans(ScMatrix& mRes) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::MatTrans called");
+}
+
+void ScVectorRefMatrix::MatCopy(ScMatrix& mRes) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::MatCopy called");
+}
+
+void ScVectorRefMatrix::CompareEqual()
+{
+    throw std::runtime_error("ScVectorRefMatrix::CompareEqual called");
+}
+
+void ScVectorRefMatrix::CompareNotEqual()
+{
+    throw std::runtime_error("ScVectorRefMatrix::CompareNotEqual called");
+}
+
+void ScVectorRefMatrix::CompareLess()
+{
+    throw std::runtime_error("ScVectorRefMatrix::CompareLess called");
+}
+
+void ScVectorRefMatrix::CompareGreater()
+{
+    throw std::runtime_error("ScVectorRefMatrix::CompareGreater called");
+}
+
+void ScVectorRefMatrix::CompareLessEqual()
+{
+    throw std::runtime_error("ScVectorRefMatrix::CompareLessEqual called");
+}
+
+void ScVectorRefMatrix::CompareGreaterEqual()
+{
+    throw std::runtime_error("ScVectorRefMatrix::CompareGreaterEqual called");
+}
+
+double ScVectorRefMatrix::And() const
+{
+    throw std::runtime_error("ScVectorRefMatrix::And called");
+}
+
+double ScVectorRefMatrix::Or() const
+{
+    throw std::runtime_error("ScVectorRefMatrix::Or called");
+}
+
+double ScVectorRefMatrix::Xor() const
+{
+    throw std::runtime_error("ScVectorRefMatrix::Xor called");
+}
+
+ScMatrix::IterateResult ScVectorRefMatrix::Sum(bool bTextAsZero) const
+{
+    const std::vector<formula::VectorRefArray>& rArrays = mpToken->GetArrays();
+    size_t nDataSize = mnRowSize;
+
+    if (mnRowStart >= mpToken->GetRefRowSize())
+    {
+        return ScMatrix::IterateResult(0.0, 0.0, 0);
+    }
+    else if (nDataSize > mpToken->GetRefRowSize() + mnRowStart)
+    {
+        nDataSize = mpToken->GetRefRowSize() - mnRowStart;
+    }
+
+    double mfFirst = 0.0;
+    double mfRest = 0.0;
+    for (const formula::VectorRefArray& rArray : rArrays)
+    {
+        if (rArray.mpStringArray)
+        {
+            // TODO FIXME
+            throw std::runtime_error("ScVectorRefMatrix::Sum - string array");
+        }
+        else if (rArray.mpNumericArray)
+        {
+            // Numeric cells only.
+            const double* p = rArray.mpNumericArray + mnRowStart;
+            size_t i = 0;
+
+            // Store the first non-zero value in mfFirst (for some reason).
+            if (!mfFirst)
+            {
+                for (i = 0; i < nDataSize; ++i)
+                {
+                    if (!mfFirst)
+                        mfFirst = p[i];
+                    else
+                        break;
+                }
+            }
+            p += i;
+            nDataSize -= i;
+            if (nDataSize == 0)
+                continue;
+
+            sc::ArraySumFunctor functor(p, nDataSize);
+
+            mfRest += functor();
+        }
+    }
+
+    return ScMatrix::IterateResult(mfFirst, mfRest, mpToken->GetArrays().size()*nDataSize);
+}
+
+ScMatrix::IterateResult ScVectorRefMatrix::SumSquare(bool bTextAsZero) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::SumSquare called");
+}
+
+ScMatrix::IterateResult ScVectorRefMatrix::Product(bool bTextAsZero) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::Product called");
+}
+
+size_t ScVectorRefMatrix::Count(bool bCountStrings) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::Count called");
+}
+
+size_t ScVectorRefMatrix::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::MatchDoubleInColumns called");
+}
+
+size_t ScVectorRefMatrix::MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::MatchStringInColumns called");
+}
+
+double ScVectorRefMatrix::GetMaxValue(bool bTextAsZero) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetMaxValue called");
+}
+
+double ScVectorRefMatrix::GetMinValue(bool bTextAsZero) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetMinValue called");
+}
+
+ScMatrixRef ScVectorRefMatrix::CompareMatrix(sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::CompareMatrix called");
+}
+
+void ScVectorRefMatrix::GetDoubleArray(std::vector<double>& rVector, bool bEmptyAsZero) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::GetDoubleArray called");
+}
+
+void ScVectorRefMatrix::MergeDoubleArray(std::vector<double>& rVector, Op eOp) const
+{
+    throw std::runtime_error("ScVectorRefMatrix::MergeDoubleArray called");
+}
+
+void ScVectorRefMatrix::NotOp(ScMatrix& rMat)
+{
+    throw std::runtime_error("ScVectorRefMatrix::NotOp called");
+}
+
+void ScVectorRefMatrix::NegOp(ScMatrix& rMat)
+{
+    throw std::runtime_error("ScVectorRefMatrix::NegOp called");
+}
+
+void ScVectorRefMatrix::AddOp(double fVal, ScMatrix& rMat)
+{
+    throw std::runtime_error("ScVectorRefMatrix::AddOp called");
+}
+
+void ScVectorRefMatrix::SubOp(bool bFlag, double fVal, ScMatrix& rMat)
+{
+    throw std::runtime_error("ScVectorRefMatrix::SubOp called");
+}
+
+void ScVectorRefMatrix::MulOp(double fVal, ScMatrix& rMat)
+{
+    throw std::runtime_error("ScVectorRefMatrix::MulOp called");
+}
+
+void ScVectorRefMatrix::DivOp(bool bFlag, double fVal, ScMatrix& rMat)
+{
+    throw std::runtime_error("ScVectorRefMatrix::DivOp called");
+}
+
+void ScVectorRefMatrix::PowOp(bool bFlag, double fVal, ScMatrix& rMat)
+{
+    throw std::runtime_error("ScVectorRefMatrix::PowOp called");
+}
+
+std::vector<ScMatrix::IterateResult> ScVectorRefMatrix::Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp)
+{
+    throw std::runtime_error("ScVectorRefMatrix::Collect called");
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -369,51 +369,61 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                 case formula::svDoubleVectorRef:
                 {
                     const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
-                    const std::vector<formula::VectorRefArray>& rArrays = p2->GetArrays();
-                    size_t nColSize = rArrays.size();
                     size_t nRowStart = p2->IsStartFixed() ? 0 : i;
                     size_t nRowEnd = p2->GetRefRowSize() - 1;
                     if (!p2->IsEndFixed())
                         nRowEnd += i;
-                    size_t nRowSize = nRowEnd - nRowStart + 1;
-                    ScMatrixRef pMat(new ScFullMatrix(nColSize, nRowSize));
 
-                    size_t nDataRowEnd = p2->GetArrayLength() - 1;
-                    if (nRowStart > nDataRowEnd)
-                        // Referenced rows are all empty.
-                        nRowSize = 0;
-                    else if (nRowEnd > nDataRowEnd)
-                        // Data array is shorter than the row size of the reference. Truncate it to the data.
-                        nRowSize -= nRowEnd - nDataRowEnd;
-
-                    for (size_t nCol = 0; nCol < nColSize; ++nCol)
+                    ScMatrixRef pMat;
+                    if (getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr)
                     {
-                        const formula::VectorRefArray& rArray = rArrays[nCol];
-                        if (rArray.mpStringArray)
+                        assert(nRowStart <= nRowEnd);
+                        pMat.reset(new ScVectorRefMatrix(p2, nRowStart, nRowEnd - nRowStart + 1));
+                    }
+                    else
+                    {
+                        const std::vector<formula::VectorRefArray>& rArrays = p2->GetArrays();
+                        size_t nColSize = rArrays.size();
+                        size_t nRowSize = nRowEnd - nRowStart + 1;
+                        pMat.reset(new ScFullMatrix(nColSize, nRowSize));
+
+                        size_t nDataRowEnd = p2->GetArrayLength() - 1;
+                        if (nRowStart > nDataRowEnd)
+                            // Referenced rows are all empty.
+                            nRowSize = 0;
+                        else if (nRowEnd > nDataRowEnd)
+                            // Data array is shorter than the row size of the reference. Truncate it to the data.
+                            nRowSize -= nRowEnd - nDataRowEnd;
+
+                        for (size_t nCol = 0; nCol < nColSize; ++nCol)
                         {
-                            if (rArray.mpNumericArray)
+                            const formula::VectorRefArray& rArray = rArrays[nCol];
+                            if (rArray.mpStringArray)
                             {
-                                // Mixture of string and numeric values.
+                                if (rArray.mpNumericArray)
+                                {
+                                    // Mixture of string and numeric values.
+                                    const double* pNums = rArray.mpNumericArray;
+                                    pNums += nRowStart;
+                                    rtl_uString** pStrs = rArray.mpStringArray;
+                                    pStrs += nRowStart;
+                                    fillMatrix(*pMat, nCol, pNums, pStrs, nRowSize);
+                                }
+                                else
+                                {
+                                    // String cells only.
+                                    rtl_uString** pStrs = rArray.mpStringArray;
+                                    pStrs += nRowStart;
+                                    fillMatrix(*pMat, nCol, pStrs, nRowSize);
+                                }
+                            }
+                            else if (rArray.mpNumericArray)
+                            {
+                                // Numeric cells only.
                                 const double* pNums = rArray.mpNumericArray;
                                 pNums += nRowStart;
-                                rtl_uString** pStrs = rArray.mpStringArray;
-                                pStrs += nRowStart;
-                                fillMatrix(*pMat, nCol, pNums, pStrs, nRowSize);
+                                fillMatrix(*pMat, nCol, pNums, nRowSize);
                             }
-                            else
-                            {
-                                // String cells only.
-                                rtl_uString** pStrs = rArray.mpStringArray;
-                                pStrs += nRowStart;
-                                fillMatrix(*pMat, nCol, pStrs, nRowSize);
-                            }
-                        }
-                        else if (rArray.mpNumericArray)
-                        {
-                            // Numeric cells only.
-                            const double* pNums = rArray.mpNumericArray;
-                            pNums += nRowStart;
-                            fillMatrix(*pMat, nCol, pNums, nRowSize);
                         }
                     }
 
