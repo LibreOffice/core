@@ -530,11 +530,18 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 {
 }
 
-void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
+void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
 {
+    OUString aWrapType = rTypeModel.moWrapType.get();
+
+    // Extreme negative top margin? Then the shape will end up at the top of the page, it's pointless to perform any kind of wrapping.
+    sal_Int32 nMarginTop = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, rTypeModel.maMarginTop, 0, false, true);
+    if (nMarginTop < -35277) // Less than 1000 points.
+        aWrapType.clear();
+
     sal_Int32 nSurround = css::text::WrapTextMode_THROUGHT;
-    if ( rTypeModel.moWrapType.get() == "square" || rTypeModel.moWrapType .get()== "tight" ||
-         rTypeModel.moWrapType.get() == "through" )
+    if ( aWrapType == "square" || aWrapType == "tight" ||
+         aWrapType == "through" )
     {
         nSurround = css::text::WrapTextMode_PARALLEL;
         if ( rTypeModel.moWrapSide.get() == "left" )
@@ -542,13 +549,13 @@ void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
         else if ( rTypeModel.moWrapSide.get() == "right" )
             nSurround = css::text::WrapTextMode_RIGHT;
     }
-    else if ( rTypeModel.moWrapType.get() == "topAndBottom" )
+    else if ( aWrapType == "topAndBottom" )
         nSurround = css::text::WrapTextMode_NONE;
 
     rPropSet.setProperty(PROP_Surround, nSurround);
 }
 
-void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
+void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
 {
     if ( rTypeModel.maPositionHorizontal == "center" )
         rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
@@ -611,7 +618,7 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
     {
         rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AS_CHARACTER);
     }
-    lcl_setSurround( rPropSet, rTypeModel );
+    lcl_setSurround( rPropSet, rTypeModel, rGraphicHelper );
 }
 
 void lcl_SetRotation(PropertySet& rPropSet, const sal_Int32 nRotation)
@@ -813,7 +820,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         }
     }
 
-    lcl_SetAnchorType(aPropertySet, maTypeModel);
+    lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper );
 
     return xShape;
 }
@@ -842,7 +849,8 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
         if ( !maTypeModel.maRotation.isEmpty() )
             lcl_SetRotation( aPropSet, maTypeModel.maRotation.toInt32() );
 
-        lcl_SetAnchorType(aPropSet, maTypeModel);
+        const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+        lcl_SetAnchorType(aPropSet, maTypeModel, rGraphicHelper);
     }
     return xShape;
 }
@@ -1231,7 +1239,8 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     }
     // Make sure group shapes are inline as well, unless there is an explicit different style.
     PropertySet aPropertySet(xGroupShape);
-    lcl_SetAnchorType(aPropertySet, maTypeModel);
+    const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+    lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper);
     if (!maTypeModel.maRotation.isEmpty())
         lcl_SetRotation(aPropertySet, maTypeModel.maRotation.toInt32());
     return xGroupShape;
