@@ -194,10 +194,8 @@ cmd/lc_insertannotation.png cmd/lc_showannotations.png
 cmd/sc_templatemenu.png cmd/sc_adddirect.png
 
 # Animation
-cmd/lc_customanimation.png cmd/lc_animationeffects.png
-cmd/lc_animationobjects.png cmd/lc_animationeffects.png
-cmd/sc_customanimation.png cmd/sc_animationeffects.png
-cmd/sc_animationobjects.png cmd/sc_animationeffects.png
+cmd/lc_customanimation.png cmd/lc_animationobjects.png
+cmd/sc_customanimation.png cmd/sc_animationobjects.png
 
 # Media
 cmd/lc_datastreamsplay.png cmd/lc_runbasic.png
@@ -288,14 +286,12 @@ cmd/sc_filecontrol.png cmd/sc_open.png
 cmd/lc_printpagepreview.png cmd/lc_printpreview.png
 cmd/lc_printlayout.png cmd/lc_printpreview.png
 cmd/lc_previewprintoptions.png cmd/lc_printpreview.png
-cmd/lc_printersetup.png cmd/lc_print.png
 cmd/lc_sendfax.png cmd/lc_print.png
 cmd/lc_editprintarea.png cmd/lc_editdoc.png
 cmd/sc_printpagepreview.png cmd/sc_printpreview.png
 cmd/sc_printlayout.png cmd/sc_printpreview.png
 cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
 cmd/sc_defineprintarea.png cmd/sc_printpreview.png
-cmd/sc_printersetup.png cmd/sc_print.png
 cmd/sc_sendfax.png cmd/sc_print.png
 cmd/sc_editprintarea.png cmd/sc_editdoc.png
 
@@ -303,7 +299,6 @@ cmd/sc_editprintarea.png cmd/sc_editdoc.png
 cmd/lc_deleteprintarea.png cmd/lc_delete.png
 cmd/lc_deleteprintarea.png cmd/lc_delete.png
 cmd/lc_deleterecord.png cmd/lc_delete.png
-cmd/lc_deletemasterpage.png cmd/lc_delete.png
 cmd/lc_dbtabledelete.png cmd/lc_delete.png
 cmd/lc_dbreportdelete.png cmd/lc_delete.png
 cmd/lc_dbquerydelete.png cmd/lc_delete.png
@@ -311,8 +306,6 @@ cmd/lc_dbformdelete.png cmd/lc_delete.png
 cmd/lc_dbclearquery.png cmd/lc_delete.png
 cmd/sc_deleteprintarea.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
-cmd/sc_deletetable.png cmd/sc_delete.png
-cmd/sc_deletemasterpage.png cmd/sc_delete.png
 cmd/sc_dbtabledelete.png cmd/sc_delete.png
 cmd/sc_dbreportdelete.png cmd/sc_delete.png
 cmd/sc_dbquerydelete.png cmd/sc_delete.png
@@ -413,12 +406,12 @@ cmd/sc_dbformrename.png cmd/sc_addfield.png
 
 # Edit
 cmd/lc_switchcontroldesignmode.png cmd/lc_editdoc.png
-cmd/lc_renamemasterpage.png cmd/lc_editdoc.png
 cmd/lc_quickedit.png cmd/lc_editdoc.png
+cmd/lc_renamemasterpage.png cmd/lc_slidemasterpage.png
 cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
 cmd/sc_switchcontroldesignmode.png cmd/sc_editdoc.png
 cmd/sc_solidcreate.png cmd/sc_editdoc.png
-cmd/sc_renamemasterpage.png cmd/sc_editdoc.png
+cmd/sc_renamemasterpage.png cmd/sc_slidemasterpage.png
 cmd/sc_quickedit.png cmd/sc_editdoc.png
 cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
 
@@ -1094,8 +1087,8 @@ sfx2/res/plus.png res/plus.png
 sfx2/res/symphony/open_more.png cmd/lc_controlproperties.png
 sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
 sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
-sfx2/res/symphony/sidebar-animation-large.png cmd/lc_animationeffects.png
-sfx2/res/symphony/sidebar-animation-small.png cmd/sc_animationeffects.png
+sfx2/res/symphony/sidebar-animation-large.png cmd/lc_animationobjects.png
+sfx2/res/symphony/sidebar-animation-small.png cmd/sc_animationobjects.png
 sfx2/res/symphony/sidebar-colors-large.png cmd/lc_bmpmask.png
 sfx2/res/symphony/sidebar-colors-small.png cmd/sc_bmpmask.png
 sfx2/res/symphony/sidebar-functions-large.png cmd/lc_dbviewfunctions.png
