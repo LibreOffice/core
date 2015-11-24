@@ -463,15 +463,15 @@ void SwSidebarWin::KeyInput(const KeyEvent& rKeyEvent)
 
 void SwSidebarWin::MouseMove(const MouseEvent& rMouseEvent)
 {
-    if (mpSidebarTextControl)
+    if (vcl::Window* pHit = lcl_getHitWindow(*this, rMouseEvent))
     {
-        mpSidebarTextControl->Push(PushFlags::MAPMODE);
+        pHit->Push(PushFlags::MAPMODE);
         MouseEvent aMouseEvent(rMouseEvent);
-        lcl_translateTwips(EditWin(), *mpSidebarTextControl, &aMouseEvent);
+        lcl_translateTwips(EditWin(), *pHit, &aMouseEvent);
 
-        mpSidebarTextControl->MouseMove(aMouseEvent);
+        pHit->MouseMove(aMouseEvent);
 
-        mpSidebarTextControl->Pop();
+        pHit->Pop();
     }
 }
 
