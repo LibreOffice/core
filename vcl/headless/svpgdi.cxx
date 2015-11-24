@@ -156,6 +156,27 @@ namespace
 
         return extents;
     }
+
+    cairo_rectangle_int_t getStrokeDamage(cairo_t* cr)
+    {
+        cairo_rectangle_int_t extents;
+        double x1, y1, x2, y2;
+
+        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+#if CAIRO_VERSION_MAJOR > 1 || (CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 10)
+        cairo_region_t *region = cairo_region_create_rectangle(&extents);
+
+        cairo_stroke_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        cairo_region_intersect_rectangle(region, &extents);
+
+        cairo_region_get_extents(region, &extents);
+        cairo_region_destroy(region);
+#endif
+
+        return extents;
+    }
 }
 #endif
 
@@ -624,39 +645,6 @@ void SvpSalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
     dbgOut( m_aDevice );
 }
 
-bool SvpSalGraphics::drawPolyLine(
-    const ::basegfx::B2DPolygon&,
-    double /*fTransparency*/,
-    const ::basegfx::B2DVector& /*rLineWidths*/,
-    basegfx::B2DLineJoin /*eJoin*/,
-    com::sun::star::drawing::LineCap /*eLineCap*/)
-{
-    // TODO: implement and advertise OutDevSupport_B2DDraw support
-    return false;
-}
-
-bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
-                                         const SalPoint*,
-                                         const sal_uInt8* )
-{
-    return false;
-}
-
-bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
-                                        const SalPoint*,
-                                        const sal_uInt8* )
-{
-    return false;
-}
-
-bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
-                                            const sal_uInt32*,
-                                            const SalPoint* const*,
-                                            const sal_uInt8* const* )
-{
-    return false;
-}
-
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, bool bClosePath)
 {
@@ -719,6 +707,151 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
     }
 }
 #endif
+
+bool SvpSalGraphics::drawPolyLine(
+    const ::basegfx::B2DPolygon& rPolyLine,
+    double fTransparency,
+    const ::basegfx::B2DVector& rLineWidths,
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap)
+{
+    bool bRet = false;
+    (void)rPolyLine; (void)fTransparency; (void)rLineWidths; (void)eLineJoin; (void)eLineCap;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+    // short circuit if there is nothing to do
+    const int nPointCount = rPolyLine.count();
+    if (nPointCount <= 0)
+    {
+        return true;
+    }
+
+    // reject requests that cannot be handled yet
+    if (rLineWidths.getX() != rLineWidths.getY())
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLine case");
+        return false;
+    }
+
+    // #i101491# Cairo does not support B2DLineJoin::NONE; return false to use
+    // the fallback (own geometry preparation)
+    // #i104886# linejoin-mode and thus the above only applies to "fat" lines
+    if (basegfx::B2DLINEJOIN_NONE == eLineJoin && rLineWidths.getX() > 1.3)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLine case");
+        return false;
+    }
+
+    cairo_t* cr = createCairoContext(m_aDevice);
+    if (!cr)
+        return bRet;
+
+    if (!m_aDevice->isTopDown())
+    {
+        cairo_scale(cr, 1, -1.0);
+        cairo_translate(cr, 0.0, -m_aDevice->getSize().getY());
+    }
+
+    clipRegion(cr);
+
+    // setup line attributes
+    cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
+    switch (eLineJoin)
+    {
+        case basegfx::B2DLINEJOIN_NONE:
+            eCairoLineJoin = /*TODO?*/CAIRO_LINE_JOIN_MITER;
+            break;
+        case basegfx::B2DLINEJOIN_MIDDLE:
+            eCairoLineJoin = /*TODO?*/CAIRO_LINE_JOIN_MITER;
+            break;
+        case basegfx::B2DLINEJOIN_BEVEL:
+            eCairoLineJoin = CAIRO_LINE_JOIN_BEVEL;
+            break;
+        case basegfx::B2DLINEJOIN_MITER:
+            eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
+            break;
+        case basegfx::B2DLINEJOIN_ROUND:
+            eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
+            break;
+    }
+
+    // setup cap attribute
+    cairo_line_cap_t eCairoLineCap(CAIRO_LINE_CAP_BUTT);
+
+    switch (eLineCap)
+    {
+        default: // css::drawing::LineCap_BUTT:
+        {
+            eCairoLineCap = CAIRO_LINE_CAP_BUTT;
+            break;
+        }
+        case css::drawing::LineCap_ROUND:
+        {
+            eCairoLineCap = CAIRO_LINE_CAP_ROUND;
+            break;
+        }
+        case css::drawing::LineCap_SQUARE:
+        {
+            eCairoLineCap = CAIRO_LINE_CAP_SQUARE;
+            break;
+        }
+    }
+
+    AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed());
+
+    cairo_rectangle_int_t extents;
+    basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
+
+    cairo_set_source_rgba(cr, m_aLineColor.getRed()/255.0,
+                              m_aLineColor.getGreen()/255.0,
+                              m_aLineColor.getBlue()/255.0,
+                              1.0-fTransparency);
+
+    cairo_set_line_join(cr, eCairoLineJoin);
+    cairo_set_line_cap(cr, eCairoLineCap);
+    cairo_set_line_width(cr, rLineWidths.getX());
+
+    if (xDamageTracker)
+        extents = getStrokeDamage(cr);
+
+    cairo_stroke(cr);
+
+    cairo_surface_flush(cairo_get_target(cr));
+    cairo_destroy(cr); // unref
+
+    if (xDamageTracker)
+    {
+        xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
+                                                extents.y + extents.height));
+    }
+    bRet = true;
+#endif
+    return bRet;
+}
+
+bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
+                                         const SalPoint*,
+                                         const sal_uInt8* )
+{
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLineBezier case");
+    return false;
+}
+
+bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
+                                        const SalPoint*,
+                                        const sal_uInt8* )
+{
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolygonBezier case");
+    return false;
+}
+
+bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
+                                            const sal_uInt32*,
+                                            const SalPoint* const*,
+                                            const sal_uInt8* const* )
+{
+    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygonBezier case");
+    return false;
+}
 
 bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
 {
