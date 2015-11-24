@@ -48,11 +48,91 @@
 #include <vector>
 #include <math.h>
 
-void ImplTBDragMgr::HideDragRect()
+
+#define SMALLBUTTON_HSIZE           7
+#define SMALLBUTTON_VSIZE           7
+
+#define SMALLBUTTON_OFF_NORMAL_X    3
+#define SMALLBUTTON_OFF_NORMAL_Y    3
+
+#define TB_TEXTOFFSET           2
+#define TB_IMAGETEXTOFFSET      3
+#define TB_LINESPACING          3
+#define TB_SPIN_SIZE            14
+#define TB_SPIN_OFFSET          2
+#define TB_BORDER_OFFSET1       4
+#define TB_BORDER_OFFSET2       2
+#define TB_CUSTOMIZE_OFFSET     2
+#define TB_RESIZE_OFFSET        3
+#define TB_MAXLINES             5
+#define TB_MAXNOSCROLL          32765
+
+#define TB_MIN_WIN_WIDTH        20
+#define TB_DRAGWIDTH            8  // the default width of the drag grip
+
+#define TB_CALCMODE_HORZ        1
+#define TB_CALCMODE_VERT        2
+#define TB_CALCMODE_FLOAT       3
+
+#define TB_WBLINESIZING         (WB_SIZEABLE | WB_DOCKABLE | WB_SCROLL)
+
+#define DOCK_LINEHSIZE          ((sal_uInt16)0x0001)
+#define DOCK_LINEVSIZE          ((sal_uInt16)0x0002)
+#define DOCK_LINERIGHT          ((sal_uInt16)0x1000)
+#define DOCK_LINEBOTTOM         ((sal_uInt16)0x2000)
+#define DOCK_LINELEFT           ((sal_uInt16)0x4000)
+#define DOCK_LINETOP            ((sal_uInt16)0x8000)
+#define DOCK_LINEOFFSET         3
+
+typedef ::std::vector< VclPtr<ToolBox> > ImplTBList;
+
+
+class ImplTBDragMgr
 {
-     if ( mbShowDragRect )
-         mpDragBox->HideTracking();
-}
+private:
+    ImplTBList*     mpBoxList;
+    VclPtr<ToolBox> mpDragBox;
+    Point           maMouseOff;
+    Rectangle       maRect;
+    Rectangle       maStartRect;
+    Accelerator     maAccel;
+    long            mnMinWidth;
+    long            mnMaxWidth;
+    sal_uInt16      mnLineMode;
+    sal_uInt16      mnStartLines;
+    void*           mpCustomizeData;
+    bool            mbResizeMode;
+    bool            mbShowDragRect;
+
+public:
+                    ImplTBDragMgr();
+                    ~ImplTBDragMgr();
+
+    void            push_back( ToolBox* pBox )
+                        { mpBoxList->push_back( pBox ); }
+    void            erase( ToolBox* pBox )
+                    {
+                        for ( ImplTBList::iterator it = mpBoxList->begin(); it != mpBoxList->end(); ++it ) {
+                            if ( *it == pBox ) {
+                                mpBoxList->erase( it );
+                                break;
+                            }
+                        }
+                    }
+    size_t          size() const
+                    { return mpBoxList->size(); }
+
+    ToolBox*        FindToolBox( const Rectangle& rRect );
+
+    void            StartDragging( ToolBox* pDragBox, const Point& rPos, const Rectangle& rRect, sal_uInt16 nLineMode,
+                                   bool bResizeItem, void* pData = nullptr );
+    void            Dragging( const Point& rPos );
+    void            EndDragging( bool bOK = true );
+    void            HideDragRect() { if ( mbShowDragRect ) mpDragBox->HideTracking(); }
+    void            UpdateDragRect();
+    DECL_LINK_TYPED( SelectHdl, Accelerator&, void );
+};
+
 
 static ImplTBDragMgr* ImplGetTBDragMgr()
 {
