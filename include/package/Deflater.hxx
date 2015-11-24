@@ -35,7 +35,6 @@ protected:
     css::uno::Sequence< sal_Int8 > sInBuffer;
     bool                    bFinish;
     bool                    bFinished;
-    sal_Int32               nStrategy;
     sal_Int64               nOffset, nLength;
     z_stream*               pStream;
 

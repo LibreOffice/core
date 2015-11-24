@@ -60,7 +60,6 @@ void Deflater::init (sal_Int32 nLevelArg, sal_Int32 nStrategyArg, bool bNowrap)
 Deflater::Deflater(sal_Int32 nSetLevel, bool bNowrap)
 : bFinish(false)
 , bFinished(false)
-, nStrategy(DEFAULT_STRATEGY)
 , nOffset(0)
 , nLength(0)
 {

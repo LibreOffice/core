@@ -43,10 +43,7 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *openRegistry)       (rtl_uString*, RegHandle*, RegAccessMode);
     RegError    (REGISTRY_CALLTYPE *closeRegistry)      (RegHandle);
     RegError    (REGISTRY_CALLTYPE *destroyRegistry)    (RegHandle, rtl_uString*);
-    RegError    (REGISTRY_CALLTYPE *loadKey)            (RegHandle, RegKeyHandle, rtl_uString*, rtl_uString*);
-    RegError    (REGISTRY_CALLTYPE *saveKey)            (RegHandle, RegKeyHandle, rtl_uString*, rtl_uString*);
     RegError    (REGISTRY_CALLTYPE *mergeKey)           (RegHandle, RegKeyHandle, rtl_uString*, rtl_uString*, sal_Bool, sal_Bool);
-    RegError    (REGISTRY_CALLTYPE *dumpRegistry)       (RegHandle, RegKeyHandle);
     void        (REGISTRY_CALLTYPE *acquireKey)         (RegKeyHandle);
     void        (REGISTRY_CALLTYPE *releaseKey)         (RegKeyHandle);
     sal_Bool    (REGISTRY_CALLTYPE *isKeyReadOnly)      (RegKeyHandle);

@@ -236,97 +236,6 @@ static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
 
 
 
-//  loadRegKey
-
-static RegError REGISTRY_CALLTYPE loadKey(RegHandle hReg,
-                                              RegKeyHandle hKey,
-                                           rtl_uString* keyName,
-                                           rtl_uString* regFileName)
-{
-
-    ORegistry* pReg = static_cast< ORegistry* >(hReg);
-    if (!pReg)
-        return RegError::INVALID_REGISTRY;
-
-    if (!pReg->isOpen())
-        return RegError::REGISTRY_NOT_OPEN;
-
-    ORegKey* pKey = static_cast< ORegKey* >(hKey);
-    if (!pKey)
-        return RegError::INVALID_KEY;
-
-    if (pKey->getRegistry() != pReg)
-        return RegError::INVALID_KEY;
-    if (pKey->isDeleted())
-        return RegError::INVALID_KEY;
-    if (pKey->isReadOnly())
-        return RegError::REGISTRY_READONLY;
-
-
-    ORegKey* pNewKey = nullptr;
-    RegError _ret = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pNewKey));
-    if (_ret == RegError::NO_ERROR)
-    {
-        pKey->releaseKey(pNewKey);
-        pKey->deleteKey(keyName);
-    }
-
-    _ret = pKey->createKey(keyName, reinterpret_cast<RegKeyHandle*>(&pNewKey));
-    if (_ret != RegError::NO_ERROR)
-        return _ret;
-
-    _ret = pReg->loadKey(pNewKey, regFileName);
-    if (_ret != RegError::NO_ERROR)
-    {
-        pKey->releaseKey(pNewKey);
-        pKey->deleteKey(keyName);
-        return _ret;
-    }
-
-    return pKey->closeKey(pNewKey);
-}
-
-
-//  saveKey
-
-static RegError REGISTRY_CALLTYPE saveKey(RegHandle hReg,
-                                              RegKeyHandle hKey,
-                                           rtl_uString* keyName,
-                                           rtl_uString* regFileName)
-{
-
-    ORegistry* pReg = static_cast< ORegistry* >(hReg);
-    if (!pReg)
-        return RegError::INVALID_REGISTRY;
-
-    if (!pReg->isOpen())
-        return RegError::REGISTRY_NOT_OPEN;
-
-    ORegKey* pKey = static_cast< ORegKey* >(hKey);
-    if (!pKey)
-        return RegError::INVALID_KEY;
-
-    if (pKey->getRegistry() != pReg)
-        return RegError::INVALID_KEY;
-    if (pKey->isDeleted())
-        return RegError::INVALID_KEY;
-
-    ORegKey* pNewKey = nullptr;
-    RegError _ret = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pNewKey));
-    if (_ret != RegError::NO_ERROR)
-        return _ret;
-
-    _ret = pReg->saveKey(pNewKey, regFileName);
-    if (_ret != RegError::NO_ERROR)
-    {
-        (void) pKey->releaseKey(pNewKey);
-        return _ret;
-    }
-
-    return pKey->releaseKey(pNewKey);
-}
-
-
 //  mergeKey
 
 static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
@@ -412,10 +321,7 @@ Registry_Api* REGISTRY_CALLTYPE initRegistry_Api()
                                &openRegistry,
                                &closeRegistry,
                                &destroyRegistry,
-                               &loadKey,
-                               &saveKey,
                                &mergeKey,
-                               &dumpRegistry,
                                &acquireKey,
                                &releaseKey,
                                &isKeyReadOnly,
