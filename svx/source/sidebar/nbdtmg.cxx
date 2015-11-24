@@ -628,6 +628,8 @@ GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTy
             pEntry->sDescription = pSrcEntry->sDescription;
             aGrfDataLst.Insert( pEntry, LIST_APPEND );
         }
+        else
+            delete pEntry;
     }
 }
 void GraphyicBulletsTypeMgr::Init()
