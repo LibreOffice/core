@@ -2517,6 +2517,8 @@ void OfaTreeOptionsDialog::LoadNodes(
                     {
                         pModule ? aNodeList.push_back( pNode ) : rOutNodeList.push_back( pNode );
                     }
+                    else
+                        delete pNode;
                 }
             }
 
