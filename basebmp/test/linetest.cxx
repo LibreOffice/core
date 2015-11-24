@@ -151,12 +151,10 @@ public:
         const basegfx::B2ISize aSize(11,11);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
-                                           Format::OneBitMsbPal,
-                                           basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()) );
+                                           Format::OneBitMsbPal );
         mpDevice32bpp = createBitmapDevice( aSize,
                                            true,
-                                           Format::ThirtyTwoBitTcMaskBGRA,
-                                           basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX()) );
+                                           Format::ThirtyTwoBitTcMaskBGRA );
     }
 
     void testCornerCases()
@@ -165,8 +163,7 @@ public:
         BitmapDeviceSharedPtr pDevice = createBitmapDevice(
             aSize,
             true,
-            Format::OneBitMsbPal,
-            basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()) );
+            Format::OneBitMsbPal );
 
         const basegfx::B2IPoint aPt1(0,0);
         const basegfx::B2IPoint aPt2(10,10);
@@ -182,8 +179,7 @@ public:
         pDevice = createBitmapDevice(
             aSize2,
             true,
-            Format::OneBitMsbPal,
-            basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()));
+            Format::OneBitMsbPal );
 
         CPPUNIT_ASSERT_MESSAGE("only pixel cleared",
                                 pDevice->getPixelData(aPt1) == 0);

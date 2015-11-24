@@ -91,26 +91,21 @@ public:
         const basegfx::B2ISize aSize(10,10);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
-                                           Format::OneBitMsbPal,
-                                           basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()));
+                                           Format::OneBitMsbPal );
         mpDevice32bpp = createBitmapDevice( aSize,
                                             true,
-                                            Format::ThirtyTwoBitTcMaskBGRA,
-                                            basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX()));
+                                            Format::ThirtyTwoBitTcMaskBGRA );
 
         mpMaskBmp1bpp = createBitmapDevice( aSize,
                                             true,
-                                            Format::OneBitMsbGrey,
-                                            basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbGrey, aSize.getX()));
+                                            Format::OneBitMsbGrey );
 
         mpBmp1bpp = createBitmapDevice( aSize,
                                         true,
-                                        Format::OneBitMsbPal,
-                                        basebmp::getBitmapDeviceStrideForWidth(Format::OneBitMsbPal, aSize.getX()));
+                                        Format::OneBitMsbPal );
         mpBmp32bpp = createBitmapDevice( aSize,
                                          true,
-                                         Format::ThirtyTwoBitTcMaskBGRA,
-                                         basebmp::getBitmapDeviceStrideForWidth(Format::ThirtyTwoBitTcMaskBGRA, aSize.getX()));
+                                         Format::ThirtyTwoBitTcMaskBGRA );
 
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
@@ -169,7 +164,6 @@ public:
 //            nFormat = Format::OneBitMsbGrey; // FIXME - un-comment me to crash hard.
             xMask = createBitmapDevice( aSize, false /* bTopDown */,
                                         nFormat,
-                                         basebmp::getBitmapDeviceStrideForWidth( nFormat, aSize.getX()),
                                          PaletteMemorySharedVector(
                                                 new std::vector< basebmp::Color >(aDevPal) ) );
             // wipe to copy everything.
@@ -183,17 +177,13 @@ public:
                                     DrawMode::Paint );
 
             xBitmap = createBitmapDevice( aSize, false,
-                                          Format::ThirtyTwoBitTcMaskBGRX,
-                                          basebmp::getBitmapDeviceStrideForWidth(
-                                                Format::ThirtyTwoBitTcMaskBGRX, aSize.getX()) );
+                                          Format::ThirtyTwoBitTcMaskBGRX );
             xBitmap->clear(Color(0x80808080));
         }
         { // mpOutput & mpBitmap
             const basegfx::B2ISize aSize(9, 9);
             xOutput = createBitmapDevice( aSize, false,
-                                          Format::ThirtyTwoBitTcMaskBGRX,
-                                          basebmp::getBitmapDeviceStrideForWidth(
-                                                Format::ThirtyTwoBitTcMaskBGRX, aSize.getX()) );
+                                          Format::ThirtyTwoBitTcMaskBGRX );
             xOutput->clear(Color(0xffffffff));
         }
 
