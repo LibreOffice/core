@@ -48,7 +48,7 @@ STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
         return E_FAIL;
 
     // Get Any type value from UNO.
-    ::com::sun::star::uno::Any  anyVal = GetXInterface()->getCurrentValue();
+    css::uno::Any  anyVal = GetXInterface()->getCurrentValue();
     // Convert Any to VARIANT.
     CMAccessible::ConvertAnyToVariant(anyVal, currentValue);
 
@@ -73,49 +73,49 @@ STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
         return E_FAIL;
 
     HRESULT hRet = S_OK;
-    ::com::sun::star::uno::Any anyVal;
+    css::uno::Any anyVal;
 
     // Set value according to value type.
     switch(value.vt)
     {
     case VT_UI1:
         {
-            ::com::sun::star::uno::Type     typeInfo(TypeClass_CHAR, (sal_Char *)"char");
+            css::uno::Type     typeInfo(TypeClass_CHAR, (sal_Char *)"char");
             anyVal.setValue(&value.bVal, typeInfo);
         }
         break;
 
     case VT_BOOL:
         {
-            ::com::sun::star::uno::Type     typeInfo(TypeClass_BOOLEAN, (sal_Char *)"bool");
+            css::uno::Type     typeInfo(TypeClass_BOOLEAN, (sal_Char *)"bool");
             anyVal.setValue(&value.boolVal, typeInfo);
         }
         break;
 
     case VT_I2:
         {
-            ::com::sun::star::uno::Type     typeInfo(TypeClass_SHORT, (sal_Char *)"short");
+            css::uno::Type     typeInfo(TypeClass_SHORT, (sal_Char *)"short");
             anyVal.setValue(&value.iVal, typeInfo);
         }
         break;
 
     case VT_I4:
         {
-            ::com::sun::star::uno::Type     typeInfo(TypeClass_LONG, (sal_Char *)"long");
+            css::uno::Type     typeInfo(TypeClass_LONG, (sal_Char *)"long");
             anyVal.setValue(&value.lVal, typeInfo);
         }
         break;
 
     case VT_R4:
         {
-            ::com::sun::star::uno::Type     typeInfo(TypeClass_FLOAT, (sal_Char *)"float");
+            css::uno::Type     typeInfo(TypeClass_FLOAT, (sal_Char *)"float");
             anyVal.setValue(&value.fltVal, typeInfo);
         }
         break;
 
     case VT_R8:
         {
-            ::com::sun::star::uno::Type     typeInfo(TypeClass_DOUBLE, (sal_Char *)"double");
+            css::uno::Type     typeInfo(TypeClass_DOUBLE, (sal_Char *)"double");
             anyVal.setValue(&value.dblVal, typeInfo);
         }
         break;
@@ -155,7 +155,7 @@ STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
         return E_FAIL;
 
     // Get Any type value from UNO.
-    ::com::sun::star::uno::Any  anyVal = GetXInterface()->getMaximumValue();
+    css::uno::Any  anyVal = GetXInterface()->getMaximumValue();
     // Convert Any to VARIANT.
     CMAccessible::ConvertAnyToVariant(anyVal, maximumValue);
 
@@ -181,7 +181,7 @@ STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumValue)
         return E_FAIL;
 
     // Get Any type value from UNO.
-    ::com::sun::star::uno::Any  anyVal = GetXInterface()->getMinimumValue();
+    css::uno::Any  anyVal = GetXInterface()->getMinimumValue();
     // Convert Any to VARIANT.
     CMAccessible::ConvertAnyToVariant(anyVal, mininumValue);
 

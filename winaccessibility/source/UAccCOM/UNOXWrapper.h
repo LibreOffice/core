@@ -41,7 +41,7 @@ public:
 
 protected:
 
-    com::sun::star::accessibility::XAccessible* pUNOInterface;
+    css::accessibility::XAccessible* pUNOInterface;
 };
 
 #endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_UNOXWRAPPER_H

@@ -944,8 +944,8 @@ STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth
                     if( !pRComponent.is() )
                         return S_FALSE;
 
-                    ::com::sun::star::awt::Point pCPoint = pRComponent->getLocationOnScreen();
-                    ::com::sun::star::awt::Size pCSize = pRComponent->getSize();
+                    css::awt::Point pCPoint = pRComponent->getLocationOnScreen();
+                    css::awt::Size pCSize = pRComponent->getSize();
                     *pxLeft = pCPoint.X;
                     *pyTop =  pCPoint.Y;
                     *pcxWidth = pCSize.Width;
@@ -2820,9 +2820,9 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
                 }
                 wcscpy(pChar, pString.getStr());
             }
-            else if (pAny.getValueType() == cppu::UnoType<Sequence< ::com::sun::star::style::TabStop >>::get())
+            else if (pAny.getValueType() == cppu::UnoType<Sequence< css::style::TabStop >>::get())
             {
-                Sequence < ::com::sun::star::style::TabStop > val;
+                Sequence < css::style::TabStop > val;
                 pAny >>= val;
                 int count = val.getLength();
 
@@ -2834,7 +2834,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
                     OLECHAR pAttrsDescimalChar[512] = {NULL};
                     OLECHAR pAttrsFillChar[512] = {NULL};
 
-                    ::com::sun::star::style::TabStop sigleVal = val[iIndex];
+                    css::style::TabStop sigleVal = val[iIndex];
 
                     swprintf( pAttrsPosition, L"Position=%ld,TabAlign=%ld",
                         sigleVal.Position, sigleVal.Alignment);
@@ -2860,24 +2860,24 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
         }
     case TypeClass_ENUM:
         {
-            if (pAny.getValueType() == cppu::UnoType<com::sun::star::awt::FontSlant>::get())
+            if (pAny.getValueType() == cppu::UnoType<css::awt::FontSlant>::get())
             {
-                com::sun::star::awt::FontSlant val;
+                css::awt::FontSlant val;
                 pAny >>= val;
                 swprintf( pChar, L"%d", val);
             }
         }
     case TypeClass_STRUCT:
         {
-            if (pAny.getValueType() == cppu::UnoType<com::sun::star::style::LineSpacing>::get())
+            if (pAny.getValueType() == cppu::UnoType<css::style::LineSpacing>::get())
             {
-                com::sun::star::style::LineSpacing val;
+                css::style::LineSpacing val;
                 pAny >>= val;
                 swprintf( pChar, L"Mode=%ld,Height=%ld,", val.Mode, val.Height);
             }
-            else if (pAny.getValueType() == cppu::UnoType<com::sun::star::accessibility::TextSegment>::get())
+            else if (pAny.getValueType() == cppu::UnoType<css::accessibility::TextSegment>::get())
             {
-                com::sun::star::accessibility::TextSegment val;
+                css::accessibility::TextSegment val;
                 pAny >>= val;
                 ::rtl::OUString realVal(val.SegmentText);
                 wcscpy(pChar, realVal.getStr());
@@ -2912,18 +2912,18 @@ void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,c
 {
     if(pChar == NULL)
         return;
-    Reference< ::com::sun::star::container::XIndexReplace > pXIndex;
+    Reference< css::container::XIndexReplace > pXIndex;
     if((pAny>>=pXIndex) && (numberingLevel !=-1))//numbering level is -1,means invalid value
     {
         Any aAny = pXIndex->getByIndex(numberingLevel);
-        Sequence< ::com::sun::star::beans::PropertyValue > aProps;
+        Sequence< css::beans::PropertyValue > aProps;
         aAny >>= aProps;
-        const ::com::sun::star::beans::PropertyValue* pPropArray = aProps.getConstArray();
+        const css::beans::PropertyValue* pPropArray = aProps.getConstArray();
         sal_Int32 nCount = aProps.getLength();
         swprintf(pChar,L"Numbering:NumberingLevel=%d,",numberingLevel);
         for( sal_Int32 i=0; i<nCount; i++ )
         {
-            ::com::sun::star::beans::PropertyValue rProp = pPropArray[i];
+            css::beans::PropertyValue rProp = pPropArray[i];
             if( (rProp.Name == "BulletChar" ) ||
                 (rProp.Name == "GraphicURL" ) ||
                 (rProp.Name == "NumberingType" ))
@@ -2970,7 +2970,7 @@ void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,c
     }
 }
 
-void CMAccessible::ConvertAnyToVariant(const ::com::sun::star::uno::Any &rAnyVal, VARIANT *pvData)
+void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pvData)
 {
     if(rAnyVal.hasValue())
     {
@@ -3195,7 +3195,7 @@ STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
     if (!m_xContext.is())
         return E_FAIL;
 
-    ::com::sun::star::lang::Locale unoLoc = m_xContext.get()->getLocale();
+    css::lang::Locale unoLoc = m_xContext.get()->getLocale();
     locale->language = SysAllocString((OLECHAR*)unoLoc.Language.getStr());
     locale->country = SysAllocString((OLECHAR*)unoLoc.Country.getStr());
     locale->variant = SysAllocString((OLECHAR*)unoLoc.Variant.getStr());
@@ -3329,9 +3329,9 @@ STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
         return E_FAIL;
     else
     {
-        com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleExtendedAttributes> pRXAttr;
+        css::uno::Reference<css::accessibility::XAccessibleExtendedAttributes> pRXAttr;
         pRXAttr = pRXI.get();
-        ::com::sun::star::uno::Any  anyVal = pRXAttr->getExtendedAttributes();
+        css::uno::Any  anyVal = pRXAttr->getExtendedAttributes();
 
         ::rtl::OUString val;
         anyVal >>= val;

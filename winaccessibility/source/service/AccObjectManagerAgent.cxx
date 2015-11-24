@@ -227,7 +227,7 @@ void AccObjectManagerAgent::IncreaseState( XAccessible* pXAcc,unsigned short pSt
     }
 }
 
-void  AccObjectManagerAgent::UpdateState( com::sun::star::accessibility::XAccessible* pXAcc )
+void  AccObjectManagerAgent::UpdateState( css::accessibility::XAccessible* pXAcc )
 {
     if(pWinManager)
         pWinManager->UpdateState(pXAcc);

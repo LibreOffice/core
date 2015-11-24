@@ -50,7 +50,7 @@ private:
     typedef std::map<HWND, void*> XHWNDToXAccHash;
     typedef std::map<const long, AccObject*> XResIdToAccObjHash;
 
-    typedef std::map<const HWND, com::sun::star::accessibility::XAccessible* >
+    typedef std::map<const HWND, css::accessibility::XAccessible* >
         XHWNDToDocumentHash;
 
     //XAccessible to AccObject
@@ -65,7 +65,7 @@ private:
     //for file name support
     XHWNDToDocumentHash XHWNDDocList;
 
-    com::sun::star::accessibility::XAccessible* oldFocus;
+    css::accessibility::XAccessible* oldFocus;
 
     AccObjectManagerAgent*   pAgent;
     ResIDGenerator ResIdGen;
@@ -74,72 +74,72 @@ private:
 
 private:
     long ImpleGenerateResID();
-    AccObject* GetAccObjByXAcc( com::sun::star::accessibility::XAccessible* pXAcc);
+    AccObject* GetAccObjByXAcc( css::accessibility::XAccessible* pXAcc);
 
     AccObject* GetTopWindowAccObj(HWND hWnd);
 
-    com::sun::star::accessibility::XAccessible* GetAccDocByHWND(HWND hWnd);
+    css::accessibility::XAccessible* GetAccDocByHWND(HWND hWnd);
 
     void       DeleteAccListener( AccObject* pAccObj );
     void       InsertAccChildNode(AccObject* pCurObj,AccObject* pParentObj,HWND pWnd);
     void       DeleteAccChildNode(AccObject* pChild);
-    void       DeleteFromHwndXAcc(com::sun::star::accessibility::XAccessible* pXAcc );
-    int  UpdateAccSelection(com::sun::star::accessibility::XAccessible* pXAcc);
+    void       DeleteFromHwndXAcc(css::accessibility::XAccessible* pXAcc );
+    int  UpdateAccSelection(css::accessibility::XAccessible* pXAcc);
 
     ::rtl::Reference<AccEventListener> CreateAccEventListener(
-            com::sun::star::accessibility::XAccessible* pXAcc);
+            css::accessibility::XAccessible* pXAcc);
 public:
     virtual ~AccObjectWinManager();
-    sal_Bool InsertAccObj( com::sun::star::accessibility::XAccessible* pXAcc,com::sun::star::accessibility::XAccessible* pParentXAcc,HWND pWnd);
-    sal_Bool InsertChildrenAccObj( com::sun::star::accessibility::XAccessible* pXAcc,HWND pWnd=0);
-    void DeleteAccObj( com::sun::star::accessibility::XAccessible* pXAcc );
-    void DeleteChildrenAccObj(com::sun::star::accessibility::XAccessible* pAccObj);
+    sal_Bool InsertAccObj( css::accessibility::XAccessible* pXAcc,css::accessibility::XAccessible* pParentXAcc,HWND pWnd);
+    sal_Bool InsertChildrenAccObj( css::accessibility::XAccessible* pXAcc,HWND pWnd=0);
+    void DeleteAccObj( css::accessibility::XAccessible* pXAcc );
+    void DeleteChildrenAccObj(css::accessibility::XAccessible* pAccObj);
 
-    sal_Bool NotifyAccEvent( com::sun::star::accessibility::XAccessible* pXAcc,short state = 0 );
+    sal_Bool NotifyAccEvent( css::accessibility::XAccessible* pXAcc,short state = 0 );
 
     LPARAM Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam);
 
-    void  DecreaseState( com::sun::star::accessibility::XAccessible* pXAcc,unsigned short pState );
-    void  IncreaseState( com::sun::star::accessibility::XAccessible* pXAcc,unsigned short pState );
-    void  UpdateState( com::sun::star::accessibility::XAccessible* pXAcc );
-    void  SetLocation( com::sun::star::accessibility::XAccessible* pXAcc,
+    void  DecreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
+    void  IncreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
+    void  UpdateState( css::accessibility::XAccessible* pXAcc );
+    void  SetLocation( css::accessibility::XAccessible* pXAcc,
                        long Top = 0,long left = 0,long width = 0,long height = 0);
 
-    void  SetValue( com::sun::star::accessibility::XAccessible* pXAcc, com::sun::star::uno::Any pAny );
-    void  UpdateValue( com::sun::star::accessibility::XAccessible* pXAcc );
+    void  SetValue( css::accessibility::XAccessible* pXAcc, css::uno::Any pAny );
+    void  UpdateValue( css::accessibility::XAccessible* pXAcc );
 
-    void  SetAccName( com::sun::star::accessibility::XAccessible* pXAcc, com::sun::star::uno::Any newName);
-    void  UpdateAccName( com::sun::star::accessibility::XAccessible* pXAcc );
+    void  SetAccName( css::accessibility::XAccessible* pXAcc, css::uno::Any newName);
+    void  UpdateAccName( css::accessibility::XAccessible* pXAcc );
 
-    void  SetDescription( com::sun::star::accessibility::XAccessible* pXAcc, com::sun::star::uno::Any newDesc );
-    void UpdateDescription( com::sun::star::accessibility::XAccessible* pXAcc );
+    void  SetDescription( css::accessibility::XAccessible* pXAcc, css::uno::Any newDesc );
+    void UpdateDescription( css::accessibility::XAccessible* pXAcc );
 
-    void  SetRole( com::sun::star::accessibility::XAccessible* pXAcc, long Role );
+    void  SetRole( css::accessibility::XAccessible* pXAcc, long Role );
 
-    void  UpdateAccFocus( com::sun::star::accessibility::XAccessible* newFocus );
-    void  UpdateAction( com::sun::star::accessibility::XAccessible* pXAcc );
+    void  UpdateAccFocus( css::accessibility::XAccessible* newFocus );
+    void  UpdateAction( css::accessibility::XAccessible* pXAcc );
 
-    sal_Bool IsContainer( com::sun::star::accessibility::XAccessible* pAccessible );
+    sal_Bool IsContainer( css::accessibility::XAccessible* pAccessible );
 
-    IMAccessible* GetIMAccByXAcc( com::sun::star::accessibility::XAccessible* pXAcc );
+    IMAccessible* GetIMAccByXAcc( css::accessibility::XAccessible* pXAcc );
     IMAccessible* GetIAccessibleFromResID(long resID);
 
-    void NotifyDestroy( com::sun::star::accessibility::XAccessible* pXAcc );
-    com::sun::star::accessibility::XAccessible* GetParentXAccessible( com::sun::star::accessibility::XAccessible* pXAcc );
-    short GetParentRole( com::sun::star::accessibility::XAccessible* pXAcc );
+    void NotifyDestroy( css::accessibility::XAccessible* pXAcc );
+    css::accessibility::XAccessible* GetParentXAccessible( css::accessibility::XAccessible* pXAcc );
+    short GetParentRole( css::accessibility::XAccessible* pXAcc );
 
-    void SaveTopWindowHandle(HWND hWnd, com::sun::star::accessibility::XAccessible* pXAcc);
+    void SaveTopWindowHandle(HWND hWnd, css::accessibility::XAccessible* pXAcc);
 
-    void UpdateChildState(com::sun::star::accessibility::XAccessible* pXAcc);
+    void UpdateChildState(css::accessibility::XAccessible* pXAcc);
 
-    bool IsSpecialToolboItem(com::sun::star::accessibility::XAccessible* pXAcc);
+    bool IsSpecialToolboItem(css::accessibility::XAccessible* pXAcc);
 
-    short GetRole(com::sun::star::accessibility::XAccessible* pXAcc);
+    short GetRole(css::accessibility::XAccessible* pXAcc);
 
-    com::sun::star::accessibility::XAccessible* GetAccDocByAccTopWin( com::sun::star::accessibility::XAccessible* pXAcc );
-    bool IsTopWinAcc( com::sun::star::accessibility::XAccessible* pXAcc );
+    css::accessibility::XAccessible* GetAccDocByAccTopWin( css::accessibility::XAccessible* pXAcc );
+    bool IsTopWinAcc( css::accessibility::XAccessible* pXAcc );
 
-    bool IsStateManageDescendant(com::sun::star::accessibility::XAccessible* pAccessible);
+    bool IsStateManageDescendant(css::accessibility::XAccessible* pAccessible);
 
 };
 #endif // INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTWINMANAGER_HXX

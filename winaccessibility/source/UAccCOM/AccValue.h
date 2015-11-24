@@ -84,9 +84,9 @@ public:
 
 private:
 
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleValue> pRXVal;
+    css::uno::Reference<css::accessibility::XAccessibleValue> pRXVal;
 
-    inline com::sun::star::accessibility::XAccessibleValue* GetXInterface()
+    inline css::accessibility::XAccessibleValue* GetXInterface()
     {
         return pRXVal.get();
     }

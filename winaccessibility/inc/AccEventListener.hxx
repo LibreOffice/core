@@ -36,23 +36,22 @@ class AccObjectManagerAgent;
  */
 class AccEventListener
     : public ::cppu::WeakImplHelper<
-        com::sun::star::accessibility::XAccessibleEventListener>
+        css::accessibility::XAccessibleEventListener>
 {
 protected:
     //accessible owner's pointer
-    com::sun::star::uno::Reference<
-        com::sun::star::accessibility::XAccessible> m_xAccessible;
+    css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     //agent pointer for objects' manager
     AccObjectManagerAgent* pAgent;
 public:
-    AccEventListener( com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
+    AccEventListener( css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccEventListener();
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException);
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException);
 
     //for name changed event
     virtual void HandleNameChangedEvent(css::uno::Any name);

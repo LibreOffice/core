@@ -101,9 +101,9 @@ public:
 
 private:
 
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleText> pRXText;
+    css::uno::Reference<css::accessibility::XAccessibleText> pRXText;
 
-    inline com::sun::star::accessibility::XAccessibleText* GetXInterface()
+    inline css::accessibility::XAccessibleText* GetXInterface()
     {
         return pRXText.get();
     }

@@ -56,9 +56,9 @@ private:
     ::rtl::Reference<AccEventListener>  m_pListener;
     IAccSelectionList   m_selectionList;
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > m_xAccRef;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleAction > m_xAccActionRef;
-    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext > m_xAccContextRef;
+    css::uno::Reference < css::accessibility::XAccessible > m_xAccRef;
+    css::uno::Reference < css::accessibility::XAccessibleAction > m_xAccActionRef;
+    css::uno::Reference < css::accessibility::XAccessibleContext > m_xAccContextRef;
 
     void ImplInitializeCreateObj();//create COM object
 
@@ -66,21 +66,20 @@ private:
     void UpdateRole();
 
     DWORD GetMSAAStateFromUNO(short xState);//translate state from UNO to MSAA value
-    ::com::sun::star::accessibility::XAccessibleSelection* GetXAccessibleSelection();
+    css::accessibility::XAccessibleSelection* GetXAccessibleSelection();
     void GetExpandedState(sal_Bool* isExpandable, sal_Bool* isExpanded);
-    ::rtl::OUString GetMAccessibleValueFromAny(::com::sun::star::uno::Any pAny);
+    ::rtl::OUString GetMAccessibleValueFromAny(css::uno::Any pAny);
 
 public:
 
-    AccObject ( ::com::sun::star::accessibility::XAccessible* pXAcc = NULL,AccObjectManagerAgent* pAgent = NULL ,AccEventListener* accListener=NULL);
+    AccObject ( css::accessibility::XAccessible* pXAcc = NULL,AccObjectManagerAgent* pAgent = NULL ,AccEventListener* accListener=NULL);
     virtual ~AccObject();
 
     sal_Bool UpdateAccessibleInfoFromUnoToMSAA(  ); //implement accessible information mapping
     void UpdateDefaultAction();
 
     IMAccessible*  GetIMAccessible();   //return COM interface in acc object
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> const& GetXAccessible();
+    css::uno::Reference<css::accessibility::XAccessible> const& GetXAccessible();
 
     void SetResID(long id);//ResID means ChildID in MSAA
     long GetResID();
@@ -105,9 +104,9 @@ public:
     void  DecreaseState(short xState );//call COM interface DecreaseState method
     void  IncreaseState( short xState );//call COM interface IncreaseState method
 
-    void  SetName( com::sun::star::uno::Any newName);
-    void  SetValue( com::sun::star::uno::Any pAny );
-    void  SetDescription( com::sun::star::uno::Any newDesc );
+    void  SetName( css::uno::Any newName);
+    void  SetValue( css::uno::Any pAny );
+    void  SetDescription( css::uno::Any newDesc );
     void  SetRole( short Role );
 
     short GetRole() const;

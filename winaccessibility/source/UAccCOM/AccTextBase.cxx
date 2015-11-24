@@ -34,8 +34,8 @@
 #include <com/sun/star/accessibility/XAccessibleTextSelection.hpp>
 #include "MAccessible.h"
 
-using namespace com::sun::star::accessibility;
-using namespace com::sun::star::uno;
+using namespace css::accessibility;
+using namespace css::uno;
 
 
 // Construction/Destruction
@@ -114,7 +114,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
 
     strAttrs += L"Version:1;";
 
-    Sequence< ::com::sun::star::beans::PropertyValue > pValues = GetXInterface()->getCharacterAttributes(offset, Sequence< rtl::OUString >());
+    Sequence< css::beans::PropertyValue > pValues = GetXInterface()->getCharacterAttributes(offset, Sequence< rtl::OUString >());
     int nCount = pValues.getLength();
 
     short numberingLevel = 0;
@@ -126,7 +126,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
     for(int i =0; i<nCount; i++)
     {
 
-        ::com::sun::star::beans::PropertyValue &pValue = pValues[i];
+        css::beans::PropertyValue &pValue = pValues[i];
         if(pValue.Name == "NumberingLevel")
         {
             if (pValue.Value != Any())
@@ -286,11 +286,11 @@ STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType c
     if(offset < 0 || offset > GetXInterface()->getCharacterCount() )
         return E_FAIL;
 
-    com::sun::star::awt::Rectangle rectangle;
+    css::awt::Rectangle rectangle;
     rectangle = GetXInterface()->getCharacterBounds(offset);
 
     //IA2Point aPoint;
-    com::sun::star::awt::Point aPoint;
+    css::awt::Point aPoint;
 
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
     if( !pRContext.is() )
@@ -302,13 +302,13 @@ STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType c
     {
         if(coordType == IA2_COORDTYPE_SCREEN_RELATIVE)
         {
-            ::com::sun::star::awt::Point pt = pRComp->getLocationOnScreen();
+            css::awt::Point pt = pRComp->getLocationOnScreen();
             aPoint.X = pt.X;
             aPoint.Y = pt.Y;
         }
         else if(coordType == IA2_COORDTYPE_PARENT_RELATIVE)
         {
-            ::com::sun::star::awt::Point pt = pRComp->getLocation();
+            css::awt::Point pt = pRComp->getLocation();
             aPoint.X = pt.X;
             aPoint.Y = pt.Y;
         }
@@ -401,7 +401,7 @@ STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType, 
     if(!pRXText.is())
         return E_FAIL;
 
-    com::sun::star::awt::Point point;
+    css::awt::Point point;
     point.X = x;
     point.Y = y;
     *offset = GetXInterface()->getIndexAtPoint(point);

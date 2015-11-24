@@ -36,7 +36,7 @@ using namespace com::sun::star::accessibility;
 #include <toolkit/awt/Vclxwindow.hxx>
 #include <vcl/sysdata.hxx>
 
-AccFrameEventListener::AccFrameEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
+AccFrameEventListener::AccFrameEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
         :AccEventListener(pAcc, Agent)
 {
 }
@@ -49,8 +49,8 @@ AccFrameEventListener::~AccFrameEventListener()
  *  Uno's event notifier when event is captured
  *  @param AccessibleEventObject    the event object which contains information about event
  */
-void  AccFrameEventListener::notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
-throw (::com::sun::star::uno::RuntimeException)
+void  AccFrameEventListener::notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard g;
 

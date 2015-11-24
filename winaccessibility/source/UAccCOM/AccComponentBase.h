@@ -57,9 +57,9 @@ public:
 
 protected:
 
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleComponent> pRXComp;
+    css::uno::Reference<css::accessibility::XAccessibleComponent> pRXComp;
 
-    inline com::sun::star::accessibility::XAccessibleComponent* GetXInterface()
+    inline css::accessibility::XAccessibleComponent* GetXInterface()
     {
         return pRXComp.get();
     }

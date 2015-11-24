@@ -32,7 +32,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccTextComponentEventListener::AccTextComponentEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
+AccTextComponentEventListener::AccTextComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
         :AccComponentEventListener(pAcc, Agent)
 {}
 AccTextComponentEventListener::~AccTextComponentEventListener()

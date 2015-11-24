@@ -64,16 +64,16 @@ public:
     // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface);
 
-    static void GetkeyBindingStrByXkeyBinding( const com::sun::star::uno::Sequence< com::sun::star::awt::KeyStroke > &keySet, OLECHAR* pString );
+    static void GetkeyBindingStrByXkeyBinding( const css::uno::Sequence< css::awt::KeyStroke > &keySet, OLECHAR* pString );
 
 protected:
 
     static OLECHAR* getOLECHARFromKeyCode(long key);
 
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleAction> pRXAct;
+    css::uno::Reference<css::accessibility::XAccessibleAction> pRXAct;
 
 private:
-    inline com::sun::star::accessibility::XAccessibleAction* GetXInterface()
+    inline css::accessibility::XAccessibleAction* GetXInterface()
     {
         return pRXAct.get();
     }

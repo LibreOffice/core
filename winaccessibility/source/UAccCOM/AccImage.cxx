@@ -26,8 +26,8 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
-using namespace com::sun::star::accessibility;
-using namespace com::sun::star::uno;
+using namespace css::accessibility;
+using namespace css::uno;
 
 /**
    * Get description.

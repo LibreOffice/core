@@ -79,7 +79,7 @@ public:
 
 private:
 
-    com::sun::star::accessibility::AccessibleRelation relation;
+    css::accessibility::AccessibleRelation relation;
 };
 
 #endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCRELATION_H

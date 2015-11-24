@@ -34,7 +34,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccObjectContainerEventListener::AccObjectContainerEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
+AccObjectContainerEventListener::AccObjectContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
         :AccContainerEventListener(pAcc, Agent)
 {}
 AccObjectContainerEventListener::~AccObjectContainerEventListener()
