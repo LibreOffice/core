@@ -433,7 +433,8 @@ SbiToken SbiTokenizer::Next()
     }
 special:
     // #i92642
-    bool bStartOfLine = (eCurTok == NIL || eCurTok == REM || eCurTok == EOLN);
+    bool bStartOfLine = (eCurTok == NIL || eCurTok == REM || eCurTok == EOLN ||
+            eCurTok == THEN || eCurTok == ELSE); // single line If
     if( !bStartOfLine && (tp->t == NAME || tp->t == LINE) )
     {
         return eCurTok = SYMBOL;
