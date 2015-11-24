@@ -62,8 +62,6 @@ public class java_fat_service implements TestBase {
             return false;
         }
 
-        param.get("ConnectionString");
-
         param.getMSF();
 
         for (int l=0;l<entries.length;l++) {
