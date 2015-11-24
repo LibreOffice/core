@@ -244,7 +244,9 @@ int32_t WindowsOSVersion()
         vinfo.dwOSVersionInfoSize = sizeof (vinfo);
 #pragma warning(push)
 #pragma warning(disable:4996)
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         if (!GetVersionEx(&vinfo))
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         {
 #pragma warning(pop)
             winVersion = kWindowsUnknown;
