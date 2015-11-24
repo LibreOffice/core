@@ -48,10 +48,7 @@ void Idle::Start()
 
 bool Idle::ReadyForSchedule( bool bTimer ) const
 {
-    // tdf#91727 - We need to re-work this to allow only UI idle handlers
-    //             and not timeouts to be processed in some limited scenarios
-    (void)bTimer;
-    return true; // !bTimer
+    return !bTimer;
 }
 
 sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 /* nTime */ ) const

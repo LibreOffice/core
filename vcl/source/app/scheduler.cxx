@@ -153,7 +153,7 @@ void Scheduler::CallbackTaskScheduling(bool ignore)
 {
     // this function is for the saltimer callback
     (void)ignore;
-    Scheduler::ProcessTaskScheduling( true );
+    Scheduler::ProcessTaskScheduling( false );
 }
 
 void Scheduler::ProcessTaskScheduling( bool bTimerOnly )
@@ -168,7 +168,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimerOnly )
     }
 }
 
-sal_uInt64 Scheduler::CalculateMinimumTimeout()
+sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
 {
     // process all pending Tasks
     // if bTimer True, only handle timer
@@ -181,13 +181,11 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout()
     pSchedulerData = pSVData->mpFirstSchedulerData;
     while ( pSchedulerData )
     {
-        if( pSchedulerData->mbInScheduler )
-        {
-            pPrevSchedulerData = pSchedulerData;
-            pSchedulerData = pSchedulerData->mpNext;
-        }
+        ImplSchedulerData *pNext = pSchedulerData->mpNext;
+
         // Should Task be released from scheduling?
-        else if ( pSchedulerData->mbDelete )
+        if ( !pSchedulerData->mbInScheduler &&
+              pSchedulerData->mbDelete )
         {
             if ( pPrevSchedulerData )
                 pPrevSchedulerData->mpNext = pSchedulerData->mpNext;
@@ -195,19 +193,24 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout()
                 pSVData->mpFirstSchedulerData = pSchedulerData->mpNext;
             if ( pSchedulerData->mpScheduler )
                 pSchedulerData->mpScheduler->mpSchedulerData = nullptr;
-            ImplSchedulerData* pTempSchedulerData = pSchedulerData;
-            pSchedulerData = pSchedulerData->mpNext;
-            delete pTempSchedulerData;
+            pNext = pSchedulerData->mpNext;
+            delete pSchedulerData;
         }
         else
         {
-            nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod( nMinPeriod, nTime );
+            if (!pSchedulerData->mbInScheduler)
+            {
+                if ( pSchedulerData->mpScheduler->ReadyForSchedule( true ) )
+                    nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod( nMinPeriod, nTime );
+                else
+                    bHasActiveIdles = true;
+            }
             pPrevSchedulerData = pSchedulerData;
-            pSchedulerData = pSchedulerData->mpNext;
         }
+        pSchedulerData = pNext;
     }
 
-    // delete clock if no more timers available
+    // delete clock if no more timers available,
     if ( !pSVData->mpFirstSchedulerData )
     {
         if ( pSVData->mpSalTimer )

@@ -477,18 +477,25 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 {
     ImplSVData* pSVData = ImplGetSVData();
 
+    bool bHasActiveIdles = false;
     sal_uInt64 nMinTimeout = 0;
     if (nReleased == 0) // else thread doesn't have SolarMutex so avoid race
-        nMinTimeout = Scheduler::CalculateMinimumTimeout();
+        nMinTimeout = Scheduler::CalculateMinimumTimeout(bHasActiveIdles);
 
     // FIXME: should use returned value as param to DoYield
     (void)nMinTimeout;
+
+    // If we have idles, don't wait for the timeout; check for events
+    // and come back as quick as possible.
+    if (bHasActiveIdles)
+        i_bWait = false;
 
     // TODO: there's a data race here on WNT only because ImplYield may be
     // called without SolarMutex; if we can get rid of LazyDelete (with VclPtr)
     // then the only remaining use of mnDispatchLevel is in OSX specific code
     // so that would effectively eliminate the race on WNT
     pSVData->maAppData.mnDispatchLevel++;
+
     // do not wait for events if application was already quit; in that
     // case only dispatch events already available
     // do not wait for events either if the app decided that it is too busy for timers
