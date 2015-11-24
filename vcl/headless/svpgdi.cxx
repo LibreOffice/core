@@ -877,11 +877,12 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
 {
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
 
-    if (m_aDevice)
+    if (m_aOrigDevice)
     {
         basebmp::BitmapDeviceSharedPtr aCopy;
         aCopy = cloneBitmapDevice(basegfx::B2IVector(nWidth, nHeight),
-                                   m_aDevice);
+                                   m_aOrigDevice);
+        basegfx::B2IVector size = aCopy->getSize();
         basegfx::B2IBox aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
         basegfx::B2IBox aDestRect( 0, 0, nWidth, nHeight );
 

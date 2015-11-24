@@ -51,17 +51,12 @@ void BitmapTest::testConvert()
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
-#if defined WNT
-        if (!OpenGLHelper::isVCLOpenGLEnabled())
-        {
-            // GDI Scanlines padded to DWORD multiples, it seems
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
-        }
-        else
+#if defined MACOSX || defined IOS
+        //it would be nice to find and change the stride for quartz to be the same as everyone else
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
+#else
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
 #endif
-        {
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
-        }
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
         const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(rColor.GetRed()));
