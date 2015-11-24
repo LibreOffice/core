@@ -30,7 +30,6 @@
 
 #include <rtl/ustring.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <framework/eventsconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/evntconf.hxx>
 

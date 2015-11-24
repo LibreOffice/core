@@ -65,14 +65,12 @@ private:
         : refCount(0)
         , aTargetFrame(rFrame)
         , aImageId(rImageIdStr)
-        , nStyle(0)
     {
     }
 
     MenuAttributes(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider)
         : refCount(0)
         , xDispatchProvider(rDispatchProvider)
-        , nStyle(0)
     {
     }
 
@@ -82,7 +80,6 @@ public:
     OUString aTargetFrame;
     OUString aImageId;
     css::uno::WeakReference<css::frame::XDispatchProvider> xDispatchProvider;
-    sal_Int16 nStyle;
 
     static sal_uIntPtr CreateAttribute(const OUString& rFrame, const OUString& rImageIdStr);
     static sal_uIntPtr CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider);
