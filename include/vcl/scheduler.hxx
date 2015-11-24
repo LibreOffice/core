@@ -61,7 +61,7 @@ protected:
 
     // These should be constexpr static, when supported.
     static const sal_uInt64 ImmediateTimeoutMs = 1;
-    static const sal_uInt64 MaximumTimeoutMs = SAL_MAX_UINT64;
+    static const sal_uInt64 MaximumTimeoutMs = 1000 * 60; // 1 minute
 
     static void ImplStartTimer(sal_uInt64 nMS, bool bForce = false);
 
