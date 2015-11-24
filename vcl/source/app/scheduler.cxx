@@ -156,7 +156,19 @@ void Scheduler::CallbackTaskScheduling(bool ignore)
     Scheduler::ProcessTaskScheduling( true );
 }
 
-void Scheduler::ProcessTaskScheduling( bool bTimer )
+void Scheduler::ProcessTaskScheduling( bool bTimerOnly )
+{
+    ImplSchedulerData* pSchedulerData;
+
+    // tdf#91727 - NB. bTimerOnly is ultimately not used
+    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly)))
+    {
+        pSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
+        pSchedulerData->Invoke();
+    }
+}
+
+sal_uInt64 Scheduler::CalculateMinimumTimeout()
 {
     // process all pending Tasks
     // if bTimer True, only handle timer
@@ -165,13 +177,6 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     ImplSVData*        pSVData = ImplGetSVData();
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
     sal_uInt64         nMinPeriod = MaximumTimeoutMs;
-
-    // tdf#91727 - NB. bTimer is ultimately not used
-    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimer)))
-    {
-        pSchedulerData->mnUpdateTime = nTime;
-        pSchedulerData->Invoke();
-    }
 
     pSchedulerData = pSVData->mpFirstSchedulerData;
     while ( pSchedulerData )
@@ -207,12 +212,15 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     {
         if ( pSVData->mpSalTimer )
             pSVData->mpSalTimer->Stop();
-        pSVData->mnTimerPeriod = MaximumTimeoutMs;
+        nMinPeriod = MaximumTimeoutMs;
+        pSVData->mnTimerPeriod = nMinPeriod;
     }
     else
     {
         Scheduler::ImplStartTimer(nMinPeriod, true);
     }
+
+    return nMinPeriod;
 }
 
 void Scheduler::Start()
