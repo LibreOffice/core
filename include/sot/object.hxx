@@ -30,7 +30,6 @@ class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 friend class SotFactory;
     sal_uInt16  nOwnerLockCount;
     bool        bOwner;
-    bool        bSVObject;        // is proxy, then TRUE if other side is SV
     bool        bInClose;         // TRUE, in DoClose
 
 protected:

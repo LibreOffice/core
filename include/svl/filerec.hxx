@@ -313,13 +313,11 @@ class SVL_DLLPUBLIC SfxSingleRecordReader: public SfxMiniRecordReader
 {
 protected:
     sal_uInt16              _nRecordTag;    // type of the complete contents
-    sal_uInt8               _nRecordVer;    // version of the complete contents
     sal_uInt8               _nRecordType;   // Record Type from the header
 
     // Three phase constructor for derived classes
     SfxSingleRecordReader()
         : _nRecordTag(0)
-        , _nRecordVer(0)
         , _nRecordType(0)
     {
     }

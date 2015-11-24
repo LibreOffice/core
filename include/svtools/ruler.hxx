@@ -573,8 +573,6 @@ struct RulerUnitData
     double          nTick2;             // Tick quarter unit
     double          nTick3;             // Tick half unit
     double          nTick4;             // Tick whole unit
-    long            n100THMM;           // 100mm Unit divider
-    sal_uInt16      nUnitDigits;        // Number of digits
     sal_Char        aUnitStr[8];        // Unit string
 };
 

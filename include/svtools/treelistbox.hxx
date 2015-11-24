@@ -259,7 +259,6 @@ class SVT_DLLPUBLIC SvTreeListBox
     bool mbUpdateAlternatingRows;
 
     SvTreeListEntry*    pHdlEntry;
-    SvLBoxItem*     pHdlItem;
 
     DragDropMode    nDragDropMode;
     DragDropMode    nOldDragMode;

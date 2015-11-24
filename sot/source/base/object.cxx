@@ -58,7 +58,6 @@ void * SotObject::Cast( const SotFactory * pFact )
 SotObject::SotObject()
     : nOwnerLockCount( 0 )
     , bOwner      ( true )
-    , bSVObject   ( false )
     , bInClose    ( false )
 {
     SotFactory::IncSvObjectCount( this );
