@@ -477,10 +477,12 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 {
     ImplSVData* pSVData = ImplGetSVData();
 
+    sal_uInt64 nMinTimeout = 0;
     if (nReleased == 0) // else thread doesn't have SolarMutex so avoid race
-    {   // Process all Tasks
-        Scheduler::ProcessTaskScheduling(false);
-    }
+        nMinTimeout = Scheduler::CalculateMinimumTimeout();
+
+    // FIXME: should use returned value as param to DoYield
+    (void)nMinTimeout;
 
     // TODO: there's a data race here on WNT only because ImplYield may be
     // called without SolarMutex; if we can get rid of LazyDelete (with VclPtr)
@@ -491,12 +493,17 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     // case only dispatch events already available
     // do not wait for events either if the app decided that it is too busy for timers
     // (feature added for the slideshow)
-    pSVData->mpDefInst->DoYield(
-        i_bWait && !pSVData->maAppData.mbAppQuit,
-        i_bAllEvents, nReleased);
+    SalYieldResult eResult =
+        pSVData->mpDefInst->DoYield(
+            i_bWait && !pSVData->maAppData.mbAppQuit,
+            i_bAllEvents, nReleased);
+
     pSVData->maAppData.mnDispatchLevel--;
 
     DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
+
+    // Process all Tasks
+    Scheduler::ProcessTaskScheduling(eResult == SalYieldResult::EVENT);
 
     // flush lazy deleted objects
     if( pSVData->maAppData.mnDispatchLevel == 0 )
