@@ -119,7 +119,7 @@ protected:
     @tparam interface_type type of interface
 */
 template< class interface_type >
-class WeakReference : public WeakReferenceHelper
+class SAL_WARN_UNUSED WeakReference : public WeakReferenceHelper
 {
 public:
     /** Default ctor.  Creates an empty weak reference.

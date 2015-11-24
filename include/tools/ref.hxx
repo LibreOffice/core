@@ -183,7 +183,7 @@ public:
 /** We only have one weak reference in LO, in include/sfx2/frame.hxx, class SfxFrameWeak.
 */
 template<typename T>
-class SvCompatWeakRef
+class SAL_WARN_UNUSED SvCompatWeakRef
 {
     tools::SvRef< SvCompatWeakHdl<T> > _xHdl;
 public:
