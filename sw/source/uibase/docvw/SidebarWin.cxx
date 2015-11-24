@@ -26,6 +26,7 @@
 #include <PostItMgr.hxx>
 
 #include <SidebarTxtControl.hxx>
+#include <SidebarScrollBar.hxx>
 #include <AnchorOverlayObject.hxx>
 #include <ShadowOverlayObject.hxx>
 #include <OverlayRanges.hxx>
@@ -622,7 +623,7 @@ void SwSidebarWin::InitControls()
     }
 
     //create Scrollbars
-    mpVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
+    mpVScrollbar = VclPtr<SidebarScrollBar>::Create(*this, WB_3DLOOK |WB_VSCROLL|WB_DRAG, mrView);
     mpVScrollbar->EnableNativeWidget(false);
     mpVScrollbar->EnableRTL( false );
     mpVScrollbar->SetScrollHdl(LINK(this, SwSidebarWin, ScrollHdl));
