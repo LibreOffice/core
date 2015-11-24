@@ -4785,7 +4785,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             nSem++;
         }
         OUString aPrefix;
-        bool LCIDInserted = false;
+        bool bLCIDInserted = false;
 
         if ( !bDefaults )
         {
@@ -4907,7 +4907,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                             }
                             j = j+2;
                         }
-                        LCIDInserted = true;
+                        bLCIDInserted = true;
                         break;
                     default:
                         aStr.append( pStr[j] );
@@ -4919,7 +4919,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         if (rNum.IsSet() && rNum.GetNatNum() == 1 &&
             rKeywords[NF_KEY_THAI_T] == "T" &&
             MsLangId::getRealLanguage( rNum.GetLang()) ==
-            LANGUAGE_THAI && !LCIDInserted )
+            LANGUAGE_THAI && !bLCIDInserted )
         {
 
             aStr.insert( 0, "[$-D00041E]" ); // number in Thai digit
