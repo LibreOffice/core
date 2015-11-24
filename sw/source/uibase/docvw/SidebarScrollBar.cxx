@@ -60,6 +60,11 @@ void SidebarScrollBar::LogicInvalidate(const Rectangle* pRectangle)
     rWrtShell.libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
+void SidebarScrollBar::MouseButtonUp(const MouseEvent& /*rMouseEvent*/)
+{
+    EndTracking();
+}
+
 void SidebarScrollBar::MouseMove(const MouseEvent& rMouseEvent)
 {
     TrackingEvent aEvent(rMouseEvent);
