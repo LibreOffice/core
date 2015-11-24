@@ -42,8 +42,6 @@ namespace cairo {
         long    hDrawable;      // a drawable
         void*   pVisual;        // the visual in use
         int nScreen;        // the current screen of the drawable
-        int     nDepth;         // depth of said visual
-        long    aColormap;      // the colormap being used
         void*   pRenderFormat;  // render format for drawable
     };
 

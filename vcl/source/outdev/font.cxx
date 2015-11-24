@@ -711,9 +711,7 @@ void ImplDirectFontSubstitution::AddFontSubstitute( const OUString& rFontName,
 
 ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
     const OUString& rSubstFontName, AddFontSubstituteFlags nSubstFlags )
-:   maName( rFontName )
-,   maReplaceName( rSubstFontName )
-,   mnFlags( nSubstFlags )
+:   mnFlags( nSubstFlags )
 {
     maSearchName = GetEnglishSearchFontName( rFontName );
     maSearchReplaceName = GetEnglishSearchFontName( rSubstFontName );

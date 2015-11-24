@@ -29,7 +29,6 @@ struct ImplBtnDlgItem
 {
     sal_uInt16              mnId;
     bool                    mbOwnButton;
-    bool                    mbDummyAlign;
     long                    mnSepSize;
     VclPtr<PushButton>      mpPushButton;
 };

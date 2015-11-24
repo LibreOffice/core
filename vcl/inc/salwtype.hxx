@@ -161,13 +161,6 @@ struct SalWheelMouseEvent
     {}
 };
 
-// MOUSEACTIVATE
-struct SalMouseActivateEvent
-{
-    long            mnX;            // X-Position (Pixel, TopLeft-Output)
-    long            mnY;            // Y-Position (Pixel, TopLeft-Output)
-};
-
 // EXTTEXTINPUT
 struct SalExtTextInputEvent
 {

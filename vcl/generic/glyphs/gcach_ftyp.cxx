@@ -444,7 +444,6 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     mpNextGCFont( nullptr ),
     mnCos( 0x10000),
     mnSin( 0 ),
-    mbCollectedZW( false ),
     mnPrioEmbedded(nDefaultPrioEmbedded),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
     mnPrioAutoHint(nDefaultPrioAutoHint),

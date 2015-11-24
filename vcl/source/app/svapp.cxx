@@ -84,12 +84,11 @@ using namespace ::com::sun::star::uno;
 class ImplReservedKey
 {
 public:
-    ImplReservedKey( vcl::KeyCode aKeyCode, sal_uInt16 nResId ) :
-      mKeyCode(aKeyCode), mnResId( nResId)
+    ImplReservedKey( vcl::KeyCode aKeyCode ) :
+      mKeyCode(aKeyCode)
      {}
 
     vcl::KeyCode mKeyCode;
-    sal_uInt16  mnResId;
 };
 
 typedef std::pair<ImplReservedKey*, size_t> ReservedKeys;
@@ -101,31 +100,31 @@ namespace
         {
             static ImplReservedKey ImplReservedKeys[] =
             {
-                ImplReservedKey(vcl::KeyCode(KEY_F1,0),                  SV_SHORTCUT_HELP),
-                ImplReservedKey(vcl::KeyCode(KEY_F1,KEY_SHIFT),          SV_SHORTCUT_ACTIVEHELP),
-                ImplReservedKey(vcl::KeyCode(KEY_F1,KEY_MOD1),           SV_SHORTCUT_CONTEXTHELP),
-                ImplReservedKey(vcl::KeyCode(KEY_F2,KEY_SHIFT),          SV_SHORTCUT_CONTEXTHELP),
-                ImplReservedKey(vcl::KeyCode(KEY_F4,KEY_MOD1),           SV_SHORTCUT_DOCKUNDOCK),
-                ImplReservedKey(vcl::KeyCode(KEY_F4,KEY_MOD2),           SV_SHORTCUT_DOCKUNDOCK),
-                ImplReservedKey(vcl::KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2),  SV_SHORTCUT_DOCKUNDOCK),
-                ImplReservedKey(vcl::KeyCode(KEY_F6,0),                  SV_SHORTCUT_NEXTSUBWINDOW),
-                ImplReservedKey(vcl::KeyCode(KEY_F6,KEY_MOD1),           SV_SHORTCUT_TODOCUMENT),
-                ImplReservedKey(vcl::KeyCode(KEY_F6,KEY_SHIFT),          SV_SHORTCUT_PREVSUBWINDOW),
-                ImplReservedKey(vcl::KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT), SV_SHORTCUT_SPLITTER),
-                ImplReservedKey(vcl::KeyCode(KEY_F10,0),                 SV_SHORTCUT_MENUBAR)
+                ImplReservedKey(vcl::KeyCode(KEY_F1,0)                  ),
+                ImplReservedKey(vcl::KeyCode(KEY_F1,KEY_SHIFT)          ),
+                ImplReservedKey(vcl::KeyCode(KEY_F1,KEY_MOD1)           ),
+                ImplReservedKey(vcl::KeyCode(KEY_F2,KEY_SHIFT)          ),
+                ImplReservedKey(vcl::KeyCode(KEY_F4,KEY_MOD1)           ),
+                ImplReservedKey(vcl::KeyCode(KEY_F4,KEY_MOD2)           ),
+                ImplReservedKey(vcl::KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2)  ),
+                ImplReservedKey(vcl::KeyCode(KEY_F6,0)                  ),
+                ImplReservedKey(vcl::KeyCode(KEY_F6,KEY_MOD1)           ),
+                ImplReservedKey(vcl::KeyCode(KEY_F6,KEY_SHIFT)          ),
+                ImplReservedKey(vcl::KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT) ),
+                ImplReservedKey(vcl::KeyCode(KEY_F10,0)                 )
 #ifdef UNX
                 ,
-                ImplReservedKey(vcl::KeyCode(KEY_1,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_2,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_3,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_4,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_5,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_6,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_7,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_8,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_9,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_0,KEY_SHIFT|KEY_MOD1), 0),
-                ImplReservedKey(vcl::KeyCode(KEY_ADD,KEY_SHIFT|KEY_MOD1), 0)
+                ImplReservedKey(vcl::KeyCode(KEY_1,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_2,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_3,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_4,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_5,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_6,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_7,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_8,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_9,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_0,KEY_SHIFT|KEY_MOD1)),
+                ImplReservedKey(vcl::KeyCode(KEY_ADD,KEY_SHIFT|KEY_MOD1))
 #endif
             };
             static ReservedKeys aKeys
@@ -148,7 +147,6 @@ extern "C" {
 struct ImplHotKey
 {
     ImplHotKey*             mpNext;
-    void*                   mpUserData;
     vcl::KeyCode            maKeyCode;
 };
 

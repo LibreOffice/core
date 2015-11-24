@@ -1123,7 +1123,7 @@ css::uno::Reference<css::accessibility::XAccessible> MenuBarWindow::CreateAccess
     return xAcc;
 }
 
-sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& i_rLink, const OUString& i_rToolTip )
+sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& i_rLink )
 {
     // find first free button id
     sal_uInt16 nId = IID_DOCUMENTCLOSE;
@@ -1143,7 +1143,7 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<Me
     LayoutChanged();
 
     if( pMenu->mpSalMenu )
-        pMenu->mpSalMenu->AddMenuBarButton( SalMenuButtonItem( nId, i_rImage, i_rToolTip ) );
+        pMenu->mpSalMenu->AddMenuBarButton( SalMenuButtonItem( i_rImage ) );
 
     return nId;
 }
