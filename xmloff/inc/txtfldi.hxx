@@ -1389,10 +1389,7 @@ public:
 
 class XMLCustomPropertyFieldImportContext : public XMLTextFieldImportContext
 {
-    OUString sName;
     ::com::sun::star::uno::Any aValue;
-    const OUString sPropertyName;
-    const OUString sPropertyValue;
 
 public:
 

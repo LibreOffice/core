@@ -60,7 +60,6 @@ protected:
     bool                        mbListContextPushed;
 
     sal_uInt16                  mnStyleFamily;
-    sal_uInt16                  mnClass;
     bool                    mbIsPlaceholder;
     bool                        mbClearDefaultAttributes;
     bool                    mbIsUserTransformed;

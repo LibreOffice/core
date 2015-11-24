@@ -114,7 +114,6 @@ typedef OUString (*convert_t)( const Any& );
 typedef struct
 {
     const sal_Char* pPropertyName;
-    sal_uInt16 nPropertyNameLength;
     sal_uInt16 nNamespace;
     sal_uInt16 nToken;
     convert_t aConverter;
@@ -123,8 +122,8 @@ static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  SvXMLExport& rExport,
                  const ExportTable* pTable );
 
-#define TABLE_ENTRY(NAME,NAMESPACE,TOKEN,CONVERTER) { NAME,sizeof(NAME)-1,XML_NAMESPACE_##NAMESPACE,xmloff::token::XML_##TOKEN, CONVERTER }
-#define TABLE_END { nullptr, 0, 0, 0, nullptr }
+#define TABLE_ENTRY(NAME,NAMESPACE,TOKEN,CONVERTER) { NAME,XML_NAMESPACE_##NAMESPACE,xmloff::token::XML_##TOKEN, CONVERTER }
+#define TABLE_END { nullptr, 0, 0, nullptr }
 
 // any conversion functions
 OUString xforms_string( const Any& );

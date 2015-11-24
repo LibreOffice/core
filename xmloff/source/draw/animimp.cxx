@@ -326,7 +326,6 @@ public:
     OUString msDimPrev;
     OUString msEffect;
     OUString msPlayFull;
-    OUString msPresOrder;
     OUString msSound;
     OUString msSoundOn;
     OUString msSpeed;
@@ -341,7 +340,6 @@ public:
         msDimPrev( "DimPrevious" ),
         msEffect( "Effect" ),
         msPlayFull( "PlayFull" ),
-        msPresOrder( "PresentationOrder" ),
         msSound( "Sound" ),
         msSoundOn( "SoundOn" ),
         msSpeed( "Speed" ),

@@ -124,15 +124,12 @@ public:
     Any convertTiming( const OUString& rValue );
     static Sequence< double > convertKeyTimes( const OUString& rValue );
     static Sequence< TimeFilterPair > convertTimeFilter( const OUString& rValue );
-
-    const OUString mastrHSL;
 };
 
 AnimationsImportHelperImpl::AnimationsImportHelperImpl( SvXMLImport& rImport )
 :   mrImport( rImport ),
     mpAnimationNodeTokenMap( nullptr ),
-    mpAnimationNodeAttributeTokenMap( nullptr ),
-    mastrHSL( "hsl" )
+    mpAnimationNodeAttributeTokenMap( nullptr )
 {
 }
 

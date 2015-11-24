@@ -148,7 +148,6 @@ SdXMLShapeContext::SdXMLShapeContext(
     , mxAttrList(xAttrList)
     , mbListContextPushed( false )
     , mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID)
-    , mnClass(0)
     , mbIsPlaceholder(false)
     , mbClearDefaultAttributes( true )
     , mbIsUserTransformed(false)

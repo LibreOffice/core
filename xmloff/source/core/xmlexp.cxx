@@ -257,9 +257,6 @@ public:
 
     SvtSaveOptions                                      maSaveOptions;
 
-    /// relative path of stream in package, e.g. "someobject/content.xml"
-    OUString mStreamPath;
-
     /// name of stream in package, e.g., "content.xml"
     OUString mStreamName;
 

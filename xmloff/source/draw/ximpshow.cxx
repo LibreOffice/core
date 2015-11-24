@@ -54,17 +54,12 @@ public:
     Reference< XPropertySet > mxPresProps;
     Reference< XNameAccess > mxPages;
     OUString maCustomShowName;
-    SdXMLImport& mrImport;
-
-    explicit ShowsImpImpl( SdXMLImport& rImport )
-    :   mrImport( rImport )
-    {}
 };
 
 
 SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
-    mpImpl(new ShowsImpImpl( rImport ) )
+    mpImpl(new ShowsImpImpl )
 {
 
     Reference< XCustomPresentationSupplier > xShowsSupplier( rImport.GetModel(), UNO_QUERY );

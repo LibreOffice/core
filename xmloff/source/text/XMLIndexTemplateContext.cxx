@@ -102,7 +102,6 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
 ,   sChapterLevel("ChapterLevel") //#i53420
 
 ,   sLevelFormat("LevelFormat")
-,   sParaStyleLevel("ParaStyleLevel")
 {
     DBG_ASSERT( ((XML_TOKEN_INVALID != eLevelAttrName) &&  (nullptr != pLevelNameMap))
                 || ((XML_TOKEN_INVALID == eLevelAttrName) &&  (nullptr == pLevelNameMap)),

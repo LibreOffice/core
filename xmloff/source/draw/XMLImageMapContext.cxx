@@ -104,7 +104,6 @@ protected:
     const OUString sCenter;
     const OUString sTitle;
     const OUString sDescription;
-    const OUString sImageMap;
     const OUString sIsActive;
     const OUString sName;
     const OUString sPolygon;
@@ -170,7 +169,6 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
         sCenter("Center"),
         sTitle("Title"),
         sDescription("Description"),
-        sImageMap("ImageMap"),
         sIsActive("IsActive"),
         sName("Name"),
         sPolygon("Polygon"),

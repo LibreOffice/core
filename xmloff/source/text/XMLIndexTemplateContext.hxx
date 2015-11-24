@@ -109,7 +109,6 @@ public:
     const OUString sChapterLevel;//i53420
 
     const OUString sLevelFormat;
-    const OUString sParaStyleLevel;
 
 
 
