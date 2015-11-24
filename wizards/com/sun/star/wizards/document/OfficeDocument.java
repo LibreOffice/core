@@ -102,67 +102,49 @@ public class OfficeDocument
 
     private static XFrame createNewPreviewFrame(XMultiServiceFactory xMSF, XTerminateListener listener)
     {
-        XToolkit xToolkit = null;
+        XFrame xFrame = null;
         try
         {
-            xToolkit = UnoRuntime.queryInterface(XToolkit.class, xMSF.createInstance("com.sun.star.awt.Toolkit"));
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            XToolkit xToolkit = UnoRuntime.queryInterface(XToolkit.class, xMSF.createInstance("com.sun.star.awt.Toolkit"));
 
-        //describe the window and its properties
-        WindowDescriptor aDescriptor = new WindowDescriptor();
-        aDescriptor.Type = com.sun.star.awt.WindowClass.TOP;
-        aDescriptor.WindowServiceName = "window";
-        aDescriptor.ParentIndex = -1;
-        aDescriptor.Parent = null;
-        aDescriptor.Bounds = new Rectangle(10, 10, 640, 480);
-        aDescriptor.WindowAttributes = WindowAttribute.BORDER |
+            //describe the window and its properties
+            WindowDescriptor aDescriptor = new WindowDescriptor();
+            aDescriptor.Type = com.sun.star.awt.WindowClass.TOP;
+            aDescriptor.WindowServiceName = "window";
+            aDescriptor.ParentIndex = -1;
+            aDescriptor.Parent = null;
+            aDescriptor.Bounds = new Rectangle(10, 10, 640, 480);
+            aDescriptor.WindowAttributes = WindowAttribute.BORDER |
                 WindowAttribute.MOVEABLE |
                 WindowAttribute.SIZEABLE |
                 //WindowAttribute.CLOSEABLE            |
                 VclWindowPeerAttribute.CLIPCHILDREN;
 
-        //create a new blank container window
-        XWindowPeer xPeer = null;
-        try
-        {
-            xPeer = UnoRuntime.queryInterface(XWindowPeer.class, xToolkit.createWindow(aDescriptor));
-        }
-        catch (IllegalArgumentException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, xPeer);
+            //create a new blank container window
+            XWindowPeer xPeer = UnoRuntime.queryInterface(XWindowPeer.class, xToolkit.createWindow(aDescriptor));
+            XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, xPeer);
 
-        //define some further properties of the frame window
-        //if it's needed .-)
-        //xPeer->setBackground(...);
+            //define some further properties of the frame window
+            //if it's needed .-)
+            //xPeer->setBackground(...);
 
-        //create new empty frame and set window on it
-        XFrame xFrame = null;
-        try
-        {
+            //create new empty frame and set window on it
             xFrame = UnoRuntime.queryInterface(XFrame.class, xMSF.createInstance("com.sun.star.frame.Frame"));
+            xFrame.initialize(xWindow);
+
+            //from now this frame is useable ...
+            //and not part of the desktop tree.
+            //You are alone with him .-)
+
+            if (listener != null)
+            {
+                Desktop.getDesktop(xMSF).addTerminateListener(listener);
+            }
         }
         catch (Exception e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        xFrame.initialize(xWindow);
-
-        //from now this frame is useable ...
-        //and not part of the desktop tree.
-        //You are alone with him .-)
-
-        if (listener != null)
-        {
-            Desktop.getDesktop(xMSF).addTerminateListener(listener);
         }
 
         return xFrame;
