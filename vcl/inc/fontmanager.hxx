@@ -246,7 +246,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     fontID                                      m_nNextFontID;
     std::unordered_map< fontID, PrintFont* >       m_aFonts;
     std::unordered_map< int, FontFamily >        m_aFamilyTypes;
-    std::list< OUString >              m_aPrinterDrivers;
     std::list< OString >               m_aFontDirectories;
     std::list< int >                            m_aPrivateFontDirectories;
     utl::MultiAtomProvider*                   m_pAtoms;
@@ -319,7 +318,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     static bool addFontconfigDir(const OString& rDirectory);
 
     std::set<OString> m_aPreviousLangSupportRequests;
-    std::vector<OString> m_aCurrentRequests;
     Timer m_aFontInstallerTimer;
 
 #if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)

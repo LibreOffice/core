@@ -36,7 +36,6 @@ struct BOX
 };
 struct _XRegion
 {
-    long size;
     long numRects;
     BOX *rects;
     BOX extents;

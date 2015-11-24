@@ -632,7 +632,6 @@ private:
     /* emit strucure marks currently (aka. NonStructElement or not)
      */
     bool                                m_bEmitStructure;
-    bool                                m_bNewMCID;
     /* role map of struct tree root */
     std::unordered_map< OString, OString, OStringHash >
                                         m_aRoleMap;

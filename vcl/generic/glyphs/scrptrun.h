@@ -47,13 +47,6 @@
 
 namespace vcl {
 
-struct ScriptRecord
-{
-    UChar32 startChar;
-    UChar32 endChar;
-    UScriptCode scriptCode;
-};
-
 struct ParenStackEntry
 {
     int32_t pairIndex;

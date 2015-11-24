@@ -36,16 +36,12 @@ class FilterConfigCache
         OUString sType;
         css::uno::Sequence< OUString > lExtensionList;
         OUString sUIName;
-        OUString sDocumentService;
-        OUString sFilterService;
-        OUString sTemplateName;
         OUString sExternalFilterName;
 
         OUString sMediaType;
         OUString sFilterType;
 
         sal_Int32       nFlags;
-        sal_Int32       nFileFormatVersion;
 
         // user data
         OUString        sFilterName;

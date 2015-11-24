@@ -122,7 +122,6 @@ struct ImplSVAppData
     OUString*               mpAppName;                      // Application name
     OUString*               mpAppFileName;                  // Abs. Application FileName
     OUString*               mpDisplayName;                  // Application Display Name
-    OUString*               mpFontPath;                     // Additional Fontpath
     Help*                   mpHelp;                         // Application help
     PopupMenu*              mpActivePopupMenu;              // Actives Popup-Menu (in Execute)
     ImplIdleMgr*            mpIdleMgr;                      // Idle-Manager
@@ -133,7 +132,6 @@ struct ImplSVAppData
     sal_uInt16              mnDispatchLevel;                // DispatchLevel
     sal_uInt16              mnModalMode;                    // ModalMode Count
     sal_uInt16              mnModalDialog;                  // ModalDialog Count
-    sal_uInt16              mnAccessCount;                  // AccessHdl Count
     SystemWindowFlags       mnSysWinMode;                   // Mode, when SystemWindows should be created
     short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
     bool                    mbInAppMain;                    // is Application::Main() on stack
@@ -230,7 +228,6 @@ struct ImplSVCtrlData
     sal_uInt16              mnRadioStyle;                   // Radio-Style for ImageList-Update
     sal_uLong               mnLastCheckFColor;              // Letzte FaceColor fuer CheckImage
     sal_uLong               mnLastCheckWColor;              // Letzte WindowColor fuer CheckImage
-    sal_uLong               mnLastCheckWTextColor;          // Letzte WindowTextColor fuer CheckImage
     sal_uLong               mnLastCheckLColor;              // Letzte LightColor fuer CheckImage
     sal_uLong               mnLastRadioFColor;              // Letzte FaceColor fuer RadioImage
     sal_uLong               mnLastRadioWColor;              // Letzte WindowColor fuer RadioImage
@@ -325,8 +322,6 @@ struct ImplSVData
     Application*            mpApp;                          // pApp
     VclPtr<WorkWindow>      mpDefaultWin;                   // Default-Window
     bool                    mbDeInit;                       // Is VCL deinitializing
-    sal_uLong               mnThreadCount;                  // is VCL MultiThread enabled
-    ImplConfigData*         mpFirstConfigData;              // pointer to the first config block
     ImplSchedulerData*      mpFirstSchedulerData;           // list of all running tasks
     SalTimer*               mpSalTimer;                     // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus;                    // interface to ime status window
