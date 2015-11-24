@@ -6359,7 +6359,7 @@ fi
 
 HAVE_GCC_PRAGMA_OPERATOR=
 dnl _Pragma support (may require C++11)
-if test "$GCC" = "yes"; then
+if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether $CXX supports _Pragma operator])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
