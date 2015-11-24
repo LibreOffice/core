@@ -31,7 +31,6 @@ struct ImplSchedulerData
     bool                mbDelete;    // Destroy this scheduler?
     bool                mbInScheduler;    // Scheduler currently processed?
     sal_uInt64          mnUpdateTime;   // Last Update Time
-    sal_uInt32          mnUpdateStack;  // Update Stack
 
     void Invoke();
 

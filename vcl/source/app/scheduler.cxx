@@ -48,8 +48,9 @@ ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly )
 
     for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
-        if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete || pSchedulerData->mnUpdateStack >= pSVData->mnUpdateStack
-            || !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly ) || !pSchedulerData->mpScheduler->IsActive())
+        if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete ||
+             !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly ) ||
+             !pSchedulerData->mpScheduler->IsActive())
             continue;
         if (!pMostUrgent)
             pMostUrgent = pSchedulerData;
@@ -125,10 +126,8 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce)
     if ( !nMS )
         nMS = 1;
 
-    // Update timeout only when not in timer handler and
-    // only if smaller timeout, to avoid skipping.
-    if (bForce || (!pSVData->mnUpdateStack &&
-                   nMS < pSVData->mnTimerPeriod))
+    // Only if smaller timeout, to avoid skipping.
+    if (bForce || nMS < pSVData->mnTimerPeriod)
     {
         pSVData->mnTimerPeriod = nMS;
         pSVData->mpSalTimer->Start(nMS);
@@ -166,7 +165,6 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     ImplSVData*        pSVData = ImplGetSVData();
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
     sal_uInt64         nMinPeriod = MaximumTimeoutMs;
-    pSVData->mnUpdateStack++;
 
     // tdf#91727 - NB. bTimer is ultimately not used
     if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimer)))
@@ -198,7 +196,6 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
         }
         else
         {
-            pSchedulerData->mnUpdateStack = 0;
             nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod( nMinPeriod, nTime );
             pPrevSchedulerData = pSchedulerData;
             pSchedulerData = pSchedulerData->mpNext;
@@ -216,7 +213,6 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     {
         Scheduler::ImplStartTimer(nMinPeriod, true);
     }
-    pSVData->mnUpdateStack--;
 }
 
 void Scheduler::Start()
@@ -253,7 +249,6 @@ void Scheduler::Start()
     }
     mpSchedulerData->mbDelete      = false;
     mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
-    mpSchedulerData->mnUpdateStack = pSVData->mnUpdateStack;
 }
 
 void Scheduler::Stop()
