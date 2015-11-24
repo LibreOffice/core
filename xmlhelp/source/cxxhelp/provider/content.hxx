@@ -39,14 +39,6 @@ namespace chelp
 
     class Databases;
 
-    struct ContentProperties
-    {
-        OUString aTitle;         // Title
-        OUString aContentType;   // ContentType
-
-        ContentProperties() {}
-    };
-
     class Content : public ::ucbhelper::ContentImplHelper
     {
     public:
@@ -106,7 +98,6 @@ namespace chelp
 
         // private members;
 
-        ContentProperties m_aProps;
         URLParameter      m_aURLParameter;
         Databases*        m_pDatabases;
 

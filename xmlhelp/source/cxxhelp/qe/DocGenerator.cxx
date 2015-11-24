@@ -29,7 +29,6 @@ RoleFiller RoleFiller::roleFiller_;
 
 
 RoleFiller::RoleFiller()
-    : fillers_( 0 )
 {
 }
 

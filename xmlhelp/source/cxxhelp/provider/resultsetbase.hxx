@@ -52,7 +52,6 @@ namespace chelp {
 
         ResultSetBase( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >&  rxContext,
                        const com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >&  xProvider,
-                       sal_Int32 nOpenMode,
                        const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq,
                        const com::sun::star::uno::Sequence< com::sun::star::ucb::NumberedSortingInfo >& seqSort );
 
@@ -537,7 +536,6 @@ namespace chelp {
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >  m_xProvider;
         sal_Int32                           m_nRow;
         bool                                m_nWasNull;
-        sal_Int32                           m_nOpenMode;
         bool                                m_bRowCountFinal;
 
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > > IdentSet;

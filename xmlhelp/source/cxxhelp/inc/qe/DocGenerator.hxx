@@ -35,8 +35,6 @@ namespace xmlsearch {
 
         private:
             static RoleFiller roleFiller_;
-
-            std::vector< RoleFiller* > fillers_;
         };
     }
 }

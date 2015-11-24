@@ -358,7 +358,6 @@ namespace chelp {
         Databases&                                                                  m_rDatabases;
 
         IteratorState                                                               m_eState;
-        OUString                                                               m_aExtensionPath;
 
         OUString                                                               m_aInitialModule;
         OUString                                                               m_aLanguage;

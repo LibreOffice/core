@@ -33,14 +33,12 @@ using namespace com::sun::star;
 
 ResultSetBase::ResultSetBase( const uno::Reference< uno::XComponentContext >&  rxContext,
                               const uno::Reference< ucb::XContentProvider >&  xProvider,
-                              sal_Int32 nOpenMode,
                               const uno::Sequence< beans::Property >& seq,
                               const uno::Sequence< ucb::NumberedSortingInfo >& seqSort )
     : m_xContext( rxContext ),
       m_xProvider( xProvider ),
       m_nRow( -1 ),
       m_nWasNull( true ),
-      m_nOpenMode( nOpenMode ),
       m_bRowCountFinal( true ),
       m_sProperty( seq ),
       m_sSortingInfo( seqSort ),

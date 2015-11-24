@@ -593,16 +593,13 @@ bool URLParameter::query()
 
 struct UserData {
 
-    UserData( InputStreamTransformer* pTransformer,
-              URLParameter*           pInitial,
+    UserData( URLParameter*           pInitial,
               Databases*              pDatabases )
-        : m_pTransformer( pTransformer ),
-          m_pDatabases( pDatabases ),
+        : m_pDatabases( pDatabases ),
           m_pInitial( pInitial )
     {
     }
 
-    InputStreamTransformer*             m_pTransformer;
     Databases*                          m_pDatabases;
     URLParameter*                       m_pInitial;
 };
@@ -787,7 +784,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
     }
     else
     {
-        UserData userData( this,urlParam,pDatabases );
+        UserData userData( urlParam,pDatabases );
 
         // Uses the implementation detail, that OString::getStr returns a zero terminated character-array
 
