@@ -512,9 +512,9 @@ WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWF
     mhFont( (HFONT)GetCurrentObject(hDC,OBJ_FONT) ),
     mnBaseAdv( 0 ),
     mfFontScale( 1.0 ),
+    mbUseOpenGL(bUseOpenGL),
     mrWinFontData( rWFD ),
-    mrWinFontEntry(rWFE),
-    mbUseOpenGL(bUseOpenGL)
+    mrWinFontEntry(rWFE)
 {
     // keep mrWinFontEntry alive
     mrWinFontEntry.m_pFontCache->Acquire(&mrWinFontEntry);
