@@ -517,7 +517,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    pDlg.reset(pFact->CreateScAttrDlg(GetViewFrame(), GetDialogParent(), pOldSet.get()));
+    pDlg.reset(pFact->CreateScAttrDlg(GetDialogParent(), pOldSet.get()));
 
     if (!rName.isEmpty())
         pDlg->SetCurPageId(rName);

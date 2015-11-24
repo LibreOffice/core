@@ -463,12 +463,10 @@ public:
                                                                     bool                    bOnlyDbtoolsEncodings = false,
                                                                     bool                    bImport = true ) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScAttrDlg( SfxViewFrame*    pFrame,
-                                                    vcl::Window*          pParent,
+    virtual SfxAbstractTabDialog * CreateScAttrDlg( vcl::Window*          pParent,
                                                     const SfxItemSet* pCellAttrs ) = 0;
 
-    virtual SfxAbstractTabDialog * CreateScHFEditDlg( SfxViewFrame*     pFrame,
-                                                    vcl::Window*         pParent,
+    virtual SfxAbstractTabDialog * CreateScHFEditDlg(vcl::Window*         pParent,
                                                     const SfxItemSet&   rCoreSet,
                                                     const OUString&       rPageStyle,
                                                     sal_uInt16              nResId = RID_SCDLG_HFEDIT ) = 0;

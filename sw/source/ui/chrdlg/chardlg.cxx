@@ -61,7 +61,7 @@ using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     sal_uInt8 nDialogMode, const OUString* pStr)
-    : SfxTabDialog(nullptr, pParent, "CharacterPropertiesDialog",
+    : SfxTabDialog(pParent, "CharacterPropertiesDialog",
         "modules/swriter/ui/characterproperties.ui", &rCoreSet, pStr != nullptr)
     , m_rView(rVw)
     , m_nDialogMode(nDialogMode)

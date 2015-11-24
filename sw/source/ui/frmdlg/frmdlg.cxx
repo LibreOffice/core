@@ -45,18 +45,17 @@
 
 // the dialog's carrier
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
-                    vcl::Window*             pParent,
+                    vcl::Window*        pParent,
                     const SfxItemSet&   rCoreSet,
                     bool                bNewFrm,
-                    const OUString&      sResType,
+                    const OUString&     sResType,
                     bool                bFormat,
                     const OString&      sDefPage,
                     const OUString*     pStr)
 
-    : SfxTabDialog(pViewFrame, pParent, sResType,
-        "modules/swriter/ui/" +
-        sResType.toAsciiLowerCase() +
-        (".ui"), &rCoreSet, pStr != nullptr)
+    : SfxTabDialog(pParent, sResType,
+        "modules/swriter/ui/" + sResType.toAsciiLowerCase() + ".ui",
+        &rCoreSet, pStr != nullptr)
     , m_bFormat(bFormat)
     , m_bNew(bNewFrm)
     , m_rSet(rCoreSet)

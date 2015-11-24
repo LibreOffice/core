@@ -23,7 +23,6 @@ protected:
     long    mnItemMaxSize;
     long    mnTextHeight;
     long    mnItemPadding;
-    size_t mnLastMouseDownItem;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEDEFAULTVIEW_HXX

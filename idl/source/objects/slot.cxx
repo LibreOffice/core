@@ -725,11 +725,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         rOutStm.WriteCharPtr( "SFX_NEW_SLOT_ARG( " ).WriteCharPtr( rShellName.getStr() ).WriteChar( ',' ) ;
 
     rOutStm.WriteCharPtr( rSlotId.getStr() ).WriteChar( ',' );
-    const SvHelpContext& rHlpCtx = GetHelpContext();
-    if( rHlpCtx.IsSet() )
-        rOutStm.WriteCharPtr( rHlpCtx.getString().getStr() ).WriteChar( ',' );
-    else
-        rOutStm.WriteCharPtr( rSlotId.getStr() ).WriteChar( ',' );
 
     // GroupId
     if( !GetGroupId().isEmpty() )

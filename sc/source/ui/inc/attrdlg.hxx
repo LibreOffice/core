@@ -29,8 +29,7 @@ class SfxItemSet;
 class ScAttrDlg : public SfxTabDialog
 {
 public:
-                ScAttrDlg( SfxViewFrame*     pFrame,
-                           vcl::Window*           pParent,
+                ScAttrDlg( vcl::Window*           pParent,
                            const SfxItemSet* pCellAttrs );
                 virtual ~ScAttrDlg();
 

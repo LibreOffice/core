@@ -187,7 +187,7 @@ IMPL_LINK_NOARG_TYPED(ScHFPage, HFEditHdl, void*, void)
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
         std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
-            pViewSh->GetViewFrame(), this, aDataSet, aStrPageStyle, nResId));
+            this, aDataSet, aStrPageStyle, nResId));
 
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )

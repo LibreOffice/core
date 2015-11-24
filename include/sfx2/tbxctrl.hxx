@@ -282,10 +282,6 @@ class SfxAddonsToolBoxControl_Impl : public SfxToolBoxControl
 */
 
 {
-    bool        bBigImages;
-    PopupMenu*  pMenu;
-    bool        m_bShowMenuImages;
-
 protected:
     virtual void            Click() override;
     virtual void            Select(sal_uInt16 nSelectModifier) override;

@@ -1182,7 +1182,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
 SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
                                               const SfxItemSet& rItemSet )
-    : SfxTabDialog(nullptr, pParent, "DocumentPropertiesDialog",
+    : SfxTabDialog(pParent, "DocumentPropertiesDialog",
         "sfx/ui/documentpropertiesdialog.ui", &rItemSet)
     , m_nDocInfoId(0)
 {

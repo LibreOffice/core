@@ -20,7 +20,6 @@ TemplateDefaultView::TemplateDefaultView( Window* pParent)
     : TemplateLocalView(pParent)
     , mnTextHeight(30)
     , mnItemPadding(5)
-    , mnLastMouseDownItem( THUMBNAILVIEW_ITEM_NOTFOUND )
 {
     Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;

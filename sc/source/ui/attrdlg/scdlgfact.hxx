@@ -528,12 +528,10 @@ public:
                                                                     bool                    bMultiByte = false,
                                                                     bool                    bOnlyDbtoolsEncodings = false,
                                                                     bool                    bImport = true ) override;
-    virtual SfxAbstractTabDialog * CreateScAttrDlg( SfxViewFrame*    pFrame,
-                                                    vcl::Window*          pParent,
+    virtual SfxAbstractTabDialog * CreateScAttrDlg( vcl::Window*          pParent,
                                                     const SfxItemSet* pCellAttrs ) override;
 
-    virtual SfxAbstractTabDialog * CreateScHFEditDlg( SfxViewFrame*     pFrame,
-                                                    vcl::Window*         pParent,
+    virtual SfxAbstractTabDialog * CreateScHFEditDlg(vcl::Window*         pParent,
                                                     const SfxItemSet&   rCoreSet,
                                                     const OUString&     rPageStyle,
                                                     sal_uInt16              nResId = RID_SCDLG_HFEDIT ) override;

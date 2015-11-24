@@ -312,30 +312,6 @@ SfxTabDialog* SfxTabPage::GetTabDialog() const
 
 
 SfxTabDialog::SfxTabDialog
-(
-    SfxViewFrame* pViewFrame,     // Frame, to which the Dialog belongs
-    vcl::Window* pParent,              // Parent Window
-    const OUString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
-    const SfxItemSet* pItemSet,   // Itemset with the data;
-                                  // can be NULL, when Pages are onDemand
-    bool bEditFmt                 // when yes -> additional Button for standard
-)
-    : TabDialog(pParent, rID, rUIXMLDescription)
-    , pFrame(pViewFrame)
-    , pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
-    , pOutSet(nullptr)
-    , pRanges(nullptr)
-    , nAppPageId(USHRT_MAX)
-    , bItemsReset(false)
-    , bStandardPushed(false)
-    , pExampleSet(nullptr)
-{
-    Init_Impl(bEditFmt);
-}
-
-
-
-SfxTabDialog::SfxTabDialog
 
 /*  [Description]
 
@@ -350,7 +326,6 @@ SfxTabDialog::SfxTabDialog
     bool bEditFmt                 // when yes -> additional Button for standard
 )
     : TabDialog(pParent, rID, rUIXMLDescription)
-    , pFrame(nullptr)
     , pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
     , pOutSet(nullptr)
     , pRanges(nullptr)
@@ -360,7 +335,6 @@ SfxTabDialog::SfxTabDialog
     , pExampleSet(nullptr)
 {
     Init_Impl(bEditFmt);
-    SAL_INFO( "sfx.config", "Please use the Construtor with the ViewFrame" );
 }
 
 

@@ -168,7 +168,7 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
 // tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
 static SfxSlot aFontworkBarSlots_Impl[] =
 {
-    { 0, 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, 0, nullptr }
+    { 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, 0, nullptr }
 };
 
 SFX_IMPL_INTERFACE(FontworkBar, SfxShell)

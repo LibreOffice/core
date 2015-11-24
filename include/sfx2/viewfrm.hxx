@@ -295,23 +295,6 @@ public:
                             { return pFrame; }
 };
 
-class SfxVerbListItem : public SfxPoolItem
-{
-    css::uno::Sequence < css::embed::VerbDescriptor > aVerbs;
-
-public:
-                            SfxVerbListItem( sal_uInt16 nWhichId = SID_OBJECT ) :
-                                SfxPoolItem( nWhichId )
-                            {}
-
-                            SfxVerbListItem( sal_uInt16 nWhichId, const css::uno::Sequence < css::embed::VerbDescriptor >& );
-
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

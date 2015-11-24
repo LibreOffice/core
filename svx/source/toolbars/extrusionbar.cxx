@@ -51,7 +51,7 @@ using namespace ::com::sun::star::uno;
 // tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
 static SfxSlot aExtrusionBarSlots_Impl[] =
 {
-    { 0, 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, 0, nullptr }
+    { 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, 0, nullptr }
 };
 
 SFX_IMPL_INTERFACE(ExtrusionBar, SfxShell)

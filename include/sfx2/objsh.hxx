@@ -211,7 +211,6 @@ private:
 
     SfxMedium *                 pMedium;  // Description of the file for example
                                           // storage that contains the object
-    SfxStyleSheetBasePool*      pStyleSheetPool;    // StyleSheets
     SfxObjectCreateMode         eCreateMode;      // Purpose of the object
     bool                        bHasName :1;      // sal_True  := existing object,
                                                   // sal_False := new object

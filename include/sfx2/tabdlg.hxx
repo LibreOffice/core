@@ -61,8 +61,6 @@ private:
 friend class SfxTabPage;
 friend class SfxTabDialogController;
 
-    SfxViewFrame*   pFrame;
-
     VclPtr<VclBox>     m_pBox;
     VclPtr<TabControl> m_pTabCtrl;
 
@@ -122,9 +120,6 @@ protected:
 
 public:
     SfxTabDialog(vcl::Window* pParent,
-                 const OUString& rID, const OUString& rUIXMLDescription,
-                 const SfxItemSet * = nullptr, bool bEditFmt = false);
-    SfxTabDialog(SfxViewFrame *pViewFrame, vcl::Window* pParent,
                  const OUString& rID, const OUString& rUIXMLDescription,
                  const SfxItemSet * = nullptr, bool bEditFmt = false);
     virtual ~SfxTabDialog();

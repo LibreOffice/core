@@ -162,7 +162,7 @@ SFX_DECL_TYPE(22); // for SvxSearchItem
 #undef SFX_DECL_TYPE
 
 #define SFX_SLOT_ARG( aShellClass, id, GroupId, ExecMethodPtr, StateMethodPtr, Flags, ItemClass, nArg0, nArgs, Name, Prop ) \
-               { id, GroupId, id, Flags | Prop, \
+               { id, GroupId, Flags | Prop, \
                  USHRT_MAX, 0, \
                  ExecMethodPtr, \
                  StateMethodPtr, \
@@ -172,7 +172,7 @@ SFX_DECL_TYPE(22); // for SvxSearchItem
                }
 
 #define SFX_SLOT( aShellClass, id, GroupId, ExecMethodPtr, StateMethodPtr, Flags, ItemClass ) \
-               { id, GroupId, id, Flags, \
+               { id, GroupId, Flags, \
                  0, 0, \
                  ExecMethodPtr, \
                  StateMethodPtr, \
@@ -180,8 +180,8 @@ SFX_DECL_TYPE(22); // for SvxSearchItem
                  0, 0, 0, 0, 0 \
                }
 
-#define SFX_NEW_SLOT_ARG( aShellClass, id, hid, GroupId, pLinked, pNext, ExecMethodPtr, StateMethodPtr, Flags, DisableFlags, ItemClass, nArg0, nArgs, Prop, UnoName ) \
-               { id, GroupId, hid, Flags | Prop, \
+#define SFX_NEW_SLOT_ARG( aShellClass, id, GroupId, pLinked, pNext, ExecMethodPtr, StateMethodPtr, Flags, DisableFlags, ItemClass, nArg0, nArgs, Prop, UnoName ) \
+               { id, GroupId, Flags | Prop, \
                  USHRT_MAX, 0, \
                  ExecMethodPtr, \
                  StateMethodPtr, \
@@ -190,8 +190,8 @@ SFX_DECL_TYPE(22); // for SvxSearchItem
                  &a##aShellClass##Args_Impl[nArg0], nArgs, DisableFlags, UnoName \
                }
 
-#define SFX_NEW_SLOT_ENUM( SlaveId, hid, GroupId, pMaster, pNext, MasterId, Value, Flags, DisableFlags, UnoName  ) \
-               { SlaveId, GroupId, hid, Flags,   \
+#define SFX_NEW_SLOT_ENUM( SlaveId, GroupId, pMaster, pNext, MasterId, Value, Flags, DisableFlags, UnoName  ) \
+               { SlaveId, GroupId, Flags,   \
                  MasterId,  Value, \
                  0, \
                  0, \
@@ -222,7 +222,6 @@ class SfxSlot
 public:
     sal_uInt16    nSlotId;   // Unique slot-ID in Shell
     sal_uInt16    nGroupId;  // for configuration region
-    sal_uIntPtr   nHelpId;   // Usually == nSlotId
     SfxSlotMode   nFlags;    // arithmetic ordered Flags
 
     sal_uInt16    nMasterSlotId;  // Enum-Slot for example Which-Id

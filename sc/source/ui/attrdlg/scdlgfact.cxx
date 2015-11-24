@@ -904,15 +904,13 @@ AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptions
     return new AbstractScImportOptionsDlg_Impl( pDlg );
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg(SfxViewFrame* pFrame,
-    vcl::Window* pParent, const SfxItemSet* pCellAttrs)
+SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<ScAttrDlg>::Create(pFrame, pParent, pCellAttrs);
+    VclPtr<SfxTabDialog> pDlg = VclPtr<ScAttrDlg>::Create(pParent, pCellAttrs);
     return new ScAbstractTabDialog_Impl(pDlg);
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewFrame*       pFrame,
-                                                                        vcl::Window*         pParent,
+SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( vcl::Window*         pParent,
                                                                         const SfxItemSet&   rCoreSet,
                                                                         const OUString&     rPageStyle,
                                                                         sal_uInt16          nResId )
@@ -923,36 +921,36 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
     {
         case RID_SCDLG_HFED_HEADER:
         case RID_SCDLG_HFEDIT_HEADER:
-            pDlg = VclPtr<ScHFEditHeaderDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditHeaderDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFED_FOOTER:
         case RID_SCDLG_HFEDIT_FOOTER:
-            pDlg = VclPtr<ScHFEditFooterDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditFooterDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_LEFTHEADER:
-            pDlg = VclPtr<ScHFEditLeftHeaderDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditLeftHeaderDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_RIGHTHEADER:
-            pDlg = VclPtr<ScHFEditRightHeaderDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditRightHeaderDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_LEFTFOOTER:
-            pDlg = VclPtr<ScHFEditLeftFooterDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditLeftFooterDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_RIGHTFOOTER:
-            pDlg = VclPtr<ScHFEditRightFooterDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditRightFooterDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_SHDR:
-            pDlg = VclPtr<ScHFEditSharedHeaderDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditSharedHeaderDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_SFTR:
-            pDlg = VclPtr<ScHFEditSharedFooterDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditSharedFooterDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_ALL:
-            pDlg = VclPtr<ScHFEditAllDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditAllDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
         default:
         case RID_SCDLG_HFEDIT:
-            pDlg = VclPtr<ScHFEditActiveDlg>::Create(pFrame, pParent, rCoreSet, rPageStyle);
+            pDlg = VclPtr<ScHFEditActiveDlg>::Create(pParent, rCoreSet, rPageStyle);
             break;
     }
 
