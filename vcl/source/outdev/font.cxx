@@ -2130,11 +2130,10 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
         // find a font family suited for glyph fallback
-#ifndef FONTFALLBACK_HOOKS_DISABLED
         // GetGlyphFallbackFont() needs a valid aFontSelData.mpFontEntry
         // if the system-specific glyph fallback is active
         aFontSelData.mpFontEntry = mpFontEntry; // reset the fontentry to base-level
-#endif
+
         ImplFontEntry* pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontCollection,
             aFontSelData, nFallbackLevel, aMissingCodes );
         if( !pFallbackFont )
