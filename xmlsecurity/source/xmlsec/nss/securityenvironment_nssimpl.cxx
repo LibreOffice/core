@@ -548,9 +548,9 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
                 if( xcert != NULL )
                     certsList.push_back( xcert ) ;
             }
+            SECKEY_DestroyPrivateKeyList( priKeyList ) ;
         }
 
-        SECKEY_DestroyPrivateKeyList( priKeyList ) ;
     }
 
     //secondly, we try to find certificate from registered private keys.
