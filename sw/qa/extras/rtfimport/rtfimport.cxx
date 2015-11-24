@@ -2373,6 +2373,27 @@ DECLARE_RTFIMPORT_TEST(testTdf59454, "tdf59454.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFIMPORT_TEST(testBreakpageLandscapeTable, "breakpage-landscape-table.rtf")
+{
+    // This was 1, missing break with new page (landscape) and table
+    uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
+
+    uno::Reference<beans::XPropertySet> xStyle(pageStyles->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xStyle, "IsLandscape"));
+
+    // get a page cursor and go to last page
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    uno::Reference<beans::XPropertySet> xStylePage(getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
