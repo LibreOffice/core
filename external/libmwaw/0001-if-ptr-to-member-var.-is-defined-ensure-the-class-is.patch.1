@@ -1,0 +1,56 @@
+From 2d178367e7029a98fb555a084c1c946c8826ff06 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Tue, 24 Nov 2015 15:15:36 +0100
+Subject: [PATCH] if ptr to member var. is defined, ensure the class is
+ complete
+
+... because MSVC represents pointers to member as variable size,
+depending on context (e.g., multiple inheritance). So it can happen that
+the size of the pointer in the header (where the class is only
+forward-declared) differs from the size of the same pointer in an impl.
+file (where the class is complete).
+---
+ src/lib/ClarisWksDocument.hxx | 1 +
+ src/lib/GreatWksDocument.hxx  | 1 +
+ src/lib/MsWksDocument.hxx     | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/src/lib/ClarisWksDocument.hxx b/src/lib/ClarisWksDocument.hxx
+index 2b70860..3003b6a 100644
+--- a/src/lib/ClarisWksDocument.hxx
++++ b/src/lib/ClarisWksDocument.hxx
+@@ -42,6 +42,7 @@
+ 
+ #include "libmwaw_internal.hxx"
+ 
++#include "MWAWParser.hxx"
+ #include "MWAWPosition.hxx"
+ 
+ #include "ClarisWksStruct.hxx"
+diff --git a/src/lib/GreatWksDocument.hxx b/src/lib/GreatWksDocument.hxx
+index 2e00451..2e13dc2 100644
+--- a/src/lib/GreatWksDocument.hxx
++++ b/src/lib/GreatWksDocument.hxx
+@@ -41,6 +41,7 @@
+ 
+ #include "MWAWCell.hxx"
+ #include "MWAWDebug.hxx"
++#include "MWAWParser.hxx"
+ 
+ namespace GreatWksDocumentInternal
+ {
+diff --git a/src/lib/MsWksDocument.hxx b/src/lib/MsWksDocument.hxx
+index a212e7f..e96f5dd 100644
+--- a/src/lib/MsWksDocument.hxx
++++ b/src/lib/MsWksDocument.hxx
+@@ -44,6 +44,7 @@
+ 
+ #include "MWAWDebug.hxx"
+ #include "MWAWCell.hxx"
++#include "MWAWParser.hxx"
+ 
+ namespace MsWksDocumentInternal
+ {
+-- 
+2.5.0
+
