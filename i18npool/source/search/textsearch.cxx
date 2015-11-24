@@ -338,28 +338,28 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         else
             endPos = in_str.getLength();
 
-    bUsePrimarySrchStr = false;
+        bUsePrimarySrchStr = false;
         sres2 = (this->*fnForward)( in_str, startPos, endPos );
 
         for ( int k = 0; k < sres2.startOffset.getLength(); k++ )
         {
             if (sres2.startOffset[k])
-          sres2.startOffset[k] = offset[sres2.startOffset[k]-1] + 1;
+                sres2.startOffset[k] = offset[sres2.startOffset[k]-1] + 1;
             if (sres2.endOffset[k])
-          sres2.endOffset[k] = offset[sres2.endOffset[k]-1] + 1;
+                sres2.endOffset[k] = offset[sres2.endOffset[k]-1] + 1;
         }
 
-    // pick first and long one
-    if ( sres.subRegExpressions == 0)
-        return sres2;
-    if ( sres2.subRegExpressions == 1)
-    {
-        if ( sres.startOffset[0] > sres2.startOffset[0])
+        // pick first and long one
+        if ( sres.subRegExpressions == 0)
             return sres2;
-        else if ( sres.startOffset[0] == sres2.startOffset[0] &&
-            sres.endOffset[0] < sres2.endOffset[0])
-            return sres2;
-    }
+        if ( sres2.subRegExpressions == 1)
+        {
+            if ( sres.startOffset[0] > sres2.startOffset[0])
+                return sres2;
+            else if ( sres.startOffset[0] == sres2.startOffset[0] &&
+                    sres.endOffset[0] < sres2.endOffset[0])
+                return sres2;
+        }
     }
 
     return sres;
@@ -378,7 +378,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     {
         // apply only simple 1<->1 transliteration here
         css::uno::Sequence<sal_Int32> offset(startPos - endPos);
-    in_str = xTranslit->transliterate( searchStr, endPos, startPos - endPos, offset );
+        in_str = xTranslit->transliterate( searchStr, endPos, startPos - endPos, offset );
 
         // JP 20.6.2001: also the start and end positions must be corrected!
         sal_Int32 const newStartPos = (startPos < searchStr.getLength())
@@ -426,9 +426,9 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
 
     if ( xTranslit2.is() && aSrchPara.algorithmType != SearchAlgorithms_REGEXP )
     {
-    SearchResult sres2;
+        SearchResult sres2;
 
-    in_str = OUString(searchStr);
+        in_str = OUString(searchStr);
         css::uno::Sequence <sal_Int32> offset( in_str.getLength());
 
         in_str = xTranslit2->transliterate(searchStr, 0, in_str.getLength(), offset);
@@ -441,8 +441,8 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         if( endPos )
             endPos = FindPosInSeq_Impl( offset, endPos );
 
-    bUsePrimarySrchStr = false;
-    sres2 = (this->*fnBackward)( in_str, startPos, endPos );
+        bUsePrimarySrchStr = false;
+        sres2 = (this->*fnBackward)( in_str, startPos, endPos );
 
         for( int k = 0; k < sres2.startOffset.getLength(); k++ )
         {
@@ -452,17 +452,17 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
                 sres2.endOffset[k] = offset[sres2.endOffset[k]-1]+1;
         }
 
-    // pick last and long one
-    if ( sres.subRegExpressions == 0 )
-        return sres2;
-    if ( sres2.subRegExpressions == 1 )
-    {
-        if ( sres.startOffset[0] < sres2.startOffset[0] )
+        // pick last and long one
+        if ( sres.subRegExpressions == 0 )
             return sres2;
-        if ( sres.startOffset[0] == sres2.startOffset[0] &&
-        sres.endOffset[0] > sres2.endOffset[0] )
-            return sres2;
-    }
+        if ( sres2.subRegExpressions == 1 )
+        {
+            if ( sres.startOffset[0] < sres2.startOffset[0] )
+                return sres2;
+            if ( sres.startOffset[0] == sres2.startOffset[0] &&
+                    sres.endOffset[0] > sres2.endOffset[0] )
+                return sres2;
+        }
     }
 
     return sres;
@@ -507,7 +507,7 @@ void TextSearch::MakeForwardTab()
     {
         sal_Unicode cCh = sSrchStr[n];
         sal_Int32 nDiff = nLen - n - 1;
-    TextSearchJumpTable::value_type aEntry( cCh, nDiff );
+        TextSearchJumpTable::value_type aEntry( cCh, nDiff );
 
         ::std::pair< TextSearchJumpTable::iterator, bool > aPair =
             pJumpTable->insert( aEntry );
@@ -535,7 +535,7 @@ void TextSearch::MakeForwardTab2()
         sal_Unicode cCh = sSrchStr2[n];
         sal_Int32 nDiff = nLen - n - 1;
 
-    TextSearchJumpTable::value_type aEntry( cCh, nDiff );
+        TextSearchJumpTable::value_type aEntry( cCh, nDiff );
         ::std::pair< TextSearchJumpTable::iterator, bool > aPair =
             pJumpTable2->insert( aEntry );
         if ( !aPair.second )
@@ -599,11 +599,11 @@ sal_Int32 TextSearch::GetDiff( const sal_Unicode cChr ) const
     OUString sSearchKey;
 
     if ( bUsePrimarySrchStr ) {
-      pJump = pJumpTable;
-      sSearchKey = sSrchStr;
+        pJump = pJumpTable;
+        sSearchKey = sSrchStr;
     } else {
-      pJump = pJumpTable2;
-      sSearchKey = sSrchStr2;
+        pJump = pJumpTable2;
+        sSearchKey = sSrchStr2;
     }
 
     TextSearchJumpTable::const_iterator iLook = pJump->find( cChr );
@@ -700,9 +700,9 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
         return aRet;
 
     if (bUsePrimarySrchStr)
-      MakeBackwardTab();                      // create the jumptable
+        MakeBackwardTab();                  // create the jumptable
     else
-      MakeBackwardTab2();
+        MakeBackwardTab2();
 
     if( nEnde == nSuchIdx )                 // end position for the search
         nEnde = sSearchKey.getLength();
