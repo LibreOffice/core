@@ -81,30 +81,6 @@ static PALETTEENTRY aImplSalSysPalEntryAry[ DITHER_MAX_SYSCOLOR ] =
 { 0xFF, 0xFF, 0xFF, 0 }
 };
 
-static BYTE aOrdDither8Bit[8][8] =
-{
-   {  0, 38,  9, 48,  2, 40, 12, 50 },
-   { 25, 12, 35, 22, 28, 15, 37, 24 },
-   {  6, 44,  3, 41,  8, 47,  5, 44 },
-   { 32, 19, 28, 16, 34, 21, 31, 18 },
-   {  1, 40, 11, 49,  0, 39, 10, 48 },
-   { 27, 14, 36, 24, 26, 13, 36, 23 },
-   {  8, 46,  4, 43,  7, 45,  4, 42 },
-   { 33, 20, 30, 17, 32, 20, 29, 16 }
-};
-
-static BYTE aOrdDither16Bit[8][8] =
-{
-   { 0, 6, 1, 7, 0, 6, 1, 7 },
-   { 4, 2, 5, 3, 4, 2, 5, 3 },
-   { 1, 7, 0, 6, 1, 7, 0, 6 },
-   { 5, 3, 4, 2, 5, 3, 4, 2 },
-   { 0, 6, 1, 7, 0, 6, 1, 7 },
-   { 4, 2, 5, 3, 4, 2, 5, 3 },
-   { 1, 7, 0, 6, 1, 7, 0, 6 },
-   { 5, 3, 4, 2, 5, 3, 4, 2 }
-};
-
 // we must create pens with 1-pixel width; otherwise the S3-graphics card
 // map has many paint problems when drawing polygons/polyLines and a
 // complex is set
