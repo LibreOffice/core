@@ -227,8 +227,6 @@ protected:
 
     css::uno::Reference< css::uno::XComponentContext > getComponentContext() { return m_xContext;}
 
-    sal_uInt32 mnInstanceNumber;
-
     bool inPositionV;
 
 private:

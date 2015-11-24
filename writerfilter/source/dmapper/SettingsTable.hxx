@@ -45,7 +45,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     std::unique_ptr<SettingsTable_Impl> m_pImpl;
 
  public:
-    SettingsTable(DomainMapper& rDMapper, const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory);
+    SettingsTable(const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory);
     virtual ~SettingsTable();
 
     //returns default TabStop in 1/100th mm

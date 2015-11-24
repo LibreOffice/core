@@ -37,7 +37,6 @@ class DomainMapper;
 class TablePropertiesHandler
 {
 private:
-    std::vector< PropertyMapPtr > m_rPropertiesStack;
     PropertyMapPtr m_pCurrentProperties;
     std::vector<css::beans::PropertyValue>* m_pCurrentInteropGrabBag;
     TableManager* m_pTableManager;

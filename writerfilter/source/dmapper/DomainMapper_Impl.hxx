@@ -591,7 +591,7 @@ public:
     SettingsTablePtr GetSettingsTable()
     {
         if( !m_pSettingsTable )
-            m_pSettingsTable.reset( new SettingsTable( m_rDMapper, m_xTextFactory ) );
+            m_pSettingsTable.reset( new SettingsTable( m_xTextFactory ) );
         return m_pSettingsTable;
     }
 

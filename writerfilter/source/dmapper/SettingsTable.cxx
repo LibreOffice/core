@@ -41,7 +41,6 @@ namespace dmapper
 
 struct SettingsTable_Impl
 {
-    DomainMapper&       m_rDMapper;
     const uno::Reference< lang::XMultiServiceFactory > m_xTextFactory;
 
     OUString     m_sCharacterSpacing;
@@ -54,21 +53,6 @@ struct SettingsTable_Impl
     bool                m_bNoPunctuationKerning;
     bool                m_doNotIncludeSubdocsInStats; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     bool                m_bRecordChanges;
-    int                 m_nEdit;
-    bool                m_bFormatting;
-    bool                m_bEnforcement;
-    int                 m_nCryptProviderType;
-    int                 m_nCryptAlgorithmClass;
-    int                 m_nCryptAlgorithmType;
-    OUString     m_sCryptAlgorithmSid;
-    int                 m_nCryptSpinCount;
-    OUString     m_sCryptProvider;
-    OUString     m_sAlgIdExt;
-    OUString     m_sAlgIdExtSource;
-    OUString     m_sCryptProviderTypeExt;
-    OUString     m_sCryptProviderTypeExtSource;
-    OUString     m_sHash;
-    OUString     m_sSalt;
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
     Id                  m_nView;
@@ -87,21 +71,13 @@ struct SettingsTable_Impl
     std::vector<beans::PropertyValue> m_aCompatSettings;
     uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
 
-    SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > & xTextFactory ) :
-    m_rDMapper( rDMapper )
-    , m_xTextFactory( xTextFactory )
+    SettingsTable_Impl( const uno::Reference< lang::XMultiServiceFactory > & xTextFactory ) :
+      m_xTextFactory( xTextFactory )
     , m_nDefaultTabStop( 720 ) //default is 1/2 in
     , m_nHyphenationZone(0)
     , m_bNoPunctuationKerning(false)
     , m_doNotIncludeSubdocsInStats(false)
     , m_bRecordChanges(false)
-    , m_nEdit(NS_ooxml::LN_Value_doc_ST_DocProtect_none)
-    , m_bFormatting(false)
-    , m_bEnforcement(false)
-    , m_nCryptProviderType(NS_ooxml::LN_Value_doc_ST_CryptProv_rsaAES)
-    , m_nCryptAlgorithmClass(NS_ooxml::LN_Value_doc_ST_AlgClass_hash)
-    , m_nCryptAlgorithmType(NS_ooxml::LN_Value_doc_ST_AlgType_typeAny)
-    , m_nCryptSpinCount(0)
     , m_bLinkStyles(false)
     , m_nZoomFactor(0)
     , m_nView(0)
@@ -121,10 +97,10 @@ struct SettingsTable_Impl
 
 };
 
-SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > & xTextFactory)
+SettingsTable::SettingsTable(const uno::Reference< lang::XMultiServiceFactory > & xTextFactory)
 : LoggedProperties("SettingsTable")
 , LoggedTable("SettingsTable")
-, m_pImpl( new SettingsTable_Impl(rDMapper, xTextFactory) )
+, m_pImpl( new SettingsTable_Impl(xTextFactory) )
 {
 
 }

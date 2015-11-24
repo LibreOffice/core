@@ -196,12 +196,9 @@ public:
     GraphicImportType eGraphicImportType;
     DomainMapper&   rDomainMapper;
 
-    sal_Int32 nHoriScaling;
-    sal_Int32 nVertScaling;
     sal_Int32 nLeftPosition;
     sal_Int32 nTopPosition;
     sal_Int32 nRightPosition;
-    sal_Int32 nBottomPosition;
 
     bool      bUseSimplePos;
     sal_Int32 zOrder;
@@ -217,7 +214,6 @@ public:
     bool      bContour;
     bool      bContourOutside;
     WrapPolygon::Pointer_t mpWrapPolygon;
-    bool      bIgnoreWRK;
 
     sal_Int32 nLeftMargin;
     sal_Int32 nRightMargin;
@@ -241,11 +237,8 @@ public:
     GraphicBorderLine   aBorders[4];
     sal_Int32           nCurrentBorderLine;
 
-    sal_Int32       nDffType;
     bool            bIsGraphic;
     bool            bIsBitmap;
-    bool            bIsTiff;
-    sal_Int32       nBitsPerPixel;
 
     bool            bHoriFlip;
     bool            bVertFlip;
@@ -275,12 +268,9 @@ public:
         ,bYSizeValid(false)
         ,eGraphicImportType( eImportType )
         ,rDomainMapper( rDMapper )
-        ,nHoriScaling(0)
-        ,nVertScaling(0)
         ,nLeftPosition(0)
         ,nTopPosition(0)
         ,nRightPosition(0)
-        ,nBottomPosition(0)
         ,bUseSimplePos(false)
         ,zOrder(-1)
         ,nHoriOrient(   text::HoriOrientation::NONE )
@@ -293,7 +283,6 @@ public:
         ,bOpaque( true )
         ,bContour(false)
         ,bContourOutside(true)
-        ,bIgnoreWRK(true)
         ,nLeftMargin(319)
         ,nRightMargin(319)
         ,nTopMargin(0)
@@ -309,11 +298,8 @@ public:
         ,nFillColor( 0xffffffff )
         ,eColorMode( drawing::ColorMode_STANDARD )
         ,nCurrentBorderLine(BORDER_TOP)
-        ,nDffType( 0 )
         ,bIsGraphic(false)
         ,bIsBitmap(false)
-        ,bIsTiff(false)
-        ,nBitsPerPixel(0)
         ,bHoriFlip(false)
         ,bVertFlip(false)
         ,bSizeProtected(false)

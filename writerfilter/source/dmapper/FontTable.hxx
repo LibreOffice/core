@@ -34,22 +34,12 @@ struct FontEntry
 {
     typedef std::shared_ptr<FontEntry> Pointer_t;
 
-    OUString sFontName;
-    OUString sFontName1;
-    bool            bTrueType;
+    OUString        sFontName;
     sal_Int16       nPitchRequest;
     sal_Int32       nTextEncoding;
-    sal_Int32       nFontFamilyId;
-    sal_Int32       nBaseWeight;
-    sal_Int32       nAltFontIndex;
-    OUString sFontSignature;
     FontEntry() :
-        bTrueType(false),
         nPitchRequest( 0 ),
-        nTextEncoding( RTL_TEXTENCODING_DONTKNOW ),
-        nFontFamilyId( 0 ),
-        nBaseWeight( 0 ),
-        nAltFontIndex( 0 )
+        nTextEncoding( RTL_TEXTENCODING_DONTKNOW )
         {}
 };
 

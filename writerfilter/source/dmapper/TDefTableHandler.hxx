@@ -50,8 +50,6 @@ private:
     std::vector<css::table::BorderLine2> m_aBottomBorderLines;
     std::vector<css::table::BorderLine2> m_aInsideHBorderLines;
     std::vector<css::table::BorderLine2> m_aInsideVBorderLines;
-    std::vector<css::table::BorderLine2> m_aTl2brBorderLines;
-    std::vector<css::table::BorderLine2> m_aTr2blBorderLines;
 
     //values of the current border
     sal_Int32                                           m_nLineWidth;
