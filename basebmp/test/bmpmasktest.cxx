@@ -91,26 +91,21 @@ public:
         const basegfx::B2ISize aSize(10,10);
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
-                                           FORMAT_ONE_BIT_MSB_PAL,
-                                           basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX()));
+                                           FORMAT_ONE_BIT_MSB_PAL );
         mpDevice32bpp = createBitmapDevice( aSize,
                                             true,
-                                            FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA,
-                                            basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX()));
+                                            FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA );
 
         mpMaskBmp1bpp = createBitmapDevice( aSize,
                                             true,
-                                            FORMAT_ONE_BIT_MSB_GREY,
-                                            basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_GREY, aSize.getX()));
+                                            FORMAT_ONE_BIT_MSB_GREY );
 
         mpBmp1bpp = createBitmapDevice( aSize,
                                         true,
-                                        FORMAT_ONE_BIT_MSB_PAL,
-                                        basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX()));
+                                        FORMAT_ONE_BIT_MSB_PAL );
         mpBmp32bpp = createBitmapDevice( aSize,
                                          true,
-                                         FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA,
-                                         basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX()));
+                                         FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA );
 
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
@@ -169,7 +164,6 @@ public:
 //            nFormat = Format::OneBitMsbGrey; // FIXME - un-comment me to crash hard.
             xMask = createBitmapDevice( aSize, false /* bTopDown */,
                                         nFormat,
-                                         basebmp::getBitmapDeviceStrideForWidth( nFormat, aSize.getX()),
                                          PaletteMemorySharedVector(
                                                 new std::vector< basebmp::Color >(aDevPal) ) );
             // wipe to copy everything.
@@ -183,17 +177,13 @@ public:
                                     DrawMode::DrawMode_PAINT );
 
             xBitmap = createBitmapDevice( aSize, false,
-                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX,
-                                          basebmp::getBitmapDeviceStrideForWidth(
-                                                FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, aSize.getX() ) );
+                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX );
             xBitmap->clear(Color(0x80808080));
         }
         { // mpOutput & mpBitmap
             const basegfx::B2ISize aSize(9, 9);
             xOutput = createBitmapDevice( aSize, false,
-                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX,
-                                          basebmp::getBitmapDeviceStrideForWidth(
-                                                FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, aSize.getX()) );
+                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX );
             xOutput->clear(Color(0xffffffff));
         }
 
