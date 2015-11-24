@@ -905,6 +905,9 @@ create_sal_gtk_timeout( GtkSalTimer *pTimer )
                          /* unused dummy */ g_idle_remove_by_data,
                          nullptr, nullptr );
   g_source_attach( pSource, g_main_context_default() );
+#ifdef DBG_UTIL
+  g_source_set_name( pSource, "VCL timeout source" );
+#endif
 
   sal_gtk_timeout_defer( pTSource );
 
@@ -937,6 +940,8 @@ bool GtkSalTimer::Expired()
 
 void GtkSalTimer::Start( sal_uLong nMS )
 {
+    // glib is not 64bit safe in this regard.
+    assert( nMS <= G_MAXINT );
     m_nTimeoutMS = nMS; // for restarting
     Stop(); // FIXME: ideally re-use an existing m_pTimeout
     m_pTimeout = create_sal_gtk_timeout( this );
