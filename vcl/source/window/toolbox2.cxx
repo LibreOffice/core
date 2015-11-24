@@ -43,6 +43,9 @@
 using namespace vcl;
 using namespace com::sun::star;
 
+#define TB_SEP_SIZE     8  // Separator size
+
+
 ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
         m_pLayoutData( nullptr )
 {
