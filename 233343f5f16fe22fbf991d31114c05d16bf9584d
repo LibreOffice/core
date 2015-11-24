@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a09f44b3",
+        "filename": "sc/source/ui/dbgui/PivotLayoutTreeList.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T21:40:52Z",
+      "side": 1,
+      "message": "This would leak pItemValue. All other ScItemValue instances are added to a container with something like\n\n maDataItemValues.push_back(std::unique_ptr\u003cScItemValue\u003e(pItemValue));\n\nso probably that needs to be done here as well. However, I didn\u0027t check if adding the instance to maDataItemValues is actually the right approach or something else needs to be done for such a \"sub\"item.\n\nNitpick:\nInstead of creating a temporary aLabel OUString instance I\u0027d pass a const reference to the ScItemValue ctor.",
+      "revId": "233343f5f16fe22fbf991d31114c05d16bf9584d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
