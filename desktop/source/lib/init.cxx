@@ -921,6 +921,19 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
+    static bool bDebug = getenv("LOK_DEBUG") != nullptr;
+    if (bDebug)
+    {
+        // Draw a small red rectangle in the top left corner so that it's easy to see where a new tile begins.
+        Rectangle aRect(0, 0, 5, 5);
+        aRect = pDevice->PixelToLogic(aRect);
+        pDevice->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        pDevice->SetFillColor(COL_LIGHTRED);
+        pDevice->SetLineColor();
+        pDevice->DrawRect(aRect);
+        pDevice->Pop();
+    }
+
     // Overwrite pBuffer's alpha channel with the separate alpha buffer.
     for (int nRow = 0; nRow < nCanvasHeight; ++nRow)
     {
@@ -936,19 +949,6 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     }
 
 #endif
-
-    static bool bDebug = getenv("LOK_DEBUG") != nullptr;
-    if (bDebug)
-    {
-        // Draw a small red rectangle in the top left corner so that it's easy to see where a new tile begins.
-        Rectangle aRect(0, 0, 5, 5);
-        aRect = pDevice->PixelToLogic(aRect);
-        pDevice->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-        pDevice->SetFillColor(COL_LIGHTRED);
-        pDevice->SetLineColor();
-        pDevice->DrawRect(aRect);
-        pDevice->Pop();
-    }
 
 #else
     (void) pBuffer;
