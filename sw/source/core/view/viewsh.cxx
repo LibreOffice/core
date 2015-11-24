@@ -1891,6 +1891,8 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
         SwViewOption aOption(*GetViewOptions());
         aOption.SetZoom(fScale * 100);
         ApplyViewOptions(aOption);
+        // Make sure the map mode (disabled in SwXTextDocument::initializeForTiledRendering()) is still disabled.
+        GetWin()->EnableMapMode(false);
     }
 
     Rectangle aOutRect = Rectangle(Point(tilePosX, tilePosY),
