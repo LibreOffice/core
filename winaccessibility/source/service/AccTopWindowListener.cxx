@@ -48,7 +48,7 @@ using namespace cppu;
  *  accessible listener to monitor all these objects.
  *  @param pAccessible      the accessible of the new opened window
  */
-void AccTopWindowListener::HandleWindowOpened( com::sun::star::accessibility::XAccessible* pAccessible )
+void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* pAccessible )
 {
     //get SystemData from window
     VCLXWindow* pvclwindow = (VCLXWindow*)pAccessible;
@@ -63,11 +63,11 @@ void AccTopWindowListener::HandleWindowOpened( com::sun::star::accessibility::XA
     {
         systemdata = NULL;
     }
-    Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
     if(!xContext.is())
         return;
 
-    com::sun::star::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
+    css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
     //Only AccessibleContext exist, add all listeners
     if(pAccessibleContext != NULL && systemdata != NULL)
     {
@@ -81,16 +81,16 @@ void AccTopWindowListener::HandleWindowOpened( com::sun::star::accessibility::XA
 
         short role = pAccessibleContext->getAccessibleRole();
 
-        if (role == com::sun::star::accessibility::AccessibleRole::POPUP_MENU ||
-                role == com::sun::star::accessibility::AccessibleRole::MENU )
+        if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
+                role == css::accessibility::AccessibleRole::MENU )
         {
             accManagerAgent.NotifyAccEvent(UM_EVENT_MENUPOPUPSTART, pAccessible);
         }
 
-        if (role == com::sun::star::accessibility::AccessibleRole::FRAME ||
-                role == com::sun::star::accessibility::AccessibleRole::DIALOG ||
-                role == com::sun::star::accessibility::AccessibleRole::WINDOW ||
-                role == com::sun::star::accessibility::AccessibleRole::ALERT)
+        if (role == css::accessibility::AccessibleRole::FRAME ||
+                role == css::accessibility::AccessibleRole::DIALOG ||
+                role == css::accessibility::AccessibleRole::WINDOW ||
+                role == css::accessibility::AccessibleRole::ALERT)
         {
             accManagerAgent.NotifyAccEvent(UM_EVENT_SHOW, pAccessible);
         }
@@ -109,15 +109,15 @@ AccTopWindowListener::~AccTopWindowListener()
 /**
  *  It is invoked when a new window is opened, the source of this EventObject is the window
  */
-void AccTopWindowListener::windowOpened( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException)
+void AccTopWindowListener::windowOpened( const css::lang::EventObject& e ) throw (css::uno::RuntimeException)
 {
     SAL_INFO( "iacc2", "windowOpened triggered" );
 
     if ( !e.Source.is())
         return;
 
-    Reference< com::sun::star::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
-    com::sun::star::accessibility::XAccessible* pAccessible = xAccessible.get();
+    Reference< css::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
+    css::accessibility::XAccessible* pAccessible = xAccessible.get();
     if ( !pAccessible )
         return;
 
@@ -132,14 +132,14 @@ void AccTopWindowListener::windowOpened( const ::com::sun::star::lang::EventObje
  *  @param  pParentXAcc     the parent of current accessible object
  *  @param  pWND            the handle of top window which current object resides
  */
-void AccTopWindowListener::AddAllListeners(com::sun::star::accessibility::XAccessible* pAccessible, com::sun::star::accessibility::XAccessible* pParentXAcc, HWND pWND)
+void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAccessible, css::accessibility::XAccessible* pParentXAcc, HWND pWND)
 {
-    Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
     if(!xContext.is())
     {
         return;
     }
-    com::sun::star::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
+    css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
     if(pAccessibleContext == NULL)
     {
         return;
@@ -155,10 +155,10 @@ void AccTopWindowListener::AddAllListeners(com::sun::star::accessibility::XAcces
 
 
     short role = pAccessibleContext->getAccessibleRole();
-    if(com::sun::star::accessibility::AccessibleRole::DOCUMENT == role ||
-            com::sun::star::accessibility::AccessibleRole::DOCUMENT_PRESENTATION == role ||
-            com::sun::star::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET == role ||
-            com::sun::star::accessibility::AccessibleRole::DOCUMENT_TEXT == role)
+    if(css::accessibility::AccessibleRole::DOCUMENT == role ||
+            css::accessibility::AccessibleRole::DOCUMENT_PRESENTATION == role ||
+            css::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET == role ||
+            css::accessibility::AccessibleRole::DOCUMENT_TEXT == role)
     {
         if(accManagerAgent.IsStateManageDescendant(pAccessible))
         {
@@ -170,22 +170,22 @@ void AccTopWindowListener::AddAllListeners(com::sun::star::accessibility::XAcces
     int count = pAccessibleContext->getAccessibleChildCount();
     for (int i=0;i<count;i++)
     {
-        Reference<com::sun::star::accessibility::XAccessible> mxAccessible
+        Reference<css::accessibility::XAccessible> mxAccessible
         = pAccessibleContext->getAccessibleChild(i);
 
-        com::sun::star::accessibility::XAccessible* mpAccessible = mxAccessible.get();
+        css::accessibility::XAccessible* mpAccessible = mxAccessible.get();
         if(mpAccessible != NULL)
         {
-            Reference<com::sun::star::accessibility::XAccessibleContext> mxAccessibleContext
+            Reference<css::accessibility::XAccessibleContext> mxAccessibleContext
             = mpAccessible->getAccessibleContext();
-            com::sun::star::accessibility::XAccessibleContext* mpContext = mxAccessibleContext.get();
+            css::accessibility::XAccessibleContext* mpContext = mxAccessibleContext.get();
             if(mpContext != NULL)
                 AddAllListeners( mpAccessible, pAccessible, pWND);
         }
     }
 }
 
-void AccTopWindowListener::windowClosing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+void AccTopWindowListener::windowClosing( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
 {
     SAL_INFO( "iacc2", "windowClosing triggered" );
 }
@@ -195,32 +195,32 @@ void AccTopWindowListener::windowClosing( const ::com::sun::star::lang::EventObj
  *  from current manager's cache, and remove the COM object and the accessible event listener
  *  assigned to the accessible objects.
  */
-void AccTopWindowListener::windowClosed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException)
+void AccTopWindowListener::windowClosed( const css::lang::EventObject& e ) throw (css::uno::RuntimeException)
 {
     SAL_INFO( "iacc2", "windowClosed triggered" );
 
     if ( !e.Source.is())
         return;
 
-    Reference< com::sun::star::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
-    com::sun::star::accessibility::XAccessible* pAccessible = xAccessible.get();
+    Reference< css::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
+    css::accessibility::XAccessible* pAccessible = xAccessible.get();
     if ( pAccessible == NULL)
         return;
 
-    Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext(pAccessible->getAccessibleContext(),UNO_QUERY);
     if(!xContext.is())
     {
         return;
     }
-    com::sun::star::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
+    css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
 
     short role = -1;
     if(pAccessibleContext != NULL)
     {
         role = pAccessibleContext->getAccessibleRole();
 
-        if (role == com::sun::star::accessibility::AccessibleRole::POPUP_MENU ||
-                role == com::sun::star::accessibility::AccessibleRole::MENU)
+        if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
+                role == css::accessibility::AccessibleRole::MENU)
         {
             accManagerAgent.NotifyAccEvent(UM_EVENT_MENUPOPUPEND, pAccessible);
         }
@@ -228,28 +228,28 @@ void AccTopWindowListener::windowClosed( const ::com::sun::star::lang::EventObje
 
 
     accManagerAgent.DeleteChildrenAccObj( pAccessible );
-    if( role != com::sun::star::accessibility::AccessibleRole::POPUP_MENU )
+    if( role != css::accessibility::AccessibleRole::POPUP_MENU )
         accManagerAgent.DeleteAccObj( pAccessible );
 
 }
 
-void AccTopWindowListener::windowMinimized( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+void AccTopWindowListener::windowMinimized( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
 {
 }
 
-void AccTopWindowListener::windowNormalized( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+void AccTopWindowListener::windowNormalized( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
 {
 }
 
-void AccTopWindowListener::windowActivated( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+void AccTopWindowListener::windowActivated( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
 {
 }
 
-void AccTopWindowListener::windowDeactivated( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+void AccTopWindowListener::windowDeactivated( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
 {
 }
 
-void AccTopWindowListener::disposing( const ::com::sun::star::lang::EventObject&  ) throw (::com::sun::star::uno::RuntimeException)
+void AccTopWindowListener::disposing( const css::lang::EventObject&  ) throw (css::uno::RuntimeException)
 {
 }
 

@@ -584,7 +584,7 @@ inline long AccObjectWinManager::ImpleGenerateResID()
    * @param pWnd  Top Window handle
    * @return The calling result.
    */
-sal_Bool AccObjectWinManager::InsertChildrenAccObj( com::sun::star::accessibility::XAccessible* pXAcc,
+sal_Bool AccObjectWinManager::InsertChildrenAccObj( css::accessibility::XAccessible* pXAcc,
         HWND pWnd)
 {
     if(!IsContainer(pXAcc))
@@ -600,10 +600,10 @@ sal_Bool AccObjectWinManager::InsertChildrenAccObj( com::sun::star::accessibilit
 
     short role = pRContext->getAccessibleRole();
 
-    if(com::sun::star::accessibility::AccessibleRole::DOCUMENT == role ||
-            com::sun::star::accessibility::AccessibleRole::DOCUMENT_PRESENTATION == role ||
-            com::sun::star::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET == role ||
-            com::sun::star::accessibility::AccessibleRole::DOCUMENT_TEXT == role)
+    if(css::accessibility::AccessibleRole::DOCUMENT == role ||
+            css::accessibility::AccessibleRole::DOCUMENT_PRESENTATION == role ||
+            css::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET == role ||
+            css::accessibility::AccessibleRole::DOCUMENT_TEXT == role)
     {
         if(IsStateManageDescendant(pXAcc))
         {
@@ -761,7 +761,7 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
    * @param pXAcc XAccessible interface for top window
    * @return void
    */
-void AccObjectWinManager::SaveTopWindowHandle(HWND hWnd, com::sun::star::accessibility::XAccessible* pXAcc)
+void AccObjectWinManager::SaveTopWindowHandle(HWND hWnd, css::accessibility::XAccessible* pXAcc)
 {
     HwndXAcc.insert( XHWNDToXAccHash::value_type( hWnd,(void*)pXAcc ) );
 }
@@ -906,7 +906,7 @@ void AccObjectWinManager::IncreaseState( XAccessible* pXAcc,unsigned short pStat
         pAccObj->IncreaseState( pState );
 }
 
-void  AccObjectWinManager::UpdateState( com::sun::star::accessibility::XAccessible* pXAcc )
+void  AccObjectWinManager::UpdateState( css::accessibility::XAccessible* pXAcc )
 {
     AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
     if( pAccObj )
@@ -1169,9 +1169,9 @@ void AccObjectWinManager::NotifyDestroy(XAccessible* pXAcc)
 }
 
 
-void AccObjectWinManager::UpdateChildState(com::sun::star::accessibility::XAccessible* pAccSubMenu)
+void AccObjectWinManager::UpdateChildState(css::accessibility::XAccessible* pAccSubMenu)
 {
-    Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pAccSubMenu,UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext(pAccSubMenu,UNO_QUERY);
     if (!xContext.is())
     {
         return;
@@ -1179,7 +1179,7 @@ void AccObjectWinManager::UpdateChildState(com::sun::star::accessibility::XAcces
     sal_Int32 nCount = xContext->getAccessibleChildCount();
     for (sal_Int32 i = 0 ; i < nCount ; ++i)
     {
-        Reference<com::sun::star::accessibility::XAccessible> xChild = xContext->getAccessibleChild(i);
+        Reference<css::accessibility::XAccessible> xChild = xContext->getAccessibleChild(i);
         if (xChild.is())
         {
             AccObject *pObj =  GetAccObjByXAcc(xChild.get());
@@ -1192,7 +1192,7 @@ void AccObjectWinManager::UpdateChildState(com::sun::star::accessibility::XAcces
 }
 
 
-bool AccObjectWinManager::IsSpecialToolboItem(com::sun::star::accessibility::XAccessible* pXAcc)
+bool AccObjectWinManager::IsSpecialToolboItem(css::accessibility::XAccessible* pXAcc)
 {
     if (pXAcc && oldFocus != pXAcc)
     {
@@ -1211,10 +1211,10 @@ bool AccObjectWinManager::IsSpecialToolboItem(com::sun::star::accessibility::XAc
     return false;
 }
 
-short AccObjectWinManager::GetRole(com::sun::star::accessibility::XAccessible* pXAcc)
+short AccObjectWinManager::GetRole(css::accessibility::XAccessible* pXAcc)
 {
     assert(pXAcc != NULL);
-    Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pXAcc->getAccessibleContext(),UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext(pXAcc->getAccessibleContext(),UNO_QUERY);
     if(xContext.is())
     {
         return xContext->getAccessibleRole();
@@ -1241,7 +1241,7 @@ XAccessible* AccObjectWinManager::GetAccDocByAccTopWin( XAccessible* pXAcc )
     return GetAccDocByHWND(hWnd);
 }
 
-bool AccObjectWinManager::IsTopWinAcc( com::sun::star::accessibility::XAccessible* pXAcc )
+bool AccObjectWinManager::IsTopWinAcc( css::accessibility::XAccessible* pXAcc )
 {
     bool bRet = false;
     AccObject* pAccObj = GetAccObjByXAcc( pXAcc );

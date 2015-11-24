@@ -121,9 +121,9 @@ public:
 
 private:
 
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleHyperlink> pRXLink;
+    css::uno::Reference<css::accessibility::XAccessibleHyperlink> pRXLink;
 
-    inline com::sun::star::accessibility::XAccessibleHyperlink* GetXInterface()
+    inline css::accessibility::XAccessibleHyperlink* GetXInterface()
     {
         return pRXLink.get();
     }

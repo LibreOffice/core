@@ -32,7 +32,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccComponentEventListener::AccComponentEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
+AccComponentEventListener::AccComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
         :AccEventListener(pAcc, Agent)
 {
 }
@@ -46,8 +46,8 @@ AccComponentEventListener::~AccComponentEventListener()
  *
  * @param   AccessibleEventObject   the event object which contains information about event
  */
-void  AccComponentEventListener::notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
-throw (::com::sun::star::uno::RuntimeException)
+void  AccComponentEventListener::notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard g;
 

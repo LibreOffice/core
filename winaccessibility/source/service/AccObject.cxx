@@ -471,9 +471,9 @@ void  AccObject::SetValue( Any pAny )
             strValue=::rtl::OUString::number(val);
         }
     }
-    else if (pAny.getValueType() == cppu::UnoType<com::sun::star::accessibility::TextSegment>::get())
+    else if (pAny.getValueType() == cppu::UnoType<css::accessibility::TextSegment>::get())
     {
-        com::sun::star::accessibility::TextSegment val;
+        css::accessibility::TextSegment val;
         if (pAny >>= val)
         {
             ::rtl::OUString realVal(val.SegmentText);
@@ -998,8 +998,8 @@ void AccObject::UpdateLocation()
     Reference< XAccessibleComponent > pRComponent(pContext,UNO_QUERY);
     if( pRComponent.is() )
     {
-        ::com::sun::star::awt::Point pCPoint = pRComponent->getLocationOnScreen();
-        ::com::sun::star::awt::Size pCSize = pRComponent->getSize();
+        css::awt::Point pCPoint = pRComponent->getLocationOnScreen();
+        css::awt::Size pCSize = pRComponent->getSize();
         Location tempLocation;
         tempLocation.m_dLeft = pCPoint.X;
         tempLocation.m_dTop =  pCPoint.Y;

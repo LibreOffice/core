@@ -82,9 +82,9 @@ public:
 
 private:
 
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleImage> pRXImg;
+    css::uno::Reference<css::accessibility::XAccessibleImage> pRXImg;
 
-    inline com::sun::star::accessibility::XAccessibleImage* GetXInterface()
+    inline css::accessibility::XAccessibleImage* GetXInterface()
     {
         return pRXImg.get();
     }

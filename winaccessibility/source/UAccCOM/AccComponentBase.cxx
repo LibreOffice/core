@@ -56,7 +56,7 @@ STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
         if(!pRXComp.is())
             return E_FAIL;
 
-        const ::com::sun::star::awt::Point& pt = GetXInterface()->getLocation();
+        const css::awt::Point& pt = GetXInterface()->getLocation();
         *x = pt.X;
         *y = pt.Y;
         return S_OK;
@@ -86,7 +86,7 @@ STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
         if(!pRXComp.is())
             return E_FAIL;
 
-        const ::com::sun::star::awt::Point& pt = GetXInterface()->getLocationOnScreen();
+        const css::awt::Point& pt = GetXInterface()->getLocationOnScreen();
         *x = pt.X;
         *y = pt.Y;
         return S_OK;

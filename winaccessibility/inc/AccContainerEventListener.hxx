@@ -38,11 +38,11 @@
 class AccContainerEventListener: public AccEventListener
 {
 public:
-    AccContainerEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
+    AccContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccContainerEventListener();
 
     //AccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException);
 
     //for child changed event
     virtual void HandleChildChangedEvent(
@@ -69,12 +69,10 @@ public:
     virtual void SetComponentState(short state, bool enable) override;
     virtual void FireStatePropertyChange(short state, bool set) override;
     virtual void FireStateFocusedChange(bool enable) override;
-    virtual bool IsEditable(
-        css::uno::Reference<css::accessibility::XAccessibleContext> xContext);
+    virtual bool IsEditable(css::uno::Reference<css::accessibility::XAccessibleContext> xContext);
 
     // update all children's state
-    void UpdateAllChildrenState(
-            com::sun::star::accessibility::XAccessible* pXAccessible);
+    void UpdateAllChildrenState( css::accessibility::XAccessible* pXAccessible);
 
     bool NotifyChildEvent(short nWinEvent, const css::uno::Any &Value);
 

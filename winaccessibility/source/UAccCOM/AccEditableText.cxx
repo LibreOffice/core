@@ -306,15 +306,15 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
     else if(ouName.equals(L"CharPosture") )
     {
         // Convert to FontSlant.
-        ::com::sun::star::awt::FontSlant fontSlant = (::com::sun::star::awt::FontSlant)ouValue.toInt32();
-        rAny.setValue(&fontSlant, cppu::UnoType<com::sun::star::awt::FontSlant>::get());
+        css::awt::FontSlant fontSlant = (css::awt::FontSlant)ouValue.toInt32();
+        rAny.setValue(&fontSlant, cppu::UnoType<css::awt::FontSlant>::get());
     }
     else if(ouName.equals(L"ParaTabStops") )
     {
 
         // Convert to the Sequence with TabStop element.
-        vector< ::com::sun::star::style::TabStop > vecTabStop;
-        ::com::sun::star::style::TabStop tabStop;
+        vector< css::style::TabStop > vecTabStop;
+        css::style::TabStop tabStop;
         ::rtl::OUString ouSubValue;
         sal_Int32 pos = 0, posComma = 0;
 
@@ -339,7 +339,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                         if(posComma != -1)
                         {
                             ouSubValue = ouValue.copy(pos + 9, posComma - pos - 9);
-                            tabStop.Alignment = (::com::sun::star::style::TabAlign)ouSubValue.toInt32();
+                            tabStop.Alignment = (css::style::TabAlign)ouSubValue.toInt32();
                             pos = posComma + 1;
 
                             // DecimalChar.
@@ -396,7 +396,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
 
         // Dump into Sequence.
         int iSeqLen = (vecTabStop.size() == 0) ? 1 : vecTabStop.size();
-        Sequence< ::com::sun::star::style::TabStop > seqTabStop(iSeqLen);
+        Sequence< css::style::TabStop > seqTabStop(iSeqLen);
 
         if(vecTabStop.size() != 0)
         {
@@ -410,18 +410,18 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         {
             // Create default value.
             seqTabStop[0].Position = 0;
-            seqTabStop[0].Alignment = ::com::sun::star::style::TabAlign_DEFAULT;
+            seqTabStop[0].Alignment = css::style::TabAlign_DEFAULT;
             seqTabStop[0].DecimalChar = '.';
             seqTabStop[0].FillChar = ' ';
         }
 
         // Assign to Any object.
-        rAny.setValue(&seqTabStop, cppu::UnoType<Sequence< ::com::sun::star::style::TabStop >>::get());
+        rAny.setValue(&seqTabStop, cppu::UnoType<Sequence< css::style::TabStop >>::get());
     }
     else if(ouName.equals(L"ParaLineSpacing") )
     {
         // Parse value string.
-        ::com::sun::star::style::LineSpacing lineSpacing;
+        css::style::LineSpacing lineSpacing;
         ::rtl::OUString ouSubValue;
         sal_Int32 pos = 0, posComma = 0;
 
@@ -459,7 +459,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         }
 
         // Convert to Any object.
-        rAny.setValue(&lineSpacing, cppu::UnoType<com::sun::star::style::LineSpacing>::get());
+        rAny.setValue(&lineSpacing, cppu::UnoType<css::style::LineSpacing>::get());
     }
     else
     {

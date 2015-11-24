@@ -35,11 +35,11 @@ class AccDescendantManagerEventListener: public AccComponentEventListener
 {
 
 public:
-    AccDescendantManagerEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
+    AccDescendantManagerEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccDescendantManagerEventListener();
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException);
 
     //for selection changed event
     virtual void HandleSelectionChangedEvent(

@@ -115,7 +115,7 @@ void MSAAServiceImpl::handleWindowOpened(sal_Int64 nAcc)
     if (m_pTopWindowListener.is() && nAcc)
     {
         m_pTopWindowListener->HandleWindowOpened(
-            static_cast<com::sun::star::accessibility::XAccessible*>(
+            static_cast<css::accessibility::XAccessible*>(
                 reinterpret_cast<void*>(nAcc)));
     }
 }
@@ -186,7 +186,7 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
                     }
                 }
             }
-            catch (::com::sun::star::uno::RuntimeException const&)
+            catch (css::uno::RuntimeException const&)
             {
                 // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
                 // but keep revoking these windows in hide(s).

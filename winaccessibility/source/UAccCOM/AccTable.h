@@ -161,9 +161,9 @@ public:
 
 private:
 
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleTable> pRXTable;
+    css::uno::Reference<css::accessibility::XAccessibleTable> pRXTable;
 
-    inline com::sun::star::accessibility::XAccessibleTable* GetXInterface()
+    inline css::accessibility::XAccessibleTable* GetXInterface()
     {
         return pRXTable.get();
     }

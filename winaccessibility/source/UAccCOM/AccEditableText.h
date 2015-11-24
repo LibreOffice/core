@@ -95,11 +95,11 @@ public:
 
 private:
 
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleEditableText> pRXEdtTxt;
+    css::uno::Reference<css::accessibility::XAccessibleEditableText> pRXEdtTxt;
 
-    void get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const ::rtl::OUString &ouValue, com::sun::star::uno::Any &rAny);
+    void get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const ::rtl::OUString &ouValue, css::uno::Any &rAny);
 
-    inline com::sun::star::accessibility::XAccessibleEditableText* GetXInterface()
+    inline css::accessibility::XAccessibleEditableText* GetXInterface()
     {
         return pRXEdtTxt.get();
     }

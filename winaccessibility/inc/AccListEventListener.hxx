@@ -37,11 +37,11 @@ class AccListEventListener: public AccDescendantManagerEventListener
 private:
     bool shouldDeleteChild;
 public:
-    AccListEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
+    AccListEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccListEventListener();
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException);
 
     //for active descendant changed event
     virtual void HandleActiveDescendantChangedEvent(

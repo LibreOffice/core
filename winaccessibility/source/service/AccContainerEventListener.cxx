@@ -32,7 +32,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccContainerEventListener::AccContainerEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
+AccContainerEventListener::AccContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
         :AccEventListener(pAcc, Agent)
 {
 }
@@ -46,8 +46,8 @@ AccContainerEventListener::~AccContainerEventListener()
  *
  *  @param AccessibleEventObject    the event object which contains information about event
  */
-void  AccContainerEventListener::notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
-throw (::com::sun::star::uno::RuntimeException)
+void  AccContainerEventListener::notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard g;
 
@@ -488,12 +488,12 @@ void AccContainerEventListener::HandleSelectionChangedWithinEvent(const Any& /*o
 
 void AccContainerEventListener::UpdateAllChildrenState(XAccessible* pXAccessible)
 {
-    Reference<com::sun::star::accessibility::XAccessibleContext> xContext(pXAccessible->getAccessibleContext(),UNO_QUERY);
+    Reference<css::accessibility::XAccessibleContext> xContext(pXAccessible->getAccessibleContext(),UNO_QUERY);
     if(!xContext.is())
     {
         return;
     }
-    com::sun::star::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
+    css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
     if(pAccessibleContext == NULL)
     {
         return;
@@ -507,10 +507,10 @@ void AccContainerEventListener::UpdateAllChildrenState(XAccessible* pXAccessible
     int count = pAccessibleContext->getAccessibleChildCount();
     for (int i=0;i<count;i++)
     {
-        Reference<com::sun::star::accessibility::XAccessible> mxAccessible
+        Reference<css::accessibility::XAccessible> mxAccessible
         = pAccessibleContext->getAccessibleChild(i);
 
-        com::sun::star::accessibility::XAccessible* mpAccessible = mxAccessible.get();
+        css::accessibility::XAccessible* mpAccessible = mxAccessible.get();
         if(mpAccessible != NULL)
         {
             pAgent->UpdateState(mpAccessible);

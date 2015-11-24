@@ -146,7 +146,7 @@ public:
 
 private:
 
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleHypertext> pHyperText;
+    css::uno::Reference<css::accessibility::XAccessibleHypertext> pHyperText;
 
 };
 

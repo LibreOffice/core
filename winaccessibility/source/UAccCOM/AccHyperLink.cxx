@@ -120,7 +120,7 @@ STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
         return E_FAIL;
     }
     // Get Any type value via pRXLink.
-    ::com::sun::star::uno::Any  anyVal = GetXInterface()->getAccessibleActionAnchor(index);
+    css::uno::Any  anyVal = GetXInterface()->getAccessibleActionAnchor(index);
     // Convert Any to VARIANT.
     CMAccessible::ConvertAnyToVariant(anyVal, anchor);
 
@@ -152,7 +152,7 @@ STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
         return E_FAIL;
     }
     // Get Any type value via pRXLink.
-    ::com::sun::star::uno::Any  anyVal = GetXInterface()->getAccessibleActionObject(index);
+    css::uno::Any  anyVal = GetXInterface()->getAccessibleActionObject(index);
     // Convert Any to VARIANT.
     CMAccessible::ConvertAnyToVariant(anyVal, anchorTarget);
 

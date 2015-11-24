@@ -42,7 +42,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 using namespace cppu;
 
-AccEventListener::AccEventListener(com::sun::star::accessibility::XAccessible* pAcc,
+AccEventListener::AccEventListener(css::accessibility::XAccessible* pAcc,
                                    AccObjectManagerAgent* Agent)
     : m_xAccessible(pAcc)
     , pAgent(Agent)
@@ -56,8 +56,8 @@ AccEventListener::~AccEventListener()
  *  Uno's event notifier when event is captured
  *  @param AccessibleEventObject    the event object which contains information about event
  */
-void  AccEventListener::notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
-throw (::com::sun::star::uno::RuntimeException)
+void  AccEventListener::notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard g;
 
@@ -201,7 +201,7 @@ void AccEventListener::FireStatePropertyChange(short /*state*/, bool set )
  */
 short AccEventListener::GetRole()
 {
-    css::uno::Reference<com::sun::star::accessibility::XAccessibleContext> const
+    css::uno::Reference<css::accessibility::XAccessibleContext> const
         xContext(m_xAccessible->getAccessibleContext());
     if(xContext.is())
     {
@@ -258,8 +258,8 @@ void AccEventListener::RemoveMeFromBroadcaster()
 /**
  *  this method is invoked before listener is disposed
  */
-void AccEventListener::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ )
-throw (::com::sun::star::uno::RuntimeException)
+void AccEventListener::disposing( const css::lang::EventObject& /*Source*/ )
+throw (css::uno::RuntimeException)
 {
     SolarMutexGuard g;
 

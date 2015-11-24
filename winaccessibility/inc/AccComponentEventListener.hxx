@@ -38,11 +38,11 @@ class AccComponentEventListener: public AccEventListener
 private:
     static FILE *output, *output2, *output3, *outacc;//used for debugging
 public:
-    AccComponentEventListener(com::sun::star::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
+    AccComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccComponentEventListener();
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException);
 
     //for value changed event
     virtual void HandleValueChangedEvent(
