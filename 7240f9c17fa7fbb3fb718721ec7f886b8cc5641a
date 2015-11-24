@@ -177,6 +177,24 @@
       "revId": "7240f9c17fa7fbb3fb718721ec7f886b8cc5641a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_25ad2632",
+        "filename": "ucb/source/ucp/webdav-neon/NeonHeadRequest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-24T14:33:48Z",
+      "side": 1,
+      "message": "I see, I\u0027ll change the logging in that way.\nFor example in the example log I provided above I\u0027ll put the received headers on  a single SAL_INFO, but on multiple lines to have some readability.",
+      "parentUuid": "dab17558_45db0aee",
+      "revId": "7240f9c17fa7fbb3fb718721ec7f886b8cc5641a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
