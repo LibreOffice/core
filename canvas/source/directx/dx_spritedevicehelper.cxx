@@ -44,9 +44,9 @@ namespace dxcanvas
     SpriteDeviceHelper::SpriteDeviceHelper() :
         DeviceHelper(),
         mpSpriteCanvas( NULL ),
+        mpBackBuffer(),
         mpSurfaceProxyManager(),
-        mpRenderModule(),
-        mpBackBuffer()
+        mpRenderModule()
     {
     }
 

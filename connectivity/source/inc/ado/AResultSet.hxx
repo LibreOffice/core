@@ -70,7 +70,6 @@ namespace connectivity
             ::std::vector<OLEVariant>       m_aBookmarks;
             OLEVariant                      m_aValue;
             ADO_LONGPTR                     m_nRowPos;
-            sal_Bool                        m_bWasNull;
             sal_Bool                        m_bEOF;
             sal_Bool                        m_bOnFirstAfterOpen;
 

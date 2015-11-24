@@ -20,6 +20,10 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_WIN_PLAYER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_WIN_PLAYER_HXX
 
+#include <sal/config.h>
+
+#include <WinDef.h>
+
 #include "wincommon.hxx"
 
 #include "com/sun/star/media/XPlayer.hpp"
@@ -59,7 +63,7 @@ public:
 
     bool                create( const OUString& rURL );
 
-    void                setNotifyWnd( int nNotifyWnd );
+    void                setNotifyWnd( HWND nNotifyWnd );
     long                processEvent();
 
     const IVideoWindow* getVideoWindow() const;
@@ -105,7 +109,7 @@ private:
     IVideoWindow*           mpVW;
     IDDrawExclModeVideo*    mpEV;
     long                    mnUnmutedVolume;
-    int                     mnFrameWnd;
+    HWND                    mnFrameWnd;
     bool                    mbMuted;
     bool                    mbLooping;
     bool                    mbAddWindow;

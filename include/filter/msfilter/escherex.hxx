@@ -323,28 +323,6 @@ enum ESCHER_dzType
    ESCHER_dzTypeMax          = 11
 };
 
-// how to interpret the colors in a shaded fill.
-enum ESCHER_ShadeType
-{
-    ESCHER_ShadeNone  = 0,        // Interpolate without correction between RGBs
-    ESCHER_ShadeGamma = 1,        // Apply gamma correction to colors
-    ESCHER_ShadeSigma = 2,        // Apply a sigma transfer function to position
-    ESCHER_ShadeBand  = 4,        // Add a flat band at the start of the shade
-    ESCHER_ShadeOneColor = 8,     // This is a one color shade
-
-   /* A parameter for the band or sigma function can be stored in the top
-      16 bits of the value - this is a proportion of *each* band of the
-      shade to make flat (or the approximate equal value for a sigma
-      function).  NOTE: the parameter is not used for the sigma function,
-      instead a built in value is used.  This value should not be changed
-      from the default! */
-    ESCHER_ShadeParameterShift = 16,
-    ESCHER_ShadeParameterMask  = 0xffff0000,
-
-    ESCHER_ShadeDefault = (ESCHER_ShadeGamma|ESCHER_ShadeSigma|
-                     (16384<<ESCHER_ShadeParameterShift))
-};
-
 // compound line style
 enum ESCHER_LineStyle
 {

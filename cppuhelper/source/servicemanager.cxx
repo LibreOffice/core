@@ -1353,6 +1353,8 @@ sal_Bool cppuhelper::ServiceManager::hasPropertyByName(
     return Name == "DefaultContext";
 }
 
+cppuhelper::ServiceManager::~ServiceManager() {}
+
 void cppuhelper::ServiceManager::disposing(
     css::lang::EventObject const & Source)
     throw (css::uno::RuntimeException, std::exception)
