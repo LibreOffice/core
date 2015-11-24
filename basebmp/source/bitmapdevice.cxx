@@ -1901,29 +1901,6 @@ BitmapDeviceSharedPtr createRenderer(
                                       pDamage);
 }
 
-
-// TODO(Q3): consolidate with canvas/canvastools.hxx! Best move this
-// to o3tl or sal/bithacks.hxx ...
-
-/** Compute the next highest power of 2 of a 32-bit value
-
-    Code devised by Sean Anderson, in good ole HAKMEM
-    tradition.
-
-    @return 1 << (lg(x - 1) + 1)
-*/
-inline sal_uInt32 nextPow2( sal_uInt32 x )
-{
-    --x;
-    x |= x >> 1;
-    x |= x >> 2;
-    x |= x >> 4;
-    x |= x >> 8;
-    x |= x >> 16;
-
-    return ++x;
-}
-
 namespace
 {
 BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&                  rSize,
