@@ -4895,16 +4895,15 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                     case NF_SYMBOLTYPE_CALDEL :
                         if ( pStr[j+1] == "buddhist" )
                         {
-                            aStr.insert( 0, "[$-" );
                             if ( rNum.IsSet() && rNum.GetNatNum() == 1 &&
                                  MsLangId::getRealLanguage( rNum.GetLang() ) ==
                                  LANGUAGE_THAI )
                             {
-                                aStr.insert( 3, "D07041E]" ); // date in Thai digit, Buddhist era
+                                aStr.insert( 0, "[$-D07041E]" ); // date in Thai digit, Buddhist era
                             }
                             else
                             {
-                                aStr.insert( 3, "107041E]" ); // date in Arabic digit, Buddhist era
+                                aStr.insert( 0, "[$-107041E]" ); // date in Arabic digit, Buddhist era
                             }
                             j = j+2;
                         }
