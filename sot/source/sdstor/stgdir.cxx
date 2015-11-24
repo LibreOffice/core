@@ -911,6 +911,8 @@ void StgDirStrm::SetupEntry (
             SetupEntry( nRight, pUpper, nEntryCount, nDepth+1);
             SetupEntry( nLeaf, pCur, nEntryCount, nDepth+1);
         }
+        else
+            delete pCur;
     }
 }
 
