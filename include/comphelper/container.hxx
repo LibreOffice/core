@@ -47,9 +47,6 @@ protected:
         // so I have to remember where each child is in relation to its parent.
         // That is the path from the root node to m_xCurrentObject
 
-    OUString     m_ustrProperty;
-        // The Name of the requested property
-
 public:
     IndexAccessIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint);
 

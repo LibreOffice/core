@@ -184,7 +184,6 @@ struct RTFPardAttrMapIds
 
 class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 {
-    SvStream &            rStrm;
     std::deque< Color* >  aColorTbl;
     SvxRTFFontTbl         m_FontTable;
     SvxRTFStyleTbl        m_StyleTable;

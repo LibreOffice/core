@@ -394,7 +394,6 @@ public:
     sal_Int32           mnTextStart;
     sal_Int32           mnTextLen;
     sal_Int32           mnPara;
-    sal_Int32           mnIndex;
     const SvxFont&      mrFont;
     const long*         mpDXArray;
 
@@ -423,7 +422,6 @@ public:
         sal_Int32 nTxtLen,
         const SvxFont& rFnt,
         sal_Int32 nPar,
-        sal_Int32 nIdx,
         const long* pDXArr,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
@@ -441,7 +439,6 @@ public:
         mnTextStart(nTxtStart),
         mnTextLen(nTxtLen),
         mnPara(nPar),
-        mnIndex(nIdx),
         mrFont(rFnt),
         mpDXArray(pDXArr),
         mpWrongSpellVector(pWrongSpellVector),
@@ -478,14 +475,11 @@ public:
 struct EDITENG_DLLPUBLIC PaintFirstLineInfo
 {
     sal_Int32 mnPara;
-    short mnOrientation;
     const Point& mrStartPos;
-    long mnBaseLineY;
-    const Point& mrOrigin;
     VclPtr<OutputDevice> mpOutDev;
 
-    PaintFirstLineInfo( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
-        : mnPara( nPara ), mnOrientation( nOrientation ), mrStartPos( rStartPos ), mnBaseLineY( nBaseLineY ), mrOrigin( rOrigin ), mpOutDev( pOutDev )
+    PaintFirstLineInfo( sal_Int32 nPara, const Point& rStartPos, OutputDevice* pOutDev )
+        : mnPara( nPara ), mrStartPos( rStartPos ), mpOutDev( pOutDev )
     {}
 };
 
@@ -623,8 +617,6 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     sal_uInt8           nBlockInsCallback;
     bool                bStrippingPortions;
     bool                bPasting;
-
-    sal_uLong           nDummy;
 
     DECL_LINK_TYPED(    ParaVisibleStateChangedHdl, Paragraph&, void );
     DECL_LINK_TYPED(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );
@@ -841,7 +833,7 @@ public:
     void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
                               const long* pDXArray, const SvxFont& rFont,
-                              sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
+                              sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,
                               const SvxFieldData* pFieldData,
                               bool bEndOfLine,
@@ -852,7 +844,7 @@ public:
                               const Color& rTextLineColor);
 
     void DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,
-                             const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
+                             const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
                              bool bEndOfLine,
                              bool bEndOfParagraph,
                              const Color& rOverlineColor,

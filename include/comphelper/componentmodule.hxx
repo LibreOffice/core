@@ -55,10 +55,6 @@ namespace comphelper
         OUString                                     sImplementationName;
         /// the services supported by the component implementation
         css::uno::Sequence< OUString >               aSupportedServices;
-        /** the name under which the component implementation should be registered as singleton,
-            or empty if the component does not implement a singleton.
-        */
-        OUString                                     sSingletonName;
         /// the function to create an instance of the component
         ::cppu::ComponentFactoryFunc                 pComponentCreationFunc;
         /// the function to create a factory for the component (usually <code>::cppu::createSingleComponentFactory</code>)
@@ -67,7 +63,6 @@ namespace comphelper
         ComponentDescription()
             :sImplementationName()
             ,aSupportedServices()
-            ,sSingletonName()
             ,pComponentCreationFunc( nullptr )
             ,pFactoryCreationFunc( nullptr )
         {
@@ -76,13 +71,11 @@ namespace comphelper
         ComponentDescription(
                 const OUString& _rImplementationName,
                 const css::uno::Sequence< OUString >& _rSupportedServices,
-                const OUString& _rSingletonName,
                 ::cppu::ComponentFactoryFunc _pComponentCreationFunc,
                 FactoryInstantiation _pFactoryCreationFunc
             )
             :sImplementationName( _rImplementationName )
             ,aSupportedServices( _rSupportedServices )
-            ,sSingletonName( _rSingletonName )
             ,pComponentCreationFunc( _pComponentCreationFunc )
             ,pFactoryCreationFunc( _pFactoryCreationFunc )
         {
@@ -246,7 +239,6 @@ namespace comphelper
         _rModule.registerImplementation( ComponentDescription(
             TYPE::getImplementationName_static(),
             TYPE::getSupportedServiceNames_static(),
-            TYPE::getSingletonName_static(),
             &TYPE::Create,
             &::cppu::createSingleComponentFactory
         ) );

@@ -49,17 +49,6 @@ namespace EEngineData
         EndOfSentence = 2
     };
 
-    class TextMarkingClass
-    {
-    public:
-        TextMarkingType eType;
-        sal_Int32 nIndex;
-
-        TextMarkingClass(TextMarkingType eT, sal_Int32 nI) : eType(eT), nIndex(nI) {}
-    };
-
-    typedef std::vector< TextMarkingClass > TextMarkingVector;
-
 } // end of namespace EditEngine
 
 #endif // INCLUDED_EDITENG_EEDATA_HXX

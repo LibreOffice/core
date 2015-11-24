@@ -1433,7 +1433,7 @@ void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XCli
                 aSel = pEditEngine->DeleteSelection(aSel);
             }
 
-            PasteOrDropInfos aPasteOrDropInfos(PasteOrDropInfosAction::PASTE);
+            PasteOrDropInfos aPasteOrDropInfos;
             aPasteOrDropInfos.nStartPara = pEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
             pEditEngine->HandleBeginPasteOrDrop(aPasteOrDropInfos);
 
@@ -1871,7 +1871,7 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
                 DrawSelection();
                 EditPaM aPaM( pDragAndDropInfo->aDropDest );
 
-                PasteOrDropInfos aPasteOrDropInfos(PasteOrDropInfosAction::DROP);
+                PasteOrDropInfos aPasteOrDropInfos;
                 aPasteOrDropInfos.nStartPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
                 pEditEngine->HandleBeginPasteOrDrop(aPasteOrDropInfos);
 

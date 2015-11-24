@@ -62,7 +62,6 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
             uno::Reference<document::XDocumentProperties> i_xDocProps,
             bool const bReadNewDoc )
     : SvRTFParser( rIn, 5 )
-    , rStrm(rIn)
     , aPlainMap(rPool)
     , aPardMap(rPool)
     , pInsPos( nullptr )

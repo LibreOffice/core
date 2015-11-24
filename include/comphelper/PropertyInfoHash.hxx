@@ -32,7 +32,6 @@ namespace comphelper
         sal_Int32 mnHandle;
         css::uno::Type maType;
         sal_Int16 mnAttributes;
-        sal_uInt8 mnMemberId;
     };
     struct PropertyData
     {

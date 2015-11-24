@@ -60,7 +60,6 @@ private:
     bool        bOtherCntnt : 1; // set => Check special sections initially
     bool        bDialog     : 1; // Is pWin the Svx...Dialog?
     bool        bHyphen     : 1; // Split instead of spell checking
-    bool        bAuto       : 1; // AutoCorrect available?
     bool        bReverse    : 1; // Reverse spell check
     bool        bStartDone  : 1; // Beginning already corrected
     bool        bEndDone    : 1; // End part already corrected
