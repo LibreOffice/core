@@ -347,7 +347,7 @@ sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
                                     getAlterService().is() || (xMeta.is() && xMeta->supportsAlterTableWithDropColumn()));
     static_cast<OColumnsHelper*>(pCol)->setParent(this);
     pCol->setParent(*this);
-    m_pColumnMediator = new OContainerMediator( pCol, m_xColumnDefinitions, getConnection() );
+    m_pColumnMediator = new OContainerMediator( pCol, m_xColumnDefinitions );
     pCol->setMediator( m_pColumnMediator.get() );
     return pCol;
 }

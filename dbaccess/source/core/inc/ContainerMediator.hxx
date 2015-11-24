@@ -23,7 +23,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -45,7 +44,6 @@ namespace dbaccess
         PropertyForwardList                                   m_aForwardList;
         css::uno::Reference< css::container::XNameAccess >    m_xSettings;    // can not be weak
         css::uno::Reference< css::container::XContainer >     m_xContainer;   // can not be weak
-        css::uno::WeakReference< css::sdbc::XConnection >     m_aConnection;
 
     protected:
         virtual ~OContainerMediator();
@@ -53,8 +51,7 @@ namespace dbaccess
     public:
         OContainerMediator(
             const css::uno::Reference< css::container::XContainer >& _xContainer,
-            const css::uno::Reference< css::container::XNameAccess >& _xSettings,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+            const css::uno::Reference< css::container::XNameAccess >& _xSettings
        );
 
         virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;

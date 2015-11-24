@@ -39,11 +39,9 @@ namespace dbaccess
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContainer, const Reference< XNameAccess >& _xSettings,
-    const Reference< XConnection >& _rxConnection )
+OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContainer, const Reference< XNameAccess >& _xSettings )
     : m_xSettings( _xSettings )
     , m_xContainer( _xContainer )
-    , m_aConnection( _rxConnection )
 {
 
     if ( _xSettings.is() && _xContainer.is() )

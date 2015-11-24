@@ -131,7 +131,7 @@ void OQuery::rebuildColumns()
         {
             xColumnDefinitions = xColSup->getColumns();
             if ( xColumnDefinitions.is() )
-                m_pColumnMediator = new OContainerMediator( m_pColumns, xColumnDefinitions, m_xConnection );
+                m_pColumnMediator = new OContainerMediator( m_pColumns, xColumnDefinitions );
         }
 
         // fill the columns with columns from the statement
