@@ -63,10 +63,8 @@ void GetDLLVersion(const sal_Unicode* aDLLPath, OUString& aVersion)
     vers[2] = HIWORD(fileVersLS);
     vers[3] = LOWORD(fileVersLS);
 
-    char buf[256];
-    sprintf(buf, "%d.%d.%d.%d", vers[0], vers[1], vers[2], vers[3]);
-    OString aBuf(buf);
-    aVersion = OStringToOUString(aBuf, RTL_TEXTENCODING_UTF8);
+    aVersion = OUString::number(vers[0]) + "." + OUString::number(vers[1])
+        + "." + OUString::number(vers[2]) + "." + OUString::number(vers[3]);
 }
 
 /*
