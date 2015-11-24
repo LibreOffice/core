@@ -27,123 +27,123 @@
  * member calls */
 class WordPerfectImportFilter : public cppu::WeakImplHelper
     <
-    com::sun::star::document::XFilter,
-    com::sun::star::document::XImporter,
-    com::sun::star::document::XExtendedFilterDetection,
-    com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo
+    css::document::XFilter,
+    css::document::XImporter,
+    css::document::XExtendedFilterDetection,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo
     >
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::lang::XComponent > mxDoc;
     OUString msFilterName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
+    css::uno::Reference< css::xml::sax::XDocumentHandler > mxHandler;
 
-    bool SAL_CALL importImpl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
+    bool SAL_CALL importImpl(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor)
     throw (css::uno::RuntimeException, std::exception);
 
 public:
-    explicit WordPerfectImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+    explicit WordPerfectImportFilter(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
         : mxContext(rxContext) {}
     virtual ~WordPerfectImportFilter() {}
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor)
+    throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL cancel()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw (css::uno::RuntimeException, std::exception) override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &xDoc)
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument(const css::uno::Reference< css::lang::XComponent > &xDoc)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &Descriptor)
-    throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor)
+    throw(css::uno::RuntimeException, std::exception) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > &aArguments)
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > &aArguments)
+    throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception) override;
 
 };
 
 OUString WordPerfectImportFilter_getImplementationName()
-throw (::com::sun::star::uno::RuntimeException);
+throw (css::uno::RuntimeException);
 
 bool SAL_CALL WordPerfectImportFilter_supportsService(const OUString &ServiceName)
-throw (::com::sun::star::uno::RuntimeException);
+throw (css::uno::RuntimeException);
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames()
-throw (::com::sun::star::uno::RuntimeException);
+css::uno::Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames()
+throw (css::uno::RuntimeException);
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL WordPerfectImportFilter_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext)
-throw (::com::sun::star::uno::Exception);
+css::uno::Reference< css::uno::XInterface >
+SAL_CALL WordPerfectImportFilter_createInstance(const css::uno::Reference< css::uno::XComponentContext > &rContext)
+throw (css::uno::Exception);
 
 
 class WordPerfectImportFilterDialog : public cppu::WeakImplHelper <
-    com::sun::star::ui::dialogs::XExecutableDialog,
-    com::sun::star::lang::XServiceInfo,
-    com::sun::star::beans::XPropertyAccess
+    css::ui::dialogs::XExecutableDialog,
+    css::lang::XServiceInfo,
+    css::beans::XPropertyAccess
     >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
     OUString msPassword;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxInputStream;
+    css::uno::Reference< css::io::XInputStream > mxInputStream;
 
     virtual ~WordPerfectImportFilterDialog();
 
     // XExecutableDialog
     virtual void SAL_CALL setTitle(const OUString &aTitle)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int16 SAL_CALL execute()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName)
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception) override;
 
     // XPropertyAccess
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-    SAL_CALL getPropertyValues() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL    setPropertyValues(const ::com::sun::star::uno::Sequence<
-                                               ::com::sun::star::beans::PropertyValue >& aProps)
-    throw (::com::sun::star::beans::UnknownPropertyException,
-           ::com::sun::star::beans::PropertyVetoException,
-           ::com::sun::star::lang::IllegalArgumentException,
-           ::com::sun::star::lang::WrappedTargetException,
-           ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue >
+    SAL_CALL getPropertyValues() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL    setPropertyValues(const css::uno::Sequence<
+                                               css::beans::PropertyValue >& aProps)
+    throw (css::beans::UnknownPropertyException,
+           css::beans::PropertyVetoException,
+           css::lang::IllegalArgumentException,
+           css::lang::WrappedTargetException,
+           css::uno::RuntimeException, std::exception) override;
 
 public:
-    explicit WordPerfectImportFilterDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext);
+    explicit WordPerfectImportFilterDialog(const css::uno::Reference< css::uno::XComponentContext > &rContext);
 
 };
 
 OUString WordPerfectImportFilterDialog_getImplementationName()
-throw (::com::sun::star::uno::RuntimeException);
+throw (css::uno::RuntimeException);
 
 bool SAL_CALL WordPerfectImportFilterDialog_supportsService(const OUString &ServiceName)
-throw (::com::sun::star::uno::RuntimeException);
+throw (css::uno::RuntimeException);
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames()
-throw (::com::sun::star::uno::RuntimeException);
+css::uno::Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames()
+throw (css::uno::RuntimeException);
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL WordPerfectImportFilterDialog_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext)
-throw (::com::sun::star::uno::Exception);
+css::uno::Reference< css::uno::XInterface >
+SAL_CALL WordPerfectImportFilterDialog_createInstance(const css::uno::Reference< css::uno::XComponentContext > &rContext)
+throw (css::uno::Exception);
 
 #endif
 

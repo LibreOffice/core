@@ -69,8 +69,8 @@ bool KeynoteImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OU
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL KeynoteImportFilter::detect(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &Descriptor)
-throw(com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL KeynoteImportFilter::detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor)
+throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 nNewLength = nLength + 2;

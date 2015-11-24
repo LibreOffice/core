@@ -49,7 +49,7 @@ namespace writerperfect
 class WRITERPERFECT_DLLPUBLIC DocumentHandler: public OdfDocumentHandler
 {
 public:
-    DocumentHandler(com::sun::star::uno::Reference < com::sun::star::xml::sax::XDocumentHandler > &xHandler);
+    DocumentHandler(css::uno::Reference < css::xml::sax::XDocumentHandler > &xHandler);
     void startDocument() override;
     void endDocument() override;
     void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList) override;
@@ -57,7 +57,7 @@ public:
     void characters(const librevenge::RVNGString &sCharacters) override;
 
 private:
-    com::sun::star::uno::Reference < com::sun::star::xml::sax::XDocumentHandler > mxHandler;
+    css::uno::Reference < css::xml::sax::XDocumentHandler > mxHandler;
 };
 
 }

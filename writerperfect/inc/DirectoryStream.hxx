@@ -37,11 +37,11 @@ class WRITERPERFECT_DLLPUBLIC DirectoryStream : public librevenge::RVNGInputStre
     struct Impl;
 
 public:
-    explicit DirectoryStream(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent);
+    explicit DirectoryStream(const css::uno::Reference<css::ucb::XContent> &xContent);
     virtual ~DirectoryStream();
 
-    static DirectoryStream *createForParent(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent);
-    static bool isDirectory(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent);
+    static DirectoryStream *createForParent(const css::uno::Reference<css::ucb::XContent> &xContent);
+    static bool isDirectory(const css::uno::Reference<css::ucb::XContent> &xContent);
 
     virtual bool isStructured() override;
     virtual unsigned subStreamCount() override;

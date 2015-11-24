@@ -104,7 +104,7 @@ DirectoryStream::Impl::Impl(const uno::Reference<ucb::XContent> &rxContent)
 {
 }
 
-DirectoryStream::DirectoryStream(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)
+DirectoryStream::DirectoryStream(const css::uno::Reference<css::ucb::XContent> &xContent)
     : m_pImpl(isDirectory(xContent) ? new Impl(xContent) : nullptr)
 {
 }
@@ -113,7 +113,7 @@ DirectoryStream::~DirectoryStream()
 {
 }
 
-DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)
+DirectoryStream *DirectoryStream::createForParent(const css::uno::Reference<css::ucb::XContent> &xContent)
 {
     try
     {
@@ -145,7 +145,7 @@ DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Ref
     }
 }
 
-bool DirectoryStream::isDirectory(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)
+bool DirectoryStream::isDirectory(const css::uno::Reference<css::ucb::XContent> &xContent)
 {
     try
     {
