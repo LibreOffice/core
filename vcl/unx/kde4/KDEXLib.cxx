@@ -276,7 +276,7 @@ void KDEXLib::socketNotifierActivated( int fd )
     sdata.handle( fd, sdata.data );
 }
 
-bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
+SalYieldResult KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     if( !m_isGlibEventLoopType )
     {
@@ -287,7 +287,9 @@ bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
             // otherwise they can remain unhandled for quite a long while
             wasEvent = processYield( false, bHandleAllCurrentEvents );
         }
-        return SalXLib::Yield(bWait, bHandleAllCurrentEvents) || wasEvent;
+        SalYieldResult aResult = SalXLib::Yield(bWait, bHandleAllCurrentEvents);
+        return (aResult == SalYieldResult::EVENT || wasEvent) ?
+            SalYieldResult::EVENT : SalYieldResult::TIMEOUT;
     }
     // if we are the main thread (which is where the event processing is done),
     // good, just do it
@@ -303,11 +305,11 @@ bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // temporarily do it while checking for new events)
         SalYieldMutexReleaser aReleaser;
         Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
-        return false;
+        return SalYieldResult::TIMEOUT;
     }
 }
 
-bool KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
+SalYieldResult KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     blockIdleTimeout = !bWait;
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
@@ -323,7 +325,8 @@ bool KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
     if( bWait && !wasEvent )
         dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
     blockIdleTimeout = false;
-    return wasEvent;
+    return wasEvent ? SalYieldResult::EVENT
+                    : SalYieldResult::TIMEOUT;
 }
 
 void KDEXLib::StartTimer( sal_uLong nMS )
