@@ -1185,7 +1185,6 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 
         bool                        mbEscherSpgr;
         bool                        mbEscherDg;
-        bool                        mbOleEmf;                   // OLE is EMF instead of WMF
         bool                        mbOOXML;
         OUString                    mEditAs;
 

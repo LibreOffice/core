@@ -278,7 +278,6 @@ struct SvxMSDffImportData
     MSDffImportRecords  m_Records;  ///< Shape pointer, Shape ids and private data
     Rectangle           aParentRect;///< Rectangle of the surrounding groups,
                                     ///< which might have been provided externally
-    Rectangle           aNewRect;   ///< Rectangle that is defined by this shape
 
     SvxMSDffImportData()
         {}
@@ -306,7 +305,6 @@ struct DffObjData
     bool        bChildAnchor   : 1;
     bool        bOpt           : 1;
     bool        bOpt2          : 1;
-    bool        bIsAutoText    : 1;
     bool        bRotateTextWithShape : 1;
     bool        bPageAnchor;
     int         nCalledByGroup;
@@ -325,7 +323,6 @@ struct DffObjData
         bChildAnchor( false ),
         bOpt( false ),
         bOpt2( false ),
-        bIsAutoText( false ),
         bRotateTextWithShape( true ),
         bPageAnchor( true ),
         nCalledByGroup( nClByGroup ){}
@@ -515,7 +512,6 @@ public:
     DffRecordManager    maShapeRecords;
     ColorData           mnDefaultColor;
 
-    bool                mbTracing;
     bool                mbSkipImages;
 
     Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;

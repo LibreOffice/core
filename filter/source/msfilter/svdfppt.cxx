@@ -522,14 +522,6 @@ SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString&
     SvxMSDffManager         ( rParam.rDocStream, rBaseURL ),
     m_pFonts                ( nullptr ),
     nStreamLen              ( 0 ),
-    nTextStylesIndex        ( 0xffff ),
-    eCharSetSystem          ( osl_getThreadTextEncoding() ),
-    bWingdingsChecked       ( false ),
-    bWingdingsAvailable     ( false ),
-    bMonotypeSortsChecked   ( false ),
-    bMonotypeSortsAvailable ( false ),
-    bTimesNewRomanChecked   ( false ),
-    bTimesNewRomanAvailable ( false ),
     rImportParam            ( rParam )
 {
 }

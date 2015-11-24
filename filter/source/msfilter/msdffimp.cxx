@@ -5550,7 +5550,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nSvxMSDffOLEConvFlags( 0 ),
      pSecPropSet( nullptr ),
      mnDefaultColor( mnDefaultColor_),
-     mbTracing( false ),
      mbSkipImages (bSkipImages)
 {
     SetModel( pSdrModel_, nApplicationScale );
@@ -5598,7 +5597,6 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      nSvxMSDffOLEConvFlags( 0 ),
      pSecPropSet( nullptr ),
      mnDefaultColor( COL_DEFAULT ),
-     mbTracing( false ),
      mbSkipImages(false)
 {
     SetModel( nullptr, 0 );

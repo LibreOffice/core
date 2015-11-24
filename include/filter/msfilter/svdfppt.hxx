@@ -105,7 +105,6 @@ struct SdHyperlinkEntry
 
     OUString    aConvSubString;
     ESelection  aESelection;
-    bool        bSelection;
 };
 
 // Helper class for reading the PPT InteractiveInfoAtom
@@ -267,11 +266,9 @@ public:
 struct PptFontEntityAtom
 {
     OUString            aName;
-    double              fScaling;
     sal_uInt8           lfClipPrecision;
     sal_uInt8           lfQuality;
 
-    sal_uInt32          nUniqueFontId;          // not used anymore
     rtl_TextEncoding    eCharSet;
     FontFamily          eFamily;
     FontPitch           ePitch;
@@ -393,7 +390,6 @@ class  SfxObjectShell;
 struct PPTOleEntry
 {
     sal_uInt32          nId;                        // OleId
-    sal_uInt32          nPersistPtr;                // PersistPtr
     sal_uInt32          nRecHdOfs;                  // points to the record header: ExObjListHd
     SfxObjectShell*     pShell;
     sal_uInt16          nType;                      // maybe PPT_PST_ExEmbed or PPT_PST_ExControl
@@ -401,7 +397,6 @@ struct PPTOleEntry
 
     PPTOleEntry( sal_uInt32 nid, sal_uInt32 nOfs, SfxObjectShell* pSh, sal_uInt16 nT, sal_uInt32 nAsp )
         : nId(nid)
-        , nPersistPtr(0)
         , nRecHdOfs(nOfs)
         , pShell(pSh)
         , nType(nT)
@@ -446,16 +441,6 @@ protected:
     PptFontCollection*  m_pFonts;
 
     sal_uInt32          nStreamLen;
-    sal_uInt16          nTextStylesIndex;
-
-    rtl_TextEncoding    eCharSetSystem;
-
-    bool                bWingdingsChecked       : 1;
-    bool                bWingdingsAvailable     : 1;
-    bool                bMonotypeSortsChecked   : 1;
-    bool                bMonotypeSortsAvailable : 1;
-    bool                bTimesNewRomanChecked   : 1;
-    bool                bTimesNewRomanAvailable : 1;
 
     bool                 ReadString( OUString& rStr ) const;
     // only for PowerPoint filter:

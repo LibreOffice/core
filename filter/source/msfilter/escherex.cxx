@@ -4979,7 +4979,6 @@ EscherEx::EscherEx(const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm, bool b
     , mnHellLayerId(USHRT_MAX)
     , mbEscherSpgr(false)
     , mbEscherDg(false)
-    , mbOleEmf(false)
     , mbOOXML(bOOXML)
 {
     if (!mpOutStrm)
