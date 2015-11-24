@@ -375,7 +375,7 @@ bool RichString::extractPlainString( OUString& orString, const oox::xls::Font* p
     if( (maTextPortions.size() == 1) && !maTextPortions.front()->hasFont() && !lclNeedsRichTextFormat( pFirstPortionFont ) )
     {
         orString = maTextPortions.front()->getText();
-        return orString.indexOf( '\x0A' ) < 0;
+        return orString.indexOf( '\x0A' ) < 0 && orString.indexOf( '\x0D' ) < 0;
     }
     return false;
 }
