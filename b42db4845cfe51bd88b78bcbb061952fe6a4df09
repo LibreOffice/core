@@ -1,0 +1,232 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_8577b201",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4414,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "I\u0027d prefer if you did not mix functional changes with cosmetical whitespace changes, to stay focused on what actually is important and keep patches smaller.",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_65744efd",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "Please outdent the private and public keywords to the class level, makes it easier to spot the sections.",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a5647649",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "Rather empty the vector (using the swap idiom) and use reserve() instead of resize() and use push_back() in the loop below. Reason is that resize() creates count elements using the default ctor to initialize them, just to overwrite them in the loop immediately thereafter.",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_055aa283",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "What if elements are negative? That would result in a negative fStepSize.",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4554aa53",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "That should set a div/0 error then, shouldn\u0027t it?",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_2551a663",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "nIdx \u003d (i \u003e\u003d nSamplesinPeriod) ? i - nSamplesinPeriod : i;\n\nwould be easier to read ;-)",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c5ed3a90",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "Instead of handling the missing case manually, use\n\n nAggregation \u003d static_cast\u003cint\u003e(GetDoubleWithDefault(0.0));\n\n(and please don\u0027t use C-style casts in new code ;-)",
+      "range": {
+        "startLine": 645,
+        "startChar": 8,
+        "endLine": 651,
+        "endChar": 47
+      },
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_05e8e27b",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "int nTemp \u003d static_cast\u003cint\u003e(GetDoubleWithDefault(1.0));",
+      "range": {
+        "startLine": 665,
+        "startChar": 8,
+        "endLine": 672,
+        "endChar": 44
+      },
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e5ecbe91",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "nSamplesinPeriod \u003d static_cast\u003cint\u003e(GetDoubleWithDefault(1.0));",
+      "range": {
+        "startLine": 690,
+        "startChar": 8,
+        "endLine": 696,
+        "endChar": 51
+      },
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_85fcd23f",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "In case of nGlobalError there\u0027s nothing pushed before the return. Interpreter functions should always push *something* in all return branches.\n\nHowever, actually you don\u0027t have to check nGlobalError because if it is set the error is pushed instead of the value in PushDouble().",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_65f9ee4d",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "Our error values are sal_uInt16, so should this be.",
+      "range": {
+        "startLine": 749,
+        "startChar": 4,
+        "endLine": 749,
+        "endChar": 7
+      },
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a5991622",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-24T14:10:50Z",
+      "side": 1,
+      "message": "Just use PushNA().",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
