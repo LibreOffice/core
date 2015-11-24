@@ -2853,6 +2853,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf85232, "tdf85232.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2267), xShape->getPosition().X);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf78902, "tdf78902.docx")
+{
+    // This hung in layout.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
