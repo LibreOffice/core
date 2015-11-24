@@ -64,28 +64,6 @@
 #include <sys/mman.h>
 #include "fontmanager.hxx"
 
-// the gamma table makes artificial bold look better for CJK glyphs
-static unsigned char aGammaTable[257];
-
-static void InitGammaTable()
-{
-    static const int M_MAX = 255;
-    static const int M_X   = 128;
-    static const int M_Y   = 208;
-
-    int x, a;
-    for( x = 0; x < 256; x++)
-    {
-        if ( x <= M_X )
-            a = ( x * M_Y + M_X / 2) / M_X;
-        else
-            a = M_Y + ( ( x - M_X ) * ( M_MAX - M_Y ) +
-                ( M_MAX - M_X ) / 2 ) / ( M_MAX - M_X );
-
-        aGammaTable[x] = (unsigned char)a;
-    }
-}
-
 static FT_Library aLibFT = nullptr;
 
 // enable linking with old FT versions
@@ -373,7 +351,6 @@ FreetypeManager::FreetypeManager()
     if( pEnv )
         nDefaultPrioAutoHint  = pEnv[0] - '0';
 
-    InitGammaTable();
     vclFontFileList::get();
 }
 
