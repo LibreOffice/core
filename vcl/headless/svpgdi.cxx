@@ -170,6 +170,28 @@ namespace
 
         return extents;
     }
+
+    cairo_rectangle_int_t getStrokeDamage(cairo_t* cr)
+    {
+        cairo_rectangle_int_t extents;
+        double x1, y1, x2, y2;
+
+        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+#if CAIRO_VERSION_MAJOR > 1 || (CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 10)
+        cairo_region_t *region = cairo_region_create_rectangle(&extents);
+
+        cairo_stroke_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        cairo_region_intersect_rectangle(region, &extents);
+
+        cairo_region_get_extents(region, &extents);
+        cairo_region_destroy(region);
+#endif
+
+        return extents;
+    }
+
 }
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
@@ -177,11 +199,6 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     bool bRet = false;
     (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-    if (m_bUseLineColor || !m_bUseFillColor)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaRect case");
-        return false;
-    }
 
     cairo_t* cr = getCairoContext();
     assert(cr && m_aDevice->isTopDown());
@@ -189,18 +206,37 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     clipRegion(cr);
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
-    cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
-                              m_aFillColor.getGreen()/255.0,
-                              m_aFillColor.getBlue()/255.0,
-                              fTransparency);
-    cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
     cairo_rectangle_int_t extents;
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
-    if (xDamageTracker)
-        extents = getFillDamage(cr);
 
-    cairo_fill(cr);
+    cairo_rectangle(cr, nX, nY, nWidth, nHeight);
+
+    if (m_bUseFillColor)
+    {
+        cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
+                                  m_aFillColor.getGreen()/255.0,
+                                  m_aFillColor.getBlue()/255.0,
+                                  fTransparency);
+
+        if (xDamageTracker && !m_bUseLineColor)
+            extents = getFillDamage(cr);
+
+        cairo_fill_preserve(cr);
+    }
+
+    if (m_bUseLineColor)
+    {
+        cairo_set_source_rgba(cr, m_aLineColor.getRed()/255.0,
+                                  m_aLineColor.getGreen()/255.0,
+                                  m_aLineColor.getBlue()/255.0,
+                                  fTransparency);
+
+        if (xDamageTracker)
+            extents = getStrokeDamage(cr);
+
+        cairo_stroke_preserve(cr);
+    }
 
     cairo_surface_flush(cairo_get_target(cr));
     cairo_destroy(cr); // unref
@@ -725,31 +761,43 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
     bool bRet = false;
     (void)rPolyPoly; (void)fTransparency;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-    if (m_bUseLineColor || !m_bUseFillColor)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyPolygon case");
-        return false;
-    }
 
     cairo_t* cr = getCairoContext();
     assert(cr && m_aDevice->isTopDown());
 
     clipRegion(cr);
 
-    cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
-                              m_aFillColor.getGreen()/255.0,
-                              m_aFillColor.getBlue()/255.0,
-                              1.0-fTransparency);
-
     for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
         AddPolygonToPath(cr, *pPoly, true);
 
     cairo_rectangle_int_t extents;
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
-    if (xDamageTracker)
-        extents = getFillDamage(cr);
 
-    cairo_fill(cr);
+    if (m_bUseFillColor)
+    {
+        cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
+                                  m_aFillColor.getGreen()/255.0,
+                                  m_aFillColor.getBlue()/255.0,
+                                  1.0-fTransparency);
+
+        if (xDamageTracker && !m_bUseLineColor)
+            extents = getFillDamage(cr);
+
+        cairo_fill_preserve(cr);
+    }
+
+    if (m_bUseLineColor)
+    {
+        cairo_set_source_rgba(cr, m_aLineColor.getRed()/255.0,
+                                  m_aLineColor.getGreen()/255.0,
+                                  m_aLineColor.getBlue()/255.0,
+                                  1.0-fTransparency);
+
+        if (xDamageTracker)
+            extents = getStrokeDamage(cr);
+
+        cairo_stroke_preserve(cr);
+    }
 
     cairo_surface_flush(cairo_get_target(cr));
     cairo_destroy(cr); // unref
