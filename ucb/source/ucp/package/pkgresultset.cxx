@@ -65,8 +65,7 @@ void DynamicResultSet::initStatic()
         = new ::ucbhelper::ResultSet( m_xContext,
                                       m_aCommand.Properties,
                                       new DataSupplier( m_xContext,
-                                                        m_xContent,
-                                                        m_aCommand.Mode ),
+                                                        m_xContent ),
                                       m_xEnv );
 }
 
@@ -77,8 +76,7 @@ void DynamicResultSet::initDynamic()
         = new ::ucbhelper::ResultSet( m_xContext,
                                       m_aCommand.Properties,
                                       new DataSupplier( m_xContext,
-                                                        m_xContent,
-                                                        m_aCommand.Mode ),
+                                                        m_xContent ),
                                       m_xEnv );
     m_xResultSet2 = m_xResultSet1;
 }

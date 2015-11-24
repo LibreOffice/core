@@ -238,13 +238,11 @@ public:
 
     ResultSetFactoryI(const Reference<XComponentContext >&  rxContext,
                       const Reference<XContentProvider >&  xProvider,
-                      sal_Int32 nOpenMode,
                       const Sequence<Property>& seq,
                       const Sequence<NumberedSortingInfo>& seqSort,
                       const std::vector<FTPDirentry>& dirvec)
         : m_xContext(rxContext),
           m_xProvider(xProvider),
-          m_nOpenMode(nOpenMode),
           m_seq(seq),
           m_seqSort(seqSort),
           m_dirvec(dirvec)
@@ -255,7 +253,6 @@ public:
     {
         return new ResultSetI(m_xContext,
                               m_xProvider,
-                              m_nOpenMode,
                               m_seq,
                               m_seqSort,
                               m_dirvec);
@@ -265,7 +262,6 @@ public:
 
     Reference< XComponentContext >                  m_xContext;
     Reference< XContentProvider >                   m_xProvider;
-    sal_Int32                                       m_nOpenMode;
     Sequence< Property >                            m_seq;
     Sequence< NumberedSortingInfo >                 m_seqSort;
     std::vector<FTPDirentry>                        m_dirvec;
@@ -564,7 +560,6 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                             Environment,
                             new ResultSetFactoryI(m_xContext,
                                                   m_xProvider.get(),
-                                                  aOpenCommand.Mode,
                                                   aOpenCommand.Properties,
                                                   aOpenCommand.SortingInfo,
                                                   resvec));

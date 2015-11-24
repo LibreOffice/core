@@ -52,7 +52,6 @@ namespace ftp {
 
         ResultSetBase(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                       const css::uno::Reference< css::ucb::XContentProvider >&  xProvider,
-                      sal_Int32 nOpenMode,
                       const css::uno::Sequence< css::beans::Property >& seq,
                       const css::uno::Sequence< css::ucb::NumberedSortingInfo >& seqSort);
 
@@ -523,7 +522,6 @@ namespace ftp {
         css::ucb::XContentProvider >  m_xProvider;
         sal_Int32                           m_nRow;
         bool                                m_nWasNull;
-        sal_Int32                           m_nOpenMode;
         bool                                m_bRowCountFinal;
 
         typedef std::vector< css::uno::Reference<

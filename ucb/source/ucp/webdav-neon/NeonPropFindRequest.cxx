@@ -220,13 +220,12 @@ extern "C" int NPFR_propnames_iter( void* userdata,
 }
 
 extern "C" void NPFR_propnames_results( void* userdata,
-                                        const ne_uri* uri,
+                                        const ne_uri* /*uri*/,
                                         const NeonPropFindResultSet* results )
 {
     // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
     // Create entry for the resource.
-    DAVResourceInfo theResource(
-        OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
+    DAVResourceInfo theResource;
 
     // Fill entry.
     ne_propset_iterate( results, NPFR_propnames_iter, &theResource );

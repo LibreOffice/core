@@ -41,8 +41,7 @@ private:
 public:
     ResultSetDataSupplier(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        const rtl::Reference< Content >& rContent,
-        sal_Int32 nOpenMode = css::ucb::OpenMode::ALL );
+        const rtl::Reference< Content >& rContent );
     virtual ~ResultSetDataSupplier();
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;

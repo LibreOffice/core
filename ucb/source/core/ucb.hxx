@@ -210,7 +210,6 @@ private:
     ProviderMap_Impl m_aProviders;
     osl::Mutex m_aMutex;
     cppu::OInterfaceContainerHelper* m_pDisposeEventListeners;
-    oslInterlockedCount m_nInitCount; //@@@ see initialize() method
     sal_Int32 m_nCommandId;
 };
 

@@ -230,7 +230,6 @@ UniversalContentBroker::UniversalContentBroker(
     const Reference< css::uno::XComponentContext >& xContext )
 : m_xContext( xContext ),
   m_pDisposeEventListeners( nullptr ),
-  m_nInitCount( 0 ), //@@@ see initialize() method
   m_nCommandId( 0 )
 {
     OSL_ENSURE( m_xContext.is(),

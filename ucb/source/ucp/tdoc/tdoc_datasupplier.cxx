@@ -74,17 +74,15 @@ struct DataSupplier_Impl
     ResultList                                   m_aResults;
     rtl::Reference< Content >                    m_xContent;
     uno::Reference< uno::XComponentContext >     m_xContext;
-    uno::Sequence< OUString > *             m_pNamesOfChildren;
-    sal_Int32                                    m_nOpenMode;
+    uno::Sequence< OUString > *                  m_pNamesOfChildren;
     bool                                         m_bCountFinal;
     bool                                         m_bThrowException;
 
     DataSupplier_Impl(
             const uno::Reference< uno::XComponentContext >& rxContext,
-            const rtl::Reference< Content >& rContent,
-            sal_Int32 nOpenMode )
+            const rtl::Reference< Content >& rContent )
     : m_xContent( rContent ), m_xContext( rxContext ),
-      m_pNamesOfChildren( nullptr ), m_nOpenMode( nOpenMode ),
+      m_pNamesOfChildren( nullptr ),
       m_bCountFinal( false ), m_bThrowException( false )
     {}
     ~DataSupplier_Impl();
@@ -110,9 +108,8 @@ DataSupplier_Impl::~DataSupplier_Impl()
 // DataSupplier Implementation.
 ResultSetDataSupplier::ResultSetDataSupplier(
                 const uno::Reference< uno::XComponentContext >& rxContext,
-                const rtl::Reference< Content >& rContent,
-                sal_Int32 nOpenMode )
-: m_pImpl( new DataSupplier_Impl( rxContext, rContent, nOpenMode ) )
+                const rtl::Reference< Content >& rContent )
+: m_pImpl( new DataSupplier_Impl( rxContext, rContent ) )
 {
 }
 

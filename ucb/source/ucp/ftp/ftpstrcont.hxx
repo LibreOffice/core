@@ -57,9 +57,6 @@ namespace ftp {
         virtual ~FTPInputStreamContainer() {}
 
         css::uno::Reference< css::io::XInputStream> operator()();
-
-    private:
-        FTPInputStream* m_out;
     };
 
 }

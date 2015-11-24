@@ -58,10 +58,7 @@ struct DAVResource
 
 struct DAVResourceInfo
 {
-    OUString uri;
     std::vector < OUString > properties;
-
-    explicit DAVResourceInfo( const OUString & inUri ) : uri( inUri ) {}
 };
 
 } // namespace webdav_ucp

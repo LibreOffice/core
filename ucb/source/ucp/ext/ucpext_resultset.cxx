@@ -63,8 +63,7 @@ namespace ucb { namespace ucp { namespace ext
     {
         ::rtl::Reference< DataSupplier > pDataSupplier( new DataSupplier(
             m_xContext,
-            m_xContent,
-            m_aCommand.Mode
+            m_xContent
         ) );
         m_xResultSet1 = new ::ucbhelper::ResultSet(
             m_xContext,

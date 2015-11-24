@@ -79,16 +79,14 @@ struct DataSupplier_Impl
     rtl::Reference< Content >                    m_xContent;
     uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< container::XEnumeration >    m_xFolderEnum;
-    sal_Int32                                    m_nOpenMode;
     bool                                     m_bCountFinal;
     bool                                     m_bThrowException;
 
     DataSupplier_Impl(
             const uno::Reference< uno::XComponentContext >& rxContext,
-            const rtl::Reference< Content >& rContent,
-            sal_Int32 nOpenMode )
+            const rtl::Reference< Content >& rContent )
     : m_xContent( rContent ), m_xContext( rxContext ),
-      m_xFolderEnum( rContent->getIterator() ), m_nOpenMode( nOpenMode ),
+      m_xFolderEnum( rContent->getIterator() ),
       m_bCountFinal( !m_xFolderEnum.is() ), m_bThrowException( m_bCountFinal )
     {}
     ~DataSupplier_Impl();
@@ -119,9 +117,8 @@ DataSupplier_Impl::~DataSupplier_Impl()
 
 DataSupplier::DataSupplier(
                 const uno::Reference< uno::XComponentContext >& rxContext,
-                const rtl::Reference< Content >& rContent,
-                sal_Int32 nOpenMode )
-: m_pImpl( new DataSupplier_Impl( rxContext, rContent, nOpenMode ) )
+                const rtl::Reference< Content >& rContent )
+: m_pImpl( new DataSupplier_Impl( rxContext, rContent ) )
 {
 }
 

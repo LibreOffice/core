@@ -67,8 +67,7 @@ void DynamicResultSet::initStatic()
             m_xContext,
             m_aCommand.Properties,
             new ResultSetDataSupplier( m_xContext,
-                                       m_xContent,
-                                       m_aCommand.Mode ) );
+                                       m_xContent ) );
 }
 
 
@@ -79,8 +78,7 @@ void DynamicResultSet::initDynamic()
             m_xContext,
             m_aCommand.Properties,
             new ResultSetDataSupplier( m_xContext,
-                                       m_xContent,
-                                       m_aCommand.Mode ) );
+                                       m_xContent ) );
     m_xResultSet2 = m_xResultSet1;
 }
 

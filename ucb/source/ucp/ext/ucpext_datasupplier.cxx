@@ -86,13 +86,10 @@ namespace ucb { namespace ucp { namespace ext
         ResultList                                  m_aResults;
         ::rtl::Reference< Content >                 m_xContent;
         Reference< XComponentContext >              m_xContext;
-        sal_Int32                                   m_nOpenMode;
 
-        DataSupplier_Impl( const Reference< XComponentContext >& rxContext, const ::rtl::Reference< Content >& i_rContent,
-                           const sal_Int32 i_nOpenMode )
+        DataSupplier_Impl( const Reference< XComponentContext >& rxContext, const ::rtl::Reference< Content >& i_rContent )
             :m_xContent( i_rContent )
             ,m_xContext( rxContext )
-            ,m_nOpenMode( i_nOpenMode )
         {
         }
         ~DataSupplier_Impl();
@@ -126,9 +123,8 @@ namespace ucb { namespace ucp { namespace ext
 
 
     DataSupplier::DataSupplier( const Reference< XComponentContext >& rxContext,
-                                const ::rtl::Reference< Content >& i_rContent,
-                                const sal_Int32 i_nOpenMode )
-        :m_pImpl( new DataSupplier_Impl( rxContext, i_rContent, i_nOpenMode ) )
+                                const ::rtl::Reference< Content >& i_rContent )
+        :m_pImpl( new DataSupplier_Impl( rxContext, i_rContent ) )
     {
     }
 

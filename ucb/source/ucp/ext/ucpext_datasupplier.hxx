@@ -42,8 +42,7 @@ namespace ucb { namespace ucp { namespace ext
     public:
         DataSupplier(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const rtl::Reference< Content >& rContent,
-            const sal_Int32 nOpenMode
+            const rtl::Reference< Content >& rContent
         );
 
         void    fetchData();
