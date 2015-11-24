@@ -3772,7 +3772,7 @@ void HwpReader::makeHyperText(TxtBox * hbox)
 
 
 /**
- * Read the platform information. if the platform is Linux or Solaris, it needs to change¶
+ * Read the platform information. if the platform is Linux or Solaris, it needs to change
  * C: \ => Home, D: \ => changed to root (/). Because HWP uses DOS emulator.
  */
 
