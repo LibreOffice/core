@@ -1460,7 +1460,7 @@ void GenericSalLayout::SortGlyphItems()
 MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout, const PhysicalFontFace* pBaseFont )
 :   SalLayout()
 ,   mnLevel( 1 )
-,   mbInComplete( false )
+,   mbIncomplete( false )
 {
     //maFallbackRuns[0].Clear();
     mpFallbackFonts[ 0 ] = pBaseFont;
@@ -1468,9 +1468,9 @@ MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout, const PhysicalFontFace* 
     mnUnitsPerPixel = rBaseLayout.GetUnitsPerPixel();
 }
 
-void MultiSalLayout::SetInComplete(bool bInComplete)
+void MultiSalLayout::SetIncomplete(bool bIncomplete)
 {
-    mbInComplete = bInComplete;
+    mbIncomplete = bIncomplete;
     maFallbackRuns[mnLevel-1] = ImplLayoutRuns();
 }
 
@@ -1497,7 +1497,7 @@ bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     if( mnLevel <= 1 )
         return false;
-    if (!mbInComplete)
+    if (!mbIncomplete)
         maFallbackRuns[ mnLevel-1 ] = rArgs.maRuns;
     return true;
 }
@@ -1613,7 +1613,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         // remove unused parts of component
         if( n > 0 )
         {
-            if (mbInComplete && (n == mnLevel-1))
+            if (mbIncomplete && (n == mnLevel-1))
                 mpLayouts[n]->Simplify( true );
             else
                 mpLayouts[n]->Simplify( false );

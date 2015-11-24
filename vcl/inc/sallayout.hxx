@@ -253,7 +253,7 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;
     virtual void    InitFont() const override;
 
-    void SetInComplete(bool bInComplete = true);
+    void SetIncomplete(bool bIncomplete = true);
 
 protected:
     virtual         ~MultiSalLayout();
@@ -272,7 +272,7 @@ private:
     const PhysicalFontFace* mpFallbackFonts[ MAX_FALLBACK ];
     ImplLayoutRuns  maFallbackRuns[ MAX_FALLBACK ];
     int             mnLevel;
-    bool            mbInComplete;
+    bool            mbIncomplete;
 };
 
 struct GlyphItem
