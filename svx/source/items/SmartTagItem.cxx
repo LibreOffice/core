@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <comphelper/propertysequence.hxx>
 #include <svx/SmartTagItem.hxx>
 
 #include <com/sun/star/container/XStringKeyMap.hpp>
@@ -53,9 +53,19 @@ SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
 
 
 
-bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, sal_uInt8 /* nMemberId */ ) const
+bool SvxSmartTagItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    return false;
+    rVal <<= comphelper::InitPropertySequence( {
+        { "ActionComponents", css::uno::makeAny( maActionComponentsSequence ) },
+        { "ActionIndices", css::uno::makeAny( maActionIndicesSequence ) },
+        { "StringKeyMaps", css::uno::makeAny( maStringKeyMaps ) },
+        { "TextRange", css::uno::makeAny( mxRange ) },
+        { "Controller", css::uno::makeAny( mxController ) },
+        { "Locale", css::uno::makeAny( maLocale ) },
+        { "ApplicationName", css::uno::makeAny( maApplicationName ) },
+        { "RangeText", css::uno::makeAny( maRangeText ) },
+    } );
+    return true;
 }
 
 bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, sal_uInt8 /* nMemberId */)

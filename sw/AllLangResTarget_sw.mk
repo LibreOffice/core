@@ -75,7 +75,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/uibase/misc/redlndlg.src \
     sw/source/uibase/ribbar/inputwin.src \
     sw/source/uibase/ribbar/workctrl.src \
-    sw/source/uibase/smartmenu/stmenu.src \
     sw/source/uibase/uiview/view.src \
     sw/source/uibase/utlui/attrdesc.src \
     sw/source/uibase/utlui/navipi.src \

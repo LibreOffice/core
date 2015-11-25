@@ -768,12 +768,8 @@ public:
 
     const SwPostItField* GetPostItFieldAtCursor() const;
 
-    // get smart tags at point position
-    void GetSmartTagTerm( const Point& rPt,
-                          SwRect& rSelectRect,
-                          css::uno::Sequence< OUString >& rSmartTagTypes,
-                          css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
-                          css::uno::Reference<css::text::XTextRange>& rRange );
+    // get smart tags rectangle for the given point
+    void GetSmartTagRect( const Point& rPt, SwRect& rSelectRect );
 
     // get smart tags at current cursor position
     void GetSmartTagTerm( css::uno::Sequence< OUString >& rSmartTagTypes,

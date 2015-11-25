@@ -586,6 +586,7 @@
 #define SID_ATTR_CHAR_COLOR2                (SID_SVX_START + 537)
 #define SID_COMP_BIBLIOGRAPHY               (SID_SVX_START + 880)
 #define SID_ADDRESS_DATA_SOURCE             (SID_SVX_START + 934)
+#define SID_OPEN_SMARTTAGOPTIONS            (SID_SVX_START + 1062)
 
 #define FID_SVX_START                       (SID_LIB_START + 500)
 #define FID_SEARCH_NOW                      (FID_SVX_START + 2)
