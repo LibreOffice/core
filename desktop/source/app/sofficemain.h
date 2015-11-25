@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_APP_SOFFICEMAIN_H
 #define INCLUDED_DESKTOP_SOURCE_APP_SOFFICEMAIN_H
 
-#include "desktopdllapi.h"
+#include <desktop/dllapi.h>
 
 #if defined __cplusplus
 extern "C" {
