@@ -46,7 +46,7 @@ private:
 // everywhere we want to log something to the crash report system.
 #if HAVE_FEATURE_BREAKPAD
 #else
-void CrashReporter::AddKeyValue(const OUString& /*rKey*/, const OUString& /*rValue*/)
+inline void CrashReporter::AddKeyValue(const OUString& /*rKey*/, const OUString& /*rValue*/)
 {
 }
 #endif
