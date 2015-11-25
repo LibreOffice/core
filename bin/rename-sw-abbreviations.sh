@@ -17,7 +17,7 @@ do
     S="${I%/*}"
     # change all except the filenames (in the .mk and in #include)
     # also avoid numFmt (OOXML token) and other stuff that must stay verbatim
-    git grep -l "$S" sw/ | grep -v -e '\.mk' -e '/data/' | xargs sed -i '/\(#include\|numFmt\|ForeignTxt\)/ !{ s/'"$I"'/g }'
+    git grep -l "$S" sw/ | grep -v -e '\.mk' -e '/data/' -e '/testdocuments/' | xargs sed -i '/\(#include\|numFmt\|ForeignTxt\)/ !{ s/'"$I"'/g }'
 done
 
 # global:
