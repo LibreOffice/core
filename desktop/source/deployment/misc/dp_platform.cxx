@@ -55,6 +55,7 @@
 #define PLATFORM_SOLARIS_SPARC      "solaris_sparc"
 #define PLATFORM_SOLARIS_SPARC64    "solaris_sparc64"
 #define PLATFORM_SOLARIS_X86        "solaris_x86"
+#define PLATFORM_FREEBSD_POWERPC    "freebsd_powerpc"
 #define PLATFORM_FREEBSD_X86        "freebsd_x86"
 #define PLATFORM_FREEBSD_X86_64     "freebsd_x86_64"
 #define PLATFORM_NETBSD_X86         "netbsd_x86"
@@ -171,6 +172,8 @@ namespace
             ret = checkOSandCPU("FreeBSD", "x86");
         else if (token == PLATFORM_FREEBSD_X86_64)
             ret = checkOSandCPU("FreeBSD", "X86_64");
+        else if (token == PLATFORM_FREEBSD_POWERPC)
+            ret = checkOSandCPU("FreeBSD", "PowerPC");
         else if (token == PLATFORM_NETBSD_X86)
             ret = checkOSandCPU("NetBSD", "x86");
         else if (token == PLATFORM_NETBSD_X86_64)
