@@ -62,7 +62,7 @@ static ::osl::Mutex& ImplGetOwnStaticMutex()
 
 LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
-    Window* pWindow = (Window*) ::GetWindowLong( hWnd, 0 );
+    Window* pWindow = (Window*) ::GetWindowLongPtr( hWnd, 0 );
     bool    bProcessed = true;
 
     if( pWindow )
@@ -305,7 +305,7 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 
         if( mnFrameWnd )
         {
-            ::SetWindowLong( mnFrameWnd, 0, (DWORD) this );
+            ::SetWindowLongPtr( mnFrameWnd, 0, (LONG_PTR) this );
 
                         pVideoWindow->put_Owner( (OAHWND) mnFrameWnd );
                         pVideoWindow->put_MessageDrain( (OAHWND) mnFrameWnd );
