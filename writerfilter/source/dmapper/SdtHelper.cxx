@@ -80,7 +80,7 @@ void SdtHelper::createDropDownControl()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("DefaultText", uno::makeAny(aDefaultText));
     xPropertySet->setPropertyValue("Dropdown", uno::makeAny(sal_True));
-    xPropertySet->setPropertyValue("StringItemList", uno::makeAny( comphelper::containerToSequence(m_aDropDownItems) ));
+    xPropertySet->setPropertyValue("StringItemList", uno::makeAny(comphelper::containerToSequence(m_aDropDownItems)));
 
     createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), aDefaultText, m_aDropDownItems), xControlModel);
     m_aDropDownItems.clear();

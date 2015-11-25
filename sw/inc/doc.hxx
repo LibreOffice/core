@@ -355,7 +355,7 @@ private:
 
     sal_Int32   mReferenceCount;
 
-   bool mbDtor                  : 1;    /**< TRUE: is in SwDoc DTOR.
+    bool mbDtor                  : 1;    /**< TRUE: is in SwDoc DTOR.
                                                and unfortunately temorarily also in
                                                SwSwgReader::InLayout() when flawed
                                                frames need deletion. */
