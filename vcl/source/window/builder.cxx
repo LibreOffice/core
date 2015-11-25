@@ -2572,7 +2572,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
 
 void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID)
 {
-    m_pParserState->m_aSizeGroups.push_back(SizeGroup(rID));
+    m_pParserState->m_aSizeGroups.push_back(SizeGroup());
     SizeGroup &rSizeGroup = m_pParserState->m_aSizeGroups.back();
 
     int nLevel = 1;

@@ -163,10 +163,6 @@ public:
         meFilter( BMP_FILTER_SMOOTH ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
         mnRadius( nRadius ) {}
 
-    BmpFilterParam( sal_uInt16 nSepiaPercent, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BMP_FILTER_SEPIA ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
-        mnSepiaPercent( nSepiaPercent ) {}
-
     BmpFilterParam( const Size& rMosaicTileSize, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_MOSAIC ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd )
         {
@@ -207,7 +203,6 @@ public:
 private:
     union
     {
-        sal_uInt16  mnSepiaPercent;
         sal_uInt8   mcSolarGreyThreshold;
         double      mnRadius;
 

@@ -139,8 +139,7 @@ private:
     struct data_holder {
         T m_value;
         T * const m_ptr;
-        sal_Int32 m_refCount;
-        data_holder( T * p ) : m_value(*p), m_ptr(p), m_refCount(1) {}
+        data_holder( T * p ) : m_value(*p), m_ptr(p) {}
         ~data_holder() { *m_ptr = m_value; }
     };
     data_holder * const m_holder;

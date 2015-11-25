@@ -35,7 +35,6 @@ class VCL_DLLPUBLIC MenuButton : public PushButton
 private:
     friend class VclBuilder;
 
-    Rectangle       maFocusRect;
     Timer*          mpMenuTimer;
     PopupMenu*      mpOwnMenu;
     PopupMenu*      mpMenu;

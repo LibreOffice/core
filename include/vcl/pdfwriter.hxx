@@ -451,10 +451,6 @@ public:
         // Use Sig prefix for members to avoid conflict with
         // the Location member of the AnyWidget which specifies the coordinates
         // of the signature
-
-        OUString                    SigLocation;
-        OUString                    SigReason;
-        OUString                    SigContactInfo;
         bool                             SigHidden;
 
         SignatureWidget()

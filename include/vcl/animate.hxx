@@ -95,15 +95,11 @@ struct AInfo
 {
     Bitmap          aLastSaveBitmap;
     Bitmap          aBackBitmap;
-    Rectangle       aClipRect;
-    Size            aLastSaveSize;
-    Point           aLastSavePoint;
     Point           aStartOrg;
     Size            aStartSize;
     VclPtr<OutputDevice>   pOutDev;
     void*           pViewData;
     long            nExtraData;
-    bool            bWithSize;
     bool            bPause;
 
     AInfo();

@@ -78,7 +78,6 @@ struct GLWindow
     Display*            dpy;
     int                 screen;
     Window              win;
-    Pixmap              pix;
 #if defined( GLX_EXT_texture_from_pixmap )
     GLXFBConfig        fbc;
 #endif
@@ -88,7 +87,6 @@ struct GLWindow
     bool HasGLXExtension( const char* name ) const;
     const char*             GLXExtensions;
 #endif
-    unsigned int            bpp;
     unsigned int            Width;
     unsigned int            Height;
     const GLubyte*          GLExtensions;
@@ -108,7 +106,6 @@ struct GLWindow
         dpy(nullptr),
         screen(0),
         win(0),
-        pix(0),
 #if defined( GLX_EXT_texture_from_pixmap )
         fbc(nullptr),
 #endif
@@ -116,7 +113,6 @@ struct GLWindow
         ctx(nullptr),
         GLXExtensions(nullptr),
 #endif
-        bpp(0),
         Width(0),
         Height(0),
         GLExtensions(nullptr),

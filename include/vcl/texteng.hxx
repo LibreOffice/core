@@ -109,7 +109,6 @@ private:
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
 
     Rectangle           maInvalidRect;
-    Range               maInvalidRange;
 
     LocaleDataWrapper*  mpLocaleDataWrapper;
 
