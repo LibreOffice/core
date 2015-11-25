@@ -1007,7 +1007,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     }
 
     if( nIndex >= rStr.getLength() )
-        return 0;
+        return 0; // TODO: this looks like a buggy caller?
 
     if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
     {
@@ -1017,7 +1017,19 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     SalLayout *const pSalLayout = ImplLayout(rStr, nIndex, nLen,
             Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
     if( !pSalLayout )
+    {
+        // The caller expects this to init the elements of pDXAry.
+        // Adapting all the callers to check that GetTextArray succeeded seems
+        // too much work.
+        // Init here to 0 only in the (rare) error case, so that any missing
+        // element init in the happy case will still be found by tools,
+        // and hope that is sufficient.
+        if (pDXAry)
+        {
+            memset(pDXAry, 0, nLen * sizeof(*pDXAry));
+        }
         return 0;
+    }
 #if VCL_FLOAT_DEVICE_PIXEL
     DeviceCoordinate* pDXPixelArray = NULL;
     if(pDXAry)
