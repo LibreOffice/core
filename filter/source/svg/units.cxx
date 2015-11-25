@@ -71,12 +71,12 @@ double convLength( const OUString& sValue, const State& rState, char dir )
     OString aUTF8 = OUStringToOString( sValue,
                                                  RTL_TEXTENCODING_UTF8 );
 
-    double  nVal=0.0;
+    std::string sVal;
     SvgUnit eUnit=SVG_LENGTH_UNIT_PX;
     const bool bRes = parse(aUTF8.getStr(),
         //  Begin grammar
         (
-            real_p[assign_a(nVal)]
+            (*digit_p >> *((str_p(".") | str_p(",")) >> *digit_p))[assign_a(sVal)]
             >> (  str_p("cm") [assign_a(eUnit,SVG_LENGTH_UNIT_CM)]
                 | str_p("em") [assign_a(eUnit,SVG_LENGTH_UNIT_EM)]
                 | str_p("ex") [assign_a(eUnit,SVG_LENGTH_UNIT_EX)]
@@ -95,7 +95,9 @@ double convLength( const OUString& sValue, const State& rState, char dir )
     if( !bRes )
         return 0.0;
 
-    return convLength(nVal,eUnit,rState,dir);
+    OUString oVal = OUString::createFromAscii(sVal.c_str()).replaceAll(",",".");
+
+    return convLength(oVal.toDouble(),eUnit,rState,dir);
 }
 
 } // namespace svgi
