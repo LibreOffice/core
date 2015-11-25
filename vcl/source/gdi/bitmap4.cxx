@@ -678,16 +678,14 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
     if( pReadAcc )
     {
         long            nSepiaPercent = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_SEPIA ) ?
-                                        pFilterParam->mcSolarGreyThreshold : 10;
+                                        pFilterParam->mnSepiaPercent : 10;
         const long      nSepia = 10000 - 100 * SAL_BOUND( nSepiaPercent, 0, 100 );
         BitmapPalette   aSepiaPal( 256 );
-
-        DBG_ASSERT( nSepiaPercent <= 100, "Bitmap::ImplSepia(): sepia value out of range; defaulting to 100%" );
 
         for( sal_uInt16 i = 0; i < 256; i++ )
         {
             BitmapColor&    rCol = aSepiaPal[ i ];
-            const sal_uInt8     cSepiaValue = (sal_uInt8) ( ( nSepia * i ) / 10000 );
+            const sal_uInt8 cSepiaValue = (sal_uInt8) ( nSepia * i / 10000 );
 
             rCol.SetRed( (sal_uInt8) i );
             rCol.SetGreen( cSepiaValue );

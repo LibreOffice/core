@@ -260,13 +260,9 @@ private:
 
     struct SizeGroup
     {
-        OString m_sID;
         std::vector<OString> m_aWidgets;
         stringmap m_aProperties;
-        SizeGroup(const OString &rId)
-            : m_sID(rId)
-        {
-        }
+        SizeGroup() {}
     };
 
     typedef std::map< VclPtr<vcl::Window>, stringmap> AtkMap;

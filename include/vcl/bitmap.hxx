@@ -165,7 +165,8 @@ public:
 
     BmpFilterParam( sal_uInt16 nSepiaPercent, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_SEPIA ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
-        mnSepiaPercent( nSepiaPercent ) {}
+        mnSepiaPercent( nSepiaPercent )
+    { assert(nSepiaPercent>=0 && nSepiaPercent<=100); }
 
     BmpFilterParam( const Size& rMosaicTileSize, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_MOSAIC ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd )
