@@ -275,10 +275,10 @@
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
   <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+/-:" block-list:name="±"/>
-  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":blocnote:" block-list:name="📓"/>
   <block-list:block block-list:abbreviated-name=":bloem:" block-list:name="⚘"/>
   <block-list:block block-list:abbreviated-name=":bloesem:" block-list:name="🌼"/>

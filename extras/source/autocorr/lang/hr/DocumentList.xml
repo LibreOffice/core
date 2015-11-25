@@ -608,10 +608,10 @@
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
   <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
-  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":bočica za bebe:" block-list:name="🍼"/>
   <block-list:block block-list:abbreviated-name=":bodež2:" block-list:name="‡"/>
   <block-list:block block-list:abbreviated-name=":bodež:" block-list:name="†"/>

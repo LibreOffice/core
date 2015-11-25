@@ -616,10 +616,10 @@
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
   <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
-  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":bœuf:" block-list:name="🐂"/>
   <block-list:block block-list:abbreviated-name=":boîte aux lettres2:" block-list:name="📫"/>
   <block-list:block block-list:abbreviated-name=":boîte aux lettres3:" block-list:name="📬"/>

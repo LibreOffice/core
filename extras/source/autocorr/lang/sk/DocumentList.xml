@@ -317,10 +317,10 @@
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
   <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
-  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":bodka v strede:" block-list:name="·"/>
   <block-list:block block-list:abbreviated-name=":bomba:" block-list:name="💣"/>
   <block-list:block block-list:abbreviated-name=":borovica:" block-list:name="🌲"/>

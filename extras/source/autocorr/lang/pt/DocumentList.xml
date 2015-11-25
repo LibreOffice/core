@@ -277,10 +277,10 @@
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
   <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
-  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":boca aberta 2:" block-list:name="😮"/>
   <block-list:block block-list:abbreviated-name=":boca aberta:" block-list:name="😃"/>
   <block-list:block block-list:abbreviated-name=":boca:" block-list:name="👄"/>

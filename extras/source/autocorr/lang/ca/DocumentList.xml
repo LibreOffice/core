@@ -358,6 +358,7 @@
   <block-list:block block-list:abbreviated-name=":coche:" block-list:name="🚗"/>
   <block-list:block block-list:abbreviated-name=":llibre:" block-list:name="📕"/>
   <block-list:block block-list:abbreviated-name=":marcador2:" block-list:name="🔖"/>
+  <block-list:block block-list:abbreviated-name=":coche:" block-list:name="📈"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":10.30:" block-list:name="🕥"/>
@@ -515,10 +516,10 @@
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
   <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
-  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":bloqueig:" block-list:name="🔏"/>
   <block-list:block block-list:abbreviated-name=":boca:" block-list:name="👄"/>
   <block-list:block block-list:abbreviated-name=":boira:" block-list:name="🌁"/>
@@ -597,7 +598,7 @@
   <block-list:block block-list:abbreviated-name=":coala:" block-list:name="🐨"/>
   <block-list:block block-list:abbreviated-name=":coche2:" block-list:name="🚘"/>
   <block-list:block block-list:abbreviated-name=":coche3:" block-list:name="🚙"/>
-  <block-list:block block-list:abbreviated-name=":coche:" block-list:name="📈"/>
+  <block-list:block block-list:abbreviated-name=":coche:" block-list:name="💹"/>
   <block-list:block block-list:abbreviated-name=":cocodril:" block-list:name="🐊"/>
   <block-list:block block-list:abbreviated-name=":còctel:" block-list:name="🍸"/>
   <block-list:block block-list:abbreviated-name=":cometa:" block-list:name="☄"/>

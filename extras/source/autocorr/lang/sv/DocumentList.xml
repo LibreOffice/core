@@ -108,6 +108,8 @@
   <block-list:block block-list:abbreviated-name="åsitk" block-list:name="åsikt"/>
   <block-list:block block-list:abbreviated-name="ädnå" block-list:name="ändå"/>
   <block-list:block block-list:abbreviated-name="övritg" block-list:name="övrigt"/>
+  <block-list:block block-list:abbreviated-name=":flagga:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":hammare och hacka:" block-list:name="⚒"/>
   <block-list:block block-list:abbreviated-name=":äktenskap:" block-list:name="⚭"/>
   <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
   <block-list:block block-list:abbreviated-name=":alpha:" block-list:name="α"/>
@@ -141,10 +143,10 @@
   <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
   <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
-  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":blomma:" block-list:name="⚘"/>
   <block-list:block block-list:abbreviated-name=":cent:" block-list:name="¢"/>
   <block-list:block block-list:abbreviated-name=":chi:" block-list:name="χ"/>
@@ -173,7 +175,7 @@
   <block-list:block block-list:abbreviated-name=":Fiskarna:" block-list:name="♓"/>
   <block-list:block block-list:abbreviated-name=":fjärderot:" block-list:name="∜"/>
   <block-list:block block-list:abbreviated-name=":flagga2:" block-list:name="⚑"/>
-  <block-list:block block-list:abbreviated-name=":flagga:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":flagga:" block-list:name="♭"/>
   <block-list:block block-list:abbreviated-name=":fontän:" block-list:name="⛲"/>
   <block-list:block block-list:abbreviated-name=":för alla:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":försiktig:" block-list:name="☡"/>
@@ -189,7 +191,7 @@
   <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
   <block-list:block block-list:abbreviated-name=":halvhög punkt:" block-list:name="·"/>
-  <block-list:block block-list:abbreviated-name=":hammare och hacka:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":hammare och hacka:" block-list:name="☭"/>
   <block-list:block block-list:abbreviated-name=":hjälm:" block-list:name="⛑"/>
   <block-list:block block-list:abbreviated-name=":hjärter2:" block-list:name="♡"/>
   <block-list:block block-list:abbreviated-name=":hjärter:" block-list:name="♥"/>
