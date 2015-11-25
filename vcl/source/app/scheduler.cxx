@@ -164,11 +164,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimerOnly )
     // tdf#91727 - NB. bTimerOnly is ultimately not used
     if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly)))
     {
-        // FIXME: move into a helper.
-        const char *pSchedulerName = pSchedulerData->mpScheduler->mpDebugName;
-        if (!pSchedulerName)
-            pSchedulerName = "unknown";
-        SAL_INFO("vcl.schedule", "Invoke task " << pSchedulerName);
+        SAL_INFO("vcl.schedule", "Invoke task " << pSchedulerData->GetDebugName());
 
         pSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
         pSchedulerData->Invoke();
@@ -208,22 +204,20 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
         {
             if (!pSchedulerData->mbInScheduler)
             {
-                // FIXME: move into a helper.
-                const char *pSchedulerName = pSchedulerData->mpScheduler->mpDebugName;
-                if (!pSchedulerName)
-                    pSchedulerName = "unknown";
-
                 if ( !pSchedulerData->mpScheduler->IsIdle() )
                 {
                     sal_uInt64 nOldMinPeriod = nMinPeriod;
                     nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod(
                                                                 nOldMinPeriod, nTime );
-                    SAL_INFO("vcl.schedule", "Have active timer " << pSchedulerName <<
-                        "update min period from " << nOldMinPeriod << " to " << nMinPeriod);
+                    SAL_INFO("vcl.schedule", "Have active timer " <<
+                             pSchedulerData->GetDebugName() <<
+                             "update min period from " << nOldMinPeriod <<
+                             " to " << nMinPeriod);
                 }
                 else
                 {
-                    SAL_INFO("vcl.schedule", "Have active idle " << pSchedulerName);
+                    SAL_INFO("vcl.schedule", "Have active idle " <<
+                             pSchedulerData->GetDebugName());
                     bHasActiveIdles = true;
                 }
             }

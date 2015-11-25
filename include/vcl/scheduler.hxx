@@ -75,6 +75,7 @@ public:
     SchedulerPriority GetPriority() const { return mePriority; }
 
     void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
+    const char     *GetDebugName() { return mpDebugName; }
 
     // Call handler
     virtual void    Invoke() = 0;
