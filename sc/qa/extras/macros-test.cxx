@@ -326,7 +326,7 @@ void ScMacrosTest::testVba()
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName);
+        SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName << " with url " << testInfo[i].sMacroUrl);
 
         SfxObjectShell::CallXScript(
             xComponent, testInfo[i].sMacroUrl, aParams, aRet, aOutParamIndex,
