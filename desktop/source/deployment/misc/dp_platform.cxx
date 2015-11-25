@@ -56,6 +56,7 @@
 #define PLATFORM_SOLARIS_SPARC      "solaris_sparc"
 #define PLATFORM_SOLARIS_SPARC64    "solaris_sparc64"
 #define PLATFORM_SOLARIS_X86        "solaris_x86"
+#define PLATFORM_FREEBSD_POWERPC    "freebsd_powerpc"
 #define PLATFORM_FREEBSD_X86        "freebsd_x86"
 #define PLATFORM_FREEBSD_X86_64     "freebsd_x86_64"
 #define PLATFORM_MACOSX_X86         "macosx_x86"
@@ -164,6 +165,8 @@ namespace
             ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("SPARC64"));
         else if (token.equals(OUSTR(PLATFORM_SOLARIS_X86)))
             ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_FREEBSD_POWERPC)))
+            ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("PowerPC"));
         else if (token.equals(OUSTR(PLATFORM_FREEBSD_X86)))
             ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_FREEBSD_X86_64)))
