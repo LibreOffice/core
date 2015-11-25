@@ -112,7 +112,7 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     :   ConfigItem( ROOTNODE_EVENTS, ConfigItemMode::ImmediateUpdate )
 {
     // the supported event names
-    for (GlobalEventId id : o3tl::enumrange<GlobalEventId>())
+    for (const GlobalEventId id : o3tl::enumrange<GlobalEventId>())
         m_supportedEvents[id] = OUString::createFromAscii( pEventAsciiNames[id] );
 
     initBindingInfo();
