@@ -621,15 +621,15 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
         {
             // The medium may be opened with READ/WRITE. Therefore, we first
             // check if it contains a Storage.
-            SfxMedium* pMedium = new SfxMedium( aFileName,
-                                                StreamMode::READ | StreamMode::NOCREATE);
+            std::unique_ptr<SfxMedium> xMedium(new SfxMedium(aFileName,
+                                                StreamMode::READ | StreamMode::NOCREATE));
 
-            if (pMedium->IsStorage())
+            if (xMedium->IsStorage())
             {
                 // Now depending on mode:
                 // maTlbObjects->SetSelectionMode(MULTIPLE_SELECTION);
-                // handover of ownership of pMedium;
-                SdDrawDocument* pDropDoc = maTlbObjects->GetBookmarkDoc(pMedium);
+                // handover of ownership of xMedium;
+                SdDrawDocument* pDropDoc = maTlbObjects->GetBookmarkDoc(xMedium.release());
 
                 if (pDropDoc)
                 {
@@ -646,7 +646,6 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
             }
             else
             {
-                delete pMedium;
                 return false;
             }
         }
