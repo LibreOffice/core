@@ -84,6 +84,23 @@
       "revId": "b6fbf3eb0c6d2b1e2ca9d1843aec5ac1de756378",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e0102cab",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2015-11-25T17:09:04Z",
+      "side": 1,
+      "message": "This is definitly broken, as you don\u0027t do a merge if the file is modifed.",
+      "revId": "b6fbf3eb0c6d2b1e2ca9d1843aec5ac1de756378",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
