@@ -43,6 +43,8 @@
 #include <unotools/mediadescriptor.hxx>
 
 #if HAVE_FEATURE_BREAKPAD
+#include <fstream>
+#include <desktop/crashreport.hxx>
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 #include <client/linux/handler/exception_handler.h>
@@ -73,10 +75,13 @@ OString getLibDir()
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* /*context*/, bool succeeded)
 {
+    std::string ini_path = CrashReporter::getIniFileName();
+    std::ofstream minidump_file(ini_path, std::ios_base::app);
+    minidump_file << "DumpFile=" << descriptor.path() << "\n";;
+    minidump_file.close();
     // send the minidump to the server (not yet implemented)
     SAL_WARN("crashreport", "minidump generated: " << descriptor.path());
-    OString aCommand = getLibDir().copy(7) + "/minidump_upload -p LibreOffice -v \"" + LIBO_VERSION_DOTTED + "\" ";
-    aCommand = aCommand + descriptor.path() + " " + "http://libreofficecrash.org/submit";
+    OString aCommand = getLibDir().copy(7) + "/minidump_upload " + ini_path.c_str();
     int retVal = std::system(aCommand.getStr());
     SAL_WARN_IF(retVal != 0, "crashreport", "Failed to upload minidump. Error Code: " << retVal);
     return succeeded;
@@ -88,6 +93,12 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if HAVE_FEATURE_BREAKPAD
     //limit the amount of code that needs to be executed before the crash reporting
+
+    std::string ini_path = CrashReporter::getIniFileName();
+    std::ofstream minidump_file(ini_path, std::ios_base::trunc);
+    minidump_file << "ProductName=LibreOffice\n";
+    minidump_file << "Version=" << LIBO_VERSION_DOTTED << "\n";
+    minidump_file.close();
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     google_breakpad::MinidumpDescriptor descriptor("/tmp");
