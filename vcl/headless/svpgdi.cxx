@@ -1154,7 +1154,7 @@ bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
 {
     if (m_aDrawMode == basebmp::DrawMode::XOR)
         return false;
-    if (!isCairoCompatible(m_aDevice))
+    if (!isCairoCompatible(m_aOrigDevice))
         return false;
     switch (eType)
     {
