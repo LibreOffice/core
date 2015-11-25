@@ -477,6 +477,9 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 {
     ImplSVData* pSVData = ImplGetSVData();
 
+    SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
+             ": " << (i_bAllEvents ? "all events" : "one event") << ": " << nReleased);
+
     bool bHasActiveIdles = false;
     sal_uInt64 nMinTimeout = 0;
     if (nReleased == 0) // else thread doesn't have SolarMutex so avoid race
@@ -505,6 +508,9 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
             i_bWait && !pSVData->maAppData.mbAppQuit,
             i_bAllEvents, nReleased);
 
+    SAL_INFO("vcl.schedule", "DoYield with " << (bHasActiveIdles ? "active idles" : "no ides") <<
+             " returns: " << (eResult == SalYieldResult::EVENT ? "processed event" : "timeout"));
+
     pSVData->maAppData.mnDispatchLevel--;
 
     DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
@@ -515,6 +521,8 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     // flush lazy deleted objects
     if( pSVData->maAppData.mnDispatchLevel == 0 )
         vcl::LazyDelete::flush();
+
+    SAL_INFO("vcl.schedule", "Leave ImplYield");
 }
 
 void Application::Reschedule( bool i_bAllEvents )
