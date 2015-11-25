@@ -20,6 +20,8 @@
 #include <errno.h>
 #include <sys/utsname.h>
 
+#include <desktop/crashreport.hxx>
+
 namespace glx {
 
 static int glxtest_pipe = 0;
@@ -287,6 +289,9 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
     // don't even try to use OpenGL 1.x
     if (mnGLMajorVersion == 1)
         return true;
+
+    CrashReporter::AddKeyValue("AdapterVendorId", rtl::OStringToOUString(maVendor, RTL_TEXTENCODING_UTF8));
+    CrashReporter::AddKeyValue("AdapterDeviceId", rtl::OStringToOUString(maRenderer, RTL_TEXTENCODING_UTF8));
 
     SAL_INFO("vcl.opengl", "Vendor: " << maVendor);
     SAL_INFO("vcl.opengl", "Renderer: " << maRenderer);
