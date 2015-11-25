@@ -83,8 +83,6 @@ awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds() throw (RuntimeExcept
     awt::Rectangle aBounds;
     OExternalLockGuard aGuard( this );
 
-    css::awt::Size aSize;
-
     if ( m_pHeadBar )
         aBounds = AWTRectangle( m_pHeadBar->GetItemRect( sal_uInt16( m_nIndexInParent ) ) );
 

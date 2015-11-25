@@ -120,8 +120,6 @@ void XSheetOutline::testShowLevel()
     uno::Reference< sheet::XSpreadsheet > aSheet(init(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetOutline > aSheetOutline(aSheet, UNO_QUERY_THROW);
 
-    table::CellRangeAddress aLevelRangeAddress;
-
     // test columns
 
     table::CellRangeAddress aLevel1 = getAddressFromRangeString(aSheet, colLevel1);

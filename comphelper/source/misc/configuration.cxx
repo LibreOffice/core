@@ -128,11 +128,8 @@ comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
 bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
     const
 {
-css::beans::Property SB(access_->getPropertyByHierarchicalName(path));
-    return
-        (access_->getPropertyByHierarchicalName(path).Attributes
-         & css::beans::PropertyAttribute::READONLY)
-        != 0;
+    css::beans::Property SB(access_->getPropertyByHierarchicalName(path));
+    return (SB.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
 }
 
 css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(

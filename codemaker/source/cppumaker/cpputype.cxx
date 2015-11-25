@@ -201,6 +201,9 @@ protected:
 
     bool passByReference(OUString const & name) const;
 
+    bool canBeWarnUnused(OUString const & name) const;
+    bool canBeWarnUnused(OUString const & name, int depth) const;
+
     OUString resolveOuterTypedefs(OUString const & name) const;
 
     OUString resolveAllTypedefs(OUString const & name) const;
@@ -903,6 +906,61 @@ bool CppuType::passByReference(OUString const & name) const {
         throw CannotDumpException(
             "unexpected entity \"" + name
             + "\" in call to CppuType::passByReference");
+    }
+}
+
+bool CppuType::canBeWarnUnused(OUString const & name) const {
+    return canBeWarnUnused(name, 0);
+}
+bool CppuType::canBeWarnUnused(OUString const & name, int depth) const {
+    // prevent infinite recursion and blowing the stack
+    if (depth > 10)
+        return false;
+    OUString aResolvedName = resolveOuterTypedefs(name);
+    switch (m_typeMgr->getSort(aResolvedName)) {
+    case codemaker::UnoType::SORT_BOOLEAN:
+    case codemaker::UnoType::SORT_BYTE:
+    case codemaker::UnoType::SORT_SHORT:
+    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
+    case codemaker::UnoType::SORT_LONG:
+    case codemaker::UnoType::SORT_UNSIGNED_LONG:
+    case codemaker::UnoType::SORT_HYPER:
+    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
+    case codemaker::UnoType::SORT_FLOAT:
+    case codemaker::UnoType::SORT_DOUBLE:
+    case codemaker::UnoType::SORT_CHAR:
+    case codemaker::UnoType::SORT_ENUM_TYPE:
+    case codemaker::UnoType::SORT_STRING:
+    case codemaker::UnoType::SORT_TYPE:
+        return true;
+    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+    {
+        rtl::Reference< unoidl::Entity > ent;
+        m_typeMgr->getSort(aResolvedName, &ent);
+        rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
+            dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
+        if (!ent2->getDirectBase().isEmpty() && !canBeWarnUnused(ent2->getDirectBase(), depth+1))
+            return false;
+        for ( const unoidl::PlainStructTypeEntity::Member& rMember : ent2->getDirectMembers())
+        {
+            if (!canBeWarnUnused(rMember.type, depth+1))
+                return false;
+        }
+        return true;
+    }
+    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+    {
+        OUString aInnerType = aResolvedName.copy(2);
+        return canBeWarnUnused(aInnerType, depth+1);
+    }
+    case codemaker::UnoType::SORT_ANY:
+    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+        return false;
+    default:
+        throw CannotDumpException(
+            "unexpected entity \"" + name
+            + "\" in call to CppuType::canBeWarnUnused");
     }
 }
 
@@ -1811,8 +1869,11 @@ private:
 };
 
 void PlainStructType::dumpDeclaration(FileStream & out) {
-    out << "\n#ifdef SAL_W32\n#   pragma pack(push, 8)\n#endif\n\n" << indent()
-        << "struct SAL_DLLPUBLIC_RTTI " << id_;
+    out << "\n#ifdef SAL_W32\n#   pragma pack(push, 8)\n#endif\n\n" << indent();
+    out << "struct SAL_DLLPUBLIC_RTTI ";
+    if (canBeWarnUnused(name_))
+        out << "SAL_WARN_UNUSED ";
+    out << id_;
     OUString base(entity_->getDirectBase());
     if (!base.isEmpty()) {
         out << ": public " << codemaker::cpp::scopedCppName(u2b(base));

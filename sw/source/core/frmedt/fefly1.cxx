@@ -1644,7 +1644,6 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             uno::Reference< beans::XPropertySetInfo >  xInfo = xSet->getPropertySetInfo();
             if(xInfo->hasPropertyByName( sName ))
             {
-                beans::Property xProperty = xInfo->getPropertyByName( sName );
                 aVal = xSet->getPropertyValue( sName );
                 if( aVal.getValue() && form::FormButtonType_URL == *static_cast<form::FormButtonType const *>(aVal.getValue()) )
                     eType = OBJCNT_URLBUTTON;

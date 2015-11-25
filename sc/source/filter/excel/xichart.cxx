@@ -1196,10 +1196,6 @@ void XclImpChText::ConvertTitlePosition( const XclChTextKey& rTitleKey ) const
         sal_Int32 nScRot = XclTools::GetScRotation( GetRotation(), 0 );
         double fRad = nScRot * F_PI18000;
         double fSin = fabs( sin( fRad ) );
-        double fCos = fabs( cos( fRad ) );
-        css::awt::Size aBoundSize(
-            static_cast< sal_Int32 >( fCos * aTitleSize.Width + fSin * aTitleSize.Height + 0.5 ),
-            static_cast< sal_Int32 >( fSin * aTitleSize.Width + fCos * aTitleSize.Height + 0.5 ) );
         // calculate the title position from the values in the CHTEXT record
         css::awt::Point aTitlePos(
             CalcHmmFromChartX( maData.maRect.mnX ),

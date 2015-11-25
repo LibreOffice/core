@@ -546,9 +546,6 @@ namespace sfx2
     {
         void operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
         {
-#ifdef DBG_UTIL
-            FilterDescriptor aHaveALook = *_rMapEntry.first;
-#endif
             *_rMapEntry.second = *_rMapEntry.first;
         }
     };

@@ -1001,7 +1001,6 @@ void PresenterSlideSorter::PaintPreview (
     // Paint a border around the preview.
     if (mxPreviewFrame.is())
     {
-        const geometry::RealRectangle2D aBox (0, 0, aSize.Width, aSize.Height);
         const util::Color aFrameColor (0x00000000);
         PresenterCanvasHelper::SetDeviceColor(aRenderState, aFrameColor);
         rxCanvas->drawPolyPolygon(mxPreviewFrame, aViewState, aRenderState);

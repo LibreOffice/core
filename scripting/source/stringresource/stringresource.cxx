@@ -1750,9 +1750,6 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUStrin
         }
         else if( !bDefaultFound && aExtension == "default" )
         {
-            //OUString aName = aInetObj.getBase();
-            Locale aLocale;
-
             if( checkNamingSceme( aPureName, m_aNameBase, aDefaultLocale ) )
                 bDefaultFound = true;
         }

@@ -1127,30 +1127,26 @@ Any SAL_CALL CachedContentResultSet
         throw UnknownPropertyException();
     }
 
-    Property aProp = m_pMyPropSetInfo->getPropertyByName( rPropertyName );
+    m_pMyPropSetInfo->getPropertyByName( rPropertyName );
         //throws UnknownPropertyException, if so
 
     Any aValue;
-    if( rPropertyName == CCRS_PropertySetInfo
-                        ::m_aPropertyNameForCount )
+    if( rPropertyName == CCRS_PropertySetInfo::m_aPropertyNameForCount )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nKnownCount;
     }
-    else if( rPropertyName == CCRS_PropertySetInfo
-                            ::m_aPropertyNameForFinalCount )
+    else if( rPropertyName == CCRS_PropertySetInfo::m_aPropertyNameForFinalCount )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_bFinalCount;
     }
-    else if( rPropertyName == CCRS_PropertySetInfo
-                            ::m_aPropertyNameForFetchSize )
+    else if( rPropertyName == CCRS_PropertySetInfo::m_aPropertyNameForFetchSize )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nFetchSize;
     }
-    else if( rPropertyName == CCRS_PropertySetInfo
-                            ::m_aPropertyNameForFetchDirection )
+    else if( rPropertyName == CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nFetchDirection;

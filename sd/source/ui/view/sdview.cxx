@@ -936,7 +936,6 @@ void View::DoConnect(SdrOle2Obj* pObj)
                 {
                     // TODO/LEAN: working with visual area can switch object to running state
                     Size aDrawSize = aRect.GetSize();
-                    awt::Size aSz;
 
                     MapMode aMapMode( mrDoc.GetScaleUnit() );
                     Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );

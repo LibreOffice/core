@@ -1309,7 +1309,6 @@ void ScXMLExport::WriteRowContent()
     }
     if (!bIsFirst)
     {
-        table::CellAddress aCellAddress;
         if (nIndex != -1)
             AddAttribute(sAttrStyleName, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
         if (nPrevValidationIndex > -1)

@@ -201,8 +201,6 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( mpViewShell->GetActiveWindow() ));
     if ( pDlg )
     {
-        css::datatransfer::DataFlavor  aFlavor;
-
         pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, OUString() );
         pDlg->Insert( SotClipboardFormatId::LINK_SOURCE, OUString() );
         pDlg->Insert( SotClipboardFormatId::DRAWING, OUString() );

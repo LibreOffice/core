@@ -138,7 +138,6 @@ awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect 
         throw embed::WrongStateException( "The own object has no model!",
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
-    awt::Size aResult;
     return maSize;
 }
 

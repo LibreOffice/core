@@ -889,7 +889,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             if( ( nMode == 1 ) || ( nMode == 2 ) )
             {
                 GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-                css::awt::Size aDefaultSize( 10000, 10000 );
                 Size aNewSize( OutputDevice::LogicToLogic( Size( nLogicalWidth, nLogicalHeight ), MAP_100TH_MM, aMtf.GetPrefMapMode() ) );
 
                 if( aNewSize.Width() && aNewSize.Height() )

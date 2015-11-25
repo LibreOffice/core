@@ -631,7 +631,7 @@ namespace pcr
         sal_Int32 nPropId = m_pInfoService->getPropertyId( _rPropertyName );
         DBG_ASSERT( nPropId != -1, "FormComponentPropertyHandler::convertToPropertyValue: not one of my properties!!" );
 
-        Property aProperty( impl_getPropertyFromId_throw( nPropId ) );
+        impl_getPropertyFromId_throw( nPropId );
 
         Any aControlValue( _rPropertyValue );
         if ( !aControlValue.hasValue() )

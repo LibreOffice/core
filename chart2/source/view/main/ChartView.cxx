@@ -1735,7 +1735,6 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         if(2==nDimensionCount)
             pSeriesPlotter->setTransformationSceneToScreen( pVCooSys->getTransformationSceneToScreen() );
         //better performance for big data
-        awt::Size aCoordinateRegionResolution(1000,1000);
         {
             //calculate resolution for coordinate system
             Sequence<sal_Int32> aCoordinateSystemResolution = pVCooSys->getCoordinateSystemResolution( rPageSize, m_aPageResolution );

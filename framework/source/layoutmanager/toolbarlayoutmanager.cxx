@@ -1753,7 +1753,6 @@ awt::Point ToolbarLayoutManager::implts_findNextCascadeFloatingPos()
 
     awt::Point aStartPos( nCascadeIndentX, nCascadeIndentY );
     awt::Point aCurrPos( aStartPos );
-    awt::Rectangle aRect;
 
     if ( xContainerWindow.is() )
     {
@@ -3274,8 +3273,6 @@ throw (uno::RuntimeException, std::exception)
 
     if ( aUIElement.m_xUIElement.is() && xWindow.is() )
     {
-        awt::Rectangle aRect;
-
         bWinFound = true;
         uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
         if ( xDockWindow->isFloating() )
@@ -3590,7 +3587,6 @@ throw (uno::RuntimeException, std::exception)
     {
         if ( !bDockingInProgress )
         {
-            awt::Rectangle aRect;
             uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
             if ( xDockWindow->isFloating() )
             {

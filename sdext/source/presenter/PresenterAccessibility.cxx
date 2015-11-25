@@ -1019,8 +1019,6 @@ awt::Rectangle SAL_CALL PresenterAccessible::AccessibleObject::getBounds()
 {
     ThrowIfDisposed();
 
-    awt::Rectangle aBox;
-
     const awt::Point aLocation (GetRelativeLocation());
     const awt::Size aSize (GetSize());
 

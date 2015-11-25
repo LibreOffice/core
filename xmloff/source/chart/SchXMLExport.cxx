@@ -1833,7 +1833,6 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     std::vector< XMLPropertyState > aPropertyStates;
 
     bool bIs3DChart = false;
-    drawing::HomogenMatrix aTransMatrix;
 
     msStringBuffer.setLength( 0 );
 

@@ -95,8 +95,6 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds()
         if (xSet.is())
         {
             uno::Any aValue;
-            awt::Point aPosition;
-            awt::Size aSize;
 
             aValue = xSet->getPropertyValue ("BorderLeft");
             aValue >>= aBoundingBox.X;

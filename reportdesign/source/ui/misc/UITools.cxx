@@ -295,7 +295,6 @@ namespace
         {
             if ( SfxItemState::SET == _rItemSet.GetItemState(aIt->nWID) && xInfo->hasPropertyByName(aIt->sName) )
             {
-                const beans::Property aProp = xInfo->getPropertyByName( aIt->sName );
                 if ( ( aIt->nFlags & beans::PropertyAttribute::READONLY ) != beans::PropertyAttribute::READONLY )
                 {
                     const SfxPoolItem* pItem = _rItemSet.GetItem(aIt->nWID);

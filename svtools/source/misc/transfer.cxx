@@ -603,7 +603,6 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
     if( bAdd )
     {
         DataFlavorEx   aFlavorEx;
-        DataFlavor     aObjDescFlavor;
 
         aFlavorEx.MimeType = rFlavor.MimeType;
         aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;

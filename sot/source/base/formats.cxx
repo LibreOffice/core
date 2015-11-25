@@ -1390,7 +1390,6 @@ static sal_uInt16 GetTransferableAction_Impl(
     {
         if( rDataFlavorExVector.size() )
         {
-            DataFlavor              aFlavor;
             const SotAction_Impl*   pArrayStart = pArray;
             SotClipboardFormatId    nId = pArray->nFormatId;
 

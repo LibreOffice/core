@@ -2158,7 +2158,6 @@ void XMLShapeExport::ImpExportPolygonShape(
         ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
 
         // create and export ViewBox
-        awt::Point aPoint(0, 0);
         awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
         SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
@@ -2620,7 +2619,6 @@ void XMLShapeExport::ImpExportConnectorShape(
             fTRRotate, aTRTranslate, pRefPoint);
 
     // fdo#49678: create and export ViewBox
-    awt::Point aPoint(0, 0);
     awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
     SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
