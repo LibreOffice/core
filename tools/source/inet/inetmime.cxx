@@ -690,8 +690,7 @@ bool parseParameters(ParameterList const & rInput,
             }
             auto const ret = pOutput->insert(
                 {p->m_aAttribute,
-                 {p->m_aAttribute, p->m_aCharset, p->m_aLanguage, aValue,
-                  !bBadEncoding}});
+                 {aValue}});
             SAL_INFO_IF(!ret.second, "tools",
                 "INetMIME: dropping duplicate parameter: " << p->m_aAttribute);
             p = pNext;

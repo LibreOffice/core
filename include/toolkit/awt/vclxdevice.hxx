@@ -52,7 +52,6 @@ private:
     VclPtr<OutputDevice>    mpOutputDevice;
 
 public:
-    void*                   pDummy;
     sal_uInt32              nFlags;
 
 public:

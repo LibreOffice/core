@@ -43,8 +43,7 @@
 //  class VCLXDevice
 
 VCLXDevice::VCLXDevice()
-    : pDummy(nullptr)
-    , nFlags(0)
+    : nFlags(0)
 {
 }
 

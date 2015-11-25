@@ -31,12 +31,6 @@
 
 namespace utl {
 
-    struct AtomDescription
-    {
-        int                 atom;
-        OUString            description;
-    };
-
     class AtomProvider
     {
         int                               m_nAtoms;
