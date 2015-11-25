@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a0e104d3",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-25T14:46:20Z",
+      "side": 1,
+      "message": "If you really have to make those white-space changes, please make them at least consistently:\n\n\u003ccss::uno::Any\u003e (no space)",
+      "revId": "b6fbf3eb0c6d2b1e2ca9d1843aec5ac1de756378",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_20ceb45a",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-25T14:46:20Z",
+      "side": 1,
+      "message": "Not your code, but why is this guy regular bool member and the rest is a bitfield?",
+      "revId": "b6fbf3eb0c6d2b1e2ca9d1843aec5ac1de756378",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_80db201b",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-25T14:46:20Z",
+      "side": 1,
+      "message": "The same here, please use whitespace consistently\n\n\u003ccss::sdbc::XRowSet\u003e",
+      "revId": "b6fbf3eb0c6d2b1e2ca9d1843aec5ac1de756378",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c0036875",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-25T14:46:20Z",
+      "side": 1,
+      "message": "and here. In fact, all over the place",
+      "revId": "b6fbf3eb0c6d2b1e2ca9d1843aec5ac1de756378",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a008e492",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-25T14:46:20Z",
+      "side": 1,
+      "message": "I haven\u0027t seen the body of this method yet, but the amount of arguments makes my head spin. This is going to be really difficult to maintain.\n\nCan\u0027t you somehow pack at least subset of those arguments into some struct and pass that as an argument?",
+      "revId": "b6fbf3eb0c6d2b1e2ca9d1843aec5ac1de756378",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
