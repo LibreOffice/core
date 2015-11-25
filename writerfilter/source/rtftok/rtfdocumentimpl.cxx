@@ -3487,7 +3487,14 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_LANDSCAPE:
     {
         auto pValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_PageOrientation_landscape);
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, pValue);
+        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, pValue);
+    }
+    case RTF_LNDSCPSXN:
+    {
+        auto pValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_PageOrientation_landscape);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, pValue);
     }
     break;
     case RTF_SHPBXPAGE:
