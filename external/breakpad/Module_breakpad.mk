@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,breakpad))
 $(eval $(call gb_Module_add_targets,breakpad,\
 	ExternalProject_breakpad \
 	UnpackedTarball_breakpad \
-	ExternalPackage_breakpad \
 ))
 
 # vim: set noet sw=4 ts=4:
