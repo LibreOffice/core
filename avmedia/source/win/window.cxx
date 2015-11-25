@@ -180,11 +180,11 @@ WNDCLASS* lcl_getWndClass()
 
 Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Player& rPlayer ) :
     mxMgr( rxMgr ),
-    mrPlayer( rPlayer ),
-    meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
-    mnParentWnd( 0 ),
-    mnFrameWnd( 0 ),
     maListeners( maMutex ),
+    meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
+    mrPlayer( rPlayer ),
+    mnFrameWnd( 0 ),
+    mnParentWnd( 0 ),
     mnPointerType( awt::SystemPointer::ARROW )
 {
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
