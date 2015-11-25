@@ -3460,14 +3460,8 @@ void SwCursorShell::GetSmartTagTerm( uno::Sequence< OUString >& rSmartTagTypes,
 }
 
 // see also SwEditShell::GetCorrection( const Point* pPt, SwRect& rSelectRect )
-void SwCursorShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
-                                   uno::Sequence< OUString >& rSmartTagTypes,
-                                   uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
-                                   uno::Reference<text::XTextRange>& rRange )
+void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
 {
-    if ( !SwSmartTagMgr::Get().IsSmartTagsEnabled() )
-        return;
-
     SwPaM* pCursor = GetCursor();
     SwPosition aPos( *pCursor->GetPoint() );
     Point aPt( rPt );
@@ -3495,9 +3489,6 @@ void SwCursorShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
                 pSmartTagList = pSubList;
                 nCurrent = eTmpState.m_pSpecialPos->nCharOfst;
             }
-
-            lcl_FillRecognizerData( rSmartTagTypes, rStringKeyMaps, *pSmartTagList, nCurrent );
-            lcl_FillTextRange( rRange, *pNode, nBegin, nLen );
 
             // get smarttag word
             OUString aText( pNode->GetText().copy(nBegin, nLen) );

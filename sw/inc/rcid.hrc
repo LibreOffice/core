@@ -235,10 +235,7 @@
 #define RC_ACCESS_END               (RC_ACCESS + 99)
 
 // free: RC_UNDO to (RC_UNDO + 199)
-
-// Smarttags
-#define RC_SMARTTAG_BEGIN                      RC_SMARTTAG
-//      RC_SMARTTAG_END                    (RC_SMARTTAG + 99)
+// free: RC_SMARTTAG to (RC_SMARTTAG + 99)
 
 // unocore
 #define RC_UNOCORE_BEGIN            RC_UNOCORE

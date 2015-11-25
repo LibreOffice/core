@@ -2359,6 +2359,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:AutoCorrectDlg?OpenSmartTag:bool=true" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Smart ~Tag Options...</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:TableMenu" oor:op="replace">

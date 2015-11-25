@@ -196,6 +196,17 @@
           <value>com.sun.star.comp.framework.ThesaurusMenuController</value>
         </prop>
       </node>
+      <node oor:name="c18" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:OpenSmartTagMenuOnCursor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.SmartTagMenuController</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="ZoomToolBox" oor:op="replace">

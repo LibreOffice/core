@@ -916,7 +916,7 @@
 #define SID_INSERT_ZWNBSP                               ( SID_SVX_START + 1059 )   /* insert ZWNJ - invisible space, forces linebreak*/
 #define SID_OPTIONS_DATABASES                           ( SID_SVX_START + 1060 )
 #define SID_OPEN_SMARTTAGMENU                           ( SID_SVX_START + 1061 )
-#define SID_OPEN_SMARTTAGOPTIONS                        ( SID_SVX_START + 1062 )
+// (SID_SVX_START + 1062) is in include/sfx2/sfxsids.hrc
 #define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1063 )
 #define SID_ATTR_VIEWLAYOUT                             ( SID_SVX_START + 1064 )
 #define SID_ATTR_ZOOMSLIDER                             ( SID_SVX_START + 1065 )

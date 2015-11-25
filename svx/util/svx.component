@@ -88,4 +88,8 @@
       constructor="com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.SmartTagMenuController"
+      constructor="com_sun_star_comp_svx_SmartTagMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
 </component>
