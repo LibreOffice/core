@@ -1534,13 +1534,13 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
     }
 
     // 2. Open the file ourselves
-    SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
-                             INetURLObject::NO_DECODE ), StreamMode::READ );
+    std::unique_ptr<SfxMedium> xMed(new SfxMedium( aTmpObj.GetMainURL(
+                             INetURLObject::NO_DECODE ), StreamMode::READ ));
     if( INetProtocol::File == aTmpObj.GetProtocol() )
-        pMed->Download(); // Touch the medium (download it)
+        xMed->Download(); // Touch the medium (download it)
 
     const SfxFilter* pSfxFlt = nullptr;
-    if( !pMed->GetError() )
+    if (!xMed->GetError())
     {
         SfxFilterMatcher aMatcher( OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
 
@@ -1551,24 +1551,24 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
         }
 
         if( nVersion )
-            pMed->GetItemSet()->Put( SfxInt16Item( SID_VERSION, nVersion ));
+            xMed->GetItemSet()->Put( SfxInt16Item( SID_VERSION, nVersion ));
 
         if( !rPasswd.isEmpty() )
-            pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
+            xMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
 
         if( !pSfxFlt )
-            aMatcher.DetectFilter( *pMed, &pSfxFlt, false );
+            aMatcher.DetectFilter( *xMed, &pSfxFlt, false );
 
         if( pSfxFlt )
         {
             // We cannot do anything without a Filter
-            pMed->SetFilter( pSfxFlt );
+            xMed->SetFilter( pSfxFlt );
 
             // If the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
             SwDocShell *const pNew(new SwDocShell(SfxObjectCreateMode::INTERNAL));
             xLockRef = pNew;
             xDocSh = static_cast<SfxObjectShell*>(xLockRef);
-            if( xDocSh->DoLoad( pMed ) )
+            if (xDocSh->DoLoad(xMed.release()))
             {
                 SwDoc const& rDoc(*pNew->GetDoc());
                 const_cast<SwDoc&>(rDoc).GetNodes().ForEach(&lcl_MergePortions);
@@ -1576,9 +1576,6 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             }
         }
     }
-
-    if( !xDocSh.Is() ) // Medium still needs to be deleted
-        delete pMed;
 
     return 0;
 }
