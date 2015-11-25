@@ -171,19 +171,29 @@ void SvtFilePicker::prepareExecute()
     // --**-- doesn't match the spec yet
     if ( m_aDisplayDirectory.getLength() > 0 || m_aDefaultName.getLength() > 0 )
     {
+        sal_Bool isFileSet = sal_False;
         if ( m_aDisplayDirectory.getLength() > 0 )
         {
 
-            INetURLObject aPath( m_aDisplayDirectory );
+            INetURLObject aPath;
+            INetURLObject givenPath( m_aDisplayDirectory );
+            if (!givenPath.HasError())
+                aPath = givenPath;
+            else
+            {
+                INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
+                aPath = aStdDirObj;
+            }
             if ( m_aDefaultName.getLength() > 0 )
             {
                 aPath.insertName( m_aDefaultName );
                 getDialog()->SetHasFilename( true );
             }
             String sPath = aPath.GetMainURL( INetURLObject::NO_DECODE );
-            getDialog()->SetPath( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
+            getDialog()->SetPath( sPath );
+            isFileSet = sal_True;
         }
-        else if ( m_aDefaultName.getLength() > 0 )
+        if ( !isFileSet && m_aDefaultName.getLength() > 0 )
         {
             getDialog()->SetPath( m_aDefaultName );
             getDialog()->SetHasFilename( true );
