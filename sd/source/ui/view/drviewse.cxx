@@ -999,24 +999,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
 
-            // Is there a page with the AutoLayout "Title"?
-            bool bFound = false;
-            sal_uInt16 i = 0;
-            sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
-
-            while (i < nCount && !bFound)
-            {
-                SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
-
-                if (nSId == SID_SLIDE_MASTER_MODE && pPage->GetAutoLayout() != AUTOLAYOUT_TITLE)
-                {
-                    bFound = true;
-                    SwitchPage((pPage->GetPageNum() - 1) / 2);
-                }
-
-                i++;
-            }
-
             // turn on default layer of MasterPage
             mpDrawView->SetActiveLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
 
