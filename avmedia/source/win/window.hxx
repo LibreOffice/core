@@ -20,6 +20,10 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_WIN_WINDOW_HXX
 #define INCLUDED_AVMEDIA_SOURCE_WIN_WINDOW_HXX
 
+#include <sal/config.h>
+
+#include <WinDef.h>
+
 #include "wincommon.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -101,8 +105,8 @@ private:
     ::cppu::OMultiTypeInterfaceContainerHelper  maListeners;
     css::media::ZoomLevel                       meZoomLevel;
     Player&                                     mrPlayer;
-    int                                         mnFrameWnd;
-    int                                         mnParentWnd;
+    HWND                                        mnFrameWnd;
+    HWND                                        mnParentWnd;
     int                                         mnPointerType;
 
     void                                        ImplLayoutVideoWindow();

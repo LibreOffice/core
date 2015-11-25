@@ -195,7 +195,7 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Playe
 Window::~Window()
 {
     if( mnFrameWnd )
-        ::DestroyWindow( (HWND) mnFrameWnd );
+        ::DestroyWindow( mnFrameWnd );
 }
 
 void Window::ImplLayoutVideoWindow()
@@ -296,16 +296,16 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
         rArguments[ 0 ] >>= nWnd;
         rArguments[ 1 ] >>= aRect;
 
-        mnParentWnd = static_cast<int>(nWnd);
+        mnParentWnd = reinterpret_cast<HWND>(nWnd);
 
-        mnFrameWnd = (int) ::CreateWindow( mpWndClass->lpszClassName, NULL,
+        mnFrameWnd = ::CreateWindow( mpWndClass->lpszClassName, NULL,
                                            WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
                                            aRect.X, aRect.Y, aRect.Width, aRect.Height,
-                                           (HWND) mnParentWnd, NULL, mpWndClass->hInstance, 0 );
+                                           mnParentWnd, NULL, mpWndClass->hInstance, 0 );
 
         if( mnFrameWnd )
         {
-            ::SetWindowLong( (HWND) mnFrameWnd, 0, (DWORD) this );
+            ::SetWindowLong( mnFrameWnd, 0, (DWORD) this );
 
                         pVideoWindow->put_Owner( (OAHWND) mnFrameWnd );
                         pVideoWindow->put_MessageDrain( (OAHWND) mnFrameWnd );
@@ -387,7 +387,7 @@ void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal
 {
     if( mnFrameWnd )
     {
-        ::SetWindowPos( (HWND) mnFrameWnd, HWND_TOP, X, Y, Width, Height, 0 );
+        ::SetWindowPos( mnFrameWnd, HWND_TOP, X, Y, Width, Height, 0 );
         ImplLayoutVideoWindow();
     }
 }
@@ -401,7 +401,7 @@ awt::Rectangle SAL_CALL Window::getPosSize()
     {
         ::RECT  aWndRect;
 
-        if( ::GetClientRect( (HWND) mnFrameWnd, &aWndRect ) )
+        if( ::GetClientRect( mnFrameWnd, &aWndRect ) )
         {
             aRet.X = aWndRect.left;
             aRet.Y = aWndRect.top;
@@ -423,7 +423,7 @@ void SAL_CALL Window::setVisible( sal_Bool bVisible )
         if( pVideoWindow )
             pVideoWindow->put_Visible( bVisible ? OATRUE : OAFALSE );
 
-        ::ShowWindow( (HWND) mnFrameWnd, bVisible ? SW_SHOW : SW_HIDE );
+        ::ShowWindow( mnFrameWnd, bVisible ? SW_SHOW : SW_HIDE );
     }
 }
 
@@ -431,14 +431,14 @@ void SAL_CALL Window::setEnable( sal_Bool bEnable )
     throw (uno::RuntimeException)
 {
     if( mnFrameWnd )
-        ::EnableWindow( (HWND) mnFrameWnd, bEnable );
+        ::EnableWindow( mnFrameWnd, bEnable );
 }
 
 void SAL_CALL Window::setFocus(  )
     throw (uno::RuntimeException)
 {
     if( mnFrameWnd )
-        ::SetFocus( (HWND) mnFrameWnd );
+        ::SetFocus( mnFrameWnd );
 }
 
 void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
