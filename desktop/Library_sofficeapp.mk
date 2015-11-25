@@ -25,6 +25,10 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
 
 $(eval $(call gb_Library_use_external,sofficeapp,boost_headers))
 
+ifeq ($(ENABLE_BREAKPAD),TRUE)
+$(eval $(call gb_Library_use_external,sofficeapp,breakpad))
+endif
+
 $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
 	officecfg/registry \
 ))
@@ -45,6 +49,9 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     comphelper \
     cppu \
     cppuhelper \
+    $(if $(filter TRUE,$(ENABLE_BREAKPAD)), \
+        crashreport \
+    ) \
     deploymentmisc \
     i18nlangtag \
     sal \
@@ -86,7 +93,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/cmdlineargs \
     desktop/source/app/cmdlinehelp \
     desktop/source/app/configinit \
-    desktop/source/app/crashreport \
     desktop/source/app/desktopcontext \
     desktop/source/app/desktopresid \
     desktop/source/app/dispatchwatcher \
@@ -118,10 +124,6 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
     -lX11 \
 ))
 endif
-endif
-
-ifeq ($(ENABLE_BREAKPAD),TRUE)
-$(eval $(call gb_Library_use_external,sofficeapp,breakpad))
 endif
 
 # LibreOfficeKit bits
