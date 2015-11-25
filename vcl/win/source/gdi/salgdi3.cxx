@@ -915,22 +915,6 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     return aDFA;
 }
 
-static ImplWinFontData* ImplLogMetricToDevFontDataA( const ENUMLOGFONTEXA* pLogFont,
-                                         const NEWTEXTMETRICA* pMetric,
-                                         DWORD nFontType )
-{
-    int nHeight = 0;
-    if ( nFontType & RASTER_FONTTYPE )
-        nHeight = pMetric->tmHeight - pMetric->tmInternalLeading;
-
-    ImplWinFontData* pData = new ImplWinFontData(
-        WinFont2DevFontAttributes(*pLogFont, *pMetric, nFontType),
-        nHeight,
-        pLogFont->elfLogFont.lfCharSet,
-        pMetric->tmPitchAndFamily );
-
-    return pData;
-}
 
 static ImplWinFontData* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
                                          const NEWTEXTMETRICW* pMetric,
@@ -1660,60 +1644,6 @@ bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilitie
     if( !mpWinFontData[0] )
         return false;
     return mpWinFontData[0]->GetFontCapabilities(rFontCapabilities);
-}
-
-int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
-                                  const NEWTEXTMETRICEXA* pMetric,
-                                  DWORD nFontType, LPARAM lParam )
-{
-    ImplEnumInfo* pInfo = (ImplEnumInfo*)(void*)lParam;
-    if ( !pInfo->mpName )
-    {
-        // Ignore vertical fonts
-        if ( pLogFont->elfLogFont.lfFaceName[0] != '@' )
-        {
-            if ( !pInfo->mbImplSalCourierNew )
-                pInfo->mbImplSalCourierNew = stricmp( pLogFont->elfLogFont.lfFaceName, "Courier New" ) == 0;
-            if ( !pInfo->mbImplSalCourierScalable )
-                pInfo->mbCourier = stricmp( pLogFont->elfLogFont.lfFaceName, "Courier" ) == 0;
-            else
-                pInfo->mbCourier = FALSE;
-            OUString aName( ImplSalGetUniString( pLogFont->elfLogFont.lfFaceName ) );
-            pInfo->mpName = &aName;
-            strncpy( pInfo->mpLogFontA->lfFaceName, pLogFont->elfLogFont.lfFaceName, LF_FACESIZE );
-            pInfo->mpLogFontA->lfCharSet = pLogFont->elfLogFont.lfCharSet;
-            EnumFontFamiliesExA( pInfo->mhDC, pInfo->mpLogFontA, (FONTENUMPROCA)SalEnumFontsProcExA,
-                                 (LPARAM)(void*)pInfo, 0 );
-            pInfo->mpLogFontA->lfFaceName[0] = '\0';
-            pInfo->mpLogFontA->lfCharSet = DEFAULT_CHARSET;
-            pInfo->mpName = NULL;
-            pInfo->mbCourier = FALSE;
-        }
-    }
-    else
-    {
-        // ignore non-scalable non-device font on printer
-        if( pInfo->mbPrinter )
-            if( (nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE) )
-                return 1;
-
-        ImplWinFontData* pData = ImplLogMetricToDevFontDataA( pLogFont, &(pMetric->ntmTm), nFontType );
-        pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
-
-        // prefer the system character set, so that we get as much as
-        // possible important characters. In the other case we could only
-        // display a limited set of characters (#87309#)
-        if ( pInfo->mnPreferredCharSet == pLogFont->elfLogFont.lfCharSet )
-            pData->mnQuality += 100;
-
-        // knowing Courier to be scalable is nice
-        if( pInfo->mbCourier )
-            pInfo->mbImplSalCourierScalable |= pData->IsScalable();
-
-        pInfo->mpList->Add( pData );
-    }
-
-    return 1;
 }
 
 int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
