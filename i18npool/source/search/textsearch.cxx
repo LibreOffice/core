@@ -301,18 +301,22 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             for ( sal_Int32 k = 0; k < nGroups; k++ )
             {
                 const sal_Int32 nStart = sres.startOffset[k] - nExtraOffset;
-                assert(nStart >= 0);
-                sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
+                // Result offsets are negative (-1) if a group expression was
+                // not matched.
+                if (nStart >= 0)
+                    sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
                 //               next position behind the last found character!
                 //               "a b c" find "b" must return 2,3 and not 2,4!!!
                 const sal_Int32 nStop = sres.endOffset[k] - nExtraOffset;
-                assert(nStop >= 0);
-                if (nStop > 0)
-                    sres.endOffset[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
-                else
-                    sres.endOffset[k] = offset[0];
+                if (nStop >= 0)
+                {
+                    if (nStop > 0)
+                        sres.endOffset[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
+                    else
+                        sres.endOffset[k] = offset[0];
+                }
             }
         }
     }
@@ -404,18 +408,22 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
             for ( sal_Int32 k = 0; k < nGroups; k++ )
             {
                 const sal_Int32 nStart = sres.startOffset[k];
-                assert(nStart >= 0);
-                if (nStart > 0)
-                    sres.startOffset[k] = offset[(nStart <= nOffsets ? nStart : nOffsets) - 1] + 1;
-                else
-                    sres.startOffset[k] = offset[0];
+                // Result offsets are negative (-1) if a group expression was
+                // not matched.
+                if (nStart >= 0)
+                {
+                    if (nStart > 0)
+                        sres.startOffset[k] = offset[(nStart <= nOffsets ? nStart : nOffsets) - 1] + 1;
+                    else
+                        sres.startOffset[k] = offset[0];
+                }
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
                 //               next position behind the last found character!
                 //               "a b c" find "b" must return 2,3 and not 2,4!!!
                 const sal_Int32 nStop = sres.endOffset[k];
-                assert(nStop >= 0);
-                sres.endOffset[k] = (nStop < nOffsets ? offset[nStop] : (offset[nOffsets - 1] + 1));
+                if (nStop >= 0)
+                    sres.endOffset[k] = (nStop < nOffsets ? offset[nStop] : (offset[nOffsets - 1] + 1));
             }
         }
     }
