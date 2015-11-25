@@ -135,7 +135,7 @@ bool            SwView::m_bJustOpened = false;
 SearchAttrItemList*     SwView::m_pSrchList   = nullptr;
 SearchAttrItemList*     SwView::m_pReplList   = nullptr;
 
-inline SfxDispatcher &SwView::GetDispatcher()
+SfxDispatcher &SwView::GetDispatcher()
 {
     return *GetViewFrame()->GetDispatcher();
 }

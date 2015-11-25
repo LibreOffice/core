@@ -25,10 +25,12 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <linguistic/lngprops.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
 #include <svl/stritem.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svx/dlgutil.hxx>
@@ -68,6 +70,8 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -77,7 +81,6 @@
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
-#include "stmenu.hxx"
 #include <svx/dialogs.hrc>
 #include <svtools/langtab.hxx>
 #include <unomid.h>
@@ -93,7 +96,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::smarttags;
 
 // Lingu-Dispatcher
 
@@ -788,33 +790,39 @@ bool SwView::ExecSpellPopup(const Point& rPt)
    This function shows the popup menu for smarttag
    actions.
 */
-bool SwView::ExecSmartTagPopup( const Point& rPt )
+void SwView::ExecSmartTagPopup( const Point& rPt )
 {
-    bool bRet = false;
     const bool bOldViewLock = m_pWrtShell->IsViewLocked();
     m_pWrtShell->LockView( true );
     m_pWrtShell->Push();
 
-    // get word that was clicked on
-    // This data structure maps a smart tag type string to the property bag
-    SwRect aToFill;
-    Sequence< OUString > aSmartTagTypes;
-    Sequence< Reference< container::XStringKeyMap > > aStringKeyMaps;
-    Reference<text::XTextRange> xRange;
+    css::uno::Sequence< css::uno::Any > aArgs( 2 );
+    aArgs[0] <<= comphelper::makePropertyValue( "Frame", GetDispatcher().GetFrame()->GetFrame().GetFrameInterface() );
+    aArgs[1] <<= comphelper::makePropertyValue( "CommandURL", OUString( ".uno:OpenSmartTagMenuOnCursor" ) );
 
-    m_pWrtShell->GetSmartTagTerm( rPt, aToFill, aSmartTagTypes, aStringKeyMaps, xRange);
-    if ( xRange.is() && aSmartTagTypes.getLength() )
+    css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+        "com.sun.star.comp.svx.SmartTagMenuController", aArgs, xContext ), css::uno::UNO_QUERY );
+
+    css::uno::Reference< css::awt::XPopupMenu > xPopupMenu( xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.awt.PopupMenu", xContext ), css::uno::UNO_QUERY );
+
+    if ( xPopupController.is() && xPopupMenu.is() )
     {
-        bRet = true;
+        xPopupController->setPopupMenu( xPopupMenu );
+
+        SwRect aToFill;
+        m_pWrtShell->GetSmartTagRect( rPt, aToFill );
         m_pWrtShell->SttSelect();
-        SwSmartTagPopup aPopup( this, aSmartTagTypes, aStringKeyMaps, xRange );
-        aPopup.Execute( aToFill.SVRect(), m_pEditWin );
+
+        if ( aToFill.HasArea() )
+            xPopupMenu->execute( m_pEditWin->GetComponentInterface(),
+                                 VCLUnoHelper::ConvertToAWTRect( m_pEditWin->LogicToPixel( aToFill.SVRect() ) ), css::awt::PopupMenuDirection::EXECUTE_DOWN );
     }
 
     m_pWrtShell->Pop( false );
     m_pWrtShell->LockView( bOldViewLock );
-
-    return bRet;
 }
 
 class SwFieldDialog : public FloatingWindow
