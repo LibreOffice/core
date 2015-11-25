@@ -18,7 +18,7 @@
  */
 
 
-#include "desktopdllapi.h"
+#include <desktop/dllapi.h>
 #include "dp_misc.h"
 #include "unopkg_main.h"
 #include "unopkg_shared.h"
