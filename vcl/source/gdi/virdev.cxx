@@ -165,6 +165,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     {
         case DeviceFormat::BITMASK:
             mnBitCount = 1;
+            break;
         default:
             mnBitCount = pOutDev->GetBitCount();
             break;
