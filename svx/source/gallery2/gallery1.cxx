@@ -166,8 +166,7 @@ public:
 // - Gallery -
 
 Gallery::Gallery( const OUString& rMultiPath )
-:       nReadTextEncoding   ( osl_getThreadTextEncoding() )
-,       bMultiPath          ( false )
+:       bMultiPath          ( false )
 {
     ImplLoad( rMultiPath );
 }

@@ -581,7 +581,7 @@ void OCustomShape::impl_setUnoShape( const uno::Reference< uno::XInterface >& rx
 OUnoObject::OUnoObject(const OUString& _sComponentName
                        ,const OUString& rModelName
                        ,sal_uInt16   _nObjectType)
-          :SdrUnoObj(rModelName, true)
+          :SdrUnoObj(rModelName)
           ,OObjectBase(_sComponentName)
           ,m_nObjectType(_nObjectType)
 {
@@ -592,7 +592,7 @@ OUnoObject::OUnoObject(const OUString& _sComponentName
 OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xComponent
                        ,const OUString& rModelName
                        ,sal_uInt16   _nObjectType)
-          :SdrUnoObj(rModelName, true)
+          :SdrUnoObj(rModelName)
           ,OObjectBase(_xComponent)
           ,m_nObjectType(_nObjectType)
 {

@@ -238,8 +238,6 @@ private:
 
 protected:
     SdrObjList*                 pObjList;
-    SdrView*                    pView;      // To be able to re-create the selection for a
-    SdrPageView*                pPageView;  // for a ObjDel, Undo
     sal_uInt32                      nOrdNum;
 
 protected:

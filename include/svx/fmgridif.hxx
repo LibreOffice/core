@@ -210,7 +210,6 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FmXGridControl  :public UnoControl
     FmXGridControlMultiplexer   m_aGridControlListeners;
 
 protected:
-    sal_uInt16  m_nPeerCreationLevel;
     bool        m_bInDraw;
 
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;

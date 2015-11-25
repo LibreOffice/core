@@ -63,7 +63,7 @@ protected:
     Fraction                    aSnapWdtX;
     Fraction                    aSnapWdtY;
 
-    sal_uInt16                      nMagnSizPix;
+    sal_uInt16                  nMagnSizPix;
     long                        nSnapAngle;
     long                        nEliminatePolyPointLimitAngle;
 
@@ -71,16 +71,11 @@ protected:
 
     bool                        bSnapEnab : 1;
     bool                        bGridSnap : 1;
-    bool                        bSnapTo1Pix : 1;             // If GridSnap off, snap to one Pixel to avoid values like 10.01
     bool                        bBordSnap : 1;
     bool                        bHlplSnap : 1;
     bool                        bOFrmSnap : 1;
     bool                        bOPntSnap : 1;
     bool                        bOConSnap : 1;
-    bool                        bMoveMFrmSnap : 1;
-    bool                        bMoveOFrmSnap : 1;
-    bool                        bMoveOPntSnap : 1;
-    bool                        bMoveOConSnap : 1;
     bool                        bMoveSnapOnlyTopLeft : 1;    //  Special for dialogeditor
     bool                        bOrtho : 1;
     bool                        bBigOrtho : 1;

@@ -100,9 +100,8 @@ void ImpSdrObjTextLink::Closed()
 }
 
 
-ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData(SdrTextObj* pObj1):
+ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData():
     SdrObjUserData(SdrInventor,SDRUSERDATA_OBJTEXTLINK,0),
-    pObj(pObj1),
     aFileDate0( DateTime::EMPTY ),
     pLink(nullptr),
     eCharSet(RTL_TEXTENCODING_DONTKNOW)
@@ -114,9 +113,9 @@ ImpSdrObjTextLinkUserData::~ImpSdrObjTextLinkUserData()
     delete pLink;
 }
 
-SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
+SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* ) const
 {
-    ImpSdrObjTextLinkUserData* pData=new ImpSdrObjTextLinkUserData(static_cast<SdrTextObj*>(pObj1));
+    ImpSdrObjTextLinkUserData* pData=new ImpSdrObjTextLinkUserData;
     pData->aFileName  =aFileName;
     pData->aFilterName=aFilterName;
     pData->aFileDate0 =aFileDate0;
@@ -135,7 +134,7 @@ void SdrTextObj::SetTextLink(const OUString& rFileName, const OUString& rFilterN
     if (pData!=nullptr) {
         ReleaseTextLink();
     }
-    pData=new ImpSdrObjTextLinkUserData(this);
+    pData=new ImpSdrObjTextLinkUserData;
     pData->aFileName=rFileName;
     pData->aFilterName=rFilterName;
     pData->eCharSet=eCharSet;

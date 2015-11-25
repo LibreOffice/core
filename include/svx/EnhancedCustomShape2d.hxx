@@ -151,10 +151,6 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         {
             HandleFlags nFlags;
 
-            bool        bMirroredX;
-            bool        bMirroredY;
-            bool        bSwitched;
-
             css::drawing::EnhancedCustomShapeParameterPair   aPosition;
             css::drawing::EnhancedCustomShapeParameterPair   aPolar;
 
@@ -172,9 +168,6 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
             Handle()
                 : nFlags(HandleFlags::NONE)
-                , bMirroredX ( false )
-                , bMirroredY ( false )
-                , bSwitched( false )
                 , nRefX( -1 )
                 , nRefY( -1 )
                 , nRefAngle( -1 )

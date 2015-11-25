@@ -767,20 +767,7 @@ enum MSO_LineCap {
 // Various enums from the OfficeDraw documentation Appendix D - End
 
 // BStore-Container
-// FBSE - File Blip Store Entry
-struct MSOF_BSE {
-   sal_uInt8      btWin32;    // Required type on Win32
-   sal_uInt8      btMacOS;    // Required type on Mac
-   sal_uInt8      rgbUid[16]; // Identifier of blip
-   sal_uInt16      tag;       // currently unused
-   sal_uIntPtr     size;      // Blip size in stream
-   sal_uIntPtr     cRef;      // Reference count on the blip
-   sal_uIntPtr /*MSOFO*/ foDelay;    // File offset in the delay stream
-   sal_uInt8      usage;      // How this blip is used (MSOBLIPUSAGE)
-   sal_uInt8      cbName;     // length of the blip name
-   sal_uInt8      unused2;    // for the future
-   sal_uInt8      unused3;    // for the future
-};
+
 
 enum MSO_BLIPUSAGE {
    mso_blipUsageDefault,  // All non-texture fill blips get this.

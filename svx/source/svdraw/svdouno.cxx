@@ -148,9 +148,8 @@ namespace
 }
 
 
-SdrUnoObj::SdrUnoObj(const OUString& rModelName, bool _bOwnUnoControlModel)
-:   m_pImpl( new SdrUnoObjDataHolder ),
-    bOwnUnoControlModel( _bOwnUnoControlModel )
+SdrUnoObj::SdrUnoObj(const OUString& rModelName)
+:   m_pImpl( new SdrUnoObjDataHolder )
 {
     bIsUnoObj = true;
 
@@ -162,10 +161,8 @@ SdrUnoObj::SdrUnoObj(const OUString& rModelName, bool _bOwnUnoControlModel)
 }
 
 SdrUnoObj::SdrUnoObj(const OUString& rModelName,
-                     const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
-                     bool _bOwnUnoControlModel)
-:   m_pImpl( new SdrUnoObjDataHolder ),
-    bOwnUnoControlModel( _bOwnUnoControlModel )
+                     const uno::Reference< lang::XMultiServiceFactory >& rxSFac)
+:   m_pImpl( new SdrUnoObjDataHolder )
 {
     bIsUnoObj = true;
 

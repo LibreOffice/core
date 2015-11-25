@@ -681,8 +681,6 @@ OUString SdrUndoGeoObj::GetComment() const
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
     : SdrUndoObj(rNewObj)
     , bOwner(false)
-    , pView(nullptr)
-    , pPageView(nullptr)
 {
     pObjList=pObj->GetObjList();
     if (bOrdNumDirect)

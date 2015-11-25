@@ -74,7 +74,6 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
     FmXFormShell*   m_pImpl;
     FmFormView*     m_pFormView;
     FmFormModel*    m_pFormModel;
-    SfxViewShell*   m_pParentShell;
 
     sal_uInt16  m_nLastSlot;
     bool        m_bDesignMode : 1;

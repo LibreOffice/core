@@ -342,7 +342,6 @@ FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
                ,m_aContainerListeners(*this, GetMutex())
                ,m_aSelectionListeners(*this, GetMutex())
                ,m_aGridControlListeners(*this, GetMutex())
-               ,m_nPeerCreationLevel(0)
                ,m_bInDraw(false)
                ,m_xContext(_rxContext)
 {

@@ -234,7 +234,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 }
 
 SdrModel::SdrModel():
-    aReadDate( DateTime::EMPTY ),
     maMaPag(),
     maPages()
 {
@@ -242,7 +241,6 @@ SdrModel::SdrModel():
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts):
-    aReadDate( DateTime::EMPTY ),
     maMaPag(),
     maPages()
 {
@@ -250,7 +248,6 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, boo
 }
 
 SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts):
-    aReadDate( DateTime::EMPTY ),
     maMaPag(),
     maPages(),
     aTablePath(rPath)
@@ -2101,7 +2098,6 @@ const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
 SdrHint::SdrHint(SdrHintKind eNewHint)
 :   mpPage(nullptr),
     mpObj(nullptr),
-    mpObjList(nullptr),
     meHint(eNewHint)
 {
 }
@@ -2109,7 +2105,6 @@ SdrHint::SdrHint(SdrHintKind eNewHint)
 SdrHint::SdrHint(const SdrObject& rNewObj)
 :   mpPage(rNewObj.GetPage()),
     mpObj(&rNewObj),
-    mpObjList(rNewObj.GetObjList()),
     meHint(HINT_OBJCHG)
 {
     maRectangle = rNewObj.GetLastBoundRect();

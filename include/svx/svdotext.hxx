@@ -102,7 +102,6 @@ class ImpSdrObjTextLinkUserData : public SdrObjUserData
     friend class                SdrTextObj;
     friend class                ImpSdrObjTextLink;
 
-    SdrTextObj*                 pObj;
     OUString                    aFileName;   // Name des referenzierten Dokuments
     OUString                    aFilterName; // ggf. ein Filter
     DateTime                    aFileDate0;  // Unnoetiges neuladen vermeiden
@@ -110,7 +109,7 @@ class ImpSdrObjTextLinkUserData : public SdrObjUserData
     rtl_TextEncoding            eCharSet;
 
 public:
-    ImpSdrObjTextLinkUserData(SdrTextObj* pObj1);
+    ImpSdrObjTextLinkUserData();
     virtual ~ImpSdrObjTextLinkUserData();
 
     virtual SdrObjUserData* Clone(SdrObject* pObj1) const override;
@@ -226,7 +225,6 @@ public:
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
 
 protected:
-    OverflowingText *mpOverflowingText = nullptr;
     bool mbIsUnchainableClone = false;
 
     // the successor in a chain

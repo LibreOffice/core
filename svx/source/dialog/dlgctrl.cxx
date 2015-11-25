@@ -1119,9 +1119,8 @@ void SvxPixelCtl::Reset()
 
 // Constructor: BitmapCtl for SvxPixelCtl
 
-SvxBitmapCtl::SvxBitmapCtl( vcl::Window* /*pParent*/, const Size& rSize )
-    : aSize(rSize)
-    , nLines(0)
+SvxBitmapCtl::SvxBitmapCtl()
+    : nLines(0)
     , pBmpArray(nullptr)
 {
 }

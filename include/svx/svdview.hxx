@@ -102,7 +102,6 @@ struct SVX_DLLPUBLIC SdrViewEvent
     Point                       aLogicPos;
     SdrHitKind                  eHit;
     SdrEventKind                eEvent;
-    SdrHdlKind                  eHdlKind;
     SdrCreateCmd                eEndCreateCmd;   // for EndInsPoint too
 
     sal_uInt16                  nMouseClicks;
@@ -113,7 +112,6 @@ struct SVX_DLLPUBLIC SdrViewEvent
 
     bool                        bMouseDown : 1;
     bool                        bMouseUp : 1;
-    bool                        bDoubleHdlSize : 1;  // Double Handlesize because of TextEdit
     bool                        bIsAction : 1;       // Action is active
     bool                        bIsTextEdit : 1;     // TextEdit runs currently
     bool                        bTextEditHit : 1;    // hit open OutlinerView?

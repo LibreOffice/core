@@ -95,7 +95,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  vcl::Window* pParent, const SfxItemSet& rIn
     m_pCtlPreview->set_width_request(aSize2.Width());
     m_pCtlPreview->set_height_request(aSize2.Height());
 
-    m_pBitmapCtl = new SvxBitmapCtl(this, aSize2);
+    m_pBitmapCtl = new SvxBitmapCtl;
 
     // this page needs ExchangeSupport
     SetExchangeSupport();

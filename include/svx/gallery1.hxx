@@ -108,7 +108,6 @@ private:
     GalleryCacheThemeList       aThemeCache;
     INetURLObject               aRelURL;
     INetURLObject               aUserURL;
-    rtl_TextEncoding            nReadTextEncoding;
     bool                        bMultiPath;
 
     SAL_DLLPRIVATE void         ImplLoad( const OUString& rMultiPath );

@@ -71,10 +71,8 @@ using namespace ::com::sun::star;
 SdrGlobalData::SdrGlobalData() :
     pSysLocale(nullptr),
     pLocaleData(nullptr),
-    pOutliner(nullptr),
     pDefaults(nullptr),
-    pResMgr(nullptr),
-    nExchangeFormat(0)
+    pResMgr(nullptr)
 {
     if (!utl::ConfigManager::IsAvoidConfig())
     {
@@ -397,8 +395,6 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 }
 
 SdrEngineDefaults::SdrEngineDefaults():
-    aFontName( OutputDevice::GetDefaultFont( DefaultFontType::SERIF, LANGUAGE_SYSTEM, GetDefaultFontFlags::OnlyOne ).GetName() ),
-    eFontFamily(FAMILY_ROMAN),
     aFontColor(COL_AUTO),
     nFontHeight(847),             // 847/100mm = ca. 24 Point
     eMapUnit(MAP_100TH_MM),

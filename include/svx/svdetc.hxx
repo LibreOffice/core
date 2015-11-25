@@ -65,8 +65,6 @@ SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& r
 class SVX_DLLPUBLIC SdrEngineDefaults
 {
 friend class SdrAttrObj;
-    OUString   aFontName;
-    FontFamily eFontFamily;
     Color      aFontColor;
     sal_uIntPtr      nFontHeight;
     MapUnit    eMapUnit;
@@ -228,10 +226,8 @@ class SVX_DLLPUBLIC SdrGlobalData
 public:
     SdrLinkList         aUserMakeObjHdl;
     SdrLinkList         aUserMakeObjUserDataHdl;
-    SdrOutliner*        pOutliner;
     SdrEngineDefaults*  pDefaults;
     ResMgr*             pResMgr;
-    sal_uIntPtr                 nExchangeFormat;
     OLEObjCache         aOLEObjCache;
 
 

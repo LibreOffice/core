@@ -125,7 +125,6 @@ public:
     Rectangle                               maRectangle;
     const SdrPage*                          mpPage;
     const SdrObject*                        mpObj;
-    const SdrObjList*                       mpObjList;
     SdrHintKind                             meHint;
 
 public:
@@ -153,7 +152,6 @@ struct SdrModelImpl;
 class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >
 {
 protected:
-    DateTime              aReadDate;  // date of the incoming stream
     std::vector<SdrPage*> maMaPag;     // master pages
     std::vector<SdrPage*> maPages;
     Link<SdrUndoAction*,void>  aUndoLink;  // link to a NotifyUndo-Handler

@@ -62,7 +62,7 @@ DlgEditor& DlgEdObj::GetDialogEditor ()
 }
 
 DlgEdObj::DlgEdObj()
-          :SdrUnoObj(OUString(), false)
+          :SdrUnoObj(OUString())
           ,bIsListening(false)
           ,pDlgEdForm( nullptr )
 {
@@ -70,7 +70,7 @@ DlgEdObj::DlgEdObj()
 
 DlgEdObj::DlgEdObj(const OUString& rModelName,
                    const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac)
-          :SdrUnoObj(rModelName, rxSFac, false)
+          :SdrUnoObj(rModelName, rxSFac)
           ,bIsListening(false)
           ,pDlgEdForm( nullptr )
 {

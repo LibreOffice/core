@@ -149,13 +149,12 @@ public:
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBitmapCtl
 {
 protected:
-    Size            aSize;
     sal_uInt16      nLines;
     Color           aPixelColor, aBackgroundColor;
     const sal_uInt16*   pBmpArray;
 
 public:
-            SvxBitmapCtl( vcl::Window* pParent, const Size& rSize );
+            SvxBitmapCtl();
             ~SvxBitmapCtl();
 
     BitmapEx GetBitmapEx();

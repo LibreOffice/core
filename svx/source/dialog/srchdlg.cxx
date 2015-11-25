@@ -258,7 +258,6 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     , bFormat(false)
     , nOptions(SearchOptionFlags::ALL)
     , bSet(false)
-    , bReadOnly(false)
     , bConstruct(true)
     , nModifyFlag(0)
     , pImpl(nullptr)

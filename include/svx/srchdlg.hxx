@@ -206,7 +206,6 @@ private:
     bool            bFormat;
     SearchOptionFlags  nOptions;
     bool            bSet;
-    bool            bReadOnly;
     bool            bConstruct;
     sal_uIntPtr         nModifyFlag;
     OUString        aStylesStr;

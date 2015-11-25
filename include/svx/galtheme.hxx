@@ -59,20 +59,6 @@ class SgaObject;
 class FmFormModel;
 class ListBox;
 
-
-// - GalDragParams -
-
-
-struct GalDragParams
-{
-    vcl::Region  aDragRegion;
-    sal_uIntPtr nDragObjPos;
-    OUString aThemeName;
-    OUString aFileName;
-    SgaObjKind  eObjKind;
-};
-
-
 // - GalleryTheme -
 
 
