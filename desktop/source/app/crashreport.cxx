@@ -15,6 +15,7 @@
 osl::Mutex CrashReporter::maMutex;
 
 #if HAVE_FEATURE_BREAKPAD
+
 void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue)
 {
     osl::MutexGuard aGuard(maMutex);
@@ -23,10 +24,12 @@ void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue)
     ini_file << rtl::OUStringToOString(rKey, RTL_TEXTENCODING_UTF8).getStr() << "=";
     ini_file << rtl::OUStringToOString(rValue, RTL_TEXTENCODING_UTF8).getStr() << "\n";
 }
+
 #endif
 
 const char* CrashReporter::getIniFileName()
 {
+    // TODO: we need a generic solution for the location
     return "/tmp/dump.ini";
 }
 
