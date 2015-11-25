@@ -38,7 +38,6 @@ bool Timer::ReadyForSchedule( bool /* bTimerOnly */ ) const
 
 sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const
 {
-    const sal_uInt64 nNewTime = tools::Time::GetSystemTicks();
     sal_uInt64 nDeltaTime;
     //determine smallest time slot
     if( mpSchedulerData->mnUpdateTime == nTime )
@@ -50,11 +49,11 @@ sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) con
     else
     {
         nDeltaTime = mpSchedulerData->mnUpdateTime + mnTimeout;
-        if( nDeltaTime < nNewTime )
+        if( nDeltaTime < nTime )
             nMinPeriod = ImmediateTimeoutMs;
         else
         {
-            nDeltaTime -= nNewTime;
+            nDeltaTime -= nTime;
             if( nDeltaTime < nMinPeriod )
                 nMinPeriod = nDeltaTime;
         }
