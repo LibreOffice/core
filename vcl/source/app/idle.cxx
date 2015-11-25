@@ -18,6 +18,7 @@
  */
 
 #include <vcl/idle.hxx>
+#include "saltimer.hxx"
 
 void Idle::Invoke()
 {

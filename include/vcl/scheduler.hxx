@@ -22,20 +22,9 @@
 
 #include <vcl/dllapi.h>
 
-struct ImplSVData;
 class Scheduler;
-struct ImplSchedulerData
-{
-    ImplSchedulerData*  mpNext;      // Pointer to the next element in list
-    Scheduler*          mpScheduler;      // Pointer to VCL Scheduler instance
-    bool                mbDelete;    // Destroy this scheduler?
-    bool                mbInScheduler;    // Scheduler currently processed?
-    sal_uInt64          mnUpdateTime;   // Last Update Time
-
-    void Invoke();
-
-    static ImplSchedulerData *GetMostImportantTask( bool bTimer );
-};
+struct ImplSVData;
+struct ImplSchedulerData;
 
 enum class SchedulerPriority {
     HIGHEST   = 0,
