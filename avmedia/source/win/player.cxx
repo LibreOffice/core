@@ -47,7 +47,7 @@ namespace avmedia { namespace win {
 
 LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
-    Player* pPlayer = (Player*) ::GetWindowLong( hWnd, 0 );
+    Player* pPlayer = (Player*) ::GetWindowLongPtr( hWnd, 0 );
     bool    bProcessed = true;
 
     if( pPlayer )
@@ -273,7 +273,7 @@ void SAL_CALL Player::start(  )
                 if ( mnFrameWnd )
                 {
                     ::ShowWindow(mnFrameWnd, SW_HIDE);
-                    ::SetWindowLong( mnFrameWnd, 0, (DWORD) this );
+                    ::SetWindowLongPtr( mnFrameWnd, 0, (LONG_PTR) this );
                     // mpVW->put_Owner( (OAHWND) mnFrameWnd );
                     setNotifyWnd( mnFrameWnd );
                 }
