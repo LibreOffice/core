@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_80ade08a",
+        "filename": "writerfilter/source/rtftok/rtfdocumentimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2172,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2015-11-25T13:41:48Z",
+      "side": 1,
+      "message": "Based on Microsoft\u0027s RTF spec, \\sect means new section. All properties of the section should be remained unless \\sectd present. \\sectd reset section property to default. Resetting to portrait whenever \\sect seems not make sense. On the other hand, it is also inconsistent with the commit message.",
+      "revId": "df423ac263d82741477d7209ec481e2312b369e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
