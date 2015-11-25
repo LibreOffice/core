@@ -22,6 +22,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
 
+#include <desktop/crashreport.hxx>
+
 OUString* WinOpenGLDeviceInfo::mpDeviceVendors[wgl::DeviceVendorMax];
 std::vector<wgl::DriverInfo> WinOpenGLDeviceInfo::maDriverInfo;
 
@@ -519,6 +521,8 @@ void writeToLog(SvStream& rStrm, const char* pKey, const OUString rVal)
 
 bool WinOpenGLDeviceInfo::isDeviceBlocked()
 {
+    // CrashReporter::AddKeyAndValue("AdapterVendorId", maAdapterVendorID);
+    // CrashReporter::AddKeyAndValue("AdapterDeviceId", maAdapterDeviceID);
     SAL_INFO("vcl.opengl", maDriverVersion);
     SAL_INFO("vcl.opengl", maDriverDate);
     SAL_INFO("vcl.opengl", maDeviceID);
