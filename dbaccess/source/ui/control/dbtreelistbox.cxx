@@ -31,10 +31,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vcl/help.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <dbaccess/IController.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <framework/imageproducer.hxx>
 #include <vcl/svapp.hxx>
 #include "svtools/treelistentry.hxx"
 
@@ -500,7 +500,7 @@ namespace
             }
 
             if ( xFrame.is() )
-                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,false));
+                _rMenu.SetItemImage(nId, vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommand, false, xFrame));
         }
     }
     // SelectionSupplier

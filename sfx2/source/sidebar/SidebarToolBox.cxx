@@ -27,7 +27,6 @@
 #include <vcl/settings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
-#include <framework/imageproducer.hxx>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 
 using namespace css;

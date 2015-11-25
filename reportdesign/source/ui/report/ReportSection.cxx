@@ -38,6 +38,7 @@
 #include <svx/svditer.hxx>
 #include <svx/dbaexchange.hxx>
 
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -59,7 +60,6 @@
 #include <svl/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <unotools/confignode.hxx>
-#include <framework/imageproducer.hxx>
 
 
 namespace rptui
@@ -453,7 +453,7 @@ void lcl_insertMenuItemImages(
             else
             {
                 const OUString sCommand = rContextMenu.GetItemCommand(nId);
-                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,false));
+                rContextMenu.SetItemImage(nId, vcl::CommandInfoProvider::Instance().GetImageForCommand(sCommand, false, _rFrame));
                 if ( nId == SID_PAGEHEADERFOOTER )
                 {
                     OUString sText = ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT);

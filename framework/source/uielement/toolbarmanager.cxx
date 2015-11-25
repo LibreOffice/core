@@ -330,7 +330,7 @@ void ToolBarManager::RefreshImages()
         else
         {
             OUString aCommandURL = m_pToolBar->GetItemCommand( it.first );
-            Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages );
+            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, bBigImages, m_xFrame);
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
@@ -1590,7 +1590,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
                 pVisibleItemsPopupMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
                 pVisibleItemsPopupMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pVisibleItemsPopupMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
-                Image aImage( GetImageFromURL( m_xFrame, aCommandURL, false ) );
+                Image aImage( vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, false, m_xFrame) );
                 commandToImage[aCommandURL] = aImage;
                 pVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
             }
