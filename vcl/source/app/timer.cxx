@@ -31,9 +31,14 @@ void Timer::SetDeletionFlags()
     }
 }
 
-bool Timer::ReadyForSchedule( bool /* bTimerOnly */ ) const
+bool Timer::ReadyForSchedule( bool /* bTimerOnly */, sal_uInt64 nTimeNow ) const
 {
-    return (mpSchedulerData->mnUpdateTime + mnTimeout) <= tools::Time::GetSystemTicks();
+    return (mpSchedulerData->mnUpdateTime + mnTimeout) <= nTimeNow;
+}
+
+bool Timer::IsIdle() const
+{
+    return false;
 }
 
 sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const

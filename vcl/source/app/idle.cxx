@@ -47,9 +47,15 @@ void Idle::Start()
     Scheduler::ImplStartTimer(Scheduler::ImmediateTimeoutMs);
 }
 
-bool Idle::ReadyForSchedule( bool bTimer ) const
+bool Idle::ReadyForSchedule( bool bTimerOnly, sal_uInt64 /* nTimeNow */ ) const
 {
-    return !bTimer;
+    // always ready if not only looking for timers.
+    return !bTimerOnly;
+}
+
+bool Idle::IsIdle() const
+{
+    return true;
 }
 
 sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 /* nTime */ ) const
