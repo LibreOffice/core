@@ -67,6 +67,9 @@ struct ImplSchedulerData
 
     void Invoke();
 
+    const char *GetDebugName() const
+        { return mpScheduler && mpScheduler->GetDebugName() ?
+                mpScheduler->GetDebugName() : "unknown"; }
     static ImplSchedulerData *GetMostImportantTask( bool bTimer );
 };
 
