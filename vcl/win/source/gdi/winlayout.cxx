@@ -395,7 +395,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     int nX =  nY;
     if (aChunk.mbVertical)
         nX += aDX[0];
-    if (!ExtTextOutW(aDC.getCompatibleHDC(), nX, nY, ETO_GLYPH_INDEX, NULL, aGlyphIndices.data(), nCount, aDX.data()))
+    if (!ExtTextOutW(aDC.getCompatibleHDC(), nX, nY, ETO_GLYPH_INDEX, NULL, reinterpret_cast<wchar_t *>(aGlyphIndices.data()), nCount, aDX.data()))
     {
         SAL_WARN("vcl.gdi", "ExtTextOutW failed: " << WindowsErrorString(GetLastError()));
         SelectFont(aDC.getCompatibleHDC(), hOrigFont);
