@@ -7269,7 +7269,7 @@ bool PDFWriterImpl::finalizeSignature()
     aPara.cbSize = sizeof(aPara);
     aPara.dwMsgEncodingType = PKCS_7_ASN_ENCODING | X509_ASN_ENCODING;
     aPara.pSigningCert = pCertContext;
-    aPara.HashAlgorithm.pszObjId = szOID_RSA_SHA1RSA;
+    aPara.HashAlgorithm.pszObjId = const_cast<LPSTR>(szOID_RSA_SHA1RSA);
     aPara.HashAlgorithm.Parameters.cbData = 0;
     aPara.cMsgCert = 1;
     aPara.rgpMsgCert = &pCertContext;
@@ -7298,7 +7298,7 @@ bool PDFWriterImpl::finalizeSignature()
     aSignerInfo.pCertInfo = pCertContext->pCertInfo;
     aSignerInfo.hCryptProv = hCryptProv;
     aSignerInfo.dwKeySpec = nKeySpec;
-    aSignerInfo.HashAlgorithm.pszObjId = szOID_RSA_SHA1RSA;
+    aSignerInfo.HashAlgorithm.pszObjId = const_cast<LPSTR>(szOID_RSA_SHA1RSA);
     aSignerInfo.HashAlgorithm.Parameters.cbData = 0;
 
     CMSG_SIGNED_ENCODE_INFO aSignedInfo;
@@ -7469,7 +7469,8 @@ bool PDFWriterImpl::finalizeSignature()
         aTimestampBlob.pbData = pTsContext->pbEncoded;
 
         CRYPT_ATTRIBUTE aTimestampAttribute;
-        aTimestampAttribute.pszObjId = "1.2.840.113549.1.9.16.2.14";
+        aTimestampAttribute.pszObjId = const_cast<LPSTR>(
+            "1.2.840.113549.1.9.16.2.14");
         aTimestampAttribute.cValue = 1;
         aTimestampAttribute.rgValue = &aTimestampBlob;
 
