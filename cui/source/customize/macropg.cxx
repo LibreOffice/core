@@ -324,7 +324,7 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "approveCursorMove",     RID_SVXSTR_EVENT_POSITIONING ) );
     aDisplayNames.push_back( EventDisplayName( "cursorMoved",           RID_SVXSTR_EVENT_POSITIONED ) );
     aDisplayNames.push_back( EventDisplayName( "approveParameter",      RID_SVXSTR_EVENT_APPROVEPARAMETER ) );
-    aDisplayNames.push_back( EventDisplayName( "errorOccurred",          RID_SVXSTR_EVENT_ERROROCCURRED ) );
+    aDisplayNames.push_back( EventDisplayName( "errorOccured",          RID_SVXSTR_EVENT_ERROROCCURRED ) );
     aDisplayNames.push_back( EventDisplayName( "adjustmentValueChanged",   RID_SVXSTR_EVENT_ADJUSTMENTVALUECHANGED ) );
 }
 
