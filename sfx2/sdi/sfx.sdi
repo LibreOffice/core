@@ -7272,7 +7272,7 @@ SfxBoolItem CheckPLZ SID_OFFICE_CHECK_PLZ
 ]
 
 SfxVoidItem AutoCorrectDlg SID_AUTO_CORRECT_DLG
-(SfxBoolItem ShowSwOptions SID_AUTO_CORRECT_DLG)
+(SfxBoolItem ShowSwOptions SID_AUTO_CORRECT_DLG, SfxBoolItem OpenSmartTag SID_OPEN_SMARTTAGOPTIONS)
 [
     /* flags: */
     AutoUpdate = FALSE,
