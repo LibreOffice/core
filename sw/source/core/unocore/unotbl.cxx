@@ -1434,7 +1434,7 @@ sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName) throw
 
 void SwXTextTableCursor::acquire() throw()
 {
-    SwXTextTableCursor_Base::release();
+    SwXTextTableCursor_Base::acquire();
 }
 
 void SwXTextTableCursor::release() throw()
