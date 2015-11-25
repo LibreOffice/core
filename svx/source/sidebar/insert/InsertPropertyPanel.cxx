@@ -29,7 +29,6 @@
 #include <vcl/toolbox.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <framework/sfxhelperfunctions.hxx>
-#include <framework/imageproducer.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/basemutex.hxx>
 
