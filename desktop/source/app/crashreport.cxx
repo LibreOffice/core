@@ -25,6 +25,7 @@ void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue)
 
 const char* CrashReporter::getIniFileName()
 {
+    // TODO: we need a generic solution for the location
     return "/tmp/dump.ini";
 }
 
