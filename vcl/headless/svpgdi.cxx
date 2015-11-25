@@ -134,6 +134,17 @@ bool SvpSalGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, cons
     return false;
 }
 
+namespace
+{
+    unsigned char reverseAndInvert(unsigned char b)
+    {
+        b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+        b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+        b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+        return ~b;
+    }
+}
+
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap )
 {
     bool bRet = false;
@@ -201,13 +212,10 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
         memcpy(pAlphaBits, pSrcBits, nImageSize);
 
         // TODO: make upper layers use standard alpha
-        long* pLDst = reinterpret_cast<long*>(pAlphaBits);
-        for( int i = nImageSize/sizeof(long); --i >= 0; ++pLDst )
+        sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits);
+        for( int i = nImageSize/sizeof(sal_uInt32); --i >= 0; ++pLDst )
             *pLDst = ~*pLDst;
-
-        char* pCDst = reinterpret_cast<char*>(pLDst);
-        for( int i = nImageSize & (sizeof(long)-1); --i >= 0; ++pCDst )
-            *pCDst = ~*pCDst;
+        assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits+nImageSize);
 
         mask = cairo_image_surface_create_for_data(pAlphaBits,
                                         CAIRO_FORMAT_A8,
@@ -216,7 +224,18 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
     }
     else
     {
-        mask = cairo_image_surface_create_for_data(data.get(),
+        // the alpha values need to be inverted *and* reordered for Cairo
+        // so big stupid copy and reverse + invert here
+        const int nImageSize = size.getY() * nStride;
+        const unsigned char* pSrcBits = data.get();
+        pAlphaBits = new unsigned char[nImageSize];
+        memcpy(pAlphaBits, pSrcBits, nImageSize);
+
+        unsigned char* pDst = pAlphaBits;
+        for (int i = nImageSize; --i >= 0; ++pDst)
+            *pDst = reverseAndInvert(*pDst);
+
+        mask = cairo_image_surface_create_for_data(pAlphaBits,
                                         CAIRO_FORMAT_A1,
                                         size.getX(), size.getY(),
                                         nStride);
