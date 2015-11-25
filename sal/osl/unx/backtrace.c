@@ -177,15 +177,23 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
+#if defined X86_64
+                    fprintf( fp, "%s+0x%lx", dli.dli_fname, offset );
+#else
                     fprintf( fp, "%s+0x%x", dli.dli_fname, offset );
+#endif
                 }
                 if ( dli.dli_sname && dli.dli_saddr )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_saddr;
+#if defined X86_64
+                    fprintf( fp, "(%s+0x%lx)", dli.dli_sname, offset );
+#else
                     fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
+#endif
                 }
             }
-            fprintf( fp, "[0x%x]\n", *pFramePtr );
+            fprintf( fp, "[0x%p]\n", *pFramePtr );
         }
         fflush( fp );
         fclose( fp );
