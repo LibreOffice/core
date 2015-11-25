@@ -334,7 +334,7 @@ void ToolBarManager::RefreshImages()
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = QueryAddonsImage( aCommandURL, bBigImages );
+                aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages );
             m_pToolBar->SetItemImage( it.first, aImage );
         }
     }
@@ -715,7 +715,7 @@ void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap
 {
     const ::std::vector< sal_uInt16 >& _rIDs = _pIter->second.aIds;
     m_pToolBar->SetItemImage( _pIter->second.nId, _aImage );
-    ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBox::SetItemImage,m_pToolBar.get(),_1,_aImage));
+    ::std::for_each(_rIDs.begin(), _rIDs.end(), ::boost::bind(&ToolBox::SetItemImage, m_pToolBar.get(), _1,_aImage));
 }
 
 void SAL_CALL ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception)
@@ -764,7 +764,7 @@ void ToolBarManager::CreateControllers()
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
 
     css::util::URL      aURL;
-    bool            bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+    bool                bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
     SvtCommandOptions   aCmdOptions;
 
     for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
@@ -773,8 +773,8 @@ void ToolBarManager::CreateControllers()
         if ( nId == 0 )
             continue;
 
-        OUString                aLoadURL( ".uno:OpenUrl" );
-        OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
+        OUString                 aLoadURL( ".uno:OpenUrl" );
+        OUString                 aCommandURL( m_pToolBar->GetItemCommand( nId ));
         bool                     bInit( true );
         bool                     bCreate( true );
         Reference< XStatusListener > xController;
@@ -933,7 +933,7 @@ void ToolBarManager::CreateControllers()
                        aCommandURL == ".uno:ParaLeftToRight" ||
                        aCommandURL == ".uno:ParaRightToLeft"
                        )
-                        pController->setFastPropertyValue_NoBroadcast(1,makeAny(sal_True));
+                        pController->setFastPropertyValue_NoBroadcast(1, makeAny(sal_True));
                 }
             }
 
@@ -1334,7 +1334,7 @@ void ToolBarManager::RequestImages()
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages );
+                aImage = framework::AddonsOptions().GetImageFromURL( aCmdURLSeq[i], bBigImages );
 
             pIter->second.nImageInfo = 1; // mark image as module based
         }
@@ -1400,7 +1400,7 @@ long ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )(
 
         if ( xController.is() )
             (xController.get()->*_pClick)( );
-    } // if ( pIter != m_aControllerMap.end() )
+    }
     return 1;
 }
 
@@ -1502,8 +1502,7 @@ bool ToolBarManager::IsPluginMode() const
         {
             Sequence< PropertyValue > aSeq = xModel->getArgs();
             utl::MediaDescriptor aMediaDescriptor( aSeq );
-            bPluginMode = aMediaDescriptor.getUnpackedValueOrDefault(
-                            utl::MediaDescriptor::PROP_VIEWONLY(), false );
+            bPluginMode = aMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VIEWONLY(), false );
         }
     }
 
@@ -2014,12 +2013,6 @@ IMPL_STATIC_LINK_TYPED( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
     }
 
     delete pExecuteInfo;
-}
-
-Image ToolBarManager::QueryAddonsImage( const OUString& aCommandURL, bool bBigImages )
-{
-    Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages );
-    return aImage;
 }
 }
 
