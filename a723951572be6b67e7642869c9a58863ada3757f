@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_e0b82ce8",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-11-25T12:08:41Z",
+      "side": 1,
+      "message": "So the intention here is to have the contents of a toolbar as a sub-menu? I think it shouldn\u0027t be hard to create a controller for the .uno command, that will simply fetch the toolbar contents, and create a sub-menu out of it, instead of repeating the whole list here.",
+      "revId": "a723951572be6b67e7642869c9a58863ada3757f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
