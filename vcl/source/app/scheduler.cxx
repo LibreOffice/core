@@ -163,6 +163,12 @@ void Scheduler::ProcessTaskScheduling( bool bTimerOnly )
     // tdf#91727 - NB. bTimerOnly is ultimately not used
     if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly)))
     {
+        // FIXME: move into a helper.
+        const char *pSchedulerName = pSchedulerData->mpScheduler->mpDebugName;
+        if (!pSchedulerName)
+            pSchedulerName = "unknown";
+        SAL_INFO("vcl.schedule", "Invoke task " << pSchedulerName);
+
         pSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
         pSchedulerData->Invoke();
     }
@@ -178,6 +184,7 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
     sal_uInt64         nMinPeriod = MaximumTimeoutMs;
 
+    SAL_INFO("vcl.schedule", "Calculating minimum timeout:");
     pSchedulerData = pSVData->mpFirstSchedulerData;
     while ( pSchedulerData )
     {
@@ -217,10 +224,13 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
             pSVData->mpSalTimer->Stop();
         nMinPeriod = MaximumTimeoutMs;
         pSVData->mnTimerPeriod = nMinPeriod;
+        SAL_INFO("vcl.schedule", "Unusual - no more timers available - stop timer");
     }
     else
     {
         Scheduler::ImplStartTimer(nMinPeriod, true);
+        SAL_INFO("vcl.schedule", "Calculated minimum timeout as " << nMinPeriod << " and " <<
+                 (const char *)(bHasActiveIdles ? "has active idles" : "no idles"));
     }
 
     return nMinPeriod;

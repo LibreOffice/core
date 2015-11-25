@@ -73,7 +73,8 @@ namespace
     };
 
     ImpTimedRefDev::ImpTimedRefDev(scoped_timed_RefDev& rOwnerOfMe)
-    :   mrOwnerOfMe(rOwnerOfMe),
+    :   Timer( "Timer to destroy drawinglayer reference device" ),
+        mrOwnerOfMe(rOwnerOfMe),
         mpVirDev(nullptr),
         mnUseCount(0L)
     {

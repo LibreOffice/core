@@ -432,6 +432,7 @@ certain functionality.
 @li @c vcl.osx.print
 @li @c vcl.quartz
 @li @c vcl.screensaverinhibitor
+@li @c vcl.schedule - scheduler / main-loop information
 @li @c vcl.scrollbar - Scroll Bars
 @li @c vcl.sm - Session Manager
 @li @c vcl.unity
