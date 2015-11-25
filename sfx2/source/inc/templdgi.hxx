@@ -192,7 +192,6 @@ protected:
 
     VclPtr<SfxActionListBox> aFmtLb;
     VclPtr<ListBox> aFilterLb;
-    Size aSize;
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx

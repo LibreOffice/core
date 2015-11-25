@@ -50,7 +50,6 @@ friend class ScVbaAxis;
     css::uno::Reference< css::chart::XTwoAxisYSupplier > xTwoAxisYSupplier;
 
     static css::uno::Sequence< OUString > getDefaultSeriesDescriptions( sal_Int32 nCount );
-    css::uno::Sequence< css::uno::Sequence< double > > dblValues;
     void setDefaultChartType()throw ( css::script::BasicErrorException ) ;
     void setDiagram( const OUString& _sDiagramType) throw( css::script::BasicErrorException );
     bool isStacked() throw ( css::uno::RuntimeException );

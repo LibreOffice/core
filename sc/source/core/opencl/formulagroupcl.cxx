@@ -2641,7 +2641,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     // of them. Round down a bit.
 
                     if (pDVR->GetArrays().size() > 50)
-                        throw UnhandledToken(pChild, ("Kernel would have ridiculously many parameters (" + std::to_string(2 + pDVR->GetArrays().size()) + ")").c_str());
+                        throw UnhandledToken(("Kernel would have ridiculously many parameters (" + std::to_string(2 + pDVR->GetArrays().size()) + ")").c_str());
 
                     for (size_t j = 0; j < pDVR->GetArrays().size(); ++j)
                     {
@@ -2673,7 +2673,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             {
                                 // Can't handle
                                 SAL_INFO("sc.opencl", "Strings but can't do that.");
-                                throw UnhandledToken(pChild, ("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str());
+                                throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str());
                             }
                             else
                             {
@@ -2764,8 +2764,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     else
                     {
                         SAL_INFO("sc.opencl", "Fallback case, rejecting for OpenCL");
-                        throw UnhandledToken(pChild,
-                            "Got unhandled case here", __FILE__, __LINE__);
+                        throw UnhandledToken("Got unhandled case here", __FILE__, __LINE__);
                     }
                 }
                 else if (pChild->GetType() == formula::svDouble)
@@ -2786,7 +2785,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 else
                 {
                     SAL_INFO("sc.opencl", "Fallback case, rejecting for OpenCL");
-                    throw UnhandledToken(pChild, ("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str());
+                    throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str());
                 }
                 break;
             case ocDiv:
@@ -3676,11 +3675,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             new OpGestep, nResultSize));
                 }
                 else
-                    throw UnhandledToken(pChild, "unhandled opcode");
+                    throw UnhandledToken("unhandled opcode");
                 break;
 
             default:
-                throw UnhandledToken(pChild, "unhandled opcode");
+                throw UnhandledToken("unhandled opcode");
         }
     }
 }

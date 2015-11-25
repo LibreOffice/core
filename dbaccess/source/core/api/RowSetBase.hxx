@@ -76,8 +76,7 @@ namespace dbaccess
     protected:
         typedef ::std::vector<ORowSetDataColumn*>   TDataColumns;
         ::osl::Mutex*                           m_pMutex;           // this the mutex form the rowset itself
-        ::osl::Mutex                            m_aRowCountMutex, // mutex for rowcount changes
-                                                // we need a extra mutex for columns to prevend deadlock when setting new values
+        ::osl::Mutex                            // we need a extra mutex for columns to prevend deadlock when setting new values
                                                 // for a row
                                                 m_aColumnsMutex;
 

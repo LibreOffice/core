@@ -544,11 +544,11 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
     {
         SvSlotElementList::iterator it = rList.begin();
         std::advance( it, nPos );
-        rList.insert( it, new SvSlotElement( this, rPrefix ) );
+        rList.insert( it, new SvSlotElement( this ) );
     }
     else
     {
-        rList.push_back( new SvSlotElement( this, rPrefix ) );
+        rList.push_back( new SvSlotElement( this ) );
     }
 
     // iron out EnumSlots

@@ -62,7 +62,7 @@ class CustomAnimationPane : public PanelLayout, public ICustomAnimationListContr
 {
     friend class MotionPathTag;
 public:
-    CustomAnimationPane( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame, const Size& rMinSize );
+    CustomAnimationPane( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame );
     virtual ~CustomAnimationPane();
     virtual void dispose() override;
 
@@ -150,8 +150,6 @@ private:
     OUString    maStrProperty;
 
     sal_Int32   mnPropertyType;
-
-    Size        maMinSize;
 
     EffectSequence  maListSelection;
     css::uno::Any   maViewSelection;

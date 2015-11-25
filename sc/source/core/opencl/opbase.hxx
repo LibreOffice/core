@@ -32,9 +32,8 @@ class FormulaTreeNode;
 class UnhandledToken
 {
 public:
-    UnhandledToken( formula::FormulaToken* t, const char* m, const std::string& fn = "", int ln = 0 );
+    UnhandledToken( const char* m, const std::string& fn = "", int ln = 0 );
 
-    formula::FormulaToken* mToken;
     std::string mMessage;
     std::string mFile;
     int mLineNumber;

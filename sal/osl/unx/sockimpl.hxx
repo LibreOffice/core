@@ -40,7 +40,6 @@ struct oslSocketImpl {
 
 struct oslSocketAddrImpl
 {
-    sal_Int32 m_nRefCount;
     struct sockaddr m_sockaddr;
 };
 

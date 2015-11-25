@@ -112,7 +112,6 @@ namespace connectivity
 
             bool    m_bClosed;
             bool    m_bUseCatalog;  // should we use the catalog on filebased databases
-            bool    m_bUseOldDateFormat;
 
         public:
             rtl::OUString getMysqlVariable(const char *varname)

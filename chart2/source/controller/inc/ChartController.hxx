@@ -456,7 +456,6 @@ private:
 private:
     mutable ::apphelper::LifeTimeManager m_aLifeTimeManager;
 
-    mutable ::osl::Mutex m_aControllerMutex;
     bool m_bSuspended;
     bool m_bCanClose;
 

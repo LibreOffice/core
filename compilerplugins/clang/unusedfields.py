@@ -68,7 +68,8 @@ for d in definitionSet:
         or srcLoc.startswith("vcl/source/filter/sgfbram.hxx")
         or srcLoc.startswith("vcl/inc/unx/XIM.h")
         or srcLoc.startswith("vcl/inc/unx/gtk/gloactiongroup.h")
-        or srcLoc.startswith("include/svl/svdde.hxx")):
+        or srcLoc.startswith("include/svl/svdde.hxx")
+        or srcLoc.startswith("lotuswordpro/source/filter/lwpsdwdrawheader.hxx")):
         continue
 
     tmp1set.add((clazz + " " + definitionToTypeMap[d], srcLoc))

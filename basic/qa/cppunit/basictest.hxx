@@ -40,13 +40,6 @@ class MacroSnippet
         mpMod = mpBasic->MakeModule( "TestModule", sSource );
     }
     public:
-    struct ErrorDetail
-    {
-        OUString sErrorText;
-        int nLine;
-        int nCol;
-        ErrorDetail() : nLine(0), nCol(0) {}
-    };
 
     explicit MacroSnippet(const OUString& sSource)
         : mbError(false)

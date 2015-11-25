@@ -186,8 +186,6 @@ protected:
 
     void fireModifyEvent();
 
-    mutable ::osl::Mutex                  m_aMutex;
-
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
     OUString                                 m_sRole;

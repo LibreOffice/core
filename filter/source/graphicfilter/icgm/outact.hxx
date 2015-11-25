@@ -34,13 +34,6 @@
 #include <chart.hxx>
 #include <tools/poly.hxx>
 
-struct NodeFrameSet
-{
-    Point          nTopLeft;
-    Point          nBottomRight;
-    css::awt::Size nSize;
-};
-
 class CGM;
 class CGMBitmapDescriptor;
 class CGMOutAct

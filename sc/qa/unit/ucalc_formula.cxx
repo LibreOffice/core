@@ -4423,11 +4423,6 @@ void Test::testFuncVLOOKUP()
     m_pDoc->DeleteTab(0);
 }
 
-struct NumStrCheck {
-    double fVal;
-    const char* pRes;
-};
-
 struct StrStrCheck {
     const char* pVal;
     const char* pRes;

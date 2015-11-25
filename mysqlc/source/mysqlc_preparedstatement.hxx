@@ -52,7 +52,6 @@ namespace connectivity
         {
         protected:
             unsigned int        m_paramCount;   // number of placeholders
-            sal_Int32           m_nNumParams;   // Number of parameter markers for the prepared statement
             Reference< XResultSetMetaData > m_xMetaData;
 
             void checkParameterIndex(sal_Int32 parameter);

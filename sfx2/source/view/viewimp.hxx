@@ -46,19 +46,17 @@ struct SfxViewShell_Impl
     bool                        m_bControllerSet;
     SfxShellArr_Impl            aArr;
     SvBorder                    aBorder;
-    Size                        aOptimalSize;
     Size                        aMargin;
-    sal_uInt16                      m_nPrinterLocks;
+    sal_uInt16                  m_nPrinterLocks;
     bool                        m_bCanPrint;
     bool                        m_bHasPrintOptions;
     bool                        m_bPlugInsActive;
     bool                        m_bIsShowView;
     bool                        m_bGotOwnership;
     bool                        m_bGotFrameOwnership;
-    sal_uInt16                      m_nFamily;
+    sal_uInt16                  m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
     std::unique_ptr< ::svt::AcceleratorExecute > m_xAccExec;
-    css::uno::Sequence < css::beans::PropertyValue > aPrintOpts;
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
     std::shared_ptr< vcl::PrinterController > m_xPrinterController;
 

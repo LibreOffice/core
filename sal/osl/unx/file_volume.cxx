@@ -87,8 +87,6 @@
 typedef struct _oslVolumeDeviceHandleImpl
 {
     sal_Char pszMountPoint[PATH_MAX];
-    sal_Char pszFilePath[PATH_MAX];
-    sal_Char pszDevice[PATH_MAX];
     sal_Char ident[4];
     sal_uInt32   RefCount;
 } oslVolumeDeviceHandleImpl;
