@@ -43,6 +43,7 @@ class ScannerManager:
 {
 protected:
 
+    osl::Mutex                              maProtector;
     void*                                   mpData;
 
     static void                             AcquireData();
