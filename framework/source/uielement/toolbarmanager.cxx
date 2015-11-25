@@ -31,34 +31,29 @@
 
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/theToolbarControllerFactory.hpp>
-#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <comphelper/sequence.hxx>
-#include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-#include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/imageitm.hxx>
 #include <svtools/framestatuslistener.hxx>
@@ -621,12 +616,6 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
 
         m_xFrame.clear();
         m_xContext.clear();
-        Reference< XComponent > xCompGAM( m_xGlobalAcceleratorManager, UNO_QUERY );
-        if ( xCompGAM.is() )
-            xCompGAM->dispose();
-        m_xGlobalAcceleratorManager.clear();
-        m_xModuleAcceleratorManager.clear();
-        m_xDocAcceleratorManager.clear();
 
         // stop timer to prevent timer events after dispose
         // do it last because other calls could restart timer in StateChanged()

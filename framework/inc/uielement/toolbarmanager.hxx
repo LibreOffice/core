@@ -139,8 +139,6 @@ class ToolBarManager : public ToolbarManager_Base
         virtual bool MenuItemAllowed( sal_uInt16 ) const;
 
         void RemoveControllers();
-        sal_Int32 RetrievePropertiesFromCommand( const OUString& aCmdURL );
-        css::uno::Sequence< css::beans::PropertyValue > GetPropsForCommand( const OUString& rCmdURL );
         void CreateControllers();
         void UpdateControllers();
         //for update controller via Support Visiable
@@ -160,9 +158,9 @@ class ToolBarManager : public ToolbarManager_Base
         void impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event );
 
     protected:
-        typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::frame::XStatusListener > > ToolBarControllerMap;
-        typedef ::std::vector< css::uno::Reference< css::frame::XSubToolbarController > > SubToolBarControllerVector;
-        typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
+        typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::frame::XStatusListener > >  ToolBarControllerMap;
+        typedef ::std::vector< css::uno::Reference< css::frame::XSubToolbarController > >             SubToolBarControllerVector;
+        typedef BaseHash< SubToolBarControllerVector >                                                SubToolBarToSubToolBarControllerMap;
 
         typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::container::XIndexAccess > > MenuDescriptionMap;
 
@@ -176,7 +174,7 @@ class ToolBarManager : public ToolbarManager_Base
 
         long m_lImageRotation;
 
-        VclPtr<ToolBox> m_pToolBar;
+        VclPtr<ToolBox>                                              m_pToolBar;
 
         OUString                                                     m_aModuleIdentifier;
         OUString                                                     m_aResourceName;
@@ -195,14 +193,11 @@ class ToolBarManager : public ToolbarManager_Base
         css::uno::Reference< css::ui::XUIConfigurationManager >      m_xUICfgMgr;
         css::uno::Reference< css::ui::XUIConfigurationManager >      m_xDocUICfgMgr;
 
-        CommandToInfoMap                                                                       m_aCommandMap;
-        SubToolBarToSubToolBarControllerMap                                                    m_aSubToolBarControllerMap;
-        Timer                                                                                  m_aAsyncUpdateControllersTimer;
-        OUString                                                                               m_sIconTheme;
-        MenuDescriptionMap m_aMenuMap;
-        css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
-        css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
-        css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
+        CommandToInfoMap                                             m_aCommandMap;
+        SubToolBarToSubToolBarControllerMap                          m_aSubToolBarControllerMap;
+        Timer                                                        m_aAsyncUpdateControllersTimer;
+        OUString                                                     m_sIconTheme;
+        MenuDescriptionMap                                           m_aMenuMap;
 };
 
 }
