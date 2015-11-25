@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <config_folders.h>
 
-#include "desktopdllapi.h"
+#include <desktop/dllapi.h>
 
 #include "app.hxx"
 #include "exithelper.h"

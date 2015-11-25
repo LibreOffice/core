@@ -16,7 +16,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <memory>
 #include <map>
-#include "../../source/inc/desktopdllapi.h"
+#include <desktop/dllapi.h>
 #include <osl/thread.h>
 
 class LOKInteractionHandler;
