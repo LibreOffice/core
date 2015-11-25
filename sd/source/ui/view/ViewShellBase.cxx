@@ -1254,6 +1254,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         pFrameView = mrBase.GetMainViewShell()->GetFrameView();
                         bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
                             && pFrameView->GetPageKind() == PK_STANDARD;
+                        break;
 
                     case SID_SLIDE_SORTER_MULTI_PANE_GUI:
                     case SID_SLIDE_SORTER_MODE:
