@@ -330,4 +330,11 @@ Scheduler::~Scheduler()
     }
 }
 
+const char *ImplSchedulerData::GetDebugName() const
+{
+    return mpScheduler && mpScheduler->GetDebugName() ?
+        mpScheduler->GetDebugName() : "unknown";
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
