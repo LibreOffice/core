@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_a0990422",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-11-25T22:38:30Z",
+      "side": 1,
+      "message": "This will match the \"0\" from non-matched result ({0, -1, 0}); and thus will translate to something like {0, -1, 10} when the chunk we process is somewhere in the middle of a larger string, won\u0027t it?",
+      "revId": "c5fb500f403b0c0ed3d7f3a8821e33321d7ab74d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
