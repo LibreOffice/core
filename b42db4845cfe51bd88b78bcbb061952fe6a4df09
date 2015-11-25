@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_a00904e0",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4414,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_8577b201",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_65744efd",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-24T14:10:50Z",
       "side": 1,
       "message": "Please outdent the private and public keywords to the class level, makes it easier to spot the sections.",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e0130c0c",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_65744efd",
       "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_20f6b4d7",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "As preprocessDataRange() is only called once, I think I\u0027ll pass the size to the constructor and do the reserving there.",
+      "parentUuid": "dab17558_a5647649",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_055aa283",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-11-24T14:10:50Z",
       "side": 1,
       "message": "What if elements are negative? That would result in a negative fStepSize.",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_60eefced",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "The elements are sorted, so even with negative values, fStepSize is always positive (that\u0027s my reasoning, it may have a flaw).",
+      "parentUuid": "dab17558_055aa283",
       "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_c0b9a8ee",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "yes, I have put a TODO marker there (have to find out first how to set nGlobalerror when not in ScInterpreter).",
+      "parentUuid": "dab17558_4554aa53",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_2551a663",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 1
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_00b450f0",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "Quite. Sorry for making it so difficult for you ;-)\nChanged, of course.",
+      "parentUuid": "dab17558_2551a663",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_c5ed3a90",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 1
@@ -115,6 +223,30 @@
       "writtenOn": "2015-11-24T14:10:50Z",
       "side": 1,
       "message": "Instead of handling the missing case manually, use\n\n nAggregation \u003d static_cast\u003cint\u003e(GetDoubleWithDefault(0.0));\n\n(and please don\u0027t use C-style casts in new code ;-)",
+      "range": {
+        "startLine": 645,
+        "startChar": 8,
+        "endLine": 651,
+        "endChar": 47
+      },
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_20cb5474",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "Old habits die hard...\nDone.",
+      "parentUuid": "dab17558_c5ed3a90",
       "range": {
         "startLine": 645,
         "startChar": 8,
@@ -150,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_c0a088a8",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_05e8e27b",
+      "range": {
+        "startLine": 665,
+        "startChar": 8,
+        "endLine": 672,
+        "endChar": 44
+      },
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_e5ecbe91",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 1
@@ -161,6 +317,30 @@
       "writtenOn": "2015-11-24T14:10:50Z",
       "side": 1,
       "message": "nSamplesinPeriod \u003d static_cast\u003cint\u003e(GetDoubleWithDefault(1.0));",
+      "range": {
+        "startLine": 690,
+        "startChar": 8,
+        "endLine": 696,
+        "endChar": 51
+      },
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a0a584b6",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_e5ecbe91",
       "range": {
         "startLine": 690,
         "startChar": 8,
@@ -190,6 +370,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_00abb08a",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_85fcd23f",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_65f9ee4d",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 1
@@ -213,6 +411,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_e0af8c92",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_65f9ee4d",
+      "range": {
+        "startLine": 749,
+        "startChar": 4,
+        "endLine": 749,
+        "endChar": 7
+      },
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_a5991622",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 1
@@ -224,6 +446,24 @@
       "writtenOn": "2015-11-24T14:10:50Z",
       "side": 1,
       "message": "Just use PushNA().",
+      "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_4095b83e",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-11-25T12:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_a5991622",
       "revId": "b42db4845cfe51bd88b78bcbb061952fe6a4df09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
