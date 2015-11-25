@@ -43,16 +43,13 @@ namespace sd
     struct ClientInfo
     {
         OUString mName;
-        OUString mAddress;
 
         bool mbIsAlreadyAuthorised;
 
         enum PROTOCOL { NETWORK = 1, BLUETOOTH };
         ClientInfo( const OUString& rName,
-                    const OUString& rAddress,
                     const bool bIsAlreadyAuthorised ) :
             mName( rName ),
-            mAddress( rAddress ),
             mbIsAlreadyAuthorised( bIsAlreadyAuthorised ) {}
 
         virtual ~ClientInfo() {};

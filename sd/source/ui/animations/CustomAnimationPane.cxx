@@ -146,13 +146,11 @@ void fillRepeatComboBox( ListBox* pBox )
 }
 
 CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
-                                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                          const Size& rMinSize )
+                                          const css::uno::Reference<css::frame::XFrame>& rxFrame )
 :   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame ),
     mrBase( rBase ),
     mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
-    maMinSize( rMinSize ),
     mxModel( rBase.GetDocShell()->GetDoc()->getUnoModel(), UNO_QUERY ),
     maLateInitTimer()
 {
@@ -2278,8 +2276,7 @@ vcl::Window * createCustomAnimationPanel( vcl::Window* pParent, ViewShellBase& r
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )
     {
-        const Size aMinSize( pParent->LogicToPixel( Size( 80, 256 ), MAP_APPFONT ) );
-        pWindow = VclPtr<CustomAnimationPane>::Create( pParent, rBase, rxFrame, aMinSize );
+        pWindow = VclPtr<CustomAnimationPane>::Create( pParent, rBase, rxFrame );
     }
 
     return pWindow;

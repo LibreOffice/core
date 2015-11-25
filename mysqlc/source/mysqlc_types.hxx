@@ -36,9 +36,6 @@ struct TypeInfoDef {
     const char *localTypeName;
     sal_Int32 minScale;
     sal_Int32 maxScale;
-    sal_Int32 sqlDataType;
-    sal_Int32 sqlDateTimeSub;
-    sal_Int32 numPrecRadix;
 };
 
 extern TypeInfoDef mysqlc_types[];

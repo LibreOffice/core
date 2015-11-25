@@ -103,7 +103,6 @@ public:
     Fraction                        m_aScaleHeight;
     SfxInPlaceClient*               m_pClient;
     sal_Int64                       m_nAspect;              // ViewAspect that is assigned from the container
-    Rectangle                       m_aLastObjAreaPixel;    // area of object in coordinate system of the container (without scaling)
     bool                            m_bStoreObject;
     bool                            m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
     bool                            m_bResizeNoScale;

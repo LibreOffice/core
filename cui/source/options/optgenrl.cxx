@@ -160,17 +160,14 @@ const vFieldInfo[] =
 
 struct SvxGeneralTabPage::Row
 {
-    // which row is it?
-    RowType eRow;
     // row label
     VclPtr<FixedText> pLabel;
     // first and last field in the row (last is exclusive)
     unsigned nFirstField, nLastField;
 
 public:
-    Row (FixedText *pLabel_, RowType eRow_)
-        : eRow(eRow_)
-        , pLabel(pLabel_)
+    Row (FixedText *pLabel_)
+        : pLabel(pLabel_)
         , nFirstField(0)
         , nLastField(0)
     {
@@ -260,7 +257,7 @@ void SvxGeneralTabPage::InitControls ()
             continue;
         // creating row
         vRows.push_back(std::make_shared<Row>(
-            get<FixedText>(vRowInfo[iRow].pTextId), eRow));
+            get<FixedText>(vRowInfo[iRow].pTextId)));
         Row& rRow = *vRows.back();
         // fields in the row
         static unsigned const nFieldCount = SAL_N_ELEMENTS(vFieldInfo);

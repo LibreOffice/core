@@ -53,11 +53,10 @@ namespace sd {
         OUString mPin;
 
         ClientInfoInternal( const OUString& rName,
-                            const OUString& rAddress,
                             const bool bIsAlreadyAuthorised,
                             BufferedStreamSocket *pSocket,
                             const OUString& rPin ):
-                ClientInfo( rName, rAddress, bIsAlreadyAuthorised ),
+                ClientInfo( rName, bIsAlreadyAuthorised ),
                 mpStreamSocket( pSocket ),
                 mPin( rPin ) {}
     };
@@ -126,13 +125,12 @@ void RemoteServer::execute()
 
             SocketAddr aClientAddr;
             pSocket->getPeerAddr( aClientAddr );
-            OUString aAddress = aClientAddr.getHostname();
 
             MutexGuard aGuard( sDataMutex );
             std::shared_ptr< ClientInfoInternal > pClient(
                 new ClientInfoInternal(
                     OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
-                    aAddress, false, pSocket, OStringToOUString( aPin,
+                    false, pSocket, OStringToOUString( aPin,
                                                                  RTL_TEXTENCODING_UTF8 ) ) );
             mAvailableClients.push_back( pClient );
 
@@ -266,7 +264,7 @@ std::vector< std::shared_ptr< ClientInfo > > RemoteServer::getClients()
     Sequence< OUString > aNames = xConfig->getElementNames();
     for ( int i = 0; i < aNames.getLength(); i++ )
     {
-        aClients.push_back( std::shared_ptr< ClientInfo > ( new ClientInfo( aNames[i], "", true ) ) );
+        aClients.push_back( std::shared_ptr< ClientInfo > ( new ClientInfo( aNames[i], true ) ) );
     }
 
     return aClients;

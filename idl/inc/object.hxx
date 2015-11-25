@@ -27,10 +27,8 @@
 struct SvSlotElement
 {
     SvMetaSlotRef   xSlot;
-    OString aPrefix;
-    SvSlotElement( SvMetaSlot * pS, const OString& rPrefix )
+    SvSlotElement( SvMetaSlot * pS )
     : xSlot( pS )
-    , aPrefix( rPrefix )
     {
     }
 };

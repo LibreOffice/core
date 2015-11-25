@@ -318,7 +318,7 @@ void OpIf::GenSlidingWindowFunction(std::stringstream &ss,
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     if(tmpCur0->GetType() == formula::svDoubleVectorRef)
     {
-        throw UnhandledToken(tmpCur0, "unknown operand for ocPush");
+        throw UnhandledToken("unknown operand for ocPush");
     }
     else
     {

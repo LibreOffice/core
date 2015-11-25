@@ -54,7 +54,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         xBasicLibraries;
     css::uno::Reference< css::script::XLibraryContainer >
                         xDialogLibraries;
-    css::uno::Sequence < OUString > xEventNames;
     ::sfx2::DocumentMacroMode
                         aMacroMode;
     SfxProgress*        pProgress;

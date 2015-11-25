@@ -36,10 +36,8 @@ class FileOpenDialog
         OUString maType;
         OUString maUIName;
         sal_Int32 maFlags;
-        css::uno::Sequence< OUString > maExtensions;
 
-        FilterEntry() :
-            maFlags( 0 ) {}
+        FilterEntry() : maFlags( 0 ) {}
     };
     css::uno::Reference < css::ui::dialogs::XFilePicker3 > mxFilePicker;
 

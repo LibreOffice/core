@@ -90,8 +90,6 @@ class SVGAttributeWriter
 private:
 
     vcl::Font                  maCurFont;
-    Color                      maCurLineColor;
-    Color                      maCurFillColor;
     SVGExport&                 mrExport;
     SVGFontExport&             mrFontExport;
     SvXMLElementExport*        mpElemFont;

@@ -66,7 +66,6 @@ struct RscSysEntry
 class RscTypCont
 {
     rtl_TextEncoding    nSourceCharSet;
-    sal_uInt32          nMachineId;         // global machine type
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
     OString             aLanguage;          // output language
     std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)

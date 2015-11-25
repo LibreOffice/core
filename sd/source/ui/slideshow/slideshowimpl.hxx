@@ -337,9 +337,7 @@ private:
     std::shared_ptr< AnimationSlideController > mpSlideController;
 
     long            mnRestoreSlide;
-    Point           maSlideOrigin;
     Point           maPopupMousePos;
-    Size            maSlideSize;
     Size            maPresSize;
     AnimationMode   meAnimationMode;
     OUString        maCharBuffer;

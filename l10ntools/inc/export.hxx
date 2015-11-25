@@ -290,12 +290,11 @@ public:
     OString sTyp;
     OString sGID;
     OString sLID;
-    OString sFilename;
     MergeEntrys* pMergeEntrys;
 private:
     MergeDataHashMap::iterator m_aNextData;
 public:
-    MergeData( const OString &rTyp, const OString &rGID, const OString &rLID , const OString &rFilename );
+    MergeData( const OString &rTyp, const OString &rGID, const OString &rLID );
     ~MergeData();
     MergeEntrys* GetMergeEntries() { return pMergeEntrys;}
 

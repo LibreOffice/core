@@ -222,7 +222,6 @@ public:
     OUString RetrieveLabelFromCommand( const OUString& aCmdURL ) const;
 
 protected:
-    osl::Mutex maMutex;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 

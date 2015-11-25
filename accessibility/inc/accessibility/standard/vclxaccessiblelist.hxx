@@ -150,10 +150,6 @@ protected:
     sal_Int32   m_nCurSelectedPos;
 
 
-    /// The currently selected item.
-    css::uno::WeakReference< css::accessibility::XAccessible>
-        m_xSelectedItem;
-
     virtual ~VCLXAccessibleList();
 
     /** This function is called from the implementation helper during a

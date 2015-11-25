@@ -43,10 +43,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "BIT",                                       // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                            // maximum scale
      },
 
     // ------------ MySQL-Type: BOOL. SDBC-Type: Bit -------------
@@ -65,10 +62,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "BOOL",                                      // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                            // maximum scale
      },
 
     // --------- MySQL-Type: TINYINT SDBC-Type: TINYINT ----------
@@ -87,10 +81,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "TINYINT",                                   // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: BIGINT SDBC-Type: BIGINT ----------
@@ -109,10 +100,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "BIGINT",                                    // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: LONG VARBINARY SDBC-Type: LONGVARBINARY ----------
@@ -131,10 +119,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "LONG VARBINARY",                            // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: MEDIUMBLOB SDBC-Type: LONGVARBINARY ----------
@@ -153,10 +138,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "MEDIUMBLOB",                                // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: LONGBLOB SDBC-Type: LONGVARBINARY ----------
@@ -175,10 +157,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "LONGBLOB",                                  // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: BLOB SDBC-Type: LONGVARBINARY ----------
@@ -197,10 +176,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "BLOB",                                      // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: TINYBLOB SDBC-Type: LONGVARBINARY ----------
@@ -219,10 +195,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "TINYBLOB",                                  // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: VARBINARY SDBC-Type: VARBINARY ----------
@@ -241,10 +214,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "VARBINARY",                                 // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: BINARY SDBC-Type: BINARY ----------
@@ -263,10 +233,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "VARBINARY",                                 // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: LONG VARCHAR SDBC-Type: LONG VARCHAR ----------
@@ -285,10 +252,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "LONG VARCHAR",                              // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: MEDIUMTEXT SDBC-Type: LONG VARCHAR ----------
@@ -307,10 +271,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "MEDIUMTEXT",                                // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: LONGTEXT SDBC-Type: LONG VARCHAR ----------
@@ -329,10 +290,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "LONGTEXT",                                  // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: TEXT SDBC-Type: LONG VARCHAR ----------
@@ -351,10 +309,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "TEXT",                                      // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: TINYTEXT SDBC-Type: LONG VARCHAR ----------
@@ -373,10 +328,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "TINYTEXT",                                  // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: CHAR SDBC-Type: CHAR ----------
@@ -395,10 +347,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "NUMERIC",                                   // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: DECIMAL SDBC-Type: DECIMAL ----------
@@ -417,10 +366,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "DECIMAL",                                   // local type name
         -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        308                                         // maximum scale
      },
 
     // ----------- MySQL-Type: NUMERIC SDBC-Type: NUMERIC ----------
@@ -439,10 +385,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "NUMERIC",                                   // local type name
         -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        308                                          // maximum scale
      },
 
     // ----------- MySQL-Type: INTEGER SDBC-Type: INTEGER ----------
@@ -461,10 +404,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "INTEGER",                                   // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                            // maximum scale
      },
 
     // ----------- MySQL-Type: INT SDBC-Type: INTEGER ----------
@@ -483,10 +423,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "INT",                                       // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                            // maximum scale
      },
 
     // ----------- MySQL-Type: MEDIUMINT SDBC-Type: INTEGER ----------
@@ -505,10 +442,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "MEDIUMINT",                                 // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: SMALLINT SDBC-Type: INTEGER ----------
@@ -527,10 +461,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "SMALLINT",                                  // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: FLOAT SDBC-Type: REAL ----------
@@ -549,10 +480,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "FLOAT",                                     // local type name
         -38,                                         // minimum scale
-        38,                                          // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        38                                          // maximum scale
      },
 
     // ----------- MySQL-Type: DOUBLE SDBC-Type: DOUBLE ----------
@@ -571,10 +499,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "DOUBLE",                                    // local type name
         -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        308                                         // maximum scale
      },
 
     // ----------- MySQL-Type: DOUBLE PRECISION SDBC-Type: DOUBLE ----------
@@ -593,10 +518,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "DOUBLE PRECISION",                          // local type name
         -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        308                                         // maximum scale
      },
 
     // ----------- MySQL-Type: REAL SDBC-Type: DOUBLE ----------
@@ -615,10 +537,7 @@ TypeInfoDef mysqlc_types[] = {
         true,                                    // auto_increment
         "REAL",                                      // local type name
         -308,                                        // minimum scale
-        308,                                         // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        308                                         // maximum scale
      },
 
     // ----------- MySQL-Type: VARCHAR SDBC-Type: VARCHAR ----------
@@ -637,10 +556,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "VARCHAR",                                   // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: ENUM SDBC-Type: VARCHAR ----------
@@ -659,10 +575,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "ENUM",                                      // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: SET SDBC-Type: VARCHAR ----------
@@ -681,10 +594,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "SET",                                       // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: DATE SDBC-Type: DATE ----------
@@ -703,10 +613,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "DATE",                                      // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: TIME SDBC-Type: TIME ----------
@@ -725,10 +632,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "TIME",                                      // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: DATETIME SDBC-Type: TIMESTAMP ----------
@@ -747,10 +651,7 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "DATETIME",                                  // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
      },
 
     // ----------- MySQL-Type: TIMESTAMP SDBC-Type: TIMESTAMP ----------
@@ -769,15 +670,12 @@ TypeInfoDef mysqlc_types[] = {
         false,                                   // auto_increment
         "TIMESTAMP",                                 // local type name
         0,                                           // minimum scale
-        0,                                           // maximum scale
-        0,                                           // sql data type (unsued)
-        0,                                           // sql datetime sub (unsued)
-        10                                           // num prec radix
+        0                                           // maximum scale
     },
 
     // ----------- MySQL-Type: TIMESTAMP SDBC-Type: TIMESTAMP ----------
     {
-        nullptr, 0, 0, nullptr, nullptr, nullptr, 0, false, 0, false, false, false, nullptr, 0, 0, 0, 0, 0
+        nullptr, 0, 0, nullptr, nullptr, nullptr, 0, false, 0, false, false, false, nullptr, 0, 0
     }
 };
 
