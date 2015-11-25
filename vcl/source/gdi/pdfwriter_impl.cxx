@@ -2245,7 +2245,7 @@ private:
     const PDFWriterImpl::BuiltinFont& mrBuiltin;
 
 public:
-    enum {PDF_FONT_MAGIC = 0xBDFF0A1C };
+    static int const PDF_FONT_MAGIC = int(0xBDFF0A1C);
     explicit                            ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& );
     const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
 
