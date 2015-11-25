@@ -31,6 +31,14 @@
 #include <rtl/ustring.hxx>
 #include "comphelper/comphelperdllapi.h"
 
+// These are specified by i386 ABI suppl. but
+// only affect Solaris i386/illumos so far.
+
+#if !defined(_XPG4_2) || defined(__EXTENSIONS__)
+#undef  CS
+#undef  ES
+#endif
+
 //_______________________________________________
 // namespace
 

@@ -69,11 +69,11 @@ rtl::OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeExceptio
         // Please take care when changing it.
 }
 
-typedef Sequence< ::rtl::OUString > SS;
+typedef Sequence< ::rtl::OUString > SSEQ;
 //------------------------------------------------------------------------------
-SS ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+SSEQ ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    SS aSNS( 1 );
+    SSEQ aSNS( 1 );
     aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
     return aSNS;
 }
@@ -87,7 +87,7 @@ SS ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 //------------------------------------------------------------------
 sal_Bool SAL_CALL ODBCDriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
-    SS aSupported(getSupportedServiceNames());
+    SSEQ aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pSupported = aSupported.getConstArray();
     const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
@@ -97,7 +97,7 @@ sal_Bool SAL_CALL ODBCDriver::supportsService( const ::rtl::OUString& _rServiceN
 }
 
 //------------------------------------------------------------------
-SS SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+SSEQ SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
