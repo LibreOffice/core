@@ -306,6 +306,11 @@ void ScMacrosTest::testVba()
         OUString sMsg( "Failed to load " + aFileName );
         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
+        // process all events such as OnLoad events etc.
+        // otherwise the tend to arrive later at a random
+        // time - while processing other StarBasic methods.
+        Application::Reschedule(true);
+
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
