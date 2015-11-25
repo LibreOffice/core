@@ -1289,6 +1289,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         pFrameView = mrBase.GetMainViewShell()->GetFrameView();
                         bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
                             && pFrameView->GetPageKind() == PK_NOTES;
+                        break;
 
                     case SID_TOGGLE_TABBAR_VISIBILITY:
                         bState = GetUserWantsTabBar();
