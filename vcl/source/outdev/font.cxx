@@ -1546,7 +1546,10 @@ bool OutputDevice::ImplNewFont() const
 
     // we need a graphics
     if ( !mpGraphics && !AcquireGraphics() )
+    {
+        SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no Graphics, no Font");
         return false;
+    }
     SalGraphics* pGraphics = mpGraphics;
     ImplInitFontList();
 
@@ -1577,7 +1580,10 @@ bool OutputDevice::ImplNewFont() const
     ImplFontEntry* pFontEntry = mpFontEntry;
 
     if (!pFontEntry)
+    {
+        SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no ImplFontEntry, no Font");
         return false;
+    }
 
     // mark when lower layers need to get involved
     mbNewFont = false;
