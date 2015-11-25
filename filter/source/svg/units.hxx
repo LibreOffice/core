@@ -14,6 +14,10 @@
 
 namespace svgi
 {
+    // recommended value for this device dependent unit, see CSS2 section 4.3.2 Lengths
+    // Same as in svgio
+    #define F_SVG_PIXEL_PER_INCH  90.0
+
     struct State;
     enum SvgUnit
     {
