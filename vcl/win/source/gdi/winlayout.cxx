@@ -651,7 +651,6 @@ public:
     int             mnEndGlyphPos;
     int             mnMinCharPos;
     int             mnEndCharPos;
-    //long          mnPixelWidth;
     int             mnXOffset;
     ABC             maABCWidths;
     bool            mbHasKashidas;
@@ -1001,7 +1000,6 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         rVisualItem.mnMinGlyphPos = mnGlyphCount;
         rVisualItem.mnEndGlyphPos = 0;
         rVisualItem.mnXOffset     = nXOffset;
-        //rVisualItem.mnPixelWidth  = 0;
 
         // shortcut ignorable items
         if( (rArgs.mnEndCharPos <= rVisualItem.mnMinCharPos)
