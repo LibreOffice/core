@@ -109,8 +109,8 @@ public:
     int                     GetMinKashidaGlyph() const { return mnMinKashidaGlyph; }
 
     static GLuint             mnGLyphyProgram;
-    GLyphyDemo::demo_atlas_t* mpGLyphyAtlas;
-    GLyphyDemo::demo_font_t*  mpGLyphyFont;
+    demo_atlas_t*             mpGLyphyAtlas;
+    demo_font_t*              mpGLyphyFont;
 
     bool                    GlyphIsCached(int nGlyphIndex) const;
     bool                    AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics);
@@ -501,10 +501,10 @@ void ImplWinFontEntry::setupGLyphy(HDC hDC)
     }
 
     if (mnGLyphyProgram == 0)
-        mnGLyphyProgram = GLyphyDemo::demo_shader_create_program();
+        mnGLyphyProgram = demo_shader_create_program();
 
-    mpGLyphyAtlas = GLyphyDemo::demo_atlas_create(2048, 1024, 64, 8);
-    mpGLyphyFont = GLyphyDemo::demo_font_create(hNewDC, mpGLyphyAtlas);
+    mpGLyphyAtlas = demo_atlas_create(2048, 1024, 64, 8);
+    mpGLyphyFont = demo_font_create(hNewDC, mpGLyphyAtlas);
 }
 
 WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE, bool bUseOpenGL)
@@ -1827,9 +1827,9 @@ bool UniscribeLayout::CacheGlyphs(SalGraphics& rGraphics) const
             if (mpOutGlyphs[i] == DROPPED_OUTGLYPH)
                 continue;
 
-            GLyphyDemo::glyph_info_t aGI;
+            glyph_info_t aGI;
             VCL_GL_INFO("Calling demo_font_lookup_glyph");
-            GLyphyDemo::demo_font_lookup_glyph( mrWinFontEntry.mpGLyphyFont, mpOutGlyphs[i], &aGI );
+            demo_font_lookup_glyph( mrWinFontEntry.mpGLyphyFont, mpOutGlyphs[i], &aGI );
         }
     }
     else
@@ -1863,7 +1863,7 @@ bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
     rGraphics.GetOpenGLContext()->UseNoProgram();
     glUseProgram( mrWinFontEntry.mnGLyphyProgram );
     CHECK_GL_ERROR();
-    GLyphyDemo::demo_atlas_set_uniforms( mrWinFontEntry.mpGLyphyAtlas );
+    demo_atlas_set_uniforms( mrWinFontEntry.mpGLyphyAtlas );
 
     GLint nLoc;
 
@@ -1942,7 +1942,7 @@ bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
 
         // font_size = 1; // ???
 
-        std::vector<GLyphyDemo::glyph_vertex_t> vertices;
+        std::vector<glyph_vertex_t> vertices;
         for (int i = nMinGlyphPos; i < nEndGlyphPos; i++)
         {
             // Ignore dropped glyphs.
@@ -1950,18 +1950,18 @@ bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
                 continue;
 
             // Total crack
-            GLyphyDemo::glyphy_point_t pt;
+            glyphy_point_t pt;
             pt.x = nAdvance + aPos.X() + mpGlyphOffsets[i].du;
             pt.y = aPos.Y() + mpGlyphOffsets[i].dv;
-            GLyphyDemo::glyph_info_t gi;
-            GLyphyDemo::demo_font_lookup_glyph( mrWinFontEntry.mpGLyphyFont, mpOutGlyphs[i], &gi );
-            GLyphyDemo::demo_shader_add_glyph_vertices( pt, font_size, &gi, &vertices, NULL );
+            glyph_info_t gi;
+            demo_font_lookup_glyph( mrWinFontEntry.mpGLyphyFont, mpOutGlyphs[i], &gi );
+            demo_shader_add_glyph_vertices( pt, font_size, &gi, &vertices, NULL );
 
             nAdvance += pGlyphWidths[i];
         }
 
         GLfloat mat[16];
-        GLyphyDemo::m4LoadIdentity( mat );
+        m4LoadIdentity( mat );
 
         GLint viewport[4];
         glGetIntegerv( GL_VIEWPORT, viewport );
@@ -1982,27 +1982,27 @@ bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
             double near = d / 4;
             double far = near + d;
             double factor = near / (2 * near + d);
-            GLyphyDemo::m4Frustum( mat, -width * factor, width * factor, -height * factor, height * factor, near, far );
-            GLyphyDemo::m4Translate( mat, 0, 0, -(near + d * 0.5) );
+            m4Frustum( mat, -width * factor, width * factor, -height * factor, height * factor, near, far );
+            m4Translate( mat, 0, 0, -(near + d * 0.5) );
         }
 
         // No rotation here
 
         // Fix 'up'
-        GLyphyDemo::m4Scale( mat, 1, -1, 1 );
+        m4Scale( mat, 1, -1, 1 );
 
         // Foo
-        // GLyphyDemo::m4Scale( mat, 0.5, 0.5, 1 );
+        // m4Scale( mat, 0.5, 0.5, 1 );
 
         // The "Center buffer" part in demo_view_display()
-        GLyphyDemo::m4Translate( mat, width/2, height/2, 0 );
+        m4Translate( mat, width/2, height/2, 0 );
 
 #else
         // Crack that just happens to show something (even if not completely in correct location) in
         // some cases, but not all. I don't understand why.
         double scale = std::max( 2/width, 2/height );
-        GLyphyDemo::m4Scale( mat, scale, -scale, 1);
-        GLyphyDemo::m4Translate( mat, -width/2, -height/2, 0 );
+        m4Scale( mat, scale, -scale, 1);
+        m4Translate( mat, -width/2, -height/2, 0 );
 #endif
 
         GLuint u_matViewProjection_loc = glGetUniformLocation( mrWinFontEntry.mnGLyphyProgram, "u_matViewProjection" );
@@ -2017,11 +2017,11 @@ bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
         glBindBuffer( GL_ARRAY_BUFFER, buf_name );
         CHECK_GL_ERROR();
 
-        glBufferData( GL_ARRAY_BUFFER,  sizeof(GLyphyDemo::glyph_vertex_t) * vertices.size(), (const char *) &vertices[0], GL_STATIC_DRAW );
+        glBufferData( GL_ARRAY_BUFFER,  sizeof(glyph_vertex_t) * vertices.size(), (const char *) &vertices[0], GL_STATIC_DRAW );
         CHECK_GL_ERROR();
         glEnableVertexAttribArray( a_glyph_vertex_loc );
         CHECK_GL_ERROR();
-        glVertexAttribPointer( a_glyph_vertex_loc, 4, GL_FLOAT, GL_FALSE, sizeof(GLyphyDemo::glyph_vertex_t), 0 );
+        glVertexAttribPointer( a_glyph_vertex_loc, 4, GL_FLOAT, GL_FALSE, sizeof(glyph_vertex_t), 0 );
         CHECK_GL_ERROR();
         glDrawArrays( GL_TRIANGLES, 0, vertices.size() );
         CHECK_GL_ERROR();
