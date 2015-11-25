@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include "desktopdllapi.h"
+#include <desktop/dllapi.h>
 
 #include "app.hxx"
 #include "cmdlineargs.hxx"

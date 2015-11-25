@@ -20,8 +20,10 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-
+#include <memory>
+#include <map>
 #include "../../source/inc/desktopdllapi.h"
+#include <osl/thread.h>
 
 class LOKInteractionHandler;
 

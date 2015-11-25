@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_PKGCHK_UNOPKG_UNOPKG_MAIN_H
 #define INCLUDED_DESKTOP_SOURCE_PKGCHK_UNOPKG_UNOPKG_MAIN_H
 
-#include "desktopdllapi.h"
+#include <desktop/dllapi.h>
 
 #if defined __cplusplus
 extern "C" {
