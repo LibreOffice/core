@@ -2167,6 +2167,10 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_bIgnoreNextContSectBreak = false;
         else
         {
+            // Restore portrait orientation
+            auto pValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_PageOrientation_portrait);
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, pValue);
+
             sectBreak();
             if (m_nResetBreakOnSectBreak != RTF_invalid)
             {
@@ -3487,6 +3491,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_LANDSCAPE:
     {
         auto pValue = std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_PageOrientation_landscape);
+        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, pValue);
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, pValue);
     }
     break;
