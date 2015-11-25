@@ -39,7 +39,8 @@ public:
     void            SetIdleHdl( const Link<Idle *, void>& rLink ) { maIdleHdl = rLink; }
     const Link<Idle *, void>& GetIdleHdl() const { return maIdleHdl; }
     virtual void Invoke() override;
-    virtual bool ReadyForSchedule( bool bTimer ) const override;
+    virtual bool ReadyForSchedule( bool bTimerOnly, sal_uInt64 nTimeNow ) const override;
+    virtual bool IsIdle() const override;
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const override;
     Idle&           operator=( const Idle& rIdle );
 };

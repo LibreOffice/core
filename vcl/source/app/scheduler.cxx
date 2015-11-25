@@ -46,10 +46,11 @@ ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly )
     ImplSVData*     pSVData = ImplGetSVData();
     ImplSchedulerData *pMostUrgent = nullptr;
 
+    sal_uInt64 nTimeNow = tools::Time::GetSystemTicks();
     for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
         if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete ||
-             !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly ) ||
+             !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly, nTimeNow ) ||
              !pSchedulerData->mpScheduler->IsActive())
             continue;
         if (!pMostUrgent)
@@ -207,10 +208,24 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
         {
             if (!pSchedulerData->mbInScheduler)
             {
-                if ( pSchedulerData->mpScheduler->ReadyForSchedule( true ) )
-                    nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod( nMinPeriod, nTime );
+                // FIXME: move into a helper.
+                const char *pSchedulerName = pSchedulerData->mpScheduler->mpDebugName;
+                if (!pSchedulerName)
+                    pSchedulerName = "unknown";
+
+                if ( !pSchedulerData->mpScheduler->IsIdle() )
+                {
+                    sal_uInt64 nOldMinPeriod = nMinPeriod;
+                    nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod(
+                                                                nOldMinPeriod, nTime );
+                    SAL_INFO("vcl.schedule", "Have active timer " << pSchedulerName <<
+                        "update min period from " << nOldMinPeriod << " to " << nMinPeriod);
+                }
                 else
+                {
+                    SAL_INFO("vcl.schedule", "Have active idle " << pSchedulerName);
                     bHasActiveIdles = true;
+                }
             }
             pPrevSchedulerData = pSchedulerData;
         }
