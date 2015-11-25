@@ -53,8 +53,6 @@ namespace xmloff
                 :public ::salhelper::SimpleReferenceObject
     {
     protected:
-        /// our export context
-        SvXMLExport&                m_rContext;
         // impl class
         std::unique_ptr<OFormLayerXMLExport_Impl> m_pImpl;
 

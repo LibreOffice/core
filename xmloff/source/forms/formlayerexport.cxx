@@ -43,8 +43,7 @@ namespace xmloff
     //= OFormLayerXMLExport
 
     OFormLayerXMLExport::OFormLayerXMLExport(SvXMLExport& _rContext)
-        :m_rContext(_rContext)
-        ,m_pImpl(new OFormLayerXMLExport_Impl(_rContext))
+        :m_pImpl(new OFormLayerXMLExport_Impl(_rContext))
     {
     }
 

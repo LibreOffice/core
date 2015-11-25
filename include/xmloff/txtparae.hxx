@@ -125,7 +125,6 @@ public:
 
 protected:
 
-    const OUString sActualSize;
     // Implement Title/Description Elements UI (#i73249#)
     const OUString sTitle;
     const OUString sDescription;
@@ -139,17 +138,12 @@ protected:
     const OUString sCharStyleName;
     const OUString sCharStyleNames;
     const OUString sContourPolyPolygon;
-    const OUString sDocumentIndex;
     const OUString sDocumentIndexMark;
     const OUString sEndNotice;
     const OUString sFootnote;
     const OUString sFootnoteCounting;
     const OUString sFrame;
-    const OUString sFrameHeightAbsolute;
-    const OUString sFrameHeightPercent;
     const OUString sFrameStyleName;
-    const OUString sFrameWidthAbsolute;
-    const OUString sFrameWidthPercent;
     const OUString sGraphicFilter;
     const OUString sGraphicRotation;
     const OUString sGraphicURL;
@@ -170,7 +164,6 @@ protected:
     const OUString sNumberingType;
     const OUString sPageDescName;
     const OUString sPageStyleName;
-    const OUString sParaChapterNumberingLevel;
     const OUString sParaConditionalStyleName;
     const OUString sParagraphService;
     const OUString sParaStyleName;
@@ -182,7 +175,6 @@ protected:
     const OUString sRelativeHeight;
     const OUString sRelativeWidth;
     const OUString sRuby;
-    const OUString sRubyAdjust;
     const OUString sRubyCharStyleName;
     const OUString sRubyText;
     const OUString sServerMap;
