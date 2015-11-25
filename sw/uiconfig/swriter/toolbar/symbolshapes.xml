@@ -24,14 +24,14 @@
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.moon"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.cloud"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.lightning"/>
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.flower"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.forbidden"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.puzzle"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.quad-bevel"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.octagon-bevel"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.diamond-bevel"/>
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.bracket-pair"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-bracket"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-bracket"/>
