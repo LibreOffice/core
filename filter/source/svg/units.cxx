@@ -25,16 +25,17 @@ double convLength( double value, SvgUnit unit, const State& rState, char dir )
     double fRet(value);
     switch ( unit )
     {
-        case SVG_LENGTH_UNIT_CM: fRet *= 72.0/2.54; break;
-        case SVG_LENGTH_UNIT_IN: fRet *= 72.0; break;
-        case SVG_LENGTH_UNIT_MM: fRet *= 72.0/25.4; break;
-        case SVG_LENGTH_UNIT_PC: fRet *= 72.0/6.0; break;
-        case SVG_LENGTH_UNIT_USER:
-        case SVG_LENGTH_UNIT_PX: // no unit defaults to PX in svg,
-                                 // assume display to have 72DPI
-        case SVG_LENGTH_UNIT_PT: break;
+        case SVG_LENGTH_UNIT_CM: fRet *= F_SVG_PIXEL_PER_INCH/2.54; break;
+        case SVG_LENGTH_UNIT_IN: fRet *= F_SVG_PIXEL_PER_INCH; break;
+        case SVG_LENGTH_UNIT_MM: fRet *= F_SVG_PIXEL_PER_INCH/25.4; break;
+        case SVG_LENGTH_UNIT_PC: fRet *= F_SVG_PIXEL_PER_INCH/6.0; break;
+        case SVG_LENGTH_UNIT_PT: fRet *= F_SVG_PIXEL_PER_INCH/72.0; break;
         case SVG_LENGTH_UNIT_EM: fRet *= rState.mnFontSize; break;
         case SVG_LENGTH_UNIT_EX: fRet *= rState.mnFontSize / 2.0; break;
+        case SVG_LENGTH_UNIT_USER:
+        case SVG_LENGTH_UNIT_PX:
+            // no unit defaults to PX in svg, assume display to have 90DPI
+            break;
         case SVG_LENGTH_UNIT_PERCENTAGE:
         {
             double fBoxLen;
