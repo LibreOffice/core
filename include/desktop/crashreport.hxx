@@ -27,16 +27,14 @@
  *      * AdapterDeviceId
  *
  */
-class DESKTOP_DLLPUBLIC CrashReporter
+class CRASHREPORT_DLLPUBLIC CrashReporter
 {
 public:
     static void AddKeyValue(const OUString& rKey, const OUString& rValue);
 
-    const char* getIniFileName();
+    static const char* getIniFileName();
 
 private:
-
-    static std::map<OUString, OUString> maValueMap;
 
     static osl::Mutex maMutex;
 };
