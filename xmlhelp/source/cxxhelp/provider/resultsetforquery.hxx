@@ -39,7 +39,6 @@ namespace chelp {
         ResultSetForQuery( const css::uno::Reference<css::uno::XComponentContext>& rxContext,
                            const css::uno::Reference<css::ucb::XContentProvider>&  xProvider,
                            const css::uno::Sequence< css::beans::Property >& seq,
-                           const css::uno::Sequence< css::ucb::NumberedSortingInfo >& seqSort,
                            URLParameter& aURLParameter,
                            Databases* pDatabases );
 

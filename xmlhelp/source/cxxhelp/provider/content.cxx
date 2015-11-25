@@ -196,7 +196,6 @@ public:
         return new ResultSetForRoot( m_xContext,
                                      m_xProvider,
                                      m_seq,
-                                     m_seqSort,
                                      m_aURLParameter,
                                      m_pDatabases );
     }
@@ -237,7 +236,6 @@ public:
         return new ResultSetForQuery( m_xContext,
                                       m_xProvider,
                                       m_seq,
-                                      m_seqSort,
                                       m_aURLParameter,
                                       m_pDatabases );
     }

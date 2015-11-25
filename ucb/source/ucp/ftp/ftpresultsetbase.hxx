@@ -52,8 +52,7 @@ namespace ftp {
 
         ResultSetBase(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                       const css::uno::Reference< css::ucb::XContentProvider >&  xProvider,
-                      const css::uno::Sequence< css::beans::Property >& seq,
-                      const css::uno::Sequence< css::ucb::NumberedSortingInfo >& seqSort);
+                      const css::uno::Sequence< css::beans::Property >& seq);
 
         virtual ~ResultSetBase();
 
@@ -516,29 +515,26 @@ namespace ftp {
 
     protected:
 
-        css::uno::Reference<
-        css::uno::XComponentContext >  m_xContext;
-        css::uno::Reference<
-        css::ucb::XContentProvider >  m_xProvider;
+        css::uno::Reference< css::uno::XComponentContext >
+                                            m_xContext;
+        css::uno::Reference< css::ucb::XContentProvider >
+                                            m_xProvider;
         sal_Int32                           m_nRow;
         bool                                m_nWasNull;
         bool                                m_bRowCountFinal;
 
-        typedef std::vector< css::uno::Reference<
-        css::ucb::XContentIdentifier > > IdentSet;
-        typedef std::vector< css::uno::Reference<
-        css::sdbc::XRow > >              ItemSet;
-        typedef std::vector< OUString >
-        PathSet;
+        typedef std::vector< css::uno::Reference<css::ucb::XContentIdentifier > >
+                                            IdentSet;
+        typedef std::vector< css::uno::Reference< css::sdbc::XRow > >
+                                            ItemSet;
+        typedef std::vector< OUString >     PathSet;
 
         IdentSet                            m_aIdents;
         ItemSet                             m_aItems;
         PathSet                             m_aPath;
 
-        css::uno::Sequence<
-        css::beans::Property >               m_sProperty;
-        css::uno::Sequence<
-        css::ucb::NumberedSortingInfo >      m_sSortingInfo;
+        css::uno::Sequence< css::beans::Property >
+                                            m_sProperty;
 
         osl::Mutex                          m_aMutex;
         cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;

@@ -80,7 +80,6 @@ typedef std::unordered_map< OUString, OUString, OUStringHash >    StringHashMap;
 class UUIInteractionHelper
 {
 private:
-    mutable osl::Mutex                                              m_aPropertyMutex;
             css::uno::Reference< css::uno::XComponentContext >      m_xContext;
             css::uno::Reference< css::awt::XWindow >                m_xWindowParam;
             const OUString                                          m_aContextParam;

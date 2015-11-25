@@ -43,12 +43,6 @@ struct NotifyInfo
 };
 
 
-struct NotifyPosSize
-{
-    Size    aPictureSize;
-    Point   aMousePos;
-};
-
 #define SVD_IMAP_USERDATA   0x0001
 
 const sal_uInt32 IMapInventor = sal_uInt32('I') * 0x00000001+

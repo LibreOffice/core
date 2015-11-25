@@ -115,7 +115,6 @@ private:
     VclPtr<GalleryToolBox> maViewBox;
     VclPtr<FixedLine>   maSeparator;
     VclPtr<FixedText>   maInfoBar;
-    Point               maDragStartPos;
     sal_uIntPtr         mnCurActionPos;
     GalleryBrowserMode  meMode;
     GalleryBrowserMode  meLastMode;

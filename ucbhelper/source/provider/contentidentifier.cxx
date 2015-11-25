@@ -49,7 +49,6 @@ struct ContentIdentifier_Impl
 {
     OUString                          m_aContentId;
     OUString                          m_aProviderScheme;
-    osl::Mutex                        m_aMutex;
 
     explicit ContentIdentifier_Impl( const OUString& rURL );
 };

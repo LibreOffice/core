@@ -35,8 +35,7 @@ protected:
     SwWrtShell*     m_pSh;
     VclPtr<SwEditWin> m_pWin;
     Point           m_aStartPos;                 // position of BeginCreate
-    Point           m_aMDPos;                // position of MouseButtonDown
-    sal_uInt16          m_nSlotId;
+    sal_uInt16      m_nSlotId;
     bool            m_bCreateObj  :1;
     bool            m_bInsForm   :1;
 

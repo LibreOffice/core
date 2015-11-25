@@ -32,7 +32,6 @@ namespace DOM
             xmlNotationPtr const pNotation)
         : CNotation_Base(rDocument, rMutex,
             NodeType_NOTATION_NODE, reinterpret_cast<xmlNodePtr>(pNotation))
-        , m_aNotationPtr(pNotation)
     {
     }
 

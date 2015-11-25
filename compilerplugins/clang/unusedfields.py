@@ -57,9 +57,23 @@ for d in definitionSet:
     if d in callSet:
         continue
     srcLoc = definitionToSourceLocationMap[d];
-    if (srcLoc.startswith("include/")):
-        continue
+    # ignore external source code
     if (srcLoc.startswith("external/")):
+        continue
+    # ignore build folder
+    if (srcLoc.startswith("workdir/")):
+        continue
+    # ignore our stable/URE/UNO api
+    if (srcLoc.startswith("include/com/")
+        or srcLoc.startswith("include/cppu/")
+        or srcLoc.startswith("include/cppuhelper/")
+        or srcLoc.startswith("include/osl/")
+        or srcLoc.startswith("include/rtl/")
+        or srcLoc.startswith("include/sal/")
+        or srcLoc.startswith("include/salhelper/")
+        or srcLoc.startswith("include/systools/")
+        or srcLoc.startswith("include/typelib/")
+        or srcLoc.startswith("include/uno/")):
         continue
     # this is all representations of on-disk data structures
     if (srcLoc.startswith("sc/source/filter/inc/scflt.hxx")
@@ -69,7 +83,8 @@ for d in definitionSet:
         or srcLoc.startswith("vcl/inc/unx/XIM.h")
         or srcLoc.startswith("vcl/inc/unx/gtk/gloactiongroup.h")
         or srcLoc.startswith("include/svl/svdde.hxx")
-        or srcLoc.startswith("lotuswordpro/source/filter/lwpsdwdrawheader.hxx")):
+        or srcLoc.startswith("lotuswordpro/source/filter/lwpsdwdrawheader.hxx")
+        or srcLoc.startswith("svtools/source/dialogs/insdlg.cxx")):
         continue
 
     tmp1set.add((clazz + " " + definitionToTypeMap[d], srcLoc))

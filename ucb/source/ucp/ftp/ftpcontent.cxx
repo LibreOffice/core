@@ -254,7 +254,6 @@ public:
         return new ResultSetI(m_xContext,
                               m_xProvider,
                               m_seq,
-                              m_seqSort,
                               m_dirvec);
     }
 

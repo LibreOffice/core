@@ -38,9 +38,6 @@ namespace DOM
     private:
         friend class CDocument;
 
-    private:
-        xmlNotationPtr m_aNotationPtr;
-
     protected:
         CNotation(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlNotationPtr const pNotation);

@@ -467,14 +467,12 @@ struct Parameter
     Parameter * m_pNext;
     OString m_aAttribute;
     OString m_aCharset;
-    OString m_aLanguage;
     OString m_aValue;
     sal_uInt32 m_nSection;
     bool m_bExtended;
 
     inline Parameter(Parameter * pTheNext, const OString& rTheAttribute,
                      const OString& rTheCharset,
-                     const OString& rTheLanguage,
                      const OString& rTheValue, sal_uInt32 nTheSection,
                      bool bTheExtended);
 };
@@ -482,13 +480,11 @@ struct Parameter
 inline Parameter::Parameter(Parameter * pTheNext,
                             const OString& rTheAttribute,
                             const OString& rTheCharset,
-                            const OString& rTheLanguage,
                             const OString& rTheValue,
                             sal_uInt32 nTheSection, bool bTheExtended):
     m_pNext(pTheNext),
     m_aAttribute(rTheAttribute),
     m_aCharset(rTheCharset),
-    m_aLanguage(rTheLanguage),
     m_aValue(rTheValue),
     m_nSection(nTheSection),
     m_bExtended(bTheExtended)
@@ -2001,7 +1997,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                     RTL_TEXTENCODING_UTF8);
         }
 
-        *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
+        *pPos = new Parameter(*pPos, aAttribute, aCharset, aValue,
                               nSection, bExtended);
     }
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;

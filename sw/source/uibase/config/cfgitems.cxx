@@ -31,8 +31,7 @@
 
 
 SwDocDisplayItem::SwDocDisplayItem( sal_uInt16 _nWhich ) :
-        SfxPoolItem(_nWhich),
-        aIndexBackgrndCol(COL_GRAY)
+        SfxPoolItem(_nWhich)
 {
     bParagraphEnd       =
     bTab                =

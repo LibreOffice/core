@@ -355,7 +355,6 @@ struct ImpCircUser : public SdrDragStatUserData
 {
     Rectangle                   aR;
     Point                       aCenter;
-    Point                       aRadius;
     Point                       aP1;
     Point                       aP2;
     long                        nMaxRad;

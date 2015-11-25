@@ -41,9 +41,8 @@ using namespace com::sun::star::sdbc;
 ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
                        const Reference<XContentProvider>&  xProvider,
                        const Sequence<Property>& seqProp,
-                       const Sequence< NumberedSortingInfo >& seqSort,
                        const std::vector<FTPDirentry>&  dirvec)
-    : ResultSetBase(rxContext,xProvider,seqProp,seqSort)
+    : ResultSetBase(rxContext,xProvider,seqProp)
 {
     for( size_t i = 0; i < dirvec.size(); ++i)
         m_aPath.push_back(dirvec[i].m_aURL);

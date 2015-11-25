@@ -300,7 +300,6 @@ struct ImpMeasurePoly
     ImpLineRec                  aMainline3; // those in between
     ImpLineRec                  aHelpline1;
     ImpLineRec                  aHelpline2;
-    Rectangle                   aTextRect;
     Size                        aTextSize;
     long                        nLineLen;
     long                        nLineAngle;

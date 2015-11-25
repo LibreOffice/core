@@ -54,8 +54,6 @@ class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
     bool bManualBreak       :1;
     bool bShowHiddenPara    :1;
 
-    Color aIndexBackgrndCol;
-
 public:
                                 SwDocDisplayItem( sal_uInt16 nWhich = FN_PARAM_DOCDISP );
                                 SwDocDisplayItem(

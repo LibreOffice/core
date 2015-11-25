@@ -67,7 +67,6 @@ class SwNavigationPI : public vcl::Window,
     OUString            m_sContentFileName;
     OUString            m_aContextArr[3];
     OUString            m_aStatusArr[4];
-    Point               m_aBoxBottomLeft; // Pos when Box is at bottom
 
     SfxObjectShellLock  *m_pxObjectShell;
     SwView              *m_pContentView;

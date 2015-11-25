@@ -52,8 +52,7 @@ namespace chelp {
 
         ResultSetBase( const css::uno::Reference< css::uno::XComponentContext >&  rxContext,
                        const css::uno::Reference< css::ucb::XContentProvider >&  xProvider,
-                       const css::uno::Sequence< css::beans::Property >& seq,
-                       const css::uno::Sequence< css::ucb::NumberedSortingInfo >& seqSort );
+                       const css::uno::Sequence< css::beans::Property >& seq );
 
         virtual ~ResultSetBase();
 
@@ -547,7 +546,6 @@ namespace chelp {
         PathSet                             m_aPath;
 
         css::uno::Sequence< css::beans::Property >           m_sProperty;
-        css::uno::Sequence< css::ucb::NumberedSortingInfo >  m_sSortingInfo;
 
         osl::Mutex                          m_aMutex;
         cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;

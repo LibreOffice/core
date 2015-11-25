@@ -41,7 +41,6 @@ namespace xmloff
     class OAttribListMerger : public OAttribListMerger_Base
     {
     protected:
-        ::osl::Mutex        m_aMutex;
         typedef std::vector< css::uno::Reference< css::xml::sax::XAttributeList > > AttributeListArray;
         AttributeListArray  m_aLists;
 

@@ -59,7 +59,6 @@ class SwAccessibleContext :
     friend class SwAccessibleSelectionHelper;
 
 protected:
-    mutable ::osl::Mutex m_ListenerMutex;
     mutable ::osl::Mutex m_Mutex;
 
 private:

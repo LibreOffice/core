@@ -33,15 +33,13 @@ using namespace com::sun::star;
 
 ResultSetBase::ResultSetBase( const uno::Reference< uno::XComponentContext >&  rxContext,
                               const uno::Reference< ucb::XContentProvider >&  xProvider,
-                              const uno::Sequence< beans::Property >& seq,
-                              const uno::Sequence< ucb::NumberedSortingInfo >& seqSort )
+                              const uno::Sequence< beans::Property >& seq )
     : m_xContext( rxContext ),
       m_xProvider( xProvider ),
       m_nRow( -1 ),
       m_nWasNull( true ),
       m_bRowCountFinal( true ),
       m_sProperty( seq ),
-      m_sSortingInfo( seqSort ),
       m_pDisposeEventListeners( nullptr ),
       m_pRowCountListeners( nullptr ),
       m_pIsFinalListeners( nullptr )

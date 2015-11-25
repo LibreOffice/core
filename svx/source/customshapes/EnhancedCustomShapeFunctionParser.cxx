@@ -805,14 +805,12 @@ public:
 class EnumFunctor
 {
     const ExpressionFunct           meFunct;
-    double                          mnValue;
     ParserContextSharedPtr          mxContext;
 
 public:
 
     EnumFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext )
     : meFunct( eFunct )
-    , mnValue( 0 )
     , mxContext( rContext )
     {
     }

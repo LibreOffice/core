@@ -82,10 +82,9 @@ struct HitItem
 ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentContext >& rxContext,
                                       const uno::Reference< XContentProvider >&  xProvider,
                                       const uno::Sequence< beans::Property >& seq,
-                                      const uno::Sequence< NumberedSortingInfo >& seqSort,
                                       URLParameter& aURLParameter,
                                       Databases* pDatabases )
-    : ResultSetBase( rxContext,xProvider,seq,seqSort ),
+    : ResultSetBase( rxContext,xProvider,seq ),
       m_aURLParameter( aURLParameter )
 {
     Reference< XExtendedTransliteration > xTrans = Transliteration::create( rxContext );

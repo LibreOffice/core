@@ -66,7 +66,6 @@ using namespace ::com::sun::star::beans;
 ****************************************************************************************************************-*/
 struct SvtDynMenuEntry
 {
-        OUString    sName;
         OUString    sURL;
         OUString    sTitle;
         OUString    sImageIdentifier;

@@ -41,8 +41,6 @@ SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );
 
 struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 {
-    Point       maPos;
-    Size        maSize;
     SignatureState  mnState;
     Image       maImage;
     Image       maImageBroken;
