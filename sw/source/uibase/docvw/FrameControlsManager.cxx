@@ -46,11 +46,11 @@ const SwFrameControlsManager& SwFrameControlsManager::operator=( const SwFrameCo
     return *this;
 }
 
-SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, const SwFrm* pFrm )
+SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, const SwFrame* pFrame )
 {
     SwFrameControlPtrMap& rControls = m_aControls[eType];
 
-    SwFrameControlPtrMap::iterator aIt = rControls.find(pFrm);
+    SwFrameControlPtrMap::iterator aIt = rControls.find(pFrame);
 
     if (aIt != rControls.end())
         return aIt->second;
@@ -58,22 +58,22 @@ SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, co
     return SwFrameControlPtr();
 }
 
-void SwFrameControlsManager::RemoveControls( const SwFrm* pFrm )
+void SwFrameControlsManager::RemoveControls( const SwFrame* pFrame )
 {
     map< FrameControlType, SwFrameControlPtrMap >::iterator pIt = m_aControls.begin();
 
     while ( pIt != m_aControls.end() )
     {
         SwFrameControlPtrMap& rMap = pIt->second;
-        rMap.erase(pFrm);
+        rMap.erase(pFrame);
         ++pIt;
     }
 }
 
-void SwFrameControlsManager::RemoveControlsByType( FrameControlType eType, const SwFrm* pFrm )
+void SwFrameControlsManager::RemoveControlsByType( FrameControlType eType, const SwFrame* pFrame )
 {
     SwFrameControlPtrMap& rMap = m_aControls[eType];
-    rMap.erase(pFrm);
+    rMap.erase(pFrame);
 }
 
 void SwFrameControlsManager::HideControls( FrameControlType eType )
@@ -102,7 +102,7 @@ void SwFrameControlsManager::SetReadonlyControls( bool bReadonly )
     }
 }
 
-void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, FrameControlType eType, Point aOffset )
+void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrame* pPageFrame, FrameControlType eType, Point aOffset )
 {
     OSL_ASSERT( eType == Header || eType == Footer );
 
@@ -112,21 +112,21 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
 
     SwFrameControlPtrMap& rControls = m_aControls[eType];
 
-    SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pPageFrm);
-    if (lb != rControls.end() && !(rControls.key_comp()(pPageFrm, lb->first)))
+    SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pPageFrame);
+    if (lb != rControls.end() && !(rControls.key_comp()(pPageFrame, lb->first)))
         pControl = lb->second;
     else
     {
         SwFrameControlPtr pNewControl(
                 new SwFrameControl( VclPtr<SwHeaderFooterWin>::Create(
-                                        m_pEditWin, pPageFrm, bHeader ).get() ) );
+                                        m_pEditWin, pPageFrame, bHeader ).get() ) );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
-        rControls.insert(lb, make_pair(pPageFrm, pNewControl));
+        rControls.insert(lb, make_pair(pPageFrame, pNewControl));
         pControl.swap( pNewControl );
     }
 
-    Rectangle aPageRect = m_pEditWin->LogicToPixel( pPageFrm->Frm().SVRect() );
+    Rectangle aPageRect = m_pEditWin->LogicToPixel( pPageFrame->Frame().SVRect() );
 
     SwHeaderFooterWin* pWin = dynamic_cast<SwHeaderFooterWin *>(pControl->GetWindow());
     assert( pWin != nullptr) ;
@@ -137,24 +137,24 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
         pControl->ShowAll( true );
 }
 
-void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
+void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame )
 {
     // Check if we already have the control
     SwFrameControlPtr pControl;
 
     SwFrameControlPtrMap& rControls = m_aControls[PageBreak];
 
-    SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pPageFrm);
-    if (lb != rControls.end() && !(rControls.key_comp()(pPageFrm, lb->first)))
+    SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pPageFrame);
+    if (lb != rControls.end() && !(rControls.key_comp()(pPageFrame, lb->first)))
         pControl = lb->second;
     else
     {
         SwFrameControlPtr pNewControl( new SwFrameControl(
-                VclPtr<SwPageBreakWin>::Create( m_pEditWin, pPageFrm ).get() ) );
+                VclPtr<SwPageBreakWin>::Create( m_pEditWin, pPageFrame ).get() ) );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
 
-        rControls.insert(lb, make_pair(pPageFrm, pNewControl));
+        rControls.insert(lb, make_pair(pPageFrame, pNewControl));
 
         pControl.swap( pNewControl );
     }
@@ -166,22 +166,22 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
         pControl->ShowAll( true );
 }
 
-SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrm* pFrm ) :
+SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame* pFrame ) :
     MenuButton( pEditWin, WB_DIALOGCONTROL ),
     m_pEditWin( pEditWin ),
-    m_pFrm( pFrm )
+    m_pFrame( pFrame )
 {
 }
 
-const SwPageFrm* SwFrameMenuButtonBase::GetPageFrame()
+const SwPageFrame* SwFrameMenuButtonBase::GetPageFrame()
 {
-    return static_cast< const SwPageFrm * >( m_pFrm );
+    return static_cast< const SwPageFrame * >( m_pFrame );
 }
 
 void SwFrameMenuButtonBase::dispose()
 {
     m_pEditWin.clear();
-    m_pFrm = nullptr;
+    m_pFrame = nullptr;
     MenuButton::dispose();
 }
 

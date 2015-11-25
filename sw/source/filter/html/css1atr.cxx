@@ -145,7 +145,7 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
                                  sal_uInt16 nMode );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt );
-static Writer& OutCSS1_SwFormatFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
+static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
                                      sal_uInt16 nMode );
 static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
                                         const SfxItemSet& rItemSet,
@@ -1713,10 +1713,10 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     // only export Portrait oder Landscape. Otherwise export size.
     bool bRefLandscape = pRefPageDesc && pRefPageDesc->GetLandscape();
     Size aRefSz;
-    const Size& rSz = rPageDesc.GetMaster().GetFrmSize().GetSize();
+    const Size& rSz = rPageDesc.GetMaster().GetFrameSize().GetSize();
     if( pRefPageDesc )
     {
-        aRefSz = pRefPageDesc->GetMaster().GetFrmSize().GetSize();
+        aRefSz = pRefPageDesc->GetMaster().GetFrameSize().GetSize();
         if( bRefLandscape != rPageDesc.GetLandscape() )
         {
             long nTmp = aRefSz.Height();
@@ -1960,7 +1960,7 @@ Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
 }
 
 void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat,
-                                          sal_uInt32 nFrmOpts,
+                                          sal_uInt32 nFrameOpts,
                                           const SdrObject *pSdrObj,
                                           const SfxItemSet *pItemSet )
 {
@@ -1971,7 +1971,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
     const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
     SvxLRSpaceItem aLRItem( rFrameFormat.GetLRSpace() );
     SvxULSpaceItem aULItem( rFrameFormat.GetULSpace() );
-    if( nFrmOpts & HTML_FRMOPT_S_ALIGN )
+    if( nFrameOpts & HTML_FRMOPT_S_ALIGN )
     {
         const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
         switch( rAnchor.GetAnchorId() )
@@ -1981,7 +1981,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
             if( text::RelOrientation::FRAME == rHoriOri.GetRelationOrient() ||
                 text::RelOrientation::PRINT_AREA == rHoriOri.GetRelationOrient() )
             {
-                if( !(nFrmOpts & HTML_FRMOPT_ALIGN) )
+                if( !(nFrameOpts & HTML_FRMOPT_ALIGN) )
                 {
                     // float
                     const sal_Char *pStr = text::HoriOrientation::RIGHT==rHoriOri.GetHoriOrient()
@@ -2072,7 +2072,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
     }
 
     // width/height
-    if( nFrmOpts & HTML_FRMOPT_S_SIZE )
+    if( nFrameOpts & HTML_FRMOPT_S_SIZE )
     {
         if( RES_DRAWFRMFMT == rFrameFormat.Which() )
         {
@@ -2083,17 +2083,17 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
             if( pSdrObj )
             {
                 Size aTwipSz( pSdrObj->GetLogicRect().GetSize() );
-                if( nFrmOpts & HTML_FRMOPT_S_WIDTH )
+                if( nFrameOpts & HTML_FRMOPT_S_WIDTH )
                 {
-                    if( nFrmOpts & HTML_FRMOPT_S_PIXSIZE )
+                    if( nFrameOpts & HTML_FRMOPT_S_PIXSIZE )
                         OutCSS1_PixelProperty( sCSS1_P_width, aTwipSz.Width(),
                                                false );
                     else
                         OutCSS1_UnitProperty( sCSS1_P_width, aTwipSz.Width() );
                 }
-                if( nFrmOpts & HTML_FRMOPT_S_HEIGHT )
+                if( nFrameOpts & HTML_FRMOPT_S_HEIGHT )
                 {
-                    if( nFrmOpts & HTML_FRMOPT_S_PIXSIZE )
+                    if( nFrameOpts & HTML_FRMOPT_S_PIXSIZE )
                         OutCSS1_PixelProperty( sCSS1_P_height, aTwipSz.Height(),
                                                true );
                     else
@@ -2103,25 +2103,25 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
         }
         else
         {
-            OSL_ENSURE( HTML_FRMOPT_ABSSIZE & nFrmOpts,
+            OSL_ENSURE( HTML_FRMOPT_ABSSIZE & nFrameOpts,
                     "Export absolute size" );
-            OSL_ENSURE( HTML_FRMOPT_ANYSIZE & nFrmOpts,
+            OSL_ENSURE( HTML_FRMOPT_ANYSIZE & nFrameOpts,
                     "Export every size" );
             sal_uInt16 nMode = 0;
-            if( nFrmOpts & HTML_FRMOPT_S_WIDTH )
+            if( nFrameOpts & HTML_FRMOPT_S_WIDTH )
                 nMode |= CSS1_FRMSIZE_WIDTH;
-            if( nFrmOpts & HTML_FRMOPT_S_HEIGHT )
+            if( nFrameOpts & HTML_FRMOPT_S_HEIGHT )
                 nMode |= (CSS1_FRMSIZE_MINHEIGHT|CSS1_FRMSIZE_FIXHEIGHT);
-            if( nFrmOpts & HTML_FRMOPT_S_PIXSIZE )
+            if( nFrameOpts & HTML_FRMOPT_S_PIXSIZE )
                 nMode |= CSS1_FRMSIZE_PIXEL;
 
-            OutCSS1_SwFormatFrmSize( *this, rFrameFormat.GetFrmSize(), nMode );
+            OutCSS1_SwFormatFrameSize( *this, rFrameFormat.GetFrameSize(), nMode );
         }
     }
 
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     // margin-*
-    if( (nFrmOpts & HTML_FRMOPT_S_SPACE) &&
+    if( (nFrameOpts & HTML_FRMOPT_S_SPACE) &&
         IsHTMLMode( HTMLMODE_FLY_MARGINS) )
     {
         const SvxLRSpaceItem *pLRItem = nullptr;
@@ -2135,17 +2135,17 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
     }
 
     // border
-    if( nFrmOpts & HTML_FRMOPT_S_BORDER )
+    if( nFrameOpts & HTML_FRMOPT_S_BORDER )
     {
         const SfxPoolItem* pItem;
-        if( nFrmOpts & HTML_FRMOPT_S_NOBORDER )
+        if( nFrameOpts & HTML_FRMOPT_S_NOBORDER )
             OutCSS1_SvxBox( *this, rFrameFormat.GetBox() );
         else if( SfxItemState::SET==rItemSet.GetItemState( RES_BOX, true, &pItem ) )
             OutCSS1_SvxBox( *this, *pItem );
     }
 
     // background (if, then the color must be set also)
-    if( nFrmOpts & HTML_FRMOPT_S_BACKGROUND )
+    if( nFrameOpts & HTML_FRMOPT_S_BACKGROUND )
         OutCSS1_FrameFormatBackground( rFrameFormat );
 
     if( pItemSet )
@@ -2919,12 +2919,12 @@ static Writer& OutCSS1_SwFormatDrop( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static Writer& OutCSS1_SwFormatFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
+static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
                                      sal_uInt16 nMode )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    const SwFormatFrmSize& rFSItem = static_cast<const SwFormatFrmSize&>(rHt);
+    const SwFormatFrameSize& rFSItem = static_cast<const SwFormatFrameSize&>(rHt);
 
     if( nMode & CSS1_FRMSIZE_WIDTH )
     {

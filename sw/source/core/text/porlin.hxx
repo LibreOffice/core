@@ -148,7 +148,7 @@ public:
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );
     SwLinePortion *FindLastPortion();
 
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const;
+    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const;
     void CalcTextSize( const SwTextSizeInfo &rInfo );
 

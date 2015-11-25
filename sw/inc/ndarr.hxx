@@ -121,12 +121,12 @@ class SW_DLLPUBLIC SwNodes
     void DelNodes( const SwNodeIndex& rStart, sal_uLong nCnt = 1 );
 
     void ChgNode( SwNodeIndex& rDelPos, sal_uLong nSize,
-                  SwNodeIndex& rInsPos, bool bNewFrms );
+                  SwNodeIndex& rInsPos, bool bNewFrames );
 
     void UpdateOutlineIdx( const SwNode& );   ///< Update all OutlineNodes starting from Node.
 
     void _CopyNodes( const SwNodeRange&, const SwNodeIndex&,
-                    bool bNewFrms = true, bool bTableInsDummyNode = false ) const;
+                    bool bNewFrames = true, bool bTableInsDummyNode = false ) const;
     void _DelDummyNodes( const SwNodeRange& rRg );
 
 protected:
@@ -171,12 +171,12 @@ public:
     void Delete(const SwNodeIndex &rPos, sal_uLong nNodes = 1);
 
     bool _MoveNodes( const SwNodeRange&, SwNodes& rNodes, const SwNodeIndex&,
-                bool bNewFrms = true );
+                bool bNewFrames = true );
     void MoveRange( SwPaM&, SwPosition&, SwNodes& rNodes );
 
     void _Copy( const SwNodeRange& rRg, const SwNodeIndex& rInsPos,
-                bool bNewFrms = true ) const
-        {   _CopyNodes( rRg, rInsPos, bNewFrms ); }
+                bool bNewFrames = true ) const
+        {   _CopyNodes( rRg, rInsPos, bNewFrames ); }
 
     void SectionUp( SwNodeRange *);
     void SectionDown( SwNodeRange *pRange, SwStartNodeType = SwNormalStartNode );
@@ -305,7 +305,7 @@ public:
                                 SwTOXBase const*const pTOXBase,
                                 SwNodeIndex const*const pEnde,
                                 bool const bInsAtStart = true,
-                                bool const bCreateFrms = true);
+                                bool const bCreateFrames = true);
 
     /// Which Doc contains the nodes-array?
             SwDoc* GetDoc()         { return m_pMyDoc; }
@@ -313,9 +313,9 @@ public:
 
     /** Search previous / next content node or table node with frames.
      If no end is given begin with the FrameIndex, else start search
-     with that before rFrmIdx and pEnd at the back.
-     If no valid node is found, return 0. rFrmIdx points to the node with frames. **/
-    SwNode* FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
+     with that before rFrameIdx and pEnd at the back.
+     If no valid node is found, return 0. rFrameIdx points to the node with frames. **/
+    SwNode* FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                                 const SwNode* pEnd = nullptr ) const;
 
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;

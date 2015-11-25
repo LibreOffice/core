@@ -66,7 +66,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link<SwOneExampleFrame&,void>* pInitializedLink,
                                         const OUString* pURL ) :
-    aTopWindow(VclPtr<SwFrmCtrlWindow>::Create(&rWin, this)),
+    aTopWindow(VclPtr<SwFrameCtrlWindow>::Create(&rWin, this)),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
     pModuleView(SW_MOD()->GetView()),
     nStyleFlags(nFlags),
@@ -200,10 +200,10 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
     // now get the model
     uno::Reference< beans::XPropertySet >  xPrSet(_xControl, uno::UNO_QUERY);
     uno::Any aFrame = xPrSet->getPropertyValue("Frame");
-    uno::Reference< frame::XFrame >  xFrm;
-    aFrame >>= xFrm;
+    uno::Reference< frame::XFrame >  xFrame;
+    aFrame >>= xFrame;
 
-    uno::Reference< beans::XPropertySet > xPropSet( xFrm, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
         try
@@ -219,7 +219,7 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
         }
     }
 
-    _xController = xFrm->getController();
+    _xController = xFrame->getController();
     if(_xController.is())
     {
         _xModel = _xController->getModel();
@@ -284,11 +284,11 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
         uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
         if( xTunnel.is() )
         {
-            OTextCursorHelper* pCrsr = reinterpret_cast<OTextCursorHelper*>( xTunnel->getSomething(
+            OTextCursorHelper* pCursor = reinterpret_cast<OTextCursorHelper*>( xTunnel->getSomething(
                                         OTextCursorHelper::getUnoTunnelId() ));
-            if( pCrsr )
+            if( pCursor )
             {
-                SwEditShell* pSh = pCrsr->GetDoc()->GetEditShell();
+                SwEditShell* pSh = pCursor->GetDoc()->GetEditShell();
 
                 do
                 {
@@ -331,8 +331,8 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
             }
         }
 
-        uno::Reference< beans::XPropertySet >  xCrsrProp(_xCursor, uno::UNO_QUERY);
-        uno::Any aPageStyle = xCrsrProp->getPropertyValue(UNO_NAME_PAGE_STYLE_NAME);
+        uno::Reference< beans::XPropertySet >  xCursorProp(_xCursor, uno::UNO_QUERY);
+        uno::Any aPageStyle = xCursorProp->getPropertyValue(UNO_NAME_PAGE_STYLE_NAME);
         OUString sPageStyle;
         aPageStyle >>= sPageStyle;
 
@@ -370,21 +370,21 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
 
         aInitializedLink.Call(*this);
 
-        uno::Reference< text::XTextViewCursorSupplier >  xCrsrSupp(_xController, uno::UNO_QUERY);
-        uno::Reference< view::XScreenCursor >  xScrCrsr(xCrsrSupp->getViewCursor(), uno::UNO_QUERY);
-        if(xScrCrsr.is())
-            xScrCrsr->screenUp();
+        uno::Reference< text::XTextViewCursorSupplier >  xCursorSupp(_xController, uno::UNO_QUERY);
+        uno::Reference< view::XScreenCursor >  xScrCursor(xCursorSupp->getViewCursor(), uno::UNO_QUERY);
+        if(xScrCursor.is())
+            xScrCursor->screenUp();
 
         xWin->setVisible( sal_True );
         aTopWindow->Show();
 
         if( xTunnel.is() )
         {
-            OTextCursorHelper* pCrsr = reinterpret_cast<OTextCursorHelper*>( xTunnel->getSomething(
+            OTextCursorHelper* pCursor = reinterpret_cast<OTextCursorHelper*>( xTunnel->getSomething(
                                         OTextCursorHelper::getUnoTunnelId() ));
-            if( pCrsr )
+            if( pCursor )
             {
-                SwEditShell* pSh = pCrsr->GetDoc()->GetEditShell();
+                SwEditShell* pSh = pCursor->GetDoc()->GetEditShell();
                 if( pSh->ActionCount() )
                 {
                     pSh->EndAllAction();
@@ -404,18 +404,18 @@ void SwOneExampleFrame::ClearDocument( bool bStartUpdateTimer )
     uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
     if( xTunnel.is() )
     {
-        OTextCursorHelper* pCrsr = reinterpret_cast<OTextCursorHelper*>(xTunnel->getSomething(
+        OTextCursorHelper* pCursor = reinterpret_cast<OTextCursorHelper*>(xTunnel->getSomething(
                                         OTextCursorHelper::getUnoTunnelId()) );
-        if( pCrsr )
+        if( pCursor )
         {
-            SwDoc* pDoc = pCrsr->GetDoc();
+            SwDoc* pDoc = pCursor->GetDoc();
             SwEditShell* pSh = pDoc->GetEditShell();
             pSh->LockPaint();
             pSh->StartAllAction();
             pSh->KillPams();
             pSh->ClearMark();
             pDoc->ClearDoc();
-            pSh->ClearUpCrsrs();
+            pSh->ClearUpCursors();
 
             if( aLoadedIdle.IsActive() || !bStartUpdateTimer )
             {
@@ -503,17 +503,17 @@ IMPL_LINK_TYPED(SwOneExampleFrame, PopupHdl, Menu*, pMenu, bool )
     }
     else if(ITEM_UP == nId || ITEM_DOWN == nId)
     {
-        uno::Reference< text::XTextViewCursorSupplier >  xCrsrSupp(_xController, uno::UNO_QUERY);
-        uno::Reference< view::XScreenCursor >  xScrCrsr(xCrsrSupp->getViewCursor(), uno::UNO_QUERY);
+        uno::Reference< text::XTextViewCursorSupplier >  xCursorSupp(_xController, uno::UNO_QUERY);
+        uno::Reference< view::XScreenCursor >  xScrCursor(xCursorSupp->getViewCursor(), uno::UNO_QUERY);
         if(ITEM_UP == nId)
-            xScrCrsr->screenUp();
+            xScrCursor->screenUp();
         else
-            xScrCrsr->screenDown();
+            xScrCursor->screenDown();
     }
     return false;
 };
 
-SwFrmCtrlWindow::SwFrmCtrlWindow(vcl::Window* pParent, SwOneExampleFrame* pFrame)
+SwFrameCtrlWindow::SwFrameCtrlWindow(vcl::Window* pParent, SwOneExampleFrame* pFrame)
     : VclEventBox(pParent)
     , pExampleFrame(pFrame)
 {
@@ -521,7 +521,7 @@ SwFrmCtrlWindow::SwFrmCtrlWindow(vcl::Window* pParent, SwOneExampleFrame* pFrame
     set_fill(true);
 }
 
-void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
+void SwFrameCtrlWindow::Command( const CommandEvent& rCEvt )
 {
     switch ( rCEvt.GetCommand() )
     {
@@ -540,12 +540,12 @@ void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-Size SwFrmCtrlWindow::GetOptimalSize() const
+Size SwFrameCtrlWindow::GetOptimalSize() const
 {
     return LogicToPixel(Size(82, 124), MapMode(MAP_APPFONT));
 }
 
-void SwFrmCtrlWindow::Resize()
+void SwFrameCtrlWindow::Resize()
 {
     VclEventBox::Resize();
     pExampleFrame->ClearDocument(true);

@@ -26,12 +26,12 @@
 #include "swtypes.hxx"
 #include "swrect.hxx"
 
-class SwRootFrm;
-class SwLayoutFrm;
-class SwPageFrm;
-class SwFlyFrm;
-class SwContentFrm;
-class SwTabFrm;
+class SwRootFrame;
+class SwLayoutFrame;
+class SwPageFrame;
+class SwFlyFrame;
+class SwContentFrame;
+class SwTabFrame;
 class SwViewShellImp;
 class SwContentNode;
 class SwWait;
@@ -50,15 +50,15 @@ class SwWait;
  */
 class SwLayAction
 {
-    SwRootFrm  *m_pRoot;
+    SwRootFrame  *m_pRoot;
     SwViewShellImp  *m_pImp; // here the action logs in and off
 
     // For the sake of optimization, so that the tables stick a bit better to
-    // the Crsr when hitting return/backspace in front of one.
-    // The first TabFrm that paints itself (per page) adds itself to the pointer.
-    // The ContentFrms beneath the page do not need to deregister at the Shell for
+    // the Cursor when hitting return/backspace in front of one.
+    // The first TabFrame that paints itself (per page) adds itself to the pointer.
+    // The ContentFrames beneath the page do not need to deregister at the Shell for
     // painting.
-    const SwTabFrm *m_pOptTab;
+    const SwTabFrame *m_pOptTab;
 
     SwWait *m_pWait;
 
@@ -68,7 +68,7 @@ class SwLayAction
     sal_uInt16 m_nPreInvaPage;
 
     std::clock_t m_nStartTicks;      // The Action's starting time; if too much time passes the
-                                // WaitCrsr can be enabled via CheckWaitCrsr()
+                                // WaitCursor can be enabled via CheckWaitCursor()
 
     VclInputFlags m_nInputType;      // Which input should terminate processing
     sal_uInt16 m_nEndPage;        // StatBar control
@@ -93,25 +93,25 @@ class SwLayAction
     // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
     bool    mbFormatContentOnInterrupt;
 
-    void PaintContent( const SwContentFrm *, const SwPageFrm *,
+    void PaintContent( const SwContentFrame *, const SwPageFrame *,
                      const SwRect &rOldRect, long nOldBottom );
-    bool PaintWithoutFlys( const SwRect &, const SwContentFrm *,
-                           const SwPageFrm * );
-    inline bool _PaintContent( const SwContentFrm *, const SwPageFrm *,
+    bool PaintWithoutFlys( const SwRect &, const SwContentFrame *,
+                           const SwPageFrame * );
+    inline bool _PaintContent( const SwContentFrame *, const SwPageFrame *,
                              const SwRect & );
 
-    bool FormatLayout( OutputDevice* pRenderContext, SwLayoutFrm *, bool bAddRect = true );
-    bool FormatLayoutTab( SwTabFrm *, bool bAddRect = true );
-    bool FormatContent( const SwPageFrm* pPage );
-    void _FormatContent( const SwContentFrm* pContent,
-                       const SwPageFrm* pPage );
-    bool IsShortCut( SwPageFrm *& );
+    bool FormatLayout( OutputDevice* pRenderContext, SwLayoutFrame *, bool bAddRect = true );
+    bool FormatLayoutTab( SwTabFrame *, bool bAddRect = true );
+    bool FormatContent( const SwPageFrame* pPage );
+    void _FormatContent( const SwContentFrame* pContent,
+                       const SwPageFrame* pPage );
+    bool IsShortCut( SwPageFrame *& );
 
     bool TurboAction();
-    bool _TurboAction( const SwContentFrm * );
+    bool _TurboAction( const SwContentFrame * );
     void InternalAction(OutputDevice* pRenderContext);
 
-    static SwPageFrm *CheckFirstVisPage( SwPageFrm *pPage );
+    static SwPageFrame *CheckFirstVisPage( SwPageFrame *pPage );
 
     bool RemoveEmptyBrowserPages();
 
@@ -119,7 +119,7 @@ class SwLayAction
     inline std::clock_t GetStartTicks() { return m_nStartTicks; }
 
 public:
-    SwLayAction( SwRootFrm *pRt, SwViewShellImp *pImp );
+    SwLayAction( SwRootFrame *pRt, SwViewShellImp *pImp );
     ~SwLayAction();
 
     void SetIdle            ( bool bNew )   { m_bIdle = bNew; }
@@ -167,21 +167,21 @@ public:
 
     sal_uInt16 GetCheckPageNum() const { return m_nCheckPageNum; }
 
-    // others should be able to activate the WaitCrsr, too
-    void CheckWaitCrsr();
+    // others should be able to activate the WaitCursor, too
+    void CheckWaitCursor();
 
     // #i28701# - method is now public;
     // delete 2nd parameter, because its not used;
-    bool FormatLayoutFly( SwFlyFrm * );
+    bool FormatLayoutFly( SwFlyFrame * );
     // #i28701# - method is now public
-    bool _FormatFlyContent( const SwFlyFrm * );
+    bool _FormatFlyContent( const SwFlyFrame * );
 
 };
 
 class SwLayIdle
 {
 
-    SwRootFrm *pRoot;
+    SwRootFrame *pRoot;
     SwViewShellImp  *pImp;           // The Idler registers and deregisters here
     SwContentNode *pContentNode;    // The current cursor position is saved here
     sal_Int32  nTextPos;
@@ -197,11 +197,11 @@ class SwLayIdle
 #endif
 
     enum IdleJobType{ ONLINE_SPELLING, AUTOCOMPLETE_WORDS, WORD_COUNT, SMART_TAGS };
-    bool _DoIdleJob( const SwContentFrm*, IdleJobType );
+    bool _DoIdleJob( const SwContentFrame*, IdleJobType );
     bool DoIdleJob( IdleJobType, bool bVisAreaOnly );
 
 public:
-    SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pImp );
+    SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pImp );
     ~SwLayIdle();
 };
 

@@ -45,15 +45,15 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
 {
     OSL_ENSURE( m_pDrawView, "SwViewShellImp::Init without DrawView" );
     //Create PageView if it doesn't exist
-    SwRootFrm *pRoot = m_pShell->GetLayout();
+    SwRootFrame *pRoot = m_pShell->GetLayout();
     if ( !m_pSdrPageView )
     {
         IDocumentDrawModelAccess& rIDDMA = m_pShell->getIDocumentDrawModelAccess();
         if ( !pRoot->GetDrawPage() )
             pRoot->SetDrawPage( rIDDMA.GetDrawModel()->GetPage( 0 ) );
 
-        if ( pRoot->GetDrawPage()->GetSize() != pRoot->Frm().SSize() )
-            pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
+        if ( pRoot->GetDrawPage()->GetSize() != pRoot->Frame().SSize() )
+            pRoot->GetDrawPage()->SetSize( pRoot->Frame().SSize() );
 
         m_pSdrPageView = m_pDrawView->ShowSdrPage( pRoot->GetDrawPage());
         // OD 26.06.2003 #108784# - notify drawing page view about invisible
@@ -73,8 +73,8 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
     Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
     m_pDrawView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
-    if ( pRoot->Frm().HasArea() )
-        m_pDrawView->SetWorkArea( pRoot->Frm().SVRect() );
+    if ( pRoot->Frame().HasArea() )
+        m_pDrawView->SetWorkArea( pRoot->Frame().SVRect() );
 
     if ( GetShell()->IsPreview() )
         m_pDrawView->SetAnimationEnabled( false );
@@ -138,7 +138,7 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
         {
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
-            const SwRect& rArea = m_pShell->isTiledRendering() ? m_pShell->GetLayout()->Frm() : m_pShell->VisArea();
+            const SwRect& rArea = m_pShell->isTiledRendering() ? m_pShell->GetLayout()->Frame() : m_pShell->VisArea();
             m_pRegion = new SwRegionRects( rArea );
         }
         (*m_pRegion) -= rRect;
@@ -147,10 +147,10 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
     return false;
 }
 
-void SwViewShellImp::CheckWaitCrsr()
+void SwViewShellImp::CheckWaitCursor()
 {
     if ( m_pLayAction )
-        m_pLayAction->CheckWaitCrsr();
+        m_pLayAction->CheckWaitCursor();
 }
 
 bool SwViewShellImp::IsCalcLayoutProgress() const
@@ -170,36 +170,36 @@ bool SwViewShellImp::IsUpdateExpFields()
 
 void SwViewShellImp::SetFirstVisPage(OutputDevice* pRenderContext)
 {
-    if ( m_pShell->mbDocSizeChgd && m_pShell->VisArea().Top() > m_pShell->GetLayout()->Frm().Height() )
+    if ( m_pShell->mbDocSizeChgd && m_pShell->VisArea().Top() > m_pShell->GetLayout()->Frame().Height() )
     {
         //We are in an action and because of erase actions the VisArea is
         //after the first visible page.
         //To avoid excessive formatting, hand back the last page.
-        m_pFirstVisiblePage = static_cast<SwPageFrm*>(m_pShell->GetLayout()->Lower());
+        m_pFirstVisiblePage = static_cast<SwPageFrame*>(m_pShell->GetLayout()->Lower());
         while ( m_pFirstVisiblePage && m_pFirstVisiblePage->GetNext() )
-            m_pFirstVisiblePage = static_cast<SwPageFrm*>(m_pFirstVisiblePage->GetNext());
+            m_pFirstVisiblePage = static_cast<SwPageFrame*>(m_pFirstVisiblePage->GetNext());
     }
     else
     {
         const SwViewOption* pSwViewOption = GetShell()->GetViewOptions();
         const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
 
-        SwPageFrm *pPage = static_cast<SwPageFrm*>(m_pShell->GetLayout()->Lower());
+        SwPageFrame *pPage = static_cast<SwPageFrame*>(m_pShell->GetLayout()->Lower());
         SwRect aPageRect = pPage->GetBoundRect(pRenderContext);
         while ( pPage && !aPageRect.IsOver( m_pShell->VisArea() ) )
         {
-            pPage = static_cast<SwPageFrm*>(pPage->GetNext());
+            pPage = static_cast<SwPageFrame*>(pPage->GetNext());
             if ( pPage )
             {
                 aPageRect = pPage->GetBoundRect(pRenderContext);
                 if ( bBookMode && pPage->IsEmptyPage() )
                 {
-                    const SwPageFrm& rFormatPage = pPage->GetFormatPage();
+                    const SwPageFrame& rFormatPage = pPage->GetFormatPage();
                     aPageRect.SSize() = rFormatPage.GetBoundRect(pRenderContext).SSize();
                 }
             }
         }
-        m_pFirstVisiblePage = pPage ? pPage : static_cast<SwPageFrm*>(m_pShell->GetLayout()->Lower());
+        m_pFirstVisiblePage = pPage ? pPage : static_cast<SwPageFrame*>(m_pShell->GetLayout()->Lower());
     }
     m_bFirstPageInvalid = false;
 }
@@ -268,14 +268,14 @@ Color SwViewShellImp::GetRetoucheColor() const
     return aRet;
 }
 
-SwPageFrm *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext)
+SwPageFrame *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext)
 {
     if ( m_bFirstPageInvalid )
         SetFirstVisPage(pRenderContext);
     return m_pFirstVisiblePage;
 }
 
-const SwPageFrm *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext) const
+const SwPageFrame *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext) const
 {
     if ( m_bFirstPageInvalid )
         const_cast<SwViewShellImp*>(this)->SetFirstVisPage(pRenderContext);
@@ -302,65 +302,65 @@ void SwViewShellImp::UpdateAccessible()
         GetAccessibleMap().GetDocumentView();
 }
 
-void SwViewShellImp::DisposeAccessible( const SwFrm *pFrm,
+void SwViewShellImp::DisposeAccessible( const SwFrame *pFrame,
                                    const SdrObject *pObj,
                                    bool bRecursive )
 {
-    OSL_ENSURE( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
+    OSL_ENSURE( !pFrame || pFrame->IsAccessibleFrame(), "frame is not accessible" );
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
         if( rTmp.Imp()->IsAccessible() )
-            rTmp.Imp()->GetAccessibleMap().Dispose( pFrm, pObj, nullptr, bRecursive );
+            rTmp.Imp()->GetAccessibleMap().Dispose( pFrame, pObj, nullptr, bRecursive );
     }
 }
 
-void SwViewShellImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
-                                const SwRect& rOldFrm )
+void SwViewShellImp::MoveAccessible( const SwFrame *pFrame, const SdrObject *pObj,
+                                const SwRect& rOldFrame )
 {
-    OSL_ENSURE( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
+    OSL_ENSURE( !pFrame || pFrame->IsAccessibleFrame(), "frame is not accessible" );
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
         if( rTmp.Imp()->IsAccessible() )
-            rTmp.Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm, pObj, nullptr,
-                                                                 rOldFrm );
+            rTmp.Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrame, pObj, nullptr,
+                                                                 rOldFrame );
     }
 }
 
-void SwViewShellImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
+void SwViewShellImp::InvalidateAccessibleFrameContent( const SwFrame *pFrame )
 {
-    OSL_ENSURE( pFrm->IsAccessibleFrm(), "frame is not accessible" );
+    OSL_ENSURE( pFrame->IsAccessibleFrame(), "frame is not accessible" );
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
         if( rTmp.Imp()->IsAccessible() )
-            rTmp.Imp()->GetAccessibleMap().InvalidateContent( pFrm );
+            rTmp.Imp()->GetAccessibleMap().InvalidateContent( pFrame );
     }
 }
 
-void SwViewShellImp::InvalidateAccessibleCursorPosition( const SwFrm *pFrm )
+void SwViewShellImp::InvalidateAccessibleCursorPosition( const SwFrame *pFrame )
 {
     if( IsAccessible() )
-        GetAccessibleMap().InvalidateCursorPosition( pFrm );
+        GetAccessibleMap().InvalidateCursorPosition( pFrame );
 }
 
 void SwViewShellImp::InvalidateAccessibleEditableState( bool bAllShells,
-                                                      const SwFrm *pFrm )
+                                                      const SwFrame *pFrame )
 {
     if( bAllShells )
     {
         for(SwViewShell& rTmp : GetShell()->GetRingContainer())
         {
             if( rTmp.Imp()->IsAccessible() )
-                rTmp.Imp()->GetAccessibleMap().InvalidateStates( AccessibleStates::EDITABLE, pFrm );
+                rTmp.Imp()->GetAccessibleMap().InvalidateStates( AccessibleStates::EDITABLE, pFrame );
         }
     }
     else if( IsAccessible() )
     {
-        GetAccessibleMap().InvalidateStates( AccessibleStates::EDITABLE, pFrm );
+        GetAccessibleMap().InvalidateStates( AccessibleStates::EDITABLE, pFrame );
     }
 }
 
-void SwViewShellImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
-                                                 const SwFlyFrm *pFollow )
+void SwViewShellImp::InvalidateAccessibleRelationSet( const SwFlyFrame *pMaster,
+                                                 const SwFlyFrame *pFollow )
 {
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
@@ -371,10 +371,10 @@ void SwViewShellImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
 }
 
 /// invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
-void SwViewShellImp::_InvalidateAccessibleParaFlowRelation( const SwTextFrm* _pFromTextFrm,
-                                                       const SwTextFrm* _pToTextFrm )
+void SwViewShellImp::_InvalidateAccessibleParaFlowRelation( const SwTextFrame* _pFromTextFrame,
+                                                       const SwTextFrame* _pToTextFrame )
 {
-    if ( !_pFromTextFrm && !_pToTextFrm )
+    if ( !_pFromTextFrame && !_pToTextFrame )
     {
         // No text frame provided. Thus, nothing to do.
         return;
@@ -384,15 +384,15 @@ void SwViewShellImp::_InvalidateAccessibleParaFlowRelation( const SwTextFrm* _pF
     {
         if ( rTmp.Imp()->IsAccessible() )
         {
-            if ( _pFromTextFrm )
+            if ( _pFromTextFrame )
             {
                 rTmp.Imp()->GetAccessibleMap().
-                            InvalidateParaFlowRelation( *_pFromTextFrm, true );
+                            InvalidateParaFlowRelation( *_pFromTextFrame, true );
             }
-            if ( _pToTextFrm )
+            if ( _pToTextFrame )
             {
                 rTmp.Imp()->GetAccessibleMap().
-                            InvalidateParaFlowRelation( *_pToTextFrm, false );
+                            InvalidateParaFlowRelation( *_pToTextFrame, false );
             }
         }
     }
@@ -411,13 +411,13 @@ void SwViewShellImp::_InvalidateAccessibleParaTextSelection()
 }
 
 /// invalidate attributes for paragraphs
-void SwViewShellImp::_InvalidateAccessibleParaAttrs( const SwTextFrm& rTextFrm )
+void SwViewShellImp::_InvalidateAccessibleParaAttrs( const SwTextFrame& rTextFrame )
 {
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
         if ( rTmp.Imp()->IsAccessible() )
         {
-            rTmp.Imp()->GetAccessibleMap().InvalidateAttr( rTextFrm );
+            rTmp.Imp()->GetAccessibleMap().InvalidateAttr( rTextFrame );
         }
     }
 }
@@ -425,12 +425,12 @@ void SwViewShellImp::_InvalidateAccessibleParaAttrs( const SwTextFrm& rTextFrm )
 // OD 15.01.2003 #103492# - method signature change due to new page preview functionality
 void SwViewShellImp::UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
                                          const Fraction&  _rScale,
-                                         const SwPageFrm* _pSelectedPageFrm,
+                                         const SwPageFrame* _pSelectedPageFrame,
                                          const Size&      _rPreviewWinSize )
 {
     if( IsAccessible() )
         GetAccessibleMap().UpdatePreview( _rPreviewPages, _rScale,
-                                          _pSelectedPageFrm, _rPreviewWinSize );
+                                          _pSelectedPageFrame, _rPreviewWinSize );
 }
 
 void SwViewShellImp::InvalidateAccessiblePreviewSelection( sal_uInt16 nSelPage )

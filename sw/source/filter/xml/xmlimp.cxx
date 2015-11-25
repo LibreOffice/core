@@ -480,14 +480,14 @@ sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
 
 static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
 {
-    Reference<XUnoTunnel> xCrsrTunnel( rTextCursor, UNO_QUERY );
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( !xCrsrTunnel.is() )
+    Reference<XUnoTunnel> xCursorTunnel( rTextCursor, UNO_QUERY );
+    OSL_ENSURE( xCursorTunnel.is(), "missing XUnoTunnel for Cursor" );
+    if( !xCursorTunnel.is() )
         return nullptr;
-    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper *>(
-            sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething(  OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
-    return pTextCrsr;
+    OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper *>(
+            sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething(  OTextCursorHelper::getUnoTunnelId() )));
+    OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
+    return pTextCursor;
 }
 
 void SwXMLImport::startDocument()
@@ -588,7 +588,7 @@ void SwXMLImport::startDocument()
     // We also might change into the insert mode later, so we have to make
     // sure to first set the insert mode and then create the text import
     // helper. Otherwise it won't have the insert flag set!
-    OTextCursorHelper *pTextCrsr = nullptr;
+    OTextCursorHelper *pTextCursor = nullptr;
     Reference < XTextCursor > xTextCursor;
     if( HasTextImport() )
            xTextCursor = GetTextImport()->GetCursor();
@@ -597,16 +597,16 @@ void SwXMLImport::startDocument()
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
         Reference < XText > xText = xTextDoc->getText();
         xTextCursor = xText->createTextCursor();
-        SwCrsrShell *pCrsrSh = nullptr;
+        SwCursorShell *pCursorSh = nullptr;
         SwDoc *pDoc = nullptr;
         if( SvXMLImportFlags::ALL == getImportFlags() )
         {
-            pTextCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
-            OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
-            if( !pTextCrsr )
+            pTextCursor = lcl_xml_GetSwXTextCursor( xTextCursor );
+            OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
+            if( !pTextCursor )
                 return;
 
-            pDoc = pTextCrsr->GetDoc();
+            pDoc = pTextCursor->GetDoc();
             OSL_ENSURE( pDoc, "SwDoc missing" );
             if( !pDoc )
                 return;
@@ -615,16 +615,16 @@ void SwXMLImport::startDocument()
             // a document. We then have to insert at the current edit shell's
             // cursor position. That not quite clean code, but there is no other
             // way currently.
-            pCrsrSh = pDoc->GetEditShell();
+            pCursorSh = pDoc->GetEditShell();
         }
-        if( pCrsrSh )
+        if( pCursorSh )
         {
             const uno::Reference<text::XTextRange> xInsertTextRange(
                 SwXTextRange::CreateXTextRange(
-                    *pDoc, *pCrsrSh->GetCrsr()->GetPoint(), nullptr ) );
+                    *pDoc, *pCursorSh->GetCursor()->GetPoint(), nullptr ) );
             setTextInsertMode( xInsertTextRange );
             xTextCursor = GetTextImport()->GetCursor();
-            pTextCrsr = nullptr;
+            pTextCursor = nullptr;
         }
         else
             GetTextImport()->SetCursor( xTextCursor );
@@ -633,13 +633,13 @@ void SwXMLImport::startDocument()
     if( (!(getImportFlags() & (SvXMLImportFlags::CONTENT|SvXMLImportFlags::MASTERSTYLES))))
         return;
 
-    if( !pTextCrsr  )
-        pTextCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
-    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
-    if( !pTextCrsr )
+    if( !pTextCursor  )
+        pTextCursor = lcl_xml_GetSwXTextCursor( xTextCursor );
+    OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
+    if( !pTextCursor )
         return;
 
-    SwDoc *pDoc = pTextCrsr->GetDoc();
+    SwDoc *pDoc = pTextCursor->GetDoc();
     OSL_ENSURE( pDoc, "SwDoc missing" );
     if( !pDoc )
         return;
@@ -656,7 +656,7 @@ void SwXMLImport::startDocument()
         m_pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
         if( IsInsertMode() )
         {
-            SwPaM *pPaM = pTextCrsr->GetPaM();
+            SwPaM *pPaM = pTextCursor->GetPaM();
             const SwPosition* pPos = pPaM->GetPoint();
 
             // Split once and remember the node that has been splitted.
@@ -725,13 +725,13 @@ void SwXMLImport::endDocument()
     SwDoc *pDoc = nullptr;
     if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
     {
-        Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
+        Reference<XUnoTunnel> xCursorTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
-        assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-        OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper *>(
-                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-        assert(pTextCrsr && "SwXTextCursor missing");
-        SwPaM *pPaM = pTextCrsr->GetPaM();
+        assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
+        OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper *>(
+                sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+        assert(pTextCursor && "SwXTextCursor missing");
+        SwPaM *pPaM = pTextCursor->GetPaM();
         if( IsInsertMode() && m_pSttNdIdx->GetIndex() )
         {
             // If we are in insert mode, join the splitted node that is in front

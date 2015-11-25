@@ -102,7 +102,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     SdrDropMarkerOverlay    *m_pUserMarker;
     SdrObject               *m_pUserMarkerObj;
-    SwShadowCursor          *m_pShadCrsr;
+    SwShadowCursor          *m_pShadCursor;
     Point                   *m_pRowColumnSelectionStart; // save position where table row/column selection has been started
 
     SwView         &m_rView;
@@ -114,11 +114,11 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     SotExchangeDest m_nDropDestination;  // destination from the last QueryDrop
 
     sal_uInt16      m_eBezierMode;
-    sal_uInt16      m_nInsFrmColCount; // column number for interactive frame
+    sal_uInt16      m_nInsFrameColCount; // column number for interactive frame
     SdrObjKind      m_eDrawMode;
     bool        m_bMBPressed      : 1,
                     m_bInsDraw        : 1,
-                    m_bInsFrm         : 1,
+                    m_bInsFrame         : 1,
                     m_bIsInMove       : 1,
                     m_bIsInDrag       : 1, // don't execute StartExecuteDrag twice
                     m_bOldIdle        : 1, // to stop to idle
@@ -126,7 +126,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
                     m_bTableInsDelMode  : 1,
                     m_bTableIsInsMode   : 1,
                     m_bChainMode      : 1, // connect frames
-                    m_bWasShdwCrsr    : 1, // ShadowCrsr was on in MouseButtonDown
+                    m_bWasShdwCursor    : 1, // ShadowCursor was on in MouseButtonDown
                     m_bLockInput      : 1, // lock while calc panel is active
                     m_bIsRowDrag      : 1, //selection of rows is used, in combination with m_pRowColumnSelectionStart
                     /** #i42732# display status of font size/name depending on either the input language or the
@@ -230,19 +230,19 @@ public:
     inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { m_eDrawMode = eSdrObjectKind; SetObjectSelect( false ); }
     void                StdDrawMode( SdrObjKind eSdrObjectKind, bool bObjSelect );
 
-    bool            IsFrmAction() const             { return m_bInsFrm; }
+    bool            IsFrameAction() const             { return m_bInsFrame; }
     sal_uInt16      GetBezierMode() const           { return m_eBezierMode; }
     void            SetBezierMode(sal_uInt16 eBezMode)  { m_eBezierMode = eBezMode; }
     void            EnterDrawTextMode(const Point& aDocPos); // turn on DrawTextEditMode
-    void            InsFrm(sal_uInt16 nCols);
-    void            StopInsFrm();
-    sal_uInt16      GetFrmColCount() const {return m_nInsFrmColCount;} // column number for interactive frame
+    void            InsFrame(sal_uInt16 nCols);
+    void            StopInsFrame();
+    sal_uInt16      GetFrameColCount() const {return m_nInsFrameColCount;} // column number for interactive frame
 
     void            SetChainMode( bool bOn );
     bool            IsChainMode() const             { return m_bChainMode; }
 
     void            FlushInBuffer();
-    static bool     IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr );
+    static bool     IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCursor );
 
     void             SetApplyTemplate(const SwApplyTemplate &);
     SwApplyTemplate* GetApplyTemplate() const { return m_pApplyTempl; }

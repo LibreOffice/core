@@ -106,12 +106,12 @@ namespace
     {
         pSh->LockView( true );
         pSh->StartAllAction();
-        pSh->SwCrsrShell::Push();
+        pSh->SwCursorShell::Push();
     }
 
     void lcl_PopCursor(SwWrtShell *pSh)
     {
-        pSh->SwCrsrShell::Pop( false );
+        pSh->SwCursorShell::Pop( false );
         pSh->EndAllAction();
         pSh->LockView( false );
     }

@@ -845,12 +845,12 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_FRM_SIZE:
         {
-            SwFormatFrmSize& rFrmSize = dynamic_cast<SwFormatFrmSize&>(rItem);
+            SwFormatFrameSize& rFrameSize = dynamic_cast<SwFormatFrameSize&>(rItem);
 
             bool bSetHeight = false;
             bool bSetWidth = false;
             bool bSetSizeType = false;
-            SwFrmSize eSizeType = ATT_VAR_SIZE;
+            SwFrameSize eSizeType = ATT_VAR_SIZE;
             sal_Int32 nMin = MINLAY;
 
             switch( nMemberId )
@@ -866,7 +866,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         else if( nValue > 100 )
                             nValue = 100;
 
-                        rFrmSize.SetWidthPercent( (sal_Int8)nValue );
+                        rFrameSize.SetWidthPercent( (sal_Int8)nValue );
                     }
                 }
                 break;
@@ -901,8 +901,8 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         else if( nValue > USHRT_MAX )
                             nValue = USHRT_MAX;
 
-                        rFrmSize.SetWidth( (sal_uInt16)nValue );
-                        rFrmSize.SetHeightSizeType( ATT_VAR_SIZE );
+                        rFrameSize.SetWidth( (sal_uInt16)nValue );
+                        rFrameSize.SetHeightSizeType( ATT_VAR_SIZE );
                         bOk = true;
                     }
                 }
@@ -917,11 +917,11 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 if( bOk )
                 {
                     if( bSetWidth )
-                        rFrmSize.SetWidth( (sal_uInt16)nValue );
+                        rFrameSize.SetWidth( (sal_uInt16)nValue );
                     if( bSetHeight )
-                        rFrmSize.SetHeight( (sal_uInt16)nValue );
+                        rFrameSize.SetHeight( (sal_uInt16)nValue );
                     if( bSetSizeType )
-                        rFrmSize.SetHeightSizeType( eSizeType );
+                        rFrameSize.SetHeightSizeType( eSizeType );
                 }
             }
         }

@@ -79,8 +79,8 @@ class SwSubFont : public SvxFont
     void DrawStretchCapital( SwDrawTextInfo &rInf );
     void DoOnCapitals( SwDoCapitals &rDo );
     void _DrawStretchText( SwDrawTextInfo &rInf );
-    sal_Int32 _GetCrsrOfst( SwDrawTextInfo& rInf );
-    sal_Int32 GetCapitalCrsrOfst( SwDrawTextInfo& rInf );
+    sal_Int32 _GetCursorOfst( SwDrawTextInfo& rInf );
+    sal_Int32 GetCapitalCursorOfst( SwDrawTextInfo& rInf );
 
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
@@ -311,8 +311,8 @@ public:
 
     sal_Int32 GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth );
 
-    sal_Int32 _GetCrsrOfst( SwDrawTextInfo& rInf )
-        { return m_aSub[m_nActual]._GetCrsrOfst( rInf ); }
+    sal_Int32 _GetCursorOfst( SwDrawTextInfo& rInf )
+        { return m_aSub[m_nActual]._GetCursorOfst( rInf ); }
 
     inline void _DrawText( SwDrawTextInfo &rInf )
         { m_aSub[m_nActual]._DrawText( rInf, IsGreyWave() ); }

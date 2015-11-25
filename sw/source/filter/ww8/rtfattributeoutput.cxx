@@ -719,10 +719,10 @@ void RtfAttributeOutput::TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t p
                                             GetExport().m_pDoc->GetPageDesc(0).GetPageFormatOfNode(*pNode, false);
 
         const SvxLRSpaceItem& rLR = pFrameFormat->GetLRSpace();
-        nPageSize = pFrameFormat->GetFrmSize().GetWidth() -
+        nPageSize = pFrameFormat->GetFrameSize().GetWidth() -
                     rLR.GetLeft() - rLR.GetRight();
     }
-    SwTwips nTableSz = pFormat->GetFrmSize().GetWidth();
+    SwTwips nTableSz = pFormat->GetFrameSize().GetWidth();
     // Not using m_nTableDepth, which is not yet incremented here.
     sal_uInt32 nCurrentDepth = pTableTextNodeInfoInner->getDepth();
     m_aCells[nCurrentDepth] = pRow->GetCells().size();
@@ -736,7 +736,7 @@ void RtfAttributeOutput::TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t p
 
         // Right boundary: this can't be in TableCellProperties as the old
         // value of nSz is needed.
-        nSz += pCellFormat->GetFrmSize().GetWidth();
+        nSz += pCellFormat->GetFrameSize().GetWidth();
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CELLX);
         SwTwips nCalc = nSz;
         nCalc *= nPageSize;
@@ -826,7 +826,7 @@ void RtfAttributeOutput::TableHeight(ww8::WW8TableNodeInfoInner::Pointer_t pTabl
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine* pTabLine = pTabBox->GetUpper();
     const SwFrameFormat* pLineFormat = pTabLine->GetFrameFormat();
-    const SwFormatFrmSize& rLSz = pLineFormat->GetFrmSize();
+    const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
 
     if (ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight())
     {
@@ -969,7 +969,7 @@ void RtfAttributeOutput::InitTableHelper(ww8::WW8TableNodeInfoInner::Pointer_t p
     GetTablePageSize(pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize);
 
     const SwFrameFormat* pFormat = pTable->GetFrameFormat();
-    const sal_uInt32 nTableSz = static_cast<sal_uInt32>(pFormat->GetFrmSize().GetWidth());
+    const sal_uInt32 nTableSz = static_cast<sal_uInt32>(pFormat->GetFrameSize().GetWidth());
 
     const SwHTMLTableLayout* pLayout = pTable->GetHTMLTableLayout();
     if (pLayout && pLayout->IsExportable())
@@ -1732,11 +1732,11 @@ void lcl_TextFrameShadow(std::vector< std::pair<OString, OString> >& rFlyPropert
 
 void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyProperties, const SwFrameFormat& rFrameFormat)
 {
-    const SwFormatFrmSize& rSize = rFrameFormat.GetFrmSize();
+    const SwFormatFrameSize& rSize = rFrameFormat.GetFrameSize();
 
     // Relative size of the Text Frame.
     const sal_uInt8 nWidthPercent = rSize.GetWidthPercent();
-    if (nWidthPercent && nWidthPercent != SwFormatFrmSize::SYNCED)
+    if (nWidthPercent && nWidthPercent != SwFormatFrameSize::SYNCED)
     {
         rFlyProperties.push_back(std::make_pair<OString, OString>("pctHoriz", OString::number(nWidthPercent * 10)));
 
@@ -1753,7 +1753,7 @@ void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyP
         rFlyProperties.push_back(std::make_pair("sizerelh", aRelation));
     }
     const sal_uInt8 nHeightPercent = rSize.GetHeightPercent();
-    if (nHeightPercent && nHeightPercent != SwFormatFrmSize::SYNCED)
+    if (nHeightPercent && nHeightPercent != SwFormatFrameSize::SYNCED)
     {
         rFlyProperties.push_back(std::make_pair<OString, OString>("pctVert", OString::number(nHeightPercent * 10)));
 
@@ -1867,11 +1867,11 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
         const Size aSize = rFrame.GetSize();
         m_pFlyFrameSize = &aSize;
 
-        m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
+        m_rExport.m_bOutFlyFrameAttrs = m_rExport.bRTFFlySyntax = true;
         m_rExport.OutputFormat(rFrame.GetFrameFormat(), false, false, true);
         m_rExport.Strm().WriteCharPtr(m_aRunText.makeStringAndClear().getStr());
         m_rExport.Strm().WriteCharPtr(m_aStyles.makeStringAndClear().getStr());
-        m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
+        m_rExport.m_bOutFlyFrameAttrs = m_rExport.bRTFFlySyntax = false;
         m_pFlyFrameSize = nullptr;
 
         const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
@@ -2928,7 +2928,7 @@ void RtfAttributeOutput::ParaSnapToGrid(const SvxParaGridItem& /*rGrid*/)
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
 
-void RtfAttributeOutput::FormatFrameSize(const SwFormatFrmSize& rSize)
+void RtfAttributeOutput::FormatFrameSize(const SwFormatFrameSize& rSize)
 {
     if (m_rExport.m_bOutPageDescs)
     {
@@ -2948,7 +2948,7 @@ void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem&)
 
 void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
 {
-    if (!m_rExport.m_bOutFlyFrmAttrs)
+    if (!m_rExport.m_bOutFlyFrameAttrs)
     {
         if (m_rExport.m_bOutPageDescs)
         {
@@ -2989,7 +2989,7 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
 
 void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
 {
-    if (!m_rExport.m_bOutFlyFrmAttrs)
+    if (!m_rExport.m_bOutFlyFrameAttrs)
     {
         if (m_rExport.m_bOutPageDescs)
         {
@@ -3043,7 +3043,7 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
 
 void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
 {
-    if (m_rExport.m_bOutFlyFrmAttrs && !m_rExport.bRTFFlySyntax)
+    if (m_rExport.m_bOutFlyFrameAttrs && !m_rExport.bRTFFlySyntax)
     {
         SwSurround eSurround = rSurround.GetSurround();
         bool bGold = SURROUND_IDEAL == eSurround;
@@ -3053,7 +3053,7 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
         m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYMAINCNT);
         m_aRunText->append((sal_Int32) aMC.GetValue());
     }
-    else if (m_rExport.m_bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
+    else if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.bRTFFlySyntax)
     {
         // See DocxSdrExport::startDMLAnchorInline() for SwFormatSurround -> WR / WRK mappings.
         sal_Int32 nWr = -1;
@@ -3092,7 +3092,7 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
 
 void RtfAttributeOutput::FormatVertOrientation(const SwFormatVertOrient& rFlyVert)
 {
-    if (m_rExport.m_bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
+    if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.bRTFFlySyntax)
     {
         switch (rFlyVert.GetRelationOrient())
         {
@@ -3135,7 +3135,7 @@ void RtfAttributeOutput::FormatVertOrientation(const SwFormatVertOrient& rFlyVer
 
 void RtfAttributeOutput::FormatHorizOrientation(const SwFormatHoriOrient& rFlyHori)
 {
-    if (m_rExport.m_bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
+    if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.bRTFFlySyntax)
     {
         switch (rFlyHori.GetRelationOrient())
         {
@@ -3904,7 +3904,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     Size aSize(pGrfNode->GetTwipSize());
     Size aRendered(aSize);
 
-    const SwFormatFrmSize& rS = pFlyFrameFormat->GetFrmSize();
+    const SwFormatFrameSize& rS = pFlyFrameFormat->GetFrameSize();
     aRendered.Width() = rS.GetWidth();
     aRendered.Height() = rS.GetHeight();
 
@@ -3935,9 +3935,9 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHP "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
         m_pFlyFrameSize = &aRendered;
         m_rExport.m_pParentFrame = pFrame;
-        m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
+        m_rExport.m_bOutFlyFrameAttrs = m_rExport.bRTFFlySyntax = true;
         m_rExport.OutputFormat(pFrame->GetFrameFormat(), false, false, true);
-        m_rExport.m_bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
+        m_rExport.m_bOutFlyFrameAttrs = m_rExport.bRTFFlySyntax = false;
         m_rExport.m_pParentFrame = nullptr;
         m_pFlyFrameSize = nullptr;
 

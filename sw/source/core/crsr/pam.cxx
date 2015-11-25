@@ -543,38 +543,38 @@ SwPaM & SwPaM::Normalize(bool bPointFirst)
 /// return page number at cursor (for reader and page bound frames)
 sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
 {
-    const SwContentFrm* pCFrm;
-    const SwPageFrm *pPg;
+    const SwContentFrame* pCFrame;
+    const SwPageFrame *pPg;
     const SwContentNode *pNd ;
     const SwPosition* pPos = bAtPoint ? m_pPoint : m_pMark;
 
     if( nullptr != ( pNd = pPos->nNode.GetNode().GetContentNode() ) &&
-        nullptr != ( pCFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), pLayPos, pPos, false )) &&
-        nullptr != ( pPg = pCFrm->FindPageFrm() ))
+        nullptr != ( pCFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), pLayPos, pPos, false )) &&
+        nullptr != ( pPg = pCFrame->FindPageFrame() ))
         return pPg->GetPhyPageNum();
     return 0;
 }
 
-// Formular view - See also SwCrsrShell::IsCrsrReadonly()
-static const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
+// Formular view - See also SwCursorShell::IsCursorReadonly()
+static const SwFrame* lcl_FindEditInReadonlyFrame( const SwFrame& rFrame )
 {
-    const SwFrm* pRet = nullptr;
+    const SwFrame* pRet = nullptr;
 
-    const SwFlyFrm* pFly;
-    const SwSectionFrm* pSectionFrm;
+    const SwFlyFrame* pFly;
+    const SwSectionFrame* pSectionFrame;
 
-    if( rFrm.IsInFly() &&
-       (pFly = rFrm.FindFlyFrm())->GetFormat()->GetEditInReadonly().GetValue() &&
+    if( rFrame.IsInFly() &&
+       (pFly = rFrame.FindFlyFrame())->GetFormat()->GetEditInReadonly().GetValue() &&
         pFly->Lower() &&
-       !pFly->Lower()->IsNoTextFrm() )
+       !pFly->Lower()->IsNoTextFrame() )
     {
        pRet = pFly;
     }
-    else if ( rFrm.IsInSct() &&
-              nullptr != ( pSectionFrm = rFrm.FindSctFrm() )->GetSection() &&
-              pSectionFrm->GetSection()->IsEditInReadonlyFlag() )
+    else if ( rFrame.IsInSct() &&
+              nullptr != ( pSectionFrame = rFrame.FindSctFrame() )->GetSection() &&
+              pSectionFrame->GetSection()->IsEditInReadonlyFlag() )
     {
-        pRet = pSectionFrm;
+        pRet = pSectionFrame;
     }
 
     return pRet;
@@ -586,19 +586,19 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
     bool bRet = false;
 
     const SwContentNode* pNd = GetPoint()->nNode.GetNode().GetContentNode();
-    const SwContentFrm *pFrm = nullptr;
+    const SwContentFrame *pFrame = nullptr;
     if ( pNd != nullptr )
     {
         Point aTmpPt;
-        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aTmpPt, GetPoint(), false );
+        pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aTmpPt, GetPoint(), false );
     }
 
     // Will be set if point are inside edit-in-readonly environment
-    const SwFrm* pPointEditInReadonlyFrm = nullptr;
-    if ( pFrm != nullptr
-         && ( pFrm->IsProtected()
+    const SwFrame* pPointEditInReadonlyFrame = nullptr;
+    if ( pFrame != nullptr
+         && ( pFrame->IsProtected()
               || ( bFormView
-                   && nullptr == ( pPointEditInReadonlyFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
+                   && nullptr == ( pPointEditInReadonlyFrame = lcl_FindEditInReadonlyFrame( *pFrame ) ) ) ) )
     {
         bRet = true;
     }
@@ -619,18 +619,18 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
          && GetPoint()->nNode != GetMark()->nNode )
     {
         pNd = GetMark()->nNode.GetNode().GetContentNode();
-        pFrm = nullptr;
+        pFrame = nullptr;
         if ( pNd != nullptr )
         {
             Point aTmpPt;
-            pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aTmpPt, GetMark(), false );
+            pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aTmpPt, GetMark(), false );
         }
 
-        const SwFrm* pMarkEditInReadonlyFrm = nullptr;
-        if ( pFrm != nullptr
-             && ( pFrm->IsProtected()
+        const SwFrame* pMarkEditInReadonlyFrame = nullptr;
+        if ( pFrame != nullptr
+             && ( pFrame->IsProtected()
                   || ( bFormView
-                       && nullptr == ( pMarkEditInReadonlyFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
+                       && nullptr == ( pMarkEditInReadonlyFrame = lcl_FindEditInReadonlyFrame( *pFrame ) ) ) ) )
         {
             bRet = true;
         }
@@ -650,7 +650,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
         {
            // Check if start and end frame are inside the _same_
            // edit-in-readonly-environment. Otherwise we better return 'true'
-           if ( pPointEditInReadonlyFrm != pMarkEditInReadonlyFrm )
+           if ( pPointEditInReadonlyFrame != pMarkEditInReadonlyFrame )
                 bRet = true;
         }
 
@@ -756,7 +756,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
     if( ((*rPam.GetPoint()).*fnMove->fnCmpOp)( *rPam.GetMark() ) ||
         ( *rPam.GetPoint() == *rPam.GetMark() && rbFirst ) )
     {
-        SwContentFrm* pFrm;
+        SwContentFrame* pFrame;
         if( rbFirst )
         {
             rbFirst = false;
@@ -765,9 +765,9 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
             {
                 if(
                     (
-                        nullptr == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
-                        ( !bInReadOnly && pFrm->IsProtected() ) ||
-                        (pFrm->IsTextFrm() && static_cast<SwTextFrm*>(pFrm)->IsHiddenNow())
+                        nullptr == ( pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
+                        ( !bInReadOnly && pFrame->IsProtected() ) ||
+                        (pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsHiddenNow())
                     ) ||
                     ( !bInReadOnly && pNd->FindSectionNode() &&
                         pNd->FindSectionNode()->GetSection().IsProtect()
@@ -798,10 +798,10 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
                     if( (aPos.*fnMove->fnCmpOp)( *rPam.GetMark() ) )
                     {
                         // only in AutoTextSection can be nodes that are hidden
-                        if( nullptr == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
-                            ( !bInReadOnly && pFrm->IsProtected() ) ||
-                            ( pFrm->IsTextFrm() &&
-                                static_cast<SwTextFrm*>(pFrm)->IsHiddenNow() ) )
+                        if( nullptr == ( pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
+                            ( !bInReadOnly && pFrame->IsProtected() ) ||
+                            ( pFrame->IsTextFrame() &&
+                                static_cast<SwTextFrame*>(pFrame)->IsHiddenNow() ) )
                         {
                             pNd = nullptr;
                             continue;

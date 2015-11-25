@@ -41,7 +41,7 @@ SwToLayoutAnchoredObjectPosition::SwToLayoutAnchoredObjectPosition( SdrObject& _
     : SwAnchoredObjectPosition( _rDrawObj ),
       maRelPos( Point() ),
       // #i26791#
-      maOffsetToFrmAnchorPos( Point() )
+      maOffsetToFrameAnchorPos( Point() )
 {}
 
 SwToLayoutAnchoredObjectPosition::~SwToLayoutAnchoredObjectPosition()
@@ -52,7 +52,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 {
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
 
-    SWRECTFN( (&GetAnchorFrm()) );
+    SWRECTFN( (&GetAnchorFrame()) );
 
     const SwFrameFormat& rFrameFormat = GetFrameFormat();
     const SvxLRSpaceItem &rLR = rFrameFormat.GetLRSpace();
@@ -75,21 +75,21 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                ( eVertOrient == text::VertOrientation::CENTER ||
                  eVertOrient == text::VertOrientation::BOTTOM ) &&
              SURROUND_THROUGHT != rFrameFormat.GetSurround().GetSurround() &&
-             !GetAnchorFrm().HasFixSize() ) )
+             !GetAnchorFrame().HasFixSize() ) )
         {
             eVertOrient = text::VertOrientation::TOP;
         }
         // #i26791# - get vertical offset to frame anchor position.
-        SwTwips nVertOffsetToFrmAnchorPos( 0L );
+        SwTwips nVertOffsetToFrameAnchorPos( 0L );
         SwTwips nRelPosY =
-                _GetVertRelPos( GetAnchorFrm(), GetAnchorFrm(), eVertOrient,
+                _GetVertRelPos( GetAnchorFrame(), GetAnchorFrame(), eVertOrient,
                                 aVert.GetRelationOrient(), aVert.GetPos(),
-                                rLR, rUL, nVertOffsetToFrmAnchorPos );
+                                rLR, rUL, nVertOffsetToFrameAnchorPos );
 
         // keep the calculated relative vertical position - needed for filters
         // (including the xml-filter)
         {
-            SwTwips nAttrRelPosY = nRelPosY - nVertOffsetToFrmAnchorPos;
+            SwTwips nAttrRelPosY = nRelPosY - nVertOffsetToFrameAnchorPos;
             if ( aVert.GetVertOrient() != text::VertOrientation::NONE &&
                  aVert.GetPos() != nAttrRelPosY )
             {
@@ -111,26 +111,26 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                    aRelPos.X() = nRelPosY;
             else
                    aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
-            maOffsetToFrmAnchorPos.X() = nVertOffsetToFrmAnchorPos;
+            maOffsetToFrameAnchorPos.X() = nVertOffsetToFrameAnchorPos;
         }
         else
         {
             aRelPos.Y() = nRelPosY;
-            maOffsetToFrmAnchorPos.Y() = nVertOffsetToFrmAnchorPos;
+            maOffsetToFrameAnchorPos.Y() = nVertOffsetToFrameAnchorPos;
         }
 
         // if in online-layout the bottom of to-page anchored object is beyond
         // the page bottom, the page frame has to grow by growing its body frame.
-        const SwViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
-        if ( !bFlyAtFly && GetAnchorFrm().IsPageFrm() &&
+        const SwViewShell *pSh = GetAnchorFrame().getRootFrame()->GetCurrShell();
+        if ( !bFlyAtFly && GetAnchorFrame().IsPageFrame() &&
              pSh && pSh->GetViewOptions()->getBrowseMode() )
         {
-            const long nAnchorBottom = GetAnchorFrm().Frm().Bottom();
-            const long nBottom = GetAnchorFrm().Frm().Top() +
+            const long nAnchorBottom = GetAnchorFrame().Frame().Bottom();
+            const long nBottom = GetAnchorFrame().Frame().Top() +
                                  aRelPos.Y() + aObjBoundRect.Height();
             if ( nAnchorBottom < nBottom )
             {
-                static_cast<SwPageFrm&>(GetAnchorFrm()).
+                static_cast<SwPageFrame&>(GetAnchorFrame()).
                         FindBodyCont()->Grow( nBottom - nAnchorBottom );
             }
         }
@@ -141,7 +141,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
     {
         // consider toggle of horizontal position for even pages.
         const bool bToggle = aHori.IsPosToggle() &&
-                             !GetAnchorFrm().FindPageFrm()->OnRightPage();
+                             !GetAnchorFrame().FindPageFrame()->OnRightPage();
         sal_Int16 eHoriOrient = aHori.GetHoriOrient();
         sal_Int16 eRelOrient = aHori.GetRelationOrient();
         // toggle orientation
@@ -154,7 +154,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         SwTwips nWidth, nOffset;
         {
             bool bDummy; // in this context irrelevant output parameter
-            _GetHoriAlignmentValues( GetAnchorFrm(), GetAnchorFrm(),
+            _GetHoriAlignmentValues( GetAnchorFrame(), GetAnchorFrame(),
                                      eRelOrient, false,
                                      nWidth, nOffset, bDummy );
         }
@@ -166,7 +166,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         if ( text::HoriOrientation::NONE == eHoriOrient )
         {
             if( bToggle ||
-                ( !aHori.IsPosToggle() && GetAnchorFrm().IsRightToLeft() ) )
+                ( !aHori.IsPosToggle() && GetAnchorFrame().IsRightToLeft() ) )
             {
                 nRelPosX = nWidth - nObjWidth - aHori.GetPos();
             }
@@ -199,12 +199,12 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         {
 
             aRelPos.Y() = nRelPosX;
-            maOffsetToFrmAnchorPos.Y() = nOffset;
+            maOffsetToFrameAnchorPos.Y() = nOffset;
         }
         else
         {
             aRelPos.X() = nRelPosX;
-            maOffsetToFrmAnchorPos.X() = nOffset;
+            maOffsetToFrameAnchorPos.X() = nOffset;
         }
 
         // keep the calculated relative horizontal position - needed for filters

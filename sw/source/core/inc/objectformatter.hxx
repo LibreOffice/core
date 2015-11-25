@@ -21,11 +21,11 @@
 
 #include <sal/types.h>
 
-class SwFrm;
+class SwFrame;
 // #i26945#
-class SwTextFrm;
-class SwLayoutFrm;
-class SwPageFrm;
+class SwTextFrame;
+class SwLayoutFrame;
+class SwPageFrame;
 class SwAnchoredObject;
 class SwLayAction;
 // OD 2004-10-04 #i26945#
@@ -39,7 +39,7 @@ class SwObjectFormatter
 {
     private:
         // page frame, at which the floating screen objects are registered.
-        const SwPageFrm& mrPageFrm;
+        const SwPageFrame& mrPageFrame;
 
         // boolean, indicating that only as-character anchored objects have to
         // be formatted.
@@ -66,7 +66,7 @@ class SwObjectFormatter
             <SwLayAction::FormatLayout(..)>. Thus, its code for the formatting have
             to be synchronised.
         */
-        void _FormatLayout( SwLayoutFrm& _rLayoutFrm );
+        void _FormatLayout( SwLayoutFrame& _rLayoutFrame );
 
         /** helper method for method <_FormatObj(..)> - performs the intrinsic
             format of the content of the given floating screen object.
@@ -76,19 +76,19 @@ class SwObjectFormatter
         void _FormatObjContent( SwAnchoredObject& _rAnchoredObj );
 
     protected:
-        SwObjectFormatter( const SwPageFrm& _rPageFrm,
+        SwObjectFormatter( const SwPageFrame& _rPageFrame,
                            SwLayAction* _pLayAction = nullptr,
                            const bool _bCollectPgNumOfAnchors = false );
 
-        static SwObjectFormatter* CreateObjFormatter( SwFrm& _rAnchorFrm,
-                                                      const SwPageFrm& _rPageFrm,
+        static SwObjectFormatter* CreateObjFormatter( SwFrame& _rAnchorFrame,
+                                                      const SwPageFrame& _rPageFrame,
                                                       SwLayAction* _pLayAction );
 
-        virtual SwFrm& GetAnchorFrm() = 0;
+        virtual SwFrame& GetAnchorFrame() = 0;
 
-        inline const SwPageFrm& GetPageFrm() const
+        inline const SwPageFrame& GetPageFrame() const
         {
-            return mrPageFrm;
+            return mrPageFrame;
         }
 
         inline bool ConsiderWrapOnObjPos() const
@@ -118,10 +118,10 @@ class SwObjectFormatter
             Thus, the objects, whose anchor character is inside the follow text
             frame can be formatted.
 
-            @param _pMasterTextFrm
+            @param _pMasterTextFrame
             input parameter - pointer to 'master' text frame. default value: NULL
         */
-        bool _FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm = nullptr );
+        bool _FormatObjsAtFrame( SwTextFrame* _pMasterTextFrame = nullptr );
 
         /** accessor to collected anchored object
         */
@@ -166,15 +166,15 @@ class SwObjectFormatter
 
         /** method to format all floating screen objects at the given anchor frame
         */
-        static bool FormatObjsAtFrm( SwFrm& _rAnchorFrm,
-                                     const SwPageFrm& _rPageFrm,
+        static bool FormatObjsAtFrame( SwFrame& _rAnchorFrame,
+                                     const SwPageFrame& _rPageFrame,
                                      SwLayAction* _pLayAction = nullptr );
 
         /** method to format a given floating screen object
         */
         static bool FormatObj( SwAnchoredObject& _rAnchoredObj,
-                               SwFrm* _pAnchorFrm = nullptr,
-                               const SwPageFrm* _pPageFrm = nullptr,
+                               SwFrame* _pAnchorFrame = nullptr,
+                               const SwPageFrame* _pPageFrame = nullptr,
                                SwLayAction* _pLayAction = nullptr );
 };
 

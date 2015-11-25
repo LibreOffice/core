@@ -303,7 +303,7 @@ private:
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
         CPPUNIT_ASSERT(pTextDoc);
         SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-        SwRootFrm* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+        SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
         pLayout->dumpAsXml(pXmlWriter);
 
         // delete xml writer

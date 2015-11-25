@@ -227,7 +227,7 @@ namespace
     }
 }
 
-void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
+void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 {
     bool bCreateWriter = ( nullptr == writer );
     if ( bCreateWriter )
@@ -293,11 +293,11 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
 
         dumpAsXmlAttributes( writer );
 
-        if (IsRootFrm())
+        if (IsRootFrame())
         {
-            const SwRootFrm* pRootFrm = static_cast<const SwRootFrm*>(this);
+            const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(this);
             xmlTextWriterStartElement(writer, BAD_CAST("shells"));
-            for (SwViewShell& rViewShell : pRootFrm->GetCurrShell()->GetRingContainer())
+            for (SwViewShell& rViewShell : pRootFrame->GetCurrShell()->GetRingContainer())
                 rViewShell.dumpAsXml(writer);
             xmlTextWriterEndElement(writer);
         }
@@ -322,10 +322,10 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
         }
 
         // Dump the children
-        if ( IsTextFrm(  ) )
+        if ( IsTextFrame(  ) )
         {
-            const SwTextFrm *pTextFrm = static_cast<const SwTextFrm *>(this);
-            OUString aText = pTextFrm->GetText(  );
+            const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
+            OUString aText = pTextFrame->GetText(  );
             for ( int i = 0; i < 32; i++ )
             {
                 aText = aText.replace( i, '*' );
@@ -335,7 +335,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
             xmlTextWriterWriteString( writer,
                                       reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
             XmlPortionDumper pdumper( writer );
-            pTextFrm->VisitPortions( pdumper );
+            pTextFrame->VisitPortions( pdumper );
 
         }
         else
@@ -349,14 +349,14 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
         lcl_freeWriter( writer );
 }
 
-void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer ) const
+void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
 {
-    // output the Frm
+    // output the Frame
     xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", Frm().Left() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", Frm().Top() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", Frm().Width() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", Frm().Height() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", Frame().Left() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", Frame().Top() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", Frame().Width() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", Frame().Height() );
     xmlTextWriterEndElement( writer );
 }
 
@@ -364,40 +364,40 @@ void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer ) const
 // bomb on two string litterals in the format.
 static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
 
-void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
+void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "id" ), "%" SAL_PRIuUINT32, GetFrmId() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "id" ), "%" SAL_PRIuUINT32, GetFrameId() );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "symbol" ), "%s", BAD_CAST( typeid( *this ).name( ) ) );
     if ( GetNext( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%" SAL_PRIuUINT32, GetNext()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%" SAL_PRIuUINT32, GetNext()->GetFrameId() );
     if ( GetPrev( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%" SAL_PRIuUINT32, GetPrev()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%" SAL_PRIuUINT32, GetPrev()->GetFrameId() );
     if ( GetUpper( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%" SAL_PRIuUINT32, GetUpper()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%" SAL_PRIuUINT32, GetUpper()->GetFrameId() );
     if ( GetLower( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%" SAL_PRIuUINT32, GetLower()->GetFrmId() );
-    if ( IsTextFrm(  ) )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%" SAL_PRIuUINT32, GetLower()->GetFrameId() );
+    if ( IsTextFrame(  ) )
     {
-        const SwTextFrm *pTextFrm = static_cast<const SwTextFrm *>(this);
-        const SwTextNode *pTextNode = pTextFrm->GetTextNode();
+        const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
+        const SwTextNode *pTextNode = pTextFrame->GetTextNode();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTextNode->GetIndex() );
     }
-    if (IsHeaderFrm() || IsFooterFrm())
+    if (IsHeaderFrame() || IsFooterFrame())
     {
-        const SwHeadFootFrm *pHeadFootFrm = static_cast<const SwHeadFootFrm*>(this);
-        OUString aFormatName = pHeadFootFrm->GetFormat()->GetName();
+        const SwHeadFootFrame *pHeadFootFrame = static_cast<const SwHeadFootFrame*>(this);
+        OUString aFormatName = pHeadFootFrame->GetFormat()->GetName();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrm->GetFormat());
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrame->GetFormat());
     }
 }
 
-void SwFrm::dumpChildrenAsXml( xmlTextWriterPtr writer ) const
+void SwFrame::dumpChildrenAsXml( xmlTextWriterPtr writer ) const
 {
-    const SwFrm *pFrm = GetLower(  );
-    for ( ; pFrm != nullptr; pFrm = pFrm->GetNext(  ) )
+    const SwFrame *pFrame = GetLower(  );
+    for ( ; pFrame != nullptr; pFrame = pFrame->GetNext(  ) )
     {
-        pFrm->dumpAsXml( writer );
+        pFrame->dumpAsXml( writer );
     }
 }
 
@@ -431,34 +431,34 @@ void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
     xmlTextWriterEndElement(writer);
 }
 
-void SwTextFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
+void SwTextFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
-    SwFrm::dumpAsXmlAttributes( writer );
+    SwFrame::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 
     if (m_pPrecede != nullptr)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrm*>(m_pPrecede)->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrame*>(m_pPrecede)->GetFrameId() );
 }
 
-void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
+void SwSectionFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
-    SwFrm::dumpAsXmlAttributes( writer );
+    SwFrame::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 
     if (m_pPrecede != nullptr)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwSectionFrm*>( m_pPrecede )->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwSectionFrame*>( m_pPrecede )->GetFrameId() );
 }
 
-void SwTabFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
+void SwTabFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
-    SwFrm::dumpAsXmlAttributes( writer );
+    SwFrame::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 
     if (m_pPrecede != nullptr)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTabFrm*>( m_pPrecede )->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTabFrame*>( m_pPrecede )->GetFrameId() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

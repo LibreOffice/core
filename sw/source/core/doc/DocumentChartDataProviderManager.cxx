@@ -67,7 +67,7 @@ void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const S
             ++aIdx;
             if( nullptr != ( pONd = aIdx.GetNode().GetOLENode() ) &&
                 aName == pONd->GetChartTableName() /* OLE node is chart? */ &&
-                nullptr != (pONd->getLayoutFrm( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
+                nullptr != (pONd->getLayoutFrame( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
             {
                 uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
                 if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )

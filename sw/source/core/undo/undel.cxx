@@ -46,11 +46,11 @@
 #include <vector>
 
 // DELETE
-/*  lcl_MakeAutoFrms has to call MakeFrms for objects bounded "AtChar"
+/*  lcl_MakeAutoFrames has to call MakeFrames for objects bounded "AtChar"
     ( == AUTO ), if the anchor frame has be moved via _MoveNodes(..) and
-    DelFrms(..)
+    DelFrames(..)
 */
-static void lcl_MakeAutoFrms( const SwFrameFormats& rSpzArr, sal_uLong nMovedIndex )
+static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, sal_uLong nMovedIndex )
 {
     if( !rSpzArr.empty() )
     {
@@ -62,7 +62,7 @@ static void lcl_MakeAutoFrms( const SwFrameFormats& rSpzArr, sal_uLong nMovedInd
             {
                 const SwPosition* pAPos = pAnchor->GetContentAnchor();
                 if( pAPos && nMovedIndex == pAPos->nNode.GetIndex() )
-                    pFormat->MakeFrms();
+                    pFormat->MakeFrames();
             }
         }
     }
@@ -329,7 +329,7 @@ SwUndoDelete::SwUndoDelete(
             }
         }
         if( m_nSectDiff || m_nReplaceDummy )
-            lcl_MakeAutoFrms( *pDoc->GetSpzFrameFormats(),
+            lcl_MakeAutoFrames( *pDoc->GetSpzFrameFormats(),
                 m_bJoinNext ? pEndTextNd->GetIndex() : pSttTextNd->GetIndex() );
     }
     else
@@ -881,7 +881,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         }
 
         if( pMovedNode )
-            lcl_MakeAutoFrms(*rDoc.GetSpzFrameFormats(), pMovedNode->GetIndex());
+            lcl_MakeAutoFrames(*rDoc.GetSpzFrameFormats(), pMovedNode->GetIndex());
 
         if( m_pSttStr )
         {
@@ -1044,7 +1044,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
                     false, &pItem ) )
                     pNextNd->SetAttr( *pItem );
             }
-            pTableNd->DelFrms();
+            pTableNd->DelFrames();
         }
 
         // avoid asserts from ~SwIndexReg for deleted nodes

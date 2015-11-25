@@ -151,7 +151,7 @@ void SwJavaEditDialog::CheckTravel()
     {
         // Traveling only when more than one field
         pSh->StartAction();
-        pSh->CreateCrsr();
+        pSh->CreateCursor();
 
         bNext = pMgr->GoNext();
         if( bNext )
@@ -161,7 +161,7 @@ void SwJavaEditDialog::CheckTravel()
             pMgr->GoNext();
         bTravel |= bNext || bPrev;
 
-        pSh->DestroyCrsr();
+        pSh->DestroyCursor();
         pSh->EndAction();
 
         if (pField->IsCodeURL())

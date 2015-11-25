@@ -146,7 +146,7 @@ public:
     sal_Int32 GetModelPosition( sal_Int32 nPos ) const;
 
     /// fill a SwSpecialPos structure, suitable for calling
-    /// SwTextFrm->GetCharRect
+    /// SwTextFrame->GetCharRect
     /// Returns the core position, and fills rpPos either with NULL or
     /// with the &rPos, after putting the appropriate data into it.
     sal_Int32 FillSpecialPos( sal_Int32 nPos,

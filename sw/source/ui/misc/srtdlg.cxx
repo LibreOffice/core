@@ -83,7 +83,7 @@ static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 // determine lines and columns for table selection
 static bool lcl_GetSelTable( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 {
-    const SwTableNode* pTableNd = rSh.IsCrsrInTable();
+    const SwTableNode* pTableNd = rSh.IsCursorInTable();
     if( !pTableNd )
         return false;
 

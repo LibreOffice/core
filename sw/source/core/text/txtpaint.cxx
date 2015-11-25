@@ -39,17 +39,17 @@ void SwSaveClip::Reset()
     }
 }
 
-void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTextFrm* pFrm,
+void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTextFrame* pFrame,
                            bool bEnlargeRect )
 {
     SwRect aOldRect( rRect );
-    const bool bVertical = pFrm && pFrm->IsVertical();
+    const bool bVertical = pFrame && pFrame->IsVertical();
 
-    if ( pFrm && pFrm->IsRightToLeft() )
-        pFrm->SwitchLTRtoRTL( (SwRect&)rRect );
+    if ( pFrame && pFrame->IsRightToLeft() )
+        pFrame->SwitchLTRtoRTL( (SwRect&)rRect );
 
     if ( bVertical )
-        pFrm->SwitchHorizontalToVertical( (SwRect&)rRect );
+        pFrame->SwitchHorizontalToVertical( (SwRect&)rRect );
 
     if ( !pOut || (!rRect.HasArea() && !pOut->IsClipRegion()) )
     {
@@ -87,7 +87,7 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTextFrm* pFrm,
             }
         }
 
-        if( SwRootFrm::HasSameRect( rRect ) )
+        if( SwRootFrame::HasSameRect( rRect ) )
             pOut->SetClipRegion();
         else
         {

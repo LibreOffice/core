@@ -184,7 +184,7 @@ static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTab
     {
         SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
         if( USHRT_MAX != nCols )
-            pBoxFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE,
+            pBoxFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
         ::lcl_SetDfltBoxAttr( *pBoxFormat, nId );
         rBoxFormatArr[ nId ] = pBoxFormat;
@@ -203,7 +203,7 @@ static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<Sw
                                 SwTableAutoFormat::UPDATE_BOX,
                                 rDoc.GetNumberFormatter( ) );
         if( USHRT_MAX != nCols )
-            pBoxFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE,
+            pBoxFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
         rBoxFormatArr[ nId ] = pBoxFormat;
     }
@@ -421,9 +421,9 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         sal_uInt16 nLastPos = pColArr->back();
         if( text::HoriOrientation::NONE == eAdjust )
         {
-            sal_uInt16 nFrmWidth = nLastPos;
+            sal_uInt16 nFrameWidth = nLastPos;
             nLastPos = (*pColArr)[ pColArr->size()-2 ];
-            pTableFormat->SetFormatAttr( SvxLRSpaceItem( nSttPos, nFrmWidth - nLastPos, 0, 0, RES_LR_SPACE ) );
+            pTableFormat->SetFormatAttr( SvxLRSpaceItem( nSttPos, nFrameWidth - nLastPos, 0, 0, RES_LR_SPACE ) );
         }
         nWidth = nLastPos - nSttPos;
     }
@@ -432,7 +432,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         nWidth /= nCols;
         nWidth *= nCols; // to avoid rounding problems
     }
-    pTableFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nWidth ));
+    pTableFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nWidth ));
     if( !(rInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
         pTableFormat->SetFormatAttr( SwFormatLayoutSplit( false ));
 
@@ -469,7 +469,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     if( !bDfltBorders && !pTAFormat )
     {
         pBoxFormat = MakeTableBoxFormat();
-        pBoxFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
+        pBoxFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
     }
     else
     {
@@ -521,7 +521,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             if( pColArr )
             {
                 nWidth = (*pColArr)[ i + 1 ] - (*pColArr)[ i ];
-                if( pBoxF->GetFrmSize().GetWidth() != nWidth )
+                if( pBoxF->GetFrameSize().GetWidth() != nWidth )
                 {
                     if( pBoxF->HasWriterListeners() ) // Create new Format
                     {
@@ -529,7 +529,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
                         *pNewFormat = *pBoxF;
                         pBoxF = pNewFormat;
                     }
-                    pBoxF->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nWidth ));
+                    pBoxF->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nWidth ));
                 }
             }
 
@@ -538,9 +538,9 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             aNdIdx += 3; // StartNode, TextNode, EndNode  == 3 Nodes
         }
     }
-    // Insert Frms
+    // Insert Frames
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
-    pTableNd->MakeFrms( &aNdIdx );
+    pTableNd->MakeFrames( &aNdIdx );
 
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))
@@ -700,7 +700,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     // All Lines have a left-to-right Fill Order
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
-    pTableFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
+    pTableFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, USHRT_MAX ));
     if( !(rInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
         pTableFormat->SetFormatAttr( SwFormatLayoutSplit( false ));
 
@@ -737,7 +737,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
         // The Box's Formats already have the right size, we must only set
         // the right Border/AutoFormat.
         bUseBoxFormat = true;
-        pTableFormat->SetFormatAttr( pBoxFormat->GetFrmSize() );
+        pTableFormat->SetFormatAttr( pBoxFormat->GetFrameSize() );
         delete pBoxFormat;
         eAdjust = text::HoriOrientation::NONE;
     }
@@ -833,7 +833,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                 if( !bUseBoxFormat )
                 {
                     if( bChgSz )
-                        pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrmSize() );
+                        pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrameSize() );
                     pBox->ChgFrameFormat( pBoxF );
                 }
             }
@@ -858,7 +858,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     }
 
     sal_uLong nIdx = pTableNd->GetIndex();
-    aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
+    aNode2Layout.RestoreUpperFrames( GetNodes(), nIdx, nIdx + 1 );
 
     {
         SwPaM& rTmp = (SwPaM&)rRange; // Point always at the Start
@@ -881,7 +881,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 static void lcl_RemoveBreaks(SwContentNode & rNode, SwTableFormat *const pTableFormat)
 {
     // delete old layout frames, new ones need to be created...
-    rNode.DelFrms();
+    rNode.DelFrames();
 
     if (!rNode.IsTextNode())
     {
@@ -964,7 +964,7 @@ lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
         {
             SwTableBoxFormat *pNewFormat = rDoc.MakeTableBoxFormat();
             pNewFormat->SetFormatAttr(
-                    SwFormatFrmSize(ATT_VAR_SIZE, (*pPositions)[n] - nLastPos));
+                    SwFormatFrameSize(ATT_VAR_SIZE, (*pPositions)[n] - nLastPos));
             for (size_t nTmpLine = 0; nTmpLine < rLns.size(); ++nTmpLine)
             {
                 // Have to do an Add here, because the BoxFormat
@@ -978,12 +978,12 @@ lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
         // propagate size upwards from format, so the table gets the right size
         SAL_WARN_IF(rBoxFormat.HasWriterListeners(), "sw.core",
                 "who is still registered in the format?");
-        rBoxFormat.SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nLastPos ));
+        rBoxFormat.SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nLastPos ));
     }
     else
     {
         size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
-        rBoxFormat.SetFormatAttr(SwFormatFrmSize(ATT_VAR_SIZE, nWidth));
+        rBoxFormat.SetFormatAttr(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
     }
 }
 
@@ -1020,7 +1020,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             cCh = 0x09;
 
             // Get the separator's position from the first Node, in order for the Boxes to be set accordingly
-            SwTextFrmInfo aFInfo( static_cast<SwTextFrm*>(pTextNd->getLayoutFrm( pTextNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )) );
+            SwTextFrameInfo aFInfo( static_cast<SwTextFrame*>(pTextNd->getLayoutFrame( pTextNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )) );
             if( aFInfo.IsOneLine() ) // only makes sense in this case
             {
                 OUString const& rText(pTextNd->GetText());
@@ -1034,9 +1034,9 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 }
 
                 aPosArr.push_back(
-                                static_cast<sal_uInt16>(aFInfo.GetFrm()->IsVertical() ?
-                                aFInfo.GetFrm()->Prt().Bottom() :
-                                aFInfo.GetFrm()->Prt().Right()) );
+                                static_cast<sal_uInt16>(aFInfo.GetFrame()->IsVertical() ?
+                                aFInfo.GetFrame()->Prt().Bottom() :
+                                aFInfo.GetFrame()->Prt().Right()) );
 
             }
         }
@@ -1219,7 +1219,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     // All Lines have a left-to-right Fill Order
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
     // The Table's SSize is USHRT_MAX
-    pTableFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
+    pTableFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, USHRT_MAX ));
 
     /* If the first node in the selection is a context node and if it
        has an item FRAMEDIR set (no default) propagate the item to the
@@ -1246,12 +1246,12 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     {
         // The Box's Formats already have the right size, we must only set
         // the right Border/AutoFormat.
-        pTableFormat->SetFormatAttr( pBoxFormat->GetFrmSize() );
+        pTableFormat->SetFormatAttr( pBoxFormat->GetFrameSize() );
         delete pBoxFormat;
     }
 
     sal_uLong nIdx = pTableNd->GetIndex();
-    aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
+    aNode2Layout.RestoreUpperFrames( GetNodes(), nIdx, nIdx + 1 );
 
     getIDocumentState().SetModified();
     getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
@@ -1335,14 +1335,14 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
             // default width for box at the end of an incomplete line
             SwTableBoxFormat *const pNewFormat = rDoc.MakeTableBoxFormat();
             size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
-            pNewFormat->SetFormatAttr( SwFormatFrmSize(ATT_VAR_SIZE,
+            pNewFormat->SetFormatAttr( SwFormatFrameSize(ATT_VAR_SIZE,
                         nWidth * (nMissing + 1)) );
             pNewFormat->Add(rBoxes.back());
         }
     }
     size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
     // default width for all boxes not at the end of an incomplete line
-    rBoxFormat.SetFormatAttr(SwFormatFrmSize(ATT_VAR_SIZE, nWidth));
+    rBoxFormat.SetFormatAttr(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
 }
 
 SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
@@ -1586,14 +1586,14 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
 
     // If the Table was alone in a Section, create the Frames via the Table's Upper
     SwNode2Layout* pNode2Layout = nullptr;
-    SwNodeIndex aFrmIdx( rRange.aStart );
-    SwNode* pFrmNd = FindPrvNxtFrmNode( aFrmIdx, &rRange.aEnd.GetNode() );
-    if( !pFrmNd )
+    SwNodeIndex aFrameIdx( rRange.aStart );
+    SwNode* pFrameNd = FindPrvNxtFrameNode( aFrameIdx, &rRange.aEnd.GetNode() );
+    if( !pFrameNd )
         // Collect all Uppers
         pNode2Layout = new SwNode2Layout( *pTableNd );
 
     // Delete the Frames
-    pTableNd->DelFrms();
+    pTableNd->DelFrames();
 
     // "Delete" the Table and merge all Lines/Boxes
     _DelTabPara aDelPara( *this, cCh, pUndo );
@@ -1630,9 +1630,9 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     SectionUp( &aDelRg ); // Delete this Section and by that the Table
     // #i28006#
     sal_uLong nStt = aDelRg.aStart.GetIndex(), nEnd = aDelRg.aEnd.GetIndex();
-    if( !pFrmNd )
+    if( !pFrameNd )
     {
-        pNode2Layout->RestoreUpperFrms( *this,
+        pNode2Layout->RestoreUpperFrames( *this,
                         aDelRg.aStart.GetIndex(), aDelRg.aEnd.GetIndex() );
         delete pNode2Layout;
     }
@@ -1644,20 +1644,20 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
         {
             if( nullptr != ( pCNd = aDelRg.aStart.GetNode().GetContentNode()))
             {
-                if( pFrmNd->IsContentNode() )
-                    static_cast<SwContentNode*>(pFrmNd)->MakeFrms( *pCNd );
-                else if( pFrmNd->IsTableNode() )
-                    static_cast<SwTableNode*>(pFrmNd)->MakeFrms( aDelRg.aStart );
-                else if( pFrmNd->IsSectionNode() )
-                    static_cast<SwSectionNode*>(pFrmNd)->MakeFrms( aDelRg.aStart );
-                pFrmNd = pCNd;
+                if( pFrameNd->IsContentNode() )
+                    static_cast<SwContentNode*>(pFrameNd)->MakeFrames( *pCNd );
+                else if( pFrameNd->IsTableNode() )
+                    static_cast<SwTableNode*>(pFrameNd)->MakeFrames( aDelRg.aStart );
+                else if( pFrameNd->IsSectionNode() )
+                    static_cast<SwSectionNode*>(pFrameNd)->MakeFrames( aDelRg.aStart );
+                pFrameNd = pCNd;
             }
             else if( nullptr != ( pSNd = aDelRg.aStart.GetNode().GetSectionNode()))
             {
                 if( !pSNd->GetSection().IsHidden() && !pSNd->IsContentHidden() )
                 {
-                    pSNd->MakeFrms( &aFrmIdx, &aDelRg.aEnd );
-                    pFrmNd = pSNd;
+                    pSNd->MakeFrames( &aFrameIdx, &aDelRg.aEnd );
+                    pFrameNd = pSNd;
                     break;
                 }
                 aDelRg.aStart = *pSNd->EndOfSectionNode();
@@ -1680,7 +1680,7 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
             nStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nEnd )
         {
-            pFormat->MakeFrms();
+            pFormat->MakeFrames();
         }
     }
 
@@ -1829,7 +1829,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
     if( ::HasProtectedCells( aBoxes ))
         return false;
 
-    // Remove the Crsr from the to-be-deleted Section.
+    // Remove the Cursor from the to-be-deleted Section.
     // The Cursor is placed after the table, except for
     //  - when there's another Line, we place it in that one
     //  - when a Line precedes it, we place it in that one
@@ -1938,7 +1938,7 @@ bool SwDoc::DeleteCol( const SwCursor& rCursor )
     if( pESh )
     {
         const SwNode* pNd = rCursor.GetNode().FindTableBoxStartNode();
-        pESh->ParkCrsr( SwNodeIndex( *pNd ) );
+        pESh->ParkCursor( SwNodeIndex( *pNd ) );
     }
 
     // Thus delete the Columns
@@ -2101,7 +2101,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                     pNextNd->SetAttr( *pItem );
             }
 
-            pTableNd->DelFrms();
+            pTableNd->DelFrames();
             getIDocumentContentOperations().DeleteSection( pTableNd );
         }
 
@@ -2352,25 +2352,25 @@ SwTableNode::~SwTableNode()
     SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
                                 pTableFormat );
     pTableFormat->ModifyNotification( &aMsgHint, &aMsgHint );
-    DelFrms();
+    DelFrames();
     delete m_pTable;
 }
 
-SwTabFrm *SwTableNode::MakeFrm( SwFrm* pSib )
+SwTabFrame *SwTableNode::MakeFrame( SwFrame* pSib )
 {
-    return new SwTabFrm( *m_pTable, pSib );
+    return new SwTabFrame( *m_pTable, pSib );
 }
 
 /**
  * Creates all Views from the Document for the preceding Node. The resulting ContentFrames
  * are added to the corresponding Layout.
  */
-void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
+void SwTableNode::MakeFrames(const SwNodeIndex & rIdx )
 {
     if( !GetTable().GetFrameFormat()->HasWriterListeners()) // Do we actually have Frame?
         return;
 
-    SwFrm *pFrm;
+    SwFrame *pFrame;
     SwContentNode * pNode = rIdx.GetNode().GetContentNode();
 
     OSL_ENSURE( pNode, "No ContentNode or CopyNode and new Node is identical");
@@ -2379,106 +2379,106 @@ void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
 
     SwNode2Layout aNode2Layout( *this, rIdx.GetIndex() );
 
-    while( nullptr != (pFrm = aNode2Layout.NextFrm()) )
+    while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
     {
-        SwFrm *pNew = pNode->MakeFrm( pFrm );
+        SwFrame *pNew = pNode->MakeFrame( pFrame );
         // Will the Node receive Frames before or after?
         if ( bBefore )
             // The new one precedes me
-            pNew->Paste( pFrm->GetUpper(), pFrm );
+            pNew->Paste( pFrame->GetUpper(), pFrame );
         else
             // The new one succeeds me
-            pNew->Paste( pFrm->GetUpper(), pFrm->GetNext() );
+            pNew->Paste( pFrame->GetUpper(), pFrame->GetNext() );
     }
 }
 
 /**
- * Create a TableFrm for every Shell and insert before the corresponding ContentFrm.
+ * Create a TableFrame for every Shell and insert before the corresponding ContentFrame.
  */
-void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
+void SwTableNode::MakeFrames( SwNodeIndex* pIdxBehind )
 {
     OSL_ENSURE( pIdxBehind, "No Index" );
     *pIdxBehind = *this;
-    SwNode *pNd = GetNodes().FindPrvNxtFrmNode( *pIdxBehind, EndOfSectionNode() );
+    SwNode *pNd = GetNodes().FindPrvNxtFrameNode( *pIdxBehind, EndOfSectionNode() );
     if( !pNd )
         return ;
 
-    SwFrm *pFrm( nullptr );
-    SwLayoutFrm *pUpper( nullptr );
+    SwFrame *pFrame( nullptr );
+    SwLayoutFrame *pUpper( nullptr );
     SwNode2Layout aNode2Layout( *pNd, GetIndex() );
-    while( nullptr != (pUpper = aNode2Layout.UpperFrm( pFrm, *this )) )
+    while( nullptr != (pUpper = aNode2Layout.UpperFrame( pFrame, *this )) )
     {
-        SwTabFrm* pNew = MakeFrm( pUpper );
-        pNew->Paste( pUpper, pFrm );
+        SwTabFrame* pNew = MakeFrame( pUpper );
+        pNew->Paste( pUpper, pFrame );
         // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
         {
-            SwViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
+            SwViewShell* pViewShell( pNew->getRootFrame()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
                 pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrm*>(pNew->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrm*>(pNew->FindPrevCnt( true )) );
+                            dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
+                            dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt( true )) );
             }
         }
         pNew->RegistFlys();
     }
 }
 
-void SwTableNode::DelFrms()
+void SwTableNode::DelFrames()
 {
-    /* For a start, cut out and delete the TabFrms (which will also delete the Columns and Rows)
-       The TabFrms are attached to the FrameFormat of the SwTable.
+    /* For a start, cut out and delete the TabFrames (which will also delete the Columns and Rows)
+       The TabFrames are attached to the FrameFormat of the SwTable.
        We need to delete them in a more cumbersome way, for the Master to also delete the Follows. */
 
-    SwIterator<SwTabFrm,SwFormat> aIter( *(m_pTable->GetFrameFormat()) );
-    SwTabFrm *pFrm = aIter.First();
-    while ( pFrm )
+    SwIterator<SwTabFrame,SwFormat> aIter( *(m_pTable->GetFrameFormat()) );
+    SwTabFrame *pFrame = aIter.First();
+    while ( pFrame )
     {
         bool bAgain = false;
         {
-            if ( !pFrm->IsFollow() )
+            if ( !pFrame->IsFollow() )
             {
-                while ( pFrm->HasFollow() )
-                    pFrm->JoinAndDelFollows();
+                while ( pFrame->HasFollow() )
+                    pFrame->JoinAndDelFollows();
                 // #i27138#
                 // notify accessibility paragraphs objects about changed
                 // CONTENT_FLOWS_FROM/_TO relation.
                 // Relation CONTENT_FLOWS_FROM for current next paragraph will change
                 // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
                 {
-                    SwViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+                    SwViewShell* pViewShell( pFrame->getRootFrame()->GetCurrShell() );
                     if ( pViewShell && pViewShell->GetLayout() &&
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
                     {
                         pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrm*>(pFrm->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrm*>(pFrm->FindPrevCnt( true )) );
+                            dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
+                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt( true )) );
                     }
                 }
-                pFrm->Cut();
-                SwFrm::DestroyFrm(pFrm);
+                pFrame->Cut();
+                SwFrame::DestroyFrame(pFrame);
                 bAgain = true;
             }
         }
-        pFrm = bAgain ? aIter.First() : aIter.Next();
+        pFrame = bAgain ? aIter.First() : aIter.Next();
     }
 }
 
 void SwTableNode::SetNewTable( SwTable* pNewTable, bool bNewFrames )
 {
-    DelFrms();
+    DelFrames();
     delete m_pTable;
     m_pTable = pNewTable;
     if( bNewFrames )
     {
         SwNodeIndex aIdx( *EndOfSectionNode());
         GetNodes().GoNext( &aIdx );
-        MakeFrms( &aIdx );
+        MakeFrames( &aIdx );
     }
 }
 
@@ -2493,38 +2493,38 @@ void SwTableNode::RemoveRedlines()
     }
 }
 
-void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
-                        const SwCellFrm* pBoxFrm )
+void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCursor,
+                        const SwCellFrame* pBoxFrame )
 {
     const SwTableBox* pBox = nullptr;
-    SwTabFrm *pTab = nullptr;
+    SwTabFrame *pTab = nullptr;
 
-    if( pBoxFrm )
+    if( pBoxFrame )
     {
-        pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
-        pBox = pBoxFrm->GetTabBox();
+        pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
+        pBox = pBoxFrame->GetTabBox();
     }
-    else if( pCrsr )
+    else if( pCursor )
     {
-        const SwContentNode* pCNd = pCrsr->GetContentNode();
+        const SwContentNode* pCNd = pCursor->GetContentNode();
         if( !pCNd )
             return ;
 
         Point aPt;
-        const SwShellCrsr *pShCrsr = dynamic_cast<const SwShellCrsr*>(pCrsr);
-        if( pShCrsr )
-            aPt = pShCrsr->GetPtPos();
+        const SwShellCursor *pShCursor = dynamic_cast<const SwShellCursor*>(pCursor);
+        if( pShCursor )
+            aPt = pShCursor->GetPtPos();
 
-        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+        const SwFrame* pTmpFrame = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
         do {
-            pTmpFrm = pTmpFrm->GetUpper();
-        } while ( !pTmpFrm->IsCellFrm() );
+            pTmpFrame = pTmpFrame->GetUpper();
+        } while ( !pTmpFrame->IsCellFrame() );
 
-        pBoxFrm = static_cast<const SwCellFrm*>(pTmpFrm);
-        pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
-        pBox = pBoxFrm->GetTabBox();
+        pBoxFrame = static_cast<const SwCellFrame*>(pTmpFrame);
+        pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
+        pBox = pBoxFrame->GetTabBox();
     }
-    else if( !pCrsr && !pBoxFrm )
+    else if( !pCursor && !pBoxFrame )
     {
         OSL_ENSURE( false, "One of them needs to be specified!" );
         return ;
@@ -2532,11 +2532,11 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
     SWRECTFN( pTab )
-    const SwPageFrm* pPage = pTab->FindPageFrm();
-    const sal_uLong nLeftMin = (pTab->Frm().*fnRect->fnGetLeft)() -
-                           (pPage->Frm().*fnRect->fnGetLeft)();
-    const sal_uLong nRightMax = (pTab->Frm().*fnRect->fnGetRight)() -
-                            (pPage->Frm().*fnRect->fnGetLeft)();
+    const SwPageFrame* pPage = pTab->FindPageFrame();
+    const sal_uLong nLeftMin = (pTab->Frame().*fnRect->fnGetLeft)() -
+                           (pPage->Frame().*fnRect->fnGetLeft)();
+    const sal_uLong nRightMax = (pTab->Frame().*fnRect->fnGetRight)() -
+                            (pPage->Frame().*fnRect->fnGetLeft)();
 
     rFill.SetLeftMin ( nLeftMin );
     rFill.SetLeft    ( (pTab->Prt().*fnRect->fnGetLeft)() );
@@ -2560,11 +2560,11 @@ bool FuzzyCompare::operator() ( long s1, long s2 ) const
     return ( s1 < s2 && std::abs( s1 - s2 ) > ROWFUZZY );
 }
 
-static bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
+static bool lcl_IsFrameInColumn( const SwCellFrame& rFrame, SwSelBoxes& rBoxes )
 {
     for (size_t i = 0; i < rBoxes.size(); ++i)
     {
-        if ( rFrm.GetTabBox() == rBoxes[ i ] )
+        if ( rFrame.GetTabBox() == rBoxes[ i ] )
             return true;
     }
 
@@ -2572,26 +2572,26 @@ static bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
 }
 
 void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
-                        const SwCellFrm* pBoxFrm )
+                        const SwCellFrame* pBoxFrame )
 {
-    OSL_ENSURE( pBoxFrm, "GetTabRows called without pBoxFrm" );
+    OSL_ENSURE( pBoxFrame, "GetTabRows called without pBoxFrame" );
 
     // Make code robust:
-    if ( !pBoxFrm )
+    if ( !pBoxFrame )
         return;
 
     // #i39552# Collection of the boxes of the current
     // column has to be done at the beginning of this function, because
     // the table may be formatted in ::GetTableSel.
-    SwDeletionChecker aDelCheck( pBoxFrm );
+    SwDeletionChecker aDelCheck( pBoxFrame );
 
     SwSelBoxes aBoxes;
-    const SwContentFrm* pContent = ::GetCellContent( *pBoxFrm );
-    if ( pContent && pContent->IsTextFrm() )
+    const SwContentFrame* pContent = ::GetCellContent( *pBoxFrame );
+    if ( pContent && pContent->IsTextFrame() )
     {
-        const SwPosition aPos( *static_cast<const SwTextFrm*>(pContent)->GetTextNode() );
-        const SwCursor aTmpCrsr( aPos, nullptr, false );
-        ::GetTableSel( aTmpCrsr, aBoxes, nsSwTableSearchType::TBLSEARCH_COL );
+        const SwPosition aPos( *static_cast<const SwTextFrame*>(pContent)->GetTextNode() );
+        const SwCursor aTmpCursor( aPos, nullptr, false );
+        ::GetTableSel( aTmpCursor, aBoxes, nsSwTableSearchType::TBLSEARCH_COL );
     }
 
     // Make code robust:
@@ -2602,19 +2602,19 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     }
 
     // Make code robust:
-    const SwTabFrm* pTab = pBoxFrm->FindTabFrm();
+    const SwTabFrame* pTab = pBoxFrame->FindTabFrame();
     OSL_ENSURE( pTab, "GetTabRows called without a table" );
     if ( !pTab )
         return;
 
-    const SwFrm* pFrm = pTab->GetNextLayoutLeaf();
+    const SwFrame* pFrame = pTab->GetNextLayoutLeaf();
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
     SWRECTFN( pTab )
-    const SwPageFrm* pPage = pTab->FindPageFrm();
+    const SwPageFrame* pPage = pTab->FindPageFrame();
     const long nLeftMin  = ( bVert ?
-                             pTab->GetPrtLeft() - pPage->Frm().Left() :
-                             pTab->GetPrtTop() - pPage->Frm().Top() );
+                             pTab->GetPrtLeft() - pPage->Frame().Left() :
+                             pTab->GetPrtTop() - pPage->Frame().Top() );
     const long nLeft     = bVert ? LONG_MAX : 0;
     const long nRight    = (pTab->Prt().*fnRect->fnGetHeight)();
     const long nRightMax = bVert ? nRight : LONG_MAX;
@@ -2633,13 +2633,13 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     HiddenMap aHidden;
     HiddenMap::iterator aHiddenIter;
 
-    while ( pFrm && pTab->IsAnLower( pFrm ) )
+    while ( pFrame && pTab->IsAnLower( pFrame ) )
     {
-        if ( pFrm->IsCellFrm() && pFrm->FindTabFrm() == pTab )
+        if ( pFrame->IsCellFrame() && pFrame->FindTabFrame() == pTab )
         {
             // upper and lower borders of current cell frame:
-            long nUpperBorder = (pFrm->Frm().*fnRect->fnGetTop)();
-            long nLowerBorder = (pFrm->Frm().*fnRect->fnGetBottom)();
+            long nUpperBorder = (pFrame->Frame().*fnRect->fnGetTop)();
+            long nLowerBorder = (pFrame->Frame().*fnRect->fnGetBottom)();
 
             // get boundaries for nUpperBorder:
             aIter = aBoundaries.find( nUpperBorder );
@@ -2669,18 +2669,18 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
             {
                 aHiddenIter = aHidden.find( nTmpVal );
                 if ( aHiddenIter == aHidden.end() )
-                    aHidden[ nTmpVal ] = !lcl_IsFrmInColumn( *static_cast<const SwCellFrm*>(pFrm), aBoxes );
+                    aHidden[ nTmpVal ] = !lcl_IsFrameInColumn( *static_cast<const SwCellFrame*>(pFrame), aBoxes );
                 else
                 {
                     if ( aHidden[ nTmpVal ] &&
-                         lcl_IsFrmInColumn( *static_cast<const SwCellFrm*>(pFrm), aBoxes ) )
+                         lcl_IsFrameInColumn( *static_cast<const SwCellFrame*>(pFrame), aBoxes ) )
                         aHidden[ nTmpVal ] = false;
                 }
                 nTmpVal = nLowerBorder;
             }
         }
 
-        pFrm = pFrm->GetNextLayoutLeaf();
+        pFrame = pFrame->GetNextLayoutLeaf();
     }
 
     // transfer calculated values from BoundaryMap and HiddenMap into rFill:
@@ -2708,37 +2708,37 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
 }
 
 void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
-                        const SwCursor* pCrsr, const SwCellFrm* pBoxFrm )
+                        const SwCursor* pCursor, const SwCellFrame* pBoxFrame )
 {
     const SwTableBox* pBox = nullptr;
-    SwTabFrm *pTab = nullptr;
+    SwTabFrame *pTab = nullptr;
 
-    if( pBoxFrm )
+    if( pBoxFrame )
     {
-        pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
-        pBox = pBoxFrm->GetTabBox();
+        pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
+        pBox = pBoxFrame->GetTabBox();
     }
-    else if( pCrsr )
+    else if( pCursor )
     {
-        const SwContentNode* pCNd = pCrsr->GetContentNode();
+        const SwContentNode* pCNd = pCursor->GetContentNode();
         if( !pCNd )
             return ;
 
         Point aPt;
-        const SwShellCrsr *pShCrsr = dynamic_cast<const SwShellCrsr*>(pCrsr);
-        if( pShCrsr )
-            aPt = pShCrsr->GetPtPos();
+        const SwShellCursor *pShCursor = dynamic_cast<const SwShellCursor*>(pCursor);
+        if( pShCursor )
+            aPt = pShCursor->GetPtPos();
 
-        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+        const SwFrame* pTmpFrame = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
         do {
-            pTmpFrm = pTmpFrm->GetUpper();
-        } while ( !pTmpFrm->IsCellFrm() );
+            pTmpFrame = pTmpFrame->GetUpper();
+        } while ( !pTmpFrame->IsCellFrame() );
 
-        pBoxFrm = static_cast<const SwCellFrm*>(pTmpFrm);
-        pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
-        pBox = pBoxFrm->GetTabBox();
+        pBoxFrame = static_cast<const SwCellFrame*>(pTmpFrame);
+        pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
+        pBox = pBoxFrame->GetTabBox();
     }
-    else if( !pCrsr && !pBoxFrm )
+    else if( !pCursor && !pBoxFrame )
     {
         OSL_ENSURE( false, "One of them needs to be specified!" );
         return ;
@@ -2747,7 +2747,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     // If the Table is still using relative values (USHRT_MAX)
     // we need to switch to absolute ones.
     SwTable& rTab = *pTab->GetTable();
-    const SwFormatFrmSize& rTableFrmSz = rTab.GetFrameFormat()->GetFrmSize();
+    const SwFormatFrameSize& rTableFrameSz = rTab.GetFrameFormat()->GetFrameSize();
     SWRECTFN( pTab )
     // #i17174# - With fix for #i9040# the shadow size is taken
     // from the table width. Thus, add its left and right size to current table
@@ -2758,20 +2758,20 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
         nPrtWidth += aShadow.CalcShadowSpace( SvxShadowItemSide::LEFT ) +
                      aShadow.CalcShadowSpace( SvxShadowItemSide::RIGHT );
     }
-    if( nPrtWidth != rTableFrmSz.GetWidth() )
+    if( nPrtWidth != rTableFrameSz.GetWidth() )
     {
-        SwFormatFrmSize aSz( rTableFrmSz );
+        SwFormatFrameSize aSz( rTableFrameSz );
         aSz.SetWidth( nPrtWidth );
         rTab.GetFrameFormat()->SetFormatAttr( aSz );
     }
 
     SwTabCols aOld( rNew.Count() );
 
-    const SwPageFrm* pPage = pTab->FindPageFrm();
-    const sal_uLong nLeftMin = (pTab->Frm().*fnRect->fnGetLeft)() -
-                           (pPage->Frm().*fnRect->fnGetLeft)();
-    const sal_uLong nRightMax = (pTab->Frm().*fnRect->fnGetRight)() -
-                            (pPage->Frm().*fnRect->fnGetLeft)();
+    const SwPageFrame* pPage = pTab->FindPageFrame();
+    const sal_uLong nLeftMin = (pTab->Frame().*fnRect->fnGetLeft)() -
+                           (pPage->Frame().*fnRect->fnGetLeft)();
+    const sal_uLong nRightMax = (pTab->Frame().*fnRect->fnGetRight)() -
+                            (pPage->Frame().*fnRect->fnGetLeft)();
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
     aOld.SetLeftMin ( nLeftMin );
@@ -2784,13 +2784,13 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
 }
 
 void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*,
-                        const SwCellFrm* pBoxFrm )
+                        const SwCellFrame* pBoxFrame )
 {
-    SwTabFrm *pTab;
+    SwTabFrame *pTab;
 
-    OSL_ENSURE( pBoxFrm, "SetTabRows called without pBoxFrm" );
+    OSL_ENSURE( pBoxFrame, "SetTabRows called without pBoxFrame" );
 
-    pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pBoxFrm))->ImplFindTabFrm();
+    pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
 
     // If the Table is still using relative values (USHRT_MAX)
     // we need to switch to absolute ones.
@@ -2798,26 +2798,26 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*
     SwTabCols aOld( rNew.Count() );
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
-    const SwPageFrm* pPage = pTab->FindPageFrm();
+    const SwPageFrame* pPage = pTab->FindPageFrame();
 
     aOld.SetRight( (pTab->Prt().*fnRect->fnGetHeight)() );
     long nLeftMin;
     if ( bVert )
     {
-        nLeftMin = pTab->GetPrtLeft() - pPage->Frm().Left();
+        nLeftMin = pTab->GetPrtLeft() - pPage->Frame().Left();
         aOld.SetLeft    ( LONG_MAX );
         aOld.SetRightMax( aOld.GetRight() );
 
     }
     else
     {
-        nLeftMin = pTab->GetPrtTop() - pPage->Frm().Top();
+        nLeftMin = pTab->GetPrtTop() - pPage->Frame().Top();
         aOld.SetLeft    ( 0 );
         aOld.SetRightMax( LONG_MAX );
     }
     aOld.SetLeftMin ( nLeftMin );
 
-    GetTabRows( aOld, nullptr, pBoxFrm );
+    GetTabRows( aOld, nullptr, pBoxFrame );
 
     GetIDocumentUndoRedo().StartUndo( UNDO_TABLE_ATTR, nullptr );
 
@@ -2842,50 +2842,50 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*
         const long nDiff = nNewRowHeight - nOldRowHeight;
         if ( std::abs( nDiff ) >= ROWFUZZY )
         {
-            // For the old table model pTextFrm and pLine will be set for every box.
-            // For the new table model pTextFrm will be set if the box is not covered,
+            // For the old table model pTextFrame and pLine will be set for every box.
+            // For the new table model pTextFrame will be set if the box is not covered,
             // but the pLine will be set if the box is not an overlapping box
             // In the new table model the row height can be adjusted,
             // when both variables are set.
-            const SwTextFrm* pTextFrm = nullptr;
+            const SwTextFrame* pTextFrame = nullptr;
             const SwTableLine* pLine = nullptr;
 
-            // Iterate over all SwCellFrms with Bottom = nOldPos
-            const SwFrm* pFrm = pTab->GetNextLayoutLeaf();
-            while ( pFrm && pTab->IsAnLower( pFrm ) )
+            // Iterate over all SwCellFrames with Bottom = nOldPos
+            const SwFrame* pFrame = pTab->GetNextLayoutLeaf();
+            while ( pFrame && pTab->IsAnLower( pFrame ) )
             {
-                if ( pFrm->IsCellFrm() && pFrm->FindTabFrm() == pTab )
+                if ( pFrame->IsCellFrame() && pFrame->FindTabFrame() == pTab )
                 {
-                    const long nLowerBorder = (pFrm->Frm().*fnRect->fnGetBottom)();
+                    const long nLowerBorder = (pFrame->Frame().*fnRect->fnGetBottom)();
                     const sal_uLong nTabTop = (pTab->*fnRect->fnGetPrtTop)();
                     if ( std::abs( (*fnRect->fnYInc)( nTabTop, nOldRowEnd ) - nLowerBorder ) <= ROWFUZZY )
                     {
-                        if ( !bCurColOnly || pFrm == pBoxFrm )
+                        if ( !bCurColOnly || pFrame == pBoxFrame )
                         {
-                            const SwFrm* pContent = ::GetCellContent( static_cast<const SwCellFrm&>(*pFrm) );
+                            const SwFrame* pContent = ::GetCellContent( static_cast<const SwCellFrame&>(*pFrame) );
 
-                            if ( pContent && pContent->IsTextFrm() )
+                            if ( pContent && pContent->IsTextFrame() )
                             {
-                                const SwTableBox* pBox = static_cast<const SwCellFrm*>(pFrm)->GetTabBox();
+                                const SwTableBox* pBox = static_cast<const SwCellFrame*>(pFrame)->GetTabBox();
                                 const long nRowSpan = pBox->getRowSpan();
                                 if( nRowSpan > 0 ) // Not overlapped
-                                    pTextFrm = static_cast<const SwTextFrm*>(pContent);
+                                    pTextFrame = static_cast<const SwTextFrame*>(pContent);
                                 if( nRowSpan < 2 ) // Not overlapping for row height
                                     pLine = pBox->GetUpper();
-                                if( pLine && pTextFrm ) // always for old table model
+                                if( pLine && pTextFrame ) // always for old table model
                                 {
                                     // The new row height must not to be calculated from a overlapping box
-                                    SwFormatFrmSize aNew( pLine->GetFrameFormat()->GetFrmSize() );
-                                    const long nNewSize = (pFrm->Frm().*fnRect->fnGetHeight)() + nDiff;
+                                    SwFormatFrameSize aNew( pLine->GetFrameFormat()->GetFrameSize() );
+                                    const long nNewSize = (pFrame->Frame().*fnRect->fnGetHeight)() + nDiff;
                                     if( nNewSize != aNew.GetHeight() )
                                     {
                                         aNew.SetHeight( nNewSize );
                                         if ( ATT_VAR_SIZE == aNew.GetHeightSizeType() )
                                             aNew.SetHeightSizeType( ATT_MIN_SIZE );
                                         // This position must not be in an overlapped box
-                                        const SwPosition aPos( *static_cast<const SwTextFrm*>(pContent)->GetTextNode() );
-                                        const SwCursor aTmpCrsr( aPos, nullptr, false );
-                                        SetRowHeight( aTmpCrsr, aNew );
+                                        const SwPosition aPos( *static_cast<const SwTextFrame*>(pContent)->GetTextNode() );
+                                        const SwCursor aTmpCursor( aPos, nullptr, false );
+                                        SetRowHeight( aTmpCursor, aNew );
                                         // For the new table model we're done, for the old one
                                         // there might be another (sub)row to adjust...
                                         if( pTable->IsNewModel() )
@@ -2897,7 +2897,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*
                         }
                     }
                 }
-                pFrm = pFrm->GetNextLayoutLeaf();
+                pFrame = pFrame->GetNextLayoutLeaf();
             }
         }
     }
@@ -2951,7 +2951,7 @@ void SwCollectTableLineBoxes::AddBox( const SwTableBox& rBox )
     aPosArr.push_back(nWidth);
     SwTableBox* p = const_cast<SwTableBox*>(&rBox);
     m_Boxes.push_back(p);
-    nWidth = nWidth + (sal_uInt16)rBox.GetFrameFormat()->GetFrmSize().GetWidth();
+    nWidth = nWidth + (sal_uInt16)rBox.GetFrameFormat()->GetFrameSize().GetWidth();
 }
 
 const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
@@ -2974,7 +2974,7 @@ const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
         if( n >= aPosArr.size() )
             --n;
 
-        nWidth = nWidth + (sal_uInt16)rBox.GetFrameFormat()->GetFrmSize().GetWidth();
+        nWidth = nWidth + (sal_uInt16)rBox.GetFrameFormat()->GetFrameSize().GetWidth();
         pRet = m_Boxes[ n ];
     }
     return pRet;
@@ -3175,7 +3175,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     // Find Lines for the Layout update
     _FndBox aFndBox( nullptr, nullptr );
     aFndBox.SetTableLines( rTable );
-    aFndBox.DelFrms( rTable );
+    aFndBox.DelFrames( rTable );
 
     SwTableNode* pNew = GetNodes().SplitTable( rPos.nNode, false, bCalcNewSize );
 
@@ -3250,10 +3250,10 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
             break;
         }
 
-        // And insert Frms
+        // And insert Frames
         SwNodeIndex aNdIdx( *pNew->EndOfSectionNode() );
         GetNodes().GoNext( &aNdIdx ); // To the next ContentNode
-        pNew->MakeFrms( &aNdIdx );
+        pNew->MakeFrames( &aNdIdx );
 
         // Insert a paragraph between the Table
         GetNodes().MakeTextNode( SwNodeIndex( *pNew ),
@@ -3261,7 +3261,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     }
 
     // Update Layout
-    aFndBox.MakeFrms( rTable );
+    aFndBox.MakeFrames( rTable );
 
     // TL_CHART2: need to inform chart of probably changed cell names
     UpdateCharts( rTable.GetFrameFormat()->GetName() );
@@ -3281,7 +3281,7 @@ static bool lcl_ChgTableSize( SwTable& rTable )
     // set back to 0.
     // So lock the Format.
     SwFrameFormat* pFormat = rTable.GetFrameFormat();
-    SwFormatFrmSize aTableMaxSz( pFormat->GetFrmSize() );
+    SwFormatFrameSize aTableMaxSz( pFormat->GetFrameSize() );
 
     if( USHRT_MAX == aTableMaxSz.GetWidth() )
         return false;
@@ -3297,7 +3297,7 @@ static bool lcl_ChgTableSize( SwTable& rTable )
         SwTwips nMaxLnWidth = 0;
         SwTableBoxes& rBoxes = pLn->GetTabBoxes();
         for( auto pBox : rBoxes )
-            nMaxLnWidth += pBox->GetFrameFormat()->GetFrmSize().GetWidth();
+            nMaxLnWidth += pBox->GetFrameFormat()->GetFrameSize().GetWidth();
 
         if( nMaxLnWidth > aTableMaxSz.GetWidth() )
             aTableMaxSz.SetWidth( nMaxLnWidth );
@@ -3461,7 +3461,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
     }
 
     {
-        // Copy the Table FrmFormat
+        // Copy the Table FrameFormat
         SwFrameFormat* pOldTableFormat = rTable.GetFrameFormat();
         SwFrameFormat* pNewTableFormat = pOldTableFormat->GetDoc()->MakeTableFrameFormat(
                                 pOldTableFormat->GetDoc()->GetUniqueTableName(),
@@ -3562,7 +3562,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
     if( !pDelTableNd || !pTableNd )
         return false;
 
-    pDelTableNd->DelFrms();
+    pDelTableNd->DelFrames();
 
     SwTable& rDelTable = pDelTableNd->GetTable();
     SwTable& rTable = pTableNd->GetTable();
@@ -3570,7 +3570,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
     // Find Lines for the Layout update
     _FndBox aFndBox( nullptr, nullptr );
     aFndBox.SetTableLines( rTable );
-    aFndBox.DelFrms( rTable );
+    aFndBox.DelFrames( rTable );
 
     // TL_CHART2:
     // tell the charts about the table to be deleted and have them use their own data
@@ -3578,8 +3578,8 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
 
     // Sync the TableFormat's Width
     {
-        const SwFormatFrmSize& rTableSz = rTable.GetFrameFormat()->GetFrmSize();
-        const SwFormatFrmSize& rDelTableSz = rDelTable.GetFrameFormat()->GetFrmSize();
+        const SwFormatFrameSize& rTableSz = rTable.GetFrameFormat()->GetFrameSize();
+        const SwFormatFrameSize& rDelTableSz = rDelTable.GetFrameFormat()->GetFrameSize();
         if( rTableSz != rDelTableSz )
         {
             // The needs correction
@@ -3649,7 +3649,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
     }
 
     // Update Layout
-    aFndBox.MakeFrms( rTable );
+    aFndBox.MakeFrames( rTable );
 
     return true;
 }

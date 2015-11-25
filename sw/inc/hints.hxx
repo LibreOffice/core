@@ -29,8 +29,8 @@ class SwTable;
 class SwNode;
 class SwNodes;
 class SwContentNode;
-class SwPageFrm;
-class SwFrm;
+class SwPageFrame;
+class SwFrame;
 class SwTextNode;
 class SwHistory;
 
@@ -225,19 +225,19 @@ public:
 
 class SwVirtPageNumInfo: public SwMsgPoolItem
 {
-    const SwPageFrm *m_pPage;
-    const SwPageFrm *m_pOrigPage;
-    const SwFrm     *m_pFrm;
+    const SwPageFrame *m_pPage;
+    const SwPageFrame *m_pOrigPage;
+    const SwFrame     *m_pFrame;
     /** Multiple attributes can be attached to a single paragraph / table
      The frame, in the end, has to decide which attribute takes effect and which physical page it involves */
 public:
-    SwVirtPageNumInfo( const SwPageFrm *pPg );
+    SwVirtPageNumInfo( const SwPageFrame *pPg );
 
-    const SwPageFrm *GetPage()          { return m_pPage;    }
-    const SwPageFrm *GetOrigPage()      { return m_pOrigPage;}
-    const SwFrm *GetFrm()               { return m_pFrm; }
-    void  SetInfo( const SwPageFrm *pPg,
-                   const SwFrm *pF )    { m_pFrm = pF, m_pPage = pPg; }
+    const SwPageFrame *GetPage()          { return m_pPage;    }
+    const SwPageFrame *GetOrigPage()      { return m_pOrigPage;}
+    const SwFrame *GetFrame()               { return m_pFrame; }
+    void  SetInfo( const SwPageFrame *pPg,
+                   const SwFrame *pF )    { m_pFrame = pF, m_pPage = pPg; }
 };
 
 class SwFindNearestNode : public SwMsgPoolItem

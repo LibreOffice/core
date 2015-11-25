@@ -392,9 +392,9 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     {
         SwViewShell* pViewShell = mpDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
 
-        SwPageFrm* pCurrentPage = pViewShell ? pViewShell->Imp()->GetFirstVisPage(pViewShell->GetOut()) : nullptr;
-        SwPageFrm* pStartPage = pCurrentPage;
-        SwPageFrm* pStopPage = nullptr;
+        SwPageFrame* pCurrentPage = pViewShell ? pViewShell->Imp()->GetFirstVisPage(pViewShell->GetOut()) : nullptr;
+        SwPageFrame* pStartPage = pCurrentPage;
+        SwPageFrame* pStopPage = nullptr;
 
         while ( pCurrentPage && pCurrentPage != pStopPage )
         {
@@ -406,7 +406,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
                     return xRet;
 
                 // search for invalid content:
-                SwContentFrm* pCnt = pCurrentPage->ContainsContent();
+                SwContentFrame* pCnt = pCurrentPage->ContainsContent();
 
                 while( pCnt && pCurrentPage->IsAnLower( pCnt ) )
                 {
@@ -422,7 +422,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
                         break;
                     }
 
-                    pCnt = pCnt->GetNextContentFrm();
+                    pCnt = pCnt->GetNextContentFrame();
                 }
             }
 
@@ -434,12 +434,12 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
             pCurrentPage->ValidateSpelling();
 
             // proceed with next page, wrap at end of document if required:
-            pCurrentPage = static_cast<SwPageFrm*>(pCurrentPage->GetNext());
+            pCurrentPage = static_cast<SwPageFrame*>(pCurrentPage->GetNext());
 
             if ( !pCurrentPage && !pStopPage )
             {
                 pStopPage = pStartPage;
-                pCurrentPage = static_cast<SwPageFrm*>(pViewShell->GetLayout()->Lower());
+                pCurrentPage = static_cast<SwPageFrame*>(pViewShell->GetLayout()->Lower());
             }
         }
     }

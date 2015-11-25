@@ -98,8 +98,8 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
             SwView* pView = ::GetActiveView();
             SwWrtShell* pWrtShell;
             if( pView && nullptr != (pWrtShell = pView->GetWrtShellPtr()) &&
-                !pWrtShell->SwCrsrShell::HasSelection()&&
-                !pWrtShell->IsSelFrmMode() &&
+                !pWrtShell->SwCursorShell::HasSelection()&&
+                !pWrtShell->IsSelFrameMode() &&
                 !pWrtShell->IsObjSelected())
             {
                 SfxStyleSheetBasePool* pPool = pView->GetDocShell()->

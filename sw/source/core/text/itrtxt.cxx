@@ -33,23 +33,23 @@
 #include "txtfrm.hxx"
 #include "porfly.hxx"
 
-void SwTextIter::CtorInitTextIter( SwTextFrm *pNewFrm, SwTextInfo *pNewInf )
+void SwTextIter::CtorInitTextIter( SwTextFrame *pNewFrame, SwTextInfo *pNewInf )
 {
-    SwTextNode *pNode = pNewFrm->GetTextNode();
+    SwTextNode *pNode = pNewFrame->GetTextNode();
 
-    OSL_ENSURE( pNewFrm->GetPara(), "No paragraph" );
+    OSL_ENSURE( pNewFrame->GetPara(), "No paragraph" );
 
-    CtorInitAttrIter( *pNode, pNewFrm->GetPara()->GetScriptInfo(), pNewFrm );
+    CtorInitAttrIter( *pNode, pNewFrame->GetPara()->GetScriptInfo(), pNewFrame );
 
-    m_pFrm = pNewFrm;
+    m_pFrame = pNewFrame;
     m_pInf = pNewInf;
     m_aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet(), *pNode );
-    m_nFrameStart = m_pFrm->Frm().Pos().Y() + m_pFrm->Prt().Pos().Y();
+    m_nFrameStart = m_pFrame->Frame().Pos().Y() + m_pFrame->Prt().Pos().Y();
     SwTextIter::Init();
 
     // Order is important: only execute FillRegister if GetValue!=0
     m_bRegisterOn = pNode->GetSwAttrSet().GetRegister().GetValue()
-        && m_pFrm->FillRegister( m_nRegStart, m_nRegDiff );
+        && m_pFrame->FillRegister( m_nRegStart, m_nRegDiff );
 }
 
 void SwTextIter::Init()
@@ -199,7 +199,7 @@ void SwTextIter::CharToLine(const sal_Int32 nChar)
 }
 
 // 1170: beruecksichtigt Mehrdeutigkeiten:
-const SwLineLayout *SwTextCursor::CharCrsrToLine( const sal_Int32 nPosition )
+const SwLineLayout *SwTextCursor::CharCursorToLine( const sal_Int32 nPosition )
 {
     CharToLine( nPosition );
     if( nPosition != m_nStart )
@@ -224,7 +224,7 @@ sal_uInt16 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
 
     sal_uInt16 nOfst = rLine.GetRealHeight() - rLine.Height();
 
-    SwTextGridItem const*const pGrid(GetGridItem(m_pFrm->FindPageFrm()));
+    SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
 
     if ( pGrid && GetInfo().SnapToGrid() )
     {
@@ -272,9 +272,9 @@ sal_uInt16 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
                 nOfst += rLine.Height() - nPorHeight + nPorAscent;
                 break;
             case SvxParaVertAlignItem::AUTOMATIC :
-                if ( bAutoToCentered || GetInfo().GetTextFrm()->IsVertical() )
+                if ( bAutoToCentered || GetInfo().GetTextFrame()->IsVertical() )
                 {
-                    if( GetInfo().GetTextFrm()->IsVertLR() )
+                    if( GetInfo().GetTextFrame()->IsVertLR() )
                             nOfst += rLine.Height() - ( rLine.Height() - nPorHeight ) / 2 - nPorAscent;
                     else
                             nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
@@ -328,7 +328,7 @@ void SwTextIter::TruncLines( bool bNoteFollow )
                                                         lcl_NeedsFieldRest( m_pCurr ) );
 
             // bug 88534: wrong positioning of flys
-            SwTextFrm* pFollow = GetTextFrm()->GetFollow();
+            SwTextFrame* pFollow = GetTextFrame()->GetFollow();
             if ( pFollow && ! pFollow->IsLocked() &&
                  nEnd == pFollow->GetOfst() )
             {
@@ -342,7 +342,7 @@ void SwTextIter::TruncLines( bool bNoteFollow )
                     pLine = pLine->GetNext();
                 }
 
-                SwpHints* pTmpHints = GetTextFrm()->GetTextNode()->GetpSwpHints();
+                SwpHints* pTmpHints = GetTextFrame()->GetTextNode()->GetpSwpHints();
 
                 // examine hints in range nEnd - (nEnd + nRangeChar)
                 for( size_t i = 0; i < pTmpHints->Count(); ++i )
@@ -363,10 +363,10 @@ void SwTextIter::TruncLines( bool bNoteFollow )
     }
     if( m_pCurr->IsDummy() &&
         !m_pCurr->GetLen() &&
-         m_nStart < GetTextFrm()->GetText().getLength() )
+         m_nStart < GetTextFrame()->GetText().getLength() )
         m_pCurr->SetRealHeight( 1 );
     if( GetHints() )
-        m_pFrm->RemoveFootnote( nEnd );
+        m_pFrame->RemoveFootnote( nEnd );
 }
 
 void SwTextIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const

@@ -236,7 +236,7 @@ protected:
 
     sal_uInt16 nBorder;             // Dicke der ausseren Umrandung
     sal_uInt16 nInnerBorder;        // Dicke der inneren Umrandung
-    sal_uInt32 nBaseWidth;            // Bezugsgroesse fur Breiten SwFormatFrmSize
+    sal_uInt32 nBaseWidth;            // Bezugsgroesse fur Breiten SwFormatFrameSize
 
     sal_uInt16 nHeadEndRow;         // letzte Zeile des Tabellen-Kopfes
 

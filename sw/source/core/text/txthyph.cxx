@@ -55,16 +55,16 @@ Reference< XHyphenatedWord >  SwTextFormatInfo::HyphWord(
 /**
  * We format a row for interactive hyphenation
  */
-bool SwTextFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
+bool SwTextFrame::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
-    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
-    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTextFrm::Hyphenate" );
+    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTextFrame::Hyphenate" );
 
     if( !g_pBreakIt->GetBreakIter().is() )
         return false;
 
     // We lock it, to start with
-    OSL_ENSURE( !IsLocked(), "SwTextFrm::Hyphenate: this is locked" );
+    OSL_ENSURE( !IsLocked(), "SwTextFrame::Hyphenate: this is locked" );
 
     // The frame::Frame must have a valid SSize!
     Calc(pRenderContext);
@@ -75,12 +75,12 @@ bool SwTextFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
     {
         // We always need to enable hyphenation
         // Don't be afraid: the SwTextIter saves the old row in the hyphenate
-        TextFrmLockGuard aLock( this );
+        TextFrameLockGuard aLock( this );
 
         if ( IsVertical() )
             SwapWidthAndHeight();
 
-        SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this, true ); // true for interactive hyph!
+        SwTextFormatInfo aInf( getRootFrame()->GetCurrShell()->GetOut(), this, true ); // true for interactive hyph!
         SwTextFormatter aLine( this, &aInf );
         aLine.CharToLine( rHyphInf.nStart );
 
@@ -131,14 +131,14 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     // We never need to hyphenate anything in the last row
     // Except for, if it contains a FlyPortion or if it's the
     // last row of the Master
-    if( !GetNext() && !rInf.GetTextFly().IsOn() && !m_pFrm->GetFollow() )
+    if( !GetNext() && !rInf.GetTextFly().IsOn() && !m_pFrame->GetFollow() )
         return false;
 
     sal_Int32 nWrdStart = m_nStart;
 
     // We need to retain the old row
     // E.g.: The attribute for hyphenation was not set, but
-    // it's always set in SwTextFrm::Hyphenate, because we want
+    // it's always set in SwTextFrame::Hyphenate, because we want
     // to set breakpoints.
     SwLineLayout *pOldCurr = m_pCurr;
 
@@ -164,7 +164,7 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( m_pCurr->PrtWidth() && m_pCurr->GetLen() )
     {
         // Wir muessen uns darauf einstellen, dass in der Zeile
-        // FlyFrms haengen, an denen auch umgebrochen werden darf.
+        // FlyFrames haengen, an denen auch umgebrochen werden darf.
         // Wir suchen also die erste HyphPortion in dem angegebenen
         // Bereich.
 

@@ -30,7 +30,7 @@
 #include <functional>
 #include <limits.h>
 
-class SwTextFrm;
+class SwTextFrame;
 class SwTextNode;
 class SwIndex;
 namespace vcl { class Font; }
@@ -107,12 +107,12 @@ struct SwSpellArgs : SwArgsBase
 // Parameter-class for Hyphenate.
 // docedt.cxx:  SwDoc::Hyphenate()
 // txtedt.cxx:  SwTextNode::Hyphenate()
-// txthyph.cxx: SwTextFrm::Hyphenate()
+// txthyph.cxx: SwTextFrame::Hyphenate()
 
 class SwInterHyphInfo
 {
     css::uno::Reference< css::linguistic2::XHyphenatedWord >    xHyphWord;
-    const Point aCrsrPos;
+    const Point aCursorPos;
     bool bNoLang : 1;
     bool bCheck  : 1;
 public:
@@ -121,9 +121,9 @@ public:
     sal_Int32 nWordStart;
     sal_Int32 nWordLen;
 
-    SwInterHyphInfo( const Point &rCrsrPos, sal_Int32 nStartPos = 0,
+    SwInterHyphInfo( const Point &rCursorPos, sal_Int32 nStartPos = 0,
         sal_Int32 nLength = SAL_MAX_INT32 )
-        : aCrsrPos(rCrsrPos)
+        : aCursorPos(rCursorPos)
         , bNoLang(false)
         , bCheck(false)
         , nStart(nStartPos)
@@ -135,9 +135,9 @@ public:
     {
         return nEnd;
     }
-    const Point *GetCrsrPos() const
+    const Point *GetCursorPos() const
     {
-        return aCrsrPos.X() || aCrsrPos.Y() ? &aCrsrPos : nullptr;
+        return aCursorPos.X() || aCursorPos.Y() ? &aCursorPos : nullptr;
     }
     bool IsCheck() const { return bCheck; }
     void SetCheck( const bool bNew ) { bCheck = bNew; }
@@ -155,8 +155,8 @@ public:
 
 namespace sw {
 
-SwTextFrm *
-SwHyphIterCacheLastTxtFrm(SwTextNode *, std::function<SwTextFrm * ()>);
+SwTextFrame *
+SwHyphIterCacheLastTextFrame(SwTextNode *, std::function<SwTextFrame * ()>);
 
 }
 

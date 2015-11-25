@@ -26,11 +26,11 @@
 #include <deque>
 
 class SwDoc;
-class SwFrm;
-class SwLayoutFrm;
-class SwPageFrm;
-class SwFlyFrm;
-class SwSectionFrm;
+class SwFrame;
+class SwLayoutFrame;
+class SwPageFrame;
+class SwFlyFrame;
+class SwSectionFrame;
 class SwSectionNode;
 class SvStream;
 
@@ -81,15 +81,15 @@ public:
 class SwActualSection
 {
     SwActualSection *pUpper;
-    SwSectionFrm    *pSectFrm;
+    SwSectionFrame    *pSectFrame;
     SwSectionNode   *pSectNode;
 public:
     SwActualSection( SwActualSection *pUpper,
-                     SwSectionFrm    *pSect,
+                     SwSectionFrame    *pSect,
                      SwSectionNode   *pNd );
 
-    SwSectionFrm    *GetSectionFrm()                    { return pSectFrm; }
-    void             SetSectionFrm( SwSectionFrm *p )   { pSectFrm = p; }
+    SwSectionFrame    *GetSectionFrame()                    { return pSectFrame; }
+    void             SetSectionFrame( SwSectionFrame *p )   { pSectFrame = p; }
     SwSectionNode   *GetSectionNode()                   { return pSectNode;}
     SwActualSection *GetUpper()                         { return pUpper; }
 };
@@ -98,10 +98,10 @@ public:
 // If there's a layoutcache available, this information is used.
 class SwLayHelper
 {
-    SwFrm* &rpFrm;
-    SwFrm* &rpPrv;
-    SwPageFrm* &rpPage;
-    SwLayoutFrm* &rpLay;
+    SwFrame* &rpFrame;
+    SwFrame* &rpPrv;
+    SwPageFrame* &rpPage;
+    SwLayoutFrame* &rpLay;
     SwActualSection* &rpActualSection;
     bool &rbBreakAfter;
     SwDoc* pDoc;
@@ -112,10 +112,10 @@ class SwLayHelper
     sal_uInt16 nIndex;                      // the index in the page break array
     size_t nFlyIdx;                         // the index in the fly cache array
     bool bFirst : 1;
-    void _CheckFlyCache( SwPageFrm* pPage );
+    void _CheckFlyCache( SwPageFrame* pPage );
 public:
-    SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
-            SwLayoutFrm* &rpL, SwActualSection* &rpA, bool &rBrk,
+    SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
+            SwLayoutFrame* &rpL, SwActualSection* &rpA, bool &rBrk,
             sal_uLong nNodeIndex, bool bCache );
     ~SwLayHelper();
     sal_uLong CalcPageCount();
@@ -125,7 +125,7 @@ public:
 
     /// Look for fresh text frames at this (new) page and set them to the right
     /// position, if they are in the fly cache.
-    void CheckFlyCache( SwPageFrm* pPage )
+    void CheckFlyCache( SwPageFrame* pPage )
     { if( pImpl && nFlyIdx < pImpl->GetFlyCount() ) _CheckFlyCache( pPage ); }
 };
 

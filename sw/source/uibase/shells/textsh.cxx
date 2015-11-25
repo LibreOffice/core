@@ -138,7 +138,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
 
-    OSL_ENSURE( !rSh.IsObjSelected() && !rSh.IsFrmSelected(),
+    OSL_ENSURE( !rSh.IsObjSelected() && !rSh.IsFrameSelected(),
             "wrong shell on dispatcher" );
 
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -155,8 +155,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         break;
 
     case FN_INSERT_SOFT_HYPHEN:
-        if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar() &&
-            CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( true, -1 ))
+        if( CHAR_SOFTHYPHEN != rSh.SwCursorShell::GetChar() &&
+            CHAR_SOFTHYPHEN != rSh.SwCursorShell::GetChar( true, -1 ))
             rSh.Insert( OUString( CHAR_SOFTHYPHEN ) );
         break;
 
@@ -199,7 +199,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case FN_INSERT_BREAK:
         {
-            if( !rSh.CrsrInsideInputField() )
+            if( !rSh.CursorInsideInputField() )
             {
                 rSh.SplitNode();
             }
@@ -504,20 +504,20 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aSize(16 * MM50, 8 * MM50);
             GetShell().LockPaint();
             GetShell().StartAllAction();
-            SwFlyFrmAttrMgr aMgr( true, GetShellPtr(), FRMMGR_TYPE_TEXT );
+            SwFlyFrameAttrMgr aMgr( true, GetShellPtr(), FRMMGR_TYPE_TEXT );
             if(nCols > 1)
             {
                 SwFormatCol aCol;
                 aCol.Init( nCols, aCol.GetGutterWidth(), aCol.GetWishWidth() );
                 aMgr.SetCol( aCol );
             }
-            aMgr.InsertFlyFrm(FLY_AT_PARA, aStartPos, aSize);
+            aMgr.InsertFlyFrame(FLY_AT_PARA, aStartPos, aSize);
             GetShell().EndAllAction();
             GetShell().UnlockPaint();
         }
         else
         {
-            GetView().InsFrmMode(nCols);
+            GetView().InsFrameMode(nCols);
         }
         rReq.Ignore();
     }
@@ -535,7 +535,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
         }
         // Create new border
-        SwFlyFrmAttrMgr aMgr( true, GetShellPtr(), FRMMGR_TYPE_TEXT );
+        SwFlyFrameAttrMgr aMgr( true, GetShellPtr(), FRMMGR_TYPE_TEXT );
         if(pArgs)
         {
             Size aSize(aMgr.GetSize());
@@ -563,7 +563,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             GetShell().LockPaint();
             GetShell().StartAllAction();
 
-            aMgr.InsertFlyFrm(eAnchor, aPos, aSize);
+            aMgr.InsertFlyFrame(eAnchor, aPos, aSize);
 
             GetShell().EndAllAction();
             GetShell().UnlockPaint();
@@ -576,7 +576,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
-            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog("FrameDialog",
+            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("FrameDialog",
                                                   GetView().GetViewFrame(),
                                                   &GetView().GetViewFrame()->GetWindow(),
                                                   aSet));
@@ -596,7 +596,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 if( rShell.IsInClickToEdit() )
                     rShell.DelRight();
 
-                aMgr.InsertFlyFrm();
+                aMgr.InsertFlyFrame();
 
                 uno::Reference< frame::XDispatchRecorder > xRecorder =
                         GetView().GetViewFrame()->GetBindings().GetRecorder();
@@ -659,11 +659,11 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
     SfxObjectCreateMode eCreateMode =
                         GetView().GetDocShell()->GetCreateMode();
 
-    bool bCrsrInHidden = false;
+    bool bCursorInHidden = false;
     if( !rSh.HasMark() )
     {
         rSh.Push();
-        bCrsrInHidden = rSh.SelectHiddenRange();
+        bCursorInHidden = rSh.SelectHiddenRange();
         rSh.Pop();
     }
 
@@ -674,10 +674,10 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
         case SID_INSERT_AVMEDIA:
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
-            if ( GetShell().IsSelFrmMode()
-                 || GetShell().CrsrInsideInputField()
+            if ( GetShell().IsSelFrameMode()
+                 || GetShell().CursorInsideInputField()
                  || SfxObjectCreateMode::EMBEDDED == eCreateMode
-                 || bCrsrInHidden )
+                 || bCursorInHidden )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -685,9 +685,9 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
         case SID_INSERT_DIAGRAM:
             if( !aMOpt.IsChart()
-                || GetShell().CrsrInsideInputField()
+                || GetShell().CursorInsideInputField()
                 || eCreateMode == SfxObjectCreateMode::EMBEDDED
-                || bCrsrInHidden )
+                || bCursorInHidden )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -696,8 +696,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case FN_INSERT_SMA:
                 if( !aMOpt.IsMath()
                     || eCreateMode == SfxObjectCreateMode::EMBEDDED
-                    || bCrsrInHidden
-                    || rSh.CrsrInsideInputField() )
+                    || bCursorInHidden
+                    || rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -707,12 +707,12 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case SID_INSERT_OBJECT:
             case SID_INSERT_PLUGIN:
                 {
-                    if( eCreateMode == SfxObjectCreateMode::EMBEDDED || bCrsrInHidden )
+                    if( eCreateMode == SfxObjectCreateMode::EMBEDDED || bCursorInHidden )
                     {
                         rSet.DisableItem( nWhich );
                     }
-                    else if( GetShell().IsSelFrmMode()
-                             || GetShell().CrsrInsideInputField() )
+                    else if( GetShell().IsSelFrameMode()
+                             || GetShell().CursorInsideInputField() )
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -729,10 +729,10 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case FN_INSERT_FRAME_INTERACT_NOCOL :
             case FN_INSERT_FRAME_INTERACT:
                 {
-                    if( GetShell().IsSelFrmMode()
+                    if( GetShell().IsSelFrameMode()
                         || rSh.IsTableMode()
-                        || GetShell().CrsrInsideInputField()
-                        || bCrsrInHidden )
+                        || GetShell().CursorInsideInputField()
+                        || bCursorInHidden )
                         rSet.DisableItem(nWhich);
                 }
                 break;
@@ -764,12 +764,12 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
                         // Get the text of the Link.
                         rSh.StartAction();
-                        rSh.CreateCrsr();
-                        rSh.SwCrsrShell::SelectTextAttr(RES_TXTATR_INETFMT,true);
+                        rSh.CreateCursor();
+                        rSh.SwCursorShell::SelectTextAttr(RES_TXTATR_INETFMT,true);
                         OUString sLinkName = rSh.GetSelText();
                         aHLinkItem.SetName(sLinkName);
                         aHLinkItem.SetInsertMode(HLINK_FIELD);
-                        rSh.DestroyCrsr();
+                        rSh.DestroyCursor();
                         rSh.EndAction();
                     }
                     else
@@ -789,13 +789,13 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 break;
 
             case FN_INSERT_FRAME:
-                if (rSh.IsSelFrmMode() )
+                if (rSh.IsSelFrameMode() )
                 {
                     const int nSel = rSh.GetSelectionType();
-                    if( ((nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE ) & nSel ) || bCrsrInHidden )
+                    if( ((nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE ) & nSel ) || bCursorInHidden )
                         rSet.DisableItem(nWhich);
                 }
-                else if ( rSh.CrsrInsideInputField() )
+                else if ( rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -936,9 +936,9 @@ SwTextShell::~SwTextShell()
 {
 }
 
-SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrmAttrMgr& rMgr)
+SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
 {
-    static const sal_uInt16 aFrmAttrRange[] =
+    static const sal_uInt16 aFrameAttrRange[] =
     {
         RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
         SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
@@ -950,19 +950,19 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrmAttrMgr& rMgr)
         0
     };
 
-    SfxItemSet aSet(GetPool(), aFrmAttrRange );
+    SfxItemSet aSet(GetPool(), aFrameAttrRange );
     aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
 
     // For the Area tab page.
     GetShell().GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems(aSet);
 
     const SwRect &rPg = GetShell().GetAnyCurRect(RECT_PAGE);
-    SwFormatFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
-    aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
-    aSet.Put(aFrmSize);
+    SwFormatFrameSize aFrameSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
+    aFrameSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
+    aSet.Put(aFrameSize);
 
     const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
-    SwFormatFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
+    SwFormatFrameSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
     aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
     aSet.Put(aPrtSize);
 
@@ -1122,7 +1122,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             rSh.SetMark();
             rSh.ExtendSelection( false, aChars.getLength() );
             rSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND | SetAttrMode::NOFORMATATTR );
-            if( !rSh.IsCrsrPtAtEnd() )
+            if( !rSh.IsCursorPtAtEnd() )
                 rSh.SwapPam();
 
             rSh.ClearMark();

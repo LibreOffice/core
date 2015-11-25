@@ -143,7 +143,7 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     get(m_pTextFT, "textft");
     get(m_pTextED, "texted");
     get(m_pNameED, "nameed");
-    get(m_pTargetFrmLB, "targetfrmlb");
+    get(m_pTargetFrameLB, "targetfrmlb");
     get(m_pURLPB, "urlpb");
     get(m_pEventPB, "eventpb");
     get(m_pVisitedLB, "visitedlb");
@@ -177,7 +177,7 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
         for ( size_t i = 0; i < nCount; i++ )
         {
-            m_pTargetFrmLB->InsertEntry( pList->at( i ) );
+            m_pTargetFrameLB->InsertEntry( pList->at( i ) );
         }
     }
     delete pList;
@@ -195,7 +195,7 @@ void SwCharURLPage::dispose()
     m_pTextFT.clear();
     m_pTextED.clear();
     m_pNameED.clear();
-    m_pTargetFrmLB.clear();
+    m_pTargetFrameLB.clear();
     m_pURLPB.clear();
     m_pEventPB.clear();
     m_pVisitedLB.clear();
@@ -231,10 +231,10 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
         }
         m_pNotVisitedLB->SelectEntry(sEntry);
 
-        m_pTargetFrmLB->SetText(pINetFormat->GetTargetFrame());
+        m_pTargetFrameLB->SetText(pINetFormat->GetTargetFrame());
         m_pVisitedLB->   SaveValue();
         m_pNotVisitedLB->SaveValue();
-        m_pTargetFrmLB-> SaveValue();
+        m_pTargetFrameLB-> SaveValue();
         pINetItem = new SvxMacroItem(FN_INET_FIELD_MACRO);
 
         if( pINetFormat->GetMacroTable() )
@@ -259,11 +259,11 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
             sURL = URIHelper::simpleNormalizedMakeRelative(OUString(), sURL);
     }
 
-    SwFormatINetFormat aINetFormat(sURL, m_pTargetFrmLB->GetText());
+    SwFormatINetFormat aINetFormat(sURL, m_pTargetFrameLB->GetText());
     aINetFormat.SetName(m_pNameED->GetText());
     bool bURLModified = m_pURLED->IsValueChangedFromSaved();
     bool bNameModified = m_pNameED->IsModified();
-    bool bTargetModified = m_pTargetFrmLB->IsValueChangedFromSaved();
+    bool bTargetModified = m_pTargetFrameLB->IsValueChangedFromSaved();
     bModified = bURLModified || bNameModified || bTargetModified;
 
     // set valid settings first

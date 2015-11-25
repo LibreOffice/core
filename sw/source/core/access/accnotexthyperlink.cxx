@@ -37,9 +37,9 @@ using namespace css::lang;
 using namespace css::uno;
 using namespace css::accessibility;
 
-SwAccessibleNoTextHyperlink::SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrm *aFrm ) :
+SwAccessibleNoTextHyperlink::SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrame *aFrame ) :
     xFrame( p ),
-    mpFrm( aFrm )
+    mpFrame( aFrame )
 {
 }
 
@@ -180,8 +180,8 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionAnchor(
         throw lang::IndexOutOfBoundsException();
 
     Any aRet;
-    //SwFrm* pAnchor = static_cast<SwFlyFrm*>(mpFrm)->GetAnchor();
-    Reference< XAccessible > xAnchor = xFrame->GetAccessibleMap()->GetContext(mpFrm);
+    //SwFrame* pAnchor = static_cast<SwFlyFrame*>(mpFrame)->GetAnchor();
+    Reference< XAccessible > xAnchor = xFrame->GetAccessibleMap()->GetContext(mpFrame);
     //SwAccessibleNoTextFrame* pFrame = xFrame.get();
     //Reference< XAccessible > xAnchor = (XAccessible*)pFrame;
     aRet <<= xAnchor;

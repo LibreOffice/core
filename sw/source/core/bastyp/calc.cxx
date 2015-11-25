@@ -629,18 +629,18 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
 
 bool SwCalc::Push( const SwUserFieldType* pUserFieldType )
 {
-    if( aRekurStk.end() != std::find(aRekurStk.begin(), aRekurStk.end(), pUserFieldType ) )
+    if( aRekurStack.end() != std::find(aRekurStack.begin(), aRekurStack.end(), pUserFieldType ) )
         return false;
 
-    aRekurStk.push_back( pUserFieldType );
+    aRekurStack.push_back( pUserFieldType );
     return true;
 }
 
 void SwCalc::Pop()
 {
-    OSL_ENSURE( aRekurStk.size(), "SwCalc: Pop on an invalid pointer" );
+    OSL_ENSURE( aRekurStack.size(), "SwCalc: Pop on an invalid pointer" );
 
-    aRekurStk.pop_back();
+    aRekurStack.pop_back();
 }
 
 SwCalcOper SwCalc::GetToken()

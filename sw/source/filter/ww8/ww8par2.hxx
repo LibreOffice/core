@@ -34,7 +34,7 @@ class WW8RStyle;
 class WW8DupProperties
 {
 public:
-    WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk);
+    WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStack);
     void Insert(const SwPosition &rPos);
 private:
     WW8DupProperties(const WW8DupProperties&) = delete;
@@ -54,7 +54,7 @@ struct WW8SwFlyPara
     sal_Int16 nWidth, nHeight;      // size
     sal_Int16 nNetWidth;
 
-    SwFrmSize eHeightFix;       // height fixed or min
+    SwFrameSize eHeightFix;       // height fixed or min
     RndStdIds eAnchor;          // binding
     short eHRel;     // page or page border
     short eVRel;     // page or page border

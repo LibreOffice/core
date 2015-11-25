@@ -263,7 +263,7 @@ class SwChartDataSequence :
     css::uno::Reference< css::chart2::data::XDataProvider >    m_xDataProvider;
     SwChartDataProvider *                   m_pDataProvider;
 
-    sw::UnoCursorPointer m_pTableCrsr;   // cursor spanned over cells to use
+    sw::UnoCursorPointer m_pTableCursor;   // cursor spanned over cells to use
 
     const SfxItemPropertySet*   m_pPropSet;
 
@@ -279,7 +279,7 @@ protected:
 public:
     SwChartDataSequence( SwChartDataProvider &rProvider,
                          SwFrameFormat   &rTableFormat,
-                         std::shared_ptr<SwUnoCrsr> pTableCursor );
+                         std::shared_ptr<SwUnoCursor> pTableCursor );
     virtual ~SwChartDataSequence();
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();

@@ -18,22 +18,22 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_WIDORP_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_WIDORP_HXX
-class SwTextFrm;
+class SwTextFrame;
 
 #include "swtypes.hxx"
 #include "itrtxt.hxx"
 
-class SwTextFrmBreak
+class SwTextFrameBreak
 {
 private:
     SwTwips  m_nRstHeight;
     SwTwips  m_nOrigin;
 protected:
-    SwTextFrm *m_pFrm;
+    SwTextFrame *m_pFrame;
     bool     m_bBreak;
     bool     m_bKeep;
 public:
-    SwTextFrmBreak( SwTextFrm *pFrm, const SwTwips nRst = 0  );
+    SwTextFrameBreak( SwTextFrame *pFrame, const SwTwips nRst = 0  );
     bool IsBreakNow( SwTextMargin &rLine );
     bool IsKeepAlways() const { return m_bKeep; }
 
@@ -42,7 +42,7 @@ public:
     bool IsInside( SwTextMargin &rLine ) const;
 
     // In order to be able to handle special cases with Footnote.
-    // SetRstHeight sets the rest height for SwTextFrmBreak. This is needed
+    // SetRstHeight sets the rest height for SwTextFrameBreak. This is needed
     // to call TruncLines() without IsBreakNow() returning another value.
     // We assume that rLine is pointing to the last non-fitting line.
 
@@ -50,25 +50,25 @@ public:
     void SetRstHeight( const SwTextMargin &rLine );
 };
 
-class WidowsAndOrphans : public SwTextFrmBreak
+class WidowsAndOrphans : public SwTextFrameBreak
 {
 private:
     sal_uInt16   nWidLines, nOrphLines;
 
 public:
-    WidowsAndOrphans( SwTextFrm *pFrm, const SwTwips nRst = 0,
+    WidowsAndOrphans( SwTextFrame *pFrame, const SwTwips nRst = 0,
         bool bCheckKeep = true );
-    bool FindWidows( SwTextFrm *pFrm, SwTextMargin &rLine );
+    bool FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine );
     sal_uInt16 GetWidowsLines() const
     { return nWidLines; }
     sal_uInt16 GetOrphansLines() const
     { return nOrphLines; }
     void ClrOrphLines(){ nOrphLines = 0; }
 
-    bool FindBreak( SwTextFrm *pFrm, SwTextMargin &rLine, bool bHasToFit );
+    bool FindBreak( SwTextFrame *pFrame, SwTextMargin &rLine, bool bHasToFit );
     bool WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTest );
     // OD 2004-02-25 #i16128# - rename method to avoid confusion with base class
-    // method <SwTextFrmBreak::IsBreakNow>, which isn't virtual.
+    // method <SwTextFrameBreak::IsBreakNow>, which isn't virtual.
     bool IsBreakNowWidAndOrp( SwTextMargin &rLine )
     {
         bool isOnFirstLine = (rLine.GetLineNr() == 1 && !rLine.GetPrev());

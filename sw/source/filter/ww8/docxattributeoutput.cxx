@@ -3014,7 +3014,7 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
     GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
 
     const SwFrameFormat *pFormat = pTable->GetFrameFormat( );
-    const sal_uInt32 nTableSz = static_cast<sal_uInt32>(pFormat->GetFrmSize( ).GetWidth( ));
+    const sal_uInt32 nTableSz = static_cast<sal_uInt32>(pFormat->GetFrameSize( ).GetWidth( ));
 
     const SwHTMLTableLayout *pLayout = pTable->GetHTMLTableLayout();
     if( pLayout && pLayout->IsExportable() )
@@ -3202,7 +3202,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     // If actual width of table is relative it should export is as "pct".`
     const SwTable *pTable = pTableTextNodeInfoInner->getTable();
     SwFrameFormat *pTableFormat = pTable->GetFrameFormat( );
-    const SwFormatFrmSize &rSize = pTableFormat->GetFrmSize();
+    const SwFormatFrameSize &rSize = pTableFormat->GetFrameSize();
     int nWidthPercent = rSize.GetWidthPercent();
     uno::Reference<beans::XPropertySet> xPropertySet(SwXTextTables::GetObject(const_cast<SwTableFormat&>(*pTable->GetFrameFormat( ))),uno::UNO_QUERY);
     bool isWidthRelative = false;
@@ -3615,7 +3615,7 @@ void DocxAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTa
     const SwTableLine * pTabLine = pTabBox->GetUpper();
     const SwFrameFormat * pLineFormat = pTabLine->GetFrameFormat();
 
-    const SwFormatFrmSize& rLSz = pLineFormat->GetFrmSize();
+    const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
     if ( ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
     {
         sal_Int32 nHeight = rLSz.GetHeight();
@@ -7238,7 +7238,7 @@ void DocxAttributeOutput::ParaSnapToGrid( const SvxParaGridItem& rGrid )
             FSEND );
 }
 
-void DocxAttributeOutput::FormatFrameSize( const SwFormatFrmSize& rSize )
+void DocxAttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
 {
     if (m_rExport.SdrExporter().getTextFrameSyntax() && m_rExport.SdrExporter().getFlyFrameSize())
     {
@@ -7249,7 +7249,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrmSize& rSize )
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
-    else if ( m_rExport.m_bOutFlyFrmAttrs )
+    else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
         if ( rSize.GetWidth() && rSize.GetWidthSizeType() == ATT_FIX_SIZE )
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(),
@@ -7298,7 +7298,7 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
-    else if ( m_rExport.m_bOutFlyFrmAttrs )
+    else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_hSpace ),
                 OString::number(
@@ -7356,7 +7356,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
-    else if ( m_rExport.m_bOutFlyFrmAttrs )
+    else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_vSpace ),
                 OString::number(
@@ -7483,7 +7483,7 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
-    else if ( m_rExport.m_bOutFlyFrmAttrs )
+    else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
         OString sWrap( "auto" );
         switch ( rSurround.GetSurround( ) )
@@ -7562,7 +7562,7 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyV
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
-    else if ( m_rExport.m_bOutFlyFrmAttrs )
+    else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
         if ( !sAlign.isEmpty() )
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_yAlign ), sAlign.getStr() );
@@ -7622,7 +7622,7 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFly
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
-    else if ( m_rExport.m_bOutFlyFrmAttrs )
+    else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
         if ( !sAlign.isEmpty() )
             AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_xAlign ), sAlign.getStr() );
@@ -8064,7 +8064,7 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
         if ( bBiDi )
             m_pSerializer->singleElementNS( XML_w, XML_bidi, FSEND );
     }
-    else if ( !m_rExport.m_bOutFlyFrmAttrs )
+    else if ( !m_rExport.m_bOutFlyFrameAttrs )
     {
         if ( bBiDi )
             m_pSerializer->singleElementNS( XML_w, XML_bidi, FSNS( XML_w, XML_val ), "1", FSEND );

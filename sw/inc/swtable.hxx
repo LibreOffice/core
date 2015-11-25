@@ -248,7 +248,7 @@ public:
                     sal_uInt16 nCnt = 1, bool bBehind = true );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );
     bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
-        SwUndo* pUndo, const bool bDelMakeFrms, const bool bCorrBorder );
+        SwUndo* pUndo, const bool bDelMakeFrames, const bool bCorrBorder );
     bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1 );
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
@@ -496,13 +496,13 @@ public:
     void RegisterToFormat( SwFormat& rFormat ) ;
 };
 
-class SwCellFrm;
+class SwCellFrame;
 class SW_DLLPUBLIC SwTableCellInfo : public ::boost::noncopyable
 {
     struct Impl;
     ::std::unique_ptr<Impl> m_pImpl;
 
-    const SwCellFrm * getCellFrm() const ;
+    const SwCellFrame * getCellFrame() const ;
 
 public:
     SwTableCellInfo(const SwTable * pTable);

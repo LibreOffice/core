@@ -74,7 +74,7 @@ IMPL_LINK_TYPED( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
         {   //Replace the old wrong list by the proxy list and repaint all frames
             getMyTextNode()->SetGrammarCheck( mpProxyList );
             mpProxyList = nullptr;
-            SwTextFrm::repaintTextFrames( *getMyTextNode() );
+            SwTextFrame::repaintTextFrames( *getMyTextNode() );
         }
     }
 }
@@ -91,7 +91,7 @@ void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
             if( mpProxyList )
             {   // replace old list by the proxy list and repaint
                 getMyTextNode()->SetGrammarCheck( mpProxyList );
-                SwTextFrm::repaintTextFrames( *getMyTextNode() );
+                SwTextFrame::repaintTextFrames( *getMyTextNode() );
             }
             GetRegisteredInNonConst()->Remove( this ); // good bye old paragraph
             mpProxyList = nullptr;
@@ -160,7 +160,7 @@ void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
 void SwGrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
 {
     if( &rTextNode != GetRegisteredIn() ) // not my paragraph
-        SwTextFrm::repaintTextFrames( rTextNode ); // can be repainted directly
+        SwTextFrame::repaintTextFrames( rTextNode ); // can be repainted directly
     else
     {
         if( mpProxyList )
@@ -171,7 +171,7 @@ void SwGrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
         else if( getMyTextNode()->GetGrammarCheck() )
         {   // all grammar problems seems to be gone, no delay needed
             getMyTextNode()->SetGrammarCheck( nullptr );
-            SwTextFrm::repaintTextFrames( *getMyTextNode() );
+            SwTextFrame::repaintTextFrames( *getMyTextNode() );
         }
     }
 }

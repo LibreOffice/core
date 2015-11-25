@@ -151,15 +151,15 @@ public:
 #endif
 
     //#i33307# restore editing position
-    void                    SetRestorePosition(const Point& rCrsrPos, bool bSelectObj)
+    void                    SetRestorePosition(const Point& rCursorPos, bool bSelectObj)
                             {
-                                m_aEditingPosition = rCrsrPos;
+                                m_aEditingPosition = rCursorPos;
                                 m_bSelectObject = bSelectObj;
                                 m_bEditingPositionSet = true;
                             }
-    bool                    GetRestorePosition(Point& rCrsrPos, bool& rbSelectObj)
+    bool                    GetRestorePosition(Point& rCursorPos, bool& rbSelectObj)
                             {
-                                rCrsrPos = m_aEditingPosition;
+                                rCursorPos = m_aEditingPosition;
                                 rbSelectObj = m_bSelectObject;
                                 return m_bEditingPositionSet;
                             }

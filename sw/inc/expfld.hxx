@@ -27,7 +27,7 @@
 
 class SfxPoolItem;
 class SwTextNode;
-class SwFrm;
+class SwFrame;
 struct SwPosition;
 class SwTextField;
 class SwDoc;
@@ -37,7 +37,7 @@ class SwEditShell;
 
 /// Forward declaration: get "BodyTextNode" for exp.fld in Fly's headers/footers/footnotes.
 const SwTextNode* GetBodyTextNode( const SwDoc& pDoc, SwPosition& rPos,
-                                 const SwFrm& rFrm );
+                                 const SwFrame& rFrame );
 
 OUString ReplacePoint(const OUString& sTmpName, bool bWithCommandType = false);
 
@@ -111,7 +111,7 @@ public:
 
     /** For fields in header/footer/footnotes/flys:
      Only called by formatting!! */
-    void                        ChangeExpansion( const SwFrm&, const SwTextField& );
+    void                        ChangeExpansion( const SwFrame&, const SwTextField& );
 
     virtual OUString    GetFieldName() const override;
 
@@ -363,8 +363,8 @@ public:
     SwField*    GetField(size_t nId);
 
     void        GotoFieldPos(size_t nId);
-    void        PushCrsr();
-    void        PopCrsr();
+    void        PushCursor();
+    void        PopCursor();
 
     /** Put all that are new into SortLst for updating. @return true if not empty.
      (For Glossary: only update its input-fields).

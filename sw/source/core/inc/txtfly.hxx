@@ -25,15 +25,15 @@
 #include <vector>
 
 class OutputDevice;
-class SwContentFrm;
-class SwPageFrm;
+class SwContentFrame;
+class SwPageFrame;
 class SwTextFly;
 class SdrObject;
 class SwTextPaintInfo;
 class SwFormat;
 class TextRanger;
 class SwAnchoredObject;
-class SwTextFrm;
+class SwTextFrame;
 class SwDrawTextInfo;
 class SwContourCache;
 
@@ -60,7 +60,7 @@ class SwContourCache
     long nPntCnt;
     sal_uInt16 nObjCnt;
     const SwRect ContourRect( const SwFormat* pFormat, const SdrObject* pObj,
-        const SwTextFrm* pFrm, const SwRect &rLine, const long nXPos,
+        const SwTextFrame* pFrame, const SwRect &rLine, const long nXPos,
         const bool bRight );
 
 public:
@@ -79,7 +79,7 @@ public:
      */
     static const SwRect CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
                                        const SwRect &rLine,
-                                       const SwTextFrm* pFrm,
+                                       const SwTextFrame* pFrame,
                                        const long nXPos,
                                        const bool bRight );
 };
@@ -118,10 +118,10 @@ public:
  */
 class SwTextFly
 {
-    const SwPageFrm             * pPage;
+    const SwPageFrame             * pPage;
     const SwAnchoredObject      * mpCurrAnchoredObj;
-    const SwTextFrm              * pCurrFrm;
-    const SwContentFrm            * pMaster;
+    const SwTextFrame              * pCurrFrame;
+    const SwContentFrame            * pMaster;
     SwAnchoredObjList           * mpAnchoredObjList;
 
     long nMinBottom;
@@ -146,7 +146,7 @@ class SwTextFly
         \param[in] rPortion
             Scope: document global.
      */
-    SwRect _GetFrm( const SwRect &rPortion, bool bTop ) const;
+    SwRect _GetFrame( const SwRect &rPortion, bool bTop ) const;
 
     SwAnchoredObjList* InitAnchoredObjList();
 
@@ -184,7 +184,7 @@ class SwTextFly
 
     /**
        The left margin is the left margin of the current PrintArea or
-       it is determined by the last FlyFrm, which stands on the line.
+       it is determined by the last FlyFrame, which stands on the line.
      */
     void CalcLeftMargin( SwRect &rFly,
                          SwAnchoredObjList::size_type nPos,
@@ -201,20 +201,20 @@ class SwTextFly
 
     SwTwips CalcMinBottom() const;
 
-    const SwContentFrm* _GetMaster();
+    const SwContentFrame* _GetMaster();
 
 public:
 
     SwTextFly();
-    SwTextFly( const SwTextFrm *pFrm );
+    SwTextFly( const SwTextFrame *pFrame );
     SwTextFly( const SwTextFly& rTextFly );
     ~SwTextFly();
 
-    void CtorInitTextFly( const SwTextFrm *pFrm );
+    void CtorInitTextFly( const SwTextFrame *pFrame );
 
     void SetTopRule();
 
-    SwRect GetFrm( const SwRect &rPortion, bool bTop = true ) const;
+    SwRect GetFrame( const SwRect &rPortion, bool bTop = true ) const;
     bool IsOn() const;
 
     /**
@@ -227,7 +227,7 @@ public:
     bool Relax();
 
     SwTwips GetMinBottom() const;
-    const SwContentFrm* GetMaster() const;
+    const SwContentFrame* GetMaster() const;
 
     // This temporary variable needs to be manipulated in const methods
     long GetNextTop() const;
@@ -250,7 +250,7 @@ public:
 
         Ensures that the overlapping frames (except the transparent frames) won't
         be scribbled by setting clip regions so that only the portions that are not
-        in the area of FlyFrms that are opaque and above the current frame will
+        in the area of FlyFrames that are opaque and above the current frame will
         be output.
 
         DrawText() takes over the on optimization!
@@ -274,13 +274,13 @@ public:
         \param[in] the line area
         \return whether the line will be overlapped by a frame
      */
-    bool IsAnyFrm( const SwRect &rLine ) const;
+    bool IsAnyFrame( const SwRect &rLine ) const;
 
     /**
-        Same as IsAnyFrm(const SwRect&), but uses the current frame print
+        Same as IsAnyFrame(const SwRect&), but uses the current frame print
         area
      */
-    bool IsAnyFrm() const;
+    bool IsAnyFrame() const;
 
     /**
         true when a frame or DrawObj must to be taken in account. The optimizations
@@ -320,7 +320,7 @@ inline bool SwTextFly::Relax( const SwRect &rRect )
 {
     if (bOn)
     {
-        bOn = IsAnyFrm( rRect );
+        bOn = IsAnyFrame( rRect );
     }
     return bOn;
 }
@@ -329,7 +329,7 @@ inline bool SwTextFly::Relax()
 {
     if (bOn)
     {
-        bOn = IsAnyFrm();
+        bOn = IsAnyFrame();
     }
     return bOn;
 }
@@ -339,7 +339,7 @@ inline SwTwips SwTextFly::GetMinBottom() const
     return mpAnchoredObjList ? nMinBottom : CalcMinBottom();
 }
 
-inline const SwContentFrm* SwTextFly::GetMaster() const
+inline const SwContentFrame* SwTextFly::GetMaster() const
 {
     return pMaster ? pMaster : const_cast<SwTextFly*>(this)->_GetMaster();
 }
@@ -354,9 +354,9 @@ inline void SwTextFly::SetNextTop( long nNew ) const
     const_cast<SwTextFly*>(this)->nNextTop = nNew;
 }
 
-inline SwRect SwTextFly::GetFrm( const SwRect &rRect, bool bTop ) const
+inline SwRect SwTextFly::GetFrame( const SwRect &rRect, bool bTop ) const
 {
-    return bOn ? _GetFrm( rRect, bTop ) : SwRect();
+    return bOn ? _GetFrame( rRect, bTop ) : SwRect();
 }
 
 inline void SwTextFly::SetIgnoreCurrentFrame( bool bNew )

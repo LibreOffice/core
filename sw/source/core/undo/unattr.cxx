@@ -315,7 +315,7 @@ void SwUndoFormatAttr::RepeatImpl(::sw::RepeatContext & rContext)
 
     case RES_FLYFRMFMT: {
         // Check if the cursor is in a flying frame
-        // Steps: search in all FlyFrmFormats for the FlyContent attribute
+        // Steps: search in all FlyFrameFormats for the FlyContent attribute
         // and validate if the cursor is in the respective section
         SwFrameFormat *const pFly =
             rContext.GetRepeatPaM().GetNode().GetFlyFormat();
@@ -364,7 +364,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( bool bSvDrwPt )
             Point aPt( static_cast<SwFrameFormat*>(m_pFormat)->FindSdrObject()
                        ->GetRelativePos() );
             // store old value as attribute, to keep SwUndoFormatAttr small
-            m_pOldSet->Put( SwFormatFrmSize( ATT_VAR_SIZE, aPt.X(), aPt.Y() ) );
+            m_pOldSet->Put( SwFormatFrameSize( ATT_VAR_SIZE, aPt.X(), aPt.Y() ) );
         }
     }
 
@@ -433,7 +433,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ) {
         if( RES_DRAWFRMFMT == pFrameFormat->Which() ) {
             // get the old cached value
-            const SwFormatFrmSize& rOldSize = static_cast<const SwFormatFrmSize&>(
+            const SwFormatFrameSize& rOldSize = static_cast<const SwFormatFrameSize&>(
                                                m_pOldSet->Get( RES_FRM_SIZE ) );
             aDrawSavePt.X() = rOldSize.GetWidth();
             aDrawSavePt.Y() = rOldSize.GetHeight();
@@ -442,7 +442,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
             // write the current value into cache
             aDrawOldPt = pFrameFormat->FindSdrObject()->GetRelativePos();
         } else {
-            pFrameFormat->DelFrms();         // delete Frms
+            pFrameFormat->DelFrames();         // delete Frames
         }
     }
 
@@ -451,7 +451,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     // Consider case, that as-character anchored object has moved its anchor position.
     if (FLY_AS_CHAR == rOldAnch.GetAnchorId()) {
         // With InContents it's tricky: the text attribute needs to be deleted.
-        // Unfortunately, this not only destroys the Frms but also the format.
+        // Unfortunately, this not only destroys the Frames but also the format.
         // To prevent that, first detach the connection between attribute and
         // format.
         const SwPosition *pPos = rOldAnch.GetContentAnchor();
@@ -491,7 +491,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         // change of the Contact object by setting the anchor.
         SdrObject* pObj = pCont->GetMaster();
 
-        if( pCont->GetAnchorFrm() && !pObj->IsInserted() ) {
+        if( pCont->GetAnchorFrame() && !pObj->IsInserted() ) {
             OSL_ENSURE( pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
                         "RestoreFlyAnchor without DrawModel" );
             pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->InsertObject( pObj );
@@ -500,7 +500,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
         // cache the old value again
         m_pOldSet->Put(
-            SwFormatFrmSize( ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y() ) );
+            SwFormatFrameSize( ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y() ) );
     }
 
     if (FLY_AS_CHAR == aNewAnchor.GetAnchorId()) {
@@ -512,7 +512,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     }
 
     if (RES_DRAWFRMFMT != pFrameFormat->Which())
-        pFrameFormat->MakeFrms();
+        pFrameFormat->MakeFrames();
     else
     {
         SdrObject* pSdrObj = pFrameFormat->FindSdrObject();

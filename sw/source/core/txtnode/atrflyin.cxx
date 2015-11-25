@@ -76,20 +76,20 @@ SwTextFlyCnt::SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStartPos )
  * Nodeinformationen vorliegen), verteilt sich der Ablauf.
  * ad 1) MakeTextHint() wird durch den Aufruf von SwDoc::CopyLayout()
  * der das neue FlyFrameFormat erzeugt und mit dem duplizierten Inhalt des
- * FlyFrm verbunden.
+ * FlyFrame verbunden.
  * ad 2) SetAnchor() wird von SwTextNode::Insert() gerufen und sorgt fuer das
  * setzen des Ankers (die SwPosition des Dummy-Zeichens wird dem FlyFrameFormat
  * per SetAttr bekannt gegeben). Dies kann nicht im MakeTextHint erledigt
  * werden, da der Zielnode unbestimmt ist.
- * ad 3) _GetFlyFrm() wird im Formatierungsprozess vom LineIter gerufen
- * und sucht den FlyFrm zum Dummyzeichen des aktuellen ContentFrm. Wird keiner
- * gefunden, so wird ein neuer FlyFrm angelegt.
+ * ad 3) _GetFlyFrame() wird im Formatierungsprozess vom LineIter gerufen
+ * und sucht den FlyFrame zum Dummyzeichen des aktuellen ContentFrame. Wird keiner
+ * gefunden, so wird ein neuer FlyFrame angelegt.
  * Kritisch an diesem Vorgehen ist, dass das pContent->AppendFly() eine
  * sofortige Neuformatierung von pContent anstoesst. Die Rekursion kommt
- * allerdings durch den Lockmechanismus in SwTextFrm::Format() nicht
+ * allerdings durch den Lockmechanismus in SwTextFrame::Format() nicht
  * zu stande.
  * Attraktiv ist der Umstand, dass niemand ueber die vom Node abhaengigen
- * ContentFrms iterieren braucht, um die FlyInCntFrm anzulegen. Dies geschieht
+ * ContentFrames iterieren braucht, um die FlyInContentFrame anzulegen. Dies geschieht
  * bei der Arbeit.
  */
 
@@ -167,12 +167,12 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
     aAnchor.SetType( FLY_AS_CHAR );        // default!
     aAnchor.SetAnchor( &aPos );
 
-    // beim Ankerwechsel werden immer alle FlyFrms vom Attribut geloescht
+    // beim Ankerwechsel werden immer alle FlyFrames vom Attribut geloescht
     // JP 25.04.95: wird innerhalb des SplitNodes die Frames verschoben
     //              koennen die Frames erhalten bleiben.
     if( ( !pNode->GetpSwpHints() || !pNode->GetpSwpHints()->IsInSplitNode() )
         && RES_DRAWFRMFMT != pFormat->Which() )
-        pFormat->DelFrms();
+        pFormat->DelFrames();
 
     // stehen wir noch im falschen Dokument ?
     if( pDoc != pFormat->GetDoc() )
@@ -204,59 +204,59 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         pFormat->SetFormatAttr( aAnchor );        // nur den Anker neu setzen
     }
 
-    // Am Node haengen u.a. abhaengige CntFrms.
-    // Fuer jeden CntFrm wird ein SwFlyInCntFrm angelegt.
+    // Am Node haengen u.a. abhaengige ContentFrames.
+    // Fuer jeden ContentFrame wird ein SwFlyInContentFrame angelegt.
 }
 
-// _GetFlyFrm() wird im Formatierungsprozess vom LineIter gerufen
-// und sucht den FlyFrm zum Dummyzeichen des aktuellen ContentFrm. Wird keiner
-// gefunden, so wird ein neuer FlyFrm angelegt.
+// _GetFlyFrame() wird im Formatierungsprozess vom LineIter gerufen
+// und sucht den FlyFrame zum Dummyzeichen des aktuellen ContentFrame. Wird keiner
+// gefunden, so wird ein neuer FlyFrame angelegt.
 // (siehe Kommentar ind SwTextFlyCnt::MakeTextHint)
-SwFlyInCntFrm *SwTextFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
+SwFlyInContentFrame *SwTextFlyCnt::_GetFlyFrame( const SwFrame *pCurrFrame )
 {
     SwFrameFormat* pFrameFormat = GetFlyCnt().GetFrameFormat();
     if( RES_DRAWFRMFMT == pFrameFormat->Which() )
     {
-        OSL_ENSURE(  false, "SwTextFlyCnt::_GetFlyFrm: DrawInCnt-Baustelle!" );
+        OSL_ENSURE(  false, "SwTextFlyCnt::_GetFlyFrame: DrawInCnt-Baustelle!" );
         return nullptr;
     }
 
-    SwIterator<SwFlyFrm,SwFormat> aIter( *GetFlyCnt().pFormat );
-    OSL_ENSURE( pCurrFrm->IsTextFrm(), "SwTextFlyCnt::_GetFlyFrm for TextFrms only." );
-    SwFrm* pFrm = aIter.First();
-    if ( pFrm )
+    SwIterator<SwFlyFrame,SwFormat> aIter( *GetFlyCnt().pFormat );
+    OSL_ENSURE( pCurrFrame->IsTextFrame(), "SwTextFlyCnt::_GetFlyFrame for TextFrames only." );
+    SwFrame* pFrame = aIter.First();
+    if ( pFrame )
     {
-        SwTextFrm *pFirst = const_cast<SwTextFrm*>(static_cast<const SwTextFrm*>(pCurrFrm));
+        SwTextFrame *pFirst = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCurrFrame));
         while ( pFirst->IsFollow() )
             pFirst = pFirst->FindMaster();
         do
             {
-                SwTextFrm *pTmp = pFirst;
+                SwTextFrame *pTmp = pFirst;
                 do
-                {   if( static_cast<SwFlyFrm*>(pFrm)->GetAnchorFrm() == static_cast<SwFrm*>(pTmp) )
+                {   if( static_cast<SwFlyFrame*>(pFrame)->GetAnchorFrame() == static_cast<SwFrame*>(pTmp) )
                     {
-                        if ( pTmp != pCurrFrm )
+                        if ( pTmp != pCurrFrame )
                         {
-                            pTmp->RemoveFly( static_cast<SwFlyFrm*>(pFrm) );
-                            const_cast<SwTextFrm*>(static_cast<const SwTextFrm*>(pCurrFrm))->AppendFly( static_cast<SwFlyFrm*>(pFrm) );
+                            pTmp->RemoveFly( static_cast<SwFlyFrame*>(pFrame) );
+                            const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCurrFrame))->AppendFly( static_cast<SwFlyFrame*>(pFrame) );
                         }
-                        return static_cast<SwFlyInCntFrm*>(pFrm);
+                        return static_cast<SwFlyInContentFrame*>(pFrame);
                     }
                     pTmp = pTmp->GetFollow();
                 } while ( pTmp );
 
-                pFrm = aIter.Next();
+                pFrame = aIter.Next();
 
-        } while( pFrm );
+        } while( pFrame );
     }
 
-    // Wir haben keinen passenden FlyFrm gefunden, deswegen wird ein
+    // Wir haben keinen passenden FlyFrame gefunden, deswegen wird ein
     // neuer angelegt.
-    // Dabei wird eine sofortige Neuformatierung von pCurrFrm angestossen.
-    // Die Rekursion wird durch den Lockmechanismus in SwTextFrm::Format()
+    // Dabei wird eine sofortige Neuformatierung von pCurrFrame angestossen.
+    // Die Rekursion wird durch den Lockmechanismus in SwTextFrame::Format()
     // abgewuergt.
-    SwFrm* pCurrentFrame = const_cast<SwFrm*>(pCurrFrm);
-    SwFlyInCntFrm *pFly = new SwFlyInCntFrm(static_cast<SwFlyFrameFormat*>(pFrameFormat), pCurrentFrame, pCurrentFrame);
+    SwFrame* pCurrentFrame = const_cast<SwFrame*>(pCurrFrame);
+    SwFlyInContentFrame *pFly = new SwFlyInContentFrame(static_cast<SwFlyFrameFormat*>(pFrameFormat), pCurrentFrame, pCurrentFrame);
     pCurrentFrame->AppendFly(pFly);
     pFly->RegistFlys();
 
@@ -264,8 +264,8 @@ SwFlyInCntFrm *SwTextFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     // nach seiner Konstruktion stramm durchformatiert wird.
     // #i26945# - Use new object formatter to format Writer
     // fly frame and its content.
-    SwObjectFormatter::FormatObj( *pFly, const_cast<SwFrm*>(pCurrFrm),
-                                  pCurrFrm->FindPageFrm() );
+    SwObjectFormatter::FormatObj( *pFly, const_cast<SwFrame*>(pCurrFrame),
+                                  pCurrFrame->FindPageFrame() );
 
     return pFly;
 }

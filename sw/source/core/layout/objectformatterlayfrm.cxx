@@ -24,53 +24,53 @@
 
 #include <layact.hxx>
 
-SwObjectFormatterLayFrm::SwObjectFormatterLayFrm( SwLayoutFrm& _rAnchorLayFrm,
-                                                  const SwPageFrm& _rPageFrm,
+SwObjectFormatterLayFrame::SwObjectFormatterLayFrame( SwLayoutFrame& _rAnchorLayFrame,
+                                                  const SwPageFrame& _rPageFrame,
                                                   SwLayAction* _pLayAction )
-    : SwObjectFormatter( _rPageFrm, _pLayAction ),
-      mrAnchorLayFrm( _rAnchorLayFrm )
+    : SwObjectFormatter( _rPageFrame, _pLayAction ),
+      mrAnchorLayFrame( _rAnchorLayFrame )
 {
 }
 
-SwObjectFormatterLayFrm::~SwObjectFormatterLayFrm()
+SwObjectFormatterLayFrame::~SwObjectFormatterLayFrame()
 {
 }
 
-SwObjectFormatterLayFrm* SwObjectFormatterLayFrm::CreateObjFormatter(
-                                                SwLayoutFrm& _rAnchorLayFrm,
-                                                const SwPageFrm& _rPageFrm,
+SwObjectFormatterLayFrame* SwObjectFormatterLayFrame::CreateObjFormatter(
+                                                SwLayoutFrame& _rAnchorLayFrame,
+                                                const SwPageFrame& _rPageFrame,
                                                 SwLayAction* _pLayAction )
 {
-    if ( !_rAnchorLayFrm.IsPageFrm() &&
-         !_rAnchorLayFrm.IsFlyFrm() )
+    if ( !_rAnchorLayFrame.IsPageFrame() &&
+         !_rAnchorLayFrame.IsFlyFrame() )
     {
-        OSL_FAIL( "<SwObjectFormatterLayFrm::CreateObjFormatter(..)> - unexpected type of anchor frame " );
+        OSL_FAIL( "<SwObjectFormatterLayFrame::CreateObjFormatter(..)> - unexpected type of anchor frame " );
         return nullptr;
     }
 
-    SwObjectFormatterLayFrm* pObjFormatter = nullptr;
+    SwObjectFormatterLayFrame* pObjFormatter = nullptr;
 
     // create object formatter, if floating screen objects are registered at
     // given anchor layout frame.
-    if ( _rAnchorLayFrm.GetDrawObjs() ||
-         ( _rAnchorLayFrm.IsPageFrm() &&
-            static_cast<SwPageFrm&>(_rAnchorLayFrm).GetSortedObjs() ) )
+    if ( _rAnchorLayFrame.GetDrawObjs() ||
+         ( _rAnchorLayFrame.IsPageFrame() &&
+            static_cast<SwPageFrame&>(_rAnchorLayFrame).GetSortedObjs() ) )
     {
         pObjFormatter =
-            new SwObjectFormatterLayFrm( _rAnchorLayFrm, _rPageFrm, _pLayAction );
+            new SwObjectFormatterLayFrame( _rAnchorLayFrame, _rPageFrame, _pLayAction );
     }
 
     return pObjFormatter;
 }
 
-SwFrm& SwObjectFormatterLayFrm::GetAnchorFrm()
+SwFrame& SwObjectFormatterLayFrame::GetAnchorFrame()
 {
-    return mrAnchorLayFrm;
+    return mrAnchorLayFrame;
 }
 
 // #i40147# - add parameter <_bCheckForMovedFwd>.
 // Not relevant for objects anchored at layout frame.
-bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
+bool SwObjectFormatterLayFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                            const bool )
 {
     _FormatObj( _rAnchoredObj );
@@ -80,13 +80,13 @@ bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
     return GetLayAction() == nullptr || !GetLayAction()->IsAgain();
 }
 
-bool SwObjectFormatterLayFrm::DoFormatObjs()
+bool SwObjectFormatterLayFrame::DoFormatObjs()
 {
     bool bSuccess( true );
 
-    bSuccess = _FormatObjsAtFrm();
+    bSuccess = _FormatObjsAtFrame();
 
-    if ( bSuccess && GetAnchorFrm().IsPageFrm() )
+    if ( bSuccess && GetAnchorFrame().IsPageFrame() )
     {
         // anchor layout frame is a page frame.
         // Thus, format also all anchored objects, which are registered at
@@ -104,11 +104,11 @@ bool SwObjectFormatterLayFrm::DoFormatObjs()
 
     OD 2004-07-02 #i28701#
 */
-bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
+bool SwObjectFormatterLayFrame::_AdditionalFormatObjsOnPage()
 {
-    if ( !GetAnchorFrm().IsPageFrm() )
+    if ( !GetAnchorFrame().IsPageFrame() )
     {
-        OSL_FAIL( "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - mis-usage of method, call only for anchor frames of type page frame" );
+        OSL_FAIL( "<SwObjectFormatterLayFrame::_AdditionalFormatObjsOnPage()> - mis-usage of method, call only for anchor frames of type page frame" );
         return true;
     }
 
@@ -119,9 +119,9 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
         return false;
     }
 
-    SwPageFrm& rPageFrm = static_cast<SwPageFrm&>(GetAnchorFrm());
+    SwPageFrame& rPageFrame = static_cast<SwPageFrame&>(GetAnchorFrame());
 
-    if ( !rPageFrm.GetSortedObjs() )
+    if ( !rPageFrame.GetSortedObjs() )
     {
         // nothing to do, if no floating screen object is registered at the anchor frame.
         return true;
@@ -129,27 +129,27 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
 
     bool bSuccess( true );
 
-    for ( size_t i = 0; i < rPageFrm.GetSortedObjs()->size(); ++i )
+    for ( size_t i = 0; i < rPageFrame.GetSortedObjs()->size(); ++i )
     {
-        SwAnchoredObject* pAnchoredObj = (*rPageFrm.GetSortedObjs())[i];
+        SwAnchoredObject* pAnchoredObj = (*rPageFrame.GetSortedObjs())[i];
 
         // #i51941# - do not format object, which are anchored
         // inside or at fly frame.
-        if ( pAnchoredObj->GetAnchorFrm()->FindFlyFrm() )
+        if ( pAnchoredObj->GetAnchorFrame()->FindFlyFrame() )
         {
             continue;
         }
-        // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
-        // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+        // #i33751#, #i34060# - method <GetPageFrameOfAnchor()>
+        // is replaced by method <FindPageFrameOfAnchor()>. It's return value
         // have to be checked.
-        SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
+        SwPageFrame* pPageFrameOfAnchor = pAnchoredObj->FindPageFrameOfAnchor();
         // #i26945# - check, if the page frame of the
         // object's anchor frame isn't the given page frame
-        OSL_ENSURE( pPageFrmOfAnchor,
-                "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - missing page frame" );
-        if ( pPageFrmOfAnchor &&
+        OSL_ENSURE( pPageFrameOfAnchor,
+                "<SwObjectFormatterLayFrame::_AdditionalFormatObjsOnPage()> - missing page frame" );
+        if ( pPageFrameOfAnchor &&
              // #i35911#
-             pPageFrmOfAnchor->GetPhyPageNum() < rPageFrm.GetPhyPageNum() )
+             pPageFrameOfAnchor->GetPhyPageNum() < rPageFrame.GetPhyPageNum() )
         {
             // if format of object fails, stop formatting and pass fail to
             // calling method via the return value.
@@ -159,18 +159,18 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
                 break;
             }
 
-            // considering changes at <GetAnchorFrm().GetDrawObjs()> during
+            // considering changes at <GetAnchorFrame().GetDrawObjs()> during
             // format of the object.
-            if ( !rPageFrm.GetSortedObjs() ||
-                 i > rPageFrm.GetSortedObjs()->size() )
+            if ( !rPageFrame.GetSortedObjs() ||
+                 i > rPageFrame.GetSortedObjs()->size() )
             {
                 break;
             }
             else
             {
                 const size_t nActPosOfObj =
-                    rPageFrm.GetSortedObjs()->ListPosOf( *pAnchoredObj );
-                if ( nActPosOfObj == rPageFrm.GetSortedObjs()->size() ||
+                    rPageFrame.GetSortedObjs()->ListPosOf( *pAnchoredObj );
+                if ( nActPosOfObj == rPageFrame.GetSortedObjs()->size() ||
                      nActPosOfObj > i )
                 {
                     --i;
@@ -181,7 +181,7 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
                 }
             }
         }
-    } // end of loop on <rPageFrm.GetSortedObjs()>
+    } // end of loop on <rPageFrame.GetSortedObjs()>
 
     return bSuccess;
 }

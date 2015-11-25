@@ -187,7 +187,7 @@ SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
     , mbReadonly(false)
     , mbIsFollow(false)
     , mrSidebarItem(rSidebarItem)
-    , mpAnchorFrm(rSidebarItem.maLayoutInfo.mpAnchorFrm)
+    , mpAnchorFrame(rSidebarItem.maLayoutInfo.mpAnchorFrame)
 {
     mpShadow = ShadowOverlayObject::CreateShadowOverlayObject( mrView );
     if ( mpShadow )
@@ -195,7 +195,7 @@ SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
         mpShadow->setVisible(false);
     }
 
-    mrMgr.ConnectSidebarWinToFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
+    mrMgr.ConnectSidebarWinToFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
                                   mrSidebarItem.GetFormatField(),
                                   *this );
 }
@@ -210,7 +210,7 @@ void SwSidebarWin::dispose()
     if (IsDisposed())
         return;
 
-    mrMgr.DisconnectSidebarWinFromFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
+    mrMgr.DisconnectSidebarWinFromFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
                                        *this );
 
     Disable();
@@ -898,29 +898,29 @@ void SwSidebarWin::SetPosAndSize()
                 SwNodes& rNds = pTextNode->GetDoc()->GetNodes();
                 SwContentNode* const pContentNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetContentNode();
                 SwPosition aStartPos( *pContentNd, mrSidebarItem.maLayoutInfo.mnStartContent );
-                SwShellCrsr* pTmpCrsr = nullptr;
-                const bool bTableCrsrNeeded = pTextNode->FindTableBoxStartNode() != pContentNd->FindTableBoxStartNode();
-                if ( bTableCrsrNeeded )
+                SwShellCursor* pTmpCursor = nullptr;
+                const bool bTableCursorNeeded = pTextNode->FindTableBoxStartNode() != pContentNd->FindTableBoxStartNode();
+                if ( bTableCursorNeeded )
                 {
-                    SwShellTableCrsr* pTableCrsr = new SwShellTableCrsr( DocView().GetWrtShell(), aStartPos );
-                    pTableCrsr->SetMark();
-                    pTableCrsr->GetMark()->nNode = *pTextNode;
-                    pTableCrsr->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
-                    pTableCrsr->NewTableSelection();
-                    pTmpCrsr = pTableCrsr;
+                    SwShellTableCursor* pTableCursor = new SwShellTableCursor( DocView().GetWrtShell(), aStartPos );
+                    pTableCursor->SetMark();
+                    pTableCursor->GetMark()->nNode = *pTextNode;
+                    pTableCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
+                    pTableCursor->NewTableSelection();
+                    pTmpCursor = pTableCursor;
                 }
                 else
                 {
-                    SwShellCrsr* pCrsr = new SwShellCrsr( DocView().GetWrtShell(), aStartPos );
-                    pCrsr->SetMark();
-                    pCrsr->GetMark()->nNode = *pTextNode;
-                    pCrsr->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
-                    pTmpCrsr = pCrsr;
+                    SwShellCursor* pCursor = new SwShellCursor( DocView().GetWrtShell(), aStartPos );
+                    pCursor->SetMark();
+                    pCursor->GetMark()->nNode = *pTextNode;
+                    pCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
+                    pTmpCursor = pCursor;
                 }
-                std::unique_ptr<SwShellCrsr> pTmpCrsrForAnnotationTextRange( pTmpCrsr );
+                std::unique_ptr<SwShellCursor> pTmpCursorForAnnotationTextRange( pTmpCursor );
 
-                pTmpCrsrForAnnotationTextRange->FillRects();
-                SwRects* pRects(pTmpCrsrForAnnotationTextRange.get());
+                pTmpCursorForAnnotationTextRange->FillRects();
+                SwRects* pRects(pTmpCursorForAnnotationTextRange.get());
                 for( size_t a(0); a < pRects->size(); ++a )
                 {
                     const SwRect aNextRect((*pRects)[a]);
@@ -1583,7 +1583,7 @@ void SwSidebarWin::SwitchToFieldPos()
     GotoPos();
     sal_uInt32 aCount = MoveCaret();
     if (aCount)
-        mrView.GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0);
+        mrView.GetDocShell()->GetWrtShell()->SwCursorShell::Right(aCount, 0);
     GrabFocusToDocument();
 }
 
@@ -1616,14 +1616,14 @@ bool SwSidebarWin::IsScrollbarVisible() const
 
 void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
 {
-    const bool bAnchorChanged = mpAnchorFrm != rSidebarItem.maLayoutInfo.mpAnchorFrm;
+    const bool bAnchorChanged = mpAnchorFrame != rSidebarItem.maLayoutInfo.mpAnchorFrame;
     if ( bAnchorChanged )
     {
-        mrMgr.DisconnectSidebarWinFromFrm( *(mpAnchorFrm), *this );
+        mrMgr.DisconnectSidebarWinFromFrame( *(mpAnchorFrame), *this );
     }
 
     mrSidebarItem = rSidebarItem;
-    mpAnchorFrm = mrSidebarItem.maLayoutInfo.mpAnchorFrm;
+    mpAnchorFrame = mrSidebarItem.maLayoutInfo.mpAnchorFrame;
 
     if ( GetWindowPeer() )
     {
@@ -1636,7 +1636,7 @@ void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
 
     if ( bAnchorChanged )
     {
-        mrMgr.ConnectSidebarWinToFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
+        mrMgr.ConnectSidebarWinToFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
                                       mrSidebarItem.GetFormatField(),
                                       *this );
     }

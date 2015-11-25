@@ -66,7 +66,7 @@ class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
     void        ChangeText( const OUString &rNewText,
                             const OUString& rOrigText,
                             const css::uno::Sequence< sal_Int32 > *pOffsets,
-                            SwPaM *pCrsr );
+                            SwPaM *pCursor );
     void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
     inline bool IsDrawObj()             { return m_bIsDrawObj; }

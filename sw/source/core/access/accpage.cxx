@@ -41,7 +41,7 @@ const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePag
 
 bool SwAccessiblePage::IsSelected()
 {
-    return GetMap()->IsPageSelected( static_cast < const SwPageFrm * >( GetFrm() ) );
+    return GetMap()->IsPageSelected( static_cast < const SwPageFrame * >( GetFrame() ) );
 }
 
 void SwAccessiblePage::GetStates(
@@ -111,18 +111,18 @@ void SwAccessiblePage::_InvalidateFocus()
 }
 
 SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
-                                    const SwFrm* pFrame )
+                                    const SwFrame* pFrame )
     : SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
     , bIsSelected( false )
 {
     OSL_ENSURE( pFrame != nullptr, "need frame" );
     OSL_ENSURE( pInitMap != nullptr, "need map" );
-    OSL_ENSURE( pFrame->IsPageFrm(), "need page frame" );
+    OSL_ENSURE( pFrame->IsPageFrame(), "need page frame" );
 
     SolarMutexGuard aGuard;
 
     OUString sPage = OUString::number(
-        static_cast<const SwPageFrm*>( GetFrm() )->GetPhyPageNum() );
+        static_cast<const SwPageFrame*>( GetFrame() )->GetPhyPageNum() );
     SetName( GetResource( STR_ACCESS_PAGE_NAME, &sPage ) );
 }
 

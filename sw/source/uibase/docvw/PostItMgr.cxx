@@ -140,7 +140,7 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     , mbDeleteNote(true)
     , mpAnswer(nullptr)
     , mbIsShowAnchor( false )
-    , mpFrmSidebarWinContainer( nullptr )
+    , mpFrameSidebarWinContainer( nullptr )
 {
     if(!mpView->GetDrawView() )
         mpView->GetWrtShell().MakeDrawView();
@@ -178,8 +178,8 @@ SwPostItMgr::~SwPostItMgr()
         delete (*i);
     mPages.clear();
 
-    delete mpFrmSidebarWinContainer;
-    mpFrmSidebarWinContainer = nullptr;
+    delete mpFrameSidebarWinContainer;
+    mpFrameSidebarWinContainer = nullptr;
 }
 
 void SwPostItMgr::CheckForRemovedPostIts()
@@ -1675,7 +1675,7 @@ void SwPostItMgr::PrepareView(bool bIgnoreCount)
     if (!HasNotes() || bIgnoreCount)
     {
         mpWrtShell->StartAllAction();
-        SwRootFrm* pLayout = mpWrtShell->GetLayout();
+        SwRootFrame* pLayout = mpWrtShell->GetLayout();
         if ( pLayout )
             SwPostItHelper::setSidebarChanged( pLayout,
                 mpWrtShell->getIDocumentSettingAccess().get( DocumentSettingId::BROWSE_MODE ) );
@@ -1696,16 +1696,16 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
     if (HasNotes() && ShowNotes())
     {
         const Point aPoint = mpEditWin->PixelToLogic(aPointPixel);
-        const SwRootFrm* pLayout = mpWrtShell->GetLayout();
-        SwRect aPageFrm;
-        const unsigned long nPageNum = SwPostItHelper::getPageInfo( aPageFrm, pLayout, aPoint );
+        const SwRootFrame* pLayout = mpWrtShell->GetLayout();
+        SwRect aPageFrame;
+        const unsigned long nPageNum = SwPostItHelper::getPageInfo( aPageFrame, pLayout, aPoint );
         if( nPageNum )
         {
             Rectangle aRect;
             OSL_ENSURE(mPages.size()>nPageNum-1,"SwPostitMgr:: page container size wrong");
             aRect = mPages[nPageNum-1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
-                    ? Rectangle(Point(aPageFrm.Left()-GetSidebarWidth()-GetSidebarBorderWidth(),aPageFrm.Top()),Size(GetSidebarWidth(),aPageFrm.Height()))
-                    : Rectangle( Point(aPageFrm.Right()+GetSidebarBorderWidth(),aPageFrm.Top()) , Size(GetSidebarWidth(),aPageFrm.Height()));
+                    ? Rectangle(Point(aPageFrame.Left()-GetSidebarWidth()-GetSidebarBorderWidth(),aPageFrame.Top()),Size(GetSidebarWidth(),aPageFrame.Height()))
+                    : Rectangle( Point(aPageFrame.Right()+GetSidebarBorderWidth(),aPageFrame.Top()) , Size(GetSidebarWidth(),aPageFrame.Height()));
             if (aRect.IsInside(aPoint))
             {
                 // we hit the note's sidebar
@@ -1770,7 +1770,7 @@ Rectangle SwPostItMgr::GetTopScrollRect(const unsigned long aPage) const
     return Rectangle(aPointTop,aSize);
 }
 
-//IMPORTANT: if you change the rects here, also change SwPageFrm::PaintNotesSidebar()
+//IMPORTANT: if you change the rects here, also change SwPageFrame::PaintNotesSidebar()
 bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
@@ -2109,10 +2109,10 @@ void SwPostItMgr::AssureStdModeAtShell()
             mpWrtShell->LockView( bLockView );
         }
 
-        if( mpWrtShell->IsSelFrmMode() || mpWrtShell->IsObjSelected())
+        if( mpWrtShell->IsSelFrameMode() || mpWrtShell->IsObjSelected())
         {
-                mpWrtShell->UnSelectFrm();
-                mpWrtShell->LeaveSelFrmMode();
+                mpWrtShell->UnSelectFrame();
+                mpWrtShell->LeaveSelFrameMode();
                 mpWrtShell->GetView().LeaveDrawCreate();
                 mpWrtShell->EnterStdMode();
 
@@ -2172,16 +2172,16 @@ void SwPostItMgr::ToggleInsModeOnActiveSidebarWin()
     }
 }
 
-void SwPostItMgr::ConnectSidebarWinToFrm( const SwFrm& rFrm,
+void SwPostItMgr::ConnectSidebarWinToFrame( const SwFrame& rFrame,
                                           const SwFormatField& rFormatField,
                                           SwSidebarWin& rSidebarWin )
 {
-    if ( mpFrmSidebarWinContainer == nullptr )
+    if ( mpFrameSidebarWinContainer == nullptr )
     {
-        mpFrmSidebarWinContainer = new SwFrmSidebarWinContainer();
+        mpFrameSidebarWinContainer = new SwFrameSidebarWinContainer();
     }
 
-    const bool bInserted = mpFrmSidebarWinContainer->insert( rFrm, rFormatField, rSidebarWin );
+    const bool bInserted = mpFrameSidebarWinContainer->insert( rFrame, rFormatField, rSidebarWin );
     if ( bInserted &&
          mpWrtShell->GetAccessibleMap() )
     {
@@ -2189,12 +2189,12 @@ void SwPostItMgr::ConnectSidebarWinToFrm( const SwFrm& rFrm,
     }
 }
 
-void SwPostItMgr::DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
+void SwPostItMgr::DisconnectSidebarWinFromFrame( const SwFrame& rFrame,
                                                SwSidebarWin& rSidebarWin )
 {
-    if ( mpFrmSidebarWinContainer != nullptr )
+    if ( mpFrameSidebarWinContainer != nullptr )
     {
-        const bool bRemoved = mpFrmSidebarWinContainer->remove( rFrm, rSidebarWin );
+        const bool bRemoved = mpFrameSidebarWinContainer->remove( rFrame, rSidebarWin );
         if ( bRemoved &&
              mpWrtShell->GetAccessibleMap() )
         {
@@ -2203,37 +2203,37 @@ void SwPostItMgr::DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
     }
 }
 
-bool SwPostItMgr::HasFrmConnectedSidebarWins( const SwFrm& rFrm )
+bool SwPostItMgr::HasFrameConnectedSidebarWins( const SwFrame& rFrame )
 {
     bool bRet( false );
 
-    if ( mpFrmSidebarWinContainer != nullptr )
+    if ( mpFrameSidebarWinContainer != nullptr )
     {
-        bRet = !mpFrmSidebarWinContainer->empty( rFrm );
+        bRet = !mpFrameSidebarWinContainer->empty( rFrame );
     }
 
     return bRet;
 }
 
-vcl::Window* SwPostItMgr::GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
+vcl::Window* SwPostItMgr::GetSidebarWinForFrameByIndex( const SwFrame& rFrame,
                                                  const sal_Int32 nIndex )
 {
     vcl::Window* pSidebarWin( nullptr );
 
-    if ( mpFrmSidebarWinContainer != nullptr )
+    if ( mpFrameSidebarWinContainer != nullptr )
     {
-        pSidebarWin = mpFrmSidebarWinContainer->get( rFrm, nIndex );
+        pSidebarWin = mpFrameSidebarWinContainer->get( rFrame, nIndex );
     }
 
     return pSidebarWin;
 }
 
-void SwPostItMgr::GetAllSidebarWinForFrm( const SwFrm& rFrm,
+void SwPostItMgr::GetAllSidebarWinForFrame( const SwFrame& rFrame,
                                           std::vector< vcl::Window* >* pChildren )
 {
-    if ( mpFrmSidebarWinContainer != nullptr )
+    if ( mpFrameSidebarWinContainer != nullptr )
     {
-        mpFrmSidebarWinContainer->getAll( rFrm, pChildren );
+        mpFrameSidebarWinContainer->getAll( rFrame, pChildren );
     }
 }
 

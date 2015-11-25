@@ -116,7 +116,7 @@ ToxTextGenerator::HandleChapterToken(const SwTOXSortTabBase& rBase, const SwForm
     }
 
     // #i53420#
-    const SwContentFrm* contentFrame = contentNode->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    const SwContentFrame* contentFrame = contentNode->getLayoutFrame(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     if (!contentFrame) {
         return OUString();
     }
@@ -125,7 +125,7 @@ ToxTextGenerator::HandleChapterToken(const SwTOXSortTabBase& rBase, const SwForm
 }
 
 OUString
-ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwContentFrm* contentFrame,
+ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwContentFrame* contentFrame,
         const SwContentNode *contentNode) const
 {
     OUString retval;
@@ -350,7 +350,7 @@ ToxTextGenerator::ConstructPageNumberPlaceholder(size_t numberOfToxSources)
 
 /*virtual*/ SwChapterField
 ToxTextGenerator::ObtainChapterField(SwChapterFieldType* chapterFieldType,
-        const SwFormToken* chapterToken, const SwContentFrm* contentFrame,
+        const SwFormToken* chapterToken, const SwContentFrame* contentFrame,
         const SwContentNode* contentNode) const
 {
     assert(chapterToken);

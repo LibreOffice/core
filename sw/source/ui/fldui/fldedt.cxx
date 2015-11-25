@@ -51,7 +51,7 @@
 
 void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
 {
-    if (pSh->CrsrInsideInputField())
+    if (pSh->CursorInsideInputField())
     {
         // move cursor to start of Input Field
         SwInputField* pInputField = dynamic_cast<SwInputField*>(pCurField);
@@ -65,8 +65,8 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
        Normalize PaM instead of swapping. */
     if (!pSh->HasSelection())
     {
-        SwShellCrsr* pCrsr = pSh->getShellCrsr(true);
-        SwPosition aOrigPos(*pCrsr->GetPoint());
+        SwShellCursor* pCursor = pSh->getShellCursor(true);
+        SwPosition aOrigPos(*pCursor->GetPoint());
 
         //After this attempt it is possible that rMgr.GetCurField() != pCurField if
         //the field was in e.g. a zero height portion and so invisible in which
@@ -78,8 +78,8 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
         bool bSelectionFailed = pCurField != pRealCurField;
         if (bSelectionFailed)
         {
-            pCrsr->DeleteMark();
-            *pCrsr->GetPoint() = aOrigPos;
+            pCursor->DeleteMark();
+            *pCursor->GetPoint() = aOrigPos;
         }
     }
 
@@ -137,7 +137,7 @@ void SwFieldEditDlg::Init()
 
         // Traveling only when more than one field
         pSh->StartAction();
-        pSh->CreateCrsr();
+        pSh->CreateCursor();
 
         bool bMove = rMgr.GoNext();
         if( bMove )
@@ -151,7 +151,7 @@ void SwFieldEditDlg::Init()
         if (pCurField->GetTypeId() == TYP_EXTUSERFLD)
             m_pAddressBT->Show();
 
-        pSh->DestroyCrsr();
+        pSh->DestroyCursor();
         pSh->EndAction();
     }
 

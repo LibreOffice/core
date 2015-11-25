@@ -270,7 +270,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
     // #i3952#
     const bool bIgnoreBlanksAndTabsForLineHeightCalculation =
-            rInf.GetTextFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
+            rInf.GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
 
     bool bHasBlankPortion = false;
     bool bHasOnlyBlankPortions = true;
@@ -299,7 +299,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 SAL_WARN_IF( POR_LIN == pPos->GetWhichPor(),
                         "sw.core", "SwLineLayout::CalcLine: don't use SwLinePortions !" );
 
-                // Null portions are eliminated. They can form if two FlyFrms
+                // Null portions are eliminated. They can form if two FlyFrames
                 // overlap.
                 if( !pPos->Compress() )
                 {
@@ -1937,10 +1937,10 @@ sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rText, long* pKernArray,
 SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
                                            bool bAllowInvalid )
 {
-    SwIterator<SwTextFrm,SwTextNode> aIter( rTNd );
+    SwIterator<SwTextFrame,SwTextNode> aIter( rTNd );
     SwScriptInfo* pScriptInfo = nullptr;
 
-    for( SwTextFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+    for( SwTextFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
         pScriptInfo = const_cast<SwScriptInfo*>(pLast->GetScriptInfo());
         if ( pScriptInfo )
@@ -2031,7 +2031,7 @@ SwTwips SwLineLayout::_GetHangingMargin() const
     return nDiff;
 }
 
-SwTwips SwTextFrm::HangingMargin() const
+SwTwips SwTextFrame::HangingMargin() const
 {
     SAL_WARN_IF( !HasPara(), "sw.core", "Don't call me without a paraportion" );
     if( !GetPara()->IsMargin() )

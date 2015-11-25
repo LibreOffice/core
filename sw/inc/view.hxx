@@ -78,7 +78,7 @@ class Graphic;
 class GraphicFilter;
 class SwPostItMgr;
 enum class SotExchangeDest;
-class SwCrsrShell;
+class SwCursorShell;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -170,7 +170,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     Timer               m_aTimer;         // for delayed ChgLnks during an action
     OUString            m_sSwViewData,
     //and the new cursor position if the user double click in the PagePreview
-                        m_sNewCrsrPos;
+                        m_sNewCursorPos;
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16              m_nNewPage;
 
@@ -232,8 +232,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     bool m_bWheelScrollInProgress;
 
-    bool            m_bCenterCrsr : 1,
-                    m_bTopCrsr : 1,
+    bool            m_bCenterCursor : 1,
+                    m_bTopCursor : 1,
                     m_bAlwaysShowSel : 1,
                     m_bTabColFromDoc : 1,
                     m_bTabRowFromDoc : 1,
@@ -284,8 +284,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // scrollbar movements
     SAL_DLLPRIVATE long          PageUp();
     SAL_DLLPRIVATE long          PageDown();
-    SAL_DLLPRIVATE bool          PageUpCrsr(bool bSelect);
-    SAL_DLLPRIVATE bool          PageDownCrsr(bool bSelect);
+    SAL_DLLPRIVATE bool          PageUpCursor(bool bSelect);
+    SAL_DLLPRIVATE bool          PageDownCursor(bool bSelect);
     SAL_DLLPRIVATE long          PhyPageUp();
     SAL_DLLPRIVATE long          PhyPageDown();
 
@@ -312,7 +312,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SAL_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
     SAL_DLLPRIVATE void          SpellKontext(bool bOn = true)
-                                 { m_bCenterCrsr = bOn; m_bAlwaysShowSel = bOn; }
+                                 { m_bCenterCursor = bOn; m_bAlwaysShowSel = bOn; }
 
     // for readonly switching
     SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -459,7 +459,7 @@ public:
     bool            HandleWheelCommands( const CommandEvent& );
 
     // insert frames
-    void            InsFrmMode(sal_uInt16 nCols);
+    void            InsFrameMode(sal_uInt16 nCols);
 
     void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, bool bViewOnly = false);
     virtual void    SetZoomFactor( const Fraction &rX, const Fraction & ) override;
@@ -539,7 +539,7 @@ public:
     void            StateTabWin(SfxItemSet&);
 
     // attributes have changed
-    DECL_LINK_TYPED( AttrChangedNotify, SwCrsrShell*, void );
+    DECL_LINK_TYPED( AttrChangedNotify, SwCursorShell*, void );
 
     // form control has been activated
     DECL_LINK_TYPED( FormControlActivated, LinkParamNone*, void );
@@ -569,10 +569,10 @@ public:
     virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
     virtual void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
 
-    void SetCrsrAtTop( bool bFlag, bool bCenter = false )
-        { m_bTopCrsr = bFlag, m_bCenterCrsr = bCenter; }
-    bool IsCrsrAtTop() const                    { return m_bTopCrsr; }
-    bool IsCrsrAtCenter() const                 { return m_bCenterCrsr; }
+    void SetCursorAtTop( bool bFlag, bool bCenter = false )
+        { m_bTopCursor = bFlag, m_bCenterCursor = bCenter; }
+    bool IsCursorAtTop() const                    { return m_bTopCursor; }
+    bool IsCursorAtCenter() const                 { return m_bCenterCursor; }
 
     bool JumpToSwMark( const OUString& rMark );
 

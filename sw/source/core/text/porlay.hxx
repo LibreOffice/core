@@ -237,7 +237,7 @@ class SwParaPortion : public SwLineLayout
     // Fraction aZoom;
     long m_nDelta;
 
-    // If a SwTextFrm is locked, no changes occur to the formatting data (under
+    // If a SwTextFrame is locked, no changes occur to the formatting data (under
     // pLine) (compare with Orphans)
     bool m_bFlys          : 1; // Overlapping Flys?
     bool m_bPrep          : 1; // PREP_*
@@ -270,7 +270,7 @@ public:
     inline SwScriptInfo& GetScriptInfo() { return m_aScriptInfo; }
     inline const SwScriptInfo& GetScriptInfo() const { return m_aScriptInfo; }
 
-    // For SwTextFrm::Format: returns the paragraph's current length
+    // For SwTextFrame::Format: returns the paragraph's current length
     sal_Int32 GetParLen() const;
 
     // For Prepare()
@@ -332,7 +332,7 @@ inline void SwParaPortion::FormatReset()
 {
     m_nDelta = 0;
     m_aReformat = SwCharRange(0, COMPLETE_STRING);
-    // bFlys needs to be retained in SwTextFrm::_Format() so that empty
+    // bFlys needs to be retained in SwTextFrame::_Format() so that empty
     // paragraphs that needed to avoid Frames with no flow, reformat
     // when the Frame disappears from the Area
     // bFlys = false;

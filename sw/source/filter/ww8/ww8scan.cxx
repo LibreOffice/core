@@ -4601,7 +4601,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
 
         p->nCp2OrIdx = 0;
         p->bFirstSprm = false;
-        p->pIdStk = nullptr;
+        p->pIdStack = nullptr;
 
         if ((p == pChp) || (p == pPap))
             p->nStartPos = p->nEndPos = nStartCp;
@@ -4622,7 +4622,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         if( p->pPLCFx->IsSprm() )
         {
             // Careful: nEndPos must be
-            p->pIdStk = new std::stack<sal_uInt16>;
+            p->pIdStack = new std::stack<sal_uInt16>;
             if ((p == pChp) || (p == pPap))
             {
                 WW8_CP nTemp = p->nEndPos+p->nCpOfs;
@@ -4645,7 +4645,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
 WW8PLCFMan::~WW8PLCFMan()
 {
     for( sal_uInt16 i=0; i<nPLCF; i++)
-        delete aD[i].pIdStk;
+        delete aD[i].pIdStack;
 }
 
 // 0. which attr class,
@@ -4773,8 +4773,8 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 
     const WW8PLCFxDesc* p = &aD[nIdx];
 
-    if (!(p->pIdStk->empty()))
-        pRes->nSprmId = p->pIdStk->top();       // get end position
+    if (!(p->pIdStack->empty()))
+        pRes->nSprmId = p->pIdStack->top();       // get end position
     else
     {
         OSL_ENSURE( false, "No Id on the Stack" );
@@ -4835,12 +4835,12 @@ bool WW8PLCFMan::TransferOpenSprms(std::stack<sal_uInt16> &rStack)
     for (sal_uInt16 i = 0; i < nPLCF; ++i)
     {
         WW8PLCFxDesc* p = &aD[i];
-        if (!p || !p->pIdStk)
+        if (!p || !p->pIdStack)
             continue;
-        while (!p->pIdStk->empty())
+        while (!p->pIdStack->empty())
         {
-            rStack.push(p->pIdStk->top());
-            p->pIdStk->pop();
+            rStack.push(p->pIdStack->top());
+            p->pIdStack->pop();
         }
     }
     return rStack.empty();
@@ -4854,7 +4854,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
     if( bStart )
     {
         const sal_uInt16 nLastId = GetId(p);
-        p->pIdStk->push(nLastId);   // remember Id for attribute end
+        p->pIdStack->push(nLastId);   // remember Id for attribute end
 
         if( p->nSprmsLen )
         {   /*
@@ -4886,9 +4886,9 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
     }
     else
     {
-        if (!(p->pIdStk->empty()))
-            p->pIdStk->pop();
-        if (p->pIdStk->empty())
+        if (!(p->pIdStack->empty()))
+            p->pIdStack->pop();
+        if (p->pIdStack->empty())
         {
             if ( (p == pChp) || (p == pPap) )
             {
@@ -4974,7 +4974,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
             p->nStartPos = aD[nIdx+1].nStartPos;
         else
         {
-            if (aD[nIdx+1].pIdStk->empty())
+            if (aD[nIdx+1].pIdStack->empty())
             {
                 WW8PLCFx_PCD *pTemp = static_cast<WW8PLCFx_PCD*>(pPcd->pPLCFx);
                 /*

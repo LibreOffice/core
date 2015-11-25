@@ -23,8 +23,8 @@
 
 class OutputDevice;
 class SwViewShellImp;
-class SwFrm;
-class SwFlyFrm;
+class SwFrame;
+class SwFlyFrame;
 class SwAnchoredObject;
 class SdrUndoManager;
 
@@ -33,7 +33,7 @@ class SwDrawView : public FmFormView
     Point           aAnchorPoint;       // anchor position
     SwViewShellImp      &rImp;               // a view is always part of a shell
 
-    const SwFrm *CalcAnchor();
+    const SwFrame *CalcAnchor();
 
     /** determine maximal order number for a 'child' object of given 'parent' object
 
@@ -50,7 +50,7 @@ class SwDrawView : public FmFormView
         optional input parameter - 'child' object, which will not be considered
         on the calculation of the maximal order number
     */
-    static sal_uInt32 _GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
+    static sal_uInt32 _GetMaxChildOrdNum( const SwFlyFrame& _rParentObj,
                                    const SdrObject* _pExclChildObj = nullptr );
 
     /** method to move 'repeated' objects of the given moved object to the

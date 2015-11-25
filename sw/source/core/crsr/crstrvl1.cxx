@@ -21,69 +21,69 @@
 #include <viscrs.hxx>
 #include <callnk.hxx>
 
-bool SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
+bool SwCursorShell::IsStartWord( sal_Int16 nWordType ) const
 {
-    return m_pCurCrsr->IsStartWord( nWordType );
+    return m_pCurrentCursor->IsStartWord( nWordType );
 }
-bool SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
+bool SwCursorShell::IsEndWord( sal_Int16 nWordType ) const
 {
-    return m_pCurCrsr->IsEndWord( nWordType );
-}
-
-bool SwCrsrShell::IsInWord( sal_Int16 nWordType ) const
-{
-    return m_pCurCrsr->IsInWord( nWordType );
+    return m_pCurrentCursor->IsEndWord( nWordType );
 }
 
-bool SwCrsrShell::IsStartSentence() const
+bool SwCursorShell::IsInWord( sal_Int16 nWordType ) const
 {
-    return m_pCurCrsr->IsStartEndSentence( false );
-}
-bool SwCrsrShell::IsEndSentence() const
-{
-    return m_pCurCrsr->IsStartEndSentence( true );
+    return m_pCurrentCursor->IsInWord( nWordType );
 }
 
-bool SwCrsrShell::GoStartWord()
+bool SwCursorShell::IsStartSentence() const
 {
-    return CallCrsrFN( &SwCursor::GoStartWord );
+    return m_pCurrentCursor->IsStartEndSentence( false );
 }
-bool SwCrsrShell::GoEndWord()
+bool SwCursorShell::IsEndSentence() const
 {
-    return CallCrsrFN( &SwCursor::GoEndWord );
-}
-
-bool SwCrsrShell::GoNextWord()
-{
-    return CallCrsrFN( &SwCursor::GoNextWord );
-}
-bool SwCrsrShell::GoPrevWord()
-{
-    return CallCrsrFN( &SwCursor::GoPrevWord );
+    return m_pCurrentCursor->IsStartEndSentence( true );
 }
 
-bool SwCrsrShell::GoNextSentence()
+bool SwCursorShell::GoStartWord()
 {
-    return CallCrsrFN( &SwCursor::GoNextSentence );
+    return CallCursorFN( &SwCursor::GoStartWord );
+}
+bool SwCursorShell::GoEndWord()
+{
+    return CallCursorFN( &SwCursor::GoEndWord );
 }
 
-bool SwCrsrShell::GoEndSentence()
+bool SwCursorShell::GoNextWord()
 {
-    return CallCrsrFN( &SwCursor::GoEndSentence );
+    return CallCursorFN( &SwCursor::GoNextWord );
 }
-bool SwCrsrShell::GoStartSentence()
+bool SwCursorShell::GoPrevWord()
 {
-    return CallCrsrFN( &SwCursor::GoStartSentence );
-}
-
-bool SwCrsrShell::SelectWord( const Point* pPt )
-{
-    return m_pCurCrsr->SelectWord( this, pPt );
+    return CallCursorFN( &SwCursor::GoPrevWord );
 }
 
-bool SwCrsrShell::ExpandToSentenceBorders()
+bool SwCursorShell::GoNextSentence()
 {
-    return m_pCurCrsr->ExpandToSentenceBorders();
+    return CallCursorFN( &SwCursor::GoNextSentence );
+}
+
+bool SwCursorShell::GoEndSentence()
+{
+    return CallCursorFN( &SwCursor::GoEndSentence );
+}
+bool SwCursorShell::GoStartSentence()
+{
+    return CallCursorFN( &SwCursor::GoStartSentence );
+}
+
+bool SwCursorShell::SelectWord( const Point* pPt )
+{
+    return m_pCurrentCursor->SelectWord( this, pPt );
+}
+
+bool SwCursorShell::ExpandToSentenceBorders()
+{
+    return m_pCurrentCursor->ExpandToSentenceBorders();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

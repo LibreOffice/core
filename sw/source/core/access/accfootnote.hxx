@@ -24,7 +24,7 @@
 #include <acccontext.hxx>
 
 class SwAccessibleMap;
-class SwFootnoteFrm;
+class SwFootnoteFrame;
 
 class SwAccessibleFootnote : public SwAccessibleContext
 {
@@ -34,7 +34,7 @@ protected:
 public:
     SwAccessibleFootnote( SwAccessibleMap* pInitMap,
                           bool bIsEndnote,
-                          const SwFootnoteFrm *pFootnoteFrm );
+                          const SwFootnoteFrame *pFootnoteFrame );
 
     // XAccessibleContext
 
@@ -64,7 +64,7 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    static bool IsEndnote( const SwFootnoteFrm *pFrm );
+    static bool IsEndnote( const SwFootnoteFrame *pFrame );
 };
 
 #endif

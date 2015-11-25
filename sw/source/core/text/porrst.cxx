@@ -81,7 +81,7 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     SetWhichPor( POR_BRK );
 }
 
-sal_Int32 SwBreakPortion::GetCrsrOfst( const sal_uInt16 ) const
+sal_Int32 SwBreakPortion::GetCursorOfst( const sal_uInt16 ) const
 { return 0; }
 
 sal_uInt16 SwBreakPortion::GetViewWidth( const SwTextSizeInfo & ) const
@@ -188,11 +188,11 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
     : bLeft( false )
 {
-    Height( (sal_uInt16)(rInf.GetTextFrm()->Prt().Height()) );
-    aPos.X() = rInf.GetTextFrm()->Frm().Left() +
-               rInf.GetTextFrm()->Prt().Right();
-    aPos.Y() = rInf.GetTextFrm()->Frm().Top() +
-               rInf.GetTextFrm()->Prt().Bottom();
+    Height( (sal_uInt16)(rInf.GetTextFrame()->Prt().Height()) );
+    aPos.X() = rInf.GetTextFrame()->Frame().Left() +
+               rInf.GetTextFrame()->Prt().Right();
+    aPos.Y() = rInf.GetTextFrame()->Frame().Top() +
+               rInf.GetTextFrame()->Prt().Bottom();
     SetWhichPor( POR_ARROW );
 }
 
@@ -203,14 +203,14 @@ void SwArrowPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 SwLinePortion *SwArrowPortion::Compress() { return this; }
 
-SwTwips SwTextFrm::EmptyHeight() const
+SwTwips SwTextFrame::EmptyHeight() const
 {
     if (IsCollapse()) {
-        SwViewShell *pSh = getRootFrm()->GetCurrShell();
-        if ( dynamic_cast<const SwCrsrShell*>( pSh ) !=  nullptr ) {
-            SwCrsrShell *pCrSh = static_cast<SwCrsrShell*>(pSh);
-            SwContentFrm *pCurrFrm=pCrSh->GetCurrFrm();
-            if (pCurrFrm==static_cast<SwContentFrm const *>(this)) {
+        SwViewShell *pSh = getRootFrame()->GetCurrShell();
+        if ( dynamic_cast<const SwCursorShell*>( pSh ) !=  nullptr ) {
+            SwCursorShell *pCrSh = static_cast<SwCursorShell*>(pSh);
+            SwContentFrame *pCurrFrame=pCrSh->GetCurrFrame();
+            if (pCurrFrame==static_cast<SwContentFrame const *>(this)) {
                 // do nothing
             } else {
                 return 1;
@@ -219,12 +219,12 @@ SwTwips SwTextFrm::EmptyHeight() const
             return 1;
         }
     }
-    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrm::EmptyHeight with swapped frame" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrame::EmptyHeight with swapped frame" );
 
     SwFont *pFnt;
     const SwTextNode& rTextNode = *GetTextNode();
     const IDocumentSettingAccess* pIDSA = rTextNode.getIDocumentSettingAccess();
-    SwViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrame()->GetCurrShell();
     if ( rTextNode.HasSwAttrSet() )
     {
         const SwAttrSet *pAttrSet = &( rTextNode.GetSwAttrSet() );
@@ -276,9 +276,9 @@ SwTwips SwTextFrm::EmptyHeight() const
     return nRet;
 }
 
-bool SwTextFrm::FormatEmpty()
+bool SwTextFrame::FormatEmpty()
 {
-    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrm::FormatEmpty with swapped frame" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrame::FormatEmpty with swapped frame" );
 
     bool bCollapse = EmptyHeight( ) == 1 && this->IsCollapse( );
 
@@ -311,7 +311,7 @@ bool SwTextFrm::FormatEmpty()
     if ( GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
             IsInDocBody() )
     {
-        SwTextGridItem const*const pGrid(GetGridItem(FindPageFrm()));
+        SwTextGridItem const*const pGrid(GetGridItem(FindPageFrame()));
         if ( pGrid )
             nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
     }
@@ -321,7 +321,7 @@ bool SwTextFrm::FormatEmpty()
 
     if( !nChg )
         SetUndersized( false );
-    AdjustFrm( nChg );
+    AdjustFrame( nChg );
 
     if( HasBlinkPor() )
     {
@@ -345,21 +345,21 @@ bool SwTextFrm::FormatEmpty()
     return true;
 }
 
-bool SwTextFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
+bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
 {
-    const SwFrm *pFrm = this;
+    const SwFrame *pFrame = this;
     rRegDiff = 0;
     while( !( ( FRM_BODY | FRM_FLY )
-           & pFrm->GetType() ) && pFrm->GetUpper() )
-        pFrm = pFrm->GetUpper();
-    if( ( FRM_BODY| FRM_FLY ) & pFrm->GetType() )
+           & pFrame->GetType() ) && pFrame->GetUpper() )
+        pFrame = pFrame->GetUpper();
+    if( ( FRM_BODY| FRM_FLY ) & pFrame->GetType() )
     {
-        SWRECTFN( pFrm )
-        rRegStart = (pFrm->*fnRect->fnGetPrtTop)();
-        pFrm = pFrm->FindPageFrm();
-        if( pFrm->IsPageFrm() )
+        SWRECTFN( pFrame )
+        rRegStart = (pFrame->*fnRect->fnGetPrtTop)();
+        pFrame = pFrame->FindPageFrame();
+        if( pFrame->IsPageFrame() )
         {
-            SwPageDesc* pDesc = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(pFrm))->FindPageDesc();
+            SwPageDesc* pDesc = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(pFrame))->FindPageDesc();
             if( pDesc )
             {
                 rRegDiff = pDesc->GetRegHeight();
@@ -377,7 +377,7 @@ bool SwTextFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                         }
                         else
                         {
-                            SwViewShell *pSh = getRootFrm()->GetCurrShell();
+                            SwViewShell *pSh = getRootFrame()->GetCurrShell();
                             SwFontAccess aFontAccess( pFormat, pSh );
                             SwFont aFnt( aFontAccess.Get()->GetFont() );
 
@@ -475,7 +475,7 @@ void SwHiddenTextPortion::Paint( const SwTextPaintInfo & rInf) const
 bool SwHiddenTextPortion::Format( SwTextFormatInfo &rInf )
 {
     Width( 0 );
-    rInf.GetTextFrm()->HideFootnotes( rInf.GetIdx(), rInf.GetIdx() + GetLen() );
+    rInf.GetTextFrame()->HideFootnotes( rInf.GetIdx(), rInf.GetIdx() + GetLen() );
 
     return false;
 };

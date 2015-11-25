@@ -1457,15 +1457,15 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
             aSet.Put(SwFormatVertOrient(aRect.Top(), text::VertOrientation::NONE,
                 aVertRelOriTab[ nYAlign ]));
 
-            SwFrameFormat *pFrm = m_rDoc.getIDocumentContentOperations().InsertDrawObj( *m_pPaM, *pObject, aSet );
+            SwFrameFormat *pFrame = m_rDoc.getIDocumentContentOperations().InsertDrawObj( *m_pPaM, *pObject, aSet );
             pObject->SetMergedItemSet(aSet);
 
-            if (dynamic_cast< const SwDrawFrameFormat *>( pFrm ) !=  nullptr)
+            if (dynamic_cast< const SwDrawFrameFormat *>( pFrame ) !=  nullptr)
             {
-                static_cast<SwDrawFrameFormat*>(pFrm)->PosAttrSet();
+                static_cast<SwDrawFrameFormat*>(pFrame)->PosAttrSet();
             }
 
-            AddAutoAnchor(pFrm);
+            AddAutoAnchor(pFrame);
         }
     }
 }
@@ -1622,7 +1622,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 /*
     am Rahmen zu setzende Frame-Attribute
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    SwFormatFrmSize            falls noch nicht gesetzt, hier setzen
+    SwFormatFrameSize            falls noch nicht gesetzt, hier setzen
     SvxLRSpaceItem          hier setzen
     SvxULSpaceItem          hier setzen
     SvxOpaqueItem           (Derzeit bei Rahmen nicht moeglich! khz 10.2.1999)
@@ -1720,21 +1720,21 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     bool bFixSize = !(WW8ITEMVALUE(rOldSet, SDRATTR_TEXT_AUTOGROWHEIGHT,
         SdrOnOffItem));
 
-    // Size: SwFormatFrmSize
+    // Size: SwFormatFrameSize
     if( SfxItemState::SET != rFlySet.GetItemState(RES_FRM_SIZE, false) )
     {
         const Rectangle& rSnapRect = pSdrObj->GetSnapRect();
         // if necessary adapt width and position of the framework: The
         // recorded interior is to remain equally large despite thick edges.
-        rFlySet.Put( SwFormatFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
+        rFlySet.Put( SwFormatFrameSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
             rSnapRect.GetWidth()  + 2*nOutside,
             rSnapRect.GetHeight() + 2*nOutside) );
     }
     else // If a size is set, adjust it to consider border thickness
     {
-        SwFormatFrmSize aSize = static_cast<const SwFormatFrmSize &>(rFlySet.Get(RES_FRM_SIZE));
+        SwFormatFrameSize aSize = static_cast<const SwFormatFrameSize &>(rFlySet.Get(RES_FRM_SIZE));
 
-        SwFormatFrmSize aNewSize = SwFormatFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
+        SwFormatFrameSize aNewSize = SwFormatFrameSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
             aSize.GetWidth()  + 2*nOutside,
             aSize.GetHeight() + 2*nOutside);
         aNewSize.SetWidthSizeType(aSize.GetWidthSizeType());
@@ -2628,7 +2628,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     sal_uInt16 nCount = pObject->GetUserDataCount();
     if(nCount)
     {
-        OUString lnName, aObjName, aTarFrm;
+        OUString lnName, aObjName, aTarFrame;
         for (sal_uInt16 i = 0; i < nCount; i++ )
         {
             SdrObjUserData* pData = pObject->GetUserData( i );
@@ -2643,7 +2643,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     {
                         lnName = macInf->GetHlink();
                         aObjName = macInf->GetName();
-                        aTarFrm = macInf->GetTarFrm();
+                        aTarFrame = macInf->GetTarFrame();
                         break;
                     }
                 }
@@ -2653,8 +2653,8 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         pFormatURL->SetURL( lnName, false );
         if (!aObjName.isEmpty())
             pFormatURL->SetName(aObjName);
-        if (!aTarFrm.isEmpty())
-            pFormatURL->SetTargetFrameName(aTarFrm);
+        if (!aTarFrame.isEmpty())
+            pFormatURL->SetTargetFrameName(aTarFrame);
         pFormatURL->SetMap(nullptr);
         aFlySet.Put(*pFormatURL);
     }
@@ -2892,9 +2892,9 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
 
-        SwFormatFrmSize aFrmSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop);
-        aFrmSize.SetWidthSizeType(pRecord->bAutoWidth ? ATT_VAR_SIZE : ATT_FIX_SIZE);
-        rFlySet.Put(aFrmSize);
+        SwFormatFrameSize aFrameSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop);
+        aFrameSize.SetWidthSizeType(pRecord->bAutoWidth ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+        rFlySet.Put(aFrameSize);
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
             pRecord->eLineDashing, pRecord->eShapeType, aInnerDist );
@@ -3008,7 +3008,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
 
     ProcessEscherAlign(pRecord, pF, rFlySet, true);
 
-    rFlySet.Put(SwFormatFrmSize(ATT_FIX_SIZE, nWidthTw, nHeightTw));
+    rFlySet.Put(SwFormatFrameSize(ATT_FIX_SIZE, nWidthTw, nHeightTw));
 
     SfxItemSet aGrSet(m_rDoc.GetAttrPool(), RES_GRFATR_BEGIN, RES_GRFATR_END-1);
 

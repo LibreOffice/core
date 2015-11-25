@@ -206,7 +206,7 @@ void SwInputWindow::ShowWin()
 
         OSL_ENSURE(pWrtShell, "no WrtShell!");
         // Cursor in table
-        bIsTable = pWrtShell->IsCrsrInTable();
+        bIsTable = pWrtShell->IsCursorInTable();
 
         if( bFirst )
             pWrtShell->SelTableCells( LINK( this, SwInputWindow,
@@ -249,13 +249,13 @@ void SwInputWindow::ShowWin()
                     pWrtShell->DoUndo();
                 }
 
-                if( !pWrtShell->SwCrsrShell::HasSelection() )
+                if( !pWrtShell->SwCursorShell::HasSelection() )
                 {
                     pWrtShell->MoveSection( fnSectionCurr, fnSectionStart );
                     pWrtShell->SetMark();
                     pWrtShell->MoveSection( fnSectionCurr, fnSectionEnd );
                 }
-                if( pWrtShell->SwCrsrShell::HasSelection() )
+                if( pWrtShell->SwCursorShell::HasSelection() )
                 {
                     pWrtShell->StartUndo( UNDO_DELETE );
                     pWrtShell->Delete();
@@ -442,7 +442,7 @@ IMPL_LINK_TYPED( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void 
             // positioned "in the forest" and the live update does not work!
             pWrtShell->StartAllAction();
 
-            SwPaM aPam( *pWrtShell->GetStkCrsr()->GetPoint() );
+            SwPaM aPam( *pWrtShell->GetStackCursor()->GetPoint() );
             aPam.Move( fnMoveBackward, fnGoSection );
             aPam.SetMark();
             aPam.Move( fnMoveForward, fnGoSection );

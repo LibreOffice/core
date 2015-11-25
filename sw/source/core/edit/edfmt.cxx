@@ -59,7 +59,7 @@ void SwEditShell::FillByEx(SwCharFormat* pCharFormat, bool bReset)
         pCharFormat->ResetAllFormatAttr();
     }
 
-    SwPaM* pPam = GetCrsr();
+    SwPaM* pPam = GetCursor();
     const SwContentNode* pCNd = pPam->GetContentNode();
     if( pCNd->IsTextNode() )
     {

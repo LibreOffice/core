@@ -349,21 +349,21 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             bRet = rSh.GotoObj(true, GotoObjFlags::Any);
             if(bRet)
             {
-                rSh.HideCrsr();
-                rSh.EnterSelFrmMode();
+                rSh.HideCursor();
+                rSh.EnterSelFrameMode();
             }
         break;
         case FN_NEXT_FOOTNOTE:
-            rSh.MoveCrsr();
+            rSh.MoveCursor();
             bRet = rSh.GotoNextFootnoteAnchor();
             break;
         case FN_PREV_FOOTNOTE:
-            rSh.MoveCrsr();
+            rSh.MoveCursor();
             bRet = rSh.GotoPrevFootnoteAnchor();
             break;
         case FN_TO_HEADER:
-            rSh.MoveCrsr();
-            if ( FrmTypeFlags::HEADER & rSh.GetFrmType(nullptr,false) )
+            rSh.MoveCursor();
+            if ( FrameTypeFlags::HEADER & rSh.GetFrameType(nullptr,false) )
                 rSh.SttPg();
             else
             {
@@ -374,8 +374,8 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             bSetRetVal = false;
             break;
         case FN_TO_FOOTER:
-            rSh.MoveCrsr();
-            if ( FrmTypeFlags::FOOTER & rSh.GetFrmType(nullptr,false) )
+            rSh.MoveCursor();
+            if ( FrameTypeFlags::FOOTER & rSh.GetFrameType(nullptr,false) )
                 rSh.EndPg();
             else
             {
@@ -386,8 +386,8 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             bSetRetVal = false;
             break;
         case FN_FOOTNOTE_TO_ANCHOR:
-            rSh.MoveCrsr();
-            if ( FrmTypeFlags::FOOTNOTE & rSh.GetFrmType(nullptr,false) )
+            rSh.MoveCursor();
+            if ( FrameTypeFlags::FOOTNOTE & rSh.GetFrameType(nullptr,false) )
                 rSh.GotoFootnoteAnchor();
             else
                 rSh.GotoFootnoteText();

@@ -309,7 +309,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     // Delete all frames from the copied area, they will be created
     // during the generation of the table frame
-    pTableNd->DelFrms();
+    pTableNd->DelFrames();
 
     _MapTableFrameFormats aMapArr;
     _CopyTable aPara( pDoc, aMapArr, GetIndex(), *pTableNd, &GetTable() );

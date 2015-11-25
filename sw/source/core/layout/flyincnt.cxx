@@ -28,8 +28,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
-SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
-    SwFlyFrm( pFormat, pSib, pAnch )
+SwFlyInContentFrame::SwFlyInContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
+    SwFlyFrame( pFormat, pSib, pAnch )
 {
     m_bInCnt = bInvalidLayout = bInvalidContent = true;
     SwTwips nRel = pFormat->GetVertOrient().GetPos();
@@ -42,24 +42,24 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAn
     SetCurrRelPos( aRelPos );
 }
 
-void SwFlyInCntFrm::DestroyImpl()
+void SwFlyInContentFrame::DestroyImpl()
 {
-    if ( !GetFormat()->GetDoc()->IsInDtor() && GetAnchorFrm() )
+    if ( !GetFormat()->GetDoc()->IsInDtor() && GetAnchorFrame() )
     {
         SwRect aTmp( GetObjRectWithSpaces() );
-        SwFlyInCntFrm::NotifyBackground( FindPageFrm(), aTmp, PREP_FLY_LEAVE );
+        SwFlyInContentFrame::NotifyBackground( FindPageFrame(), aTmp, PREP_FLY_LEAVE );
     }
 
-    SwFlyFrm::DestroyImpl();
+    SwFlyFrame::DestroyImpl();
 }
 
-SwFlyInCntFrm::~SwFlyInCntFrm()
+SwFlyInContentFrame::~SwFlyInContentFrame()
 {
 }
 
 // #i28701#
 
-void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
+void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
                                  const Point& rRelAttr,
                                  const Point& rRelPos )
 {
@@ -72,8 +72,8 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
         pNotify = new SwFlyNotify( this );
     aRef = rPoint;
     SetCurrRelPos( rRelAttr );
-    SWRECTFN( GetAnchorFrm() )
-    (Frm().*fnRect->fnSetPos)( rPoint + rRelPos );
+    SWRECTFN( GetAnchorFrame() )
+    (Frame().*fnRect->fnSetPos)( rPoint + rRelPos );
     // #i68520#
     InvalidateObjRectWithSpaces();
     if( pNotify )
@@ -81,12 +81,12 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
         InvalidatePage();
         mbValidPos = false;
         m_bInvalid  = true;
-        Calc(getRootFrm()->GetCurrShell()->GetOut());
+        Calc(getRootFrame()->GetCurrShell()->GetOut());
         delete pNotify;
     }
 }
 
-void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwFlyInContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     bool bCallPrepare = false;
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
@@ -107,40 +107,40 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             aNew.ClearItem( RES_FRMMACRO );
             if( aNew.Count() )
             {
-                SwFlyFrm::Modify( &aOld, &aNew );
+                SwFlyFrame::Modify( &aOld, &aNew );
                 bCallPrepare = true;
             }
         }
         else if( static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->Count())
         {
-            SwFlyFrm::Modify( pOld, pNew );
+            SwFlyFrame::Modify( pOld, pNew );
             bCallPrepare = true;
         }
     }
     else if( nWhich != RES_SURROUND && RES_FRMMACRO != nWhich )
     {
-        SwFlyFrm::Modify( pOld, pNew );
+        SwFlyFrame::Modify( pOld, pNew );
         bCallPrepare = true;
     }
 
-    if ( bCallPrepare && GetAnchorFrm() )
-        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFormat() );
+    if ( bCallPrepare && GetAnchorFrame() )
+        AnchorFrame()->Prepare( PREP_FLY_ATTR_CHG, GetFormat() );
 }
 
 /// Here the content gets formatted initially.
-void SwFlyInCntFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs )
+void SwFlyInContentFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs )
 {
-    if ( !Frm().Height() )
+    if ( !Frame().Height() )
     {
         Lock(); //don't format the anchor on the crook.
-        SwContentFrm *pContent = ContainsContent();
+        SwContentFrame *pContent = ContainsContent();
         while ( pContent )
         {   pContent->Calc(pRenderContext);
-            pContent = pContent->GetNextContentFrm();
+            pContent = pContent->GetNextContentFrame();
         }
         Unlock();
     }
-    SwFlyFrm::Format( pRenderContext, pAttrs );
+    SwFlyFrame::Format( pRenderContext, pAttrs );
 }
 
 /** Calculate object position
@@ -148,7 +148,7 @@ void SwFlyInCntFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAt
  * @note: In contrast to other Frames, we only calculate the relative position
  *        here. The absolute position is only calculated using SetAbsPos.
  **/
-void SwFlyInCntFrm::MakeObjPos()
+void SwFlyInContentFrame::MakeObjPos()
 {
     if ( !mbValidPos )
     {
@@ -157,8 +157,8 @@ void SwFlyInCntFrm::MakeObjPos()
         const SwFormatVertOrient &rVert = pFormat->GetVertOrient();
         //Update the current values in the format if needed, during this we of
         //course must not send any Modify.
-        const bool bVert = GetAnchorFrm()->IsVertical();
-        const bool bRev = GetAnchorFrm()->IsReverse();
+        const bool bVert = GetAnchorFrame()->IsVertical();
+        const bool bRev = GetAnchorFrame()->IsReverse();
         SwTwips nOld = rVert.GetPos();
         SwTwips nAct = bVert ? -GetCurrRelPos().X() : GetCurrRelPos().Y();
         if( bRev )
@@ -174,36 +174,36 @@ void SwFlyInCntFrm::MakeObjPos()
     }
 }
 
-void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
+void SwFlyInContentFrame::_ActionOnInvalidation( const InvalidationType _nInvalid )
 {
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
-        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrameFormat() );
+        AnchorFrame()->Prepare( PREP_FLY_ATTR_CHG, &GetFrameFormat() );
 }
 
-void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
+void SwFlyInContentFrame::NotifyBackground( SwPageFrame *, const SwRect& rRect,
                                        PrepareHint eHint)
 {
     if ( eHint == PREP_FLY_ATTR_CHG )
-        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG );
+        AnchorFrame()->Prepare( PREP_FLY_ATTR_CHG );
     else
-        AnchorFrm()->Prepare( eHint, static_cast<void const *>(&rRect) );
+        AnchorFrame()->Prepare( eHint, static_cast<void const *>(&rRect) );
 }
 
-const Point SwFlyInCntFrm::GetRelPos() const
+const Point SwFlyInContentFrame::GetRelPos() const
 {
-    Calc(getRootFrm()->GetCurrShell()->GetOut());
+    Calc(getRootFrame()->GetCurrShell()->GetOut());
     return GetCurrRelPos();
 }
 
-/// @see SwRowFrm::RegistFlys()
-void SwFlyInCntFrm::RegistFlys()
+/// @see SwRowFrame::RegistFlys()
+void SwFlyInContentFrame::RegistFlys()
 {
-    SwPageFrm *pPage = FindPageFrm();
+    SwPageFrame *pPage = FindPageFrame();
     OSL_ENSURE( pPage, "Register Flys without pages?" );
     ::RegistFlys( pPage, this );
 }
 
-void SwFlyInCntFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
+void SwFlyInContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     // OD 2004-01-19 #110582#
     if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
@@ -211,14 +211,14 @@ void SwFlyInCntFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         return;
     }
 
-    if ( !GetAnchorFrm() || IsLocked() || IsColLocked() || !FindPageFrm() )
+    if ( !GetAnchorFrame() || IsLocked() || IsColLocked() || !FindPageFrame() )
         return;
 
     Lock(); // The curtain falls
 
         //does the notification in the DTor
     const SwFlyNotify aNotify( this );
-    SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
+    SwBorderAttrAccess aAccess( SwFrame::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     if ( IsClipped() )
@@ -239,7 +239,7 @@ void SwFlyInCntFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
 
         if ( !mbValidSize )
-            Format( getRootFrm()->GetCurrShell()->GetOut(), &rAttrs );
+            Format( getRootFrame()->GetCurrShell()->GetOut(), &rAttrs );
 
         if ( !mbValidPos )
         {
@@ -254,11 +254,11 @@ void SwFlyInCntFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         if ( mbValidPos && mbValidSize &&
              GetFormat()->getIDocumentSettingAccess().get( DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
         {
-            SwFrm* pFrm = AnchorFrm();
-            if ( Frm().Left() == (pFrm->Frm().Left()+pFrm->Prt().Left()) &&
-                 Frm().Width() > pFrm->Prt().Width() )
+            SwFrame* pFrame = AnchorFrame();
+            if ( Frame().Left() == (pFrame->Frame().Left()+pFrame->Prt().Left()) &&
+                 Frame().Width() > pFrame->Prt().Width() )
             {
-                Frm().Width( pFrm->Prt().Width() );
+                Frame().Width( pFrame->Prt().Width() );
                 mbValidPrtArea = false;
                 m_bWidthClipped = true;
             }

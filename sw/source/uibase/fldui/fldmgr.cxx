@@ -237,10 +237,10 @@ bool  SwFieldMgr::CanInsertRefMark( const OUString& rStr )
     OSL_ENSURE(pSh, "no SwWrtShell found");
     if(pSh)
     {
-        sal_uInt16 nCnt = pSh->GetCrsrCnt();
+        sal_uInt16 nCnt = pSh->GetCursorCnt();
 
-        // the last Crsr doesn't have to be a spanned selection
-        if( 1 < nCnt && !pSh->SwCrsrShell::HasSelection() )
+        // the last Cursor doesn't have to be a spanned selection
+        if( 1 < nCnt && !pSh->SwCursorShell::HasSelection() )
             --nCnt;
 
         bRet =  2 > nCnt && nullptr == pSh->GetRefMark( rStr );
@@ -1254,7 +1254,7 @@ bool SwFieldMgr::InsertField(
 
     case TYP_FORMELFLD:
         {
-            if(pCurShell->GetFrmType(nullptr,false) & FrmTypeFlags::TABLE)
+            if(pCurShell->GetFrameType(nullptr,false) & FrameTypeFlags::TABLE)
             {
                 pCurShell->StartAllAction();
 

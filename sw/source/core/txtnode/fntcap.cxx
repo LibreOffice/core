@@ -276,11 +276,11 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     long nDiff = rInf.GetPos().X() - rPos.X();
 
     Point aPos( rPos );
-    const bool bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
-                          ! rInf.IsIgnoreFrmRTL();
+    const bool bSwitchL2R = rInf.GetFrame()->IsRightToLeft() &&
+                          ! rInf.IsIgnoreFrameRTL();
 
     if ( bSwitchL2R )
-       rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+       rInf.GetFrame()->SwitchLTRtoRTL( aPos );
 
     const ComplexTextLayoutMode nMode = rInf.GetpOut()->GetLayoutMode();
     const bool bBidiPor = ( bSwitchL2R !=
@@ -289,8 +289,8 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     if ( bBidiPor )
         nDiff = -nDiff;
 
-    if ( rInf.GetFrm()->IsVertical() )
-        rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+    if ( rInf.GetFrame()->IsVertical() )
+        rInf.GetFrame()->SwitchHorizontalToVertical( aPos );
 
     if ( nDiff )
     {
@@ -312,38 +312,38 @@ void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
     DoOnCapitals( aDo );
 }
 
-class SwDoCapitalCrsrOfst : public SwDoCapitals
+class SwDoCapitalCursorOfst : public SwDoCapitals
 {
 protected:
     SwFntObj *pUpperFnt;
     SwFntObj *pLowerFnt;
-    sal_Int32 nCrsr;
+    sal_Int32 nCursor;
     sal_uInt16 nOfst;
 public:
-    SwDoCapitalCrsrOfst( SwDrawTextInfo &rInfo, const sal_uInt16 nOfs ) :
-        SwDoCapitals( rInfo ), pUpperFnt(nullptr), pLowerFnt(nullptr), nCrsr( 0 ), nOfst( nOfs )
+    SwDoCapitalCursorOfst( SwDrawTextInfo &rInfo, const sal_uInt16 nOfs ) :
+        SwDoCapitals( rInfo ), pUpperFnt(nullptr), pLowerFnt(nullptr), nCursor( 0 ), nOfst( nOfs )
         { }
-    virtual ~SwDoCapitalCrsrOfst() {}
+    virtual ~SwDoCapitalCursorOfst() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
     virtual void Do() override;
 
-    inline sal_Int32 GetCrsr(){ return nCrsr; }
+    inline sal_Int32 GetCursor(){ return nCursor; }
 };
 
-void SwDoCapitalCrsrOfst::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
+void SwDoCapitalCursorOfst::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
 {
     pUpperFnt = pUpperFont;
     pLowerFnt = pLowerFont;
 }
 
-void SwDoCapitalCrsrOfst::Do()
+void SwDoCapitalCursorOfst::Do()
 {
     if ( nOfst )
     {
         if ( static_cast<long>(nOfst) > rInf.GetSize().Width() )
         {
             nOfst -= rInf.GetSize().Width();
-            nCrsr = nCrsr + rInf.GetLen();
+            nCursor = nCursor + rInf.GetLen();
         }
         else
         {
@@ -355,35 +355,35 @@ void SwDoCapitalCrsrOfst::Do()
             aDrawInf.SetOfst( nOfst );
             aDrawInf.SetKern( rInf.GetKern() );
             aDrawInf.SetKanaComp( rInf.GetKanaComp() );
-            aDrawInf.SetFrm( rInf.GetFrm() );
+            aDrawInf.SetFrame( rInf.GetFrame() );
             aDrawInf.SetFont( rInf.GetFont() );
 
             if ( rInf.GetUpper() )
             {
                 aDrawInf.SetSpace( 0 );
-                nCrsr = nCrsr + pUpperFnt->GetCrsrOfst( aDrawInf );
+                nCursor = nCursor + pUpperFnt->GetCursorOfst( aDrawInf );
             }
             else
             {
                 aDrawInf.SetSpace( rInf.GetSpace() );
-                nCrsr = nCrsr + pLowerFnt->GetCrsrOfst( aDrawInf );
+                nCursor = nCursor + pLowerFnt->GetCursorOfst( aDrawInf );
             }
             nOfst = 0;
         }
     }
 }
 
-sal_Int32 SwSubFont::GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
+sal_Int32 SwSubFont::GetCapitalCursorOfst( SwDrawTextInfo& rInf )
 {
     const long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
-    SwDoCapitalCrsrOfst aDo( rInf, rInf.GetOfst() );
+    SwDoCapitalCursorOfst aDo( rInf, rInf.GetOfst() );
     Point aPos;
     rInf.SetPos( aPos );
     rInf.SetDrawSpace( false );
     DoOnCapitals( aDo );
     rInf.SetKern( nOldKern );
-    return aDo.GetCrsr();
+    return aDo.GetCursor();
 }
 
 class SwDoDrawStretchCapital : public SwDoDrawCapital
@@ -425,14 +425,14 @@ void SwDoDrawStretchCapital::Do()
         rInf.ApplyAutoColor();
 
         Point aPos( rInf.GetPos() );
-        const bool bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
-                              ! rInf.IsIgnoreFrmRTL();
+        const bool bSwitchL2R = rInf.GetFrame()->IsRightToLeft() &&
+                              ! rInf.IsIgnoreFrameRTL();
 
         if ( bSwitchL2R )
-            rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+            rInf.GetFrame()->SwitchLTRtoRTL( aPos );
 
-        if ( rInf.GetFrm()->IsVertical() )
-            rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+        if ( rInf.GetFrame()->IsVertical() )
+            rInf.GetFrame()->SwitchHorizontalToVertical( aPos );
 
         // Optimierung:
         if( 1 >= rInf.GetLen() )

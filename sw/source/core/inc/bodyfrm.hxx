@@ -24,17 +24,17 @@
 
 class SwBorderAttrs;
 
-class SwBodyFrm: public SwLayoutFrm
+class SwBodyFrame: public SwLayoutFrame
 {
 protected:
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
 
 public:
-    SwBodyFrm( SwFrameFormat*, SwFrm* );
+    SwBodyFrame( SwFrameFormat*, SwFrame* );
 
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
+    virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrame)
 };
 
 #endif

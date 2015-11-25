@@ -23,13 +23,13 @@
 // classes <Point>, <Size> and <Rectangle>
 #include <tools/gen.hxx>
 
-class SwPageFrm;
+class SwPageFrame;
 
 /** data structure for a preview page in the current preview layout
 */
 struct PreviewPage
 {
-    const SwPageFrm*  pPage;
+    const SwPageFrame*  pPage;
     bool        bVisible;
     Size        aPageSize;
     Point       aPreviewWinPos;

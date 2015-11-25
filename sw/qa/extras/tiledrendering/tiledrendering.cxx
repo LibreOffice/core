@@ -168,14 +168,14 @@ void SwTiledRenderingTest::testPostKeyEvent()
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // Did we manage to go after the first character?
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pShellCrsr->GetPoint()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pShellCursor->GetPoint()->nContent.GetIndex());
 
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     // Did we manage to insert the character after the first one?
-    CPPUNIT_ASSERT_EQUAL(OUString("Axaa bbb."), pShellCrsr->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Axaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 }
 
 void SwTiledRenderingTest::testPostMouseEvent()
@@ -183,16 +183,16 @@ void SwTiledRenderingTest::testPostMouseEvent()
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // Did we manage to go after the first character?
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pShellCrsr->GetPoint()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pShellCursor->GetPoint()->nContent.GetIndex());
 
-    Point aStart = pShellCrsr->GetSttPos();
+    Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() - 1000);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1);
     // The new cursor position must be before the first word.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCrsr->GetPoint()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCursor->GetPoint()->nContent.GetIndex());
 }
 
 void SwTiledRenderingTest::testSetTextSelection()
@@ -203,21 +203,21 @@ void SwTiledRenderingTest::testSetTextSelection()
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
     // Create a selection by on the word.
     pWrtShell->SelWrd();
-    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // Did we indeed manage to select the second word?
-    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), pShellCrsr->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), pShellCursor->GetText());
 
     // Now use setTextSelection() to move the start of the selection 1000 twips left.
-    Point aStart = pShellCrsr->GetSttPos();
+    Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() - 1000);
     pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_START, aStart.getX(), aStart.getY());
     // The new selection must include the first word, too -- but not the ending dot.
-    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb"), pShellCrsr->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb"), pShellCursor->GetText());
 
     // Next: test that LOK_SETTEXTSELECTION_RESET + LOK_SETTEXTSELECTION_END can be used to create a selection.
     pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_RESET, aStart.getX(), aStart.getY());
     pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aStart.getX() + 1000, aStart.getY());
-    CPPUNIT_ASSERT_EQUAL(OUString("Aaa b"), pShellCrsr->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa b"), pShellCursor->GetText());
 }
 
 void SwTiledRenderingTest::testGetTextSelection()
@@ -283,25 +283,25 @@ void SwTiledRenderingTest::testResetSelection()
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Select one character.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // We have a text selection.
-    CPPUNIT_ASSERT(pShellCrsr->HasMark());
+    CPPUNIT_ASSERT(pShellCursor->HasMark());
 
     pXTextDocument->resetSelection();
     // We no longer have a text selection.
-    CPPUNIT_ASSERT(!pShellCrsr->HasMark());
+    CPPUNIT_ASSERT(!pShellCursor->HasMark());
 
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     Point aPoint = pObject->GetSnapRect().Center();
     // Select the shape.
-    pWrtShell->EnterSelFrmMode(&aPoint);
+    pWrtShell->EnterSelFrameMode(&aPoint);
     // We have a graphic selection.
-    CPPUNIT_ASSERT(pWrtShell->IsSelFrmMode());
+    CPPUNIT_ASSERT(pWrtShell->IsSelFrameMode());
 
     pXTextDocument->resetSelection();
     // We no longer have a graphic selection.
-    CPPUNIT_ASSERT(!pWrtShell->IsSelFrmMode());
+    CPPUNIT_ASSERT(!pWrtShell->IsSelFrameMode());
 }
 
 void lcl_search(bool bBackward)
@@ -321,12 +321,12 @@ void SwTiledRenderingTest::testSearch()
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    size_t nNode = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
+    size_t nNode = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
 
     // First hit, in the second paragraph, before the shape.
     lcl_search(false);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
-    size_t nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
+    size_t nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
     /// Make sure we get search result selection for normal find as well, not only find all.
     CPPUNIT_ASSERT(!m_aSearchResultSelection.empty());
@@ -342,7 +342,7 @@ void SwTiledRenderingTest::testSearch()
     // Last hit, in the last paragraph, after the shape.
     lcl_search(false);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
-    nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
+    nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 7, nActual);
 
     // Now change direction and make sure that the first 2 hits are in the shape, but not the 3rd one.
@@ -352,7 +352,7 @@ void SwTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT(pWrtShell->GetDrawView()->GetTextEditObject());
     lcl_search(true);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
-    nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
+    nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
 
     comphelper::LibreOfficeKit::setActive(false);
@@ -364,9 +364,9 @@ void SwTiledRenderingTest::testSearchViewArea()
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Go to the second page, 1-based.
     pWrtShell->GotoPage(2, false);
-    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // Get the ~top left corner of the second page.
-    Point aPoint = pShellCrsr->GetSttPos();
+    Point aPoint = pShellCursor->GetSttPos();
 
     // Go back to the first page, search while the cursor is there, but the
     // visible area is the second page.
@@ -380,7 +380,7 @@ void SwTiledRenderingTest::testSearchViewArea()
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.
-    CPPUNIT_ASSERT_EQUAL(OUString("Heading on second page"), pShellCrsr->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading on second page"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 }
 
 void SwTiledRenderingTest::testSearchTextFrame()

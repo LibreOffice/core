@@ -43,7 +43,7 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const override;
+    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;

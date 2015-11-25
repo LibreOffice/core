@@ -116,12 +116,12 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
     return FmFormPage::ReplaceObject( pNewObj, nObjNum );
 }
 
-void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
+void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrame *pPg )
 {
     SwRect aPrt( pPg->Prt() );
-    aPrt += pPg->Frm().Pos();
+    aPrt += pPg->Frame().Pos();
     const Rectangle aUser( aPrt.SVRect() );
-    const Rectangle aPaper( pPg->Frm().SVRect() );
+    const Rectangle aPaper( pPg->Frame().SVRect() );
     pLst->Insert( SdrPageGridFrame( aPaper, aUser ) );
 }
 
@@ -148,9 +148,9 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
         {
             //The drawing demands all pages which overlap with the rest.
             const SwRect aRect( *pRect );
-            const SwFrm *pPg = pSh->GetLayout()->Lower();
+            const SwFrame *pPg = pSh->GetLayout()->Lower();
             do
-            {   if ( pPg->Frm().IsOver( aRect ) )
+            {   if ( pPg->Frame().IsOver( aRect ) )
                     ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst, pPg );
                 pPg = pPg->GetNext();
             } while ( pPg );
@@ -158,12 +158,12 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
         else
         {
             //The drawing demands all visible pages
-            const SwFrm *pPg = pSh->Imp()->GetFirstVisPage(pSh->GetOut());
+            const SwFrame *pPg = pSh->Imp()->GetFirstVisPage(pSh->GetOut());
             if ( pPg )
                 do
                 {   ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst, pPg );
                     pPg = pPg->GetNext();
-                } while ( pPg && pPg->Frm().IsOver( pSh->VisArea() ) );
+                } while ( pPg && pPg->Frame().IsOver( pSh->VisArea() ) );
         }
     }
     return pGridLst;
@@ -187,7 +187,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
         if( pView->PickObj( aPos, 0, pObj, pPV, SdrSearchOptions::PICKMACRO ) &&
              dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
         {
-            SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
+            SwFlyFrame *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
             const SwFormatURL &rURL = pFly->GetFormat()->GetURL();
             OUString sText;
             if( rURL.GetMap() )
@@ -212,7 +212,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                 {
                     // then append the relative pixel position!!
                     Point aPt( aPos );
-                    aPt -= pFly->Frm().Pos();
+                    aPt -= pFly->Frame().Pos();
                     // without MapMode-Offset !!!!!
                     // without MapMode-Offset, without Offset, w ... !!!!!
                     aPt = pWindow->LogicToPixel(

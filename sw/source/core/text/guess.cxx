@@ -89,7 +89,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         if ( rInf.SnapToGrid() )
         {
             SwTextGridItem const*const pGrid(
-                    GetGridItem(rInf.GetTextFrm()->FindPageFrm()));
+                    GetGridItem(rInf.GetTextFrame()->FindPageFrame()));
             bAddItalic = !pGrid || GRID_LINES_CHARS != pGrid->GetGridType();
         }
 
@@ -112,7 +112,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     nLineWidth -= nLeftRightBorderSpace;
 
-    const bool bUnbreakableNumberings = rInf.GetTextFrm()->GetTextNode()->
+    const bool bUnbreakableNumberings = rInf.GetTextFrame()->GetTextNode()->
             getIDocumentSettingAccess()->get(DocumentSettingId::UNBREAKABLE_NUMBERINGS);
 
     // first check if everything fits to line
@@ -213,7 +213,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         nBreakPos = nCutPos;
         sal_Int32 nX = nBreakPos;
 
-        const SvxAdjust& rAdjust = rInf.GetTextFrm()->GetTextNode()->GetSwAttrSet().GetAdjust().GetAdjust();
+        const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNode()->GetSwAttrSet().GetAdjust().GetAdjust();
         if ( rAdjust == SVX_ADJUST_LEFT )
         {
             // we step back until a non blank character has been found
@@ -336,7 +336,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
                 // compare current script with script from last "real" character
                 if ( nScript - 1 != rInf.GetFont()->GetActual() )
-                    aLang = rInf.GetTextFrm()->GetTextNode()->GetLang(
+                    aLang = rInf.GetTextFrame()->GetTextNode()->GetLang(
                         CH_TXTATR_BREAKWORD == cFieldChr ?
                         nDoNotStepOver :
                         nLangIndex, 0, nScript );
@@ -344,7 +344,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         }
 
         const ForbiddenCharacters aForbidden(
-                *rInf.GetTextFrm()->GetNode()->getIDocumentSettingAccess()->getForbiddenCharacters( aLang, true ) );
+                *rInf.GetTextFrame()->GetNode()->getIDocumentSettingAccess()->getForbiddenCharacters( aLang, true ) );
 
         const bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
                                       ! rPor.InFieldGrp();
@@ -423,7 +423,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 CHAR_SOFTHYPHEN == rInf.GetText()[ nBreakPos - 1 ] )
                 nBreakPos = rInf.GetIdx() - 1;
 
-            const SvxAdjust& rAdjust = rInf.GetTextFrm()->GetTextNode()->GetSwAttrSet().GetAdjust().GetAdjust();
+            const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNode()->GetSwAttrSet().GetAdjust().GetAdjust();
             if( rAdjust != SVX_ADJUST_LEFT )
             {
                 // Delete any blanks at the end of a line, but be careful:

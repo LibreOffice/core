@@ -108,7 +108,7 @@ class MockedToxTabStopTokenHandler : public ToxTabStopTokenHandler {
 public:
     virtual HandledTabStopToken
     HandleTabStopToken(const SwFormToken& aToken, const SwTextNode& targetNode,
-            const SwRootFrm *currentLayout) const override {
+            const SwRootFrame *currentLayout) const override {
         (void)(aToken); (void)(targetNode); (void)(currentLayout); // avoid unused warnings.
         return HandledTabStopToken();
     }
@@ -128,7 +128,7 @@ public:
 private:
     SwChapterField
     ObtainChapterField(SwChapterFieldType* chapterFieldType, const SwFormToken* chapterToken,
-            const SwContentFrm* contentFrame, const SwContentNode *contentNode) const override {
+            const SwContentFrame* contentFrame, const SwContentNode *contentNode) const override {
         // get rid of 'unused-parameters' warnings
         (void)(chapterFieldType);(void)(chapterToken);(void)(contentFrame);(void)(contentNode);
         return mChapterField;

@@ -317,7 +317,7 @@ SwDoc::SwDoc()
         getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
 
     // Set to "Empty Page"
-    mpEmptyPageFormat->SetFormatAttr( SwFormatFrmSize( ATT_FIX_SIZE ) );
+    mpEmptyPageFormat->SetFormatAttr( SwFormatFrameSize( ATT_FIX_SIZE ) );
     // Set BodyFormat for columns
     mpColumnContFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ) );
 
@@ -424,7 +424,7 @@ SwDoc::~SwDoc()
     getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAndDestroyAll();
 
     const sw::DocDisposingHint aHint;
-    for(const auto& pWeakCursor : mvUnoCrsrTable)
+    for(const auto& pWeakCursor : mvUnoCursorTable)
     {
         auto pCursor(pWeakCursor.lock());
         if(pCursor)
@@ -479,7 +479,7 @@ SwDoc::~SwDoc()
     }
     delete mpDefTOXBases;
 
-    // Any of the FrmFormats can still have indices registered.
+    // Any of the FrameFormats can still have indices registered.
     // These need to be destroyed now at the latest.
     for( SwFrameFormat* pFormat : *mpFrameFormatTable )
         lcl_DelFormatIndices( pFormat );

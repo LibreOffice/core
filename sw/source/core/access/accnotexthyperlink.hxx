@@ -35,15 +35,15 @@ class SwAccessibleNoTextHyperlink :
     friend class SwAccessibleNoTextFrame;
 
     ::rtl::Reference< SwAccessibleNoTextFrame > xFrame;
-    const SwFrm *mpFrm;
+    const SwFrame *mpFrame;
 
     SwFrameFormat *GetFormat()
     {
-        return const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(mpFrm))->GetFormat();
+        return const_cast<SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(mpFrame))->GetFormat();
     }
 public:
 
-    SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrm* aFrm );
+    SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrame* aFrame );
 
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount()

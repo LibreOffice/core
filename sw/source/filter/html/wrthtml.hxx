@@ -52,7 +52,7 @@ class SdrUnoObj;
 class SvxBrushItem;
 class SvxFontItem;
 class SwHTMLNumRuleInfo;
-class SwHTMLPosFlyFrms;
+class SwHTMLPosFlyFrames;
 class SwTextFootnote;
 
 typedef std::vector<SwTextFootnote*> SwHTMLTextFootnotes;
@@ -260,7 +260,7 @@ class IDocumentStylePoolAccess;
 
 class SwHTMLWriter : public Writer
 {
-    SwHTMLPosFlyFrms *m_pHTMLPosFlyFrms;
+    SwHTMLPosFlyFrames *m_pHTMLPosFlyFrames;
     SwHTMLNumRuleInfo *m_pNumRuleInfo;// aktuelle Numerierung
     SwHTMLNumRuleInfo *m_pNextNumRuleInfo;
     sal_uInt32 m_nHTMLMode;               // Beschreibung der Export-Konfiguration
@@ -414,7 +414,7 @@ public:
     void OutHyperlinkHRefValue( const OUString& rURL );
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
-    bool OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nContentIdx,
+    bool OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx,
                         sal_uInt8 nPos, HTMLOutContext *pContext = nullptr );
     void OutFrameFormat( sal_uInt8 nType, const SwFrameFormat& rFormat,
                     const SdrObject *pSdrObj );
@@ -468,14 +468,14 @@ public:
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
     OString OutFrameFormatOptions( const SwFrameFormat& rFrameFormat, const OUString& rAltText,
-        sal_uInt32 nFrmOpts, const OString& rEndTags = OString() );
+        sal_uInt32 nFrameOpts, const OString& rEndTags = OString() );
 
-    void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, sal_uInt32 nFrmOpts);
+    void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, sal_uInt32 nFrameOpts);
 
     void OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameFormat );
     void OutCSS1_TableCellBorderHack(const SwFrameFormat& rFrameFormat);
     void OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameFormat, const SwFormatCol *pCol );
-    void OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat, sal_uInt32 nFrmOpts,
+    void OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat, sal_uInt32 nFrameOpts,
                                 const SdrObject *pSdrObj=nullptr,
                                 const SfxItemSet *pItemSet=nullptr );
     void OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFormat );
@@ -504,11 +504,11 @@ public:
 
     static sal_uInt32 ToPixel( sal_uInt32 nVal, const bool bVert );
 
-    sal_uInt16 GuessFrmType( const SwFrameFormat& rFrameFormat,
+    sal_uInt16 GuessFrameType( const SwFrameFormat& rFrameFormat,
                          const SdrObject*& rpStrObj );
-    static sal_uInt16 GuessOLENodeFrmType( const SwNode& rNd );
+    static sal_uInt16 GuessOLENodeFrameType( const SwNode& rNd );
 
-    void CollectFlyFrms();
+    void CollectFlyFrames();
 
     sal_uInt16 GetHTMLFontSize( sal_uInt32 nFontHeight ) const;
 
@@ -649,7 +649,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
 
 Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
                        Graphic& rGraphic, const OUString& rAlternateText,
-                       const Size& rRealSize, sal_uInt32 nFrmOpts,
+                       const Size& rRealSize, sal_uInt32 nFrameOpts,
                        const sal_Char *pMarkType = nullptr,
                        const ImageMap *pGenImgMap = nullptr );
 

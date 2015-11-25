@@ -242,11 +242,11 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
             continue;
 
         Point aPt;
-        const SwContentFrm* pCFrm = pTOXSrc->getLayoutFrm( getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
-        if (!pCFrm)
+        const SwContentFrame* pCFrame = pTOXSrc->getLayoutFrame( getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+        if (!pCFrame)
             continue;
 
-        if ( bInReadOnly || !pCFrm->IsProtected() )
+        if ( bInReadOnly || !pCFrame->IsProtected() )
         {
             CompareNodeContent aAbsNew( pTOXSrc->GetIndex(), pMark->GetStart() );
             switch( eDir )
@@ -692,12 +692,12 @@ static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl 
         // then find the "Anchor" (Body) position
         Point aPt;
         SwNode2Layout aNode2Layout( *pNd, pNd->GetIndex() );
-        const SwFrm* pFrm = aNode2Layout.GetFrm( &aPt, nullptr, false );
+        const SwFrame* pFrame = aNode2Layout.GetFrame( &aPt, nullptr, false );
 
-        if( pFrm )
+        if( pFrame )
         {
             SwPosition aPos( *pNd );
-            pNd = GetBodyTextNode( *pNd->GetDoc(), aPos, *pFrm );
+            pNd = GetBodyTextNode( *pNd->GetDoc(), aPos, *pFrame );
             OSL_ENSURE( pNd, "Where's the paragraph?" );
         }
     }
@@ -842,7 +842,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             : nullptr;
 
     SwNode2Layout aN2L( *pSectNd );
-    const_cast<SwSectionNode*>(pSectNd)->DelFrms();
+    const_cast<SwSectionNode*>(pSectNd)->DelFrames();
 
     // remove old content an insert one empty textnode (to hold the layout!)
     SwTextNode* pFirstEmptyNd;
@@ -1021,11 +1021,11 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     if(nIdx + 2 < pSectNd->EndOfSectionIndex())
         pDoc->GetNodes().Delete( aInsPos );
 
-    aN2L.RestoreUpperFrms( pDoc->GetNodes(), nIdx, nIdx + 1 );
-    std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
-    for ( std::set<SwRootFrm*>::iterator pLayoutIter = aAllLayouts.begin(); pLayoutIter != aAllLayouts.end(); ++pLayoutIter)
+    aN2L.RestoreUpperFrames( pDoc->GetNodes(), nIdx, nIdx + 1 );
+    std::set<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
+    for ( std::set<SwRootFrame*>::iterator pLayoutIter = aAllLayouts.begin(); pLayoutIter != aAllLayouts.end(); ++pLayoutIter)
     {
-        SwFrm::CheckPageDescs( static_cast<SwPageFrm*>((*pLayoutIter)->Lower()) );
+        SwFrame::CheckPageDescs( static_cast<SwPageFrame*>((*pLayoutIter)->Lower()) );
     }
 
     SetProtect( SwTOXBase::IsProtected() );
@@ -1149,7 +1149,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
             // If selected use marks from the same chapter only
             if( pTOXSrc->GetNodes().IsDocNodes() &&
                 pTOXSrc->GetText().getLength() && pTOXSrc->HasWriterListeners() &&
-                pTOXSrc->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+                pTOXSrc->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
                (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc ) == pOwnChapterNode ) &&
                !pTOXSrc->HasHiddenParaField() &&
                !SwScriptInfo::IsInHiddenRange( *pTOXSrc, pTextMark->GetStart() ) )
@@ -1207,7 +1207,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode )
         SwTextNode* pTextNd = pOutlineNode->GetTextNode();
         if( pTextNd && pTextNd->Len() && pTextNd->HasWriterListeners() &&
             sal_uInt16( pTextNd->GetAttrOutlineLevel()) <= GetLevel() &&
-            pTextNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+            pTextNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
            !pTextNd->HasHiddenParaField() &&
            !pTextNd->HasHiddenCharAttribute( true ) &&
             ( !IsFromChapter() ||
@@ -1247,7 +1247,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTextNode* pOwnChapterNode )
                 ::SetProgressState( 0, pDoc->GetDocShell() );
 
                 if (pTextNd->GetText().getLength() &&
-                    pTextNd->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
+                    pTextNd->getLayoutFrame(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
                     pTextNd->GetNodes().IsDocNodes() &&
                     ( !IsFromChapter() || pOwnChapterNode ==
                         ::lcl_FindChapterNode( *pTextNd ) ) )
@@ -1278,7 +1278,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTextNode* pOwnChapterNode )
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
         if (rTextNode.GetText().getLength() &&
-            rTextNode.getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
+            rTextNode.getLayoutFrame(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
             rTextNode.GetNodes().IsDocNodes() &&
             ( !IsFromChapter() ||
                 ::lcl_FindChapterNode( rTextNode ) == pOwnChapterNode ) )
@@ -1321,15 +1321,15 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
         if (rTextNode.GetText().getLength() &&
-            rTextNode.getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
+            rTextNode.getLayoutFrame(pDoc->getIDocumentLayoutAccess().GetCurrentLayout()) &&
             rTextNode.GetNodes().IsDocNodes() )
         {
             //#106485# the body node has to be used!
-            SwContentFrm *pFrm = rTextNode.getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
+            SwContentFrame *pFrame = rTextNode.getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
             SwPosition aFieldPos(rTextNode);
             const SwTextNode* pTextNode = nullptr;
-            if(pFrm && !pFrm->IsInDocBody())
-                pTextNode = GetBodyTextNode( *pDoc, aFieldPos, *pFrm );
+            if(pFrame && !pFrame->IsInDocBody())
+                pTextNode = GetBodyTextNode( *pDoc, aFieldPos, *pFrame );
             if(!pTextNode)
                 pTextNode = &rTextNode;
             SwTOXAuthority* pNew = new SwTOXAuthority( *pTextNode, *pFormatField, rIntl );
@@ -1473,7 +1473,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
                 }
             }
 
-            if( pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) && ( !IsFromChapter() ||
+            if( pCNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) && ( !IsFromChapter() ||
                     ::lcl_FindChapterNode( *pCNd ) == pOwnChapterNode ))
             {
                 SwTOXPara * pNew = new SwTOXPara( *pCNd, eMyType,
@@ -1511,7 +1511,7 @@ void SwTOXBaseSection::UpdateTable( const SwTextNode* pOwnChapterNode )
             while( nullptr != ( pCNd = rNds.GoNext( &aContentIdx ) ) &&
                 aContentIdx.GetIndex() < pTableNd->EndOfSectionIndex() )
             {
-                if( pCNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) && (!IsFromChapter() ||
+                if( pCNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) && (!IsFromChapter() ||
                     ::lcl_FindChapterNode( *pCNd ) == pOwnChapterNode ))
                 {
                     SwTOXTable * pNew = new SwTOXTable( *pCNd );
@@ -1543,7 +1543,7 @@ void SwTOXBaseSection::UpdatePageNum()
         return ;
 
     // Insert the current PageNumber into the TOC
-    SwPageFrm*  pAktPage    = nullptr;
+    SwPageFrame*  pAktPage    = nullptr;
     sal_uInt16      nPage       = 0;
     SwDoc* pDoc = GetFormat()->GetDoc();
 
@@ -1589,20 +1589,20 @@ void SwTOXBaseSection::UpdatePageNum()
                 SwTOXSource& rTOXSource = pSortBase->aTOXSources[j];
                 if( rTOXSource.pNd )
                 {
-                    SwContentFrm* pFrm = rTOXSource.pNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
-                    OSL_ENSURE( pFrm || pDoc->IsUpdateTOX(), "TOX, no Frame found");
-                    if( !pFrm )
+                    SwContentFrame* pFrame = rTOXSource.pNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
+                    OSL_ENSURE( pFrame || pDoc->IsUpdateTOX(), "TOX, no Frame found");
+                    if( !pFrame )
                         continue;
-                    if( pFrm->IsTextFrm() && static_cast<SwTextFrm*>(pFrm)->HasFollow() )
+                    if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->HasFollow() )
                     {
                         // find the right one
-                        SwTextFrm* pNext;
-                        while( nullptr != ( pNext = static_cast<SwTextFrm*>(pFrm->GetFollow()) )
+                        SwTextFrame* pNext;
+                        while( nullptr != ( pNext = static_cast<SwTextFrame*>(pFrame->GetFollow()) )
                                 && rTOXSource.nPos >= pNext->GetOfst() )
-                            pFrm = pNext;
+                            pFrame = pNext;
                     }
 
-                    SwPageFrm*  pTmpPage = pFrm->FindPageFrm();
+                    SwPageFrame*  pTmpPage = pFrame->FindPageFrame();
                     if( pTmpPage != pAktPage )
                     {
                         nPage       = pTmpPage->GetVirtPageNum();

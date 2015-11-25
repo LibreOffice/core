@@ -18,7 +18,7 @@
 
 struct SwFormToken;
 class SwPageDesc;
-class SwRootFrm;
+class SwRootFrame;
 class SwTextNode;
 
 namespace sw {
@@ -46,7 +46,7 @@ public:
      */
     virtual HandledTabStopToken
     HandleTabStopToken(const SwFormToken& aToken, const SwTextNode& targetNode,
-            const SwRootFrm *currentLayout) const = 0;
+            const SwRootFrame *currentLayout) const = 0;
 };
 
 /** The default implementation of ToxTabStopTokenHandler */
@@ -84,7 +84,7 @@ public:
      */
     ToxTabStopTokenHandler::HandledTabStopToken
     HandleTabStopToken(const SwFormToken& aToken, const SwTextNode& targetNode,
-            const SwRootFrm *currentLayout) const override;
+            const SwRootFrame *currentLayout) const override;
 
 private:
     /** Test whether the page layout can be obtained by a layout rectangle.
@@ -92,7 +92,7 @@ private:
      * Is used to determine how to find tab stop position.
      */
     static bool
-    CanUseLayoutRectangle(const SwTextNode& targetNode, const SwRootFrm *currentLayout);
+    CanUseLayoutRectangle(const SwTextNode& targetNode, const SwRootFrame *currentLayout);
 
     /** Calculate the page margin from the page description.
      *

@@ -868,7 +868,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     sal_uInt16 nDir = rHWrt.GetHTMLDirection(
             (pNodeItemSet ? static_cast < const SvxFrameDirectionItem& >(
                                     pNodeItemSet->Get( RES_FRAMEDIR ) )
-                          : rFormat.GetFrmDir() ).GetValue() );
+                          : rFormat.GetFrameDir() ).GetValue() );
 
     // Ein <P> wird nur geschrieben, wenn
     // - wir in keiner OL/UL/DL sind, oder
@@ -2063,7 +2063,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         rHTMLWrt.ChangeParaToken( 0 );
 
         // Alle an dem Node verankerten Rahmen ausgeben
-        rHTMLWrt.OutFlyFrm( rNode.GetIndex(), 0, HTML_POS_ANY );
+        rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HTML_POS_ANY );
 
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine(); // Absatz-Tag in eine neue Zeile
@@ -2089,7 +2089,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 const SwFrameFormat& rPgFormat =
                     rHTMLWrt.pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool
                     ( RES_POOLPAGE_HTML, false )->GetMaster();
-                const SwFormatFrmSize& rSz   = rPgFormat.GetFrmSize();
+                const SwFormatFrameSize& rSz   = rPgFormat.GetFrameSize();
                 const SvxLRSpaceItem& rLR = rPgFormat.GetLRSpace();
                 const SwFormatCol& rCol = rPgFormat.GetCol();
 
@@ -2104,7 +2104,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                     const SwTableBox* pBox = pTableNd->GetTable().GetTableBox(
                                     pNd->StartOfSectionIndex() );
                     if( pBox )
-                        nPageWidth = pBox->GetFrameFormat()->GetFrmSize().GetWidth();
+                        nPageWidth = pBox->GetFrameFormat()->GetFrameSize().GetWidth();
                 }
 
                 OString sWidth = OString::number(SwHTMLWriter::ToPixel(nPageWidth - nLeft - nRight, false));
@@ -2176,7 +2176,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 rHTMLWrt.m_bLFPossible = !rHTMLWrt.m_nLastParaToken;
 
                 // Alle an dem Node verankerten Rahmen ausgeben
-                rHTMLWrt.OutFlyFrm( rNode.GetIndex(), 0, HTML_POS_ANY );
+                rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HTML_POS_ANY );
                 rHTMLWrt.m_bLFPossible = false;
 
                 return rWrt;
@@ -2229,13 +2229,13 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     rHTMLWrt.OutForm();
 
     // An dem Node "verankerte" Seitenegebunde Rahmen ausgeben
-    bool bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(), 0, HTML_POS_PREFIX );
+    bool bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HTML_POS_PREFIX );
 
     // An dem Node verankerte Rahmen ausgeben, die vor dem
     // Absatz-Tag geschrieben werden sollen.
     if( bFlysLeft )
     {
-        bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(), 0, HTML_POS_BEFORE );
+        bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HTML_POS_BEFORE );
     }
 
     if( rHTMLWrt.pCurPam->GetPoint()->nNode == rHTMLWrt.pCurPam->GetMark()->nNode )
@@ -2402,7 +2402,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             if( bFlysLeft )
             {
                 aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
-                bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
+                bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(),
                                                 nStrPos, HTML_POS_INSIDE,
                                                 &aContext );
             }
@@ -2562,7 +2562,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
     // Die an der letzten Position verankerten Rahmen ausgeben
     if( bFlysLeft )
-        bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
+        bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(),
                                        nEnd, HTML_POS_INSIDE );
     OSL_ENSURE( !bFlysLeft, "Es wurden nicht alle Rahmen gespeichert!" );
 
@@ -2900,9 +2900,9 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
     const SwFrameFormat& rFormat = *rFlyCnt.GetFrameFormat();
     const SdrObject *pSdrObj = nullptr;
 
-    SwHTMLFrmType eType =
-        (SwHTMLFrmType)rHTMLWrt.GuessFrmType( rFormat, pSdrObj );
-    sal_uInt8 nMode = aHTMLOutFrmAsCharTable[eType][rHTMLWrt.m_nExportMode];
+    SwHTMLFrameType eType =
+        (SwHTMLFrameType)rHTMLWrt.GuessFrameType( rFormat, pSdrObj );
+    sal_uInt8 nMode = aHTMLOutFrameAsCharTable[eType][rHTMLWrt.m_nExportMode];
     rHTMLWrt.OutFrameFormat( nMode, rFormat, pSdrObj );
     return rWrt;
 }

@@ -68,14 +68,14 @@ void DocumentLayoutManager::SetCurrentViewShell( SwViewShell* pNew )
 }
 
 // It must be able to communicate to a SwViewShell. This is going to be removed later.
-const SwRootFrm *DocumentLayoutManager::GetCurrentLayout() const
+const SwRootFrame *DocumentLayoutManager::GetCurrentLayout() const
 {
     if(GetCurrentViewShell())
         return GetCurrentViewShell()->GetLayout();
     return nullptr;
 }
 
-SwRootFrm *DocumentLayoutManager::GetCurrentLayout()
+SwRootFrame *DocumentLayoutManager::GetCurrentLayout()
 {
     if(GetCurrentViewShell())
         return GetCurrentViewShell()->GetLayout();
@@ -239,7 +239,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
     }
 
     // Destroy Frames
-    pFormat->DelFrms();
+    pFormat->DelFrames();
 
     // Only FlyFrames are undoable at first
     const sal_uInt16 nWh = pFormat->Which();
@@ -334,7 +334,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     const SwFrameFormat& rSource,
     const SwFormatAnchor& rNewAnchor,
     bool bSetTextFlyAtt,
-    bool bMakeFrms )
+    bool bMakeFrames )
 {
     const bool bFly = RES_FLYFRMFMT == rSource.Which();
     const bool bDraw = RES_DRAWFRMFMT == rSource.Which();
@@ -467,8 +467,8 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 
         if( pDest->GetAnchor() == rNewAnchor )
         {
-            // Do *not* connect to layout, if a <MakeFrms> will not be called.
-            if ( bMakeFrms )
+            // Do *not* connect to layout, if a <MakeFrames> will not be called.
+            if ( bMakeFrames )
             {
                 pContact->ConnectToLayout( &rNewAnchor );
             }
@@ -490,8 +490,8 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
             aFormat, pPos->nContent.GetIndex(), 0 );
     }
 
-    if( bMakeFrms )
-        pDest->MakeFrms();
+    if( bMakeFrames )
+        pDest->MakeFrames();
 
     // If the draw format has a TextBox, then copy its fly format as well.
     if (SwFrameFormat* pSourceTextBox = SwTextBoxHelper::findTextBox(&rSource))
@@ -505,7 +505,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         // presumably these anchors are supported though not sure
         assert(FLY_AT_CHAR == boxAnchor.GetAnchorId() || FLY_AT_PARA == boxAnchor.GetAnchorId());
         SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
-                boxAnchor, bSetTextFlyAtt, bMakeFrms);
+                boxAnchor, bSetTextFlyAtt, bMakeFrames);
         SwAttrSet aSet(pDest->GetAttrSet());
         SwFormatContent aContent(pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
         aSet.Put(aContent);
@@ -521,7 +521,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 //by the SwLayouter
 void DocumentLayoutManager::ClearSwLayouterEntries()
 {
-    SwLayouter::ClearMovedFwdFrms( m_rDoc );
+    SwLayouter::ClearMovedFwdFrames( m_rDoc );
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( m_rDoc );
     // #i65250#
     SwLayouter::ClearMoveBwdLayoutInfo( m_rDoc );

@@ -27,7 +27,7 @@
 
 #include <acccontext.hxx>
 
-class SwTabFrm;
+class SwTabFrame;
 class SwAccessibleTableData_Impl;
 class SwTableBox;
 class SwSelBoxes;
@@ -86,7 +86,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwAccessibleTable( SwAccessibleMap* pInitMap, const SwTabFrm* pTableFrm );
+    SwAccessibleTable( SwAccessibleMap* pInitMap, const SwTabFrame* pTableFrame );
 
     // XInterface
 
@@ -226,10 +226,10 @@ public:
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( bool bRecursive = false ) override;
 
-    virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrmOrObj,
+    virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrameOrObj,
                                bool bRecursive ) override;
-    virtual void InvalidateChildPosOrSize( const sw::access::SwAccessibleChild& rFrmOrObj,
-                                           const SwRect& rFrm ) override;
+    virtual void InvalidateChildPosOrSize( const sw::access::SwAccessibleChild& rFrameOrObj,
+                                           const SwRect& rFrame ) override;
 
     // XAccessibleSelection
 
@@ -292,7 +292,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwAccessibleTableColHeaders( SwAccessibleMap *pMap, const SwTabFrm *pTabFrm );
+    SwAccessibleTableColHeaders( SwAccessibleMap *pMap, const SwTabFrame *pTabFrame );
 
     // XInterface
 

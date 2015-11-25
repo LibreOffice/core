@@ -236,8 +236,8 @@ public:
 
 };
 
-// TabPage for ShadowCrsr
-class SwShdwCrsrOptionsTabPage : public SfxTabPage
+// TabPage for ShadowCursor
+class SwShdwCursorOptionsTabPage : public SfxTabPage
 {
     //nonprinting characters
     VclPtr<CheckBox> m_pParaCB;
@@ -259,7 +259,7 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     VclPtr<RadioButton> m_pFillSpaceRB;
 
     VclPtr<VclFrame> m_pCursorProtFrame;
-    VclPtr<CheckBox> m_pCrsrInProtCB;
+    VclPtr<CheckBox> m_pCursorInProtCB;
     VclPtr<CheckBox> m_pIgnoreProtCB;
 
     VclPtr<CheckBox> m_pMathBaselineAlignmentCB;
@@ -267,8 +267,8 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     SwWrtShell *    m_pWrtShell;
 
 public:
-    SwShdwCrsrOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwShdwCrsrOptionsTabPage();
+    SwShdwCursorOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    virtual ~SwShdwCursorOptionsTabPage();
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

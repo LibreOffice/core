@@ -26,7 +26,7 @@ SwBlockCursor::~SwBlockCursor()
     delete pEndPt;
 }
 
-SwShellCrsr& SwBlockCursor::getShellCrsr()
+SwShellCursor& SwBlockCursor::getShellCursor()
 {
     return aCursor;
 }

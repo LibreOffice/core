@@ -138,7 +138,7 @@ protected:
     short           m_nDivisionY;
     sal_uInt8       m_nPagePreviewRow;       // Page Preview Row/Columns.
     sal_uInt8       m_nPagePreviewCol;       // Page Preview Row/Columns.
-    sal_uInt8       m_nShadowCrsrFillMode;  // FillMode for ShadowCrsr.
+    sal_uInt8       m_nShadowCursorFillMode;  // FillMode for ShadowCursor.
     bool            m_bReadonly : 1;      // Readonly-Doc.
     bool            m_bStarOneSetting : 1;// Prevent from UI automatics (no scrollbars in readonly documents).
     bool            m_bIsPagePreview : 1; // The preview mustn't print field/footnote/... shadings.
@@ -549,8 +549,8 @@ public:
     bool            IsPagePreview() const {return m_bIsPagePreview; }
     void            SetPagePreview(bool bSet) { m_bIsPagePreview= bSet; }
 
-    sal_uInt8           GetShdwCrsrFillMode() const { return m_nShadowCrsrFillMode; }
-    void            SetShdwCrsrFillMode( sal_uInt8 nMode ) { m_nShadowCrsrFillMode = nMode; };
+    sal_uInt8           GetShdwCursorFillMode() const { return m_nShadowCursorFillMode; }
+    void            SetShdwCursorFillMode( sal_uInt8 nMode ) { m_nShadowCursorFillMode = nMode; };
 
     bool        IsShowPlaceHolderFields() const { return m_bShowPlaceHolderFields; }
     void            SetShowPlaceHolderFields(bool bSet) { m_bShowPlaceHolderFields = bSet; }
@@ -602,7 +602,7 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
 {
     m_nUIOptions = rVOpt.m_nUIOptions;
     m_nTableDestination = rVOpt.m_nTableDestination;
-    m_nShadowCrsrFillMode = rVOpt.m_nShadowCrsrFillMode;
+    m_nShadowCursorFillMode = rVOpt.m_nShadowCursorFillMode;
 }
 
 // Helper function for checking HTML-capabilities.

@@ -34,9 +34,9 @@ namespace vcl
     class PDFExtOutDevData;
 }
 class OutputDevice;
-class SwFrm;
+class SwFrame;
 class SwLinePortion;
-class SwPageFrm;
+class SwPageFrame;
 class SwPrintData;
 class SwTextPainter;
 class SwEditShell;
@@ -55,11 +55,11 @@ class SvxLanguageItem;
  *
  * Grouping elements:
  *
- * SwRootFrm                                Document
+ * SwRootFrame                                Document
  *                                          Part
  *                                          Art
  * SwSection                                Sect
- * SwFootnoteContFrm and SwFlyFrm                Div
+ * SwFootnoteContFrame and SwFlyFrame                Div
  * SwFormat "Quotations"                       BlockQuote
  * SwFormat "Caption"                          Caption
  * SwSection (TOC)                          TOC
@@ -73,16 +73,16 @@ class SvxLanguageItem;
  * SwTextNode with Outline                   H1 - H6
  * SwTextNode with NumRule                   L, LI, LBody
  * SwTable                                  Table
- * SwRowFrm                                 TR
- * SwCellFrm in Headline row or
+ * SwRowFrame                                 TR
+ * SwCellFrame in Headline row or
  * SwFtm "Table Heading"                    TH
- * SwCellFrm                                TD
+ * SwCellFrame                                TD
  *
  * Inline-Level Structure Elements:
  *
  * SwTextPortion                             Span
  * SwFormat "Quotation"                        Quote
- * SwFootnoteFrm                                 Note
+ * SwFootnoteFrame                                 Note
  *                                          Form
  *                                          Reference
  * SwFieldPortion (AuthorityField)            BibEntry
@@ -91,21 +91,21 @@ class SvxLanguageItem;
  *
  * Illustration elements:
  *
- * SwFlyFrm with SwNoTextFrm                 Figure
- * SwFlyFrm with Math OLE Object            Formula
+ * SwFlyFrame with SwNoTextFrame                 Figure
+ * SwFlyFrame with Math OLE Object            Formula
  *
  */
 
 struct Num_Info
 {
-    const SwFrm& mrFrm;
-    Num_Info( const SwFrm& rFrm ) : mrFrm( rFrm ) {};
+    const SwFrame& mrFrame;
+    Num_Info( const SwFrame& rFrame ) : mrFrame( rFrame ) {};
 };
 
-struct Frm_Info
+struct Frame_Info
 {
-    const SwFrm& mrFrm;
-    Frm_Info( const SwFrm& rFrm ) : mrFrm( rFrm ) {};
+    const SwFrame& mrFrame;
+    Frame_Info( const SwFrame& rFrame ) : mrFrame( rFrame ) {};
 };
 
 struct Por_Info
@@ -141,7 +141,7 @@ class SwTaggedPDFHelper
     vcl::PDFExtOutDevData* mpPDFExtOutDevData;
 
     const Num_Info* mpNumInfo;
-    const Frm_Info* mpFrmInfo;
+    const Frame_Info* mpFrameInfo;
     const Por_Info* mpPorInfo;
 
     void BeginTag( vcl::PDFWriter::StructElement aTagRole, const OUString& rTagName );
@@ -160,10 +160,10 @@ class SwTaggedPDFHelper
 
     public:
 
-    // pFrmInfo != 0 => BeginBlockStructureElement
+    // pFrameInfo != 0 => BeginBlockStructureElement
     // pPorInfo != 0 => BeginInlineStructureElement
-    // pFrmInfo, pPorInfo = 0 => BeginNonStructureElement
-    SwTaggedPDFHelper( const Num_Info* pNumInfo, const Frm_Info* pFrmInfo, const Por_Info* pPorInfo,
+    // pFrameInfo, pPorInfo = 0 => BeginNonStructureElement
+    SwTaggedPDFHelper( const Num_Info* pNumInfo, const Frame_Info* pFrameInfo, const Por_Info* pPorInfo,
                        OutputDevice& rOut );
     ~SwTaggedPDFHelper();
 
@@ -187,7 +187,7 @@ typedef std::vector< IdMapEntry > LinkIdMap;
 typedef std::map< const SwTable*, TableColumnsMapEntry > TableColumnsMap;
 typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListIdMap;
 typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListBodyIdMap;
-typedef std::map< const void*, sal_Int32 > FrmTagIdMap;
+typedef std::map< const void*, sal_Int32 > FrameTagIdMap;
 
 class SwEnhancedPDFExportHelper
 {
@@ -215,7 +215,7 @@ class SwEnhancedPDFExportHelper
     static LinkIdMap aLinkIdMap;
     static NumListIdMap aNumListIdMap;
     static NumListBodyIdMap aNumListBodyIdMap;
-    static FrmTagIdMap aFrmTagIdMap;
+    static FrameTagIdMap aFrameTagIdMap;
 
     static LanguageType eLanguageDefault;
 
@@ -242,12 +242,12 @@ class SwEnhancedPDFExportHelper
     static LinkIdMap& GetLinkIdMap() { return aLinkIdMap; }
     static NumListIdMap& GetNumListIdMap() {return aNumListIdMap; }
     static NumListBodyIdMap& GetNumListBodyIdMap() {return aNumListBodyIdMap; }
-    static FrmTagIdMap& GetFrmTagIdMap() { return aFrmTagIdMap; }
+    static FrameTagIdMap& GetFrameTagIdMap() { return aFrameTagIdMap; }
 
     static LanguageType GetDefaultLanguage() {return eLanguageDefault; }
 
     //scale and position rRectangle if we're scaling due to notes in margins.
-    Rectangle SwRectToPDFRect(const SwPageFrm* pCurrPage,
+    Rectangle SwRectToPDFRect(const SwPageFrame* pCurrPage,
         const Rectangle& rRectangle) const;
 };
 

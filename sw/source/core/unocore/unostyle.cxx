@@ -3161,7 +3161,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     pTargetFormat->SetFormatAttr(aLR);
                     pTargetFormat->SetFormatAttr(aUL);
                     SwPageDesc* pStdPgDsc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
-                    SwFormatFrmSize aFrmSz(ATT_FIX_SIZE);
+                    SwFormatFrameSize aFrameSz(ATT_FIX_SIZE);
 
                     if(RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFormatId())
                     {
@@ -3169,27 +3169,27 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                         {
                             const Size aPhysSize( SvxPaperInfo::GetPaperSize(
                                 static_cast<Printer*>(m_pDoc->getIDocumentDeviceAccess().getPrinter(false))));
-                            aFrmSz.SetSize(aPhysSize);
+                            aFrameSz.SetSize(aPhysSize);
                         }
                         else
                         {
-                            aFrmSz.SetSize(SvxPaperInfo::GetDefaultPaperSize());
+                            aFrameSz.SetSize(SvxPaperInfo::GetDefaultPaperSize());
                         }
 
                     }
                     else
                     {
-                        aFrmSz = pStdPgDsc->GetMaster().GetFrmSize();
+                        aFrameSz = pStdPgDsc->GetMaster().GetFrameSize();
                     }
 
                     if(pStdPgDsc->GetLandscape())
                     {
-                        SwTwips nTmp = aFrmSz.GetHeight();
-                        aFrmSz.SetHeight(aFrmSz.GetWidth());
-                        aFrmSz.SetWidth(nTmp);
+                        SwTwips nTmp = aFrameSz.GetHeight();
+                        aFrameSz.SetHeight(aFrameSz.GetWidth());
+                        aFrameSz.SetWidth(nTmp);
                     }
 
-                    pTargetFormat->SetFormatAttr( aFrmSz );
+                    pTargetFormat->SetFormatAttr( aFrameSz );
                 }
                 else
                 {

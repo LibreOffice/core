@@ -189,7 +189,7 @@ public:
     void ScaleImageMap();
 
     /// Returns the with our graphic attributes filled Graphic-Attr-Structure.
-    GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
+    GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrame* pFrame ) const;
 
     std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer() { return mpThreadConsumer;}
     bool IsLinkedInputStreamReady() const { return mbLinkedInputStreamReady;}

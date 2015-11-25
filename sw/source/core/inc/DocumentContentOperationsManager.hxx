@@ -104,7 +104,7 @@ public:
                             const sal_Int32 nEndContentIndex,
                             const SwNodeIndex& rInsPos,
                             const std::pair<const SwPaM&, const SwPosition&> * pCopiedPaM = nullptr,
-                            bool bMakeNewFrms = true,
+                            bool bMakeNewFrames = true,
                             bool bDelRedlines = true,
                             bool bCopyFlyAtFly = false ) const;
     void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
@@ -163,7 +163,7 @@ private:
                                 SwFrameFormat* = nullptr );
     /* Copy a range within the same or to another document.
      Position may not lie within range! */
-    bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrms /*= true */,
+    bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrames /*= true */,
             const bool bCopyAll, SwPaM *const pCpyRng /*= 0*/ ) const;
 };
 

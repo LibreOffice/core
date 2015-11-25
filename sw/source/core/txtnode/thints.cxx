@@ -1270,7 +1270,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 if( !(SetAttrMode::NOTXTATRCHR & nInsMode) )
                 {
                     // Wir muessen zuerst einfuegen, da in SetAnchor()
-                    // dem FlyFrm GetStart() uebermittelt wird.
+                    // dem FlyFrame GetStart() uebermittelt wird.
                     //JP 11.05.98: falls das Anker-Attribut schon richtig
                     // gesetzt ist, dann korrigiere dieses nach dem Einfuegen
                     // des Zeichens. Sonst muesste das immer  ausserhalb
@@ -1397,7 +1397,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     {
                         SwContentNode* pCNd = rNodes[ nSttIdx ]->GetContentNode();
                         if( nullptr != pCNd )
-                            pCNd->DelFrms();
+                            pCNd->DelFrames();
                     }
                 }
 

@@ -60,16 +60,16 @@ bool SwAccessibleCell::IsSelected()
     assert(GetMap());
     const SwViewShell *pVSh = GetMap()->GetShell();
     assert(pVSh);
-    if( dynamic_cast<const SwCrsrShell*>( pVSh) !=  nullptr )
+    if( dynamic_cast<const SwCursorShell*>( pVSh) !=  nullptr )
     {
-        const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );
+        const SwCursorShell *pCSh = static_cast< const SwCursorShell * >( pVSh );
         if( pCSh->IsTableMode() )
         {
-            const SwCellFrm *pCFrm =
-                static_cast< const SwCellFrm * >( GetFrm() );
+            const SwCellFrame *pCFrame =
+                static_cast< const SwCellFrame * >( GetFrame() );
             SwTableBox *pBox =
-                const_cast< SwTableBox *>( pCFrm->GetTabBox() );
-            SwSelBoxes const& rBoxes(pCSh->GetTableCrsr()->GetSelectedBoxes());
+                const_cast< SwTableBox *>( pCFrame->GetTabBox() );
+            SwSelBoxes const& rBoxes(pCSh->GetTableCursor()->GetSelectedBoxes());
             bRet = rBoxes.find(pBox) != rBoxes.end();
         }
     }
@@ -84,7 +84,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     // SELECTABLE
     const SwViewShell *pVSh = GetMap()->GetShell();
     assert(pVSh);
-    if( dynamic_cast<const SwCrsrShell*>( pVSh) !=  nullptr )
+    if( dynamic_cast<const SwCursorShell*>( pVSh) !=  nullptr )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
     //Add resizable state to table cell.
     rStateSet.AddState( AccessibleStateType::RESIZABLE );
@@ -100,13 +100,13 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
 }
 
 SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
-                                    const SwCellFrm *pCellFrm )
-    : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrm )
+                                    const SwCellFrame *pCellFrame )
+    : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrame )
     , aSelectionHelper( *this )
     , bIsSelected( false )
 {
     SolarMutexGuard aGuard;
-    OUString sBoxName( pCellFrm->GetTabBox()->GetName() );
+    OUString sBoxName( pCellFrame->GetTabBox()->GetName() );
     SetName( sBoxName );
 
     bIsSelected = IsSelected();
@@ -151,16 +151,16 @@ bool SwAccessibleCell::_InvalidateMyCursorPos()
     return bChanged;
 }
 
-bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
+bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrame *pFrame )
 {
     bool bChanged = false;
 
-    const SwAccessibleChildSList aVisList( GetVisArea(), *pFrm, *GetMap() );
+    const SwAccessibleChildSList aVisList( GetVisArea(), *pFrame, *GetMap() );
     SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
     while( aIter != aVisList.end() )
     {
         const SwAccessibleChild& rLower = *aIter;
-        const SwFrm *pLower = rLower.GetSwFrm();
+        const SwFrame *pLower = rLower.GetSwFrame();
         if( pLower )
         {
             if( rLower.IsAccessible( GetMap()->GetShell()->IsPreview() )  )
@@ -169,7 +169,7 @@ bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
                     GetMap()->GetContextImpl( pLower, false ) );
                 if( xAccImpl.is() )
                 {
-                    assert(xAccImpl->GetFrm()->IsCellFrm());
+                    assert(xAccImpl->GetFrame()->IsCellFrame());
                     bChanged = static_cast< SwAccessibleCell *>(
                             xAccImpl.get() )->_InvalidateMyCursorPos();
                 }
@@ -195,9 +195,9 @@ void SwAccessibleCell::_InvalidateCursorPos()
     if (IsSelected())
     {
         const SwAccessibleChild aChild( GetChild( *(GetMap()), 0 ) );
-        if( aChild.IsValid()  && aChild.GetSwFrm() )
+        if( aChild.IsValid()  && aChild.GetSwFrame() )
         {
-            ::rtl::Reference < SwAccessibleContext > xChildImpl( GetMap()->GetContextImpl( aChild.GetSwFrm())  );
+            ::rtl::Reference < SwAccessibleContext > xChildImpl( GetMap()->GetContextImpl( aChild.GetSwFrame())  );
             if (xChildImpl.is())
             {
                 AccessibleEventObject aEvent;
@@ -208,16 +208,16 @@ void SwAccessibleCell::_InvalidateCursorPos()
         }
     }
 
-    const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
-    assert(pParent->IsTabFrm());
-    const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( pParent );
-    if( pTabFrm->IsFollow() )
-        pTabFrm = pTabFrm->FindMaster();
+    const SwFrame *pParent = GetParent( SwAccessibleChild(GetFrame()), IsInPagePreview() );
+    assert(pParent->IsTabFrame());
+    const SwTabFrame *pTabFrame = static_cast< const SwTabFrame * >( pParent );
+    if( pTabFrame->IsFollow() )
+        pTabFrame = pTabFrame->FindMaster();
 
-    while( pTabFrm )
+    while( pTabFrame )
     {
-        _InvalidateChildrenCursorPos( pTabFrm );
-        pTabFrm = pTabFrm->GetFollow();
+        _InvalidateChildrenCursorPos( pTabFrame );
+        pTabFrame = pTabFrame->GetFollow();
     }
     if (m_pAccTable.is())
     {
@@ -265,21 +265,21 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
 
 void SwAccessibleCell::Dispose( bool bRecursive )
 {
-    const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
+    const SwFrame *pParent = GetParent( SwAccessibleChild(GetFrame()), IsInPagePreview() );
     ::rtl::Reference< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, false ) );
     if( xAccImpl.is() )
-        xAccImpl->DisposeChild( SwAccessibleChild(GetFrm()), bRecursive );
+        xAccImpl->DisposeChild( SwAccessibleChild(GetFrame()), bRecursive );
     SwAccessibleContext::Dispose( bRecursive );
 }
 
 void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 {
-    const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
+    const SwFrame *pParent = GetParent( SwAccessibleChild(GetFrame()), IsInPagePreview() );
     ::rtl::Reference< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, false ) );
     if( xAccImpl.is() )
-        xAccImpl->InvalidateChildPosOrSize( SwAccessibleChild(GetFrm()), rOldBox );
+        xAccImpl->InvalidateChildPosOrSize( SwAccessibleChild(GetFrame()), rOldBox );
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
 
@@ -339,11 +339,11 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
 
 SwFrameFormat* SwAccessibleCell::GetTableBoxFormat() const
 {
-    assert(GetFrm());
-    assert(GetFrm()->IsCellFrm());
+    assert(GetFrame());
+    assert(GetFrame()->IsCellFrame());
 
-    const SwCellFrm* pCellFrm = static_cast<const SwCellFrm*>( GetFrm() );
-    return pCellFrm->GetTabBox()->GetFrameFormat();
+    const SwCellFrame* pCellFrame = static_cast<const SwCellFrame*>( GetFrame() );
+    return pCellFrame->GetTabBox()->GetFrameFormat();
 }
 
 //Implement TableCell currentValue
@@ -437,7 +437,7 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
 {
     SolarMutexGuard g;
 
-    const SvxBrushItem &rBack = GetFrm()->GetAttrSet()->GetBackground();
+    const SvxBrushItem &rBack = GetFrame()->GetAttrSet()->GetBackground();
     sal_uInt32 crBack = rBack.GetColor().GetColor();
 
     if (COL_AUTO == crBack)

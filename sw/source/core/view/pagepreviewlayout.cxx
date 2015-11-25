@@ -44,11 +44,11 @@
 // methods to initialize page preview layout
 
 SwPagePreviewLayout::SwPagePreviewLayout( SwViewShell& _rParentViewShell,
-                                          const SwRootFrm& _rLayoutRootFrm )
+                                          const SwRootFrame& _rLayoutRootFrame )
     : mnXFree ( 4*142 ),
       mnYFree ( 4*142 ),
       mrParentViewShell( _rParentViewShell ),
-      mrLayoutRootFrm ( _rLayoutRootFrm )
+      mrLayoutRootFrame ( _rLayoutRootFrame )
 {
     _Clear();
 
@@ -125,23 +125,23 @@ void SwPagePreviewLayout::_CalcPreviewLayoutSizes()
     vcl::RenderContext* pRenderContext = mrParentViewShell.GetOut();
     // calculate maximal page size; calculate also number of pages
 
-    const SwPageFrm* pPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
+    const SwPageFrame* pPage = static_cast<const SwPageFrame*>(mrLayoutRootFrame.Lower());
     while ( pPage )
     {
         if ( !mbBookPreview && !mbPrintEmptyPages && pPage->IsEmptyPage() )
         {
-            pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
+            pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
             continue;
         }
 
         ++mnPages;
         pPage->Calc(pRenderContext);
-        const Size& rPageSize = pPage->Frm().SSize();
+        const Size& rPageSize = pPage->Frame().SSize();
         if ( rPageSize.Width() > maMaxPageSize.Width() )
             maMaxPageSize.Width() = rPageSize.Width();
         if ( rPageSize.Height() > maMaxPageSize.Height() )
             maMaxPageSize.Height() = rPageSize.Height();
-        pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
+        pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
     }
     // calculate and set column width and row height
     mnColWidth = maMaxPageSize.Width() + mnXFree;
@@ -555,7 +555,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
         return;
 
     // determine start page frame
-    const SwPageFrm* pStartPage = mrLayoutRootFrm.GetPageByPageNum( mnPaintPhyStartPageNum );
+    const SwPageFrame* pStartPage = mrLayoutRootFrame.GetPageByPageNum( mnPaintPhyStartPageNum );
 
     // calculate initial paint offset
     Point aInitialPaintOffset;
@@ -575,7 +575,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
     aInitialPaintOffset += maAdditionalPaintOffset;
 
     // prepare loop data
-    const SwPageFrm* pPage = pStartPage;
+    const SwPageFrame* pPage = pStartPage;
     sal_uInt16 nCurrCol = mnPaintStartCol;
     sal_uInt16 nConsideredRows = 0;
     Point aCurrPaintOffset = aInitialPaintOffset;
@@ -587,7 +587,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
     {
         if ( !mbBookPreview && !mbPrintEmptyPages && pPage->IsEmptyPage() )
         {
-            pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
+            pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
             continue;
         }
 
@@ -604,7 +604,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
             pPreviewPage->bVisible = false;
             maPreviewPages.push_back( pPreviewPage );
             // continue with next page and next column
-            pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
+            pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
             ++nCurrCol;
             continue;
         }
@@ -641,7 +641,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
         }
 
         // prepare data for next loop
-        pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
+        pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
 
         /// check whether RTL interface or not
         if(!AllSettings::GetLayoutRTL())
@@ -662,7 +662,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
 
     OD 13.12.2002 #103492#
 */
-bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrm& _rPage,
+bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrame& _rPage,
                                                    const Point& _rPreviewOffset,
                                                    PreviewPage* _opPreviewPage )
 {
@@ -672,12 +672,12 @@ bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrm& _rPage,
     if ( _rPage.IsEmptyPage() )
     {
         if ( _rPage.GetPhyPageNum() % 2 == 0 )
-            _opPreviewPage->aPageSize = _rPage.GetPrev()->Frm().SSize();
+            _opPreviewPage->aPageSize = _rPage.GetPrev()->Frame().SSize();
         else
-            _opPreviewPage->aPageSize = _rPage.GetNext()->Frm().SSize();
+            _opPreviewPage->aPageSize = _rPage.GetNext()->Frame().SSize();
     }
     else
-        _opPreviewPage->aPageSize = _rPage.Frm().SSize();
+        _opPreviewPage->aPageSize = _rPage.Frame().SSize();
     // position of page in preview window
     Point aPreviewWinOffset( _rPreviewOffset );
     if ( _opPreviewPage->aPageSize.Width() < maMaxPageSize.Width() )
@@ -693,7 +693,7 @@ bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrm& _rPage,
     }
     else
     {
-        _opPreviewPage->aLogicPos = _rPage.Frm().Pos();
+        _opPreviewPage->aLogicPos = _rPage.Frame().Pos();
         _opPreviewPage->aMapOffset = _opPreviewPage->aPreviewWinPos - _opPreviewPage->aLogicPos;
     }
 
@@ -1029,7 +1029,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
     }
 
     // OD 17.11.2003 #i22014# - no paint, if <superfluous> flag is set at layout
-    if (mrLayoutRootFrm.IsSuperfluous())
+    if (mrLayoutRootFrame.IsSuperfluous())
     {
         return true;
     }
@@ -1050,7 +1050,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
     {
         mrParentViewShell.Imp()->m_bFirstPageInvalid = false;
         mrParentViewShell.Imp()->m_pFirstVisiblePage =
-                const_cast<SwPageFrm*>(maPreviewPages[0]->pPage);
+                const_cast<SwPageFrame*>(maPreviewPages[0]->pPage);
     }
 
     // paint preview background
@@ -1077,7 +1077,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
     MapMode aMapMode( pOutputDev->GetMapMode() );
     MapMode aSavedMapMode = aMapMode;
 
-    const vcl::Font& rEmptyPgFont = SwPageFrm::GetEmptyPageFont();
+    const vcl::Font& rEmptyPgFont = SwPageFrame::GetEmptyPageFont();
 
     for ( std::vector<PreviewPage*>::const_iterator aPageIter = maPreviewPages.begin();
           aPageIter != maPreviewPages.end();
@@ -1116,7 +1116,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
                 pOutputDev->SetFont( aOldFont );
                 // paint shadow and border for empty page
                 // OD 19.02.2003 #107369# - use new method to paint page border and shadow
-                SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
+                SwPageFrame::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
             }
             else
             {
@@ -1128,11 +1128,11 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
                 // paint page border and shadow
                 {
                     SwRect aPageBorderRect;
-                    SwPageFrm::GetBorderAndShadowBoundRect( SwRect( aPageRect ), &mrParentViewShell, &rRenderContext, aPageBorderRect,
+                    SwPageFrame::GetBorderAndShadowBoundRect( SwRect( aPageRect ), &mrParentViewShell, &rRenderContext, aPageBorderRect,
                         (*aPageIter)->pPage->IsLeftShadowNeeded(), (*aPageIter)->pPage->IsRightShadowNeeded(), true );
                     const vcl::Region aDLRegion(aPageBorderRect.SVRect());
                     mrParentViewShell.DLPrePaint2(aDLRegion);
-                    SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
+                    SwPageFrame::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
                     mrParentViewShell.DLPostPaint2(true);
                 }
                 // <--
@@ -1160,7 +1160,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
         mrParentViewShell.Imp()->UpdateAccessiblePreview(
                         maPreviewPages,
                         aMapMode.GetScaleX(),
-                        mrLayoutRootFrm.GetPageByPageNum( mnSelectedPageNum ),
+                        mrLayoutRootFrame.GetPageByPageNum( mnSelectedPageNum ),
                         maWinSize );
     }
 
@@ -1199,7 +1199,7 @@ void SwPagePreviewLayout::Repaint( const Rectangle& rInvalidCoreRect ) const
     {
         mrParentViewShell.Imp()->m_bFirstPageInvalid = false;
         mrParentViewShell.Imp()->m_pFirstVisiblePage =
-                const_cast<SwPageFrm*>(maPreviewPages[0]->pPage);
+                const_cast<SwPageFrame*>(maPreviewPages[0]->pPage);
     }
 
     // invalidate visible pages, which overlap the invalid core rectangle
@@ -1253,7 +1253,7 @@ void SwPagePreviewLayout::_PaintSelectMarkAtPage(vcl::RenderContext& rRenderCont
     SwRect aPageRect( _aSelectedPreviewPage->aLogicPos,
                          _aSelectedPreviewPage->aPageSize );
     // OD 19.02.2003 #107369# - use aligned page rectangle, as it is used for
-    // page border and shadow paint - see <SwPageFrm::PaintBorderAndShadow(..)>
+    // page border and shadow paint - see <SwPageFrame::PaintBorderAndShadow(..)>
     ::SwAlignRect( aPageRect, &mrParentViewShell, pOutputDev );
     Rectangle aPxPageRect = pOutputDev->LogicToPixel( aPageRect.SVRect() );
 
@@ -1444,7 +1444,7 @@ sal_uInt16 SwPagePreviewLayout::ConvertAbsoluteToRelativePageNum( sal_uInt16 _nA
         return _nAbsPageNum;
     }
 
-    const SwPageFrm* pTmpPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
+    const SwPageFrame* pTmpPage = static_cast<const SwPageFrame*>(mrLayoutRootFrame.Lower());
 
     sal_uInt16 nRet = 1;
 
@@ -1453,7 +1453,7 @@ sal_uInt16 SwPagePreviewLayout::ConvertAbsoluteToRelativePageNum( sal_uInt16 _nA
         if ( !pTmpPage->IsEmptyPage() )
             ++nRet;
 
-        pTmpPage = static_cast<const SwPageFrm*>( pTmpPage->GetNext() );
+        pTmpPage = static_cast<const SwPageFrame*>( pTmpPage->GetNext() );
     }
 
     return nRet;
@@ -1467,8 +1467,8 @@ sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nR
         return _nRelPageNum;
     }
 
-    const SwPageFrm* pTmpPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
-    const SwPageFrm* pRet = nullptr;
+    const SwPageFrame* pTmpPage = static_cast<const SwPageFrame*>(mrLayoutRootFrame.Lower());
+    const SwPageFrame* pRet = nullptr;
 
     sal_uInt16 i = 0;
     while( pTmpPage && i != _nRelPageNum )
@@ -1477,7 +1477,7 @@ sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nR
             ++i;
 
         pRet = pTmpPage;
-        pTmpPage = static_cast<const SwPageFrm*>( pTmpPage->GetNext() );
+        pTmpPage = static_cast<const SwPageFrame*>( pTmpPage->GetNext() );
     }
 
     return pRet->GetPhyPageNum();

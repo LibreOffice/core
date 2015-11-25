@@ -21,7 +21,7 @@
 
 #include "fldbas.hxx"
 
-class SwFrm;
+class SwFrame;
 class SwContentNode;
 class SwTextNode;
 class ToxTextGeneratorTest;
@@ -63,7 +63,7 @@ public:
     SwChapterField(SwChapterFieldType*, sal_uInt32 nFormat = 0);
 
     // #i53420#
-    void ChangeExpansion( const SwFrm*,
+    void ChangeExpansion( const SwFrame*,
                           const SwContentNode*,
         bool bSrchNum = false);
     void ChangeExpansion(const SwTextNode &rNd, bool bSrchNum);

@@ -174,7 +174,7 @@ bool SwViewShellImp::IsDragPossible( const Point &rPoint )
         aRect.Union( aTmp );
     }
     else
-        aRect = GetShell()->GetLayout()->Frm();
+        aRect = GetShell()->GetLayout()->Frame();
 
     aRect.Top(    aRect.Top()    - FUZZY_EDGE );
     aRect.Bottom( aRect.Bottom() + FUZZY_EDGE );
@@ -220,9 +220,9 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
             if( !pCont || dynamic_cast<const SwDrawContact*>( pCont) ==  nullptr )
                 continue;
 
-            const SwFrm *pAnchor = static_cast<const SwDrawContact*>(pCont)->GetAnchorFrm();
+            const SwFrame *pAnchor = static_cast<const SwDrawContact*>(pCont)->GetAnchorFrame();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
-                 !pAnchor->GetUpper() || !pAnchor->FindPageFrm() ||
+                 !pAnchor->GetUpper() || !pAnchor->FindPageFrame() ||
                  (FLY_AS_CHAR == pCont->GetFormat()->GetAnchor().GetAnchorId()) )
             {
                 continue;
@@ -232,8 +232,8 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
                 // Actually this should never happen but currently layouting
                 // is broken. So don't move anchors, if the page is invalid.
                 // This should be turned into an DBG_ASSERT, once layouting is fixed!
-                const SwPageFrm *pPageFrm = pAnchor->FindPageFrm();
-                if (!pPageFrm || pPageFrm->IsInvalid() ) {
+                const SwPageFrame *pPageFrame = pAnchor->FindPageFrame();
+                if (!pPageFrame || pPageFrame->IsInvalid() ) {
                     SAL_WARN( "sw.core", "Trying to move anchor from invalid page - fix layouting!" );
                     continue;
                 }

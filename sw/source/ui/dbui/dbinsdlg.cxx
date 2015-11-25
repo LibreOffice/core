@@ -716,7 +716,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void 
         }
         else
             nWidth = rSh.GetAnyCurRect(
-                                FrmTypeFlags::FLY_ANY & rSh.GetFrmType( nullptr, true )
+                                FrameTypeFlags::FLY_ANY & rSh.GetFrameType( nullptr, true )
                                               ? RECT_FLY_PRT_EMBEDDED
                                               : RECT_PAGE_PRT ).Width();
 
@@ -1194,7 +1194,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             if( !rSh.IsEndPara() )
             {
                 rSh.SwEditShell::SplitNode();
-                rSh.SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
+                rSh.SwCursorShell::Left(1,CRSR_SKIP_CHARS);
             }
 
             rSh.DoUndo( false );
@@ -1247,7 +1247,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                             GetFieldType( 0, RES_DBNEXTSETFLD )),
                                         "1", "", aDBData );
 
-            bool bSetCrsr = true;
+            bool bSetCursor = true;
             const size_t nCols = aColArr.size();
             ::sw::mark::IMark* pMark = nullptr;
             for( sal_Int32 i = 0 ; ; ++i )
@@ -1358,21 +1358,21 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     {
                         rSh.Insert( sIns );
 
-                        if( bSetCrsr)
+                        if( bSetCursor)
                         {
                             // to the beginning and set a mark, so that
                             // the cursor can be set to the initial position
                             // at the end.
 
-                            rSh.SwCrsrShell::MovePara(
+                            rSh.SwCursorShell::MovePara(
                                     GetfnParaCurr(), GetfnParaStart() );
                             pMark = rSh.SetBookmark(
                                     vcl::KeyCode(),
                                     OUString(),
                                     OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
-                            rSh.SwCrsrShell::MovePara(
+                            rSh.SwCursorShell::MovePara(
                                     GetfnParaCurr(), GetfnParaEnd() );
-                            bSetCrsr = false;
+                            bSetCursor = false;
                         }
                     }
                 }
@@ -1396,7 +1396,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     pWait.reset(new SwWait( *pView->GetDocShell(), true ));
             }
 
-            if( !bSetCrsr && pMark != nullptr)
+            if( !bSetCursor && pMark != nullptr)
             {
                 rSh.SetMark();
                 rSh.GotoMark( pMark );

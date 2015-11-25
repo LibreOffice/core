@@ -68,10 +68,10 @@ enum SvEmbeddedObjectTypes
 SwNoTextNode *SwXMLTextParagraphExport::GetNoTextNode(
     const Reference < XPropertySet >& rPropSet )
 {
-    Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
-    assert(xCrsrTunnel.is() && "missing XUnoTunnel for embedded");
+    Reference<XUnoTunnel> xCursorTunnel( rPropSet, UNO_QUERY );
+    assert(xCursorTunnel.is() && "missing XUnoTunnel for embedded");
     SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
-                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
+                sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
     assert(pFrame && "SwXFrame missing");
     SwFrameFormat *pFrameFormat = pFrame->GetFrameFormat();
     const SwFormatContent& rContent = pFrameFormat->GetContent();

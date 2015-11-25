@@ -27,28 +27,28 @@ class SwFrameFormat;
 class SwNodeIndex;
 
 /// For querying current flys in document.
-class SW_DLLPUBLIC SwPosFlyFrm
+class SW_DLLPUBLIC SwPosFlyFrame
 {
     const SwFrameFormat* m_pFrameFormat;    ///< FlyFrameFormat
     SwNodeIndex* m_pNodeIndex;        ///< Index for node is sufficient.
     sal_uInt32 m_nOrdNum;
 public:
-    SwPosFlyFrm( const SwNodeIndex& , const SwFrameFormat*, sal_uInt16 nArrPos );
-    virtual ~SwPosFlyFrm(); ///< Virtual for Writer (DLL !!)
+    SwPosFlyFrame( const SwNodeIndex& , const SwFrameFormat*, sal_uInt16 nArrPos );
+    virtual ~SwPosFlyFrame(); ///< Virtual for Writer (DLL !!)
 
     const SwFrameFormat& GetFormat() const { return *m_pFrameFormat; }
     const SwNodeIndex& GetNdIndex() const { return *m_pNodeIndex; }
     sal_uInt32 GetOrdNum() const { return m_nOrdNum; }
 };
 
-// define needed classes to safely handle an array of allocated SwPosFlyFrm(s).
-// SwPosFlyFrms can be handled by value (as return value), only refcounts to
-// contained SwPosFlyFrm* will be copied. When releasing the last SwPosFlyFrmPtr
+// define needed classes to safely handle an array of allocated SwPosFlyFrame(s).
+// SwPosFlyFrames can be handled by value (as return value), only refcounts to
+// contained SwPosFlyFrame* will be copied. When releasing the last SwPosFlyFramePtr
 // instance the allocated instance will be freed. The array is sorted by
 // GetNdIndex by using a std::set container.
-typedef std::shared_ptr< SwPosFlyFrm > SwPosFlyFrmPtr;
-struct SwPosFlyFrmCmp { bool operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const; };
-typedef std::set< SwPosFlyFrmPtr, SwPosFlyFrmCmp > SwPosFlyFrms;
+typedef std::shared_ptr< SwPosFlyFrame > SwPosFlyFramePtr;
+struct SwPosFlyFrameCmp { bool operator()(const SwPosFlyFramePtr& rA, const SwPosFlyFramePtr& rB) const; };
+typedef std::set< SwPosFlyFramePtr, SwPosFlyFrameCmp > SwPosFlyFrames;
 
 #endif // INCLUDED_SW_INC_FLYPOS_HXX
 

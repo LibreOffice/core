@@ -27,14 +27,14 @@
 class SwSection;
 class SwSectionFormat;
 class SwAttrSetChg;
-class SwFootnoteContFrm;
+class SwFootnoteContFrame;
 class SwLayouter;
 
 #define FINDMODE_ENDNOTE 1
 #define FINDMODE_LASTCNT 2
 #define FINDMODE_MYLAST  4
 
-class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
+class SwSectionFrame: public SwLayoutFrame, public SwFlowFrame
 {
     SwSection* m_pSection;
     bool m_bFootnoteAtEnd; // footnotes at the end of section
@@ -55,33 +55,33 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
     bool IsEndnoteAtMyEnd() const;
 
     virtual void DestroyImpl() override;
-    virtual ~SwSectionFrm();
+    virtual ~SwSectionFrame();
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
-    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat ) override;
+    virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool bHead, bool &rReformat ) override;
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
 
 public:
-    SwSectionFrm( SwSection &, SwFrm* ); // Content is not created!
-    SwSectionFrm( SwSectionFrm &, bool bMaster ); // _ONLY_ for creating Master/Follows!
+    SwSectionFrame( SwSection &, SwFrame* ); // Content is not created!
+    SwSectionFrame( SwSectionFrame &, bool bMaster ); // _ONLY_ for creating Master/Follows!
 
     void Init();
     virtual void CheckDirection( bool bVert ) override;
 
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const override;
+    virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
 
     virtual void Cut() override;
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = nullptr ) override;
+    virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 
-    inline const SwSectionFrm *GetFollow() const;
-    inline       SwSectionFrm *GetFollow();
-    SwSectionFrm* FindMaster() const;
+    inline const SwSectionFrame *GetFollow() const;
+    inline       SwSectionFrame *GetFollow();
+    SwSectionFrame* FindMaster() const;
 
-                 SwContentFrm *FindLastContent( sal_uInt8 nMode = 0 );
-    inline const SwContentFrm *FindLastContent( sal_uInt8 nMode = 0 ) const;
+                 SwContentFrame *FindLastContent( sal_uInt8 nMode = 0 );
+    inline const SwContentFrame *FindLastContent( sal_uInt8 nMode = 0 ) const;
     inline SwSection* GetSection() { return m_pSection; }
     inline const SwSection* GetSection() const { return m_pSection; }
     inline void ColLock()       { mbColLocked = true; }
@@ -90,16 +90,16 @@ public:
     void CalcFootnoteContent();
     void SimpleFormat();
     bool IsDescendantFrom( const SwSectionFormat* pSect ) const;
-    bool HasToBreak( const SwFrm* pFrm ) const;
-    void MergeNext( SwSectionFrm* pNxt );
+    bool HasToBreak( const SwFrame* pFrame ) const;
+    void MergeNext( SwSectionFrame* pNxt );
 
     /**
-     * Splits the SectionFrm surrounding the pFrm up in two parts:
-     * pFrm and the start of the 2nd part
+     * Splits the SectionFrame surrounding the pFrame up in two parts:
+     * pFrame and the start of the 2nd part
      */
-    bool SplitSect( SwFrm* pFrm, bool bApres );
+    bool SplitSect( SwFrame* pFrame, bool bApres );
     void DelEmpty( bool bRemove ); // Like Cut(), except for that Follow chaining is maintained
-    SwFootnoteContFrm* ContainsFootnoteCont( const SwFootnoteContFrm* pCont = nullptr ) const;
+    SwFootnoteContFrame* ContainsFootnoteCont( const SwFootnoteContFrame* pCont = nullptr ) const;
     bool Growable() const;
     SwTwips _Shrink( SwTwips, bool bTst );
     SwTwips _Grow  ( SwTwips, bool bTst );
@@ -112,18 +112,18 @@ public:
     bool ToMaximize( bool bCheckFollow ) const;
     inline bool _ToMaximize() const
         { if( !m_pSection ) return false; return ToMaximize( false ); }
-    bool MoveAllowed( const SwFrm* ) const;
+    bool MoveAllowed( const SwFrame* ) const;
     bool CalcMinDiff( SwTwips& rMinDiff ) const;
 
     /**
      * Returns the size delta that the section would like to be
-     * greater if it has undersized TextFrms in it.
+     * greater if it has undersized TextFrames in it.
      *
      * If we don't pass a @param bOverSize or false, the return value
      * is > 0 for undersized Frames, or 0 otherwise.
      * If @param bOverSize == true, we can also get a negative return value,
-     * if the SectionFrm is not completely filled, which happens often for
-     * e.g. SectionFrms with Follows.
+     * if the SectionFrame is not completely filled, which happens often for
+     * e.g. SectionFrames with Follows.
      *
      * If necessary the undersized-flag is corrected.
      * We need this in the FormatWidthCols to "deflate" columns there.
@@ -139,7 +139,7 @@ public:
     const SwSectionFormat* GetEndSectFormat() const
         { if( IsEndnAtEnd() ) return _GetEndSectFormat(); return nullptr; }
 
-    static void MoveContentAndDelete( SwSectionFrm* pDel, bool bSave );
+    static void MoveContentAndDelete( SwSectionFrame* pDel, bool bSave );
 
     bool IsBalancedSection() const;
 
@@ -157,22 +157,22 @@ public:
     void SetFootnoteLock( bool bNew ) { m_bFootnoteLock = bNew; }
     bool IsFootnoteLock() const { return m_bFootnoteLock; }
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwSectionFrm)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwSectionFrame)
 };
 
-class SwDestroyList : public std::set<SwSectionFrm*> {};
+class SwDestroyList : public std::set<SwSectionFrame*> {};
 
-inline const SwSectionFrm *SwSectionFrm::GetFollow() const
+inline const SwSectionFrame *SwSectionFrame::GetFollow() const
 {
-    return static_cast<const SwSectionFrm*>(SwFlowFrm::GetFollow());
+    return static_cast<const SwSectionFrame*>(SwFlowFrame::GetFollow());
 }
-inline SwSectionFrm *SwSectionFrm::GetFollow()
+inline SwSectionFrame *SwSectionFrame::GetFollow()
 {
-    return static_cast<SwSectionFrm*>(SwFlowFrm::GetFollow());
+    return static_cast<SwSectionFrame*>(SwFlowFrame::GetFollow());
 }
-inline const SwContentFrm *SwSectionFrm::FindLastContent( sal_uInt8 nMode ) const
+inline const SwContentFrame *SwSectionFrame::FindLastContent( sal_uInt8 nMode ) const
 {
-    return const_cast<SwSectionFrm*>(this)->FindLastContent( nMode );
+    return const_cast<SwSectionFrame*>(this)->FindLastContent( nMode );
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX

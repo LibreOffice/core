@@ -63,7 +63,7 @@ inline const SvxFormatBreakItem &SwAttrSet::GetBreak(bool bInP) const
     { return static_cast<const SvxFormatBreakItem&>(Get( RES_BREAK,bInP)); }
 inline const SvxMacroItem &SwAttrSet::GetMacro(bool bInP) const
     { return static_cast<const SvxMacroItem&>(Get( RES_FRMMACRO,bInP)); }
-inline const SvxFrameDirectionItem &SwAttrSet::GetFrmDir(bool bInP) const
+inline const SvxFrameDirectionItem &SwAttrSet::GetFrameDir(bool bInP) const
     { return static_cast<const SvxFrameDirectionItem&>(Get( RES_FRAMEDIR,bInP)); }
 inline const SdrTextVertAdjustItem &SwAttrSet::GetTextVertAdjust(bool bInP) const
     { return static_cast<const SdrTextVertAdjustItem&>(Get( RES_TEXT_VERT_ADJUST,bInP)); }
@@ -91,8 +91,8 @@ inline const SvxFormatBreakItem &SwFormat::GetBreak(bool bInP) const
     { return m_aSet.GetBreak(bInP); }
 inline const SvxMacroItem &SwFormat::GetMacro(bool bInP) const
     { return m_aSet.GetMacro(bInP); }
-inline const SvxFrameDirectionItem  &SwFormat::GetFrmDir(bool bInP) const
-    { return m_aSet.GetFrmDir(bInP); }
+inline const SvxFrameDirectionItem  &SwFormat::GetFrameDir(bool bInP) const
+    { return m_aSet.GetFrameDir(bInP); }
 inline const SdrTextVertAdjustItem &SwFormat::GetTextVertAdjust(bool bInP) const
     { return m_aSet.GetTextVertAdjust(bInP); }
 

@@ -27,9 +27,9 @@
 
 sw::DocDisposingHint::~DocDisposingHint() {}
 
-IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCursor )
 
-SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
+SwUnoCursor::SwUnoCursor( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing, false )
     , SwModify(nullptr)
     , m_bRemainInSection(true)
@@ -37,12 +37,12 @@ SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     , m_bSkipOverProtectSections(false)
 {}
 
-SwUnoCrsr::~SwUnoCrsr()
+SwUnoCursor::~SwUnoCursor()
 {
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-        assert(!static_cast<bool>(SwIterator<SwClient, SwUnoCrsr>(*this).First()));
+        assert(!static_cast<bool>(SwIterator<SwClient, SwUnoCursor>(*this).First()));
     }
 
     // delete the whole ring
@@ -54,23 +54,23 @@ SwUnoCrsr::~SwUnoCrsr()
     }
 }
 
-bool SwUnoCrsr::IsReadOnlyAvailable() const
+bool SwUnoCursor::IsReadOnlyAvailable() const
 {
     return true;
 }
 
-const SwContentFrm*
-SwUnoCrsr::DoSetBidiLevelLeftRight( bool &, bool, bool )
+const SwContentFrame*
+SwUnoCursor::DoSetBidiLevelLeftRight( bool &, bool, bool )
 {
     return nullptr; // not for uno cursor
 }
 
-void SwUnoCrsr::DoSetBidiLevelUpDown()
+void SwUnoCursor::DoSetBidiLevelUpDown()
 {
     return; // not for uno cursor
 }
 
-bool SwUnoCrsr::IsSelOvr( int eFlags )
+bool SwUnoCursor::IsSelOvr( int eFlags )
 {
     if (m_bRemainInSection)
     {
@@ -156,24 +156,24 @@ bool SwUnoCrsr::IsSelOvr( int eFlags )
     return SwCursor::IsSelOvr( eFlags );
 }
 
-SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
+SwUnoTableCursor::SwUnoTableCursor(const SwPosition& rPos)
     : SwCursor(rPos, nullptr, false)
-    , SwUnoCrsr(rPos)
+    , SwUnoCursor(rPos)
     , SwTableCursor(rPos)
     , m_aTableSel(rPos, nullptr, false)
 {
     SetRemainInSection(false);
 }
 
-SwUnoTableCrsr::~SwUnoTableCrsr()
+SwUnoTableCursor::~SwUnoTableCursor()
 {
     while (m_aTableSel.GetNext() != &m_aTableSel)
         delete m_aTableSel.GetNext();
 }
 
-bool SwUnoTableCrsr::IsSelOvr( int eFlags )
+bool SwUnoTableCursor::IsSelOvr( int eFlags )
 {
-    bool bRet = SwUnoCrsr::IsSelOvr( eFlags );
+    bool bRet = SwUnoCursor::IsSelOvr( eFlags );
     if( !bRet )
     {
         const SwTableNode* pTNd = GetPoint()->nNode.GetNode().FindTableNode();
@@ -184,16 +184,16 @@ bool SwUnoTableCrsr::IsSelOvr( int eFlags )
     return bRet;
 }
 
-void SwUnoTableCrsr::MakeBoxSels()
+void SwUnoTableCursor::MakeBoxSels()
 {
     const SwContentNode* pCNd;
-    bool bMakeTableCrsrs = true;
+    bool bMakeTableCursors = true;
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
-            nullptr != ( pCNd = GetContentNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
-            nullptr != ( pCNd = GetContentNode(false) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
-        bMakeTableCrsrs = GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->MakeTableCrsrs( *this );
+            nullptr != ( pCNd = GetContentNode() ) && pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+            nullptr != ( pCNd = GetContentNode(false) ) && pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
+        bMakeTableCursors = GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->MakeTableCursors( *this );
 
-    if ( !bMakeTableCrsrs )
+    if ( !bMakeTableCursors )
     {
         SwSelBoxes const& rTmpBoxes = GetSelectedBoxes();
         while (!rTmpBoxes.empty())

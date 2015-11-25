@@ -29,7 +29,7 @@ class SwViewShell;
 
 class SwLayVout
 {
-    friend void _FrmFinit();    //deletes Vout
+    friend void _FrameFinit();    //deletes Vout
 private:
     SwViewShell*      pSh;
     VclPtr<OutputDevice>  pOut;

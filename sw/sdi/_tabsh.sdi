@@ -313,7 +313,7 @@ interface BaseTextTable
     SID_ATTR_BORDER // status()
     [
         ExecMethod = Execute ;
-        StateMethod = GetFrmBorderState ;
+        StateMethod = GetFrameBorderState ;
         GroupId = GID_TABLE;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]

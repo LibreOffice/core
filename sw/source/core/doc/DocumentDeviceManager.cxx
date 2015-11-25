@@ -309,7 +309,7 @@ void DocumentDeviceManager::PrtDataChanged()
     // #i41075#
     OSL_ENSURE( m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE) ||
             nullptr != getPrinter( false ), "PrtDataChanged will be called recursively!" );
-    SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     std::unique_ptr<SwWait> pWait;
     bool bEndAction = false;
 
@@ -339,7 +339,7 @@ void DocumentDeviceManager::PrtDataChanged()
 
             pFntCache->Flush();
 
-            for(SwRootFrm* aLayout : m_rDoc.GetAllLayouts())
+            for(SwRootFrame* aLayout : m_rDoc.GetAllLayouts())
                 aLayout->InvalidateAllContent(INV_SIZE);
 
             for(SwViewShell& rShell : pSh->GetRingContainer())

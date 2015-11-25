@@ -78,11 +78,11 @@ class SvxMacroTableDtor;
 class SwAutoCompleteWord;
 class SwAutoCorrExceptWord;
 class SwCalc;
-class SwCellFrm;
+class SwCellFrame;
 class SwCharFormat;
 class SwCharFormats;
 class SwConditionTextFormatColl;
-class SwCrsrShell;
+class SwCursorShell;
 class SwCursor;
 class SwDBNameInfField;
 class SwDocShell;
@@ -120,7 +120,7 @@ class SwPagePreviewPrtData;
 class SwRangeRedline;
 class SwRedlineTable;
 class SwExtraRedlineTable;
-class SwRootFrm;
+class SwRootFrame;
 class SwRubyList;
 class SwRubyListEntry;
 class SwSectionFormat;
@@ -142,7 +142,7 @@ class SwTextBlocks;
 class SwTextFormatColl;
 class SwTextFormatColls;
 class SwURLStateChanged;
-class SwUnoCrsr;
+class SwUnoCursor;
 class SwViewShell;
 class _SetGetExpField;
 class SwDrawContact;
@@ -168,7 +168,7 @@ class SwChartLockController_Helper;
 class IGrammarContact;
 class SwPrintData;
 class SwRenderData;
-class SwPageFrm;
+class SwPageFrame;
 class SwViewOption;
 class SwList;
 class IDocumentUndoRedo;
@@ -392,7 +392,7 @@ private:
                                 const SwContentNode& rNode, RndStdIds eRequestId,
                                 const SfxItemSet* pFlyAttrSet,
                                 SwFrameFormat* = nullptr );
-    sal_Int8 SetFlyFrmAnchor( SwFrameFormat& rFlyFormat, SfxItemSet& rSet, bool bNewFrms );
+    sal_Int8 SetFlyFrameAnchor( SwFrameFormat& rFlyFormat, SfxItemSet& rSet, bool bNewFrames );
 
     typedef SwFormat* (SwDoc:: *FNCopyFormat)( const OUString&, SwFormat*, bool, bool );
     SwFormat* CopyFormat( const SwFormat& rFormat, const SwFormatsBase& rFormatArr,
@@ -619,7 +619,7 @@ public:
      have to be surrounded completely by css::awt::Selection.
      ( Start < Pos < End ) !!!
      (Required for Writers.) */
-    SwPosFlyFrms GetAllFlyFormats( const SwPaM* = nullptr,
+    SwPosFlyFrames GetAllFlyFormats( const SwPaM* = nullptr,
                         bool bDrawAlso = false,
                         bool bAsCharAlso = false ) const;
 
@@ -656,13 +656,13 @@ public:
     // these items work for the UNO API and thus e.g. for ODF im/export)
     void CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet);
 
-    bool SetFlyFrmAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet );
+    bool SetFlyFrameAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet );
 
     bool SetFrameFormatToFly( SwFrameFormat& rFlyFormat, SwFrameFormat& rNewFormat,
                         SfxItemSet* pSet = nullptr, bool bKeepOrient = false );
-    void SetFlyFrmTitle( SwFlyFrameFormat& rFlyFrameFormat,
+    void SetFlyFrameTitle( SwFlyFrameFormat& rFlyFrameFormat,
                          const OUString& sNewTitle );
-    void SetFlyFrmDescription( SwFlyFrameFormat& rFlyFrameFormat,
+    void SetFlyFrameDescription( SwFlyFrameFormat& rFlyFrameFormat,
                                const OUString& sNewDescription );
 
     // Footnotes
@@ -686,7 +686,7 @@ public:
                    SwConversionArgs *pConvArgs = nullptr ) const;
 
     css::uno::Reference< css::linguistic2::XHyphenatedWord >
-            Hyphenate( SwPaM *pPam, const Point &rCrsrPos,
+            Hyphenate( SwPaM *pPam, const Point &rCursorPos,
                          sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     // count words in pam
@@ -726,7 +726,7 @@ public:
     OUString GetUniqueFrameName() const;
     OUString GetUniqueShapeName() const;
 
-    std::set<SwRootFrm*> GetAllLayouts();
+    std::set<SwRootFrame*> GetAllLayouts();
 
     void SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName );
     const SwFlyFrameFormat* FindFlyByName( const OUString& rName, sal_Int8 nNdTyp = 0 ) const;
@@ -898,15 +898,15 @@ public:
 
     // travel over PaM Ring
     bool InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
-                        SwPaM& rPaM, SwCrsrShell* pShell = nullptr);
+                        SwPaM& rPaM, SwCursorShell* pShell = nullptr);
 
     /** get the set of printable pages for the XRenderable API by
      evaluating the respective settings (see implementation) */
-    static void CalculatePagesForPrinting( const SwRootFrm& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+    static void CalculatePagesForPrinting( const SwRootFrame& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
     static void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
-    static void CalculatePagePairsForProspectPrinting( const SwRootFrm& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions,
+    static void CalculatePagePairsForProspectPrinting( const SwRootFrame& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );
 
     // PageDescriptor interface.
@@ -1013,34 +1013,34 @@ public:
 
     // Correct the SwPosition-Objects that are registered with the document
     // e. g. Bookmarks or tables/indices.
-    // If bMoveCrsr is set move Crsr too.
+    // If bMoveCursor is set move Cursor too.
 
     // Set everything in rOldNode on rNewPos + Offset.
     void CorrAbs(
         const SwNodeIndex& rOldNode,
         const SwPosition& rNewPos,
         const sal_Int32 nOffset = 0,
-        bool bMoveCrsr = false );
+        bool bMoveCursor = false );
 
     // Set everything in the range of [rStartNode, rEndNode] to rNewPos.
     static void CorrAbs(
         const SwNodeIndex& rStartNode,
         const SwNodeIndex& rEndNode,
         const SwPosition& rNewPos,
-        bool bMoveCrsr = false );
+        bool bMoveCursor = false );
 
     // Set everything in this range from rRange to rNewPos.
     static void CorrAbs(
         const SwPaM& rRange,
         const SwPosition& rNewPos,
-        bool bMoveCrsr = false );
+        bool bMoveCursor = false );
 
     // Set everything in rOldNode to relative Pos.
     void CorrRel(
         const SwNodeIndex& rOldNode,
         const SwPosition& rNewPos,
         const sal_Int32 nOffset = 0,
-        bool bMoveCrsr = false );
+        bool bMoveCursor = false );
 
     // Query / set rules for Outline.
     inline SwNumRule* GetOutlineNumRule() const
@@ -1230,14 +1230,14 @@ public:
     bool IsInsTableAlignNum() const;
 
     // From FEShell (for Undo and BModified).
-    static void GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
-                    const SwCellFrm* pBoxFrm = nullptr );
+    static void GetTabCols( SwTabCols &rFill, const SwCursor* pCursor,
+                    const SwCellFrame* pBoxFrame = nullptr );
     void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
-                    const SwCursor* pCrsr, const SwCellFrm* pBoxFrm = nullptr );
-    static void GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
-                    const SwCellFrm* pBoxFrm = nullptr );
-    void SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor* pCrsr,
-                     const SwCellFrm* pBoxFrm = nullptr );
+                    const SwCursor* pCursor, const SwCellFrame* pBoxFrame = nullptr );
+    static void GetTabRows( SwTabCols &rFill, const SwCursor* pCursor,
+                    const SwCellFrame* pBoxFrame = nullptr );
+    void SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor* pCursor,
+                     const SwCellFrame* pBoxFrame = nullptr );
 
     // Direct access for UNO.
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
@@ -1460,7 +1460,7 @@ public:
     void SetOLEObjModified();
 
     // Uno - Interfaces
-    std::shared_ptr<SwUnoCrsr> CreateUnoCrsr( const SwPosition& rPos, bool bTableCrsr = false );
+    std::shared_ptr<SwUnoCursor> CreateUnoCursor( const SwPosition& rPos, bool bTableCursor = false );
 
     // FeShell - Interfaces
     // !!! These assume always an existing layout !!!
@@ -1469,8 +1469,8 @@ public:
                         const bool _bSameOnly,
                         const bool _bPosCorr );
 
-    void SetRowHeight( const SwCursor& rCursor, const SwFormatFrmSize &rNew );
-    static void GetRowHeight( const SwCursor& rCursor, SwFormatFrmSize *& rpSz );
+    void SetRowHeight( const SwCursor& rCursor, const SwFormatFrameSize &rNew );
+    static void GetRowHeight( const SwCursor& rCursor, SwFormatFrameSize *& rpSz );
     void SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew );
     static void GetRowSplit( const SwCursor& rCursor, SwFormatRowSplit *& rpSz );
     bool BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly = true );
@@ -1501,7 +1501,7 @@ public:
     SwChainRet Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest );
     void Unchain( SwFrameFormat &rFormat );
 
-    // For Copy/Move from FrmShell.
+    // For Copy/Move from FrameShell.
     SdrObject* CloneSdrObj( const SdrObject&, bool bMoveWithinDoc = false,
                             bool bInsInPage = true );
 
@@ -1634,17 +1634,17 @@ public:
     void dumpAsXml(struct _xmlTextWriter* = nullptr) const;
 
     std::set<Color> GetDocColors();
-    std::vector< std::weak_ptr<SwUnoCrsr> > mvUnoCrsrTable;
+    std::vector< std::weak_ptr<SwUnoCursor> > mvUnoCursorTable;
 
-    // Remove expired UnoCrsr weak pointers the document keeps to notify about document death.
-    void cleanupUnoCrsrTable()
+    // Remove expired UnoCursor weak pointers the document keeps to notify about document death.
+    void cleanupUnoCursorTable()
     {
         // In most cases we'll remove most of the elements.
-        std::vector< std::weak_ptr<SwUnoCrsr> > unoCrsrTable;
-        std::copy_if(mvUnoCrsrTable.begin(), mvUnoCrsrTable.end(),
-                     std::back_inserter(unoCrsrTable),
-                     [](const std::weak_ptr<SwUnoCrsr>& pWeakPtr) { return !pWeakPtr.expired(); });
-        std::swap(mvUnoCrsrTable, unoCrsrTable);
+        std::vector< std::weak_ptr<SwUnoCursor> > unoCursorTable;
+        std::copy_if(mvUnoCursorTable.begin(), mvUnoCursorTable.end(),
+                     std::back_inserter(unoCursorTable),
+                     [](const std::weak_ptr<SwUnoCursor>& pWeakPtr) { return !pWeakPtr.expired(); });
+        std::swap(mvUnoCursorTable, unoCursorTable);
     }
 
 private:

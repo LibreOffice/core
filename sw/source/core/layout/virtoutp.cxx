@@ -48,24 +48,24 @@ inline DbgRect::DbgRect( OutputDevice *pOutDev, const Rectangle &rRect,
 #endif
 
 /* The SWLayVout class manages the virtual output devices.
- * RootFrm has a static member of this class which is created in _FrmInit
- * and destroyed in _FrmFinit.
+ * RootFrame has a static member of this class which is created in _FrameInit
+ * and destroyed in _FrameFinit.
  * */
 
-bool SwRootFrm::FlushVout()
+bool SwRootFrame::FlushVout()
 {
-    if (SwRootFrm::s_pVout->IsFlushable())
+    if (SwRootFrame::s_pVout->IsFlushable())
     {
-        SwRootFrm::s_pVout->_Flush();
+        SwRootFrame::s_pVout->_Flush();
         return true;
     }
     return false;
 }
 
-bool SwRootFrm::HasSameRect( const SwRect& rRect )
+bool SwRootFrame::HasSameRect( const SwRect& rRect )
 {
-    if (SwRootFrm::s_pVout->IsFlushable())
-        return ( rRect == SwRootFrm::s_pVout->GetOrgRect() );
+    if (SwRootFrame::s_pVout->IsFlushable())
+        return ( rRect == SwRootFrame::s_pVout->GetOrgRect() );
     return false;
 }
 

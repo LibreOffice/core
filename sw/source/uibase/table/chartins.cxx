@@ -144,7 +144,7 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
     uno::Reference< frame::XModel > xChartModel;
     OUString aRangeString;
 
-    if( rWrtShell.IsCrsrInTable())
+    if( rWrtShell.IsCursorInTable())
     {
         if (!rWrtShell.IsTableMode())
         {

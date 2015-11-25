@@ -35,8 +35,8 @@ struct SfxItemPropertySimpleEntry;
 class SdrObject;
 class SwTextNode;
 class SwCursor;
-class SwUnoCrsr;
-class SwUnoTableCrsr;
+class SwUnoCursor;
+class SwUnoTableCursor;
 class SwFormatColl;
 struct SwSortOptions;
 class SwDoc;
@@ -81,7 +81,7 @@ namespace SwUnoCursorHelper
         GetNestedTextContent(SwTextNode & rTextNode, sal_Int32 const nIndex,
             bool const bParent);
 
-    bool                    getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
+    bool                    getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
                                         , css::uno::Any *pAny
                                         , css::beans::PropertyState& eState
@@ -89,14 +89,14 @@ namespace SwUnoCursorHelper
 
     void                        GetCurPageStyle(SwPaM& rPaM, OUString &rString);
 
-    inline bool             IsStartOfPara(SwPaM& rUnoCrsr)
-                                        { return rUnoCrsr.GetPoint()->nContent == 0;}
-    inline bool             IsEndOfPara(SwPaM& rUnoCrsr)
-                                        { return rUnoCrsr.GetContentNode() &&
-                                            rUnoCrsr.GetPoint()->nContent == rUnoCrsr.GetContentNode()->Len();}
+    inline bool             IsStartOfPara(SwPaM& rUnoCursor)
+                                        { return rUnoCursor.GetPoint()->nContent == 0;}
+    inline bool             IsEndOfPara(SwPaM& rUnoCursor)
+                                        { return rUnoCursor.GetContentNode() &&
+                                            rUnoCursor.GetPoint()->nContent == rUnoCursor.GetContentNode()->Len();}
 
-    void                        resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam);
-    void                        InsertFile(SwUnoCrsr* pUnoCrsr,
+    void                        resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam);
+    void                        InsertFile(SwUnoCursor* pUnoCursor,
                                     const OUString& rURL,
                                     const css::uno::Sequence< css::beans::PropertyValue >& rOptions)
         throw (css::lang::IllegalArgumentException,
@@ -133,10 +133,10 @@ namespace SwUnoCursorHelper
                 throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     /// @param bTableMode: attributes should be applied to a table selection
-    void SetCrsrAttr(SwPaM & rPam, const SfxItemSet & rSet,
+    void SetCursorAttr(SwPaM & rPam, const SfxItemSet & rSet,
                      const SetAttrMode nAttrMode,
                      const bool bTableMode = false);
-    void GetCrsrAttr(SwPaM & rPam, SfxItemSet & rSet,
+    void GetCursorAttr(SwPaM & rPam, SfxItemSet & rSet,
                      const bool bOnlyTextAttr = false,
                      const bool bGetFromChrFormat = true);
     void GetTextFromPam(SwPaM & rPam, OUString & rBuffer);
@@ -235,7 +235,7 @@ namespace SwUnoCursorHelper
         css::uno::Reference<css::uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
         SwPaM *& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
-        OUString & o_rTableName, SwUnoTableCrsr const*& o_rpTableCursor,
+        OUString & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
         ::sw::mark::IMark const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects);
 

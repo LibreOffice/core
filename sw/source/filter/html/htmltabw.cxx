@@ -902,9 +902,9 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     if( pFlyFrameFormat )
     {
         eSurround = pFlyFrameFormat->GetSurround().GetSurround();
-        const SwFormatFrmSize& rFrmSize = pFlyFrameFormat->GetFrmSize();
-        nFlyPrcWidth = rFrmSize.GetWidthPercent();
-        nFlyWidth = rFrmSize.GetSize().Width();
+        const SwFormatFrameSize& rFrameSize = pFlyFrameFormat->GetFrameSize();
+        nFlyPrcWidth = rFrameSize.GetWidthPercent();
+        nFlyWidth = rFrameSize.GetSize().Width();
 
         eFlyHoriOri = pFlyFrameFormat->GetHoriOrient().GetHoriOrient();
         if( text::HoriOrientation::NONE == eFlyHoriOri )
@@ -928,9 +928,9 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
 
     SwFrameFormat *pFormat = rTable.GetFrameFormat();
 
-    const SwFormatFrmSize& rFrmSize = pFormat->GetFrmSize();
-    long nWidth = rFrmSize.GetSize().Width();
-    sal_uInt8 nPrcWidth = rFrmSize.GetWidthPercent();
+    const SwFormatFrameSize& rFrameSize = pFormat->GetFrameSize();
+    long nWidth = rFrameSize.GetSize().Width();
+    sal_uInt8 nPrcWidth = rFrameSize.GetWidthPercent();
     sal_uInt16 nBaseWidth = (sal_uInt16)nWidth;
 
     sal_Int16 eTabHoriOri = pFormat->GetHoriOrient().GetHoriOrient();

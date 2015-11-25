@@ -423,27 +423,27 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
     // - es wurde eine Breite angegeben (in beiden Faellen noetig)
     if( SwCSS1Parser::MayBePositioned( rPropInfo ) )
     {
-        SfxItemSet aFrmItemSet( m_pDoc->GetAttrPool(),
+        SfxItemSet aFrameItemSet( m_pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
-            Reader::ResetFrameFormatAttrs(aFrmItemSet );
+            Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
         // Ausrichtung setzen
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, rItemSet, rPropInfo,
-                                aFrmItemSet );
+                                aFrameItemSet );
 
         // Groesse setzen
-        SetVarSize( rItemSet, rPropInfo, aFrmItemSet );
+        SetVarSize( rItemSet, rPropInfo, aFrameItemSet );
 
         // Abstaende setzen
-        SetSpace( Size(0,0), rItemSet, rPropInfo, aFrmItemSet );
+        SetSpace( Size(0,0), rItemSet, rPropInfo, aFrameItemSet );
 
         // Sonstige CSS1-Attribute Setzen
         SetFrameFormatAttrs( rItemSet, rPropInfo,
                         HTML_FF_BOX|HTML_FF_PADDING|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
-                        aFrmItemSet );
+                        aFrameItemSet );
 
-        InsertFlyFrame( aFrmItemSet, pContext, rPropInfo.aId,
+        InsertFlyFrame( aFrameItemSet, pContext, rPropInfo.aId,
                         CONTEXT_FLAGS_ABSPOS );
         pContext->SetPopStack( true );
         rPropInfo.aId.clear();
@@ -463,18 +463,18 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
         SwCSS1Parser::MayBePositioned( rPropInfo ) )
     {
         // Container-Klasse
-        SfxItemSet *pFrmItemSet = pContext->GetFrmItemSet( m_pDoc );
+        SfxItemSet *pFrameItemSet = pContext->GetFrameItemSet( m_pDoc );
         if( !IsNewDoc() )
-            Reader::ResetFrameFormatAttrs( *pFrmItemSet );
+            Reader::ResetFrameFormatAttrs( *pFrameItemSet );
 
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE,
-                                rItemSet, rPropInfo, *pFrmItemSet );
+                                rItemSet, rPropInfo, *pFrameItemSet );
         Size aDummy(0,0);
         SetFixSize( aDummy, aDummy, false, false, rItemSet, rPropInfo,
-                    *pFrmItemSet );
-        SetSpace( aDummy, rItemSet, rPropInfo, *pFrmItemSet );
+                    *pFrameItemSet );
+        SetSpace( aDummy, rItemSet, rPropInfo, *pFrameItemSet );
         SetFrameFormatAttrs( rItemSet, rPropInfo, HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
-                        *pFrmItemSet );
+                        *pFrameItemSet );
 
         bRet = true;
     }
@@ -730,12 +730,12 @@ void SwHTMLParser::SplitPREListingXMP( _HTMLAttrContext *pCntxt )
     FinishPREListingXMP();
 }
 
-SfxItemSet *_HTMLAttrContext::GetFrmItemSet( SwDoc *pCreateDoc )
+SfxItemSet *_HTMLAttrContext::GetFrameItemSet( SwDoc *pCreateDoc )
 {
-    if( !pFrmItemSet && pCreateDoc )
-        pFrmItemSet = new SfxItemSet( pCreateDoc->GetAttrPool(),
+    if( !pFrameItemSet && pCreateDoc )
+        pFrameItemSet = new SfxItemSet( pCreateDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
-    return pFrmItemSet;
+    return pFrameItemSet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

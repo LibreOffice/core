@@ -107,7 +107,7 @@ static SwPaM* lcl_createPamCopy(const SwPaM& rPam)
 void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
         SwPaM *& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
-        OUString & o_rTableName, SwUnoTableCrsr const*& o_rpTableCursor,
+        OUString & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
         ::sw::mark::IMark const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects)
 {
@@ -178,10 +178,10 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         ::sw::UnoTunnelGetImplementation<SwXTextRanges>(xTunnel));
     if (pRanges)
     {
-        SwUnoCrsr const* pUnoCrsr = pRanges->GetCursor();
-        if (pUnoCrsr && pUnoCrsr->GetDoc() == &rTargetDoc)
+        SwUnoCursor const* pUnoCursor = pRanges->GetCursor();
+        if (pUnoCursor && pUnoCursor->GetDoc() == &rTargetDoc)
         {
-            o_rpPaM = lcl_createPamCopy(*pUnoCrsr);
+            o_rpPaM = lcl_createPamCopy(*pUnoCursor);
         }
         return;
     }
@@ -249,12 +249,12 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         ::sw::UnoTunnelGetImplementation<SwXCellRange>(xTunnel));
     if (pCellRange)
     {
-        SwUnoCrsr const*const pUnoCrsr(pCellRange->GetTableCrsr());
-        if (pUnoCrsr && pUnoCrsr->GetDoc() == &rTargetDoc)
+        SwUnoCursor const*const pUnoCursor(pCellRange->GetTableCursor());
+        if (pUnoCursor && pUnoCursor->GetDoc() == &rTargetDoc)
         {
             // probably can't copy it to o_rpPaM for this since it's
             // a SwTableCursor
-            o_rpTableCursor = dynamic_cast<SwUnoTableCrsr const*>(pUnoCrsr);
+            o_rpTableCursor = dynamic_cast<SwUnoTableCursor const*>(pUnoCursor);
         }
         return;
     }
@@ -299,7 +299,7 @@ GetNestedTextContent(SwTextNode & rTextNode, sal_Int32 const nIndex,
 }
 
 // Read the special properties of the cursor
-bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
+bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
                                         , Any *pAny
                                         , PropertyState& eState
@@ -897,10 +897,10 @@ void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
 {
     if (!rPaM.GetContentNode())
         return; // TODO: is there an easy way to get it for tables/sections?
-    SwContentFrm* pFrame = rPaM.GetContentNode()->getLayoutFrm(rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
+    SwContentFrame* pFrame = rPaM.GetContentNode()->getLayoutFrame(rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
     if(pFrame)
     {
-        const SwPageFrm* pPage = pFrame->FindPageFrm();
+        const SwPageFrame* pPage = pFrame->FindPageFrame();
         if(pPage)
         {
             SwStyleNameMapper::FillProgName(pPage->GetPageDesc()->GetName(),
@@ -910,7 +910,7 @@ void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
 }
 
 // reset special properties of the cursor
-void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam)
+void resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam)
 {
     SwDoc* pDoc = rPam.GetDoc();
     switch(rEntry.nWID)
@@ -951,13 +951,13 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
     }
 }
 
-void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
+void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& rOptions)
     throw (lang::IllegalArgumentException, io::IOException,
            uno::RuntimeException, std::exception)
 {
     std::unique_ptr<SfxMedium> pMed;
-    SwDoc* pDoc = pUnoCrsr->GetDoc();
+    SwDoc* pDoc = pUnoCursor->GetDoc();
     SwDocShell* pDocSh = pDoc->GetDocShell();
     utl::MediaDescriptor aMediaDescriptor( rOptions );
     OUString sFileName = rURL;
@@ -1055,30 +1055,30 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
         pSet->Put(SfxBoolItem(FN_API_CALL, true));
         if(!sPassword.isEmpty())
             pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
-        Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, nullptr, pUnoCrsr);
+        Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, nullptr, pUnoCursor);
         if( pRead )
         {
 
             UnoActionContext aContext(pDoc);
 
-            if(pUnoCrsr->HasMark())
-                pDoc->getIDocumentContentOperations().DeleteAndJoin(*pUnoCrsr);
+            if(pUnoCursor->HasMark())
+                pDoc->getIDocumentContentOperations().DeleteAndJoin(*pUnoCursor);
 
-            SwNodeIndex aSave(  pUnoCrsr->GetPoint()->nNode, -1 );
-            sal_Int32 nContent = pUnoCrsr->GetPoint()->nContent.GetIndex();
+            SwNodeIndex aSave(  pUnoCursor->GetPoint()->nNode, -1 );
+            sal_Int32 nContent = pUnoCursor->GetPoint()->nContent.GetIndex();
 
             sal_uInt32 nErrno = pRdr->Read( *pRead );   // and paste the document
 
             if(!nErrno)
             {
                 ++aSave;
-                pUnoCrsr->SetMark();
-                pUnoCrsr->GetMark()->nNode = aSave;
+                pUnoCursor->SetMark();
+                pUnoCursor->GetMark()->nNode = aSave;
 
                 SwContentNode* pCntNode = aSave.GetNode().GetContentNode();
                 if( !pCntNode )
                     nContent = 0;
-                pUnoCrsr->GetMark()->nContent.Assign( pCntNode, nContent );
+                pUnoCursor->GetMark()->nContent.Assign( pCntNode, nContent );
             }
 
             delete pRdr;

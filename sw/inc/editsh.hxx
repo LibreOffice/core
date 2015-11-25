@@ -141,7 +141,7 @@ typedef std::vector<SwGetINetAttr> SwGetINetAttrs;
 #define CNT_HasGrf(USH) ((USH)&CNT_GRF)
 #define CNT_HasOLE(USH) ((USH)&CNT_OLE)
 
-class SW_DLLPUBLIC SwEditShell : public SwCrsrShell
+class SW_DLLPUBLIC SwEditShell : public SwCursorShell
 {
     static SvxSwAutoFormatFlags* s_pAutoFormatFlags;
 
@@ -165,7 +165,7 @@ class SW_DLLPUBLIC SwEditShell : public SwCrsrShell
 
 public:
     /// Edit (all selected ranges).
-    void Insert( sal_Unicode, bool bOnlyCurrCrsr = false );
+    void Insert( sal_Unicode, bool bOnlyCurrCursor = false );
     void Insert2( const OUString &, const bool bForceExpandHints = false );
     void Overwrite( const OUString & );
 
@@ -234,7 +234,7 @@ public:
     bool GetCurAttr( SfxItemSet& ,
                      const bool bMergeIndentValuesOfNumRule = false ) const;
     void SetAttrItem( const SfxPoolItem&, SetAttrMode nFlags = SetAttrMode::DEFAULT );
-    void SetAttrSet( const SfxItemSet&, SetAttrMode nFlags = SetAttrMode::DEFAULT, SwPaM* pCrsr = nullptr );
+    void SetAttrSet( const SfxItemSet&, SetAttrMode nFlags = SetAttrMode::DEFAULT, SwPaM* pCursor = nullptr );
 
     /** Get RES_CHRATR_* items of one type in the current selection.
      * @param nWhich WhichId of the collected items.
@@ -276,7 +276,7 @@ public:
     /// Query default attribute of document.
     const SfxPoolItem& GetDefault( sal_uInt16 nFormatHint ) const;
 
-    void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>(), SwPaM* pCrsr = nullptr );
+    void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>(), SwPaM* pCursor = nullptr );
     void GCAttr();
 
     /// @return the scripttpye of the selection.
@@ -459,7 +459,7 @@ public:
 
     bool IsProtectedOutlinePara() const;
 
-    const SwNumRule* GetNumRuleAtCurrCrsrPos() const;
+    const SwNumRule* GetNumRuleAtCurrCursorPos() const;
 
     /** Returns the numbering rule found at the paragraphs of the current selection,
        if all paragraphs of the current selection have the same or none numbering rule applied. */
@@ -499,7 +499,7 @@ public:
     void ChangeIndentOfAllListLevels( short nDiff );
     // Adjust method name
     void SetIndent(short nIndent, const SwPosition & rPos);
-    bool IsFirstOfNumRuleAtCrsrPos() const;
+    bool IsFirstOfNumRuleAtCursorPos() const;
 
     bool IsNoNum( bool bChkStart = true ) const;
 
@@ -525,7 +525,7 @@ public:
     void ChgNumRuleFormats( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
-    void SetNumRuleStart( bool bFlag = true, SwPaM* pCrsr = nullptr );
+    void SetNumRuleStart( bool bFlag = true, SwPaM* pCursor = nullptr );
     bool IsNumRuleStart( SwPaM* pPaM = nullptr ) const;
     void SetNodeNumStart( sal_uInt16 nStt, SwPaM* = nullptr );
 
@@ -579,7 +579,7 @@ public:
     /// To enable set up of StartActions and EndActions.
     virtual void CalcLayout() override;
 
-    /// Determine form of content. Return Type at CurCrsr->SPoint.
+    /// Determine form of content. Return Type at CurrentCursor->SPoint.
     sal_uInt16 GetCntType() const;
 
     /// Are there frames, footnotes, etc.
@@ -594,7 +594,7 @@ public:
     bool GetSelectedText( OUString &rBuf,
                         int nHndlParaBreak = GETSELTXT_PARABRK_TO_BLANK );
 
-    /** @return graphic, if CurCrsr->Point() points to a SwGrfNode
+    /** @return graphic, if CurrentCursor->Point() points to a SwGrfNode
      (and mark is not set or points to the same graphic). */
 
     const Graphic* GetGraphic( bool bWait = true ) const;
@@ -632,7 +632,7 @@ public:
     Graphic GetIMapGraphic() const; ///< @return a graphic for all Flys!
     const SwFlyFrameFormat* FindFlyByName( const OUString& rName, sal_uInt8 nNdTyp = 0 ) const;
 
-    /** @return a ClientObject, if CurCrsr->Point() points to a SwOLENode
+    /** @return a ClientObject, if CurrentCursor->Point() points to a SwOLENode
      (and mark is neither set not pointint to same ClientObject)
      else give rap on the knuckles. */
     svt::EmbeddedObjectRef&  GetOLEObject() const;
@@ -960,7 +960,7 @@ public:
     ~SwActContext();
 };
 
- /// Class for automated call of Start- and EndCrsrMove().
+ /// Class for automated call of Start- and EndCursorMove().
 class SwMvContext {
     SwEditShell & m_rShell;
 public:

@@ -33,7 +33,7 @@
 class SwWrtShell;
 class SwView;
 class SfxItemSet;
-class SwCrsrShell;
+class SwCursorShell;
 
 struct DBTextStruct_Impl;
 class SwBaseShell: public SfxShell
@@ -50,7 +50,7 @@ class SwBaseShell: public SfxShell
     // Update-Timer for graphic
     std::set<sal_uInt16> aGrfUpdateSlots;
 
-    DECL_LINK_TYPED( GraphicArrivedHdl, SwCrsrShell&, void );
+    DECL_LINK_TYPED( GraphicArrivedHdl, SwCursorShell&, void );
 
 protected:
     SwWrtShell&         GetShell();
@@ -109,9 +109,9 @@ public:
 
     void        ExecField(SfxRequest& rReq);
 
-    static void    SetFrmMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
-    static void   _SetFrmMode( FlyMode eMode )   { eFrameMode = eMode; }
-    static FlyMode  GetFrmMode()                 { return eFrameMode;  }
+    static void    SetFrameMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
+    static void   _SetFrameMode( FlyMode eMode )   { eFrameMode = eMode; }
+    static FlyMode  GetFrameMode()                 { return eFrameMode;  }
 };
 
 #endif

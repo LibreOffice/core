@@ -233,7 +233,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
     return nRet;
 }
 
-SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
+SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
                             const OUString& rPath,
                             const OUString& rBaseURL,
                             bool bReadNewDoc,
@@ -300,13 +300,13 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
 {
     m_nEventId = nullptr;
     m_bUpperSpace = m_bViewCreated = m_bChkJumpMark =
-    m_bSetCrsr = false;
+    m_bSetCursor = false;
 
     m_eScriptLang = HTML_SL_UNKNOWN;
     m_bAnyStarBasic = true;
 
-    rCrsr.DeleteMark();
-    m_pPam = &rCrsr; // re-use existing cursor: avoids spurious ~SwIndexReg assert
+    rCursor.DeleteMark();
+    m_pPam = &rCursor; // re-use existing cursor: avoids spurious ~SwIndexReg assert
     memset( &m_aAttrTab, 0, sizeof( _HTMLAttrTable ));
 
     // Die Font-Groessen 1-7 aus der INI-Datei lesen
@@ -761,16 +761,16 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
                         pCNd->EndOfSectionIndex() && !bHasFlysOrMarks )
                     {
                         SwViewShell *pVSh = CheckActionViewShell();
-                        SwCrsrShell *pCrsrSh = pVSh && dynamic_cast< const SwCrsrShell *>( pVSh ) !=  nullptr
-                                        ? static_cast < SwCrsrShell * >( pVSh )
+                        SwCursorShell *pCursorSh = pVSh && dynamic_cast< const SwCursorShell *>( pVSh ) !=  nullptr
+                                        ? static_cast < SwCursorShell * >( pVSh )
                                         : nullptr;
-                        if( pCrsrSh &&
-                            pCrsrSh->GetCrsr()->GetPoint()
+                        if( pCursorSh &&
+                            pCursorSh->GetCursor()->GetPoint()
                                    ->nNode.GetIndex() == nNodeIdx )
                         {
-                            pCrsrSh->MovePara(fnParaPrev, fnParaEnd );
-                            pCrsrSh->SetMark();
-                            pCrsrSh->ClearMark();
+                            pCursorSh->MovePara(fnParaPrev, fnParaEnd );
+                            pCursorSh->SetMark();
+                            pCursorSh->ClearMark();
                         }
                         m_pPam->GetBound().nContent.Assign( nullptr, 0 );
                         m_pPam->GetBound(false).nContent.Assign( nullptr, 0 );
@@ -2579,16 +2579,16 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
     if( !m_pActionViewShell || (bChkAction && !m_pActionViewShell->ActionPend()) )
         return m_pActionViewShell;
 
-    if( m_bSetCrsr )
+    if( m_bSetCursor )
     {
-        // set the cursor to the doc begin in all CrsrEditShells
+        // set the cursor to the doc begin in all CursorEditShells
         for(SwViewShell& rSh : m_pActionViewShell->GetRingContainer())
         {
-            if( dynamic_cast<const SwCrsrShell *>(&rSh) != nullptr )
-                static_cast<SwCrsrShell*>(&rSh)->SttEndDoc(true);
+            if( dynamic_cast<const SwCursorShell *>(&rSh) != nullptr )
+                static_cast<SwCursorShell*>(&rSh)->SttEndDoc(true);
         }
 
-        m_bSetCrsr = false;
+        m_bSetCursor = false;
     }
     if( dynamic_cast< const SwEditShell *>( m_pActionViewShell ) !=  nullptr )
     {
@@ -2891,9 +2891,9 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
         }
     }
 
-    for( auto n = m_aMoveFlyFrms.size(); n; )
+    for( auto n = m_aMoveFlyFrames.size(); n; )
     {
-        SwFrameFormat *pFrameFormat = m_aMoveFlyFrms[ --n ];
+        SwFrameFormat *pFrameFormat = m_aMoveFlyFrames[ --n ];
 
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         OSL_ENSURE( FLY_AT_PARA == rAnchor.GetAnchorId(),
@@ -2916,7 +2916,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
         }
         if( bMoveFly )
         {
-            pFrameFormat->DelFrms();
+            pFrameFormat->DelFrames();
             *pAttrPam->GetPoint() = *pFlyPos;
             pAttrPam->GetPoint()->nContent.Assign( pAttrPam->GetContentNode(),
                                                    m_aMoveFlyCnts[n] );
@@ -2940,8 +2940,8 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                 pFrameFormat->SetFormatAttr( aVertOri );
             }
 
-            pFrameFormat->MakeFrms();
-            m_aMoveFlyFrms.erase( m_aMoveFlyFrms.begin() + n );
+            pFrameFormat->MakeFrames();
+            m_aMoveFlyFrames.erase( m_aMoveFlyFrames.begin() + n );
             m_aMoveFlyCnts.erase( m_aMoveFlyCnts.begin() + n );
         }
     }
@@ -4875,13 +4875,13 @@ void SwHTMLParser::InsertSpacer()
             // einen leeren Textrahmen anlegen
 
             // den Itemset holen
-            SfxItemSet aFrmSet( m_pDoc->GetAttrPool(),
+            SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
             if( !IsNewDoc() )
-                Reader::ResetFrameFormatAttrs( aFrmSet );
+                Reader::ResetFrameFormatAttrs( aFrameSet );
 
             // den Anker und die Ausrichtung setzen
-            SetAnchorAndAdjustment( eVertOri, eHoriOri, aFrmSet );
+            SetAnchorAndAdjustment( eVertOri, eHoriOri, aFrameSet );
 
             // und noch die Groesse des Rahmens
             Size aDfltSz( MINFLY, MINFLY );
@@ -4891,21 +4891,21 @@ void SwHTMLParser::InsertSpacer()
             SvxCSS1PropertyInfo aDummyPropInfo;
 
             SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight,
-                        aDummyItemSet, aDummyPropInfo, aFrmSet );
-            SetSpace( aSpace, aDummyItemSet, aDummyPropInfo, aFrmSet );
+                        aDummyItemSet, aDummyPropInfo, aFrameSet );
+            SetSpace( aSpace, aDummyItemSet, aDummyPropInfo, aFrameSet );
 
             // den Inhalt schuetzen
             SvxProtectItem aProtectItem( RES_PROTECT) ;
             aProtectItem.SetContentProtect( true );
-            aFrmSet.Put( aProtectItem );
+            aFrameSet.Put( aProtectItem );
 
             // der Rahmen anlegen
             RndStdIds eAnchorId =
-                static_cast<const SwFormatAnchor &>(aFrmSet.Get(RES_ANCHOR)).GetAnchorId();
+                static_cast<const SwFormatAnchor &>(aFrameSet.Get(RES_ANCHOR)).GetAnchorId();
             SwFrameFormat *pFlyFormat = m_pDoc->MakeFlySection( eAnchorId,
-                                            m_pPam->GetPoint(), &aFrmSet );
+                                            m_pPam->GetPoint(), &aFrameSet );
             // Ggf Frames anlegen und auto-geb. Rahmen registrieren
-            RegisterFlyFrm( pFlyFormat );
+            RegisterFlyFrame( pFlyFormat );
         }
         break;
     case HTML_SPTYPE_VERT:
@@ -5015,7 +5015,7 @@ SwTwips SwHTMLParser::GetCurrentBrowseWidth()
     {
         const SwFrameFormat& rPgFormat = m_pCSS1Parser->GetMasterPageDesc()->GetMaster();
 
-        const SwFormatFrmSize& rSz   = rPgFormat.GetFrmSize();
+        const SwFormatFrameSize& rSz   = rPgFormat.GetFrameSize();
         const SvxLRSpaceItem& rLR = rPgFormat.GetLRSpace();
         const SvxULSpaceItem& rUL = rPgFormat.GetULSpace();
         const SwFormatCol& rCol = rPgFormat.GetCol();

@@ -25,7 +25,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
 
-class SwTextFrm;
+class SwTextFrame;
 class SwViewShell;
 class SwScriptInfo;
 class Point;
@@ -42,7 +42,7 @@ class SwUnderlineFont;
 // encapsulates information for drawing text
 class SW_DLLPUBLIC SwDrawTextInfo
 {
-    const SwTextFrm* m_pFrm;
+    const SwTextFrame* m_pFrame;
     VclPtr<OutputDevice> m_pOut;
     SwViewShell const * m_pSh;
     const SwScriptInfo* m_pScriptInfo;
@@ -79,8 +79,8 @@ class SW_DLLPUBLIC SwDrawTextInfo
     bool m_bSpaceStop : 1;
     bool m_bSnapToGrid : 1;   // Does paragraph snap to grid?
     // Paint text as if text has LTR direction, used for line numbering
-    bool m_bIgnoreFrmRTL : 1;
-    // GetCrsrOfst should not return the next position if screen position is
+    bool m_bIgnoreFrameRTL : 1;
+    // GetCursorOfst should not return the next position if screen position is
     // inside second half of bound rect, used for Accessibility
     bool m_bPosMatchesBounds :1;
 
@@ -114,7 +114,7 @@ public:
                     vcl::TextLayoutCache const*const pCachedVclData = nullptr)
         : m_pCachedVclData(pCachedVclData)
     {
-        m_pFrm = nullptr;
+        m_pFrame = nullptr;
         m_pSh = pSh;
         m_pOut = &rOut;
         m_pScriptInfo = pSI;
@@ -131,7 +131,7 @@ public:
         m_bGreyWave = false;
         m_bSpaceStop = false;
         m_bSnapToGrid = false;
-        m_bIgnoreFrmRTL = false;
+        m_bIgnoreFrameRTL = false;
         m_bPosMatchesBounds = false;
 
         // These values are initialized but have to be set explicitly via their
@@ -162,14 +162,14 @@ public:
 #endif
     }
 
-    const SwTextFrm* GetFrm() const
+    const SwTextFrame* GetFrame() const
     {
-        return m_pFrm;
+        return m_pFrame;
     }
 
-    void SetFrm( const SwTextFrm* pNewFrm )
+    void SetFrame( const SwTextFrame* pNewFrame )
     {
-        m_pFrm = pNewFrm;
+        m_pFrame = pNewFrame;
     }
 
     SwViewShell const *GetShell() const
@@ -379,9 +379,9 @@ public:
         return m_bSnapToGrid;
     }
 
-    bool IsIgnoreFrmRTL() const
+    bool IsIgnoreFrameRTL() const
     {
-        return m_bIgnoreFrmRTL;
+        return m_bIgnoreFrameRTL;
     }
 
     bool IsPosMatchesBounds() const
@@ -590,9 +590,9 @@ public:
         m_bSnapToGrid = bNew;
     }
 
-    void SetIgnoreFrmRTL( bool bNew )
+    void SetIgnoreFrameRTL( bool bNew )
     {
-        m_bIgnoreFrmRTL = bNew;
+        m_bIgnoreFrameRTL = bNew;
     }
 
     void SetPosMatchesBounds( bool bNew )

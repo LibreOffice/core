@@ -107,8 +107,8 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
         aBoxInfo = *static_cast<const SvxBoxInfoItem*>(pBoxInfo);
 
         // Table variant: If more than one table cells are selected
-    rSh.GetCrsr();                  //So that GetCrsrCnt() returns the right thing
-    aBoxInfo.SetTable          (rSh.IsTableMode() && rSh.GetCrsrCnt() > 1);
+    rSh.GetCursor();                  //So that GetCursorCnt() returns the right thing
+    aBoxInfo.SetTable          (rSh.IsTableMode() && rSh.GetCursorCnt() > 1);
         // Always show the distance field
     aBoxInfo.SetDist           (true);
         // Set minimal size in tables and paragraphs
@@ -224,10 +224,10 @@ void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
     const SfxBoolItem& rDynamic = static_cast<const SfxBoolItem&>(rSet.Get(SID_ATTR_PAGE_DYNAMIC));
 
     // Convert size
-    SwFormatFrmSize aFrmSize(rDynamic.GetValue() ? ATT_MIN_SIZE : ATT_FIX_SIZE,
+    SwFormatFrameSize aFrameSize(rDynamic.GetValue() ? ATT_MIN_SIZE : ATT_FIX_SIZE,
                             rSize.GetSize().Width(),
                             rSize.GetSize().Height());
-    aSet.Put(aFrmSize);
+    aSet.Put(aFrameSize);
     pFormat->SetFormatAttr(aSet);
 }
 
@@ -288,7 +288,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     if(rSet.GetItemState(SID_ATTR_PAGE_SIZE) == SfxItemState::SET)
     {
         const SvxSizeItem& rSizeItem = static_cast<const SvxSizeItem&>(rSet.Get(SID_ATTR_PAGE_SIZE));
-        SwFormatFrmSize aSize(ATT_FIX_SIZE);
+        SwFormatFrameSize aSize(ATT_FIX_SIZE);
         aSize.SetSize(rSizeItem.GetSize());
         rMaster.SetFormatAttr(aSize);
     }
@@ -425,7 +425,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     rSet.Put(aPageItem);
 
     // Size
-    SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, rMaster.GetFrmSize().GetSize());
+    SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, rMaster.GetFrameSize().GetSize());
     rSet.Put(aSizeItem);
 
     // Maximum size
@@ -484,8 +484,8 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);
         aHeaderSet.Put(aOn);
 
-        const SwFormatFrmSize &rFrmSize = pHeaderFormat->GetFrmSize();
-        const SwFrmSize eSizeType = rFrmSize.GetHeightSizeType();
+        const SwFormatFrameSize &rFrameSize = pHeaderFormat->GetFrameSize();
+        const SwFrameSize eSizeType = rFrameSize.GetHeightSizeType();
         SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != ATT_FIX_SIZE);
         aHeaderSet.Put(aDynamic);
 
@@ -496,7 +496,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aHeaderSet.Put(aFirstShared);
 
         // Size
-        SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, Size(rFrmSize.GetSize()));
+        SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, Size(rFrameSize.GetSize()));
         aHeaderSet.Put(aSize);
 
         // Shifting frame attributes
@@ -535,8 +535,8 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);
         aFooterSet.Put(aOn);
 
-        const SwFormatFrmSize &rFrmSize = pFooterFormat->GetFrmSize();
-        const SwFrmSize eSizeType = rFrmSize.GetHeightSizeType();
+        const SwFormatFrameSize &rFrameSize = pFooterFormat->GetFrameSize();
+        const SwFrameSize eSizeType = rFrameSize.GetHeightSizeType();
         SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != ATT_FIX_SIZE);
         aFooterSet.Put(aDynamic);
 
@@ -547,7 +547,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aFooterSet.Put(aFirstShared);
 
         // Size
-        SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, Size(rFrmSize.GetSize()));
+        SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, Size(rFrameSize.GetSize()));
         aFooterSet.Put(aSize);
 
         // Shifting Frame attributes
@@ -756,7 +756,7 @@ SwTwips GetTableWidth( SwFrameFormat* pFormat, SwTabCols& rCols, sal_uInt16 *pPe
         case text::HoriOrientation::LEFT:
         case text::HoriOrientation::RIGHT:
         case text::HoriOrientation::CENTER:
-            nWidth = pFormat->GetFrmSize().GetWidth();
+            nWidth = pFormat->GetFrameSize().GetWidth();
         break;
         default:
         {
@@ -780,7 +780,7 @@ SwTwips GetTableWidth( SwFrameFormat* pFormat, SwTabCols& rCols, sal_uInt16 *pPe
         }
     }
     if (pPercent)
-        *pPercent = pFormat->GetFrmSize().GetWidthPercent();
+        *pPercent = pFormat->GetFrameSize().GetWidthPercent();
     return nWidth;
 }
 

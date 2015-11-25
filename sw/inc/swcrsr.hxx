@@ -58,7 +58,7 @@ namespace nsSwCursorSelOverFlags
 
 class SW_DLLPUBLIC SwCursor : public SwPaM
 {
-    friend class SwCrsrSaveState;
+    friend class SwCursorSaveState;
 
     _SwCursor_SavePos* m_pSavePos;
     long m_nRowSpanOffset;        // required for travelling in tabs with rowspans
@@ -78,8 +78,8 @@ protected:
 
     const _SwCursor_SavePos* GetSavePos() const { return m_pSavePos; }
 
-    virtual const SwContentFrm* DoSetBidiLevelLeftRight(
-        bool & io_rbLeft, bool bVisualAllowed, bool bInsertCrsr);
+    virtual const SwContentFrame* DoSetBidiLevelLeftRight(
+        bool & io_rbLeft, bool bVisualAllowed, bool bInsertCursor);
     virtual void DoSetBidiLevelUpDown();
     virtual bool IsSelOvrCheck(int eFlags);
 
@@ -157,7 +157,7 @@ public:
     bool ExpandToSentenceBorders();
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
-        bool bAllowVisual, bool bSkipHidden, bool bInsertCrsr );
+        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor );
     bool UpDown( bool bUp, sal_uInt16 nCnt, Point* pPt, long nUpDownX );
     bool LeftRightMargin( bool bLeftMargin, bool bAPI = false );
     bool IsAtLeftRightMargin( bool bLeftMargin, bool bAPI = false ) const;
@@ -190,10 +190,10 @@ public:
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
     bool IsInProtectTable( bool bMove = false,
-                                   bool bChgCrsr = true );
+                                   bool bChgCursor = true );
     bool IsNoContent() const;
 
-    /** Restore cursor state to the one saved by SwCrsrSaveState **/
+    /** Restore cursor state to the one saved by SwCursorSaveState **/
     void RestoreSavePos();
 
     // true: cursor can be set at this position.
@@ -205,31 +205,31 @@ public:
     virtual bool IsSkipOverProtectSections() const;
     virtual bool IsSkipOverHiddenSections() const;
 
-    sal_uInt8 GetCrsrBidiLevel() const { return m_nCursorBidiLevel; }
-    void SetCrsrBidiLevel( sal_uInt8 nNewLevel ) { m_nCursorBidiLevel = nNewLevel; }
+    sal_uInt8 GetCursorBidiLevel() const { return m_nCursorBidiLevel; }
+    void SetCursorBidiLevel( sal_uInt8 nNewLevel ) { m_nCursorBidiLevel = nNewLevel; }
 
     bool IsColumnSelection() const { return m_bColumnSelection; }
     void SetColumnSelection( bool bNew ) { m_bColumnSelection = bNew; }
 
-    long GetCrsrRowSpanOffset() const { return m_nRowSpanOffset; }
+    long GetCursorRowSpanOffset() const { return m_nRowSpanOffset; }
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwCursor )
 };
 
 /**
- A helper class to save cursor state (position). Create SwCrsrSaveState
+ A helper class to save cursor state (position). Create SwCursorSaveState
  object to save current state, use SwCursor::RestoreSavePos() to actually
- restore cursor state to the saved state (SwCrsrSaveState destructor only
+ restore cursor state to the saved state (SwCursorSaveState destructor only
  removes the saved state from an internal stack). It is possible to stack
- several SwCrsrSaveState objects.
+ several SwCursorSaveState objects.
 **/
-class SwCrsrSaveState
+class SwCursorSaveState
 {
 private:
-    SwCursor& m_rCrsr;
+    SwCursor& m_rCursor;
 public:
-    SwCrsrSaveState( SwCursor& rC ) : m_rCrsr( rC ) { rC.SaveState(); }
-    ~SwCrsrSaveState() { m_rCrsr.RestoreState(); }
+    SwCursorSaveState( SwCursor& rC ) : m_rCursor( rC ) { rC.SaveState(); }
+    ~SwCursorSaveState() { m_rCursor.RestoreState(); }
 };
 
 // internal, used by SwCursor::SaveState() etc.
@@ -239,9 +239,9 @@ struct _SwCursor_SavePos
     sal_Int32 nContent;
     _SwCursor_SavePos* pNext;
 
-    _SwCursor_SavePos( const SwCursor& rCrsr )
-        : nNode( rCrsr.GetPoint()->nNode.GetIndex() ),
-        nContent( rCrsr.GetPoint()->nContent.GetIndex() ),
+    _SwCursor_SavePos( const SwCursor& rCursor )
+        : nNode( rCursor.GetPoint()->nNode.GetIndex() ),
+        nContent( rCursor.GetPoint()->nContent.GetIndex() ),
         pNext( nullptr )
     {}
     virtual ~_SwCursor_SavePos() {}
@@ -269,7 +269,7 @@ public:
     virtual ~SwTableCursor();
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
-        bool bAllowVisual, bool bSkipHidden, bool bInsertCrsr ) override;
+        bool bAllowVisual, bool bSkipHidden, bool bInsertCursor ) override;
     virtual bool GotoTable( const OUString& rName ) override;
 
     void InsertBox( const SwTableBox& rTableBox );
@@ -278,14 +278,14 @@ public:
     const SwSelBoxes& GetSelectedBoxes() const { return m_SelectedBoxes; }
 
     // Creates cursor for all boxes.
-    SwCursor* MakeBoxSels( SwCursor* pAktCrsr );
+    SwCursor* MakeBoxSels( SwCursor* pAktCursor );
     // Any boxes protected?
     bool HasReadOnlyBoxSel() const;
 
     // Has table cursor been changed? If so, save new values immediately.
-    bool IsCrsrMovedUpdate();
+    bool IsCursorMovedUpdate();
     // Has table cursor been changed?
-    bool IsCrsrMoved() const
+    bool IsCursorMoved() const
     {
         return  m_nTableMkNd != GetMark()->nNode.GetIndex() ||
                 m_nTablePtNd != GetPoint()->nNode.GetIndex() ||
@@ -296,7 +296,7 @@ public:
     bool IsChgd() const { return m_bChanged; }
 
     // Park table cursor at start node of boxes.
-    void ParkCrsr();
+    void ParkCursor();
 
     bool NewTableSelection();
     void ActualizeSelection( const SwSelBoxes &rBoxes );

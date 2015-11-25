@@ -568,7 +568,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 pValues[nProp], pPropertyNames[nProp], pEntry->nWID))
         {
             beans::PropertyState eTemp;
-            const bool bDone = SwUnoCursorHelper::getCrsrPropertyValue(
+            const bool bDone = SwUnoCursorHelper::getCursorPropertyValue(
                 *pEntry, aPam, &(pValues[nProp]), eTemp, &rTextNode );
             if (!bDone)
             {
@@ -646,7 +646,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
 
-    //SwNode& rTextNode = pUnoCrsr->GetPoint()->nNode.GetNode();
+    //SwNode& rTextNode = pUnoCursor->GetPoint()->nNode.GetNode();
     //const SwAttrSet& rAttrSet = static_cast<SwTextNode&>(rTextNode).GetSwAttrSet();
     //sal_uInt16 nAttrCount = rAttrSet.Count();
 
@@ -824,7 +824,7 @@ throw (uno::RuntimeException, std::exception)
                         // and thus only pretendend to be paragraph attributes
                         beans::PropertyState eTemp;
                         const bool bDone =
-                            SwUnoCursorHelper::getCrsrPropertyValue(
+                            SwUnoCursorHelper::getCursorPropertyValue(
                                     *pEntry, aPam, &aValue, eTemp, &rTextNode );
 
                         // if not found try the real paragraph attributes...
@@ -1150,10 +1150,10 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
             static_cast<cppu::OWeakObject *>(this));
     }
 
-    const bool bBelowFrmAtrEnd(pEntry->nWID < RES_FRMATR_END);
+    const bool bBelowFrameAtrEnd(pEntry->nWID < RES_FRMATR_END);
     const bool bDrawingLayerRange(XATTR_FILL_FIRST <= pEntry->nWID && XATTR_FILL_LAST >= pEntry->nWID);
 
-    if(bBelowFrmAtrEnd || bDrawingLayerRange)
+    if(bBelowFrameAtrEnd || bDrawingLayerRange)
     {
         std::set<sal_uInt16> aWhichIds;
 
@@ -1178,7 +1178,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
             // to paragraph boundaries
             SwPosition aStart( *aCursor.Start() );
             SwPosition aEnd  ( *aCursor.End()   );
-            auto pTemp( aCursor.GetDoc()->CreateUnoCrsr(aStart) );
+            auto pTemp( aCursor.GetDoc()->CreateUnoCursor(aStart) );
             if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
             {
                 pTemp->MovePara(fnParaCurr, fnParaStart);
@@ -1200,7 +1200,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     }
     else
     {
-        SwUnoCursorHelper::resetCrsrPropertyValue(*pEntry, aCursor);
+        SwUnoCursorHelper::resetCursorPropertyValue(*pEntry, aCursor);
     }
 }
 
@@ -1228,10 +1228,10 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             static_cast<cppu::OWeakObject *>(this));
     }
 
-    const bool bBelowFrmAtrEnd(pEntry->nWID < RES_FRMATR_END);
+    const bool bBelowFrameAtrEnd(pEntry->nWID < RES_FRMATR_END);
     const bool bDrawingLayerRange(XATTR_FILL_FIRST <= pEntry->nWID && XATTR_FILL_LAST >= pEntry->nWID);
 
-    if(bBelowFrmAtrEnd || bDrawingLayerRange)
+    if(bBelowFrameAtrEnd || bDrawingLayerRange)
     {
         const SfxPoolItem& rDefItem = rTextNode.GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
 

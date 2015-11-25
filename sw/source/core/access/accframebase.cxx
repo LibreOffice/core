@@ -53,8 +53,8 @@ bool SwAccessibleFrameBase::IsSelected()
     if( dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr )
     {
         const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
-        const SwFrm *pFlyFrm = pFESh->GetSelectedFlyFrm();
-        if( pFlyFrm == GetFrm() )
+        const SwFrame *pFlyFrame = pFESh->GetSelectedFlyFrame();
+        if( pFlyFrame == GetFrame() )
             bRet = true;
     }
 
@@ -94,21 +94,21 @@ void SwAccessibleFrameBase::GetStates(
         rStateSet.AddState( AccessibleStateType::SELECTED );
 }
 
-sal_uInt8 SwAccessibleFrameBase::GetNodeType( const SwFlyFrm *pFlyFrm )
+sal_uInt8 SwAccessibleFrameBase::GetNodeType( const SwFlyFrame *pFlyFrame )
 {
     sal_uInt8 nType = ND_TEXTNODE;
-    if( pFlyFrm->Lower() )
+    if( pFlyFrame->Lower() )
     {
-         if( pFlyFrm->Lower()->IsNoTextFrm() )
+         if( pFlyFrame->Lower()->IsNoTextFrame() )
         {
-            const SwContentFrm *pCntFrm =
-                static_cast<const SwContentFrm *>( pFlyFrm->Lower() );
-            nType = pCntFrm->GetNode()->GetNodeType();
+            const SwContentFrame *pContentFrame =
+                static_cast<const SwContentFrame *>( pFlyFrame->Lower() );
+            nType = pContentFrame->GetNode()->GetNodeType();
         }
     }
     else
     {
-        const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+        const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
         const SwFormatContent& rContent = pFrameFormat->GetContent();
         const SwNodeIndex *pNdIdx = rContent.GetContentIdx();
         if( pNdIdx )
@@ -126,13 +126,13 @@ sal_uInt8 SwAccessibleFrameBase::GetNodeType( const SwFlyFrm *pFlyFrm )
 SwAccessibleFrameBase::SwAccessibleFrameBase(
         SwAccessibleMap* pInitMap,
         sal_Int16 nInitRole,
-        const SwFlyFrm* pFlyFrm  ) :
-    SwAccessibleContext( pInitMap, nInitRole, pFlyFrm ),
+        const SwFlyFrame* pFlyFrame  ) :
+    SwAccessibleContext( pInitMap, nInitRole, pFlyFrame ),
     bIsSelected( false )
 {
     SolarMutexGuard aGuard;
 
-    const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+    const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
     const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );
 
     SetName( pFrameFormat->GetName() );
@@ -215,13 +215,13 @@ SwAccessibleFrameBase::~SwAccessibleFrameBase()
 void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( GetFrm() );
+    const SwFlyFrame *pFlyFrame = static_cast< const SwFlyFrame * >( GetFrame() );
     switch( nWhich )
     {
     case RES_NAME_CHANGED:
-        if(  pFlyFrm )
+        if(  pFlyFrame )
         {
-            const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+            const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
             assert(pFrameFormat == GetRegisteredIn() && "invalid frame");
 
             const OUString sOldName( GetName() );
@@ -272,25 +272,25 @@ void SwAccessibleFrameBase::Dispose( bool bRecursive )
 }
 
 //Get the selection cursor of the document.
-SwPaM* SwAccessibleFrameBase::GetCrsr()
+SwPaM* SwAccessibleFrameBase::GetCursor()
 {
     // get the cursor shell; if we don't have any, we don't have a
     // cursor/selection either
-    SwPaM* pCrsr = nullptr;
-    SwCrsrShell* pCrsrShell = GetCrsrShell();
-    if( pCrsrShell != nullptr && !pCrsrShell->IsTableMode() )
+    SwPaM* pCursor = nullptr;
+    SwCursorShell* pCursorShell = GetCursorShell();
+    if( pCursorShell != nullptr && !pCursorShell->IsTableMode() )
     {
-        SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pCrsrShell) !=  nullptr
-                            ? static_cast< SwFEShell * >( pCrsrShell ) : nullptr;
+        SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pCursorShell) !=  nullptr
+                            ? static_cast< SwFEShell * >( pCursorShell ) : nullptr;
         if( !pFESh ||
-            !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
+            !(pFESh->IsFrameSelected() || pFESh->IsObjSelected() > 0) )
         {
             // get the selection, and test whether it affects our text node
-            pCrsr = pCrsrShell->GetCrsr( false /* ??? */ );
+            pCursor = pCursorShell->GetCursor( false /* ??? */ );
         }
     }
 
-    return pCrsr;
+    return pCursor;
 }
 
 //Return the selected state of the object.
@@ -305,8 +305,8 @@ bool SwAccessibleFrameBase::GetSelectedState( )
     }
 
     // SELETED.
-    SwFlyFrm* pFlyFrm = getFlyFrm();
-    const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+    SwFlyFrame* pFlyFrame = getFlyFrame();
+    const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
     const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
     const SwPosition *pPos = pAnchor.GetContentAnchor();
     if( !pPos )
@@ -314,23 +314,23 @@ bool SwAccessibleFrameBase::GetSelectedState( )
     int pIndex = pPos->nContent.GetIndex();
     if( pPos->nNode.GetNode().GetTextNode() )
     {
-        SwPaM* pCrsr = GetCrsr();
-        if( pCrsr != nullptr )
+        SwPaM* pCursor = GetCursor();
+        if( pCursor != nullptr )
         {
             const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
             sal_uLong nHere = pNode->GetIndex();
 
             // iterate over ring
-            SwPaM* pRingStart = pCrsr;
+            SwPaM* pRingStart = pCursor;
             do
             {
                 // ignore, if no mark
-                if( pCrsr->HasMark() )
+                if( pCursor->HasMark() )
                 {
-                    // check whether nHere is 'inside' pCrsr
-                    SwPosition* pStart = pCrsr->Start();
+                    // check whether nHere is 'inside' pCursor
+                    SwPosition* pStart = pCursor->Start();
                     sal_uLong nStartIndex = pStart->nNode.GetIndex();
-                    SwPosition* pEnd = pCrsr->End();
+                    SwPosition* pEnd = pCursor->End();
                     sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                     if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
                     {
@@ -353,26 +353,26 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                 // else: this PaM is collapsed and doesn't select anything
 
                 // next PaM in ring
-                pCrsr = pCrsr->GetNext();
+                pCursor = pCursor->GetNext();
             }
-            while( pCrsr != pRingStart );
+            while( pCursor != pRingStart );
         }
     }
     return false;
 }
 
-SwFlyFrm* SwAccessibleFrameBase::getFlyFrm() const
+SwFlyFrame* SwAccessibleFrameBase::getFlyFrame() const
 {
-    SwFlyFrm* pFlyFrm = nullptr;
+    SwFlyFrame* pFlyFrame = nullptr;
 
-    const SwFrm* pFrm = GetFrm();
-    assert(pFrm);
-    if( pFrm->IsFlyFrm() )
+    const SwFrame* pFrame = GetFrame();
+    assert(pFrame);
+    if( pFrame->IsFlyFrame() )
     {
-        pFlyFrm = static_cast<SwFlyFrm*>( const_cast<SwFrm*>( pFrm ) );
+        pFlyFrame = static_cast<SwFlyFrame*>( const_cast<SwFrame*>( pFrame ) );
     }
 
-    return pFlyFrm;
+    return pFlyFrame;
 }
 
 bool SwAccessibleFrameBase::SetSelectedState( bool )

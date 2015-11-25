@@ -202,7 +202,7 @@ class _HTMLAttrContext
     OUString    aClass;          // die Klasse des Kontexts
 
     _HTMLAttrContext_SaveDoc *pSaveDocContext;
-    SfxItemSet *pFrmItemSet;
+    SfxItemSet *pFrameItemSet;
 
     sal_uInt16  nToken;         // das Token, zu dem der Kontext gehoehrt
 
@@ -234,7 +234,7 @@ public:
                       bool bDfltColl=false ) :
         aClass( rClass ),
         pSaveDocContext( nullptr ),
-        pFrmItemSet( nullptr ),
+        pFrameItemSet( nullptr ),
         nToken( nTokn ),
         nTextFormatColl( nPoolId ),
         nLeftMargin( 0 ),
@@ -256,7 +256,7 @@ public:
 
     explicit _HTMLAttrContext( sal_uInt16 nTokn ) :
         pSaveDocContext( nullptr ),
-        pFrmItemSet( nullptr ),
+        pFrameItemSet( nullptr ),
         nToken( nTokn ),
         nTextFormatColl( 0 ),
         nLeftMargin( 0 ),
@@ -276,7 +276,7 @@ public:
         bRestartListing( false )
     {}
 
-    ~_HTMLAttrContext() { ClearSaveDocContext(); delete pFrmItemSet; }
+    ~_HTMLAttrContext() { ClearSaveDocContext(); delete pFrameItemSet; }
 
     sal_uInt16 GetToken() const { return nToken; }
 
@@ -308,8 +308,8 @@ public:
     bool HasSaveDocContext() const { return pSaveDocContext!=nullptr; }
     _HTMLAttrContext_SaveDoc *GetSaveDocContext( bool bCreate=false );
 
-    const SfxItemSet *GetFrmItemSet() const { return pFrmItemSet; }
-    SfxItemSet *GetFrmItemSet( SwDoc *pCreateDoc );
+    const SfxItemSet *GetFrameItemSet() const { return pFrameItemSet; }
+    SfxItemSet *GetFrameItemSet( SwDoc *pCreateDoc );
 
     void SetFinishPREListingXMP( bool bSet ) { bFinishPREListingXMP = bSet; }
     bool IsFinishPREListingXMP() const { return bFinishPREListingXMP; }
@@ -381,7 +381,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     _HTMLAttrs      m_aParaAttrs; // vorlauefige Absatz-Attribute
     _HTMLAttrTable  m_aAttrTab;   // "offene" Attribute
     _HTMLAttrContexts m_aContexts;// der aktuelle Attribut/Token-Kontext
-    std::vector<SwFrameFormat *> m_aMoveFlyFrms;// Fly-Frames, the anchor is moved
+    std::vector<SwFrameFormat *> m_aMoveFlyFrames;// Fly-Frames, the anchor is moved
     std::deque<sal_Int32> m_aMoveFlyCnts;// and the Content-Positions
 
     SwApplet_Impl *m_pAppletImpl; // das aktuelle Applet
@@ -438,7 +438,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
                                 // Flag um doppeltes init durch Rekursion
                                 // zu verhindern.
     bool m_bViewCreated : 1;      // die View wurde schon erzeugt (asynchron)
-    bool m_bSetCrsr : 1;          // Crsr wieder auf den Anfang setzen
+    bool m_bSetCursor : 1;          // Cursor wieder auf den Anfang setzen
     bool m_bSetModEnabled : 1;
 
     bool m_bInFloatingFrame : 1;  // Wir sind in einen Floating Frame
@@ -493,7 +493,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     inline void SetAttr( bool bChkEnd = true, bool bBeforeTable = false,
                          _HTMLAttrs *pPostIts = nullptr )
     {
-        if( !m_aSetAttrTab.empty() || !m_aMoveFlyFrms.empty() )
+        if( !m_aSetAttrTab.empty() || !m_aMoveFlyFrames.empty() )
             _SetAttr( bChkEnd, bBeforeTable, pPostIts );
     }
 
@@ -667,20 +667,20 @@ private:
                                  sal_Int16 eHoriOri,
                                  const SfxItemSet &rItemSet,
                                  const SvxCSS1PropertyInfo &rPropInfo,
-                                 SfxItemSet& rFrmSet );
+                                 SfxItemSet& rFrameSet );
     void SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                  sal_Int16 eHoriOri,
-                                 SfxItemSet& rFrmSet,
+                                 SfxItemSet& rFrameSet,
                                  bool bDontAppend=false );
     void SetAnchorAndAdjustment( const SfxItemSet &rItemSet,
                                  const SvxCSS1PropertyInfo &rPropInfo,
-                                 SfxItemSet &rFrmItemSet );
+                                 SfxItemSet &rFrameItemSet );
 
     static void SetFrameFormatAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
-                         sal_uInt16 nFlags, SfxItemSet &rFrmItemSet );
+                         sal_uInt16 nFlags, SfxItemSet &rFrameItemSet );
 
     // Frames anlegen und Auto-gebundene Rahmen registrieren
-    void RegisterFlyFrm( SwFrameFormat *pFlyFrm );
+    void RegisterFlyFrame( SwFrameFormat *pFlyFrame );
 
     // Die Groesse des Fly-Frames an die Vorgaben und Gegebenheiten anpassen
     // (nicht fuer Grafiken, deshalb htmlplug.cxx)
@@ -884,7 +884,7 @@ protected:
 
 public:
 
-    SwHTMLParser( SwDoc* pD, SwPaM & rCrsr, SvStream& rIn,
+    SwHTMLParser( SwDoc* pD, SwPaM & rCursor, SvStream& rIn,
                     const OUString& rFileName,
                     const OUString& rBaseURL,
                     bool bReadNewDoc = true,

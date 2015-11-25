@@ -437,7 +437,7 @@ struct MSWordSaveData
 
     bool bOldWriteAll : 1;          ///< WW8Export only
     bool bOldOutTable : 1;
-    bool bOldFlyFrmAttrs : 1;
+    bool bOldFlyFrameAttrs : 1;
     bool bOldStartTOX : 1;
     bool bOldInWriteTOX : 1;
     // m_bOutPageDescs does not have to be saved in MSWordExportBase::SaveData
@@ -536,7 +536,7 @@ public:
     bool m_bStyDef : 1;           // should Style be written?
     bool m_bBreakBefore : 1;      // Breaks are being written 2 times
     bool m_bOutKF : 1;            // Header/Footer texts are being written
-    bool m_bOutFlyFrmAttrs : 1;   // Frame-attr of Flys are being written
+    bool m_bOutFlyFrameAttrs : 1;   // Frame-attr of Flys are being written
     bool m_bOutPageDescs : 1;     ///< PageDescs (section properties) are being written
     bool m_bOutFirstPage : 1;     // write Attrset of FirstPageDesc
     bool m_bOutTable : 1;         // table is being written
@@ -1324,7 +1324,7 @@ public:
 class GraphicDetails
 {
 public:
-    ww8::Frame maFly;                // surrounding FlyFrms
+    ww8::Frame maFly;                // surrounding FlyFrames
     sal_uLong mnPos;                // FilePos of the graphics
     sal_uInt16 mnWid;               // Width of the graphics
     sal_uInt16 mnHei;               // Height of the graphics
@@ -1462,7 +1462,7 @@ private:
 
     const SwFormatDrop &mrSwFormatDrop;
 
-    ww8::Frames maFlyFrms;     // #i2916#
+    ww8::Frames maFlyFrames;     // #i2916#
     ww8::FrameIter maFlyIter;
 
     sal_Int32 SearchNext( sal_Int32 nStartPos );

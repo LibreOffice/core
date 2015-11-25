@@ -103,7 +103,7 @@ typedef std::vector<SwTextAttr*> SwpHts;
                                   pNd->GetpSwpHints()->Check(true); }
 #define CHECK_SWPHINTS_IF_FRM(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
-    pNd->GetpSwpHints()->Check(getLayoutFrm(nullptr, nullptr, nullptr, false) != nullptr); }
+    pNd->GetpSwpHints()->Check(getLayoutFrame(nullptr, nullptr, nullptr, false) != nullptr); }
 #else
 #define CHECK_SWPHINTS(pNd)
 #define CHECK_SWPHINTS_IF_FRM(pNd)
@@ -123,7 +123,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
     if ( IsDocNodes() )
         UpdateOutlineNode(*pNode);
 
-    // if there is no layout or it is in a hidden section, MakeFrms is not needed
+    // if there is no layout or it is in a hidden section, MakeFrames is not needed
     const SwSectionNode* pSectNd;
     if( !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ||
         ( nullptr != (pSectNd = pNode->FindSectionNode()) &&
@@ -140,7 +140,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
         switch (pNd->GetNodeType())
         {
         case ND_TABLENODE:
-            static_cast<SwTableNode*>(pNd)->MakeFrms( aIdx );
+            static_cast<SwTableNode*>(pNd)->MakeFrames( aIdx );
             return pNode;
 
         case ND_SECTIONNODE:
@@ -148,19 +148,19 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
                 static_cast<SwSectionNode*>(pNd)->IsContentHidden() )
             {
                 SwNodeIndex aTmpIdx( *pNode );
-                pNd = FindPrvNxtFrmNode( aTmpIdx, pNode );
+                pNd = FindPrvNxtFrameNode( aTmpIdx, pNode );
                 if( !pNd )
                     return pNode;
                 aTmp = *pNd;
                 break;
             }
-            static_cast<SwSectionNode*>(pNd)->MakeFrms( aIdx );
+            static_cast<SwSectionNode*>(pNd)->MakeFrames( aIdx );
             return pNode;
 
         case ND_TEXTNODE:
         case ND_GRFNODE:
         case ND_OLENODE:
-            static_cast<SwContentNode*>(pNd)->MakeFrms( *pNode );
+            static_cast<SwContentNode*>(pNd)->MakeFrames( *pNode );
             return pNode;
 
         case ND_ENDNODE:
@@ -270,7 +270,7 @@ SwTextNode::~SwTextNode()
 
     if (HasWriterListeners())
     {
-        DelFrms_TextNodePart();
+        DelFrames_TextNodePart();
     }
 }
 
@@ -282,13 +282,13 @@ void SwTextNode::FileLoadedInitHints()
     }
 }
 
-SwContentFrm *SwTextNode::MakeFrm( SwFrm* pSib )
+SwContentFrame *SwTextNode::MakeFrame( SwFrame* pSib )
 {
     // fdo#52028: ODF file import does not result in MergePortions being called
     // for every attribute, since that would be inefficient.  So call it here.
     FileLoadedInitHints();
-    SwContentFrm *pFrm = new SwTextFrm( this, pSib );
-    return pFrm;
+    SwContentFrame *pFrame = new SwTextFrame( this, pSib );
+    return pFrame;
 }
 
 sal_Int32 SwTextNode::Len() const
@@ -302,20 +302,20 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
     SwpHints *pSwpHints = rNode.GetpSwpHints();
     if( pSwpHints && rNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwContentFrm* pFrm = nullptr;
+        SwContentFrame* pFrame = nullptr;
         // OD 07.11.2002 #104840# - local variable to remember first footnote
         // of node <rNode> in order to invalidate position of its first content.
         // Thus, in its <MakeAll()> it will checked its position relative to its reference.
-        SwFootnoteFrm* pFirstFootnoteOfNode = nullptr;
+        SwFootnoteFrame* pFirstFootnoteOfNode = nullptr;
         for( size_t j = pSwpHints->Count(); j; )
         {
             SwTextAttr* pHt = pSwpHints->Get(--j);
             if (RES_TXTATR_FTN == pHt->Which())
             {
-                if( !pFrm )
+                if( !pFrame )
                 {
-                    pFrm = SwIterator<SwContentFrm,SwTextNode>(rNode).First();
-                    if (!pFrm)
+                    pFrame = SwIterator<SwContentFrame,SwTextNode>(rNode).First();
+                    if (!pFrame)
                         return;
                 }
                 SwTextFootnote *pAttr = static_cast<SwTextFootnote*>(pHt);
@@ -323,18 +323,18 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
                 SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
                 SwContentNode *pNd = aIdx.GetNode().GetContentNode();
                 if ( !pNd )
-                    pNd = pFrm->GetAttrSet()->GetDoc()->
+                    pNd = pFrame->GetAttrSet()->GetDoc()->
                             GetNodes().GoNextSection( &aIdx, true, false );
                 if ( !pNd )
                     continue;
 
-                SwIterator<SwContentFrm,SwContentNode> aIter( *pNd );
-                SwContentFrm* pContent = aIter.First();
+                SwIterator<SwContentFrame,SwContentNode> aIter( *pNd );
+                SwContentFrame* pContent = aIter.First();
                 if( pContent )
                 {
-                    OSL_ENSURE( pContent->getRootFrm() == pFrm->getRootFrm(),
+                    OSL_ENSURE( pContent->getRootFrame() == pFrame->getRootFrame(),
                             "lcl_ChangeFootnoteRef: Layout double?" );
-                    SwFootnoteFrm *pFootnote = pContent->FindFootnoteFrm();
+                    SwFootnoteFrame *pFootnote = pContent->FindFootnoteFrame();
                     if( pFootnote && pFootnote->GetAttr() == pAttr )
                     {
                         while( pFootnote->GetMaster() )
@@ -343,16 +343,16 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
                         pFirstFootnoteOfNode = pFootnote;
                         while ( pFootnote )
                         {
-                            pFootnote->SetRef( pFrm );
+                            pFootnote->SetRef( pFrame );
                             pFootnote = pFootnote->GetFollow();
-                            static_cast<SwTextFrm*>(pFrm)->SetFootnote( true );
+                            static_cast<SwTextFrame*>(pFrame)->SetFootnote( true );
                         }
                     }
 #if OSL_DEBUG_LEVEL > 0
                     while( nullptr != (pContent = aIter.Next()) )
                     {
-                        SwFootnoteFrm *pDbgFootnote = pContent->FindFootnoteFrm();
-                        OSL_ENSURE( !pDbgFootnote || pDbgFootnote->GetRef() == pFrm,
+                        SwFootnoteFrame *pDbgFootnote = pContent->FindFootnoteFrame();
+                        OSL_ENSURE( !pDbgFootnote || pDbgFootnote->GetRef() == pFrame,
                                 "lcl_ChangeFootnoteRef: Who's that guy?" );
                     }
 #endif
@@ -362,7 +362,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
         // #104840# - invalidate
         if ( pFirstFootnoteOfNode )
         {
-            SwContentFrm* pContent = pFirstFootnoteOfNode->ContainsContent();
+            SwContentFrame* pContent = pFirstFootnoteOfNode->ContainsContent();
             if ( pContent )
             {
                 pContent->_InvalidatePos();
@@ -465,7 +465,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
                     SwTextAttr* const pHt = m_pSwpHints->Get( --j );
                     if ( RES_TXTATR_FLYCNT == pHt ->Which() )
                     {
-                        pHt->GetFlyCnt().GetFrameFormat()->DelFrms();
+                        pHt->GetFlyCnt().GetFrameFormat()->DelFrames();
                     }
                     else if ( pHt->DontExpand() )
                     {
@@ -482,17 +482,17 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         }
 
-        SwIterator<SwContentFrm,SwTextNode> aIter( *this );
-        for( SwContentFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+        SwIterator<SwContentFrame,SwTextNode> aIter( *this );
+        for( SwContentFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
         {
-            pFrm->RegisterToNode( *pNode );
-            if( pFrm->IsTextFrm() && !pFrm->IsFollow() && static_cast<SwTextFrm*>(pFrm)->GetOfst() )
-                static_cast<SwTextFrm*>(pFrm)->SetOfst( 0 );
+            pFrame->RegisterToNode( *pNode );
+            if( pFrame->IsTextFrame() && !pFrame->IsFollow() && static_cast<SwTextFrame*>(pFrame)->GetOfst() )
+                static_cast<SwTextFrame*>(pFrame)->SetOfst( 0 );
         }
 
         if ( IsInCache() )
         {
-            SwFrm::GetCache().Delete( this );
+            SwFrame::GetCache().Delete( this );
             SetInCache( false );
         }
 
@@ -501,10 +501,10 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         // If there is an accessible layout we must call modify even
         // with length zero, because we have to notify about the changed
         // text node.
-        const SwRootFrm *pRootFrm;
+        const SwRootFrame *pRootFrame;
         if ( (nTextLen != nSplitPos) ||
-            ( (pRootFrm = pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()) != nullptr &&
-              pRootFrm->IsAnyShellAccessible() ) )
+            ( (pRootFrame = pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()) != nullptr &&
+              pRootFrame->IsAnyShellAccessible() ) )
         {
             // dann sage den Frames noch, das am Ende etwas "geloescht" wurde
             if( 1 == nTextLen - nSplitPos )
@@ -522,7 +522,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         {
             MoveTextAttr_To_AttrSet();
         }
-        pNode->MakeFrms( *this );       // neue Frames anlegen.
+        pNode->MakeFrames( *this );       // neue Frames anlegen.
         lcl_ChangeFootnoteRef( *this );
     }
     else
@@ -582,7 +582,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         if ( HasWriterListeners() )
         {
-            MakeFrms( *pNode );     // neue Frames anlegen.
+            MakeFrames( *pNode );     // neue Frames anlegen.
         }
         lcl_ChangeFootnoteRef( *pNode );
     }
@@ -709,7 +709,7 @@ SwContentNode *SwTextNode::JoinNext()
 
         if( pTextNode->HasAnyIndex() )
         {
-            // alle Crsr/StkCrsr/UnoCrsr aus dem Loeschbereich verschieben
+            // alle Cursor/StackCursor/UnoCursor aus dem Loeschbereich verschieben
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
         rNds.Delete(aIdx);
@@ -803,7 +803,7 @@ SwContentNode *SwTextNode::JoinPrev()
 
         if( pTextNode->HasAnyIndex() )
         {
-            // alle Crsr/StkCrsr/UnoCrsr aus dem Loeschbereich verschieben
+            // alle Cursor/StackCursor/UnoCursor aus dem Loeschbereich verschieben
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, true );
         }
         rNds.Delete(aIdx);
@@ -1182,8 +1182,8 @@ void SwTextNode::Update(
 
     //Any drawing objects anchored into this text node may be sorted by their
     //anchor position which may have changed here, so resort them
-    SwContentFrm* pContentFrm = getLayoutFrm(GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
-    SwSortedObjs* pSortedObjs = pContentFrm ? pContentFrm->GetDrawObjs() : nullptr;
+    SwContentFrame* pContentFrame = getLayoutFrame(GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
+    SwSortedObjs* pSortedObjs = pContentFrame ? pContentFrame->GetDrawObjs() : nullptr;
     if (pSortedObjs)
         pSortedObjs->UpdateAll();
 }
@@ -1382,7 +1382,7 @@ const SwTextInputField* SwTextNode::GetOverlappingInputField( const SwTextAttr& 
     return pTextInputField;
 }
 
-void SwTextNode::DelFrms_TextNodePart()
+void SwTextNode::DelFrames_TextNodePart()
 {
     SetWrong( nullptr );
     SetWrongDirty(WrongState::TODO);
@@ -2382,7 +2382,7 @@ void SwTextNode::GCAttr()
 
     if(bChanged)
     {
-        //TextFrm's reagieren auf aHint, andere auf aNew
+        //TextFrame's reagieren auf aHint, andere auf aNew
         SwUpdateAttr aHint(
             nMin,
             nMax,
@@ -2453,13 +2453,13 @@ void SwTextNode::NumRuleChgd()
 
     if( IsInCache() )
     {
-        SwFrm::GetCache().Delete( this );
+        SwFrame::GetCache().Delete( this );
         SetInCache( false );
     }
     SetInSwFntCache( false );
 
     // Sending "noop" modify in order to cause invalidations of registered
-    // <SwTextFrm> instances to get the list style change respectively the change
+    // <SwTextFrame> instances to get the list style change respectively the change
     // in the list tree reflected in the layout.
     // Important note:
     {
@@ -2562,7 +2562,7 @@ SwTextNode* SwTextNode::_MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
 
         if( !bNext && bRemoveFromCache && IsInCache() )
         {
-            SwFrm::GetCache().Delete( this );
+            SwFrame::GetCache().Delete( this );
             SetInCache( false );
         }
     }
@@ -2607,7 +2607,7 @@ SwTextNode* SwTextNode::_MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
             aClearWhichIds.push_back( RES_PARATR_NUMRULE );
             if ( ClearItemsFromAttrSet( aClearWhichIds ) != 0 && IsInCache() )
             {
-                SwFrm::GetCache().Delete( this );
+                SwFrame::GetCache().Delete( this );
                 SetInCache( false );
             }
         }
@@ -2639,7 +2639,7 @@ SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
     }
 
     if( HasWriterListeners() )
-        MakeFrms( *pNew );
+        MakeFrames( *pNew );
     return pNew;
 }
 

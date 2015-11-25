@@ -721,9 +721,9 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     }
     else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) && pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
     {
-        SwCrsrMoveState aState( MV_SETONLYTEXT );
+        SwCursorMoveState aState( MV_SETONLYTEXT );
         Point aTmp(convertMm100ToTwip(aMM100Pos.X), convertMm100ToTwip(aMM100Pos.Y));
-        pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );
+        pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( pPam->GetPoint(), aTmp, &aState );
         aAnchor.SetAnchor( pPam->GetPoint() );
 
         // #i32349# - adjustment of vertical positioning
@@ -1304,7 +1304,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         RndStdIds eOldAnchorId = rOldAnchor.GetAnchorId();
                         SdrObject* pObj = pFormat->FindSdrObject();
                         SwFrameFormat *pFlyFormat = FindFrameFormat( pObj );
-                        pFlyFormat->DelFrms();
+                        pFlyFormat->DelFrames();
                         if( text::TextContentAnchorType_AS_CHARACTER != eNewAnchor &&
                             (FLY_AS_CHAR == eOldAnchorId))
                         {
@@ -1337,9 +1337,9 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
                             if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
                             {
-                                SwCrsrMoveState aState( MV_SETONLYTEXT );
+                                SwCursorMoveState aState( MV_SETONLYTEXT );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
+                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( aPam.GetPoint(), aTmp, &aState );
                             }
                             else
                             {
@@ -1358,9 +1358,9 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
                             if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
                             {
-                                SwCrsrMoveState aState( MV_SETONLYTEXT );
+                                SwCursorMoveState aState( MV_SETONLYTEXT );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
+                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( aPam.GetPoint(), aTmp, &aState );
                             }
                             else
                             {
@@ -1369,7 +1369,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             }
                             //the RES_TXTATR_FLYCNT needs to be added now
                             SwTextNode *pNd = aPam.GetNode().GetTextNode();
-                            SAL_WARN_IF( !pNd, "sw.uno", "Crsr is not in a TextNode." );
+                            SAL_WARN_IF( !pNd, "sw.uno", "Cursor is not in a TextNode." );
                             SwFormatFlyCnt aFormat( pFlyFormat );
                             pNd->InsertItem(aFormat,
                                 aPam.GetPoint()->nContent.GetIndex(), 0 );

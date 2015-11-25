@@ -133,7 +133,7 @@ void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOpt
     m_pWrtShell->ApplyAccessiblityOptions(rAccessibilityOptions);
     //to enable the right state of the selection cursor in readonly documents
     if(GetDocShell()->IsReadOnly())
-        m_pWrtShell->ShowCrsr();
+        m_pWrtShell->ShowCursor();
 
 }
 

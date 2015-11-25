@@ -924,15 +924,15 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateTableMergeDialog(vcl::Wi
     return new VclAbstractDialog_Impl( pDlg );
 }
 
-SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog(const OUString &rDialogType,
+SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrameTabDialog(const OUString &rDialogType,
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
-                                                bool        bNewFrm,
+                                                bool        bNewFrame,
                                                 bool        bFormat,
                                                 const OString&  sDefPage,
                                                 const OUString* pFormatStr )
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwFrmDlg>::Create(pFrame, pParent, rCoreSet, bNewFrm, rDialogType, bFormat, sDefPage, pFormatStr);
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwFrameDlg>::Create(pFrame, pParent, rCoreSet, bNewFrame, rDialogType, bFormat, sDefPage, pFormatStr);
     return new AbstractTabDialog_Impl(pDlg);
 }
 
@@ -1156,7 +1156,7 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             break;
         case RID_SW_TP_OPTSHDWCRSR:
         case RID_SW_TP_HTML_OPTSHDWCRSR:
-            pRet = SwShdwCrsrOptionsTabPage::Create;
+            pRet = SwShdwCursorOptionsTabPage::Create;
             break;
         case RID_SW_TP_REDLINE_OPT :
             pRet = SwRedlineOptionsTabPage::Create;

@@ -120,7 +120,7 @@ class SwColumnPage : public SfxTabPage
 
     // Example
     VclPtr<SwColExample>   m_pPgeExampleWN;
-    VclPtr<SwColumnOnlyExample> m_pFrmExampleWN;
+    VclPtr<SwColumnOnlyExample> m_pFrameExampleWN;
 
     SwColMgr*       pColMgr;
 
@@ -134,7 +134,7 @@ class SwColumnPage : public SfxTabPage
     std::map<VclPtr<MetricField>, PercentField*> m_aPercentFieldsMap;
 
     bool            bFormat;
-    bool            bFrm;
+    bool            bFrame;
     bool            bHtmlMode;
     bool            bLockUpdate;
 
@@ -181,7 +181,7 @@ public:
     virtual bool    FillItemSet(SfxItemSet *rSet) override;
     virtual void    Reset(const SfxItemSet *rSet) override;
 
-    void SetFrmMode(bool bMod);
+    void SetFrameMode(bool bMod);
     void SetPageWidth(long nPageWidth);
 
     void SetFormatUsed(bool bFormatUsed)

@@ -430,11 +430,11 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLan
             pDrawModel->ReformatAllTextObjects();
     }
 
-    SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pTmpRoot && !m_rDoc.IsInReading() )
     {
         pTmpRoot->StartAllAction();
-        for(SwRootFrm* aLayout : m_rDoc.GetAllLayouts())
+        for(SwRootFrame* aLayout : m_rDoc.GetAllLayouts())
             aLayout->InvalidateAllContent(INV_SIZE);
         pTmpRoot->EndAllAction();
     }
@@ -500,7 +500,7 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
                 pDrawModel->ReformatAllTextObjects();
         }
 
-        SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
+        SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
         if( pTmpRoot && !m_rDoc.IsInReading() )
         {
             pTmpRoot->StartAllAction();

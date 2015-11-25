@@ -142,8 +142,8 @@ class SW_DLLPUBLIC SwSection
 {
     // In order to correctly maintain the flag when creating/deleting frames.
     friend class SwSectionNode;
-    // The "read CTOR" of SwSectionFrm have to change the Hiddenflag.
-    friend class SwSectionFrm;
+    // The "read CTOR" of SwSectionFrame have to change the Hiddenflag.
+    friend class SwSectionFrame;
 
 private:
     mutable SwSectionData m_Data;
@@ -249,15 +249,15 @@ public:
 };
 
 // #i117863#
-class SwSectionFrmMoveAndDeleteHint : public SfxSimpleHint
+class SwSectionFrameMoveAndDeleteHint : public SfxSimpleHint
 {
     public:
-        SwSectionFrmMoveAndDeleteHint( const bool bSaveContent )
+        SwSectionFrameMoveAndDeleteHint( const bool bSaveContent )
             : SfxSimpleHint( SFX_HINT_DYING )
             , mbSaveContent( bSaveContent )
         {}
 
-        virtual ~SwSectionFrmMoveAndDeleteHint()
+        virtual ~SwSectionFrameMoveAndDeleteHint()
         {}
 
         bool IsSaveContent() const
@@ -286,17 +286,17 @@ class SW_DLLPUBLIC SwSectionFormat
     SAL_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
 protected:
-    SwSectionFormat( SwFrameFormat* pDrvdFrm, SwDoc *pDoc );
+    SwSectionFormat( SwFrameFormat* pDrvdFrame, SwDoc *pDoc );
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
     virtual ~SwSectionFormat();
 
-    // Deletes all Frms in aDepend (Frms are recognized via dynamic_cast).
-    virtual void DelFrms() override;
+    // Deletes all Frames in aDepend (Frames are recognized via dynamic_cast).
+    virtual void DelFrames() override;
 
     // Creates views.
-    virtual void MakeFrms() override;
+    virtual void MakeFrames() override;
 
     // Get information from Format.
     virtual bool GetInfo( SfxPoolItem& ) const override;

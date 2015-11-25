@@ -22,19 +22,19 @@
 
 #include "swtypes.hxx"
 
-class SwTextFrm;
+class SwTextFrame;
 class SwPaM;
 class SwTextCursor;
 
-class SwTextFrmInfo
+class SwTextFrameInfo
 {
-    const SwTextFrm *pFrm;
+    const SwTextFrame *pFrame;
 
     // Where does the text (w/o whitespaces) start (document is global!)?
     static SwTwips GetLineStart( const SwTextCursor &rLine );
 
 public:
-    inline SwTextFrmInfo( const SwTextFrm *pTextFrm ) : pFrm(pTextFrm) { }
+    inline SwTextFrameInfo( const SwTextFrame *pTextFrame ) : pFrame(pTextFrame) { }
 
     // Does the paragraph fit into a single line?
     bool IsOneLine() const;
@@ -57,13 +57,13 @@ public:
     // determine intentation for first line
     SwTwips GetFirstIndent() const;
 
-    const SwTextFrm* GetFrm() const { return pFrm; }
-    SwTextFrmInfo& SetFrm( const SwTextFrm* pNew )
-        { pFrm = pNew; return *this; }
+    const SwTextFrame* GetFrame() const { return pFrame; }
+    SwTextFrameInfo& SetFrame( const SwTextFrame* pNew )
+        { pFrame = pNew; return *this; }
 
     // Is it a comparison? Returns position in frame.
     sal_Int32 GetBigIndent( sal_Int32& rFndPos,
-                        const SwTextFrm *pNextFrm = nullptr ) const;
+                        const SwTextFrame *pNextFrame = nullptr ) const;
 };
 
 #endif

@@ -36,7 +36,7 @@
 #include <unobaseclass.hxx>
 
 class SwDoc;
-class SwUnoCrsr;
+class SwUnoCursor;
 class SwFrameFormat;
 
 class SW_DLLPUBLIC SwUnoInternalPaM
@@ -252,8 +252,8 @@ typedef ::cppu::WeakImplHelper
 
 struct SwXTextRanges : public SwXTextRanges_Base
 {
-    virtual SwUnoCrsr* GetCursor() =0;
-    static SwXTextRanges* Create(SwPaM* const pCrsr);
+    virtual SwUnoCursor* GetCursor() =0;
+    static SwXTextRanges* Create(SwPaM* const pCursor);
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };
 

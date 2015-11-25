@@ -41,8 +41,8 @@ public:
     virtual SwViewShell *GetCurrentViewShell() override; //< It must be able to communicate to a SwViewShell.This is going to be removed later.
     virtual void SetCurrentViewShell( SwViewShell* pNew ) override;
 
-    virtual const SwRootFrm *GetCurrentLayout() const override;
-    virtual SwRootFrm *GetCurrentLayout() override;
+    virtual const SwRootFrame *GetCurrentLayout() const override;
+    virtual SwRootFrame *GetCurrentLayout() override;
     virtual bool HasLayout() const override;
 
     virtual const SwLayouter* GetLayouter() const override;
@@ -51,7 +51,7 @@ public:
 
     virtual SwFrameFormat* MakeLayoutFormat( RndStdIds eRequest, const SfxItemSet* pSet ) override;
     virtual void DelLayoutFormat( SwFrameFormat *pFormat ) override;
-    virtual SwFrameFormat* CopyLayoutFormat( const SwFrameFormat& rSrc, const SwFormatAnchor& rNewAnchor, bool bSetTextFlyAtt, bool bMakeFrms ) override;
+    virtual SwFrameFormat* CopyLayoutFormat( const SwFrameFormat& rSrc, const SwFormatAnchor& rNewAnchor, bool bSetTextFlyAtt, bool bMakeFrames ) override;
 
     //Non Interface methods
     void ClearSwLayouterEntries();

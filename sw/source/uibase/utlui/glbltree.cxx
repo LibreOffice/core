@@ -923,8 +923,8 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         break;
         case CTX_INSERT_NEW_FILE:
         {
-            SfxViewFrame* pGlobFrm = pActiveShell->GetView().GetViewFrame();
-            SwGlobalFrameListener_Impl aFrmListener(*pGlobFrm);
+            SfxViewFrame* pGlobFrame = pActiveShell->GetView().GetViewFrame();
+            SwGlobalFrameListener_Impl aFrameListener(*pGlobFrame);
 
             sal_uLong nEntryPos = pEntry ? GetModel()->GetAbsPos(pEntry) : (sal_uLong)-1;
             // Creating a new doc
@@ -936,8 +936,8 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                                 SfxCallMode::SYNCHRON, &aFactory, 0L));
 
             // save at
-            SfxFrame* pFrm = pItem ? pItem->GetFrame() : nullptr;
-            SfxViewFrame* pViewFrame = pFrm ? pFrm->GetCurrentViewFrame() : nullptr;
+            SfxFrame* pFrame = pItem ? pItem->GetFrame() : nullptr;
+            SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : nullptr;
             if (pViewFrame)
             {
                 const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(
@@ -948,9 +948,9 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                 OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
                 // Insert the area with the Doc-Name
                 // Bring the own Doc in the foreground
-                if(aFrmListener.IsValid() && !sNewFile.isEmpty())
+                if(aFrameListener.IsValid() && !sNewFile.isEmpty())
                 {
-                    pGlobFrm->ToTop();
+                    pGlobFrame->ToTop();
                     // Due to the update the entries are invalid
                     if(nEntryPos != (sal_uLong)-1)
                     {

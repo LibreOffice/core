@@ -53,7 +53,7 @@ class IDocumentListItems;
 class IDocumentOutlineNodes;
 class SfxPrinter;
 class SfxProgress;
-class SwRootFrm;
+class SwRootFrame;
 class SwNodes;
 class SdrView;
 class SfxItemPool;
@@ -67,10 +67,10 @@ class OutputDevice;
 class SwLayIdle;
 struct ShellResource;
 class SwRegionRects;
-class SwFrm;
+class SwFrame;
 class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
-class SwTextFrm;
+class SwTextFrame;
 class BitmapEx;
 
 struct SwAccessibilityOptions;
@@ -89,7 +89,7 @@ namespace vcl
 // Currently the Preview flag is needed for DrawPage.
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
 #define VSHELLFLAG_SHARELAYOUT          ((long)0x2)
-typedef std::shared_ptr<SwRootFrm> SwRootFrmPtr;
+typedef std::shared_ptr<SwRootFrame> SwRootFramePtr;
 
 class SwViewShell;
 class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
@@ -158,7 +158,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SdrPaintWindow*         mpTargetPaintWindow;
     VclPtr<OutputDevice>    mpBufferedOut;
 
-    SwRootFrmPtr            mpLayout;
+    SwRootFramePtr            mpLayout;
 
     // Initialization; called by the diverse constructors.
     SAL_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
@@ -278,7 +278,7 @@ public:
     // Invalidate first visible page for all Shells in ring.
     void SetFirstVisPageInvalid();
 
-    SwRootFrm   *GetLayout() const;
+    SwRootFrame   *GetLayout() const;
     bool         IsNewLayout() const; // Has Layout been loaded or created?
 
      Size GetDocSize() const;   // Get document size.
@@ -511,18 +511,18 @@ public:
 
         @author OD
 
-        @param _pFromTextFrm
+        @param _pFromTextFrame
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_FROM
         has to be invalidated.
         If NULL, no CONTENT_FLOWS_FROM relation has to be invalidated
 
-        @param _pToTextFrm
+        @param _pToTextFrame
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_TO
         has to be invalidated.
         If NULL, no CONTENT_FLOWS_TO relation has to be invalidated
     */
-    void InvalidateAccessibleParaFlowRelation( const SwTextFrm* _pFromTextFrm,
-                                               const SwTextFrm* _pToTextFrm );
+    void InvalidateAccessibleParaFlowRelation( const SwTextFrame* _pFromTextFrame,
+                                               const SwTextFrame* _pToTextFrame );
 
     /** invalidate text selection for paragraphs
 
@@ -537,10 +537,10 @@ public:
 
         @author OD
 
-        @param rTextFrm
+        @param rTextFrame
         input parameter - paragraph frame, whose attributes have changed
     */
-    void InvalidateAccessibleParaAttrs( const SwTextFrm& rTextFrm );
+    void InvalidateAccessibleParaAttrs( const SwTextFrame& rTextFrame );
 
     SwAccessibleMap* GetAccessibleMap();
 
@@ -589,7 +589,7 @@ class CurrShell
 {
 public:
     SwViewShell *pPrev;
-    SwRootFrm *pRoot;
+    SwRootFrame *pRoot;
 
     CurrShell( SwViewShell *pNew );
     ~CurrShell();

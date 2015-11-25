@@ -38,7 +38,7 @@ DefaultToxTabStopTokenHandler::DefaultToxTabStopTokenHandler(sal_uInt32 indexOfS
 
 ToxTabStopTokenHandler::HandledTabStopToken
 DefaultToxTabStopTokenHandler::HandleTabStopToken(
-        const SwFormToken& aToken, const SwTextNode& targetNode, const SwRootFrm *currentLayout) const
+        const SwFormToken& aToken, const SwTextNode& targetNode, const SwRootFrame *currentLayout) const
 {
     HandledTabStopToken result;
 
@@ -91,14 +91,14 @@ DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTe
         pPageDesc = &mDefaultPageDescription;
     }
     const SwFrameFormat& rPgDscFormat = pPageDesc->GetMaster();
-    long result = rPgDscFormat.GetFrmSize().GetWidth() - rPgDscFormat.GetLRSpace().GetLeft()
+    long result = rPgDscFormat.GetFrameSize().GetWidth() - rPgDscFormat.GetLRSpace().GetLeft()
             - rPgDscFormat.GetLRSpace().GetRight();
     return result;
 }
 
 
 /*static*/ bool
-DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTextNode& targetNode, const SwRootFrm *currentLayout)
+DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTextNode& targetNode, const SwRootFrame *currentLayout)
 {
     const SwPageDesc* pageDescription =
             static_cast<const SwFormatPageDesc&>( targetNode.SwContentNode::GetAttr(RES_PAGEDESC)).GetPageDesc();
@@ -106,16 +106,16 @@ DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTextNode& targetNod
     if (!pageDescription) {
         return false;
     }
-    const SwFrm* pFrm = targetNode.getLayoutFrm(currentLayout);
-    if (!pFrm) {
+    const SwFrame* pFrame = targetNode.getLayoutFrame(currentLayout);
+    if (!pFrame) {
         return false;
     }
-    pFrm = pFrm->FindPageFrm();
-    if (!pFrm) {
+    pFrame = pFrame->FindPageFrame();
+    if (!pFrame) {
         return false;
     }
-    const SwPageFrm* pageFrm = static_cast<const SwPageFrm*>(pFrm);
-    if (pageDescription != pageFrm->GetPageDesc()) {
+    const SwPageFrame* pageFrame = static_cast<const SwPageFrame*>(pFrame);
+    if (pageDescription != pageFrame->GetPageDesc()) {
         return false;
     }
     return true;

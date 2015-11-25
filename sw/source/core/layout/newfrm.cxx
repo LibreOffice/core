@@ -39,11 +39,11 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <DocumentLayoutManager.hxx>
 
-SwLayVout     *SwRootFrm::s_pVout = nullptr;
-bool           SwRootFrm::s_isInPaint = false;
-bool           SwRootFrm::s_isNoVirDev = false;
+SwLayVout     *SwRootFrame::s_pVout = nullptr;
+bool           SwRootFrame::s_isInPaint = false;
+bool           SwRootFrame::s_isNoVirDev = false;
 
-SwCache *SwFrm::mpCache = nullptr;
+SwCache *SwFrame::mpCache = nullptr;
 
 long FirstMinusSecond( long nFirst, long nSecond )
     { return nFirst - nSecond; }
@@ -82,25 +82,25 @@ static SwRectFnCollection aHorizontal = {
     &SwRect::SetPosX,
     &SwRect::SetPosY,
 
-    &SwFrm::GetTopMargin,
-    &SwFrm::GetBottomMargin,
-    &SwFrm::GetLeftMargin,
-    &SwFrm::GetRightMargin,
-    &SwFrm::SetLeftRightMargins,
-    &SwFrm::SetTopBottomMargins,
-    &SwFrm::GetPrtTop,
-    &SwFrm::GetPrtBottom,
-    &SwFrm::GetPrtLeft,
-    &SwFrm::GetPrtRight,
+    &SwFrame::GetTopMargin,
+    &SwFrame::GetBottomMargin,
+    &SwFrame::GetLeftMargin,
+    &SwFrame::GetRightMargin,
+    &SwFrame::SetLeftRightMargins,
+    &SwFrame::SetTopBottomMargins,
+    &SwFrame::GetPrtTop,
+    &SwFrame::GetPrtBottom,
+    &SwFrame::GetPrtLeft,
+    &SwFrame::GetPrtRight,
     &SwRect::GetTopDistance,
     &SwRect::GetBottomDistance,
     &SwRect::GetLeftDistance,
     &SwRect::GetRightDistance,
-    &SwFrm::SetMaxBottom,
+    &SwFrame::SetMaxBottom,
     &SwRect::OverStepBottom,
 
     &SwRect::SetUpperLeftCorner,
-    &SwFrm::MakeBelowPos,
+    &SwFrame::MakeBelowPos,
     &FirstMinusSecond,
     &FirstMinusSecond,
     &SwIncrement,
@@ -137,25 +137,25 @@ static SwRectFnCollection aVertical = {
     &SwRect::SetPosY,
     &SwRect::SetPosX,
 
-    &SwFrm::GetRightMargin,
-    &SwFrm::GetLeftMargin,
-    &SwFrm::GetTopMargin,
-    &SwFrm::GetBottomMargin,
-    &SwFrm::SetTopBottomMargins,
-    &SwFrm::SetRightLeftMargins,
-    &SwFrm::GetPrtRight,
-    &SwFrm::GetPrtLeft,
-    &SwFrm::GetPrtTop,
-    &SwFrm::GetPrtBottom,
+    &SwFrame::GetRightMargin,
+    &SwFrame::GetLeftMargin,
+    &SwFrame::GetTopMargin,
+    &SwFrame::GetBottomMargin,
+    &SwFrame::SetTopBottomMargins,
+    &SwFrame::SetRightLeftMargins,
+    &SwFrame::GetPrtRight,
+    &SwFrame::GetPrtLeft,
+    &SwFrame::GetPrtTop,
+    &SwFrame::GetPrtBottom,
     &SwRect::GetRightDistance,
     &SwRect::GetLeftDistance,
     &SwRect::GetTopDistance,
     &SwRect::GetBottomDistance,
-    &SwFrm::SetMinLeft,
+    &SwFrame::SetMinLeft,
     &SwRect::OverStepLeft,
 
     &SwRect::SetUpperRightCorner,
-    &SwFrm::MakeLeftPos,
+    &SwFrame::MakeLeftPos,
     &FirstMinusSecond,
     &SecondMinusFirst,
     &SwIncrement,
@@ -192,25 +192,25 @@ static SwRectFnCollection aBottomToTop = {
     &SwRect::SetPosX,
     &SwRect::SetPosY,
 
-    &SwFrm::GetBottomMargin,
-    &SwFrm::GetTopMargin,
-    &SwFrm::GetLeftMargin,
-    &SwFrm::GetRightMargin,
-    &SwFrm::SetLeftRightMargins,
-    &SwFrm::SetBottomTopMargins,
-    &SwFrm::GetPrtBottom,
-    &SwFrm::GetPrtTop,
-    &SwFrm::GetPrtLeft,
-    &SwFrm::GetPrtRight,
+    &SwFrame::GetBottomMargin,
+    &SwFrame::GetTopMargin,
+    &SwFrame::GetLeftMargin,
+    &SwFrame::GetRightMargin,
+    &SwFrame::SetLeftRightMargins,
+    &SwFrame::SetBottomTopMargins,
+    &SwFrame::GetPrtBottom,
+    &SwFrame::GetPrtTop,
+    &SwFrame::GetPrtLeft,
+    &SwFrame::GetPrtRight,
     &SwRect::GetBottomDistance,
     &SwRect::GetTopDistance,
     &SwRect::GetLeftDistance,
     &SwRect::GetRightDistance,
-    &SwFrm::SetMinTop,
+    &SwFrame::SetMinTop,
     &SwRect::OverStepTop,
 
     &SwRect::SetLowerLeftCorner,
-    &SwFrm::MakeUpperPos,
+    &SwFrame::MakeUpperPos,
     &FirstMinusSecond,
     &SecondMinusFirst,
     &SwIncrement,
@@ -247,25 +247,25 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwRect::SetPosY,
     &SwRect::SetPosX,
 
-    &SwFrm::GetLeftMargin,
-    &SwFrm::GetRightMargin,
-    &SwFrm::GetTopMargin,
-    &SwFrm::GetBottomMargin,
-    &SwFrm::SetTopBottomMargins,
-    &SwFrm::SetLeftRightMargins,
-    &SwFrm::GetPrtLeft,
-    &SwFrm::GetPrtRight,
-    &SwFrm::GetPrtBottom,
-    &SwFrm::GetPrtTop,
+    &SwFrame::GetLeftMargin,
+    &SwFrame::GetRightMargin,
+    &SwFrame::GetTopMargin,
+    &SwFrame::GetBottomMargin,
+    &SwFrame::SetTopBottomMargins,
+    &SwFrame::SetLeftRightMargins,
+    &SwFrame::GetPrtLeft,
+    &SwFrame::GetPrtRight,
+    &SwFrame::GetPrtBottom,
+    &SwFrame::GetPrtTop,
     &SwRect::GetLeftDistance,
     &SwRect::GetRightDistance,
     &SwRect::GetBottomDistance,
     &SwRect::GetTopDistance,
-    &SwFrm::SetMaxRight,
+    &SwFrame::SetMaxRight,
     &SwRect::OverStepRight,
 
     &SwRect::SetLowerLeftCorner,
-    &SwFrm::MakeRightPos,
+    &SwFrame::MakeRightPos,
     &FirstMinusSecond,
     &FirstMinusSecond,
     &SwDecrement,
@@ -302,25 +302,25 @@ static SwRectFnCollection aVerticalLeftToRight = {
     &SwRect::SetPosY,
     &SwRect::SetPosX,
 
-    &SwFrm::GetLeftMargin,
-    &SwFrm::GetRightMargin,
-    &SwFrm::GetTopMargin,
-    &SwFrm::GetBottomMargin,
-    &SwFrm::SetTopBottomMargins,
-    &SwFrm::SetLeftRightMargins,
-    &SwFrm::GetPrtLeft,
-    &SwFrm::GetPrtRight,
-    &SwFrm::GetPrtTop,
-    &SwFrm::GetPrtBottom,
+    &SwFrame::GetLeftMargin,
+    &SwFrame::GetRightMargin,
+    &SwFrame::GetTopMargin,
+    &SwFrame::GetBottomMargin,
+    &SwFrame::SetTopBottomMargins,
+    &SwFrame::SetLeftRightMargins,
+    &SwFrame::GetPrtLeft,
+    &SwFrame::GetPrtRight,
+    &SwFrame::GetPrtTop,
+    &SwFrame::GetPrtBottom,
     &SwRect::GetLeftDistance,
     &SwRect::GetRightDistance,
     &SwRect::GetTopDistance,
     &SwRect::GetBottomDistance,
-    &SwFrm::SetMaxRight,
+    &SwFrame::SetMaxRight,
     &SwRect::OverStepRight,
 
     &SwRect::SetUpperLeftCorner,
-    &SwFrm::MakeRightPos,
+    &SwFrame::MakeRightPos,
     &FirstMinusSecond,
     &FirstMinusSecond,
     &SwIncrement,
@@ -338,36 +338,36 @@ SwRectFn fnRectB2T = &aBottomToTop;
 SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
 // #i65250#
-sal_uInt32 SwFrm::mnLastFrmId=0;
+sal_uInt32 SwFrame::mnLastFrameId=0;
 
 
-void _FrmInit()
+void _FrameInit()
 {
-    SwRootFrm::s_pVout = new SwLayVout();
+    SwRootFrame::s_pVout = new SwLayVout();
     SwCache *pNew = new SwCache( 100
 #ifdef DBG_UTIL
     , "static SwBorderAttrs::pCache"
 #endif
     );
-    SwFrm::SetCache( pNew );
+    SwFrame::SetCache( pNew );
 }
 
-void _FrmFinit()
+void _FrameFinit()
 {
 #if OSL_DEBUG_LEVEL > 0
     // The cache may only contain null pointers at this time.
-    for( size_t n = SwFrm::GetCachePtr()->size(); n; )
-        if( (*SwFrm::GetCachePtr())[ --n ] )
+    for( size_t n = SwFrame::GetCachePtr()->size(); n; )
+        if( (*SwFrame::GetCachePtr())[ --n ] )
         {
-            SwCacheObj* pObj = (*SwFrm::GetCachePtr())[ n ];
+            SwCacheObj* pObj = (*SwFrame::GetCachePtr())[ n ];
             OSL_ENSURE( !pObj, "Who didn't deregister?");
         }
 #endif
-    delete SwRootFrm::s_pVout;
-    delete SwFrm::GetCachePtr();
+    delete SwRootFrame::s_pVout;
+    delete SwFrame::GetCachePtr();
 }
 
-// RootFrm::Everything that belongs to CurrShell
+// RootFrame::Everything that belongs to CurrShell
 
 class SwCurrShells : public std::set<CurrShell*> {};
 
@@ -402,14 +402,14 @@ CurrShell::~CurrShell()
 
 void SetShell( SwViewShell *pSh )
 {
-    SwRootFrm *pRoot = pSh->GetLayout();
+    SwRootFrame *pRoot = pSh->GetLayout();
     if ( pRoot->mpCurrShells->empty() )
         pRoot->mpCurrShell = pSh;
     else
         pRoot->mpWaitingCurrShell = pSh;
 }
 
-void SwRootFrm::DeRegisterShell( SwViewShell *pSh )
+void SwRootFrame::DeRegisterShell( SwViewShell *pSh )
 {
     // Activate some shell if possible
     if ( mpCurrShell == pSh )
@@ -438,18 +438,18 @@ void SwRootFrm::DeRegisterShell( SwViewShell *pSh )
     }
 }
 
-void InitCurrShells( SwRootFrm *pRoot )
+void InitCurrShells( SwRootFrame *pRoot )
 {
     pRoot->mpCurrShells = new SwCurrShells;
 }
 
 /*
-|*      The RootFrm requests an own FrameFormat from the document, which it is
+|*      The RootFrame requests an own FrameFormat from the document, which it is
 |*      going to delete again in the dtor. The own FrameFormat is derived from
 |*      the passed FrameFormat.
 |*/
-SwRootFrm::SwRootFrm( SwFrameFormat *pFormat, SwViewShell * pSh ) :
-    SwLayoutFrm( pFormat->GetDoc()->MakeFrameFormat(
+SwRootFrame::SwRootFrame( SwFrameFormat *pFormat, SwViewShell * pSh ) :
+    SwLayoutFrame( pFormat->GetDoc()->MakeFrameFormat(
         "Root", pFormat ), nullptr ),
     maPagesArea(),
     mnViewWidth( -1 ),
@@ -477,11 +477,11 @@ SwRootFrm::SwRootFrm( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     mnPhyPageNums( 0 ),
     mnAccessibleShells( 0 )
 {
-    mnFrmType = FRM_ROOT;
-    setRootFrm( this );
+    mnFrameType = FRM_ROOT;
+    setRootFrame( this );
 }
 
-void SwRootFrm::Init( SwFrameFormat* pFormat )
+void SwRootFrame::Init( SwFrameFormat* pFormat )
 {
     InitCurrShells( this );
 
@@ -490,7 +490,7 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
     IDocumentFieldsAccess& rFieldsAccess = pFormat->getIDocumentFieldsAccess();
     const IDocumentSettingAccess& rSettingAccess = pFormat->getIDocumentSettingAccess();
     rTimerAccess.StopIdling();
-    // For creating the Flys by MakeFrms()
+    // For creating the Flys by MakeFrames()
     rLayoutAccess.SetCurrentViewShell( this->GetCurrShell() );
     mbCallbackActionEnabled = false; // needs to be set to true before leaving!
 
@@ -500,7 +500,7 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
         // Disable "multiple layout"
         mpDrawPage = pMd->GetPage(0);
 
-        mpDrawPage->SetSize( Frm().SSize() );
+        mpDrawPage->SetSize( Frame().SSize() );
     }
 
     // Initialize the layout: create pages, link content with Content etc.
@@ -543,12 +543,12 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
     bool bFirst = !oPgNum || 1 == oPgNum.get();
 
     // Create a page and put it in the layout
-    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, false, nullptr );
+    SwPageFrame *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, false, nullptr );
 
     // Find the first page in the Bodytext section.
-    SwLayoutFrm *pLay = pPage->FindBodyCont();
+    SwLayoutFrame *pLay = pPage->FindBodyCont();
     while( pLay->Lower() )
-        pLay = static_cast<SwLayoutFrm*>(pLay->Lower());
+        pLay = static_cast<SwLayoutFrame*>(pLay->Lower());
 
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), true );
@@ -559,7 +559,7 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
     //b6433357: Update page fields after loading
     if ( !mpCurrShell || !mpCurrShell->Imp()->IsUpdateExpFields() )
     {
-        SwDocPosUpdate aMsgHint( pPage->Frm().Top() );
+        SwDocPosUpdate aMsgHint( pPage->Frame().Top() );
         rFieldsAccess.UpdatePageFields( &aMsgHint );
     }
 
@@ -571,23 +571,23 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
         mbNeedGrammarCheck = pViewSh->GetViewOptions()->IsOnlineSpell();
 }
 
-void SwRootFrm::DestroyImpl()
+void SwRootFrame::DestroyImpl()
 {
     mbTurboAllowed = false;
     mpTurbo = nullptr;
     // fdo#39510 crash on document close with footnotes
     // Object ownership in writer and esp. in layout are a mess: Before the
-    // document/layout split SwDoc and SwRootFrm were essentially one object
+    // document/layout split SwDoc and SwRootFrame were essentially one object
     // and magically/uncleanly worked around their common destruction by call
     // to SwDoc::IsInDtor() -- even from the layout. As of now destuction of
-    // the layout proceeds forward through the frames. Since SwTextFootnote::DelFrms
+    // the layout proceeds forward through the frames. Since SwTextFootnote::DelFrames
     // also searches backwards to find the master of footnotes, they must be
-    // considered to be owned by the SwRootFrm and also be destroyed here,
+    // considered to be owned by the SwRootFrame and also be destroyed here,
     // before tearing down the (now footnote free) rest of the layout.
     RemoveFootnotes(nullptr, false, true);
 
     if(pBlink)
-        pBlink->FrmDelete( this );
+        pBlink->FrameDelete( this );
     SwFrameFormat *pRegisteredInNonConst = static_cast<SwFrameFormat*>(GetRegisteredInNonConst());
     if ( pRegisteredInNonConst )
     {
@@ -605,17 +605,17 @@ void SwRootFrm::DestroyImpl()
     delete mpCurrShells;
     mpCurrShells = nullptr;
 
-    // Some accessible shells are left => problems on second SwFrm::Destroy call
+    // Some accessible shells are left => problems on second SwFrame::Destroy call
     assert(0 == mnAccessibleShells);
 
-    SwLayoutFrm::DestroyImpl();
+    SwLayoutFrame::DestroyImpl();
 }
 
-SwRootFrm::~SwRootFrm()
+SwRootFrame::~SwRootFrame()
 {
 }
 
-void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
+void SwRootFrame::RemoveMasterObjs( SdrPage *pPg )
 {
     // Remove all master objects from the Page. But don't delete!
     for( size_t i = pPg ? pPg->GetObjCount() : 0; i; )
@@ -626,42 +626,42 @@ void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
     }
 }
 
-void SwRootFrm::AllCheckPageDescs() const
+void SwRootFrame::AllCheckPageDescs() const
 {
     if ( !IsLayoutFreezed() )
-        CheckPageDescs( const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(this->Lower())) );
+        CheckPageDescs( const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(this->Lower())) );
 }
 
-void SwRootFrm::AllInvalidateAutoCompleteWords() const
+void SwRootFrame::AllInvalidateAutoCompleteWords() const
 {
-    SwPageFrm *pPage = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(this->Lower()));
+    SwPageFrame *pPage = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(this->Lower()));
     while ( pPage )
     {
         pPage->InvalidateAutoCompleteWords();
-        pPage = static_cast<SwPageFrm*>(pPage->GetNext());
+        pPage = static_cast<SwPageFrame*>(pPage->GetNext());
     }
 }
 
-void SwRootFrm::AllAddPaintRect() const
+void SwRootFrame::AllAddPaintRect() const
 {
-    GetCurrShell()->AddPaintRect( this->Frm() );
+    GetCurrShell()->AddPaintRect( this->Frame() );
 }
 
-void SwRootFrm::AllRemoveFootnotes()
+void SwRootFrame::AllRemoveFootnotes()
 {
     RemoveFootnotes();
 }
 
-void SwRootFrm::AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const
+void SwRootFrame::AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const
 {
-    SwPageFrm *pPage = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(this->Lower()));
+    SwPageFrame *pPage = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(this->Lower()));
     while ( pPage )
     {
         if ( bSmartTags )
             pPage->InvalidateSmartTags();
 
         pPage->InvalidateSpelling();
-        pPage = static_cast<SwPageFrm*>(pPage->GetNext());
+        pPage = static_cast<SwPageFrame*>(pPage->GetNext());
     }
 }
 

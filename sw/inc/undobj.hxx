@@ -279,8 +279,8 @@ public:
 
 class SwUndoInsLayFormat : public SwUndoFlyBase
 {
-    sal_uLong mnCrsrSaveIndexPara;           // Cursor position
-    sal_Int32 mnCrsrSaveIndexPos;            // for undo
+    sal_uLong mnCursorSaveIndexPara;           // Cursor position
+    sal_Int32 mnCursorSaveIndexPos;            // for undo
 public:
     SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx );
 
@@ -296,7 +296,7 @@ public:
 
 class SwUndoDelLayFormat : public SwUndoFlyBase
 {
-    bool bShowSelFrm;
+    bool bShowSelFrame;
 public:
     SwUndoDelLayFormat( SwFrameFormat* pFormat );
 
@@ -305,7 +305,7 @@ public:
 
     void RedoForRollback();
 
-    void ChgShowSel( bool bNew ) { bShowSelFrm = bNew; }
+    void ChgShowSel( bool bNew ) { bShowSelFrame = bNew; }
 
     virtual SwRewriter GetRewriter() const override;
 

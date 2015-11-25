@@ -25,41 +25,41 @@
 #include <viscrs.hxx>
 #include <callnk.hxx>
 
-SwLayoutFrm* GetCurrColumn( const SwLayoutFrm* pLayFrm )
+SwLayoutFrame* GetCurrColumn( const SwLayoutFrame* pLayFrame )
 {
-    while( pLayFrm && !pLayFrm->IsColumnFrm() )
-        pLayFrm = pLayFrm->GetUpper();
-    return const_cast<SwLayoutFrm*>(pLayFrm);
+    while( pLayFrame && !pLayFrame->IsColumnFrame() )
+        pLayFrame = pLayFrame->GetUpper();
+    return const_cast<SwLayoutFrame*>(pLayFrame);
 }
 
-SwLayoutFrm* GetNextColumn( const SwLayoutFrm* pLayFrm )
+SwLayoutFrame* GetNextColumn( const SwLayoutFrame* pLayFrame )
 {
-    SwLayoutFrm* pActCol = GetCurrColumn( pLayFrm );
-    return pActCol ? static_cast<SwLayoutFrm*>(pActCol->GetNext()) : nullptr;
+    SwLayoutFrame* pActCol = GetCurrColumn( pLayFrame );
+    return pActCol ? static_cast<SwLayoutFrame*>(pActCol->GetNext()) : nullptr;
 }
 
-SwLayoutFrm* GetPrevColumn( const SwLayoutFrm* pLayFrm )
+SwLayoutFrame* GetPrevColumn( const SwLayoutFrame* pLayFrame )
 {
-    SwLayoutFrm* pActCol = GetCurrColumn( pLayFrm );
-    return pActCol ? static_cast<SwLayoutFrm*>(pActCol->GetPrev()) : nullptr;
+    SwLayoutFrame* pActCol = GetCurrColumn( pLayFrame );
+    return pActCol ? static_cast<SwLayoutFrame*>(pActCol->GetPrev()) : nullptr;
 }
 
-SwContentFrm* GetColumnStt( const SwLayoutFrm* pColFrm )
+SwContentFrame* GetColumnStt( const SwLayoutFrame* pColFrame )
 {
-    return pColFrm ? const_cast<SwContentFrm*>(pColFrm->ContainsContent()) : nullptr;
+    return pColFrame ? const_cast<SwContentFrame*>(pColFrame->ContainsContent()) : nullptr;
 }
 
-SwContentFrm* GetColumnEnd( const SwLayoutFrm* pColFrm )
+SwContentFrame* GetColumnEnd( const SwLayoutFrame* pColFrame )
 {
-    SwContentFrm *pRet = GetColumnStt( pColFrm );
+    SwContentFrame *pRet = GetColumnStt( pColFrame );
     if( !pRet )
         return nullptr;
 
-    SwContentFrm *pNxt = pRet->GetNextContentFrm();
-    while( pNxt && pColFrm->IsAnLower( pNxt ) )
+    SwContentFrame *pNxt = pRet->GetNextContentFrame();
+    while( pNxt && pColFrame->IsAnLower( pNxt ) )
     {
         pRet = pNxt;
-        pNxt = pNxt->GetNextContentFrm();
+        pNxt = pNxt->GetNextContentFrame();
     }
     return pRet;
 }
@@ -70,36 +70,36 @@ SwWhichColumn fnColumnNext = &GetNextColumn;
 SwPosColumn fnColumnStart = &GetColumnStt;
 SwPosColumn fnColumnEnd = &GetColumnEnd;
 
-bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
+bool SwCursorShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 {
     bool bRet = false;
-    if( !m_pTableCrsr )
+    if( !m_pTableCursor )
     {
-        SwLayoutFrm* pLayFrm = GetCurrFrm()->GetUpper();
-        if( pLayFrm && nullptr != ( pLayFrm = (*fnWhichCol)( pLayFrm )) )
+        SwLayoutFrame* pLayFrame = GetCurrFrame()->GetUpper();
+        if( pLayFrame && nullptr != ( pLayFrame = (*fnWhichCol)( pLayFrame )) )
         {
-            SwContentFrm* pCnt = (*fnPosCol)( pLayFrm );
+            SwContentFrame* pCnt = (*fnPosCol)( pLayFrame );
             if( pCnt )
             {
                 SET_CURR_SHELL( this );
-                SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-                SwCrsrSaveState aSaveState( *m_pCurCrsr );
+                SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
+                SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
                 pCnt->Calc(GetOut());
 
-                Point aPt( pCnt->Frm().Pos() + pCnt->Prt().Pos() );
+                Point aPt( pCnt->Frame().Pos() + pCnt->Prt().Pos() );
                 if( fnPosCol == GetColumnEnd )
                 {
                     aPt.setX(aPt.getX() + pCnt->Prt().Width());
                     aPt.setY(aPt.getY() + pCnt->Prt().Height());
                 }
 
-                pCnt->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
+                pCnt->GetCursorOfst( m_pCurrentCursor->GetPoint(), aPt );
 
-                if( !m_pCurCrsr->IsInProtectTable( true ) &&
-                    !m_pCurCrsr->IsSelOvr() )
+                if( !m_pCurrentCursor->IsInProtectTable( true ) &&
+                    !m_pCurrentCursor->IsSelOvr() )
                 {
-                    UpdateCrsr();
+                    UpdateCursor();
                     bRet = true;
                 }
             }

@@ -37,29 +37,29 @@ class SwLooping
     sal_uInt16 nCount;
     sal_uInt16 mnLoopControlStage;
 public:
-    explicit SwLooping( SwPageFrm* pPage );
-    void Control( SwPageFrm* pPage );
-    void Drastic( SwFrm* pFrm );
+    explicit SwLooping( SwPageFrame* pPage );
+    void Control( SwPageFrame* pPage );
+    void Drastic( SwFrame* pFrame );
     bool IsLoopingLouieLight() const { return nCount > LOOP_DETECT - 30; };
 };
 
 class SwEndnoter
 {
     SwLayouter* pMaster;
-    SwSectionFrm* pSect;
-    SwFootnoteFrms*    pEndArr;
+    SwSectionFrame* pSect;
+    SwFootnoteFrames*    pEndArr;
 public:
     explicit SwEndnoter( SwLayouter* pLay )
         : pMaster( pLay ), pSect( nullptr ), pEndArr( nullptr ) {}
     ~SwEndnoter() { delete pEndArr; }
-    void CollectEndnotes( SwSectionFrm* pSct );
-    void CollectEndnote( SwFootnoteFrm* pFootnote );
-    const SwSectionFrm* GetSect() const { return pSect; }
+    void CollectEndnotes( SwSectionFrame* pSct );
+    void CollectEndnote( SwFootnoteFrame* pFootnote );
+    const SwSectionFrame* GetSect() const { return pSect; }
     void InsertEndnotes();
     bool HasEndnotes() const { return pEndArr && !pEndArr->empty(); }
 };
 
-void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
+void SwEndnoter::CollectEndnotes( SwSectionFrame* pSct )
 {
     OSL_ENSURE( pSct, "CollectEndnotes: Which section?" );
     if( !pSect )
@@ -69,7 +69,7 @@ void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
     pSect->CollectEndnotes( pMaster );
 }
 
-void SwEndnoter::CollectEndnote( SwFootnoteFrm* pFootnote )
+void SwEndnoter::CollectEndnote( SwFootnoteFrame* pFootnote )
 {
     if( pEndArr && pEndArr->end() != std::find( pEndArr->begin(), pEndArr->end(), pFootnote ) )
         return;
@@ -77,24 +77,24 @@ void SwEndnoter::CollectEndnote( SwFootnoteFrm* pFootnote )
     if( pFootnote->GetUpper() )
     {
         // pFootnote is the master, he incorporates its follows
-        SwFootnoteFrm *pNxt = pFootnote->GetFollow();
+        SwFootnoteFrame *pNxt = pFootnote->GetFollow();
         while ( pNxt )
         {
-            SwFrm *pCnt = pNxt->ContainsAny();
+            SwFrame *pCnt = pNxt->ContainsAny();
             if ( pCnt )
             {
                 do
-                {   SwFrm *pNxtCnt = pCnt->GetNext();
+                {   SwFrame *pNxtCnt = pCnt->GetNext();
                     pCnt->Cut();
                     pCnt->Paste( pFootnote );
                     pCnt = pNxtCnt;
                 } while ( pCnt );
             }
             else
-            { OSL_ENSURE( pNxt->Lower() && pNxt->Lower()->IsSctFrm(),
+            { OSL_ENSURE( pNxt->Lower() && pNxt->Lower()->IsSctFrame(),
                         "Endnote without content?" );
                 pNxt->Cut();
-                SwFrm::DestroyFrm(pNxt);
+                SwFrame::DestroyFrame(pNxt);
             }
             pNxt = pFootnote->GetFollow();
         }
@@ -106,16 +106,16 @@ void SwEndnoter::CollectEndnote( SwFootnoteFrm* pFootnote )
     {
         for ( size_t i = 0; i < pEndArr->size(); ++i )
         {
-            SwFootnoteFrm *pEndFootnote = (*pEndArr)[i];
+            SwFootnoteFrame *pEndFootnote = (*pEndArr)[i];
             if( pEndFootnote->GetAttr() == pFootnote->GetAttr() )
             {
-                SwFrm::DestroyFrm(pFootnote);
+                SwFrame::DestroyFrame(pFootnote);
                 return;
             }
         }
     }
     if( !pEndArr )
-        pEndArr = new SwFootnoteFrms;  // deleted from the SwLayouter
+        pEndArr = new SwFootnoteFrames;  // deleted from the SwLayouter
     pEndArr->push_back( pFootnote );
 }
 
@@ -128,18 +128,18 @@ void SwEndnoter::InsertEndnotes()
         pSect = nullptr;
         return;
     }
-    OSL_ENSURE( pSect->Lower() && pSect->Lower()->IsFootnoteBossFrm(),
+    OSL_ENSURE( pSect->Lower() && pSect->Lower()->IsFootnoteBossFrame(),
             "InsertEndnotes: Where's my column?" );
-    SwFrm* pRef = pSect->FindLastContent( FINDMODE_MYLAST );
-    SwFootnoteBossFrm *pBoss = pRef ? pRef->FindFootnoteBossFrm()
-                               : static_cast<SwFootnoteBossFrm*>(pSect->Lower());
+    SwFrame* pRef = pSect->FindLastContent( FINDMODE_MYLAST );
+    SwFootnoteBossFrame *pBoss = pRef ? pRef->FindFootnoteBossFrame()
+                               : static_cast<SwFootnoteBossFrame*>(pSect->Lower());
     pBoss->_MoveFootnotes( *pEndArr );
     delete pEndArr;
     pEndArr = nullptr;
     pSect = nullptr;
 }
 
-SwLooping::SwLooping( SwPageFrm* pPage )
+SwLooping::SwLooping( SwPageFrame* pPage )
 {
     OSL_ENSURE( pPage, "Where's my page?" );
     nMinPage = pPage->GetPhyPageNum();
@@ -148,16 +148,16 @@ SwLooping::SwLooping( SwPageFrm* pPage )
     mnLoopControlStage = 0;
 }
 
-void SwLooping::Drastic( SwFrm* pFrm )
+void SwLooping::Drastic( SwFrame* pFrame )
 {
-    while( pFrm )
+    while( pFrame )
     {
-        pFrm->ValidateThisAndAllLowers( mnLoopControlStage );
-        pFrm = pFrm->GetNext();
+        pFrame->ValidateThisAndAllLowers( mnLoopControlStage );
+        pFrame = pFrame->GetNext();
     }
 }
 
-void SwLooping::Control( SwPageFrm* pPage )
+void SwLooping::Control( SwPageFrame* pPage )
 {
     if( !pPage )
         return;
@@ -193,9 +193,9 @@ void SwLooping::Control( SwPageFrm* pPage )
 
         Drastic( pPage->Lower() );
         if( nNew > nMinPage && pPage->GetPrev() )
-            Drastic( static_cast<SwPageFrm*>(pPage->GetPrev())->Lower() );
+            Drastic( static_cast<SwPageFrame*>(pPage->GetPrev())->Lower() );
         if( nNew < nMaxPage && pPage->GetNext() )
-            Drastic( static_cast<SwPageFrm*>(pPage->GetNext())->Lower() );
+            Drastic( static_cast<SwPageFrame*>(pPage->GetNext())->Lower() );
 
         ++mnLoopControlStage;
         nCount = 0;
@@ -206,7 +206,7 @@ SwLayouter::SwLayouter()
         : mpEndnoter( nullptr ),
           mpLooping( nullptr ),
           // #i28701#
-          mpMovedFwdFrms( nullptr ),
+          mpMovedFwdFrames( nullptr ),
           // #i35911#
           mpObjsTmpConsiderWrapInfl( nullptr )
 {
@@ -217,14 +217,14 @@ SwLayouter::~SwLayouter()
     delete mpEndnoter;
     delete mpLooping;
     // #i28701#
-    delete mpMovedFwdFrms;
-    mpMovedFwdFrms = nullptr;
+    delete mpMovedFwdFrames;
+    mpMovedFwdFrames = nullptr;
     // #i35911#
     delete mpObjsTmpConsiderWrapInfl;
     mpObjsTmpConsiderWrapInfl = nullptr;
 }
 
-void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
+void SwLayouter::_CollectEndnotes( SwSectionFrame* pSect )
 {
     if( !mpEndnoter )
         mpEndnoter = new SwEndnoter( this );
@@ -236,36 +236,36 @@ bool SwLayouter::HasEndnotes() const
     return mpEndnoter->HasEndnotes();
 }
 
-void SwLayouter::CollectEndnote( SwFootnoteFrm* pFootnote )
+void SwLayouter::CollectEndnote( SwFootnoteFrame* pFootnote )
 {
     mpEndnoter->CollectEndnote( pFootnote );
 }
 
-void SwLayouter::InsertEndnotes( SwSectionFrm* pSect )
+void SwLayouter::InsertEndnotes( SwSectionFrame* pSect )
 {
     if( !mpEndnoter || mpEndnoter->GetSect() != pSect )
         return;
     mpEndnoter->InsertEndnotes();
 }
 
-void SwLayouter::LoopControl( SwPageFrm* pPage, sal_uInt8 )
+void SwLayouter::LoopControl( SwPageFrame* pPage, sal_uInt8 )
 {
     OSL_ENSURE( mpLooping, "Looping: Lost control" );
     mpLooping->Control( pPage );
 }
 
-void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTextFrm& rFrm )
+void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame )
 {
     if ( mpLooping && mpLooping->IsLoopingLouieLight() )
     {
 #if OSL_DEBUG_LEVEL > 1
         OSL_FAIL( "Looping Louie (Light): Fixating fractious frame" );
 #endif
-        SwLayouter::InsertMovedFwdFrm( rDoc, rFrm, rFrm.FindPageFrm()->GetPhyPageNum() );
+        SwLayouter::InsertMovedFwdFrame( rDoc, rFrame, rFrame.FindPageFrame()->GetPhyPageNum() );
     }
 }
 
-bool SwLayouter::StartLooping( SwPageFrm* pPage )
+bool SwLayouter::StartLooping( SwPageFrame* pPage )
 {
     if( mpLooping )
         return false;
@@ -279,7 +279,7 @@ void SwLayouter::EndLoopControl()
     mpLooping = nullptr;
 }
 
-void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
+void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrame* pSect )
 {
     assert(pDoc && "No doc, no fun");
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
@@ -287,7 +287,7 @@ void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
     pDoc->getIDocumentLayoutAccess().GetLayouter()->_CollectEndnotes( pSect );
 }
 
-bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFootnoteFrm* pFootnote )
+bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrame* pSect, SwFootnoteFrame* pFootnote )
 {
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
         return false;
@@ -303,7 +303,7 @@ bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFootnoteFrm* pF
     return false;
 }
 
-bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
+bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrame *pPage )
 {
     OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
@@ -315,17 +315,17 @@ bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
 // #i28701#
 // methods to manage text frames, which are moved forward by the positioning
 // of its anchored objects
-void SwLayouter::ClearMovedFwdFrms( const SwDoc& _rDoc )
+void SwLayouter::ClearMovedFwdFrames( const SwDoc& _rDoc )
 {
     if ( _rDoc.getIDocumentLayoutAccess().GetLayouter() &&
-         _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms )
+         _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames )
     {
-        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->Clear();
+        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames->Clear();
     }
 }
 
-void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
-                                    const SwTextFrm& _rMovedFwdFrmByObjPos,
+void SwLayouter::InsertMovedFwdFrame( const SwDoc& _rDoc,
+                                    const SwTextFrame& _rMovedFwdFrameByObjPos,
                                     const sal_uInt32 _nToPageNum )
 {
     if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
@@ -333,29 +333,29 @@ void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
         const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
     }
 
-    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms )
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames )
     {
-        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms =
-                                                new SwMovedFwdFrmsByObjPos();
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames =
+                                                new SwMovedFwdFramesByObjPos();
     }
 
-    _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->Insert( _rMovedFwdFrmByObjPos,
+    _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames->Insert( _rMovedFwdFrameByObjPos,
                                                  _nToPageNum );
 }
 
 // #i40155#
-void SwLayouter::RemoveMovedFwdFrm( const SwDoc& _rDoc,
-                                    const SwTextFrm& _rTextFrm )
+void SwLayouter::RemoveMovedFwdFrame( const SwDoc& _rDoc,
+                                    const SwTextFrame& _rTextFrame )
 {
     sal_uInt32 nDummy;
-    if ( SwLayouter::FrmMovedFwdByObjPos( _rDoc, _rTextFrm, nDummy ) )
+    if ( SwLayouter::FrameMovedFwdByObjPos( _rDoc, _rTextFrame, nDummy ) )
     {
-        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->Remove( _rTextFrm );
+        _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames->Remove( _rTextFrame );
     }
 }
 
-bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
-                                      const SwTextFrm& _rTextFrm,
+bool SwLayouter::FrameMovedFwdByObjPos( const SwDoc& _rDoc,
+                                      const SwTextFrame& _rTextFrame,
                                       sal_uInt32& _ornToPageNum )
 {
     if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
@@ -363,34 +363,34 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
         _ornToPageNum = 0;
         return false;
     }
-    else if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms )
+    else if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames )
     {
         _ornToPageNum = 0;
         return false;
     }
     else
     {
-        return _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms->
-                                FrmMovedFwdByObjPos( _rTextFrm, _ornToPageNum );
+        return _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames->
+                                FrameMovedFwdByObjPos( _rTextFrame, _ornToPageNum );
     }
 }
 
 // #i26945#
-bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
-                                            const SwRowFrm& _rRowFrm )
+bool SwLayouter::DoesRowContainMovedFwdFrame( const SwDoc& _rDoc,
+                                            const SwRowFrame& _rRowFrame )
 {
     if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
     {
         return false;
     }
-    else if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrms )
+    else if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames )
     {
         return false;
     }
     else
     {
         return _rDoc.getIDocumentLayoutAccess().GetLayouter()->
-                        mpMovedFwdFrms->DoesRowContainMovedFwdFrm( _rRowFrm );
+                        mpMovedFwdFrames->DoesRowContainMovedFwdFrame( _rRowFrame );
     }
 }
 
@@ -421,22 +421,22 @@ void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
     _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
 }
 
-void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTextFrm& rTextFrm )
+void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTextFrame& rTextFrame )
 {
     if ( bCondition )
     {
-        const SwDoc& rDoc = *rTextFrm.GetAttrSet()->GetDoc();
+        const SwDoc& rDoc = *rTextFrame.GetAttrSet()->GetDoc();
         if ( rDoc.getIDocumentLayoutAccess().GetLayouter() )
         {
-            const_cast<SwDoc&>(rDoc).getIDocumentLayoutAccess().GetLayouter()->LoopingLouieLight( rDoc, rTextFrm );
+            const_cast<SwDoc&>(rDoc).getIDocumentLayoutAccess().GetLayouter()->LoopingLouieLight( rDoc, rTextFrame );
         }
     }
 }
 
 // #i65250#
 bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
-                                    const SwFlowFrm& p_rFlowFrm,
-                                    const SwLayoutFrm& p_rNewUpperFrm )
+                                    const SwFlowFrame& p_rFlowFrame,
+                                    const SwLayoutFrame& p_rNewUpperFrame )
 {
     bool bMoveBwdSuppressed( false );
 
@@ -447,21 +447,21 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
 
     // create hash map key
     tMoveBwdLayoutInfoKey aMoveBwdLayoutInfo;
-    aMoveBwdLayoutInfo.mnFrmId = p_rFlowFrm.GetFrm().GetFrmId();
-    aMoveBwdLayoutInfo.mnNewUpperPosX = p_rNewUpperFrm.Frm().Pos().X();
-    aMoveBwdLayoutInfo.mnNewUpperPosY = p_rNewUpperFrm.Frm().Pos().Y();
-    aMoveBwdLayoutInfo.mnNewUpperWidth = p_rNewUpperFrm.Frm().Width();
-    aMoveBwdLayoutInfo.mnNewUpperHeight =  p_rNewUpperFrm.Frm().Height();
-    SWRECTFN( (&p_rNewUpperFrm) )
-    const SwFrm* pLastLower( p_rNewUpperFrm.Lower() );
+    aMoveBwdLayoutInfo.mnFrameId = p_rFlowFrame.GetFrame().GetFrameId();
+    aMoveBwdLayoutInfo.mnNewUpperPosX = p_rNewUpperFrame.Frame().Pos().X();
+    aMoveBwdLayoutInfo.mnNewUpperPosY = p_rNewUpperFrame.Frame().Pos().Y();
+    aMoveBwdLayoutInfo.mnNewUpperWidth = p_rNewUpperFrame.Frame().Width();
+    aMoveBwdLayoutInfo.mnNewUpperHeight =  p_rNewUpperFrame.Frame().Height();
+    SWRECTFN( (&p_rNewUpperFrame) )
+    const SwFrame* pLastLower( p_rNewUpperFrame.Lower() );
     while ( pLastLower && pLastLower->GetNext() )
     {
         pLastLower = pLastLower->GetNext();
     }
     aMoveBwdLayoutInfo.mnFreeSpaceInNewUpper =
             pLastLower
-            ? (pLastLower->Frm().*fnRect->fnBottomDist)( (p_rNewUpperFrm.*fnRect->fnGetPrtBottom)() )
-            : (p_rNewUpperFrm.Frm().*fnRect->fnGetHeight)();
+            ? (pLastLower->Frame().*fnRect->fnBottomDist)( (p_rNewUpperFrame.*fnRect->fnGetPrtBottom)() )
+            : (p_rNewUpperFrame.Frame().*fnRect->fnGetHeight)();
 
     // check for moving backward suppress threshold
     const sal_uInt16 cMoveBwdCountSuppressThreshold = 20;

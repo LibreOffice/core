@@ -29,7 +29,7 @@ class SwHeaderFooterWin : public SwFrameMenuButtonBase
     Timer                 m_aFadeTimer;
 
 public:
-    SwHeaderFooterWin( SwEditWin *pEditWin, const SwFrm *pFrm, bool bHeader );
+    SwHeaderFooterWin( SwEditWin *pEditWin, const SwFrame *pFrame, bool bHeader );
     virtual ~SwHeaderFooterWin( );
     virtual void dispose() override;
 

@@ -48,7 +48,7 @@ class SvStream;
 class SvxFontItem;
 class SvxMacroTableDtor;
 class SwContentNode;
-class SwCrsrShell;
+class SwCursorShell;
 class SwDoc;
 class SwPaM;
 class SwTextBlocks;
@@ -151,7 +151,7 @@ class SW_DLLPUBLIC SwReader: public SwDocFac
     css::uno::Reference < css::embed::XStorage > xStg;
     SfxMedium* pMedium;     // Who wants to obtain a Medium (W4W).
 
-    SwPaM* pCrsr;
+    SwPaM* pCursor;
     OUString aFileName;
     OUString sBaseURL;
     bool mbSkipImages;
@@ -227,8 +227,8 @@ public:
 
     virtual void SetFltName( const OUString& rFltNm );
 
-    // Adapt item-set of a Frm-Format to the old format.
-    static void ResetFrameFormatAttrs( SfxItemSet &rFrmSet );
+    // Adapt item-set of a Frame-Format to the old format.
+    static void ResetFrameFormatAttrs( SfxItemSet &rFrameSet );
 
     // Adapt Frame-/Graphics-/OLE- styles to the old format
     // (without borders etc.).
@@ -491,7 +491,7 @@ class SW_DLLPUBLIC SwWriter
     SfxMedium* pMedium;
 
     SwPaM* pOutPam;
-    SwCrsrShell *pShell;
+    SwCursorShell *pShell;
     SwDoc &rDoc;
 
     bool bWriteAll;
@@ -499,13 +499,13 @@ class SW_DLLPUBLIC SwWriter
 public:
     sal_uLong Write( WriterRef& rxWriter, const OUString* = nullptr);
 
-    SwWriter( SvStream&, SwCrsrShell &, bool bWriteAll = false );
+    SwWriter( SvStream&, SwCursorShell &, bool bWriteAll = false );
     SwWriter( SvStream&, SwDoc & );
     SwWriter( SvStream&, SwPaM &, bool bWriteAll = false );
 
     SwWriter( const css::uno::Reference < css::embed::XStorage >&, SwDoc& );
 
-    SwWriter( SfxMedium&, SwCrsrShell &, bool bWriteAll = false );
+    SwWriter( SfxMedium&, SwCursorShell &, bool bWriteAll = false );
     SwWriter( SfxMedium&, SwDoc & );
 };
 

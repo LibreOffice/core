@@ -489,7 +489,7 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
         }
         else
         {
-            const SwFormatFrmSize &rSz = pNd->GetFrmSize();
+            const SwFormatFrameSize &rSz = pNd->GetFrameSize();
             nMin = rSz.GetWidth();
         }
         nMax = nMin;
@@ -702,7 +702,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                         }
                         else
                         {
-                            const SwFormatFrmSize& rTmpSize = pFrameFormat->GetFrmSize();
+                            const SwFormatFrameSize& rTmpSize = pFrameFormat->GetFrameSize();
                             if( RES_FLYFRMFMT == pFrameFormat->Which()
                                 && rTmpSize.GetWidthPercent() )
                             {
@@ -716,7 +716,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                                     rMax = USHRT_MAX;
                             }
                             else
-                                nAktWidth = pFrameFormat->GetFrmSize().GetWidth();
+                                nAktWidth = pFrameFormat->GetFrameSize().GetWidth();
                         }
                         nAktWidth += rLR.GetLeft();
                         nAktWidth += rLR.GetRight();
@@ -958,24 +958,24 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
     nWidth = std::max( nWidth, nProWidth );
 
     // search for a text frame this node belongs to
-    SwIterator<SwTextFrm,SwTextNode> aFrmIter( *this );
-    SwTextFrm* pFrm = nullptr;
-    for( SwTextFrm* pTmpFrm = aFrmIter.First(); pTmpFrm; pTmpFrm = aFrmIter.Next() )
+    SwIterator<SwTextFrame,SwTextNode> aFrameIter( *this );
+    SwTextFrame* pFrame = nullptr;
+    for( SwTextFrame* pTmpFrame = aFrameIter.First(); pTmpFrame; pTmpFrame = aFrameIter.Next() )
     {
-            if ( pTmpFrm->GetOfst() <= nStt &&
-                ( !pTmpFrm->GetFollow() ||
-                   pTmpFrm->GetFollow()->GetOfst() > nStt ) )
+            if ( pTmpFrame->GetOfst() <= nStt &&
+                ( !pTmpFrame->GetFollow() ||
+                   pTmpFrame->GetFollow()->GetOfst() > nStt ) )
             {
-                pFrm = pTmpFrm;
+                pFrame = pTmpFrame;
                 break;
             }
         }
 
     // search for the line containing nStt
-    if ( pFrm && pFrm->HasPara() )
+    if ( pFrame && pFrame->HasPara() )
     {
-        SwTextInfo aInf( pFrm );
-        SwTextIter aLine( pFrm, &aInf );
+        SwTextInfo aInf( pFrame );
+        SwTextIter aLine( pFrame, &aInf );
         aLine.CharToLine( nStt );
         pOut->SetMapMode( aOldMap );
         return (sal_uInt16)( nWidth ?
@@ -1014,18 +1014,18 @@ SwTwips SwTextNode::GetWidthOfLeadingTabs() const
         aPos.nContent += nIdx;
 
         // Find the non-follow text frame:
-        SwIterator<SwTextFrm,SwTextNode> aIter( *this );
-        for( SwTextFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+        SwIterator<SwTextFrame,SwTextNode> aIter( *this );
+        for( SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
         {
             // Only consider master frames:
-            if ( !pFrm->IsFollow() )
+            if ( !pFrame->IsFollow() )
             {
-                SWRECTFN( pFrm )
+                SWRECTFN( pFrame )
                 SwRect aRect;
-                pFrm->GetCharRect( aRect, aPos );
-                nRet = pFrm->IsRightToLeft() ?
-                            (pFrm->*fnRect->fnGetPrtRight)() - (aRect.*fnRect->fnGetRight)() :
-                            (aRect.*fnRect->fnGetLeft)() - (pFrm->*fnRect->fnGetPrtLeft)();
+                pFrame->GetCharRect( aRect, aPos );
+                nRet = pFrame->IsRightToLeft() ?
+                            (pFrame->*fnRect->fnGetPrtRight)() - (aRect.*fnRect->fnGetRight)() :
+                            (aRect.*fnRect->fnGetLeft)() - (pFrame->*fnRect->fnGetPrtLeft)();
                 break;
             }
         }

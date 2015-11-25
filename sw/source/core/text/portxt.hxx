@@ -38,7 +38,7 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
-    virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const override;
+    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;

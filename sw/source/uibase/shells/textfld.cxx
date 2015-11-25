@@ -195,8 +195,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     {
                         rSh.SttSelect();
                         rSh.SelectText(
-                            SwCrsrShell::StartOfInputFieldAtPos( *(rSh.GetCrsr()->Start()) ) + 1,
-                            SwCrsrShell::EndOfInputFieldAtPos( *(rSh.GetCrsr()->Start()) ) - 1 );
+                            SwCursorShell::StartOfInputFieldAtPos( *(rSh.GetCursor()->Start()) ) + 1,
+                            SwCursorShell::EndOfInputFieldAtPos( *(rSh.GetCursor()->Start()) ) - 1 );
                     }
                     else
                     {
@@ -406,7 +406,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     aFieldMgr.InsertField( aData );
 
                     rSh.Push();
-                    rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS);
+                    rSh.SwCursorShell::Left(1, CRSR_SKIP_CHARS);
                     pPostIt = static_cast<SwPostItField*>(aFieldMgr.GetCurField());
                     rSh.Pop(false); // Restore cursor position
                 }
@@ -490,7 +490,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bool bNext = pActRed != nullptr;
                     rSh.Pop(false); // Restore cursor position
 
-                    if( rSh.IsCrsrPtAtEnd() )
+                    if( rSh.IsCursorPtAtEnd() )
                         rSh.SwapPam();
 
                     rSh.EndAction();
@@ -707,7 +707,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
 
         case FN_INSERT_FIELD:
             {
-                if ( rSh.CrsrInsideInputField() )
+                if ( rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -728,7 +728,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             {
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                 if ( !pVFrame->KnowsChildWindow(FN_INSERT_FIELD)
-                     || rSh.CrsrInsideInputField() )
+                     || rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem(FN_INSERT_REF_FIELD);
                 }
@@ -736,7 +736,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             break;
 
         case FN_INSERT_FIELD_CTRL:
-                if ( rSh.CrsrInsideInputField() )
+                if ( rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -765,7 +765,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 {
                     rSet.DisableItem(nWhich);
                 }
-                else if ( rSh.CrsrInsideInputField() )
+                else if ( rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -781,7 +781,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_INSERT_FLD_TITLE:
         case FN_INSERT_FLD_TOPIC:
         case FN_INSERT_DBFIELD:
-            if ( rSh.CrsrInsideInputField() )
+            if ( rSh.CursorInsideInputField() )
             {
                 rSet.DisableItem(nWhich);
             }
@@ -813,7 +813,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
         {
             // Select links
-            rSh.SwCrsrShell::SelectTextAttr(RES_TXTATR_INETFMT, false);
+            rSh.SwCursorShell::SelectTextAttr(RES_TXTATR_INETFMT, false);
         }
         switch (nType)
         {
@@ -864,7 +864,7 @@ IMPL_LINK_TYPED( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, vo
     if (pRedline)
     {
         // Traveling only if more than one field.
-        if( !pSh->IsCrsrPtAtEnd() )
+        if( !pSh->IsCursorPtAtEnd() )
             pSh->SwapPam(); // Move the cursor behind the Redline.
 
         pSh->Push();
@@ -884,7 +884,7 @@ IMPL_LINK_TYPED( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, vo
 
         rDlg.EnableTravel(bEnable, true);
 
-        if( pSh->IsCrsrPtAtEnd() )
+        if( pSh->IsCursorPtAtEnd() )
             pSh->SwapPam();
 
         pRedline = pSh->GetCurrRedline();

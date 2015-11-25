@@ -20,9 +20,9 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_TOCNTNTANCHOREDOBJECTPOSITION_HXX
 #include <anchoredobjectposition.hxx>
 
-class SwFrm;
-class SwTextFrm;
-class SwLayoutFrm;
+class SwFrame;
+class SwTextFrame;
+class SwLayoutFrame;
 class SwRect;
 
 namespace objectpositioning
@@ -31,27 +31,27 @@ namespace objectpositioning
     {
         private:
             // calculated data for object position
-            const SwLayoutFrm* mpVertPosOrientFrm;
+            const SwLayoutFrame* mpVertPosOrientFrame;
             // #i26791#
             // determine offset to frame anchor position according to the
             // positioning alignments
-            Point maOffsetToFrmAnchorPos;
+            Point maOffsetToFrameAnchorPos;
 
             // data for calculation of position
             bool          mbAnchorToChar;
-            const SwFrm*  mpToCharOrientFrm;
+            const SwFrame*  mpToCharOrientFrame;
             const SwRect* mpToCharRect;
             SwTwips       mnToCharTopOfLine;
 
             virtual bool IsAnchoredToChar() const override;
-            virtual const SwFrm* ToCharOrientFrm() const override;
+            virtual const SwFrame* ToCharOrientFrame() const override;
             virtual const SwRect* ToCharRect() const override;
             // #i22341#
             virtual SwTwips ToCharTopOfLine() const override;
 
-            // method to cast <SwAnchoredObjectPosition::GetAnchorFrm()> to
+            // method to cast <SwAnchoredObjectPosition::GetAnchorFrame()> to
             // the needed type
-            SwTextFrm&       GetAnchorTextFrm() const;
+            SwTextFrame&       GetAnchorTextFrame() const;
 
             /** determine frame for horizontal position
 
@@ -62,13 +62,13 @@ namespace objectpositioning
                 for the first, that the anchor or a follow of the anchor.
                 If none is found, the proposed frame is returned.
 
-                @param _pProposedFrm
+                @param _pProposedFrame
                 input parameter - proposed frame for horizontal position
 
-                @return constant reference to <SwFrm> object, at which the
+                @return constant reference to <SwFrame> object, at which the
                 horizontal position is determined.
             */
-            const SwFrm& _GetHoriVirtualAnchor( const SwLayoutFrm& _pProposedFrm ) const;
+            const SwFrame& _GetHoriVirtualAnchor( const SwLayoutFrame& _pProposedFrame ) const;
 
         public:
             SwToContentAnchoredObjectPosition( SdrObject& _rDrawObj );
@@ -80,7 +80,7 @@ namespace objectpositioning
 
             /** frame, at which the vertical position is oriented at
             */
-            const SwLayoutFrm& GetVertPosOrientFrm() const { return *mpVertPosOrientFrm;}
+            const SwLayoutFrame& GetVertPosOrientFrame() const { return *mpVertPosOrientFrame;}
     };
 } // namespace objectpositioning
 

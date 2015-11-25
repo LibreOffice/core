@@ -152,36 +152,36 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            sal_Int16 eHoriOri,
                                            const SfxItemSet &rCSS1ItemSet,
                                            const SvxCSS1PropertyInfo &rCSS1PropInfo,
-                                           SfxItemSet& rFrmItemSet )
+                                           SfxItemSet& rFrameItemSet )
 {
     const SfxItemSet *pCntnrItemSet = nullptr;
     auto i = m_aContexts.size();
     while( !pCntnrItemSet && i > m_nContextStMin )
-        pCntnrItemSet = m_aContexts[--i]->GetFrmItemSet();
+        pCntnrItemSet = m_aContexts[--i]->GetFrameItemSet();
 
     if( pCntnrItemSet )
     {
         // Wenn wir und in einem Container befinden wird die Verankerung
         // des Containers uebernommen.
-        rFrmItemSet.Put( *pCntnrItemSet );
+        rFrameItemSet.Put( *pCntnrItemSet );
     }
     else if( SwCSS1Parser::MayBePositioned( rCSS1PropInfo, true ) )
     {
         // Wenn die Ausrichtung anhand der CSS1-Optionen gesetzt werden kann
         // werden die benutzt.
-        SetAnchorAndAdjustment( rCSS1ItemSet, rCSS1PropInfo, rFrmItemSet );
+        SetAnchorAndAdjustment( rCSS1ItemSet, rCSS1PropInfo, rFrameItemSet );
     }
     else
     {
         // Sonst wird die Ausrichtung entsprechend der normalen HTML-Optionen
         // gesetzt.
-        SetAnchorAndAdjustment( eVertOri, eHoriOri, rFrmItemSet );
+        SetAnchorAndAdjustment( eVertOri, eHoriOri, rFrameItemSet );
     }
 }
 
 void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            sal_Int16 eHoriOri,
-                                           SfxItemSet& rFrmSet,
+                                           SfxItemSet& rFrameSet,
                                            bool bDontAppend )
 {
     bool bMoveBackward = false;
@@ -256,11 +256,11 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             eVertRel = text::RelOrientation::PRINT_AREA;
         }
 
-        rFrmSet.Put( SwFormatHoriOrient( 0, eHoriOri, eHoriRel) );
+        rFrameSet.Put( SwFormatHoriOrient( 0, eHoriOri, eHoriRel) );
 
-        rFrmSet.Put( SwFormatSurround( eSurround ) );
+        rFrameSet.Put( SwFormatSurround( eSurround ) );
     }
-    rFrmSet.Put( SwFormatVertOrient( 0, eVertOri, eVertRel) );
+    rFrameSet.Put( SwFormatVertOrient( 0, eVertOri, eVertRel) );
 
     if( bMoveBackward )
         m_pPam->Move( fnMoveBackward );
@@ -270,10 +270,10 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
     if( bMoveBackward )
         m_pPam->Move( fnMoveForward );
 
-    rFrmSet.Put( aAnchor );
+    rFrameSet.Put( aAnchor );
 }
 
-void SwHTMLParser::RegisterFlyFrm( SwFrameFormat *pFlyFormat )
+void SwHTMLParser::RegisterFlyFrame( SwFrameFormat *pFlyFormat )
 {
     // automatisch verankerte Rahmen muessen noch um eine Position
     // nach vorne verschoben werden.
@@ -281,7 +281,7 @@ void SwHTMLParser::RegisterFlyFrm( SwFrameFormat *pFlyFormat )
         (FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()) &&
         SURROUND_THROUGHT == pFlyFormat->GetSurround().GetSurround() )
     {
-        m_aMoveFlyFrms.push_back( pFlyFormat );
+        m_aMoveFlyFrames.push_back( pFlyFormat );
         m_aMoveFlyCnts.push_back( m_pPam->GetPoint()->nContent.GetIndex() );
     }
 }
@@ -494,10 +494,10 @@ IMAGE_SETEVENT:
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
-    SfxItemSet aFrmSet( m_pDoc->GetAttrPool(),
+    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
-        Reader::ResetFrameFormatAttrs( aFrmSet );
+        Reader::ResetFrameFormatAttrs( aFrameSet );
 
     // Umrandung setzen
     long nHBorderWidth = 0, nVBorderWidth = 0;
@@ -537,17 +537,17 @@ IMAGE_SETEVENT:
         aBoxItem.SetLine( &aHBorderLine, SvxBoxItemLine::BOTTOM );
         aBoxItem.SetLine( &aVBorderLine, SvxBoxItemLine::LEFT );
         aBoxItem.SetLine( &aVBorderLine, SvxBoxItemLine::RIGHT );
-        aFrmSet.Put( aBoxItem );
+        aFrameSet.Put( aBoxItem );
     }
 
     // Ausrichtung setzen
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrmSet );
+    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrameSet );
 
     // Abstaende setzen
-    SetSpace( Size( nHSpace, nVSpace), aItemSet, aPropInfo, aFrmSet );
+    SetSpace( Size( nHSpace, nVSpace), aItemSet, aPropInfo, aFrameSet );
 
     // Sonstige CSS1-Attribute Setzen
-    SetFrameFormatAttrs( aItemSet, aPropInfo, HTML_FF_BOX, aFrmSet );
+    SetFrameFormatAttrs( aItemSet, aPropInfo, HTML_FF_BOX, aFrameSet );
 
     Size aTwipSz( bPrcWidth ? 0 : nWidth, bPrcHeight ? 0 : nHeight );
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
@@ -590,7 +590,7 @@ IMAGE_SETEVENT:
 
     Size aGrfSz( 0, 0 );
     bool bSetTwipSize = true;       // Twip-Size am Node setzen?
-    bool bChangeFrmSize = false;    // Frame-Format nachtraeglich anpassen?
+    bool bChangeFrameSize = false;    // Frame-Format nachtraeglich anpassen?
     bool bRequestGrfNow = false;
     bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
@@ -608,7 +608,7 @@ IMAGE_SETEVENT:
         }
 
         // Die Groesse des Rahmens wird nachtraeglich gesetzt
-        bChangeFrmSize = true;
+        bChangeFrameSize = true;
         aGrfSz = aTwipSz;
         if( !nWidth && !nHeight )
         {
@@ -673,13 +673,13 @@ IMAGE_SETEVENT:
             SwFormatURL aURL; aURL.SetMap( pImgMap );//wird kopieiert
 
             bSetScaleImageMap = !nPrcWidth || !nPrcHeight;
-            aFrmSet.Put( aURL );
+            aFrameSet.Put( aURL );
         }
         else
         {
             ImageMap aEmptyImgMap( aName );
             SwFormatURL aURL; aURL.SetMap( &aEmptyImgMap );//wird kopieiert
-            aFrmSet.Put( aURL );
+            aFrameSet.Put( aURL );
             m_nMissingImgMaps++;          // es fehlen noch Image-Maps
 
             // die Grafik muss beim SetTwipSize skaliert werden, wenn
@@ -717,14 +717,14 @@ IMAGE_SETEVENT:
             aTwipSz.Height() = MINFLY;
     }
 
-    SwFormatFrmSize aFrmSize( ATT_FIX_SIZE, aTwipSz.Width(), aTwipSz.Height() );
-    aFrmSize.SetWidthPercent( nPrcWidth );
-    aFrmSize.SetHeightPercent( nPrcHeight );
-    aFrmSet.Put( aFrmSize );
+    SwFormatFrameSize aFrameSize( ATT_FIX_SIZE, aTwipSz.Width(), aTwipSz.Height() );
+    aFrameSize.SetWidthPercent( nPrcWidth );
+    aFrameSize.SetHeightPercent( nPrcHeight );
+    aFrameSet.Put( aFrameSize );
 
     // passing empty sGrfNm here, means we don't want the graphic to be linked
     SwFrameFormat *pFlyFormat = m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, sGrfNm, aEmptyOUStr, &aGraphic,
-                                      &aFrmSet, nullptr, nullptr );
+                                      &aFrameSet, nullptr, nullptr );
     SwGrfNode *pGrfNd = m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                                   ->GetIndex()+1 ]->GetGrfNode();
 
@@ -748,7 +748,7 @@ IMAGE_SETEVENT:
         if( bSetTwipSize )
             pGrfNd->SetTwipSize( aGrfSz );
 
-        pGrfNd->SetChgTwipSize( bChangeFrmSize );
+        pGrfNd->SetChgTwipSize( bChangeFrameSize );
 
         if( bSetScaleImageMap )
             pGrfNd->SetScaleImageMap( true );
@@ -817,7 +817,7 @@ IMAGE_SETEVENT:
     }
 
     // Ggf. Frames anlegen und Auto-gebundenen Rahmen registrieren
-    RegisterFlyFrm( pFlyFormat );
+    RegisterFlyFrame( pFlyFormat );
 
     if( !aId.isEmpty() )
         InsertBookmark( aId );

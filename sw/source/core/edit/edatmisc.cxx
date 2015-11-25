@@ -32,17 +32,17 @@
 void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
 {
     SET_CURR_SHELL( this );
-    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr( );
+    SwPaM* pCursor = pPaM ? pPaM : GetCursor( );
 
     StartAllAction();
-    bool bUndoGroup = pCrsr->GetNext() != pCrsr;
+    bool bUndoGroup = pCursor->GetNext() != pCursor;
     if( bUndoGroup )
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_RESETATTR, nullptr);
     }
 
-    for(SwPaM& rCurCrsr : pCrsr->GetRingContainer())
-        GetDoc()->ResetAttrs(rCurCrsr, true, attrs);
+    for(SwPaM& rCurrentCursor : pCursor->GetRingContainer())
+        GetDoc()->ResetAttrs(rCurrentCursor, true, attrs);
 
     if( bUndoGroup )
     {
@@ -54,7 +54,7 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
 
 void SwEditShell::GCAttr()
 {
-    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         if ( !rPaM.HasMark() )
         {
@@ -99,13 +99,13 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
+    SwPaM* pCursor = GetCursor();
+    if( pCursor->GetNext() != pCursor )     // Ring of Cursors
     {
         bool bIsTableMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, nullptr);
 
-        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             if( rPaM.HasMark() && ( bIsTableMode ||
                 *rPaM.GetPoint() != *rPaM.GetMark() ))
@@ -120,7 +120,7 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
     {
         if( !HasSelection() )
             UpdateAttr();
-        GetDoc()->getIDocumentContentOperations().InsertPoolItem( *pCrsr, rHint, nFlags );
+        GetDoc()->getIDocumentContentOperations().InsertPoolItem( *pCursor, rHint, nFlags );
     }
     EndAllAction();
 }
@@ -129,19 +129,19 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
 {
     SET_CURR_SHELL( this );
 
-    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
+    SwPaM* pCursor = pPaM ? pPaM : GetCursor();
     StartAllAction();
-    if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
+    if( pCursor->GetNext() != pCursor )     // Ring of Cursors
     {
         bool bIsTableMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, nullptr);
 
-        for(SwPaM& rTmpCrsr : pCrsr->GetRingContainer())
+        for(SwPaM& rTmpCursor : pCursor->GetRingContainer())
         {
-            if( rTmpCrsr.HasMark() && ( bIsTableMode ||
-                *rTmpCrsr.GetPoint() != *rTmpCrsr.GetMark() ))
+            if( rTmpCursor.HasMark() && ( bIsTableMode ||
+                *rTmpCursor.GetPoint() != *rTmpCursor.GetMark() ))
             {
-                GetDoc()->getIDocumentContentOperations().InsertItemSet(rTmpCrsr, rSet, nFlags );
+                GetDoc()->getIDocumentContentOperations().InsertItemSet(rTmpCursor, rSet, nFlags );
             }
         }
 
@@ -151,7 +151,7 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
     {
         if( !HasSelection() )
             UpdateAttr();
-        GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCrsr, rSet, nFlags );
+        GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCursor, rSet, nFlags );
     }
     EndAllAction();
 }

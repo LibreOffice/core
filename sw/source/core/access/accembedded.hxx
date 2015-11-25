@@ -33,7 +33,7 @@ protected:
 
 public:
     SwAccessibleEmbeddedObject( SwAccessibleMap* pInitMap,
-                                const SwFlyFrm* pFlyFrm );
+                                const SwFlyFrame* pFlyFrame );
 
     // XInterface
 

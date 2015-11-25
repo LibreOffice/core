@@ -1598,7 +1598,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
     {
         pFS->startElementNS(XML_wps, XML_bodyPr, xBodyPrAttrList);
         // AutoSize of the Text Frame.
-        const SwFormatFrmSize& rSize = rFrameFormat.GetFrmSize();
+        const SwFormatFrameSize& rSize = rFrameFormat.GetFrameSize();
         pFS->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
         pFS->endElementNS(XML_wps, XML_bodyPr);
 
@@ -1608,7 +1608,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
 
         // Relative size of the Text Frame.
         const sal_uInt8 nWidthPercent = rSize.GetWidthPercent();
-        if (nWidthPercent && nWidthPercent != SwFormatFrmSize::SYNCED)
+        if (nWidthPercent && nWidthPercent != SwFormatFrameSize::SYNCED)
         {
             pFS->startElementNS(XML_wp14, XML_sizeRelH,
                                 XML_relativeFrom, (rSize.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
@@ -1619,7 +1619,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
             pFS->endElementNS(XML_wp14, XML_sizeRelH);
         }
         const sal_uInt8 nHeightPercent = rSize.GetHeightPercent();
-        if (nHeightPercent && nHeightPercent != SwFormatFrmSize::SYNCED)
+        if (nHeightPercent && nHeightPercent != SwFormatFrameSize::SYNCED)
         {
             pFS->startElementNS(XML_wp14, XML_sizeRelV,
                                 XML_relativeFrom, (rSize.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),

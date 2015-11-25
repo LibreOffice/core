@@ -26,22 +26,22 @@
 #include "swrect.hxx"
 #include "swregion.hxx"
 
-class SwCrsrShell;
-class SwShellCrsr;
+class SwCursorShell;
+class SwShellCursor;
 class SwTextInputField;
 
 // From here classes/methods for non-text cursor.
 
-class SwVisCrsr
+class SwVisibleCursor
 {
     friend void _InitCore();
     friend void _FinitCore();
 
     bool m_bIsVisible;
-    bool m_bIsDragCrsr;
+    bool m_bIsDragCursor;
 
-    vcl::Cursor m_aTextCrsr;
-    const SwCrsrShell* m_pCrsrShell;
+    vcl::Cursor m_aTextCursor;
+    const SwCursorShell* m_pCursorShell;
 
     /// For LibreOfficeKit only - remember what page we were at the last time.
     sal_uInt16 m_nPageLastTime;
@@ -49,14 +49,14 @@ class SwVisCrsr
     void _SetPosAndShow();
 
 public:
-    SwVisCrsr( const SwCrsrShell * pCShell );
-    ~SwVisCrsr();
+    SwVisibleCursor( const SwCursorShell * pCShell );
+    ~SwVisibleCursor();
 
     void Show();
     void Hide();
 
     bool IsVisible() const { return m_bIsVisible; }
-    void SetDragCrsr( bool bFlag = true ) { m_bIsDragCrsr = bFlag; }
+    void SetDragCursor( bool bFlag = true ) { m_bIsDragCursor = bFlag; }
 };
 
 // From here classes/methods for selections.
@@ -72,7 +72,7 @@ class SwSelPaintRects : public SwRects
     static long s_nPixPtX, s_nPixPtY;
     static MapMode *s_pMapMode;
 
-    const SwCrsrShell* m_pCursorShell;
+    const SwCursorShell* m_pCursorShell;
 
 #if HAVE_FEATURE_DESKTOP || defined(ANDROID)
     sdr::overlay::OverlayObject*    m_pCursorOverlay;
@@ -88,14 +88,14 @@ class SwSelPaintRects : public SwRects
     void HighlightInputField();
 
 public:
-    SwSelPaintRects( const SwCrsrShell& rCSh );
+    SwSelPaintRects( const SwCursorShell& rCSh );
     virtual ~SwSelPaintRects();
 
     virtual void FillRects() = 0;
     /// Fill rStart and rEnd with a rectangle that represents the start and end for selection handles.
     virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const = 0;
 
-    // #i75172# in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
+    // #i75172# in SwCursorShell::CreateCursor() the content of SwSelPaintRects is exchanged. To
     // make a complete swap access to m_pCursorOverlay is needed there
     void swapContent(SwSelPaintRects& rSwap);
 
@@ -108,14 +108,14 @@ public:
         m_bShowTextInputFieldOverlay = bShow;
     }
 
-    const SwCrsrShell* GetShell() const { return m_pCursorShell; }
+    const SwCursorShell* GetShell() const { return m_pCursorShell; }
     // check current MapMode of the shell and set possibly the static members.
     // Optional set the parameters pX, pY
     static void Get1PixelInLogic( const SwViewShell& rSh,
                                     long* pX = nullptr, long* pY = nullptr );
 };
 
-class SwShellCrsr : public virtual SwCursor, public SwSelPaintRects
+class SwShellCursor : public virtual SwCursor, public SwSelPaintRects
 {
 private:
     // Document positions of start/end characters of a SSelection.
@@ -126,12 +126,12 @@ private:
     using SwCursor::UpDown;
 
 public:
-    SwShellCrsr( const SwCrsrShell& rCrsrSh, const SwPosition &rPos );
-    SwShellCrsr( const SwCrsrShell& rCrsrSh, const SwPosition &rPos,
+    SwShellCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos );
+    SwShellCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos,
                     const Point& rPtPos, SwPaM* pRing = nullptr );
     // note: *intentionally* links the new shell cursor into the old one's Ring
-    SwShellCrsr( SwShellCrsr& );
-    virtual ~SwShellCrsr();
+    SwShellCursor( SwShellCursor& );
+    virtual ~SwShellCursor();
 
     virtual void FillRects() override;   // For Table- und normal cursors.
     /// @see SwSelPaintRects::FillStartEnd(), override for text selections.
@@ -164,10 +164,10 @@ public:
 
     virtual bool IsReadOnlyAvailable() const override;
 
-    DECL_FIXEDMEMPOOL_NEWDEL( SwShellCrsr )
+    DECL_FIXEDMEMPOOL_NEWDEL( SwShellCursor )
 };
 
-class SwShellTableCrsr : public virtual SwShellCrsr, public virtual SwTableCursor
+class SwShellTableCursor : public virtual SwShellCursor, public virtual SwTableCursor
 {
     /// Left edge of the selection start (top left cell).
     SwRect m_aStart;
@@ -178,11 +178,11 @@ class SwShellTableCrsr : public virtual SwShellCrsr, public virtual SwTableCurso
     // it has to be deleted from the other one as well!!
 
 public:
-    SwShellTableCrsr( const SwCrsrShell& rCrsrSh, const SwPosition& rPos );
-    SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
+    SwShellTableCursor( const SwCursorShell& rCursorSh, const SwPosition& rPos );
+    SwShellTableCursor( const SwCursorShell& rCursorSh,
                     const SwPosition &rMkPos, const Point& rMkPt,
                     const SwPosition &rPtPos, const Point& rPtPt );
-    virtual ~SwShellTableCrsr();
+    virtual ~SwShellTableCursor();
 
     virtual void FillRects() override;   // For table and normal cursor.
     /// @see SwSelPaintRects::FillStartEnd(), override for table selections.

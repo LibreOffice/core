@@ -29,7 +29,7 @@
 class SfxPoolItem;
 class SwClient;
 class SwDoc;
-class SwUnoTableCrsr;
+class SwUnoTableCursor;
 
 typedef ::cppu::WeakImplHelper
 <   css::lang::XServiceInfo
@@ -79,7 +79,7 @@ private:
 
 public:
         UnoActionRemoveContext(SwDoc *const pDoc);
-        UnoActionRemoveContext(SwUnoTableCrsr const& rCursor);
+        UnoActionRemoveContext(SwUnoTableCursor const& rCursor);
         ~UnoActionRemoveContext();
 };
 

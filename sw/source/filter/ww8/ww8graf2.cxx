@@ -366,7 +366,7 @@ SwFlyFrameFormat* SwWW8ImplReader::MakeGrafNotInContent(const WW8PicDesc& rPD,
     aAnchor.SetAnchor(m_pPaM->GetPoint());
     aFlySet.Put(aAnchor);
 
-    aFlySet.Put( SwFormatFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
+    aFlySet.Put( SwFormatFrameSize( ATT_FIX_SIZE, nWidth, nHeight ) );
 
     SwFlyFrameFormat* pFlyFormat = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, rFileName, OUString(), pGraph,
         &aFlySet, &rGrfSet, nullptr);
@@ -375,7 +375,7 @@ SwFlyFrameFormat* SwWW8ImplReader::MakeGrafNotInContent(const WW8PicDesc& rPD,
     if (m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
         (FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()))
     {
-        pFlyFormat->MakeFrms();
+        pFlyFormat->MakeFrames();
     }
     return pFlyFormat;
 }
@@ -602,7 +602,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
                     // Set the size from the WinWord PIC-structure as graphic
                     // size
-                    aAttrSet.Put( SwFormatFrmSize( ATT_FIX_SIZE, aPD.nWidth,
+                    aAttrSet.Put( SwFormatFrameSize( ATT_FIX_SIZE, aPD.nWidth,
                         aPD.nHeight ) );
                 }
 

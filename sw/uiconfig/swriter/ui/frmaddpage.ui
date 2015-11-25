@@ -23,7 +23,7 @@
       </row>
     </data>
   </object>
-  <object class="GtkBox" id="FrmAddPage">
+  <object class="GtkBox" id="FrameAddPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>

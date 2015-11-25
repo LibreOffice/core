@@ -110,17 +110,17 @@ namespace
     }
 
     /*
-     Utility to convert a SwPosFlyFrms into a simple vector of ww8::Frames
+     Utility to convert a SwPosFlyFrames into a simple vector of ww8::Frames
 
      The crucial thing is that a ww8::Frame always has an anchor which
      points to some content in the document. This is a requirement of exporting
      to Word
     */
-    ww8::Frames SwPosFlyFrmsToFrames(const SwPosFlyFrms &rFlys)
+    ww8::Frames SwPosFlyFramesToFrames(const SwPosFlyFrames &rFlys)
     {
         ww8::Frames aRet;
 
-        for(SwPosFlyFrms::const_iterator aIter(rFlys.begin()); aIter != rFlys.end(); ++aIter)
+        for(SwPosFlyFrames::const_iterator aIter(rFlys.begin()); aIter != rFlys.end(); ++aIter)
         {
             const SwFrameFormat &rEntry = (*aIter)->GetFormat();
 
@@ -165,7 +165,7 @@ namespace ww8
 {
     //For i120928,size conversion before exporting graphic of bullet
     Frame::Frame(const Graphic &rGrf, const SwPosition &rPos)
-        : mpFlyFrm(nullptr)
+        : mpFlyFrame(nullptr)
         , maPos(rPos)
         , maSize()
         , maLayoutSize()
@@ -190,7 +190,7 @@ namespace ww8
     }
 
     Frame::Frame(const SwFrameFormat &rFormat, const SwPosition &rPos)
-        : mpFlyFrm(&rFormat)
+        : mpFlyFrame(&rFormat)
         , maPos(rPos)
         , maSize()
         , maLayoutSize() // #i43447#
@@ -217,7 +217,7 @@ namespace ww8
                         // header/footer) - thus, get the values from the format.
                         if ( aLayRect.IsEmpty() )
                         {
-                            aRect.SetSize( rFormat.GetFrmSize().GetSize() );
+                            aRect.SetSize( rFormat.GetFrameSize().GetSize() );
                         }
                         maLayoutSize = aRect.GetSize();
                     }
@@ -524,8 +524,8 @@ namespace sw
            */
         ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM /*, bool bAll*/)
         {
-            SwPosFlyFrms aFlys(rDoc.GetAllFlyFormats(pPaM, true));
-            ww8::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
+            SwPosFlyFrames aFlys(rDoc.GetAllFlyFormats(pPaM, true));
+            ww8::Frames aRet(SwPosFlyFramesToFrames(aFlys));
             return aRet;
         }
 
@@ -844,7 +844,7 @@ namespace sw
         {
         }
 
-        void InsertedTablesManager::DelAndMakeTableFrms()
+        void InsertedTablesManager::DelAndMakeTableFrames()
         {
             if (!mbHasRoot)
                 return;
@@ -862,8 +862,8 @@ namespace sw
                     if (pFrameFormat != nullptr)
                     {
                         SwNodeIndex *pIndex = aIter->second;
-                        pTable->DelFrms();
-                        pTable->MakeFrms(pIndex);
+                        pTable->DelFrames();
+                        pTable->MakeFrames(pIndex);
                     }
                 }
             }

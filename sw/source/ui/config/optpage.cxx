@@ -1311,7 +1311,7 @@ void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
         SetWrtShell(pWrtSh->GetValue());
 }
 
-SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
+SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
                                                     const SfxItemSet& rSet )
    : SfxTabPage(pParent, "OptFormatAidsPage",
                 "modules/swriter/ui/optformataidspage.ui", &rSet),
@@ -1336,7 +1336,7 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
     get(m_pFillSpaceRB, "fillspace");
 
     get(m_pCursorProtFrame, "crsrprotframe");
-    get(m_pCrsrInProtCB, "cursorinprot");
+    get(m_pCursorInProtCB, "cursorinprot");
     get(m_pIgnoreProtCB, "ignoreprot");
 
     get(m_pMathBaselineAlignmentCB, "mathbaseline");
@@ -1370,17 +1370,17 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
         m_pFillSpaceRB->Hide();
 
         m_pCursorProtFrame->Hide();
-        m_pCrsrInProtCB->Hide();
+        m_pCursorInProtCB->Hide();
         m_pIgnoreProtCB->Hide();
     }
 }
 
-SwShdwCrsrOptionsTabPage::~SwShdwCrsrOptionsTabPage()
+SwShdwCursorOptionsTabPage::~SwShdwCursorOptionsTabPage()
 {
     disposeOnce();
 }
 
-void SwShdwCrsrOptionsTabPage::dispose()
+void SwShdwCursorOptionsTabPage::dispose()
 {
     m_pParaCB.clear();
     m_pSHyphCB.clear();
@@ -1398,25 +1398,25 @@ void SwShdwCrsrOptionsTabPage::dispose()
     m_pFillTabRB.clear();
     m_pFillSpaceRB.clear();
     m_pCursorProtFrame.clear();
-    m_pCrsrInProtCB.clear();
+    m_pCursorInProtCB.clear();
     m_pIgnoreProtCB.clear();
     m_pMathBaselineAlignmentCB.clear();
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwShdwCrsrOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
-    return VclPtr<SwShdwCrsrOptionsTabPage>::Create( pParent, *rSet );
+    return VclPtr<SwShdwCursorOptionsTabPage>::Create( pParent, *rSet );
 }
 
-void SwShdwCrsrOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
+void SwShdwCursorOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
 {
     const SwWrtShellItem* pWrtSh = aSet.GetItem<SwWrtShellItem>(SID_WRT_SHELL, false);
     if (pWrtSh)
         SetWrtShell(pWrtSh->GetValue());
 }
 
-bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
+bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 {
     SwShadowCursorItem aOpt;
     aOpt.SetOn( m_pOnOffCB->IsChecked() );
@@ -1447,9 +1447,9 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
         bRet |= m_pMathBaselineAlignmentCB->IsValueChangedFromSaved();
     }
 
-    if( m_pCrsrInProtCB->IsValueChangedFromSaved())
+    if( m_pCursorInProtCB->IsValueChangedFromSaved())
     {
-        rSet->Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_pCrsrInProtCB->IsChecked()));
+        rSet->Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_pCursorInProtCB->IsChecked()));
         bRet = true;
     }
 
@@ -1483,7 +1483,7 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     return bRet;
 }
 
-void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
+void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem = nullptr;
 
@@ -1506,8 +1506,8 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
     }
 
     if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_CRSR_IN_PROTECTED, false, &pItem ))
-        m_pCrsrInProtCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
-    m_pCrsrInProtCB->SaveValue();
+        m_pCursorInProtCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+    m_pCursorInProtCB->SaveValue();
 
     if (rSet->GetItemState(FN_PARAM_IGNORE_PROTECTED, false, &pItem) == SfxItemState::SET)
         m_pIgnoreProtCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());

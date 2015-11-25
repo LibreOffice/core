@@ -62,7 +62,7 @@ class SwASCIIParser
     void InsertText( const OUString& rStr );
 
 public:
-    SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
+    SwASCIIParser( SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
                             bool bReadNewDoc, const SwAsciiOptions& rOpts );
     ~SwASCIIParser();
 
@@ -88,12 +88,12 @@ sal_uLong AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OU
     return nRet;
 }
 
-SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
+SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
     bool bReadNewDoc, const SwAsciiOptions& rOpts)
     : pDoc(pD), rInput(rIn), rOpt(rOpts), nFileSize(0), nScript(SvtScriptType::NONE)
     , bNewDoc(bReadNewDoc)
 {
-    pPam = new SwPaM( *rCrsr.GetPoint() );
+    pPam = new SwPaM( *rCursor.GetPoint() );
     pArr = new sal_Char [ ASC_BUFFLEN + 2 ];
 
     pItemSet = new SfxItemSet( pDoc->GetAttrPool(),

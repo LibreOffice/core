@@ -25,7 +25,7 @@
 
 class AbstractSvxPostItDialog;
 class SwFieldMgr;
-class SwFlyFrmAttrMgr;
+class SwFlyFrameAttrMgr;
 class SvxHyperlinkItem;
 
 class SW_DLLPUBLIC SwTextShell: public SwBaseShell
@@ -80,7 +80,7 @@ public:
              SwTextShell(SwView &rView);
     virtual ~SwTextShell();
     /// Create item set for the insert frame dialog.
-    SfxItemSet CreateInsertFrameItemSet(SwFlyFrmAttrMgr& rMgr);
+    SfxItemSet CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr);
 };
 
 void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
