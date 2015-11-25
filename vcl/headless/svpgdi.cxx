@@ -156,12 +156,6 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
         return false;
     }
 
-    if (rTR.mnSrcWidth != rTR.mnDestWidth || rTR.mnSrcHeight != rTR.mnDestHeight)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap scale case");
-        return false;
-    }
-
     cairo_surface_t* source = nullptr;
 
     const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSourceBitmap);
@@ -259,13 +253,15 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
 
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
 
-    cairo_set_source_surface(cr, source, rTR.mnDestX - rTR.mnSrcX, rTR.mnDestY - rTR.mnSrcY);
-
     if (xDamageTracker)
         extents = getFillDamage(cr);
 
     cairo_clip(cr);
-    cairo_mask_surface(cr, mask, rTR.mnDestX - rTR.mnSrcX, rTR.mnDestY - rTR.mnSrcY);
+
+    cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
+    cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
+    cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
+    cairo_mask_surface(cr, mask, -rTR.mnSrcX, -rTR.mnSrcY);
 
     cairo_surface_flush(cairo_get_target(cr));
     cairo_surface_destroy(mask);
