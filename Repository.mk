@@ -88,6 +88,7 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
+	minidump_upload \
 	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
 	soffice_bin \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \

@@ -33,6 +33,7 @@ ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice_bin \
     Executable_unopkg_bin \
+    Executable_minidump_upload \
     Library_migrationoo2 \
     Library_migrationoo3 \
     Library_unopkgapp \
