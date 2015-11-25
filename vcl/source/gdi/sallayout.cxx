@@ -1865,9 +1865,12 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
         fUnitMul /= rLayout.GetUnitsPerPixel();
         for( int i = 0; i < nCharCount; ++i )
         {
-            DeviceCoordinate w = pCharWidths[ i + nCharCount ];
-            w = (DeviceCoordinate)(w * fUnitMul + 0.5);
-            pCharWidths[ i ] += w;
+            if( pCharWidths[ i ] == 0 )
+            {
+                DeviceCoordinate w = pCharWidths[ i + nCharCount ];
+                w = (DeviceCoordinate)(w * fUnitMul + 0.5);
+                pCharWidths[ i ] = w;
+            }
         }
     }
 
