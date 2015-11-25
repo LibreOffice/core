@@ -47,6 +47,7 @@
 class GlyphCache;
 class ServerFont;
 typedef struct _cairo cairo_t;
+typedef struct _cairo_surface cairo_surface_t;
 
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 {
@@ -214,6 +215,7 @@ public:
 #endif // ENABLE_CAIRO_CANVAS
 
     cairo_t*                getCairoContext() const;
+    static cairo_surface_t* createCairoSurface(const basebmp::BitmapDeviceSharedPtr& rBuffer);
     static cairo_t*         createCairoContext(const basebmp::BitmapDeviceSharedPtr& rBuffer);
     void                    clipRegion(cairo_t* cr);
 };
