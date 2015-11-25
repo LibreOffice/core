@@ -1317,18 +1317,20 @@ SwSbxValue SwCalc::Prim()
         break;
 
     case CALC_NAME:
-        switch(SwCalcOper nOper = GetToken())
+        switch(SwCalcOper eOper = GetToken())
         {
             case CALC_ASSIGN:
-            {
-                SwCalcExp* n = VarInsert(aVarName);
-                GetToken();
-                nErg = n->nValue = Expr();
-            }
-            break;
+                {
+                    SwCalcExp* n = VarInsert(aVarName);
+                    GetToken();
+                    nErg = n->nValue = Expr();
+                }
+                break;
             default:
                 nErg = VarLook(aVarName)->nValue;
-                if (nErg.IsVoidValue() && (nOper == CALC_LP))
+                // Explicitly disallow unknown function names (followed by "("),
+                // allow unknown variable names (equal to zero)
+                if (nErg.IsVoidValue() && (eOper == CALC_LP))
                     eError = CALC_SYNTAX;
                 else
                     bChkPow = true;
