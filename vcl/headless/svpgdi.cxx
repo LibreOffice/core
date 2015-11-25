@@ -64,6 +64,62 @@ rDevice
     #endif
 }
 
+namespace
+{
+#if CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR < 10
+    struct cairo_rectangle_int_t
+    {
+        double x;
+        double y;
+        double width;
+        double height;
+    };
+#endif
+
+    cairo_rectangle_int_t getFillDamage(cairo_t* cr)
+    {
+        cairo_rectangle_int_t extents;
+        double x1, y1, x2, y2;
+
+        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+#if CAIRO_VERSION_MAJOR > 1 || (CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 10)
+        cairo_region_t *region = cairo_region_create_rectangle(&extents);
+
+        cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        cairo_region_intersect_rectangle(region, &extents);
+
+        cairo_region_get_extents(region, &extents);
+        cairo_region_destroy(region);
+#endif
+
+        return extents;
+    }
+
+    cairo_rectangle_int_t getStrokeDamage(cairo_t* cr)
+    {
+        cairo_rectangle_int_t extents;
+        double x1, y1, x2, y2;
+
+        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+#if CAIRO_VERSION_MAJOR > 1 || (CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 10)
+        cairo_region_t *region = cairo_region_create_rectangle(&extents);
+
+        cairo_stroke_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        cairo_region_intersect_rectangle(region, &extents);
+
+        cairo_region_get_extents(region, &extents);
+        cairo_region_destroy(region);
+#endif
+
+        return extents;
+    }
+
+}
+
 #ifndef IOS
 
 bool SvpSalGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& /*rBitmap*/ )
@@ -78,11 +134,134 @@ bool SvpSalGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, cons
     return false;
 }
 
-bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect&, const SalBitmap& /*rSourceBitmap*/, const SalBitmap& /*rAlphaBitmap*/ )
+bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap )
 {
-    // TODO(P3) implement alpha blending
-    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
-    return false;
+    bool bRet = false;
+    (void)rTR; (void)rSourceBitmap; (void)rAlphaBitmap;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+    if (rAlphaBitmap.GetBitCount() != 8 && rAlphaBitmap.GetBitCount() != 1)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap alpha depth case: " << rAlphaBitmap.GetBitCount());
+        return false;
+    }
+
+    if (rTR.mnSrcWidth != rTR.mnDestWidth || rTR.mnSrcHeight != rTR.mnDestHeight)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap scale case");
+        return false;
+    }
+
+    cairo_surface_t* source = nullptr;
+
+    const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSourceBitmap);
+    const basebmp::BitmapDeviceSharedPtr& rSrcBmp = rSrc.getBitmap();
+
+    SvpSalBitmap aTmpBmp;
+    if (rSourceBitmap.GetBitCount() != 32)
+    {
+        //big stupid copy here
+        static bool bWarnedOnce;
+        SAL_WARN_IF(!bWarnedOnce, "vcl.gdi", "non default depth bitmap, slow convert, upscale the input");
+        bWarnedOnce = true;
+        Size aSize = rSourceBitmap.GetSize();
+        aTmpBmp.Create(aSize, 0, BitmapPalette());
+        assert(aTmpBmp.GetBitCount() == 32);
+        basegfx::B2IBox aRect(0, 0, aSize.Width(), aSize.Height());
+        const basebmp::BitmapDeviceSharedPtr& rTmpSrc = aTmpBmp.getBitmap();
+        rTmpSrc->drawBitmap(rSrcBmp, aRect, aRect, basebmp::DrawMode::Paint );
+        source = createCairoSurface(rTmpSrc);
+    }
+    else
+        source = createCairoSurface(rSrcBmp);
+
+    if (!source)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
+        return false;
+    }
+
+    const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
+    const basebmp::BitmapDeviceSharedPtr& rMaskBmp = rMask.getBitmap();
+
+    cairo_surface_t *mask = nullptr;
+
+    unsigned char* pAlphaBits = nullptr;
+
+    basegfx::B2IVector size = rMaskBmp->getSize();
+    sal_Int32 nStride = rMaskBmp->getScanlineStride();
+    basebmp::RawMemorySharedArray data = rMaskBmp->getBuffer();
+
+    if (rAlphaBitmap.GetBitCount() == 8)
+    {
+        // the alpha values need to be inverted for Cairo
+        // so big stupid copy and invert here
+        const int nImageSize = size.getY() * nStride;
+        const unsigned char* pSrcBits = data.get();
+        pAlphaBits = new unsigned char[nImageSize];
+        memcpy(pAlphaBits, pSrcBits, nImageSize);
+
+        // TODO: make upper layers use standard alpha
+        long* pLDst = reinterpret_cast<long*>(pAlphaBits);
+        for( int i = nImageSize/sizeof(long); --i >= 0; ++pLDst )
+            *pLDst = ~*pLDst;
+
+        char* pCDst = reinterpret_cast<char*>(pLDst);
+        for( int i = nImageSize & (sizeof(long)-1); --i >= 0; ++pCDst )
+            *pCDst = ~*pCDst;
+
+        mask = cairo_image_surface_create_for_data(pAlphaBits,
+                                        CAIRO_FORMAT_A8,
+                                        size.getX(), size.getY(),
+                                        nStride);
+    }
+    else
+    {
+        mask = cairo_image_surface_create_for_data(data.get(),
+                                        CAIRO_FORMAT_A1,
+                                        size.getX(), size.getY(),
+                                        nStride);
+    }
+
+    if (!mask)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
+        cairo_surface_destroy(source);
+        delete[] pAlphaBits;
+        return false;
+    }
+
+    cairo_t* cr = getCairoContext();
+    assert(cr && m_aDevice->isTopDown());
+
+    clipRegion(cr);
+
+    cairo_rectangle_int_t extents;
+    basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
+
+    cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
+
+    cairo_set_source_surface(cr, source, rTR.mnDestX - rTR.mnSrcX, rTR.mnDestY - rTR.mnSrcY);
+
+    if (xDamageTracker)
+        extents = getFillDamage(cr);
+
+    cairo_clip(cr);
+    cairo_mask_surface(cr, mask, rTR.mnDestX - rTR.mnSrcX, rTR.mnDestY - rTR.mnSrcY);
+
+    cairo_surface_flush(cairo_get_target(cr));
+    cairo_surface_destroy(mask);
+    cairo_surface_destroy(source);
+    delete[] pAlphaBits;
+    cairo_destroy(cr); // unref
+
+    if (xDamageTracker)
+    {
+        xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
+                                                extents.y + extents.height));
+    }
+    bRet = true;
+#endif
+    return bRet;
 }
 
 bool SvpSalGraphics::drawTransformedBitmap(
@@ -141,61 +320,6 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
         }
         cairo_clip(cr);
     }
-}
-namespace
-{
-#if CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR < 10
-    struct cairo_rectangle_int_t
-    {
-        double x;
-        double y;
-        double width;
-        double height;
-    };
-#endif
-
-    cairo_rectangle_int_t getFillDamage(cairo_t* cr)
-    {
-        cairo_rectangle_int_t extents;
-        double x1, y1, x2, y2;
-
-        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
-#if CAIRO_VERSION_MAJOR > 1 || (CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 10)
-        cairo_region_t *region = cairo_region_create_rectangle(&extents);
-
-        cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
-        cairo_region_intersect_rectangle(region, &extents);
-
-        cairo_region_get_extents(region, &extents);
-        cairo_region_destroy(region);
-#endif
-
-        return extents;
-    }
-
-    cairo_rectangle_int_t getStrokeDamage(cairo_t* cr)
-    {
-        cairo_rectangle_int_t extents;
-        double x1, y1, x2, y2;
-
-        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
-#if CAIRO_VERSION_MAJOR > 1 || (CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 10)
-        cairo_region_t *region = cairo_region_create_rectangle(&extents);
-
-        cairo_stroke_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
-        cairo_region_intersect_rectangle(region, &extents);
-
-        cairo_region_get_extents(region, &extents);
-        cairo_region_destroy(region);
-#endif
-
-        return extents;
-    }
-
 }
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
@@ -1086,7 +1210,7 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
     return false;
 }
 
-cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+cairo_surface_t* SvpSalGraphics::createCairoSurface(const basebmp::BitmapDeviceSharedPtr &rBuffer)
 {
     if (!isCairoCompatible(rBuffer))
         return nullptr;
@@ -1105,6 +1229,14 @@ cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr
                                         nFormat,
                                         size.getX(), size.getY(),
                                         nStride);
+    return target;
+}
+
+cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+{
+    cairo_surface_t *target = createCairoSurface(rBuffer);
+    if (!target)
+        return nullptr;
     cairo_t* cr = cairo_create(target);
     cairo_surface_destroy(target);
     return cr;
