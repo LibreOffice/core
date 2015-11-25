@@ -122,14 +122,8 @@ struct SystemMenuData
 {
 #if defined( WNT )
     HMENU           hMenu;          // the menu handle of the menu bar
-#elif defined( MACOSX )
+#else
     // Nothing
-#elif defined( ANDROID )
-    // Nothing
-#elif defined( IOS )
-    // Nothing
-#elif defined( UNX )
-    long            aMenu;          // ???
 #endif
 };
 

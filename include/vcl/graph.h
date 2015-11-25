@@ -39,11 +39,9 @@ protected:
 
     OUString        maUpperName;
     ReaderData*     mpReaderData;
-    bool            mbIsReading;
 
                     GraphicReader() :
-                        mpReaderData( NULL ),
-                        mbIsReading( sal_False ) {}
+                        mpReaderData( NULL ) {}
 
 public:
 
