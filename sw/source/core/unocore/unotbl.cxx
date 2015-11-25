@@ -795,6 +795,8 @@ void SAL_CALL SwXCell::acquire(  ) throw()
 
 void SAL_CALL SwXCell::release(  ) throw()
 {
+    SolarMutexGuard aGuard;
+
     SwXCellBaseClass::release();
 }
 
@@ -1430,7 +1432,27 @@ OUString SwXTextTableCursor::getImplementationName() throw( uno::RuntimeExceptio
 sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
     { return cppu::supportsService(this, rServiceName); }
 
-IMPLEMENT_FORWARD_XINTERFACE2(SwXTextTableCursor,SwXTextTableCursor_Base,OTextCursorHelper)
+void SwXTextTableCursor::acquire() throw()
+{
+    SwXTextTableCursor_Base::release();
+}
+
+void SwXTextTableCursor::release() throw()
+{
+    SolarMutexGuard aGuard;
+    SwXTextTableCursor_Base::release();
+}
+
+css::uno::Any SAL_CALL
+SwXTextTableCursor::queryInterface( const css::uno::Type& _rType )
+        throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Any aReturn = SwXTextTableCursor_Base::queryInterface( _rType );
+    if ( !aReturn.hasValue() )
+        aReturn = OTextCursorHelper::queryInterface( _rType );
+    return aReturn;
+}
+
 const SwPaM*        SwXTextTableCursor::GetPaM() const  { return &GetCursor(); }
 SwPaM*              SwXTextTableCursor::GetPaM()        { return &GetCursor(); }
 const SwDoc*        SwXTextTableCursor::GetDoc() const  { return GetFrameFormat()->GetDoc(); }
