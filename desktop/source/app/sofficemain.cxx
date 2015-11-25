@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_version.h>
 #include <config_folders.h>
 
 #include <desktop/dllapi.h>
@@ -74,7 +75,7 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, 
 {
     // send the minidump to the server (not yet implemented)
     SAL_WARN("crashreport", "minidump generated: " << descriptor.path());
-    OString aCommand = getLibDir().copy(7) + "/minidump_upload -p LibreOffice -v \"5.1.0.0\" ";
+    OString aCommand = getLibDir().copy(7) + "/minidump_upload -p LibreOffice -v \"" + LIBO_VERSION_DOTTED + "\" ";
     aCommand = aCommand + descriptor.path() + " " + "http://libreofficecrash.org/submit";
     int retVal = std::system(aCommand.getStr());
     SAL_WARN_IF(retVal != 0, "crashreport", "Failed to upload minidump. Error Code: " << retVal);
