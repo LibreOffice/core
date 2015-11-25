@@ -62,14 +62,14 @@
         {                                                                   \
             Identifier = FN_EDIT_FIELD ;                                    \
             HelpId = CMD_FN_EDIT_FIELD ;                                        \
-            Text [ en-US ] = "Fields..." ;                             \
+            Text [ en-US ] = "Edit Fields..." ;                             \
     };
 #define _MN_EDIT_FOOTNOTE                                                    \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_EDIT_FOOTNOTE ;                                 \
             HelpId = CMD_FN_EDIT_FOOTNOTE ;                                     \
-            Text [ en-US ] = "Footnote/Endnote~..." ;                          \
+            Text [ en-US ] = "Edit Footnote or Endnote~..." ;                          \
         };
     #define _MN_EDIT_IDX_ENTRY_DLG                                          \
         MenuItem                                                            \
@@ -84,7 +84,7 @@
         {                                                                   \
             Identifier = FN_EDIT_AUTH_ENTRY_DLG ;                           \
             HelpId = CMD_FN_EDIT_AUTH_ENTRY_DLG ;                               \
-            Text [ en-US ] = "~Bibliography Entry...";                  \
+            Text [ en-US ] = "Edit ~Bibliography Entry...";                  \
     };                                                                  \
         SEPARATOR ;
 
@@ -132,14 +132,6 @@
     SEPARATOR ;                                                         \
     _MN_EDIT_OPEN_HYPERLINK                                             \
     _MN_EDIT_OPEN_SMARTTAGMENU
-
-#define MN_RESET\
-    MenuItem\
-    {\
-        Identifier = FN_FORMAT_RESET ; \
-        HelpId = CMD_FN_FORMAT_RESET ; \
-        Text [ en-US ] = "Clear ~Direct Formatting" ; \
-    };
 
 #define _NUMBERING_RELATED_MENU \
         SEPARATOR ;                                                         \
@@ -200,12 +192,9 @@
         MENU_PASTE_SPECIAL                                                  \
         _NUMBERING_RELATED_MENU                                             \
         SEPARATOR ;                                                         \
-        MN_RESET                                                            \
-        SEPARATOR ;                                                         \
         MN_TXT                                                              \
         MN_NUMBERING                                                        \
         MN_PAGE                                                             \
-        ITEM_TRANSLITERATE_MENU                                             \
         SEPARATOR ;
 
 // not in Writer/Web
@@ -248,6 +237,12 @@
     };
 
 #define MN_TABLE \
+    MenuItem\
+    {\
+        Identifier = FN_TABLE_UNSET_READ_ONLY_CELLS ; \
+        HelpId = CMD_FN_TABLE_UNSET_READ_ONLY_CELLS ; \
+        Text [ en-US ] = "~Unprotect Cells" ; \
+    };\
     MenuItem\
     {\
        Identifier = DUMMY ; \
@@ -325,78 +320,9 @@
     };\
     MenuItem\
     {\
-       Identifier = DUMMY + 2; \
-       Command = ".uno:TableSelectMenu" ; \
-       Text [ en-US ] = "~Select" ; \
-       SubMenu = Menu\
-       {\
-           ItemList =\
-           {\
-                    MenuItem\
-                    {\
-                        Identifier = FN_TABLE_SELECT_ROW ; \
-                        HelpId = CMD_FN_TABLE_SELECT_ROW ; \
-                        Text [ en-US ] = "~Rows" ; \
-                    };\
-                    MenuItem\
-                    {\
-                        Identifier = FN_TABLE_SELECT_COL ; \
-                        HelpId = CMD_FN_TABLE_SELECT_COL ; \
-                        Text [ en-US ] = "~Columns" ; \
-                    };\
-                    MenuItem\
-                    {\
-                        Identifier = FN_TABLE_SELECT_ALL ; \
-                        Command = ".uno:SelectTable" ; \
-                        Text [ en-US ] = "~Table" ; \
-                    };\
-                    MenuItem\
-                    {\
-                        Identifier = FN_TABLE_SELECT_CELL ; \
-                        Command = ".uno:EntireCell" ; \
-                        Text [ en-US ] = "C~ell" ; \
-                    };\
-           };\
-       };\
-    };\
-    MenuItem\
-    {\
         Identifier = FN_TABLE_MERGE_CELLS ; \
         HelpId = CMD_FN_TABLE_MERGE_CELLS ; \
-        Text [ en-US ] = "~Merge" ; \
-    };\
-    MenuItem\
-    {\
-        Identifier = MN_FORMAT_ALGN ; \
-        Command = ".uno:AlignTextMenu" ; \
-        Text [ en-US ] = "A~lignment" ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MenuItem\
-                {\
-                    RadioCheck = TRUE ; \
-                    Identifier = SID_TABLE_VERT_NONE ; \
-                    HelpId = CMD_SID_TABLE_VERT_NONE ; \
-                    Text [ en-US ] = "~Top" ; \
-                };\
-                MenuItem\
-                {\
-                    RadioCheck = TRUE ; \
-                    Identifier = SID_TABLE_VERT_CENTER ; \
-                    HelpId = CMD_SID_TABLE_VERT_CENTER ; \
-                    Text [ en-US ] = "C~enter" ; \
-                };\
-                MenuItem\
-                {\
-                    RadioCheck = TRUE ; \
-                    Identifier = SID_TABLE_VERT_BOTTOM ; \
-                    HelpId = CMD_SID_TABLE_VERT_BOTTOM ; \
-                    Text [ en-US ] = "~Bottom" ; \
-                };\
-            };\
-        };\
+        Text [ en-US ] = "~Merge Cells" ; \
     };\
     MenuItem\
     {\
@@ -499,7 +425,7 @@
     {\
         Identifier = FN_FORMAT_FRAME_DLG ; \
         HelpId = CMD_FN_FORMAT_FRAME_DLG ; \
-        Text [ en-US ] = "~Frame..." ; \
+        Text [ en-US ] = "Format ~Frame..." ; \
     };
 
 #define MN_DRAW1 \
@@ -595,7 +521,6 @@
             };\
         };\
     };\
-    MN_ALIGN\
 
 #define MN_DRAW6 \
     MenuItem\
@@ -707,18 +632,8 @@ Menu MN_TAB_POPUPMENU
         SEPARATOR ;
         MN_TABLE
         SEPARATOR ;
-        MN_RESET
-        SEPARATOR ;
-        MenuItem
-        {
-            ITEM_FORMAT_CHAR_DLG
-        };
-        MenuItem
-        {
-            ITEM_FORMAT_PARA_DLG
-        };
+        MN_TXT
         MN_NUMBERING
-        ITEM_TRANSLITERATE_MENU
         SEPARATOR ;
         _DEFAULT_TEXT_EDIT_ELEMENTS
     };
@@ -878,7 +793,7 @@ String MN_DRAW_POPUPMENU
                 {\
                     Identifier = FN_DRAW_WRAP_DLG ; \
                     HelpId = CMD_FN_DRAW_WRAP_DLG ; \
-                    Text [ en-US ] = "~Edit..." ; \
+                    Text [ en-US ] = "~Wrap Properties..." ; \
                 };\
             };\
         };\
@@ -948,24 +863,30 @@ Menu MN_DRAW_POPUPMENU
 {
     ItemList =
     {
-        MN_DRAW1
-        MN_DRWTXTATTR
         MenuItem
         {
             ITEM_FORMAT_ATTR_TRANSFORM
         };
-
+        MN_DRAW1
         SEPARATOR ;
-        MN_TITLE_DESCRIPTION_SHAPE
-        MN_NAME_SHAPE
 
-        SEPARATOR ;
-        MN_DRAW5
-        MN_WRAP_DRAW
-        MN_ANCHOR
+        MenuItem
+        {
+            Identifier = SID_BEZIER_EDIT;
+            HelpId = CMD_SID_BEZIER_EDIT;
+            Text [ en-US ] = "Edit Line ~Points";
+        };
         MN_FRM_CAPTION_ITEM
         SEPARATOR ;
+
+        MN_ANCHOR
+        MN_WRAP_DRAW
+        MN_DRAW5
+        SEPARATOR ;
+        MN_ALIGN
         MN_DRAW3
+        SEPARATOR ;
+
         MenuItem
         {
             Identifier = FN_ADD_TEXT_BOX;
@@ -1021,9 +942,7 @@ Menu MN_DRWTXT_POPUPMENU
     {
         MENU_PASTE_SPECIAL
         SEPARATOR ;
-        MN_RESET
-        SEPARATOR ;
-        ITEM_TRANSLITERATE_MENU
+        MN_DRWTXTATTR
         SEPARATOR ;
         MN_DRWTXT
         MN_FRM_CAPTION_ITEM
@@ -1153,21 +1072,20 @@ String MN_GRF_POPUPMENU
     };\
 
 #define MN_ALIGN_FRAME \
-    MN_ARRANGE_FRAME \
+    MN_ANCHOR \
+    MN_MOUSE_FRAME_WITH_CONTOUR \
     MN_ALIGNMENT_FRAME \
-    MN_ANCHOR
+    MN_ARRANGE_FRAME
 
 Menu MN_GRF_POPUPMENU
 {
     ItemList =
     {
+        MenuItem { ITEM_OBJECT_CROP };
         MenuItem { ITEM_EXTERNAL_EDIT };
         MenuItem { ITEM_CHANGE_PICTURE };
         MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_SAVE_GRAPHIC };
-        SEPARATOR ;
-
-        MenuItem { ITEM_OBJECT_CROP };
         SEPARATOR ;
 
         MN_ANCHOR
@@ -1197,17 +1115,15 @@ Menu MN_OLE_POPUPMENU
     ItemList =
     {
         MN_ALIGN_FRAME
-        MN_MOUSE_FRAME_WITH_CONTOUR
         SEPARATOR ;
-        MN_TITLE_DESCRIPTION_SHAPE
-        SEPARATOR ;
+
+        MN_FRM_CAPTION_ITEM
         MenuItem
         {
             Identifier = FN_FORMAT_FRAME_DLG ;
             HelpId = CMD_FN_FORMAT_FRAME_DLG ;
-            Text [ en-US ] = "Object..." ;
+            Text [ en-US ] = "Format ~Object..." ;
         };
-        MN_FRM_CAPTION_ITEM
     };
 };
 
@@ -1223,12 +1139,10 @@ Menu MN_FRM_POPUPMENU
     ItemList =
     {
         MN_ALIGN_FRAME
-        MN_MOUSE_FRAME_WITHOUT_CONTOUR
         SEPARATOR ;
-        MN_TITLE_DESCRIPTION_SHAPE
-        SEPARATOR ;
-        MN_FRM
+
         MN_FRM_CAPTION_ITEM
+        MN_FRM
     };
 };
 
