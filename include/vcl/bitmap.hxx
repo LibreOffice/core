@@ -152,33 +152,32 @@ class VCL_DLLPUBLIC BmpFilterParam
 {
 public:
 
-    BmpFilterParam( sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BMP_FILTER_UNKNOWN ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ) {}
+    BmpFilterParam() :
+        meFilter( BMP_FILTER_UNKNOWN ), mnProgressStart( 0 ), mnProgressEnd( 0 ) {}
 
-    BmpFilterParam( sal_uInt8 cSolarGreyThreshold, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BMP_FILTER_SOLARIZE ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
+    BmpFilterParam( sal_uInt8 cSolarGreyThreshold) :
+        meFilter( BMP_FILTER_SOLARIZE ), mnProgressStart( 0 ), mnProgressEnd( 0 ),
         mcSolarGreyThreshold( cSolarGreyThreshold ) {}
 
-    BmpFilterParam( double nRadius, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BMP_FILTER_SMOOTH ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
+    BmpFilterParam( double nRadius) :
+        meFilter( BMP_FILTER_SMOOTH ), mnProgressStart( 0 ), mnProgressEnd( 0 ),
         mnRadius( nRadius ) {}
 
-    BmpFilterParam( sal_uInt16 nSepiaPercent, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BMP_FILTER_SEPIA ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
+    BmpFilterParam( sal_uInt16 nSepiaPercent) :
+        meFilter( BMP_FILTER_SEPIA ), mnProgressStart( 0 ), mnProgressEnd( 0 ),
         mnSepiaPercent( nSepiaPercent )
         {
             assert(nSepiaPercent<=100);
         }
 
-    BmpFilterParam( const Size& rMosaicTileSize, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BMP_FILTER_MOSAIC ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd )
+    BmpFilterParam( const Size& rMosaicTileSize) :
+        meFilter( BMP_FILTER_MOSAIC ), mnProgressStart( 0 ), mnProgressEnd( 0 )
         {
             maMosaicTileSize.mnTileWidth = rMosaicTileSize.Width();
             maMosaicTileSize.mnTileHeight= rMosaicTileSize.Height();
         }
-    BmpFilterParam( sal_uInt16 nEmbossAzimuthAngle100, sal_uInt16 nEmbossElevationAngle100,
-                    sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
-        meFilter( BMP_FILTER_EMBOSS_GREY ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd )
+    BmpFilterParam( sal_uInt16 nEmbossAzimuthAngle100, sal_uInt16 nEmbossElevationAngle100) :
+        meFilter( BMP_FILTER_EMBOSS_GREY ), mnProgressStart( 0 ), mnProgressEnd( 0 )
         {
             maEmbossAngles.mnAzimuthAngle100 = nEmbossAzimuthAngle100;
             maEmbossAngles.mnElevationAngle100 = nEmbossElevationAngle100;
