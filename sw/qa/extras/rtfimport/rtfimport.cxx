@@ -2383,6 +2383,79 @@ DECLARE_RTFIMPORT_TEST(testTdf54584, "tdf54584.rtf")
                                     xFields->nextElement());
 }
 
+DECLARE_RTFIMPORT_TEST(testLndscpsxn, "lndscpsxn.rtf")
+{
+    // Check landscape flag.
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+
+    uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
+
+    // get a page cursor
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(
+        xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    // check that the first page has landscape flag
+    xCursor->jumpToFirstPage();
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    uno::Reference<style::XStyle> xStylePage(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+
+    // check that the second page has no landscape flag
+    xCursor->jumpToPage(2);
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+
+    // check that the third page has landscape flag
+    xCursor->jumpToPage(3);
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+
+    // check that the last page has no landscape flag
+    xCursor->jumpToLastPage();
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+}
+
+DECLARE_RTFIMPORT_TEST(testLandscape, "landscape.rtf")
+{
+    // Check landscape flag.
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+    // All pages should have flag orientiation
+    uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
+
+    // get a page cursor
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(
+        xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    // check that the first page has landscape flag
+    xCursor->jumpToFirstPage();
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    uno::Reference<style::XStyle> xStylePage(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+
+    // check that the second page has landscape flag
+    xCursor->jumpToPage(2);
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+
+    // check that the last page has landscape flag
+    xCursor->jumpToLastPage();
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xStylePage.set(pageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xStylePage, "IsLandscape"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
