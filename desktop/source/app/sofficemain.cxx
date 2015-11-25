@@ -63,7 +63,7 @@
 
 OString getLibDir()
 {
-    OUString aOriginal = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER;
+    OUString aOriginal = "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER;
     rtl::Bootstrap::expandMacros(aOriginal);
 
     return rtl::OUStringToOString(aOriginal, RTL_TEXTENCODING_UTF8);
