@@ -32,9 +32,9 @@ class DESKTOP_DLLPUBLIC CrashReporter
 public:
     static void AddKeyValue(const OUString& rKey, const OUString& rValue);
 
-private:
+    static const char* getIniFileName();
 
-    static std::map<OUString, OUString> maValueMap;
+private:
 
     static osl::Mutex maMutex;
 };
