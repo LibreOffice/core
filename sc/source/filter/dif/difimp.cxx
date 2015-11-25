@@ -778,6 +778,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                     eS = S_END;
                 }
                 break;
+            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
             case S_END:
                 OSL_FAIL( "DifParser::ScanFloatVal - unexpected state" );
                 break;
