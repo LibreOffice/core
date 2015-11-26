@@ -38,9 +38,9 @@ namespace /* private */
     // OK button so that we determine the size of the text
     // currently in the edit field and resize our buffer
     // appropriately - in the future we will do this
-    const size_t MAX_FILENAME_BUFF_SIZE  = 32000;
-    const size_t MAX_FILETITLE_BUFF_SIZE = 32000;
-    const size_t MAX_FILTER_BUFF_SIZE    = 4096;
+    const sal_Int32 MAX_FILENAME_BUFF_SIZE  = 32000;
+    const sal_Int32 MAX_FILETITLE_BUFF_SIZE = 32000;
+    const sal_Int32 MAX_FILTER_BUFF_SIZE    = 4096;
 
     const LPCTSTR CURRENT_INSTANCE = TEXT("CurrInst");
 
