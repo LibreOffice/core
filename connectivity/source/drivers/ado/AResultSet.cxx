@@ -78,7 +78,6 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  ORes
                         ,m_xStatement(*pStmt)
                         ,m_xMetaData(NULL)
                         ,m_nRowPos(0)
-                        ,m_bWasNull(sal_False)
                         ,m_bEOF(sal_False)
                         ,m_bOnFirstAfterOpen(sal_False)
 {
@@ -91,7 +90,6 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
                         ,m_xStatement(NULL)
                         ,m_xMetaData(NULL)
                         ,m_nRowPos(0)
-                        ,m_bWasNull(sal_False)
                         ,m_bEOF(sal_False)
                         ,m_bOnFirstAfterOpen(sal_False)
 {
