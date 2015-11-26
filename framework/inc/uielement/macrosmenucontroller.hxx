@@ -47,7 +47,6 @@ namespace framework
         struct ExecuteInfo
         {
             css::uno::Reference< css::frame::XDispatch >     xDispatch;
-            css::util::URL                                   aTargetURL;
          };
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
         css::uno::Reference< css::frame::XDispatchProvider >  m_xDispatchProvider;

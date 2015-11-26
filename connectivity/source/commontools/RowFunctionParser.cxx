@@ -243,13 +243,11 @@ public:
 
 class UnaryFunctionFunctor
 {
-    const ExpressionFunct   meFunct;
     ParserContextSharedPtr  mpContext;
 
 public:
 
-    UnaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
-        meFunct( eFunct ),
+    UnaryFunctionFunctor( const ParserContextSharedPtr& rContext ) :
         mpContext( rContext )
     {
     }
@@ -338,7 +336,7 @@ public:
 
             unaryFunction =
                     (COLUMN >> '(' >> integer >> ')' )
-                                [ UnaryFunctionFunctor( UNARY_FUNC_COLUMN,  self.getContext()) ]
+                                [ UnaryFunctionFunctor( self.getContext()) ]
                 ;
 
             assignment =

@@ -1643,9 +1643,9 @@ void WorksheetHelper::setCellArrayFormula( const css::table::CellRangeAddress& r
 }
 
 void WorksheetHelper::createSharedFormulaMapEntry(
-    const table::CellAddress& rAddress, const table::CellRangeAddress& rRange, sal_Int32 nSharedId, const OUString& rTokens )
+    const table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens )
 {
-    getFormulaBuffer().createSharedFormulaMapEntry(rAddress, rRange, nSharedId, rTokens);
+    getFormulaBuffer().createSharedFormulaMapEntry(rAddress, nSharedId, rTokens);
 }
 
 } // namespace xls

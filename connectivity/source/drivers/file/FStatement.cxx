@@ -69,7 +69,6 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
     ,m_bEscapeProcessing(true)
-    ,rBHelper(OStatement_BASE::rBHelper)
 {
     m_pConnection->acquire();
 

@@ -340,9 +340,9 @@ protected:
 }
 
 FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
-    const table::CellAddress& rAddr, const table::CellRangeAddress& rRange,
+    const table::CellAddress& rAddr,
     const OUString& rTokenStr, sal_Int32 nSharedId ) :
-    maAddress(rAddr), maRange(rRange), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
+    maAddress(rAddr), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
 
 FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
     const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
@@ -457,12 +457,12 @@ FormulaBuffer::SheetItem FormulaBuffer::getSheetItem( SCTAB nTab )
 }
 
 void FormulaBuffer::createSharedFormulaMapEntry(
-    const table::CellAddress& rAddress, const table::CellRangeAddress& rRange,
+    const table::CellAddress& rAddress,
     sal_Int32 nSharedId, const OUString& rTokens )
 {
     assert( rAddress.Sheet >= 0 && (size_t)rAddress.Sheet < maSharedFormulas.size() );
     std::vector<SharedFormulaEntry>& rSharedFormulas = maSharedFormulas[ rAddress.Sheet ];
-    SharedFormulaEntry aEntry(rAddress, rRange, rTokens, nSharedId);
+    SharedFormulaEntry aEntry(rAddress, rTokens, nSharedId);
     rSharedFormulas.push_back( aEntry );
 }
 

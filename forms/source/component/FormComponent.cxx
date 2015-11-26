@@ -333,7 +333,6 @@ OBoundControl::OBoundControl( const Reference< XComponentContext >& _rxContext,
             const OUString& _rAggregateService, const bool _bSetDelegator )
     :OControl( _rxContext, _rAggregateService, _bSetDelegator )
     ,m_bLocked(false)
-    ,m_aOriginalFont( EmptyFontDescriptor() )
 {
 }
 

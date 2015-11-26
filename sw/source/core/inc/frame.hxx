@@ -110,7 +110,6 @@ struct SwRectFnCollection
     SwRectGet     fnGetWidth;
     SwRectGet     fnGetHeight;
     SwRectPoint   fnGetPos;
-    SwRectSize    fnGetSize;
 
     SwRectSet     fnSetTop;
     SwRectSet     fnSetBottom;
@@ -139,22 +138,19 @@ struct SwRectFnCollection
     SwFrameGet      fnGetPrtBottom;
     SwFrameGet      fnGetPrtLeft;
     SwFrameGet      fnGetPrtRight;
-    SwRectDist    fnTopDist;
-    SwRectDist    fnBottomDist;
-    SwRectDist    fnLeftDist;
-    SwRectDist    fnRightDist;
+    SwRectDist      fnTopDist;
+    SwRectDist      fnBottomDist;
     SwFrameMax      fnSetLimit;
-    SwRectMax     fnOverStep;
+    SwRectMax       fnOverStep;
 
-    SwRectSetPos  fnSetPos;
+    SwRectSetPos    fnSetPos;
     SwFrameMakePos  fnMakePos;
-    SwOperator    fnXDiff;
-    SwOperator    fnYDiff;
-    SwOperator    fnXInc;
-    SwOperator    fnYInc;
+    SwOperator      fnXDiff;
+    SwOperator      fnYDiff;
+    SwOperator      fnYInc;
 
-    SwRectSetTwice fnSetLeftAndWidth;
-    SwRectSetTwice fnSetTopAndHeight;
+    SwRectSetTwice  fnSetLeftAndWidth;
+    SwRectSetTwice  fnSetTopAndHeight;
 };
 
 typedef SwRectFnCollection* SwRectFn;

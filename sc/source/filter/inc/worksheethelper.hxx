@@ -303,7 +303,6 @@ public:
 
     void createSharedFormulaMapEntry(
         const css::table::CellAddress& rAddress,
-        const css::table::CellRangeAddress& rRange,
         sal_Int32 nSharedId, const OUString& rTokens );
 
     void setCellFormulaValue(

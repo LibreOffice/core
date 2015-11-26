@@ -168,7 +168,6 @@ namespace dbaui
                                     const Reference< XComponentContext >& _rxContext,sal_Int32 _nMaxColumnsInIndex)
         :ModalDialog( _pParent, "IndexDesignDialog", "dbaccess/ui/indexdesigndialog.ui")
         ,m_xConnection(_rxConnection)
-        ,m_aGeometrySettings(E_DIALOG, OUString("dbaccess.tabledesign.indexdialog"))
         ,m_pIndexes(nullptr)
         ,m_pPreviousSelection(nullptr)
         ,m_bEditAgain(false)

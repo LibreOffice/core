@@ -69,7 +69,6 @@ namespace connectivity
         {
 
         protected:
-            ::std::vector<void*>                    m_aBindVector;
             ::std::vector<sal_Int32>                m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
 
             ::std::vector<sal_Int32>                m_aOrderbyColumnNumber;
@@ -110,8 +109,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xColsIdx; // table columns
 
 
-            OUString                         m_aTableRange;
-            rtl_TextEncoding                        m_nTextEncoding;
             sal_Int32                               m_nRowPos;
             sal_Int32                               m_nFilePos;
             sal_Int32                               m_nLastVisitedPos;
@@ -119,7 +116,6 @@ namespace connectivity
             sal_Int32                               m_nColumnCount;
             bool                                m_bWasNull;
             bool                                m_bEOF;                 // after last record
-            bool                                m_bLastRecord;
             bool                                m_bInserted;            // true when moveToInsertRow was called
                                                                             // set to false when cursor moved or cancel
             bool                                m_bRowUpdated;

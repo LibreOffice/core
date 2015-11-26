@@ -161,7 +161,7 @@ void SheetDataContext::onEndElement()
                 if( maFmlaData.mnSharedId >= 0 )
                 {
                     if( mbValidRange && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
-                        createSharedFormulaMapEntry(maCellData.maCellAddr, maFmlaData.maFormulaRef, maFmlaData.mnSharedId, maFormulaStr);
+                        createSharedFormulaMapEntry(maCellData.maCellAddr, maFmlaData.mnSharedId, maFormulaStr);
 
                     setCellFormula(maCellData.maCellAddr, maFmlaData.mnSharedId, maCellValue, maCellData.mnCellType);
                     mrSheetData.setCellFormat( maCellData );

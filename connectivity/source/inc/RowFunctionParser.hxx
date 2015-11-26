@@ -31,13 +31,7 @@ namespace connectivity
 
 struct OOO_DLLPUBLIC_DBTOOLS RowEquation
 {
-    sal_Int32   nOperation;
     ORowSetValueDecoratorRef    nPara[ 3 ];
-
-    RowEquation() :
-        nOperation  ( 0 )
-        {
-        }
 };
 
 enum ExpressionFunct

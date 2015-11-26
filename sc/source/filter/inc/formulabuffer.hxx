@@ -38,13 +38,11 @@ public:
     struct SharedFormulaEntry
     {
         css::table::CellAddress maAddress;
-        css::table::CellRangeAddress maRange;
         OUString maTokenStr;
         sal_Int32 mnSharedId;
 
         SharedFormulaEntry(
             const css::table::CellAddress& rAddress,
-            const css::table::CellRangeAddress& rRange,
             const OUString& rTokenStr, sal_Int32 nSharedId );
     };
 
@@ -131,7 +129,6 @@ public:
                                              const css::table::CellAddress& rTokenAddress,
                                              const OUString& );
     void                createSharedFormulaMapEntry( const css::table::CellAddress& rAddress,
-                                                     const css::table::CellRangeAddress& rRange,
                                                      sal_Int32 nSharedId, const OUString& rTokens );
 
     /// ensure sizes of vectors matches the number of sheets

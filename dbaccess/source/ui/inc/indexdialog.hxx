@@ -81,7 +81,6 @@ namespace dbaui
     {
     protected:
         css::uno::Reference< css::sdbc::XConnection > m_xConnection;
-        SvtViewOptions                  m_aGeometrySettings;
 
         VclPtr<ToolBox>                 m_pActions;
         VclPtr<DbaIndexList>            m_pIndexList;

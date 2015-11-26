@@ -37,7 +37,6 @@ namespace connectivity
 
     class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSetMetaData :    public  ODatabaseMetaResultSetMetaData_BASE
     {
-        TIntVector                                  m_vMapping; // when not every column is needed
         ::std::map<sal_Int32,connectivity::OColumn> m_mColumns;
         ::std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
 

@@ -97,8 +97,6 @@ namespace connectivity
             sal_Int32                                   m_nResultSetConcurrency;
             bool                                    m_bEscapeProcessing;
 
-            ::cppu::OBroadcastHelper&                   rBHelper;
-
         protected:
             // initialize the column index map (mapping select columns to table columns)
             void createColumnMapping();

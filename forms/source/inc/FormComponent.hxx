@@ -269,9 +269,6 @@ class OBoundControl :public OControl
 protected:
     bool            m_bLocked : 1;
 
-    css::awt::FontDescriptor
-                    m_aOriginalFont;                    // as long as the text/value is invalid, we also change the font
-
 public:
     OBoundControl(
         const css::uno::Reference< css::uno::XComponentContext >& _rxContext,

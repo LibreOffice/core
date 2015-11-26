@@ -68,7 +68,6 @@ java_sql_Statement_Base::java_sql_Statement_Base( JNIEnv * pEnv, java_sql_Connec
     ,m_nResultSetConcurrency(ResultSetConcurrency::READ_ONLY)
     ,m_nResultSetType(ResultSetType::FORWARD_ONLY)
     ,m_bEscapeProcessing(true)
-    ,rBHelper(java_sql_Statement_BASE::rBHelper)
 {
     m_pConnection->acquire();
 }

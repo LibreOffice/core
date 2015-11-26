@@ -86,7 +86,6 @@ namespace connectivity
         sal_Int32                   m_nResultSetConcurrency;
         sal_Int32                   m_nResultSetType;
         bool                    m_bEscapeProcessing;
-        ::cppu::OBroadcastHelper&   rBHelper;
 
 
     // Static data for the class

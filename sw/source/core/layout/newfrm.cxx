@@ -63,7 +63,6 @@ static SwRectFnCollection aHorizontal = {
     &SwRect::_Width,
     &SwRect::_Height,
     &SwRect::TopLeft,
-    &SwRect::_Size,
     /* fnRectSet      */
     &SwRect::_Top,
     &SwRect::_Bottom,
@@ -94,8 +93,6 @@ static SwRectFnCollection aHorizontal = {
     &SwFrame::GetPrtRight,
     &SwRect::GetTopDistance,
     &SwRect::GetBottomDistance,
-    &SwRect::GetLeftDistance,
-    &SwRect::GetRightDistance,
     &SwFrame::SetMaxBottom,
     &SwRect::OverStepBottom,
 
@@ -103,7 +100,6 @@ static SwRectFnCollection aHorizontal = {
     &SwFrame::MakeBelowPos,
     &FirstMinusSecond,
     &FirstMinusSecond,
-    &SwIncrement,
     &SwIncrement,
     &SwRect::SetLeftAndWidth,
     &SwRect::SetTopAndHeight
@@ -118,7 +114,6 @@ static SwRectFnCollection aVertical = {
     &SwRect::_Height,
     &SwRect::_Width,
     &SwRect::TopRight,
-    &SwRect::SwappedSize,
     /* fnRectSet      */
     &SwRect::_Right,
     &SwRect::_Left,
@@ -149,8 +144,6 @@ static SwRectFnCollection aVertical = {
     &SwFrame::GetPrtBottom,
     &SwRect::GetRightDistance,
     &SwRect::GetLeftDistance,
-    &SwRect::GetTopDistance,
-    &SwRect::GetBottomDistance,
     &SwFrame::SetMinLeft,
     &SwRect::OverStepLeft,
 
@@ -159,7 +152,6 @@ static SwRectFnCollection aVertical = {
     &FirstMinusSecond,
     &SecondMinusFirst,
     &SwIncrement,
-    &SwDecrement,
     &SwRect::SetTopAndHeight,
     &SwRect::SetRightAndWidth
 };
@@ -173,7 +165,6 @@ static SwRectFnCollection aBottomToTop = {
     &SwRect::_Width,
     &SwRect::_Height,
     &SwRect::BottomLeft,
-    &SwRect::_Size,
     /* fnRectSet      */
     &SwRect::_Bottom,
     &SwRect::_Top,
@@ -204,8 +195,6 @@ static SwRectFnCollection aBottomToTop = {
     &SwFrame::GetPrtRight,
     &SwRect::GetBottomDistance,
     &SwRect::GetTopDistance,
-    &SwRect::GetLeftDistance,
-    &SwRect::GetRightDistance,
     &SwFrame::SetMinTop,
     &SwRect::OverStepTop,
 
@@ -214,7 +203,6 @@ static SwRectFnCollection aBottomToTop = {
     &FirstMinusSecond,
     &SecondMinusFirst,
     &SwIncrement,
-    &SwDecrement,
     &SwRect::SetLeftAndWidth,
     &SwRect::SetBottomAndHeight
 };
@@ -228,7 +216,6 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwRect::_Height,
     &SwRect::_Width,
     &SwRect::BottomRight,
-    &SwRect::SwappedSize,
     /* fnRectSet      */
     &SwRect::_Left,
     &SwRect::_Right,
@@ -259,8 +246,6 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwFrame::GetPrtTop,
     &SwRect::GetLeftDistance,
     &SwRect::GetRightDistance,
-    &SwRect::GetBottomDistance,
-    &SwRect::GetTopDistance,
     &SwFrame::SetMaxRight,
     &SwRect::OverStepRight,
 
@@ -269,7 +254,6 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &FirstMinusSecond,
     &FirstMinusSecond,
     &SwDecrement,
-    &SwIncrement,
     &SwRect::SetBottomAndHeight,
     &SwRect::SetLeftAndWidth
 };
@@ -283,7 +267,6 @@ static SwRectFnCollection aVerticalLeftToRight = {
     &SwRect::_Height,
     &SwRect::_Width,
     &SwRect::TopLeft,
-    &SwRect::SwappedSize,
     /* fnRectSet      */
     &SwRect::_Left,
     &SwRect::_Right,
@@ -314,8 +297,6 @@ static SwRectFnCollection aVerticalLeftToRight = {
     &SwFrame::GetPrtBottom,
     &SwRect::GetLeftDistance,
     &SwRect::GetRightDistance,
-    &SwRect::GetTopDistance,
-    &SwRect::GetBottomDistance,
     &SwFrame::SetMaxRight,
     &SwRect::OverStepRight,
 
@@ -323,7 +304,6 @@ static SwRectFnCollection aVerticalLeftToRight = {
     &SwFrame::MakeRightPos,
     &FirstMinusSecond,
     &FirstMinusSecond,
-    &SwIncrement,
     &SwIncrement,
     &SwRect::SetTopAndHeight,
     &SwRect::SetLeftAndWidth
