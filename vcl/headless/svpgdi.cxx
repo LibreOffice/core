@@ -873,6 +873,9 @@ bool SvpSalGraphics::drawPolyLine(
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap)
 {
+    bool bRet = false;
+    (void)rPolyLine; (void)fTransparency; (void)rLineWidths; (void)eLineJoin; (void)eLineCap;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
     if (nPointCount <= 0)
@@ -971,8 +974,9 @@ bool SvpSalGraphics::drawPolyLine(
         xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
                                                 extents.y + extents.height));
     }
-
-    return true;
+    bRet = true;
+#endif
+    return bRet;
 }
 
 bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
