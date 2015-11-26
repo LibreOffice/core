@@ -24,7 +24,6 @@
 #include <ooo/vba/excel/XStyles.hpp>
 #include <ooo/vba/excel/XRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
@@ -42,7 +41,6 @@
 
 class ScVbaFormatConditions: public CollTestImplHelper< ov::excel::XFormatConditions >
 {
-    css::table::CellAddress maCellAddress;
     css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
     css::uno::Reference< ov::excel::XStyles > mxStyles;
     css::uno::Reference< ov::excel::XRange > mxRangeParent;
