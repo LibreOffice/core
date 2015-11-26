@@ -286,15 +286,22 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         gtk_widget_show(rWindow.m_pCornerButton->m_pDrawingArea);
 
         rWindow.m_pRowBar->m_aHeaders.clear();
-        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
+        try
         {
-            int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str())));
-            if (nSize >= rWindow.m_pRowBar->m_nPositionPixel)
+            for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
             {
-                int nScrolledSize = nSize - rWindow.m_pRowBar->m_nPositionPixel;
-                Header aHeader(nScrolledSize, rValue.second.get<std::string>("text"));
-                rWindow.m_pRowBar->m_aHeaders.push_back(aHeader);
+                int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str())));
+                if (nSize >= rWindow.m_pRowBar->m_nPositionPixel)
+                {
+                    int nScrolledSize = nSize - rWindow.m_pRowBar->m_nPositionPixel;
+                    Header aHeader(nScrolledSize, rValue.second.get<std::string>("text"));
+                    rWindow.m_pRowBar->m_aHeaders.push_back(aHeader);
+                }
             }
+        }
+        catch (boost::property_tree::ptree_bad_path& rException)
+        {
+            std::cerr << "TiledRowColumnBar::docConfigureEvent: failed to get rows: " << rException.what() << std::endl;
         }
         gtk_widget_show(rWindow.m_pRowBar->m_pDrawingArea);
         gtk_widget_queue_draw(rWindow.m_pRowBar->m_pDrawingArea);
