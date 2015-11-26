@@ -50,8 +50,7 @@ class XMLTextNumRuleInfo
     const OUString msListLabelStringProp;
 
     // numbering rules instance and its name
-    ::com::sun::star::uno::Reference <
-                        ::com::sun::star::container::XIndexReplace > mxNumRules;
+    css::uno::Reference < css::container::XIndexReplace > mxNumRules;
     OUString     msNumRulesName;
 
     // paragraph's list attributes
@@ -76,8 +75,7 @@ public:
 
     inline XMLTextNumRuleInfo& operator=( const XMLTextNumRuleInfo& rInfo );
 
-    void Set( const ::com::sun::star::uno::Reference <
-                        ::com::sun::star::text::XTextContent > & rTextContnt,
+    void Set( const css::uno::Reference < css::text::XTextContent > & rTextContnt,
               const bool bOutlineStyleAsNormalListStyle,
               const XMLTextListAutoStylePool& rListAutoPool,
               const bool bExportTextNumberElement );

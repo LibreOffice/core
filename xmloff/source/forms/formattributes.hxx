@@ -248,7 +248,7 @@ namespace xmloff
         {
             OUString                 sAttributeName;         // the attribute name
             OUString                 sPropertyName;          // the property name
-            ::com::sun::star::uno::Type     aPropertyType;          // the property type
+            css::uno::Type           aPropertyType;          // the property type
             OUString                 sAttributeDefault;      // the default if the attribute is not present
 
             // entries which are special to some value types
@@ -348,13 +348,13 @@ namespace xmloff
         void    addEnumProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
-            const ::com::sun::star::uno::Type* _pType = nullptr);
+            const css::uno::Type* _pType = nullptr);
 
     protected:
         /// some common code for the various add*Property methods
         AttributeAssignment& implAdd(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const ::com::sun::star::uno::Type& _rType, const OUString& _rDefaultString);
+            const css::uno::Type& _rType, const OUString& _rDefaultString);
     };
 }   // namespace xmloff
 

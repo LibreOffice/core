@@ -34,7 +34,7 @@ namespace xmloff
 {
 
     //= OEventDescriptorMapper
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::container::XNameReplace
+    typedef ::cppu::WeakImplHelper <   css::container::XNameReplace
                                     >   OEventDescriptorMapper_Base;
     /** helper class wrapping different script event representations
 
@@ -48,24 +48,24 @@ namespace xmloff
     class OEventDescriptorMapper : public OEventDescriptorMapper_Base
     {
     protected:
-        typedef std::map< OUString, ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > MapString2PropertyValueSequence;
+        typedef std::map< OUString, css::uno::Sequence < css::beans::PropertyValue > > MapString2PropertyValueSequence;
         MapString2PropertyValueSequence m_aMappedEvents;
 
     public:
         explicit OEventDescriptorMapper(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents);
+            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents);
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) override;
     };
 
 }   // namespace xmloff

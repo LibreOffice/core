@@ -35,14 +35,14 @@ class SvXMLImportContext;
 /** import the xsd:simpleType element */
 class SchemaSimpleTypeContext : public TokenContext
 {
-    com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository> mxRepository;
+    css::uno::Reference<css::xforms::XDataTypeRepository> mxRepository;
     OUString msTypeName;
 
 public:
     SchemaSimpleTypeContext( SvXMLImport& rImport,
                              sal_uInt16 nPrfx,
                              const OUString& rLName,
-                             const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& rRepository );
+                             const css::uno::Reference<css::xforms::XDataTypeRepository>& rRepository );
 
     virtual ~SchemaSimpleTypeContext();
 
@@ -57,7 +57,7 @@ protected:
         sal_uInt16 nToken,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif

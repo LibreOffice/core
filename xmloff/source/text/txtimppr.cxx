@@ -206,7 +206,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
 
         if( !pFontFamily )
         {
-            aAny <<= (sal_Int16)com::sun::star::awt::FontFamily::DONTKNOW;
+            aAny <<= (sal_Int16)css::awt::FontFamily::DONTKNOW;
 
     #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
@@ -219,7 +219,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
 
         if( !pFontPitch )
         {
-            aAny <<= (sal_Int16)com::sun::star::awt::FontPitch::DONTKNOW;
+            aAny <<= (sal_Int16)css::awt::FontPitch::DONTKNOW;
     #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 3 );

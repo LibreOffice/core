@@ -152,9 +152,8 @@ public:
 
 
     XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                  const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const OUString& rLName,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nType,
             ParamMap &rParamMap);
     virtual ~XMLTextFrameParam_Impl();
@@ -167,9 +166,8 @@ XMLTextFrameParam_Impl::~XMLTextFrameParam_Impl()
 
 XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
-          const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+        const OUString& rLName,
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
         sal_uInt16 /*nType*/,
         ParamMap &rParamMap):
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -208,9 +206,8 @@ public:
 
 
     XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                  const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const OUString& rLName,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const Reference < XPropertySet >& rPropSet,
             bool bPath );
     virtual ~XMLTextFrameContourContext_Impl();
@@ -318,7 +315,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
                         aTargetRange));
             }
 
-            com::sun::star::drawing::PointSequenceSequence aPointSequenceSequence;
+            css::drawing::PointSequenceSequence aPointSequenceSequence;
             basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(aPolyPolygon, aPointSequenceSequence);
             aAny <<= aPointSequenceSequence;
             xPropSet->setPropertyValue( sContourPolyPolygon, aAny );
@@ -348,12 +345,9 @@ XMLTextFrameContourContext_Impl::~XMLTextFrameContourContext_Impl()
 
 class XMLTextFrameContext_Impl : public SvXMLImportContext
 {
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextCursor > xOldTextCursor;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::beans::XPropertySet > xPropSet;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::io::XOutputStream > xBase64Stream;
+    css::uno::Reference < css::text::XTextCursor > xOldTextCursor;
+    css::uno::Reference < css::beans::XPropertySet > xPropSet;
+    css::uno::Reference < css::io::XOutputStream > xBase64Stream;
 
     /// old list item and block (#89891#)
     bool mbListContextPushed;
@@ -410,7 +404,7 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     sal_Int16   nRelHeight;
 
     sal_uInt16 nType;
-    ::com::sun::star::text::TextContentAnchorType   eAnchorType;
+    css::text::TextContentAnchorType   eAnchorType;
 
     bool    bMayScript : 1;
     bool    bMinWidth : 1;
@@ -431,12 +425,10 @@ public:
     XMLTextFrameContext_Impl( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & rAttrList,
-            ::com::sun::star::text::TextContentAnchorType eAnchorType,
+            const css::uno::Reference<css::xml::sax::XAttributeList > & rAttrList,
+            css::text::TextContentAnchorType eAnchorType,
             sal_uInt16 nType,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & rFrameAttrList );
+            const css::uno::Reference<css::xml::sax::XAttributeList > & rFrameAttrList );
     virtual ~XMLTextFrameContext_Impl();
 
     virtual void EndElement() override;
@@ -445,8 +437,7 @@ public:
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
@@ -460,10 +451,9 @@ public:
 
     void SetName();
 
-    ::com::sun::star::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
+    css::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
 
-    const ::com::sun::star::uno::Reference <
-        ::com::sun::star::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
+    const css::uno::Reference < css::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
 };
 
 
@@ -1201,7 +1191,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
                                                                 UNO_QUERY );
                     OSL_ENSURE( xEOS.is(),
                             "no embedded object supplier for own object" );
-                    Reference<com::sun::star::lang::XComponent> aXComponent(xEOS->getEmbeddedObject());
+                    Reference<css::lang::XComponent> aXComponent(xEOS->getEmbeddedObject());
                     pEContext->SetComponent( aXComponent );
                 }
             }
@@ -1356,8 +1346,7 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
 }
 
 
-bool XMLTextFrameContext::CreateIfNotThere( ::com::sun::star::uno::Reference <
-        ::com::sun::star::beans::XPropertySet >& rPropSet )
+bool XMLTextFrameContext::CreateIfNotThere( css::uno::Reference < css::beans::XPropertySet >& rPropSet )
 {
     SvXMLImportContext *pContext = &m_xImplContext;
     XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl*>( pContext );

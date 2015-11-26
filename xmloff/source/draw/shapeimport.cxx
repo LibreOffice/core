@@ -57,7 +57,7 @@ struct ltint32
 
 struct ConnectionHint
 {
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxConnector;
+    css::uno::Reference< css::drawing::XShape > mxConnector;
     bool      bStart;
     OUString  aDestShapeId;
     sal_Int32 nDestGlueId;
@@ -65,8 +65,8 @@ struct ConnectionHint
 
 struct XShapeCompareHelper
 {
-  bool operator()(com::sun::star::uno::Reference < com::sun::star::drawing::XShape > x1,
-                  com::sun::star::uno::Reference < com::sun::star::drawing::XShape > x2 ) const
+  bool operator()(css::uno::Reference < css::drawing::XShape > x1,
+                  css::uno::Reference < css::drawing::XShape > x2 ) const
   {
     return x1.get() < x2.get();
   }
@@ -75,7 +75,7 @@ struct XShapeCompareHelper
 /** this map store all glue point id mappings for shapes that had user defined glue points. This
     is needed because on insertion the glue points will get a new and unique id */
 typedef std::map<sal_Int32,sal_Int32,ltint32> GluePointIdMap;
-typedef std::map< com::sun::star::uno::Reference < com::sun::star::drawing::XShape >, GluePointIdMap, XShapeCompareHelper > ShapeGluePointsMap;
+typedef std::map< css::uno::Reference < css::drawing::XShape >, GluePointIdMap, XShapeCompareHelper > ShapeGluePointsMap;
 
 /** this struct is created for each startPage() call and stores information that is needed during
     import of shapes for one page. Since pages could be nested ( notes pages inside impress ) there
@@ -95,7 +95,7 @@ struct XMLShapeImportHelperImpl
     // context for sorting shapes
     ShapeSortContext*           mpSortContext;
 
-    std::map<sal_Int32, com::sun::star::uno::Reference< com::sun::star::drawing::XShape >, ltint32>
+    std::map<sal_Int32, css::uno::Reference< css::drawing::XShape >, ltint32>
                                 maShapeIds;
 
     std::vector<ConnectionHint> maConnections;
@@ -726,16 +726,16 @@ void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
     all properties and styles are set.
 */
 void XMLShapeImportHelper::finishShape(
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >&,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >&)
+        css::uno::Reference< css::drawing::XShape >& rShape,
+        const css::uno::Reference< css::xml::sax::XAttributeList >&,
+        css::uno::Reference< css::drawing::XShapes >&)
 {
     /* Set property <PositionLayoutDir>
        to <PositionInHoriL2R>, if it exists and the import states that
        the shape positioning attributes are in horizontal left-to-right
        layout. This is the case for the OpenOffice.org file format.
        This setting is done for Writer documents, because the property
-       only exists at service com::sun::star::text::Shape - the Writer
+       only exists at service css::text::Shape - the Writer
        UNO service for shapes.
        The value indicates that the positioning attributes are given
        in horizontal left-to-right layout. The property is evaluated
@@ -911,7 +911,7 @@ void XMLShapeImportHelper::popGroupAndSort()
     delete pContext;
 }
 
-void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >&, sal_Int32 nZIndex )
+void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape >&, sal_Int32 nZIndex )
 {
     if( mpImpl->mpSortContext)
     {
@@ -932,7 +932,7 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference<
     }
 }
 
-void XMLShapeImportHelper::addShapeConnection( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rConnectorShape,
+void XMLShapeImportHelper::addShapeConnection( css::uno::Reference< css::drawing::XShape >& rConnectorShape,
                          bool bStart,
                          const OUString& rDestShapeId,
                          sal_Int32 nDestGlueId )
@@ -1008,7 +1008,7 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
 
 /** adds a mapping for a glue point identifier from an xml file to the identifier created after inserting
     the new glue point into the core. The saved mappings can be retrieved by getGluePointId() */
-void XMLShapeImportHelper::addGluePointMapping( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
+void XMLShapeImportHelper::addGluePointMapping( css::uno::Reference< css::drawing::XShape >& xShape,
                           sal_Int32 nSourceId, sal_Int32 nDestinnationId )
 {
     if( mpPageContext )
@@ -1017,7 +1017,7 @@ void XMLShapeImportHelper::addGluePointMapping( com::sun::star::uno::Reference< 
 
 /** find mapping for given DestinationID. This allows to extract the original draw:id imported with a draw:glue-point */
 sal_Int32 XMLShapeImportHelper::findGluePointMapping(
-    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
+    const css::uno::Reference< css::drawing::XShape >& xShape,
     sal_Int32 nDestinnationId ) const
 {
     if( mpPageContext )
@@ -1045,7 +1045,7 @@ sal_Int32 XMLShapeImportHelper::findGluePointMapping(
 }
 
 /** moves all current DestinationId's by n */
-void XMLShapeImportHelper::moveGluePointMapping( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, const sal_Int32 n )
+void XMLShapeImportHelper::moveGluePointMapping( const css::uno::Reference< css::drawing::XShape >& xShape, const sal_Int32 n )
 {
     if( mpPageContext )
     {
@@ -1066,7 +1066,7 @@ void XMLShapeImportHelper::moveGluePointMapping( const com::sun::star::uno::Refe
 
 /** retrieves a mapping for a glue point identifier from the current xml file to the identifier created after
     inserting the new glue point into the core. The mapping must be initialized first with addGluePointMapping() */
-sal_Int32 XMLShapeImportHelper::getGluePointId( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nSourceId )
+sal_Int32 XMLShapeImportHelper::getGluePointId( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nSourceId )
 {
     if( mpPageContext )
     {
@@ -1083,7 +1083,7 @@ sal_Int32 XMLShapeImportHelper::getGluePointId( const com::sun::star::uno::Refer
 }
 
 /** this method must be calling before the first shape is imported for the given page */
-void XMLShapeImportHelper::startPage( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes )
+void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes >& rShapes )
 {
     XMLShapeImportPageContextImpl* pOldContext = mpPageContext;
     mpPageContext = new XMLShapeImportPageContextImpl();
@@ -1092,7 +1092,7 @@ void XMLShapeImportHelper::startPage( com::sun::star::uno::Reference< com::sun::
 }
 
 /** this method must be calling after the last shape is imported for the given page */
-void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes )
+void XMLShapeImportHelper::endPage( css::uno::Reference< css::drawing::XShapes >& rShapes )
 {
     DBG_ASSERT( mpPageContext && (mpPageContext->mxShapes == rShapes), "wrong call to endPage(), no startPage called or wrong page" );
     if( nullptr == mpPageContext )

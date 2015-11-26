@@ -1025,7 +1025,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
     }
 }
 
-bool SdXMLImExTransform3D::GetFullHomogenTransform(com::sun::star::drawing::HomogenMatrix& xHomMat)
+bool SdXMLImExTransform3D::GetFullHomogenTransform(css::drawing::HomogenMatrix& xHomMat)
 {
     ::basegfx::B3DHomMatrix aFullTransform;
     GetFullTransform(aFullTransform);

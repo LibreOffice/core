@@ -175,7 +175,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 }
 
 void SvXMLAutoStylePoolP::exportStyleContent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > &,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler > &,
         sal_Int32 nFamily,
         const vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp,
@@ -368,7 +368,7 @@ OUString SvXMLAutoStylePoolP::Find( sal_Int32 nFamily,
 }
 
 void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily,
-    const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > &,
+    const uno::Reference< css::xml::sax::XDocumentHandler > &,
     const SvXMLUnitConverter&,
     const SvXMLNamespaceMap&
     ) const

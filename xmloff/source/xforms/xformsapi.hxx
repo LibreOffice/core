@@ -34,42 +34,42 @@ namespace com { namespace sun { namespace star {
 } } }
 class SvXMLNamespaceMap;
 
-com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> xforms_createXFormsModel();
+css::uno::Reference<css::xforms::XModel2> xforms_createXFormsModel();
 
 void xforms_addXFormsModel(
-    const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xDocument,
-    const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2>& xModel );
+    const css::uno::Reference<css::frame::XModel>& xDocument,
+    const css::uno::Reference<css::xforms::XModel2>& xModel );
 
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_findXFormsBinding( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const OUString& );
+css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsBinding( css::uno::Reference<css::frame::XModel>&, const OUString& );
 
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_findXFormsSubmission( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const OUString& );
+css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsSubmission( css::uno::Reference<css::frame::XModel>&, const OUString& );
 
 void xforms_setValue(
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet,
+    css::uno::Reference<css::beans::XPropertySet>& xPropSet,
     const OUString& rName,
-    const com::sun::star::uno::Any& rAny );
+    const css::uno::Any& rAny );
 
 template<typename T>
 void xforms_setValue(
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet,
+    css::uno::Reference<css::beans::XPropertySet>& xPropSet,
     const OUString& rName,
     T& aValue )
 {
-    xforms_setValue( xPropSet, rName, com::sun::star::uno::makeAny( aValue ) );
+    xforms_setValue( xPropSet, rName, css::uno::makeAny( aValue ) );
 }
 
 sal_uInt16 xforms_getTypeClass(
-    const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
+    const css::uno::Reference<css::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName );
 
 OUString xforms_getTypeName(
-    const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
+    const css::uno::Reference<css::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName );
 
 OUString xforms_getBasicTypeName(
-    const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
+    const css::uno::Reference<css::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName );
 

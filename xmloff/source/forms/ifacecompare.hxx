@@ -32,12 +32,12 @@ namespace xmloff
     */
     template < class IAFCE >
     struct OInterfaceCompare
-        :public ::std::binary_function  <   ::com::sun::star::uno::Reference< IAFCE >
-                                        ,   ::com::sun::star::uno::Reference< IAFCE >
+        :public ::std::binary_function  <   css::uno::Reference< IAFCE >
+                                        ,   css::uno::Reference< IAFCE >
                                         ,   bool
                                         >
     {
-        bool operator() (const ::com::sun::star::uno::Reference< IAFCE >& lhs, const ::com::sun::star::uno::Reference< IAFCE >& rhs) const
+        bool operator() (const css::uno::Reference< IAFCE >& lhs, const css::uno::Reference< IAFCE >& rhs) const
         {
             return lhs.get() < rhs.get();
                 // this does not make any sense if you see the semantics of the pointer returned by get:
@@ -47,8 +47,8 @@ namespace xmloff
         }
     };
 
-    typedef OInterfaceCompare< ::com::sun::star::beans::XPropertySet >  OPropertySetCompare;
-    typedef OInterfaceCompare< ::com::sun::star::drawing::XDrawPage >   ODrawPageCompare;
+    typedef OInterfaceCompare< css::beans::XPropertySet >  OPropertySetCompare;
+    typedef OInterfaceCompare< css::drawing::XDrawPage >   ODrawPageCompare;
 
 }   // namespace xmloff
 

@@ -34,8 +34,8 @@ class XMLTextFrameHyperlinkContext : public SvXMLImportContext
     OUString              sHRef;
     OUString              sName;
     OUString              sTargetFrameName;
-    ::com::sun::star::text::TextContentAnchorType eDefaultAnchorType;
-    SvXMLImportContextRef       xFrameContext;
+    css::text::TextContentAnchorType eDefaultAnchorType;
+    SvXMLImportContextRef   xFrameContext;
     bool                    bMap;
 
 public:
@@ -44,26 +44,22 @@ public:
     XMLTextFrameHyperlinkContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            ::com::sun::star::text::TextContentAnchorType eDefaultAnchorType );
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+            css::text::TextContentAnchorType eDefaultAnchorType );
     virtual ~XMLTextFrameHyperlinkContext();
 
     virtual void EndElement() override;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
-    ::com::sun::star::text::TextContentAnchorType GetAnchorType() const;
+    css::text::TextContentAnchorType GetAnchorType() const;
 
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextContent > GetTextContent() const;
+    css::uno::Reference < css::text::XTextContent > GetTextContent() const;
 
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::drawing::XShape > GetShape() const;
+    css::uno::Reference < css::drawing::XShape > GetShape() const;
 };
 
 

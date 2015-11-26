@@ -40,16 +40,13 @@ namespace com { namespace sun { namespace star {
 class XMLSectionImportContext : public SvXMLImportContext
 {
     /// start position; ranges acquired via getStart(),getEnd() don't move
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xStartRange;
+    css::uno::Reference<css::text::XTextRange> xStartRange;
 
     /// end position
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextRange> xEndRange;
+    css::uno::Reference<css::text::XTextRange> xEndRange;
 
     /// TextSection (as XPropertySet) for passing down to data source elements
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xSectionPropertySet;
+    css::uno::Reference<css::beans::XPropertySet> xSectionPropertySet;
 
     const OUString sTextSection;
     const OUString sIndexHeaderSection;
@@ -63,7 +60,7 @@ class XMLSectionImportContext : public SvXMLImportContext
     OUString sStyleName;
     OUString sName;
     OUString sCond;
-    ::com::sun::star::uno::Sequence<sal_Int8> aSequence;
+    css::uno::Sequence<sal_Int8> aSequence;
     bool bProtect;
     bool bCondOK;
     bool bIsVisible;
@@ -87,20 +84,17 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     virtual void EndElement() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 
     void ProcessAttributes(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList );
 };
 
 #endif

@@ -36,7 +36,7 @@ enum SchXMLCellType
 struct SchXMLCell
 {
     OUString aString;
-    ::com::sun::star::uno::Sequence< OUString > aComplexString;
+    css::uno::Sequence< OUString > aComplexString;
     double fValue;
     SchXMLCellType eType;
     OUString aRangeId;
@@ -84,7 +84,7 @@ enum SchXMLLabeledSequencePart
 };
 typedef ::std::pair< tSchXMLIndex, SchXMLLabeledSequencePart > tSchXMLIndexWithPart;
 typedef ::std::multimap< tSchXMLIndexWithPart,
-        ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > >
+        css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
     tSchXMLLSequencesPerIndex;
 
 bool operator < ( const tSchXMLIndexWithPart & rFirst, const tSchXMLIndexWithPart & rSecond );
@@ -147,15 +147,15 @@ struct GlobalSeriesImportInfo
 
 struct RegressionStyle
 {
-    com::sun::star::uno::Reference<
-                com::sun::star::chart2::XDataSeries > m_xSeries;
-    com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet > m_xEquationProperties;
+    css::uno::Reference<
+                css::chart2::XDataSeries > m_xSeries;
+    css::uno::Reference<
+                css::beans::XPropertySet > m_xEquationProperties;
 
     OUString msStyleName;
 
-    RegressionStyle(const com::sun::star::uno::Reference<
-                          com::sun::star::chart2::XDataSeries >& xSeries,
+    RegressionStyle(const css::uno::Reference<
+                          css::chart2::XDataSeries >& xSeries,
                     const OUString& sStyleName) :
             m_xSeries    ( xSeries ),
             msStyleName  ( sStyleName )
@@ -173,17 +173,13 @@ struct DataRowPointStyle
     };
 
     StyleType meType;
-    com::sun::star::uno::Reference<
-                com::sun::star::chart2::XDataSeries > m_xSeries;
+    css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
 
-    com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet > m_xOldAPISeries;
+    css::uno::Reference< css::beans::XPropertySet > m_xOldAPISeries;
 
-    com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet > m_xErrorXProperties;
+    css::uno::Reference< css::beans::XPropertySet > m_xErrorXProperties;
 
-    com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet > m_xErrorYProperties;
+    css::uno::Reference< css::beans::XPropertySet > m_xErrorYProperties;
 
     sal_Int32 m_nPointIndex;
     sal_Int32 m_nPointRepeat;
@@ -193,8 +189,7 @@ struct DataRowPointStyle
     bool mbSymbolSizeForSeriesIsMissingInFile;
 
     DataRowPointStyle( StyleType eType
-                        , const com::sun::star::uno::Reference<
-                          com::sun::star::chart2::XDataSeries >& xSeries
+                        , const css::uno::Reference< css::chart2::XDataSeries >& xSeries
                         , sal_Int32 nPointIndex
                         , sal_Int32 nPointRepeat
                         , const OUString& sStyleName
@@ -210,8 +205,8 @@ struct DataRowPointStyle
         {}
 };
 
-typedef ::std::multimap< OUString, ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence > > tSchXMLRangeSequenceMap;
+typedef ::std::multimap< OUString, css::uno::Reference<
+        css::chart2::data::XDataSequence > > tSchXMLRangeSequenceMap;
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_TRANSPORTTYPES_HXX
 

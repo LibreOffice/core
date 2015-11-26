@@ -72,8 +72,7 @@ class XMLPropertyBackpatcher
 
     /// backpatch list type
     typedef ::std::vector<
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> > BackpatchListType;
+                css::uno::Reference<css::beans::XPropertySet> > BackpatchListType;
 
     /* use void* instead of BackpatchListType to avoid linker problems
        with long typenames. The real typename (commented out) contains
@@ -104,14 +103,12 @@ public:
     /// Use this whenever the value should be set, even if it is not yet known.
     /// const version
     void SetProperty(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet> & xPropSet,
+        const css::uno::Reference<css::beans::XPropertySet> & xPropSet,
         const OUString& sName);
 
     /// non-const version of SetProperty
     void SetProperty(
-        ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet> & xPropSet,
+        css::uno::Reference<css::beans::XPropertySet> & xPropSet,
         const OUString& sName);
 
     /// set default (if bDefaultHandling) for unresolved names

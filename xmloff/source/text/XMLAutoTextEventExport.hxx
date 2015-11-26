@@ -46,24 +46,22 @@ namespace com { namespace sun { namespace star {
  */
 class XMLAutoTextEventExport : public SvXMLExport
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameAccess> xEvents;
+    css::uno::Reference<css::container::XNameAccess> xEvents;
 
 public:
 
     XMLAutoTextEventExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext, OUString const & implementationName, SvXMLExportFlags nFlags
+        const css::uno::Reference< css::uno::XComponentContext >& xContext, OUString const & implementationName, SvXMLExportFlags nFlags
         );
 
     virtual ~XMLAutoTextEventExport();
 
     // XInitialization
     virtual void SAL_CALL initialize(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any> & rArguments )
+        const css::uno::Sequence<css::uno::Any> & rArguments )
         throw(
-            ::com::sun::star::uno::Exception,
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+            css::uno::Exception,
+            css::uno::RuntimeException, std::exception) override;
 
 protected:
 

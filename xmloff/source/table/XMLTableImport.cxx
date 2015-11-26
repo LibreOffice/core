@@ -109,7 +109,7 @@ public:
     OUString GetDefaultCellStyleName() const;
 
     rtl::Reference< XMLTableImport > mxTableImporter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XTable > mxTable;
+    css::uno::Reference< css::table::XTable > mxTable;
     Reference< XTableColumns > mxColumns;
     Reference< XTableRows > mxRows;
 
@@ -130,7 +130,7 @@ public:
                           const Reference< XMergeableCell >& xCell,
                           const OUString& sDefaultCellStyleName,
                           sal_uInt16 nPrfx, const OUString& rLName,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                          const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
     virtual ~XMLCellImportContext();
 
@@ -548,7 +548,7 @@ OUString XMLTableImportContext::GetDefaultCellStyleName() const
 
 // XMLCellImportContext
 
-XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Reference< XMergeableCell >& xCell, const OUString& sDefaultCellStyleName, sal_uInt16 nPrfx, const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Reference< XMergeableCell >& xCell, const OUString& sDefaultCellStyleName, sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 : SvXMLImportContext( rImport, nPrfx, rLName )
 , mxCell( xCell )
 , mbListContextPushed( false )

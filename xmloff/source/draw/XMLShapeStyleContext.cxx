@@ -262,7 +262,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                     rPropSet->setPropertyValue( rPropertyName, Any( sStyleName ) );
                 }
             }
-            catch ( const ::com::sun::star::lang::IllegalArgumentException& e )
+            catch ( const css::lang::IllegalArgumentException& e )
             {
                 Sequence<OUString> aSeq { sStyleName };
                 GetImport().SetError(
@@ -287,7 +287,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                     rPropSet->setPropertyValue( rPropertyName, rState.maValue );
                 }
             }
-            catch ( const ::com::sun::star::lang::IllegalArgumentException& e )
+            catch ( const css::lang::IllegalArgumentException& e )
             {
                 Sequence<OUString> aSeq;
                 GetImport().SetError(

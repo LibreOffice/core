@@ -73,7 +73,7 @@ void XMLIndexSimpleEntryContext::StartElement(
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                 XML_STYLE_FAMILY_TEXT_TEXT, sCharStyleName );
             // #142494#: Check if style exists
-            const Reference < ::com::sun::star::container::XNameContainer > & rStyles =
+            const Reference < css::container::XNameContainer > & rStyles =
                 GetImport().GetTextImport()->GetTextStyles();
             if( rStyles.is() && rStyles->hasByName( sDisplayStyleName ) )
                 bCharStyleNameOK = true;
@@ -99,8 +99,7 @@ void XMLIndexSimpleEntryContext::EndElement()
 }
 
 void XMLIndexSimpleEntryContext::FillPropertyValues(
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue> & rValues)
+    css::uno::Sequence<css::beans::PropertyValue> & rValues)
 {
     // due to the limited number of subclasses, we fill the values
     // directly into the slots. Subclasses will have to know they can

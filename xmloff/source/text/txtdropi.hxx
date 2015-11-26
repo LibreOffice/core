@@ -31,16 +31,14 @@ class XMLTextDropCapImportContext :public XMLElementPropertyContext
 
 private:
     void ProcessAttrs(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
 public:
 
     XMLTextDropCapImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
         sal_Int32 nWholeWOrdIdx,
         ::std::vector< XMLPropertyState > &rProps );

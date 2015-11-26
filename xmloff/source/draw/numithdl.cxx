@@ -25,7 +25,7 @@ using namespace ::com::sun::star;
 // class XMLNumRulePropHdl
 
 
-XMLNumRulePropHdl::XMLNumRulePropHdl( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > xNumRuleCompare )
+XMLNumRulePropHdl::XMLNumRulePropHdl( css::uno::Reference< css::ucb::XAnyCompare > xNumRuleCompare )
 : mxNumRuleCompare( xNumRuleCompare )
 {
 }
@@ -40,12 +40,12 @@ bool XMLNumRulePropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
     return mxNumRuleCompare.is() && mxNumRuleCompare->compare( r1, r2 ) == 0;
 }
 
-bool XMLNumRulePropHdl::importXML( const OUString& /*rStrImpValue*/, ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLNumRulePropHdl::importXML( const OUString& /*rStrImpValue*/, css::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     return false;
 }
 
-bool XMLNumRulePropHdl::exportXML( OUString& /*rStrExpValue*/, const ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLNumRulePropHdl::exportXML( OUString& /*rStrExpValue*/, const css::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     return false;
 }

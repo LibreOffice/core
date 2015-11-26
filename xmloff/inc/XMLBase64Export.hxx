@@ -37,15 +37,12 @@ public:
 
     XMLBase64Export( SvXMLExport& rExport );
 
-    bool exportXML( const ::com::sun::star::uno::Reference <
-            ::com::sun::star::io::XInputStream > & rIn );
-    bool exportElement( const ::com::sun::star::uno::Reference <
-            ::com::sun::star::io::XInputStream > & rIn,
+    bool exportXML( const css::uno::Reference < css::io::XInputStream > & rIn );
+    bool exportElement( const css::uno::Reference < css::io::XInputStream > & rIn,
             sal_uInt16 nNamespace,
             enum ::xmloff::token::XMLTokenEnum eName );
     bool exportOfficeBinaryDataElement(
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::io::XInputStream > & rIn );
+            const css::uno::Reference < css::io::XInputStream > & rIn );
 };
 
 

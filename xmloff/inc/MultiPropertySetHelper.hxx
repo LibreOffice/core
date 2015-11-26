@@ -62,20 +62,20 @@ class MultiPropertySetHelper
 
     /// the sequence of property names that the current (multi)
     /// property set implementation supports
-    ::com::sun::star::uno::Sequence< OUString > aPropertySequence;
+    css::uno::Sequence< OUString > aPropertySequence;
 
     /// an array of indices that maps from pPropertyNames indices to
     /// aPropertySequence indices
     sal_Int16* pSequenceIndex;
 
     /// the last set of values retrieved by getValues
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aValues;
+    css::uno::Sequence< css::uno::Any > aValues;
 
     /// result of aValues.getConstArray()
-    const ::com::sun::star::uno::Any* pValues;
+    const css::uno::Any* pValues;
 
     /// an empty Any
-    ::com::sun::star::uno::Any aEmptyAny;
+    css::uno::Any aEmptyAny;
 
 public:
 
@@ -88,8 +88,7 @@ public:
      * Call hasPropertiesByName for the provided XPropertySetInfo and build
      * list of allowed properties.
      */
-    void hasProperties( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XPropertySetInfo> & );
+    void hasProperties( const css::uno::Reference<css::beans::XPropertySetInfo> & );
 
 
     /**
@@ -104,8 +103,7 @@ public:
      * May only be called after hasProperties() was called for the
      * appropriate XPropertySetInfo.
      */
-    void getValues( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XMultiPropertySet> & );
+    void getValues( const css::uno::Reference<css::beans::XMultiPropertySet> & );
 
     /**
      * Get values from the XPropertySet. This can be much slower than
@@ -115,8 +113,7 @@ public:
      * May only be called after hasProperties() was called for the
      * appropriate XPropertySetInfo.
      */
-    void getValues( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XPropertySet> & );
+    void getValues( const css::uno::Reference<css::beans::XPropertySet> & );
 
 
 
@@ -125,7 +122,7 @@ public:
      *
      * May only be called after getValues() was called.
      */
-    inline const ::com::sun::star::uno::Any& getValue( sal_Int16 nIndex );
+    inline const css::uno::Any& getValue( sal_Int16 nIndex );
 
     /**
      * Find out if this property is supported.
@@ -144,9 +141,8 @@ public:
      * bTryMult is set, the XMultiPropertySet is used to get the values.
      *
      */
-    const ::com::sun::star::uno::Any& getValue( sal_Int16 nIndex,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XPropertySet> &,
+    const css::uno::Any& getValue( sal_Int16 nIndex,
+                        const css::uno::Reference<css::beans::XPropertySet> &,
                         bool bTryMulti = false );
 
     /**
@@ -159,9 +155,8 @@ public:
      * XMultiPropertySet is used to get the values.
      *
      */
-    const ::com::sun::star::uno::Any& getValue( sal_Int16 nIndex,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XMultiPropertySet> & );
+    const css::uno::Any& getValue( sal_Int16 nIndex,
+                        const css::uno::Reference<css::beans::XMultiPropertySet> & );
 
     inline void resetValues() { pValues = nullptr; }
 };
@@ -169,7 +164,7 @@ public:
 
 // inline implementations of the often-called methods getValue and hasProperty:
 
-const ::com::sun::star::uno::Any& MultiPropertySetHelper::getValue(
+const css::uno::Any& MultiPropertySetHelper::getValue(
     sal_Int16 nValueNo )
 {
     assert(pValues && "called getValue() without calling getValues()");

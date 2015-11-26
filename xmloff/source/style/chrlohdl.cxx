@@ -35,7 +35,7 @@ using namespace ::xmloff::token;
  * => make LanguageTagODF (unpublished) API? */
 
 // For runtime performance, instead of converting back and forth between
-// com::sun::star::Locale and LanguageTag to decide if script or tag are
+// css::Locale and LanguageTag to decide if script or tag are
 // needed, this code takes advantage of knowledge about the internal
 // representation of BCP 47 language tags in a Locale if present as done in a
 // LanguageTag.
@@ -45,7 +45,7 @@ XMLCharLanguageHdl::~XMLCharLanguageHdl()
     // nothing to do
 }
 
-bool XMLCharLanguageHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
+bool XMLCharLanguageHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
 {
     bool bRet = false;
     lang::Locale aLocale1, aLocale2;
@@ -135,7 +135,7 @@ XMLCharScriptHdl::~XMLCharScriptHdl()
     // nothing to do
 }
 
-bool XMLCharScriptHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
+bool XMLCharScriptHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
 {
     bool bRet = false;
     lang::Locale aLocale1, aLocale2;
@@ -252,7 +252,7 @@ XMLCharCountryHdl::~XMLCharCountryHdl()
     // nothing to do
 }
 
-bool XMLCharCountryHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
+bool XMLCharCountryHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
 {
     bool bRet = false;
     lang::Locale aLocale1, aLocale2;
@@ -323,7 +323,7 @@ XMLCharRfcLanguageTagHdl::~XMLCharRfcLanguageTagHdl()
     // nothing to do
 }
 
-bool XMLCharRfcLanguageTagHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
+bool XMLCharRfcLanguageTagHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const
 {
     bool bRet = false;
     lang::Locale aLocale1, aLocale2;

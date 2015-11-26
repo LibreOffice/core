@@ -40,15 +40,15 @@ namespace xmloff
     class OElementExport : public OPropertyExport
     {
     protected:
-        ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >
+        css::uno::Sequence< css::script::ScriptEventDescriptor >
                                 m_aEvents;
 
         SvXMLElementExport*     m_pXMLElement;          // XML element doing the concrete startElement etc.
 
     public:
         OElementExport(IFormsExportContext& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents);
+            const css::uno::Reference< css::beans::XPropertySet >& _rxProps,
+            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents);
         virtual ~OElementExport();
 
         void doExport();
@@ -115,10 +115,10 @@ namespace xmloff
                 the comma-separated list of control-ids of all the controls referring to this one as LabelControl
         */
         OControlExport(IFormsExportContext& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
             const OUString& _rControlId,
             const OUString& _rReferringControls,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents);
+            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
         virtual ~OControlExport();
 
     protected:
@@ -235,7 +235,7 @@ namespace xmloff
 
             Bindings which count here are:
             <ul><li>an established connection to a database field</li>
-                <li>a binding to an external value supplier (<type scope="com::sun::star::form::binding">XValueBinding</type>)</li>
+                <li>a binding to an external value supplier (<type scope="css::form::binding">XValueBinding</type>)</li>
             </ul>
         */
         bool controlHasActiveDataBinding() const;
@@ -248,7 +248,7 @@ namespace xmloff
 
             List entries may be
             <ul><li>specified by the user</li>
-                <li>specified by an external list source (<type scope="com::sun::star::form::binding">XListEntrySource</type>)</li>
+                <li>specified by an external list source (<type scope="css::form::binding">XListEntrySource</type>)</li>
                 <li>obtained from a database query (in various ways)</li>
             </ul>
 
@@ -267,9 +267,9 @@ namespace xmloff
             @see OColumnExport::OColumnExport
         */
         OColumnExport(IFormsExportContext& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
             const OUString& _rControlId,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents);
+            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
 
         virtual ~OColumnExport();
 
@@ -298,8 +298,8 @@ namespace xmloff
         /** constructs an object capable of exporting controls
         */
         OFormExport(IFormsExportContext& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents
+            const css::uno::Reference< css::beans::XPropertySet >& _rxForm,
+            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents
             );
 
     protected:

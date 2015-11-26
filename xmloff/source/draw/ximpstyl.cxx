@@ -58,8 +58,7 @@ public:
 
     SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
-                 const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                 const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
@@ -68,7 +67,7 @@ public:
     using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp) override;
 };
@@ -135,7 +134,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID);
     virtual ~SdXMLDrawingPageStyleContext();
@@ -143,14 +142,12 @@ public:
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual void Finish( bool bOverwrite ) override;
 
     // #i35918#
-    virtual void FillPropertySet(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
+    virtual void FillPropertySet( const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 };
 
 
@@ -1030,7 +1027,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
     sal_uInt16 nFamily,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
+    const uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
 {
     SvXMLStyleContext* pContext = nullptr;
 
@@ -1548,7 +1545,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
 
 SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLName,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList)
+    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
     : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList)
     , mbFixed(false)
 {

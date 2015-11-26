@@ -156,8 +156,8 @@ public:
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper );
     void RegisterName( sal_Int32 nFamily, const OUString& rName );
     void GetRegisteredNames(
-        com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
-        com::sun::star::uno::Sequence<OUString>& aNames );
+        css::uno::Sequence<sal_Int32>& aFamilies,
+        css::uno::Sequence<OUString>& aNames );
 
     bool Add(
         OUString& rName, sal_Int32 nFamily,
@@ -174,7 +174,7 @@ public:
                           const ::std::vector< XMLPropertyState >& rProperties ) const;
 
     void exportXML( sal_Int32 nFamily,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         const SvXMLAutoStylePoolP *pAntiImpl) const;

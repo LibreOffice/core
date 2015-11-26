@@ -278,7 +278,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
                                 rPropSet->setPropertyValue(rPropertyName,Any(sStyleName));
                             }
                         }
-                        catch(::com::sun::star::lang::IllegalArgumentException& e)
+                        catch(css::lang::IllegalArgumentException& e)
                         {
                             Sequence<OUString> aSeq { sStyleName };
                             GetImport().SetError(

@@ -42,14 +42,14 @@ class SvXMLExport;
 
 namespace SchXMLTools
 {
-    bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
-    bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
-    bool isDocumentGeneratedWithOpenOfficeOlderThan2_4( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
-    bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
-    bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
+    bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const css::uno::Reference< css::frame::XModel >& xChartModel);
+    bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const css::uno::Reference< css::frame::XModel >& xChartModel);
+    bool isDocumentGeneratedWithOpenOfficeOlderThan2_4( const css::uno::Reference< css::frame::XModel >& xChartModel);
+    bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const css::uno::Reference< css::frame::XModel >& xChartModel);
+    bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const css::uno::Reference< css::frame::XModel >& xChartModel);
 
-    void setBuildIDAtImportInfo( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel
-        , ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xImportInfo );
+    void setBuildIDAtImportInfo( css::uno::Reference< css::frame::XModel > xModel
+        , css::uno::Reference< css::beans::XPropertySet > xImportInfo );
 
     enum SchXMLChartTypeEnum
     {
@@ -78,28 +78,26 @@ namespace SchXMLTools
 
     OUString GetNewChartTypeName( const OUString & rOldChartTypeName );
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence2 > GetNewLabeledDataSequence();
+    css::uno::Reference<
+        css::chart2::data::XLabeledDataSequence2 > GetNewLabeledDataSequence();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > CreateDataSequence(
+    css::uno::Reference< css::chart2::data::XDataSequence > CreateDataSequence(
         const OUString& rRange,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+        const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > CreateDataSequenceWithoutConvert(
+    css::uno::Reference< css::chart2::data::XDataSequence > CreateDataSequenceWithoutConvert(
         const OUString& rRange,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+        const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
     void CreateCategories(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > & xDataProvider,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > & xNewDoc,
+        const css::uno::Reference< css::chart2::data::XDataProvider > & xDataProvider,
+        const css::uno::Reference< css::chart2::XChartDocument > & xNewDoc,
         const OUString & rRangeAddress,
         sal_Int32 nCooSysIndex,
         sal_Int32 nDimensionIndex,
         tSchXMLLSequencesPerIndex * pLSequencesPerIndex = nullptr );
 
-    ::com::sun::star::uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
+    css::uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 
     void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsLFs );
 
@@ -110,8 +108,7 @@ namespace SchXMLTools
         given in rXMLRange
      */
     void setXMLRangePropertyAtDataSequence(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSequence > & xDataSequence,
+        const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence,
         const OUString & rXMLRange );
 
     /** checks if the data sequence has the property "CachedXMLRange" (true for
@@ -124,20 +121,18 @@ namespace SchXMLTools
         @return true, if the property was found, assigned and is non-empty
      */
     bool getXMLRangePropertyFromDataSequence(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSequence > & xDataSequence,
+        const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence,
         OUString & rOutXMLRange,
         bool bClearProp = false );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > getDataProviderFromParent( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+    css::uno::Reference< css::chart2::data::XDataProvider > getDataProviderFromParent( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
-    bool switchBackToDataProviderFromParent( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartDocument >& xChartDoc
+    bool switchBackToDataProviderFromParent( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc
         , const tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
 
     void copyProperties(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xSource,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xDestination );
+        const css::uno::Reference< css::beans::XPropertySet > & xSource,
+        const css::uno::Reference< css::beans::XPropertySet > & xDestination );
 }
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLTOOLS_HXX

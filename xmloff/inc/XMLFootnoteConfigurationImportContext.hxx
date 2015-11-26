@@ -70,22 +70,19 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList);
 
     virtual ~XMLFootnoteConfigurationImportContext();
 
     /// parse attributes
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;
 
     /// for footnotes, also parse begin and end notices
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;
 
     /// get token map for attributes
     const SvXMLTokenMap& GetFtnConfigAttrTokenMap();
@@ -98,8 +95,7 @@ public:
 
     /// set configuration at document
     void ProcessSettings(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rConfig);
+        const css::uno::Reference< css::beans::XPropertySet> & rConfig);
 
     /// for helper class: set begin notice
     void SetBeginNotice( const OUString& sText);

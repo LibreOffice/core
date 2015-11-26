@@ -201,7 +201,7 @@ sal_uInt16 xforms_getTypeClass(
     SvXMLTokenMap aMap( aTypes );
     sal_uInt16 mnToken = aMap.Get( nPrefix, sLocalName );
 
-    sal_uInt16 nTypeClass = com::sun::star::xsd::DataTypeClass::STRING;
+    sal_uInt16 nTypeClass = css::xsd::DataTypeClass::STRING;
     if( mnToken != XML_TOK_UNKNOWN )
     {
         // we found an XSD name: then get the proper API name for it
@@ -209,50 +209,50 @@ sal_uInt16 xforms_getTypeClass(
         switch( mnToken )
         {
         case XML_STRING:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::STRING;
+            nTypeClass = css::xsd::DataTypeClass::STRING;
             break;
         case XML_ANYURI:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::anyURI;
+            nTypeClass = css::xsd::DataTypeClass::anyURI;
             break;
         case XML_DECIMAL:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::DECIMAL;
+            nTypeClass = css::xsd::DataTypeClass::DECIMAL;
             break;
         case XML_DOUBLE:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::DOUBLE;
+            nTypeClass = css::xsd::DataTypeClass::DOUBLE;
             break;
         case XML_FLOAT:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::FLOAT;
+            nTypeClass = css::xsd::DataTypeClass::FLOAT;
             break;
         case XML_BOOLEAN:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::BOOLEAN;
+            nTypeClass = css::xsd::DataTypeClass::BOOLEAN;
             break;
         case XML_DATETIME_XSD:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::DATETIME;
+            nTypeClass = css::xsd::DataTypeClass::DATETIME;
             break;
         case XML_DATE:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::DATE;
+            nTypeClass = css::xsd::DataTypeClass::DATE;
             break;
         case XML_TIME:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::TIME;
+            nTypeClass = css::xsd::DataTypeClass::TIME;
             break;
         case XML_YEAR:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::gYear;
+            nTypeClass = css::xsd::DataTypeClass::gYear;
             break;
         case XML_DAY:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::gDay;
+            nTypeClass = css::xsd::DataTypeClass::gDay;
             break;
         case XML_MONTH:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::gMonth;
+            nTypeClass = css::xsd::DataTypeClass::gMonth;
             break;
 
             /* data types not yet supported:
-            nTypeClass = com::sun::star::xsd::DataTypeClass::DURATION;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::gYearMonth;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::gMonthDay;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::hexBinary;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::base64Binary;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::QName;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::NOTATION;
+            nTypeClass = css::xsd::DataTypeClass::DURATION;
+            nTypeClass = css::xsd::DataTypeClass::gYearMonth;
+            nTypeClass = css::xsd::DataTypeClass::gMonthDay;
+            nTypeClass = css::xsd::DataTypeClass::hexBinary;
+            nTypeClass = css::xsd::DataTypeClass::base64Binary;
+            nTypeClass = css::xsd::DataTypeClass::QName;
+            nTypeClass = css::xsd::DataTypeClass::NOTATION;
             */
         }
     }

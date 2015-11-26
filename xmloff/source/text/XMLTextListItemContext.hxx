@@ -33,8 +33,7 @@ class XMLTextListItemContext : public SvXMLImportContext
     // quantity of <text:list> child elements
     sal_Int16 mnSubListCount;
     // list style instance for text::style-override property
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XIndexReplace > mxNumRulesOverride;
+    css::uno::Reference< css::container::XIndexReplace > mxNumRulesOverride;
 
 public:
 
@@ -44,8 +43,7 @@ public:
             XMLTextImportHelper& rTxtImp,
             const sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const bool bIsHeader = false );
     virtual ~XMLTextListItemContext();
 
@@ -53,8 +51,7 @@ public:
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                  const OUString& rLocalName,
-                 const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     bool HasStartValue() const { return -1 != nStartValue; }
     sal_Int16 GetStartValue() const { return nStartValue; }
@@ -63,8 +60,7 @@ public:
     {
         return mxNumRulesOverride.is();
     }
-    inline const ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexReplace >& GetNumRulesOverride() const
+    inline const css::uno::Reference < css::container::XIndexReplace >& GetNumRulesOverride() const
     {
         return mxNumRulesOverride;
     }

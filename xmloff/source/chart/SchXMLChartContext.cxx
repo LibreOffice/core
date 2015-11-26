@@ -384,16 +384,14 @@ namespace
 
 struct NewDonutSeries
 {
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > m_xSeries;
+    css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
     OUString msStyleName;
     sal_Int32 mnAttachedAxis;
 
     ::std::vector< OUString > m_aSeriesStyles;
     ::std::vector< OUString > m_aPointStyles;
 
-    NewDonutSeries( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >& xSeries, sal_Int32 nPointCount )
+    NewDonutSeries( const css::uno::Reference< css::chart2::XDataSeries >& xSeries, sal_Int32 nPointCount )
                     : m_xSeries( xSeries )
                     , mnAttachedAxis( 1 )
     {
@@ -446,16 +444,15 @@ struct NewDonutSeries
 };
 
 void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle >& rStyleList
-        , const ::std::map< ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries> , sal_Int32 >& rSeriesMap )
+        , const ::std::map< css::uno::Reference< css::chart2::XDataSeries> , sal_Int32 >& rSeriesMap )
 {
     ::std::list< DataRowPointStyle >::iterator aIt(rStyleList.begin());
     ::std::list< DataRowPointStyle >::iterator aEnd(rStyleList.end());
 
     //detect old series count
     //and add old series to aSeriesMap
-    ::std::map< ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >, sal_Int32 > aSeriesMap(rSeriesMap);
+    ::std::map< css::uno::Reference<
+                css::chart2::XDataSeries >, sal_Int32 > aSeriesMap(rSeriesMap);
     sal_Int32 nOldSeriesCount = 0;
     {
         sal_Int32 nMaxOldSeriesIndex = 0;
@@ -581,7 +578,7 @@ bool lcl_SpecialHandlingForDonutChartNeeded(
 static void lcl_ApplyDataFromRectangularRangeToDiagram(
         const uno::Reference< chart2::XChartDocument >& xNewDoc
         , const OUString& rRectangularRange
-        , ::com::sun::star::chart::ChartDataRowSource eDataRowSource
+        , css::chart::ChartDataRowSource eDataRowSource
         , bool bRowHasLabels, bool bColHasLabels
         , bool bSwitchOnLabelsAndCategoriesForOwnData
         , const OUString& sColTrans
@@ -1152,7 +1149,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
 
-    com::sun::star::awt::Point maPosition;
+    css::awt::Point maPosition;
     bool bHasXPosition=false;
     bool bHasYPosition=false;
 

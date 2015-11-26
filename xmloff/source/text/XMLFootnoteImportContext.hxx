@@ -41,8 +41,7 @@ class XMLFootnoteImportContext : public SvXMLImportContext
     const OUString sPropertyReferenceId;
 
     /// old document cursor
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextCursor> xOldCursor;
+    css::uno::Reference<css::text::XTextCursor> xOldCursor;
 
     /// old list item and block (#89891#)
     bool mbListContextPushed;
@@ -51,8 +50,7 @@ class XMLFootnoteImportContext : public SvXMLImportContext
     XMLTextImportHelper& rHelper;
 
     /// the footnote
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XFootnote> xFootnote;
+    css::uno::Reference<css::text::XFootnote> xFootnote;
 
 public:
 
@@ -66,8 +64,7 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     virtual void Characters(
         const OUString& rChars) override;
@@ -77,8 +74,7 @@ protected:
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 
 };
 

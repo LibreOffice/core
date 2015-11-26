@@ -1773,13 +1773,13 @@ void XMLTextFieldExport::ExportFieldHelper(
             }
         }
 
-        com::sun::star::uno::Reference < com::sun::star::text::XText > xText;
+        css::uno::Reference < css::text::XText > xText;
         try
         {
-            com::sun::star::uno::Any aRet = rPropSet->getPropertyValue(sPropertyTextRange);
+            css::uno::Any aRet = rPropSet->getPropertyValue(sPropertyTextRange);
             aRet >>= xText;
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch ( css::uno::Exception& )
         {}
 
         if ( xText.is() )

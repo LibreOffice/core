@@ -61,8 +61,7 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo()
 
 // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
 void XMLTextNumRuleInfo::Set(
-        const ::com::sun::star::uno::Reference <
-                        ::com::sun::star::text::XTextContent > & xTextContent,
+        const css::uno::Reference < css::text::XTextContent > & xTextContent,
         const bool bOutlineStyleAsNormalListStyle,
         const XMLTextListAutoStylePool& rListAutoPool,
         const bool bExportTextNumberElement )

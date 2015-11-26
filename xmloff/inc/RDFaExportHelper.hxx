@@ -42,8 +42,7 @@ class RDFaExportHelper
 private:
     SvXMLExport & m_rExport;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XDocumentRepository> m_xRepository;
+    css::uno::Reference<css::rdf::XDocumentRepository> m_xRepository;
 
     typedef ::std::map< OUString, OUString >
         BlankNodeMap_t;
@@ -53,15 +52,13 @@ private:
     long m_Counter;
 
     OUString
-    LookupBlankNode( ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XBlankNode> const & i_xBlankNode);
+    LookupBlankNode( css::uno::Reference<css::rdf::XBlankNode> const & i_xBlankNode);
 
 public:
     RDFaExportHelper(SvXMLExport & i_rExport);
 
     void
-    AddRDFa(::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable> const & i_xMetadatable);
+    AddRDFa(css::uno::Reference<css::rdf::XMetadatable> const & i_xMetadatable);
 };
 
 } // namespace xmloff

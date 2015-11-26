@@ -105,8 +105,7 @@ sal_Char const sXML_np__field[] = "_field";
 sal_Char const sXML_np__xhtml[] = "_xhtml";
 sal_Char const sXML_np__css3text[] = "_css3text";
 
-class SvXMLImportEventListener : public cppu::WeakImplHelper<
-                            com::sun::star::lang::XEventListener >
+class SvXMLImportEventListener : public cppu::WeakImplHelper< css::lang::XEventListener >
 {
 private:
     SvXMLImport*    pImport;
@@ -116,7 +115,7 @@ public:
     virtual                 ~SvXMLImportEventListener();
 
                             // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 SvXMLImportEventListener::SvXMLImportEventListener(SvXMLImport* pTempImport)
@@ -419,7 +418,7 @@ void SvXMLImport::_InitCtor()
 }
 
 SvXMLImport::SvXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags ) throw ()
 :   mpImpl( new SvXMLImport_Impl(xContext, implementationName) ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
@@ -529,7 +528,7 @@ void SAL_CALL SvXMLImport::startDocument()
                     mpImpl->mbOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
-            catch( com::sun::star::uno::Exception& )
+            catch( css::uno::Exception& )
             {
             }
         }
@@ -964,7 +963,7 @@ void SAL_CALL SvXMLImport::cancel(  )
 
 // XInitialize
 void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     const sal_Int32 nAnyCount = aArguments.getLength();
     const uno::Any* pAny = aArguments.getConstArray();
@@ -1077,7 +1076,7 @@ OUString SAL_CALL SvXMLImport::getImplementationName()
 }
 
 sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -1455,11 +1454,11 @@ OUString SvXMLImport::GetStyleDisplayName( sal_uInt16 nFamily,
     return sName;
 }
 
-void SvXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&)
+void SvXMLImport::SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>&)
 {
 }
 
-void SvXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&)
+void SvXMLImport::SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>&)
 {
 }
 

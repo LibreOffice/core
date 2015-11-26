@@ -28,19 +28,19 @@
 class SdXMLEventsContext : public SvXMLImportContext
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
+    css::uno::Reference< css::drawing::XShape > mxShape;
 
 public:
 
     SdXMLEventsContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rxShape );
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        const css::uno::Reference< css::drawing::XShape >& rxShape );
     virtual ~SdXMLEventsContext();
 
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_EVENTIMP_HXX

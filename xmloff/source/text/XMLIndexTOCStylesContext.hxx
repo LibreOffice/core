@@ -45,8 +45,7 @@ class XMLIndexTOCStylesContext : public SvXMLImportContext
     const OUString sLevelParagraphStyles;
 
     /// XPropertySet of the index
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & rTOCPropertySet;
+    css::uno::Reference<css::beans::XPropertySet> & rTOCPropertySet;
 
     /// style names for this level
     ::std::vector< OUString > aStyleNames;
@@ -59,8 +58,7 @@ public:
 
     XMLIndexTOCStylesContext(
         SvXMLImport& rImport,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet,
+        css::uno::Reference<css::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
@@ -69,16 +67,14 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     virtual void EndElement() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 };
 
 #endif

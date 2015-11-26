@@ -29,11 +29,11 @@ namespace com { namespace sun { namespace star { namespace io {
 /// Handles <style:font-face>
 class XMLFontStyleContextFontFace : public SvXMLStyleContext
 {
-    ::com::sun::star::uno::Any aFamilyName;
-    ::com::sun::star::uno::Any aStyleName;
-    ::com::sun::star::uno::Any aFamily;
-    ::com::sun::star::uno::Any aPitch;
-    ::com::sun::star::uno::Any aEnc;
+    css::uno::Any aFamilyName;
+    css::uno::Any aStyleName;
+    css::uno::Any aFamily;
+    css::uno::Any aPitch;
+    css::uno::Any aEnc;
 
     SvXMLImportContextRef xStyles;
 
@@ -47,8 +47,8 @@ public:
 
     XMLFontStyleContextFontFace( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference<
+                css::xml::sax::XAttributeList > & xAttrList,
             XMLFontStylesContext& rStyles );
     virtual ~XMLFontStyleContextFontFace();
 
@@ -67,7 +67,7 @@ public:
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 /// Handles <style:font-face-src>
@@ -84,7 +84,7 @@ public:
     virtual SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 /// Handles <style:font-face-uri>
@@ -103,8 +103,8 @@ public:
 
     XMLFontStyleContextFontFaceUri( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference<
+                css::xml::sax::XAttributeList > & xAttrList,
             const XMLFontStyleContextFontFace& font );
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
@@ -114,7 +114,7 @@ public:
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 /// Handles <svg:font-face-format>
@@ -125,8 +125,8 @@ public:
 
     XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference<
+                css::xml::sax::XAttributeList > & xAttrList,
             XMLFontStyleContextFontFaceUri& uri );
 
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,

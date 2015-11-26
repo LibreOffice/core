@@ -43,8 +43,7 @@ public:
     virtual void Export(
         SvXMLExport& rExport,
         const OUString& rEventName,
-        ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rValues,
+        css::uno::Sequence<css::beans::PropertyValue> & rValues,
         bool bUseWhitespace) override;
 };
 

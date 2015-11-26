@@ -55,8 +55,7 @@ protected:
 
     /// add Text PropertyValue
     virtual void FillPropertyValues(
-        ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rValues) override;
+        css::uno::Sequence<css::beans::PropertyValue> & rValues) override;
 };
 
 #endif

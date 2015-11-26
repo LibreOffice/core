@@ -29,17 +29,17 @@ public:
     SchXMLPropertyMappingContext( SchXMLImportHelper& rImpHelper,
                           SvXMLImport& rImport, const OUString& rLocalName,
                           tSchXMLLSequencesPerIndex& rLSequencesPerIndex,
-                              com::sun::star::uno::Reference<
-                              com::sun::star::chart2::XDataSeries > xSeries );
+                              css::uno::Reference<
+                              css::chart2::XDataSeries > xSeries );
 
     virtual ~SchXMLPropertyMappingContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 private:
 
-    com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > mxChartDocument;
+    css::uno::Reference< css::chart2::XChartDocument > mxChartDocument;
     SchXMLImportHelper& mrImportHelper;
-    com::sun::star::uno::Reference< com::sun::star::chart2::XDataSeries > mxDataSeries;
+    css::uno::Reference< css::chart2::XDataSeries > mxDataSeries;
 
     tSchXMLLSequencesPerIndex& mrLSequencesPerIndex;
 

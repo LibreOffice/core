@@ -33,11 +33,10 @@ class XMLTextPropertySetContext : public SvXMLPropertySetContext
 public:
     XMLTextPropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
-                 const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList,
                 sal_uInt32 nFamily,
-                 ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+                ::std::vector< XMLPropertyState > &rProps,
+                const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                 OUString& rDopCapTextStyleName );
 
     virtual ~XMLTextPropertySetContext();
@@ -45,7 +44,7 @@ public:
     using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp) override;
 };

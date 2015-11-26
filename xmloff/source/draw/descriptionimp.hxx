@@ -28,15 +28,15 @@
 class SdXMLDescriptionContext : public SvXMLImportContext
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
+    css::uno::Reference< css::drawing::XShape > mxShape;
     OUString msText;
 public:
 
     SdXMLDescriptionContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rxShape );
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        const css::uno::Reference< css::drawing::XShape >& rxShape );
     virtual ~SdXMLDescriptionContext();
 
     virtual void EndElement() override;

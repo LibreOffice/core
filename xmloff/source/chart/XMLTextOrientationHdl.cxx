@@ -30,7 +30,7 @@ XMLTextOrientationHdl::~XMLTextOrientationHdl()
 
 bool XMLTextOrientationHdl::importXML(
     const OUString& rStrImpValue,
-    ::com::sun::star::uno::Any& rValue,
+    css::uno::Any& rValue,
     const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bRetval( false );
@@ -51,7 +51,7 @@ bool XMLTextOrientationHdl::importXML(
 
 bool XMLTextOrientationHdl::exportXML(
     OUString& rStrExpValue,
-    const ::com::sun::star::uno::Any& rValue,
+    const css::uno::Any& rValue,
     const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bVal (false );

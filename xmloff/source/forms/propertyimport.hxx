@@ -42,14 +42,14 @@ namespace xmloff
     class PropertyConversion
     {
     public:
-        static ::com::sun::star::uno::Any convertString(
-            const ::com::sun::star::uno::Type& _rExpectedType,
+        static css::uno::Any convertString(
+            const css::uno::Type& _rExpectedType,
             const OUString& _rReadCharacters,
             const SvXMLEnumMapEntry* _pEnumMap = nullptr,
             const bool _bInvertBoolean = false
         );
 
-        static ::com::sun::star::uno::Type xmlTypeToUnoType( const OUString& _rType );
+        static css::uno::Type xmlTypeToUnoType( const OUString& _rType );
     };
 
     class OFormLayerXMLImport_Impl;
@@ -65,7 +65,7 @@ namespace xmloff
         friend class OListPropertyContext;
 
     protected:
-        typedef ::std::vector< ::com::sun::star::beans::PropertyValue > PropertyValueArray;
+        typedef ::std::vector< css::beans::PropertyValue > PropertyValueArray;
         PropertyValueArray          m_aValues;
         PropertyValueArray          m_aGenericValues;
             // the values which the instance collects between StartElement and EndElement
@@ -86,10 +86,10 @@ namespace xmloff
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
 
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void Characters(const OUString& _rChars) override;
 
     protected:
@@ -123,18 +123,18 @@ namespace xmloff
         */
         void        enableTrackAttributes() { m_bTrackAttributes = true; }
 
-        inline void implPushBackPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
+        inline void implPushBackPropertyValue(const css::beans::PropertyValue& _rProp)
         {
             m_aValues.push_back(_rProp);
         }
 
-        inline void implPushBackPropertyValue( const OUString& _rName, const ::com::sun::star::uno::Any& _rValue )
+        inline void implPushBackPropertyValue( const OUString& _rName, const css::uno::Any& _rValue )
         {
-            m_aValues.push_back( ::com::sun::star::beans::PropertyValue(
-                _rName, -1, _rValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) );
+            m_aValues.push_back( css::beans::PropertyValue(
+                _rName, -1, _rValue, css::beans::PropertyState_DIRECT_VALUE ) );
         }
 
-        inline void implPushBackGenericPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
+        inline void implPushBackGenericPropertyValue(const css::beans::PropertyValue& _rProp)
         {
             m_aGenericValues.push_back(_rProp);
         }
@@ -155,11 +155,11 @@ namespace xmloff
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
 
 #if OSL_DEBUG_LEVEL > 0
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void Characters(const OUString& _rChars) override;
 #endif
     };
@@ -177,10 +177,10 @@ namespace xmloff
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
 
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
     };
 
     //= OListPropertyContext
@@ -196,13 +196,13 @@ namespace xmloff
                 const OPropertyImportRef& _rPropertyImporter );
 
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList ) override;
 
         virtual void EndElement() override;
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
     };
 
     //= OListValueContext
@@ -215,7 +215,7 @@ namespace xmloff
             OUString& _rListValueHolder );
 
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList ) override;
     };
 
 }   // namespace xmloff

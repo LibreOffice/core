@@ -42,8 +42,8 @@ using namespace xmloff::token;
 #define XML_STANDARDFORMAT "StandardFormat"
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier)
-    : xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
+            css::uno::Reference< css::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier)
+    : xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : css::uno::Reference< css::util::XNumberFormats > ()),
     pExport(nullptr),
     sStandardFormat(XML_STANDARDFORMAT),
     sType(XML_TYPE),
@@ -54,9 +54,9 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
 }
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier,
+            css::uno::Reference< css::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier,
             SvXMLExport& rTempExport )
-:   xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
+:   xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : css::uno::Reference< css::util::XNumberFormats > ()),
     pExport(&rTempExport),
     sStandardFormat(XML_STANDARDFORMAT),
     sType(XML_TYPE),

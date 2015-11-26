@@ -36,23 +36,22 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         std::list< RegressionStyle >& rRegressionStyleList,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >& xSeries,
-        const ::com::sun::star::awt::Size & rChartSize );
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        const css::awt::Size & rChartSize );
 
     virtual ~SchXMLRegressionCurveObjectContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
 
     SchXMLImportHelper&                mrImportHelper;
-    com::sun::star::uno::Reference<com::sun::star::chart2::XDataSeries > mxSeries;
-    com::sun::star::awt::Size          maChartSize;
+    css::uno::Reference<css::chart2::XDataSeries > mxSeries;
+    css::awt::Size                     maChartSize;
     std::list< RegressionStyle >&      mrRegressionStyleList;
 };
 
@@ -64,21 +63,19 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >& xSeries,
-        const ::com::sun::star::awt::Size & rChartSize,
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        const css::awt::Size & rChartSize,
         RegressionStyle & rRegressionStyle );
 
     virtual ~SchXMLEquationContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
     SchXMLImportHelper&                           mrImportHelper;
     RegressionStyle&                              mrRegressionStyle;
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > mxSeries;
-    ::com::sun::star::awt::Size maChartSize;
+    css::uno::Reference< css::chart2::XDataSeries > mxSeries;
+    css::awt::Size                                maChartSize;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLREGRESSIONCURVEOBJECTCONTEXT_HXX

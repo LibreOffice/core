@@ -279,7 +279,7 @@ SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSetti
 SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", true, SvXMLImportFlags::SETTINGS )
 
 SdXMLImport::SdXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     bool bIsDraw, SvXMLImportFlags nImportFlags )
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
@@ -751,7 +751,7 @@ SvXMLImportContext *SdXMLImport::CreateScriptContext(
     return pContext;
 }
 
-void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps)
+void SdXMLImport::SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps)
 {
     uno::Reference< beans::XPropertySet > xPropSet( GetModel(), uno::UNO_QUERY );
     if( !xPropSet.is() )
@@ -791,7 +791,7 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
     {
         xPropSet->setPropertyValue("VisibleArea", uno::makeAny( aVisArea )  );
     }
-    catch(const com::sun::star::uno::Exception&)
+    catch(const css::uno::Exception&)
     {
 /* #i79978# since old documents may contain invalid view settings, this is nothing to worry the user about.
         uno::Sequence<OUString> aSeq(0);
@@ -800,7 +800,7 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
     }
 }
 
-void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps)
+void SdXMLImport::SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps)
 {
     uno::Reference< lang::XMultiServiceFactory > xFac( GetModel(), uno::UNO_QUERY );
     if( !xFac.is() )

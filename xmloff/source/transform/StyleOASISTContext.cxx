@@ -62,8 +62,7 @@ static const sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 
 class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
+    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
 
     XMLPropType m_ePropType;
     bool        m_bControlStyle;
@@ -86,7 +85,7 @@ public:
 
     virtual ~XMLPropertiesTContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void Export() override;
 

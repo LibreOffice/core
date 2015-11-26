@@ -259,8 +259,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
 SvXMLNumFmtExport::SvXMLNumFmtExport(
                        SvXMLExport& rExp,
-                       const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::util::XNumberFormatsSupplier >& rSupp,
+                       const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
                        const OUString& rPrefix ) :
     rExport( rExp ),
     sPrefix( rPrefix ),
@@ -827,7 +826,7 @@ sal_Int32 lcl_FindSymbol( const OUString& sUpperStr, const OUString& sCurString 
 }
 
 bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
-                            const ::com::sun::star::lang::Locale& rLocale )
+                            const css::lang::Locale& rLocale )
 {
     //  returns true if currency element was written
 
@@ -1122,7 +1121,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     }
 
     // Native number transliteration
-    ::com::sun::star::i18n::NativeNumberXmlAttributes aAttr;
+    css::i18n::NativeNumberXmlAttributes aAttr;
     rFormat.GetNatNumXml( aAttr, nPart );
     if ( !aAttr.Format.isEmpty() )
     {

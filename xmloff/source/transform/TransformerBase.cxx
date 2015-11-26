@@ -439,7 +439,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
             m_xPropSet.set( *pAny, UNO_QUERY );
 
         // xmodel
-        if( cppu::UnoType<com::sun::star::frame::XModel>::get().isAssignableFrom( pAny->getValueType() ) )
+        if( cppu::UnoType<css::frame::XModel>::get().isAssignableFrom( pAny->getValueType() ) )
             mxModel.set( *pAny, UNO_QUERY );
     }
 

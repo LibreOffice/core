@@ -61,9 +61,9 @@ static const SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
 
 static const SvXMLEnumMapEntry aXMLAxisTypeMap[] =
 {
-    { XML_AUTO,  ::com::sun::star::chart::ChartAxisType::AUTOMATIC },
-    { XML_TEXT,  ::com::sun::star::chart::ChartAxisType::CATEGORY },
-    { XML_DATE,  ::com::sun::star::chart::ChartAxisType::DATE },
+    { XML_AUTO,  css::chart::ChartAxisType::AUTOMATIC },
+    { XML_TEXT,  css::chart::ChartAxisType::CATEGORY },
+    { XML_DATE,  css::chart::ChartAxisType::DATE },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -78,7 +78,7 @@ public:
                                    const OUString& rLocalName,
                                    OUString& rAddress );
     virtual ~SchXMLCategoriesContext();
-    virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 class DateScaleContext : public SvXMLImportContext
@@ -89,7 +89,7 @@ public:
                         const Reference< beans::XPropertySet >& rAxisProps );
 
     virtual ~DateScaleContext();
-    virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
     Reference< beans::XPropertySet > m_xAxisProps;
@@ -769,7 +769,7 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                         if( rChartTypeServiceName == "com.sun.star.chart2.ScatterChartType" )
                         {
                             xMainYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE) );
+                                    , uno::makeAny( css::chart::ChartAxisPosition_VALUE) );
                             double fCrossoverValue = 0.0;
                             aMainXScale.Origin >>= fCrossoverValue;
                             xMainYAxisProp->setPropertyValue("CrossoverValue"
@@ -778,22 +778,22 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                             if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                             {
                                 xMainYAxisProp->setPropertyValue("LabelPosition"
-                                    , uno::makeAny( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END) );
+                                    , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
                                 xMainYAxisProp->setPropertyValue("MarkPosition"
-                                    , uno::makeAny( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS) );
+                                    , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                                 if( xSecondaryYAxisProp.is() )
                                     xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START) );
+                                    , uno::makeAny( css::chart::ChartAxisPosition_START) );
                             }
                             else
                             {
                                 xMainYAxisProp->setPropertyValue("LabelPosition"
-                                    , uno::makeAny( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START) );
+                                    , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
                                 xMainYAxisProp->setPropertyValue("MarkPosition"
-                                    , uno::makeAny( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS) );
+                                    , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                                 if( xSecondaryYAxisProp.is() )
                                     xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_END) );
+                                    , uno::makeAny( css::chart::ChartAxisPosition_END) );
                             }
                         }
                         else
@@ -801,24 +801,24 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                             if( aMainXScale.Orientation == chart2::AxisOrientation_REVERSE )
                             {
                                 xMainYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_END) );
+                                    , uno::makeAny( css::chart::ChartAxisPosition_END) );
                                 if( xSecondaryYAxisProp.is() )
                                     xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
-                                        , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START) );
+                                        , uno::makeAny( css::chart::ChartAxisPosition_START) );
                             }
                             else
                             {
                                 xMainYAxisProp->setPropertyValue("CrossoverPosition"
-                                    , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START) );
+                                    , uno::makeAny( css::chart::ChartAxisPosition_START) );
                                 if( xSecondaryYAxisProp.is() )
                                     xSecondaryYAxisProp->setPropertyValue("CrossoverPosition"
-                                        , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_END) );
+                                        , uno::makeAny( css::chart::ChartAxisPosition_END) );
                             }
                         }
 
                         chart2::ScaleData aMainYScale = xMainYAxis->getScaleData();
                         xMainXAxisProp->setPropertyValue("CrossoverPosition"
-                                , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE) );
+                                , uno::makeAny( css::chart::ChartAxisPosition_VALUE) );
                         double fCrossoverValue = 0.0;
                         aMainYScale.Origin >>= fCrossoverValue;
                         xMainXAxisProp->setPropertyValue("CrossoverValue"
@@ -827,22 +827,22 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                         if( aMainYScale.Orientation == chart2::AxisOrientation_REVERSE )
                         {
                             xMainXAxisProp->setPropertyValue("LabelPosition"
-                                , uno::makeAny( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END) );
+                                , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_END) );
                             xMainXAxisProp->setPropertyValue("MarkPosition"
-                                , uno::makeAny( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS) );
+                                , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                             if( xSecondaryXAxisProp.is() )
                                 xSecondaryXAxisProp->setPropertyValue("CrossoverPosition"
-                                , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START) );
+                                , uno::makeAny( css::chart::ChartAxisPosition_START) );
                         }
                         else
                         {
                             xMainXAxisProp->setPropertyValue("LabelPosition"
-                                , uno::makeAny( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START) );
+                                , uno::makeAny( css::chart::ChartAxisLabelPosition_OUTSIDE_START) );
                             xMainXAxisProp->setPropertyValue("MarkPosition"
-                                , uno::makeAny( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS) );
+                                , uno::makeAny( css::chart::ChartAxisMarkPosition_AT_LABELS) );
                             if( xSecondaryXAxisProp.is() )
                                 xSecondaryXAxisProp->setPropertyValue("CrossoverPosition"
-                                , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_END) );
+                                , uno::makeAny( css::chart::ChartAxisPosition_END) );
                         }
                     }
                 }
@@ -933,13 +933,13 @@ struct theDateScaleAttributeTokenMap : public rtl::Static< DateScaleAttributeTok
 
 sal_Int32 lcl_getTimeUnit( const OUString& rValue )
 {
-    sal_Int32 nTimeUnit = ::com::sun::star::chart::TimeUnit::DAY;
+    sal_Int32 nTimeUnit = css::chart::TimeUnit::DAY;
     if( IsXMLToken( rValue, XML_DAYS ) )
-        nTimeUnit = ::com::sun::star::chart::TimeUnit::DAY;
+        nTimeUnit = css::chart::TimeUnit::DAY;
     else if( IsXMLToken( rValue, XML_MONTHS ) )
-        nTimeUnit = ::com::sun::star::chart::TimeUnit::MONTH;
+        nTimeUnit = css::chart::TimeUnit::MONTH;
     else if( IsXMLToken( rValue, XML_YEARS ) )
-        nTimeUnit = ::com::sun::star::chart::TimeUnit::YEAR;
+        nTimeUnit = css::chart::TimeUnit::YEAR;
     return nTimeUnit;
 }
 

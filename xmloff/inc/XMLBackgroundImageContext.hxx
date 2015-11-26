@@ -34,17 +34,16 @@ class XMLBackgroundImageContext : public XMLElementPropertyContext
     XMLPropertyState aFilterProp;
     XMLPropertyState aTransparencyProp;
 
-    ::com::sun::star::style::GraphicLocation ePos;
+    css::style::GraphicLocation ePos;
     OUString sURL;
     OUString sFilter;
     sal_Int8 nTransparency;
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xBase64Stream;
+    css::uno::Reference < css::io::XOutputStream > xBase64Stream;
 
 private:
     void ProcessAttrs(
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+            const css::uno::Reference<css::xml::sax::XAttributeList > & xAttrList );
 
 public:
 
@@ -52,8 +51,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+        const css::uno::Reference<css::xml::sax::XAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
         sal_Int32 nPosIdx,
         sal_Int32 nFilterIdx,
@@ -65,8 +63,7 @@ public:
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                 const css::uno::Reference<css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual void EndElement() override;
 };

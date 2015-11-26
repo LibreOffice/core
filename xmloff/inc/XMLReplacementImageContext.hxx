@@ -30,10 +30,8 @@ namespace com { namespace sun { namespace star {
 
 class XMLReplacementImageContext : public SvXMLImportContext
 {
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::io::XOutputStream > m_xBase64Stream;
-::com::sun::star::uno::Reference <
-        ::com::sun::star::beans::XPropertySet > m_xPropSet;
+    css::uno::Reference < css::io::XOutputStream > m_xBase64Stream;
+    css::uno::Reference < css::beans::XPropertySet > m_xPropSet;
 
     OUString m_sHRef;
     const OUString m_sGraphicURL;
@@ -44,18 +42,15 @@ public:
     XMLReplacementImageContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & rAttrList,
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::beans::XPropertySet >& rPropSet );
+            const css::uno::Reference< css::xml::sax::XAttributeList > & rAttrList,
+            const css::uno::Reference< css::beans::XPropertySet >& rPropSet );
     virtual ~XMLReplacementImageContext();
 
     virtual void EndElement() override;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
 };
 

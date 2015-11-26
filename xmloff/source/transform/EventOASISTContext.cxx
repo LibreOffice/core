@@ -130,14 +130,11 @@ bool ParseURL(
     const OUString& rAttrValue,
     OUString* pName, OUString* pLocation )
 {
-    Reference< com::sun::star::uno::XComponentContext >
-        xContext = ::comphelper::getProcessComponentContext();
+    Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-    Reference< com::sun::star::uri::XUriReferenceFactory > xFactory =
-        com::sun::star::uri::UriReferenceFactory::create(xContext);
+    Reference< css::uri::XUriReferenceFactory > xFactory = css::uri::UriReferenceFactory::create(xContext);
 
-    Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl (
-        xFactory->parse( rAttrValue ), UNO_QUERY );
+    Reference< css::uri::XVndSunStarScriptUrl > xUrl ( xFactory->parse( rAttrValue ), UNO_QUERY );
 
     if ( xUrl.is() )
     {

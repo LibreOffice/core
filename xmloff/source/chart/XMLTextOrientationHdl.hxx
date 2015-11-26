@@ -28,10 +28,10 @@ public:
     virtual ~XMLTextOrientationHdl();
 
     virtual bool importXML( const OUString& rStrImpValue,
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue,
-                                const ::com::sun::star::uno::Any& rValue,
+                                const css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 

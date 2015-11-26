@@ -58,13 +58,11 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     /** fill property values for this template entry */
     virtual void FillPropertyValues(
-        ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rValues) override;
+        css::uno::Sequence<css::beans::PropertyValue> & rValues) override;
 };
 
 #endif

@@ -2575,7 +2575,7 @@ bool XMLTextImportHelper::hasCurrentFieldCtx()
     return !m_xImpl->m_FieldStack.empty();
 }
 
-void XMLTextImportHelper::setCurrentFieldParamsTo(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField> &xFormField)
+void XMLTextImportHelper::setCurrentFieldParamsTo(css::uno::Reference< css::text::XFormField> &xFormField)
 {
     assert(!m_xImpl->m_FieldStack.empty());
     if (!m_xImpl->m_FieldStack.empty() && xFormField.is())
