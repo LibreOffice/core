@@ -26,9 +26,9 @@
 
 #ifndef HAVE_DLFCN_H
 
-#if defined(LINUX) || defined(SOLARIS)
+#if defined(LINUX) || defined(SOLARIS) || defined(FREEBSD)
 #define HAVE_DLFCN_H
-#endif  /* LINUX || SOLARIS */
+#endif  /* LINUX || SOLARIS || FREEBSD */
 
 #endif  /* HAVE_DLFCN_H */
 
@@ -73,7 +73,7 @@ static void osl_diagnose_backtrace_Impl (
 #define OSL_DIAGNOSE_OUTPUTMESSAGE(f, s) \
 ((f != 0) ? (*(f))((s)) : (void)fprintf(stderr, "%s", (s)))
 
-#if defined (LINUX) || defined (SOLARIS)
+#if defined (LINUX) || defined (SOLARIS) || defined(FREEBSD)
 /************************************************************************/
 /* osl_diagnose_frame_Impl */
 /************************************************************************/
@@ -194,14 +194,46 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
     }
 }
 
-#else  /* (LINUX || SOLARIS) */
+#elif defined(FREEBSD)
+
+#include <setjmp.h>
+#include "backtrace.h" /* for struct frame */
+
+#if defined(X86) || defined(X86_64)
+
+#define FRAME_PTR_OFFSET 3
+#define FRAME_OFFSET 0
+
+#endif /* (X86 || X86_64) */
+
+static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
+{
+    struct frame * fp;
+    jmp_buf        ctx;
+    int            i;
+
+    setjmp (ctx);
+    fp = (struct frame*)(((long*)(ctx))[FRAME_PTR_OFFSET]);
+
+    for (i = 0; (i < FRAME_OFFSET) && (fp != 0); i++)
+        fp = fp->fr_savfp;
+
+    for (i = 0; (fp != 0) && (fp->fr_savpc != 0); i++)
+    {
+        struct frame * prev = fp->fr_savfp;
+        osl_diagnose_frame_Impl (f, i, (void*)(fp->fr_savpc));
+        fp = (prev > fp) ? prev : 0;
+    }
+}
+
+#else  /* (LINUX || SOLARIS || FREEBSD) */
 
 static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 {
     /* not yet implemented */
 }
 
-#endif /* (LINUX || SOLARIS) */
+#endif /* (LINUX || SOLARIS || FREEBSD) */
 
 /************************************************************************/
 /* osl_assertFailedLine */
