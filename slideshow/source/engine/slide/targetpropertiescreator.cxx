@@ -95,19 +95,26 @@ namespace internal
         class NodeFunctor
         {
         public:
-            explicit NodeFunctor( XShapeHash& rShapeHash ) :
-                mrShapeHash( rShapeHash ),
+            /// tdf#96083 bInitial added; allows to specify if initial or final state is to be detected
+            explicit NodeFunctor(
+                XShapeHash& rShapeHash,
+                bool bInitial )
+            :   mrShapeHash( rShapeHash ),
                 mxTargetShape(),
-                mnParagraphIndex( -1 )
+                mnParagraphIndex( -1 ),
+                mbInitial( bInitial)
             {
             }
 
+            /// tdf#96083 bInitial added; allows to specify if initial or final state is to be detected
             NodeFunctor( XShapeHash&                                rShapeHash,
                          const uno::Reference< drawing::XShape >&   rTargetShape,
-                         sal_Int16                                  nParagraphIndex ) :
+                         sal_Int16                                  nParagraphIndex,
+                         bool                                       bInitial) :
                 mrShapeHash( rShapeHash ),
                 mxTargetShape( rTargetShape ),
-                mnParagraphIndex( nParagraphIndex )
+                mnParagraphIndex( nParagraphIndex ),
+                mbInitial( bInitial )
             {
             }
 
@@ -169,9 +176,11 @@ namespace internal
                         // FALLTHROUGH intended
                     case animations::AnimationNodeType::SEQ:
                     {
+                        /// forward bInitial
                         NodeFunctor aFunctor( mrShapeHash,
                                               xTargetShape,
-                                              nParagraphIndex );
+                                              nParagraphIndex,
+                                              mbInitial );
                         if( !for_each_childNode( xNode, aFunctor ) )
                         {
                             OSL_FAIL( "AnimCore: NodeFunctor::operator(): child node iteration failed, "
@@ -251,7 +260,9 @@ namespace internal
                         // check whether we already have an entry for
                         // this target (we only take the first set
                         // effect for every shape)
-                        if( mrShapeHash.find( aTarget ) != mrShapeHash.end() )
+                        // tdf#96083 to keep the initial entry, break when initial state is requested.
+                        // for final state, let the entry evtl ve overwritten in the unordered list
+                        if( mbInitial && mrShapeHash.find( aTarget ) != mrShapeHash.end() )
                             break; // already an entry in existence for given XShape
 
                         // if this is an appear effect, hide shape
@@ -286,6 +297,14 @@ namespace internal
                                 }
                             }
                         }
+
+                        // tdf#96083 if initial anim makes shape visible, set it to invisible. For
+                        // final state all is correct intuitively (shape is visible)
+                        if(mbInitial)
+                        {
+                            bVisible = !bVisible;
+                        }
+
                         // target is set the 'visible' value,
                         // so we should record the opposite value
                         mrShapeHash.insert(
@@ -296,7 +315,7 @@ namespace internal
                                             beans::NamedValue(
                                                 //xAnimateNode->getAttributeName(),
                                                 OUString("visibility"),
-                                                uno::makeAny( !bVisible ) ) ) ) );
+                                                uno::makeAny( bVisible ) ) ) ) );
                     break;
                     }
                 }
@@ -306,19 +325,25 @@ namespace internal
             XShapeHash&                         mrShapeHash;
             uno::Reference< drawing::XShape >   mxTargetShape;
             sal_Int16                           mnParagraphIndex;
+
+            // get initial or filal state
+            bool                                mbInitial;
         };
     }
 
-    uno::Sequence< animations::TargetProperties > SAL_CALL TargetPropertiesCreator::createInitialTargetProperties
+    uno::Sequence< animations::TargetProperties > SAL_CALL TargetPropertiesCreator::createTargetProperties
         (
-            const uno::Reference< animations::XAnimationNode >& xRootNode
+            const uno::Reference< animations::XAnimationNode >& xRootNode,
+            bool bInitial
         ) //throw (uno::RuntimeException, std::exception)
     {
         // scan all nodes for visibility changes, and record first
         // 'visibility=true' for each shape
         XShapeHash aShapeHash( 101 );
 
-        NodeFunctor aFunctor( aShapeHash );
+        NodeFunctor aFunctor(
+            aShapeHash,
+            bInitial );
 
         // TODO(F1): Maybe limit functor application to main sequence
         // alone (CL said something that shape visibility is only

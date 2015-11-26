@@ -34,7 +34,10 @@ namespace slideshow
     {
         namespace TargetPropertiesCreator
         {
-            uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode );
+            // tdf#96083 added bool to express if initial or final state is requested
+            uno::Sequence< animations::TargetProperties > SAL_CALL createTargetProperties(
+                const uno::Reference< animations::XAnimationNode >& rootNode,
+                bool bInitial );
         }
 
     } // namespace internal
