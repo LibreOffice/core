@@ -9,13 +9,7 @@
 
 $(eval $(call gb_Library_Library,$(gb_CPPU_ENV)_uno))
 
-ifeq ($(OS)-$(CPUNAME),AIX-POWERPC)
-
-bridges_SELECTED_BRIDGE := gcc3_aix_powerpc
-bridge_exception_objects := except
-bridge_cxx_objects := cpp2uno uno2cpp
-
-else ifeq ($(CPUNAME),ARM)
+ifeq ($(CPUNAME),ARM)
 
 ifeq ($(OS),IOS)
 $(eval $(call gb_Library_use_sdk_api,gcc3_uno))
@@ -25,7 +19,7 @@ bridge_exception_objects := cpp2uno cpp2uno-arm cpp2uno-arm64 cpp2uno-i386 excep
 $(eval $(call gb_Library_use_custom_headers,gcc3_uno,\
 	bridges/source/cpp_uno/gcc3_ios_arm \
 ))
-else ifneq ($(filter LINUX ANDROID,$(OS)),)
+else ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_arm
 bridge_noopt_objects := cpp2uno except uno2cpp
 # HACK
@@ -35,8 +29,9 @@ $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,gcc3_uno)) : \
 	EXTRAOBJECTLISTS += $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
 endif
 
-else ifneq (,$(filter ANDROID-AARCH64 LINUX-AARCH64,$(OS)-$(CPUNAME)))
+else ifeq ($(CPUNAME),AARCH64)
 
+ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_aarch64
 bridge_exception_objects := abi callvirtualfunction uno2cpp
 
@@ -46,23 +41,30 @@ $(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno, \
         $(gb_LinkTarget_EXCEPTIONFLAGS) \
         $(call gb_LinkTarget__get_cxxflags,$(gb_CPPU_ENV)_uno)) \
 ))
+endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-AXP)
+else ifeq ($(CPUNAME),AXP)
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_alpha
 bridge_exception_objects := cpp2uno except uno2cpp
+endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-HPPA)
+else ifeq ($(CPUNAME),HPPA)
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_hppa
 bridge_noopt_objects := call cpp2uno except uno2cpp
+endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-IA64)
+else ifeq ($(CPUNAME),IA64)
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_ia64
 bridge_asm_objects := call
 bridge_exception_objects := except
 bridge_noopt_objects := cpp2uno uno2cpp
+endif
 
 else ifeq ($(CPUNAME),INTEL)
 
@@ -86,10 +88,12 @@ bridge_noopt_objects := uno2cpp
 bridge_exception_objects := callvirtualmethod cpp2uno dllinit except smallstruct
 endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-M68K)
+else ifeq ($(CPUNAME),M68K)
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_m68k
 bridge_noopt_objects := cpp2uno except uno2cpp
+endif
 
 else ifeq ($(CPUNAME),GODSON)
 
@@ -108,34 +112,52 @@ bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
 endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-POWERPC)
+else ifeq ($(CPUNAME),POWERPC)
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_powerpc
 bridge_noopt_objects := uno2cpp
 bridge_exception_objects := cpp2uno except
+else ifeq ($(OS),AIX)
+bridges_SELECTED_BRIDGE := gcc3_aix_powerpc
+bridge_exception_objects := except
+bridge_cxx_objects := cpp2uno uno2cpp
+endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-POWERPC64)
+else ifeq ($(CPUNAME),POWERPC64)
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_powerpc64
 bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
+endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-S390)
+else ifeq ($(CPUNAME),S390)
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_s390
 bridge_exception_objects := cpp2uno except uno2cpp
+endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-S390X)
+else ifeq ($(CPUNAME),S390X)
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_s390x
 bridge_exception_objects := cpp2uno except uno2cpp
+endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-SPARC)
+else ifeq ($(CPUNAME),SPARC)
 
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_sparc
 bridge_asm_objects := call
 bridge_noopt_objects := except
 bridge_exception_objects := cpp2uno uno2cpp
+else ifeq ($(OS),SOLARIS)
+bridges_SELECTED_BRIDGE := gcc3_solaris_sparc
+bridge_noopt_objects := cpp2uno uno2cpp
+bridge_exception_objects := except
+endif
 
 else ifeq ($(CPUNAME),X86_64)
 
@@ -159,12 +181,6 @@ bridge_asm_objects := call
 bridge_noncallexception_noopt_objects := callvirtualmethod
 bridge_exception_objects := abi cpp2uno except uno2cpp
 endif
-
-else ifeq ($(OS)-$(CPUNAME),SOLARIS-SPARC)
-
-bridges_SELECTED_BRIDGE := gcc3_solaris_sparc
-bridge_noopt_objects := cpp2uno uno2cpp
-bridge_exception_objects := except
 
 endif
 
