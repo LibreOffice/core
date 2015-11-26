@@ -1520,6 +1520,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             {
                 // Found, thus return
                 xDocSh = pShell;
+                delete pMed;
                 return 1;
             }
         }
@@ -1531,6 +1532,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
         }
         else
             pShell = SfxObjectShell::GetNext( *pShell, checkSfxObjectShell<SwDocShell> );
+        delete pMed;
     }
 
     // 2. Open the file ourselves

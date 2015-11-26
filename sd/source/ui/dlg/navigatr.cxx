@@ -642,15 +642,18 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
                         maTlbObjects->Fill(pDropDoc, false, maDropFileName);
                         RefreshDocumentLB( &maDropFileName );
                     }
+                    delete pDropDoc;
                 }
             }
             else
             {
+                delete pFilter;
                 return false;
             }
         }
         else
         {
+            delete pFilter;
             return false;
         }
     }
