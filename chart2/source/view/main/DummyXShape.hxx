@@ -44,7 +44,6 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -227,16 +226,7 @@ private:
     css::drawing::HomogenMatrix maUnitCircleToScene;
 };
 
-class DummyPieSegment : public DummyXShape
-{
-public:
-    DummyPieSegment(
-            const css::drawing::Direction3D& rOffset, const css::drawing::HomogenMatrix& rUnitCircleToScene);
-
-private:
-    css::drawing::Direction3D maOffset;
-    css::drawing::HomogenMatrix maUnitCircleToScene;
-};
+class DummyPieSegment : public DummyXShape {};
 
 class DummyStripe : public DummyXShape
 {
@@ -248,14 +238,7 @@ private:
     Stripe maStripe;
 };
 
-class DummyArea3D : public DummyXShape
-{
-public:
-    explicit DummyArea3D(const css::drawing::PolyPolygonShape3D& rShape);
-
-private:
-    css::drawing::PolyPolygonShape3D maShapes;
-};
+class DummyArea3D : public DummyXShape {};
 
 class DummyArea2D : public DummyXShape
 {
@@ -275,8 +258,6 @@ public:
             sal_Int32 nStandardSymbol, sal_Int32 nFillColor);
     void render() override;
 private:
-    css::drawing::Position3D mrPosition;
-    css::drawing::Direction3D mrSize;
     sal_Int32 mnStandardSymbol;
     sal_Int32 mnFillColor;
 };
@@ -302,10 +283,7 @@ public:
 class DummyLine3D : public DummyXShape
 {
 public:
-    DummyLine3D(const css::drawing::PolyPolygonShape3D& rPoints, const VLineProperties& rProperties);
-
-private:
-    css::drawing::PolyPolygonShape3D maPoints;
+    DummyLine3D(const VLineProperties& rProperties);
 };
 
 class DummyLine2D : public DummyXShape

@@ -453,23 +453,11 @@ void DummyPieSegment2D::render()
 
 }
 
-DummyPieSegment::DummyPieSegment(
-        const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene ):
-    maOffset(rOffset),
-    maUnitCircleToScene(rUnitCircleToScene)
-{
-}
-
 DummyStripe::DummyStripe(const Stripe& rStripe, const uno::Reference< beans::XPropertySet > & xPropSet,
         const tPropertyNameMap& rPropertyNameMap ):
     maStripe(rStripe)
 {
     setProperties(xPropSet, rPropertyNameMap, maProperties);
-}
-
-DummyArea3D::DummyArea3D(const drawing::PolyPolygonShape3D& rShape):
-    maShapes(rShape)
-{
 }
 
 DummyArea2D::DummyArea2D(const drawing::PointSequenceSequence& rShape):
@@ -505,8 +493,6 @@ void DummyArea2D::render()
 
 DummySymbol2D::DummySymbol2D(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
         sal_Int32 nStandardSymbol, sal_Int32 nFillColor):
-    mrPosition(rPos),
-    mrSize(rSize),
     mnStandardSymbol(nStandardSymbol),
     mnFillColor(nFillColor)
 {
@@ -592,8 +578,7 @@ void setProperties( const VLineProperties& rLineProperties, std::map<OUString, u
 
 }
 
-DummyLine3D::DummyLine3D(const drawing::PolyPolygonShape3D& rPoints, const VLineProperties& rLineProperties):
-    maPoints(rPoints)
+DummyLine3D::DummyLine3D(const VLineProperties& rLineProperties)
 {
     setProperties(rLineProperties, maProperties);
 }
