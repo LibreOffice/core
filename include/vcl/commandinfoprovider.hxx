@@ -100,6 +100,8 @@ public:
     */
     void SetFrame (const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
+    void dispose();
+
   private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::frame::XFrame> mxCachedDataFrame;

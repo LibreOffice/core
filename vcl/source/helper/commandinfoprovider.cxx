@@ -31,6 +31,8 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 
+#include "svdata.hxx"
+
 using namespace css;
 using namespace css::uno;
 
@@ -100,15 +102,26 @@ CommandInfoProvider::CommandInfoProvider()
       msCachedModuleIdentifier(),
       mxFrameListener()
 {
+    ImplGetSVData()->mpCommandInfoProvider = this;
 }
 
-CommandInfoProvider::~CommandInfoProvider()
+void CommandInfoProvider::dispose()
 {
     if (mxFrameListener.is())
     {
         mxFrameListener->dispose();
-        mxFrameListener = nullptr;
+        mxFrameListener.clear();
     }
+    mxCachedGlobalAcceleratorConfiguration.clear();
+    mxCachedModuleAcceleratorConfiguration.clear();
+    mxCachedDocumentAcceleratorConfiguration.clear();
+    mxCachedDataFrame.clear();
+    mxContext.clear();
+}
+
+CommandInfoProvider::~CommandInfoProvider()
+{
+    dispose();
 }
 
 OUString CommandInfoProvider::GetLabelForCommand (

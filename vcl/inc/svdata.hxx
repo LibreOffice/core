@@ -75,7 +75,11 @@ class Image;
 class PopupMenu;
 class Application;
 class OutputDevice;
-namespace vcl { class Window; }
+namespace vcl
+{
+    class CommandInfoProvider;
+    class Window;
+}
 class SystemWindow;
 class WorkWindow;
 class Dialog;
@@ -338,6 +342,7 @@ struct ImplSVData
     VclPtr<vcl::Window>     mpIntroWindow;                  // the splash screen
     DockingManager*         mpDockingManager;
     BlendFrameCache*        mpBlendFrameCache;
+    vcl::CommandInfoProvider* mpCommandInfoProvider;
 
     oslThreadIdentifier     mnMainThreadId;
     rtl::Reference< vcl::DisplayConnection > mxDisplayConnection;
