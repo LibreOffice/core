@@ -22,7 +22,6 @@
 
 #include "xeroot.hxx"
 #include "xerecord.hxx"
-#include <boost/ptr_container/ptr_map.hpp>
 
 class ScDBData;
 class XclExpTablesManagerImpl;
@@ -44,7 +43,7 @@ protected:
         Entry( const ScDBData* pData, sal_Int32 nTableId );
     };
 
-    typedef std::vector<Entry> TablesType;
+    typedef ::std::vector<Entry> TablesType;
     TablesType maTables;
 
     static void         SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry );
@@ -59,10 +58,10 @@ public:
     virtual             ~XclExpTablesManager();
 
     void                Initialize();
-    XclExpTables*       GetTablesBySheet( SCTAB nTab );
+    ::std::shared_ptr< XclExpTables > GetTablesBySheet( SCTAB nTab );
 
 private:
-    typedef boost::ptr_map< SCTAB, XclExpTables > TablesMapType;
+    typedef ::std::map< SCTAB, ::std::shared_ptr< XclExpTables > > TablesMapType;
     TablesMapType maTablesMap;
 };
 
