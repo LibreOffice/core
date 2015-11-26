@@ -40,10 +40,10 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 class XMLDocumentWrapper_XmlSecImpl : public cppu::WeakImplHelper
 <
-    com::sun::star::xml::wrapper::XXMLDocumentWrapper,
-    com::sun::star::xml::sax::XDocumentHandler,
-    com::sun::star::xml::csax::XCompressedDocumentHandler,
-    com::sun::star::lang::XServiceInfo
+    css::xml::wrapper::XXMLDocumentWrapper,
+    css::xml::sax::XDocumentHandler,
+    css::xml::csax::XCompressedDocumentHandler,
+    css::lang::XServiceInfo
 >
 /****** XMLDocumentWrapper_XmlSecImpl.hxx/CLASS XMLDocumentWrapper_XmlSecImpl *
  *
@@ -83,30 +83,29 @@ private:
      */
     xmlNodePtr m_pStopAtNode;
     xmlNodePtr m_pCurrentReservedNode;
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper > > m_aReservedNodes;
+    css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > m_aReservedNodes;
     sal_Int32 m_nReservedNodeIndex;
 
 private:
     void getNextSAXEvent();
 
     static void sendStartElement(
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler2,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler2,
         const xmlNodePtr pNode)
-        throw (com::sun::star::xml::sax::SAXException);
+        throw (css::xml::sax::SAXException);
 
     static void sendEndElement(
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler2,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler2,
         const xmlNodePtr pNode)
-        throw (com::sun::star::xml::sax::SAXException);
+        throw (css::xml::sax::SAXException);
 
     static void sendNode(
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xHandler2,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler2,
         const xmlNodePtr pNode)
-        throw (com::sun::star::xml::sax::SAXException);
+        throw (css::xml::sax::SAXException);
 
     static OString getNodeQName(const xmlNodePtr pNode);
 
@@ -117,8 +116,7 @@ private:
     void removeNode( const xmlNodePtr pNode) const;
 
     static xmlNodePtr checkElement(
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::wrapper::XXMLElementWrapper >& xXMLElement);
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& xXMLElement);
 
     void buildIDAttr( xmlNodePtr pNode ) const;
     void rebuildIDLink( xmlNodePtr pNode ) const;
@@ -127,140 +125,133 @@ public:
     XMLDocumentWrapper_XmlSecImpl();
     virtual ~XMLDocumentWrapper_XmlSecImpl();
 
-    /* com::sun::star::xml::wrapper::XXMLDocumentWrapper */
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL getCurrentElement(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    /* css::xml::wrapper::XXMLDocumentWrapper */
+    virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL getCurrentElement(  )
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL setCurrentElement( const com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper >& element )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setCurrentElement( const css::uno::Reference<
+        css::xml::wrapper::XXMLElementWrapper >& element )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removeCurrentElement(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual sal_Bool SAL_CALL isCurrent( const com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper >& node )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isCurrent( const css::uno::Reference<
+        css::xml::wrapper::XXMLElementWrapper >& node )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL isCurrentElementEmpty(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual OUString SAL_CALL getNodeName( const com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper >& node )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getNodeName( const css::uno::Reference<
+        css::xml::wrapper::XXMLElementWrapper >& node )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL clearUselessData(
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::wrapper::XXMLElementWrapper >& node,
-        const com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
-            com::sun::star::xml::wrapper::XXMLElementWrapper > >& reservedDescendants,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::wrapper::XXMLElementWrapper >& stopAtNode )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node,
+        const css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >& reservedDescendants,
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& stopAtNode )
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL collapse( const com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper >& node )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL collapse( const css::uno::Reference<
+        css::xml::wrapper::XXMLElementWrapper >& node )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL generateSAXEvents(
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& handler,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xEventKeeperHandler,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::wrapper::XXMLElementWrapper >& startNode,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::wrapper::XXMLElementWrapper >& endNode )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& handler,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xEventKeeperHandler,
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& startNode,
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& endNode )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL getTree(
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& handler )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& handler )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL rebuildIDLink(
-        const com::sun::star::uno::Reference< com::sun::star::xml::wrapper::XXMLElementWrapper >& node )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node )
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    /* com::sun::star::xml::sax::XDocumentHandler */
+    /* css::xml::sax::XDocumentHandler */
     virtual void SAL_CALL startDocument(  )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL endDocument(  )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL startElement(
         const OUString& aName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL endElement( const OUString& aName )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL characters( const OUString& aChars )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL setDocumentLocator( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XLocator >& xLocator )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
-    /* com::sun::star::xml::csax::XCompressedDocumentHandler */
+    /* css::xml::csax::XCompressedDocumentHandler */
     virtual void SAL_CALL compressedStartDocument(  )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL compressedEndDocument(  )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL compressedStartElement(
         const OUString& aName,
-        const com::sun::star::uno::Sequence<
-            com::sun::star::xml::csax::XMLAttribute >& aAttributes )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL compressedEndElement( const OUString& aName )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL compressedCharacters( const OUString& aChars )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL compressedIgnorableWhitespace( const OUString& aWhitespaces )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL compressedProcessingInstruction( const OUString& aTarget, const OUString& aData )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL compressedSetDocumentLocator(
         sal_Int32 columnNumber,
         sal_Int32 lineNumber,
         const OUString& publicId,
         const OUString& systemId )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
-    /* com::sun::star::lang::XServiceInfo */
+    /* css::lang::XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 OUString XMLDocumentWrapper_XmlSecImpl_getImplementationName()
-    throw ( com::sun::star::uno::RuntimeException );
+    throw ( css::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString > SAL_CALL
     XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames(  )
-    throw ( com::sun::star::uno::RuntimeException );
+    throw ( css::uno::RuntimeException );
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+css::uno::Reference< css::uno::XInterface >
 SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > &)
-    throw ( com::sun::star::uno::Exception );
+    const css::uno::Reference< css::uno::XComponentContext > &)
+    throw ( css::uno::Exception );
 
 #endif
 

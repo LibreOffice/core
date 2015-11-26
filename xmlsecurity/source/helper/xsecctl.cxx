@@ -399,7 +399,7 @@ void XSecController::initializeSAXChain()
     chainOff();
 }
 
-cssu::Reference< com::sun::star::io::XInputStream >
+cssu::Reference< css::io::XInputStream >
     XSecController::getObjectInputStream( const OUString& objectURL )
 /****** XSecController/getObjectInputStream ************************************
  *
@@ -416,7 +416,7 @@ cssu::Reference< com::sun::star::io::XInputStream >
  *  xInputStream - the XInputStream interface
  ******************************************************************************/
 {
-        cssu::Reference< com::sun::star::io::XInputStream > xObjectInputStream;
+        cssu::Reference< css::io::XInputStream > xObjectInputStream;
 
     DBG_ASSERT( m_xUriBinding.is(), "Need XUriBinding!" );
 
@@ -925,8 +925,8 @@ void SAL_CALL XSecController::bufferStatusChanged( sal_Bool /*isBufferEmpty*/)
 /*
  * XSignatureCreationResultListener
  */
-void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
-        throw (com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
+        throw (css::uno::RuntimeException, std::exception)
 {
     int index = findSignatureInfor(securityId);
     assert(index != -1 && "Signature Not Found!");
@@ -937,8 +937,8 @@ void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, com::sun::
 /*
  * XSignatureVerifyResultListener
  */
-void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
-        throw (com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
+        throw (css::uno::RuntimeException, std::exception)
 {
     int index = findSignatureInfor(securityId);
     assert(index != -1 && "Signature Not Found!");

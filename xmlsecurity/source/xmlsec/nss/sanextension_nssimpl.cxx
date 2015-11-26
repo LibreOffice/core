@@ -50,15 +50,15 @@ SanExtensionImpl::~SanExtensionImpl() {
 
 
 //Methods from XCertificateExtension
-sal_Bool SAL_CALL SanExtensionImpl::isCritical() throw( ::com::sun::star::uno::RuntimeException, std::exception ) {
+sal_Bool SAL_CALL SanExtensionImpl::isCritical() throw( css::uno::RuntimeException, std::exception ) {
     return m_critical ;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionId() throw( ::com::sun::star::uno::RuntimeException, std::exception ) {
+css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionId() throw( css::uno::RuntimeException, std::exception ) {
     return m_xExtnId ;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionValue() throw( ::com::sun::star::uno::RuntimeException, std::exception ) {
+css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionValue() throw( css::uno::RuntimeException, std::exception ) {
     return m_xExtnValue ;
 }
 
@@ -82,7 +82,7 @@ namespace {
 }
 
 //Methods from XSanExtension
-::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > SAL_CALL SanExtensionImpl::getAlternativeNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ){
+css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl::getAlternativeNames() throw( css::uno::RuntimeException, std::exception ){
 
     if (!m_Entries.hasElements())
     {
@@ -109,7 +109,7 @@ namespace {
             switch (current->type) {
                 case certOtherName: {
                     arrCertAltNameEntry[i].Type = ExtAltNameType_OTHER_NAME;
-                    ::com::sun::star::beans::PropertyValue otherNameProp;
+                    css::beans::PropertyValue otherNameProp;
                     otherNameProp.Name = OUString::createFromAscii(CERT_GetOidString(&current->name.OthName.oid));
 
                     Sequence< sal_Int8 > otherName( current->name.OthName.name.len ) ;
@@ -170,7 +170,7 @@ namespace {
             current = CERT_GetNextGeneralName(current);
         }
 
-        m_Entries = ::comphelper::arrayToSequence< com::sun::star::security::CertAltNameEntry >(arrCertAltNameEntry, size);
+        m_Entries = ::comphelper::arrayToSequence< css::security::CertAltNameEntry >(arrCertAltNameEntry, size);
 
         delete [] arrCertAltNameEntry;
 

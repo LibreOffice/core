@@ -31,7 +31,7 @@ using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 XMLEncryptionTemplateImpl::XMLEncryptionTemplateImpl()
     : m_xTemplate( nullptr ),
       m_xTarget( nullptr ),
-      m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN ) {
+      m_nStatus ( css::xml::crypto::SecurityOperationStatus_UNKNOWN ) {
 }
 
 XMLEncryptionTemplateImpl::~XMLEncryptionTemplateImpl() {
@@ -39,40 +39,40 @@ XMLEncryptionTemplateImpl::~XMLEncryptionTemplateImpl() {
 
 /* XXMLEncryptionTemplate */
 void SAL_CALL XMLEncryptionTemplateImpl::setTemplate( const Reference< XXMLElementWrapper >& aTemplate )
-    throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception)
+    throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     m_xTemplate = aTemplate ;
 }
 
 /* XXMLEncryptionTemplate */
 Reference< XXMLElementWrapper > SAL_CALL XMLEncryptionTemplateImpl::getTemplate()
-throw (com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     return m_xTemplate ;
 }
 
 /* XXMLEncryptionTemplate */
 void SAL_CALL XMLEncryptionTemplateImpl::setTarget( const Reference< XXMLElementWrapper >& aTarget )
-    throw( com::sun::star::lang::IllegalArgumentException, std::exception ) {
+    throw( css::lang::IllegalArgumentException, std::exception ) {
     m_xTarget = aTarget ;
 }
 
 /* XXMLEncryptionTemplate */
 Reference< XXMLElementWrapper > SAL_CALL XMLEncryptionTemplateImpl::getTarget()
-throw (com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     return m_xTarget ;
 }
 
 void SAL_CALL XMLEncryptionTemplateImpl::setStatus(
-    ::com::sun::star::xml::crypto::SecurityOperationStatus status )
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::xml::crypto::SecurityOperationStatus status )
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     m_nStatus = status;
 }
 
-::com::sun::star::xml::crypto::SecurityOperationStatus SAL_CALL XMLEncryptionTemplateImpl::getStatus(  )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::xml::crypto::SecurityOperationStatus SAL_CALL XMLEncryptionTemplateImpl::getStatus(  )
+    throw (css::uno::RuntimeException, std::exception)
 {
     return m_nStatus;
 }

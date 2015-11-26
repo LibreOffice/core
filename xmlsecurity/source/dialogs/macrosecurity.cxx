@@ -222,7 +222,7 @@ IMPL_LINK_NOARG_TYPED(MacroSecurityTrustedSourcesTP, ViewCertPBHdl, Button*, voi
         sal_uInt16 nSelected = sal_uInt16( sal_uIntPtr( m_pTrustCertLB->FirstSelected()->GetUserData() ) );
 
         uno::Reference< css::security::XSerialNumberAdapter > xSerialNumberAdapter =
-            ::com::sun::star::security::SerialNumberAdapter::create(mpDlg->mxCtx);
+            css::security::SerialNumberAdapter::create(mpDlg->mxCtx);
 
         uno::Reference< css::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], xSerialNumberAdapter->toSequence( maTrustedAuthors[nSelected][1] ) );
 

@@ -44,7 +44,7 @@ private:
      * BEFOREMODIFY - this ElementCollector must notify before any
      *                    internal modification happens.
      */
-    com::sun::star::xml::crypto::sax::ElementMarkPriority m_nPriority;
+    css::xml::crypto::sax::ElementMarkPriority m_nPriority;
 
     /*
      * the modify flag, representing whether which elementcollector will
@@ -59,31 +59,26 @@ private:
     bool m_bNotified;
 
     /* the listener to be notified */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XReferenceResolvedListener > m_xReferenceResolvedListener;
+    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > m_xReferenceResolvedListener;
 
 public:
     ElementCollector(
         sal_Int32 nSecurityId,
         sal_Int32 nBufferId,
-        com::sun::star::xml::crypto::sax::ElementMarkPriority nPriority,
+        css::xml::crypto::sax::ElementMarkPriority nPriority,
         bool bToModify,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::crypto::sax::XReferenceResolvedListener >&
-            xReferenceResolvedListener);
+        const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener);
     virtual ~ElementCollector() {};
 
-    com::sun::star::xml::crypto::sax::ElementMarkPriority getPriority() const { return m_nPriority;}
+    css::xml::crypto::sax::ElementMarkPriority getPriority() const { return m_nPriority;}
     bool getModify() const { return m_bToModify;}
     void notifyListener();
     void setReferenceResolvedListener(
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::crypto::sax::XReferenceResolvedListener >&
-            referenceResolvedListener);
+        const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& referenceResolvedListener);
     void doNotify();
     ElementCollector* clone(
         sal_Int32 nId,
-        com::sun::star::xml::crypto::sax::ElementMarkPriority nPriority ) const;
+        css::xml::crypto::sax::ElementMarkPriority nPriority ) const;
 };
 
 #endif

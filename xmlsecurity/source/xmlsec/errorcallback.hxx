@@ -27,7 +27,7 @@
 // Only used for logging
 void setErrorRecorder();
 //ToDo
-//void setErrorRecorder(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
+//void setErrorRecorder(const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
 void clearErrorRecorder();
 
 #endif

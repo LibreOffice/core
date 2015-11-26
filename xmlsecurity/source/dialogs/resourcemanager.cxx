@@ -50,12 +50,12 @@ namespace XmlSec
         return pSysLocale->GetLocaleData();
     }
 
-    DateTime GetDateTime( const ::com::sun::star::util::DateTime& _rDT )
+    DateTime GetDateTime( const css::util::DateTime& _rDT )
     {
         return DateTime(_rDT);
     }
 
-    OUString GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
+    OUString GetDateTimeString( const css::util::DateTime& _rDT )
     {
         // String with date and time information (#i20172#)
         DateTime aDT( GetDateTime( _rDT ) );
@@ -64,7 +64,7 @@ namespace XmlSec
         return  rLoDa.getDate( aDT ) + " " + rLoDa.getTime( aDT );
     }
 
-    OUString GetDateString( const ::com::sun::star::util::DateTime& _rDT )
+    OUString GetDateString( const css::util::DateTime& _rDT )
     {
         return GetLocaleData().getDate( GetDateTime( _rDT ) );
     }
@@ -311,7 +311,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         return retVal;
     }
 
-    OUString GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak )
+    OUString GetHexString( const css::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak )
     {
         const sal_Int8*         pSerNumSeq = _rSeq.getConstArray();
         int                     nCnt = _rSeq.getLength();

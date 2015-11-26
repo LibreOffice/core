@@ -153,7 +153,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     {
         const SignatureReferenceInformation& refInfor = vReferenceInfors[i];
 
-        cssu::Reference< com::sun::star::io::XInputStream > xInputStream
+        cssu::Reference< css::io::XInputStream > xInputStream
             = getObjectInputStream( refInfor.ouURI );
 
         if (xInputStream.is())
@@ -266,7 +266,7 @@ void XSecController::setX509Certificate(
 
 void XSecController::setDate(
     sal_Int32 nSecurityId,
-    const ::com::sun::star::util::DateTime& rDateTime )
+    const css::util::DateTime& rDateTime )
 {
     int index = findSignatureInfor( nSecurityId );
 
@@ -354,7 +354,7 @@ bool XSecController::WriteSignature(
         {
             m_pErrorMessage = ERROR_SAXEXCEPTIONDURINGCREATION;
         }
-        catch( com::sun::star::io::IOException& )
+        catch( css::io::IOException& )
         {
             m_pErrorMessage = ERROR_IOEXCEPTIONDURINGCREATION;
         }

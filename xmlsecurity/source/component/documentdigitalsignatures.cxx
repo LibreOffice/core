@@ -198,7 +198,7 @@ void DocumentDigitalSignatures::showPackageSignatures(
 }
 
 OUString DocumentDigitalSignatures::getPackageSignatureDefaultStreamName(  )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return DocumentSignatureHelper::GetPackageSignatureDefaultStreamName();
 }
@@ -274,7 +274,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
     }
 
     if (!xInputStream.is() && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
-        return Sequence< ::com::sun::star::security::DocumentSignatureInformation >(0);
+        return Sequence< css::security::DocumentSignatureInformation >(0);
 
 
     XMLSignatureHelper aSignatureHelper( mxCtx );
@@ -284,7 +284,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
     DBG_ASSERT( bInit, "Error initializing security context!" );
 
     if ( !bInit )
-        return Sequence< ::com::sun::star::security::DocumentSignatureInformation >(0);
+        return Sequence< css::security::DocumentSignatureInformation >(0);
 
     aSignatureHelper.SetStorage(rxStorage, m_sODFVersion);
 
@@ -297,7 +297,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
     aSignatureHelper.EndMission();
 
-    Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecEnv = aSignatureHelper.GetSecurityEnvironment();
+    Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
     SignatureInformations aSignInfos = aSignatureHelper.GetSignatureInformations();
     int nInfos = aSignInfos.size();
@@ -307,7 +307,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
     if ( nInfos )
     {
        Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
-            ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+            css::security::SerialNumberAdapter::create(mxCtx);
 
         for( int n = 0; n < nInfos; ++n )
         {
@@ -356,7 +356,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
                 rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
             }
 
-            rSigInfo.SignatureIsValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
+            rSigInfo.SignatureIsValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
 
             // OOXML intentionally doesn't sign metadata.
@@ -420,7 +420,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     bool bFound = false;
 
     Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
-        ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+        css::security::SerialNumberAdapter::create(mxCtx);
 
     OUString sSerialNum = xSerialNumberAdapter->toString( Author->getSerialNumber() );
 
@@ -473,7 +473,7 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources(
     SvtSecurityOptions aSecOpts;
 
     Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
-        ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+        css::security::SerialNumberAdapter::create(mxCtx);
 
     SvtSecurityOptions::Certificate aNewCert( 3 );
     aNewCert[ 0 ] = Author->getIssuerName();

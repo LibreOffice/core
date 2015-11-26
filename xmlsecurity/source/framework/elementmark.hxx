@@ -52,7 +52,7 @@ protected:
      *                     not changed
      * TYPEOFELEMENTCOLLECTOR - represents an ElementCollector
      */
-    com::sun::star::xml::crypto::sax::ElementMarkType m_type;
+    css::xml::crypto::sax::ElementMarkType m_type;
 
 public:
     ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId);
@@ -62,7 +62,7 @@ public:
     void setBufferNode(const BufferNode* pBufferNode);
     sal_Int32 getSecurityId() const { return m_nSecurityId;}
     void setSecurityId(sal_Int32 nSecurityId);
-    com::sun::star::xml::crypto::sax::ElementMarkType getType() const { return m_type;}
+    css::xml::crypto::sax::ElementMarkType getType() const { return m_type;}
     sal_Int32 getBufferId() const { return m_nBufferId;}
 };
 

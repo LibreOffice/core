@@ -132,7 +132,7 @@ void CertificateChooser::ImplInitialize()
         }
 
         uno::Reference< css::security::XSerialNumberAdapter> xSerialNumberAdapter =
-            ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+            css::security::SerialNumberAdapter::create(mxCtx);
 
         sal_Int32 nCertificates = maCerts.getLength();
         for( sal_Int32 nCert = nCertificates; nCert; )

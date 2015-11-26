@@ -31,13 +31,13 @@
 #include <com/sun/star/security/CertAltNameEntry.hpp>
 
 class SanExtensionImpl : public ::cppu::WeakImplHelper<
-    ::com::sun::star::security::XSanExtension >
+    css::security::XSanExtension >
 {
     private:
         bool m_critical ;
-        ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnId ;
-        ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnValue ;
-        ::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > m_Entries;
+        css::uno::Sequence< sal_Int8 > m_xExtnId ;
+        css::uno::Sequence< sal_Int8 > m_xExtnValue ;
+        css::uno::Sequence< css::security::CertAltNameEntry > m_Entries;
 
         static OString removeOIDFromString( const OString &oid);
 
@@ -46,15 +46,15 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper<
         virtual ~SanExtensionImpl() ;
 
         //Methods from XCertificateExtension
-        virtual sal_Bool SAL_CALL isCritical() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        virtual sal_Bool SAL_CALL isCritical() throw( css::uno::RuntimeException, std::exception ) override ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( css::uno::RuntimeException, std::exception ) override ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( css::uno::RuntimeException, std::exception ) override ;
 
         //Methods from XSanExtension
 
-        virtual ::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > SAL_CALL getAlternativeNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL getAlternativeNames() throw( css::uno::RuntimeException, std::exception ) override ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SANEXTENSION_NSSIMPL_HXX

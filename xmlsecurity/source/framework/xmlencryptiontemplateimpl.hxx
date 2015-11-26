@@ -35,13 +35,13 @@
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 
 class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper<
-    ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ,
-    ::com::sun::star::lang::XServiceInfo >
+    css::xml::crypto::XXMLEncryptionTemplate ,
+    css::lang::XServiceInfo >
 {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTemplate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTarget;
-        ::com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
+        css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > m_xTemplate;
+        css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > m_xTarget;
+        css::xml::crypto::SecurityOperationStatus m_nStatus;
 
     public:
         explicit XMLEncryptionTemplateImpl();
@@ -49,45 +49,45 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper<
 
         //Methods from XXMLEncryptionTemplate
         virtual void SAL_CALL setTemplate(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement
+            const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement
             )
-            throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception) override;
+            throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL getTemplate(
-        ) throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL getTemplate(
+        ) throw (css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL setTarget(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement
-            ) throw( com::sun::star::lang::IllegalArgumentException, std::exception) override;
+            const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement
+            ) throw( css::lang::IllegalArgumentException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL getTarget(
-        ) throw (com::sun::star::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL getTarget(
+        ) throw (css::uno::RuntimeException, std::exception) override ;
 
         virtual void SAL_CALL setStatus(
-            ::com::sun::star::xml::crypto::SecurityOperationStatus status )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::xml::crypto::SecurityOperationStatus
+            css::xml::crypto::SecurityOperationStatus status )
+            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual css::xml::crypto::SecurityOperationStatus
             SAL_CALL getStatus(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override ;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        ) throw( css::uno::RuntimeException, std::exception ) override ;
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override ;
 
         //Helper for XServiceInfo
-        static ::com::sun::star::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
+        static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
-        static OUString impl_getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
+        static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
 
         //Helper for registry
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) throw( ::com::sun::star::uno::RuntimeException ) ;
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) throw( css::uno::RuntimeException ) ;
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
+        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;
 
 #endif  // _XMLENCRYPTIONTEMPLATE_XMLSECIMPL_HXX_

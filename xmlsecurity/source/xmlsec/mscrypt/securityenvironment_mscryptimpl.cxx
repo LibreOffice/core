@@ -247,11 +247,11 @@ SecurityEnvironment_MSCryptImpl* SecurityEnvironment_MSCryptImpl::getImplementat
 }
 
 /* Native methods */
-HCRYPTPROV SecurityEnvironment_MSCryptImpl::getCryptoProvider() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
+HCRYPTPROV SecurityEnvironment_MSCryptImpl::getCryptoProvider() throw( css::uno::Exception , css::uno::RuntimeException ) {
     return m_hProv ;
 }
 
-void SecurityEnvironment_MSCryptImpl::setCryptoProvider( HCRYPTPROV aProv ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
+void SecurityEnvironment_MSCryptImpl::setCryptoProvider( HCRYPTPROV aProv ) throw( css::uno::Exception , css::uno::RuntimeException ) {
     if( m_hProv != NULL ) {
         CryptReleaseContext( m_hProv, 0 ) ;
         m_hProv = NULL ;
@@ -262,11 +262,11 @@ void SecurityEnvironment_MSCryptImpl::setCryptoProvider( HCRYPTPROV aProv ) thro
     }
 }
 
-LPCTSTR SecurityEnvironment_MSCryptImpl::getKeyContainer() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
+LPCTSTR SecurityEnvironment_MSCryptImpl::getKeyContainer() throw( css::uno::Exception , css::uno::RuntimeException ) {
     return m_pszContainer ;
 }
 
-void SecurityEnvironment_MSCryptImpl::setKeyContainer( LPCTSTR aKeyContainer ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
+void SecurityEnvironment_MSCryptImpl::setKeyContainer( LPCTSTR aKeyContainer ) throw( css::uno::Exception , css::uno::RuntimeException ) {
     //TODO: Don't know whether or not it should be copied.
     m_pszContainer = aKeyContainer ;
 }
@@ -801,7 +801,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFrom
 
 
 HCERTSTORE getCertStoreForIntermediatCerts(
-    const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts)
+    const Sequence< Reference< css::security::XCertificate > >& seqCerts)
 {
     HCERTSTORE store = NULL;
     store = CertOpenStore(
@@ -829,9 +829,9 @@ HCERTSTORE getCertStoreForIntermediatCerts(
 //errors occur. See also
 //http://wiki.openoffice.org/wiki/Certificate_Path_Validation#Validation_status
 sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
-    const Reference< ::com::sun::star::security::XCertificate >& aCert,
-    const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts)
-    throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException )
+    const Reference< css::security::XCertificate >& aCert,
+    const Sequence< Reference< css::security::XCertificate > >& seqCerts)
+    throw( css::uno::SecurityException, css::uno::RuntimeException )
 {
     sal_Int32 validity = 0;
     PCCERT_CHAIN_CONTEXT pChainContext = NULL;
@@ -958,7 +958,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
                         && pChainContext->rgpChain[0]->TrustStatus.dwErrorStatus == CERT_TRUST_NO_ERROR)
                     {
                         SAL_INFO("xmlsecurity.xmlsec", "Certificate is valid.");
-                        validity = ::com::sun::star::security::CertificateValidity::VALID;
+                        validity = css::security::CertificateValidity::VALID;
                     }
                     else
                     {
@@ -969,14 +969,14 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
                 {
                     //valid and revocation information available
                     SAL_INFO("xmlsecurity.xmlsec", "Certificate is valid.");
-                    validity = ::com::sun::star::security::CertificateValidity::VALID;
+                    validity = css::security::CertificateValidity::VALID;
                 }
             }
             else
             {
                 //invalid
                 SAL_INFO("xmlsecurity.xmlsec", "Certificate is invalid.");
-                validity = ::com::sun::star::security::CertificateValidity::INVALID ;
+                validity = css::security::CertificateValidity::INVALID ;
             }
         }
         else
@@ -1000,7 +1000,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
     return validity ;
 }
 
-sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
+sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::uno::Reference< css::security::XCertificate >& aCert ) throw( css::uno::SecurityException, css::uno::RuntimeException ) {
     sal_Int32 characters ;
     PCCERT_CONTEXT pCertContext ;
     const X509Certificate_MSCryptImpl* xcert ;
@@ -1021,9 +1021,9 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const ::com
 
     //Firstly, make sentence whether or not the cert is self-signed.
     if( CertCompareCertificateName( X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, &(pCertContext->pCertInfo->Subject), &(pCertContext->pCertInfo->Issuer) ) ) {
-        characters |= ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
+        characters |= css::security::CertificateCharacters::SELF_SIGNED ;
     } else {
-        characters &= ~ ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
+        characters &= ~ css::security::CertificateCharacters::SELF_SIGNED ;
     }
 
     //Secondly, make sentence whether or not the cert has a private key.
@@ -1038,12 +1038,12 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const ::com
                    &( dwKeySpec ) ,
                    &( fCallerFreeProv ) )
         ) {
-            characters |=  ::com::sun::star::security::CertificateCharacters::HAS_PRIVATE_KEY ;
+            characters |=  css::security::CertificateCharacters::HAS_PRIVATE_KEY ;
 
             if( hProv != NULL && fCallerFreeProv )
                 CryptReleaseContext( hProv, 0 ) ;
         } else {
-            characters &= ~ ::com::sun::star::security::CertificateCharacters::HAS_PRIVATE_KEY ;
+            characters &= ~ css::security::CertificateCharacters::HAS_PRIVATE_KEY ;
         }
     }
     return characters ;
@@ -1071,7 +1071,7 @@ X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
     return xcert ;
 }
 
-OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
+OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() throw( css::uno::RuntimeException )
 {
     return OUString("Microsoft Crypto API");
 }

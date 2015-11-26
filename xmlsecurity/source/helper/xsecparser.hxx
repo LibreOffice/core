@@ -31,8 +31,8 @@
 
 class XSecParser: public cppu::WeakImplHelper
 <
-    com::sun::star::xml::sax::XDocumentHandler,
-    com::sun::star::lang::XInitialization
+    css::xml::sax::XDocumentHandler,
+    css::lang::XInitialization
 >
 /****** XSecController.hxx/CLASS XSecParser ***********************************
  *
@@ -82,8 +82,8 @@ private:
     /*
      * the next XDocumentHandler on the SAX chain
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::sax::XDocumentHandler > m_xNextHandler;
+    css::uno::Reference<
+        css::xml::sax::XDocumentHandler > m_xNextHandler;
 
     /*
      * this string is used to remember the current handled reference's URI,
@@ -96,55 +96,55 @@ private:
     bool m_bReferenceUnresolved;
 
 private:
-    static OUString getIdAttr(const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XAttributeList >& xAttribs );
+    static OUString getIdAttr(const css::uno::Reference<
+            css::xml::sax::XAttributeList >& xAttribs );
 
 public:
     XSecParser( XSecController* pXSecController,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XDocumentHandler >& xNextHandler );
+        const css::uno::Reference<
+            css::xml::sax::XDocumentHandler >& xNextHandler );
     virtual ~XSecParser(){};
 
     /*
      * XDocumentHandler
      */
     virtual void SAL_CALL startDocument(  )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL endDocument(  )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL startElement(
         const OUString& aName,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XAttributeList >& xAttribs )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference<
+            css::xml::sax::XAttributeList >& xAttribs )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL endElement( const OUString& aName )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL characters( const OUString& aChars )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL processingInstruction(
         const OUString& aTarget,
         const OUString& aData )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setDocumentLocator(
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XLocator >& xLocator )
-        throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference<
+            css::xml::sax::XLocator >& xLocator )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
     /*
      * XInitialization
      */
     virtual void SAL_CALL initialize(
-        const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-        throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

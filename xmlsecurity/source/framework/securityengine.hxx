@@ -31,9 +31,9 @@
 
 class SecurityEngine : public cppu::WeakImplHelper
 <
-    com::sun::star::xml::crypto::sax::XReferenceResolvedListener,
-    com::sun::star::xml::crypto::sax::XKeyCollector,
-    com::sun::star::xml::crypto::sax::XMissionTaker
+    css::xml::crypto::sax::XReferenceResolvedListener,
+    css::xml::crypto::sax::XKeyCollector,
+    css::xml::crypto::sax::XMissionTaker
 >
 /****** securityengine.hxx/CLASS SecurityEngine *******************************
  *
@@ -52,8 +52,7 @@ protected:
      * operation needs. The m_xSAXEventKeeper member is used to release
      * those resources when the security operation finishes.
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XSAXEventKeeper > m_xSAXEventKeeper;
+    css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeper > m_xSAXEventKeeper;
 
     /*
      * the id of ElementCollector of the template element.
@@ -90,14 +89,12 @@ protected:
     /*
      * the status of the operation
      */
-    com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
+    css::xml::crypto::SecurityOperationStatus m_nStatus;
 
     /*
      * the result listener, which will receives the security operation result.
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XInterface >
-        m_xResultListener;
+    css::uno::Reference< css::uno::XInterface > m_xResultListener;
 
 protected:
     explicit SecurityEngine();
@@ -108,7 +105,7 @@ protected:
      * Any derived class will implement this method respectively.
      */
     virtual void tryToPerform( )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException){};
+        throw (css::uno::Exception, css::uno::RuntimeException){};
 
     /*
      * clear up all resources used by this operation.
@@ -125,7 +122,7 @@ protected:
      * Any derived class will implement this method respectively.
          */
     virtual void notifyResultListener() const
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
+        throw (css::uno::Exception, css::uno::RuntimeException)
         {};
 
     /*
@@ -137,15 +134,15 @@ protected:
 public:
     /* XReferenceResolvedListener */
     virtual void SAL_CALL referenceResolved( sal_Int32 referenceId )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     /* XKeyCollector */
     virtual void SAL_CALL setKeyId( sal_Int32 id )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         /* XMissionTaker */
         virtual sal_Bool SAL_CALL endMission(  )
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

@@ -34,10 +34,10 @@
 typedef cppu::ImplInheritanceHelper
 <
     EncryptionEngine,
-    com::sun::star::xml::crypto::sax::XEncryptionResultBroadcaster,
-    com::sun::star::xml::crypto::sax::XReferenceCollector,
-    com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo
+    css::xml::crypto::sax::XEncryptionResultBroadcaster,
+    css::xml::crypto::sax::XReferenceCollector,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo
 > EncryptorImpl_Base;
 
 class EncryptorImpl : public EncryptorImpl_Base
@@ -57,64 +57,64 @@ private:
      */
     sal_Int32 m_nReferenceId;
 
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment;
+    css::uno::Reference<
+        css::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment;
 
     virtual void notifyResultListener() const
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::Exception, css::uno::RuntimeException) override;
     virtual bool checkReady() const override;
-    virtual void startEngine( const com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XXMLEncryptionTemplate >&
+    virtual void startEngine( const css::uno::Reference<
+        css::xml::crypto::XXMLEncryptionTemplate >&
         xEncryptionTemplate)
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::Exception, css::uno::RuntimeException) override;
 
 public:
-    explicit EncryptorImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext);
+    explicit EncryptorImpl(const css::uno::Reference< css::uno::XComponentContext > & xContext);
     virtual ~EncryptorImpl();
 
     /* XEncryptionResultBroadcaster */
     virtual void SAL_CALL addEncryptionResultListener(
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::crypto::sax::XEncryptionResultListener >&
+        const css::uno::Reference<
+            css::xml::crypto::sax::XEncryptionResultListener >&
             listener )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL removeEncryptionResultListener(
-            const com::sun::star::uno::Reference<
-                com::sun::star::xml::crypto::sax::XEncryptionResultListener >&
+            const css::uno::Reference<
+                css::xml::crypto::sax::XEncryptionResultListener >&
                 listener )
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     /* XReferenceCollector */
     virtual void SAL_CALL setReferenceCount( sal_Int32 count )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setReferenceId( sal_Int32 id )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
-        const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 OUString EncryptorImpl_getImplementationName()
-    throw ( com::sun::star::uno::RuntimeException );
+    throw ( css::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
-    throw ( com::sun::star::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
+    throw ( css::uno::RuntimeException );
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+css::uno::Reference< css::uno::XInterface >
 SAL_CALL EncryptorImpl_createInstance(
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr)
-    throw ( com::sun::star::uno::Exception );
+    const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr)
+    throw ( css::uno::Exception );
 
 #endif
 
