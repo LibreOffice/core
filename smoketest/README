@@ -13,3 +13,6 @@ macro and waits for a dispatchFinished from the macro's execution. To
 debug this best load workdir/Zip/smoketestdoc.sxw - and hit 'start
 smoketest' - this will launch a number of components and build a
 suitable report in the form of a table.
+
+	The StarBasic smoketests also log their output, this ends up
+in instdir/user/temp/smoketest.log.
