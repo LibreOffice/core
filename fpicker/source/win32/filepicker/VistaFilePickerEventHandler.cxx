@@ -220,9 +220,6 @@ void SAL_CALL VistaFilePickerEventHandler::removeFilePickerListener( const css::
 
 void VistaFilePickerEventHandler::startListening( const TFileDialog& pBroadcaster )
 {
-    static const sal_Bool STARTUP_SUSPENDED = sal_True;
-    static const sal_Bool STARTUP_WORKING   = sal_False;
-
     if (m_pDialog.is())
         return;
 
