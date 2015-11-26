@@ -31,9 +31,7 @@ ElementCollector::ElementCollector(
     sal_Int32 nBufferId,
     cssxc::sax::ElementMarkPriority nPriority,
     bool bToModify,
-    const com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XReferenceResolvedListener >&
-        xReferenceResolvedListener)
+    const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
     :ElementMark(nSecurityId, nBufferId),
      m_nPriority(nPriority),
      m_bToModify(bToModify),

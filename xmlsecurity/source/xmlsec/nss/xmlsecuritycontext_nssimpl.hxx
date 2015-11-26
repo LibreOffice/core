@@ -37,13 +37,11 @@
 #include <vector>
 
 class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper<
-    ::com::sun::star::xml::crypto::XXMLSecurityContext ,
-    ::com::sun::star::lang::XServiceInfo >
+    css::xml::crypto::XXMLSecurityContext ,
+    css::lang::XServiceInfo >
 {
     private:
-        //xmlSecKeysMngrPtr m_pKeysMngr ;
-        //::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment ;
-        std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > > m_vSecurityEnvironments;
+        std::vector< css::uno::Reference< css::xml::crypto::XSecurityEnvironment > > m_vSecurityEnvironments;
 
         sal_Int32 m_nDefaultEnvIndex;
 
@@ -53,60 +51,60 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper<
 
         //Methods from XXMLSecurityContext
         virtual sal_Int32 SAL_CALL addSecurityEnvironment(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment
-            ) throw (::com::sun::star::security::SecurityInfrastructureException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment
+            ) throw (css::security::SecurityInfrastructureException, css::uno::RuntimeException, std::exception) override;
 
         virtual ::sal_Int32 SAL_CALL getSecurityEnvironmentNumber(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
+        virtual css::uno::Reference<
+            css::xml::crypto::XSecurityEnvironment > SAL_CALL
             getSecurityEnvironmentByIndex( ::sal_Int32 index )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
+        virtual css::uno::Reference<
+            css::xml::crypto::XSecurityEnvironment > SAL_CALL
             getSecurityEnvironment(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual ::sal_Int32 SAL_CALL getDefaultSecurityEnvironmentIndex(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override ;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        ) throw( css::uno::RuntimeException, std::exception ) override ;
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override ;
 
         //Helper for XServiceInfo
-        static ::com::sun::star::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
+        static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
-        static OUString impl_getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
+        static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
 
         //Helper for registry
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) throw( ::com::sun::star::uno::RuntimeException ) ;
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) throw( css::uno::RuntimeException ) ;
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
+        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 
         /*
          * Because of the issue of multi-securityenvironment, so the keyManager method is not useful any longer.
          *
 
         //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-        throw (com::sun::star::uno::RuntimeException);
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
+        throw (css::uno::RuntimeException);
 
-        static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
-        static XMLSecurityContext_NssImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xObj ) ;
+        static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
+        static XMLSecurityContext_NssImpl* getImplementation( const css::uno::Reference< css::uno::XInterface > xObj ) ;
 
         //Native methods
-        virtual xmlSecKeysMngrPtr keysManager() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+        virtual xmlSecKeysMngrPtr keysManager() throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
         */
 } ;

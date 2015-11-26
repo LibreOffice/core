@@ -30,13 +30,13 @@ SecurityEngine::SecurityEngine()
      m_nIdOfKeyEC(-1),
      m_bMissionDone(false),
      m_nSecurityId(-1),
-     m_nStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN)
+     m_nStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN)
 {
 }
 
 /* XReferenceResolvedListener */
 void SAL_CALL SecurityEngine::referenceResolved( sal_Int32 /*referenceId*/)
-    throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     m_nNumOfResolvedReferences++;
     tryToPerform();
@@ -44,7 +44,7 @@ void SAL_CALL SecurityEngine::referenceResolved( sal_Int32 /*referenceId*/)
 
 /* XKeyCollector */
 void SAL_CALL SecurityEngine::setKeyId( sal_Int32 id )
-    throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     m_nIdOfKeyEC = id;
     tryToPerform();
@@ -52,7 +52,7 @@ void SAL_CALL SecurityEngine::setKeyId( sal_Int32 id )
 
 /* XMissionTaker */
 sal_Bool SAL_CALL SecurityEngine::endMission(  )
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     bool rc = m_bMissionDone;
 

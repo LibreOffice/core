@@ -46,30 +46,30 @@ class SAXHelper
         xmlDocPtr getDocument() { return m_pParserCtxt->myDoc;}
 
         void startDocument()
-            throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
+            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
 
         void endDocument()
-            throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
+            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
 
         void startElement(
             const OUString& aName ,
-            const com::sun::star::uno::Sequence<
-                com::sun::star::xml::csax::XMLAttribute >& aAttributes )
-            throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
+            const css::uno::Sequence<
+                css::xml::csax::XMLAttribute >& aAttributes )
+            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
 
         void endElement( const OUString& aName )
-            throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
+            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
 
         void characters( const OUString& aChars )
-            throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
+            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
 
         void ignorableWhitespace( const OUString& aWhitespaces )
-            throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
+            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
 
         void processingInstruction(
             const OUString& aTarget ,
             const OUString& aData )
-            throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
+            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
 
 } ;
 

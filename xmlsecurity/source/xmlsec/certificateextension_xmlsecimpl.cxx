@@ -38,15 +38,15 @@ CertificateExtension_XmlSecImpl::~CertificateExtension_XmlSecImpl() {
 
 
 //Methods from XCertificateExtension
-sal_Bool SAL_CALL CertificateExtension_XmlSecImpl::isCritical() throw( ::com::sun::star::uno::RuntimeException, std::exception ) {
+sal_Bool SAL_CALL CertificateExtension_XmlSecImpl::isCritical() throw( css::uno::RuntimeException, std::exception ) {
     return m_critical ;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CertificateExtension_XmlSecImpl::getExtensionId() throw( ::com::sun::star::uno::RuntimeException, std::exception ) {
+css::uno::Sequence< sal_Int8 > SAL_CALL CertificateExtension_XmlSecImpl::getExtensionId() throw( css::uno::RuntimeException, std::exception ) {
     return m_xExtnId ;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CertificateExtension_XmlSecImpl::getExtensionValue() throw( ::com::sun::star::uno::RuntimeException, std::exception ) {
+css::uno::Sequence< sal_Int8 > SAL_CALL CertificateExtension_XmlSecImpl::getExtensionValue() throw( css::uno::RuntimeException, std::exception ) {
     return m_xExtnValue ;
 }
 
