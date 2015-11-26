@@ -167,7 +167,6 @@ class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
 //  Handles all Ranges. Ranges are automatically modified by putting items.
 
 {
-    SfxVoidItem                 aDefault;
     sal_uInt16                      nFree;
 
 public:

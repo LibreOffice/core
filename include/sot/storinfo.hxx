@@ -31,7 +31,6 @@ class SvStorageInfo
 {
 friend class SotStorage;
     OUString        aName;
-    SvGlobalName    aClassName;
     sal_uLong       nSize;
     bool            bStream;
     bool            bStorage;

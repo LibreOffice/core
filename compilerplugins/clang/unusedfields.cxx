@@ -180,7 +180,7 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
     // unwrap array types
     while (type->isArrayType())
         type = type->getAsArrayTypeUnsafe()->getElementType();
-
+/*
     if( CXXRecordDecl* recordDecl = type->getAsCXXRecordDecl() )
     {
         bool warn_unused = recordDecl->hasAttr<WarnUnusedAttr>();
@@ -196,7 +196,7 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
         if (!warn_unused)
             return true;
     }
-
+*/
     definitionSet.insert(niceName(canonicalDecl));
     return true;
 }

@@ -48,24 +48,6 @@ namespace connectivity
                                     public  OPreparedStatement_Base
         {
         protected:
-            struct Parameter
-            {
-                ::com::sun::star::uno::Any  aValue;
-                sal_Int32                   nDataType;
-
-                Parameter(const ::com::sun::star::uno::Any& rValue,
-                          sal_Int32                         rDataType) : aValue(rValue),nDataType(rDataType)
-                {
-                }
-
-            };
-
-            ::std::vector< Parameter>       m_aParameters;
-
-            TTypeInfoVector                 m_aTypeInfo;    // Hashtable containing an entry
-                                                                        //  for each row returned by
-                                                                        //  DatabaseMetaData.getTypeInfo.
-
             ::rtl::OUString                                                                 m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
 
@@ -105,7 +87,6 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // a constructor, which is required for returning objects:
             OPreparedStatement( Connection* _pConnection,
-                                const TTypeInfoVector& _TypeInfo,
                                 const ::rtl::OUString& sql);
 
             //XInterface

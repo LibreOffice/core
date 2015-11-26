@@ -74,7 +74,6 @@ private:
 
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pDocElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pReportElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pGroupsElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pGroupElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pSectionElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pComponentElemTokenMap;

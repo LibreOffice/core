@@ -86,9 +86,7 @@ namespace slideshow
             maLayers.reserve(4);
 
             // create initial background layer
-            maLayers.push_back(
-                    Layer::createBackgroundLayer(
-                        maPageBounds ));
+            maLayers.push_back( Layer::createBackgroundLayer() );
 
             // init views
             for( const auto& rView : mrViews )
@@ -700,8 +698,7 @@ namespace slideshow
         {
             OSL_ASSERT( mbActive );
 
-            LayerSharedPtr pLayer( Layer::createLayer(
-                                       maPageBounds ));
+            LayerSharedPtr pLayer( Layer::createLayer() );
 
             // create ViewLayers for all registered views, and add to
             // newly created layer.

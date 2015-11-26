@@ -54,7 +54,6 @@ class SpellCheckerDispatcher :
     typedef std::shared_ptr< LangSvcEntries_Spell >               LangSvcEntries_Spell_Ptr_t;
     typedef std::map< LanguageType, LangSvcEntries_Spell_Ptr_t >    SpellSvcByLangMap_t;
     SpellSvcByLangMap_t     aSvcMap;
-    LinguOptions            aOpt;
 
     css::uno::Reference< css::linguistic2::XLinguProperties >           xPropSet;
     css::uno::Reference< css::linguistic2::XSearchableDictionaryList >  xDicList;

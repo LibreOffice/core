@@ -30,7 +30,6 @@
 class L10N_DLLPUBLIC IndexerPreProcessor
 {
 private:
-    fs::path          m_fsIndexBaseDir;
     fs::path          m_fsCaptionFilesDirName;
     fs::path          m_fsContentFilesDirName;
 
@@ -82,7 +81,6 @@ private:
     std::string extensionPath;
     std::string extensionDestination;
     bool bExtensionMode;
-    fs::path indexDirName;
     fs::path indexDirParentName;
     IndexerPreProcessor* m_pIndexerPreProcessor;
     bool m_bUseLangRoot;

@@ -39,7 +39,6 @@ class CSerialization
 {
 protected:
     css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
-    std::map<OUString, OUString> m_properties;
 
 public:
     virtual ~CSerialization() {}

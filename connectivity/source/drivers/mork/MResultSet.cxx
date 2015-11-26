@@ -108,7 +108,6 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,m_pKeySet(nullptr)
     ,m_nNewRow(0)
     ,m_nUpdatedRow(0)
-    ,m_RowStates(0)
     ,m_bIsReadOnly(TRISTATE_INDET)
 {
     //m_aQuery.setMaxNrOfReturns(pStmt->getOwnConnection()->getMaxResultRecords());

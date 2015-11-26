@@ -41,7 +41,6 @@
 IndexerPreProcessor::IndexerPreProcessor
     ( const fs::path& fsIndexBaseDir,
       const fs::path& idxCaptionStylesheet, const fs::path& idxContentStylesheet )
-        : m_fsIndexBaseDir( fsIndexBaseDir )
 {
     m_fsCaptionFilesDirName = fsIndexBaseDir / "caption";
     fs::create_directory( m_fsCaptionFilesDirName );

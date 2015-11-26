@@ -104,7 +104,6 @@ struct SdHyperlinkEntry
     sal_Int32   nEndPos;
 
     OUString    aConvSubString;
-    ESelection  aESelection;
 };
 
 // Helper class for reading the PPT InteractiveInfoAtom

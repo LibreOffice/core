@@ -85,7 +85,6 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui"),
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
-        aLocalRangeName ( *(pDoc->GetRangeName()) ),
         aStrInsertCols       (SC_RESSTR(STR_CHG_INSERT_COLS)),
         aStrInsertRows       (SC_RESSTR(STR_CHG_INSERT_ROWS)),
         aStrInsertTabs       (SC_RESSTR(STR_CHG_INSERT_TABS)),

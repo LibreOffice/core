@@ -41,7 +41,6 @@ private:
     RichStringRef       mxString;       /// Processed string.
     RichStringPortionRef mxPortion;     /// Processed portion in the string.
     RichStringPhoneticRef mxPhonetic;   /// Processed phonetic text portion.
-    FontRef             mxFont;         /// Processed font of the portion.
 };
 
 template< typename ParentType >

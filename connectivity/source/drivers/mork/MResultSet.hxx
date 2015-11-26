@@ -241,7 +241,6 @@ protected:
             ::rtl::Reference<OKeySet>     m_pKeySet;
             sal_Int32                 m_nNewRow;        //inserted row
             sal_Int32                     m_nUpdatedRow;    //updated row
-            sal_Int32                 m_RowStates;
             TriState                      m_bIsReadOnly;
             inline void resetParameters() { m_nParamIndex = 0; }
 

@@ -47,8 +47,7 @@ OStatementCommonBase::OStatementCommonBase(Connection* _pConnection)
     : OStatementCommonBase_Base(m_aMutex),
       OPropertySetHelper(OStatementCommonBase_Base::rBHelper),
       m_pConnection(_pConnection),
-      m_aStatementHandle( 0 ),
-      rBHelper(OStatementCommonBase_Base::rBHelper)
+      m_aStatementHandle( 0 )
 {
 }
 

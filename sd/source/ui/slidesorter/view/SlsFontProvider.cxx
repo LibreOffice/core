@@ -63,8 +63,7 @@ FontProvider& FontProvider::Instance()
 }
 
 FontProvider::FontProvider()
-    : maFont(),
-      maMapMode()
+    : maFont()
 {
 }
 

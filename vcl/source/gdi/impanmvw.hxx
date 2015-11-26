@@ -43,7 +43,6 @@ private:
     Size            maSzPix;
     Size            maDispSz;
     Size            maRestSz;
-    MapMode         maMap;
     vcl::Region     maClip;
     VclPtr<VirtualDevice>  mpBackground;
     VclPtr<VirtualDevice>  mpRestore;

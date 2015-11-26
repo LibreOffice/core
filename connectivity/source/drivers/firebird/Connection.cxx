@@ -86,7 +86,6 @@ Connection::Connection(FirebirdDriver*    _pDriver)
     , m_bIsEmbedded(false)
     , m_xEmbeddedStorage(nullptr)
     , m_bIsFile(false)
-    , m_sUser()
     , m_bIsAutoCommit(false)
     , m_bIsReadOnly(false)
     , m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ)
@@ -408,7 +407,6 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
     OUString sSqlStatement (transformPreparedStatement( _sSql ));
 
     Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,
-                                                                     m_aTypeInfo,
                                                                      sSqlStatement);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
 

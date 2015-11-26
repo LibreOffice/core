@@ -264,7 +264,6 @@ private:
     SharedPresenterTextCaret mpCaret;
     double mnLeftOffset;
     double mnTopOffset;
-    const ::std::function<void (const css::awt::Rectangle&)> maInvalidator;
     bool mbIsFormatPending;
     sal_Int32 mnCharacterCount;
     ::std::function<void ()> maTextChangeBroadcaster;

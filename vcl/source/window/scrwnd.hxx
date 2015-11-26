@@ -40,7 +40,6 @@ private:
 
     ImageList           maImgList;
     Bitmap              maWheelBmp;
-    CommandScrollData   maCommandScrollData;
     Point               maLastMousePos;
     Point               maCenter;
     Timer*              mpTimer;

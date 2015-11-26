@@ -39,24 +39,6 @@ class SwIdxFormDlg : public SvxStandardDialog
 {
     void            Apply() override;
 
-    VclPtr<ListBox>         m_aEntryLB;
-    VclPtr<OKButton>        m_aOKBtn;
-    VclPtr<CancelButton>    m_aCancelBT;
-    VclPtr<FixedText>       m_aLevelFT;
-    VclPtr<Edit>            m_aEntryED;
-    VclPtr<PushButton>      m_aEntryBT;
-    VclPtr<PushButton>      m_aTabBT;
-    VclPtr<PushButton>      m_aPageBT;
-    VclPtr<PushButton>      m_aJumpBT;
-    VclPtr<FixedLine>       m_aEntryFL;
-    VclPtr<FixedText>       m_aLevelFT2;
-    VclPtr<ListBox>         m_aLevelLB;
-    VclPtr<FixedText>       m_aTemplateFT;
-    VclPtr<ListBox>         m_aParaLayLB;
-    VclPtr<PushButton>      m_aStdBT;
-    VclPtr<PushButton>      m_aAssignBT;
-    VclPtr<FixedLine>       m_aFormatFL;
-
 public:
     SwIdxFormDlg( vcl::Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
     virtual ~SwIdxFormDlg();

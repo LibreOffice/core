@@ -51,10 +51,8 @@ IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedS
 
 
 OPreparedStatement::OPreparedStatement( Connection* _pConnection,
-                                        const TTypeInfoVector& _TypeInfo,
                                         const OUString& sql)
     :OStatementCommonBase(_pConnection)
-    ,m_aTypeInfo(_TypeInfo)
     ,m_sSqlStatement(sql)
     ,m_pOutSqlda(nullptr)
     ,m_pInSqlda(nullptr)

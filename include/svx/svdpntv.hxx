@@ -143,7 +143,6 @@ protected:
     // All windows this view is displayed on
     SdrPaintWindowVector        maPaintWindows;
 
-    MapMode                     maActualMapMode;
     Size                        maGridBig;   // FIXME: We need to get rid of this eventually
     Size                        maGridFin;   // FIXME: We need to get rid of this eventually
     SdrDragStat                 maDragStat;

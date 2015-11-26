@@ -147,10 +147,6 @@ private:
     RECT_POINT          m_eRP;
     bool                m_bObjSelected;
 
-    XLineStyleItem      m_aXLStyle;
-    XLineWidthItem      m_aXWidth;
-    XLineDashItem       m_aXDash;
-    XLineColorItem      m_aXColor;
     XLineAttrSetItem    m_aXLineAttr;
     SfxItemSet&         m_rXLSet;
 

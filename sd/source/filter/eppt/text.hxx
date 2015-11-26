@@ -178,8 +178,6 @@ class ParagraphObj : public PropStateValue, public SOParagraph
     friend struct PPTExParaSheet;
 
     std::vector<std::unique_ptr<PortionObj> > mvPortions;
-        MapMode         maMapModeSrc;
-        MapMode         maMapModeDest;
 
     protected:
 

@@ -178,8 +178,7 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
     sGraphicObjectProtocol( "vnd.sun.star.GraphicObject:" ),
     aAppletClassId( SO3_APPLET_CLASSID ),
     aPluginClassId( SO3_PLUGIN_CLASSID ),
-    aIFrameClassId( SO3_IFRAME_CLASSID ),
-    aOutplaceClassId( SO3_OUT_CLASSID )
+    aIFrameClassId( SO3_IFRAME_CLASSID )
 {
 }
 

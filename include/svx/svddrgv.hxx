@@ -35,13 +35,12 @@ protected:
     SdrDragMethod*              mpCurrentSdrDragMethod;
     SdrUndoGeoObj*              mpInsPointUndo;
     Rectangle                   maDragLimit;
-    OUString               maInsPointUndoStr;
-    SdrMarkList                 maFollowingEdges; // If nodes are dragged, all edges should follow as Xor
+    OUString                    maInsPointUndoStr;
     SdrHdlKind                  meDragHdl;
 
-    sal_uIntPtr                     mnDragXorPolyLimit;
-    sal_uIntPtr                     mnDragXorPointLimit;
-    sal_uInt16                      mnDetailedEdgeDraggingLimit;
+    sal_uIntPtr                 mnDragXorPolyLimit;
+    sal_uIntPtr                 mnDragXorPointLimit;
+    sal_uInt16                  mnDetailedEdgeDraggingLimit;
 
     bool                        mbFramDrag : 1;        // currently frame dragging
     bool                        mbDragSpecial : 1;     // currently Special Obj-dragging

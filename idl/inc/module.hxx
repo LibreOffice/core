@@ -23,13 +23,6 @@
 #include <slot.hxx>
 #include <object.hxx>
 
-struct SvNamePos
-{
-    SvGlobalName    aUUId;
-    SvNamePos( const SvGlobalName & rName )
-        : aUUId( rName ) {}
-};
-
 class SvMetaModule : public SvMetaExtern
 {
     SvMetaClassMemberList       aClassList;

@@ -173,8 +173,6 @@ class MigrationImpl
 {
 
 private:
-    strings_vr m_vrVersions;
-
     migrations_available m_vMigrationsAvailable; // list of all available migrations
     migrations_vr        m_vrMigrations;         // list of all migration specs from config
     install_info         m_aInfo;                // info about the version being migrated

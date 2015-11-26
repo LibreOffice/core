@@ -124,12 +124,9 @@ namespace connectivity
             /** We are using an external (local) file */
             bool                m_bIsFile;
 
-            /* REMOTE CONNECTION DATA */
-            ::rtl::OUString     m_sUser;
-
             /* CONNECTION PROPERTIES */
-            bool            m_bIsAutoCommit;
-            bool            m_bIsReadOnly;
+            bool                m_bIsAutoCommit;
+            bool                m_bIsReadOnly;
             sal_Int32           m_aTransactionIsolation;
 
             isc_db_handle       m_aDBHandle;

@@ -58,9 +58,6 @@ private:
         with a different map mode or by a call to Invalidate().
     */
     SharedFontPointer maFont;
-    /** The map mode for which maFont was created.
-    */
-    MapMode maMapMode;
 
     FontProvider();
     virtual ~FontProvider();

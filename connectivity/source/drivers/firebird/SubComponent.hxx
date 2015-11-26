@@ -132,15 +132,6 @@ namespace connectivity
             return s_pProps;
         }
 
-        class OBase_Mutex
-        {
-        public:
-            ::osl::Mutex m_aMutex;
-        };
-
-
-
-
     }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_SUBCOMPONENT_HXX

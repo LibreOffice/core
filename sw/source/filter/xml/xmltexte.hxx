@@ -38,7 +38,6 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
     const SvGlobalName aAppletClassId;
     const SvGlobalName aPluginClassId;
     const SvGlobalName aIFrameClassId;
-    const SvGlobalName aOutplaceClassId;
 
     static SwNoTextNode *GetNoTextNode(
         const css::uno::Reference < css::beans::XPropertySet >& rPropSet );

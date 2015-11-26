@@ -70,26 +70,16 @@ namespace slideshow
 
                 This method will create a layer without a ViewLayer,
                 i.e. one that displays directly on the background.
-
-                @param rMaxLayerBounds
-                Maximal bounds of this layer, in user
-                coordinates. This layer will never be larger or extend
-                outside these bounds.
              */
-            static ::boost::shared_ptr< Layer > createBackgroundLayer( const basegfx::B2DRange& rMaxLayerBounds );
+            static ::boost::shared_ptr< Layer > createBackgroundLayer();
 
             /** Create non-background layer
 
                 This method will create a layer in front of the
                 background, to contain shapes that should appear in
                 front of animated objects.
-
-                @param rMaxLayerBounds
-                Maximal bounds of this layer, in user
-                coordinates. This layer will never be larger or extend
-                outside these bounds.
              */
-            static ::boost::shared_ptr< Layer > createLayer( const basegfx::B2DRange& rMaxLayerBounds );
+            static ::boost::shared_ptr< Layer > createLayer();
 
 
 
@@ -227,30 +217,19 @@ namespace slideshow
                 ViewLayer, i.e. one that displays directly on the
                 background.
 
-                @param rMaxLayerBounds
-                Maximal bounds of this layer, in user
-                coordinates. This layer will never be larger or extend
-                outside these bounds.
-
                 @param eFlag
                 Dummy parameter, to disambiguate from normal layer
                 constructor
              */
-            Layer( const basegfx::B2DRange& rMaxLayerBounds,
-                   Dummy                    eFlag );
+            Layer( Dummy                    eFlag );
 
             /** Create non-background layer
 
                 This constructor will create a layer in front of the
                 background, to contain shapes that should appear in
                 front of animated objects.
-
-                @param rMaxLayerBounds
-                Maximal bounds of this layer, in user
-                coordinates. This layer will never be larger or extend
-                outside these bounds.
              */
-            explicit Layer( const basegfx::B2DRange& rMaxLayerBounds );
+            explicit Layer();
 
             struct ViewEntry
             {
@@ -274,7 +253,6 @@ namespace slideshow
             basegfx::B2DPolyRange      maUpdateAreas;
             basegfx::B2DRange          maBounds;
             basegfx::B2DRange          maNewBounds;
-            const basegfx::B2DRange    maMaxBounds;       // maBounds is clipped against this
             bool                       mbBoundsDirty;     // true, if view layers need resize
             bool                       mbBackgroundLayer; // true, if this
                                                           // layer is the

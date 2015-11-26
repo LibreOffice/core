@@ -54,8 +54,6 @@ private:
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;
-    ScRangeName             aLocalRangeName;
-    ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
 
     void                    Init();

@@ -715,9 +715,7 @@ Statics & getStatics()
                         defTypeInfoMetaData[i].scale,
                         defTypeInfoMetaData[i].isCurrency,
                         defTypeInfoMetaData[i].isNullable,
-                        defTypeInfoMetaData[i].isAutoIncrement,
-                        defTypeInfoMetaData[i].isReadOnly,
-                        defTypeInfoMetaData[i].isSigned ) );
+                        defTypeInfoMetaData[i].isAutoIncrement ) );
             }
 
             p = &statics;

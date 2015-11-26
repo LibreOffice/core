@@ -1601,7 +1601,6 @@ void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SfxAllItemSet::SfxAllItemSet( SfxItemPool &rPool )
 :   SfxItemSet(rPool, nullptr),
-    aDefault(0),
     nFree(nInitCount)
 {
     // Initially no Items
@@ -1614,7 +1613,6 @@ SfxAllItemSet::SfxAllItemSet( SfxItemPool &rPool )
 
 SfxAllItemSet::SfxAllItemSet(const SfxItemSet &rCopy)
 :   SfxItemSet(rCopy),
-    aDefault(0),
     nFree(0)
 {
 }
@@ -1625,7 +1623,6 @@ SfxAllItemSet::SfxAllItemSet(const SfxItemSet &rCopy)
  */
 SfxAllItemSet::SfxAllItemSet(const SfxAllItemSet &rCopy)
 :   SfxItemSet(rCopy),
-    aDefault(0),
     nFree(0)
 {
 }

@@ -79,7 +79,6 @@ PresenterTextView::PresenterTextView (
           rInvalidator)),
       mnLeftOffset(0),
       mnTopOffset(0),
-      maInvalidator(rInvalidator),
       mbIsFormatPending(false),
       mnCharacterCount(-1),
       maTextChangeBroadcaster()

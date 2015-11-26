@@ -89,7 +89,6 @@ class SvMetaType : public SvMetaExtern
     SvBOOL                      aIn;    // input parameter
     SvBOOL                      aOut;   // return parameter
     Svint                       aCall0, aCall1;
-    Svint                       aSbxDataType;
     SvIdentifier                aSvName;
     SvIdentifier                aSbxName;
     SvIdentifier                aOdlName;
