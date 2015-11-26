@@ -82,6 +82,9 @@ namespace slideshow
             static ::boost::shared_ptr< Layer > createLayer();
 
 
+
+
+
             /** Predicate, whether this layer is the special
                 background layer
 
