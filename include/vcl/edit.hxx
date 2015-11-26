@@ -27,8 +27,6 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/timer.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/dndhelp.hxx>
 #include <vcl/vclptr.hxx>
@@ -69,6 +67,8 @@ public:
 };
 
 enum AutocompleteAction{ AUTOCOMPLETE_KEYINPUT, AUTOCOMPLETE_TABFORWARD, AUTOCOMPLETE_TABBACKWARD };
+
+class Timer;
 
 // - Edit -
 class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
@@ -205,7 +205,7 @@ public:
     virtual bool        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
 
     virtual void        EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
-    virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = nullptr; }
+    virtual void        DisableUpdateData();
 
     void                SetEchoChar( sal_Unicode c );
     sal_Unicode         GetEchoChar() const { return mcEchoChar; }

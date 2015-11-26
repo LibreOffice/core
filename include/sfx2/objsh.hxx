@@ -37,7 +37,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/CmisVersion.hpp>
 
-#include <vcl/timer.hxx>
 #include <vcl/vclptr.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/bitmap.hxx>
@@ -804,17 +803,6 @@ inline SfxObjectShellLock & SfxObjectShellLock::
 }
 inline SfxObjectShellLock & SfxObjectShellLock::operator = ( SfxObjectShell * pObjP )
 { return *this = SfxObjectShellLock( pObjP ); }
-
-class AutoReloadTimer_Impl : public Timer
-{
-    OUString          aUrl;
-    SfxObjectShell*   pObjSh;
-
-public:
-    AutoReloadTimer_Impl( const OUString& rURL, sal_uInt32 nTime,
-                          SfxObjectShell* pSh );
-    virtual void Invoke() override;
-};
 
 class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
 {

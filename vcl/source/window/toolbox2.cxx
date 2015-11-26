@@ -25,6 +25,7 @@
 #include <tools/rc.h>
 
 #include <vcl/svapp.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/help.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/toolbox.hxx>
@@ -357,7 +358,7 @@ void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )
         {
             Invalidate( Rectangle( mnLeftBorder, mnTopBorder,
                                    mnDX-mnRightBorder-1, mnDY-mnBottomBorder-1 ) );
-            maIdle.Stop();
+            mpIdle->Stop();
         }
     }
     else
@@ -368,7 +369,7 @@ void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )
 
             // do we need to redraw?
             if ( IsReallyVisible() && IsUpdateMode() )
-                maIdle.Start();
+                mpIdle->Start();
         }
     }
 

@@ -2463,6 +2463,12 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
     }
 }
 
+void Edit::DisableUpdateData()
+{
+    delete mpUpdateDataTimer;
+    mpUpdateDataTimer = nullptr;
+}
+
 void Edit::SetEchoChar( sal_Unicode c )
 {
     mcEchoChar = c;

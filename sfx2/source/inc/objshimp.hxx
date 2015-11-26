@@ -30,6 +30,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docmacromode.hxx>
 #include "bitset.hxx"
+#include <vcl/timer.hxx>
 
 #include <appbaslib.hxx>
 
@@ -44,6 +45,17 @@ struct MarkData_Impl
 };
 
 class SfxBasicManagerHolder;
+
+class AutoReloadTimer_Impl : public Timer
+{
+    OUString          aUrl;
+    SfxObjectShell*   pObjSh;
+
+public:
+    AutoReloadTimer_Impl( const OUString& rURL, sal_uInt32 nTime,
+                          SfxObjectShell* pSh );
+    virtual void Invoke() override;
+};
 
 struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 {
