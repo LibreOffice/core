@@ -16,6 +16,24 @@
       "revId": "c5fb500f403b0c0ed3d7f3a8821e33321d7ab74d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_6be41d3b",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-26T12:11:47Z",
+      "side": 1,
+      "message": "I don\u0027t follow you. Could you give a concrete example of what exactly you have in mind?",
+      "parentUuid": "dab17558_a0990422",
+      "revId": "c5fb500f403b0c0ed3d7f3a8821e33321d7ab74d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
