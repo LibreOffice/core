@@ -30,12 +30,12 @@
 
 class ONSSInitializer : public cppu::WeakImplHelper
 <
-    ::com::sun::star::xml::crypto::XNSSInitializer,
-    ::com::sun::star::lang::XServiceInfo
+    css::xml::crypto::XNSSInitializer,
+    css::lang::XServiceInfo
 >
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     ONSSInitializer()
     {}
@@ -44,34 +44,34 @@ public:
     explicit ONSSInitializer(const css::uno::Reference<css::uno::XComponentContext> &rxContext);
     virtual ~ONSSInitializer();
 
-    static bool initNSS( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext );
+    static bool initNSS( const css::uno::Reference< css::uno::XComponentContext > &rxContext );
 
     /* XDigestContextSupplier */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > SAL_CALL getDigestContext( ::sal_Int32 nDigestID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL getDigestContext( ::sal_Int32 nDigestID, const css::uno::Sequence< css::beans::NamedValue >& aParams ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     /* XCipherContextSupplier */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > SAL_CALL getCipherContext( ::sal_Int32 nCipherID, const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aKey, const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aInitializationVector, sal_Bool bEncryption, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, sal_Bool bEncryption, const css::uno::Sequence< css::beans::NamedValue >& aParams ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 OUString ONSSInitializer_getImplementationName()
-    throw ( ::com::sun::star::uno::RuntimeException );
+    throw ( css::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames()
-    throw ( ::com::sun::star::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames()
+    throw ( css::uno::RuntimeException );
 
-com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL ONSSInitializer_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
-    throw ( ::com::sun::star::uno::Exception );
+css::uno::Reference< css::uno::XInterface >
+SAL_CALL ONSSInitializer_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
+    throw ( css::uno::Exception );
 
 #endif
 

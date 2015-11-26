@@ -37,9 +37,9 @@ namespace XmlSec
     ResMgr*         GetResMgr();
 
     const LocaleDataWrapper&    GetLocaleData();
-    DateTime        GetDateTime( const ::com::sun::star::util::DateTime& _rDT );
-    OUString        GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
-    OUString        GetDateString( const ::com::sun::star::util::DateTime& _rDT );
+    DateTime        GetDateTime( const css::util::DateTime& _rDT );
+    OUString        GetDateTimeString( const css::util::DateTime& _rDT );
+    OUString        GetDateString( const css::util::DateTime& _rDT );
 
     std::vector< std::pair< OUString, OUString> >
         parseDN(const OUString& rRawString);
@@ -47,7 +47,7 @@ namespace XmlSec
         const OUString & rRawString);
     OUString        GetContentPart( const OUString& _rRawString );
 
-    OUString        GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", sal_uInt16 _nLineBreak = 0xFFFF );
+    OUString        GetHexString( const css::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", sal_uInt16 _nLineBreak = 0xFFFF );
 }
 
 #define XMLSEC_RES(id)      ResId(id,*XmlSec::GetResMgr())

@@ -131,16 +131,13 @@ class InternalSignatureInformation
 public:
     SignatureInformation signatureInfor;
 
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XReferenceResolvedListener >
-        xReferenceResolvedListener;
+    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
 
     ::std::vector< sal_Int32 > vKeeperIds;
 
     InternalSignatureInformation(
         sal_Int32 nId,
-        com::sun::star::uno::Reference< com::sun::star::xml::crypto::sax::XReferenceResolvedListener >
-            xListener)
+        css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >  xListener)
         :signatureInfor(nId)
     {
         xReferenceResolvedListener = xListener;
@@ -156,11 +153,11 @@ public:
 
 class XSecController : public cppu::WeakImplHelper
 <
-    com::sun::star::xml::crypto::sax::XSecurityController,
-    //com::sun::star::beans::XFastPropertySet,
-    com::sun::star::xml::crypto::sax::XSAXEventKeeperStatusChangeListener,
-    com::sun::star::xml::crypto::sax::XSignatureCreationResultListener,
-    com::sun::star::xml::crypto::sax::XSignatureVerifyResultListener
+    css::xml::crypto::sax::XSecurityController,
+    //css::beans::XFastPropertySet,
+    css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener,
+    css::xml::crypto::sax::XSignatureCreationResultListener,
+    css::xml::crypto::sax::XSignatureVerifyResultListener
 >
 /****** XSecController.hxx/CLASS XSecController *******************************
  *
@@ -181,31 +178,27 @@ class XSecController : public cppu::WeakImplHelper
     friend class OOXMLSecParser;
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext> mxCtx;
+    css::uno::Reference< css::uno::XComponentContext> mxCtx;
 
     /*
      * used to buffer SAX events
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLDocumentWrapper > m_xXMLDocumentWrapper;
+    css::uno::Reference< css::xml::wrapper::XXMLDocumentWrapper > m_xXMLDocumentWrapper;
 
     /*
      * the SAX events keeper
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XSecuritySAXEventKeeper > m_xSAXEventKeeper;
+    css::uno::Reference< css::xml::crypto::sax::XSecuritySAXEventKeeper > m_xSAXEventKeeper;
 
     /*
      * the bridge component which creates/verifies signature
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XXMLSignature > m_xXMLSignature;
+    css::uno::Reference< css::xml::crypto::XXMLSignature > m_xXMLSignature;
 
     /*
      * the Security Context
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XXMLSecurityContext > m_xSecurityContext;
+    css::uno::Reference< css::xml::crypto::XXMLSecurityContext > m_xSecurityContext;
 
     /*
      * the security id incrementer, in order to make any security id unique
@@ -227,8 +220,7 @@ private:
      * and importing, and there is no other common interface they
      * can provided.
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XInterface > m_xPreviousNodeOnSAXChain;
+    css::uno::Reference< css::uno::XInterface > m_xPreviousNodeOnSAXChain;
     /*
      * whether the previous node can provide an XInitialize interface,
      * use this variable in order to typecast the XInterface to the
@@ -240,8 +232,7 @@ private:
      * the next node on the SAX chain.
      * it can always provide an XDocumentHandler interface.
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::sax::XDocumentHandler > m_xNextNodeOnSAXChain;
+    css::uno::Reference< css::xml::sax::XDocumentHandler > m_xNextNodeOnSAXChain;
 
     /*
      * the ElementStackKeeper is used to reserve the key SAX events.
@@ -279,8 +270,7 @@ private:
      *    startElement(<D>), endElement(<D>), endElement(<C>),
      *    endElement(<A>).
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XElementStackKeeper > m_xElementStackKeeper;
+    css::uno::Reference< css::xml::crypto::sax::XElementStackKeeper > m_xElementStackKeeper;
 
     /*
      * a flag representing whether the SAXEventKeeper is now on the
@@ -339,8 +329,7 @@ public:
     /*
      * An xUriBinding is provided to map Uris to XInputStream interfaces.
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XUriBinding > m_xUriBinding;
+    css::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding;
 
 private:
 
@@ -354,8 +343,7 @@ private:
     void checkChainingStatus();
     void initializeSAXChain();
 
-    com::sun::star::uno::Reference<
-        com::sun::star::io::XInputStream > getObjectInputStream( const OUString& objectURL );
+    css::uno::Reference< css::io::XInputStream > getObjectInputStream( const OUString& objectURL );
 
         //sal_Int32 getFastPropertyIndex(sal_Int32 nHandle) const;
 
@@ -363,8 +351,7 @@ private:
      * For signature generation
      */
     static OUString createId();
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToWrite(
+    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToWrite(
         InternalSignatureInformation& signatureInfo, sal_Int32 nStorageFormat = 0 );
 
     /*
@@ -393,28 +380,24 @@ private:
     void setId( OUString& ouId );
     void setPropertyId( OUString& ouPropertyId );
 
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToRead(
+    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToRead(
         sal_Int32 nSecurityId );
 
 public:
-    explicit XSecController(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rxCtx);
+    explicit XSecController(const css::uno::Reference<css::uno::XComponentContext>& rxCtx);
     virtual ~XSecController();
 
     sal_Int32 getNewSecurityId(  );
 
-    void startMission( const com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XUriBinding >& xUriBinding,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::crypto::XXMLSecurityContext >& xSecurityContext );
+    void startMission( const css::uno::Reference<
+        css::xml::crypto::XUriBinding >& xUriBinding,
+        const css::uno::Reference<
+            css::xml::crypto::XXMLSecurityContext >& xSecurityContext );
 
     void setSAXChainConnector(
-        const com::sun::star::uno::Reference<
-            com::sun::star::lang::XInitialization >& xInitialization,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::crypto::sax::XElementStackKeeper >& xElementStackKeeper);
+        const css::uno::Reference< css::lang::XInitialization >& xInitialization,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
+        const css::uno::Reference< css::xml::crypto::sax::XElementStackKeeper >& xElementStackKeeper);
 
     void clearSAXChainConnector();
     void endMission();
@@ -423,8 +406,7 @@ public:
     SignatureInformations   getSignatureInformations() const;
 
     static void exportSignature(
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
         const SignatureInformation& signatureInfo );
 
 
@@ -469,20 +451,18 @@ public:
 
     void setDate(
         sal_Int32 nSecurityId,
-        const ::com::sun::star::util::DateTime& rDateTime );
+        const css::util::DateTime& rDateTime );
     void setDescription(sal_Int32 nSecurityId, const OUString& rDescription);
 
-
     bool WriteSignature(
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler );
 
     /*
      * For signature verification
      */
     void collectToVerify( const OUString& referenceId );
     void addSignature( sal_Int32 nSignatureId );
-    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > createSignatureReader(sal_Int32 nType = 0);
+    css::uno::Reference< css::xml::sax::XDocumentHandler > createSignatureReader(sal_Int32 nType = 0);
     void releaseSignatureReader();
 
 public:
@@ -502,24 +482,24 @@ public:
      * XSAXEventKeeperStatusChangeListener
      */
     virtual void SAL_CALL blockingStatusChanged( sal_Bool isBlocking )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL collectionStatusChanged(
         sal_Bool isInsideCollectedElement )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL bufferStatusChanged( sal_Bool isBufferEmpty )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /*
      * XSignatureCreationResultListener
      */
-    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /*
      * XSignatureVerifyResultListener
      */
-    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// Writes XML elements inside a single OOXML signature's <Signature> element.
     bool WriteOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);

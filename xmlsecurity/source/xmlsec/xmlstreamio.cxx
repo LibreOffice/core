@@ -37,12 +37,12 @@
  */
 static char enableXmlStreamIO = 0x00 ;
 
-::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XUriBinding > m_xUriBinding ;
+css::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding ;
 
 extern "C"
 int xmlStreamMatch( const char* uri )
 {
-    ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream ;
+    css::uno::Reference< css::io::XInputStream > xInputStream ;
 
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
@@ -74,7 +74,7 @@ int xmlStreamMatch( const char* uri )
 extern "C"
 void* xmlStreamOpen( const char* uri )
 {
-    ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream ;
+    css::uno::Reference< css::io::XInputStream > xInputStream ;
 
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
@@ -95,7 +95,7 @@ void* xmlStreamOpen( const char* uri )
         }
 
         if( xInputStream.is() ) {
-            ::com::sun::star::io::XInputStream* pInputStream ;
+            css::io::XInputStream* pInputStream ;
             pInputStream = xInputStream.get() ;
             pInputStream->acquire() ;
             return static_cast<void*>(pInputStream) ;
@@ -109,14 +109,14 @@ extern "C"
 int xmlStreamRead( void* context, char* buffer, int len )
 {
     int numbers ;
-    ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream ;
-    ::com::sun::star::uno::Sequence< sal_Int8 > outSeqs( len ) ;
+    css::uno::Reference< css::io::XInputStream > xInputStream ;
+    css::uno::Sequence< sal_Int8 > outSeqs( len ) ;
 
     numbers = 0 ;
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
         if( context != nullptr ) {
-            xInputStream = static_cast<com::sun::star::io::XInputStream*>(context);
+            xInputStream = static_cast<css::io::XInputStream*>(context);
             if( !xInputStream.is() )
                 return 0 ;
 
@@ -136,7 +136,7 @@ int xmlStreamClose( void * context )
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
         if( context != nullptr ) {
-            ::com::sun::star::io::XInputStream* pInputStream ;
+            css::io::XInputStream* pInputStream ;
             pInputStream = static_cast<css::io::XInputStream*>(context);
             pInputStream->release() ;
         }
@@ -181,7 +181,7 @@ int xmlEnableStreamInputCallbacks()
 }
 
 int xmlRegisterStreamInputCallbacks(
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XUriBinding >& aUriBinding
+    css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding
 ) {
     if( !( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) ) {
         if( xmlEnableStreamInputCallbacks() < 0 )

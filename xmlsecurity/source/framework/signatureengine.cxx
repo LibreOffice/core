@@ -180,17 +180,17 @@ void SAL_CALL SignatureEngine::setReferenceId( sal_Int32 id )
 /* XUriBinding */
 void SAL_CALL SignatureEngine::setUriBinding(
     const OUString& uri,
-    const cssu::Reference< com::sun::star::io::XInputStream >& aInputStream )
+    const cssu::Reference< css::io::XInputStream >& aInputStream )
     throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     m_vUris.push_back(uri);
     m_vXInputStreams.push_back(aInputStream);
 }
 
-cssu::Reference< com::sun::star::io::XInputStream > SAL_CALL SignatureEngine::getUriBinding( const OUString& uri )
+cssu::Reference< css::io::XInputStream > SAL_CALL SignatureEngine::getUriBinding( const OUString& uri )
     throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
-    cssu::Reference< com::sun::star::io::XInputStream > xInputStream;
+    cssu::Reference< css::io::XInputStream > xInputStream;
 
     int size = m_vUris.size();
 

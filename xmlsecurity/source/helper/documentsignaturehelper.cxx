@@ -240,7 +240,7 @@ DocumentSignatureHelper::CreateElementList(
                         }
                     }
                 }
-                catch( com::sun::star::io::IOException& )
+                catch( css::io::IOException& )
                 {
                     ; // Doesn't have to exist...
                 }
@@ -261,7 +261,7 @@ DocumentSignatureHelper::CreateElementList(
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
                 ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
             }
-            catch( com::sun::star::io::IOException& )
+            catch( css::io::IOException& )
             {
                 ; // Doesn't have to exist...
             }
@@ -273,7 +273,7 @@ DocumentSignatureHelper::CreateElementList(
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
                 ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
             }
-            catch( com::sun::star::io::IOException& )
+            catch( css::io::IOException& )
             {
                 ; // Doesn't have to exist...
             }

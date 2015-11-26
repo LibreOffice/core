@@ -166,7 +166,7 @@ namespace {
         {
             if (altNames[n].Type ==  security::ExtAltNameType_OTHER_NAME)
             {
-                ::com::sun::star::beans::NamedValue otherNameProp;
+                css::beans::NamedValue otherNameProp;
                 if (altNames[n].Value >>= otherNameProp)
                 {
                     CPPUNIT_ASSERT_EQUAL( OUString("1.2.3.4"), otherNameProp.Name);

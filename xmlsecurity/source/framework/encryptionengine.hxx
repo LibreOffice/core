@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 class EncryptionEngine : public cppu::ImplInheritanceHelper
 <
     SecurityEngine,
-    com::sun::star::xml::crypto::sax::XBlockerMonitor
+    css::xml::crypto::sax::XBlockerMonitor
 >
 /****** encryptionEngine.hxx/CLASS encryptionEngine ***************************
  *
@@ -51,16 +51,14 @@ class EncryptionEngine : public cppu::ImplInheritanceHelper
  ******************************************************************************/
 {
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 protected:
     /*
      * the Encryption bridge component, which performs encrypt and decrypt
      * operation based on xmlsec library.
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XXMLEncryption > m_xXMLEncryption;
+    css::uno::Reference< css::xml::crypto::XXMLEncryption > m_xXMLEncryption;
 
     /*
      * the Id of template blocker.
@@ -68,11 +66,11 @@ protected:
     sal_Int32 m_nIdOfBlocker;
 
 protected:
-    explicit EncryptionEngine( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext );
+    explicit EncryptionEngine( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~EncryptionEngine(){};
 
     virtual void tryToPerform( )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::Exception, css::uno::RuntimeException) override;
     virtual void clearUp( ) const override;
     virtual bool checkReady() const override;
 
@@ -81,15 +79,14 @@ protected:
      * For a Encryptor, it performs encryption operation;
      * for a Decryptor, decryption operation is performed.
      */
-    virtual void startEngine( const com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XXMLEncryptionTemplate >&)
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
+    virtual void startEngine( const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >&)
+        throw (css::uno::Exception, css::uno::RuntimeException)
         {};
 
 public:
     /* XBlockerMonitor */
     virtual void SAL_CALL setBlockerId( sal_Int32 id )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

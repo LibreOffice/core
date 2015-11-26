@@ -38,13 +38,13 @@ namespace com { namespace  sun { namespace star {
 
 class DocumentDigitalSignatures : public cppu::WeakImplHelper
 <
-    com::sun::star::security::XDocumentDigitalSignatures,
-    com::sun::star::lang::XInitialization,
+    css::security::XDocumentDigitalSignatures,
+    css::lang::XInitialization,
     css::lang::XServiceInfo
 >
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxCtx;
+    css::uno::Reference< css::uno::XComponentContext > mxCtx;
     // will be set by XInitialization. If not we assume true. false means an earlier version.
     OUString m_sODFVersion;
     //The number of arguments which were passed in XInitialization::initialize
@@ -52,20 +52,20 @@ private:
     //Indicates if the document already contains a document signature
     bool m_bHasDocumentSignature;
 
-    bool ImplViewSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (css::uno::RuntimeException, std::exception);
-    void ImplViewSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > ImplVerifySignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignStream, DocumentSignatureMode eMode ) throw (::com::sun::star::uno::RuntimeException);
+    bool ImplViewSignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const css::uno::Reference< css::io::XStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (css::uno::RuntimeException, std::exception);
+    void ImplViewSignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const css::uno::Reference< css::io::XInputStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (css::uno::RuntimeException, std::exception);
+    css::uno::Sequence< css::security::DocumentSignatureInformation > ImplVerifySignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< css::io::XInputStream >& xSignStream, DocumentSignatureMode eMode ) throw (css::uno::RuntimeException);
 
 public:
-    explicit DocumentDigitalSignatures( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext>& rxCtx );
+    explicit DocumentDigitalSignatures( const css::uno::Reference< css::uno::XComponentContext>& rxCtx );
 
     // for service registration...
-    static OUString GetImplementationName() throw (com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Sequence < OUString > GetSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+    static OUString GetImplementationName() throw (css::uno::RuntimeException);
+    static css::uno::Sequence < OUString > GetSupportedServiceNames() throw (css::uno::RuntimeException);
 
     //XInitialization
-    void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -77,30 +77,30 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     // XDocumentDigitalSignatures
-    sal_Bool SAL_CALL signDocumentContent( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSignStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > SAL_CALL verifyDocumentContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL showDocumentContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getDocumentContentSignatureDefaultStreamName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL signScriptingContent( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSignStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > SAL_CALL verifyScriptingContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL showScriptingContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getScriptingContentSignatureDefaultStreamName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL signPackage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSignStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > SAL_CALL verifyPackageSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL showPackageSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getPackageSignatureDefaultStreamName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL showCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Certificate ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL manageTrustedSources(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isAuthorTrusted( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Author ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isLocationTrusted( const OUString& Location ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addAuthorToTrustedSources( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Author ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addLocationToTrustedSources( const OUString& Location ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL signDocumentContent( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XStream >& xSignStream ) throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::security::DocumentSignatureInformation > SAL_CALL verifyDocumentContentSignatures( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XInputStream >& xSignInStream ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL showDocumentContentSignatures( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XInputStream >& xSignInStream ) throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getDocumentContentSignatureDefaultStreamName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL signScriptingContent( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XStream >& xSignStream ) throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::security::DocumentSignatureInformation > SAL_CALL verifyScriptingContentSignatures( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XInputStream >& xSignInStream ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL showScriptingContentSignatures( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XInputStream >& xSignInStream ) throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getScriptingContentSignatureDefaultStreamName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL signPackage( const css::uno::Reference< css::embed::XStorage >& Storage, const css::uno::Reference< css::io::XStream >& xSignStream ) throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::security::DocumentSignatureInformation > SAL_CALL verifyPackageSignatures( const css::uno::Reference< css::embed::XStorage >& Storage, const css::uno::Reference< css::io::XInputStream >& xSignInStream ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL showPackageSignatures( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::io::XInputStream >& xSignInStream ) throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getPackageSignatureDefaultStreamName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL showCertificate( const css::uno::Reference< css::security::XCertificate >& Certificate ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL manageTrustedSources(  ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isAuthorTrusted( const css::uno::Reference< css::security::XCertificate >& Author ) throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL isLocationTrusted( const OUString& Location ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addAuthorToTrustedSources( const css::uno::Reference< css::security::XCertificate >& Author ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addLocationToTrustedSources( const OUString& Location ) throw (css::uno::RuntimeException, std::exception) override;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL chooseCertificate( ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificate( ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL DocumentDigitalSignatures_CreateInstance(
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rCtx) throw ( com::sun::star::uno::Exception );
+css::uno::Reference< css::uno::XInterface > SAL_CALL DocumentDigitalSignatures_CreateInstance(
+    const css::uno::Reference< css::uno::XComponentContext >& rCtx) throw ( css::uno::Exception );
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_COMPONENT_DOCUMENTDIGITALSIGNATURES_HXX
 

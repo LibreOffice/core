@@ -143,7 +143,7 @@ void XSecController::addStreamReference(
             /*
              * get the input stream
              */
-            cssu::Reference< com::sun::star::io::XInputStream > xObjectInputStream
+            cssu::Reference< css::io::XInputStream > xObjectInputStream
                 = getObjectInputStream( ouUri );
 
         if ( xObjectInputStream.is() )

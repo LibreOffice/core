@@ -58,9 +58,9 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_NssImpl::generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( com::sun::star::xml::crypto::XMLSignatureException,
-         com::sun::star::uno::SecurityException,
-         com::sun::star::uno::RuntimeException, std::exception )
+) throw( css::xml::crypto::XMLSignatureException,
+         css::uno::SecurityException,
+         css::uno::RuntimeException, std::exception )
 {
     xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
@@ -137,13 +137,13 @@ SAL_CALL XMLSignature_NssImpl::generate(
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
-            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
         else
-            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
     else
     {
-        aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+        aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
 
 
@@ -163,9 +163,9 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_NssImpl::validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( com::sun::star::uno::RuntimeException,
-         com::sun::star::uno::SecurityException,
-         com::sun::star::xml::crypto::XMLSignatureException, std::exception ) {
+) throw( css::uno::RuntimeException,
+         css::uno::SecurityException,
+         css::xml::crypto::XMLSignatureException, std::exception ) {
     xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
@@ -260,14 +260,14 @@ SAL_CALL XMLSignature_NssImpl::validate(
 
         if (rs == 0 && pDsigCtx->status == xmlSecDSigStatusSucceeded && nReferenceCount == nReferenceGood)
         {
-            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
             xmlSecDSigCtxDestroy( pDsigCtx ) ;
             SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
             break;
         }
         else
         {
-            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
         }
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
         SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );

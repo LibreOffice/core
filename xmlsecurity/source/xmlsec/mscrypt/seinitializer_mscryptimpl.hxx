@@ -32,8 +32,8 @@
 
 class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper
 <
-    com::sun::star::xml::crypto::XSEInitializer,
-    com::sun::star::lang::XServiceInfo
+    css::xml::crypto::XSEInitializer,
+    css::lang::XServiceInfo
 >
 /****** SEInitializer_MSCryptImpl.hxx/CLASS SEInitializer_MSCryptImpl ***********
  *
@@ -48,45 +48,44 @@ class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper
  ******************************************************************************/
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
 
 public:
-    explicit SEInitializer_MSCryptImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > &rxContext);
+    explicit SEInitializer_MSCryptImpl(const css::uno::Reference< css::uno::XComponentContext > &rxContext);
     virtual ~SEInitializer_MSCryptImpl();
 
     /* XSEInitializer */
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XXMLSecurityContext >
+    virtual css::uno::Reference< css::xml::crypto::XXMLSecurityContext >
         SAL_CALL createSecurityContext( const OUString& certDB )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL freeSecurityContext( const com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XXMLSecurityContext >& securityContext )
-        throw (com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL freeSecurityContext( const css::uno::Reference<
+        css::xml::crypto::XXMLSecurityContext >& securityContext )
+        throw (css::uno::RuntimeException);
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (css::uno::RuntimeException);
 };
 
 OUString SEInitializer_MSCryptImpl_getImplementationName()
-    throw ( com::sun::star::uno::RuntimeException );
+    throw ( css::uno::RuntimeException );
 
 sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const OUString& ServiceName )
-    throw ( com::sun::star::uno::RuntimeException );
+    throw ( css::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )
-    throw ( com::sun::star::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )
+    throw ( css::uno::RuntimeException );
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-SAL_CALL SEInitializer_MSCryptImpl_createInstance( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr)
-    throw ( com::sun::star::uno::Exception );
+css::uno::Reference< css::uno::XInterface >
+SAL_CALL SEInitializer_MSCryptImpl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
+    throw ( css::uno::Exception );
 
 #endif
 

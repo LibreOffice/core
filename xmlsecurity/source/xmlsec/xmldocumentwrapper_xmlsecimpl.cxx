@@ -856,8 +856,8 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::generateSAXEvents(
 }
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::rebuildIDLink(
-    const com::sun::star::uno::Reference< com::sun::star::xml::wrapper::XXMLElementWrapper >& node )
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node )
+    throw (css::uno::RuntimeException, std::exception)
 {
     xmlNodePtr pNode = checkElement( node );
     rebuildIDLink(pNode);

@@ -27,7 +27,7 @@ int xmlEnableStreamInputCallbacks() ;
 void xmlDisableStreamInputCallbacks() ;
 
 int xmlRegisterStreamInputCallbacks(
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XUriBinding >& aUriBinding
+    css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding
 ) ;
 
 int xmlUnregisterStreamInputCallbacks() ;

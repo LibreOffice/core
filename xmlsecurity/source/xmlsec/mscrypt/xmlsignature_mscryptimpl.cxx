@@ -55,8 +55,8 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_MSCryptImpl::generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( com::sun::star::xml::crypto::XMLSignatureException,
-         com::sun::star::uno::SecurityException )
+) throw( css::xml::crypto::XMLSignatureException,
+         css::uno::SecurityException )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
@@ -125,13 +125,13 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
-            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
         else
-            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
     else
     {
-        aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+        aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
 
 
@@ -151,9 +151,9 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_MSCryptImpl::validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( com::sun::star::uno::RuntimeException,
-         com::sun::star::uno::SecurityException,
-         com::sun::star::xml::crypto::XMLSignatureException ) {
+) throw( css::uno::RuntimeException,
+         css::uno::SecurityException,
+         css::xml::crypto::XMLSignatureException ) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
     xmlNodePtr pNode = NULL ;
@@ -243,13 +243,13 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
     if (rs == 0 && nReferenceCount == nReferenceGood)
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
-            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
         else
-            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
     else
     {
-        aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+        aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;

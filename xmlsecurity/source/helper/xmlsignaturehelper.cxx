@@ -77,7 +77,7 @@ bool XMLSignatureHelper::Init()
     DBG_ASSERT( !mxSEInitializer.is(), "XMLSignatureHelper::Init - mxSEInitializer already set!" );
     DBG_ASSERT( !mxSecurityContext.is(), "XMLSignatureHelper::Init - mxSecurityContext already set!" );
 
-    mxSEInitializer = com::sun::star::xml::crypto::SEInitializer::create( mxCtx );
+    mxSEInitializer = css::xml::crypto::SEInitializer::create( mxCtx );
 
     if ( mxSEInitializer.is() )
         mxSecurityContext = mxSEInitializer->createSecurityContext( OUString() );
@@ -153,7 +153,7 @@ void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const OUString& u
 
 
 uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithHeader(
-    const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream )
+    const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
 {
     /*
      * get SAX writer component
@@ -185,7 +185,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     xSaxWriter->startDocument();
     xSaxWriter->startElement(
         tag_AllSignatures,
-        uno::Reference< com::sun::star::xml::sax::XAttributeList > (pAttributeList));
+        uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
 
     return xSaxWriter;
 }
@@ -252,7 +252,7 @@ bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
     return !mbError;
 }
 
-bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream )
+bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css::io::XInputStream >& xInputStream )
 {
     mbError = false;
 
@@ -309,7 +309,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     {
         mbError = true;
     }
-    catch( com::sun::star::io::IOException& )
+    catch( css::io::IOException& )
     {
         mbError = true;
     }
@@ -345,22 +345,22 @@ SignatureInformations XMLSignatureHelper::GetSignatureInformations() const
     return mpXSecController->getSignatureInformations();
 }
 
-uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > XMLSignatureHelper::GetSecurityEnvironment()
+uno::Reference< css::xml::crypto::XSecurityEnvironment > XMLSignatureHelper::GetSecurityEnvironment()
 {
-    return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironment()): uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >());
+    return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironment()): uno::Reference< css::xml::crypto::XSecurityEnvironment >());
 }
 
 IMPL_LINK_TYPED( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult&, rResult, void )
 {
     maCreationResults.insert( maCreationResults.begin() + maCreationResults.size(), rResult );
-    if ( rResult.nSignatureCreationResult != com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
+    if ( rResult.nSignatureCreationResult != css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
 }
 
 IMPL_LINK_TYPED( XMLSignatureHelper, SignatureVerifyResultListener, XMLSignatureVerifyResult&, rResult, void )
 {
     maVerifyResults.insert( maVerifyResults.begin() + maVerifyResults.size(), rResult );
-    if ( rResult.nSignatureVerifyResult != com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
+    if ( rResult.nSignatureVerifyResult != css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
 }
 

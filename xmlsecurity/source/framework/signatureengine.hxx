@@ -41,8 +41,8 @@
 class SignatureEngine : public cppu::ImplInheritanceHelper
 <
     SecurityEngine,
-    com::sun::star::xml::crypto::sax::XReferenceCollector,
-    com::sun::star::xml::crypto::XUriBinding
+    css::xml::crypto::sax::XReferenceCollector,
+    css::xml::crypto::XUriBinding
 >
 /****** signatureengine.hxx/CLASS SignatureEngine *****************************
  *
@@ -54,7 +54,7 @@ class SignatureEngine : public cppu::ImplInheritanceHelper
  ******************************************************************************/
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 protected:
 
@@ -62,8 +62,7 @@ protected:
      * the Signature bridge component, which performs signature generation
      * and verification based on xmlsec library.
      */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::XXMLSignature > m_xXMLSignature;
+    css::uno::Reference< css::xml::crypto::XXMLSignature > m_xXMLSignature;
 
     /*
      * a collection of ElementCollector's ids. Each ElementCollector
@@ -83,15 +82,14 @@ protected:
      * to hold corresponding binded XInputStream interface.
      */
     std::vector< OUString > m_vUris;
-    std::vector< com::sun::star::uno::Reference<
-        com::sun::star::io::XInputStream > > m_vXInputStreams;
+    std::vector< css::uno::Reference< css::io::XInputStream > > m_vXInputStreams;
 
 protected:
-    explicit SignatureEngine( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext);
+    explicit SignatureEngine( const css::uno::Reference< css::uno::XComponentContext > & xContext);
     virtual ~SignatureEngine() {};
 
     virtual void tryToPerform( )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::Exception, css::uno::RuntimeException) override;
     virtual void clearUp( ) const override;
     virtual bool checkReady() const override;
 
@@ -100,28 +98,27 @@ protected:
      * For a SignatureCreator, it performs signing operation;
      * for a SignatureVerifier, verification operation is performed.
      */
-    virtual void startEngine( const com::sun::star::uno::Reference<
-                              com::sun::star::xml::crypto::XXMLSignatureTemplate >&)
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
+    virtual void startEngine( const css::uno::Reference<
+                              css::xml::crypto::XXMLSignatureTemplate >&)
+        throw (css::uno::Exception, css::uno::RuntimeException)
         {};
 
 public:
     /* XReferenceCollector */
     virtual void SAL_CALL setReferenceCount( sal_Int32 count )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setReferenceId( sal_Int32 id )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     /* XUriBinding */
     virtual void SAL_CALL setUriBinding(
         const OUString& uri,
-        const com::sun::star::uno::Reference<
-            com::sun::star::io::XInputStream >& aInputStream )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+        const css::uno::Reference< css::io::XInputStream >& aInputStream )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::io::XInputStream >
         SAL_CALL getUriBinding( const OUString& uri )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

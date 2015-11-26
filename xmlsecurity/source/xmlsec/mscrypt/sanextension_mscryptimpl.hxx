@@ -39,29 +39,29 @@
 #include <com/sun/star/security/CertAltNameEntry.hpp>
 
 class SanExtensionImpl : public ::cppu::WeakImplHelper<
-    ::com::sun::star::security::XSanExtension >
+    css::security::XSanExtension >
 {
     private:
         sal_Bool m_critical ;
-        ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnId ;
-        ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnValue ;
+        css::uno::Sequence< sal_Int8 > m_xExtnId ;
+        css::uno::Sequence< sal_Int8 > m_xExtnValue ;
 
-        ::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > m_Entries;
+        css::uno::Sequence< css::security::CertAltNameEntry > m_Entries;
 
     public:
         SanExtensionImpl() ;
         virtual ~SanExtensionImpl() ;
 
         //Methods from XCertificateExtension
-        virtual sal_Bool SAL_CALL isCritical() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual sal_Bool SAL_CALL isCritical() throw( css::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( css::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( css::uno::RuntimeException ) ;
 
         //Methods from XSanExtension
 
-        virtual ::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > SAL_CALL getAlternativeNames() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL getAlternativeNames() throw( css::uno::RuntimeException ) ;
 
         //Helper method
         void setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, sal_Bool critical ) ;

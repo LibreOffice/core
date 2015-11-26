@@ -56,13 +56,13 @@ struct SignatureInformation
 {
     sal_Int32 nSecurityId;
     sal_Int32 nSecurityEnvironmentIndex;
-    ::com::sun::star::xml::crypto::SecurityOperationStatus nStatus;
+    css::xml::crypto::SecurityOperationStatus nStatus;
     SignatureReferenceInformations  vSignatureReferenceInfors;
     OUString ouX509IssuerName;
     OUString ouX509SerialNumber;
     OUString ouX509Certificate;
     OUString ouSignatureValue;
-    ::com::sun::star::util::DateTime stDateTime;
+    css::util::DateTime stDateTime;
 
     //We also keep the date and time as string. This is done when this
     //structure is created as a result of a XML signature being read.
@@ -90,7 +90,7 @@ struct SignatureInformation
     SignatureInformation( sal_Int32 nId )
     {
         nSecurityId = nId;
-        nStatus = ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN;
+        nStatus = css::xml::crypto::SecurityOperationStatus_UNKNOWN;
         nSecurityEnvironmentIndex = -1;
     }
 };

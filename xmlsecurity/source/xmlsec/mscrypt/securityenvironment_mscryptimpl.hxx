@@ -51,9 +51,9 @@
 
 
 class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
-    ::com::sun::star::xml::crypto::XSecurityEnvironment ,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XUnoTunnel >
+    css::xml::crypto::XSecurityEnvironment ,
+    css::lang::XServiceInfo,
+    css::lang::XUnoTunnel >
 {
     private:
         //crypto provider and key container
@@ -81,108 +81,108 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         std::list< HCRYPTKEY >              m_tPriKeyList ;
 
         //Service manager
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
+        css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public:
-        explicit SecurityEnvironment_MSCryptImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
+        explicit SecurityEnvironment_MSCryptImpl( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory ) ;
         virtual ~SecurityEnvironment_MSCryptImpl() ;
 
         //Methods from XSecurityEnvironment
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > > SAL_CALL getPersonalCertificates()
-            throw(  ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates()
+            throw(  css::uno::SecurityException , css::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL getCertificate(
+        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate(
             const OUString& issuerName,
-            const ::com::sun::star::uno::Sequence< sal_Int8 >& serialNumber )
-            throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+            const css::uno::Sequence< sal_Int8 >& serialNumber )
+            throw( css::uno::SecurityException , css::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL getCertificate(
+        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate(
             const OUString& issuerName,
             const OUString& serialNumber )
-            throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+            throw( css::uno::SecurityException , css::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > > SAL_CALL buildCertificatePath(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& beginCert )
-            throw(  ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath(
+            const css::uno::Reference< css::security::XCertificate >& beginCert )
+            throw(  css::uno::SecurityException , css::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromRaw(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >& rawCertificate )
-            throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw(
+            const css::uno::Sequence< sal_Int8 >& rawCertificate )
+            throw( css::uno::SecurityException , css::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromAscii(
+        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii(
             const OUString& asciiCertificate )
-            throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+            throw( css::uno::SecurityException , css::uno::RuntimeException ) ;
 
         virtual ::sal_Int32 SAL_CALL verifyCertificate(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-            ::com::sun::star::security::XCertificate > >& intermediateCertificates)
-            throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
+            const css::uno::Reference< css::security::XCertificate >& xCert,
+            const css::uno::Sequence< css::uno::Reference<
+            css::security::XCertificate > >& intermediateCertificates)
+            throw (css::uno::SecurityException, css::uno::RuntimeException) ;
 
         virtual ::sal_Int32 SAL_CALL getCertificateCharacters(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert )
-            throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
+            const css::uno::Reference< css::security::XCertificate >& xCert )
+            throw (css::uno::SecurityException, css::uno::RuntimeException) ;
 
         virtual OUString SAL_CALL getSecurityEnvironmentInformation(  )
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (css::uno::RuntimeException);
 
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException ) ;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( ::com::sun::star::uno::RuntimeException ) ;
+        ) throw( css::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException ) ;
 
         //Helper for XServiceInfo
-        static ::com::sun::star::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
+        static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
-        static OUString impl_getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
+        static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
 
         //Helper for registry
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager )
-            throw( ::com::sun::star::uno::RuntimeException ) ;
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance(
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager )
+            throw( css::uno::RuntimeException ) ;
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
+        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory(
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 
         //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-            throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
+            throw (css::uno::RuntimeException);
 
-        static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
-        static SecurityEnvironment_MSCryptImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rObj ) ;
-
-        //Native methods
-        virtual HCRYPTPROV getCryptoProvider() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-        virtual void setCryptoProvider( HCRYPTPROV aProv ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
-        virtual LPCTSTR getKeyContainer() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-        virtual void setKeyContainer( LPCTSTR aKeyContainer ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
-        virtual HCERTSTORE getCryptoSlot() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-        virtual void setCryptoSlot( HCERTSTORE aKeyStore ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
-        virtual HCERTSTORE getCertDb() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-        virtual void setCertDb( HCERTSTORE aCertDb ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
-        virtual void adoptSymKey( HCRYPTKEY aSymKey ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-        virtual HCRYPTKEY getSymKey( unsigned int position ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
-        virtual HCRYPTKEY getPubKey( unsigned int position ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
-        virtual HCRYPTKEY getPriKey( unsigned int position ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
-        virtual void enableDefaultCrypt( sal_Bool enable ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-        virtual sal_Bool defaultEnabled() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+        static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
+        static SecurityEnvironment_MSCryptImpl* getImplementation( const css::uno::Reference< css::uno::XInterface >& rObj ) ;
 
         //Native methods
-        virtual xmlSecKeysMngrPtr createKeysManager() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+        virtual HCRYPTPROV getCryptoProvider() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        virtual void setCryptoProvider( HCRYPTPROV aProv ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
-        virtual void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+        virtual LPCTSTR getKeyContainer() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        virtual void setKeyContainer( LPCTSTR aKeyContainer ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+
+        virtual HCERTSTORE getCryptoSlot() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        virtual void setCryptoSlot( HCERTSTORE aKeyStore ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+
+        virtual HCERTSTORE getCertDb() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        virtual void setCertDb( HCERTSTORE aCertDb ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+
+        virtual void adoptSymKey( HCRYPTKEY aSymKey ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        virtual HCRYPTKEY getSymKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+
+        virtual HCRYPTKEY getPubKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+
+        virtual HCRYPTKEY getPriKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+
+        virtual void enableDefaultCrypt( sal_Bool enable ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        virtual sal_Bool defaultEnabled() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+
+        //Native methods
+        virtual xmlSecKeysMngrPtr createKeysManager() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+
+        virtual void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SECURITYENVIRONMENT_MSCRYPTIMPL_HXX

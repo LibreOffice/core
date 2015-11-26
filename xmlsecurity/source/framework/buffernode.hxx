@@ -67,8 +67,7 @@ private:
     bool m_bAllReceived;
 
     /* the XMLElementWrapper of the bufferred element */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper > m_xXMLElement;
+    css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > m_xXMLElement;
 
 private:
     bool isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const;
@@ -78,8 +77,7 @@ private:
 
 public:
     explicit BufferNode(
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::wrapper::XXMLElementWrapper >& xXMLElement);
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& xXMLElement);
     virtual ~BufferNode() {};
 
     bool isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const;
@@ -104,10 +102,9 @@ public:
     const BufferNode* isAncestor(const BufferNode* pDescendant) const;
     bool isPrevious(const BufferNode* pFollowing) const;
     const BufferNode* getNextNodeByTreeOrder() const;
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper > getXMLElement() const { return m_xXMLElement;}
-    void setXMLElement(const com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper >& xXMLElement);
+    css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > getXMLElement() const { return m_xXMLElement;}
+    void setXMLElement(const css::uno::Reference<
+        css::xml::wrapper::XXMLElementWrapper >& xXMLElement);
     void notifyBranch();
     void elementCollectorNotify();
     void freeAllChildren();

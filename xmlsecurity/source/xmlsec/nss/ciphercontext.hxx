@@ -26,7 +26,7 @@
 #include <osl/mutex.hxx>
 #include <pk11pub.h>
 
-class OCipherContext : public cppu::WeakImplHelper< ::com::sun::star::xml::crypto::XCipherContext >
+class OCipherContext : public cppu::WeakImplHelper< css::xml::crypto::XCipherContext >
 {
 private:
     ::osl::Mutex m_aMutex;
@@ -37,7 +37,7 @@ private:
     PK11Context* m_pContext;
 
     sal_Int32 m_nBlockSize;
-    ::com::sun::star::uno::Sequence< sal_Int8 > m_aLastBlock;
+    css::uno::Sequence< sal_Int8 > m_aLastBlock;
 
     bool m_bEncryption;
     bool m_bPadding;
@@ -70,11 +70,11 @@ public:
         Dispose();
     }
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > Create( CK_MECHANISM_TYPE nNSSCipherID, const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aKey, const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, bool bW3CPadding );
+    static css::uno::Reference< css::xml::crypto::XCipherContext > Create( CK_MECHANISM_TYPE nNSSCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, bool bW3CPadding );
 
     // XCipherContext
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose(  ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext( const css::uno::Sequence< ::sal_Int8 >& aData ) throw (css::lang::IllegalArgumentException, css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose(  ) throw (css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
 };
 
 #endif
