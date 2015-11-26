@@ -89,8 +89,10 @@ public:
 
     // Process one pending Timer with highhest priority
     static void CallbackTaskScheduling( bool ignore );
-    /// Process one pending task ahead of time with highhest priority.
-    static void ProcessTaskScheduling( bool bTimer );
+    /// Process one pending task ahead of time with highest priority.
+    static bool       ProcessTaskScheduling( bool bTimerOnly );
+    /// Process all events until we are idle
+    static void       ProcessEventsToIdle();
 };
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX

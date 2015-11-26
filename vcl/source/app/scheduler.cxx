@@ -109,7 +109,7 @@ void Scheduler::CallbackTaskScheduling(bool ignore)
     Scheduler::ProcessTaskScheduling( true );
 }
 
-void Scheduler::ProcessTaskScheduling( bool bTimer )
+bool Scheduler::ProcessTaskScheduling( bool bTimerOnly )
 {
     // process all pending Tasks
     // if bTimer True, only handle timer
@@ -119,12 +119,14 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
     sal_uInt64         nMinPeriod = MAX_TIMER_PERIOD;
     pSVData->mnUpdateStack++;
+    bool bProcessed = false;
 
     // tdf#91727 - NB. bTimer is ultimately not used
-    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimer)))
+    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly)))
     {
         pSchedulerData->mnUpdateTime = nTime;
         pSchedulerData->Invoke();
+        bProcessed = true;
     }
 
     pSchedulerData = pSVData->mpFirstSchedulerData;
@@ -169,6 +171,21 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
         Timer::ImplStartTimer( pSVData, nMinPeriod );
     }
     pSVData->mnUpdateStack--;
+    return bProcessed;
+}
+
+void Scheduler::ProcessEventsToIdle()
+{
+    // FIXME: really we should process incoming OS events too ...
+    int nSanity = 1000;
+    while (Scheduler::ProcessTaskScheduling(false))
+    {
+        if (nSanity-- < 0)
+        {
+            SAL_WARN("vcl.schedule", "Unexpected volume of events to process");
+            break;
+        }
+    }
 }
 
 void Scheduler::SetPriority( SchedulerPriority ePriority )
