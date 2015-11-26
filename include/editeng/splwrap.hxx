@@ -71,6 +71,9 @@ private:
     EDITENG_DLLPRIVATE bool     SpellNext();        // select next area
     bool    FindSpellError();   // Check for errors (over areas)
 
+    SvxSpellWrapper(SvxSpellWrapper const &) = delete;
+    void operator =(SvxSpellWrapper const &) = delete;
+
 public:
     SvxSpellWrapper( vcl::Window* pWn,
                      css::uno::Reference< css::linguistic2::XSpellChecker1 >  &xSpellChecker,
