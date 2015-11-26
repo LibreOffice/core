@@ -54,9 +54,9 @@ Reference< XXMLEncryptionTemplate >
 SAL_CALL XMLEncryption_NssImpl::encrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw (com::sun::star::xml::crypto::XMLEncryptionException,
-         com::sun::star::uno::SecurityException,
-         com::sun::star::uno::RuntimeException, std::exception)
+) throw (css::xml::crypto::XMLEncryptionException,
+         css::uno::SecurityException,
+         css::uno::RuntimeException, std::exception)
 {
     xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecEncCtxPtr pEncCtx = nullptr ;
@@ -193,9 +193,9 @@ Reference< XXMLEncryptionTemplate >
 SAL_CALL XMLEncryption_NssImpl::decrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw (com::sun::star::xml::crypto::XMLEncryptionException ,
-         com::sun::star::uno::SecurityException,
-         com::sun::star::uno::RuntimeException, std::exception)
+) throw (css::xml::crypto::XMLEncryptionException ,
+         css::uno::SecurityException,
+         css::uno::RuntimeException, std::exception)
 {
     xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecEncCtxPtr pEncCtx = nullptr ;
