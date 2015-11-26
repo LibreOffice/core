@@ -66,7 +66,7 @@ rDevice
 
 namespace
 {
-#if CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR < 10
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
     struct cairo_rectangle_int_t
     {
         double x;
@@ -83,7 +83,8 @@ namespace
 
         cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
         extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
-#if CAIRO_VERSION_MAJOR > 1 || (CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 10)
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
         cairo_region_t *region = cairo_region_create_rectangle(&extents);
 
         cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
@@ -104,7 +105,8 @@ namespace
 
         cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
         extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
-#if CAIRO_VERSION_MAJOR > 1 || (CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR >= 10)
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
         cairo_region_t *region = cairo_region_create_rectangle(&extents);
 
         cairo_stroke_extents(cr, &x1, &y1, &x2, &y2);
@@ -147,9 +149,6 @@ namespace
 
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap )
 {
-    bool bRet = false;
-    (void)rTR; (void)rSourceBitmap; (void)rAlphaBitmap;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
     if (rAlphaBitmap.GetBitCount() != 8 && rAlphaBitmap.GetBitCount() != 1)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap alpha depth case: " << rAlphaBitmap.GetBitCount());
@@ -274,9 +273,7 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
         xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
                                                 extents.y + extents.height));
     }
-    bRet = true;
-#endif
-    return bRet;
+    return true;
 }
 
 bool SvpSalGraphics::drawTransformedBitmap(
@@ -299,11 +296,10 @@ namespace
         if (!rBuffer)
             return false;
 
-        if (rBuffer->getScanlineFormat() != SVP_CAIRO_FORMAT
-         && rBuffer->getScanlineFormat() != basebmp::Format::OneBitMsbPal)
+        if (rBuffer->getScanlineFormat() != SVP_CAIRO_FORMAT &&
+            rBuffer->getScanlineFormat() != basebmp::Format::OneBitMsbPal)
             return false;
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
         basegfx::B2IVector size = rBuffer->getSize();
         sal_Int32 nStride = rBuffer->getScanlineStride();
         cairo_format_t nFormat;
@@ -312,9 +308,6 @@ namespace
         else
             nFormat = CAIRO_FORMAT_A1;
         return (cairo_format_stride_for_width(nFormat, size.getX()) == nStride);
-#else
-        return false;
-#endif
     }
 }
 
@@ -339,10 +332,6 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
 {
-    bool bRet = false;
-    (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-
     cairo_t* cr = getCairoContext();
     assert(cr && m_aDevice->isTopDown());
 
@@ -389,9 +378,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
         xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
                                                 extents.y + extents.height));
     }
-    bRet = true;
-#endif
-    return bRet;
+    return true;
 }
 
 SvpSalGraphics::SvpSalGraphics() :
@@ -803,7 +790,6 @@ void SvpSalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
     dbgOut( m_aDevice );
 }
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, bool bClosePath)
 {
     // short circuit if there is nothing to do
@@ -864,7 +850,6 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
         cairo_close_path(cr);
     }
 }
-#endif
 
 bool SvpSalGraphics::drawPolyLine(
     const ::basegfx::B2DPolygon& rPolyLine,
@@ -873,9 +858,6 @@ bool SvpSalGraphics::drawPolyLine(
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap)
 {
-    bool bRet = false;
-    (void)rPolyLine; (void)fTransparency; (void)rLineWidths; (void)eLineJoin; (void)eLineCap;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
     if (nPointCount <= 0)
@@ -974,9 +956,8 @@ bool SvpSalGraphics::drawPolyLine(
         xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
                                                 extents.y + extents.height));
     }
-    bRet = true;
-#endif
-    return bRet;
+
+    return true;
 }
 
 bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
@@ -1006,10 +987,6 @@ bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
 
 bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
 {
-    bool bRet = false;
-    (void)rPolyPoly; (void)fTransparency;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-
     cairo_t* cr = getCairoContext();
     assert(cr && m_aDevice->isTopDown());
 
@@ -1055,9 +1032,8 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
         xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
                                                 extents.y + extents.height));
     }
-    bRet = true;
-#endif
-    return bRet;
+
+    return true;
 }
 
 void SvpSalGraphics::copyArea( long nDestX,
