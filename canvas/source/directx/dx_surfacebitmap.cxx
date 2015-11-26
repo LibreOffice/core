@@ -48,8 +48,7 @@ namespace dxcanvas
             DXColorBuffer( const COMReference<surface_type>& rSurface,
                            const ::basegfx::B2IVector&       rSize ) :
                 maSize(rSize),
-                mpSurface(rSurface),
-                mbAlpha(false)
+                mpSurface(rSurface)
             {
             }
 
@@ -68,7 +67,6 @@ namespace dxcanvas
             ::basegfx::B2IVector maSize;
             mutable D3DLOCKED_RECT maLockedRect;
             mutable COMReference<surface_type> mpSurface;
-            bool mbAlpha;
         };
 
         sal_uInt8* DXColorBuffer::lock() const
@@ -114,8 +112,7 @@ namespace dxcanvas
             GDIColorBuffer( const BitmapSharedPtr&      rSurface,
                             const ::basegfx::B2IVector& rSize ) :
                 maSize(rSize),
-                mpGDIPlusBitmap(rSurface),
-                mbAlpha(true)
+                mpGDIPlusBitmap(rSurface)
             {
             }
 
@@ -134,7 +131,6 @@ namespace dxcanvas
             ::basegfx::B2IVector maSize;
             mutable Gdiplus::BitmapData aBmpData;
             BitmapSharedPtr mpGDIPlusBitmap;
-            bool mbAlpha;
         };
 
         sal_uInt8* GDIColorBuffer::lock() const
