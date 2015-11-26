@@ -96,6 +96,14 @@ public:
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
+    bool IsRotated(
+        const OUString& rsCommandName,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    bool IsMirrored(
+        const OUString& rsCommandName,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
     /** Do not call.  Should be part of a local and hidden interface.
     */
     void SetFrame (const css::uno::Reference<css::frame::XFrame>& rxFrame);

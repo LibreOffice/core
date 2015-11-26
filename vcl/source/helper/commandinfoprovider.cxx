@@ -263,6 +263,64 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
     return nValue;
 }
 
+bool CommandInfoProvider::IsRotated(
+    const OUString& rsCommandName,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+{
+    Sequence< OUString > aSeqRotateCmd;
+    try
+    {
+        const OUString sModuleIdentifier (GetModuleIdentifier());
+        if (!sModuleIdentifier.isEmpty())
+        {
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xUICommandLabels;
+            if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels) {
+                xUICommandLabels->getByName("private:resource/image/commandrotateimagelist") >>= aSeqRotateCmd;
+                for ( sal_Int32 i = 0; i < aSeqRotateCmd.getLength(); i++ )
+                {
+                    if (aSeqRotateCmd[i] == rsCommandName)
+                        return true;
+                }
+            }
+        }
+    }
+    catch (Exception&)
+    {
+    }
+
+    return false;
+}
+
+bool CommandInfoProvider::IsMirrored(
+    const OUString& rsCommandName,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+{
+    Sequence< OUString > aSeqMirrorCmd;
+    try
+    {
+        const OUString sModuleIdentifier (GetModuleIdentifier());
+        if (!sModuleIdentifier.isEmpty())
+        {
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xUICommandLabels;
+            if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels) {
+                xUICommandLabels->getByName("private:resource/image/commandmirrorimagelist") >>= aSeqMirrorCmd;
+                for ( sal_Int32 i = 0; i < aSeqMirrorCmd.getLength(); i++ )
+                {
+                    if (aSeqMirrorCmd[i] == rsCommandName)
+                        return true;
+                }
+            }
+        }
+    }
+    catch (Exception&)
+    {
+    }
+
+    return false;
+}
+
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 {
     if (rxFrame != mxCachedDataFrame)
@@ -393,7 +451,7 @@ Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties(const O
     try
     {
         const OUString sModuleIdentifier (GetModuleIdentifier());
-        if (sModuleIdentifier.getLength() > 0)
+        if (!sModuleIdentifier.isEmpty())
         {
             Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
             Reference<container::XNameAccess> xUICommandLabels;

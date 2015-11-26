@@ -39,6 +39,7 @@
 #include <toolbox.h>
 
 #include <unotools/confignode.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
 
 using namespace vcl;
 using namespace com::sun::star;
@@ -606,6 +607,11 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
     InsertItem(nItemId, aImage, aLabel, nBits, nPos);
     SetItemCommand(nItemId, rCommand);
     SetQuickHelpText(nItemId, aTooltip);
+
+    if (vcl::CommandInfoProvider::Instance().IsMirrored(rCommand, rFrame))
+        SetItemImageMirrorMode(nItemId, mbImagesMirrored);
+    if (vcl::CommandInfoProvider::Instance().IsRotated(rCommand, rFrame))
+        SetItemImageAngle(nItemId, mnImagesRotationAngle);
 
     // set the minimal size
     ImplToolItem* pItem = ImplGetItem( nItemId );
@@ -1228,6 +1234,24 @@ void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
             if (!mbCalc)
                 ImplUpdateItem(nPos);
         }
+    }
+}
+
+void ToolBox::UpdateImageOrientation()
+{
+    css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
+
+    css::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getActiveFrame());
+    if (!xFrame.is())
+        return;
+
+    for (std::vector<ImplToolItem>::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
+    {
+        if (vcl::CommandInfoProvider::Instance().IsMirrored(it->maCommandStr, xFrame))
+            SetItemImageMirrorMode(it->mnId, mbImagesMirrored);
+        if (vcl::CommandInfoProvider::Instance().IsRotated(it->maCommandStr, xFrame))
+            SetItemImageAngle(it->mnId, mnImagesRotationAngle);
     }
 }
 

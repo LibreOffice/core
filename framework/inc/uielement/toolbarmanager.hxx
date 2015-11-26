@@ -61,7 +61,6 @@ namespace framework
 
 typedef ::cppu::WeakImplHelper<
            css::frame::XFrameActionListener,
-           css::frame::XStatusListener,
            css::lang::XComponent,
            css::ui::XUIConfigurationListener
         > ToolbarManager_Base;
@@ -79,9 +78,6 @@ class ToolBarManager : public ToolbarManager_Base
 
         // XFrameActionListener
         virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) throw ( css::uno::RuntimeException, std::exception ) override;
-
-        // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
@@ -145,8 +141,6 @@ class ToolBarManager : public ToolbarManager_Base
         void UpdateController( css::uno::Reference< css::frame::XToolbarController > xController);
         //end
         void AddFrameActionListener();
-        void AddImageOrientationListener();
-        void UpdateImageOrientation();
         void ImplClearPopupMenu( ToolBox *pToolBar );
         void RequestImages();
         ToolBoxItemBits ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
@@ -167,11 +161,7 @@ class ToolBarManager : public ToolbarManager_Base
              m_bSmallSymbols : 1,
              m_bAddedToTaskPaneList : 1,
              m_bFrameActionRegistered : 1,
-             m_bUpdateControllers : 1,
-             m_bImageOrientationRegistered : 1,
-             m_bImageMirrored : 1;
-
-        long m_lImageRotation;
+             m_bUpdateControllers : 1;
 
         VclPtr<ToolBox>                                              m_pToolBar;
 
@@ -188,7 +178,6 @@ class ToolBarManager : public ToolbarManager_Base
         css::uno::Reference< css::frame::XUIControllerFactory >      m_xToolbarControllerFactory;
         css::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;
         css::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;
-        css::uno::Reference< css::lang::XComponent >                 m_xImageOrientationListener;
         css::uno::Reference< css::ui::XUIConfigurationManager >      m_xUICfgMgr;
         css::uno::Reference< css::ui::XUIConfigurationManager >      m_xDocUICfgMgr;
 
