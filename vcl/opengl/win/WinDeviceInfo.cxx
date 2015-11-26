@@ -16,8 +16,11 @@
 #include <setupapi.h>
 #include <algorithm>
 #include <cstdint>
+
+#include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/stream.hxx>
 
 OUString* WinOpenGLDeviceInfo::mpDeviceVendors[wgl::DeviceVendorMax];
 std::vector<wgl::DriverInfo> WinOpenGLDeviceInfo::maDriverInfo;
