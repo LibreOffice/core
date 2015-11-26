@@ -89,7 +89,7 @@ SAL_CALL exportLibraryContainer(
 
 void
 SAL_CALL exportLibrary(
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XWriter > const & xOut,
+    css::uno::Reference< css::xml::sax::XWriter > const & xOut,
     const LibDescriptor& rLib )
 {
     xOut->startDocument();

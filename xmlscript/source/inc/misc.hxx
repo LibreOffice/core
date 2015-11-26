@@ -26,19 +26,19 @@ namespace xmlscript
 {
 
 template< typename T >
-inline void extract_throw( T * p, ::com::sun::star::uno::Any const & a )
+inline void extract_throw( T * p, css::uno::Any const & a )
 {
     if (! (a >>= *p))
     {
-        throw ::com::sun::star::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             "expected " + cppu::UnoType<T>::get().getTypeName(),
-            ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface>() );
+            css::uno::Reference<
+            css::uno::XInterface>() );
     }
 }
 
 template< typename T >
-inline T extract_throw( ::com::sun::star::uno::Any const & a )
+inline T extract_throw( css::uno::Any const & a )
 {
     T v = T();
     extract_throw<T>( &v, a );
