@@ -1912,7 +1912,7 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
     throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    Scheduler::ProcessTaskScheduling(false);
+    Scheduler::ProcessEventsToIdle();
 }
 
 OUString SAL_CALL VCLXToolkit::getHWOSConfInfo()
