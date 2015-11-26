@@ -26,7 +26,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svl/itempool.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/prntypes.hxx>
@@ -369,12 +369,10 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                 // notice-masterpage (at the moment)
                 if( ePageKind != PK_NOTES )
                 {
-                    ScopedVclPtrInstance<MessBox> aQuestionBox (
-                        pParent,
-                        WB_YES_NO | WB_DEF_YES,
-                        SD_RESSTR(STR_PAGE_BACKGROUND_TITLE),
-                        SD_RESSTR(STR_PAGE_BACKGROUND_TXT) );
-                    aQuestionBox->SetImage( QueryBox::GetStandardImage() );
+                    ScopedVclPtrInstance<MessageDialog> aQuestionBox(
+                        pParent, SD_RESSTR(STR_PAGE_BACKGROUND_TXT),
+                        VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                    aQuestionBox->SetText(SD_RESSTR(STR_PAGE_BACKGROUND_TITLE));
                     bSetToAllPages = ( RET_YES == aQuestionBox->Execute() );
                 }
 
