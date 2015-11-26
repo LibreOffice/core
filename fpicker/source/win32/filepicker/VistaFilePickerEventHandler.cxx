@@ -50,8 +50,8 @@ VistaFilePickerEventHandler::VistaFilePickerEventHandler(IVistaFilePickerInterna
     : m_nRefCount           (0       )
     , m_nListenerHandle     (0       )
     , m_pDialog             (        )
-    , m_lListener           (m_aMutex)
     , m_pInternalNotify     (pInternalNotify)
+    , m_lListener           (m_aMutex)
 {
 }
 
