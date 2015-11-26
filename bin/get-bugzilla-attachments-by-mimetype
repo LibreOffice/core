@@ -460,6 +460,7 @@ mimetypes = {
     'application/x-fictionbook+xml': 'fb2',
     'application/x-abiword': 'abw',
     'application/x-pagemaker': 'pmd',
+    'application/x-gnumeric': 'gnumeric',
 # relatively uncommon image mimetypes
     'image/x-freehand': 'fh',
     'image/cgm': 'cgm',
