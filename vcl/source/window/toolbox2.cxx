@@ -25,6 +25,7 @@
 #include <tools/rc.h>
 
 #include <vcl/svapp.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/help.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/toolbox.hxx>

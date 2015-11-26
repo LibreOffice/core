@@ -35,6 +35,7 @@
 #include <svtools/svtools.hrc>
 #include <limits>
 #include <utility>
+#include <vcl/idle.hxx>
 
 namespace
 {
