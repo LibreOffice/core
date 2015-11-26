@@ -1892,7 +1892,7 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    Scheduler::ProcessTaskScheduling(false);
+    Scheduler::ProcessEventsToIdle();
 }
 
 }
