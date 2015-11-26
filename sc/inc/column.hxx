@@ -138,6 +138,10 @@ class ScColumn
     ScAttrArray*          pAttrArray;
     ScDocument*           pDocument;
     bool mbDirtyGroups;     /// formula groups are dirty.
+    bool mbMayHaveFormula;  // Flag that this column contains at least one
+                            // formula (used for optimisation, e.g. there
+                            // is no need to iterate to start listeners on
+                            // this column if there is no formula)
 
 friend class ScDocument;                    // for FillInfo
 friend class ScTable;
@@ -663,6 +667,10 @@ public:
     SCSIZE      GetPatternCount() const;
     SCSIZE      GetPatternCount( SCROW nRow1, SCROW nRow2 ) const;
     bool        ReservePatternCount( SCSIZE nReserve );
+
+    inline void setMayHaveFormula(bool bFlag) { mbMayHaveFormula = bFlag ; }
+    inline bool getMayHaveFormula(void) const { return mbMayHaveFormula ; }
+
 private:
 
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow );

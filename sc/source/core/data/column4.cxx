@@ -531,6 +531,8 @@ void ScColumn::CloneFormulaCell(
 
         itPos = maCells.set(itPos, nRow1, aFormulas.begin(), aFormulas.end());
 
+        setMayHaveFormula(true);
+
         // Join the top and bottom of the pasted formula cells as needed.
         sc::CellStoreType::position_type aPosObj = maCells.position(itPos, nRow1);
 
@@ -1353,6 +1355,9 @@ void ScColumn::StartListeningFormulaCells(
     sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
     SCROW nRow1, SCROW nRow2, SCROW* pStartRow, SCROW* pEndRow )
 {
+    if (!getMayHaveFormula())
+        return;
+
     StartListeningFormulaCellsHandler aFunc(rStartCxt, rEndCxt);
     sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 
@@ -1371,6 +1376,9 @@ void ScColumn::EndListeningFormulaCells(
     sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
     SCROW* pStartRow, SCROW* pEndRow )
 {
+    if (!getMayHaveFormula())
+        return;
+
     EndListeningFormulaCellsHandler aFunc(rCxt);
     sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 
