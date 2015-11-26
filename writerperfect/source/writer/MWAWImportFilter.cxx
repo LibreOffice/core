@@ -34,6 +34,7 @@ static bool handleEmbeddedMWAWGraphicObject(const librevenge::RVNGBinaryData &da
 static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
     OdsGenerator exporter;
+    exporter.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWGraphicObject);
     exporter.addDocumentHandler(pHandler, streamType);
     return MWAWDocument::decodeSpreadsheet(data, &exporter);
 }
@@ -132,6 +133,9 @@ bool MWAWImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUStr
             case MWAWDocument::MWAW_T_ZWRITE:
                 rTypeName = "writer_ZWrite";
                 break;
+            case MWAWDocument::MWAW_T_RESERVED3: // also MWAWDocument::MWAW_T_STYLE
+                rTypeName = "writer_MWStyle";
+                break;
 
             case MWAWDocument::MWAW_T_ADOBEILLUSTRATOR:
             case MWAWDocument::MWAW_T_CLARISRESOLVE:
@@ -163,7 +167,6 @@ bool MWAWImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUStr
 
             case MWAWDocument::MWAW_T_RESERVED1:
             case MWAWDocument::MWAW_T_RESERVED2:
-            case MWAWDocument::MWAW_T_RESERVED3:
             case MWAWDocument::MWAW_T_RESERVED4:
             case MWAWDocument::MWAW_T_RESERVED5:
             case MWAWDocument::MWAW_T_RESERVED6:

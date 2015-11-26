@@ -35,6 +35,7 @@ static bool handleEmbeddedMWAWGraphicObject(const librevenge::RVNGBinaryData &da
 static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
     OdsGenerator exporter;
+    exporter.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWGraphicObject);
     exporter.addDocumentHandler(pHandler, streamType);
     return MWAWDocument::decodeSpreadsheet(data, &exporter);
 }
@@ -82,10 +83,13 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
             case MWAWDocument::MWAW_T_MICROSOFTWORKS:
                 rTypeName = "draw_Mac_Works";
                 break;
+            case MWAWDocument::MWAW_T_PIXELPAINT:
+                rTypeName = "draw_PixelPaint";
+                break;
             case MWAWDocument::MWAW_T_SUPERPAINT:
                 rTypeName = "draw_SuperPaint";
                 break;
-            case MWAWDocument::MWAW_T_RESERVED1:
+            case MWAWDocument::MWAW_T_RESERVED1: // also MWAWDocument::MWAW_T_CLARISDRAW
                 rTypeName = "draw_ClarisDraw";
                 break;
 
@@ -119,7 +123,6 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
             case MWAWDocument::MWAW_T_NISUSWRITER:
             case MWAWDocument::MWAW_T_OVERVUE:
             case MWAWDocument::MWAW_T_PAGEMAKER:
-            case MWAWDocument::MWAW_T_PIXELPAINT:
             case MWAWDocument::MWAW_T_RAGTIME:
             case MWAWDocument::MWAW_T_READYSETGO:
             case MWAWDocument::MWAW_T_SYMPOSIUM:
