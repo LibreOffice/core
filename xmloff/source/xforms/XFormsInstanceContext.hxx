@@ -36,8 +36,8 @@ class SvXMLImportContext;
 /** import the xforms:instance element */
 class XFormsInstanceContext : public TokenContext
 {
-    com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> mxModel;
-    com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument> mxInstance;
+    css::uno::Reference<css::xforms::XModel2> mxModel;
+    css::uno::Reference<css::xml::dom::XDocument> mxInstance;
     OUString msId;
     OUString msURL;
 
@@ -45,7 +45,7 @@ public:
     XFormsInstanceContext( SvXMLImport& rImport,
                            sal_uInt16 nPrfx,
                            const OUString& rLName,
-                           const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> & xModel );
+                           const css::uno::Reference<css::xforms::XModel2> & xModel );
     virtual ~XFormsInstanceContext();
 
     // implement SvXMLImportContext & TokenContext methods:
@@ -56,7 +56,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 
@@ -69,7 +69,7 @@ protected:
         sal_uInt16 nToken,
         sal_uInt16 nNamespace,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif

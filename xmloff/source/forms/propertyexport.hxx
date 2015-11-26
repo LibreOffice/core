@@ -65,11 +65,11 @@ namespace xmloff
     protected:
         IFormsExportContext&    m_rContext;
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        const css::uno::Reference< css::beans::XPropertySet >
                                 m_xProps;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+        const css::uno::Reference< css::beans::XPropertySetInfo >
                                 m_xPropertyInfo;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >
+        const css::uno::Reference< css::beans::XPropertyState >
                                 m_xPropertyState;
 
         // caching
@@ -84,7 +84,7 @@ namespace xmloff
                 the property set to be exported
         */
         OPropertyExport(IFormsExportContext& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps);
+            const css::uno::Reference< css::beans::XPropertySet >& _rxProps);
 
     protected:
         /** examines a property set given for all properties which's value are to made persistent
@@ -95,7 +95,7 @@ namespace xmloff
         void examinePersistence();
 
         template< typename T > void exportRemainingPropertiesSequence(
-            com::sun::star::uno::Any const & value,
+            css::uno::Any const & value,
             token::XMLTokenEnum eValueAttName);
 
         void exportRemainingProperties();
@@ -325,7 +325,7 @@ namespace xmloff
                 the value to convert
         */
         OUString implConvertAny(
-            const ::com::sun::star::uno::Any& _rValue);
+            const css::uno::Any& _rValue);
 
         /**
             @return
@@ -341,7 +341,7 @@ namespace xmloff
                 </ul>
                 If the type is not convertible, float is returned
         */
-        static ::xmloff::token::XMLTokenEnum implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType);
+        static ::xmloff::token::XMLTokenEnum implGetPropertyXMLType(const css::uno::Type& _rType);
 
 #ifdef DBG_UTIL
                 void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const OUString& _rValue);
@@ -377,11 +377,11 @@ namespace xmloff
         */
         void dbg_implCheckProperty(
             const OUString& _rPropertyName,
-            const ::com::sun::star::uno::Type* _pType);
+            const css::uno::Type* _pType);
 
 //      void dbg_implCheckProperty(
 //          const sal_Char* _rPropertyName,
-//          const ::com::sun::star::uno::Type* _pType)
+//          const css::uno::Type* _pType)
 //      {
 //          dbg_implCheckProperty(OUString::createFromAscii(_rPropertyName), _pType);
 //      }

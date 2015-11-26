@@ -158,7 +158,7 @@ enum SchXMLRegEquationAttrMap
 class SchXMLImport : public SvXMLImport
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
 
     rtl::Reference<SchXMLImportHelper> maImportHelper;
 
@@ -166,20 +166,20 @@ protected:
     virtual SvXMLImportContext *CreateContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 public:
     SchXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlags );
 
     virtual ~SchXMLImport() throw ();
 
     SvXMLImportContext* CreateStylesContext( const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_XMLOFF_INC_SCHXMLIMPORT_HXX

@@ -68,7 +68,7 @@ void SvXMLImportContext::Characters( const OUString& )
 {
 }
 
-// ::com::sun::star::xml::sax::XFastContextHandler:
+// css::xml::sax::XFastContextHandler:
 void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32, const uno::Reference< xml::sax::XFastAttributeList > &)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {

@@ -44,7 +44,7 @@ XMLDurationPropertyHdl::~XMLDurationPropertyHdl()
 
 bool XMLDurationPropertyHdl::importXML(
     const OUString& rStrImpValue,
-    ::com::sun::star::uno::Any& rValue,
+    css::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     util::Duration aDuration;
@@ -67,7 +67,7 @@ bool XMLDurationPropertyHdl::importXML(
 
 bool XMLDurationPropertyHdl::exportXML(
     OUString& rStrExpValue,
-    const ::com::sun::star::uno::Any& rValue,
+    const css::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     double nVal = 0;
@@ -100,7 +100,7 @@ XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl()
 
 bool XMLOpacityPropertyHdl::importXML(
     const OUString& rStrImpValue,
-    ::com::sun::star::uno::Any& rValue,
+    css::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
@@ -148,7 +148,7 @@ bool XMLOpacityPropertyHdl::importXML(
 
 bool XMLOpacityPropertyHdl::exportXML(
     OUString& rStrExpValue,
-    const ::com::sun::star::uno::Any& rValue,
+    const css::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
@@ -175,7 +175,7 @@ XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl()
 
 bool XMLTextAnimationStepPropertyHdl::importXML(
     const OUString& rStrImpValue,
-    ::com::sun::star::uno::Any& rValue,
+    css::uno::Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
@@ -205,7 +205,7 @@ bool XMLTextAnimationStepPropertyHdl::importXML(
 
 bool XMLTextAnimationStepPropertyHdl::exportXML(
     OUString& rStrExpValue,
-    const ::com::sun::star::uno::Any& rValue,
+    const css::uno::Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
@@ -244,13 +244,13 @@ XMLDateTimeFormatHdl::~XMLDateTimeFormatHdl()
 {
 }
 
-bool XMLDateTimeFormatHdl::importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLDateTimeFormatHdl::importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     rValue <<= rStrImpValue;
     return true;
 }
 
-bool XMLDateTimeFormatHdl::exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLDateTimeFormatHdl::exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nNumberFormat = 0;
     if( mpExport && (rValue >>= nNumberFormat) )

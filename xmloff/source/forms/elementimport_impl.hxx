@@ -32,7 +32,7 @@
 template <class BASE>
 inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
     sal_uInt16 _nPrefix, const OUString& _rLocalName,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList)
+    const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList)
 {
     // maybe it's a sub control
     if (_rLocalName == m_sWrapperElementName)
@@ -50,16 +50,16 @@ inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
 }
 
 template <class BASE>
-inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+inline css::uno::Reference< css::beans::XPropertySet >
     OContainerImport< BASE >::createElement()
 {
     // let the base class create the object
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xReturn = BASE::createElement();
+    css::uno::Reference< css::beans::XPropertySet > xReturn = BASE::createElement();
     if (!xReturn.is())
         return xReturn;
 
     // ensure that the object is a XNameContainer (we strongly need this for inserting child elements)
-    m_xMeAsContainer.set(xReturn, ::com::sun::star::uno::UNO_QUERY);
+    m_xMeAsContainer.set(xReturn, css::uno::UNO_QUERY);
     if (!m_xMeAsContainer.is())
     {
         OSL_FAIL("OContainerImport::createElement: invalid element (no XNameContainer) created!");
@@ -75,7 +75,7 @@ inline void OContainerImport< BASE >::EndElement()
     BASE::EndElement();
 
     // now that we have all children, attach the events
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, ::com::sun::star::uno::UNO_QUERY);
+    css::uno::Reference< css::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, css::uno::UNO_QUERY);
     if (xIndexContainer.is())
         ODefaultEventAttacherManager::setEvents(xIndexContainer);
 }
@@ -83,19 +83,19 @@ inline void OContainerImport< BASE >::EndElement()
 //= OColumnImport
 template <class BASE>
 OColumnImport< BASE >::OColumnImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
+        const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
         OControlElement::ElementType _eType)
     :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
-    ,m_xColumnFactory(_rxParentContainer, ::com::sun::star::uno::UNO_QUERY)
+    ,m_xColumnFactory(_rxParentContainer, css::uno::UNO_QUERY)
 {
     OSL_ENSURE(m_xColumnFactory.is(), "OColumnImport::OColumnImport: invalid parent container (no factory)!");
 }
 
 // OElementImport overridables
 template <class BASE>
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > OColumnImport< BASE >::createElement()
+css::uno::Reference< css::beans::XPropertySet > OColumnImport< BASE >::createElement()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xReturn;
+    css::uno::Reference< css::beans::XPropertySet > xReturn;
     // no call to the base class' method. We have to use the grid column factory
     if (m_xColumnFactory.is())
     {

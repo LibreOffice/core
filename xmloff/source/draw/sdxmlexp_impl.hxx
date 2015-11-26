@@ -77,9 +77,9 @@ struct DateTimeDeclImpl
 
 class SdXMLExport : public SvXMLExport
 {
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxDocStyleFamilies;
-    com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocMasterPages;
-    com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocDrawPages;
+    css::uno::Reference< css::container::XNameAccess > mxDocStyleFamilies;
+    css::uno::Reference< css::container::XIndexAccess > mxDocMasterPages;
+    css::uno::Reference< css::container::XIndexAccess > mxDocDrawPages;
     sal_Int32                   mnDocMasterPageCount;
     sal_Int32                   mnDocDrawPageCount;
     sal_uInt32                  mnObjectCount;
@@ -91,7 +91,7 @@ class SdXMLExport : public SvXMLExport
     ImpXMLEXPPageMasterInfo*    mpHandoutPageMaster;
     ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
 
-    com::sun::star::uno::Sequence< OUString > maDrawPagesAutoLayoutNames;
+    css::uno::Sequence< OUString > maDrawPagesAutoLayoutNames;
 
     ::std::vector< OUString >        maDrawPagesStyleNames;
     ::std::vector< OUString >        maDrawNotesPagesStyleNames;
@@ -124,43 +124,43 @@ class SdXMLExport : public SvXMLExport
     virtual void _ExportContent() override;
     virtual void _ExportMeta() override;
 
-    ImpXMLEXPPageMasterInfo* ImpGetOrCreatePageMasterInfo( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xMasterPage );
+    ImpXMLEXPPageMasterInfo* ImpGetOrCreatePageMasterInfo( css::uno::Reference< css::drawing::XDrawPage > xMasterPage );
     void ImpPrepPageMasterInfos();
     void ImpWritePageMasterInfos();
     void ImpPrepAutoLayoutInfos();
-    HeaderFooterPageSettingsImpl ImpPrepDrawPageHeaderFooterDecls( const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xDrawPage );
+    HeaderFooterPageSettingsImpl ImpPrepDrawPageHeaderFooterDecls( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage );
     ImpXMLEXPPageMasterInfo* ImpGetPageMasterInfoByName(const OUString& rName);
 
     void ImpPrepDrawPageInfos();
     void ImpPrepMasterPageInfos();
     void ImpWritePresentationStyles();
-    OUString ImpCreatePresPageStyleName( com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage, bool bExportBackground = true );
+    OUString ImpCreatePresPageStyleName( css::uno::Reference<css::drawing::XDrawPage> xDrawPage, bool bExportBackground = true );
 
-    bool ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, OUString& rName);
+    bool ImpPrepAutoLayoutInfo(const css::uno::Reference< css::drawing::XDrawPage >& xPage, OUString& rName);
     void ImpWriteAutoLayoutInfos();
     void ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectangle& rRect);
     void ImpWriteHeaderFooterDecls();
     void ImplExportHeaderFooterDeclAttributes( const HeaderFooterPageSettingsImpl& aSettings );
 
-    void exportFormsElement( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage );
+    void exportFormsElement( css::uno::Reference< css::drawing::XDrawPage > xDrawPage );
     void exportPresentationSettings();
 
     // #82003# helper function for recursive object count
-    sal_uInt32 ImpRecursiveObjectCount( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes);
+    sal_uInt32 ImpRecursiveObjectCount( css::uno::Reference< css::drawing::XShapes > xShapes);
 
-    OUString getNavigationOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage );
+    OUString getNavigationOrder( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage );
 
-    void collectAnnotationAutoStyles( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage );
-    void exportAnnotations( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage );
+    void collectAnnotationAutoStyles( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage );
+    void exportAnnotations( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage );
 
 protected:
-    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) override;
-    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) override;
+    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool() override;
 
 public:
     SdXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         bool bIsDraw, SvXMLExportFlags nExportFlags = SvXMLExportFlags::ALL );
     virtual ~SdXMLExport();
@@ -168,7 +168,7 @@ public:
     void SetProgress(sal_Int32 nProg);
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // get factories and mappers
     XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper; }

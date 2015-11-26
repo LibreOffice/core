@@ -161,7 +161,7 @@ void XMLMutableAttributeList::RenameAttributeByIndex( sal_Int16 i,
 }
 
 void XMLMutableAttributeList::AppendAttributeList(
-        const Reference< ::com::sun::star::xml::sax::XAttributeList >& r )
+        const Reference< css::xml::sax::XAttributeList >& r )
 {
     GetMutableAttrList()->AppendAttributeList( r );
 }

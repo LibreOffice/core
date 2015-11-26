@@ -29,12 +29,11 @@
 class SvXMLAttributeList;
 
 class XMLMutableAttributeList : public ::cppu::WeakImplHelper<
-        ::com::sun::star::xml::sax::XAttributeList,
-        ::com::sun::star::util::XCloneable,
-        ::com::sun::star::lang::XUnoTunnel>
+        css::xml::sax::XAttributeList,
+        css::util::XCloneable,
+        css::lang::XUnoTunnel>
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> m_xAttrList;
+    css::uno::Reference< css::xml::sax::XAttributeList> m_xAttrList;
 
     SvXMLAttributeList *m_pMutableAttrList;
 
@@ -42,26 +41,26 @@ class XMLMutableAttributeList : public ::cppu::WeakImplHelper<
 
 public:
     XMLMutableAttributeList();
-    XMLMutableAttributeList( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & rAttrList,
+    XMLMutableAttributeList( const css::uno::Reference<
+        css::xml::sax::XAttributeList> & rAttrList,
            bool bClone=false );
     virtual ~XMLMutableAttributeList();
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::xml::sax::XAttributeList
-    virtual sal_Int16 SAL_CALL getLength() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getValueByName(const OUString& aName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    // css::xml::sax::XAttributeList
+    virtual sal_Int16 SAL_CALL getLength() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getValueByName(const OUString& aName) throw( css::uno::RuntimeException, std::exception ) override;
 
-    // ::com::sun::star::util::XCloneable
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()   throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    // css::util::XCloneable
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()   throw( css::uno::RuntimeException, std::exception ) override;
 
     // methods that are not contained in any interface
     void SetValueByIndex( sal_Int16 i, const OUString& rValue );
@@ -69,7 +68,7 @@ public:
 //  void Clear();
     void RemoveAttributeByIndex( sal_Int16 i );
     void RenameAttributeByIndex( sal_Int16 i, const OUString& rNewName );
-    void AppendAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
+    void AppendAttributeList( const css::uno::Reference< css::xml::sax::XAttributeList > & );
 
     sal_Int16 GetIndexByName( const OUString& rName ) const;
 };

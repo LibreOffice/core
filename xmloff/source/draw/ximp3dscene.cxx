@@ -38,7 +38,7 @@ SdXML3DLightContext::SdXML3DLightContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
+    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
 :   SvXMLImportContext( rImport, nPrfx, rLName),
     maDiffuseColor(0x00000000),
     maDirection(0.0, 0.0, 1.0),
@@ -99,7 +99,7 @@ SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShapes)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
@@ -234,7 +234,7 @@ SdXML3DSceneAttributesHelper::~SdXML3DSceneAttributesHelper()
 }
 
 /** creates a 3d light context and adds it to the internal list for later processing */
-SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
+SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
 {
     SvXMLImportContext* pContext = new SdXML3DLightContext(mrImport, nPrfx, rLName, xAttrList);
 
@@ -344,7 +344,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
 }
 
 /** this sets the scene attributes at this propertyset */
-void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet )
+void SdXML3DSceneAttributesHelper::setSceneAttributes( const css::uno::Reference< css::beans::XPropertySet >& xPropSet )
 {
     uno::Any aAny;
 

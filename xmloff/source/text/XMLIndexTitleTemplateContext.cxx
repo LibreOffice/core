@@ -69,7 +69,7 @@ void XMLIndexTitleTemplateContext::StartElement(
             sStyleName = xAttrList->getValueByIndex(nAttr);
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                 XML_STYLE_FAMILY_TEXT_PARAGRAPH, sStyleName );
-            const Reference < ::com::sun::star::container::XNameContainer >&
+            const Reference < css::container::XNameContainer >&
                 rStyles = GetImport().GetTextImport()->GetParaStyles();
             bStyleNameOK = rStyles.is() && rStyles->hasByName( sDisplayStyleName );
         }

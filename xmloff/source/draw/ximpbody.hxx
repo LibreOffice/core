@@ -38,13 +38,13 @@ class SdXMLDrawPageContext : public SdXMLGenericPageContext
 public:
     SdXMLDrawPageContext( SdXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLDrawPageContext();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void EndElement() override;
 
 };
@@ -62,7 +62,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPBODY_HXX

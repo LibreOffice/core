@@ -48,26 +48,26 @@ namespace com { namespace sun { namespace star {
 struct SeriesDefaultsAndStyles
 {
     //default values for series:
-    ::com::sun::star::uno::Any    maSymbolTypeDefault;
-    ::com::sun::star::uno::Any    maDataCaptionDefault;
+    css::uno::Any    maSymbolTypeDefault;
+    css::uno::Any    maDataCaptionDefault;
 
-    ::com::sun::star::uno::Any    maErrorIndicatorDefault;
-    ::com::sun::star::uno::Any    maErrorCategoryDefault;
-    ::com::sun::star::uno::Any    maConstantErrorLowDefault;
-    ::com::sun::star::uno::Any    maConstantErrorHighDefault;
-    ::com::sun::star::uno::Any    maPercentageErrorDefault;
-    ::com::sun::star::uno::Any    maErrorMarginDefault;
+    css::uno::Any    maErrorIndicatorDefault;
+    css::uno::Any    maErrorCategoryDefault;
+    css::uno::Any    maConstantErrorLowDefault;
+    css::uno::Any    maConstantErrorHighDefault;
+    css::uno::Any    maPercentageErrorDefault;
+    css::uno::Any    maErrorMarginDefault;
 
-    ::com::sun::star::uno::Any    maMeanValueDefault;
-    ::com::sun::star::uno::Any    maRegressionCurvesDefault;
+    css::uno::Any    maMeanValueDefault;
+    css::uno::Any    maRegressionCurvesDefault;
 
-    ::com::sun::star::uno::Any    maStackedDefault;
-    ::com::sun::star::uno::Any    maPercentDefault;
-    ::com::sun::star::uno::Any    maDeepDefault;
-    ::com::sun::star::uno::Any    maStackedBarsConnectedDefault;
+    css::uno::Any    maStackedDefault;
+    css::uno::Any    maPercentDefault;
+    css::uno::Any    maDeepDefault;
+    css::uno::Any    maStackedBarsConnectedDefault;
 
     //additional information
-    ::com::sun::star::uno::Any    maLinesOnProperty;
+    css::uno::Any    maLinesOnProperty;
 
     //styles for series and datapoints
     ::std::list< DataRowPointStyle > maSeriesStyleList;
@@ -81,28 +81,26 @@ public:
                         SvXMLImport& rImport, const OUString& rLocalName );
     virtual ~SchXMLChartContext();
 
-    virtual void StartElement( const com::sun::star::uno::Reference<
-                                     com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
     SchXMLTable maTable;
     SchXMLImportHelper& mrImportHelper;
 
     OUString maMainTitle, maSubTitle;
-    com::sun::star::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
+    css::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
     OUString m_aXLinkHRefAttributeToIndicateDataProvider;
     bool m_bHasRangeAtPlotArea;
     bool m_bHasTableElement;
     bool mbAllRangeAddressesAvailable;
     bool mbColHasLabels;
     bool mbRowHasLabels;
-    ::com::sun::star::chart::ChartDataRowSource meDataRowSource;
+    css::chart::ChartDataRowSource meDataRowSource;
     bool mbIsStockChart;
 
     OUString msCategoriesAddress;
@@ -111,12 +109,12 @@ private:
     SeriesDefaultsAndStyles maSeriesDefaultsAndStyles;
     tSchXMLLSequencesPerIndex maLSequencesPerIndex;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxDrawPage;
+    css::uno::Reference< css::drawing::XShapes > mxDrawPage;
     OUString msColTrans;
     OUString msRowTrans;
     OUString maChartTypeServiceName;
 
-    ::com::sun::star::awt::Size maChartSize;
+    css::awt::Size maChartSize;
 
     /** @descr  This method bundles some settings to the chart model and executes them with
             a locked controller.  This includes setting the chart type.
@@ -135,22 +133,21 @@ class SchXMLTitleContext : public SvXMLImportContext
 private:
     SchXMLImportHelper& mrImportHelper;
     OUString& mrTitle;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTitleShape;
+    css::uno::Reference< css::drawing::XShape > mxTitleShape;
     OUString msAutoStyleName;
 
 public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport, const OUString& rLocalName,
                         OUString& rTitle,
-                        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTitleShape );
+                        css::uno::Reference< css::drawing::XShape >& xTitleShape );
     virtual ~SchXMLTitleContext();
 
-    virtual void StartElement( const com::sun::star::uno::Reference<
-                               com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLCHARTCONTEXT_HXX

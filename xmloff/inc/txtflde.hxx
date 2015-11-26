@@ -156,7 +156,7 @@ class XMLTextFieldExport
 
     /// store used text field master names (NULL means: don't collect)
     ::std::map<
-            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >,
+            css::uno::Reference< css::text::XText >,
             ::std::set< OUString > > *
         pUsedMasters;
 
@@ -169,16 +169,14 @@ public:
 
     /// Export this field and the surrounding span element with the formatting.
     /// To be called for every field in the document body.
-    void ExportField(const ::com::sun::star::uno::Reference <
-                        ::com::sun::star::text::XTextField > & rTextField,
+    void ExportField(const css::uno::Reference < css::text::XTextField > & rTextField,
                      bool bProgress );
 
     /// collect styles (character styles, data styles, ...) for this field
     /// (if appropriate).
     /// Also collect used field masters (if pUsedMasters is set)
     /// to be called for every field during style export.
-    void ExportFieldAutoStyle(const ::com::sun::star::uno::Reference <
-                        ::com::sun::star::text::XTextField > & rTextField,
+    void ExportFieldAutoStyle(const css::uno::Reference < css::text::XTextField > & rTextField,
                  const bool bProgress, const bool bRecursive );
 
     /// export field declarations.
@@ -189,8 +187,7 @@ public:
     /// (Requires that a list of used field declarations has previously been
     ///  built-up in ExportFieldAutoStyle() )
     void ExportFieldDeclarations(
-        const ::com::sun::star::uno::Reference <
-                ::com::sun::star::text::XText > & rText);
+        const css::uno::Reference < css::text::XText > & rText);
 
     /// export all field declarations, or only those that have been used?
     /// Calling this method will reset the list of used field declataions.
@@ -209,13 +206,10 @@ public:
     static enum ::xmloff::token::XMLTokenEnum MapCountFieldName(FieldIdEnum nToken);
     static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(const OUString& sName);
     static enum ::xmloff::token::XMLTokenEnum MapMeasureKind(sal_Int16 nKind);
-    enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::beans::XPropertySet> & xPropSet,
+    enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const css::uno::Reference< css::beans::XPropertySet> & xPropSet,
                       sal_Int32& nOffset);  /// also adjust page offset
-    enum ::xmloff::token::XMLTokenEnum MapAuthorFieldName(const ::com::sun::star::uno::Reference <
-                      ::com::sun::star::beans::XPropertySet > & xPropSet);
-    enum ::xmloff::token::XMLTokenEnum MapSenderFieldName(const ::com::sun::star::uno::Reference <
-                      ::com::sun::star::beans::XPropertySet > & xPropSet);
+    enum ::xmloff::token::XMLTokenEnum MapAuthorFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
+    enum ::xmloff::token::XMLTokenEnum MapSenderFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
 
 protected:
 
@@ -223,12 +217,9 @@ protected:
 
     /// export a field after <text:span> is already written
     void ExportFieldHelper(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextField> & rTextField,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet> & rPropSet,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet> & rRangePropSet,
+        const css::uno::Reference< css::text::XTextField> & rTextField,
+        const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
+        const css::uno::Reference< css::beans::XPropertySet> & rRangePropSet,
         enum FieldIdEnum nToken,
         bool bProgress );
 
@@ -244,13 +235,11 @@ protected:
                                                         /// element?
 
     /// export a macro (as used in the macro field)
-    void ExportMacro( const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::beans::XPropertySet> & rPropSet,
+    void ExportMacro( const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
                       const OUString& rContent);
 
     /// export text:meta-field (RDF metadata)
-    void ExportMetaField( const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::beans::XPropertySet> & i_xMeta,
+    void ExportMetaField( const css::uno::Reference< css::beans::XPropertySet> & i_xMeta,
                           bool i_bAutoStyles, bool i_bProgress );
 
     /// export a boolean attribute
@@ -363,70 +352,61 @@ protected:
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(
         enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
-        const ::com::sun::star::util::DateTime& rTime,      /// date/time value
+        const css::util::DateTime& rTime,      /// date/time value
         bool bIsDate,           /// export as date (rather than date/time)?
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export time or dateTime
     void ProcessTimeOrDateTime(
         enum ::xmloff::token::XMLTokenEnum eXMLName,    /// attribute token
-        const ::com::sun::star::util::DateTime& rTime,  /// date/time value
+        const css::util::DateTime& rTime,  /// date/time value
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export all attributes for bibliography data fields
     void ProcessBibliographyData(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rPropertySet);
+        const css::uno::Reference <
+            css::beans::XPropertySet > & rPropertySet);
 
     /// export CommandTypeAttribute
     void ProcessCommandType(
-        sal_Int32 nCommandType);        /// com::sun::star::sdb::CommandType
+        sal_Int32 nCommandType);        /// css::sdb::CommandType
 
     void ProcessStringSequence(
-        const ::com::sun::star::uno::Sequence<OUString>& rSequence,
+        const css::uno::Sequence<OUString>& rSequence,
         const OUString& sSelected );
 
     void ProcessStringSequence(
-        const ::com::sun::star::uno::Sequence<OUString>& rSequence,
+        const css::uno::Sequence<OUString>& rSequence,
         sal_Int32 nSelected );
 
     /// export attributes that describe a data source
     void ExportDataBaseElement(
         enum ::xmloff::token::XMLTokenEnum eElement,
         const OUString& sContent,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rPropertySet,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySetInfo > & rPropertySetInfo );
+        const css::uno::Reference < css::beans::XPropertySet > & rPropertySet,
+        const css::uno::Reference < css::beans::XPropertySetInfo > & rPropertySetInfo );
 
     /// for XDependentTextFields, get PropertySet of FieldMaster
-    static ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >
-    GetMasterPropertySet(const ::com::sun::star::uno::Reference <
-                         ::com::sun::star::text::XTextField > & rTextField);
+    static css::uno::Reference < css::beans::XPropertySet >
+    GetMasterPropertySet(const css::uno::Reference < css::text::XTextField > & rTextField);
 
     /// get PropertySet of (any) DependentTextField for this FieldMaster
     bool GetDependentFieldPropertySet(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xmaster,
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xField);
+        const css::uno::Reference< css::beans::XPropertySet> & xmaster,
+        css::uno::Reference< css::beans::XPropertySet> & xField);
 
 
     /// get field ID from XTextField (and it's Property-Set)
-    enum FieldIdEnum GetFieldID(const ::com::sun::star::uno::Reference <
-                          ::com::sun::star::text::XTextField > & rTextField,
-                          const ::com::sun::star::uno::Reference <
-                          ::com::sun::star::beans::XPropertySet > & xPropSet);
+    enum FieldIdEnum GetFieldID(const css::uno::Reference < css::text::XTextField > & rTextField,
+                          const css::uno::Reference < css::beans::XPropertySet > & xPropSet);
 
     /// get field ID from XTextField service name (and it's PropertySet)
     enum FieldIdEnum MapFieldName(const OUString& sFieldName,
-                            const ::com::sun::star::uno::Reference <
-                            ::com::sun::star::beans::XPropertySet> & xPropSet);
+                            const css::uno::Reference < css::beans::XPropertySet> & xPropSet);
 
     /// determine, whether field has string or numeric content
     bool IsStringField(FieldIdEnum nFieldType,  /// field ID
-                           const ::com::sun::star::uno::Reference <
-                           ::com::sun::star::beans::XPropertySet > & xPropSet);
+                           const css::uno::Reference < css::beans::XPropertySet > & xPropSet);
 
 
     /// explode a field master name into field type and field name

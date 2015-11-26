@@ -42,7 +42,7 @@ SvXMLEnumMapEntry pXML_tabstop_style[] =
     { XML_TOKEN_INVALID,        0 }
 };
 
-void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop* pTabStop )
+void SvxXMLTabStopExport::exportTabStop( const css::style::TabStop* pTabStop )
 {
     SvXMLUnitConverter& rUnitConv = rExport.GetMM100UnitConverter();
 
@@ -101,14 +101,14 @@ SvxXMLTabStopExport::~SvxXMLTabStopExport()
 
 void SvxXMLTabStopExport::Export( const uno::Any& rAny )
 {
-    uno::Sequence< ::com::sun::star::style::TabStop> aSeq;
+    uno::Sequence< css::style::TabStop> aSeq;
     if(!(rAny >>= aSeq))
     {
-        OSL_FAIL( "SvxXMLTabStopExport needs a Sequence ::com::sun::star::style::TabStop>" );
+        OSL_FAIL( "SvxXMLTabStopExport needs a Sequence css::style::TabStop>" );
     }
     else
     {
-        const ::com::sun::star::style::TabStop* pTabs = aSeq.getConstArray();
+        const css::style::TabStop* pTabs = aSeq.getConstArray();
         const sal_Int32 nTabs   = aSeq.getLength();
 
         SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOPS,

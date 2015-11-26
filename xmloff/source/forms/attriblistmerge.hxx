@@ -32,7 +32,7 @@ namespace xmloff
 {
 
     //= OAttribListMerger
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::xml::sax::XAttributeList
+    typedef ::cppu::WeakImplHelper <   css::xml::sax::XAttributeList
                                     >   OAttribListMerger_Base;
     /** implements the XAttributeList list by merging different source attribute lists
 
@@ -42,7 +42,7 @@ namespace xmloff
     {
     protected:
         ::osl::Mutex        m_aMutex;
-        typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > > AttributeListArray;
+        typedef std::vector< css::uno::Reference< css::xml::sax::XAttributeList > > AttributeListArray;
         AttributeListArray  m_aLists;
 
         virtual ~OAttribListMerger() { }
@@ -52,19 +52,19 @@ namespace xmloff
 
         // attribute list handling
         // (very thin at the moment... only adding lists is allowed... add more if you need it :)
-        void addList(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rList);
+        void addList(const css::uno::Reference< css::xml::sax::XAttributeList >& _rList);
 
         // XAttributeList
-        virtual sal_Int16 SAL_CALL getLength(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getNameByIndex( sal_Int16 i ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getTypeByIndex( sal_Int16 i ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getTypeByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getValueByIndex( sal_Int16 i ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getValueByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Int16 SAL_CALL getLength(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getNameByIndex( sal_Int16 i ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getTypeByIndex( sal_Int16 i ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getTypeByName( const OUString& aName ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getValueByIndex( sal_Int16 i ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getValueByName( const OUString& aName ) throw(css::uno::RuntimeException, std::exception) override;
 
     protected:
-        bool seekToIndex(sal_Int16 _nGlobalIndex, ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex);
-        bool seekToName(const OUString& _rName, ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex);
+        bool seekToIndex(sal_Int16 _nGlobalIndex, css::uno::Reference< css::xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex);
+        bool seekToName(const OUString& _rName, css::uno::Reference< css::xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex);
     };
 
 }   // namespace xmloff

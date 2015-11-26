@@ -389,7 +389,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
 }
 
 SdXMLExport::SdXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     bool bIsDraw, SvXMLExportFlags nExportFlags )
 :   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName,
@@ -1847,7 +1847,7 @@ void SdXMLExport::_ExportContent()
                 AddAttribute ( XML_NAMESPACE_DRAW, XML_NAV_ORDER, sNavigationOrder );
 
             rtl::Reference< xmloff::AnimationsExporter >  xAnimationsExporter;
-            uno::Reference< ::com::sun::star::animations::XAnimationNodeSupplier > xAnimNodeSupplier;
+            uno::Reference< css::animations::XAnimationNodeSupplier > xAnimNodeSupplier;
 
             // prepare animation export
             if(IsImpress())
@@ -2707,13 +2707,13 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 
                 {
                     // date time
-                    com::sun::star::util::DateTime aDate( xAnnotation->getDateTime() );
+                    css::util::DateTime aDate( xAnnotation->getDateTime() );
                     ::sax::Converter::convertDateTime(sStringBuffer, aDate, nullptr, true);
                     SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC, XML_DATE, true, false );
                     Characters(sStringBuffer.makeStringAndClear());
                 }
 
-                com::sun::star::uno::Reference < com::sun::star::text::XText > xText( xAnnotation->getTextRange() );
+                css::uno::Reference < css::text::XText > xText( xAnnotation->getTextRange() );
                 if( xText.is() )
                     this->GetTextParagraphExport()->exportText( xText );
             }

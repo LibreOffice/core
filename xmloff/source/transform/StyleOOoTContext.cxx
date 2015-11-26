@@ -144,8 +144,7 @@ static const sal_uInt16 aElemActionMaps[XML_PROP_TYPE_END] =
 
 class XMLTypedPropertiesOOoTContext_Impl : public XMLPersElemContentTContext
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
+    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
 
 public:
     XMLTypedPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
@@ -159,7 +158,7 @@ public:
     void AddAttribute( sal_uInt16 nPrefix, XMLTokenEnum eToken,
                        const OUString &sValue );
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& rAttrList ) override;
 
     virtual void Export() override;
 };
@@ -244,7 +243,7 @@ public:
             const OUString& rQName,
             const Reference< XAttributeList >& rAttrList ) override;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& rAttrList ) override;
 
     virtual void EndElement() override;
 

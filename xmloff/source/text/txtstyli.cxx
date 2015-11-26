@@ -588,7 +588,7 @@ void XMLTextStyleContext::FillPropertySet(
                                 rPropSet->setPropertyValue(rPropertyName,Any(sStyleName));
                             }
                         }
-                        catch(::com::sun::star::lang::IllegalArgumentException& e)
+                        catch(css::lang::IllegalArgumentException& e)
                         {
                             Sequence<OUString> aSeq { sStyleName };
                             GetImport().SetError(XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING, aSeq, e.Message, nullptr);

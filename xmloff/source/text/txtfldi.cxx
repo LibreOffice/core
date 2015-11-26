@@ -1962,8 +1962,7 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
 }
 
 void XMLUserDocInfoImportContext::PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet)
+        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet)
 {
     uno::Any aAny;
     if ( !aName.isEmpty() )
@@ -3259,8 +3258,7 @@ void XMLPageNameFieldImportContext::ProcessAttribute( sal_uInt16,
 
 /// prepare XTextField for insertion into document
 void XMLPageNameFieldImportContext::PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> &)
+        const css::uno::Reference<css::beans::XPropertySet> &)
 {
 }
 
@@ -4136,8 +4134,8 @@ void XMLDateTimeFieldImportContext::ProcessAttribute( sal_uInt16,
 
 /// prepare XTextField for insertion into document
 void XMLDateTimeFieldImportContext::PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> &)
+        const css::uno::Reference<
+        css::beans::XPropertySet> &)
 {
 }
 

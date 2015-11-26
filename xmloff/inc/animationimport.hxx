@@ -33,27 +33,27 @@ class AnimationNodeContext : public SvXMLImportContext
 {
     AnimationsImportHelperImpl* mpHelper;
     bool mbRootContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxNode;
+    css::uno::Reference< css::animations::XAnimationNode > mxNode;
 
-    void init_node( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    void init_node( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
 public:
 
     AnimationNodeContext(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xParentNode,
+        const css::uno::Reference< css::animations::XAnimationNode >& xParentNode,
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         AnimationsImportHelperImpl* mpImpl = nullptr );
     virtual ~AnimationNodeContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    static void postProcessRootNode( SvXMLImport& rImport, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPageProps );
+    static void postProcessRootNode( SvXMLImport& rImport, const css::uno::Reference< css::animations::XAnimationNode >& xNode, css::uno::Reference< css::beans::XPropertySet >& xPageProps );
 };
 
 }

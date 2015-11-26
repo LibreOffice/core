@@ -41,7 +41,7 @@ public:
     // StartElement is called after a context has been constructed and
     // before a elements context is parsed. It may be used for actions that
     // require virtual methods. The default is to do nothing.
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_DOCUMENTTCONTEXT_HXX

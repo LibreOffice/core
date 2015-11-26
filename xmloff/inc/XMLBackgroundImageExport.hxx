@@ -41,10 +41,10 @@ public:
 
     ~XMLBackgroundImageExport();
 
-    void exportXML( const ::com::sun::star::uno::Any& rURL,
-                    const ::com::sun::star::uno::Any *pPos,
-                    const ::com::sun::star::uno::Any *pFilter,
-                    const ::com::sun::star::uno::Any *pTransparency,
+    void exportXML( const css::uno::Any& rURL,
+                    const css::uno::Any *pPos,
+                    const css::uno::Any *pFilter,
+                    const css::uno::Any *pTransparency,
                     sal_uInt16 nPrefix,
                     const OUString& rLocalName );
 };

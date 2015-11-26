@@ -42,16 +42,16 @@ namespace xmloff
 
         // SvXMLImportContext overriabled
         virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
-        virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
+        virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList ) override;
         virtual void EndElement() override;
 
     protected:
         void implImportBool(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttributes,
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttributes,
             OfficeFormsAttributes _eAttribute,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxProps,
+            const css::uno::Reference< css::beans::XPropertySetInfo >& _rxPropInfo,
             const OUString& _rPropName,
             bool _bDefault
             );
@@ -73,8 +73,8 @@ namespace xmloff
         static void implExportBool(
             SvXMLExport& _rExp,
             OfficeFormsAttributes _eAttribute,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxProps,
+            const css::uno::Reference< css::beans::XPropertySetInfo >& _rxPropInfo,
             const OUString& _rPropName,
             bool _bDefault
             );

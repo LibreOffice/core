@@ -734,11 +734,11 @@ class XMLCaptionEscapeRelative : public XMLPropertyHandler
 public:
     virtual bool importXML(
             const OUString& rStrImpValue,
-            ::com::sun::star::uno::Any& rValue,
+            css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const ::com::sun::star::uno::Any& rValue,
+            const css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -774,11 +774,11 @@ public:
 
     virtual bool importXML(
             const OUString& rStrImpValue,
-            ::com::sun::star::uno::Any& rValue,
+            css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const ::com::sun::star::uno::Any& rValue,
+            const css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 private:
     const sal_Int32 mnType;
@@ -813,8 +813,8 @@ class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
 public:
     virtual ~XMLSdHeaderFooterVisibilityTypeHdl();
 
-    virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 XMLSdHeaderFooterVisibilityTypeHdl::~XMLSdHeaderFooterVisibilityTypeHdl()
@@ -823,7 +823,7 @@ XMLSdHeaderFooterVisibilityTypeHdl::~XMLSdHeaderFooterVisibilityTypeHdl()
 
 bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
         const OUString& rStrImpValue,
-        ::com::sun::star::uno::Any& rValue,
+        css::uno::Any& rValue,
         const SvXMLUnitConverter& ) const
 {
     // #i38644#
@@ -1025,26 +1025,26 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_BITMAP_REFPOINT:
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, cppu::UnoType<com::sun::star::drawing::RectanglePoint>::get());
+                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, cppu::UnoType<css::drawing::RectanglePoint>::get());
                 break;
             }
             case XML_TYPE_TEXT_ANIMATION:
-                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimation_Enum, cppu::UnoType<com::sun::star::drawing::TextAnimationKind>::get());
+                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimation_Enum, cppu::UnoType<css::drawing::TextAnimationKind>::get());
                 break;
             case XML_TYPE_TEXT_ANIMATION_BLINKING:
-                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimation_Blinking_Enum, cppu::UnoType<com::sun::star::drawing::TextAnimationKind>::get());
+                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimation_Blinking_Enum, cppu::UnoType<css::drawing::TextAnimationKind>::get());
                 break;
             case XML_TYPE_TEXT_ANIMATION_DIRECTION:
-                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimationDirection_Enum, cppu::UnoType<com::sun::star::drawing::TextAnimationDirection>::get());
+                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimationDirection_Enum, cppu::UnoType<css::drawing::TextAnimationDirection>::get());
                 break;
             case XML_TYPE_TEXT_ANIMATION_STEPS:
                 pHdl = new XMLTextAnimationStepPropertyHdl;
                 break;
             case XML_SD_TYPE_TEXT_ALIGN:
-                pHdl = new XMLEnumPropertyHdl( pXML_TextAlign_Enum, cppu::UnoType<com::sun::star::drawing::TextHorizontalAdjust>::get());
+                pHdl = new XMLEnumPropertyHdl( pXML_TextAlign_Enum, cppu::UnoType<css::drawing::TextHorizontalAdjust>::get());
                 break;
             case XML_SD_TYPE_VERTICAL_ALIGN:
-                pHdl = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, cppu::UnoType<com::sun::star::drawing::TextVerticalAdjust>::get());
+                pHdl = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, cppu::UnoType<css::drawing::TextVerticalAdjust>::get());
                 break;
             case XML_SD_TYPE_FITTOSIZE:
                 {
@@ -1052,12 +1052,12 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                                         <= SvtSaveOptions::ODFVER_012))
                     {
                         pHdl = new XMLEnumPropertyHdl(pXML_FitToSize_Enum_Odf12,
-                            cppu::UnoType<com::sun::star::drawing::TextFitToSizeType>::get());
+                            cppu::UnoType<css::drawing::TextFitToSizeType>::get());
                     }
                     else
                     {
                         pHdl = new XMLEnumPropertyHdl(pXML_FitToSize_Enum,
-                            cppu::UnoType<com::sun::star::drawing::TextFitToSizeType>::get());
+                            cppu::UnoType<css::drawing::TextFitToSizeType>::get());
                     }
                 }
                 break;
@@ -1065,10 +1065,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLEnumPropertyHdl( pXML_MeasureUnit_Enum, ::cppu::UnoType<sal_Int32>::get() );
                 break;
             case XML_SD_TYPE_MEASURE_HALIGN:
-                pHdl = new XMLEnumPropertyHdl( pXML_Measure_HAlign_Enum, cppu::UnoType<com::sun::star::drawing::MeasureTextHorzPos>::get());
+                pHdl = new XMLEnumPropertyHdl( pXML_Measure_HAlign_Enum, cppu::UnoType<css::drawing::MeasureTextHorzPos>::get());
                 break;
             case XML_SD_TYPE_MEASURE_VALIGN:
-                pHdl = new XMLEnumPropertyHdl( pXML_Measure_VAlign_Enum, cppu::UnoType<com::sun::star::drawing::MeasureTextVertPos>::get());
+                pHdl = new XMLEnumPropertyHdl( pXML_Measure_VAlign_Enum, cppu::UnoType<css::drawing::MeasureTextVertPos>::get());
                 break;
             case XML_SD_TYPE_MEASURE_PLACING:
                 {
@@ -1678,7 +1678,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
         }
     }
 
-    if( pTransitionFadeColor && nTransitionType != ::com::sun::star::animations::TransitionType::FADE )
+    if( pTransitionFadeColor && nTransitionType != css::animations::TransitionType::FADE )
         pTransitionFadeColor->mnIndex = -1;
 
     if( pDateTimeFormat && pDateTimeUpdate )

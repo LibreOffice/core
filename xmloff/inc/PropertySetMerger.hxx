@@ -22,10 +22,10 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-extern ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+extern css::uno::Reference< css::beans::XPropertySet >
     PropertySetMerger_CreateInstance(
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rPropSet1,
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rPropSet2 ) throw();
+        css::uno::Reference< css::beans::XPropertySet > rPropSet1,
+        css::uno::Reference< css::beans::XPropertySet > rPropSet2 ) throw();
 
 #endif
 

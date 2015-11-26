@@ -66,14 +66,12 @@ public:
 
     /** Add a RDFa statement; must have been parsed with ParseRDFa */
     void AddRDFa(
-        ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable>
-            const & i_xObject,
+        css::uno::Reference< css::rdf::XMetadatable> const & i_xObject,
         std::shared_ptr<ParsedRDFaAttributes> & i_pRDFaAttributes);
 
     /** Parse and add a RDFa statement; parameters are XML attribute values */
     void ParseAndAddRDFa(
-        ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable>
-            const & i_xObject,
+        css::uno::Reference< css::rdf::XMetadatable> const & i_xObject,
         OUString const & i_rAbout,
         OUString const & i_rProperty,
         OUString const & i_rContent,
@@ -83,8 +81,7 @@ public:
         <p> This is done <em>after</em> the input file has been read,
         to prevent collision between generated ids and ids in the file.</p>
      */
-    void InsertRDFa( ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XRepositorySupplier > const & i_xModel);
+    void InsertRDFa( css::uno::Reference< css::rdf::XRepositorySupplier > const & i_xModel);
 };
 
 } // namespace xmloff

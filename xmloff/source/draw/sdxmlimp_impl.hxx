@@ -169,10 +169,10 @@ typedef std::map<OUString, DateTimeDeclContextImpl> DateTimeDeclMap;
 
 class SdXMLImport: public SvXMLImport
 {
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxDocStyleFamilies;
-    com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocMasterPages;
-    com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocDrawPages;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxPageLayouts;
+    css::uno::Reference< css::container::XNameAccess > mxDocStyleFamilies;
+    css::uno::Reference< css::container::XIndexAccess > mxDocMasterPages;
+    css::uno::Reference< css::container::XIndexAccess > mxDocDrawPages;
+    css::uno::Reference< css::container::XNameAccess > mxPageLayouts;
 
     // contexts for Style and AutoStyle import
     SdXMLMasterStylesContext*   mpMasterStylesContext;
@@ -196,7 +196,7 @@ class SdXMLImport: public SvXMLImport
     bool                        mbLoadDoc;
     bool                        mbPreview;
 
-    std::map< sal_Int32, com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >, SdXMLltXDrawPageId >
+    std::map< sal_Int32, css::uno::Reference< css::drawing::XDrawPage >, SdXMLltXDrawPageId >
                                 maDrawPageIds;
 
     OUString                    msPageLayouts;
@@ -211,41 +211,40 @@ protected:
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
       const OUString& rLocalName,
-      const com::sun::star::uno::Reference<
-        com::sun::star::xml::sax::XAttributeList>& xAttrList) override;
+      const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
 
 public:
     SdXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         bool bIsDraw, SvXMLImportFlags nImportFlags );
     virtual ~SdXMLImport() throw ();
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
-    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) override;
-    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) override;
+    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles
     //     the root element (i.e. office:document-meta)
     SvXMLImportContext* CreateMetaContext(const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     SvXMLImportContext* CreateScriptContext( const OUString& rLocalName );
     SvXMLImportContext* CreateBodyContext(const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     SvXMLStylesContext* CreateStylesContext(const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     SvXMLStylesContext* CreateAutoStylesContext(const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     SvXMLImportContext* CreateMasterStylesContext(const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     SvXMLImportContext *CreateFontDeclsContext(const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
     // Styles and AutoStyles contexts
 
@@ -263,25 +262,22 @@ public:
     const SvXMLTokenMap& GetPresentationPlaceholderAttrTokenMap();
 
     // export local parameters concerning page access and similar
-    const com::sun::star::uno::Reference<
-        com::sun::star::container::XNameAccess >& GetLocalDocStyleFamilies() const { return mxDocStyleFamilies; }
-    const com::sun::star::uno::Reference<
-        com::sun::star::container::XIndexAccess >& GetLocalMasterPages() const { return mxDocMasterPages; }
-    const com::sun::star::uno::Reference<
-        com::sun::star::container::XIndexAccess >& GetLocalDrawPages() const { return mxDocDrawPages; }
+    const css::uno::Reference< css::container::XNameAccess >& GetLocalDocStyleFamilies() const { return mxDocStyleFamilies; }
+    const css::uno::Reference< css::container::XIndexAccess >& GetLocalMasterPages() const { return mxDocMasterPages; }
+    const css::uno::Reference< css::container::XIndexAccess >& GetLocalDrawPages() const { return mxDocDrawPages; }
 
     sal_Int32 GetNewPageCount() const { return mnNewPageCount; }
     void IncrementNewPageCount() { mnNewPageCount++; }
     sal_Int32 GetNewMasterPageCount() const { return mnNewMasterPageCount; }
     void IncrementNewMasterPageCount() { mnNewMasterPageCount++; }
 
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getPageLayouts() const { return mxPageLayouts; }
+    css::uno::Reference< css::container::XNameAccess > getPageLayouts() const { return mxPageLayouts; }
 
     bool IsDraw() const { return mbIsDraw; }
     bool IsImpress() const { return !mbIsDraw; }
 
     virtual void SetStatistics(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) override;
+        const css::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
 
     bool IsPreview() const { return mbPreview; }
 

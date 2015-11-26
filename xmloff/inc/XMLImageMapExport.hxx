@@ -62,15 +62,13 @@ public:
      */
     void Export(
         /// the property set containing the ImageMap property
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
     /**
      * Export an ImageMap (XIndexContainer).
      */
     void Export(
         /// the container containing the image map elements
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XIndexContainer> & rContainer);
+        const css::uno::Reference< css::container::XIndexContainer> & rContainer);
 
 protected:
 
@@ -80,32 +78,28 @@ protected:
      * Calls methods for specific image map entries.
      */
     void ExportMapEntry(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 
     /**
      * Export the specifics of a rectangular image map entry.
      * To be called by ExportMapEntry.
      */
     void ExportRectangle(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 
     /**
      * Export the specifics of a circular image map entry.
      * To be called by ExportMapEntry.
      */
     void ExportCircle(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 
     /**
      * Export the specifics of a polygonal image map entry;
      * To be called by ExportMapEntry.
      */
     void ExportPolygon(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 };
 
 #endif

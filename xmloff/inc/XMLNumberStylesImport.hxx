@@ -51,14 +51,14 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
         SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         SvXMLStylesContext& rStyles);
     virtual ~SdXMLNumberFormatImportContext();
 
     virtual void EndElement() override;
 
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
     sal_Int32 GetDrawKey() const { return mnKey; }
 };

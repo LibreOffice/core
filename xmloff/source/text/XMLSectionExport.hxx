@@ -145,16 +145,14 @@ public:
      * appropriate section or index method.
      */
     void ExportSectionStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextSection > & rSection,
+        const css::uno::Reference < css::text::XTextSection > & rSection,
         bool bAutoStyles);
 
     /**
      * export section or index end elements
      */
     void ExportSectionEnd(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextSection > & rSection,
+        const css::uno::Reference < css::text::XTextSection > & rSection,
         bool bAutoStyles);
 
     /**
@@ -162,16 +160,14 @@ public:
      * (E.g. linked sections in global documents are not always exported)
      */
     bool IsMuteSection(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextSection > & rSection) const;
+        const css::uno::Reference < css::text::XTextSection > & rSection) const;
 
     /**
      * XTextContent-version of IsMuteSection(Reference<XTextSection>&)
      * returns *true* for all non-section elements
      */
     bool IsMuteSection(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextContent > & rSection,
+        const css::uno::Reference < css::text::XTextContent > & rSection,
         /// return value if this content doesn't support the section property
         bool bDefault) const;
 
@@ -180,10 +176,8 @@ public:
      * current section of rContent can not be determined, return bDefault.
      */
     bool IsInSection(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextSection > & rEnclosingSection,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextContent > & rContent,
+        const css::uno::Reference < css::text::XTextSection > & rEnclosingSection,
+        const css::uno::Reference < css::text::XTextContent > & rContent,
         /// return value if this content doesn't support the section property
         bool bDefault);
 
@@ -212,53 +206,43 @@ protected:
 
     /// export an index start element.
     void ExportIndexStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XDocumentIndex > & rSection);
+        const css::uno::Reference < css::text::XDocumentIndex > & rSection);
 
     /// export an index header start element.
     void ExportIndexHeaderStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextSection > & rSection);
+        const css::uno::Reference < css::text::XTextSection > & rSection);
 
     /// export a proper section (and source elements)
     void ExportRegularSectionStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextSection > & rSection);
+        const css::uno::Reference < css::text::XTextSection > & rSection);
 
     /// export a table of content (and source element)
     void ExportTableOfContentStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+        const css::uno::Reference < css::beans::XPropertySet > & rSection);
 
     /// export a table index (and source element)
     void ExportTableIndexStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+        const css::uno::Reference < css::beans::XPropertySet > & rSection);
 
     /// export an object index (and source element)
     void ExportObjectIndexStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+        const css::uno::Reference < css::beans::XPropertySet > & rSection);
 
     /// export an illustration index (and source element)
     void ExportIllustrationIndexStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+        const css::uno::Reference < css::beans::XPropertySet > & rSection);
 
     /// export an alphabetical/keyword index (and source element)
     void ExportAlphabeticalIndexStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+        const css::uno::Reference < css::beans::XPropertySet > & rSection);
 
     /// export a user index (and source element)
     void ExportUserIndexStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+        const css::uno::Reference < css::beans::XPropertySet > & rSection);
 
     /// export the bibliography (and source element)
     void ExportBibliographyStart(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rIndex);
+        const css::uno::Reference < css::beans::XPropertySet > & rIndex);
 
     // helper methods:
 
@@ -272,10 +256,8 @@ protected:
      * return sal_True, xIndex is empty: index header section
      * return sal_True, xIndex is set: index section */
     bool GetIndex(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextSection > & rSection,
-        ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XDocumentIndex > & rIndex) const;
+        const css::uno::Reference < css::text::XTextSection > & rSection,
+        css::uno::Reference < css::text::XDocumentIndex > & rIndex) const;
 
     /// map service name to section type
     static enum SectionTypeEnum MapSectionType(const OUString& rSectionName);
@@ -288,8 +270,7 @@ protected:
      */
     void ExportBaseIndexStart(
         ::xmloff::token::XMLTokenEnum eElement,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+        const css::uno::Reference < css::beans::XPropertySet > & rSection);
 
     /**
      * Export the index source element (common for all index types).
@@ -299,16 +280,15 @@ protected:
      */
     void ExportBaseIndexSource(
         SectionTypeEnum eType,                /// index type
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+        const css::uno::Reference <
+            css::beans::XPropertySet > & rSection);
 
     /**
      * Export the index body (common for all index types).
      */
     void ExportBaseIndexBody(
         SectionTypeEnum eType,                /// index type
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+        const css::uno::Reference < css::beans::XPropertySet > & rSection);
 
 
     /**
@@ -316,35 +296,30 @@ protected:
      * illustration indices
      */
      void ExportTableAndIllustrationIndexSourceAttributes(
-         const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rSection);
+         const css::uno::Reference < css::beans::XPropertySet > & rSection);
 
     /// export one template for the specific index type
     bool ExportIndexTemplate(
         SectionTypeEnum eType,                /// index type
         sal_Int32 nLevel,                     /// outline level (if applicable)
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet,
-        ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue> > & rValues);
+        const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
+        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue> > & rValues);
 
     /// export a single template element (e.g. span or tab-stop)
     void ExportIndexTemplateElement(
         SectionTypeEnum eType, //i90246, needed for ODF 1.0, 1.0 and 1.2 management
-        ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rValues);
+        css::uno::Sequence<
+            css::beans::PropertyValue> & rValues);
 
     /// export level paragraph styles
     void ExportLevelParagraphStyles(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XIndexReplace> & xStyles);
+        css::uno::Reference<
+            css::container::XIndexReplace> & xStyles);
 
 
     /// helper to export boolean properties
     void ExportBoolean(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet,
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet,
         const OUString& sPropertyName,
         enum ::xmloff::token::XMLTokenEnum eAttributeName,
         bool bDefault,

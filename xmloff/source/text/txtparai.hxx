@@ -35,25 +35,24 @@ namespace xml { namespace sax { class XAttributeList; } }
 
 class XMLParaContext : public SvXMLImportContext
 {
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextRange > xStart;
+    css::uno::Reference < css::text::XTextRange > xStart;
     OUString             sStyleName;
     OUString             m_sXmlId;
     OUString             m_sAbout;
     OUString             m_sProperty;
     OUString             m_sContent;
     OUString             m_sDatatype;
-    bool                        m_bHaveAbout;
-    sal_Int8                nOutlineLevel;
-    XMLHints_Impl           *pHints;
+    bool                 m_bHaveAbout;
+    sal_Int8             nOutlineLevel;
+    XMLHints_Impl       *pHints;
     // Lost outline numbering in master document (#i73509#)
-    bool                mbOutlineLevelAttrFound;
-    bool                bIgnoreLeadingSpace;
-    bool                bHeading;
-    bool                bIsListHeader;
-    bool                bIsRestart;
-    sal_Int16               nStartValue;
-    sal_uInt8               nStarFontsConvFlags;
+    bool                 mbOutlineLevelAttrFound;
+    bool                 bIgnoreLeadingSpace;
+    bool                 bHeading;
+    bool                 bIsListHeader;
+    bool                 bIsRestart;
+    sal_Int16            nStartValue;
+    sal_uInt8            nStarFontsConvFlags;
 
 public:
 
@@ -61,16 +60,14 @@ public:
     XMLParaContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             bool bHeading );
 
     virtual ~XMLParaContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual void Characters( const OUString& rChars ) override;
 
@@ -87,8 +84,7 @@ class XMLNumberedParaContext : public SvXMLImportContext
     /// text:list-id
     OUString m_ListId;
     /// text:style-name
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexReplace > m_xNumRules;
+    css::uno::Reference< css::container::XIndexReplace > m_xNumRules;
 
 public:
 
@@ -96,8 +92,7 @@ public:
     XMLNumberedParaContext( SvXMLImport& i_rImport,
             sal_uInt16 i_nPrefix,
             const OUString& i_rLocalName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList );
+            const css::uno::Reference< css::xml::sax::XAttributeList > & i_xAttrList );
 
     virtual ~XMLNumberedParaContext();
 
@@ -105,12 +100,10 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 i_nPrefix,
             const OUString& i_rLocalName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & i_xAttrList ) override;
 
     sal_Int16 GetLevel() const { return m_Level; }
-    const ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexReplace >& GetNumRules() const
+    const css::uno::Reference< css::container::XIndexReplace >& GetNumRules() const
         { return m_xNumRules; }
     const OUString& GetListId() const { return m_ListId; }
     sal_Int16 GetStartValue() const { return m_StartValue; }

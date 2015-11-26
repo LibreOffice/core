@@ -43,8 +43,8 @@ private:
 
     bool mbHasRowPermutation;
     bool mbHasColumnPermutation;
-    ::com::sun::star::uno::Sequence< sal_Int32 > maRowPermutation;
-    ::com::sun::star::uno::Sequence< sal_Int32 > maColumnPermutation;
+    css::uno::Sequence< sal_Int32 > maRowPermutation;
+    css::uno::Sequence< sal_Int32 > maColumnPermutation;
 
 public:
     SchXMLTableContext( SchXMLImportHelper& rImpHelper,
@@ -56,27 +56,27 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 
-    void setRowPermutation( const ::com::sun::star::uno::Sequence< sal_Int32 > & rPermutation );
-    void setColumnPermutation( const ::com::sun::star::uno::Sequence< sal_Int32 > & rPermutation );
+    void setRowPermutation( const css::uno::Sequence< sal_Int32 > & rPermutation );
+    void setColumnPermutation( const css::uno::Sequence< sal_Int32 > & rPermutation );
 };
 
 class SchXMLTableHelper
 {
 public:
     static void applyTableToInternalDataProvider( const SchXMLTable& rTable,
-                            com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc );
+                            css::uno::Reference< css::chart2::XChartDocument > xChartDoc );
 
     /** This function reorders local data to fit the correct data structure.
         Call it after the data series got their styles set.
      */
     static void switchRangesFromOuterToInternalIfNecessary( const SchXMLTable& rTable,
                                   const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
-                                  com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc,
-                                  ::com::sun::star::chart::ChartDataRowSource eDataRowSource );
+                                  css::uno::Reference< css::chart2::XChartDocument > xChartDoc,
+                                  css::chart::ChartDataRowSource eDataRowSource );
 };
 
 // classes for columns
@@ -100,7 +100,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 class SchXMLTableColumnContext : public SvXMLImportContext
@@ -113,7 +113,7 @@ public:
                               const OUString& rLocalName,
                               SchXMLTable& aTable );
     virtual ~SchXMLTableColumnContext();
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 // classes for rows
@@ -134,7 +134,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 class SchXMLTableRowContext : public SvXMLImportContext
@@ -153,7 +153,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 // classes for cells and their content
@@ -177,8 +177,8 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 

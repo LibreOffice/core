@@ -610,7 +610,7 @@ struct StyleComparator
 
 void SvXMLAutoStylePoolP_Impl::exportXML(
            sal_Int32 nFamily,
-        const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > &,
+        const uno::Reference< css::xml::sax::XDocumentHandler > &,
         const SvXMLUnitConverter&,
         const SvXMLNamespaceMap&,
         const SvXMLAutoStylePoolP *pAntiImpl) const

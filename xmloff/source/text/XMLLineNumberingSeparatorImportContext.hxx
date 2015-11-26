@@ -52,8 +52,8 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<
+            css::xml::sax::XAttributeList> & xAttrList) override;
 
     virtual void Characters( const OUString& rChars ) override;
 

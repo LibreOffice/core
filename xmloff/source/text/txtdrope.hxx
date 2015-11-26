@@ -33,7 +33,7 @@ public:
     explicit XMLTextDropCapExport( SvXMLExport& rExport );
     ~XMLTextDropCapExport();
 
-    void exportXML( const ::com::sun::star::uno::Any& rAny,
+    void exportXML( const css::uno::Any& rAny,
                     bool bWholeWord,
                     const OUString& rStyleName );
 };

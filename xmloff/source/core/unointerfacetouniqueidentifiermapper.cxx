@@ -20,8 +20,8 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::XInterface;
+using css::uno::Reference;
+using css::uno::XInterface;
 
 namespace comphelper
 {

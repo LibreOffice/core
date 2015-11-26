@@ -29,13 +29,13 @@
 class XMLGradientStyleContext: public SvXMLStyleContext
 {
 private:
-    ::com::sun::star::uno::Any  maAny;
+    css::uno::Any          maAny;
     OUString               maStrName;
 
 public:
 
     XMLGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLGradientStyleContext();
 
     virtual void EndElement() override;
@@ -48,13 +48,13 @@ public:
 class XMLHatchStyleContext: public SvXMLStyleContext
 {
 private:
-    ::com::sun::star::uno::Any  maAny;
+    css::uno::Any          maAny;
     OUString               maStrName;
 
 public:
 
     XMLHatchStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLHatchStyleContext();
 
     virtual void EndElement() override;
@@ -67,20 +67,20 @@ public:
 class XMLBitmapStyleContext: public SvXMLStyleContext
 {
 private:
-    ::com::sun::star::uno::Any  maAny;
+    css::uno::Any          maAny;
     OUString               maStrName;
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
+    css::uno::Reference < css::io::XOutputStream > mxBase64Stream;
 
 public:
 
     XMLBitmapStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLBitmapStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual void EndElement() override;
 
@@ -92,13 +92,13 @@ public:
 class XMLTransGradientStyleContext: public SvXMLStyleContext
 {
 private:
-    ::com::sun::star::uno::Any  maAny;
+    css::uno::Any          maAny;
     OUString               maStrName;
 
 public:
 
     XMLTransGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLTransGradientStyleContext();
 
     virtual void EndElement() override;
@@ -111,13 +111,13 @@ public:
 class XMLMarkerStyleContext: public SvXMLStyleContext
 {
 private:
-    ::com::sun::star::uno::Any  maAny;
+    css::uno::Any          maAny;
     OUString               maStrName;
 
 public:
 
     XMLMarkerStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLMarkerStyleContext();
 
     virtual void EndElement() override;
@@ -130,13 +130,13 @@ public:
 class XMLDashStyleContext: public SvXMLStyleContext
 {
 private:
-    ::com::sun::star::uno::Any  maAny;
+    css::uno::Any          maAny;
     OUString               maStrName;
 
 public:
 
     XMLDashStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLDashStyleContext();
 
     virtual void EndElement() override;

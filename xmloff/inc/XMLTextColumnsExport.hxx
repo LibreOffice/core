@@ -44,7 +44,7 @@ public:
 
     XMLTextColumnsExport( SvXMLExport& rExport );
 
-    void exportXML( const ::com::sun::star::uno::Any& rAny );
+    void exportXML( const css::uno::Any& rAny );
 };
 
 

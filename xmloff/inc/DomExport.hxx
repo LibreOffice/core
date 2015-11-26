@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace dom { class XNode; } }
 } } }
 
-void exportDom( SvXMLExport&, const com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument>& );
+void exportDom( SvXMLExport&, const css::uno::Reference<css::xml::dom::XDocument>& );
 
 #endif
 

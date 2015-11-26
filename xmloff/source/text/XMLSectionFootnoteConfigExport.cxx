@@ -40,7 +40,7 @@
 using namespace ::xmloff::token;
 
 using ::std::vector;
-using ::com::sun::star::style::NumberingType::ARABIC;
+using css::style::NumberingType::ARABIC;
 
 
 void XMLSectionFootnoteConfigExport::exportXML(

@@ -33,13 +33,12 @@ using namespace ::xmloff::token;
 class XMLMetaImportComponent : public SvXMLImport
 {
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::document::XDocumentProperties> mxDocProps;
+    css::uno::Reference< css::document::XDocumentProperties> mxDocProps;
 
 public:
     // XMLMetaImportComponent() throw();
     XMLMetaImportComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
+        const css::uno::Reference< css::uno::XComponentContext >& xContext
         ) throw();
 
     virtual ~XMLMetaImportComponent() throw();
@@ -49,12 +48,11 @@ protected:
     virtual SvXMLImportContext* CreateContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
+        throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 };
 
 // global functions to support the component

@@ -58,7 +58,7 @@ public:
     virtual void EndElement() override;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxLayerManager;
+    css::uno::Reference< css::container::XNameAccess > mxLayerManager;
     OUString msName;
     OUStringBuffer sDescriptionBuffer;
     OUStringBuffer sTitleBuffer;
@@ -144,7 +144,7 @@ void SdXMLLayerContext::EndElement()
 
 
 SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>&)
+        const css::uno::Reference< css::xml::sax::XAttributeList>&)
 : SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
     Reference< XLayerSupplier > xLayerSupplier( rImport.GetModel(), UNO_QUERY );
@@ -158,7 +158,7 @@ SdXMLLayerSetContext::~SdXMLLayerSetContext()
 }
 
 SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     return new SdXMLLayerContext( GetImport(), nPrefix, rLocalName, xAttrList, mxLayerManager );
 }

@@ -37,26 +37,21 @@ using namespace ::xmloff::token;
 class XMLDocumentBuilderContext : public SvXMLImportContext
 {
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
+    css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
 
 public:
     XMLDocumentBuilderContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::dom::XSAXDocumentBuilder2>& rDocBuilder);
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        const css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2>& rDocBuilder);
 
     virtual ~XMLDocumentBuilderContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void Characters( const OUString& rChars ) override;
 

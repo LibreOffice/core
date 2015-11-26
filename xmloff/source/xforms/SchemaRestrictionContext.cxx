@@ -87,7 +87,7 @@ SchemaRestrictionContext::SchemaRestrictionContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    Reference<com::sun::star::xforms::XDataTypeRepository>& rRepository,
+    Reference<css::xforms::XDataTypeRepository>& rRepository,
     const OUString& sTypeName ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
         mxRepository( rRepository ),
@@ -163,11 +163,11 @@ Any xforms_whitespace( const OUString& rValue )
 {
     Any aValue;
     if( IsXMLToken( rValue, XML_PRESERVE ) )
-        aValue <<= com::sun::star::xsd::WhiteSpaceTreatment::Preserve;
+        aValue <<= css::xsd::WhiteSpaceTreatment::Preserve;
     else if( IsXMLToken( rValue, XML_REPLACE ) )
-        aValue <<= com::sun::star::xsd::WhiteSpaceTreatment::Replace;
+        aValue <<= css::xsd::WhiteSpaceTreatment::Replace;
     else if( IsXMLToken( rValue, XML_COLLAPSE ) )
-        aValue <<= com::sun::star::xsd::WhiteSpaceTreatment::Collapse;
+        aValue <<= css::xsd::WhiteSpaceTreatment::Collapse;
     return aValue;
 }
 
@@ -212,7 +212,7 @@ Any xforms_time( const OUString& rValue )
     Duration aDuration;
     if (::sax::Converter::convertDuration( aDuration, rValue ))
     {
-        com::sun::star::util::Time aTime;
+        css::util::Time aTime;
         aTime.Hours = aDuration.Hours;
         aTime.Minutes = aDuration.Minutes;
         aTime.Seconds = aDuration.Seconds;
@@ -303,45 +303,45 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
                                       GetImport().GetNamespaceMap(),
                                       msBaseName ) )
             {
-            case com::sun::star::xsd::DataTypeClass::DECIMAL:
-            case com::sun::star::xsd::DataTypeClass::DOUBLE:
-            case com::sun::star::xsd::DataTypeClass::FLOAT:
+            case css::xsd::DataTypeClass::DECIMAL:
+            case css::xsd::DataTypeClass::DOUBLE:
+            case css::xsd::DataTypeClass::FLOAT:
                 sPropertyName += "Double";
                 pConvert = &xforms_double;
                 break;
-            case com::sun::star::xsd::DataTypeClass::DATETIME:
+            case css::xsd::DataTypeClass::DATETIME:
                 sPropertyName += "DateTime";
                 pConvert = &xforms_dateTime;
                 break;
-            case com::sun::star::xsd::DataTypeClass::DATE:
+            case css::xsd::DataTypeClass::DATE:
                 sPropertyName += "Date";
                 pConvert = &xforms_date;
                 break;
-            case com::sun::star::xsd::DataTypeClass::TIME:
+            case css::xsd::DataTypeClass::TIME:
                 sPropertyName += "Time";
                 pConvert = &xforms_time;
                 break;
-            case com::sun::star::xsd::DataTypeClass::gYear:
-            case com::sun::star::xsd::DataTypeClass::gDay:
-            case com::sun::star::xsd::DataTypeClass::gMonth:
+            case css::xsd::DataTypeClass::gYear:
+            case css::xsd::DataTypeClass::gDay:
+            case css::xsd::DataTypeClass::gMonth:
                 sPropertyName += "Int";
                 pConvert = &xforms_int16;
                 break;
 
-            case com::sun::star::xsd::DataTypeClass::STRING:
-            case com::sun::star::xsd::DataTypeClass::anyURI:
-            case com::sun::star::xsd::DataTypeClass::BOOLEAN:
+            case css::xsd::DataTypeClass::STRING:
+            case css::xsd::DataTypeClass::anyURI:
+            case css::xsd::DataTypeClass::BOOLEAN:
                 // invalid: These shouldn't have min/max-inclusive
                 break;
 
                 /* data types not yet supported:
-                   case com::sun::star::xsd::DataTypeClass::DURATION:
-                   case com::sun::star::xsd::DataTypeClass::gYearMonth:
-                   case com::sun::star::xsd::DataTypeClass::gMonthDay:
-                   case com::sun::star::xsd::DataTypeClass::hexBinary:
-                   case com::sun::star::xsd::DataTypeClass::base64Binary:
-                   case com::sun::star::xsd::DataTypeClass::QName:
-                   case com::sun::star::xsd::DataTypeClass::NOTATION:
+                   case css::xsd::DataTypeClass::DURATION:
+                   case css::xsd::DataTypeClass::gYearMonth:
+                   case css::xsd::DataTypeClass::gMonthDay:
+                   case css::xsd::DataTypeClass::hexBinary:
+                   case css::xsd::DataTypeClass::base64Binary:
+                   case css::xsd::DataTypeClass::QName:
+                   case css::xsd::DataTypeClass::NOTATION:
                 */
             }
         }

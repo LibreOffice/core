@@ -346,7 +346,7 @@ void SvXMLMetaExport::Export()
     }
 }
 
-// ::com::sun::star::xml::sax::XDocumentHandler:
+// css::xml::sax::XDocumentHandler:
 void SAL_CALL
 SvXMLMetaExport::startDocument()
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)

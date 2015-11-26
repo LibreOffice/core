@@ -32,8 +32,8 @@
 class SdXMLGenericPageContext : public SvXMLImportContext
 {
     // the shape group this group is working on
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxShapes;
-    ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotationAccess > mxAnnotationAccess;
+    css::uno::Reference< css::drawing::XShapes > mxShapes;
+    css::uno::Reference< css::office::XAnnotationAccess > mxAnnotationAccess;
 
 protected:
     OUString               maPageLayoutName;
@@ -62,19 +62,19 @@ protected:
 public:
 
     SdXMLGenericPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLGenericPageContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void EndElement() override;
 
-    const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext() const
+    const css::uno::Reference< css::drawing::XShapes >& GetLocalShapesContext() const
         { return mxShapes; }
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext()
+    css::uno::Reference< css::drawing::XShapes >& GetLocalShapesContext()
         { return mxShapes; }
 };
 

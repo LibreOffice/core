@@ -800,7 +800,7 @@ namespace xmloff
 
     void OControlImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttributes;
+        css::uno::Reference< css::xml::sax::XAttributeList > xAttributes;
         if( m_xOuterAttributes.is() )
         {
             // merge the attribute lists
@@ -2036,8 +2036,8 @@ namespace xmloff
                     SvXMLImport& _rImport
                     ,sal_uInt16 nPrfx
                     , const OUString& _sLocalName
-                    ,const Reference< ::com::sun::star::xml::sax::XAttributeList > & _xAttrList
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xElement) :
+                    ,const Reference< css::xml::sax::XAttributeList > & _xAttrList
+                    ,const css::uno::Reference< css::beans::XPropertySet >& _xElement) :
         SvXMLImportContext( _rImport, nPrfx, _sLocalName )
     {
         OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");

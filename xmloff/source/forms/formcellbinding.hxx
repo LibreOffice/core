@@ -38,9 +38,9 @@ namespace xmloff
     class FormCellBindingHelper
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                     m_xControlModel;    // the model we work for
-        ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
+        css::uno::Reference< css::sheet::XSpreadsheetDocument >
                     m_xDocument;        // the document where the model lives
 
     public:
@@ -49,7 +49,7 @@ namespace xmloff
             this model, since then no of it's functionality will be available.</p>
         */
         static  bool    livesInSpreadsheetDocument(
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel
+                                const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel
                             );
 
         /** ctor
@@ -62,8 +62,8 @@ namespace xmloff
                 model.
         */
         FormCellBindingHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument
+            const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
+            const css::uno::Reference< css::frame::XModel >& _rxDocument
         );
 
     public:
@@ -71,7 +71,7 @@ namespace xmloff
             @precond
                 isCellBindingAllowed returns <TRUE/>
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
+        css::uno::Reference< css::form::binding::XValueBinding >
                         createCellBindingFromStringAddress(
                             const OUString& _rAddress,
                             bool _bUseIntegerBinding
@@ -79,7 +79,7 @@ namespace xmloff
 
         /** gets a cell range list source binding for the given address
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
+        css::uno::Reference< css::form::binding::XListEntrySource >
                         createCellListSourceFromStringAddress( const OUString& _rAddress ) const;
 
         /** creates a string representation for the given value binding's address
@@ -92,7 +92,7 @@ namespace xmloff
             @see isCellBinding
         */
         OUString getStringAddressFromCellBinding(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
+                            const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
                         ) const;
 
         /** creates a string representation for the given list source's range address
@@ -106,17 +106,17 @@ namespace xmloff
             @see isCellRangeListSource
         */
         OUString getStringAddressFromCellListSource(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
+                            const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
                         ) const;
 
         /** returns the current binding of our control model, if any.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
+        css::uno::Reference< css::form::binding::XValueBinding >
                         getCurrentBinding( ) const;
 
         /** returns the current external list source of the control model, if any
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
+        css::uno::Reference< css::form::binding::XListEntrySource >
                         getCurrentListSource( ) const;
 
         /** sets a new binding for our control model
@@ -125,7 +125,7 @@ namespace xmloff
                 returning <TRUE/>)
         */
         void            setBinding(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
+                            const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
                         );
 
         /** sets a list source for our control model
@@ -134,7 +134,7 @@ namespace xmloff
                 returning <TRUE/>)
         */
         void            setListSource(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
+                            const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
                         );
 
         /** checks whether it's possible to bind the control model to a spreadsheet cell
@@ -144,7 +144,7 @@ namespace xmloff
         /** checks whether within the given document, it's possible to bind control models to spreadsheet cells
         */
         static bool     isCellBindingAllowed(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument
+                            const css::uno::Reference< css::frame::XModel >& _rxDocument
                         );
 
         /** checks whether it's possible to bind the control model to a range of spreadsheet cells
@@ -156,26 +156,26 @@ namespace xmloff
             spreadsheet cells supplying the list entries
         */
         static bool     isListCellRangeAllowed(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument
+                            const css::uno::Reference< css::frame::XModel >& _rxDocument
                         );
 
         /** checks whether a given binding is a spreadsheet cell binding
         */
         static bool     isCellBinding(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
+                            const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
                         );
 
         /** checks whether a given binding is a spreadsheet cell binding, exchanging
             integer values
         */
         static bool     isCellIntegerBinding(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
+                            const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
                         );
 
         /** checks whether a given list source is a spreadsheet cell list source
         */
         static bool    isCellRangeListSource(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
+                            const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
                         );
 
     protected:
@@ -183,7 +183,7 @@ namespace xmloff
         */
         bool            convertStringAddress(
                             const OUString& _rAddressDescription,
-                            ::com::sun::star::table::CellAddress& /* [out] */ _rAddress,
+                            css::table::CellAddress& /* [out] */ _rAddress,
                             sal_Int16 _nAssumeSheet = -1
                         ) const;
 
@@ -191,7 +191,7 @@ namespace xmloff
         */
         bool            convertStringAddress(
                             const OUString& _rAddressDescription,
-                            ::com::sun::star::table::CellRangeAddress& /* [out] */ _rAddress
+                            css::table::CellRangeAddress& /* [out] */ _rAddress
                         ) const;
 
         /** determines if our document is a spreadsheet document, *and* can supply
@@ -203,14 +203,14 @@ namespace xmloff
             the given service
         */
         static bool     isSpreadsheetDocumentWhichSupplies(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& _rxDocument,
+                            const css::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument,
                             const OUString& _rService
                         );
 
         /** checkes whether a given component supports a given servive
         */
         static bool     doesComponentSupport(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
+                            const css::uno::Reference< css::uno::XInterface >& _rxComponent,
                             const OUString& _rService
                         );
 
@@ -224,11 +224,11 @@ namespace xmloff
                 the value of the instantiation argument. Not evaluated if <arg>_rArgumentName</arg>
                 is empty.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                         createDocumentDependentInstance(
                             const OUString& _rService,
                             const OUString& _rArgumentName,
-                            const ::com::sun::star::uno::Any& _rArgumentValue
+                            const css::uno::Any& _rArgumentValue
                         ) const;
 
         /** converts an address representation into another one
@@ -248,14 +248,14 @@ namespace xmloff
             @return
                 <TRUE/> if any only if the conversion was successful
 
-            @see com::sun::star::table::CellAddressConversion
-            @see com::sun::star::table::CellRangeAddressConversion
+            @see css::table::CellAddressConversion
+            @see css::table::CellRangeAddressConversion
         */
         bool            doConvertAddressRepresentations(
                             const OUString& _rInputProperty,
-                            const ::com::sun::star::uno::Any& _rInputValue,
+                            const css::uno::Any& _rInputValue,
                             const OUString& _rOutputProperty,
-                                  ::com::sun::star::uno::Any& _rOutputValue,
+                                  css::uno::Any& _rOutputValue,
                             bool _bIsRange
                         ) const;
     };

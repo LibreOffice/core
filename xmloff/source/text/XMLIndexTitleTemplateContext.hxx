@@ -49,16 +49,14 @@ class XMLIndexTitleTemplateContext : public SvXMLImportContext
     OUStringBuffer sContent;
 
     // TOC property set
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & rTOCPropertySet;
+    css::uno::Reference<css::beans::XPropertySet> & rTOCPropertySet;
 
 public:
 
 
      XMLIndexTitleTemplateContext(
         SvXMLImport& rImport,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet,
+        css::uno::Reference<css::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
         const OUString& rLocalName);
 
@@ -68,8 +66,7 @@ protected:
 
     /** process parameters */
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     /** set values */
     virtual void EndElement() override;

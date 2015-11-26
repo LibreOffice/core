@@ -205,7 +205,7 @@ void XMLIndexTemplateContext::EndElement()
                         XML_STYLE_FAMILY_TEXT_PARAGRAPH,
                         sStyleName );
                 // #i50288#: Check if style exists
-                const Reference < ::com::sun::star::container::XNameContainer > & rStyles =
+                const Reference < css::container::XNameContainer > & rStyles =
                     GetImport().GetTextImport()->GetParaStyles();
                 if( rStyles.is() &&
                     rStyles->hasByName( sDisplayStyleName ) )

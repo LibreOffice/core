@@ -60,7 +60,7 @@ using ::com::sun::star::xml::sax::XDocumentHandler;
 
 
 XMLAutoTextEventExport::XMLAutoTextEventExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLExportFlags nFlags
     )
 :   SvXMLExport(util::MeasureUnit::INCH, xContext, implementationName, XML_AUTO_TEXT, nFlags)
@@ -129,7 +129,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
                 SetDocHandler( xTmpDocHandler );
             }
         }
-        catch( com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
         }
     }

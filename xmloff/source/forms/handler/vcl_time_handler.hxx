@@ -33,7 +33,7 @@ namespace xmloff
 
         // IPropertyHandler
         virtual OUString getAttributeValue( const PropertyValues& i_propertyValues ) const override;
-        virtual OUString getAttributeValue( const ::com::sun::star::uno::Any& i_propertyValue ) const override;
+        virtual OUString getAttributeValue( const css::uno::Any& i_propertyValue ) const override;
         virtual bool getPropertyValues( const OUString& i_attributeValue, PropertyValues& o_propertyValues ) const override;
     };
 

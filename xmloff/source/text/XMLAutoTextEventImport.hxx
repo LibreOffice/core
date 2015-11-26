@@ -40,49 +40,45 @@ namespace com { namespace sun { namespace star {
 
 class XMLAutoTextEventImport : public SvXMLImport
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameReplace> xEvents;
+    css::uno::Reference<css::container::XNameReplace> xEvents;
 
 public:
     explicit XMLAutoTextEventImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
+        const css::uno::Reference< css::uno::XComponentContext >& xContext
         ) throw();
 
     virtual ~XMLAutoTextEventImport() throw();
 
     // XInitialization
     virtual void SAL_CALL initialize(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any> & rArguments )
+        const css::uno::Sequence<css::uno::Any> & rArguments )
         throw(
-            ::com::sun::star::uno::Exception,
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+            css::uno::Exception,
+            css::uno::RuntimeException, std::exception) override;
 
 protected:
 
     virtual SvXMLImportContext* CreateContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
 };
 
 
 // global functions to support the component
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString > SAL_CALL
     XMLAutoTextEventImport_getSupportedServiceNames()
     throw();
 
 OUString SAL_CALL XMLAutoTextEventImport_getImplementationName()
     throw();
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface > SAL_CALL
     XMLAutoTextEventImport_createInstance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & )
-    throw( ::com::sun::star::uno::Exception );
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & )
+    throw( css::uno::Exception );
 
 #endif
 

@@ -54,9 +54,9 @@ using namespace ::xmloff::EnhancedCustomShapeToken;
 
 
 XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImport,
-            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
-                    std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry ) :
+            css::uno::Reference< css::drawing::XShape >& rxShape,
+            sal_uInt16 nPrefix, const OUString& rLocalName,
+            std::vector< css::beans::PropertyValue >& rCustomShapeGeometry ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrUnitConverter( rImport.GetMM100UnitConverter() ),
         mrxShape( rxShape ),
@@ -72,7 +72,7 @@ const SvXMLEnumMapEntry aXML_GluePointEnumMap[] =
     { XML_RECTANGLE,    3 },
     { XML_TOKEN_INVALID, 0 }
 };
-void GetBool( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+void GetBool( std::vector< css::beans::PropertyValue >& rDest,
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     bool bAttrBool;
@@ -85,7 +85,7 @@ void GetBool( std::vector< com::sun::star::beans::PropertyValue >& rDest,
     }
 }
 
-void GetInt32( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+void GetInt32( std::vector< css::beans::PropertyValue >& rDest,
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nAttrNumber;
@@ -98,7 +98,7 @@ void GetInt32( std::vector< com::sun::star::beans::PropertyValue >& rDest,
     }
 }
 
-void GetDouble( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+void GetDouble( std::vector< css::beans::PropertyValue >& rDest,
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     double fAttrDouble;
@@ -111,7 +111,7 @@ void GetDouble( std::vector< com::sun::star::beans::PropertyValue >& rDest,
     }
 }
 
-void GetString( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+void GetString( std::vector< css::beans::PropertyValue >& rDest,
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     beans::PropertyValue aProp;
@@ -120,7 +120,7 @@ void GetString( std::vector< com::sun::star::beans::PropertyValue >& rDest,
     rDest.push_back( aProp );
 }
 
-void GetEnum( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+void GetEnum( std::vector< css::beans::PropertyValue >& rDest,
                          const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         const SvXMLEnumMapEntry& rMap )
 {
@@ -135,7 +135,7 @@ void GetEnum( std::vector< com::sun::star::beans::PropertyValue >& rDest,
     }
 }
 
-void GetDoublePercentage( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+void GetDoublePercentage( std::vector< css::beans::PropertyValue >& rDest,
                          const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
@@ -155,7 +155,7 @@ void GetDoublePercentage( std::vector< com::sun::star::beans::PropertyValue >& r
     }
 }
 
-void GetB3DVector( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+void GetB3DVector( std::vector< css::beans::PropertyValue >& rDest,
                          const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     ::basegfx::B3DVector aB3DVector;
@@ -192,7 +192,7 @@ bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, OUStrin
     return bValid;
 }
 
-bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const OUString& rParaString )
+bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const OUString& rParaString )
 {
     if ( nIndex >= rParaString.getLength() )
         return false;
@@ -201,10 +201,10 @@ bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rP
     bool bNumberRequired = true;
     bool bMustBePositiveWholeNumbered = false;
 
-    rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL;
+    rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::NORMAL;
     if ( rParaString[ nIndex ] == '$' )
     {
-        rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
+        rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
         bMustBePositiveWholeNumbered = true;
         nIndex++;
     }
@@ -216,7 +216,7 @@ bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rP
         bValid = GetEquationName( rParaString, nIndex, aEquationName );
         if ( bValid )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::EQUATION;
             rParameter.Value <<= aEquationName;
             nIndex += aEquationName.getLength();
         }
@@ -226,62 +226,62 @@ bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rP
         bNumberRequired = false;
         if ( rParaString.matchIgnoreAsciiCase( "left", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::LEFT;
             nIndex += 4;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "top", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::TOP;
             nIndex += 3;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "right", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::RIGHT;
             nIndex += 5;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "bottom", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::BOTTOM;
             nIndex += 6;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "xstretch", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::XSTRETCH;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::XSTRETCH;
             nIndex += 8;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "ystretch", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::YSTRETCH;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::YSTRETCH;
             nIndex += 8;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "hasstroke", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::HASSTROKE;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::HASSTROKE;
             nIndex += 9;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "hasfill", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::HASFILL;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::HASFILL;
             nIndex += 7;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "width", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::WIDTH;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::WIDTH;
             nIndex += 5;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "height", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::HEIGHT;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::HEIGHT;
             nIndex += 6;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "logwidth", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGWIDTH;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::LOGWIDTH;
             nIndex += 8;
         }
         else if ( rParaString.matchIgnoreAsciiCase( "logheight", nIndex ) )
         {
-            rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT;
+            rParameter.Type = css::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT;
             nIndex += 9;
         }
         else
@@ -424,7 +424,7 @@ bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rP
     return bValid;
 }
 
-void GetPosition3D( std::vector< com::sun::star::beans::PropertyValue >& rDest,                     // e.g. draw:extrusion-viewpoint
+void GetPosition3D( std::vector< css::beans::PropertyValue >& rDest,                     // e.g. draw:extrusion-viewpoint
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         SvXMLUnitConverter& rUnitConverter )
 {
@@ -438,7 +438,7 @@ void GetPosition3D( std::vector< com::sun::star::beans::PropertyValue >& rDest, 
     }
 }
 
-void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,                 // e.g. draw:glue-point-leaving-directions
+void GetDoubleSequence( std::vector< css::beans::PropertyValue >& rDest,                 // e.g. draw:glue-point-leaving-directions
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< double > vDirection;
@@ -463,7 +463,7 @@ void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDe
     }
 }
 
-void GetSizeSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
                       const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< sal_Int32 > vNum;
@@ -500,11 +500,11 @@ void GetSizeSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest
     }
 }
 
-void GetEnhancedParameter( std::vector< com::sun::star::beans::PropertyValue >& rDest,              // e.g. draw:handle-position
+void GetEnhancedParameter( std::vector< css::beans::PropertyValue >& rDest,              // e.g. draw:handle-position
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
-    com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
+    css::drawing::EnhancedCustomShapeParameter aParameter;
     if ( GetNextParameter( aParameter, nIndex, rValue ) )
     {
         beans::PropertyValue aProp;
@@ -514,11 +514,11 @@ void GetEnhancedParameter( std::vector< com::sun::star::beans::PropertyValue >& 
     }
 }
 
-void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue >& rDest,          // e.g. draw:handle-position
+void GetEnhancedParameterPair( std::vector< css::beans::PropertyValue >& rDest,          // e.g. draw:handle-position
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
-    com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair;
+    css::drawing::EnhancedCustomShapeParameterPair aParameterPair;
     if ( GetNextParameter( aParameterPair.First, nIndex, rValue )
         && GetNextParameter( aParameterPair.Second, nIndex, rValue ) )
     {
@@ -529,11 +529,11 @@ void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue
     }
 }
 
-sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,     // e.g. draw:glue-points
+sal_Int32 GetEnhancedParameterPairSequence( std::vector< css::beans::PropertyValue >& rDest,     // e.g. draw:glue-points
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair > vParameter;
-    com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameter;
+    std::vector< css::drawing::EnhancedCustomShapeParameterPair > vParameter;
+    css::drawing::EnhancedCustomShapeParameterPair aParameter;
 
     sal_Int32 nIndex = 0;
     while ( GetNextParameter( aParameter.First, nIndex, rValue )
@@ -551,11 +551,11 @@ sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::
     return vParameter.size();
 }
 
-void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
+void GetEnhancedRectangleSequence( std::vector< css::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeTextFrame > vTextFrame;
-    com::sun::star::drawing::EnhancedCustomShapeTextFrame aParameter;
+    std::vector< css::drawing::EnhancedCustomShapeTextFrame > vTextFrame;
+    css::drawing::EnhancedCustomShapeTextFrame aParameter;
 
     sal_Int32 nIndex = 0;
 
@@ -575,17 +575,17 @@ void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyV
     }
 }
 
-void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest,                   // e.g. draw:enhanced-path
+void GetEnhancedPath( std::vector< css::beans::PropertyValue >& rDest,                   // e.g. draw:enhanced-path
                         const OUString& rValue )
 {
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >    vCoordinates;
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >      vSegments;
+    std::vector< css::drawing::EnhancedCustomShapeParameterPair >    vCoordinates;
+    std::vector< css::drawing::EnhancedCustomShapeSegment >      vSegments;
 
     sal_Int32 nIndex = 0;
     sal_Int32 nParameterCount = 0;
 
     sal_Int32 nParametersNeeded = 1;
-    sal_Int16 nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+    sal_Int16 nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
 
     bool bValid = true;
 
@@ -595,147 +595,147 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
         {
             case 'M' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
                 nParametersNeeded = 1;
                 nIndex++;
             }
             break;
             case 'L' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
                 nParametersNeeded = 1;
                 nIndex++;
             }
             break;
             case 'C' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
                 nParametersNeeded = 3;
                 nIndex++;
             }
             break;
             case 'Z' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'N' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'F' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOFILL;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::NOFILL;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'S' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'T' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO;
                 nParametersNeeded = 3;
                 nIndex++;
             }
             break;
             case 'U' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE;
                 nParametersNeeded = 3;
                 nIndex++;
             }
             break;
             case 'A' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
                 nParametersNeeded = 4;
                 nIndex++;
             }
             break;
             case 'B' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARC;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::ARC;
                 nParametersNeeded = 4;
                 nIndex++;
             }
             break;
             case 'G' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO;
                 nParametersNeeded = 2;
                 nIndex++;
             }
             break;
             case 'H' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKEN;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::DARKEN;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'I' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'J' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'K' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS;
                 nParametersNeeded = 0;
                 nIndex++;
             }
             break;
             case 'W' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO;
                 nParametersNeeded = 4;
                 nIndex++;
             }
             break;
             case 'V' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
                 nParametersNeeded = 4;
                 nIndex++;
             }
             break;
             case 'X' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX;
                 nParametersNeeded = 1;
                 nIndex++;
             }
             break;
             case 'Y' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY;
                 nParametersNeeded = 1;
                 nIndex++;
             }
             break;
             case 'Q' :
             {
-                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO;
+                nLatestSegmentCommand = css::drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO;
                 nParametersNeeded = 2;
                 nIndex++;
             }
@@ -761,7 +761,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
             case '.' :
             case '-' :
             {
-                com::sun::star::drawing::EnhancedCustomShapeParameterPair aPair;
+                css::drawing::EnhancedCustomShapeParameterPair aPair;
                 if ( GetNextParameter( aPair.First, nIndex, rValue ) &&
                         GetNextParameter( aPair.Second, nIndex, rValue ) )
                 {
@@ -778,7 +778,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
         }
         if ( !nParameterCount && !nParametersNeeded )
         {
-            com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
+            css::drawing::EnhancedCustomShapeSegment aSegment;
             aSegment.Command = nLatestSegmentCommand;
             aSegment.Count = 0;
             vSegments.push_back( aSegment );
@@ -792,7 +792,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
                 vSegments[ vSegments.size() -1 ].Count++;
             else
             {
-                com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
+                css::drawing::EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = nLatestSegmentCommand;
                 aSegment.Count = 1;
                 vSegments.push_back( aSegment );
@@ -813,16 +813,16 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
     rDest.push_back( aProp );
 }
 
-void GetAdjustmentValues( std::vector< com::sun::star::beans::PropertyValue >& rDest,               // draw:adjustments
+void GetAdjustmentValues( std::vector< css::beans::PropertyValue >& rDest,               // draw:adjustments
                         const OUString& rValue )
 {
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > vAdjustmentValue;
-    com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
+    std::vector< css::drawing::EnhancedCustomShapeAdjustmentValue > vAdjustmentValue;
+    css::drawing::EnhancedCustomShapeParameter aParameter;
     sal_Int32 nIndex = 0;
     while ( GetNextParameter( aParameter, nIndex, rValue ) )
     {
-        com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue aAdj;
-        if ( aParameter.Type == com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL )
+        css::drawing::EnhancedCustomShapeAdjustmentValue aAdj;
+        if ( aParameter.Type == css::drawing::EnhancedCustomShapeParameterType::NORMAL )
         {
             aAdj.Value <<= aParameter.Value;
             aAdj.State = beans::PropertyState_DIRECT_VALUE;
@@ -900,9 +900,9 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 case EAS_extrusion_depth :
                 {
                     sal_Int32 nIndex = 0;
-                    com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair;
-                    com::sun::star::drawing::EnhancedCustomShapeParameter& rDepth = aParameterPair.First;
-                    com::sun::star::drawing::EnhancedCustomShapeParameter& rFraction = aParameterPair.Second;
+                    css::drawing::EnhancedCustomShapeParameterPair aParameterPair;
+                    css::drawing::EnhancedCustomShapeParameter& rDepth = aParameterPair.First;
+                    css::drawing::EnhancedCustomShapeParameter& rFraction = aParameterPair.Second;
                     if ( GetNextParameter( rDepth, nIndex, rValue ) )
                     {
                         // try to catch the unit for the depth
@@ -1068,11 +1068,11 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 break;
                 case EAS_text_path_mode :
                 {
-                    com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode( com::sun::star::drawing::EnhancedCustomShapeTextPathMode_NORMAL );
+                    css::drawing::EnhancedCustomShapeTextPathMode eTextPathMode( css::drawing::EnhancedCustomShapeTextPathMode_NORMAL );
                     if( IsXMLToken( rValue, XML_PATH ) )
-                        eTextPathMode = com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH;
+                        eTextPathMode = css::drawing::EnhancedCustomShapeTextPathMode_PATH;
                     else if ( IsXMLToken( rValue, XML_SHAPE ) )
-                        eTextPathMode = com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE;
+                        eTextPathMode = css::drawing::EnhancedCustomShapeTextPathMode_SHAPE;
 
                     beans::PropertyValue aProp;
                     aProp.Name = EASGet( EAS_TextPathMode );
@@ -1102,7 +1102,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
     }
 }
 
-void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::PropertyValue >& rPropVec,
+void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
                                     const std::vector< beans::PropertyValues >& rElement,
                                         const OUString& rElementName )
 {
@@ -1115,7 +1115,7 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
     }
 }
 
-void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::PropertyValue >& rPropVec,
+void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
                                     const std::vector< OUString >& rElement,
                                         const OUString& rElementName )
 {
@@ -1128,8 +1128,8 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
     }
 }
 
-void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::PropertyValue >& rPropVec,
-                                    const std::vector< com::sun::star::beans::PropertyValue >& rElement,
+void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
+                                    const std::vector< css::beans::PropertyValue >& rElement,
                                         const OUString& rElementName )
 {
     if ( !rElement.empty() )
@@ -1145,9 +1145,9 @@ typedef std::unordered_map< OUString, sal_Int32, OUStringHash > EquationHashMap;
 
 /* if rPara.Type is from type EnhancedCustomShapeParameterType::EQUATION, the name of the equation
    will be converted from OUString to index */
-void CheckAndResolveEquationParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rPara, EquationHashMap* pH )
+void CheckAndResolveEquationParameter( css::drawing::EnhancedCustomShapeParameter& rPara, EquationHashMap* pH )
 {
-    if ( rPara.Type == com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )
+    if ( rPara.Type == css::drawing::EnhancedCustomShapeParameterType::EQUATION )
     {
         OUString aEquationName;
         if ( rPara.Value >>= aEquationName )
@@ -1218,8 +1218,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 case EAS_Coordinates :
                 case EAS_GluePoints :
                 {
-                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > const & rSeq =
-                        *static_cast<uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > const *>(
+                    uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > const & rSeq =
+                        *static_cast<uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > const *>(
                             aPathIter->Value.getValue());
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
@@ -1230,8 +1230,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 break;
                 case EAS_TextFrames :
                 {
-                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > const & rSeq =
-                        *static_cast<uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > const *>(
+                    uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > const & rSeq =
+                        *static_cast<uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > const *>(
                             aPathIter->Value.getValue());
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
@@ -1263,7 +1263,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_RadiusRangeMinimum :
                     case EAS_RadiusRangeMaximum :
                     {
-                        CheckAndResolveEquationParameter( *const_cast<css::drawing::EnhancedCustomShapeParameter *>(static_cast<com::sun::star::drawing::EnhancedCustomShapeParameter const *>(
+                        CheckAndResolveEquationParameter( *const_cast<css::drawing::EnhancedCustomShapeParameter *>(static_cast<css::drawing::EnhancedCustomShapeParameter const *>(
                             pValues->Value.getValue())), pH );
                     }
                     break;
@@ -1271,9 +1271,9 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_Position :
                     case EAS_Polar :
                     {
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*static_cast<com::sun::star::drawing::EnhancedCustomShapeParameterPair const *>(
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*static_cast<css::drawing::EnhancedCustomShapeParameterPair const *>(
                             pValues->Value.getValue())).First), pH );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*static_cast<com::sun::star::drawing::EnhancedCustomShapeParameterPair const *>(
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*static_cast<css::drawing::EnhancedCustomShapeParameterPair const *>(
                             pValues->Value.getValue())).Second), pH );
                     }
                     break;
@@ -1333,7 +1333,7 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt1
     }
     else if ( aTokenEnum == EAS_handle )
     {
-        std::vector< com::sun::star::beans::PropertyValue > aHandle;
+        std::vector< css::beans::PropertyValue > aHandle;
         const sal_Int16 nLength = xAttrList->getLength();
         for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
         {

@@ -130,14 +130,12 @@ public:
                 SvXMLNumFmtElementContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext, sal_uInt16 nNewType,
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
     virtual     ~SvXMLNumFmtElementContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
-                                    const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void Characters( const OUString& rChars ) override;
     virtual void EndElement() override;
 
@@ -154,14 +152,12 @@ public:
                 SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,
                                     SvXMLNumFmtElementContext& rParentContext,
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
     virtual     ~SvXMLNumFmtEmbeddedTextContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
-                                    const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void Characters( const OUString& rChars ) override;
     virtual void EndElement() override;
 };
@@ -176,14 +172,12 @@ public:
                 SvXMLNumFmtMapContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
     virtual     ~SvXMLNumFmtMapContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
-                                    const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void Characters( const OUString& rChars ) override;
     virtual void EndElement() override;
 };
@@ -198,14 +192,12 @@ public:
                 SvXMLNumFmtPropContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
     virtual     ~SvXMLNumFmtPropContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
-                                    const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void Characters( const OUString& rChars ) override;
     virtual void EndElement() override;
 };
@@ -1315,7 +1307,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 {
     LanguageTagODF aLanguageTagODF;
     OUString sNatNumAttrScript, sNatNumAttrRfcLanguageTag;
-    ::com::sun::star::i18n::NativeNumberXmlAttributes aNatNumAttr;
+    css::i18n::NativeNumberXmlAttributes aNatNumAttr;
     bool bAttrBool(false);
     sal_uInt16 nAttrEnum;
 
@@ -1550,7 +1542,7 @@ sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
     }
 }
 
-sal_Int32 SvXMLNumFormatContext::CreateAndInsert( com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xFormatsSupplier )
+sal_Int32 SvXMLNumFormatContext::CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier >& xFormatsSupplier )
 {
     if (nKey <= -1)
     {

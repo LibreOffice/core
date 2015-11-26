@@ -70,23 +70,21 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
 
 class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XDocumentHandler > xHandler;
+    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler;
 
 public:
 
     XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XDocumentHandler >& rHandler );
+    const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
 
     virtual ~XMLEmbeddedObjectImportContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 

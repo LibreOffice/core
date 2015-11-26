@@ -78,10 +78,10 @@ public:
 
     void AddMatrix(const ::basegfx::B3DHomMatrix& rNew);
 
-    void AddHomogenMatrix(const com::sun::star::drawing::HomogenMatrix& xHomMat);
+    void AddHomogenMatrix(const css::drawing::HomogenMatrix& xHomMat);
     bool NeedsAction() const { return !maList.empty(); }
     void GetFullTransform(::basegfx::B3DHomMatrix& rFullTrans);
-    bool GetFullHomogenTransform(com::sun::star::drawing::HomogenMatrix& xHomMat);
+    bool GetFullHomogenTransform(css::drawing::HomogenMatrix& xHomMat);
     const OUString& GetExportString(const SvXMLUnitConverter& rConv);
     void SetString(const OUString& rNew, const SvXMLUnitConverter& rConv);
 };

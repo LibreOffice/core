@@ -146,7 +146,7 @@ namespace xmloff
                 bool bIsEmptyValue = TypeClass_VOID == aValue.getValueType().getTypeClass();
                 if ( bIsEmptyValue )
                 {
-                    com::sun::star::beans::Property aPropDesc;
+                    css::beans::Property aPropDesc;
                     aPropDesc = m_xPropertyInfo->getPropertyByName( *aProperty );
                     aExportType = aPropDesc.Type;
                 }
@@ -562,9 +562,9 @@ namespace xmloff
             default:
             {   // hmmm .... what else do we know?
                 double fValue = 0;
-                ::com::sun::star::util::Date aDate;
-                ::com::sun::star::util::Time aTime;
-                ::com::sun::star::util::DateTime aDateTime;
+                css::util::Date aDate;
+                css::util::Time aTime;
+                css::util::DateTime aDateTime;
                 if (_rValue >>= aDate)
                 {
                     Date aToolsDate( Date::EMPTY );
@@ -607,7 +607,7 @@ namespace xmloff
         return aBuffer.makeStringAndClear();
     }
 
-    token::XMLTokenEnum OPropertyExport::implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType)
+    token::XMLTokenEnum OPropertyExport::implGetPropertyXMLType(const css::uno::Type& _rType)
     {
         // handle the type description
         switch (_rType.getTypeClass())

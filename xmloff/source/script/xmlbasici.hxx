@@ -29,19 +29,19 @@
 class XMLBasicImportContext : public SvXMLImportContext
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XXMLOasisBasicImporter >    m_xHandler;
+    css::uno::Reference< css::frame::XModel >                 m_xModel;
+    css::uno::Reference< css::document::XXMLOasisBasicImporter >    m_xHandler;
 
 public:
     XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
+        const css::uno::Reference< css::frame::XModel >& rxModel );
 
     virtual ~XMLBasicImportContext();
 
     virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rxAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& rxAttrList ) override;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rxAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& rxAttrList ) override;
 
     virtual void EndElement() override;
 
@@ -53,18 +53,18 @@ public:
 class XMLBasicImportChildContext : public SvXMLImportContext
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xHandler;
+    css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
 
 public:
     XMLBasicImportChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rxHandler );
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& rxHandler );
 
     virtual ~XMLBasicImportChildContext();
 
     virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 
