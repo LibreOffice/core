@@ -246,6 +246,7 @@ void ScDocumentImport::setFormulaCell(
         return;
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pTab->aCol[rPos.Col()].setMayHaveFormula(true);
     pBlockPos->miCellPos =
         rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, rFormula, eGrammar));
 }
@@ -263,6 +264,7 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScTokenArray* pArra
         return;
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pTab->aCol[rPos.Col()].setMayHaveFormula(true);
     pBlockPos->miCellPos =
         rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, pArray));
 }
@@ -280,6 +282,7 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCel
         return;
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pTab->aCol[rPos.Col()].setMayHaveFormula(true);
     pBlockPos->miCellPos =
         rCells.set(pBlockPos->miCellPos, rPos.Row(), pCell);
 }
@@ -334,6 +337,7 @@ void ScDocumentImport::setMatrixCells(
         pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, MM_REFERENCE);
         pBlockPos->miCellPos =
             rCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
+        pTab->aCol[rBasePos.Col()].setMayHaveFormula(true);
     }
 
     for (SCCOL nCol = rRange.aStart.Col()+1; nCol <= rRange.aEnd.Col(); ++nCol)
@@ -354,6 +358,7 @@ void ScDocumentImport::setMatrixCells(
             pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, MM_REFERENCE);
             pBlockPos->miCellPos =
                 rColCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
+            pTab->aCol[nCol].setMayHaveFormula(true);
         }
     }
 }
@@ -444,6 +449,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
             ScFormulaCell* pCell = new ScFormulaCell(aRefCell, *pDoc, aPos);
             pBlockPos->miCellPos =
                 rColCells.set(pBlockPos->miCellPos, nRow, pCell);
+            pTab->aCol[nCol].setMayHaveFormula(true);
         }
     }
 }

@@ -1560,7 +1560,7 @@ public:
     StartListenersHandler( sc::StartListeningContext& rCxt, bool bAllListeners ) :
         mpCxt(&rCxt), mbAllListeners(bAllListeners) {}
 
-    void operator() ( sc::CellStoreType::value_type& aBlk )
+    void processHandler(sc::CellStoreType::value_type& aBlk)
     {
         if (aBlk.type != sc::element_type_formula)
             return;
@@ -1589,7 +1589,38 @@ public:
 
 void ScColumn::StartListeners( sc::StartListeningContext& rCxt, bool bAll )
 {
-    std::for_each(maCells.begin(), maCells.end(), StartListenersHandler(rCxt, bAll));
+    StartListenersHandler *pHandler = NULL;
+    sc::CellStoreType::iterator it = maCells.begin();
+    sc::CellStoreType::iterator itEnd = maCells.end();
+
+    int loopCounter = 0;
+
+    if (!getMayHaveFormula())
+        return;
+
+    bool hasFormula = false;
+    for (; it != itEnd ; ++it)
+    {
+        // Since we have to iterate the cells, we use this to update the formula flag
+        loopCounter++;
+        if (it->type == sc::element_type_formula)
+        {
+            // We have found a formula, flag goes to true
+            hasFormula = true;
+            if (!pHandler)
+            {
+                pHandler = new StartListenersHandler(rCxt, bAll);
+            }
+
+            pHandler->processHandler(*it);
+        }
+    }
+
+    // Update the flag
+    setMayHaveFormula(hasFormula);
+
+    if (pHandler)
+        delete pHandler;
 }
 
 namespace {
@@ -1758,6 +1789,12 @@ bool ScColumn::ParseString(
         }
     }
 
+    if (rCell.meType == CELLTYPE_FORMULA)
+    {
+        // We have found a formula, flag goes to true
+        setMayHaveFormula(true);
+    }
+
     return bNumFmtSet;
 }
 
@@ -1846,6 +1883,9 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
 {
     ScAddress aPos(nCol, nRow, nTab);
 
+    // Update the flag
+    setMayHaveFormula(true);
+
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, rArray, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
@@ -1863,6 +1903,9 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
 {
     ScAddress aPos(nCol, nRow, nTab);
 
+    // Update the flag
+    setMayHaveFormula(true);
+
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, rFormula, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
@@ -1879,6 +1922,9 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
 ScFormulaCell* ScColumn::SetFormulaCell(
     SCROW nRow, ScFormulaCell* pCell, sc::StartListeningType eListenType )
 {
+   // Update the flag
+    setMayHaveFormula(true);
+
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
@@ -1896,6 +1942,9 @@ ScFormulaCell* ScColumn::SetFormulaCell(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell,
     sc::StartListeningType eListenType )
 {
+    // Update the flag
+    setMayHaveFormula(true);
+
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
@@ -1918,6 +1967,9 @@ bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells 
     SCROW nEndRow = nRow + rCells.size() - 1;
     if (!ValidRow(nEndRow))
         return false;
+
+    // Update the flag
+    setMayHaveFormula(true);
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
 
@@ -2576,35 +2628,18 @@ CellType ScColumn::GetCellType( SCROW nRow ) const
     return CELLTYPE_NONE;
 }
 
-namespace {
-
-/**
- * Count the number of all non-empty cells.
- */
-class CellCounter
-{
-    size_t mnCount;
-public:
-    CellCounter() : mnCount(0) {}
-
-    void operator() (const sc::CellStoreType::value_type& node)
-    {
-        if (node.type == sc::element_type_empty)
-            return;
-
-        mnCount += node.size;
-    }
-
-    size_t getCount() const { return mnCount; }
-};
-
-}
-
 SCSIZE ScColumn::GetCellCount() const
 {
-    CellCounter aFunc;
-    aFunc = std::for_each(maCells.begin(), maCells.end(), aFunc);
-    return aFunc.getCount();
+    size_t counter = 0;
+
+    sc::CellStoreType::const_iterator it = maCells.begin();
+    sc::CellStoreType::const_iterator itEnd = maCells.end();
+
+    for (; it != itEnd ; ++it)
+        if (it->type != sc::element_type_empty)
+            counter += it->size;
+
+    return counter;
 }
 
 sal_uInt16 ScColumn::GetErrCode( SCROW nRow ) const
