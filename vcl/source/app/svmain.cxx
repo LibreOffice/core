@@ -38,6 +38,7 @@
 #include "vcl/implimagetree.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/unowrap.hxx"
+#include "vcl/commandinfoprovider.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/lazydelete.hxx"
 #include "vcl/embeddedfontshelper.hxx"
@@ -516,6 +517,12 @@ void DeInitVCL()
 
     if (pSVData->mpBlendFrameCache)
         delete pSVData->mpBlendFrameCache, pSVData->mpBlendFrameCache = nullptr;
+
+    if (pSVData->mpCommandInfoProvider)
+    {
+        pSVData->mpCommandInfoProvider->dispose();
+        pSVData->mpCommandInfoProvider = nullptr;
+    }
 
     ImplDeletePrnQueueList();
     delete pSVData->maGDIData.mpScreenFontList;
