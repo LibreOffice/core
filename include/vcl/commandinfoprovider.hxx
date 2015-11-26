@@ -96,8 +96,9 @@ public:
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    /** Do not call.  Should be part of a local and hidden interface.
-    */
+    bool IsRotated(const OUString& rsCommandName);
+    bool IsMirrored(const OUString& rsCommandName);
+    /** Do not call. Should be part of a local and hidden interface. */
     void SetFrame (const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
   private:
@@ -119,6 +120,7 @@ public:
     css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
         const OUString& rsCommandName);
     OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName);
+    bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName);
     static OUString RetrieveShortcutsFromConfiguration(
         const css::uno::Reference<css::ui::XAcceleratorConfiguration>& rxConfiguration,
         const OUString& rsCommandName);

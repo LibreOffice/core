@@ -55,8 +55,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <svtools/miscopt.hxx>
-#include <svl/imageitm.hxx>
-#include <svtools/framestatuslistener.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>
@@ -98,39 +96,6 @@ static const char HELPID_PREFIX_TESTTOOL[]     = ".HelpId:";
 
 static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU = 1000;
 
-class ImageOrientationListener : public svt::FrameStatusListener
-{
-    public:
-        ImageOrientationListener( const Reference< XStatusListener >& rReceiver,
-                                  const Reference< XComponentContext >& rxContext,
-                                  const Reference< XFrame >& rFrame );
-        virtual ~ImageOrientationListener();
-
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
-
-    private:
-        Reference< XStatusListener > m_xReceiver;
-};
-
-ImageOrientationListener::ImageOrientationListener(
-    const Reference< XStatusListener >& rReceiver,
-    const Reference< XComponentContext >& rxContext,
-    const Reference< XFrame >& rFrame ) :
-    FrameStatusListener( rxContext, rFrame ),
-    m_xReceiver( rReceiver )
-{
-}
-
-ImageOrientationListener::~ImageOrientationListener()
-{
-}
-
-void SAL_CALL ImageOrientationListener::statusChanged( const FeatureStateEvent& Event )
-throw ( RuntimeException, std::exception )
-{
-    if ( m_xReceiver.is() )
-        m_xReceiver->statusChanged( Event );
-}
 
 static sal_Int16 getImageTypeFromBools( bool bBig )
 {
@@ -175,9 +140,6 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_bAddedToTaskPaneList( true ),
     m_bFrameActionRegistered( false ),
     m_bUpdateControllers( false ),
-    m_bImageOrientationRegistered( false ),
-    m_bImageMirrored( false ),
-    m_lImageRotation( 0 ),
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
@@ -343,61 +305,6 @@ void ToolBarManager::RefreshImages()
     m_pToolBar->SetOutputSizePixel( aSize );
 }
 
-void ToolBarManager::UpdateImageOrientation()
-{
-    SolarMutexGuard g;
-
-    if ( m_xUICommandLabels.is() )
-    {
-        sal_Int32 i;
-        Sequence< OUString > aSeqMirrorCmd;
-        Sequence< OUString > aSeqRotateCmd;
-        m_xUICommandLabels->getByName(
-            UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ) >>= aSeqMirrorCmd;
-        m_xUICommandLabels->getByName(
-            UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ) >>= aSeqRotateCmd;
-
-        CommandToInfoMap::iterator pIter;
-        for ( i = 0; i < aSeqMirrorCmd.getLength(); i++ )
-        {
-            OUString aMirrorCmd = aSeqMirrorCmd[i];
-            pIter = m_aCommandMap.find( aMirrorCmd );
-            if ( pIter != m_aCommandMap.end() )
-                pIter->second.bMirrored = true;
-        }
-        for ( i = 0; i < aSeqRotateCmd.getLength(); i++ )
-        {
-            OUString aRotateCmd = aSeqRotateCmd[i];
-            pIter = m_aCommandMap.find( aRotateCmd );
-            if ( pIter != m_aCommandMap.end() )
-                pIter->second.bRotated = true;
-        }
-    }
-
-    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
-    {
-        sal_uInt16 nId = m_pToolBar->GetItemId( nPos );
-        if ( nId > 0 )
-        {
-            OUString aCmd = m_pToolBar->GetItemCommand( nId );
-
-            CommandToInfoMap::const_iterator pIter = m_aCommandMap.find( aCmd );
-            if ( pIter != m_aCommandMap.end() )
-            {
-                if ( pIter->second.bRotated )
-                {
-                    m_pToolBar->SetItemImageMirrorMode( nId, false );
-                    m_pToolBar->SetItemImageAngle( nId, m_lImageRotation );
-                }
-                if ( pIter->second.bMirrored )
-                {
-                    m_pToolBar->SetItemImageMirrorMode( nId, m_bImageMirrored );
-                }
-            }
-        }
-    }
-}
-
 void ToolBarManager::UpdateControllers()
 {
 
@@ -474,24 +381,6 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-void SAL_CALL ToolBarManager::statusChanged( const css::frame::FeatureStateEvent& Event )
-throw ( css::uno::RuntimeException, std::exception )
-{
-    SolarMutexGuard g;
-    if ( m_bDisposed )
-        return;
-
-    if ( Event.FeatureURL.Complete == ".uno:ImageOrientation" )
-    {
-        SfxImageItem aItem( 1, 0 );
-        aItem.PutValue( Event.State, 0 );
-
-        m_lImageRotation = aItem.GetRotation();
-        m_bImageMirrored = aItem.IsMirrored();
-        UpdateImageOrientation();
-    }
-}
-
 void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( RuntimeException, std::exception )
 {
     {
@@ -528,14 +417,6 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
             catch (const Exception&)
             {
             }
-        }
-
-        if ( m_xImageOrientationListener.is() )
-        {
-            ImageOrientationListener* pImageOrientation =
-                static_cast<ImageOrientationListener*>(m_xImageOrientationListener.get());
-            pImageOrientation->unbindListener();
-            m_xImageOrientationListener.clear();
         }
 
         m_xDocImageManager.clear();
@@ -604,14 +485,6 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
             catch (const Exception&)
             {
             }
-        }
-
-        if ( m_xImageOrientationListener.is() )
-        {
-            ImageOrientationListener* pImageOrientation =
-                static_cast<ImageOrientationListener*>(m_xImageOrientationListener.get());
-            pImageOrientation->unbindListener();
-            m_xImageOrientationListener.clear();
         }
 
         m_xFrame.clear();
@@ -982,7 +855,6 @@ void ToolBarManager::CreateControllers()
     }
 
     AddFrameActionListener();
-    AddImageOrientationListener();
 }
 
 void ToolBarManager::AddFrameActionListener()
@@ -992,23 +864,6 @@ void ToolBarManager::AddFrameActionListener()
         m_bFrameActionRegistered = true;
         m_xFrame->addFrameActionListener( Reference< XFrameActionListener >(
                                             static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ));
-    }
-}
-
-void ToolBarManager::AddImageOrientationListener()
-{
-    if ( !m_bImageOrientationRegistered && m_xFrame.is() )
-    {
-        m_bImageOrientationRegistered = true;
-        ImageOrientationListener* pImageOrientation = new ImageOrientationListener(
-            Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ),
-            m_xContext,
-            m_xFrame );
-        m_xImageOrientationListener.set( static_cast< ::cppu::OWeakObject *>(
-                                        pImageOrientation ), UNO_QUERY );
-        pImageOrientation->addStatusListener(
-            ".uno:ImageOrientation");
-        pImageOrientation->bindListener();
     }
 }
 
