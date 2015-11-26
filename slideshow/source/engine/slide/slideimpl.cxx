@@ -157,6 +157,11 @@ private:
     /// Set all Shapes to their initial attributes for slideshow
     bool applyInitialShapeAttributes( const css::uno::Reference< css::animations::XAnimationNode >& xRootAnimationNode );
 
+    /// Set shapes to attributes corresponding to initial or final state of slide
+    void applyShapeAttributes(
+        const css::uno::Reference< css::animations::XAnimationNode >& xRootAnimationNode,
+        bool bInitial) const;
+
     /// Renders current slide content to bitmap
     SlideBitmapSharedPtr createCurrentSlideBitmap(
         const UnoViewSharedPtr& rView,
@@ -272,8 +277,11 @@ private:
     /// When true, show() was called. Slide hidden oherwise.
     bool                                                mbActive;
 
-    ///When true, enablePaintOverlay was called and mbUserPaintOverlay = true
+    /// When true, enablePaintOverlay was called and mbUserPaintOverlay = true
     bool                                                mbPaintOverlayActive;
+
+    /// When true, final state attributes are already applied to shapes
+    bool                                                mbFinalStateApplied;
 };
 
 
@@ -369,7 +377,8 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mbHaveAnimations( false ),
     mbMainSequenceFound( false ),
     mbActive( false ),
-    mbPaintOverlayActive( false )
+    mbPaintOverlayActive( false ),
+    mbFinalStateApplied( false )
 {
     // clone already existing views for slide bitmaps
     for( const auto& rView : rViewContainer )
@@ -523,8 +532,6 @@ void SlideImpl::hide()
     // vanish from view
     resetCursor();
     mbActive = false;
-
-
 }
 
 basegfx::B2ISize SlideImpl::getSlideSize() const
@@ -679,6 +686,14 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
                       "SlideImpl::createCurrentSlideBitmap(): Invalid layer manager" );
     ENSURE_OR_THROW( mbShowLoaded,
                       "SlideImpl::createCurrentSlideBitmap(): No show loaded" );
+
+    // tdf#96083 ensure end state settings are applied to shapes once when bitmap gets re-rendered
+    // in that state
+    if(!mbFinalStateApplied && FINAL_STATE == meAnimationState && mxRootNode.is())
+    {
+        const_cast< SlideImpl* >(this)->mbFinalStateApplied = true;
+        applyShapeAttributes(mxRootNode, false);
+    }
 
     ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
 
@@ -887,22 +902,12 @@ void SlideImpl::startIntrinsicAnimations()
     mpSubsettableShapeManager->notifyIntrinsicAnimationsEnabled();
 }
 
-bool SlideImpl::applyInitialShapeAttributes(
-    const uno::Reference< animations::XAnimationNode >& xRootAnimationNode )
+void SlideImpl::applyShapeAttributes(
+    const css::uno::Reference< css::animations::XAnimationNode >& xRootAnimationNode,
+    bool bInitial) const
 {
-    if( !implPrefetchShow() )
-        return false;
-
-    if( !xRootAnimationNode.is() )
-    {
-        meAnimationState = INITIAL_STATE;
-
-        return true; // no animations - no attributes to apply -
-                     // succeeded
-    }
-
     uno::Sequence< animations::TargetProperties > aProps(
-        TargetPropertiesCreator::createInitialTargetProperties( xRootAnimationNode ) );
+        TargetPropertiesCreator::createTargetProperties( xRootAnimationNode, bInitial ) );
 
     // apply extracted values to our shapes
     const ::std::size_t nSize( aProps.getLength() );
@@ -994,6 +999,23 @@ bool SlideImpl::applyInitialShapeAttributes(
             }
         }
     }
+}
+
+bool SlideImpl::applyInitialShapeAttributes(
+    const uno::Reference< animations::XAnimationNode >& xRootAnimationNode )
+{
+    if( !implPrefetchShow() )
+        return false;
+
+    if( !xRootAnimationNode.is() )
+    {
+        meAnimationState = INITIAL_STATE;
+
+        return true; // no animations - no attributes to apply -
+                     // succeeded
+    }
+
+    applyShapeAttributes(xRootAnimationNode, true);
 
     meAnimationState = INITIAL_STATE;
 
