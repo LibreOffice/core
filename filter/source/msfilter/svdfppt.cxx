@@ -5816,7 +5816,6 @@ PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, TSS_Type nIn
     PPTNumberFormatCreator  ( nullptr ),
     mrStyleSheet            ( rStyleSheet ),
     mnInstance              ( nInstance ),
-    mbTab                   ( true ),      // style sheets always have to get the right tabulator setting
     mnCurrentObject         ( 0 )
 {
     mxParaSet->mnDepth = sanitizeForMaxPPTLevels(nDepth);
@@ -5831,7 +5830,6 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
     PPTTextRulerInterpreter ( rRuler ),
     mrStyleSheet            ( rStyleSheet ),
     mnInstance              ( nInstance ),
-    mbTab                   ( false ),
     mnCurrentObject         ( 0 )
 {
     if (rnCurCharPos >= rPropReader.aCharPropList.size())
@@ -5847,10 +5845,6 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
             rPropReader.aCharPropList[rnCurCharPos].get();
         std::unique_ptr<PPTPortionObj> pPPTPortion(new PPTPortionObj(
                 *pCharPropSet, rStyleSheet, nInstance, mxParaSet->mnDepth));
-        if (!mbTab)
-        {
-            mbTab = pPPTPortion->HasTabulator();
-        }
         m_PortionList.push_back(std::move(pPPTPortion));
     }
 }
@@ -5863,10 +5857,6 @@ void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
 {
     m_PortionList.push_back(
             std::make_unique<PPTPortionObj>(rPPTPortion));
-    if ( !mbTab )
-    {
-        mbTab = m_PortionList.back()->HasTabulator();
-    }
 }
 
 void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
@@ -6310,9 +6300,6 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
         }
         rSet.Put( aULSpaceItem );
     }
-
-    if ( !mbTab )    // makes it sense to apply tabsettings
-        return;
 
     sal_uInt32 i, nDefaultTab, nTab, nTextOfs2 = 0;
     sal_uInt32 nLatestManTab = 0;
