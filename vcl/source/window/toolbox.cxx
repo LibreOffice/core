@@ -1398,8 +1398,9 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnKeyModifier     = 0;
     mnActivateCount   = 0;
 
-    maIdle.SetPriority( SchedulerPriority::RESIZE );
-    maIdle.SetIdleHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
+    mpIdle = new Idle("toolbox update");
+    mpIdle->SetPriority( SchedulerPriority::RESIZE );
+    mpIdle->SetIdleHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
 
     // set timeout and handler for dropdown items
     mpData->maDropdownTimer.SetTimeout( 250 );
@@ -1657,6 +1658,10 @@ void ToolBox::dispose()
         }
     }
     mpFloatWin.clear();
+
+    delete mpIdle;
+    mpIdle = nullptr;
+
     DockingWindow::dispose();
 }
 
