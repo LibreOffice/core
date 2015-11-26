@@ -295,12 +295,12 @@ bool SvXMLUnitConverter::convertDouble(double& rValue,
 }
 
 /** get the Null Date of the XModel and set it to the UnitConverter */
-bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xModel)
+bool SvXMLUnitConverter::setNullDate(const css::uno::Reference <css::frame::XModel>& xModel)
 {
-    com::sun::star::uno::Reference <com::sun::star::util::XNumberFormatsSupplier> xNumberFormatsSupplier (xModel, com::sun::star::uno::UNO_QUERY);
+    css::uno::Reference <css::util::XNumberFormatsSupplier> xNumberFormatsSupplier (xModel, css::uno::UNO_QUERY);
     if (xNumberFormatsSupplier.is())
     {
-        const com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
+        const css::uno::Reference <css::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
         return xPropertySet.is() && (xPropertySet->getPropertyValue(XML_NULLDATE) >>= m_pImpl->m_aNullDate);
     }
     return false;
@@ -323,7 +323,7 @@ bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
 /** convert double to ISO Date Time String */
 void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
         const double& fDateTime,
-        const com::sun::star::util::Date& aTempNullDate,
+        const css::util::Date& aTempNullDate,
         bool bAddTimeIf0AM )
 {
     double fValue = fDateTime;
@@ -430,9 +430,9 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
 
 /** convert ISO Date Time String to double */
 bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
-                            const OUString& rString, const com::sun::star::util::Date& aTempNullDate)
+                            const OUString& rString, const css::util::Date& aTempNullDate)
 {
-    com::sun::star::util::DateTime aDateTime;
+    css::util::DateTime aDateTime;
     bool bSuccess = ::sax::Converter::parseDateTime(aDateTime, nullptr, rString);
 
     if (bSuccess)

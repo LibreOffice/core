@@ -30,8 +30,7 @@ namespace com { namespace sun { namespace star {
 
 class XMLSectionSourceDDEImportContext : public SvXMLImportContext
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & rSectionPropertySet;
+    css::uno::Reference<css::beans::XPropertySet> & rSectionPropertySet;
 
     const OUString sDdeCommandFile;
     const OUString sDdeCommandType;
@@ -45,24 +44,21 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rSectPropSet);
+        css::uno::Reference<css::beans::XPropertySet> & rSectPropSet);
 
     virtual ~XMLSectionSourceDDEImportContext();
 
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     virtual void EndElement() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 };
 
 #endif

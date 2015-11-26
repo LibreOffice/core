@@ -40,7 +40,7 @@ class SdXMLPageMasterStyleContext: public SvXMLStyleContext
     sal_Int32                   mnBorderTop;
     sal_Int32                   mnWidth;
     sal_Int32                   mnHeight;
-    com::sun::star::view::PaperOrientation meOrientation;
+    css::view::PaperOrientation meOrientation;
 
     const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
@@ -51,7 +51,7 @@ public:
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterStyleContext();
 
     sal_Int32 GetBorderBottom() const { return mnBorderBottom; }
@@ -60,7 +60,7 @@ public:
     sal_Int32 GetBorderTop() const { return mnBorderTop; }
     sal_Int32 GetWidth() const { return mnWidth; }
     sal_Int32 GetHeight() const { return mnHeight; }
-    com::sun::star::view::PaperOrientation GetOrientation() const { return meOrientation; }
+    css::view::PaperOrientation GetOrientation() const { return meOrientation; }
 };
 
 // style:page-master context
@@ -79,12 +79,12 @@ public:
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterContext();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mpPageMasterStyle; }
 };
@@ -104,13 +104,13 @@ public:
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        css::uno::Reference< css::drawing::XShapes >& rShapes);
     virtual ~SdXMLMasterPageContext();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 
@@ -136,7 +136,7 @@ public:
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPresentationPlaceholderContext();
 
     const OUString& GetName() const { return msName; }
@@ -161,12 +161,12 @@ public:
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPresentationPageLayoutContext();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
     sal_uInt16 GetTypeId() const { return mnTypeId; }
@@ -186,33 +186,33 @@ class SdXMLStylesContext : public SvXMLStylesContext
 
     void ImpSetGraphicStyles() const;
     void ImpSetCellStyles() const;
-    void ImpSetGraphicStyles( com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xPageStyles,
+    void ImpSetGraphicStyles( css::uno::Reference< css::container::XNameAccess >& xPageStyles,
         sal_uInt16 nFamily, const OUString& rPrefix) const;
 
 protected:
     virtual SvXMLStyleContext* CreateStyleChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList) override;
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
         sal_uInt16 nFamily,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList) override;
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference<
+            css::xml::sax::XAttributeList > & xAttrList ) override;
 public:
 
     SdXMLStylesContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         bool bIsAutoStyle);
     virtual ~SdXMLStylesContext();
 
@@ -222,7 +222,7 @@ public:
 
     void SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getPageLayouts() const;
+    css::uno::Reference< css::container::XNameAccess > getPageLayouts() const;
 };
 
 // office:master-styles context
@@ -245,7 +245,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 // <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl>
@@ -255,7 +255,7 @@ class SdXMLHeaderFooterDeclContext : public SvXMLStyleContext
 public:
     SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
     virtual bool IsTransient() const override;
     virtual void EndElement() override;

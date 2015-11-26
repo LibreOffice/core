@@ -28,10 +28,8 @@ namespace com { namespace sun { namespace star { namespace lang {
 
 class XMLEmbeddedObjectImportContext : public SvXMLImportContext
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XDocumentHandler > xHandler;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XComponent > xComp;
+    css::uno::Reference<css::xml::sax::XDocumentHandler > xHandler;
+    css::uno::Reference<css::lang::XComponent > xComp;
 
     OUString sFilterService;
     OUString sCLSID;
@@ -43,24 +41,22 @@ public:
 
     XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
     virtual ~XMLEmbeddedObjectImportContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 
     virtual void Characters( const OUString& rChars ) override;
 
     bool SetComponent(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent >& rComp );
+        css::uno::Reference< css::lang::XComponent >& rComp );
 
 };
 

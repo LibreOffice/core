@@ -608,8 +608,7 @@ void SchXMLPlotAreaContext::EndElement()
 
 SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
                                                  ::std::list< DataRowPointStyle >& rStyleList,
-                                                 const ::com::sun::star::uno::Reference<
-                                                    ::com::sun::star::chart2::XDataSeries >& xSeries,
+                                                 const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
                                                  sal_Int32& rIndex,
                                                  bool bSymbolSizeForSeriesIsMissingInFile ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
@@ -908,9 +907,9 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
                                bool bPositiveValue, bool bYError,
                                tSchXMLLSequencesPerIndex& rSequences)
 {
-    uno::Reference< com::sun::star::chart2::data::XDataProvider > xDataProvider(xDoc->getDataProvider());
-    uno::Reference< com::sun::star::chart2::data::XDataSource > xDataSource( xBarProp, uno::UNO_QUERY );
-    uno::Reference< com::sun::star::chart2::data::XDataSink > xDataSink( xDataSource, uno::UNO_QUERY );
+    uno::Reference< css::chart2::data::XDataProvider > xDataProvider(xDoc->getDataProvider());
+    uno::Reference< css::chart2::data::XDataSource > xDataSource( xBarProp, uno::UNO_QUERY );
+    uno::Reference< css::chart2::data::XDataSink > xDataSink( xDataSource, uno::UNO_QUERY );
 
     assert( xDataSink.is() && xDataSource.is() && xDataProvider.is() );
 
@@ -968,8 +967,7 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     const OUString& rLocalName,
     const OUString &rSeriesStyleName,
     ::std::list< DataRowPointStyle >& rStyleList,
-    const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >& xSeries,
+    const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
     ContextType eContextType,
     const awt::Size & rChartSize,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex) :
@@ -1018,7 +1016,7 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
 
     if ( aAny.hasValue() )
     {
-        sal_Int32 aBarStyle = com::sun::star::chart::ErrorBarStyle::NONE;
+        sal_Int32 aBarStyle = css::chart::ErrorBarStyle::NONE;
         aAny >>= aBarStyle;
         xBarProp->setPropertyValue("ErrorBarStyle", aAny);
 
@@ -1085,7 +1083,7 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
 
         aAny = SchXMLTools::getPropertyFromContext("PercentageError",
                 pSeriesStyleContext, pStylesCtxt);
-        if( aAny.hasValue() && aBarStyle == com::sun::star::chart::ErrorBarStyle::RELATIVE )
+        if( aAny.hasValue() && aBarStyle == css::chart::ErrorBarStyle::RELATIVE )
         {
             xBarProp->setPropertyValue("PositiveError", aAny);
             xBarProp->setPropertyValue("NegativeError", aAny);
@@ -1093,7 +1091,7 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
 
         switch(aBarStyle)
         {
-            case com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
+            case css::chart::ErrorBarStyle::ERROR_MARGIN:
                 {
                     aAny = SchXMLTools::getPropertyFromContext("NegativeError",
                             pSeriesStyleContext,pStylesCtxt);
@@ -1161,7 +1159,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                     uno::Reference< beans::XPropertySet > xBarProp( xFact->createInstance("com.sun.star.chart2.ErrorBar" ),
                                                                     uno::UNO_QUERY );
 
-                    xBarProp->setPropertyValue("ErrorBarStyle",uno::makeAny(com::sun::star::chart::ErrorBarStyle::NONE));
+                    xBarProp->setPropertyValue("ErrorBarStyle",uno::makeAny(css::chart::ErrorBarStyle::NONE));
                     xBarProp->setPropertyValue("PositiveError",uno::makeAny(static_cast<double>(0.0)));
                     xBarProp->setPropertyValue("NegativeError",uno::makeAny(static_cast<double>(0.0)));
                     xBarProp->setPropertyValue("Weight",uno::makeAny(static_cast<double>(1.0)));

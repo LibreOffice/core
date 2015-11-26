@@ -55,7 +55,7 @@ XMLImageStyle::~XMLImageStyle()
 {
 }
 
-void XMLImageStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport )
+void XMLImageStyle::exportXML( const OUString& rStrName, const css::uno::Any& rValue, SvXMLExport& rExport )
 {
     ImpExportXML( rStrName, rValue, rExport );
 }

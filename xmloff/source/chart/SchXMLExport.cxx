@@ -122,8 +122,8 @@ class SchXMLExportHelper_Impl: private boost::noncopyable
 {
 public:
     // first: data sequence for label, second: data sequence for values.
-    typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >,
-            ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > > tLabelValuesDataPair;
+    typedef ::std::pair< css::uno::Reference< css::chart2::data::XDataSequence >,
+            css::uno::Reference< css::chart2::data::XDataSequence > > tLabelValuesDataPair;
     typedef ::std::vector< tLabelValuesDataPair > tDataSequenceCont;
 
 public:
@@ -134,8 +134,7 @@ public:
 
     // auto-styles
     /// parse chart and collect all auto-styles used in current pool
-    void collectAutoStyles( com::sun::star::uno::Reference<
-                            com::sun::star::chart::XChartDocument > rChartDoc );
+    void collectAutoStyles( css::uno::Reference< css::chart::XChartDocument > rChartDoc );
 
     /// write the styles collected into the current pool as <style:style> elements
     void exportAutoStyles();
@@ -151,8 +150,7 @@ public:
         which is the outer element of a chart. So these attributes can easily
         be parsed again by the container
      */
-    void exportChart( com::sun::star::uno::Reference<
-                          com::sun::star::chart::XChartDocument > rChartDoc,
+    void exportChart( css::uno::Reference< css::chart::XChartDocument > rChartDoc,
                       bool bIncludeTable );
 
     rtl::Reference<XMLPropertySetMapper> GetPropertySetMapper() const;
@@ -163,12 +161,10 @@ public:
         { msTableNumberList = rList; }
 
     void InitRangeSegmentationProperties(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
 
-    static ::com::sun::star::awt::Size getPageSize(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+    static css::awt::Size getPageSize(
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
 
     /** first parseDocument: collect autostyles and store names in this queue
         second parseDocument: export content and use names from this queue
@@ -183,20 +179,19 @@ public:
     { return mrAutoStylePool; }
 
     /// if bExportContent is false the auto-styles are collected
-    void parseDocument( com::sun::star::uno::Reference<
-                            com::sun::star::chart::XChartDocument >& rChartDoc,
+    void parseDocument( css::uno::Reference< css::chart::XChartDocument >& rChartDoc,
                         bool bExportContent,
                         bool bIncludeTable = false );
     void exportTable();
     void exportPlotArea(
-        com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > xDiagram,
-        com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > xNewDiagram,
-        const ::com::sun::star::awt::Size & rPageSize,
+        css::uno::Reference< css::chart::XDiagram > xDiagram,
+        css::uno::Reference< css::chart2::XDiagram > xNewDiagram,
+        const css::awt::Size & rPageSize,
         bool bExportContent,
         bool bIncludeTable );
-    void exportCoordinateRegion( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram );
-    void exportAxes( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > & xDiagram,
-                                    const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
+    void exportCoordinateRegion( const css::uno::Reference< css::chart::XDiagram >& xDiagram );
+    void exportAxes( const css::uno::Reference< css::chart::XDiagram > & xDiagram,
+                                    const css::uno::Reference< css::chart2::XDiagram > & xNewDiagram,
                                     bool bExportContent );
     void exportAxis( enum XMLTokenEnum eDimension, enum XMLTokenEnum eAxisName,
                     const Reference< beans::XPropertySet >& rAxisProps, const Reference< chart2::XAxis >& rChart2Axis,
@@ -207,46 +202,42 @@ public:
     void exportAxisTitle( const Reference< beans::XPropertySet >& rTitleProps, bool bExportContent );
 
     void exportSeries(
-        const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
-        const ::com::sun::star::awt::Size & rPageSize,
+        const css::uno::Reference< css::chart2::XDiagram > & xNewDiagram,
+        const css::awt::Size & rPageSize,
         bool bExportContent,
         bool bHasTwoYAxes );
 
     void exportPropertyMapping(
-        const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataSource > & xSource,
+        const css::uno::Reference< css::chart2::data::XDataSource > & xSource,
         Sequence< OUString >& rSupportedMappings );
 
     void exportCandleStickSeries(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > > & aSeriesSeq,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        const css::uno::Sequence<
+            css::uno::Reference< css::chart2::XDataSeries > > & aSeriesSeq,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         bool bJapaneseCandleSticks,
         bool bExportContent );
     void exportDataPoints(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xSeriesProperties,
+        const css::uno::Reference< css::beans::XPropertySet > & xSeriesProperties,
         sal_Int32 nSeriesLength,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         bool bExportContent );
 
     void exportRegressionCurve(
-        const com::sun::star::uno::Reference<com::sun::star::chart2::XDataSeries>& xSeries,
-        const com::sun::star::awt::Size& rPageSize,
+        const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
+        const css::awt::Size& rPageSize,
         bool bExportContent );
 
     void exportErrorBar (
-        const ::com::sun::star::uno::Reference<beans::XPropertySet> &xSeriesProp, bool bYError,
+        const css::uno::Reference<beans::XPropertySet> &xSeriesProp, bool bYError,
             bool bExportContent );
 
     /// add svg position as attribute for current element
-    void addPosition( const ::com::sun::star::awt::Point & rPosition );
-    void addPosition( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
+    void addPosition( const css::awt::Point & rPosition );
+    void addPosition( css::uno::Reference< css::drawing::XShape > xShape );
     /// add svg size as attribute for current element
-    void addSize( const ::com::sun::star::awt::Size & rSize, bool bIsOOoNamespace = false );
-    void addSize( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape, bool bIsOOoNamespace = false  );
+    void addSize( const css::awt::Size & rSize, bool bIsOOoNamespace = false );
+    void addSize( css::uno::Reference< css::drawing::XShape > xShape, bool bIsOOoNamespace = false  );
     /// exports a string as a paragraph element
     void exportText( const OUString& rText, bool bConvertTabsLFs = false );
 
@@ -266,14 +257,14 @@ public:
     bool mbRowSourceColumns;
     OUString msChartAddress;
     OUString msTableNumberList;
-    ::com::sun::star::uno::Sequence< sal_Int32 > maSequenceMapping;
+    css::uno::Sequence< sal_Int32 > maSequenceMapping;
 
     OUString msCLSID;
 
     OUString maSrcShellID;
     OUString maDestShellID;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxAdditionalShapes;
+    css::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
 
     tDataSequenceCont m_aDataSequencesToExport;
     OUString maCategoriesRange;
@@ -1089,7 +1080,7 @@ void SchXMLExportHelper_Impl::exportChart( Reference< chart::XChartDocument > rC
     SAL_WARN_IF( !maAutoStyleNameQueue.empty(), "xmloff.chart", "There are still remaining autostyle names in the queue" );
 }
 
-static OUString lcl_GetStringFromNumberSequence( const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
+static OUString lcl_GetStringFromNumberSequence( const css::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
 {
     const sal_Int32* pArray = rSequenceMapping.getConstArray();
     const sal_Int32 nSize = rSequenceMapping.getLength();
@@ -2119,10 +2110,10 @@ namespace
         XMLTokenEnum eToken = XML_DAYS;
         switch( nTimeUnit )
         {
-        case ::com::sun::star::chart::TimeUnit::YEAR:
+        case css::chart::TimeUnit::YEAR:
             eToken = XML_YEARS;
             break;
-        case ::com::sun::star::chart::TimeUnit::MONTH:
+        case css::chart::TimeUnit::MONTH:
             eToken = XML_MONTHS;
             break;
         default://days
@@ -2140,7 +2131,7 @@ void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XProperty
     chart::TimeIncrement aIncrement;
     if( (rAxisProps->getPropertyValue("TimeIncrement") >>= aIncrement) )
     {
-        sal_Int32 nTimeResolution = ::com::sun::star::chart::TimeUnit::DAY;
+        sal_Int32 nTimeResolution = css::chart::TimeUnit::DAY;
         if( aIncrement.TimeResolution >>= nTimeResolution )
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_BASE_TIME_UNIT, lcl_getTimeUnitToken( nTimeResolution ) );
 
@@ -2424,7 +2415,7 @@ void SchXMLExportHelper_Impl::exportAxes(
 
     // x axis
 
-    Reference< ::com::sun::star::chart2::XAxis > xNewAxis = lcl_getAxis( xCooSys, XML_X );
+    Reference< css::chart2::XAxis > xNewAxis = lcl_getAxis( xCooSys, XML_X );
     if( xNewAxis.is() )
     {
         Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(0) : nullptr, uno::UNO_QUERY );

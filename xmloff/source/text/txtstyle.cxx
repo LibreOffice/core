@@ -44,8 +44,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
 void XMLTextParagraphExport::exportStyleAttributes(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::style::XStyle > & rStyle )
+        const css::uno::Reference< css::style::XStyle > & rStyle )
 {
     OUString sName;
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );

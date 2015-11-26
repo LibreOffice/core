@@ -1098,7 +1098,7 @@ public:
 
     virtual ~XMLDocumentTransformerContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -1239,7 +1239,7 @@ public:
 
     virtual ~XMLBodyTransformerContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -1297,7 +1297,7 @@ public:
 
     virtual ~XMLTabStopOOoTContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 XMLTabStopOOoTContext_Impl::XMLTabStopOOoTContext_Impl(
@@ -1395,7 +1395,7 @@ public:
 
     virtual ~XMLTrackedChangesOOoTContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 XMLTrackedChangesOOoTContext_Impl::XMLTrackedChangesOOoTContext_Impl(
@@ -1465,7 +1465,7 @@ public:
 
     virtual ~XMLTableOOoTransformerContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -2016,16 +2016,15 @@ Sequence< OUString > SAL_CALL OOo2OasisTransformer::getSupportedServiceNames(  )
 }
 
 // XTypeProvider
-Sequence< ::com::sun::star::uno::Type > SAL_CALL
+Sequence< css::uno::Type > SAL_CALL
     OOo2OasisTransformer::getTypes() throw(RuntimeException, std::exception)
 {
-    Sequence< ::com::sun::star::uno::Type > aTypes(
-                        XMLTransformerBase::getTypes() );
+    Sequence< css::uno::Type > aTypes( XMLTransformerBase::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
     aTypes.realloc( nIndex + 2 );
 
-    ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
+    css::uno::Type* pTypes = aTypes.getArray();
     pTypes[nIndex++] = cppu::UnoType<XImporter>::get();
     pTypes[nIndex++] = cppu::UnoType<XFilter>::get();
 

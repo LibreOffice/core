@@ -235,7 +235,7 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
 SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
             const bool bFirst )

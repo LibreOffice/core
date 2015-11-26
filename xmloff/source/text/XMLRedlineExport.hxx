@@ -38,12 +38,11 @@ namespace com { namespace sun { namespace star {
 
 // store a list of redline properties
 typedef ::std::list<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet> > ChangesListType;
+            css::uno::Reference<css::beans::XPropertySet> > ChangesListType;
 
 // store a list of redline properties for each XText
 typedef ::std::map<
-            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText>,
+            css::uno::Reference< css::text::XText>,
             ChangesListType* > ChangesMapType;
 
 
@@ -102,8 +101,7 @@ public:
     /// export a change
     void ExportChange(
         /// PropertySet of RedlinePortion
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet,
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet,
         bool bAutoStyle);
 
     /// export the list of changes (complete list minus recorded changed)
@@ -111,15 +109,13 @@ public:
 
     /// export the list of changes (recorded changes for this XText only)
     void ExportChangesList(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XText> & rText,
+        const css::uno::Reference<css::text::XText> & rText,
         bool bAutoStyles);
 
     /// set the current XText for which changes should be recorded.
     /// An empty XText means: don't record changes
     void SetCurrentXText(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XText> & rText);
+        const css::uno::Reference<css::text::XText> & rText);
 
     /// Do not record changes.
     /// Same as SetCurrentXText(Reference<XText>) with empty argument.
@@ -128,22 +124,20 @@ public:
     /// export redline marks which start or end at start nodes,
     /// i.e. that include the complete paragraph/table/section
     void ExportStartOrEndRedline(
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet,
+        const css::uno::Reference<
+                    css::beans::XPropertySet> & rPropSet,
         bool bStart);   /// start or end of text entity (e.g. paragraph)?
 
     /// convenience method, calls XPropertySet-version of this method
     void ExportStartOrEndRedline(
         /// XTextContent; must also be an XPropertySet
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::text::XTextContent> & rContent,
+        const css::uno::Reference<css::text::XTextContent> & rContent,
         bool bStart);
 
     /// convenience method, calls XPropertySet-version of this method
     void ExportStartOrEndRedline(
         /// XTextSection; must also be an XPropertySet
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::text::XTextSection> & rSection,
+        const css::uno::Reference<css::text::XTextSection> & rSection,
         bool bStart);
 
 private:
@@ -151,14 +145,12 @@ private:
     /// export the change mark contained in the text body
     void ExportChangeInline(
         /// PropertySet of RedlinePortion
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export the auto styles used in this change
     void ExportChangeAutoStyle(
         /// PropertySet of RedlinePortion
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export the changes list (<text:tracked-changes>)
     void ExportChangesListElements();
@@ -168,26 +160,22 @@ private:
 
     /// export the changed-region element
     void ExportChangedRegion(
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export an change-info element (from a PropertySet)
     void ExportChangeInfo(
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export an change-info element (from PropertyValues)
     void ExportChangeInfo(
-        const ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::beans::PropertyValue> & rValues);
+        const css::uno::Sequence<css::beans::PropertyValue> & rValues);
 
     /// convert the change type from API to XML names
     const OUString ConvertTypeName(const OUString& sApiName);
 
     /// Get ID string!
     const OUString GetRedlineID(
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// write a comment string as sequence of <text:p> elements
     void WriteComment(const OUString& rComment);

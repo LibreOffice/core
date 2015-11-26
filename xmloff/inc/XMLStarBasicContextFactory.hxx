@@ -46,8 +46,7 @@ public:
         SvXMLImport& rImport,               /// import context
         sal_uInt16 nPrefix,                 /// element: namespace prefix
         const OUString& rLocalName,  /// element: local name
-        const ::com::sun::star::uno::Reference<     /// attribute list
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList,/// attribute list
         /// the context for the enclosing <script:events> element
         XMLEventsImportContext* rEvents,
         /// the event name (as understood by the API)

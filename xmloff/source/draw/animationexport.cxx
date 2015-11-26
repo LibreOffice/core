@@ -541,7 +541,7 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
 {
     try
     {
-        mxExport = static_cast< ::com::sun::star::document::XFilter *>(&rExport);
+        mxExport = static_cast< css::document::XFilter *>(&rExport);
     }
     catch (const RuntimeException&)
     {
@@ -1401,7 +1401,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nCommand, getAnimationsEnumMap(Animations_EnumMap_Command) );
         mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, sTmp.makeStringAndClear() );
 
-// todo virtual ::com::sun::star::uno::Any SAL_CALL getParameter() throw (::com::sun::star::uno::RuntimeException) = 0;
+// todo virtual css::uno::Any SAL_CALL getParameter() throw (css::uno::RuntimeException) = 0;
 
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, true, true );
 
@@ -1615,7 +1615,7 @@ void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTa
 
     Reference< XInterface > xRef;
 
-    if( rTarget.getValueTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE )
+    if( rTarget.getValueTypeClass() == css::uno::TypeClass_INTERFACE )
     {
         rTarget >>= xRef;
     }
@@ -1654,7 +1654,7 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
         for( nElement = 0; nElement < nLength; nElement++, pAny++ )
             prepareValue( *pAny );
     }
-    else if( rValue.getValueTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE )
+    else if( rValue.getValueTypeClass() == css::uno::TypeClass_INTERFACE )
     {
         Reference< XInterface> xRef( rValue, UNO_QUERY );
         if( xRef.is() )

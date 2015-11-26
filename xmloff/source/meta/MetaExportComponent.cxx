@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 XMLMetaExportComponent::XMLMetaExportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLExportFlags nFlags )
 :   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName, XML_TEXT, nFlags )
 {
@@ -53,7 +53,7 @@ XMLMetaExportComponent::~XMLMetaExportComponent()
 {
 }
 
-void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -113,7 +113,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 
             SetDocHandler( xDocHandler );
         }
-        catch( com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             OSL_FAIL( "Cannot instantiate com.sun.star.comp.Oasis2OOoTransformer!\n");
         }

@@ -55,7 +55,7 @@ public:
      * create a warning for all others. Classes that wish to override
      * StartElement need to call the parent method. */
     virtual void StartElement(
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     /** call HandleChild for each child element in the token map;
      * create a warning for all others. Classes that wish to override
@@ -64,7 +64,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     /** Create a warning for all non-namespace character
      * content. Classes that wish to deal with character content have
@@ -86,7 +86,7 @@ protected:
         // context creation
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) = 0;
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) = 0;
 };
 
 #endif

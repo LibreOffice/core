@@ -86,8 +86,7 @@ class XMLIndexSourceBaseContext : public SvXMLImportContext
 protected:
 
     /// property set of index; must be accessible to subclasses
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & rIndexPropertySet;
+    css::uno::Reference<css::beans::XPropertySet> & rIndexPropertySet;
 
 public:
 
@@ -96,8 +95,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet,
+        css::uno::Reference<css::beans::XPropertySet> & rPropSet,
         bool bLevelFormats);
 
     virtual ~XMLIndexSourceBaseContext();
@@ -105,8 +103,7 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 
     virtual void ProcessAttribute(
         enum IndexSourceParamEnum eParam,
@@ -117,8 +114,7 @@ protected:
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 };
 
 #endif

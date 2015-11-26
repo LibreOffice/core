@@ -107,7 +107,7 @@ void exportXForms( SvXMLExport& rExport )
 void exportXFormsInstance( SvXMLExport&, const Sequence<PropertyValue>& );
 void exportXFormsBinding( SvXMLExport&, const Reference<XPropertySet>& );
 void exportXFormsSubmission( SvXMLExport&, const Reference<XPropertySet>& );
-void exportXFormsSchemas( SvXMLExport&, const Reference<com::sun::star::xforms::XModel>& );
+void exportXFormsSchemas( SvXMLExport&, const Reference<css::xforms::XModel>& );
 
 
 typedef OUString (*convert_t)( const Any& );
@@ -133,14 +133,14 @@ template<typename T, void (*FUNC)( OUStringBuffer&, T )> OUString xforms_convert
 template<typename T, void (*FUNC)( OUStringBuffer&, const T& )> OUString xforms_convertRef( const Any& );
 
 void xforms_formatDate( OUStringBuffer& aBuffer, const util::Date& aDate );
-void xforms_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Time& aTime );
+void xforms_formatTime( OUStringBuffer& aBuffer, const css::util::Time& aTime );
 void xforms_formatDateTime( OUStringBuffer& aBuffer, const util::DateTime& aDateTime );
 
 convert_t xforms_int32    = &xforms_convert<sal_Int32,&::sax::Converter::convertNumber>;
 convert_t xforms_double   = &xforms_convert<double,&::sax::Converter::convertDouble>;
 convert_t xforms_dateTime = &xforms_convertRef<util::DateTime,&xforms_formatDateTime>;
 convert_t xforms_date     = &xforms_convertRef<util::Date,&xforms_formatDate>;
-convert_t xforms_time     = &xforms_convertRef<com::sun::star::util::Time,&xforms_formatTime>;
+convert_t xforms_time     = &xforms_convertRef<css::util::Time,&xforms_formatTime>;
 
 // other functions
 static OUString lcl_getXSDType( SvXMLExport& rExport,
@@ -162,7 +162,7 @@ void exportXFormsModel( SvXMLExport& rExport,
                         const Reference<XPropertySet>& xModelPropSet )
 {
     // no model -> don't do anything!
-    Reference<com::sun::star::xforms::XModel> xModel( xModelPropSet, UNO_QUERY );
+    Reference<css::xforms::XModel> xModel( xModelPropSet, UNO_QUERY );
     if( ! xModel.is() || ! xModelPropSet.is() )
         return;
 
@@ -297,7 +297,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
         {
             // now get type, and determine whether it's a standard type. If
             // so, export the XSD name
-            Reference<com::sun::star::xforms::XModel> xModel(
+            Reference<css::xforms::XModel> xModel(
                 xBinding->getPropertyValue( "Model" ),
                 UNO_QUERY );
             Reference<XDataTypeRepository> xRepository(
@@ -473,49 +473,49 @@ static OUString lcl_getXSDType( SvXMLExport& rExport,
     xType->getPropertyValue( "TypeClass" ) >>= nDataTypeClass;
     switch( nDataTypeClass )
     {
-    case com::sun::star::xsd::DataTypeClass::STRING:
+    case css::xsd::DataTypeClass::STRING:
         eToken = XML_STRING;
         break;
-    case com::sun::star::xsd::DataTypeClass::anyURI:
+    case css::xsd::DataTypeClass::anyURI:
         eToken = XML_ANYURI;
         break;
-    case com::sun::star::xsd::DataTypeClass::DECIMAL:
+    case css::xsd::DataTypeClass::DECIMAL:
         eToken = XML_DECIMAL;
         break;
-    case com::sun::star::xsd::DataTypeClass::DOUBLE:
+    case css::xsd::DataTypeClass::DOUBLE:
         eToken = XML_DOUBLE;
         break;
-    case com::sun::star::xsd::DataTypeClass::FLOAT:
+    case css::xsd::DataTypeClass::FLOAT:
         eToken = XML_FLOAT;
         break;
-    case com::sun::star::xsd::DataTypeClass::BOOLEAN:
+    case css::xsd::DataTypeClass::BOOLEAN:
         eToken = XML_BOOLEAN;
         break;
-    case com::sun::star::xsd::DataTypeClass::DATETIME:
+    case css::xsd::DataTypeClass::DATETIME:
         eToken = XML_DATETIME_XSD;
         break;
-    case com::sun::star::xsd::DataTypeClass::TIME:
+    case css::xsd::DataTypeClass::TIME:
         eToken = XML_TIME;
         break;
-    case com::sun::star::xsd::DataTypeClass::DATE:
+    case css::xsd::DataTypeClass::DATE:
         eToken = XML_DATE;
         break;
-    case com::sun::star::xsd::DataTypeClass::gYear:
+    case css::xsd::DataTypeClass::gYear:
         eToken = XML_YEAR;
         break;
-    case com::sun::star::xsd::DataTypeClass::gDay:
+    case css::xsd::DataTypeClass::gDay:
         eToken = XML_DAY;
         break;
-    case com::sun::star::xsd::DataTypeClass::gMonth:
+    case css::xsd::DataTypeClass::gMonth:
         eToken = XML_MONTH;
         break;
-    case com::sun::star::xsd::DataTypeClass::DURATION:
-    case com::sun::star::xsd::DataTypeClass::gYearMonth:
-    case com::sun::star::xsd::DataTypeClass::gMonthDay:
-    case com::sun::star::xsd::DataTypeClass::hexBinary:
-    case com::sun::star::xsd::DataTypeClass::base64Binary:
-    case com::sun::star::xsd::DataTypeClass::QName:
-    case com::sun::star::xsd::DataTypeClass::NOTATION:
+    case css::xsd::DataTypeClass::DURATION:
+    case css::xsd::DataTypeClass::gYearMonth:
+    case css::xsd::DataTypeClass::gMonthDay:
+    case css::xsd::DataTypeClass::hexBinary:
+    case css::xsd::DataTypeClass::base64Binary:
+    case css::xsd::DataTypeClass::QName:
+    case css::xsd::DataTypeClass::NOTATION:
     default:
         OSL_FAIL( "unknown data type" );
     }
@@ -558,7 +558,7 @@ static void lcl_exportDataType( SvXMLExport& rExport,
 }
 
 void exportXFormsSchemas( SvXMLExport& rExport,
-                          const Reference<com::sun::star::xforms::XModel>& xModel )
+                          const Reference<css::xforms::XModel>& xModel )
 {
     // TODO: for now, we'll fake this...
     {
@@ -672,7 +672,7 @@ void xforms_formatDate( OUStringBuffer& aBuffer, const util::Date& rDate )
             + "-" + OUString::number(static_cast<sal_Int32>( rDate.Day )) );
 }
 
-void xforms_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Time& rTime )
+void xforms_formatTime( OUStringBuffer& aBuffer, const css::util::Time& rTime )
 {
     Duration aDuration;
     aDuration.Hours = rTime.Hours;
@@ -695,13 +695,13 @@ OUString xforms_whitespace( const Any& rAny )
     {
         switch( n )
         {
-        case com::sun::star::xsd::WhiteSpaceTreatment::Preserve:
+        case css::xsd::WhiteSpaceTreatment::Preserve:
             sResult = GetXMLToken( XML_PRESERVE );
             break;
-        case com::sun::star::xsd::WhiteSpaceTreatment::Replace:
+        case css::xsd::WhiteSpaceTreatment::Replace:
             sResult = GetXMLToken( XML_REPLACE );
             break;
-        case com::sun::star::xsd::WhiteSpaceTreatment::Collapse:
+        case css::xsd::WhiteSpaceTreatment::Collapse:
             sResult = GetXMLToken( XML_COLLAPSE );
             break;
         }

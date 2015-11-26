@@ -40,8 +40,8 @@ using namespace ::com::sun::star;
 const char XMLN_VERSIONSLIST[] = "VersionList.xml";
 
 XMLVersionListExport::XMLVersionListExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
-    const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions,
+    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    const css::uno::Sequence < css::util::RevisionTag >& rVersions,
     const OUString &rFileName,
     Reference< XDocumentHandler > &rHandler )
 :   SvXMLExport( rContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
@@ -99,8 +99,8 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 }
 
 XMLVersionListImport::XMLVersionListImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
-    com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions )
+    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    css::uno::Sequence < css::util::RevisionTag >& rVersions )
 :   SvXMLImport(rContext, ""),
     maVersions( rVersions )
 {
@@ -318,7 +318,7 @@ bool XMLVersionContext::ParseISODateTimeString(
 }
 
 void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const uno::Sequence< util::RevisionTag >& rVersions )
-    throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::io::IOException, css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     // no storage, no version list!
     if ( xRoot.is() )
@@ -364,9 +364,9 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 }
 
 uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( const uno::Reference< embed::XStorage >& xRoot )
-        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::container::NoSuchElementException, css::io::IOException, css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
-    com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag > aVersions;
+    css::uno::Sequence < css::util::RevisionTag > aVersions;
 
     const OUString sDocName( XMLN_VERSIONSLIST  );
     uno::Reference< container::XNameAccess > xRootNames( xRoot, uno::UNO_QUERY );

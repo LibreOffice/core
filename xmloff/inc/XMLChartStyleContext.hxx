@@ -39,20 +39,19 @@ public:
     XMLChartStyleContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
     virtual ~XMLChartStyleContext();
 
     /// is called after all styles have been read to apply styles
     void FillPropertySet(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
+        const css::uno::Reference<css::beans::XPropertySet > & rPropSet ) override;
 
     /// necessary for property context (element-property symbol-image)
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_INC_XMLCHARTSTYLECONTEXT_HXX

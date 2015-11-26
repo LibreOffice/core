@@ -338,7 +338,7 @@ bool SvXMLImportPropertyMapper::handleSpecialItem(
 
 void SvXMLImportPropertyMapper::FillPropertySequence(
             const ::std::vector< XMLPropertyState >& rProperties,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues )
+            css::uno::Sequence< css::beans::PropertyValue >& rValues )
             const
 {
     sal_Int32 nCount = rProperties.size();
@@ -365,8 +365,7 @@ void SvXMLImportPropertyMapper::FillPropertySequence(
 
 void SvXMLImportPropertyMapper::CheckSpecialContext(
             const ::std::vector< XMLPropertyState >& aProperties,
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet >& rPropSet,
+            const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
             _ContextID_Index_Pair* pSpecialContextIds ) const
 {
     OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );

@@ -39,27 +39,27 @@ namespace com { namespace sun { namespace star {
 class XMLEnhancedCustomShapeContext : public SvXMLImportContext
 {
     SvXMLUnitConverter& mrUnitConverter;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& mrxShape;
-    std::vector< com::sun::star::beans::PropertyValue >& mrCustomShapeGeometry;
+    css::uno::Reference< css::drawing::XShape >& mrxShape;
+    std::vector< css::beans::PropertyValue >& mrCustomShapeGeometry;
 
-    std::vector< com::sun::star::beans::PropertyValue > maExtrusion;
-    std::vector< com::sun::star::beans::PropertyValue > maPath;
-    std::vector< com::sun::star::beans::PropertyValue > maTextPath;
-    std::vector< com::sun::star::beans::PropertyValues > maHandles;
+    std::vector< css::beans::PropertyValue > maExtrusion;
+    std::vector< css::beans::PropertyValue > maPath;
+    std::vector< css::beans::PropertyValue > maTextPath;
+    std::vector< css::beans::PropertyValues > maHandles;
     std::vector< OUString > maEquations;
     std::vector< OUString > maEquationNames;
 
 public:
 
 
-    XMLEnhancedCustomShapeContext( SvXMLImport& rImport, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &, sal_uInt16 nPrefix,
-        const OUString& rLocalName, std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry );
+    XMLEnhancedCustomShapeContext( SvXMLImport& rImport, css::uno::Reference< css::drawing::XShape > &, sal_uInt16 nPrefix,
+        const OUString& rLocalName, std::vector< css::beans::PropertyValue >& rCustomShapeGeometry );
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;
 };
 
 #endif

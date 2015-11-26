@@ -127,9 +127,9 @@ namespace xmloff
             virtual ~OMergedPropertySetInfo();
 
             // XPropertySetInfo
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties(  ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (css::uno::RuntimeException, std::exception) override;
         };
 
         OMergedPropertySetInfo::OMergedPropertySetInfo( const Reference< XPropertySetInfo >& _rxMasterInfo )

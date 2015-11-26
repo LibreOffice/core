@@ -2271,7 +2271,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sTextFieldStart))
             {
-                Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                Reference< css::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
 
                 /* As of now, textmarks are a proposed extension to the OpenDocument standard. */
                 if (!bAutoStyles)
@@ -2302,7 +2302,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (xFormField.is())
                         {
                             OUString sName;
-                            Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
+                            Reference< css::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
                             if (xParameters.is() && xParameters->hasByName("Name"))
                             {
                                 const Any aValue = xParameters->getByName("Name");
@@ -2340,7 +2340,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 if (!bAutoStyles)
                 {
-                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    Reference< css::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
 
                     if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     {
@@ -2353,7 +2353,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (xFormField.is())
                         {
                             OUString sName;
-                            Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
+                            Reference< css::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
                             if (xParameters.is() && xParameters->hasByName("Name"))
                             {
                                 const Any aValue = xParameters->getByName("Name");
@@ -2385,7 +2385,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         {
                             GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
                         }
-                        Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                        Reference< css::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                         if (xFormField.is())
                         {
                             GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
@@ -3315,7 +3315,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
 }
 
 void XMLTextParagraphExport::exportTextRangeSpan(
-    const com::sun::star::uno::Reference< com::sun::star::text::XTextRange > & rTextRange,
+    const css::uno::Reference< css::text::XTextRange > & rTextRange,
     Reference< XPropertySet > & xPropSet,
     Reference < XPropertySetInfo > & xPropSetInfo,
     const bool bIsUICharStyle,

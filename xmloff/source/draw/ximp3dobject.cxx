@@ -43,7 +43,7 @@ SdXML3DObjectContext::SdXML3DObjectContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
@@ -109,7 +109,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
@@ -210,7 +210,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
@@ -308,7 +308,7 @@ SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
@@ -394,7 +394,7 @@ SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
@@ -428,7 +428,7 @@ SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )

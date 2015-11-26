@@ -36,13 +36,11 @@ class XMLImageMapContext : public SvXMLImportContext
     const OUString sImageMap;
 
     /// the image map to be imported
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XIndexContainer> xImageMap;
+    css::uno::Reference< css::container::XIndexContainer> xImageMap;
 
     /// the property set from which to get and where eventually to set the
     /// image map
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xPropertySet;
+    css::uno::Reference< css::beans::XPropertySet> xPropertySet;
 
 public:
 
@@ -50,16 +48,14 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+        css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 
     virtual ~XMLImageMapContext();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 };

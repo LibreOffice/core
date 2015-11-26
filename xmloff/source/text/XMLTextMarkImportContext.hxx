@@ -47,8 +47,7 @@ public:
         const OUString& rLocalName );
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
 };
 
 
@@ -85,28 +84,24 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
     virtual void EndElement() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+                                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 public:
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextContent > CreateAndInsertMark(
+    static css::uno::Reference< css::text::XTextContent > CreateAndInsertMark(
         SvXMLImport& rImport,
         const OUString& sServiceName,
         const OUString& sMarkName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextRange> & rRange,
+        const css::uno::Reference<css::text::XTextRange> & rRange,
         const OUString& i_rXmlId = OUString());
 
     bool FindName(
         SvXMLImport& rImport,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList);
 };
 
 #endif

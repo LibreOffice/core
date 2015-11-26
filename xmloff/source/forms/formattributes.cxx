@@ -259,7 +259,7 @@ namespace xmloff
     void OAttribute2Property::addEnumProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
-            const ::com::sun::star::uno::Type* _pType)
+            const css::uno::Type* _pType)
     {
         OUStringBuffer aDefault;
         SvXMLUnitConverter::convertEnum(aDefault, _nAttributeDefault, _pValueMap);
@@ -272,7 +272,7 @@ namespace xmloff
 
     OAttribute2Property::AttributeAssignment& OAttribute2Property::implAdd(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const ::com::sun::star::uno::Type& _rType, const OUString& /*_rDefaultString*/)
+            const css::uno::Type& _rType, const OUString& /*_rDefaultString*/)
     {
         OSL_ENSURE(m_aKnownProperties.end() == m_aKnownProperties.find(OUString::createFromAscii(_pAttributeName)),
             "OAttribute2Property::implAdd: already have this attribute!");

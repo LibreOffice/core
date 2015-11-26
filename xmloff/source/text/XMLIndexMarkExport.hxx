@@ -69,33 +69,28 @@ public:
      * collapsed.
      */
     void ExportIndexMark(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet,
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet,
         bool bAutoStyles);
 
 protected:
 
     /// export attributes of table-of-content index marks
     void ExportTOCMarkAttributes(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export attributes of user index marks
     void ExportUserIndexMarkAttributes(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export attributes of alphabetical  index marks
     void ExportAlphabeticalIndexMarkAttributes(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// create a numerical ID for this index mark
     /// (represented by its properties)
     static void GetID(
         OUStringBuffer& sBuffer,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
 };
 

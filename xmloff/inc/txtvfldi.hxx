@@ -81,8 +81,7 @@ public:
 
     /// prepare XTextField for insertion into document
     void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet);
 
     /// is value a string (rather than double)?
     inline bool IsStringValue() { return bStringType; }
@@ -186,8 +185,8 @@ protected:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
+        const css::uno::Reference<
+        css::beans::XPropertySet> & xPropertySet) override;
 
     // various accessor methods:
     inline OUString GetName()    { return sName; }
@@ -212,8 +211,8 @@ public:
 protected:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
+        const css::uno::Reference<
+        css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -234,8 +233,8 @@ public:
 
 protected:
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
+        const css::uno::Reference<
+        css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /*** import text input fields (<text:text-input>) */
@@ -254,8 +253,8 @@ public:
 
 protected:
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
+        const css::uno::Reference<
+        css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -304,8 +303,8 @@ protected:
 
     /// find appropriate field master
     bool FindFieldMaster(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xMaster);
+        css::uno::Reference<
+        css::beans::XPropertySet> & xMaster);
 };
 
 
@@ -327,8 +326,7 @@ public:
 protected:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
+        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -352,8 +350,7 @@ protected:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
+        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -386,8 +383,7 @@ public:
         const OUString& rLocalName);     /// element name w/o prefix
 
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
+        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -420,8 +416,7 @@ protected:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
+        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -451,8 +446,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
 };
 
 /**
@@ -479,13 +473,11 @@ public:
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName,      /// element name w/o prefix
-        const ::com::sun::star::uno::Reference< /// list of element attributes
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList,/// list of element attributes
         enum VarType eVarType);                 /// variable type
 
     /// get field master for name and rename if appropriate
-    static bool FindFieldMaster(::com::sun::star::uno::Reference<
-                                    ::com::sun::star::beans::XPropertySet> & xMaster,
+    static bool FindFieldMaster(css::uno::Reference<css::beans::XPropertySet> & xMaster,
                                     SvXMLImport& rImport,
                                     XMLTextImportHelper& rHelper,
                                     const OUString& sVarName,
@@ -522,8 +514,7 @@ protected:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
+        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 

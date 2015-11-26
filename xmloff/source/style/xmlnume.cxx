@@ -59,7 +59,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< ::com::sun::star::container::XIndexReplace > & xNumRule,
+void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< css::container::XIndexReplace > & xNumRule,
                                              bool bOutline )
 {
     sal_Int32 nCount = xNumRule ->getCount();
@@ -96,7 +96,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     rtl_TextEncoding eBulletFontEncoding = RTL_TEXTENCODING_DONTKNOW;
 
     OUString sImageURL;
-    uno::Reference< ::com::sun::star::awt::XBitmap >  xBitmap;
+    uno::Reference< css::awt::XBitmap >  xBitmap;
     sal_Int32 nImageWidth = 0, nImageHeight = 0;
     sal_Int16 eImageVertOrient = VertOrientation::LINE_CENTER;
 

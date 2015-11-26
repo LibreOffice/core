@@ -54,7 +54,7 @@ public:
     /** @descr  Abstract interface of a method for setting a variables
             value to that of the property.
     */
-    virtual void    SetValue    (const ::com::sun::star::uno::Any & rValue) = 0;
+    virtual void    SetValue    (const css::uno::Any & rValue) = 0;
 
     const OUString msName;
 };
@@ -75,7 +75,7 @@ public:
     /** descr   Set the given value inside an Any to the variable referenced
         by the data member.
     */
-    virtual void    SetValue    (const ::com::sun::star::uno::Any & rValue) override
+    virtual void    SetValue    (const css::uno::Any & rValue) override
     {
         rValue >>= mrValue;
     }
@@ -121,8 +121,8 @@ public:
             not necessarily XPropertySet or XMultiPropertySet.  It
             is casted later to one of the two of them.
     */
-    explicit MultiPropertySetHandler (::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface> xObject);
+    explicit MultiPropertySetHandler (css::uno::Reference<
+        css::uno::XInterface> xObject);
     ~MultiPropertySetHandler();
     /** @descr  Add a property to handle.  The type given implicitly by the
             reference to a variable is used to create an instance of
@@ -152,7 +152,7 @@ private:
             containing the properties names.
         @return True if values could be derived.
     */
-    inline  bool    MultiGet    (const ::com::sun::star::uno::Sequence<
+    inline  bool    MultiGet    (const css::uno::Sequence<
         OUString> & rNameList);
 
     /** @descr  Try to use the XPropertySet interface to get the property
@@ -161,7 +161,7 @@ private:
             containing the properties names.
         @return True if values could be derived.
     */
-    inline  bool    SingleGet   (const ::com::sun::star::uno::Sequence<
+    inline  bool    SingleGet   (const css::uno::Sequence<
         OUString> & rNameList);
 
     /** @descr  STL map that maps from property names to polymorphic instances of
@@ -171,11 +171,11 @@ private:
     ::std::map< OUString, PropertyWrapperBase*, OUStringComparison> aPropertyList;
 
     /// The object from which to get the property values.
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    mxObject;
+    css::uno::Reference< css::uno::XInterface>    mxObject;
 };
 
-MultiPropertySetHandler::MultiPropertySetHandler (::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XInterface> xObject)
+MultiPropertySetHandler::MultiPropertySetHandler (css::uno::Reference<
+    css::uno::XInterface> xObject)
         :   mxObject (xObject)
 {
 }
@@ -190,7 +190,7 @@ MultiPropertySetHandler::~MultiPropertySetHandler()
 bool    MultiPropertySetHandler::GetProperties()
 {
     ::std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
-    ::com::sun::star::uno::Sequence< OUString> aNameList (aPropertyList.size());
+    css::uno::Sequence< OUString> aNameList (aPropertyList.size());
     int i;
     for (I=aPropertyList.begin(),i=0; I!=aPropertyList.end(); ++I)
         aNameList[i++] = I->second->msName;
@@ -200,22 +200,22 @@ bool    MultiPropertySetHandler::GetProperties()
     return true;
 }
 
-bool    MultiPropertySetHandler::MultiGet   (const ::com::sun::star::uno::Sequence<
+bool    MultiPropertySetHandler::MultiGet   (const css::uno::Sequence<
     OUString> & rNameList)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet> xMultiSet (
-        mxObject, ::com::sun::star::uno::UNO_QUERY);
+    css::uno::Reference< css::beans::XMultiPropertySet> xMultiSet (
+        mxObject, css::uno::UNO_QUERY);
     if (xMultiSet.is())
         try
         {
             ::std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
             int i;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> aValueList =
+            css::uno::Sequence< css::uno::Any> aValueList =
                 xMultiSet->getPropertyValues (rNameList);
             for (I=aPropertyList.begin(),i=0; I!=aPropertyList.end(); ++I)
                 I->second->SetValue (aValueList[i++]);
         }
-        catch (const ::com::sun::star::beans::UnknownPropertyException&)
+        catch (const css::beans::UnknownPropertyException&)
         {
             return false;
         }
@@ -225,11 +225,11 @@ bool    MultiPropertySetHandler::MultiGet   (const ::com::sun::star::uno::Sequen
     return true;
 }
 
-bool    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Sequence<
+bool    MultiPropertySetHandler::SingleGet  (const css::uno::Sequence<
     OUString> & rNameList)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xSingleSet (
-        mxObject, ::com::sun::star::uno::UNO_QUERY);
+    css::uno::Reference< css::beans::XPropertySet> xSingleSet (
+        mxObject, css::uno::UNO_QUERY);
     if (xSingleSet.is())
         try
         {
@@ -238,7 +238,7 @@ bool    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Sequen
             for (I=aPropertyList.begin(),i=0; I!=aPropertyList.end(); ++I)
                 I->second->SetValue (xSingleSet->getPropertyValue (rNameList[i++]));
         }
-        catch (const ::com::sun::star::beans::UnknownPropertyException&)
+        catch (const css::beans::UnknownPropertyException&)
         {
             return false;
         }

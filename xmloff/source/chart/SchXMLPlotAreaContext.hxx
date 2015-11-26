@@ -48,7 +48,7 @@ public:
     explicit SchXML3DSceneAttributesHelper( SvXMLImport& rImporter );
     virtual ~SchXML3DSceneAttributesHelper();
 
-    void getCameraDefaultFromDiagram( const ::com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram );
+    void getCameraDefaultFromDiagram( const css::uno::Reference< css::chart::XDiagram >& xDiagram );
 
 private:
     SchXML3DSceneAttributesHelper();
@@ -65,7 +65,7 @@ public:
 
     bool hasPosSize() const;
     bool isAutomatic() const;
-    ::com::sun::star::awt::Rectangle getRectangle() const { return css::awt::Rectangle( m_aPosition.X, m_aPosition.Y, m_aSize.Width, m_aSize.Height );}
+    css::awt::Rectangle getRectangle() const { return css::awt::Rectangle( m_aPosition.X, m_aPosition.Y, m_aSize.Width, m_aSize.Height );}
 
 private:
     bool hasSize() const;
@@ -73,8 +73,8 @@ private:
 
     SvXMLImport& m_rImport;
 
-    ::com::sun::star::awt::Point m_aPosition;
-    ::com::sun::star::awt::Size m_aSize;
+    css::awt::Point m_aPosition;
+    css::awt::Size m_aSize;
 
     bool m_bHasSizeWidth;
     bool m_bHasSizeHeight;
@@ -96,24 +96,24 @@ public:
                            bool & rAllRangeAddressesAvailable,
                            bool & rColHasLabels,
                            bool & rRowHasLabels,
-                           ::com::sun::star::chart::ChartDataRowSource & rDataRowSource,
+                           css::chart::ChartDataRowSource & rDataRowSource,
                            SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
                            const OUString& aChartTypeServiceName,
                            tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
-                           const ::com::sun::star::awt::Size & rChartSize );
+                           const css::awt::Size & rChartSize );
     virtual ~SchXMLPlotAreaContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 
 private:
     SchXMLImportHelper& mrImportHelper;
-    ::com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
-    ::com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > mxNewDoc;
+    css::uno::Reference< css::chart::XDiagram > mxDiagram;
+    css::uno::Reference< css::chart2::XChartDocument > mxNewDoc;
     ::std::vector< SchXMLAxis > maAxes;
     OUString& mrCategoriesAddress;
     SeriesDefaultsAndStyles& mrSeriesDefaultsAndStyles;
@@ -133,33 +133,32 @@ private:
     bool& m_rbHasRangeAtPlotArea;
     bool & mrColHasLabels;
     bool & mrRowHasLabels;
-    ::com::sun::star::chart::ChartDataRowSource & mrDataRowSource;
+    css::chart::ChartDataRowSource & mrDataRowSource;
     OUString maChartTypeServiceName;
 
     tSchXMLLSequencesPerIndex & mrLSequencesPerIndex;
 
     bool mbGlobalChartTypeUsedBySeries;
-    ::com::sun::star::awt::Size maChartSize;
+    css::awt::Size maChartSize;
 };
 
 class SchXMLDataPointContext : public SvXMLImportContext
 {
 private:
     ::std::list< DataRowPointStyle >& mrStyleList;
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > m_xSeries;
+    css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
     sal_Int32& mrIndex;
     bool mbSymbolSizeForSeriesIsMissingInFile;
 
 public:
     SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
                              ::std::list< DataRowPointStyle >& rStyleList,
-                             const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::chart2::XDataSeries >& xSeries, sal_Int32& rIndex,
-                                bool bSymbolSizeForSeriesIsMissingInFile );
+                             const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+                             sal_Int32& rIndex,
+                             bool bSymbolSizeForSeriesIsMissingInFile );
     virtual ~SchXMLDataPointContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 class SchXMLCoordinateRegionContext : public SvXMLImportContext
@@ -171,7 +170,7 @@ public:
             , const OUString& rLocalName
             , SchXMLPositonAttributesHelper& rPositioning );
     virtual ~SchXMLCoordinateRegionContext();
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
     SchXMLPositonAttributesHelper& m_rPositioning;
@@ -188,7 +187,7 @@ public:
 
 private:
     SchXMLImportHelper& mrImportHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart::X3DDisplay > mxWallFloorSupplier;
+    css::uno::Reference< css::chart::X3DDisplay > mxWallFloorSupplier;
     ContextType meContextType;
 
 public:
@@ -196,10 +195,10 @@ public:
                             SvXMLImport& rImport,
                             sal_uInt16 nPrefix,
                             const OUString& rLocalName,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >& xDiagram,
+                            css::uno::Reference< css::chart::XDiagram >& xDiagram,
                             ContextType eContextType );
     virtual ~SchXMLWallFloorContext();
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 class SchXMLStockContext : public SvXMLImportContext
@@ -214,7 +213,7 @@ public:
 
 private:
     SchXMLImportHelper& mrImportHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XStatisticDisplay > mxStockPropProvider;
+    css::uno::Reference< css::chart::XStatisticDisplay > mxStockPropProvider;
     ContextType meContextType;
 
 public:
@@ -222,10 +221,10 @@ public:
                         SvXMLImport& rImport,
                         sal_uInt16 nPrefix,
                         const OUString& rLocalName,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >& xDiagram,
+                        css::uno::Reference< css::chart::XDiagram >& xDiagram,
                         ContextType eContextType );
     virtual ~SchXMLStockContext();
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 class SchXMLStatisticsObjectContext : public SvXMLImportContext
@@ -244,27 +243,25 @@ public:
         const OUString& rLocalName,
         const OUString &rSeriesStyleName,
         ::std::list< DataRowPointStyle >& rStyleList,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >& xSeries,
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ContextType eContextType,
-        const ::com::sun::star::awt::Size & rChartSize,
+        const css::awt::Size & rChartSize,
         tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
 
     virtual ~SchXMLStatisticsObjectContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
     SchXMLImportHelper &                           mrImportHelper;
     ::std::list< DataRowPointStyle > &             mrStyleList;
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > m_xSeries;
+    css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
     ContextType                                    meContextType;
-    ::com::sun::star::awt::Size                    maChartSize;
+    css::awt::Size                                 maChartSize;
     OUString maSeriesStyleName;
     tSchXMLLSequencesPerIndex& mrLSequencesPerIndex;
 };

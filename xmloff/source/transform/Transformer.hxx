@@ -27,10 +27,10 @@
 #include <cppuhelper/implbase.hxx>
 
 class XMLTransformer : public ::cppu::WeakImplHelper<
-             ::com::sun::star::xml::sax::XExtendedDocumentHandler,
-             ::com::sun::star::lang::XServiceInfo,
-             ::com::sun::star::lang::XInitialization,
-             ::com::sun::star::lang::XUnoTunnel>
+             css::xml::sax::XExtendedDocumentHandler,
+             css::lang::XServiceInfo,
+             css::lang::XInitialization,
+             css::lang::XUnoTunnel>
 {
 };
 

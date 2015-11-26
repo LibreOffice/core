@@ -31,17 +31,17 @@ class XMLPMPropHdl_PageStyleLayout : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_PageStyleLayout();
     virtual bool            equals(
-                                const ::com::sun::star::uno::Any& rAny1,
-                                const ::com::sun::star::uno::Any& rAny2
+                                const css::uno::Any& rAny1,
+                                const css::uno::Any& rAny2
                                 ) const override;
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
-                                const ::com::sun::star::uno::Any& rValue,
+                                const css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
 };
@@ -54,12 +54,12 @@ public:
     virtual                 ~XMLPMPropHdl_NumFormat();
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
-                                const ::com::sun::star::uno::Any& rValue,
+                                const css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
 };
@@ -72,12 +72,12 @@ public:
     virtual                 ~XMLPMPropHdl_NumLetterSync();
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
-                                const ::com::sun::star::uno::Any& rValue,
+                                const css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
 };
@@ -90,12 +90,12 @@ public:
     virtual                 ~XMLPMPropHdl_PaperTrayNumber();
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
-                                const ::com::sun::star::uno::Any& rValue,
+                                const css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
 };
@@ -113,12 +113,12 @@ public:
 
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
-                                const ::com::sun::star::uno::Any& rValue,
+                                const css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
 };
@@ -131,12 +131,12 @@ public:
     virtual                 ~XMLPMPropHdl_CenterHorizontal();
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
-                                const ::com::sun::star::uno::Any& rValue,
+                                const css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
 };
@@ -147,12 +147,12 @@ public:
     virtual                 ~XMLPMPropHdl_CenterVertical();
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
-                                const ::com::sun::star::uno::Any& rValue,
+                                const css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
 };

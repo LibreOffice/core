@@ -35,8 +35,8 @@ class SvXMLImportContext;
 /** import the xsd:restriction element */
 class SchemaRestrictionContext : public TokenContext
 {
-    com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository> mxRepository;
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> mxDataType;
+    css::uno::Reference<css::xforms::XDataTypeRepository> mxRepository;
+    css::uno::Reference<css::beans::XPropertySet> mxDataType;
     OUString msTypeName;
     OUString msBaseName;
 
@@ -44,7 +44,7 @@ public:
     SchemaRestrictionContext( SvXMLImport& rImport,
                               sal_uInt16 nPrfx,
                               const OUString& rLName,
-                              com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& rRepository,
+                              css::uno::Reference<css::xforms::XDataTypeRepository>& rRepository,
                               const OUString& sTypeName );
     virtual ~SchemaRestrictionContext();
 
@@ -62,7 +62,7 @@ protected:
         sal_uInt16 nToken,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif

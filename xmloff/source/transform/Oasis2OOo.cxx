@@ -1152,7 +1152,7 @@ public:
 
     virtual ~XMLTableTransformerContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -1250,12 +1250,12 @@ public:
 
     virtual ~XMLBodyOASISTransformerContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -1279,7 +1279,7 @@ void XMLBodyOASISTransformerContext_Impl::StartElement(
 XMLTransformerContext* XMLBodyOASISTransformerContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {
     if (!m_bFirstChild)
     {
@@ -1306,7 +1306,7 @@ public:
 
     virtual ~XMLTabStopOASISTContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 XMLTabStopOASISTContext_Impl::XMLTabStopOASISTContext_Impl(
@@ -1436,7 +1436,7 @@ public:
 
     virtual ~XMLConfigItemTContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 
     virtual void Characters( const OUString& rChars ) override;
@@ -1546,7 +1546,7 @@ public:
 
     virtual ~XMLTrackedChangesOASISTContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 XMLTrackedChangesOASISTContext_Impl::XMLTrackedChangesOASISTContext_Impl(

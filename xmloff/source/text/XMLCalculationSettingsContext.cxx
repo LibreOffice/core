@@ -40,8 +40,7 @@ using namespace ::xmloff::token;
 XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImport,
                                     sal_uInt16 p_nPrefix,
                                     const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 : SvXMLImportContext ( rImport, p_nPrefix, rLocalName )
 , nYear( 1930 )
 {

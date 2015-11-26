@@ -28,18 +28,18 @@
 class SdXMLLayerSetContext : public SvXMLImportContext
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxLayerManager;
+    css::uno::Reference< css::container::XNameAccess > mxLayerManager;
 
 public:
 
     SdXMLLayerSetContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList);
     virtual ~SdXMLLayerSetContext();
 
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_LAYERIMP_HXX

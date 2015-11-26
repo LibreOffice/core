@@ -64,7 +64,7 @@ XMLFieldParamImportContext::XMLFieldParamImportContext(
 }
 
 
-void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> & xAttrList)
+void XMLFieldParamImportContext::StartElement(const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList)
 {
     SvXMLImport& rImport = GetImport();
     OUString sName;
@@ -217,7 +217,7 @@ void XMLTextMarkImportContext::EndElement()
                         if ((lcl_MarkType)nTmp==TypeFieldmark) {
                             if (xContent.is() && bImportAsField) {
                                 // setup fieldmark...
-                                Reference< ::com::sun::star::text::XFormField> xFormField(xContent, UNO_QUERY);
+                                Reference< css::text::XFormField> xFormField(xContent, UNO_QUERY);
                                 xFormField->setFieldType(OUString::createFromAscii(formFieldmarkName));
                                 if (xFormField.is() && m_rHelper.hasCurrentFieldCtx()) {
                                     m_rHelper.setCurrentFieldParamsTo(xFormField);
@@ -324,7 +324,7 @@ void XMLTextMarkImportContext::EndElement()
                             if ((lcl_MarkType)nTmp==TypeFieldmarkEnd) {
                                 if (xContent.is() && bImportAsField) {
                                     // setup fieldmark...
-                                    Reference< ::com::sun::star::text::XFormField> xFormField(xContent, UNO_QUERY);
+                                    Reference< css::text::XFormField> xFormField(xContent, UNO_QUERY);
                                     if (xFormField.is() && m_rHelper.hasCurrentFieldCtx()) {
 
                                         xFormField->setFieldType(fieldmarkTypeName);
@@ -355,7 +355,7 @@ void XMLTextMarkImportContext::EndElement()
 
 SvXMLImportContext *XMLTextMarkImportContext::CreateChildContext( sal_uInt16 nPrefix,
                                         const OUString& rLocalName,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >&  )
+                                        const css::uno::Reference< css::xml::sax::XAttributeList >&  )
 {
     return new XMLFieldParamImportContext(GetImport(), m_rHelper,
                 nPrefix, rLocalName);
@@ -415,7 +415,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
 
                 return xTextContent;
             }
-            catch (com::sun::star::lang::IllegalArgumentException &)
+            catch (css::lang::IllegalArgumentException &)
             {
                 OSL_FAIL("CreateAndInsertMark: cannot insert?");
                 return nullptr;

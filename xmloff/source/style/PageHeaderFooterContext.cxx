@@ -30,8 +30,7 @@ using ::xmloff::token::XML_HEADER_FOOTER_PROPERTIES;
 PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>&,
+                                      const css::uno::Reference< css::xml::sax::XAttributeList>&,
                                       ::std::vector< XMLPropertyState > & rTempProperties,
                                       const rtl::Reference < SvXMLImportPropertyMapper > &rTempMap,
                                       sal_Int32 nStart, sal_Int32 nEnd,
@@ -51,8 +50,7 @@ PageHeaderFooterContext::~PageHeaderFooterContext()
 
 SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                            const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 

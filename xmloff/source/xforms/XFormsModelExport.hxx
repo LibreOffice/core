@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 void exportXFormsModel( SvXMLExport&,
-                        const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& );
+                        const css::uno::Reference<css::beans::XPropertySet>& );
 
 #endif
 

@@ -41,18 +41,18 @@ using namespace ::xmloff::token;
 class XMLScriptChildContext : public SvXMLImportContext
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts >    m_xDocumentScripts;
+    css::uno::Reference< css::frame::XModel >                 m_xModel;
+    css::uno::Reference< css::document::XEmbeddedScripts >    m_xDocumentScripts;
     OUString m_aLanguage;
 
 public:
     XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& rxModel,
+        const css::uno::Reference< css::frame::XModel>& rxModel,
         const OUString& rLanguage );
     virtual ~XMLScriptChildContext();
 
     virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 };

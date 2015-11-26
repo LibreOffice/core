@@ -31,17 +31,17 @@ public:
     virtual ~XMLTextColumnsPropertyHandler ();
 
     virtual bool equals(
-            const ::com::sun::star::uno::Any& r1,
-            const ::com::sun::star::uno::Any& r2 ) const override;
+            const css::uno::Any& r1,
+            const css::uno::Any& r2 ) const override;
 
     /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
     virtual bool importXML(
             const OUString& rStrImpValue,
-            ::com::sun::star::uno::Any& rValue,
+            css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const ::com::sun::star::uno::Any& rValue,
+            const css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 

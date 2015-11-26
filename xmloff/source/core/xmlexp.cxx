@@ -165,7 +165,7 @@ public:
 
     virtual void    Characters( const OUString& i_rCharacters ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    virtual css::uno::Reference< css::uno::XComponentContext >
                     GetComponentContext() const override;
 private:
     SvXMLExport&                    m_rExport;
@@ -207,7 +207,7 @@ Reference< XComponentContext > SettingsExportFacade::GetComponentContext() const
 }
 
 class SvXMLExportEventListener : public cppu::WeakImplHelper<
-                            com::sun::star::lang::XEventListener >
+                            css::lang::XEventListener >
 {
 private:
     SvXMLExport*    pExport;
@@ -217,7 +217,7 @@ public:
     virtual                 ~SvXMLExportEventListener();
 
                             // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 SvXMLExportEventListener::SvXMLExportEventListener(SvXMLExport* pTempExport)
@@ -462,7 +462,7 @@ SvXMLExport::SvXMLExport(
 }
 
 SvXMLExport::SvXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     const OUString &rFileName,
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
@@ -497,7 +497,7 @@ SvXMLExport::SvXMLExport(
 }
 
 SvXMLExport::SvXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
@@ -671,7 +671,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 }
             }
         }
-        catch(const com::sun::star::uno::Exception&)
+        catch(const css::uno::Exception&)
         {
         }
     }
@@ -682,7 +682,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
 
 // XInitialize
 void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArguments )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     // #93186# we need to queryInterface every single Any with any expected outcome. This variable hold the queryInterface results.
 
@@ -871,13 +871,13 @@ void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException, std::exception)
 }
 
 OUString SAL_CALL SvXMLExport::getName(  )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return msFilterName;
 }
 
 void SAL_CALL SvXMLExport::setName( const OUString& )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     // do nothing, because it is not possible to set the FilterName
 }
@@ -1010,7 +1010,7 @@ void SvXMLExport::AddAttribute( const OUString& rQName,
 }
 
 void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
-        const ::com::sun::star::lang::Locale& rLocale, bool bWriteEmpty,
+        const css::lang::Locale& rLocale, bool bWriteEmpty,
         enum ::xmloff::token::XMLTokenEnum eClass )
 {
     if (rLocale.Variant.isEmpty())
@@ -1343,7 +1343,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                     bOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
-            catch(const com::sun::star::uno::Exception&)
+            catch(const css::uno::Exception&)
             {
             }
         }
@@ -1389,7 +1389,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 mxExtHandler.set( mxHandler, UNO_QUERY );
             }
         }
-        catch(const com::sun::star::uno::Exception&)
+        catch(const css::uno::Exception&)
         {
         }
     }

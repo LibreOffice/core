@@ -624,7 +624,7 @@ Any AnimationsImportHelperImpl::convertPath( const OUString& rValue )
 AnimationNodeContext::AnimationNodeContext(
         const Reference< XAnimationNode >& xParentNode,
         SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         AnimationsImportHelperImpl* pHelper /* = NULL */ )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpHelper( pHelper ),
@@ -726,7 +726,7 @@ AnimationNodeContext::~AnimationNodeContext()
         delete mpHelper;
 }
 
-void AnimationNodeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
+void AnimationNodeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )
 {
     // code of StartElement is moved to init_node that is now called
     // in c'tor before appending this node to its parent.
@@ -734,7 +734,7 @@ void AnimationNodeContext::StartElement( const ::com::sun::star::uno::Reference<
     // set when child nodes are appended.
 }
 
-void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {
     if( mxNode.is() ) try
     {
@@ -1152,7 +1152,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                     double fInterval = 0.0;
                     if( rValue.match("P") )
                     {
-                        ::com::sun::star::util::Duration aDuration;
+                        css::util::Duration aDuration;
                         if (::sax::Converter::convertDuration(aDuration, rValue))
                         {
                             fInterval = ((((aDuration.Hours * 60)
@@ -1240,7 +1240,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
 }
 
 SvXMLImportContext * AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     if( mxNode.is())
         return new AnimationNodeContext( mxNode, GetImport(), nPrefix, rLocalName, xAttrList, mpHelper );

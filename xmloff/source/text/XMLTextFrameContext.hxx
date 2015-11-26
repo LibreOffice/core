@@ -32,8 +32,7 @@ class XMLTextFrameContextHyperlink_Impl;
 
 class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHelper
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
+    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
 
     SvXMLImportContextRef m_xImplContext;
     SvXMLImportContextRef m_xReplImplContext;
@@ -43,7 +42,7 @@ class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHe
     OUString m_sTitle;
     OUString m_sDesc;
 
-    ::com::sun::star::text::TextContentAnchorType   m_eDefaultAnchorType;
+    css::text::TextContentAnchorType   m_eDefaultAnchorType;
 
     /* The <draw:name> can longer be used to distinguish Writer graphic/text box
        objects and Draw graphic/text box objects.
@@ -54,8 +53,7 @@ class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHe
     bool m_HasAutomaticStyleWithoutParentStyle;
     bool m_bSupportsReplacement;
 
-    bool CreateIfNotThere( ::com::sun::star::uno::Reference <
-        ::com::sun::star::beans::XPropertySet >& rPropSet );
+    bool CreateIfNotThere( css::uno::Reference < css::beans::XPropertySet >& rPropSet );
 
 protected:
     /// helper to get the created xShape instance, needs to be overridden
@@ -68,31 +66,28 @@ public:
     XMLTextFrameContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            ::com::sun::star::text::TextContentAnchorType eDfltAnchorType );
+            const css::uno::Reference<
+                css::xml::sax::XAttributeList > & xAttrList,
+            css::text::TextContentAnchorType eDfltAnchorType );
     virtual ~XMLTextFrameContext();
 
     virtual void EndElement() override;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
                        const OUString& rTargetFrameName,
                        bool bMap );
 
-    ::com::sun::star::text::TextContentAnchorType GetAnchorType() const;
+    css::text::TextContentAnchorType GetAnchorType() const;
 
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextContent > GetTextContent() const;
+    css::uno::Reference < css::text::XTextContent > GetTextContent() const;
 
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::drawing::XShape > GetShape() const;
+    css::uno::Reference < css::drawing::XShape > GetShape() const;
 };
 
 

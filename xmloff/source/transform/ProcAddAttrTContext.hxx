@@ -39,7 +39,7 @@ public:
 
     virtual ~XMLProcAddAttrTransformerContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 #endif  //  _XMLOFF_PROCADDATTRCONTEXT_HXX

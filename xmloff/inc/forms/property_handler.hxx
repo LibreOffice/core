@@ -33,7 +33,7 @@
 namespace xmloff
 {
 
-    typedef ::std::map< PropertyId, ::com::sun::star::uno::Any >    PropertyValues;
+    typedef ::std::map< PropertyId, css::uno::Any >    PropertyValues;
 
     class PropertyHandlerBase : public ::salhelper::SimpleReferenceObject
     {
@@ -46,7 +46,7 @@ namespace xmloff
         /** is a convenience method for XML attributes whose value comprises of only one UNO API property
         */
         virtual OUString
-            getAttributeValue( const ::com::sun::star::uno::Any& i_propertyValue ) const = 0;
+            getAttributeValue( const css::uno::Any& i_propertyValue ) const = 0;
 
         /** retrieves the values of the properties controlled by an XML attributed, described by a given attribute value
         */

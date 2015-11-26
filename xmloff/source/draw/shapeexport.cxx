@@ -573,7 +573,7 @@ namespace
 // This method exports the given XShape
 void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape,
                                  XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */,
-                                 com::sun::star::awt::Point* pRefPoint /* = NULL */,
+                                 css::awt::Point* pRefPoint /* = NULL */,
                                  SvXMLAttributeList* pAttrList /* = NULL */ )
 {
     SAL_INFO("xmloff", xShape->getShapeType());
@@ -1279,7 +1279,7 @@ void XMLShapeExport::ExportGraphicDefaults()
     }
 }
 
-void XMLShapeExport::onExport( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& )
+void XMLShapeExport::onExport( const css::uno::Reference < css::drawing::XShape >& )
 {
 }
 
@@ -1320,7 +1320,7 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
 {
     /* Get <TransformationInHoriL2R>, if it exist
        and if the document is exported into the OpenOffice.org file format.
-       This property only exists at service com::sun::star::text::Shape - the
+       This property only exists at service css::text::Shape - the
        Writer UNO service for shapes.
        This code is needed, because the positioning attributes in the
        OpenOffice.org file format are given in horizontal left-to-right layout
@@ -1354,7 +1354,7 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
 }
 
 void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2DHomMatrix& rMatrix, ::basegfx::B2DTuple& rTRScale,
-    double& fTRShear, double& fTRRotate, ::basegfx::B2DTuple& rTRTranslate, com::sun::star::awt::Point* pRefPoint)
+    double& fTRShear, double& fTRRotate, ::basegfx::B2DTuple& rTRTranslate, css::awt::Point* pRefPoint)
 {
     // decompose matrix
     rMatrix.decompose(rTRScale, rTRTranslate, fTRRotate, fTRShear);
@@ -1934,7 +1934,7 @@ void XMLShapeExport::ImpExportTextBoxShape(
 
 void XMLShapeExport::ImpExportRectangleShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, com::sun::star::awt::Point* pRefPoint)
+    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -2479,7 +2479,7 @@ void XMLShapeExport::ImpExportConnectorShape(
     /* Get <StartPositionInHoriL2R> and
        <EndPositionInHoriL2R>, if they exist and if the document is exported
        into the OpenOffice.org file format.
-       These properties only exist at service com::sun::star::text::Shape - the
+       These properties only exist at service css::text::Shape - the
        Writer UNO service for shapes.
        This code is needed, because the positioning attributes in the
        OpenOffice.org file format are given in horizontal left-to-right layout
@@ -2651,7 +2651,7 @@ void XMLShapeExport::ImpExportMeasureShape(
     /* Get <StartPositionInHoriL2R> and
        <EndPositionInHoriL2R>, if they exist and if the document is exported
        into the OpenOffice.org file format.
-       These properties only exist at service com::sun::star::text::Shape - the
+       These properties only exist at service css::text::Shape - the
        Writer UNO service for shapes.
        This code is needed, because the positioning attributes in the
        OpenOffice.org file format are given in horizontal left-to-right layout
@@ -2972,7 +2972,7 @@ void XMLShapeExport::ImpExportCaptionShape(
 
 void XMLShapeExport::ImpExportFrameShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, com::sun::star::awt::Point* pRefPoint)
+    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -3006,7 +3006,7 @@ void XMLShapeExport::ImpExportFrameShape(
 
 void XMLShapeExport::ImpExportAppletShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, com::sun::star::awt::Point* pRefPoint)
+    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -3061,7 +3061,7 @@ void XMLShapeExport::ImpExportAppletShape(
 
 void XMLShapeExport::ImpExportPluginShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, com::sun::star::awt::Point* pRefPoint)
+    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -3308,7 +3308,7 @@ static void lcl_StoreGltfFallback(
 
 void XMLShapeExport::ImpExportMediaShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, com::sun::star::awt::Point* pRefPoint)
+    XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -3609,7 +3609,7 @@ void XMLShapeExport::ImpExport3DShape(
 }
 
 /** helper for chart that adds all attributes of a 3d scene element to the export */
-void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet )
+void XMLShapeExport::export3DSceneAttributes( const css::uno::Reference< css::beans::XPropertySet >& xPropSet )
 {
     OUString aStr;
     OUStringBuffer sStringBuffer;
@@ -3727,7 +3727,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
 }
 
 /** helper for chart that exports all lamps from the propertyset */
-void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet )
+void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XPropertySet >& xPropSet )
 {
     // write lamps 1..8 as content
     OUString aStr;
@@ -3782,11 +3782,11 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
 }
 
 
-// using namespace ::com::sun::star::io;
+// using namespace css::io;
 // using namespace ::xmloff::EnhancedCustomShapeToken;
 
 
-void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter )
+void ExportParameter( OUStringBuffer& rStrBuffer, const css::drawing::EnhancedCustomShapeParameter& rParameter )
 {
     if ( !rStrBuffer.isEmpty() )
         rStrBuffer.append( ' ' );
@@ -3803,42 +3803,42 @@ void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing:
 
         switch( rParameter.Type )
         {
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
+            case css::drawing::EnhancedCustomShapeParameterType::EQUATION :
             {
                 rStrBuffer.append( "?f" + OUString::number( nValue ) );
             }
             break;
 
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
+            case css::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
             {
                 rStrBuffer.append( '$' );
                 rStrBuffer.append( OUString::number( nValue ) );
             }
             break;
 
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM :
+            case css::drawing::EnhancedCustomShapeParameterType::BOTTOM :
                 rStrBuffer.append( GetXMLToken( XML_BOTTOM ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT :
+            case css::drawing::EnhancedCustomShapeParameterType::RIGHT :
                 rStrBuffer.append( GetXMLToken( XML_RIGHT ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP :
+            case css::drawing::EnhancedCustomShapeParameterType::TOP :
                 rStrBuffer.append( GetXMLToken( XML_TOP ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT :
+            case css::drawing::EnhancedCustomShapeParameterType::LEFT :
                 rStrBuffer.append( GetXMLToken( XML_LEFT ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::XSTRETCH :
+            case css::drawing::EnhancedCustomShapeParameterType::XSTRETCH :
                 rStrBuffer.append( GetXMLToken( XML_XSTRETCH ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::YSTRETCH :
+            case css::drawing::EnhancedCustomShapeParameterType::YSTRETCH :
                 rStrBuffer.append( GetXMLToken( XML_YSTRETCH ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::HASSTROKE :
+            case css::drawing::EnhancedCustomShapeParameterType::HASSTROKE :
                 rStrBuffer.append( GetXMLToken( XML_HASSTROKE ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::HASFILL :
+            case css::drawing::EnhancedCustomShapeParameterType::HASFILL :
                 rStrBuffer.append( GetXMLToken( XML_HASFILL ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::WIDTH :
+            case css::drawing::EnhancedCustomShapeParameterType::WIDTH :
                 rStrBuffer.append( GetXMLToken( XML_WIDTH ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::HEIGHT :
+            case css::drawing::EnhancedCustomShapeParameterType::HEIGHT :
                 rStrBuffer.append( GetXMLToken( XML_HEIGHT ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGWIDTH :
+            case css::drawing::EnhancedCustomShapeParameterType::LOGWIDTH :
                 rStrBuffer.append( GetXMLToken( XML_LOGWIDTH ) ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT :
+            case css::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT :
                 rStrBuffer.append( GetXMLToken( XML_LOGHEIGHT ) ); break;
             default :
                 rStrBuffer.append( OUString::number( nValue ) );
@@ -3891,7 +3891,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                 {
                     case EAS_Position :
                     {
-                        com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition;
+                        css::drawing::EnhancedCustomShapeParameterPair aPosition;
                         if ( rPropVal.Value >>= aPosition )
                         {
                             ExportParameter( aStrBuffer, aPosition.First );
@@ -3928,7 +3928,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_Polar :
                     {
-                        com::sun::star::drawing::EnhancedCustomShapeParameterPair aPolar;
+                        css::drawing::EnhancedCustomShapeParameterPair aPolar;
                         if ( rPropVal.Value >>= aPolar )
                         {
                             ExportParameter( aStrBuffer, aPolar.First );
@@ -3940,7 +3940,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_RadiusRangeMinimum :
                     {
-                        com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
+                        css::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
                         if ( rPropVal.Value >>= aRadiusRangeMinimum )
                         {
                             ExportParameter( aStrBuffer, aRadiusRangeMinimum );
@@ -3951,7 +3951,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_RadiusRangeMaximum :
                     {
-                        com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
+                        css::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
                         if ( rPropVal.Value >>= aRadiusRangeMaximum )
                         {
                             ExportParameter( aStrBuffer, aRadiusRangeMaximum );
@@ -3962,7 +3962,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_RangeXMinimum :
                     {
-                        com::sun::star::drawing::EnhancedCustomShapeParameter aXRangeMinimum;
+                        css::drawing::EnhancedCustomShapeParameter aXRangeMinimum;
                         if ( rPropVal.Value >>= aXRangeMinimum )
                         {
                             ExportParameter( aStrBuffer, aXRangeMinimum );
@@ -3973,7 +3973,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_RangeXMaximum :
                     {
-                        com::sun::star::drawing::EnhancedCustomShapeParameter aXRangeMaximum;
+                        css::drawing::EnhancedCustomShapeParameter aXRangeMaximum;
                         if ( rPropVal.Value >>= aXRangeMaximum )
                         {
                             ExportParameter( aStrBuffer, aXRangeMaximum );
@@ -3984,7 +3984,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_RangeYMinimum :
                     {
-                        com::sun::star::drawing::EnhancedCustomShapeParameter aYRangeMinimum;
+                        css::drawing::EnhancedCustomShapeParameter aYRangeMinimum;
                         if ( rPropVal.Value >>= aYRangeMinimum )
                         {
                             ExportParameter( aStrBuffer, aYRangeMinimum );
@@ -3995,7 +3995,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                     break;
                     case EAS_RangeYMaximum :
                     {
-                        com::sun::star::drawing::EnhancedCustomShapeParameter aYRangeMaximum;
+                        css::drawing::EnhancedCustomShapeParameter aYRangeMaximum;
                         if ( rPropVal.Value >>= aYRangeMaximum )
                         {
                             ExportParameter( aStrBuffer, aYRangeMaximum );
@@ -4017,8 +4017,8 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
 }
 
 void ImpExportEnhancedPath( SvXMLExport& rExport,
-                            const uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >& rCoordinates,
-                            const uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments,
+                            const uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& rCoordinates,
+                            const uno::Sequence< css::drawing::EnhancedCustomShapeSegment >& rSegments,
                             bool bExtended = false )
 {
 
@@ -4035,7 +4035,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
         nSegments = 4;
     for ( j = i = 0; j < nSegments; j++ )
     {
-        com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
+        css::drawing::EnhancedCustomShapeSegment aSegment;
         if ( bSimpleSegments )
         {
             // if there are not enough segments we will default them
@@ -4044,25 +4044,25 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                 case 0 :
                 {
                     aSegment.Count = 1;
-                    aSegment.Command = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+                    aSegment.Command = css::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
                 }
                 break;
                 case 1 :
                 {
                     aSegment.Count = (sal_Int16)std::min( nCoords - 1, (sal_Int32)32767 );
-                    aSegment.Command = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                    aSegment.Command = css::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
                 }
                 break;
                 case 2 :
                 {
                     aSegment.Count = 1;
-                    aSegment.Command = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
+                    aSegment.Command = css::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
                 }
                 break;
                 case 3 :
                 {
                     aSegment.Count = 1;
-                    aSegment.Command = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                    aSegment.Command = css::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
                 }
                 break;
             }
@@ -4076,40 +4076,40 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
         sal_Int32 nParameter = 0;
         switch( aSegment.Command )
         {
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
                 aStrBuffer.append( 'Z' ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
                 aStrBuffer.append( 'N' ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
                 aStrBuffer.append( 'F' ); break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
                 aStrBuffer.append( 'S' ); break;
 
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
                 aStrBuffer.append( 'M' ); nParameter = 1; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::LINETO :
                 aStrBuffer.append( 'L' ); nParameter = 1; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
                 aStrBuffer.append( 'C' ); nParameter = 3; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
                 aStrBuffer.append( 'T' ); nParameter = 3; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
                 aStrBuffer.append( 'U' ); nParameter = 3; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
                 aStrBuffer.append( 'A' ); nParameter = 4; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARC :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::ARC :
                 aStrBuffer.append( 'B' ); nParameter = 4; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
                 aStrBuffer.append( 'W' ); nParameter = 4; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
                 aStrBuffer.append( 'V' ); nParameter = 4; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
                 aStrBuffer.append( 'X' ); nParameter = 1; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
                 aStrBuffer.append( 'Y' ); nParameter = 1; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO :
                 aStrBuffer.append( 'Q' ); nParameter = 2; break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
                 if ( bExtended ) {
                     aStrBuffer.append( 'G' );
                     nParameter = 2;
@@ -4119,25 +4119,25 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                     i += 2;
                 }
                 break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKEN :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::DARKEN :
                 if ( bExtended )
                     aStrBuffer.append( 'H' );
                 else
                     bNeedExtended = true;
                 break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS :
                 if ( bExtended )
                     aStrBuffer.append( 'I' );
                 else
                     bNeedExtended = true;
                 break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN :
                 if ( bExtended )
                     aStrBuffer.append( 'J' );
                 else
                     bNeedExtended = true;
                 break;
-            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS :
+            case css::drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS :
                 if ( bExtended )
                     aStrBuffer.append( 'K' );
                 else
@@ -4146,7 +4146,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
             default : // ups, seems to be something wrong
             {
                 aSegment.Count = 1;
-                aSegment.Command = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                aSegment.Command = css::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
             }
             break;
         }
@@ -4184,10 +4184,10 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
     bool bHandles = false;
     uno::Sequence< beans::PropertyValues > aHandles;
 
-    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
-    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+    uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
+    uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
 
-    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentValues;
+    uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentValues;
 
     OUString       aStr;
     OUStringBuffer aStrBuffer;
@@ -4294,7 +4294,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Depth :
                                     {
-                                        com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
+                                        css::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
                                         if ( rProp.Value >>= aDepthParaPair )
                                         {
                                             double fDepth = 0;
@@ -4449,7 +4449,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_RotateAngle :
                                     {
-                                        com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
+                                        css::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
                                         if ( rProp.Value >>= aRotateAngleParaPair )
                                         {
                                             ExportParameter( aStrBuffer, aRotateAngleParaPair.First );
@@ -4491,7 +4491,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Skew :
                                     {
-                                        com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
+                                        css::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
                                         if ( rProp.Value >>= aSkewParaPair )
                                         {
                                             ExportParameter( aStrBuffer, aSkewParaPair.First );
@@ -4539,7 +4539,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_Origin :
                                     {
-                                        com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
+                                        css::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
                                         if ( rProp.Value >>= aOriginParaPair )
                                         {
                                             ExportParameter( aStrBuffer, aOriginParaPair.First );
@@ -4587,14 +4587,14 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_TextPathMode :
                                     {
-                                        com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
+                                        css::drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
                                         if ( rProp.Value >>= eTextPathMode )
                                         {
                                             switch ( eTextPathMode )
                                             {
-                                                case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_NORMAL: aStr = GetXMLToken( XML_NORMAL ); break;
-                                                case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH  : aStr = GetXMLToken( XML_PATH );   break;
-                                                case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE : aStr = GetXMLToken( XML_SHAPE );  break;
+                                                case css::drawing::EnhancedCustomShapeTextPathMode_NORMAL: aStr = GetXMLToken( XML_NORMAL ); break;
+                                                case css::drawing::EnhancedCustomShapeTextPathMode_PATH  : aStr = GetXMLToken( XML_PATH );   break;
+                                                case css::drawing::EnhancedCustomShapeTextPathMode_SHAPE : aStr = GetXMLToken( XML_SHAPE );  break;
                                                 default:
                                                     break;
                                             }
@@ -4683,7 +4683,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_GluePoints :
                                     {
-                                        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair> aGluePoints;
+                                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> aGluePoints;
                                         if ( rProp.Value >>= aGluePoints )
                                         {
                                             sal_Int32 k, nElements = aGluePoints.getLength();
@@ -4707,9 +4707,9 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         {
                                             switch ( nGluePointType )
                                             {
-                                                case com::sun::star::drawing::EnhancedCustomShapeGluePointType::NONE     : aStr = GetXMLToken( XML_NONE );    break;
-                                                case com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS : aStr = GetXMLToken( XML_SEGMENTS ); break;
-                                                case com::sun::star::drawing::EnhancedCustomShapeGluePointType::RECT     : aStr = GetXMLToken( XML_RECTANGLE ); break;
+                                                case css::drawing::EnhancedCustomShapeGluePointType::NONE     : aStr = GetXMLToken( XML_NONE );    break;
+                                                case css::drawing::EnhancedCustomShapeGluePointType::SEGMENTS : aStr = GetXMLToken( XML_SEGMENTS ); break;
+                                                case css::drawing::EnhancedCustomShapeGluePointType::RECT     : aStr = GetXMLToken( XML_RECTANGLE ); break;
                                             }
                                             if ( !aStr.isEmpty() )
                                                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GLUE_POINT_TYPE, aStr );
@@ -4742,7 +4742,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_TextFrames :
                                     {
-                                        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aPathTextFrames;
+                                        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aPathTextFrames;
                                         if ( rProp.Value >>= aPathTextFrames )
                                         {
                                             if ( (sal_uInt16)aPathTextFrames.getLength() )
@@ -4799,7 +4799,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     if ( i )
                         aStrBuffer.append( ' ' );
 
-                    const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue& rAdj = aAdjustmentValues[ i ];
+                    const css::drawing::EnhancedCustomShapeAdjustmentValue& rAdj = aAdjustmentValues[ i ];
                     if ( rAdj.State == beans::PropertyState_DIRECT_VALUE )
                     {
                         if ( rAdj.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
@@ -4836,7 +4836,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
 
 void XMLShapeExport::ImpExportCustomShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, com::sun::star::awt::Point* pRefPoint )
+    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint )
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if ( xPropSet.is() )
@@ -4872,7 +4872,7 @@ void XMLShapeExport::ImpExportCustomShape(
     }
 }
 
-void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, com::sun::star::awt::Point* pRefPoint )
+void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint )
 {
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     uno::Reference< container::XNamed > xNamed(xShape, uno::UNO_QUERY);

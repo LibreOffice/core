@@ -63,7 +63,7 @@ inline bool StyleNameHash_Impl::operator()(
 }
 
 class StyleMap :
-    public ::cppu::WeakImplHelper< ::com::sun::star::lang::XUnoTunnel>,
+    public ::cppu::WeakImplHelper< css::lang::XUnoTunnel>,
     public std::unordered_map< StyleNameKey_Impl, OUString,
                             StyleNameHash_Impl, StyleNameHash_Impl >
 {
@@ -73,14 +73,13 @@ public:
     StyleMap();
     virtual ~StyleMap();
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     static StyleMap* getImplementation(
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface > ) throw();
+            css::uno::Reference< css::uno::XInterface > ) throw();
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(
-                const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_XMLOFF_INC_STYLEMAP_HXX

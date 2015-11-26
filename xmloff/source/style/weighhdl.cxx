@@ -42,18 +42,18 @@ struct FontWeightMapper
 
 FontWeightMapper const aFontWeightMap[] =
 {
-    { ::com::sun::star::awt::FontWeight::DONTKNOW,              0 },
-    { ::com::sun::star::awt::FontWeight::THIN,                  100 },
-    { ::com::sun::star::awt::FontWeight::ULTRALIGHT,            150 },
-    { ::com::sun::star::awt::FontWeight::LIGHT,                 250 },
-    { ::com::sun::star::awt::FontWeight::SEMILIGHT,             350 },
-    { ::com::sun::star::awt::FontWeight::NORMAL,                400 },
-    { ::com::sun::star::awt::FontWeight::NORMAL,                450 },
-    { ::com::sun::star::awt::FontWeight::SEMIBOLD,              600 },
-    { ::com::sun::star::awt::FontWeight::BOLD,                  700 },
-    { ::com::sun::star::awt::FontWeight::ULTRABOLD,             800 },
-    { ::com::sun::star::awt::FontWeight::BLACK,                 900 },
-    { ::com::sun::star::awt::FontWeight::DONTKNOW,             1000 }
+    { css::awt::FontWeight::DONTKNOW,              0 },
+    { css::awt::FontWeight::THIN,                  100 },
+    { css::awt::FontWeight::ULTRALIGHT,            150 },
+    { css::awt::FontWeight::LIGHT,                 250 },
+    { css::awt::FontWeight::SEMILIGHT,             350 },
+    { css::awt::FontWeight::NORMAL,                400 },
+    { css::awt::FontWeight::NORMAL,                450 },
+    { css::awt::FontWeight::SEMIBOLD,              600 },
+    { css::awt::FontWeight::BOLD,                  700 },
+    { css::awt::FontWeight::ULTRABOLD,             800 },
+    { css::awt::FontWeight::BLACK,                 900 },
+    { css::awt::FontWeight::DONTKNOW,             1000 }
 };
 
 // class XMLFmtBreakBeforePropHdl

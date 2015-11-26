@@ -24,8 +24,7 @@
 
 class XMLFrameOASISTransformerContext : public XMLTransformerContext
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
+    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
 
     OUString m_aElemQName;
 
@@ -33,8 +32,7 @@ class XMLFrameOASISTransformerContext : public XMLTransformerContext
 
     bool IsLinkedEmbeddedObject(
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& rAttrList );
+        const css::uno::Reference< css::xml::sax::XAttributeList >& rAttrList );
 
 public:
     XMLFrameOASISTransformerContext( XMLTransformerBase& rTransformer,
@@ -45,9 +43,9 @@ public:
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 

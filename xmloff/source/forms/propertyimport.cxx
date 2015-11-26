@@ -58,9 +58,9 @@ namespace xmloff
 //= PropertyConversion
 namespace
 {
-    ::com::sun::star::util::Time lcl_getTime(double _nValue)
+    css::util::Time lcl_getTime(double _nValue)
     {
-        ::com::sun::star::util::Time aTime;
+        css::util::Time aTime;
         sal_uInt64 nIntValue = static_cast<sal_uInt64>(_nValue * ::tools::Time::nanoSecPerDay);
         aTime.NanoSeconds = nIntValue % ::tools::Time::nanoSecPerSec;
         nIntValue /= ::tools::Time::nanoSecPerSec;
@@ -74,16 +74,16 @@ namespace
         return aTime;
     }
 
-    static ::com::sun::star::util::Date lcl_getDate( double _nValue )
+    static css::util::Date lcl_getDate( double _nValue )
     {
         Date aToolsDate((sal_uInt32)_nValue);
-        ::com::sun::star::util::Date aDate;
+        css::util::Date aDate;
         ::utl::typeConvert(aToolsDate, aDate);
         return aDate;
     }
 }
 
-Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpectedType,
+Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
     const OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap, const bool _bInvertBoolean )
 {
     Any aReturn;
@@ -160,11 +160,11 @@ Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_STRUCT:
         {
             sal_Int32 nType = 0;
-            if ( _rExpectedType.equals( ::cppu::UnoType< ::com::sun::star::util::Date >::get() ) )
+            if ( _rExpectedType.equals( ::cppu::UnoType< css::util::Date >::get() ) )
                 nType = TYPE_DATE;
-            else if ( _rExpectedType.equals( ::cppu::UnoType< ::com::sun::star::util::Time >::get() ) )
+            else if ( _rExpectedType.equals( ::cppu::UnoType< css::util::Time >::get() ) )
                 nType = TYPE_TIME;
-            else  if ( _rExpectedType.equals( ::cppu::UnoType< ::com::sun::star::util::DateTime >::get() ) )
+            else  if ( _rExpectedType.equals( ::cppu::UnoType< css::util::DateTime >::get() ) )
                 nType = TYPE_DATETIME;
 
             if ( nType )
@@ -197,10 +197,10 @@ Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpe
                     break;
                     case TYPE_DATETIME:
                     {
-                        ::com::sun::star::util::Time aTime = lcl_getTime(nValue);
-                        ::com::sun::star::util::Date aDate = lcl_getDate(nValue);
+                        css::util::Time aTime = lcl_getTime(nValue);
+                        css::util::Date aDate = lcl_getDate(nValue);
 
-                        ::com::sun::star::util::DateTime aDateTime;
+                        css::util::DateTime aDateTime;
                         aDateTime.NanoSeconds = aTime.NanoSeconds;
                         aDateTime.Seconds = aTime.Seconds;
                         aDateTime.Minutes = aTime.Minutes;
@@ -404,8 +404,8 @@ SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPref
 
 void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
 {
-    ::com::sun::star::beans::PropertyValue aPropValue;      // the property the instance imports currently
-    ::com::sun::star::uno::Type aPropType;          // the type of the property the instance imports currently
+    css::beans::PropertyValue aPropValue;      // the property the instance imports currently
+    css::uno::Type aPropType;          // the type of the property the instance imports currently
 
     OUString sType, sValue;
     const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
@@ -441,7 +441,7 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
     // the name of the property
     OSL_ENSURE(!aPropValue.Name.isEmpty(), "OSinglePropertyContext::StartElement: invalid property name!");
 
-    // needs to be translated into a ::com::sun::star::uno::Type
+    // needs to be translated into a css::uno::Type
     aPropType = PropertyConversion::xmlTypeToUnoType( sType );
     if( TypeClass_VOID == aPropType.getTypeClass() )
     {
@@ -508,7 +508,7 @@ void OListPropertyContext::EndElement()
 
     Sequence< Any > aListElements( m_aListValues.size() );
     Any* pListElement = aListElements.getArray();
-    com::sun::star::uno::Type aType = PropertyConversion::xmlTypeToUnoType( m_sPropertyType );
+    css::uno::Type aType = PropertyConversion::xmlTypeToUnoType( m_sPropertyType );
     for (   ::std::vector< OUString >::const_iterator values = m_aListValues.begin();
             values != m_aListValues.end();
             ++values, ++pListElement

@@ -42,10 +42,10 @@ namespace xmloff
         /** steps through a collection and exports all children of this collection
         */
         virtual void    exportCollectionElements(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection) = 0;
+            const css::uno::Reference< css::container::XIndexAccess >& _rxCollection) = 0;
 
         virtual OUString                             getObjectStyleName(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) = 0;
+            const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) = 0;
 
     protected:
         ~IFormsExportContext() {}
@@ -56,8 +56,8 @@ namespace xmloff
     {
     public:
         virtual void registerEvents(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxElement,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
+            const css::uno::Reference< css::beans::XPropertySet >& _rxElement,
+            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             ) = 0;
 
     protected:
@@ -69,7 +69,7 @@ namespace xmloff
     {
     public:
         virtual void registerEvents(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
+            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             ) = 0;
 
     protected:

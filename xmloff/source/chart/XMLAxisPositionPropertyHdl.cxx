@@ -50,7 +50,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
     {
         if( !m_bCrossingValue )
         {
-            rValue <<= ::com::sun::star::chart::ChartAxisPosition_START;
+            rValue <<= css::chart::ChartAxisPosition_START;
             bResult = true;
         }
     }
@@ -58,7 +58,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
     {
         if( !m_bCrossingValue )
         {
-            rValue <<= ::com::sun::star::chart::ChartAxisPosition_END;
+            rValue <<= css::chart::ChartAxisPosition_END;
             bResult = true;
         }
     }
@@ -66,7 +66,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
     {
         if( !m_bCrossingValue )
         {
-            rValue <<= ::com::sun::star::chart::ChartAxisPosition_ZERO;
+            rValue <<= css::chart::ChartAxisPosition_ZERO;
             bResult = true;
         }
     }
@@ -74,7 +74,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
     {
         if( !m_bCrossingValue )
         {
-            rValue <<= ::com::sun::star::chart::ChartAxisPosition_VALUE;
+            rValue <<= css::chart::ChartAxisPosition_VALUE;
             bResult = true;
         }
         else
@@ -107,19 +107,19 @@ bool XMLAxisPositionPropertyHdl::exportXML( OUString& rStrExpValue,
     }
     else
     {
-        ::com::sun::star::chart::ChartAxisPosition ePosition( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+        css::chart::ChartAxisPosition ePosition( css::chart::ChartAxisPosition_ZERO );
         rValue >>= ePosition;
         switch(ePosition)
         {
-            case ::com::sun::star::chart::ChartAxisPosition_START:
+            case css::chart::ChartAxisPosition_START:
                 rStrExpValue = GetXMLToken( XML_START );
                 bResult = true;
                 break;
-            case ::com::sun::star::chart::ChartAxisPosition_END:
+            case css::chart::ChartAxisPosition_END:
                 rStrExpValue = GetXMLToken( XML_END );
                 bResult = true;
                 break;
-            case ::com::sun::star::chart::ChartAxisPosition_ZERO:
+            case css::chart::ChartAxisPosition_ZERO:
                 ::sax::Converter::convertDouble( sValueBuffer, 0.0 );
                 rStrExpValue = sValueBuffer.makeStringAndClear();
                 bResult = true;
