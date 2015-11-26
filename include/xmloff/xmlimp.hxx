@@ -335,7 +335,7 @@ public:
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
     }
 
-    // Convert a local packe URL into either a graphic manager or a
+    // Convert a local package URL into either a graphic manager or a
     // internal package URL. The later one happens only if bLoadURL is true
     OUString ResolveGraphicObjectURL( const OUString& rURL, bool bLoadOnDemand );
     css::uno::Reference< css::io::XOutputStream >
