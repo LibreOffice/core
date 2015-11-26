@@ -93,7 +93,7 @@ class DocumentHandlerImpl :
     public ::cppu::WeakImplHelper< xml::sax::XDocumentHandler,
                                     xml::input::XNamespaceMapping,
                                     lang::XInitialization,
-                                    com::sun::star::lang::XServiceInfo >
+                                    css::lang::XServiceInfo >
 {
     friend class ExtendedAttributes;
 

@@ -35,41 +35,41 @@ namespace xmlscript
     // class XMLBasicExporterBase
 
     typedef ::cppu::WeakImplHelper<
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::document::XXMLBasicExporter > XMLBasicExporterBase_BASE;
+        css::lang::XServiceInfo,
+        css::lang::XInitialization,
+        css::document::XXMLBasicExporter > XMLBasicExporterBase_BASE;
 
     class XMLBasicExporterBase : public XMLBasicExporterBase_BASE
     {
     private:
-        ::osl::Mutex                                                                        m_aMutex;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-        bool                                                                                m_bOasis;
+        ::osl::Mutex                                              m_aMutex;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
+        css::uno::Reference< css::frame::XModel >                 m_xModel;
+        bool                                                      m_bOasis;
 
     public:
         XMLBasicExporterBase(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, bool bOasis );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext, bool bOasis );
         virtual ~XMLBasicExporterBase();
 
         // XServiceInfo
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XExporter
-        virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxDoc )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& rxDoc )
+            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
         // XFilter
-        virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL cancel()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
     };
 
     // class XMLBasicExporter
@@ -78,14 +78,14 @@ namespace xmlscript
     {
     public:
         explicit XMLBasicExporter(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         virtual ~XMLBasicExporter();
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+            throw (css::uno::RuntimeException, std::exception) override;
     };
 
     // class XMLOasisBasicExporter
@@ -94,14 +94,14 @@ namespace xmlscript
     {
     public:
         explicit XMLOasisBasicExporter(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         virtual ~XMLOasisBasicExporter();
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+            throw (css::uno::RuntimeException, std::exception) override;
     };
 
 }   // namespace xmlscript

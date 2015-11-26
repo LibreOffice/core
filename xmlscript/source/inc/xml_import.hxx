@@ -48,10 +48,10 @@ namespace xmlscript
     @return
             document handler for parser
 */
-::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+css::uno::Reference< css::xml::sax::XDocumentHandler >
 SAL_CALL createDocumentHandler(
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::xml::input::XRoot > const & xRoot,
+    css::uno::Reference<
+    css::xml::input::XRoot > const & xRoot,
     bool bSingleThreadedUse = true );
 
 }
