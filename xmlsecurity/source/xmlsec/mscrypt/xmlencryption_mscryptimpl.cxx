@@ -58,8 +58,8 @@ Reference< XXMLEncryptionTemplate >
 SAL_CALL XMLEncryption_MSCryptImpl::encrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( com::sun::star::xml::crypto::XMLEncryptionException,
-         com::sun::star::uno::SecurityException )
+) throw( css::xml::crypto::XMLEncryptionException,
+         css::uno::SecurityException )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
@@ -165,13 +165,13 @@ SAL_CALL XMLEncryption_MSCryptImpl::encrypt(
 
     //Encrypt the template
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 ) {
-        aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+        aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
         xmlSecEncCtxDestroy( pEncCtx ) ;
         pSecEnv->destroyKeysManager( pMngr );
         clearErrorRecorder();
         return aTemplate;
     }
-    aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+    aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
     xmlSecEncCtxDestroy( pEncCtx ) ;
     pSecEnv->destroyKeysManager( pMngr );
 
@@ -194,8 +194,8 @@ Reference< XXMLEncryptionTemplate > SAL_CALL
 XMLEncryption_MSCryptImpl::decrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( com::sun::star::xml::crypto::XMLEncryptionException ,
-         com::sun::star::uno::SecurityException) {
+) throw( css::xml::crypto::XMLEncryptionException ,
+         css::uno::SecurityException) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
     xmlNodePtr pEncryptedData = NULL ;
@@ -271,7 +271,7 @@ XMLEncryption_MSCryptImpl::decrypt(
 
     //Decrypt the template
     if( xmlSecEncCtxDecrypt( pEncCtx , pEncryptedData ) < 0 || pEncCtx->result == NULL ) {
-        aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+        aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
         xmlSecEncCtxDestroy( pEncCtx ) ;
         pSecEnv->destroyKeysManager( pMngr );
 
@@ -279,7 +279,7 @@ XMLEncryption_MSCryptImpl::decrypt(
         clearErrorRecorder();
         return aTemplate;
     }
-    aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+    aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
 #if 0 // This code block has been commented out since 2004,
       // but let's keep it here in case it contains some useful hints
       // for future work.

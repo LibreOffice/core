@@ -71,7 +71,7 @@ namespace
         virtual void ImplCommit() override;
 
     public:
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
         SaveODFItem();
         //See group ODF in Common.xcs
         bool isLessODF1_2()
@@ -81,7 +81,7 @@ namespace
     };
 
 void SaveODFItem::ImplCommit() {}
-void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SaveODFItem::Notify( const css::uno::Sequence< OUString >& ) {}
 
     SaveODFItem::SaveODFItem(): utl::ConfigItem(OUString(
         "Office.Common/Save")), m_nODF(0)
@@ -273,7 +273,7 @@ bool DigitalSignaturesDialog::Init()
     return bInit;
 }
 
-void DigitalSignaturesDialog::SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStore )
+void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore )
 {
     mxStore = rxStore;
     maSignatureHelper.SetStorage( mxStore, m_sODFVersion);
@@ -385,7 +385,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
         embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, false );
     uno::Reference< io::XOutputStream > xOutputStream(
         aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-    uno::Reference< com::sun::star::xml::sax::XWriter> xSaxWriter =
+    uno::Reference< css::xml::sax::XWriter> xSaxWriter =
         maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
     uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
@@ -424,14 +424,14 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         return;
     try
     {
-        uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
+        uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
 
-        uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
-            ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+        uno::Reference<css::security::XSerialNumberAdapter> xSerialNumberAdapter =
+            css::security::SerialNumberAdapter::create(mxCtx);
         ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnv, maCurrentSignatureInformations );
         if ( aChooser->Execute() == RET_OK )
         {
-            uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
+            uno::Reference< css::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
             if ( !xCert.is() )
             {
                 SAL_WARN( "xmlsecurity.dialogs", "no certificate selected" );
@@ -500,7 +500,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
 
             sal_Int32 nStatus = maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
 
-            if ( nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
+            if ( nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
             {
                 mbSignaturesChanged = true;
 
@@ -574,11 +574,11 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 {
     m_pSignaturesLB->Clear();
 
-    uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecEnv = maSignatureHelper.GetSecurityEnvironment();
-    uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
-        ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+    uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = maSignatureHelper.GetSecurityEnvironment();
+    uno::Reference<css::security::XSerialNumberAdapter> xSerialNumberAdapter =
+        css::security::SerialNumberAdapter::create(mxCtx);
 
-    uno::Reference< ::com::sun::star::security::XCertificate > xCert;
+    uno::Reference< css::security::XCertificate > xCert;
 
     size_t nInfos = maCurrentSignatureInformations.size();
     size_t nValidSigs = 0, nValidCerts = 0;
@@ -642,7 +642,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 // String with date and time information (#i20172#)
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
             }
-            bSigValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
+            bSigValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
             if ( bSigValid )
             {
@@ -746,8 +746,8 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
         css::uno::Reference<css::xml::crypto::XSecurityEnvironment > xSecEnv =
             maSignatureHelper.GetSecurityEnvironment();
-        css::uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
-            ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+        css::uno::Reference<css::security::XSerialNumberAdapter> xSerialNumberAdapter =
+            css::security::SerialNumberAdapter::create(mxCtx);
         // Use Certificate from doc, not from key store
         uno::Reference< css::security::XCertificate > xCert;
         if (!rInfo.ouX509Certificate.isEmpty())

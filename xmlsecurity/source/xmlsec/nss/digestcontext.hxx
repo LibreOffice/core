@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
-class ODigestContext : public cppu::WeakImplHelper< ::com::sun::star::xml::crypto::XDigestContext >
+class ODigestContext : public cppu::WeakImplHelper< css::xml::crypto::XDigestContext >
 {
 private:
     ::osl::Mutex m_aMutex;
@@ -52,8 +52,8 @@ public:
 
 
     // XDigestContext
-    virtual void SAL_CALL updateDigest( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL updateDigest( const css::uno::Sequence< ::sal_Int8 >& aData ) throw (css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
 };
 
 #endif
