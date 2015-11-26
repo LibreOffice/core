@@ -239,7 +239,7 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
     {
         Scheduler::ImplStartTimer(nMinPeriod, true);
         SAL_INFO("vcl.schedule", "Calculated minimum timeout as " << nMinPeriod << " and " <<
-                 (const char *)(bHasActiveIdles ? "has active idles" : "no idles"));
+                 (bHasActiveIdles ? "has active idles" : "no idles"));
     }
 
     return nMinPeriod;
