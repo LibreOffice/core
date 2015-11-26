@@ -89,7 +89,7 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
                         ADOCommand* pCom = (ADOCommand*)aVar.getIDispatch();
                         OLEString aBSTR;
                         pCom->get_CommandText(&aBSTR);
-                        rValue <<= (OUString) aBSTR;
+                        rValue <<= aBSTR.operator OUString();
                     }
                 }
                 break;
