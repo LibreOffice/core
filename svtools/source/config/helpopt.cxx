@@ -55,9 +55,6 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
     OUString        aSystem;
     OUString        sHelpStyleSheet;
 
-    typedef std::map <OUString, sal_Int32> MapString2Int;
-    MapString2Int   aURLIgnoreCounters;
-
     static Sequence< OUString > GetPropertyNames();
 
     virtual void    ImplCommit() override;

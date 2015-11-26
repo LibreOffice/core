@@ -135,7 +135,6 @@ private:
     glm::vec3 maDefaultCameraPosition;
     glm::vec3 maDefaultCameraDirection;
 
-    glm::vec3 maStepDirection;
     float mnMaxX;
     float mnMaxY;
     float mnDistance;

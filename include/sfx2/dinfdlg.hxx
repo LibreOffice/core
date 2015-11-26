@@ -420,7 +420,6 @@ private:
 
     sal_Int32                           m_nLineHeight;
     sal_Int32                           m_nScrollPos;
-    SvtSysLocale                        m_aSysLocale;
     std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;

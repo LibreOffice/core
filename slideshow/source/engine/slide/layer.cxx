@@ -34,23 +34,20 @@ namespace slideshow
 {
     namespace internal
     {
-        Layer::Layer( const basegfx::B2DRange& rMaxLayerBounds,
-                      Dummy                     ) :
+        Layer::Layer( Dummy                     ) :
             maViewEntries(),
             maBounds(),
             maNewBounds(),
-            maMaxBounds( rMaxLayerBounds ),
             mbBoundsDirty(false),
             mbBackgroundLayer(true),
             mbClipSet(false)
         {
         }
 
-        Layer::Layer( const basegfx::B2DRange& rMaxLayerBounds ) :
+        Layer::Layer() :
             maViewEntries(),
             maBounds(),
             maNewBounds(),
-            maMaxBounds( rMaxLayerBounds ),
             mbBoundsDirty(false),
             mbBackgroundLayer(false),
             mbClipSet(false)
@@ -264,15 +261,14 @@ namespace slideshow
             return maUpdateAreas.overlaps( rShape->getUpdateArea() );
         }
 
-        LayerSharedPtr Layer::createBackgroundLayer( const basegfx::B2DRange& rMaxLayerBounds )
+        LayerSharedPtr Layer::createBackgroundLayer()
         {
-            return LayerSharedPtr(new Layer( rMaxLayerBounds,
-                                             BackgroundLayer ));
+            return LayerSharedPtr(new Layer( BackgroundLayer ));
         }
 
-        LayerSharedPtr Layer::createLayer( const basegfx::B2DRange& rMaxLayerBounds )
+        LayerSharedPtr Layer::createLayer( )
         {
-            return LayerSharedPtr( new Layer( rMaxLayerBounds ) );
+            return LayerSharedPtr( new Layer );
         }
 
     }

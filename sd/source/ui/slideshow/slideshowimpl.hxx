@@ -341,8 +341,6 @@ private:
     Size            maPresSize;
     AnimationMode   meAnimationMode;
     OUString        maCharBuffer;
-    Pointer         maOldPointer;
-    Pointer         maPencil;
     VclPtr< ::sd::Window>   mpOldActiveWindow;
     Link<StarBASIC*,bool>   maStarBASICGlobalErrorHdl;
     unsigned long   mnChildMask;

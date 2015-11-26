@@ -228,7 +228,6 @@ void Migration::migrateSettingsIfNecessary()
 }
 
 MigrationImpl::MigrationImpl()
-    : m_vrVersions(new strings_v)
 {
 }
 

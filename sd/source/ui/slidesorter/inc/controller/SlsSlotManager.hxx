@@ -78,9 +78,6 @@ private:
     /// The controller for which we manage the slot calls.
     SlideSorter& mrSlideSorter;
 
-    typedef ::std::queue<Command*> CommandQueue;
-    CommandQueue maCommandQueue;
-
     /** Called by FuTemporary to show the slide show.
     */
     void ShowSlideShow (SfxRequest& rRequest);

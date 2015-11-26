@@ -139,7 +139,6 @@ private:
     ScDocument& mrDoc;
 
     std::unique_ptr<ScConditionalFormat> mpCurrentFormat;
-    std::unique_ptr<ScFormatEntry> mpCurrentEntry;
 
     condformat::ScFormatEntryType meEntryType;
 };
@@ -196,9 +195,6 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     ScOrcusAutoFilter maAutoFilter;
     ScOrcusSheetProperties maProperties;
     ScOrcusConditionalFormat maConditionalFormat;
-
-    typedef std::map<size_t, ScRangeData*> SharedFormulaContainer;
-    SharedFormulaContainer maSharedFormulas;
 
     int mnCellCount;
 

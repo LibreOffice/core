@@ -131,7 +131,6 @@ private:
 #if 0
     GLint m_RenderProID;
 #endif
-    glm::vec4 m_ClearColor;
 
     GLuint m_VertexBuffer;
 

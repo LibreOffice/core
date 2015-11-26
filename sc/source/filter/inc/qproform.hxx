@@ -55,8 +55,6 @@ class QProToSc : public ConverterBase
 {
 private:
     TokenId mnAddToken;
-    TokenId mnSubToken;
-    TokenId mn0Token;
     SvStream& maIn;
 
 public:

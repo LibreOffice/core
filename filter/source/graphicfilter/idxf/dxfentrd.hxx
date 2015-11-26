@@ -428,7 +428,6 @@ class DXFHatchEntity : public DXFBasicEntity
 
     public:
 
-        DXFVector   aElevationPoint;
         sal_Int32   nFlags;                         // 70 (solid fill = 1, pattern fill = 0)
         sal_Int32   nAssociativityFlag;             // 71 (associative = 1, non-associative = 0)
         sal_Int32   nBoundaryPathCount;             // 91

@@ -38,13 +38,10 @@ public:
 
     const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
 
-private:
-    XclFunctionProvider maFuncProv;     /// Excel function data provider.
 };
 
 XclImpFmlaCompImpl::XclImpFmlaCompImpl( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot ),
-    maFuncProv( rRoot )
+    XclImpRoot( rRoot )
 {
 }
 

@@ -44,27 +44,10 @@ namespace connectivity
                                     public  OPreparedStatement_BASE
         {
         protected:
-            struct Parameter
-            {
-                ::com::sun::star::uno::Any  aValue;
-                sal_Int32                   nDataType;
-
-                Parameter(const ::com::sun::star::uno::Any& rValue,
-                          sal_Int32                         rDataType) : aValue(rValue),nDataType(rDataType)
-                {
-                }
-
-            };
-
-            ::std::vector< Parameter>       m_aParameters;
-
             // Data attributes
-
-            sal_Int32                       m_nNumParams; // Number of parameter markers for the prepared statement
 
             OUString                             m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
-            bool                                    m_bPrepared;
             ::rtl::Reference< OResultSet >              m_pResultSet;
             ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;    // the parameter columns
             OValueRow                                   m_aParameterRow;

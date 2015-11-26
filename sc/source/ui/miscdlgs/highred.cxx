@@ -44,7 +44,6 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl:
         "modules/scalc/ui/showchangesdialog.ui")
     , pViewData(ptrViewData)
     , pDoc(ptrViewData->GetDocument())
-    , aLocalRangeName(*(pDoc->GetRangeName()))
 {
     m_pFilterCtr = VclPtr<SvxTPFilter>::Create(get<VclContainer>("box"));
     get(m_pHighlightBox, "showchanges");

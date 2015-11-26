@@ -58,8 +58,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             //  for this Statement
 
-            ::std::list< ::rtl::OUString>               m_aBatchList;
-
             ::rtl::Reference<Connection>                m_pConnection;
 
             ISC_STATUS_ARRAY                            m_statusVector;
@@ -103,7 +101,6 @@ namespace connectivity
 
         public:
 
-            ::cppu::OBroadcastHelper& rBHelper;
             explicit OStatementCommonBase(Connection* _pConnection);
             using OStatementCommonBase_Base::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 

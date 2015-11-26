@@ -44,7 +44,6 @@ namespace connectivity
 
             // Data attributes
 
-            ::com::sun::star::sdbc::SQLWarning      m_aLastWarning;
             MorkDriver*                             m_pDriver;      //  Pointer to the owning
                                                                     //  driver object
             OColumnAlias    m_aColumnAlias;

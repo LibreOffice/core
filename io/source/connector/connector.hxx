@@ -119,7 +119,6 @@ namespace stoc_connector
         void completeConnectionString();
 
         ::osl::ConnectorSocket m_socket;
-        ::osl::SocketAddr m_addr;
         oslInterlockedCount m_nStatus;
         OUString m_sDescription;
 

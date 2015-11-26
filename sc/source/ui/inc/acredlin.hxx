@@ -61,7 +61,6 @@ private:
     VclPtr<SvxAcceptChgCtr> m_pAcceptChgCtr;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
-    ScRangeName             aLocalRangeName;
     VclPtr<SvxTPFilter>     pTPFilter;
     VclPtr<SvxTPView>       pTPView;
     VclPtr<SvxRedlinTable>  pTheView; // #i48648 now SvHeaderTabListBox

@@ -116,11 +116,6 @@ protected:
         clicked over a master page.
     */
     sal_uInt16 mnDefaultClickAction;
-    /** Pages with pointers in this queue have their previews updated
-        eventually.  Filled by InvalidatePreview() and operated upon by
-        UpdatePreviews().
-    */
-    ::std::queue<sal_uInt16> maPreviewUpdateQueue;
 
     SdPage* GetSelectedMasterPage();
 

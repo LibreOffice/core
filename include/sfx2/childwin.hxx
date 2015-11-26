@@ -97,7 +97,6 @@ struct SfxChildWinContextFactory
 {
     SfxChildWinContextCtor  pCtor;      // Factory method
     sal_uInt16              nContextId; // Idenifier for SfxInterface
-    SfxChildWinInfo         aInfo;      // Configuration
 
     SfxChildWinContextFactory( SfxChildWinContextCtor pTheCtor, sal_uInt16 nID )
         : pCtor(pTheCtor)

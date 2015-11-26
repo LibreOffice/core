@@ -222,7 +222,6 @@ void SvMetaAttribute::Insert (SvSlotElementList&, const OString&, SvIdlDataBase&
 #define CTOR                            \
     : aCall0( CALL_VALUE, false )       \
     , aCall1( CALL_VALUE, false )       \
-    , aSbxDataType( 0, false )          \
     , pAttrList( nullptr )                 \
     , nType( TYPE_BASE )                \
     , bIsItem( false )                  \

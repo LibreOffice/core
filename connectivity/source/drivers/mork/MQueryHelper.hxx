@@ -169,7 +169,6 @@ namespace connectivity
             typedef std::vector< MQueryHelperResultEntry* > resultsArray;
 
             mutable ::osl::Mutex        m_aMutex;
-            ::osl::Condition    m_aCondition;
             resultsArray        m_aResults;
             sal_uInt32          m_nIndex;
             bool            m_bHasMore;

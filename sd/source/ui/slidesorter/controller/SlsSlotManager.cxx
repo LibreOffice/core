@@ -112,8 +112,7 @@ SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet);
 } // end of anonymous namespace
 
 SlotManager::SlotManager (SlideSorter& rSlideSorter)
-    : mrSlideSorter(rSlideSorter),
-      maCommandQueue()
+    : mrSlideSorter(rSlideSorter)
 {
 }
 

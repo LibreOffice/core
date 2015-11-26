@@ -76,8 +76,6 @@ namespace connectivity
 
             //  for this Statement
 
-            ::std::list< OUString>               m_aBatchList;
-
             OTable*                                     m_pTable;
             OConnection*                                m_pConnection;  // The owning Connection object
 
@@ -92,8 +90,6 @@ namespace connectivity
             ::std::vector<sal_Int32>                    m_aColMapping;
             ::std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
             ::std::vector<TAscendingOrder>              m_aOrderbyAscending;
-
-            ::cppu::OBroadcastHelper&                   rBHelper;
 
         protected:
 

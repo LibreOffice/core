@@ -105,9 +105,6 @@ public:
 
 class TextUndoSetAttribs: public TextUndo
 {
-private:
-    TextSelection       maSelection;
-
 public:
                         TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rESel );
                         virtual ~TextUndoSetAttribs();

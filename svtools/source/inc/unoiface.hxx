@@ -241,7 +241,6 @@ class SVTXRoadmap : public SVTXRoadmap_Base
 private:
     ItemListenerMultiplexer     maItemListeners;
 
-    RMItemData CurRMItemData;
     static RMItemData GetRMItemData( const css::container::ContainerEvent& _rEvent );
 
 protected:

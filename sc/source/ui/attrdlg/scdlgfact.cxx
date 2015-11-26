@@ -632,13 +632,13 @@ AbstractScSortWarningDlg* ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( 
 }
 
 AbstractScCondFormatManagerDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
-                                                                const ScAddress& rPos, int nId )
+                                                                int nId )
 {
     VclPtr<ScCondFormatManagerDlg> pDlg;
     switch( nId )
     {
         case RID_SCDLG_COND_FORMAT_MANAGER:
-            pDlg = VclPtr<ScCondFormatManagerDlg>::Create( pParent, pDoc, pFormatList, rPos );
+            pDlg = VclPtr<ScCondFormatManagerDlg>::Create( pParent, pDoc, pFormatList );
             break;
         default:
             break;

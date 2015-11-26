@@ -330,7 +330,6 @@ public:
 
 private:
     css::uno::Reference< css::text::XText > mxText;
-    ESelection maSelection;
 };
 
 
@@ -340,8 +339,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ESelection& rSel,
     const OUString& rFileName,
     const css::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler)
-:   SvXMLExport( xContext, "", rFileName, xHandler, (static_cast<frame::XModel*>(new SvxSimpleUnoModel())), FUNIT_CM ),
-    maSelection( rSel )
+:   SvXMLExport( xContext, "", rFileName, xHandler, (static_cast<frame::XModel*>(new SvxSimpleUnoModel())), FUNIT_CM )
 {
     SvxEditEngineSource aEditSource( pEditEngine );
 

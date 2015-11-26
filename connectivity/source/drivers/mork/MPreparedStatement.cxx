@@ -43,9 +43,7 @@ IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.mork.PreparedState
 
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString& sql)
     :OCommonStatement(_pConnection)
-    ,m_nNumParams(0)
     ,m_sSqlStatement(sql)
-    ,m_bPrepared(false)
     ,m_pResultSet()
 {
 }

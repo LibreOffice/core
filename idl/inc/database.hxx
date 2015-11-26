@@ -92,7 +92,6 @@ public:
     // list of used types while writing
     SvMetaTypeMemberList    aUsedTypes;
     OString                 aIFaceName;
-    SvIdentifier            aStructSlotId;
 
     void                    StartNewFile( const OUString& rName );
     void                    SetExportFile( const OUString& rName )

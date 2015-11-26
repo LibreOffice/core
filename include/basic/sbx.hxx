@@ -50,12 +50,11 @@ class SfxBroadcaster;
 struct SbxParamInfo
 {
     const OUString aName;          // Name of the parameter
-    SbxBaseRef     aTypeRef;       // Object, if object type
     SbxDataType    eType;          // Data type
     SbxFlagBits    nFlags;         // Flag-Bits
     sal_uInt32     nUserData;      // IDs etc.
-    SbxParamInfo( const OUString& s, SbxDataType t, SbxFlagBits n, SbxBase* b = nullptr )
-        : aName( s ), aTypeRef( b ), eType( t ), nFlags( n ), nUserData( 0 ) {}
+    SbxParamInfo( const OUString& s, SbxDataType t, SbxFlagBits n )
+        : aName( s ), eType( t ), nFlags( n ), nUserData( 0 ) {}
     ~SbxParamInfo() {}
 };
 

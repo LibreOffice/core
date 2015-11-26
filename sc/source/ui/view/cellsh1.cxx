@@ -2438,7 +2438,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
                 std::unique_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
-                    pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER));
+                    pTabViewShell->GetDialogParent(), pDoc, pList, RID_SCDLG_COND_FORMAT_MANAGER));
                 short nRet = pDlg->Execute();
                 if(nRet == RET_OK && pDlg->CondFormatsChanged())
                 {

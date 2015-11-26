@@ -98,10 +98,6 @@ SvxLineTabPage::SvxLineTabPage
     m_eRP( RP_LT ),
     m_bObjSelected( false ),
 
-    m_aXLStyle            ( drawing::LineStyle_DASH ),
-    m_aXWidth             ( 1 ),
-    m_aXDash              ( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ),
-    m_aXColor             ( OUString(), COL_LIGHTRED ),
     m_aXLineAttr          ( rInAttrs.GetPool() ),
     m_rXLSet              ( m_aXLineAttr.GetItemSet() ),
      m_pnLineEndListState( nullptr ),

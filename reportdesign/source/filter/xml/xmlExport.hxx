@@ -101,7 +101,6 @@ public:
     typedef ::std::map< Reference<XPropertySet> ,TGrid >            TSectionsGrid;
     typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
 private:
-    ::std::unique_ptr< TStringPair >                m_aAutoIncrement;
     TSectionsGrid                                   m_aSectionsGrid;
 
     TPropertyStyleMap                               m_aAutoStyleNames;

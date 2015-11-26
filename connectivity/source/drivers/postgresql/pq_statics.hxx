@@ -61,9 +61,7 @@ struct ColumnMetaData
         sal_Int32 _scale,
         bool _isCurrency,
         bool _isNullable,
-        bool _isAutoIncrement,
-        bool _isReadOnly,
-        bool _isSigned ) :
+        bool _isAutoIncrement ) :
         columnName( _columnName ),
         tableName( _tableName ),
         schemaTableName( _schemaTableName ),
@@ -73,9 +71,7 @@ struct ColumnMetaData
         scale( _scale ),
         isCurrency( _isCurrency ),
         isNullable( _isNullable ),
-        isAutoIncrement( _isAutoIncrement ),
-        isReadOnly( _isReadOnly ),
-        isSigned( _isSigned )
+        isAutoIncrement( _isAutoIncrement )
     {}
 
     OUString columnName;
@@ -88,20 +84,9 @@ struct ColumnMetaData
     bool isCurrency;
     bool isNullable;
     bool isAutoIncrement;
-    bool isReadOnly;
-    bool isSigned;
 };
 
 typedef std::vector< ColumnMetaData > ColumnMetaDataVector;
-
-struct TypeDetails
-{
-    sal_Int32 dataType;
-    sal_Int32 minScale;
-    sal_Int32 maxScale;  // in case nothing is given in getTypeInfo
-    bool isAutoIncrement;
-    bool isSearchable;
-};
 
 typedef std::unordered_map
 <

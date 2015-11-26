@@ -47,7 +47,7 @@ public:
 class ScCondFormatManagerDlg : public ModalDialog
 {
 public:
-    ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos);
+    ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList);
     virtual ~ScCondFormatManagerDlg();
     virtual void dispose() override;
 
@@ -65,7 +65,6 @@ private:
     VclPtr<ScCondFormatManagerWindow> m_pCtrlManager;
 
     ScDocument* mpDoc;
-    ScAddress maPos;
 
     DECL_LINK_TYPED(RemoveBtnHdl, Button*, void);
     DECL_LINK_TYPED(EditBtnClickHdl, Button*, void);

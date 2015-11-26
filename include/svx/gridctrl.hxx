@@ -217,7 +217,6 @@ public:
     };
 
 private:
-    vcl::Font              m_aDefaultFont;
     Link<sal_uInt16,int>   m_aMasterStateProvider;
     Link<sal_uInt16,bool>   m_aMasterSlotExecutor;
 

@@ -132,7 +132,6 @@ class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
     Entries m_Entries;
 
     sal_uLong nFieldFlags;
-    vcl::KeyCode aEmptyKeyCode; // fuer Bookmarks
 
 private:
     bool bHasSdOD;
