@@ -125,12 +125,10 @@ SAXHelper::SAXHelper( )
 
     if( m_pParserCtxt == nullptr )
     {
-#ifndef XMLSEC_NO_XSLT
-        xsltCleanupGlobals() ;
-#endif
 //      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
 //      in other parts of the office.
 //      xmlCleanupParser() ;
+//      and neither can we call xsltCleanupGlobals()
         throw cssu::RuntimeException() ;
     }
     else
@@ -146,12 +144,10 @@ SAXHelper::SAXHelper( )
         {
             xmlFreeParserCtxt( m_pParserCtxt ) ;
 
-#ifndef XMLSEC_NO_XSLT
-            xsltCleanupGlobals() ;
-#endif
 //      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
 //      in other parts of the office.
 //      xmlCleanupParser() ;
+//      and neither can we call xsltCleanupGlobals()
             m_pParserCtxt = nullptr ;
             throw cssu::RuntimeException() ;
         }
