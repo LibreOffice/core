@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dab17558_202234ba",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2015-11-26T06:21:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab17558_94ed2a28",
+      "range": {
+        "startLine": 1062,
+        "startChar": 36,
+        "endLine": 1062,
+        "endChar": 74
+      },
+      "revId": "97f2ea8795c9a67fe0e588494d6518bd3c8d5c7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_f4f2b605",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2015-11-18T13:38:18Z",
       "side": 1,
       "message": "Btw, why the name aDiscFuncNameStr? If it stands for description then use aDescFuncNameStr, it\u0027s not a disc ;-)",
+      "range": {
+        "startLine": 1155,
+        "startChar": 13,
+        "endLine": 1155,
+        "endChar": 29
+      },
+      "revId": "97f2ea8795c9a67fe0e588494d6518bd3c8d5c7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_802fa0a0",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2015-11-26T06:21:50Z",
+      "side": 1,
+      "message": "Oh, my mistake, Done. Thank you.",
+      "parentUuid": "dab17558_f4f2b605",
       "range": {
         "startLine": 1155,
         "startChar": 13,

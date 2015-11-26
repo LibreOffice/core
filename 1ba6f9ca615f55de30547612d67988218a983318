@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_602c3cac",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2015-11-26T06:21:50Z",
+      "side": 0,
+      "message": "Done. Thanks.",
+      "parentUuid": "dab17558_b4e82e18",
+      "revId": "1ba6f9ca615f55de30547612d67988218a983318",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_14dada78",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-18T13:38:18Z",
       "side": 0,
       "message": "Why remove this? You want the function names tiphelp to disappear if the user has chosen a function, don\u0027t you?",
+      "revId": "1ba6f9ca615f55de30547612d67988218a983318",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_c017e852",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1001137
+      },
+      "writtenOn": "2015-11-26T06:21:50Z",
+      "side": 0,
+      "message": "Done. Thanks.",
+      "parentUuid": "dab17558_14dada78",
       "revId": "1ba6f9ca615f55de30547612d67988218a983318",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
