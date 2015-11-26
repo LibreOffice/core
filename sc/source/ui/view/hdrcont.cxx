@@ -879,8 +879,8 @@ void ScHeaderControl::StopMarking()
 
     //  don't call pSelEngine->Reset, so selection across the parts of
     //  a split/frozen view is possible
-
-    ReleaseMouse();
+    if (IsMouseCaptured())
+        ReleaseMouse();
 }
 
 void ScHeaderControl::ShowDragHelp()

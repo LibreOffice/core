@@ -249,13 +249,13 @@ void Window::dispose()
 
     DBG_ASSERT( pSVData->maWinData.mpTrackWin.get() != this,
                 "Window::~Window(): Window is in TrackingMode" );
-    DBG_ASSERT( pSVData->maWinData.mpCaptureWin.get() != this,
-                "Window::~Window(): Window has the mouse captured" );
+    DBG_ASSERT(!IsMouseCaptured(),
+                "Window::~Window(): Window has the mouse captured");
 
     // due to old compatibility
     if ( pSVData->maWinData.mpTrackWin == this )
         EndTracking();
-    if ( pSVData->maWinData.mpCaptureWin == this )
+    if (IsMouseCaptured())
         ReleaseMouse();
     if ( pSVData->maWinData.mpDefDialogParent == this )
         pSVData->maWinData.mpDefDialogParent = nullptr;

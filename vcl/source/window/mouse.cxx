@@ -468,10 +468,10 @@ void Window::ReleaseMouse()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    SAL_WARN_IF( pSVData->maWinData.mpCaptureWin.get() != this, "vcl",
+    SAL_WARN_IF(!IsMouseCaptured(), "vcl",
                        "Window::ReleaseMouse(): window doesn't have the mouse capture" );
 
-    if ( pSVData->maWinData.mpCaptureWin.get() == this )
+    if (IsMouseCaptured())
     {
         pSVData->maWinData.mpCaptureWin = nullptr;
         mpWindowImpl->mpFrame->CaptureMouse( false );
