@@ -317,6 +317,9 @@ struct AnnotatingVisitor
                     double scale = (scaleW < scaleH) ? scaleW : scaleH;
                     aLocalTransform.scale(scale,scale);
                 }
+                else if( !maParentStates.back().maViewBox.isEmpty() )
+                                    maCurrState.maViewBox = maParentStates.back().maViewBox;
+
                 maCurrState.maCTM = maCurrState.maCTM*maCurrState.maTransform*aLocalTransform;
 
                 OSL_TRACE("annotateStyle - CTM is: %f %f %f %f %f %f",
