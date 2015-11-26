@@ -23,7 +23,6 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/vclptr.hxx>
 
 // - Dialog -

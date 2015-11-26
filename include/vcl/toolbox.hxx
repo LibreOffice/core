@@ -25,12 +25,10 @@
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/idle.hxx>
 #include <vector>
 
+class Timer;
 class UserDrawEvent;
-
 struct ImplToolItem;
 struct ImplToolSize;
 struct ImplToolBoxPrivateData;
@@ -67,6 +65,7 @@ struct ImplToolSize
     sal_uInt16 mnLines;
 };
 
+class Idle;
 class VCL_DLLPUBLIC ToolBox : public DockingWindow
 {
     friend class FloatingWindow;
@@ -76,7 +75,7 @@ private:
     ImplToolBoxPrivateData*   mpData;
     std::vector<ImplToolSize> maFloatSizes;
     ImageList           maImageList;
-    Idle                maIdle;
+    Idle               *mpIdle;
     Rectangle           maUpperRect;
     Rectangle           maLowerRect;
     Rectangle           maOutDockRect;
