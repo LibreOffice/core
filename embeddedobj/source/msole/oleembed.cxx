@@ -674,6 +674,7 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
 
 namespace
 {
+#ifndef WNT
     bool lcl_CopyStream(uno::Reference<io::XInputStream> xIn, uno::Reference<io::XOutputStream> xOut)
     {
         const sal_Int32 nChunkSize = 4096;
@@ -688,6 +689,7 @@ namespace
         } while (nRead == nChunkSize);
         return nTotalRead != 0;
     }
+#endif
 
     //Dump the objects content to a tempfile, just the "CONTENTS" stream if
     //there is one for non-compound documents, otherwise the whole content.
