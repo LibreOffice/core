@@ -261,7 +261,6 @@ PresenterSlideSorter::PresenterSlideSorter (
       mnCurrentSlideIndex(-1),
       mnSeparatorY(0),
       maSeparatorColor(0x00ffffff),
-      maCloseButtonCenter(),
       maCurrentSlideFrameBoundingBox(),
       mpCurrentSlideFrameRenderer(),
       mxPreviewFrame()

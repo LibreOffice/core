@@ -173,7 +173,6 @@ private:
     sal_Int32 mnCurrentSlideIndex;
     sal_Int32 mnSeparatorY;
     css::util::Color maSeparatorColor;
-    css::awt::Point maCloseButtonCenter;
     css::awt::Rectangle maCurrentSlideFrameBoundingBox;
     class CurrentSlideFrameRenderer;
     std::shared_ptr<CurrentSlideFrameRenderer> mpCurrentSlideFrameRenderer;
