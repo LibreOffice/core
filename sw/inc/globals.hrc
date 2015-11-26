@@ -101,7 +101,7 @@
 #define STR_HIDDEN                   (STR_STATUS_FIRST + 0)
 #define STR_ACTIVE                   (STR_STATUS_FIRST + 1)
 #define STR_INACTIVE                 (STR_STATUS_FIRST + 2)
-#define STR_MISC                     (RC_GLOBALS_BEGIN + 63)
+#define STR_MISC                     (RC_GLOBALS_BEGIN + 62)
 #define STR_EDIT_ENTRY               STR_MISC
 #define STR_DELETE_ENTRY             (STR_MISC + 1)
 
