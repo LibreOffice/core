@@ -133,27 +133,32 @@ void XclExpTablesManager::Initialize()
         TablesMapType::iterator it = maTablesMap.find( nTab);
         if (it == maTablesMap.end())
         {
-            XclExpTables* pNew;
+            ::std::shared_ptr< XclExpTables > pNew;
             switch( GetBiff() )
             {
                 case EXC_BIFF5:
-                    pNew = new XclExpTablesImpl5( GetRoot());
+                    pNew.reset( new XclExpTablesImpl5( GetRoot()));
                     break;
                 case EXC_BIFF8:
-                    pNew = new XclExpTablesImpl8( GetRoot());
+                    pNew.reset( new XclExpTablesImpl8( GetRoot()));
                     break;
                 default:
                     assert(!"Unknown BIFF type!");
                     continue;   // for
             }
-            it = maTablesMap.insert( nTab, pNew).first;
+            ::std::pair< TablesMapType::iterator, bool > ins( maTablesMap.insert( ::std::make_pair( nTab, pNew)));
+            if (!ins.second)
+            {
+                assert(!"XclExpTablesManager::Initialize - XclExpTables insert failed");
+                continue;   // for
+            }
+            it = ins.first;
         }
-        XclExpTables* p = it->second;
-        p->AppendTable( pDBData, ++nTableId);
+        it->second->AppendTable( pDBData, ++nTableId);
     }
 }
 
-XclExpTables* XclExpTablesManager::GetTablesBySheet( SCTAB nTab )
+::std::shared_ptr< XclExpTables > XclExpTablesManager::GetTablesBySheet( SCTAB nTab )
 {
     TablesMapType::iterator it = maTablesMap.find(nTab);
     return it == maTablesMap.end() ? nullptr : it->second;

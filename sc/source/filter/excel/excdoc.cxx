@@ -678,6 +678,9 @@ void ExcTable::FillAsTableXml()
     if (pImgData)
         aRecList.AppendRecord(std::shared_ptr<XclExpRecordBase>(pImgData));
 
+    // <tableParts> after <drawing> and before <extLst>
+    aRecList.AppendRecord( GetTablesManager().GetTablesBySheet( mnScTab));
+
     aRecList.AppendRecord( xExtLst );
 }
 
@@ -743,10 +746,6 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
     XclExpXmlPivotTables* pPT = GetXmlPivotTableManager().GetTablesBySheet(mnScTab);
     if (pPT)
         pPT->SaveXml(rStrm);
-
-    XclExpTables* pTables = GetTablesManager().GetTablesBySheet(mnScTab);
-    if (pTables)
-        pTables->SaveXml(rStrm);
 
     rStrm.GetCurrentStream()->endElement( XML_worksheet );
     rStrm.PopStream();
