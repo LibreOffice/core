@@ -63,7 +63,7 @@ namespace xmlscript
     }
 
     bool BasicElementBase::getBoolAttr( sal_Bool* pRet, const OUString& rAttrName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
+        const css::uno::Reference< css::xml::input::XAttributes >& xAttributes,
         sal_Int32 nUid )
     {
         if ( xAttributes.is() )
