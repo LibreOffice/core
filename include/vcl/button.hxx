@@ -92,9 +92,7 @@ public:
     bool                IsSmallSymbol() const;
     void                SetSmallSymbol(bool bSmall = true);
     virtual bool        set_property(const OString &rKey, const OString &rValue) override;
-
-    /// Sets the button state according to the FeatureStateEvent emitted by an Uno state change.
-    virtual void        SetStateUno(const css::frame::FeatureStateEvent& rEvent);
+    virtual void        statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
 protected:
 
@@ -187,7 +185,7 @@ public:
 
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }
-    virtual void    SetStateUno(const css::frame::FeatureStateEvent& rEvent) override;
+    virtual void    statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     void            Check( bool bCheck = true );
     bool            IsChecked() const;

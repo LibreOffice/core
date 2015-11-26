@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 #include <tools/poly.hxx>
+#include <svl/imageitm.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
@@ -1344,8 +1345,8 @@ IMPL_LINK_TYPED( ImplTBDragMgr, SelectHdl, Accelerator&, rAccel, void )
 void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     // initialize variables
-    ImplGetWindowImpl()->mbToolBox         = true;
-    mpData                = new ImplToolBoxPrivateData;
+    ImplGetWindowImpl()->mbToolBox = true;
+    mpData            = new ImplToolBoxPrivateData;
     mpFloatWin        = nullptr;
     mnDX              = 0;
     mnDY              = 0;
@@ -1386,8 +1387,8 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbCustomizeMode   = false;
     mbDragging        = false;
     mbMenuStrings     = false;
-    mbIsShift          = false;
-    mbIsKeyEvent = false;
+    mbIsShift         = false;
+    mbIsKeyEvent      = false;
     mbChangingHighlight = false;
     meButtonType      = ButtonType::SYMBOLONLY;
     meAlign           = WindowAlign::Top;
@@ -1397,6 +1398,7 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnLastFocusItemId = 0;
     mnKeyModifier     = 0;
     mnActivateCount   = 0;
+    mpStatusListener  = new WindowStatusListener(this, ".uno:ImageOrientation");
 
     mpIdle = new Idle("toolbox update");
     mpIdle->SetPriority( SchedulerPriority::RESIZE );
@@ -1657,6 +1659,10 @@ void ToolBox::dispose()
             pSVData->maCtrlData.mpTBDragMgr = nullptr;
         }
     }
+
+    if (mpStatusListener.is())
+        mpStatusListener->dispose();
+
     mpFloatWin.clear();
 
     delete mpIdle;
@@ -4538,6 +4544,21 @@ void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 
     maDataChangedHandler.Call( &rDCEvt );
+}
+
+void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
+{
+    // Update image mirroring/rotation
+    if ( Event.FeatureURL.Complete == ".uno:ImageOrientation" )
+    {
+        SfxImageItem aItem( 1, 0 );
+        aItem.PutValue( Event.State, 0 );
+
+        mbImagesMirrored = aItem.IsMirrored();
+        mnImagesRotationAngle = aItem.GetRotation();
+
+        UpdateImageOrientation();
+    }
 }
 
 bool ToolBox::PrepareToggleFloatingMode()

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/buttonstatuslistener.hxx>
+#include <vcl/windowstatuslistener.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -17,8 +17,8 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-ButtonStatusListener::ButtonStatusListener(Button* button, const rtl::OUString& aCommand) {
-    mButton = button;
+WindowStatusListener::WindowStatusListener(vcl::Window* window, const rtl::OUString& aCommand) {
+    mWindow = window;
 
     css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
@@ -42,25 +42,25 @@ ButtonStatusListener::ButtonStatusListener(Button* button, const rtl::OUString& 
     mxDispatch->addStatusListener(this, maCommandURL);
 }
 
-void ButtonStatusListener::statusChanged(const css::frame::FeatureStateEvent& rEvent)
+void WindowStatusListener::statusChanged(const css::frame::FeatureStateEvent& rEvent)
             throw(css::uno::RuntimeException, std::exception)
 {
-    mButton->SetStateUno(rEvent);
+    mWindow->statusChanged(rEvent);
 }
 
-void ButtonStatusListener::disposing(const css::lang::EventObject& /*Source*/)
+void WindowStatusListener::disposing(const css::lang::EventObject& /*Source*/)
             throw( css::uno::RuntimeException, std::exception )
 {
     mxDispatch.clear();
 }
 
-void ButtonStatusListener::dispose()
+void WindowStatusListener::dispose()
 {
     if (mxDispatch.is()) {
         mxDispatch->removeStatusListener(this, maCommandURL);
         mxDispatch.clear();
     }
-    mButton.clear();
+    mWindow.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

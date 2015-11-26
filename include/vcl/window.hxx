@@ -38,6 +38,7 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <memory>
 
 class VirtualDevice;
@@ -1254,13 +1255,15 @@ public:
                                                         const Point& rDestOff, VirtualDevice& rSaveDevice );
 
     const SystemEnvData*                GetSystemData() const;
-    css::uno::Any          GetSystemDataAny() const;
+    css::uno::Any                       GetSystemDataAny() const;
+
+    /// XStatusListener
+    virtual void                        statusChanged(const css::frame::FeatureStateEvent& /*rEvent*/) {};
 
     // API to set/query the component interfaces
-    virtual css::uno::Reference< css::awt::XWindowPeer >
-                                        GetComponentInterface( bool bCreate = true );
+    virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface( bool bCreate = true );
 
-    void                        SetComponentInterface( css::uno::Reference< css::awt::XWindowPeer > xIFace );
+    void                                SetComponentInterface( css::uno::Reference< css::awt::XWindowPeer > xIFace );
 
     /** @name Accessibility
      */
