@@ -35,6 +35,7 @@ static bool handleEmbeddedMWAWGraphicObject(const librevenge::RVNGBinaryData &da
 static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
     OdsGenerator exporter;
+    exporter.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWGraphicObject);
     exporter.addDocumentHandler(pHandler, streamType);
     return MWAWDocument::decodeSpreadsheet(data, &exporter);
 }

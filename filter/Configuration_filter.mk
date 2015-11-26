@@ -343,6 +343,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_MacWritePro \
 	writer_Mariner_Write \
 	writer_MindWrite \
+	writer_MWStyle \
 	writer_Nisus_Writer \
 	writer_TeachText \
 	writer_TexEdit \
@@ -405,6 +406,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	MacWrite \
 	MacWritePro \
 	Mariner_Write \
+	MWStyle \
 	MindWrite \
 	Nisus_Writer \
 	TeachText \
@@ -592,6 +594,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,f
 	draw_MacDrawPro \
 	draw_Mac_Works \
 	draw_MacPaint \
+	draw_PixelPaint \
 	draw_SuperPaint \
 	draw_PageMaker_Document \
 ))
@@ -618,6 +621,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.x
 	MacDrawPro_Draw \
 	Mac_Works_Draw \
 	MacPaint_Draw \
+	PixelPaint_Draw \
 	SuperPaint_Draw \
 	PageMakerDocument \
 ))
