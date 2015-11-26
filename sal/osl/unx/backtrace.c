@@ -138,7 +138,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 #include <stdio.h>
 #include "backtrace.h"
 
-#define FRAME_PTR_OFFSET 1
+#define FRAME_PTR_OFFSET 3
 #define FRAME_OFFSET 0
 
 int backtrace( void **buffer, int max_frames )
