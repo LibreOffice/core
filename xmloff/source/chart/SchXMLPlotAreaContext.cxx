@@ -969,7 +969,6 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     ::std::list< DataRowPointStyle >& rStyleList,
     const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
     ContextType eContextType,
-    const awt::Size & rChartSize,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex) :
 
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
@@ -977,7 +976,6 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
         mrStyleList( rStyleList ),
         m_xSeries( xSeries ),
         meContextType( eContextType ),
-        maChartSize( rChartSize ),
         maSeriesStyleName( rSeriesStyleName),
         mrLSequencesPerIndex(rLSequencesPerIndex)
 {}

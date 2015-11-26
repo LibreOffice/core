@@ -245,7 +245,6 @@ public:
         ::std::list< DataRowPointStyle >& rStyleList,
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ContextType eContextType,
-        const css::awt::Size & rChartSize,
         tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
 
     virtual ~SchXMLStatisticsObjectContext();
@@ -261,7 +260,6 @@ private:
     ::std::list< DataRowPointStyle > &             mrStyleList;
     css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
     ContextType                                    meContextType;
-    css::awt::Size                                 maChartSize;
     OUString maSeriesStyleName;
     tSchXMLLSequencesPerIndex& mrLSequencesPerIndex;
 };

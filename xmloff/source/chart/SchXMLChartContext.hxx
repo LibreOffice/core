@@ -93,7 +93,6 @@ private:
     SchXMLImportHelper& mrImportHelper;
 
     OUString maMainTitle, maSubTitle;
-    css::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
     OUString m_aXLinkHRefAttributeToIndicateDataProvider;
     bool m_bHasRangeAtPlotArea;
     bool m_bHasTableElement;

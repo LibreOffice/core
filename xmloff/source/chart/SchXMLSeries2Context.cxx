@@ -661,7 +661,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
                 nPrefix, rLocalName, msAutoStyleName,
                 mrStyleList, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_MEAN_VALUE_LINE,
-                maChartSize, mrLSequencesPerIndex );
+                mrLSequencesPerIndex );
             break;
         case XML_TOK_SERIES_REGRESSION_CURVE:
             pContext = new SchXMLRegressionCurveObjectContext(
@@ -675,7 +675,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
                 nPrefix, rLocalName, msAutoStyleName,
                 mrStyleList, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_ERROR_INDICATOR,
-                maChartSize, mrLSequencesPerIndex );
+                mrLSequencesPerIndex );
             break;
 
         case XML_TOK_SERIES_DATA_POINT:
