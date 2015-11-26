@@ -157,7 +157,7 @@ void Scheduler::CallbackTaskScheduling(bool ignore)
     Scheduler::ProcessTaskScheduling( false );
 }
 
-void Scheduler::ProcessTaskScheduling( bool bTimerOnly )
+bool Scheduler::ProcessTaskScheduling( bool bTimerOnly )
 {
     ImplSchedulerData* pSchedulerData;
 
@@ -168,6 +168,23 @@ void Scheduler::ProcessTaskScheduling( bool bTimerOnly )
 
         pSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
         pSchedulerData->Invoke();
+        return true;
+    }
+    else
+        return false;
+}
+
+void Scheduler::ProcessEventsToIdle()
+{
+    // FIXME: really we should process incoming OS events too ...
+    int nSanity = 1000;
+    while (Scheduler::ProcessTaskScheduling(false))
+    {
+        if (nSanity-- < 0)
+        {
+            SAL_WARN("vcl.schedule", "Unexpected volume of events to process");
+            break;
+        }
     }
 }
 
