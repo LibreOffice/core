@@ -72,10 +72,6 @@ namespace vista{
 
 namespace
 {
-    // controlling event notifications
-    const bool STARTUP_SUSPENDED = true;
-    const bool STARTUP_ALIVE     = false;
-
     css::uno::Sequence< OUString > SAL_CALL VistaFilePicker_getSupportedServiceNames()
     {
         css::uno::Sequence< OUString > aRet(2);
