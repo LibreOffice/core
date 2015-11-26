@@ -47,8 +47,8 @@ namespace dxcanvas
         public:
             DXColorBuffer( const COMReference<surface_type>& rSurface,
                            const ::basegfx::B2IVector&       rSize ) :
-                mpSurface(rSurface),
                 maSize(rSize),
+                mpSurface(rSurface),
                 mbAlpha(false)
             {
             }
@@ -113,8 +113,8 @@ namespace dxcanvas
 
             GDIColorBuffer( const BitmapSharedPtr&      rSurface,
                             const ::basegfx::B2IVector& rSize ) :
-                mpGDIPlusBitmap(rSurface),
                 maSize(rSize),
+                mpGDIPlusBitmap(rSurface),
                 mbAlpha(true)
             {
             }
