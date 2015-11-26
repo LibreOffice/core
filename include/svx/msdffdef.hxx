@@ -673,27 +673,6 @@ enum MSO_FillType {
    mso_fillBackground         // Use the background fill color/pattern
 };
 
-// MSO_SHADETYPE - how to interpret the colors in a shaded fill.
-enum MSO_ShadeType {
-   mso_shadeNone  = 0,        // Interpolate without correction between RGBs
-   mso_shadeGamma = 1,        // Apply gamma correction to colors
-   mso_shadeSigma = 2,        // Apply a sigma transfer function to position
-   mso_shadeBand  = 4,        // Add a flat band at the start of the shade
-   mso_shadeOneColor = 8,     // This is a one color shade
-
-   /* A parameter for the band or sigma function can be stored in the top
-      16 bits of the value - this is a proportion of *each* band of the
-      shade to make flat (or the approximate equal value for a sigma
-      function).  NOTE: the parameter is not used for the sigma function,
-      instead a built in value is used.  This value should not be changed
-      from the default! */
-   mso_shadeParameterShift = 16,
-   mso_shadeParameterMask  = 0xffff0000,
-
-   mso_shadeDefault = (mso_shadeGamma|mso_shadeSigma|
-                     (16384<<mso_shadeParameterShift))
-};
-
 // MSOLINESTYLE - compound line style
 enum MSO_LineStyle {
    mso_lineSimple,          // Single line (of width lineWidth)
