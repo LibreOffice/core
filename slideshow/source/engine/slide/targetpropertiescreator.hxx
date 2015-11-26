@@ -34,7 +34,10 @@ namespace slideshow
     {
         namespace TargetPropertiesCreator
         {
-            uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode );
+            /// Generate shape property list - set bInitial to true for initial slide state
+            uno::Sequence< animations::TargetProperties > SAL_CALL createTargetProperties(
+                const uno::Reference< animations::XAnimationNode >& rootNode,
+                bool bInitial );
         }
 
     } // namespace internal
