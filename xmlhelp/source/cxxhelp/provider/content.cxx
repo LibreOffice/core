@@ -169,7 +169,6 @@ private:
     uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
     uno::Sequence< beans::Property >             m_seq;
-    uno::Sequence< ucb::NumberedSortingInfo >    m_seqSort;
     URLParameter                                 m_aURLParameter;
     Databases*                                   m_pDatabases;
 
@@ -179,13 +178,11 @@ public:
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< ucb::XContentProvider >&  xProvider,
         const uno::Sequence< beans::Property >& seq,
-        const uno::Sequence< ucb::NumberedSortingInfo >& seqSort,
         const URLParameter& rURLParameter,
         Databases* pDatabases )
         : m_xContext( xContext ),
           m_xProvider( xProvider ),
           m_seq( seq ),
-          m_seqSort( seqSort ),
           m_aURLParameter( rURLParameter ),
           m_pDatabases( pDatabases )
     {
@@ -209,7 +206,6 @@ private:
     uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
     uno::Sequence< beans::Property >             m_seq;
-    uno::Sequence< ucb::NumberedSortingInfo >    m_seqSort;
     URLParameter                                 m_aURLParameter;
     Databases*                                   m_pDatabases;
 
@@ -219,13 +215,11 @@ public:
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< ucb::XContentProvider >&  xProvider,
         const uno::Sequence< beans::Property >& seq,
-        const uno::Sequence< ucb::NumberedSortingInfo >& seqSort,
         const URLParameter& rURLParameter,
         Databases* pDatabases )
         : m_xContext( rxContext ),
           m_xProvider( xProvider ),
           m_seq( seq ),
-          m_seqSort( seqSort ),
           m_aURLParameter( rURLParameter ),
           m_pDatabases( pDatabases )
     {
@@ -343,7 +337,6 @@ uno::Any SAL_CALL Content::execute(
                         m_xContext,
                         m_xProvider.get(),
                         aOpenCommand.Properties,
-                        aOpenCommand.SortingInfo,
                         m_aURLParameter,
                         m_pDatabases));
             aRet <<= xSet;
@@ -360,7 +353,6 @@ uno::Any SAL_CALL Content::execute(
                         m_xContext,
                         m_xProvider.get(),
                         aOpenCommand.Properties,
-                        aOpenCommand.SortingInfo,
                         m_aURLParameter,
                         m_pDatabases ) );
             aRet <<= xSet;
