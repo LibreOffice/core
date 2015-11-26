@@ -556,7 +556,7 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
         sal_Int32 counter = 0;
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
         std::vector< uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
-        uno::Sequence<uno::Reference<xml::dom::XDocument> > xCustomXmlDomPropsListTemp(aSeqs.getLength());
+        std::vector< uno::Reference<xml::dom::XDocument> > aCustomXmlDomPropsList;
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
@@ -583,7 +583,7 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
                 if(mxCustomXmlProsDom.is() && customXmlTemp.is())
                 {
                     aCustomXmlDomList.push_back(customXmlTemp);
-                    xCustomXmlDomPropsListTemp[counter] = mxCustomXmlProsDom;
+                    aCustomXmlDomPropsList.push_back(mxCustomXmlProsDom);
                     counter++;
                     resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
                 }
@@ -591,9 +591,8 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
             }
         }
 
-        xCustomXmlDomPropsListTemp.realloc(counter);
         mxCustomXmlDomList = comphelper::containerToSequence(aCustomXmlDomList);
-        mxCustomXmlDomPropsList = xCustomXmlDomPropsListTemp;
+        mxCustomXmlDomPropsList = comphelper::containerToSequence(aCustomXmlDomPropsList);
     }
 }
 
