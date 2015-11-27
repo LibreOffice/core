@@ -22,10 +22,6 @@ interface XToolkitExperimental : XToolkit2
   /** Process all pending idle events
    */
   void processEventsToIdle();
-
-  /** Get misc. information for User-Agent:
-   */
-  string getHWOSConfInfo();
 };
 
 }; }; }; };
