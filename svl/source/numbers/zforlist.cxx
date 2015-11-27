@@ -779,6 +779,8 @@ void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
 {
     FillKeywordTable( rKeywords, LANGUAGE_ENGLISH_US );
 
+    // Replace upper case "GENERAL" with proper case "General".
+    rKeywords[ NF_KEY_GENERAL ] = GetStandardName( LANGUAGE_ENGLISH_US );
     // Remap codes unknown to Excel.
     rKeywords[ NF_KEY_NN ] = "DDD";
     rKeywords[ NF_KEY_NNN ] = "DDDD";
