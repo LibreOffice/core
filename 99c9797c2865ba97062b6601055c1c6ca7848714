@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_e67204ad",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-11-27T21:28:44Z",
+      "side": 1,
+      "message": "Is there a reason why you rename it? It is no longer a functor and can not be used in a place where a function or functor is expected.",
+      "revId": "99c9797c2865ba97062b6601055c1c6ca7848714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_066e28c9",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1591,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-11-27T21:28:44Z",
+      "side": 1,
+      "message": "This variable should be defined after the return;",
+      "revId": "99c9797c2865ba97062b6601055c1c6ca7848714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_466830bb",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-11-27T21:28:44Z",
+      "side": 1,
+      "message": "I would not dynamically allocate the handler. Instead I would allocate it on the stack.",
+      "revId": "99c9797c2865ba97062b6601055c1c6ca7848714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_26652ce1",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-11-27T21:28:44Z",
+      "side": 1,
+      "message": "If I\u0027m not wrong there is just one case that will result in a formula cell. Why not handle this there?",
+      "revId": "99c9797c2865ba97062b6601055c1c6ca7848714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_866218d7",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2632,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-11-27T21:28:44Z",
+      "side": 1,
+      "message": "Why did you remove the std::for_each with the functor?",
+      "revId": "99c9797c2865ba97062b6601055c1c6ca7848714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_06a58803",
+        "filename": "sc/source/core/data/documentimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-11-27T21:28:44Z",
+      "side": 1,
+      "message": "This can be moved out of the loop.",
+      "revId": "99c9797c2865ba97062b6601055c1c6ca7848714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_a69f5cb3",
+        "filename": "sc/source/core/data/documentimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-11-27T21:28:44Z",
+      "side": 1,
+      "message": "This can be moved out of the loop.",
+      "revId": "99c9797c2865ba97062b6601055c1c6ca7848714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e6a964e1",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-11-27T21:28:44Z",
+      "side": 1,
+      "message": "Why do we need to set the flag for all columns when we insert a column?",
+      "revId": "99c9797c2865ba97062b6601055c1c6ca7848714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_46af90e3",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-11-27T21:28:44Z",
+      "side": 1,
+      "message": "Same question here.",
+      "revId": "99c9797c2865ba97062b6601055c1c6ca7848714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
