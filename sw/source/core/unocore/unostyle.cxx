@@ -380,29 +380,25 @@ sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PARA>(const SwDoc &rDoc, OUString
 }
 
 template<>
-sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_FRAME>(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_FRAME>(const SwDoc &rDoc, OUString* pString, sal_Int32 nIndex)
 {
+    constexpr sal_Int32 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
+    nIndex -= nBaseCount;
     sal_Int32 nCount = 0;
-    const sal_Int32 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
-    nIndex = nIndex - nBaseCount;
-    const size_t nArrLen = rDoc.GetFrameFormats()->size();
-    for( size_t i = 0; i < nArrLen; ++i )
+    for(const auto pFormat : *rDoc.GetFrameFormats())
     {
-        const SwFrameFormat* pFormat = (*rDoc.GetFrameFormats())[ i ];
         if(pFormat->IsDefault() || pFormat->IsAuto())
             continue;
-        if ( IsPoolUserFormat ( pFormat->GetPoolFormatId() ) )
+        if(!IsPoolUserFormat(pFormat->GetPoolFormatId()))
+            continue;
+        if(nIndex == nCount)
         {
-            if ( nIndex == nCount )
-            {
-                *pString = pFormat->GetName();
-                break;
-            }
-            nCount++;
+            *pString = pFormat->GetName();
+            break;
         }
+        nCount++;
     }
-    nCount += nBaseCount;
-    return nCount;
+    return nCount + nBaseCount;
 }
 
 template<>
@@ -423,7 +419,7 @@ sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PAGE>(const SwDoc &rDoc, OUString
                 *pString = rDesc.GetName();
                 break;
             }
-            nCount++;
+            ++nCount;
         }
     }
     nCount += nBaseCount;
