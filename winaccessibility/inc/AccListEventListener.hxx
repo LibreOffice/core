@@ -41,7 +41,7 @@ public:
     virtual ~AccListEventListener();
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException) override;
 
     //for active descendant changed event
     virtual void HandleActiveDescendantChangedEvent(
