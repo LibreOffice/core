@@ -17,6 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+#include <map>
+#include <vector>
+
 #include <vclhelperbufferdevice.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/bitmapex.hxx>
