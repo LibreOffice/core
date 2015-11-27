@@ -90,16 +90,27 @@
 #include <memory>
 #include <set>
 
-#define STYLE_FAMILY_COUNT 5            // we have 5 style families
-
-const sal_uInt16 aStyleByIndex[] =
+namespace
 {
-    SFX_STYLE_FAMILY_CHAR,
-    SFX_STYLE_FAMILY_PARA,
-    SFX_STYLE_FAMILY_PAGE,
-    SFX_STYLE_FAMILY_FRAME,
-    SFX_STYLE_FAMILY_PSEUDO
-};
+    struct StyleFamilyEntry
+    {
+        const SfxStyleFamily m_eFamily;
+        const SwGetPoolIdFromName m_aPoolId;
+        const OUString m_sName;
+        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString sName)
+                : m_eFamily(eFamily)
+                , m_aPoolId(aPoolId)
+                , m_sName(sName)
+            {}
+    };
+    static const std::vector<StyleFamilyEntry> our_vStyleFamilyEntries {
+        { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles" },
+        { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles" },
+        { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles" },
+        { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles" },
+        { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles" }
+    };
+}
 
 // Already implemented autostyle families: 3
 #define AUTOSTYLE_FAMILY_COUNT 3
@@ -112,24 +123,14 @@ const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
 
 using namespace ::com::sun::star;
 
-static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum ( SfxStyleFamily eFamily )
+static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
 {
-    switch ( eFamily )
-    {
-        case SFX_STYLE_FAMILY_CHAR:
-            return nsSwGetPoolIdFromName::GET_POOLID_CHRFMT;
-        case SFX_STYLE_FAMILY_PARA:
-            return nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL;
-        case SFX_STYLE_FAMILY_FRAME:
-            return nsSwGetPoolIdFromName::GET_POOLID_FRMFMT;
-        case SFX_STYLE_FAMILY_PAGE:
-            return nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC;
-        case SFX_STYLE_FAMILY_PSEUDO:
-            return nsSwGetPoolIdFromName::GET_POOLID_NUMRULE;
-        default:
-            OSL_ENSURE(false, "someone asking for all styles in unostyle.cxx!" );
-            return nsSwGetPoolIdFromName::GET_POOLID_CHRFMT;
-    }
+    const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+            [eFamily] (const StyleFamilyEntry& e) { return e.m_eFamily == eFamily; });
+    if(pEntry != our_vStyleFamilyEntries.end())
+        return pEntry->m_aPoolId;
+    SAL_WARN("sw.uno", "someone asking for all styles in unostyle.cxx!" );
+    return nsSwGetPoolIdFromName::GET_POOLID_CHRFMT;
 }
 
 class SwAutoStylesEnumImpl
@@ -185,52 +186,33 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
         uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-// the index comes from const unsigned short aStyleByIndex[] = ...
-    uno::Any aRet;
     if(!IsValid())
         throw uno::RuntimeException();
-    if(Name=="CharacterStyles" )
-        aRet = getByIndex(0);
-    else if(Name=="ParagraphStyles" )
-        aRet = getByIndex(1);
-    else if(Name=="FrameStyles" )
-        aRet = getByIndex(3);
-    else if(Name=="PageStyles" )
-        aRet = getByIndex(2);
-    else if(Name=="NumberingStyles" )
-        aRet = getByIndex(4);
-    else
+    const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+        [&Name] (const StyleFamilyEntry& e) { return e.m_sName == Name; });
+    if(pEntry == our_vStyleFamilyEntries.end())
         throw container::NoSuchElementException();
-    return aRet;
+    return getByIndex(pEntry-our_vStyleFamilyEntries.begin());
 }
 
 uno::Sequence< OUString > SwXStyleFamilies::getElementNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aNames(STYLE_FAMILY_COUNT);
-    OUString* pNames = aNames.getArray();
-    pNames[0] = "CharacterStyles";
-    pNames[1] = "ParagraphStyles";
-    pNames[2] = "FrameStyles";
-    pNames[3] = "PageStyles";
-    pNames[4] = "NumberingStyles";
+    uno::Sequence< OUString > aNames(our_vStyleFamilyEntries.size());
+    std::transform(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+            aNames.begin(), [] (const StyleFamilyEntry& e) { return e.m_sName; });
     return aNames;
 }
 
 sal_Bool SwXStyleFamilies::hasByName(const OUString& Name) throw( uno::RuntimeException, std::exception )
 {
-    if( Name=="CharacterStyles" ||
-        Name=="ParagraphStyles" ||
-        Name=="FrameStyles" ||
-        Name=="PageStyles" ||
-        Name=="NumberingStyles" )
-        return sal_True;
-    else
-        return sal_False;
+    const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+        [&Name] (const StyleFamilyEntry& e) { return e.m_sName == Name; });
+    return pEntry != our_vStyleFamilyEntries.end();
 }
 
 sal_Int32 SwXStyleFamilies::getCount() throw( uno::RuntimeException, std::exception )
 {
-    return STYLE_FAMILY_COUNT;
+    return our_vStyleFamilyEntries.size();
 }
 
 uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
@@ -238,19 +220,19 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    if(nIndex < 0 || nIndex >= STYLE_FAMILY_COUNT)
+    if(nIndex < 0 || nIndex >= static_cast<sal_Int32>(our_vStyleFamilyEntries.size()))
         throw lang::IndexOutOfBoundsException();
     if(IsValid())
     {
         uno::Reference< container::XNameContainer >  aRef;
-        const sal_uInt16 nType = aStyleByIndex[nIndex];
-        switch( nType )
+        auto eFamily = our_vStyleFamilyEntries[nIndex].m_eFamily;
+        switch( eFamily )
         {
             case SFX_STYLE_FAMILY_CHAR:
             {
                 if(!m_xCharStyles.is())
                 {
-                    m_xCharStyles = new SwXStyleFamily(m_pDocShell, nType);
+                    m_xCharStyles = new SwXStyleFamily(m_pDocShell, eFamily);
                 }
                 aRef = m_xCharStyles;
             }
@@ -259,25 +241,25 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
             {
                 if(!m_xParaStyles.is())
                 {
-                    m_xParaStyles = new SwXStyleFamily(m_pDocShell, nType);
+                    m_xParaStyles = new SwXStyleFamily(m_pDocShell, eFamily);
                 }
                 aRef = m_xParaStyles;
             }
             break;
-            case SFX_STYLE_FAMILY_PAGE     :
+            case SFX_STYLE_FAMILY_PAGE:
             {
                 if(!m_xPageStyles.is())
                 {
-                    m_xPageStyles = new SwXStyleFamily(m_pDocShell, nType);
+                    m_xPageStyles = new SwXStyleFamily(m_pDocShell, eFamily);
                 }
                 aRef = m_xPageStyles;
             }
             break;
-            case SFX_STYLE_FAMILY_FRAME    :
+            case SFX_STYLE_FAMILY_FRAME:
             {
                 if(!m_xFrameStyles.is())
                 {
-                    m_xFrameStyles = new SwXStyleFamily(m_pDocShell, nType);
+                    m_xFrameStyles = new SwXStyleFamily(m_pDocShell, eFamily);
                 }
                 aRef = m_xFrameStyles;
             }
@@ -286,11 +268,13 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
             {
                 if(!m_xNumberingStyles.is())
                 {
-                    m_xNumberingStyles = new SwXStyleFamily(m_pDocShell, nType);
+                    m_xNumberingStyles = new SwXStyleFamily(m_pDocShell, eFamily);
                 }
                 aRef = m_xNumberingStyles;
             }
             break;
+            case SFX_STYLE_FAMILY_ALL:
+                assert(false);
         }
         aRet.setValue(&aRef, cppu::UnoType<container::XNameContainer>::get());
     }
