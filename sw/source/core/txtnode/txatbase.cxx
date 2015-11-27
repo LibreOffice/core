@@ -117,6 +117,11 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
             oValue = "rubytext: " + rFormat.GetText().toUtf8();
             break;
         }
+    case RES_TXTATR_META:
+        {
+            pWhich = "meta";
+            break;
+        }
     default:
         break;
     }
