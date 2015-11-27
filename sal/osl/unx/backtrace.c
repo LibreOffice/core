@@ -19,7 +19,7 @@
  *
  *************************************************************/
 
-
+#include "sal/types.h"
 
 
 #ifdef SOLARIS
@@ -184,20 +184,12 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
-#if defined X86_64
-                    fprintf( fp, "%s+0x%lx", dli.dli_fname, offset );
-#else
-                    fprintf( fp, "%s+0x%x", dli.dli_fname, offset );
-#endif
+                    fprintf( fp, "%s+0x%" SAL_PRI_PTRDIFFT "x", dli.dli_fname, offset );
                 }
                 if ( dli.dli_sname && dli.dli_saddr )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_saddr;
-#if defined X86_64
-                    fprintf( fp, "(%s+0x%lx)", dli.dli_sname, offset );
-#else
-                    fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
-#endif
+                    fprintf( fp, "(%s+0x%" SAL_PRI_PTRDIFFT "x)", dli.dli_sname, offset );
                 }
             }
             fprintf( fp, "[0x%p]\n", *pFramePtr );
