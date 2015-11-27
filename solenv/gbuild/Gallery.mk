@@ -14,19 +14,6 @@
 gb_Gallery_TRANSLATE := $(SRCDIR)/solenv/bin/desktop-translate.pl
 gb_Gallery_INSTDIR := $(LIBO_SHARE_FOLDER)/gallery
 
-# BRAND_BASE_DIR is for resource files
-define gb_Gallery__make_env_args
-"-env:BRAND_BASE_DIR=$(call gb_Helper_make_url,$(INSTROOT_FOR_BUILD))" \
-"-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry)" \
-"-env:UNO_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target_for_build,ure/services)) \
-	$(foreach item,$(gb_Gallery__UNO_COMPONENTS),\
-		$(call gb_Helper_make_url,$(call gb_ComponentTarget_get_target_for_build,$(item))))" \
-"-env:UNO_TYPES=$(foreach item,offapi udkapi,\
-	$(call gb_Helper_make_url,$(call gb_UnoApi_get_target,$(item))))" \
--env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT_FOR_BUILD)/$(LIBO_URE_LIB_FOLDER_FOR_BUILD)) \
--env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER_FOR_BUILD))
-endef
-
 define gb_Gallery__command
 $(call gb_Output_announce,$(2),$(true),GAL,1)
 $(call gb_Helper_abbreviate_dirs,\
@@ -37,7 +24,6 @@ $(call gb_Helper_abbreviate_dirs,\
 			SAL_USE_VCLPLUGIN=svp \
 		)) \
 		$(call gb_Executable_get_command,gengal,$(ICECREAM_RUN)) \
-			$(call gb_Gallery__make_env_args) \
 			--build-tree \
 			--destdir $(GALLERY_BASEDIR) \
 			--name "$(GALLERY_NAME)" \

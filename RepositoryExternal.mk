@@ -3727,29 +3727,10 @@ $(call gb_Executable_add_runtime_dependencies,cppumaker,\
 )
 endef
 
-gb_Gallery__UNO_COMPONENTS := \
-	comphelper/util/comphelp \
-	configmgr/source/configmgr \
-	drawinglayer/drawinglayer \
-	framework/util/fwk \
-	i18npool/util/i18npool \
-	package/source/xstor/xstor \
-	package/util/package2 \
-	sax/source/expatwrap/expwrap \
-	sfx2/util/sfx \
-	svgio/svgio \
-	svx/util/svx \
-	svx/util/svxcore \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-	unoxml/source/service/unoxml
-
 # This is used to determine what we need for 'build' platform.
 # FIXME: the library target should be for build too
 define gb_Executable__register_gengal
 $(call gb_Executable_add_runtime_dependencies,gengal,\
-	$(foreach component,$(gb_Gallery__UNO_COMPONENTS) \
-	,$(call gb_ComponentTarget_get_target_for_build,$(component))) \
 	$(call gb_AllLangResTarget_get_target,ofa) \
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,postprocess_images) \
