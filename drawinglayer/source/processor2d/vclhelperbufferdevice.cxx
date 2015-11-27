@@ -43,6 +43,11 @@ namespace
         // allocated/used buffers (remembered to allow deleting them in destructor)
         aBuffers            maUsedBuffers;
 
+        // remember what outputdevice was the template passed to VirtualDevice::Create
+        // so we can test if that OutputDevice was disposed before reusing a
+        // virtualdevice because that isn't safe to do at least for Gtk2
+        std::map< VclPtr<VirtualDevice>, VclPtr<OutputDevice> > maDeviceTemplates;
+
     public:
         VDevBuffer();
         virtual ~VDevBuffer();
@@ -87,14 +92,14 @@ namespace
 
         sal_Int32 nBits = bMonoChrome ? 1 : rOutDev.GetBitCount();
 
+        bool bOkay(false);
         if(!maFreeBuffers.empty())
         {
-            bool bOkay(false);
             aBuffers::iterator aFound(maFreeBuffers.end());
 
             for(aBuffers::iterator a(maFreeBuffers.begin()); a != maFreeBuffers.end(); ++a)
             {
-                OSL_ENSURE(*a, "Empty pointer in VDevBuffer (!)");
+                assert(*a && "Empty pointer in VDevBuffer (!)");
 
                 if (nBits == (*a)->GetBitCount())
                 {
@@ -144,10 +149,25 @@ namespace
             {
                 pRetval = *aFound;
                 maFreeBuffers.erase(aFound);
+            }
+        }
 
-                if(bOkay)
+        if (pRetval)
+        {
+            // found a suitable cached virtual device, but the
+            // outputdevice it was based on has been disposed,
+            // drop it and create a new one instead as reusing
+            // such devices is unsafe under at least Gtk2
+            if (maDeviceTemplates[pRetval]->isDisposed())
+            {
+                maDeviceTemplates.erase(pRetval);
+                pRetval = nullptr;
+            }
+            else
+            {
+                if (bOkay)
                 {
-                    if(bClear)
+                    if (bClear)
                     {
                         pRetval->Erase(Rectangle(0, 0, rSizePixel.getWidth(), rSizePixel.getHeight()));
                     }
@@ -163,6 +183,7 @@ namespace
         if(!pRetval)
         {
             pRetval = VclPtr<VirtualDevice>::Create(rOutDev, bMonoChrome ? DeviceFormat::BITMASK : DeviceFormat::DEFAULT);
+            maDeviceTemplates[pRetval] = &rOutDev;
             pRetval->SetOutputSizePixel(rSizePixel, bClear);
         }
         else
@@ -196,7 +217,9 @@ namespace
 
         while(!maFreeBuffers.empty())
         {
-            (*(maFreeBuffers.end() - 1)).disposeAndClear();
+            aBuffers::iterator aLastOne(maFreeBuffers.end() - 1);
+            maDeviceTemplates.erase(*aLastOne);
+            aLastOne->disposeAndClear();
             maFreeBuffers.pop_back();
         }
     }
