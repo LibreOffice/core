@@ -624,7 +624,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
     {
 
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
-        uno::Sequence<uno::Sequence< uno::Any> > xGlossaryDomListTemp(aSeqs.getLength());
+        std::vector< uno::Sequence<uno::Any> > aGlossaryDomList;
          sal_Int32 counter = 0;
          for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
          {
@@ -694,13 +694,12 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                       glossaryTuple[2] = uno::makeAny(gType);
                       glossaryTuple[3] = uno::makeAny(gTarget);
                       glossaryTuple[4] = uno::makeAny(contentType);
-                      xGlossaryDomListTemp[counter] = glossaryTuple;
+                      aGlossaryDomList.push_back(glossaryTuple);
                       counter++;
                   }
               }
           }
-          xGlossaryDomListTemp.realloc(counter);
-          mxGlossaryDomList = xGlossaryDomListTemp;
+          mxGlossaryDomList = comphelper::containerToSequence(aGlossaryDomList);
       }
 }
 
