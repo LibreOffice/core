@@ -202,6 +202,12 @@ struct _LibreOfficeKitDocumentClass
     int (*getView) (LibreOfficeKitDocument* pThis);
     /// @see lok::Document::getViews().
     int (*getViews) (LibreOfficeKitDocument* pThis);
+
+    /// @see lok::Document::renderFont().
+    unsigned char* (*renderFont) (LibreOfficeKitDocument* pThis,
+                       const char* pFontName,
+                       int* pFontWidth,
+                       int* pFontHeight);
 #endif // LOK_USE_UNSTABLE_API
 };
 
