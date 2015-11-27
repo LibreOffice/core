@@ -97,18 +97,20 @@ namespace
         const SfxStyleFamily m_eFamily;
         const SwGetPoolIdFromName m_aPoolId;
         const OUString m_sName;
-        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString sName)
+        const sal_uInt32 m_nRedId;
+        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString sName, sal_uInt32 nResId)
                 : m_eFamily(eFamily)
                 , m_aPoolId(aPoolId)
                 , m_sName(sName)
+                , m_nRedId(nResId)
             {}
     };
     static const std::vector<StyleFamilyEntry> our_vStyleFamilyEntries {
-        { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles" },
-        { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles" },
-        { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles" },
-        { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles" },
-        { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles" }
+        { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER },
+        { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH },
+        { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE},
+        { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME},
+        { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING}
     };
 }
 
@@ -911,22 +913,11 @@ uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyNam
     if ( sPropertyName == "DisplayName" )
     {
         SolarMutexGuard aGuard;
-        sal_uInt32 nResId = 0;
-        switch ( m_eFamily )
-        {
-            case SFX_STYLE_FAMILY_CHAR:
-                nResId = STR_STYLE_FAMILY_CHARACTER; break;
-            case SFX_STYLE_FAMILY_PARA:
-                nResId = STR_STYLE_FAMILY_PARAGRAPH; break;
-            case SFX_STYLE_FAMILY_FRAME:
-                nResId = STR_STYLE_FAMILY_FRAME; break;
-            case SFX_STYLE_FAMILY_PAGE:
-                nResId = STR_STYLE_FAMILY_PAGE; break;
-            case SFX_STYLE_FAMILY_PSEUDO:
-                nResId = STR_STYLE_FAMILY_NUMBERING; break;
-            default:
-                OSL_FAIL( "SwXStyleFamily::getPropertyValue(): invalid family" );
-        }
+        const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+                [this] (const StyleFamilyEntry& e) { return m_eFamily == e.m_eFamily; });
+        if(pEntry == our_vStyleFamilyEntries.end())
+            OSL_FAIL( "SwXStyleFamily::getPropertyValue(): invalid family" );
+        sal_uInt32 nResId = pEntry->m_nRedId;
         if ( nResId > 0 )
         {
             aRet = uno::makeAny( SW_RESSTR( nResId ) );
