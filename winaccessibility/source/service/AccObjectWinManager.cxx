@@ -63,8 +63,8 @@ using namespace com::sun::star::uno;
    * @return
    */
 AccObjectWinManager::AccObjectWinManager( AccObjectManagerAgent* Agent ):
-        pAgent( Agent ),
-        oldFocus( NULL )
+        oldFocus( NULL ),
+        pAgent( Agent )
 {
 }
 
