@@ -152,6 +152,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/NisusWrtParser \
 	UnpackedTarball/libmwaw/src/lib/NisusWrtStruct \
 	UnpackedTarball/libmwaw/src/lib/NisusWrtText \
+	UnpackedTarball/libmwaw/src/lib/PixelPaintParser \
+	UnpackedTarball/libmwaw/src/lib/RagTime5Chart \
 	UnpackedTarball/libmwaw/src/lib/RagTime5ClusterManager \
 	UnpackedTarball/libmwaw/src/lib/RagTime5Graph \
 	UnpackedTarball/libmwaw/src/lib/RagTime5Layout \
@@ -165,6 +167,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/RagTimeSpreadsheet \
 	UnpackedTarball/libmwaw/src/lib/RagTimeStruct \
 	UnpackedTarball/libmwaw/src/lib/RagTimeText \
+	UnpackedTarball/libmwaw/src/lib/StyleParser \
 	UnpackedTarball/libmwaw/src/lib/SuperPaintParser \
 	UnpackedTarball/libmwaw/src/lib/TeachTxtParser \
 	UnpackedTarball/libmwaw/src/lib/WingzParser \
