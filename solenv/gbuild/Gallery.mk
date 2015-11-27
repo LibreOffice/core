@@ -69,7 +69,8 @@ $(dir $(call gb_Gallery_get_target,$(1)))%/.dir :
 
 $(call gb_Gallery_get_target,%) : \
 		$(call gb_Executable_get_runtime_dependencies,gengal) \
-		$(INSTDIR)/program/$(call gb_Helper_get_rcfile,gengal) \
+		$(INSTROOT)/$(LIBO_ETC_FOLDER)/services/services.rdb \
+		$(INSTROOT)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,gengal) \
 	    $(call gb_ComponentTarget_get_target,ucb/source/core/ucb1) \
 	    $(call gb_ComponentTarget_get_target,ucb/source/ucp/file/ucpfile1)
 	$(call gb_Gallery__command,$@,$*)
