@@ -90,6 +90,10 @@
 #include <comphelper/sequence.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
+
+#include <svl/zforlist.hxx>
+#include <svl/numuno.hxx>
+
 #include <set>
 #include <unordered_set>
 
@@ -3753,17 +3757,26 @@ bool ChartExport::isDeep3dChart()
 
 OUString ChartExport::getNumberFormatCode(sal_Int32 nKey) const
 {
+    /* XXX if this was called more than one or two times per export the two
+     * SvNumberFormatter instances and NfKeywordTable should be member
+     * variables and initialized only once. */
+
+    OUString aCode("General");  // init with fallback
     uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(mxChartModel, uno::UNO_QUERY_THROW);
-    uno::Reference<util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
-    uno::Reference<beans::XPropertySet> xNumberFormat = xNumberFormats->getByKey(nKey);
+    SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xNumberFormatsSupplier);
+    if (!pSupplierObj)
+        return aCode;
 
-    if (!xNumberFormat.is())
-        return OUString();
+    SvNumberFormatter* pNumberFormatter = pSupplierObj->GetNumberFormatter();
+    if (!pNumberFormatter)
+        return aCode;
 
-    uno::Any aAny = xNumberFormat->getPropertyValue("FormatString");
-    OUString aValue;
-    aAny >>= aValue;
-    return aValue;
+    SvNumberFormatter aTempFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US);
+    NfKeywordTable aKeywords;
+    aTempFormatter.FillKeywordTableForExcel( aKeywords);
+    aCode = pNumberFormatter->GetFormatStringForExcel( nKey, aKeywords, aTempFormatter);
+
+    return aCode;
 }
 
 }// drawingml
