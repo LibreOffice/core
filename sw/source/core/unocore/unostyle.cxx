@@ -114,15 +114,6 @@ namespace
     };
 }
 
-// Already implemented autostyle families: 3
-#define AUTOSTYLE_FAMILY_COUNT 3
-const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
-{
-    IStyleAccess::AUTO_STYLE_CHAR,
-    IStyleAccess::AUTO_STYLE_RUBY,
-    IStyleAccess::AUTO_STYLE_PARA
-};
-
 using namespace ::com::sun::star;
 
 static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
@@ -134,20 +125,6 @@ static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
     SAL_WARN("sw.uno", "someone asking for all styles in unostyle.cxx!" );
     return nsSwGetPoolIdFromName::GET_POOLID_CHRFMT;
 }
-
-class SwAutoStylesEnumImpl
-{
-    std::vector<SfxItemSet_Pointer_t> mAutoStyles;
-    std::vector<SfxItemSet_Pointer_t>::iterator aIter;
-    SwDoc* pDoc;
-    IStyleAccess::SwAutoStyleFamily eFamily;
-public:
-    SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
-    bool hasMoreElements() { return aIter != mAutoStyles.end(); }
-    SfxItemSet_Pointer_t nextElement() { return *(aIter++); }
-    IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
-    SwDoc* getDoc() const { return pDoc; }
-};
 
 OUString SwXStyleFamilies::getImplementationName() throw( uno::RuntimeException, std::exception )
     { return {"SwXStyleFamilies"}; }
@@ -161,15 +138,12 @@ uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames() throw( un
     { return { "com.sun.star.style.StyleFamilies" }; }
 
 SwXStyleFamilies::SwXStyleFamilies(SwDocShell& rDocShell) :
-    SwUnoCollection(rDocShell.GetDoc()),
-    m_pDocShell(&rDocShell)
-{
-
-}
+        SwUnoCollection(rDocShell.GetDoc()),
+        m_pDocShell(&rDocShell)
+    { }
 
 SwXStyleFamilies::~SwXStyleFamilies()
-{
-}
+    { }
 
 uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
     throw(
@@ -227,13 +201,10 @@ uno::Type SwXStyleFamilies::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<container::XNameContainer>::get();
-
 }
 
 sal_Bool SwXStyleFamilies::hasElements() throw( uno::RuntimeException, std::exception )
-{
-    return sal_True;
-}
+    { return true; }
 
 void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& aOptions)
@@ -311,6 +282,29 @@ sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( un
 
 uno::Sequence< OUString > SwXStyleFamily::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
     { return { "com.sun.star.style.StyleFamily" }; }
+
+// Already implemented autostyle families: 3
+#define AUTOSTYLE_FAMILY_COUNT 3
+const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
+{
+    IStyleAccess::AUTO_STYLE_CHAR,
+    IStyleAccess::AUTO_STYLE_RUBY,
+    IStyleAccess::AUTO_STYLE_PARA
+};
+
+class SwAutoStylesEnumImpl
+{
+    std::vector<SfxItemSet_Pointer_t> mAutoStyles;
+    std::vector<SfxItemSet_Pointer_t>::iterator aIter;
+    SwDoc* pDoc;
+    IStyleAccess::SwAutoStyleFamily eFamily;
+public:
+    SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
+    bool hasMoreElements() { return aIter != mAutoStyles.end(); }
+    SfxItemSet_Pointer_t nextElement() { return *(aIter++); }
+    IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
+    SwDoc* getDoc() const { return pDoc; }
+};
 
 SwXStyleFamily::SwXStyleFamily(SwDocShell* pDocSh, sal_uInt16 nFamily) :
         m_eFamily((SfxStyleFamily)nFamily),
