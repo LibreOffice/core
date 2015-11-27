@@ -1768,9 +1768,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     const bool bKeep = IsKeep( pAttrs->GetAttrSet() );
 
     // All rows should keep together
-    // OD 2004-05-25 #i21478# - don't split table, if it has to keep with next
     const bool bDontSplit = !IsFollow() &&
-                            ( !GetFormat()->GetLayoutSplit().GetValue() || bKeep );
+                            ( !GetFormat()->GetLayoutSplit().GetValue() );
 
     // The number of repeated headlines
     const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
