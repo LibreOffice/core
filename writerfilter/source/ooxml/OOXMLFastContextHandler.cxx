@@ -1089,7 +1089,7 @@ void OOXMLFastContextHandlerPropertyTable::lcl_endFastElement
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     OOXMLPropertySet::Pointer_t pPropSet(mpPropertySet->clone());
-    OOXMLTableImpl::ValuePointer_t pTmpVal
+    OOXMLTable::ValuePointer_t pTmpVal
         (new OOXMLPropertySetValue(pPropSet));
 
     mTable.add(pTmpVal);
@@ -1218,7 +1218,7 @@ void OOXMLFastContextHandlerTable::addCurrentChild()
 
         if (pValue.get() != nullptr)
         {
-            OOXMLTableImpl::ValuePointer_t pTmpVal(pValue->clone());
+            OOXMLTable::ValuePointer_t pTmpVal(pValue->clone());
             mTable.add(pTmpVal);
         }
     }

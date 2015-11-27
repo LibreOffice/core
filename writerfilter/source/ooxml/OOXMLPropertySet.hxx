@@ -20,6 +20,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
 
 #include <dmapper/resourcemodel.hxx>
+#include <vector>
 
 namespace writerfilter {
 namespace ooxml
@@ -59,14 +60,23 @@ public:
 #endif
 };
 
+class OOXMLValue;
+
 class OOXMLTable : public writerfilter::Reference<Table>
 {
 public:
+    typedef std::shared_ptr<OOXMLValue> ValuePointer_t;
+    OOXMLTable();
     virtual ~OOXMLTable();
 
-    virtual void resolve(Table & rTable) override = 0;
-    virtual OOXMLTable * clone() const = 0;
+    void resolve(Table & rTable);
+    void add(ValuePointer_t pPropertySet);
+    OOXMLTable * clone() const;
+private:
+    typedef std::vector<ValuePointer_t> PropertySets_t;
+    PropertySets_t mPropertySets;
 };
+
 }}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX

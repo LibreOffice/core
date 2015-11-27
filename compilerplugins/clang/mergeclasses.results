@@ -397,7 +397,6 @@ merge writerfilter::ooxml::OOXMLFastContextHandlerLinear with writerfilter::ooxm
 merge writerfilter::ooxml::OOXMLProperty with writerfilter::ooxml::OOXMLPropertyImpl
 merge writerfilter::ooxml::OOXMLPropertySet with writerfilter::ooxml::OOXMLPropertySetImpl
 merge writerfilter::ooxml::OOXMLStream with writerfilter::ooxml::OOXMLStreamImpl
-merge writerfilter::ooxml::OOXMLTable with writerfilter::ooxml::OOXMLTableImpl
 merge writerfilter::rtftok::RTFDocument with writerfilter::rtftok::RTFDocumentImpl
 merge ww8::WW8Struct with ww8::WW8Sttb
 merge xforms::OXSDDataType with xforms::OValueLimitedType_Base

@@ -305,7 +305,7 @@ public:
     virtual ~OOXMLFastContextHandlerPropertyTable();
 
 protected:
-    OOXMLTableImpl mTable;
+    OOXMLTable mTable;
 
     virtual void lcl_endFastElement(Token_t Element)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
@@ -346,7 +346,7 @@ public:
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
 protected:
-    OOXMLTableImpl mTable;
+    OOXMLTable mTable;
 
     css::uno::Reference<css::xml::sax::XFastContextHandler> mCurrentChild;
 

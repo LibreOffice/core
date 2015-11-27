@@ -271,23 +271,6 @@ public:
     virtual OOXMLValue * clone() const override;
 };
 
-class OOXMLTableImpl : public OOXMLTable
-{
-public:
-    typedef std::shared_ptr<OOXMLValue> ValuePointer_t;
-private:
-    typedef std::vector<ValuePointer_t> PropertySets_t;
-    PropertySets_t mPropertySets;
-
-public:
-    OOXMLTableImpl();
-    virtual ~OOXMLTableImpl();
-
-    virtual void resolve(Table & rTable) override;
-    void add(ValuePointer_t pPropertySet);
-    virtual OOXMLTable * clone() const override;
-};
-
 class OOXMLPropertySetEntryToString : public Properties
 {
     Id mnId;

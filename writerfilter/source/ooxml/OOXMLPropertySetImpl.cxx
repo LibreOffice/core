@@ -38,10 +38,6 @@ OOXMLPropertySet::~OOXMLPropertySet()
 {
 }
 
-OOXMLTable::~OOXMLTable()
-{
-}
-
 OOXMLPropertyImpl::OOXMLPropertyImpl(Id id, OOXMLValue::Pointer_t pValue,
                                      OOXMLPropertyImpl::Type_t eType)
 : mId(id), mpValue(pValue), meType(eType)
@@ -722,15 +718,16 @@ OOXMLValue * OOXMLStarMathValue::clone() const
   class OOXMLTableImpl
  */
 
-OOXMLTableImpl::OOXMLTableImpl()
+OOXMLTable::OOXMLTable()
 {
 }
 
-OOXMLTableImpl::~OOXMLTableImpl()
+OOXMLTable::~OOXMLTable()
 {
 }
 
-void OOXMLTableImpl::resolve(Table & rTable)
+
+void OOXMLTable::resolve(Table & rTable)
 {
     Table * pTable = &rTable;
 
@@ -752,15 +749,15 @@ void OOXMLTableImpl::resolve(Table & rTable)
     }
 }
 
-void OOXMLTableImpl::add(ValuePointer_t pPropertySet)
+void OOXMLTable::add(ValuePointer_t pPropertySet)
 {
     if (pPropertySet.get() != nullptr)
         mPropertySets.push_back(pPropertySet);
 }
 
-OOXMLTable * OOXMLTableImpl::clone() const
+OOXMLTable * OOXMLTable::clone() const
 {
-    return new OOXMLTableImpl(*this);
+    return new OOXMLTable(*this);
 }
 
 /*
