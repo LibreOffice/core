@@ -11805,7 +11805,10 @@ AC_SUBST(CAIRO_LIBS)
 dnl ===================================================================
 dnl Test whether to use avahi
 dnl ===================================================================
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_avahi" = "yes"; then
+if test "$_os" = "WINNT"; then
+    # Windows uses bundled mDNSResponder
+    BUILD_TYPE="$BUILD_TYPE MDNSRESPONDER"
+elif test "$_os" != "Darwin" -a "$enable_avahi" = "yes"; then
     PKG_CHECK_MODULES([AVAHI], [avahi-client >= 0.6.10],
                       [ENABLE_AVAHI="TRUE"])
     AC_DEFINE(HAVE_FEATURE_AVAHI)
