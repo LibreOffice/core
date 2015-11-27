@@ -155,6 +155,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/subtoolbarcontroller \
     framework/source/uielement/thesaurusmenucontroller \
     framework/source/uielement/togglebuttontoolbarcontroller \
+    framework/source/uielement/toolbarasmenucontroller \
     framework/source/uielement/toolbarmanager \
     framework/source/uielement/toolbarmerger \
     framework/source/uielement/toolbarwrapper \
