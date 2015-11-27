@@ -339,15 +339,19 @@ UpdateInformationProvider::UpdateInformationProvider(
 bool
 UpdateInformationProvider::isUserAgentExtended()
 {
-    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        css::configuration::theDefaultProvider::get(m_xContext));
-
-    uno::Any aExtended = getConfigurationItemAny(
-        xConfigurationProvider,
-        "org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments",
-        "ExtendedUserAgent");
     bool bExtendedUserAgent = false;
-    aExtended >>= bExtendedUserAgent;
+    try {
+        uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
+            css::configuration::theDefaultProvider::get(m_xContext));
+
+        uno::Any aExtended = getConfigurationItemAny(
+            xConfigurationProvider,
+            "org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments",
+            "ExtendedUserAgent");
+        aExtended >>= bExtendedUserAgent;
+    } catch (const uno::RuntimeException &) {
+        SAL_WARN("extensions.update", "Online update disabled");
+    }
     return bExtendedUserAgent;
 }
 
