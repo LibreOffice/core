@@ -79,6 +79,7 @@ $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
 	$(if $(ENABLE_AVAHI), \
 	    avahi \
 	) \
+	$(if $(filter WNT,$(OS)),mDNSResponder) \
 	libxml2 \
 ))
 
