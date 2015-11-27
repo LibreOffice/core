@@ -62,11 +62,7 @@ class SwXStyleFamilies :  public cppu::WeakImplHelper
 {
     SwDocShell*         m_pDocShell;
 
-    css::uno::Reference< css::container::XNameContainer >   m_xCharStyles;
-    css::uno::Reference< css::container::XNameContainer >   m_xParaStyles;
-    css::uno::Reference< css::container::XNameContainer >   m_xFrameStyles;
-    css::uno::Reference< css::container::XNameContainer >   m_xPageStyles;
-    css::uno::Reference< css::container::XNameContainer >   m_xNumberingStyles;
+    std::map<SfxStyleFamily, css::uno::Reference<css::container::XNameContainer>> m_vContainers;
 protected:
     virtual ~SwXStyleFamilies();
 public:

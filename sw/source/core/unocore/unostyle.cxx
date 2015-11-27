@@ -162,12 +162,7 @@ uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames() throw( un
 
 SwXStyleFamilies::SwXStyleFamilies(SwDocShell& rDocShell) :
     SwUnoCollection(rDocShell.GetDoc()),
-    m_pDocShell(&rDocShell),
-    m_xCharStyles(),
-    m_xParaStyles(),
-    m_xFrameStyles(),
-    m_xPageStyles(),
-    m_xNumberingStyles()
+    m_pDocShell(&rDocShell)
 {
 
 }
@@ -216,68 +211,16 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
     if(nIndex < 0 || nIndex >= static_cast<sal_Int32>(our_vStyleFamilyEntries.size()))
         throw lang::IndexOutOfBoundsException();
-    if(IsValid())
-    {
-        uno::Reference< container::XNameContainer >  aRef;
-        auto eFamily = our_vStyleFamilyEntries[nIndex].m_eFamily;
-        switch( eFamily )
-        {
-            case SFX_STYLE_FAMILY_CHAR:
-            {
-                if(!m_xCharStyles.is())
-                {
-                    m_xCharStyles = new SwXStyleFamily(m_pDocShell, eFamily);
-                }
-                aRef = m_xCharStyles;
-            }
-            break;
-            case SFX_STYLE_FAMILY_PARA:
-            {
-                if(!m_xParaStyles.is())
-                {
-                    m_xParaStyles = new SwXStyleFamily(m_pDocShell, eFamily);
-                }
-                aRef = m_xParaStyles;
-            }
-            break;
-            case SFX_STYLE_FAMILY_PAGE:
-            {
-                if(!m_xPageStyles.is())
-                {
-                    m_xPageStyles = new SwXStyleFamily(m_pDocShell, eFamily);
-                }
-                aRef = m_xPageStyles;
-            }
-            break;
-            case SFX_STYLE_FAMILY_FRAME:
-            {
-                if(!m_xFrameStyles.is())
-                {
-                    m_xFrameStyles = new SwXStyleFamily(m_pDocShell, eFamily);
-                }
-                aRef = m_xFrameStyles;
-            }
-            break;
-            case SFX_STYLE_FAMILY_PSEUDO:
-            {
-                if(!m_xNumberingStyles.is())
-                {
-                    m_xNumberingStyles = new SwXStyleFamily(m_pDocShell, eFamily);
-                }
-                aRef = m_xNumberingStyles;
-            }
-            break;
-            case SFX_STYLE_FAMILY_ALL:
-                assert(false);
-        }
-        aRet.setValue(&aRef, cppu::UnoType<container::XNameContainer>::get());
-    }
-    else
+    if(!IsValid())
         throw uno::RuntimeException();
-    return aRet;
+    auto eFamily = our_vStyleFamilyEntries[nIndex].m_eFamily;
+    assert(eFamily != SFX_STYLE_FAMILY_ALL);
+    auto& rxContainer = m_vContainers[eFamily];
+    if(!rxContainer.is())
+        rxContainer = new SwXStyleFamily(m_pDocShell, eFamily);
+    return uno::makeAny(rxContainer);
 }
 
 uno::Type SwXStyleFamilies::getElementType()
