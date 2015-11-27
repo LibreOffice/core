@@ -97,7 +97,7 @@ extern "C"
 
     void *lok_dlsym(void *Hnd, const char *pName)
     {
-        return GetProcAddress((HINSTANCE) Hnd, pName);
+        return reinterpret_cast<void *>(GetProcAddress((HINSTANCE) Hnd, pName));
     }
 
     int lok_dlclose(void *Hnd)
