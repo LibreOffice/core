@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_463af0ce",
+        "filename": ".gitignore",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2015-11-27T20:39:17Z",
+      "side": 1,
+      "message": "It would have been better to avoid scattering files in the source tree,they do belong in workdir. However there is another patch on its way.",
+      "revId": "d24739f744185bcc8fb83a4aa0d093b1a954e2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_e624c4b0",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2015-11-27T20:39:17Z",
+      "side": 1,
+      "message": "I understand what you are doing here, but you have not added that feature to the other IDE.",
+      "revId": "d24739f744185bcc8fb83a4aa0d093b1a954e2fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
