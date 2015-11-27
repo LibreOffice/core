@@ -357,9 +357,7 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
 }
 
 OUString SwXStyleFamily::getImplementationName() throw( uno::RuntimeException, std::exception )
-{
-    return OUString("SwXStyleFamily");
-}
+    { return {"SwXStyleFamily"}; }
 
 sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
@@ -367,10 +365,7 @@ sal_Bool SwXStyleFamily::supportsService(const OUString& rServiceName) throw( un
 }
 
 uno::Sequence< OUString > SwXStyleFamily::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
-{
-    uno::Sequence<OUString> aRet { "com.sun.star.style.StyleFamily" };
-    return aRet;
-}
+    { return { "com.sun.star.style.StyleFamily" }; }
 
 SwXStyleFamily::SwXStyleFamily(SwDocShell* pDocSh, sal_uInt16 nFamily) :
         m_eFamily((SfxStyleFamily)nFamily),
