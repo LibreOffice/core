@@ -197,6 +197,7 @@ void SdPPTFilter::PreSaveBasic()
             {
                 pSaveVBA( (SfxObjectShell&) mrDocShell, pBas );
             }
+            delete pLibrary;
         }
     }
 }
