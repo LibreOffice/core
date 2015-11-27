@@ -57,7 +57,7 @@ extern X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cer
 
 struct CertErrorToString{
     DWORD error;
-    char * name;
+    char const * name;
 };
 
 CertErrorToString arErrStrings[] =
