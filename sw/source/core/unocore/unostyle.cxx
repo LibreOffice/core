@@ -324,36 +324,31 @@ template<enum SfxStyleFamily>
 static sal_Int32 lcl_GetCountOrName2(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex);
 
 template<>
-sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_CHAR>(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_CHAR>(const SwDoc &rDoc, OUString* pString, sal_Int32 nIndex)
 {
+    constexpr sal_Int32 nBaseCount =
+            RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN +
+            RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
+    nIndex -= nBaseCount;
     sal_Int32 nCount = 0;
-    const sal_Int32 nBaseCount =
-                             RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN  +
-                             RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
-    nIndex = nIndex - nBaseCount;
-    const size_t nArrLen = rDoc.GetCharFormats()->size();
-    for( size_t i = 0; i < nArrLen; ++i )
+    for(auto pFormat : *rDoc.GetCharFormats())
     {
-        SwCharFormat* pFormat = (*rDoc.GetCharFormats())[ i ];
-        if( pFormat->IsDefault() && pFormat != rDoc.GetDfltCharFormat() )
+        if(pFormat->IsDefault() && pFormat != rDoc.GetDfltCharFormat())
             continue;
-        if ( IsPoolUserFormat ( pFormat->GetPoolFormatId() ) )
+        if(!IsPoolUserFormat(pFormat->GetPoolFormatId()))
+            continue;
+        if(nIndex == nCount)
         {
-            if ( nIndex == nCount )
-            {
-                // the default character format needs to be set to "Default!"
-                if(rDoc.GetDfltCharFormat() == pFormat)
-                    SwStyleNameMapper::FillUIName(
-                        RES_POOLCOLL_STANDARD, *pString );
-                else
-                    *pString = pFormat->GetName();
-                break;
-            }
-            nCount++;
+            // the default character format needs to be set to "Default!"
+            if(rDoc.GetDfltCharFormat() == pFormat)
+                SwStyleNameMapper::FillUIName(RES_POOLCOLL_STANDARD, *pString);
+            else
+                *pString = pFormat->GetName();
+            break;
         }
+        ++nCount;
     }
-    nCount += nBaseCount;
-    return nCount;
+    return nCount + nBaseCount;
 }
 
 template<>
