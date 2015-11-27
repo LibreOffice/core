@@ -3715,10 +3715,9 @@ endef
 define gb_Executable__register_climaker
 $(call gb_Executable_add_runtime_dependencies,climaker,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
-	$(call gb_Rdb_get_target_for_build,ure/services) \
-	$(INSTROOT)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
+	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
-	$(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno)
+	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno)
 )
 endef
 
@@ -3746,6 +3745,7 @@ gb_Gallery__UNO_COMPONENTS := \
 	unoxml/source/service/unoxml
 
 # This is used to determine what we need for 'build' platform.
+# FIXME: the library target should be for build too
 define gb_Executable__register_gengal
 $(call gb_Executable_add_runtime_dependencies,gengal,\
 	$(foreach component,$(gb_Gallery__UNO_COMPONENTS) \
@@ -3756,8 +3756,8 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	$(call gb_Package_get_target_for_build,postprocess_registry) \
 	$(call gb_Package_get_target_for_build,instsetoo_native_setup_ure) \
 	$(call gb_Package_get_target_for_build,instsetoo_native_setup) \
-	$(call gb_Rdb_get_target_for_build,ure/services) \
-	$(INSTROOT)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
+	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
+	$(INSTROOT_FOR_BUILD)/$(LIBO_ETC_FOLDER)/services/services.rdb \
 	$(call gb_UnoApi_get_target,offapi) \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
@@ -3796,8 +3796,7 @@ $(call gb_Executable_add_runtime_dependencies,saxparser,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,instsetoo_native_setup_ure) \
 	$(call gb_Rdb_get_target_for_build,saxparser) \
-	$(call gb_Rdb_get_target_for_build,ure/services) \
-	$(INSTROOT)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
+	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
@@ -3809,8 +3808,7 @@ endef
 define gb_Executable__register_uno
 $(call gb_Executable_add_runtime_dependencies,uno,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
-	$(call gb_Rdb_get_target_for_build,ure/services) \
-	$(INSTROOT)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
+	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
