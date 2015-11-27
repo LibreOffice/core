@@ -359,7 +359,7 @@ Reference< XAxis > AxisHelper::createAxis(
 
         if( nAxisIndex>0 )//when inserting secondary axes copy some things from the main axis
         {
-            ::com::sun::star::chart::ChartAxisPosition eNewAxisPos( ::com::sun::star::chart::ChartAxisPosition_END );
+            css::chart::ChartAxisPosition eNewAxisPos( css::chart::ChartAxisPosition_END );
 
             Reference< XAxis > xMainAxis( xCooSys->getAxisByDimension( nDimensionIndex, 0 ) );
             if( xMainAxis.is() )
@@ -378,10 +378,10 @@ Reference< XAxis > AxisHelper::createAxis(
                 Reference< beans::XPropertySet > xMainProp( xMainAxis, uno::UNO_QUERY );
                 if( xMainProp.is() )
                 {
-                    ::com::sun::star::chart::ChartAxisPosition eMainAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+                    css::chart::ChartAxisPosition eMainAxisPos( css::chart::ChartAxisPosition_ZERO );
                     xMainProp->getPropertyValue("CrossoverPosition") >>= eMainAxisPos;
-                    if( ::com::sun::star::chart::ChartAxisPosition_END == eMainAxisPos )
-                        eNewAxisPos = ::com::sun::star::chart::ChartAxisPosition_START;
+                    if( css::chart::ChartAxisPosition_END == eMainAxisPos )
+                        eNewAxisPos = css::chart::ChartAxisPosition_START;
                 }
             }
 
@@ -561,7 +561,7 @@ void AxisHelper::makeGridInvisible( const Reference< beans::XPropertySet >& xGri
 }
 
 bool AxisHelper::isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
-                , const Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
+                , const Reference< css::chart2::XDiagram >& xDiagram )
 {
     bool bRet = false;
 

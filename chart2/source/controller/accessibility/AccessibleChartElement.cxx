@@ -154,7 +154,7 @@ OUString SAL_CALL AccessibleChartElement::getImplementationName()
 
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
 OUString SAL_CALL AccessibleChartElement::getAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return ObjectNameProvider::getNameForCID(
         GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
@@ -162,7 +162,7 @@ OUString SAL_CALL AccessibleChartElement::getAccessibleName()
 
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
 OUString SAL_CALL AccessibleChartElement::getAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return getToolTipText();
 }
@@ -197,7 +197,7 @@ OUString SAL_CALL AccessibleChartElement::getTitledBorderText()
 }
 
 OUString SAL_CALL AccessibleChartElement::getToolTipText()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     CheckDisposeState();
 

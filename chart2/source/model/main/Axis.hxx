@@ -39,12 +39,12 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<
-        ::com::sun::star::chart2::XAxis,
-        ::com::sun::star::chart2::XTitled,
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::util::XCloneable,
-        ::com::sun::star::util::XModifyBroadcaster,
-        ::com::sun::star::util::XModifyListener >
+        css::chart2::XAxis,
+        css::chart2::XTitled,
+        css::lang::XServiceInfo,
+        css::util::XCloneable,
+        css::util::XModifyBroadcaster,
+        css::util::XModifyListener >
     Axis_Base;
 }
 
@@ -54,8 +54,7 @@ class Axis :
     public ::property::OPropertySet
 {
 public:
-    explicit Axis( ::com::sun::star::uno::Reference<
-          ::com::sun::star::uno::XComponentContext > const & xContext );
+    explicit Axis( css::uno::Reference< css::uno::XComponentContext > const & xContext );
     virtual ~Axis();
 
     /// XServiceInfo declarations
@@ -81,7 +80,7 @@ protected:
     void Init( const Axis & rOther );
 
     // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw (css::beans::UnknownPropertyException,
                css::uno::RuntimeException) override;
 
@@ -89,58 +88,51 @@ protected:
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XAxis ____
-    virtual void SAL_CALL setScaleData( const ::com::sun::star::chart2::ScaleData& rScaleData )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::chart2::ScaleData SAL_CALL getScaleData()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > SAL_CALL getGridProperties()
-                    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference<
-                        ::com::sun::star::beans::XPropertySet > > SAL_CALL getSubGridProperties()
-                    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > > SAL_CALL getSubTickProperties()
-                    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setScaleData( const css::chart2::ScaleData& rScaleData )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::chart2::ScaleData SAL_CALL getScaleData()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getGridProperties()
+                    throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubGridProperties()
+                    throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubTickProperties()
+                    throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XTitled ____
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XTitle > SAL_CALL getTitleObject()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setTitleObject(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XTitle >& Title )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XTitle >& Title )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XCloneable ____
     // Note: the coordinate systems are not cloned!
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;
@@ -153,20 +145,15 @@ private: //methods
 
 private: //member
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener >   m_xModifyEventForwarder;
+    css::uno::Reference< css::util::XModifyListener >   m_xModifyEventForwarder;
 
-    ::com::sun::star::chart2::ScaleData             m_aScaleData;
+    css::chart2::ScaleData             m_aScaleData;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >     m_xGrid;
+    css::uno::Reference< css::beans::XPropertySet >     m_xGrid;
 
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > >     m_aSubGridProperties;
+    css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > >     m_aSubGridProperties;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle >          m_xTitle;
+    css::uno::Reference< css::chart2::XTitle >          m_xTitle;
 };
 
 } //  namespace chart

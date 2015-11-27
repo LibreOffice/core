@@ -31,7 +31,7 @@ class DragMethod_Base : public SdrDragMethod
 {
 public:
     DragMethod_Base( DrawViewWrapper& rDrawViewWrapper, const OUString& rObjectCID
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
+        , const css::uno::Reference< css::frame::XModel >& xChartModel
         , ActionDescriptionProvider::ActionType eActionType = ActionDescriptionProvider::MOVE );
     virtual ~DragMethod_Base();
 
@@ -41,7 +41,7 @@ public:
     virtual Pointer GetSdrDragPointer() const override;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getChartModel() const;
+    css::uno::Reference< css::frame::XModel > getChartModel() const;
 
 protected:
     DrawViewWrapper&    m_rDrawViewWrapper;
@@ -49,7 +49,7 @@ protected:
     ActionDescriptionProvider::ActionType m_eActionType;
 
 private:
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel > m_xChartModel;
+    css::uno::WeakReference< css::frame::XModel > m_xChartModel;
 };
 
 } //  namespace chart

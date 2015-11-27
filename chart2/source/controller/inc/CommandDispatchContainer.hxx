@@ -70,20 +70,17 @@ public:
     // handled by other dispatchers.  (Chart is currently the controller
     // itself)
     explicit CommandDispatchContainer(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext,
         ChartController* pController );
 
     void setModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+        const css::uno::Reference< css::frame::XModel > & xModel );
 
     /** Set a chart dispatcher that is used for all commands contained in
         rChartCommands
      */
     void setChartDispatch(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XDispatch >& rChartDispatch,
+        const css::uno::Reference< css::frame::XDispatch >& rChartDispatch,
         const ::std::set< OUString > & rChartCommands );
 
     /** Returns the dispatch that is able to do the command given in rURL, if
@@ -93,22 +90,18 @@ public:
 
         <p>If all this fails, return an empty dispatch.</p>
      */
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XDispatch > getDispatchForURL(
-                const ::com::sun::star::util::URL & rURL );
+    css::uno::Reference< css::frame::XDispatch > getDispatchForURL(
+                const css::util::URL & rURL );
 
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XDispatch > > getDispatchesForURLs(
-                const ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::frame::DispatchDescriptor > & aDescriptors );
+    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > getDispatchesForURLs(
+                const css::uno::Sequence< css::frame::DispatchDescriptor > & aDescriptors );
 
     void DisposeAndClear();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
+    static css::uno::Reference< css::frame::XDispatch >
         getContainerDispatchForURL(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > & xChartController,
-            const ::com::sun::star::util::URL & rURL );
+            const css::uno::Reference< css::frame::XController > & xChartController,
+            const css::util::URL & rURL );
 
     void setDrawCommandDispatch( DrawCommandDispatch* pDispatch );
     DrawCommandDispatch* getDrawCommandDispatch() { return m_pDrawCommandDispatch; }
@@ -118,23 +111,22 @@ public:
 private:
     typedef
         ::std::map< OUString,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XDispatch > >
+            css::uno::Reference< css::frame::XDispatch > >
         tDispatchMap;
 
     typedef
-        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > tDisposeVector;
+        ::std::vector< css::uno::Reference< css::frame::XDispatch > > tDisposeVector;
 
     mutable tDispatchMap m_aCachedDispatches;
     mutable tDisposeVector m_aToBeDisposedDispatches;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >         m_xModel;
+    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::WeakReference< css::frame::XModel >         m_xModel;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xChartDispatcher;
-    ::std::set< OUString >                                          m_aChartCommands;
+    css::uno::Reference< css::frame::XDispatch >          m_xChartDispatcher;
+    ::std::set< OUString >                                m_aChartCommands;
 
-    ::std::set< OUString >                                          m_aContainerDocumentCommands;
+    ::std::set< OUString >                                m_aContainerDocumentCommands;
 
     ChartController* m_pChartController;
     DrawCommandDispatch* m_pDrawCommandDispatch;

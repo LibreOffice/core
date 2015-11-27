@@ -35,8 +35,7 @@ class VAxisBase : public VAxisOrGridBase
 public:
     VAxisBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
            , const AxisProperties& rAxisProperties
-           , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~VAxisBase();
 
     /**
@@ -51,13 +50,13 @@ public:
 
     virtual bool isAnythingToDraw();
     virtual void initAxisLabelProperties(
-                    const ::com::sun::star::awt::Size& rFontReferenceSize
-                  , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
+                    const css::awt::Size& rFontReferenceSize
+                  , const css::awt::Rectangle& rMaximumSpaceForLabels );
 
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
           , const ExplicitIncrementData& rIncrement )
-                throw (::com::sun::star::uno::RuntimeException) override;
+                throw (css::uno::RuntimeException) override;
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
     virtual void createAllTickInfos( TickInfoArraysType& rAllTickInfos );
@@ -70,22 +69,21 @@ protected: //methods
     void updateUnscaledValuesAtTicks( TickIter& rIter );
 
     virtual bool prepareShapeCreation();
-    void recordMaximumTextSize( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape >& xShape
+    void recordMaximumTextSize( const css::uno::Reference< css::drawing::XShape >& xShape
                     , double fRotationAngleDegree );
 
     bool isDateAxis() const;
     bool isComplexCategoryAxis() const;
 
 protected: //member
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
-    AxisProperties                                                                      m_aAxisProperties;
-    AxisLabelProperties                                                                 m_aAxisLabelProperties;
-    ::com::sun::star::uno::Sequence< OUString >                                    m_aTextLabels;
-    bool                                                                                m_bUseTextLabels;
+    css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
+    AxisProperties                                            m_aAxisProperties;
+    AxisLabelProperties                                       m_aAxisLabelProperties;
+    css::uno::Sequence< OUString >                            m_aTextLabels;
+    bool                                                      m_bUseTextLabels;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xGroupShape_Shapes;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xTextTarget;
+    css::uno::Reference< css::drawing::XShapes > m_xGroupShape_Shapes;
+    css::uno::Reference< css::drawing::XShapes > m_xTextTarget;
 
     /**
      * This typically consists of 2 TickInfo vectors (i.e. the outer vector

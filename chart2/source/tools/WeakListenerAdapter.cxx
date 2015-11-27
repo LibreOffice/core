@@ -29,7 +29,7 @@ namespace chart
 
 WeakModifyListenerAdapter::WeakModifyListenerAdapter(
     const uno::WeakReference< util::XModifyListener > & xListener ) :
-        WeakListenerAdapter< ::com::sun::star::util::XModifyListener >( xListener )
+        WeakListenerAdapter< css::util::XModifyListener >( xListener )
 {}
 
 WeakModifyListenerAdapter::~WeakModifyListenerAdapter()
@@ -45,7 +45,7 @@ void SAL_CALL WeakModifyListenerAdapter::modified( const lang::EventObject& aEve
 
 WeakSelectionChangeListenerAdapter::WeakSelectionChangeListenerAdapter(
     const Reference< view::XSelectionChangeListener > & xListener ) :
-        WeakListenerAdapter< ::com::sun::star::view::XSelectionChangeListener >( xListener )
+        WeakListenerAdapter< css::view::XSelectionChangeListener >( xListener )
 {}
 
 WeakSelectionChangeListenerAdapter::~WeakSelectionChangeListenerAdapter()

@@ -39,11 +39,11 @@ namespace impl
 {
 typedef ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
-        ::com::sun::star::chart2::XChartType,
-        ::com::sun::star::chart2::XDataSeriesContainer,
-        ::com::sun::star::util::XCloneable,
-        ::com::sun::star::util::XModifyBroadcaster,
-        ::com::sun::star::util::XModifyListener >
+        css::chart2::XChartType,
+        css::chart2::XDataSeriesContainer,
+        css::util::XCloneable,
+        css::util::XModifyBroadcaster,
+        css::util::XModifyListener >
     ChartType_Base;
 }
 
@@ -53,9 +53,7 @@ class ChartType :
     public ::property::OPropertySet
 {
 public:
-    explicit ChartType(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > const & xContext );
+    explicit ChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
     virtual ~ChartType();
 
     /// merge XInterface implementations
@@ -64,98 +62,95 @@ public:
 protected:
     explicit ChartType( const ChartType & rOther );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         GetComponentContext() const { return m_xContext;}
 
     // ____ XChartType ____
     // still abstract ! implement !
     virtual OUString SAL_CALL getChartType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override = 0;
+    virtual css::uno::Reference< css::chart2::XCoordinateSystem > SAL_CALL
         createCoordinateSystem( ::sal_Int32 DimensionCount )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedMandatoryRoles()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedOptionalRoles()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getRoleOfSequenceForSeriesLabel()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedPropertyRoles()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XDataSeriesContainer ____
     virtual void SAL_CALL addDataSeries(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& aDataSeries )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeDataSeries(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& aDataSeries )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > SAL_CALL getDataSeries()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries )
+        throw (css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > SAL_CALL getDataSeries()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setDataSeries(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >& aDataSeries )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aDataSeries )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     void fireModifyEvent();
 
     // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(css::beans::UnknownPropertyException) override;
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
     // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >
+    css::uno::Reference< css::util::XModifyListener >
         const m_xModifyEventForwarder;
 
 private:
     void impl_addDataSeriesWithoutNotification(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries >& aDataSeries );
+        const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         const m_xContext;
 
     typedef
-        ::std::vector< ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > >
-        tDataSeriesContainerType;
+        ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >  tDataSeriesContainerType;
 
     // --- mutable members: the following members need mutex guard ---
 

@@ -46,18 +46,18 @@ namespace LinePropertiesHelper
     };
 
     OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
-        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
+        ::std::vector< css::beans::Property > & rOutProperties );
 
     OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
-    bool IsLineVisible( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >& xLineProperties );
-    void SetLineVisible( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >& xLineProperties );
-    void SetLineInvisible( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >& xLineProperties );
-    void SetLineColor( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >& xGridProperties, sal_Int32 nColor  );
+    bool IsLineVisible( const css::uno::Reference<
+        css::beans::XPropertySet >& xLineProperties );
+    void SetLineVisible( const css::uno::Reference<
+        css::beans::XPropertySet >& xLineProperties );
+    void SetLineInvisible( const css::uno::Reference<
+        css::beans::XPropertySet >& xLineProperties );
+    void SetLineColor( const css::uno::Reference<
+        css::beans::XPropertySet >& xGridProperties, sal_Int32 nColor  );
 }
 
 } //  namespace chart

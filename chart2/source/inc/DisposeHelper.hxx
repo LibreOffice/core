@@ -30,16 +30,15 @@ namespace DisposeHelper
 template< class T >
     void Dispose( const T & xIntf )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp(
-        xIntf, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XComponent > xComp( xIntf, css::uno::UNO_QUERY );
     if( xComp.is())
         xComp->dispose();
 }
 
 template< class Intf >
-    void DisposeAndClear( ::com::sun::star::uno::Reference< Intf > & rIntf )
+    void DisposeAndClear( css::uno::Reference< Intf > & rIntf )
 {
-    Dispose< ::com::sun::star::uno::Reference< Intf > >( rIntf );
+    Dispose< css::uno::Reference< Intf > >( rIntf );
     rIntf.set( 0 );
 }
 

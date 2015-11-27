@@ -49,14 +49,14 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakComponentImplHelper<
-    ::com::sun::star::chart2::data::XDataSequence,
-    ::com::sun::star::chart2::data::XNumericalDataSequence,
-    ::com::sun::star::chart2::data::XTextualDataSequence,
-    ::com::sun::star::util::XCloneable,
-    ::com::sun::star::util::XModifiable, // contains util::XModifyBroadcaster
-    ::com::sun::star::container::XIndexReplace,
-    ::com::sun::star::container::XNamed, // for setting a new range representation
-    ::com::sun::star::lang::XServiceInfo >
+    css::chart2::data::XDataSequence,
+    css::chart2::data::XNumericalDataSequence,
+    css::chart2::data::XTextualDataSequence,
+    css::util::XCloneable,
+    css::util::XModifiable, // contains util::XModifyBroadcaster
+    css::container::XIndexReplace,
+    css::container::XNamed, // for setting a new range representation
+    css::lang::XServiceInfo >
     UncachedDataSequence_Base;
 }
 
@@ -81,12 +81,10 @@ public:
         lifetime is at least as long as the one of this object.
      */
     UncachedDataSequence(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XInternalDataProvider > & xIntDataProv,
+        const css::uno::Reference< css::chart2::XInternalDataProvider > & xIntDataProv,
         const OUString & rRangeRepresentation );
     UncachedDataSequence(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XInternalDataProvider > & xIntDataProv,
+        const css::uno::Reference< css::chart2::XInternalDataProvider > & xIntDataProv,
         const OUString & rRangeRepresentation,
         const OUString & rRole );
     UncachedDataSequence( const UncachedDataSequence & rSource );
@@ -110,79 +108,79 @@ public:
 
 protected:
     // ____ XPropertySet ____
-    /// @see ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    /// @see css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+        throw (css::uno::RuntimeException, std::exception) override;
     /// @see ::comphelper::OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     /// @see ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // ____ XDataSequence ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getData()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getSourceRangeRepresentation()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL generateLabel(
-        ::com::sun::star::chart2::data::LabelOrigin nLabelOrigin )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL generateLabel(
+        css::chart2::data::LabelOrigin nLabelOrigin )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XNumericalDataSequence ____
-    /// @see ::com::sun::star::chart::data::XNumericalDataSequence
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getNumericalData() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    /// @see css::chart::data::XNumericalDataSequence
+    virtual css::uno::Sequence< double > SAL_CALL getNumericalData() throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XTextualDataSequence ____
-    /// @see ::com::sun::star::chart::data::XTextualDataSequence
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getTextualData() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    /// @see css::chart::data::XTextualDataSequence
+    virtual css::uno::Sequence< OUString > SAL_CALL getTextualData() throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XIndexReplace ____
-    virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const css::uno::Any& Element )
+        throw (css::lang::IllegalArgumentException,
+               css::lang::IndexOutOfBoundsException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XIndexAccess (base of XIndexReplace) ____
     virtual ::sal_Int32 SAL_CALL getCount()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index )
+        throw (css::lang::IndexOutOfBoundsException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XElementAccess (base of XIndexAccess) ____
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XNamed (for setting a new range representation) ____
     virtual OUString SAL_CALL getName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setName( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifiable ____
     virtual sal_Bool SAL_CALL isModified()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setModified( sal_Bool bModified )
-        throw (::com::sun::star::beans::PropertyVetoException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::beans::PropertyVetoException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyBroadcaster (base of XModifiable) ____
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     void fireModifyEvent();
 
@@ -198,10 +196,9 @@ protected:
     void registerProperties();
 
 private:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XInternalDataProvider > m_xDataProvider;
+    css::uno::Reference< css::chart2::XInternalDataProvider > m_xDataProvider;
     OUString                 m_aSourceRepresentation;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >
+    css::uno::Reference< css::util::XModifyListener >
         m_xModifyEventForwarder;
 };
 

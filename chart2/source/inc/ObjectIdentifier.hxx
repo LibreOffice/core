@@ -91,8 +91,8 @@ class OOO_DLLPUBLIC_CHARTTOOLS ObjectIdentifier
 public:
     ObjectIdentifier();
     ObjectIdentifier( const OUString& rObjectCID );
-    ObjectIdentifier( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape );
-    ObjectIdentifier( const ::com::sun::star::uno::Any& rAny );
+    ObjectIdentifier( const css::uno::Reference< css::drawing::XShape >& rxShape );
+    ObjectIdentifier( const css::uno::Any& rAny );
     virtual ~ObjectIdentifier();
 
     ObjectIdentifier( const ObjectIdentifier& rOID );
@@ -102,15 +102,12 @@ public:
     bool operator<( const ObjectIdentifier& rOID ) const;
 
     static OUString createClassifiedIdentifierForObject(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XInterface >& xObject
+          const css::uno::Reference< css::uno::XInterface >& xObject
         , ChartModel& rModel);
 
     static OUString createClassifiedIdentifierForObject(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XInterface >& xObject
-        , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
+          const css::uno::Reference< css::uno::XInterface >& xObject
+        , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static OUString createClassifiedIdentifierForParticle(
         const OUString& rParticle );
@@ -122,33 +119,25 @@ public:
           , const OUString& rDragParameterString = OUString() );
 
     static OUString createClassifiedIdentifierForGrid(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XAxis >& xAxis
-        , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel
+          const css::uno::Reference< css::chart2::XAxis >& xAxis
+        , const css::uno::Reference< css::frame::XModel >& xChartModel
         , sal_Int32 nSubIndex = -1 );//-1: main grid, 0: first subgrid etc
 
     SAL_DLLPRIVATE static OUString createParticleForDiagram(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDiagram >& xDiagram
+          const css::uno::Reference< css::chart2::XDiagram >& xDiagram
         , ChartModel& rModel);
 
     SAL_DLLPRIVATE static OUString createParticleForDiagram(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDiagram >& xDiagram
-        , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
+          const css::uno::Reference< css::chart2::XDiagram >& xDiagram
+        , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static OUString createParticleForCoordinateSystem(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XCoordinateSystem >& xCooSys
+          const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys
         , ChartModel& rModel );
 
     static OUString createParticleForCoordinateSystem(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XCoordinateSystem >& xCooSys
-        , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
+          const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys
+        , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static OUString createParticleForAxis(
                       sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
@@ -160,15 +149,12 @@ public:
             , sal_Int32 nChartTypeIndex, sal_Int32 nSeriesIndex );
 
     static OUString createParticleForLegend(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XLegend >& xLegend
+          const css::uno::Reference< css::chart2::XLegend >& xLegend
         , ChartModel& rModel );
 
     static OUString createParticleForLegend(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XLegend >& xLegend
-        , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
+          const css::uno::Reference< css::chart2::XLegend >& xLegend
+        , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static OUString addChildParticle( const OUString& rParticle, const OUString& rChildParticle );
     static OUString createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex );
@@ -217,46 +203,41 @@ public:
     static OUString getSeriesParticleFromCID( const OUString& rCID );
 
     //return the model object that is indicated by rObjectCID
-    static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+    static css::uno::Reference< css::beans::XPropertySet >
             getObjectPropertySet(
                   const OUString& rObjectCID
-                , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                , const css::uno::Reference< css::frame::XModel >& xChartModel );
+    static css::uno::Reference< css::beans::XPropertySet >
             getObjectPropertySet(
                   const OUString& rObjectCID
-                , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XChartDocument >& xChartDocument );
+                , const css::uno::Reference< css::chart2::XChartDocument >& xChartDocument );
 
     //return the axis object that belongs to rObjectCID if any
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >
+    static css::uno::Reference< css::chart2::XAxis >
             getAxisForCID(
                   const OUString& rObjectCID
-                , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
+                , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     //return the series object that belongs to rObjectCID if any
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >
+    static css::uno::Reference< css::chart2::XDataSeries >
             getDataSeriesForCID(
                   const OUString& rObjectCID
-                , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
+                , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >
+    static css::uno::Reference< css::chart2::XDiagram >
             getDiagramForCID(
                   const OUString& rObjectCID
-                , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
+                , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static const OUString& getPieSegmentDragMethodServiceName();
     static OUString createPieSegmentDragParameterString(
           sal_Int32 nOffsetPercent
-        , const ::com::sun::star::awt::Point& rMinimumPosition
-        , const ::com::sun::star::awt::Point& rMaximumPosition );
+        , const css::awt::Point& rMinimumPosition
+        , const css::awt::Point& rMaximumPosition );
     static bool parsePieSegmentDragParameterString( const OUString& rDragParameterString
         , sal_Int32& rOffsetPercent
-        , ::com::sun::star::awt::Point& rMinimumPosition
-        , ::com::sun::star::awt::Point& rMaximumPosition );
+        , css::awt::Point& rMinimumPosition
+        , css::awt::Point& rMaximumPosition );
 
     static TitleHelper::eTitleType getTitleTypeForCID( const OUString& rCID );
 
@@ -266,8 +247,8 @@ public:
     bool isAutoGeneratedObject() const;
     bool isAdditionalShape() const;
     OUString getObjectCID() const { return m_aObjectCID;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getAdditionalShape() const { return m_xAdditionalShape;}
-    ::com::sun::star::uno::Any getAny() const;
+    css::uno::Reference< css::drawing::XShape > getAdditionalShape() const { return m_xAdditionalShape;}
+    css::uno::Any getAny() const;
 
 private:
     // #i12587# support for shapes in chart
@@ -276,7 +257,7 @@ private:
     // Note, that if m_aObjectCID is set, m_xAdditionalShape must be empty
     // and vice versa.
     OUString m_aObjectCID;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xAdditionalShape;
+    css::uno::Reference< css::drawing::XShape > m_xAdditionalShape;
 };
 
 } //namespace chart

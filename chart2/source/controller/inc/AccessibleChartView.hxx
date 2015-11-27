@@ -48,8 +48,8 @@ namespace impl
 {
 typedef ::cppu::ImplInheritanceHelper<
         ::chart::AccessibleBase,
-        ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::view::XSelectionChangeListener >
+        css::lang::XInitialization,
+        css::view::XSelectionChangeListener >
     AccessibleChartView_Base;
 }
 
@@ -71,35 +71,35 @@ public:
     // 4: awt::XWindow representing the view's window (is a vcl Window)
     // all arguments are only valid until next initialization - don't keep them longer
     virtual void SAL_CALL initialize(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw (::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw (css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ view::XSelectionChangeListener ____
-    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
     // ________ XEventListener ________
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     // ________ XAccessibleContext ________
     virtual OUString SAL_CALL getAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getAccessibleName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ________ XAccessibleComponent ________
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Rectangle SAL_CALL getBounds() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getLocationOnScreen() throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     // ________ AccessibleChartElement ________
-    virtual ::com::sun::star::awt::Point   GetUpperLeftOnScreen() const override;
+    virtual css::awt::Point   GetUpperLeftOnScreen() const override;
 
 private: // methods
     /** @return the result that m_xWindow->getPosSize() _should_ return.  It
@@ -108,23 +108,18 @@ private: // methods
                 a decoration.  Thus you have an offset of (currently) (2,2)
                 which isn't taken into account.
      */
-    ::com::sun::star::awt::Rectangle GetWindowPosSize() const;
+    css::awt::Rectangle GetWindowPosSize() const;
 
     ExplicitValueProvider* getExplicitValueProvider();
 
 private: // members
-    ::com::sun::star::uno::WeakReference<
-                       ::com::sun::star::view::XSelectionSupplier > m_xSelectionSupplier;
-    ::com::sun::star::uno::WeakReference<
-                       ::com::sun::star::frame::XModel >            m_xChartModel;
-    ::com::sun::star::uno::WeakReference<
-                       ::com::sun::star::uno::XInterface >          m_xChartView;
-    ::com::sun::star::uno::WeakReference<
-                        ::com::sun::star::awt::XWindow >            m_xWindow;
-    ::com::sun::star::uno::WeakReference<
-                       ::com::sun::star::accessibility::XAccessible > m_xParent;
+    css::uno::WeakReference< css::view::XSelectionSupplier >        m_xSelectionSupplier;
+    css::uno::WeakReference< css::frame::XModel >                   m_xChartModel;
+    css::uno::WeakReference< css::uno::XInterface >                 m_xChartView;
+    css::uno::WeakReference< css::awt::XWindow >                    m_xWindow;
+    css::uno::WeakReference< css::accessibility::XAccessible >      m_xParent;
 
-    std::shared_ptr< ObjectHierarchy >                          m_spObjectHierarchy;
+    std::shared_ptr< ObjectHierarchy >                              m_spObjectHierarchy;
     AccessibleUniqueId                                              m_aCurrentSelectionOID;
     SdrView*                                                        m_pSdrView;
     ::accessibility::IAccessibleViewForwarder*                      m_pViewForwarder;

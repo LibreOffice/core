@@ -43,82 +43,71 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS DataSourceHelper
 {
 public:
-        static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >
-            createDataSource( const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::data::XLabeledDataSequence > > & rSequences );
+        static css::uno::Reference< css::chart2::data::XDataSource >
+            createDataSource( const css::uno::Sequence<
+                css::uno::Reference<  css::chart2::data::XLabeledDataSequence > > & rSequences );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
+        static css::uno::Reference< css::chart2::data::XDataSequence >
             createCachedDataSequence();
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
+        static css::uno::Reference< css::chart2::data::XDataSequence >
             createCachedDataSequence( const OUString & rSingleText );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+        static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
             createLabeledDataSequence(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xValues ,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xLabels );
+                const css::uno::Reference< css::chart2::data::XDataSequence >& xValues ,
+                const css::uno::Reference< css::chart2::data::XDataSequence >& xLabels );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+        static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
             createLabeledDataSequence(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xValues );
+                const css::uno::Reference< css::chart2::data::XDataSequence >& xValues );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+        static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
             createLabeledDataSequence();
 
-        static ::com::sun::star::uno::Sequence<
-               ::com::sun::star::beans::PropertyValue > createArguments(
+        static css::uno::Sequence< css::beans::PropertyValue >
+            createArguments(
                    bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories );
 
-        static ::com::sun::star::uno::Sequence<
-               ::com::sun::star::beans::PropertyValue > createArguments(
+        static css::uno::Sequence<
+               css::beans::PropertyValue > createArguments(
                    const OUString & rRangeRepresentation,
-                   const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping,
+                   const css::uno::Sequence< sal_Int32 >& rSequenceMapping,
                    bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories );
 
-        SAL_DLLPRIVATE static void readArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArguments
-            , OUString & rRangeRepresentation, ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
+        SAL_DLLPRIVATE static void readArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments
+            , OUString & rRangeRepresentation, css::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& bUseColumns, bool& bFirstCellAsLabel, bool& bHasCategories );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >
-            pressUsedDataIntoRectangularFormat( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+        static css::uno::Reference< css::chart2::data::XDataSource >
+            pressUsedDataIntoRectangularFormat( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
-        SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString > getUsedDataRanges(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram > & xDiagram );
+        SAL_DLLPRIVATE static css::uno::Sequence< OUString > getUsedDataRanges(
+            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
-        static ::com::sun::star::uno::Sequence< OUString > getUsedDataRanges(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel > & xChartModel );
+        static css::uno::Sequence< OUString > getUsedDataRanges(
+            const css::uno::Reference< css::frame::XModel > & xChartModel );
 
-        static ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataSource > getUsedData(
+        static css::uno::Reference< css::chart2::data::XDataSource > getUsedData(
                 ChartModel& rModel );
 
-        static ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataSource > getUsedData(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xChartModel );
+        static css::uno::Reference< css::chart2::data::XDataSource > getUsedData(
+            const css::uno::Reference< css::frame::XModel >& xChartModel );
 
-        static ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataSource > getUsedData(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+        static css::uno::Reference< css::chart2::data::XDataSource > getUsedData(
+            const css::uno::Reference<css::chart2::XChartDocument >& xChartDoc );
 
         static bool detectRangeSegmentation(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xChartModel
+            const css::uno::Reference< css::frame::XModel >& xChartModel
             , OUString& rOutRangeString
-            , ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
+            , css::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& rOutUseColumns
             , bool& rOutFirstCellAsLabel
             , bool& rOutHasCategories );
 
         static void setRangeSegmentation(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xChartModel
-            , const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
+            const css::uno::Reference< css::frame::XModel >& xChartModel
+            , const css::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool bUseColumns
             , bool bFirstCellAsLabel
             , bool bUseCategories );
@@ -131,19 +120,16 @@ public:
             HasCategories and FirstCellAsLabel.
          */
         static bool allArgumentsForRectRangeDetected(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument );
+            const css::uno::Reference< css::chart2::XChartDocument >& xChartDocument );
 
-        SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString > getRangesFromLabeledDataSequence(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XLabeledDataSequence > & xLSeq );
+        SAL_DLLPRIVATE static css::uno::Sequence< OUString > getRangesFromLabeledDataSequence(
+            const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq );
 
         SAL_DLLPRIVATE static OUString getRangeFromValues(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XLabeledDataSequence > & xLSeq );
+            const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq );
 
-        SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString > getRangesFromDataSource(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataSource > & xSource );
+        SAL_DLLPRIVATE static css::uno::Sequence< OUString > getRangesFromDataSource(
+            const css::uno::Reference< css::chart2::data::XDataSource > & xSource );
 };
 
 } //namespace chart

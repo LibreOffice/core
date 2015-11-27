@@ -33,23 +33,20 @@ class VCartesianGrid : public VAxisOrGridBase
 // public methods
 public:
     VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-        , const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > >& rGridPropertiesList //main grid, subgrid, subsubgrid etc
+        , const css::uno::Sequence<
+            css::uno::Reference< css::beans::XPropertySet > >& rGridPropertiesList //main grid, subgrid, subsubgrid etc
         );
     virtual ~VCartesianGrid();
 
     virtual void createShapes() override;
 
     static void fillLinePropertiesFromGridModel( ::std::vector<VLineProperties>& rLinePropertiesList
-                    , const ::com::sun::star::uno::Sequence<
-                        ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XPropertySet > >& rGridPropertiesList );
+                    , const css::uno::Sequence<
+                        css::uno::Reference< css::beans::XPropertySet > >& rGridPropertiesList );
 
 private:
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > > m_aGridPropertiesList; //main grid, subgrid, subsubgrid etc
+    css::uno::Sequence<
+        css::uno::Reference< css::beans::XPropertySet > > m_aGridPropertiesList; //main grid, subgrid, subsubgrid etc
 };
 
 } //namespace chart

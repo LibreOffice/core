@@ -51,9 +51,8 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString
     @param aRole
         The role that is to be filtered out.
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
-    getDataSequenceByRole( const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::chart2::data::XDataSource > & xSource,
+OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    getDataSequenceByRole( const css::uno::Reference< css::chart2::data::XDataSource > & xSource,
                            const OUString& aRole,
                            bool bMatchPrefix = false );
 
@@ -67,10 +66,8 @@ OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::cha
         The role that is to be filtered out.
 */
 OOO_DLLPUBLIC_CHARTTOOLS ::std::vector<
-  ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > >
-    getAllDataSequencesByRole( const ::com::sun::star::uno::Sequence<
-                                   ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::chart2::data::XLabeledDataSequence > > & aDataSequences,
+  css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+    getAllDataSequencesByRole( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole,
                                bool bMatchPrefix = false );
 
@@ -83,11 +80,8 @@ getAllDataSequences(
     into a data source.  The order of sequences will match the order of the data
     series.
  */
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSource >
-    getDataSource( const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Reference<
-                              ::com::sun::star::chart2::XDataSeries > > & aSeries );
+OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XDataSource >
+    getDataSource( const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > & aSeries );
 
 /** Get the label of a series (e.g. for the legend)
 
@@ -96,109 +90,90 @@ OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<
         to take its label.
  */
 OOO_DLLPUBLIC_CHARTTOOLS OUString getDataSeriesLabel(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries > & xSeries,
+    const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
     const OUString & rLabelSequenceRole );
 
 /** Get the label of a labeled sequence including necessary automatic generation
  */
 OOO_DLLPUBLIC_CHARTTOOLS OUString getLabelForLabeledDataSequence(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence > & xLabeledSeq );
+    const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLabeledSeq );
 
 OOO_DLLPUBLIC_CHARTTOOLS void setStackModeAtSeries(
-    const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > & aSeries,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
+    const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > & aSeries,
+    const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
     StackMode eStackMode );
 
 OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getAttachedAxisIndex(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xSeries );
+    const css::uno::Reference< css::chart2::XDataSeries > & xSeries );
 
 /// @param nAxisIndex, if -1 it is determined by the given data series via getAttachedAxisIndex
 OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getNumberFormatKeyFromAxis(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xSeries,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
+    const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+    const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
     sal_Int32 nDimensionIndex,
     sal_Int32 nAxisIndex = -1 );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >
+css::uno::Reference< css::chart2::XCoordinateSystem >
     getCoordinateSystemOfSeries(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xSeries,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > & xDiagram );
+        const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
+css::uno::Reference< css::chart2::XChartType >
     getChartTypeOfSeries(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > & xSeries,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > & xDiagram );
+        const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
 OOO_DLLPUBLIC_CHARTTOOLS void deleteSeries(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries > & xSeries,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartType > & xChartType );
+    const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+    const css::uno::Reference< css::chart2::XChartType > & xChartType );
 
 OOO_DLLPUBLIC_CHARTTOOLS void switchSymbolsOnOrOff(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & xSeriesProperties,
+    const css::uno::Reference< css::beans::XPropertySet > & xSeriesProperties,
     bool bSymbolsOn, sal_Int32 nSeriesIndex );
 
 OOO_DLLPUBLIC_CHARTTOOLS void switchLinesOnOrOff(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & xSeriesProperties,
+    const css::uno::Reference< css::beans::XPropertySet > & xSeriesProperties,
     bool bLinesOn );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-void makeLinesThickOrThin( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & xSeriesProperties, bool bThick );
+void makeLinesThickOrThin( const css::uno::Reference< css::beans::XPropertySet > & xSeriesProperties, bool bThick );
 
 OOO_DLLPUBLIC_CHARTTOOLS void setPropertyAlsoToAllAttributedDataPoints(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xSeries,
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         const OUString& rPropertyName,
-        const ::com::sun::star::uno::Any& rPropertyValue );
+        const css::uno::Any& rPropertyValue );
 
 OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xSeries,
+    const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
     const OUString& rPropertyName,
-    const ::com::sun::star::uno::Any& rPropertyValue );
+    const css::uno::Any& rPropertyValue );
 
 OOO_DLLPUBLIC_CHARTTOOLS bool areAllSeriesAttachedToSameAxis(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType,
+        const css::uno::Reference< css::chart2::XChartType >& xChartType,
         sal_Int32 & rOutAxisIndex );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool hasUnhiddenData( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS bool hasUnhiddenData( const css::uno::Reference<
+        css::chart2::XDataSeries >& xSeries );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence >& xDataSequence, bool bTranslate );
+sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const css::uno::Reference<
+        css::chart2::data::XDataSequence >& xDataSequence, bool bTranslate );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtSeries( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtSeries( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtPoints( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtPoints( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelAtPoint( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xSeries, sal_Int32 nPointIndex );
+OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelAtPoint( const css::uno::Reference< css::chart2::XDataSeries >& xSeries, sal_Int32 nPointIndex );
 
-OOO_DLLPUBLIC_CHARTTOOLS void insertDataLabelsToSeriesAndAllPoints( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS void insertDataLabelsToSeriesAndAllPoints( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
-OOO_DLLPUBLIC_CHARTTOOLS void insertDataLabelToPoint( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >& xPointPropertySet );
+OOO_DLLPUBLIC_CHARTTOOLS void insertDataLabelToPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 
-OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromSeriesAndAllPoints( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromSeriesAndAllPoints( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
-OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromPoint( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >& xPointPropertySet );
+OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 
 } //  namespace DataSeriesHelper
 } //  namespace chart

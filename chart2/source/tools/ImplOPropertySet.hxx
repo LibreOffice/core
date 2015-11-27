@@ -39,10 +39,10 @@ public:
 
     /** supports states DIRECT_VALUE and DEFAULT_VALUE
      */
-    ::com::sun::star::beans::PropertyState
+    css::beans::PropertyState
         GetPropertyStateByHandle( sal_Int32 nHandle ) const;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState >
+    css::uno::Sequence< css::beans::PropertyState >
         GetPropertyStatesByHandle( const ::std::vector< sal_Int32 > & aHandles ) const;
 
     void SetPropertyToDefault( sal_Int32 nHandle );
@@ -58,25 +58,25 @@ public:
         @return false if the property is default, true otherwise.
      */
     bool GetPropertyValueByHandle(
-        ::com::sun::star::uno::Any & rValue,
+        css::uno::Any & rValue,
         sal_Int32 nHandle ) const;
 
     void SetPropertyValueByHandle( sal_Int32 nHandle,
-                                   const ::com::sun::star::uno::Any & rValue );
+                                   const css::uno::Any & rValue );
 
-    bool SetStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > & xStyle );
-    ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
+    bool SetStyle( const css::uno::Reference< css::style::XStyle > & xStyle );
+    css::uno::Reference< css::style::XStyle >
         GetStyle() const { return m_xStyle;}
 
     typedef
-        ::std::map< sal_Int32, ::com::sun::star::uno::Any >
+        ::std::map< sal_Int32, css::uno::Any >
         tPropertyMap;
 
 private:
     void cloneInterfaceProperties();
 
     tPropertyMap    m_aProperties;
-    ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
+    css::uno::Reference< css::style::XStyle >
         m_xStyle;
 };
 

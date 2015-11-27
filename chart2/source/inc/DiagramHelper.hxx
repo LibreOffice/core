@@ -52,8 +52,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper
 {
 public:
     typedef ::std::pair<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartTypeTemplate >,
+            css::uno::Reference< css::chart2::XChartTypeTemplate >,
             OUString >
         tTemplateWithServiceName;
 
@@ -67,18 +66,15 @@ public:
      */
     static tTemplateWithServiceName
         getTemplateForDiagram(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram > & xDiagram,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory > & xChartTypeManager);
+            const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+            const css::uno::Reference< css::lang::XMultiServiceFactory > & xChartTypeManager);
 
     /** Sets the "SwapXAndYAxis" property at all coordinate systems found in the
         given diagram.
 
         "vertical==true" for bar charts, "vertical==false" for column charts
      */
-    static void setVertical( const ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::chart2::XDiagram > & xDiagram,
+    static void setVertical( const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
                              bool bVertical = true );
 
     /** Gets the "SwapXAndYAxis" property at all coordinate systems found in the
@@ -86,13 +82,11 @@ public:
 
         "vertical==true" for bar charts, "vertical==false" for column charts
     */
-    static bool getVertical( const ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::chart2::XDiagram > & xDiagram,
+    static bool getVertical( const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
                              bool& rbOutFoundResult, bool& rbOutAmbiguousResult );
 
     static StackMode getStackMode(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         bool& rbFound, bool& rbAmbiguous
         );
 
@@ -103,8 +97,7 @@ public:
         applies to the first chart type/the bars)
      */
     static void setStackMode(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         StackMode eStackMode
         );
 
@@ -118,20 +111,17 @@ public:
             "ambiguous")
      */
     static StackMode getStackModeFromChartType(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType > & xChartType,
+        const css::uno::Reference< css::chart2::XChartType > & xChartType,
         bool& rbFound, bool& rbAmbiguous,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem =
-                ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >()
+        const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem =
+                css::uno::Reference< css::chart2::XCoordinateSystem >()
         );
 
     /** Returns the dimension found for all chart types in the tree.  If the
         dimension is not unique, 0 is returned.
      */
     static sal_Int32 getDimension(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram );
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
     /** Sets the dimension of the diagram given.
 
@@ -141,122 +131,92 @@ public:
            XCoordinateSystemContainer of the diagram.
      */
     static void setDimension(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         sal_Int32 nNewDimensionCount );
 
     /** Replaces all occurrences of xCooSysToReplace in the tree with
         xReplacement in the diagram's tree
      */
     SAL_DLLPRIVATE static void replaceCoordinateSystem(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystem > & xCooSysToReplace,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystem > & xReplacement );
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+        const css::uno::Reference< css::chart2::XCoordinateSystem > & xCooSysToReplace,
+        const css::uno::Reference< css::chart2::XCoordinateSystem > & xReplacement );
 
     static bool isSeriesAttachedToMainAxis(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries >& xDataSeries );
+        const css::uno::Reference< css::chart2::XDataSeries >& xDataSeries );
 
     static bool attachSeriesToAxis( bool bMainAxis,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries >& xSeries,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext,
         bool bAdaptAxes=true );
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XAxis > getAttachedAxis(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries >& xSeries,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram );
+    static css::uno::Reference< css::chart2::XAxis > getAttachedAxis(
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType >
+    static css::uno::Reference< css::chart2::XChartType >
         getChartTypeOfSeries(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram >& xDiagram,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >& xSeries );
+            const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+            const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
-    static ::std::vector<
-            ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > >
+    static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
         getDataSeriesFromDiagram(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram );
+            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
     /** return all data series in this diagram grouped by chart-types
      */
-    static ::com::sun::star::uno::Sequence<
-               ::com::sun::star::uno::Sequence<
-                   ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > >
+    static css::uno::Sequence<
+               css::uno::Sequence<
+                   css::uno::Reference< css::chart2::XDataSeries > > >
         getDataSeriesGroups(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram );
+            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
     static bool isCategoryDiagram(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram >& xDiagram );
+            const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
     static void setCategoriesToDiagram(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XLabeledDataSequence >& xCategories,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram >& xDiagram,
+            const css::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
+            const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
             bool bSetAxisType = false, // when this flag is true ...
             bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+    static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getCategoriesFromDiagram(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram > & xDiagram );
+            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
-    static ::com::sun::star::uno::Sequence< OUString >
+    static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 
-    SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString >
+    SAL_DLLPRIVATE static css::uno::Sequence< OUString >
         generateAutomaticCategoriesFromCooSys(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XCoordinateSystem > & xCooSys );
+            const css::uno::Reference< css::chart2::XCoordinateSystem > & xCooSys );
 
     static void switchToDateCategories(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
 
     static void switchToTextCategories(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
 
-    static bool isSupportingDateAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
-    static bool isDateNumberFormat( sal_Int32 nNumberFormat, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& xNumberFormats );
-    static sal_Int32 getDateNumberFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
-    static sal_Int32 getDateTimeInputNumberFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber );
+    static bool isSupportingDateAxis( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+    static bool isDateNumberFormat( sal_Int32 nNumberFormat, const css::uno::Reference< css::util::XNumberFormats >& xNumberFormats );
+    static sal_Int32 getDateNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+    static sal_Int32 getDateTimeInputNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber );
 
-    static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+    static sal_Int32 getPercentNumberFormat( const css::uno::Reference<
+                css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType >
-        getChartTypeByIndex( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram, sal_Int32 nIndex );
+    static css::uno::Reference< css::chart2::XChartType >
+        getChartTypeByIndex( const css::uno::Reference< css::chart2::XDiagram >& xDiagram, sal_Int32 nIndex );
 
-    static ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType > >
+    static css::uno::Sequence<
+            css::uno::Reference< css::chart2::XChartType > >
         getChartTypesFromDiagram(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram > & xDiagram );
+            const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
-    SAL_DLLPRIVATE static bool areChartTypesCompatible( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType >& xFirstType,
-                const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType >& xSecondType );
+    SAL_DLLPRIVATE static bool areChartTypesCompatible( const css::uno::Reference<
+                css::chart2::XChartType >& xFirstType,
+                const css::uno::Reference< css::chart2::XChartType >& xSecondType );
 
     /**
         * Test if a series can be moved.
@@ -274,10 +234,8 @@ public:
         *
         */
     static bool isSeriesMoveable(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram >& xDiagram,
-            const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xGivenDataSeries,
+            const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+            const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
             bool bForward );
 
     /**
@@ -296,42 +254,33 @@ public:
         *
         */
     static bool moveSeries(
-                const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::chart2::XDiagram >& xDiagram,
-                const ::com::sun::star::uno::Reference<
-          ::com::sun::star::chart2::XDataSeries >& xGivenDataSeries,
+                const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+                const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
                 bool bForward );
 
-    static bool isSupportingFloorAndWall( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram > & xDiagram );
+    static bool isSupportingFloorAndWall( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
-    static bool isPieOrDonutChart( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram >& xDiagram );
+    static bool isPieOrDonutChart( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
     static sal_Int32 getGeometry3D(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         bool& rbFound, bool& rbAmbiguous );
 
     static void setGeometry3D(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         sal_Int32 nNewGeometry );
 
-    //returns integer from constant group ::com::sun::star::chart::MissingValueTreatment
+    //returns integer from constant group css::chart::MissingValueTreatment
     static sal_Int32 getCorrectedMissingValueTreatment(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram > & xDiagram,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType >& xChartType );
+            const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+            const css::uno::Reference< css::chart2::XChartType >& xChartType );
 
-    static DiagramPositioningMode getDiagramPositioningMode( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram > & xDiagram );
+    static DiagramPositioningMode getDiagramPositioningMode( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
-    static bool setDiagramPositioning( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel,
-        const ::com::sun::star::awt::Rectangle& rPosRect /*100th mm*/ );
+    static bool setDiagramPositioning( const css::uno::Reference< css::frame::XModel >& xChartModel,
+        const css::awt::Rectangle& rPosRect /*100th mm*/ );
 
-    static ::com::sun::star::awt::Rectangle getDiagramRectangleFromModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
+    static css::awt::Rectangle getDiagramRectangleFromModel( const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static bool switchDiagramPositioningToExcludingPositioning( ChartModel& rModel
         , bool bResetModifiedState //set model back to unchanged if it was unchanged before

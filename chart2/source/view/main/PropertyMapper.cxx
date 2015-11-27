@@ -386,8 +386,8 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
 void PropertyMapper::setMultiProperties(
                   const tNameSequence& rNames
                 , const tAnySequence&  rValues
-                , const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::beans::XPropertySet >& xTarget )
+                , const css::uno::Reference<
+                  css::beans::XPropertySet >& xTarget )
 {
     bool bSuccess = false;
     try

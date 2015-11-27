@@ -47,28 +47,24 @@ class VCoordinateSystem
 public:
     virtual ~VCoordinateSystem();
 
-    static VCoordinateSystem* createCoordinateSystem( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel );
+    static VCoordinateSystem* createCoordinateSystem( const css::uno::Reference<
+                                css::chart2::XCoordinateSystem >& xCooSysModel );
 
     void initPlottingTargets(
-                  const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::drawing::XShapes >& xLogicTarget
-                , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::drawing::XShapes >& xFinalTarget
-                , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-                , ::com::sun::star::uno::Reference<
-                        ::com::sun::star::drawing::XShapes >& xLogicTargetForSeriesBehindAxis )
+                  const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
+                , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget
+                , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
+                , css::uno::Reference< css::drawing::XShapes >& xLogicTargetForSeriesBehindAxis )
                         throw (css::uno::RuntimeException, std::exception);
 
     void setParticle( const OUString& rCooSysParticle );
 
-    void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
-    ::com::sun::star::drawing::HomogenMatrix getTransformationSceneToScreen() { return m_aMatrixSceneToScreen;}
+    void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix );
+    css::drawing::HomogenMatrix getTransformationSceneToScreen() { return m_aMatrixSceneToScreen;}
 
     //better performance for big data
-    virtual ::com::sun::star::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const ::com::sun::star::awt::Size& rPageSize
-                                    , const ::com::sun::star::awt::Size& rPageResolution );
+    virtual css::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const css::awt::Size& rPageSize
+                                    , const css::awt::Size& rPageResolution );
 
     ExplicitScaleData getExplicitScale( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
     ExplicitIncrementData getExplicitIncrement( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
@@ -107,17 +103,17 @@ public:
 
     void set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos );
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XCoordinateSystem >
+    css::uno::Reference<
+        css::chart2::XCoordinateSystem >
         getModel() const { return m_xCooSysModel;}
 
     /**
      * Create "view" axis obejcts 'VAxis' from the coordinate system model.
      */
     virtual void createVAxisList(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument> & xChartDoc
-            , const ::com::sun::star::awt::Size& rFontReferenceSize
-            , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
+            const css::uno::Reference< css::chart2::XChartDocument> & xChartDoc
+            , const css::awt::Size& rFontReferenceSize
+            , const css::awt::Rectangle& rMaximumSpaceForLabels );
 
     virtual void initVAxisInList();
     virtual void updateScalesAndIncrementsOnAxes();
@@ -134,52 +130,47 @@ public:
     sal_Int32 getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex ) const;
 
     bool needSeriesNamesForAxis() const;
-    void setSeriesNamesForAxis( const ::com::sun::star::uno::Sequence< OUString >& rSeriesNames );
+    void setSeriesNamesForAxis( const css::uno::Sequence< OUString >& rSeriesNames );
 
 protected: //methods
-    VCoordinateSystem( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+    VCoordinateSystem( const css::uno::Reference<
+        css::chart2::XCoordinateSystem >& xCooSys );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >
+    css::uno::Reference< css::chart2::XAxis >
         getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex  ) const;
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > >
-        getGridListFromAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
+    static css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > >
+        getGridListFromAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis );
 
     VAxisBase* getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
-    OUString createCIDForAxis( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XAxis >& xAxis
+    OUString createCIDForAxis( const css::uno::Reference<
+                    css::chart2::XAxis >& xAxis
                     , sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
-    OUString createCIDForGrid( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XAxis >& xAxis
+    OUString createCIDForGrid( const css::uno::Reference<
+                    css::chart2::XAxis >& xAxis
                     , sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
-    sal_Int32 getNumberFormatKeyForAxis( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::chart2::XAxis >& xAxis
-                     , const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::chart2::XChartDocument>& xChartDoc);
+    sal_Int32 getNumberFormatKeyForAxis( const css::uno::Reference<
+                     css::chart2::XAxis >& xAxis
+                     , const css::uno::Reference<
+                     css::chart2::XChartDocument>& xChartDoc);
 
 private: //methods
     static void impl_adjustDimension( sal_Int32& rDimensionIndex );
     void impl_adjustDimensionAndIndex( sal_Int32& rDimensionIndex, sal_Int32& rAxisIndex ) const;
 
 protected: //member
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XCoordinateSystem > m_xCooSysModel;
+    css::uno::Reference< css::chart2::XCoordinateSystem > m_xCooSysModel;
 
     OUString m_aCooSysParticle;
 
     typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >                m_xLogicTargetForGrids;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >                m_xLogicTargetForAxes;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >                m_xFinalTarget;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>       m_xShapeFactory;
-    ::com::sun::star::drawing::HomogenMatrix                            m_aMatrixSceneToScreen;
+    css::uno::Reference< css::drawing::XShapes >                m_xLogicTargetForGrids;
+    css::uno::Reference< css::drawing::XShapes >                m_xLogicTargetForAxes;
+    css::uno::Reference< css::drawing::XShapes >                m_xFinalTarget;
+    css::uno::Reference< css::lang::XMultiServiceFactory>       m_xShapeFactory;
+    css::drawing::HomogenMatrix                            m_aMatrixSceneToScreen;
 
     CuboidPlanePosition m_eLeftWallPos;
     CuboidPlanePosition m_eBackWallPos;
@@ -192,7 +183,7 @@ protected: //member
      */
     MergedMinimumAndMaximumSupplier m_aMergedMinMaxSupplier;
 
-    ::com::sun::star::uno::Sequence< OUString > m_aSeriesNamesForZAxis;
+    css::uno::Sequence< OUString > m_aSeriesNamesForZAxis;
 
     typedef std::map< tFullAxisIndex, std::shared_ptr< VAxisBase > > tVAxisMap;
 

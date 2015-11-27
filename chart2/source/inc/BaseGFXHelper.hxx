@@ -41,37 +41,37 @@ namespace chart
 namespace BaseGFXHelper
 {
 
-OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DRange getBoundVolume( const ::com::sun::star::drawing::PolyPolygonShape3D& rPolyPoly );
+OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DRange getBoundVolume( const css::drawing::PolyPolygonShape3D& rPolyPoly );
 
 OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B2IRectangle makeRectangle(
-            const com::sun::star::awt::Point& rPosition,
-            const com::sun::star::awt::Size& rSize );
+            const css::awt::Point& rPosition,
+            const css::awt::Size& rSize );
 
 OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B2IRectangle makeRectangle( const css::awt::Rectangle& rRect );
 
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::awt::Point B2IRectangleToAWTPoint(
+OOO_DLLPUBLIC_CHARTTOOLS css::awt::Point B2IRectangleToAWTPoint(
             const ::basegfx::B2IRectangle& rB2IRectangle );
 
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::awt::Size B2IRectangleToAWTSize(
+OOO_DLLPUBLIC_CHARTTOOLS css::awt::Size B2IRectangleToAWTSize(
             const ::basegfx::B2IRectangle& rB2IRectangle );
 
 ::basegfx::B3DVector Direction3DToB3DVector(
-    const com::sun::star::drawing::Direction3D& rDirection );
+    const css::drawing::Direction3D& rDirection );
 
-com::sun::star::drawing::Direction3D B3DVectorToDirection3D(
+css::drawing::Direction3D B3DVectorToDirection3D(
     const ::basegfx::B3DVector& rB3DVector );
 
 ::basegfx::B3DVector Position3DToB3DVector(
-    const com::sun::star::drawing::Position3D& rPosition );
+    const css::drawing::Position3D& rPosition );
 
-com::sun::star::drawing::Position3D B3DVectorToPosition3D(
+css::drawing::Position3D B3DVectorToPosition3D(
     const ::basegfx::B3DVector& rB3DVector );
 
 OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DHomMatrix HomogenMatrixToB3DHomMatrix(
-    const ::com::sun::star::drawing::HomogenMatrix & rHomogenMatrix );
+    const css::drawing::HomogenMatrix & rHomogenMatrix );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-::com::sun::star::drawing::HomogenMatrix B3DHomMatrixToHomogenMatrix(
+css::drawing::HomogenMatrix B3DHomMatrixToHomogenMatrix(
     const ::basegfx::B3DHomMatrix & rB3DMatrix );
 
 OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DTuple GetRotationFromMatrix(

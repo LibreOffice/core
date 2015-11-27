@@ -47,9 +47,9 @@ public:
             the clipping area are stored into aResult whose prior content is deleted first.
      */
     static void clipPolygonAtRectangle(
-                                const ::com::sun::star::drawing::PolyPolygonShape3D& rPolygon
+                                const css::drawing::PolyPolygonShape3D& rPolygon
                                 , const ::basegfx::B2DRectangle& rRectangle
-                                , ::com::sun::star::drawing::PolyPolygonShape3D& aResult
+                                , css::drawing::PolyPolygonShape3D& aResult
                                 , bool bSplitPiecesToDifferentPolygons = true );
 };
 

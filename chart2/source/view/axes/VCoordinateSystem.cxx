@@ -362,7 +362,7 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
     if( rScaleAutomatism.getScale().AxisType==AxisType::DATE && nDimIndex==0 )
     {
         // This is a date X dimension.  Determine proper time resolution.
-        sal_Int32 nTimeResolution = ::com::sun::star::chart::TimeUnit::MONTH;
+        sal_Int32 nTimeResolution = css::chart::TimeUnit::MONTH;
         if( !(rScaleAutomatism.getScale().TimeIncrement.TimeResolution >>= nTimeResolution) )
         {
             nTimeResolution = m_aMergedMinMaxSupplier.calculateTimeResolutionOnXAxis();

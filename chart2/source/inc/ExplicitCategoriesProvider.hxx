@@ -44,61 +44,56 @@ public:
     virtual ~SplitCategoriesProvider();
 
     virtual sal_Int32 getLevelCount() const = 0;
-    virtual ::com::sun::star::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
+    virtual css::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
 };
 
 class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider
 {
 public:
-    ExplicitCategoriesProvider( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel
+    ExplicitCategoriesProvider( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSysModel
                        , ChartModel& rChartModel
                        );
     virtual ~ExplicitCategoriesProvider();
 
     void init();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence > getOriginalCategories();
+    css::uno::Reference< css::chart2::data::XDataSequence > getOriginalCategories();
 
-    ::com::sun::star::uno::Sequence< OUString > getSimpleCategories();
+    css::uno::Sequence< OUString > getSimpleCategories();
     const std::vector<ComplexCategory>* getCategoriesByLevel( sal_Int32 nLevel );
 
     static OUString getCategoryByIndex(
-          const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel
+          const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSysModel
         , ChartModel& rModel
         , sal_Int32 nIndex );
 
-    static ::com::sun::star::uno::Sequence< OUString > getExplicitSimpleCategories(
+    static css::uno::Sequence< OUString > getExplicitSimpleCategories(
             const SplitCategoriesProvider& rSplitCategoriesProvider );
 
-    static void convertCategoryAnysToText( ::com::sun::star::uno::Sequence< OUString >& rOutTexts
-        , const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rInAnys
+    static void convertCategoryAnysToText( css::uno::Sequence< OUString >& rOutTexts
+        , const css::uno::Sequence< css::uno::Any >& rInAnys
         , ChartModel& rModel );
 
     bool hasComplexCategories() const;
     sal_Int32 getCategoryLevelCount() const;
 
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList() { return m_aSplitCategoriesList;}
+    const css::uno::Sequence< css::uno::Reference<
+        css::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList() { return m_aSplitCategoriesList;}
 
     bool isDateAxis();
     const std::vector< double >&  getDateCategories();
 
 private: //member
     bool volatile m_bDirty;
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::chart2::XCoordinateSystem >   m_xCooSysModel;
+    css::uno::WeakReference< css::chart2::XCoordinateSystem >   m_xCooSysModel;
     ChartModel& mrModel;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
 
     bool m_bIsExplicitCategoriesInited;
-    ::com::sun::star::uno::Sequence< OUString >  m_aExplicitCategories;
+    css::uno::Sequence< OUString >  m_aExplicitCategories;
     ::std::vector< ::std::vector< ComplexCategory > >   m_aComplexCats;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
+    css::uno::Sequence< css::uno::Reference<
+        css::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
 
     bool m_bIsDateAxis;
     bool m_bIsAutoDate;

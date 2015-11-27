@@ -36,8 +36,7 @@ class ColumnLineChartTypeTemplate :
 {
 public:
     explicit ColumnLineChartTypeTemplate(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > const & xContext,
+        css::uno::Reference< css::uno::XComponentContext > const & xContext,
         const OUString & rServiceName,
         StackMode eStackMode,
         sal_Int32 nNumberOfLines );
@@ -50,50 +49,48 @@ public:
 
 protected:
     // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(css::beans::UnknownPropertyException) override;
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XChartTypeTemplate ____
     virtual sal_Bool SAL_CALL matchesTemplate(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram,
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         sal_Bool bAdaptProperties )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > SAL_CALL
-        getChartTypeForNewSeries( const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType > >& aFormerlyUsedChartTypes )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XChartType > SAL_CALL
+        getChartTypeForNewSeries( const css::uno::Sequence<
+            css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL applyStyle(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries,
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ ChartTypeTemplate ____
     virtual void createChartTypes(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XDataSeries > > > & aSeriesSeq,
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys,
-            const ::com::sun::star::uno::Sequence<
-                  ::com::sun::star::uno::Reference<
-                      ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq
+            const css::uno::Sequence<
+                css::uno::Sequence<
+                    css::uno::Reference<
+                        css::chart2::XDataSeries > > > & aSeriesSeq,
+            const css::uno::Sequence<
+                css::uno::Reference<
+                    css::chart2::XCoordinateSystem > > & rCoordSys,
+            const css::uno::Sequence<
+                  css::uno::Reference<
+                      css::chart2::XChartType > > & aOldChartTypesSeq
             ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
+    virtual css::uno::Reference< css::chart2::XChartType >
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex ) override;
 
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const override;

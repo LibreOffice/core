@@ -37,21 +37,18 @@ public: //methods
     bool hasSelection();
 
     OUString getSelectedCID();
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape > getSelectedAdditionalShape();
+    css::uno::Reference< css::drawing::XShape > getSelectedAdditionalShape();
     ObjectIdentifier getSelectedOID() const { return m_aSelectedOID;}
 
     bool isResizeableObjectSelected();
-    bool isRotateableObjectSelected( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel >& xChartModel );
+    bool isRotateableObjectSelected( const css::uno::Reference< css::frame::XModel >& xChartModel );
     bool isDragableObjectSelected();
 
     bool isAdditionalShapeSelected() const;
 
     //returns true if selection has changed
     bool setSelection( const OUString& rCID );
-    bool setSelection( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape >& xShape );
+    bool setSelection( const css::uno::Reference< css::drawing::XShape >& xShape );
 
     void clearSelection();
 
@@ -99,8 +96,7 @@ public:
         bool bGetDiagramInsteadOf_Wall=false );
 
     static bool isRotateableObject( const OUString& rCID
-                    , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel >& xChartModel );
+                    , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     explicit SelectionHelper( SdrObject* pSelectedObj );
     virtual ~SelectionHelper();

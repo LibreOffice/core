@@ -38,39 +38,37 @@ namespace impl
 template< class InterfaceRef >
 struct addListenerFunctor : public ::std::unary_function< InterfaceRef, void >
 {
-    explicit addListenerFunctor( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::lang::XEventListener > & xListener ) :
+    explicit addListenerFunctor( const css::uno::Reference< css::lang::XEventListener > & xListener ) :
             m_xListener( xListener )
     {}
 
     void operator() ( const InterfaceRef & xObject )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-              xBroadcaster( xObject, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::lang::XComponent >
+              xBroadcaster( xObject, css::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->addEventListener( m_xListener );
     }
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > m_xListener;
+    css::uno::Reference< css::lang::XEventListener > m_xListener;
 };
 
 template< class InterfaceRef >
 struct removeListenerFunctor : public ::std::unary_function< InterfaceRef, void >
 {
-    explicit removeListenerFunctor( const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::lang::XEventListener > & xListener ) :
+    explicit removeListenerFunctor( const css::uno::Reference<  css::lang::XEventListener > & xListener ) :
             m_xListener( xListener )
     {}
 
     void operator() ( const InterfaceRef & xObject )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-              xBroadcaster( xObject, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::lang::XComponent >
+              xBroadcaster( xObject, css::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->removeEventListener( m_xListener );
     }
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > m_xListener;
+    css::uno::Reference< css::lang::XEventListener > m_xListener;
 };
 
 } //  namespace impl
@@ -78,8 +76,7 @@ private:
 template< class InterfaceRef >
 void addListener(
     const InterfaceRef & xObject,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener > & xListener )
+    const css::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
     {
@@ -91,8 +88,7 @@ void addListener(
 template< class Container >
 void addListenerToAllElements(
     const Container & rContainer,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener > & xListener )
+    const css::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
         ::std::for_each( rContainer.begin(), rContainer.end(),
@@ -102,8 +98,7 @@ void addListenerToAllElements(
 template< class InterfaceRef >
 void removeListener(
     const InterfaceRef & xObject,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener > & xListener )
+    const css::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
     {
@@ -115,8 +110,7 @@ void removeListener(
 template< class Container >
 void removeListenerFromAllElements(
     const Container & rContainer,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener > & xListener )
+    const css::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
         ::std::for_each( rContainer.begin(), rContainer.end(),

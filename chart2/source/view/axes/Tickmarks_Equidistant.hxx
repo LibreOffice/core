@@ -27,8 +27,7 @@ namespace chart
 class EquidistantTickIter : public TickIter
 {
 public:
-    EquidistantTickIter( const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Sequence< double > >& rTicks
+    EquidistantTickIter( const css::uno::Sequence< css::uno::Sequence< double > >& rTicks
                 , const ExplicitIncrementData& rIncrement
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
     EquidistantTickIter( TickInfoArraysType& rTickInfos
@@ -75,8 +74,7 @@ private: //methods
                 }
 
 private: //member
-    const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< double > >*  m_pSimpleTicks;
+    const css::uno::Sequence< css::uno::Sequence< double > >*  m_pSimpleTicks;
     TickInfoArraysType*       m_pInfoTicks;
     const ExplicitIncrementData& m_rIncrement;
     sal_Int32   m_nMaxDepth;
@@ -106,8 +104,7 @@ public:
 
 private: //methods
     void        addSubTicks( sal_Int32 nDepth,
-                        ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::uno::Sequence< double > >& rParentTicks ) const;
+                        css::uno::Sequence< css::uno::Sequence< double > >& rParentTicks ) const;
     double*     getMajorTick( sal_Int32 nTick ) const;
     double*     getMinorTick( sal_Int32 nTick, sal_Int32 nDepth
                     , double fStartParentTick, double fNextParentTick ) const;
@@ -120,8 +117,7 @@ private: //methods
 private: //member
     ExplicitScaleData     m_rScale;
     ExplicitIncrementData m_rIncrement;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >
-                                                m_xInverseScaling;
+    css::uno::Reference< css::chart2::XScaling > m_xInverseScaling;
 
     //minimum and maximum of the visible range after scaling
     double    m_fScaledVisibleMin;

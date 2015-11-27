@@ -33,16 +33,14 @@ class ChartTypeDialog : public ModalDialog
 {
 public:
     ChartTypeDialog( vcl::Window* pWindow
-        , const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel >& xChartModel );
+        , const css::uno::Reference< css::frame::XModel >& xChartModel );
     virtual ~ChartTypeDialog();
     virtual void dispose() override;
 
 private:
     VclPtr<ChartTypeTabPage>   m_pChartTypeTabPage;
 
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >            m_xChartModel;
+    css::uno::Reference< css::frame::XModel >            m_xChartModel;
 };
 
 } //namespace chart

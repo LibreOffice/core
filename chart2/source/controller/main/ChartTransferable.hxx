@@ -45,10 +45,10 @@ protected:
     virtual void        AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
-                                        const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) override;
+                                        const css::datatransfer::DataFlavor& rFlavor ) override;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xMetaFileGraphic;
+    css::uno::Reference< css::graphic::XGraphic > m_xMetaFileGraphic;
     SdrModel* m_pMarkedObjModel;
     bool m_bDrawing;
 };

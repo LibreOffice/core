@@ -39,12 +39,12 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper
-    < ::com::sun::star::lang::XServiceInfo,
-      ::com::sun::star::chart2::XCoordinateSystem,
-      ::com::sun::star::chart2::XChartTypeContainer,
-      ::com::sun::star::util::XCloneable,
-      ::com::sun::star::util::XModifyBroadcaster,
-      ::com::sun::star::util::XModifyListener >
+    < css::lang::XServiceInfo,
+      css::chart2::XCoordinateSystem,
+      css::chart2::XChartTypeContainer,
+      css::util::XCloneable,
+      css::util::XModifyBroadcaster,
+      css::util::XModifyListener >
     BaseCoordinateSystem_Base;
 }
 
@@ -55,23 +55,22 @@ class BaseCoordinateSystem :
 {
 public:
     BaseCoordinateSystem(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext,
         sal_Int32 nDimensionCount = 2,
         bool bSwapXAndYAxis = false );
     explicit BaseCoordinateSystem( const BaseCoordinateSystem & rSource );
     virtual ~BaseCoordinateSystem();
 
     // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(css::beans::UnknownPropertyException) override;
 
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -81,54 +80,54 @@ public:
 protected:
     // ____ XCoordinateSystem ____
     virtual ::sal_Int32 SAL_CALL getDimension()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setAxisByDimension(
         ::sal_Int32 nDimension,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis,
+        const css::uno::Reference< css::chart2::XAxis >& xAxis,
         ::sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > SAL_CALL getAxisByDimension(
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XAxis > SAL_CALL getAxisByDimension(
         ::sal_Int32 nDimension, ::sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL getMaximumAxisIndexByDimension( ::sal_Int32 nDimension )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XChartTypeContainer ____
     virtual void SAL_CALL addChartType(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& aChartType )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XChartType >& aChartType )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeChartType(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& aChartType )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > > SAL_CALL getChartTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XChartType >& aChartType )
+        throw (css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > SAL_CALL getChartTypes()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setChartTypes(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > >& aChartTypes )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aChartTypes )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;
@@ -137,20 +136,16 @@ protected:
     void fireModifyEvent();
 
 protected:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >        m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
+    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 
 private:
     sal_Int32                                             m_nDimensionCount;
-    typedef ::std::vector< ::std::vector< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XAxis > > > tAxisVecVecType;
+    typedef ::std::vector< ::std::vector< css::uno::Reference< css::chart2::XAxis > > > tAxisVecVecType;
     tAxisVecVecType m_aAllAxis; //outer sequence is the dimension; inner sequence is the axis index that indicates main or secondary axis
-    ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any >                  m_aOrigin;
-    ::std::vector< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartType > >          m_aChartTypes;
+    css::uno::Sequence< css::uno::Any >                  m_aOrigin;
+    ::std::vector< css::uno::Reference< css::chart2::XChartType > >          m_aChartTypes;
 };
 
 } //  namespace chart

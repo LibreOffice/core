@@ -34,37 +34,37 @@ namespace chart
 class Stripe
 {
 public:
-    Stripe( const ::com::sun::star::drawing::Position3D& rPoint1
-        , const ::com::sun::star::drawing::Direction3D& rDirectionToPoint2
-        , const ::com::sun::star::drawing::Direction3D& rDirectionToPoint4 );
+    Stripe( const css::drawing::Position3D& rPoint1
+        , const css::drawing::Direction3D& rDirectionToPoint2
+        , const css::drawing::Direction3D& rDirectionToPoint4 );
 
-    Stripe( const ::com::sun::star::drawing::Position3D& rPoint1
-        , const ::com::sun::star::drawing::Position3D& rPoint2
+    Stripe( const css::drawing::Position3D& rPoint1
+        , const css::drawing::Position3D& rPoint2
         , double fDepth );
 
-    Stripe( const ::com::sun::star::drawing::Position3D& rPoint1
-        , const ::com::sun::star::drawing::Position3D& rPoint2
-        , const ::com::sun::star::drawing::Position3D& rPoint3
-        , const ::com::sun::star::drawing::Position3D& rPoint4 );
+    Stripe( const css::drawing::Position3D& rPoint1
+        , const css::drawing::Position3D& rPoint2
+        , const css::drawing::Position3D& rPoint3
+        , const css::drawing::Position3D& rPoint4 );
 
-    void SetManualNormal( const ::com::sun::star::drawing::Direction3D& rNormal );
-    ::com::sun::star::drawing::Direction3D getNormal() const;
+    void SetManualNormal( const css::drawing::Direction3D& rNormal );
+    css::drawing::Direction3D getNormal() const;
 
     void InvertNormal( bool bInvertNormal );
 
-    ::com::sun::star::uno::Any         getPolyPolygonShape3D() const;
-    ::com::sun::star::uno::Any         getNormalsPolygon() const;
-    static ::com::sun::star::uno::Any  getTexturePolygon( short nRotatedTexture ); //0 to 7 are the different possibilities
+    css::uno::Any         getPolyPolygonShape3D() const;
+    css::uno::Any         getNormalsPolygon() const;
+    static css::uno::Any  getTexturePolygon( short nRotatedTexture ); //0 to 7 are the different possibilities
 
 private:
-    ::com::sun::star::drawing::Position3D m_aPoint1;
-    ::com::sun::star::drawing::Position3D m_aPoint2;
-    ::com::sun::star::drawing::Position3D m_aPoint3;
-    ::com::sun::star::drawing::Position3D m_aPoint4;
+    css::drawing::Position3D m_aPoint1;
+    css::drawing::Position3D m_aPoint2;
+    css::drawing::Position3D m_aPoint3;
+    css::drawing::Position3D m_aPoint4;
 
     bool m_bInvertNormal;
     bool m_bManualNormalSet;
-    ::com::sun::star::drawing::Direction3D m_aManualNormal;
+    css::drawing::Direction3D m_aManualNormal;
 };
 
 } //namespace chart

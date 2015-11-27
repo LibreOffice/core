@@ -30,32 +30,29 @@ class BarChart : public VSeriesPlotter
 {
     // public methods
 public:
-    BarChart( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType >& xChartTypeModel
+    BarChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
             , sal_Int32 nDimensionCount );
     virtual ~BarChart();
 
     virtual void createShapes() override;
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;
 
-    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
+    virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
 
 private: //methods
     //no default constructor
     BarChart();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createDataPoint3D_Bar(
-                          const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShapes >& xTarget
-                        , const ::com::sun::star::drawing::Position3D& rPosition
-                        , const ::com::sun::star::drawing::Direction3D& rSize
+                          const css::uno::Reference< css::drawing::XShapes >& xTarget
+                        , const css::drawing::Position3D& rPosition
+                        , const css::drawing::Direction3D& rSize
                         , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
-                        , const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::beans::XPropertySet >& xObjectProperties
+                        , const css::uno::Reference< css::beans::XPropertySet >& xObjectProperties
                         , sal_Int32 nGeometry3D );
 
-    ::com::sun::star::awt::Point getLabelScreenPositionAndAlignment(
+    css::awt::Point getLabelScreenPositionAndAlignment(
                         LabelAlignment& rAlignment, sal_Int32 nLabelPlacement
                         , double fScaledX, double fScaledLowerYValue, double fScaledUpperYValue, double fScaledZ
                         , double fScaledLowerBarDepth, double fScaledUpperBarDepth, double fBaseValue
@@ -67,8 +64,8 @@ private: //methods
 
 private: //member
     BarPositionHelper*                   m_pMainPosHelper;
-    ::com::sun::star::uno::Sequence< sal_Int32 > m_aOverlapSequence;
-    ::com::sun::star::uno::Sequence< sal_Int32 > m_aGapwidthSequence;
+    css::uno::Sequence< sal_Int32 >      m_aOverlapSequence;
+    css::uno::Sequence< sal_Int32 >      m_aGapwidthSequence;
 };
 } //namespace chart
 #endif

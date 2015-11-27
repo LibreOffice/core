@@ -153,7 +153,7 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_xChartTypeModelProps( uno::Reference< beans::XPropertySet >::query( xChartTypeModel ))
         , m_aZSlots()
         , m_bCategoryXAxis(bCategoryXAxis)
-        , m_nTimeResolution(::com::sun::star::chart::TimeUnit::DAY)
+        , m_nTimeResolution(css::chart::TimeUnit::DAY)
         , m_aNullDate(30,12,1899)
         , m_xColorScheme()
         , m_pExplicitCategoriesProvider(nullptr)
@@ -365,7 +365,7 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VData
                                         , const uno::Reference< drawing::XShapes >& xTarget
                                         , bool bYError )
 {
-    uno::Reference< ::com::sun::star::drawing::XShapes > &rShapeGroup =
+    uno::Reference< css::drawing::XShapes > &rShapeGroup =
             bYError ? rDataSeries.m_xErrorYBarsGroupShape : rDataSeries.m_xErrorXBarsGroupShape;
 
     uno::Reference< drawing::XShapes > xShapes( rShapeGroup );
@@ -731,15 +731,15 @@ double lcl_getErrorBarLogicLength(
     {
         switch( nErrorBarStyle )
         {
-            case ::com::sun::star::chart::ErrorBarStyle::NONE:
+            case css::chart::ErrorBarStyle::NONE:
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::VARIANCE:
+            case css::chart::ErrorBarStyle::VARIANCE:
                 fResult = StatisticsHelper::getVariance( rData );
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION:
+            case css::chart::ErrorBarStyle::STANDARD_DEVIATION:
                 fResult = StatisticsHelper::getStandardDeviation( rData );
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::RELATIVE:
+            case css::chart::ErrorBarStyle::RELATIVE:
             {
                 double fPercent = 0;
                 if( xProp->getPropertyValue( bPositive
@@ -755,12 +755,12 @@ double lcl_getErrorBarLogicLength(
                 }
             }
             break;
-            case ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE:
+            case css::chart::ErrorBarStyle::ABSOLUTE:
                 xProp->getPropertyValue( bPositive
                                          ? OUString("PositiveError")
                                          : OUString("NegativeError") ) >>= fResult;
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
+            case css::chart::ErrorBarStyle::ERROR_MARGIN:
             {
                 // todo: check if this is really what's called error-margin
                 double fPercent = 0;
@@ -784,10 +784,10 @@ double lcl_getErrorBarLogicLength(
                 }
             }
             break;
-            case ::com::sun::star::chart::ErrorBarStyle::STANDARD_ERROR:
+            case css::chart::ErrorBarStyle::STANDARD_ERROR:
                 fResult = StatisticsHelper::getStandardError( rData );
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::FROM_DATA:
+            case css::chart::ErrorBarStyle::FROM_DATA:
             {
                 uno::Reference< chart2::data::XDataSource > xErrorBarData( xProp, uno::UNO_QUERY );
                 if( xErrorBarData.is())
@@ -899,7 +899,7 @@ void VSeriesPlotter::createErrorBar(
     {
         bool bShowPositive = false;
         bool bShowNegative = false;
-        sal_Int32 nErrorBarStyle = ::com::sun::star::chart::ErrorBarStyle::VARIANCE;
+        sal_Int32 nErrorBarStyle = css::chart::ErrorBarStyle::VARIANCE;
 
         xErrorBarProperties->getPropertyValue( "ShowPositiveError") >>= bShowPositive;
         xErrorBarProperties->getPropertyValue( "ShowNegativeError") >>= bShowNegative;
@@ -908,14 +908,14 @@ void VSeriesPlotter::createErrorBar(
         if(!bShowPositive && !bShowNegative)
             return;
 
-        if(nErrorBarStyle==::com::sun::star::chart::ErrorBarStyle::NONE)
+        if(nErrorBarStyle==css::chart::ErrorBarStyle::NONE)
             return;
 
         if (!m_pPosHelper)
             return;
 
         drawing::Position3D aUnscaledLogicPosition(rUnscaledLogicPosition);
-        if(nErrorBarStyle==::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION)
+        if(nErrorBarStyle==css::chart::ErrorBarStyle::STANDARD_DEVIATION)
         {
             if (bYError)
                 aUnscaledLogicPosition.PositionY = rVDataSeries.getYMeanValue();
@@ -1348,7 +1348,7 @@ void VSeriesPlotter::setTimeResolutionOnXAxis( long TimeResolution, const Date& 
 // MinimumAndMaximumSupplier
 long VSeriesPlotter::calculateTimeResolutionOnXAxis()
 {
-    long nRet = ::com::sun::star::chart::TimeUnit::YEAR;
+    long nRet = css::chart::TimeUnit::YEAR;
     if( m_pExplicitCategoriesProvider )
     {
         const std::vector< double >&  rDateCategories = m_pExplicitCategoriesProvider->getDateCategories();
@@ -1363,17 +1363,17 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
             for(;aIt!=aEnd;++aIt)
             {
                 Date aCurrent(aNullDate); aCurrent+=static_cast<long>(rtl::math::approxFloor(*aIt));
-                if( ::com::sun::star::chart::TimeUnit::YEAR == nRet )
+                if( css::chart::TimeUnit::YEAR == nRet )
                 {
                     if( DateHelper::IsInSameYear( aPrevious, aCurrent ) )
-                        nRet = ::com::sun::star::chart::TimeUnit::MONTH;
+                        nRet = css::chart::TimeUnit::MONTH;
                 }
-                if( ::com::sun::star::chart::TimeUnit::MONTH == nRet )
+                if( css::chart::TimeUnit::MONTH == nRet )
                 {
                     if( DateHelper::IsInSameMonth( aPrevious, aCurrent ) )
-                        nRet = ::com::sun::star::chart::TimeUnit::DAY;
+                        nRet = css::chart::TimeUnit::DAY;
                 }
-                if( ::com::sun::star::chart::TimeUnit::DAY == nRet )
+                if( css::chart::TimeUnit::DAY == nRet )
                     break;
                 aPrevious=aCurrent;
             }
@@ -2092,7 +2092,7 @@ private:
 };
 } // anonymous namespace
 
-void VSeriesPlotter::setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize )
+void VSeriesPlotter::setPageReferenceSize( const css::awt::Size & rPageRefSize )
 {
     m_aPageReferenceSize = rPageRefSize;
 
@@ -2123,7 +2123,7 @@ bool VSeriesPlotter::shouldSnapRectToUsedArea()
 
 std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
               const awt::Size& rEntryKeyAspectRatio
-            , ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion
+            , css::chart::ChartLegendExpansion eLegendExpansion
             , const Reference< beans::XPropertySet >& xTextProperties
             , const Reference< drawing::XShapes >& xTarget
             , const Reference< lang::XMultiServiceFactory >& xShapeFactory
@@ -2169,7 +2169,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
                     // If the legend is wide and we have a stacked bar-chart the normal order
                     // is the correct one
                     bool bReverse = false;
-                    if( eLegendExpansion != ::com::sun::star::chart::ChartLegendExpansion_WIDE )
+                    if( eLegendExpansion != css::chart::ChartLegendExpansion_WIDE )
                     {
                         StackingDirection eStackingDirection( pSeries->getStackingDirection() );
                         bReverse = ( eStackingDirection == StackingDirection_Y_STACKING );

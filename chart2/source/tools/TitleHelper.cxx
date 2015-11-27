@@ -364,8 +364,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
 }
 
 void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
-                    , const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::frame::XModel >& xModel )
+                    , const css::uno::Reference< css::frame::XModel >& xModel )
 {
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xModel ) );
     if( xTitled.is())
@@ -375,8 +374,7 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
 }
 
 bool TitleHelper::getTitleType( eTitleType& rType
-                    , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XTitle >& xTitle
+                    , const css::uno::Reference< css::chart2::XTitle >& xTitle
                     , ChartModel& rModel )
 {
     if( !xTitle.is() )
@@ -397,10 +395,8 @@ bool TitleHelper::getTitleType( eTitleType& rType
 }
 
 bool TitleHelper::getTitleType( eTitleType& rType
-                    , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XTitle >& xTitle
-                    , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel >& xModel )
+                    , const css::uno::Reference< css::chart2::XTitle >& xTitle
+                    , const css::uno::Reference< css::frame::XModel >& xModel )
 {
     if( !xTitle.is() || !xModel.is() )
         return false;

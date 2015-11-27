@@ -36,13 +36,13 @@ AccStatisticsObject::~AccStatisticsObject()
 }
 
 OUString SAL_CALL AccStatisticsObject::getAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return getToolTipText();
 }
 
 OUString SAL_CALL AccStatisticsObject::getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return OUString( "StatisticsObject" );
 }

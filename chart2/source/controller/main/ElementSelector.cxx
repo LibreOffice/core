@@ -236,7 +236,7 @@ bool SelectorListBox::Notify( NotifyEvent& rNEvt )
     return bHandled || ListBox::Notify( rNEvt );
 }
 
-Reference< ::com::sun::star::accessibility::XAccessible > SelectorListBox::CreateAccessible()
+Reference< css::accessibility::XAccessible > SelectorListBox::CreateAccessible()
 {
     UpdateChartElementsListAndSelection();
     return ListBox::CreateAccessible();

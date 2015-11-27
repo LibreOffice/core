@@ -45,10 +45,10 @@ template< typename PROPERTYTYPE >
 class WrappedSeriesOrDiagramProperty : public WrappedProperty
 {
 public:
-    virtual PROPERTYTYPE getValueFromSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet ) const =0;
-    virtual void setValueToSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet, const PROPERTYTYPE & aNewValue ) const =0;
+    virtual PROPERTYTYPE getValueFromSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet ) const =0;
+    virtual void setValueToSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const PROPERTYTYPE & aNewValue ) const =0;
 
-    explicit WrappedSeriesOrDiagramProperty( const OUString& rName, const ::com::sun::star::uno::Any& rDefaulValue
+    explicit WrappedSeriesOrDiagramProperty( const OUString& rName, const css::uno::Any& rDefaulValue
         , std::shared_ptr< Chart2ModelContact > spChart2ModelContact
         , tSeriesOrDiagramPropertyType ePropertyType )
             : WrappedProperty(rName,OUString())
@@ -67,13 +67,13 @@ public:
         if( m_ePropertyType == DIAGRAM &&
             m_spChart2ModelContact.get() )
         {
-            ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > aSeriesVector(
+            ::std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
-            ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >::const_iterator aIter =
+            ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >::const_iterator aIter =
                     aSeriesVector.begin();
             for( ; aIter != aSeriesVector.end(); ++aIter )
             {
-                PROPERTYTYPE aCurValue = getValueFromSeries( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >::query( *aIter ) );
+                PROPERTYTYPE aCurValue = getValueFromSeries( css::uno::Reference< css::beans::XPropertySet >::query( *aIter ) );
                 if( !bHasDetectableInnerValue )
                     rValue = aCurValue;
                 else
@@ -96,13 +96,13 @@ public:
         if( m_ePropertyType == DIAGRAM &&
             m_spChart2ModelContact.get() )
         {
-            ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > aSeriesVector(
+            ::std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
-            ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >::const_iterator aIter =
+            ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >::const_iterator aIter =
                     aSeriesVector.begin();
             for( ; aIter != aSeriesVector.end(); ++aIter )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xSeriesPropertySet( *aIter, ::com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference< css::beans::XPropertySet > xSeriesPropertySet( *aIter, css::uno::UNO_QUERY );
                 if( xSeriesPropertySet.is() )
                 {
                     setValueToSeries( xSeriesPropertySet, aNewValue );
@@ -110,12 +110,12 @@ public:
             }
         }
     }
-    virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
-                    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
+                    throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override
     {
         PROPERTYTYPE aNewValue = PROPERTYTYPE();
         if( ! (rOuterValue >>= aNewValue) )
-            throw ::com::sun::star::lang::IllegalArgumentException( "statistic property requires different type", nullptr, 0 );
+            throw css::lang::IllegalArgumentException( "statistic property requires different type", nullptr, 0 );
 
         if( m_ePropertyType == DIAGRAM )
         {
@@ -135,8 +135,8 @@ public:
         }
     }
 
-    virtual ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
-                            throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
+                            throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override
     {
         if( m_ePropertyType == DIAGRAM )
         {
@@ -153,22 +153,22 @@ public:
         }
         else
         {
-            ::com::sun::star::uno::Any aRet( m_aDefaultValue );
+            css::uno::Any aRet( m_aDefaultValue );
             aRet <<= getValueFromSeries( xInnerPropertySet );
             return aRet;
         }
     }
 
-    virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& /* xInnerPropertyState */ ) const
-                            throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& /* xInnerPropertyState */ ) const
+                            throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override
     {
         return m_aDefaultValue;
     }
 
 protected:
     std::shared_ptr< Chart2ModelContact >  m_spChart2ModelContact;
-    mutable ::com::sun::star::uno::Any         m_aOuterValue;
-    ::com::sun::star::uno::Any                 m_aDefaultValue;
+    mutable css::uno::Any         m_aOuterValue;
+    css::uno::Any                 m_aDefaultValue;
     tSeriesOrDiagramPropertyType               m_ePropertyType;
 };
 

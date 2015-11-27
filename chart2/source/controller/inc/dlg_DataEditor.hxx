@@ -42,10 +42,8 @@ class DataEditor : public ModalDialog
 {
 public:
     DataEditor( vcl::Window* pParent,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XChartDocument > & xChartDoc,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XComponentContext > & xContext );
+                const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
+                const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~DataEditor();
     virtual void dispose() override;
 
@@ -67,9 +65,8 @@ private:
     bool                           m_bReadOnly;
     VclPtr<DataBrowser>            m_xBrwData;
     VclPtr<ToolBox>                m_pTbxData;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > m_xChartDoc;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::chart2::XChartDocument > m_xChartDoc;
+    css::uno::Reference< css::uno::XComponentContext >
         m_xContext;
 
     /// handles actions of the toolbox

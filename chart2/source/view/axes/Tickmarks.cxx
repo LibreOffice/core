@@ -233,8 +233,8 @@ void TickFactory2D::addPointSequenceForTickLine( drawing::PointSequenceSequence&
 B2DVector TickFactory2D::getDistanceAxisTickToText( const AxisProperties& rAxisProperties, bool bIncludeFarAwayDistanceIfSo, bool bIncludeSpaceBetweenTickAndText ) const
 {
     bool bFarAwayLabels = false;
-    if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START == rAxisProperties.m_eLabelPos
-        || ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == rAxisProperties.m_eLabelPos )
+    if( css::chart::ChartAxisLabelPosition_OUTSIDE_START == rAxisProperties.m_eLabelPos
+        || css::chart::ChartAxisLabelPosition_OUTSIDE_END == rAxisProperties.m_eLabelPos )
         bFarAwayLabels = true;
 
     double fInnerDirectionSign = rAxisProperties.maLabelAlignment.mfInnerTickDirection;

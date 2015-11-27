@@ -78,7 +78,7 @@ void TextCache::insertBitmap(const TextCacheKey& rKey, const BitmapEx& rBitmap)
 }
 
 class DummyPropertySetInfo : public cppu::WeakImplHelper<
-                                com::sun::star::beans::XPropertySetInfo >
+                                css::beans::XPropertySetInfo >
 {
 public:
     explicit DummyPropertySetInfo(const std::map<OUString, uno::Any>& rProps ):
@@ -471,11 +471,11 @@ void DummyArea2D::render()
     sal_Int32 nPointssCount = maShapes.getLength();
     for(sal_Int32 i = 0; i < nPointssCount; i++)
     {
-        const com::sun::star::uno::Sequence<com::sun::star::awt::Point>& points = maShapes[i];
+        const css::uno::Sequence<css::awt::Point>& points = maShapes[i];
         sal_Int32 nPointsCount = points.getLength();
         for(sal_Int32 j = 0; j < nPointsCount; j++)
         {
-            const com::sun::star::awt::Point& p = points[j];
+            const css::awt::Point& p = points[j];
             pChart->m_GLRender.SetArea2DShapePoint((float)p.X, (float)p.Y, nPointsCount);
         }
     }
@@ -655,11 +655,11 @@ void DummyLine2D::render()
     sal_Int32 pointsscount = maPoints.getLength();
     for(sal_Int32 i = 0; i < pointsscount; i++)
     {
-        com::sun::star::uno::Sequence<com::sun::star::awt::Point>& points = maPoints[i];
+        css::uno::Sequence<css::awt::Point>& points = maPoints[i];
         sal_Int32 pointscount = points.getLength();
         for(sal_Int32 j = 0; j < pointscount; j++)
         {
-            com::sun::star::awt::Point& p = points[j];
+            css::awt::Point& p = points[j];
             pChart->m_GLRender.SetLine2DShapePoint((float)p.X, (float)p.Y, pointscount);
         }
 

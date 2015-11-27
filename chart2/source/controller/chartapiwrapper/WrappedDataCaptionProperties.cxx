@@ -41,8 +41,8 @@ namespace wrapper
 class WrappedDataCaptionProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
 {
 public:
-    virtual sal_Int32 getValueFromSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet ) const override;
-    virtual void setValueToSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const override;
+    virtual sal_Int32 getValueFromSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const override;
 
     explicit WrappedDataCaptionProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                          tSeriesOrDiagramPropertyType ePropertyType );
@@ -62,13 +62,13 @@ sal_Int32 lcl_LabelToCaption( const chart2::DataPointLabel& rLabel )
     sal_Int32 nCaption=0;
 
     if( rLabel.ShowNumber )
-        nCaption |= ::com::sun::star::chart::ChartDataCaption::VALUE;
+        nCaption |= css::chart::ChartDataCaption::VALUE;
     if( rLabel.ShowNumberInPercent )
-        nCaption |= ::com::sun::star::chart::ChartDataCaption::PERCENT;
+        nCaption |= css::chart::ChartDataCaption::PERCENT;
     if( rLabel.ShowCategoryName )
-        nCaption |= ::com::sun::star::chart::ChartDataCaption::TEXT;
+        nCaption |= css::chart::ChartDataCaption::TEXT;
     if( rLabel.ShowLegendSymbol )
-        nCaption |= ::com::sun::star::chart::ChartDataCaption::SYMBOL;
+        nCaption |= css::chart::ChartDataCaption::SYMBOL;
 
     return nCaption;
 }
@@ -77,13 +77,13 @@ chart2::DataPointLabel lcl_CaptionToLabel( sal_Int32 nCaption )
 {
     chart2::DataPointLabel aLabel(false,false,false,false);
 
-    if( nCaption & ::com::sun::star::chart::ChartDataCaption::VALUE )
+    if( nCaption & css::chart::ChartDataCaption::VALUE )
         aLabel.ShowNumber = true;
-    if( nCaption & ::com::sun::star::chart::ChartDataCaption::PERCENT )
+    if( nCaption & css::chart::ChartDataCaption::PERCENT )
         aLabel.ShowNumberInPercent = true;
-    if( nCaption & ::com::sun::star::chart::ChartDataCaption::TEXT )
+    if( nCaption & css::chart::ChartDataCaption::TEXT )
         aLabel.ShowCategoryName = true;
-    if( nCaption & ::com::sun::star::chart::ChartDataCaption::SYMBOL )
+    if( nCaption & css::chart::ChartDataCaption::SYMBOL )
         aLabel.ShowLegendSymbol = true;
 
     return aLabel;

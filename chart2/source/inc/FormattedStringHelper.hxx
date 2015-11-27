@@ -30,15 +30,12 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS FormattedStringHelper
 {
 public:
-    static ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XFormattedString2 > >
+    static css::uno::Sequence<
+            css::uno::Reference< css::chart2::XFormattedString2 > >
             createFormattedStringSequence(
-                     const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::uno::XComponentContext > & xContext
+                     const css::uno::Reference< css::uno::XComponentContext > & xContext
                     , const OUString & rString
-                    , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::beans::XPropertySet > & xTextProperties ) throw();
+                    , const css::uno::Reference< css::beans::XPropertySet > & xTextProperties ) throw();
 };
 
 } //namespace chart

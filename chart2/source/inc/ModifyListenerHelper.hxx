@@ -40,7 +40,7 @@ namespace chart
 namespace ModifyListenerHelper
 {
 
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > createModifyEventForwarder();
+OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::util::XModifyListener > createModifyEventForwarder();
 
 /** This helper class serves as forwarder of modify events.  It can be used
     whenever an object has to send modify events after it gets a modify event of
@@ -53,53 +53,53 @@ OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::uti
 class ModifyEventForwarder :
         public MutexContainer,
         public ::cppu::WeakComponentImplHelper<
-            ::com::sun::star::util::XModifyBroadcaster,
-            ::com::sun::star::util::XModifyListener >
+            css::util::XModifyBroadcaster,
+            css::util::XModifyListener >
 {
 public:
     ModifyEventForwarder();
 
-    void FireEvent( const ::com::sun::star::lang::EventObject & rEvent );
+    void FireEvent( const css::lang::EventObject & rEvent );
 
     void AddListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener );
+        const css::uno::Reference< css::util::XModifyListener >& aListener );
     void RemoveListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener );
+        const css::uno::Reference< css::util::XModifyListener >& aListener );
 
 protected:
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ WeakComponentImplHelperBase ____
     virtual void SAL_CALL disposing() override;
 
 private:
     /// call disposing() at all listeners and remove all listeners
-    void DisposeAndClear( const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::uno::XWeak > & xSource );
+    void DisposeAndClear( const css::uno::Reference<
+                              css::uno::XWeak > & xSource );
 
 //     ::osl::Mutex & m_rMutex;
     ::cppu::OBroadcastHelper  m_aModifyListeners;
 
     typedef ::std::list<
             ::std::pair<
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::util::XModifyListener >,
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > > >
+            css::uno::WeakReference< css::util::XModifyListener >,
+            css::uno::Reference< css::util::XModifyListener > > >
         tListenerMap;
 
     tListenerMap m_aListenerMap;
@@ -111,77 +111,73 @@ namespace impl
 template< class InterfaceRef >
 struct addListenerFunctor : public ::std::unary_function< InterfaceRef, void >
 {
-    explicit addListenerFunctor( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::util::XModifyListener > & xListener ) :
+    explicit addListenerFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
     {}
 
     void operator() ( const InterfaceRef & xObject )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >
-              xBroadcaster( xObject, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::util::XModifyBroadcaster >
+              xBroadcaster( xObject, css::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->addModifyListener( m_xListener );
     }
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xListener;
+    css::uno::Reference< css::util::XModifyListener > m_xListener;
 };
 
 template< class InterfaceRef >
 struct removeListenerFunctor : public ::std::unary_function< InterfaceRef, void >
 {
-    explicit removeListenerFunctor( const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::util::XModifyListener > & xListener ) :
+    explicit removeListenerFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
     {}
 
     void operator() ( const InterfaceRef & xObject )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >
-              xBroadcaster( xObject, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::util::XModifyBroadcaster >
+              xBroadcaster( xObject, css::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->removeModifyListener( m_xListener );
     }
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xListener;
+    css::uno::Reference< css::util::XModifyListener > m_xListener;
 };
 
 template< class Pair >
 struct addListenerToMappedElementFunctor : public ::std::unary_function< Pair, void >
 {
-    explicit addListenerToMappedElementFunctor( const ::com::sun::star::uno::Reference<
-                                                    ::com::sun::star::util::XModifyListener > & xListener ) :
+    explicit addListenerToMappedElementFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
     {}
 
     void operator() ( const Pair & aPair )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >
-              xBroadcaster( aPair.second, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::util::XModifyBroadcaster >
+              xBroadcaster( aPair.second, css::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->addModifyListener( m_xListener );
     }
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xListener;
+    css::uno::Reference< css::util::XModifyListener > m_xListener;
 };
 
 template< class Pair >
 struct removeListenerFromMappedElementFunctor : public ::std::unary_function< Pair, void >
 {
-    explicit removeListenerFromMappedElementFunctor( const ::com::sun::star::uno::Reference<
-                                                         ::com::sun::star::util::XModifyListener > & xListener ) :
+    explicit removeListenerFromMappedElementFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
     {}
 
     void operator() ( const Pair & aPair )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >
-              xBroadcaster( aPair.second, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::util::XModifyBroadcaster >
+              xBroadcaster( aPair.second, css::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->removeModifyListener( m_xListener );
     }
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xListener;
+    css::uno::Reference< css::util::XModifyListener > m_xListener;
 };
 
 } //  namespace impl
@@ -189,8 +185,7 @@ private:
 template< class InterfaceRef >
 void addListener(
     const InterfaceRef & xObject,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener > & xListener )
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
     {
@@ -202,8 +197,7 @@ void addListener(
 template< class Container >
 void addListenerToAllElements(
     const Container & rContainer,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener > & xListener )
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         ::std::for_each( rContainer.begin(), rContainer.end(),
@@ -213,8 +207,7 @@ void addListenerToAllElements(
 template< class Container >
 void addListenerToAllMapElements(
     const Container & rContainer,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener > & xListener )
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         ::std::for_each( rContainer.begin(), rContainer.end(),
@@ -223,9 +216,8 @@ void addListenerToAllMapElements(
 
 template< typename T >
 void addListenerToAllSequenceElements(
-    const ::com::sun::star::uno::Sequence< T > & rSequence,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener > & xListener )
+    const css::uno::Sequence< T > & rSequence,
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         ::std::for_each( rSequence.getConstArray(), rSequence.getConstArray() + rSequence.getLength(),
@@ -235,8 +227,7 @@ void addListenerToAllSequenceElements(
 template< class InterfaceRef >
 void removeListener(
     const InterfaceRef & xObject,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener > & xListener )
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
     {
@@ -248,8 +239,7 @@ void removeListener(
 template< class Container >
 void removeListenerFromAllElements(
     const Container & rContainer,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener > & xListener )
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         ::std::for_each( rContainer.begin(), rContainer.end(),
@@ -259,8 +249,7 @@ void removeListenerFromAllElements(
 template< class Container >
 void removeListenerFromAllMapElements(
     const Container & rContainer,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener > & xListener )
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         ::std::for_each( rContainer.begin(), rContainer.end(),
@@ -269,9 +258,8 @@ void removeListenerFromAllMapElements(
 
 template< typename T >
 void removeListenerFromAllSequenceElements(
-    const ::com::sun::star::uno::Sequence< T > & rSequence,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener > & xListener )
+    const css::uno::Sequence< T > & rSequence,
+    const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         ::std::for_each( rSequence.getConstArray(), rSequence.getConstArray() + rSequence.getLength(),

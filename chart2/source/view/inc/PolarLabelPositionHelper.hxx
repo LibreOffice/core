@@ -37,11 +37,11 @@ public:
     PolarLabelPositionHelper(
         PolarPlottingPositionHelper* pPosHelper
         , sal_Int32 nDimensionCount
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
+        , const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
         , AbstractShapeFactory* pShapeFactory );
     virtual ~PolarLabelPositionHelper();
 
-    ::com::sun::star::awt::Point getLabelScreenPositionAndAlignmentForLogicValues(
+    css::awt::Point getLabelScreenPositionAndAlignmentForLogicValues(
                         LabelAlignment& rAlignment
                         , double fLogicValueOnAngleAxis
                         , double fLogicValueOnRadiusAxis
@@ -59,8 +59,8 @@ public:
      *  angle defined by the horizontal axis and the ray bisecting the slice.
      *
      */
-    ::com::sun::star::awt::Point getLabelScreenPositionAndAlignmentForUnitCircleValues(
-                        LabelAlignment& rAlignment, sal_Int32 nLabelPlacement /*see ::com::sun::star::chart::DataLabelPlacement*/
+    css::awt::Point getLabelScreenPositionAndAlignmentForUnitCircleValues(
+                        LabelAlignment& rAlignment, sal_Int32 nLabelPlacement /*see css::chart::DataLabelPlacement*/
                         , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                         , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
                         , double fLogicZ

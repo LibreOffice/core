@@ -121,14 +121,14 @@ namespace CharacterProperties
     };
 
     OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
-        ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
+        ::std::vector< css::beans::Property > & rOutProperties );
 
     OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool IsCharacterPropertyHandle( sal_Int32 nHandle );
 
-    OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::awt::FontDescriptor createFontDescriptorFromPropertySet(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > & xMultiPropSet );
+    OOO_DLLPUBLIC_CHARTTOOLS css::awt::FontDescriptor createFontDescriptorFromPropertySet(
+        const css::uno::Reference< css::beans::XMultiPropertySet > & xMultiPropSet );
 }
 
 } //  namespace chart

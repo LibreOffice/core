@@ -62,11 +62,11 @@ ExplicitScaleData::ExplicitScaleData()
     : Minimum(0.0)
     , Maximum(10.0)
     , Origin(0.0)
-    , Orientation(::com::sun::star::chart2::AxisOrientation_MATHEMATICAL)
+    , Orientation(css::chart2::AxisOrientation_MATHEMATICAL)
     , Scaling()
-    , AxisType(::com::sun::star::chart2::AxisType::REALNUMBER)
+    , AxisType(css::chart2::AxisType::REALNUMBER)
     , ShiftedCategoryPosition(false)
-    , TimeResolution(::com::sun::star::chart::TimeUnit::DAY)
+    , TimeResolution(css::chart::TimeUnit::DAY)
     , NullDate(30,12,1899)
 {
 }
@@ -78,8 +78,8 @@ ExplicitSubIncrement::ExplicitSubIncrement()
 }
 
 ExplicitIncrementData::ExplicitIncrementData()
-    : MajorTimeInterval(1,::com::sun::star::chart::TimeUnit::DAY)
-    , MinorTimeInterval(1,::com::sun::star::chart::TimeUnit::DAY)
+    : MajorTimeInterval(1,css::chart::TimeUnit::DAY)
+    , MinorTimeInterval(1,css::chart::TimeUnit::DAY)
     , Distance(1.0)
     , PostEquidistant(true)
     , BaseValue(0.0)
@@ -96,7 +96,7 @@ ScaleAutomatism::ScaleAutomatism( const ScaleData& rSourceScale, const Date& rNu
                     , m_bExpandIfValuesCloseToBorder( false )
                     , m_bExpandWideValuesToZero( false )
                     , m_bExpandNarrowValuesTowardZero( false )
-                    , m_nTimeResolution(::com::sun::star::chart::TimeUnit::DAY)
+                    , m_nTimeResolution(css::chart::TimeUnit::DAY)
                     , m_aNullDate(rNullDate)
 {
     resetValueRange();

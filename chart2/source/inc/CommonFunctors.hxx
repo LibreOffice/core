@@ -32,34 +32,34 @@ namespace chart
 namespace CommonFunctors
 {
 
-/** unary function to convert any type T into a ::com::sun::star::uno::Any.
+/** unary function to convert any type T into a css::uno::Any.
 
     <p>uno::makeAny is an inline function.  Thus is cannot be taken directly
     (via mem_fun_ptr)</p>
 */
 template< typename T >
-    struct makeAny : public ::std::unary_function< T, ::com::sun::star::uno::Any >
+    struct makeAny : public ::std::unary_function< T, css::uno::Any >
 {
-    ::com::sun::star::uno::Any operator() ( const T & aVal )
+    css::uno::Any operator() ( const T & aVal )
     {
-        return ::com::sun::star::uno::makeAny( aVal );
+        return css::uno::makeAny( aVal );
     }
 };
 
-/** unary function to convert ::com::sun::star::uno::Any into a double number.
+/** unary function to convert css::uno::Any into a double number.
 
     <p>In case no number can be generated from the Any, NaN (see
     rtl::math::SetNAN()) is returned.</p>
 */
-struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public ::std::unary_function< ::com::sun::star::uno::Any, double >
+struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public ::std::unary_function< css::uno::Any, double >
 {
-    double operator() ( const ::com::sun::star::uno::Any & rAny )
+    double operator() ( const css::uno::Any & rAny )
     {
         double fResult;
         ::rtl::math::setNan( & fResult );
 
-        ::com::sun::star::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
-        if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
+        css::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
+        if( eClass == css::uno::TypeClass_DOUBLE )
         {
             fResult = * static_cast< const double * >( rAny.getValue() );
         }
@@ -68,15 +68,15 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public ::std::unary_function< ::co
     }
 };
 
-/** unary function to convert ::com::sun::star::uno::Any into an
+/** unary function to convert css::uno::Any into an
     OUString.
 */
-struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::com::sun::star::uno::Any,  OUString >
+struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< css::uno::Any,  OUString >
 {
-    OUString operator() ( const ::com::sun::star::uno::Any & rAny )
+    OUString operator() ( const css::uno::Any & rAny )
     {
-        ::com::sun::star::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
-        if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
+        css::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
+        if( eClass == css::uno::TypeClass_DOUBLE )
         {
             const double* pDouble = static_cast< const double * >( rAny.getValue() );
             if( ::rtl::math::isNan(*pDouble) )
@@ -89,7 +89,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::co
                 true // remove trailing zeros
                 );
         }
-        else if( eClass == ::com::sun::star::uno::TypeClass_STRING )
+        else if( eClass == css::uno::TypeClass_STRING )
         {
             return * static_cast< const OUString * >( rAny.getValue() );
         }

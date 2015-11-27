@@ -39,11 +39,11 @@ friend class LifeTimeGuard;
 protected:
     mutable ::osl::Mutex                    m_aAccessMutex;
 public:
-    LifeTimeManager( ::com::sun::star::lang::XComponent* pComponent, bool bLongLastingCallsCancelable = false );
+    LifeTimeManager( css::lang::XComponent* pComponent, bool bLongLastingCallsCancelable = false );
     virtual ~LifeTimeManager();
 
     bool        impl_isDisposed( bool bAssert=true );
-    bool    dispose() throw(::com::sun::star::uno::RuntimeException);
+    bool    dispose() throw(css::uno::RuntimeException);
 
 public:
     ::cppu::OMultiTypeInterfaceContainerHelper      m_aListenerContainer;
@@ -58,7 +58,7 @@ protected:
     SAL_DLLPRIVATE void        impl_init();
 
 protected:
-    ::com::sun::star::lang::XComponent*     m_pComponent;
+    css::lang::XComponent*     m_pComponent;
 
     ::osl::Condition        m_aNoAccessCountCondition;
     sal_Int32 volatile      m_nAccessCount;
@@ -74,7 +74,7 @@ protected:
 class CloseableLifeTimeManager : public LifeTimeManager
 {
 protected:
-    ::com::sun::star::util::XCloseable*         m_pCloseable;
+    css::util::XCloseable*         m_pCloseable;
 
     ::osl::Condition        m_aEndTryClosingCondition;
     bool volatile       m_bClosed;
@@ -85,21 +85,20 @@ protected:
     bool volatile       m_bOwnership;
 
 public:
-OOO_DLLPUBLIC_CHARTTOOLS    CloseableLifeTimeManager( ::com::sun::star::util::XCloseable* pCloseable
-        , ::com::sun::star::lang::XComponent* pComponent
+OOO_DLLPUBLIC_CHARTTOOLS    CloseableLifeTimeManager( css::util::XCloseable* pCloseable
+        , css::lang::XComponent* pComponent
         , bool bLongLastingCallsCancelable = false );
 OOO_DLLPUBLIC_CHARTTOOLS    virtual ~CloseableLifeTimeManager();
 
 OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposedOrClosed( bool bAssert=true );
 OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_startTryClose(bool bDeliverOwnership)
-                    throw ( ::com::sun::star::uno::Exception );
-OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, ::com::sun::star::util::CloseVetoException& ex )
-                    throw ( ::com::sun::star::util::CloseVetoException );
+                    throw ( css::uno::Exception );
+OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException& ex )
+                    throw ( css::util::CloseVetoException );
 OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose(bool bDeliverOwnership, bool bMyVeto );
 OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose_doClose();
-OOO_DLLPUBLIC_CHARTTOOLS    void        g_addCloseListener( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::util::XCloseListener > & xListener )
-                    throw(::com::sun::star::uno::RuntimeException);
+OOO_DLLPUBLIC_CHARTTOOLS    void    g_addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener )
+                    throw(css::uno::RuntimeException);
 
 protected:
     virtual bool    impl_canStartApiCall() override;

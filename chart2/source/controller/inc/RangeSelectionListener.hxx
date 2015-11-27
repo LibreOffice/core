@@ -39,26 +39,25 @@ protected:
 
 class RangeSelectionListener : public
     ::cppu::WeakImplHelper<
-        ::com::sun::star::sheet::XRangeSelectionListener >
+        css::sheet::XRangeSelectionListener >
 {
 public:
     explicit RangeSelectionListener(
         RangeSelectionListenerParent & rParent,
         const OUString & rInitialRange,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel >& xModelToLockController );
+        const css::uno::Reference< css::frame::XModel >& xModelToLockController );
     virtual ~RangeSelectionListener();
 
 protected:
     // ____ XRangeSelectionListener ____
-    virtual void SAL_CALL done( const ::com::sun::star::sheet::RangeSelectionEvent& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL aborted( const ::com::sun::star::sheet::RangeSelectionEvent& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL done( const css::sheet::RangeSelectionEvent& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL aborted( const css::sheet::RangeSelectionEvent& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener ____
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     RangeSelectionListenerParent & m_rParent;

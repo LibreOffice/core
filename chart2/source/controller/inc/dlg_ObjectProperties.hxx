@@ -33,7 +33,7 @@ public:
     ObjectPropertiesDialogParameter( const OUString& rObjectCID );
     virtual ~ObjectPropertiesDialogParameter();
 
-    void            init( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    void            init( const css::uno::Reference< css::frame::XModel >& xModel );
     ObjectType      getObjectType() const { return m_eObjectType;}
     OUString   getLocalizedName() const { return m_aLocalizedName;}
 
@@ -53,9 +53,9 @@ public:
     bool IsSupportingAxisPositioning() const { return m_bSupportingAxisPositioning;}
     bool ShowAxisOrigin() const { return m_bShowAxisOrigin;}
     bool IsCrossingAxisIsCategoryAxis() const { return m_bIsCrossingAxisIsCategoryAxis;}
-    const ::com::sun::star::uno::Sequence< OUString >& GetCategories() const { return m_aCategories;}
+    const css::uno::Sequence< OUString >& GetCategories() const { return m_aCategories;}
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
+    css::uno::Reference< css::chart2::XChartDocument >
         getDocument() const { return m_xChartDocument;}
 
     bool IsComplexCategoriesAxis() const { return m_bComplexCategoriesAxis;}
@@ -86,9 +86,9 @@ private:
     bool m_bSupportingAxisPositioning;
     bool m_bShowAxisOrigin;
     bool m_bIsCrossingAxisIsCategoryAxis;
-    ::com::sun::star::uno::Sequence< OUString > m_aCategories;
+    css::uno::Sequence< OUString > m_aCategories;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
+    css::uno::Reference< css::chart2::XChartDocument > m_xChartDocument;
 
     bool m_bComplexCategoriesAxis;
 
@@ -129,8 +129,7 @@ public:
     SchAttribTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr,
                     const ObjectPropertiesDialogParameter* pDialogParameter,
                     const ViewElementListProvider* pViewElementListProvider,
-                    const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+                    const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~SchAttribTabDlg();
     virtual void dispose() override;
 

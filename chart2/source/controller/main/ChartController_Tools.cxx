@@ -750,7 +750,7 @@ bool ChartController::executeDispatch_Delete()
                         ControllerLockGuardUNO aCtlLockGuard( xModel );
                         xErrorBarProp->setPropertyValue(
                             "ErrorBarStyle",
-                            uno::makeAny( ::com::sun::star::chart::ErrorBarStyle::NONE ));
+                            uno::makeAny( css::chart::ErrorBarStyle::NONE ));
                     }
                     bReturn = true;
                     aUndoGuard.commit();

@@ -224,11 +224,11 @@ void RangeHighlighter::fillRangesForErrorBars(
     bool bUsesRangesAsErrorBars = false;
     try
     {
-        sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+        sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
         bUsesRangesAsErrorBars =
             ( xErrorBar.is() &&
               (xErrorBar->getPropertyValue( "ErrorBarStyle") >>= nStyle) &&
-              nStyle == ::com::sun::star::chart::ErrorBarStyle::FROM_DATA );
+              nStyle == css::chart::ErrorBarStyle::FROM_DATA );
     }
     catch( const uno::Exception & ex )
     {

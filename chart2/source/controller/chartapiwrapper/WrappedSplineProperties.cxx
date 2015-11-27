@@ -44,7 +44,7 @@ class WrappedSplineProperty : public WrappedProperty
 {
 public:
     explicit WrappedSplineProperty( const OUString& rOuterName, const OUString& rInnerName
-        , const ::com::sun::star::uno::Any& rDefaulValue
+        , const css::uno::Any& rDefaulValue
         , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty(rOuterName,OUString())
             , m_spChart2ModelContact(spChart2ModelContact)
@@ -59,7 +59,7 @@ public:
     {
         bool bHasDetectableInnerValue = false;
         rHasAmbiguousValue = false;
-        Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > > aChartTypes(
+        Sequence< css::uno::Reference< css::chart2::XChartType > > aChartTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
         for( sal_Int32 nN = aChartTypes.getLength(); nN--; )
         {
@@ -95,12 +95,12 @@ public:
         }
         return bHasDetectableInnerValue;
     }
-    void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override
+    void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
+                    throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override
     {
         PROPERTYTYPE aNewValue;
         if( ! (rOuterValue >>= aNewValue) )
-            throw ::com::sun::star::lang::IllegalArgumentException( "spline property requires different type", nullptr, 0 );
+            throw css::lang::IllegalArgumentException( "spline property requires different type", nullptr, 0 );
 
         m_aOuterValue = rOuterValue;
 
@@ -110,13 +110,13 @@ public:
         {
             if( bHasAmbiguousValue || aNewValue != aOldValue )
             {
-                Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > > aChartTypes(
+                Sequence< css::uno::Reference< css::chart2::XChartType > > aChartTypes(
                     ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
                 for( sal_Int32 nN = aChartTypes.getLength(); nN--; )
                 {
                     try
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xChartTypePropertySet( aChartTypes[nN], ::com::sun::star::uno::UNO_QUERY );
+                        css::uno::Reference< css::beans::XPropertySet > xChartTypePropertySet( aChartTypes[nN], css::uno::UNO_QUERY );
                         if( xChartTypePropertySet.is() )
                         {
                             xChartTypePropertySet->setPropertyValue(m_aOwnInnerName,this->convertOuterToInnerValue(uno::makeAny(aNewValue)));
@@ -133,8 +133,8 @@ public:
         }
     }
 
-    ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                            throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override
+    css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
+                            throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override
     {
         bool bHasAmbiguousValue = false;
         PROPERTYTYPE aValue;
@@ -145,16 +145,16 @@ public:
         return m_aOuterValue;
     }
 
-    ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                            throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override
+    css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& /*xInnerPropertyState*/ ) const
+                            throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override
     {
         return m_aDefaultValue;
     }
 
 protected:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    mutable ::com::sun::star::uno::Any     m_aOuterValue;
-    ::com::sun::star::uno::Any             m_aDefaultValue;
+    mutable css::uno::Any                   m_aOuterValue;
+    css::uno::Any                           m_aDefaultValue;
     // this inner name is not set as inner name at the base class
     const OUString m_aOwnInnerName;
 };
@@ -165,8 +165,8 @@ public:
     explicit WrappedSplineTypeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedSplineTypeProperty();
 
-    virtual ::com::sun::star::uno::Any convertInnerToOuterValue( const ::com::sun::star::uno::Any& rInnerValue ) const override;
-    virtual ::com::sun::star::uno::Any convertOuterToInnerValue( const ::com::sun::star::uno::Any& rOuterValue ) const override;
+    virtual css::uno::Any convertInnerToOuterValue( const css::uno::Any& rInnerValue ) const override;
+    virtual css::uno::Any convertOuterToInnerValue( const css::uno::Any& rOuterValue ) const override;
 };
 
 namespace

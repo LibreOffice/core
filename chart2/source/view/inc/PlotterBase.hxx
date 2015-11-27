@@ -49,36 +49,30 @@ public:
     virtual ~PlotterBase();
 
     virtual void initPlotter(
-          const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xLogicTarget
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xFinalTarget
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+          const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
+        , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget
+        , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
         , const OUString& rCID
                 ) throw (css::uno::RuntimeException, std::exception);
 
     virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
 
-    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
+    virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix );
 
     virtual void createShapes() = 0;
 
-    static bool isValidPosition( const ::com::sun::star::drawing::Position3D& rPos );
+    static bool isValidPosition( const css::drawing::Position3D& rPos );
 
 protected: //methods
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
-        createGroupShape( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
+    css::uno::Reference< css::drawing::XShapes >
+        createGroupShape( const css::uno::Reference<
+                css::drawing::XShapes >& xTarget
                 , const OUString& rName=OUString() );
 
 protected: //member
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >                m_xLogicTarget;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >                m_xFinalTarget;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>       m_xShapeFactory;
+    css::uno::Reference< css::drawing::XShapes >                m_xLogicTarget;
+    css::uno::Reference< css::drawing::XShapes >                m_xFinalTarget;
+    css::uno::Reference< css::lang::XMultiServiceFactory>       m_xShapeFactory;
     AbstractShapeFactory* m_pShapeFactory;
     OUString   m_aCID;
 

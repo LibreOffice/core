@@ -289,13 +289,13 @@ void PieChart::createTextLabelShape(
     ///`AVOID_OVERLAP` as if it was of `CENTER` type;
 
     //AVOID_OVERLAP is in fact "Best fit" in the UI.
-    bool bMovementAllowed = ( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::AVOID_OVERLAP );
+    bool bMovementAllowed = ( nLabelPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP );
     if( bMovementAllowed )
         // Use center for "Best fit" for now. In the future we
         // may want to implement a real best fit algorithm.
         // But center is good enough, and close to what Excel
         // does.
-        nLabelPlacement = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+        nLabelPlacement = css::chart::DataLabelPlacement::CENTER;
 
     ///for `OUTSIDE` (`INSIDE`) label placements an offset of 150 (-150), in the
     ///radius direction, is added to the final screen position of the label
@@ -307,9 +307,9 @@ void PieChart::createTextLabelShape(
     ///these are coordinates of a virtual screen and 150 is a small value;
     LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
     sal_Int32 nScreenValueOffsetInRadiusDirection = 0 ;
-    if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE )
+    if( nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE )
         nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? 150 : 0;//todo maybe calculate this font height dependent
-    else if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::INSIDE )
+    else if( nLabelPlacement == css::chart::DataLabelPlacement::INSIDE )
         nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? -150 : 0;//todo maybe calculate this font height dependent
 
     ///the scene position of the label anchor point is calculated (see notes for

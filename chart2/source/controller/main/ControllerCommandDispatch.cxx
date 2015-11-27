@@ -62,7 +62,7 @@ bool lcl_isStatusBarVisible( const Reference< frame::XController > & xController
         Reference< beans::XPropertySet > xPropSet( xController->getFrame(), uno::UNO_QUERY );
         if( xPropSet.is() )
         {
-            uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+            uno::Reference< css::frame::XLayoutManager > xLayoutManager;
             xPropSet->getPropertyValue( "LayoutManager" ) >>= xLayoutManager;
             if ( xLayoutManager.is() )
                 bIsStatusBarVisible = xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" );

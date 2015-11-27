@@ -76,31 +76,31 @@ namespace impl
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
 typedef cppu::WeakImplHelper<
-//       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
-         ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
-        ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
-        ,::com::sun::star::util::XModifiable    //comprehends XModifyBroadcaster (required interface)
-        ,::com::sun::star::lang::XServiceInfo
-        ,::com::sun::star::lang::XInitialization
-        ,::com::sun::star::chart2::XChartDocument  // derived from XModel
-        ,::com::sun::star::chart2::data::XDataReceiver   // public API
-        ,::com::sun::star::chart2::XTitled
-        ,::com::sun::star::frame::XLoadable
-        ,::com::sun::star::util::XCloneable
-        ,::com::sun::star::embed::XVisualObject
-        ,::com::sun::star::lang::XMultiServiceFactory
-        ,::com::sun::star::document::XStorageBasedDocument
-        ,::com::sun::star::lang::XUnoTunnel
-        ,::com::sun::star::util::XNumberFormatsSupplier
-        ,::com::sun::star::container::XChild
-        ,::com::sun::star::util::XModifyListener
-        ,::com::sun::star::datatransfer::XTransferable
-        ,::com::sun::star::document::XDocumentPropertiesSupplier
-        ,::com::sun::star::chart2::data::XDataSource
-        ,::com::sun::star::document::XUndoManagerSupplier
-        ,::com::sun::star::chart2::X3DChartWindowProvider
-        ,::com::sun::star::util::XUpdatable
-        ,::com::sun::star::qa::XDumper
+//       css::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
+         css::util::XCloseable     //comprehends XCloseBroadcaster
+        ,css::frame::XStorable2    //(extension of XStorable)
+        ,css::util::XModifiable    //comprehends XModifyBroadcaster (required interface)
+        ,css::lang::XServiceInfo
+        ,css::lang::XInitialization
+        ,css::chart2::XChartDocument  // derived from XModel
+        ,css::chart2::data::XDataReceiver   // public API
+        ,css::chart2::XTitled
+        ,css::frame::XLoadable
+        ,css::util::XCloneable
+        ,css::embed::XVisualObject
+        ,css::lang::XMultiServiceFactory
+        ,css::document::XStorageBasedDocument
+        ,css::lang::XUnoTunnel
+        ,css::util::XNumberFormatsSupplier
+        ,css::container::XChild
+        ,css::util::XModifyListener
+        ,css::datatransfer::XTransferable
+        ,css::document::XDocumentPropertiesSupplier
+        ,css::chart2::data::XDataSource
+        ,css::document::XUndoManagerSupplier
+        ,css::chart2::X3DChartWindowProvider
+        ,css::util::XUpdatable
+        ,css::qa::XDumper
         >
     ChartModel_Base;
 }
@@ -122,54 +122,54 @@ private:
 
     bool mbTimeBased;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xChartView; // for the ref count
+    css::uno::Reference< css::uno::XInterface > xChartView; // for the ref count
     ChartView* mpChartView;
 
     OUString m_aResource;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aMediaDescriptor;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > m_xDocumentProperties;
-    ::rtl::Reference< UndoManager >                                             m_pUndoManager;
+    css::uno::Sequence< css::beans::PropertyValue >   m_aMediaDescriptor;
+    css::uno::Reference< css::document::XDocumentProperties > m_xDocumentProperties;
+    ::rtl::Reference< UndoManager >                    m_pUndoManager;
 
-    ::comphelper::OInterfaceContainerHelper2                                           m_aControllers;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    m_xCurrentController;
-    sal_uInt16                                                                  m_nControllerLockCount;
+    ::comphelper::OInterfaceContainerHelper2           m_aControllers;
+    css::uno::Reference< css::frame::XController >     m_xCurrentController;
+    sal_uInt16                                         m_nControllerLockCount;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >      m_xOldModelAgg;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XAggregation >      m_xOldModelAgg;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >        m_xStorage;
+    css::uno::Reference< css::embed::XStorage >        m_xStorage;
     //the content of this should be always synchronized with the current m_xViewWindow size. The variable is necessary to hold the information as long as no view window exists.
-    ::com::sun::star::awt::Size                                                  m_aVisualAreaSize;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >          m_xParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
-    ::std::vector< GraphicObject >                                               m_aGraphicObjectVector;
+    css::awt::Size                                     m_aVisualAreaSize;
+    css::uno::Reference< css::frame::XModel >          m_xParent;
+    css::uno::Reference< css::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
+    ::std::vector< GraphicObject >                            m_aGraphicObjectVector;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   m_xDataProvider;
+    css::uno::Reference< css::chart2::data::XDataProvider >   m_xDataProvider;
     /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an
         external data provider this reference must be set to 0
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   m_xInternalDataProvider;
+    css::uno::Reference< css::chart2::data::XDataProvider >   m_xInternalDataProvider;
 
-    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
+    css::uno::Reference< css::util::XNumberFormatsSupplier >
                                 m_xOwnNumberFormatsSupplier;
-    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
+    css::uno::Reference< css::util::XNumberFormatsSupplier >
                                 m_xNumberFormatsSupplier;
     std::unique_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >
+    css::uno::Reference< css::chart2::XChartTypeManager >
         m_xChartTypeManager;
 
     // Diagram Access
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >
+    css::uno::Reference< css::chart2::XDiagram >
         m_xDiagram;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
+    css::uno::Reference< css::chart2::XTitle >
                                           m_xTitle;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+    css::uno::Reference< css::beans::XPropertySet >
                                           m_xPageBackground;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xXMLNamespaceMap;
+    css::uno::Reference< css::container::XNameAccess>     m_xXMLNamespaceMap;
 
 private:
     //private methods
@@ -177,48 +177,48 @@ private:
     OUString impl_g_getLocation();
 
     bool
-        impl_isControllerConnected( const com::sun::star::uno::Reference< com::sun::star::frame::XController >& xController );
+        impl_isControllerConnected( const css::uno::Reference< com::sun::star::frame::XController >& xController );
 
-    com::sun::star::uno::Reference< com::sun::star::frame::XController >
+    css::uno::Reference< css::frame::XController >
         impl_getCurrentController()
-                            throw( com::sun::star::uno::RuntimeException);
+                            throw( css::uno::RuntimeException);
 
     void SAL_CALL
         impl_notifyModifiedListeners()
-                            throw( com::sun::star::uno::RuntimeException);
+                            throw( css::uno::RuntimeException);
     void SAL_CALL
         impl_notifyCloseListeners()
-                            throw( com::sun::star::uno::RuntimeException);
+                            throw( css::uno::RuntimeException);
     void SAL_CALL
         impl_notifyStorageChangeListeners()
-                            throw(::com::sun::star::uno::RuntimeException);
+                            throw(css::uno::RuntimeException);
 
     void impl_store(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > & xStorage );
+        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
+        const css::uno::Reference< css::embed::XStorage > & xStorage );
     void impl_load(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
+        const css::uno::Reference< css::embed::XStorage >& xStorage );
     void impl_loadGraphics(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter >
-        impl_createFilter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
+        const css::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    css::uno::Reference< css::document::XFilter >
+        impl_createFilter( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeTemplate > impl_createDefaultChartTypeTemplate();
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > impl_createDefaultData();
+    css::uno::Reference< css::chart2::XChartTypeTemplate > impl_createDefaultChartTypeTemplate();
+    css::uno::Reference< css::chart2::data::XDataSource > impl_createDefaultData();
 
     void impl_adjustAdditionalShapesPositionAndSize(
-        const ::com::sun::star::awt::Size& aVisualAreaSize );
+        const css::awt::Size& aVisualAreaSize );
 
     void insertDefaultChart();
 
 public:
     //no default constructor
-    ChartModel(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    ChartModel(css::uno::Reference< css::uno::XComponentContext > const & xContext);
     explicit ChartModel( const ChartModel & rOther );
     virtual ~ChartModel();
 
-    // ::com::sun::star::lang::XServiceInfo
+    // css::lang::XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) override;
@@ -230,190 +230,190 @@ public:
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-    // ::com::sun::star::lang::XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-                throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+                throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::frame::XModel (required interface)
+    // css::frame::XModel (required interface)
 
     virtual sal_Bool SAL_CALL
-        attachResource( const OUString& rURL
-                            , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        attachResource( const OUString& rURL,
+                        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL
-        getURL()            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        getURL()            throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
-        getArgs()           throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-
-    virtual void SAL_CALL
-        connectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+        getArgs()           throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        disconnectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        connectController( const css::uno::Reference< css::frame::XController >& xController )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        lockControllers()   throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        disconnectController( const css::uno::Reference< css::frame::XController >& xController )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        unlockControllers() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        lockControllers()   throw (css::uno::RuntimeException, std::exception) override;
+
+    virtual void SAL_CALL
+        unlockControllers() throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL
         hasControllersLocked()
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                            throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL
+    virtual css::uno::Reference< css::frame::XController > SAL_CALL
         getCurrentController()
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        setCurrentController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
-                            throw (::com::sun::star::container::NoSuchElementException
-                            , ::com::sun::star::uno::RuntimeException, std::exception) override;
+        setCurrentController( const css::uno::Reference< css::frame::XController >& xController )
+                            throw (css::container::NoSuchElementException
+                            , css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         getCurrentSelection()
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                            throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XComponent (base of XModel)
+    // css::lang::XComponent (base of XModel)
     virtual void SAL_CALL
-        dispose()           throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-
-    virtual void SAL_CALL
-        addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        dispose()           throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        addEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XCloseable
+    virtual void SAL_CALL
+        removeEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener )
+                            throw (css::uno::RuntimeException, std::exception) override;
+
+    // css::util::XCloseable
     virtual void SAL_CALL
         close( sal_Bool bDeliverOwnership )
-                            throw(::com::sun::star::util::CloseVetoException,
-                                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+                            throw(css::util::CloseVetoException,
+                                  css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XCloseBroadcaster (base of XCloseable)
+    // css::util::XCloseBroadcaster (base of XCloseable)
     virtual void SAL_CALL
-        addCloseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > & xListener )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        removeCloseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > & xListener )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        removeCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::frame::XStorable2 (extension of XStorable)
+    // css::frame::XStorable2 (extension of XStorable)
     virtual void SAL_CALL storeSelf(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor )
+        throw (css::lang::IllegalArgumentException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::frame::XStorable (required interface)
+    // css::frame::XStorable (required interface)
     virtual sal_Bool SAL_CALL
-        hasLocation()       throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        hasLocation()       throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL
-        getLocation()       throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        getLocation()       throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL
-        isReadonly()        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        isReadonly()        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        store()             throw (::com::sun::star::io::IOException
-                            , ::com::sun::star::uno::RuntimeException, std::exception) override;
+        store()             throw (css::io::IOException
+                            , css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        storeAsURL( const OUString& rURL
-                            , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
-                            throw (::com::sun::star::io::IOException
-                            , ::com::sun::star::uno::RuntimeException, std::exception) override;
+        storeAsURL( const OUString& rURL,
+                    const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor )
+                            throw (css::io::IOException
+                            , css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        storeToURL( const OUString& rURL
-                            , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
-                            throw (::com::sun::star::io::IOException
-                            , ::com::sun::star::uno::RuntimeException, std::exception) override;
+        storeToURL( const OUString& rURL,
+                    const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor )
+                            throw (css::io::IOException
+                            , css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XModifiable (required interface)
+    // css::util::XModifiable (required interface)
     virtual sal_Bool SAL_CALL
-        isModified()        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        isModified()        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
         setModified( sal_Bool bModified )
-                            throw (::com::sun::star::beans::PropertyVetoException
-                            , ::com::sun::star::uno::RuntimeException, std::exception) override;
+                            throw (css::beans::PropertyVetoException
+                            , css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XModifyBroadcaster (base of XModifiable)
+    // css::util::XModifyBroadcaster (base of XModifiable)
     virtual void SAL_CALL
-        addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& xListener )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        addModifyListener( const css::uno::Reference< css::util::XModifyListener >& xListener )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& xListener )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& xListener )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ datatransferable::XTransferable ____
-    virtual ::com::sun::star::uno::Any SAL_CALL getTransferData(
-        const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-        throw (::com::sun::star::datatransfer::UnsupportedFlavorException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getTransferData(
+        const css::datatransfer::DataFlavor& aFlavor )
+        throw (css::datatransfer::UnsupportedFlavorException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isDataFlavorSupported(
-        const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::datatransfer::DataFlavor& aFlavor )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // lang::XTypeProvider (override method of WeakImplHelper)
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
-        getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
+        getTypes() throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ document::XDocumentPropertiesSupplier ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > SAL_CALL
-        getDocumentProperties(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::document::XDocumentProperties > SAL_CALL
+        getDocumentProperties(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ document::XUndoManagerSupplier ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL
-        getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL
+        getUndoManager(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::chart2::XChartDocument
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL
-        getFirstDiagram()       throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::chart2::XChartDocument
+    virtual css::uno::Reference< css::chart2::XDiagram > SAL_CALL
+        getFirstDiagram() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setFirstDiagram(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
         createInternalDataProvider( sal_Bool bCloneExistingData )
-            throw (::com::sun::star::util::CloseVetoException,
-                   ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::util::CloseVetoException,
+                   css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasInternalDataProvider()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::data::XDataProvider > SAL_CALL
         getDataProvider()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
-        setChartTypeManager( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >& xNewManager )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager > SAL_CALL
+        setChartTypeManager( const css::uno::Reference< css::chart2::XChartTypeManager >& xNewManager )
+            throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XChartTypeManager > SAL_CALL
         getChartTypeManager()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
+            throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
         getPageBackground()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL createDefaultChart() throw (css::uno::RuntimeException, std::exception) override;
 
@@ -421,156 +421,157 @@ public:
 
     // ____ XDataReceiver (public API) ____
     virtual void SAL_CALL
-        attachDataProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >& xProvider )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        attachDataProvider( const css::uno::Reference< css::chart2::data::XDataProvider >& xProvider )
+            throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setArguments(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getUsedRangeRepresentations()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL getUsedData()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL attachNumberFormatsSupplier( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > SAL_CALL getRangeHighlighter()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getUsedRangeRepresentations()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL getUsedData()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL attachNumberFormatsSupplier( const css::uno::Reference<
+        css::util::XNumberFormatsSupplier >& xSupplier )
+            throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::data::XRangeHighlighter > SAL_CALL getRangeHighlighter()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XTitled ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTitleObject( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >& Title )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XTitle > SAL_CALL getTitleObject()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTitleObject( const css::uno::Reference< css::chart2::XTitle >& Title )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XInterface (for old API wrapper) ____
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XLoadable ____
     virtual void SAL_CALL initNew()
-        throw (::com::sun::star::frame::DoubleInitializationException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL load( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
-        throw (::com::sun::star::frame::DoubleInitializationException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::frame::DoubleInitializationException,
+               css::io::IOException,
+               css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor )
+        throw (css::frame::DoubleInitializationException,
+               css::io::IOException,
+               css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XVisualObject ____
     virtual void SAL_CALL setVisualAreaSize(
         ::sal_Int64 nAspect,
-        const ::com::sun::star::awt::Size& aSize )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::embed::WrongStateException,
-               ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::awt::Size SAL_CALL getVisualAreaSize(
+        const css::awt::Size& aSize )
+        throw (css::lang::IllegalArgumentException,
+               css::embed::WrongStateException,
+               css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Size SAL_CALL getVisualAreaSize(
         ::sal_Int64 nAspect )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::embed::WrongStateException,
-               ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation(
+        throw (css::lang::IllegalArgumentException,
+               css::embed::WrongStateException,
+               css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation(
         ::sal_Int64 nAspect )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::embed::WrongStateException,
-               ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IllegalArgumentException,
+               css::embed::WrongStateException,
+               css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL getMapUnit(
         ::sal_Int64 nAspect )
-        throw (::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XMultiServiceFactory ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         createInstance( const OUString& aServiceSpecifier )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         createInstanceWithArguments( const OUString& ServiceSpecifier
-                                   , const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getAvailableServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                                   , const css::uno::Sequence< css::uno::Any >& Arguments )
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
+        getAvailableServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XStorageBasedDocument ____
     virtual void SAL_CALL loadFromStorage(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::frame::DoubleInitializationException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::embed::XStorage >& xStorage,
+        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor )
+        throw (css::lang::IllegalArgumentException,
+               css::frame::DoubleInitializationException,
+               css::io::IOException,
+               css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL storeToStorage(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::embed::XStorage >& xStorage,
+        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor )
+        throw (css::lang::IllegalArgumentException,
+               css::io::IOException,
+               css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL switchToStorage(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getDocumentStorage()
-        throw (::com::sun::star::io::IOException,
-               ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::embed::XStorage >& xStorage )
+        throw (css::lang::IllegalArgumentException,
+               css::io::IOException,
+               css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getDocumentStorage()
+        throw (css::io::IOException,
+               css::uno::Exception,
+               css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addStorageChangeListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageChangeListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::document::XStorageChangeListener >& xListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeStorageChangeListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageChangeListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::document::XStorageChangeListener >& xListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // for SvNumberFormatsSupplierObj
     // ____ XUnoTunnel ___
-    virtual ::sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aIdentifier )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< ::sal_Int8 >& aIdentifier )
+            throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XNumberFormatsSupplier ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getNumberFormatSettings()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > SAL_CALL getNumberFormats()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getNumberFormatSettings()
+            throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XNumberFormats > SAL_CALL getNumberFormats()
+            throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XChild ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setParent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent )
-        throw (::com::sun::star::lang::NoSupportException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::uno::XInterface >& Parent )
+        throw (css::lang::NoSupportException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XDataSource ____ allows access to the currently used data and data ranges
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // X3DChartWindowProvider
     virtual void SAL_CALL setWindow( sal_uInt64 nWindowPtr )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XUpdatable
     virtual void SAL_CALL update()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XDumper
     virtual OUString SAL_CALL dump()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // normal methods
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
+    css::uno::Reference< css::util::XNumberFormatsSupplier >
         getNumberFormatsSupplier();
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > getChartView() { return xChartView;}
+    css::uno::Reference< css::uno::XInterface > getChartView() { return xChartView;}
 
     bool isTimeBased() const { return mbTimeBased;}
     void setTimeBased(bool bTimeBased);

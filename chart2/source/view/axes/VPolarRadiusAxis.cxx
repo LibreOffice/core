@@ -83,8 +83,8 @@ void VPolarRadiusAxis::setScales( const std::vector< ExplicitScaleData >& rScale
     m_apAxisWithLabels->setScales( rScales, bSwapXAndYAxis );
 }
 
-void VPolarRadiusAxis::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
-                  , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels )
+void VPolarRadiusAxis::initAxisLabelProperties( const css::awt::Size& rFontReferenceSize
+                  , const css::awt::Rectangle& rMaximumSpaceForLabels )
 {
     VPolarAxis::initAxisLabelProperties( rFontReferenceSize, rMaximumSpaceForLabels );
     m_apAxisWithLabels->initAxisLabelProperties( rFontReferenceSize, rMaximumSpaceForLabels );

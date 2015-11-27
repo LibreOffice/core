@@ -38,19 +38,15 @@ namespace VLegendSymbolFactory
         PROP_TYPE_FILL_AND_LINE
     };
 
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
         createSymbol(
-            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& rSymbolContainer,
+            const css::awt::Size& rEntryKeyAspectRatio,
+            const css::uno::Reference< css::drawing::XShapes >& rSymbolContainer,
             LegendSymbolStyle eStyle,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory > & xShapeFactory,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & xLegendEntryProperties,
+            const css::uno::Reference< css::lang::XMultiServiceFactory > & xShapeFactory,
+            const css::uno::Reference< css::beans::XPropertySet > & xLegendEntryProperties,
             tPropertyType ePropertyType,
-            const ::com::sun::star::uno::Any& rExplicitSymbol /*should contain a ::com::sun::star::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
+            const css::uno::Any& rExplicitSymbol /*should contain a css::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
 }
 
 } //  namespace chart

@@ -664,8 +664,8 @@ void SplineCalculater::CalculateCubicSplines(
 // http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/
 // [last called 2011-05-20]
 void SplineCalculater::CalculateBSplines(
-            const ::com::sun::star::drawing::PolyPolygonShape3D& rInput
-            , ::com::sun::star::drawing::PolyPolygonShape3D& rResult
+            const css::drawing::PolyPolygonShape3D& rInput
+            , css::drawing::PolyPolygonShape3D& rResult
             , sal_uInt32 nResolution
             , sal_uInt32 nDegree )
 {

@@ -65,12 +65,12 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
         {OUString("ErrorBarRangePositive"),6,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
         {OUString("ErrorBarRangeNegative"),7,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
         {OUString("Weight"),8,cppu::UnoType<double>::get(),0,0},
-        {OUString("LineStyle"),9,cppu::UnoType<com::sun::star::drawing::LineStyle>::get(),0,0},
+        {OUString("LineStyle"),9,cppu::UnoType<css::drawing::LineStyle>::get(),0,0},
         {OUString("LineDash"),10,cppu::UnoType<drawing::LineDash>::get(),0,0},
         {OUString("LineWidth"),11,cppu::UnoType<sal_Int32>::get(),0,0},
-        {OUString("LineColor"),12,cppu::UnoType<com::sun::star::util::Color>::get(),0,0},
+        {OUString("LineColor"),12,cppu::UnoType<css::util::Color>::get(),0,0},
         {OUString("LineTransparence"),13,cppu::UnoType<sal_Int16>::get(),0,0},
-        {OUString("LineJoint"),14,cppu::UnoType<com::sun::star::drawing::LineJoint>::get(),0,0},
+        {OUString("LineJoint"),14,cppu::UnoType<css::drawing::LineJoint>::get(),0,0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aPropSet( aErrorBarPropertyMap_Impl );
@@ -95,7 +95,7 @@ ErrorBar::ErrorBar(
     mfPositiveError(0),
     mfNegativeError(0),
     mfWeight(1),
-    meStyle(com::sun::star::chart::ErrorBarStyle::NONE),
+    meStyle(css::chart::ErrorBarStyle::NONE),
     m_xContext( xContext ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
@@ -237,7 +237,7 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
     else if(rPropName == "ErrorBarRangePositive")
     {
         OUString aRange;
-        if(meStyle == com::sun::star::chart::ErrorBarStyle::FROM_DATA)
+        if(meStyle == css::chart::ErrorBarStyle::FROM_DATA)
         {
             uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
                 getDataSequences();
@@ -250,7 +250,7 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
     else if(rPropName == "ErrorBarRangeNegative")
     {
         OUString aRange;
-        if(meStyle == com::sun::star::chart::ErrorBarStyle::FROM_DATA)
+        if(meStyle == css::chart::ErrorBarStyle::FROM_DATA)
         {
             uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
                 getDataSequences();
@@ -268,11 +268,11 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
 }
 
 beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
-        throw (com::sun::star::beans::UnknownPropertyException, std::exception)
+        throw (css::beans::UnknownPropertyException, std::exception)
 {
     if(rPropName == "ErrorBarStyle")
     {
-        if(meStyle == com::sun::star::chart::ErrorBarStyle::NONE)
+        if(meStyle == css::chart::ErrorBarStyle::NONE)
             return beans::PropertyState_DEFAULT_VALUE;
         return beans::PropertyState_DIRECT_VALUE;
     }
@@ -282,8 +282,8 @@ beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
         {
             switch(meStyle)
             {
-                case com::sun::star::chart::ErrorBarStyle::ABSOLUTE:
-                case com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
+                case css::chart::ErrorBarStyle::ABSOLUTE:
+                case css::chart::ErrorBarStyle::ERROR_MARGIN:
                     return beans::PropertyState_DIRECT_VALUE;
                 default:
                     break;
@@ -297,8 +297,8 @@ beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
         {
             switch(meStyle)
             {
-                case com::sun::star::chart::ErrorBarStyle::ABSOLUTE:
-                case com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
+                case css::chart::ErrorBarStyle::ABSOLUTE:
+                case css::chart::ErrorBarStyle::ERROR_MARGIN:
                     return beans::PropertyState_DIRECT_VALUE;
                 default:
                     break;
@@ -308,7 +308,7 @@ beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
     }
     else if(rPropName == "PercentageError")
     {
-        if(meStyle != com::sun::star::chart::ErrorBarStyle::RELATIVE)
+        if(meStyle != css::chart::ErrorBarStyle::RELATIVE)
             return beans::PropertyState_DEFAULT_VALUE;
         return beans::PropertyState_DIRECT_VALUE;
     }
@@ -324,13 +324,13 @@ beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
     }
     else if(rPropName == "ErrorBarRangePositive")
     {
-        if(meStyle == com::sun::star::chart::ErrorBarStyle::FROM_DATA && mbShowPositiveError)
+        if(meStyle == css::chart::ErrorBarStyle::FROM_DATA && mbShowPositiveError)
             return beans::PropertyState_DIRECT_VALUE;
         return beans::PropertyState_DEFAULT_VALUE;
     }
     else if(rPropName == "ErrorBarRangeNegative")
     {
-        if(meStyle == com::sun::star::chart::ErrorBarStyle::FROM_DATA && mbShowNegativeError)
+        if(meStyle == css::chart::ErrorBarStyle::FROM_DATA && mbShowNegativeError)
             return beans::PropertyState_DIRECT_VALUE;
         return beans::PropertyState_DEFAULT_VALUE;
     }
@@ -339,7 +339,7 @@ beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
 }
 
 uno::Sequence< beans::PropertyState > ErrorBar::getPropertyStates( const uno::Sequence< OUString >& rPropNames )
-        throw (com::sun::star::beans::UnknownPropertyException, std::exception)
+        throw (css::beans::UnknownPropertyException, std::exception)
 {
     uno::Sequence< beans::PropertyState > aRet( rPropNames.getLength() );
     for(sal_Int32 i = 0; i < rPropNames.getLength(); ++i)
@@ -362,23 +362,23 @@ uno::Any ErrorBar::getPropertyDefault( const OUString& )
     return uno::Any();
 }
 
-void ErrorBar::addPropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
-    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void ErrorBar::addPropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
+    throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
 }
 
-void ErrorBar::removePropertyChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& )
-    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void ErrorBar::removePropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
+    throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
 }
 
-void ErrorBar::addVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
-    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void ErrorBar::addVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
+    throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
 }
 
-void ErrorBar::removeVetoableChangeListener( const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& )
-    throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void ErrorBar::removeVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
+    throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
 }
 

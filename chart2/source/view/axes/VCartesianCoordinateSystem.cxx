@@ -33,7 +33,7 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
 class TextualDataProvider : public ::cppu::WeakImplHelper<
-        ::com::sun::star::chart2::data::XTextualDataSequence
+        css::chart2::data::XTextualDataSequence
         >
 {
 public:

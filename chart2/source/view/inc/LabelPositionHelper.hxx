@@ -39,19 +39,19 @@ class LabelPositionHelper
 public:
     LabelPositionHelper(
           sal_Int32 nDimensionCount
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
+        , const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
         , AbstractShapeFactory* pShapeFactory );
     virtual ~LabelPositionHelper();
 
-    ::com::sun::star::awt::Point transformSceneToScreenPosition(
-            const ::com::sun::star::drawing::Position3D& rScenePosition3D ) const;
+    css::awt::Point transformSceneToScreenPosition(
+            const css::drawing::Position3D& rScenePosition3D ) const;
 
     static void changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment);
     static void doDynamicFontResize(  tAnySequence& rPropValues, const tNameSequence& rPropNames
-                    , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisModelProps
-                    , const ::com::sun::star::awt::Size& rNewReferenceSize );
+                    , const css::uno::Reference< css::beans::XPropertySet >& xAxisModelProps
+                    , const css::awt::Size& rNewReferenceSize );
 
-    static void correctPositionForRotation( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape2DText
+    static void correctPositionForRotation( const css::uno::Reference< css::drawing::XShape >& xShape2DText
                     , LabelAlignment eLabelAlignment, const double fRotationAngle, bool bRotateAroundCenter );
 
 private:
@@ -62,8 +62,7 @@ protected:
 
 private:
     //these members are only necessary for transformation from 3D to 2D
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >    m_xLogicTarget;
+    css::uno::Reference< css::drawing::XShapes >    m_xLogicTarget;
     AbstractShapeFactory* m_pShapeFactory;
 };
 

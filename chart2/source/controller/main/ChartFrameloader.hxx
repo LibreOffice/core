@@ -29,16 +29,12 @@ namespace chart
 {
 
 class ChartFrameLoader : public ::cppu::WeakImplHelper<
-         ::com::sun::star::frame::XSynchronousFrameLoader
-         , ::com::sun::star::lang::XServiceInfo
-            //comprehends XComponent (required interface)
-    //  ,public ::com::sun::star::uno::XWeak            // implemented by WeakImplHelper(optional interface)
-    //  ,public ::com::sun::star::uno::XInterface       // implemented by WeakImplHelper(optional interface)
-    //  ,public ::com::sun::star::lang::XTypeProvider   // implemented by WeakImplHelper
+         css::frame::XSynchronousFrameLoader
+         , css::lang::XServiceInfo
         >
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
+    css::uno::Reference< css::uno::XComponentContext>        m_xCC;
     bool            m_bCancelRequired;
     ::osl::Condition    m_oCancelFinished;
 
@@ -47,11 +43,10 @@ private:
     //no default constructor
     ChartFrameLoader(){}
 public:
-    explicit ChartFrameLoader(::com::sun::star::uno::Reference<
-               ::com::sun::star::uno::XComponentContext > const & xContext);
+    explicit ChartFrameLoader(css::uno::Reference< css::uno::XComponentContext > const & xContext);
     virtual ~ChartFrameLoader();
 
-    // ::com::sun::star::lang::XServiceInfo
+    // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -62,17 +57,15 @@ public:
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-    // ::com::sun::star::frame::XFrameLoader
+    // css::frame::XFrameLoader
 
     virtual sal_Bool SAL_CALL
-        load( const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue >& rMediaDescriptor
-                ,const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XFrame >& xFrame )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        load( const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor
+                ,const css::uno::Reference< css::frame::XFrame >& xFrame )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        cancel()            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        cancel()            throw (css::uno::RuntimeException, std::exception) override;
 };
 
 } //namespace chart

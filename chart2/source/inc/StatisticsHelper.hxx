@@ -35,78 +35,63 @@ namespace StatisticsHelper
 
         @see http://mathworld.wolfram.com/Variance.html
      */
-    OOO_DLLPUBLIC_CHARTTOOLS double getVariance( const ::com::sun::star::uno::Sequence< double > & rData );
+    OOO_DLLPUBLIC_CHARTTOOLS double getVariance( const css::uno::Sequence< double > & rData );
 
     // square root of the variance
-    OOO_DLLPUBLIC_CHARTTOOLS double getStandardDeviation( const ::com::sun::star::uno::Sequence< double > & rData );
+    OOO_DLLPUBLIC_CHARTTOOLS double getStandardDeviation( const css::uno::Sequence< double > & rData );
 
     // also called "Standard deviation of the mean (SDOM)"
-    OOO_DLLPUBLIC_CHARTTOOLS double getStandardError( const ::com::sun::star::uno::Sequence< double > & rData );
+    OOO_DLLPUBLIC_CHARTTOOLS double getStandardError( const css::uno::Sequence< double > & rData );
 
-    OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence >
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getErrorLabeledDataSequenceFromDataSource(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataSource > & xDataSource,
+            const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
             bool bPositiveValue,
             bool bYError = true );
 
-    OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSequence >
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XDataSequence >
         getErrorDataSequenceFromDataSource(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XDataSource > & xDataSource,
+            const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
             bool bPositiveValue,
             bool bYError = true );
 
     OOO_DLLPUBLIC_CHARTTOOLS double getErrorFromDataSource(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSource > & xDataSource,
+        const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
         sal_Int32 nIndex,
         bool bPositiveValue,
         bool bYError = true );
 
     OOO_DLLPUBLIC_CHARTTOOLS void setErrorDataSequence(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSource > & xDataSource,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataProvider > & xDataProvider,
+        const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
+        const css::uno::Reference< css::chart2::data::XDataProvider > & xDataProvider,
         const OUString & rNewRange,
         bool bPositiveValue,
         bool bYError = true,
         OUString * pXMLRange = nullptr );
 
     /// @return the newly created or existing error bar object
-    OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::beans::XPropertySet >
         addErrorBars(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > & xDataSeries,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext > & xContext,
+            const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
+            const css::uno::Reference< css::uno::XComponentContext > & xContext,
             sal_Int32 nStyle,
             bool bYError = true );
 
-    OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::beans::XPropertySet >
         getErrorBars(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+            const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
             bool bYError = true );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool hasErrorBars(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+        const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
         bool bYError = true );
 
     OOO_DLLPUBLIC_CHARTTOOLS void removeErrorBars(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+        const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
         bool bYError = true );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool usesErrorBarRanges(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+        const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
         bool bYError = true );
 }
 

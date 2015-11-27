@@ -338,24 +338,14 @@ sal_Int32 XMLFilter::impl_Import(
         comphelper::PropertyMapEntry const aImportInfoMap[] =
         {
             // necessary properties for XML progress bar at load time
-            { OUString("ProgressRange"),   0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("ProgressMax"),     0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("PrivateData"), 0,
-                cppu::UnoType<XInterface>::get(),
-                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("BaseURI"), 0,
-                ::cppu::UnoType<OUString>::get(),
-                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamRelPath"), 0,
-                ::cppu::UnoType<OUString>::get(),
-                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamName"), 0,
-                ::cppu::UnoType<OUString>::get(),
-                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("BuildId"), 0,
-                ::cppu::UnoType<OUString>::get(),
-                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("ProgressRange"),   0, cppu::UnoType<sal_Int32>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("ProgressMax"),     0, cppu::UnoType<sal_Int32>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("ProgressCurrent"), 0, cppu::UnoType<sal_Int32>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("PrivateData"),     0, cppu::UnoType<XInterface>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("BaseURI"),         0, cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("StreamRelPath"),   0, cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("StreamName"),      0, cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("BuildId"),         0, cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         uno::Reference< beans::XPropertySet > xImportInfo(

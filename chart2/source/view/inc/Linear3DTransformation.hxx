@@ -27,29 +27,29 @@ namespace chart
 {
 
 class Linear3DTransformation : public ::cppu::WeakImplHelper<
-    ::com::sun::star::chart2::XTransformation
+    css::chart2::XTransformation
     >
 {
 public:
-    Linear3DTransformation( const ::com::sun::star::drawing::HomogenMatrix& rHomMatrix, bool bSwapXAndY  );
+    Linear3DTransformation( const css::drawing::HomogenMatrix& rHomMatrix, bool bSwapXAndY  );
     virtual ~Linear3DTransformation();
 
     // ____ XTransformation ____
-    /// @see ::com::sun::star::chart2::XTransformation
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL transform(
-        const ::com::sun::star::uno::Sequence< double >& rSourceValues )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    /// @see ::com::sun::star::chart2::XTransformation
+    /// @see css::chart2::XTransformation
+    virtual css::uno::Sequence< double > SAL_CALL transform(
+        const css::uno::Sequence< double >& rSourceValues )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
+    /// @see css::chart2::XTransformation
     virtual sal_Int32 SAL_CALL getSourceDimension()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    /// @see ::com::sun::star::chart2::XTransformation
+        throw (css::uno::RuntimeException, std::exception) override;
+    /// @see css::chart2::XTransformation
     virtual sal_Int32 SAL_CALL getTargetDimension()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    ::com::sun::star::drawing::HomogenMatrix    m_Matrix;
-    bool                                        m_bSwapXAndY;
+    css::drawing::HomogenMatrix    m_Matrix;
+    bool                           m_bSwapXAndY;
 };
 
 }  // namespace chart

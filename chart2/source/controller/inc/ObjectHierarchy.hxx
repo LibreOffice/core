@@ -50,8 +50,7 @@ public:
             used for keyboard navigation).
      */
     explicit ObjectHierarchy(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDocument,
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
         ExplicitValueProvider * pExplicitValueProvider = nullptr,
         bool bFlattenDiagram = false,
         bool bOrderingForElementSelector = false );
@@ -81,11 +80,10 @@ class ObjectKeyNavigation
 {
 public:
     explicit ObjectKeyNavigation( const ObjectHierarchy::tOID & rCurrentOID,
-                                  const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::chart2::XChartDocument > & xChartDocument,
+                                  const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
                                   ExplicitValueProvider * pExplicitValueProvider = nullptr );
 
-    bool handleKeyEvent( const ::com::sun::star::awt::KeyEvent & rEvent );
+    bool handleKeyEvent( const css::awt::KeyEvent & rEvent );
     ObjectHierarchy::tOID getCurrentSelection() const { return m_aCurrentOID;}
 
 private:
@@ -100,8 +98,7 @@ private:
     bool veryLast();
 
     ObjectHierarchy::tOID m_aCurrentOID;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
+    css::uno::Reference< css::chart2::XChartDocument > m_xChartDocument;
     ExplicitValueProvider * m_pExplicitValueProvider;
     bool m_bStepDownInDiagram;
 };

@@ -28,7 +28,7 @@
 namespace chart
 {
 
-struct ControllerFeature: public ::com::sun::star::frame::DispatchInformation
+struct ControllerFeature: public css::frame::DispatchInformation
 {
     sal_uInt16 nFeatureId;
 };
@@ -40,7 +40,7 @@ typedef ::std::map< OUString,
 struct FeatureState
 {
     bool bEnabled;
-    ::com::sun::star::uno::Any aState;
+    css::uno::Any aState;
 
     FeatureState() : bEnabled( false ) { }
 };
@@ -50,8 +50,7 @@ struct FeatureState
 class FeatureCommandDispatchBase: public CommandDispatch
 {
 public:
-    explicit FeatureCommandDispatchBase( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >& rxContext );
+    explicit FeatureCommandDispatchBase( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~FeatureCommandDispatchBase();
 
     // late initialisation, especially for adding as listener
@@ -61,18 +60,18 @@ public:
 
 protected:
     // XDispatch
-    virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispatch( const css::util::URL& URL,
+        const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void fireStatusEvent( const OUString& rURL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xSingleListener ) override;
+        const css::uno::Reference< css::frame::XStatusListener >& xSingleListener ) override;
 
     // state of a feature
     virtual FeatureState getState( const OUString& rCommand ) = 0;
 
     // execute a feature
-    virtual void execute( const OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs ) = 0;
+    virtual void execute( const OUString& rCommand, const css::uno::Sequence< css::beans::PropertyValue>& rArgs ) = 0;
 
     // all the features which should be handled by this class
     virtual void describeSupportedFeatures() = 0;
@@ -88,10 +87,10 @@ protected:
             URL.
         @param nGroup
             the command group of the feature. This is important for configuring the controller UI
-            by the user, see also <type scope="com::sun::star::frame">CommandGroup</type>.
+            by the user, see also <type scope="css::frame">CommandGroup</type>.
     */
     void implDescribeSupportedFeature( const sal_Char* pAsciiCommandURL, sal_uInt16 nId,
-        sal_Int16 nGroup = ::com::sun::star::frame::CommandGroup::INTERNAL );
+        sal_Int16 nGroup = css::frame::CommandGroup::INTERNAL );
 
     mutable SupportedFeatures m_aSupportedFeatures;
 

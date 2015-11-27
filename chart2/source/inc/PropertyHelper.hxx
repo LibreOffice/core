@@ -46,9 +46,8 @@ namespace PropertyHelper
     @return The name used for storing this element in the table
 */
 OOO_DLLPUBLIC_CHARTTOOLS OUString addLineDashUniqueNameToTable(
-    const ::com::sun::star::uno::Any & rValue,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const css::uno::Any & rValue,
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** adds a gradient with a unique name to the gradient obtained by the given
@@ -57,9 +56,8 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString addLineDashUniqueNameToTable(
     @return The name used for storing this element in the table
 */
 OOO_DLLPUBLIC_CHARTTOOLS OUString addGradientUniqueNameToTable(
-    const ::com::sun::star::uno::Any & rValue,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const css::uno::Any & rValue,
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** adds a transparency gradient with a unique name to the gradient obtained
@@ -69,9 +67,8 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString addGradientUniqueNameToTable(
 */
 OOO_DLLPUBLIC_CHARTTOOLS
 OUString addTransparencyGradientUniqueNameToTable(
-    const ::com::sun::star::uno::Any & rValue,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const css::uno::Any & rValue,
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** adds a hatch with a unique name to the gradient obtained by the given
@@ -80,9 +77,8 @@ OUString addTransparencyGradientUniqueNameToTable(
     @return The name used for storing this element in the table
 */
 OOO_DLLPUBLIC_CHARTTOOLS OUString addHatchUniqueNameToTable(
-    const ::com::sun::star::uno::Any & rValue,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const css::uno::Any & rValue,
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** adds a bitmap with a unique name to the gradient obtained by the given
@@ -91,9 +87,8 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString addHatchUniqueNameToTable(
     @return The name used for storing this element in the table
 */
 OOO_DLLPUBLIC_CHARTTOOLS OUString addBitmapUniqueNameToTable(
-    const ::com::sun::star::uno::Any & rValue,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const css::uno::Any & rValue,
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** Set a property to a certain value in the given map.  This works for
@@ -103,7 +98,7 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString addBitmapUniqueNameToTable(
  */
 OOO_DLLPUBLIC_CHARTTOOLS
 void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
-                          const ::com::sun::star::uno::Any & rAny );
+                          const css::uno::Any & rAny );
 
 /** Set a property to a certain value in the given map.  This works for
     properties that are already set, and those which are not yet in the map.
@@ -114,13 +109,13 @@ void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
 template< typename Value >
     void setPropertyValue( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
 {
-    setPropertyValueAny( rOutMap, key, ::com::sun::star::uno::makeAny( value ));
+    setPropertyValueAny( rOutMap, key, css::uno::makeAny( value ));
 }
 
 template<>
-    void setPropertyValue< ::com::sun::star::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny );
+    void setPropertyValue< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
 
-OOO_DLLPUBLIC_CHARTTOOLS void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny );
+OOO_DLLPUBLIC_CHARTTOOLS void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
 
 /** Calls setPropertyValue() but asserts that the given property hasn't been set
     before.
@@ -128,14 +123,14 @@ OOO_DLLPUBLIC_CHARTTOOLS void setPropertyValueDefaultAny( tPropertyValueMap & rO
 template< typename Value >
     void setPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
 {
-    setPropertyValueDefaultAny( rOutMap, key, ::com::sun::star::uno::makeAny( value ));
+    setPropertyValueDefaultAny( rOutMap, key, css::uno::makeAny( value ));
 }
 
 /** Calls setPropertyValue() but asserts that the given property hasn't been set
     before.
  */
 template<>
-    void setPropertyValueDefault< ::com::sun::star::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny );
+    void setPropertyValueDefault< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
 
 /** Calls setPropertyValueDefault() with an empty Any as value
  */
@@ -145,8 +140,8 @@ OOO_DLLPUBLIC_CHARTTOOLS void setEmptyPropertyValueDefault( tPropertyValueMap & 
 
 struct OOO_DLLPUBLIC_CHARTTOOLS PropertyNameLess
 {
-    inline bool operator() ( const ::com::sun::star::beans::Property & first,
-                             const ::com::sun::star::beans::Property & second )
+    inline bool operator() ( const css::beans::Property & first,
+                             const css::beans::Property & second )
     {
         return ( first.Name.compareTo( second.Name ) < 0 );
     }

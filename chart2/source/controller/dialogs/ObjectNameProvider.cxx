@@ -695,7 +695,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
     return aRet;
 }
 
-OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument )
+OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID, const css::uno::Reference< css::chart2::XChartDocument >& xChartDocument )
 {
     OUString aRet;
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );

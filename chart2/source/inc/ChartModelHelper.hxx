@@ -44,60 +44,44 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
 {
 public:
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > createRangeHighlighter(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >& xSelectionSupplier );
+    static css::uno::Reference< css::chart2::data::XRangeHighlighter > createRangeHighlighter(
+            const css::uno::Reference< css::view::XSelectionSupplier >& xSelectionSupplier );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc, bool bConnectToModel );
+    static css::uno::Reference< css::chart2::data::XDataProvider > createInternalDataProvider(
+            const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc, bool bConnectToModel );
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >
-        findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    static css::uno::Reference< css::chart2::XDiagram >
+        findDiagram( const css::uno::Reference< css::frame::XModel >& xModel );
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >
-        findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+    static css::uno::Reference< css::chart2::XDiagram >
+        findDiagram( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystem >
+    static css::uno::Reference< css::chart2::XCoordinateSystem >
         getFirstCoordinateSystem( ChartModel& rModel );
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystem >
-        getFirstCoordinateSystem( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    static css::uno::Reference< css::chart2::XCoordinateSystem >
+        getFirstCoordinateSystem( const css::uno::Reference< css::frame::XModel >& xModel );
 
-    SAL_DLLPRIVATE static ::std::vector< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries > > getDataSeries(
-            ChartModel& rModel );
+    SAL_DLLPRIVATE static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+        getDataSeries( ChartModel& rModel );
 
-    SAL_DLLPRIVATE static ::std::vector< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries > > getDataSeries(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDoc );
-    static ::std::vector< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries > > getDataSeries(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    SAL_DLLPRIVATE static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+            getDataSeries( const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
+    static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+            getDataSeries( const css::uno::Reference< css::frame::XModel > & xModel );
 
-    static ::com::sun::star::uno::Reference<
-    ::com::sun::star::chart2::XChartType >
+    static css::uno::Reference< css::chart2::XChartType >
         getChartTypeOfSeries(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xModel
-            , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
+            const css::uno::Reference< css::frame::XModel >& xModel
+            , const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries );
 
-    static ::com::sun::star::awt::Size getDefaultPageSize();
+    static css::awt::Size getDefaultPageSize();
 
-    static ::com::sun::star::awt::Size getPageSize(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xModel );
+    static css::awt::Size getPageSize( const css::uno::Reference< css::frame::XModel >& xModel );
 
-    static void triggerRangeHighlighting( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::frame::XModel >& xModel );
+    static void triggerRangeHighlighting( const css::uno::Reference< css::frame::XModel >& xModel );
 
-    static bool isIncludeHiddenCells( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::frame::XModel >& xChartModel );
+    static bool isIncludeHiddenCells( const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static bool setIncludeHiddenCells( bool bIncludeHiddenCells, ChartModel& rModel);
 };

@@ -354,23 +354,23 @@ void BubbleChart::createShapes()
 
                             switch(nLabelPlacement)
                             {
-                            case ::com::sun::star::chart::DataLabelPlacement::TOP:
+                            case css::chart::DataLabelPlacement::TOP:
                                 aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
                                 eAlignment = LABEL_ALIGN_TOP;
                                 break;
-                            case ::com::sun::star::chart::DataLabelPlacement::BOTTOM:
+                            case css::chart::DataLabelPlacement::BOTTOM:
                                 aScenePosition3D.PositionY += (aSymbolSize.DirectionY/2+1);
                                 eAlignment = LABEL_ALIGN_BOTTOM;
                                 break;
-                            case ::com::sun::star::chart::DataLabelPlacement::LEFT:
+                            case css::chart::DataLabelPlacement::LEFT:
                                 aScenePosition3D.PositionX -= (aSymbolSize.DirectionX/2+1);
                                 eAlignment = LABEL_ALIGN_LEFT;
                                 break;
-                            case ::com::sun::star::chart::DataLabelPlacement::RIGHT:
+                            case css::chart::DataLabelPlacement::RIGHT:
                                 aScenePosition3D.PositionX += (aSymbolSize.DirectionX/2+1);
                                 eAlignment = LABEL_ALIGN_RIGHT;
                                 break;
-                            case ::com::sun::star::chart::DataLabelPlacement::CENTER:
+                            case css::chart::DataLabelPlacement::CENTER:
                                 eAlignment = LABEL_ALIGN_CENTER;
                                 break;
                             default:

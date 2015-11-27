@@ -36,9 +36,8 @@ class VPolarGrid : public VAxisOrGridBase
 // public methods
 public:
     VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-        , const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > > & rGridPropertiesList //main grid, subgrid, subsubgrid etc
+        , const css::uno::Sequence<
+            css::uno::Reference< css::beans::XPropertySet > > & rGridPropertiesList //main grid, subgrid, subsubgrid etc
         );
     virtual ~VPolarGrid();
 
@@ -47,7 +46,7 @@ public:
     void setIncrements( const std::vector< ExplicitIncrementData >& rIncrements );
 
     static void createLinePointSequence_ForAngleAxis(
-                    ::com::sun::star::drawing::PointSequenceSequence& rPoints
+                    css::drawing::PointSequenceSequence& rPoints
                     , TickInfoArraysType& rAllTickInfos
                     , const ExplicitIncrementData& rIncrement
                     , const ExplicitScaleData& rScale
@@ -55,9 +54,8 @@ public:
                     , double fLogicRadius, double fLogicZ );
 
 private: //member
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
+    css::uno::Sequence<
+        css::uno::Reference< css::beans::XPropertySet > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
     PolarPlottingPositionHelper* m_pPosHelper;
     ::std::vector< ExplicitIncrementData >   m_aIncrements;
 

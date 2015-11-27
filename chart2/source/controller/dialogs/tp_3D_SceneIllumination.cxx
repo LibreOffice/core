@@ -64,7 +64,7 @@ void LightButton::switchLightOn(bool bOn)
 struct LightSource
 {
     long nDiffuseColor;
-    ::com::sun::star::drawing::Direction3D aDirection;
+    css::drawing::Direction3D aDirection;
     bool bIsEnabled;
 
     LightSource() :

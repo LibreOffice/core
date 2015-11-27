@@ -41,21 +41,17 @@ class LegendEntryProvider;
 class VLegend
 {
 public:
-    VLegend( const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::chart2::XLegend > & xLegend,
-             const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::uno::XComponentContext > & xContext,
+    VLegend( const css::uno::Reference< css::chart2::XLegend > & xLegend,
+             const css::uno::Reference< css::uno::XComponentContext > & xContext,
              const std::vector< LegendEntryProvider* >& rLegendEntryProviderList,
-            const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XShapes >& xTargetPage,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
-                            ChartModel& rModel  );
+             const css::uno::Reference< css::drawing::XShapes >& xTargetPage,
+             const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+             ChartModel& rModel  );
 
     void setDefaultWritingMode( sal_Int16 nDefaultWritingMode );
 
-    void createShapes( const ::com::sun::star::awt::Size & rAvailableSpace,
-                       const ::com::sun::star::awt::Size & rPageSize );
+    void createShapes( const css::awt::Size & rAvailableSpace,
+                       const css::awt::Size & rPageSize );
 
     /** Sets the position according to its internal anchor.
 
@@ -67,27 +63,21 @@ public:
             is used to calculate the offset (default 2%) from the edge.
      */
     void changePosition(
-        ::com::sun::star::awt::Rectangle & rOutAvailableSpace,
-        const ::com::sun::star::awt::Size & rReferenceSize );
+        css::awt::Rectangle & rOutAvailableSpace,
+        const css::awt::Size & rReferenceSize );
 
     static bool isVisible(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XLegend > & xLegend );
+        const css::uno::Reference< css::chart2::XLegend > & xLegend );
 
 private:
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >            m_xTarget;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>   m_xShapeFactory;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XLegend >             m_xLegend;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape >             m_xShape;
+    css::uno::Reference< css::drawing::XShapes >            m_xTarget;
+    css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
+    css::uno::Reference< css::chart2::XLegend >             m_xLegend;
+    css::uno::Reference< css::drawing::XShape >             m_xShape;
 
     ChartModel& mrModel;
 
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XComponentContext >      m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >      m_xContext;
 
     std::vector< LegendEntryProvider* >         m_aLegendEntryProviderList;
 

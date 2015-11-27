@@ -113,27 +113,27 @@ enum
     PROP_CHART_SYMBOL_AND_LINES
 };
 
-sal_Int32 lcl_getSymbolType( const ::com::sun::star::chart2::Symbol& rSymbol )
+sal_Int32 lcl_getSymbolType( const css::chart2::Symbol& rSymbol )
 {
-    sal_Int32 nSymbol = ::com::sun::star::chart::ChartSymbolType::NONE;
+    sal_Int32 nSymbol = css::chart::ChartSymbolType::NONE;
     switch( rSymbol.Style )
     {
         case chart2::SymbolStyle_NONE:
             break;
         case chart2::SymbolStyle_AUTO:
-            nSymbol = ::com::sun::star::chart::ChartSymbolType::AUTO;
+            nSymbol = css::chart::ChartSymbolType::AUTO;
             break;
         case chart2::SymbolStyle_STANDARD:
             nSymbol = rSymbol.StandardSymbol%15;
             break;
         case chart2::SymbolStyle_POLYGON://new feature
-            nSymbol = ::com::sun::star::chart::ChartSymbolType::AUTO;
+            nSymbol = css::chart::ChartSymbolType::AUTO;
             break;
         case chart2::SymbolStyle_GRAPHIC:
-            nSymbol = ::com::sun::star::chart::ChartSymbolType::BITMAPURL;
+            nSymbol = css::chart::ChartSymbolType::BITMAPURL;
             break;
         default:
-            nSymbol = ::com::sun::star::chart::ChartSymbolType::AUTO;
+            nSymbol = css::chart::ChartSymbolType::AUTO;
             break;
     }
     return nSymbol;
@@ -142,13 +142,13 @@ void lcl_setSymbolTypeToSymbol( sal_Int32 nSymbolType, chart2::Symbol& rSymbol )
 {
     switch( nSymbolType )
     {
-        case ::com::sun::star::chart::ChartSymbolType::NONE:
+        case css::chart::ChartSymbolType::NONE:
             rSymbol.Style = chart2::SymbolStyle_NONE;
             break;
-        case ::com::sun::star::chart::ChartSymbolType::AUTO:
+        case css::chart::ChartSymbolType::AUTO:
             rSymbol.Style = chart2::SymbolStyle_AUTO;
             break;
-        case ::com::sun::star::chart::ChartSymbolType::BITMAPURL:
+        case css::chart::ChartSymbolType::BITMAPURL:
             rSymbol.Style = chart2::SymbolStyle_GRAPHIC;
             break;
         default:
@@ -217,7 +217,7 @@ WrappedSymbolTypeProperty::WrappedSymbolTypeProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedSeriesOrDiagramProperty< sal_Int32 >( "SymbolType"
-            , uno::makeAny( ::com::sun::star::chart::ChartSymbolType::NONE )
+            , uno::makeAny( css::chart::ChartSymbolType::NONE )
             , spChart2ModelContact
             , ePropertyType )
 {
@@ -260,21 +260,21 @@ Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XProper
         {
             if(bHasAmbiguousValue)
             {
-                m_aOuterValue = uno::makeAny( ::com::sun::star::chart::ChartSymbolType::AUTO );
+                m_aOuterValue = uno::makeAny( css::chart::ChartSymbolType::AUTO );
             }
             else
             {
-                if( ::com::sun::star::chart::ChartSymbolType::NONE == aValue )
-                    m_aOuterValue = uno::makeAny( ::com::sun::star::chart::ChartSymbolType::NONE );
+                if( css::chart::ChartSymbolType::NONE == aValue )
+                    m_aOuterValue = uno::makeAny( css::chart::ChartSymbolType::NONE );
                 else
-                    m_aOuterValue = uno::makeAny( ::com::sun::star::chart::ChartSymbolType::AUTO );
+                    m_aOuterValue = uno::makeAny( css::chart::ChartSymbolType::AUTO );
             }
         }
         return m_aOuterValue;
     }
     else
     {
-        ::com::sun::star::uno::Any aRet( m_aDefaultValue );
+        css::uno::Any aRet( m_aDefaultValue );
         aRet <<= getValueFromSeries( xInnerPropertySet );
         return aRet;
     }

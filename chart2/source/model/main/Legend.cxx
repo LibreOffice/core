@@ -73,7 +73,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Expansion",
                   PROP_LEGEND_EXPANSION,
-                  cppu::UnoType<com::sun::star::chart::ChartLegendExpansion>::get(),
+                  cppu::UnoType<css::chart::ChartLegendExpansion>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -122,7 +122,7 @@ private:
         ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, ::com::sun::star::chart::ChartLegendExpansion_HIGH );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, css::chart::ChartLegendExpansion_HIGH );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
 
         float fDefaultCharHeight = 10.0;
@@ -147,7 +147,7 @@ struct StaticLegendInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );

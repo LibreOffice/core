@@ -28,8 +28,7 @@ class CartesianCoordinateSystem : public BaseCoordinateSystem
 {
 public:
     explicit CartesianCoordinateSystem(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext,
         sal_Int32 nDimensionCount = 2,
         bool bSwapXAndYAxis = false );
     explicit CartesianCoordinateSystem( const CartesianCoordinateSystem & rSource );
@@ -37,14 +36,13 @@ public:
 
     // ____ XCoordinateSystem ____
     virtual OUString SAL_CALL getCoordinateSystemType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getViewServiceName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()
@@ -62,8 +60,7 @@ class CartesianCoordinateSystem2d : public CartesianCoordinateSystem
 {
 public:
     explicit CartesianCoordinateSystem2d(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~CartesianCoordinateSystem2d();
 
     // ____ XServiceInfo ____
@@ -82,8 +79,8 @@ class CartesianCoordinateSystem3d : public CartesianCoordinateSystem
 {
 public:
     explicit CartesianCoordinateSystem3d(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference<
+            css::uno::XComponentContext > & xContext );
     virtual ~CartesianCoordinateSystem3d();
 
     // ____ XServiceInfo ____

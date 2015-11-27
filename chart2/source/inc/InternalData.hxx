@@ -34,22 +34,20 @@ public:
 
     void createDefaultData();
 
-    void setData( const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< double > > & rDataInRows );
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< double > > getData() const;
+    void setData( const css::uno::Sequence< css::uno::Sequence< double > > & rDataInRows );
+    css::uno::Sequence< css::uno::Sequence< double > > getData() const;
 
-    ::com::sun::star::uno::Sequence< double > getColumnValues( sal_Int32 nColumnIndex ) const;
-    ::com::sun::star::uno::Sequence< double > getRowValues( sal_Int32 nRowIndex ) const;
+    css::uno::Sequence< double > getColumnValues( sal_Int32 nColumnIndex ) const;
+    css::uno::Sequence< double > getRowValues( sal_Int32 nRowIndex ) const;
 
     void setColumnValues( sal_Int32 nColumnIndex, const ::std::vector< double > & rNewData );
     void setRowValues( sal_Int32 nRowIndex, const ::std::vector< double > & rNewData );
 
-    void setComplexColumnLabel( sal_Int32 nColumnIndex, const ::std::vector< ::com::sun::star::uno::Any >& rComplexLabel );
-    void setComplexRowLabel( sal_Int32 nRowIndex, const ::std::vector< ::com::sun::star::uno::Any >& rComplexLabel );
+    void setComplexColumnLabel( sal_Int32 nColumnIndex, const ::std::vector< css::uno::Any >& rComplexLabel );
+    void setComplexRowLabel( sal_Int32 nRowIndex, const ::std::vector< css::uno::Any >& rComplexLabel );
 
-    ::std::vector< ::com::sun::star::uno::Any > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
-    ::std::vector< ::com::sun::star::uno::Any > getComplexRowLabel( sal_Int32 nRowIndex ) const;
+    ::std::vector< css::uno::Any > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
+    ::std::vector< css::uno::Any > getComplexRowLabel( sal_Int32 nRowIndex ) const;
 
     void swapRowWithNext( sal_Int32 nRowIndex );
     void swapColumnWithNext( sal_Int32 nColumnIndex );
@@ -67,7 +65,7 @@ public:
     sal_Int32 getRowCount() const;
     sal_Int32 getColumnCount() const;
 
-    typedef ::std::vector< ::std::vector< ::com::sun::star::uno::Any > > tVecVecAny; //inner index is hierarchical level
+    typedef ::std::vector< ::std::vector< css::uno::Any > > tVecVecAny; //inner index is hierarchical level
 
     void setComplexRowLabels( const tVecVecAny& rNewRowLabels );
     tVecVecAny getComplexRowLabels() const;

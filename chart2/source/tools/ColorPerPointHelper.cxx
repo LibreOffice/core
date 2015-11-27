@@ -30,11 +30,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 bool ColorPerPointHelper::hasPointOwnColor(
-        const ::com::sun::star::uno::Reference<
-              ::com::sun::star::beans::XPropertySet >& xDataSeriesProperties
+        const css::uno::Reference< css::beans::XPropertySet >& xDataSeriesProperties
         , sal_Int32 nPointIndex
-        , const ::com::sun::star::uno::Reference<
-              ::com::sun::star::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
+        , const css::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
          )
 {
     if( !xDataSeriesProperties.is() )
@@ -59,8 +57,7 @@ bool ColorPerPointHelper::hasPointOwnColor(
 }
 
 bool ColorPerPointHelper::hasPointOwnProperties(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >& xSeriesProperties
+    const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties
     , sal_Int32 nPointIndex )
 {
     if( xSeriesProperties.is() )

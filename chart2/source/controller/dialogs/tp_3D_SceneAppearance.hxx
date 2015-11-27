@@ -36,7 +36,7 @@ class ThreeD_SceneAppearance_TabPage : public TabPage
 public:
     ThreeD_SceneAppearance_TabPage(
         vcl::Window* pWindow,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
+        const css::uno::Reference< css::frame::XModel > & xChartModel,
         ControllerLockHelper & rControllerLockHelper );
     virtual ~ThreeD_SceneAppearance_TabPage();
     virtual void dispose() override;
@@ -54,7 +54,7 @@ private:
     void updateScheme();
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    css::uno::Reference< css::frame::XModel >
         m_xChartModel;
 
     VclPtr<ListBox>         m_pLB_Scheme;

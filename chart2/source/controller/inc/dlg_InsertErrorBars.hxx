@@ -33,17 +33,14 @@ class InsertErrorBarsDialog : public ModalDialog
 {
 public:
     InsertErrorBarsDialog( vcl::Window* pParent, const SfxItemSet& rMyAttrs,
-                           const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::chart2::XChartDocument > & xChartDocument,
+                           const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
                            ErrorBarResources::tErrorBarType eType );
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
 
     static double getAxisMinorStepWidthForErrorBarDecimals(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel >& xChartModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface >& xChartView,
+        const css::uno::Reference< css::frame::XModel >& xChartModel,
+        const css::uno::Reference< css::uno::XInterface >& xChartView,
         const OUString& rSelectedObjectCID );
 
     void FillItemSet( SfxItemSet& rOutAttrs );

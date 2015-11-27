@@ -137,11 +137,11 @@ void MediaDescriptorHelper::impl_init()
     ISSET_CharacterSet = false;
     ISSET_Comment = false;
 
-//  ::com::sun::star::uno::Any  ComponentData;
+//  css::uno::Any  ComponentData;
     ISSET_ComponentData = false;
     ISSET_FileName = false;
 
-//  ::com::sun::star::uno::Any  FilterData;
+//  css::uno::Any  FilterData;
     ISSET_FilterData = false;
     ISSET_FilterName = false;
     ISSET_FilterFlags = false;
@@ -163,10 +163,10 @@ void MediaDescriptorHelper::impl_init()
     ISSET_Overwrite = false;
     ISSET_Password = false;
 
-//  ::com::sun::star::awt::Rectangle PosSize;
+//  css::awt::Rectangle PosSize;
     ISSET_PosSize = false;
 
-//  ::com::sun::star::uno::Sequence< sal_Int8 > PostData;
+//  css::uno::Sequence< sal_Int8 > PostData;
     ISSET_PostData = false;
     ISSET_PostString = false;
     Preview = false;
@@ -185,7 +185,7 @@ void MediaDescriptorHelper::impl_init()
     Version = 0;
     ISSET_Version = false;
 
-//  ::com::sun::star::uno::Any ViewData;
+//  css::uno::Any ViewData;
     ISSET_ViewData = false;
     ViewId = 0;
     ISSET_ViewId = false;

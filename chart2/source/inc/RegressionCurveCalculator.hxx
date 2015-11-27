@@ -28,25 +28,25 @@ namespace chart
 {
 
 class RegressionCurveCalculator : public
-    cppu::WeakImplHelper< com::sun::star::chart2::XRegressionCurveCalculator >
+    cppu::WeakImplHelper< css::chart2::XRegressionCurveCalculator >
 {
 public:
     RegressionCurveCalculator();
     virtual ~RegressionCurveCalculator();
 
     static bool isLinearScaling(
-        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScaling );
+        const css::uno::Reference< css::chart2::XScaling >& xScaling );
 
     static bool isLogarithmicScaling(
-        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScaling );
+        const css::uno::Reference< css::chart2::XScaling >& xScaling );
 
 protected:
     virtual OUString ImplGetRepresentation(
-        const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
+        const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey ) const = 0;
 
     static OUString getFormattedString(
-        const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
+        const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey,
         double fNumber );
 
@@ -63,37 +63,37 @@ protected:
         sal_Bool  aForceIntercept,
         double    aInterceptValue,
         sal_Int32 aPeriod)
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL recalculateRegression(
-        const com::sun::star::uno::Sequence< double >& aXValues,
-        const com::sun::star::uno::Sequence< double >& aYValues )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override = 0;
+        const css::uno::Sequence< double >& aXValues,
+        const css::uno::Sequence< double >& aYValues )
+        throw (css::uno::RuntimeException, std::exception) override = 0;
 
     virtual double SAL_CALL getCurveValue( double x )
-        throw (com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::uno::RuntimeException, std::exception) override = 0;
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override = 0;
 
-    virtual com::sun::star::uno::Sequence< com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
+    virtual css::uno::Sequence< css::geometry::RealPoint2D > SAL_CALL getCurveValues(
         double min,
         double max,
         sal_Int32 nPointCount,
-        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScalingX,
-        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScalingY,
+        const css::uno::Reference< css::chart2::XScaling >& xScalingX,
+        const css::uno::Reference< css::chart2::XScaling >& xScalingY,
         sal_Bool bMaySkipPointsInCalculation )
-        throw (com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
 
     virtual double SAL_CALL getCorrelationCoefficient()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getRepresentation()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL getFormattedRepresentation(
-        const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xNumFmtSupplier,
+        const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumFmtSupplier,
         sal_Int32 nNumberFormatKey )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 } //  namespace chart

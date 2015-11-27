@@ -53,7 +53,7 @@ public:
 
     /// tries to get an OutputDevice from the XParent of the model to use as reference device
     void attachParentReferenceDevice(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel );
+        const css::uno::Reference< css::frame::XModel > & xChartModel );
 
     //fill list of selection handles 'aHdl'
     virtual void SetMarkHandles() override;
@@ -79,8 +79,7 @@ public:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    static SdrObject* getSdrObject( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape >& xShape );
+    static SdrObject* getSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape );
 
 private:
     mutable MarkHandleProvider*     m_pMarkHandleProvider;

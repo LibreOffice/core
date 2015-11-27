@@ -134,22 +134,22 @@ uno::Sequence<OUString> GL3DBarChartType::getSupportedServiceNames_Static()
 }
 
 OUString SAL_CALL GL3DBarChartType::getChartType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return OUString(CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR);
 }
 
 uno::Sequence<OUString> GL3DBarChartType::getSupportedPropertyRoles()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aPropRoles { "FillColor" };
 
     return aPropRoles;
 }
 
-com::sun::star::uno::Reference<com::sun::star::util::XCloneable>
+css::uno::Reference<css::util::XCloneable>
 GL3DBarChartType::createClone()
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return uno::Reference<util::XCloneable>(new GL3DBarChartType(*this));
 }

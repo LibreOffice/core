@@ -70,59 +70,57 @@ namespace chart
     * create an XLegend via the global service factory, set it at the diagram.
  */
 class ChartTypeTemplate : public ::cppu::WeakImplHelper<
-        ::com::sun::star::chart2::XChartTypeTemplate,
-        ::com::sun::star::lang::XServiceName >
+        css::chart2::XChartTypeTemplate,
+        css::lang::XServiceName >
 {
 public:
-    explicit ChartTypeTemplate(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > const & xContext,
+    explicit ChartTypeTemplate( css::uno::Reference< css::uno::XComponentContext > const & xContext,
         const OUString & rServiceName );
     virtual ~ChartTypeTemplate();
 
 protected:
     // ____ XChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL createDiagramByDataSource(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XDiagram > SAL_CALL createDiagramByDataSource(
+        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+        throw (css::uno::RuntimeException, std::exception) override;
     /// denotes if the chart needs categories at the first scale
     virtual sal_Bool SAL_CALL supportsCategories()
         throw (css::uno::RuntimeException, ::std::exception) override;
 
     virtual void SAL_CALL changeDiagram(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL changeDiagramData(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL matchesTemplate(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDiagram >& xDiagram,
+        const css::uno::Reference<
+        css::chart2::XDiagram >& xDiagram,
         sal_Bool bAdaptProperties )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     // still abstract: getChartTypeForNewSeries()
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL applyStyle(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries,
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL resetStyles(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     void SAL_CALL applyStyles(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
-        throw (::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
+        throw (css::uno::RuntimeException);
 
     // ____ XServiceName ____
     virtual OUString SAL_CALL getServiceName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // Methods to override for automatic creation
 
@@ -139,7 +137,7 @@ protected:
      */
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
+    virtual css::uno::Reference< css::chart2::XChartType >
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex ) = 0;
 
     virtual bool isSwapXAndY() const;
@@ -152,8 +150,7 @@ protected:
         changeDiagram
      */
     virtual void adaptDiagram(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram );
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
     /** Creates a 2d or 3d cartesian coordinate system with mathematically
         oriented, linear scales with auto-min/max.  If the given
@@ -163,8 +160,7 @@ protected:
         <p>The dimension depends on the value returned by getDimension().</p>
      */
     virtual void createCoordinateSystems(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystemContainer > & xOutCooSysCnt );
+        const css::uno::Reference< css::chart2::XCoordinateSystemContainer > & xOutCooSysCnt );
 
     /** Sets categories at the scales of dimension 0 and the percent stacking at
         the scales of dimension 1 of all given coordinate systems.
@@ -172,11 +168,8 @@ protected:
         <p>Called by FillDiagram.</p>
      */
     virtual void adaptScales(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XCoordinateSystem > > & aCooSysSeq,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence > & xCategories );
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & aCooSysSeq,
+        const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories );
 
     /** create a data series tree, that fits the requirements of the chart type.
 
@@ -204,16 +197,16 @@ protected:
         empty.</p>
      */
     virtual void createChartTypes(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XDataSeries > > > & aSeriesSeq,
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys,
-            const ::com::sun::star::uno::Sequence<
-                      ::com::sun::star::uno::Reference<
-                          ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq
+            const css::uno::Sequence<
+                css::uno::Sequence<
+                    css::uno::Reference<
+                        css::chart2::XDataSeries > > > & aSeriesSeq,
+            const css::uno::Sequence<
+                css::uno::Reference<
+                    css::chart2::XCoordinateSystem > > & rCoordSys,
+            const css::uno::Sequence<
+                      css::uno::Reference<
+                          css::chart2::XChartType > > & aOldChartTypesSeq
             );
 
     /** create axes and add them to the given container. If there are already
@@ -225,9 +218,7 @@ protected:
         requesting a secondary axes a secondary y axes is added</p>
      */
     void createAxes(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & rCoordSys );
 
     /** Give the number of requested axis per dimension here.  Default is one
         axis for each dimension
@@ -237,25 +228,18 @@ protected:
     /** adapt properties of exsisting axes and remove superfluous axes
     */
     virtual void adaptAxes(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & rCoordSys );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         GetComponentContext() const { return m_xContext;}
 
     static void copyPropertiesFromOldToNewCoordinateSystem(
-                    const ::com::sun::star::uno::Sequence<
-                      ::com::sun::star::uno::Reference<
-                          ::com::sun::star::chart2::XChartType > > & rOldChartTypesSeq,
-                    const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::chart2::XChartType > & xNewChartType );
+                    const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > & rOldChartTypesSeq,
+                    const css::uno::Reference< css::chart2::XChartType > & xNewChartType );
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        m_xContext;
-    mutable ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataInterpreter > m_xDataInterpreter;
+    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+    mutable css::uno::Reference< css::chart2::XDataInterpreter > m_xDataInterpreter;
 
 private:
     const OUString m_aServiceName;
@@ -263,17 +247,17 @@ private:
 private:
     /** modifies the given diagram
      */
-    void FillDiagram( const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::chart2::XDiagram > & xDiagram,
-                      const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Sequence<
-                              ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::chart2::XDataSeries > > > & aSeriesSeq,
-                      ::com::sun::star::uno::Reference<
-                          ::com::sun::star::chart2::data::XLabeledDataSequence > xCategories,
-                      const ::com::sun::star::uno::Sequence<
-                              ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq,
+    void FillDiagram( const css::uno::Reference<
+                          css::chart2::XDiagram > & xDiagram,
+                      const css::uno::Sequence<
+                          css::uno::Sequence<
+                              css::uno::Reference<
+                                  css::chart2::XDataSeries > > > & aSeriesSeq,
+                      css::uno::Reference<
+                          css::chart2::data::XLabeledDataSequence > xCategories,
+                      const css::uno::Sequence<
+                              css::uno::Reference<
+                                  css::chart2::XChartType > > & aOldChartTypesSeq,
                       bool bCreate );
 };
 

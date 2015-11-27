@@ -31,7 +31,7 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ChartViewHelper
 {
 public:
-    static void setViewToDirtyState( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
+    static void setViewToDirtyState( const css::uno::Reference< css::frame::XModel >& xChartModel );
 };
 
 } //namespace chart

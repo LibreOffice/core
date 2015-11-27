@@ -73,8 +73,7 @@ public:
         reading/writing converted items
      */
     ItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rPropertySet ,
+            const css::uno::Reference< css::beans::XPropertySet > & rPropertySet ,
             SfxItemPool& rItemPool );
     virtual ~ItemConverter();
 
@@ -160,7 +159,7 @@ protected:
         @return true if the item changed a property, false otherwise.
      */
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception );
+        throw( css::uno::Exception );
 
     /// Returns the pool
     SfxItemPool & GetItemPool() const { return m_rItemPool;}
@@ -168,11 +167,10 @@ protected:
     /** Returns the XPropertySet that was given in the CTOR and is used to apply
         items in ApplyItemSet().
      */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >  GetPropertySet() const { return m_xPropertySet;}
+    css::uno::Reference< css::beans::XPropertySet >  GetPropertySet() const { return m_xPropertySet;}
 
     // ____ ::utl::OEventListenerAdapter ____
-    virtual void _disposing( const ::com::sun::star::lang::EventObject& rSource ) override;
+    virtual void _disposing( const css::lang::EventObject& rSource ) override;
 
 protected:
     /** sets a new property set, that you get with GetPropertySet().  It should
@@ -180,14 +178,11 @@ protected:
         the regression type of a regression curve which changes the object
         identity.
      */
-    void resetPropertySet( const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::beans::XPropertySet > & xPropSet );
+    void resetPropertySet( const css::uno::Reference< css::beans::XPropertySet > & xPropSet );
 
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >     m_xPropertySet;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySetInfo > m_xPropertySetInfo;
+    css::uno::Reference< css::beans::XPropertySet >     m_xPropertySet;
+    css::uno::Reference< css::beans::XPropertySetInfo > m_xPropertySetInfo;
 
     SfxItemPool&                                    m_rItemPool;
     bool                                            m_bIsValid;

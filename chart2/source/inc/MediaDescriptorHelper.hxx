@@ -48,30 +48,24 @@ class OOO_DLLPUBLIC_CHARTTOOLS MediaDescriptorHelper
 private:
     //MediaDescriptorHelper(){};
 public:
-    MediaDescriptorHelper( const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
+    MediaDescriptorHelper( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 
-    ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue > getReducedForModel() { return m_aModelProperties;}
+    css::uno::Sequence< css::beans::PropertyValue > getReducedForModel() { return m_aModelProperties;}
 
 public:
     //all properties given in the constructor are stored in the following three sequences
 
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue >
+    css::uno::Sequence< css::beans::PropertyValue >
                         m_aRegularProperties; //these are the properties which are described in service com.sun.star.document.MediaDescriptor and not marked as deprecated
 
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue >
+    css::uno::Sequence< css::beans::PropertyValue >
                         m_aDeprecatedProperties; //these are properties which are described in service com.sun.star.document.MediaDescriptor but are marked as deprecated
 
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue >
+    css::uno::Sequence< css::beans::PropertyValue >
                         m_aAdditionalProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
 
     //properties which should be given to a model are additionally stored in this sequence (not documented properties and deprecated properties are not included!)
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue >
+    css::uno::Sequence< css::beans::PropertyValue >
                         m_aModelProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
 
     //@todo define this for debug only, except URL
@@ -84,12 +78,12 @@ public:
     OUString     Comment;
     bool            ISSET_Comment;
 
-    ::com::sun::star::uno::Any
+    css::uno::Any
                         ComponentData;
     bool            ISSET_ComponentData;
     OUString     FileName; //deprecated, same as url
     bool            ISSET_FileName;
-    ::com::sun::star::uno::Any
+    css::uno::Any
                         FilterData;
     bool            ISSET_FilterData;
     OUString     FilterName; //internal filter name.
@@ -107,14 +101,14 @@ public:
     OUString     HierarchicalDocumentName;
     bool            ISSET_HierarchicalDocumentName;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    css::uno::Reference< css::io::XOutputStream >
                         OutputStream; //a stream to receive the document data for saving
     bool            ISSET_OutputStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    css::uno::Reference< css::io::XInputStream >
                         InputStream; //content of document.
     bool            ISSET_InputStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        InteractionHandler; //::com::sun::star::task::XInteractionHandler
+    css::uno::Reference< css::uno::XInterface >
+                        InteractionHandler; //css::task::XInteractionHandler
     bool            ISSET_InteractionHandler;
 
     OUString     JumpMark;   //specifies the name of a mark within the document where the first view is to position itself.
@@ -131,11 +125,11 @@ public:
     bool            ISSET_Password;
 
         //not documented ... @todo remove?
-    ::com::sun::star::awt::Rectangle
+    css::awt::Rectangle
                         PosSize; //position and size of document window.
     bool            ISSET_PosSize;
 
-    ::com::sun::star::uno::Sequence< sal_Int8 >
+    css::uno::Sequence< sal_Int8 >
                         PostData; //contains the data for HTTP post method as a sequence of bytes.
     bool            ISSET_PostData;
     OUString     PostString; //deprecated, contains the data for HTTP post method as a sequence of bytes.
@@ -147,8 +141,8 @@ public:
     OUString     Referer; //name of document referrer.
     bool            ISSET_Referer;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        StatusIndicator; //::com::sun::star::task::XStatusIndicator
+    css::uno::Reference< css::uno::XInterface >
+                        StatusIndicator; //css::task::XStatusIndicator
     bool            ISSET_StatusIndicator;
         //not documented ... @todo remove?
     bool            Silent; //prevents dialogs to query for more information.
@@ -164,22 +158,22 @@ public:
     sal_Int16           Version; //storage version.
     bool            ISSET_Version;
 
-    ::com::sun::star::uno::Any
+    css::uno::Any
                         ViewData;
     bool            ISSET_ViewData;
     sal_Int16           ViewId; //id of the initial view.
     bool            ISSET_ViewId;
 
     // new framework objects
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage >
                         Storage;
     bool            ISSET_Storage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+    css::uno::Reference< css::io::XStream >
                         Stream;
     bool            ISSET_Stream;
 
     // undocumented SFX Properties
-    ::com::sun::star::uno::Sequence< sal_Int32 >
+    css::uno::Sequence< sal_Int32 >
                         WinExtent;
     bool            ISSET_WinExtent;
     bool            SetEmbedded;

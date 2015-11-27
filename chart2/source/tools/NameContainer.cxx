@@ -30,12 +30,12 @@ namespace chart
 {
 
 uno::Reference< container::XNameContainer > createNameContainer(
-        const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
+        const css::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
 {
     return new NameContainer( rType, rServicename, rImplementationName );
 }
 
-NameContainer::NameContainer( const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
+NameContainer::NameContainer( const css::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
     : m_aType( rType )
     , m_aServicename( rServicename )
     , m_aImplementationName( rImplementationName )
@@ -59,19 +59,19 @@ NameContainer::~NameContainer()
 
 //XServiceInfo
 OUString SAL_CALL NameContainer::getImplementationName()
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     return m_aImplementationName;
 }
 
 sal_Bool SAL_CALL NameContainer::supportsService( const OUString& ServiceName )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     Sequence<OUString> aSNS { m_aServicename };
     return aSNS;

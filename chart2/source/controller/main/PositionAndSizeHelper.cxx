@@ -71,7 +71,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     else if(OBJECTTYPE_LEGEND==eObjectType)
     {
         xObjectProp->setPropertyValue( "AnchorPosition", uno::makeAny(LegendPosition(LegendPosition_CUSTOM)));
-        xObjectProp->setPropertyValue( "Expansion", uno::makeAny(::com::sun::star::chart::ChartLegendExpansion_CUSTOM));
+        xObjectProp->setPropertyValue( "Expansion", uno::makeAny(css::chart::ChartLegendExpansion_CUSTOM));
         chart2::RelativePosition aRelativePosition;
         chart2::RelativeSize aRelativeSize;
         Point aAnchor = aObjectRect.TopLeft();

@@ -73,7 +73,7 @@ namespace RegressionCurveHelper
     /** Returns the first regression curve found that is not of type
         mean-value line
      */
-    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<com::sun::star::chart2::XRegressionCurve>
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         getFirstCurveNotMeanValueLine(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 

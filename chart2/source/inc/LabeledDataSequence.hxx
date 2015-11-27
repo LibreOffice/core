@@ -35,8 +35,8 @@ namespace chart
 namespace impl
 {
 typedef cppu::WeakImplHelper<
-        ::com::sun::star::chart2::data::XLabeledDataSequence2,
-        ::com::sun::star::lang::XServiceInfo >
+        css::chart2::data::XLabeledDataSequence2,
+        css::lang::XServiceInfo >
     LabeledDataSequence_Base;
 }
 
@@ -47,13 +47,10 @@ class LabeledDataSequence :
 public:
     explicit LabeledDataSequence();
     explicit LabeledDataSequence(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSequence > & rValues );
+        const css::uno::Reference< css::chart2::data::XDataSequence > & rValues );
     explicit LabeledDataSequence(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSequence > & rValues,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSequence > & rLabels );
+        const css::uno::Reference< css::chart2::data::XDataSequence > & rValues,
+        const css::uno::Reference< css::chart2::data::XDataSequence > & rLabels );
 
     virtual ~LabeledDataSequence();
 
@@ -70,34 +67,34 @@ public:
 
 protected:
     // ____ XLabeledDataSequence ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL getValues()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getValues()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setValues(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xSequence )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL getLabel()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getLabel()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setLabel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xSequence )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > m_xData;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > m_xLabel;
+    css::uno::Reference< css::chart2::data::XDataSequence > m_xData;
+    css::uno::Reference< css::chart2::data::XDataSequence > m_xLabel;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >       m_xModifyEventForwarder;
+    css::uno::Reference< css::util::XModifyListener >       m_xModifyEventForwarder;
 };
 
 } //  namespace chart

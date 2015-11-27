@@ -55,7 +55,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForLogicV
     double fUnitCircleRadius = m_pPosHelper->transformToRadius( fLogicValueOnRadiusAxis );
 
     return getLabelScreenPositionAndAlignmentForUnitCircleValues(
-           rAlignment, ::com::sun::star::chart::DataLabelPlacement::OUTSIDE
+           rAlignment, css::chart::DataLabelPlacement::OUTSIDE
            , fUnitCircleAngleDegree, 0.0
            , fUnitCircleRadius, fUnitCircleRadius, fLogicZ, nScreenValueOffsetInRadiusDirection );
 }
@@ -67,8 +67,8 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
         , double fLogicZ
         , sal_Int32 nScreenValueOffsetInRadiusDirection ) const
 {
-    bool bCenter = (nLabelPlacement != ::com::sun::star::chart::DataLabelPlacement::OUTSIDE)
-                && (nLabelPlacement != ::com::sun::star::chart::DataLabelPlacement::INSIDE);
+    bool bCenter = (nLabelPlacement != css::chart::DataLabelPlacement::OUTSIDE)
+                && (nLabelPlacement != css::chart::DataLabelPlacement::INSIDE);
 
     double fAngleDegree = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
     double fRadius = 0.0;
@@ -80,7 +80,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
     awt::Point aRet( this->transformSceneToScreenPosition(
         m_pPosHelper->transformUnitCircleToScene( fAngleDegree, fRadius, fLogicZ+0.5 ) ) );
 
-    if(3==m_nDimensionCount && nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE)
+    if(3==m_nDimensionCount && nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE)
     {
         //check whether the upper or the downer edge is more distant from the center
         //take the farest point to put the label to
@@ -127,7 +127,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
         while(fAngleDegree<0.0)
             fAngleDegree+=360.0;
 
-        bool bOutside = nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
+        bool bOutside = nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE;
 
         if(fAngleDegree==0.0)
             rAlignment = LABEL_ALIGN_CENTER;

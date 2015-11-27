@@ -31,9 +31,8 @@
 namespace chart
 {
 
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XColorScheme > createConfigColorScheme(
-    const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::XColorScheme > createConfigColorScheme(
+    const css::uno::Reference< css::uno::XComponentContext > & xContext );
 
 namespace impl
 {
@@ -42,13 +41,11 @@ class ChartConfigItem;
 
 class ConfigColorScheme :
     public ::cppu::WeakImplHelper<
-        ::com::sun::star::chart2::XColorScheme,
-        ::com::sun::star::lang::XServiceInfo >
+        css::chart2::XColorScheme,
+        css::lang::XServiceInfo >
 {
 public:
-    explicit ConfigColorScheme(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit ConfigColorScheme( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     SAL_DLLPRIVATE virtual ~ConfigColorScheme();
 
     /// declare XServiceInfo methods
@@ -68,16 +65,15 @@ public:
 protected:
     // ____ XColorScheme ____
     SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getColorByIndex( ::sal_Int32 nIndex )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     SAL_DLLPRIVATE void retrieveConfigColors();
 
     // member variables
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >        m_xContext;
-    ::std::unique_ptr< impl::ChartConfigItem >              m_apChartConfigItem;
-    mutable ::com::sun::star::uno::Sequence< sal_Int64 >  m_aColorSequence;
+    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    ::std::unique_ptr< impl::ChartConfigItem >            m_apChartConfigItem;
+    mutable css::uno::Sequence< sal_Int64 >               m_aColorSequence;
     mutable sal_Int32                                     m_nNumberOfColors;
     bool                                                  m_bNeedsUpdate;
 };

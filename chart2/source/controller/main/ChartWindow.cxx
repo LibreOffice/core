@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-::Rectangle lcl_AWTRectToVCLRect( const ::com::sun::star::awt::Rectangle & rAWTRect )
+::Rectangle lcl_AWTRectToVCLRect( const css::awt::Rectangle & rAWTRect )
 {
     ::Rectangle aResult;
     aResult.setX( rAWTRect.X );

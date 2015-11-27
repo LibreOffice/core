@@ -41,7 +41,7 @@ class ScaleAutomatism
 {
 public:
     explicit            ScaleAutomatism(
-                            const ::com::sun::star::chart2::ScaleData& rSourceScale, const Date& rNullDate );
+                            const css::chart2::ScaleData& rSourceScale, const Date& rNullDate );
     virtual             ~ScaleAutomatism();
 
     /** Expands own value range with the passed minimum and maximum.
@@ -96,7 +96,7 @@ public:
                             ExplicitScaleData& rExplicitScale,
                             ExplicitIncrementData& rExplicitIncrement ) const;
 
-    ::com::sun::star::chart2::ScaleData getScale() const { return m_aSourceScale;}
+    css::chart2::ScaleData getScale() const { return m_aSourceScale;}
     Date getNullDate() const { return m_aNullDate;}
 
 private:
@@ -125,7 +125,7 @@ private:
                             bool bAutoMinimum, bool bAutoMaximum ) const;
 
 private:
-    ::com::sun::star::chart2::ScaleData             m_aSourceScale;
+    css::chart2::ScaleData             m_aSourceScale;
 
     double              m_fValueMinimum;                    /// Minimum of all source values.
     double              m_fValueMaximum;                    /// Maximum of all source values.
@@ -134,7 +134,7 @@ private:
     bool                m_bExpandIfValuesCloseToBorder;     /// true = Expand if values are too close to the borders.
     bool                m_bExpandWideValuesToZero;          /// true = Expand wide spread values to zero.
     bool                m_bExpandNarrowValuesTowardZero;    /// true = Expand narrow range toward zero (add half of range).
-    sal_Int32           m_nTimeResolution;// a constant out of ::com::sun::star::chart::TimeUnit
+    sal_Int32           m_nTimeResolution;// a constant out of css::chart::TimeUnit
 
     Date                m_aNullDate;
 };

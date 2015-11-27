@@ -101,7 +101,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "CrossoverPosition",
                   PROP_AXIS_CROSSOVER_POSITION,
-                  cppu::UnoType<com::sun::star::chart::ChartAxisPosition>::get(),
+                  cppu::UnoType<css::chart::ChartAxisPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
@@ -134,7 +134,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "LabelPosition",
                   PROP_AXIS_LABEL_POSITION,
-                  cppu::UnoType<com::sun::star::chart::ChartAxisLabelPosition>::get(),
+                  cppu::UnoType<css::chart::ChartAxisLabelPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
@@ -168,7 +168,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ArrangeOrder",
                   PROP_AXIS_TEXT_ARRANGE_ORDER,
-                  cppu::UnoType<com::sun::star::chart::ChartAxisArrangeOrderType>::get(),
+                  cppu::UnoType<css::chart::ChartAxisArrangeOrderType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -194,7 +194,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "MarkPosition",
                   PROP_AXIS_MARK_POSITION,
-                  cppu::UnoType<com::sun::star::chart::ChartAxisMarkPosition>::get(),
+                  cppu::UnoType<css::chart::ChartAxisMarkPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     //Properties for display units:
@@ -239,15 +239,15 @@ private:
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_SHOW, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSSOVER_POSITION, ::com::sun::star::chart::ChartAxisPosition_ZERO );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSSOVER_POSITION, css::chart::ChartAxisPosition_ZERO );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_LABELS, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LABEL_POSITION, ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LABEL_POSITION, css::chart::ChartAxisLabelPosition_NEAR_AXIS );
         ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_AXIS_TEXT_ROTATION, 0.0 );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_BREAK, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_OVERLAP, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_STACKED, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_ARRANGE_ORDER, ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_ARRANGE_ORDER, css::chart::ChartAxisArrangeOrderType_AUTO );
 
         float fDefaultCharHeight = 10.0;
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
@@ -256,7 +256,7 @@ private:
 
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MAJOR_TICKMARKS, 2 /* CHAXIS_MARK_OUTER */ );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MINOR_TICKMARKS, 0 /* CHAXIS_MARK_NONE */ );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_MARK_POSITION, ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_MARK_POSITION, css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_UNITS, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TRY_STAGGERING_FIRST, false );
     }
@@ -277,7 +277,7 @@ struct StaticAxisInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );

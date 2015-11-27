@@ -46,7 +46,7 @@ void ChartController::executeDispatch_EditData()
     Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
     if( xChartDoc.is())
     {
-        Reference< ::com::sun::star::chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider());
+        Reference< css::chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider());
 
         {
             SolarMutexGuard aSolarGuard;

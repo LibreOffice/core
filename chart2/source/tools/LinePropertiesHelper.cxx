@@ -97,8 +97,8 @@ void LinePropertiesHelper::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_JOINT, drawing::LineJoint_ROUND );
 }
 
-bool LinePropertiesHelper::IsLineVisible( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >& xLineProperties )
+bool LinePropertiesHelper::IsLineVisible( const css::uno::Reference<
+        css::beans::XPropertySet >& xLineProperties )
 {
     bool bRet = false;
     try
@@ -125,8 +125,8 @@ bool LinePropertiesHelper::IsLineVisible( const ::com::sun::star::uno::Reference
     return bRet;
 }
 
-void LinePropertiesHelper::SetLineVisible( const ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >& xLineProperties )
+void LinePropertiesHelper::SetLineVisible( const css::uno::Reference<
+    css::beans::XPropertySet >& xLineProperties )
 {
     try
     {
@@ -149,8 +149,8 @@ void LinePropertiesHelper::SetLineVisible( const ::com::sun::star::uno::Referenc
     }
 }
 
-void LinePropertiesHelper::SetLineInvisible( const ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >& xLineProperties )
+void LinePropertiesHelper::SetLineInvisible( const css::uno::Reference<
+    css::beans::XPropertySet >& xLineProperties )
 {
     try
     {
@@ -168,8 +168,8 @@ void LinePropertiesHelper::SetLineInvisible( const ::com::sun::star::uno::Refere
     }
 }
 
-void LinePropertiesHelper::SetLineColor( const ::com::sun::star::uno::Reference<
-     ::com::sun::star::beans::XPropertySet >& xLineProperties, sal_Int32 nColor  )
+void LinePropertiesHelper::SetLineColor( const css::uno::Reference<
+     css::beans::XPropertySet >& xLineProperties, sal_Int32 nColor  )
 {
     try
     {

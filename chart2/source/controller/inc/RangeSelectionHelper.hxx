@@ -39,13 +39,11 @@ class RangeSelectionHelper
 {
 public:
     explicit RangeSelectionHelper(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDocument );
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
     ~RangeSelectionHelper();
 
     bool hasRangeSelection();
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XRangeSelection > getRangeSelection();
+    css::uno::Reference< css::sheet::XRangeSelection > getRangeSelection();
     void raiseRangeSelectionDocument();
     bool chooseRange(
         const OUString & aCurrentRange,
@@ -53,19 +51,16 @@ public:
         RangeSelectionListenerParent & rListenerParent );
     void stopRangeListening( bool bRemoveListener = true );
     bool verifyCellRange( const OUString & rRangeStr );
-    bool verifyArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArguments );
+    bool verifyArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments );
 
 private:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XRangeSelection >
+    css::uno::Reference< css::sheet::XRangeSelection >
         m_xRangeSelection;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument >
+    css::uno::Reference< css::chart2::XChartDocument >
         m_xChartDocument;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XRangeSelectionListener >
+    css::uno::Reference< css::sheet::XRangeSelectionListener >
         m_xRangeSelectionListener;
 };
 

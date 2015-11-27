@@ -58,7 +58,7 @@ Any WrappedIgnoreProperty::getPropertyValue( const Reference< beans::XPropertySe
 }
 
 void WrappedIgnoreProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& /* xInnerPropertyState */ ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+                        throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     m_aCurrentValue = m_aDefaultValue;
 }

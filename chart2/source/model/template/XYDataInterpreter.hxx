@@ -27,24 +27,22 @@ namespace chart
 class XYDataInterpreter : public DataInterpreter
 {
 public:
-    explicit XYDataInterpreter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit XYDataInterpreter( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~XYDataInterpreter();
 
 protected:
     // ____ XDataInterpreter ____
-    virtual ::com::sun::star::chart2::InterpretedData SAL_CALL interpretDataSource(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xSource,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >& aSeriesToReUse )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::chart2::InterpretedData SAL_CALL reinterpretDataSeries(
-        const ::com::sun::star::chart2::InterpretedData& aInterpretedData )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::chart2::InterpretedData SAL_CALL interpretDataSource(
+        const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aSeriesToReUse )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::chart2::InterpretedData SAL_CALL reinterpretDataSeries(
+        const css::chart2::InterpretedData& aInterpretedData )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isDataCompatible(
-        const ::com::sun::star::chart2::InterpretedData& aInterpretedData )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::chart2::InterpretedData& aInterpretedData )
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 } // namespace chart

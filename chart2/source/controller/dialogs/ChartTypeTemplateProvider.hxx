@@ -31,8 +31,7 @@ namespace chart
 class ChartTypeTemplateProvider
 {
 public:
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate() const =0;
+    virtual css::uno::Reference< css::chart2::XChartTypeTemplate > getCurrentTemplate() const =0;
     virtual ~ChartTypeTemplateProvider() {}
 };
 

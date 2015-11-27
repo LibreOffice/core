@@ -36,10 +36,8 @@ class StatisticsItemConverter : public ItemConverter
 {
 public:
     StatisticsItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        const css::uno::Reference< css::frame::XModel > & xChartModel,
+        const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool );
     virtual ~StatisticsItemConverter();
 
@@ -48,13 +46,12 @@ protected:
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const override;
 
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception ) override;
+        throw( css::uno::Exception ) override;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception ) override;
+        throw( css::uno::Exception ) override;
 
 private:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel >  m_xModel;
+    css::uno::Reference< css::frame::XModel >  m_xModel;
 };
 
 } //  namespace wrapper

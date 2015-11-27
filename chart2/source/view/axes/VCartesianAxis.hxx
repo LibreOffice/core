@@ -30,7 +30,7 @@ class VCartesianAxis : public VAxisBase
     // public methods
 public:
     VCartesianAxis( const AxisProperties& rAxisProperties
-           , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
            , PlottingPositionHelper* pPosHelper = nullptr //takes ownership
            );

@@ -473,9 +473,9 @@ void ImplObjectHierarchy::createDataSeriesTree(
                                 (xSeriesProp->getPropertyValue( CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp) &&
                                 xErrorBarProp.is())
                             {
-                                sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+                                sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
                                 if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
-                                    ( nStyle != ::com::sun::star::chart::ErrorBarStyle::NONE ) )
+                                    ( nStyle != css::chart::ErrorBarStyle::NONE ) )
                                 {
                                     aSeriesSubContainer.push_back(
                                         ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierWithParent(
@@ -487,9 +487,9 @@ void ImplObjectHierarchy::createDataSeriesTree(
                                 (xSeriesProp->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp) &&
                                 xErrorBarProp.is())
                             {
-                                sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+                                sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
                                 if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
-                                    ( nStyle != ::com::sun::star::chart::ErrorBarStyle::NONE ) )
+                                    ( nStyle != css::chart::ErrorBarStyle::NONE ) )
                                 {
                                     aSeriesSubContainer.push_back(
                                         ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierWithParent(

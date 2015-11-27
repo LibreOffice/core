@@ -121,7 +121,7 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
     }
 }
 
-void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Reference< frame::XModel >& xChartModel ) const
+void LegendPositionResources::writeToModel( const css::uno::Reference< frame::XModel >& xChartModel ) const
 {
     try
     {
@@ -135,7 +135,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
 
             //position
             chart2::LegendPosition eNewPos;
-            ::com::sun::star::chart::ChartLegendExpansion eExp = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
+            css::chart::ChartLegendExpansion eExp = css::chart::ChartLegendExpansion_HIGH;
 
             if( m_pRbtLeft->IsChecked() )
                 eNewPos = chart2::LegendPosition_LINE_START;
@@ -146,12 +146,12 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
             else if( m_pRbtTop->IsChecked() )
             {
                 eNewPos = chart2::LegendPosition_PAGE_START;
-                eExp = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                eExp = css::chart::ChartLegendExpansion_WIDE;
             }
             else if( m_pRbtBottom->IsChecked() )
             {
                 eNewPos = chart2::LegendPosition_PAGE_END;
-                eExp = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                eExp = css::chart::ChartLegendExpansion_WIDE;
             }
 
             xProp->setPropertyValue( "AnchorPosition" , uno::makeAny( eNewPos ));

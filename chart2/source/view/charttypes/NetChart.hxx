@@ -29,8 +29,7 @@ class NetChart : public VSeriesPlotter
 {
     // public methods
 public:
-    NetChart( const ::com::sun::star::uno::Reference<
-             ::com::sun::star::chart2::XChartType >& xChartTypeModel
+    NetChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount
              , bool bNoArea
              , PlottingPositionHelper* pPlottingPositionHelper //takes ownership
@@ -40,7 +39,7 @@ public:
     virtual void createShapes() override;
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;
 
-    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
+    virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
 
     // MinimumAndMaximumSupplier
     virtual double getMaximumX() override;
@@ -48,7 +47,7 @@ public:
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
     virtual LegendSymbolStyle getLegendSymbolStyle() override;
-    virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ ) override;
+    virtual css::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ ) override;
 
 private: //methods
     //no default constructor
@@ -56,11 +55,11 @@ private: //methods
 
     void impl_createSeriesShapes();
     bool impl_createArea( VDataSeries* pSeries
-                , ::com::sun::star::drawing::PolyPolygonShape3D* pSeriesPoly
-                , ::com::sun::star::drawing::PolyPolygonShape3D* pPreviousSeriesPoly
+                , css::drawing::PolyPolygonShape3D* pSeriesPoly
+                , css::drawing::PolyPolygonShape3D* pPreviousSeriesPoly
                 , PlottingPositionHelper* pPosHelper );
     bool impl_createLine( VDataSeries* pSeries
-                , ::com::sun::star::drawing::PolyPolygonShape3D* pSeriesPoly
+                , css::drawing::PolyPolygonShape3D* pSeriesPoly
                 , PlottingPositionHelper* pPosHelper );
 
 private: //member
@@ -69,10 +68,8 @@ private: //member
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
 
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes > m_xSeriesTarget;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes > m_xTextTarget;
+    css::uno::Reference< css::drawing::XShapes > m_xSeriesTarget;
+    css::uno::Reference< css::drawing::XShapes > m_xTextTarget;
 };
 } //namespace chart
 #endif

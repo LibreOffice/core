@@ -45,13 +45,13 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakComponentImplHelper<
-    ::com::sun::star::chart2::data::XDataSequence,
-    ::com::sun::star::chart2::data::XNumericalDataSequence,
-    ::com::sun::star::chart2::data::XTextualDataSequence,
-    ::com::sun::star::util::XCloneable,
-    ::com::sun::star::util::XModifyBroadcaster,
-    ::com::sun::star::lang::XInitialization,
-    ::com::sun::star::lang::XServiceInfo >
+    css::chart2::data::XDataSequence,
+    css::chart2::data::XNumericalDataSequence,
+    css::chart2::data::XTextualDataSequence,
+    css::util::XCloneable,
+    css::util::XModifyBroadcaster,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo >
     CachedDataSequence_Base;
 }
 
@@ -69,9 +69,7 @@ public:
      */
     CachedDataSequence();
 
-    explicit CachedDataSequence(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit CachedDataSequence( const css::uno::Reference< css::uno::XComponentContext > & xContext );
 
     /** creates a sequence and initializes it with the given string.  This is
         especially useful for labels, which only have one element.
@@ -101,49 +99,49 @@ public:
 
 protected:
     // ____ XPropertySet ____
-    /// @see ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    /// @see css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+        throw (css::uno::RuntimeException, std::exception) override;
     /// @see ::comphelper::OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     /// @see ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // ____ XDataSequence ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getData()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getSourceRangeRepresentation()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL generateLabel(
-        ::com::sun::star::chart2::data::LabelOrigin nLabelOrigin )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL generateLabel(
+        css::chart2::data::LabelOrigin nLabelOrigin )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XNumericalDataSequence ____
-    /// @see ::com::sun::star::chart::data::XNumericalDataSequence
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getNumericalData() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    /// @see css::chart::data::XNumericalDataSequence
+    virtual css::uno::Sequence< double > SAL_CALL getNumericalData() throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XTextualDataSequence ____
-    /// @see ::com::sun::star::chart::data::XTextualDataSequence
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getTextualData() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    /// @see css::chart::data::XTextualDataSequence
+    virtual css::uno::Sequence< OUString > SAL_CALL getTextualData() throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XInitialization:
-    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments)
-        throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception, std::exception) override;
+    // css::lang::XInitialization:
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments)
+        throw (css::uno::RuntimeException, css::uno::Exception, std::exception) override;
 
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
@@ -165,23 +163,21 @@ protected:
 private:
     /** is used by interface method getNumericalData().
      */
-    ::com::sun::star::uno::Sequence< double > Impl_getNumericalData() const;
+    css::uno::Sequence< double > Impl_getNumericalData() const;
     /** is used by interface method getTextualData().
      */
-    ::com::sun::star::uno::Sequence< OUString > Impl_getTextualData() const;
+    css::uno::Sequence< OUString > Impl_getTextualData() const;
     /** is used by interface method getData().
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > Impl_getMixedData() const;
+    css::uno::Sequence< css::uno::Any > Impl_getMixedData() const;
 
 private:
-    enum DataType                                       m_eCurrentDataType;
+    enum DataType                                          m_eCurrentDataType;
 
-    ::com::sun::star::uno::Sequence< double >           m_aNumericalSequence;
-    ::com::sun::star::uno::Sequence< OUString >  m_aTextualSequence;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Any >                    m_aMixedSequence;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >
-        m_xModifyEventForwarder;
+    css::uno::Sequence< double >                           m_aNumericalSequence;
+    css::uno::Sequence< OUString >                         m_aTextualSequence;
+    css::uno::Sequence< css::uno::Any >                    m_aMixedSequence;
+    css::uno::Reference< css::util::XModifyListener >      m_xModifyEventForwarder;
 };
 
 }  // namespace chart

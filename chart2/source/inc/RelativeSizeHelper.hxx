@@ -31,14 +31,14 @@ class OOO_DLLPUBLIC_CHARTTOOLS RelativeSizeHelper
 public:
     static double calculate(
         double fValue,
-        const ::com::sun::star::awt::Size & rOldReferenceSize,
-        const ::com::sun::star::awt::Size & rNewReferenceSize );
+        const css::awt::Size & rOldReferenceSize,
+        const css::awt::Size & rNewReferenceSize );
 
     static void adaptFontSizes(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xTargetProperties,
-        const ::com::sun::star::awt::Size & rOldReferenceSize,
-        const ::com::sun::star::awt::Size & rNewReferenceSize );
+        const css::uno::Reference<
+            css::beans::XPropertySet > & xTargetProperties,
+        const css::awt::Size & rOldReferenceSize,
+        const css::awt::Size & rNewReferenceSize );
 
 private:
     RelativeSizeHelper() = delete;

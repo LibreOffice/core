@@ -158,9 +158,9 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_nDimensionIndex(0)
     , m_bIsMainAxis(true)
     , m_bSwapXAndY(false)
-    , m_eCrossoverType( ::com::sun::star::chart::ChartAxisPosition_ZERO )
-    , m_eLabelPos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS )
-    , m_eTickmarkPos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS )
+    , m_eCrossoverType( css::chart::ChartAxisPosition_ZERO )
+    , m_eLabelPos( css::chart::ChartAxisLabelPosition_NEAR_AXIS )
+    , m_eTickmarkPos( css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS )
     , m_bCrossingAxisHasReverseDirection(false)
     , m_bCrossingAxisIsCategoryAxes(false)
     , m_bDisplayLabels( true )
@@ -241,7 +241,7 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
         if( AxisHelper::isAxisPositioningEnabled() )
         {
             xAxisProp->getPropertyValue("CrossoverPosition") >>= m_eCrossoverType;
-            if( ::com::sun::star::chart::ChartAxisPosition_VALUE == m_eCrossoverType )
+            if( css::chart::ChartAxisPosition_VALUE == m_eCrossoverType )
             {
                 double fValue = 0.0;
                 xAxisProp->getPropertyValue("CrossoverValue") >>= fValue;
@@ -250,7 +250,7 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
                     fValue = ::rtl::math::round(fValue);
                 m_pfMainLinePositionAtOtherAxis.reset(fValue);
             }
-            else if( ::com::sun::star::chart::ChartAxisPosition_ZERO == m_eCrossoverType )
+            else if( css::chart::ChartAxisPosition_ZERO == m_eCrossoverType )
                 m_pfMainLinePositionAtOtherAxis.reset(0.0);
 
             xAxisProp->getPropertyValue("LabelPosition") >>= m_eLabelPos;
@@ -258,11 +258,11 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
         }
         else
         {
-            m_eCrossoverType = ::com::sun::star::chart::ChartAxisPosition_START;
+            m_eCrossoverType = css::chart::ChartAxisPosition_START;
             if( m_bIsMainAxis == m_bCrossingAxisHasReverseDirection )
-                m_eCrossoverType = ::com::sun::star::chart::ChartAxisPosition_END;
-            m_eLabelPos = ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS;
-            m_eTickmarkPos = ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS;
+                m_eCrossoverType = css::chart::ChartAxisPosition_END;
+            m_eLabelPos = css::chart::ChartAxisLabelPosition_NEAR_AXIS;
+            m_eTickmarkPos = css::chart::ChartAxisMarkPosition_AT_LABELS;
         }
     }
     catch( const uno::Exception& e )
@@ -292,18 +292,18 @@ void AxisProperties::init( bool bCartesian )
                 && m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
             m_bComplexCategories = true;
 
-        if( ::com::sun::star::chart::ChartAxisPosition_END == m_eCrossoverType )
+        if( css::chart::ChartAxisPosition_END == m_eCrossoverType )
             maLabelAlignment.mfInnerTickDirection = m_bCrossingAxisHasReverseDirection ? 1.0 : -1.0;
         else
             maLabelAlignment.mfInnerTickDirection = m_bCrossingAxisHasReverseDirection ? -1.0 : 1.0;
 
-        if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS == m_eLabelPos )
+        if( css::chart::ChartAxisLabelPosition_NEAR_AXIS == m_eLabelPos )
             maLabelAlignment.mfLabelDirection = maLabelAlignment.mfInnerTickDirection;
-        else if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE == m_eLabelPos )
+        else if( css::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE == m_eLabelPos )
             maLabelAlignment.mfLabelDirection = -maLabelAlignment.mfInnerTickDirection;
-        else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START == m_eLabelPos )
+        else if( css::chart::ChartAxisLabelPosition_OUTSIDE_START == m_eLabelPos )
             maLabelAlignment.mfLabelDirection = m_bCrossingAxisHasReverseDirection ? -1 : 1;
-        else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == m_eLabelPos )
+        else if( css::chart::ChartAxisLabelPosition_OUTSIDE_END == m_eLabelPos )
             maLabelAlignment.mfLabelDirection = m_bCrossingAxisHasReverseDirection ? 1 : -1;
 
         if( m_nDimensionIndex==2 )
@@ -389,17 +389,17 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
             xProp->getPropertyValue( "StackCharacters" ) >>= this->bStackCharacters;
             xProp->getPropertyValue( "TextRotation" ) >>= this->fRotationAngleDegree;
 
-            ::com::sun::star::chart::ChartAxisArrangeOrderType eArrangeOrder;
+            css::chart::ChartAxisArrangeOrderType eArrangeOrder;
             xProp->getPropertyValue( "ArrangeOrder" ) >>= eArrangeOrder;
             switch(eArrangeOrder)
             {
-                case ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
+                case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
                     this->eStaggering = SIDE_BY_SIDE;
                     break;
-                case ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
+                case css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
                     this->eStaggering = STAGGER_EVEN;
                     break;
-                case ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
+                case css::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
                     this->eStaggering = STAGGER_ODD;
                     break;
                 default:

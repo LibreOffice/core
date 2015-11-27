@@ -30,26 +30,26 @@ class OOO_DLLPUBLIC_CHARTTOOLS WrappedDefaultProperty : public WrappedProperty
 public:
     explicit WrappedDefaultProperty(
         const OUString& rOuterName, const OUString& rInnerName,
-        const ::com::sun::star::uno::Any& rNewOuterDefault );
+        const css::uno::Any& rNewOuterDefault );
     virtual ~WrappedDefaultProperty();
 
     virtual void setPropertyToDefault(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-        throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::uno::RuntimeException) override;
+        const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
+        throw (css::beans::UnknownPropertyException,
+               css::uno::RuntimeException) override;
 
-    virtual ::com::sun::star::uno::Any getPropertyDefault(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-        throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault(
+        const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
+        throw (css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException) override;
 
-    virtual ::com::sun::star::beans::PropertyState getPropertyState(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-        throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::uno::RuntimeException) override;
+    virtual css::beans::PropertyState getPropertyState(
+        const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
+        throw (css::beans::UnknownPropertyException,
+               css::uno::RuntimeException) override;
 private:
-    ::com::sun::star::uno::Any m_aOuterDefaultValue;
+    css::uno::Any m_aOuterDefaultValue;
 };
 
 } //  namespace chart

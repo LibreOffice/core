@@ -32,13 +32,13 @@ class SplineCalculater
 {
 public:
     static void CalculateCubicSplines(
-            const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
-            , ::com::sun::star::drawing::PolyPolygonShape3D& rResult
+            const css::drawing::PolyPolygonShape3D& rPoints
+            , css::drawing::PolyPolygonShape3D& rResult
             , sal_uInt32 nGranularity );
 
     static void CalculateBSplines(
-            const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
-            , ::com::sun::star::drawing::PolyPolygonShape3D& rResult
+            const css::drawing::PolyPolygonShape3D& rPoints
+            , css::drawing::PolyPolygonShape3D& rResult
             , sal_uInt32 nGranularity
             , sal_uInt32 nSplineDepth );
 };

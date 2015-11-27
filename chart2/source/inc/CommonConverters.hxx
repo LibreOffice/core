@@ -50,12 +50,12 @@ and operations e.g  drawing::Position3D + drawing::Direction3D
 
 /** ::basegfx::B3DHomMatrix -> HomogenMatrix
 */
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::HomogenMatrix
+OOO_DLLPUBLIC_CHARTTOOLS css::drawing::HomogenMatrix
                  B3DHomMatrixToHomogenMatrix( const ::basegfx::B3DHomMatrix& rM );
 
 /** HomogenMatrix -> ::basegfx::B3DHomMatrix
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DHomMatrix HomogenMatrixToB3DHomMatrix( const com::sun::star::drawing::HomogenMatrix& rHM );
+OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DHomMatrix HomogenMatrixToB3DHomMatrix( const css::drawing::HomogenMatrix& rHM );
 
 /** ::basegfx::B3DHomMatrix -> B2DHomMatrix
 */
@@ -64,135 +64,131 @@ OOO_DLLPUBLIC_CHARTTOOLS
 
 /** B2DHomMatrix <-> HomogenMatrix3
 */
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::HomogenMatrix3
+OOO_DLLPUBLIC_CHARTTOOLS css::drawing::HomogenMatrix3
                 B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMatrix& rM );
 
 /** Position3D -> B3DPoint
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DPoint Position3DToB3DPoint( const com::sun::star::drawing::Position3D& rPosition );
+OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DPoint Position3DToB3DPoint( const css::drawing::Position3D& rPosition );
 
 /** B3DVector -> Direction3D
 */
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Direction3D B3DVectorToDirection3D( const ::basegfx::B3DVector& rVector);
+OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Direction3D B3DVectorToDirection3D( const ::basegfx::B3DVector& rVector);
 
 /** B3DPoint -> Position3D
 */
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPoint& rPoint);
+OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPoint& rPoint);
 
 /** Direction3D -> B3DVector
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DVector Direction3DToB3DVector( const com::sun::star::drawing::Direction3D& rDirection);
+OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DVector Direction3DToB3DVector( const css::drawing::Direction3D& rDirection);
 
 /** PolyPolygonShape3D + drawing::Position3D -> PolyPolygonShape3D
 */
 OOO_DLLPUBLIC_CHARTTOOLS
-void AddPointToPoly( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly
-                , const com::sun::star::drawing::Position3D& rPos
+void AddPointToPoly( css::drawing::PolyPolygonShape3D& rPoly
+                , const css::drawing::Position3D& rPos
                 , sal_Int32 nSequenceIndex=0 );
 
 /** get a single Point from a Polygon
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::drawing::Position3D getPointFromPoly(
-                  const ::com::sun::star::drawing::PolyPolygonShape3D& rPolygon
+OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D getPointFromPoly(
+                  const css::drawing::PolyPolygonShape3D& rPolygon
                 , sal_Int32 nPointIndex, sal_Int32 nPolyIndex=0 );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-void addPolygon( com::sun::star::drawing::PolyPolygonShape3D& rRet
-                , const com::sun::star::drawing::PolyPolygonShape3D& rAdd );
+void addPolygon( css::drawing::PolyPolygonShape3D& rRet
+                , const css::drawing::PolyPolygonShape3D& rAdd );
 /** PolyPolygonShape3D + PolyPolygonShape3D -> PolyPolygonShape3D
 */
 OOO_DLLPUBLIC_CHARTTOOLS
-void appendPoly( com::sun::star::drawing::PolyPolygonShape3D& rRet
-                , const com::sun::star::drawing::PolyPolygonShape3D& rAdd );
+void appendPoly( css::drawing::PolyPolygonShape3D& rRet
+                , const css::drawing::PolyPolygonShape3D& rAdd );
 
 /** PolyPolygonBezierCoords -> PolyPolygonShape3D
 */
 OOO_DLLPUBLIC_CHARTTOOLS
-com::sun::star::drawing::PolyPolygonShape3D BezierToPoly(
-    const com::sun::star::drawing::PolyPolygonBezierCoords& rBezier );
+css::drawing::PolyPolygonShape3D BezierToPoly(
+    const css::drawing::PolyPolygonBezierCoords& rBezier );
 
 /** PolyPolygonShape3D -> drawing::PointSequenceSequence (2D)
 */
 OOO_DLLPUBLIC_CHARTTOOLS
-com::sun::star::drawing::PointSequenceSequence PolyToPointSequence(
-                const com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygon );
+css::drawing::PointSequenceSequence PolyToPointSequence(
+                const css::drawing::PolyPolygonShape3D& rPolyPolygon );
 
 /** drawing::PointSequenceSequence + drawing::PointSequenceSequence
 */
 OOO_DLLPUBLIC_CHARTTOOLS
-void appendPointSequence( com::sun::star::drawing::PointSequenceSequence& rTarget
-                        , com::sun::star::drawing::PointSequenceSequence& rAdd );
+void appendPointSequence( css::drawing::PointSequenceSequence& rTarget
+                        , css::drawing::PointSequenceSequence& rAdd );
 
 /** Position3D + Direction3D == Position3D
 */
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Position3D
-                operator+( const com::sun::star::drawing::Position3D& rPos
-                           , const com::sun::star::drawing::Direction3D& rDirection);
+OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D
+                operator+( const css::drawing::Position3D& rPos
+                           , const css::drawing::Direction3D& rDirection);
 
 /** Position3D - Position3D == Direction3D
 */
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Direction3D
-                operator-( const com::sun::star::drawing::Position3D& rPos1
-                           , const com::sun::star::drawing::Position3D& rPos2);
-
+OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Direction3D
+                operator-( const css::drawing::Position3D& rPos1
+                           , const css::drawing::Position3D& rPos2);
 
 /** awt::Rect --> awt::Point (2D)
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::awt::Point ToPoint( const com::sun::star::awt::Rectangle& rRectangle );
+OOO_DLLPUBLIC_CHARTTOOLS css::awt::Point ToPoint( const css::awt::Rectangle& rRectangle );
 
 /** awt::Rect --> awt::Size (2D)
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::awt::Size ToSize( const com::sun::star::awt::Rectangle& rRectangle );
+OOO_DLLPUBLIC_CHARTTOOLS css::awt::Size ToSize( const css::awt::Rectangle& rRectangle );
 
 /** Position3D --> awt::Point (2D)
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::awt::Point Position3DToAWTPoint( const com::sun::star::drawing::Position3D& rPos );
+OOO_DLLPUBLIC_CHARTTOOLS css::awt::Point Position3DToAWTPoint( const css::drawing::Position3D& rPos );
 
 /** Direction3D --> awt::Size (2D)
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::awt::Size Direction3DToAWTSize( const com::sun::star::drawing::Direction3D& rDirection );
+OOO_DLLPUBLIC_CHARTTOOLS css::awt::Size Direction3DToAWTSize( const css::drawing::Direction3D& rDirection );
 
 /** B3DPoint -> Sequence<double>
 */
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::uno::Sequence< double > B3DPointToSequence( const ::basegfx::B3DPoint& rPoint );
+OOO_DLLPUBLIC_CHARTTOOLS css::uno::Sequence< double > B3DPointToSequence( const ::basegfx::B3DPoint& rPoint );
 
 /** Sequence<double> -> drawing::Position3D
 */
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Position3D
-                SequenceToPosition3D( const com::sun::star::uno::Sequence< double >& rSeq );
+OOO_DLLPUBLIC_CHARTTOOLS css::drawing::Position3D
+                SequenceToPosition3D( const css::uno::Sequence< double >& rSeq );
 
 /** drawing::Position3D -> Sequence<double>
 */
 
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::uno::Sequence< double >
-                Position3DToSequence( const com::sun::star::drawing::Position3D& rPosition );
+OOO_DLLPUBLIC_CHARTTOOLS css::uno::Sequence< double >
+                Position3DToSequence( const css::drawing::Position3D& rPosition );
 
 /** chart2::XDataSequence -> uno::Sequence< double >
 */
 
 OOO_DLLPUBLIC_CHARTTOOLS
-::com::sun::star::uno::Sequence< double > DataSequenceToDoubleSequence(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence > & xDataSequence );
+css::uno::Sequence< double > DataSequenceToDoubleSequence(
+    const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-::com::sun::star::uno::Sequence< OUString > DataSequenceToStringSequence(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence > & xDataSequence );
+css::uno::Sequence< OUString > DataSequenceToStringSequence(
+    const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence );
 
 /** uno::Sequence< uno::Sequence< T > > -> uno::Sequence< T >
  */
 template< typename T >
-::com::sun::star::uno::Sequence< T >
-    FlattenSequence( const ::com::sun::star::uno::Sequence<
-                         ::com::sun::star::uno::Sequence< T > > & aSeqSeq )
+css::uno::Sequence< T >
+    FlattenSequence( const css::uno::Sequence< css::uno::Sequence< T > > & aSeqSeq )
 {
     sal_Int32 nOuter, nInner, nCount = 0,
         nResultSize = 0;
     const sal_Int32 nOuterSize = aSeqSeq.getLength();
     for( nOuter=0; nOuter<nOuterSize; ++nOuter )
         nResultSize += aSeqSeq[nOuter].getLength();
-    ::com::sun::star::uno::Sequence< T > aResult( nResultSize );
+    css::uno::Sequence< T > aResult( nResultSize );
 
     for( nOuter=0; nOuter<nOuterSize; ++nOuter )
     {
@@ -218,12 +214,12 @@ template< typename T >
 }
 
 OOO_DLLPUBLIC_CHARTTOOLS
-bool hasDoubleValue( const ::com::sun::star::uno::Any& rAny );
+bool hasDoubleValue( const css::uno::Any& rAny );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-bool  hasLongOrShortValue( const ::com::sun::star::uno::Any& rAny );
+bool  hasLongOrShortValue( const css::uno::Any& rAny );
 OOO_DLLPUBLIC_CHARTTOOLS
-sal_Int16 getShortForLongAlso( const ::com::sun::star::uno::Any& rAny );
+sal_Int16 getShortForLongAlso( const css::uno::Any& rAny );
 
 OOO_DLLPUBLIC_CHARTTOOLS
 bool replaceParamterInString( OUString & rInOutResourceString,

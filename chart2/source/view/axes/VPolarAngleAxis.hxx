@@ -32,7 +32,7 @@ class VPolarAngleAxis : public VPolarAxis
 {
 public:
     VPolarAngleAxis( const AxisProperties& rAxisProperties
-           , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionCount );
     virtual ~VPolarAngleAxis();
 
@@ -44,7 +44,7 @@ public:
 
 private: //methods
     bool createTextShapes_ForAngleAxis(
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                       const css::uno::Reference< css::drawing::XShapes >& xTarget
                      , EquidistantTickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
                      , double fLogicRadius, double fLogicZ );

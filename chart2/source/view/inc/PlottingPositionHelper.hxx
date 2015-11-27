@@ -47,13 +47,13 @@ public:
     virtual PlottingPositionHelper* clone() const;
     PlottingPositionHelper* createSecondaryPosHelper( const ExplicitScaleData& rSecondaryScale );
 
-    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix);
+    virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix);
 
     virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
     const ::std::vector< ExplicitScaleData >& getScales() const { return m_aScales;}
 
     //better performance for big data
-    inline void   setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
+    inline void   setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
     inline bool   isSameForGivenResolution( double fX, double fY, double fZ
                                 , double fX2, double fY2, double fZ2 );
 
@@ -65,22 +65,22 @@ public:
            void   clipScaledLogicValues( double* pX, double* pY, double* pZ ) const;
     inline bool   clipYRange( double& rMin, double& rMax ) const;
 
-    inline void   doLogicScaling( ::com::sun::star::drawing::Position3D& rPos ) const;
+    inline void   doLogicScaling( css::drawing::Position3D& rPos ) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
+    virtual css::uno::Reference< css::chart2::XTransformation >
                   getTransformationScaledLogicToScene() const;
 
-    virtual ::com::sun::star::drawing::Position3D
+    virtual css::drawing::Position3D
             transformLogicToScene( double fX, double fY, double fZ, bool bClip ) const;
 
-    virtual ::com::sun::star::drawing::Position3D
+    virtual css::drawing::Position3D
             transformScaledLogicToScene( double fX, double fY, double fZ, bool bClip ) const;
 
-    void    transformScaledLogicToScene( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly ) const;
+    void    transformScaledLogicToScene( css::drawing::PolyPolygonShape3D& rPoly ) const;
 
-    static com::sun::star::awt::Point transformSceneToScreenPosition(
-                  const com::sun::star::drawing::Position3D& rScenePosition3D
-                , const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& xSceneTarget
+    static css::awt::Point transformSceneToScreenPosition(
+                  const css::drawing::Position3D& rScenePosition3D
+                , const css::uno::Reference< css::drawing::XShapes >& xSceneTarget
                 , AbstractShapeFactory* pShapeFactory, sal_Int32 nDimensionCount );
 
     inline double getLogicMinX() const;
@@ -95,7 +95,7 @@ public:
     inline bool isMathematicalOrientationZ() const;
 
     ::basegfx::B2DRectangle     getScaledLogicClipDoubleRect() const;
-    ::com::sun::star::drawing::Direction3D getScaledLogicWidth() const;
+    css::drawing::Direction3D getScaledLogicWidth() const;
 
     inline bool isSwapXAndY() const;
 
@@ -115,8 +115,7 @@ protected: //member
     ::basegfx::B3DHomMatrix             m_aMatrixScreenToScene;
 
     //this is calculated based on m_aScales and m_aMatrixScreenToScene
-    mutable ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTransformation >     m_xTransformationLogicToScene;
+    mutable css::uno::Reference< css::chart2::XTransformation >  m_xTransformationLogicToScene;
 
     bool    m_bSwapXAndY;//e.g. true for bar chart and false for column chart
 
@@ -152,12 +151,12 @@ public:
 
     virtual PlottingPositionHelper* clone() const override;
 
-    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix) override;
+    virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix) override;
     virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
 
     ::basegfx::B3DHomMatrix getUnitCartesianToScene() const { return m_aUnitCartesianToScene;}
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
+    virtual css::uno::Reference< css::chart2::XTransformation >
                   getTransformationScaledLogicToScene() const override;
 
     //the resulting values provided by the following 3 methods should be used
@@ -181,18 +180,18 @@ public:
      */
     double  getWidthAngleDegree( double& fStartLogicValueOnAngleAxis, double& fEndLogicValueOnAngleAxis ) const;
 
-    virtual ::com::sun::star::drawing::Position3D
+    virtual css::drawing::Position3D
             transformLogicToScene( double fX, double fY, double fZ, bool bClip ) const override;
-    virtual ::com::sun::star::drawing::Position3D
+    virtual css::drawing::Position3D
             transformScaledLogicToScene( double fX, double fY, double fZ, bool bClip ) const override;
-    ::com::sun::star::drawing::Position3D
+    css::drawing::Position3D
             transformAngleRadiusToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ, bool bDoScaling=true ) const;
 
     /** It returns the scene coordinates of the passed point: this point is
      *  described through a normalized cylindrical coordinate system.
      *  (For a pie chart the origin of the coordinate system is the pie center).
      */
-    ::com::sun::star::drawing::Position3D
+    css::drawing::Position3D
             transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius, double fLogicZ, bool bDoScaling=true ) const;
 
     using PlottingPositionHelper::transformScaledLogicToScene;
@@ -226,20 +225,20 @@ private:
 bool PolarPlottingPositionHelper::isMathematicalOrientationAngle() const
 {
     const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[1] : m_aScales[2];
-    if( ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL==rScale.Orientation )
+    if( css::chart2::AxisOrientation_MATHEMATICAL==rScale.Orientation )
         return true;
     return false;
 }
 bool PolarPlottingPositionHelper::isMathematicalOrientationRadius() const
 {
     const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
-    if( ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL==rScale.Orientation )
+    if( css::chart2::AxisOrientation_MATHEMATICAL==rScale.Orientation )
         return true;
     return false;
 }
 
 //better performance for big data
-void PlottingPositionHelper::setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution )
+void PlottingPositionHelper::setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution )
 {
     m_nXResolution = 1000;
     m_nYResolution = 1000;
@@ -330,7 +329,7 @@ void PlottingPositionHelper::doUnshiftedLogicScaling( double* pX, double* pY, do
         *pZ = m_aScales[2].Scaling->doScaling(*pZ);
 }
 
-void PlottingPositionHelper::doLogicScaling( ::com::sun::star::drawing::Position3D& rPos ) const
+void PlottingPositionHelper::doLogicScaling( css::drawing::Position3D& rPos ) const
 {
     doLogicScaling( &rPos.PositionX, &rPos.PositionY, &rPos.PositionZ );
 }
@@ -407,15 +406,15 @@ inline double PlottingPositionHelper::getLogicMaxZ() const
 }
 inline bool PlottingPositionHelper::isMathematicalOrientationX() const
 {
-    return ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[0].Orientation;
+    return css::chart2::AxisOrientation_MATHEMATICAL == m_aScales[0].Orientation;
 }
 inline bool PlottingPositionHelper::isMathematicalOrientationY() const
 {
-    return ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[1].Orientation;
+    return css::chart2::AxisOrientation_MATHEMATICAL == m_aScales[1].Orientation;
 }
 inline bool PlottingPositionHelper::isMathematicalOrientationZ() const
 {
-    return ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[2].Orientation;
+    return css::chart2::AxisOrientation_MATHEMATICAL == m_aScales[2].Orientation;
 }
 inline bool PlottingPositionHelper::isSwapXAndY() const
 {

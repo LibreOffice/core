@@ -30,12 +30,12 @@ public:
     explicit WrappedTextRotationProperty( bool bDirectState=false );
     virtual ~WrappedTextRotationProperty();
 
-    virtual ::com::sun::star::beans::PropertyState getPropertyState( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException) override;
+    virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (css::beans::UnknownPropertyException, css::uno::RuntimeException) override;
 
 protected:
-    virtual ::com::sun::star::uno::Any convertInnerToOuterValue( const ::com::sun::star::uno::Any& rInnerValue ) const override;
-    virtual ::com::sun::star::uno::Any convertOuterToInnerValue( const ::com::sun::star::uno::Any& rOuterValue ) const override;
+    virtual css::uno::Any convertInnerToOuterValue( const css::uno::Any& rInnerValue ) const override;
+    virtual css::uno::Any convertOuterToInnerValue( const css::uno::Any& rOuterValue ) const override;
 
     bool m_bDirectState;
 };

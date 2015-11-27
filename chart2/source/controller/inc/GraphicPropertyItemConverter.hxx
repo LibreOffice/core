@@ -44,12 +44,10 @@ public:
     };
 
     GraphicPropertyItemConverter(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         eGraphicObjectType eObjectType = FILLED_DATA_POINT );
     virtual ~GraphicPropertyItemConverter();
 
@@ -60,13 +58,12 @@ protected:
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
         throw (css::uno::Exception, std::exception) override;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception ) override;
+        throw( css::uno::Exception ) override;
 
 private:
     eGraphicObjectType              m_eGraphicObjectType;
     SdrModel &                      m_rDrawModel;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >  m_xNamedPropertyTableFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory >  m_xNamedPropertyTableFactory;
 };
 
 } //  namespace wrapper

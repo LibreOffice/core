@@ -52,57 +52,57 @@ namespace
 Any lcl_getRegressionDefault()
 {
     Any aRet;
-    aRet <<= ::com::sun::star::chart::ChartRegressionCurveType_NONE;
+    aRet <<= css::chart::ChartRegressionCurveType_NONE;
     return aRet;
 }
 
-::com::sun::star::chart::ChartRegressionCurveType lcl_getRegressionCurveType(SvxChartRegress eRegressionType)
+css::chart::ChartRegressionCurveType lcl_getRegressionCurveType(SvxChartRegress eRegressionType)
 {
-    ::com::sun::star::chart::ChartRegressionCurveType eRet = ::com::sun::star::chart::ChartRegressionCurveType_NONE;
+    css::chart::ChartRegressionCurveType eRet = css::chart::ChartRegressionCurveType_NONE;
     switch(eRegressionType)
     {
         case CHREGRESS_LINEAR:
-            eRet = ::com::sun::star::chart::ChartRegressionCurveType_LINEAR;
+            eRet = css::chart::ChartRegressionCurveType_LINEAR;
             break;
         case CHREGRESS_LOG:
-            eRet = ::com::sun::star::chart::ChartRegressionCurveType_LOGARITHM;
+            eRet = css::chart::ChartRegressionCurveType_LOGARITHM;
             break;
         case CHREGRESS_EXP:
-            eRet = ::com::sun::star::chart::ChartRegressionCurveType_EXPONENTIAL;
+            eRet = css::chart::ChartRegressionCurveType_EXPONENTIAL;
             break;
         case CHREGRESS_POWER:
-            eRet = ::com::sun::star::chart::ChartRegressionCurveType_POWER;
+            eRet = css::chart::ChartRegressionCurveType_POWER;
             break;
         case CHREGRESS_POLYNOMIAL:
-            eRet = ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL;
+            eRet = css::chart::ChartRegressionCurveType_POLYNOMIAL;
             break;
         /*case CHREGRESS_MOVING_AVERAGE:
-            eRet = ::com::sun::star::chart::ChartRegressionCurveType_MOVING_AVERAGE;
+            eRet = css::chart::ChartRegressionCurveType_MOVING_AVERAGE;
             break;*/
         default:
-            eRet = ::com::sun::star::chart::ChartRegressionCurveType_NONE;
+            eRet = css::chart::ChartRegressionCurveType_NONE;
             break;
     }
     return eRet;
 }
 
-SvxChartRegress lcl_getRegressionType( ::com::sun::star::chart::ChartRegressionCurveType eRegressionCurveType )
+SvxChartRegress lcl_getRegressionType( css::chart::ChartRegressionCurveType eRegressionCurveType )
 {
     SvxChartRegress eRet;
     switch (eRegressionCurveType)
     {
-        case ::com::sun::star::chart::ChartRegressionCurveType_LINEAR:
+        case css::chart::ChartRegressionCurveType_LINEAR:
             eRet = CHREGRESS_LINEAR;
             break;
-        case ::com::sun::star::chart::ChartRegressionCurveType_LOGARITHM:
+        case css::chart::ChartRegressionCurveType_LOGARITHM:
             eRet = CHREGRESS_LOG;
             break;
-        case ::com::sun::star::chart::ChartRegressionCurveType_EXPONENTIAL:
+        case css::chart::ChartRegressionCurveType_EXPONENTIAL:
             eRet = CHREGRESS_EXP;
             break;
-        case ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL:
-        //case ::com::sun::star::chart::ChartRegressionCurveType_MOVING_AVERAGE:
-        case ::com::sun::star::chart::ChartRegressionCurveType_POWER:
+        case css::chart::ChartRegressionCurveType_POLYNOMIAL:
+        //case css::chart::ChartRegressionCurveType_MOVING_AVERAGE:
+        case css::chart::ChartRegressionCurveType_POWER:
             eRet = CHREGRESS_POWER;
             break;
         default:
@@ -114,7 +114,7 @@ SvxChartRegress lcl_getRegressionType( ::com::sun::star::chart::ChartRegressionC
 
 sal_Int32 lcl_getErrorBarStyle( const uno::Reference< beans::XPropertySet >& xErrorBarProperties )
 {
-    sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+    sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
     if(xErrorBarProperties.is())
         xErrorBarProperties->getPropertyValue( "ErrorBarStyle" ) >>= nStyle;
     return nStyle;
@@ -193,7 +193,7 @@ protected:
             //default in new and old api are different
             xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::makeAny(false) );
             xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::makeAny(false) );
-            xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::makeAny(::com::sun::star::chart::ErrorBarStyle::NONE) );
+            xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::makeAny(css::chart::ErrorBarStyle::NONE) );
             xSeriesPropertySet->setPropertyValue( CHART_UNONAME_ERRORBAR_Y , uno::makeAny( xErrorBarProperties ) );
         }
         return xErrorBarProperties;
@@ -234,7 +234,7 @@ double WrappedConstantErrorLowProperty::getValueFromSeries( const Reference< bea
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        if( ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
             xErrorBarProperties->getPropertyValue( "NegativeError" ) >>= aRet;
         else
             m_aOuterValue >>= aRet;
@@ -248,7 +248,7 @@ void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue = uno::makeAny( aNewValue );
-        if( ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "NegativeError", m_aOuterValue );
         }
@@ -288,7 +288,7 @@ double WrappedConstantErrorHighProperty::getValueFromSeries( const Reference< be
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        if( ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
             xErrorBarProperties->getPropertyValue( "PositiveError" ) >>= aRet;
         else
             m_aOuterValue >>= aRet;
@@ -302,7 +302,7 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue = uno::makeAny( aNewValue );
-        if( ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
         }
@@ -354,11 +354,11 @@ void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XProper
 
 //PROP_CHART_STATISTIC_ERROR_CATEGORY
 // deprecated, replaced by ErrorBarStyle
-class WrappedErrorCategoryProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorCategory >
+class WrappedErrorCategoryProperty : public WrappedStatisticProperty< css::chart::ChartErrorCategory >
 {
 public:
-    virtual ::com::sun::star::chart::ChartErrorCategory getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorCategory& aNewValue ) const override;
+    virtual css::chart::ChartErrorCategory getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartErrorCategory& aNewValue ) const override;
 
     explicit WrappedErrorCategoryProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                            tSeriesOrDiagramPropertyType ePropertyType );
@@ -368,46 +368,46 @@ public:
 WrappedErrorCategoryProperty::WrappedErrorCategoryProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorCategory >( "ErrorCategory"
-            , uno::makeAny( ::com::sun::star::chart::ChartErrorCategory_NONE ), spChart2ModelContact, ePropertyType  )
+        : WrappedStatisticProperty< css::chart::ChartErrorCategory >( "ErrorCategory"
+            , uno::makeAny( css::chart::ChartErrorCategory_NONE ), spChart2ModelContact, ePropertyType  )
 {
 }
 WrappedErrorCategoryProperty::~WrappedErrorCategoryProperty()
 {
 }
 
-::com::sun::star::chart::ChartErrorCategory WrappedErrorCategoryProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
+css::chart::ChartErrorCategory WrappedErrorCategoryProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
 {
-    ::com::sun::star::chart::ChartErrorCategory aRet = ::com::sun::star::chart::ChartErrorCategory_NONE;
+    css::chart::ChartErrorCategory aRet = css::chart::ChartErrorCategory_NONE;
     m_aDefaultValue >>= aRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+        sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
         xErrorBarProperties->getPropertyValue( "ErrorBarStyle" ) >>= nStyle;
         switch(nStyle)
         {
-            case ::com::sun::star::chart::ErrorBarStyle::NONE:
-                aRet = ::com::sun::star::chart::ChartErrorCategory_NONE;
+            case css::chart::ErrorBarStyle::NONE:
+                aRet = css::chart::ChartErrorCategory_NONE;
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::VARIANCE:
-                aRet = ::com::sun::star::chart::ChartErrorCategory_VARIANCE;
+            case css::chart::ErrorBarStyle::VARIANCE:
+                aRet = css::chart::ChartErrorCategory_VARIANCE;
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION:
-                aRet = ::com::sun::star::chart::ChartErrorCategory_STANDARD_DEVIATION;
+            case css::chart::ErrorBarStyle::STANDARD_DEVIATION:
+                aRet = css::chart::ChartErrorCategory_STANDARD_DEVIATION;
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE:
-                aRet = ::com::sun::star::chart::ChartErrorCategory_CONSTANT_VALUE;
+            case css::chart::ErrorBarStyle::ABSOLUTE:
+                aRet = css::chart::ChartErrorCategory_CONSTANT_VALUE;
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::RELATIVE:
-                aRet = ::com::sun::star::chart::ChartErrorCategory_PERCENT;
+            case css::chart::ErrorBarStyle::RELATIVE:
+                aRet = css::chart::ChartErrorCategory_PERCENT;
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
-                aRet = ::com::sun::star::chart::ChartErrorCategory_ERROR_MARGIN;
+            case css::chart::ErrorBarStyle::ERROR_MARGIN:
+                aRet = css::chart::ChartErrorCategory_ERROR_MARGIN;
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::STANDARD_ERROR:
+            case css::chart::ErrorBarStyle::STANDARD_ERROR:
                 break;
-            case ::com::sun::star::chart::ErrorBarStyle::FROM_DATA:
+            case css::chart::ErrorBarStyle::FROM_DATA:
                 break;
             default:
                 break;
@@ -415,7 +415,7 @@ WrappedErrorCategoryProperty::~WrappedErrorCategoryProperty()
     }
     return aRet;
 }
-void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorCategory& aNewValue ) const
+void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartErrorCategory& aNewValue ) const
 {
     if( !xSeriesPropertySet.is() )
         return;
@@ -423,26 +423,26 @@ void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPr
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        sal_Int32 nNewStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+        sal_Int32 nNewStyle = css::chart::ErrorBarStyle::NONE;
         switch(aNewValue)
         {
-            case ::com::sun::star::chart::ChartErrorCategory_NONE:
-                nNewStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+            case css::chart::ChartErrorCategory_NONE:
+                nNewStyle = css::chart::ErrorBarStyle::NONE;
                 break;
-            case ::com::sun::star::chart::ChartErrorCategory_VARIANCE:
-                nNewStyle = ::com::sun::star::chart::ErrorBarStyle::VARIANCE;
+            case css::chart::ChartErrorCategory_VARIANCE:
+                nNewStyle = css::chart::ErrorBarStyle::VARIANCE;
                 break;
-            case ::com::sun::star::chart::ChartErrorCategory_STANDARD_DEVIATION:
-                nNewStyle = ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION;
+            case css::chart::ChartErrorCategory_STANDARD_DEVIATION:
+                nNewStyle = css::chart::ErrorBarStyle::STANDARD_DEVIATION;
                 break;
-            case ::com::sun::star::chart::ChartErrorCategory_CONSTANT_VALUE:
-                nNewStyle = ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE;
+            case css::chart::ChartErrorCategory_CONSTANT_VALUE:
+                nNewStyle = css::chart::ErrorBarStyle::ABSOLUTE;
                 break;
-            case ::com::sun::star::chart::ChartErrorCategory_PERCENT:
-                nNewStyle = ::com::sun::star::chart::ErrorBarStyle::RELATIVE;
+            case css::chart::ChartErrorCategory_PERCENT:
+                nNewStyle = css::chart::ErrorBarStyle::RELATIVE;
                 break;
-            case ::com::sun::star::chart::ChartErrorCategory_ERROR_MARGIN:
-                nNewStyle = ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN;
+            case css::chart::ChartErrorCategory_ERROR_MARGIN:
+                nNewStyle = css::chart::ErrorBarStyle::ERROR_MARGIN;
                 break;
             default:
                 break;
@@ -484,7 +484,7 @@ double WrappedPercentageErrorProperty::getValueFromSeries( const Reference< bean
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        if( ::com::sun::star::chart::ErrorBarStyle::RELATIVE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( css::chart::ErrorBarStyle::RELATIVE == lcl_getErrorBarStyle( xErrorBarProperties ) )
             xErrorBarProperties->getPropertyValue( "PositiveError" ) >>= aRet;
         else
             m_aOuterValue >>= aRet;
@@ -497,7 +497,7 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue = uno::makeAny( aNewValue );
-        if( ::com::sun::star::chart::ErrorBarStyle::RELATIVE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( css::chart::ErrorBarStyle::RELATIVE == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
             xErrorBarProperties->setPropertyValue( "NegativeError" , m_aOuterValue );
@@ -538,7 +538,7 @@ double WrappedErrorMarginProperty::getValueFromSeries( const Reference< beans::X
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        if( ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( css::chart::ErrorBarStyle::ERROR_MARGIN == lcl_getErrorBarStyle( xErrorBarProperties ) )
             xErrorBarProperties->getPropertyValue( "PositiveError" ) >>= aRet;
         else
             m_aOuterValue >>= aRet;
@@ -551,7 +551,7 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue = uno::makeAny( aNewValue );
-        if( ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( css::chart::ErrorBarStyle::ERROR_MARGIN == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
             xErrorBarProperties->setPropertyValue( "NegativeError" , m_aOuterValue );
@@ -560,11 +560,11 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
 }
 
 //PROP_CHART_STATISTIC_ERROR_INDICATOR
-class WrappedErrorIndicatorProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorIndicatorType >
+class WrappedErrorIndicatorProperty : public WrappedStatisticProperty< css::chart::ChartErrorIndicatorType >
 {
 public:
-    virtual ::com::sun::star::chart::ChartErrorIndicatorType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorIndicatorType& aNewValue ) const override;
+    virtual css::chart::ChartErrorIndicatorType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartErrorIndicatorType& aNewValue ) const override;
 
     explicit WrappedErrorIndicatorProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                             tSeriesOrDiagramPropertyType ePropertyType );
@@ -574,17 +574,17 @@ public:
 WrappedErrorIndicatorProperty::WrappedErrorIndicatorProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorIndicatorType >( "ErrorIndicator"
-            , uno::makeAny( ::com::sun::star::chart::ChartErrorIndicatorType_NONE ), spChart2ModelContact, ePropertyType  )
+        : WrappedStatisticProperty< css::chart::ChartErrorIndicatorType >( "ErrorIndicator"
+            , uno::makeAny( css::chart::ChartErrorIndicatorType_NONE ), spChart2ModelContact, ePropertyType  )
 {
 }
 WrappedErrorIndicatorProperty::~WrappedErrorIndicatorProperty()
 {
 }
 
-::com::sun::star::chart::ChartErrorIndicatorType WrappedErrorIndicatorProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
+css::chart::ChartErrorIndicatorType WrappedErrorIndicatorProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
 {
-    ::com::sun::star::chart::ChartErrorIndicatorType aRet = ::com::sun::star::chart::ChartErrorIndicatorType_NONE;
+    css::chart::ChartErrorIndicatorType aRet = css::chart::ChartErrorIndicatorType_NONE;
     m_aDefaultValue >>= aRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
@@ -595,15 +595,15 @@ WrappedErrorIndicatorProperty::~WrappedErrorIndicatorProperty()
         xErrorBarProperties->getPropertyValue( "ShowNegativeError" ) >>= bNegative;
 
         if( bPositive && bNegative )
-            aRet = ::com::sun::star::chart::ChartErrorIndicatorType_TOP_AND_BOTTOM;
+            aRet = css::chart::ChartErrorIndicatorType_TOP_AND_BOTTOM;
         else if( bPositive && !bNegative )
-            aRet = ::com::sun::star::chart::ChartErrorIndicatorType_UPPER;
+            aRet = css::chart::ChartErrorIndicatorType_UPPER;
         else if( !bPositive && bNegative )
-            aRet = ::com::sun::star::chart::ChartErrorIndicatorType_LOWER;
+            aRet = css::chart::ChartErrorIndicatorType_LOWER;
     }
     return aRet;
 }
-void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorIndicatorType& aNewValue ) const
+void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartErrorIndicatorType& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
@@ -612,14 +612,14 @@ void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XP
         bool bNegative = false;
         switch( aNewValue )
         {
-            case ::com::sun::star::chart::ChartErrorIndicatorType_TOP_AND_BOTTOM:
+            case css::chart::ChartErrorIndicatorType_TOP_AND_BOTTOM:
                 bPositive = true;
                 bNegative = true;
                 break;
-            case ::com::sun::star::chart::ChartErrorIndicatorType_UPPER:
+            case css::chart::ChartErrorIndicatorType_UPPER:
                 bPositive = true;
                 break;
-            case ::com::sun::star::chart::ChartErrorIndicatorType_LOWER:
+            case css::chart::ChartErrorIndicatorType_LOWER:
                 bNegative = true;
                 break;
             default:
@@ -648,7 +648,7 @@ WrappedErrorBarStyleProperty::WrappedErrorBarStyleProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< sal_Int32 >( "ErrorBarStyle"
-            , uno::makeAny( ::com::sun::star::chart::ErrorBarStyle::NONE ), spChart2ModelContact, ePropertyType  )
+            , uno::makeAny( css::chart::ErrorBarStyle::NONE ), spChart2ModelContact, ePropertyType  )
 {
 }
 WrappedErrorBarStyleProperty::~WrappedErrorBarStyleProperty()
@@ -657,7 +657,7 @@ WrappedErrorBarStyleProperty::~WrappedErrorBarStyleProperty()
 
 sal_Int32 WrappedErrorBarStyleProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
 {
-    sal_Int32 nRet = ::com::sun::star::chart::ErrorBarStyle::NONE;
+    sal_Int32 nRet = css::chart::ErrorBarStyle::NONE;
     m_aDefaultValue >>= nRet;
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
@@ -813,11 +813,11 @@ void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< be
 }
 
 //PROP_CHART_STATISTIC_REGRESSION_CURVES
-class WrappedRegressionCurvesProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartRegressionCurveType >
+class WrappedRegressionCurvesProperty : public WrappedStatisticProperty< css::chart::ChartRegressionCurveType >
 {
 public:
-    virtual ::com::sun::star::chart::ChartRegressionCurveType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartRegressionCurveType & aNewValue ) const override;
+    virtual css::chart::ChartRegressionCurveType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartRegressionCurveType & aNewValue ) const override;
 
     explicit WrappedRegressionCurvesProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                               tSeriesOrDiagramPropertyType ePropertyType );
@@ -827,7 +827,7 @@ public:
 WrappedRegressionCurvesProperty::WrappedRegressionCurvesProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedStatisticProperty< ::com::sun::star::chart::ChartRegressionCurveType >( "RegressionCurves"
+        : WrappedStatisticProperty< css::chart::ChartRegressionCurveType >( "RegressionCurves"
         , lcl_getRegressionDefault(), spChart2ModelContact, ePropertyType  )
 {
 }
@@ -836,9 +836,9 @@ WrappedRegressionCurvesProperty::~WrappedRegressionCurvesProperty()
 {
 }
 
-::com::sun::star::chart::ChartRegressionCurveType WrappedRegressionCurvesProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
+css::chart::ChartRegressionCurveType WrappedRegressionCurvesProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
 {
-    ::com::sun::star::chart::ChartRegressionCurveType aRet;
+    css::chart::ChartRegressionCurveType aRet;
     m_aDefaultValue >>= aRet;
     uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropertySet, uno::UNO_QUERY );
     if( xRegCnt.is() )
@@ -848,7 +848,7 @@ WrappedRegressionCurvesProperty::~WrappedRegressionCurvesProperty()
     }
     return aRet;
 }
-void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartRegressionCurveType& aNewValue ) const
+void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartRegressionCurveType& aNewValue ) const
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeriesPropertySet, uno::UNO_QUERY );
     uno::Reference< chart2::XRegressionCurve > xRegressionCurve( xSeriesPropertySet, uno::UNO_QUERY );
@@ -1012,7 +1012,7 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
     rOutProperties.push_back(
         Property( "ErrorCategory",
                   PROP_CHART_STATISTIC_ERROR_CATEGORY,
-                  cppu::UnoType<com::sun::star::chart::ChartErrorCategory>::get(),
+                  cppu::UnoType<css::chart::ChartErrorCategory>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
@@ -1036,7 +1036,7 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
     rOutProperties.push_back(
         Property( "ErrorIndicator",
                   PROP_CHART_STATISTIC_ERROR_INDICATOR,
-                  cppu::UnoType<com::sun::star::chart::ChartErrorIndicatorType>::get(),
+                  cppu::UnoType<css::chart::ChartErrorIndicatorType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
@@ -1054,7 +1054,7 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
     rOutProperties.push_back(
         Property( "RegressionCurves",
                   PROP_CHART_STATISTIC_REGRESSION_CURVES,
-                  cppu::UnoType<com::sun::star::chart::ChartRegressionCurveType>::get(),
+                  cppu::UnoType<css::chart::ChartRegressionCurveType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

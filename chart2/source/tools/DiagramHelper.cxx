@@ -1486,8 +1486,7 @@ bool DiagramHelper::isSupportingFloorAndWall( const Reference<
     return true;
 }
 
-bool DiagramHelper::isPieOrDonutChart( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram >& xDiagram )
+bool DiagramHelper::isPieOrDonutChart( const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
 {
     uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex(
         xDiagram, 0 ) );
@@ -1566,7 +1565,7 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
             const Reference< chart2::XDiagram > & xDiagram,
             const Reference< chart2::XChartType >& xChartType )
 {
-    sal_Int32 nResult = ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP;
+    sal_Int32 nResult = css::chart::MissingValueTreatment::LEAVE_GAP;
     uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(
                 ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
@@ -1702,7 +1701,7 @@ bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
     if( nCurrentODFVersion > SvtSaveOptions::ODFVER_012 )
     {
-        uno::Reference< ::com::sun::star::chart::XDiagramPositioning > xDiagramPositioning( rModel.getFirstDiagram(), uno::UNO_QUERY );
+        uno::Reference< css::chart::XDiagramPositioning > xDiagramPositioning( rModel.getFirstDiagram(), uno::UNO_QUERY );
         if( xDiagramPositioning.is() && ( bConvertAlsoFromAutoPositioning || !xDiagramPositioning->isAutomaticDiagramPositioning() )
                 && !xDiagramPositioning->isExcludingDiagramPositioning() )
         {

@@ -33,10 +33,8 @@ class UndoCommandDispatch : public CommandDispatch
 {
 public:
     explicit UndoCommandDispatch(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext,
+        const css::uno::Reference< css::frame::XModel > & xModel );
     virtual ~UndoCommandDispatch();
 
     // late initialisation, especially for adding as listener
@@ -45,9 +43,9 @@ public:
 protected:
     // ____ XDispatch ____
     virtual void SAL_CALL dispatch(
-        const ::com::sun::star::util::URL& URL,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::util::URL& URL,
+        const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ WeakComponentImplHelperBase ____
     /// is called when this is disposed
@@ -55,18 +53,16 @@ protected:
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void fireStatusEvent(
         const OUString & rURL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener ) override;
+        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
 
 private:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > m_xModel;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XUndoManager > m_xUndoManager;
+    css::uno::Reference< css::frame::XModel > m_xModel;
+    css::uno::Reference< css::document::XUndoManager > m_xUndoManager;
 };
 
 } //  namespace chart
