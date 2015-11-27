@@ -63,6 +63,7 @@
 #include "ring.hxx"
 #include "calbck.hxx"
 #include "pagedesc.hxx"
+#include "calc.hxx"
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
@@ -1213,6 +1214,16 @@ void SwDocTest::testFormulas()
     aFormula.PtrToBoxNm(pTable);
 
     CPPUNIT_ASSERT_EQUAL(OUString("<?>+<Table1.?>"), aFormula.GetFormula());
+
+    // tdf#61228: Evaluating non-defined function should return an error
+    SwCalc aCalc(*m_pDoc);
+    SwSbxValue val = aCalc.Calculate("foobar()");
+    CPPUNIT_ASSERT(aCalc.IsCalcError() && val.IsVoidValue() && val.IsDouble());
+    CPPUNIT_ASSERT_EQUAL(DBL_MAX, val.GetDouble());
+    // Evaluating non-defined variable should return 0 without an error
+    val = aCalc.Calculate("foobar");
+    CPPUNIT_ASSERT(!aCalc.IsCalcError() && val.IsVoidValue() && val.IsLong());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), val.GetLong());
 }
 
 void SwDocTest::testMarkMove()
