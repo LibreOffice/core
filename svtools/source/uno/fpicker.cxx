@@ -115,8 +115,8 @@ Sequence< OUString > FilePicker_getSupportedServiceNames()
  */
 static OUString FolderPicker_getSystemPickerServiceName()
 {
-    OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
 #ifdef UNX
+    OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
     if (aDesktopEnvironment.equalsIgnoreAsciiCase("tde"))
         return OUString("com.sun.star.ui.dialogs.TDEFolderPicker");
     else if (aDesktopEnvironment.equalsIgnoreAsciiCase("kde"))
