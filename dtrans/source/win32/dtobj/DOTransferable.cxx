@@ -224,7 +224,6 @@ void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
 //inline
 DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
 {
-    DataFlavor aFlavor;
     LCID lcid = 0;
 
     // for non-unicode text format we must provid a locale to get
