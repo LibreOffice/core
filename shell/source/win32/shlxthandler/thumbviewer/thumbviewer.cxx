@@ -117,7 +117,7 @@ namespace internal
     }
 }
 
-class StreamOnZipBuffer : public IStream
+class StreamOnZipBuffer final : public IStream
 {
 public:
     StreamOnZipBuffer(const ZipFile::ZipContentBuffer_t& zip_buffer);
