@@ -48,7 +48,7 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
         m_bDocumentLoad( false ),
         m_rConfigItem(rItem),
         m_sStarting(        SW_RES( ST_STARTING      )),
-        m_sDocumentType(    SW_RES( ST_DOCUMETNTYPE   )),
+        m_sDocumentType(    SW_RES( ST_DOCUMENTTYPE   )),
         m_sAddressBlock(    SW_RES( ST_ADDRESSBLOCK   )),
         m_sAddressList(     SW_RES( ST_ADDRESSLIST )),
         m_sGreetingsLine(   SW_RES( ST_GREETINGSLINE   )),

@@ -24,7 +24,7 @@ String ST_STARTING
     Text [ en-US ] = "Select starting document";
 };
 
-String ST_DOCUMETNTYPE
+String ST_DOCUMENTTYPE
 {
     Text [ en-US ] = "Select document type";
 };
