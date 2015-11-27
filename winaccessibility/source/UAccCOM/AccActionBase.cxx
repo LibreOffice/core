@@ -297,12 +297,12 @@ void CAccActionBase::GetkeyBindingStrByXkeyBinding( const Sequence< KeyStroke > 
  *
  * @param    key    the key code.
  */
-OLECHAR* CAccActionBase::getOLECHARFromKeyCode(long key)
+OLECHAR const * CAccActionBase::getOLECHARFromKeyCode(long key)
 {
     static struct keyMap
     {
         int keyCode;
-        OLECHAR* key;
+        OLECHAR const * key;
     }
     map[] =
         {

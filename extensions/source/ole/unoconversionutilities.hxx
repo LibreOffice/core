@@ -1973,7 +1973,6 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
                                      "Conversion of dispatch object to Sequence failed!");
 
         DISPID dispid;
-        OUString sindex;
         DISPPARAMS param= {0,0,0,0};
         CComVariant result;
 

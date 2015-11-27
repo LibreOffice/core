@@ -35,11 +35,24 @@
 #include <prewin.h>
 #include <windows.h>
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wall"
+#pragma clang diagnostic ignored "-Wattributes"
+#pragma clang diagnostic ignored "-Wdelete-incomplete"
+#pragma clang diagnostic ignored "-Wint-to-pointer-cast"
+#pragma clang diagnostic ignored "-Winvalid-noreturn"
+#pragma clang diagnostic ignored "-Wmicrosoft"
+#pragma clang diagnostic ignored "-Wnon-pod-varargs"
+#endif
 #include <atlbase.h>
 // You may derive a class from CComModule and use it if you want to override
 // something, but do not change the name of _Module
 extern CComModule _Module;
 #include <atlcom.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 #include <postwin.h>
 #undef OPAQUE
 

@@ -799,7 +799,7 @@ cleanup:
     return err;
 }
 
-int DNSSD_API DNSServiceRefSockFD(DNSServiceRef sdRef)
+dnssd_sock_t DNSSD_API DNSServiceRefSockFD(DNSServiceRef sdRef)
 {
     if (!sdRef) { syslog(LOG_WARNING, "dnssd_clientstub DNSServiceRefSockFD called with NULL DNSServiceRef"); return dnssd_InvalidSocket; }
 
@@ -816,7 +816,7 @@ int DNSSD_API DNSServiceRefSockFD(DNSServiceRef sdRef)
         return dnssd_InvalidSocket;
     }
 
-    return (int) sdRef->sockfd;
+    return sdRef->sockfd;
 }
 
 #if _DNS_SD_LIBDISPATCH
@@ -2025,7 +2025,7 @@ DNSServiceErrorType DNSSD_API DNSServiceSetDispatchQueue
     dispatch_queue_t queue
 )
 {
-    int dnssd_fd  = DNSServiceRefSockFD(service);
+    dnssd_sock_t dnssd_fd  = DNSServiceRefSockFD(service);
     if (dnssd_fd == dnssd_InvalidSocket) return kDNSServiceErr_BadParam;
     if (!queue)
     {

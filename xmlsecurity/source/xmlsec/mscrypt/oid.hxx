@@ -21,8 +21,8 @@
 #define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_OID_HXX
 
 typedef struct {
-    char *oid;
-    char *desc;
+    char const *oid;
+    char const *desc;
 } OIDItem;
 
 OIDItem OIDs[] = {

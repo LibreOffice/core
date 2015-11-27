@@ -109,7 +109,7 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nMode )
 
     SetBufferSize( 8192 );
     // convert URL to SystemPath, if necessary
-    OUString aFileName, aNormPath;
+    OUString aFileName;
 
     if ( FileBase::getSystemPathFromFileURL( rFileName, aFileName ) != FileBase::E_None )
         aFileName = rFileName;

@@ -68,7 +68,7 @@ public:
 
 protected:
 
-    static OLECHAR* getOLECHARFromKeyCode(long key);
+    static OLECHAR const * getOLECHARFromKeyCode(long key);
 
     css::uno::Reference<css::accessibility::XAccessibleAction> pRXAct;
 

@@ -541,12 +541,6 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
         {
             // search the best matching type
             OExtendedTypeInfo* pInfo = aIter->second;
-    #ifdef DBG_UTIL
-            OUString sDBTypeName = pInfo->aSimpleType.aTypeName;
-            sal_Int32       nDBTypePrecision = pInfo->aSimpleType.nPrecision;   (void)nDBTypePrecision;
-            sal_Int32       nDBTypeScale = pInfo->aSimpleType.nMaximumScale;    (void)nDBTypeScale;
-            sal_Int32       nAdoType = pInfo->eType;                            (void)nAdoType;
-    #endif
             if  (   (   !_sTypeName.getLength()
                     ||  (pInfo->aSimpleType.aTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     )
