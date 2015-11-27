@@ -212,49 +212,33 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
            std::exception)
 {
     SolarMutexGuard aGuard;
-    if(IsValid() && !rURL.isEmpty())
-    {
-        bool    bLoadStyleText = true;
-        bool    bLoadStylePage = true;
-        bool    bLoadStyleOverwrite = true;
-        bool    bLoadStyleNumbering = true;
-        bool    bLoadStyleFrame = true;
-
-        int nCount = aOptions.getLength();
-        const beans::PropertyValue* pArray = aOptions.getConstArray();
-        for(int i = 0; i < nCount; i++)
-        {
-            const uno::Any* pVal = &pArray[i].Value;
-            if( pVal->getValueType() == cppu::UnoType<bool>::get() )
-            {
-                const OUString sName = pArray[i].Name;
-                bool bVal = *static_cast<sal_Bool const *>(pVal->getValue());
-                if( sName == UNO_NAME_OVERWRITE_STYLES )
-                    bLoadStyleOverwrite = bVal;
-                else if( sName == UNO_NAME_LOAD_NUMBERING_STYLES )
-                    bLoadStyleNumbering = bVal;
-                else if( sName == UNO_NAME_LOAD_PAGE_STYLES )
-                    bLoadStylePage = bVal;
-                else if( sName == UNO_NAME_LOAD_FRAME_STYLES )
-                    bLoadStyleFrame = bVal;
-                else if( sName == UNO_NAME_LOAD_TEXT_STYLES )
-                    bLoadStyleText = bVal;
-            }
-        }
-
-        SwgReaderOption aOpt;
-        aOpt.SetFrameFormats( bLoadStyleFrame );
-        aOpt.SetTextFormats( bLoadStyleText );
-        aOpt.SetPageDescs( bLoadStylePage );
-        aOpt.SetNumRules( bLoadStyleNumbering );
-        aOpt.SetMerge( !bLoadStyleOverwrite );
-
-        sal_uLong nErr = m_pDocShell->LoadStylesFromFile( rURL, aOpt, true );
-        if( nErr )
-            throw io::IOException();
-    }
-    else
+    if(!IsValid() || rURL.isEmpty())
         throw uno::RuntimeException();
+    SwgReaderOption aOpt;
+    aOpt.SetFrameFormats(true);
+    aOpt.SetTextFormats(true);
+    aOpt.SetPageDescs(true);
+    aOpt.SetNumRules(true);
+    aOpt.SetMerge(false);
+    for(const auto& rProperty: aOptions)
+    {
+        if(rProperty.Value.getValueType() != cppu::UnoType<bool>::get())
+            continue;
+        const bool bValue = rProperty.Value.get<bool>();
+        if(rProperty.Name == UNO_NAME_OVERWRITE_STYLES)
+            aOpt.SetMerge(!bValue);
+        else if(rProperty.Name == UNO_NAME_LOAD_NUMBERING_STYLES)
+            aOpt.SetNumRules(bValue);
+        else if(rProperty.Name == UNO_NAME_LOAD_PAGE_STYLES)
+            aOpt.SetPageDescs(bValue);
+        else if(rProperty.Name == UNO_NAME_LOAD_FRAME_STYLES)
+            aOpt.SetFrameFormats(bValue);
+        else if(rProperty.Name == UNO_NAME_LOAD_TEXT_STYLES)
+            aOpt.SetTextFormats(bValue);
+    }
+    const sal_uLong nErr = m_pDocShell->LoadStylesFromFile( rURL, aOpt, true );
+    if(nErr)
+        throw io::IOException();
 }
 
 uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
