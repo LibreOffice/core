@@ -148,9 +148,7 @@ public:
 };
 
 OUString SwXStyleFamilies::getImplementationName() throw( uno::RuntimeException, std::exception )
-{
-    return OUString("SwXStyleFamilies");
-}
+    { return {"SwXStyleFamilies"}; }
 
 sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
 {
@@ -158,10 +156,7 @@ sal_Bool SwXStyleFamilies::supportsService(const OUString& rServiceName) throw( 
 }
 
 uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
-{
-    uno::Sequence<OUString> aRet { "com.sun.star.style.StyleFamilies" };
-    return aRet;
-}
+    { return { "com.sun.star.style.StyleFamilies" }; }
 
 SwXStyleFamilies::SwXStyleFamilies(SwDocShell& rDocShell) :
     SwUnoCollection(rDocShell.GetDoc()),
