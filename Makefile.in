@@ -368,7 +368,8 @@ $(foreach ide,\
 	vs2013 \
 	vim \
 	xcode \
-	qtcreator,\
+	qtcreator \
+        eclipsecdt,\
 $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
 endif # MAKE_RESTARTS
