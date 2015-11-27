@@ -352,35 +352,31 @@ sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_CHAR>(const SwDoc &rDoc, OUString
 }
 
 template<>
-sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PARA>(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PARA>(const SwDoc &rDoc, OUString* pString, sal_Int32 nIndex)
 {
+    constexpr sal_Int32 nBaseCount =
+            RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN +
+            RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
+            RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
+            RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
+            RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
+            RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN;
+    nIndex -= nBaseCount;
     sal_Int32 nCount = 0;
-    const sal_Int32 nBaseCount =
-                            RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN +
-                            RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
-                            RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
-                            RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
-                            RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
-                            RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN;
-    nIndex = nIndex - nBaseCount;
-    const size_t nArrLen = rDoc.GetTextFormatColls()->size();
-    for ( size_t i = 0; i < nArrLen; ++i )
+    for(auto pColl : *rDoc.GetTextFormatColls())
     {
-        SwTextFormatColl * pColl = (*rDoc.GetTextFormatColls())[i];
-        if ( pColl->IsDefault() )
+        if(pColl->IsDefault())
             continue;
-        if ( IsPoolUserFormat ( pColl->GetPoolFormatId() ) )
+        if(!IsPoolUserFormat(pColl->GetPoolFormatId()))
+            continue;
+        if(nIndex == nCount)
         {
-            if ( nIndex == nCount )
-            {
-                *pString = pColl->GetName();
-                break;
-            }
-            nCount++;
+            *pString = pColl->GetName();
+            break;
         }
+        ++nCount;
     }
-    nCount += nBaseCount;
-    return nCount;
+    return nCount + nBaseCount;
 }
 
 template<>
