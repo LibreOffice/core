@@ -104,6 +104,8 @@ struct GetNSSInitStaticMutex
     }
 };
 
+#ifdef XMLSEC_CRYPTO_NSS
+
 void deleteRootsModule()
 {
     SECMODModule *RootsModule = nullptr;
@@ -216,6 +218,8 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
     SAL_INFO("xmlsecurity.xmlsec", "No Mozilla profile found");
     return OString();
 }
+
+#endif
 
 //Older versions of Firefox (FF), for example FF2, and Thunderbird (TB) 2 write
 //the roots certificate module (libnssckbi.so), which they use, into the
