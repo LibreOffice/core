@@ -343,17 +343,12 @@ void SalData::initKeyCodeMap()
 
     initKey( '+', KEY_ADD );
     initKey( '-', KEY_SUBTRACT );
-    initKey( '*', KEY_MULTIPLY );
     initKey( '/', KEY_DIVIDE );
     initKey( '.', KEY_POINT );
     initKey( ',', KEY_COMMA );
     initKey( '<', KEY_LESS );
     initKey( '>', KEY_GREATER );
     initKey( '=', KEY_EQUAL );
-    initKey( '~', KEY_TILDE );
-    initKey( '`', KEY_QUOTELEFT );
-    initKey( '[', KEY_BRACKETLEFT );
-    initKey( ']', KEY_BRACKETRIGHT );
     initKey( ';', KEY_SEMICOLON );
     initKey( '\'', KEY_QUOTERIGHT );
 }
