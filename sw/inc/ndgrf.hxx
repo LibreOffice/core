@@ -51,6 +51,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
 
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
+    bool mbUpdateLinkInProgress;
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
     bool mbIsStreamReadOnly;
 
@@ -198,6 +199,8 @@ public:
 
     boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer() { return mpThreadConsumer;}
     bool IsLinkedInputStreamReady() const { return mbLinkedInputStreamReady;}
+    bool IsUpdateLinkInProgress() const { return mbUpdateLinkInProgress;}
+    void SetUpdateLinkInProgress(bool b) { mbUpdateLinkInProgress = b; }
     void TriggerAsyncRetrieveInputStream();
     void ApplyInputStream(
         com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
