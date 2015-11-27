@@ -2673,7 +2673,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
         }
 
         // #i76520# Emulate non-splitting tables
-        if ( m_bOutTable )
+        if ( IsInTable() )
         {
             const SwTableNode* pTableNode = rNode.FindTableNode();
 
