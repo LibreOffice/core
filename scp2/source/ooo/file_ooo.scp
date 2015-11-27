@@ -48,7 +48,7 @@ File gid_File_Basic_User_Standard
     Name = "wizards_basicsrvstandard.filelist";
 End
 
-#if defined UNX
+#if defined UNX && !defined MACOSX
 
 File gid_File_Script_Gengal
     BIN_FILE_BODY;

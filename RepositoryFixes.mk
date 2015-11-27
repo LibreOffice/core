@@ -27,7 +27,9 @@ gb_Executable_FILENAMES := $(patsubst uno:uno,uno:uno.bin,$(gb_Executable_FILENA
 endif
 gb_Executable_FILENAMES := $(patsubst unopkg_bin:unopkg_bin%,unopkg_bin:unopkg$(if $(filter-out MACOSX,$(OS)),.bin),$(gb_Executable_FILENAMES))
 gb_Executable_FILENAMES := $(patsubst unopkg_com:unopkg_com%,unopkg_com:unopkg.com,$(gb_Executable_FILENAMES))
+ifneq ($(OS),MACOSX)
 gb_Executable_FILENAMES := $(patsubst gengal:gengal,gengal:gengal.bin,$(gb_Executable_FILENAMES))
+endif
 
 ifeq ($(OS),MACOSX)
 gb_Executable_FILENAMES := $(patsubst soffice_bin:soffice_bin,soffice_bin:soffice,$(gb_Executable_FILENAMES))
