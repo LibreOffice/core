@@ -112,13 +112,15 @@ bool SwFlowFrame::HasLockedFollow() const
     return false;
 }
 
-bool SwFlowFrame::IsKeepFwdMoveAllowed()
+bool SwFlowFrame::IsKeepFwdMoveAllowed( bool bIgnoreMyOwnKeepValue )
 {
     // If all the predecessors up to the first of the chain have
     // the 'keep' attribute set, and the first of the chain's
     // IsFwdMoveAllowed returns false, then we're not allowed to move.
     SwFrame *pFrame = &m_rThis;
     if ( !pFrame->IsInFootnote() )
+        if ( bIgnoreMyOwnKeepValue && pFrame->GetIndPrev() )
+            pFrame = pFrame->GetIndPrev();
         do
         {   if ( pFrame->GetAttrSet()->GetKeep().GetValue() )
                 pFrame = pFrame->GetIndPrev();
@@ -1699,13 +1701,13 @@ SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
 }
 
 /// Moves the Frame forward if it seems necessary regarding the current conditions and attributes.
-bool SwFlowFrame::CheckMoveFwd( bool& rbMakePage, bool bKeep, bool )
+bool SwFlowFrame::CheckMoveFwd( bool& rbMakePage, bool bKeep, bool, bool bIgnoreMyOwnKeepValue )
 {
     const SwFrame* pNxt = m_rThis.GetIndNext();
 
     if ( bKeep && //!bMovedBwd &&
          ( !pNxt || ( pNxt->IsTextFrame() && static_cast<const SwTextFrame*>(pNxt)->IsEmptyMaster() ) ) &&
-         ( nullptr != (pNxt = m_rThis.FindNext()) ) && IsKeepFwdMoveAllowed() )
+         ( nullptr != (pNxt = m_rThis.FindNext()) ) && IsKeepFwdMoveAllowed(bIgnoreMyOwnKeepValue) )
     {
         if( pNxt->IsSctFrame() )
         {   // Don't get fooled by empty SectionFrames
