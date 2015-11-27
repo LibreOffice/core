@@ -554,8 +554,6 @@ OUString getCacheFolder()
     return url;
 }
 
-OUString aCacheFolder = getCacheFolder();
-
 void writeToLog(SvStream& rStrm, const char* pKey, const OUString rVal)
 {
     rStrm.WriteCharPtr(pKey);
@@ -576,6 +574,8 @@ bool WinOpenGLDeviceInfo::isDeviceBlocked()
     SAL_INFO("vcl.opengl", maAdapterSubsysID);
     SAL_INFO("vcl.opengl", maDeviceKey);
     SAL_INFO("vcl.opengl", maDeviceString);
+
+    OUString aCacheFolder = getCacheFolder();
 
     OUString aCacheFile(aCacheFolder + "/opengl_device.log");
     SvFileStream aOpenGLLogFile(aCacheFile, StreamMode::WRITE);
