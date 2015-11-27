@@ -94,10 +94,10 @@ namespace
 {
     struct StyleFamilyEntry
     {
-        const SfxStyleFamily m_eFamily;
-        const SwGetPoolIdFromName m_aPoolId;
-        const OUString m_sName;
-        const sal_uInt32 m_nRedId;
+        SfxStyleFamily m_eFamily;
+        SwGetPoolIdFromName m_aPoolId;
+        OUString m_sName;
+        sal_uInt32 m_nRedId;
         StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const & sName, sal_uInt32 nResId)
                 : m_eFamily(eFamily)
                 , m_aPoolId(aPoolId)
