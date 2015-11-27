@@ -758,6 +758,10 @@ public:
     /// Fill a NfKeywordIndex table with keywords of a language/country
     void    FillKeywordTable( NfKeywordTable& rKeywords, LanguageType eLang );
 
+    /** Fill a NfKeywordIndex table with keywords usable in Excel export with
+        GetMappedFormatstring() */
+    void    FillKeywordTableForExcel( NfKeywordTable& rKeywords );
+
     /** Return a keyword for a language/country and NfKeywordIndex
         for XML import, to generate number format strings. */
     OUString GetKeyword( LanguageType eLnge, sal_uInt16 nIndex );
