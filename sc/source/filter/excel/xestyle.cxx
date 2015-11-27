@@ -1433,48 +1433,9 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNum
 
 namespace {
 
-OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberFormatter* xFormatter, NfKeywordTable* pKeywordTable)
+OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberFormatter* pFormatter, NfKeywordTable* pKeywordTable)
 {
-    OUString aFormatStr;
-
-    if( const SvNumberformat* pEntry = rRoot.GetFormatter().GetEntry( nScNumFmt ) )
-    {
-        if( pEntry->GetType() == css::util::NumberFormat::LOGICAL )
-        {
-            // build Boolean number format
-            Color* pColor = nullptr;
-            OUString aTemp;
-            const_cast< SvNumberformat* >( pEntry )->GetOutputString( 1.0, aTemp, &pColor );
-            aFormatStr += "\"" + aTemp + "\";\"" + aTemp + "\";\"";
-            const_cast< SvNumberformat* >( pEntry )->GetOutputString( 0.0, aTemp, &pColor );
-            aFormatStr += aTemp + "\"";
-        }
-        else
-        {
-            LanguageType eLang = pEntry->GetLanguage();
-            if( eLang != LANGUAGE_ENGLISH_US )
-            {
-                sal_Int32 nCheckPos;
-                short nType = css::util::NumberFormat::DEFINED;
-                sal_uInt32 nKey;
-                OUString aTemp( pEntry->GetFormatstring() );
-                xFormatter->PutandConvertEntry( aTemp, nCheckPos, nType, nKey, eLang, LANGUAGE_ENGLISH_US );
-                OSL_ENSURE( nCheckPos == 0, "XclExpNumFmtBuffer::WriteFormatRecord - format code not convertible" );
-                pEntry = xFormatter->GetEntry( nKey );
-            }
-
-            aFormatStr = pEntry->GetMappedFormatstring( *pKeywordTable, *xFormatter->GetLocaleData() );
-            if( aFormatStr == "Standard" )
-                aFormatStr = "General";
-        }
-    }
-    else
-    {
-        OSL_FAIL( "XclExpNumFmtBuffer::WriteFormatRecord - format not found" );
-        aFormatStr = "General";
-    }
-
-    return aFormatStr;
+    return rRoot.GetFormatter().GetFormatStringForExcel( nScNumFmt, *pKeywordTable, *pFormatter);
 }
 
 }
