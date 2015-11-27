@@ -4,7 +4,7 @@
 #include <string>
 #undef WB_LEFT
 #undef WB_RIGHT
-#include "mDNSResponder/dns_sd.h"
+#include <dns_sd.h>
 #include "ZeroconfService.hxx"
 
 namespace sd{

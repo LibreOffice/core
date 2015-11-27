@@ -2442,6 +2442,18 @@ gb_LinkTarget__use_coinmp :=
 
 endif # ENABLE_COINMP
 
+ifneq (,$(filter MDNSRESPONDER,$(BUILD_TYPE)))
+
+define gb_LinkTarget__use_mDNSResponder
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,mDNSResponder)/mDNSShared \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),mDNSResponder)
+endef
+
+endif # MDNSRESPONDER
+
 ifeq ($(ENABLE_GIO),TRUE)
 
 define gb_LinkTarget__use_gio
