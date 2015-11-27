@@ -49,54 +49,52 @@ public:
         If the given Axis could not be found or for another reason no correct output can be given false is returned.
      */
     virtual bool getExplicitValuesForAxis(
-        ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > xAxis
+        css::uno::Reference< css::chart2::XAxis > xAxis
         , ExplicitScaleData&  rExplicitScale
         , ExplicitIncrementData& rExplicitIncrement )=0;
 
     /** for rotated objects the shape size and position differs from the visible rectangle
         if bSnapRect is set to true you get the resulting visible position (left-top) and size
     */
-    virtual ::com::sun::star::awt::Rectangle
+    virtual css::awt::Rectangle
         getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect=false )=0;
 
-    virtual ::com::sun::star::awt::Rectangle getDiagramRectangleExcludingAxes()=0;
+    virtual css::awt::Rectangle getDiagramRectangleExcludingAxes()=0;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
         getShapeForCID( const OUString& rObjectCID )=0;
 
     virtual std::shared_ptr< DrawModelWrapper > getDrawModelWrapper() = 0;
 
-    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ExplicitValueProvider* getExplicitValueProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xChartView );
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static ExplicitValueProvider* getExplicitValueProvider( const css::uno::Reference< css::uno::XInterface >& xChartView );
 
-    static ::com::sun::star::awt::Rectangle
+    static css::awt::Rectangle
         addAxisTitleSizes(
                 ChartModel& rModel
-            , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface >& xChartView
-            , const ::com::sun::star::awt::Rectangle& rExcludingPositionAndSize );
+            , const css::uno::Reference< css::uno::XInterface >& xChartView
+            , const css::awt::Rectangle& rExcludingPositionAndSize );
 
-    static ::com::sun::star::awt::Rectangle
+    static css::awt::Rectangle
         substractAxisTitleSizes(
                 ChartModel& rModel
-            , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface >& xChartView
-            , const ::com::sun::star::awt::Rectangle& rPositionAndSizeIncludingTitles );
+            , const css::uno::Reference< css::uno::XInterface >& xChartView
+            , const css::awt::Rectangle& rPositionAndSizeIncludingTitles );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
-              const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument>& xChartDoc);
+              const css::uno::Reference< css::chart2::XAxis >& xAxis
+            , const css::uno::Reference< css::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
+            , const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc);
 
     static sal_Int32 getExplicitNumberFormatKeyForDataLabel(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries
+            const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp
+            , const css::uno::Reference< css::chart2::XDataSeries >& xSeries
             , sal_Int32 nPointIndex /*-1 for whole series*/
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
+            , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
     static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+            const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp
+            , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
 protected:
     ~ExplicitValueProvider() {}

@@ -118,8 +118,8 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
     {
         // event is addressed to this object
 
-        ::com::sun::star::uno::Any aEmpty;
-        ::com::sun::star::uno::Any aSelected;
+        css::uno::Any aEmpty;
+        css::uno::Any aSelected;
         aSelected <<= AccessibleStateType::SELECTED;
         switch( eEventType )
         {

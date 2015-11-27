@@ -52,14 +52,13 @@ namespace chart
 
 class XMLFilter : public
     ::cppu::WeakImplHelper<
-        ::com::sun::star::document::XFilter,
-        ::com::sun::star::document::XExporter,
-        ::com::sun::star::document::XImporter,
-        ::com::sun::star::lang::XServiceInfo >
+        css::document::XFilter,
+        css::document::XExporter,
+        css::document::XImporter,
+        css::lang::XServiceInfo >
 {
 public:
-    explicit XMLFilter( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::uno::XComponentContext > const & xContext );
+    explicit XMLFilter( css::uno::Reference< css::uno::XComponentContext > const & xContext );
     virtual ~XMLFilter();
 
     /// XServiceInfo declarations
@@ -76,25 +75,22 @@ public:
 protected:
     // ____ XFilter ____
     virtual sal_Bool SAL_CALL filter(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL cancel()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XImporter ____
     virtual void SAL_CALL setTargetDocument(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent >& Document )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::lang::XComponent >& Document )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XExporter ____
     virtual void SAL_CALL setSourceDocument(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent >& Document )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::lang::XComponent >& Document )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override;
 
     inline void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
 
@@ -105,57 +101,40 @@ protected:
     * \param _rMediaDescriptor
     * \param _rOutOASIS
     */
-    virtual void isOasisFormat(const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS );
+    virtual void isOasisFormat(const css::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS );
 
 private:
     // methods
 
     /// @return a warning code, or 0 for successful operation
-    sal_Int32 impl_Import( const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::lang::XComponent > & xDocumentComp,
-                           const ::com::sun::star::uno::Sequence<
-                               ::com::sun::star::beans::PropertyValue > & aMediaDescriptor );
+    sal_Int32 impl_Import( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
+                           const css::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
     sal_Int32 impl_ImportStream(
         const OUString & rStreamName,
         const OUString & rServiceName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::embed::XStorage > & xStorage,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XParser > & xParser,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiComponentFactory > & xFactory,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XGraphicObjectResolver > & xGraphicObjectResolver,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xPropSet );
+        const css::uno::Reference< css::embed::XStorage > & xStorage,
+        const css::uno::Reference< css::xml::sax::XParser > & xParser,
+        const css::uno::Reference< css::lang::XMultiComponentFactory > & xFactory,
+        const css::uno::Reference< css::document::XGraphicObjectResolver > & xGraphicObjectResolver,
+        css::uno::Reference< css::beans::XPropertySet >& xPropSet );
 
     /// @return a warning code, or 0 for successful operation
-    sal_Int32 impl_Export( const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::lang::XComponent > & xDocumentComp,
-                           const ::com::sun::star::uno::Sequence<
-                               ::com::sun::star::beans::PropertyValue > & aMediaDescriptor );
+    sal_Int32 impl_Export( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
+                           const css::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
     sal_Int32 impl_ExportStream(
         const OUString & rStreamName,
         const OUString & rServiceName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::embed::XStorage > & xStorage,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XWriter >& xActiveDataSource,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xFactory,
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any > & rFilterProperties );
+        const css::uno::Reference< css::embed::XStorage > & xStorage,
+        const css::uno::Reference< css::xml::sax::XWriter >& xActiveDataSource,
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & xFactory,
+        const css::uno::Sequence< css::uno::Any > & rFilterProperties );
 
     // members
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XComponent >       m_xTargetDoc;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XComponent >       m_xSourceDoc;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::lang::XComponent >       m_xTargetDoc;
+    css::uno::Reference< css::lang::XComponent >       m_xSourceDoc;
 
     css::uno::Sequence<css::beans::PropertyValue> m_aMediaDescriptor;
 
@@ -167,11 +146,10 @@ private:
 
 class XMLReportFilterHelper : public XMLFilter
 {
-    virtual void isOasisFormat(const ::com::sun::star::uno::Sequence<
-                                    ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS ) override;
+    virtual void isOasisFormat(const css::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor,
+                               bool & _rOutOASIS ) override;
 public:
-    explicit XMLReportFilterHelper( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::uno::XComponentContext > const & _xContext )
+    explicit XMLReportFilterHelper( css::uno::Reference< css::uno::XComponentContext > const & _xContext )
                             :XMLFilter(_xContext)
     {}
     static OUString getImplementationName_Static()
@@ -181,16 +159,15 @@ public:
 protected:
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override
+            throw( css::uno::RuntimeException, std::exception ) override
     {
         return getImplementationName_Static();
     }
     // ____ XImporter ____
     virtual void SAL_CALL setTargetDocument(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent >& Document )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override
+        const css::uno::Reference< css::lang::XComponent >& Document )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override
     {
         setDocumentHandler( "com.sun.star.comp.report.ImportDocumentHandler" );
         XMLFilter::setTargetDocument(Document);
@@ -198,10 +175,9 @@ protected:
 
     // ____ XExporter ____
     virtual void SAL_CALL setSourceDocument(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent >& Document )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override
+        const css::uno::Reference< css::lang::XComponent >& Document )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception) override
     {
         setDocumentHandler( "com.sun.star.comp.report.ExportDocumentHandler" );
         XMLFilter::setSourceDocument(Document);

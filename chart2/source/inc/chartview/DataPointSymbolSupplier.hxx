@@ -34,12 +34,10 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTVIEW DataPointSymbolSupplier
 {
 public:
-    static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
-        create2DSymbolList( ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory > xShapeFactory
-            , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-            , const ::com::sun::star::drawing::Direction3D& rSize );
+    static css::uno::Reference< css::drawing::XShapes >
+        create2DSymbolList( css::uno::Reference< css::lang::XMultiServiceFactory > xShapeFactory
+            , const css::uno::Reference< css::drawing::XShapes >& xTarget
+            , const css::drawing::Direction3D& rSize );
 };
 
 } //namespace chart

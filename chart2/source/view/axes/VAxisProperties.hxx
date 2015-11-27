@@ -61,8 +61,8 @@ struct AxisLabelProperties final
 {
     AxisLabelProperties();
 
-    ::com::sun::star::awt::Size         m_aFontReferenceSize;//reference size to calculate the font height
-    ::com::sun::star::awt::Rectangle    m_aMaximumSpaceForLabels;//Labels need to be clipped in order to fit into this rectangle
+    css::awt::Size         m_aFontReferenceSize;//reference size to calculate the font height
+    css::awt::Rectangle    m_aMaximumSpaceForLabels;//Labels need to be clipped in order to fit into this rectangle
 
     sal_Int32            nNumberFormatKey;
 
@@ -78,8 +78,7 @@ struct AxisLabelProperties final
     bool        bRhythmIsFix; //states whether the given rhythm is fix or may be changed
 
     //methods:
-    void init( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XAxis >&  xAxisModel );
+    void init( const css::uno::Reference< css::chart2::XAxis >&  xAxisModel );
 
     bool isStaggered() const;
 
@@ -136,7 +135,7 @@ struct AxisProperties final
     VLineProperties                     m_aLineProperties;
 
     //for category axes ->
-    sal_Int32                           m_nAxisType;//REALNUMBER, CATEGORY etc. type ::com::sun::star::chart2::AxisType
+    sal_Int32                           m_nAxisType;//REALNUMBER, CATEGORY etc. type css::chart2::AxisType
     bool                                m_bComplexCategories;
     ExplicitCategoriesProvider* m_pExplicitCategoriesProvider;/*no ownership here*/
     css::uno::Reference<css::chart2::data::XTextualDataSequence> m_xAxisTextProvider; //for categories or series names
@@ -144,13 +143,13 @@ struct AxisProperties final
 
     //methods:
 
-    AxisProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxisModel
+    AxisProperties( const css::uno::Reference< css::chart2::XAxis >& xAxisModel
                   , ExplicitCategoriesProvider* pExplicitCategoriesProvider );
     AxisProperties( const AxisProperties& rAxisProperties );
 
     void init(bool bCartesian=false);//init from model data (m_xAxisModel)
 
-    void initAxisPositioning( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProp );
+    void initAxisPositioning( const css::uno::Reference< css::beans::XPropertySet >& xAxisProp );
 
     static TickmarkProperties getBiggestTickmarkProperties();
     TickmarkProperties makeTickmarkPropertiesForComplexCategories( sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 nTextLevel ) const;

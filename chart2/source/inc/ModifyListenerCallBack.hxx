@@ -47,8 +47,7 @@ private: //methods
 
 private: //member
     ModifyListenerCallBack_impl* pModifyListener_impl;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener >   m_xModifyListener;
+    css::uno::Reference< css::util::XModifyListener >   m_xModifyListener;
 };
 
 } // namespace chart

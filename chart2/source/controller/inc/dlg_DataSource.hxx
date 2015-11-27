@@ -45,10 +45,8 @@ class DataSourceDialog :
 public:
     explicit DataSourceDialog(
         vcl::Window * pParent,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDocument,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~DataSourceDialog();
     virtual void dispose() override;
 

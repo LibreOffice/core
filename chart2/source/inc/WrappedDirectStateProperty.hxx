@@ -33,10 +33,10 @@ public:
         const OUString& rOuterName, const OUString& rInnerName );
     virtual ~WrappedDirectStateProperty();
 
-    virtual ::com::sun::star::beans::PropertyState getPropertyState(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-        throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::uno::RuntimeException) override;
+    virtual css::beans::PropertyState getPropertyState(
+        const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
+        throw (css::beans::UnknownPropertyException,
+               css::uno::RuntimeException) override;
 };
 
 } //  namespace chart

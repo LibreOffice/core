@@ -52,9 +52,8 @@ class ThreeD_SceneIllumination_TabPage : public TabPage
 public:
     ThreeD_SceneIllumination_TabPage(
         vcl::Window* pWindow,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xSceneProperties,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel,
+        const css::uno::Reference< css::beans::XPropertySet > & xSceneProperties,
+        const css::uno::Reference< css::frame::XModel >& xChartModel,
         const XColorListRef &pColorTable );
     virtual ~ThreeD_SceneIllumination_TabPage();
     virtual void dispose() override;
@@ -93,14 +92,13 @@ private:
 
     LightSourceInfo* m_pLightSourceInfoList;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xSceneProperties;
+    css::uno::Reference< css::beans::XPropertySet > m_xSceneProperties;
 
     TimerTriggeredControllerLock    m_aTimerTriggeredControllerLock;
 
     bool            m_bInCommitToModel;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel >       m_xChartModel;
+    css::uno::Reference< css::frame::XModel >       m_xChartModel;
 };
 
 } //namespace chart

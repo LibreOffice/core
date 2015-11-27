@@ -46,114 +46,99 @@ namespace wrapper
 class Chart2ModelContact
 {
 public:
-    explicit Chart2ModelContact( const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::uno::XComponentContext >& xContext );
+    explicit Chart2ModelContact( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~Chart2ModelContact();
 
 public:
-    void setModel( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xChartModel );
+    void setModel( const css::uno::Reference< css::frame::XModel >& xChartModel );
     void clear();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel > getChartModel() const;
+    css::uno::Reference< css::frame::XModel > getChartModel() const;
 
     ChartModel* getModel() const { return mpModel;}
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XChartDocument > getChart2Document() const;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDiagram > getChart2Diagram() const;
+    css::uno::Reference< css::chart2::XChartDocument > getChart2Document() const;
+    css::uno::Reference< css::chart2::XDiagram > getChart2Diagram() const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > getDrawPage();
+    css::uno::Reference< css::drawing::XDrawPage > getDrawPage();
 
     /** get the current values calculated for an axis in the current view in
         case properties are 'auto'.
      */
     void getExplicitValuesForAxis(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XAxis > & xAxis,
+        const css::uno::Reference< css::chart2::XAxis > & xAxis,
         ExplicitScaleData &  rOutExplicitScale,
         ExplicitIncrementData & rOutExplicitIncrement );
 
     sal_Int32 getExplicitNumberFormatKeyForAxis(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
+            const css::uno::Reference< css::chart2::XAxis >& xAxis );
 
     sal_Int32 getExplicitNumberFormatKeyForSeries(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries );
+            const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
     /** Returns the size of the page in logic coordinates.  This value is used
         for setting an appropriate "ReferencePageSize" for FontHeights.
      */
-    ::com::sun::star::awt::Size GetPageSize() const;
+    css::awt::Size GetPageSize() const;
 
     /** calculates the current axes title sizes and subtract that space them from the given rectangle
      */
-    ::com::sun::star::awt::Rectangle SubstractAxisTitleSizes( const ::com::sun::star::awt::Rectangle& rPositionRect );
+    css::awt::Rectangle SubstractAxisTitleSizes( const css::awt::Rectangle& rPositionRect );
 
     /** Returns the position and size of the diagram in logic coordinates (100th mm) including
         the space used for axes including axes titles.
      */
-    ::com::sun::star::awt::Rectangle GetDiagramRectangleIncludingTitle() const;
+    css::awt::Rectangle GetDiagramRectangleIncludingTitle() const;
 
     /** Returns the position and size of the diagram in logic coordinates (100th mm) including
         the space used for axes excluding axes titles.
      */
-    ::com::sun::star::awt::Rectangle GetDiagramRectangleIncludingAxes() const;
+    css::awt::Rectangle GetDiagramRectangleIncludingAxes() const;
 
     /** Returns the position and size of the diagram in logic coordinates (100th mm) excluding
         the space used for axes (inner plot area).
      */
-    ::com::sun::star::awt::Rectangle GetDiagramRectangleExcludingAxes() const;
+    css::awt::Rectangle GetDiagramRectangleExcludingAxes() const;
 
     /** Returns the size of the object in logic coordinates.
      */
-    ::com::sun::star::awt::Size GetLegendSize() const;
+    css::awt::Size GetLegendSize() const;
 
     /** Returns the position of the object in logic coordinates.
      */
-    ::com::sun::star::awt::Point GetLegendPosition() const;
+    css::awt::Point GetLegendPosition() const;
 
     /** Returns the size of the object in logic coordinates.
      */
-    ::com::sun::star::awt::Size GetTitleSize( const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::chart2::XTitle > & xTitle ) const;
+    css::awt::Size GetTitleSize( const css::uno::Reference< css::chart2::XTitle > & xTitle ) const;
 
     /** Returns the position of the object in logic coordinates.
      */
-    ::com::sun::star::awt::Point GetTitlePosition( const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::chart2::XTitle > & xTitle ) const;
+    css::awt::Point GetTitlePosition( const css::uno::Reference< css::chart2::XTitle > & xTitle ) const;
 
     /** Returns the size of the object in logic coordinates.
      */
-    ::com::sun::star::awt::Size GetAxisSize( const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::chart2::XAxis > & xAxis ) const;
+    css::awt::Size GetAxisSize( const css::uno::Reference< css::chart2::XAxis > & xAxis ) const;
 
     /** Returns the position of the object in logic coordinates.
      */
-    ::com::sun::star::awt::Point GetAxisPosition( const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::chart2::XAxis > & xAxis ) const;
+    css::awt::Point GetAxisPosition( const css::uno::Reference< css::chart2::XAxis > & xAxis ) const;
 
 private: //methods
     ExplicitValueProvider* getExplicitValueProvider() const;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XUnoTunnel > getChartView() const;
+    css::uno::Reference< css::lang::XUnoTunnel > getChartView() const;
 
 public: //member
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >
-                        m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
 private: //member
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::frame::XModel >   m_xChartModel;
+    css::uno::WeakReference< css::frame::XModel >   m_xChartModel;
 
     ChartModel* mpModel;
 
-    mutable ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XUnoTunnel >        m_xChartView;
+    mutable css::uno::Reference< css::lang::XUnoTunnel > m_xChartView;
 
-    typedef std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > > tTableMap;//GradientTable, HatchTable etc.
+    typedef std::map< OUString, css::uno::Reference< css::container::XNameContainer > > tTableMap;//GradientTable, HatchTable etc.
     tTableMap   m_aTableMap;
 };
 

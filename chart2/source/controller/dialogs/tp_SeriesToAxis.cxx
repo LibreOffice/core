@@ -123,11 +123,11 @@ bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)
         rOutAttrs->Put(SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, ! m_pCBAxisSideBySide->IsChecked()));
 
     if(m_pRB_DontPaint->IsChecked())
-        rOutAttrs->Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,css::chart::MissingValueTreatment::LEAVE_GAP));
     else if(m_pRB_AssumeZero->IsChecked())
-        rOutAttrs->Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::USE_ZERO));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,css::chart::MissingValueTreatment::USE_ZERO));
     else if(m_pRB_ContinueLine->IsChecked())
-        rOutAttrs->Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::CONTINUE));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,css::chart::MissingValueTreatment::CONTINUE));
 
     if (m_pCBIncludeHiddenCells->IsVisible())
         rOutAttrs->Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_pCBIncludeHiddenCells->IsChecked()));
@@ -202,20 +202,20 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
             for( size_t nN =0; nN<aMissingValueTreatments.size(); nN++ )
             {
                 sal_Int32 nVal = aMissingValueTreatments[nN];
-                if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
+                if(nVal==css::chart::MissingValueTreatment::LEAVE_GAP)
                     m_pRB_DontPaint->Enable();
-                else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
+                else if(nVal==css::chart::MissingValueTreatment::USE_ZERO)
                     m_pRB_AssumeZero->Enable();
-                else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
+                else if(nVal==css::chart::MissingValueTreatment::CONTINUE)
                     m_pRB_ContinueLine->Enable();
             }
 
             long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
-            if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
+            if(nVal==css::chart::MissingValueTreatment::LEAVE_GAP)
                 m_pRB_DontPaint->Check();
-            else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
+            else if(nVal==css::chart::MissingValueTreatment::USE_ZERO)
                 m_pRB_AssumeZero->Check();
-            else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
+            else if(nVal==css::chart::MissingValueTreatment::CONTINUE)
                 m_pRB_ContinueLine->Check();
         }
         else

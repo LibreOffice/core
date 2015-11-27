@@ -28,22 +28,20 @@ namespace chart
 class LineChartType : public ChartType
 {
 public:
-    explicit LineChartType(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > const & xContext );
+    explicit LineChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
     virtual ~LineChartType();
 
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
         supportsService( const OUString& ServiceName )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
     static OUString getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString >
+    static css::uno::Sequence< OUString >
         getSupportedServiceNames_Static();
 
 protected:
@@ -51,21 +49,21 @@ protected:
 
     // ____ XChartType ____
     virtual OUString SAL_CALL getChartType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(css::beans::UnknownPropertyException) override;
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 } //  namespace chart

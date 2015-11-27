@@ -188,7 +188,7 @@ void MergedMinimumAndMaximumSupplier::clearMinimumAndMaximumSupplierList()
 
 long MergedMinimumAndMaximumSupplier::calculateTimeResolutionOnXAxis()
 {
-    long nRet = ::com::sun::star::chart::TimeUnit::YEAR;
+    long nRet = css::chart::TimeUnit::YEAR;
     for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
     {
         long nCurrent = (*aIt)->calculateTimeResolutionOnXAxis();

@@ -31,7 +31,7 @@ namespace chart
 {
 
 /** This structure contains the explicit values for a scale like Minimum and Maximum.
-    See also ::com::sun::star::chart2::ScaleData.
+    See also css::chart2::ScaleData.
 */
 struct OOO_DLLPUBLIC_CHARTVIEW ExplicitScaleData
 {
@@ -41,13 +41,13 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitScaleData
     double Maximum;
     double Origin;
 
-    ::com::sun::star::chart2::AxisOrientation     Orientation;
+    css::chart2::AxisOrientation     Orientation;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling > Scaling;
+    css::uno::Reference< css::chart2::XScaling > Scaling;
 
-    sal_Int32   AxisType;//see ::com::sun::star::chart2::AxisType
+    sal_Int32   AxisType;//see css::chart2::AxisType
     bool        ShiftedCategoryPosition;
-    sal_Int32   TimeResolution; //constant of type <type>::com::sun::star::chart::TimeUnit</type>
+    sal_Int32   TimeResolution; //constant of type <type>css::chart::TimeUnit</type>
     Date        NullDate;
 };
 
@@ -77,8 +77,8 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitIncrementData
 
     /** the following two members are only for date-time axis
     */
-    ::com::sun::star::chart::TimeInterval   MajorTimeInterval;
-    ::com::sun::star::chart::TimeInterval   MinorTimeInterval;
+    css::chart::TimeInterval   MajorTimeInterval;
+    css::chart::TimeInterval   MinorTimeInterval;
 
     /** the other members are for *not* date-time axis
     */

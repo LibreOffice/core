@@ -46,10 +46,10 @@ template< class Listener >
     ::cppu::WeakImplHelper< Listener >
 {
 public:
-    explicit WeakListenerAdapter( const ::com::sun::star::uno::Reference< Listener > & xListener ) :
+    explicit WeakListenerAdapter( const css::uno::Reference< Listener > & xListener ) :
             m_xListener( xListener )
     {}
-    explicit WeakListenerAdapter( const ::com::sun::star::uno::WeakReference< Listener > & xListener ) :
+    explicit WeakListenerAdapter( const css::uno::WeakReference< Listener > & xListener ) :
             m_xListener( xListener )
     {}
     virtual ~WeakListenerAdapter()
@@ -58,54 +58,51 @@ public:
 protected:
     // ____ XEventListener (base of all listeners) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException) SAL_OVERRIDE
     {
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::lang::XEventListener > xEventListener =
-          ::com::sun::star::uno::Reference<
-              ::com::sun::star::lang::XEventListener >(
-                  ::com::sun::star::uno::Reference< Listener >( m_xListener), ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::lang::XEventListener > xEventListener(
+                  css::uno::Reference< Listener >( m_xListener), css::uno::UNO_QUERY );
         if( xEventListener.is())
             xEventListener->disposing( Source );
     }
 
-    ::com::sun::star::uno::Reference< Listener > getListener() const
+    css::uno::Reference< Listener > getListener() const
     {
         return m_xListener;
     }
 
 private:
-    ::com::sun::star::uno::WeakReference< Listener > m_xListener;
+    css::uno::WeakReference< Listener > m_xListener;
 };
 
 class WeakModifyListenerAdapter :
-        public WeakListenerAdapter< ::com::sun::star::util::XModifyListener >
+        public WeakListenerAdapter< css::util::XModifyListener >
 {
 public:
     explicit WeakModifyListenerAdapter(
-        const ::com::sun::star::uno::WeakReference< ::com::sun::star::util::XModifyListener > & xListener );
+        const css::uno::WeakReference< css::util::XModifyListener > & xListener );
     virtual ~WeakModifyListenerAdapter();
 
 protected:
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 class WeakSelectionChangeListenerAdapter :
-        public WeakListenerAdapter< ::com::sun::star::view::XSelectionChangeListener >
+        public WeakListenerAdapter< css::view::XSelectionChangeListener >
 {
 public:
     explicit WeakSelectionChangeListenerAdapter(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > & xListener );
+        const css::uno::Reference< css::view::XSelectionChangeListener > & xListener );
     virtual ~WeakSelectionChangeListenerAdapter();
 
 protected:
     // ____ XSelectionChangeListener ____
     virtual void SAL_CALL selectionChanged(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 } //  namespace chart

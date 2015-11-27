@@ -49,7 +49,7 @@ uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeH
 }
 
 uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
-    const uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc, bool bConnectToModel )
+    const uno::Reference< css::chart2::XChartDocument >& xChartDoc, bool bConnectToModel )
 {
     bool bDefaultDataInColumns(true);
 
@@ -57,23 +57,23 @@ uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDa
     // chart data and use it as default for creating a new InternalDataProvider
     if(xChartDoc.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > xDoc(xChartDoc, uno::UNO_QUERY);
+        css::uno::Reference< css::chart::XChartDocument > xDoc(xChartDoc, uno::UNO_QUERY);
 
         if(xDoc.is())
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram > aDiagram = xDoc->getDiagram();
+            css::uno::Reference< css::chart::XDiagram > aDiagram = xDoc->getDiagram();
 
             if(aDiagram.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xProp(aDiagram, uno::UNO_QUERY);
+                css::uno::Reference< css::beans::XPropertySet > xProp(aDiagram, uno::UNO_QUERY);
 
                 if(xProp.is())
                 {
-                    ::com::sun::star::chart::ChartDataRowSource aDataRowSource(::com::sun::star::chart::ChartDataRowSource_COLUMNS);
+                    css::chart::ChartDataRowSource aDataRowSource(css::chart::ChartDataRowSource_COLUMNS);
 
                     xProp->getPropertyValue( "DataRowSource" ) >>= aDataRowSource;
 
-                    bDefaultDataInColumns = (::com::sun::star::chart::ChartDataRowSource_COLUMNS == aDataRowSource);
+                    bDefaultDataInColumns = (css::chart::ChartDataRowSource_COLUMNS == aDataRowSource);
                 }
             }
         }

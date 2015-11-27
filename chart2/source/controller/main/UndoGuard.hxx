@@ -39,7 +39,7 @@ class UndoGuard
 public:
     explicit UndoGuard(
         const OUString& i_undoMessage,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager,
+        const css::uno::Reference< css::document::XUndoManager > & i_undoManager,
         const ModelFacet i_facet = E_MODEL
     );
     ~UndoGuard();
@@ -54,8 +54,8 @@ private:
     void    discardSnapshot();
 
 private:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >           m_xChartModel;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >  m_xUndoManager;
+    const css::uno::Reference< css::frame::XModel >           m_xChartModel;
+    const css::uno::Reference< css::document::XUndoManager >  m_xUndoManager;
 
     std::shared_ptr< ChartModelClone >  m_pDocumentSnapshot;
     OUString                           m_aUndoString;
@@ -70,7 +70,7 @@ class UndoLiveUpdateGuard : public UndoGuard
 public:
     explicit UndoLiveUpdateGuard(
         const OUString& i_undoMessage,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+        const css::uno::Reference< css::document::XUndoManager > & i_undoManager
     );
     ~UndoLiveUpdateGuard();
 };
@@ -84,7 +84,7 @@ class UndoLiveUpdateGuardWithData :
 public:
     explicit UndoLiveUpdateGuardWithData(
         const OUString& i_undoMessage,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+        const css::uno::Reference< css::document::XUndoManager > & i_undoManager
     );
     ~UndoLiveUpdateGuardWithData();
 };
@@ -94,7 +94,7 @@ class UndoGuardWithSelection : public UndoGuard
 public:
     explicit UndoGuardWithSelection(
         const OUString& i_undoMessage,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+        const css::uno::Reference< css::document::XUndoManager > & i_undoManager
     );
     virtual ~UndoGuardWithSelection();
 };
@@ -103,12 +103,12 @@ class HiddenUndoContext
 {
 public:
     explicit HiddenUndoContext(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+        const css::uno::Reference< css::document::XUndoManager > & i_undoManager
     );
     ~HiddenUndoContext();
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >    m_xUndoManager;
+    css::uno::Reference< css::document::XUndoManager >    m_xUndoManager;
 };
 
 }

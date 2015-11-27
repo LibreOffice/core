@@ -31,15 +31,13 @@ namespace chart
 class TimerTriggeredControllerLock
 {
 public:
-    TimerTriggeredControllerLock( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel >& xModel );
+    TimerTriggeredControllerLock( const css::uno::Reference< css::frame::XModel >& xModel );
     virtual ~TimerTriggeredControllerLock();
 
     void startTimer();
 
 private:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > m_xModel;
+    css::uno::Reference< css::frame::XModel > m_xModel;
     std::unique_ptr< ControllerLockGuardUNO > m_apControllerLockGuard;
     AutoTimer       m_aTimer;
 

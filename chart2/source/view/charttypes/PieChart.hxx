@@ -33,20 +33,19 @@ class PieChart : public VSeriesPlotter
     struct ShapeParam;
 
 public:
-    PieChart( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType >& xChartTypeModel
+    PieChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
             , sal_Int32 nDimensionCount, bool bExcludingPositioning );
     virtual ~PieChart();
 
     /** This method creates all shapes needed for representing the pie chart.
      */
     virtual void createShapes() override;
-    virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize ) override;
+    virtual void rearrangeLabelToAvoidOverlapIfRequested( const css::awt::Size& rPageSize ) override;
 
     virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;
 
-    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
+    virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
     virtual bool shouldSnapRectToUsedArea() override;
 
     //MinimumAndMaximumSupplier
@@ -100,12 +99,12 @@ private: //methods
      *  and its entries are utilized for computing the maximum offset.
      */
     double              getMaxOffset();
-    bool                detectLabelOverlapsAndMove(const ::com::sun::star::awt::Size& rPageSize);//returns true when there might be more to do
+    bool                detectLabelOverlapsAndMove(const css::awt::Size& rPageSize);//returns true when there might be more to do
     void                resetLabelPositionsToPreviousState();
 struct PieLabelInfo;
     bool                tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondBorder
                                 , PieLabelInfo* pCenter, bool bSingleCenter, bool& rbAlternativeMoveDirection
-                                , const ::com::sun::star::awt::Size& rPageSize );
+                                , const css::awt::Size& rPageSize );
 
     bool                performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
     static bool         performLabelBestFitOuterPlacement(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
@@ -119,20 +118,20 @@ private: //member
     struct PieLabelInfo
     {
         PieLabelInfo();
-        bool moveAwayFrom( const PieLabelInfo* pFix, const ::com::sun::star::awt::Size& rPageSize
+        bool moveAwayFrom( const PieLabelInfo* pFix, const css::awt::Size& rPageSize
             , bool bMoveHalfWay, bool bMoveClockwise, bool bAlternativeMoveDirection );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xTextShape;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xLabelGroupShape;
+        css::uno::Reference< css::drawing::XShape > xTextShape;
+        css::uno::Reference< css::drawing::XShape > xLabelGroupShape;
         ::basegfx::B2IVector aFirstPosition;
         ::basegfx::B2IVector aOrigin;
         double fValue;
         bool bMovementAllowed;
         bool bMoved;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > xTextTarget;
+        css::uno::Reference< css::drawing::XShapes > xTextTarget;
         PieLabelInfo* pPrevious;
         PieLabelInfo* pNext;
-        ::com::sun::star::awt::Point aPreviousPosition;
+        css::awt::Point aPreviousPosition;
     };
 
     ::std::vector< PieLabelInfo > m_aLabelInfoList;

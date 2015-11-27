@@ -263,7 +263,7 @@ sal_Int32 lcl_getTextLineHeight( const std::vector< sal_Int32 >& aRowHeights, co
 //returns resulting legend size
 awt::Size lcl_placeLegendEntries(
     tViewLegendEntryContainer & rEntries,
-    ::com::sun::star::chart::ChartLegendExpansion eExpansion,
+    css::chart::ChartLegendExpansion eExpansion,
     bool bSymbolsLeftSide,
     double fViewFontSize,
     const awt::Size& rMaxSymbolExtent,
@@ -272,7 +272,7 @@ awt::Size lcl_placeLegendEntries(
     const Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const awt::Size & rAvailableSpace )
 {
-    bool bIsCustomSize = (eExpansion == ::com::sun::star::chart::ChartLegendExpansion_CUSTOM);
+    bool bIsCustomSize = (eExpansion == css::chart::ChartLegendExpansion_CUSTOM);
     awt::Size aResultingLegendSize(0,0);
     if( bIsCustomSize )
         aResultingLegendSize = rAvailableSpace;
@@ -291,7 +291,7 @@ awt::Size lcl_placeLegendEntries(
     uno::Any* pFrameWidthAny = PropertyMapper::getValuePointer( rTextProperties.second, rTextProperties.first, "TextMaximumFrameWidth");
     if(pFrameWidthAny)
     {
-        if( eExpansion == ::com::sun::star::chart::ChartLegendExpansion_HIGH )
+        if( eExpansion == css::chart::ChartLegendExpansion_HIGH )
         {
             // limit the width of texts to 30% of the total available width
             // #i109336# Improve auto positioning in chart
@@ -315,7 +315,7 @@ awt::Size lcl_placeLegendEntries(
     sal_Int32 nTextLineHeight = static_cast< sal_Int32 >( fViewFontSize );
 
     // determine layout depending on LegendExpansion
-    if( eExpansion == ::com::sun::star::chart::ChartLegendExpansion_CUSTOM )
+    if( eExpansion == css::chart::ChartLegendExpansion_CUSTOM )
     {
         sal_Int32 nCurrentRow=0;
         sal_Int32 nCurrentColumn=-1;
@@ -456,7 +456,7 @@ awt::Size lcl_placeLegendEntries(
             }
         }
     }
-    else if( eExpansion == ::com::sun::star::chart::ChartLegendExpansion_HIGH )
+    else if( eExpansion == css::chart::ChartLegendExpansion_HIGH )
     {
         sal_Int32 nMaxNumberOfRows = nMaxEntryHeight
             ? (rAvailableSpace.Height - 2*nYPadding ) / nMaxEntryHeight
@@ -473,7 +473,7 @@ awt::Size lcl_placeLegendEntries(
                       static_cast< double >( nNumberOfColumns ) ))
             : 0;
     }
-    else if( eExpansion == ::com::sun::star::chart::ChartLegendExpansion_WIDE )
+    else if( eExpansion == css::chart::ChartLegendExpansion_WIDE )
     {
         sal_Int32 nMaxNumberOfColumns = nMaxEntryWidth
             ? (rAvailableSpace.Width - 2*nXPadding ) / nMaxEntryWidth
@@ -490,7 +490,7 @@ awt::Size lcl_placeLegendEntries(
                       static_cast< double >( nNumberOfRows ) ))
             : 0;
     }
-    else // ::com::sun::star::chart::ChartLegendExpansion_BALANCED
+    else // css::chart::ChartLegendExpansion_BALANCED
     {
         double fAspect = nMaxEntryHeight
             ? static_cast< double >( nMaxEntryWidth ) / static_cast< double >( nMaxEntryHeight )
@@ -508,7 +508,7 @@ awt::Size lcl_placeLegendEntries(
     if(nNumberOfRows<=0)
         return aResultingLegendSize;
 
-    if( eExpansion != ::com::sun::star::chart::ChartLegendExpansion_CUSTOM )
+    if( eExpansion != css::chart::ChartLegendExpansion_CUSTOM )
     {
         lcl_collectColumnWidths( aColumnWidths, nNumberOfRows, nNumberOfColumns, aTextShapes, nSymbolPlusDistanceWidth );
         lcl_collectRowHeighs( aRowHeights, nNumberOfRows, nNumberOfColumns, aTextShapes );
@@ -840,14 +840,14 @@ void VLegend::createShapes(
             tPropertyValues aTextProperties;
 
             Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
-            ::com::sun::star::chart::ChartLegendExpansion eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
+            css::chart::ChartLegendExpansion eExpansion = css::chart::ChartLegendExpansion_HIGH;
             awt::Size aLegendSize( rAvailableSpace );
 
             if( xLegendProp.is())
             {
                 // get Expansion property
                 xLegendProp->getPropertyValue( "Expansion") >>= eExpansion;
-                if( eExpansion == ::com::sun::star::chart::ChartLegendExpansion_CUSTOM )
+                if( eExpansion == css::chart::ChartLegendExpansion_CUSTOM )
                 {
                     RelativeSize aRelativeSize;
                     if ((xLegendProp->getPropertyValue( "RelativeSize") >>= aRelativeSize))
@@ -856,7 +856,7 @@ void VLegend::createShapes(
                         aLegendSize.Height = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height ));
                     }
                     else
-                        eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
+                        eExpansion = css::chart::ChartLegendExpansion_HIGH;
                 }
                 lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, rPageSize );
             }

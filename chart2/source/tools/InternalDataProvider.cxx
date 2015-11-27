@@ -788,8 +788,8 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
     aArguments[1] = beans::PropertyValue(
         "DataRowSource", -1, uno::makeAny(
             m_bDataInColumns
-            ? ::com::sun::star::chart::ChartDataRowSource_COLUMNS
-            : ::com::sun::star::chart::ChartDataRowSource_ROWS ),
+            ? css::chart::ChartDataRowSource_COLUMNS
+            : css::chart::ChartDataRowSource_ROWS ),
         beans::PropertyState_DIRECT_VALUE );
     // internal data always contains labels and categories
     aArguments[2] = beans::PropertyValue(
@@ -1506,13 +1506,13 @@ Sequence< OUString > SAL_CALL InternalDataProvider::getColumnDescriptions()
 
 // ____ XChartData (base of XChartDataArray) ____
 void SAL_CALL InternalDataProvider::addChartDataChangeEventListener(
-    const Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& )
+    const Reference< css::chart::XChartDataChangeEventListener >& )
     throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL InternalDataProvider::removeChartDataChangeEventListener(
-    const Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& )
+    const Reference< css::chart::XChartDataChangeEventListener >& )
     throw (uno::RuntimeException, std::exception)
 {
 }

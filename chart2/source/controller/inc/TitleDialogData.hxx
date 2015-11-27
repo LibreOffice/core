@@ -33,19 +33,19 @@ namespace chart
 
 struct TitleDialogData
 {
-    ::com::sun::star::uno::Sequence< sal_Bool > aPossibilityList;
-    ::com::sun::star::uno::Sequence< sal_Bool > aExistenceList;
-    ::com::sun::star::uno::Sequence< OUString > aTextList;
+    css::uno::Sequence< sal_Bool > aPossibilityList;
+    css::uno::Sequence< sal_Bool > aExistenceList;
+    css::uno::Sequence< OUString > aTextList;
     std::unique_ptr< ReferenceSizeProvider > apReferenceSizeProvider;
 
     TitleDialogData(ReferenceSizeProvider* pReferenzeSizeProvider = nullptr);
 
-    void readFromModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
+    void readFromModel( const css::uno::Reference< css::frame::XModel >& xChartModel );
     /* return true if anything has changed;
     when pOldState is NULL then all data are written to the model
     */
-    bool writeDifferenceToModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
-                        , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
+    bool writeDifferenceToModel( const css::uno::Reference< css::frame::XModel >& xChartModel
+                        , const css::uno::Reference< css::uno::XComponentContext >& xContext
                         , TitleDialogData* pOldState=nullptr );
 };
 

@@ -257,16 +257,16 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
         {
             aRet.realloc(4);
             sal_Int32* pSeq = aRet.getArray();
-            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::AVOID_OVERLAP;
-            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
-            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::INSIDE;
-            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+            *pSeq++ = css::chart::DataLabelPlacement::AVOID_OVERLAP;
+            *pSeq++ = css::chart::DataLabelPlacement::OUTSIDE;
+            *pSeq++ = css::chart::DataLabelPlacement::INSIDE;
+            *pSeq++ = css::chart::DataLabelPlacement::CENTER;
         }
         else
         {
             aRet.realloc(1);
             sal_Int32* pSeq = aRet.getArray();
-            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+            *pSeq++ = css::chart::DataLabelPlacement::CENTER;
         }
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
@@ -276,11 +276,11 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     {
         aRet.realloc(5);
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::BOTTOM;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::LEFT;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::RIGHT;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+        *pSeq++ = css::chart::DataLabelPlacement::TOP;
+        *pSeq++ = css::chart::DataLabelPlacement::BOTTOM;
+        *pSeq++ = css::chart::DataLabelPlacement::LEFT;
+        *pSeq++ = css::chart::DataLabelPlacement::RIGHT;
+        *pSeq++ = css::chart::DataLabelPlacement::CENTER;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
@@ -300,49 +300,49 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
         {
             if(bSwapXAndY)
             {
-                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::RIGHT;
-                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::LEFT;
+                *pSeq++ = css::chart::DataLabelPlacement::RIGHT;
+                *pSeq++ = css::chart::DataLabelPlacement::LEFT;
             }
             else
             {
-                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
-                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::BOTTOM;
+                *pSeq++ = css::chart::DataLabelPlacement::TOP;
+                *pSeq++ = css::chart::DataLabelPlacement::BOTTOM;
             }
         }
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+        *pSeq++ = css::chart::DataLabelPlacement::CENTER;
         if(!bStacked)
-            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::INSIDE;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::NEAR_ORIGIN;
+            *pSeq++ = css::chart::DataLabelPlacement::OUTSIDE;
+        *pSeq++ = css::chart::DataLabelPlacement::INSIDE;
+        *pSeq++ = css::chart::DataLabelPlacement::NEAR_ORIGIN;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
     {
         aRet.realloc(1);
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
+        *pSeq++ = css::chart::DataLabelPlacement::TOP;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
     {
         aRet.realloc(6);
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::BOTTOM;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::LEFT;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::RIGHT;
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+        *pSeq++ = css::chart::DataLabelPlacement::OUTSIDE;
+        *pSeq++ = css::chart::DataLabelPlacement::TOP;
+        *pSeq++ = css::chart::DataLabelPlacement::BOTTOM;
+        *pSeq++ = css::chart::DataLabelPlacement::LEFT;
+        *pSeq++ = css::chart::DataLabelPlacement::RIGHT;
+        *pSeq++ = css::chart::DataLabelPlacement::CENTER;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
     {
         aRet.realloc(1);
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
+        *pSeq++ = css::chart::DataLabelPlacement::OUTSIDE;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
     {
         aRet.realloc( 1 );
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
+        *pSeq++ = css::chart::DataLabelPlacement::OUTSIDE;
     }
     else
     {
@@ -516,7 +516,7 @@ drawing::Direction3D ChartTypeHelper::getDefaultRealisticLightDirection( const u
 sal_Int32 ChartTypeHelper::getAxisType( const uno::Reference<
             XChartType >& xChartType, sal_Int32 nDimensionIndex )
 {
-    //retruned is a constant from constant group ::com::sun::star::chart2::AxisType
+    //retruned is a constant from constant group css::chart2::AxisType
 
     //@todo ask charttype itself --> need model change first
     if(!xChartType.is())
@@ -583,16 +583,16 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     {
         aRet.realloc( 2 );
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP;
-        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::USE_ZERO;
+        *pSeq++ = css::chart::MissingValueTreatment::LEAVE_GAP;
+        *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
     {
         aRet.realloc( bStacked ? 1 : 2 );
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::USE_ZERO;
+        *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
         if( !bStacked )
-            *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::CONTINUE;
+            *pSeq++ = css::chart::MissingValueTreatment::CONTINUE;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) ||
@@ -600,18 +600,18 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     {
         aRet.realloc( bStacked ? 2 : 3 );
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP;
-        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::USE_ZERO;
+        *pSeq++ = css::chart::MissingValueTreatment::LEAVE_GAP;
+        *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
         if( !bStacked )
-            *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::CONTINUE;
+            *pSeq++ = css::chart::MissingValueTreatment::CONTINUE;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
     {
         aRet.realloc( 3 );
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::CONTINUE;
-        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP;
-        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::USE_ZERO;
+        *pSeq++ = css::chart::MissingValueTreatment::CONTINUE;
+        *pSeq++ = css::chart::MissingValueTreatment::LEAVE_GAP;
+        *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )

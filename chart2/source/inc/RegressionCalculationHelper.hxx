@@ -42,8 +42,8 @@ typedef ::std::pair< ::std::vector< double >, ::std::vector< double > > tDoubleV
  */
 template< class Pred >
 tDoubleVectorPair
-    cleanup( const ::com::sun::star::uno::Sequence< double > & rXValues,
-             const ::com::sun::star::uno::Sequence< double > & rYValues,
+    cleanup( const css::uno::Sequence< double > & rXValues,
+             const css::uno::Sequence< double > & rYValues,
              Pred aPred )
 {
     tDoubleVectorPair aResult;

@@ -34,32 +34,29 @@ class VPolarRadiusAxis : public VPolarAxis
 {
 public:
     VPolarRadiusAxis( const AxisProperties& rAxisProperties
-           , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionCount );
     virtual ~VPolarRadiusAxis();
 
     virtual void initPlotter(
-          const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xLogicTarget
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xFinalTarget
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+          const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
+        , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget
+        , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
         , const OUString& rCID
-                ) throw (::com::sun::star::uno::RuntimeException ) override;
+                ) throw (css::uno::RuntimeException ) override;
 
-    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix ) override;
+    virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix ) override;
 
     virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
 
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
           , const ExplicitIncrementData& rIncrement )
-                throw (::com::sun::star::uno::RuntimeException) override;
+                throw (css::uno::RuntimeException) override;
 
     virtual void initAxisLabelProperties(
-                    const ::com::sun::star::awt::Size& rFontReferenceSize
-                  , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) override;
+                    const css::awt::Size& rFontReferenceSize
+                  , const css::awt::Rectangle& rMaximumSpaceForLabels ) override;
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount() override;
 

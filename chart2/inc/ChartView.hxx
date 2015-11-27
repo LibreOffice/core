@@ -88,16 +88,16 @@ struct TimeBasedInfo
  * done by the ChartWindow).
  */
 class ChartView : public ::cppu::WeakImplHelper<
-    ::com::sun::star::lang::XInitialization
-        ,::com::sun::star::lang::XServiceInfo
-        ,::com::sun::star::datatransfer::XTransferable
-        ,::com::sun::star::lang::XUnoTunnel
-        ,::com::sun::star::util::XModifyListener
-        ,::com::sun::star::util::XModeChangeBroadcaster
-        ,::com::sun::star::util::XUpdatable2
-        ,::com::sun::star::beans::XPropertySet
-        ,::com::sun::star::lang::XMultiServiceFactory
-        ,::com::sun::star::qa::XDumper
+    css::lang::XInitialization
+        ,css::lang::XServiceInfo
+        ,css::datatransfer::XTransferable
+        ,css::lang::XUnoTunnel
+        ,css::util::XModifyListener
+        ,css::util::XModeChangeBroadcaster
+        ,css::util::XUpdatable2
+        ,css::beans::XPropertySet
+        ,css::lang::XMultiServiceFactory
+        ,css::qa::XDumper
         >
         , public ExplicitValueProvider
         , private SfxListener
@@ -107,8 +107,7 @@ private:
     void init();
 
 public:
-    ChartView(::com::sun::star::uno::Reference<
-               ::com::sun::star::uno::XComponentContext > const & xContext,
+    ChartView(css::uno::Reference< css::uno::XComponentContext > const & xContext,
                ChartModel& rModel);
 
     virtual ~ChartView();
@@ -125,85 +124,85 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ___lang::XInitialization___
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-                throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+                throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // ___ExplicitValueProvider___
     virtual bool getExplicitValuesForAxis(
-        ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > xAxis
+        css::uno::Reference< css::chart2::XAxis > xAxis
         , ExplicitScaleData&  rExplicitScale
         , ExplicitIncrementData& rExplicitIncrement ) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
         getShapeForCID( const OUString& rObjectCID ) override;
 
-    virtual ::com::sun::star::awt::Rectangle getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect=false ) override;
+    virtual css::awt::Rectangle getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect=false ) override;
 
-    virtual ::com::sun::star::awt::Rectangle getDiagramRectangleExcludingAxes() override;
+    virtual css::awt::Rectangle getDiagramRectangleExcludingAxes() override;
 
     std::shared_ptr< DrawModelWrapper > getDrawModelWrapper() override;
 
     // ___XTransferable___
-    virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-                throw (::com::sun::star::datatransfer::UnsupportedFlavorException
-                     , ::com::sun::star::io::IOException
-                     , ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor )
+                throw (css::datatransfer::UnsupportedFlavorException
+                     , css::io::IOException
+                     , css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
+                throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor )
+                throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XEventListener (base of XCloseListener and XModifyListener)
+    // css::util::XEventListener (base of XCloseListener and XModifyListener)
     virtual void SAL_CALL
-        disposing( const ::com::sun::star::lang::EventObject& Source )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        disposing( const css::lang::EventObject& Source )
+                            throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XModifyListener
+    // css::util::XModifyListener
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    // ::com::sun::star::util::XModeChangeBroadcaster
+    // css::util::XModeChangeBroadcaster
 
-    virtual void SAL_CALL addModeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeModeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addModeChangeApproveListener( const css::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeModeChangeApproveListener( const css::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XUpdatable
-    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::util::XUpdatable
+    virtual void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) override;
 
     // util::XUpdatable2
     virtual void SAL_CALL updateSoft() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL updateHard() throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::beans::XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XMultiServiceFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments(
-        const OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XMultiServiceFactory
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(
+        const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
     // for ExplicitValueProvider
     // ____ XUnoTunnel ___
-    virtual ::sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aIdentifier )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< ::sal_Int8 >& aIdentifier )
+            throw (css::uno::RuntimeException, std::exception) override;
 
     // XDumper
     virtual OUString SAL_CALL dump()
-            throw(::com::sun::star::uno::RuntimeException,
+            throw(css::uno::RuntimeException,
                   std::exception) override;
 
     void setViewDirty();
@@ -217,7 +216,7 @@ private: //methods
     bool createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize );
     void createShapes3D();
     bool isReal3DChart();
-    void getMetaFile( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream
+    void getMetaFile( const css::uno::Reference< css::io::XOutputStream >& xOutStream
                       , bool bUseHighContrast );
     SdrPage* getSdrPage();
 
@@ -237,24 +236,24 @@ private: //methods
 private: //member
     ::osl::Mutex m_aMutex;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>
+    css::uno::Reference< css::uno::XComponentContext>
             m_xCC;
 
     chart::ChartModel& mrChartModel;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
+    css::uno::Reference< css::lang::XMultiServiceFactory>
             m_xShapeFactory;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage>
+    css::uno::Reference< css::drawing::XDrawPage>
             m_xDrawPage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
             mxRootShape;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xDashTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xGradientTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xHatchTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xBitmapTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xTransGradientTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xMarkerTable;
+    css::uno::Reference< css::uno::XInterface > m_xDashTable;
+    css::uno::Reference< css::uno::XInterface > m_xGradientTable;
+    css::uno::Reference< css::uno::XInterface > m_xHatchTable;
+    css::uno::Reference< css::uno::XInterface > m_xBitmapTable;
+    css::uno::Reference< css::uno::XInterface > m_xTransGradientTable;
+    css::uno::Reference< css::uno::XInterface > m_xMarkerTable;
 
     std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
 
@@ -269,7 +268,7 @@ private: //member
     bool m_bRefreshAddIn;
 
     //better performance for big data
-    ::com::sun::star::awt::Size m_aPageResolution;
+    css::awt::Size m_aPageResolution;
     bool m_bPointsWereSkipped;
 
     //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
@@ -280,7 +279,7 @@ private: //member
 
     bool m_bSdrViewIsInEditMode;
 
-    ::com::sun::star::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
+    css::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 
     std::shared_ptr<GL3DPlotterBase> m_pGL3DPlotter;
     TimeBasedInfo maTimeBased;

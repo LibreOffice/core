@@ -33,28 +33,28 @@ class FixedNumberFormatter;
 class OOO_DLLPUBLIC_CHARTTOOLS NumberFormatterWrapper
 {
 public:
-    NumberFormatterWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier );
+    NumberFormatterWrapper( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier );
     virtual ~NumberFormatterWrapper();
 
     SvNumberFormatter* getSvNumberFormatter() const { return m_pNumberFormatter;}
-    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
+    css::uno::Reference< css::util::XNumberFormatsSupplier >
                 getNumberFormatsSupplier() { return m_xNumberFormatsSupplier; };
 
     OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
     Date    getNullDate() const;
 
 private: //private member
-    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
+    css::uno::Reference< css::util::XNumberFormatsSupplier >
                         m_xNumberFormatsSupplier;
 
     SvNumberFormatter* m_pNumberFormatter;
-    ::com::sun::star::uno::Any m_aNullDate;
+    css::uno::Any m_aNullDate;
 };
 
 class OOO_DLLPUBLIC_CHARTTOOLS FixedNumberFormatter
 {
 public:
-    FixedNumberFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier
+    FixedNumberFormatter( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier
         , sal_Int32 nNumberFormatKey );
     virtual ~FixedNumberFormatter();
 

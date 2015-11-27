@@ -58,28 +58,23 @@ public:
         @todo deprecate the hard set camera geometry and use the property
               default
      */
-    static ::com::sun::star::drawing::CameraGeometry getDefaultCameraGeometry( bool bPie=false );
+    static css::drawing::CameraGeometry getDefaultCameraGeometry( bool bPie=false );
 
     static void getRotationAngleFromDiagram(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties
+        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
             , double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad );
     static void setRotationAngleToDiagram(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties
+        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
             , double fXAngleRad, double fYAngleRad, double fZAngleRad );
 
     static void getRotationFromDiagram(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties
+        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
             , sal_Int32& rnHorizontalAngleDegree, sal_Int32& rnVerticalAngleDegree );
     static void setRotationToDiagram(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties
+        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
             , sal_Int32 nHorizontalAngleDegree, sal_Int32 nVerticalYAngleDegree );
 
-    static void switchRightAngledAxes( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties
+    static void switchRightAngledAxes( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
             , bool bRightAngledAxes );
 
     static void adaptRadAnglesForRightAngledAxes( double& rfXAngleRad, double& rfYAngleRad );
@@ -97,11 +92,9 @@ public:
         , double fXRad, double fYRad, double fZRad );
 
     static double getCameraDistance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
+        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties );
     static void setCameraDistance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties
+        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
             , double fCameraDistance );
     SAL_DLLPRIVATE static void ensureCameraDistanceRange( double& rfCameraDistance );
     SAL_DLLPRIVATE static void getCameraDistanceRange( double& rfMinimumDistance, double& rfMaximumDistance );
@@ -109,37 +102,29 @@ public:
     static double CameraDistanceToPerspective( double fCameraDistance );
     static double PerspectiveToCameraDistance( double fPerspective );
 
-    static void set3DSettingsToDefault( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
-    static void setDefaultRotation( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
-    static void setDefaultIllumination( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
+    static void set3DSettingsToDefault( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties );
+    static void setDefaultRotation( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties );
+    static void setDefaultIllumination( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties );
 
-    static void setDefaultRotation( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties, bool bPieOrDonut );
+    static void setDefaultRotation( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties, bool bPieOrDonut );
 
-    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardLeftWall( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
-    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBackWall(const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
-    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBottom(const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
+    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardLeftWall( const css::uno::Reference<
+            css::beans::XPropertySet >& xSceneProperties );
+    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBackWall(const css::uno::Reference<
+            css::beans::XPropertySet >& xSceneProperties );
+    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBottom(const css::uno::Reference<
+            css::beans::XPropertySet >& xSceneProperties );
 
-    static ThreeDLookScheme detectScheme( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram );
-    static void setScheme( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram
+    static ThreeDLookScheme detectScheme( const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+    static void setScheme( const css::uno::Reference< css::chart2::XDiagram >& xDiagram
             , ThreeDLookScheme aScheme );
 
     //sal_Int32 nRoundedEdges:  <0 or >100 -> mixed state
     //sal_Int32 nObjectLines:  0->no lines; 1->all lines on; other->mixed state
 
-    static void getRoundedEdgesAndObjectLines( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram
+    static void getRoundedEdgesAndObjectLines( const css::uno::Reference< css::chart2::XDiagram >& xDiagram
             , sal_Int32& rnRoundedEdges, sal_Int32& rnObjectLines );
-    static void setRoundedEdgesAndObjectLines( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram
+    static void setRoundedEdgesAndObjectLines( const css::uno::Reference< css::chart2::XDiagram >& xDiagram
             , sal_Int32 nRoundedEdges, sal_Int32 nObjectLines );
 };
 

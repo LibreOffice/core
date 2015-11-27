@@ -40,10 +40,8 @@ class TitlesAndObjectsTabPage : public svt::OWizardPage
 {
 public:
     TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
-                , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument >& xChartModel
-                , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext >& xContext );
+                , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
+                , const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~TitlesAndObjectsTabPage();
     virtual void dispose() override;
 
@@ -65,10 +63,8 @@ protected:
     VclPtr<CheckBox>          m_pCB_Grid_Y;
     VclPtr<CheckBox>          m_pCB_Grid_Z;
 
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::chart2::XChartDocument >   m_xChartModel;
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext>    m_xCC;
+    css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
+    css::uno::Reference< css::uno::XComponentContext>    m_xCC;
 
     bool    m_bCommitToModel;
     TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;

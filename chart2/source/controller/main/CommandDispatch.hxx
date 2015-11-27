@@ -36,8 +36,8 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakComponentImplHelper<
-        ::com::sun::star::frame::XDispatch,
-        ::com::sun::star::util::XModifyListener >
+        css::frame::XDispatch,
+        css::util::XModifyListener >
     CommandDispatch_Base;
 }
 
@@ -48,9 +48,7 @@ class CommandDispatch :
         public impl::CommandDispatch_Base
 {
 public:
-    explicit CommandDispatch(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit CommandDispatch( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~CommandDispatch();
 
     // late initialisation, especially for adding as listener
@@ -75,12 +73,12 @@ protected:
      */
     virtual void fireStatusEvent(
         const OUString & rURL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener ) = 0;
+        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener ) = 0;
 
     /** calls fireStatusEvent( OUString, xSingleListener )
      */
     void fireAllStatusEvents(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener );
+        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener );
 
     /** sends a status event for a specific command to all registered listeners
         or only the one given when set.
@@ -92,25 +90,25 @@ protected:
      */
     void fireStatusEventForURL(
         const OUString & rURL,
-        const ::com::sun::star::uno::Any & rState,
+        const css::uno::Any & rState,
         bool bEnabled,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener =
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >(),
+        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener =
+            css::uno::Reference< css::frame::XStatusListener >(),
         const OUString & rFeatureDescriptor = OUString() );
 
     // ____ XDispatch ____
     virtual void SAL_CALL dispatch(
-        const ::com::sun::star::util::URL& URL,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::util::URL& URL,
+        const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addStatusListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& Control,
-        const ::com::sun::star::util::URL& URL )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::frame::XStatusListener >& Control,
+        const css::util::URL& URL )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeStatusListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& Control,
-        const ::com::sun::star::util::URL& URL )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::frame::XStatusListener >& Control,
+        const css::util::URL& URL )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ WeakComponentImplHelperBase ____
     /// is called when this is disposed
@@ -118,17 +116,17 @@ protected:
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >  m_xURLTransformer;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::util::XURLTransformer >  m_xURLTransformer;
 
 private:
     typedef ::std::map< OUString, ::comphelper::OInterfaceContainerHelper2* >

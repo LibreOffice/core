@@ -65,7 +65,7 @@ struct StaticBubbleChartTypeInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< css::beans::Property > aProperties;
 
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
@@ -170,7 +170,7 @@ uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()
 }
 
 uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedPropertyRoles()
-    throw(com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aPropertyRoles(2);
     aPropertyRoles[0] = "FillColor";

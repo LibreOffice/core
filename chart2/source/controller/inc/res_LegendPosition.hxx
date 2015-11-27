@@ -36,14 +36,12 @@ public:
     //constructor without Display checkbox
     LegendPositionResources(VclBuilderContainer& rParent);
     //constructor inclusive Display checkbox
-    LegendPositionResources(VclBuilderContainer& rParent, const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext>& xCC );
+    LegendPositionResources(VclBuilderContainer& rParent, const css::uno::Reference<
+                       css::uno::XComponentContext>& xCC );
     virtual ~LegendPositionResources();
 
-    void writeToResources( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xChartModel );
-    void writeToModel( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xChartModel ) const;
+    void writeToResources( const css::uno::Reference< css::frame::XModel >& xChartModel );
+    void writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
 
     void initFromItemSet( const SfxItemSet& rInAttrs );
     void writeToItemSet( SfxItemSet& rOutAttrs ) const;
@@ -57,8 +55,7 @@ private:
     void impl_setRadioButtonToggleHdl();
 
 private:
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext>    m_xCC;
+    css::uno::Reference< css::uno::XComponentContext>    m_xCC;
 
     VclPtr<CheckBox>       m_pCbxShow;
 

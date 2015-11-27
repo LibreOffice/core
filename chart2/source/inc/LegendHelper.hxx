@@ -36,26 +36,22 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS LegendHelper
 {
 public:
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XLegend >
+    static css::uno::Reference< css::chart2::XLegend >
         showLegend( ChartModel& rModel
-                  , const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext >& xContext );
+                  , const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     static  void hideLegend( ChartModel& rModel );
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XLegend >
+    static css::uno::Reference< css::chart2::XLegend >
         getLegend( ChartModel& rModel
-                 , const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext >& xContext = nullptr
+                 , const css::uno::Reference< css::uno::XComponentContext >& xContext = nullptr
                  , bool bCreate = false );
 
     /** returns <FALSE/>, if either there is no legend at the diagram, or there
         is a legend which has a "Show" property of value <FALSE/>. Otherwise,
         <TRUE/> is returned.
      */
-    static bool hasLegend( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > & xDiagram );
+    static bool hasLegend( const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 };
 
 } //namespace chart

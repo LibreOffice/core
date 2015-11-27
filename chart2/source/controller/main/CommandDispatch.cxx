@@ -115,7 +115,7 @@ void SAL_CALL CommandDispatch::disposing( const lang::EventObject& /* Source */ 
 {}
 
 void CommandDispatch::fireAllStatusEvents(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener )
+    const css::uno::Reference< css::frame::XStatusListener > & xSingleListener )
 {
     fireStatusEvent( OUString(), xSingleListener );
 }

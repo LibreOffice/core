@@ -33,13 +33,11 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuardUNO
 {
 public:
-    explicit ControllerLockGuardUNO(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    explicit ControllerLockGuardUNO( const css::uno::Reference< css::frame::XModel > & xModel );
     ~ControllerLockGuardUNO();
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::frame::XModel > mxModel;
+    css::uno::Reference< css::frame::XModel > mxModel;
 };
 
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuard
@@ -62,16 +60,14 @@ class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockHelper
 {
 public:
     explicit ControllerLockHelper(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+        const css::uno::Reference< css::frame::XModel > & xModel );
     ~ControllerLockHelper();
 
     SAL_DLLPRIVATE void lockControllers();
     SAL_DLLPRIVATE void unlockControllers();
 
 private:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > m_xModel;
+    css::uno::Reference< css::frame::XModel > m_xModel;
 };
 
 /** This guard calls lockControllers at the given ControllerLockHelper in the

@@ -116,7 +116,7 @@ sal_Int16 AccessibleChartShape::getAccessibleRole()
 }
 
 OUString AccessibleChartShape::getAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     OUString aDescription;
     if ( m_pAccShape.is() )
@@ -127,7 +127,7 @@ OUString AccessibleChartShape::getAccessibleDescription()
 }
 
 OUString AccessibleChartShape::getAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     OUString aName;
     if ( m_pAccShape.is() )
@@ -256,7 +256,7 @@ OUString AccessibleChartShape::getTitledBorderText()
 }
 
 OUString AccessibleChartShape::getToolTipText()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     OUString aText;
     if ( m_pAccShape.is() )

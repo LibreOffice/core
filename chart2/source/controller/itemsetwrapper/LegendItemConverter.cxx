@@ -42,8 +42,7 @@ namespace wrapper
 {
 
 LegendItemConverter::LegendItemConverter(
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet > & rPropertySet,
+    const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
@@ -126,16 +125,16 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
             {
                 chart2::LegendPosition eNewPos = static_cast<chart2::LegendPosition>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
 
-                ::com::sun::star::chart::ChartLegendExpansion eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
+                css::chart::ChartLegendExpansion eExpansion = css::chart::ChartLegendExpansion_HIGH;
                 switch( eNewPos )
                 {
                     case chart2::LegendPosition_LINE_START:
                     case chart2::LegendPosition_LINE_END:
-                        eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
+                        eExpansion = css::chart::ChartLegendExpansion_HIGH;
                         break;
                     case chart2::LegendPosition_PAGE_START:
                     case chart2::LegendPosition_PAGE_END:
-                        eExpansion = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                        eExpansion = css::chart::ChartLegendExpansion_WIDE;
                         break;
                     default:
                         break;

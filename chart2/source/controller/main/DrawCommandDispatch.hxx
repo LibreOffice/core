@@ -34,8 +34,7 @@ class ChartController;
 class DrawCommandDispatch: public FeatureCommandDispatchBase
 {
 public:
-    DrawCommandDispatch( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >& rxContext, ChartController* pController );
+    DrawCommandDispatch( const css::uno::Reference< css::uno::XComponentContext >& rxContext, ChartController* pController );
     virtual ~DrawCommandDispatch();
 
     // late initialisation, especially for adding as listener
@@ -51,14 +50,14 @@ protected:
     virtual void SAL_CALL disposing() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // state of a feature
     virtual FeatureState getState( const OUString& rCommand ) override;
 
     // execute a feature
-    virtual void execute( const OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs ) override;
+    virtual void execute( const OUString& rCommand, const css::uno::Sequence< css::beans::PropertyValue>& rArgs ) override;
 
     // all the features which should be handled by this class
     virtual void describeSupportedFeatures() override;

@@ -34,10 +34,10 @@ public:
     virtual ~AccStatisticsObject();
 
     // ________ XAccessibleContext ________
-    virtual OUString SAL_CALL getAccessibleName() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getAccessibleName() throw (css::uno::RuntimeException);
 
     // ________ XServiceInfo ________
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
 };
 
 }  // accessibility

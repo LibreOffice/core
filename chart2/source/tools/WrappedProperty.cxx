@@ -71,7 +71,7 @@ Any WrappedProperty::getPropertyValue( const Reference< beans::XPropertySet >& x
 }
 
 void WrappedProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+                        throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     if( xInnerPropertyState.is() && !this->getInnerName().isEmpty() )
         xInnerPropertyState->setPropertyToDefault(this->getInnerName());

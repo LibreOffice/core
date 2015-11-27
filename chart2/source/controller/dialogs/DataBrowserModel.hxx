@@ -39,9 +39,8 @@ class DataBrowserModel
 {
 public:
     explicit DataBrowserModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > & xChartDoc,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~DataBrowserModel();
 
     /** Inserts a new data series after the data series to which the data column
@@ -78,14 +77,14 @@ public:
     /// If getCellType( nAtColumn, nAtRow ) returns TEXT, the result will be Nan
     double getCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     OUString getCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow );
-    ::com::sun::star::uno::Any getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow );
+    css::uno::Any getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     sal_uInt32 getNumberFormatKey( sal_Int32 nAtColumn, sal_Int32 nAtRow );
 
     /// returns </sal_True> if the number could successfully be set at the given position
     bool setCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow, double fValue );
     /// returns </sal_True> if the text could successfully be set at the given position
     bool setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const OUString & rText );
-    bool setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const ::com::sun::star::uno::Any & aValue );
+    bool setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const css::uno::Any & aValue );
 
     sal_Int32 getColumnCount() const;
     sal_Int32 getMaxRowCount() const;
@@ -96,10 +95,8 @@ public:
 
     struct tDataHeader
     {
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries >     m_xDataSeries;
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType >      m_xChartType;
+        css::uno::Reference< css::chart2::XDataSeries > m_xDataSeries;
+        css::uno::Reference< css::chart2::XChartType >  m_xChartType;
         bool                                            m_bSwapXAndYAxis;
         sal_Int32                                       m_nStartColumn;
         sal_Int32                                       m_nEndColumn;
@@ -112,10 +109,8 @@ public:
         {}
         // "full" CTOR
         tDataHeader(
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > xDataSeries,
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType >  xChartType,
+            css::uno::Reference< css::chart2::XDataSeries > xDataSeries,
+            css::uno::Reference< css::chart2::XChartType >  xChartType,
             bool                                        bSwapXAndYAxis,
             sal_Int32                                   nStartColumn,
             sal_Int32                                   nEndColumn ) :
@@ -132,11 +127,9 @@ public:
     const tDataHeaderVector& getDataHeaders() const { return m_aHeaders;}
 
     tDataHeader getHeaderForSeries(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > &xSeries ) const;
+        const css::uno::Reference< css::chart2::XDataSeries > &xSeries ) const;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries >
+    css::uno::Reference< css::chart2::XDataSeries >
         getDataSeriesByColumn( sal_Int32 nColumn ) const;
 
 private:
@@ -145,16 +138,14 @@ private:
     void removeComplexCategoryLevel( sal_Int32 nAtColumnIndex );
 
     void addErrorBarRanges(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xDataSeries,
+        const css::uno::Reference<css::chart2::XDataSeries > & xDataSeries,
         sal_Int32 nNumberFormatKey,
         sal_Int32 & rInOutSequenceIndex,
         sal_Int32 & rInOutHeaderEnd, bool bYError );
 
     sal_Int32 getCategoryColumnCount();
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
+    css::uno::Reference< css::chart2::XChartDocument > m_xChartDocument;
     std::unique_ptr< DialogModel > m_apDialogModel;
 
     struct tDataColumn;

@@ -146,7 +146,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
 
     switch(nLabelPlacement)
     {
-    case ::com::sun::star::chart::DataLabelPlacement::TOP:
+    case css::chart::DataLabelPlacement::TOP:
         {
             if( !pPosHelper->isSwapXAndY() )
             {
@@ -163,7 +163,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             }
         }
         break;
-    case ::com::sun::star::chart::DataLabelPlacement::BOTTOM:
+    case css::chart::DataLabelPlacement::BOTTOM:
         {
             if(!pPosHelper->isSwapXAndY())
             {
@@ -180,7 +180,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             }
         }
         break;
-    case ::com::sun::star::chart::DataLabelPlacement::LEFT:
+    case css::chart::DataLabelPlacement::LEFT:
         {
             if( pPosHelper->isSwapXAndY() )
             {
@@ -197,7 +197,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             }
         }
         break;
-    case ::com::sun::star::chart::DataLabelPlacement::RIGHT:
+    case css::chart::DataLabelPlacement::RIGHT:
         {
             if( pPosHelper->isSwapXAndY() )
             {
@@ -214,7 +214,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             }
         }
         break;
-    case ::com::sun::star::chart::DataLabelPlacement::OUTSIDE:
+    case css::chart::DataLabelPlacement::OUTSIDE:
         {
         fY = (fBaseValue < fScaledUpperYValue) ? fScaledUpperYValue : fScaledLowerYValue;
         if( pPosHelper->isSwapXAndY() )
@@ -225,7 +225,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             fDepth = (fBaseValue < fScaledUpperYValue) ? fabs(fScaledUpperBarDepth) : fabs(fScaledLowerBarDepth);
         }
         break;
-    case ::com::sun::star::chart::DataLabelPlacement::INSIDE:
+    case css::chart::DataLabelPlacement::INSIDE:
         {
         fY = (fBaseValue < fScaledUpperYValue) ? fScaledUpperYValue : fScaledLowerYValue;
         if( pPosHelper->isSwapXAndY() )
@@ -236,7 +236,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             fDepth = (fBaseValue < fScaledUpperYValue) ? fabs(fScaledUpperBarDepth) : fabs(fScaledLowerBarDepth);
         }
         break;
-    case ::com::sun::star::chart::DataLabelPlacement::NEAR_ORIGIN:
+    case css::chart::DataLabelPlacement::NEAR_ORIGIN:
         {
         fY = (fBaseValue < fScaledUpperYValue) ? fScaledLowerYValue : fScaledUpperYValue;
         if( pPosHelper->isSwapXAndY() )
@@ -247,7 +247,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             fDepth = (fBaseValue < fScaledUpperYValue) ? fabs(fScaledLowerBarDepth) : fabs(fScaledUpperBarDepth);
         }
         break;
-    case ::com::sun::star::chart::DataLabelPlacement::CENTER:
+    case css::chart::DataLabelPlacement::CENTER:
         fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
         rAlignment = LABEL_ALIGN_CENTER;
         if(3==m_nDimension)

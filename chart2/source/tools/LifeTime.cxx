@@ -161,8 +161,8 @@ bool LifeTimeManager::dispose()
     //--release all resources and references after calling this method successful
 }
 
-CloseableLifeTimeManager::CloseableLifeTimeManager( ::com::sun::star::util::XCloseable* pCloseable
-        , ::com::sun::star::lang::XComponent* pComponent
+CloseableLifeTimeManager::CloseableLifeTimeManager( css::util::XCloseable* pCloseable
+        , css::lang::XComponent* pComponent
         , bool bLongLastingCallsCancelable )
         : LifeTimeManager( pComponent, bLongLastingCallsCancelable )
         , m_pCloseable(pCloseable)

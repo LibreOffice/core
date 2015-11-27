@@ -29,8 +29,8 @@ namespace chart
 
 struct InsertAxisOrGridDialogData
 {
-    ::com::sun::star::uno::Sequence< sal_Bool > aPossibilityList;
-    ::com::sun::star::uno::Sequence< sal_Bool > aExistenceList;
+    css::uno::Sequence< sal_Bool > aPossibilityList;
+    css::uno::Sequence< sal_Bool > aExistenceList;
 
     InsertAxisOrGridDialogData();
 };

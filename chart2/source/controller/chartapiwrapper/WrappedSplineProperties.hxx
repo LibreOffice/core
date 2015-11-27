@@ -33,7 +33,7 @@ namespace wrapper
 class WrappedSplineProperties
 {
 public:
-    static void addProperties( ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
+    static void addProperties( ::std::vector< css::beans::Property > & rOutProperties );
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };

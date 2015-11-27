@@ -29,14 +29,13 @@ namespace chart
 class VCartesianCoordinateSystem : public VCoordinateSystem
 {
 public:
-    explicit VCartesianCoordinateSystem( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+    explicit VCartesianCoordinateSystem( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
     virtual ~VCartesianCoordinateSystem();
 
     virtual void createVAxisList(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument> &ChartDoc
-            , const ::com::sun::star::awt::Size& rFontReferenceSize
-            , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) override;
+            const css::uno::Reference< css::chart2::XChartDocument> &ChartDoc
+            , const css::awt::Size& rFontReferenceSize
+            , const css::awt::Rectangle& rMaximumSpaceForLabels ) override;
 
     virtual void initVAxisInList() override;
     virtual void updateScalesAndIncrementsOnAxes() override;

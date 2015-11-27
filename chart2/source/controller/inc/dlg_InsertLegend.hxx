@@ -37,13 +37,10 @@ private:
     std::unique_ptr < LegendPositionResources >    m_xLegendPositionResources;
 
 public:
-    SchLegendDlg( vcl::Window* pParent, const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext>& xCC );
+    SchLegendDlg( vcl::Window* pParent, const css::uno::Reference< css::uno::XComponentContext>& xCC );
 
-    void init( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xChartModel );
-    bool writeToModel( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xChartModel ) const;
+    void init( const css::uno::Reference< css::frame::XModel >& xChartModel );
+    bool writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
 };
 
 } //namespace chart

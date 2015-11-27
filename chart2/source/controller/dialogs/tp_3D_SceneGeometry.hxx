@@ -36,8 +36,7 @@ class ThreeD_SceneGeometry_TabPage : public TabPage
 {
 public:
     ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow,
-                                  const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::beans::XPropertySet > & xSceneProperties,
+                                  const css::uno::Reference< css::beans::XPropertySet > & xSceneProperties,
                                   ControllerLockHelper & rControllerLockHelper );
     virtual ~ThreeD_SceneGeometry_TabPage();
     virtual void dispose() override;
@@ -61,8 +60,7 @@ private:
     void applyAnglesToModel();
     void applyPerspectiveToModel();
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > m_xSceneProperties;
+    css::uno::Reference< css::beans::XPropertySet > m_xSceneProperties;
 
     VclPtr<CheckBox>        m_pCbxRightAngledAxes;
 

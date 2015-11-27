@@ -49,7 +49,7 @@ PlottingPositionHelper::PlottingPositionHelper()
         , m_nZResolution( 1000 )
         , m_bMaySkipPointsInRegressionCalculation( true )
         , m_bDateAxis(false)
-        , m_nTimeResolution( ::com::sun::star::chart::TimeUnit::DAY )
+        , m_nTimeResolution( css::chart::TimeUnit::DAY )
         , m_aNullDate(30,12,1899)
         , m_fScaledCategoryWidth(1.0)
         , m_bAllowShiftXAxisPos(false)
@@ -700,10 +700,10 @@ void PlottingPositionHelper::setTimeResolution( long nTimeResolution, const Date
     double fCategoryWidth = 1.0;
     if( !m_aScales.empty() )
     {
-        if( m_aScales[0].AxisType == ::com::sun::star::chart2::AxisType::DATE )
+        if( m_aScales[0].AxisType == css::chart2::AxisType::DATE )
         {
             m_bDateAxis = true;
-            if( nTimeResolution == ::com::sun::star::chart::TimeUnit::YEAR )
+            if( nTimeResolution == css::chart::TimeUnit::YEAR )
             {
                 const double fMonthCount = 12.0;//todo: this depends on the DateScaling and must be adjusted in case we use more generic calendars in future
                 fCategoryWidth = fMonthCount;

@@ -20,19 +20,19 @@ class LineProperties
 {
 private:
     OUString maDashName;
-    com::sun::star::drawing::LineDash maLineDash;
+    css::drawing::LineDash maLineDash;
     sal_Int32 mnLineWidth;
-    com::sun::star::drawing::LineStyle meLineStyle;
-    com::sun::star::util::Color maLineColor;
+    css::drawing::LineStyle meLineStyle;
+    css::util::Color maLineColor;
     sal_Int16 mnLineTransparence;
-    com::sun::star::drawing::LineJoint meLineJoint;
+    css::drawing::LineJoint meLineJoint;
 
 public:
     LineProperties();
     LineProperties(const LineProperties&);
 
-    com::sun::star::uno::Any getPropertyValue(const OUString& rName);
-    void setPropertyValue(const OUString& rName, const com::sun::star::uno::Any& rAny);
+    css::uno::Any getPropertyValue(const OUString& rName);
+    void setPropertyValue(const OUString& rName, const css::uno::Any& rAny);
 };
 
 #endif

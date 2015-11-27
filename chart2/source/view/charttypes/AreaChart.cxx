@@ -154,8 +154,8 @@ void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlo
     if( m_bArea && pSeries )
     {
         sal_Int32 nMissingValueTreatment = pSeries->getMissingValueTreatment();
-        if( nMissingValueTreatment == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP  )
-            pSeries->setMissingValueTreatment( ::com::sun::star::chart::MissingValueTreatment::USE_ZERO );
+        if( nMissingValueTreatment == css::chart::MissingValueTreatment::LEAVE_GAP  )
+            pSeries->setMissingValueTreatment( css::chart::MissingValueTreatment::USE_ZERO );
     }
     if( m_nDimension == 3 && !m_bCategoryXAxis )
     {
@@ -784,7 +784,7 @@ void AreaChart::createShapes()
                             || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY)
                             || ::rtl::math::isNan(fLogicZ) || ::rtl::math::isInf(fLogicZ) )
                     {
-                        if( (*aSeriesIter)->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP )
+                        if( (*aSeriesIter)->getMissingValueTreatment() == css::chart::MissingValueTreatment::LEAVE_GAP )
                         {
                             drawing::PolyPolygonShape3D& rPolygon = (*aSeriesIter)->m_aPolyPolygonShape3D;
                             sal_Int32& rIndex = (*aSeriesIter)->m_nPolygonIndex;
@@ -945,23 +945,23 @@ void AreaChart::createShapes()
 
                             switch(nLabelPlacement)
                             {
-                                case ::com::sun::star::chart::DataLabelPlacement::TOP:
+                                case css::chart::DataLabelPlacement::TOP:
                                     aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
                                     eAlignment = LABEL_ALIGN_TOP;
                                     break;
-                                case ::com::sun::star::chart::DataLabelPlacement::BOTTOM:
+                                case css::chart::DataLabelPlacement::BOTTOM:
                                     aScenePosition3D.PositionY += (aSymbolSize.DirectionY/2+1);
                                     eAlignment = LABEL_ALIGN_BOTTOM;
                                     break;
-                                case ::com::sun::star::chart::DataLabelPlacement::LEFT:
+                                case css::chart::DataLabelPlacement::LEFT:
                                     aScenePosition3D.PositionX -= (aSymbolSize.DirectionX/2+1);
                                     eAlignment = LABEL_ALIGN_LEFT;
                                     break;
-                                case ::com::sun::star::chart::DataLabelPlacement::RIGHT:
+                                case css::chart::DataLabelPlacement::RIGHT:
                                     aScenePosition3D.PositionX += (aSymbolSize.DirectionX/2+1);
                                     eAlignment = LABEL_ALIGN_RIGHT;
                                     break;
-                                case ::com::sun::star::chart::DataLabelPlacement::CENTER:
+                                case css::chart::DataLabelPlacement::CENTER:
                                     eAlignment = LABEL_ALIGN_CENTER;
                                     //todo implement this different for area charts
                                     break;

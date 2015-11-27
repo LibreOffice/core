@@ -28,134 +28,127 @@ class ShapeFactory : public AbstractShapeFactory
 {
     friend class AbstractShapeFactory;
 
-    ShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory)
+    ShapeFactory(css::uno::Reference< css::lang::XMultiServiceFactory> xFactory)
         {m_xShapeFactory = xFactory;}
 
 public:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    virtual css::uno::Reference< css::drawing::XShapes >
         createGroup2D(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-                , const OUString& aName = OUString() ) override;
+            const css::uno::Reference< css::drawing::XShapes >& xTarget
+          , const OUString& aName = OUString() ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    virtual css::uno::Reference< css::drawing::XShapes >
         createGroup3D(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-                , const OUString& aName = OUString() ) override;
+            const css::uno::Reference< css::drawing::XShapes >& xTarget
+          , const OUString& aName = OUString() ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-            createCube(   const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShapes >& xTarget
-                        , const ::com::sun::star::drawing::Position3D& rPosition
-                        , const ::com::sun::star::drawing::Direction3D& rSize
+    virtual css::uno::Reference< css::drawing::XShape >
+            createCube(   const css::uno::Reference< css::drawing::XShapes >& xTarget
+                        , const css::drawing::Position3D& rPosition
+                        , const css::drawing::Direction3D& rSize
                         , sal_Int32 nRotateZAngleHundredthDegree
-                        , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSourceProp
+                        , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
                         , const tPropertyNameMap& rPropertyNameMap
                         , bool bRounded = false) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createCylinder(   const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShapes >& xTarget
-                        , const ::com::sun::star::drawing::Position3D& rPosition
-                        , const ::com::sun::star::drawing::Direction3D& rSize
+    virtual css::uno::Reference< css::drawing::XShape >
+        createCylinder(   const css::uno::Reference< css::drawing::XShapes >& xTarget
+                        , const css::drawing::Position3D& rPosition
+                        , const css::drawing::Direction3D& rSize
                         , sal_Int32 nRotateZAngleHundredthDegree ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createPyramid(    const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShapes >& xTarget
-                        , const ::com::sun::star::drawing::Position3D& rPosition
-                        , const ::com::sun::star::drawing::Direction3D& rSize
+    virtual css::uno::Reference< css::drawing::XShape >
+        createPyramid(    const css::uno::Reference< css::drawing::XShapes >& xTarget
+                        , const css::drawing::Position3D& rPosition
+                        , const css::drawing::Direction3D& rSize
                         , double fTopHeight
                         , bool bRotateZ
-                        , const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XPropertySet >& xSourceProp
+                        , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
                         , const tPropertyNameMap& rPropertyNameMap) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createCone(       const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShapes >& xTarget
-                        , const ::com::sun::star::drawing::Position3D& rPosition
-                        , const ::com::sun::star::drawing::Direction3D& rSize
+    virtual css::uno::Reference< css::drawing::XShape >
+        createCone(       const css::uno::Reference< css::drawing::XShapes >& xTarget
+                        , const css::drawing::Position3D& rPosition
+                        , const css::drawing::Direction3D& rSize
                         , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createPieSegment2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+    virtual css::uno::Reference< css::drawing::XShape >
+        createPieSegment2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
-                    , const ::com::sun::star::drawing::Direction3D& rOffset
-                    , const ::com::sun::star::drawing::HomogenMatrix& rUnitCircleToScene ) override;
+                    , const css::drawing::Direction3D& rOffset
+                    , const css::drawing::HomogenMatrix& rUnitCircleToScene ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createPieSegment( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+    virtual css::uno::Reference< css::drawing::XShape >
+        createPieSegment( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                     , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
-                    , const ::com::sun::star::drawing::Direction3D& rOffset
-                    , const ::com::sun::star::drawing::HomogenMatrix& rUnitCircleToScene
+                    , const css::drawing::Direction3D& rOffset
+                    , const css::drawing::HomogenMatrix& rUnitCircleToScene
                     , double fDepth ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createStripe( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+    virtual css::uno::Reference< css::drawing::XShape >
+        createStripe( const css::uno::Reference< css::drawing::XShapes >& xTarget
                     , const Stripe& rStripe
-                    , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSourceProp
+                    , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
                     , bool bDoubleSided = true
                     , short nRotatedTexture = 0 //0 to 7 are the different possibilities
                     , bool bFlatNormals=true ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createArea3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygon
+    virtual css::uno::Reference< css::drawing::XShape >
+        createArea3D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon
                     , double fDepth) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createArea2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygon) override;
+    virtual css::uno::Reference< css::drawing::XShape >
+        createArea2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::drawing::PolyPolygonShape3D& rPolyPolygon) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createSymbol2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::Position3D& rPos
-                    , const ::com::sun::star::drawing::Direction3D& rSize
+    virtual css::uno::Reference< css::drawing::XShape >
+        createSymbol2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::drawing::Position3D& rPos
+                    , const css::drawing::Direction3D& rSize
                     , sal_Int32 nStandardSymbol
                     , sal_Int32 nBorderColor=0
                     , sal_Int32 nFillColor=0 ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createGraphic2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::Position3D& rPos
-                    , const ::com::sun::star::drawing::Direction3D& rSize
-                    , const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& xGraphic ) override;
+    virtual css::uno::Reference< css::drawing::XShape >
+        createGraphic2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::drawing::Position3D& rPos
+                    , const css::drawing::Direction3D& rSize
+                    , const css::uno::Reference< css::graphic::XGraphic >& xGraphic ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createLine2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::PointSequenceSequence& rPoints
+    virtual css::uno::Reference< css::drawing::XShape >
+        createLine2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties = nullptr ) override;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
-        createLine ( const ::com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& xTarget,
-                const com::sun::star::awt::Size& rSize, const com::sun::star::awt::Point& rPosition ) override;
+    virtual css::uno::Reference< css::drawing::XShape >
+        createLine ( const css::uno::Reference< css::drawing::XShapes >& xTarget,
+                const css::awt::Size& rSize, const css::awt::Point& rPosition ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createLine3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
+    virtual css::uno::Reference< css::drawing::XShape >
+        createLine3D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createCircle2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::Position3D& rPos
-                    , const ::com::sun::star::drawing::Direction3D& rSize ) override;
+    virtual css::uno::Reference< css::drawing::XShape >
+        createCircle2D( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::drawing::Position3D& rPos
+                    , const css::drawing::Direction3D& rSize ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createCircle( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::awt::Size& rSize
-                    , const ::com::sun::star::awt::Point& rPosition ) override;
+    virtual css::uno::Reference< css::drawing::XShape >
+        createCircle( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::awt::Size& rSize
+                    , const css::awt::Point& rPosition ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget2D
+    virtual css::uno::Reference< css::drawing::XShape >
+        createText( const css::uno::Reference< css::drawing::XShapes >& xTarget2D
                     , const OUString& rText
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
-                    , const ::com::sun::star::uno::Any& rATransformation
+                    , const css::uno::Any& rATransformation
                      ) override;
 
     /** This method creates a text shape made up by a set of paragraphs.
@@ -185,74 +178,70 @@ public:
      *      a transformation to be applied to the text shape as final step.
      *
      */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::uno::Sequence< OUString >& rTextParagraphs
-                    , const ::com::sun::star::uno::Sequence< tNameSequence >& rParaPropNames
-                    , const ::com::sun::star::uno::Sequence< tAnySequence >& rParaPropValues
+    virtual css::uno::Reference< css::drawing::XShape >
+        createText( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::uno::Sequence< OUString >& rTextParagraphs
+                    , const css::uno::Sequence< tNameSequence >& rParaPropNames
+                    , const css::uno::Sequence< tAnySequence >& rParaPropValues
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
-                    , const ::com::sun::star::uno::Any& rATransformation ) override;
+                    , const css::uno::Any& rATransformation ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget2D,
-                const com::sun::star::awt::Size& rSize,
-                const com::sun::star::awt::Point& rPosition,
-                com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::chart2::XFormattedString > >& xFormattedString,
-                const com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet > & xTextProperties,
+    virtual css::uno::Reference< css::drawing::XShape >
+        createText( const css::uno::Reference< css::drawing::XShapes >& xTarget2D,
+                const css::awt::Size& rSize,
+                const css::awt::Point& rPosition,
+                css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
+                const css::uno::Reference< css::beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
         createInvisibleRectangle(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-                , const ::com::sun::star::awt::Size& rSize ) override;
+            const css::uno::Reference< css::drawing::XShapes >& xTarget
+          , const css::awt::Size& rSize ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
         createRectangle(
-            const com::sun::star::uno::Reference<
-                com::sun::star::drawing::XShapes >& xTarget,
-            const com::sun::star::awt::Size& rSize,
-            const com::sun::star::awt::Point& rPosition,
+            const css::uno::Reference< css::drawing::XShapes >& xTarget,
+            const css::awt::Size& rSize,
+            const css::awt::Point& rPosition,
             const tNameSequence& rPropNames,
             const tAnySequence& rPropValues,
             StackPosition ePos = Top ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
         createRectangle(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget ) override;
+            const css::uno::Reference< css::drawing::XShapes >& xTarget ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
-         getOrCreateChartRootShape( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XDrawPage>& xPage ) override;
+    virtual css::uno::Reference< css::drawing::XShapes >
+         getOrCreateChartRootShape( const css::uno::Reference<
+            css::drawing::XDrawPage>& xPage ) override;
 
-    virtual void setPageSize( com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > xChartShapes, const com::sun::star::awt::Size& rSize ) override;
+    virtual void setPageSize( css::uno::Reference < css::drawing::XShapes > xChartShapes, const css::awt::Size& rSize ) override;
 
     /**
      * not necessary right now
      */
-    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >, bool ) override {}
+    virtual void render(css::uno::Reference< css::drawing::XShapes >, bool ) override {}
 
-    virtual bool preRender(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >, OpenGLWindow*) override { return true; }
+    virtual bool preRender(css::uno::Reference< css::drawing::XShapes >, OpenGLWindow*) override { return true; }
     virtual void postRender(OpenGLWindow*) override {}
 
-    virtual void clearPage(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > ) override {}
+    virtual void clearPage(css::uno::Reference< css::drawing::XShapes > ) override {}
 
 private:
     ShapeFactory();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        impl_createCube( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::Position3D& rPosition
-                    , const ::com::sun::star::drawing::Direction3D& rSize, sal_Int32 nRotateZAngleHundredthDegree
+    css::uno::Reference< css::drawing::XShape >
+        impl_createCube( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::drawing::Position3D& rPosition
+                    , const css::drawing::Direction3D& rSize, sal_Int32 nRotateZAngleHundredthDegree
                     , bool bRounded );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        impl_createConeOrCylinder( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const ::com::sun::star::drawing::Position3D& rPosition
-                    , const ::com::sun::star::drawing::Direction3D& rSize
+    css::uno::Reference< css::drawing::XShape >
+        impl_createConeOrCylinder( const css::uno::Reference< css::drawing::XShapes >& xTarget
+                    , const css::drawing::Position3D& rPosition
+                    , const css::drawing::Direction3D& rSize
                     , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
                     , bool bCylinder = false);
 };

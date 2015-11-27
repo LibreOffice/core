@@ -36,12 +36,10 @@ class RegressionEquationItemConverter : public ItemConverter
 {
 public:
     RegressionEquationItemConverter(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         const css::awt::Size* pRefSize = nullptr );
 
     virtual ~RegressionEquationItemConverter();
@@ -54,9 +52,9 @@ protected:
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const override;
 
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception ) override;
+        throw( css::uno::Exception ) override;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception ) override;
+        throw( css::uno::Exception ) override;
 
 private:
     ::std::vector< ItemConverter * >    m_aConverters;

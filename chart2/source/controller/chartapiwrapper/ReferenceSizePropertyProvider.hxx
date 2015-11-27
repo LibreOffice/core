@@ -29,8 +29,8 @@ class ReferenceSizePropertyProvider
 {
 public:
     virtual void updateReferenceSize() = 0;
-    virtual ::com::sun::star::uno::Any getReferenceSize() = 0;
-    virtual ::com::sun::star::awt::Size getCurrentSizeForReference() = 0;
+    virtual css::uno::Any getReferenceSize() = 0;
+    virtual css::awt::Size getCurrentSizeForReference() = 0;
 
 protected:
     ~ReferenceSizePropertyProvider() {}

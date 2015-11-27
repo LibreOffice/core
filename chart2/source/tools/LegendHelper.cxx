@@ -48,11 +48,11 @@ Reference< chart2::XLegend > LegendHelper::showLegend( ChartModel& rModel
             if( !(xProp->getPropertyValue( "AnchorPosition") >>= ePos ) )
                 xProp->setPropertyValue( "AnchorPosition", uno::makeAny( ePos ));
 
-            ::com::sun::star::chart::ChartLegendExpansion eExpansion =
+            css::chart::ChartLegendExpansion eExpansion =
                     ( ePos == chart2::LegendPosition_LINE_END ||
                       ePos == chart2::LegendPosition_LINE_START )
-                    ? ::com::sun::star::chart::ChartLegendExpansion_HIGH
-                    : ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                    ? css::chart::ChartLegendExpansion_HIGH
+                    : css::chart::ChartLegendExpansion_WIDE;
             if( !(xProp->getPropertyValue( "Expansion") >>= eExpansion ) )
                 xProp->setPropertyValue( "Expansion", uno::makeAny( eExpansion ));
 

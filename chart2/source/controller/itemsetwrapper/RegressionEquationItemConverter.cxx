@@ -49,8 +49,7 @@ ItemPropertyMapType & lcl_GetEquationPropertyMap()
 } // anonymous namespace
 
 RegressionEquationItemConverter::RegressionEquationItemConverter(
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet > & rPropertySet,
+    const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,

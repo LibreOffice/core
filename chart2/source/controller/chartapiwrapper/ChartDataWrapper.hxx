@@ -41,16 +41,16 @@ struct lcl_Operator;
 
 class ChartDataWrapper : public MutexContainer, public
     ::cppu::WeakImplHelper<
-    com::sun::star::chart2::XAnyDescriptionAccess,
-    com::sun::star::chart::XDateCategories,
-    com::sun::star::lang::XServiceInfo,
-    com::sun::star::lang::XEventListener,
-    com::sun::star::lang::XComponent >
+    css::chart2::XAnyDescriptionAccess,
+    css::chart::XDateCategories,
+    css::lang::XServiceInfo,
+    css::lang::XEventListener,
+    css::lang::XComponent >
 {
 public:
     explicit ChartDataWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     ChartDataWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartData >& xNewData );
+        , const css::uno::Reference< css::chart::XChartData >& xNewData );
     virtual ~ChartDataWrapper();
 
     /// XServiceInfo declarations
@@ -66,86 +66,70 @@ public:
 
 protected:
     // ____ XDateCategories ____
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getDateCategories() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDateCategories( const ::com::sun::star::uno::Sequence< double >& rDates ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< double > SAL_CALL getDateCategories() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDateCategories( const css::uno::Sequence< double >& rDates ) throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XAnyDescriptionAccess ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL
-        getAnyRowDescriptions() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Sequence< css::uno::Any > > SAL_CALL
+        getAnyRowDescriptions() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setAnyRowDescriptions(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aRowDescriptions )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL
-        getAnyColumnDescriptions() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& aRowDescriptions )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Sequence< css::uno::Any > > SAL_CALL
+        getAnyColumnDescriptions() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setAnyColumnDescriptions(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aColumnDescriptions )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& aColumnDescriptions )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > SAL_CALL
-        getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL
+        getComplexRowDescriptions() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setComplexRowDescriptions(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< OUString > >& aRowDescriptions )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > SAL_CALL
-        getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Sequence< OUString > >& aRowDescriptions )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL
+        getComplexColumnDescriptions() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setComplexColumnDescriptions(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< OUString > >& aColumnDescriptions )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Sequence< OUString > >& aColumnDescriptions )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
-    virtual ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence<
-        double > > SAL_CALL getData()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence<
-                                   ::com::sun::star::uno::Sequence<
-                                   double > >& aData )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence<
-        OUString > SAL_CALL getRowDescriptions()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setRowDescriptions( const ::com::sun::star::uno::Sequence<
-                                              OUString >& aRowDescriptions )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence<
-        OUString > SAL_CALL getColumnDescriptions()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setColumnDescriptions( const ::com::sun::star::uno::Sequence<
-                                                 OUString >& aColumnDescriptions )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL getData()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setData( const css::uno::Sequence< css::uno::Sequence< double > >& aData )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getRowDescriptions()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRowDescriptions( const css::uno::Sequence< OUString >& aRowDescriptions )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getColumnDescriptions()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setColumnDescriptions( const css::uno::Sequence< OUString >& aColumnDescriptions )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XChartData (base of XChartDataArray) ____
-    virtual void SAL_CALL addChartDataChangeEventListener( const ::com::sun::star::uno::Reference<
-                                                           ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeChartDataChangeEventListener( const ::com::sun::star::uno::Reference<
-                                                              ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual double SAL_CALL getNotANumber()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isNotANumber( double nNumber )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XComponent ____
     virtual void SAL_CALL dispose()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference<
-                                            ::com::sun::star::lang::XEventListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference<
-                                               ::com::sun::star::lang::XEventListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener ____
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    void fireChartDataChangeEvent( ::com::sun::star::chart::ChartDataChangeEvent& aEvent );
+    void fireChartDataChangeEvent( css::chart::ChartDataChangeEvent& aEvent );
 
 private: //methods
     void switchToInternalDataProvider();
@@ -153,8 +137,7 @@ private: //methods
     void applyData( lcl_Operator& rDataOperator );
 
 private: //member
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XAnyDescriptionAccess > m_xDataAccess;
+    css::uno::Reference< css::chart2::XAnyDescriptionAccess > m_xDataAccess;
 
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;

@@ -53,32 +53,26 @@ struct ViewLegendEntry
     /** The legend symbol that represents a data series or other
         information contained in the legend
      */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape > aSymbol;
+    css::uno::Reference< css::drawing::XShape > aSymbol;
 
     /** The descriptive text for a legend entry.
      */
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XFormattedString2 > >  aLabel;
+    css::uno::Sequence<
+        css::uno::Reference< css::chart2::XFormattedString2 > >  aLabel;
 };
 
 class LegendEntryProvider
 {
 public:
-    virtual ::com::sun::star::awt::Size getPreferredLegendKeyAspectRatio()=0;
+    virtual css::awt::Size getPreferredLegendKeyAspectRatio()=0;
 
     virtual std::vector< ViewLegendEntry > createLegendEntries(
-            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
-            ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >& xTextProperties,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext >& xContext
+            const css::awt::Size& rEntryKeyAspectRatio,
+            css::chart::ChartLegendExpansion eLegendExpansion,
+            const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
+            const css::uno::Reference< css::drawing::XShapes >& xTarget,
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory,
+            const css::uno::Reference< css::uno::XComponentContext >& xContext
                 ) = 0;
 
 protected:

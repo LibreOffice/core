@@ -63,7 +63,7 @@ struct StaticDataSeriesInfoHelper : public rtl::StaticWithInit< ::cppu::OPropert
 {
     uno::Sequence< Property > operator()()
     {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< css::beans::Property > aProperties;
         ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
@@ -92,7 +92,7 @@ void lcl_SetParent(
         xChild->setParent( xParentInterface );
 }
 
-typedef ::std::map< sal_Int32, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > >
+typedef ::std::map< sal_Int32, css::uno::Reference< css::beans::XPropertySet > >
     lcl_tDataPointMap;
 
 void lcl_CloneAttributedDataPoints(

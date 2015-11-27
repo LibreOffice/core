@@ -42,10 +42,8 @@ class CreationWizard : public svt::RoadmapWizard, public TabPageNotifiable
 {
 public:
     CreationWizard( vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel >& xChartModel
-        , const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >& xContext
+        const css::uno::Reference< css::frame::XModel >& xChartModel
+        , const css::uno::Reference< css::uno::XComponentContext >& xContext
         , sal_Int32 nOnePageOnlyIndex=-1 );//if nOnePageOnlyIndex is an index of an exsisting  page starting with 0, then only this page is displayed without next/previous and roadmap
 
     bool isClosable() { /*@todo*/ return m_bIsClosable;}
@@ -67,10 +65,8 @@ private:
 
     virtual VclPtr<TabPage> createPage(WizardState nState) override;
 
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::chart2::XChartDocument >   m_xChartModel;
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext>    m_xCC;
+    css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
+    css::uno::Reference< css::uno::XComponentContext>    m_xCC;
     bool m_bIsClosable;
     sal_Int32 m_nOnePageOnlyIndex;//if nOnePageOnlyIndex is an index of an exsisting page starting with 0, then only this page is displayed without next/previous and roadmap
     ChartTypeTemplateProvider*   m_pTemplateProvider;

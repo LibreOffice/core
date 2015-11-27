@@ -29,18 +29,17 @@ namespace chart
 class VPolarCoordinateSystem : public VCoordinateSystem
 {
 public:
-    explicit VPolarCoordinateSystem( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+    explicit VPolarCoordinateSystem( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
     virtual ~VPolarCoordinateSystem();
 
     //better performance for big data
-    virtual ::com::sun::star::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const ::com::sun::star::awt::Size& rPageSize
-                                    , const ::com::sun::star::awt::Size& rPageResolution ) override;
+    virtual css::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const css::awt::Size& rPageSize
+                                    , const css::awt::Size& rPageResolution ) override;
 
     virtual void createVAxisList(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument> & xChartDoc
-            , const ::com::sun::star::awt::Size& rFontReferenceSize
-            , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) override;
+            const css::uno::Reference< css::chart2::XChartDocument> & xChartDoc
+            , const css::awt::Size& rFontReferenceSize
+            , const css::awt::Rectangle& rMaximumSpaceForLabels ) override;
 
     virtual void initVAxisInList() override;
     virtual void updateScalesAndIncrementsOnAxes() override;

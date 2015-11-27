@@ -242,7 +242,7 @@ struct StaticDiagramInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::SceneProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
@@ -287,10 +287,9 @@ lcl_tCooSysMapping lcl_CloneCoordinateSystems(
          aIt != rSource.end(); ++aIt )
     {
         lcl_tCooSysRef xClone;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >
-              xCloneable( *aIt, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::util::XCloneable > xCloneable( *aIt, css::uno::UNO_QUERY );
         if( xCloneable.is())
-            xClone.set( xCloneable->createClone(), ::com::sun::star::uno::UNO_QUERY );
+            xClone.set( xCloneable->createClone(), css::uno::UNO_QUERY );
 
         if( xClone.is())
         {

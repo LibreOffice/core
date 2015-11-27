@@ -135,7 +135,7 @@ bool ChartController::EndTextEdit()
             ControllerLockGuardUNO aCLGuard( getModel() );
 
             TitleHelper::setCompleteString( aString, uno::Reference<
-                ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
+                css::chart2::XTitle >::query( xPropSet ), m_xCC );
 
             OSL_ENSURE( m_pTextActionUndoGuard.get(), "ChartController::EndTextEdit: no TextUndoGuard!" );
             if ( m_pTextActionUndoGuard.get() )
@@ -209,10 +209,10 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     }
 }
 
-uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+uno::Reference< css::accessibility::XAccessibleContext >
     ChartController::impl_createAccessibleTextContext()
 {
-    uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xResult(
+    uno::Reference< css::accessibility::XAccessibleContext > xResult(
         new AccessibleTextHelper( m_pDrawViewWrapper ));
 
     return xResult;

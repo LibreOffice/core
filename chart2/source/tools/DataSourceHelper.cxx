@@ -87,9 +87,9 @@ void lcl_addErrorBarRanges(
         if( ( xSeriesProp->getPropertyValue( CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp ) &&
             xErrorBarProp.is())
         {
-            sal_Int32 eStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+            sal_Int32 eStyle = css::chart::ErrorBarStyle::NONE;
             if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= eStyle ) &&
-                eStyle == ::com::sun::star::chart::ErrorBarStyle::FROM_DATA )
+                eStyle == css::chart::ErrorBarStyle::FROM_DATA )
             {
                 uno::Reference< data::XDataSource > xErrorBarDataSource( xErrorBarProp, uno::UNO_QUERY );
                 if( xErrorBarDataSource.is() )
@@ -99,9 +99,9 @@ void lcl_addErrorBarRanges(
 
         if( ( xSeriesProp->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp ) && xErrorBarProp.is())
         {
-            sal_Int32 eStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+            sal_Int32 eStyle = css::chart::ErrorBarStyle::NONE;
             if( ( xErrorBarProp->getPropertyValue("ErrorBarStyle") >>= eStyle ) &&
-                eStyle == ::com::sun::star::chart::ErrorBarStyle::FROM_DATA )
+                eStyle == css::chart::ErrorBarStyle::FROM_DATA )
             {
                 uno::Reference< data::XDataSource > xErrorBarDataSource( xErrorBarProp, uno::UNO_QUERY );
                 if( xErrorBarDataSource.is() )
@@ -154,9 +154,9 @@ Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledD
 uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
                                             bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories )
 {
-    ::com::sun::star::chart::ChartDataRowSource eRowSource = ::com::sun::star::chart::ChartDataRowSource_ROWS;
+    css::chart::ChartDataRowSource eRowSource = css::chart::ChartDataRowSource_ROWS;
     if( bUseColumns )
-        eRowSource = ::com::sun::star::chart::ChartDataRowSource_COLUMNS;
+        eRowSource = css::chart::ChartDataRowSource_COLUMNS;
 
     uno::Sequence< beans::PropertyValue > aArguments(3);
     aArguments[0] = beans::PropertyValue( "DataRowSource"
@@ -204,9 +204,9 @@ void DataSourceHelper::readArguments( const uno::Sequence< beans::PropertyValue 
         const beans::PropertyValue& aProperty = *pArguments;
         if ( aProperty.Name == "DataRowSource" )
         {
-            ::com::sun::star::chart::ChartDataRowSource eRowSource;
+            css::chart::ChartDataRowSource eRowSource;
             if( aProperty.Value >>= eRowSource )
-                bUseColumns = (eRowSource==::com::sun::star::chart::ChartDataRowSource_COLUMNS);
+                bUseColumns = (eRowSource==css::chart::ChartDataRowSource_COLUMNS);
         }
         else if ( aProperty.Name == "FirstCellAsLabel" )
         {
@@ -353,7 +353,7 @@ bool DataSourceHelper::detectRangeSegmentation(
     const uno::Reference<
         frame::XModel >& xChartModel
     , OUString& rOutRangeString
-    , ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
+    , css::uno::Sequence< sal_Int32 >& rSequenceMapping
     , bool& rOutUseColumns
     , bool& rOutFirstCellAsLabel
     , bool& rOutHasCategories )
@@ -408,7 +408,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
             {
                 bHasDataRowSource =
                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(
-                        cppu::UnoType<com::sun::star::chart::ChartDataRowSource>::get()));
+                        cppu::UnoType<css::chart::ChartDataRowSource>::get()));
             }
             else if ( aProperty.Name == "FirstCellAsLabel" )
             {
@@ -433,7 +433,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
 
 void DataSourceHelper::setRangeSegmentation(
             const uno::Reference< frame::XModel >& xChartModel
-            , const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
+            , const css::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool bUseColumns , bool bFirstCellAsLabel, bool bUseCategories )
 {
     uno::Reference< XChartDocument > xChartDocument( xChartModel, uno::UNO_QUERY );

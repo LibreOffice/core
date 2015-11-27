@@ -39,12 +39,12 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::lang::XServiceName,
-        ::com::sun::star::chart2::XRegressionCurve,
-        ::com::sun::star::util::XCloneable,
-        ::com::sun::star::util::XModifyBroadcaster,
-        ::com::sun::star::util::XModifyListener >
+        css::lang::XServiceInfo,
+        css::lang::XServiceName,
+        css::chart2::XRegressionCurve,
+        css::util::XCloneable,
+        css::util::XModifyBroadcaster,
+        css::util::XModifyListener >
     RegressionCurveModel_Base;
 }
 
@@ -65,8 +65,7 @@ public:
         CURVE_TYPE_MOVING_AVERAGE
     };
 
-    RegressionCurveModel( ::com::sun::star::uno::Reference<
-                              ::com::sun::star::uno::XComponentContext > const & xContext,
+    RegressionCurveModel( css::uno::Reference< css::uno::XComponentContext > const & xContext,
                           tCurveType eCurveType );
     RegressionCurveModel( const RegressionCurveModel & rOther );
     virtual ~RegressionCurveModel();
@@ -78,48 +77,47 @@ public:
 
 protected:
     // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(css::beans::UnknownPropertyException) override;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XRegressionCurve ____
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveCalculator > SAL_CALL getCalculator()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getEquationProperties()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XRegressionCurveCalculator > SAL_CALL getCalculator()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getEquationProperties()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setEquationProperties(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xEquationProperties )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::beans::XPropertySet >& xEquationProperties )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XServiceName ____
     virtual OUString SAL_CALL getServiceName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     using ::cppu::OPropertySetHelper::disposing;
 
@@ -129,14 +127,13 @@ protected:
     void fireModifyEvent();
 
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
                         m_xContext;
 
     const tCurveType    m_eRegressionCurveType;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xEquationProperties;
+    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    css::uno::Reference< css::beans::XPropertySet > m_xEquationProperties;
 };
 
 // implementations for factory instantiation
@@ -145,15 +142,14 @@ class MeanValueRegressionCurve : public RegressionCurveModel
 {
 public:
     explicit MeanValueRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     explicit MeanValueRegressionCurve(
         const MeanValueRegressionCurve & rOther );
     virtual ~MeanValueRegressionCurve();
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
@@ -171,15 +167,15 @@ class LinearRegressionCurve : public RegressionCurveModel
 {
 public:
     explicit LinearRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference<
+        css::uno::XComponentContext > & xContext );
     explicit LinearRegressionCurve(
         const LinearRegressionCurve & rOther );
     virtual ~LinearRegressionCurve();
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
@@ -197,15 +193,15 @@ class LogarithmicRegressionCurve : public RegressionCurveModel
 {
 public:
     explicit LogarithmicRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference<
+        css::uno::XComponentContext > & xContext );
     explicit LogarithmicRegressionCurve(
         const LogarithmicRegressionCurve & rOther );
     virtual ~LogarithmicRegressionCurve();
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
@@ -223,15 +219,14 @@ class ExponentialRegressionCurve : public RegressionCurveModel
 {
 public:
     explicit ExponentialRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     explicit ExponentialRegressionCurve(
         const ExponentialRegressionCurve & rOther );
     virtual ~ExponentialRegressionCurve();
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
@@ -249,15 +244,15 @@ class PotentialRegressionCurve : public RegressionCurveModel
 {
 public:
     explicit PotentialRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference<
+        css::uno::XComponentContext > & xContext );
     explicit PotentialRegressionCurve(
         const PotentialRegressionCurve & rOther );
     virtual ~PotentialRegressionCurve();
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
@@ -275,15 +270,14 @@ class PolynomialRegressionCurve : public RegressionCurveModel
 {
 public:
     explicit PolynomialRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     explicit PolynomialRegressionCurve(
         const PolynomialRegressionCurve & rOther );
     virtual ~PolynomialRegressionCurve();
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
@@ -301,15 +295,14 @@ class MovingAverageRegressionCurve : public RegressionCurveModel
 {
 public:
     explicit MovingAverageRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     explicit MovingAverageRegressionCurve(
         const MovingAverageRegressionCurve & rOther );
     virtual ~MovingAverageRegressionCurve();
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

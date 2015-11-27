@@ -39,11 +39,11 @@ public:
     VAxisOrGridBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
     virtual ~VAxisOrGridBase();
 
-    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix ) override;
+    virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix ) override;
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
           , const ExplicitIncrementData& rIncrement )
-                throw (::com::sun::star::uno::RuntimeException);
+                throw (css::uno::RuntimeException);
     void set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos );
 
     virtual TickFactory* createTickFactory();

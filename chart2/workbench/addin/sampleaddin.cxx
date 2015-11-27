@@ -468,7 +468,7 @@ void SAL_CALL SampleAddIn::setPosition( const awt::Point& aPos )
 }
 
 // XShapeDescriptor ( ::XShape ::XDiagram )
-OUString SAL_CALL SampleAddIn::getShapeType() throw( com::sun::star::uno::RuntimeException )
+OUString SAL_CALL SampleAddIn::getShapeType() throw( css::uno::RuntimeException )
 {
     return "com.sun.star.chart.SampleAddinShape";
 }

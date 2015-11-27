@@ -303,7 +303,7 @@ void AxisPositionsTabPage::SetCrossingAxisIsCategoryAxis( bool bCrossingAxisIsCa
     m_bCrossingAxisIsCategoryAxis = bCrossingAxisIsCategoryAxis;
 }
 
-void AxisPositionsTabPage::SetCategories( const ::com::sun::star::uno::Sequence< OUString >& rCategories )
+void AxisPositionsTabPage::SetCategories( const css::uno::Sequence< OUString >& rCategories )
 {
     m_aCategories = rCategories;
 }

@@ -36,8 +36,8 @@ class OOO_DLLPUBLIC_CHARTVIEW DrawModelWrapper : private SdrModel
 private:
     SfxItemPool* m_pChartItemPool;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > m_xMainDrawPage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > m_xHiddenDrawPage;
+    css::uno::Reference< css::drawing::XDrawPage > m_xMainDrawPage;
+    css::uno::Reference< css::drawing::XDrawPage > m_xHiddenDrawPage;
 
     VclPtr<OutputDevice> m_pRefDevice;
 
@@ -46,21 +46,20 @@ private:
 
 public:
     SAL_DLLPRIVATE DrawModelWrapper(
-        const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext );
+        const css::uno::Reference<css::uno::XComponentContext>& xContext );
     SAL_DLLPRIVATE virtual ~DrawModelWrapper();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getShapeFactory();
+    css::uno::Reference< css::lang::XMultiServiceFactory > getShapeFactory();
 
     // the main page will contain the normal view objects
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > getMainDrawPage();
+    css::uno::Reference< css::drawing::XDrawPage > getMainDrawPage();
     SAL_DLLPRIVATE void clearMainDrawPage();
 
     // the extra page is not visible, but contains some extras like the symbols for data points
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > getHiddenDrawPage();
+    css::uno::Reference< css::drawing::XDrawPage > getHiddenDrawPage();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
-         getChartRootShape( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XDrawPage>& xPage );
+    static css::uno::Reference< css::drawing::XShapes >
+         getChartRootShape( const css::uno::Reference< css::drawing::XDrawPage>& xPage );
 
     SAL_DLLPRIVATE void lockControllers();
     SAL_DLLPRIVATE void unlockControllers();
@@ -69,9 +68,9 @@ public:
 
     SfxItemPool&            GetItemPool();
 
-    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    SAL_DLLPRIVATE virtual css::uno::Reference< css::uno::XInterface >
         createUnoModel() override;
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    SAL_DLLPRIVATE css::uno::Reference< css::frame::XModel >
         getUnoModel();
     SdrModel& getSdrModel();
 
@@ -85,8 +84,7 @@ public:
     SdrObject* getNamedSdrObject( const OUString& rName );
     static SdrObject* getNamedSdrObject( const OUString& rName, SdrObjList* pObjList );
 
-    static bool removeShape( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape >& xShape );
+    static bool removeShape( const css::uno::Reference< css::drawing::XShape >& xShape );
 };
 } //namespace chart
 #endif

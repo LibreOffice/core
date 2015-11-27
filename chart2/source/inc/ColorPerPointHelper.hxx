@@ -33,18 +33,15 @@ class OOO_DLLPUBLIC_CHARTTOOLS ColorPerPointHelper
 {
 public:
     static bool hasPointOwnColor(
-        const ::com::sun::star::uno::Reference<
-              ::com::sun::star::beans::XPropertySet >& xDataSeriesProperties
+        const css::uno::Reference< css::beans::XPropertySet >& xDataSeriesProperties
         , sal_Int32 nPointIndex
-        , const ::com::sun::star::uno::Reference<
-              ::com::sun::star::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
+        , const css::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
          );
 
     // returns true if AttributedDataPoints contains nPointIndex and the
     // property Color is DEFAULT
     SAL_DLLPRIVATE static bool hasPointOwnProperties(
-        const ::com::sun::star::uno::Reference<
-              ::com::sun::star::beans::XPropertySet >& xSeriesProperties
+        const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties
         , sal_Int32 nPointIndex );
 };
 

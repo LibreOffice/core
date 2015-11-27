@@ -53,7 +53,7 @@ struct StaticDataPointInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< css::beans::Property > aProperties;
         ::chart::DataPointProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );

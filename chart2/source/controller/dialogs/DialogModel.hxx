@@ -60,51 +60,41 @@ class DialogModel
 {
 public:
     explicit DialogModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDocument,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
     ~DialogModel();
 
     typedef ::std::pair<
                 OUString,
-                ::std::pair< ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::chart2::XDataSeries >,
-                             ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::chart2::XChartType > > >
+                ::std::pair< css::uno::Reference< css::chart2::XDataSeries >,
+                             css::uno::Reference< css::chart2::XChartType > > >
         tSeriesWithChartTypeByName;
 
     typedef ::std::map< OUString, OUString >
         tRolesWithRanges;
 
     void setTemplate(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartTypeTemplate > & xTemplate );
+        const css::uno::Reference< css::chart2::XChartTypeTemplate > & xTemplate );
 
     std::shared_ptr< RangeSelectionHelper >
         getRangeSelectionHelper() const;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel >
+    css::uno::Reference< css::frame::XModel >
         getChartModel() const;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataProvider >
+    css::uno::Reference< css::chart2::data::XDataProvider >
         getDataProvider() const;
 
-    ::std::vector< ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeriesContainer > >
+    ::std::vector< css::uno::Reference< css::chart2::XDataSeriesContainer > >
         getAllDataSeriesContainers() const;
 
     ::std::vector< tSeriesWithChartTypeByName >
         getAllDataSeriesWithLabel() const;
 
     static tRolesWithRanges getRolesWithRanges(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xSeries,
+        const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
         const OUString & aRoleOfSequenceForLabel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType > & xChartType );
+        const css::uno::Reference< css::chart2::XChartType > & xChartType );
 
     enum eMoveDirection
     {
@@ -112,31 +102,24 @@ public:
         MOVE_UP
     };
 
-    void moveSeries( const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::chart2::XDataSeries > & xSeries,
+    void moveSeries( const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
                      eMoveDirection eDirection );
 
     /// @return the newly inserted series
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > insertSeriesAfter(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDataSeries > & xSeries,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XChartType > & xChartType,
+    css::uno::Reference<
+            css::chart2::XDataSeries > insertSeriesAfter(
+                const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+                const css::uno::Reference< css::chart2::XChartType > & xChartType,
                 bool bCreateDataCachedSequences = false );
 
     void deleteSeries(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xSeries,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType > & xChartType );
+        const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+        const css::uno::Reference< css::chart2::XChartType > & xChartType );
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence >
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getCategories() const;
 
-    void setCategories( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::data::XLabeledDataSequence > & xCategories );
+    void setCategories( const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories );
 
     OUString getCategoriesRange() const;
 
@@ -148,8 +131,7 @@ public:
 
     bool allArgumentsForRectRangeDetected() const;
 
-    void setData( const ::com::sun::star::uno::Sequence<
-                      ::com::sun::star::beans::PropertyValue > & rArguments );
+    void setData( const css::uno::Sequence< css::beans::PropertyValue > & rArguments );
 
     void setTimeBasedRange( bool bTimeBased, sal_Int32 nStart, sal_Int32 nEnd) const;
 
@@ -165,16 +147,13 @@ public:
     static sal_Int32 GetRoleIndexForSorting( const OUString & rInternalRoleString );
 
 private:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument >
+    css::uno::Reference< css::chart2::XChartDocument >
         m_xChartDocument;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartTypeTemplate >
+    css::uno::Reference< css::chart2::XChartTypeTemplate >
         m_xTemplate;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         m_xContext;
 
     mutable std::shared_ptr< RangeSelectionHelper >
@@ -184,9 +163,8 @@ private:
 
 private:
     void applyInterpretedData(
-        const ::com::sun::star::chart2::InterpretedData & rNewData,
-        const ::std::vector< ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > > & rSeriesToReUse,
+        const css::chart2::InterpretedData & rNewData,
+        const ::std::vector< css::uno::Reference< css::chart2::XDataSeries > > & rSeriesToReUse,
         bool bSetStyles );
 
     sal_Int32 countSeries() const;

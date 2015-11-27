@@ -270,19 +270,19 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             sal_Int32 nType = 0;
             if( (rOuterValue >>= nType) )
             {
-                if( ::com::sun::star::chart::ChartAxisType::AUTOMATIC == nType )
+                if( css::chart::ChartAxisType::AUTOMATIC == nType )
                 {
                     aScaleData.AutoDateAxis = true;
                     if( aScaleData.AxisType == AxisType::DATE )
                         aScaleData.AxisType = AxisType::CATEGORY;
                 }
-                else if( ::com::sun::star::chart::ChartAxisType::CATEGORY == nType )
+                else if( css::chart::ChartAxisType::CATEGORY == nType )
                 {
                     aScaleData.AutoDateAxis = false;
                     if( aScaleData.AxisType == AxisType::DATE )
                         aScaleData.AxisType = AxisType::CATEGORY;
                 }
-                else if( ::com::sun::star::chart::ChartAxisType::DATE == nType )
+                else if( css::chart::ChartAxisType::DATE == nType )
                 {
                     if( aScaleData.AxisType == AxisType::CATEGORY )
                         aScaleData.AxisType = AxisType::DATE;
@@ -525,15 +525,15 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         }
         case SCALE_PROP_AXIS_TYPE:
         {
-            sal_Int32 nType = ::com::sun::star::chart::ChartAxisType::AUTOMATIC;
+            sal_Int32 nType = css::chart::ChartAxisType::AUTOMATIC;
             if( aScaleData.AxisType == AxisType::DATE )
             {
-                nType = ::com::sun::star::chart::ChartAxisType::DATE;
+                nType = css::chart::ChartAxisType::DATE;
             }
             else if( aScaleData.AxisType == AxisType::CATEGORY )
             {
                 if( !aScaleData.AutoDateAxis )
-                    nType = ::com::sun::star::chart::ChartAxisType::CATEGORY;
+                    nType = css::chart::ChartAxisType::CATEGORY;
             }
             aRet = uno::makeAny( nType );
             break;

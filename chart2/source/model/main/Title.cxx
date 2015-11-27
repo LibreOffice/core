@@ -72,7 +72,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ParaAdjust",
                   PROP_TITLE_PARA_ADJUST,
-                  cppu::UnoType<com::sun::star::style::ParagraphAdjust>::get(),
+                  cppu::UnoType<css::style::ParagraphAdjust>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -162,7 +162,7 @@ private:
 
         // ParagraphProperties
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_ADJUST,
-                                                          ::com::sun::star::style::ParagraphAdjust_CENTER );
+                                                          css::style::ParagraphAdjust_CENTER );
         // PROP_TITLE_PARA_LAST_LINE_ADJUST
 
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_LEFT_MARGIN, 0 );
@@ -196,7 +196,7 @@ struct StaticTitleInfoHelper_Initializer
 private:
     static uno::Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );

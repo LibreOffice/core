@@ -503,7 +503,7 @@ void SAL_CALL ChartController::attachFrame(
         {
             try
             {
-                uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                uno::Reference< css::frame::XLayoutManager > xLayoutManager;
                 xPropSet->getPropertyValue( "LayoutManager" ) >>= xLayoutManager;
                 if ( xLayoutManager.is() )
                 {
@@ -1318,7 +1318,7 @@ void SAL_CALL ChartController::dispatch(
         uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY );
         if( xPropSet.is() )
         {
-            uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+            uno::Reference< css::frame::XLayoutManager > xLayoutManager;
             xPropSet->getPropertyValue( "LayoutManager" ) >>= xLayoutManager;
             if ( xLayoutManager.is() )
             {

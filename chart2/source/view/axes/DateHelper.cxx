@@ -86,13 +86,13 @@ double DateHelper::RasterizeDateValue( double fValue, const Date& rNullDate, lon
     Date aDate(rNullDate); aDate += static_cast<long>(::rtl::math::approxFloor(fValue));
     switch(TimeResolution)
     {
-        case ::com::sun::star::chart::TimeUnit::DAY:
+        case css::chart::TimeUnit::DAY:
             break;
-        case ::com::sun::star::chart::TimeUnit::YEAR:
+        case css::chart::TimeUnit::YEAR:
             aDate.SetMonth(1);
             aDate.SetDay(1);
             break;
-        case ::com::sun::star::chart::TimeUnit::MONTH:
+        case css::chart::TimeUnit::MONTH:
         default:
             aDate.SetDay(1);
             break;

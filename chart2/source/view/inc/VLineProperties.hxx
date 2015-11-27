@@ -27,15 +27,14 @@ namespace chart
 
 struct VLineProperties
 {
-    com::sun::star::uno::Any Color; //type sal_Int32 UNO_NAME_LINECOLOR
-    com::sun::star::uno::Any LineStyle; //type drawing::LineStyle for property UNO_NAME_LINESTYLE
-    com::sun::star::uno::Any Transparence;//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
-    com::sun::star::uno::Any Width;//type sal_Int32 for property UNO_NAME_LINEWIDTH
-    com::sun::star::uno::Any DashName;//type OUString for property "LineDashName"
+    css::uno::Any Color; //type sal_Int32 UNO_NAME_LINECOLOR
+    css::uno::Any LineStyle; //type drawing::LineStyle for property UNO_NAME_LINESTYLE
+    css::uno::Any Transparence;//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
+    css::uno::Any Width;//type sal_Int32 for property UNO_NAME_LINEWIDTH
+    css::uno::Any DashName;//type OUString for property "LineDashName"
 
     VLineProperties();
-    void initFromPropertySet( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::beans::XPropertySet >& xProp );
+    void initFromPropertySet( const css::uno::Reference< css::beans::XPropertySet >& xProp );
 
     bool isLineVisible() const;
 };

@@ -38,10 +38,10 @@ template< class Interface >
     Interface operator() ( const Interface & xOther )
     {
         Interface xResult;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >
-              xCloneable( xOther, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::util::XCloneable >
+              xCloneable( xOther, css::uno::UNO_QUERY );
         if( xCloneable.is())
-            xResult.set( xCloneable->createClone(), ::com::sun::star::uno::UNO_QUERY );
+            xResult.set( xCloneable->createClone(), css::uno::UNO_QUERY );
 
         return xResult;
     }
@@ -61,8 +61,8 @@ template< class Interface >
 /// clones a UNO-sequence of UNO-References
 template< class Interface >
     void CloneRefSequence(
-        const ::com::sun::star::uno::Sequence< Interface > & rSource,
-        ::com::sun::star::uno::Sequence< Interface > & rDestination )
+        const css::uno::Sequence< Interface > & rSource,
+        css::uno::Sequence< Interface > & rDestination )
 {
     rDestination.realloc( rSource.getLength());
     ::std::transform( rSource.getConstArray(), rSource.getConstArray() + rSource.getLength(),

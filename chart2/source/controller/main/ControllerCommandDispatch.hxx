@@ -42,7 +42,7 @@ struct ControllerState;
 // to update the ControllerState when the selection changes.
 typedef ::cppu::ImplInheritanceHelper<
         CommandDispatch,
-        ::com::sun::star::view::XSelectionChangeListener >
+        css::view::XSelectionChangeListener >
     ControllerCommandDispatch_Base;
 }
 
@@ -57,8 +57,7 @@ class ControllerCommandDispatch : public impl::ControllerCommandDispatch_Base
 {
 public:
     explicit ControllerCommandDispatch(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext,
         ChartController* pController, CommandDispatchContainer* pContainer );
     virtual ~ControllerCommandDispatch();
 
@@ -68,9 +67,9 @@ public:
 protected:
     // ____ XDispatch ____
     virtual void SAL_CALL dispatch(
-        const ::com::sun::star::util::URL& URL,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::util::URL& URL,
+        const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ WeakComponentImplHelperBase ____
     /// is called when this is disposed
@@ -78,27 +77,27 @@ protected:
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void fireStatusEvent(
         const OUString & rURL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener ) override;
+        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XSelectionChangeListener ____
     virtual void SAL_CALL selectionChanged(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     void fireStatusEventForURLImpl(
         const OUString & rURL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener );
+        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener );
 
     bool commandAvailable( const OUString & rCommand );
     void updateCommandAvailability();
@@ -106,18 +105,15 @@ private:
     bool isShapeControllerCommandAvailable( const OUString& rCommand );
 
     ChartController* m_pChartController;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XController > m_xController;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::view::XSelectionSupplier > m_xSelectionSupplier;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XDispatch > m_xDispatch;
+    css::uno::Reference< css::frame::XController > m_xController;
+    css::uno::Reference< css::view::XSelectionSupplier > m_xSelectionSupplier;
+    css::uno::Reference< css::frame::XDispatch > m_xDispatch;
 
     ::std::unique_ptr< impl::ModelState > m_apModelState;
     ::std::unique_ptr< impl::ControllerState > m_apControllerState;
 
     mutable ::std::map< OUString, bool > m_aCommandAvailability;
-    mutable ::std::map< OUString, ::com::sun::star::uno::Any > m_aCommandArguments;
+    mutable ::std::map< OUString, css::uno::Any > m_aCommandArguments;
 
     CommandDispatchContainer* m_pDispatchContainer;
 };

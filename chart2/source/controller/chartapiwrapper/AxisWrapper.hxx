@@ -43,11 +43,11 @@ class Chart2ModelContact;
 
 class AxisWrapper : public ::cppu::ImplInheritanceHelper<
                       WrappedPropertySet
-                    , com::sun::star::chart::XAxis
-                    , com::sun::star::drawing::XShape
-                    , com::sun::star::lang::XComponent
-                    , com::sun::star::lang::XServiceInfo
-                    , com::sun::star::util::XNumberFormatsSupplier
+                    , css::chart::XAxis
+                    , css::drawing::XShape
+                    , css::lang::XComponent
+                    , css::lang::XServiceInfo
+                    , css::util::XNumberFormatsSupplier
                     >
                     , public ReferenceSizePropertyProvider
 {
@@ -79,55 +79,55 @@ public:
 
     //ReferenceSizePropertyProvider
     virtual void updateReferenceSize() override;
-    virtual ::com::sun::star::uno::Any getReferenceSize() override;
-    virtual ::com::sun::star::awt::Size getCurrentSizeForReference() override;
+    virtual css::uno::Any getReferenceSize() override;
+    virtual css::awt::Size getCurrentSizeForReference() override;
 
     // ____ XComponent ____
     virtual void SAL_CALL dispose()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference<
-                                            ::com::sun::star::lang::XEventListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference<
-                                               ::com::sun::star::lang::XEventListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference<
+                                            css::lang::XEventListener >& xListener )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference<
+                                               css::lang::XEventListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ chart::XAxis ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getAxisTitle(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getMajorGrid(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getMinorGrid(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getAxisTitle(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getMajorGrid(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getMinorGrid(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XShape ____
-    virtual ::com::sun::star::awt::Point SAL_CALL getPosition()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSize( const ::com::sun::star::awt::Size& aSize )
-        throw (::com::sun::star::beans::PropertyVetoException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getPosition()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Size SAL_CALL getSize()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSize( const css::awt::Size& aSize )
+        throw (css::beans::PropertyVetoException,
+               css::uno::RuntimeException, std::exception) override;
 
     // ____ XShapeDescriptor (base of XShape) ____
     virtual OUString SAL_CALL getShapeType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XNumberFormatsSupplier ____
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > SAL_CALL getNumberFormatSettings()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::util::XNumberFormats > SAL_CALL getNumberFormats()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<
+                css::beans::XPropertySet > SAL_CALL getNumberFormatSettings()
+            throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<
+                css::util::XNumberFormats > SAL_CALL getNumberFormats()
+            throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     // ____ WrappedPropertySet ____
-    virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& getPropertySequence() override;
+    virtual const css::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual const std::vector< WrappedProperty* > createWrappedProperties() override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getInnerPropertySet() override;
+    virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
 private: //methods
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > getAxis();
+    css::uno::Reference< css::chart2::XAxis > getAxis();
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -135,9 +135,9 @@ private: //member
 
     tAxisType           m_eType;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xAxisTitle;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xMajorGrid;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xMinorGrid;
+    css::uno::Reference< css::beans::XPropertySet >   m_xAxisTitle;
+    css::uno::Reference< css::beans::XPropertySet >   m_xMajorGrid;
+    css::uno::Reference< css::beans::XPropertySet >   m_xMinorGrid;
 };
 
 } //  namespace wrapper

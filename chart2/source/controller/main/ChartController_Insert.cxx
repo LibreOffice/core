@@ -430,7 +430,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         // add error bars with standard deviation
         uno::Reference< beans::XPropertySet > xErrorBarProp(
             StatisticsHelper::addErrorBars( xSeries, m_xCC,
-                                            ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION,
+                                            css::chart::ErrorBarStyle::STANDARD_DEVIATION,
                                             bYError));
 
         // get an appropriate item converter

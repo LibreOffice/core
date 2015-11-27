@@ -54,8 +54,7 @@ public:
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
     void SetErrorBarType( tErrorBarType eNewType );
     void SetChartDocumentForRangeChoosing(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDocument );
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
     void Reset(const SfxItemSet& rInAttrs);
     bool FillItemSet(SfxItemSet& rOutAttrs) const;
 

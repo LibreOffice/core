@@ -41,7 +41,7 @@ private: //methods
 private: //member
     ExplicitScaleData     m_aScale;
     ExplicitIncrementData m_aIncrement;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >
+    css::uno::Reference< css::chart2::XScaling >
                                                 m_xInverseScaling;
 
     //minimum and maximum of the visible range after scaling

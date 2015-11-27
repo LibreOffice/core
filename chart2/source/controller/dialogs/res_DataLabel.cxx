@@ -133,6 +133,7 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, vcl::Window
     for( sal_Int32 nEnum=0; nEnum<m_pLB_LabelPlacement->GetEntryCount(); ++nEnum )
         aPlacementToStringMap[nEnum] = m_pLB_LabelPlacement->GetEntry(static_cast<sal_uInt16>(nEnum));
 
+
     std::vector< sal_Int32 > aAvailabelPlacementList;
     const SfxPoolItem *pPoolItem = nullptr;
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, true, &pPoolItem) == SfxItemState::SET )

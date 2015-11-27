@@ -55,7 +55,7 @@ public:
     ChartTypeParameter( sal_Int32 nSubTypeIndex, bool bXAxisWithValues=false
                     ,  bool b3DLook=false,  GlobalStackMode eStackMode=GlobalStackMode_NONE
                     ,  bool _bSymbols = true, bool _bLines = true
-                    , ::com::sun::star::chart2::CurveStyle eCurveStyle = ::com::sun::star::chart2::CurveStyle_LINES );
+                    , css::chart2::CurveStyle eCurveStyle = css::chart2::CurveStyle_LINES );
     ChartTypeParameter();
     virtual ~ChartTypeParameter();
 
@@ -70,7 +70,7 @@ public:
     bool            bLines;
 
     GlobalStackMode eStackMode;
-    ::com::sun::star::chart2::CurveStyle      eCurveStyle;
+    css::chart2::CurveStyle      eCurveStyle;
 
     sal_Int32       nCurveResolution;
     sal_Int32       nSplineOrder;
@@ -107,22 +107,22 @@ public:
     virtual void    showExtraControls(VclBuilderContainer* pParent);
     virtual void    hideExtraControls() const;
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
-                                     , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel
-                                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps=::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() ) const;
-    virtual void    setTemplateProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps ) const throw (::com::sun::star::uno::RuntimeException);
+                                     , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
+                                     , const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps=css::uno::Reference< css::beans::XPropertySet >() ) const;
+    virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const throw (css::uno::RuntimeException);
 
     bool                isSubType( const OUString& rServiceName );
-    ChartTypeParameter  getChartTypeParameterForService( const OUString& rServiceName, const ::com::sun::star::uno::Reference<
-                                                                ::com::sun::star::beans::XPropertySet >& xTemplateProps );
+    ChartTypeParameter  getChartTypeParameterForService( const OUString& rServiceName, const css::uno::Reference<
+                                                                css::beans::XPropertySet >& xTemplateProps );
     virtual void        adjustSubTypeAndEnableControls( ChartTypeParameter& rParameter );//if you have different counts of subtypes you may need to adjust the index
     virtual void        adjustParameterToSubType( ChartTypeParameter& rParameter );
     virtual void        adjustParameterToMainType( ChartTypeParameter& rParameter );
     OUString            getServiceNameForParameter( const ChartTypeParameter& rParameter ) const;
     void                commitToModel( const ChartTypeParameter& rParameter
-                                     , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel );
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate( const ChartTypeParameter& rParameter
-                , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xTemplateManager ) const;
+                                     , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel );
+    css::uno::Reference<
+                css::chart2::XChartTypeTemplate > getCurrentTemplate( const ChartTypeParameter& rParameter
+                , const css::uno::Reference< css::lang::XMultiServiceFactory >& xTemplateManager ) const;
 
 protected:
     bool bSupportsXAxisWithValues;
@@ -272,10 +272,10 @@ public:
     virtual void    showExtraControls(VclBuilderContainer* pParent) override;
     virtual void    hideExtraControls() const override;
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
-                                     , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel
-                                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps=::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() ) const override;
+                                     , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
+                                     , const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps=css::uno::Reference< css::beans::XPropertySet >() ) const override;
 
-    virtual void    setTemplateProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps ) const throw (::com::sun::star::uno::RuntimeException) override;
+    virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const throw (css::uno::RuntimeException) override;
 
 private:
     DECL_LINK_TYPED( ChangeLineCountHdl, Edit&, void );

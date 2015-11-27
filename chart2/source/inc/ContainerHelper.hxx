@@ -47,7 +47,7 @@ namespace ContainerHelper
 */
 template< class Container >
     Container
-    SequenceToSTLSequenceContainer( const ::com::sun::star::uno::Sequence< typename Container::value_type > & rSeq )
+    SequenceToSTLSequenceContainer( const css::uno::Sequence< typename Container::value_type > & rSeq )
 {
     Container aResult( rSeq.getLength());
     ::std::copy( rSeq.begin(), rSeq.end(), aResult.begin() );
@@ -65,7 +65,7 @@ template< class Container >
  */
 template< typename T >
     ::std::vector< T >
-    SequenceToVector( const ::com::sun::star::uno::Sequence< T > & rSeq )
+    SequenceToVector( const css::uno::Sequence< T > & rSeq )
 {
     return SequenceToSTLSequenceContainer< ::std::vector< T > >( rSeq );
 }

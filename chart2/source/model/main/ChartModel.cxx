@@ -788,7 +788,7 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
             aArgs[3] = beans::PropertyValue(
                 "DataRowSource",
                 -1,
-                uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ),
+                uno::makeAny( css::chart::ChartDataRowSource_COLUMNS ),
                 beans::PropertyState_DIRECT_VALUE );
             xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
         }

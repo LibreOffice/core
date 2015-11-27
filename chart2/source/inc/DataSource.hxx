@@ -31,18 +31,14 @@ namespace chart
 
 class DataSource : public
     ::cppu::WeakImplHelper<
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::chart2::data::XDataSource,
-        ::com::sun::star::chart2::data::XDataSink >
+        css::lang::XServiceInfo,
+        css::chart2::data::XDataSource,
+        css::chart2::data::XDataSink >
 {
 public:
+    explicit DataSource( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     explicit DataSource(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
-    explicit DataSource(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XLabeledDataSequence > > & rSequences );
+        const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rSequences );
 
     virtual ~DataSource();
 
@@ -59,18 +55,16 @@ public:
 
 protected:
     // ____ XDataSource ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL
         getDataSequences()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XDataSink ____
-    virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > >& aData )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setData( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence > >
+    css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
         m_aDataSeq;
 };
 

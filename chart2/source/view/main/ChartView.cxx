@@ -958,21 +958,21 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
                 Reference< XAxis > xAxis( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
                 Reference< beans::XPropertySet > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ), uno::UNO_QUERY );
 
-                ::com::sun::star::chart::ChartAxisPosition eCrossingMainAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+                css::chart::ChartAxisPosition eCrossingMainAxisPos( css::chart::ChartAxisPosition_ZERO );
                 if( xCrossingMainAxis.is() )
                 {
                     xCrossingMainAxis->getPropertyValue("CrossoverPosition") >>= eCrossingMainAxisPos;
-                    if( ::com::sun::star::chart::ChartAxisPosition_VALUE == eCrossingMainAxisPos )
+                    if( css::chart::ChartAxisPosition_VALUE == eCrossingMainAxisPos )
                     {
                         double fValue = 0.0;
                         xCrossingMainAxis->getPropertyValue("CrossoverValue") >>= fValue;
                         aExplicitScale.Origin = fValue;
                     }
-                    else if( ::com::sun::star::chart::ChartAxisPosition_ZERO == eCrossingMainAxisPos )
+                    else if( css::chart::ChartAxisPosition_ZERO == eCrossingMainAxisPos )
                         aExplicitScale.Origin = 0.0;
-                    else  if( ::com::sun::star::chart::ChartAxisPosition_START == eCrossingMainAxisPos )
+                    else  if( css::chart::ChartAxisPosition_START == eCrossingMainAxisPos )
                         aExplicitScale.Origin = aExplicitScale.Minimum;
-                    else  if( ::com::sun::star::chart::ChartAxisPosition_END == eCrossingMainAxisPos )
+                    else  if( css::chart::ChartAxisPosition_END == eCrossingMainAxisPos )
                         aExplicitScale.Origin = aExplicitScale.Maximum;
                 }
 
@@ -1867,27 +1867,27 @@ bool ChartView::getExplicitValuesForAxis(
         if( rExplicitScale.ShiftedCategoryPosition )
         {
             //remove 'one' from max
-            if( rExplicitScale.AxisType == ::com::sun::star::chart2::AxisType::DATE )
+            if( rExplicitScale.AxisType == css::chart2::AxisType::DATE )
             {
                 Date aMaxDate(rExplicitScale.NullDate); aMaxDate += static_cast<long>(::rtl::math::approxFloor(rExplicitScale.Maximum));
                 //for explicit scales with shifted categories we need one interval more
                 switch( rExplicitScale.TimeResolution )
                 {
-                case ::com::sun::star::chart::TimeUnit::DAY:
+                case css::chart::TimeUnit::DAY:
                     --aMaxDate;
                     break;
-                case ::com::sun::star::chart::TimeUnit::MONTH:
+                case css::chart::TimeUnit::MONTH:
                     aMaxDate = DateHelper::GetDateSomeMonthsAway(aMaxDate,-1);
                     break;
-                case ::com::sun::star::chart::TimeUnit::YEAR:
+                case css::chart::TimeUnit::YEAR:
                     aMaxDate = DateHelper::GetDateSomeYearsAway(aMaxDate,-1);
                     break;
                 }
                 rExplicitScale.Maximum = aMaxDate - rExplicitScale.NullDate;
             }
-            else if( rExplicitScale.AxisType == ::com::sun::star::chart2::AxisType::CATEGORY )
+            else if( rExplicitScale.AxisType == css::chart2::AxisType::CATEGORY )
                 rExplicitScale.Maximum -= 1.0;
-            else if( rExplicitScale.AxisType == ::com::sun::star::chart2::AxisType::SERIES )
+            else if( rExplicitScale.AxisType == css::chart2::AxisType::SERIES )
                 rExplicitScale.Maximum -= 1.0;
         }
         return true;
@@ -2262,7 +2262,7 @@ bool getAvailablePosAndSizeForDiagram(
         xProp->getPropertyValue( "PosSizeExcludeAxes" ) >>= bPosSizeExcludeAxes;
 
     //size:
-    ::com::sun::star::chart2::RelativeSize aRelativeSize;
+    css::chart2::RelativeSize aRelativeSize;
     if( xProp.is() && (xProp->getPropertyValue( "RelativeSize" )>>=aRelativeSize) )
     {
         rParam.maRemainingSpace.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*rPageSize.Height);

@@ -221,9 +221,8 @@ class SplitCategoriesProvider_ForLabeledDataSequences : public SplitCategoriesPr
 public:
 
     explicit SplitCategoriesProvider_ForLabeledDataSequences(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XLabeledDataSequence> >& rSplitCategoriesList
+        const css::uno::Sequence<
+            css::uno::Reference< css::chart2::data::XLabeledDataSequence> >& rSplitCategoriesList
         , ChartModel& rModel )
         : m_rSplitCategoriesList( rSplitCategoriesList )
         , mrModel( rModel )
@@ -235,8 +234,8 @@ public:
     virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;
 
 private:
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence> >& m_rSplitCategoriesList;
+    const css::uno::Sequence< css::uno::Reference<
+        css::chart2::data::XLabeledDataSequence> >& m_rSplitCategoriesList;
 
     ChartModel& mrModel;
 };

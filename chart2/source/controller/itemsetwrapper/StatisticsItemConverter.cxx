@@ -301,26 +301,26 @@ bool StatisticsItemConverter::ApplySpecialItem(
             }
             else
             {
-                sal_Int32 nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE;
+                sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
 
                 switch( eErrorKind )
                 {
                     case CHERROR_NONE:
-                        nStyle = ::com::sun::star::chart::ErrorBarStyle::NONE; break;
+                        nStyle = css::chart::ErrorBarStyle::NONE; break;
                     case CHERROR_VARIANT:
-                        nStyle = ::com::sun::star::chart::ErrorBarStyle::VARIANCE; break;
+                        nStyle = css::chart::ErrorBarStyle::VARIANCE; break;
                     case CHERROR_SIGMA:
-                        nStyle = ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION; break;
+                        nStyle = css::chart::ErrorBarStyle::STANDARD_DEVIATION; break;
                     case CHERROR_PERCENT:
-                        nStyle = ::com::sun::star::chart::ErrorBarStyle::RELATIVE; break;
+                        nStyle = css::chart::ErrorBarStyle::RELATIVE; break;
                     case CHERROR_BIGERROR:
-                        nStyle = ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN; break;
+                        nStyle = css::chart::ErrorBarStyle::ERROR_MARGIN; break;
                     case CHERROR_CONST:
-                        nStyle = ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE; break;
+                        nStyle = css::chart::ErrorBarStyle::ABSOLUTE; break;
                     case CHERROR_STDERROR:
-                        nStyle = ::com::sun::star::chart::ErrorBarStyle::STANDARD_ERROR; break;
+                        nStyle = css::chart::ErrorBarStyle::STANDARD_ERROR; break;
                     case CHERROR_RANGE:
-                        nStyle = ::com::sun::star::chart::ErrorBarStyle::FROM_DATA; break;
+                        nStyle = css::chart::ErrorBarStyle::FROM_DATA; break;
                 }
 
                 if( !xErrorBarProp.is() )
@@ -630,21 +630,21 @@ void StatisticsItemConverter::FillSpecialItem(
                 {
                     switch( nStyle )
                     {
-                        case ::com::sun::star::chart::ErrorBarStyle::NONE:
+                        case css::chart::ErrorBarStyle::NONE:
                             break;
-                        case ::com::sun::star::chart::ErrorBarStyle::VARIANCE:
+                        case css::chart::ErrorBarStyle::VARIANCE:
                             eErrorKind = CHERROR_VARIANT; break;
-                        case ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION:
+                        case css::chart::ErrorBarStyle::STANDARD_DEVIATION:
                             eErrorKind = CHERROR_SIGMA; break;
-                        case ::com::sun::star::chart::ErrorBarStyle::ABSOLUTE:
+                        case css::chart::ErrorBarStyle::ABSOLUTE:
                             eErrorKind = CHERROR_CONST; break;
-                        case ::com::sun::star::chart::ErrorBarStyle::RELATIVE:
+                        case css::chart::ErrorBarStyle::RELATIVE:
                             eErrorKind = CHERROR_PERCENT; break;
-                        case ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
+                        case css::chart::ErrorBarStyle::ERROR_MARGIN:
                             eErrorKind = CHERROR_BIGERROR; break;
-                        case ::com::sun::star::chart::ErrorBarStyle::STANDARD_ERROR:
+                        case css::chart::ErrorBarStyle::STANDARD_ERROR:
                             eErrorKind = CHERROR_STDERROR; break;
-                        case ::com::sun::star::chart::ErrorBarStyle::FROM_DATA:
+                        case css::chart::ErrorBarStyle::FROM_DATA:
                             eErrorKind = CHERROR_RANGE; break;
                     }
                 }

@@ -209,7 +209,7 @@ void lcl_AddPropertiesToVector_SeriesOnly(
 
 uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )
 {
-    ::std::vector< ::com::sun::star::beans::Property > aProperties;
+    ::std::vector< css::beans::Property > aProperties;
 
     lcl_AddPropertiesToVector_PointProperties( aProperties );
     if( _eType == DataSeriesPointWrapper::DATA_SERIES )
@@ -264,14 +264,14 @@ public:
     explicit WrappedAttachedAxisProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedAttachedAxisProperty();
 
-    virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override;
+    virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
-    virtual Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override;
+    virtual Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
-    virtual Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override;
+    virtual Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
 protected:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -292,7 +292,7 @@ Any WrappedAttachedAxisProperty::getPropertyDefault( const Reference< beans::XPr
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
-    aRet <<= ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
+    aRet <<= css::chart::ChartAxisAssign::PRIMARY_Y;
     return aRet;
 }
 
@@ -304,9 +304,9 @@ Any WrappedAttachedAxisProperty::getPropertyValue( const Reference< beans::XProp
     uno::Reference< chart2::XDataSeries > xDataSeries( xInnerPropertySet, uno::UNO_QUERY );
     bool bAttachedToMainAxis = ::chart::DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
     if( bAttachedToMainAxis )
-        aRet <<= ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
+        aRet <<= css::chart::ChartAxisAssign::PRIMARY_Y;
     else
-        aRet <<= ::com::sun::star::chart::ChartAxisAssign::SECONDARY_Y;
+        aRet <<= css::chart::ChartAxisAssign::SECONDARY_Y;
     return aRet;
 }
 
@@ -315,11 +315,11 @@ void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, cons
 {
     uno::Reference< chart2::XDataSeries > xDataSeries( xInnerPropertySet, uno::UNO_QUERY );
 
-    sal_Int32 nChartAxisAssign = ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
+    sal_Int32 nChartAxisAssign = css::chart::ChartAxisAssign::PRIMARY_Y;
     if( ! (rOuterValue >>= nChartAxisAssign) )
         throw lang::IllegalArgumentException("Property Axis requires value of type sal_Int32", nullptr, 0 );
 
-    bool bNewAttachedToMainAxis = nChartAxisAssign == ::com::sun::star::chart::ChartAxisAssign::PRIMARY_Y;
+    bool bNewAttachedToMainAxis = nChartAxisAssign == css::chart::ChartAxisAssign::PRIMARY_Y;
     bool bOldAttachedToMainAxis = ::chart::DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
 
     if( bNewAttachedToMainAxis != bOldAttachedToMainAxis)
@@ -378,14 +378,14 @@ public:
     explicit WrappedLineColorProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
     virtual ~WrappedLineColorProperty();
 
-    virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override;
+    virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
-    virtual void setPropertyToDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException) override;
+    virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (css::beans::UnknownPropertyException, css::uno::RuntimeException) override;
 
-    virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
@@ -416,7 +416,7 @@ void WrappedLineColorProperty::setPropertyValue( const Any& rOuterValue, const R
 }
 
 void WrappedLineColorProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+                        throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
         m_aOuterValue = m_aDefaultValue;
@@ -439,11 +439,11 @@ public:
     explicit WrappedLineStyleProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
     virtual ~WrappedLineStyleProperty();
 
-    virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) override;
+    virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
-    virtual void setPropertyToDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException) override;
+    virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (css::beans::UnknownPropertyException, css::uno::RuntimeException) override;
 
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
@@ -477,7 +477,7 @@ void WrappedLineStyleProperty::setPropertyValue( const Any& rOuterValue, const R
 }
 
 void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+                        throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
         m_aOuterValue = m_aDefaultValue;
@@ -655,10 +655,10 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
         if (rPropertyName == "SymbolBitmapURL")
         {
             uno::Any aAny = WrappedPropertySet::getPropertyValue("SymbolType");
-            sal_Int32 nVal = com::sun::star::chart::ChartSymbolType::NONE;
+            sal_Int32 nVal = css::chart::ChartSymbolType::NONE;
             if (aAny >>= nVal)
             {
-                if (nVal != com::sun::star::chart::ChartSymbolType::BITMAPURL)
+                if (nVal != css::chart::ChartSymbolType::BITMAPURL)
                     return beans::PropertyState::PropertyState_DEFAULT_VALUE;
             }
         }
@@ -836,22 +836,22 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
     static const sal_Int32 nErrorCategoryHandle = getInfoHelper().getHandleByName("ErrorCategory");
     if( nErrorCategoryHandle == nHandle )
     {
-        ::com::sun::star::chart::ChartErrorCategory aNewValue = ::com::sun::star::chart::ChartErrorCategory_NONE;
+        css::chart::ChartErrorCategory aNewValue = css::chart::ChartErrorCategory_NONE;
         rValue >>= aNewValue;
         Any aLow, aHigh;
         bool bSetHighAndLowValues = false;
         switch(aNewValue)
         {
-            case ::com::sun::star::chart::ChartErrorCategory_CONSTANT_VALUE:
+            case css::chart::ChartErrorCategory_CONSTANT_VALUE:
                 aHigh = this->getPropertyValue("ConstantErrorHigh");
                 aLow = this->getPropertyValue("ConstantErrorLow");
                 bSetHighAndLowValues = true;
                 break;
-            case ::com::sun::star::chart::ChartErrorCategory_PERCENT:
+            case css::chart::ChartErrorCategory_PERCENT:
                 aHigh = aLow = this->getPropertyValue("PercentageError");
                 bSetHighAndLowValues = true;
                 break;
-            case ::com::sun::star::chart::ChartErrorCategory_ERROR_MARGIN:
+            case css::chart::ChartErrorCategory_ERROR_MARGIN:
                 aHigh = aLow = this->getPropertyValue("ErrorMargin");
                 bSetHighAndLowValues = true;
                 break;
@@ -865,14 +865,14 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
         {
             switch(aNewValue)
             {
-                case ::com::sun::star::chart::ChartErrorCategory_CONSTANT_VALUE:
+                case css::chart::ChartErrorCategory_CONSTANT_VALUE:
                     this->setPropertyValue("ConstantErrorHigh",aHigh);
                     this->setPropertyValue("ConstantErrorLow",aLow);
                     break;
-                case ::com::sun::star::chart::ChartErrorCategory_PERCENT:
+                case css::chart::ChartErrorCategory_PERCENT:
                     this->setPropertyValue("PercentageError",aHigh);
                     break;
-                case ::com::sun::star::chart::ChartErrorCategory_ERROR_MARGIN:
+                case css::chart::ChartErrorCategory_ERROR_MARGIN:
                     this->setPropertyValue("ErrorMargin",aHigh);
                     break;
                 default:

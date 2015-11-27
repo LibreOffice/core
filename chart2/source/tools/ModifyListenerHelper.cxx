@@ -62,8 +62,8 @@ void lcl_fireModifyEvent(
 
 struct lcl_weakReferenceToSame : public ::std::unary_function<
         ::std::pair<
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::util::XModifyListener >,
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > >,
+            css::uno::WeakReference< css::util::XModifyListener >,
+            css::uno::Reference< css::util::XModifyListener > >,
         bool >
 {
     explicit lcl_weakReferenceToSame( const Reference< util::XModifyListener > & xModListener ) :
@@ -96,8 +96,8 @@ uno::Reference< util::XModifyListener > createModifyEventForwarder()
 
 ModifyEventForwarder::ModifyEventForwarder() :
         ::cppu::WeakComponentImplHelper<
-        ::com::sun::star::util::XModifyBroadcaster,
-        ::com::sun::star::util::XModifyListener >( m_aMutex ),
+        css::util::XModifyBroadcaster,
+        css::util::XModifyListener >( m_aMutex ),
         m_aModifyListeners( m_aMutex )
 {
 }

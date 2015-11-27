@@ -34,12 +34,9 @@ class SeriesOptionsItemConverter : public ItemConverter
 {
 public:
     SeriesOptionsItemConverter(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xChartModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        const css::uno::Reference< css::frame::XModel > & xChartModel,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext,
+        const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool );
     virtual ~SeriesOptionsItemConverter();
 
@@ -48,15 +45,13 @@ protected:
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const override;
 
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception ) override;
+        throw( css::uno::Exception ) override;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception ) override;
+        throw( css::uno::Exception ) override;
 
 private:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel >  m_xChartModel;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext>   m_xCC;
+    css::uno::Reference< css::frame::XModel >  m_xChartModel;
+    css::uno::Reference< css::uno::XComponentContext>   m_xCC;
 
     bool m_bAttachToMainAxis;
     bool m_bSupportingOverlapAndGapWidthProperties;
@@ -75,10 +70,9 @@ private:
     sal_Int32 m_nStartingAngle;
 
     bool m_bClockwise;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XCoordinateSystem > m_xCooSys;
+    css::uno::Reference< css::chart2::XCoordinateSystem > m_xCooSys;
 
-    ::com::sun::star::uno::Sequence< sal_Int32 > m_aSupportedMissingValueTreatments;
+    css::uno::Sequence< sal_Int32 > m_aSupportedMissingValueTreatments;
     sal_Int32 m_nMissingValueTreatment;
 
     bool m_bSupportingPlottingOfHiddenCells;

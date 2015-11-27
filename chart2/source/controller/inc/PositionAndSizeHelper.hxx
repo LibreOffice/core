@@ -33,14 +33,14 @@ class PositionAndSizeHelper
 {
 public:
     static bool moveObject( ObjectType eObjectType
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xObjectProp
-            , const ::com::sun::star::awt::Rectangle& rNewPositionAndSize
-            , const ::com::sun::star::awt::Rectangle& rPageRectangle );
+            , const css::uno::Reference< css::beans::XPropertySet >& xObjectProp
+            , const css::awt::Rectangle& rNewPositionAndSize
+            , const css::awt::Rectangle& rPageRectangle );
 
     static bool moveObject( const OUString& rObjectCID
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
-            , const ::com::sun::star::awt::Rectangle& rNewPositionAndSize
-            , const ::com::sun::star::awt::Rectangle& rPageRectangle );
+            , const css::uno::Reference< css::frame::XModel >& xChartModel
+            , const css::awt::Rectangle& rNewPositionAndSize
+            , const css::awt::Rectangle& rPageRectangle );
 };
 
 } //namespace chart

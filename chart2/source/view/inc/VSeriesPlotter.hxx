@@ -140,7 +140,7 @@ public:
 
     /** a value <= 0 for a directions means that this direction can be stretched arbitrary
     */
-    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
+    virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
 
     /** this enables you to handle series on the same x axis with different y axis
     the property AttachedAxisIndex at a dataseries indicates which value scale is to use
@@ -153,7 +153,7 @@ public:
     */
 
     void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
-                throw (::com::sun::star::uno::RuntimeException);
+                throw (css::uno::RuntimeException);
 
     // MinimumAndMaximumSupplier
 
@@ -182,54 +182,45 @@ public:
     // Methods for handling legends and legend entries.
 
     virtual std::vector< ViewLegendEntry > createLegendEntries(
-            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
-            ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >& xTextProperties,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext >& xContext
+            const css::awt::Size& rEntryKeyAspectRatio,
+            css::chart::ChartLegendExpansion eLegendExpansion,
+            const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
+            const css::uno::Reference< css::drawing::XShapes >& xTarget,
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory,
+            const css::uno::Reference< css::uno::XComponentContext >& xContext
                 ) override;
 
     virtual LegendSymbolStyle getLegendSymbolStyle();
-    virtual com::sun::star::awt::Size getPreferredLegendKeyAspectRatio() override;
+    virtual css::awt::Size getPreferredLegendKeyAspectRatio() override;
 
-    virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
+    virtual css::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > createLegendSymbolForSeries(
-                  const ::com::sun::star::awt::Size& rEntryKeyAspectRatio
+    css::uno::Reference< css::drawing::XShape > createLegendSymbolForSeries(
+                  const css::awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
-                , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory );
+                , const css::uno::Reference< css::drawing::XShapes >& xTarget
+                , const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > createLegendSymbolForPoint(
-                  const ::com::sun::star::awt::Size& rEntryKeyAspectRatio
+    css::uno::Reference< css::drawing::XShape > createLegendSymbolForPoint(
+                  const css::awt::Size& rEntryKeyAspectRatio
                 , const VDataSeries& rSeries
                 , sal_Int32 nPointIndex
-                , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory );
+                , const css::uno::Reference< css::drawing::XShapes >& xTarget
+                , const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory );
 
     std::vector< ViewLegendEntry > createLegendEntriesForSeries(
-            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
+            const css::awt::Size& rEntryKeyAspectRatio,
             const VDataSeries& rSeries,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >& xTextProperties,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext >& xContext
+            const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
+            const css::uno::Reference< css::drawing::XShapes >& xTarget,
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory,
+            const css::uno::Reference< css::uno::XComponentContext >& xContext
                 );
 
     ::std::vector< VDataSeries* > getAllSeries();
 
     // This method creates a series plotter of the requested type; e.g. : return new PieChart ....
-    static VSeriesPlotter* createSeriesPlotter( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::chart2::XChartType >& xChartTypeModel
+    static VSeriesPlotter* createSeriesPlotter( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
                                 , sal_Int32 nDimensionCount
                                 , bool bExcludingPositioning = false /*for pie and donut charts labels and exploded segments are excluded from the given size*/);
 
@@ -237,21 +228,19 @@ public:
 
     // Methods for number formats and color schemes
 
-    void setNumberFormatsSupplier( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::util::XNumberFormatsSupplier > & xNumFmtSupplier );
+    void setNumberFormatsSupplier( const css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumFmtSupplier );
     void setAxesNumberFormats( const AxesNumberFormats& rAxesNumberFormats ) { m_aAxesNumberFormats = rAxesNumberFormats; };
 
-    void setColorScheme( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XColorScheme >& xColorScheme );
+    void setColorScheme( const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme );
 
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
     //get series names for the z axis labels
-    ::com::sun::star::uno::Sequence< OUString > getSeriesNames() const;
+    css::uno::Sequence< OUString > getSeriesNames() const;
 
-    void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
+    void setPageReferenceSize( const css::awt::Size & rPageRefSize );
     //better performance for big data
-    void setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
+    void setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
     bool PointsWereSkipped() const { return m_bPointsWereSkipped;}
 
     //return the depth for a logic 1
@@ -259,7 +248,7 @@ public:
 
     void    releaseShapes();
 
-    virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize );
+    virtual void rearrangeLabelToAvoidOverlapIfRequested( const css::awt::Size& rPageSize );
 
     bool WantToPlotInFrontOfAxisLine();
     virtual bool shouldSnapRectToUsedArea();
@@ -270,41 +259,35 @@ private:
 
 protected:
 
-    VSeriesPlotter( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType >& xChartTypeModel
+    VSeriesPlotter( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
                 , sal_Int32 nDimensionCount
                 , bool bCategoryXAxis=true );
 
     // Methods for group shapes.
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
         getSeriesGroupShape( VDataSeries* pDataSeries
-            , const::com::sun::star:: uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget );
+            , const css:: uno::Reference< css::drawing::XShapes >& xTarget );
 
     //the following group shapes will be created as children of SeriesGroupShape on demand
     //they can be used to assure that some parts of a series shape are always in front of others (e.g. symbols in front of lines)
     //parameter xTarget will be used as parent for the series group shape
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
         getSeriesGroupShapeFrontChild( VDataSeries* pDataSeries
-            , const::com::sun::star:: uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget );
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+            , const css:: uno::Reference< css::drawing::XShapes >& xTarget );
+    css::uno::Reference< css::drawing::XShapes >
         getSeriesGroupShapeBackChild( VDataSeries* pDataSeries
-            , const::com::sun::star:: uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget );
+            , const css:: uno::Reference< css::drawing::XShapes >& xTarget );
 
     /// This method creates a 2D group shape for containing all text shapes
     /// needed for this series; the group is added to the text target;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
         getLabelsGroupShape( VDataSeries& rDataSeries
-            , const::com::sun::star:: uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget );
+            , const css:: uno::Reference< css::drawing::XShapes >& xTarget );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
         getErrorBarsGroupShape( VDataSeries& rDataSeries
-            , const::com::sun::star:: uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget, bool bYError );
+            , const css:: uno::Reference< css::drawing::XShapes >& xTarget, bool bYError );
 
     /** This method creates a text shape for a label related to a data point
      *  and append it to the root text shape group (xTarget).
@@ -331,14 +314,13 @@ protected:
      *  @return
      *      a reference to the created text shape.
      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createDataLabel( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >& xTarget
+    css::uno::Reference< css::drawing::XShape >
+        createDataLabel( const css::uno::Reference< css::drawing::XShapes >& xTarget
                 , VDataSeries& rDataSeries
                 , sal_Int32 nPointIndex
                 , double fValue
                 , double fSumValue
-                , const ::com::sun::star::awt::Point& rScreenPosition2D
+                , const css::awt::Point& rScreenPosition2D
                 , LabelAlignment eAlignment=LABEL_ALIGN_CENTER
                 , sal_Int32 nOffset=0
                 , sal_Int32 nTextWidth = 0 );
@@ -368,49 +350,38 @@ protected:
             for y-error bars this is true, for x-error-bars it is false.
      */
     void createErrorBar(
-          const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-        , const ::com::sun::star::drawing::Position3D & rPos
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & xErrorBarProperties
+          const css::uno::Reference< css::drawing::XShapes >& xTarget
+        , const css::drawing::Position3D & rPos
+        , const css::uno::Reference< css::beans::XPropertySet > & xErrorBarProperties
         , const VDataSeries& rVDataSeries
         , sal_Int32 nIndex
         , bool bVertical
         , double* pfScaledLogicX
         );
 
-    void createErrorBar_X( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
+    void createErrorBar_X( const css::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget );
+        , const css::uno::Reference< css::drawing::XShapes >& xTarget );
 
-    void createErrorBar_Y( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
+    void createErrorBar_Y( const css::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
+        , const css::uno::Reference< css::drawing::XShapes >& xTarget
         , double* pfScaledLogicX=nullptr );
 
     void createRegressionCurvesShapes( VDataSeries& rVDataSeries
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xEquationTarget
+        , const css::uno::Reference< css::drawing::XShapes >& xTarget
+        , const css::uno::Reference< css::drawing::XShapes >& xEquationTarget
         , bool bMaySkipPointsInRegressionCalculation );
 
     void createRegressionCurveEquationShapes( const OUString & rEquationCID
-        , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xEquationProperties
-        , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShapes >& xEquationTarget
-        , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator
-        , ::com::sun::star::awt::Point aDefaultPos );
+        , const css::uno::Reference< css::beans::XPropertySet > & xEquationProperties
+        , const css::uno::Reference< css::drawing::XShapes >& xEquationTarget
+        , const css::uno::Reference< css::chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator
+        , css::awt::Point aDefaultPos );
 
     static void setMappedProperties(
-          const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape >& xTarget
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >& xSource
+          const css::uno::Reference< css::drawing::XShape >& xTarget
+        , const css::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
         , tPropertyNameValueMap* pOverwriteMap=nullptr );
 
@@ -421,10 +392,8 @@ protected:
 protected:
     PlottingPositionHelper*    m_pMainPosHelper;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType >    m_xChartTypeModel;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >           m_xChartTypeModelProps;
+    css::uno::Reference< css::chart2::XChartType >    m_xChartTypeModel;
+    css::uno::Reference< css::beans::XPropertySet >   m_xChartTypeModelProps;
 
     ::std::vector< ::std::vector< VDataSeriesGroup > >  m_aZSlots;
 
@@ -435,13 +404,12 @@ protected:
     std::unique_ptr< NumberFormatterWrapper > m_apNumberFormatterWrapper;
     AxesNumberFormats                         m_aAxesNumberFormats;//direct numberformats on axes, if empty ask the data series instead
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XColorScheme >    m_xColorScheme;
+    css::uno::Reference< css::chart2::XColorScheme >    m_xColorScheme;
 
     ExplicitCategoriesProvider*    m_pExplicitCategoriesProvider;
 
     //better performance for big data
-    ::com::sun::star::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;
+    css::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;
     bool m_bPointsWereSkipped;
 
 private:
@@ -450,7 +418,7 @@ private:
 
     typedef std::map< sal_Int32 , PlottingPositionHelper* > tSecondaryPosHelperMap;
     mutable tSecondaryPosHelperMap   m_aSecondaryPosHelperMap;
-    ::com::sun::star::awt::Size      m_aPageReferenceSize;
+    css::awt::Size      m_aPageReferenceSize;
 };
 
 } //namespace chart

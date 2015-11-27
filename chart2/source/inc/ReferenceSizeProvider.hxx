@@ -47,11 +47,10 @@ public:
     };
 
     ReferenceSizeProvider(
-        ::com::sun::star::awt::Size aPageSize,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+        css::awt::Size aPageSize,
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
 
-    ::com::sun::star::awt::Size getPageSize() const { return m_aPageSize;}
+    css::awt::Size getPageSize() const { return m_aPageSize;}
 
     /** Retrieves the state auto-resize from all objects that support this
         feature.  If all objects return the same state, AUTO_RESIZE_YES or
@@ -62,8 +61,7 @@ public:
         with state NO, AUTO_RESIZE_AMBIGUOUS is returned.
     */
     static AutoResizeState getAutoResizeState(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
 
     /** sets or resets the auto-resize at all objects that support this feature
         for text to the opposite of the current setting.  If the current state
@@ -77,8 +75,7 @@ public:
         is </sal_True>.
      */
     SAL_DLLPRIVATE void setValuesAtPropertySet(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xProp,
+        const css::uno::Reference< css::beans::XPropertySet > & xProp,
         bool bAdaptFontSizes = true );
 
     /** Sets the ReferencePageSize according to the internal settings of this
@@ -86,8 +83,7 @@ public:
         XFormattedStrings
      */
     SAL_DLLPRIVATE void setValuesAtTitle(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XTitle > & xTitle );
+        const css::uno::Reference< css::chart2::XTitle > & xTitle );
 
     /** Sets the internal value at all data series in the currently set model.
         This is useful, if you have changed a chart-type and thus probably added
@@ -111,21 +107,17 @@ private:
         the current property set, or the other way round.
      */
     SAL_DLLPRIVATE static void getAutoResizeFromPropSet(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xProp,
+        const css::uno::Reference< css::beans::XPropertySet > & xProp,
         AutoResizeState & rInOutState );
 
     SAL_DLLPRIVATE void impl_setValuesAtTitled(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XTitled > & xTitled );
+        const css::uno::Reference< css::chart2::XTitled > & xTitled );
     SAL_DLLPRIVATE static void impl_getAutoResizeFromTitled(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XTitled > & xTitled,
+        const css::uno::Reference< css::chart2::XTitled > & xTitled,
         AutoResizeState & rInOutState );
 
-    ::com::sun::star::awt::Size m_aPageSize;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > m_xChartDoc;
+    css::awt::Size m_aPageSize;
+    css::uno::Reference< css::chart2::XChartDocument > m_xChartDoc;
     bool      m_bUseAutoScale;
 };
 

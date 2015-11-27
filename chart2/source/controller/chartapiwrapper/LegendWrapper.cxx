@@ -88,7 +88,7 @@ Any WrappedLegendAlignmentProperty::getPropertyValue( const Reference< beans::XP
         xInnerPropertySet->getPropertyValue( "Show" ) >>= bShowLegend;
         if(!bShowLegend)
         {
-            aRet = uno::makeAny( ::com::sun::star::chart::ChartLegendPosition_NONE );
+            aRet = uno::makeAny( css::chart::ChartLegendPosition_NONE );
         }
         else
         {
@@ -107,8 +107,8 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
         bool bNewShowLegend = true;
         bool bOldShowLegend = true;
         {
-            ::com::sun::star::chart::ChartLegendPosition eOuterPos(::com::sun::star::chart::ChartLegendPosition_NONE);
-            if( (rOuterValue >>= eOuterPos)  && eOuterPos == ::com::sun::star::chart::ChartLegendPosition_NONE )
+            css::chart::ChartLegendPosition eOuterPos(css::chart::ChartLegendPosition_NONE);
+            if( (rOuterValue >>= eOuterPos)  && eOuterPos == css::chart::ChartLegendPosition_NONE )
                 bNewShowLegend = false;
             xInnerPropertySet->getPropertyValue( "Show" ) >>= bOldShowLegend;
         }
@@ -127,13 +127,13 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
         chart2::LegendPosition eNewInnerPos(chart2::LegendPosition_LINE_END);
         if( aInnerValue >>= eNewInnerPos )
         {
-            ::com::sun::star::chart::ChartLegendExpansion eNewExpansion =
+            css::chart::ChartLegendExpansion eNewExpansion =
                 ( eNewInnerPos == chart2::LegendPosition_LINE_END ||
                   eNewInnerPos == chart2::LegendPosition_LINE_START )
-                ? ::com::sun::star::chart::ChartLegendExpansion_HIGH
-                : ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                ? css::chart::ChartLegendExpansion_HIGH
+                : css::chart::ChartLegendExpansion_WIDE;
 
-            ::com::sun::star::chart::ChartLegendExpansion eOldExpansion( ::com::sun::star::chart::ChartLegendExpansion_HIGH );
+            css::chart::ChartLegendExpansion eOldExpansion( css::chart::ChartLegendExpansion_HIGH );
             bool bExpansionWasSet(
                 xInnerPropertySet->getPropertyValue( "Expansion" ) >>= eOldExpansion );
 
@@ -152,7 +152,7 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
 
 Any WrappedLegendAlignmentProperty::convertInnerToOuterValue( const Any& rInnerValue ) const
 {
-    ::com::sun::star::chart::ChartLegendPosition ePos = ::com::sun::star::chart::ChartLegendPosition_NONE;
+    css::chart::ChartLegendPosition ePos = css::chart::ChartLegendPosition_NONE;
 
     chart2::LegendPosition eNewPos;
     if( rInnerValue >>= eNewPos )
@@ -160,20 +160,20 @@ Any WrappedLegendAlignmentProperty::convertInnerToOuterValue( const Any& rInnerV
         switch( eNewPos )
         {
             case chart2::LegendPosition_LINE_START:
-                ePos = ::com::sun::star::chart::ChartLegendPosition_LEFT;
+                ePos = css::chart::ChartLegendPosition_LEFT;
                 break;
             case chart2::LegendPosition_LINE_END:
-                ePos = ::com::sun::star::chart::ChartLegendPosition_RIGHT;
+                ePos = css::chart::ChartLegendPosition_RIGHT;
                 break;
             case chart2::LegendPosition_PAGE_START:
-                ePos = ::com::sun::star::chart::ChartLegendPosition_TOP;
+                ePos = css::chart::ChartLegendPosition_TOP;
                 break;
             case chart2::LegendPosition_PAGE_END:
-                ePos = ::com::sun::star::chart::ChartLegendPosition_BOTTOM;
+                ePos = css::chart::ChartLegendPosition_BOTTOM;
                 break;
 
             default:
-                ePos = ::com::sun::star::chart::ChartLegendPosition_NONE;
+                ePos = css::chart::ChartLegendPosition_NONE;
                 break;
         }
     }
@@ -183,21 +183,21 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
 {
     chart2::LegendPosition eNewPos = chart2::LegendPosition_LINE_END;
 
-    ::com::sun::star::chart::ChartLegendPosition ePos;
+    css::chart::ChartLegendPosition ePos;
     if( rOuterValue >>= ePos )
     {
         switch( ePos )
         {
-            case ::com::sun::star::chart::ChartLegendPosition_LEFT:
+            case css::chart::ChartLegendPosition_LEFT:
                 eNewPos = chart2::LegendPosition_LINE_START;
                 break;
-            case ::com::sun::star::chart::ChartLegendPosition_RIGHT:
+            case css::chart::ChartLegendPosition_RIGHT:
                 eNewPos = chart2::LegendPosition_LINE_END;
                 break;
-            case ::com::sun::star::chart::ChartLegendPosition_TOP:
+            case css::chart::ChartLegendPosition_TOP:
                 eNewPos = chart2::LegendPosition_PAGE_START;
                 break;
-            case ::com::sun::star::chart::ChartLegendPosition_BOTTOM:
+            case css::chart::ChartLegendPosition_BOTTOM:
                 eNewPos = chart2::LegendPosition_PAGE_END;
                 break;
             default: // NONE
@@ -225,14 +225,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Alignment",
                   PROP_LEGEND_ALIGNMENT,
-                  cppu::UnoType<com::sun::star::chart::ChartLegendPosition>::get(),
+                  cppu::UnoType<css::chart::ChartLegendPosition>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "Expansion",
                   PROP_LEGEND_EXPANSION,
-                  cppu::UnoType<com::sun::star::chart::ChartLegendExpansion>::get(),
+                  cppu::UnoType<css::chart::ChartLegendExpansion>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 }
@@ -248,7 +248,7 @@ struct StaticLegendWrapperPropertyArray_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        ::std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );

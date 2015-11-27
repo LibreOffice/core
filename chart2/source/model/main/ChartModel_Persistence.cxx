@@ -115,7 +115,7 @@ Reference< embed::XStorage > lcl_createStorage(
     try
     {
         Reference< io::XStream > xStream(
-            ::ucbhelper::Content( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext()).openStream(),
+            ::ucbhelper::Content( rURL, Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext()).openStream(),
             uno::UNO_QUERY );
 
         Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create( xContext ) );

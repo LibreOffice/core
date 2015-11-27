@@ -32,32 +32,26 @@ namespace chart
 class VTitle
 {
 public:
-    explicit VTitle( const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::chart2::XTitle > & xTitle );
+    explicit VTitle( const css::uno::Reference< css::chart2::XTitle > & xTitle );
     virtual ~VTitle();
 
-    void    init( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::drawing::XShapes >& xTargetPage
-             , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+    void    init( const css::uno::Reference< css::drawing::XShapes >& xTargetPage
+             , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
              , const OUString& rCID );
 
-    void    createShapes( const ::com::sun::star::awt::Point& rPos
-                          , const ::com::sun::star::awt::Size& rReferenceSize );
+    void    createShapes( const css::awt::Point& rPos
+                          , const css::awt::Size& rReferenceSize );
 
     double getRotationAnglePi() const;
-    ::com::sun::star::awt::Size getUnrotatedSize() const;
-    ::com::sun::star::awt::Size getFinalSize() const;
-    void    changePosition( const ::com::sun::star::awt::Point& rPos );
+    css::awt::Size getUnrotatedSize() const;
+    css::awt::Size getFinalSize() const;
+    void    changePosition( const css::awt::Point& rPos );
 
 private:
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >            m_xTarget;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>   m_xShapeFactory;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle >                  m_xTitle;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape >             m_xShape;
+    css::uno::Reference< css::drawing::XShapes >            m_xTarget;
+    css::uno::Reference< css::lang::XMultiServiceFactory>   m_xShapeFactory;
+    css::uno::Reference< css::chart2::XTitle >              m_xTitle;
+    css::uno::Reference< css::drawing::XShape >             m_xShape;
     OUString   m_aCID;
 
     double      m_fRotationAngleDegree;

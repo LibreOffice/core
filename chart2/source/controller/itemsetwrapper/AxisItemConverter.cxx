@@ -341,7 +341,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SCHATTR_AXIS_POSITION:
         {
-            ::com::sun::star::chart::ChartAxisPosition eAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+            css::chart::ChartAxisPosition eAxisPos( css::chart::ChartAxisPosition_ZERO );
             GetPropertySet()->getPropertyValue( "CrossoverPosition" ) >>= eAxisPos;
             rOutItemSet.Put( SfxInt32Item( nWhichId, eAxisPos ) );
         }
@@ -374,7 +374,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SCHATTR_AXIS_LABEL_POSITION:
         {
-            ::com::sun::star::chart::ChartAxisLabelPosition ePos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
+            css::chart::ChartAxisLabelPosition ePos( css::chart::ChartAxisLabelPosition_NEAR_AXIS );
             GetPropertySet()->getPropertyValue( "LabelPosition" ) >>= ePos;
             rOutItemSet.Put( SfxInt32Item( nWhichId, ePos ) );
         }
@@ -382,7 +382,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SCHATTR_AXIS_MARK_POSITION:
         {
-            ::com::sun::star::chart::ChartAxisMarkPosition ePos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+            css::chart::ChartAxisMarkPosition ePos( css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
             GetPropertySet()->getPropertyValue( "MarkPosition" ) >>= ePos;
             rOutItemSet.Put( SfxInt32Item( nWhichId, ePos ) );
         }
@@ -448,7 +448,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
 bool lcl_isDateAxis( const SfxItemSet & rItemSet )
 {
-    sal_Int32 nAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( SCHATTR_AXISTYPE )).GetValue();//::com::sun::star::chart2::AxisType
+    sal_Int32 nAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( SCHATTR_AXISTYPE )).GetValue();//css::chart2::AxisType
     return (chart2::AxisType::DATE == nAxisType);
 }
 
@@ -738,11 +738,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                 double fValue = 0.0;
                                 if( aValue >>= fValue )
                                 {
-                                    xCrossingMainAxis->setPropertyValue( "CrossoverPosition" , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE ));
+                                    xCrossingMainAxis->setPropertyValue( "CrossoverPosition" , uno::makeAny( css::chart::ChartAxisPosition_VALUE ));
                                     xCrossingMainAxis->setPropertyValue( "CrossoverValue" , uno::makeAny( fValue ));
                                 }
                                 else
-                                    xCrossingMainAxis->setPropertyValue( "CrossoverPosition" , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START ));
+                                    xCrossingMainAxis->setPropertyValue( "CrossoverPosition" , uno::makeAny( css::chart::ChartAxisPosition_START ));
                             }
                         }
                     }
@@ -753,11 +753,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_POSITION:
         {
-            ::com::sun::star::chart::ChartAxisPosition eAxisPos =
-                (::com::sun::star::chart::ChartAxisPosition)
+            css::chart::ChartAxisPosition eAxisPos =
+                (css::chart::ChartAxisPosition)
                 static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
-            ::com::sun::star::chart::ChartAxisPosition eOldAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+            css::chart::ChartAxisPosition eOldAxisPos( css::chart::ChartAxisPosition_ZERO );
             bool bPropExisted = ( GetPropertySet()->getPropertyValue( "CrossoverPosition" ) >>= eOldAxisPos );
 
             if( !bPropExisted || ( eOldAxisPos != eAxisPos ))
@@ -766,20 +766,20 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 bChangedOtherwise = true;
 
                 //move the parallel axes to the other side if necessary
-                if( eAxisPos==::com::sun::star::chart::ChartAxisPosition_START || eAxisPos==::com::sun::star::chart::ChartAxisPosition_END )
+                if( eAxisPos==css::chart::ChartAxisPosition_START || eAxisPos==css::chart::ChartAxisPosition_END )
                 {
                     Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
                     if( xParallelAxis.is() )
                     {
-                        ::com::sun::star::chart::ChartAxisPosition eOtherPos;
+                        css::chart::ChartAxisPosition eOtherPos;
                         if( xParallelAxis->getPropertyValue( "CrossoverPosition" ) >>= eOtherPos )
                         {
                             if( eOtherPos == eAxisPos )
                             {
-                                ::com::sun::star::chart::ChartAxisPosition eOppositePos =
-                                    (eAxisPos==::com::sun::star::chart::ChartAxisPosition_START)
-                                    ? ::com::sun::star::chart::ChartAxisPosition_END
-                                    : ::com::sun::star::chart::ChartAxisPosition_START;
+                                css::chart::ChartAxisPosition eOppositePos =
+                                    (eAxisPos==css::chart::ChartAxisPosition_START)
+                                    ? css::chart::ChartAxisPosition_END
+                                    : css::chart::ChartAxisPosition_START;
                                 xParallelAxis->setPropertyValue( "CrossoverPosition" , uno::makeAny( eOppositePos ));
                             }
                         }
@@ -825,11 +825,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_LABEL_POSITION:
         {
-            ::com::sun::star::chart::ChartAxisLabelPosition ePos =
-                (::com::sun::star::chart::ChartAxisLabelPosition)
+            css::chart::ChartAxisLabelPosition ePos =
+                (css::chart::ChartAxisLabelPosition)
                 static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
-            ::com::sun::star::chart::ChartAxisLabelPosition eOldPos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
+            css::chart::ChartAxisLabelPosition eOldPos( css::chart::ChartAxisLabelPosition_NEAR_AXIS );
             bool bPropExisted = ( GetPropertySet()->getPropertyValue( "LabelPosition" ) >>= eOldPos );
 
             if( !bPropExisted || ( eOldPos != ePos ))
@@ -838,20 +838,20 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 bChangedOtherwise = true;
 
                 //move the parallel axes to the other side if necessary
-                if( ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START || ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END )
+                if( ePos==css::chart::ChartAxisLabelPosition_OUTSIDE_START || ePos==css::chart::ChartAxisLabelPosition_OUTSIDE_END )
                 {
                     Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
                     if( xParallelAxis.is() )
                     {
-                        ::com::sun::star::chart::ChartAxisLabelPosition eOtherPos;
+                        css::chart::ChartAxisLabelPosition eOtherPos;
                         if( xParallelAxis->getPropertyValue( "LabelPosition" ) >>= eOtherPos )
                         {
                             if( eOtherPos == ePos )
                             {
-                                ::com::sun::star::chart::ChartAxisLabelPosition eOppositePos =
-                                    (ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START)
-                                    ? ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END
-                                    : ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START;
+                                css::chart::ChartAxisLabelPosition eOppositePos =
+                                    (ePos==css::chart::ChartAxisLabelPosition_OUTSIDE_START)
+                                    ? css::chart::ChartAxisLabelPosition_OUTSIDE_END
+                                    : css::chart::ChartAxisLabelPosition_OUTSIDE_START;
                                 xParallelAxis->setPropertyValue( "LabelPosition" , uno::makeAny( eOppositePos ));
                             }
                         }
@@ -863,11 +863,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_MARK_POSITION:
         {
-            ::com::sun::star::chart::ChartAxisMarkPosition ePos =
-                (::com::sun::star::chart::ChartAxisMarkPosition)
+            css::chart::ChartAxisMarkPosition ePos =
+                (css::chart::ChartAxisMarkPosition)
                 static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
-            ::com::sun::star::chart::ChartAxisMarkPosition eOldPos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+            css::chart::ChartAxisMarkPosition eOldPos( css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
             bool bPropExisted = ( GetPropertySet()->getPropertyValue( "MarkPosition" ) >>= eOldPos );
 
             if( !bPropExisted || ( eOldPos != ePos ))
@@ -963,7 +963,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXISTYPE:
         {
-            sal_Int32 nNewAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();//::com::sun::star::chart2::AxisType
+            sal_Int32 nNewAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();//css::chart2::AxisType
             aScale.AxisType = nNewAxisType;
             bSetScale = true;
         }

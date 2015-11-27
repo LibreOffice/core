@@ -134,7 +134,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
 
 void lcl_maybeReplaceNanWithZero( double& rfValue, sal_Int32 nMissingValueTreatment )
 {
-    if( nMissingValueTreatment == ::com::sun::star::chart::MissingValueTreatment::USE_ZERO
+    if( nMissingValueTreatment == css::chart::MissingValueTreatment::USE_ZERO
         && (::rtl::math::isNan(rfValue) || ::rtl::math::isInf(rfValue)) )
             rfValue = 0.0;
 }
@@ -181,7 +181,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_apSymbolProperties_AttributedPoint(nullptr)
     , m_apSymbolProperties_InvisibleSymbolForSelection(nullptr)
     , m_nCurrentAttributedPoint(-1)
-    , m_nMissingValueTreatment(::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
+    , m_nMissingValueTreatment(css::chart::MissingValueTreatment::LEAVE_GAP)
     , m_bAllowPercentValueInDataLabel(false)
     , mpOldSeries(nullptr)
     , mnPercent(0.0)

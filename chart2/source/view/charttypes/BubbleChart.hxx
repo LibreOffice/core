@@ -29,8 +29,7 @@ class BubbleChart : public VSeriesPlotter
 {
     // public methods
 public:
-    BubbleChart( const ::com::sun::star::uno::Reference<
-             ::com::sun::star::chart2::XChartType >& xChartTypeModel
+    BubbleChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount );
     virtual ~BubbleChart();
 
@@ -38,7 +37,7 @@ public:
 
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;
 
-    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
+    virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
 
     // MinimumAndMaximumSupplier
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) override;
@@ -53,7 +52,7 @@ private: //methods
     void    calculateMaximumLogicBubbleSize();
     void    calculateBubbleSizeScalingFactor();
 
-    com::sun::star::drawing::Direction3D transformToScreenBubbleSize( double fLogicSize );
+    css::drawing::Direction3D transformToScreenBubbleSize( double fLogicSize );
 
 private: //member
 
