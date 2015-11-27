@@ -46,8 +46,6 @@
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
-#include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/awt/XToolkitExperimental.hpp>
 
 #include <rtl/ref.hxx>
 #include <rtl/bootstrap.hxx>
@@ -56,6 +54,7 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <osl/conditn.hxx>
+#include <vcl/svapp.hxx>
 
 namespace beans = com::sun::star::beans ;
 namespace container = com::sun::star::container ;
@@ -387,14 +386,7 @@ OUString UpdateInformationProvider::getUserAgent(bool bExtended)
     OUString aExtended;
     if( bExtended )
     {
-        try {
-            uno::Reference< css::awt::XToolkitExperimental > xToolkit(
-                css::awt::Toolkit::create( m_xContext ), uno::UNO_QUERY_THROW );
-            if ( xToolkit.is() )
-                aExtended = xToolkit->getHWOSConfInfo();
-        } catch (const uno::Exception &) {
-            SAL_WARN( "extensions.update", "Failed to find version info from toolkit" );
-        }
+        aExtended = Application::GetHWOSConfInfo();
     }
     rtl::Bootstrap::expandMacros( aUserAgent );
     aUserAgent = aUserAgent.replaceAll("<PRODUCT>", product);

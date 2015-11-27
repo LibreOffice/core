@@ -11,12 +11,17 @@ $(eval $(call gb_Library_Library,updatefeed))
 
 $(eval $(call gb_Library_set_componentfile,updatefeed,extensions/source/update/feed/updatefeed))
 
+$(eval $(call gb_Library_use_externals,updatefeed, \
+    boost_headers \
+))
+
 $(eval $(call gb_Library_use_sdk_api,updatefeed))
 
 $(eval $(call gb_Library_use_libraries,updatefeed,\
 	cppuhelper \
 	cppu \
 	sal \
+	vcl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,updatefeed,\
