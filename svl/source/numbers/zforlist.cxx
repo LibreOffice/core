@@ -775,6 +775,20 @@ void SvNumberFormatter::FillKeywordTable( NfKeywordTable& rKeywords,
 }
 
 
+void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
+{
+    FillKeywordTable( rKeywords, LANGUAGE_ENGLISH_US );
+
+    // Remap codes unknown to Excel.
+    rKeywords[ NF_KEY_NN ] = "DDD";
+    rKeywords[ NF_KEY_NNN ] = "DDDD";
+    // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
+    rKeywords[ NF_KEY_NNNN ] = "DDDD";
+    // Export the Thai T NatNum modifier.
+    rKeywords[ NF_KEY_THAI_T ] = "T";
+}
+
+
 OUString SvNumberFormatter::GetKeyword( LanguageType eLnge, sal_uInt16 nIndex )
 {
     ChangeIntl(eLnge);
