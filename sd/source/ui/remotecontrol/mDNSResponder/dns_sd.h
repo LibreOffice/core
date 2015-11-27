@@ -741,33 +741,6 @@ DNSServiceErrorType DNSSD_API DNSServiceGetProperty
 *
 *********************************************************************************************/
 
-/* DNSServiceRefSockFD()
- *
- * Access underlying Unix domain socket for an initialized DNSServiceRef.
- * The DNS Service Discovery implementation uses this socket to communicate between the client and
- * the mDNSResponder daemon. The application MUST NOT directly read from or write to this socket.
- * Access to the socket is provided so that it can be used as a kqueue event source, a CFRunLoop
- * event source, in a select() loop, etc. When the underlying event management subsystem (kqueue/
- * select/CFRunLoop etc.) indicates to the client that data is available for reading on the
- * socket, the client should call DNSServiceProcessResult(), which will extract the daemon's
- * reply from the socket, and pass it to the appropriate application callback. By using a run
- * loop or select(), results from the daemon can be processed asynchronously. Alternatively,
- * a client can choose to fork a thread and have it loop calling "DNSServiceProcessResult(ref);"
- * If DNSServiceProcessResult() is called when no data is available for reading on the socket, it
- * will block until data does become available, and then process the data and return to the caller.
- * When data arrives on the socket, the client is responsible for calling DNSServiceProcessResult(ref)
- * in a timely fashion -- if the client allows a large backlog of data to build up the daemon
- * may terminate the connection.
- *
- * sdRef:           A DNSServiceRef initialized by any of the DNSService calls.
- *
- * return value:    The DNSServiceRef's underlying socket descriptor, or -1 on
- *                  error.
- */
-
-int DNSSD_API DNSServiceRefSockFD(DNSServiceRef sdRef);
-
-
 /* DNSServiceProcessResult()
  *
  * Read a reply from the daemon, calling the appropriate application callback. This call will
