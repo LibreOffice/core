@@ -290,8 +290,8 @@ public:
     SwDoc* getDoc() const { return pDoc; }
 };
 
-SwXStyleFamily::SwXStyleFamily(SwDocShell* pDocSh, sal_uInt16 nFamily) :
-        m_eFamily((SfxStyleFamily)nFamily),
+SwXStyleFamily::SwXStyleFamily(SwDocShell* pDocSh, const SfxStyleFamily eFamily) :
+        m_eFamily(eFamily),
         m_pBasePool(pDocSh->GetStyleSheetPool()),
         m_pDocShell(pDocSh)
 {
