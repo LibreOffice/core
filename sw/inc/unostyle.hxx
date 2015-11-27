@@ -109,7 +109,7 @@ class SwXStyleFamily : public cppu::WeakImplHelper
 
     SwXStyle*               _FindStyle(const OUString& rStyleName) const;
 public:
-    SwXStyleFamily(SwDocShell* pDocShell, sal_uInt16 nFamily);
+    SwXStyleFamily(SwDocShell* pDocShell, const SfxStyleFamily eFamily);
     virtual ~SwXStyleFamily();
 
     //XIndexAccess
