@@ -253,7 +253,7 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
 }
 
 static
-#ifdef __GNUC__
+#if defined __GNUC__ || defined __clang__
 __attribute__((used))
 #endif
 LibreOfficeKit *lok_init( const char *install_path )
