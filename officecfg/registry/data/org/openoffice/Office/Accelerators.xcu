@@ -1099,13 +1099,13 @@
             <value xml:lang="hu">.uno:InsertCurrentTime</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
+        <node oor:name="LESS_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:MarkPrecedents</value>
           </prop>
         </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
+        <node oor:name="GREATER_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:MarkDependents</value>
@@ -1758,13 +1758,13 @@
             <value xml:lang="en-US">.uno:Undo</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
+        <node oor:name="LESS_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
           </prop>
         </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
+        <node oor:name="GREATER_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
@@ -1862,13 +1862,13 @@
             <value xml:lang="en-US">.uno:DelToStartOfSentence</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
+        <node oor:name="LESS_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
           </prop>
         </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
+        <node oor:name="GREATER_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
@@ -3053,13 +3053,13 @@
             <value xml:lang="en-US">.uno:Undo</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
+        <node oor:name="LESS_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
           </prop>
         </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
+        <node oor:name="GREATER_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
@@ -3219,13 +3219,13 @@
             <value xml:lang="en-US">.uno:DelToStartOfSentence</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
+        <node oor:name="LESS_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
           </prop>
         </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
+        <node oor:name="GREATER_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
@@ -5514,13 +5514,13 @@
             <value xml:lang="en-US">.uno:DelToStartOfSentence</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
+        <node oor:name="LESS_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
           </prop>
         </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
+        <node oor:name="GREATER_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
@@ -6287,13 +6287,13 @@
             <value xml:lang="en-US">.uno:DelToStartOfSentence</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
+        <node oor:name="LESS_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
           </prop>
         </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
+        <node oor:name="GREATER_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
@@ -7235,13 +7235,13 @@
             <value xml:lang="en-US">.uno:Undo</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
+        <node oor:name="LESS_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
           </prop>
         </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
+        <node oor:name="GREATER_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>
@@ -7361,13 +7361,13 @@
             <value xml:lang="en-US">.uno:Undo</value>
           </prop>
         </node>
-        <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
+        <node oor:name="LESS_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Shrink</value>
           </prop>
         </node>
-        <node oor:name="BRACKETRIGHT_MOD1" oor:op="replace">
+        <node oor:name="GREATER_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Grow</value>

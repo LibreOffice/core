@@ -3355,6 +3355,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     static bool     bWaitForModKeyRelease = false;
     sal_uInt16          nRepeat         = LOWORD( lParam )-1;
     sal_uInt16          nModCode        = 0;
+    WPARAM              spec_shiftstate = 0;  // shift state for the special keys
 
     // this key might have been relayed by SysChild and thus
     // may not be processed twice
@@ -3378,7 +3379,11 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
     // determine modifiers
     if ( GetKeyState( VK_SHIFT ) & 0x8000 )
+    {
         nModCode |= KEY_SHIFT;
+        if(wParam >= KEY_TAB_SIZE)           // is key a special key ?
+            spec_shiftstate = 0x100;         // yes, set shift state for the dynamically keys
+    }
     if ( GetKeyState( VK_CONTROL ) & 0x8000 )
         nModCode |= KEY_MOD1;
     if ( GetKeyState( VK_LMENU ) & 0x8000 )
@@ -3531,7 +3536,16 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             aKeyEvt.mnCharCode = 0;
             aKeyEvt.mnCode = 0;
 
-            aKeyEvt.mnCode = ImplSalGetKeyCode( wParam );
+            // the special dynamically table need the shift state
+            aKeyEvt.mnCode = ImplSalGetKeyCode( wParam | spec_shiftstate );
+
+            // when special shift state is set, and special key is found, and a hotkey modi is pressed
+            // then we must delete the shift state for the next routine
+            // in our handling the special key is recognize, and the other function not want to see
+            // the shift state
+            if((aKeyEvt.mnCode != 0) && (spec_shiftstate != 0) && ((nModCode & (KEY_MOD1 | KEY_MOD2)) != 0 ))
+                nModCode &= ~KEY_SHIFT;  // then delete here
+
             if ( !bKeyUp )
             {
                 // check for charcode
