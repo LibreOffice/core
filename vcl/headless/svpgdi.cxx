@@ -300,7 +300,7 @@ namespace
             return false;
 
         if (rBuffer->getScanlineFormat() != SVP_CAIRO_FORMAT
-         && rBuffer->getScanlineFormat() != basebmp::Format::OneBitLsbGrey)
+         && rBuffer->getScanlineFormat() != basebmp::Format::OneBitMsbPal)
             return false;
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
