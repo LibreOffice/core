@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_0b5ab183",
+        "filename": "i18npool/source/localedata/data/cu_RU.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-27T12:59:39Z",
+      "side": 1,
+      "message": "There should be a format code for negative numbers defined, otherwise negative numbers will be displayed as positive numbers.\n\n [NatNum1]0;-0\n\nI\u0027ll amend the commit.",
+      "range": {
+        "startLine": 77,
+        "startChar": 18,
+        "endLine": 77,
+        "endChar": 28
+      },
+      "revId": "a9c500fc1819fe7f86e2663902f3eae24c6b17f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
