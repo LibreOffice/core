@@ -104,44 +104,36 @@ typedef Reader *SwRead;
 class SwgReaderOption
 {
     SwAsciiOptions aASCIIOpts;
-    union
-    {
-        bool bFormatsOnly;
-        struct
-        {
-            bool bFrameFormats: 1;
-            bool bPageDescs: 1;
-            bool bTextFormats: 1;
-            bool bNumRules: 1;
-            bool bMerge:1;
-        }  Formats;
-    } What;
-
+    bool m_bFrameFormats;
+    bool m_bPageDescs;
+    bool m_bTextFormats;
+    bool m_bNumRules;
+    bool m_bMerge;
 public:
-    void ResetAllFormatsOnly() { What.bFormatsOnly = false; }
-    bool IsFormatsOnly() const { return What.bFormatsOnly; }
+    void ResetAllFormatsOnly() { m_bFrameFormats = m_bPageDescs = m_bTextFormats = m_bNumRules = m_bMerge = false; }
+    bool IsFormatsOnly() const { return m_bFrameFormats || m_bPageDescs || m_bTextFormats || m_bNumRules || m_bMerge; }
 
-    bool IsFrameFormats() const { return What.Formats.bFrameFormats; }
-    void SetFrameFormats( const bool bNew) { What.Formats.bFrameFormats = bNew; }
+    bool IsFrameFormats() const { return m_bFrameFormats; }
+    void SetFrameFormats( const bool bNew) { m_bFrameFormats = bNew; }
 
-    bool IsPageDescs() const { return What.Formats.bPageDescs; }
-    void SetPageDescs( const bool bNew) { What.Formats.bPageDescs = bNew; }
+    bool IsPageDescs() const { return m_bPageDescs; }
+    void SetPageDescs( const bool bNew) { m_bPageDescs = bNew; }
 
-    bool IsTextFormats() const { return What.Formats.bTextFormats; }
-    void SetTextFormats( const bool bNew) { What.Formats.bTextFormats = bNew; }
+    bool IsTextFormats() const { return m_bTextFormats; }
+    void SetTextFormats( const bool bNew) { m_bTextFormats = bNew; }
 
-    bool IsNumRules() const { return What.Formats.bNumRules; }
-    void SetNumRules( const bool bNew) { What.Formats.bNumRules = bNew; }
+    bool IsNumRules() const { return m_bNumRules; }
+    void SetNumRules( const bool bNew) { m_bNumRules = bNew; }
 
-    bool IsMerge() const { return What.Formats.bMerge; }
-    void SetMerge( const bool bNew ) { What.Formats.bMerge = bNew; }
+    bool IsMerge() const { return m_bMerge; }
+    void SetMerge( const bool bNew ) { m_bMerge = bNew; }
 
     const SwAsciiOptions& GetASCIIOpts() const { return aASCIIOpts; }
     void SetASCIIOpts( const SwAsciiOptions& rOpts ) { aASCIIOpts = rOpts; }
     void ResetASCIIOpts() { aASCIIOpts.Reset(); }
 
     SwgReaderOption()
-    {   ResetAllFormatsOnly(); aASCIIOpts.Reset(); }
+        { ResetAllFormatsOnly(); aASCIIOpts.Reset(); }
 };
 
 class SW_DLLPUBLIC SwReader: public SwDocFac
