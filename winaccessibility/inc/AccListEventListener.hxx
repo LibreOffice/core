@@ -34,8 +34,6 @@
  */
 class AccListEventListener: public AccDescendantManagerEventListener
 {
-private:
-    bool shouldDeleteChild;
 public:
     AccListEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
     virtual ~AccListEventListener();

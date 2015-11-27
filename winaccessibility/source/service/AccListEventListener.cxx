@@ -33,8 +33,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
 AccListEventListener::AccListEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
-        :AccDescendantManagerEventListener(pAcc, Agent),
-        shouldDeleteChild(true)
+        :AccDescendantManagerEventListener(pAcc, Agent)
 {
 }
 
