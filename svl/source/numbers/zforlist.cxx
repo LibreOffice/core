@@ -791,6 +791,62 @@ void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
 }
 
 
+OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKeywordTable& rKeywords,
+        SvNumberFormatter& rTempFormatter ) const
+{
+    OUString aFormatStr;
+    if (const SvNumberformat* pEntry = GetEntry( nKey))
+    {
+        if (pEntry->GetType() == css::util::NumberFormat::LOGICAL)
+        {
+            // Build Boolean number format, which needs non-zero and zero
+            // subformat codes with TRUE and FALSE strings.
+            Color* pColor = nullptr;
+            OUString aTemp;
+            const_cast< SvNumberformat* >( pEntry )->GetOutputString( 1.0, aTemp, &pColor );
+            aFormatStr += "\"" + aTemp + "\";\"" + aTemp + "\";\"";
+            const_cast< SvNumberformat* >( pEntry )->GetOutputString( 0.0, aTemp, &pColor );
+            aFormatStr += aTemp + "\"";
+        }
+        else
+        {
+            LanguageType nLang = pEntry->GetLanguage();
+            if (nLang == LANGUAGE_SYSTEM)
+                nLang = SvtSysLocale().GetLanguageTag().getLanguageType();
+            if (nLang != LANGUAGE_ENGLISH_US)
+            {
+                sal_Int32 nCheckPos;
+                short nType = css::util::NumberFormat::DEFINED;
+                sal_uInt32 nTempKey;
+                OUString aTemp( pEntry->GetFormatstring());
+                rTempFormatter.PutandConvertEntry( aTemp, nCheckPos, nType, nTempKey, nLang, LANGUAGE_ENGLISH_US);
+                SAL_WARN_IF( nCheckPos != 0, "svl.numbers",
+                        "SvNumberFormatter::GetFormatStringForExcel - format code not convertible");
+                if (nTempKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
+                    pEntry = rTempFormatter.GetEntry( nTempKey);
+            }
+
+            if (pEntry)
+            {
+                // GetLocaleData() returns the current locale's data, so switch
+                // before (which doesn't do anything if it was the same locale
+                // already).
+                rTempFormatter.ChangeIntl( LANGUAGE_ENGLISH_US);
+                aFormatStr = pEntry->GetMappedFormatstring( rKeywords, *rTempFormatter.GetLocaleData());
+            }
+        }
+    }
+    else
+    {
+        SAL_WARN("svl.numbers","SvNumberFormatter::GetFormatStringForExcel - format not found: " << nKey);
+    }
+
+    if (aFormatStr.isEmpty())
+        aFormatStr = "General";
+    return aFormatStr;
+}
+
+
 OUString SvNumberFormatter::GetKeyword( LanguageType eLnge, sal_uInt16 nIndex )
 {
     ChangeIntl(eLnge);

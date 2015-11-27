@@ -759,8 +759,18 @@ public:
     void    FillKeywordTable( NfKeywordTable& rKeywords, LanguageType eLang );
 
     /** Fill a NfKeywordIndex table with keywords usable in Excel export with
-        GetMappedFormatstring() */
+        GetFormatStringForExcel() or SvNumberformat::GetMappedFormatstring() */
     void    FillKeywordTableForExcel( NfKeywordTable& rKeywords );
+
+    /** Return a format code string suitable for Excel export.
+
+        @param  rTempFormatter
+                SvNumberFormatter to use if a non-en-US format code needs to be
+                converted and put, should not be the same formatter to not
+                pollute the entries of this one here.
+     */
+    OUString GetFormatStringForExcel( sal_uInt32 nKey, const NfKeywordTable& rKeywords,
+            SvNumberFormatter& rTempFormatter ) const;
 
     /** Return a keyword for a language/country and NfKeywordIndex
         for XML import, to generate number format strings. */
