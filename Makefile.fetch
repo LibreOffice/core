@@ -165,6 +165,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,LPSOLVE,LPSOLVE_TARBALL) \
 		$(call fetch_Optional,MARIADB,MARIADB_TARBALL) \
 		$(call fetch_Optional,MDDS,MDDS_TARBALL) \
+		$(call fetch_Optional,MDNSRESPONDER,MDNSRESPONDER_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_CALADEA_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_CARLITO_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_DEJAVU_TARBALL) \
