@@ -166,6 +166,7 @@ public:
     void testTextTableCellNames();
     void testShapeAnchorUndo();
     void testDde();
+    void testTdf34957();
     void testTdf89954();
     void testTdf89720();
     void testTdf88986();
@@ -246,6 +247,7 @@ public:
     CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST(testShapeAnchorUndo);
     CPPUNIT_TEST(testDde);
+    CPPUNIT_TEST(testTdf34957);
     CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf88986);
@@ -2744,6 +2746,16 @@ void SwUiWriterTest::testUnicodeNotationToggle()
     lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
     sDocString = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
     CPPUNIT_ASSERT( sDocString.equals(sOriginalDocString) );
+}
+
+void SwUiWriterTest::testTdf34957()
+{
+    load(DATA_DIRECTORY, "tdf34957.odt");
+    // table with "keep with next" always started on a new page if the table was large,
+    // regardless of whether it was already kept with the previous paragraph,
+    // or whether the following paragraph actually fit on the same page (MAB 3.6 - 5.0)
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[2]/body/tab[1]/row[2]/cell[1]/txt") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[4]/body/tab[1]/row[2]/cell[1]/txt") );
 }
 
 void SwUiWriterTest::testTdf89954()
