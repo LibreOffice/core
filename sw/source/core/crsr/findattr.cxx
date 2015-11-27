@@ -480,6 +480,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
         else
             break;
     }
+    delete pIter;
     return Found();
 }
 
@@ -639,6 +640,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
         else
             break;
     }
+    delete pIter;
     return Found();
 }
 
