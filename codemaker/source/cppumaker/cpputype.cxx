@@ -3446,11 +3446,9 @@ static OUString failsToSupply(const OUString& name_, const OString& baseName)
 {
     return OUString(
             "\n"
-            "#if OSL_DEBUG_LEVEL > 0\n"
+            "\n"
             "                ::rtl::OUString(\"component context fails to supply service '" + name_ + "' of type '" + OStringToOUString(baseName, RTL_TEXTENCODING_UTF8) + "'\")\n"
-            "#else\n"
-            "                ::rtl::OUString(\"service not supplied\")\n"
-            "#endif\n");
+            "\n");
 }
 
 void ServiceType::dumpHxxFile(
