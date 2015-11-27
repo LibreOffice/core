@@ -223,17 +223,17 @@ using namespace com::sun::star::accessibility::AccessibleRole;
 AccObjectManagerAgent* CMAccessible::g_pAgent = NULL;
 
 CMAccessible::CMAccessible():
+m_pszName(NULL),
+m_pszValue(NULL),
+m_pszActionDescription(NULL),
 m_iRole(0x00),
 m_dState(0x00),
+m_pszDescription(NULL),
+m_pIParent(NULL),
 m_dChildID(0x00),
 m_dFocusChildID(UACC_NO_FOCUS),
 m_hwnd(NULL),
-m_pIParent(NULL),
-m_pszName(NULL),
-m_pszValue(NULL),
-m_pszDescription(NULL),
 m_isDestroy(FALSE),
-m_pszActionDescription(NULL),
 m_bRequiresSave(FALSE)
 {
     m_sLocation.m_dLeft=0;
