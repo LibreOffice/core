@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_abba85be",
+        "filename": "dbaccess/source/core/dataaccess/datasource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2015-11-27T06:42:03Z",
+      "side": 1,
+      "message": "This is not standard constructor function and I am not 100% sure. Is it correct?",
+      "revId": "7f6368fd1f6be2ced19fabcf6782968ad53a20ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
