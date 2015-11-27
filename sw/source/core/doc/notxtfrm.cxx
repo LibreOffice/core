@@ -897,10 +897,11 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
             {
                 Size aTmpSz;
                 ::sfx2::SvLinkSource* pGrfObj = pGrfNd->GetLink()->GetObj();
-                if( !pGrfObj ||
-                    !pGrfObj->IsDataComplete() ||
-                    !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
-                    !aTmpSz.Height() || !pGrfNd->GetAutoFormatLvl() )
+                if ( ( !pGrfObj ||
+                       !pGrfObj->IsDataComplete() ||
+                       !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
+                       !aTmpSz.Height() || !pGrfNd->GetAutoFormatLvl() ) &&
+                    !pGrfNd->IsUpdateLinkInProgress() )
                 {
                     pGrfNd->TriggerAsyncRetrieveInputStream(); // #i73788#
                 }
@@ -909,9 +910,13 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
                     GetRealURL( *pGrfNd, aText );
                 ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, false );
                 bContinue = false;
+            } else if ( rGrfObj.GetType() != GRAPHIC_DEFAULT &&
+                      rGrfObj.GetType() != GRAPHIC_NONE &&
+                      pGrfNd->IsUpdateLinkInProgress() )
+            {
+                pGrfNd->SetUpdateLinkInProgress( false );
             }
         }
-
         if( bContinue )
         {
             if( rGrfObj.GetGraphic().IsSupportedGraphic())

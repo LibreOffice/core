@@ -71,6 +71,7 @@ SwGrfNode::SwGrfNode(
     mpReplacementGraphic(0),
     // #i73788#
     mbLinkedInputStreamReady( false ),
+    mbUpdateLinkInProgress( false ),
     mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
@@ -89,6 +90,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mpReplacementGraphic(0),
     // #i73788#
     mbLinkedInputStreamReady( false ),
+    mbUpdateLinkInProgress( false ),
     mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
@@ -112,6 +114,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mpReplacementGraphic(0),
     // #i73788#
     mbLinkedInputStreamReady( false ),
+    mbUpdateLinkInProgress( false ),
     mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
@@ -521,7 +524,6 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
     bool bRet = false;
     bInSwapIn = true;
     SwBaseLink* pLink = static_cast<SwBaseLink*>((::sfx2::SvBaseLink*) refLink);
-
     if( pLink )
     {
         if( GRAPHIC_NONE == maGrfObj.GetType() ||
@@ -1089,7 +1091,6 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
         OSL_FAIL( "<SwGrfNode::TriggerAsyncLoad()> - Method is misused. Method call is only valid for graphic nodes, which refer a linked graphic file" );
         return;
     }
-
     if ( mpThreadConsumer.get() == 0 )
     {
         mpThreadConsumer.reset( new SwAsyncRetrieveInputStreamThreadConsumer( *this ) );
@@ -1104,6 +1105,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
         }
         mpThreadConsumer->CreateThread( sGrfNm, sReferer );
     }
+
 }
 
 
@@ -1137,6 +1139,7 @@ void SwGrfNode::UpdateLinkWithInputStream()
         // #i88291#
         mxInputStream.clear();
         GetLink()->clearStreamToLoadFrom();
+        mbUpdateLinkInProgress = true;
         mbLinkedInputStreamReady = false;
         mpThreadConsumer.reset();
     }
