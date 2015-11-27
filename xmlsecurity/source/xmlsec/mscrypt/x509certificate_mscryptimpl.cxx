@@ -394,7 +394,6 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectName() throw ( ::com::s
 ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl::findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*oid*/ ) throw (::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 ) {
         CertificateExtension_XmlSecImpl* xExtn ;
-        Sequence< Reference< XCertificateExtension > > xExtns( m_pCertContext->pCertInfo->cExtension ) ;
 
         xExtn = NULL ;
         for( unsigned int i = 0; i < m_pCertContext->pCertInfo->cExtension; i++ ) {

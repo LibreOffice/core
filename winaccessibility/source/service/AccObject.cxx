@@ -32,9 +32,17 @@
 
 #include "AccObject.hxx"
 #include "AccEventListener.hxx"
-#include "UAccCOM_i.c"
 #include "AccResource.hxx"
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wextra-tokens"
+    // "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
+#endif
+#include "UAccCOM_i.c"
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 using namespace std;
 using namespace com::sun::star::uno;
@@ -149,12 +157,12 @@ const short ROLE_TABLE[][2] =
    */
 AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
                      AccEventListener* pListener) :
-        m_pIMAcc    (NULL),
         m_resID     (NULL),
         m_pParantID (NULL),
+        m_bShouldDestroy(sal_False),
+        m_pIMAcc    (NULL),
         m_pParentObj(NULL),
         m_pListener (pListener),
-        m_bShouldDestroy(sal_False),
         m_xAccRef( pAcc )
 {
     ImplInitializeCreateObj();

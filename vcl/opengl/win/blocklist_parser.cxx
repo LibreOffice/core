@@ -164,8 +164,6 @@ void WinBlocklistParser::handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlR
         xmlreader::XmlReader::Result res = rReader.nextItem(
                 xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
 
-        OString aId(name.begin, name.length);
-
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
             ++nLevel;
