@@ -75,7 +75,7 @@
 #define ST_FAILED               (RC_DBUI_BEGIN + 50)
 #define ST_TERMINATEQUERY       (RC_DBUI_BEGIN + 51)
 #define ST_STARTING             (RC_DBUI_BEGIN + 52)
-#define ST_DOCUMETNTYPE         (RC_DBUI_BEGIN + 53)
+#define ST_DOCUMENTTYPE         (RC_DBUI_BEGIN + 53)
 #define ST_ADDRESSBLOCK         (RC_DBUI_BEGIN + 54)
 #define ST_GREETINGSLINE        (RC_DBUI_BEGIN + 55)
 #define ST_LAYOUT               (RC_DBUI_BEGIN + 56)
