@@ -212,8 +212,8 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) = 0;
 
-    virtual OpenGLContext *beginPaint() { return nullptr; }
-    virtual void           endPaint()   { }
+    /// flush and hence render any pending rendering commands
+    virtual void flush() { }
 };
 
 #endif

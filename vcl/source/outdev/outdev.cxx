@@ -846,11 +846,23 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 }
 
 OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
-    : mpDev( pDev )
 {
-    SalGraphics *mpGraphics = mpDev->GetGraphics();
-    if (mpGraphics)
-        mpGraphics->BeginPaint();
+    vcl::Window *pWindow = dynamic_cast<vcl::Window *>(pDev);
+
+    if (!pWindow) // no point on a non-window
+    {
+        mpDebug = NULL;
+        return;
+    }
+
+    mpDev = pDev;
+
+    SalFrame *pFrame = pWindow->ImplGetFrame();
+    mpDebug = pFrame;
+    if (pFrame)
+        pFrame->BeginPaint();
+    else
+        SAL_WARN("vcl.gdi", "paintscope: no frame for window " << pWindow);
 }
 
 OutputDevice::PaintScope::~PaintScope()
@@ -861,10 +873,16 @@ OutputDevice::PaintScope::~PaintScope()
 /// Flush all the queued rendering commands to the screen for this context.
 void OutputDevice::PaintScope::flush()
 {
-    SalGraphics *mpGraphics = mpDev->GetGraphics();
-    if (mpGraphics)
-        mpGraphics->EndPaint();
-}
+    /// SAL_DEBUG kill this method - why a separate flush ? -> fold me into ~PaintScope.
+    vcl::Window *pWindow = static_cast<vcl::Window *>(mpDev.get());
 
+    SalFrame *pFrame = pWindow->ImplGetFrame();
+    if (!pFrame || pWindow->isDisposed())
+        SAL_WARN("vcl.gdi", "Very odd, window disposed while painting");
+    else
+        assert (pFrame == mpDebug);
+
+    pFrame->EndPaint();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

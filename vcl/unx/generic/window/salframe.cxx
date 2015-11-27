@@ -2286,6 +2286,11 @@ void X11SalFrame::SetTitle( const OUString& rTitle )
 
 void X11SalFrame::Flush()
 {
+    SAL_DEBUG("flush " << this);
+    if( pGraphics_ )
+        pGraphics_->Flush();
+    if( pFreeGraphics_ )
+        pFreeGraphics_->Flush();
     XFlush( GetDisplay()->GetDisplay() );
 }
 

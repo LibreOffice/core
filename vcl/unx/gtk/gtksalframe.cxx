@@ -2628,6 +2628,9 @@ void GtkSalFrame::SetPointerPos( long nX, long nY )
 
 void GtkSalFrame::Flush()
 {
+    if( m_pGraphics )
+        m_pGraphics->Flush();
+
 #if GTK_CHECK_VERSION(3,0,0)
     gdk_display_flush( getGdkDisplay() );
 #else

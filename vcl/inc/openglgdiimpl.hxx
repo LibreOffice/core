@@ -347,12 +347,8 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
 
-    virtual OpenGLContext *beginPaint() override;
-    virtual void           endPaint() override;
-
     /// flush contents of the back-buffer to the screen & swap.
-    void flushAndSwap();
-private:
+    virtual void flush() override;
 };
 
 #endif

@@ -788,6 +788,8 @@ bool Window::AcquireGraphics() const
     // try harder if no wingraphics was available directly
     if ( !mpGraphics )
     {
+        assert ("this is utterly lame !" || false);
+
         // find another output device in the same frame
         OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
         while ( pReleaseOutDev )

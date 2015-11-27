@@ -65,7 +65,6 @@ OpenGLContext::OpenGLContext():
     mpFirstFramebuffer(nullptr),
     mpLastFramebuffer(nullptr),
     mpCurrentProgram(nullptr),
-    mnPainting(0),
     mpPrevContext(nullptr),
     mpNextContext(nullptr)
 {
@@ -1198,9 +1197,6 @@ void OpenGLContext::reset()
         return;
 
     OpenGLZone aZone;
-
-    // don't reset a context in the middle of stack frames rendering to it
-    assert( mnPainting == 0 );
 
     // reset the clip region
     maClipRegion.SetEmpty();

@@ -436,9 +436,6 @@ public:
 
     virtual SystemGraphicsData GetGraphicsData() const override;
 
-    virtual OpenGLContext     *BeginPaint() override;
-    virtual void               EndPaint() override;
-
     /// Update settings based on the platform values
     static void updateSettingsNative( AllSettings& rSettings );
 };

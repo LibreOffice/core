@@ -33,6 +33,7 @@ SalFrame::SalFrame()
     : m_bPaintsBlocked(false)
     , m_pWindow(nullptr)
     , m_pProc(nullptr)
+    , m_nPaintNesting( 0 )
 {
 }
 
@@ -41,6 +42,8 @@ SalFrame::SalFrame()
 
 SalFrame::~SalFrame()
 {
+    // don't destroy graphics while mid-paint.
+    assert(m_nPaintNesting == 0);
 }
 
 void SalFrame::SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc )
@@ -54,6 +57,21 @@ void SalFrame::SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc )
 void SalFrame::Flush( const Rectangle& )
 {
     Flush();
+}
+
+void SalFrame::BeginPaint()
+{
+    m_nPaintNesting++;
+    assert (m_nPaintNesting > 0);
+    SAL_DEBUG("paint: " << this << " begin " << m_nPaintNesting);
+}
+
+void SalFrame::EndPaint()
+{
+    SAL_DEBUG("paint: " << this << " end " << m_nPaintNesting);
+    assert (m_nPaintNesting > 0);
+    if (--m_nPaintNesting == 0)
+        Flush();
 }
 
 void SalFrame::SetRepresentedURL( const OUString& )

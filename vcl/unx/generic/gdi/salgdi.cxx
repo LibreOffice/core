@@ -557,16 +557,6 @@ bool X11SalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradien
     return mxImpl->drawGradient(rPoly, rGradient);
 }
 
-OpenGLContext *X11SalGraphics::BeginPaint()
-{
-    return mxImpl->beginPaint();
-}
-
-void X11SalGraphics::EndPaint()
-{
-    return mxImpl->endPaint();
-}
-
 SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
 {
     if (m_pFrame)

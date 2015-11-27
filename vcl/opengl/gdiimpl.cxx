@@ -154,6 +154,10 @@ void OpenGLSalGraphicsImpl::Init()
             mpContext->ReleaseFramebuffer( maOffscreenTex );
         }
         maOffscreenTex = OpenGLTexture();
+        SAL_DEBUG("paint: " << this << " size mismatch - delete texture " <<
+                  maOffscreenTex.GetWidth() << " x " <<
+                  maOffscreenTex.GetHeight() << " vs. " <<
+                  GetWidth() << " x " << GetHeight());
         VCL_GL_INFO("::Init - re-size offscreen texture");
     }
 
@@ -232,10 +236,15 @@ void OpenGLSalGraphicsImpl::PostDraw()
     else
         assert( mpWindowContext.is() );
 
-    if( mpContext->mnPainting == 0 )
+    // FIXME: we should flush when something is drawn outside paint really.
+    if( !IsOffscreen() )
     {
-        if (!IsOffscreen())
-            flushAndSwap();
+        SalFrame *pFrame = dynamic_cast< SalFrame * >(mpProvider);
+        if( pFrame && pFrame->GetPaintNesting() == 0 )
+        {
+            VCL_GL_INFO( "uncontrolled rendering: catch and stop me." );
+            flush();
+        }
     }
 
     OpenGLZone::leave();
@@ -429,6 +438,7 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
             mpContext->ReleaseFramebuffer( maOffscreenTex );
             maOffscreenTex = OpenGLTexture();
             VCL_GL_INFO( "re-size offscreen texture" );
+            SAL_DEBUG( "paint: " << this << " re-size offscreen texture" );
         }
     }
 
@@ -436,6 +446,8 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
     {
         VCL_GL_INFO( "create texture of size "
                      << GetWidth() << " x " << GetHeight() );
+        SAL_DEBUG( "paint: " << this << " create texture of size "
+                   << GetWidth() << " x " << GetHeight() );
         maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
         bClearTexture = true;
     }
@@ -1936,25 +1948,28 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     return true;
 }
 
-OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
+void OpenGLSalGraphicsImpl::flush()
 {
-    AcquireContext();
-    if( mpContext.is() )
-        mpContext->mnPainting++;
-    return mpContext.get();
-}
+    if( IsOffscreen() )
+        return;
 
-void OpenGLSalGraphicsImpl::flushAndSwap()
-{
-    assert( !IsOffscreen() );
     assert( mpWindowContext.is() );
-    assert( mpContext.is() );
 
     if( !maOffscreenTex )
     {
+        SAL_DEBUG("paint: " << this << " flush and swap - no texture !");
         VCL_GL_INFO( "flushAndSwap - odd no texture !" );
         return;
     }
+
+    if (mnDrawCountAtFlush == mnDrawCount)
+    {
+        VCL_GL_INFO( "eliding redundant flushAndSwap, no drawing since last!" );
+        SAL_DEBUG( "paint: " << this << " eliding redundant flushAndSwap, no drawing since last!" );
+        return;
+    }
+
+    SAL_DEBUG("paint: " << this << " flush and swap");
 
     mnDrawCountAtFlush = mnDrawCount;
 
@@ -2042,19 +2057,6 @@ void OpenGLSalGraphicsImpl::flushAndSwap()
         }
     }
     VCL_GL_INFO( "flushAndSwap - end." );
-}
-
-void OpenGLSalGraphicsImpl::endPaint()
-{
-    assert( !IsOffscreen() );
-
-    AcquireContext();
-    if( mpContext.is() )
-    {
-        mpContext->mnPainting--;
-        if( mpContext->mnPainting == 0 )
-            flushAndSwap();
-    }
 }
 
 bool OpenGLSalGraphicsImpl::IsForeignContext(const rtl::Reference<OpenGLContext> &xContext)

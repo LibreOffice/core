@@ -612,8 +612,9 @@ public:
      */
     class PaintScope {
         VclPtr<OutputDevice> mpDev;
+        void                *mpDebug;
     public:
-        PaintScope(OutputDevice *);
+        explicit PaintScope(OutputDevice *);
         ~PaintScope();
         void flush();
     };

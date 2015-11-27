@@ -253,6 +253,13 @@ public:
         { return m_pProc ? long(m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent )) : 0; }
 
     bool PaintsBlocked() const { return m_bPaintsBlocked; }
+
+    // track painting, and flush when its done.
+    void                        BeginPaint();
+    void                        EndPaint();
+    sal_uInt32                  GetPaintNesting() { return m_nPaintNesting; }
+private:
+    sal_uInt32                  m_nPaintNesting;
 };
 
 #endif // INCLUDED_VCL_INC_SALFRAME_HXX

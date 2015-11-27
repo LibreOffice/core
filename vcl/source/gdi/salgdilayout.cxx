@@ -65,7 +65,7 @@ SalFrameGeometry SalFrame::GetGeometry()
 
 SalGraphics::SalGraphics()
 :   m_nLayout( SalLayoutFlags::NONE ),
-    m_bAntiAliasB2DDraw(false)
+    m_bAntiAliasB2DDraw( false )
 {
     // read global RTL settings
     if( AllSettings::GetLayoutRTL() )
@@ -74,6 +74,13 @@ SalGraphics::SalGraphics()
 
 SalGraphics::~SalGraphics()
 {
+}
+
+void SalGraphics::Flush()
+{
+    SalGraphicsImpl* pImpl = GetImpl();
+    if (pImpl)
+        pImpl->flush();
 }
 
 rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const

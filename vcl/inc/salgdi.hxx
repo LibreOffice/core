@@ -438,10 +438,10 @@ public:
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 
-    virtual OpenGLContext      *BeginPaint() { return nullptr; }
-    virtual void                EndPaint()   { }
-
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
+
+    /// Push any pending rendering to the screen.
+    virtual void                Flush();
 
 #if ENABLE_CAIRO_CANVAS
 
