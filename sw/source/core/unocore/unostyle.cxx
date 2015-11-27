@@ -320,144 +320,185 @@ static bool lcl_GetHeaderFooterItem(
     return SfxItemState::SET == eState;
 }
 
+template<enum SfxStyleFamily>
+static sal_Int32 lcl_GetCountOrName2(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex);
+
+template<>
+sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_CHAR>(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex)
+{
+    sal_Int32 nCount = 0;
+    const sal_Int32 nBaseCount =
+                             RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN  +
+                             RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
+    nIndex = nIndex - nBaseCount;
+    const size_t nArrLen = rDoc.GetCharFormats()->size();
+    for( size_t i = 0; i < nArrLen; ++i )
+    {
+        SwCharFormat* pFormat = (*rDoc.GetCharFormats())[ i ];
+        if( pFormat->IsDefault() && pFormat != rDoc.GetDfltCharFormat() )
+            continue;
+        if ( IsPoolUserFormat ( pFormat->GetPoolFormatId() ) )
+        {
+            if ( nIndex == nCount )
+            {
+                // the default character format needs to be set to "Default!"
+                if(rDoc.GetDfltCharFormat() == pFormat)
+                    SwStyleNameMapper::FillUIName(
+                        RES_POOLCOLL_STANDARD, *pString );
+                else
+                    *pString = pFormat->GetName();
+                break;
+            }
+            nCount++;
+        }
+    }
+    nCount += nBaseCount;
+    return nCount;
+}
+
+template<>
+sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PARA>(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex)
+{
+    sal_Int32 nCount = 0;
+    const sal_Int32 nBaseCount =
+                            RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN +
+                            RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
+                            RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
+                            RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
+                            RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
+                            RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN;
+    nIndex = nIndex - nBaseCount;
+    const size_t nArrLen = rDoc.GetTextFormatColls()->size();
+    for ( size_t i = 0; i < nArrLen; ++i )
+    {
+        SwTextFormatColl * pColl = (*rDoc.GetTextFormatColls())[i];
+        if ( pColl->IsDefault() )
+            continue;
+        if ( IsPoolUserFormat ( pColl->GetPoolFormatId() ) )
+        {
+            if ( nIndex == nCount )
+            {
+                *pString = pColl->GetName();
+                break;
+            }
+            nCount++;
+        }
+    }
+    nCount += nBaseCount;
+    return nCount;
+}
+
+template<>
+sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_FRAME>(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex)
+{
+    sal_Int32 nCount = 0;
+    const sal_Int32 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
+    nIndex = nIndex - nBaseCount;
+    const size_t nArrLen = rDoc.GetFrameFormats()->size();
+    for( size_t i = 0; i < nArrLen; ++i )
+    {
+        const SwFrameFormat* pFormat = (*rDoc.GetFrameFormats())[ i ];
+        if(pFormat->IsDefault() || pFormat->IsAuto())
+            continue;
+        if ( IsPoolUserFormat ( pFormat->GetPoolFormatId() ) )
+        {
+            if ( nIndex == nCount )
+            {
+                *pString = pFormat->GetName();
+                break;
+            }
+            nCount++;
+        }
+    }
+    nCount += nBaseCount;
+    return nCount;
+}
+
+template<>
+sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PAGE>(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex)
+{
+    sal_Int32 nCount = 0;
+    const sal_Int32 nBaseCount = RES_POOLPAGE_END - RES_POOLPAGE_BEGIN;
+    nIndex = nIndex - nBaseCount;
+    const size_t nArrLen = rDoc.GetPageDescCnt();
+    for(size_t i = 0; i < nArrLen; ++i)
+    {
+        const SwPageDesc& rDesc = rDoc.GetPageDesc(i);
+
+        if ( IsPoolUserFormat ( rDesc.GetPoolFormatId() ) )
+        {
+            if ( nIndex == nCount )
+            {
+                *pString = rDesc.GetName();
+                break;
+            }
+            nCount++;
+        }
+    }
+    nCount += nBaseCount;
+    return nCount;
+}
+
+template<>
+sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex)
+{
+    sal_Int32 nCount = 0;
+    const sal_Int32 nBaseCount = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
+    nIndex = nIndex - nBaseCount;
+    const SwNumRuleTable& rNumTable = rDoc.GetNumRuleTable();
+    for(size_t i = 0; i < rNumTable.size(); ++i)
+    {
+        const SwNumRule& rRule = *rNumTable[ i ];
+        if( rRule.IsAutoRule() )
+            continue;
+        if ( IsPoolUserFormat ( rRule.GetPoolFormatId() ) )
+        {
+            if ( nIndex == nCount )
+            {
+                *pString = rRule.GetName();
+                break;
+            }
+            nCount++;
+        }
+    }
+    nCount += nBaseCount;
+    return nCount;
+}
+
 static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
     SfxStyleFamily eFamily, OUString *pString, sal_Int32 nIndex = SAL_MAX_INT32)
 {
-    sal_Int32 nCount = 0;
     switch( eFamily )
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
-            const sal_Int32 nBaseCount =
-                                     RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN  +
-                                     RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
-            nIndex = nIndex - nBaseCount;
-            const size_t nArrLen = rDoc.GetCharFormats()->size();
-            for( size_t i = 0; i < nArrLen; ++i )
-            {
-                SwCharFormat* pFormat = (*rDoc.GetCharFormats())[ i ];
-                if( pFormat->IsDefault() && pFormat != rDoc.GetDfltCharFormat() )
-                    continue;
-                if ( IsPoolUserFormat ( pFormat->GetPoolFormatId() ) )
-                {
-                    if ( nIndex == nCount )
-                    {
-                        // the default character format needs to be set to "Default!"
-                        if(rDoc.GetDfltCharFormat() == pFormat)
-                            SwStyleNameMapper::FillUIName(
-                                RES_POOLCOLL_STANDARD, *pString );
-                        else
-                            *pString = pFormat->GetName();
-                        break;
-                    }
-                    nCount++;
-                }
-            }
-            nCount += nBaseCount;
+            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_CHAR>(rDoc, pString, nIndex);
         }
         break;
         case SFX_STYLE_FAMILY_PARA:
         {
-            const sal_Int32 nBaseCount =
-                                    RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN +
-                                    RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
-                                    RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
-                                    RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
-                                    RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
-                                    RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN;
-            nIndex = nIndex - nBaseCount;
-            const size_t nArrLen = rDoc.GetTextFormatColls()->size();
-            for ( size_t i = 0; i < nArrLen; ++i )
-            {
-                SwTextFormatColl * pColl = (*rDoc.GetTextFormatColls())[i];
-                if ( pColl->IsDefault() )
-                    continue;
-                if ( IsPoolUserFormat ( pColl->GetPoolFormatId() ) )
-                {
-                    if ( nIndex == nCount )
-                    {
-                        *pString = pColl->GetName();
-                        break;
-                    }
-                    nCount++;
-                }
-            }
-            nCount += nBaseCount;
+            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_PARA>(rDoc, pString, nIndex);
         }
         break;
         case SFX_STYLE_FAMILY_FRAME:
         {
-            const sal_Int32 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
-            nIndex = nIndex - nBaseCount;
-            const size_t nArrLen = rDoc.GetFrameFormats()->size();
-            for( size_t i = 0; i < nArrLen; ++i )
-            {
-                const SwFrameFormat* pFormat = (*rDoc.GetFrameFormats())[ i ];
-                if(pFormat->IsDefault() || pFormat->IsAuto())
-                    continue;
-                if ( IsPoolUserFormat ( pFormat->GetPoolFormatId() ) )
-                {
-                    if ( nIndex == nCount )
-                    {
-                        *pString = pFormat->GetName();
-                        break;
-                    }
-                    nCount++;
-                }
-            }
-            nCount += nBaseCount;
+            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_FRAME>(rDoc, pString, nIndex);
         }
         break;
         case SFX_STYLE_FAMILY_PAGE:
         {
-            const sal_Int32 nBaseCount = RES_POOLPAGE_END - RES_POOLPAGE_BEGIN;
-            nIndex = nIndex - nBaseCount;
-            const size_t nArrLen = rDoc.GetPageDescCnt();
-            for(size_t i = 0; i < nArrLen; ++i)
-            {
-                const SwPageDesc& rDesc = rDoc.GetPageDesc(i);
-
-                if ( IsPoolUserFormat ( rDesc.GetPoolFormatId() ) )
-                {
-                    if ( nIndex == nCount )
-                    {
-                        *pString = rDesc.GetName();
-                        break;
-                    }
-                    nCount++;
-                }
-            }
-            nCount += nBaseCount;
+            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_PAGE>(rDoc, pString, nIndex);
         }
         break;
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            const sal_Int32 nBaseCount = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
-            nIndex = nIndex - nBaseCount;
-            const SwNumRuleTable& rNumTable = rDoc.GetNumRuleTable();
-            for(size_t i = 0; i < rNumTable.size(); ++i)
-            {
-                const SwNumRule& rRule = *rNumTable[ i ];
-                if( rRule.IsAutoRule() )
-                    continue;
-                if ( IsPoolUserFormat ( rRule.GetPoolFormatId() ) )
-                {
-                    if ( nIndex == nCount )
-                    {
-                        *pString = rRule.GetName();
-                        break;
-                    }
-                    nCount++;
-                }
-            }
-            nCount += nBaseCount;
+            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_PSEUDO>(rDoc, pString, nIndex);
         }
         break;
 
         default:
-            ;
+            return 0;
     }
-    return nCount;
 }
 
 sal_Int32 SwXStyleFamily::getCount() throw( uno::RuntimeException, std::exception )
