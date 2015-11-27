@@ -137,7 +137,7 @@ SAXHelper::SAXHelper( )
     {
         xmlSAXVersion(m_pParserCtxt->sax, 1);
 
-        if( m_pParserCtxt->inputTab[0] != NULL )
+        if (m_pParserCtxt->inputTab != nullptr)
         {
             m_pParserCtxt->inputTab[0] = NULL ;
         }
