@@ -634,7 +634,8 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
 DECLARE_WW8EXPORT_TEST(testTableKeep, "tdf91083.odt")
 {
     //emulate table "keep with next" -do not split table
-    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[5]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[3]/body/tab[1]/row[2]/cell[1]/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[6]/body/tab[1]/row[2]/cell[1]/txt[1]") );
 }
 
 DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
