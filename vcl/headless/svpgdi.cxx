@@ -135,6 +135,7 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
         cairo_clip(cr);
     }
 }
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 namespace
 {
     cairo_rectangle_int_t getFillDamage(cairo_t* cr)
@@ -156,6 +157,7 @@ namespace
         return extents;
     }
 }
+#endif
 
 #endif
 
