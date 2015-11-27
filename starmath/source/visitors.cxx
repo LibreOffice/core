@@ -413,7 +413,7 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     // draw root-sign itself
     DrawSpecialNode( pNode );
 
-    SmTmpDevice aTmpDev( ( OutputDevice & ) rDev, true );
+    SmTmpDevice aTmpDev( rDev, true );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
@@ -469,7 +469,7 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
           aPos ( Position + aOffset );
     pNode->GetPolygon( ).Move( aPos.X( ), aPos.Y( ) );    //Works because Polygon wraps a pointer
 
-    SmTmpDevice aTmpDev ( ( OutputDevice & ) rDev, false );
+    SmTmpDevice aTmpDev ( rDev, false );
     aTmpDev.SetLineColor( pNode->GetFont( ).GetColor( ) );
 
     rDev.DrawPolyLine( pNode->GetPolygon( ), aInfo );
@@ -480,7 +480,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     if ( pNode->IsPhantom( ) )
         return;
 
-    SmTmpDevice aTmpDev ( ( OutputDevice & ) rDev, false );
+    SmTmpDevice aTmpDev ( rDev, false );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
@@ -512,7 +512,7 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
     if ( pNode->IsPhantom() || pNode->GetText().isEmpty() || pNode->GetText()[0] == '\0' )
         return;
 
-    SmTmpDevice aTmpDev ( ( OutputDevice & ) rDev, false );
+    SmTmpDevice aTmpDev ( rDev, false );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
     Point  aPos ( Position );
