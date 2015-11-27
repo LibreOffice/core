@@ -1765,7 +1765,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     const SwBorderAttrs *pAttrs = pAccess->Get();
 
     // The beloved keep attribute
-    const bool bKeep = IsKeep( pAttrs->GetAttrSet() );
+    const bool bEmulateTableKeep = AreAllRowsKeepWithNext( GetFirstNonHeadlineRow() );
+    const bool bKeep = IsKeep( pAttrs->GetAttrSet(), bEmulateTableKeep );
 
     // All rows should keep together
     const bool bDontSplit = !IsFollow() &&
@@ -1845,8 +1846,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
         const bool bMoveable = IsMoveable();
-        if (bMoveable)
-            if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bMovedBwd ) )
+        if (bMoveable &&
+            !(bMovedFwd && bEmulateTableKeep) )
+            if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bMovedBwd, bEmulateTableKeep ) )
             {
                 bMovedFwd = true;
                 m_bCalcLowers = true;
@@ -2222,19 +2224,25 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                         AreAllRowsKeepWithNext( pFirstNonHeadlineRow ) ) &&
                                       !pIndPrev &&
                                       !bDontSplit;
+        const bool bEmulateTableKeepFwdMoveAllowed = IsKeepFwdMoveAllowed(bEmulateTableKeep);
 
         if ( pFirstNonHeadlineRow && nUnSplitted > 0 &&
-             ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() || !pFirstNonHeadlineRow->ShouldRowKeepWithNext() || bAllowSplitOfRow ) &&
-             ( !bDontSplit || !pIndPrev ) )
+             ( !bEmulateTableKeepFwdMoveAllowed ||
+               ( ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() ||
+                   !pFirstNonHeadlineRow->ShouldRowKeepWithNext() || bAllowSplitOfRow
+                 ) && ( !bDontSplit || !pIndPrev )
+           ) ) )
         {
             // #i29438#
-            // Special DoNotSplit case:
+            // Special DoNotSplit cases:
+            // We better avoid splitting if the table keeps with next paragraph and can move fwd still.
             // We better avoid splitting of a row frame if we are inside a columned
             // section which has a height of 0, because this is not growable and thus
             // all kinds of unexpected things could happen.
-            if ( IsInSct() &&
-                (FindSctFrame())->Lower()->IsColumnFrame() &&
-                0 == (GetUpper()->Frame().*fnRect->fnGetHeight)()  )
+            if ( !bEmulateTableKeepFwdMoveAllowed ||
+                 ( IsInSct() && (FindSctFrame())->Lower()->IsColumnFrame() &&
+                   0 == (GetUpper()->Frame().*fnRect->fnGetHeight)()
+               ) )
             {
                 bTryToSplit = false;
             }
@@ -2303,7 +2311,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 // Some more checks if we want to call the split algorithm or not:
                 // The repeating lines / keeping lines still fit into the upper or
                 // if we do not have an (in)direct Prev, we split anyway.
-                if( (*fnRect->fnYDiff)(nDeadLine, nBreakLine) >=0 || !pIndPrev )
+                if( (*fnRect->fnYDiff)(nDeadLine, nBreakLine) >=0
+                    || !pIndPrev || !bEmulateTableKeepFwdMoveAllowed )
                 {
                     aNotify.SetLowersComplete( false );
                     bSplit = true;
@@ -2320,7 +2329,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             --nThrowAwayValidLayoutLimit;
                     }
 
-                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !bAllowSplitOfRow ) );
+                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || !bEmulateTableKeepFwdMoveAllowed) ) );
                     if( !bTryToSplit && !bSplitError && nUnSplitted > 0 )
                     {
                         --nUnSplitted;
