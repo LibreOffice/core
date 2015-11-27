@@ -364,6 +364,10 @@ static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
 static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
 static int doc_getView(LibreOfficeKitDocument* pThis);
 static int doc_getViews(LibreOfficeKitDocument* pThis);
+static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
+                          const char *pFontName,
+                          int* pFontWidth,
+                          int* pFontHeight);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
@@ -385,6 +389,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->setPart = doc_setPart;
         m_pDocumentClass->getPartName = doc_getPartName;
         m_pDocumentClass->setPartMode = doc_setPartMode;
+        m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->paintTile = doc_paintTile;
         m_pDocumentClass->getTileMode = doc_getTileMode;
         m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
@@ -1534,6 +1539,54 @@ static int doc_getViews(LibreOfficeKitDocument* /*pThis*/)
     SolarMutexGuard aGuard;
 
     return SfxLokHelper::getViews();
+}
+
+unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
+                    const char* pFontName,
+                    int* pFontWidth,
+                    int* pFontHeight)
+{
+    OString aSearchedFontName(pFontName);
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
+        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+    const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
+
+    if ( pList )
+    {
+        sal_uInt16 nFontCount = pList->GetFontNameCount();
+        for (sal_uInt16 i = 0; i < nFontCount; ++i)
+        {
+            const vcl::FontInfo& rInfo = pList->GetFontName(i);
+            OUString aFontName = rInfo.GetName();
+            if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
+                continue;
+
+            VirtualDevice aDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+            ::Rectangle aRect;
+            vcl::Font aFont(rInfo);
+            aFont.SetSize(Size(0, 25));
+            aDevice.SetFont(aFont);
+            aDevice.GetTextBoundRect(aRect, aFontName);
+            int nFontWidth = aRect.BottomRight().X() + 1;
+            *pFontWidth = nFontWidth;
+            int nFontHeight = aRect.BottomRight().Y() + 1;
+            *pFontHeight = nFontHeight;
+
+            unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
+            memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
+            boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
+
+            aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
+            aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
+                        Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
+                        aBuffer, nullptr);
+            aDevice.DrawText(Point(0,0), aFontName);
+
+            return pBuffer;
+        }
+    }
+    return nullptr;
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

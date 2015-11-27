@@ -376,6 +376,18 @@ public:
     {
         return mpDoc->pClass->getViews(mpDoc);
     }
+
+    /**
+     * Paints a font name to be displayed in the font list
+     * @param pFontName the font to be painted
+     */
+    inline unsigned char* renderFont(const char *pFontName,
+                          int *pFontWidth,
+                          int *pFontHeight)
+    {
+        return mpDoc->pClass->renderFont(mpDoc, pFontName, pFontWidth, pFontHeight);
+    }
+
 #endif // LOK_USE_UNSTABLE_API
 };
 
