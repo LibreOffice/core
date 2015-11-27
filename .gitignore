@@ -76,6 +76,11 @@
 *.kdev4
 .kdev_include_paths
 .directory
+.cproject
+.project
+.settings
+.eclipsesettingfile
+eclipsesettingfile.xml
 
 # things below this point are targeted for elimination
 

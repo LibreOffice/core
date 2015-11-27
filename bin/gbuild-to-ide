@@ -103,8 +103,8 @@ class GbuildParser:
     warningpattern = re.compile('-W\S+')
 
     def __init__(self):
-        (self.makecmd, self.srcdir, self.builddir, self.instdir, self.libs,
-         self.exes, self.libnames, self.exenames, self.target_by_path, self.target_by_location) = ('', '', '', '', [], [], {}, {}, {}, {})
+        (self.makecmd, self.srcdir, self.builddir, self.instdir, self.libs, self.exes,
+         self.libnames, self.exenames, self.target_by_path, self.target_by_location, self.modulenamelist) = ('', '', '', '', [], [], {}, {}, {}, {}, [])
 
     def __mapping_to_dict(self, mapping):
         mapping_dict = {}
@@ -232,7 +232,8 @@ class GbuildParser:
             if len(set(self.target_by_path[path])) > 1:
                 print('fdo#70422: multiple target use dir %s: %s' % (
                     path, ', '.join([target.short_name() for target in set(self.target_by_path[path])])))
-
+        for location in self.target_by_location:
+            self.modulenamelist.append(os.path.split(location)[1])
         return self
 
 
@@ -245,49 +246,91 @@ class IdeIntegrationGenerator:
     def emit(self):
         pass
 
-
 class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-        self.oe_cdt = 'org.eclipse.cdt'
-        self.cdt_mb = self.oe_cdt + '.managebuilder.core'
-        self.cdt_core = self.oe_cdt + '.core'
 
-    def generate_project_file(self, name, comment, xmlversion, encoding):
+    def create_include_paths(self):
+        for module in self.gbuildparser.modulenamelist:
+            modulepath = os.path.join(self.gbuildparser.builddir, module)
+            includedirfile = open(os.path.join(modulepath, '.eclipsesettingfile'), 'w')
+            modulelibs = []
+            for lib in self.gbuildparser.target_by_path.keys():
+                if lib.startswith(module+'/'):
+                    modulelibs.append(lib)
+            include = set()
+            for lib in modulelibs:
+                for target in self.gbuildparser.target_by_path[lib]:
+                    include |= set(target.include)
+            includedirfile.write('\n'.join(include))
+            includedirfile.close()
 
-        projectfiletemplate = """
-<?xml version="%(xmlversion)s" encoding="%(encoding)s"?>
-<projectDescription>
-        <name>%(name)s</name>
-        <comment>%(comment)s</comment>
-        <projects>
-        </projects>
-        <buildSpec>
-                <buildCommand>
-                        <name>""" + self.cdt_mb + """.genmakebuilder</name>
-                        <triggers>clean,full,incremental,</triggers>
-                        <arguments>
-                        </arguments>
-                </buildCommand>
-                <buildCommand>
-                        <name>""" + self.cdt_mb + """.ScannerConfigBuilder</name>
-                        <triggers>full,incremental,</triggers>
-                        <arguments>
-                        </arguments>
-                </buildCommand>
-        </buildSpec>
-        <natures>
-                <nature>""" + self.cdt_core + """.cnature</nature>
-                <nature>""" + self.cdt_core + """.ccnature</nature>
-                <nature>""" + self.cdt_mb + """.managedBuildNature</nature>
-                <nature>""" + self.cdt_mb + """.ScannerConfigNature</nature>
-        </natures>
-</projectDescription>
-"""
+    def create_settings_file(self):
 
-        return projectfiletemplate % {'name': name, 'comment': comment, 'xmlversion': xmlversion, 'encoding': encoding}
+        settingsfiletemplate = """\
+<?xml version="1.0" encoding="UTF-8"?>
+<cdtprojectproperties>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
+<language name="C++ Source File">
 
+
+</language>
+<language name="C Source File">
+
+</language>
+<language name="Object File">
+
+</language>
+<language name="Assembly Source File">
+
+</language>
+</section>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">
+<language name="C++ Source File">
+
+</language>
+<language name="C Source File">
+
+</language>
+<language name="Object File">
+
+</language>
+<language name="Assembly Source File">
+
+</language>
+</section>
+</cdtprojectproperties>
+""" 
+
+        for module in self.gbuildparser.modulenamelist:
+            tempxml = []
+            modulepath = os.path.join(self.gbuildparser.builddir, module)
+
+            settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'w')
+            settingsfile.write(settingsfiletemplate)
+            settingsfile.close()
+
+            settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'r')
+            tempxml = settingsfile.readlines()
+            tempinclude = open(os.path.join(modulepath, '.eclipsesettingfile'), 'r')
+            for includepath in tempinclude:
+                if includepath[-1:] == "\n":
+                    includepath = includepath[:-1]
+                templine = "<includepath>%s</includepath>\n" % includepath
+                tempxml.insert(5, templine)
+            tempxml="".join(tempxml)
+            settingsfile.close
+
+            settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'w')
+            settingsfile.write(tempxml)
+            settingsfile.close()
+            os.remove(os.path.join(modulepath, '.eclipsesettingfile'))
+
+
+    def emit(self):
+        self.create_include_paths()
+        self.create_settings_file() 
 
 class DebugIntegrationGenerator(IdeIntegrationGenerator):
 
