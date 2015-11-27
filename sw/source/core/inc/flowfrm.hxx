@@ -123,7 +123,7 @@ protected:
     inline bool IsFwdMoveAllowed();
     // #i44049# - method <CalcContent(..)> has to check this property.
     friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl, bool bNoCalcFollow );
-    bool IsKeepFwdMoveAllowed();    // like above, forward flow for Keep.
+    bool IsKeepFwdMoveAllowed( bool bIgnoreMyOwnKeepValue = false );    // like above, forward flow for Keep.
 
     /** method to determine overlapping of an object that requests floating
 
@@ -137,7 +137,7 @@ protected:
     void LockJoin()   { m_bLockJoin = true;  }
     void UnlockJoin() { m_bLockJoin = false; }
 
-    bool CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bMovedBwd );
+    bool CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bMovedBwd, bool bIgnoreMyOwnKeepValue = false );
     bool MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways = false );
     bool MoveBwd( bool &rbReformat );
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool bHead, bool &rReformat )=0;
