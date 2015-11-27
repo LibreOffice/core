@@ -185,6 +185,7 @@ namespace
         if(!pRetval)
         {
             pRetval = VclPtr<VirtualDevice>::Create(rOutDev, bMonoChrome ? DeviceFormat::BITMASK : DeviceFormat::FULLCOLOR);
+            maDeviceTemplates[pRetval] = &rOutDev;
             pRetval->SetOutputSizePixel(rSizePixel, bClear);
         }
         else
