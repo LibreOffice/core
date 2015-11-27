@@ -39,7 +39,7 @@ public:
     virtual ~AccParagraphEventListener();
 
     //AccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException) override;
 
     //for caret changed event
     virtual void HandleCaretChangedEvent(

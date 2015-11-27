@@ -249,16 +249,6 @@ void OAdoColumn::fillPropertyValues()
                 m_Description = OTools::getValue( aProps, OUString("Description") );
 
                 m_DefaultValue = OTools::getValue( aProps, OUString("Default") );
-
-#if OSL_DEBUG_LEVEL > 0
-                sal_Int32 nCount = aProps.GetItemCount();
-                for (sal_Int32 i = 0; i<nCount; ++i)
-                {
-                    WpADOProperty aProp = aProps.GetItem(i);
-                    OUString sName = aProp.GetName();
-                    OUString sVal = aProp.GetValue();
-                }
-#endif
             }
         }
     }

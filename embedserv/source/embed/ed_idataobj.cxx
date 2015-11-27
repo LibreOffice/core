@@ -42,7 +42,6 @@ sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( sal_Bool isEnhMeta )
     uno::Reference< datatransfer::XTransferable > xTransferable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
     if ( xTransferable.is() )
     {
-        uno::Sequence< sal_Int8 > aMetaBuffer;
         datatransfer::DataFlavor aFlavor;
 
         if ( isEnhMeta )

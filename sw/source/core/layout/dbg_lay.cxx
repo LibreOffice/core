@@ -345,7 +345,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         }
         if( !aTok.isEmpty() )
         {
-            sal_uLong nVal;
+            long nVal;
             sscanf( aTok.getStr(), "%li", &nVal );
             switch ( nInitFile )
             {
@@ -362,9 +362,9 @@ void SwImplProtocol::CheckLine( OString& rLine )
                 case 3: {
                             sal_uLong nOld = SwProtocol::Record();
                             if( bNo )
-                                nOld &= ~nVal;      // remove function
+                                nOld &= ~sal_uLong(nVal); // remove function
                             else
-                                nOld |= nVal;       // remove function
+                                nOld |= sal_uLong(nVal);  // remove function
                             SwProtocol::SetRecord( nOld );
                         }
                         break;
@@ -378,7 +378,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
                         break;
                 case 5: nMaxLines = (sal_uInt16)nVal;
                         break;
-                case 6: aVars.push_back( (long)nVal );
+                case 6: aVars.push_back( nVal );
                         break;
             }
         }

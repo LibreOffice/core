@@ -1368,8 +1368,10 @@ void SAL_CALL BluetoothServer::run()
     WSAQUERYSETW aRecord;
     memset( &aRecord, 0, sizeof(aRecord));
     aRecord.dwSize = sizeof(aRecord);
-    aRecord.lpszServiceInstanceName = L"LibreOffice Impress Remote Control";
-    aRecord.lpszComment = L"Remote control of presentations over bluetooth.";
+    aRecord.lpszServiceInstanceName = const_cast<wchar_t *>(
+        L"LibreOffice Impress Remote Control");
+    aRecord.lpszComment = const_cast<wchar_t *>(
+        L"Remote control of presentations over bluetooth.");
     aRecord.lpServiceClassId = (LPGUID) &SerialPortServiceClass_UUID;
     aRecord.dwNameSpace = NS_BTH;
     aRecord.dwNumberOfCsAddrs = 1;

@@ -535,7 +535,6 @@ Reference<XInterface> InterfaceOleWrapper_Impl::createComWrapperInstance()
 // to an actual Type object.
 bool getType( const BSTR name, Type & type)
 {
-    Type retType;
     bool ret = false;
     typelib_TypeDescription * pDesc= NULL;
     OUString str( reinterpret_cast<const sal_Unicode*>(name));
@@ -971,7 +970,6 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, V
 {
     HRESULT ret= S_OK;
 
-    Any value;
     try
     {
         Any returnValue = m_xInvocation->getValue( name);

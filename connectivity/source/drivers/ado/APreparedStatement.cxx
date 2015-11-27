@@ -219,11 +219,6 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
         WpADOParameter aParam(pParam);
         if(pParam)
         {
-#if OSL_DEBUG_LEVEL > 0
-            OUString sParam = aParam.GetName();
-
-#endif // OSL_DEBUG_LEVEL
-
             DataTypeEnum eType = aParam.GetADOType();
             if ( _eType != eType && _eType != adDBTimeStamp )
             {
@@ -438,7 +433,6 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
             WpADOParameter aParam(pParam);
             if(pParam)
             {
-                OUString sParam = aParam.GetName();
                 CHECK_RETURN(aParam.PutValue(aVal));
             }
         }

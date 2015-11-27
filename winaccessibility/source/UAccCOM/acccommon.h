@@ -59,8 +59,6 @@ enum DM_NIR {
 #define CHECK_STR        L"Check"
 //End
 
-static DWORD GetMSAAStateFromUNO(short xState);
-
 template<typename T, typename Ifc> HRESULT
 createInstance(REFIID iid, Ifc ** ppIfc)
 {

@@ -7254,8 +7254,6 @@ bool PDFWriterImpl::finalizeSignature()
         return false;
     }
 
-    OString pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 );
-
     PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(n_derArray), n_derLength);
     if (pCertContext == NULL)
     {
