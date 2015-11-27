@@ -3355,6 +3355,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     static bool     bWaitForModKeyRelease = false;
     sal_uInt16          nRepeat         = LOWORD( lParam )-1;
     sal_uInt16          nModCode        = 0;
+    WPARAM              shiftstate      = 0;
 
     // this key might have been relayed by SysChild and thus
     // may not be processed twice
@@ -3378,7 +3379,11 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
     // determine modifiers
     if ( GetKeyState( VK_SHIFT ) & 0x8000 )
+    {
         nModCode |= KEY_SHIFT;
+        if(wParam >= KEY_TAB_SIZE)
+            shiftstate = 0x100;
+    }
     if ( GetKeyState( VK_CONTROL ) & 0x8000 )
         nModCode |= KEY_MOD1;
     if ( GetKeyState( VK_LMENU ) & 0x8000 )
@@ -3531,7 +3536,12 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             aKeyEvt.mnCharCode = 0;
             aKeyEvt.mnCode = 0;
 
-            aKeyEvt.mnCode = ImplSalGetKeyCode( wParam );
+            aKeyEvt.mnCode = ImplSalGetKeyCode( wParam | shiftstate );
+
+
+            if((aKeyEvt.mnCode != 0) && (shiftstate != 0) && ((nModCode & (KEY_MOD1 | KEY_MOD2)) != 0 ))
+                nModCode &= ~KEY_SHIFT;
+
             if ( !bKeyUp )
             {
                 // check for charcode
