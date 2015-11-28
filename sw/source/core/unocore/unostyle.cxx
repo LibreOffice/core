@@ -94,18 +94,21 @@ namespace
 {
     struct StyleFamilyEntry
     {
-        using GetCountOrName_t = std::function< sal_Int32 (const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)>;
+        using GetCountOrName_t = std::function<sal_Int32 (const SwDoc&, OUString*, sal_Int32)>;
+        using CreateStyle_t = std::function<uno::Reference<css::style::XStyle>(SfxStyleSheetBasePool*, SwDocShell*, const OUString&)>;
         SfxStyleFamily m_eFamily;
         SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
         sal_uInt32 m_nResId;
         GetCountOrName_t m_fGetCountOrName;
-        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t fGetCountOrName)
+        CreateStyle_t m_fCreateStyle;
+        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t fGetCountOrName, CreateStyle_t fCreateStyle)
                 : m_eFamily(eFamily)
                 , m_aPoolId(aPoolId)
                 , m_sName(sName)
                 , m_nResId(nResId)
                 , m_fGetCountOrName(fGetCountOrName)
+                , m_fCreateStyle(fCreateStyle)
             {}
     };
     static const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
@@ -500,6 +503,17 @@ sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUStrin
     return nCount + nPoolNumRange;
 }
 
+template<enum SfxStyleFamily eFamily>
+static uno::Reference< css::style::XStyle> lcl_CreateStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
+    { return new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName); };
+
+template<>
+uno::Reference< css::style::XStyle> lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
+    { return new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), sStyleName); };
+
+template<>
+uno::Reference< css::style::XStyle> lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
+    { return new SwXPageStyle(*pBasePool, pDocShell, SFX_STYLE_FAMILY_PAGE, sStyleName); };
 
 uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
@@ -572,19 +586,7 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     uno::Reference<style::XStyle> xStyle = _FindStyle(sStyleName);
     if(!xStyle.is())
-    {
-        switch(m_rEntry.m_eFamily)
-        {
-            case SFX_STYLE_FAMILY_PAGE:
-                xStyle = new SwXPageStyle(*m_pBasePool, m_pDocShell, m_rEntry.m_eFamily, sStyleName);
-                break;
-            case SFX_STYLE_FAMILY_FRAME:
-                xStyle = new SwXFrameStyle(*m_pBasePool, m_pDocShell->GetDoc(), pBase->GetName());
-                break;
-            default:
-                xStyle = new SwXStyle(*m_pBasePool, m_rEntry.m_eFamily, m_pDocShell->GetDoc(), sStyleName);
-        }
-    }
+        xStyle = m_rEntry.m_fCreateStyle(m_pBasePool, m_pDocShell, m_rEntry.m_eFamily == SFX_STYLE_FAMILY_FRAME ? pBase->GetName() : sStyleName);
     return uno::makeAny(xStyle);
 }
 
@@ -602,19 +604,7 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
         throw container::NoSuchElementException();
     uno::Reference<style::XStyle> xStyle = _FindStyle(sStyleName);
     if(!xStyle.is())
-    {
-        switch(m_rEntry.m_eFamily)
-        {
-            case SFX_STYLE_FAMILY_PAGE:
-                xStyle = new SwXPageStyle(*m_pBasePool, m_pDocShell, m_rEntry.m_eFamily, sStyleName);
-                break;
-            case SFX_STYLE_FAMILY_FRAME:
-                xStyle = new SwXFrameStyle(*m_pBasePool, m_pDocShell->GetDoc(), pBase->GetName());
-                break;
-            default:
-                xStyle = new SwXStyle(*m_pBasePool, m_rEntry.m_eFamily, m_pDocShell->GetDoc(), sStyleName);
-        }
-    }
+        xStyle = m_rEntry.m_fCreateStyle(m_pBasePool, m_pDocShell, m_rEntry.m_eFamily == SFX_STYLE_FAMILY_FRAME ? pBase->GetName() : sStyleName);
     return uno::makeAny(xStyle);
 }
 
@@ -762,11 +752,11 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
     if(!our_pStyleFamilyEntries)
     {
         our_pStyleFamilyEntries = new std::vector<StyleFamilyEntry>{
-            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>   },
-            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>   },
-            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>   },
-            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>  },
-            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO> }
+            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_CHAR>   },
+            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>   },
+            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>   },
+            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>  },
+            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>, &lcl_CreateStyle<SFX_STYLE_FAMILY_PSEUDO> }
        };
     }
     return our_pStyleFamilyEntries;
