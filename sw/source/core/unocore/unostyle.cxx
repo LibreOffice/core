@@ -736,27 +736,13 @@ void SAL_CALL SwXStyleFamily::setPropertyValue( const OUString&, const uno::Any&
 
 uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    uno::Any aRet;
-
-    if ( sPropertyName == "DisplayName" )
-    {
-        SolarMutexGuard aGuard;
-        const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
-                [this] (const StyleFamilyEntry& e) { return m_eFamily == e.m_eFamily; });
-        if(pEntry == our_vStyleFamilyEntries.end())
-            OSL_FAIL( "SwXStyleFamily::getPropertyValue(): invalid family" );
-        sal_uInt32 nResId = pEntry->m_nRedId;
-        if ( nResId > 0 )
-        {
-            aRet = uno::makeAny( SW_RESSTR( nResId ) );
-        }
-    }
-    else
-    {
+    if(sPropertyName != "DisplayName")
         throw beans::UnknownPropertyException( "unknown property: " + sPropertyName, static_cast<OWeakObject *>(this) );
-    }
-
-    return aRet;
+    SolarMutexGuard aGuard;
+    const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+            [this] (const StyleFamilyEntry& e) { return m_eFamily == e.m_eFamily; });
+    assert(pEntry != our_vStyleFamilyEntries.end()); // invalid family
+    return uno::makeAny(SW_RESSTR(pEntry->m_nRedId));
 }
 
 void SAL_CALL SwXStyleFamily::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
