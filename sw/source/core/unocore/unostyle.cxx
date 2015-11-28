@@ -768,17 +768,15 @@ void SwXStyleFamily::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-SwXStyle*   SwXStyleFamily::_FindStyle(const OUString& rStyleName)const
+SwXStyle* SwXStyleFamily::_FindStyle(const OUString& rStyleName) const
 {
     const size_t nLCount = m_pBasePool->GetSizeOfVector();
-    for( size_t i = 0; i < nLCount; ++i)
+    for(size_t i = 0; i < nLCount; ++i)
     {
-        SfxListener* pListener = m_pBasePool->GetListener( i );
-        SwXStyle* pTempStyle = dynamic_cast<SwXStyle*>( pListener );
+        SfxListener* pListener = m_pBasePool->GetListener(i);
+        SwXStyle* pTempStyle = dynamic_cast<SwXStyle*>(pListener);
         if(pTempStyle && pTempStyle->GetFamily() == m_eFamily && pTempStyle->GetStyleName() == rStyleName)
-        {
             return pTempStyle;
-        }
     }
     return nullptr;
 }
