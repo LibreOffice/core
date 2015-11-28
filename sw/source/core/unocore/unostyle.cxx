@@ -482,17 +482,17 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    switch( m_eFamily )
+    switch(m_eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
-            if ( nIndex < ( RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN ) )
-                SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLCHR_NORMAL_BEGIN + nIndex), sStyleName );
-            else if ( nIndex < ( RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN  +
-                                 RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN ) )
-                SwStyleNameMapper::FillUIName ( RES_POOLCHR_HTML_BEGIN
-                                                - RES_POOLCHR_NORMAL_END + RES_POOLCHR_NORMAL_BEGIN
-                                                + nIndex, sStyleName );
+            constexpr sal_Int32 nPoolChrNormalRange = RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
+            constexpr sal_Int32 nPoolChrHtmlRange = RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN;
+            static_assert(nPoolChrNormalRange > 0 && nPoolChrHtmlRange > 0, "invalid pool range");
+            if(nIndex < nPoolChrNormalRange)
+                SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLCHR_NORMAL_BEGIN + nIndex), sStyleName);
+            else if(nIndex < (nPoolChrHtmlRange+nPoolChrNormalRange))
+                SwStyleNameMapper::FillUIName(RES_POOLCHR_HTML_BEGIN + nPoolChrNormalRange + nIndex, sStyleName );
         }
         break;
         case SFX_STYLE_FAMILY_PARA:
