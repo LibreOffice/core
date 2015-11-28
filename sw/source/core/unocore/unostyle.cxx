@@ -631,16 +631,13 @@ sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeExc
 }
 
 uno::Type SwXStyleFamily::getElementType() throw( uno::RuntimeException, std::exception )
-{
-    return cppu::UnoType<style::XStyle>::get();
-
-}
+    { return cppu::UnoType<style::XStyle>::get(); }
 
 sal_Bool SwXStyleFamily::hasElements() throw( uno::RuntimeException, std::exception )
 {
     if(!m_pBasePool)
         throw uno::RuntimeException();
-    return sal_True;
+    return true;
 }
 
 void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
