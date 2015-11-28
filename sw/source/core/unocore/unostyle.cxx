@@ -717,20 +717,15 @@ void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rEleme
 void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(m_pBasePool)
-    {
-        m_pBasePool->SetSearchMask(m_eFamily);
-        OUString aString;
-        SwStyleNameMapper::FillUIName(rName, aString, lcl_GetSwEnumFromSfxEnum ( m_eFamily ), true );
-
-        SfxStyleSheetBase* pBase = m_pBasePool->Find( aString );
-        if(pBase)
-            m_pBasePool->Remove(pBase);
-        else
-            throw container::NoSuchElementException();
-    }
-    else
+    if(!m_pBasePool)
         throw uno::RuntimeException();
+    m_pBasePool->SetSearchMask(m_eFamily);
+    OUString sName;
+    SwStyleNameMapper::FillUIName(rName, sName, lcl_GetSwEnumFromSfxEnum(m_eFamily), true);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find( sName );
+    if(!pBase)
+        throw container::NoSuchElementException();
+    m_pBasePool->Remove(pBase);
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySetInfo(  ) throw (uno::RuntimeException, std::exception)
