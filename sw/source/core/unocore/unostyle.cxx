@@ -728,10 +728,8 @@ void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuc
     m_pBasePool->Remove(pBase);
 }
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySetInfo(  ) throw (uno::RuntimeException, std::exception)
-{
-    return uno::Reference< beans::XPropertySetInfo >();
-}
+uno::Reference<beans::XPropertySetInfo> SAL_CALL SwXStyleFamily::getPropertySetInfo(  ) throw (uno::RuntimeException, std::exception)
+    { return {}; }
 
 void SAL_CALL SwXStyleFamily::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
     { SAL_WARN("sw.uno", "###unexpected!"); }
