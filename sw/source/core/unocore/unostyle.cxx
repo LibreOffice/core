@@ -466,16 +466,14 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PAGE>(const SwDoc& rDoc, OUStr
     for(size_t i = 0; i < nArrLen; ++i)
     {
         const SwPageDesc& rDesc = rDoc.GetPageDesc(i);
-
-        if ( IsPoolUserFormat ( rDesc.GetPoolFormatId() ) )
+        if(!IsPoolUserFormat(rDesc.GetPoolFormatId()))
+            continue;
+        if(nIndex == nCount)
         {
-            if ( nIndex == nCount )
-            {
-                *pString = rDesc.GetName();
-                break;
-            }
-            ++nCount;
+            *pString = rDesc.GetName();
+            break;
         }
+        ++nCount;
     }
     nCount += nPoolPageRange;
     return nCount;
