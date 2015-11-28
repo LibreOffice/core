@@ -50,6 +50,7 @@ namespace cppcanvas
             mxSpriteCanvas( rCanvas ),
             mpTransformArbiter( new TransformationArbiter() )
         {
+/*SB*/ColorSharedPtr SB;(void)SB;
             OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::ImplSpriteCanvas(): Invalid canvas" );
         }
 

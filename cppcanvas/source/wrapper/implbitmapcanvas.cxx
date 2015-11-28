@@ -41,6 +41,7 @@ namespace cppcanvas
             mxBitmap( rCanvas,
                       uno::UNO_QUERY )
         {
+/*SB*/ColorSharedPtr SB;(void)SB;
             OSL_ENSURE( mxBitmapCanvas.is(), "ImplBitmapCanvas::ImplBitmapCanvas(): Invalid canvas" );
             OSL_ENSURE( mxBitmap.is(), "ImplBitmapCanvas::ImplBitmapCanvas(): Invalid bitmap" );
         }

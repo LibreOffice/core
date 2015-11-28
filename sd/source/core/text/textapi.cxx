@@ -57,6 +57,7 @@ UndoTextAPIChanged::UndoTextAPIChanged(SdrModel& rModel, TextApiObject* pTextObj
 , mpNewText( nullptr )
 , mxTextObj( pTextObj )
 {
+/*SB*/css::uno::Sequence<css::beans::PropertyState>SB;(void)SB;
 }
 
 UndoTextAPIChanged::~UndoTextAPIChanged()

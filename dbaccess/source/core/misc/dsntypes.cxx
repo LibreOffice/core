@@ -589,6 +589,7 @@ bool operator==(const ODsnTypeCollection::TypeIterator& lhs, const ODsnTypeColle
 {
     return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);
 }
+/*TODO*/bool operator!=(const ODsnTypeCollection::TypeIterator& lhs, const ODsnTypeCollection::TypeIterator& rhs){ return !(lhs == rhs); }
 
 }   // namespace dbaccess
 

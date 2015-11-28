@@ -54,7 +54,7 @@ void OutputError_Impl( HWND hw, HRESULT ErrorCode )
 }
 
 HRESULT ExecuteFunc( IDispatch* idispUnoObject,
-                     OLECHAR* sFuncName,
+                     OLECHAR const * sFuncName,
                      CComVariant* params,
                      unsigned int count,
                      CComVariant* pResult )
@@ -63,7 +63,7 @@ HRESULT ExecuteFunc( IDispatch* idispUnoObject,
         return E_FAIL;
 
     DISPID id;
-    HRESULT hr = idispUnoObject->GetIDsOfNames( IID_NULL, &sFuncName, 1, LOCALE_USER_DEFAULT, &id);
+    HRESULT hr = idispUnoObject->GetIDsOfNames( IID_NULL, const_cast<OLECAR **>(&sFuncName), 1, LOCALE_USER_DEFAULT, &id);
     if( !SUCCEEDED( hr ) ) return hr;
 
     DISPPARAMS dispparams= { params, 0, count, 0};
@@ -82,7 +82,7 @@ HRESULT ExecuteFunc( IDispatch* idispUnoObject,
 }
 
 HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
-                          OLECHAR* sFuncName,
+                          OLECHAR const * sFuncName,
                           CComVariant* params,
                           unsigned int count,
                           CComPtr<IDispatch>& pdispResult )

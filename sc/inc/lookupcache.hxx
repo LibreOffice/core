@@ -49,7 +49,7 @@ public:
         FOUND               /// Criteria found.
     };
 
-    enum QueryOp
+    enum QueryOp: unsigned
     {
         UNKNOWN,
         EQUAL,

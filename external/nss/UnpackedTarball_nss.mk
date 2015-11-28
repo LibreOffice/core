@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss-3.13.3-build.patch.3 \
 		external/nss/nss.mingw.patch.3) \
     external/nss/ubsan.patch.0 \
+    external/nss/clang-cl.patch.0 \
     $(if $(filter IOS,$(OS)), \
         external/nss/nss-chromium-nss-static.patch \
         external/nss/nss-more-static.patch \

@@ -56,6 +56,7 @@ SwTextAPIObject::SwTextAPIObject( SwTextAPIEditSource* p )
 : SvxUnoText( p, ImplGetSvxTextPortionPropertySet(), uno::Reference < text::XText >() )
 , pSource(p)
 {
+/*SB*/css::uno::Sequence<css::beans::PropertyState>SB;(void)SB;
 }
 
 SwTextAPIObject::~SwTextAPIObject() throw()

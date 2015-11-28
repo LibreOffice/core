@@ -61,6 +61,7 @@ namespace frm
     ORichTextUnoWrapper::ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :SvxUnoText( getTextEnginePropertySet() )
     {
+/*SB*/css::uno::Sequence<css::beans::PropertyState>SB;(void)SB;
         SetEditSource( new RichTextEditSource( _rEngine, _pTextChangeListener ) );
     }
 
