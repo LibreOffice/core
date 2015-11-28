@@ -645,6 +645,7 @@ Dim sOutputFormat As String, iTemplate As Integer, iOutputFile As Integer, bOutp
 
 	&apos;Determine output file
 	If pvOutputFile = &quot;&quot; Then			&apos;	Prompt file picker to user
+		sSuffix = &quot;html&quot;
 		sOutputFile = _PromptFilePicker(sSuffix)
 		If sOutputFile = &quot;&quot; Then Goto Exit_Function
 	Else
