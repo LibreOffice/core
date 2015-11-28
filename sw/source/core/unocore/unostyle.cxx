@@ -145,6 +145,8 @@ namespace sw
         SwDocShell*                 m_pDocShell;
 
         SwXStyle*               _FindStyle(const OUString& rStyleName) const;
+        sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32);
+
     public:
         XStyleFamily(SwDocShell* pDocShell, const SfxStyleFamily eFamily)
             : m_eFamily(eFamily)
@@ -157,7 +159,11 @@ namespace sw
         virtual ~XStyleFamily() {};
 
         //XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() throw( uno::RuntimeException, std::exception ) override;
+        virtual sal_Int32 SAL_CALL getCount() throw( uno::RuntimeException, std::exception ) override
+        {
+            SolarMutexGuard aGuard;
+            return GetCountOrName(nullptr);
+        };
         virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
 
         //XElementAccess
@@ -496,9 +502,10 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUS
     return nCount + nBaseCount;
 }
 
-static sal_Int32 lcl_GetCountOrName(const SwDoc& rDoc, SfxStyleFamily eFamily, OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32)
+sal_Int32 XStyleFamily::GetCountOrName(OUString* pString, sal_Int32 nIndex)
 {
-    switch(eFamily)
+    const auto& rDoc = *m_pDocShell->GetDoc();
+    switch(m_eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
             return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_CHAR>(rDoc, pString, nIndex);
@@ -513,12 +520,6 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc& rDoc, SfxStyleFamily eFamily, O
         default:
             return 0;
     }
-}
-
-sal_Int32 XStyleFamily::getCount() throw( uno::RuntimeException, std::exception )
-{
-    SolarMutexGuard aGuard;
-    return lcl_GetCountOrName(*m_pDocShell->GetDoc(), m_eFamily, nullptr);
 }
 
 uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
@@ -583,7 +584,7 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
             ;
     }
     if (sStyleName.isEmpty())
-        lcl_GetCountOrName(*m_pDocShell->GetDoc(), m_eFamily, &sStyleName, nIndex);
+        GetCountOrName(&sStyleName, nIndex);
 
     if(sStyleName.isEmpty())
         throw lang::IndexOutOfBoundsException();
