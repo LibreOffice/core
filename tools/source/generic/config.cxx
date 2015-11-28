@@ -946,11 +946,7 @@ void Config::DeleteKey(const OString& rKey)
 sal_uInt16 Config::GetKeyCount() const
 {
 #ifdef DBG_UTIL
-    OStringBuffer aTraceStr("Config::GetKeyCount()");
-    aTraceStr.append(" from ");
-    aTraceStr.append(GetGroup());
-    aTraceStr.append(" in ");
-    aTraceStr.append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    OString aTraceStr("Config::GetKeyCount() from " + GetGroup() + " in " + OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
@@ -979,13 +975,7 @@ sal_uInt16 Config::GetKeyCount() const
 OString Config::GetKeyName(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
-    OStringBuffer aTraceStr("Config::GetKeyName( ");
-    aTraceStr.append(static_cast<sal_Int32>(nKey));
-    aTraceStr.append(" ) from ");
-    aTraceStr.append(GetGroup());
-    aTraceStr.append(" in ");
-    aTraceStr.append(OUStringToOString(
-        maFileName, RTL_TEXTENCODING_UTF8));
+    OString aTraceStr("Config::GetKeyName( " + OString::number(static_cast<sal_Int32>(nKey)) + " ) from " + GetGroup() + " in " + OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
@@ -1013,13 +1003,7 @@ OString Config::GetKeyName(sal_uInt16 nKey) const
 OString Config::ReadKey(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
-    OStringBuffer aTraceStr("Config::ReadKey( ");
-    aTraceStr.append(static_cast<sal_Int32>(nKey));
-    aTraceStr.append(" ) from ");
-    aTraceStr.append(GetGroup());
-    aTraceStr.append(" in ");
-    aTraceStr.append(OUStringToOString(maFileName,
-        RTL_TEXTENCODING_UTF8));
+    OString aTraceStr("Config::ReadKey( " + OString::number(static_cast<sal_Int32>(nKey)) + " ) from " + GetGroup() + " in " + OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
