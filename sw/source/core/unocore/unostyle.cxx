@@ -97,7 +97,7 @@ namespace
         SfxStyleFamily m_eFamily;
         SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
-        sal_uInt32 m_nRedId;
+        sal_uInt32 m_nResId;
         StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId)
                 : m_eFamily(eFamily)
                 , m_aPoolId(aPoolId)
