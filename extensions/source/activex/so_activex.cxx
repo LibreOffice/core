@@ -29,7 +29,16 @@
 #include <initguid.h>
 #include "so_activex.h"
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wextra-tokens"
+    // "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
+#endif
 #include "so_activex_i.c"
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+
 #include "SOActiveX.h"
 
 #include <comphelper\documentconstants.hxx>

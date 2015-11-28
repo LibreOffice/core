@@ -45,9 +45,6 @@
 #include "IVistaFilePickerInternalNotify.hxx"
 #include "../misc/resourceprovider.hxx"
 
-#include <com/sun/star/uno/Sequence.hxx>
-
-#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/basemutex.hxx>
 #include <osl/thread.hxx>
@@ -300,15 +297,6 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
         /// @todo document me
         CFilterContainer m_lFilters;
-
-
-        /** cache last selected list of files
-         *  Because those list must be retrieved directly after closing the dialog
-         *  (and only in case it was finished successfully) we cache it internally.
-         *  Because the outside provided UNO API decouple showing the dialog
-         *  and asking for results .-)
-         */
-        css::uno::Sequence< OUString > m_lLastFiles;
 
 
         /** help us to handle dialog events and provide them to interested office

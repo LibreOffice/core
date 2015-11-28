@@ -100,7 +100,7 @@ public:
     TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, const tools::Time& rTime );
     TOOLS_DLLPUBLIC friend double   operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 );
     TOOLS_DLLPUBLIC friend long     operator -( const DateTime& rDateTime, const Date& rDate )
-                        { return (const Date&) rDateTime - rDate; }
+                        ;/*TODO { return (const Date&) rDateTime - rDate; }*/
 
     DateTime&       operator =( const DateTime& rDateTime );
 

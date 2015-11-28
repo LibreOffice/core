@@ -232,6 +232,12 @@ gb_CFLAGS += \
 
 endif
 
+ifeq ($(COM_IS_CLANG),TRUE)
+gb_CXXFLAGS += \
+	-Wno-missing-braces \
+
+endif
+
 # rc.exe does not support -nologo in 6.1.6723.1 that is in the Windows SDK 6.0A
 gb_RCFLAGS += -nologo
 
