@@ -497,53 +497,31 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
         break;
         case SFX_STYLE_FAMILY_PARA:
         {
-            if ( nIndex < ( RES_POOLCOLL_TEXT_END - RES_POOLCOLL_TEXT_BEGIN ) )
-                SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLCOLL_TEXT_BEGIN + nIndex), sStyleName );
-            else if ( nIndex < ( RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
-                                 RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN ) )
-                SwStyleNameMapper::FillUIName ( RES_POOLCOLL_LISTS_BEGIN
-                                                - RES_POOLCOLL_TEXT_END + RES_POOLCOLL_TEXT_BEGIN
-                                                + nIndex, sStyleName );
-            else if ( nIndex < ( RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
-                                 RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
-                                 RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN ) )
-                SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLCOLL_EXTRA_BEGIN
-                                                 - RES_POOLCOLL_LISTS_END + RES_POOLCOLL_LISTS_BEGIN
-                                                 - RES_POOLCOLL_TEXT_END  + RES_POOLCOLL_TEXT_BEGIN
-                                                 + nIndex), sStyleName );
-            else if ( nIndex < ( RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
-                                 RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
-                                 RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
-                                 RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN ) )
-                SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLCOLL_REGISTER_BEGIN
-                                                 - RES_POOLCOLL_EXTRA_END + RES_POOLCOLL_EXTRA_BEGIN
-                                                 - RES_POOLCOLL_LISTS_END + RES_POOLCOLL_LISTS_BEGIN
-                                                 - RES_POOLCOLL_TEXT_END  + RES_POOLCOLL_TEXT_BEGIN
-                                                 + nIndex), sStyleName );
-            else if ( nIndex < ( RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
-                                 RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
-                                 RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
-                                 RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
-                                 RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN ) )
-                SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLCOLL_DOC_BEGIN
-                                                 - RES_POOLCOLL_REGISTER_END + RES_POOLCOLL_REGISTER_BEGIN
-                                                 - RES_POOLCOLL_EXTRA_END + RES_POOLCOLL_EXTRA_BEGIN
-                                                 - RES_POOLCOLL_LISTS_END + RES_POOLCOLL_LISTS_BEGIN
-                                                 - RES_POOLCOLL_TEXT_END  + RES_POOLCOLL_TEXT_BEGIN
-                                                 + nIndex), sStyleName );
-            else if ( nIndex < ( RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN +
-                                 RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
-                                 RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
-                                 RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
-                                 RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
-                                 RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN ) )
-                SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLCOLL_HTML_BEGIN
-                                                 - RES_POOLCOLL_DOC_END + RES_POOLCOLL_DOC_BEGIN
-                                                 - RES_POOLCOLL_REGISTER_END + RES_POOLCOLL_REGISTER_BEGIN
-                                                 - RES_POOLCOLL_EXTRA_END + RES_POOLCOLL_EXTRA_BEGIN
-                                                 - RES_POOLCOLL_LISTS_END + RES_POOLCOLL_LISTS_BEGIN
-                                                 - RES_POOLCOLL_TEXT_END  + RES_POOLCOLL_TEXT_BEGIN
-                                                 + nIndex), sStyleName );
+            constexpr sal_uInt16 nPoolCollTextRange     = RES_POOLCOLL_TEXT_END     - RES_POOLCOLL_TEXT_BEGIN;
+            constexpr sal_uInt16 nPoolCollListsRange    = RES_POOLCOLL_LISTS_END    - RES_POOLCOLL_LISTS_BEGIN;
+            constexpr sal_uInt16 nPoolCollExtraRange    = RES_POOLCOLL_EXTRA_END    - RES_POOLCOLL_EXTRA_BEGIN;
+            constexpr sal_uInt16 nPoolCollRegisterRange = RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN;
+            constexpr sal_uInt16 nPoolCollDocRange      = RES_POOLCOLL_DOC_END      - RES_POOLCOLL_DOC_BEGIN;
+            constexpr sal_uInt16 nPoolCollHtmlRange     = RES_POOLCOLL_HTML_END     - RES_POOLCOLL_HTML_BEGIN;
+            static_assert(nPoolCollTextRange > 0 && nPoolCollListsRange > 0 && nPoolCollExtraRange > 0 && nPoolCollRegisterRange > 0 && nPoolCollDocRange > 0 && nPoolCollHtmlRange > 0, "weird pool range");
+            constexpr sal_uInt16 nPoolCollListsStackedStart    = nPoolCollTextRange;
+            constexpr sal_uInt16 nPoolCollExtraStackedStart    = nPoolCollListsStackedStart    + nPoolCollListsRange;
+            constexpr sal_uInt16 nPoolCollRegisterStackedStart = nPoolCollExtraStackedStart    + nPoolCollExtraRange;
+            constexpr sal_uInt16 nPoolCollDocStackedStart      = nPoolCollRegisterStackedStart + nPoolCollRegisterRange;
+            constexpr sal_uInt16 nPoolCollHtmlStackedStart     = nPoolCollDocStackedStart      + nPoolCollDocRange;
+            const sal_uInt16 nIndex16 = static_cast<sal_uInt16>(nIndex);
+            if(nIndex16 < nPoolCollListsStackedStart)
+                SwStyleNameMapper::FillUIName(RES_POOLCOLL_TEXT_BEGIN                                     + nIndex16, sStyleName);
+            else if(nIndex16 < nPoolCollExtraStackedStart)
+                SwStyleNameMapper::FillUIName(RES_POOLCOLL_LISTS_BEGIN    + nPoolCollListsStackedStart    + nIndex16, sStyleName);
+            else if(nIndex16 < nPoolCollRegisterStackedStart)
+                SwStyleNameMapper::FillUIName(RES_POOLCOLL_EXTRA_BEGIN    + nPoolCollExtraStackedStart    + nIndex16, sStyleName);
+            else if(nIndex16 < nPoolCollDocStackedStart)
+                SwStyleNameMapper::FillUIName(RES_POOLCOLL_REGISTER_BEGIN + nPoolCollRegisterStackedStart + nIndex16, sStyleName);
+            else if(nIndex16 < nPoolCollHtmlStackedStart)
+                SwStyleNameMapper::FillUIName(RES_POOLCOLL_DOC_BEGIN      + nPoolCollDocStackedStart      + nIndex16, sStyleName);
+            else if(nIndex16 < nPoolCollHtmlStackedStart + nPoolCollTextRange)
+                SwStyleNameMapper::FillUIName(RES_POOLCOLL_HTML_BEGIN     + nPoolCollHtmlStackedStart     + nIndex16, sStyleName);
         }
         break;
         case SFX_STYLE_FAMILY_FRAME:
