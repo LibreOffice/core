@@ -94,15 +94,18 @@ namespace
 {
     struct StyleFamilyEntry
     {
+        using GetCountOrName_t = std::function< sal_Int32 (const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)>;
         SfxStyleFamily m_eFamily;
         SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
         sal_uInt32 m_nResId;
-        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId)
+        GetCountOrName_t m_fGetCountOrName;
+        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t fGetCountOrName)
                 : m_eFamily(eFamily)
                 , m_aPoolId(aPoolId)
                 , m_sName(sName)
                 , m_nResId(nResId)
+                , m_fGetCountOrName(fGetCountOrName)
             {}
     };
     static const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
@@ -143,7 +146,8 @@ namespace sw
         SwDocShell* m_pDocShell;
 
         SwXStyle* _FindStyle(const OUString& rStyleName) const;
-        sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32);
+        sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32)
+            { return m_rEntry.m_fGetCountOrName(*m_pDocShell->GetDoc(), pString, nIndex); };
         static const StyleFamilyEntry& InitEntry(SfxStyleFamily eFamily)
         {
             auto pEntries = lcl_GetStyleFamilyEntries();
@@ -382,10 +386,10 @@ static bool lcl_GetHeaderFooterItem(
 }
 
 template<enum SfxStyleFamily>
-static sal_Int32 lcl_GetCountOrNameImpl(const SwDoc&, OUString*, sal_Int32);
+static sal_Int32 lcl_GetCountOrName(const SwDoc&, OUString*, sal_Int32);
 
 template<>
-sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_CHAR>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     constexpr sal_Int32 nBaseCount = nPoolChrHtmlRange + nPoolCollTextRange;
     nIndex -= nBaseCount;
@@ -411,7 +415,7 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_CHAR>(const SwDoc& rDoc, OUStr
 }
 
 template<>
-sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PARA>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     constexpr sal_Int32 nBaseCount = nPoolCollHtmlStackedStart + nPoolCollHtmlRange;
     nIndex -= nBaseCount;
@@ -433,7 +437,7 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PARA>(const SwDoc& rDoc, OUStr
 }
 
 template<>
-sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_FRAME>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     nIndex -= nPoolFrameRange;
     sal_Int32 nCount = 0;
@@ -454,7 +458,7 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_FRAME>(const SwDoc& rDoc, OUSt
 }
 
 template<>
-sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PAGE>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     nIndex -= nPoolPageRange;
     sal_Int32 nCount = 0;
@@ -476,7 +480,7 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PAGE>(const SwDoc& rDoc, OUStr
 }
 
 template<>
-sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     nIndex -= nPoolNumRange;
     sal_Int32 nCount = 0;
@@ -496,25 +500,6 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUS
     return nCount + nPoolNumRange;
 }
 
-sal_Int32 XStyleFamily::GetCountOrName(OUString* pString, sal_Int32 nIndex)
-{
-    const auto& rDoc = *m_pDocShell->GetDoc();
-    switch(m_rEntry.m_eFamily)
-    {
-        case SFX_STYLE_FAMILY_CHAR:
-            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_CHAR>(rDoc, pString, nIndex);
-        case SFX_STYLE_FAMILY_PARA:
-            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PARA>(rDoc, pString, nIndex);
-        case SFX_STYLE_FAMILY_FRAME:
-            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_FRAME>(rDoc, pString, nIndex);
-        case SFX_STYLE_FAMILY_PAGE:
-            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PAGE>(rDoc, pString, nIndex);
-        case SFX_STYLE_FAMILY_PSEUDO:
-            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PSEUDO>(rDoc, pString, nIndex);
-        default:
-            return 0;
-    }
-}
 
 uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
@@ -777,11 +762,11 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
     if(!our_pStyleFamilyEntries)
     {
         our_pStyleFamilyEntries = new std::vector<StyleFamilyEntry>{
-            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER },
-            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH },
-            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE },
-            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME },
-            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING }
+            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>   },
+            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>   },
+            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>   },
+            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>  },
+            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO> }
        };
     }
     return our_pStyleFamilyEntries;
