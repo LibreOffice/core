@@ -229,6 +229,7 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
     {
         maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
+        UpdateConfigurations();
     }
 }
 
