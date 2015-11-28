@@ -113,7 +113,7 @@ class GbuildParser:
             mapping_dict[target] = library
         return mapping_dict
 
-    def _parse_hash(self, line, state):
+    def _parse_hash_old(self, line, state):
         libmatch = GbuildParser.libpattern.match(line)
         if libmatch:
             libname = self.libnames.get(state.ilib, None)
@@ -169,55 +169,100 @@ class GbuildParser:
         # we could match a lot of other stuff here if needed for integration rpaths etc.
         return state
 
+    def _parse_hash(self, line):
+        libmatch = GbuildParser.libpattern.match(line)
+        if libmatch:
+            return True
+        exematch = GbuildParser.exepattern.match(line)
+        if exematch:
+            return True
+        if line.find('# INCLUDE :=') == 0:
+            return True
+        defsmatch = GbuildParser.defspattern.match(line)
+        if defsmatch:
+            return True
+        cxxmatch = GbuildParser.cxxpattern.match(line)
+        if cxxmatch:
+            return True
+        linkedlibsmatch = GbuildParser.linkedlibspattern.match(line)
+        if linkedlibsmatch:
+            return True
+        ilibmatch = GbuildParser.ilibpattern.match(line)
+        if ilibmatch:
+            return True
+        if line.find('# T_CXXFLAGS :=') == 0:
+            return True
+        # we could match a lot of other stuff here if needed for integration rpaths etc.
+        return False
+
+    def _parse_without_hash(self, line):
+        makecmdmatch = GbuildParser.makecmdpattern.match(line)
+        if makecmdmatch:
+            self.makecmd = makecmdmatch.group(1)
+            # FIXME: Hack
+            if self.makecmd == 'make':
+                self.makecmd = '/usr/bin/make'
+            return False
+        srcdirmatch = GbuildParser.srcdirpattern.match(line)
+        if srcdirmatch:
+            self.srcdir = srcdirmatch.group(1)
+            return False
+        builddirmatch = GbuildParser.builddirpattern.match(line)
+        if builddirmatch:
+            self.builddir = builddirmatch.group(1)
+            return False
+        instdirmatch = GbuildParser.instdirpattern.match(line)
+        if instdirmatch:
+            self.instdir = instdirmatch.group(1)
+            return False
+        binpathmatch = GbuildParser.binpathpattern.match(line)
+        if binpathmatch:
+            self.binpath = binpathmatch.group(1)
+            return False
+        libnamesmatch = GbuildParser.libnamespattern.match(line)
+        if libnamesmatch:
+            self.libnames = self.__mapping_to_dict(libnamesmatch.group(1))
+            return False
+        exenamesmatch = GbuildParser.exenamepattern.match(line)
+        if exenamesmatch:
+            self.exenames = self.__mapping_to_dict(exenamesmatch.group(1))
+            return False
+        rulematch = self.rulepattern.match(line)
+        if rulematch:
+            return True
+
     def parse(self, gbuildstate):
-        state = GbuildParserState()
+        workLines = []
+        stateActive = False
         for line in gbuildstate:
             line = line.rstrip('\r\n')
             if line.startswith('#'):
-                state = self._parse_hash(line, state)
+                if self._parse_hash(line):
+                    stateActive = True
+                    workLines.append(line)
             else:
-                makecmdmatch = GbuildParser.makecmdpattern.match(line)
-                if makecmdmatch:
-                    self.makecmd = makecmdmatch.group(1)
-                    # FIXME: Hack
-                    if self.makecmd == 'make':
-                        self.makecmd = '/usr/bin/make'
-                    continue
-                srcdirmatch = GbuildParser.srcdirpattern.match(line)
-                if srcdirmatch:
-                    self.srcdir = srcdirmatch.group(1)
-                    continue
-                builddirmatch = GbuildParser.builddirpattern.match(line)
-                if builddirmatch:
-                    self.builddir = builddirmatch.group(1)
-                    continue
-                instdirmatch = GbuildParser.instdirpattern.match(line)
-                if instdirmatch:
-                    self.instdir = instdirmatch.group(1)
-                    continue
-                binpathmatch = GbuildParser.binpathpattern.match(line)
-                if binpathmatch:
-                    self.binpath = binpathmatch.group(1)
-                    continue
+                if self._parse_without_hash(line):
+                    workLines.append(line)
+                elif stateActive:
+                    workLines.append('!END OF STATE')
+
+        state = GbuildParserState()
+        for line in workLines:
+            if line.startswith('!END OF STATE'):
+                state = GbuildParserState()
+                continue
+            if line.startswith('#'):
+                state = self._parse_hash_old(line, state)
+            else:
                 rulematch = self.rulepattern.match(line)
                 if rulematch:
                     if len(rulematch.groups()) == 2 \
                        and rulematch.group(2) is not None \
                        and ':=' in rulematch.group(2):
                         # Hack to make GNU make >= 4.x happy
-                        state = self._parse_hash('#' + rulematch.group(2), state)
+                        state = self._parse_hash_old('#' + rulematch.group(2), state)
                     else:
-                        state.target = os.path.basename(rulematch.group(1))
-                    continue
-                libnamesmatch = GbuildParser.libnamespattern.match(line)
-                if libnamesmatch:
-                    self.libnames = self.__mapping_to_dict(libnamesmatch.group(1))
-                    continue
-                exenamesmatch = GbuildParser.exenamepattern.match(line)
-                if exenamesmatch:
-                    self.exenames = self.__mapping_to_dict(exenamesmatch.group(1))
-                    continue
-                state = GbuildParserState()
+                       state.target = os.path.basename(rulematch.group(1))
 
         for target in set(self.libs) | set(self.exes):
             if target.location not in self.target_by_location:
