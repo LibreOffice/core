@@ -575,6 +575,12 @@
             <value xml:lang="en-US">.uno:NumberFormatScientific</value>
           </prop>
         </node>
+        <node oor:name="3_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SetOptimalColumnWidthDirect</value>
+          </prop>
+        </node>
         <node oor:name="3_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
