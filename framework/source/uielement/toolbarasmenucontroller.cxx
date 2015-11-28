@@ -249,6 +249,7 @@ void ToolbarAsMenuController::fillPopupMenu()
                         pVCLMenu->InsertItem( aCommandURL, m_xFrame );
                     break;
                 case css::ui::ItemType::SEPARATOR_LINE:
+                case css::ui::ItemType::SEPARATOR_LINEBREAK:
                     if ( bVisible && pVCLMenu->GetItemId( pVCLMenu->GetItemCount() - 1 ) != 0 )
                         pVCLMenu->InsertSeparator();
                     break;
