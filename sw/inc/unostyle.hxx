@@ -49,7 +49,10 @@ class SwStyleProperties_Impl;
 class SwAutoStylesEnumImpl;
 class IStyleAccess;
 class SfxItemSet;
-class SwXStyleFamily;
+namespace sw
+{
+    class XStyleFamily;
+};
 typedef std::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 
 class SwXStyleFamilies :  public cppu::WeakImplHelper
@@ -109,7 +112,7 @@ class SwXStyle : public cppu::WeakImplHelper
         public SfxListener,
         public SwClient
 {
-    friend class SwXStyleFamily;
+    friend class sw::XStyleFamily;
     SwDoc*                  m_pDoc;
     OUString                m_sStyleName;
     SfxStyleSheetBasePool*  m_pBasePool;
