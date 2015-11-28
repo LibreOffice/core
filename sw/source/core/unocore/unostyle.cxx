@@ -526,26 +526,20 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
         break;
         case SFX_STYLE_FAMILY_FRAME:
         {
-            if ( nIndex < ( RES_POOLFRM_END - RES_POOLFRM_BEGIN ) )
-            {
-                SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLFRM_BEGIN + nIndex), sStyleName );
-            }
+            if(nIndex < (RES_POOLFRM_END - RES_POOLFRM_BEGIN))
+                SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLFRM_BEGIN + nIndex), sStyleName);
         }
         break;
         case SFX_STYLE_FAMILY_PAGE:
         {
-            if ( nIndex < ( RES_POOLPAGE_END - RES_POOLPAGE_BEGIN ) )
-            {
-                SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLPAGE_BEGIN + nIndex), sStyleName );
-            }
+            if(nIndex < (RES_POOLPAGE_END - RES_POOLPAGE_BEGIN ))
+                SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLPAGE_BEGIN + nIndex), sStyleName);
         }
         break;
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            if ( nIndex < ( RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN ) )
-            {
+            if(nIndex < (RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN))
                 SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLNUMRULE_BEGIN + nIndex), sStyleName );
-            }
         }
         break;
 
@@ -553,14 +547,14 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
             ;
     }
     if (sStyleName.isEmpty())
-        lcl_GetCountOrName ( *m_pDocShell->GetDoc(), m_eFamily, &sStyleName, nIndex );
+        lcl_GetCountOrName(*m_pDocShell->GetDoc(), m_eFamily, &sStyleName, nIndex);
 
     if(sStyleName.isEmpty())
         throw lang::IndexOutOfBoundsException();
-    SfxStyleSheetBase* pBase = m_pBasePool->Find( sStyleName, m_eFamily );
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_eFamily);
     if(!pBase)
         throw uno::RuntimeException();
-    uno::Reference< style::XStyle >  xStyle = _FindStyle(sStyleName);
+    uno::Reference<style::XStyle> xStyle = _FindStyle(sStyleName);
     if(!xStyle.is())
     {
         switch(m_eFamily)
