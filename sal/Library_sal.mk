@@ -28,8 +28,8 @@ $(eval $(call gb_Library_add_defs,sal,\
 	) \
 	$(LFS_CFLAGS) \
 	-DSAL_DLLIMPLEMENTATION \
-	-DRTL_OS="\"$(RTL_OS)"\" \
-	-DRTL_ARCH="\"$(RTL_ARCH)"\" \
+	-DRTL_OS="\"$(RTL_OS)\"" \
+	-DRTL_ARCH="\"$(RTL_ARCH)\"" \
 	-DSRCDIR="\"$(SRCDIR)\"" \
 ))
 

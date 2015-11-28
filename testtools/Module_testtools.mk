@@ -30,9 +30,11 @@ $(eval $(call gb_Module_add_targets,testtools,\
 endif
 
 ifeq ($(COM),MSC)
+ifneq ($(COM_IS_CLANG),TRUE)
 $(eval $(call gb_Module_add_targets,testtools,\
 	CustomTarget_bridgetest_climaker \
 ))
+endif
 endif
 
 $(eval $(call gb_Module_add_check_targets,testtools,\

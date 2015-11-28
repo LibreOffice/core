@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,odk))
 
 $(eval $(call gb_Module_add_targets,odk,\
-	$(if $(filter WNT,$(OS)),Package_cli) \
+	$(if $(filter WNT,$(OS)),$(if $(COM_IS_CLANG),,Package_cli)) \
 	$(if $(DOXYGEN),\
 		CustomTarget_doxygen \
 		GeneratedPackage_odk_doxygen \

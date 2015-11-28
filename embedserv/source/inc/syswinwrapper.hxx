@@ -146,7 +146,7 @@ protected:
 
         int         m_dBorder;
         int         m_dBorderOrg;
-        UINT        m_uID;
+        WORD        m_uID;
         HWND        m_hWndParent;
         HWND        m_hWndKid;
         HWND        m_hWndAssociate;
@@ -157,7 +157,7 @@ protected:
         CHatchWin(HINSTANCE,const DocumentHolder*);
         ~CHatchWin();
 
-        BOOL        Init(HWND, UINT, HWND);
+        BOOL        Init(HWND, WORD, HWND);
 
         HWND        HwndAssociateSet(HWND);
         HWND        HwndAssociateGet();
