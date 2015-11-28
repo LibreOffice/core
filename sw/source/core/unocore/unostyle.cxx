@@ -644,66 +644,45 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
         throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(m_pBasePool)
-    {
-        OUString sStyleName;
-        SwStyleNameMapper::FillUIName(rName, sStyleName, lcl_GetSwEnumFromSfxEnum ( m_eFamily ), true);
-        m_pBasePool->SetSearchMask(m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
-        SfxStyleSheetBase* pUINameBase = m_pBasePool->Find( sStyleName );
-        if(pBase || pUINameBase)
-            throw container::ElementExistException();
-        else
-        {
-            if(rElement.getValueType().getTypeClass() ==
-                                            uno::TypeClass_INTERFACE)
-            {
-                uno::Reference< uno::XInterface > const * pxRef =
-                    static_cast<uno::Reference< uno::XInterface > const *>(rElement.getValue());
-
-                uno::Reference<lang::XUnoTunnel> xStyleTunnel( *pxRef, uno::UNO_QUERY);
-
-                SwXStyle* pNewStyle = nullptr;
-                if(xStyleTunnel.is())
-                {
-                    pNewStyle = reinterpret_cast< SwXStyle * >(
-                            sal::static_int_cast< sal_IntPtr >( xStyleTunnel->getSomething( SwXStyle::getUnoTunnelId()) ));
-                }
-
-                if (!pNewStyle || !pNewStyle->IsDescriptor() || pNewStyle->GetFamily() != m_eFamily)
-                    throw lang::IllegalArgumentException();
-
-                sal_uInt16 nMask = SFXSTYLEBIT_ALL;
-                if(m_eFamily == SFX_STYLE_FAMILY_PARA && !pNewStyle->IsConditional())
-                    nMask &= ~SWSTYLEBIT_CONDCOLL;
-#if OSL_DEBUG_LEVEL > 1
-                SfxStyleSheetBase& rNewBase =
-#endif
-                m_pBasePool->Make(sStyleName, m_eFamily, nMask);
-                pNewStyle->SetDoc(m_pDocShell->GetDoc(), m_pBasePool);
-                pNewStyle->SetStyleName(sStyleName);
-                const OUString sParentStyleName(pNewStyle->GetParentStyleName());
-                if (!sParentStyleName.isEmpty())
-                {
-                    m_pBasePool->SetSearchMask(m_eFamily);
-                    SfxStyleSheetBase* pParentBase = m_pBasePool->Find(sParentStyleName);
-                    if(pParentBase && pParentBase->GetFamily() == m_eFamily &&
-                        &pParentBase->GetPool() == m_pBasePool)
-                        m_pBasePool->SetParent( m_eFamily, sStyleName, sParentStyleName );
-
-                }
-#if OSL_DEBUG_LEVEL > 1
-                (void)rNewBase;
-#endif
-                // after all, we still need to apply the properties of the descriptor
-                pNewStyle->ApplyDescriptorProperties();
-            }
-            else
-                throw lang::IllegalArgumentException();
-        }
-    }
-    else
+    if(!m_pBasePool)
         throw uno::RuntimeException();
+    OUString sStyleName;
+    SwStyleNameMapper::FillUIName(rName, sStyleName, lcl_GetSwEnumFromSfxEnum(m_eFamily), true);
+    m_pBasePool->SetSearchMask(m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
+    SfxStyleSheetBase* pUINameBase = m_pBasePool->Find( sStyleName );
+    if(pBase || pUINameBase)
+        throw container::ElementExistException();
+    if(rElement.getValueType().getTypeClass() != uno::TypeClass_INTERFACE)
+        throw lang::IllegalArgumentException();
+    uno::Reference<lang::XUnoTunnel> xStyleTunnel = rElement.get<uno::Reference<lang::XUnoTunnel>>();
+    SwXStyle* pNewStyle = nullptr;
+    if(xStyleTunnel.is())
+    {
+        pNewStyle = reinterpret_cast< SwXStyle * >(
+                sal::static_int_cast< sal_IntPtr >( xStyleTunnel->getSomething( SwXStyle::getUnoTunnelId()) ));
+    }
+
+    if (!pNewStyle || !pNewStyle->IsDescriptor() || pNewStyle->GetFamily() != m_eFamily)
+        throw lang::IllegalArgumentException();
+
+    sal_uInt16 nMask = SFXSTYLEBIT_ALL;
+    if(m_eFamily == SFX_STYLE_FAMILY_PARA && !pNewStyle->IsConditional())
+        nMask &= ~SWSTYLEBIT_CONDCOLL;
+    m_pBasePool->Make(sStyleName, m_eFamily, nMask);
+    pNewStyle->SetDoc(m_pDocShell->GetDoc(), m_pBasePool);
+    pNewStyle->SetStyleName(sStyleName);
+    const OUString sParentStyleName(pNewStyle->GetParentStyleName());
+    if (!sParentStyleName.isEmpty())
+    {
+        m_pBasePool->SetSearchMask(m_eFamily);
+        SfxStyleSheetBase* pParentBase = m_pBasePool->Find(sParentStyleName);
+        if(pParentBase && pParentBase->GetFamily() == m_eFamily &&
+            &pParentBase->GetPool() == m_pBasePool)
+            m_pBasePool->SetParent(m_eFamily, sStyleName, sParentStyleName);
+    }
+    // after all, we still need to apply the properties of the descriptor
+    pNewStyle->ApplyDescriptorProperties();
 }
 
 void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement)
