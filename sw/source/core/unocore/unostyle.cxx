@@ -112,6 +112,19 @@ namespace
         { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME},
         { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING}
     };
+    constexpr sal_uInt16 nPoolChrNormalRange = RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
+    constexpr sal_uInt16 nPoolChrHtmlRange   = RES_POOLCHR_HTML_END   - RES_POOLCHR_HTML_BEGIN;
+    constexpr sal_uInt16 nPoolCollTextRange     = RES_POOLCOLL_TEXT_END     - RES_POOLCOLL_TEXT_BEGIN;
+    constexpr sal_uInt16 nPoolCollListsRange    = RES_POOLCOLL_LISTS_END    - RES_POOLCOLL_LISTS_BEGIN;
+    constexpr sal_uInt16 nPoolCollExtraRange    = RES_POOLCOLL_EXTRA_END    - RES_POOLCOLL_EXTRA_BEGIN;
+    constexpr sal_uInt16 nPoolCollRegisterRange = RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN;
+    constexpr sal_uInt16 nPoolCollDocRange      = RES_POOLCOLL_DOC_END      - RES_POOLCOLL_DOC_BEGIN;
+    constexpr sal_uInt16 nPoolCollHtmlRange     = RES_POOLCOLL_HTML_END     - RES_POOLCOLL_HTML_BEGIN;
+    constexpr sal_uInt16 nPoolCollListsStackedStart    = nPoolCollTextRange;
+    constexpr sal_uInt16 nPoolCollExtraStackedStart    = nPoolCollListsStackedStart    + nPoolCollListsRange;
+    constexpr sal_uInt16 nPoolCollRegisterStackedStart = nPoolCollExtraStackedStart    + nPoolCollExtraRange;
+    constexpr sal_uInt16 nPoolCollDocStackedStart      = nPoolCollRegisterStackedStart + nPoolCollRegisterRange;
+    constexpr sal_uInt16 nPoolCollHtmlStackedStart     = nPoolCollDocStackedStart      + nPoolCollDocRange;
 }
 
 using namespace ::com::sun::star;
@@ -346,30 +359,6 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
     return aSeq;
 }
 
-// Already implemented autostyle families: 3
-#define AUTOSTYLE_FAMILY_COUNT 3
-const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
-{
-    IStyleAccess::AUTO_STYLE_CHAR,
-    IStyleAccess::AUTO_STYLE_RUBY,
-    IStyleAccess::AUTO_STYLE_PARA
-};
-
-class SwAutoStylesEnumImpl
-{
-    std::vector<SfxItemSet_Pointer_t> mAutoStyles;
-    std::vector<SfxItemSet_Pointer_t>::iterator aIter;
-    SwDoc* pDoc;
-    IStyleAccess::SwAutoStyleFamily eFamily;
-public:
-    SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
-    bool hasMoreElements() { return aIter != mAutoStyles.end(); }
-    SfxItemSet_Pointer_t nextElement() { return *(aIter++); }
-    IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
-    SwDoc* getDoc() const { return pDoc; }
-};
-
-
 static bool lcl_GetHeaderFooterItem(
         SfxItemSet const& rSet, OUString const& rPropName, bool const bFooter,
         SvxSetItem const*& o_rpItem)
@@ -393,9 +382,7 @@ static sal_Int32 lcl_GetCountOrNameImpl(const SwDoc&, OUString*, sal_Int32);
 template<>
 sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_CHAR>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
-    constexpr sal_Int32 nBaseCount =
-            RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN +
-            RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
+    constexpr sal_Int32 nBaseCount = nPoolChrHtmlRange + nPoolCollTextRange;
     nIndex -= nBaseCount;
     sal_Int32 nCount = 0;
     for(auto pFormat : *rDoc.GetCharFormats())
@@ -421,13 +408,7 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_CHAR>(const SwDoc& rDoc, OUStr
 template<>
 sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PARA>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
-    constexpr sal_Int32 nBaseCount =
-            RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN +
-            RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
-            RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN +
-            RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN +
-            RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
-            RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN;
+    constexpr sal_Int32 nBaseCount = nPoolCollHtmlStackedStart + nPoolCollHtmlRange;
     nIndex -= nBaseCount;
     sal_Int32 nCount = 0;
     for(auto pColl : *rDoc.GetTextFormatColls())
@@ -553,29 +534,17 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
-            constexpr sal_Int32 nPoolChrNormalRange = RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
-            constexpr sal_Int32 nPoolChrHtmlRange = RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN;
             static_assert(nPoolChrNormalRange > 0 && nPoolChrHtmlRange > 0, "invalid pool range");
-            if(nIndex < nPoolChrNormalRange)
+            const sal_uInt16 nIndex16 = static_cast<sal_uInt16>(nIndex);
+            if(nIndex16 < nPoolChrNormalRange)
                 SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLCHR_NORMAL_BEGIN + nIndex), sStyleName);
-            else if(nIndex < (nPoolChrHtmlRange+nPoolChrNormalRange))
+            else if(nIndex16 < (nPoolChrHtmlRange+nPoolChrNormalRange))
                 SwStyleNameMapper::FillUIName(RES_POOLCHR_HTML_BEGIN + nPoolChrNormalRange + nIndex, sStyleName );
         }
         break;
         case SFX_STYLE_FAMILY_PARA:
         {
-            constexpr sal_uInt16 nPoolCollTextRange     = RES_POOLCOLL_TEXT_END     - RES_POOLCOLL_TEXT_BEGIN;
-            constexpr sal_uInt16 nPoolCollListsRange    = RES_POOLCOLL_LISTS_END    - RES_POOLCOLL_LISTS_BEGIN;
-            constexpr sal_uInt16 nPoolCollExtraRange    = RES_POOLCOLL_EXTRA_END    - RES_POOLCOLL_EXTRA_BEGIN;
-            constexpr sal_uInt16 nPoolCollRegisterRange = RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN;
-            constexpr sal_uInt16 nPoolCollDocRange      = RES_POOLCOLL_DOC_END      - RES_POOLCOLL_DOC_BEGIN;
-            constexpr sal_uInt16 nPoolCollHtmlRange     = RES_POOLCOLL_HTML_END     - RES_POOLCOLL_HTML_BEGIN;
             static_assert(nPoolCollTextRange > 0 && nPoolCollListsRange > 0 && nPoolCollExtraRange > 0 && nPoolCollRegisterRange > 0 && nPoolCollDocRange > 0 && nPoolCollHtmlRange > 0, "weird pool range");
-            constexpr sal_uInt16 nPoolCollListsStackedStart    = nPoolCollTextRange;
-            constexpr sal_uInt16 nPoolCollExtraStackedStart    = nPoolCollListsStackedStart    + nPoolCollListsRange;
-            constexpr sal_uInt16 nPoolCollRegisterStackedStart = nPoolCollExtraStackedStart    + nPoolCollExtraRange;
-            constexpr sal_uInt16 nPoolCollDocStackedStart      = nPoolCollRegisterStackedStart + nPoolCollRegisterRange;
-            constexpr sal_uInt16 nPoolCollHtmlStackedStart     = nPoolCollDocStackedStart      + nPoolCollDocRange;
             const sal_uInt16 nIndex16 = static_cast<sal_uInt16>(nIndex);
             if(nIndex16 < nPoolCollListsStackedStart)
                 SwStyleNameMapper::FillUIName(RES_POOLCOLL_TEXT_BEGIN                                     + nIndex16, sStyleName);
@@ -3813,6 +3782,29 @@ uno::Reference< container::XNameReplace > SwXFrameStyle::getEvents(  ) throw(uno
 {
     return new SwFrameStyleEventDescriptor( *this );
 }
+
+// Already implemented autostyle families: 3
+#define AUTOSTYLE_FAMILY_COUNT 3
+const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
+{
+    IStyleAccess::AUTO_STYLE_CHAR,
+    IStyleAccess::AUTO_STYLE_RUBY,
+    IStyleAccess::AUTO_STYLE_PARA
+};
+
+class SwAutoStylesEnumImpl
+{
+    std::vector<SfxItemSet_Pointer_t> mAutoStyles;
+    std::vector<SfxItemSet_Pointer_t>::iterator aIter;
+    SwDoc* pDoc;
+    IStyleAccess::SwAutoStyleFamily eFamily;
+public:
+    SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
+    bool hasMoreElements() { return aIter != mAutoStyles.end(); }
+    SfxItemSet_Pointer_t nextElement() { return *(aIter++); }
+    IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
+    SwDoc* getDoc() const { return pDoc; }
+};
 
 SwXAutoStyles::SwXAutoStyles(SwDocShell& rDocShell) :
     SwUnoCollection(rDocShell.GetDoc()), m_pDocShell( &rDocShell )
