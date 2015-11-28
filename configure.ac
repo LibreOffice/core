@@ -4087,6 +4087,10 @@ AC_SUBST(x_CXXFLAGS)
 AC_SUBST(x_OBJCFLAGS)
 AC_SUBST(x_OBJCXXFLAGS)
 AC_SUBST(x_LDFLAGS)
+AC_MSG_CHECKING(for explicit COMSPEC)
+if test -z "$COMSPEC"; then
+    AC_MSG_ERROR([COMSPEC not set in Environment, please set it an rerun])
+fi
 
 #
 # determine CPUNAME, OS, ...
