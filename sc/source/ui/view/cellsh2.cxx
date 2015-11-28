@@ -107,6 +107,21 @@ static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange 
         bRet = false;
     }
 
+    if ( bRet )
+    {
+        rRange.PutInOrder();
+        SCCOL nStartCol = rRange.aStart.Col(), nEndCol = rRange.aEnd.Col();
+        SCROW nStartRow = rRange.aStart.Row(), nEndRow = rRange.aEnd.Row();
+        bool bShrunk = false;
+        pDoc->ShrinkToUsedDataArea( bShrunk, rRange.aStart.Tab(), nStartCol, nStartRow,
+                                   nEndCol, nEndRow, false, false, true );
+        if ( bShrunk )
+        {
+            rRange.aStart.SetRow( nStartRow );
+            rRange.aEnd.SetRow( nEndRow );
+        }
+    }
+
     return bRet;
 }
 
