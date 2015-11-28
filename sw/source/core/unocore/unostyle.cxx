@@ -621,19 +621,13 @@ uno::Sequence<OUString> SwXStyleFamily::getElementNames() throw( uno::RuntimeExc
 sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    bool bRet = false;
-    if(m_pBasePool)
-    {
-        OUString sStyleName;
-        SwStyleNameMapper::FillUIName(rName, sStyleName, lcl_GetSwEnumFromSfxEnum ( m_eFamily ), true );
-        m_pBasePool->SetSearchMask(m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
-        bRet = nullptr != pBase;
-    }
-    else
+    if(!m_pBasePool)
         throw uno::RuntimeException();
-    return bRet;
-
+    OUString sStyleName;
+    SwStyleNameMapper::FillUIName(rName, sStyleName, lcl_GetSwEnumFromSfxEnum(m_eFamily), true);
+    m_pBasePool->SetSearchMask(m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
+    return nullptr != pBase;
 }
 
 uno::Type SwXStyleFamily::getElementType() throw( uno::RuntimeException, std::exception )
