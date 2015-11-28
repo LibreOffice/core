@@ -105,13 +105,7 @@ namespace
                 , m_nResId(nResId)
             {}
     };
-    static const std::vector<StyleFamilyEntry> our_vStyleFamilyEntries {
-        { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER },
-        { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH },
-        { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE },
-        { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME },
-        { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING }
-    };
+    static const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
     constexpr sal_uInt16 nPoolChrNormalRange = RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
     constexpr sal_uInt16 nPoolChrHtmlRange   = RES_POOLCHR_HTML_END   - RES_POOLCHR_HTML_BEGIN;
     constexpr sal_uInt16 nPoolCollTextRange     = RES_POOLCOLL_TEXT_END     - RES_POOLCOLL_TEXT_BEGIN;
@@ -129,6 +123,7 @@ namespace
     constexpr sal_uInt16 nPoolCollDocStackedStart      = nPoolCollRegisterStackedStart + nPoolCollRegisterRange;
     constexpr sal_uInt16 nPoolCollHtmlStackedStart     = nPoolCollDocStackedStart      + nPoolCollDocRange;
 }
+static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries();
 
 using namespace ::com::sun::star;
 
@@ -151,9 +146,10 @@ namespace sw
         sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32);
         static const StyleFamilyEntry& InitEntry(SfxStyleFamily eFamily)
         {
-            const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+            auto pEntries = lcl_GetStyleFamilyEntries();
+            const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
                     [eFamily] (const StyleFamilyEntry& e) { return e.m_eFamily == eFamily; });
-            assert(pEntry != our_vStyleFamilyEntries.end());
+            assert(pEntry != pEntries->end());
             return *pEntry;
         }
     public:
@@ -262,42 +258,46 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+    auto pEntries(lcl_GetStyleFamilyEntries());
+    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
         [&Name] (const StyleFamilyEntry& e) { return e.m_sName == Name; });
-    if(pEntry == our_vStyleFamilyEntries.end())
+    if(pEntry == pEntries->end())
         throw container::NoSuchElementException();
-    return getByIndex(pEntry-our_vStyleFamilyEntries.begin());
+    return getByIndex(pEntry-pEntries->begin());
 }
 
 uno::Sequence< OUString > SwXStyleFamilies::getElementNames() throw( uno::RuntimeException, std::exception )
 {
-    uno::Sequence< OUString > aNames(our_vStyleFamilyEntries.size());
-    std::transform(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+    auto pEntries(lcl_GetStyleFamilyEntries());
+    uno::Sequence<OUString> aNames(pEntries->size());
+    std::transform(pEntries->begin(), pEntries->end(),
             aNames.begin(), [] (const StyleFamilyEntry& e) { return e.m_sName; });
     return aNames;
 }
 
 sal_Bool SwXStyleFamilies::hasByName(const OUString& Name) throw( uno::RuntimeException, std::exception )
 {
-    const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+    auto pEntries(lcl_GetStyleFamilyEntries());
+    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
         [&Name] (const StyleFamilyEntry& e) { return e.m_sName == Name; });
-    return pEntry != our_vStyleFamilyEntries.end();
+    return pEntry != pEntries->end();
 }
 
 sal_Int32 SwXStyleFamilies::getCount() throw( uno::RuntimeException, std::exception )
 {
-    return our_vStyleFamilyEntries.size();
+    return lcl_GetStyleFamilyEntries()->size();
 }
 
 uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
+    auto pEntries(lcl_GetStyleFamilyEntries());
     SolarMutexGuard aGuard;
-    if(nIndex < 0 || nIndex >= static_cast<sal_Int32>(our_vStyleFamilyEntries.size()))
+    if(nIndex < 0 || nIndex >= static_cast<sal_Int32>(pEntries->size()))
         throw lang::IndexOutOfBoundsException();
     if(!IsValid())
         throw uno::RuntimeException();
-    auto eFamily = our_vStyleFamilyEntries[nIndex].m_eFamily;
+    auto eFamily = (*pEntries)[nIndex].m_eFamily;
     assert(eFamily != SFX_STYLE_FAMILY_ALL);
     auto& rxFamily = m_vFamilies[eFamily];
     if(!rxFamily.is())
@@ -772,6 +772,21 @@ SwXStyle* XStyleFamily::_FindStyle(const OUString& rStyleName) const
     return nullptr;
 }
 
+static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
+{
+    if(!our_pStyleFamilyEntries)
+    {
+        our_pStyleFamilyEntries = new std::vector<StyleFamilyEntry>{
+            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER },
+            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH },
+            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE },
+            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME },
+            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING }
+       };
+    }
+    return our_pStyleFamilyEntries;
+}
+
 class SwStyleProperties_Impl
 {
     const PropertyEntryVector_t aPropertyEntries;
@@ -886,9 +901,10 @@ void SwStyleProperties_Impl::GetProperty( const OUString &rPropertyName, const u
 
 static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
 {
-    const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
+    auto pEntries(lcl_GetStyleFamilyEntries());
+    const auto pEntry = std::find_if(pEntries->begin(), pEntries->end(),
             [eFamily] (const StyleFamilyEntry& e) { return e.m_eFamily == eFamily; });
-    if(pEntry != our_vStyleFamilyEntries.end())
+    if(pEntry != pEntries->end())
         return pEntry->m_aPoolId;
     SAL_WARN("sw.uno", "someone asking for all styles in unostyle.cxx!" );
     return nsSwGetPoolIdFromName::GET_POOLID_CHRFMT;
