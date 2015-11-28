@@ -133,16 +133,29 @@ namespace sw
 
         SwXStyle*               _FindStyle(const OUString& rStyleName) const;
     public:
-        XStyleFamily(SwDocShell* pDocShell, const SfxStyleFamily eFamily);
-        virtual ~XStyleFamily();
+        XStyleFamily(SwDocShell* pDocShell, const SfxStyleFamily eFamily)
+            : m_eFamily(eFamily)
+            , m_pBasePool(pDocShell->GetStyleSheetPool())
+            , m_pDocShell(pDocShell)
+        {
+            StartListening(*m_pBasePool);
+        }
+
+        virtual ~XStyleFamily() {};
 
         //XIndexAccess
         virtual sal_Int32 SAL_CALL getCount() throw( uno::RuntimeException, std::exception ) override;
         virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
 
         //XElementAccess
-        virtual uno::Type SAL_CALL SAL_CALL getElementType(  ) throw(uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL SAL_CALL hasElements(  ) throw(uno::RuntimeException, std::exception) override;
+        virtual uno::Type SAL_CALL SAL_CALL getElementType(  ) throw(uno::RuntimeException, std::exception) override
+            { return cppu::UnoType<style::XStyle>::get(); };
+        virtual sal_Bool SAL_CALL SAL_CALL hasElements(  ) throw(uno::RuntimeException, std::exception) override
+        {
+            if(!m_pBasePool)
+                throw uno::RuntimeException();
+            return true;
+        }
 
         //XNameAccess
         virtual uno::Any SAL_CALL getByName(const OUString& Name) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
@@ -155,26 +168,43 @@ namespace sw
         virtual void SAL_CALL removeByName(const OUString& Name) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
 
         //XPropertySet
-        virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
+        virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (uno::RuntimeException, std::exception) override
+            { return {}; };
+        virtual void SAL_CALL setPropertyValue( const OUString&, const uno::Any&) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+            { SAL_WARN("sw.uno", "###unexpected!"); };
         virtual uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addPropertyChangeListener( const OUString&, const uno::Reference<beans::XPropertyChangeListener>&) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+            { SAL_WARN("sw.uno", "###unexpected!"); };
+        virtual void SAL_CALL removePropertyChangeListener( const OUString&, const uno::Reference<beans::XPropertyChangeListener>&) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+            { SAL_WARN("sw.uno", "###unexpected!"); };
+        virtual void SAL_CALL addVetoableChangeListener(const OUString&, const uno::Reference<beans::XVetoableChangeListener>&) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+            { SAL_WARN("sw.uno", "###unexpected!"); };
+        virtual void SAL_CALL removeVetoableChangeListener(const OUString&, const uno::Reference<beans::XVetoableChangeListener>&) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+            { SAL_WARN("sw.uno", "###unexpected!"); };
 
         //SfxListener
-        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+        virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override
+        {
+            const SfxSimpleHint *pHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
+            if(pHint && (pHint->GetId() & SFX_HINT_DYING))
+            {
+                m_pBasePool = nullptr, m_pDocShell = nullptr;
+                EndListening(rBC);
+            }
+        }
 
         //XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException, std::exception ) override;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( uno::RuntimeException, std::exception ) override;
-        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException, std::exception ) override
+            { return {"XStyleFamily"}; };
+        virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception ) override
+            { return cppu::supportsService(this, rServiceName); };
+        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( uno::RuntimeException, std::exception ) override
+            { return { "com.sun.star.style.StyleFamily" }; }
     };
 
 }
-using sw::XStyleFamily;
 
+using sw::XStyleFamily;
 
 static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
 {
@@ -316,17 +346,6 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
     return aSeq;
 }
 
-OUString XStyleFamily::getImplementationName() throw( uno::RuntimeException, std::exception )
-    { return {"XStyleFamily"}; }
-
-sal_Bool XStyleFamily::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-uno::Sequence< OUString > XStyleFamily::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
-    { return { "com.sun.star.style.StyleFamily" }; }
-
 // Already implemented autostyle families: 3
 #define AUTOSTYLE_FAMILY_COUNT 3
 const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
@@ -350,18 +369,6 @@ public:
     SwDoc* getDoc() const { return pDoc; }
 };
 
-XStyleFamily::XStyleFamily(SwDocShell* pDocSh, const SfxStyleFamily eFamily) :
-        m_eFamily(eFamily),
-        m_pBasePool(pDocSh->GetStyleSheetPool()),
-        m_pDocShell(pDocSh)
-{
-    StartListening(*m_pBasePool);
-}
-
-XStyleFamily::~XStyleFamily()
-{
-
-}
 
 static bool lcl_GetHeaderFooterItem(
         SfxItemSet const& rSet, OUString const& rPropName, bool const bFooter,
@@ -690,15 +697,6 @@ sal_Bool XStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeExcep
     return nullptr != pBase;
 }
 
-uno::Type XStyleFamily::getElementType() throw( uno::RuntimeException, std::exception )
-    { return cppu::UnoType<style::XStyle>::get(); }
-
-sal_Bool XStyleFamily::hasElements() throw( uno::RuntimeException, std::exception )
-{
-    if(!m_pBasePool)
-        throw uno::RuntimeException();
-    return true;
-}
 
 void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
         throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
@@ -788,12 +786,6 @@ void XStyleFamily::removeByName(const OUString& rName) throw( container::NoSuchE
     m_pBasePool->Remove(pBase);
 }
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL XStyleFamily::getPropertySetInfo(  ) throw (uno::RuntimeException, std::exception)
-    { return {}; }
-
-void SAL_CALL XStyleFamily::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-    { SAL_WARN("sw.uno", "###unexpected!"); }
-
 uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if(sPropertyName != "DisplayName")
@@ -805,28 +797,6 @@ uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName 
     return uno::makeAny(SW_RESSTR(pEntry->m_nRedId));
 }
 
-void SAL_CALL XStyleFamily::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-    { SAL_WARN("sw.uno", "###unexpected!"); }
-
-void SAL_CALL XStyleFamily::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-    { SAL_WARN("sw.uno", "###unexpected!"); }
-
-void SAL_CALL XStyleFamily::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-    { SAL_WARN("sw.uno", "###unexpected!"); }
-
-void SAL_CALL XStyleFamily::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-    { SAL_WARN("sw.uno", "###unexpected!"); }
-
-void XStyleFamily::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
-{
-    const SfxSimpleHint *pHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-    if( pHint && ( pHint->GetId() & SFX_HINT_DYING ) )
-    {
-        m_pBasePool = nullptr;
-        m_pDocShell = nullptr;
-        EndListening(rBC);
-    }
-}
 
 SwXStyle* XStyleFamily::_FindStyle(const OUString& rStyleName) const
 {
