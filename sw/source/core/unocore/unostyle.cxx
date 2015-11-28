@@ -303,10 +303,10 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     auto eFamily = our_vStyleFamilyEntries[nIndex].m_eFamily;
     assert(eFamily != SFX_STYLE_FAMILY_ALL);
-    auto& rxContainer = m_vContainers[eFamily];
-    if(!rxContainer.is())
-        rxContainer = new XStyleFamily(m_pDocShell, eFamily);
-    return uno::makeAny(rxContainer);
+    auto& rxFamily = m_vFamilies[eFamily];
+    if(!rxFamily.is())
+        rxFamily = new XStyleFamily(m_pDocShell, eFamily);
+    return uno::makeAny(rxFamily);
 }
 
 uno::Type SwXStyleFamilies::getElementType()

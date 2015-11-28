@@ -66,7 +66,7 @@ class SwXStyleFamilies :  public cppu::WeakImplHelper
 {
     SwDocShell*         m_pDocShell;
 
-    std::map<SfxStyleFamily, css::uno::Reference<css::container::XNameContainer>> m_vContainers;
+    std::map<SfxStyleFamily, css::uno::Reference<css::container::XNameContainer>> m_vFamilies;
 protected:
     virtual ~SwXStyleFamilies();
 public:
