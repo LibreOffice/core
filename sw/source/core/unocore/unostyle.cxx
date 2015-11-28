@@ -321,10 +321,10 @@ static bool lcl_GetHeaderFooterItem(
 }
 
 template<enum SfxStyleFamily>
-static sal_Int32 lcl_GetCountOrName2(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex);
+static sal_Int32 lcl_GetCountOrNameImpl(const SwDoc&, OUString*, sal_Int32);
 
 template<>
-sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_CHAR>(const SwDoc &rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_CHAR>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     constexpr sal_Int32 nBaseCount =
             RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN +
@@ -352,7 +352,7 @@ sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_CHAR>(const SwDoc &rDoc, OUString
 }
 
 template<>
-sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PARA>(const SwDoc &rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PARA>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     constexpr sal_Int32 nBaseCount =
             RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN +
@@ -380,7 +380,7 @@ sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PARA>(const SwDoc &rDoc, OUString
 }
 
 template<>
-sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_FRAME>(const SwDoc &rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_FRAME>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     constexpr sal_Int32 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
     nIndex -= nBaseCount;
@@ -402,7 +402,7 @@ sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_FRAME>(const SwDoc &rDoc, OUStrin
 }
 
 template<>
-sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PAGE>(const SwDoc &rDoc, OUString *pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PAGE>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     sal_Int32 nCount = 0;
     const sal_Int32 nBaseCount = RES_POOLPAGE_END - RES_POOLPAGE_BEGIN;
@@ -427,7 +427,7 @@ sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PAGE>(const SwDoc &rDoc, OUString
 }
 
 template<>
-sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc &rDoc, OUString* pString, sal_Int32 nIndex)
+sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
     constexpr sal_Int32 nBaseCount = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
     nIndex -= nBaseCount;
@@ -448,37 +448,20 @@ sal_Int32 lcl_GetCountOrName2<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc &rDoc, OUStri
     return nCount + nBaseCount;
 }
 
-static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
-    SfxStyleFamily eFamily, OUString *pString, sal_Int32 nIndex = SAL_MAX_INT32)
+static sal_Int32 lcl_GetCountOrName(const SwDoc& rDoc, SfxStyleFamily eFamily, OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32)
 {
-    switch( eFamily )
+    switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-        {
-            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_CHAR>(rDoc, pString, nIndex);
-        }
-        break;
+            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_CHAR>(rDoc, pString, nIndex);
         case SFX_STYLE_FAMILY_PARA:
-        {
-            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_PARA>(rDoc, pString, nIndex);
-        }
-        break;
+            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PARA>(rDoc, pString, nIndex);
         case SFX_STYLE_FAMILY_FRAME:
-        {
-            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_FRAME>(rDoc, pString, nIndex);
-        }
-        break;
+            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_FRAME>(rDoc, pString, nIndex);
         case SFX_STYLE_FAMILY_PAGE:
-        {
-            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_PAGE>(rDoc, pString, nIndex);
-        }
-        break;
+            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PAGE>(rDoc, pString, nIndex);
         case SFX_STYLE_FAMILY_PSEUDO:
-        {
-            return lcl_GetCountOrName2<SFX_STYLE_FAMILY_PSEUDO>(rDoc, pString, nIndex);
-        }
-        break;
-
+            return lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PSEUDO>(rDoc, pString, nIndex);
         default:
             return 0;
     }
@@ -487,7 +470,7 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
 sal_Int32 SwXStyleFamily::getCount() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    return lcl_GetCountOrName ( *m_pDocShell->GetDoc(), m_eFamily, nullptr );
+    return lcl_GetCountOrName(*m_pDocShell->GetDoc(), m_eFamily, nullptr);
 }
 
 uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
