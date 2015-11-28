@@ -1015,19 +1015,12 @@ void SmEditWindow::InsertText(const OUString& rText)
         ESelection aSelection = pEditView->GetSelection();
         OUString aCurrentFormula = pEditView->GetEditEngine()->GetText();
         sal_Int32 nStartIndex = 0;
-        sal_Int32 nEndIndex = 0;
 
         // get the start position (when we get a multi line formula)
         for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nStartPara; nParaPos++)
              nStartIndex = aCurrentFormula.indexOf("\n", nStartIndex) + 1;
 
         nStartIndex += aSelection.nStartPos;
-
-        // get the end position (when we get a multi line formula)
-        for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nEndPara; nParaPos++)
-             nEndIndex = aCurrentFormula.indexOf("\n", nEndIndex) + 1;
-
-        nEndIndex += aSelection.nEndPos;
 
         // TODO: unify this function with the InsertCommand: The do the same thing for different
         // callers
