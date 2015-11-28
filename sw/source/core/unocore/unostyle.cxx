@@ -120,6 +120,9 @@ namespace
     constexpr sal_uInt16 nPoolCollRegisterRange = RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN;
     constexpr sal_uInt16 nPoolCollDocRange      = RES_POOLCOLL_DOC_END      - RES_POOLCOLL_DOC_BEGIN;
     constexpr sal_uInt16 nPoolCollHtmlRange     = RES_POOLCOLL_HTML_END     - RES_POOLCOLL_HTML_BEGIN;
+    constexpr sal_uInt16 nPoolFrameRange = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
+    constexpr sal_uInt16 nPoolPageRange  = RES_POOLPAGE_END - RES_POOLPAGE_BEGIN;
+    constexpr sal_uInt16 nPoolNumRange   = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
     constexpr sal_uInt16 nPoolCollListsStackedStart    = nPoolCollTextRange;
     constexpr sal_uInt16 nPoolCollExtraStackedStart    = nPoolCollListsStackedStart    + nPoolCollListsRange;
     constexpr sal_uInt16 nPoolCollRegisterStackedStart = nPoolCollExtraStackedStart    + nPoolCollExtraRange;
@@ -436,8 +439,7 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PARA>(const SwDoc& rDoc, OUStr
 template<>
 sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_FRAME>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
-    constexpr sal_Int32 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
-    nIndex -= nBaseCount;
+    nIndex -= nPoolFrameRange;
     sal_Int32 nCount = 0;
     for(const auto pFormat : *rDoc.GetFrameFormats())
     {
@@ -452,15 +454,14 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_FRAME>(const SwDoc& rDoc, OUSt
         }
         nCount++;
     }
-    return nCount + nBaseCount;
+    return nCount + nPoolFrameRange;
 }
 
 template<>
 sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PAGE>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
+    nIndex -= nPoolPageRange;
     sal_Int32 nCount = 0;
-    const sal_Int32 nBaseCount = RES_POOLPAGE_END - RES_POOLPAGE_BEGIN;
-    nIndex = nIndex - nBaseCount;
     const size_t nArrLen = rDoc.GetPageDescCnt();
     for(size_t i = 0; i < nArrLen; ++i)
     {
@@ -476,15 +477,14 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PAGE>(const SwDoc& rDoc, OUStr
             ++nCount;
         }
     }
-    nCount += nBaseCount;
+    nCount += nPoolPageRange;
     return nCount;
 }
 
 template<>
 sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
-    constexpr sal_Int32 nBaseCount = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
-    nIndex -= nBaseCount;
+    nIndex -= nPoolNumRange;
     sal_Int32 nCount = 0;
     for(const auto pRule : rDoc.GetNumRuleTable())
     {
@@ -499,7 +499,7 @@ sal_Int32 lcl_GetCountOrNameImpl<SFX_STYLE_FAMILY_PSEUDO>(const SwDoc& rDoc, OUS
         }
         ++nCount;
     }
-    return nCount + nBaseCount;
+    return nCount + nPoolNumRange;
 }
 
 sal_Int32 XStyleFamily::GetCountOrName(OUString* pString, sal_Int32 nIndex)
@@ -563,20 +563,20 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
         break;
         case SFX_STYLE_FAMILY_FRAME:
         {
-            if(nIndex < (RES_POOLFRM_END - RES_POOLFRM_BEGIN))
+            if(nIndex < nPoolFrameRange)
                 SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLFRM_BEGIN + nIndex), sStyleName);
         }
         break;
         case SFX_STYLE_FAMILY_PAGE:
         {
-            if(nIndex < (RES_POOLPAGE_END - RES_POOLPAGE_BEGIN ))
+            if(nIndex < nPoolPageRange)
                 SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLPAGE_BEGIN + nIndex), sStyleName);
         }
         break;
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            if(nIndex < (RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN))
-                SwStyleNameMapper::FillUIName ( static_cast< sal_uInt16 >(RES_POOLNUMRULE_BEGIN + nIndex), sStyleName );
+            if(nIndex < nPoolNumRange)
+                SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLNUMRULE_BEGIN + nIndex), sStyleName);
         }
         break;
 
