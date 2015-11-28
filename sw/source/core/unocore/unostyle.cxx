@@ -97,12 +97,12 @@ namespace
         SfxStyleFamily m_eFamily;
         SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
-        sal_uInt32 m_nRedId;
-        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const & sName, sal_uInt32 nResId)
+        sal_uInt32 m_nResId;
+        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId)
                 : m_eFamily(eFamily)
                 , m_aPoolId(aPoolId)
                 , m_sName(sName)
-                , m_nRedId(nResId)
+                , m_nResId(nResId)
             {}
     };
     static const std::vector<StyleFamilyEntry> our_vStyleFamilyEntries {
@@ -762,7 +762,7 @@ uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName 
     const auto pEntry = std::find_if(our_vStyleFamilyEntries.begin(), our_vStyleFamilyEntries.end(),
             [this] (const StyleFamilyEntry& e) { return m_eFamily == e.m_eFamily; });
     assert(pEntry != our_vStyleFamilyEntries.end()); // invalid family
-    return uno::makeAny(SW_RESSTR(pEntry->m_nRedId));
+    return uno::makeAny(SW_RESSTR(pEntry->m_nResId));
 }
 
 
