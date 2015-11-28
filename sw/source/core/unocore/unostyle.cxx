@@ -551,27 +551,11 @@ sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>(const sal_uInt16 nIndex)
     throw lang::IndexOutOfBoundsException();
 }
 
-template<>
-sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_FRAME>(const sal_uInt16 nIndex)
+template<sal_uInt16 nRangeBegin, sal_uInt16 nRangeSize>
+static sal_uInt16 lcl_TranslateIndexRange(const sal_uInt16 nIndex)
 {
-    if(nIndex < nPoolFrameRange)
-        return nIndex + RES_POOLFRM_BEGIN;
-    throw lang::IndexOutOfBoundsException();
-}
-
-template<>
-sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_PAGE>(const sal_uInt16 nIndex)
-{
-    if(nIndex < nPoolPageRange)
-        return nIndex + RES_POOLPAGE_BEGIN;
-    throw lang::IndexOutOfBoundsException();
-}
-
-template<>
-sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_PSEUDO>(const sal_uInt16 nIndex)
-{
-    if(nIndex < nPoolNumRange)
-        return nIndex + RES_POOLNUMRULE_BEGIN;
+    if(nIndex < nRangeSize)
+        return nIndex + nRangeBegin;
     throw lang::IndexOutOfBoundsException();
 }
 
@@ -758,11 +742,11 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
     if(!our_pStyleFamilyEntries)
     {
         our_pStyleFamilyEntries = new std::vector<StyleFamilyEntry>{
-            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_CHAR>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_CHAR>   },
-            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>   },
-            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_PAGE>   },
-            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>,  &lcl_TranslateIndex<SFX_STYLE_FAMILY_FRAME>  },
-            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>, &lcl_CreateStyle<SFX_STYLE_FAMILY_PSEUDO>, &lcl_TranslateIndex<SFX_STYLE_FAMILY_PSEUDO> }
+            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_CHAR>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_CHAR>                       },
+            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>                       },
+            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
+            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
+            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>, &lcl_CreateStyle<SFX_STYLE_FAMILY_PSEUDO>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   }
        };
     }
     return our_pStyleFamilyEntries;
