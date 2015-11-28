@@ -70,7 +70,7 @@
 
 using namespace com::sun::star;
 
-static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
+static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange, bool bDoEmptyCheckOnly )
 {
     OSL_ENSURE( pData, "lcl_GetTextToColumnsRange: pData is null!" );
 
@@ -100,11 +100,28 @@ static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange 
     const ScDocument* pDoc = pData->GetDocument();
     OSL_ENSURE( pDoc, "lcl_GetTextToColumnsRange: pDoc is null!" );
 
-    if ( bRet && pDoc->IsBlockEmpty( rRange.aStart.Tab(), rRange.aStart.Col(),
-                                     rRange.aStart.Row(), rRange.aEnd.Col(),
-                                     rRange.aEnd.Row() ) )
+    if ( bDoEmptyCheckOnly )
     {
-        bRet = false;
+        if ( bRet && pDoc->IsBlockEmpty( rRange.aStart.Tab(), rRange.aStart.Col(),
+                                         rRange.aStart.Row(), rRange.aEnd.Col(),
+                                         rRange.aEnd.Row() ) )
+        {
+            bRet = false;
+        }
+    }
+    else if ( bRet )
+    {
+        rRange.PutInOrder();
+        SCCOL nStartCol = rRange.aStart.Col(), nEndCol = rRange.aEnd.Col();
+        SCROW nStartRow = rRange.aStart.Row(), nEndRow = rRange.aEnd.Row();
+        bool bShrunk = false;
+        pDoc->ShrinkToUsedDataArea( bShrunk, rRange.aStart.Tab(), nStartCol, nStartRow,
+                                   nEndCol, nEndRow, false, false, true );
+        if ( bShrunk )
+        {
+            rRange.aStart.SetRow( nStartRow );
+            rRange.aEnd.SetRow( nEndRow );
+        }
     }
 
     return bRet;
@@ -957,7 +974,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 OSL_ENSURE( pData, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pData is null!" );
                 ScRange aRange;
 
-                if ( lcl_GetTextToColumnsRange( pData, aRange ) )
+                if ( lcl_GetTextToColumnsRange( pData, aRange, false ) )
                 {
                     ScDocument* pDoc = pData->GetDocument();
                     OSL_ENSURE( pDoc, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDoc is null!" );
@@ -1195,7 +1212,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_TEXT_TO_COLUMNS:
                 {
                     ScRange aRange;
-                    if ( !lcl_GetTextToColumnsRange( pData, aRange ) )
+                    if ( !lcl_GetTextToColumnsRange( pData, aRange, true ) )
                     {
                         rSet.DisableItem( nWhich );
                     }
