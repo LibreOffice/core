@@ -477,7 +477,6 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
     if(nIndex < 0)
         throw lang::IndexOutOfBoundsException();
     if(!m_pBasePool)
@@ -598,8 +597,7 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
                 xStyle = new SwXStyle(*m_pBasePool, m_eFamily, m_pDocShell->GetDoc(), sStyleName);
         }
     }
-    aRet.setValue(&xStyle, cppu::UnoType<style::XStyle>::get());
-    return aRet;
+    return uno::makeAny(xStyle);
 }
 
 uno::Any SwXStyleFamily::getByName(const OUString& rName)
