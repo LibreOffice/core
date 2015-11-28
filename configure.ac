@@ -282,6 +282,10 @@ if test "$build_os" = "cygwin"; then
     PathFormat "$BUILDDIR"
     BUILDDIR="$formatted_path"
     x_Cygwin=
+    AC_MSG_CHECKING(for explicit COMSPEC)
+    if test -z "$COMSPEC"; then
+        AC_MSG_ERROR([COMSPEC not set in Environment, please set it an rerun])
+    fi
 fi
 
 AC_SUBST(SRC_ROOT)
