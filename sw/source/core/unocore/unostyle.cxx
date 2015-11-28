@@ -689,33 +689,29 @@ void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rEleme
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(m_pBasePool)
-    {
-        m_pBasePool->SetSearchMask(m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(rName);
-        // replacements only for userdefined styles
-        if(!pBase)
-            throw container::NoSuchElementException();
-        if(!pBase->IsUserDefined())
-            throw lang::IllegalArgumentException();
-        //if theres an object available to this style then it must be invalidated
-        uno::Reference< style::XStyle >  xStyle = _FindStyle(pBase->GetName());
-        if(xStyle.is())
-        {
-            uno::Reference<lang::XUnoTunnel> xTunnel( xStyle, uno::UNO_QUERY);
-            if(xTunnel.is())
-            {
-                SwXStyle* pStyle = reinterpret_cast< SwXStyle * >(
-                        sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( SwXStyle::getUnoTunnelId()) ));
-                pStyle->Invalidate();
-            }
-        }
-
-        m_pBasePool->Remove(pBase);
-        insertByName(rName, rElement);
-    }
-    else
+    if(!m_pBasePool)
         throw uno::RuntimeException();
+    m_pBasePool->SetSearchMask(m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(rName);
+    // replacements only for userdefined styles
+    if(!pBase)
+        throw container::NoSuchElementException();
+    if(!pBase->IsUserDefined())
+        throw lang::IllegalArgumentException();
+    //if theres an object available to this style then it must be invalidated
+    uno::Reference<style::XStyle> xStyle = _FindStyle(pBase->GetName());
+    if(xStyle.is())
+    {
+        uno::Reference<lang::XUnoTunnel> xTunnel( xStyle, uno::UNO_QUERY);
+        if(xTunnel.is())
+        {
+            SwXStyle* pStyle = reinterpret_cast< SwXStyle * >(
+                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( SwXStyle::getUnoTunnelId()) ));
+            pStyle->Invalidate();
+        }
+    }
+    m_pBasePool->Remove(pBase);
+    insertByName(rName, rElement);
 }
 
 void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
