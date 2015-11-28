@@ -581,13 +581,7 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
 
     if(sStyleName.isEmpty())
         throw lang::IndexOutOfBoundsException();
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.m_eFamily);
-    if(!pBase)
-        throw uno::RuntimeException();
-    uno::Reference<style::XStyle> xStyle = _FindStyle(sStyleName);
-    if(!xStyle.is())
-        xStyle = m_rEntry.m_fCreateStyle(m_pBasePool, m_pDocShell, m_rEntry.m_eFamily == SFX_STYLE_FAMILY_FRAME ? pBase->GetName() : sStyleName);
-    return uno::makeAny(xStyle);
+    return getByName(sStyleName);
 }
 
 uno::Any XStyleFamily::getByName(const OUString& rName)
