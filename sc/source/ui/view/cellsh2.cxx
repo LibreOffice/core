@@ -100,11 +100,21 @@ static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange 
     const ScDocument* pDoc = pData->GetDocument();
     OSL_ENSURE( pDoc, "lcl_GetTextToColumnsRange: pDoc is null!" );
 
-    if ( bRet && pDoc->IsBlockEmpty( rRange.aStart.Tab(), rRange.aStart.Col(),
-                                     rRange.aStart.Row(), rRange.aEnd.Col(),
-                                     rRange.aEnd.Row() ) )
+    if ( bRet )
     {
-        bRet = false;
+        rRange.PutInOrder();
+        SCROW nRowItr;
+        for ( nRowItr = rRange.aStart.Row(); nRowItr <= rRange.aEnd.Row(); ++nRowItr )
+        {
+            if ( !pDoc->IsBlockEmpty( rRange.aStart.Tab(), rRange.aStart.Col(),
+                                      nRowItr, rRange.aEnd.Col(),
+                                      nRowItr ) )
+                break;
+        }
+        if ( nRowItr <= rRange.aEnd.Row() )
+            rRange.aStart.SetRow( nRowItr );
+        else
+            bRet = false;
     }
 
     return bRet;
