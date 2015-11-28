@@ -1023,12 +1023,6 @@ void SmEditWindow::InsertText(const OUString& rText)
 
         nStartIndex += aSelection.nStartPos;
 
-        // get the end position (when we get a multi line formula)
-        for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nEndPara; nParaPos++)
-             nEndIndex = aCurrentFormula.indexOf("\n", nEndIndex) + 1;
-
-        nEndIndex += aSelection.nEndPos;
-
         // TODO: unify this function with the InsertCommand: The do the same thing for different
         // callers
         OUString string(rText);
