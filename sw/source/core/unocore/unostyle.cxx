@@ -576,39 +576,30 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, lcl_GetSwEnumFromSfxEnum ( m_eFamily ), true );
-    if(m_pBasePool)
-    {
-        m_pBasePool->SetSearchMask(m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
-        if(pBase)
-        {
-            uno::Reference< style::XStyle >  xStyle = _FindStyle(sStyleName);
-            if(!xStyle.is())
-            {
-                switch(m_eFamily)
-                {
-                    case SFX_STYLE_FAMILY_PAGE:
-                        xStyle = new SwXPageStyle(*m_pBasePool, m_pDocShell, m_eFamily, sStyleName);
-                        break;
-                    case SFX_STYLE_FAMILY_FRAME:
-                        xStyle = new SwXFrameStyle(*m_pBasePool, m_pDocShell->GetDoc(), pBase->GetName());
-                        break;
-                    default:
-                        xStyle = new SwXStyle(*m_pBasePool, m_eFamily, m_pDocShell->GetDoc(), sStyleName);
-                }
-            }
-            aRet.setValue(&xStyle, cppu::UnoType<style::XStyle>::get());
-        }
-        else
-            throw container::NoSuchElementException();
-    }
-    else
+    SwStyleNameMapper::FillUIName(rName, sStyleName, lcl_GetSwEnumFromSfxEnum(m_eFamily), true);
+    if(!m_pBasePool)
         throw uno::RuntimeException();
-    return aRet;
-
+    m_pBasePool->SetSearchMask(m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
+    if(!pBase)
+        throw container::NoSuchElementException();
+    uno::Reference<style::XStyle> xStyle = _FindStyle(sStyleName);
+    if(!xStyle.is())
+    {
+        switch(m_eFamily)
+        {
+            case SFX_STYLE_FAMILY_PAGE:
+                xStyle = new SwXPageStyle(*m_pBasePool, m_pDocShell, m_eFamily, sStyleName);
+                break;
+            case SFX_STYLE_FAMILY_FRAME:
+                xStyle = new SwXFrameStyle(*m_pBasePool, m_pDocShell->GetDoc(), pBase->GetName());
+                break;
+            default:
+                xStyle = new SwXStyle(*m_pBasePool, m_eFamily, m_pDocShell->GetDoc(), sStyleName);
+        }
+    }
+    return uno::makeAny(xStyle);
 }
 
 uno::Sequence< OUString > SwXStyleFamily::getElementNames() throw( uno::RuntimeException, std::exception )
