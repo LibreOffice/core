@@ -115,22 +115,23 @@ namespace
             {}
     };
     static const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
-    constexpr sal_uInt16 nPoolChrNormalRange = RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
-    constexpr sal_uInt16 nPoolChrHtmlRange   = RES_POOLCHR_HTML_END   - RES_POOLCHR_HTML_BEGIN;
-    constexpr sal_uInt16 nPoolCollTextRange     = RES_POOLCOLL_TEXT_END     - RES_POOLCOLL_TEXT_BEGIN;
-    constexpr sal_uInt16 nPoolCollListsRange    = RES_POOLCOLL_LISTS_END    - RES_POOLCOLL_LISTS_BEGIN;
-    constexpr sal_uInt16 nPoolCollExtraRange    = RES_POOLCOLL_EXTRA_END    - RES_POOLCOLL_EXTRA_BEGIN;
-    constexpr sal_uInt16 nPoolCollRegisterRange = RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN;
-    constexpr sal_uInt16 nPoolCollDocRange      = RES_POOLCOLL_DOC_END      - RES_POOLCOLL_DOC_BEGIN;
-    constexpr sal_uInt16 nPoolCollHtmlRange     = RES_POOLCOLL_HTML_END     - RES_POOLCOLL_HTML_BEGIN;
-    constexpr sal_uInt16 nPoolFrameRange = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
-    constexpr sal_uInt16 nPoolPageRange  = RES_POOLPAGE_END - RES_POOLPAGE_BEGIN;
-    constexpr sal_uInt16 nPoolNumRange   = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
-    constexpr sal_uInt16 nPoolCollListsStackedStart    = nPoolCollTextRange;
-    constexpr sal_uInt16 nPoolCollExtraStackedStart    = nPoolCollListsStackedStart    + nPoolCollListsRange;
-    constexpr sal_uInt16 nPoolCollRegisterStackedStart = nPoolCollExtraStackedStart    + nPoolCollExtraRange;
-    constexpr sal_uInt16 nPoolCollDocStackedStart      = nPoolCollRegisterStackedStart + nPoolCollRegisterRange;
-    constexpr sal_uInt16 nPoolCollHtmlStackedStart     = nPoolCollDocStackedStart      + nPoolCollDocRange;
+    // these should really be constexprs, but MSVC still is apparently too stupid for them
+    #define nPoolChrNormalRange (RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN)
+    #define nPoolChrHtmlRange   (RES_POOLCHR_HTML_END   - RES_POOLCHR_HTML_BEGIN)
+    #define nPoolCollTextRange     ( RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN)
+    #define nPoolCollListsRange    ( RES_POOLCOLL_LISTS_END    - RES_POOLCOLL_LISTS_BEGIN)
+    #define nPoolCollExtraRange    ( RES_POOLCOLL_EXTRA_END    - RES_POOLCOLL_EXTRA_BEGIN)
+    #define nPoolCollRegisterRange ( RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN)
+    #define nPoolCollDocRange      ( RES_POOLCOLL_DOC_END      - RES_POOLCOLL_DOC_BEGIN)
+    #define nPoolCollHtmlRange     ( RES_POOLCOLL_HTML_END     - RES_POOLCOLL_HTML_BEGIN)
+    #define nPoolFrameRange ( RES_POOLFRM_END - RES_POOLFRM_BEGIN)
+    #define nPoolPageRange  ( RES_POOLPAGE_END - RES_POOLPAGE_BEGIN)
+    #define nPoolNumRange   ( RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN)
+    #define nPoolCollListsStackedStart    ( nPoolCollTextRange)
+    #define nPoolCollExtraStackedStart    ( nPoolCollListsStackedStart    + nPoolCollListsRange)
+    #define nPoolCollRegisterStackedStart ( nPoolCollExtraStackedStart    + nPoolCollExtraRange)
+    #define nPoolCollDocStackedStart      ( nPoolCollRegisterStackedStart + nPoolCollRegisterRange)
+    #define nPoolCollHtmlStackedStart     ( nPoolCollDocStackedStart      + nPoolCollDocRange)
 }
 static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries();
 
@@ -397,7 +398,7 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc&, OUString*, sal_Int32);
 template<>
 sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
-    constexpr sal_Int32 nBaseCount = nPoolChrHtmlRange + nPoolCollTextRange;
+    const sal_uInt16 nBaseCount = nPoolChrHtmlRange + nPoolCollTextRange;
     nIndex -= nBaseCount;
     sal_Int32 nCount = 0;
     for(auto pFormat : *rDoc.GetCharFormats())
@@ -423,7 +424,7 @@ sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>(const SwDoc& rDoc, OUString*
 template<>
 sal_Int32 lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
-    constexpr sal_Int32 nBaseCount = nPoolCollHtmlStackedStart + nPoolCollHtmlRange;
+    const sal_uInt16 nBaseCount = nPoolCollHtmlStackedStart + nPoolCollHtmlRange;
     nIndex -= nBaseCount;
     sal_Int32 nCount = 0;
     for(auto pColl : *rDoc.GetTextFormatColls())
