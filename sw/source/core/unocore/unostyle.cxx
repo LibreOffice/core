@@ -602,25 +602,20 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
     return uno::makeAny(xStyle);
 }
 
-uno::Sequence< OUString > SwXStyleFamily::getElementNames() throw( uno::RuntimeException, std::exception )
+uno::Sequence<OUString> SwXStyleFamily::getElementNames() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    std::vector< OUString > aRet;
-    if(m_pBasePool)
-    {
-        SfxStyleSheetIteratorPtr pIt = m_pBasePool->CreateIterator(m_eFamily, SFXSTYLEBIT_ALL);
-        OUString aString;
-        for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
-        {
-            SwStyleNameMapper::FillProgName(pStyle->GetName(), aString,
-                                            lcl_GetSwEnumFromSfxEnum ( m_eFamily ), true);
-            aRet.push_back(aString);
-        }
-    }
-    else
+    if(!m_pBasePool)
         throw uno::RuntimeException();
-
-    return comphelper::containerToSequence(aRet);
+    std::vector<OUString> vRet;
+    SfxStyleSheetIteratorPtr pIt = m_pBasePool->CreateIterator(m_eFamily, SFXSTYLEBIT_ALL);
+    for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
+    {
+        OUString sName;
+        SwStyleNameMapper::FillProgName(pStyle->GetName(), sName, lcl_GetSwEnumFromSfxEnum(m_eFamily), true);
+        vRet.push_back(sName);
+    }
+    return comphelper::containerToSequence(vRet);
 }
 
 sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeException, std::exception )
