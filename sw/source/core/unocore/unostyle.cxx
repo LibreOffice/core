@@ -96,19 +96,22 @@ namespace
     {
         using GetCountOrName_t = std::function<sal_Int32 (const SwDoc&, OUString*, sal_Int32)>;
         using CreateStyle_t = std::function<uno::Reference<css::style::XStyle>(SfxStyleSheetBasePool*, SwDocShell*, const OUString&)>;
+        using TranslateIndex_t = std::function<sal_uInt16(const sal_uInt16)>;
         SfxStyleFamily m_eFamily;
         SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
         sal_uInt32 m_nResId;
         GetCountOrName_t m_fGetCountOrName;
         CreateStyle_t m_fCreateStyle;
-        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t fGetCountOrName, CreateStyle_t fCreateStyle)
+        TranslateIndex_t m_fTranslateIndex;
+        StyleFamilyEntry(SfxStyleFamily eFamily, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t fGetCountOrName, CreateStyle_t fCreateStyle, TranslateIndex_t fTranslateIndex)
                 : m_eFamily(eFamily)
                 , m_aPoolId(aPoolId)
                 , m_sName(sName)
                 , m_nResId(nResId)
                 , m_fGetCountOrName(fGetCountOrName)
                 , m_fCreateStyle(fCreateStyle)
+                , m_fTranslateIndex(fTranslateIndex)
             {}
     };
     static const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
@@ -515,6 +518,63 @@ template<>
 uno::Reference< css::style::XStyle> lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
     { return new SwXPageStyle(*pBasePool, pDocShell, SFX_STYLE_FAMILY_PAGE, sStyleName); };
 
+template<enum SfxStyleFamily>
+static sal_uInt16 lcl_TranslateIndex(const sal_uInt16 nIndex);
+
+template<>
+sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_CHAR>(const sal_uInt16 nIndex)
+{
+    static_assert(nPoolChrNormalRange > 0 && nPoolChrHtmlRange > 0, "invalid pool range");
+    if(nIndex < nPoolChrNormalRange)
+        return nIndex + RES_POOLCHR_NORMAL_BEGIN;
+    else if(nIndex < (nPoolChrHtmlRange+nPoolChrNormalRange))
+        return nIndex + RES_POOLCHR_HTML_BEGIN + nPoolChrNormalRange;
+    throw lang::IndexOutOfBoundsException();
+}
+
+template<>
+sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>(const sal_uInt16 nIndex)
+{
+    static_assert(nPoolCollTextRange > 0 && nPoolCollListsRange > 0 && nPoolCollExtraRange > 0 && nPoolCollRegisterRange > 0 && nPoolCollDocRange > 0 && nPoolCollHtmlRange > 0, "weird pool range");
+    if(nIndex < nPoolCollListsStackedStart)
+        return nIndex + RES_POOLCOLL_TEXT_BEGIN;
+    else if(nIndex < nPoolCollExtraStackedStart)
+        return nIndex + RES_POOLCOLL_LISTS_BEGIN + nPoolCollListsStackedStart;
+    else if(nIndex < nPoolCollRegisterStackedStart)
+        return nIndex + RES_POOLCOLL_EXTRA_BEGIN + nPoolCollExtraStackedStart;
+    else if(nIndex < nPoolCollDocStackedStart)
+        return nIndex + RES_POOLCOLL_REGISTER_BEGIN + nPoolCollRegisterStackedStart;
+    else if(nIndex < nPoolCollHtmlStackedStart)
+        return nIndex + RES_POOLCOLL_DOC_BEGIN + nPoolCollDocStackedStart;
+    else if(nIndex < nPoolCollHtmlStackedStart + nPoolCollTextRange)
+        return nIndex + RES_POOLCOLL_HTML_BEGIN + nPoolCollHtmlStackedStart;
+    throw lang::IndexOutOfBoundsException();
+}
+
+template<>
+sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_FRAME>(const sal_uInt16 nIndex)
+{
+    if(nIndex < nPoolFrameRange)
+        return nIndex + RES_POOLFRM_BEGIN;
+    throw lang::IndexOutOfBoundsException();
+}
+
+template<>
+sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_PAGE>(const sal_uInt16 nIndex)
+{
+    if(nIndex < nPoolPageRange)
+        return nIndex + RES_POOLPAGE_BEGIN;
+    throw lang::IndexOutOfBoundsException();
+}
+
+template<>
+sal_uInt16 lcl_TranslateIndex<SFX_STYLE_FAMILY_PSEUDO>(const sal_uInt16 nIndex)
+{
+    if(nIndex < nPoolNumRange)
+        return nIndex + RES_POOLNUMRULE_BEGIN;
+    throw lang::IndexOutOfBoundsException();
+}
+
 uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
@@ -524,58 +584,10 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    switch(m_rEntry.m_eFamily)
+    try
     {
-        case SFX_STYLE_FAMILY_CHAR:
-        {
-            static_assert(nPoolChrNormalRange > 0 && nPoolChrHtmlRange > 0, "invalid pool range");
-            const sal_uInt16 nIndex16 = static_cast<sal_uInt16>(nIndex);
-            if(nIndex16 < nPoolChrNormalRange)
-                SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLCHR_NORMAL_BEGIN + nIndex), sStyleName);
-            else if(nIndex16 < (nPoolChrHtmlRange+nPoolChrNormalRange))
-                SwStyleNameMapper::FillUIName(RES_POOLCHR_HTML_BEGIN + nPoolChrNormalRange + nIndex, sStyleName );
-        }
-        break;
-        case SFX_STYLE_FAMILY_PARA:
-        {
-            static_assert(nPoolCollTextRange > 0 && nPoolCollListsRange > 0 && nPoolCollExtraRange > 0 && nPoolCollRegisterRange > 0 && nPoolCollDocRange > 0 && nPoolCollHtmlRange > 0, "weird pool range");
-            const sal_uInt16 nIndex16 = static_cast<sal_uInt16>(nIndex);
-            if(nIndex16 < nPoolCollListsStackedStart)
-                SwStyleNameMapper::FillUIName(RES_POOLCOLL_TEXT_BEGIN                                     + nIndex16, sStyleName);
-            else if(nIndex16 < nPoolCollExtraStackedStart)
-                SwStyleNameMapper::FillUIName(RES_POOLCOLL_LISTS_BEGIN    + nPoolCollListsStackedStart    + nIndex16, sStyleName);
-            else if(nIndex16 < nPoolCollRegisterStackedStart)
-                SwStyleNameMapper::FillUIName(RES_POOLCOLL_EXTRA_BEGIN    + nPoolCollExtraStackedStart    + nIndex16, sStyleName);
-            else if(nIndex16 < nPoolCollDocStackedStart)
-                SwStyleNameMapper::FillUIName(RES_POOLCOLL_REGISTER_BEGIN + nPoolCollRegisterStackedStart + nIndex16, sStyleName);
-            else if(nIndex16 < nPoolCollHtmlStackedStart)
-                SwStyleNameMapper::FillUIName(RES_POOLCOLL_DOC_BEGIN      + nPoolCollDocStackedStart      + nIndex16, sStyleName);
-            else if(nIndex16 < nPoolCollHtmlStackedStart + nPoolCollTextRange)
-                SwStyleNameMapper::FillUIName(RES_POOLCOLL_HTML_BEGIN     + nPoolCollHtmlStackedStart     + nIndex16, sStyleName);
-        }
-        break;
-        case SFX_STYLE_FAMILY_FRAME:
-        {
-            if(nIndex < nPoolFrameRange)
-                SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLFRM_BEGIN + nIndex), sStyleName);
-        }
-        break;
-        case SFX_STYLE_FAMILY_PAGE:
-        {
-            if(nIndex < nPoolPageRange)
-                SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLPAGE_BEGIN + nIndex), sStyleName);
-        }
-        break;
-        case SFX_STYLE_FAMILY_PSEUDO:
-        {
-            if(nIndex < nPoolNumRange)
-                SwStyleNameMapper::FillUIName(static_cast<sal_uInt16>(RES_POOLNUMRULE_BEGIN + nIndex), sStyleName);
-        }
-        break;
-
-        default:
-            ;
-    }
+        SwStyleNameMapper::FillUIName(m_rEntry.m_fTranslateIndex(nIndex), sStyleName);
+    } catch(...) {}
     if (sStyleName.isEmpty())
         GetCountOrName(&sStyleName, nIndex);
 
@@ -746,11 +758,11 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
     if(!our_pStyleFamilyEntries)
     {
         our_pStyleFamilyEntries = new std::vector<StyleFamilyEntry>{
-            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_CHAR>   },
-            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>   },
-            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>   },
-            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>  },
-            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>, &lcl_CreateStyle<SFX_STYLE_FAMILY_PSEUDO> }
+            { SFX_STYLE_FAMILY_CHAR,   nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,   "CharacterStyles", STR_STYLE_FAMILY_CHARACTER, &lcl_GetCountOrName<SFX_STYLE_FAMILY_CHAR>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_CHAR>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_CHAR>   },
+            { SFX_STYLE_FAMILY_PARA,   nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PARA>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PARA>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_PARA>   },
+            { SFX_STYLE_FAMILY_PAGE,   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SFX_STYLE_FAMILY_PAGE>,   &lcl_CreateStyle<SFX_STYLE_FAMILY_PAGE>,   &lcl_TranslateIndex<SFX_STYLE_FAMILY_PAGE>   },
+            { SFX_STYLE_FAMILY_FRAME,  nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SFX_STYLE_FAMILY_FRAME>,  &lcl_CreateStyle<SFX_STYLE_FAMILY_FRAME>,  &lcl_TranslateIndex<SFX_STYLE_FAMILY_FRAME>  },
+            { SFX_STYLE_FAMILY_PSEUDO, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SFX_STYLE_FAMILY_PSEUDO>, &lcl_CreateStyle<SFX_STYLE_FAMILY_PSEUDO>, &lcl_TranslateIndex<SFX_STYLE_FAMILY_PSEUDO> }
        };
     }
     return our_pStyleFamilyEntries;
