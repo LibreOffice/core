@@ -734,9 +734,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySe
 }
 
 void SAL_CALL SwXStyleFamily::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-{
-    OSL_FAIL( "###unexpected!" );
-}
+    { SAL_WARN("sw.uno", "###unexpected!"); }
 
 uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -764,24 +762,16 @@ uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyNam
 }
 
 void SAL_CALL SwXStyleFamily::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-{
-    OSL_FAIL( "###unexpected!" );
-}
+    { SAL_WARN("sw.uno", "###unexpected!"); }
 
 void SAL_CALL SwXStyleFamily::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-{
-    OSL_FAIL( "###unexpected!" );
-}
+    { SAL_WARN("sw.uno", "###unexpected!"); }
 
 void SAL_CALL SwXStyleFamily::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-{
-    OSL_FAIL( "###unexpected!" );
-}
+    { SAL_WARN("sw.uno", "###unexpected!"); }
 
 void SAL_CALL SwXStyleFamily::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-{
-    OSL_FAIL( "###unexpected!" );
-}
+    { SAL_WARN("sw.uno", "###unexpected!"); }
 
 void SwXStyleFamily::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
