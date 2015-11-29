@@ -24,7 +24,7 @@ public:
     CommandStatusHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                          const css::uno::Reference< css::frame::XFrame >& rxFrame,
                          const OUString& rCommandURL );
-    ~CommandStatusHelper();
+    virtual ~CommandStatusHelper();
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
@@ -103,7 +103,7 @@ class ToolbarAsMenuController : public cppu::ImplInheritanceHelper< svt::PopupMe
 public:
     ToolbarAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                              const css::uno::Sequence< css::uno::Any >& rxArgs );
-    ~ToolbarAsMenuController();
+    virtual ~ToolbarAsMenuController();
 
     // XPopupMenuController
     virtual void SAL_CALL updatePopupMenu() throw ( css::uno::RuntimeException, std::exception ) override;
