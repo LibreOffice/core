@@ -241,6 +241,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     {
         EnableItem( MN_READONLY_EDITDOC, sal_False );
     }
+    delete pState;
 
     if ( !sURL.Len() )
     {
