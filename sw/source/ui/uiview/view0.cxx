@@ -567,6 +567,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
         default:
+            delete pOpt;
             ASSERT(sal_False, Falsche Request-Methode);
             return;
     }
