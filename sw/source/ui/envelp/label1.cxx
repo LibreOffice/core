@@ -185,6 +185,8 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
 
     if (!bDouble)
         pRecs->C40_INSERT( SwLabRec, pRec, 0 );
+    else
+        delete pRec;
 
     sal_uInt16 nLstGroup = 0;
     const UNO_NMSPC::Sequence<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
