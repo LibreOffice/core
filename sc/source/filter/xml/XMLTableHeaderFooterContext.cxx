@@ -25,6 +25,7 @@
 #include <comphelper/extract.hxx>
 
 #include "unonames.hxx"
+#include "textuno.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -99,6 +100,8 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
 
 XMLTableHeaderFooterContext::~XMLTableHeaderFooterContext()
 {
+    rtl::Reference<ScHeaderFooterContentObj> pImp = ScHeaderFooterContentObj::getImplementation( xHeaderFooterContent );
+    pImp->dispose();
 }
 
 SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(

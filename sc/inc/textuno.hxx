@@ -102,6 +102,8 @@ public:
                                 throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(css::uno::RuntimeException, std::exception) override;
+
+    virtual void dispose();
 };
 
 //  ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
@@ -130,7 +132,9 @@ public:
     sal_uInt16                  GetPart() const         { return nPart; }
     rtl::Reference<ScHeaderFooterContentObj> GetContentObj() const { return rContentObj; }
 
-    const EditTextObject* GetTextObject() const { return mpTextObj;}
+    const EditTextObject* GetTextObject() const { return mpTextObj; }
+
+    void dispose() { rContentObj.clear(); }
 };
 
 /**
@@ -224,6 +228,8 @@ public:
                                 throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(css::uno::RuntimeException, std::exception) override;
+
+    virtual void dispose() { aTextData.dispose(); }
 };
 
 //  derived cursor objects for getImplementation and getText/getStart/getEnd

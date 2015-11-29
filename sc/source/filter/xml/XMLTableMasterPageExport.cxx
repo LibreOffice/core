@@ -23,9 +23,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "XMLTableMasterPageExport.hxx"
 #include <comphelper/extract.hxx>
+#include <rtl/ref.hxx>
 
 #include "unonames.hxx"
 #include "xmlexprt.hxx"
+#include "textuno.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -105,6 +107,14 @@ void XMLTableMasterPageExport::exportHeaderFooter(const css::uno::Reference < cs
     }
 }
 
+void lcl_DisposeXHeaderFooterContent( Reference < sheet::XHeaderFooterContent > xHFContent )
+{
+    if( !xHFContent.is() )
+        return;
+    rtl::Reference<ScHeaderFooterContentObj> pImp = ScHeaderFooterContentObj::getImplementation( xHFContent );
+    pImp->dispose();
+}
+
 void XMLTableMasterPageExport::exportMasterPageContent(
                 const Reference < XPropertySet > & rPropSet,
                 bool bAutoStyles )
@@ -162,6 +172,11 @@ void XMLTableMasterPageExport::exportMasterPageContent(
 
         exportHeaderFooter( xFooterLeft, XML_FOOTER_LEFT, bLeftFooter );
     }
+
+    lcl_DisposeXHeaderFooterContent( xHeader );
+    lcl_DisposeXHeaderFooterContent( xHeaderLeft );
+    lcl_DisposeXHeaderFooterContent( xFooter );
+    lcl_DisposeXHeaderFooterContent( xFooterLeft );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
