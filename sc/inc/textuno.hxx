@@ -132,9 +132,8 @@ public:
     ScHeaderFooterPart      GetPart() const         { return nPart; }
     const rtl::Reference<ScHeaderFooterContentObj>& GetContentObj() const { return rContentObj; }
 
-    const EditTextObject* GetTextObject() const { return mpTextObj.get(); }
-
-    void dispose() { rContentObj.clear(); }
+    const EditTextObject* GetTextObject() const { return mpTextObj; }
+    void dispose() { delete rContentObj; rContentObj=NULL; }
 };
 
 /**

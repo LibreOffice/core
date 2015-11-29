@@ -107,7 +107,7 @@ void XMLTableMasterPageExport::exportHeaderFooter(const css::uno::Reference < cs
     }
 }
 
-void lcl_DisposeXHeaderFooterContent( const Reference < sheet::XHeaderFooterContent >& xHFContent )
+void lcl_DisposeXHeaderFooterContent( Reference < sheet::XHeaderFooterContent > xHFContent )
 {
     if( !xHFContent.is() )
         return;
