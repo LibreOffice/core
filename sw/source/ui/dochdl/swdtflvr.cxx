@@ -2744,6 +2744,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             delete pCommandItem;
             delete pCommandTypeItem;
             delete pColumnNameItem;
+            delete pSelectionItem;
             delete pCursorItem;
         }
         else
