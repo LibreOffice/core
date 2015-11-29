@@ -327,6 +327,7 @@ int TxtBox::Read(HWPFile & hwpf)
           }
           TCell* *pArr = ::comphelper::newArray_null<TCell *>(ncell);
           if (!pArr) {
+                delete tbl;
                 return hwpf.SetState(HWP_InvalidFileFormat);
           }
           for( ii = 0 ; ii < ncell; ii++)
