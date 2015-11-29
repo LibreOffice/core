@@ -85,7 +85,7 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
             if ( (AstDeclaration*)pArray != pDecl2 )
             {
                 delete m_pComplexPart;
-                m_pComplexPart = pDecl2;
+                return (AstType*)pDecl2;
             }
         }
         return pArray;
