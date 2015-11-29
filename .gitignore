@@ -139,7 +139,3 @@ DerivedData
 # gdb config
 /.gdbinit
 /.gdb_history
-
-# eclipse
-.project
-.cproject
