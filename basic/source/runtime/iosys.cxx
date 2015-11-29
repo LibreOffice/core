@@ -238,6 +238,7 @@ sal_Bool needSecurityRestrictions( void )
         oslSecurity aSecurity = osl_getCurrentSecurity();
         ::rtl::OUString aSystemUser;
         sal_Bool bRet = osl_getUserName( aSecurity, &aSystemUser.pData );
+        osl_freeSecurityHandle(aSecurity);
         if( !bRet )
         {
             // No valid security! -> Secure mode!
