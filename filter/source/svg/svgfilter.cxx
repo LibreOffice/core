@@ -129,11 +129,11 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         }
 
         uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
-        uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_QUERY_THROW);
-        uno::Reference<frame::XController > xController(xFrame->getController(), uno::UNO_QUERY_THROW);
-
-        if (!bPageProvided)
+        uno::Reference<frame::XController > xController;
+        if (xDesktop->getCurrentFrame().is() && !bPageProvided) // Manage headless case
         {
+            uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_QUERY_THROW);
+            xController.set(xFrame->getController(), uno::UNO_QUERY_THROW);
             uno::Reference<drawing::XDrawView> xDrawView(xController, uno::UNO_QUERY_THROW);
             uno::Reference<drawing::framework::XControllerManager> xManager(xController, uno::UNO_QUERY_THROW);
             uno::Reference<drawing::framework::XConfigurationController> xConfigController(xManager->getConfigurationController());
