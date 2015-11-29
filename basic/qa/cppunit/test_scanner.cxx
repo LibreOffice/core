@@ -118,14 +118,14 @@ namespace
     CPPUNIT_ASSERT(symbols.empty());
 
     symbols = getSymbols(source2);
-    CPPUNIT_ASSERT(symbols.size() == 1);
-    CPPUNIT_ASSERT(symbols[0].text == cr);
-    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT_EQUAL(symbols.size(), size_t(1));
+    CPPUNIT_ASSERT_EQUAL(symbols[0].text, cr);
+    CPPUNIT_ASSERT_EQUAL(symbols[0].type, SbxVARIANT);
 
     symbols = getSymbols(source3);
-    CPPUNIT_ASSERT(symbols.size() == 1);
-    CPPUNIT_ASSERT(symbols[0].text == cr);
-    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT_EQUAL(symbols.size(), size_t(1));
+    CPPUNIT_ASSERT_EQUAL(symbols[0].text, cr);
+    CPPUNIT_ASSERT_EQUAL(symbols[0].type, SbxVARIANT);
 
     symbols = getSymbols(source4);
     CPPUNIT_ASSERT(symbols.size() == 1);
@@ -579,7 +579,7 @@ namespace
     CPPUNIT_ASSERT(symbols.size() == 3);
     CPPUNIT_ASSERT(symbols[0].number == 1.2);
     CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
-    CPPUNIT_ASSERT(rtl::math::round( symbols[1].number, 12) == rtl::math::round( .3, 12));
+    CPPUNIT_ASSERT_EQUAL(rtl::math::round( .3, 12), rtl::math::round( symbols[1].number, 12));
     CPPUNIT_ASSERT(symbols[1].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[2].text == cr);
     CPPUNIT_ASSERT(errors == 1);
