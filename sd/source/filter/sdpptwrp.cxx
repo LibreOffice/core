@@ -118,6 +118,7 @@ sal_Bool SdPPTFilter::Import()
                     if ( !bRet )
                         mrMedium.SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                 }
+                delete pLibrary;
             }
 
             delete pDocStream;
