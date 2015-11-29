@@ -17,33 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <classes/resource.hrc>
-#include <classes/fwkresid.hxx>
-
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/file.hxx>
-#include <osl/mutex.hxx>
-#include <rtl/ref.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <tools/urlobj.hxx>
-#include <unotools/historyoptions.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace css;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::util;
-using namespace framework;
 
 namespace {
 
 class SaveAsMenuController :  public svt::PopupMenuControllerBase
 {
-    using svt::PopupMenuControllerBase::disposing;
-
 public:
     explicit SaveAsMenuController( const uno::Reference< uno::XComponentContext >& xContext );
     virtual ~SaveAsMenuController();
@@ -71,23 +57,12 @@ public:
     // XStatusListener
     virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException, std::exception ) override;
 
-    // XMenuListener
-    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException, std::exception) override;
-
-    // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) override;
-
 private:
     virtual void impl_setPopupMenu() override;
-
-    void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
-
-    bool                  m_bDisabled : 1;
 };
 
 SaveAsMenuController::SaveAsMenuController( const uno::Reference< uno::XComponentContext >& xContext ) :
-    svt::PopupMenuControllerBase( xContext ),
-    m_bDisabled( false )
+    svt::PopupMenuControllerBase( xContext )
 {
 }
 
@@ -95,15 +70,13 @@ SaveAsMenuController::~SaveAsMenuController()
 {
 }
 
-// private function
-void SaveAsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void SaveAsMenuController::impl_setPopupMenu()
 {
-    VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
-    PopupMenu*     pVCLPopupMenu = nullptr;
+    VCLXMenu* pPopupMenu    = VCLXMenu::GetImplementation( m_xPopupMenu );
+    Menu*     pVCLPopupMenu = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 
-    resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
         pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
@@ -114,38 +87,9 @@ void SaveAsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     }
 }
 
-// XEventListener
-void SAL_CALL SaveAsMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
-{
-    Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
-
-    osl::MutexGuard aLock( m_aMutex );
-    m_xFrame.clear();
-    m_xDispatch.clear();
-
-    if ( m_xPopupMenu.is() )
-        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
-    m_xPopupMenu.clear();
-}
-
 // XStatusListener
-void SAL_CALL SaveAsMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
+void SAL_CALL SaveAsMenuController::statusChanged( const FeatureStateEvent& /*Event*/ ) throw ( RuntimeException, std::exception )
 {
-    osl::MutexGuard aLock( m_aMutex );
-    m_bDisabled = !Event.IsEnabled;
-}
-
-void SAL_CALL SaveAsMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
-{
-    osl::MutexGuard aLock( m_aMutex );
-    impl_setPopupMenu();
-}
-
-// XPopupMenuController
-void SaveAsMenuController::impl_setPopupMenu()
-{
-    if ( m_xPopupMenu.is() )
-        fillPopupMenu( m_xPopupMenu );
 }
 
 }
