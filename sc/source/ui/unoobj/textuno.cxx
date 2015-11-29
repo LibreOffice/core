@@ -174,6 +174,13 @@ rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementa
     return pRet;
 }
 
+void ScHeaderFooterContentObj::dispose()
+{
+    mxLeftText->dispose();
+    mxCenterText->dispose();
+    mxRightText->dispose();
+}
+
 ScHeaderFooterTextData::ScHeaderFooterTextData(
     rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
     mpTextObj(pTextObj ? pTextObj->Clone() : nullptr),
