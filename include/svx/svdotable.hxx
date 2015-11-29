@@ -47,9 +47,7 @@ struct ImplTableShadowPaintInfo;
 #endif
 
 
-// SdrTableHitKind
-
-
+/// SdrTableHitKind
 enum TableHitKind
 {
     SDRTABLEHIT_NONE,
@@ -74,9 +72,7 @@ struct CellPos
 };
 
 
-// TableStyleSettings
-
-
+/// TableStyleSettings
 struct SVX_DLLPUBLIC TableStyleSettings
 {
     bool mbUseFirstRow;
@@ -94,9 +90,7 @@ struct SVX_DLLPUBLIC TableStyleSettings
 };
 
 
-//   SdrTableObj
-
-
+/// SdrTableObj
 class SdrTableObjImpl;
 
 class SVX_DLLPUBLIC SdrTableObj : public ::SdrTextObj
@@ -110,8 +104,7 @@ public:
     virtual ~SdrTableObj();
 
 
-    // table stuff
-
+    // Table stuff
     SdrTableObj* CloneRange( const CellPos& rStartPos, const CellPos& rEndPos );
     void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn );
     void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow );
@@ -140,7 +133,7 @@ public:
     void uno_lock();
     void uno_unlock();
 
-    /** the active table has the focus or is currently edited */
+    /** The active table has the focus or is currently edited */
     const sdr::table::CellRef& getActiveCell() const;
 
     void setActiveCell( const sdr::table::CellPos& rPos );
@@ -153,21 +146,21 @@ public:
      void setTableStyle( const css::uno::Reference< css::container::XIndexAccess >& xAutoFormatStyle );
      const css::uno::Reference< css::container::XIndexAccess >& getTableStyle() const;
 
-     // text stuff
+    // Text stuff
 
-    /** returns the currently active text. */
+    /** Returns the currently active text */
     virtual SdrText* getActiveText() const override;
 
-    /** returns the nth available text. */
+    /** Returns the nth available text */
     virtual SdrText* getText( sal_Int32 nIndex ) const override;
 
-    /** returns the number of texts available for this object. */
+    /** Returns the number of texts available for this object */
     virtual sal_Int32 getTextCount() const override;
 
-    /** changes the current active text */
+    /** Changes the current active text */
     virtual void setActiveText( sal_Int32 nIndex ) override;
 
-    /** returns the index of the text that contains the given point or -1 */
+    /** Returns the index of the text that contains the given point or -1 */
     virtual sal_Int32 CheckTextHit(const Point& rPnt) const override;
 
     // #i121917#
@@ -176,11 +169,12 @@ public:
     bool IsTextEditActive() const { return (pEdtOutl != nullptr); }
     bool IsTextEditActive( const sdr::table::CellPos& rPos );
 
-    /** returns true only if we are in edit mode and the user actually changed anything */
+    /** Returns true only if we are in edit mode and the user actually changed anything */
     virtual bool IsReallyEdited() const override;
 
-    // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
-    // der des EditOutliners) und die PaperSize gesetzt.
+    /** At the same time, we set the text in the outliner (if applicable the EditOutliners')
+     * as well as the PaperSize
+     */
     void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText = false, ::Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false, Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const override;
     void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
@@ -220,7 +214,7 @@ public:
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
-    // special drag methods
+    // Special drag methods
     virtual bool hasSpecialDrag() const override;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
     virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
@@ -259,20 +253,16 @@ public:
 
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus ) override;
 
-
-
-
-    // transformation interface for StarOfficeAPI. This implements support for
-    // homogen 3x3 matrices containing the transformation of the SdrObject. At the
+    // Transformation interface for StarOfficeAPI. This implements support for
+    // homogenous 3x3 matrices containing the transformation of the SdrObject. At the
     // moment it contains a shearX, rotation and translation, but for setting all linear
     // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
 
-
-    // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
+    // Gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
     virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
 
-    // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
+    // Sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
     // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
@@ -282,7 +272,7 @@ public:
     //          given vector
 //  virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
 
-    /** hack for clipboard with calc and writer, export and import table content as rtf table */
+    /** Hack for clipboard with calc and writer, export and import table content as rtf table */
     static void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
     static void ImportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
 
@@ -301,7 +291,7 @@ private:
     SdrOutliner* GetCellTextEditOutliner( const sdr::table::Cell& rCell ) const;
 
 private:
-    // for the ViewContactOfTableObj to build the primitive representation, it is necessary to access the
+    // For the ViewContactOfTableObj to build the primitive representation, it is necessary to access the
     // TableLayouter for position and attribute information
     friend class sdr::contact::ViewContactOfTableObj;
     const TableLayouter& getTableLayouter() const;

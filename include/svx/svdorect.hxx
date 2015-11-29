@@ -24,9 +24,7 @@
 #include <svx/svxdllapi.h>
 
 
-//   Vorausdeklarationen
-
-
+// Forward declaration
 class XPolygon;
 
 namespace sdr { namespace properties {
@@ -36,22 +34,19 @@ namespace sdr { namespace properties {
 
 //   SdrRectObj
 
-// Rechteck-Objekte (Rechteck,Kreis,...)
-
-
-
+/// Rectangle objects (rectangle, circle, ...)
 class SVX_DLLPUBLIC SdrRectObj : public SdrTextObj
 {
 private:
     // to allow sdr::properties::RectangleProperties access to SetXPolyDirty()
     friend class sdr::properties::RectangleProperties;
-    friend class                SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
+    friend class SdrTextObj; // Due to SetXPolyDirty for GrowAdjust
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
-    XPolygon*                   mpXPoly;
+    XPolygon* mpXPoly;
 
 protected:
     XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
@@ -64,16 +59,18 @@ protected:
     virtual void           RestGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    // Der Eckenradius-Parameter fliegt irgendwann raus. Der Eckenradius
-    // ist dann (spaeter) ueber SfxItems einzustellen (SetAttributes()).
-    // Konstruktion eines Rechteck-Zeichenobjekts
-
+    /**
+     * The corner radius parameter is dropped at some point.
+     * We need to set the corner radius via SfxItems later on, using SetAttributes()
+     *
+     * Constructor of a rectangular drawing object
+     */
     SdrRectObj();
     SdrRectObj(const Rectangle& rRect);
 
     SdrRectObj& operator=(const SdrRectObj& rCopy);
 
-    // Konstruktion eines Textrahmens
+    // Constructor of a text frame
     SdrRectObj(SdrObjKind eNewTextKind);
     SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
     virtual ~SdrRectObj();
@@ -94,7 +91,7 @@ public:
     virtual sal_uInt32 GetHdlCount() const override;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
 
-    // special drag methods
+    // Special drag methods
     virtual bool hasSpecialDrag() const override;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
     virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
