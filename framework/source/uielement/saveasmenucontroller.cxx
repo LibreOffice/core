@@ -78,7 +78,7 @@ void SaveAsMenuController::impl_setPopupMenu()
     SolarMutexGuard aSolarMutexGuard;
 
     if ( pPopupMenu )
-        pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
+        pVCLPopupMenu = pPopupMenu->GetMenu();
 
     if ( pVCLPopupMenu )
     {
