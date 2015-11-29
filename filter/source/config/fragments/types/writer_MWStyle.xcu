@@ -21,7 +21,7 @@
         <prop oor:name="Extensions"><value>dummy</value></prop>
         <prop oor:name="MediaType"></prop>
         <prop oor:name="Preferred"><value>true</value></prop>
-        <prop oor:name="PreferredFilter"><value>Style (v1)</value></prop>
+        <prop oor:name="PreferredFilter"><value>MWStyle</value></prop>
         <prop oor:name="UIName">
             <value>Style v1 Document</value>
         </prop>
