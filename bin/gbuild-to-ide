@@ -1443,6 +1443,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             def lopath(path):
                 return os.path.relpath(path, lib.location)
 
+            defines_list = []
             sources_list = []
             includepath_list = []
             # The explicit headers list is not mandatory :
@@ -1476,16 +1477,25 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                             hf_lopath = lopath(os.path.join(hdir, hf))
                             headers_list.append(hf_lopath)
 
+            # List defines
+            for key, value in lib.defs.items():
+                define = key
+                if value is not None:
+                    define += '=' + value
+                defines_list.append(define)
+
             # All datas are prepared, store them for the lib.
             if lib_folder in self.data_libs:
                 self.data_libs[lib_folder]['sources'] |= set(sources_list)
                 self.data_libs[lib_folder]['headers'] |= set(headers_list)
                 self.data_libs[lib_folder]['includepath'] |= set(includepath_list)
+                self.data_libs[lib_folder]['defines'] |= set(defines_list)
             else:
                 self.data_libs[lib_folder] = {
                     'sources': set(sources_list),
                     'headers': set(headers_list),
                     'includepath': set(includepath_list),
+                    'defines': set(defines_list),
                     'loc': lib.location,
                     'name': lib_name
                 }
@@ -1507,17 +1517,19 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             sources_list = sorted(self.data_libs[lib_folder]['sources'])
             headers_list = sorted(self.data_libs[lib_folder]['headers'])
             includepath_list = sorted(self.data_libs[lib_folder]['includepath'])
+            defines_list = sorted(self.data_libs[lib_folder]['defines'])
             lib_loc = self.data_libs[lib_folder]['loc']
             lib_name = self.data_libs[lib_folder]['name']
 
             sources = " \\\n".join(sources_list)
             headers = " \\\n".join(headers_list)
             includepath = " \\\n".join(includepath_list)
+            defines = " \\\n".join(defines_list)
 
             # create .pro file
             qt_pro_file = '%s/%s.pro' % (lib_loc, lib_name)
             try:
-                content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers, 'includepath': includepath}
+                content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers, 'includepath': includepath, 'defines': defines}
                 mode = 'w+'
                 with open(qt_pro_file, mode) as fpro:
                     fpro.write(content)
@@ -1585,6 +1597,8 @@ INCLUDEPATH += %(includepath)s
 SOURCES += %(sources)s
 
 HEADERS += %(headers)s
+
+DEFINES += %(defines)s
 
 """
     pro_meta_template = """TEMPLATE = subdirs
