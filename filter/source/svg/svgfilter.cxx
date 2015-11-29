@@ -109,6 +109,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         // #i124608# detect selection
         bool bSelectionOnly = false;
         bool bGotSelection = false;
+        bool bSilent = false;
 
         // when using LibreOfficeKit, default to exporting everything (-1)
         bool bPageProvided = comphelper::LibreOfficeKit::isActive();
@@ -121,6 +122,10 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 // #i124608# extract single selection wanted from dialog return values
                 rDescriptor[nInd].Value >>= bSelectionOnly;
             }
+            else if (rDescriptor[nInd].Name == "Silent")
+            {
+                bSilent = true;
+            }
             else if (rDescriptor[nInd].Name == "PagePos")
             {
                 rDescriptor[nInd].Value >>= nPageToExport;
@@ -128,12 +133,12 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             }
         }
 
-        uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
-        uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_QUERY_THROW);
-        uno::Reference<frame::XController > xController(xFrame->getController(), uno::UNO_QUERY_THROW);
-
-        if (!bPageProvided)
+        uno::Reference<frame::XController > xController;
+        if (!bSilent && !bPageProvided)
         {
+            uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
+            uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_QUERY_THROW);
+            xController.set(xFrame->getController(), uno::UNO_QUERY_THROW);
             uno::Reference<drawing::XDrawView> xDrawView(xController, uno::UNO_QUERY_THROW);
             uno::Reference<drawing::framework::XControllerManager> xManager(xController, uno::UNO_QUERY_THROW);
             uno::Reference<drawing::framework::XConfigurationController> xConfigController(xManager->getConfigurationController());
