@@ -23,12 +23,11 @@
 #include <svx/sdynitm.hxx>
 #include <svx/sdmetitm.hxx>
 
-
-// class SdrCaptionLineLenItem
-// Laenge der ersten Austrittslinie
-// Nur bei Type3 und Type4
-// Nur relevant, wenn SdrCaptionFitLineLenItem=FALSE
-
+/**
+ * Length of the first caption line
+ * Only for Type3 and Type4
+ * Only relevant, if SdrCaptionFitLineLenItem = false
+ */
 class SVX_DLLPUBLIC SdrCaptionLineLenItem: public SdrMetricItem {
 public:
     SdrCaptionLineLenItem(long nLineLen=0): SdrMetricItem(SDRATTR_CAPTIONLINELEN,nLineLen) {}
@@ -37,12 +36,10 @@ public:
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
-
-// class SdrCaptionFitLineLenItem
-// Laenge der ersten Austrittslinie automatisch berechnen oder
-// Vorgabe (SdrCaptionLineLenItem) verwenden.
-// Nur bei Type3 und Type4
-
+/**
+ * The length of the first caption line is either automatically
+ * calculated or the default setting is used (SdrCaptionLineLenItem)
+ */
 class SVX_DLLPUBLIC SdrCaptionFitLineLenItem: public SdrYesNoItem {
 public:
     SdrCaptionFitLineLenItem(bool bBestFit=true): SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,bBestFit) {}

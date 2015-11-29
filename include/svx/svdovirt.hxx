@@ -23,16 +23,10 @@
 #include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
 
-
-
-//   SdrVirtObj
-
-// Achtung! Das virtuelle Objekt ist noch nicht bis in alle Feinheiten
-// durchprogrammiert und getestet. Z.Zt. kommt es nur in abgeleiteter
-// beim Writer zum Einsatz.
-
-
-
+/**
+ * FIXME: The virtual object is not yet fully implemented and tested.
+ * At the moment we only use it in a derived class in Writer.
+ */
 class SVX_DLLPUBLIC SdrVirtObj : public SdrObject
 {
     SdrVirtObj( const SdrVirtObj& ) = delete;
@@ -42,7 +36,7 @@ public:
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
-    SdrObject&                  rRefObj; // Referenziertes Zeichenobjekt
+    SdrObject&                  rRefObj; // Referenced drawing object
     Rectangle                   aSnapRect;
 
 protected:
@@ -145,12 +139,9 @@ public:
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec) override;
     virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const override;
 
-    // OD 30.06.2003 #108784# - virtual <GetOffset()> returns Point(0,0)
     // #i73248# for default SdrVirtObj, offset is aAnchor, not (0,0)
     virtual const Point GetOffset() const;
 };
-
-
 
 #endif // INCLUDED_SVX_SVDOVIRT_HXX
 

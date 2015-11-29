@@ -26,6 +26,33 @@
 #include <algorithm>
 #include <vector>
 
+/**
+ * Note on the layer mix with symbolic/ID-based interface:
+ * You create a new layer with
+ *    pLayerAdmin->NewLayer("A new layer");
+ * This layer is automatically appended to the end of the list.
+ *
+ * The same holds true for layer sets.
+ *
+ * The interface for SdrLayerSet is based on LayerIDs. The app must get
+ * an ID for it at the SdrLayerAdmin, like so:
+ *   SdrLayerID nLayerID=pLayerAdmin->GetLayerID("A new layer");
+ *
+ * If the layer cannot be found, SDRLAYER_NOTFOUND is returned.
+ * The methods with the ID interface usually handle that error in a
+ * meaningful way.
+ * If you not only got a name, but even a SdrLayer*, you can get the ID
+ * much faster via the layer directly.
+ *
+ * @param bInherited:
+ * TRUE If the layer/layer set cannot be found, we examine the parent layer admin,
+ *      whether there's a corresponding definition
+ * FALSE We only search this layer admin
+ *
+ * Every page's layer admin has a parent layer admin (the model's). The model
+ * itself does not have a parent.
+ */
+
 class SdrModel;
 
 class SVX_DLLPUBLIC SdrLayer
@@ -35,15 +62,15 @@ class SVX_DLLPUBLIC SdrLayer
     OUString maName;
     OUString maTitle;
     OUString maDescription;
-    SdrModel*  pModel; // zum Broadcasten
-    sal_uInt16     nType;  // 0=Userdefined,1=Standardlayer
+    SdrModel*  pModel; // For broadcasting
+    sal_uInt16 nType;  // 0= userdefined, 1= default layer
     SdrLayerID nID;
 
     SdrLayer(SdrLayerID nNewID, const OUString& rNewName);
 
 public:
-    bool      operator==(const SdrLayer& rCmpLayer) const;
-    bool      operator!=(const SdrLayer& rCmpLayer) const { return !operator==(rCmpLayer); }
+    bool operator==(const SdrLayer& rCmpLayer) const;
+    bool operator!=(const SdrLayer& rCmpLayer) const { return !operator==(rCmpLayer); }
 
     void SetName(const OUString& rNewName);
     const OUString& GetName() const { return maName; }
@@ -62,8 +89,7 @@ public:
     void          SetStandardLayer(bool bStd = true);
 };
 
-// When Changing the layer data you currently have to set the Modify-Flag
-// manually
+// When Changing the layer data you currently have to set the Modify flag manually
 #define SDRLAYER_MAXCOUNT 255
 class SVX_DLLPUBLIC SdrLayerAdmin {
 friend class SdrView;
@@ -72,14 +98,14 @@ friend class SdrPage;
 
 protected:
     std::vector<SdrLayer*> aLayer;
-    SdrLayerAdmin* pParent; // Der Admin der Seite kennt den Admin des Docs
-    SdrModel*      pModel; // for broadcasting
-    OUString       maControlLayerName;
+    SdrLayerAdmin* pParent; // The page's admin knows the doc's admin
+    SdrModel* pModel; // For broadcasting
+    OUString maControlLayerName;
 protected:
-    // Eine noch nicht verwendete LayerID raussuchen. Sind bereits alle
-    // verbraucht, so gibt's 'ne 0. Wer sicher gehen will, muss vorher
-    // GetLayerCount()<SDRLAYER_MAXCOUNT abfragen, denn sonst sind alle
-    // vergeben.
+    // Find a LayerID which is not in use yet. If all have been used up,
+    // we return 0.
+    // If you want to play safe, check GetLayerCount()<SDRLAYER_MAXCOUNT
+    // first, else all are given away already.
     SdrLayerID         GetUniqueLayerID() const;
     void               Broadcast() const;
 public:
@@ -101,15 +127,19 @@ public:
         Broadcast();
     }
     SdrLayer*          RemoveLayer(sal_uInt16 nPos);
+
     // Delete the entire layer
     void               ClearLayer();
+
     // New layer is created and inserted
     SdrLayer*          NewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
+
     // New layer, name is retrieved from the resource
     SdrLayer*          NewStandardLayer(sal_uInt16 nPos=0xFFFF);
 
     // Iterate over all layers
     sal_uInt16         GetLayerCount() const                                         { return sal_uInt16(aLayer.size()); }
+
     SdrLayer*          GetLayer(sal_uInt16 i)                                        { return aLayer[i]; }
     const SdrLayer*    GetLayer(sal_uInt16 i) const                                  { return aLayer[i]; }
 
@@ -118,34 +148,12 @@ public:
     SdrLayer*          GetLayer(const OUString& rName, bool bInherited);
     const SdrLayer*    GetLayer(const OUString& rName, bool bInherited) const;
     SdrLayerID         GetLayerID(const OUString& rName, bool bInherited) const;
-    SdrLayer*          GetLayerPerID(sal_uInt16 nID)                                     { return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayerPerID(nID)); }
+    SdrLayer*          GetLayerPerID(sal_uInt16 nID) { return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayerPerID(nID)); }
     const SdrLayer*    GetLayerPerID(sal_uInt16 nID) const;
 
     void               SetControlLayerName(const OUString& rNewName);
     const OUString&    GetControlLayerName() const { return maControlLayerName; }
 };
-
-/*
-Anmerkung zu den Layer - Gemischt symbolisch/ID-basierendes Interface
-    Einen neuen Layer macht man sich mit:
-      pLayerAdmin->NewLayer("Der neue Layer");
-    Der Layer wird dann automatisch an das Ende der Liste angehaengt.
-    Entsprechdes gilt fuer Layersets gleichermassen.
-    Das Interface am SdrLayerSet basiert auf LayerID's. Die App muss sich
-    dafuer am SdrLayerAdmin eine ID abholen:
-        SdrLayerID nLayerID=pLayerAdmin->GetLayerID("Der neue Layer");
-    Wird der Layer nicht gefunden, so liefert die Methode SDRLAYER_NOTFOUND
-    zurueck. Die Methoden mit ID-Interface fangen diesen Wert jedoch i.d.R
-    sinnvoll ab.
-    Hat man nicht nur den Namen, sondern gar einen SdrLayer*, so kann man
-    sich die ID natuerlich wesentlich schneller direkt vom Layer abholen.
-bInherited:
-    TRUE: Wird der Layer/LayerSet nicht gefunden, so wird im Parent-LayerAdmin
-          nachgesehen, ob es dort einen entsprechende Definition gibt.
-    FALSE: Es wird nur dieser LayerAdmin durchsucht.
-    Jeder LayerAdmin einer Seite hat einen Parent-LayerAdmin, n?mlich den des
-    Model. Das Model selbst hat keinen Parent.
-*/
 
 #endif // INCLUDED_SVX_SVDLAYER_HXX
 
