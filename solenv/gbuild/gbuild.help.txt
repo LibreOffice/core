@@ -27,20 +27,30 @@ IMPORTANT OPTIONS
        (descriptions from GNU make man page)
 
 AVAILABLE TARGETS
-       all              build product and run unit tests (default goal)
-       unitcheck        run unit tests
-       slowcheck        run slow unit tests
-       subsequentcheck  run system tests (requires full installation)
-       stagingcheck     run (unstable/failing) tests from staging area
-                        (requires full installation)
-       perfcheck        run performance/callgrind unit tests
-       check            run unit tests and if in toplevel subsequentcheck
-       clean            remove all generated files
-       debugrun         starts the INSTDIR instance and allows tests to be run
-                        against it
-       dump-deps-png    creates dependency diagrams in PNG format
-                        NOTE: needs graphviz to work
-       showmodules      shows all registered modules
+       all                  build product and run unit tests (default goal)
+       build                similar to "all"
+       build-l10n-only      build only modules with translations
+       build-non-l10n-only  build all modules without translations
+       translations         build and merge translations
+       packageinfo          generates package information for distros
+       unitcheck            run unit tests
+       slowcheck            run slow unit tests
+       subsequentcheck      run system tests (requires full installation)
+       stagingcheck         run (unstable/failing) tests from staging area
+                            (requires full installation)
+       perfcheck            run performance/callgrind unit tests
+       check                run unit tests and if in toplevel subsequentcheck
+       clean                remove all generated files
+       debugrun             starts the INSTDIR instance and allows tests to
+                            be run against it
+       dump-deps-png        creates dependency diagrams in PNG format
+                            NOTE: needs graphviz to work
+       showmodules          shows all registered modules
+
+
+
+
+
        <module>         build the named module
        <module>.build   build the named module without running unittests
        <module>.check   run unittests of the named module
