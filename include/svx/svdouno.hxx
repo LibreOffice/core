@@ -28,9 +28,7 @@
 #include <svx/svdorect.hxx>
 
 
-//   Vorausdeklarationen
-
-
+// Forward declaration
 class SdrView;
 class SdrPageWindow;
 class SdrControlEventListenerImpl;
@@ -40,9 +38,7 @@ namespace sdr { namespace contact {
 }}
 
 
-//   SdrUnoObj
-
-
+// SdrUnoObj
 struct SdrUnoObjDataHolder;
 class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
 {
@@ -55,7 +51,7 @@ class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
     OUString                    aUnoControlTypeName;
 
 protected:
-    css::uno::Reference< css::awt::XControlModel > xUnoControlModel; // kann auch von aussen gesetzt werden
+    css::uno::Reference< css::awt::XControlModel > xUnoControlModel; // Can also be set from outside
 
 private:
     SVX_DLLPRIVATE void CreateUnoControlModel(const OUString& rModelName);
@@ -95,7 +91,7 @@ public:
     css::uno::Reference< css::awt::XControlModel > GetUnoControlModel() const {return xUnoControlModel;}
     css::uno::Reference< css::awt::XControl > GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const;
 
-    /** retrieves a temporary XControl instance for a given output device
+    /** Retrieves a temporary XControl instance for a given output device
 
         The method GetUnoControl, used to retrieve the XControl whose parent is a given device, only works
         if the SdrUnoObj has already been painted at least once onto this device. However, there are valid
@@ -134,7 +130,7 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
 private:
-    /** retrieves the typed ViewContact for the object
+    /** Retrieves the typed ViewContact for the object
         @param _out_rpContact
             Upon successful return, ->_out_rpContact contains the ViewContact.
         @return
@@ -144,7 +140,6 @@ private:
     */
     SVX_DLLPRIVATE  bool    impl_getViewContact( sdr::contact::ViewContactOfUnoControl*& _out_rpContact ) const;
 };
-
 
 #endif // INCLUDED_SVX_SVDOUNO_HXX
 
