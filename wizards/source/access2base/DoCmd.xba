@@ -2086,7 +2086,7 @@ Dim oDatabase As Object
 	If oDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
 			
 Dim sObjects() As String, sObjectName As String, oController As Object, oObject As Object
-Dim i As Integer, bFound As Boolean, lComponent As Long
+Dim i As Integer, bFound As Boolean, lComponent As Long, oQuery As Object
 	
 	&apos;	Check existence of object and find its exact (case-sensitive) name
 	Select Case psObjectType
@@ -2110,12 +2110,20 @@ Dim i As Integer, bFound As Boolean, lComponent As Long
 	Next i
 	If Not bFound Then Goto Trace_NotFound
 
+	If psObjectType = &quot;Query&quot; Then		&apos;	Processing for action query
+		Set oQuery = Application._CurrentDb().QueryDefs(pvObjectName)
+		If oQuery.pType &lt;&gt; dbQSelect Then
+			_OpenObject = oQuery.Execute()
+			GoTo Exit_Function
+		End If
+	End If
 	Set oController = oDatabase.Document.CurrentController
 	Set oObject = oController.loadComponent(lComponent, sObjectName, ( pvView = acViewDesign ))
 	_OpenObject = True	
 
 Exit_Function:
 	Set oObject = Nothing
+	Set oQuery = Nothing
 	Set oController = Nothing
 	Exit Function
 Error_Function:
