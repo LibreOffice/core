@@ -21,6 +21,8 @@
  <toolbar:toolbaritem xlink:href=".uno:DesignerDialog" toolbar:visible="false" toolbar:helpid="5539"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
@@ -38,8 +40,8 @@
  <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
- <toolbar:toolbaritem xlink:href=".uno:OutlineFont"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shadowed" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToLower" toolbar:visible="false"/>

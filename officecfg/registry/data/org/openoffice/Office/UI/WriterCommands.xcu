@@ -1052,7 +1052,7 @@
       </node>
       <node oor:name=".uno:AlignTop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Align Top</value>
+          <value xml:lang="en-US">Align Top to Anchor</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1060,7 +1060,7 @@
       </node>
       <node oor:name=".uno:AlignBottom" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Align Bottom</value>
+          <value xml:lang="en-US">Align Bottom to Anchor</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1068,7 +1068,7 @@
       </node>
       <node oor:name=".uno:AlignVerticalCenter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Align Vertical Center</value>
+          <value xml:lang="en-US">Align Middle to Anchor</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1261,7 +1261,7 @@
       </node>
       <node oor:name=".uno:OptimizeTable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Optimize</value>
+          <value xml:lang="en-US">Optimize Size</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
