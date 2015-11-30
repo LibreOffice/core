@@ -118,14 +118,14 @@ namespace
     CPPUNIT_ASSERT(symbols.empty());
 
     symbols = getSymbols(source2);
-    CPPUNIT_ASSERT_EQUAL(symbols.size(), size_t(1));
-    CPPUNIT_ASSERT_EQUAL(symbols[0].text, cr);
-    CPPUNIT_ASSERT_EQUAL(symbols[0].type, SbxVARIANT);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
 
     symbols = getSymbols(source3);
-    CPPUNIT_ASSERT_EQUAL(symbols.size(), size_t(1));
-    CPPUNIT_ASSERT_EQUAL(symbols[0].text, cr);
-    CPPUNIT_ASSERT_EQUAL(symbols[0].type, SbxVARIANT);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
 
     symbols = getSymbols(source4);
     CPPUNIT_ASSERT(symbols.size() == 1);
