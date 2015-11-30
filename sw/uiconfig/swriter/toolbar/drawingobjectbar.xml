@@ -51,7 +51,11 @@
  <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground" toolbar:helpid="10282"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatGroup" toolbar:helpid="10454"/>
+ <toolbar:toolbaritem xlink:href=".uno:EnterGroup"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeaveGroup"/>
  <toolbar:toolbaritem xlink:href=".uno:FormatUngroup" toolbar:helpid="10455"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:visible="false" toolbar:helpid="27322"/>
  <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:visible="false" toolbar:helpid="27154"/>

@@ -2170,6 +2170,9 @@
       </node>
       <node oor:name=".uno:ToggleObjectBezierMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Points</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Poi~nts</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
