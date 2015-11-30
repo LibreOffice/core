@@ -846,7 +846,10 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
     }
 
     if (!xHelpContent.is())
+    {
         delete pHelpWindow;
+        return NULL;
+    }
 
     xHelpContent->setName(::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP")));
 
