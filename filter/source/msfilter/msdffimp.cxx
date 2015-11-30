@@ -1532,10 +1532,6 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     // creating SdrCustomShapeGeometryItem
 
     typedef std::vector< beans::PropertyValue > PropVec;
-    typedef PropVec::iterator PropVecIter;
-    PropVecIter aIter;
-    PropVecIter aEnd;
-
 
     // aPropVec will be filled with all PropertyValues
     PropVec aPropVec;
