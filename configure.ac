@@ -4776,7 +4776,6 @@ if test "$USING_X11" != TRUE; then
     test_tde=no
     test_kde4=no
     enable_cairo_canvas=no
-    enable_gnome_vfs=no
 fi
 
 dnl ===================================================================
