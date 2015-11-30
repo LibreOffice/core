@@ -777,8 +777,10 @@ void GtkSalFrame::InvalidateGraphics()
 {
     if( m_pGraphics )
     {
-        m_pGraphics->SetDrawable( None, m_nXScreen );
+        m_pGraphics->DeInit();
         m_pGraphics->SetWindow(nullptr);
+        delete m_pGraphics;
+        m_pGraphics = nullptr;
         m_bGraphics = false;
     }
 }
@@ -846,9 +848,6 @@ GtkSalFrame::~GtkSalFrame()
         g_object_unref( G_OBJECT( m_pForeignParent ) );
     if( m_pForeignTopLevel )
         g_object_unref( G_OBJECT( m_pForeignTopLevel) );
-
-    delete m_pGraphics;
-    m_pGraphics = nullptr;
 }
 
 void GtkSalFrame::moveWindow( long nX, long nY )
