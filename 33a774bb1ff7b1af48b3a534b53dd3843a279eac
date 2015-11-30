@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_ba93f04e",
+        "filename": "cui/source/customize/acccfg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-30T11:56:39Z",
+      "side": 0,
+      "message": "And in the same light, perhaps don\u0027t remove those key combos unconditionally, the fact that they\u0027re unusable in Windows with German keyboard doesn\u0027t mean they\u0027re unusable everywhere ....",
+      "revId": "33a774bb1ff7b1af48b3a534b53dd3843a279eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_fa9d785a",
+        "filename": "cui/source/customize/acccfg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-30T11:56:39Z",
+      "side": 0,
+      "message": "Given the above, I\u0027d just append those KEY_LESS, KEY_GREATER combos here ...",
+      "revId": "33a774bb1ff7b1af48b3a534b53dd3843a279eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_daa074a8",
+        "filename": "vcl/win/source/app/salinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-30T11:56:39Z",
+      "side": 0,
+      "message": "I\u0027m not sure yet if removing those keys unconditionally is what we really want to do. Sure, they\u0027re accessible only with AltGr on German keyboard (which renders them unusable in German Windows), but for other languages and keyboard layouts, the users can still be given the option to assign them to actions.",
+      "revId": "33a774bb1ff7b1af48b3a534b53dd3843a279eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

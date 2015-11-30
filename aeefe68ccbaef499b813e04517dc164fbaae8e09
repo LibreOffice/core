@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_9aad4c8b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-30T11:56:39Z",
+      "side": 1,
+      "message": "This kbd shortcut is valid for Hungarian only. Please check that it really conflicts with \u003c  or \u003e on Hungarian keyboard and only then remap",
+      "revId": "aeefe68ccbaef499b813e04517dc164fbaae8e09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_da8eb426",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3228,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-30T11:56:39Z",
+      "side": 1,
+      "message": "typo: GREATER :) \n(hm, I wonder why the build doesn\u0027t fail here)",
+      "revId": "aeefe68ccbaef499b813e04517dc164fbaae8e09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_7ac5085a",
+        "filename": "vcl/win/source/window/salframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3539,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-11-30T11:56:39Z",
+      "side": 1,
+      "message": "Please comment this code, if possible, so that it\u0027s easier to debug in the future if something goes wrong here",
+      "revId": "aeefe68ccbaef499b813e04517dc164fbaae8e09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
