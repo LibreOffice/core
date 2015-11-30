@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_7a69888b",
+        "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-30T09:06:54Z",
+      "side": 1,
+      "message": "it would probably be better if LO could gracefully handle ne_lockstore_create failures",
+      "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_da04f4c7",
+        "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-30T09:06:54Z",
+      "side": 1,
+      "message": "this doesn\u0027t make sense; if it is a programming error for m_aLockInfoMap to be non-empty here (i.e.,the assert is OK). then the following code of iterating over m_aLockInfoMap is not OK",
+      "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ba0930e0",
+        "filename": "ucb/source/ucp/webdav-neon/NeonPropFindRequest.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-30T09:06:54Z",
+      "side": 1,
+      "message": "this assert looks dubious, esp. given UCBDeadPropertyValue::createFromXML returns bool to indicate success (so it is apparently assumed it can fail; esp. as ne_xml_create can presumably fail?)",
+      "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
