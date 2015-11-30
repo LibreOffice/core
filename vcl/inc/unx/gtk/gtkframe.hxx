@@ -62,19 +62,6 @@ typedef ::Window GdkNativeWindow;
 
 class GtkSalFrame : public SalFrame, public X11WindowProvider
 {
-    static const int nMaxGraphics = 2;
-
-    struct GraphicsHolder
-    {
-        GtkSalGraphics*     pGraphics;
-        bool                bInUse;
-        GraphicsHolder()
-                : pGraphics( nullptr ),
-                  bInUse( false )
-        {}
-        ~GraphicsHolder();
-    };
-
     struct IMHandler
     {
 
@@ -187,7 +174,8 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     std::list< GtkSalFrame* >       m_aChildren;
     GdkWindowState                  m_nState;
     SystemEnvData                   m_aSystemData;
-    GraphicsHolder                  m_aGraphics[ nMaxGraphics ];
+    GtkSalGraphics                 *m_pGraphics;
+    bool                            m_bGraphics;
     sal_uInt16                      m_nKeyModifiers;
     GdkCursor                      *m_pCurrentCursor;
     GdkVisibilityState              m_nVisibility;
