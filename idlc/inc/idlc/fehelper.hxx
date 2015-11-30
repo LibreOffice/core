@@ -27,23 +27,14 @@
 class FeDeclarator
 {
 public:
-    // Enum to denote types of declarators
-    enum DeclaratorType
-    {
-        FD_simple,      // Simple declarator
-        FD_complex      // Complex declarator (complex_part field used)
-    };
-
-    FeDeclarator(const OString& name, DeclaratorType declType, AstDeclaration* pComplPart);
+    FeDeclarator(const OString& name);
     virtual ~FeDeclarator();
     const OString& getName()
         { return m_name; }
     bool checkType(AstDeclaration const * pType);
-    AstType const * compose(AstDeclaration const * pDecl);
+    static AstType const * compose(AstDeclaration const * pDecl);
 private:
-    AstDeclaration* m_pComplexPart;
     OString  m_name;
-    DeclaratorType  m_declType;
 };
 
 typedef ::std::list< FeDeclarator* > FeDeclList;

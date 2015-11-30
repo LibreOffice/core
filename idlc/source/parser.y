@@ -733,7 +733,7 @@ attribute :
         AstInterface * scope = static_cast< AstInterface * >(
             idlc()->scopes()->top());
         AstAttribute * attr = new AstAttribute(
-            $1, $4->compose($2), $4->getName(), scope);
+            $1, FeDeclarator::compose($2), $4->getName(), scope);
         delete $4;
         AstInterface::DoubleMemberDeclarations doubleMembers(
             scope->checkMemberClashes(attr));
@@ -1053,7 +1053,7 @@ parameter :
          */
         if ( pScope && $5 && $8 )
         {
-            AstType const * pType = $8->compose($5);
+            AstType const * pType = FeDeclarator::compose($5);
             if ( pType )
             {
                 if (pScope->isConstructor() && $2 != DIR_IN) {
@@ -1570,7 +1570,7 @@ property :
                         continue;
                     }
 
-                    pType = pDecl->compose($2);
+                    pType = FeDeclarator::compose($2);
 
                     if ( !pType )
                     {
@@ -2047,7 +2047,7 @@ type_declarator :
                     continue;
                 }
 
-                pType = pDecl->compose($1);
+                pType = FeDeclarator::compose($1);
 
                 if ( !pType )
                 {
@@ -2122,7 +2122,7 @@ declarator :
             checkIdentifier($1);
         }
 
-        $$ = new FeDeclarator(*$1, FeDeclarator::FD_simple, NULL);
+        $$ = new FeDeclarator(*$1);
         delete $1;
     }
     ;
@@ -2556,7 +2556,7 @@ member :
                     continue;
                 }
 
-                pType = pDecl->compose($1);
+                pType = FeDeclarator::compose($1);
 
                 if ( !pType )
                 {

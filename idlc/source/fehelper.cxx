@@ -21,10 +21,8 @@
 #include <idlc/errorhandler.hxx>
 #include "idlc/idlc.hxx"
 
-FeDeclarator::FeDeclarator(const OString& name, DeclaratorType declType, AstDeclaration* pComplPart)
-    : m_pComplexPart(pComplPart)
-    , m_name(name)
-    , m_declType(declType)
+FeDeclarator::FeDeclarator(const OString& name)
+    : m_name(name)
 {
 }
 
@@ -47,8 +45,6 @@ bool FeDeclarator::checkType(AstDeclaration const * type)
 
 AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
 {
-    const AstType*    pType;
-
     if ( pDecl == nullptr )
     {
         return nullptr;
@@ -58,11 +54,7 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
         ErrorHandler::noTypeError(pDecl);
         return nullptr;
     }
-    pType = static_cast<const AstType*>(pDecl);
-    if (m_declType == FD_simple || m_pComplexPart == nullptr)
-        return pType;
-
-    return nullptr; // return through this statement should not happen
+    return static_cast<const AstType*>(pDecl);
 }
 
 FeInheritanceHeader::FeInheritanceHeader(
