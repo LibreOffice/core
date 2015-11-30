@@ -1064,15 +1064,19 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     aBuffer.append("=");
 
     if (aEvent.FeatureURL.Path == "Bold" ||
-        aEvent.FeatureURL.Path == "Italic" ||
-        aEvent.FeatureURL.Path == "Underline" ||
-        aEvent.FeatureURL.Path == "Strikeout" ||
+        aEvent.FeatureURL.Path == "CenterPara" ||
         aEvent.FeatureURL.Path == "DefaultBullet" ||
         aEvent.FeatureURL.Path == "DefaultNumbering" ||
+        aEvent.FeatureURL.Path == "Italic" ||
+        aEvent.FeatureURL.Path == "JustifyPara" ||
         aEvent.FeatureURL.Path == "LeftPara" ||
-        aEvent.FeatureURL.Path == "CenterPara" ||
+        aEvent.FeatureURL.Path == "OutlineFont" ||
         aEvent.FeatureURL.Path == "RightPara" ||
-        aEvent.FeatureURL.Path == "JustifyPara")
+        aEvent.FeatureURL.Path == "Shadowed" ||
+        aEvent.FeatureURL.Path == "SubScript" ||
+        aEvent.FeatureURL.Path == "SuperScript" ||
+        aEvent.FeatureURL.Path == "Strikeout" ||
+        aEvent.FeatureURL.Path == "Underline")
     {
         bool bTemp = false;
         aEvent.State >>= bTemp;

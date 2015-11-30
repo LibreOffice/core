@@ -661,23 +661,27 @@ static void doc_iniUnoCommands ()
 {
     OUString sUnoCommands[] =
     {
+        OUString(".uno:BackColor"),
         OUString(".uno:Bold"),
-        OUString(".uno:Italic"),
-        OUString(".uno:Underline"),
-        OUString(".uno:Strikeout"),
+        OUString(".uno:CenterPara"),
+        OUString(".uno:CharFontName"),
+        OUString(".uno:DecrementIndent"),
         OUString(".uno:DefaultBullet"),
         OUString(".uno:DefaultNumbering"),
-        OUString(".uno:LeftPara"),
-        OUString(".uno:CenterPara"),
-        OUString(".uno:RightPara"),
-        OUString(".uno:JustifyPara"),
-        OUString(".uno:IncrementIndent"),
-        OUString(".uno:DecrementIndent"),
-        OUString(".uno:CharFontName"),
-        OUString(".uno:FontHeight"),
-        OUString(".uno:StyleApply"),
         OUString(".uno:FontColor"),
-        OUString(".uno:BackColor")
+        OUString(".uno:FontHeight"),
+        OUString(".uno:IncrementIndent"),
+        OUString(".uno:Italic"),
+        OUString(".uno:JustifyPara"),
+        OUString(".uno:OutlineFont"),
+        OUString(".uno:LeftPara"),
+        OUString(".uno:RightPara"),
+        OUString(".uno:Shadowed"),
+        OUString(".uno:SubScript"),
+        OUString(".uno:SuperScript"),
+        OUString(".uno:Strikeout"),
+        OUString(".uno:StyleApply"),
+        OUString(".uno:Underline")
     };
 
     util::URL aCommandURL;
