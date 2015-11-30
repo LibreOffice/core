@@ -30,13 +30,13 @@
  <toolbar:toolbaritem xlink:href=".uno:FillColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox"/>
  <toolbar:toolbaritem xlink:href=".uno:LineToolbox"/>
  <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes"/>
