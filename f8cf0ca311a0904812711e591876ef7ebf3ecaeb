@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_ba993022",
+        "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-30T15:46:44Z",
+      "side": 1,
+      "message": "Good point.\nThe NeonLockStore code currently doesn\u0027t handle the m_pNeonLockStore to guard for a NULL pointer.\n\nI\u0027ll think of a way to check that, though this means that in case of wrong initialization the lock functionality would not work.\n\nSo here instead of assert a SAL_WARN_IF would be better.\n\nBut what would be best in the release version?\n\nI think that alerting the user would be the right idea, for example fail the lock with something \"Lock not available: LO internal error\" ?\n\nOr what else?\n\nIn the end: write additional code in a separate patch to address the NULL m_pNeonLockStore pointer situation.\nA patch to be proposed together with this one.",
+      "parentUuid": "dab17558_7a69888b",
+      "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_da04f4c7",
         "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_faa3b84d",
+        "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-30T15:46:44Z",
+      "side": 1,
+      "message": "My fault: SAL_WARN_IF it\u0027s better, since the following code deals with the situation either way, both empty or not empty.",
+      "parentUuid": "dab17558_da04f4c7",
+      "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_ba0930e0",
         "filename": "ucb/source/ucp/webdav-neon/NeonPropFindRequest.cxx",
         "patchSetId": 5
@@ -47,6 +83,24 @@
       "writtenOn": "2015-11-30T09:06:54Z",
       "side": 1,
       "message": "this assert looks dubious, esp. given UCBDeadPropertyValue::createFromXML returns bool to indicate success (so it is apparently assumed it can fail; esp. as ne_xml_create can presumably fail?)",
+      "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_7a9068ed",
+        "filename": "ucb/source/ucp/webdav-neon/NeonPropFindRequest.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-11-30T15:46:44Z",
+      "side": 1,
+      "message": "Yes it can fail and in release build nothing should happen.\n\nThis is part of the \u0027WebDAV Dead Property\u0027 management I didn\u0027t fully explore.\nThey are the properties created and maintained by the client (LO); currently LO doesn\u0027t use that capability.\n\nBetter a SAL_WARN_IF here.",
+      "parentUuid": "dab17558_ba0930e0",
       "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
