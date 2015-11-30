@@ -262,6 +262,12 @@ gb_LinkTarget_LDFLAGS := \
 	$(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-nologo,) \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 
+# Prevent warning spamming
+# Happens because of the way we link our unit tests with our libraries.
+gb_LinkTarget_LDFLAGS += \
+	/ignore:4217
+
+
 gb_DEBUGINFO_FLAGS := -Zi
 
 ifeq ($(VCVER),120)
