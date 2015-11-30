@@ -37,6 +37,10 @@ void setupccenv() {
     char* libbuf;
     size_t liblen;
     _dupenv_s(&libbuf,&liblen,"ILIB");
+    if (libbuf == nullptr) {
+        std::cerr << "No environment variable ILIB" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
     libpath.append(libbuf);
     free(libbuf);
     if(_putenv(libpath.c_str())<0) {
@@ -49,6 +53,10 @@ void setupccenv() {
     char* incbuf;
     size_t inclen;
     _dupenv_s(&incbuf,&inclen,"SOLARINC");
+    if (incbuf == nullptr) {
+        std::cerr << "No environment variable SOLARINC" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
     string inctmp(incbuf);
     free(incbuf);
 
