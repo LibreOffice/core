@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
-<id type="desktop">libreoffice-draw.desktop</id>
-<licence>CC0</licence>
+<component type="desktop">
+<id>libreoffice-draw.desktop</id>
+<project_license>MPL-2.0</project_license>
+<name>LibreOffice Draw</name>
+<summary>graphics editor part of the LibreOffice productivity suite</summary>
 <description>
 <p>
 LibreOffice Draw is an easy-to-use graphics editor, which empowers you to create
@@ -21,9 +23,12 @@ can easily share drawings with users of other popular office suites without
 worrying about compatibility.
 </p>
 </description>
-<url type="homepage">http://www.libreoffice.org/features/draw/</url>
+<url type="homepage">http://www.libreoffice.org/discover/draw/</url>
 <screenshots>
-<screenshot type="default">http://www.libreoffice.org/assets/Uploads/EN-Project_images/800x600/Draw/Screenshot-68.png</screenshot>
+<screenshot type="default">http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Draw-02-Tiger-fdo82219.png</screenshot>
+<screenshot>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Draw-03-Square-fdo75097.png</screenshot>
 </screenshots>
+<project_group>The Document Foundation</project_group>
+<developer_name>The Document Foundation</developer_name>
 <updatecontact>libreoffice_at_lists.freedesktop.org</updatecontact>
-</application>
+</component>

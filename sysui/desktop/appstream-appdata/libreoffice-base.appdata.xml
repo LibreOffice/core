@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
-<id type="desktop">libreoffice-base.desktop</id>
-<licence>CC0</licence>
+<component type="desktop">
+<id>libreoffice-base.desktop</id>
+<project_license>MPL-2.0</project_license>
+<name>LibreOffice Base</name>
+<summary>database manaager part of the LibreOffice productivity suite</summary>
 <description>
 <p>
 Base is a powerful database manager, part of the LibreOffice productivity suite.
@@ -22,9 +24,12 @@ In addition, the built-in support for JDBC- and ODBC-standard drivers allows you
 to connect to virtually any other existing database engine as well.
 </p>
 </description>
-<url type="homepage">http://www.libreoffice.org/features/base/</url>
+<url type="homepage">http://www.libreoffice.org/discover/base/</url>
 <screenshots>
-<screenshot type="default">http://www.libreoffice.org/assets/Uploads/EN-Project_images/800x600/Base/Screenshot-87.png</screenshot>
+<screenshot type="default">http://www.libreoffice.org/assets/Uploads/Screenshots/Base/Screenshot-78.png</screenshot>
+<screenshot>http://www.libreoffice.org/assets/Uploads/Screenshots/Base/Screenshot-80.png</screenshot>
 </screenshots>
+<project_group>The Document Foundation</project_group>
+<developer_name>The Document Foundation</developer_name>
 <updatecontact>libreoffice_at_lists.freedesktop.org</updatecontact>
-</application>
+</component>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
-<id type="desktop">libreoffice-writer.desktop</id>
-<licence>CC0</licence>
+<component type="desktop">
+<id>libreoffice-writer.desktop</id>
+<project_license>MPL-2.0</project_license>
+<name>LibreOffice Writer</name>
+<summary>word processor part of the LibreOffice productivity suite</summary>
 <description>
 <p>
 Writer is the word processor inside LibreOffice productivity suite.
@@ -23,9 +25,12 @@ can easily share documents with users of other popular office suites without
 worrying about compatibility.
 </p>
 </description>
-<url type="homepage">http://www.libreoffice.org/features/writer/</url>
+<url type="homepage">http://www.libreoffice.org/discover/writer/</url>
 <screenshots>
-<screenshot type="default">http://www.libreoffice.org/assets/Uploads/EN-Project_images/800x600/Writer/Screenshot-99.png</screenshot>
+<screenshot type="default">http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Writer-02-Table-of-Contents-Getting-Started-Guide-4-2.png</screenshot>
+<screenshot>http://www.libreoffice.org/assets/Uploads/Discover/Screenshots/_resampled/ResizedImage400300-Writer-03-Technical-Doc-fdo83524.png</screenshot>
 </screenshots>
+<project_group>The Document Foundation</project_group>
+<developer_name>The Document Foundation</developer_name>
 <updatecontact>libreoffice_at_lists.freedesktop.org</updatecontact>
-</application>
+</component>
