@@ -76,7 +76,7 @@ namespace connectivity
              * Only relevant for embedded dbs.
              */
             static const OUString our_sDBLocation;
-        protected:
+
             ::osl::Mutex        m_aMutex;
 
             TTypeInfoVector     m_aTypeInfo;    //  vector containing an entry
