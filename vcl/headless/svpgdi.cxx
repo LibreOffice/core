@@ -82,13 +82,13 @@ namespace
         double x1, y1, x2, y2;
 
         cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
         cairo_region_t *region = cairo_region_create_rectangle(&extents);
 
         cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
         cairo_region_intersect_rectangle(region, &extents);
 
         cairo_region_get_extents(region, &extents);
@@ -104,13 +104,13 @@ namespace
         double x1, y1, x2, y2;
 
         cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
         cairo_region_t *region = cairo_region_create_rectangle(&extents);
 
         cairo_stroke_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
         cairo_region_intersect_rectangle(region, &extents);
 
         cairo_region_get_extents(region, &extents);
