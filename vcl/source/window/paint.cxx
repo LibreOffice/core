@@ -1290,6 +1290,8 @@ void Window::Update()
     if ( !mpWindowImpl->mbReallyVisible )
         return;
 
+    OutputDevice::PaintScope aScope (this);
+
     bool bFlush = false;
     if ( mpWindowImpl->mpFrameWindow->mpWindowImpl->mbPaintFrame )
     {
