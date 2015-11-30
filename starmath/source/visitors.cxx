@@ -413,9 +413,9 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     // draw root-sign itself
     DrawSpecialNode( pNode );
 
-    SmTmpDevice aTmpDev( rDev, true );
+    SmTmpDevice aTmpDev( mrDev, true );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
-    rDev.SetLineColor( );
+    mrDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
     // since the width is always unscaled it corresponds ot the _original_
@@ -425,17 +425,17 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     long nBarHeight = pNode->GetWidth( ) * 7L / 100L;
     long nBarWidth = pNode->GetBodyWidth( ) + pNode->GetBorderWidth( );
     Point aBarOffset( pNode->GetWidth( ), +pNode->GetBorderWidth( ) );
-    Point aBarPos( Position + aBarOffset );
+    Point aBarPos( maPosition + aBarOffset );
 
     Rectangle  aBar( aBarPos, Size( nBarWidth, nBarHeight ) );
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
     //! increasing zoomfactor.
     //  This is done by shifting its output-position to a point that
     //  corresponds exactly to a pixel on the output device.
-    Point  aDrawPos( rDev.PixelToLogic( rDev.LogicToPixel( aBar.TopLeft( ) ) ) );
+    Point  aDrawPos( mrDev.PixelToLogic( mrDev.LogicToPixel( aBar.TopLeft( ) ) ) );
     aBar.SetPos( aDrawPos );
 
-    rDev.DrawRect( aBar );
+    mrDev.DrawRect( aBar );
 }
 
 void SmDrawingVisitor::Visit( SmDynIntegralSymbolNode* pNode )
@@ -466,13 +466,13 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
 
     Point aOffset ( Point( ) - pNode->GetPolygon( ).GetBoundRect( ).TopLeft( )
                    + Point( nBorderwidth, nBorderwidth ) ),
-          aPos ( Position + aOffset );
+          aPos ( maPosition + aOffset );
     pNode->GetPolygon( ).Move( aPos.X( ), aPos.Y( ) );    //Works because Polygon wraps a pointer
 
-    SmTmpDevice aTmpDev ( rDev, false );
+    SmTmpDevice aTmpDev ( mrDev, false );
     aTmpDev.SetLineColor( pNode->GetFont( ).GetColor( ) );
 
-    rDev.DrawPolyLine( pNode->GetPolygon( ), aInfo );
+    mrDev.DrawPolyLine( pNode->GetPolygon( ), aInfo );
 }
 
 void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
@@ -480,15 +480,15 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     if ( pNode->IsPhantom( ) )
         return;
 
-    SmTmpDevice aTmpDev ( rDev, false );
+    SmTmpDevice aTmpDev ( mrDev, false );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
-    rDev.SetLineColor( );
+    mrDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
     sal_uLong  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
 
     // get rectangle and remove borderspace
-    Rectangle  aTmp ( pNode->AsRectangle( ) + Position - pNode->GetTopLeft( ) );
+    Rectangle  aTmp ( pNode->AsRectangle( ) + maPosition - pNode->GetTopLeft( ) );
     aTmp.Left( )   += nTmpBorderWidth;
     aTmp.Right( )  -= nTmpBorderWidth;
     aTmp.Top( )    += nTmpBorderWidth;
@@ -501,10 +501,10 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     //! increasing zoomfactor.
     //  This is done by shifting its output-position to a point that
     //  corresponds exactly to a pixel on the output device.
-    Point  aPos ( rDev.PixelToLogic( rDev.LogicToPixel( aTmp.TopLeft( ) ) ) );
+    Point  aPos ( mrDev.PixelToLogic( mrDev.LogicToPixel( aTmp.TopLeft( ) ) ) );
     aTmp.SetPos( aPos );
 
-    rDev.DrawRect( aTmp );
+    mrDev.DrawRect( aTmp );
 }
 
 void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
@@ -512,15 +512,15 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
     if ( pNode->IsPhantom() || pNode->GetText().isEmpty() || pNode->GetText()[0] == '\0' )
         return;
 
-    SmTmpDevice aTmpDev ( rDev, false );
+    SmTmpDevice aTmpDev ( mrDev, false );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
-    Point  aPos ( Position );
+    Point  aPos ( maPosition );
     aPos.Y( ) += pNode->GetBaselineOffset( );
     // auf Pixelkoordinaten runden
-    aPos = rDev.PixelToLogic( rDev.LogicToPixel( aPos ) );
+    aPos = mrDev.PixelToLogic( mrDev.LogicToPixel( aPos ) );
 
-    rDev.DrawStretchText( aPos, pNode->GetWidth( ), pNode->GetText( ) );
+    mrDev.DrawStretchText( aPos, pNode->GetWidth( ), pNode->GetText( ) );
 }
 
 void SmDrawingVisitor::DrawSpecialNode( SmSpecialNode* pNode )
@@ -537,13 +537,13 @@ void SmDrawingVisitor::DrawChildren( SmNode* pNode )
     if ( pNode->IsPhantom( ) )
         return;
 
-    Point rPosition = Position;
+    Point rPosition = maPosition;
 
     SmNodeIterator it( pNode );
     while( it.Next( ) )
     {
         Point  aOffset ( it->GetTopLeft( ) - pNode->GetTopLeft( ) );
-        Position = rPosition + aOffset;
+        maPosition = rPosition + aOffset;
         it->Accept( this );
     }
 }
