@@ -69,7 +69,7 @@ public:
     OOXMLTable();
     virtual ~OOXMLTable();
 
-    void resolve(Table & rTable);
+    void resolve(Table & rTable) override;
     void add(ValuePointer_t pPropertySet);
     OOXMLTable * clone() const;
 private:
