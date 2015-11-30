@@ -312,7 +312,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
     }
     else
     {
-        OSL_FAIL( "For now unexpected tags are ignored!" );
+        SAL_WARN("oox", "OOXMLDocPropHandler::startFastElement: unknown element " << getBaseToken(nElement));
     }
 
     if ( m_nInBlock == SAL_MAX_INT32 )
