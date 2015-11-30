@@ -122,7 +122,10 @@
       </node>
       <node oor:name=".uno:InsertMultiIndex" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Table of Contents or ~Index...</value>
+          <value xml:lang="en-US">Insert Table of Contents, Index or Bibliography</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Table of Contents, ~Index or Bibliography...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -533,7 +536,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:ObjectMenu" oor:op="replace">
+      <node oor:name=".uno:FormatObjectMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Text Box and Shape</value>
         </prop>
@@ -2592,7 +2595,7 @@
           <value xml:lang="en-US">Pre~formatted Text</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Text Body&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Text Body</value>
         </prop>
