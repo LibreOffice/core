@@ -17,10 +17,12 @@ $(eval $(call gb_Executable_use_libraries,libtest,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_libs,libtest,\
 	-ldl \
 	-pthread \
 ))
+endif
 
 $(eval $(call gb_Executable_add_exception_objects,libtest,\
 	smoketest/libtest \
