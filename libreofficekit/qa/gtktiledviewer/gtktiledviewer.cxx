@@ -24,6 +24,7 @@
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <vcl/event.hxx>
 
 #ifndef g_info
 #define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
@@ -69,6 +70,7 @@ public:
 
     explicit TiledRowColumnBar(TiledBarType eType);
     static gboolean draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData);
+    static gboolean mouseEvent(GtkWidget* pWidget, GdkEvent* pEvent, gpointer pData);
     gboolean drawImpl(GtkWidget* pWidget, cairo_t* pCairo);
     static gboolean docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
     /// Adjustments of the doc widget changed -- horizontal or vertical scroll.
@@ -179,10 +181,24 @@ TiledRowColumnBar::TiledRowColumnBar(TiledBarType eType)
     m_eType(eType)
 {
     if (m_eType == ROW)
+    {
         gtk_widget_set_size_request(m_pDrawingArea, ROW_HEADER_WIDTH, -1);
+        gtk_widget_set_name(m_pDrawingArea, "rowbar");
+    }
     else
+    {
         gtk_widget_set_size_request(m_pDrawingArea, -1, COLUMN_HEADER_HEIGHT);
+        gtk_widget_set_name(m_pDrawingArea, "colbar");
+    }
     g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(TiledRowColumnBar::draw), this);
+
+    gtk_widget_add_events(GTK_WIDGET(m_pDrawingArea),
+                          GDK_BUTTON_PRESS_MASK
+                          |GDK_BUTTON_RELEASE_MASK
+                          |GDK_BUTTON_MOTION_MASK);
+
+    // Need to connect signals here?
+    // see gtksalframe for examples of how to do that...
 }
 
 gboolean TiledRowColumnBar::draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData)
@@ -331,6 +347,65 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
 
     return TRUE;
 }
+
+gboolean TiledRowColumnBar::mouseEvent(GtkWidget* pDrawingArea, GdkEvent* pEvent, gpointer pData)
+{
+    GtkWidget* pDocView = static_cast<GtkWidget*>(pData);
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
+
+    int nButton = 0;
+    int nX;
+    int nY;
+    int nLOKEvent;
+
+    if (pEvent->type == GDK_BUTTON_PRESS || pEvent->type == GDK_BUTTON_RELEASE)
+    {
+        nLOKEvent = (pEvent->type == GDK_BUTTON_PRESS) ? LOK_MOUSEEVENT_MOUSEBUTTONDOWN : LOK_MOUSEEVENT_MOUSEBUTTONUP;
+
+        GdkEventButton* pButtonEvent = reinterpret_cast<GdkEventButton*>(pEvent);
+
+        nX = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), pButtonEvent->x);
+        nY = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), pButtonEvent->y);
+
+        switch (pButtonEvent->button)
+        {
+        case 1:
+            nButton = MOUSE_LEFT;
+            break;
+        case 2:
+            nButton = MOUSE_MIDDLE;
+            break;
+        case 3:
+            nButton = MOUSE_RIGHT;
+            break;
+        }
+    }
+    else if (pEvent->type == GDK_MOTION_NOTIFY)
+    {
+        nLOKEvent = LOK_MOUSEEVENT_MOUSEMOVE;
+
+        GdkEventMotion* pMotionEvent = reinterpret_cast<GdkEventMotion*>(pEvent);
+
+        nX = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), pMotionEvent->x);
+        nY = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), pMotionEvent->y);
+    }
+    else
+    {
+        assert(false);
+        return false;
+    }
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      nLOKEvent,
+                                      nX,
+                                      nY,
+                                      1,
+                                      nButton,
+                                      0, // modifier - not yet supported here - it's lokdocview internal?
+                                      gtk_widget_get_name(pDrawingArea));
+
+    return true;
+}
+
 
 TiledCornerButton::TiledCornerButton()
     : m_pDrawingArea(gtk_drawing_area_new())
@@ -1236,6 +1311,16 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     g_signal_connect(pHAdjustment, "value-changed", G_CALLBACK(TiledRowColumnBar::docAdjustmentChanged), rWindow.m_pDocView);
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
     g_signal_connect(pVAdjustment, "value-changed", G_CALLBACK(TiledRowColumnBar::docAdjustmentChanged), rWindow.m_pDocView);
+
+
+    // columnbar events
+    g_signal_connect(rWindow.m_pColumnBar->m_pDrawingArea, "button-press-event", G_CALLBACK(TiledRowColumnBar::mouseEvent), rWindow.m_pDocView);
+    g_signal_connect(rWindow.m_pColumnBar->m_pDrawingArea, "button-release-event", G_CALLBACK(TiledRowColumnBar::mouseEvent), rWindow.m_pDocView);
+    g_signal_connect(rWindow.m_pColumnBar->m_pDrawingArea, "motion-notify-event", G_CALLBACK(TiledRowColumnBar::mouseEvent), rWindow.m_pDocView);
+    g_signal_connect(rWindow.m_pRowBar->m_pDrawingArea, "button-press-event", G_CALLBACK(TiledRowColumnBar::mouseEvent), rWindow.m_pDocView);
+    g_signal_connect(rWindow.m_pRowBar->m_pDrawingArea, "button-release-event", G_CALLBACK(TiledRowColumnBar::mouseEvent), rWindow.m_pDocView);
+    g_signal_connect(rWindow.m_pRowBar->m_pDrawingArea, "motion-notify-event", G_CALLBACK(TiledRowColumnBar::mouseEvent), rWindow.m_pDocView);
+
 
     rWindow.m_pProgressBar = gtk_progress_bar_new ();
     g_signal_connect(rWindow.m_pDocView, "load-changed", G_CALLBACK(loadChanged), rWindow.m_pProgressBar);

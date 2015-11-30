@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Executable_Executable,gtktiledviewer))
 
+$(eval $(call gb_Executable_use_sdk_api,gtktiledviewer))
+
 $(eval $(call gb_Executable_set_include,gtktiledviewer,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \
