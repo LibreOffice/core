@@ -519,6 +519,8 @@ public:
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
     /// @see ScModelObj::getRowColumnHeaders().
     OUString getRowColumnHeaders(const Rectangle& rRectangle);
+    void postColBarMouseEvent(int nType, const MouseEvent& rEvent);
+    void postRowBarMouseEvent(int nType, const MouseEvent& rEvent);
 };
 
 #endif

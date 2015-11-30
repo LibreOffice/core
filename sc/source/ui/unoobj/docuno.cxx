@@ -591,7 +591,7 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 }
 
-void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier, const OUString& aTargetWindow)
 {
     SolarMutexGuard aGuard;
 
@@ -611,26 +611,40 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     MouseEvent aEvent(Point(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY()), nCount,
             MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
-    switch (nType)
+
+    if (aTargetWindow.isEmpty() || aTargetWindow == "document")
     {
-    case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-        pGridWindow->MouseButtonDown(aEvent);
-        break;
-    case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-        pGridWindow->MouseButtonUp(aEvent);
+        switch (nType)
+        {
+        case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+            pGridWindow->MouseButtonDown(aEvent);
+            break;
+        case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+            pGridWindow->MouseButtonUp(aEvent);
 
-        // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
-        // will not take care of releasing that with tiled rendering
-        if (pGridWindow->IsTracking())
-            pGridWindow->EndTracking(TrackingEventFlags::DontCallHdl);
+            // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
+            // will not take care of releasing that with tiled rendering
+            if (pGridWindow->IsTracking())
+                pGridWindow->EndTracking(TrackingEventFlags::DontCallHdl);
 
-        break;
-    case LOK_MOUSEEVENT_MOUSEMOVE:
-        pGridWindow->MouseMove(aEvent);
-        break;
-    default:
-        assert(false);
-        break;
+            break;
+        case LOK_MOUSEEVENT_MOUSEMOVE:
+            pGridWindow->MouseMove(aEvent);
+            break;
+        default:
+            assert(false);
+            break;
+        }
+    }
+    else if (aTargetWindow == "colbar")
+    {
+        ScTabView* pTabView = pViewData->GetView();
+        pTabView->postColBarMouseEvent(nType, aEvent);
+    }
+    else if (aTargetWindow == "rowbar")
+    {
+        ScTabView* pTabView = pViewData->GetView();
+        pTabView->postRowBarMouseEvent(nType, aEvent);
     }
 }
 

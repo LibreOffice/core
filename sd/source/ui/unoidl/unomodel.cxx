@@ -2425,7 +2425,7 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 }
 
-void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier, const OUString& /*aTargetWindow*/)
 {
     SolarMutexGuard aGuard;
 

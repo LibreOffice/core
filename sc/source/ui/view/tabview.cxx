@@ -25,6 +25,9 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 #include "tabview.hxx"
 #include "tabvwsh.hxx"
 #include "document.hxx"
@@ -2354,6 +2357,43 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     return OUString::fromUtf8(aStream.str().c_str());
+}
+
+void postHeaderMouseEvent(vcl::Window* pBar, int nType, const MouseEvent& rEvent)
+{
+    switch (nType)
+    {
+    case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+        pBar->MouseButtonDown(rEvent);
+        break;
+    case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+        pBar->MouseButtonUp(rEvent);
+
+            // // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
+            // // will not take care of releasing that with tiled rendering
+            // if (pGridWindow->IsTracking())
+            //     pGridWindow->EndTracking(TrackingEventFlags::DontCallHdl);
+
+        break;
+    case LOK_MOUSEEVENT_MOUSEMOVE:
+        pBar->MouseMove(rEvent);
+        break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
+void ScTabView::postColBarMouseEvent(int nType, const MouseEvent& rEvent)
+{
+    ScColBar* pBar = pColBar[SC_SPLIT_LEFT];
+    postHeaderMouseEvent(pBar, nType, rEvent);
+}
+
+void ScTabView::postRowBarMouseEvent(int nType, const MouseEvent& rEvent)
+{
+    ScRowBar* pBar = pRowBar[SC_SPLIT_BOTTOM];
+    postHeaderMouseEvent(pBar, nType, rEvent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

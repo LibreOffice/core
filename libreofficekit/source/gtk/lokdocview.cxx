@@ -1549,7 +1549,8 @@ postMouseEventInThread(gpointer data)
                                               pLOEvent->m_nPostMouseEventY,
                                               pLOEvent->m_nPostMouseEventCount,
                                               pLOEvent->m_nPostMouseEventButton,
-                                              pLOEvent->m_nPostMouseEventModifier);
+                                              pLOEvent->m_nPostMouseEventModifier,
+                                              "");
 }
 
 static void

@@ -218,9 +218,9 @@ public:
      * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
      * @param nModifier: which keyboard modifier: (see include/rsc/rsc-vcl-shared-types.hxx for possible values)
      */
-    inline void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+    inline void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier, const char* pTargetWindow = 0)
     {
-        mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY, nCount, nButtons, nModifier);
+        mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY, nCount, nButtons, nModifier, pTargetWindow);
     }
 
     /**

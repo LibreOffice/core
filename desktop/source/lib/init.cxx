@@ -332,7 +332,8 @@ static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nY,
                                 int nCount,
                                 int nButtons,
-                                int nModifier);
+                                int nModifier,
+                                const char* pTargetWindow);
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments,
@@ -1112,7 +1113,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
 }
 
-static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier, const char* pTargetWindow)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -1121,7 +1122,8 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
         return;
     }
 
-    pDoc->postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier);
+    const OUString aTargetWindow(pTargetWindow, strlen(pTargetWindow), RTL_TEXTENCODING_UTF8);
+    pDoc->postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, aTargetWindow);
 
     Pointer aPointer = pDoc->getPointer();
 
