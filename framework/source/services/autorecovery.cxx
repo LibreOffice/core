@@ -2475,6 +2475,8 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
         return;
 
     css::uno::Reference< css::frame::XFrame >   xFrame   = xController->getFrame();
+    if (!xFrame.is())
+        return;
     css::uno::Reference< css::frame::XDesktop > xDesktop (xFrame->getCreator(), css::uno::UNO_QUERY);
     if (!xDesktop.is())
         return;
