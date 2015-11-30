@@ -170,8 +170,9 @@ public:
      * @remarks This constructor will do the drawing, no need to anything more.
      */
     SmDrawingVisitor( OutputDevice &rDevice, Point position, SmNode* pTree )
-        : rDev( rDevice ) {
-        this->Position = position;
+        : mrDev( rDevice )
+        , maPosition( position )
+    {
         pTree->Accept( this );
     }
     virtual ~SmDrawingVisitor() {}
@@ -215,13 +216,13 @@ private:
     /** Draw an SmSpecialNode or a subclass of this  */
     void DrawSpecialNode( SmSpecialNode* pNode );
     /** OutputDevice to draw on */
-    OutputDevice& rDev;
-    /** Position to draw on the rDev
+    OutputDevice& mrDev;
+    /** Position to draw on the mrDev
      * @remarks This variable is used to pass parameters in DrawChildren( ), this means
                 that after a call to DrawChildren( ) the contents of this method is undefined
                 so if needed cache it locally on the stack.
      */
-    Point Position;
+    Point maPosition;
 };
 
 // SmSetSelectionVisitor
