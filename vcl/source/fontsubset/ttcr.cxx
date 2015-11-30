@@ -394,7 +394,7 @@ int StreamToFile(TrueTypeCreator *_this, const char* fname)
     FILE* fd;
 
     if ((r = StreamToMemory(_this, &ptr, &length)) != SF_OK) return r;
-    if ((!fname) || (fd = fopen(fname, "wb")) == NULL)) {
+    if ((!fname) || ((fd = fopen(fname, "wb")) == NULL)) {
         free(ptr);
         return SF_BADFILE;
     }
