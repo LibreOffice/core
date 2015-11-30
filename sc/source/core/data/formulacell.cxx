@@ -129,13 +129,19 @@ static struct DebugCalculation
     void storeResult( const svl::SharedString& rStr )
     {
         if (mbActive && !mvPos.empty())
-            mvPos.back().maResult = rStr.getString();
+            mvPos.back().maResult = "\"" + rStr.getString() + "\"";
     }
 
     void storeResult( const double& fVal )
     {
         if (mbActive && !mvPos.empty())
-            storeResult( rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 2, '.', true));
+            mvPos.back().maResult = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 2, '.', true);
+    }
+
+    void storeResultError( const sal_uInt16& nErr )
+    {
+        if (mbActive && !mvPos.empty())
+            mvPos.back().maResult = "Err:" + OUString::number( nErr);
     }
 
 } aDC;
@@ -1714,7 +1720,9 @@ void ScFormulaCell::Interpret()
     }
 
 #if DEBUG_CALCULATION
-    if (aResult.IsValue())
+    if (sal_uInt16 nErr = aResult.GetResultError())
+        aDC.storeResultError( nErr);
+    else if (aResult.IsValue())
         aDC.storeResult( aResult.GetDouble());
     else
         aDC.storeResult( aResult.GetString());
