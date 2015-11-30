@@ -2628,13 +2628,20 @@ void GtkSalFrame::SetPointerPos( long nX, long nY )
 void GtkSalFrame::Flush()
 {
     if( m_pGraphics )
-        m_pGraphics->Flush();
-
+    {
+        // Don't flush if we're still painting, just wait.
+        if ( GetPaintNesting() == 0 )
+        {
+            m_pGraphics->Flush();
 #if GTK_CHECK_VERSION(3,0,0)
-    gdk_display_flush( getGdkDisplay() );
+            gdk_display_flush( getGdkDisplay() );
 #else
-    XFlush (GDK_DISPLAY_XDISPLAY (getGdkDisplay()));
+            XFlush (GDK_DISPLAY_XDISPLAY (getGdkDisplay()));
 #endif
+        }
+        else
+            SAL_WARN("vcl.opengl", "avoid erroneous flush during paint");
+    }
 }
 
 #ifndef GDK_Open
