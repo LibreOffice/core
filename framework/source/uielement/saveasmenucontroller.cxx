@@ -83,7 +83,19 @@ void SaveAsMenuController::impl_setPopupMenu()
     if ( pVCLPopupMenu )
     {
         pVCLPopupMenu->InsertItem( ".uno:SaveAs", m_xFrame );
-        pVCLPopupMenu->InsertItem( ".uno:SaveAsRemote", m_xFrame );
+
+        // Add Save Remote File command only where it's supported.
+        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
+        if ( xDispatchProvider.is() )
+        {
+            css::util::URL aTargetURL;
+            aTargetURL.Complete = ".uno:SaveAsRemote";
+            m_xURLTransformer->parseStrict( aTargetURL );
+
+            css::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 ) );
+            if ( xDispatch.is() )
+                pVCLPopupMenu->InsertItem( aTargetURL.Complete, m_xFrame );
+        }
     }
 }
 
