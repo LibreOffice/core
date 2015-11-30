@@ -187,7 +187,7 @@ class AutoCorrEdit : public Edit
     sal_Int32 m_nCol;
     bool bSpaces;
 
-    void dispose() override;
+    void dispose() SAL_OVERRIDE;
 
 public:
     AutoCorrEdit(vcl::Window* pParent, const ResId& rResId)
