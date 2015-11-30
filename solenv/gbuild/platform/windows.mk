@@ -50,4 +50,9 @@ gb_Executable_LAYER := \
 # empty to avoid --warn-undefined-functions
 gb_Library__set_soversion_script_platform =
 
+# Prevent warning spamming
+# Happens because of the way we link our unit tests with our libraries.
+gb_LinkTarget_LDFLAGS += \
+	/ignore:4217
+
 # vim:set noexpandtab:
