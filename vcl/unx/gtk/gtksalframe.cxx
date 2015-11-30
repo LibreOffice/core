@@ -2770,8 +2770,18 @@ KeyIndicatorState GtkSalFrame::GetIndicatorState()
 #if !GTK_CHECK_VERSION(3,0,0)
     return GetGtkSalData()->GetGtkDisplay()->GetIndicatorState();
 #else
-    g_warning ("missing get indicator state");
-    return KeyIndicatorState::NONE;
+    KeyIndicatorState nState = KeyIndicatorState::NONE;
+
+    GdkKeymap *pKeyMap = gdk_keymap_get_for_display(getGdkDisplay());
+
+    if (gdk_keymap_get_caps_lock_state(pKeyMap))
+        nState |= KeyIndicatorState::CAPSLOCK;
+    if (gdk_keymap_get_num_lock_state(pKeyMap))
+        nState |= KeyIndicatorState::NUMLOCK;
+    if (gdk_keymap_get_scroll_lock_state(pKeyMap))
+        nState |= KeyIndicatorState::SCROLLLOCK;
+
+    return nState;
 #endif
 }
 
