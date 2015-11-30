@@ -1217,7 +1217,6 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
             cairo_clip(cr);
 
             cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
-            cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
             cairo_mask(cr, pattern);
             cairo_pattern_destroy(pattern);
 
