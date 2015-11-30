@@ -359,7 +359,7 @@
       </node>
       <node oor:name="private:resource/toolbar/outlinetoolbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>1,0</value>
+          <value>0,1</value>
         </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>true</value>
