@@ -923,7 +923,7 @@ GtkSalFrame::~GtkSalFrame()
         g_object_unref( G_OBJECT( m_pForeignTopLevel) );
 
     delete m_pGraphics;
-    m_pGraphics = NULL;
+    m_pGraphics = nullptr;
 }
 
 void GtkSalFrame::moveWindow( long nX, long nY )
@@ -1171,7 +1171,7 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
 
     m_bGraphics = false;
-    m_pGraphics = NULL;
+    m_pGraphics = nullptr;
 
     // fake an initial geometry, gets updated via configure event or SetPosSize
     if( m_bDefaultPos || m_bDefaultSize )
