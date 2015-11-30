@@ -5647,7 +5647,7 @@
           <desc>Determines whether Software Interpreter can be used to speed
           up some operations on Calc formulas.</desc>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="MacroRecorderMode" oor:type="xs:boolean" oor:nillable="false">
         <info>
