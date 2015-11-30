@@ -58,3 +58,10 @@ How to add a new icon for a new command:
   all its letters lower-cased.  In this example, the file names will be
   lc_openfromcalc.png and sc_openfromcalc.png.  Note that you need to add new
   images to the galaxy theme for them to show up in any themes at all.
+
+How to call optipng to optimize size:
+---------------------------
+
+8 bit palettes are on the slow path for quartz/svp/gtk3 so avoid using palettes with...
+
+$ optipng -nc <file>
