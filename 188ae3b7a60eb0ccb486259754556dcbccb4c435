@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_9d3426df",
+        "filename": "bin/update_pch",
+        "patchSetId": 3
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-30T22:46:03Z",
+      "side": 1,
+      "message": "this needs an #ifdef _WIN32 or something like that; while in practice nobody does that, it *is* possible to --enable-pch with GCC and clang too, no need to unnecessarily break that",
+      "revId": "188ae3b7a60eb0ccb486259754556dcbccb4c435",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_7d3182ec",
+        "filename": "xmlsecurity/source/xmlsec/nss/nssinitializer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-30T22:46:03Z",
+      "side": 1,
+      "message": "please add a short comment that this prevents a conflict, so nobody removes it because it looks unnecessary...",
+      "revId": "188ae3b7a60eb0ccb486259754556dcbccb4c435",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
