@@ -141,6 +141,9 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
 namespace
 {
 #if CAIRO_VERSION_MAJOR == 1 && CAIRO_VERSION_MINOR < 10
+
+#define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
+
     struct cairo_rectangle_int_t
     {
         double x;
