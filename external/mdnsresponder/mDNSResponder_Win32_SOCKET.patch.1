@@ -16,7 +16,7 @@ diff --git a/mDNSShared/dns_sd.h b/mDNSShared/dns_sd.h
 index 31daaeb..faaa741 100644
 --- a/mDNSShared/dns_sd.h
 +++ b/mDNSShared/dns_sd.h
-@@ -741,33 +741,6 @@ DNSServiceErrorType DNSSD_API DNSServiceGetProperty
+@@ -741,35 +741,6 @@ DNSServiceErrorType DNSSD_API DNSServiceGetProperty
  *
  *********************************************************************************************/
  
@@ -24,7 +24,7 @@ index 31daaeb..faaa741 100644
 - *
 - * Access underlying Unix domain socket for an initialized DNSServiceRef.
 - * The DNS Service Discovery implementation uses this socket to communicate between the client and
-- * the mDNSResponder daemon. The application MUST NOT directly read from or write to this socket.
+- * the daemon. The application MUST NOT directly read from or write to this socket.
 - * Access to the socket is provided so that it can be used as a kqueue event source, a CFRunLoop
 - * event source, in a select() loop, etc. When the underlying event management subsystem (kqueue/
 - * select/CFRunLoop etc.) indicates to the client that data is available for reading on the
@@ -34,6 +34,8 @@ index 31daaeb..faaa741 100644
 - * a client can choose to fork a thread and have it loop calling "DNSServiceProcessResult(ref);"
 - * If DNSServiceProcessResult() is called when no data is available for reading on the socket, it
 - * will block until data does become available, and then process the data and return to the caller.
+- * The application is reponsible for checking the return value of DNSServiceProcessResult() to determine
+- * if the socket is valid and if it should continue to process data on the socket.
 - * When data arrives on the socket, the client is responsible for calling DNSServiceProcessResult(ref)
 - * in a timely fashion -- if the client allows a large backlog of data to build up the daemon
 - * may terminate the connection.

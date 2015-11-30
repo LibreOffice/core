@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,mDNSResponder,$(MDNSRESPONDER_TARBA
 
 $(eval $(call gb_UnpackedTarball_add_patches,mDNSResponder,\
 	external/mdnsresponder/mDNSResponder_Win32_SOCKET.patch.1 \
+	external/mdnsresponder/mDNSResponder_Win32_buildfix.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
