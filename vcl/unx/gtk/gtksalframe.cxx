@@ -1392,6 +1392,15 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     if( m_pParent && m_pParent->m_pWindow && ! isChild() )
         gtk_window_set_screen( GTK_WINDOW(m_pWindow), gtk_window_get_screen( GTK_WINDOW(m_pParent->m_pWindow) ) );
 
+    if (m_pParent)
+    {
+        if (!(m_pParent->m_nStyle & SalFrameStyleFlags::PLUG))
+            gtk_window_set_transient_for( GTK_WINDOW(m_pWindow), GTK_WINDOW(m_pParent->m_pWindow) );
+        m_pParent->m_aChildren.push_back( this );
+    }
+
+    InitCommon();
+
     // set window type
     bool bDecoHandling =
         ! isChild() &&
@@ -1432,17 +1441,9 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 #endif
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), eType );
         gtk_window_set_gravity( GTK_WINDOW(m_pWindow), GDK_GRAVITY_STATIC );
-        if( m_pParent && ! (m_pParent->m_nStyle & SalFrameStyleFlags::PLUG) )
-            gtk_window_set_transient_for( GTK_WINDOW(m_pWindow), GTK_WINDOW(m_pParent->m_pWindow) );
     }
     else if( (nStyle & SalFrameStyleFlags::FLOAT) )
-    {
-        gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), GDK_WINDOW_TYPE_HINT_UTILITY );
-    }
-    if( m_pParent )
-        m_pParent->m_aChildren.push_back( this );
-
-    InitCommon();
+        gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), GDK_WINDOW_TYPE_HINT_POPUP_MENU );
 
     if( eWinType == GTK_WINDOW_TOPLEVEL )
     {
