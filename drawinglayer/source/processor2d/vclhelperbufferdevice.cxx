@@ -27,6 +27,8 @@
 #include <vcl/lazydelete.hxx>
 #include <vcl/dibtools.hxx>
 
+#include <map>
+
 
 // buffered VDev usage
 
