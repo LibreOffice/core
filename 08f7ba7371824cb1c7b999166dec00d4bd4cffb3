@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_fa161854",
+        "filename": "include/svx/svdlayer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-30T20:44:25Z",
+      "side": 1,
+      "message": "superfluous comma on restrictive which",
+      "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_ba1c9078",
+        "filename": "include/svx/svdorect.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-30T20:44:25Z",
+      "side": 1,
+      "message": "typo \"cirlce\"",
+      "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_da17d452",
+        "filename": "include/svx/svdovirt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-30T20:44:25Z",
+      "side": 1,
+      "message": "typo \"derrived\"",
+      "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1a12fc62",
+        "filename": "include/svx/svdsnpv.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-30T20:44:25Z",
+      "side": 1,
+      "message": "superfluous comma",
+      "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
