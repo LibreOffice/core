@@ -494,6 +494,7 @@ void GtkSalFrame::doKeyCallback( guint state,
 
 GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     : m_nXScreen( getDisplay()->GetDefaultXScreen() )
+    , m_pGraphics(nullptr)
 {
     getDisplay()->registerFrame( this );
     m_bDefaultPos       = true;
@@ -507,6 +508,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 
 GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     : m_nXScreen( getDisplay()->GetDefaultXScreen() )
+    , m_pGraphics(nullptr)
 {
     getDisplay()->registerFrame( this );
     // permanently ignore errors from our unruly children ...
