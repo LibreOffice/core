@@ -39,23 +39,6 @@
 #pragma warning(pop)
 #endif
 
-struct FormatEntry
-{
-   FormatEntry();
-
-   FormatEntry(
-        const char* mime_content_type,
-        const char* human_presentable_name,
-        const char* native_format_name,
-        CLIPFORMAT std_clipboard_format_id,
-        css::uno::Type const & cppu_type
-    );
-
-    css::datatransfer::DataFlavor aDataFlavor;
-    OUString                      aNativeFormatName;
-    sal_Int32                     aStandardFormatId;
-};
-
 // CDataFormatTranslator
 
 class CDataFormatTranslator : public
@@ -86,8 +69,6 @@ public:
         throw(css::uno::RuntimeException);
 
 private:
-    void SAL_CALL initTranslationTable( );
-
     void SAL_CALL findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, css::datatransfer::DataFlavor& aDataFlavor ) const;
     void SAL_CALL findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, css::datatransfer::DataFlavor& aDataFlavor ) const;
     void SAL_CALL findStandardFormatIdForCharset( const OUString& aCharset, css::uno::Any& aAny ) const;
@@ -101,7 +82,6 @@ private:
     css::datatransfer::DataFlavor SAL_CALL mkDataFlv( const OUString& cnttype, const OUString& hpname, css::uno::Type dtype );
 
 private:
-    std::vector< FormatEntry >                                m_TranslTable;
     const css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 };
 
