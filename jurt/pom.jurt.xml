@@ -1,0 +1,44 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.libreoffice</groupId>
+  <artifactId>jurt</artifactId>
+  <version>@version@</version>
+  <packaging>jar</packaging>
+  <name>LibreOffice - Java Uno Runtime</name>
+  <description>Java Uno Runtime</description>
+  <url>https://www.libreoffice.org</url>
+
+  <licenses>
+    <license>
+      <name>Mozilla Public License, Version 2.0</name>
+      <url>https://www.mozilla.org/en-US/MPL/2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>http://cgit.freedesktop.org/libreoffice/core</url>
+    <connection>https://gerrit.libreoffice.org/#/admin/projects/core</connection>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>The Document Foundation</name>
+    </developer>
+  </developers>
+
+  <mailingLists>
+    <mailingList>
+      <name>LibreOffice Development Mailing List</name>
+      <post>libreoffice@lists.freedesktop.org</post>
+      <subscribe>http://lists.freedesktop.org/mailman/listinfo/libreoffice</subscribe>
+      <unsubscribe>http://lists.freedesktop.org/mailman/listinfo/libreoffice</unsubscribe>
+      <archive>http://lists.freedesktop.org/archives/libreoffice</archive>
+    </mailingList>
+  </mailingLists>
+
+  <issueManagement>
+    <url>https://bugs.documentfoundation.org</url>
+    <system>LibreOffice Issue Tracker</system>
+  </issueManagement>
+</project>
