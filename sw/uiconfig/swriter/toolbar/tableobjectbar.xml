@@ -28,8 +28,8 @@
  <toolbar:toolbaritem xlink:href=".uno:DeleteTable"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EntireCell"/>
- <toolbar:toolbaritem xlink:href=".uno:EntireRow"/>
- <toolbar:toolbaritem xlink:href=".uno:EntireColumn"/>
+ <toolbar:toolbaritem xlink:href=".uno:EntireRow" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EntireColumn" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SelectTable"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:MergeCells"/>
