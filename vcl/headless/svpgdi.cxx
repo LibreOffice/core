@@ -64,9 +64,9 @@ rDevice
     #endif
 }
 
-#define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
-
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
+
+#define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
 
 struct cairo_rectangle_int_t
 {
