@@ -3952,7 +3952,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             return false;
     }
 
-    if (!ScCalcConfig::isOpenCLEnabled() && (getenv("SC_ALLOW_SOFTWARE_INTERPRETER") == nullptr))
+    if (!ScCalcConfig::isOpenCLEnabled() && !ScCalcConfig::isSwInterpreterEnabled())
         return false;
 
     // TODO : Disable invariant formula group interpretation for now in order
