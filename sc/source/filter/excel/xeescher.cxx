@@ -159,15 +159,15 @@ static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectan
 
 static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 nTab, Rectangle &aFrom, Rectangle &aTo )
 {
-    bool bTo = false;
     sal_Int32 nCol = 0, nRow = 0;
     sal_Int32 nColOff = 0, nRowOff= 0;
 
-    while(true)
+    const bool bRTL = rRoot.GetDocRef().IsNegativePage( nTab );
+    if (!bRTL)
     {
-        Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
-        if( !bTo )
+        while(true)
         {
+            Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Left() <= aRect.Left() )
             {
                 nCol++;
@@ -182,11 +182,38 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
             {
                 aFrom = Rectangle( nCol-1, static_cast<long>(HMM2XL( nColOff )),
                                    nRow-1, static_cast<long>(HMM2XL( nRowOff )) );
-                bTo=true;
+                break;
             }
         }
-        if( bTo )
+    }
+    else
+    {
+        while(true)
         {
+            Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            if( r.Left() >= aRect.Left() )
+            {
+                nCol++;
+                nColOff = r.Left() - aRect.Left();
+            }
+            if( r.Top() <= aRect.Top() )
+            {
+                nRow++;
+                nRowOff = aRect.Top() - r.Top();
+            }
+            if( r.Left() < aRect.Left() && r.Top() > aRect.Top() )
+            {
+                aFrom = Rectangle( nCol-1, static_cast<long>(HMM2XL( nColOff )),
+                                   nRow-1, static_cast<long>(HMM2XL( nRowOff )) );
+                break;
+            }
+        }
+    }
+    if (!bRTL)
+    {
+        while(true)
+        {
+            Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Right() < aRect.Right() )
                 nCol++;
             if( r.Bottom() < aRect.Bottom() )
@@ -199,7 +226,23 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
             }
         }
     }
-    return;
+    else
+    {
+        while(true)
+        {
+            Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            if( r.Right() >= aRect.Right() )
+                nCol++;
+            if( r.Bottom() < aRect.Bottom() )
+                nRow++;
+            if( r.Right() < aRect.Right() && r.Bottom() >= aRect.Bottom() )
+            {
+                aTo = Rectangle( nCol, static_cast<long>(HMM2XL( r.Left() - aRect.Right() )),
+                                 nRow, static_cast<long>(HMM2XL( aRect.Bottom() - r.Top() )));
+                break;
+            }
+        }
+    }
 }
 
 // Escher client anchor =======================================================
