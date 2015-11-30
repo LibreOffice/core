@@ -154,10 +154,6 @@ void OpenGLSalGraphicsImpl::Init()
             mpContext->ReleaseFramebuffer( maOffscreenTex );
         }
         maOffscreenTex = OpenGLTexture();
-        SAL_DEBUG("paint: " << this << " size mismatch - delete texture " <<
-                  maOffscreenTex.GetWidth() << " x " <<
-                  maOffscreenTex.GetHeight() << " vs. " <<
-                  GetWidth() << " x " << GetHeight());
         VCL_GL_INFO("::Init - re-size offscreen texture");
     }
 
@@ -438,7 +434,6 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
             mpContext->ReleaseFramebuffer( maOffscreenTex );
             maOffscreenTex = OpenGLTexture();
             VCL_GL_INFO( "re-size offscreen texture" );
-            SAL_DEBUG( "paint: " << this << " re-size offscreen texture" );
         }
     }
 
@@ -446,8 +441,6 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
     {
         VCL_GL_INFO( "create texture of size "
                      << GetWidth() << " x " << GetHeight() );
-        SAL_DEBUG( "paint: " << this << " create texture of size "
-                   << GetWidth() << " x " << GetHeight() );
         maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
         bClearTexture = true;
     }
@@ -1957,7 +1950,6 @@ void OpenGLSalGraphicsImpl::flush()
 
     if( !maOffscreenTex )
     {
-        SAL_DEBUG("paint: " << this << " flush and swap - no texture !");
         VCL_GL_INFO( "flushAndSwap - odd no texture !" );
         return;
     }
@@ -1965,11 +1957,8 @@ void OpenGLSalGraphicsImpl::flush()
     if (mnDrawCountAtFlush == mnDrawCount)
     {
         VCL_GL_INFO( "eliding redundant flushAndSwap, no drawing since last!" );
-        SAL_DEBUG( "paint: " << this << " eliding redundant flushAndSwap, no drawing since last!" );
         return;
     }
-
-    SAL_DEBUG("paint: " << this << " flush and swap");
 
     mnDrawCountAtFlush = mnDrawCount;
 

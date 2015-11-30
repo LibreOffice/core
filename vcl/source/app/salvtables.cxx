@@ -63,12 +63,10 @@ void SalFrame::BeginPaint()
 {
     m_nPaintNesting++;
     assert (m_nPaintNesting > 0);
-    SAL_DEBUG("paint: " << this << " begin " << m_nPaintNesting);
 }
 
 void SalFrame::EndPaint()
 {
-    SAL_DEBUG("paint: " << this << " end " << m_nPaintNesting);
     assert (m_nPaintNesting > 0);
     if (--m_nPaintNesting == 0)
         Flush();
