@@ -693,7 +693,7 @@ public:
     void            SetPendingRowHeights( SCTAB nTab, bool bSet );
     SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, bool bRTL );
     SC_DLLPUBLIC bool           IsLayoutRTL( SCTAB nTab ) const;
-    bool            IsNegativePage( SCTAB nTab ) const;
+    SC_DLLPUBLIC bool           IsNegativePage( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetScenario( SCTAB nTab, bool bFlag );
     SC_DLLPUBLIC bool           IsScenario( SCTAB nTab ) const;
     SC_DLLPUBLIC void GetScenarioData( SCTAB nTab, OUString& rComment,
