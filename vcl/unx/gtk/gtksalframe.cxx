@@ -492,11 +492,6 @@ void GtkSalFrame::doKeyCallback( guint state,
         CallCallback( SALEVENT_KEYUP, &aEvent );
 }
 
-GtkSalFrame::GraphicsHolder::~GraphicsHolder()
-{
-    delete pGraphics;
-}
-
 GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     : m_nXScreen( getDisplay()->GetDefaultXScreen() )
 {
@@ -845,15 +840,13 @@ void GtkSalFrame::EnsureAppMenuWatch()
 
 void GtkSalFrame::InvalidateGraphics()
 {
-    for (unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); ++i)
+    if( m_pGraphics )
     {
-        if( !m_aGraphics[i].pGraphics )
-            continue;
 #if !GTK_CHECK_VERSION(3,0,0)
-        m_aGraphics[i].pGraphics->SetDrawable( None, m_nXScreen );
-        m_aGraphics[i].pGraphics->SetWindow(nullptr);
+        m_pGraphics->SetDrawable( None, m_nXScreen );
+        m_pGraphics->SetWindow(nullptr);
 #endif
-        m_aGraphics[i].bInUse = false;
+        m_bGraphics = false;
     }
 }
 
@@ -926,6 +919,9 @@ GtkSalFrame::~GtkSalFrame()
         g_object_unref( G_OBJECT( m_pForeignParent ) );
     if( m_pForeignTopLevel )
         g_object_unref( G_OBJECT( m_pForeignTopLevel) );
+
+    delete m_pGraphics;
+    m_pGraphics = NULL;
 }
 
 void GtkSalFrame::moveWindow( long nX, long nY )
@@ -1171,6 +1167,9 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
     m_aSystemData.pAppContext   = nullptr;
     m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
+
+    m_bGraphics = false;
+    m_pGraphics = NULL;
 
     // fake an initial geometry, gets updated via configure event or SetPosSize
     if( m_bDefaultPos || m_bDefaultSize )
@@ -1596,45 +1595,32 @@ void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
 
 SalGraphics* GtkSalFrame::AcquireGraphics()
 {
-    if( m_pWindow )
-    {
-        for( int i = 0; i < nMaxGraphics; i++ )
-        {
-            if( ! m_aGraphics[i].bInUse )
-            {
-                m_aGraphics[i].bInUse = true;
-                if( ! m_aGraphics[i].pGraphics )
-                {
-#if GTK_CHECK_VERSION(3,0,0)
-                    m_aGraphics[i].pGraphics = new GtkSalGraphics( this, m_pWindow );
-                    if( !m_aFrame.get() )
-                    {
-                        AllocateFrame();
-                        TriggerPaintEvent();
-                    }
-                    m_aGraphics[i].pGraphics->setDevice( m_aFrame );
-#else // common case:
-                    m_aGraphics[i].pGraphics = new GtkSalGraphics( this, m_pWindow, m_nXScreen );
-#endif
-                }
-                return m_aGraphics[i].pGraphics;
-            }
-        }
-    }
+    if( m_bGraphics )
+        return nullptr;
 
-    return nullptr;
+    if( !m_pGraphics )
+    {
+#if GTK_CHECK_VERSION(3,0,0)
+        m_pGraphics = new GtkSalGraphics( this, m_pWindow );
+        if( !m_aFrame.get() )
+        {
+            AllocateFrame();
+            TriggerPaintEvent();
+        }
+        m_pGraphics->setDevice( m_aFrame );
+#else // common case:
+        m_pGraphics = new GtkSalGraphics( this, m_pWindow, m_nXScreen );
+#endif
+    }
+    m_bGraphics = true;
+    return m_pGraphics;
 }
 
 void GtkSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
-    for( int i = 0; i < nMaxGraphics; i++ )
-    {
-        if( m_aGraphics[i].pGraphics == pGraphics )
-        {
-            m_aGraphics[i].bInUse = false;
-            break;
-        }
-    }
+    (void) pGraphics;
+    assert( pGraphics == m_pGraphics );
+    m_bGraphics = false;
 }
 
 bool GtkSalFrame::PostEvent(ImplSVEvent* pData)
@@ -1978,13 +1964,8 @@ void GtkSalFrame::AllocateFrame()
         m_aFrame->clear( basebmp::Color( 255, 127, 0 ) );
 #endif
 
-        // update device in existing graphics
-        for( unsigned int i = 0; i < SAL_N_ELEMENTS( m_aGraphics ); ++i )
-        {
-            if( !m_aGraphics[i].pGraphics )
-                continue;
-            m_aGraphics[i].pGraphics->setDevice( m_aFrame );
-        }
+        if( m_pGraphics )
+            m_pGraphics->setDevice( m_aFrame );
     }
 #endif
 }
@@ -2835,7 +2816,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     if( ! m_pWindow )
         return;
 
-    GtkSalGraphics* pGraphics = static_cast<GtkSalGraphics*>(m_aGraphics[0].pGraphics);
+    GtkSalGraphics* pGraphics = m_pGraphics;
     bool bFreeGraphics = false;
     if( ! pGraphics )
     {
@@ -2914,9 +2895,8 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
     }
 
     // free xrender resources
-    for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
-        if( m_aGraphics[i].bInUse )
-            m_aGraphics[i].pGraphics->SetDrawable( None, m_nXScreen );
+    if( m_pGraphics )
+        m_pGraphics->SetDrawable( None, m_nXScreen );
 
     // first deinit frame
     if( m_pIMHandler )
@@ -2957,13 +2937,10 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
     }
 
     // update graphics
-    for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
+    if( m_pGraphics )
     {
-        if( m_aGraphics[i].bInUse )
-        {
-            m_aGraphics[i].pGraphics->SetDrawable( widget_get_xid(m_pWindow), m_nXScreen );
-            m_aGraphics[i].pGraphics->SetWindow( m_pWindow );
-        }
+        m_pGraphics->SetDrawable( widget_get_xid(m_pWindow), m_nXScreen );
+        m_pGraphics->SetWindow( m_pWindow );
     }
 
     if( ! m_aTitle.isEmpty() )
