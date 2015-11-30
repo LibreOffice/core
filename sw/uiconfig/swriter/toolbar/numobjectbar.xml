@@ -31,5 +31,13 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertNeutralParagraph" toolbar:helpid="20136"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberingStart" toolbar:helpid="21738"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BulletsAndNumberingDialog" toolbar:helpid="20121" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:JumpDownThisLevel" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:JumpUpThisLevel" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ContinueNumbering" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BulletsAndNumberingDialog" toolbar:helpid="20121"/>
 </toolbar:toolbar>

@@ -47,5 +47,5 @@
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:helpid="10201"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="20456"/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="20456" toolbar:visible="false"/>
 </toolbar:toolbar>
