@@ -116,15 +116,15 @@ void FuPoor::Deactivate()
     aDragTimer.Stop();
     aScrollTimer.Stop();
     aDelayToScrollTimer.Stop ();
-        bScrollable  =
-        bDelayActive = false;
+    bScrollable = bDelayActive = false;
 
     if (pDialog)
     {
         pDialog->Hide();
     }
 
-    if (mpWindow) mpWindow->ReleaseMouse ();
+    if (mpWindow && mpWindow->IsMouseCaptured())
+        mpWindow->ReleaseMouse();
 }
 
 void FuPoor::SetWindow(::sd::Window* pWin)
