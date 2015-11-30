@@ -2778,8 +2778,10 @@ KeyIndicatorState GtkSalFrame::GetIndicatorState()
         nState |= KeyIndicatorState::CAPSLOCK;
     if (gdk_keymap_get_num_lock_state(pKeyMap))
         nState |= KeyIndicatorState::NUMLOCK;
+#if GTK_CHECK_VERSION(3,18,0)
     if (gdk_keymap_get_scroll_lock_state(pKeyMap))
         nState |= KeyIndicatorState::SCROLLLOCK;
+#endif
 
     return nState;
 #endif
