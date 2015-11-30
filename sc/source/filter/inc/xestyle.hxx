@@ -268,11 +268,11 @@ private:
 /** Stores a core number format index with corresponding Excel format index. */
 struct XclExpNumFmt
 {
-    sal_uLong           mnScNumFmt;     /// Core index of the number format.
+    sal_uInt32          mnScNumFmt;     /// Core index of the number format.
     sal_uInt16          mnXclNumFmt;    /// Resulting Excel format index.
     OUString            maNumFmtString; /// format string
 
-    inline explicit     XclExpNumFmt( sal_uLong nScNumFmt, sal_uInt16 nXclNumFmt, const OUString& rFrmt ) :
+    inline explicit     XclExpNumFmt( sal_uInt32 nScNumFmt, sal_uInt16 nXclNumFmt, const OUString& rFrmt ) :
                             mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ), maNumFmtString( rFrmt ) {}
 
     void SaveXml( XclExpXmlStream& rStrm );
@@ -289,12 +289,12 @@ public:
     virtual             ~XclExpNumFmtBuffer();
 
     /** Returns the core index of the current standard number format. */
-    inline sal_uLong    GetStandardFormat() const { return mnStdFmt; }
+    inline sal_uInt32   GetStandardFormat() const { return mnStdFmt; }
 
     /** Inserts a number format into the format buffer.
         @param nScNumFmt  The core index of the number format.
         @return  The resulting Excel format index. */
-    sal_uInt16          Insert( sal_uLong nScNumFmt );
+    sal_uInt16          Insert( sal_uInt32 nScNumFmt );
 
     /** Writes all FORMAT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -306,7 +306,7 @@ private:
     /** Writes the FORMAT record represented by rFormat. */
     void                WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat );
 
-    OUString            GetFormatCode ( sal_uInt16 nScNumFmt );
+    OUString            GetFormatCode ( sal_uInt32 nScNumFmt );
 
 private:
     typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
@@ -314,7 +314,7 @@ private:
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     XclExpNumFmtVec     maFormatMap;    /// Maps core formats to Excel indexes.
     std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
-    sal_uLong           mnStdFmt;       /// Key for standard number format.
+    sal_uInt32          mnStdFmt;       /// Key for standard number format.
     sal_uInt16          mnXclOffset;    /// Offset to first user defined format.
 };
 

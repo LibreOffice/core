@@ -821,12 +821,12 @@ XclExpFormulaCell::XclExpFormulaCell(
         XclExpNumFmtBuffer& rNumFmtBfr = rRoot.GetNumFmtBuffer();
 
         // current cell number format
-        sal_uLong nScNumFmt = pPattern ?
+        sal_uInt32 nScNumFmt = pPattern ?
             GETITEMVALUE( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uLong ) :
             rNumFmtBfr.GetStandardFormat();
 
         // alternative number format passed to XF buffer
-        sal_uLong nAltScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
+        sal_uInt32 nAltScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
         /*  Xcl doesn't know Boolean number formats, we write
             "TRUE";"FALSE" (language dependent). Don't do it for automatic
             formula formats, because Excel gets them right. */

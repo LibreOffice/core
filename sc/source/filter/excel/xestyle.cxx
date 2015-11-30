@@ -1373,7 +1373,7 @@ XclExpNumFmtBuffer::~XclExpNumFmtBuffer()
 {
 }
 
-sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uLong nScNumFmt )
+sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uInt32 nScNumFmt )
 {
     XclExpNumFmtVec::const_iterator aIt =
         ::std::find_if( maFormatMap.begin(), maFormatMap.end(), XclExpNumFmtPred( nScNumFmt ) );
@@ -1433,14 +1433,14 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNum
 
 namespace {
 
-OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberFormatter* pFormatter, NfKeywordTable* pKeywordTable)
+OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt32 nScNumFmt, SvNumberFormatter* pFormatter, NfKeywordTable* pKeywordTable)
 {
     return rRoot.GetFormatter().GetFormatStringForExcel( nScNumFmt, *pKeywordTable, *pFormatter);
 }
 
 }
 
-OUString XclExpNumFmtBuffer::GetFormatCode( sal_uInt16 nScNumFmt )
+OUString XclExpNumFmtBuffer::GetFormatCode( sal_uInt32 nScNumFmt )
 {
     return GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() );
 }
@@ -3027,7 +3027,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         const SfxPoolItem *pPoolItem = nullptr;
                         if( rSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SfxItemState::SET )
                         {
-                            sal_uLong nScNumFmt = static_cast< const SfxUInt32Item* >(pPoolItem)->GetValue();
+                            sal_uInt32 nScNumFmt = static_cast< const SfxUInt32Item* >(pPoolItem)->GetValue();
                             sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
                             pNumFormat = new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() ));
                         }
