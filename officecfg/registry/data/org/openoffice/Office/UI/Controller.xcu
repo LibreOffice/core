@@ -221,6 +221,76 @@
           <value>basicshapes</value>
         </prop>
       </node>
+      <node oor:name="c20" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SymbolShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>symbolshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c21" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ArrowShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>arrowshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c22" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:StarShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>starshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c23" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CalloutShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>calloutshapes</value>
+        </prop>
+      </node>
+      <node oor:name="c24" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FlowChartShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>flowchartshapes</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="ZoomToolBox" oor:op="replace">

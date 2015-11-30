@@ -82,6 +82,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Basic Shapes</value>
         </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Basic</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -89,6 +92,9 @@
       <node oor:name=".uno:SymbolShapes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Symbol Shapes</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Symbol</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1985,7 +1991,7 @@
       </node>
       <node oor:name=".uno:GridMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Gr~id</value>
+          <value xml:lang="en-US">Gr~id and Helplines</value>
         </prop>
       </node>
       <node oor:name=".uno:ToolsFormsMenu" oor:op="replace">
@@ -3359,6 +3365,14 @@
       <node oor:name=".uno:ShapesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Shape</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ShapesLineMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Line</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4946,7 +4960,10 @@
       </node>
       <node oor:name=".uno:SwitchControlDesignMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Design Mode On/Off</value>
+          <value xml:lang="en-US">Toggle Design Mode</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Design Mode</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>

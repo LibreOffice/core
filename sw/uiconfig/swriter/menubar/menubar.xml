@@ -125,13 +125,6 @@
           <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:EditCommentsMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:ReplyComment"/>
-          <menu:menuitem menu:id=".uno:DeleteComment"/>
-          <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
-        </menu:menupopup>
-      </menu:menu>
       <menu:menuitem menu:id=".uno:FieldDialog"/>
       <menu:menuitem menu:id=".uno:LinkDialog"/>
       <menu:menuitem menu:id=".uno:PlugInsActive"/>
@@ -139,6 +132,7 @@
       <menu:menuitem menu:id=".uno:ObjectMenue"/>
       <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
       <menu:menuitem menu:id=".uno:EditDoc"/>
     </menu:menupopup>
   </menu:menu>
@@ -149,7 +143,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
-      <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
       <menu:menu menu:id=".uno:RulerMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Ruler"/>
@@ -180,7 +173,7 @@
       <menu:menuitem menu:id=".uno:Marks"/>
       <menu:menuitem menu:id=".uno:Fieldnames"/>
       <menu:menuitem menu:id=".uno:ShowHiddenParagraphs"/>
-      <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
+      <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:DesignerDialog"/>
@@ -235,11 +228,20 @@
       </menu:menu>
       <menu:menu menu:id=".uno:ShapesMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:Line"/>
-          <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
-          <menu:menuitem menu:id=".uno:BasicShapes.rectangle"/>
-          <menu:menuitem menu:id=".uno:BasicShapes.ellipse"/>
-          <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
+          <menu:menu menu:id=".uno:ShapesLineMenu">
+            <menu:menupopup>
+              <menu:menuitem menu:id=".uno:Line"/>
+              <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
+              <menu:menuitem menu:id=".uno:Freeline"/>
+              <menu:menuitem menu:id=".uno:Bezier_Unfilled"/>
+              <menu:menuitem menu:id=".uno:BezierFill"/>
+              <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
+              <menu:menuitem menu:id=".uno:Polygon_Diagonal_Unfilled"/>
+              <menu:menuitem menu:id=".uno:Polygon_Diagonal"/>
+            </menu:menupopup>
+          </menu:menu>
+          <menu:menuitem menu:id=".uno:BasicShapes"/>
+          <menu:menuitem menu:id=".uno:SymbolShapes"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
@@ -308,9 +310,10 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:InsertDoc"/>
       <menu:menuitem menu:id=".uno:InsertSection"/>
+      <menu:menuitem menu:id=".uno:InsertDoc"/>
       <menu:menuitem menu:id=".uno:InsertEnvelope"/>
+      <menu:menuseparator/>
       <menu:menu menu:id=".uno:InsertFormMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Edit"/>
@@ -468,7 +471,7 @@
           <menu:menuitem menu:id=".uno:GraphicDialog"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:ObjectMenu">
+      <menu:menu menu:id=".uno:FormatObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:TransformDialog"/>
           <menu:menuitem menu:id=".uno:FormatLine"/>
@@ -483,6 +486,12 @@
           <menu:menuitem menu:id=".uno:UnhainFrames"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:FrameDialog"/>
+        </menu:menupopup>
+      </menu:menu>
+      <menu:menu menu:id=".uno:FormatFormMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ControlProperties"/>
+          <menu:menuitem menu:id=".uno:FormProperties"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
@@ -555,7 +564,7 @@
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Text Body&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Preformatted Text&amp;FamilyName:string=ParagraphStyles"/>
       <menu:menuseparator/>
@@ -680,6 +689,7 @@
           <menu:menuitem menu:id=".uno:ShowFmExplorer"/>
           <menu:menuitem menu:id=".uno:TabDialog"/>
           <menu:menuitem menu:id=".uno:AddField"/>
+          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:OpenReadOnly"/>
           <menu:menuitem menu:id=".uno:UseWizards"/>
         </menu:menupopup>
