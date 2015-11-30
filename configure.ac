@@ -904,9 +904,9 @@ AC_SUBST(PTHREAD_LIBS)
 
 if test $_os != "WINNT"; then
     save_LIBS="$LIBS"
-    AC_SEARCH_LIBS([dlopen], [dl],
-        [case "$ac_cv_search_dlopen" in -l*) DLOPEN_LIBS="$ac_cv_search_dlopen";; esac],
-        [AC_MSG_ERROR([dlopen not found in either libc nor libdl])])
+    AC_SEARCH_LIBS([dlsym], [dl],
+        [case "$ac_cv_search_dlsym" in -l*) DLOPEN_LIBS="$ac_cv_search_dlsym";; esac],
+        [AC_MSG_ERROR([dlsym not found in either libc nor libdl])])
     LIBS="$save_LIBS"
 fi
 AC_SUBST(DLOPEN_LIBS)
