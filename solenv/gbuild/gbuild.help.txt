@@ -78,7 +78,7 @@ AVAILABLE TARGETS
            o Library
            o Package
            o Pagein
-           o PythonTest_pytests
+           o PythonTest
            o Pyuno
            o Rdb
            o StaticLibrary
