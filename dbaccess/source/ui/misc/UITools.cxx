@@ -891,6 +891,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
         }
     }
 
+    pFormatDescriptor.reset();
     SfxItemPool::Free(pPool);
     for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
         delete pDefaults[i];
