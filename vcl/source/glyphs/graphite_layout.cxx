@@ -27,7 +27,7 @@
 #undef NDEBUG
 #endif
 
-// #define GRLAYOUT_DEBUG 1
+//#define GRLAYOUT_DEBUG 1
 
 #include <algorithm>
 #include <cassert>
@@ -602,6 +602,9 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
                 ++nClusterCount;
             }
         }
+#ifdef GRLAYOUT_DEBUG
+            fprintf(grLog(), "Expand by width %f for %ld clusters\n", nDeltaWidth, nClusterCount);
+#endif
         if (nClusterCount > 1)
         {
             float fExtraPerCluster = static_cast<float>(nDeltaWidth) / static_cast<float>(nClusterCount - 1);
@@ -740,25 +743,26 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
         // calculate visual cluster widths
         if (lastChar > args.mnEndCharPos) lastChar = args.mnEndCharPos;
         if (firstChar < args.mnMinCharPos) firstChar = args.mnMinCharPos;
-        long nNewClusterWidth = args.mpDXArray[lastChar - args.mnMinCharPos];
         long nOrigClusterWidth = mvCharDxs[lastChar - mnMinCharPos];
+        long nNewClusterWidth = args.mpDXArray[lastChar - args.mnMinCharPos];
         long nDGlyphOrigin = 0;
-        if (firstChar >= args.mnMinCharPos)
+        if (firstChar > args.mnMinCharPos)
         {
-            nNewClusterWidth -= args.mpDXArray[firstChar - args.mnMinCharPos];
-            nOrigClusterWidth -= mvCharDxs[firstChar - mnMinCharPos];
-            nDGlyphOrigin = args.mpDXArray[firstChar - args.mnMinCharPos]
-                                - mvCharDxs[firstChar - mnMinCharPos];
+            //nNewClusterWidth -= args.mpDXArray[firstChar - args.mnMinCharPos];
+            //nOrigClusterWidth -= mvCharDxs[firstChar - mnMinCharPos];
+            nDGlyphOrigin = args.mpDXArray[firstChar - args.mnMinCharPos - 1]
+                                - mvCharDxs[firstChar - mnMinCharPos - 1];
         }
 
         // update visual cluster
         long nDWidth = nNewClusterWidth - nOrigClusterWidth;
         if (firstChar >= args.mnMinCharPos)
             for (int n = firstChar; n <= lastChar; ++n)
-                if (mvCharDxs[n - mnMinCharPos] != -1)
-                    mvCharDxs[n - mnMinCharPos] += nDWidth + nDGlyphOrigin;
+                if (n > mnMinCharPos && mvCharDxs[n - mnMinCharPos - 1] != -1)
+                    mvCharDxs[n - mnMinCharPos - 1] += nDGlyphOrigin; // + nDWidth;
         for (unsigned int n = i; n < nLastGlyph; n++)
-            mvGlyphs[n].maLinearPos.X() += (nDGlyphOrigin + nDWidth) * (bRtl ? -1 : 1);
+            //mvGlyphs[n].maLinearPos.X() += (nDGlyphOrigin + nDWidth) * (bRtl ? -1 : 1);
+            mvGlyphs[n].maLinearPos.X() += nDGlyphOrigin * (bRtl ? -1 : 1);
 
         rDeltaWidth[nBaseGlyph] = nDWidth;
 #ifdef GRLAYOUT_DEBUG
@@ -771,6 +775,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     // Update the dx vector with the new values.
     std::copy(args.mpDXArray, args.mpDXArray + nChars,
       mvCharDxs.begin() + (args.mnMinCharPos - mnMinCharPos));
+    //args.mpDXArray[0] = 0;
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"ApplyDx %ld(%ld)\n", args.mpDXArray[nChars - 1], mnWidth);
 #endif
