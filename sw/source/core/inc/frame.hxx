@@ -94,98 +94,6 @@ typedef struct _xmlTextWriter *xmlTextWriterPtr;
 #define FRM_HEADFOOT    0x0018
 #define FRM_BODYFTNC    0x00a0
 
-class SwFrame;
-typedef long (SwFrame:: *SwFrameGet)() const;
-typedef bool (SwFrame:: *SwFrameMax)( long );
-typedef void (SwFrame:: *SwFrameMakePos)( const SwFrame*, const SwFrame*, bool );
-typedef long (*SwOperator)( long, long );
-typedef void (SwFrame:: *SwFrameSet)( long, long );
-
-struct SwRectFnCollection
-{
-    SwRectGet     fnGetTop;
-    SwRectGet     fnGetBottom;
-    SwRectGet     fnGetLeft;
-    SwRectGet     fnGetRight;
-    SwRectGet     fnGetWidth;
-    SwRectGet     fnGetHeight;
-    SwRectPoint   fnGetPos;
-
-    SwRectSet     fnSetTop;
-    SwRectSet     fnSetBottom;
-    SwRectSet     fnSetLeft;
-    SwRectSet     fnSetRight;
-    SwRectSet     fnSetWidth;
-    SwRectSet     fnSetHeight;
-
-    SwRectSet     fnSubTop;
-    SwRectSet     fnAddBottom;
-    SwRectSet     fnSubLeft;
-    SwRectSet     fnAddRight;
-    SwRectSet     fnAddWidth;
-    SwRectSet     fnAddHeight;
-
-    SwRectSet     fnSetPosX;
-    SwRectSet     fnSetPosY;
-
-    SwFrameGet      fnGetTopMargin;
-    SwFrameGet      fnGetBottomMargin;
-    SwFrameGet      fnGetLeftMargin;
-    SwFrameGet      fnGetRightMargin;
-    SwFrameSet      fnSetXMargins;
-    SwFrameSet      fnSetYMargins;
-    SwFrameGet      fnGetPrtTop;
-    SwFrameGet      fnGetPrtBottom;
-    SwFrameGet      fnGetPrtLeft;
-    SwFrameGet      fnGetPrtRight;
-    SwRectDist      fnTopDist;
-    SwRectDist      fnBottomDist;
-    SwFrameMax      fnSetLimit;
-    SwRectMax       fnOverStep;
-
-    SwRectSetPos    fnSetPos;
-    SwFrameMakePos  fnMakePos;
-    SwOperator      fnXDiff;
-    SwOperator      fnYDiff;
-    SwOperator      fnYInc;
-
-    SwRectSetTwice  fnSetLeftAndWidth;
-    SwRectSetTwice  fnSetTopAndHeight;
-};
-
-typedef SwRectFnCollection* SwRectFn;
-
-extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
-#define SWRECTFN( pFrame )    bool bVert = pFrame->IsVertical(); \
-                            bool bRev = pFrame->IsReverse(); \
-                            bool bVertL2R = pFrame->IsVertLR(); \
-                            SwRectFn fnRect = bVert ? \
-                                ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
-                                ( bRev ? fnRectB2T : fnRectHori );
-#define SWRECTFNX( pFrame )   bool bVertX = pFrame->IsVertical(); \
-                            bool bRevX = pFrame->IsReverse(); \
-                            bool bVertL2RX = pFrame->IsVertLR(); \
-                            SwRectFn fnRectX = bVertX ? \
-                                ( bRevX ? fnRectVL2R : ( bVertL2RX ? fnRectVertL2R : fnRectVert ) ): \
-                                ( bRevX ? fnRectB2T : fnRectHori );
-#define SWREFRESHFN( pFrame ) { if( bVert != pFrame->IsVertical() || \
-                                  bRev  != pFrame->IsReverse() ) \
-                                bVert = pFrame->IsVertical(); \
-                                bRev = pFrame->IsReverse(); \
-                                bVertL2R = pFrame->IsVertLR(); \
-                                fnRect = bVert ? \
-                                    ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
-                                    ( bRev ? fnRectB2T : fnRectHori ); }
-#define SWRECTFN2( pFrame )   bool bVert = pFrame->IsVertical(); \
-                bool bVertL2R = pFrame->IsVertLR(); \
-                            bool bNeighb = pFrame->IsNeighbourFrame(); \
-                            SwRectFn fnRect = bVert == bNeighb ? \
-                                fnRectHori : ( bVertL2R ? fnRectVertL2R : fnRectVert );
-
-#define POS_DIFF( aFrame1, aFrame2 ) \
-            ( (aFrame1.*fnRect->fnGetTop)() != (aFrame2.*fnRect->fnGetTop)() || \
-            (aFrame1.*fnRect->fnGetLeft)() != (aFrame2.*fnRect->fnGetLeft)() )
-
 // for GetNextLeaf/GetPrevLeaf.
 enum MakePageType
 {
@@ -1172,6 +1080,97 @@ public:
             m_pFrame->AllowDelete();
     }
 };
+
+typedef long (SwFrame:: *SwFrameGet)() const;
+typedef bool (SwFrame:: *SwFrameMax)( long );
+typedef void (SwFrame:: *SwFrameMakePos)( const SwFrame*, const SwFrame*, bool );
+typedef long (*SwOperator)( long, long );
+typedef void (SwFrame:: *SwFrameSet)( long, long );
+
+struct SwRectFnCollection
+{
+    SwRectGet     fnGetTop;
+    SwRectGet     fnGetBottom;
+    SwRectGet     fnGetLeft;
+    SwRectGet     fnGetRight;
+    SwRectGet     fnGetWidth;
+    SwRectGet     fnGetHeight;
+    SwRectPoint   fnGetPos;
+
+    SwRectSet     fnSetTop;
+    SwRectSet     fnSetBottom;
+    SwRectSet     fnSetLeft;
+    SwRectSet     fnSetRight;
+    SwRectSet     fnSetWidth;
+    SwRectSet     fnSetHeight;
+
+    SwRectSet     fnSubTop;
+    SwRectSet     fnAddBottom;
+    SwRectSet     fnSubLeft;
+    SwRectSet     fnAddRight;
+    SwRectSet     fnAddWidth;
+    SwRectSet     fnAddHeight;
+
+    SwRectSet     fnSetPosX;
+    SwRectSet     fnSetPosY;
+
+    SwFrameGet      fnGetTopMargin;
+    SwFrameGet      fnGetBottomMargin;
+    SwFrameGet      fnGetLeftMargin;
+    SwFrameGet      fnGetRightMargin;
+    SwFrameSet      fnSetXMargins;
+    SwFrameSet      fnSetYMargins;
+    SwFrameGet      fnGetPrtTop;
+    SwFrameGet      fnGetPrtBottom;
+    SwFrameGet      fnGetPrtLeft;
+    SwFrameGet      fnGetPrtRight;
+    SwRectDist      fnTopDist;
+    SwRectDist      fnBottomDist;
+    SwFrameMax      fnSetLimit;
+    SwRectMax       fnOverStep;
+
+    SwRectSetPos    fnSetPos;
+    SwFrameMakePos  fnMakePos;
+    SwOperator      fnXDiff;
+    SwOperator      fnYDiff;
+    SwOperator      fnYInc;
+
+    SwRectSetTwice  fnSetLeftAndWidth;
+    SwRectSetTwice  fnSetTopAndHeight;
+};
+
+typedef SwRectFnCollection* SwRectFn;
+
+extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
+#define SWRECTFN( pFrame )    bool bVert = pFrame->IsVertical(); \
+                            bool bRev = pFrame->IsReverse(); \
+                            bool bVertL2R = pFrame->IsVertLR(); \
+                            SwRectFn fnRect = bVert ? \
+                                ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
+                                ( bRev ? fnRectB2T : fnRectHori );
+#define SWRECTFNX( pFrame )   bool bVertX = pFrame->IsVertical(); \
+                            bool bRevX = pFrame->IsReverse(); \
+                            bool bVertL2RX = pFrame->IsVertLR(); \
+                            SwRectFn fnRectX = bVertX ? \
+                                ( bRevX ? fnRectVL2R : ( bVertL2RX ? fnRectVertL2R : fnRectVert ) ): \
+                                ( bRevX ? fnRectB2T : fnRectHori );
+#define SWREFRESHFN( pFrame ) { if( bVert != pFrame->IsVertical() || \
+                                  bRev  != pFrame->IsReverse() ) \
+                                bVert = pFrame->IsVertical(); \
+                                bRev = pFrame->IsReverse(); \
+                                bVertL2R = pFrame->IsVertLR(); \
+                                fnRect = bVert ? \
+                                    ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
+                                    ( bRev ? fnRectB2T : fnRectHori ); }
+#define SWRECTFN2( pFrame )   bool bVert = pFrame->IsVertical(); \
+                bool bVertL2R = pFrame->IsVertLR(); \
+                            bool bNeighb = pFrame->IsNeighbourFrame(); \
+                            SwRectFn fnRect = bVert == bNeighb ? \
+                                fnRectHori : ( bVertL2R ? fnRectVertL2R : fnRectVert );
+
+#define POS_DIFF( aFrame1, aFrame2 ) \
+            ( (aFrame1.*fnRect->fnGetTop)() != (aFrame2.*fnRect->fnGetTop)() || \
+            (aFrame1.*fnRect->fnGetLeft)() != (aFrame2.*fnRect->fnGetLeft)() )
 
 #endif
 
