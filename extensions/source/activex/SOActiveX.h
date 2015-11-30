@@ -124,6 +124,12 @@ BEGIN_COM_MAP(CSOActiveX)
     COM_INTERFACE_ENTRY(IObjectSafety)
 END_COM_MAP()
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winvalid-offsetof"
+    // offset of on non-standard-layout type '_PropMapClass' (aka 'CSOActiveX'),
+    // expanded from macro 'PROP_DATA_ENTRY'
+#endif
 BEGIN_PROP_MAP(CSOActiveX)
     PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
     PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
@@ -131,6 +137,9 @@ BEGIN_PROP_MAP(CSOActiveX)
     // PROP_ENTRY("Property Description", dispid, clsid)
     // PROP_PAGE(CLSID_StockColorPage)
 END_PROP_MAP()
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 BEGIN_CONNECTION_POINT_MAP(CSOActiveX)
 END_CONNECTION_POINT_MAP()
