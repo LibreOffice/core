@@ -31,6 +31,7 @@ class SvxOpenCLTabPage : public SfxTabPage
 private:
     OpenCLConfig maConfig;
 
+    VclPtr<CheckBox> mpUseSwInterpreter;
     VclPtr<CheckBox> mpUseOpenCL;
 
     VclPtr<VclFrame> mpBlackListFrame;

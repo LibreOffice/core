@@ -38,6 +38,12 @@ bool ScCalcConfig::isOpenCLEnabled()
     return gOpenCLEnabled.get();
 }
 
+bool ScCalcConfig::isSwInterpreterEnabled()
+{
+    static comphelper::ConfigurationListenerProperty<bool> gSwInterpreterEnabled(getMiscListener(), OUString("UseSwInterpreter"));
+    return gSwInterpreterEnabled.get();
+}
+
 ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
     meStringConversion(StringConversion::LOCALE),     // old LibreOffice behavior

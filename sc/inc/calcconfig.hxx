@@ -49,6 +49,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool mbHasStringRefSyntax:1;
 
     static bool isOpenCLEnabled();
+    static bool isSwInterpreterEnabled();
 
     bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;

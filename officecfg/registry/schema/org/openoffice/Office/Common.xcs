@@ -5642,6 +5642,13 @@
         </info>
         <value oor:separator=";">Linux//Advanced Micro Devices, Inc\.//1445\.5 \(sse2,avx\);//Advanced Micro Devices, Inc\.//;//Intel\(R\) Corporation//;//NVIDIA Corporation//</value>
       </prop>
+      <prop oor:name="UseSwInterpreter" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether Software Interpreter can be used to speed
+          up some operations on Calc formulas.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="MacroRecorderMode" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if the limited, and awkward code producing

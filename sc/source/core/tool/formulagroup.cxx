@@ -375,7 +375,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         nRowEnd += i;
 
                     ScMatrixRef pMat;
-                    if (getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr)
+                    if (ScCalcConfig::isSwInterpreterEnabled())
                     {
                         assert(nRowStart <= nRowEnd);
                         pMat.reset(new ScVectorRefMatrix(p2, nRowStart, nRowEnd - nRowStart + 1));
@@ -481,13 +481,14 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     if ( !msInstance )
     {
 #if HAVE_FEATURE_OPENCL
-        const ScCalcConfig& rConfig = ScInterpreter::GetGlobalConfig();
         if (ScCalcConfig::isOpenCLEnabled())
+        {
+            const ScCalcConfig& rConfig = ScInterpreter::GetGlobalConfig();
             switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect);
+        }
 #endif
-        static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr);
 
-        if ( !msInstance && bAllowSoftwareInterpreter ) // software fallback
+        if (!msInstance && ScCalcConfig::isSwInterpreterEnabled()) // software interpreter
         {
             SAL_INFO("sc.core.formulagroup", "Create S/W interpreter");
             msInstance = new sc::FormulaGroupInterpreterSoftware();
@@ -509,20 +510,26 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rP
 bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation)
 {
     bool bOpenCLEnabled = ScCalcConfig::isOpenCLEnabled();
-    static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr);
-    if (!bOpenCLEnabled || (bAllowSoftwareInterpreter && rDeviceId == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME))
+    if (!bOpenCLEnabled || (rDeviceId == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME))
     {
-        if(msInstance)
+        bool bSwInterpreterEnabled = ScCalcConfig::isSwInterpreterEnabled();
+        if (msInstance)
         {
             // if we already have a software interpreter don't delete it
-            if(dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(msInstance))
+            if (bSwInterpreterEnabled && dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(msInstance))
                 return true;
 
             delete msInstance;
+            msInstance = nullptr;
         }
 
-        msInstance = new sc::FormulaGroupInterpreterSoftware();
-        return true;
+        if (bSwInterpreterEnabled)
+        {
+            msInstance = new sc::FormulaGroupInterpreterSoftware();
+            return true;
+        }
+
+        return false;
     }
     bool bSuccess = ::opencl::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
     if(!bSuccess)
@@ -531,7 +538,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     delete msInstance;
     msInstance = nullptr;
 
-    if (ScCalcConfig::isOpenCLEnabled())
+    if (bOpenCLEnabled)
     {
         msInstance = new sc::opencl::FormulaGroupInterpreterOpenCL();
         return msInstance != nullptr;

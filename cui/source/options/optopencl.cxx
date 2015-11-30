@@ -35,7 +35,8 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/setup/UpdateCheckConfig.hpp>
 
-#include "cuires.hrc"
+#include <cuires.hrc>
+#include <dialmgr.hxx>
 #include "optopencl.hxx"
 #include <svtools/treelistentry.hxx>
 
@@ -43,6 +44,7 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SfxTabPage(pParent, "OptOpenCLPage", "cui/ui/optopenclpage.ui", &rSet),
     maConfig(OpenCLConfig::get())
 {
+    get(mpUseSwInterpreter, "useswinterpreter");
     get(mpUseOpenCL, "useopencl");
     get(mpBlackListTable, "blacklist");
     get(mpBlackListFrame,"blacklistframe");
@@ -59,6 +61,8 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(mpDevice,"device");
     get(mpVendor,"vendor");
     get(mpDrvVersion,"driverversion");
+
+    mpUseSwInterpreter->Check(officecfg::Office::Common::Misc::UseSwInterpreter::get());
 
     mpUseOpenCL->Check(maConfig.mbUseOpenCL);
     mpUseOpenCL->SetClickHdl(LINK(this, SvxOpenCLTabPage, EnableOpenCLHdl));
@@ -116,6 +120,7 @@ void SvxOpenCLTabPage::dispose()
     mpBlackList.disposeAndClear();
     mpWhiteList.disposeAndClear();
 
+    mpUseSwInterpreter.clear();
     mpUseOpenCL.clear();
     mpBlackListFrame.clear();
     mpBlackListTable.clear();
@@ -145,6 +150,15 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+
+    if (mpUseSwInterpreter->IsValueChangedFromSaved())
+    {
+        officecfg::Office::Common::Misc::UseSwInterpreter::set(mpUseSwInterpreter->IsChecked(), batch);
+        bModified = true;
+
+        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
+        aWarnBox->Execute();
+    }
 
     if (mpUseOpenCL->IsValueChangedFromSaved())
         maConfig.mbUseOpenCL = mpUseOpenCL->IsChecked();
@@ -194,6 +208,9 @@ void fillListBox(SvSimpleTable* pListBox, const OpenCLConfig::ImplMatcherSet& rS
 void SvxOpenCLTabPage::Reset( const SfxItemSet* )
 {
     maConfig = OpenCLConfig::get();
+
+    mpUseSwInterpreter->Check(officecfg::Office::Common::Misc::UseSwInterpreter::get());
+    mpUseSwInterpreter->SaveValue();
 
     mpUseOpenCL->Check(maConfig.mbUseOpenCL);
     mpUseOpenCL->SaveValue();

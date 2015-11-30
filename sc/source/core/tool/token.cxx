@@ -32,6 +32,7 @@
 #include "compiler.hxx"
 #include "interpre.hxx"
 #include <formula/compiler.hrc>
+#include <formulagroup.hxx>
 #include "rechead.hxx"
 #include "parclass.hxx"
 #include "jumpmatrix.hxx"
@@ -1319,7 +1320,9 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             return;
         }
 
-        if (!ScCalcConfig::isOpenCLEnabled() && getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr && ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
+        // test for OpenCL interpreter first - the assumption is that S/W
+        // interpreter blacklist is more strict than the OpenCL one
+        if (ScCalcConfig::isSwInterpreterEnabled() && (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) && ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
         {
             meVectorState = FormulaVectorDisabled;
             return;
@@ -1566,10 +1569,12 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         return;
     }
 
+    // only when openCL interpreter is not enabled - the assumption is that
+    // the S/W interpreter blacklist is more strict
     if (eOp >= SC_OPCODE_START_BIN_OP &&
         eOp <= SC_OPCODE_STOP_UN_OP &&
-        !ScCalcConfig::isOpenCLEnabled() &&
-        getenv("SC_ALLOW_SOFTWARE_INTERPRETER") != nullptr &&
+        ScCalcConfig::isSwInterpreterEnabled() &&
+        (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) &&
         ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
     {
         meVectorState = FormulaVectorDisabled;
