@@ -1251,7 +1251,8 @@ void ImplTBDragMgr::Dragging( const Point& rPos )
 void ImplTBDragMgr::EndDragging( bool bOK )
 {
     mpDragBox->HideTracking();
-    mpDragBox->ReleaseMouse();
+    if (mpDragBox->IsMouseCaptured())
+        mpDragBox->ReleaseMouse();
     mpDragBox->mbDragging = false;
     mbShowDragRect = false;
     Application::RemoveAccel( &maAccel );
@@ -3346,7 +3347,8 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
 
         mbDrag = false;
         EndTracking();
-        ReleaseMouse();
+        if (IsMouseCaptured())
+            ReleaseMouse();
     }
     else
     {

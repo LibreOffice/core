@@ -1335,7 +1335,8 @@ void ToolBox::EndSelection()
         if (mnCurPos != TOOLBOX_ITEM_NOTFOUND)
             InvalidateItem(mnCurPos);
         EndTracking();
-        ReleaseMouse();
+        if (IsMouseCaptured())
+            ReleaseMouse();
         Deactivate();
     }
 
@@ -1378,7 +1379,8 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
                 mbDrag = false;
                 mbSelection = false;
                 EndTracking();
-                ReleaseMouse();
+                if (IsMouseCaptured())
+                    ReleaseMouse();
                 Deactivate();
             }
 

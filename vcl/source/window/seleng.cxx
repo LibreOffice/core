@@ -280,7 +280,7 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 
 void SelectionEngine::ReleaseMouse()
 {
-    if (!pWin)
+    if (!pWin || !pWin->IsMouseCaptured())
         return;
     pWin->ReleaseMouse();
 }
