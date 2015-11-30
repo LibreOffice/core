@@ -409,9 +409,6 @@ class SC_DLLPUBLIC ScFullMatrix : public ScMatrix
 
     std::unique_ptr<ScMatrixImpl> pImpl;
 
-    // only delete via Delete()
-    virtual ~ScFullMatrix();
-
     ScFullMatrix( const ScFullMatrix& ) = delete;
     ScFullMatrix& operator=( const ScFullMatrix&) = delete;
 
@@ -421,6 +418,8 @@ public:
     ScFullMatrix(SCSIZE nC, SCSIZE nR, double fInitVal);
 
     ScFullMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals );
+
+    virtual ~ScFullMatrix();
 
     /** Clone the matrix. */
     virtual ScMatrix* Clone() const override;
@@ -611,18 +610,26 @@ class SC_DLLPUBLIC ScVectorRefMatrix : public ScMatrix
     const formula::DoubleVectorRefToken* mpToken;
     ScInterpreter* mpErrorInterpreter;
 
+    /// For the operations that are not fully implemented, create a ScFullMatrix, and operate on it.
+    std::unique_ptr<ScFullMatrix> mpFullMatrix;
+
     SCSIZE mnRowStart;
     SCSIZE mnRowSize;
-
-    // only delete via Delete()
-    virtual ~ScVectorRefMatrix();
 
     ScVectorRefMatrix( const ScVectorRefMatrix& ) = delete;
     ScVectorRefMatrix& operator=( const ScVectorRefMatrix&) = delete;
 
+    /// For the operations that are not fully implemented, create a ScFullMatrix, and operate on it.
+    ///
+    /// Note: This is potentially an expensive operation.
+    /// TODO: Implement as much as possible directly using the DoubleVectorRefToken.
+    void ensureFullMatrix();
+
 public:
 
     ScVectorRefMatrix(const formula::DoubleVectorRefToken* pToken, SCSIZE nRowStart, SCSIZE nRowSize);
+
+    virtual ~ScVectorRefMatrix();
 
     /** Clone the matrix. */
     virtual ScMatrix* Clone() const override;

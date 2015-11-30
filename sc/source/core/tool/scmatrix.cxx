@@ -2835,6 +2835,197 @@ void ScFullMatrix::Dump() const
 }
 #endif
 
+namespace {
+
+/**
+ * Input double array consists of segments of NaN's and normal values.
+ * Insert only the normal values into the matrix while skipping the NaN's.
+ */
+void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, size_t nLen )
+{
+    const double* pNum = pNums;
+    const double* pNumEnd = pNum + nLen;
+    const double* pNumHead = nullptr;
+    for (; pNum != pNumEnd; ++pNum)
+    {
+        if (!rtl::math::isNan(*pNum))
+        {
+            if (!pNumHead)
+                // Store the first non-NaN position.
+                pNumHead = pNum;
+
+            continue;
+        }
+
+        if (pNumHead)
+        {
+            // Flush this non-NaN segment to the matrix.
+            rMat.PutDouble(pNumHead, pNum - pNumHead, nCol, pNumHead - pNums);
+            pNumHead = nullptr;
+        }
+    }
+
+    if (pNumHead)
+    {
+        // Flush last non-NaN segment to the matrix.
+        rMat.PutDouble(pNumHead, pNum - pNumHead, nCol, pNumHead - pNums);
+    }
+}
+
+void flushStrSegment(
+    ScMatrix& rMat, size_t nCol, rtl_uString** pHead, rtl_uString** pCur, rtl_uString** pTop )
+{
+    size_t nOffset = pHead - pTop;
+    std::vector<svl::SharedString> aStrs;
+    aStrs.reserve(pCur - pHead);
+    for (; pHead != pCur; ++pHead)
+        aStrs.push_back(svl::SharedString(*pHead, *pHead));
+
+    rMat.PutString(&aStrs[0], aStrs.size(), nCol, nOffset);
+}
+
+void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
+{
+    rtl_uString** p = pStrs;
+    rtl_uString** pEnd = p + nLen;
+    rtl_uString** pHead = nullptr;
+    for (; p != pEnd; ++p)
+    {
+        if (*p)
+        {
+            if (!pHead)
+                // Store the first non-empty string position.
+                pHead = p;
+
+            continue;
+        }
+
+        if (pHead)
+        {
+            // Flush this non-empty segment to the matrix.
+            flushStrSegment(rMat, nCol, pHead, p, pStrs);
+            pHead = nullptr;
+        }
+    }
+
+    if (pHead)
+    {
+        // Flush last non-empty segment to the matrix.
+        flushStrSegment(rMat, nCol, pHead, p, pStrs);
+    }
+}
+
+void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, rtl_uString** pStrs, size_t nLen )
+{
+    if (!pStrs)
+    {
+        fillMatrix(rMat, nCol, pNums, nLen);
+        return;
+    }
+
+    const double* pNum = pNums;
+    const double* pNumHead = nullptr;
+    rtl_uString** pStr = pStrs;
+    rtl_uString** pStrEnd = pStr + nLen;
+    rtl_uString** pStrHead = nullptr;
+
+    for (; pStr != pStrEnd; ++pStr, ++pNum)
+    {
+        if (*pStr)
+        {
+            // String cell exists.
+
+            if (pNumHead)
+            {
+                // Flush this numeric segment to the matrix.
+                rMat.PutDouble(pNumHead, pNum - pNumHead, nCol, pNumHead - pNums);
+                pNumHead = nullptr;
+            }
+
+            if (!pStrHead)
+                // Store the first non-empty string position.
+                pStrHead = pStr;
+
+            continue;
+        }
+
+        // No string cell. Check the numeric cell value.
+
+        if (pStrHead)
+        {
+            // Flush this non-empty string segment to the matrix.
+            flushStrSegment(rMat, nCol, pStrHead, pStr, pStrs);
+            pStrHead = nullptr;
+        }
+
+        if (!rtl::math::isNan(*pNum))
+        {
+            // Numeric cell exists.
+            if (!pNumHead)
+                // Store the first non-NaN position.
+                pNumHead = pNum;
+
+            continue;
+        }
+
+        // Empty cell. No action required.
+    }
+
+    if (pStrHead)
+    {
+        // Flush the last non-empty segment to the matrix.
+        flushStrSegment(rMat, nCol, pStrHead, pStr, pStrs);
+    }
+    else if (pNumHead)
+    {
+        // Flush the last numeric segment to the matrix.
+        rMat.PutDouble(pNumHead, pNum - pNumHead, nCol, pNumHead - pNums);
+    }
+}
+
+} // anonymous namespace
+
+void ScVectorRefMatrix::ensureFullMatrix()
+{
+    if (mpFullMatrix)
+        return;
+
+    const std::vector<formula::VectorRefArray>& rArrays = mpToken->GetArrays();
+    size_t nColSize = rArrays.size();
+    mpFullMatrix.reset(new ScFullMatrix(nColSize, mnRowSize));
+
+    for (size_t nCol = 0; nCol < nColSize; ++nCol)
+    {
+        const formula::VectorRefArray& rArray = rArrays[nCol];
+        if (rArray.mpStringArray)
+        {
+            if (rArray.mpNumericArray)
+            {
+                // Mixture of string and numeric values.
+                const double* pNums = rArray.mpNumericArray;
+                pNums += mnRowStart;
+                rtl_uString** pStrs = rArray.mpStringArray;
+                pStrs += mnRowStart;
+                fillMatrix(*mpFullMatrix, nCol, pNums, pStrs, mnRowSize);
+            }
+            else
+            {
+                // String cells only.
+                rtl_uString** pStrs = rArray.mpStringArray;
+                pStrs += mnRowStart;
+                fillMatrix(*mpFullMatrix, nCol, pStrs, mnRowSize);
+            }
+        }
+        else if (rArray.mpNumericArray)
+        {
+            // Numeric cells only.
+            const double* pNums = rArray.mpNumericArray;
+            pNums += mnRowStart;
+            fillMatrix(*mpFullMatrix, nCol, pNums, mnRowSize);
+        }
+    }
+}
+
 ScVectorRefMatrix::ScVectorRefMatrix(const formula::DoubleVectorRefToken* pToken, SCSIZE nRowStart, SCSIZE nRowSize)
     : ScMatrix()
     , mpToken(pToken)
