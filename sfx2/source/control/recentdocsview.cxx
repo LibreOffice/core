@@ -182,7 +182,8 @@ void RecentDocsView::Reload()
                 a >>= aURL;
             else if (rRecentEntry[j].Name == "Title")
                 a >>= aTitle;
-            else if (rRecentEntry[j].Name == "Thumbnail")
+            //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
+            else if (rRecentEntry[j].Name == "Thumbnail" && officecfg::Office::Common::History::RecentDocsThumbnail::get())
             {
                 OUString aBase64;
                 a >>= aBase64;
