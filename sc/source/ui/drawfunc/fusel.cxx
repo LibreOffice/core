@@ -214,10 +214,9 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                            uno::Any aRet;
                            uno::Sequence< sal_Int16 > aOutArgsIndex;
                            uno::Sequence< uno::Any > aOutArgs;
-                           uno::Sequence< uno::Any >* pInArgs =
-                               new uno::Sequence< uno::Any >(0);
+                           uno::Sequence< uno::Any > aInArgs;
                            pObjSh->CallXScript( pInfo->GetMacro(),
-                               *pInArgs, aRet, aOutArgsIndex, aOutArgs, true, &aCaller );
+                               aInArgs, aRet, aOutArgsIndex, aOutArgs, true, &aCaller );
                            pViewShell->FakeButtonUp( pViewShell->GetViewData().GetActivePart() );
                            return true;        // kein CaptureMouse etc.
                        }
