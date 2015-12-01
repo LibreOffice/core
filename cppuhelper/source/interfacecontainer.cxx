@@ -37,14 +37,6 @@ using namespace com::sun::star::lang;
 namespace cppu
 {
 /**
- * Reallocate the sequence.
- */
-static void realloc( Sequence< Reference< XInterface > > & rSeq, sal_Int32 nNewLen )
-{
-    rSeq.realloc( nNewLen );
-}
-
-/**
  * Remove an element from an interface sequence.
  */
 static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq, sal_Int32 index )
@@ -211,7 +203,7 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
     if( bIsList )
     {
         sal_Int32 nLen = aData.pAsSequence->getLength();
-        realloc( *aData.pAsSequence, nLen +1 );
+        aData.pAsSequence->realloc( nLen +1 );
         aData.pAsSequence->getArray()[ nLen ] = rListener;
         return nLen +1;
     }
