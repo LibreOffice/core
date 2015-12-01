@@ -2989,6 +2989,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf95970, "tdf95970.docx")
     CPPUNIT_ASSERT(basegfx::fTools::equal(aTransform.Line3.Column3,  1.0));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf94043, "tdf94043.docx")
+{
+    auto xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(2), "TextSection");
+    auto xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    // This was 0, the separator line was not visible due to 0 width.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), getProperty<sal_Int32>(xTextColumns, "SeparatorLineWidth"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
