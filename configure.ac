@@ -4938,11 +4938,11 @@ dnl enable pch by default on windows
 dnl enable it explicitely otherwise
 AC_MSG_CHECKING([whether to enable pch feature])
 ENABLE_PCH=""
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-    ENABLE_PCH="TRUE"
-    AC_MSG_RESULT([yes])
-elif test "$enable_pch" != "no"; then
-    if test -n "$enable_pch" && test "$GCC" = "yes"; then
+if test "$enable_pch" != "no"; then
+    if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+        ENABLE_PCH="TRUE"
+        AC_MSG_RESULT([yes])
+    elif test -n "$enable_pch" && test "$GCC" = "yes"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
     elif test -n "$enable_pch"; then
