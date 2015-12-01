@@ -66,6 +66,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <filter/msfilter/util.hxx>
+#include <sfx2/DocumentMetadataAccess.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <TextEffectsHandler.hxx>
 #include <CellColorHandler.hxx>
@@ -114,6 +116,22 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
 
     // Don't load the default style definitions to avoid weird mix
     m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::makeAny(true));
+
+    // Initialize RDF metadata, to be able to add statements during the import.
+    try
+    {
+        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(xModel, uno::UNO_QUERY_THROW);
+        uno::Reference<embed::XStorage> xStorage(comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, bRepairStorage));
+        OUString aBaseURL = rMediaDesc.getUnpackedValueOrDefault("URL", OUString());
+        OUString aStreamPath;
+        const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xContext, xStorage, aBaseURL, aStreamPath));
+        const uno::Reference<task::XInteractionHandler> xHandler;
+        xDocumentMetadataAccess->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("writerfilter", "DomainMapper::DomainMapper: failed to initialize RDF metadata: " << rException.Message);
+    }
 
     //import document properties
     try
