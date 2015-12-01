@@ -824,6 +824,8 @@ OUString VisAttrArrayToString(SCRIPT_VISATTR *pVisAttrs, int n)
 
 bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
+    msTheString = rArgs.mrStr;
+
     // for a base layout only the context glyphs have to be dropped
     // => when the whole string is involved there is no extra context
     typedef std::vector<int> TIntVector;
@@ -1524,6 +1526,9 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
         }
 
         // update return values
+        if( (mnLayoutFlags & SalLayoutFlags::Vertical) &&
+            nCharPos != -1 )
+            aGlyphId |= GetVerticalFlags( msTheString[nCharPos] );
         *(pGlyphs++) = aGlyphId;
         if( pGlyphAdvances )
             *(pGlyphAdvances++) = nGlyphWidth;
