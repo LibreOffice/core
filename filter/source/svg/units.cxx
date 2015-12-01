@@ -77,7 +77,7 @@ double convLength( const OUString& sValue, const State& rState, char dir )
     const bool bRes = parse(aUTF8.getStr(),
         //  Begin grammar
         (
-            (*digit_p >> *((str_p(".") | str_p(",")) >> *digit_p))[assign_a(sVal)]
+            (*str_p("-") >> *digit_p >> *((str_p(".") | str_p(",")) >> *digit_p))[assign_a(sVal)]
             >> (  str_p("cm") [assign_a(eUnit,SVG_LENGTH_UNIT_CM)]
                 | str_p("em") [assign_a(eUnit,SVG_LENGTH_UNIT_EM)]
                 | str_p("ex") [assign_a(eUnit,SVG_LENGTH_UNIT_EX)]
