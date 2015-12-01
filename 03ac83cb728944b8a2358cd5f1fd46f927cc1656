@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_5d963e95",
+        "filename": "include/LibreOfficeKit/LibreOfficeKit.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-12-01T08:32:37Z",
+      "side": 1,
+      "message": "Can you please add a @param documentation line for your new parameter? A one-liner description on what it does + mention that it\u0027s used for spreadsheet documents only would be nice.",
+      "revId": "03ac83cb728944b8a2358cd5f1fd46f927cc1656",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
