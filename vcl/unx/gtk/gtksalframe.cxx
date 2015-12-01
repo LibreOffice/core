@@ -3243,22 +3243,23 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
 #if GTK_CHECK_VERSION(3,14,0)
 void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame)
 {
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
-    SalSwipeEvent aEvent;
-    aEvent.mnVelocityX = velocity_x;
-    aEvent.mnVelocityY = velocity_y;
-
     gdouble x, y;
     GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence(GTK_GESTURE_SINGLE(gesture));
     //I feel I want the first point of the sequence, not the last point which
     //the docs say this gives, but for the moment assume we start and end
     //within the same vcl window
-    gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y);
-    aEvent.mnX = x;
-    aEvent.mnY = y;
+    if (gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y))
+    {
+        GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    pThis->CallCallback(SALEVENT_SWIPE, &aEvent);
+        SalSwipeEvent aEvent;
+        aEvent.mnVelocityX = velocity_x;
+        aEvent.mnVelocityY = velocity_y;
+        aEvent.mnX = x;
+        aEvent.mnY = y;
+
+        pThis->CallCallback(SALEVENT_SWIPE, &aEvent);
+    }
 }
 
 void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gpointer frame)
