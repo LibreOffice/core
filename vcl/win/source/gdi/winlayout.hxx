@@ -110,6 +110,7 @@ private:
 
     // string specific info
     // everything is in logical order
+    OUString        msTheString;        // Sadly we need it in GetNextGlyphs(), to be able to call GetVerticalFlags()
     int             mnCharCapacity;
     WORD*           mpLogClusters;      // map from absolute_char_pos to relative_glyph_pos
     int*            mpCharWidths;       // map from absolute_char_pos to char_width
