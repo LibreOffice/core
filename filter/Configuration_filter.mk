@@ -784,7 +784,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_svm_Export \
 	draw_tif_Export \
 	draw_wmf_Export \
-	draw_xpm_Export \
 ))
 
 # fcfg_impressgraphics
@@ -829,7 +828,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 	impress_svm_Export \
 	impress_tif_Export \
 	impress_wmf_Export \
-	impress_xpm_Export \
 ))
 
 # fcfg_writergraphics
@@ -925,7 +923,6 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	wmf_Export \
 	wmf_Import \
 	xbm_Import \
-	xpm_Export \
 	xpm_Import \
         mov_Import \
 ))

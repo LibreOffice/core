@@ -39,7 +39,6 @@ $(eval $(call gb_Library_use_libraries,gie,\
 
 $(eval $(call gb_Library_add_exception_objects,gie,\
 	filter/source/graphicfilter/egif/egif \
-	filter/source/graphicfilter/expm/expm \
 	filter/source/graphicfilter/etiff/etiff \
 	filter/source/graphicfilter/eos2met/eos2met \
 	filter/source/graphicfilter/epbm/epbm \
