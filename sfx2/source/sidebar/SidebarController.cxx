@@ -573,35 +573,43 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId)
 
     // init panels bounded to that deck, do not wait them being displayed as may be accessed through API
 
-            VclPtr<Deck> pDeck = pDeckDescriptor->mpDeck;
+    VclPtr<Deck> pDeck = pDeckDescriptor->mpDeck;
 
-            ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
+    ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
 
-            css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
+    css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
 
-            mpResourceManager->GetMatchingPanels(
-                                                aPanelContextDescriptors,
-                                                maCurrentContext,
-                                                rDeckId,
-                                                xController);
+    mpResourceManager->GetMatchingPanels(
+                                        aPanelContextDescriptors,
+                                        maCurrentContext,
+                                        rDeckId,
+                                        xController);
 
-            // Update the panel list.
-            const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
-            SharedPanelContainer aNewPanels;
+    // Update the panel list.
+    const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
+    SharedPanelContainer aNewPanels;
 
-            aNewPanels.resize(nNewPanelCount);
-            sal_Int32 nWriteIndex (0);
+    aNewPanels.resize(nNewPanelCount);
+    sal_Int32 nWriteIndex (0);
 
-            for (sal_Int32 nReadIndex=0; nReadIndex<nNewPanelCount; ++nReadIndex)
-            {
-                const ResourceManager::PanelContextDescriptor& rPanelContexDescriptor (
-                    aPanelContextDescriptors[nReadIndex]);
+    for (sal_Int32 nReadIndex=0; nReadIndex<nNewPanelCount; ++nReadIndex)
+    {
+        const ResourceManager::PanelContextDescriptor& rPanelContexDescriptor (
+            aPanelContextDescriptors[nReadIndex]);
 
-                // Determine if the panel can be displayed.
-                const bool bIsPanelVisible (!mbIsDocumentReadOnly || rPanelContexDescriptor.mbShowForReadOnlyDocuments);
-                if ( ! bIsPanelVisible)
-                    continue;
+        // Determine if the panel can be displayed.
+        const bool bIsPanelVisible (!mbIsDocumentReadOnly || rPanelContexDescriptor.mbShowForReadOnlyDocuments);
+        if ( ! bIsPanelVisible)
+            continue;
 
+        Panel *const pPanel(pDeck->GetPanel(rPanelContexDescriptor.msId));
+        if (pPanel != nullptr)
+        {
+            aNewPanels[nWriteIndex] = pPanel;
+            ++nWriteIndex;
+        }
+        else
+        {
                 VclPtr<Panel>  aPanel = CreatePanel(
                                             rPanelContexDescriptor.msId,
                                             pDeck->GetPanelParentWindow(),
@@ -625,12 +633,11 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId)
                  }
 
             }
+        }
 
-            // mpCurrentPanels - may miss stuff (?)
-            aNewPanels.resize(nWriteIndex);
-            pDeck->ResetPanels(aNewPanels);
-
-            pDeckDescriptor->mpDeck = pDeck;
+    // mpCurrentPanels - may miss stuff (?)
+    aNewPanels.resize(nWriteIndex);
+    pDeck->ResetPanels(aNewPanels);
 }
 
 void SidebarController::SwitchToDeck (
