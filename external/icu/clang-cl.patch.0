@@ -1,3 +1,16 @@
+--- source/config/mh-cygwin-msvc
++++ source/config/mh-cygwin-msvc
+@@ -51,8 +51,8 @@
+ LDFLAGS+=-nologo
+ 
+ # Commands to compile
+-COMPILE.c=	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c
++COMPILE.c=	true && $(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c
+-COMPILE.cc=	$(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) -c
++COMPILE.cc=	true && $(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) -c
+ 
+ # Commands to link
+ LINK.c=		LINK.EXE -subsystem:console $(LDFLAGS)
 --- source/runConfigureICU
 +++ source/runConfigureICU
 @@ -259,8 +259,8 @@
