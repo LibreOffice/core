@@ -31,6 +31,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/pngwrite.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -200,7 +201,9 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     boost::optional<OUString> aThumbnail;
 
     // generate the thumbnail
-    if (!pDocSh->IsModified() && !Application::IsHeadlessModeEnabled())
+    //fdo#74834: only generate thumbnail for history if the corresponding option is not disabled in the configuration
+    if (!pDocSh->IsModified() && !Application::IsHeadlessModeEnabled() &&
+            officecfg::Office::Common::History::RecentDocsThumbnail::get())
     {
         // not modified => the document matches what is in the shell
         const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pMed->GetItemSet(), SID_ENCRYPTIONDATA, false);

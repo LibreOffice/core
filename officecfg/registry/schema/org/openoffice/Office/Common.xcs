@@ -2079,6 +2079,13 @@
         </constraints>
         <value>25</value>
       </prop>
+      <prop oor:name="RecentDocsThumbnail" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether to generate/show a thumbnail image for RecentDocsView.</desc>
+          <label>Store/show thumbnails in RecentDocs History</label>
+        </info>
+        <value>true</value>
+      </prop>
       <set oor:name="HelpBookmarks" oor:node-type="HistoryType">
         <info>
           <desc>Contains the most recently opened help documents.</desc>
