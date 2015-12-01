@@ -136,7 +136,7 @@ public class FieldColumn
      */
     private String getOnlyFieldName(String _DisplayFieldName, String _CommandName)
     {
-        return _DisplayFieldName.substring(_CommandName.length() + 1, _DisplayFieldName.length());
+        return _DisplayFieldName.substring(_CommandName.length() + 1);
     }
 
     public static String composeDisplayFieldName(String _sCommandName, String _sFieldName)
