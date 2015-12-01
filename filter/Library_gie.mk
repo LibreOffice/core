@@ -47,7 +47,6 @@ $(eval $(call gb_Library_add_exception_objects,gie,\
 	filter/source/graphicfilter/eppm/eppm \
 	filter/source/graphicfilter/eps/eps \
 	filter/source/graphicfilter/egif/giflzwc \
-	filter/source/graphicfilter/eras/eras \
 	filter/source/graphicfilter/itiff/ccidecom \
 	filter/source/graphicfilter/itiff/itiff \
 	filter/source/graphicfilter/itiff/lzwdecom \

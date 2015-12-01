@@ -51,7 +51,6 @@
 #define FORMAT_PBM      5
 #define FORMAT_PGM      6
 #define FORMAT_PPM      7
-#define FORMAT_RAS      9
 #define FORMAT_TIF      10
 #define FORMAT_XPM      11
 #define FORMAT_WMF      12
@@ -88,8 +87,6 @@ static sal_Int16 GetFilterFormat(const OUString& rExt)
         nFormat = FORMAT_PGM;
     else if ( rExt == "PPM" )
         nFormat = FORMAT_PPM;
-    else if ( rExt == "RAS" )
-        nFormat = FORMAT_RAS;
     else if ( rExt == "TIF" )
         nFormat = FORMAT_TIF;
     else if ( rExt == "XPM" )
