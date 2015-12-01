@@ -59,6 +59,8 @@ struct SystemWindowData;
 class Menu;
 enum class VclInputFlags;
 
+typedef struct _cairo_font_options cairo_font_options_t;
+
 class VCL_PLUGIN_PUBLIC SalInstance
 {
 private:
@@ -177,6 +179,8 @@ public:
     virtual void            updatePrinterUpdate() {}
     virtual void            jobStartedPrinterUpdate() {}
     virtual void            jobEndedPrinterUpdate() {}
+
+    virtual const cairo_font_options_t* GetCairoFontOptions() { return nullptr; }
 };
 
 // called from SVMain

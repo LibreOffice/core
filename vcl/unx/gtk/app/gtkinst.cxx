@@ -468,4 +468,9 @@ GtkInstance::getPrintWrapper() const
     return m_xPrintWrapper;
 }
 
+const cairo_font_options_t* GtkInstance::GetCairoFontOptions()
+{
+    return gdk_screen_get_font_options(gdk_screen_get_default());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

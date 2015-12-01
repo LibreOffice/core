@@ -191,7 +191,6 @@ struct ImplStyleData
     bool                            mbPrimaryButtonWarpsSlider;
     DialogStyle                     maDialogStyle;
     FrameStyle                      maFrameStyle;
-    const void*                     mpFontOptions;
 
     sal_uInt16                      mnEdgeBlending;
     Color                           maEdgeBlendingTopLeftColor;
@@ -546,7 +545,6 @@ ImplStyleData::ImplStyleData() :
     mbAutoMnemonic              = true;
     mnToolbarIconSize           = ToolbarIconSize::Unknown;
     meUseImagesInMenus          = TRISTATE_INDET;
-    mpFontOptions              = NULL;
     mnEdgeBlending = 35;
     maEdgeBlendingTopLeftColor = RGB_COLORDATA(0xC0, 0xC0, 0xC0);
     maEdgeBlendingBottomRightColor = RGB_COLORDATA(0x40, 0x40, 0x40);
@@ -667,7 +665,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mIconThemeScanner.reset(new vcl::IconThemeScanner(*rData.mIconThemeScanner));
     mIconThemeSelector.reset(new vcl::IconThemeSelector(*rData.mIconThemeSelector));
-    mpFontOptions               = rData.mpFontOptions;
     mnEdgeBlending              = rData.mnEdgeBlending;
     maEdgeBlendingTopLeftColor  = rData.maEdgeBlendingTopLeftColor;
     maEdgeBlendingBottomRightColor = rData.maEdgeBlendingBottomRightColor;
@@ -1544,19 +1541,6 @@ bool
 StyleSettings::GetPrimaryButtonWarpsSlider() const
 {
     return mxData->mbPrimaryButtonWarpsSlider;
-}
-
-void
-StyleSettings::SetCairoFontOptions( const void *pOptions )
-{
-    CopyData();
-    mxData->mpFontOptions = pOptions;
-}
-
-const void*
-StyleSettings::GetCairoFontOptions() const
-{
-    return mxData->mpFontOptions;
 }
 
 void

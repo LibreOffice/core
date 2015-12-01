@@ -98,6 +98,8 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) SAL_OVERRIDE;
 #endif
 
+    virtual const cairo_font_options_t* GetCairoFontOptions() override;
+
     void                        RemoveTimer (SalTimer *pTimer);
 
     // for managing a mirror of the in-flight un-dispatched gdk event queue
