@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "dab17558_7d1d02bd",
+        "filename": "solenv/gbuild/gbuild.help.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-12-01T18:55:50Z",
+      "side": 1,
+      "message": "This builds only the translations for the product, but not the product itself. (Well, depending on configuration it might actually build a lot of the product too as that is needed to build the translations (esp. if you e.g. use --enable-mergelibs).",
+      "range": {
+        "startLine": 42,
+        "startChar": 28,
+        "endLine": 42,
+        "endChar": 64
+      },
+      "revId": "c5e4de42b282d69ab303cbb541f85b391b4d63bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_dd118eb1",
+        "filename": "solenv/gbuild/gbuild.help.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-12-01T18:55:50Z",
+      "side": 1,
+      "message": "this builds the product (e.g. all libraries and executables) without the files needed to localize those. It has nothing to do with modules.",
+      "range": {
+        "startLine": 43,
+        "startChar": 28,
+        "endLine": 43,
+        "endChar": 66
+      },
+      "revId": "c5e4de42b282d69ab303cbb541f85b391b4d63bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_dd2a2ee7",
         "filename": "solenv/gbuild/gbuild.help.txt",
         "patchSetId": 2
