@@ -194,18 +194,15 @@ int startprocess(string command, string args) {
         command=command.substr(0,pos+strlen("ccache"))+".exe";
     }
 
-    if (args[0] != ' ')
-    {
-        args.insert(0, " "); // lpCommandLine *must* start with space!
-    }
+    auto cmdline = "\"" + command + "\" " + args;
 
     //cerr << "CMD= " << command << " " << args << endl;
 
     // Commandline may be modified by CreateProcess
-    char* cmdline=_strdup(args.c_str());
+    char* cmdlineBuf=_strdup(cmdline.c_str());
 
-    if(!CreateProcess(command.c_str(), // Process Name
-        cmdline, // Command Line
+    if(!CreateProcess(nullptr, // Process Name
+        cmdlineBuf, // Command Line
         NULL, // Process Handle not Inheritable
         NULL, // Thread Handle not Inheritable
         TRUE, // Handles are Inherited
