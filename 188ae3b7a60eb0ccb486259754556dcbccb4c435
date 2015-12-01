@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_fd7292ac",
+        "filename": "bin/update_pch",
+        "patchSetId": 3
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-12-01T03:34:23Z",
+      "side": 1,
+      "message": "Not a bad idea, although it won\u0027t break anything (postwin.h just undefs a bunch of macros that leak from windows headers that break the build, so if any of them is defined the build is already broken and this include will fix that). But agreed on #ifdef, will update the patch.",
+      "parentUuid": "dab17558_9d3426df",
+      "revId": "188ae3b7a60eb0ccb486259754556dcbccb4c435",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_7d3182ec",
         "filename": "xmlsecurity/source/xmlsec/nss/nssinitializer.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-30T22:46:03Z",
       "side": 1,
       "message": "please add a short comment that this prevents a conflict, so nobody removes it because it looks unnecessary...",
+      "revId": "188ae3b7a60eb0ccb486259754556dcbccb4c435",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_5d68feba",
+        "filename": "xmlsecurity/source/xmlsec/nss/nssinitializer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-12-01T03:34:23Z",
+      "side": 1,
+      "message": "Good call, will do.",
+      "parentUuid": "dab17558_7d3182ec",
       "revId": "188ae3b7a60eb0ccb486259754556dcbccb4c435",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
