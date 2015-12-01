@@ -88,22 +88,20 @@ template<typename Func> void visitElements(Func& rFunc,
     // notify children processing
     rFunc.push();
 
+    if (eCaller == SHAPE_WRITER && rElem->getTagName() == "defs")
+        return;
+
     // recurse over children
     uno::Reference<xml::dom::XNodeList> xChildren( rElem->getChildNodes() );
     const sal_Int32 nNumNodes( xChildren->getLength() );
     for( sal_Int32 i=0; i<nNumNodes; ++i )
     {
         if( xChildren->item(i)->getNodeType() == xml::dom::NodeType_ELEMENT_NODE ){
-            //tdf#65864
-            //TODO: support clipPath
-            if( !(eCaller == SHAPE_WRITER &&
-                rElem->getTagName() == "clipPath")){
-                    visitElements( rFunc,
-                                   uno::Reference<xml::dom::XElement>(
-                                       xChildren->item(i),
-                                       uno::UNO_QUERY_THROW),
-                                   eCaller );
-            }
+            visitElements( rFunc,
+                uno::Reference<xml::dom::XElement>(
+                xChildren->item(i),
+                uno::UNO_QUERY_THROW),
+                eCaller );
         }
     }
 
