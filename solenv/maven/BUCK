@@ -1,0 +1,41 @@
+include_defs('//solenv/maven/VERSION')
+include_defs('//solenv/maven/package.defs')
+
+URL = 'https://oss.sonatype.org/content/repositories/snapshots' \
+    if LIBREOFFICE_VERSION.endswith('-SNAPSHOT') else \
+        'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+
+maven_package(
+  repository = 'sonatype-nexus-staging',
+  url = URL,
+  version = LIBREOFFICE_VERSION,
+  jar = {
+    'juh': '//:juh',
+    'jurt': '//:jurt',
+    'officebean': '//:officebean',
+    'ridl': '//:ridl',
+    'unoil': '//:unoil',
+    'unoloader': '//:unoloader',
+  },
+  src = {
+    'juh': '//javaunohelper:juh-src',
+    'jurt': '//jurt:jurt-src',
+    'officebean': '//bean:officebean-src',
+    'ridl': '//ridljar:ridl-src',
+    'unoil': '//unoil:unoil-src',
+    'unoloader': '//ridljar/source/unoloader:unoloader-src',
+  },
+  doc = {
+    'juh': '//javaunohelper:juh-javadoc',
+    'jurt': '//jurt:jurt-javadoc',
+    'officebean': '//bean:officebean-javadoc',
+    'ridl': '//ridljar:ridl-javadoc',
+    'unoil': '//unoil:unoil-javadoc',
+    'unoloader': '//ridljar/source/unoloader:unoloader-javadoc',
+  },
+)
+
+python_binary(
+  name = 'mvn',
+  main = 'mvn.py',
+)
