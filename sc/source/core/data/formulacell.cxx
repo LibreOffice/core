@@ -1479,8 +1479,16 @@ void ScFormulaCell::Interpret()
     }
     else
     {
-        if ( ! InterpretFormulaGroup() )
+        // Do not attempt to interpret a group when calculations are already
+        // running, otherwise we may run into a circular reference hell. See
+        // tdf#95748
+        if (rRecursionHelper.GetRecursionCount())
             InterpretTail( SCITP_NORMAL);
+        else
+        {
+            if (!InterpretFormulaGroup())
+                InterpretTail( SCITP_NORMAL);
+        }
     }
 
     // While leaving a recursion or iteration stack, insert its cells to the
