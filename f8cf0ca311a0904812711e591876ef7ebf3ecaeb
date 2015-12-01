@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_5dcabe50",
+        "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-12-01T15:22:36Z",
+      "side": 1,
+      "message": "I see.  I don\u0027t know much about neon, so wasn\u0027t aware ne_lockstore_create cannot return indicating failure (but was wrongly made to believe so by the OSL_ENSURE verifying the return value).  In which case it would probably be best to rely on ne_lockstore_create working as advertised [1], and not bother to OSL_ENSURE or assert the return value at all.\n\n[1]  I see the general \"neon does not attempt to cope gracefully with an out-of-memory situation; instead, by default, the abort function is called to immediately terminate the process. An application may register a custom function which will be called before abort in such a situation; see ne_oom_callback.\" at \u003chttp://www.webdav.org/neon/doc/html/refneon.html\u003e.  I don\u0027t find any specific documentation for ne_lockstore_create at all.",
+      "parentUuid": "dab17558_dd8eae26",
+      "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_da04f4c7",
         "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
         "patchSetId": 5
