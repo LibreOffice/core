@@ -12809,12 +12809,12 @@ AC_MSG_NOTICE([setting up the build environment variables...])
 AC_SUBST(COMPATH)
 
 if test "$build_os" = "cygwin"; then
-    if test "$DISABLE_ACTIVEX" = "TRUE"; then
-        ATL_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
-        ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
-    else
+    if test -d "$COMPATH/atlmfc/lib"; then
         ATL_LIB="$COMPATH/atlmfc/lib"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
+    else
+        ATL_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
+        ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
     fi
     if test "$BITNESS_OVERRIDE" = 64; then
         ATL_LIB="$ATL_LIB/amd64"
