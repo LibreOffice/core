@@ -1,0 +1,14 @@
+# "#pragma intrinsic" not (yet?) handled in the "if (LangOpts.MicrosoftExt)"
+# block in Preprocessor::RegisterBuiltinPragmas in Clang's lib/Lex/Pragma.cpp:
+--- glm/core/func_integer.inl
++++ glm/core/func_integer.inl
+@@ -29,7 +29,9 @@
+ #if(GLM_ARCH != GLM_ARCH_PURE)
+ #if(GLM_COMPILER & GLM_COMPILER_VC)
+ #	include <intrin.h>
++#if !defined __clang__
+ #	pragma intrinsic(_BitScanReverse)
++#endif
+ #endif//(GLM_COMPILER & GLM_COMPILER_VC)
+ #endif//(GLM_ARCH != GLM_ARCH_PURE)
+ 
