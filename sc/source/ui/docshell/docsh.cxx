@@ -1785,11 +1785,12 @@ sal_Int32 getTextSepPos(
     const StrT& rStr, const ScImportOptions& rAsciiOpt, const SepCharT& rTextSep, const SepCharT& rFieldSep, bool& rNeedQuotes)
 {
     // #i116636# quotes are needed if text delimiter (quote), field delimiter,
-    // or LF is in the cell text.
+    // or LF or CR is in the cell text.
     sal_Int32 nPos = rStr.indexOf(rTextSep);
     rNeedQuotes = rAsciiOpt.bQuoteAllText || (nPos >= 0) ||
         (rStr.indexOf(rFieldSep) >= 0) ||
-        (rStr.indexOf('\n') >= 0);
+        (rStr.indexOf('\n') >= 0) ||
+        (rStr.indexOf('\r') >= 0);
     return nPos;
 }
 
