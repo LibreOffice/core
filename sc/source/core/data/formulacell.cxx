@@ -1551,15 +1551,24 @@ void ScFormulaCell::Interpret()
     }
     else
     {
-#if DEBUG_CALCULATION
-        aDC.enterGroup();
-#endif
-        bool bGroupInterpreted = InterpretFormulaGroup();
-#if DEBUG_CALCULATION
-        aDC.leaveGroup();
-#endif
-        if (!bGroupInterpreted)
+        // Do not attempt to interpret a group when calculations are already
+        // running, otherwise we may run into a circular reference hell. See
+        // tdf#95748
+        if (rRecursionHelper.GetRecursionCount())
             InterpretTail( SCITP_NORMAL);
+        else
+        {
+#if DEBUG_CALCULATION
+            aDC.enterGroup();
+            bool bGroupInterpreted = InterpretFormulaGroup();
+            aDC.leaveGroup();
+            if (!bGroupInterpreted)
+                InterpretTail( SCITP_NORMAL);
+#else
+            if (!InterpretFormulaGroup())
+                InterpretTail( SCITP_NORMAL);
+#endif
+        }
     }
 
     // While leaving a recursion or iteration stack, insert its cells to the
