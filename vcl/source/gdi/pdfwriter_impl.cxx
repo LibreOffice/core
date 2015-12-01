@@ -8929,9 +8929,9 @@ static double calcAngle( const Rectangle& rRect, const Point& rPoint )
     double fX = (double)aPoint.X();
     double fY = (double)-aPoint.Y();
 
-    if( rRect.GetWidth() > rRect.GetHeight() )
+    if((rRect.GetWidth() > rRect.GetHeight()) && (rRect.GetHeight() != 0 ))
         fY = fY*((double)rRect.GetWidth()/(double)rRect.GetHeight());
-    else if( rRect.GetHeight() > rRect.GetWidth() )
+    else if((rRect.GetHeight() > rRect.GetWidth()) && (rRect.GetWidth() != 0))
         fX = fX*((double)rRect.GetHeight()/(double)rRect.GetWidth());
     return atan2( fY, fX );
 }
