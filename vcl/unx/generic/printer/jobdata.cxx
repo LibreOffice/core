@@ -125,7 +125,7 @@ bool JobData::setPaperBin( int i_nPaperBin )
     return bSuccess;
 }
 
-bool JobData::getStreamBuffer( void*& pData, int& bytes )
+bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
 {
     // consistency checks
     if( ! m_pParser )
@@ -198,12 +198,13 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     pContextBuffer.reset();
 
     // success
-    pData = rtl_allocateMemory( bytes = aStream.Tell() );
+    bytes = static_cast<sal_uInt32>(aStream.Tell());
+    pData = rtl_allocateMemory( bytes );
     memcpy( pData, aStream.GetData(), bytes );
     return true;
 }
 
-bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobData )
+bool JobData::constructFromStreamBuffer( void* pData, sal_uInt32 bytes, JobData& rJobData )
 {
     SvMemoryStream aStream( pData, bytes, StreamMode::READ );
     OString aLine;
@@ -291,7 +292,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
                 if( rJobData.m_pParser )
                 {
                     rJobData.m_aContext.setParser( rJobData.m_pParser );
-                    int nBytes = bytes - aStream.Tell();
+                    const sal_uInt64 nBytes = bytes - aStream.Tell();
                     std::unique_ptr<char[]> pRemain(new char[bytes - aStream.Tell()]);
                     aStream.Read( pRemain.get(), nBytes );
                     rJobData.m_aContext.rebuildFromStreamBuffer( pRemain.get(), nBytes );

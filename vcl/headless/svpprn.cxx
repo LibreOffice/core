@@ -139,7 +139,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     if( pJobSetup->mpDriverData )
         rtl_freeMemory( pJobSetup->mpDriverData );
 
-    int nBytes;
+    sal_uInt32 nBytes;
     void* pBuffer = nullptr;
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
