@@ -50,16 +50,16 @@
 #define XLS_XML_FORMAT_TYPE  (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN)
 #define XLSB_XML_FORMAT_TYPE (SfxFilterFlags::IMPORT |                          SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER | SfxFilterFlags::PREFERED)
 
-#define ODS      0
-#define XLS      1
-#define XLSX     2
-#define XLSM     3
-#define CSV      4
-#define HTML     5
-#define LOTUS123 6
-#define DIF      7
-#define XLS_XML  8
-#define XLSB     9
+#define FORMAT_ODS      0
+#define FORMAT_XLS      1
+#define FORMAT_XLSX     2
+#define FORMAT_XLSM     3
+#define FORMAT_CSV      4
+#define FORMAT_HTML     5
+#define FORMAT_LOTUS123 6
+#define FORMAT_DIF      7
+#define FORMAT_XLS_XML  8
+#define FORMAT_XLSB     9
 
 enum StringType { PureString, FormulaValue, StringValue };
 

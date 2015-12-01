@@ -206,7 +206,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a single line", STRIKEOUT_SINGLE, aFont.GetStrikeout());
     //some tests on sheet2 only for ods
-    if (nFormat == ODS)
+    if (nFormat == FORMAT_ODS)
     {
         pPattern = pDoc->GetPattern(1,2,1);
         pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
@@ -247,12 +247,12 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned block horizontally", SVX_HOR_JUSTIFY_BLOCK, eHorJustify);
 
     //test Sheet3 only for ods and xlsx
-    if ( nFormat == ODS || nFormat == XLSX )
+    if ( nFormat == FORMAT_ODS || nFormat == FORMAT_XLSX )
     {
         pTest->createCSVPath("conditionalFormatting.", aCSVFileName);
         testCondFile(aCSVFileName, pDoc, 2);
         // test parent cell style import ( fdo#55198 )
-        if ( nFormat == XLSX )
+        if ( nFormat == FORMAT_XLSX )
         {
             pPattern = pDoc->GetPattern(1,1,3);
             ScStyleSheet* pStyleSheet = const_cast<ScStyleSheet*>(pPattern->GetStyleSheet());

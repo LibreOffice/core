@@ -367,7 +367,7 @@ void testRangeNameImpl(ScDocument& rDoc)
 
 void ScFiltersTest::testBasicCellContentODS()
 {
-    ScDocShellRef xDocSh = loadDoc("basic-cell-content.", ODS);
+    ScDocShellRef xDocSh = loadDoc("basic-cell-content.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load basic-cell-content.ods", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -390,7 +390,7 @@ void ScFiltersTest::testBasicCellContentODS()
 
 void ScFiltersTest::testBooleanFormatXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("check-boolean.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("check-boolean.", FORMAT_XLSX);
     ScDocument& rDoc = xDocSh->GetDocument();
     SvNumberFormatter* pNumFormatter = rDoc.GetFormatTable();
     const OUString aBooleanTypeStr = "\"TRUE\";\"TRUE\";\"FALSE\"";
@@ -411,7 +411,7 @@ void ScFiltersTest::testBooleanFormatXLSX()
 
 void ScFiltersTest::testRangeNameXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("named-ranges-global.", XLS);
+    ScDocShellRef xDocSh = loadDoc("named-ranges-global.", FORMAT_XLS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -428,7 +428,7 @@ void ScFiltersTest::testRangeNameXLS()
 
 void ScFiltersTest::testRangeNameLocalXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("named-ranges-local.", XLS);
+    ScDocShellRef xDocSh = loadDoc("named-ranges-local.", FORMAT_XLS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -449,7 +449,7 @@ void ScFiltersTest::testRangeNameLocalXLS()
 
 void ScFiltersTest::testRangeNameXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("named-ranges-global.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("named-ranges-global.", FORMAT_XLSX);
     xDocSh->DoHardRecalc(true);
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -460,7 +460,7 @@ void ScFiltersTest::testRangeNameXLSX()
 
 void ScFiltersTest::testHyperlinksXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("hyperlinks.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("hyperlinks.", FORMAT_XLSX);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     CPPUNIT_ASSERT_EQUAL(OUString("10:ABC10"), rDoc.GetString(ScAddress(0,1,0)));
@@ -472,7 +472,7 @@ void ScFiltersTest::testHyperlinksXLSX()
 
 void ScFiltersTest::testHardRecalcODS()
 {
-    ScDocShellRef xDocSh = loadDoc("hard-recalc.", ODS);
+    ScDocShellRef xDocSh = loadDoc("hard-recalc.", FORMAT_ODS);
     xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load hard-recalc.*", xDocSh.Is());
@@ -489,7 +489,7 @@ void ScFiltersTest::testHardRecalcODS()
 
 void ScFiltersTest::testFunctionsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("functions.", ODS);
+    ScDocShellRef xDocSh = loadDoc("functions.", FORMAT_ODS);
     xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
@@ -520,7 +520,7 @@ void ScFiltersTest::testFunctionsODS()
 
     xDocSh->DoClose();
 
-    xDocSh = loadDoc("database-functions.", ODS);
+    xDocSh = loadDoc("database-functions.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
     xDocSh->DoHardRecalc(true);
     ScDocument& rDoc2 = xDocSh->GetDocument();
@@ -530,7 +530,7 @@ void ScFiltersTest::testFunctionsODS()
 
     xDocSh->DoClose();
 
-    xDocSh = loadDoc("date-time-functions.", ODS);
+    xDocSh = loadDoc("date-time-functions.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
     xDocSh->DoHardRecalc(true);
     ScDocument& rDoc3 = xDocSh->GetDocument();
@@ -540,7 +540,7 @@ void ScFiltersTest::testFunctionsODS()
     xDocSh->DoClose();
 
     // crashes at exit while unloading StarBasic code
-    // xDocSh = loadDoc("user-defined-function.", ODS);
+    // xDocSh = loadDoc("user-defined-function.", FORMAT_ODS);
     // xDocSh->DoHardRecalc(true);
     // ScDocument& rDocUserDef = xDocSh->GetDocument();
     // createCSVPath("user-defined-function.", aCSVFileName);
@@ -549,7 +549,7 @@ void ScFiltersTest::testFunctionsODS()
 
 void ScFiltersTest::testFunctionsExcel2010()
 {
-    ScDocShellRef xDocSh = loadDoc("functions-excel-2010.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("functions-excel-2010.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll(); // perform hard re-calculation.
@@ -561,7 +561,7 @@ void ScFiltersTest::testFunctionsExcel2010()
 
 void ScFiltersTest::testCeilingFloorXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("ceiling-floor.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("ceiling-floor.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll(); // perform hard re-calculation.
@@ -574,7 +574,7 @@ void ScFiltersTest::testCeilingFloorXLSX()
 void ScFiltersTest::testCachedFormulaResultsODS()
 {
     {
-        ScDocShellRef xDocSh = loadDoc("functions.", ODS);
+        ScDocShellRef xDocSh = loadDoc("functions.", FORMAT_ODS);
         CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
 
         ScDocument& rDoc = xDocSh->GetDocument();
@@ -600,7 +600,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
     }
 
     {
-        ScDocShellRef xDocSh = loadDoc("cachedValue.", ODS);
+        ScDocShellRef xDocSh = loadDoc("cachedValue.", FORMAT_ODS);
         CPPUNIT_ASSERT_MESSAGE("Failed to load cachedValue.*", xDocSh.Is());
 
         ScDocument& rDoc = xDocSh->GetDocument();
@@ -646,7 +646,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
 
 void ScFiltersTest::testCachedMatrixFormulaResultsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("matrix.", ODS);
+    ScDocShellRef xDocSh = loadDoc("matrix.", FORMAT_ODS);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -680,7 +680,7 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
 
 void ScFiltersTest::testFormulaDepAcrossSheetsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("formula-across-sheets.", ODS);
+    ScDocShellRef xDocSh = loadDoc("formula-across-sheets.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the file.", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -704,7 +704,7 @@ void ScFiltersTest::testFormulaDepAcrossSheetsODS()
 
 void ScFiltersTest::testFormulaDepDeleteContentsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("formula-delete-contents.", ODS, true);
+    ScDocShellRef xDocSh = loadDoc("formula-delete-contents.", FORMAT_ODS, true);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the file.", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -758,7 +758,7 @@ void testDBRanges_Impl(ScDocument& rDoc, sal_Int32 nFormat)
     CPPUNIT_ASSERT_MESSAGE("Sheet1: row 4-5 should be hidden", bHidden && nRow1 == 4 && nRow2 == 5);
     bHidden = rDoc.RowHidden(6, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("Sheet1: row 6-end should be visible", !bHidden && nRow1 == 6 && nRow2 == MAXROW);
-    if(nFormat == ODS) //excel doesn't support named db ranges
+    if (nFormat == FORMAT_ODS) //excel doesn't support named db ranges
     {
         double aValue;
         rDoc.GetValue(0,10,1, aValue);
@@ -771,80 +771,79 @@ void testDBRanges_Impl(ScDocument& rDoc, sal_Int32 nFormat)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: D11: formula result is incorrect", 4.0, aValue);
     rDoc.GetValue(4, 10, 1, aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: E11: formula result is incorrect", 2.0, aValue);
-
 }
 
 }
 
 void ScFiltersTest::testDatabaseRangesODS()
 {
-    ScDocShellRef xDocSh = loadDoc("database.", ODS);
+    ScDocShellRef xDocSh = loadDoc("database.", FORMAT_ODS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    testDBRanges_Impl(rDoc, ODS);
+    testDBRanges_Impl(rDoc, FORMAT_ODS);
     xDocSh->DoClose();
 }
 
 void ScFiltersTest::testDatabaseRangesXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("database.", XLS);
+    ScDocShellRef xDocSh = loadDoc("database.", FORMAT_XLS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    testDBRanges_Impl(rDoc, XLS);
+    testDBRanges_Impl(rDoc, FORMAT_XLS);
     xDocSh->DoClose();
 }
 
 void ScFiltersTest::testDatabaseRangesXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("database.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("database.", FORMAT_XLSX);
     xDocSh->DoHardRecalc(true);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    testDBRanges_Impl(rDoc, XLSX);
+    testDBRanges_Impl(rDoc, FORMAT_XLSX);
     xDocSh->DoClose();
 }
 
 void ScFiltersTest::testFormatsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("formats.", ODS);
+    ScDocShellRef xDocSh = loadDoc("formats.", FORMAT_ODS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    testFormats(this, &rDoc, ODS);
+    testFormats(this, &rDoc, FORMAT_ODS);
     xDocSh->DoClose();
 }
 
 // void ScFiltersTest::testFormatsXLS()
 // {
-//     ScDocShellRef xDocSh = loadDoc("formats.", XLS);
+//     ScDocShellRef xDocSh = loadDoc("formats.", FORMAT_XLS);
 //     xDocSh->DoHardRecalc(true);
 //
 //     ScDocument& rDoc = xDocSh->GetDocument();
 //
-//     testFormats(this, rDoc, XLS);
+//     testFormats(this, rDoc, FORMAT_XLS);
 //     xDocSh->DoClose();
 // }
 
 // void ScFiltersTest::testFormatsXLSX()
 // {
-//     ScDocShellRef xDocSh = loadDoc("formats.", XLSX);
+//     ScDocShellRef xDocSh = loadDoc("formats.", FORMAT_XLSX);
 //     xDocSh->DoHardRecalc(true);
 //
 //     ScDocument& rDoc = xDocSh->GetDocument();
 //
-//     testFormats(this, rDoc, XLSX);
+//     testFormats(this, rDoc, FORMAT_XLSX);
 //     xDocSh->DoClose();
 // }
 
 void ScFiltersTest::testMatrixODS()
 {
-    ScDocShellRef xDocSh = loadDoc("matrix.", ODS);
+    ScDocShellRef xDocSh = loadDoc("matrix.", FORMAT_ODS);
     xDocSh->DoHardRecalc(true);
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -858,7 +857,7 @@ void ScFiltersTest::testMatrixODS()
 
 void ScFiltersTest::testMatrixXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("matrix.", XLS);
+    ScDocShellRef xDocSh = loadDoc("matrix.", FORMAT_XLS);
     xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.Is());
@@ -873,7 +872,7 @@ void ScFiltersTest::testMatrixXLS()
 
 void ScFiltersTest::testBorderODS()
 {
-    ScDocShellRef xDocSh = loadDoc("border.", ODS);
+    ScDocShellRef xDocSh = loadDoc("border.", FORMAT_ODS);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load border.*", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -969,7 +968,7 @@ void ScFiltersTest::testBordersOoo33()
     borders.push_back(Border(4, 9, 80, 80, 80, 80, 80, 0, 0, 80, 0, 0, 80, 0, 0, 80, 0, 0, 0, 0, 0, 0));
     borders.push_back(Border(4, 11, 100, 100, 100, 100, 100, 0, 0, 100, 0, 0, 100, 0, 0, 100, 0, 0, 0, 0, 0, 0));
 
-    ScDocShellRef xDocSh = loadDoc("borders_ooo33.", ODS);
+    ScDocShellRef xDocSh = loadDoc("borders_ooo33.", FORMAT_ODS);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load borders_ooo33.*", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1022,7 +1021,7 @@ void ScFiltersTest::testBordersOoo33()
 
 void ScFiltersTest::testBugFixesODS()
 {
-    ScDocShellRef xDocSh = loadDoc("bug-fixes.", ODS);
+    ScDocShellRef xDocSh = loadDoc("bug-fixes.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.ods", xDocSh.Is());
 
     xDocSh->DoHardRecalc(true);
@@ -1058,7 +1057,7 @@ void ScFiltersTest::testBugFixesODS()
 
 void ScFiltersTest::testBugFixesXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("bug-fixes.", XLS);
+    ScDocShellRef xDocSh = loadDoc("bug-fixes.", FORMAT_XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.Is());
 
     xDocSh->DoHardRecalc(true);
@@ -1068,7 +1067,7 @@ void ScFiltersTest::testBugFixesXLS()
 
 void ScFiltersTest::testBugFixesXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("bug-fixes.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("bug-fixes.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.Is());
 
     xDocSh->DoHardRecalc(true);
@@ -1097,7 +1096,7 @@ void checkMergedCells( ScDocument& rDoc, const ScAddress& rStartAddress,
 
 void ScFiltersTest::testMergedCellsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("merged.", ODS);
+    ScDocShellRef xDocSh = loadDoc("merged.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     //check sheet1 content
@@ -1123,7 +1122,7 @@ void ScFiltersTest::testMergedCellsODS()
 
 void ScFiltersTest::testRepeatedColumnsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("repeatedColumns.", ODS);
+    ScDocShellRef xDocSh = loadDoc("repeatedColumns.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     //text
@@ -1244,7 +1243,7 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
 
 void ScFiltersTest::testDataValidityODS()
 {
-    ScDocShellRef xDocSh = loadDoc("dataValidity.", ODS);
+    ScDocShellRef xDocSh = loadDoc("dataValidity.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     ScAddress aValBaseAddr1( 2,6,0 ); //sheet1
@@ -1290,7 +1289,7 @@ void ScFiltersTest::testDataValidityODS()
 
 void ScFiltersTest::testDataTableMortgageXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("data-table/mortgage.", XLS);
+    ScDocShellRef xDocSh = loadDoc("data-table/mortgage.", FORMAT_XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.Is());
 
     ScFormulaOptions aOptions;
@@ -1343,7 +1342,7 @@ void ScFiltersTest::testDataTableMortgageXLS()
 
 void ScFiltersTest::testDataTableOneVarXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("data-table/one-variable.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("data-table/one-variable.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.Is());
 
     ScFormulaOptions aOptions;
@@ -1390,7 +1389,7 @@ void ScFiltersTest::testDataTableOneVarXLSX()
 
 void ScFiltersTest::testDataTableMultiTableXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("data-table/multi-table.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("data-table/multi-table.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xDocSh.Is());
 
     ScFormulaOptions aOptions;
@@ -1425,14 +1424,14 @@ void ScFiltersTest::testDataTableMultiTableXLSX()
 void ScFiltersTest::testBrokenQuotesCSV()
 {
     const OUString aFileNameBase("fdo48621_broken_quotes.");
-    OUString aFileExtension(getFileFormats()[CSV].pName, strlen(getFileFormats()[CSV].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(getFileFormats()[CSV].pFilterName, strlen(getFileFormats()[CSV].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileExtension(getFileFormats()[FORMAT_CSV].pName, strlen(getFileFormats()[FORMAT_CSV].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(getFileFormats()[FORMAT_CSV].pFilterName, strlen(getFileFormats()[FORMAT_CSV].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(getFileFormats()[CSV].pTypeName, strlen(getFileFormats()[CSV].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << getFileFormats()[CSV].pName << " Test" << std::endl;
+    OUString aFilterType(getFileFormats()[FORMAT_CSV].pTypeName, strlen(getFileFormats()[FORMAT_CSV].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << getFileFormats()[FORMAT_CSV].pName << " Test" << std::endl;
 
-    SfxFilterFlags nFormatType = getFileFormats()[CSV].nFormatType;
+    SfxFilterFlags nFormatType = getFileFormats()[FORMAT_CSV].nFormatType;
     SotClipboardFormatId nClipboardId = bool(nFormatType) ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
     ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId);
@@ -1452,14 +1451,14 @@ void ScFiltersTest::testBrokenQuotesCSV()
 void ScFiltersTest::testCellValueXLSX()
 {
     const OUString aFileNameBase("cell-value.");
-    OUString aFileExtension(getFileFormats()[XLSX].pName, strlen(getFileFormats()[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(getFileFormats()[XLSX].pFilterName, strlen(getFileFormats()[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFileExtension(getFileFormats()[FORMAT_XLSX].pName, strlen(getFileFormats()[FORMAT_XLSX].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFilterName(getFileFormats()[FORMAT_XLSX].pFilterName, strlen(getFileFormats()[FORMAT_XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(getFileFormats()[XLSX].pTypeName, strlen(getFileFormats()[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << getFileFormats()[XLSX].pName << " Test" << std::endl;
+    OUString aFilterType(getFileFormats()[FORMAT_XLSX].pTypeName, strlen(getFileFormats()[FORMAT_XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << getFileFormats()[FORMAT_XLSX].pName << " Test" << std::endl;
 
-    SfxFilterFlags nFormatType = getFileFormats()[XLSX].nFormatType;
+    SfxFilterFlags nFormatType = getFileFormats()[FORMAT_XLSX].nFormatType;
     SotClipboardFormatId nClipboardId = bool(nFormatType) ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
     ScDocShellRef xDocSh = ScBootstrapFixture::load( aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId);
@@ -1476,7 +1475,7 @@ void ScFiltersTest::testCellValueXLSX()
 
 void ScFiltersTest::testRowIndex1BasedXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("row-index-1-based.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("row-index-1-based.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -1564,7 +1563,7 @@ void ScFiltersTest::testPasswordWrongSHA()
 
 void ScFiltersTest::testControlImport()
 {
-    ScDocShellRef xDocSh = loadDoc("singlecontrol.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("singlecontrol.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load singlecontrol.xlsx", xDocSh.Is());
 
     uno::Reference< frame::XModel > xModel = xDocSh->GetModel();
@@ -1580,7 +1579,7 @@ void ScFiltersTest::testControlImport()
 
 void ScFiltersTest::testChartImportODS()
 {
-    ScDocShellRef xDocSh = loadDoc("chart-import-basic.", ODS);
+    ScDocShellRef xDocSh = loadDoc("chart-import-basic.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load chart-import-basic.ods.", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1614,7 +1613,7 @@ void ScFiltersTest::testChartImportODS()
 
 void ScFiltersTest::testChartImportXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("chartx.", XLS);
+    ScDocShellRef xDocSh = loadDoc("chartx.", FORMAT_XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load chartx.xls.", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1631,7 +1630,7 @@ void ScFiltersTest::testChartImportXLS()
 
 void ScFiltersTest::testNumberFormatHTML()
 {
-    ScDocShellRef xDocSh = loadDoc("numberformat.", HTML);
+    ScDocShellRef xDocSh = loadDoc("numberformat.", FORMAT_HTML);
     CPPUNIT_ASSERT_MESSAGE("Failed to load numberformat.html", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1658,7 +1657,7 @@ void ScFiltersTest::testNumberFormatHTML()
 
 void ScFiltersTest::testNumberFormatCSV()
 {
-    ScDocShellRef xDocSh = loadDoc("numberformat.", CSV);
+    ScDocShellRef xDocSh = loadDoc("numberformat.", FORMAT_CSV);
     CPPUNIT_ASSERT_MESSAGE("Failed to load numberformat.csv", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1685,7 +1684,7 @@ void ScFiltersTest::testNumberFormatCSV()
 
 void ScFiltersTest::testCellAnchoredShapesODS()
 {
-    ScDocShellRef xDocSh = loadDoc("cell-anchored-shapes.", ODS);
+    ScDocShellRef xDocSh = loadDoc("cell-anchored-shapes.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-shapes.ods", xDocSh.Is());
 
     // There are two cell-anchored objects on the first sheet.
@@ -1713,7 +1712,7 @@ void ScFiltersTest::testCellAnchoredShapesODS()
 
 void ScFiltersTest::testCellAnchoredHiddenShapesXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("cell-anchored-hidden-shapes.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("cell-anchored-hidden-shapes.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-shapes.xlsx", xDocSh.Is());
 
     // There are two cell-anchored objects on the first sheet.
@@ -1755,7 +1754,7 @@ bool hasDimension(const std::vector<const ScDPSaveDimension*>& rDims, const OUSt
 
 void ScFiltersTest::testPivotTableBasicODS()
 {
-    ScDocShellRef xDocSh = loadDoc("pivot-table-basic.", ODS);
+    ScDocShellRef xDocSh = loadDoc("pivot-table-basic.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load pivot-table-basic.ods", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1818,7 +1817,7 @@ void ScFiltersTest::testPivotTableBasicODS()
 
 void ScFiltersTest::testPivotTableNamedRangeSourceODS()
 {
-    ScDocShellRef xDocSh = loadDoc("pivot-table-named-range-source.", ODS);
+    ScDocShellRef xDocSh = loadDoc("pivot-table-named-range-source.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load pivot-table-named-range-source.ods", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1874,7 +1873,7 @@ bool checkVisiblePageFieldMember( const ScDPSaveDimension::MemberList& rMembers,
 
 void ScFiltersTest::testPivotTableSharedCacheGroupODS()
 {
-    ScDocShellRef xDocSh = loadDoc("pivot-table-shared-cache-with-group.", ODS);
+    ScDocShellRef xDocSh = loadDoc("pivot-table-shared-cache-with-group.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -2009,7 +2008,7 @@ void ScFiltersTest::testPivotTableSharedCacheGroupODS()
 
 void ScFiltersTest::testGetPivotDataXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("pivot-getpivotdata.", XLS);
+    ScDocShellRef xDocSh = loadDoc("pivot-getpivotdata.", FORMAT_XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll();
@@ -2025,7 +2024,7 @@ void ScFiltersTest::testGetPivotDataXLS()
 
 void ScFiltersTest::testRowHeightODS()
 {
-    ScDocShellRef xDocSh = loadDoc("row-height-import.", ODS);
+    ScDocShellRef xDocSh = loadDoc("row-height-import.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load row-height-import.ods", xDocSh.Is());
 
     SCTAB nTab = 0;
@@ -2068,7 +2067,7 @@ void ScFiltersTest::testRowHeightODS()
 
 void ScFiltersTest::testRichTextContentODS()
 {
-    ScDocShellRef xDocSh = loadDoc("rich-text-cells.", ODS);
+    ScDocShellRef xDocSh = loadDoc("rich-text-cells.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load rich-text-cells.ods", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -2328,7 +2327,7 @@ void ScFiltersTest::testRichTextContentODS()
 
 void ScFiltersTest::testDataBarODS()
 {
-    ScDocShellRef xDocSh = loadDoc("databar.", ODS);
+    ScDocShellRef xDocSh = loadDoc("databar.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -2339,7 +2338,7 @@ void ScFiltersTest::testDataBarODS()
 
 void ScFiltersTest::testDataBarXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("databar.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("databar.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -2350,7 +2349,7 @@ void ScFiltersTest::testDataBarXLSX()
 
 void ScFiltersTest::testColorScaleODS()
 {
-    ScDocShellRef xDocSh = loadDoc("colorscale.", ODS);
+    ScDocShellRef xDocSh = loadDoc("colorscale.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -2362,7 +2361,7 @@ void ScFiltersTest::testColorScaleODS()
 
 void ScFiltersTest::testColorScaleXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("colorscale.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("colorscale.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -2374,7 +2373,7 @@ void ScFiltersTest::testColorScaleXLSX()
 
 void ScFiltersTest::testNewCondFormatODS()
 {
-    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "new_cond_format_test.", ODS );
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("new_cond_format_test.", FORMAT_ODS);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load new_cond_format_test.ods", xDocSh.Is());
 
@@ -2390,7 +2389,7 @@ void ScFiltersTest::testNewCondFormatODS()
 
 void ScFiltersTest::testNewCondFormatXLSX()
 {
-    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "new_cond_format_test.", XLSX );
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("new_cond_format_test.", FORMAT_XLSX);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load new_cond_format_test.xlsx", xDocSh.Is());
 
@@ -2406,7 +2405,7 @@ void ScFiltersTest::testNewCondFormatXLSX()
 
 void ScFiltersTest::testCondFormatThemeColorXLSX()
 {
-    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "condformat_theme_color.", XLSX );
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("condformat_theme_color.", FORMAT_XLSX);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load condformat_theme_color.xlsx", xDocSh.Is());
 
@@ -2442,7 +2441,7 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
 
 void ScFiltersTest::testCondFormatThemeColor2XLSX()
 {
-    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "cond_format_theme_color2.", XLSX );
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("cond_format_theme_color2.", FORMAT_XLSX);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load cond_format_theme_color2.xlsx", xDocSh.Is());
 
@@ -2499,7 +2498,7 @@ void testCustomIconSetsXLSX_Impl(ScDocument& rDoc, SCCOL nCol, SCROW nRow, ScIco
 
 void ScFiltersTest::testComplexIconSetsXLSX()
 {
-    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "complex_icon_set.", XLSX );
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("complex_icon_set.", FORMAT_XLSX);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load complex_icon_set.xlsx", xDocSh.Is());
 
@@ -2523,7 +2522,7 @@ void ScFiltersTest::testComplexIconSetsXLSX()
 
 void ScFiltersTest::testCondFormatParentXLSX()
 {
-    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "cond_parent.", XLSX );
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("cond_parent.", FORMAT_XLSX);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load cond_parent.xlsx", xDocSh.Is());
 
@@ -2537,7 +2536,7 @@ void ScFiltersTest::testCondFormatParentXLSX()
 
 void ScFiltersTest::testLiteralInFormulaXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("shared-string/literal-in-formula.", XLS);
+    ScDocShellRef xDocSh = loadDoc("shared-string/literal-in-formula.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -2550,7 +2549,7 @@ void ScFiltersTest::testLiteralInFormulaXLS()
 
 void ScFiltersTest::testFormulaDependency()
 {
-    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "dependencyTree.", ODS );
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("dependencyTree.", FORMAT_ODS);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -2592,11 +2591,11 @@ void ScFiltersTest::testMiscRowHeights()
            have default row heights ( there was a problem where the optimal
            height was being calcuated after import if no hard height )
         */
-        { "alldefaultheights.", ODS, -1, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
+        { "alldefaultheights.", FORMAT_ODS, -1, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
         /* Checks the imported height of some multiline input, additionally checks
            that the optimal height flag is set ( or not )
         */
-        { "multilineoptimal.", ODS, -1, SAL_N_ELEMENTS(MultiLineOptData), MultiLineOptData },
+        { "multilineoptimal.", FORMAT_ODS, -1, SAL_N_ELEMENTS(MultiLineOptData), MultiLineOptData },
     };
     miscRowHeightsTest( aTestValues, SAL_N_ELEMENTS(aTestValues) );
 }
@@ -2607,7 +2606,7 @@ void ScFiltersTest::testMiscRowHeights()
 
 void ScFiltersTest::testOptimalHeightReset()
 {
-    ScDocShellRef xDocSh = loadDoc("multilineoptimal.", ODS, true);
+    ScDocShellRef xDocSh = loadDoc("multilineoptimal.", FORMAT_ODS, true);
     SCTAB nTab = 0;
     SCROW nRow = 0;
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -2643,7 +2642,7 @@ void ScFiltersTest::testOptimalHeightReset()
 
 void ScFiltersTest::testPrintRangeODS()
 {
-    ScDocShellRef xDocSh = loadDoc("print-range.", ODS);
+    ScDocShellRef xDocSh = loadDoc("print-range.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
     const ScRange* pRange = rDoc.GetRepeatRowRange(0);
     CPPUNIT_ASSERT(pRange);
@@ -2658,7 +2657,7 @@ void ScFiltersTest::testPrintRangeODS()
 
 void ScFiltersTest::testOutlineODS()
 {
-    ScDocShellRef xDocSh = loadDoc("outline.", ODS);
+    ScDocShellRef xDocSh = loadDoc("outline.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     const ScOutlineTable* pTable = rDoc.GetOutlineTable(0);
@@ -2713,7 +2712,7 @@ void ScFiltersTest::testOutlineODS()
 
 void ScFiltersTest::testColumnStyleXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("column-style.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("column-style.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -2734,7 +2733,7 @@ void ScFiltersTest::testColumnStyleXLSX()
 
 void ScFiltersTest::testSharedFormulaHorizontalXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("shared-formula/horizontal.", XLS);
+    ScDocShellRef xDocSh = loadDoc("shared-formula/horizontal.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -2774,7 +2773,7 @@ void ScFiltersTest::testSharedFormulaHorizontalXLS()
 
 void ScFiltersTest::testSharedFormulaWrappedRefsXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("shared-formula/wrapped-refs.", XLS);
+    ScDocShellRef xDocSh = loadDoc("shared-formula/wrapped-refs.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll();
@@ -2802,7 +2801,7 @@ void ScFiltersTest::testSharedFormulaWrappedRefsXLS()
 
 void ScFiltersTest::testSharedFormulaBIFF5()
 {
-    ScDocShellRef xDocSh = loadDoc("shared-formula/biff5.", XLS);
+    ScDocShellRef xDocSh = loadDoc("shared-formula/biff5.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll();
@@ -2818,7 +2817,7 @@ void ScFiltersTest::testSharedFormulaBIFF5()
 
 void ScFiltersTest::testSharedFormulaXLSB()
 {
-    ScDocShellRef xDocSh = loadDoc("shared_formula.", XLSB);
+    ScDocShellRef xDocSh = loadDoc("shared_formula.", FORMAT_XLSB);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll();
@@ -2841,7 +2840,7 @@ void ScFiltersTest::testSharedFormulaXLS()
 {
     {
         // fdo#80091
-        ScDocShellRef xDocSh = loadDoc("shared-formula/relative-refs1.", XLS);
+        ScDocShellRef xDocSh = loadDoc("shared-formula/relative-refs1.", FORMAT_XLS);
         CPPUNIT_ASSERT(xDocSh.Is());
         ScDocument& rDoc = xDocSh->GetDocument();
         rDoc.CalcAll();
@@ -2862,7 +2861,7 @@ void ScFiltersTest::testSharedFormulaXLS()
 
     {
         // fdo#84556 and some related tests
-        ScDocShellRef xDocSh = loadDoc("shared-formula/relative-refs2.", XLS);
+        ScDocShellRef xDocSh = loadDoc("shared-formula/relative-refs2.", FORMAT_XLS);
         CPPUNIT_ASSERT(xDocSh.Is());
         ScDocument& rDoc = xDocSh->GetDocument();
         rDoc.CalcAll();
@@ -2930,7 +2929,7 @@ void ScFiltersTest::testSharedFormulaXLS()
 
 void ScFiltersTest::testExternalRefCacheXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("external-refs.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("external-refs.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -2945,7 +2944,7 @@ void ScFiltersTest::testExternalRefCacheXLSX()
 
 void ScFiltersTest::testExternalRefCacheODS()
 {
-    ScDocShellRef xDocSh = loadDoc("external-ref-cache.", ODS);
+    ScDocShellRef xDocSh = loadDoc("external-ref-cache.", FORMAT_ODS);
 
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -2964,7 +2963,7 @@ void ScFiltersTest::testExternalRefCacheODS()
 
 void ScFiltersTest::testHybridSharedStringODS()
 {
-    ScDocShellRef xDocSh = loadDoc("hybrid-shared-string.", ODS);
+    ScDocShellRef xDocSh = loadDoc("hybrid-shared-string.", FORMAT_ODS);
 
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -2977,7 +2976,7 @@ void ScFiltersTest::testHybridSharedStringODS()
 
 void ScFiltersTest::testCopyMergedNumberFormats()
 {
-    ScDocShellRef xDocSh = loadDoc("copy-merged-number-formats.", ODS);
+    ScDocShellRef xDocSh = loadDoc("copy-merged-number-formats.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -3000,7 +2999,7 @@ void ScFiltersTest::testCopyMergedNumberFormats()
 
 void ScFiltersTest::testVBAUserFunctionXLSM()
 {
-    ScDocShellRef xDocSh = loadDoc("vba-user-function.", XLSM);
+    ScDocShellRef xDocSh = loadDoc("vba-user-function.", FORMAT_XLSM);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -3028,7 +3027,7 @@ void ScFiltersTest::testEmbeddedImageXLS()
     // The document has one embedded image on the first sheet.  Make sure it's
     // imported properly.
 
-    ScDocShellRef xDocSh = loadDoc("file-with-png-image.", XLS);
+    ScDocShellRef xDocSh = loadDoc("file-with-png-image.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -3049,7 +3048,7 @@ void ScFiltersTest::testEmbeddedImageXLS()
 
 void ScFiltersTest::testErrorOnExternalReferences()
 {
-    ScDocShellRef xDocSh = loadDoc("blank.", ODS);
+    ScDocShellRef xDocSh = loadDoc("blank.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to open empty doc", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -3069,7 +3068,7 @@ void ScFiltersTest::testErrorOnExternalReferences()
 
 void ScFiltersTest::testEditEngStrikeThroughXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("strike-through.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("strike-through.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -3102,7 +3101,7 @@ void ScFiltersTest::testEditEngStrikeThroughXLSX()
 
 void ScFiltersTest::testRefStringXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("ref_string.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("ref_string.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -3117,7 +3116,7 @@ void ScFiltersTest::testRefStringXLSX()
 
 void ScFiltersTest::testBnc762542()
 {
-    ScDocShellRef xDocSh = loadDoc("bnc762542.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("bnc762542.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -3143,7 +3142,7 @@ void ScFiltersTest::testBnc762542()
 
 void ScFiltersTest::testHiddenSheetsXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("hidden_sheets.", XLSX);
+    ScDocShellRef xDocSh = loadDoc("hidden_sheets.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
