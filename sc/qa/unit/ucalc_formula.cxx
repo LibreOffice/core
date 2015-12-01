@@ -29,6 +29,7 @@
 #include <docpool.hxx>
 
 #include <formula/vectortoken.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/broadcast.hxx>
 
 #include <memory>
@@ -789,29 +790,45 @@ void Test::testFormulaHashAndTag()
     // Test formula vectorization state.
 
     struct {
-        const char* pFormula; ScFormulaVectorState eState;
+        const char* pFormula;
+        ScFormulaVectorState eState;
+        ScFormulaVectorState eSwInterpreterState; // these can change when more is whitelisted
     } aVectorTests[] = {
-        { "=SUM(1;2;3;4;5)", FormulaVectorEnabled },
-        { "=NOW()", FormulaVectorDisabled },
-        { "=AVERAGE(X1:Y200)", FormulaVectorCheckReference },
-        { "=MAX(X1:Y200;10;20)", FormulaVectorCheckReference },
-        { "=MIN(10;11;22)", FormulaVectorEnabled },
-        { "=H4", FormulaVectorCheckReference },
+        { "=SUM(1;2;3;4;5)", FormulaVectorEnabled, FormulaVectorEnabled },
+        { "=NOW()", FormulaVectorDisabled, FormulaVectorDisabled },
+        { "=AVERAGE(X1:Y200)", FormulaVectorCheckReference, FormulaVectorDisabled },
+        { "=MAX(X1:Y200;10;20)", FormulaVectorCheckReference, FormulaVectorDisabled },
+        { "=MIN(10;11;22)", FormulaVectorEnabled, FormulaVectorDisabled },
+        { "=H4", FormulaVectorCheckReference, FormulaVectorCheckReference },
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aVectorTests); ++i)
-    {
-        m_pDoc->SetString(aPos1, OUString::createFromAscii(aVectorTests[i].pFormula));
-        ScFormulaVectorState eState = m_pDoc->GetFormulaVectorState(aPos1);
+    bool bSwInterpreter = officecfg::Office::Common::Misc::UseSwInterpreter::get();
 
-        if (eState != aVectorTests[i].eState)
+    for (bool bForceSwInterpreter : { false, true })
+    {
+        std::shared_ptr< comphelper::ConfigurationChanges > xBatch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::UseSwInterpreter::set(bForceSwInterpreter, xBatch);
+        xBatch->commit();
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aVectorTests); ++i)
         {
-            std::ostringstream os;
-            os << "Unexpected vectorization state: expr:" << aVectorTests[i].pFormula;
-            CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), false);
+            m_pDoc->SetString(aPos1, OUString::createFromAscii(aVectorTests[i].pFormula));
+            ScFormulaVectorState eState = m_pDoc->GetFormulaVectorState(aPos1);
+            ScFormulaVectorState eReferenceState = bForceSwInterpreter? aVectorTests[i].eSwInterpreterState: aVectorTests[i].eState;
+
+            if (eState != eReferenceState)
+            {
+                std::ostringstream os;
+                os << "Unexpected vectorization state: expr: '" << aVectorTests[i].pFormula << "', using software interpreter: " << bForceSwInterpreter;
+                CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), false);
+            }
+            aPos1.IncRow();
         }
-        aPos1.IncRow();
     }
+
+    std::shared_ptr< comphelper::ConfigurationChanges > xBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::UseSwInterpreter::set(bSwInterpreter, xBatch);
+    xBatch->commit();
 
     m_pDoc->DeleteTab(0);
 }

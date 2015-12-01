@@ -90,6 +90,10 @@ $(eval $(call gb_CppunitTest_use_api,sc_ucalc,\
     udkapi \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sc_ucalc,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_ure,sc_ucalc))
 $(eval $(call gb_CppunitTest_use_vcl,sc_ucalc))
 
