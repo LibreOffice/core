@@ -64,9 +64,9 @@ public:
             double          mfVal;
             const OUString *mpStr;
         };
-        bool                mbAlloc  : 1;
-        bool                mbString : 1;
-        QueryOp             meOp     : 2;
+        bool                mbAlloc;
+        bool                mbString;
+        QueryOp             meOp;
 
         void deleteString()
         {
@@ -145,7 +145,7 @@ private:
     {
         SCROW           mnRow;
         SCTAB           mnTab;
-        QueryOp         meOp : 2;
+        QueryOp         meOp;
 
         QueryKey( const ScAddress & rAddress, const QueryOp eOp ) :
             mnRow( rAddress.Row()),
