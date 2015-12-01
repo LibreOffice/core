@@ -70,17 +70,20 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell )
 
 #define DEBUG_CALCULATION 0
 #if DEBUG_CALCULATION
-static ScAddress aDebugCalculationTriggerAddress(1,2,0);    // Sheet1.B3, whatever you like
+static bool bDebugCalculationActive = false;                // Set to true for global active init,
+static ScAddress aDebugCalculationTriggerAddress(1,2,0);    // or on cell Sheet1.B3, whatever you like
 
 struct DebugCalculationEntry
 {
           ScAddress     maPos;
           OUString      maResult;
     const ScDocument*   mpDoc;
+          sal_uInt16    mnRecursion;
 
-    DebugCalculationEntry( const ScAddress& rPos, const ScDocument* pDoc ) :
+    DebugCalculationEntry( const ScAddress& rPos, ScDocument* pDoc ) :
         maPos(rPos),
-        mpDoc(pDoc)
+        mpDoc(pDoc),
+        mnRecursion(pDoc->GetRecursionHelper().GetRecursionCount())
     {
     }
 };
@@ -101,14 +104,15 @@ static struct DebugCalculation
     bool                                    mbPrint;
     bool                                    mbPrintResults;
 
-    DebugCalculation() : mbActive(false), mbSwitchOff(false), mbPrint(true), mbPrintResults(false) {}
+    DebugCalculation() : mbActive(bDebugCalculationActive), mbSwitchOff(false), mbPrint(true), mbPrintResults(false) {}
 
     /** Print chain in encountered dependency order. */
     void print() const
     {
         for (auto const& it : mvPos)
         {
-            OUString aStr( it.maPos.Format( SCA_VALID | SCA_TAB_3D, it.mpDoc));
+            OUString aStr( it.maPos.Format( SCA_VALID | SCA_TAB_3D, it.mpDoc) +
+                    " [" + OUString::number( it.mnRecursion) + "]");
             fprintf( stderr, "%s -> ", aStr.toUtf8().getStr());
         }
         fprintf( stderr, "%s", "END\n");
@@ -120,7 +124,7 @@ static struct DebugCalculation
         for (auto const& it : mvResults)
         {
             OUString aStr( it.maPos.Format( SCA_VALID | SCA_TAB_3D, it.mpDoc));
-            aStr += "(" + it.maResult + ")";
+            aStr += " (" + it.maResult + ")";
             fprintf( stderr, "%s, ", aStr.toUtf8().getStr());
         }
         fprintf( stderr, "%s", "END\n");
@@ -148,7 +152,7 @@ static struct DebugCalculation
 
 struct DebugCalculationStacker
 {
-    DebugCalculationStacker( const ScAddress& rPos, const ScDocument* pDoc )
+    DebugCalculationStacker( const ScAddress& rPos, ScDocument* pDoc )
     {
         if (!aDC.mbActive && rPos == aDC.maTrigger)
             aDC.mbActive = aDC.mbSwitchOff = true;
