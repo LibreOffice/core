@@ -311,6 +311,27 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             includedirfile.write('\n'.join(include))
             includedirfile.close()
 
+
+    def create_macros(self):
+        for module in self.gbuildparser.modulenamelist:
+            modulepath = os.path.join(self.gbuildparser.builddir, module)
+            macrofile = open(os.path.join(modulepath, '.macros'), 'w')
+            modulelibs = []
+            for lib in self.gbuildparser.target_by_path.keys():
+                if lib.startswith(module+'/'):
+                    modulelibs.append(lib)
+            define = []
+            defineset = set()
+            for lib in modulelibs:
+                for target in self.gbuildparser.target_by_path[lib]:
+                    for i in target.defs.keys():
+                        tmp = str(i) +','+str(target.defs[i])
+                        if tmp not in defineset:
+                            defineset.add(tmp)
+            macrofile.write('\n'.join(defineset))
+            macrofile.close()
+
+
     def create_settings_file(self):
 
         settingsfiletemplate = """\
@@ -359,11 +380,21 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'r')
             tempxml = settingsfile.readlines()
             tempinclude = open(os.path.join(modulepath, '.eclipsesettingfile'), 'r')
+            tempmacro = open(os.path.join(modulepath, '.macros'), 'r')
             for includepath in tempinclude:
                 if includepath[-1:] == "\n":
                     includepath = includepath[:-1]
                 templine = "<includepath>%s</includepath>\n" % includepath
                 tempxml.insert(5, templine)
+
+            for line in tempmacro:
+                macroskeyvalue = line.split(',')
+                macrokey = macroskeyvalue[0]
+                macrovalue = macroskeyvalue[1]
+                if macrovalue[-1:] == "\n":
+                    macrovalue = macrovalue[:-1] 
+                templine = "<macro><name>%s</name><value>%s</value></macro>\n" %(macrokey, macrovalue)
+                tempxml.insert(-13, templine)
             tempxml="".join(tempxml)
             settingsfile.close
 
@@ -371,10 +402,11 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             settingsfile.write(tempxml)
             settingsfile.close()
             os.remove(os.path.join(modulepath, '.eclipsesettingfile'))
-
+            os.remove(os.path.join(modulepath, '.macros'))
 
     def emit(self):
         self.create_include_paths()
+        self.create_macros()
         self.create_settings_file() 
 
 class DebugIntegrationGenerator(IdeIntegrationGenerator):
