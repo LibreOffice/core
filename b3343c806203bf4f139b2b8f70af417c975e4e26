@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_3dd89aef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-12-01T20:45:15Z",
+      "side": 1,
+      "message": "There\u0027s no clear form for that sort of change, git log has something like \u0027formatting\u0027 or \u0027vcl: align code\u0027 or \u0027Adjust whitespace and alignment\u0027 etc.\n\nAs it stands, not quite self-descriptive...",
+      "revId": "b3343c806203bf4f139b2b8f70af417c975e4e26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
