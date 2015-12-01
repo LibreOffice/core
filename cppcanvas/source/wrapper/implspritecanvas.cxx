@@ -49,6 +49,9 @@ namespace cppcanvas
             mxSpriteCanvas( rCanvas ),
             mpTransformArbiter( new TransformationArbiter() )
         {
+#if defined __clang__ && defined _MSC_VER // workaround clang-cl ABI bug PR25641
+            (void) (ColorSharedPtr());
+#endif
             OSL_ENSURE( mxSpriteCanvas.is(), "ImplSpriteCanvas::ImplSpriteCanvas(): Invalid canvas" );
         }
 
