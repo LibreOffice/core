@@ -842,7 +842,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             // side effects when using name as variable implicitly
             bool bForwardToSbxObject = true;
 
-            sal_uIntPtr nId = pHint->GetId();
+            const sal_uInt32 nId = pHint->GetId();
             if( (nId == SBX_HINT_DATAWANTED || nId == SBX_HINT_DATACHANGED) &&
                 pVar->GetName().equalsIgnoreAsciiCase( "name" ) )
             {
@@ -954,7 +954,7 @@ void SbModule::SetSource32( const OUString& r )
 
 // Broadcast of a hint to all Basics
 
-static void _SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
+static void _SendHint( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
 {
     // Self a BASIC?
     if( dynamic_cast<const StarBASIC *>(pObj) != nullptr && pObj->IsBroadcaster() )
@@ -969,7 +969,7 @@ static void _SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
     }
 }
 
-static void SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
+static void SendHint( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
 {
     while( pObj->GetParent() )
         pObj = pObj->GetParent();
