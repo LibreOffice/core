@@ -725,7 +725,6 @@ SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
     , nWordType( nType )
     , bClip( bClp )
 {
-    OSL_ENSURE( !aPreDashReplacementText.isEmpty(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
     nEndPos = nEnde;
 
