@@ -212,8 +212,9 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         return;
     }
 
-    if (const void *pOptions = Application::GetSettings().GetStyleSettings().GetCairoFontOptions())
-        cairo_set_font_options(cr, static_cast<const cairo_font_options_t*>(pOptions));
+    ImplSVData* pSVData = ImplGetSVData();
+    if (const cairo_font_options_t* pFontOptions = pSVData->mpDefInst->GetCairoFontOptions())
+        cairo_set_font_options(cr, pFontOptions);
 
     double nDX, nDY;
     getSurfaceOffset(nDX, nDY);
@@ -429,12 +430,11 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
 
 void cairosubcallback(void* pPattern)
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const void* pFontOptions = rStyleSettings.GetCairoFontOptions();
+    ImplSVData* pSVData = ImplGetSVData();
+    const cairo_font_options_t* pFontOptions = pSVData->mpDefInst->GetCairoFontOptions();
     if( !pFontOptions )
         return;
-    cairo_ft_font_options_substitute(static_cast<const cairo_font_options_t*>(pFontOptions),
-        static_cast<FcPattern*>(pPattern));
+    cairo_ft_font_options_substitute(pFontOptions, static_cast<FcPattern*>(pPattern));
 }
 
 FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)

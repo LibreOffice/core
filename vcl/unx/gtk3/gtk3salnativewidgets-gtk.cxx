@@ -1450,7 +1450,6 @@ static inline ::Color getColorFromColor( const GdkColor& rCol )
 
 void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 {
-    GdkScreen* pScreen = gtk_widget_get_screen( mpWindow );
     GtkStyleContext* pStyle = gtk_widget_get_style_context( mpWindow );
     GtkSettings* pSettings = gtk_widget_get_settings( mpWindow );
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
@@ -1799,8 +1798,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     aStyleSet.SetToolbarIconSize( ToolbarIconSize::Large );
 
-    const cairo_font_options_t* pNewOptions = gdk_screen_get_font_options(pScreen);
-    aStyleSet.SetCairoFontOptions( pNewOptions );
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
 #if OSL_DEBUG_LEVEL > 1

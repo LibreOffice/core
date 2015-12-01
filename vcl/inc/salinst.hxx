@@ -62,6 +62,8 @@ enum class SalFrameStyleFlags;
 
 enum SalYieldResult { EVENT, TIMEOUT };
 
+typedef struct _cairo_font_options cairo_font_options_t;
+
 class VCL_PLUGIN_PUBLIC SalInstance
 {
 private:
@@ -178,6 +180,8 @@ public:
 
     /// get information about underlying versions
     virtual OUString        getOSVersion() { return OUString("-"); }
+
+    virtual const cairo_font_options_t* GetCairoFontOptions() { return nullptr; }
 };
 
 // called from SVMain
