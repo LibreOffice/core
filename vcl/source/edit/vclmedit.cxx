@@ -1359,11 +1359,17 @@ void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
 
 void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
-    ImplInitSettings( true, true, true );
+    ImplInitSettings(true, true, true);
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
-    vcl::Font aFont = pImpVclMEdit->GetTextWindow()->GetDrawPixelFont( pDev );
+
+    vcl::Font aFont = pImpVclMEdit->GetTextWindow()->GetPointFont(*this);
+    Size aFontSize = aFont.GetSize();
+    MapMode aPtMapMode(MAP_POINT);
+    aFontSize = pDev->LogicToPixel(aFontSize, aPtMapMode);
+    aFont.SetSize(aFontSize);
+
     aFont.SetTransparent( true );
     OutDevType eOutDevType = pDev->GetOutDevType();
 
