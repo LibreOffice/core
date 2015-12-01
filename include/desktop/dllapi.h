@@ -19,6 +19,12 @@
 #   define DESKTOP_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
+#if defined(CRASHREPORT_DLLIMPLEMENTATION)
+#   define CRASHREPORT_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#   define CRASHREPORT_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
+
 #endif
 
 /* vim: set shiftwidth=4 softtabstop=4 expandtab: */
