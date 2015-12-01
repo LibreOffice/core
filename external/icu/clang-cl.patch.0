@@ -1,0 +1,13 @@
+--- source/runConfigureICU
++++ source/runConfigureICU
+@@ -259,8 +259,8 @@
+     Cygwin/MSVC)
+         THE_OS="Windows with Cygwin"
+         THE_COMP="Microsoft Visual C++"
+-        CC=cl; export CC
+-        CXX=cl; export CXX
++        CC=${CC-cl}; export CC
++        CXX=${CXX-cl}; export CXX
+         RELEASE_CFLAGS='-Gy -MD'
+         RELEASE_CXXFLAGS='-Gy -MD'
+         DEBUG_CFLAGS='-Zi -MDd'
