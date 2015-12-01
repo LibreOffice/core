@@ -191,7 +191,7 @@ class OOO_DLLPUBLIC_DBA ODsnTypeCollection::TypeIterator
     friend class ODsnTypeCollection;
 
     friend bool OOO_DLLPUBLIC_DBA operator==(const TypeIterator& lhs, const TypeIterator& rhs);
-    friend bool OOO_DLLPUBLIC_DBA operator!=(const TypeIterator& lhs, const TypeIterator& rhs) { return !(lhs == rhs); }
+    friend bool OOO_DLLPUBLIC_DBA operator!=(const TypeIterator& lhs, const TypeIterator& rhs) ;/*TODO { return !(lhs == rhs); }*/
 
 protected:
     const ODsnTypeCollection*   m_pContainer;

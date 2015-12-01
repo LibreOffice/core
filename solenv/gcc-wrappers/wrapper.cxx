@@ -37,6 +37,10 @@ void setupccenv() {
     char* libbuf;
     size_t liblen;
     _dupenv_s(&libbuf,&liblen,"ILIB");
+    if (libbuf == nullptr) {
+        std::cerr << "No environment variable ILIB" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
     libpath.append(libbuf);
     free(libbuf);
     if(_putenv(libpath.c_str())<0) {
@@ -49,6 +53,10 @@ void setupccenv() {
     char* incbuf;
     size_t inclen;
     _dupenv_s(&incbuf,&inclen,"SOLARINC");
+    if (incbuf == nullptr) {
+        std::cerr << "No environment variable SOLARINC" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
     string inctmp(incbuf);
     free(incbuf);
 
@@ -139,7 +147,7 @@ string processccargs(vector<string> rawargs) {
             // "foo.def" by itself
             linkargs.append(" " + *i);
         }
-        else if(!(*i).compare(0,12,"-fvisibility")) {
+        else if(!(*i).compare(0,12,"-fvisibility") || *i == "-fPIC") {
             //TODO: drop other gcc-specific options
         }
         else if(!(*i).compare(0,4,"-Wl,")) {
@@ -186,18 +194,15 @@ int startprocess(string command, string args) {
         command=command.substr(0,pos+strlen("ccache"))+".exe";
     }
 
-    if (args[0] != ' ')
-    {
-        args.insert(0, " "); // lpCommandLine *must* start with space!
-    }
+    auto cmdline = "\"" + command + "\" " + args;
 
     //cerr << "CMD= " << command << " " << args << endl;
 
     // Commandline may be modified by CreateProcess
-    char* cmdline=_strdup(args.c_str());
+    char* cmdlineBuf=_strdup(cmdline.c_str());
 
-    if(!CreateProcess(command.c_str(), // Process Name
-        cmdline, // Command Line
+    if(!CreateProcess(nullptr, // Process Name
+        cmdlineBuf, // Command Line
         NULL, // Process Handle not Inheritable
         NULL, // Thread Handle not Inheritable
         TRUE, // Handles are Inherited

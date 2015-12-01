@@ -252,6 +252,12 @@ void
 #include "mscx.hxx"
 #include "bridges/cpp_uno/shared/except.hxx"
 
+//TOOD: Work around missing __CxxDetectRethrow in clang-cl for now (predefined
+// in cl, <www.geoffchappell.com/studies/msvc/language/predefined/index.html>):
+#if defined __clang__
+extern "C" int __cdecl __CxxDetectRethrow(void *);
+#endif
+
 #pragma pack(push, 8)
 
 using namespace ::com::sun::star::uno;

@@ -145,7 +145,10 @@ static void deallocate (void * p, AllocatorTraits const & rTraits)
 
 // T * p = new T; delete p;
 
-void* SAL_CALL operator new (std::size_t n) throw (std::bad_alloc)
+void* SAL_CALL operator new (std::size_t n)
+#if !defined _MSC_VER
+     throw (std::bad_alloc)
+#endif
 {
     return allocate (n, ScalarTraits());
 }
@@ -188,7 +191,10 @@ void* SAL_CALL operator new[] (std::size_t n) throw (std::bad_alloc)
     return allocate (n, VectorTraits());
 }
 
-void SAL_CALL operator delete[] (void * p) throw ()
+void SAL_CALL operator delete[] (void * p)
+#if !defined _MSC_VER
+    throw ()
+#endif
 {
     deallocate (p, VectorTraits());
 }

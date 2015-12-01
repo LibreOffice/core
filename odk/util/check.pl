@@ -62,7 +62,9 @@ if (-d "$SdkDir") {
         }
     }
 
-    if ($OperatingSystem eq "windows" || $OperatingSystem eq "mingw") {
+    if (($OperatingSystem eq "windows" || $OperatingSystem eq "mingw")
+        && $ENV{'COM_IS_CLANG'} ne 'TRUE')
+    {
         if ($OperatingSystem eq "windows" && !check_file("bin/climaker.exe")) {
         $return++;
         print "\nERROR: \"bin/climaker.exe\" is missing\n";
