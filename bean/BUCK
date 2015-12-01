@@ -1,0 +1,23 @@
+
+java_sources(
+  name = 'officebean-src',
+  srcs = glob(['com/**']),
+  visibility = ['PUBLIC'],
+)
+
+java_doc(
+  name = 'officebean-javadoc',
+  title = 'LibreOffice API',
+  pkgs = [
+    'com.sun.star.comp.beans',
+  ],
+  paths = ['.'],
+  srcs = glob(['com/**']),
+  deps = [
+    '//:juh',
+    '//:officebean',
+    '//:unoil',
+    '//:ridl',
+  ],
+  visibility = ['PUBLIC'],
+)
