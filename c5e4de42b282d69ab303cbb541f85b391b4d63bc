@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_dd2a2ee7",
+        "filename": "solenv/gbuild/gbuild.help.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2015-12-01T17:52:45Z",
+      "side": 1,
+      "message": "No. \u0027make translations\u0027 generates the pot files (po templates with extracted en-US strings) in workdir/pot. It does not build and merge translations.",
+      "range": {
+        "startLine": 44,
+        "startChar": 44,
+        "endLine": 44,
+        "endChar": 56
+      },
+      "revId": "c5e4de42b282d69ab303cbb541f85b391b4d63bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
