@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_dd8eae26",
+        "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-12-01T14:46:35Z",
+      "side": 1,
+      "message": "Before starting to write code to handle the NULL pointer situation, I had a look to neon implementation of ne_lockstore_create().\n\nIt isn\u0027t good. Neon calls abort() when it can\u0027t allocate memory, hence ne_lockstore_create() will never return NULL.\n\nThis code from build tree, can explain why I gathered this conclusion:\n\nlibreoffice/workdir/UnpackedTarball/neon/src/ne_alloc.h:40\n\n#ifndef NEON_MEMLEAK\n/* Replacements for standard C library memory allocation functions,\n * which never return NULL. If the C library malloc() returns NULL,\n * neon will abort(); calling an OOM callback beforehand if one is\n * registered.  The C library will only ever return NULL if the\n * operating system does not use optimistic memory allocation. */\nvoid *ne_malloc(size_t size) ne_attribute_malloc;\nvoid *ne_calloc(size_t size) ne_attribute_malloc;\nvoid *ne_realloc(void *ptr, size_t s);\nchar *ne_strdup(const char *s) ne_attribute_malloc;\nchar *ne_strndup(const char *s, size_t n) ne_attribute_malloc;\n#ifdef WIN32\nvoid ne_free(void *ptr);\n#else\n#define ne_free free\n#endif\n#endif\n\nne_attribute_malloc expands to __attribute__((malloc)) or nothing, depending on the compiler used.\n\nNEON_MEMLEAK can\u0027t be declared during LO build, because it enables functions not meant for application use (stated elsewhere in the neon source tree).\n\nThe OOM callback can be implemented, but what should it do?\nIt can\u0027t return since neon will abort() anyway.\n\nabort() will be called by neon internals every time a memory allocation fails.\n\nNot a good situation.",
+      "parentUuid": "dab17558_ba993022",
+      "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_da04f4c7",
         "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
         "patchSetId": 5
