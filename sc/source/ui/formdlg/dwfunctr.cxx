@@ -112,7 +112,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
         eSfxNewAlignment=SfxChildAlignment::RIGHT;
     eSfxOldAlignment=eSfxNewAlignment;
     aFiFuncDesc->SetUpdateMode(true);
-    pAllFuncList=aFuncList.get();
+    pAllFuncList=aFuncList;
     aDDFuncList->Disable();
     aDDFuncList->Hide();
     nArgs=0;
@@ -275,7 +275,7 @@ void ScFunctionDockWin::SetSize()
                             aPrivatSplit->Hide();
                             aFuncList->Disable();
                             aFuncList->Hide();
-                            pAllFuncList=aDDFuncList.get();
+                            pAllFuncList=aDDFuncList;
                             SelHdl(*aCatBox.get());
                             aDDFuncList->SelectEntryPos(nSelEntry);
                         }
@@ -293,7 +293,7 @@ void ScFunctionDockWin::SetSize()
                             aPrivatSplit->Show();
                             aFuncList->Enable();
                             aFuncList->Show();
-                            pAllFuncList=aFuncList.get();
+                            pAllFuncList=aFuncList;
                             SelHdl(*aCatBox.get());
                             aFuncList->SelectEntryPos(nSelEntry);
                         }
@@ -822,6 +822,9 @@ void ScFunctionDockWin::DoEnter()
         if(!pScMod->IsEditMode())
         {
             pScMod->SetInputMode(SC_INPUT_TABLE);
+            // the above call can result in us being disposed
+            if (OutputDevice::isDisposed())
+                return;
             aString = "=";
             aString += pAllFuncList->GetSelectEntry();
             if (pHdl)
