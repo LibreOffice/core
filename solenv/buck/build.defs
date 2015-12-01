@@ -1,0 +1,49 @@
+def java_sources(
+    name,
+    srcs,
+    visibility = []
+  ):
+  java_library(
+    name = name,
+    resources = srcs,
+    visibility = visibility,
+  )
+
+def java_doc(
+    name,
+    title,
+    pkgs,
+    paths,
+    srcs = [],
+    deps = [],
+    visibility = [],
+    do_it_wrong = False,
+  ):
+  if do_it_wrong:
+    sourcepath = paths
+  else:
+    sourcepath = ['$SRCDIR/' + n for n in paths]
+  genrule(
+    name = name,
+    cmd = ' '.join([
+      'while ! test -f .buckconfig; do cd ..; done;',
+      'javadoc',
+      '-quiet',
+      '-protected',
+      '-encoding UTF-8',
+      '-charset UTF-8',
+      '-notimestamp',
+      '-windowtitle "' + title + '"',
+      '-link http://docs.oracle.com/javase/7/docs/api',
+      '-subpackages ',
+      ':'.join(pkgs),
+      '-sourcepath ',
+      ':'.join(sourcepath),
+      ' -classpath ',
+      ':'.join(['$(location %s)' % n for n in deps]),
+      '-d $TMP',
+    ]) + ';jar cf $OUT -C $TMP .',
+    srcs = srcs,
+    out = name + '.jar',
+    visibility = visibility,
+)
