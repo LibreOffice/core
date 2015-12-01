@@ -41,6 +41,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include "PropertyMapHelper.hxx"
@@ -743,9 +744,14 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
         }
 
         if(m_bSeparatorLineIsOn)
-            xColumnPropSet->setPropertyValue(
-                getPropertyName( PROP_SEPARATOR_LINE_IS_ON ),
-                uno::makeAny( m_bSeparatorLineIsOn ));
+        {
+            xColumnPropSet->setPropertyValue("SeparatorLineIsOn", uno::makeAny(true));
+            xColumnPropSet->setPropertyValue("SeparatorLineVerticalAlignment", uno::makeAny(style::VerticalAlignment_TOP));
+            xColumnPropSet->setPropertyValue("SeparatorLineRelativeHeight", uno::makeAny(static_cast<sal_Int8>(100)));
+            xColumnPropSet->setPropertyValue("SeparatorLineColor", uno::makeAny(static_cast<sal_Int32>(COL_BLACK)));
+            // 1 twip -> 2 mm100.
+            xColumnPropSet->setPropertyValue("SeparatorLineWidth", uno::makeAny(static_cast<sal_Int32>(2)));
+        }
         xColumnContainer->setPropertyValue( sTextColumns, uno::makeAny( xColumns ) );
         // Set the columns to be unbalanced if that compatibility option is set or this is the last section.
         if (rDM_Impl.GetSettingsTable()->GetNoColumnBalance() || rDM_Impl.GetIsLastSectionGroup())
