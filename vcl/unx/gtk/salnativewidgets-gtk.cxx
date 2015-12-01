@@ -3918,7 +3918,6 @@ void GtkSalGraphics::refreshFontconfig( GtkSettings *pSettings )
 
 void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 {
-    GdkScreen* pScreen = gtk_widget_get_screen( m_pWindow );
     gtk_widget_ensure_style( m_pWindow );
     GtkStyle* pStyle = gtk_widget_get_style( m_pWindow );
     GtkSettings* pSettings = gtk_widget_get_settings( m_pWindow );
@@ -4243,9 +4242,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     g_free( pIconThemeName );
 
     aStyleSet.SetToolbarIconSize( ToolbarIconSize::Large );
-
-    const cairo_font_options_t* pNewOptions = gdk_screen_get_font_options( pScreen );
-    aStyleSet.SetCairoFontOptions( pNewOptions );
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );

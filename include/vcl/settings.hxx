@@ -445,9 +445,6 @@ public:
     void                            SetPrimaryButtonWarpsSlider( bool bPrimaryButtonWarpsSlider );
     bool                            GetPrimaryButtonWarpsSlider() const;
 
-    void                            SetCairoFontOptions( const void *pOptions );
-    const void*                     GetCairoFontOptions() const;
-
     void                            SetAppFont( const vcl::Font& rFont );
     const vcl::Font&                GetAppFont() const;
 
