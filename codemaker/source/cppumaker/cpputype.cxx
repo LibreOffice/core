@@ -3442,13 +3442,11 @@ private:
     rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > entity_;
 };
 
-static OUString failsToSupply(const OUString& name_, const OString& baseName)
+static void failsToSupply(
+    FileStream & o, OUString const & service, OString const & type)
 {
-    return OUString(
-            "\n"
-            "\n"
-            "                ::rtl::OUString(\"component context fails to supply service '" + name_ + "' of type '" + OStringToOUString(baseName, RTL_TEXTENCODING_UTF8) + "'\")\n"
-            "\n");
+    o << "::rtl::OUString(\"component context fails to supply service \") + \""
+      << service << "\" + \" of type \" + \"" << type << "\"";
 }
 
 void ServiceType::dumpHxxFile(
@@ -3586,18 +3584,16 @@ void ServiceType::dumpHxxFile(
                 o << indent()
                   << ("} catch (const ::css::uno::Exception & the_exception) {\n");
                 inc();
-                o << indent()
-                  << "throw ::css::uno::DeploymentException("
-                  << failsToSupply(name_, baseName)
-                  << " + \": \" + the_exception.Message, the_context);\n";
+                o << indent() << "throw ::css::uno::DeploymentException(";
+                failsToSupply(o, name_, baseName);
+                o << " + \": \" + the_exception.Message, the_context);\n";
                 dec();
                 o << indent() << "}\n" << indent()
                   << "if (!the_instance.is()) {\n";
                 inc();
-                o << indent()
-                  << "throw ::css::uno::DeploymentException("
-                  << failsToSupply(name_, baseName)
-                  << ", the_context);\n";
+                o << indent() << "throw ::css::uno::DeploymentException(";
+                failsToSupply(o, name_, baseName);
+                o << ", the_context);\n";
                 dec();
                 o << indent() << "}\n" << indent() << "return the_instance;\n";
                 dec();
@@ -3747,19 +3743,17 @@ void ServiceType::dumpHxxFile(
                       << ("} catch (const ::css::uno::Exception &"
                           " the_exception) {\n");
                     inc();
-                    o << indent()
-                      << "throw ::css::uno::DeploymentException("
-                      << failsToSupply(name_, baseName)
-                      << " + \": \" + the_exception.Message, the_context);\n";
+                    o << indent() << "throw ::css::uno::DeploymentException(";
+                    failsToSupply(o, name_, baseName);
+                    o << " + \": \" + the_exception.Message, the_context);\n";
                     dec();
                     o << indent() << "}\n";
                 }
                 o << indent() << "if (!the_instance.is()) {\n";
                 inc();
-                o << indent()
-                  << "throw ::css::uno::DeploymentException("
-                  << failsToSupply(name_, baseName)
-                  << ", the_context);\n";
+                o << indent() << "throw ::css::uno::DeploymentException(";
+                failsToSupply(o, name_, baseName);
+                o << ", the_context);\n";
                 dec();
                 o << indent() << "}\n" << indent() << "return the_instance;\n";
                 dec();
