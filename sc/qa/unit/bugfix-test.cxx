@@ -101,7 +101,7 @@ private:
 
 void ScFiltersTest::testTdf64229()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo64229b.", ODS);
+    ScDocShellRef xDocSh = loadDoc("fdo64229b.", FORMAT_ODS);
 
     xDocSh->DoHardRecalc(true);
 
@@ -119,7 +119,7 @@ void ScFiltersTest::testTdf64229()
 
 void ScFiltersTest::testTdf36933()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo36933test.", ODS);
+    ScDocShellRef xDocSh = loadDoc("fdo36933test.", FORMAT_ODS);
 
     xDocSh->DoHardRecalc(true);
 
@@ -137,7 +137,7 @@ void ScFiltersTest::testTdf36933()
 
 void ScFiltersTest::testTdf43700()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo43700test.", ODS);
+    ScDocShellRef xDocSh = loadDoc("fdo43700test.", FORMAT_ODS);
 
     xDocSh->DoHardRecalc(true);
 
@@ -155,7 +155,7 @@ void ScFiltersTest::testTdf43700()
 
 void ScFiltersTest::testTdf43534()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo43534test.", ODS);
+    ScDocShellRef xDocSh = loadDoc("fdo43534test.", FORMAT_ODS);
 
     xDocSh->DoHardRecalc(true);
 
@@ -213,7 +213,7 @@ void ScFiltersTest::testTdf91979()
 /*
 void ScFiltersTest::testTdf40110()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo40110test.", ODS);
+    ScDocShellRef xDocSh = loadDoc("fdo40110test.", FORMAT_ODS);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo40110test.*", xDocSh.Is());
     xDocSh->DoHardRecalc(true);
