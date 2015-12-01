@@ -1,3 +1,45 @@
+# clang-cl supports constexpr, so BOOST_CHRONO_LIB_CONSTEXPR expands to
+# "constexpr", but MSVC's std::numeric_limits<>::max() isn't marked as
+# constexpr, so clang-cl issues -Winvalid-constexpr:
+--- boost/chrono/duration.hpp
++++ boost/chrono/duration.hpp
+@@ -348,29 +348,36 @@
+         static BOOST_CHRONO_LIB_CONSTEXPR T lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW {return (std::numeric_limits<T>::min)  ();}
+     };
+ 
++#if defined _MSC_VER && defined __clang__
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Winvalid-constexpr"
++#endif
+     template <>
+     struct chrono_numeric_limits<float,true> {
+         static BOOST_CHRONO_LIB_CONSTEXPR float lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW
+         {
+             return -(std::numeric_limits<float>::max) ();
+         }
+     };
+ 
+     template <>
+     struct chrono_numeric_limits<double,true> {
+         static BOOST_CHRONO_LIB_CONSTEXPR double lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW
+         {
+             return -(std::numeric_limits<double>::max) ();
+         }
+     };
+ 
+     template <>
+     struct chrono_numeric_limits<long double,true> {
+         static BOOST_CHRONO_LIB_CONSTEXPR long double lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW
+         {
+             return -(std::numeric_limits<long double>::max)();
+         }
+     };
++#if defined _MSC_VER && defined __clang__
++#pragma clang diagnostic pop
++#endif
+ 
+     template <class T>
+     struct numeric_limits : chrono_numeric_limits<typename remove_cv<T>::type>
 --- boost/config/compiler/clang.hpp
 +++ boost/config/compiler/clang.hpp
 @@ -260,9 +260,7 @@
