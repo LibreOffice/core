@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_bde12ad3",
+        "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-12-01T15:47:43Z",
+      "side": 1,
+      "message": "I\u0027ll remove OSL_ENSURE, leaving in place some comment about the why, e.g. \"neon does not attempt to cope...\".",
+      "parentUuid": "dab17558_5dcabe50",
+      "revId": "f8cf0ca311a0904812711e591876ef7ebf3ecaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_da04f4c7",
         "filename": "ucb/source/ucp/webdav-neon/NeonLockStore.cxx",
         "patchSetId": 5
