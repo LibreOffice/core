@@ -543,6 +543,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	collator_data \
 	comphelper \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
+	$(call gb_Helper_optional,BREAKPAD,crashreport) \
 	deployment \
 	deploymentgui \
 	dict_ja \
