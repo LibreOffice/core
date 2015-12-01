@@ -1,0 +1,28 @@
+def maven_package(
+    version,
+    repository = None,
+    url = None,
+    jar = {},
+    src = {},
+    doc = {}):
+  cmd = ['$(exe //solenv/maven:mvn)', '-v', version, '-o', '$OUT']
+  api_cmd = []
+  for type,d in [('jar', jar), ('java-source', src), ('javadoc', doc)]:
+    for a,t in d.iteritems():
+      api_cmd.append('-s %s:%s:$(location %s)' % (a,type,t))
+
+  genrule(
+    name = 'api_install',
+    cmd = ' '.join(cmd + api_cmd + ['-a', 'install']),
+    out = 'api_install.info',
+  )
+
+  if repository and url:
+    genrule(
+      name = 'api_deploy',
+      cmd = ' '.join(cmd + api_cmd + [
+        '-a', 'deploy',
+        '--repository', repository,
+        '--url', url]),
+      out = 'api_deploy.info',
+    )

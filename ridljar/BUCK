@@ -1,0 +1,20 @@
+
+java_sources(
+  name = 'ridl-src',
+  srcs = glob(['com/**']),
+  visibility = ['PUBLIC'],
+)
+
+java_doc(
+  name = 'ridl-javadoc',
+  title = 'LibreOffice types for the Java Uno typesystem',
+  pkgs = [
+    'com.sun.star',
+  ],
+  paths = ['.'],
+  srcs = glob(['com/**']),
+  deps = [
+    '//:ridl',
+  ],
+  visibility = ['PUBLIC'],
+)
