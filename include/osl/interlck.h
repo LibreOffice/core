@@ -25,6 +25,10 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 
+#if defined WNT
+#include <intrin.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -58,6 +62,8 @@ SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInte
 */
 #if HAVE_GCC_BUILTIN_ATOMIC
 #    define osl_atomic_increment(p)  __sync_add_and_fetch((p), 1)
+#elif defined WNT
+#    define osl_atomic_increment(p)  _InterlockedIncrement(p)
 #else
 #    define osl_atomic_increment(p) osl_incrementInterlockedCount((p))
 #endif
@@ -75,6 +81,8 @@ SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInte
 */
 #if HAVE_GCC_BUILTIN_ATOMIC
 #    define osl_atomic_decrement(p) __sync_sub_and_fetch((p), 1)
+#elif defined WNT
+#    define osl_atomic_decrement(p)  _InterlockedDecrement(p)
 #else
 #    define osl_atomic_decrement(p) osl_decrementInterlockedCount((p))
 #endif
