@@ -59,7 +59,7 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
 {
     const Size aSize(rBitmapEx.GetSizePixel());
 
-    Bitmap aGrey(aSize, 8, &Bitmap::GetGreyPalette(256));
+    Bitmap aGrey(aSize, rBitmapEx.GetBitCount());
     AlphaMask aGreyAlpha(aSize);
 
     Bitmap aBitmap(rBitmapEx.GetBitmap());
@@ -77,14 +77,14 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
 
         if (pRead && pReadAlpha && pGrey && pGreyAlpha)
         {
-            BitmapColor aGreyValue(0);
             BitmapColor aGreyAlphaValue(0);
 
             for (long nY = 0; nY < aSize.Height(); ++nY)
             {
                 for (long nX = 0; nX < aSize.Width(); ++nX)
                 {
-                    aGreyValue.SetIndex(pRead->GetLuminance(nY, nX));
+                    const sal_uInt8 nLum(pRead->GetLuminance(nY, nX));
+                    BitmapColor aGreyValue(nLum, nLum, nLum);
                     pGrey->SetPixel(nY, nX, aGreyValue);
 
                     const BitmapColor aBitmapAlphaValue(pReadAlpha->GetPixel(nY, nX));
@@ -101,14 +101,14 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
     {
         if (pRead && pGrey && pGreyAlpha)
         {
-            BitmapColor aGreyValue(0);
             BitmapColor aGreyAlphaValue(0);
 
             for (long nY = 0; nY < aSize.Height(); ++nY)
             {
                 for (long nX = 0; nX < aSize.Width(); ++nX)
                 {
-                    aGreyValue.SetIndex(pRead->GetLuminance(nY, nX));
+                    const sal_uInt8 nLum(pRead->GetLuminance(nY, nX));
+                    BitmapColor aGreyValue(nLum, nLum, nLum);
                     pGrey->SetPixel(nY, nX, aGreyValue);
 
                     aGreyAlphaValue.SetIndex(128);
