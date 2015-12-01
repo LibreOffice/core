@@ -20,6 +20,7 @@
 #
 
 # where stuff is built
+/buck-out
 /instdir
 /instdir_for_build
 /workdir
@@ -76,6 +77,7 @@
 \#*
 *.kdev4
 .kdev_include_paths
+.buckd
 .directory
 
 # things below this point are targeted for elimination
