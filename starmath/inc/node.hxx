@@ -549,7 +549,7 @@ public:
 
 /** Math symbol node
  *
- * Use for math symbols such as plus, minus and integrale in the INT command.
+ * Use for math symbols such as plus, minus and integral in the INT command.
  */
 class SmMathSymbolNode : public SmSpecialNode
 {
