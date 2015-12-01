@@ -18166,6 +18166,9 @@
       <attribute name="uri" tokenid="ooxml:CT_SmartTagRun_uri"/>
       <attribute name="element" tokenid="ooxml:CT_SmartTagRun_element"/>
     </resource>
+    <resource name="CT_SmartTagPr" resource="Properties">
+      <element name="attr" tokenid="ooxml:CT_SmartTagPr_attr"/>
+    </resource>
     <resource name="EG_PContent" resource="Properties">
       <element name="fldSimple" tokenid="ooxml:EG_PContent_fldSimple"/>
       <element name="hyperlink" tokenid="ooxml:EG_PContent_hyperlink"/>

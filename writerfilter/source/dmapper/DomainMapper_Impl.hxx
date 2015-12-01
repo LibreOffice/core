@@ -48,6 +48,7 @@
 #include "GraphicImport.hxx"
 #include "OLEHandler.hxx"
 #include "FFDataHandler.hxx"
+#include "SmartTagHandler.hxx"
 #include "FormControlHelper.hxx"
 #include <map>
 
@@ -460,6 +461,7 @@ private:
     css::uno::Reference<css::beans::XPropertySet> GetDocumentSettings();
 
     std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
+    SmartTagHandler m_aSmartTagHandler;
 
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
@@ -849,6 +851,7 @@ public:
     std::queue<OUString> m_aPositivePercentages;
     bool isInIndexContext() { return m_bStartIndex;}
     bool isInBibliographyContext() { return m_bStartBibliography;}
+    SmartTagHandler& getSmartTagHandler() { return m_aSmartTagHandler; }
 
     void substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t const& ref);
 

@@ -101,6 +101,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/SdtHelper \
     writerfilter/source/dmapper/SectionColumnHandler \
     writerfilter/source/dmapper/SettingsTable \
+    writerfilter/source/dmapper/SmartTagHandler \
     writerfilter/source/dmapper/StyleSheetTable \
     writerfilter/source/dmapper/TDefTableHandler \
     writerfilter/source/dmapper/TableManager \

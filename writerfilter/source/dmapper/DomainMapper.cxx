@@ -626,8 +626,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         break;
         case NS_ooxml::LN_CT_SmartTagRun_uri:
+            m_pImpl->getSmartTagHandler().setURI(val.getString());
+        break;
         case NS_ooxml::LN_CT_SmartTagRun_element:
-            //TODO: add handling of SmartTags
+            m_pImpl->getSmartTagHandler().setElement(val.getString());
         break;
         case NS_ooxml::LN_CT_Br_type :
             //TODO: attributes for break (0x12) are not supported
@@ -2637,6 +2639,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                 break;
         }
         m_pImpl->SetRubyInfo(aInfo);
+    }
+    break;
+    case NS_ooxml::LN_CT_SmartTagRun_smartTagPr:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get())
+            pProperties->resolve(m_pImpl->getSmartTagHandler());
     }
     break;
     default:
