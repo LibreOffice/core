@@ -825,7 +825,19 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNewSet->Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER ) );
 
                 aFrameSize = pOldFormat->GetFrameSize();
-                aFrameSize.SetWidthPercent(0);
+
+                SwOLENode* pOleNode = rDoc.GetNodes()[nNdIdx + 1]->GetOLENode();
+                bool isMath = false;
+                if(pOleNode)
+                {
+                    svt::EmbeddedObjectRef& xRef = pOleNode->GetOLEObj().GetObject();
+                    if(xRef.is())
+                    {
+                        SvGlobalName aCLSID( xRef->getClassID() );
+                        isMath = ( SotExchange::IsMath( aCLSID ) != 0 );
+                    }
+                }
+                aFrameSize.SetWidthPercent(isMath ? 0 : 1000);
                 aFrameSize.SetHeightPercent(SwFormatFrameSize::SYNCED);
                 pNewSet->Put( aFrameSize );
 
