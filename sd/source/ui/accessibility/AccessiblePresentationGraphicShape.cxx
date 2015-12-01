@@ -36,6 +36,9 @@ AccessiblePresentationGraphicShape::AccessiblePresentationGraphicShape (
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
     : AccessibleGraphicShape (rShapeInfo, rShapeTreeInfo)
 {
+#if defined __clang__ && defined _MSC_VER // workaround clang-cl ABI bug PR25641
+    css::uno::Sequence<css::uno::Type> dummy; (void) dummy;
+#endif
 }
 
 AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape()

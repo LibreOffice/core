@@ -41,6 +41,9 @@ namespace cppcanvas
             mxBitmap( rCanvas,
                       uno::UNO_QUERY )
         {
+#if defined __clang__ && defined _MSC_VER // workaround clang-cl ABI bug PR25641
+            (void) (ColorSharedPtr());
+#endif
             OSL_ENSURE( mxBitmapCanvas.is(), "ImplBitmapCanvas::ImplBitmapCanvas(): Invalid canvas" );
             OSL_ENSURE( mxBitmap.is(), "ImplBitmapCanvas::ImplBitmapCanvas(): Invalid bitmap" );
         }
