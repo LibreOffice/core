@@ -837,7 +837,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                         isMath = ( SotExchange::IsMath( aCLSID ) != 0 );
                     }
                 }
-                aFrameSize.SetWidthPercent(isMath ? 0 : 1000);
+                aFrameSize.SetWidthPercent(isMath ? 0 : 100);
                 aFrameSize.SetHeightPercent(SwFormatFrameSize::SYNCED);
                 pNewSet->Put( aFrameSize );
 
