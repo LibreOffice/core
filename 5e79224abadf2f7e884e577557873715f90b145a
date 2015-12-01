@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_9d49c6d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-12-01T18:24:39Z",
+      "side": 1,
+      "message": "A little less generic description of the changes (e.g. \"hide items x y z\" etc. would be helpful here)",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "5e79224abadf2f7e884e577557873715f90b145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
