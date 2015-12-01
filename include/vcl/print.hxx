@@ -258,9 +258,10 @@ public:
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const override;
 
 protected:
-    virtual void                DrawDeviceMask ( const Bitmap& rMask, const Color& rMaskColor,
-                                            const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPtPixel, const Size& rSrcSizePixel ) override;
+    virtual void                DrawDeviceMask(
+                                    const Bitmap& rMask, const Color& rMaskColor,
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel) override;
 
     bool                        DrawTransformBitmapExDirect(
                                     const basegfx::B2DHomMatrix& aFullTransform,
@@ -365,23 +366,30 @@ public:
         starts a print job asynchronously (that is will return
 
     */
-    static void                 PrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController,
-                                          const JobSetup& i_rInitSetup );
+    static void                 PrintJob(
+                                    const std::shared_ptr<vcl::PrinterController>& i_pController,
+                                    const JobSetup& i_rInitSetup );
 
     virtual bool                HasMirroredGraphics() const override;
 
-    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPt,  const Size& rSrcSize ) override;
-    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPt,  const Size& rSrcSize,
-                                            const OutputDevice& rOutDev ) override;
-    virtual void                CopyArea( const Point& rDestPt,
-                                          const Point& rSrcPt,  const Size& rSrcSize,
-                                          bool bWindowInvalidate = false ) override;
+    virtual void                DrawOutDev(
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPt,  const Size& rSrcSize ) override;
+
+    virtual void                DrawOutDev(
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPt,  const Size& rSrcSize,
+                                    const OutputDevice& rOutDev ) override;
+
+    virtual void                CopyArea(
+                                    const Point& rDestPt,
+                                    const Point& rSrcPt,  const Size& rSrcSize,
+                                    bool bWindowInvalidate = false ) override;
 
     virtual void                DrawImage( const Point&, const Image&, DrawImageFlags ) override;
-    virtual void                DrawImage( const Point&, const Size&,
-                                           const Image&, DrawImageFlags ) override;
+    virtual void                DrawImage(
+                                    const Point&, const Size&,
+                                    const Image&, DrawImageFlags ) override;
 
 
     // These 3 together are more modular PrintJob(), allowing printing more documents as one print job
@@ -448,7 +456,7 @@ public:
 
     virtual ~PrinterController();
 
-    const VclPtr<Printer>& getPrinter() const;
+    const VclPtr<Printer>&           getPrinter() const;
     /* for implementations: get current job properties as changed by e.g. print dialog
        this gets the current set of properties initially told to Printer::PrintJob
 
@@ -456,41 +464,42 @@ public:
        In case of duplicate property names, the value of i_MergeList wins.
     */
     css::uno::Sequence< css::beans::PropertyValue >
-        getJobProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rMergeList ) const;
+                                     getJobProperties(const css::uno::Sequence< css::beans::PropertyValue >& i_rMergeList ) const;
 
     /* get the PropertyValue of a Property
     */
-    css::beans::PropertyValue* getValue( const OUString& i_rPropertyName );
+    css::beans::PropertyValue*       getValue( const OUString& i_rPropertyName );
     const css::beans::PropertyValue* getValue( const OUString& i_rPropertyName ) const;
     /* get a bool property
        in case the property is unknown or not convertible to bool, i_bFallback is returned
     */
-    bool getBoolProperty( const OUString& i_rPropertyName, bool i_bFallback ) const;
+    bool                             getBoolProperty( const OUString& i_rPropertyName, bool i_bFallback ) const;
     /* get an int property
        in case the property is unknown or not convertible to bool, i_nFallback is returned
     */
-    sal_Int32 getIntProperty( const OUString& i_rPropertyName, sal_Int32 i_nFallback ) const;
+    sal_Int32                        getIntProperty( const OUString& i_rPropertyName, sal_Int32 i_nFallback ) const;
 
     /* set a property value - can also be used to add another UI property
     */
-    void setValue( const OUString& i_rPropertyName, const css::uno::Any& i_rValue );
-    void setValue( const css::beans::PropertyValue& i_rValue );
+    void                             setValue( const OUString& i_rPropertyName, const css::uno::Any& i_rValue );
+    void                             setValue( const css::beans::PropertyValue& i_rValue );
 
     /* return the currently active UI options. These are the same that were passed to setUIOptions.
     */
-    const css::uno::Sequence< css::beans::PropertyValue >& getUIOptions() const;
+    const css::uno::Sequence< css::beans::PropertyValue >&
+                                     getUIOptions() const;
     /* set possible UI options. should only be done once before passing the PrinterListener
        to Printer::PrintJob
     */
-    void setUIOptions( const css::uno::Sequence< css::beans::PropertyValue >& );
+    void                             setUIOptions( const css::uno::Sequence< css::beans::PropertyValue >& );
     /* enable/disable an option; this can be used to implement dialog logic.
     */
-    bool isUIOptionEnabled( const OUString& rPropName ) const;
-    bool isUIChoiceEnabled( const OUString& rPropName, sal_Int32 nChoice ) const;
+    bool                             isUIOptionEnabled( const OUString& rPropName ) const;
+    bool                             isUIChoiceEnabled( const OUString& rPropName, sal_Int32 nChoice ) const;
     /* returns the property name rPropName depends on or an empty string
        if no dependency exists.
     */
-    OUString getDependency( const OUString& rPropName ) const;
+    OUString                         getDependency( const OUString& rPropName ) const;
     /* makeEnabled will chage the property rPropName depends on to the value
        that makes rPropName enabled. If the dependency itself is also disabled,
        no action will be performed.
@@ -498,9 +507,9 @@ public:
        returns the property name rPropName depends on or an empty string
        if no change was made.
     */
-    OUString makeEnabled( const OUString& rPropName );
+    OUString                         makeEnabled( const OUString& rPropName );
 
-    virtual int getPageCount() const = 0; /// App must override this
+    virtual int                      getPageCount() const = 0; /// App must override this
     /* get the page parameters, namely the jobsetup that should be active for the page
        (describing among others the physical page size) and the "page size". In writer
        case this would probably be the same as the JobSetup since writer sets the page size
@@ -509,48 +518,52 @@ public:
        the paper size.
        App must override this, return page size in 1/100th mm
     */
-    virtual css::uno::Sequence< css::beans::PropertyValue > getPageParameters( int i_nPage ) const = 0;
-    virtual void printPage(int i_nPage) const = 0; /// App must override this
-    virtual void jobStarted(); // will be called after a possible dialog has been shown and the real printjob starts
-    virtual void jobFinished( css::view::PrintableState );
+    virtual css::uno::Sequence< css::beans::PropertyValue >
+                                     getPageParameters( int i_nPage ) const = 0;
+    virtual void                     printPage(int i_nPage) const = 0; /// App must override this
+    // will be called after a possible dialog has been shown and the real printjob starts
+    virtual void                     jobStarted();
+    virtual void                     jobFinished( css::view::PrintableState );
 
-    css::view::PrintableState getJobState() const;
+    css::view::PrintableState        getJobState() const;
 
-    void abortJob();
+    void                             abortJob();
 
-    bool isShowDialogs() const;
-    bool isDirectPrint() const;
+    bool                             isShowDialogs() const;
+    bool                             isDirectPrint() const;
 
     // implementation details, not usable outside vcl
     // don't use outside vcl. Some of these are exported for
     // the benefit of vcl's plugins.
     // Still: DO NOT USE OUTSIDE VCL
-    VCL_PLUGIN_PUBLIC int getFilteredPageCount();
-    SAL_DLLPRIVATE PageSize getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
-    VCL_PLUGIN_PUBLIC PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
-    VCL_PLUGIN_PUBLIC void printFilteredPage( int i_nPage );
-    SAL_DLLPRIVATE void setPrinter( const VclPtr<Printer>& );
-    VCL_PLUGIN_PUBLIC void createProgressDialog();
-    VCL_PLUGIN_PUBLIC bool isProgressCanceled() const;
-    SAL_DLLPRIVATE void setMultipage( const MultiPageSetup& );
-    SAL_DLLPRIVATE const MultiPageSetup& getMultipage() const;
-    VCL_PLUGIN_PUBLIC void setLastPage( bool i_bLastPage );
-    SAL_DLLPRIVATE void setReversePrint( bool i_bReverse );
-    SAL_DLLPRIVATE bool getReversePrint() const;
-    SAL_DLLPRIVATE void setPapersizeFromSetup( bool i_bPapersizeFromSetup );
-    SAL_DLLPRIVATE bool getPapersizeFromSetup() const;
-    VCL_PLUGIN_PUBLIC void setPrinterModified( bool i_bPapersizeFromSetup );
-    VCL_PLUGIN_PUBLIC bool getPrinterModified() const;
-    SAL_DLLPRIVATE void pushPropertiesToPrinter();
-    SAL_DLLPRIVATE void resetPaperToLastConfigured();
-    VCL_PLUGIN_PUBLIC void setJobState( css::view::PrintableState );
-    SAL_DLLPRIVATE bool setupPrinter( vcl::Window* i_pDlgParent );
+    VCL_PLUGIN_PUBLIC int            getFilteredPageCount();
+    SAL_DLLPRIVATE    PageSize       getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
+    VCL_PLUGIN_PUBLIC PageSize       getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
+    VCL_PLUGIN_PUBLIC void           printFilteredPage( int i_nPage );
+    SAL_DLLPRIVATE    void           setPrinter( const VclPtr<Printer>& );
+    VCL_PLUGIN_PUBLIC void           createProgressDialog();
+    VCL_PLUGIN_PUBLIC bool           isProgressCanceled() const;
+    SAL_DLLPRIVATE    void           setMultipage( const MultiPageSetup& );
+    SAL_DLLPRIVATE const MultiPageSetup&
+                                     getMultipage() const;
+    VCL_PLUGIN_PUBLIC void           setLastPage( bool i_bLastPage );
+    SAL_DLLPRIVATE    void           setReversePrint( bool i_bReverse );
+    SAL_DLLPRIVATE    bool           getReversePrint() const;
+    SAL_DLLPRIVATE    void           setPapersizeFromSetup( bool i_bPapersizeFromSetup );
+    SAL_DLLPRIVATE    bool           getPapersizeFromSetup() const;
+    VCL_PLUGIN_PUBLIC void           setPrinterModified( bool i_bPapersizeFromSetup );
+    VCL_PLUGIN_PUBLIC bool           getPrinterModified() const;
+    SAL_DLLPRIVATE    void           pushPropertiesToPrinter();
+    SAL_DLLPRIVATE    void           resetPaperToLastConfigured();
+    VCL_PLUGIN_PUBLIC void           setJobState( css::view::PrintableState );
+    SAL_DLLPRIVATE    bool           setupPrinter( vcl::Window* i_pDlgParent );
 
-    SAL_DLLPRIVATE int getPageCountProtected() const;
-    SAL_DLLPRIVATE css::uno::Sequence< css::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;
+    SAL_DLLPRIVATE    int            getPageCountProtected() const;
+    SAL_DLLPRIVATE css::uno::Sequence< css::beans::PropertyValue >
+                                     getPageParametersProtected( int i_nPage ) const;
 
-    SAL_DLLPRIVATE DrawModeFlags removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
-    SAL_DLLPRIVATE void resetPrinterOptions( bool i_bFileOutput );
+    SAL_DLLPRIVATE DrawModeFlags     removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
+    SAL_DLLPRIVATE    void           resetPrinterOptions( bool i_bFileOutput );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper
@@ -571,49 +584,50 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
      * merges changed properties and returns "true" if any occurred
      * if the optional output set is not NULL then the names of the changed properties are returned
     **/
-    bool processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp,
-                            std::set< OUString >* o_pChangeProp = nullptr );
+    bool          processProperties(
+                      const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp,
+                      std::set< OUString >* o_pChangeProp = nullptr );
     /* append  to a sequence of property values the ui property sequence passed at creation
      * as the "ExtraPrintUIOptions" property. if that sequence was empty, no "ExtraPrintUIOptions" property
      * will be appended.
     **/
-    void appendPrintUIOptions( css::uno::Sequence< css::beans::PropertyValue >& io_rProps ) const;
+    void          appendPrintUIOptions( css::uno::Sequence< css::beans::PropertyValue >& io_rProps ) const;
 
     // returns an empty Any for not existing properties
     css::uno::Any getValue( const OUString& i_rPropertyName ) const;
 
-    bool getBoolValue( const OUString& i_rPropertyName, bool i_bDefault = false ) const;
+    bool          getBoolValue( const OUString& i_rPropertyName, bool i_bDefault = false ) const;
     // convenience for fixed strings
-    bool getBoolValue( const char* i_pPropName, bool i_bDefault = false ) const
-    { return getBoolValue( OUString::createFromAscii( i_pPropName ), i_bDefault ); }
+    bool          getBoolValue( const char* i_pPropName, bool i_bDefault = false ) const
+                      { return getBoolValue( OUString::createFromAscii( i_pPropName ), i_bDefault ); }
 
-    sal_Int64 getIntValue( const OUString& i_rPropertyName, sal_Int64 i_nDefault ) const;
+    sal_Int64     getIntValue( const OUString& i_rPropertyName, sal_Int64 i_nDefault ) const;
     // convenience for fixed strings
-    sal_Int64 getIntValue( const char* i_pPropName, sal_Int64 i_nDefault ) const
-    { return getIntValue( OUString::createFromAscii( i_pPropName ), i_nDefault ); }
+    sal_Int64     getIntValue( const char* i_pPropName, sal_Int64 i_nDefault ) const
+                      { return getIntValue( OUString::createFromAscii( i_pPropName ), i_nDefault ); }
 
-    OUString getStringValue( const OUString& i_rPropertyName, const OUString& i_rDefault = OUString() ) const;
+    OUString      getStringValue( const OUString& i_rPropertyName, const OUString& i_rDefault = OUString() ) const;
     // convenience for fixed strings
-    OUString getStringValue( const char* i_pPropName, const OUString& i_rDefault = OUString() ) const
-    { return getStringValue( OUString::createFromAscii( i_pPropName ), i_rDefault ); }
+    OUString      getStringValue( const char* i_pPropName, const OUString& i_rDefault = OUString() ) const
+                      { return getStringValue( OUString::createFromAscii( i_pPropName ), i_rDefault ); }
 
     // helper functions for user to create a single control
     struct UIControlOptions
     {
         OUString   maDependsOnName;
-        sal_Int32       mnDependsOnEntry;
-        bool        mbAttachToDependency;
+        sal_Int32  mnDependsOnEntry;
+        bool       mbAttachToDependency;
         OUString   maGroupHint;
-        bool        mbInternalOnly;
-        bool        mbEnabled;
+        bool       mbInternalOnly;
+        bool       mbEnabled;
         css::uno::Sequence< css::beans::PropertyValue > maAddProps;
 
         UIControlOptions( const OUString& i_rDependsOnName = OUString(),
-                          sal_Int32 i_nDependsOnEntry = -1,
-                          bool i_bAttachToDependency = false,
-                          const OUString& i_rGroupHint = OUString(),
-                          bool i_bInternalOnly = false,
-                          bool i_bEnabled = true
+                          sal_Int32 i_nDependsOnEntry      = -1,
+                          bool i_bAttachToDependency       = false,
+                          const OUString& i_rGroupHint     = OUString(),
+                          bool i_bInternalOnly             = false,
+                          bool i_bEnabled                  = true
                          )
         : maDependsOnName( i_rDependsOnName )
         , mnDependsOnEntry( i_nDependsOnEntry )
@@ -630,76 +644,83 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // transported via UTF16 strings.
 
     // Show general control
-    static css::uno::Any setUIControlOpt( const css::uno::Sequence< OUString >& i_rIDs,
-                                                     const OUString& i_rTitle,
-                                                     const css::uno::Sequence< OUString >& i_rHelpId,
-                                                     const OUString& i_rType,
-                                                     const css::beans::PropertyValue* i_pValue = nullptr,
-                                                     const UIControlOptions& i_rControlOptions = UIControlOptions()
-                                                     );
+    static css::uno::Any setUIControlOpt(
+                             const css::uno::Sequence< OUString >& i_rIDs,
+                             const OUString& i_rTitle,
+                             const css::uno::Sequence< OUString >& i_rHelpId,
+                             const OUString& i_rType,
+                             const css::beans::PropertyValue* i_pValue = nullptr,
+                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // Show and set the title of a TagPage of id i_rID
-    static css::uno::Any setGroupControlOpt(const OUString& i_rID,
-                                                       const OUString& i_rTitle,
-                                                       const OUString& i_rHelpId);
+    static css::uno::Any setGroupControlOpt(
+                             const OUString& i_rID,
+                             const OUString& i_rTitle,
+                             const OUString& i_rHelpId);
 
     // Show and set the label of a VclFrame of id i_rID
-    static css::uno::Any setSubgroupControlOpt(const OUString& i_rID,
-                                                          const OUString& i_rTitle,
-                                                          const OUString& i_rHelpId,
-                                                          const UIControlOptions& i_rControlOptions = UIControlOptions());
+    static css::uno::Any setSubgroupControlOpt(
+                             const OUString& i_rID,
+                             const OUString& i_rTitle,
+                             const OUString& i_rHelpId,
+                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // Show a bool option as a checkbox
-    static css::uno::Any setBoolControlOpt(const OUString& i_rID,
-                                                      const OUString& i_rTitle,
-                                                      const OUString& i_rHelpId,
-                                                      const OUString& i_rProperty,
-                                                      bool i_bValue,
-                                                      const UIControlOptions& i_rControlOptions = UIControlOptions());
+    static css::uno::Any setBoolControlOpt(
+                             const OUString& i_rID,
+                             const OUString& i_rTitle,
+                             const OUString& i_rHelpId,
+                             const OUString& i_rProperty,
+                             bool i_bValue,
+                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // Show a set of choices in a list box
-    static css::uno::Any setChoiceListControlOpt(const OUString& i_rID,
-                                                            const OUString& i_rTitle,
-                                                            const css::uno::Sequence< OUString >& i_rHelpId,
-                                                            const OUString& i_rProperty,
-                                                            const css::uno::Sequence< OUString >& i_rChoices,
-                                                            sal_Int32 i_nValue,
-                                                            const css::uno::Sequence< sal_Bool >& i_rDisabledChoices = css::uno::Sequence< sal_Bool >(),
-                                                            const UIControlOptions& i_rControlOptions = UIControlOptions());
+    static css::uno::Any setChoiceListControlOpt(
+                             const OUString& i_rID,
+                             const OUString& i_rTitle,
+                             const css::uno::Sequence< OUString >& i_rHelpId,
+                             const OUString& i_rProperty,
+                             const css::uno::Sequence< OUString >& i_rChoices,
+                             sal_Int32 i_nValue,
+                             const css::uno::Sequence< sal_Bool >& i_rDisabledChoices = css::uno::Sequence< sal_Bool >(),
+                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // show a set of choices as radio buttons
-    static css::uno::Any setChoiceRadiosControlOpt(const css::uno::Sequence< OUString >& i_rIDs,
-                                                            const OUString& i_rTitle,
-                                                            const css::uno::Sequence< OUString >& i_rHelpId,
-                                                            const OUString& i_rProperty,
-                                                            const css::uno::Sequence< OUString >& i_rChoices,
-                                                            sal_Int32 i_nValue,
-                                                            const css::uno::Sequence< sal_Bool >& i_rDisabledChoices = css::uno::Sequence< sal_Bool >(),
-                                                            const UIControlOptions& i_rControlOptions = UIControlOptions());
+    static css::uno::Any setChoiceRadiosControlOpt(
+                             const css::uno::Sequence< OUString >& i_rIDs,
+                             const OUString& i_rTitle,
+                             const css::uno::Sequence< OUString >& i_rHelpId,
+                             const OUString& i_rProperty,
+                             const css::uno::Sequence< OUString >& i_rChoices,
+                             sal_Int32 i_nValue,
+                             const css::uno::Sequence< sal_Bool >& i_rDisabledChoices = css::uno::Sequence< sal_Bool >(),
+                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
 
     // show an integer range (e.g. a spin field)
     // note: max value < min value means do not apply min/max values
-    static css::uno::Any setRangeControlOpt(const OUString& i_rID,
-                                                       const OUString& i_rTitle,
-                                                       const OUString& i_rHelpId,
-                                                       const OUString& i_rProperty,
-                                                       sal_Int32 i_nValue,
-                                                       sal_Int32 i_nMinValue = -1,
-                                                       sal_Int32 i_nMaxValue = -2,
-                                                       const UIControlOptions& i_rControlOptions = UIControlOptions());
+    static css::uno::Any setRangeControlOpt(
+                             const OUString& i_rID,
+                             const OUString& i_rTitle,
+                             const OUString& i_rHelpId,
+                             const OUString& i_rProperty,
+                             sal_Int32 i_nValue,
+                             sal_Int32 i_nMinValue = -1,
+                             sal_Int32 i_nMaxValue = -2,
+                             const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // show a string field
     // note: max value < min value means do not apply min/max values
-    static css::uno::Any setEditControlOpt(const OUString& i_rID,
-                                                      const OUString& i_rTitle,
-                                                      const OUString& i_rHelpId,
-                                                      const OUString& i_rProperty,
-                                                      const OUString& i_rValue,
-                                                      const UIControlOptions& i_rControlOptions = UIControlOptions());
-};
+    static css::uno::Any setEditControlOpt(
+                             const OUString& i_rID,
+                             const OUString& i_rTitle,
+                             const OUString& i_rHelpId,
+                             const OUString& i_rProperty,
+                             const OUString& i_rValue,
+                             const UIControlOptions& i_rControlOptions = UIControlOptions());
+}; // class PrinterOptionsHelper
 
-}
+} // namespace vcl
 
 
 #endif // INCLUDED_VCL_PRINT_HXX
