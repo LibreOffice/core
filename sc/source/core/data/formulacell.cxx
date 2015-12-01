@@ -78,11 +78,13 @@ struct DebugCalculationEntry
           ScAddress     maPos;
           OUString      maResult;
     const ScDocument*   mpDoc;
+          sal_uInt32    mnGroup;
           sal_uInt16    mnRecursion;
 
-    DebugCalculationEntry( const ScAddress& rPos, ScDocument* pDoc ) :
+    DebugCalculationEntry( const ScAddress& rPos, ScDocument* pDoc, sal_uInt32 nGroup ) :
         maPos(rPos),
         mpDoc(pDoc),
+        mnGroup(nGroup),
         mnRecursion(pDoc->GetRecursionHelper().GetRecursionCount())
     {
     }
@@ -99,12 +101,14 @@ static struct DebugCalculation
     std::vector< DebugCalculationEntry >    mvPos;
     std::vector< DebugCalculationEntry >    mvResults;
     ScAddress                               maTrigger;
+    sal_uInt32                              mnGroup;
     bool                                    mbActive;
     bool                                    mbSwitchOff;
     bool                                    mbPrint;
     bool                                    mbPrintResults;
 
-    DebugCalculation() : mbActive(bDebugCalculationActive), mbSwitchOff(false), mbPrint(true), mbPrintResults(false) {}
+    DebugCalculation() : mnGroup(0), mbActive(bDebugCalculationActive), mbSwitchOff(false),
+    mbPrint(true), mbPrintResults(false) {}
 
     /** Print chain in encountered dependency order. */
     void print() const
@@ -112,7 +116,7 @@ static struct DebugCalculation
         for (auto const& it : mvPos)
         {
             OUString aStr( it.maPos.Format( SCA_VALID | SCA_TAB_3D, it.mpDoc) +
-                    " [" + OUString::number( it.mnRecursion) + "]");
+                    " [" + OUString::number( it.mnRecursion) + "," + OUString::number( it.mnGroup) + "]");
             fprintf( stderr, "%s -> ", aStr.toUtf8().getStr());
         }
         fprintf( stderr, "%s", "END\n");
@@ -148,6 +152,16 @@ static struct DebugCalculation
             mvPos.back().maResult = "Err:" + OUString::number( nErr);
     }
 
+    void enterGroup()
+    {
+        ++mnGroup;
+    }
+
+    void leaveGroup()
+    {
+        --mnGroup;
+    }
+
 } aDC;
 
 struct DebugCalculationStacker
@@ -158,7 +172,7 @@ struct DebugCalculationStacker
             aDC.mbActive = aDC.mbSwitchOff = true;
         if (aDC.mbActive)
         {
-            aDC.mvPos.push_back( DebugCalculationEntry( rPos, pDoc));
+            aDC.mvPos.push_back( DebugCalculationEntry( rPos, pDoc, aDC.mnGroup));
             aDC.mbPrint = true;
         }
     }
@@ -1537,7 +1551,14 @@ void ScFormulaCell::Interpret()
     }
     else
     {
-        if ( ! InterpretFormulaGroup() )
+#if DEBUG_CALCULATION
+        aDC.enterGroup();
+#endif
+        bool bGroupInterpreted = InterpretFormulaGroup();
+#if DEBUG_CALCULATION
+        aDC.leaveGroup();
+#endif
+        if (!bGroupInterpreted)
             InterpretTail( SCITP_NORMAL);
     }
 
