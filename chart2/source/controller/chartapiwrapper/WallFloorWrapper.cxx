@@ -88,6 +88,7 @@ WallFloorWrapper::WallFloorWrapper( bool bWall,
         m_bWall( bWall )
 
 {
+/*SB*/css::uno::Sequence<css::beans::PropertyState>SB;(void)SB;
 }
 
 WallFloorWrapper::~WallFloorWrapper()

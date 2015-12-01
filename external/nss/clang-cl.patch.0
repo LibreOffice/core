@@ -1,0 +1,56 @@
+# "#pragma deprecated" and "#pragma intrinsic" not (yet?) handled in the "if
+# (LangOpts.MicrosoftExt)" block in Preprocessor::RegisterBuiltinPragmas in
+# Clang's lib/Lex/Pragma.cpp:
+--- nspr/pr/include/pratom.h
++++ nspr/pr/include/pratom.h
+@@ -83,7 +83,7 @@
+ 
+ #include <intrin.h>
+ 
+-#ifdef _MSC_VER
++#if defined _WIN32 && !defined __clang__
+ #pragma intrinsic(_InterlockedIncrement)
+ #pragma intrinsic(_InterlockedDecrement)
+ #pragma intrinsic(_InterlockedExchange)
+--- nspr/pr/include/prbit.h
++++ nspr/pr/include/prbit.h
+@@ -14,7 +14,7 @@
+ ** functions.
+ */
+ #if defined(_WIN32) && (_MSC_VER >= 1300) && \
+-    (defined(_M_IX86) || defined(_M_AMD64) || defined(_M_ARM))
++    (defined(_M_IX86) || defined(_M_AMD64) || defined(_M_ARM)) && !defined __clang__
+ # include <intrin.h>
+ # pragma  intrinsic(_BitScanForward,_BitScanReverse)
+   __forceinline static int __prBitScanForward32(unsigned int val)
+@@ -136,7 +136,7 @@
+ */
+ 
+ #if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64) || \
+-    defined(_M_X64) || defined(_M_ARM))
++    defined(_M_X64) || defined(_M_ARM)) && !defined __clang__
+ #include <stdlib.h>
+ #pragma intrinsic(_rotl, _rotr)
+ #define PR_ROTATE_LEFT32(a, bits) _rotl(a, bits)
+--- nss/lib/certdb/certdb.h
++++ nss/lib/certdb/certdb.h
+@@ -31,7 +31,7 @@
+ #endif
+ #define CERTDB_VALID_PEER  ((__CERTDB_VALID_PEER) CERTDB_TERMINAL_RECORD)
+ #else
+-#ifdef _WIN32
++#if defined _WIN32 && !defined __clang__
+ #pragma deprecated(CERTDB_VALID_PEER)
+ #endif
+ #define CERTDB_VALID_PEER  CERTDB_TERMINAL_RECORD 
+--- nss/lib/util/pkcs11n.h
++++ nss/lib/util/pkcs11n.h
+@@ -390,7 +390,7 @@
+ /* keep the old value for compatibility reasons*/
+ #define CKT_NSS_MUST_VERIFY ((__CKT_NSS_MUST_VERIFY)(CKT_NSS +4))
+ #else
+-#ifdef _WIN32
++#if defined _WIN32 && !defined __clang__
+ /* This magic gets the windows compiler to give us a deprecation
+  * warning */
+ #pragma deprecated(CKT_NSS_UNTRUSTED, CKT_NSS_MUST_VERIFY, CKT_NSS_VALID)

@@ -95,6 +95,7 @@ ScHeaderFooterContentObj::ScHeaderFooterContentObj( const EditTextObject* pLeft,
     mxCenterText(new ScHeaderFooterTextObj(this, SC_HDFT_CENTER, pCenter)),
     mxRightText(new ScHeaderFooterTextObj(this, SC_HDFT_RIGHT, pRight))
 {
+/*SB*/css::uno::Sequence<css::beans::PropertyState>SB;(void)SB;
 }
 
 ScHeaderFooterContentObj::~ScHeaderFooterContentObj() {}

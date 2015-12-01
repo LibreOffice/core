@@ -29,6 +29,13 @@ $(eval $(call gb_Library_add_defs,orcus-parser,\
 	-DBOOST_ALL_NO_LIB \
 	-D__ORCUS_PSR_BUILDING_DLL \
 ))
+ifeq ($(OS),WNT)
+ifeq ($(COM_IS_CLANG),TRUE)
+$(eval $(call gb_Library_add_defs,orcus-parser, \
+    -DBOOST_USE_WINDOWS_H \
+))
+endif
+endif
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,orcus-parser,cpp))
 

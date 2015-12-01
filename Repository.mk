@@ -78,7 +78,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
-	$(if $(filter MSC,$(COM)),climaker) \
+	$(if $(filter MSC,$(COM)),$(if $(COM_IS_CLANG),,climaker)) \
 	cppumaker \
 	idlc \
 	javamaker \

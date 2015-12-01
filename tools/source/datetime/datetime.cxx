@@ -275,4 +275,5 @@ DateTime DateTime::CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const
     return DateTime( _aDate, _aTime );
 }
 
+/*TODO*/long operator-(const DateTime& rDateTime, const Date& rDate) { return (const Date&) rDateTime - rDate; }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
