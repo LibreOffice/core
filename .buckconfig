@@ -1,0 +1,13 @@
+[alias]
+  api = //:api
+  api_install = //solenv/maven:api_install
+  api_deploy = //solenv/maven:api_deploy
+
+[buildfile]
+  includes = //solenv/buck/build.defs
+
+[project]
+  ignore = .git,workdir,instdir
+
+[cache]
+  mode = dir
