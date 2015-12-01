@@ -186,7 +186,7 @@ CHatchWin::~CHatchWin()
  *
  * Parameters:
  *  hWndParent      HWND of the parent of this window
- *  uID             UINT identifier for this window (send in
+ *  uID             WORD identifier for this window (send in
  *                  notifications to associate window).
  *  hWndAssoc       HWND of the initial associate.
  *
@@ -194,14 +194,14 @@ CHatchWin::~CHatchWin()
  *  BOOL            TRUE if the function succeeded, FALSE otherwise.
  */
 
-BOOL CHatchWin::Init(HWND hWndParent, UINT uID, HWND hWndAssoc)
+BOOL CHatchWin::Init(HWND hWndParent, WORD uID, HWND hWndAssoc)
 {
     m_hWndParent = hWndParent;
     m_hWnd=CreateWindowEx(
         WS_EX_NOPARENTNOTIFY, SZCLASSHATCHWIN
         , SZCLASSHATCHWIN, WS_CHILD | WS_CLIPSIBLINGS
-        | WS_CLIPCHILDREN, 0, 0, 100, 100, hWndParent, (HMENU)uID
-        , m_hInst, this);
+        | WS_CLIPCHILDREN, 0, 0, 100, 100, hWndParent
+        , reinterpret_cast<HMENU>(UINT_PTR(uID)), m_hInst, this);
 
     m_uID=uID;
     m_hWndAssociate=hWndAssoc;

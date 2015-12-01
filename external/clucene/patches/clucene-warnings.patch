@@ -4,7 +4,7 @@
  #ifndef _lucene_analysis_AnalysisHeader_
  #define _lucene_analysis_AnalysisHeader_
  
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
 +#endif
@@ -17,7 +17,7 @@
  
  CL_NS_END
 +
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic pop
 +#endif
  #endif
@@ -27,7 +27,7 @@
  #ifndef _lucene_search_Searcher_
  #define _lucene_search_Searcher_
  
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
 +#endif
@@ -40,7 +40,7 @@
  
  CL_NS_END
 +
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic pop
 +#endif
  #endif
@@ -50,7 +50,7 @@
  #ifndef _lucene_store_IndexInput_
  #define _lucene_store_IndexInput_
  
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Woverloaded-virtual"
 +#endif
@@ -63,7 +63,7 @@
  	};
  CL_NS_END
 +
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic pop
 +#endif
  #endif
@@ -73,7 +73,7 @@
  #ifndef _lucene_util_Array_
  #define _lucene_util_Array_
  
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wshadow"
 +# pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -87,7 +87,7 @@
  
  CL_NS_END
 +
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic pop
 +#endif
  #endif
@@ -97,7 +97,7 @@
  #ifndef _lucene_util_PriorityQueue_
  #define _lucene_util_PriorityQueue_
  
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic push
 +# pragma GCC diagnostic ignored "-Wshadow"
 +#endif
@@ -110,7 +110,7 @@
  
  CL_NS_END
 +
-+#if defined(__GNUC__)
++#if defined(__GNUC__) || defined __clang__
 +# pragma GCC diagnostic pop
 +#endif
  #endif

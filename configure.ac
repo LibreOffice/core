@@ -4938,11 +4938,11 @@ dnl enable pch by default on windows
 dnl enable it explicitely otherwise
 AC_MSG_CHECKING([whether to enable pch feature])
 ENABLE_PCH=""
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-    ENABLE_PCH="TRUE"
-    AC_MSG_RESULT([yes])
-elif test "$enable_pch" != "no"; then
-    if test -n "$enable_pch" && test "$GCC" = "yes"; then
+if test "$enable_pch" != "no"; then
+    if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+        ENABLE_PCH="TRUE"
+        AC_MSG_RESULT([yes])
+    elif test -n "$enable_pch" && test "$GCC" = "yes"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
     elif test -n "$enable_pch"; then
@@ -6051,19 +6051,6 @@ if test "$GCC" = "yes"; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -Werror -Wunknown-pragmas"
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-            struct __attribute__((warn_unused)) dummy {};
-        ])], [
-            AC_DEFINE([HAVE_GCC_ATTRIBUTE_WARN_UNUSED],[1])
-            AC_MSG_RESULT([yes])
-        ], [AC_MSG_RESULT([no])])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
-
     AC_MSG_CHECKING([whether STL uses __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
@@ -6079,6 +6066,19 @@ if test "$GCC" = "yes"; then
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
 fi
+
+AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS -Werror -Wunknown-pragmas"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        struct __attribute__((warn_unused)) dummy {};
+    ])], [
+        AC_DEFINE([HAVE_GCC_ATTRIBUTE_WARN_UNUSED],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
 
 AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_STACK_PROTECTOR_STRONG)
@@ -12809,12 +12809,12 @@ AC_MSG_NOTICE([setting up the build environment variables...])
 AC_SUBST(COMPATH)
 
 if test "$build_os" = "cygwin"; then
-    if test "$DISABLE_ACTIVEX" = "TRUE"; then
-        ATL_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
-        ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
-    else
+    if test -d "$COMPATH/atlmfc/lib"; then
         ATL_LIB="$COMPATH/atlmfc/lib"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
+    else
+        ATL_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
+        ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
     fi
     if test "$BITNESS_OVERRIDE" = 64; then
         ATL_LIB="$ATL_LIB/amd64"

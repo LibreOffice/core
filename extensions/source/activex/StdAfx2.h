@@ -40,6 +40,19 @@
     //  expression before comma has no effect; expected expression with side-effect
 #pragma warning (disable:4555)
     //  expression has no effect; expected expression with side-effect
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wall"
+#pragma clang diagnostic ignored "-Wattributes"
+#pragma clang diagnostic ignored "-Wdelete-incomplete"
+#pragma clang diagnostic ignored "-Wdynamic-class-memaccess"
+#pragma clang diagnostic ignored "-Wint-to-pointer-cast"
+#pragma clang diagnostic ignored "-Winvalid-noreturn"
+#pragma clang diagnostic ignored "-Wmicrosoft"
+#pragma clang diagnostic ignored "-Wnon-pod-varargs"
+#pragma clang diagnostic ignored "-Wsequence-point"
+#pragma clang diagnostic ignored "-Wtypename-missing"
+#endif
 
 #define min(a, b)  (((a) < (b)) ? (a) : (b))
 #include <atlbase.h>
@@ -50,6 +63,9 @@ extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>
 
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 #pragma warning (pop)
 
 //{{AFX_INSERT_LOCATION}}
