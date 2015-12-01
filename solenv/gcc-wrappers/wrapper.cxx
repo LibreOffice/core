@@ -147,7 +147,7 @@ string processccargs(vector<string> rawargs) {
             // "foo.def" by itself
             linkargs.append(" " + *i);
         }
-        else if(!(*i).compare(0,12,"-fvisibility")) {
+        else if(!(*i).compare(0,12,"-fvisibility") || *i == "-fPIC") {
             //TODO: drop other gcc-specific options
         }
         else if(!(*i).compare(0,4,"-Wl,")) {
