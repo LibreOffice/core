@@ -943,22 +943,24 @@ void GtkSalFrame::moveWindow( long nX, long nY )
 
 void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     gint nOrigwidth, nOrigheight;
     gtk_window_get_size(GTK_WINDOW(m_pWindow), &nOrigwidth, &nOrigheight);
-#if !GTK_CHECK_VERSION(3,0,0)
     if (nWidth > nOrigwidth || nHeight > nOrigheight)
     {
         m_bPaintsBlocked = true;
     }
-#endif
     gtk_widget_set_size_request(m_pWindow, nWidth, nHeight );
+#else
+    gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
+#endif
 }
 
 void GtkSalFrame::window_resize(long nWidth, long nHeight)
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     gint nOrigwidth, nOrigheight;
     gtk_window_get_size(GTK_WINDOW(m_pWindow), &nOrigwidth, &nOrigheight);
-#if !GTK_CHECK_VERSION(3,0,0)
     if (nWidth > nOrigwidth || nHeight > nOrigheight)
     {
         m_bPaintsBlocked = true;
@@ -1080,7 +1082,7 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-release-event", G_CALLBACK(signalButton), this ));
 #if GTK_CHECK_VERSION(3,0,0)
     g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "size-allocate", G_CALLBACK(sizeAllocated), this );
+    g_signal_connect( G_OBJECT(m_pFixedContainer), "size-allocate", G_CALLBACK(sizeAllocated), this );
 #if GTK_CHECK_VERSION(3,14,0)
     GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
     g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
