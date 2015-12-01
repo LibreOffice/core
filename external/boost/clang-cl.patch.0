@@ -52,6 +52,105 @@
  
  #ifndef BOOST_COMPILER
  #  define BOOST_COMPILER "Clang version " __clang_version__
+--- boost/date_time/filetime_functions.hpp
++++ boost/date_time/filetime_functions.hpp
+@@ -27,6 +27,16 @@
+ #include <boost/date_time/time.hpp>
+ #include <boost/date_time/date_defs.hpp>
+ 
++#if !defined(BOOST_USE_WINDOWS_H)
++extern "C" {
++    struct _FILETIME; // Windows Kits/8.1/Include/shared/minwindef.h
++    struct _SYSTEMTIME; // Windows Kits/8.1/Include/um/minwinbase.h
++    __declspec(dllimport) void __stdcall GetSystemTimeAsFileTime(_FILETIME* lpFileTime);
++    __declspec(dllimport) int __stdcall FileTimeToLocalFileTime(const _FILETIME* lpFileTime, _FILETIME* lpLocalFileTime);
++    __declspec(dllimport) void __stdcall GetSystemTime(_SYSTEMTIME* lpSystemTime);
++    __declspec(dllimport) int __stdcall SystemTimeToFileTime(const _SYSTEMTIME* lpSystemTime, _FILETIME* lpFileTime);
++}
++#endif
+ namespace boost {
+ 
+ namespace date_time {
+@@ -54,10 +64,6 @@
+             boost::uint16_t wMilliseconds;
+         };
+ 
+-        __declspec(dllimport) void __stdcall GetSystemTimeAsFileTime(FILETIME* lpFileTime);
+-        __declspec(dllimport) int __stdcall FileTimeToLocalFileTime(const FILETIME* lpFileTime, FILETIME* lpLocalFileTime);
+-        __declspec(dllimport) void __stdcall GetSystemTime(SYSTEMTIME* lpSystemTime);
+-        __declspec(dllimport) int __stdcall SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime, FILETIME* lpFileTime);
+ 
+     } // extern "C"
+ 
+@@ -74,7 +80,7 @@
+         GetSystemTimeAsFileTime(&ft_utc);
+         FileTimeToLocalFileTime(&ft_utc, &ft);
+ #elif defined(BOOST_HAS_GETSYSTEMTIMEASFILETIME)
+-        GetSystemTimeAsFileTime(&ft);
++        GetSystemTimeAsFileTime(reinterpret_cast<::_FILETIME *>(&ft));
+ #else
+         system_time st;
+         GetSystemTime(&st);
+--- boost/detail/winapi/timers.hpp
++++ boost/detail/winapi/timers.hpp
+@@ -15,6 +15,11 @@
+ #pragma once
+ #endif
+ 
++#if !defined(BOOST_USE_WINDOWS_H)
++extern "C" {
++    union _LARGE_INTEGER; // Windows Kits/8.1/Include/um/winnt.h
++}
++#endif
+ namespace boost
+ {
+ namespace detail
+@@ -28,12 +33,12 @@
+ extern "C" { 
+     __declspec(dllimport) BOOL_ WINAPI
+         QueryPerformanceCounter(
+-            LARGE_INTEGER_ *lpPerformanceCount
++            ::_LARGE_INTEGER *lpPerformanceCount
+         );
+ 
+     __declspec(dllimport) BOOL_ WINAPI
+         QueryPerformanceFrequency(
+-            LARGE_INTEGER_ *lpFrequency
++            ::_LARGE_INTEGER *lpFrequency
+         );
+ }
+ #endif
+--- boost/multi_array/base.hpp
++++ boost/multi_array/base.hpp
+@@ -222,7 +222,7 @@
+ // MSVC 2010 is broken in debug mode: it requires
+ // that an Output Iterator have output_iterator_tag in its iterator_category if 
+ // that iterator is not bidirectional_iterator or random_access_iterator.
+-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600)
++#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600) || (defined __clang__ && BOOST_WORKAROUND(_MSC_VER, >= 1600))
+ struct mutable_iterator_tag
+  : boost::random_access_traversal_tag, std::input_iterator_tag
+ {
+@@ -274,7 +274,7 @@
+   //
+   // iterator support
+   //
+-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600)
++#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600) || (defined __clang__ && BOOST_WORKAROUND(_MSC_VER, >= 1600))
+   // Deal with VC 2010 output_iterator_tag requirement
+   typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
+                          mutable_iterator_tag> iterator;
+--- boost/multi_array/iterator.hpp
++++ boost/multi_array/iterator.hpp
+@@ -60,7 +60,7 @@
+     , private
+           value_accessor_generator<T,NumDims>::type
+ {
+-  friend class iterator_core_access;
++  friend class boost::iterators::iterator_core_access;
+   typedef detail::multi_array::associated_types<T,NumDims> access_t;
+ 
+   typedef iterator_facade<
 
 # workdir/UnpackedTarball/boost\boost/smart_ptr/detail/sp_counted_base_clang.hpp(29,1) :  error: cannot mangle this C11 atomic type yet
 # inline void atomic_increment( atomic_int_least32_t * pw )
@@ -68,7 +167,25 @@
  # endif
  #endif
 
-# C:/lo64/core/workdir/UnpackedTarball/boost/libs/thread/src/win32/thread.cpp(1006,36) :  error: dllimport cannot be applied to non-inline function definition
+# workdir/UnpackedTarball/boost\boost/smart_ptr/detail/yield_k.hpp(63,29) :  error: 'Sleep' redeclared without 'dllimport' attribute: previous 'dll# import' ignored [-Werror,-Winconsistent-dllimport]
+#   extern "C" void __stdcall Sleep( unsigned long ms );
+#                             ^
+# C:/PROGRA~2/WI3CF2~1/8.1/include/um\synchapi.h(908,1) :  note: previous declaration is here
+# Sleep(
+# ^
+--- boost/smart_ptr/detail/yield_k.hpp
++++ boost/smart_ptr/detail/yield_k.hpp
+@@ -60,7 +60,7 @@
+ {
+ 
+ #if !defined( BOOST_USE_WINDOWS_H ) && !BOOST_PLAT_WINDOWS_RUNTIME
+-  extern "C" void __stdcall Sleep( unsigned long ms );
++  extern "C" __declspec(dllimport) void __stdcall Sleep( unsigned long ms );
+ #endif
+ 
+ inline void yield( unsigned k )
+
+# workdir/UnpackedTarball/boost/libs/thread/src/win32/thread.cpp(1006,36) :  error: dllimport cannot be applied to non-inline function definition
 #     BOOST_THREAD_DECL void __cdecl on_process_enter()
 #                                    ^
 --- boost/thread/detail/config.hpp
@@ -82,3 +199,25 @@
        //For compilers supporting auto-tss cleanup
              //with Boost.Threads lib, use Boost.Threads lib
  #           define BOOST_THREAD_USE_LIB
+--- boost/typeof/typeof.hpp
++++ boost/typeof/typeof.hpp
+@@ -49,7 +49,7 @@
+ #       endif
+ #   endif
+ 
+-#elif defined(__GNUC__)
++#elif defined(__GNUC__) || defined __clang__
+ #   ifndef BOOST_TYPEOF_EMULATION
+ #       ifndef BOOST_TYPEOF_NATIVE
+ #           define BOOST_TYPEOF_NATIVE
+--- boost/uuid/seed_rng.hpp
++++ boost/uuid/seed_rng.hpp
+@@ -175,7 +175,7 @@
+ 
+             boost::detail::winapi::LARGE_INTEGER_ ts;
+             ts.QuadPart = 0;
+-            boost::detail::winapi::QueryPerformanceCounter( &ts );
++            boost::detail::winapi::QueryPerformanceCounter( reinterpret_cast<::_LARGE_INTEGER *>(&ts) );
+             sha.process_bytes( (unsigned char const*)&ts, sizeof( ts ) );
+ 
+             std::time_t tm = std::time( 0 );
