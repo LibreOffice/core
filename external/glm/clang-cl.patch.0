@@ -12,3 +12,21 @@
  #endif//(GLM_COMPILER & GLM_COMPILER_VC)
  #endif//(GLM_ARCH != GLM_ARCH_PURE)
  
+
+# Fix check for availability of C++11 static_assert (it apparently should be
+# conditional on GLM_LANG_CXX11 instead of GLM_LANG_CXX0X, but just don't care
+# to try to fix that mess, and use __cplusplus value instead; unconditionally
+# using C++11 static_assert would fail in external/libgltf, which uses
+# external/glm but does not -std=c++11); falling back to BOOST_STATIC_ASSERT
+# would cause unnecessary warnings with clang-cl:
+--- glm/core/setup.hpp
++++ glm/core/setup.hpp
+@@ -628,7 +628,7 @@
+ ///////////////////////////////////////////////////////////////////////////////////////////////////
+ // Static assert
+ 
+-#if(GLM_LANG == GLM_LANG_CXX0X)
++#if __cplusplus >= 201103L
+ #	define GLM_STATIC_ASSERT(x, message) static_assert(x, message)
+ #elif(defined(BOOST_STATIC_ASSERT))
+ #	define GLM_STATIC_ASSERT(x, message) BOOST_STATIC_ASSERT(x)
