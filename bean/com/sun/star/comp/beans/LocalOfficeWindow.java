@@ -79,7 +79,7 @@ public class LocalOfficeWindow
      * Receives a notification about the connection has been closed.
      * This method has to set the connection to <code>null</code>.
      *
-     * @source The event object.
+     * @param source The event object.
      */
     public void disposing(EventObject source)
     {

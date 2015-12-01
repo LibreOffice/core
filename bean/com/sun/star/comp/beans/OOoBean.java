@@ -23,11 +23,9 @@ import com.sun.star.uno.UnoRuntime;
 // @requirement FUNC.PERF.LRN/0.6
 // @requirement FUNC.PERF.LOC/0.6
 // @requirement FUNC.PERF.FIX/0.6
+// @requirement FUNC.RES.OTH/0.2
+// No other resources are needed yet.
 /** This is the basic JavaBean for all OOo application modules.
-
-    @requirement FUNC.RES.OTH/0.2
-        No other resources are needed yet.
-
     @since OOo 2.0.0
  */
 public class OOoBean
@@ -80,7 +78,8 @@ public class OOoBean
     }
 
     // @requirement FUNC.PER/0.2
-    /** @internal
+    // @internal
+    /**
      */
     @Deprecated
     public void writeExternal( java.io.ObjectOutput aObjOut )
@@ -89,7 +88,8 @@ public class OOoBean
     }
 
     // @requirement FUNC.PER/0.2
-    /** @internal
+    // @internal
+    /**
      */
     @Deprecated
     public void readExternal( java.io.ObjectInput aObjIn )
@@ -155,9 +155,8 @@ public class OOoBean
         nOOoCheckCycle = nMilliSecs;
     }
 
+    // @internal
     /** Sets a connection to an OOo instance.
-
-        @internal
      */
     private synchronized void setOOoConnection(OfficeConnection iNewConnection)
             throws HasConnectionException, NoConnectionException {
@@ -927,7 +926,7 @@ public class OOoBean
     /** returns the <type scope="com::sun::star::frame">Frame</a>
         of the bean.
 
-        @returns
+        @return
             a Java class which implements all interfaces which the service
         <type scope="com::sun::star::frame">Frame</a> implements.
         Thus, methods can be called directly without queryInterface.
@@ -950,7 +949,7 @@ public class OOoBean
        // @requirement API.SIM.SEAP/0.2
     /** returns the <type scope="com::sun::star::frame::Controller"> of the bean.
 
-        @returns
+        @return
             a Java class which implements all interfaces which the service
         <type scope="com::sun::star::frame">Controller</a> implements.
         Thus, methods can be called directly without queryInterface.
@@ -978,7 +977,7 @@ public class OOoBean
        /** returns the <type scope="com::sun::star::document::OfficeDocument">
         of the bean.
 
-        @returns
+        @return
             a Java class which implements all interfaces which the service
         <type scope="com::sun::star::document">OfficeDocument</a>
         implements.
@@ -1362,10 +1361,9 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
     // Helper Classes
 
-
+    // @internal
     /** Helper class to listen on the connection to learn when it dies.
 
-        @internal
      */
     private class EventListener
         extends Thread
