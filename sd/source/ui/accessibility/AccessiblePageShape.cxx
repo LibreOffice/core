@@ -47,6 +47,9 @@ AccessiblePageShape::AccessiblePageShape (
     : AccessibleShape (AccessibleShapeInfo (nullptr, rxParent), rShapeTreeInfo),
       mxPage (rxPage)
 {
+#if defined __clang__ && defined _MSC_VER // workaround clang-cl ABI bug PR25641
+    css::uno::Sequence<css::uno::Type> dummy; (void) dummy;
+#endif
     // The main part of the initialization is done in the init method which
     // has to be called from this constructor's caller.
 }
