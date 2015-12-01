@@ -1,0 +1,20 @@
+
+java_sources(
+  name = 'juh-src',
+  srcs = glob(['com/**']),
+  visibility = ['PUBLIC'],
+)
+
+java_doc(
+  name = 'juh-javadoc',
+  title = 'LibreOffice Makes it easier to use UNO with Java',
+  pkgs = [
+    'com.sun.star',
+  ],
+  paths = ['.'],
+  srcs = glob(['com/**']),
+  deps = [
+    '//:juh',
+  ],
+  visibility = ['PUBLIC'],
+)

@@ -1,0 +1,21 @@
+
+java_sources(
+  name = 'jurt-src',
+  srcs = glob(['com/**']),
+  visibility = ['PUBLIC'],
+)
+
+java_doc(
+  name = 'jurt-javadoc',
+  title = 'LibreOffice Java Uno Runtime',
+  pkgs = [
+    'com.sun.star',
+  ],
+  paths = ['.'],
+  srcs = glob(['com/**']),
+  deps = [
+    '//:jurt',
+    '//:unoloader',
+  ],
+  visibility = ['PUBLIC'],
+)

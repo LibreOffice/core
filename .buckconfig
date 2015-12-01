@@ -1,0 +1,11 @@
+[alias]
+  all = //:all
+
+[buildfile]
+  includes = //bin/build.defs
+
+[project]
+  ignore = .git,workdir,instdir
+
+[cache]
+  mode = dir
