@@ -251,7 +251,7 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
 
     clipRegion(cr);
 
-    cairo_rectangle_int_t extents;
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
 
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
@@ -343,7 +343,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
 
-    cairo_rectangle_int_t extents;
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
 
     cairo_rectangle(cr, nX, nY, nWidth, nHeight);
@@ -935,7 +935,7 @@ bool SvpSalGraphics::drawPolyLine(
 
     AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed());
 
-    cairo_rectangle_int_t extents;
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
 
     cairo_set_source_rgba(cr, m_aLineColor.getRed()/255.0,
@@ -999,7 +999,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
     for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
         AddPolygonToPath(cr, *pPoly, true);
 
-    cairo_rectangle_int_t extents;
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
     basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
 
     if (m_bUseFillColor)
@@ -1211,7 +1211,7 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
 
             clipRegion(cr);
 
-            cairo_rectangle_int_t extents;
+            cairo_rectangle_int_t extents = {0, 0, 0, 0};
             basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
 
             cairo_rectangle(cr, nX, nY, nWidth, nHeight);
