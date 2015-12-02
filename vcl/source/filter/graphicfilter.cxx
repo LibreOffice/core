@@ -1824,9 +1824,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
 
 extern "C" bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool emeGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool epbGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool epgGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool eppGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool epsGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
@@ -2120,12 +2117,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("egiGraphicExport"));
                 else if (tmpFilterName == "eme")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("emeGraphicExport"));
-                else if (tmpFilterName == "epb")
-                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epbGraphicExport"));
-                else if (tmpFilterName == "epg")
-                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epgGraphicExport"));
-                else if (tmpFilterName == "epp")
-                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("eppGraphicExport"));
                 else if (tmpFilterName == "eps")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epsGraphicExport"));
                 else if (tmpFilterName == "eti")
@@ -2137,12 +2128,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                     pFunc = egiGraphicExport;
                 else if (aFilterName == "eme")
                     pFunc = emeGraphicExport;
-                else if (aFilterName == "epb")
-                    pFunc = epbGraphicExport;
-                else if (aFilterName == "epg")
-                    pFunc = epgGraphicExport;
-                else if (aFilterName == "epp")
-                    pFunc = eppGraphicExport;
                 else if (aFilterName == "eps")
                     pFunc = epsGraphicExport;
                 else if (aFilterName == "eti")
