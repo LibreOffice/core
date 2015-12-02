@@ -423,46 +423,6 @@ namespace dxcanvas
                         }
                         break;
 
-                        case ::canvas::IColorBuffer::FMT_R8G8B8:
-                        {
-                            const std::size_t nSourceBytesPerPixel(3);
-                            const std::size_t nSourcePitchInBytes(rSource.getStride());
-                            pImage += rSourceRect.getMinY()*nSourcePitchInBytes;
-                            pImage += rSourceRect.getMinX()*nSourceBytesPerPixel;
-
-                            // calculate the destination memory address
-                            sal_uInt8 *pDst = (sal_uInt8*)aLockedRect.pBits;
-
-                            const sal_Int32 nNumColumns(
-                                sal::static_int_cast<sal_Int32>(rSourceRect.getWidth()));
-                            const sal_Int32 nNumLines(
-                                sal::static_int_cast<sal_Int32>(rSourceRect.getHeight()));
-                            for(sal_Int32 i=0; i<nNumLines; ++i)
-                            {
-                                sal_uInt32 *pDstScanline = reinterpret_cast<sal_uInt32 *>(pDst);
-                                sal_uInt8 *pSrcScanline = reinterpret_cast<sal_uInt8 *>(pImage);
-
-                                for(sal_Int32 x=0; x<nNumColumns; ++x)
-                                {
-                                    sal_uInt32 color(0xFF000000);
-                                    color |= pSrcScanline[2]<<16;
-                                    color |= pSrcScanline[1]<<8;
-                                    color |= pSrcScanline[0];
-                                    pSrcScanline += 3;
-                                    *pDstScanline++ = color;
-                                }
-                                if( bClearRightColumn )
-                                    *pDstScanline++ = 0xFF000000;
-
-                                pDst += aLockedRect.Pitch;
-                                pImage += nSourcePitchInBytes;
-                            }
-
-                            if( bClearBottomRow )
-                                memset(pDst, 0, 4*(nNumColumns+1));
-                        }
-                        break;
-
                         case ::canvas::IColorBuffer::FMT_X8R8G8B8:
                         {
                             const std::size_t nSourceBytesPerPixel(4);
