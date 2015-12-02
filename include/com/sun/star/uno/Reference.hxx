@@ -124,6 +124,15 @@ inline Reference< interface_type >::Reference( const Reference< interface_type >
         _pInterface->acquire();
 }
 
+#if defined LIBO_INTERNAL_ONLY
+template< class interface_type >
+inline Reference< interface_type >::Reference( Reference< interface_type > && rRef ) noexcept
+{
+    _pInterface = rRef._pInterface;
+    rRef._pInterface = nullptr;
+}
+#endif
+
 template< class interface_type > template< class derived_type >
 inline Reference< interface_type >::Reference(
     const Reference< derived_type > & rRef,
@@ -341,6 +350,15 @@ inline Reference< interface_type > & Reference< interface_type >::operator = (
     return *this;
 }
 
+#if defined LIBO_INTERNAL_ONLY
+template< class interface_type >
+inline Reference< interface_type > & Reference< interface_type >::operator = (
+     Reference< interface_type > && rRef ) noexcept
+{
+    std::swap(_pInterface, rRef._pInterface);
+    return *this;
+}
+#endif
 
 template< class interface_type >
 inline Reference< interface_type > Reference< interface_type >::query(
