@@ -1986,7 +1986,7 @@ RTLFUNC(DateValue)
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
-        sal_uInt32 nIndex;
+        sal_uInt32 nIndex = 0;
         double fResult;
         String aStr( rPar.Get(1)->GetString() );
         sal_Bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
