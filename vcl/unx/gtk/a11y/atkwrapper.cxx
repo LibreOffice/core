@@ -214,7 +214,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_FILLER,
         ATK_ROLE_FONT_CHOOSER,
         ATK_ROLE_FOOTER,
-        ATK_ROLE_TEXT,            // FOOTNOTE - registered below
+        ATK_ROLE_UNKNOWN,         // FOOTNOTE - registered below
         ATK_ROLE_FRAME,
         ATK_ROLE_GLASS_PANE,
         ATK_ROLE_IMAGE,           // GRAPHIC
@@ -246,16 +246,16 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_ROOT_PANE,
         ATK_ROLE_SCROLL_BAR,
         ATK_ROLE_SCROLL_PANE,
-        ATK_ROLE_UNKNOWN,        // SHAPE - registered below
+        ATK_ROLE_PANEL,         // SHAPE
         ATK_ROLE_SEPARATOR,
         ATK_ROLE_SLIDER,
-        ATK_ROLE_SPIN_BUTTON,    // SPIN_BOX ?
+        ATK_ROLE_SPIN_BUTTON,   // SPIN_BOX ?
         ATK_ROLE_SPLIT_PANE,
         ATK_ROLE_STATUSBAR,
         ATK_ROLE_TABLE,
         ATK_ROLE_TABLE_CELL,
         ATK_ROLE_TEXT,
-        ATK_ROLE_INTERNAL_FRAME, // TEXT_FRAME - registered below
+        ATK_ROLE_PANEL,         // TEXT_FRAME
         ATK_ROLE_TOGGLE_BUTTON,
         ATK_ROLE_TOOL_BAR,
         ATK_ROLE_TOOL_TIP,
@@ -309,13 +309,9 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         roleMap[accessibility::AccessibleRole::IMAGE_MAP] = registerRole("image map");
         roleMap[accessibility::AccessibleRole::TREE_ITEM] = registerRole("tree item");
         roleMap[accessibility::AccessibleRole::HYPER_LINK] = registerRole("link");
-
-        // these don't exist in ATK yet
-        roleMap[accessibility::AccessibleRole::END_NOTE] = registerRole("end note");
-        roleMap[accessibility::AccessibleRole::FOOTNOTE] = registerRole("foot note");
-        roleMap[accessibility::AccessibleRole::SHAPE] = registerRole("shape");
-        roleMap[accessibility::AccessibleRole::TEXT_FRAME] = registerRole("text frame");
-        roleMap[accessibility::AccessibleRole::NOTE] = registerRole("note");
+        roleMap[accessibility::AccessibleRole::END_NOTE] = registerRole("comment");
+        roleMap[accessibility::AccessibleRole::FOOTNOTE] = registerRole("comment");
+        roleMap[accessibility::AccessibleRole::NOTE] = registerRole("comment");
 
         initialized = true;
     }
