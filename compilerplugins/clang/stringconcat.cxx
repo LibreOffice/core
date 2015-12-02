@@ -39,22 +39,28 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
     {
         return true;
     }
-    CallExpr const * left = dyn_cast<CallExpr>(
-        expr->getArg(0)->IgnoreParenImpCasts());
-    if (left == nullptr) {
-        return true;
-    }
-    FunctionDecl const * ldecl = left->getDirectCallee();
-    if (ldecl == nullptr) {
-        return true;
-    }
-    OverloadedOperatorKind loo = ldecl->getOverloadedOperator();
-    if ((loo != OverloadedOperatorKind::OO_Plus
-         && loo != OverloadedOperatorKind::OO_LessLess)
-        || ldecl->getNumParams() != 2 || left->getNumArgs() != 2
-        || !isa<StringLiteral>(left->getArg(1)->IgnoreParenImpCasts()))
-    {
-        return true;
+    SourceLocation leftLoc;
+    auto const leftExpr = expr->getArg(0)->IgnoreParenImpCasts();
+    if (isa<StringLiteral>(leftExpr)) {
+        leftLoc = leftExpr->getLocStart();
+    } else {
+        CallExpr const * left = dyn_cast<CallExpr>(leftExpr);
+        if (left == nullptr) {
+            return true;
+        }
+        FunctionDecl const * ldecl = left->getDirectCallee();
+        if (ldecl == nullptr) {
+            return true;
+        }
+        OverloadedOperatorKind loo = ldecl->getOverloadedOperator();
+        if ((loo != OverloadedOperatorKind::OO_Plus
+             && loo != OverloadedOperatorKind::OO_LessLess)
+            || ldecl->getNumParams() != 2 || left->getNumArgs() != 2
+            || !isa<StringLiteral>(left->getArg(1)->IgnoreParenImpCasts()))
+        {
+            return true;
+        }
+        leftLoc = left->getArg(1)->getLocStart();
     }
     StringRef name {
         compiler.getSourceManager().getFilename(
@@ -70,8 +76,7 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
         "replace '%0' between string literals with juxtaposition",
         op == nullptr ? expr->getExprLoc() : op->getOperatorLoc())
         << (oo == OverloadedOperatorKind::OO_Plus ? "+" : "<<")
-        << SourceRange(
-            left->getArg(1)->getLocStart(), expr->getArg(1)->getLocEnd());
+        << SourceRange(leftLoc, expr->getArg(1)->getLocEnd());
     return true;
 }
 
