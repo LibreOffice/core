@@ -3530,6 +3530,9 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_WIDOWCTRL:
         m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_widowControl, std::make_shared<RTFValue>(1));
         break;
+    case RTF_LINEBETCOL:
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_sep, std::make_shared<RTFValue>(1));
+        break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
