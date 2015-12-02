@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_70c1a92e",
+        "filename": "include/svx/svdlayer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-12-02T20:53:02Z",
+      "side": 1,
+      "message": "Not a linguist either but it looks restrictive to me: the function shouldn\u0027t return just any old LayerID, but only a LayerID that is unused.\n\nIt would be non-restrictive if it said \"Find a LayerID, which you can print out in a 72 pt font if it\u0027s your lucky number.\"",
+      "parentUuid": "dab17558_70c5295a",
+      "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_ba1c9078",
         "filename": "include/svx/svdorect.hxx",
         "patchSetId": 1
