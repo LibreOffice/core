@@ -716,17 +716,14 @@ bool SVGFilter::implExportDocument()
     bool         bRet = false;
     sal_Int32        nLastPage = mSelectedPages.getLength() - 1;
 
-    SvtMiscOptions aMiscOptions;
-    const bool bExperimentalMode = aMiscOptions.IsExperimentalMode();
-
-    mbSinglePage = ((nLastPage == 0) || !bExperimentalMode) && !comphelper::LibreOfficeKit::isActive();
+    mbSinglePage = (nLastPage == 0);
     mnVisiblePage = -1;
 
     const Reference< XPropertySet >             xDefaultPagePropertySet( mxDefaultPage, UNO_QUERY );
     const Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
     // #i124608#
-    mbExportSelection = mbSinglePage && maShapeSelection.is() && maShapeSelection->getCount();
+    mbExportShapeSelection = mbSinglePage && maShapeSelection.is() && maShapeSelection->getCount();
 
     if(xDefaultPagePropertySet.is())
     {
@@ -734,7 +731,7 @@ bool SVGFilter::implExportDocument()
         xDefaultPagePropertySet->getPropertyValue( "Height" ) >>= nDocHeight;
     }
 
-    if(mbExportSelection)
+    if(mbExportShapeSelection)
     {
         // #i124608# create BoundRange and set nDocX, nDocY, nDocWidth and nDocHeight
         basegfx::B2DRange aShapeRange;
@@ -794,7 +791,7 @@ bool SVGFilter::implExportDocument()
     // instead of centered.
     #define _SVG_WRITE_EXTENTS
     #ifdef _SVG_WRITE_EXTENTS
-    if( mbSinglePage )
+    if( !mbPresentation )
     {
         aAttr = OUString::number( nDocWidth * 0.01 ) + "mm";
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", aAttr );
@@ -805,7 +802,7 @@ bool SVGFilter::implExportDocument()
     #endif
 
     // #i124608# set viewBox explicitely to the exported content
-    if (mbExportSelection)
+    if (mbExportShapeSelection)
     {
         aAttr = OUString::number(nDocX) + " " + OUString::number(nDocY) + " ";
     }
@@ -854,11 +851,10 @@ bool SVGFilter::implExportDocument()
 
     if( implLookForFirstVisiblePage() )  // OK! We found at least one visible page.
     {
-        if( !mbSinglePage )
+        if( mbPresentation )
         {
             implGenerateMetaData();
-            if( bExperimentalMode )
-                implExportAnimations();
+            implExportAnimations();
         }
         else
         {
@@ -897,7 +893,7 @@ bool SVGFilter::implExportDocument()
                 implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.size() - 1 );
             implExportDrawPages( mSelectedPages, 0, nLastPage );
 
-            if( !mbSinglePage )
+            if( mbPresentation )
             {
                 implGenerateScript();
             }
@@ -1488,7 +1484,7 @@ bool SVGFilter::implExportMasterPages( const std::vector< Reference< XDrawPage >
 
     // When the exported slides are more than one we wrap master page elements
     // with a svg <defs> element.
-    OUString aContainerTag = (mbSinglePage) ? OUString( "g" ) : OUString( "defs" );
+    OUString aContainerTag = (!mbPresentation) ? OUString( "g" ) : OUString( "defs" );
     SvXMLElementExport aContainerElement( *mpSVGExport, XML_NAMESPACE_NONE, aContainerTag, true, true );
 
     bool bRet = false;
@@ -1528,7 +1524,7 @@ bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPage
     {
         Reference< XShapes > xShapes;
 
-        if (mbExportSelection)
+        if (mbExportShapeSelection)
         {
             // #i124608# export a given object selection
             xShapes = maShapeSelection;
@@ -1544,7 +1540,7 @@ bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPage
             // handling a slide visibility.
             // In case the exported slides are more than one the initial
             // visibility of each slide is set to 'hidden'.
-            if( !mbSinglePage )
+            if( mbPresentation )
             {
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
             }
@@ -1583,7 +1579,7 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
 
     {
         OUString sPageName = implGetInterfaceName( rxPage );
-        if( !(sPageName.isEmpty() || mbSinglePage ))
+        if( mbPresentation && !sPageName.isEmpty() )
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrName, sPageName );
 
         {
@@ -1623,7 +1619,7 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
                 // of the parent slide regardless of the value of the 'IsBackgroundVisible' property.
                 // This means that we need to set up the visibility attribute only for the background
                 // element of a master page.
-                if( mbSinglePage && bMaster )
+                if( !mbPresentation && bMaster )
                 {
                     if( !mVisiblePagePropSet.bIsBackgroundVisible )
                     {
@@ -1650,7 +1646,7 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
             OUString sBackgroundObjectsId = "bo-";
             sBackgroundObjectsId += sPageId;
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundObjectsId );
-            if( mbSinglePage )
+            if( !mbPresentation )
             {
                 if( !mVisiblePagePropSet.bAreBackgroundObjectsVisible )
                 {
@@ -1756,44 +1752,31 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
                         bool bIsDateTime    = ( aShapeClass == "Date/Time" );
                         if( bIsPageNumber || bIsDateTime || bIsFooter )
                         {
-                            if( !mbSinglePage )
+                            // to notify to the SVGActionWriter::ImplWriteActions method
+                            // that we are dealing with a placeholder shape
+                            pElementId = &sPlaceholderTag;
+
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
+
+                            sal_uInt16 nTextAdjust = ParagraphAdjust_LEFT;
+                            OUString sTextAdjust;
+                            xShapePropSet->getPropertyValue( "ParaAdjust" ) >>= nTextAdjust;
+
+                            switch( nTextAdjust )
                             {
-                                // to notify to the SVGActionWriter::ImplWriteActions method
-                                // that we are dealing with a placeholder shape
-                                pElementId = &sPlaceholderTag;
-
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
-
-                                sal_uInt16 nTextAdjust = ParagraphAdjust_LEFT;
-                                OUString sTextAdjust;
-                                xShapePropSet->getPropertyValue( "ParaAdjust" ) >>= nTextAdjust;
-
-                                switch( nTextAdjust )
-                                {
-                                    case ParagraphAdjust_LEFT:
-                                            sTextAdjust = "left";
-                                            break;
-                                    case ParagraphAdjust_CENTER:
-                                            sTextAdjust = "center";
-                                            break;
-                                    case ParagraphAdjust_RIGHT:
-                                            sTextAdjust = "right";
-                                            break;
-                                    default:
+                                case ParagraphAdjust_LEFT:
+                                        sTextAdjust = "left";
                                         break;
-                                }
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrTextAdjust, sTextAdjust );
+                                case ParagraphAdjust_CENTER:
+                                        sTextAdjust = "center";
+                                        break;
+                                case ParagraphAdjust_RIGHT:
+                                        sTextAdjust = "right";
+                                        break;
+                                default:
+                                    break;
                             }
-                            else // single page case
-                            {
-                                if( !mVisiblePagePropSet.bAreBackgroundObjectsVisible || (
-                                    ( bIsPageNumber && !mVisiblePagePropSet.bIsPageNumberFieldVisible ) ||
-                                    ( bIsDateTime && !mVisiblePagePropSet.bIsDateTimeFieldVisible ) ||
-                                    ( bIsFooter && !mVisiblePagePropSet.bIsFooterFieldVisible ) ) )
-                                {
-                                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
-                                }
-                            }
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrTextAdjust, sTextAdjust );
                         }
                     }
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", aShapeClass );
@@ -1885,7 +1868,7 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
 
 bool SVGFilter::implCreateObjects()
 {
-    if (mbExportSelection)
+    if (mbExportShapeSelection)
     {
         // #i124608# export a given object selection
         if (mSelectedPages.getLength() && mSelectedPages[0].is())
@@ -2180,235 +2163,179 @@ IMPL_LINK_TYPED( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
     {
         bFieldProcessed = true;
         OUString   aRepresentation;
-        if( !mbSinglePage )
+        if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
         {
-            if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
+            // to notify to the SVGActionWriter::ImplWriteText method
+            // that we are dealing with a placeholder shape
+            aRepresentation = sPlaceholderTag;
+
+            if( !mCreateOjectsCurrentMasterPage.is() )
             {
-                // to notify to the SVGActionWriter::ImplWriteText method
-                // that we are dealing with a placeholder shape
-                aRepresentation = sPlaceholderTag;
+                OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
+                return;
+            }
+            bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
 
-                if( !mCreateOjectsCurrentMasterPage.is() )
-                {
-                    OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
-                    return;
-                }
-                bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
+            static const OUString aHeaderId( aOOOAttrHeaderField );
+            static const OUString aFooterId( aOOOAttrFooterField );
+            static const OUString aDateTimeId( aOOOAttrDateTimeField );
+            static const OUString aVariableDateTimeId( aOOOAttrDateTimeField + "-variable" );
 
-                static const OUString aHeaderId( aOOOAttrHeaderField );
-                static const OUString aFooterId( aOOOAttrFooterField );
-                static const OUString aDateTimeId( aOOOAttrDateTimeField );
-                static const OUString aVariableDateTimeId( aOOOAttrDateTimeField + "-variable" );
-
-                const UCharSet * pCharSet = nullptr;
-                UCharSetMap * pCharSetMap = nullptr;
-                if( bHasCharSetMap )
+            const UCharSet * pCharSet = nullptr;
+            UCharSetMap * pCharSetMap = nullptr;
+            if( bHasCharSetMap )
+            {
+                pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
+            }
+            const SvxFieldData* pField = pInfo->GetField().GetField();
+            if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_HEADER ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
+            {
+                pCharSet = &( (*pCharSetMap)[ aHeaderId ] );
+            }
+            else if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_FOOTER ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
+            {
+                pCharSet = &( (*pCharSetMap)[ aFooterId ] );
+            }
+            else if( pField->GetClassId() == text::textfield::Type::PRESENTATION_DATE_TIME )
+            {
+                if( bHasCharSetMap && ( pCharSetMap->find( aDateTimeId ) != pCharSetMap->end() ) )
                 {
-                    pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
+                    pCharSet = &( (*pCharSetMap)[ aDateTimeId ] );
                 }
-                const SvxFieldData* pField = pInfo->GetField().GetField();
-                if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_HEADER ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
+                if( bHasCharSetMap && ( pCharSetMap->find( aVariableDateTimeId ) != pCharSetMap->end() ) && !(*pCharSetMap)[ aVariableDateTimeId ].empty() )
                 {
-                    pCharSet = &( (*pCharSetMap)[ aHeaderId ] );
-                }
-                else if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_FOOTER ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
-                {
-                    pCharSet = &( (*pCharSetMap)[ aFooterId ] );
-                }
-                else if( pField->GetClassId() == text::textfield::Type::PRESENTATION_DATE_TIME )
-                {
-                    if( bHasCharSetMap && ( pCharSetMap->find( aDateTimeId ) != pCharSetMap->end() ) )
+                    SvxDateFormat eDateFormat = SVXDATEFORMAT_B, eCurDateFormat;
+                    const UCharSet & aCharSet = (*pCharSetMap)[ aVariableDateTimeId ];
+                    UCharSet::const_iterator aChar = aCharSet.begin();
+                    // we look for the most verbose date format
+                    for( ; aChar != aCharSet.end(); ++aChar )
                     {
-                        pCharSet = &( (*pCharSetMap)[ aDateTimeId ] );
-                    }
-                    if( bHasCharSetMap && ( pCharSetMap->find( aVariableDateTimeId ) != pCharSetMap->end() ) && !(*pCharSetMap)[ aVariableDateTimeId ].empty() )
-                    {
-                        SvxDateFormat eDateFormat = SVXDATEFORMAT_B, eCurDateFormat;
-                        const UCharSet & aCharSet = (*pCharSetMap)[ aVariableDateTimeId ];
-                        UCharSet::const_iterator aChar = aCharSet.begin();
-                        // we look for the most verbose date format
-                        for( ; aChar != aCharSet.end(); ++aChar )
+                        eCurDateFormat = (SvxDateFormat)( (int)( *aChar ) & 0x0f );
+                        switch( eDateFormat )
                         {
-                            eCurDateFormat = (SvxDateFormat)( (int)( *aChar ) & 0x0f );
-                            switch( eDateFormat )
-                            {
-                                case SVXDATEFORMAT_STDSMALL:
-                                case SVXDATEFORMAT_A:       // 13.02.96
-                                case SVXDATEFORMAT_B:       // 13.02.1996
-                                    switch( eCurDateFormat )
-                                    {
-                                        case SVXDATEFORMAT_C:       // 13.Feb 1996
-                                        case SVXDATEFORMAT_D:       // 13.February 1996
-                                        case SVXDATEFORMAT_E:       // Tue, 13.February 1996
-                                        case SVXDATEFORMAT_STDBIG:
-                                        case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
-                                            eDateFormat = eCurDateFormat;
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    break;
-                                case SVXDATEFORMAT_C:       // 13.Feb 1996
-                                case SVXDATEFORMAT_D:       // 13.February 1996
-                                    switch( eCurDateFormat )
-                                    {
-                                        case SVXDATEFORMAT_E:       // Tue, 13.February 1996
-                                        case SVXDATEFORMAT_STDBIG:
-                                        case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
-                                            eDateFormat = eCurDateFormat;
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        // Independently of the date format, we always put all these characters by default.
-                        // They should be enough to cover every time format.
-                        aRepresentation += "0123456789.:/-APM";
-
-                        if( eDateFormat )
-                        {
-                            OUString sDate;
-                            LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
-                            SvNumberFormatter * pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM );
-                            // We always collect the characters obtained by using the SVXDATEFORMAT_B (as: 13.02.1996)
-                            // so we are sure to include any unusual day|month|year separator.
-                            Date aDate( 1, 1, 1996 );
-                            sDate += SvxDateField::GetFormatted( aDate, SVXDATEFORMAT_B, *pNumberFormatter, eLang );
-                            switch( eDateFormat )
-                            {
-                                case SVXDATEFORMAT_E:       // Tue, 13.February 1996
-                                case SVXDATEFORMAT_STDBIG:
-                                case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
-                                    for( sal_uInt16 i = 1; i <= 7; ++i )  // we get all days in a week
-                                    {
-                                        aDate.SetDay( i );
-                                        sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
-                                    }
-                                    // No break here! We need months too!
-                                case SVXDATEFORMAT_C:       // 13.Feb 1996
-                                case SVXDATEFORMAT_D:       // 13.February 1996
-                                    for( sal_uInt16 i = 1; i <= 12; ++i ) // we get all months in a year
-                                    {
-                                        aDate.SetMonth( i );
-                                        sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
-                                    }
-                                    break;
-                                // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
-                                case SVXDATEFORMAT_STDSMALL:
-                                case SVXDATEFORMAT_A:       // 13.02.96
-                                case SVXDATEFORMAT_B:       // 13.02.1996
-                                default:
-                                    // nothing to do here, we always collect the characters needed for these cases.
-                                    break;
-                            }
-                            aRepresentation += sDate;
+                            case SVXDATEFORMAT_STDSMALL:
+                            case SVXDATEFORMAT_A:       // 13.02.96
+                            case SVXDATEFORMAT_B:       // 13.02.1996
+                                switch( eCurDateFormat )
+                                {
+                                    case SVXDATEFORMAT_C:       // 13.Feb 1996
+                                    case SVXDATEFORMAT_D:       // 13.February 1996
+                                    case SVXDATEFORMAT_E:       // Tue, 13.February 1996
+                                    case SVXDATEFORMAT_STDBIG:
+                                    case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                                        eDateFormat = eCurDateFormat;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case SVXDATEFORMAT_C:       // 13.Feb 1996
+                            case SVXDATEFORMAT_D:       // 13.February 1996
+                                switch( eCurDateFormat )
+                                {
+                                    case SVXDATEFORMAT_E:       // Tue, 13.February 1996
+                                    case SVXDATEFORMAT_STDBIG:
+                                    case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                                        eDateFormat = eCurDateFormat;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
                         }
                     }
-                }
-                else if( pField->GetClassId() == text::textfield::Type::PAGE )
-                {
-                    switch( mVisiblePagePropSet.nPageNumberingType )
+                    // Independently of the date format, we always put all these characters by default.
+                    // They should be enough to cover every time format.
+                    aRepresentation += "0123456789.:/-APM";
+
+                    if( eDateFormat )
                     {
-                        case SVX_CHARS_UPPER_LETTER:
-                            aRepresentation += "QWERTYUIOPASDFGHJKLZXCVBNM";
-                            break;
-                        case SVX_CHARS_LOWER_LETTER:
-                            aRepresentation += "qwertyuiopasdfghjklzxcvbnm";
-                            break;
-                        case SVX_ROMAN_UPPER:
-                            aRepresentation += "IVXLCDM";
-                            break;
-                        case SVX_ROMAN_LOWER:
-                            aRepresentation += "ivxlcdm";
-                            break;
-                        // arabic numbering type is the default
-                        case SVX_ARABIC:
-                        // in case the numbering type is not handled we fall back on arabic numbering
-                        default:
-                            aRepresentation += "0123456789";
-                            break;
-                    }
-                }
-                else
-                {
-                    bFieldProcessed = false;
-                }
-                if( bFieldProcessed )
-                {
-                    if( pCharSet != nullptr )
-                    {
-                        UCharSet::const_iterator aChar = pCharSet->begin();
-                        for( ; aChar != pCharSet->end(); ++aChar )
+                        OUString sDate;
+                        LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
+                        SvNumberFormatter * pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM );
+                        // We always collect the characters obtained by using the SVXDATEFORMAT_B (as: 13.02.1996)
+                        // so we are sure to include any unusual day|month|year separator.
+                        Date aDate( 1, 1, 1996 );
+                        sDate += SvxDateField::GetFormatted( aDate, SVXDATEFORMAT_B, *pNumberFormatter, eLang );
+                        switch( eDateFormat )
                         {
-                            aRepresentation += OUString( *aChar );
+                            case SVXDATEFORMAT_E:       // Tue, 13.February 1996
+                            case SVXDATEFORMAT_STDBIG:
+                            case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                                for( sal_uInt16 i = 1; i <= 7; ++i )  // we get all days in a week
+                                {
+                                    aDate.SetDay( i );
+                                    sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
+                                }
+                                // No break here! We need months too!
+                            case SVXDATEFORMAT_C:       // 13.Feb 1996
+                            case SVXDATEFORMAT_D:       // 13.February 1996
+                                for( sal_uInt16 i = 1; i <= 12; ++i ) // we get all months in a year
+                                {
+                                    aDate.SetMonth( i );
+                                    sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
+                                }
+                                break;
+                            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
+                            case SVXDATEFORMAT_STDSMALL:
+                            case SVXDATEFORMAT_A:       // 13.02.96
+                            case SVXDATEFORMAT_B:       // 13.02.1996
+                            default:
+                                // nothing to do here, we always collect the characters needed for these cases.
+                                break;
                         }
+                        aRepresentation += sDate;
                     }
-                    pInfo->SetRepresentation( aRepresentation );
+                }
+            }
+            else if( pField->GetClassId() == text::textfield::Type::PAGE )
+            {
+                switch( mVisiblePagePropSet.nPageNumberingType )
+                {
+                    case SVX_CHARS_UPPER_LETTER:
+                        aRepresentation += "QWERTYUIOPASDFGHJKLZXCVBNM";
+                        break;
+                    case SVX_CHARS_LOWER_LETTER:
+                        aRepresentation += "qwertyuiopasdfghjklzxcvbnm";
+                        break;
+                    case SVX_ROMAN_UPPER:
+                        aRepresentation += "IVXLCDM";
+                        break;
+                    case SVX_ROMAN_LOWER:
+                        aRepresentation += "ivxlcdm";
+                        break;
+                    // arabic numbering type is the default
+                    case SVX_ARABIC:
+                    // in case the numbering type is not handled we fall back on arabic numbering
+                    default:
+                        aRepresentation += "0123456789";
+                        break;
                 }
             }
             else
             {
                 bFieldProcessed = false;
             }
-        }
-        else  // single page case
-        {
-            if( mVisiblePagePropSet.bAreBackgroundObjectsVisible )
+            if( bFieldProcessed )
             {
-                const SvxFieldData* pField = pInfo->GetField().GetField();
-                if( ( pField->GetClassId() == text::textfield::Type::PRESENTATION_HEADER ) && mVisiblePagePropSet.bIsHeaderFieldVisible )
+                if( pCharSet != nullptr )
                 {
-                    aRepresentation += mVisiblePagePropSet.sHeaderText;
-                }
-                else if( ( pField->GetClassId() == text::textfield::Type::PRESENTATION_FOOTER ) && mVisiblePagePropSet.bIsFooterFieldVisible )
-                {
-                    aRepresentation += mVisiblePagePropSet.sFooterText;
-                }
-                else if( ( pField->GetClassId() == text::textfield::Type::PRESENTATION_DATE_TIME ) && mVisiblePagePropSet.bIsDateTimeFieldVisible )
-                {
-                    // TODO: implement the variable case
-                    aRepresentation += mVisiblePagePropSet.sDateTimeText;
-                }
-                else if( ( pField->GetClassId() == text::textfield::Type::PAGE ) && mVisiblePagePropSet.bIsPageNumberFieldVisible )
-                {
-                    sal_Int16 nPageNumber = mVisiblePagePropSet.nPageNumber;
-                    switch( mVisiblePagePropSet.nPageNumberingType )
+                    UCharSet::const_iterator aChar = pCharSet->begin();
+                    for( ; aChar != pCharSet->end(); ++aChar )
                     {
-                        case SVX_CHARS_UPPER_LETTER:
-                            aRepresentation += OUString( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'A' ) );
-                            break;
-                        case SVX_CHARS_LOWER_LETTER:
-                            aRepresentation += OUString( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'a' ) );
-                            break;
-                        case SVX_ROMAN_UPPER:
-                            aRepresentation += SvxNumberFormat::CreateRomanString( nPageNumber, true /* upper */ );
-                            break;
-                        case SVX_ROMAN_LOWER:
-                            aRepresentation += SvxNumberFormat::CreateRomanString( nPageNumber, false /* lower */ );
-                            break;
-                        // arabic numbering type is the default
-                        case SVX_ARABIC:
-                        // in case the numbering type is not handled we fall back on arabic numbering
-                        default:
-                            aRepresentation += OUString::number( nPageNumber );
-                            break;
+                        aRepresentation += OUString( *aChar );
                     }
                 }
-                else
-                {
-                    bFieldProcessed = false;
-                }
-                if( bFieldProcessed )
-                {
-                    pInfo->SetRepresentation( aRepresentation );
-                }
+                pInfo->SetRepresentation( aRepresentation );
             }
-
         }
+        else
+        {
+            bFieldProcessed = false;
+        }
+
     }
     if (!bFieldProcessed)
         maOldFieldHdl.Call( pInfo );
