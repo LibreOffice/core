@@ -48,9 +48,6 @@
 #define FORMAT_PNG      2
 #define FORMAT_BMP      3
 #define FORMAT_GIF      4
-#define FORMAT_PBM      5
-#define FORMAT_PGM      6
-#define FORMAT_PPM      7
 #define FORMAT_TIF      10
 #define FORMAT_WMF      12
 #define FORMAT_EMF      13
@@ -80,12 +77,6 @@ static sal_Int16 GetFilterFormat(const OUString& rExt)
         nFormat = FORMAT_BMP;
     else if ( rExt == "GIF" )
         nFormat = FORMAT_GIF;
-    else if ( rExt == "PBM" )
-        nFormat = FORMAT_PBM;
-    else if ( rExt == "PGM" )
-        nFormat = FORMAT_PGM;
-    else if ( rExt == "PPM" )
-        nFormat = FORMAT_PPM;
     else if ( rExt == "TIF" )
         nFormat = FORMAT_TIF;
     else if ( rExt == "WMF" )
@@ -275,17 +266,6 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
             if (mpCbSaveTransparency->IsChecked())
                 nValue++;
             pFilterOptions->WriteInt32("Translucent", nValue);
-        }
-        break;
-
-        case FORMAT_PBM :
-        case FORMAT_PGM :
-        case FORMAT_PPM :
-        {
-            sal_Int32 nFormat = 0;
-            if ( mpRbText->IsChecked() )
-                nFormat++;
-            pFilterOptions->WriteInt32("FileFormat", nFormat);
         }
         break;
 
@@ -813,17 +793,6 @@ void ExportDialog::createFilterOptions()
             // Transparency
             mpDrawingObjects->Show();
             mpCbSaveTransparency->Check(mpFilterOptionsItem->ReadInt32("Translucent", 1) != 0);
-        }
-        break;
-        case FORMAT_PBM :
-        case FORMAT_PGM :
-        case FORMAT_PPM :
-        {
-            // RB Binary / Text
-            mpEncoding->Show();
-            sal_Int32 nFormat = mpFilterOptionsItem->ReadInt32("FileFormat", 1);
-            mpRbBinary->Check( nFormat == 0 );
-            mpRbText->Check( nFormat != 0 );
         }
         break;
         case FORMAT_EPS :
