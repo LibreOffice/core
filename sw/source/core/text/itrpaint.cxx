@@ -236,7 +236,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // we calculate Y value for the whole line
     SwTextGridItem const*const pGrid(GetGridItem(GetTextFrame()->FindPageFrame()));
     const bool bAdjustBaseLine =
-        ( !GetTextFrame()->IsVertical() || GetLineInfo().HasSpecialAlign( true ) ) && (! GetTextFrame()->IsInFly()) &&
+        GetLineInfo().HasSpecialAlign( GetTextFrame()->IsVertical() ) ||
         ( nullptr != pGrid );
     const SwTwips nLineBaseLine = GetInfo().GetPos().Y() + nTmpAscent;
     if ( ! bAdjustBaseLine )
