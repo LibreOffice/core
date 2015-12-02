@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_10577d03",
+        "filename": "include/com/sun/star/uno/Reference.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-12-02T13:15:49Z",
+      "side": 1,
+      "message": "This is too clever for my taste.  It might be unexpected by client code that rRef isn\u0027t a null reference afterwards, and especially it can lead to this\u0027 originally referenced object not being deleted at the time client code would expect",
+      "revId": "a9447bdbdb0a60b5a3fe773c7319a8ff98b6742e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
