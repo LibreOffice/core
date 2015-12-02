@@ -2048,7 +2048,7 @@ RTLFUNC(TimeValue)
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
-        sal_uInt32 nIndex;
+        sal_uInt32 nIndex = 0;
         double fResult;
         sal_Bool bSuccess = pFormatter->IsNumberFormat( rPar.Get(1)->GetString(),
                                                    nIndex, fResult );
