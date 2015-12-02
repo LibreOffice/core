@@ -30,8 +30,10 @@ namespace svgi
         SVG_LENGTH_UNIT_PT,
         SVG_LENGTH_UNIT_PX,
         SVG_LENGTH_UNIT_PERCENTAGE,
-        SVG_LENGTH_UNIT_USER
+        SVG_LENGTH_UNIT_USER,
+        SVG_LENGTH_FONT_SIZE
     };
+
 
     /** return svg_length_t in 100th's of mm
          @param fVal value to convert
@@ -39,7 +41,7 @@ namespace svgi
          @param rState current state (needed for viewport dimensions etc.)
          @param dir direction - either 'h' or 'v' for horizonal or vertical, resp.
      */
-    double convLength( double fVal, SvgUnit unit, const State& rState, char dir );
+    double convLength( const OUString& fVal, SvgUnit unit, const State& rState, char dir );
 
     /** return svg_length_t in 100th's of mm
          @param sValue value to convert

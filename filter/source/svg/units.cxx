@@ -17,12 +17,12 @@
 namespace svgi
 {
 
-double convLength( double value, SvgUnit unit, const State& rState, char dir )
+double convLength( const OUString& value, SvgUnit unit, const State& rState, char dir )
 {
     // convert svg unit to internal coordinates ("pixel"). Since the
     // OOo drawing layer is still largely integer-based, the initial
     // viewport transformation includes a certain scale factor
-    double fRet(value);
+    double fRet(value.toDouble());
     switch ( unit )
     {
         case SVG_LENGTH_UNIT_CM: fRet *= F_SVG_PIXEL_PER_INCH/2.54; break;
@@ -36,14 +36,38 @@ double convLength( double value, SvgUnit unit, const State& rState, char dir )
         case SVG_LENGTH_UNIT_PX:
             // no unit defaults to PX in svg, assume display to have 90DPI
             break;
+        case SVG_LENGTH_FONT_SIZE:
+        {
+            if ( value == "xx-small" )
+                fRet = 6.75;
+            else if ( value == "x-small" )
+                fRet = 7.5;
+            else if ( value == "small" )
+                fRet = 9.75;
+            else if ( value == "smaller" )
+                fRet = 9.75;
+            else if ( value == "medium" )
+                fRet = 12.0;
+            else if ( value == "large" )
+                fRet = 13.5;
+            else if ( value == "larger" )
+                fRet = 14.25;
+            else if ( value == "x-large" )
+                fRet = 18.0;
+            else if ( value == "xx-large" )
+                fRet = 24.0;
+            else if ( value == "initial" )
+                fRet = 12.0;
+            break;
+        }
         case SVG_LENGTH_UNIT_PERCENTAGE:
         {
             double fBoxLen;
             if (rState.maViewBox.isEmpty())
             {
                 basegfx::B2DRange aDefaultBox(0, 0,
-                  convLength(210, SVG_LENGTH_UNIT_MM, rState, 'h'),
-                  convLength(297, SVG_LENGTH_UNIT_MM, rState, 'v'));
+                  convLength("210", SVG_LENGTH_UNIT_MM, rState, 'h'),
+                  convLength("297", SVG_LENGTH_UNIT_MM, rState, 'v'));
                 fBoxLen = (dir=='h' ? aDefaultBox.getWidth() :
                           (dir=='v' ? aDefaultBox.getHeight() :
                            aDefaultBox.getRange().getLength()));
@@ -77,7 +101,10 @@ double convLength( const OUString& sValue, const State& rState, char dir )
     const bool bRes = parse(aUTF8.getStr(),
         //  Begin grammar
         (
-            (*str_p("-") >> *digit_p >> *((str_p(".") | str_p(",")) >> *digit_p))[assign_a(sVal)]
+            (+(alpha_p | str_p("-")))[assign_a(sVal)] >> str_p("")
+            [assign_a(eUnit,SVG_LENGTH_FONT_SIZE)] |
+            (*str_p("-") >> *digit_p >>
+            *(str_p(".") | str_p(",")) >> *digit_p)[assign_a(sVal)]
             >> (  str_p("cm") [assign_a(eUnit,SVG_LENGTH_UNIT_CM)]
                 | str_p("em") [assign_a(eUnit,SVG_LENGTH_UNIT_EM)]
                 | str_p("ex") [assign_a(eUnit,SVG_LENGTH_UNIT_EX)]
@@ -98,7 +125,7 @@ double convLength( const OUString& sValue, const State& rState, char dir )
 
     OUString oVal = OUString::createFromAscii(sVal.c_str()).replaceAll(",",".");
 
-    return convLength(oVal.toDouble(),eUnit,rState,dir);
+    return convLength(oVal,eUnit,rState,dir);
 }
 
 } // namespace svgi
