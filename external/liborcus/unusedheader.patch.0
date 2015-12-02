@@ -1,0 +1,11 @@
+--- ./src/parser/pstring.cpp.orig	2015-12-02 14:38:44.658744408 +0000
++++ ./src/parser/pstring.cpp	2015-12-02 14:38:50.449658497 +0000
+@@ -13,8 +13,6 @@
+ #include <iostream>
+ #include <vector>
+ 
+-#include <boost/thread/mutex.hpp>
+-
+ using namespace std;
+ 
+ namespace orcus {
