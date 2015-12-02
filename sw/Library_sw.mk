@@ -214,6 +214,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/notxtfrm \
     sw/source/core/doc/number \
     sw/source/core/doc/poolfmt \
+    sw/source/core/doc/rdfhelper \
     sw/source/core/doc/sortopt \
     sw/source/core/doc/swserv \
     sw/source/core/doc/swstylemanager \
