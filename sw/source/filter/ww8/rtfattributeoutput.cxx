@@ -3330,6 +3330,9 @@ void RtfAttributeOutput::FormatColumns_Impl(sal_uInt16 nCols, const SwFormatCol&
     m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_COLS);
     m_rExport.OutLong(nCols);
 
+    if (rCol.GetLineAdj() != COLADJ_NONE)
+        m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LINEBETCOL);
+
     if (bEven)
     {
         m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_COLSX);

@@ -28,6 +28,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -941,6 +942,14 @@ DECLARE_RTFEXPORT_TEST(testTdf92521, "tdf92521.odt")
     // There should be a page break that's in the middle of the document: right after the table.
     // But there wasn't, so this was 1.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf94043, "tdf94043.rtf")
+{
+    auto xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(2), "TextSection");
+    auto xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    // This was 0, the separator line was not visible due to 0 width.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), getProperty<sal_Int32>(xTextColumns, "SeparatorLineWidth"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
