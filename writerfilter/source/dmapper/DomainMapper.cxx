@@ -2662,7 +2662,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_SmartTagRun_smartTagPr:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get())
+        if (pProperties.get() && m_pImpl->GetTopContextType() == CONTEXT_PARAGRAPH)
             pProperties->resolve(m_pImpl->getSmartTagHandler());
     }
     break;

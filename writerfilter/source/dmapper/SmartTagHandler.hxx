@@ -9,6 +9,13 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SMARTTAGHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SMARTTAGHANDLER_HXX
 
+#include <vector>
+
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include "LoggedResources.hxx"
 
 namespace writerfilter
@@ -20,11 +27,14 @@ namespace dmapper
 class SmartTagHandler
     : public LoggedProperties
 {
+    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<css::rdf::XDocumentMetadataAccess> m_xDocumentMetadataAccess;
     OUString m_aURI;
     OUString m_aElement;
+    std::vector< std::pair<OUString, OUString> > m_aAttributes;
 
 public:
-    SmartTagHandler();
+    SmartTagHandler(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext, const css::uno::Reference<css::text::XTextDocument>& xTextDocument);
     virtual ~SmartTagHandler();
 
     virtual void lcl_attribute(Id Name, Value& val) override;
@@ -32,6 +42,9 @@ public:
 
     void setURI(const OUString& rURI);
     void setElement(const OUString& rElement);
+
+    /// Set m_aAttributes as RDF statements on xParagraph.
+    void handle(const css::uno::Reference<css::text::XTextRange>& xParagraph);
 };
 
 } // namespace dmapper

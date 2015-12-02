@@ -226,6 +226,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xAnnotationField(),
         m_nAnnotationId( -1 ),
         m_aAnnotationPositions(),
+        m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bInTableStyleRunProps(false),
@@ -1154,6 +1155,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     }
                 }
                 getTableManager( ).handle(xTextRange);
+                m_aSmartTagHandler.handle(xTextRange);
 
                 // Get the end of paragraph character inserted
                 uno::Reference< text::XTextCursor > xCur = xTextRange->getText( )->createTextCursor( );
