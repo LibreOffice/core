@@ -1828,8 +1828,6 @@ extern "C" bool epbGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterCo
 extern "C" bool epgGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool eppGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool epsGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool eptGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool eraGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool expGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
@@ -2131,10 +2129,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("eppGraphicExport"));
                 else if (tmpFilterName == "eps")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epsGraphicExport"));
-                else if (tmpFilterName == "ept")
-                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("eptGraphicExport"));
-                else if (tmpFilterName == "era")
-                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("eraGraphicExport"));
                 else if (tmpFilterName == "eti")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("etiGraphicExport"));
                 else if (tmpFilterName == "exp")
