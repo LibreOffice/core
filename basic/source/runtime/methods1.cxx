@@ -268,7 +268,7 @@ RTLFUNC(CCur)  // JSM
     (void)pBasic;
     (void)bWrite;
 
-    SbxINT64 nCur;
+    SbxINT64 nCur = 0;
     if ( rPar.Count() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get(1);
