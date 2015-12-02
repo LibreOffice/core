@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_10993d6f",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T19:14:47Z",
+      "side": 1,
+      "message": "These are only used in the \u0027else\u0027 case below, so declaration should also go into that scope.",
+      "revId": "16713c973c8081f239e887dd0935c88e0deca109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f09d995a",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T19:14:47Z",
+      "side": 1,
+      "message": "I have a problem with counting the records here whenever the cursor is moved in a DB area. Doing so can significantly slow down things in large DB areas where several alternating (filter matched / did not match) ranges are affected by the filters. This would hit on every cursor movement.\n\nI\u0027d rather see some caching inside GetFilterSelCount() of the value determined for a specific ScDBArea. Of course that would need to be invalidated whenever another ScDBArea is touched or a filter changed, which may not be that trivial.",
+      "revId": "16713c973c8081f239e887dd0935c88e0deca109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
