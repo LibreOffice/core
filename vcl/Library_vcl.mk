@@ -692,26 +692,26 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/win/gdiimpl \
 	vcl/opengl/win/WinDeviceInfo \
 	vcl/opengl/win/blocklist_parser \
-    vcl/win/source/app/saldata \
-    vcl/win/source/app/salinfo \
-    vcl/win/source/app/salinst \
-    vcl/win/source/app/salshl \
-    vcl/win/source/app/saltimer \
-    vcl/win/source/gdi/gdiimpl \
-    vcl/win/source/gdi/salbmp \
-    vcl/win/source/gdi/salgdi \
-    vcl/win/source/gdi/salgdi2 \
-    vcl/win/source/gdi/salgdi3 \
-    vcl/win/source/gdi/salgdi_gdiplus \
-    vcl/win/source/gdi/salnativewidgets-luna \
-    vcl/win/source/gdi/salprn \
-    vcl/win/source/gdi/salvd \
-    vcl/win/source/gdi/winlayout \
-    vcl/win/source/gdi/wntgdi \
-    vcl/win/source/window/salframe \
-    vcl/win/source/window/keynames \
-    vcl/win/source/window/salmenu \
-    vcl/win/source/window/salobj \
+    vcl/win/app/saldata \
+    vcl/win/app/salinfo \
+    vcl/win/app/salinst \
+    vcl/win/app/salshl \
+    vcl/win/app/saltimer \
+    vcl/win/gdi/gdiimpl \
+    vcl/win/gdi/salbmp \
+    vcl/win/gdi/salgdi \
+    vcl/win/gdi/salgdi2 \
+    vcl/win/gdi/salgdi3 \
+    vcl/win/gdi/salgdi_gdiplus \
+    vcl/win/gdi/salnativewidgets-luna \
+    vcl/win/gdi/salprn \
+    vcl/win/gdi/salvd \
+    vcl/win/gdi/winlayout \
+    vcl/win/gdi/wntgdi \
+    vcl/win/window/salframe \
+    vcl/win/window/keynames \
+    vcl/win/window/salmenu \
+    vcl/win/window/salobj \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,vcl,\

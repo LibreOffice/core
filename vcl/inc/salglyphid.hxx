@@ -31,7 +31,7 @@ typedef sal_uInt32 sal_GlyphId;
 // caution !!!
 #define GF_VERT     0x02000000
 // GF_VERT is only for windows implementation
-// (win/source/gdi/salgdi3.cxx, win/source/gdi/winlayout.cxx)
+// (win/gdi/salgdi3.cxx, win/gdi/winlayout.cxx)
 // don't use this elsewhere !!!
 #define GF_ROTR     0x03000000
 #define GF_ROTMASK  0x03000000
