@@ -209,12 +209,22 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_DIALOG,
         ATK_ROLE_UNKNOWN,         // DOCUMENT - registered below
         ATK_ROLE_UNKNOWN,         // EMBEDDED_OBJECT - registered below
-        ATK_ROLE_UNKNOWN,         // END_NOTE - registered below
+#if defined(ATK_CHECK_VERSION)
+        ATK_ROLE_COMMENT,         // END_NOTE - registered below
+#else
+        //older version should fallback to ATK_ROLE_UNKNOWN role
+        ATK_ROLE_UNKNOWN,
+#endif
         ATK_ROLE_FILE_CHOOSER,
         ATK_ROLE_FILLER,
         ATK_ROLE_FONT_CHOOSER,
         ATK_ROLE_FOOTER,
-        ATK_ROLE_TEXT,            // FOOTNOTE - registered below
+#if defined(ATK_CHECK_VERSION)
+        ATK_ROLE_COMMENT,            // FOOTNOTE - registered below
+#else
+        //older version should fallback to ATK_ROLE_UNKNOWN role
+        ATK_ROLE_UNKNOWN,
+#endif
         ATK_ROLE_FRAME,
         ATK_ROLE_GLASS_PANE,
         ATK_ROLE_IMAGE,           // GRAPHIC
@@ -246,7 +256,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_ROOT_PANE,
         ATK_ROLE_SCROLL_BAR,
         ATK_ROLE_SCROLL_PANE,
-        ATK_ROLE_UNKNOWN,        // SHAPE - registered below
+        ATK_ROLE_PANEL,        // SHAPE - registered below
         ATK_ROLE_SEPARATOR,
         ATK_ROLE_SLIDER,
         ATK_ROLE_SPIN_BUTTON,    // SPIN_BOX ?
@@ -255,7 +265,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_TABLE,
         ATK_ROLE_TABLE_CELL,
         ATK_ROLE_TEXT,
-        ATK_ROLE_INTERNAL_FRAME, // TEXT_FRAME - registered below
+        ATK_ROLE_PANEL, // TEXT_FRAME - registered below
         ATK_ROLE_TOGGLE_BUTTON,
         ATK_ROLE_TOOL_BAR,
         ATK_ROLE_TOOL_TIP,
@@ -269,7 +279,12 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_UNKNOWN,       // EDIT_BAR - registered below
         ATK_ROLE_UNKNOWN,       // FORM - registered below
         ATK_ROLE_UNKNOWN,       // IMAGE_MAP - registered below
-        ATK_ROLE_UNKNOWN,       // NOTE - registered below
+#if defined(ATK_CHECK_VERSION)
+        ATK_ROLE_COMMENT,       // NOTE - registered below
+#else
+        //older version should fallback to ATK_ROLE_UNKNOWN role
+        ATK_ROLE_UNKNOWN,
+#endif
         ATK_ROLE_UNKNOWN,       // PAGE - registered below
         ATK_ROLE_RULER,
         ATK_ROLE_UNKNOWN,       // SECTION - registered below
@@ -309,13 +324,11 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         roleMap[accessibility::AccessibleRole::IMAGE_MAP] = registerRole("image map");
         roleMap[accessibility::AccessibleRole::TREE_ITEM] = registerRole("tree item");
         roleMap[accessibility::AccessibleRole::HYPER_LINK] = registerRole("link");
-
-        // these don't exist in ATK yet
-        roleMap[accessibility::AccessibleRole::END_NOTE] = registerRole("end note");
-        roleMap[accessibility::AccessibleRole::FOOTNOTE] = registerRole("foot note");
-        roleMap[accessibility::AccessibleRole::SHAPE] = registerRole("shape");
-        roleMap[accessibility::AccessibleRole::TEXT_FRAME] = registerRole("text frame");
-        roleMap[accessibility::AccessibleRole::NOTE] = registerRole("note");
+        roleMap[accessibility::AccessibleRole::END_NOTE] = registerRole("comment");
+        roleMap[accessibility::AccessibleRole::FOOTNOTE] = registerRole("comment");
+        roleMap[accessibility::AccessibleRole::NOTE] = registerRole("comment");
+        roleMap[accessibility::AccessibleRole::TEXT_FRAME] = registerRole("role panel");
+        roleMap[accessibility::AccessibleRole::SHAPE] = registerRole("role panel");
 
         initialized = true;
     }
