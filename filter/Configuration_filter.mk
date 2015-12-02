@@ -776,10 +776,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_html_Export \
 	draw_jpg_Export \
 	draw_met_Export \
-	draw_pbm_Export \
-	draw_pgm_Export \
 	draw_png_Export \
-	draw_ppm_Export \
 	draw_svg_Export \
 	draw_svm_Export \
 	draw_tif_Export \
@@ -820,10 +817,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 	impress_html_Export \
 	impress_jpg_Export \
 	impress_met_Export \
-	impress_pbm_Export \
-	impress_pgm_Export \
 	impress_png_Export \
-	impress_ppm_Export \
 	impress_svg_Export \
 	impress_svm_Export \
 	impress_tif_Export \
@@ -896,18 +890,15 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	jpg_Import \
 	met_Export \
 	met_Import \
-	pbm_Export \
 	pbm_Import \
 	pcd_Import_Base \
 	pcd_Import_Base4 \
 	pcd_Import_Base16 \
 	pct_Import \
 	pcx_Import \
-	pgm_Export \
 	pgm_Import \
 	png_Export \
 	png_Import \
-	ppm_Export \
 	ppm_Import \
 	psd_Import \
 	ras_Import \
