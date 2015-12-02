@@ -293,6 +293,14 @@ public:
     */
     inline Reference( const Reference< interface_type > & rRef );
 
+#if defined LIBO_INTERNAL_ONLY
+    /** Move constructor
+
+        @param rRef another reference
+    */
+    inline Reference( Reference< interface_type > && rRef );
+#endif
+
     /** Up-casting conversion constructor: Copies interface reference.
 
         Does not work for up-casts to ambiguous bases.  For the special case of
@@ -540,7 +548,15 @@ public:
         @return this reference
     */
     inline Reference< interface_type > & SAL_CALL operator = ( const Reference< interface_type > & rRef );
+#if defined LIBO_INTERNAL_ONLY
+    /** Assignment move operator: Acquires given interface reference and sets reference.
+        An interface already set will be released.
 
+        @param rRef an interface reference
+        @return this reference
+    */
+    inline Reference< interface_type > & SAL_CALL operator = ( Reference< interface_type > && rRef );
+#endif
     /** Queries given interface reference for type interface_type.
 
         @param rRef interface reference
