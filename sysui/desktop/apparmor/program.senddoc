@@ -26,7 +26,6 @@ profile libreoffice-senddoc INSTDIR-/usr/lib{,32,64}/libreoffice/program/senddoc
   /bin/grep             rmix,
   /bin/uname            rmix,
   /usr/bin/xdg-open     Cxr -> sanitized_helper,
-  /usr/bin/gnome-open   Cxr -> sanitized_helper,
   /dev/null             rw,
   INSTDIR-program/uri-encode rmPUx,
   /usr/share/libreoffice/share/config/* r,

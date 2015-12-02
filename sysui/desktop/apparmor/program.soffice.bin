@@ -122,7 +122,6 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
   /usr/lib{,32,64}/jvm/**                       r,
   INSTDIR-**                        ra,
   INSTDIR-**.so                     rm,
-  INSTDIR-program/gnome-open-url    rmPUx,  #This doesn't seem to be used on my install
   INSTDIR-program/soffice.bin       rmix,
   INSTDIR-program/xpdfimport        rPx,
   INSTDIR-program/open-url          rPx,

@@ -389,8 +389,6 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             MAILER=${DESKTOP_LAUNCH}
         elif [ -n "$KDE_FULL_SESSION" -a -x /usr/bin/kde-open ] ; then
             MAILER=/usr/bin/kde-open
-        elif [ -n "$GNOME_DESKTOP_SESSION_ID" -a -x /usr/bin/gnome-open ] ; then
-            MAILER=/usr/bin/gnome-open
         elif [ -x /usr/bin/xdg-open ] ; then
             MAILER=/usr/bin/xdg-open
         else
