@@ -4840,6 +4840,12 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
         sFileExtension = "xls";
     }
+    else if (sProgID == "AcroExch.Document.11")
+    {
+        sMediaType = "application/pdf";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        sFileExtension = "pdf";
+    }
     else
     {
         sMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
