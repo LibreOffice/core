@@ -969,7 +969,7 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
 
     pszLinkContent[0] = '\0';
 
-    nRet = readlink(pszSourceFileName,pszLinkContent,PATH_MAX);
+    nRet = readlink(pszSourceFileName,pszLinkContent,PATH_MAX-1);
 
     if ( nRet < 0 )
     {
