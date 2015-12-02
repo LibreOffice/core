@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_70c5295a",
+        "filename": "include/svx/svdlayer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-12-02T17:12:20Z",
+      "side": 1,
+      "message": "I\u0027m not a linguist, but I think \u0027which\u0027 here is non-restrictive. The reason is that regardless of the second half of the sentence, the first half is complete.\n\nPerhaps it\u0027s best to put the \"not in use yet\" in parenthesis? (In which case \"unused\" is better.)",
+      "parentUuid": "dab17558_fa161854",
+      "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_ba1c9078",
         "filename": "include/svx/svdorect.hxx",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_d0a055a8",
+        "filename": "include/svx/svdovirt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-12-02T17:12:20Z",
+      "side": 1,
+      "message": "Comma here is superfluous. \"At the moment\" makes no sense without the rest of the sentence.",
+      "parentUuid": "dab17558_da17d452",
+      "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_1a12fc62",
         "filename": "include/svx/svdsnpv.hxx",
         "patchSetId": 1
@@ -64,6 +100,24 @@
       "writtenOn": "2015-11-30T20:44:25Z",
       "side": 1,
       "message": "superfluous comma",
+      "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b0a5d1b6",
+        "filename": "include/svx/svdsnpv.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-12-02T17:12:20Z",
+      "side": 1,
+      "message": "Indeed.",
+      "parentUuid": "dab17558_1a12fc62",
       "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
