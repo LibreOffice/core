@@ -601,11 +601,10 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
 
     nPaintFlags = mpWindowImpl->mnPaintFlags & ~(IMPL_PAINT_PAINT);
 
+    PaintHelper aHelper(this, nPaintFlags);
+
     if (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINT)
-    {
-        PaintHelper aHelper(this, nPaintFlags);
         aHelper.DoPaint(pRegion);
-    }
     else
         mpWindowImpl->mnPaintFlags = 0;
 }
