@@ -78,6 +78,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_globalfilter,\
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \
 	unotools/util/utl \
+	unoxml/source/rdf/unordf \
 	unoxml/source/service/unoxml \
 	uui/util/uui \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \

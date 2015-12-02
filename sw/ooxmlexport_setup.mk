@@ -58,7 +58,9 @@ define sw_ooxmlexport_components
 	toolkit/util/tk \
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \
+	ucb/source/ucp/tdoc/ucptdoc1 \
 	unotools/util/utl \
+	unoxml/source/rdf/unordf \
 	unoxml/source/service/unoxml \
 	uui/util/uui \
 	writerfilter/util/writerfilter \

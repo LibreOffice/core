@@ -36,6 +36,7 @@
 #include "unoframe.hxx"
 #include "unodraw.hxx"
 #include "textboxhelper.hxx"
+#include "rdfhelper.hxx"
 #include "wrtww8.hxx"
 
 #include <comphelper/random.hxx>
@@ -1033,6 +1034,25 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     }
 
     m_pSerializer->endElementNS( XML_w, XML_pPr );
+
+    // RDF metadata for this text node.
+    SwTextNode* pTextNode = m_rExport.m_pCurPam->GetNode().GetTextNode();
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements("urn:tscp:names:baf:1.1", *pTextNode);
+    if (!aStatements.empty())
+    {
+        m_pSerializer->startElementNS(XML_w, XML_smartTag,
+                                      FSNS(XML_w, XML_uri), "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                                      FSNS(XML_w, XML_element), "RDF",
+                                      FSEND);
+        m_pSerializer->startElementNS(XML_w, XML_smartTagPr, FSEND);
+        for (const std::pair<OUString, OUString>& rStatement : aStatements)
+            m_pSerializer->singleElementNS(XML_w, XML_attr,
+                                           FSNS(XML_w, XML_name), rStatement.first.toUtf8(),
+                                           FSNS(XML_w, XML_val), rStatement.second.toUtf8(),
+                                           FSEND);
+        m_pSerializer->endElementNS(XML_w, XML_smartTagPr);
+        m_pSerializer->endElementNS(XML_w, XML_smartTag);
+    }
 
     if ( m_nColBreakStatus == COLBRK_WRITE )
     {
