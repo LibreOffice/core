@@ -2148,10 +2148,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                     pFunc = eppGraphicExport;
                 else if (aFilterName == "eps")
                     pFunc = epsGraphicExport;
-                else if (aFilterName == "ept")
-                    pFunc = eptGraphicExport;
-                else if (aFilterName == "era")
-                    pFunc = eraGraphicExport;
                 else if (aFilterName == "eti")
                     pFunc = etiGraphicExport;
                 else if (aFilterName == "exp")
