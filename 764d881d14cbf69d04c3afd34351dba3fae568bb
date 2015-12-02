@@ -1,0 +1,274 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_9076cd3c",
+        "filename": "cui/source/tabpages/border.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "There is one remaining problem with determining enabling the checkbox this way, namely the situation of the test case attached to the bug ;-) when only the apparently bordered cell is selected. If there is no line to remove at the marked cell so the user can\u0027t click a line to remove, the checkbox will stay disabled.\n\nI\u0027m not sure how to solve that, maybe by enabling the checkbox also if the \"Set No Borders\" Line Arrangement push button was selected.",
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b09f91b3",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5596,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "Why not just\n\n SvxBoxItem aTmp0( *pLineOuter );\n\ninstead of creating and assigning a temporary?",
+      "range": {
+        "startLine": 5596,
+        "startChar": 8,
+        "endLine": 5596,
+        "endChar": 53
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_30ac41ed",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5604,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "Also here\n\n SvxBoxItem aLeft( aTmp0 );\n SvxBoxItem aRight( aTmp0 );\n SvxBoxItem aTop( aTmp0 );\n SvxBoxItem aBottom( aTmp0 );",
+      "range": {
+        "startLine": 5601,
+        "startChar": 0,
+        "endLine": 5604,
+        "endChar": 49
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_10a5bd03",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5606,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "Ditto\n\n SvxBoxInfoItem aTmp1( *pLineInner );",
+      "range": {
+        "startLine": 5606,
+        "startChar": 8,
+        "endLine": 5606,
+        "endChar": 61
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_70b6c93e",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5615,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "And here\n\n SvxBoxInfoItem aLeftInfo( aTmp1 );\n SvxBoxInfoItem aRightInfo( aTmp1 );\n SvxBoxInfoItem aTopInfo( aTmp1 );\n SvxBoxInfoItem aBottomInfo( aTmp1 );",
+      "range": {
+        "startLine": 5612,
+        "startChar": 0,
+        "endLine": 5615,
+        "endChar": 61
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_d081754f",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5650,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "Instead of copying the range just use the pointer, i.e.\n\n const ScRange* pRange \u003d rRangeListTopEnvelope[ j ];",
+      "range": {
+        "startLine": 5650,
+        "startChar": 20,
+        "endLine": 5650,
+        "endChar": 65
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b0867163",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5653,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "... so these become\n\n pRange-\u003eaStart.Col(), pRange-\u003eaStart.Row(),\n pRange-\u003eaEnd.Col(),   pRange-\u003eaEnd.Row()",
+      "range": {
+        "startLine": 5652,
+        "startChar": 51,
+        "endLine": 5653,
+        "endChar": 89
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_107c9d71",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "Should be passed as const reference\n\n const ScRange\u0026 rNewRange\n\ninstead of per-value, which unnecessarily may create a temporary copy.",
+      "range": {
+        "startLine": 570,
+        "startChar": 47,
+        "endLine": 570,
+        "endChar": 64
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_507c6520",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "A function returning void does not need an empty return statement at the end of the function.",
+      "range": {
+        "startLine": 586,
+        "startChar": 4,
+        "endLine": 586,
+        "endChar": 10
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_b08cb136",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "These should be moved into the if(pArray[nCol].HasMarks()) scope, otherwise up to MAXROWCOUNT instances of ScFlatBoolRowSegments are created just to be destroyed again (usually the selection covers only a few columns). Handling of\n\n pPrevColMarkedRows.reset( pCurColMarkedRows.release() );\n\nbelow then of course would need to be adapted, and maybe the algorithm to better cope with the \"marked are only a few columns\" situation.\n\nAn attempt could be to first determine the first and last marked column from the ScMarkData, and then do this entire loop only for nStartCol-1 to nEndCol+1.",
+      "range": {
+        "startLine": 605,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 53
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1082dd00",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "Probably should be\n\n const auto\u0026 rKV",
+      "range": {
+        "startLine": 747,
+        "startChar": 12,
+        "endLine": 747,
+        "endChar": 21
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f0863912",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-02T18:18:41Z",
+      "side": 1,
+      "message": "Probably should be\n\n const auto\u0026 rKV",
+      "range": {
+        "startLine": 761,
+        "startChar": 12,
+        "endLine": 761,
+        "endChar": 21
+      },
+      "revId": "764d881d14cbf69d04c3afd34351dba3fae568bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
