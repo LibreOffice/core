@@ -3029,6 +3029,7 @@ void ScVectorRefMatrix::ensureFullMatrix()
 ScVectorRefMatrix::ScVectorRefMatrix(const formula::DoubleVectorRefToken* pToken, SCSIZE nRowStart, SCSIZE nRowSize)
     : ScMatrix()
     , mpToken(pToken)
+    , mpErrorInterpreter(nullptr)
     , mnRowStart(nRowStart)
     , mnRowSize(nRowSize)
 {
