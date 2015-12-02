@@ -49,6 +49,8 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
+#include <com/sun/star/rdf/URI.hpp>
+#include <com/sun/star/rdf/Statement.hpp>
 
 #include <string>
 
@@ -83,6 +85,44 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76248, "FDO76248.docx")
        return;
     // In two cases the a:graphicData elements had no children, which is invalid.
     assertXPath(pXmlDoc, "//a:graphicData[not(*)]", 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTscp, "tscp.docx")
+{
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, "urn:tscp:names:baf:1.1");
+    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent, uno::UNO_QUERY);
+    uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
+    // This failed, no graphs had the urn:tscp:names:baf:1.1 type.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aGraphNames.getLength());
+    uno::Reference<rdf::XURI> xGraphName = aGraphNames[0];
+    uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
+
+    // No RDF statement on the first paragraph.
+    uno::Reference<rdf::XResource> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xStatements = xGraph->getStatements(xParagraph, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
+    CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(xStatements->hasMoreElements()));
+
+    // 3 RDF statements on the second paragraph.
+    xParagraph.set(getParagraph(2), uno::UNO_QUERY);
+    std::map<OUString, OUString> aExpectedStatements = {
+        {"urn:tscp:names:baf:1.1#BusinessAuthorization", "urn:example:tscp:1"},
+        {"urn:tscp:names:baf:1.1#BusinessAuthorizationCategory", "urn:example:tscp:1:confidential"},
+        {"urn:tscp:names:baf:1.1#BusinessAuthorizationDate", "2015-11-27T11:45:00"}
+    };
+    std::map<OUString, OUString> aActualStatements;
+    xStatements = xGraph->getStatements(xParagraph, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
+    while (xStatements->hasMoreElements())
+    {
+        rdf::Statement aStatement = xStatements->nextElement().get<rdf::Statement>();
+        aActualStatements[aStatement.Predicate->getNamespace() + aStatement.Predicate->getLocalName()] = aStatement.Object->getStringValue();
+    }
+    CPPUNIT_ASSERT(aExpectedStatements == aActualStatements);
+
+    // No RDF statement on the third paragraph.
+    xParagraph.set(getParagraph(3), uno::UNO_QUERY);
+    xStatements = xGraph->getStatements(xParagraph, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
+    CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(xStatements->hasMoreElements()));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo76589 , "fdo76589.docx")
