@@ -2394,6 +2394,7 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
         nXScreen = m_nXScreen;
 
     SystemParentData aParentData;
+    aParentData.nSize = sizeof(SystemParentData);
     aParentData.aWindow = aNewParent;
     aParentData.bXEmbedSupport = (aNewParent != None && m_bXEmbed); // caution: this is guesswork
     if( aNewParent == None )
