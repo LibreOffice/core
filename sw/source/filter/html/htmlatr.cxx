@@ -813,7 +813,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         // The align=... attribute does behave strange in netscape
         // if there are controls in a paragraph, because the control and
         // all text behind the control does not recognize this attribute.
-        OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_division);
+        OString sOut = "<" OOO_STRING_SVTOOLS_HTML_division;
         rWrt.Strm().WriteOString( sOut );
 
         rHWrt.m_bTextAttr = false;
@@ -915,7 +915,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         if( rHWrt.m_bCfgOutStyles &&
             (!pFormatInfo->aClass.isEmpty() || pFormatInfo->bScriptDependent) )
         {
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_class) + "=\"";
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_class "=\"";
             rWrt.Strm().WriteOString( sOut );
             sOut = "";
             OUString aClass( pFormatInfo->aClass );
@@ -957,9 +957,9 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         }
 
         if (rHWrt.m_bParaDotLeaders) {
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_class) + "=\"" +
-                OString(sCSS2_P_CLASS_leaders) + "\"><" +
-                OString(OOO_STRING_SVTOOLS_HTML_O_span);
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_class "=\""
+                sCSS2_P_CLASS_leaders "\"><"
+                OOO_STRING_SVTOOLS_HTML_O_span;
             rWrt.Strm().WriteOString( sOut );
             sOut = "";
         }
@@ -2692,8 +2692,8 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
         if( COL_AUTO == aColor.GetColor() )
             aColor.SetColor( COL_BLACK );
 
-        OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_font) + " " +
-            OString(OOO_STRING_SVTOOLS_HTML_O_color) + "=";
+        OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font " "
+            OOO_STRING_SVTOOLS_HTML_O_color "=";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor, rHTMLWrt.m_eDestEnc ).WriteChar( '>' );
     }
@@ -2734,8 +2734,8 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
         OUString aNames;
         SwHTMLWriter::PrepareFontList( static_cast<const SvxFontItem&>(rHt), aNames, 0,
                            rHTMLWrt.IsHTMLMode(HTMLMODE_FONT_GENERIC) );
-        OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_font) + " " +
-            OString(OOO_STRING_SVTOOLS_HTML_O_face) + "=\"";
+        OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font " "
+            OOO_STRING_SVTOOLS_HTML_O_face "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), aNames, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters )
            .WriteCharPtr( "\">" );
@@ -2754,11 +2754,11 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.m_bTagOn )
     {
-        OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_font);
+        OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font;
 
         sal_uInt32 nHeight = static_cast<const SvxFontHeightItem&>(rHt).GetHeight();
         sal_uInt16 nSize = rHTMLWrt.GetHTMLFontSize( nHeight );
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_size) + "=\"" +
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_size "=\"" +
             OString::number(static_cast<sal_Int32>(nSize)) + "\"";
         rWrt.Strm().WriteOString( sOut );
 
@@ -2789,7 +2789,7 @@ static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.m_bTagOn )
     {
-        OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_span);
+        OString sOut = "<" OOO_STRING_SVTOOLS_HTML_span;
         rWrt.Strm().WriteOString( sOut );
         rHTMLWrt.OutLanguage( static_cast<const SvxLanguageItem &>(rHt).GetLanguage() );
         rWrt.Strm().WriteChar( '>' );
@@ -2947,7 +2947,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
         return rWrt;
     }
 
-    OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_anchor);
+    OString sOut = "<" OOO_STRING_SVTOOLS_HTML_anchor;
 
     bool bScriptDependent = false;
     {
@@ -2974,7 +2974,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
 
     if( bScriptDependent )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_class) + "=\"";
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_class "=\"";
         const sal_Char* pStr = nullptr;
         switch( rHTMLWrt.m_nCSS1Script )
         {
@@ -3007,7 +3007,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
         }
         aURL = comphelper::string::strip(aURL, ' ');
 
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_href) + "=\"";
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_href "=\"";
         rWrt.Strm().WriteOString( sOut );
         rHTMLWrt.OutHyperlinkHRefValue( aURL );
         sOut = "\"";
@@ -3015,7 +3015,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
 
     if( !rINetFormat.GetName().isEmpty() )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), rINetFormat.GetName(),
                                   rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
@@ -3025,7 +3025,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
     const OUString& rTarget = rINetFormat.GetTargetFrame();
     if( !rTarget.isEmpty() )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_target) + "=\"";
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut = "\"";
@@ -3131,7 +3131,7 @@ static Writer& OutHTML_SwTextCharFormat( Writer& rWrt, const SfxPoolItem& rHt )
         if( rHTMLWrt.m_bCfgOutStyles &&
             (!pFormatInfo->aClass.isEmpty() || pFormatInfo->bScriptDependent) )
         {
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_class) + "=\"";
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_class "=\"";
             rWrt.Strm().WriteOString( sOut );
             OUString aClass( pFormatInfo->aClass );
             if( pFormatInfo->bScriptDependent )
@@ -3188,7 +3188,7 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     }
     if( pStr )
     {
-        OString sOut = " " + OString(OOO_STRING_SVTOOLS_HTML_O_align) + "=\"" +
+        OString sOut = " " OOO_STRING_SVTOOLS_HTML_O_align "=\"" +
             OString(pStr) + "\"";
         rWrt.Strm().WriteOString( sOut );
     }

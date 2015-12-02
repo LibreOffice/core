@@ -205,7 +205,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
 
             if( pStr )
             {
-                sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"" + OString(pStr) + "\"";
+                sOut += " " OOO_STRING_SVTOOLS_HTML_O_type "=\"" + OString(pStr) + "\"";
             }
         }
         else if( SVX_NUM_BITMAP == eType )
@@ -243,7 +243,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
             if( cType )
             {
-                sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"" + OString(cType) + "\"";
+                sOut += " " OOO_STRING_SVTOOLS_HTML_O_type "=\"" + OString(cType) + "\"";
             }
 
             sal_uInt16 nStartVal = rNumFormat.GetStart();
@@ -262,7 +262,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
             if( nStartVal != 1 )
             {
-                sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_start) + "=\"" + OString::number(static_cast<sal_Int32>(nStartVal)) + "\"";
+                sOut += " " OOO_STRING_SVTOOLS_HTML_O_start "=\"" + OString::number(static_cast<sal_Int32>(nStartVal)) + "\"";
             }
         }
 

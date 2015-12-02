@@ -220,8 +220,8 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     {
         m_bFirstCSS1Rule = false;
         OutNewLine();
-        sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_style) + " " +
-                    OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"text/css\">");
+        sOut.append("<" OOO_STRING_SVTOOLS_HTML_style " "
+                    OOO_STRING_SVTOOLS_HTML_O_type "=\"text/css\">");
     //  Optional CSS2 code for dot leaders (dotted line between the Table of Contents titles and page numbers):
     //  (More inforation: http://www.w3.org/Style/Examples/007/leaders.en.html)
     //
@@ -254,14 +254,14 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
 
         if (m_bCfgPrintLayout) {
             sOut.append(
-                "p." + OString(sCSS2_P_CLASS_leaders) + "{max-width:" + OString::number(DOT_LEADERS_MAX_WIDTH) +
+                "p." sCSS2_P_CLASS_leaders "{max-width:" + OString::number(DOT_LEADERS_MAX_WIDTH) +
                     "cm;padding:0;overflow-x:hidden;line-height:120%}"
-                "p." + OString(sCSS2_P_CLASS_leaders) + ":after{float:left;width:0;white-space:nowrap;content:\"");
+                "p." sCSS2_P_CLASS_leaders ":after{float:left;width:0;white-space:nowrap;content:\"");
                 for (int i = 0; i < 100; i++ )
                     sOut.append(". ");
                 sOut.append(
-                    "\"}p." + OString(sCSS2_P_CLASS_leaders) + " span:first-child{padding-right:0.33em;background:white}"
-                    "p." + OString(sCSS2_P_CLASS_leaders) + " span+span{float:right;padding-left:0.33em;"
+                    "\"}p." sCSS2_P_CLASS_leaders " span:first-child{padding-right:0.33em;background:white}"
+                    "p." sCSS2_P_CLASS_leaders " span+span{float:right;padding-left:0.33em;"
                     "background:white;position:relative;z-index:1}");
         }
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
@@ -277,8 +277,8 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         case CSS1_OUTMODE_SPAN_TAG1_ON:
             if( m_bTagOn )
             {
-                sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_span) +
-                            " " + OString(OOO_STRING_SVTOOLS_HTML_O_style) + "=\"");
+                sOut.append("<" OOO_STRING_SVTOOLS_HTML_span
+                            " " OOO_STRING_SVTOOLS_HTML_O_style "=\"");
             }
             else
             {
@@ -295,7 +295,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
             break;
 
         case CSS1_OUTMODE_STYLE_OPT_ON:
-            sOut.append(" " + OString(OOO_STRING_SVTOOLS_HTML_O_style) + "=\"");
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_style "=\"");
             break;
         }
         m_bFirstCSS1Property = false;
@@ -840,8 +840,8 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             case RES_POOLCOLL_TABLE:
                 if( pPseudo )
                 {
-                    rToken = OString(OOO_STRING_SVTOOLS_HTML_tabledata) + " " +
-                             OString(OOO_STRING_SVTOOLS_HTML_parabreak);
+                    rToken = OOO_STRING_SVTOOLS_HTML_tabledata " "
+                             OOO_STRING_SVTOOLS_HTML_parabreak;
                 }
                 else
                     rToken = OOO_STRING_SVTOOLS_HTML_parabreak;
@@ -849,8 +849,8 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             case RES_POOLCOLL_TABLE_HDLN:
                 if( pPseudo )
                 {
-                    rToken = OString(OOO_STRING_SVTOOLS_HTML_tableheader) + " " +
-                             OString(OOO_STRING_SVTOOLS_HTML_parabreak);
+                    rToken = OOO_STRING_SVTOOLS_HTML_tableheader " "
+                             OOO_STRING_SVTOOLS_HTML_parabreak;
                 }
                 else
                     rToken = OString(OOO_STRING_SVTOOLS_HTML_parabreak);

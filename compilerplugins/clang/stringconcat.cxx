@@ -11,6 +11,35 @@
 
 namespace {
 
+Expr const * stripCtor(Expr const * expr) {
+    auto e0 = expr;
+    auto const e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
+    if (e1 != nullptr) {
+        e0 = e1->getSubExpr()->IgnoreParenImpCasts();
+    }
+    auto const e2 = dyn_cast<CXXBindTemporaryExpr>(e0);
+    if (e2 == nullptr) {
+        return expr;
+    }
+    auto const e3 = dyn_cast<CXXConstructExpr>(
+        e2->getSubExpr()->IgnoreParenImpCasts());
+    if (e3 == nullptr) {
+        return expr;
+    }
+    auto const n = e3->getConstructor()->getQualifiedNameAsString();
+    if (n != "rtl::OString::OString" && n != "rtl::OUString::OUString") {
+        return expr;
+    }
+    if (e3->getNumArgs() != 2) {
+        return expr;
+    }
+    return e3->getArg(0)->IgnoreParenImpCasts();
+}
+
+bool isStringLiteral(Expr const * expr) {
+    return isa<StringLiteral>(stripCtor(expr));
+}
+
 class StringConcat:
     public RecursiveASTVisitor<StringConcat>, public loplugin::Plugin
 {
@@ -35,13 +64,13 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
     if ((oo != OverloadedOperatorKind::OO_Plus
          && oo != OverloadedOperatorKind::OO_LessLess)
         || fdecl->getNumParams() != 2 || expr->getNumArgs() != 2
-        || !isa<StringLiteral>(expr->getArg(1)->IgnoreParenImpCasts()))
+        || !isStringLiteral(expr->getArg(1)->IgnoreParenImpCasts()))
     {
         return true;
     }
     SourceLocation leftLoc;
     auto const leftExpr = expr->getArg(0)->IgnoreParenImpCasts();
-    if (isa<StringLiteral>(leftExpr)) {
+    if (isStringLiteral(leftExpr)) {
         leftLoc = leftExpr->getLocStart();
     } else {
         CallExpr const * left = dyn_cast<CallExpr>(leftExpr);
@@ -56,7 +85,7 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
         if ((loo != OverloadedOperatorKind::OO_Plus
              && loo != OverloadedOperatorKind::OO_LessLess)
             || ldecl->getNumParams() != 2 || left->getNumArgs() != 2
-            || !isa<StringLiteral>(left->getArg(1)->IgnoreParenImpCasts()))
+            || !isStringLiteral(left->getArg(1)->IgnoreParenImpCasts()))
         {
             return true;
         }

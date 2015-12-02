@@ -182,7 +182,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
         if( EXTENDED_STYPE == eScriptType &&
             !pDescs[i].AddListenerParam.isEmpty() )
         {
-            sOut = " " + OString(OOO_STRING_SVTOOLS_HTML_O_sdaddparam) +
+            sOut = " " OOO_STRING_SVTOOLS_HTML_O_sdaddparam +
                 OUStringToOString(sListener, RTL_TEXTENCODING_ASCII_US) + "-" +
                 OUStringToOString(sMethod, RTL_TEXTENCODING_ASCII_US) + "=\"";
             rStrm.WriteOString( sOut );
@@ -458,7 +458,7 @@ void SwHTMLWriter::OutForm( bool bOn,
     // die neue Form wird geoeffnet
     if( m_bLFPossible )
         OutNewLine();
-    OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_form);
+    OString sOut = "<" OOO_STRING_SVTOOLS_HTML_form;
 
     uno::Reference< beans::XPropertySet > xFormPropSet( rFormComps, uno::UNO_QUERY );
 
@@ -466,7 +466,7 @@ void SwHTMLWriter::OutForm( bool bOn,
     if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
         !static_cast<const OUString*>(aTmp.getValue())->isEmpty() )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
         Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( Strm(), *static_cast<OUString const *>(aTmp.getValue()),
                                   m_eDestEnc, &m_aNonConvertableCharacters );
@@ -477,7 +477,7 @@ void SwHTMLWriter::OutForm( bool bOn,
     if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
         !static_cast<const OUString*>(aTmp.getValue())->isEmpty() )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_action) + "=\"";
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_action "=\"";
         Strm().WriteOString( sOut );
         OUString aURL( *static_cast<OUString const *>(aTmp.getValue()) );
         aURL = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), aURL);
@@ -492,8 +492,8 @@ void SwHTMLWriter::OutForm( bool bOn,
                 *static_cast<form::FormSubmitMethod const *>(aTmp.getValue());
         if( form::FormSubmitMethod_POST==eMethod )
         {
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_method) + "=\"" +
-                OString(OOO_STRING_SVTOOLS_HTML_METHOD_post) + "\"";
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_method "=\""
+                OOO_STRING_SVTOOLS_HTML_METHOD_post "\"";
         }
     }
     aTmp = xFormPropSet->getPropertyValue( "SubmitEncoding" );
@@ -516,7 +516,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
         if( pStr )
         {
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_enctype) + "=\"" +
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_enctype "=\"" +
                 OString(pStr) + "\"";
         }
     }
@@ -525,7 +525,7 @@ void SwHTMLWriter::OutForm( bool bOn,
     if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get()&&
         !static_cast<const OUString*>(aTmp.getValue())->isEmpty() )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_target) + "=\"";
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
         Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( Strm(), *static_cast<OUString const *>(aTmp.getValue()),
                                   m_eDestEnc, &m_aNonConvertableCharacters );
@@ -591,15 +591,15 @@ void SwHTMLWriter::OutHiddenControls(
         {
             if( m_bLFPossible )
                 OutNewLine( true );
-            OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_input) + " " +
-                OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"" +
-                OString(OOO_STRING_SVTOOLS_HTML_IT_hidden) + "\"";
+            OString sOut = "<" OOO_STRING_SVTOOLS_HTML_input " "
+                OOO_STRING_SVTOOLS_HTML_O_type "=\""
+                OOO_STRING_SVTOOLS_HTML_IT_hidden "\"";
 
             aTmp = xPropSet->getPropertyValue( "Name" );
             if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
                 !static_cast<const OUString*>(aTmp.getValue())->isEmpty() )
             {
-                sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
+                sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
                 Strm().WriteOString( sOut );
                 HTMLOutFuncs::Out_String( Strm(), *static_cast<OUString const *>(aTmp.getValue()),
                                           m_eDestEnc, &m_aNonConvertableCharacters );
@@ -609,7 +609,7 @@ void SwHTMLWriter::OutHiddenControls(
             if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
                 !static_cast<const OUString*>(aTmp.getValue())->isEmpty() )
             {
-                sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_value) + "=\"";
+                sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
                 Strm().WriteOString( sOut );
                 HTMLOutFuncs::Out_String( Strm(), *static_cast<OUString const *>(aTmp.getValue()),
                                           m_eDestEnc, &m_aNonConvertableCharacters );
@@ -736,7 +736,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get() &&
             TRISTATE_FALSE != *static_cast<sal_Int16 const *>(aTmp.getValue()) )
         {
-            sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_checked);
+            sOptions += " " OOO_STRING_SVTOOLS_HTML_O_checked;
             sOptions += "=\"";
             sOptions += OString(OOO_STRING_SVTOOLS_HTML_O_checked);
             sOptions += "\"";
@@ -798,7 +798,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             // wieviele sind sichtbar ??
             if( aSz.Height() )
             {
-                sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_size) + "=\"" +
+                sOptions += " " OOO_STRING_SVTOOLS_HTML_O_size "=\"" +
                     OString::number(static_cast<sal_Int32>(aSz.Height())) + "\"";
             }
 
@@ -806,7 +806,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             if( aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                 *static_cast<sal_Bool const *>(aTmp.getValue()) )
             {
-                sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_multiple);
+                sOptions += " " OOO_STRING_SVTOOLS_HTML_O_multiple;
             }
         }
         break;
@@ -833,12 +833,12 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
                 if( aSz.Height() )
                 {
-                    sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_rows) + "=\"" +
+                    sOptions += " " OOO_STRING_SVTOOLS_HTML_O_rows "=\"" +
                         OString::number(static_cast<sal_Int32>(aSz.Height())) + "\"";
                 }
                 if( aSz.Width() )
                 {
-                    sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_cols) + "=\"" +
+                    sOptions += " " OOO_STRING_SVTOOLS_HTML_O_cols "=\"" +
                         OString::number(static_cast<sal_Int32>(aSz.Width())) + "\"";
                 }
 
@@ -853,7 +853,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                         (aTmp.getValueType() == cppu::UnoType<bool>::get() &&
                         *static_cast<sal_Bool const *>(aTmp.getValue())) ? OOO_STRING_SVTOOLS_HTML_WW_hard
                                                      : OOO_STRING_SVTOOLS_HTML_WW_soft;
-                    sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_wrap) + "=\"" +
+                    sOptions += " " OOO_STRING_SVTOOLS_HTML_O_wrap "=\"" +
                         OString(pWrapStr) + "\"";
                 }
             }
@@ -871,7 +871,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
                 if( aSz.Width() )
                 {
-                    sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_size) + "=\"" +
+                    sOptions += " " OOO_STRING_SVTOOLS_HTML_O_size "=\"" +
                         OString::number(static_cast<sal_Int32>(aSz.Width())) + "\"";
                 }
 
@@ -879,7 +879,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get() &&
                     *static_cast<sal_Int16 const *>(aTmp.getValue()) != 0 )
                 {
-                    sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_maxlength) + "=\"" +
+                    sOptions += " " OOO_STRING_SVTOOLS_HTML_O_maxlength "=\"" +
                         OString::number(static_cast<sal_Int32>(*static_cast<sal_Int16 const *>(aTmp.getValue()))) + "\"";
                 }
 
@@ -904,7 +904,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
             if( aSz.Width() )
             {
-                sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_size) + "=\"" +
+                sOptions += " " OOO_STRING_SVTOOLS_HTML_O_size "=\"" +
                     OString::number(static_cast<sal_Int32>(aSz.Width())) + "\"";
             }
 
@@ -928,7 +928,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     OString sOut = "<" + OString(TagNames[eTag]);
     if( eType != TYPE_NONE )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"" +
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_type "=\"" +
             OString(TypeNames[eType]) + "\"";
     }
 
@@ -936,7 +936,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
         !static_cast<const OUString*>(aTmp.getValue())->isEmpty() )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), *static_cast<OUString const *>(aTmp.getValue()),
                                   rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
@@ -947,12 +947,12 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     if( aTmp.getValueType() == cppu::UnoType<bool>::get() &&
         !*static_cast<sal_Bool const *>(aTmp.getValue()) )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_disabled);
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_disabled;
     }
 
     if( !sValue.isEmpty() || bEmptyValue )
     {
-        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_value) + "=\"";
+        sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), sValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut = "\"";
@@ -966,7 +966,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
             !static_cast<const OUString*>(aTmp.getValue())->isEmpty() )
         {
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_src) + "=\"";
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_src "=\"";
             rWrt.Strm().WriteOString( sOut );
 
             HTMLOutFuncs::Out_String( rWrt.Strm(),
@@ -991,13 +991,13 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
         if( aPixelSz.Width() )
         {
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_width) + "=\"" +
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_width "=\"" +
                 OString::number(static_cast<sal_Int32>(aPixelSz.Width())) + "\"";
         }
 
         if( aPixelSz.Height() )
         {
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_height) + "=\"" +
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_height "=\"" +
                 OString::number(static_cast<sal_Int32>(aPixelSz.Height())) + "\"";
         }
     }
@@ -1011,7 +1011,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             if( nTabIndex >= 32767 )
                 nTabIndex = 32767;
 
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_tabindex) + "=\"" +
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_tabindex "=\"" +
                 OString::number(static_cast<sal_Int32>(nTabIndex)) + "\"";
         }
     }
@@ -1200,17 +1200,17 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     nSel++;
 
                 rHTMLWrt.OutNewLine(); // jede Option bekommt eine eigene Zeile
-                sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_option);
+                sOut = "<" OOO_STRING_SVTOOLS_HTML_option;
                 if( !sVal.isEmpty() || bEmptyVal )
                 {
-                    sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_value) + "=\"";
+                    sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
                     rWrt.Strm().WriteOString( sOut );
                     HTMLOutFuncs::Out_String( rWrt.Strm(), sVal,
                         rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
                     sOut = "\"";
                 }
                 if( bSelected )
-                    sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_selected);
+                    sOut += " " OOO_STRING_SVTOOLS_HTML_O_selected;
 
                 sOut += ">";
                 rWrt.Strm().WriteOString( sOut );
