@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_f3a923e1",
+        "filename": "sfx2/source/dialog/tabdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T19:51:37Z",
+      "side": 1,
+      "message": "This doesn\u0027t make sense to me, especially not with the \"A const was cast to a non-const, and changed\" commit message. The TabDialog() ctor expects a const OUString\u0026, the only thing that changed is that now (unnecessarily) a temporary copy is passed.\n\nI also don\u0027t see where a cast to non-const and a change of the object would occur. TabDialog() -\u003e Dialog() -\u003e loadUI() -\u003e VclBuilder() all pass/use const OUString\u0026",
+      "revId": "78fc9b290a7dee1a8175aab0554791c7d21c6cd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
