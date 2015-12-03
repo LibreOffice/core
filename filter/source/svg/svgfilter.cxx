@@ -267,7 +267,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 }
             }
             // Later we move them to a uno::Sequence so we can get them by index
-            mMasterPageTargets.realloc( aMasterPageTargetSet.size() );
+            mMasterPageTargets.resize( aMasterPageTargetSet.size() );
             ObjectSet::const_iterator aElem = aMasterPageTargetSet.begin();
             for( sal_Int32 i = 0; aElem != aMasterPageTargetSet.end(); ++aElem, ++i)
             {

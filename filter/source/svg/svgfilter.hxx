@@ -242,7 +242,7 @@ private:
     Reference< XShapes >                maShapeSelection;
     bool                                mbExportSelection;
     XDrawPageSequence                   mSelectedPages;
-    XDrawPageSequence                   mMasterPageTargets;
+    std::vector< Reference< XDrawPage > > mMasterPageTargets;
 
     Link<EditFieldInfo*,void>           maOldFieldHdl;
     Link<EditFieldInfo*,void>           maNewFieldHdl;
@@ -263,7 +263,7 @@ private:
     bool                            implExportDocument();
     bool                            implExportAnimations();
 
-    bool                            implExportMasterPages( const XDrawPageSequence& rxPages,
+    bool                            implExportMasterPages( const std::vector< Reference< XDrawPage > >& rxPages,
                                                                sal_Int32 nFirstPage, sal_Int32 nLastPage );
     bool                            implExportDrawPages( const XDrawPageSequence& rxPages,
                                                              sal_Int32 nFirstPage, sal_Int32 nLastPage );

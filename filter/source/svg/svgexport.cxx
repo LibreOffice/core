@@ -578,7 +578,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
     if( xOStm.is() )
     {
-        if( mSelectedPages.hasElements() && mMasterPageTargets.hasElements() )
+        if( mSelectedPages.hasElements() && !mMasterPageTargets.empty() )
         {
             Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( xOStm ), UNO_QUERY );
 
@@ -599,7 +599,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     implRegisterInterface( mSelectedPages[i] );
 
                 // create an id for each master page
-                for( sal_Int32 i = 0; i < mMasterPageTargets.getLength(); ++i )
+                for( size_t i = 0; i < mMasterPageTargets.size(); ++i )
                     implRegisterInterface( mMasterPageTargets[i] );
 
                 try
@@ -894,7 +894,7 @@ bool SVGFilter::implExportDocument()
 
             // #i124608# export a given object selection, so no MasterPage export at all
             if (!mbExportSelection)
-                implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.getLength() - 1 );
+                implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.size() - 1 );
             implExportDrawPages( mSelectedPages, 0, nLastPage );
 
             if( !mbSinglePage )
@@ -1478,7 +1478,7 @@ bool SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
 
 
 
-bool SVGFilter::implExportMasterPages( const SVGFilter::XDrawPageSequence & rxPages,
+bool SVGFilter::implExportMasterPages( const std::vector< Reference< XDrawPage > > & rxPages,
                                            sal_Int32 nFirstPage, sal_Int32 nLastPage )
 {
     DBG_ASSERT( nFirstPage <= nLastPage,
@@ -1896,7 +1896,7 @@ bool SVGFilter::implCreateObjects()
 
     sal_Int32 i, nCount;
 
-    for( i = 0, nCount = mMasterPageTargets.getLength(); i < nCount; ++i )
+    for( i = 0, nCount = mMasterPageTargets.size(); i < nCount; ++i )
     {
         const Reference< XDrawPage > & xMasterPage = mMasterPageTargets[i];
 
