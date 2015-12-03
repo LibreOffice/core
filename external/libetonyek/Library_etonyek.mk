@@ -26,7 +26,6 @@ $(eval $(call gb_Library_set_include,etonyek,\
 	-I$(call gb_UnpackedTarball_get_dir,libetonyek)/inc \
 	-I$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib \
 	-I$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib/contexts \
-	-I$(SRCDIR)/external/libetonyek/inc \
 	$$(INCLUDE) \
 ))
 
@@ -103,7 +102,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKBrContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKChartInfoElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKColorElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKCoreImageFilterDescriptorElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKDataElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKFilteredImageElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKFoElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKGeometryElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKGroupElement \

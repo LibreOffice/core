@@ -17,7 +17,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/win_build.patch.1 \
 	external/libetonyek/ubsan.patch \
 	external/libetonyek/rpath.patch \
-	external/libetonyek/0001-std-containers-of-incomplete-types-are-not-allowed.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)
