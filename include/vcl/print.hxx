@@ -574,7 +574,7 @@ public:
     VCL_PLUGIN_PUBLIC void              createProgressDialog();
     VCL_PLUGIN_PUBLIC bool              isProgressCanceled() const;
     SAL_DLLPRIVATE    void              setMultipage( const MultiPageSetup& );
-    SAL_DLLPRIVATE    const MultiPageSetup&
+    VCL_PLUGIN_PUBLIC const MultiPageSetup&
                                         getMultipage() const;
     VCL_PLUGIN_PUBLIC void              setLastPage( bool i_bLastPage );
     SAL_DLLPRIVATE    void              setReversePrint( bool i_bReverse );
