@@ -244,12 +244,12 @@ namespace toolkit
                 }
 
                 // found a set?
-                Sequence< Reference< XGraphic > > aImages;
+                std::vector< Image > aImages;
                 if ( ( nPreferredSet >= 0 ) && ( size_t( nPreferredSet ) < nImageSetCount ) )
                 {
                     // => set the images
                     ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );
-                    aImages.realloc( rImageSet.size() );
+                    aImages.resize( rImageSet.size() );
                     sal_Int32 imageIndex = 0;
                     for (   ::std::vector< CachedImage >::const_iterator cachedImage = rImageSet.begin();
                             cachedImage != rImageSet.end();
@@ -257,7 +257,7 @@ namespace toolkit
                         )
                     {
                         lcl_ensureImage_throw( xGraphicProvider, isHighContrast, *cachedImage );
-                        aImages[ imageIndex ] = cachedImage->xGraphic;
+                        aImages[ imageIndex ] = Image(cachedImage->xGraphic);
                     }
                 }
                 pThrobber->setImageList( aImages );

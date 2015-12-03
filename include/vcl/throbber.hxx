@@ -62,7 +62,6 @@ public:
     void stop();
     bool isRunning() const;
 
-    void setImageList( const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& ImageList );
     void setImageList( ::std::vector< Image > const& i_images );
 
     // default images
