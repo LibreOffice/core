@@ -109,7 +109,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
     DAVPropertyValue thePropertyValue;
     thePropertyValue.IsCaseSensitive = true;
 
-    assert( pname->nspace && "NPFR_propfind_iter - No namespace!" );
+    SAL_WARN_IF( !pname->nspace, "ucb.ucp.webdav", "NPFR_propfind_iter - No XML namespace!" );
 
     DAVProperties::createUCBPropName( pname->nspace,
                                       pname->name,
