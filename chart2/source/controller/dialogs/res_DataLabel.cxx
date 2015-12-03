@@ -133,13 +133,13 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, vcl::Window
     for( sal_Int32 nEnum=0; nEnum<m_pLB_LabelPlacement->GetEntryCount(); ++nEnum )
         aPlacementToStringMap[nEnum] = m_pLB_LabelPlacement->GetEntry(static_cast<sal_uInt16>(nEnum));
 
-    ::com::sun::star::uno::Sequence < sal_Int32 > aAvailabelPlacementList;
+    std::vector< sal_Int32 > aAvailabelPlacementList;
     const SfxPoolItem *pPoolItem = nullptr;
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, true, &pPoolItem) == SfxItemState::SET )
-        aAvailabelPlacementList = static_cast<const SfxIntegerListItem*>(pPoolItem)->GetConstSequence();
+        aAvailabelPlacementList = static_cast<const SfxIntegerListItem*>(pPoolItem)->GetList();
 
     m_pLB_LabelPlacement->Clear();
-    for( sal_Int32 nN=0; nN<aAvailabelPlacementList.getLength(); ++nN )
+    for( size_t nN=0; nN<aAvailabelPlacementList.size(); ++nN )
     {
         sal_uInt16 nListBoxPos = static_cast<sal_uInt16>( nN );
         sal_Int32 nPlacement = aAvailabelPlacementList[nN];

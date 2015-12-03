@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <svl/ilstitem.hxx>
 
@@ -33,24 +34,22 @@ SfxIntegerListItem::SfxIntegerListItem()
 
 SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const ::std::vector < sal_Int32 >& rList )
     : SfxPoolItem( which )
+    , m_aList( rList )
 {
-    m_aList.realloc( rList.size() );
-    for ( size_t n=0; n<rList.size(); ++n )
-        m_aList[n] = rList[n];
 }
 
 SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const css::uno::Sequence < sal_Int32 >& rList )
     : SfxPoolItem( which )
 {
-    m_aList.realloc( rList.getLength() );
+    m_aList.resize( rList.getLength() );
     for ( sal_Int32 n=0; n<rList.getLength(); ++n )
         m_aList[n] = rList[n];
 }
 
 SfxIntegerListItem::SfxIntegerListItem( const SfxIntegerListItem& rItem )
     : SfxPoolItem( rItem )
+    , m_aList( rItem.m_aList )
 {
-    m_aList = rItem.m_aList;
 }
 
 SfxIntegerListItem::~SfxIntegerListItem()
@@ -82,20 +81,17 @@ bool SfxIntegerListItem::PutValue  ( const css::uno::Any& rVal, sal_uInt8 )
         return true;
     }
 
-    return ( aNew >>= m_aList );
+    css::uno::Sequence<sal_Int32> aTempSeq;
+    bool bRet = aNew >>= aTempSeq;
+    if (bRet)
+        m_aList = comphelper::sequenceToContainer<std::vector<sal_Int32>>(aTempSeq);
+    return bRet;
 }
 
 bool SfxIntegerListItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
-    rVal <<= m_aList;
+    rVal <<= comphelper::containerToSequence(m_aList);
     return true;
-}
-
-void SfxIntegerListItem::GetList( ::std::vector< sal_Int32 >& rList ) const
-{
-    rList.reserve( m_aList.getLength() );
-    for ( sal_Int32 n=0; n<m_aList.getLength(); ++n )
-        rList.push_back( m_aList[n] );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

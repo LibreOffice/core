@@ -162,8 +162,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     if (rCoreAttrs.HasItem(SID_ATTR_BORDER_STYLES, &pItem))
     {
         const SfxIntegerListItem* p = static_cast<const SfxIntegerListItem*>(pItem);
-        std::vector<sal_Int32> aUsedStyles;
-        p->GetList(aUsedStyles);
+        std::vector<sal_Int32> aUsedStyles = p->GetList();
         for (size_t i = 0, n = aUsedStyles.size(); i < n; ++i)
             maUsedBorderStyles.insert(static_cast<sal_Int16>(aUsedStyles[i]));
     }

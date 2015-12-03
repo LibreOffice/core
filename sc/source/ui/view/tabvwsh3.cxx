@@ -796,7 +796,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             ::std::vector < sal_Int32 > aIndexList;
             const SfxIntegerListItem* pItem = rReq.GetArg<SfxIntegerListItem>(SID_SELECT_TABLES);
             if ( pItem )
-                pItem->GetList( aIndexList );
+                aIndexList = pItem->GetList();
             else
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
