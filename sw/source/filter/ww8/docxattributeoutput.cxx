@@ -4330,22 +4330,27 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOL
 
 bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
 {
-    uno::Reference< chart2::XChartDocument > xChartDoc;
     uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
-    if( xShape.is() )
-    {
-        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-        if( xPropSet.is() )
-            xChartDoc.set( xPropSet->getPropertyValue( "Model" ), uno::UNO_QUERY );
-    }
+    if (!xShape.is())
+        return false;
 
-    if( xChartDoc.is() )
-    {
-        m_postponedChart = pSdrObj;
-        m_postponedChartSize = rSize;
-        return true;
-    }
-    return false;
+    uno::Reference<beans::XPropertySet> const xPropSet(xShape, uno::UNO_QUERY);
+    if (!xPropSet.is())
+        return false;
+
+    OUString clsid; // why is the property of type string, not sequence<byte>?
+    xPropSet->getPropertyValue("CLSID") >>= clsid;
+    SAL_WARN_IF(clsid.isEmpty(), "sw.ww8", "OLE without CLSID?");
+    SvGlobalName aClassID;
+    bool const isValid(aClassID.MakeId(clsid));
+    SAL_WARN_IF(!isValid, "sw.ww8", "OLE with invalid CLSID?");
+
+    if (!SotExchange::IsChart(aClassID))
+        return false;
+
+    m_postponedChart = pSdrObj;
+    m_postponedChartSize = rSize;
+    return true;
 }
 
 /*
