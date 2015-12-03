@@ -212,6 +212,12 @@
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
           <value xml:lang="en-US" install:module="unxwnt">.uno:UnicodeNotationToggle</value>
+          <!--  tdf#73691
+                Translations of main menu keyboard ALT shortcuts can conflict with this assignment.
+                Those languages need to have blank assignments in order to avoid inheriting the en-US value.
+          -->
+          <value xml:lang="de"    install:module="unxwnt"></value>
+          <value xml:lang="vi"    install:module="unxwnt"></value>
         </prop>
       </node>
       <node oor:name="C_MOD2" oor:op="replace">
