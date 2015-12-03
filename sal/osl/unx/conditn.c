@@ -149,6 +149,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
    {
        OSL_TRACE("osl_setCondition : condition broadcast failed. Errno: %d; %s\n",
                   nRet, strerror(nRet));
+       (void)pthread_mutex_unlock(&pCond->m_Lock);
        return sal_False;
    }
 
