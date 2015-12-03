@@ -47,7 +47,6 @@
 #include <boost/logic/tribool.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

@@ -45,12 +45,12 @@
 #include <sidebar/ContextChangeBroadcaster.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
-#include <boost/ptr_container/ptr_map.hpp>
-#include <vector>
 #include <memory>
+#include <vector>
+#include <map>
 
 // Maps the Which() field to a pointer to a SfxPoolItem
-typedef boost::ptr_map<sal_uInt16, SfxPoolItem> SfxItemPtrMap;
+typedef std::map<sal_uInt16, std::unique_ptr<SfxPoolItem>> SfxItemPtrMap;
 
 
 using namespace com::sun::star;
@@ -58,7 +58,7 @@ using namespace com::sun::star;
 struct SfxShell_Impl: public SfxBroadcaster
 {
     OUString                    aObjectName;   // Name of Sbx-Objects
-    SfxItemPtrMap               aItems;        // Data exchange on Item level
+    SfxItemPtrMap               m_Items;       // Data exchange on Item level
     SfxViewShell*               pViewSh;       // SfxViewShell if Shell is
                                             // ViewFrame/ViewShell/SubShell list
     SfxViewFrame*               pFrame;        // Frame, if  <UI-active>
@@ -153,9 +153,9 @@ const SfxPoolItem* SfxShell::GetItem
     sal_uInt16  nSlotId         // Slot-Id of the querying <SfxPoolItem>s
 )   const
 {
-    SfxItemPtrMap::const_iterator it = pImp->aItems.find( nSlotId );
-    if( it != pImp->aItems.end() )
-        return it->second;
+    auto const it = pImp->m_Items.find( nSlotId );
+    if (it != pImp->m_Items.end())
+        return it->second.get();
     return nullptr;
 }
 
@@ -174,12 +174,12 @@ void SfxShell::PutItem
     SfxPoolItemHint aItemHint( pItem );
     sal_uInt16 nWhich = rItem.Which();
 
-    SfxItemPtrMap::iterator it = pImp->aItems.find( nWhich );
-    if( it != pImp->aItems.end() )
+    auto const it = pImp->m_Items.find(nWhich);
+    if (it != pImp->m_Items.end())
     {
         // Replace Item
-        pImp->aItems.erase( it );
-        pImp->aItems.insert( nWhich, pItem );
+        pImp->m_Items.erase( it );
+        pImp->m_Items.insert(std::make_pair(nWhich, std::unique_ptr<SfxPoolItem>(pItem)));
 
         // if active, notify Bindings
         SfxDispatcher *pDispat = GetDispatcher();
@@ -200,7 +200,7 @@ void SfxShell::PutItem
     else
     {
         Broadcast( aItemHint );
-        pImp->aItems.insert( nWhich, pItem );
+        pImp->m_Items.insert(std::make_pair(nWhich, std::unique_ptr<SfxPoolItem>(pItem)));
     }
 }
 
