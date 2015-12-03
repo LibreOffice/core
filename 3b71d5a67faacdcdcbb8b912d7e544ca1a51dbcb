@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_33656be1",
+        "filename": "sc/source/ui/dbgui/PivotLayoutTreeList.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T18:42:26Z",
+      "side": 1,
+      "message": "Is cloning that actually necessary? Apparently InsertEntryForItem() is called from InsertEntryForSourceTarget() above, where pOriginalItemValue is a pointer to an instance already managed elsewhere. So unless that is destructed before this ScPivotLayoutTreeList instance, simply inserting the pointer should do. But maybe I\u0027m missing something?",
+      "revId": "3b71d5a67faacdcdcbb8b912d7e544ca1a51dbcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
