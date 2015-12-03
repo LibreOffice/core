@@ -1059,6 +1059,7 @@ struct AnnotatingVisitor
                 maCurrState.maFontFamily=sValue;
                 break;
             case XML_FONT_SIZE:
+                maCurrState.mnParentFontSize=maParentStates.back().mnFontSize;
                 maCurrState.mnFontSize=convLength(sValue,maCurrState,'v');
                 break;
             case XML_FONT_STYLE:
