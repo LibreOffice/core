@@ -35,8 +35,8 @@
 
 #include <memory>
 #include <vector>
+#include <map>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
 
 namespace chart
 {
@@ -206,7 +206,7 @@ private: //member
 
     VDataSequence*  m_pValueSequenceForDataLabelNumberFormatDetection;
 
-    boost::ptr_map<OUString, VDataSequence> maPropertyMap;
+    std::map<OUString, VDataSequence> m_PropertyMap;
 
     mutable double m_fXMeanValue;
     mutable double m_fYMeanValue;

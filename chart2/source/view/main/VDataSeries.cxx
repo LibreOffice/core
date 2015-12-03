@@ -229,9 +229,9 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
                     m_aValues_Bubble_Size.init( xDataSequence );
                 else
                 {
-                    VDataSequence* pSequence = new VDataSequence();
-                    pSequence->init( xDataSequence );
-                    maPropertyMap.insert(aRole, pSequence);
+                    VDataSequence aSequence;
+                    aSequence.init(xDataSequence);
+                    m_PropertyMap.insert(std::make_pair(aRole, aSequence));
                 }
             }
             catch( const uno::Exception& e )
@@ -1087,7 +1087,7 @@ VDataSeries* VDataSeries::createCopyForTimeBased() const
     pNew->m_aValues_Y_First = m_aValues_Y_First;
     pNew->m_aValues_Y_Last = m_aValues_Y_Last;
     pNew->m_aValues_Bubble_Size = m_aValues_Bubble_Size;
-    pNew->maPropertyMap = maPropertyMap;
+    pNew->m_PropertyMap = m_PropertyMap;
 
     pNew->m_nPointCount = m_nPointCount;
 
@@ -1096,16 +1096,15 @@ VDataSeries* VDataSeries::createCopyForTimeBased() const
 
 double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropName ) const
 {
-    boost::ptr_map<OUString, VDataSequence>::const_iterator itr =
-        maPropertyMap.find(rPropName);
-    if(itr == maPropertyMap.end())
+    auto const itr = m_PropertyMap.find(rPropName);
+    if (itr == m_PropertyMap.end())
     {
         double fNan;
         ::rtl::math::setNan( &fNan );
         return fNan;
     }
 
-    const VDataSequence* pData = itr->second;
+    const VDataSequence* pData = &itr->second;
     double fValue = pData->getValue(nIndex);
     if(mpOldSeries && mpOldSeries->hasPropertyMapping(rPropName))
     {
@@ -1129,7 +1128,7 @@ double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropN
 
 bool VDataSeries::hasPropertyMapping(const OUString& rPropName ) const
 {
-    return maPropertyMap.find(rPropName) != maPropertyMap.end();
+    return m_PropertyMap.find(rPropName) != m_PropertyMap.end();
 }
 
 } //namespace chart
