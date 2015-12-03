@@ -83,10 +83,10 @@ public:
 
 OUString SwCaptionDialog::our_aSepTextSave(": "); // Caption separator text
 
-//Resolves: fdo#47427 disallow typing *or* pasting content into the category box
+//Resolves: tdf#47427 disallow typing *or* pasting invalid content into the category box
 OUString TextFilterAutoConvert::filter(const OUString &rText)
 {
-    if (rText != m_sNone && !SwCalc::IsValidVarName(rText))
+    if (!rText.isEmpty() && rText != m_sNone && !SwCalc::IsValidVarName(rText))
         return m_sLastGoodText;
     m_sLastGoodText = rText;
     return rText;
