@@ -164,7 +164,7 @@ public:
 
 private:
 
-    css::uno::Sequence< css::beans::PropertyValue > m_lCfgManagerSeq;
+    std::vector< css::beans::PropertyValue > m_lCfgManagerSeq;
     css::uno::Sequence< css::beans::PropertyValue > m_lNewVersionMenubarSettingsSeq;
     css::uno::Sequence< css::beans::PropertyValue > m_lNewVersionToolbarSettingsSeq;
 };
