@@ -231,6 +231,9 @@ friend class SwConnectionDisposedListener_Impl;
     /// merge to file _and_ merge to e-Mail
     SAL_DLLPRIVATE bool          MergeMailFiles(SwWrtShell* pSh,
                                         const SwMergeDescriptor& rMergeDescriptor, vcl::Window* pParent );
+    // merge to printer
+    SAL_DLLPRIVATE bool          MergeMailPrinter(SwWrtShell* pSh,
+                                        const SwMergeDescriptor& rMergeDescriptor, vcl::Window* pParent );
     SAL_DLLPRIVATE bool          ToNextRecord(SwDSParam* pParam, bool bReset);
 
     static css::uno::Reference< css::sdbc::XRowSet>

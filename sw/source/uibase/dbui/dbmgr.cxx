@@ -478,6 +478,11 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pP
             break;
 
         case DBMGR_MERGE_PRINTER:
+            // print files
+            bRet = MergeMailPrinter(&rMergeDesc.rSh,
+                    rMergeDesc, pParent);
+            break;
+
         case DBMGR_MERGE_EMAIL:
         case DBMGR_MERGE_FILE:
         case DBMGR_MERGE_SHELL:
@@ -903,26 +908,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     const bool bMergeShell = rMergeDescriptor.nMergeType == DBMGR_MERGE_SHELL;
     bool bCreateSingleFile = rMergeDescriptor.bCreateSingleFile;
 
-    if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
-    {
-        // It is possible to do MM printing in both modes for the same result, but the singlefile mode
-        // is slower because of all the temporary document copies and merging them together
-        // into the single file, while the other mode simply updates fields and prints for every record.
-        // However, this would cause one print job for every record, and e.g. CUPS refuses new jobs
-        // if it has many jobs enqueued (500 by default), and with the current printing framework
-        // (which uses a pull model) it's rather complicated to create a single print job
-        // in steps.
-        // To handle this, CUPS backend has been changed to cache all the documents to print
-        // and send them to CUPS only as one job at the very end. Therefore, with CUPS, it's ok
-        // to use the faster mode. As I have no idea about other platforms, keep them using
-        // the slower singlefile mode (or feel free to check them, or rewrite the printing code).
-#if ENABLE_CUPS && !defined(MACOSX)
-        bCreateSingleFile = !psp::PrinterInfoManager::get().supportsBatchPrint();
-#else
-        bCreateSingleFile = true;
-#endif
-    }
-
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     OUString sBodyMimeType;
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
@@ -1075,34 +1060,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                              bMergeShell, rMergeDescriptor, nMaxDumpDocs);
 
                         }
-                        else if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
-                        {
-                            assert(!bCreateSingleFile);
-                            if( 1 == nDocNo ) // set up printing only once at the beginning
-                            {
-                                // printing should be done synchronously otherwise the document
-                                // might already become invalid during the process
-                                uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
-
-                                aOptions.realloc( 2 );
-                                aOptions[ 0 ].Name = "Wait";
-                                aOptions[ 0 ].Value <<= sal_True;
-                                aOptions[ 1 ].Name = "MonitorVisible";
-                                aOptions[ 1 ].Value <<= sal_False;
-                                // move print options
-                                SetPrinterOptions(rMergeDescriptor, aOptions);
-                                pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
-                                SfxPrinter* pDocPrt = pWorkView->GetPrinter();
-                                JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
-                                bCancel = !Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
-#if ENABLE_CUPS && !defined(MACOSX)
-                                if( !bCancel )
-                                    psp::PrinterInfoManager::get().startBatchPrint();
-#endif
-                            }
-                            if( !bCancel && !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
-                                bCancel = true;
-                        }
                         else
                         {
                             assert( createTempFile );
@@ -1229,7 +1186,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
 
-            FinishMailMergeFile(xWorkDocSh, pWorkView, pTargetDoc, pTargetShell, bCreateSingleFile, rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER,
+            FinishMailMergeFile(xWorkDocSh, pWorkView, pTargetDoc, pTargetShell, bCreateSingleFile, false,
                                  pWorkDoc, pOldDBManager);
 
             pProgressDlg.disposeAndClear();
@@ -1237,7 +1194,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             // save the single output document
             bNoError = SavePrintDoc(xTargetDocShell, pTargetView, rMergeDescriptor, aTempFile,
                                         pStoreToFilter, pStoreToFilterOptions,
-                                        bMergeShell, bCreateSingleFile, rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER);
+                                        bMergeShell, bCreateSingleFile, false);
 
 
             //remove the temporary files
@@ -1254,6 +1211,210 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     {
         xMailDispatcher->stop();
         xMailDispatcher->shutdown();
+    }
+
+    return bNoError;
+}
+
+
+bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
+                                 const SwMergeDescriptor& rMergeDescriptor,
+                                 vcl::Window* pParent)
+{
+    //check if the doc is synchronized and contains at least one linked section
+    bool bSynchronizedDoc   = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFormatCount() > 1;
+    bool bCreateSingleFile = true;
+
+    bool bNoError = true;
+
+    // It is possible to do MM printing in both modes for the same result, but the single file mode
+    // is slower because of all the temporary document copies and merging them together
+    // into the single file, while the other mode simply updates fields and prints for every record.
+    // However, this would cause one print job for every record, and e.g. CUPS refuses new jobs
+    // if it has many jobs enqueued (500 by default), and with the current printing framework
+    // (which uses a pull model) it's rather complicated to create a single print job
+    // in steps.
+    // To handle this, CUPS backend has been changed to cache all the documents to print
+    // and send them to CUPS only as one job at the very end. Therefore, with CUPS, it's ok
+    // to use the faster mode. As I have no idea about other platforms, keep them using
+    // the slower single file mode (or feel free to check them, or rewrite the printing code).
+#if ENABLE_CUPS && !defined(MACOSX)
+        bCreateSingleFile = !psp::PrinterInfoManager::get().supportsBatchPrint();
+#endif
+
+
+    static sal_Int32 nMaxDumpDocs = 0;
+
+    CreateDumpDocs(nMaxDumpDocs);
+
+    // Try saving the source document
+    SfxDispatcher* pSfxDispatcher = pSourceShell->GetView().GetViewFrame()->GetDispatcher();
+    SwDocShell* pSourceDocSh = pSourceShell->GetView().GetDocShell();
+
+    SetSourceProp(pSourceDocSh);
+
+    if( pSourceDocSh->IsModified() )
+        pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SfxCallMode::SYNCHRON|SfxCallMode::RECORD);
+    else
+    {
+        const SfxFilter* pStoreToFilter = nullptr;
+        const OUString* pStoreToFilterOptions = nullptr;
+
+        CreateStoreToFilter(pStoreToFilter, pStoreToFilterOptions, pSourceDocSh, false, rMergeDescriptor);
+
+        bCancel = false;
+
+        // in case of creating a single resulting file this has to be created here
+        SwWrtShell* pTargetShell = nullptr;
+        SwDoc* pTargetDoc        = nullptr;
+
+        SfxObjectShellRef xTargetDocShell;
+        OUString sModifiedStartingPageDesc;
+        OUString sStartingPageDesc;
+        VclPtr<CancelableDialog> pProgressDlg;
+
+        SwView* pTargetView              = nullptr;
+        sal_uInt16 nStartingPageNo       = 0;
+        vcl::Window *pSourceWindow       = nullptr;
+        bool bPageStylesWithHeaderFooter = false;
+
+
+        CreateProgessDlg(pSourceWindow, pProgressDlg, false, pSourceShell, pParent);
+
+        if(bCreateSingleFile)
+        {
+
+            bPageStylesWithHeaderFooter = CreateTargetDocShell(nMaxDumpDocs, false, pSourceWindow, pSourceShell,
+                                                                pSourceDocSh, xTargetDocShell, pTargetDoc, pTargetShell,
+                                                                pTargetView, nStartingPageNo, sStartingPageDesc);
+
+            sModifiedStartingPageDesc = sStartingPageDesc;
+        }
+
+        // Progress, to prohibit KeyInputs
+        SfxProgress aProgress(pSourceDocSh, ::aEmptyOUStr, 1);
+
+        // lock all dispatchers
+        LockUnlockDisp(true, pSourceDocSh);
+
+        sal_Int32 nDocNo       = 1;
+        // For single file mode, the number of pages in the target document so far, which is used
+        // by AppendDoc() to adjust position of page-bound objects. Getting this information directly
+        // from the target doc would require repeated layouts of the doc, which is expensive, but
+        // it can be manually computed from the source documents (for which we do layouts, so the page
+        // count is known, and there is a blank page between each of them in the target document).
+        int targetDocPageCount = 0;
+
+
+        long nStartRow, nEndRow;
+        // collect temporary files
+        ::std::vector< OUString> aFilesToRemove;
+
+        // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
+        SfxObjectShellLock xWorkDocSh;
+        // a view frame for the document
+        bool bFreezedLayouts       = false;
+        SwView* pWorkView          = nullptr;
+        SwDoc* pWorkDoc            = nullptr;
+        SwDBManager* pOldDBManager = nullptr;
+
+        std::shared_ptr< vcl::PrinterController > prnCtrl;
+
+        do
+        {
+            nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
+
+            if( !bCancel )
+            {
+                std::unique_ptr< INetURLObject > dum;
+                UpdateProgressDlg(false, pProgressDlg, false, dum, pSourceDocSh, nDocNo);
+
+                // Create a copy of the source document and work with that one instead of the source.
+                // If we're not in the single file mode (which requires modifying the document for the merging),
+                // it is enough to do this just once.
+                if(1 == nDocNo || bCreateSingleFile)
+                    CreateWorkDoc(xWorkDocSh, pWorkView, pWorkDoc, pOldDBManager, pSourceDocSh, nMaxDumpDocs, nDocNo);
+
+                SwWrtShell &rWorkShell = pWorkView->GetWrtShell();
+
+                UpdateExpFields(rWorkShell, xWorkDocSh);
+
+                if(bCreateSingleFile)
+                    MergeSingleFiles(pWorkDoc, rWorkShell, pTargetShell, pTargetDoc, xWorkDocSh, xTargetDocShell,
+                                     bPageStylesWithHeaderFooter, bSynchronizedDoc, sModifiedStartingPageDesc,
+                                     sStartingPageDesc, nDocNo, nStartRow, nStartingPageNo, targetDocPageCount,
+                                     false, rMergeDescriptor, nMaxDumpDocs);
+                else
+                {
+
+                    if( 1 == nDocNo ) // set up printing only once at the beginning
+                    {
+                        // printing should be done synchronously otherwise the document
+                        // might already become invalid during the process
+                        uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
+
+                        aOptions.realloc( 2 );
+                        aOptions[ 0 ].Name = "Wait";
+                        aOptions[ 0 ].Value <<= sal_True;
+                        aOptions[ 1 ].Name = "MonitorVisible";
+                        aOptions[ 1 ].Value <<= sal_False;
+
+                        // move print options
+                        SetPrinterOptions(rMergeDescriptor, aOptions);
+                        pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
+                        prnCtrl = pWorkView->GetPrinterController();
+
+                        SfxPrinter* pDocPrt = pWorkView->GetPrinter();
+                        JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
+                        bCancel = !Printer::PreparePrintJob( prnCtrl, aJobSetup );
+
+
+#if ENABLE_CUPS && !defined(MACOSX)
+                        if( !bCancel )
+                            psp::PrinterInfoManager::get().startBatchPrint();
+#endif
+                    }
+
+                    if( !bCancel && !Printer::ExecutePrintJob( prnCtrl ))
+                        bCancel = true;
+                }
+
+                if(bCreateSingleFile)
+                {
+                    ResetWorkDoc(pWorkDoc, xWorkDocSh, pOldDBManager);
+                }
+            }
+            nDocNo++;
+            nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
+
+            // Freeze the layouts of the target document after the first inserted
+            // sub-document, to get the correct PageDesc.
+            if(!bFreezedLayouts && bCreateSingleFile)
+            {
+                FreezeLayouts(pTargetShell, true);
+                bFreezedLayouts = true;
+            }
+        } while( !bCancel &&
+            (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+
+        FinishMailMergeFile(xWorkDocSh, pWorkView, pTargetDoc, pTargetShell, bCreateSingleFile, true,
+                                 pWorkDoc, pOldDBManager);
+
+        pProgressDlg.disposeAndClear();
+
+            // save the single output document
+        std::unique_ptr<utl::TempFile> dum;
+        bNoError = SavePrintDoc(xTargetDocShell, pTargetView, rMergeDescriptor, dum,
+                                    pStoreToFilter, pStoreToFilterOptions,
+                                    false, bCreateSingleFile, true);
+
+        //remove the temporary files
+        RemoveTmpFiles(aFilesToRemove);
+
+        // unlock all dispatchers
+        LockUnlockDisp(false, pSourceDocSh);
+
+        SW_MOD()->SetView(&pSourceShell->GetView());
     }
 
     return bNoError;
