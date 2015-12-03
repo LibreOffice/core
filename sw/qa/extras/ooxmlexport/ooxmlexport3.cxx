@@ -984,6 +984,9 @@ DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.
      if (!pXmlDoc)
          return;
       assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
+
+    // let's also assert that the formula was exported properly
+    assertXPathContent(pXmlDoc, "//wps:txbx/w:txbxContent/w:tbl/w:tr/w:tc[2]/w:p/m:oMath/m:sSubSup/m:e/m:r/m:t", OUString::fromUtf8("\xcf\x83"));
 }
 
 #endif
