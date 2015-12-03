@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "dab17558_50b0e58b",
+        "filename": "include/svx/svdlayer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-12-03T12:16:42Z",
+      "side": 1,
+      "message": "Then the sentence was so misleading that I actually thought it meant GetUniqueLayerID \"Finds a LayerID, but it\u0027s not used anyway\" rather than \"Find an *unused* LayerID.\" Huge difference. You were right.",
+      "parentUuid": "dab17558_70c1a92e",
+      "revId": "08f7ba7371824cb1c7b999166dec00d4bd4cffb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab17558_ba1c9078",
         "filename": "include/svx/svdorect.hxx",
         "patchSetId": 1
