@@ -412,5 +412,56 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf90230, "empty.odt", "10-testing-addresses.od
     executeMailMerge();
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    // Copying bookmarks for MM was broken because of the StartOfContent node copy
+    // copyied marks were off by one
+    executeMailMerge();
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    IDocumentMarkAccess const *pIDMA = pTextDoc->GetDocShell()->GetDoc()->getIDocumentMarkAccess();
+    // There is just one mark...
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pIDMA->getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pIDMA->getBookmarksCount());
+    IDocumentMarkAccess::const_iterator_t mark = pIDMA->getAllMarksBegin();
+    // and it's a TEXT_FIELDMARK
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(IDocumentMarkAccess::GetType( **mark )),
+                          sal_Int32(IDocumentMarkAccess::MarkType::TEXT_FIELDMARK ) );
+    sal_uLong src_pos = (*mark)->GetMarkPos().nNode.GetIndex();
+
+    // Get the size of the document in nodes
+    SwDoc *doc = pTextDoc->GetDocShell()->GetDoc();
+    sal_uLong size = doc->GetNodes().GetEndOfContent().GetIndex() - doc->GetNodes().GetEndOfExtras().GetIndex();
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(13), size );
+    size -= 2; // For common start and end nodes
+
+    // Iterate over all field marks in the target document and check that they
+    // are positioned at a multitude of the document size
+    SwXTextDocument* pMMTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pMMTextDoc);
+    pIDMA = pMMTextDoc->GetDocShell()->GetDoc()->getIDocumentMarkAccess();
+    // The target document has the duplicated amount of bookmarks
+    // as the helping uno bookmark from the mail merge is left in the doc
+    // TODO should be fixed!
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20), pIDMA->getAllMarksCount());
+    std::set<sal_uLong> pages;
+    sal_Int32 countFieldMarks = 0;
+    for( mark = pIDMA->getAllMarksBegin(); mark != pIDMA->getAllMarksEnd(); ++mark )
+    {
+        IDocumentMarkAccess::MarkType markType = IDocumentMarkAccess::GetType( **mark );
+        if( markType == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK )
+        {
+            sal_uLong pos = (*mark)->GetMarkPos().nNode.GetIndex() - src_pos;
+            CPPUNIT_ASSERT_EQUAL(sal_uLong(0), pos % size);
+            CPPUNIT_ASSERT(pages.insert(pos).second);
+            countFieldMarks++;
+        }
+        else // see previous TODO
+            CPPUNIT_ASSERT_EQUAL( sal_Int32(markType), sal_Int32(IDocumentMarkAccess::MarkType::UNO_BOOKMARK) );
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), countFieldMarks);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
