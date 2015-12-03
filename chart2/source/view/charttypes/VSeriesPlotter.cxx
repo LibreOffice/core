@@ -60,6 +60,7 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -84,7 +85,6 @@
 #include <map>
 #include <unordered_map>
 
-#include <boost/ptr_container/ptr_map.hpp>
 
 namespace chart {
 
@@ -1684,9 +1684,9 @@ class PerXMinMaxCalculator
 {
     typedef std::pair<double, double> MinMaxType;
     typedef std::map<size_t, MinMaxType> SeriesMinMaxType;
-    typedef boost::ptr_map<double, SeriesMinMaxType> GroupMinMaxType;
+    typedef std::map<double, std::unique_ptr<SeriesMinMaxType>> GroupMinMaxType;
     typedef std::unordered_map<double, MinMaxType> TotalStoreType;
-    GroupMinMaxType maSeriesGroup;
+    GroupMinMaxType m_SeriesGroup;
     size_t mnCurSeries;
 
 public:
@@ -1751,12 +1751,11 @@ private:
     void getTotalStore(TotalStoreType& rStore) const
     {
         TotalStoreType aStore;
-        GroupMinMaxType::const_iterator it = maSeriesGroup.begin(), itEnd = maSeriesGroup.end();
-        for (; it != itEnd; ++it)
+        for (auto const& it : m_SeriesGroup)
         {
-            double fX = it->first;
+            double fX = it.first;
 
-            const SeriesMinMaxType& rSeries = *it->second;
+            const SeriesMinMaxType& rSeries = *it.second;
             SeriesMinMaxType::const_iterator itSeries = rSeries.begin(), itSeriesEnd = rSeries.end();
             for (; itSeries != itSeriesEnd; ++itSeries)
             {
@@ -1781,11 +1780,11 @@ private:
 
     SeriesMinMaxType* getByXValue(double fX)
     {
-        GroupMinMaxType::iterator it = maSeriesGroup.find(fX);
-        if (it == maSeriesGroup.end())
+        GroupMinMaxType::iterator it = m_SeriesGroup.find(fX);
+        if (it == m_SeriesGroup.end())
         {
             std::pair<GroupMinMaxType::iterator,bool> r =
-                maSeriesGroup.insert(fX, new SeriesMinMaxType);
+                m_SeriesGroup.insert(std::make_pair(fX, o3tl::make_unique<SeriesMinMaxType>()));
 
             if (!r.second)
                 // insertion failed.
@@ -1794,7 +1793,7 @@ private:
             it = r.first;
         }
 
-        return it->second;
+        return it->second.get();
     }
 };
 
