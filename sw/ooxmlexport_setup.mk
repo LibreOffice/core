@@ -33,6 +33,9 @@ define sw_ooxmlexport_components
 	dbaccess/util/dba \
 	drawinglayer/drawinglayer \
 	embeddedobj/util/embobj \
+	$(if $(filter-out WNT,$(OS)), \
+		embeddedobj/source/msole/emboleobj \
+	) \
 	filter/source/config/cache/filterconfig1 \
 	filter/source/odfflatxml/odfflatxml \
 	filter/source/xmlfilterdetect/xmlfd \
@@ -45,6 +48,9 @@ define sw_ooxmlexport_components
 	package/source/xstor/xstor \
 	package/util/package2 \
 	sax/source/expatwrap/expwrap \
+	sc/util/sc \
+	sc/util/scd \
+	sc/util/scfilt \
 	sw/util/sw \
 	sw/util/swd \
 	sw/util/msword \
