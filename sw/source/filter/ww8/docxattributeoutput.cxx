@@ -4414,7 +4414,7 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
     assert(!clsid.isEmpty());
     SvGlobalName aClassID;
     bool const isValid(aClassID.MakeId(clsid));
-    assert(isValid);
+    assert(isValid); (void)isValid;
 
     if (!SotExchange::IsChart(aClassID))
         return false;
