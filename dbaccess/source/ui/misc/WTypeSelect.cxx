@@ -424,22 +424,49 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
                 ptWhere = pComEvt->GetMousePosPixel();
 
             PopupMenu aContextMenu(ModuleRes(RID_SBA_RTF_PKEYPOPUP));
+            // Should primary key checkbox be checked?
+            const sal_Int32 nCount = GetEntryCount();
+            bool bCheckOk = true;
+            bool bAreAllFieldsUnselected = true;
+            for(sal_Int32 j = 0 ; j < nCount ; ++j)
+            {
+                OFieldDescription* pFieldDescr = static_cast<OFieldDescription*>(GetEntryData(j));
+                // if at least 1 of the selected fields isn't considered as part of primary key,
+                // don't check Primary key checkbox
+                if(
+                    (pFieldDescr && !pFieldDescr->IsPrimaryKey() && IsEntryPosSelected(j))
+                     ||
+                    ( pFieldDescr && pFieldDescr->IsPrimaryKey() && !IsEntryPosSelected(j))
+                  )
+                {
+                    bCheckOk = false;
+                }
+                if (IsEntryPosSelected(j))
+                    bAreAllFieldsUnselected = false;
+            }
+            if (bAreAllFieldsUnselected)
+                bCheckOk = false;
+
+            if (bCheckOk)
+                aContextMenu.CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY, true );
+
             switch( aContextMenu.Execute( this, ptWhere ) )
             {
                 case SID_TABLEDESIGN_TABED_PRIMARYKEY:
                 {
-                    const sal_Int32 nCount = GetEntryCount();
                     for(sal_Int32 j = 0 ; j < nCount ; ++j)
                     {
                         OFieldDescription* pFieldDescr = static_cast<OFieldDescription*>(GetEntryData(j));
                         if( pFieldDescr )
                         {
-                            if(pFieldDescr->IsPrimaryKey() && !IsEntryPosSelected(j))
-                                setPrimaryKey(pFieldDescr,j);
-                            else if(IsEntryPosSelected(j))
+                            if(!bCheckOk && IsEntryPosSelected(j))
                             {
-                                setPrimaryKey(pFieldDescr,j,!pFieldDescr->IsPrimaryKey());
+                                setPrimaryKey(pFieldDescr,j,true);
                                 SelectEntryPos(j);
+                            }
+                            else
+                            {
+                                setPrimaryKey(pFieldDescr,j);
                             }
                         }
                     }
