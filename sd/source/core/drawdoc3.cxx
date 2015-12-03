@@ -51,6 +51,7 @@
 #include "strmname.h"
 #include "anminfo.hxx"
 #include "customshowlist.hxx"
+#include "sdxfer.hxx"
 
 #include "../ui/inc/unmovss.hxx"
 #include "../ui/inc/unchss.hxx"
@@ -110,7 +111,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
         {
             // Ignore Layouts with "Default" these seem to be special - in the sense that there are lot of assumption all over Impress
             // about this
-            if( bRenameDuplicates && aTest != OUString( SdResId( STR_LAYOUT_DEFAULT_NAME ) ) && pTestPage->getHash() != pBMMPage->getHash() )
+            if( bRenameDuplicates && aTest != OUString( SdResId( STR_LAYOUT_DEFAULT_NAME ) ) && pTestPage->stringify() != pBMMPage->stringify() )
             {
                 pBookmarkDoc->RenameLayoutTemplate(
                     pBMMPage->GetLayoutName(), pBMMPage->GetName() + "_");
@@ -437,17 +438,26 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     sal_Int32 nNRight = pNPage->GetRgtBorder();
     sal_Int32 nNUpper = pNPage->GetUppBorder();
     sal_Int32 nNLower = pNPage->GetLwrBorder();
-    Orientation eNOrient = pRefPage->GetOrientation();
+    Orientation eNOrient = pNPage->GetOrientation();
 
     // Adapt page size and margins to those of the later pages?
     pRefPage = GetSdPage(nSdPageCount - 1, PK_STANDARD);
 
     if( bNoDialogs )
     {
-        if( rBookmarkList.empty() )
-            bScaleObjects = pRefPage->IsScaleObjects();
-        else
-            bScaleObjects = true;
+        // If this is clipboard, then no need to scale objects:
+        // this will make copied masters to differ from the originals,
+        // and thus InsertBookmarkAsPage_FindDuplicateLayouts will
+        // duplicate masters on insert to same document
+        bool bIsClipBoard = (SD_MOD()->pTransferClip &&
+                             SD_MOD()->pTransferClip->GetWorkDocument() == this);
+        if (!bIsClipBoard)
+        {
+            if (rBookmarkList.empty())
+                bScaleObjects = pRefPage->IsScaleObjects();
+            else
+                bScaleObjects = true;
+        }
     }
     else
     {
