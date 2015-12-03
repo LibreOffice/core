@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_3051e163",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-12-03T10:00:03Z",
+      "side": 1,
+      "message": "This is \"The Last Line Effect\" (see http://www.viva64.com/en/b/0260/)",
+      "range": {
+        "startLine": 441,
+        "startChar": 28,
+        "endLine": 441,
+        "endChar": 29
+      },
+      "revId": "e4eea13cc009bd899c7f905081564bacbd004616",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_9077ed01",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-12-03T10:00:03Z",
+      "side": 1,
+      "message": "Another option is to pass this info to the function with an argument.",
+      "range": {
+        "startLine": 452,
+        "startChar": 8,
+        "endLine": 453,
+        "endChar": 81
+      },
+      "revId": "e4eea13cc009bd899c7f905081564bacbd004616",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
