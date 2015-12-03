@@ -30,6 +30,7 @@
 #include "cellsuno.hxx"
 #include <vector>
 #include <basic/sberrors.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -115,11 +116,7 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
             for (sal_Int32 n = 0; n < nChartNames; n++ )
                 aChartNamesVector.push_back(scurchartnames[n]);
         }
-        sChartNames.realloc( aChartNamesVector.size() );
-        std::vector< OUString > ::const_iterator it = aChartNamesVector.begin();
-        std::vector< OUString > ::const_iterator it_end = aChartNamesVector.end();
-        for ( sal_Int32 index = 0 ; it != it_end; ++it, ++index )
-            sChartNames[index] = *it;
+        sChartNames = comphelper::containerToSequence( aChartNamesVector );
     }
     catch (uno::Exception& )
     {

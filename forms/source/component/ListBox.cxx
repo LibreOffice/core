@@ -44,6 +44,7 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/listenernotification.hxx>
+#include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/dbconversion.hxx>
@@ -1402,12 +1403,7 @@ namespace frm
             }
 
             // copy the indexes to the sequence
-            aSelectIndexes.realloc( aSelectionSet.size() );
-            ::std::copy(
-                aSelectionSet.begin(),
-                aSelectionSet.end(),
-                aSelectIndexes.getArray()
-            );
+            aSelectIndexes = comphelper::containerToSequence<sal_Int16>( aSelectionSet );
         }
         break;
 
