@@ -85,13 +85,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SfxItemState::DEFAULT == rSet.GetItemState( SID_CONNECTION_DLG ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_CONNECTION_NEW_ROUTING ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_OBJECT_SHEAR ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( SID_CONVERT_TO_1BIT_THRESHOLD ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( SID_CONVERT_TO_1BIT_MATRIX ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( SID_CONVERT_TO_4BIT_GRAYS ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( SID_CONVERT_TO_4BIT_COLORS ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( SID_CONVERT_TO_8BIT_GRAYS ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( SID_CONVERT_TO_8BIT_COLORS ) ||
-            SfxItemState::DEFAULT == rSet.GetItemState( SID_CONVERT_TO_24BIT ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_LEFT ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_CENTER ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_RIGHT ) ||
@@ -144,19 +137,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             if(!(dynamic_cast< const SdrObjGroup *>( pObj ) !=  nullptr && nInv == SdrInventor))
             {
                 rSet.DisableItem(SID_UNGROUP);
-            }
-            if(!pSdrGrafObj ||
-                pSdrGrafObj->GetGraphicType() != GRAPHIC_BITMAP ||
-                pSdrGrafObj->IsLinkedGraphic() ||
-                pSdrGrafObj->isEmbeddedSvg())
-            {
-                rSet.DisableItem(SID_CONVERT_TO_1BIT_THRESHOLD);
-                rSet.DisableItem(SID_CONVERT_TO_1BIT_MATRIX);
-                rSet.DisableItem(SID_CONVERT_TO_4BIT_GRAYS);
-                rSet.DisableItem(SID_CONVERT_TO_4BIT_COLORS);
-                rSet.DisableItem(SID_CONVERT_TO_8BIT_GRAYS);
-                rSet.DisableItem(SID_CONVERT_TO_8BIT_COLORS);
-                rSet.DisableItem(SID_CONVERT_TO_24BIT);
             }
 
             if( nInv == SdrInventor &&
@@ -315,7 +295,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             bool bText = false;
             bool bLine = false;
             bool bGroup = false;
-            bool bGraf = false;
             bool bDrawObj = false;
             bool b3dObj = false;
             bool bTable = false;
@@ -353,7 +332,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
                         case OBJ_GRUP: bGroup = true; break;
 
-                        case OBJ_GRAF: bGraf = true; break;
+                        case OBJ_GRAF: break;
 
                         case OBJ_TABLE: bTable = true; break;
                     }
@@ -402,17 +381,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
             if( !bMeasureObj )
                 rSet.DisableItem( SID_MEASURE_DLG );
-
-            if (!bGraf)
-            {
-                rSet.DisableItem(SID_CONVERT_TO_1BIT_THRESHOLD);
-                rSet.DisableItem(SID_CONVERT_TO_1BIT_MATRIX);
-                rSet.DisableItem(SID_CONVERT_TO_4BIT_GRAYS);
-                rSet.DisableItem(SID_CONVERT_TO_4BIT_COLORS);
-                rSet.DisableItem(SID_CONVERT_TO_8BIT_GRAYS);
-                rSet.DisableItem(SID_CONVERT_TO_8BIT_COLORS);
-                rSet.DisableItem(SID_CONVERT_TO_24BIT);
-            }
 
             if(bE3dCompoundObject)
             {

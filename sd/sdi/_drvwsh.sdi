@@ -2220,41 +2220,6 @@ interface DrawView
         ExecMethod = ExecOptionsBar ;
         StateMethod = GetOptionsBarState ;
     ]
-    SID_CONVERT_TO_1BIT_THRESHOLD // ole : no, status : ?
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_CONVERT_TO_1BIT_MATRIX // ole : no, status : ?
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_CONVERT_TO_4BIT_GRAYS // ole : no, status : ?
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_CONVERT_TO_4BIT_COLORS // ole : no, status : ?
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_CONVERT_TO_8BIT_GRAYS // ole : no, status : ?
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_CONVERT_TO_8BIT_COLORS // ole : no, status : ?
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_CONVERT_TO_24BIT // ole : no, status : ?
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
     SID_HYPHENATION // ole : no, status : play rec
     [
         ExecMethod = FuTemporary ;

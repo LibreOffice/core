@@ -212,15 +212,7 @@
 #define SID_SNAP_POINTS                     (SID_SD_START+157)
 #define SID_QUICKEDIT                       (SID_SD_START+158)
 #define SID_PICK_THROUGH                    (SID_SD_START+159)
-    // FREE
-#define SID_CONVERT_TO_1BIT_THRESHOLD       (SID_SD_START+161)
-#define SID_CONVERT_TO_1BIT_MATRIX          (SID_SD_START+162)
-#define SID_CONVERT_TO_4BIT_GRAYS           (SID_SD_START+163)
-#define SID_CONVERT_TO_4BIT_COLORS          (SID_SD_START+164)
-#define SID_CONVERT_TO_8BIT_GRAYS           (SID_SD_START+165)
-#define SID_CONVERT_TO_8BIT_COLORS          (SID_SD_START+166)
-#define SID_CONVERT_TO_24BIT                (SID_SD_START+167)
-    // FREE
+    // FREE 160 - 168
 #define SID_DOUBLECLICK_TEXTEDIT            (SID_SD_START+169)
 #define SID_CLICK_CHANGE_ROTATION           (SID_SD_START+170)
 #define SID_DRAWTBX_ARROWS                  (SID_SD_START+171)

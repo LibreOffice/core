@@ -3239,11 +3239,6 @@
           <value xml:lang="en-US">~Filters</value>
         </prop>
       </node>
-      <node oor:name=".uno:FormatImageModeMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Mo~de</value>
-        </prop>
-      </node>
       <node oor:name=".uno:FormatTextMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Text</value>

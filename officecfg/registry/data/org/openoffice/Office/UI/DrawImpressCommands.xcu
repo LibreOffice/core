@@ -1346,41 +1346,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:ConvertTo1BitThreshold" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">1 Bit Threshold</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ConvertTo1BitMatrix" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">1 Bit Dithered</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ConvertTo4BitGrays" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">4 Bit grayscales</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ConvertTo4BitColors" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">4 Bit color palette</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ConvertTo8BitGrays" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">8 Bit Grayscales</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ConvertTo8BitColors" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">8 Bit color palette</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ConvertToTrueColor" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">24 Bit True Color</value>
-        </prop>
-      </node>
       <node oor:name=".uno:DoubleClickTextEdit" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Double-click to edit Text</value>

@@ -349,17 +349,6 @@
                           <menu:menuitem menu:id=".uno:GraphicFilterSolarize"/>
                       </menu:menupopup>
                   </menu:menu>
-                  <menu:menu menu:id=".uno:FormatImageModeMenu">
-                      <menu:menupopup>
-                          <menu:menuitem menu:id=".uno:ConvertTo1BitMatrix"/>
-                          <menu:menuitem menu:id=".uno:ConvertTo1BitThreshold"/>
-                          <menu:menuitem menu:id=".uno:ConvertTo4BitColors"/>
-                          <menu:menuitem menu:id=".uno:ConvertTo4BitGrays"/>
-                          <menu:menuitem menu:id=".uno:ConvertTo8BitColors"/>
-                          <menu:menuitem menu:id=".uno:ConvertTo8BitGrays"/>
-                          <menu:menuitem menu:id=".uno:ConvertToTrueColor"/>
-                      </menu:menupopup>
-                  </menu:menu>
                   <menu:menuitem menu:id=".uno:ColorSettings"/>
               </menu:menupopup>
             </menu:menu>
