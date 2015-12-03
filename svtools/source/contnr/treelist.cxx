@@ -22,10 +22,11 @@
 #include <svtools/viewdataentry.hxx>
 #include <osl/diagnose.h>
 
-#include <boost/ptr_container/ptr_map.hpp>
+#include <memory>
+#include <map>
 
 
-typedef boost::ptr_map<SvTreeListEntry*, SvViewDataEntry> SvDataTable;
+typedef std::map<SvTreeListEntry*, std::unique_ptr<SvViewDataEntry>> SvDataTable;
 
 struct SvListView::Impl
 {
@@ -1223,21 +1224,20 @@ void SvListView::Impl::InitTable()
     }
 
     SvTreeListEntry* pEntry;
-    SvViewDataEntry* pViewData;
 
     // insert root entry
     pEntry = m_rThis.pModel->pRootItem;
-    pViewData = new SvViewDataEntry;
+    std::unique_ptr<SvViewDataEntry> pViewData(new SvViewDataEntry);
     pViewData->SetExpanded(true);
-    m_DataTable.insert( pEntry, pViewData );
+    m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
     // now all the other entries
     pEntry = m_rThis.pModel->First();
     while( pEntry )
     {
-        pViewData = m_rThis.CreateViewData( pEntry );
+        pViewData.reset(m_rThis.CreateViewData( pEntry ));
         DBG_ASSERT(pViewData,"InitTable:No ViewData");
-        m_rThis.InitViewData( pViewData, pEntry );
-        m_DataTable.insert( pEntry, pViewData );
+        m_rThis.InitViewData( pViewData.get(), pEntry );
+        m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
         pEntry = m_rThis.pModel->Next( pEntry );
     }
 }
@@ -1257,9 +1257,9 @@ void SvListView::Clear()
     {
         // insert root entry
         SvTreeListEntry* pEntry = pModel->pRootItem;
-        SvViewDataEntry* pViewData = new SvViewDataEntry;
+        std::unique_ptr<SvViewDataEntry> pViewData(new SvViewDataEntry);
         pViewData->SetExpanded(true);
-        m_pImpl->m_DataTable.insert( pEntry, pViewData );
+        m_pImpl->m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
     }
 }
 
@@ -1325,7 +1325,7 @@ void SvListView::Impl::ActionMoving( SvTreeListEntry* pEntry,SvTreeListEntry*,sa
     DBG_ASSERT(pParent,"Model not consistent");
     if (pParent != m_rThis.pModel->pRootItem && pParent->m_Children.size() == 1)
     {
-        SvViewDataEntry* pViewData = m_DataTable.find( pParent )->second;
+        SvViewDataEntry* pViewData = m_DataTable.find( pParent )->second.get();
         pViewData->SetExpanded(false);
     }
     // preliminary
@@ -1344,10 +1344,10 @@ void SvListView::Impl::ActionMoved( SvTreeListEntry* /* pEntry */ ,
 void SvListView::Impl::ActionInserted( SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Insert:No Entry");
-    SvViewDataEntry* pData = m_rThis.CreateViewData( pEntry );
-    m_rThis.InitViewData( pData, pEntry );
+    std::unique_ptr<SvViewDataEntry> pData(m_rThis.CreateViewData( pEntry ));
+    m_rThis.InitViewData( pData.get(), pEntry );
     std::pair<SvDataTable::iterator, bool> aSuccess =
-        m_DataTable.insert( pEntry, pData );
+        m_DataTable.insert(std::make_pair(pEntry, std::move(pData)));
     DBG_ASSERT(aSuccess.second,"Entry already in View");
     if (m_nVisibleCount && m_rThis.pModel->IsEntryVisible(&m_rThis, pEntry))
     {
@@ -1369,10 +1369,10 @@ void SvListView::Impl::ActionInsertedTree( SvTreeListEntry* pEntry )
     while( pCurEntry )
     {
         DBG_ASSERT(m_DataTable.find(pCurEntry) != m_DataTable.end(),"Entry already in Table");
-        SvViewDataEntry* pViewData = m_rThis.CreateViewData( pCurEntry );
+        std::unique_ptr<SvViewDataEntry> pViewData(m_rThis.CreateViewData(pCurEntry));
         DBG_ASSERT(pViewData,"No ViewData");
-        m_rThis.InitViewData( pViewData, pEntry );
-        m_DataTable.insert( pCurEntry, pViewData );
+        m_rThis.InitViewData( pViewData.get(), pEntry );
+        m_DataTable.insert(std::make_pair(pCurEntry, std::move(pViewData)));
         pCurEntry = m_rThis.pModel->Next( pCurEntry );
         if ( pCurEntry && m_rThis.pModel->GetDepth(pCurEntry) <= nRefDepth)
             pCurEntry = nullptr;
@@ -1396,7 +1396,7 @@ void SvListView::Impl::ActionRemoving( SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Remove:No Entry");
 
-    SvViewDataEntry* pViewData = m_DataTable.find( pEntry )->second;
+    SvViewDataEntry* pViewData = m_DataTable.find( pEntry )->second.get();
     sal_uLong nSelRemoved = 0;
     if ( pViewData->IsSelected() )
         nSelRemoved = 1 + m_rThis.pModel->GetChildSelectionCount(&m_rThis, pEntry);
@@ -1422,7 +1422,7 @@ void SvListView::Impl::ActionRemoving( SvTreeListEntry* pEntry )
     SvTreeListEntry* pCurEntry = pEntry->pParent;
     if (pCurEntry && pCurEntry != m_rThis.pModel->pRootItem && pCurEntry->m_Children.size() == 1)
     {
-        pViewData = m_DataTable.find(pCurEntry)->second;
+        pViewData = m_DataTable.find(pCurEntry)->second.get();
         pViewData->SetExpanded(false);
     }
 }
@@ -1522,14 +1522,14 @@ const SvViewDataEntry* SvListView::GetViewData( const SvTreeListEntry* pEntry ) 
         m_pImpl->m_DataTable.find(const_cast<SvTreeListEntry*>(pEntry));
     if (itr == m_pImpl->m_DataTable.end())
         return nullptr;
-    return itr->second;
+    return itr->second.get();
 }
 
 SvViewDataEntry* SvListView::GetViewData( SvTreeListEntry* pEntry )
 {
     SvDataTable::iterator itr = m_pImpl->m_DataTable.find( pEntry );
     DBG_ASSERT(itr != m_pImpl->m_DataTable.end(),"Entry not in model or wrong view");
-    return itr->second;
+    return itr->second.get();
 }
 
 sal_Int32 SvTreeList::Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const
