@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_10e81d7c",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-12-03T10:53:13Z",
+      "side": 0,
+      "message": "include/tools/stream.hxx\n... line 663:\nconst void*     GetData() { Flush(); return pBuf; }",
+      "range": {
+        "startLine": 1730,
+        "startChar": 11,
+        "endLine": 1730,
+        "endChar": 21
+      },
+      "revId": "0261be7f92930952a470bc7f5e1d543b8907b1f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
