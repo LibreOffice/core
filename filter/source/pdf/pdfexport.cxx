@@ -38,6 +38,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include "svl/solar.hrc"
+#include "comphelper/sequence.hxx"
 #include "comphelper/string.hxx"
 #include "comphelper/storagehelper.hxx"
 #include "unotools/streamwrap.hxx"
@@ -1003,13 +1004,7 @@ void PDFExport::showErrors( const std::set< vcl::PDFWriter::ErrorCode >& rErrors
     if( ! rErrors.empty() && mxIH.is() )
     {
         task::PDFExportException aExc;
-        aExc.ErrorCodes.realloc( sal_Int32(rErrors.size()) );
-        sal_Int32 i = 0;
-        for( std::set< vcl::PDFWriter::ErrorCode >::const_iterator it = rErrors.begin();
-             it != rErrors.end(); ++it, i++ )
-        {
-            aExc.ErrorCodes.getArray()[i] = (sal_Int32)*it;
-        }
+        aExc.ErrorCodes = comphelper::containerToSequence<sal_Int32>( rErrors );
         Reference< task::XInteractionRequest > xReq( new PDFErrorRequest( aExc ) );
         mxIH->handle( xReq );
     }
