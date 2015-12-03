@@ -28,6 +28,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/current_function.hpp>
 #include <vcl/scrbar.hxx>
+#include "sddllapi.h"
 #include <memory>
 
 class ScrollBar;
@@ -138,7 +139,8 @@ public:
 
     view::SlideSorterView& GetView() const;
 
-    controller::SlideSorterController& GetController() const;
+    // Exported for unit test
+    SD_DLLPUBLIC controller::SlideSorterController& GetController() const;
 
     /** Return the view shell that was given at construction.
         @return
