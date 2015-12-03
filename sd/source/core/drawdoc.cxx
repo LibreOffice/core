@@ -451,7 +451,6 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
     {
         // Document is created for drag & drop/clipboard. To be able to
         // do this, the document has to know a DocShell (SvPersist).
-        SfxObjectShell*   pObj = nullptr;
         ::sd::DrawDocShell*     pNewDocSh = nullptr;
 
         if( meDocType == DOCUMENT_TYPE_IMPRESS )
@@ -461,7 +460,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
             mpCreatingTransferable->SetDocShell( new ::sd::GraphicDocShell(
                 SfxObjectCreateMode::EMBEDDED, true, meDocType ) );
 
-        pNewDocSh = static_cast< ::sd::DrawDocShell*>( pObj = mpCreatingTransferable->GetDocShell() );
+        pNewDocSh = static_cast< ::sd::DrawDocShell*>( mpCreatingTransferable->GetDocShell() );
         pNewDocSh->DoInitNew();
         pNewModel = pNewDocSh->GetDoc();
 
