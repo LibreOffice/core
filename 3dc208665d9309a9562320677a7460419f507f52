@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_93e7f73f",
+        "filename": "sc/source/ui/view/cellsh2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T21:10:32Z",
+      "side": 1,
+      "message": "This loop at the worst case iterates over MAXROWCOUNT rows if an empty column was marked, significantly slowing down things already for the GetDBState() function, you\u0027ll notice if you invoke the Data menu on such a selected empty column.\n\nInstead, keep the original code using ScDocument::IsBlockEmpty() for the call from GetDBState(), but use ScDocument::ShrinkToUsedDataArea() with bStickyLeftCol\u003dtrue for the call from ExecuteDB().",
+      "revId": "3dc208665d9309a9562320677a7460419f507f52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
