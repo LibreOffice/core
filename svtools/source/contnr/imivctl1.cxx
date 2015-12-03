@@ -95,7 +95,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aHorSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_HSCROLL) ),
     aScrBarBox( VclPtr<ScrollBarBox>::Create(pCurView) ),
     aImageSize( 32, 32 ),
-    pColumns( nullptr )
+    m_pColumns( nullptr )
 {
     bChooseWithCursor = false;
     pEntryPaintDev = nullptr;
@@ -227,7 +227,7 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
         nWinBits |= WB_ALIGN_LEFT;
     if( (nWinStyle & WB_DETAILS))
     {
-        if( !pColumns  )
+        if (!m_pColumns)
             SetColumn( 0, SvxIconChoiceCtrlColumnInfo( 0, 100, IcnViewAlignLeft ));
     }
 }
@@ -3501,20 +3501,20 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
 
 void SvxIconChoiceCtrl_Impl::ClearColumnList()
 {
-    if( !pColumns )
+    if (!m_pColumns)
         return;
 
-    pColumns->clear();
-    DELETEZ(pColumns);
+    m_pColumns->clear();
+    DELETEZ(m_pColumns);
 }
 
 void SvxIconChoiceCtrl_Impl::SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCtrlColumnInfo& rInfo)
 {
-    if( !pColumns )
-        pColumns = new SvxIconChoiceCtrlColumnInfoMap;
+    if (!m_pColumns)
+        m_pColumns = new SvxIconChoiceCtrlColumnInfoMap;
 
     SvxIconChoiceCtrlColumnInfo* pInfo = new SvxIconChoiceCtrlColumnInfo( rInfo );
-    pColumns->insert( nIndex,  pInfo );
+    m_pColumns->insert(std::make_pair(nIndex, std::unique_ptr<SvxIconChoiceCtrlColumnInfo>(pInfo)));
 
     // HACK: Detail mode is not yet fully implemented, this workaround makes it
     // fly with a single column
@@ -3527,12 +3527,12 @@ void SvxIconChoiceCtrl_Impl::SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCt
 
 const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16 nIndex ) const
 {
-    if (!pColumns)
+    if (!m_pColumns)
         return nullptr;
-    SvxIconChoiceCtrlColumnInfoMap::const_iterator it = pColumns->find( nIndex );
-    if( it == pColumns->end() )
+    auto const it = m_pColumns->find( nIndex );
+    if (it == m_pColumns->end())
         return nullptr;
-    return it->second;
+    return it->second.get();
 }
 
 void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect, bool bHide)

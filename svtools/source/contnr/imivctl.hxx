@@ -32,7 +32,9 @@
 #include <limits.h>
 
 #include <svtools/ivctrl.hxx>
-#include <boost/ptr_container/ptr_map.hpp>
+
+#include <memory>
+#include <map>
 
 class IcnCursor_Impl;
 class SvtIconChoiceCtrl;
@@ -150,7 +152,7 @@ public:
 // Implementation-class of IconChoiceCtrl
 
 
-typedef boost::ptr_map<sal_uInt16, SvxIconChoiceCtrlColumnInfo> SvxIconChoiceCtrlColumnInfoMap;
+typedef std::map<sal_uInt16, std::unique_ptr<SvxIconChoiceCtrlColumnInfo>> SvxIconChoiceCtrlColumnInfoMap;
 typedef std::vector<SvxIconChoiceCtrlEntry*> SvxIconChoiceCtrlEntryPtrVec;
 
 class SvxIconChoiceCtrl_Impl
@@ -182,7 +184,7 @@ class SvxIconChoiceCtrl_Impl
     long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
     long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
     SvxIconChoiceCtrlEntryList_impl*    pZOrderList;
-    SvxIconChoiceCtrlColumnInfoMap* pColumns;
+    SvxIconChoiceCtrlColumnInfoMap* m_pColumns;
     VclPtr<IcnViewEdit_Impl>   pEdit;
     WinBits                 nWinBits;
     long                    nMaxBoundHeight;            // height of highest BoundRects
