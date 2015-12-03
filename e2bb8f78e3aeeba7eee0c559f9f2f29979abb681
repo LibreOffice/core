@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_3023a107",
+        "filename": "officecfg/registry/data/org/openoffice/Inet.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-12-03T09:07:51Z",
+      "side": 1,
+      "message": "Names in Inet section begin all as oo... should I change the new ones as well?",
+      "range": {
+        "startLine": 63,
+        "startChar": 3,
+        "endLine": 68,
+        "endChar": 11
+      },
+      "revId": "e2bb8f78e3aeeba7eee0c559f9f2f29979abb681",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
