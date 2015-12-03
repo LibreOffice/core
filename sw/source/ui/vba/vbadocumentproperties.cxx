@@ -326,6 +326,7 @@ public:
                 {
                     aReturn = stats[ index ].Value;
                     bFound = true;
+                    break;
                 }
             }
             if ( !bFound )
