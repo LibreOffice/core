@@ -1004,11 +1004,13 @@ const Link<>& SystemWindow::GetCloseHdl() const
 
 void SystemWindow::queue_resize(StateChangedType /*eReason*/)
 {
-    if (hasPendingLayout() || isCalculatingInitialLayoutSize())
-        return;
     if (!isLayoutEnabled())
         return;
+    if (isCalculatingInitialLayoutSize())
+        return;
     InvalidateSizeCache();
+    if (hasPendingLayout())
+        return;
     maLayoutIdle.Start();
 }
 
