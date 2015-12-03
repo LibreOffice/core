@@ -325,7 +325,8 @@ SfxTabDialog::SfxTabDialog
                                   // can be NULL, when Pages are onDemand
     bool bEditFmt                 // when yes -> additional Button for standard
 )
-    : TabDialog(pParent, rID, rUIXMLDescription)
+
+    : TabDialog(pParent, OUString(rID), OSString(rUIXMLDescription))
     , pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
     , pOutSet(nullptr)
     , pRanges(nullptr)
