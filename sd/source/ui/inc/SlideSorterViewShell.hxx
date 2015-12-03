@@ -69,7 +69,8 @@ public:
         pane is returned.  When no slidesorter is visible then NULL is
         returned.
     */
-    static SlideSorterViewShell* GetSlideSorter (ViewShellBase& rBase);
+    // Exported for unit test
+    SD_DLLPUBLIC static SlideSorterViewShell* GetSlideSorter(ViewShellBase& rBase);
 
     virtual SdPage* GetActualPage() override;
 
@@ -185,7 +186,8 @@ public:
     // handle SlideSorterView specially because AccessibleSlideSorterView doesn't inherit from AccessibleDocumentViewBase
     virtual void SwitchViewFireFocus( css::uno::Reference< css::accessibility::XAccessible > xAcc ) override;
 
-    SlideSorter& GetSlideSorter() const;
+    // Exported for unit test
+    SD_DLLPUBLIC SlideSorter& GetSlideSorter() const;
 
     /** Try to relocate all toplevel window elements to the given parent
         window.

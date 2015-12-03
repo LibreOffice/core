@@ -110,7 +110,8 @@ public:
 
     PageSelector& GetPageSelector();
     FocusManager& GetFocusManager();
-    controller::Clipboard& GetClipboard();
+    // Exported for unit test
+    SD_DLLPUBLIC controller::Clipboard& GetClipboard();
 
     /** Return the object that manages the scroll bars.
     */

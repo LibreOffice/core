@@ -138,7 +138,8 @@ public:
 
     view::SlideSorterView& GetView() const;
 
-    controller::SlideSorterController& GetController() const;
+    // Exported for unit test
+    SD_DLLPUBLIC controller::SlideSorterController& GetController() const;
 
     /** Return the view shell that was given at construction.
         @return

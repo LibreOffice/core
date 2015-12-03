@@ -360,7 +360,8 @@ public:
     //  virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
     //  virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
 
-    ViewShellBase& GetViewShellBase() const;
+    // Exported for unit test
+    SD_DLLPUBLIC ViewShellBase& GetViewShellBase() const;
 
     /** Return <TRUE/> when the called view shell is the main sub shell of
         its ViewShellBase object, i.e. is display in the center pane.  This
