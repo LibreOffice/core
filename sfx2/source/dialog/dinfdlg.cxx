@@ -1478,16 +1478,19 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_pCurrentLine (nullptr),
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
-
 {
-    m_aEditButton->SetPosSizePixel(
-        LogicToPixel(Point(159, 2), MAP_APPFONT),
+    Point aPos(LogicToPixel(Point(159, 2), MAP_APPFONT));
+
+    m_aEditButton->SetPosSizePixel(aPos,
         LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
+
     m_aRemoveButton->SetSizePixel(LogicToPixel(Size(RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT), MAP_APPFONT));
 
-    m_aValueEdit->SetPosSizePixel(
-        LogicToPixel(Point(159, 2), MAP_APPFONT),
-        LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
+    m_aValueEdit->SetPosSizePixel(aPos, aSize);
+    m_aDurationField->SetPosSizePixel(aPos, aSize);
+    m_aDateField->SetPosSizePixel(aPos, aSize);
+    m_aTimeField->SetPosSizePixel(aPos, aSize);
 
     m_aEditLoseFocusIdle.SetPriority( SchedulerPriority::LOWEST );
     m_aEditLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
