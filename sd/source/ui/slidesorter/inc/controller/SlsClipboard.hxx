@@ -28,6 +28,8 @@
 #include <tools/solar.h>
 #include <svx/svdpage.hxx>
 
+#include "sddllapi.h"
+
 #include <set>
 
 class SfxRequest;
@@ -71,8 +73,10 @@ public:
     void HandleSlotCall (SfxRequest& rRequest);
 
     void DoCut (vcl::Window* pWindow = nullptr);
-    void DoCopy (vcl::Window* pWindow = nullptr);
-    void DoPaste (vcl::Window* pWindow = nullptr);
+    // Exported for unit test
+    SD_DLLPUBLIC void DoCopy(vcl::Window* pWindow = nullptr);
+    // Exported for unit test
+    SD_DLLPUBLIC void DoPaste(vcl::Window* pWindow = nullptr);
     void DoDelete (vcl::Window* pWindow = nullptr);
 
     void StartDrag (

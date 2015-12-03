@@ -1726,7 +1726,6 @@ SvMemoryStream::~SvMemoryStream()
 
 const void* SvMemoryStream::GetBuffer()
 {
-    Flush();
     return GetData();
 }
 
