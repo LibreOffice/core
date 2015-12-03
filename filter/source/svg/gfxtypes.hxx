@@ -16,6 +16,7 @@
 #include <functional>
 #include <unordered_set>
 #include <unordered_map>
+#include <units.hxx>
 
 namespace svgi
 {
@@ -154,7 +155,7 @@ struct State
         maViewBox(),
         mbIsText(false),
         maFontFamily(), // app-default
-        mnFontSize(12),
+        mnFontSize(defaultFontSize),
         maFontStyle("normal"),
         maFontVariant("normal"),
         mnFontWeight(400.0),

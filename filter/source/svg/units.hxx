@@ -18,6 +18,8 @@ namespace svgi
     // Same as in svgio
     #define F_SVG_PIXEL_PER_INCH  90.0
 
+    #define defaultFontSize 12.0
+
     struct State;
     enum SvgUnit
     {
@@ -30,7 +32,8 @@ namespace svgi
         SVG_LENGTH_UNIT_PT,
         SVG_LENGTH_UNIT_PX,
         SVG_LENGTH_UNIT_PERCENTAGE,
-        SVG_LENGTH_UNIT_USER
+        SVG_LENGTH_UNIT_USER,
+        SVG_LENGTH_FONT_SIZE
     };
 
     /** return svg_length_t in 100th's of mm
@@ -39,7 +42,7 @@ namespace svgi
          @param rState current state (needed for viewport dimensions etc.)
          @param dir direction - either 'h' or 'v' for horizonal or vertical, resp.
      */
-    double convLength( double fVal, SvgUnit unit, const State& rState, char dir );
+    double convLength( const OUString& sVal, SvgUnit unit, const State& rState, char dir );
 
     /** return svg_length_t in 100th's of mm
          @param sValue value to convert
