@@ -72,7 +72,7 @@ namespace dbaui
         virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
         VclPtr<vcl::Window>     m_pParentTabPage;
     public:
-        OWizTypeSelectList( vcl::Window* pParent, WinBits nStyle = WB_BORDER )
+        OWizTypeSelectList( vcl::Window* pParent, WinBits nStyle = WB_BORDER | WB_SIMPLEMODE )
             : MultiListBox(pParent,nStyle)
             , m_bPKey(false)
             , m_pParentTabPage(nullptr)
