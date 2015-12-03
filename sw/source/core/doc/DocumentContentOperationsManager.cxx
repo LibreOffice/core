@@ -124,7 +124,8 @@ namespace
     /*
         The lcl_CopyBookmarks function has to copy bookmarks from the source to the destination nodes
         array. It is called after a call of the _CopyNodes(..) function. But this function does not copy
-        every node (at least at the moment: 2/08/2006 ), section start and end nodes will not be copied if the corresponding end/start node is outside the copied pam.
+        every node (at least at the moment: 2/08/2006 ), section start and end nodes will not be copied
+        if the corresponding end/start node is outside the copied pam.
         The lcl_NonCopyCount function counts the number of these nodes, given the copied pam and a node
         index inside the pam.
         rPam is the original source pam, rLastIdx is the last calculated position, rDelCount the number
@@ -138,6 +139,13 @@ namespace
         sal_uLong nEnd = rPam.End()->nNode.GetIndex();
         if( rLastIdx.GetIndex() < nNewIdx ) // Moving forward?
         {
+            // We never copy the StartOfContent node
+            // Special handling for SwDoc::AppendDoc
+            if( rPam.GetDoc()->GetNodes().GetEndOfExtras().GetIndex() + 1 == nStart )
+            {
+                ++rDelCount;
+                ++rLastIdx;
+            }
             do // count "non-copy" nodes
             {
                 SwNode& rNode = rLastIdx.GetNode();
