@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_30d8c1ef",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2015-12-03T10:28:15Z",
+      "side": 0,
+      "message": "\"Removed Flush() called from SvMemoryStream::GetBuffer(), because it calls GetData(), which calls Flush() itself. \"\n\nI don\u0027t see Flush() call in SvMemoryStream::GetData() ...",
+      "range": {
+        "startLine": 1729,
+        "startChar": 9,
+        "endLine": 1729,
+        "endChar": 12
+      },
+      "revId": "bc910480d685576faa13c92ec7d0b6c0e3c968ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
