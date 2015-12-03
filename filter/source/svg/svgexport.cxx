@@ -2170,7 +2170,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
             if( !mCreateOjectsCurrentMasterPage.is() )
             {
                 OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
-                return;
+                return 0;
             }
             bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
 
