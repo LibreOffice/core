@@ -122,7 +122,7 @@ namespace vclcanvas
         ::std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
         setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
 
-        uno::Sequence< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
+        std::vector< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
         ::basegfx::B2DPolyPolygonVector aOutlines;
         if (pVDev->GetTextOutlines(
             aOutlines,
@@ -134,7 +134,7 @@ namespace vclcanvas
             0,
             aOffsets.get()))
         {
-            aOutlineSequence.realloc(aOutlines.size());
+            aOutlineSequence.reserve(aOutlines.size());
             sal_Int32 nIndex (0);
             for (::basegfx::B2DPolyPolygonVector::const_iterator
                      iOutline(aOutlines.begin()),
@@ -148,7 +148,7 @@ namespace vclcanvas
             }
         }
 
-        return aOutlineSequence;
+        return comphelper::containerToSequence(aOutlineSequence);
     }
 
     uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryInkMeasures(  ) throw (uno::RuntimeException, std::exception)

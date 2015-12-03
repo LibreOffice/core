@@ -429,8 +429,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
         pEntry = pList->NextSelected(pEntry);
     }
 
-    _out_rSelectedObjects.realloc( aSelected.size() );
-    ::std::copy( aSelected.begin(), aSelected.end(), _out_rSelectedObjects.getArray() );
+    _out_rSelectedObjects = comphelper::containerToSequence( aSelected );
 }
 
 void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)

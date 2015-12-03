@@ -72,21 +72,23 @@ static const char lcl_aCompleteRange[] = "all";
 typedef ::std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
     lcl_tSequenceMap;
 
-Sequence< OUString > lcl_AnyToStringSequence( const Sequence< uno::Any >& aAnySeq )
+std::vector< OUString > lcl_AnyToStringSequence( const std::vector< uno::Any >& aAnySeq )
 {
-    Sequence< OUString > aResult;
-    aResult.realloc( aAnySeq.getLength() );
-    transform( aAnySeq.getConstArray(), aAnySeq.getConstArray() + aAnySeq.getLength(),
-               aResult.getArray(), CommonFunctors::AnyToString() );
+    std::vector< OUString > aResult;
+    aResult.resize( aAnySeq.size() );
+    int i = 0;
+    for (const uno::Any& aAny : aAnySeq)
+       aResult[i++] = CommonFunctors::AnyToString()(aAny);
     return aResult;
 }
 
-Sequence< uno::Any > lcl_StringToAnySequence( const Sequence< OUString >& aStringSeq )
+std::vector< uno::Any > lcl_StringToAnyVector( const css::uno::Sequence< OUString >& aStringSeq )
 {
-    Sequence< uno::Any > aResult;
-    aResult.realloc( aStringSeq.getLength() );
-    transform( aStringSeq.getConstArray(), aStringSeq.getConstArray() + aStringSeq.getLength(),
-               aResult.getArray(), CommonFunctors::makeAny< OUString >() );
+    std::vector< uno::Any > aResult;
+    aResult.resize( aStringSeq.getLength() );
+    int i = 0;
+    for (const OUString& aStr : aStringSeq)
+       aResult[i++] = CommonFunctors::makeAny<OUString>()(aStr);
     return aResult;
 }
 
@@ -151,9 +153,9 @@ struct lcl_internalizeSeries : public ::std::unary_function< Reference< chart2::
                 if( xLabel.is() )
                 {
                     if( m_bDataInColumns )
-                        m_rInternalData.setComplexColumnLabel( nNewIndex, ContainerHelper::SequenceToVector( lcl_StringToAnySequence( xLabel->getTextualData() ) ) );
+                        m_rInternalData.setComplexColumnLabel( nNewIndex, lcl_StringToAnyVector( xLabel->getTextualData() ) );
                     else
-                        m_rInternalData.setComplexRowLabel( nNewIndex, ContainerHelper::SequenceToVector( lcl_StringToAnySequence( xLabel->getTextualData() ) ) );
+                        m_rInternalData.setComplexRowLabel( nNewIndex, lcl_StringToAnyVector( xLabel->getTextualData() ) );
                     if( m_bConnectToModel )
                     {
                         Reference< chart2::data::XDataSequence > xNewLabel(
@@ -1324,15 +1326,15 @@ vector< vector< Type > > lcl_convertSequenceSequenceToVectorVector( const Sequen
     return aRet;
 }
 
-Sequence< Sequence< OUString > > lcl_convertComplexAnyVectorToStringSequence( const vector< vector< uno::Any > >& rIn )
+std::vector< Sequence< OUString > > lcl_convertComplexAnyVectorToStringSequence( const vector< vector< uno::Any > >& rIn )
 {
-    Sequence< Sequence< OUString > > aRet;
+    std::vector< Sequence< OUString > > aRet;
     sal_Int32 nOuterCount = rIn.size();
     if( nOuterCount )
     {
-        aRet.realloc(nOuterCount);
+        aRet.resize(nOuterCount);
         for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-            aRet[nN]= lcl_AnyToStringSequence( comphelper::containerToSequence( rIn[nN] ) );
+            aRet[nN] = comphelper::containerToSequence(lcl_AnyToStringSequence( rIn[nN] ));
     }
     return aRet;
 }
@@ -1342,7 +1344,7 @@ vector< vector< uno::Any > > lcl_convertComplexStringSequenceToAnyVector( const 
     vector< vector< uno::Any > > aRet;
     sal_Int32 nOuterCount = rIn.getLength();
     for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-        aRet.push_back( ContainerHelper::SequenceToVector( lcl_StringToAnySequence( rIn[nN] ) ) );
+        aRet.push_back( lcl_StringToAnyVector( rIn[nN] ) );
     return aRet;
 }
 
@@ -1440,7 +1442,7 @@ void SAL_CALL InternalDataProvider::setAnyColumnDescriptions( const Sequence< Se
 // ____ XComplexDescriptionAccess ____
 Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexRowDescriptions() throw (uno::RuntimeException, std::exception)
 {
-    return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexRowLabels() );
+    return comphelper::containerToSequence(lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexRowLabels() ));
 }
 void SAL_CALL InternalDataProvider::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& aRowDescriptions ) throw (uno::RuntimeException, std::exception)
 {
@@ -1448,7 +1450,7 @@ void SAL_CALL InternalDataProvider::setComplexRowDescriptions( const Sequence< S
 }
 Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException, std::exception)
 {
-    return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexColumnLabels() );
+    return comphelper::containerToSequence(lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexColumnLabels() ));
 }
 void SAL_CALL InternalDataProvider::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& aColumnDescriptions ) throw (uno::RuntimeException, std::exception)
 {

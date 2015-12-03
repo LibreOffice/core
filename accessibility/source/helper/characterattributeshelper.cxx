@@ -19,6 +19,7 @@
 
 #include <accessibility/helper/characterattributeshelper.hxx>
 #include <tools/gen.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -48,57 +49,51 @@ CharacterAttributesHelper::~CharacterAttributesHelper()
 }
 
 
-Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes()
+std::vector< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes()
 {
-    Sequence< PropertyValue > aValues( m_aAttributeMap.size() );
-    PropertyValue* pValues = aValues.getArray();
+    std::vector< PropertyValue > aValues( m_aAttributeMap.size() );
 
-    for ( AttributeMap::iterator aIt = m_aAttributeMap.begin(); aIt != m_aAttributeMap.end(); ++aIt, ++pValues )
+    int i = 0;
+    for ( AttributeMap::iterator aIt = m_aAttributeMap.begin(); aIt != m_aAttributeMap.end(); ++aIt, ++i )
     {
-        pValues->Name   = aIt->first;
-        pValues->Handle = (sal_Int32) -1;
-        pValues->Value  = aIt->second;
-        pValues->State  = PropertyState_DIRECT_VALUE;
+        aValues[i].Name   = aIt->first;
+        aValues[i].Handle = (sal_Int32) -1;
+        aValues[i].Value  = aIt->second;
+        aValues[i].State  = PropertyState_DIRECT_VALUE;
     }
 
     return aValues;
 }
 
 
-Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes( const Sequence< OUString >& aRequestedAttributes )
+Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes( const css::uno::Sequence< OUString >& aRequestedAttributes )
 {
-    Sequence< PropertyValue > aValues;
+    if ( aRequestedAttributes.getLength() == 0 )
+        return comphelper::containerToSequence(GetCharacterAttributes());
+
+    std::vector< PropertyValue > aValues;
     sal_Int32 nLength = aRequestedAttributes.getLength();
 
-    if ( nLength != 0 )
+    AttributeMap aAttributeMap;
+
+    for ( sal_Int32 i = 0; i < nLength; ++i )
     {
-        const OUString* pNames = aRequestedAttributes.getConstArray();
-        AttributeMap aAttributeMap;
-
-        for ( sal_Int32 i = 0; i < nLength; ++i )
-        {
-            AttributeMap::iterator aFound = m_aAttributeMap.find( pNames[i] );
-            if ( aFound != m_aAttributeMap.end() )
-                aAttributeMap.insert( *aFound );
-        }
-
-        aValues.realloc( aAttributeMap.size() );
-        PropertyValue* pValues = aValues.getArray();
-
-        for ( AttributeMap::iterator aIt = aAttributeMap.begin(); aIt != aAttributeMap.end(); ++aIt, ++pValues )
-        {
-            pValues->Name   = aIt->first;
-            pValues->Handle = (sal_Int32) -1;
-            pValues->Value  = aIt->second;
-            pValues->State  = PropertyState_DIRECT_VALUE;
-        }
-    }
-    else
-    {
-        aValues = GetCharacterAttributes();
+        AttributeMap::iterator aFound = m_aAttributeMap.find( aRequestedAttributes[i] );
+        if ( aFound != m_aAttributeMap.end() )
+            aAttributeMap.insert( *aFound );
     }
 
-    return aValues;
+    aValues.reserve( aAttributeMap.size() );
+
+    int i = 0;
+    for ( AttributeMap::iterator aIt = aAttributeMap.begin(); aIt != aAttributeMap.end(); ++aIt, ++i )
+    {
+        aValues[i].Name   = aIt->first;
+        aValues[i].Handle = (sal_Int32) -1;
+        aValues[i].Value  = aIt->second;
+        aValues[i].State  = PropertyState_DIRECT_VALUE;
+    }
+    return comphelper::containerToSequence(aValues);
 }
 
 
