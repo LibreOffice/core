@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_b3867b63",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T20:27:15Z",
+      "side": 1,
+      "message": "Is this really necessary? My workdir/CustomTarget/officecfg/registry/officecfg/Office/Common.hxx already has an #undef RGB, so why would this still fail? Or does a PCH pollute an included header anyway regardless whether there\u0027s an undef inside the header? If so, then please add a comment that the undef here exists because of PCH to prevent that someone removes it again thinking the same that it\u0027s undef\u0027ed inside the header file..",
+      "revId": "18063cdd1e634ddc9f2e3bb106ee1e2f5ea0e181",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
