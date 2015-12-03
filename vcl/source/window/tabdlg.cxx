@@ -213,7 +213,7 @@ TabDialog::TabDialog( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-TabDialog::TabDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
+TabDialog::TabDialog( vcl::Window* pParent, OUString& rID, OUString& rUIXMLDescription ) :
     Dialog(pParent, rID, rUIXMLDescription, WINDOW_TABDIALOG)
 {
     ImplInitTabDialogData();

@@ -513,7 +513,7 @@ void Dialog::doDeferredInit(WinBits nBits)
     mbIsDefferedInit = false;
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
+Dialog::Dialog(vcl::Window* pParent, OUString& rID, OUString& rUIXMLDescription)
     : SystemWindow(WINDOW_DIALOG)
     , mnInitFlag(InitFlag::Default)
 {
@@ -521,7 +521,7 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
     loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag)
+Dialog::Dialog(vcl::Window* pParent, OUString& rID, OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag)
     : SystemWindow(nType)
     , mnInitFlag(eFlag)
 {
