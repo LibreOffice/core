@@ -1780,13 +1780,13 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case  SID_OPEN_SMARTTAGMENU:
             {
-                 uno::Sequence< OUString > aSmartTagTypes;
+                 std::vector< OUString > aSmartTagTypes;
                  uno::Sequence< uno::Reference< container::XStringKeyMap > > aStringKeyMaps;
                  uno::Reference<text::XTextRange> xRange;
 
                  rSh.GetSmartTagTerm( aSmartTagTypes, aStringKeyMaps, xRange );
 
-                 if ( xRange.is() && aSmartTagTypes.getLength() )
+                 if ( xRange.is() && !aSmartTagTypes.empty() )
                  {
                      uno::Sequence < uno::Sequence< uno::Reference< smarttags::XSmartTagAction > > > aActionComponentsSequence;
                      uno::Sequence < uno::Sequence< sal_Int32 > > aActionIndicesSequence;

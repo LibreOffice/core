@@ -3365,12 +3365,11 @@ void SwCursorShell::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-static void lcl_FillRecognizerData( uno::Sequence< OUString >& rSmartTagTypes,
+static void lcl_FillRecognizerData( std::vector< OUString >& rSmartTagTypes,
                              uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                              const SwWrongList& rSmartTagList, sal_Int32 nCurrent )
 {
     // Insert smart tag information
-    std::vector< OUString > aSmartTagTypes;
     std::vector< uno::Reference< container::XStringKeyMap > > aStringKeyMaps;
 
     for ( sal_uInt16 i = 0; i < rSmartTagList.Count(); ++i )
@@ -3383,24 +3382,18 @@ static void lcl_FillRecognizerData( uno::Sequence< OUString >& rSmartTagTypes,
             const SwWrongArea* pArea = rSmartTagList.GetElement( i );
             if ( pArea )
             {
-                aSmartTagTypes.push_back( pArea->maType );
+                rSmartTagTypes.push_back( pArea->maType );
                 aStringKeyMaps.push_back( pArea->mxPropertyBag );
             }
         }
     }
 
-    if ( !aSmartTagTypes.empty() )
+    if ( !rSmartTagTypes.empty() )
     {
-        rSmartTagTypes.realloc( aSmartTagTypes.size() );
-        rStringKeyMaps.realloc( aSmartTagTypes.size() );
-
-        std::vector< OUString >::const_iterator aTypesIter = aSmartTagTypes.begin();
-        sal_uInt16 i = 0;
-        for ( aTypesIter = aSmartTagTypes.begin(); aTypesIter != aSmartTagTypes.end(); ++aTypesIter )
-            rSmartTagTypes[i++] = *aTypesIter;
+        rStringKeyMaps.realloc( rSmartTagTypes.size() );
 
         std::vector< uno::Reference< container::XStringKeyMap > >::const_iterator aMapsIter = aStringKeyMaps.begin();
-        i = 0;
+        sal_uInt16 i = 0;
         for ( aMapsIter = aStringKeyMaps.begin(); aMapsIter != aStringKeyMaps.end(); ++aMapsIter )
             rStringKeyMaps[i++] = *aMapsIter;
     }
@@ -3423,7 +3416,7 @@ static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
     rRange = xRange;
 }
 
-void SwCursorShell::GetSmartTagTerm( uno::Sequence< OUString >& rSmartTagTypes,
+void SwCursorShell::GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
                                    uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                                    uno::Reference< text::XTextRange>& rRange ) const
 {

@@ -772,7 +772,7 @@ public:
     void GetSmartTagRect( const Point& rPt, SwRect& rSelectRect );
 
     // get smart tags at current cursor position
-    void GetSmartTagTerm( css::uno::Sequence< OUString >& rSmartTagTypes,
+    void GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
                           css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
                           css::uno::Reference<css::text::XTextRange>& rRange ) const;
 

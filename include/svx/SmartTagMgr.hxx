@@ -172,7 +172,7 @@ public:
         @param rActionIndicesSequence
             Output parameter
     */
-    void GetActionSequences( css::uno::Sequence < OUString >& rSmartTagTypes,
+    void GetActionSequences( std::vector< OUString >& rSmartTagTypes,
                              css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                              css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence ) const;
 

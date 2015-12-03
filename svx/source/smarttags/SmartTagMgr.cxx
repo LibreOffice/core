@@ -152,14 +152,14 @@ void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange>& xRange,
 
 typedef std::multimap < OUString, ActionReference >::const_iterator SmartTagMapIter;
 
-void SmartTagMgr::GetActionSequences( Sequence < OUString >& rSmartTagTypes,
+void SmartTagMgr::GetActionSequences( std::vector< OUString >& rSmartTagTypes,
                                       Sequence < Sequence< Reference< smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                                       Sequence < Sequence< sal_Int32 > >& rActionIndicesSequence ) const
 {
-    rActionComponentsSequence.realloc( rSmartTagTypes.getLength() );
-    rActionIndicesSequence.realloc( rSmartTagTypes.getLength() );
+    rActionComponentsSequence.realloc( rSmartTagTypes.size() );
+    rActionIndicesSequence.realloc( rSmartTagTypes.size() );
 
-    for ( sal_Int32 j = 0; j < rSmartTagTypes.getLength(); ++j )
+    for ( size_t j = 0; j < rSmartTagTypes.size(); ++j )
     {
         const OUString& rSmartTagType = rSmartTagTypes[j];
 
