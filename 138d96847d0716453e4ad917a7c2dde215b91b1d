@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_d325ffae",
+        "filename": "sc/source/ui/inc/hdrcont.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T17:09:55Z",
+      "side": 1,
+      "message": "Rather than constructing with and memorizing two independent pointers, the ScViewData should be obtained from the ScTabView passed when needed. Or is there a specific reason not to?",
+      "revId": "138d96847d0716453e4ad917a7c2dde215b91b1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f32483b0",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T17:09:55Z",
+      "side": 1,
+      "message": "Check this when it is actually needed, not before and we could return on other conditions without actually using the check result.",
+      "revId": "138d96847d0716453e4ad917a7c2dde215b91b1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_1320279b",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T17:09:55Z",
+      "side": 1,
+      "message": "Always check the least expensive condition first in an expression, or the most likely to fail inexpensively, which here means\n\n if (bDoneInitRef \u0026\u0026 rMEvt.IsLeft() \u0026\u0026 SC_MOD()-\u003eIsFormulaMode())\n\nas the implementation of SC_MOD()-\u003eIsFormulaMode() may have to check more things.",
+      "revId": "138d96847d0716453e4ad917a7c2dde215b91b1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
