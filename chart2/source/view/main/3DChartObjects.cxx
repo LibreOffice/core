@@ -72,9 +72,9 @@ void Line::setLineColor(const Color& rColor)
 
 const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
 {
-    TextCacheType::const_iterator itr = maTextCache.find(rText);
-    if(itr != maTextCache.end())
-        return *itr->second;
+    TextCacheType::const_iterator const itr = m_TextCache.find(rText);
+    if (itr != m_TextCache.end())
+        return itr->second;
 
     ScopedVclPtrInstance< VirtualDevice > pDevice(*Application::GetDefaultDevice(),
                                                   DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
@@ -105,10 +105,9 @@ const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
     long nBmpHeight = aText.GetSizePixel().Height();
     sal_uInt8* pBitmapBuf(new sal_uInt8[3* nBmpWidth * nBmpHeight]);
     memcpy(pBitmapBuf, buf, 3* nBmpWidth * nBmpHeight);
-    TextCacheItem *pItem = new TextCacheItem(pBitmapBuf, aText.GetSizePixel());
-    maTextCache.insert(rText, pItem);
+    m_TextCache.insert(std::make_pair(rText, TextCacheItem(pBitmapBuf, aText.GetSizePixel())));
     Bitmap::ReleaseAccess(pAcc);
-    return *maTextCache.find(rText)->second;
+    return m_TextCache.find(rText)->second;
 }
 
 Text::Text(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId):

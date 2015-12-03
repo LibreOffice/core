@@ -17,8 +17,9 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include "GL3DRenderer.hxx"
 
-#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/shared_array.hpp>
+
+#include <map>
 
 namespace chart {
 
@@ -39,9 +40,9 @@ class TextCache
 public:
     const TextCacheItem &getText(OUString const & rText, bool bIs3dText = false);
 private:
-    typedef boost::ptr_map<OUString const, TextCacheItem> TextCacheType;
+    typedef std::map<OUString const, TextCacheItem> TextCacheType;
 
-    TextCacheType maTextCache;
+    TextCacheType m_TextCache;
 };
 
 class Renderable3DObject
