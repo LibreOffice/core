@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_10449d72",
+        "filename": "include/vcl/print.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-12-03T12:44:48Z",
+      "side": 1,
+      "message": "Hmm - still not really consistent, c.f. setUIControlOpt() and other methods. Sometimes you also put the actual function name into the next line. Most of the changes had the parameter types and parameter names aligned (which I think is good). Why not here?",
+      "revId": "5f13a39eb4a7da2584f37b7e5193cc5d7a813332",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
