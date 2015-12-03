@@ -199,7 +199,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
             m_pRB_AssumeZero->Enable(false);
             m_pRB_ContinueLine->Enable(false);
 
-            for( sal_Int32 nN =0; nN<aMissingValueTreatments.size(); nN++ )
+            for( size_t nN =0; nN<aMissingValueTreatments.size(); nN++ )
             {
                 sal_Int32 nVal = aMissingValueTreatments[nN];
                 if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
