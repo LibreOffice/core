@@ -246,7 +246,7 @@ OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
     m_pAutoEt->SetText("10");
     m_pAutoEt->SetDecimalDigits(0);
     m_pAutoPb->SetClickHdl(LINK(this,OWizTypeSelect,ButtonClickHdl));
-    m_pColumnNames->EnableMultiSelection(false);
+    m_pColumnNames->EnableMultiSelection(true);
 
     try
     {
@@ -288,6 +288,8 @@ IMPL_LINK_NOARG_TYPED( OWizTypeSelect, ColumnSelectHdl, ListBox&, void )
     OFieldDescription* pField = static_cast<OFieldDescription*>(m_pColumnNames->GetEntryData(m_pColumnNames->GetEntryPos(aColumnName)));
     if(pField)
         m_pTypeControl->DisplayData(pField);
+
+    m_pTypeControl->Enable(m_pColumnNames->GetSelectEntryCount() == 1 );
 }
 
 void OWizTypeSelect::Reset()
