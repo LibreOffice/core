@@ -175,8 +175,8 @@ namespace pcr
             @param  _out_rTypes
                 Takes, upon successful return, the types of possible listeners at the introspectee
         */
-        void    impl_getCopmonentListenerTypes_nothrow(
-                    css::uno::Sequence< css::uno::Type >& _out_rTypes
+        void    impl_getComponentListenerTypes_nothrow(
+                    std::vector< css::uno::Type >& _out_rTypes
                 ) const;
 
         /** returns a secondary component to be used for event inspection

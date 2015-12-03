@@ -715,27 +715,25 @@ namespace pcr
             m_bEventsMapInitialized = true;
             try
             {
-                Sequence< Type > aListeners;
-                impl_getCopmonentListenerTypes_nothrow( aListeners );
-                sal_Int32 listenerCount = aListeners.getLength();
+                std::vector< Type > aListeners;
+                impl_getComponentListenerTypes_nothrow( aListeners );
 
                 Property aCurrentProperty;
                 OUString sListenerClassName;
 
                 // loop through all listeners and all methods, and see which we can present at the UI
-                const Type* pListeners = aListeners.getConstArray();
-                for ( sal_Int32 listener = 0; listener < listenerCount; ++listener, ++pListeners )
+                for ( const Type& rListener : aListeners )
                 {
                     aCurrentProperty = Property();
 
                     // the programmatic name of the listener, to be used as "property" name
-                    sListenerClassName = pListeners->getTypeName();
+                    sListenerClassName = rListener.getTypeName();
                     OSL_ENSURE( !sListenerClassName.isEmpty(), "EventHandler::getSupportedProperties: strange - no listener name ..." );
                     if ( sListenerClassName.isEmpty() )
                         continue;
 
                     // loop through all methods
-                    Sequence< OUString > aMethods( comphelper::getEventMethodsForType( *pListeners ) );
+                    Sequence< OUString > aMethods( comphelper::getEventMethodsForType( rListener ) );
 
                     const OUString* pMethods = aMethods.getConstArray();
                     sal_uInt32 methodCount = aMethods.getLength();
@@ -969,9 +967,9 @@ namespace pcr
         }
     }
 
-    void EventHandler::impl_getCopmonentListenerTypes_nothrow( Sequence< Type >& _out_rTypes ) const
+    void EventHandler::impl_getComponentListenerTypes_nothrow( std::vector< Type >& _out_rTypes ) const
     {
-        _out_rTypes.realloc( 0 );
+        _out_rTypes.clear();
         try
         {
             // we use a set to avoid duplicates
@@ -991,8 +989,7 @@ namespace pcr
             }
 
             // now that they're disambiguated, copy these types into our member
-            _out_rTypes.realloc( aListeners.size() );
-            ::std::copy( aListeners.begin(), aListeners.end(), _out_rTypes.getArray() );
+            std::copy(aListeners.begin(), aListeners.end(), std::back_inserter(_out_rTypes));
         }
         catch( const Exception& )
         {
