@@ -32,7 +32,7 @@ using namespace ::ooo::vba;
 
 SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
 {
-    OSL_TRACE("SwVbaGlobals::SwVbaGlobals()");
+    SAL_INFO("SwVbaGlobals::SwVbaGlobals()", "Call constructor failed");
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
         aInitArgs[ 0 ].Name = "Application";
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
@@ -44,7 +44,7 @@ SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Refere
 
 SwVbaGlobals::~SwVbaGlobals()
 {
-    OSL_TRACE("SwVbaGlobals::~SwVbaGlobals");
+    SAL_INFO("SwVbaGlobals::~SwVbaGlobals", "Call destructor failed");
 }
 
 // XGlobals
@@ -52,7 +52,7 @@ SwVbaGlobals::~SwVbaGlobals()
 uno::Reference<word::XApplication >
 SwVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
-    OSL_TRACE("In SwVbaGlobals::getApplication");
+    SAL_INFO("SwVbaGlobals::getApplication", "getApplication() returns a nullptr");
     if ( !mxApplication.is() )
          mxApplication.set( new SwVbaApplication( mxContext) );
 
