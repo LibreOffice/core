@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_53c46f91",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T22:45:47Z",
+      "side": 1,
+      "message": "Why int if it counts? Should be size_t.",
+      "range": {
+        "startLine": 191,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 7
+      },
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_73bb730f",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T22:45:47Z",
+      "side": 1,
+      "message": "Please place block scope braces on the next line, not following the conditional statement, so\n\n if (...)\n {\n     ...\n }\n\nMakes it easier for the eye when in the editor jumping between braces on larger blocks.\n\nAnd please one space between keyword and the opening parenthesis.",
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_33c1eb81",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T22:45:47Z",
+      "side": 1,
+      "message": "Please stick to the naming conventions, so bFirstTime.",
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_f3ce43b3",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T22:45:47Z",
+      "side": 1,
+      "message": "This crashes if the input is \"\u003dsum(1\" and one enters a comma so rSelText\u003d\"\u003dSUM(1,)\", because then nActive-1 is 1 but there\u0027s only one parameter description (because it\u0027s equal for all parameters) at offset 0 of ScFuncDesc::maDefArgDescs",
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab17558_d3cfbfb1",
+        "filename": "sc/source/ui/inc/inputhdl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-12-03T22:45:47Z",
+      "side": 1,
+      "message": "This should take a const reference instead of a temporary per-value copy, so\n\n ShowDescTip( const OUString\u0026 rFuncName );\n\nNitpick: please stick with our naming conventions, rFuncName in this case.",
+      "revId": "2a47e4d4b4b47871c17e2f171b7762dabb51ff92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
