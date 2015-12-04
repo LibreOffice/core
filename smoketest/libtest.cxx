@@ -25,17 +25,6 @@
         return GetTickCount();
     }
 
-    bool IsAbsolutePath(char *pPath)
-    {
-        if (pPath[1] != ':')
-        {
-            fprintf( stderr, "Absolute path required to libreoffice install\n" );
-            return false;
-        }
-
-        return true;
-    }
-
 #else
 #include <sys/time.h>
 #include <sal/types.h>
@@ -46,16 +35,6 @@
         return t.tv_sec*1000 + t.tv_usec/1000;
     }
 
-    bool IsAbsolutePath(char *pPath)
-    {
-        if (pPath[0] != '/')
-        {
-            fprintf( stderr, "Absolute path required to libreoffice install\n" );
-            return false;
-        }
-
-        return true;
-    }
 #endif
 
 
@@ -64,7 +43,7 @@ using namespace ::lok;
 
 static int help()
 {
-    fprintf( stderr, "Usage: libtest <absolute-path-to-libreoffice-install> [path to load document] [path to save document].\n" );
+    fprintf( stderr, "Usage: libtest <path-to-libreoffice-install> [path to load document] [path to save document].\n" );
     return 1;
 }
 
@@ -78,9 +57,6 @@ int main (int argc, char **argv)
         ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
         return help();
 
-
-    if( !IsAbsolutePath(argv[1]) )
-        return 1;
 
     // coverity[tainted_string] - build time test tool
     Office *pOffice = lok_cpp_init( argv[1] );

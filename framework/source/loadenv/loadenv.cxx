@@ -1083,6 +1083,8 @@ bool LoadEnv::impl_loadContent()
     bool                                           bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW()        , false );
     css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
 
+    bHidden |= Application::IsHeadlessModeEnabled();
+
     if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
     {
         // Note: its an optional interface!
@@ -1533,6 +1535,8 @@ void LoadEnv::impl_reactForLoadingState()
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
         bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
         bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), false);
+
+        bHidden |= Application::IsHeadlessModeEnabled();
 
         if (bMinimized)
         {

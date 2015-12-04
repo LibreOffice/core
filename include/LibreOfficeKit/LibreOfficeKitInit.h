@@ -27,7 +27,7 @@ extern "C"
 #ifndef _WIN32
 
     #include "dlfcn.h"
-
+    #include <limits.h>
     #ifdef  _AIX
     #  include <sys/ldr.h>
     #endif
@@ -39,6 +39,7 @@ extern "C"
         #define TARGET_MERGED_LIB "lib" "mergedlo" ".so"
     #endif
     #define SEPARATOR         '/'
+    #define MAXPATH           PATH_MAX
 
     void *_dlopen(const char *pFN)
     {
@@ -72,6 +73,22 @@ extern "C"
         (void)pPath;
     }
 
+    bool IsAbsolutePath(const char *pPath)
+    {
+        if (pPath[0] != '/')
+        {
+            fprintf( stderr, "Absolute path required to libreoffice install\n" );
+            return false;
+        }
+
+        return true;
+    }
+
+    char * SetFullPath(const char *relative, char *fullpath)
+    {
+        return realpath(relative, fullpath);
+    }
+
 #else
 
     #include <windows.h>
@@ -79,10 +96,11 @@ extern "C"
     #define TARGET_MERGED_LIB "mergedlo" ".dll"
     #define SEPARATOR         '\\'
     #define UNOPATH           "\\..\\URE\\bin"
+    #define MAXPATH           MAX_PATH
 
     void *_dlopen(const char *pFN)
     {
-        return (void *) LoadLibrary(pFN);
+        return (void *) LoadLibraryA(pFN);
     }
 
     char *_dlerror(void)
@@ -108,11 +126,11 @@ extern "C"
             return;
 
         char* sEnvPath = NULL;
-        DWORD  cChars = GetEnvironmentVariable("PATH", sEnvPath, 0);
+        DWORD  cChars = GetEnvironmentVariableA("PATH", sEnvPath, 0);
         if (cChars > 0)
         {
             sEnvPath = new char[cChars];
-            cChars = GetEnvironmentVariable("PATH", sEnvPath, cChars);
+            cChars = GetEnvironmentVariableA("PATH", sEnvPath, cChars);
             //If PATH is not set then it is no error
             if (cChars == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND)
             {
@@ -122,21 +140,40 @@ extern "C"
         }
         //prepare the new PATH. Add the Ure/bin directory at the front.
         //note also adding ';'
-        char * sNewPath = new char[strlen(sEnvPath) + strlen(pPath) + strlen(UNOPATH) + 2];
+        char * sNewPath = new char[strlen(sEnvPath) + strlen(pPath) * 2 + strlen(UNOPATH) + 4];
         sNewPath[0] = L'\0';
-        strcat(sNewPath, pPath);
-        strcat(sNewPath, UNOPATH);
+        strcat(sNewPath, pPath);     // program to PATH
+        strcat(sNewPath, ";");
+        strcat(sNewPath, UNOPATH);   // UNO to PATH
         if (strlen(sEnvPath))
         {
             strcat(sNewPath, ";");
             strcat(sNewPath, sEnvPath);
         }
 
-        SetEnvironmentVariable("PATH", sNewPath);
+        SetEnvironmentVariableA("PATH", sNewPath);
 
         delete[] sEnvPath;
         delete[] sNewPath;
     }
+
+
+    bool IsAbsolutePath(const char *pPath)
+    {
+        if (pPath[1] != ':')
+        {
+            fprintf( stderr, "Absolute path required to libreoffice install\n" );
+            return false;
+        }
+
+        return true;
+    }
+
+    char * SetFullPath(const char *relative, char *fullpath)
+    {
+        return _fullpath(fullpath, relative, MAXPATH);
+    }
+
 #endif
 
 typedef LibreOfficeKit *(HookFunction)( const char *install_path);
@@ -152,12 +189,21 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
 
 #if !(defined(__APPLE__) && defined(__arm__))
     size_t partial_length;
+    char instPath[MAXPATH];
 
     if (!install_path)
         return NULL;
 
+    if( !IsAbsolutePath(install_path) )
+    {
+        if(SetFullPath(install_path, instPath) == NULL)
+            return NULL;
+    }
+    else
+        strcpy(instPath, install_path);
+
     // allocate large enough buffer
-    partial_length = strlen(install_path);
+    partial_length = strlen(instPath);
     imp_lib = (char *) malloc(partial_length + sizeof(TARGET_LIB) + sizeof(TARGET_MERGED_LIB) + 2);
     if (!imp_lib)
     {
@@ -165,7 +211,7 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
         return NULL;
     }
 
-    strcpy(imp_lib, install_path);
+    strcpy(imp_lib, instPath);
 
     extendUnoPath(install_path);
 
@@ -195,6 +241,10 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
         {
             fprintf(stderr, "failed to open library '%s': %s\n",
                     imp_lib, _dlerror());
+//TODO:     check error message
+//
+//            fprintf(stderr, "failed to open library '%s' or '%s' in '%s/'\n",
+//                    TARGET_LIB, TARGET_MERGED_LIB, instPath);
             free(imp_lib);
             return NULL;
         }
