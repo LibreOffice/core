@@ -25,6 +25,7 @@
 
 #include "textanim.hxx"
 #include "textattr.hxx"
+#include "textchaining.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
@@ -52,6 +53,7 @@ SvxTextTabDialog::SvxTextTabDialog( vcl::Window* pParent,
 {
     m_nTextId = AddTabPage( "RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, nullptr);
     m_nTextAnimId = AddTabPage( "RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
+    m_nTextChainId = AddTabPage( "RID_SVXPAGE_TEXTCHAINING", SvxTextChainingPage::Create, nullptr);
 }
 
 /*************************************************************************

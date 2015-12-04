@@ -193,6 +193,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/swpossizepage \
 	cui/uiconfig/ui/textattrtabpage \
 	cui/uiconfig/ui/textanimtabpage \
+	cui/uiconfig/ui/textchainingtabpage \
 	cui/uiconfig/ui/textdialog \
 	cui/uiconfig/ui/textflowpage \
 	cui/uiconfig/ui/thesaurus \

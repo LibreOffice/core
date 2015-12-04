@@ -193,6 +193,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/tabstpge \
     cui/source/tabpages/textanim \
     cui/source/tabpages/textattr \
+    cui/source/tabpages/textchaining \
     cui/source/tabpages/tparea \
     cui/source/tabpages/tpbitmap \
     cui/source/tabpages/tpcolor \
