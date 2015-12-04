@@ -1076,11 +1076,6 @@ void GtkSalFrame::InitCommon()
             maGeometry.nRightDecoration     = 0;
         }
     }
-    else
-    {
-        resizeWindow( maGeometry.nWidth, maGeometry.nHeight );
-        moveWindow( maGeometry.nX, maGeometry.nY );
-    }
     updateScreenNumber();
 
     SetIcon(1);
@@ -1341,32 +1336,10 @@ void GtkSalFrame::DrawMenuBar()
 
 void GtkSalFrame::Center()
 {
-    long nX, nY;
-
-    if( m_pParent )
-    {
-        nX = ((long)m_pParent->maGeometry.nWidth - (long)maGeometry.nWidth)/2;
-        nY = ((long)m_pParent->maGeometry.nHeight - (long)maGeometry.nHeight)/2;
-    }
+    if (m_pParent)
+        gtk_window_set_position(GTK_WINDOW(m_pWindow), GTK_WIN_POS_CENTER_ON_PARENT);
     else
-    {
-        GdkScreen *pScreen = nullptr;
-        gint px, py;
-        GdkModifierType nMask;
-        gdk_display_get_pointer( getGdkDisplay(), &pScreen, &px, &py, &nMask );
-        if( !pScreen )
-            pScreen = gtk_widget_get_screen( m_pWindow );
-
-        gint nMonitor;
-        nMonitor = gdk_screen_get_monitor_at_point( pScreen, px, py );
-
-        GdkRectangle aMonitor;
-        gdk_screen_get_monitor_geometry( pScreen, nMonitor, &aMonitor );
-
-        nX = aMonitor.x + (aMonitor.width - (long)maGeometry.nWidth)/2;
-        nY = aMonitor.y + (aMonitor.height - (long)maGeometry.nHeight)/2;
-    }
-    SetPosSize( nX, nY, 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
+        gtk_window_set_position(GTK_WINDOW(m_pWindow), GTK_WIN_POS_CENTER);
 }
 
 Size GtkSalFrame::calcDefaultSize()
@@ -1460,8 +1433,6 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
             // the display connection used for clipboard and our connection
             Flush();
         }
-        CallCallback( SALEVENT_RESIZE, nullptr );
-        TriggerPaintEvent();
     }
 }
 
@@ -1491,19 +1462,6 @@ void GtkSalFrame::setMinMaxSize()
                 aHints |= GDK_HINT_MAX_SIZE;
             }
         }
-        else
-        {
-            if( ! m_bFullscreen )
-            {
-                aGeo.min_width = maGeometry.nWidth;
-                aGeo.min_height = maGeometry.nHeight;
-                aHints |= GDK_HINT_MIN_SIZE;
-
-                aGeo.max_width = maGeometry.nWidth;
-                aGeo.max_height = maGeometry.nHeight;
-                aHints |= GDK_HINT_MAX_SIZE;
-            }
-        }
         if( m_bFullscreen && m_aMaxSize.Width() && m_aMaxSize.Height() )
         {
             aGeo.max_width = m_aMaxSize.Width();
@@ -1525,9 +1483,7 @@ void GtkSalFrame::SetMaxClientSize( long nWidth, long nHeight )
     if( ! isChild() )
     {
         m_aMaxSize = Size( nWidth, nHeight );
-        // Show does a setMinMaxSize
-        if( IS_WIDGET_MAPPED( m_pWindow ) )
-            setMinMaxSize();
+        setMinMaxSize();
     }
 }
 void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
@@ -1538,9 +1494,7 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
         if( m_pWindow )
         {
             widget_set_size_request(nWidth, nHeight );
-            // Show does a setMinMaxSize
-            if( IS_WIDGET_MAPPED( m_pWindow ) )
-                setMinMaxSize();
+            setMinMaxSize();
         }
     }
 }
@@ -1577,23 +1531,17 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     if( !m_pWindow || isChild( true, false ) )
         return;
 
-    bool bSized = false, bMoved = false;
-
     if( (nFlags & ( SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT )) &&
         (nWidth > 0 && nHeight > 0 ) // sometimes stupid things happen
             )
     {
         m_bDefaultSize = false;
 
-        if( (unsigned long)nWidth != maGeometry.nWidth || (unsigned long)nHeight != maGeometry.nHeight )
-            bSized = true;
-        maGeometry.nWidth   = nWidth;
-        maGeometry.nHeight  = nHeight;
-
         if( isChild( false ) )
             widget_set_size_request(nWidth, nHeight);
         else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
             window_resize(nWidth, nHeight);
+
         setMinMaxSize();
     }
     else if( m_bDefaultSize )
@@ -1611,14 +1559,9 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             nY += m_pParent->maGeometry.nY;
         }
 
-        if( nX != maGeometry.nX || nY != maGeometry.nY )
-            bMoved = true;
-        maGeometry.nX = nX;
-        maGeometry.nY = nY;
-
         m_bDefaultPos = false;
 
-        moveWindow( maGeometry.nX, maGeometry.nY );
+        moveWindow(nX, nY);
 
         updateScreenNumber();
     }
@@ -1626,19 +1569,6 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         Center();
 
     m_bDefaultPos = false;
-
-    if( bSized )
-        AllocateFrame();
-
-    if( bSized && ! bMoved )
-        CallCallback( SALEVENT_RESIZE, nullptr );
-    else if( bMoved && ! bSized )
-        CallCallback( SALEVENT_MOVE, nullptr );
-    else if( bMoved && bSized )
-        CallCallback( SALEVENT_MOVERESIZE, nullptr );
-
-    if (bSized)
-        TriggerPaintEvent();
 }
 
 void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
@@ -1692,16 +1622,11 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         moveWindow( pState->mnX, pState->mnY );
         m_bDefaultPos = m_bDefaultSize = false;
 
-        maGeometry.nX       = pState->mnMaximizedX;
-        maGeometry.nY       = pState->mnMaximizedY;
-        maGeometry.nWidth   = pState->mnMaximizedWidth;
-        maGeometry.nHeight  = pState->mnMaximizedHeight;
         updateScreenNumber();
 
         m_nState = GdkWindowState( m_nState | GDK_WINDOW_STATE_MAXIMIZED );
         m_aRestorePosSize = Rectangle( Point( pState->mnX, pState->mnY ),
                                        Size( pState->mnWidth, pState->mnHeight ) );
-        CallCallback( SALEVENT_RESIZE, nullptr );
     }
     else if( pState->mnMask & (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y |
                                WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT ) )
@@ -1798,6 +1723,8 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
     if (maGeometry.nDisplayScreenNumber == nNewScreen && eType == SET_RETAIN_SIZE)
         return;
 
+    int nX = maGeometry.nX, nY = maGeometry.nY,
+        nWidth = maGeometry.nWidth, nHeight = maGeometry.nHeight;
     GdkScreen *pScreen = nullptr;
     GdkRectangle aNewMonitor;
 
@@ -1851,8 +1778,8 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         gdk_screen_get_monitor_geometry( pScreen, nOldMonitor, &aOldMonitor );
         gdk_screen_get_monitor_geometry( pScreen, nMonitor, &aNewMonitor );
 
-        maGeometry.nX = aNewMonitor.x + maGeometry.nX - aOldMonitor.x;
-        maGeometry.nY = aNewMonitor.y + maGeometry.nY - aOldMonitor.y;
+        nX = aNewMonitor.x + nX - aOldMonitor.x;
+        nY = aNewMonitor.y + nY - aOldMonitor.y;
     }
 
     bool bResize = false;
@@ -1862,10 +1789,10 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
     if( eType == SET_FULLSCREEN )
     {
-        maGeometry.nX = aNewMonitor.x;
-        maGeometry.nY = aNewMonitor.y;
-        maGeometry.nWidth = aNewMonitor.width;
-        maGeometry.nHeight = aNewMonitor.height;
+        nX = aNewMonitor.x;
+        nY = aNewMonitor.y;
+        nWidth = aNewMonitor.width;
+        nHeight = aNewMonitor.height;
         m_nStyle |= SalFrameStyleFlags::PARTIAL_FULLSCREEN;
         bResize = true;
 
@@ -1877,10 +1804,10 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
     if( pSize && eType == SET_UN_FULLSCREEN )
     {
-        maGeometry.nX = pSize->Left();
-        maGeometry.nY = pSize->Top();
-        maGeometry.nWidth = pSize->GetWidth();
-        maGeometry.nHeight = pSize->GetHeight();
+        nX = pSize->Left();
+        nY = pSize->Top();
+        nWidth = pSize->GetWidth();
+        nHeight = pSize->GetHeight();
         m_nStyle &= ~SalFrameStyleFlags::PARTIAL_FULLSCREEN;
         bResize = true;
     }
@@ -1890,14 +1817,10 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         // temporarily re-sizeable
         if( !(m_nStyle & SalFrameStyleFlags::SIZEABLE) )
             gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
-        window_resize(maGeometry.nWidth, maGeometry.nHeight);
-        //I wonder if we should instead leave maGeometry alone and rely on
-        //configure-event to trigger signalConfigure and set it there
-        AllocateFrame();
-        TriggerPaintEvent();
+        window_resize(nWidth, nHeight);
     }
 
-    gtk_window_move( GTK_WINDOW( m_pWindow ), maGeometry.nX, maGeometry.nY );
+    gtk_window_move(GTK_WINDOW(m_pWindow), nX, nY);
 
 #if GTK_CHECK_VERSION(3,8,0)
     gdk_window_set_fullscreen_mode( widget_get_window(m_pWindow), m_bSpanMonitorsWhenFullscreen
@@ -1921,7 +1844,6 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
     m_bDefaultPos = m_bDefaultSize = false;
     updateScreenNumber();
-    CallCallback( SALEVENT_MOVERESIZE, nullptr );
 
     if( bVisible )
         Show( true );
@@ -2693,44 +2615,19 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 void GtkSalFrame::sizeAllocated(GtkWidget*, GdkRectangle *pAllocation, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
-    bool bSized = false;
-
-    if( pThis->m_bFullscreen || (pThis->m_nStyle & (SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::PLUG)) == SalFrameStyleFlags::SIZEABLE )
-    {
-        if( pAllocation->width != (int)pThis->maGeometry.nWidth || pAllocation->height != (int)pThis->maGeometry.nHeight )
-        {
-            bSized = true;
-            pThis->maGeometry.nWidth = pAllocation->width;
-            pThis->maGeometry.nHeight = pAllocation->height;
-        }
-    }
-
-    if( bSized )
-    {
-        pThis->AllocateFrame();
-        pThis->CallCallback( SALEVENT_RESIZE, nullptr );
-        pThis->TriggerPaintEvent();
-    }
+    pThis->maGeometry.nWidth = pAllocation->width;
+    pThis->maGeometry.nHeight = pAllocation->height;
+    pThis->AllocateFrame();
+    pThis->CallCallback( SALEVENT_RESIZE, nullptr );
+    pThis->TriggerPaintEvent();
 }
 
 gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->m_bPaintsBlocked = false;
 
     bool bMoved = false;
     int x = pEvent->x, y = pEvent->y;
-
-    /*  HACK: during sizing/moving a toolbar pThis->maGeometry is actually
-     *  already exact; even worse: due to the asynchronicity of configure
-     *  events the borderwindow which would evaluate this event
-     *  would size/move based on wrong data if we would actually evaluate
-     *  this event. So let's swallow it.
-     */
-    if( (pThis->m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) &&
-        GtkSalFrame::getDisplay()->GetCaptureFrame() == pThis )
-        return false;
 
     /* #i31785# claims we cannot trust the x,y members of the event;
      * they are e.g. not set correctly on maximize/demaximize;
@@ -2745,23 +2642,12 @@ gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpo
     }
 
     // update decoration hints
-    if( ! (pThis->m_nStyle & SalFrameStyleFlags::PLUG) )
-    {
-        GdkRectangle aRect;
-        gdk_window_get_frame_extents( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &aRect );
-        pThis->maGeometry.nTopDecoration    = y - aRect.y;
-        pThis->maGeometry.nBottomDecoration = aRect.y + aRect.height - y - pEvent->height;
-        pThis->maGeometry.nLeftDecoration   = x - aRect.x;
-        pThis->maGeometry.nRightDecoration  = aRect.x + aRect.width - x - pEvent->width;
-    }
-    else
-    {
-        pThis->maGeometry.nTopDecoration =
-            pThis->maGeometry.nBottomDecoration =
-            pThis->maGeometry.nLeftDecoration =
-            pThis->maGeometry.nRightDecoration = 0;
-    }
-
+    GdkRectangle aRect;
+    gdk_window_get_frame_extents( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &aRect );
+    pThis->maGeometry.nTopDecoration    = y - aRect.y;
+    pThis->maGeometry.nBottomDecoration = aRect.y + aRect.height - y - pEvent->height;
+    pThis->maGeometry.nLeftDecoration   = x - aRect.x;
+    pThis->maGeometry.nRightDecoration  = aRect.x + aRect.width - x - pEvent->width;
     pThis->updateScreenNumber();
 
     if (bMoved)
