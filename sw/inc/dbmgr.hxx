@@ -217,6 +217,46 @@ friend class SwConnectionDisposedListener_Impl;
     /// The document that owns this manager.
     SwDoc* m_pDoc;
 
+    struct SParRec
+    {
+        const SwMergeDescriptor  &rMergeDescriptor;
+        vcl::Window              *pSourceWindow;
+        SwDocShell               *pSourceDocSh;
+        SwWrtShell               *pSourceShell;
+        SwDoc                    *pWorkDoc;
+        // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
+        SfxObjectShellLock       xWorkDocSh;
+        SwView                   *pWorkView;
+        SfxObjectShellRef        xTargetDocShell;
+        SwWrtShell               *pTargetShell;
+        SwDoc                    *pTargetDoc;
+        SwView                   *pTargetView;
+        SwDBManager              *pOldDBManager;
+        const SfxFilter          *pStoreToFilter;
+        const OUString           *pStoreToFilterOptions;
+        bool                      bMergeShell;
+        bool                      bPageStylesWithHeaderFooter;
+        bool                      bSynchronizedDoc;
+        bool                      bCreateSingleFile;
+        OUString                  sModifiedStartingPageDesc;
+        OUString                  sStartingPageDesc;
+        sal_uInt16                nStartingPageNo;
+        sal_Int32                 nDocNo;
+        int                       targetDocPageCount;
+
+        SParRec(bool SynchronizedDoc, bool MergeShell, bool CreateSingleFile, SwWrtShell *SourceShell,
+                const SwMergeDescriptor &MergeDescriptor) :
+            rMergeDescriptor(MergeDescriptor), pSourceWindow(nullptr), pSourceDocSh(nullptr),
+            pSourceShell(SourceShell), pWorkDoc(nullptr),
+            pWorkView(nullptr),
+            pTargetShell(nullptr), pTargetDoc(nullptr), pTargetView(nullptr), pOldDBManager(nullptr),
+            pStoreToFilter(nullptr), pStoreToFilterOptions(nullptr), bMergeShell(MergeShell),
+            bPageStylesWithHeaderFooter(), bSynchronizedDoc(SynchronizedDoc),
+            bCreateSingleFile(CreateSingleFile),
+            nStartingPageNo(0), nDocNo(0), targetDocPageCount(0)
+            { }
+    };  // Parameter Record
+
     SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, bool bCreate);
     SAL_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, bool bCreate);
 
@@ -256,53 +296,35 @@ friend class SwConnectionDisposedListener_Impl;
     SAL_DLLPRIVATE void GetPathAddress(OUString &sPath, OUString &sAddress,
                                       css::uno::Reference< css::beans::XPropertySet > xColumnProp);
 
-    SAL_DLLPRIVATE bool CreateNewTemp(OUString &sPath, const OUString &sAddress,
-                                      std::unique_ptr< utl::TempFile > &aTempFile,
-                                      const SwMergeDescriptor& rMergeDescriptor,  const SfxFilter* pStoreToFilter);
+    SAL_DLLPRIVATE bool CreateNewTemp(SParRec &parRec, OUString &sPath, const OUString &sAddress,
+                                      std::unique_ptr< utl::TempFile > &aTempFile);
 
-    SAL_DLLPRIVATE void UpdateProgressDlg(bool bMergeShell,  VclPtr<CancelableDialog> pProgressDlg, bool createTempFile,
-                                          std::unique_ptr< INetURLObject > &aTempFileURL,
-                                          SwDocShell *pSourceDocSh, sal_Int32 nDocNo);
+    SAL_DLLPRIVATE void UpdateProgressDlg(SParRec &parRec, VclPtr<CancelableDialog> pProgressDlg, bool createTempFile,
+                                          std::unique_ptr< INetURLObject > &aTempFileURL);
 
-    SAL_DLLPRIVATE bool CreateTargetDocShell(sal_Int32 nMaxDumpDocs, bool bMergeShell, vcl::Window *pSourceWindow,
-                                             SwWrtShell *pSourceShell, SwDocShell *pSourceDocSh,
-                                             SfxObjectShellRef &xTargetDocShell, SwDoc *&pTargetDoc,
-                                             SwWrtShell *&pTargetShell, SwView  *&pTargetView,
-                                             sal_uInt16 &nStartingPageNo, OUString &sStartingPageDesc);
+    SAL_DLLPRIVATE void CreateTargetDocShell(SParRec &parRec, sal_Int32 nMaxDumpDocs);
 
     SAL_DLLPRIVATE void LockUnlockDisp(bool bLock, SwDocShell *pSourceDocSh);
 
-    SAL_DLLPRIVATE void CreateProgessDlg(vcl::Window *&pSourceWindow, VclPtr<CancelableDialog> &pProgressDlg,
-                                         bool bMergeShell, SwWrtShell *pSourceShell, vcl::Window *pParent);
+    SAL_DLLPRIVATE void CreateProgessDlg(SParRec &parRec, VclPtr<CancelableDialog> &pProgressDlg,
+                                         vcl::Window *pParent);
 
-    SAL_DLLPRIVATE void CreateWorkDoc(SfxObjectShellLock &xWorkDocSh, SwView *&pWorkView, SwDoc *&pWorkDoc, SwDBManager *&pOldDBManager,
-                                      SwDocShell *pSourceDocSh, sal_Int32 nMaxDumpDocs,  sal_Int32 nDocNo);
+    SAL_DLLPRIVATE void CreateWorkDoc(SParRec &parRec, sal_Int32 nMaxDumpDocs);
 
     SAL_DLLPRIVATE void UpdateExpFields(SwWrtShell& rWorkShell, SfxObjectShellLock xWorkDocSh);
 
-    SAL_DLLPRIVATE void CreateStoreToFilter(const SfxFilter *&pStoreToFilter, const OUString *&pStoreToFilterOptions,
-                                            SwDocShell *pSourceDocSh, bool bEMail, const SwMergeDescriptor &rMergeDescriptor);
+    SAL_DLLPRIVATE void CreateStoreToFilter(SParRec &parRec, bool bEMail);
 
-    SAL_DLLPRIVATE void MergeSingleFiles(SwDoc *pWorkDoc, SwWrtShell &rWorkShell, SwWrtShell *pTargetShell, SwDoc *pTargetDoc,
-                                         SfxObjectShellLock &xWorkDocSh, SfxObjectShellRef xTargetDocShell,
-                                         bool bPageStylesWithHeaderFooter, bool bSynchronizedDoc,
-                                         OUString &sModifiedStartingPageDesc, OUString &sStartingPageDesc, sal_Int32 nDocNo,
-                                         long nStartRow, sal_uInt16 nStartingPageNo, int &targetDocPageCount, const bool bMergeShell,
-                                         const SwMergeDescriptor& rMergeDescriptor, sal_Int32 nMaxDumpDocs);
+    SAL_DLLPRIVATE void MergeSingleFiles(SParRec &parRec, SwWrtShell& rWorkShell, long nStartRow, sal_Int32 nMaxDumpDocs);
 
-    SAL_DLLPRIVATE void ResetWorkDoc(SwDoc *pWorkDoc, SfxObjectShellLock &xWorkDocSh, SwDBManager *pOldDBManager);
+    SAL_DLLPRIVATE void ResetWorkDoc(SParRec &parRec);
 
     SAL_DLLPRIVATE void FreezeLayouts(SwWrtShell *pTargetShell, bool freeze);
 
-    SAL_DLLPRIVATE void FinishMailMergeFile(SfxObjectShellLock &xWorkDocSh, SwView *pWorkView, SwDoc *pTargetDoc,
-                                             SwWrtShell *pTargetShell, bool bCreateSingleFile, bool bPrinter,
-                                             SwDoc *pWorkDoc, SwDBManager *pOldDBManager);
+    SAL_DLLPRIVATE void FinishMailMergeFile(SParRec &parRec, bool bPrinter);
 
-    SAL_DLLPRIVATE bool SavePrintDoc(SfxObjectShellRef xTargetDocShell, SwView *pTargetView,
-                                     const SwMergeDescriptor &rMergeDescriptor,
-                                     std::unique_ptr< utl::TempFile > &aTempFile,
-                                     const SfxFilter *&pStoreToFilter, const OUString *&pStoreToFilterOptions,
-                                     const bool bMergeShell, bool bCreateSingleFile, const bool bPrinter);
+    SAL_DLLPRIVATE bool SavePrintDoc(SParRec &parRec, std::unique_ptr< utl::TempFile > &aTempFile,
+                                      const bool bPrinter);
 
     SAL_DLLPRIVATE void SetPrinterOptions(const SwMergeDescriptor &rMergeDescriptor,
                                           css::uno::Sequence< css::beans::PropertyValue > &aOptions);
