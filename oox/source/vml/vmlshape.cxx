@@ -61,6 +61,8 @@
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
@@ -335,46 +337,26 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
 
                 if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
                 {
-                    uno::Sequence<beans::PropertyValue> aGrabBag;
                     uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
-                    propertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
-                    sal_Int32 length;
+                    uno::Any aAny = propertySet->getPropertyValue("FrameInteropGrabBag");
+                    auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
 
-                    length = aGrabBag.getLength();
-                    aGrabBag.realloc( length+1 );
-                    aGrabBag[length].Name = "VML-Z-ORDER";
-                    aGrabBag[length].Value = uno::makeAny( maTypeModel.maZIndex.toInt32() );
+                    aGrabBag.push_back(comphelper::makePropertyValue("VML-Z-ORDER", maTypeModel.maZIndex.toInt32()));
 
                     if( !s_mso_next_textbox.isEmpty() )
-                    {
-                        length = aGrabBag.getLength();
-                        aGrabBag.realloc( length+1 );
-                        aGrabBag[length].Name = "mso-next-textbox";
-                        aGrabBag[length].Value = uno::makeAny( s_mso_next_textbox );
-                    }
+                        aGrabBag.push_back(comphelper::makePropertyValue("mso-next-textbox", s_mso_next_textbox));
 
                     if( !sLinkChainName.isEmpty() )
                     {
-                        length = aGrabBag.getLength();
-                        aGrabBag.realloc( length+4 );
-                        aGrabBag[length].Name   = "TxbxHasLink";
-                        aGrabBag[length].Value   = uno::makeAny( true );
-                        aGrabBag[length+1].Name = "Txbx-Id";
-                        aGrabBag[length+1].Value = uno::makeAny( id );
-                        aGrabBag[length+2].Name = "Txbx-Seq";
-                        aGrabBag[length+2].Value = uno::makeAny( seq );
-                        aGrabBag[length+3].Name = "LinkChainName";
-                        aGrabBag[length+3].Value = uno::makeAny( sLinkChainName );
+                        aGrabBag.push_back(comphelper::makePropertyValue("TxbxHasLink", true));
+                        aGrabBag.push_back(comphelper::makePropertyValue("Txbx-Id", id));
+                        aGrabBag.push_back(comphelper::makePropertyValue("Txbx-Seq", seq));
+                        aGrabBag.push_back(comphelper::makePropertyValue("LinkChainName", sLinkChainName));
                     }
 
                     if(!(maTypeModel.maRotation).isEmpty())
-                    {
-                        length = aGrabBag.getLength();
-                        aGrabBag.realloc( length+1 );
-                        aGrabBag[length].Name = "mso-rotation-angle";
-                        aGrabBag[length].Value = uno::makeAny(sal_Int32(NormAngle360((maTypeModel.maRotation.toInt32()) * -100)));
-                    }
-                    propertySet->setPropertyValue( "FrameInteropGrabBag", uno::makeAny(aGrabBag) );
+                        aGrabBag.push_back(comphelper::makePropertyValue("mso-rotation-angle", sal_Int32(NormAngle360((maTypeModel.maRotation.toInt32()) * -100))));
+                    propertySet->setPropertyValue("FrameInteropGrabBag", uno::makeAny(comphelper::containerToSequence(aGrabBag)));
                     sal_Int32 backColorTransparency = 0;
                     propertySet->getPropertyValue("BackColorTransparency")
                         >>= backColorTransparency;
