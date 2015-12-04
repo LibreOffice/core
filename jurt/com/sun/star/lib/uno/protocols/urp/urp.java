@@ -642,7 +642,6 @@ public final class urp implements IProtocol {
                     forceSynchronous = parseBooleanAttributeValue(a, v);
                 } else if (a.equalsIgnoreCase("negotiate")) {
                     // Ignored:
-                    parseBooleanAttributeValue(a, v);
                 } else {
                     throw new IllegalArgumentException(
                         "unknown protocol attribute " + a);
