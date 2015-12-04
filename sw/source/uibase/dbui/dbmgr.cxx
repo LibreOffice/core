@@ -1260,10 +1260,7 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
 
         CreateProgessDlg(parRec, pProgressDlg, pParent);
 
-        if(parRec.bCreateSingleFile)
-        {
-            CreateTargetDocShell(parRec, nMaxDumpDocs);
-        }
+        CreateTargetDocShell(parRec, nMaxDumpDocs);
 
         // Progress, to prohibit KeyInputs
         SfxProgress aProgress(parRec.pSourceDocSh, ::aEmptyOUStr, 1);
@@ -1291,6 +1288,14 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
         parRec.pOldDBManager = nullptr;
 
 
+        sal_Int32 nDbEntries        = GetRowCount(),
+                  nOneDocPages      = 1,
+                  nPrnDocPages      = 1,
+                  nPageCounts       = 1,
+                  nStartPage        = 0,
+                  nNextPage         = 0,
+                  nLastOne          = -1;
+
         std::shared_ptr< vcl::PrinterController > prnCtrl;
 
         do
@@ -1305,16 +1310,15 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
                 // Create a copy of the source document and work with that one instead of the source.
                 // If we're not in the single file mode (which requires modifying the document for the merging),
                 // it is enough to do this just once.
-                if(1 == parRec.nDocNo || parRec.bCreateSingleFile)
-                    CreateWorkDoc(parRec, nMaxDumpDocs);
+                CreateWorkDoc(parRec, nMaxDumpDocs);
 
                 SwWrtShell &rWorkShell = parRec.pWorkView->GetWrtShell();
 
                 UpdateExpFields(rWorkShell, parRec.xWorkDocSh);
 
-                if(parRec.bCreateSingleFile)
-                    MergeSingleFiles(parRec, rWorkShell, nStartRow, nMaxDumpDocs);
-                else
+                MergeSingleFiles(parRec, rWorkShell, nStartRow, nMaxDumpDocs);
+
+                if(!parRec.bCreateSingleFile)
                 {
 
                     if( 1 == parRec.nDocNo ) // set up printing only once at the beginning
@@ -1331,28 +1335,73 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
 
                         // move print options
                         SetPrinterOptions(rMergeDescriptor, aOptions);
-                        parRec.pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
-                        prnCtrl = parRec.pWorkView->GetPrinterController();
+                        parRec.pTargetView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync, nDbEntries );
+                        prnCtrl = parRec.pTargetView->GetPrinterController();
 
-                        SfxPrinter* pDocPrt = parRec.pWorkView->GetPrinter();
+                        SfxPrinter* pDocPrt = parRec.pTargetView->GetPrinter();
                         JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
                         bCancel = !Printer::PreparePrintJob( prnCtrl, aJobSetup );
 
+                        nStartPage    = 0;
+                        // one documents has count of page(s)
+                        nOneDocPages  = prnCtrl->getPageCountProtected(false) / nDbEntries;
+                        // how many pages must be printing, for first calculation (but for only one document it is not right)
+                        nPrnDocPages  = prnCtrl->getFilteredPageCount();
+                        const vcl::PrinterController::MultiPageSetup &mp = prnCtrl->getMultipage();
+                        // how many pages must be print on one page
+                        nPageCounts   = mp.nRows * mp.nColumns;
+                        nLastOne      = (nDbEntries * nOneDocPages);
 
+                        if(nPageCounts < 1)
+                            nPageCounts = 1;
+                        else if(nPageCounts > nLastOne)
+                            nPageCounts = nLastOne;
+
+                        if(nOneDocPages >= nPageCounts)
+                            nNextPage = 1;
+                        else
+                        {
+                            nNextPage = nPageCounts / nOneDocPages;
+                            if((nPageCounts % nOneDocPages) > 0)
+                                ++nNextPage;
+                        }
 #if ENABLE_CUPS && !defined(MACOSX)
                         if( !bCancel )
                             psp::PrinterInfoManager::get().startBatchPrint();
 #endif
                     }
 
-                    if( !bCancel && !Printer::ExecutePrintJob( prnCtrl ))
-                        bCancel = true;
+                    if(nNextPage == parRec.nDocNo)
+                    {   // now all document here, recalculate the Pages exactly
+                        nPrnDocPages  = prnCtrl->getFilteredPageCount();
+                        // set the controller in the print modus
+                        prnCtrl->updatePrinterContr(1, nPrnDocPages);
+                    }
+
+                    int curPages  = parRec.nDocNo * nOneDocPages;
+                    int mustPrint = curPages - (nPageCounts * nStartPage);
+                    if((mustPrint >= nPageCounts) || (nLastOne <= curPages))
+                    {
+                        int cnt = mustPrint / nPageCounts;
+
+                        if((parRec.nDocNo == nDbEntries) && (cnt > 0) && ((mustPrint % nPageCounts) > 0))
+                            ++cnt;
+
+                        do
+                        {
+                            prnCtrl->updatePrinterContr(2, nStartPage);
+                            ++nStartPage;
+
+                            if( !bCancel && !Printer::ExecutePrintJob( prnCtrl))
+                                bCancel = true;
+                            else if((prnCtrl->getJobState() == view::PrintableState_JOB_SPOOLED) &&
+                                (nStartPage < nPrnDocPages))
+                                prnCtrl->setJobState(view::PrintableState_JOB_STARTED);
+                        } while(--cnt > 0);
+                    }
                 }
 
-                if(parRec.bCreateSingleFile)
-                {
-                    ResetWorkDoc(parRec);
-                }
+                ResetWorkDoc(parRec);
             }
 
             parRec.nDocNo++;
@@ -1360,7 +1409,7 @@ bool SwDBManager::MergeMailPrinter(SwWrtShell* pSourceShell,
 
             // Freeze the layouts of the target document after the first inserted
             // sub-document, to get the correct PageDesc.
-            if(!bFreezedLayouts && parRec.bCreateSingleFile)
+            if(!bFreezedLayouts)
             {
                 FreezeLayouts(parRec.pTargetShell, true);
                 bFreezedLayouts = true;
@@ -1726,13 +1775,13 @@ void SwDBManager::FinishMailMergeFile(SParRec &parRec, bool bPrinter)
     {
         if(bPrinter)
         {
-            Printer::FinishPrintJob( parRec.pWorkView->GetPrinterController() );
+            Printer::FinishPrintJob( parRec.pTargetView->GetPrinterController() );
 #if ENABLE_CUPS && !defined(MACOSX)
             psp::PrinterInfoManager::get().flushBatchPrint();
 #endif
         }
-
-        ResetWorkDoc(parRec);
+        else
+            ResetWorkDoc(parRec);
     }
 
     if( parRec.bCreateSingleFile )
@@ -1814,6 +1863,11 @@ bool SwDBManager::SavePrintDoc(SParRec &parRec, std::unique_ptr< utl::TempFile >
         // Leave docshell available for caller (e.g. MM wizard)
         if (!parRec.bMergeShell)
             parRec.xTargetDocShell->DoClose();
+    }
+    else if(bPrinter)
+    {
+         // Leave docshell available for caller (e.g. MM wizard)
+         parRec.xTargetDocShell->DoClose();
     }
 
     return bNoError;

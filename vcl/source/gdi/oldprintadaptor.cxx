@@ -78,7 +78,7 @@ void OldStylePrintAdaptor::EndPage()
     mpData->maPages.back().maPage.WindStart();
 }
 
-int  OldStylePrintAdaptor::getPageCount() const
+int  OldStylePrintAdaptor::getPageCount(bool) const
 {
     return int(mpData->maPages.size());
 }
