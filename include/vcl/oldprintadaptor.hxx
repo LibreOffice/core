@@ -35,7 +35,9 @@ namespace vcl
         void StartPage();
         void EndPage();
 
-        virtual int  getPageCount() const override;
+        // is only needed when print in multi-file when true give the real pages back
+        // otherwise not use, here not needed
+        virtual int  getPageCount(bool) const override;
         virtual css::uno::Sequence< css::beans::PropertyValue > getPageParameters( int i_nPage ) const override;
         virtual void printPage( int i_nPage ) const override;
     };

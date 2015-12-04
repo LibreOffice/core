@@ -285,13 +285,29 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pFromNF->SetMax(SAL_MAX_INT32);
     m_pToNF->SetMax(SAL_MAX_INT32);
 
+    sal_Int32 nCnt = 0;
+
     SwDBManager* pDBManager = rSh.GetDBManager();
     if(_xConnection.is())
+    {
         SwDBManager::GetColumnNames(m_pAddressFieldLB, _xConnection, rTableName);
+        nCnt = SwDBManager::GetRowCount(_xConnection, rTableName);
+    }
     else
+    {
         pDBManager->GetColumnNames(m_pAddressFieldLB, rSourceName, rTableName);
+        nCnt = pDBManager->GetRowCount(rSourceName, rTableName);
+    }
+
     for(sal_Int32 nEntry = 0; nEntry < m_pAddressFieldLB->GetEntryCount(); ++nEntry)
         m_pColumnLB->InsertEntry(m_pAddressFieldLB->GetEntry(nEntry));
+
+
+    m_pFromNF->SetMin(1);
+    m_pFromNF->SetMax(nCnt == 0 ? SAL_MAX_INT32 : nCnt);
+
+    m_pToNF->SetMin(1);
+    m_pToNF->SetMax(nCnt == 0 ? SAL_MAX_INT32 :nCnt);
 
     m_pAddressFieldLB->SelectEntry("EMAIL");
 
@@ -448,6 +464,7 @@ IMPL_LINK_TYPED( SwMailMergeDlg, OutputTypeHdl, Button *, pBtn, void )
         m_pFilterFT->Enable(false);
         m_pFilterLB->Enable(false);
         m_pGenerateFromDataBaseCB->Enable(false);
+        m_pSaveSingleDocRB->Check();
     }
 }
 
