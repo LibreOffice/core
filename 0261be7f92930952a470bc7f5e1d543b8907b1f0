@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab17558_73eff3b0",
+        "filename": "jurt/com/sun/star/lib/uno/protocols/urp/urp.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-12-04T12:34:48Z",
+      "side": 0,
+      "message": "this throws an exception if v is null, are we sure we want to lose that validation?",
+      "revId": "0261be7f92930952a470bc7f5e1d543b8907b1f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
