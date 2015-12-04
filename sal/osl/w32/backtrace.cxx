@@ -15,6 +15,8 @@
 #define OPTIONAL
 #include <DbgHelp.h>
 
+#include <ustrbuf.hxx>
+
 // No-op for now; it needs implementing.
 rtl_uString *osl_backtraceAsString()
 {
