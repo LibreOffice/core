@@ -76,7 +76,7 @@ class SwpHtEnd : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtEnd,
     o3tl::find_partialorder_ptrequals> {};
 
 
-
+/// An SwTextAttr container, stores all directly formatted text portions for a text node.
 class SwpHints
 {
 private:
