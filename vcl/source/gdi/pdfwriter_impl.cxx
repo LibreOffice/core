@@ -10758,14 +10758,6 @@ void PDFWriterImpl::drawPixel( const Point& rPoint, const Color& rColor )
     setFillColor( aOldFillColor );
 }
 
-class AccessReleaser
-{
-    BitmapReadAccess* m_pAccess;
-public:
-    explicit AccessReleaser( BitmapReadAccess* pAccess ) : m_pAccess( pAccess ){}
-    ~AccessReleaser() { delete m_pAccess; }
-};
-
 bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
 {
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
@@ -10925,8 +10917,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     aDev->DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
 
     Bitmap aSample = aDev->GetBitmap( Point( 0, 0 ), rObject.m_aSize );
-    BitmapReadAccess* pAccess = aSample.AcquireReadAccess();
-    AccessReleaser aReleaser( pAccess );
+    Bitmap::ScopedReadAccess pAccess(aSample);
 
     Size aSize = aSample.GetSizePixel();
 
@@ -11240,8 +11231,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         }
     }
 
-    BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
-    AccessReleaser aReleaser( pAccess );
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
 
     bool bTrueColor;
     sal_Int32 nBitsPerComponent;
@@ -11421,7 +11411,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 #ifndef DEBUG_DISABLE_PDFCOMPRESSION
     if( nBitsPerComponent == 1 )
     {
-        writeG4Stream( pAccess );
+        writeG4Stream(pAccess.get());
     }
     else
 #endif
