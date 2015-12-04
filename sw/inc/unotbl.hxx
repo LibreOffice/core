@@ -547,11 +547,12 @@ class SwXTableRows final : public cppu::WeakImplHelper
 <
     css::table::XTableRows,
     css::lang::XServiceInfo
->,
-    public SwClient
-
+>
 {
-    SwFrameFormat* GetFrameFormat() { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
+private:
+   class Impl;
+   ::sw::UnoImplPtr<Impl> m_pImpl;
+    SwFrameFormat* GetFrameFormat();
     const SwFrameFormat* GetFrameFormat() const { return const_cast<SwXTableRows*>(this)->GetFrameFormat(); }
 protected:
     virtual ~SwXTableRows();
@@ -579,20 +580,18 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
-
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
 
 class SwXTableColumns : public cppu::WeakImplHelper
 <
     css::table::XTableColumns,
     css::lang::XServiceInfo
->,
-    public SwClient
-
+>
 {
-    SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+private:
+   class Impl;
+   ::sw::UnoImplPtr<Impl> m_pImpl;
+    SwFrameFormat* GetFrameFormat() const;
 protected:
     virtual ~SwXTableColumns();
 public:
@@ -619,9 +618,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
-
-    //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
 
 int sw_CompareCellRanges(

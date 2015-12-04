@@ -3756,6 +3756,15 @@ void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     }
 }
 
+class SwXTableRows::Impl : public SwClient
+{
+public:
+    Impl(SwFrameFormat& rFrameFormat) : SwClient(&rFrameFormat) {}
+protected:
+    //SwClient
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+};
+
 //  SwXTableRows
 
 OUString SwXTableRows::getImplementationName() throw( uno::RuntimeException, std::exception )
@@ -3769,11 +3778,16 @@ uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames() throw( uno::R
 
 
 SwXTableRows::SwXTableRows(SwFrameFormat& rFrameFormat) :
-    SwClient(&rFrameFormat)
+    m_pImpl(new SwXTableRows::Impl(rFrameFormat))
 { }
 
 SwXTableRows::~SwXTableRows()
 { }
+
+SwFrameFormat* SwXTableRows::GetFrameFormat()
+{
+    return static_cast<SwFrameFormat*>(m_pImpl->GetRegisteredIn());
+}
 
 sal_Int32 SwXTableRows::getCount() throw( uno::RuntimeException, std::exception )
 {
@@ -3904,10 +3918,19 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     }
 }
 
-void SwXTableRows::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTableRows::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     { ClientModify(this, pOld, pNew); }
 
 // SwXTableColumns
+
+class SwXTableColumns::Impl : public SwClient
+{
+public:
+    Impl(SwFrameFormat& rFrameFormat) : SwClient(&rFrameFormat) {}
+protected:
+    //SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+};
 
 OUString SwXTableColumns::getImplementationName() throw( uno::RuntimeException, std::exception )
     { return OUString("SwXTableColumns"); }
@@ -3920,11 +3943,16 @@ uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames() throw( uno
 
 
 SwXTableColumns::SwXTableColumns(SwFrameFormat& rFrameFormat) :
-    SwClient(&rFrameFormat)
+    m_pImpl(new SwXTableColumns::Impl(rFrameFormat))
 { }
 
 SwXTableColumns::~SwXTableColumns()
 { }
+
+SwFrameFormat* SwXTableColumns::GetFrameFormat() const
+{
+    return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(m_pImpl->GetRegisteredIn()));
+}
 
 sal_Int32 SwXTableColumns::getCount() throw( uno::RuntimeException, std::exception )
 {
@@ -4044,7 +4072,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     }
 }
 
-void SwXTableColumns::Modify(const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTableColumns::Impl::Modify(const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     { ClientModify(this, pOld, pNew); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
