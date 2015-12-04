@@ -29,8 +29,8 @@ class SvNumberFormatter;
 class ScNumFormatAbbrev
 {
     OUString sFormatstring;
-    LanguageType eLnge;
-    LanguageType eSysLnge;
+    LanguageType eLanguage;
+    LanguageType eSysLanguage;
 public:
     ScNumFormatAbbrev();
     ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat);
@@ -42,17 +42,17 @@ public:
     inline bool operator==(const ScNumFormatAbbrev& rNumFormat) const
     {
         return ((sFormatstring == rNumFormat.sFormatstring)
-            && (eLnge == rNumFormat.eLnge)
-            && (eSysLnge == rNumFormat.eSysLnge));
+            && (eLanguage == rNumFormat.eLanguage)
+            && (eSysLanguage == rNumFormat.eSysLanguage));
     }
     inline ScNumFormatAbbrev& operator=(const ScNumFormatAbbrev& rNumFormat)
     {
         sFormatstring = rNumFormat.sFormatstring;
-        eLnge = rNumFormat.eLnge;
-        eSysLnge = rNumFormat.eSysLnge;
+        eLanguage = rNumFormat.eLanguage;
+        eSysLanguage = rNumFormat.eSysLanguage;
         return *this;
     }
-    inline LanguageType GetLanguage() const { return eLnge; }
+    inline LanguageType GetLanguage() const { return eLanguage; }
 };
 
 #endif
