@@ -7,18 +7,46 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/buttonstatuslistener.hxx>
+#ifndef INCLUDED_VCL_VCLSTATUSLISTENER_HXX
+#define INCLUDED_VCL_VCLSTATUSLISTENER_HXX
+
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/vclptr.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-ButtonStatusListener::ButtonStatusListener(Button* button, const rtl::OUString& aCommand) {
-    mButton = button;
+template <class T> class VCL_DLLPUBLIC VclStatusListener : public cppu::WeakImplHelper < css::frame::XStatusListener>
+{
+public:
+    VclStatusListener<T>(T* widget, const rtl::OUString& aCommand);
+
+private:
+    VclPtr<T> mWidget; /** The widget on which actions are performed */
+
+    /** Dispatcher. Need to keep a reference to it as long as this StatusListener exists. */
+    css::uno::Reference<css::frame::XDispatch> mxDispatch;
+    css::util::URL maCommandURL;
+
+public:
+    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent)
+        throw(css::uno::RuntimeException, std::exception) override;
+
+    void SAL_CALL disposing(const css::lang::EventObject& /*Source*/)
+        throw( css::uno::RuntimeException, std::exception ) override;
+
+    void dispose();
+};
+
+template<class T>
+VclStatusListener<T>::VclStatusListener(T* widget, const rtl::OUString& aCommand) {
+    mWidget = widget;
 
     css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
@@ -42,25 +70,31 @@ ButtonStatusListener::ButtonStatusListener(Button* button, const rtl::OUString& 
     mxDispatch->addStatusListener(this, maCommandURL);
 }
 
-void ButtonStatusListener::statusChanged(const css::frame::FeatureStateEvent& rEvent)
+template<class T>
+void VclStatusListener<T>::statusChanged(const css::frame::FeatureStateEvent& rEvent)
             throw(css::uno::RuntimeException, std::exception)
 {
-    mButton->SetStateUno(rEvent);
+    mWidget->statusChanged(rEvent);
 }
 
-void ButtonStatusListener::disposing(const css::lang::EventObject& /*Source*/)
+template<class T>
+void VclStatusListener<T>::disposing(const css::lang::EventObject& /*Source*/)
             throw( css::uno::RuntimeException, std::exception )
 {
     mxDispatch.clear();
 }
 
-void ButtonStatusListener::dispose()
+template<class T>
+void VclStatusListener<T>::dispose()
 {
     if (mxDispatch.is()) {
         mxDispatch->removeStatusListener(this, maCommandURL);
         mxDispatch.clear();
     }
-    mButton.clear();
+    mWidget.clear();
 }
+
+
+#endif // INCLUDED_VCL_VCLSTATUSLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
