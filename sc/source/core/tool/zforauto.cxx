@@ -28,7 +28,7 @@
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
     sFormatstring   ( "Standard" ),
     eLnge           (LANGUAGE_SYSTEM),
-    eSysLnge        (LANGUAGE_GERMAN)       // sonst passt "Standard" nicht
+    eSysLnge        (LANGUAGE_GERMAN)       // otherwise "Standard" does not fit
 {
 }
 
@@ -76,7 +76,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uInt32 nFormat,
     {
         OSL_FAIL("SCNumFormatAbbrev:: unknown number format");
         eLnge = LANGUAGE_SYSTEM;
-        eSysLnge = LANGUAGE_GERMAN;     // sonst passt "Standard" nicht
+        eSysLnge = LANGUAGE_GERMAN;     // otherwise "Standard" does not fit
         sFormatstring = "Standard";
     }
 }
