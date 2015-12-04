@@ -3008,7 +3008,12 @@ void Content::lock(
                 //grab the error code
                 switch( e.getStatus() )
                 {
-                    // this returned error is part of base http 1.1 RFCs
+                    // Tries to solve a problem in SharePoint,
+                    // lock the resource on first creation due to this:
+                    // https://msdn.microsoft.com/en-us/library/jj575265%28v=office.12%29.aspx#id15
+                    // retrieved on 2015-08-14
+                    case SC_PRECONDITION_FAILED:
+                        // this returned error is part of base http 1.1 RFCs
                     case SC_NOT_IMPLEMENTED:
                     case SC_METHOD_NOT_ALLOWED:
                         SAL_WARN( "ucb.ucp.webdav", "lock() DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
@@ -3019,8 +3024,9 @@ void Content::lock(
                         // is actually created by LOCK, locking it before
                         // doing the first PUT, but if LOCK is not supported
                         // (simple web or DAV with lock disabled) we end with one of these two http
-                        // errors
-                        // details to LOCK on an unmapped (i.e. non existent) resource are in:
+                        // errors.
+                        // Same happens when the LOCK on an unmapped (i.e. non existent) resource
+                        // is not implemented. Detailed specification in:
                         // http://tools.ietf.org/html/rfc4918#section-7.3
                         return;
                         break;
