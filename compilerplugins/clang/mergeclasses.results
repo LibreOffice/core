@@ -394,7 +394,6 @@ merge writerfilter::Table with writerfilter::LoggedTable
 merge writerfilter::dmapper::TableManager with writerfilter::dmapper::DomainMapperTableManager
 merge writerfilter::ooxml::OOXMLDocument with writerfilter::ooxml::OOXMLDocumentImpl
 merge writerfilter::ooxml::OOXMLFastContextHandlerLinear with writerfilter::ooxml::OOXMLFastContextHandlerMath
-merge writerfilter::ooxml::OOXMLProperty with writerfilter::ooxml::OOXMLPropertyImpl
 merge writerfilter::ooxml::OOXMLStream with writerfilter::ooxml::OOXMLStreamImpl
 merge writerfilter::rtftok::RTFDocument with writerfilter::rtftok::RTFDocumentImpl
 merge ww8::WW8Struct with ww8::WW8Sttb

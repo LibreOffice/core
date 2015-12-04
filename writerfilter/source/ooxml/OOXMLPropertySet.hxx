@@ -28,23 +28,6 @@ namespace writerfilter {
 namespace ooxml
 {
 
-class OOXMLProperty : public Sprm
-{
-public:
-    typedef std::shared_ptr<OOXMLProperty> Pointer_t;
-
-    virtual ~OOXMLProperty();
-
-    virtual sal_uInt32 getId() const override = 0;
-    virtual Value::Pointer_t getValue() override = 0;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProps() override = 0;
-#ifdef DEBUG_WRITERFILTER
-    virtual std::string getName() const override = 0;
-    virtual std::string toString() const override = 0;
-#endif
-    virtual void resolve(Properties & rProperties) = 0;
-};
-
 class OOXMLValue : public Value
 {
 public:
@@ -64,9 +47,10 @@ public:
     virtual OOXMLValue * clone() const;
 };
 
-class OOXMLPropertyImpl : public OOXMLProperty
+class OOXMLProperty : public Sprm
 {
 public:
+    typedef std::shared_ptr<OOXMLProperty> Pointer_t;
     enum Type_t { SPRM, ATTRIBUTE };
 private:
     Id mId;
@@ -74,20 +58,18 @@ private:
     Type_t meType;
 
 public:
-    typedef std::shared_ptr<OOXMLProperty> Pointer_t;
+    OOXMLProperty(Id id, OOXMLValue::Pointer_t pValue, Type_t eType);
+    OOXMLProperty(const OOXMLProperty & rSprm);
+    virtual ~OOXMLProperty();
 
-    OOXMLPropertyImpl(Id id, OOXMLValue::Pointer_t pValue, Type_t eType);
-    OOXMLPropertyImpl(const OOXMLPropertyImpl & rSprm);
-    virtual ~OOXMLPropertyImpl();
-
-    virtual sal_uInt32 getId() const override;
-    virtual Value::Pointer_t getValue() override;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProps() override;
+    sal_uInt32 getId() const;
+    Value::Pointer_t getValue();
+    writerfilter::Reference<Properties>::Pointer_t getProps();
 #ifdef DEBUG_WRITERFILTER
-    virtual std::string getName() const override;
-    virtual std::string toString() const override;
+    std::string getName() const;
+    std::string toString() const;
 #endif
-    virtual void resolve(Properties & rProperties) override;
+    void resolve(Properties & rProperties);
 };
 
 class OOXMLBinaryValue : public OOXMLValue

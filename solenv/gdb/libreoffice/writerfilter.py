@@ -24,7 +24,7 @@ class OOXMLPropertySetPrinter(object):
         return children.__iter__()
 
 class OOXMLPropertyPrinter(object):
-    '''Prints writerfilter::ooxml::OOXMLPropertyImpl'''
+    '''Prints writerfilter::ooxml::OOXMLProperty'''
 
     def __init__(self, typename, value):
         self.typename = typename
@@ -73,7 +73,7 @@ def build_pretty_printers():
     global printer
 
     printer = printing.Printer("libreoffice/writerfilter")
-    printer.add('writerfilter::ooxml::OOXMLPropertyImpl', OOXMLPropertyPrinter)
+    printer.add('writerfilter::ooxml::OOXMLProperty', OOXMLPropertyPrinter)
     printer.add('writerfilter::ooxml::OOXMLPropertySet', OOXMLPropertySetPrinter)
     printer.add('writerfilter::ooxml::OOXMLPropertySetValue', OOXMLPropertySetValuePrinter)
     printer.add('writerfilter::ooxml::OOXMLStringValue', OOXMLStringValuePrinter)

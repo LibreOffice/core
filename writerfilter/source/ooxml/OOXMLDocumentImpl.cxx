@@ -353,8 +353,8 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
     OOXMLValue::Pointer_t pPayloadValue(new OOXMLBinaryValue(pPicture));
 
     OOXMLProperty::Pointer_t pPayloadProperty
-        (new OOXMLPropertyImpl(NS_ooxml::LN_payload, pPayloadValue,
-                               OOXMLPropertyImpl::ATTRIBUTE));
+        (new OOXMLProperty(NS_ooxml::LN_payload, pPayloadValue,
+                               OOXMLProperty::ATTRIBUTE));
 
     OOXMLPropertySet::Pointer_t pBlipSet(new OOXMLPropertySet);
 
@@ -363,8 +363,8 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
     OOXMLValue::Pointer_t pBlipValue(new OOXMLPropertySetValue(pBlipSet));
 
     OOXMLProperty::Pointer_t pBlipProperty
-        (new OOXMLPropertyImpl(NS_ooxml::LN_blip, pBlipValue,
-                               OOXMLPropertyImpl::ATTRIBUTE));
+        (new OOXMLProperty(NS_ooxml::LN_blip, pBlipValue,
+                               OOXMLProperty::ATTRIBUTE));
 
     OOXMLPropertySet * pProps = new OOXMLPropertySet;
 

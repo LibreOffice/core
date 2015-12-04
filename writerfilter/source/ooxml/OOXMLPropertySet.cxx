@@ -30,31 +30,27 @@ namespace ooxml
 using namespace ::std;
 using namespace com::sun::star;
 
-OOXMLProperty::~OOXMLProperty()
-{
-}
-
-OOXMLPropertyImpl::OOXMLPropertyImpl(Id id, OOXMLValue::Pointer_t pValue,
-                                     OOXMLPropertyImpl::Type_t eType)
+OOXMLProperty::OOXMLProperty(Id id, OOXMLValue::Pointer_t pValue,
+                                     OOXMLProperty::Type_t eType)
 : mId(id), mpValue(pValue), meType(eType)
 {
 }
 
-OOXMLPropertyImpl::OOXMLPropertyImpl(const OOXMLPropertyImpl & rSprm)
-: OOXMLProperty(), mId(rSprm.mId), mpValue(rSprm.mpValue), meType(rSprm.meType)
+OOXMLProperty::OOXMLProperty(const OOXMLProperty & rSprm)
+: mId(rSprm.mId), mpValue(rSprm.mpValue), meType(rSprm.meType)
 {
 }
 
-OOXMLPropertyImpl::~OOXMLPropertyImpl()
+OOXMLProperty::~OOXMLProperty()
 {
 }
 
-sal_uInt32 OOXMLPropertyImpl::getId() const
+sal_uInt32 OOXMLProperty::getId() const
 {
     return mId;
 }
 
-Value::Pointer_t OOXMLPropertyImpl::getValue()
+Value::Pointer_t OOXMLProperty::getValue()
 {
     Value::Pointer_t pResult;
 
@@ -66,7 +62,7 @@ Value::Pointer_t OOXMLPropertyImpl::getValue()
     return pResult;
 }
 
-writerfilter::Reference<Properties>::Pointer_t OOXMLPropertyImpl::getProps()
+writerfilter::Reference<Properties>::Pointer_t OOXMLProperty::getProps()
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;
 
@@ -77,7 +73,7 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLPropertyImpl::getProps()
 }
 
 #ifdef DEBUG_WRITERFILTER
-string OOXMLPropertyImpl::getName() const
+string OOXMLProperty::getName() const
 {
     string sResult;
 
@@ -99,7 +95,7 @@ string OOXMLPropertyImpl::getName() const
 #endif
 
 #ifdef DEBUG_WRITERFILTER
-string OOXMLPropertyImpl::toString() const
+string OOXMLProperty::toString() const
 {
     string sResult = "(";
 
@@ -115,7 +111,7 @@ string OOXMLPropertyImpl::toString() const
 }
 #endif
 
-void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
+void OOXMLProperty::resolve(writerfilter::Properties & rProperties)
 {
     writerfilter::Properties * pProperties = nullptr;
     pProperties = &rProperties;
