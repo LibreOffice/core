@@ -43,6 +43,7 @@
 #include <svx/svdpage.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/langitem.hxx>
+#include <filter/msfilter/classids.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -3232,7 +3233,6 @@ void WW8Export::PrepareStorage()
     sal_uLong nLen;
     const sal_uInt8* pData;
     const char* pName;
-    sal_uInt32 nId1;
 
     static const char aUserName[] = "Microsoft Word-Document";
     static const sal_uInt8 aCompObj[] =
@@ -3256,10 +3256,8 @@ void WW8Export::PrepareStorage()
     pName = aUserName;
     pData = aCompObj;
     nLen = sizeof( aCompObj );
-    nId1 = 0x00020906L;
 
-    SvGlobalName aGName( nId1, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00,
-                         0x00, 0x00, 0x00, 0x46 );
+    SvGlobalName aGName(MSO_WW8_CLASSID);
     GetWriter().GetStorage().SetClass( aGName, SotClipboardFormatId::NONE, OUString::createFromAscii( pName ));
     tools::SvRef<SotStorageStream> xStor( GetWriter().GetStorage().OpenSotStream(sCompObj) );
     xStor->Write( pData, nLen );

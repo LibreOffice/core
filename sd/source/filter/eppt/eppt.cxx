@@ -44,6 +44,7 @@
 #include <tools/zcodec.hxx>
 #include <editeng/svxenum.hxx>
 #include <sot/storinfo.hxx>
+#include <filter/msfilter/classids.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wmf.hxx>
@@ -113,7 +114,7 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
         mXStatusIndicator->start( "PowerPoint Export", mnStatMaxValue + ( mnStatMaxValue >> 3 ) );
     }
 
-    SvGlobalName aGName( 0x64818d10L, 0x4f9b, 0x11cf, 0x86, 0xea, 0x00, 0xaa, 0x00, 0xb9, 0x29, 0xe8 );
+    SvGlobalName aGName(MSO_PPT8_CLASSID);
     mrStg->SetClass( aGName, SotClipboardFormatId::NONE, "MS PowerPoint 97" );
 
     if ( !ImplCreateCurrentUserStream() )

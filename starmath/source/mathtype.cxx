@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <mathtype.hxx>
+
+#include <filter/msfilter/classids.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>
 
@@ -1887,8 +1888,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
     {
         tools::SvRef<SotStorage> pStor = new SotStorage( pStream, false );
 
-        SvGlobalName aGName(0x0002ce02L, 0x0000, 0x0000,0xc0,0x00,
-            0x00,0x00,0x00,0x00,0x00,0x46 );
+        SvGlobalName aGName(MSO_EQUATION3_CLASSID);
         pStor->SetClass( aGName, SotClipboardFormatId::NONE, "Microsoft Equation 3.0");
 
         static sal_uInt8 const aCompObj[] = {

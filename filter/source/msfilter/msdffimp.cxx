@@ -107,6 +107,7 @@
 #include "svx/svditer.hxx"
 #include <svx/xpoly.hxx>
 #include "svx/xattr.hxx"
+#include <filter/msfilter/classids.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
@@ -6849,31 +6850,18 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             sal_uInt16 n2, n3;
             sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
         } aArr[] = {
-            { OLE_MATHTYPE_2_STARMATH, "smath",
-                0x0002ce02L, 0x0000, 0x0000,
-                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-            { OLE_MATHTYPE_2_STARMATH, "smath",
-                0x00021700L, 0x0000, 0x0000,
-                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-            { OLE_WINWORD_2_STARWRITER, "swriter",
-                0x00020906L, 0x0000, 0x0000,
-                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-            { OLE_EXCEL_2_STARCALC, "scalc",                // Excel table
-                0x00020810L, 0x0000, 0x0000,
-                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-            { OLE_EXCEL_2_STARCALC, "scalc",                // Excel chart
-                0x00020820L, 0x0000, 0x0000,
-                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
+            { OLE_MATHTYPE_2_STARMATH, "smath", MSO_EQUATION3_CLASSID },
+            { OLE_MATHTYPE_2_STARMATH, "smath", MSO_EQUATION2_CLASSID },
+            { OLE_WINWORD_2_STARWRITER, "swriter", MSO_WW8_CLASSID },
+            // Excel table
+            { OLE_EXCEL_2_STARCALC, "scalc", MSO_EXCEL5_CLASSID },
+            { OLE_EXCEL_2_STARCALC, "scalc", MSO_EXCEL8_CLASSID },
             // 114465: additional Excel OLE chart classId to above.
-            { OLE_EXCEL_2_STARCALC, "scalc",
-                0x00020821L, 0x0000, 0x0000,
-                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-            { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint presentation
-                0x64818d10L, 0x4f9b, 0x11cf,
-                0x86,0xea,0x00,0xaa,0x00,0xb9,0x29,0xe8 },
-            { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint slide
-                0x64818d11L, 0x4f9b, 0x11cf,
-                0x86,0xea,0x00,0xaa,0x00,0xb9,0x29,0xe8 },
+            { OLE_EXCEL_2_STARCALC, "scalc", MSO_EXCEL8_CHART_CLASSID },
+            // PowerPoint presentation
+            { OLE_POWERPOINT_2_STARIMPRESS, "simpress", MSO_PPT8_CLASSID },
+            // PowerPoint slide
+            { OLE_POWERPOINT_2_STARIMPRESS, "simpress", MSO_PPT8_SLIDE_CLASSID },
             { 0, nullptr,
               0, 0, 0,
               0, 0, 0, 0, 0, 0, 0, 0 }

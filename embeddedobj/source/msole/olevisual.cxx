@@ -28,6 +28,7 @@
 #include <oleembobj.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/seqstream.hxx>
+#include <filter/msfilter/classids.hxx>
 
 #if defined WNT
 #include <olecomponent.hxx>
@@ -113,8 +114,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     // If cached size is not set, that means that this is the size initialization, so there is no need to set the real size
     sal_Bool bAllowToSetExtent =
       ( ( getStatus( nAspect ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE )
-      && !MimeConfigurationHelper::ClassIDsEqual( m_aClassID, MimeConfigurationHelper::GetSequenceClassID( 0x00020906L, 0x0000, 0x0000,
-                                                           0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 ) )
+      && !MimeConfigurationHelper::ClassIDsEqual(m_aClassID, MimeConfigurationHelper::GetSequenceClassID(MSO_WW8_CLASSID))
       && m_bHasCachedSize );
 
     if ( m_nObjectState == embed::EmbedStates::LOADED && bAllowToSetExtent )

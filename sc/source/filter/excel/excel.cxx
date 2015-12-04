@@ -24,6 +24,7 @@
 #include <sfx2/request.hxx>
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
+#include <filter/msfilter/classids.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -186,7 +187,7 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     if( eRet == eERR_RNGOVRFLW )
         eRet = SCWARN_EXPORT_MAXROW;
 
-    SvGlobalName aGlobName( 0x00020810, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
+    SvGlobalName aGlobName(MSO_EXCEL5_CLASSID);
     SotClipboardFormatId nClip = SotExchange::RegisterFormatName( aClipName );
     xRootStrg->SetClass( aGlobName, nClip, aClassName );
 
