@@ -49,7 +49,12 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
         : Window(pParent, nStyle)
         , m_pWindowController( pController )
         , m_bInPaint(false)
+#if HAVE_FEATURE_OPENGL
         , m_pOpenGLWindow(VclPtr<OpenGLWindow>::Create(this))
+#else
+        , m_pOpenGLWindow(0)
+#endif
+
 {
     this->SetHelpId( HID_SCH_WIN_DOCUMENT );
     this->SetMapMode( MapMode(MAP_100TH_MM) );

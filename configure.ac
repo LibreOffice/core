@@ -10287,11 +10287,13 @@ if test $_os = iOS -o $_os = Android; then
 elif test "$_os" = "Darwin"; then
     # We use frameworks on Mac OS X, no need for detail checks
     ENABLE_OPENGL=TRUE
+    AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE
     SYSTEM_MESA_HEADERS=TRUE
 elif test $_os = WINNT; then
     # Experimental: try to use OpenGL on Windows
     ENABLE_OPENGL=TRUE
+    AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE
     # We need the internal "Mesa" headers.
     SYSTEM_MESA_HEADERS=
@@ -10299,8 +10301,9 @@ elif test $_os = WINNT; then
 else
     if test "$with_x" != "no"; then
         ENABLE_OPENGL=TRUE
+        AC_DEFINE(HAVE_FEATURE_OPENGL,1)
+        ENABLE_OPENGL_CANVAS=TRUE
     fi
-    ENABLE_OPENGL_CANVAS=TRUE
 
     dnl ===================================================================
     dnl Check for system Mesa

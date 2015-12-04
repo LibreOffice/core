@@ -32,8 +32,9 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <comphelper/lok.hxx>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
-
+#endif
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
 #define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)
 #define IMPL_PAINT_PAINTALLCHILDREN   ((sal_uInt16)0x0004)
@@ -273,11 +274,11 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     pWindowImpl->mnPaintFlags = 0;
     if (!pWindowImpl->maInvalidateRegion.IsEmpty())
     {
+#if HAVE_FEATURE_OPENGL
         VCL_GL_INFO("vcl.opengl", "PaintHelper::DoPaint on " <<
                     typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "' begin");
-
         OutputDevice::PaintScope aScope( m_pWindow );
-
+#endif
         // double-buffering: setup the buffer if it does not exist
         if (!pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
             StartBufferedPaint();
@@ -305,9 +306,10 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             m_pWindow->PushPaintHelper(this, *m_pWindow);
             m_pWindow->Paint(*m_pWindow, m_aPaintRect);
         }
-
+#if HAVE_FEATURE_OPENGL
         VCL_GL_INFO("vcl.opengl", "PaintHelper::DoPaint end on " <<
                     typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "'");
+#endif
     }
 }
 
@@ -627,7 +629,9 @@ void Window::ImplCallOverlapPaint()
     {
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
         //         because we were called from the Sal layer
+#if HAVE_FEATURE_OPENGL
         OutputDevice::PaintScope aScope( GetOutDev() );
+#endif
         ImplCallPaint(NULL, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
     }
 }
@@ -646,8 +650,9 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
         return;
     }
-
+#if HAVE_FEATURE_OPENGL
     OutputDevice::PaintScope aScope(this);
+#endif
 
     // save paint events until resizing or initial sizing done
     if (!ImplDoTiledRendering() && mpWindowImpl->mbFrame &&
@@ -666,7 +671,9 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
 {
     if( mpWindowImpl->mbReallyVisible )
     {
+#if HAVE_FEATURE_OPENGL
         OutputDevice::PaintScope aScope(this);
+#endif
 
         ImplCallResize();
         if( ImplDoTiledRendering() )

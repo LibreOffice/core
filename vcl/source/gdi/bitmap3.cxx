@@ -1003,7 +1003,11 @@ bool Bitmap::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 
 bool Bitmap::HasFastScale()
 {
+#if HAVE_FEATURE_OPENGL
     return OpenGLHelper::isVCLOpenGLEnabled();
+#else
+    return false;
+#endif
 }
 
 void Bitmap::AdaptBitCount(Bitmap& rNew) const

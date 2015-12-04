@@ -40,7 +40,10 @@
 #include <utility>
 #include <o3tl/compat_functional.hxx>
 #include <algorithm>
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#endif
 
 
 using namespace ::com::sun::star;
@@ -311,9 +314,11 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                      m_bCacheHasForcedLastImpl,
                      OUString("ForceSafeServiceImpl") );
 
+#if HAVE_FEATURE_OPENGL
     // tdf#93870 - force VCL canvas in OpenGL mode for now.
     if( OpenGLWrapper::isVCLOpenGLEnabled() )
         bForceLastEntry = true;
+#endif
 
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);

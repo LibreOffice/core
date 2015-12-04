@@ -3245,7 +3245,9 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
 #endif
             case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(pModel);   break;
+#if HAVE_FEATURE_OPENGL
             case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
+#endif
         }
     }
 
@@ -3333,7 +3335,9 @@ SdrObject* SdrObjFactory::MakeNewObject(
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
 #endif
             case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(pModel);   break;
+#if HAVE_FEATURE_OPENGL
             case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
+#endif
         }
     }
 
