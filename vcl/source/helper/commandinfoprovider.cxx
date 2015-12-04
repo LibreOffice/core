@@ -276,6 +276,16 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
     return nValue;
 }
 
+bool CommandInfoProvider::IsRotated(const OUString& rsCommandName)
+{
+    return ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName);
+}
+
+bool CommandInfoProvider::IsMirrored(const OUString& rsCommandName)
+{
+    return ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName);
+}
+
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 {
     if (rxFrame != mxCachedDataFrame)
@@ -397,6 +407,32 @@ OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
         }
     }
     return OUString();
+}
+
+bool CommandInfoProvider::ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName)
+{
+    Sequence< OUString > aSequence;
+    try
+    {
+        const OUString sModuleIdentifier (GetModuleIdentifier());
+        if (!sModuleIdentifier.isEmpty())
+        {
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xUICommandLabels;
+            if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels) {
+                xUICommandLabels->getByName(rsResourceName) >>= aSequence;
+                for ( sal_Int32 i = 0; i < aSequence.getLength(); i++ )
+                {
+                    if (aSequence[i] == rsCommandName)
+                        return true;
+                }
+            }
+        }
+    }
+    catch (Exception&)
+    {
+    }
+    return false;
 }
 
 Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties(const OUString& rsCommandName)
