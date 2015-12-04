@@ -12,7 +12,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -22,7 +21,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-template <class T> class VCL_DLLPUBLIC VclStatusListener : public cppu::WeakImplHelper < css::frame::XStatusListener>
+template <class T> class VclStatusListener : public cppu::WeakImplHelper < css::frame::XStatusListener>
 {
 public:
     VclStatusListener<T>(T* widget, const rtl::OUString& aCommand);
