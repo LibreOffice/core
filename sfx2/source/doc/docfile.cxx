@@ -2083,11 +2083,37 @@ void SfxMedium::Transfer_Impl()
                             sComment = pComments->GetValue( );
                     }
                     OUString sResultURL;
-                    if (!aTransferContent.transferContent( aSourceContent, eOperation,
-                                aFileName, nNameClash, aMimeType, bMajor, sComment, &sResultURL, sObjectId))
+                    bool isTransferOK = aTransferContent.transferContent(
+                        aSourceContent, eOperation,
+                        aFileName, nNameClash, aMimeType, bMajor, sComment,
+                        &sResultURL, sObjectId );
+
+                    if ( !isTransferOK )
                         pImp->m_eError = ERRCODE_IO_GENERAL;
                     else if ( !sResultURL.isEmpty( ) )  // Likely to happen only for checkin
                         SwitchDocumentToFile( sResultURL );
+                    try
+                    {
+                        if ( GetURLObject().isAnyKnownWebDAVScheme() &&
+                             isTransferOK &&
+                             eOperation == ::ucbhelper::InsertOperation_COPY )
+                        {
+                            // tdf#95272 try to re-issue a lock command when a new file is created.
+                            // This may be needed because some WebDAV servers fail to implement the
+                            // 'LOCK on unallocated reference', see issue comment:
+                            // <https://bugs.documentfoundation.org/show_bug.cgi?id=95792#c8>
+                            // and specification at:
+                            // <http://tools.ietf.org/html/rfc4918#section-7.3>
+                            // If the WebDAV resource is already locked by this LO instance, nothing will
+                            // happen, e.g. the LOCK method will not be sent to the server.
+                            ::ucbhelper::Content aLockContent = ::ucbhelper::Content( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
+                            aLockContent.lock();
+                        }
+                    }
+                    catch ( css::uno::Exception & e )
+                    {
+                        SAL_WARN( "sfx.doc", "LOCK not working while re-issuing it. Exception message: " << e.Message );
+                    }
                 }
                 catch ( const css::ucb::CommandAbortedException& )
                 {

@@ -596,7 +596,7 @@ NeonSession::NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFa
     m_aScheme    = theUri.GetScheme();
     m_aHostName  = theUri.GetHost();
     m_nPort      = theUri.GetPort();
-    SAL_INFO( "ucb.ucp.webdav", "NeonSession ctor - URL < " << inUri << ">" );
+    SAL_INFO( "ucb.ucp.webdav", "NeonSession ctor - URL <" << inUri << ">" );
 }
 
 NeonSession::~NeonSession( )
