@@ -3,6 +3,8 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/svdattr.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/layout.hxx>
 
 class SdrView;
 
@@ -10,6 +12,10 @@ class SvxTextChainingPage : public SfxTabPage
 {
 private:
     static const sal_uInt16     pRanges[];
+
+    VclPtr<VclGrid> mpBoxLinks;
+    VclPtr<ListBox> mpLBPrevLink;
+    VclPtr<ListBox> mpLBNextLink;
 
 public:
     SvxTextChainingPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );

@@ -12,7 +12,9 @@ const sal_uInt16 SvxTextChainingPage::pRanges[] =
 SvxTextChainingPage::SvxTextChainingPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow,"TextChainingPage","cui/ui/textchainingtabpage.ui", &rInAttrs)
 {
-    SfxItemPool* pPool = rInAttrs.GetPool();
+    get(mpBoxLinks, "box_textlink");
+    get(mpLBPrevLink,"previouslink");
+    get(mpLBNextLink, "nextlink");
 }
 
 SvxTextChainingPage::~SvxTextChainingPage()
@@ -22,6 +24,9 @@ SvxTextChainingPage::~SvxTextChainingPage()
 
 void SvxTextChainingPage::dispose()
 {
+    mpLBPrevLink.dispose();
+    mpLBNextLInk.dispose();
+    mpBoxLinks.dispose();
 }
 
 void SvxTextChainingPage::Reset( const SfxItemSet* rAttrs )
