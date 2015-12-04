@@ -334,7 +334,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
         pFormTable->PutEntry( aFormString, nDummy, eType, nHandle, eLanguage );
     }
 
-    return new SfxUInt32Item( ATTR_VALUE_FORMAT, ( sal_uInt32 ) nHandle );
+    return new SfxUInt32Item( ATTR_VALUE_FORMAT, nHandle );
 }
 
 void LotusRange::MakeHash()
