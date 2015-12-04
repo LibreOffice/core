@@ -11419,7 +11419,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         beginCompression();
         if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
         {
-            const int nScanLineBytes = 1 + ( pAccess->GetBitCount() * ( pAccess->Width() - 1 ) / 8U );
+            const int nScanLineBytes = pAccess->GetScanlineSize();
 
             for( long i = 0; i < pAccess->Height(); i++ )
             {
