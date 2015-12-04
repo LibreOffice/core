@@ -1195,33 +1195,46 @@ namespace
 
 void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
-    // FIXME: handle SAL_INVERT_TRACKFRAME
-    if ( nFlags & SAL_INVERT_TRACKFRAME )
+    if (m_aDrawMode != basebmp::DrawMode::XOR)
     {
-        SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, unhandled SAL_INVERT_TRACKFRAME");
-    }
-    else
-    {
-        if (m_aDrawMode == basebmp::DrawMode::XOR)
-            SAL_WARN("vcl.gdi", "SvpSalGraphics::invert unhandled XOR (?)");
+        cairo_t* cr = getCairoContext();
+        assert(cr && m_aDevice->isTopDown());
+
+        clipRegion(cr);
+
+        cairo_rectangle_int_t extents = {0, 0, 0, 0};
+        basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
+
+        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
+
+        cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+
+        if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
+        {
+            cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
+        }
         else
         {
-            cairo_t* cr = getCairoContext();
-            assert(cr && m_aDevice->isTopDown());
+            SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
+        }
 
-            clipRegion(cr);
+        if (nFlags & SAL_INVERT_TRACKFRAME)
+        {
+            cairo_set_line_width(cr, 2.0);
+            const double dashLengths[2] = { 4.0, 4.0 };
+            cairo_set_dash(cr, dashLengths, 2, 0);
 
-            cairo_rectangle_int_t extents = {0, 0, 0, 0};
-            basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
+            if (xDamageTracker)
+                extents = getStrokeDamage(cr);
 
-            cairo_rectangle(cr, nX, nY, nWidth, nHeight);
-
+            cairo_stroke(cr);
+        }
+        else
+        {
             if (xDamageTracker)
                 extents = getFillDamage(cr);
 
             cairo_clip(cr);
-
-            cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 
             if (nFlags & SAL_INVERT_50)
             {
@@ -1231,30 +1244,23 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
             }
             else
             {
-                if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0))
-                {
-                    cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
-                }
-                else
-                {
-                    SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
-                    cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
-                }
                 cairo_paint(cr);
             }
-
-            cairo_surface_flush(cairo_get_target(cr));
-            cairo_destroy(cr); // unref
-
-            if (xDamageTracker)
-            {
-                xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
-                                                        extents.y + extents.height));
-            }
-
-            return;
         }
+
+        cairo_surface_flush(cairo_get_target(cr));
+        cairo_destroy(cr); // unref
+
+        if (xDamageTracker)
+        {
+            xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
+                                                    extents.y + extents.height));
+        }
+
+        return;
     }
+
+    SAL_WARN("vcl.gdi", "SvpSalGraphics::invert unhandled XOR (?)");
 
     basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect( basegfx::B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) );
     basegfx::B2DPolyPolygon aPolyPoly( aRect );
