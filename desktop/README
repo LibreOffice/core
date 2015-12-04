@@ -22,15 +22,15 @@ on Mac OS X).
 When called with a sole argument of "c++", it prints to stdout an absolute
 pathname denoting the directory where the public URE libraries are found.
 
-When called with a sole argument of "java", it prints to stdout a marker byte
-(with value zero or one) followed by a sequence of zero or more absolute
-pathnames denoting jars or directories that need to be included in a class
-loader's search locations.
+When called with a sole argument of "java", it prints to stdout a marker
+character (either an ASCII '0' or '1') followed by a sequence of zero or more
+absolute pathnames denoting jars or directories that need to be included in a
+class loader's search locations.
 
-If the marker byte is zero (on Linux and Mac OS X), the pathnames are encoded as
-bytes, and any two pathnames in the sequence are separated from each other by
-NUL bytes.
+If the marker character is '0' (on Linux and Mac OS X), the pathnames are
+encoded as bytes, and any two pathnames in the sequence are separated from each
+other by NUL bytes.
 
-If the marker byte is one (on Windows), the pathnames are encoded as UTF-16-LE
-two-byte code units, and any two pathnames in the sequence are separated from
-each other by two-byte NUL code units.
+If the marker character is '1' (on Windows), the pathnames are encoded as
+UTF-16-LE two-byte code units, and any two pathnames in the sequence are
+separated from each other by two-byte NUL code units.
